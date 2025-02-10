@@ -13,7 +13,7 @@ export class AcquisitionAPIClient extends HttpClient {
                 this.getAll({
                     endpoint: "vendors",
                     query,
-                    params,
+                    params: { _order_by: "name", ...params },
                     headers: {
                         "x-koha-embed": "aliases",
                     },
