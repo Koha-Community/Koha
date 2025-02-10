@@ -67,6 +67,7 @@ export default {
                 props.extendedAttributesResourceType || null,
             resourceListFiltersRequired:
                 props.resourceListFiltersRequired || null,
+            formGroupsDisplayMode: props.formGroupsDisplayMode || null,
         };
 
         return {
