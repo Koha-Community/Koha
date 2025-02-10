@@ -43,7 +43,7 @@ return {
                 `type` varchar(80) DEFAULT NULL COMMENT 'type of counter file',
                 `filename` varchar(80) DEFAULT NULL COMMENT 'name of the counter file',
                 `file_content` longblob DEFAULT NULL COMMENT 'content of the counter file',
-                `date_uploaded` timestamp DEFAULT NULL DEFAULT current_timestamp() COMMENT 'counter file upload date',
+                `date_uploaded` timestamp DEFAULT current_timestamp() COMMENT 'counter file upload date',
                 PRIMARY KEY (`erm_counter_files_id`),
                 CONSTRAINT `erm_counter_files_ibfk_1` FOREIGN KEY (`usage_data_provider_id`) REFERENCES `erm_usage_data_providers` (`erm_usage_data_provider_id`) ON DELETE CASCADE ON UPDATE CASCADE
                 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -61,7 +61,7 @@ return {
                 `borrowernumber` int(11) DEFAULT NULL COMMENT 'foreign key to borrowers',
                 `counter_files_id` int(11) DEFAULT NULL COMMENT 'foreign key to erm_counter_files',
                 `usage_data_provider_id` int(11) DEFAULT NULL COMMENT 'foreign key to erm_usage_data_providers',
-                `importdate` timestamp DEFAULT NULL DEFAULT current_timestamp() COMMENT 'counter file import date',
+                `importdate` timestamp DEFAULT current_timestamp() COMMENT 'counter file import date',
                 `filename` varchar(80) DEFAULT NULL COMMENT 'name of the counter file',
                 `logdetails` longtext DEFAULT NULL COMMENT 'details from the counter log',
                 PRIMARY KEY (`erm_counter_log_id`),
