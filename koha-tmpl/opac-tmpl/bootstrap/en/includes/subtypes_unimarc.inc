@@ -122,7 +122,7 @@
 </fieldset>
 
 <fieldset>
-    <legend>Serials</legend><p>
+    <legend>Serials</legend>
     <p>
         <label>Serial type</label>
         <select name="limit" class="subtype">

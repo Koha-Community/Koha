@@ -14,7 +14,7 @@
                             <li>
                             <label for="nbissues" class="required">How many issues do you want to receive?</label>
                             <input type="text"  size="25" id="nbissues" name="nbissues" required="required" />
-                            <li>
+                            </li>
                             <li>
                                 <label for="date_received_today">Set the date received to today?</label>
                                 <input type="checkbox" id="date_received_today" name="date_received_today" />

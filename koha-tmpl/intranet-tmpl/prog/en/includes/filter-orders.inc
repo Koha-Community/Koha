@@ -18,7 +18,7 @@
     <ol>
         [% PROCESS 'search-orders-1' %]
         [% PROCESS 'search-orders-2' %]
-    <ol>
+    </ol>
 [% END %]
 
 [% BLOCK 'search-orders-1' %]

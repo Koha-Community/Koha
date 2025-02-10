@@ -11,7 +11,7 @@
             <span id="issues-table-load-delay">
                 <i id="issues-table-load-delay-spinner" class="fa fa-spinner fa-pulse fa-fw"></i>
                 <span id="issues-table-load-delay-message">Checkouts table will show automatically in [% LoadCheckoutsTableDelay | html %] seconds...</span>
-            <span>
+            </span>
             [% END %]
         </p>
     </div>
