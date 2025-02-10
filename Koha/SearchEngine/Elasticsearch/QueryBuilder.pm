@@ -511,9 +511,13 @@ sub build_authorities_query {
     # Merge the query parts appropriately
     # 'should' behaves like 'or'
     # 'must' behaves like 'and'
-    # Zebra behaviour seem to match must so using that here
+    # We will obey the first and_or passed in here:
+    # authfinder.pl is hardcoded to 'AND'
+    # authorities-home.pl only allows searching a single index
+    # for matching we 'OR' together multiple fields
+    my $search_type   = defined $search->{and_or} && uc( $search->{and_or}->[0] ) eq 'OR' ? 'should' : 'must';
     my $elastic_query = {};
-    $elastic_query->{bool}->{must} = \@query_parts;
+    $elastic_query->{bool}->{$search_type} = \@query_parts;
 
     # Filter by authtypecode if set
     if ( $search->{authtypecode} ) {
@@ -549,7 +553,8 @@ thesaurus. If left blank, any field is used.
 
 =item and_or
 
-Totally ignored. It is never used in L<C4::AuthoritiesMarc::SearchAuthorities>.
+This takes an array to match Zebra, however, we only care about the first value.
+This will determine whether searches are combined as 'must' (AND) or 'should' (OR).
 
 =item excluding
 
@@ -663,6 +668,7 @@ sub build_authorities_query_compat {
     my %search = (
         searches     => \@searches,
         authtypecode => $authtypecode,
+        and_or       => $and_or,
     );
     $search{sort} = \%sort if %sort;
     my $query = $self->build_authorities_query( \%search );
