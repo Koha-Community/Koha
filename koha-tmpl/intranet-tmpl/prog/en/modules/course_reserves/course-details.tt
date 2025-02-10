@@ -152,11 +152,15 @@
                                             [% IF cr.course_item.itype_enabled %]
                                                 [% IF cr.course_item.enabled == 'yes' %]
                                                     <strong>[% ItemTypes.GetDescription( cr.item.effective_itemtype ) | html %]</strong>
+                                                [% IF (cr.course_item.itype_storage ) %]
                                                     ([% ItemTypes.GetDescription( cr.course_item.itype_storage ) | html %])
+                                                [% END %]
                                                 [% ELSE %]
                                                     [% ItemTypes.GetDescription( cr.course_item.itype ) | html %]
+                                                [% IF ( cr.item.effective_itemtype ) %]
                                                     (<strong>[% ItemTypes.GetDescription( cr.item.effective_itemtype) | html %]</strong>)
                                                 [% END %]
+                                            [% END %]
                                             [% ELSE %]
                                                 <em>Unchanged</em>
                                                 [% IF cr.item.itype %]
@@ -169,7 +173,7 @@
                                             [% IF cr.course_item.ccode_enabled %]
                                                 [% IF cr.course_item.enabled == 'yes' %]
                                                 <strong>[% AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.ccode', authorised_value => cr.item.ccode ) | html %]</strong>
-                                                    [% IF cr.item.ccode %]
+                                            [% IF cr.course_item.ccode_storage %]
                                                         ([% AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.ccode', authorised_value => cr.course_item.ccode_storage ) | html %])
                                                     [% END %]
                                                 [% ELSE %]
@@ -189,7 +193,7 @@
                                                 [% IF cr.course_item.location_enabled %]
                                                     [% IF cr.course_item.enabled == 'yes' %]
                                                         <strong>[% AuthorisedValues.GetByCode( 'LOC', cr.item.permanent_location ) | html %]</strong>
-                                                        [% IF cr.item.permanent_location %]
+                                            [% IF cr.course_item.location_storage %]
                                                             ([% AuthorisedValues.GetByCode( 'LOC', cr.course_item.location_storage ) | html %])
                                                         [% END %]
                                                 [% ELSE %]
@@ -209,7 +213,7 @@
                                             [% IF cr.course_item.homebranch_enabled %]
                                                 [% IF cr.course_item.enabled == 'yes' %]
                                                     <strong>[% Branches.GetName( cr.item.homebranch ) | html %]</strong>
-                                                    [% IF cr.item.homebranch %]
+                                            [% IF cr.course_item.homebranch_storage %]
                                                         ([% Branches.GetName( cr.course_item.homebranch_storage ) | html %])
                                                     [% END %]
                                                 [% ELSE %]
@@ -229,7 +233,7 @@
                                             [% IF cr.course_item.holdingbranch_enabled %]
                                                 [% IF cr.course_item.enabled == 'yes' %]
                                                     <strong>[% Branches.GetName( cr.item.holdingbranch ) | html %]</strong>
-                                                    [% IF cr.item.holdingbranch %]
+                                            [% IF cr.course_item.holdingbranch_storage %]
                                                         ([% Branches.GetName( cr.course_item.holdingbranch_storage ) | html %])
                                                     [% END %]
                                                 [% ELSE %]
