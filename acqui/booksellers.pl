@@ -1,7 +1,5 @@
 #!/usr/bin/perl
 
-#script to show suppliers and orders
-
 # Copyright 2000-2002 Katipo Communications
 # Copyright 2008-2009 BibLibre SARL
 # Copyright 2010 PTFS Europe
@@ -27,19 +25,9 @@ booksellers.pl
 
 =head1 DESCRIPTION
 
-this script displays the list of suppliers & baskets like C<$supplier> given on input arg.
-thus, this page brings different features like to display supplier's details,
-to add an order for a specific supplier or to just add a new supplier.
+this script displays the baskets for a vendor
 
 =head1 CGI PARAMETERS
-
-=over 4
-
-=item supplier
-
-C<$supplier> is the string with which we search for a supplier
-
-=back
 
 =over 4
 
@@ -52,17 +40,14 @@ The id of the supplier whose baskets we will display
 =cut
 
 use Modern::Perl;
-use C4::Auth    qw( get_template_and_user haspermission );
-use C4::Budgets qw( GetBudgetHierarchy GetBudget CanUserUseBudget );
-use C4::Output  qw( output_html_with_http_headers );
-use CGI         qw ( -utf8 );
+use C4::Auth   qw( get_template_and_user haspermission );
+use C4::Output qw( output_html_with_http_headers );
+use CGI        qw ( -utf8 );
 
 use C4::Acquisition qw( GetBasket GetBasketsInfosByBookseller CanUserManageBasket GetBasketgroup );
-use C4::Context;
 
 use Koha::Acquisition::Booksellers;
 use Koha::Patrons;
-use Koha::Acquisition::Currencies;
 
 my $query = CGI->new;
 my ( $template, $loggedinuser, $cookie, $userflags ) = get_template_and_user(
@@ -75,65 +60,23 @@ my ( $template, $loggedinuser, $cookie, $userflags ) = get_template_and_user(
 );
 
 #parameters
-my $supplier     = $query->param('supplier');
 my $booksellerid = $query->param('booksellerid');
 my $allbaskets   = $query->param('allbaskets') || 0;
-my @suppliers;
 
-if ($booksellerid) {
-    push @suppliers, Koha::Acquisition::Booksellers->find($booksellerid);
-} else {
-    @suppliers = Koha::Acquisition::Booksellers->search(
-        [
-            { name                         => { -like => "%$supplier%" } },
-            { 'aqbookseller_aliases.alias' => { -like => "%$supplier%" } },
-        ],
-        {
-            order_by => { -asc => 'name' },
-            join     => 'aqbookseller_aliases',
-            distinct => 1,
-        }
-    )->as_list;
-}
-
-my $supplier_count = @suppliers;
-if ( $supplier_count == 1 ) {
-    $template->param(
-        supplier_name      => $suppliers[0]->name,
-        booksellerid       => $suppliers[0]->id,
-        basketcount        => $suppliers[0]->baskets->count,
-        subscriptionscount => $suppliers[0]->subscriptions->count,
-        active             => $suppliers[0]->active,
-    );
-}
-
-my $uid;
-
-# FIXME This script should only be accessed by a valid logged in patron
-if ($loggedinuser) {
-
-    # FIXME Should not be needed, logged in patron should be cached
-    $uid = Koha::Patrons->find($loggedinuser)->userid;
-}
-
-my $userenv     = C4::Context::userenv;
-my $viewbaskets = C4::Context->preference('AcqViewBaskets');
-
-my $userbranch = $userenv->{branch};
-
-my $budgets     = GetBudgetHierarchy;
-my $has_budgets = 0;
-foreach my $r ( @{$budgets} ) {
-    next unless ( CanUserUseBudget( $loggedinuser, $r, $userflags ) );
-
-    $has_budgets = 1;
-    last;
-}
-
-#build result page
+my $vendor;
 my $loop_suppliers = [];
 
-for my $vendor (@suppliers) {
+if ($booksellerid) {
+    $vendor = Koha::Acquisition::Booksellers->find($booksellerid);
+
+    $template->param(
+        supplier_name      => $vendor->name,
+        booksellerid       => $vendor->id,
+        basketcount        => $vendor->baskets->count,
+        subscriptionscount => $vendor->subscriptions->count,
+        active             => $vendor->active,
+    );
+
     my $baskets = GetBasketsInfosByBookseller( $vendor->id, $allbaskets );
 
     my $loop_basket = [];
@@ -167,14 +110,12 @@ for my $vendor (@suppliers) {
         basketcount       => $vendor->baskets->count,
         subscriptioncount => $vendor->subscriptions->count,
         };
-
 }
 
 $template->param(
     loop_suppliers => $loop_suppliers,
-    supplier       => ( $booksellerid || $supplier ),
-    count          => $supplier_count,
-    has_budgets    => $has_budgets,
+    supplier       => $booksellerid,
+    count          => $vendor ? 1 : 0,
 );
 $template->{VARS}->{'allbaskets'} = $allbaskets;
 
