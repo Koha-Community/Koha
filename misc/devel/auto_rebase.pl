@@ -167,7 +167,7 @@ FILE: while ( my ( $ii, $file ) = each @modified_files ) {
         write_file( $file, join "\n", @content );
 
         # Tidy the file
-        my $cmd = "$conflict_resolver_script $file";
+        my $cmd = "perl $conflict_resolver_script $file";
         try {
             system $cmd;
         } catch {
@@ -239,6 +239,11 @@ Finally the rebase will continue.
 The source branch is the branch that is currently checked out.
 
 =head1 EXAMPLES
+
+First you need to retrieve this script from the main branch, do not place it under misc/devel/auto_rebase.pl or you will get an error (`The following untracked working tree files would be overwritten by checkout`).
+
+  git show origin/main:misc/devel/auto_rebase.pl > auto_rebase.pl
+  chmod +x auto_rebase.pl
 
 Rebase onto 'main' in the current repository:
 
