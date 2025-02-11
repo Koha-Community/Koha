@@ -1157,34 +1157,47 @@ sub expand_template {
     my ( $self, $params ) = @_;
     my $backend = $self->_backend->name;
 
-    # Generate path to file to load
-    my $backend_dir;
-    my $backend_tmpl;
+    if ( $backend eq 'Standard' ) {
 
-    if ( $self->{_plugin} ) {
+        my $template_name = 'ill/backends/Standard/' . ( $params->{method} // q{} ) . '.inc';
 
-        $backend_dir  = $self->{_plugin}->bundle_path;
-        $backend_tmpl = $backend_dir;
+        # Set files to load
+        $params->{template}      = $template_name;
+        $params->{opac_template} = $template_name;
 
-    } elsif ( $backend eq 'Standard' ) {
-
-        # Check for core Standard backend
-        $backend_tmpl = dirname(__FILE__) . '/Backend';
     } else {
+        my $plugin =
+              $self->{_plugin}
+            ? $self->{_plugin}
+            : $self->get_plugin( $self->_backend->name );
 
-        # Old way of loading backends: Through backend_dir config
-        $backend_dir  = $self->_config->backend_dir;
-        $backend_tmpl = join "/", $backend_dir, $backend;
+        # Generate path to file to load
+        my $backend_dir;
+        my $backend_tmpl;
+
+        if ($plugin) {
+
+            # New way of loading backends: Through plugins
+            $backend_dir  = $plugin->bundle_path;
+            $backend_tmpl = $backend_dir;
+
+        } else {
+
+            # Old way of loading backends: Through backend_dir config
+            $backend_dir  = $self->_config->backend_dir;
+            $backend_tmpl = join "/", $backend_dir, $backend;
+        }
+
+        my $intra_tmpl = join "/", $backend_tmpl, "intra-includes",
+            ( $params->{method} // q{} ) . ".inc";
+        my $opac_tmpl = join "/", $backend_tmpl, "opac-includes",
+            ( $params->{method} // q{} ) . ".inc";
+
+        # Set files to load
+        $params->{template}      = $intra_tmpl;
+        $params->{opac_template} = $opac_tmpl;
     }
 
-    my $intra_tmpl = join "/", $backend_tmpl, "intra-includes",
-        ( $params->{method} // q{} ) . ".inc";
-    my $opac_tmpl = join "/", $backend_tmpl, "opac-includes",
-        ( $params->{method} // q{} ) . ".inc";
-
-    # Set files to load
-    $params->{template}      = $intra_tmpl;
-    $params->{opac_template} = $opac_tmpl;
     return $params;
 }
 
