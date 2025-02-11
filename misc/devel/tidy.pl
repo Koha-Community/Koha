@@ -50,7 +50,6 @@ my @exceptions = qw(
     misc/cronjobs/rss/lastAcquired-2.0.tt
     misc/cronjobs/rss/longestUnseen.tt
     misc/cronjobs/rss/mostReserved.tt
-    t/db_dependent/misc/translator/sample.tt
 );
 
 @files = array_minus( @files, @exceptions );
@@ -121,7 +120,7 @@ sub get_js_files {
 }
 
 sub get_tt_files {
-    my @files = qx{git ls-files '*.tt' '*.inc' ':(exclude)Koha/ILL/Backend/' ':(exclude)doc-head-open.inc'};
+    my @files = qx{git ls-files '*.tt' '*.inc' ':(exclude)Koha/ILL/Backend/' ':(exclude)*doc-head-open.inc'};
     chomp for @files;
     return @files;
 }
