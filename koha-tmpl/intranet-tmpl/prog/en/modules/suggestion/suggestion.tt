@@ -716,7 +716,7 @@
                             [% SWITCH m.code %]
                             [% CASE 'already_exists' %]
                                 <span
-                                    >The suggestion has not been added. A suggestion with this title already exists (<a href="/cgi-bin/koha/suggestion/suggestion.pl?suggestionid=[% m.id | html %]&op=show">suggestion #[% m.id | html %]</a
+                                    >The suggestion has not been added. A suggestion with this title already exists (<a href="/cgi-bin/koha/suggestion/suggestion.pl?suggestionid=[% m.id | uri %]&op=show">suggestion #[% m.id | html %]</a
                                     >)</span
                                 >
                             [% CASE 'biblio_exists' %]
