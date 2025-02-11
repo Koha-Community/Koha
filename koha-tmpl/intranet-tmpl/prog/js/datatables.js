@@ -496,10 +496,13 @@ function _dt_default_ajax (params){
                             coded_datatype &&
                             coded_datatype.length > 1
                         ) {
-                            if (global_search.length) {
+                            if (global_search.length || value.length) {
                                 coded_datatype = coded_datatype[1];
+                                const search_value = value.length
+                                    ? value
+                                    : global_search;
                                 const regex = new RegExp(
-                                    `^${global_search}`,
+                                    `^${search_value}`,
                                     "i"
                                 );
                                 if (
