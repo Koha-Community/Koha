@@ -98,6 +98,7 @@ sub marc2marc {
             my @privatefields;
             foreach my $field ($marc_record_obj->fields()) {
                 if ($field->tag() =~ m/9/ && ($field->tag() != '490' || C4::Context->preference("marcflavour") eq 'UNIMARC')) {
+                    next if grep { $field->tag eq $_ } qw/ 920 924 930 /;
                     push @privatefields, $field;
                 } elsif (! ($field->is_control_field())) {
                     $field->delete_subfield(code => '9') if ($field->subfield('9'));
