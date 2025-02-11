@@ -483,8 +483,12 @@ sub load_backend {
         logger => Koha::ILL::Request::Logger->new
     };
 
-    # Find plugin implementing the backend for the request
-    my $plugin = $self->get_backend_plugin($backend_name);
+    my $plugin;
+    if ( $backend_name ne 'Standard' ) {
+
+        # Find plugin implementing the backend for the request
+        $plugin = $self->get_backend_plugin($backend_name);
+    }
 
     if ( $backend_name eq 'Standard' ) {
 
