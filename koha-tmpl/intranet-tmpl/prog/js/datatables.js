@@ -1056,6 +1056,7 @@ function _dt_add_filters(table_node, table_dt, filters_options = {}) {
         }
     });
     _dt_add_delay_filters(table_dt, table_node);
+    table_dt.fixedHeader.adjust();
 }
 
 function _dt_add_delay(table_dt, table_node) {
