@@ -484,15 +484,16 @@ sub load_backend {
     };
 
     # Find plugin implementing the backend for the request
-    my $backend_plugin = $self->get_backend_plugin($backend_name);
+    my $plugin = $self->get_backend_plugin($backend_name);
 
     if ( $backend_name eq 'Standard' ) {
 
         # Load the Standard core backend
         $self->{_my_backend} = Koha::ILL::Backend::Standard->new($backend_params);
-    } elsif ($backend_plugin) {
+    } elsif ($plugin) {
 
-        $self->{_my_backend} = $backend_plugin->new_ill_backend($backend_params);
+        $self->{_my_backend} = $plugin->new_ill_backend($backend_params);
+        $self->{_plugin}     = $plugin;
     } elsif ($backend_name) {
 
         # Fallback to loading through backend_dir config
