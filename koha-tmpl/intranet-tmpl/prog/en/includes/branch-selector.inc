@@ -3,7 +3,7 @@
     <p
         ><a href="#" id="checkall"> <i class="fa fa-check"></i> Select all</a> | <a href="#" id="checknone"> <i class="fa fa-times"></i> Clear all</a></p
     >
-    [% SET branches_for_loop = branches.hash(1).keys.nsort %][%# Do not modify the original variable 'branches' %]
+    [% SET branches_for_loop = branches.hash(1).keys.nsort || [] %][%# Do not modify the original variable 'branches' %]
     [% WHILE branches_for_loop.size > 0 %]
         <div class="branchgridrow">
             [% FOREACH i IN branches_for_loop.splice(0, 4) %]
