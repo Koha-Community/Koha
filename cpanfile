@@ -175,6 +175,7 @@ recommends 'Test::Deep', '0.106';
 recommends 'Test::Exception', '0.35';
 recommends 'Test::MockObject', '1.09';
 recommends 'Test::MockTime', '0.13';
+recommends 'Test::PerlTidy', '20230226';
 recommends 'Test::Strict', '0.14';
 recommends 'Test::WWW::Mechanize', '1.42';
 recommends 'Test::Warn', '0.21';
