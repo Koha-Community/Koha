@@ -97,6 +97,7 @@
                                 <th>Requested item type</th>
                             [% END %]
                             <th>Status</th>
+                            <th>Notes</th>
                         </tr>
                     </thead>
                 </table>
@@ -141,6 +142,7 @@
                                 <th>Requested item type</th>
                             [% END %]
                             <th>Status</th>
+                            <th>Notes</th>
                         </tr>
                     </thead>
                 </table>
@@ -330,6 +332,14 @@
                                 }
 
                                 return _("Pending");
+                            }
+                        },
+                        {
+                            data: "notes",
+                            searchable: true,
+                            orderable: true,
+                            render: function (data, type, row, meta) {
+                                return row.notes;
                             }
                         },
                     ],
