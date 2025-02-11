@@ -1161,11 +1161,9 @@ sub expand_template {
     my $backend_dir;
     my $backend_tmpl;
 
-    my $backend_plugin = $self->get_backend_plugin( $self->_backend->name );
-    if ($backend_plugin) {
+    if ( $self->{_plugin} ) {
 
-        # New way of loading backends: Through plugins
-        $backend_dir  = $backend_plugin->bundle_path;
+        $backend_dir  = $self->{_plugin}->bundle_path;
         $backend_tmpl = $backend_dir;
 
     } elsif ( $backend eq 'Standard' ) {
