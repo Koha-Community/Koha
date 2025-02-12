@@ -62,31 +62,34 @@
                     <p> [% loopfilte.crit | html %] = [% loopfilte.filter | html %] </p>
                 [% END %]
             [% END %]
-            <table>
-                <tr>
-                    <th>[% mainloo.line | html %] / [% mainloo.column | html %]</th>
-                    [% FOREACH loopco IN mainloo.loopcol %]
-                        <th>[% IF ( loopco.coltitle_display ) %][% loopco.coltitle_display | html %][% ELSE %][% loopco.coltitle | html %][% END %] </th>
-                    [% END %]
-                    <th>TOTAL</th>
-                </tr>
-                [% FOREACH loopro IN mainloo.looprow %]
+            <div class="page-section">
+                <table>
                     <tr>
-                        <td>[% IF ( loopro.rowtitle_display ) %][% loopro.rowtitle_display | html %][% ELSE %][% loopro.rowtitle | html %][% END %] </td>
-                        [% FOREACH loopcel IN loopro.loopcell %]
-                            <td>[% IF ( loopcel.value ) %][% loopcel.value | html %][% ELSE %]&nbsp;[% END %] </td>
+                        <th>[% mainloo.line | html %] / [% mainloo.column | html %]</th>
+                        [% FOREACH loopco IN mainloo.loopcol %]
+                            <th>[% IF ( loopco.coltitle_display ) %][% loopco.coltitle_display | html %][% ELSE %][% loopco.coltitle | html %][% END %] </th>
                         [% END %]
-                        <td>[% loopro.totalrow | html %]</td>
+                        <th>TOTAL</th>
                     </tr>
-                [% END %]
-                <tr>
-                    <th>TOTAL</th>
-                    [% FOREACH loopfoote IN mainloo.loopfooter %]
-                        <th>[% loopfoote.totalcol | html %]</th>
+                    [% FOREACH loopro IN mainloo.looprow %]
+                        <tr>
+                            <td>[% IF ( loopro.rowtitle_display ) %][% loopro.rowtitle_display | html %][% ELSE %][% loopro.rowtitle | html %][% END %] </td>
+                            [% FOREACH loopcel IN loopro.loopcell %]
+                                <td>[% IF ( loopcel.value ) %][% loopcel.value | html %][% ELSE %]&nbsp;[% END %] </td>
+                            [% END %]
+                            <td>[% loopro.totalrow | html %]</td>
+                        </tr>
                     [% END %]
-                    <th>[% mainloo.total | html %]</th>
-                </tr>
-            </table>
+                    <tr>
+                        <th>TOTAL</th>
+                        [% FOREACH loopfoote IN mainloo.loopfooter %]
+                            <th>[% loopfoote.totalcol | html %]</th>
+                        [% END %]
+                        <th>[% mainloo.total | html %]</th>
+                    </tr>
+                </table>
+            </div>
+            <!-- /.page-section -->
         [% END %]
     [% ELSE %]
         <form method="get" action="/cgi-bin/koha/reports/borrowers_stats.pl">

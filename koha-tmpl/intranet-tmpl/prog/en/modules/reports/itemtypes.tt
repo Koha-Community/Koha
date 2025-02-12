@@ -47,28 +47,31 @@
     [% IF ( do_it ) %]
         [% FOREACH mainloo IN mainloop %]
             <h1>Reports on item types [% IF branch %]held at [% Branches.GetName( branch ) | html %][% END %]</h1>
-            <table id="itemtypest">
-                <thead>
-                    <tr>
-                        <th>Item type</th>
-                        <th>Count</th>
-                    </tr>
-                </thead>
-                <tfoot>
-                    <tr>
-                        <th>TOTAL</th>
-                        <th>[% mainloo.total | html %]</th>
-                    </tr>
-                </tfoot>
-                <tbody>
-                    [% FOREACH loopitemtyp IN mainloo.loopitemtype %]
+            <div class="page-section">
+                <table id="itemtypest">
+                    <thead>
                         <tr>
-                            <td>[% ItemTypes.GetDescription( loopitemtyp.itemtype ) | html %]</td>
-                            <td>[% loopitemtyp.count | html %]</td>
+                            <th>Item type</th>
+                            <th>Count</th>
                         </tr>
-                    [% END %]
-                </tbody>
-            </table>
+                    </thead>
+                    <tfoot>
+                        <tr>
+                            <th>TOTAL</th>
+                            <th>[% mainloo.total | html %]</th>
+                        </tr>
+                    </tfoot>
+                    <tbody>
+                        [% FOREACH loopitemtyp IN mainloo.loopitemtype %]
+                            <tr>
+                                <td>[% ItemTypes.GetDescription( loopitemtyp.itemtype ) | html %]</td>
+                                <td>[% loopitemtyp.count | html %]</td>
+                            </tr>
+                        [% END %]
+                    </tbody>
+                </table>
+            </div>
+            <!-- /.page-section -->
         [% END %]
     [% ELSE %]
         <h1>View a count of items held at your library grouped by item type</h1>

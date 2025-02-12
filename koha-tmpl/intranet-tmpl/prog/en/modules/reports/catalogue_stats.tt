@@ -53,43 +53,46 @@
                 [% END %]
             [% END %]
 
-            <table id="catalogue_stats">
-                <thead>
-                    <tr>
-                        <th>[% mainloo.line | html %] / [% mainloo.column | html %]</th>
-                        [% FOREACH loopco IN mainloo.loopcol %]
-                            <th>[% loopco.coltitle | html %]</th>
-                        [% END %]
-                        <th>TOTAL</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    [% FOREACH loopro IN mainloo.looprow %]
+            <div class="page-section">
+                <table id="catalogue_stats">
+                    <thead>
                         <tr>
-                            <td> [% loopro.rowtitle | html %]</td>
-                            [% FOREACH loopcel IN loopro.loopcell %]
-                                <td>
-                                    [% IF ( loopcel.value ) %]
-                                        [% loopcel.value | html %]
-                                    [% ELSE %]
-                                        &nbsp;
-                                    [% END %]
-                                </td>
+                            <th>[% mainloo.line | html %] / [% mainloo.column | html %]</th>
+                            [% FOREACH loopco IN mainloo.loopcol %]
+                                <th>[% loopco.coltitle | html %]</th>
                             [% END %]
-                            <td> [% loopro.totalrow | html %] </td>
+                            <th>TOTAL</th>
                         </tr>
-                    [% END %]
-                </tbody>
-                <tfoot>
-                    <tr>
-                        <th>TOTAL (all results)</th>
-                        [% FOREACH loopfoote IN mainloo.loopfooter %]
-                            <th> [% loopfoote.totalcol | html %] </th>
+                    </thead>
+                    <tbody>
+                        [% FOREACH loopro IN mainloo.looprow %]
+                            <tr>
+                                <td> [% loopro.rowtitle | html %]</td>
+                                [% FOREACH loopcel IN loopro.loopcell %]
+                                    <td>
+                                        [% IF ( loopcel.value ) %]
+                                            [% loopcel.value | html %]
+                                        [% ELSE %]
+                                            &nbsp;
+                                        [% END %]
+                                    </td>
+                                [% END %]
+                                <td> [% loopro.totalrow | html %] </td>
+                            </tr>
                         [% END %]
-                        <th>[% mainloo.total | html %]</th>
-                    </tr>
-                </tfoot>
-            </table>
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <th>TOTAL (all results)</th>
+                            [% FOREACH loopfoote IN mainloo.loopfooter %]
+                                <th> [% loopfoote.totalcol | html %] </th>
+                            [% END %]
+                            <th>[% mainloo.total | html %]</th>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+            <!-- /.page-section -->
         [% END %]
     [% ELSE %]
         <form method="get" action="/cgi-bin/koha/reports/catalogue_stats.pl">

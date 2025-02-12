@@ -104,31 +104,34 @@
                 </ul>
             [% END %]
 
-            <table>
-                <tr>
-                    <th>[% mainloo.line | html %] / [% mainloo.column | html %]</th>
-                    [% FOREACH loopco IN mainloo.loopcol %]
-                        <th>[% loopco.coltitle_display | html %]</th>
-                    [% END %]
-                    <th>TOTAL</th>
-                </tr>
-                [% FOREACH loopro IN mainloo.looprow %]
+            <div class="page-section">
+                <table>
                     <tr>
-                        <td>[% loopro.rowtitle_display or "UNKNOWN VALUE" | html %]</td>
-                        [% FOREACH loopcel IN loopro.loopcell %]
-                            <td>[% loopcel.value || 0 | html %]</td>
+                        <th>[% mainloo.line | html %] / [% mainloo.column | html %]</th>
+                        [% FOREACH loopco IN mainloo.loopcol %]
+                            <th>[% loopco.coltitle_display | html %]</th>
                         [% END %]
-                        <td>[% loopro.totalrow | html %]</td>
+                        <th>TOTAL</th>
                     </tr>
-                [% END %]
-                <tr>
-                    <th>TOTAL</th>
-                    [% FOREACH loopfoote IN mainloo.loopfooter %]
-                        <th>[% loopfoote.totalcol | html %]</th>
+                    [% FOREACH loopro IN mainloo.looprow %]
+                        <tr>
+                            <td>[% loopro.rowtitle_display or "UNKNOWN VALUE" | html %]</td>
+                            [% FOREACH loopcel IN loopro.loopcell %]
+                                <td>[% loopcel.value || 0 | html %]</td>
+                            [% END %]
+                            <td>[% loopro.totalrow | html %]</td>
+                        </tr>
                     [% END %]
-                    <th>[% mainloo.total | html %]</th>
-                </tr>
-            </table>
+                    <tr>
+                        <th>TOTAL</th>
+                        [% FOREACH loopfoote IN mainloo.loopfooter %]
+                            <th>[% loopfoote.totalcol | html %]</th>
+                        [% END %]
+                        <th>[% mainloo.total | html %]</th>
+                    </tr>
+                </table>
+            </div>
+            <!-- /.page-section -->
         [% END %]
     [% ELSE %]
         <form method="get" action="/cgi-bin/koha/reports/issues_stats.pl">

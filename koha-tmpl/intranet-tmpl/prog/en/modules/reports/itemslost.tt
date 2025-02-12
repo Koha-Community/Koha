@@ -76,61 +76,64 @@
                 <div class="lostitems-table_table_controls"> </div>
             [% END %]
 
-            <table id="lostitems-table">
-                <thead>
-                    <tr>
-                        [% IF csv_profiles.count %]
-                            <th class="NoSort"></th>
-                        [% END %]
-                        <th>Title</th>
-                        <th>Author</th>
-                        <th>Lost status</th>
-                        <th>Lost on</th>
-                        <th>Barcode</th>
-                        <th>Call number</th>
-                        <th>Date last seen</th>
-                        <th>Price</th>
-                        <th>Rep.price</th>
-                        <th>Library</th>
-                        <th>Item type</th>
-                        <th>Collection</th>
-                        <th>Current library</th>
-                        <th>Location</th>
-                        <th>Not for loan status</th>
-                        <th>Notes</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    [% FOREACH item IN items %]
+            <div class="page-section">
+                <table id="lostitems-table">
+                    <thead>
                         <tr>
                             [% IF csv_profiles.count %]
-                                <td style="text-align:center;vertical-align:middle">
-                                    <input type="checkbox" value="[% item.itemnumber | html %]" name="itemnumber" />
-                                </td>
+                                <th class="NoSort"></th>
                             [% END %]
-                            <td>
-                                <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% item.biblionumber | uri %]">[% item.biblio.title | html %]</a>
-                            </td>
-                            <td>[% item.biblio.author | html %]</td>
-                            <td>[% AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.itemlost', authorised_value => item.itemlost ) | html %] </td
-                            ><td data-order="[% item.itemlost_on | html %]">[% item.itemlost_on | $KohaDates %]</td>
-                            <td>
-                                <a href="/cgi-bin/koha/catalogue/moredetail.pl?biblionumber=[% item.biblionumber | uri %]">[% item.barcode | html %]</a>
-                            </td>
-                            <td>[% item.itemcallnumber | html %]</td>
-                            <td data-order="[% item.datelastseen | html %]">[% item.datelastseen | $KohaDates with_hours => 1 %]</td>
-                            <td>[% item.price | $Price %]</td>
-                            <td>[% item.replacementprice | $Price %]</td>
-                            <td>[% Branches.GetName(item.homebranch) | html %]</td>
-                            <td>[% ItemTypes.GetDescription(item.effective_itemtype) | html %]</td>
-                            <td>[% AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.ccode', authorised_value => item.ccode ) | html %]</td>
-                            <td>[% Branches.GetName(item.holdingbranch) | html %]</td>
-                            <td>[% AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.location', authorised_value => item.location ) | html %]</td>
-                            <td>[% AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.notforloan', authorised_value => item.notforloan ) | html %] </td><td>[% item.itemnotes | $raw %]</td>
+                            <th>Title</th>
+                            <th>Author</th>
+                            <th>Lost status</th>
+                            <th>Lost on</th>
+                            <th>Barcode</th>
+                            <th>Call number</th>
+                            <th>Date last seen</th>
+                            <th>Price</th>
+                            <th>Rep.price</th>
+                            <th>Library</th>
+                            <th>Item type</th>
+                            <th>Collection</th>
+                            <th>Current library</th>
+                            <th>Location</th>
+                            <th>Not for loan status</th>
+                            <th>Notes</th>
                         </tr>
-                    [% END %]
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody>
+                        [% FOREACH item IN items %]
+                            <tr>
+                                [% IF csv_profiles.count %]
+                                    <td style="text-align:center;vertical-align:middle">
+                                        <input type="checkbox" value="[% item.itemnumber | html %]" name="itemnumber" />
+                                    </td>
+                                [% END %]
+                                <td>
+                                    <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% item.biblionumber | uri %]">[% item.biblio.title | html %]</a>
+                                </td>
+                                <td>[% item.biblio.author | html %]</td>
+                                <td>[% AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.itemlost', authorised_value => item.itemlost ) | html %] </td
+                                ><td data-order="[% item.itemlost_on | html %]">[% item.itemlost_on | $KohaDates %]</td>
+                                <td>
+                                    <a href="/cgi-bin/koha/catalogue/moredetail.pl?biblionumber=[% item.biblionumber | uri %]">[% item.barcode | html %]</a>
+                                </td>
+                                <td>[% item.itemcallnumber | html %]</td>
+                                <td data-order="[% item.datelastseen | html %]">[% item.datelastseen | $KohaDates with_hours => 1 %]</td>
+                                <td>[% item.price | $Price %]</td>
+                                <td>[% item.replacementprice | $Price %]</td>
+                                <td>[% Branches.GetName(item.homebranch) | html %]</td>
+                                <td>[% ItemTypes.GetDescription(item.effective_itemtype) | html %]</td>
+                                <td>[% AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.ccode', authorised_value => item.ccode ) | html %]</td>
+                                <td>[% Branches.GetName(item.holdingbranch) | html %]</td>
+                                <td>[% AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.location', authorised_value => item.location ) | html %]</td>
+                                <td>[% AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.notforloan', authorised_value => item.notforloan ) | html %] </td><td>[% item.itemnotes | $raw %]</td>
+                            </tr>
+                        [% END %]
+                    </tbody>
+                </table>
+            </div>
+            <!-- /.page-section -->
         [% END %]
     [% ELSE %]
         <form name="f" action="/cgi-bin/koha/reports/itemslost.pl" method="get">

@@ -80,36 +80,39 @@
                 [% END %]
             [% END %]
 
-            <table>
-                <tr>
-                    <th rowspan="2">Rank</th>
-                    <th rowspan="2">Patron</th>
-                    <th rowspan="2">Total</th>
-                    [% FOREACH loopco IN mainloo.loopcol %]
-                        <th>[% loopco.coltitle | html %]</th>
-                    [% END %]
-                </tr>
-                <tr>
-                    [% FOREACH loopco IN mainloo.loopcol %]
-                        <th>Checkout count</th>
-                    [% END %]
-                </tr>
-                [% FOREACH loopro IN mainloo.looprow %]
+            <div class="page-section">
+                <table>
                     <tr>
-                        <td> [% loopro.rowtitle | html %]</td>
-                        <td>
-                            [% IF ( loopro.reference ) %]
-                                <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% loopro.reference | uri %]"> [% IF ( loopro.patron ) %][% loopro.patron | html %][% END %] </a>
-                            [% ELSE %]
-                                [% IF ( loopro.patron ) %][% loopro.patron | html %][% END %]
-                            [% END %]
-                        </td>
-                        [% FOREACH loopcel IN loopro.loopcell %]
-                            <td> [% IF ( loopcel.count ) %][% loopcel.count | html %][% END %] </td>
+                        <th rowspan="2">Rank</th>
+                        <th rowspan="2">Patron</th>
+                        <th rowspan="2">Total</th>
+                        [% FOREACH loopco IN mainloo.loopcol %]
+                            <th>[% loopco.coltitle | html %]</th>
                         [% END %]
                     </tr>
-                [% END %]
-            </table>
+                    <tr>
+                        [% FOREACH loopco IN mainloo.loopcol %]
+                            <th>Checkout count</th>
+                        [% END %]
+                    </tr>
+                    [% FOREACH loopro IN mainloo.looprow %]
+                        <tr>
+                            <td> [% loopro.rowtitle | html %]</td>
+                            <td>
+                                [% IF ( loopro.reference ) %]
+                                    <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% loopro.reference | uri %]"> [% IF ( loopro.patron ) %][% loopro.patron | html %][% END %] </a>
+                                [% ELSE %]
+                                    [% IF ( loopro.patron ) %][% loopro.patron | html %][% END %]
+                                [% END %]
+                            </td>
+                            [% FOREACH loopcel IN loopro.loopcell %]
+                                <td> [% IF ( loopcel.count ) %][% loopcel.count | html %][% END %] </td>
+                            [% END %]
+                        </tr>
+                    [% END %]
+                </table>
+            </div>
+            <!-- /.page-section -->
         [% END %]
     [% ELSE %]
         <h1>Patrons with the most checkouts</h1>

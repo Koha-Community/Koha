@@ -49,22 +49,25 @@
                 [% END %]
             [% END %]
 
-            <table>
-                <tr>
-                    <th>Num/Patrons</th>
-                    [% FOREACH loopco IN mainloo.loopcol %]
-                        <th>[% loopco.coltitle | html %]</th>
-                    [% END %]
-                </tr>
-                [% FOREACH loopro IN mainloo.looprow %]
+            <div class="page-section">
+                <table>
                     <tr>
-                        <td>[% loopro.rowtitle | html %]</td>
-                        [% FOREACH loopcel IN loopro.loopcell %]
-                            <td>[% IF ( loopcel.value ) %][% loopcel.value | html %][% END %] </td>
+                        <th>Num/Patrons</th>
+                        [% FOREACH loopco IN mainloo.loopcol %]
+                            <th>[% loopco.coltitle | html %]</th>
                         [% END %]
                     </tr>
-                [% END %]
-            </table>
+                    [% FOREACH loopro IN mainloo.looprow %]
+                        <tr>
+                            <td>[% loopro.rowtitle | html %]</td>
+                            [% FOREACH loopcel IN loopro.loopcell %]
+                                <td>[% IF ( loopcel.value ) %][% loopcel.value | html %][% END %] </td>
+                            [% END %]
+                        </tr>
+                    [% END %]
+                </table>
+            </div>
+            <!-- /.page-section -->
         [% END %]
     [% ELSE %]
         <h1>Patrons with no checkouts</h1>

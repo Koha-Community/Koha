@@ -91,37 +91,40 @@
             [% END %]
 
             [% FOREACH mainloo IN mainloop %]
-                <table>
-                    <tr>
-                        <th>[% mainloo.line | html %] / [% mainloo.column | html %]</th>
-                        [% FOREACH loopco IN mainloo.loopcol %]
-                            <th>[% PROCESS reservestatus field=mainloo.column value=loopco.coltitle_display %]</th>
-                        [% END %]
-                        <th>TOTAL</th>
-                    </tr>
-                    [% FOREACH loopro IN mainloo.looprow %]
+                <div class="page-section">
+                    <table>
                         <tr>
-                            <td>[% PROCESS reservestatus field=mainloo.line value=loopro.rowtitle_display %]</td>
-                            [% FOREACH loopcel IN loopro.loopcell %]
-                                <td align="center">
-                                    [% IF ( loopcel.url_complement ) %]
-                                        <a href="reserves_stats.pl?output=[% loopcel.output | uri %]&amp;[% loopcel.url_complement | uri %]">[% loopcel.value | html %]</a>
-                                    [% ELSE %]
-                                        [% loopcel.value | html %]
-                                    [% END %]
-                                </td>
+                            <th>[% mainloo.line | html %] / [% mainloo.column | html %]</th>
+                            [% FOREACH loopco IN mainloo.loopcol %]
+                                <th>[% PROCESS reservestatus field=mainloo.column value=loopco.coltitle_display %]</th>
                             [% END %]
-                            <td align="center">[% loopro.totalrow | html %]</td>
+                            <th>TOTAL</th>
                         </tr>
-                    [% END %]
-                    <tr>
-                        <th>TOTAL</th>
-                        [% FOREACH loopfoote IN mainloo.loopfooter %]
-                            <th>[% loopfoote.totalcol | html %]</th>
+                        [% FOREACH loopro IN mainloo.looprow %]
+                            <tr>
+                                <td>[% PROCESS reservestatus field=mainloo.line value=loopro.rowtitle_display %]</td>
+                                [% FOREACH loopcel IN loopro.loopcell %]
+                                    <td align="center">
+                                        [% IF ( loopcel.url_complement ) %]
+                                            <a href="reserves_stats.pl?output=[% loopcel.output | uri %]&amp;[% loopcel.url_complement | uri %]">[% loopcel.value | html %]</a>
+                                        [% ELSE %]
+                                            [% loopcel.value | html %]
+                                        [% END %]
+                                    </td>
+                                [% END %]
+                                <td align="center">[% loopro.totalrow | html %]</td>
+                            </tr>
                         [% END %]
-                        <th>[% mainloo.total | html %]</th>
-                    </tr>
-                </table>
+                        <tr>
+                            <th>TOTAL</th>
+                            [% FOREACH loopfoote IN mainloo.loopfooter %]
+                                <th>[% loopfoote.totalcol | html %]</th>
+                            [% END %]
+                            <th>[% mainloo.total | html %]</th>
+                        </tr>
+                    </table>
+                </div>
+                <!-- /.page-section -->
             [% END %]
         [% END %]
     [% ELSE %]
