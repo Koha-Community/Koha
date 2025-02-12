@@ -2,9 +2,11 @@
 use Modern::Perl;
 use Term::ANSIColor qw(:constants);
 use Git::Wrapper;
-use File::Slurp qw( write_file );
-use File::Temp  qw( tempfile );
-use List::Util  qw( first );
+use File::Slurp    qw( write_file );
+use File::Temp     qw( tempfile );
+use File::Basename qw(dirname);
+use File::Path     qw(make_path);
+use List::Util     qw( first );
 use Getopt::Long;
 use Pod::Usage;
 use Try::Tiny;
@@ -164,6 +166,10 @@ FILE: while ( my ( $ii, $file ) = each @modified_files ) {
 
         next unless @content;    # We removed the file
 
+        my $parent_directory = dirname($file);
+        unless ( -f $parent_directory ) {
+            make_path($parent_directory);
+        }
         write_file( $file, join "\n", @content );
 
         # Tidy the file
