@@ -10,17 +10,20 @@ use List::Util     qw( first );
 use Getopt::Long;
 use Pod::Usage;
 use Try::Tiny;
+use REST::Client;
+use JSON qw( decode_json );
 $Term::ANSIColor::AUTOLOCAL = 1;
 
 my $git_dir       = '.';
 my $target_branch = 'main';
-my ( $new_branch, $nb_commits, $help );
+my ( $new_branch, $nb_commits, $bug_number, $help );
 
 GetOptions(
     'git-dir=s'       => \$git_dir,
     'target-branch=s' => \$target_branch,
     'new-branch=s'    => \$new_branch,
     'n=s'             => \$nb_commits,
+    'bugzilla=s'      => \$bug_number,
     'help|?'          => \$help,
 ) or pod2usage(2);
 
@@ -56,7 +59,13 @@ try {
     exit 2;
 };
 
-my ($source_branch) = $git->RUN( 'symbolic-ref', '--short', 'HEAD' );
+my $source_branch;
+if ($bug_number) {
+    $source_branch = "bug_$bug_number";
+    switch_branch($source_branch);
+} else {
+    ($source_branch) = $git->RUN( 'symbolic-ref', '--short', 'HEAD' );
+}
 
 # Bug 38664 is "Tidy the whole codebase"
 my @tidy_commits = grep { m{\|Bug 38664: } } $git->RUN( 'log', '--format=%h|%s', $target_branch );
@@ -68,27 +77,63 @@ my ($tidy_commit)        = split '\|', $tidy_commits[0];
 my ($commit_before_tidy) = split '\|', $tidy_commits[-1];
 $commit_before_tidy .= '^1';
 
-# Do not do anything if we have the tidy commits in the git log
-if ( $git->branch( $source_branch, '--contains', $tidy_commit ) ) {
-    say GREEN "No need to rebase, your branch already contains the tidy commits!";
-    exit;
-}
-
 my $tmp_src_branch = "$source_branch-tmp";
 $new_branch ||= "$source_branch-rebased";
 
 say BLUE "Creating a temporary branch '$tmp_src_branch'...";
-try {
-    $git->checkout( '-b', $tmp_src_branch );
-} catch {
-    say MAGENTA $_->error;
-    say RED sprintf "Cannot create and checkout branch '%s'.", $tmp_src_branch;
-    if ( $_->error =~ m{already exists} ) {
-        say RED "Delete it and try again.";
-        say sprintf "\t\$ git branch -D %s", $tmp_src_branch;
+switch_branch($tmp_src_branch);
+
+if ($bug_number) {
+    say BLUE sprintf "Guessing a date to use from bugzilla's bug %s", $bug_number;
+    my $client = REST::Client->new(
+        {
+            host => 'https://bugs.koha-community.org/bugzilla3/rest',
+        }
+    );
+
+    $client->GET("/bug/$bug_number/attachment?include_fields=is_patch,is_obsolete,creation_time,summary");
+    my $response = decode_json( $client->responseContent );
+
+    my $time;
+    foreach my $attachment ( @{ $response->{bugs}->{$bug_number} } ) {
+        next if ( $attachment->{is_obsolete} );
+        next if ( !$attachment->{is_patch} );
+
+        $time = $attachment->{creation_time};
+        last;
     }
-    exit 2;
-};
+
+    unless ($time) {
+        say RED sprintf "No non-obsolete patch found on bug %s", $bug_number;
+        exit 2;
+    }
+    say GREEN sprintf "First patch from this bug was applied at %s", $time;
+
+    my ($commit) = $git->rev_list( '-n', 1, '--before', $time, $target_branch );
+    unless ($commit) {
+        say RED sprintf "No commit found before %s on '%s'", $time, $target_branch;
+        exit 2;
+    }
+
+    say BLUE "Resetting HEAD to where origin/main was at $time (commit $commit)";
+    $git->reset( '--hard', $commit );
+    try {
+        say BLUE "Applying patches using git bz";
+        $git->bz( 'apply', $bug_number, '--confirm' );
+    } catch {
+        say MAGENTA $_->error;
+        say RED "Cannot apply the patches cleanly";
+        say BLUE
+            "You can continue git-bz operation without this script. Once all the patches are applied retry without --bugzilla.";
+        exit 2;
+    }
+}
+
+# Do not do anything if we have the tidy commits in the git log
+if ( $git->branch( $tmp_src_branch, '--contains', $tidy_commit ) ) {
+    say GREEN "No need to rebase, your branch already contains the tidy commits!";
+    exit;
+}
 
 # Rebase the branch up to before the tidy work
 unless ( $git->branch( $source_branch, '--contains', $commit_before_tidy ) ) {
@@ -111,17 +156,7 @@ unless ( $git->branch( $source_branch, '--contains', $commit_before_tidy ) ) {
 
 # Create a new branch
 say BLUE "Creating a new branch '$new_branch' starting at the end of the tidy commits...";
-try {
-    $git->checkout( '-b', $new_branch, $tidy_commit );
-} catch {
-    say MAGENTA $_->error;
-    say RED sprintf "Cannot create and checkout branch '%s'.", $new_branch;
-    if ( $_->error =~ m{already exists} ) {
-        say RED "Delete it and try again.";
-        say sprintf "\t\$ git branch -D %s", $new_branch;
-    }
-    exit 2;
-};
+switch_branch( $new_branch, $tidy_commit );
 
 # Get the list of commits from the source branch
 say BLUE "Getting commit list from branch '$tmp_src_branch'...";
@@ -228,6 +263,21 @@ sub get_commit_info {
     return ( $author, $date, $message );
 }
 
+sub switch_branch {
+    my ( $branch, $commit ) = @_;
+    try {
+        $git->checkout( '-b', $branch, $commit || () );
+    } catch {
+        say MAGENTA $_->error;
+        say RED sprintf "Cannot create and checkout branch '%s'.", $branch;
+        if ( $_->error =~ m{already exists} ) {
+            say RED "Delete it and try again.";
+            say sprintf "\t\$ git branch -D %s", $branch;
+        }
+        exit 2;
+    };
+}
+
 =head1 NAME
 
 auto_rebase.pl - Automate rebasing and resolving conflicts during Git rebases.
@@ -241,6 +291,7 @@ auto_rebase.pl [options]
    --target-branch   Target branch to rebase onto (default: main)
    --new-branch      The resulting branch (default: ${source-branch}-rebased)
    -n                The number of commits to pick for rebase from the source branch
+   --bugzilla        Pull patches from bugzilla
    --help            Show this help message
 
 =head1 DESCRIPTION
@@ -252,11 +303,6 @@ Finally the rebase will continue.
 The source branch is the branch that is currently checked out.
 
 =head1 EXAMPLES
-
-First you need to retrieve this script from the main branch, do not place it under misc/devel/auto_rebase.pl or you will get an error (`The following untracked working tree files would be overwritten by checkout`).
-
-  git show origin/main:misc/devel/auto_rebase.pl > auto_rebase.pl
-  chmod +x auto_rebase.pl
 
 Rebase onto 'main' in the current repository:
 
@@ -273,6 +319,10 @@ Rebase onto 'main' and produces a new branch named 'new-branch'
 Rebase onto 'main' the last 42 commits of the current branch
 
   ./auto_rebase.pl -n 42
+
+Rebase onto 'main' the patches from bugzilla's bug 42424
+
+  ./auto_rebase.pl --bugzilla 42424
 
 =head1 AUTHOR
 
