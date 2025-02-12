@@ -488,7 +488,9 @@
                         <div class="btn-group"><a href="#" id="addauth" class="btn btn-primary" accesskey="w"><i class="fa fa-save"></i> Save</a></div>
                         <div class="btn-group">
                             [% IF ( authid ) %]
+                            [% IF CAN_user_nukat_merge_auth %]
                                 <a class="btn btn-default" id="z3950submit" href="#"><i class="fa fa-search"></i> Replace record via Z39.50/SRU search</a>
+                            [% END %]
                             [% ELSE %]
                                 <a class="btn btn-default" id="z3950submit" href="#"><i class="fa fa-search"></i> Z39.50/SRU search</a>
                             [% END %]

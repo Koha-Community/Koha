@@ -937,7 +937,9 @@ $(document).ready(function(){
 
                     [% UNLESS (circborrowernumber) %][%# Hide in fast cataloging %]
                         [% IF biblionumber %]
+                        [% IF CAN_user_nukat_merge_biblio %]
                             <div class="btn-group"><a class="btn btn-default" href="#" id="z3950search"><i class="fa fa-search"></i> Replace record via Z39.50/SRU search</a></div>
+                        [% END %]
                         [% ELSE %]
                             <div class="btn-group"><a class="btn btn-default" href="#" id="z3950search"><i class="fa fa-search"></i> Z39.50/SRU search</a></div>
                         [% END %]
