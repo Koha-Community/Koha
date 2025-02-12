@@ -70,7 +70,7 @@
                 </p>
 			[% END %]
 		[% END %]
-
+            <div class="page-section">
 		<table>
 			<tr >
 				<th>[% mainloo.line | html %] / [% mainloo.column | html %]</th>
@@ -105,6 +105,8 @@
 					<th>[% mainloo.total | html %]</th>
 				</tr>
 		</table>
+            </div>
+            <!-- /.page-section -->
 	[% END %]
 [% ELSE %]
 	<form method="get" action="/cgi-bin/koha/reports/acquisitions_stats.pl">

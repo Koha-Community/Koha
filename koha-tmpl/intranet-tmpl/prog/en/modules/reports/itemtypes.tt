@@ -51,6 +51,7 @@
 [% IF ( do_it ) %]
 [% FOREACH mainloo IN mainloop %]
     <h1>Reports on item types [% IF branch %] held at [% Branches.GetName( branch ) | html %][% END %]</h1>
+            <div class="page-section">
 	<table id="itemtypest">
 		<thead>
 		<tr>
@@ -73,6 +74,8 @@
 			[% END %]
 		</tbody>
 	</table>
+            </div>
+            <!-- /.page-section -->
 [% END %]
 [% ELSE %]
         <h1>View a count of items held at your library grouped by item type</h1>
