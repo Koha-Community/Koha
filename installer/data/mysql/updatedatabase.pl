@@ -25947,8 +25947,10 @@ if ( CheckVersion($DBversion) ) {
         |, { Slice => {} }
         );
         for my $suggestion (@$suggestions) {
-            my ($max_date) = sort ( $suggestion->{manageddate} || (), $suggestion->{accepteddate} || (),
-                $suggestion->{rejecteddate} || () );
+            my ($max_date) = sort { $a cmp $b } (
+                $suggestion->{manageddate} || (), $suggestion->{accepteddate} || (),
+                $suggestion->{rejecteddate} || ()
+            );
             next unless $max_date;
             my $last_modif_by =
                 ( defined $suggestion->{manageddate} and $max_date eq $suggestion->{manageddate} )
