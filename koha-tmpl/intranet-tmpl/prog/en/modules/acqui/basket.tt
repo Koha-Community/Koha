@@ -741,12 +741,12 @@
                                                     >
                                                 [% END %]
                                                 [% IF (books_loo.transferred_from) %]
-                                                    [% basket = books_loo.transferred_from.basket %]
+                                                    [% transfer_basket = books_loo.transferred_from.basket %]
                                                     [% bookseller = books_loo.transferred_from.bookseller %]
                                                     [% timestamp = books_loo.transferred_from.timestamp %]
                                                     <p>
                                                         Transferred from basket:
-                                                        <a href="/cgi-bin/koha/acqui/basket.pl?basketno=[% basket.basketno | uri %]"> [% basket.basketname | html %]</a>
+                                                        <a href="/cgi-bin/koha/acqui/basket.pl?basketno=[% transfer_basket.basketno | uri %]"> [% transfer_basket.basketname | html %]</a>
                                                         (<a href="/cgi-bin/koha/acquisition/vendors/[% bookseller.id | uri %]">[% bookseller.name | html %]</a>) on
                                                         <span title="[% timestamp | $KohaDates with_hours = 1 %]"> [% timestamp | $KohaDates %] </span>
                                                     </p>
