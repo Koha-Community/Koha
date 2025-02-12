@@ -29,30 +29,48 @@ $nproc ||= qx{nproc};
 
 my @files = @ARGV;
 
-pod2usage("--no-write can only be passed with a single file") if $no_write && @files > 1;
+pod2usage("--no-write can only be passed with a single file") if $no_write && @files != 1;
 
 pod2usage("--perl, --js and --tt can only be passed without any other files in parameter")
     if @files && ( $perl_files || $js_files || $tt_files );
 
-push @files, get_perl_files() if $perl_files;
-push @files, get_js_files()   if $js_files;
-push @files, get_tt_files()   if $tt_files;
+my $exceptions = {
+    pl => [qw(Koha/Schema/Result Koha/Schema.pm)],
+    js => [
+        qw(koha-tmpl/intranet-tmpl/lib koha-tmpl/intranet-tmpl/js/Gettext.js koha-tmpl/opac-tmpl/lib Koha/ILL/Backend/)
+    ],
+    tt => [qw(Koha/ILL/Backend/ *doc-head-open.inc misc/cronjobs/rss)],
+};
 
-unless (@files) {
-    push @files, get_perl_files();
-    push @files, get_js_files();
-    push @files, get_tt_files();
+if (@files) {
+
+    # This is inefficient if the list of files is long but most of the time we will have only one
+    @files = map {
+        my $file     = $_;
+        my $filetype = get_filetype($file);
+        my $cmd      = sprintf q{git ls-files %s %s}, $file, build_git_exclude($filetype);
+        my $output   = qx{$cmd};
+        chomp $output;
+        $output ? $file : ();
+    } @files;
+} else {
+    push @files, get_perl_files() if $perl_files;
+    push @files, get_js_files()   if $js_files;
+    push @files, get_tt_files()   if $tt_files;
+
+    unless (@files) {
+        push @files, get_perl_files();
+        push @files, get_js_files();
+        push @files, get_tt_files();
+    }
 }
 
-my @exceptions = qw(
-    misc/cronjobs/rss/lastAcquired.tt
-    misc/cronjobs/rss/lastAcquired-1.0.tt
-    misc/cronjobs/rss/lastAcquired-2.0.tt
-    misc/cronjobs/rss/longestUnseen.tt
-    misc/cronjobs/rss/mostReserved.tt
-);
+if ( $no_write && !@files ) {
 
-@files = array_minus( @files, @exceptions );
+    # File should not be tidy, but we need to return the content or we risk data loss
+    print read_file(@ARGV);
+    exit;
+}
 
 my $nb_files = scalar @files;
 my $pm       = Parallel::ForkManager->new($nproc);
@@ -93,7 +111,7 @@ sub tidy {
 
     my $filetype = get_filetype($file);
 
-    if ( $filetype eq 'perl' ) {
+    if ( $filetype eq 'pl' ) {
         return tidy_perl($file);
     } elsif ( $filetype eq 'js' ) {
         return tidy_js($file);
@@ -104,23 +122,28 @@ sub tidy {
     }
 }
 
+sub build_git_exclude {
+    my ($filetype) = @_;
+    return join( " ", map( "':(exclude)$_'", @{ $exceptions->{$filetype} } ) );
+}
+
 sub get_perl_files {
-    my @files;
-    push @files, qx{git ls-files '*.pl' '*.pm' '*.t' ':(exclude)Koha/Schema/Result'};
-    push @files, qx{git ls-files svc opac/svc};                                         # Files without extension
+    my $cmd   = sprintf q{git ls-files '*.pl' '*.pm' '*.t' svc opac/svc %s}, build_git_exclude('pl');
+    my @files = qx{$cmd};
     chomp for @files;
     return @files;
 }
 
 sub get_js_files {
-    my @files =
-        qx{git ls-files '*.js' '*.ts' '*.vue' ':(exclude)koha-tmpl/intranet-tmpl/lib' ':(exclude)koha-tmpl/intranet-tmpl/js/Gettext.js' ':(exclude)koha-tmpl/opac-tmpl/lib' ':(exclude)Koha/ILL/Backend/'};
+    my $cmd   = sprintf q{git ls-files '*.js' '*.ts' '*.vue' %s}, build_git_exclude('js');
+    my @files = qx{$cmd};
     chomp for @files;
     return @files;
 }
 
 sub get_tt_files {
-    my @files = qx{git ls-files '*.tt' '*.inc' ':(exclude)Koha/ILL/Backend/' ':(exclude)*doc-head-open.inc'};
+    my $cmd   = sprintf q{git ls-files '*.tt' '*.inc' %s}, build_git_exclude('js');
+    my @files = qx{$cmd};
     chomp for @files;
     return @files;
 }
@@ -181,8 +204,8 @@ sub tidy_tt {
 
 sub get_filetype {
     my ($file) = @_;
-    return 'perl' if $file =~ m{^svc} || $file =~ m{^opac/svc};
-    return 'perl' if $file =~ m{\.pl$} || $file =~ m{\.pm} || $file =~ m{\.t$};
+    return 'pl' if $file =~ m{^svc} || $file =~ m{^opac/svc};
+    return 'pl' if $file =~ m{\.pl$} || $file =~ m{\.pm} || $file =~ m{\.t$};
 
     return 'js' if $file =~ m{\.js$} || $file =~ m{\.ts$} || $file =~ m{\.vue$};
 
@@ -216,6 +239,9 @@ tidy.pl [options] [files]
 =head1 DESCRIPTION
 
 This script will tidy the different files present in the git repository.
+
+If the file is an exception and should be tidy, it will be skipped.
+However if only one file is passed with --no-write then the content of the file will be print to STDOUT.
 
 =head1 EXAMPLES
 
