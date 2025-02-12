@@ -23,8 +23,7 @@ use Test::Strict;
 use Parallel::ForkManager;
 use Sys::CPU;
 
-my @tt_files =
-    qx{git ls-files '*.tt' '*.inc' ':(exclude)Koha/ILL/Backend/' ':(exclude)*doc-head-open.inc' ':(exclude)misc/cronjobs/rss'};
+my @tt_files = qx{git ls-files '*.tt' '*.inc'};
 
 $Test::Strict::TEST_STRICT = 0;
 
