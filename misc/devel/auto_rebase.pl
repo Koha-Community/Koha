@@ -147,24 +147,31 @@ while ( my ( $i, $commit ) = each @commits ) {
     say BLUE sprintf "\tProcessing commit %s... (%s/%s)", $commit, $i + 1, scalar @commits;
 
     # Get the list of modified files in this commit
-    my @modified_files = $git->diff_tree( '--no-commit-id', '--name-only', '-r', $commit );
-FILE: while ( my ( $ii, $file ) = each @modified_files ) {
+    my @modified_files = $git->diff_tree( '--no-commit-id', '--name-status', '-r', $commit );
+    while ( my ( $ii, $file_status ) = each @modified_files ) {
+        $file_status =~ s/ +/ /;
+        my ( $status, $file ) = split ' ', $file_status;
+
         say BLUE sprintf "\t\tProcessing file %s... (%s/%s)", $file, $ii + 1, scalar @modified_files;
 
         # Retrieve the content of the file from this commit
-        my @content = try {
-            $git->RUN( "show", "$commit:$file" );
-        } catch {
-            if ( $_->error =~ m{fatal: path '.*' exists on disk, but not in '$commit'} ) {
-                say BLUE "\t\t\tFile does not exist, removing...";
+        if ( $status eq 'D' ) {
+            try {
                 $git->rm($file);
-            } else {
-                say RED "Something wrong happened when retrieving the file from the branch.";
+            } catch {
+                say RED "Something wrong happened when removing the file from the branch.";
                 exit 2;
-            }
-        };
+            };
+            next;
+        }
 
-        next unless @content;    # We removed the file
+        my @content;
+        try {
+            @content = $git->RUN( "show", "$commit:$file" );
+        } catch {
+            say RED "Something wrong happened when retrieving the file from the branch.";
+            exit 2;
+        };
 
         my $parent_directory = dirname($file);
         unless ( -f $parent_directory ) {
@@ -180,10 +187,10 @@ FILE: while ( my ( $ii, $file ) = each @modified_files ) {
             say RED "Cannot tidy $file: $_";
             exit 2;
         };
-    }
 
-    # Stage the changes
-    $git->add($_) for @modified_files;
+        # Stage the changes
+        $git->add($file);
+    }
 
     # Get the original commit information
     my ( $author, $date, $message ) = get_commit_info($commit);
