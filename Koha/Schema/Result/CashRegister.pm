@@ -173,9 +173,24 @@ __PACKAGE__->has_many(
   { cascade_copy => 0, cascade_delete => 0 },
 );
 
+=head2 sip_accounts
 
-# Created by DBIx::Class::Schema::Loader v0.07049 @ 2021-01-21 13:39:29
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:NNSzc20vEH34dmEsTb5K0Q
+Type: has_many
+
+Related object: L<Koha::Schema::Result::SipAccount>
+
+=cut
+
+__PACKAGE__->has_many(
+  "sip_accounts",
+  "Koha::Schema::Result::SipAccount",
+  { "foreign.register_id" => "self.id" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+
+
+# Created by DBIx::Class::Schema::Loader v0.07051 @ 2025-02-12 16:06:18
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:l32Vqvfc8q/PREZ9BWu5zw
 
 __PACKAGE__->add_columns(
     '+archived'       => { is_boolean => 1 },

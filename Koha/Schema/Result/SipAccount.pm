@@ -178,6 +178,20 @@ PREVIOUSLY id in Sipconfig.xml
   is_nullable: 1
   size: 255
 
+=head2 lost_block_checkout
+
+  data_type: 'tinyint'
+  is_nullable: 1
+
+actual tinyint, not boolean
+
+=head2 lost_block_checkout_value
+
+  data_type: 'tinyint'
+  is_nullable: 1
+
+actual tinyint, not boolean
+
 =head2 lost_status_for_missing
 
   data_type: 'tinyint'
@@ -204,9 +218,10 @@ actual tinyint, not boolean
 =head2 register_id
 
   data_type: 'integer'
+  is_foreign_key: 1
   is_nullable: 1
 
-SHOULD THIS BE A FK TO cash_registers?
+Foreign key to cash_registers.id
 
 =head2 seen_on_item_information
 
@@ -292,6 +307,10 @@ __PACKAGE__->add_columns(
   { data_type => "varchar", is_nullable => 0, size => 255 },
   "login_password",
   { data_type => "varchar", is_nullable => 1, size => 255 },
+  "lost_block_checkout",
+  { data_type => "tinyint", is_nullable => 1 },
+  "lost_block_checkout_value",
+  { data_type => "tinyint", is_nullable => 1 },
   "lost_status_for_missing",
   { data_type => "tinyint", is_nullable => 1 },
   "overdues_block_checkout",
@@ -301,7 +320,7 @@ __PACKAGE__->add_columns(
   "prevcheckout_block_checkout",
   { data_type => "tinyint", is_nullable => 1 },
   "register_id",
-  { data_type => "integer", is_nullable => 1 },
+  { data_type => "integer", is_foreign_key => 1, is_nullable => 1 },
   "seen_on_item_information",
   { data_type => "varchar", is_nullable => 1, size => 255 },
   "send_patron_home_library_in_af",
@@ -345,6 +364,26 @@ __PACKAGE__->set_primary_key("sip_account_id");
 __PACKAGE__->add_unique_constraint("account_login_id", ["login_id"]);
 
 =head1 RELATIONS
+
+=head2 register
+
+Type: belongs_to
+
+Related object: L<Koha::Schema::Result::CashRegister>
+
+=cut
+
+__PACKAGE__->belongs_to(
+  "register",
+  "Koha::Schema::Result::CashRegister",
+  { id => "register_id" },
+  {
+    is_deferrable => 1,
+    join_type     => "LEFT",
+    on_delete     => "SET NULL",
+    on_update     => "CASCADE",
+  },
+);
 
 =head2 sip_account_custom_item_fields
 
