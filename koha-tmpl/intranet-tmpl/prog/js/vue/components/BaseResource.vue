@@ -409,7 +409,7 @@ export default {
             let idAttr = this.idAttr;
 
             const columns = resourceAttrs
-                .filter(attr => attr.showInTable)
+                ?.filter(attr => attr.showInTable)
                 .reduce((acc, attr, i) => {
                     if (typeof attr.showInTable === "object") {
                         acc.push(attr.showInTable);
@@ -568,8 +568,12 @@ export default {
         },
     },
     created() {
-        this.populateAttributesWithAuthorisedValues(this.resourceAttrs);
-        this.tableOptions.columns = this.getTableColumns(this.resourceAttrs);
+        if (this.resourceAttrs) {
+            this.populateAttributesWithAuthorisedValues(this.resourceAttrs);
+            this.tableOptions.columns = this.getTableColumns(
+                this.resourceAttrs
+            );
+        }
     },
     name: "BaseResource",
 };
