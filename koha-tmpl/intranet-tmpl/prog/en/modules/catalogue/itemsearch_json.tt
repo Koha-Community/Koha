@@ -1,6 +1,8 @@
-{ "draw": [% draw | html %], "recordsTotal": [% total_rows | html %], "recordsFiltered": [% total_rows | html %], "data": [
-[%- FOREACH item IN results -%]
-    [%- INCLUDE 'catalogue/itemsearch_item.json.inc' item = item, user = user -%]
-    [%- UNLESS loop.last %],[% END -%]
-[%- END -%]
-] }
+[% FILTER collapse %]
+    { "draw": [% draw | html %], "recordsTotal": [% total_rows | html %], "recordsFiltered": [% total_rows | html %], "data": [
+    [% FOREACH item IN results %]
+        [% INCLUDE 'catalogue/itemsearch_item.json.inc' item = item, user = user %]
+        [% UNLESS loop.last %],[% END %]
+    [% END %]
+    ] }
+[% END %]
