@@ -19,8 +19,7 @@ use Modern::Perl;
 use File::Slurp qw( read_file );
 use Test::More;
 
-my @js_files =
-    qx{git ls-files '*.js' '*.ts' ':(exclude)koha-tmpl/intranet-tmpl/lib' ':(exclude)koha-tmpl/intranet-tmpl/js/Gettext.js' ':(exclude)koha-tmpl/opac-tmpl/lib' ':(exclude)Koha/ILL/Backend/'};
+my @js_files = qx{git ls-files '*.js' '*.ts'};
 
 plan tests => scalar @js_files;
 
