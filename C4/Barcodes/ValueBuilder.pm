@@ -48,7 +48,7 @@ sub get_barcode {
     my $month = $args->{mon};
     my $query = "SELECT MAX(CAST(SUBSTRING(barcode,-4) AS signed)) AS number FROM items WHERE barcode REGEXP ?";
     my $sth = C4::Context->dbh->prepare($query);
-    $sth->execute("^[-a-zA-Z]{1,}$year$month");
+    $sth->execute("^[-a-zA-Z0-9]{1,}$year$month");
     while (my ($count)= $sth->fetchrow_array) {
         $nextnum = $count if $count;
         $nextnum = 0 if $nextnum == 9999; # this sequence only allows for cataloging 9999 items per month
