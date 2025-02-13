@@ -233,9 +233,6 @@ export default {
         const vendorStore = inject("vendorStore");
         const { currencies, gstValues } = storeToRefs(vendorStore);
 
-        const AVStore = inject("AVStore");
-        const { get_lib_from_av } = AVStore;
-
         return {
             currencies,
             gstValues,

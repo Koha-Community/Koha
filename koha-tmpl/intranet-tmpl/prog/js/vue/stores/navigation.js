@@ -159,7 +159,7 @@ export const useNavigationStore = defineStore("navigation", () => {
             }
         }),
         leftNavigation: computed(() => {
-            const currentRoute = this.current[this.current.length - 1];
+            const currentRoute = store.current[store.current.length - 1];
             if (currentRoute) {
                 const alternateMenuRequired =
                     currentRoute.meta.self.alternateLeftMenu;

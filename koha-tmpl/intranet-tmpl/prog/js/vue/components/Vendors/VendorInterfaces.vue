@@ -76,7 +76,7 @@
                         v-model="vendorInterface.type"
                         label="description"
                         :reduce="av => av.value"
-                        :options="av_vendor_interface_types"
+                        :options="authorisedValues['av_vendor_interface_types']"
                     />
                 </li>
                 <li>
@@ -150,11 +150,11 @@ export default {
         display: Boolean,
     },
     setup() {
-        const AVStore = inject("AVStore");
-        const { get_lib_from_av, av_vendor_interface_types } = AVStore;
+        const vendorStore = inject("vendorStore");
+        const { get_lib_from_av, authorisedValues } = vendorStore;
         return {
             get_lib_from_av,
-            av_vendor_interface_types,
+            authorisedValues,
         };
     },
     methods: {

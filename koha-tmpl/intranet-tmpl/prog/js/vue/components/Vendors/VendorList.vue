@@ -38,10 +38,9 @@ export default {
     setup() {
         const vendorStore = inject("vendorStore");
         const { vendors } = storeToRefs(vendorStore);
+        const { get_lib_from_av, map_av_dt_filter } = vendorStore;
 
         const { setConfirmationDialog, setMessage } = inject("mainStore");
-
-        const { get_lib_from_av, map_av_dt_filter } = inject("AVStore");
 
         const table = ref();
 

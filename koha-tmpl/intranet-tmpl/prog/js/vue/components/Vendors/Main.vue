@@ -32,16 +32,15 @@ import LeftMenu from "../LeftMenu.vue";
 import Dialog from "../Dialog.vue";
 import "vue-select/dist/vue-select.css";
 import { storeToRefs } from "pinia";
-import { APIClient } from "../../fetch/api-client";
 
 export default {
     setup() {
         const vendorStore = inject("vendorStore");
-        const { config } = storeToRefs(vendorStore);
+        const { config, authorisedValues } = storeToRefs(vendorStore);
+        const { loadAuthorisedValues } = vendorStore;
 
         const mainStore = inject("mainStore");
         const { loading, loaded, setError } = mainStore;
-        const AVStore = inject("AVStore");
 
         const permissionsStore = inject("permissionsStore");
         const { userPermissions } = storeToRefs(permissionsStore);
@@ -52,61 +51,30 @@ export default {
             loading,
             loaded,
             userPermissions,
-            AVStore,
             config,
+            loadAuthorisedValues,
+            authorisedValues,
         };
     },
     beforeCreate() {
         this.loading();
 
-        const fetchConfig = () => {
-            let promises = [];
-
-            const av_client = APIClient.authorised_values;
-            const authorised_values = {
-                av_vendor_types: "VENDOR_TYPE",
-                av_vendor_interface_types: "VENDOR_INTERFACE_TYPE",
-            };
-
-            let av_cat_array = Object.keys(authorised_values).map(
-                function (av_cat) {
-                    return '"' + authorised_values[av_cat] + '"';
-                }
-            );
-
-            promises.push(
-                av_client.values
-                    .getCategoriesWithValues(av_cat_array)
-                    .then(av_categories => {
-                        Object.entries(authorised_values).forEach(
-                            ([av_var, av_cat]) => {
-                                const av_match = av_categories.find(
-                                    element => element.category_name == av_cat
-                                );
-                                this.AVStore[av_var] =
-                                    av_match.authorised_values;
-                            }
-                        );
-                    })
-            );
-
-            return Promise.all(promises);
-        };
-
-        fetchConfig().then(() => {
-            this.loaded();
-            this.userPermissions = userPermissions;
-            this.config.settings.edifact = edifact;
-            this.config.settings.marcOrderAutomation = marcOrderAutomation;
-            this.vendorStore.currencies = currencies;
-            this.vendorStore.gstValues = gstValues.map(gv => {
-                return {
-                    label: `${Number(gv.option * 100).format_price()}%`,
-                    value: gv.option,
-                };
-            });
-            this.initialized = true;
-        });
+        this.loadAuthorisedValues(this.authorisedValues, this.vendorStore).then(
+            () => {
+                this.userPermissions = userPermissions;
+                this.config.settings.edifact = edifact;
+                this.config.settings.marcOrderAutomation = marcOrderAutomation;
+                this.vendorStore.currencies = currencies;
+                this.vendorStore.gstValues = gstValues.map(gv => {
+                    return {
+                        label: `${Number(gv.option * 100).format_price()}%`,
+                        value: gv.option,
+                    };
+                });
+                this.loaded();
+                this.initialized = true;
+            }
+        );
     },
     data() {
         return {
