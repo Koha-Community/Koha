@@ -42,6 +42,7 @@ my $exceptions = {
     tt => [qw(Koha/ILL/Backend/ *doc-head-open.inc misc/cronjobs/rss)],
 };
 
+my @original_files = @files;
 if (@files) {
 
     # This is inefficient if the list of files is long but most of the time we will have only one
@@ -53,6 +54,20 @@ if (@files) {
         chomp $output;
         $output ? $file : ();
     } @files;
+
+    if ( scalar @files != scalar @original_files ) {
+        my @diff = array_minus( @original_files, @files );
+        for my $file (@diff) {
+            my $cmd    = sprintf q{git ls-files %s}, $file;
+            my $output = qx{$cmd};
+            chomp $output;
+            unless ($output) {
+                l( sprintf "File '%s' not in the index, will be tidy anyway", $file );
+                push @files, $file
+                    ; # At the end of the index so the original order will be modified. This is not a feature and could be fixed later.
+            }
+        }
+    }
 } else {
     push @files, get_perl_files() if $perl_files;
     push @files, get_js_files()   if $js_files;
@@ -68,7 +83,7 @@ if (@files) {
 if ( $no_write && !@files ) {
 
     # File should not be tidy, but we need to return the content or we risk data loss
-    print read_file(@ARGV);
+    print read_file( $original_files[0] );
     exit;
 }
 
