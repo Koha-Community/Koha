@@ -546,7 +546,7 @@ subtest 'to_api() tests' => sub {
     my $biblioitem_api = $biblio->biblioitem->to_api;
     my $biblio_api     = $biblio->to_api;
 
-    plan tests => (scalar keys %{ $biblioitem_api }) + 1;
+    plan tests => ( scalar keys %{$biblioitem_api} ) + 4;
 
     foreach my $key ( keys %{ $biblioitem_api } ) {
         is( $biblio_api->{$key}, $biblioitem_api->{$key}, "$key is added to the biblio object" );
@@ -554,6 +554,13 @@ subtest 'to_api() tests' => sub {
 
     $biblio_api = $biblio->to_api({ embed => { items => {} } });
     is_deeply( $biblio_api->{items}, [ $item->to_api ], 'Item correctly embedded' );
+
+    $biblio->biblioitem->delete();
+    throws_ok { $biblio->to_api }
+    'Koha::Exceptions::RelatedObjectNotFound',
+        'Exception thrown if the biblioitem accessor returns undef';
+    is( $@->class,    'Koha::Biblioitem' );
+    is( $@->accessor, 'biblioitem' );
 
     $schema->storage->txn_rollback;
 };
