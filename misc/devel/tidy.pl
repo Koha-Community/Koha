@@ -49,7 +49,7 @@ if (@files) {
     @files = map {
         my $file     = $_;
         my $filetype = get_filetype($file);
-        my $cmd      = sprintf q{git ls-files %s %s}, $file, build_git_exclude($filetype);
+        my $cmd      = sprintf q{git ls-files %s | grep %s}, build_git_exclude($filetype), $file;
         my $output   = qx{$cmd};
         chomp $output;
         $output ? $file : ();
@@ -139,7 +139,7 @@ sub tidy {
 
 sub build_git_exclude {
     my ($filetype) = @_;
-    return join( " ", map( "--exclude='$_'", @{ $exceptions->{$filetype} } ) );
+    return join( " ", map( "':(exclude)$_'", @{ $exceptions->{$filetype} } ) );
 }
 
 sub get_perl_files {
