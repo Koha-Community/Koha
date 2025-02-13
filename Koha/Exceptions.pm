@@ -37,6 +37,11 @@ use Exception::Class (
         isa         => 'Koha::Exception',
         description => 'The object have not been created',
     },
+    'Koha::Exceptions::RelatedObjectNotFound' => {
+        isa         => 'Koha::Exception',
+        description => 'The requested related object does not exist',
+        fields      => [ 'accessor', 'class' ],
+    },
     'Koha::Exceptions::CannotDeleteDefault' => {
         isa         => 'Koha::Exception',
         description => 'The default value cannot be deleted'
