@@ -1706,7 +1706,12 @@ sub to_api {
     $args = defined $args ? {%$args} : {};
     delete $args->{embed};
 
-    my $json_biblioitem = $self->biblioitem->to_api( $args );
+    my $biblioitem = $self->biblioitem;
+
+    Koha::Exceptions::RelatedObjectNotFound->throw( accessor => 'biblioitem', class => 'Koha::Biblioitem' )
+        unless $biblioitem;
+
+    my $json_biblioitem = $biblioitem->to_api($args);
     return unless $json_biblioitem;
 
     return { %$json_biblioitem, %$json_biblio };
