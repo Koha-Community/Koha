@@ -62,6 +62,21 @@ export const componentRegistry: Map<string, WebComponentDynamicImport> =
                 },
             },
         ],
+        [
+            "vendor-menu",
+            {
+                importFn: async () => {
+                    const module = await import(
+                        /* webpackChunkName: "vendor-menu" */
+                        "../components/Islands/VendorMenu.vue"
+                    );
+                    return module.default;
+                },
+                config: {
+                    stores: ["navigationStore", "permissionsStore"],
+                },
+            },
+        ],
     ]);
 
 /**

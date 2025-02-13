@@ -8,6 +8,7 @@
                 "
             >
                 <a
+                    ref="booksellers"
                     :href="`/cgi-bin/koha/acqui/booksellers.pl?booksellerid=${vendorId}`"
                     >{{ $__("Baskets") }}</a
                 >
@@ -19,6 +20,7 @@
                 "
             >
                 <a
+                    ref="basketgroup"
                     :href="`/cgi-bin/koha/acqui/basketgroup.pl?booksellerid=${vendorId}`"
                     >{{ $__("Basket groups") }}</a
                 >
@@ -30,6 +32,7 @@
                 "
             >
                 <a
+                    ref="aqcontract"
                     :href="`/cgi-bin/koha/admin/aqcontract.pl?booksellerid=${vendorId}`"
                     >{{ $__("Contracts") }}</a
                 >
@@ -41,12 +44,14 @@
                 "
             >
                 <a
+                    ref="vendor_issues"
                     :href="`/cgi-bin/koha/acqui/vendor_issues.pl?booksellerid=${vendorId}`"
                     >{{ $__("Vendor issues") }}</a
                 >
             </li>
             <li>
                 <a
+                    ref="invoices"
                     :href="`/cgi-bin/koha/acqui/invoices.pl?supplierid=${vendorId}&amp;op=do_search`"
                     >{{ $__("Invoices") }}</a
                 >
@@ -59,11 +64,13 @@
             >
                 <a
                     v-if="basketno"
+                    ref="uncertainprice"
                     :href="`/cgi-bin/koha/acqui/uncertainprice.pl?booksellerid=${vendorId}&amp;basketno=${basketno}&amp;owner=1`"
                     >{{ $__("Uncertain prices") }}</a
                 >
                 <a
                     v-else
+                    ref="uncertainprice"
                     :href="`/cgi-bin/koha/acqui/uncertainprice.pl?booksellerid=${vendorId}&amp;owner=1`"
                     >{{ $__("Uncertain prices") }}</a
                 >
@@ -113,6 +120,15 @@ export default {
         return {
             vendorId,
         };
+    },
+    mounted() {
+        const path = location.pathname.substring(1);
+
+        Object.keys(this.$refs).forEach(ref => {
+            if (this.$refs[ref].href.includes(path)) {
+                this.$refs[ref].classList.add("current");
+            }
+        });
     },
 };
 </script>
