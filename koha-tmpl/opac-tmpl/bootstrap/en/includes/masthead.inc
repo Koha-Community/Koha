@@ -59,7 +59,7 @@
                                             [% SET number_of_public_shelves = number_of_public_shelves + 1 %]
                                             [% IF number_of_public_shelves >= 10 %][% LAST %][% END %]
                                         [% END %]
-                                        [% IF some_public_shelves > 10 %]
+                                    [% IF some_public_shelves.count > 10 %]
                                             <a class="dropdown-item listmenulink" href="/cgi-bin/koha/opac-shelves.pl?op=list&amp;public=1" tabindex="-1" role="menuitem">View all</a>
                                         [% END %]
                                     [% END %]
@@ -76,7 +76,7 @@
                                                     [% SET number_of_private_shelves = number_of_private_shelves + 1 %]
                                                     [% IF number_of_private_shelves >= 10 %][% LAST %][% END %]
                                                 [% END %]
-                                                [% IF some_private_shelves > 10 %]
+                                            [% IF some_private_shelves.count > 10 %]
                                                     <a class="dropdown-item listmenulink" href="/cgi-bin/koha/opac-shelves.pl?op=list&amp;public=0" tabindex="-1" role="menuitem">View all</a>
                                                 [% END %]
                                             [% ELSE %]
