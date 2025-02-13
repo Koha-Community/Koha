@@ -50,7 +50,7 @@ my $t = Test::Mojo->new('Koha::REST::V1');
 
 subtest 'get() tests' => sub {
 
-    plan tests => 22;
+    plan tests => 26;
 
     $schema->storage->txn_begin;
 
@@ -96,6 +96,13 @@ subtest 'get() tests' => sub {
 
     $t->get_ok( "//$userid:$password@/api/v1/biblios/" . $biblio->biblionumber => { Accept => 'text/plain' } )
         ->status_is(200)->content_is( $biblio->metadata->record->as_formatted );
+
+    # Simulate a data error situation (BZ35246)
+    $biblio->biblioitem->delete();
+
+    $t->get_ok( "//$userid:$password@/api/v1/biblios/" . $biblio->biblionumber => { Accept => 'application/json' } )
+        ->status_is(500)->json_is( '/error_code', 'internal_server_error' )
+        ->json_is( '/error', 'Something went wrong, check Koha logs for details.' );
 
     $biblio->delete;
     $t->get_ok( "//$userid:$password@/api/v1/biblios/" . $biblio->biblionumber => { Accept => 'application/marc' } )
