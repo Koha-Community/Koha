@@ -17,12 +17,13 @@
 
 use Modern::Perl;
 
-use Test::More tests => 6;
+use Test::More tests => 9;
 
 use t::lib::TestBuilder;
 
 use C4::Acquisition qw( NewBasket );
 use C4::Biblio      qw( AddBiblio );
+use C4::Contract    qw( AddContract );
 use C4::Budgets     qw( AddBudgetPeriod AddBudget );
 use C4::Serials     qw( NewSubscription SearchSubscriptions );
 
@@ -168,6 +169,9 @@ subtest '->contacts() tests' => sub {
         }
     );
 
+    # Ensure contacts aren't being duplicated on store
+    $vendor->contacts( [ $contact_1->unblessed, $contact_2->unblessed ] );
+
     # Re-fetch vendor
     $vendor = Koha::Acquisition::Booksellers->find( $vendor->id );
     my $contacts = $vendor->contacts;
@@ -256,4 +260,75 @@ subtest 'issues' => sub {
     is( $issues->next->strings_map->{type}->{str}, 'Maintenance' );
 
     $schema->storage->txn_rollback();
+};
+
+subtest 'contracts' => sub {
+
+    plan tests => 2;
+
+    $schema->storage->txn_begin();
+
+    my $vendor = $builder->build_object( { class => 'Koha::Acquisition::Booksellers' } );
+
+    is( scalar( @{ $vendor->contracts } ), 0, 'Vendor has no contracts' );
+
+    AddContract(
+        {
+            booksellerid => $vendor->id,
+            contractname => 'Test contract',
+        }
+    );
+
+    $vendor = $vendor->get_from_storage;
+    my $contracts = $vendor->contracts;
+    is( scalar( @{$contracts} ), 1, '1 contract stored' );
+
+    $schema->storage->txn_rollback();
+};
+
+subtest 'invoices' => sub {
+
+    plan tests => 3;
+
+    $schema->storage->txn_begin();
+
+    my $vendor = $builder->build_object( { class => 'Koha::Acquisition::Booksellers' } );
+
+    is( $vendor->invoices->count, 0, 'Vendor has no invoices' );
+
+    Koha::Acquisition::Invoice->new(
+        {
+            booksellerid  => $vendor->id,
+            invoicenumber => 'INV12345'
+        }
+    )->store;
+
+    $vendor = $vendor->get_from_storage;
+    my $invoices = $vendor->invoices;
+    is( $invoices->count, 1,                             '1 invoice stored' );
+    is( ref($invoices),   'Koha::Acquisition::Invoices', 'Type is correct' );
+
+    $schema->storage->txn_rollback();
+};
+
+subtest 'to_api() tests' => sub {
+
+    plan tests => 4;
+
+    $schema->storage->txn_begin;
+
+    my $vendor = $builder->build_object( { class => 'Koha::Acquisition::Booksellers' } );
+
+    is( $vendor->interfaces->count, 0, 'Vendor has no interfaces' );
+
+    $vendor->interfaces(
+        [ { name => 'first interface' }, { name => 'second interface', login => 'one_login', password => 'Test1234' } ]
+    );
+
+    my $interfaces = $vendor->to_api->{interfaces};
+    is( scalar(@$interfaces),          2,          'Vendor has two interfaces' );
+    is( @{$interfaces}[0]->{password}, undef,      'No password set for the interface' );
+    is( @{$interfaces}[1]->{password}, 'Test1234', 'password is unhashed' );
+
+    $schema->storage->txn_rollback;
 };

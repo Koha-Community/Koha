@@ -94,7 +94,7 @@ describe("Vendor CRUD operations", () => {
         // Click the button in the toolbar
         cy.visit("/cgi-bin/koha/vendors");
         cy.contains("New vendor").click();
-        cy.get("#vendor_add h2").contains("New vendor");
+        cy.get("#vendor_add h1").contains("Add vendor");
 
         // Fill in the form for normal attributes
         cy.get("#vendor_add").contains("Submit").click();
@@ -189,7 +189,7 @@ describe("Vendor CRUD operations", () => {
         cy.get("#vendors_list table tbody tr:first").contains("Edit").click();
         cy.wait("@get-vendor");
         cy.wait(500); // Cypress is too fast! Vue hasn't populated the form yet!
-        cy.get("#vendor_add h2").contains("Edit vendor");
+        cy.get("#vendor_add h1").contains("Edit vendor");
 
         // Form has been correctly filled in
         cy.get("#vendor_name").should("have.value", vendor.name);
