@@ -124,7 +124,7 @@ sub tidy {
 
 sub build_git_exclude {
     my ($filetype) = @_;
-    return join( " ", map( "':(exclude)$_'", @{ $exceptions->{$filetype} } ) );
+    return join( " ", map( "--exclude='$_'", @{ $exceptions->{$filetype} } ) );
 }
 
 sub get_perl_files {
