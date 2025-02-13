@@ -74,7 +74,7 @@ for my $index ( 0 .. $#files ) {
     my $error;
     my ( $success, $error_message, $full_buf, $stdout_buf, $stderr_buf ) = tidy($file);
     unless ($success) {
-        $error = join( '', @$stderr_buf );
+        $error = join( '', @$stderr_buf ) || $error_message;
         chomp $error;
         warn $error;
     }
