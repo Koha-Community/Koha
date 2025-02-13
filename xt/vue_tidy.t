@@ -25,7 +25,7 @@ plan tests => scalar @vue_files;
 
 foreach my $filepath (@vue_files) {
     chomp $filepath;
-    my $tidy    = qx{yarn --silent run prettier $filepath};
+    my $tidy    = qx{perl misc/devel/tidy.pl --silent --no-write $filepath};
     my $content = read_file $filepath;
     ok( $content eq $tidy, "$filepath should be kept tidy" );
 }
