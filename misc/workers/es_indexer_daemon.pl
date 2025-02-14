@@ -118,8 +118,27 @@ while (1) {
         }
 
         my $args = try {
-            my $body = $frame->body;
-            decode_json($body);    # TODO Should this be from_json? Check utf8 flag.
+            my $command      = $frame->command;
+            my $body         = $frame->body;
+            my $content_type = $frame->content_type;
+            if ( $command && $command eq 'MESSAGE' ) {
+                if ( $content_type && $content_type eq 'application/json' ) {
+                    decode_json($body);    # TODO Should this be from_json? Check utf8 flag.
+                } else {
+
+                    #TODO: This is a fallback for older enqueued messages which are missing the content-type header
+                    #TODO: Please replace this decode with a die in the future once content-type is well established
+                    decode_json($body);    # TODO Should this be from_json? Check utf8 flag.
+                }
+            } elsif ( $command && $command eq 'ERROR' ) {
+
+                #Known errors:
+                #You must log in using CONNECT first
+                #"NACK" must include a valid "message-id" header
+                Koha::Logger->get( { interface => 'worker' } )
+                    ->warn( sprintf "Shutting down after receiving ERROR frame:\n%s\n", $frame->as_string );
+                exit 1;
+            }
         } catch {
             Koha::Logger->get( { interface => 'worker' } )->warn( sprintf "Frame not processed - %s", $_ );
             return;
