@@ -24,6 +24,7 @@ use t::lib::TestBuilder;
 use t::lib::Mocks;
 
 use Koha::Database;
+use Koha::File::Transports;
 
 my $schema  = Koha::Database->new->schema;
 my $builder = t::lib::TestBuilder->new;
@@ -67,9 +68,10 @@ subtest 'list() tests' => sub {
         {
             class => 'Koha::File::Transports',
             value => {
-                password => undef,
-                key_file => undef,
-                status   => undef,
+                transport => 'sftp',
+                password  => undef,
+                key_file  => undef,
+                status    => undef,
             },
         }
     );
@@ -81,9 +83,10 @@ subtest 'list() tests' => sub {
         {
             class => 'Koha::File::Transports',
             value => {
-                password => undef,
-                key_file => undef,
-                status   => undef,
+                transport => 'sftp',
+                password  => undef,
+                key_file  => undef,
+                status    => undef,
             },
         }
     );
@@ -108,9 +111,10 @@ subtest 'get() tests' => sub {
         {
             class => 'Koha::File::Transports',
             value => {
-                password => undef,
-                key_file => undef,
-                status   => undef,
+                transport => 'sftp',
+                password  => undef,
+                key_file  => undef,
+                status    => undef,
             },
         }
     );
@@ -143,9 +147,10 @@ subtest 'get() tests' => sub {
         {
             class => 'Koha::File::Transports',
             value => {
-                password => undef,
-                key_file => undef,
-                status   => undef,
+                transport => 'sftp',
+                password  => undef,
+                key_file  => undef,
+                status    => undef,
             },
         }
     );
@@ -190,9 +195,10 @@ subtest 'add() tests' => sub {
         {
             class => 'Koha::File::Transports',
             value => {
-                password => undef,
-                key_file => undef,
-                status   => undef,
+                transport => 'sftp',
+                password  => undef,
+                key_file  => undef,
+                status    => undef,
             },
         }
     );
@@ -277,9 +283,10 @@ subtest 'update() tests' => sub {
         {
             class => 'Koha::File::Transports',
             value => {
-                password => undef,
-                key_file => undef,
-                status   => undef,
+                transport => 'sftp',
+                password  => undef,
+                key_file  => undef,
+                status    => undef,
             },
         }
     )->id;
@@ -329,9 +336,10 @@ subtest 'update() tests' => sub {
         {
             class => 'Koha::File::Transports',
             value => {
-                password => undef,
-                key_file => undef,
-                status   => undef,
+                transport => 'sftp',
+                password  => undef,
+                key_file  => undef,
+                status    => undef,
             },
         }
     );
@@ -382,9 +390,10 @@ subtest 'delete() tests' => sub {
         {
             class => 'Koha::File::Transports',
             value => {
-                password => undef,
-                key_file => undef,
-                status   => undef,
+                transport => 'sftp',
+                password  => undef,
+                key_file  => undef,
+                status    => undef,
             },
         }
     )->id;
