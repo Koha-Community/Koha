@@ -18,7 +18,6 @@ import ToolbarButton from "./ToolbarButton.vue";
 import { ref } from "vue";
 import { APIClient } from "../fetch/api-client.js";
 import KohaTable from "./KohaTable.vue";
-import FormElement from "./FormElement.vue";
 
 export default {
     setup(props) {
@@ -117,7 +116,7 @@ export default {
             return this.tableOptions;
         },
     },
-    components: { Toolbar, ToolbarButton, KohaTable, FormElement },
+    components: { Toolbar, ToolbarButton, KohaTable },
     name: "RelationshipTableDisplay",
 };
 </script>
