@@ -1,6 +1,6 @@
 <template>
     <div v-if="!initialized">{{ $__("Loading") }}</div>
-    <div v-else :id="`${extendedAttributesResourceType}_list`">
+    <div v-else :id="`${resourceName}_list`">
         <Toolbar v-if="!embedded">
             <ToolbarButton
                 action="add"
@@ -65,6 +65,7 @@ export default {
         // tableFilters: { type: Array, default: [] },
         // getFilters: Function,
         // filterTable: Function | null,
+        resourceName: String,
         hasAdditionalFields: { type: Boolean, default: false },
         extendedAttributesResourceType: String,
         getToolbarButtons: {
