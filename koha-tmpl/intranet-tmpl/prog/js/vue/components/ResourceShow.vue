@@ -49,6 +49,7 @@ import ToolbarButton from "./ToolbarButton.vue";
 import ShowElement from "./ShowElement.vue";
 
 export default {
+    inheritAttrs: false,
     data() {
         return {
             initialized: false,

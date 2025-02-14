@@ -45,6 +45,7 @@ import KohaTable from "./KohaTable.vue";
 import FormElement from "./FormElement.vue";
 
 export default {
+    inheritAttrs: false,
     setup(props) {
         const table = ref();
 

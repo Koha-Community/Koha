@@ -150,6 +150,7 @@ import FormElement from "./FormElement.vue";
 import ButtonSubmit from "./ButtonSubmit.vue";
 
 export default {
+    inheritAttrs: false,
     data() {
         return {
             initialized: false,
