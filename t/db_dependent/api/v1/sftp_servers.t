@@ -23,7 +23,6 @@ use Test::Mojo;
 use t::lib::TestBuilder;
 use t::lib::Mocks;
 
-use Koha::SFTP::Servers;
 use Koha::Database;
 
 my $schema  = Koha::Database->new->schema;
@@ -38,7 +37,7 @@ subtest 'list() tests' => sub {
 
     $schema->storage->txn_begin;
 
-    Koha::SFTP::Servers->search->delete;
+    Koha::File::Transports->search->delete;
 
     my $librarian = $builder->build_object(
         {
@@ -66,7 +65,7 @@ subtest 'list() tests' => sub {
 
     my $sftp_server = $builder->build_object(
         {
-            class => 'Koha::SFTP::Servers',
+            class => 'Koha::File::Transports',
             value => {
                 password => undef,
                 key_file => undef,
@@ -80,7 +79,7 @@ subtest 'list() tests' => sub {
 
     my $another_sftp_server = $builder->build_object(
         {
-            class => 'Koha::SFTP::Servers',
+            class => 'Koha::File::Transports',
             value => {
                 password => undef,
                 key_file => undef,
@@ -107,7 +106,7 @@ subtest 'get() tests' => sub {
 
     my $sftp_server = $builder->build_object(
         {
-            class => 'Koha::SFTP::Servers',
+            class => 'Koha::File::Transports',
             value => {
                 password => undef,
                 key_file => undef,
@@ -142,7 +141,7 @@ subtest 'get() tests' => sub {
 
     my $sftp_server_to_delete = $builder->build_object(
         {
-            class => 'Koha::SFTP::Servers',
+            class => 'Koha::File::Transports',
             value => {
                 password => undef,
                 key_file => undef,
@@ -165,7 +164,7 @@ subtest 'add() tests' => sub {
 
     $schema->storage->txn_begin;
 
-    Koha::SFTP::Servers->search->delete;
+    Koha::File::Transports->search->delete;
 
     my $librarian = $builder->build_object(
         {
@@ -189,7 +188,7 @@ subtest 'add() tests' => sub {
 
     my $sftp_server = $builder->build_object(
         {
-            class => 'Koha::SFTP::Servers',
+            class => 'Koha::File::Transports',
             value => {
                 password => undef,
                 key_file => undef,
@@ -276,7 +275,7 @@ subtest 'update() tests' => sub {
 
     my $sftp_server_id = $builder->build_object(
         {
-            class => 'Koha::SFTP::Servers',
+            class => 'Koha::File::Transports',
             value => {
                 password => undef,
                 key_file => undef,
@@ -328,7 +327,7 @@ subtest 'update() tests' => sub {
 
     my $sftp_server_to_delete = $builder->build_object(
         {
-            class => 'Koha::SFTP::Servers',
+            class => 'Koha::File::Transports',
             value => {
                 password => undef,
                 key_file => undef,
@@ -381,7 +380,7 @@ subtest 'delete() tests' => sub {
 
     my $sftp_server_id = $builder->build_object(
         {
-            class => 'Koha::SFTP::Servers',
+            class => 'Koha::File::Transports',
             value => {
                 password => undef,
                 key_file => undef,
@@ -429,7 +428,7 @@ subtest 'test() tests' => sub {
 
     my $sftp_server = $builder->build_object(
         {
-            class => 'Koha::SFTP::Servers',
+            class => 'Koha::File::Transports',
             value => {
                 password => undef,
                 key_file => undef,
