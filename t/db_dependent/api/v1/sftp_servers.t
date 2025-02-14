@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 6;
+use Test::More tests => 5;
 use Test::Mojo;
 
 use t::lib::TestBuilder;
@@ -400,52 +400,4 @@ subtest 'delete() tests' => sub {
     $schema->storage->txn_rollback;
 };
 
-subtest 'test() tests' => sub {
-
-    plan tests => 5;
-
-    $schema->storage->txn_begin;
-
-    my $librarian = $builder->build_object(
-        {
-            class => 'Koha::Patrons',
-            value => { flags => 3**2 }    # parameters flag = 3
-        }
-    );
-    my $password = 'thePassword123';
-    $librarian->set_password( { password => $password, skip_validation => 1 } );
-    my $userid = $librarian->userid;
-
-    my $patron = $builder->build_object(
-        {
-            class => 'Koha::Patrons',
-            value => { flags => 0 }
-        }
-    );
-
-    $patron->set_password( { password => $password, skip_validation => 1 } );
-    my $unauth_userid = $patron->userid;
-
-    my $sftp_server = $builder->build_object(
-        {
-            class => 'Koha::File::Transports',
-            value => {
-                password => undef,
-                key_file => undef,
-                status   => undef,
-            },
-        }
-    );
-    my $sftp_server_id = $sftp_server->id;
-
-    # Unauthorized attempt to test
-    $t->get_ok("//$unauth_userid:$password@/api/v1/sftp_server/$sftp_server_id/test_connection")->status_is(403);
-
-    $t->get_ok("//$userid:$password@/api/v1/sftp_server/$sftp_server_id/test_connection")
-        ->status_is( 200, 'SWAGGER3.2.4' )
-        ->content_is( '{"1_ftp_conn":{"err":"cannot connect to '
-            . $sftp_server->host
-            . ': Name or service not known","msg":null,"passed":false}}', 'SWAGGER3.3.4' );
-
-    $schema->storage->txn_rollback;
-};
+1;

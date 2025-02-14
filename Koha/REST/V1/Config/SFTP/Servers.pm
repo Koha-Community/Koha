@@ -166,19 +166,4 @@ sub delete {
     };
 }
 
-=head3 test
-
-Controller method that invokes Koha::SFTP::Server->test_conn
-
-=cut
-
-sub test {
-    my $c = shift->openapi->valid_input or return;
-
-    my $sftp_server = Koha::File::Transports->find( $c->param('sftp_server_id') );
-
-    return $c->render_resource_not_found("FTP/SFTP server")
-        unless $sftp_server;
-}
-
 1;
