@@ -989,6 +989,18 @@
         [% INCLUDE 'patron-detail-tabs.inc' patronpage = "circ" %]
     [% ELSIF borrowernumber # IF patron %]
         <div class="alert alert-info">Patron not found. <a href="/cgi-bin/koha/members/members-home.pl">Return to search</a></div>
+    [% ELSE %]
+        <form action="/cgi-bin/koha/circ/circulation.pl" id="patronsearch" method="get">
+            <fieldset id="patron_checkout_search">
+                <input autocomplete="off" id="findborrower" name="findborrower" type="text" placeholder="Enter patron card number or partial name" size="40" />
+                [% IF ( stickyduedate ) %]
+                    <input type="hidden" name="duedatespec" value="[% duedatespec | html %]" />
+                    <input type="hidden" name="stickyduedate" value="[% stickyduedate | html %]" />
+                [% END %]
+
+                <button class="btn btn-primary" type="submit" aria-label="Search">Search</button>
+            </fieldset>
+        </form>
     [% END # /IF patron %]
 [% END %]
 [% IF Koha.Preference('ClaimReturnedLostValue') || Koha.Preference('BundleLostValue') %]
