@@ -390,9 +390,9 @@ export default {
                 if (component === "Show" && resource) {
                     groupFields.forEach(field => {
                         if (
-                            resource.hasOwnProperty(field.name) &&
-                            resource[field.name] &&
-                            resource[field.name]?.length > 0
+                            resource[field.name] != null &&
+                            (field.type !== "relationshipWidget" ||
+                                resource[field.name].length > 0)
                         ) {
                             groupInfo.hasDataToDisplay = true;
                         }
