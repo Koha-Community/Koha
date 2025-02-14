@@ -39,6 +39,7 @@ INSERT INTO permissions (module_bit, code, description) VALUES
    ( 3, 'manage_additional_fields', 'Add, edit, or delete additional custom fields for baskets or subscriptions (also requires order_manage or edit_subscription permissions)'),
    ( 3, 'manage_keyboard_shortcuts', 'Manage keyboard shortcuts for the advanced cataloging editor'),
    ( 3, 'manage_smtp_servers', 'Manage SMTP servers configuration'),
+   ( 3, 'manage_sftp_servers', 'Manage FTP/SFTP servers configuration'),
    ( 3, 'manage_background_jobs', 'Manage background jobs'),
    ( 3, 'manage_curbside_pickups', 'Manage curbside pickups'),
    ( 3, 'manage_search_filters', 'Manage custom search filters'),
