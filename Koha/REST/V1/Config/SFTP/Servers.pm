@@ -29,7 +29,7 @@ use Try::Tiny qw( catch try );
 
 =head3 list
 
-Controller method that handles listing Koha::SFTP::Server objects
+Controller method that handles listing Koha::File::Transport objects
 
 =cut
 
@@ -50,7 +50,7 @@ sub list {
 
 =head3 get
 
-Controller method that handles retrieving a single Koha::SFTP::Server object
+Controller method that handles retrieving a single Koha::File::Transport object
 
 =cut
 
@@ -74,7 +74,7 @@ sub get {
 
 =head3 add
 
-Controller method that handles adding a new Koha::SFTP::Server object
+Controller method that handles adding a new Koha::File::Transport object
 
 =cut
 
@@ -83,7 +83,7 @@ sub add {
 
     return try {
 
-        my $sftp_server = Koha::SFTP::Server->new_from_api( $c->req->json );
+        my $sftp_server = Koha::File::Transport->new_from_api( $c->req->json );
         $sftp_server->store->discard_changes;
 
         $c->res->headers->location( $c->req->url->to_string . '/' . $sftp_server->id );
@@ -109,7 +109,7 @@ sub add {
 
 =head3 update
 
-Controller method that handles updating a Koha::SFTP::Server object
+Controller method that handles updating a Koha::File::Transport object
 
 =cut
 
@@ -146,7 +146,7 @@ sub update {
 
 =head3 delete
 
-Controller method that handles deleting a Koha::SFTP::Server object
+Controller method that handles deleting a Koha::File::Transport object
 
 =cut
 
