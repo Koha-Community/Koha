@@ -12,7 +12,7 @@ export class AcquisitionAPIClient {
                     endpoint: "vendors/" + id,
                     headers: {
                         "x-koha-embed":
-                            "aliases,subscriptions+count,interfaces,contacts,contracts",
+                            "aliases,subscriptions+count,interfaces,contacts,contracts,baskets",
                     },
                 }),
             getAll: (query, params) =>

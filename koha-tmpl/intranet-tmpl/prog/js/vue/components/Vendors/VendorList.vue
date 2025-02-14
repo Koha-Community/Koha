@@ -138,7 +138,7 @@ export default {
             event.preventDefault();
             this.$router.push({
                 name: "VendorShow",
-                params: { vendor_id: id },
+                params: { id: id },
             });
         },
         doReceive({ id }, dt, event) {

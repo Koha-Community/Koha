@@ -36,6 +36,11 @@
                 :title="$__('Edit vendor')"
             />
             <ToolbarButton
+                v-if="
+                    vendor.active &&
+                    vendor.baskets?.length > 0 &&
+                    isUserPermitted('CAN_user_acquisition_order_receive')
+                "
                 :to="{
                     path: '/cgi-bin/koha/acqui/parcels.pl',
                     query: { booksellerid: vendor.id },
@@ -44,6 +49,17 @@
                 :title="$__('Receive shipments')"
                 callback="redirect"
             />
+            <a
+                v-if="
+                    (!vendor.baskets || vendor.baskets.length === 0) &&
+                    (!vendor.subscriptions_count ||
+                        vendor.subscriptions_count === 0) &&
+                    (!vendor.invoices || vendor.invoices.length === 0)
+                "
+                @click="doDelete(vendor.id, vendor.name)"
+                class="btn btn-default"
+                ><font-awesome-icon icon="trash" /> {{ $__("Delete") }}</a
+            >
         </Toolbar>
         <h1>
             {{ vendor.name }}
@@ -89,9 +105,13 @@ export default {
     setup() {
         const { setConfirmationDialog, setMessage } = inject("mainStore");
 
+        const permissionsStore = inject("permissionsStore");
+        const { isUserPermitted } = permissionsStore;
+
         return {
             setConfirmationDialog,
             setMessage,
+            isUserPermitted,
         };
     },
     data() {
@@ -116,6 +136,31 @@ export default {
                 error => {}
             );
         },
+        doDelete(id, name) {
+            this.setConfirmationDialog(
+                {
+                    title: this.$__(
+                        "Are you sure you want to remove this vendor?"
+                    ),
+                    message: name,
+                    accept_label: this.$__("Yes, delete"),
+                    cancel_label: this.$__("No, do not delete"),
+                },
+                () => {
+                    const client = APIClient.acquisition;
+                    client.vendors.delete(id).then(
+                        success => {
+                            this.setMessage(
+                                this.$__("Vendor %s deleted").format(name),
+                                true
+                            );
+                            this.$router.push({ name: "VendorList" });
+                        },
+                        error => {}
+                    );
+                }
+            );
+        },
     },
     components: {
         Toolbar,
@@ -127,6 +172,7 @@ export default {
         VendorContacts,
         VendorSubscriptions,
         VendorContracts,
+        DropdownButtons,
     },
     name: "VendorShow",
 };
