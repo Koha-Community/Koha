@@ -70,6 +70,7 @@ subtest 'list() tests' => sub {
             value => {
                 password => undef,
                 key_file => undef,
+                status   => undef,
             },
         }
     );
@@ -83,6 +84,7 @@ subtest 'list() tests' => sub {
             value => {
                 password => undef,
                 key_file => undef,
+                status   => undef,
             },
         }
     );
@@ -109,6 +111,7 @@ subtest 'get() tests' => sub {
             value => {
                 password => undef,
                 key_file => undef,
+                status   => undef,
             },
         }
     );
@@ -143,6 +146,7 @@ subtest 'get() tests' => sub {
             value => {
                 password => undef,
                 key_file => undef,
+                status   => undef,
             },
         }
     );
@@ -189,6 +193,7 @@ subtest 'add() tests' => sub {
             value => {
                 password => undef,
                 key_file => undef,
+                status   => undef,
             },
         }
     );
@@ -275,6 +280,7 @@ subtest 'update() tests' => sub {
             value => {
                 password => undef,
                 key_file => undef,
+                status   => undef,
             },
         }
     )->id;
@@ -326,6 +332,7 @@ subtest 'update() tests' => sub {
             value => {
                 password => undef,
                 key_file => undef,
+                status   => undef,
             },
         }
     );
@@ -378,6 +385,7 @@ subtest 'delete() tests' => sub {
             value => {
                 password => undef,
                 key_file => undef,
+                status   => undef,
             },
         }
     )->id;
@@ -425,6 +433,7 @@ subtest 'test() tests' => sub {
             value => {
                 password => undef,
                 key_file => undef,
+                status   => undef,
             },
         }
     );
