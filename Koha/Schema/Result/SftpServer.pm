@@ -182,7 +182,7 @@ Helper for Koha::Object-based class name resolution.
 =cut
 
 sub koha_objects_class {
-    'Koha::SFTP::Servers';
+    'Koha::File::Transports';
 }
 
 =head2 koha_object_class
@@ -192,7 +192,7 @@ Helper for Koha::Object-based class name resolution.
 =cut
 
 sub koha_object_class {
-    'Koha::SFTP::Server';
+    'Koha::File::Transport';
 }
 
 1;
