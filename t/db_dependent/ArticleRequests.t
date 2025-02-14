@@ -77,6 +77,7 @@ my $article_request = $builder->build_object(
             biblionumber   => $item->biblionumber,
             itemnumber     => $item->itemnumber,
             title          => $article_request_title,
+            debit_id       => undef,
         }
     }
 )->request();
