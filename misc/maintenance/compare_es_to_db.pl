@@ -30,7 +30,10 @@ B<compare_es_to_db.pl>
 =cut
 
 use Modern::Perl;
+
 use Array::Utils qw( array_minus );
+use Getopt::Long qw( GetOptions );
+use Try::Tiny    qw( catch try );
 
 use C4::Context;
 
@@ -39,7 +42,61 @@ use Koha::Biblios;
 use Koha::Items;
 use Koha::SearchEngine::Elasticsearch;
 
-foreach my $index ( ('biblios','authorities') ){
+my $help;
+my $fix;
+
+GetOptions(
+    'h|help' => \$help,
+    'f|fix'  => \$fix,
+);
+
+my $usage = <<'ENDUSAGE';
+
+This script finds differences between the records on the Koha database
+and the Elasticsearch index.
+
+The `--fix` option switch can be passed to try fixing them.
+
+This script has the following parameters :
+
+    -f|--fix     Try to fix errors
+    -h|--help    Print this message
+
+ENDUSAGE
+
+if ($help) {
+    print $usage;
+    exit;
+}
+
+my $help;
+my $fix;
+
+GetOptions(
+    'h|help' => \$help,
+    'f|fix'  => \$fix,
+);
+
+my $usage = <<'ENDUSAGE';
+
+This script finds differences between the records on the Koha database
+and the Elasticsearch index.
+
+The `--fix` option switch can be passed to try fixing them.
+
+This script has the following parameters :
+
+    -f|--fix     Try to fix errors
+    -h|--help    Print this message
+
+ENDUSAGE
+
+if ($help) {
+    print $usage;
+    exit;
+}
+
+foreach my $index ( ('biblios','authorities') ) {
     print "=================\n";
     print "Checking $index\n";
     my @db_records = $index eq 'biblios' ? Koha::Biblios->search()->get_column('biblionumber') : Koha::Authorities->search()->get_column('authid');
@@ -108,4 +165,44 @@ foreach my $index ( ('biblios','authorities') ){
             print "  Enter this command to view record: curl $es_base/data/$problem?pretty=true\n";
         }
     }
+
+    if ( $fix && ( @koha_problems || @es_problems ) ) {
+
+        print "=================\n";
+        print "Trying to fix problems:\n\n";
+
+        my $indexer;
+        my $server;
+        if ( $index eq 'biblios' ) {
+            $indexer = Koha::SearchEngine::Indexer->new( { index => $Koha::SearchEngine::BIBLIOS_INDEX } );
+            $server  = 'biblioserver';
+        } else {
+            $indexer = Koha::SearchEngine::Indexer->new( { index => $Koha::SearchEngine::AUTHORITIES_INDEX } );
+            $server  = 'authorityserver';
+        }
+
+        if (@koha_problems) {
+
+            print "=================\n";
+            print "Fixing missing records in the index ($index):\n\n";
+
+            foreach my $id (@koha_problems) {
+                try {
+                    $indexer->update_index( [$id] );
+                } catch {
+                    print STDERR "ERROR: record #$id failed: $_\n\n";
+                };
+            }
+        }
+
+        if (@es_problems) {
+
+            print "=================\n";
+            print "Deleting non-existent records from the index ($index)...\n";
+
+            $indexer->delete_index( \@es_problems );
+        }
+    }
 }
+
+1;
