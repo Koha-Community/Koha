@@ -1,5 +1,22 @@
 #!/usr/bin/env perl
+
+# This file is part of Koha.
+#
+# Koha is free software; you can redistribute it and/or modify it
+# under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 3 of the License, or
+# (at your option) any later version.
+#
+# Koha is distributed in the hope that it will be useful, but
+# WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with Koha; if not, see <http://www.gnu.org/licenses>.
+
 use Modern::Perl;
+
 use Term::ANSIColor qw(:constants);
 use Git::Wrapper;
 use File::Slurp    qw( write_file );
@@ -7,10 +24,10 @@ use File::Temp     qw( tempfile );
 use File::Basename qw(dirname);
 use File::Path     qw(make_path);
 use List::Util     qw( first );
+use LWP::UserAgent ();
 use Getopt::Long;
 use Pod::Usage;
 use Try::Tiny;
-use REST::Client;
 use JSON qw( decode_json );
 $Term::ANSIColor::AUTOLOCAL = 1;
 
@@ -85,17 +102,19 @@ switch_branch($tmp_src_branch);
 
 if ($bug_number) {
     say BLUE sprintf "Guessing a date to use from bugzilla's bug %s", $bug_number;
-    my $client = REST::Client->new(
-        {
-            host => 'https://bugs.koha-community.org/bugzilla3/rest',
-        }
-    );
+    my $client   = LWP::UserAgent->new();
+    my $response = $client->get( 'https://bugs.koha-community.org/bugzilla3/rest'
+            . "/bug/$bug_number/attachment?include_fields=is_patch,is_obsolete,creation_time,summary" );
 
-    $client->GET("/bug/$bug_number/attachment?include_fields=is_patch,is_obsolete,creation_time,summary");
-    my $response = decode_json( $client->responseContent );
+    if ( !$response->is_success ) {
+        say RED sprintf "Request to Bugzilla returned an error: %s", $response->status_line;
+        exit 2;
+    }
+
+    my $bz_response = decode_json( $response->decoded_content );
 
     my $time;
-    foreach my $attachment ( @{ $response->{bugs}->{$bug_number} } ) {
+    foreach my $attachment ( @{ $bz_response->{bugs}->{$bug_number} } ) {
         next if ( $attachment->{is_obsolete} );
         next if ( !$attachment->{is_patch} );
 
