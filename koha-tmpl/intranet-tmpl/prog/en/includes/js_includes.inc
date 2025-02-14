@@ -83,6 +83,9 @@
                 if ( $("#findborrower").length ) {
                     patron_autocomplete($("#findborrower"), { 'link-to': 'circ' });
                 }
+                if ( $("#findborrower_main").length ) {
+                    patron_autocomplete($("#findborrower_main"), { 'link-to': 'circ' });
+                }
             [% END %]
             if ( $("#searchmember").length ) {
                 patron_autocomplete($("#searchmember"), { 'link-to': 'patron' });
