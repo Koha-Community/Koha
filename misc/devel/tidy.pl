@@ -143,7 +143,7 @@ sub build_git_exclude {
 }
 
 sub get_perl_files {
-    my $cmd   = sprintf q{git ls-files '*.pl' '*.pm' '*.t' svc opac/svc %s}, build_git_exclude('pl');
+    my $cmd   = sprintf q{git ls-files '*.pl' '*.PL' '*.pm' '*.t' svc opac/svc %s}, build_git_exclude('pl');
     my @files = qx{$cmd};
     chomp for @files;
     return @files;
@@ -219,8 +219,9 @@ sub tidy_tt {
 
 sub get_filetype {
     my ($file) = @_;
-    return 'pl' if $file =~ m{^svc} || $file =~ m{^opac/svc};
+    return 'pl' if $file =~ m{^svc}  || $file =~ m{^opac/svc};
     return 'pl' if $file =~ m{\.pl$} || $file =~ m{\.pm} || $file =~ m{\.t$};
+    return 'pl' if $file =~ m{\.PL$};
 
     return 'js' if $file =~ m{\.js$} || $file =~ m{\.ts$} || $file =~ m{\.vue$};
 
