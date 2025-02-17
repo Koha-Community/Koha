@@ -4,7 +4,7 @@ use Test::PerlTidy;
 use Test::More;
 
 my @files;
-push @files, qx{git ls-files '*.pl' '*.pm' '*.t' ':(exclude)Koha/Schema/Result' ':(exclude)Koha/Schema.pm'};
+push @files, qx{git ls-files '*.pl' '*.PL' '*.pm' '*.t' ':(exclude)Koha/Schema/Result' ':(exclude)Koha/Schema.pm'};
 push @files, qx{git ls-files svc opac/svc};    # Files without extension
 
 plan tests => scalar @files;
