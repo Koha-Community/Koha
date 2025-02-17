@@ -20,15 +20,15 @@ use ExtUtils::MakeMaker::Config;
 use Tie::File;
 
 my $basedir = (shift);
-my $DEBUG = 0;
+my $DEBUG   = 0;
 
 $DEBUG = 1 if $basedir eq 'test';
 
 my $bindir = $Config{installbin};
-$bindir =~ s!\\!/!g;	# make all directory separators uniform since Win32 does not care and *nix does...
+$bindir =~ s!\\!/!g;    # make all directory separators uniform since Win32 does not care and *nix does...
 my $shebang = "#!$bindir\/perl";
 
-warn "Perl binary located in $bindir on this system.\n" if $DEBUG;
+warn "Perl binary located in $bindir on this system.\n"        if $DEBUG;
 warn "The shebang line for this sytems should be $shebang\n\n" if $DEBUG;
 
 die if $basedir eq 'test';
@@ -59,25 +59,26 @@ in a manner similar to 'fixshebang (foodir)' but may be supplied with any direct
 
 =cut
 
-sub fixshebang{
-	my $dir = shift;
+sub fixshebang {
+    my $dir = shift;
     opendir my $dh, $dir or die $!;
-	warn "Reading $dir contents.\n" if $DEBUG;
-    while( my $file = readdir($dh) ) {
-		# this may be used to exclude any desired files from the scan
+    warn "Reading $dir contents.\n" if $DEBUG;
+    while ( my $file = readdir($dh) ) {
+
+        # this may be used to exclude any desired files from the scan
         # if ( $file =~ /foo/ ) { next; }
-		# handle files... other extensions could be substituted/added if needed
-		if ( $file =~ /\.pl$/ ) {
+        # handle files... other extensions could be substituted/added if needed
+        if ( $file =~ /\.pl$/ ) {
             my @filearray;
-			my $pathfile =$dir . '/' . $file;
-			warn "Found a perl script named $pathfile\n" if $DEBUG;
+            my $pathfile = $dir . '/' . $file;
+            warn "Found a perl script named $pathfile\n" if $DEBUG;
 
             # At this point, file is in 'blib' and by default
             # has mode a-w.  Therefore, must change permission
             # to make it writable.  Note that stat and chmod
             # (the Perl functions) should work on Win32
             my $old_perm;
-            $old_perm = (stat $pathfile)[2] & oct(7777);
+            $old_perm = ( stat $pathfile )[2] & oct(7777);
             my $new_perm = $old_perm | oct(200);
             chmod $new_perm, $pathfile;
 
@@ -88,30 +89,29 @@ sub fixshebang{
             tie @filearray, 'Tie::File', $pathfile, recsep => "\x0a" or die $!;
 
             warn "First line of $file is $filearray[0]\n\n" if $DEBUG;
-			if ( ( $filearray[0] =~ /#!.*perl/ ) && ( $filearray[0] !~ /$shebang|"$shebang -w"/ ) ) {
-				warn "\n\tRe-writing shebang line for $pathfile\n" if $DEBUG;
-                warn "\tOriginal shebang line: $filearray[0]\n" if $DEBUG;
+            if ( ( $filearray[0] =~ /#!.*perl/ ) && ( $filearray[0] !~ /$shebang|"$shebang -w"/ ) ) {
+                warn "\n\tRe-writing shebang line for $pathfile\n" if $DEBUG;
+                warn "\tOriginal shebang line: $filearray[0]\n"    if $DEBUG;
                 $filearray[0] =~ /-w$/ ? $filearray[0] = "$shebang -w" : $filearray[0] = $shebang;
                 warn "\tNew shebang line is: $filearray[0]\n\n" if $DEBUG;
-			}
-            elsif ( $filearray[0] =~ /$shebang|"$shebang -w"/ ) {
+            } elsif ( $filearray[0] =~ /$shebang|"$shebang -w"/ ) {
                 warn "\n\tShebang line is correct.\n\n" if $DEBUG;
-            }
-			else {
+            } else {
                 warn "\n\tNo shebang line found in $pathfile\n\n" if $DEBUG;
-			}
+            }
             untie @filearray;
             chmod $old_perm, $pathfile;
-		}
-		# handle directories
-		elsif ( -d ($dir . '/' . $file) && $file !~ /^\.{1,2}/ ) {
-			my $dirpath = $dir . '/' . $file;
-			warn "Found a subdir named $dirpath\n" if $DEBUG;
-			fixshebang ($dirpath);
-		}
-	}
-	closedir $dh;
+        }
+
+        # handle directories
+        elsif ( -d ( $dir . '/' . $file ) && $file !~ /^\.{1,2}/ ) {
+            my $dirpath = $dir . '/' . $file;
+            warn "Found a subdir named $dirpath\n" if $DEBUG;
+            fixshebang($dirpath);
+        }
+    }
+    closedir $dh;
 }
 
-fixshebang ($basedir);
+fixshebang($basedir);
 
