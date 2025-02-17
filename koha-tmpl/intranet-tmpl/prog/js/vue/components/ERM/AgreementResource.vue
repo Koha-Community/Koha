@@ -273,6 +273,7 @@ export default {
                             label: __("User"),
                             componentPath: "./PatronSearch.vue",
                             required: true,
+                            indexRequired: true,
                             componentProps: {
                                 name: {
                                     type: "string",
@@ -303,6 +304,7 @@ export default {
                             label: __("Role"),
                             avCat: "av_user_roles",
                             required: true,
+                            indexRequired: true,
                         },
                     ],
                 },
