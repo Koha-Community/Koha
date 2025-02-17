@@ -53,13 +53,31 @@ mysqlhost="$( xmlstarlet sel -t -v 'yazgfs/config/hostname' $kohaconfig )"
 mysqldb="$( xmlstarlet sel -t -v 'yazgfs/config/database' $kohaconfig )"
 mysqluser="$( xmlstarlet sel -t -v 'yazgfs/config/user' $kohaconfig )"
 mysqlpass="$( xmlstarlet sel -t -v 'yazgfs/config/pass' $kohaconfig )"
-
+mysqltls="$( xmlstarlet sel -t -v 'yazgfs/config/tls' $kohaconfig || true )"
+mysqlca="$( xmlstarlet sel -t -v 'yazgfs/config/ca' $kohaconfig || true )"
+mysqlcert="$( xmlstarlet sel -t -v 'yazgfs/config/cert' $kohaconfig || true )"
+mysqlkey="$( xmlstarlet sel -t -v 'yazgfs/config/key' $kohaconfig || true )"
 mysqltz="$( xmlstarlet sel -t -v 'yazgfs/config/timezone' $kohaconfig || true )"
-if [ "$mysqltz" != "" ]
-then
-    mysql --host="$mysqlhost" --user="$mysqluser" --password="$mysqlpass" --init-command="SET time_zone='$mysqltz'" \
-        "$mysqldb"  "${@}"
-else
-    mysql --host="$mysqlhost" --user="$mysqluser" --password="$mysqlpass" \
-        "$mysqldb"  "${@}"
+
+set -- --host="$mysqlhost" "$@"
+set -- --user="$mysqluser" "$@"
+set -- --password="$mysqlpass" "$@"
+
+if [ "$mysqltls" = "yes" ]; then
+    set -- --ssl "$@"
+    if [ -n "$mysqlca" ] && [ "$mysqlca" != "DB_TLS_CA_CERTIFICATE" ]; then
+        set -- --ssl-ca="$mysqlca" "$@"
+    fi
+    if [ -n "$mysqlcert" ] && [ "$mysqlcert" != "__DB_TLS_CLIENT_CERTIFICATE__" ]; then
+        set -- --ssl-cert="$mysqlcert" "$@"
+    fi
+    if [ -n "$mysqlkey" ] && [ "$mysqlkey" != "__DB_TLS_CLIENT_KEY__" ]; then
+        set -- --ssl-key="$mysqlkey" "$@"
+    fi
 fi
+
+if [ "$mysqltz" != "" ]; then
+    set -- --init-command="SET time_zone='$mysqltz'" "$@"
+fi
+
+mysql "$mysqldb" "$@"
