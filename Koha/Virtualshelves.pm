@@ -45,9 +45,10 @@ just delete them if not possible.
 sub disown_or_delete {
     my ($self) = @_;
 
+    my $list_pref = C4::Context->preference('ListOwnershipUponPatronDeletion');
     $self->_resultset->result_source->schema->txn_do(
         sub {
-            if ( C4::Context->preference('ListOwnershipUponPatronDeletion') eq 'transfer' ) {
+            if ( $list_pref ne 'delete' ) { # transfer or transfer_public
                 my $new_owner;
 
                 $new_owner = C4::Context->preference('ListOwnerDesignated')
@@ -59,9 +60,11 @@ sub disown_or_delete {
                 }
 
                 while ( my $list = $self->next ) {
-                    if ( $new_owner && ( $list->is_public or $list->is_shared ) ) {
+                    if ( $new_owner && $list->is_public ) {
                         $list->transfer_ownership($new_owner);
-                    } else {
+                    } elsif ( $new_owner && $list->is_shared && $list_pref eq 'transfer' ) {
+                        $list->transfer_ownership($new_owner);
+                    } else { # private list, or shared list with transfer_public
                         $list->delete;
                     }
                 }
