@@ -1,11 +1,12 @@
 <template>
+    <label
+        v-if="attr.label"
+        :for="`${attr.name}${index}`"
+        :class="{ required: attr.required }"
+        :style="{ ...attr.style }"
+        >{{ attr.label }}:</label
+    >
     <template v-if="attr.type == 'number'">
-        <label
-            :for="`${attr.name}${index}`"
-            :class="{ required: attr.required }"
-            :style="{ ...attr.style }"
-            >{{ attr.label }}:</label
-        >
         <input
             :id="`${attr.name}${index}`"
             type="number"
@@ -15,12 +16,6 @@
         />
     </template>
     <template v-if="attr.type == 'text'">
-        <label
-            :for="`${attr.name}${index}`"
-            :class="{ required: attr.required }"
-            :style="{ ...attr.style }"
-            >{{ attr.label }}:</label
-        >
         <input
             :id="`${attr.name}${index}`"
             v-model="resource[attr.name]"
@@ -29,12 +24,6 @@
         />
     </template>
     <template v-else-if="attr.type == 'textarea'">
-        <label
-            :for="`${attr.name}${index}`"
-            :class="{ required: attr.required }"
-            :style="{ ...attr.style }"
-            >{{ attr.label }}:</label
-        >
         <textarea
             :id="`${attr.name}${index}`"
             v-model="resource[attr.name]"
@@ -45,12 +34,6 @@
         />
     </template>
     <template v-else-if="attr.type == 'checkbox'">
-        <label
-            :for="`${attr.name}${index}`"
-            :class="{ required: attr.required }"
-            :style="{ ...attr.style }"
-            >{{ attr.label }}:</label
-        >
         <input
             type="checkbox"
             :id="`${attr.name}${index}`"
@@ -59,7 +42,6 @@
         />
     </template>
     <template v-else-if="attr.type == 'boolean'">
-        <label :for="`${attr.name}${index}`">{{ attr.label }}:</label>
         <label class="radio" :for="`${attr.name}${index}` + '_yes'"
             >{{ $__("Yes") }}:
             <input
@@ -82,12 +64,6 @@
         </label>
     </template>
     <template v-else-if="attr.type == 'select'">
-        <label
-            :for="`${attr.name}${index}`"
-            :class="{ required: attr.required }"
-            :style="{ ...attr.style }"
-            >{{ attr.label }}:</label
-        >
         <v-select
             :id="`${attr.name}${index}`"
             v-model="resource[attr.name]"
@@ -110,13 +86,6 @@
         </v-select>
     </template>
     <template v-else-if="attr.type == 'vendor'">
-        <label
-            v-if="attr.label"
-            :for="attr.name"
-            :class="{ required: attr.required }"
-            :style="{ ...attr.style }"
-            >{{ attr.label }}:</label
-        >
         <component
             :is="requiredComponent"
             :id="attr.name"
@@ -126,13 +95,6 @@
         ></component>
     </template>
     <template v-else-if="attr.type == 'date'">
-        <label
-            v-if="attr.label"
-            :for="attr.name"
-            :class="{ required: attr.required }"
-            :style="{ ...attr.style }"
-            >{{ attr.label }}:</label
-        >
         <component
             :is="requiredComponent"
             :id="attr.name"
@@ -142,13 +104,6 @@
         ></component>
     </template>
     <template v-else-if="attr.type == 'component' && attr.componentPath">
-        <label
-            v-if="attr.label"
-            :for="attr.name"
-            :class="{ required: attr.required }"
-            :style="{ ...attr.style }"
-            >{{ attr.label }}:</label
-        >
         <component
             v-if="isVModelRequired(attr.componentPath)"
             :is="requiredComponent"
@@ -176,13 +131,6 @@
         ></component>
     </template>
     <template v-else-if="attr.type == 'relationshipSelect'">
-        <label
-            v-if="attr.label"
-            :for="attr.name"
-            :class="{ required: attr.required }"
-            :style="{ ...attr.style }"
-            >{{ attr.label }}:</label
-        >
         <FormRelationshipSelect
             v-bind="attr"
             :resource="resource"
