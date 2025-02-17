@@ -491,23 +491,72 @@ subtest 'build_object() tests' => sub {
             $module =~ s|^.*/(Koha.*)\.pm$|$1|;
             $module =~ s|/|::|g;
             next if $module eq 'Koha::Objects';
+
             eval "require $module";
-            my $object = $builder->build_object( { class => $module } );
-            is( ref($object), $module->object_class, "Testing $module" );
 
-            if ( !grep { $module eq $_ } qw( Koha::Old::Patrons Koha::Statistics ) )
-            {    # FIXME deletedborrowers and statistics do not have a PK
-                eval { $object->get_from_storage };
-                is( $@, '', "Module $module should have koha_object[s]_class method if needed" );
+            # Check if this is a polymorphic class
+            my $is_polymorphic = $module->can('_polymorphic_field') && $module->can('_polymorphic_map');
+
+            if ($is_polymorphic) {
+
+                # Test each concrete implementation
+                my $polymorphic_field = $module->_polymorphic_field();
+                my $polymorphic_map   = $module->_polymorphic_map();
+
+                foreach my $type_value ( keys %$polymorphic_map ) {
+                    my $expected_class = $polymorphic_map->{$type_value};
+
+                    # Create an object of this type
+                    my $object = $builder->build_object(
+                        {
+                            class => $module,
+                            value => { $polymorphic_field => $type_value }
+                        }
+                    );
+
+                    is(
+                        ref($object), $expected_class,
+                        "Testing polymorphic $module with $polymorphic_field=$type_value"
+                    );
+
+                    # Do the storage test
+                    if ( !grep { $module eq $_ } qw(Koha::Old::Patrons Koha::Statistics) ) {
+                        eval { $object->get_from_storage };
+                        is(
+                            $@, '',
+                            "Module $module with $polymorphic_field=$type_value should have koha_object[s]_class method if needed"
+                        );
+                    }
+
+                    # Test class loading
+                    my $object_class = Koha::Object::_get_object_class( $object->_result->result_class );
+                    eval "require $object_class";
+                    is( $@, '', "Module $object_class should be defined" );
+
+                    my $objects_class = Koha::Objects::_get_objects_class( $object->_result->result_class );
+                    eval "require $objects_class";
+                    is( $@, '', "Module $objects_class should be defined" );
+                }
+            } else {
+
+                # Regular class
+                my $object = $builder->build_object( { class => $module } );
+                is( ref($object), $module->object_class, "Testing $module" );
+
+                if ( !grep { $module eq $_ } qw( Koha::Old::Patrons Koha::Statistics ) )
+                {    # FIXME deletedborrowers and statistics do not have a PK
+                    eval { $object->get_from_storage };
+                    is( $@, '', "Module $module should have koha_object[s]_class method if needed" );
+                }
+
+                # Testing koha_object_class and koha_objects_class
+                my $object_class = Koha::Object::_get_object_class( $object->_result->result_class );
+                eval "require $object_class";
+                is( $@, '', "Module $object_class should be defined" );
+                my $objects_class = Koha::Objects::_get_objects_class( $object->_result->result_class );
+                eval "require $objects_class";
+                is( $@, '', "Module $objects_class should be defined" );
             }
-
-            # Testing koha_object_class and koha_objects_class
-            my $object_class = Koha::Object::_get_object_class( $object->_result->result_class );
-            eval "require $object_class";
-            is( $@, '', "Module $object_class should be defined" );
-            my $objects_class = Koha::Objects::_get_objects_class( $object->_result->result_class );
-            eval "require $objects_class";
-            is( $@, '', "Module $objects_class should be defined" );
         }
     };
 
