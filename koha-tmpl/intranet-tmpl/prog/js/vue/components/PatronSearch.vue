@@ -5,12 +5,17 @@
     &nbsp;
     <a
         href="#patron_search_modal"
-        @click="selectUser(counter)"
+        @click="selectUser()"
         class="btn btn-default"
         data-bs-toggle="modal"
         ><i class="fa fa-plus"></i> {{ $__("Select user") }}</a
     >
-    <input type="hidden" name="selected_patron_id" id="selected_patron_id" />
+    <input
+        v-if="shouldRenderInput"
+        type="hidden"
+        name="selected_patron_id"
+        id="selected_patron_id"
+    />
 </template>
 
 <script>
@@ -20,21 +25,31 @@ export default {
     props: {
         name: String,
         resource: Object,
-        counter: String,
         label: String,
         required: Boolean,
     },
     beforeCreate() {
         this.resource.patron_str = $patron_to_html(this.resource.patron);
     },
+    computed: {
+        shouldRenderInput() {
+            return !document.getElementById("selected_patron_id");
+        },
+    },
     methods: {
-        selectUser(counter) {
-            // This is a bit dirty, the "select user" window should be rewritten and be a Vue component
-            // but that's not for now...
+        selectUser() {
+            this.modalEventListener = () => {
+                this.newUserSelected();
+                $(document).off(
+                    "hidden.bs.modal",
+                    "#patron_search_modal",
+                    this.modalEventListener
+                );
+            };
             $(document).on(
                 "hidden.bs.modal",
                 "#patron_search_modal",
-                this.newUserSelected
+                this.modalEventListener
             );
         },
         newUserSelected(e) {
