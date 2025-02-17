@@ -59,15 +59,16 @@ export default {
                 if (prop.type === "av") {
                     acc[key] = prop.av;
                 }
-                if (prop.type === "string") {
-                    if (prop.indexRequired && this.index > -1) {
-                        acc[key] = `${prop.value}${this.index}`;
-                    } else {
-                        acc[key] = prop.value;
-                    }
-                }
-                if (prop.type === "boolean" || prop.type === "object") {
+                if (
+                    prop.type === "boolean" ||
+                    prop.type === "object" ||
+                    prop.type === "string" ||
+                    prop.type === "date"
+                ) {
                     acc[key] = prop.value;
+                    if (prop.indexRequired && this.index > -1) {
+                        acc[key] = `${prop.value}_${this.index}`;
+                    }
                 }
 
                 if (key === "disabled") {

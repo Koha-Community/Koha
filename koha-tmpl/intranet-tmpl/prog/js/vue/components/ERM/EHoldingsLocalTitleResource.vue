@@ -348,7 +348,7 @@ export default {
                             componentProps: {
                                 date_to: {
                                     type: "string",
-                                    value: "ended_on_",
+                                    value: "ended_on",
                                     indexRequired: true,
                                 },
                             },

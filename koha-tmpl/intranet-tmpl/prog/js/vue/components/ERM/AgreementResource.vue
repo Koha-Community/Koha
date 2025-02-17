@@ -193,6 +193,7 @@ export default {
                             type: "date",
                             label: __("Start date"),
                             required: true,
+                            indexRequired: true,
                             componentProps: {
                                 required: {
                                     type: "boolean",
@@ -200,7 +201,7 @@ export default {
                                 },
                                 date_to: {
                                     type: "string",
-                                    value: "ended_on_",
+                                    value: "ended_on",
                                     indexRequired: true,
                                 },
                             },
@@ -210,6 +211,7 @@ export default {
                             type: "date",
                             label: __("End date"),
                             required: false,
+                            indexRequired: true,
                         },
                         {
                             name: "cancellation_deadline",

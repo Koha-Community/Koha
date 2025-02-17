@@ -1,14 +1,14 @@
 <template>
     <label
         v-if="attr.label"
-        :for="`${attr.name}${index}`"
+        :for="getElementId"
         :class="{ required: attr.required }"
         :style="{ ...attr.style }"
         >{{ attr.label }}:</label
     >
     <template v-if="attr.type == 'number'">
         <input
-            :id="`${attr.name}${index}`"
+            :id="getElementId"
             type="number"
             v-model="resource[attr.name]"
             :placeholder="attr.placeholder || attr.label"
@@ -17,7 +17,7 @@
     </template>
     <template v-if="attr.type == 'text'">
         <input
-            :id="`${attr.name}${index}`"
+            :id="getElementId"
             v-model="resource[attr.name]"
             :placeholder="attr.placeholder || attr.label"
             :required="attr.required ? true : false"
@@ -25,7 +25,7 @@
     </template>
     <template v-else-if="attr.type == 'textarea'">
         <textarea
-            :id="`${attr.name}${index}`"
+            :id="getElementId"
             v-model="resource[attr.name]"
             :rows="attr.textAreaRows"
             :cols="attr.textAreaCols"
@@ -36,13 +36,13 @@
     <template v-else-if="attr.type == 'checkbox'">
         <input
             type="checkbox"
-            :id="`${attr.name}${index}`"
+            :id="getElementId"
             v-model="resource[attr.name]"
             @change="attr.onChange && attr.onChange(resource)"
         />
     </template>
     <template v-else-if="attr.type == 'boolean'">
-        <label class="radio" :for="`${attr.name}${index}` + '_yes'"
+        <label class="radio" :for="getElementId + '_yes'"
             >{{ $__("Yes") }}:
             <input
                 type="radio"
@@ -52,7 +52,7 @@
                 v-model="resource[attr.name]"
             />
         </label>
-        <label class="radio" :for="attr.name + '_no'"
+        <label class="radio" :for="getElementId + '_no'"
             >{{ $__("No") }}:
             <input
                 type="radio"
@@ -65,7 +65,7 @@
     </template>
     <template v-else-if="attr.type == 'select'">
         <v-select
-            :id="`${attr.name}${index}`"
+            :id="getElementId"
             v-model="resource[attr.name]"
             :label="attr.selectLabel"
             :reduce="av => selectRequiredKey(av)"
@@ -88,7 +88,7 @@
     <template v-else-if="attr.type == 'vendor'">
         <component
             :is="requiredComponent"
-            :id="attr.name"
+            :id="getElementId"
             v-bind="getComponentProps()"
             v-on="getEventHandlers()"
             v-model="resource[attr.name]"
@@ -97,7 +97,7 @@
     <template v-else-if="attr.type == 'date'">
         <component
             :is="requiredComponent"
-            :id="attr.name"
+            :id="getElementId"
             v-bind="getComponentProps()"
             v-on="getEventHandlers()"
             v-model="resource[attr.name]"
@@ -170,6 +170,11 @@ export default {
         };
     },
     computed: {
+        getElementId() {
+            return this.attr.indexRequired
+                ? `${this.attr.name}_${this.index}`
+                : this.attr.name;
+        },
         requiredComponent() {
             const component = this.identifyAndImportComponent(this.attr);
             return component;
