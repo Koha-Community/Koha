@@ -155,6 +155,9 @@ if ( $op eq 'add_form' ) {
         $op = $referer;
         my $sortfield = $query->param('sortfield');
         $sortfield = 'title' unless grep { $_ eq $sortfield } qw( title author copyrightdate itemcallnumber dateadded );
+        if ( $sortfield eq 'copyrightdate' and C4::Context->preference('marcflavour') eq 'UNIMARC' ) {
+            $sortfield = 'publicationyear';
+        }
         if ( $shelf->can_be_managed($loggedinuser) ) {
             $shelf->shelfname( scalar $query->param('shelfname') );
             $shelf->sortfield($sortfield);
@@ -328,6 +331,9 @@ if ( $op eq 'view' ) {
             $sortfield = 'title'
                 if !$sortfield
                 or !grep { $_ eq $sortfield } qw( title author copyrightdate itemcallnumber dateadded );
+            if ( $sortfield eq 'copyrightdate' and C4::Context->preference('marcflavour') eq 'UNIMARC' ) {
+                $sortfield = 'publicationyear';
+            }
 
             my $rows;
             if ( $query->param('print') or $query->param('rss') ) {
