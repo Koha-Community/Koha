@@ -234,12 +234,11 @@
                         </select>
                     </li>
                     <li
-                        ><label for="branches">Library limitations: </label>
-                        <select id="branches" name="branches" multiple size="10">
-                            <option value="">All libraries</option>
+                        ><label for="library_limitation">Library limitations: </label>
+                        <select id="library_limitation" name="branches" multiple size="10">
                             [% PROCESS options_for_libraries libraries => Branches.all( selected => category.get_library_limits, unfiltered => 1, do_not_select_my_library => 1 ) %]
                         </select>
-                        <div class="hint">Select <em>All libraries</em> if this category type must to be displayed all the time. Otherwise select libraries you want to associate with this value. </div>
+                        <div class="hint">Select libraries you want to associate with this value.</div>
                     </li>
                     <li>
                         <label for="reset_password">Password reset in OPAC: </label>
@@ -857,6 +856,7 @@
     [% Asset.js("lib/jquery/plugins/multiple-select/multiple-select.min.js") | $raw %]
     [% INCLUDE 'calendar.inc' %]
     [% INCLUDE 'datatables.inc' %]
+    [% INCLUDE 'select2.inc' %]
     <script>
         var table_settings = [% TablesSettings.GetTableSettings( 'admin', 'categories', 'patron_categories', 'json' ) | $raw %];
     </script>

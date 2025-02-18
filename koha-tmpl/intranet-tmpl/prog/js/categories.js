@@ -52,9 +52,8 @@ $(document).ready(function () {
         table_settings
     );
 
-    if ($("#branches option:selected").length < 1) {
-        $("#branches option:first").attr("selected", "selected");
-    }
+    $("#library_limitation")[0].style.minWidth = "450px";
+    $("#library_limitation").select2();
 
     $("#categorycode").on("blur", function () {
         toUC(this);

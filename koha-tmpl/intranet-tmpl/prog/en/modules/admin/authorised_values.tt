@@ -196,9 +196,8 @@
                             <input type="text" name="lib_opac" id="lib_opac" value="[% av.lib_opac | html %]" maxlength="200" />
                         </li>
                         <li
-                            ><label for="branches">Library limitations: </label>
-                            <select id="branches" name="branches" multiple size="10">
-                                <option value="">All libraries</option>
+                            ><label for="library_limitation">Library limitations: </label>
+                            <select id="library_limitation" name="branches" multiple size="10">
                                 [% FOREACH branch IN branches_loop %]
                                     [% IF ( branch.selected ) %]
                                         <option selected="selected" value="[% branch.branchcode | html %]">[% branch.branchname | html %]</option>
@@ -207,7 +206,7 @@
                                     [% END %]
                                 [% END %]
                             </select>
-                            <div class="hint">Select 'All libraries' if this authorized value must be displayed all the time. Otherwise select libraries you want to associate with this value.</div>
+                            <div class="hint">Select libraries you want to associate with this value.</div>
                         </li>
                     </ol>
 
@@ -403,6 +402,7 @@
 [% MACRO jsinclude BLOCK %]
     [% Asset.js("js/admin-menu.js") | $raw %]
     [% INCLUDE 'datatables.inc' %]
+    [% INCLUDE 'select2.inc' %]
     <script>
         $(document).ready(function () {
             $("#categoriest").kohaTable({
@@ -439,6 +439,8 @@
                 }
                 return true;
             });
+            $("#library_limitation")[0].style.minWidth = "450px";
+            $("#library_limitation").select2();
         });
     </script>
 [% END %]
