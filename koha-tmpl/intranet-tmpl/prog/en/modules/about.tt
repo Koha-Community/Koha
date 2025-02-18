@@ -449,6 +449,8 @@
                         <span>One of the logfiles listed in the config file is not writable.</span>
                     [% CASE 'cannot_init_module' %]
                         <span>The Koha::Logger module cannot be initiated correctly (check the log file).</span>
+                    [% CASE 'sip_log_still_found' %]
+                        <span>Config file log4perl.conf still refers to sip.log (instead of sip-output.log).</span>
                     [% CASE %]
                         <span>Unknown error '[% e | html %]'.</span>
                     [% END %]

@@ -826,7 +826,9 @@ sub log4perl_check {
         for my $line (@lines) {
             next unless $line =~ m|log4perl\.appender\.\w+\.filename=(.*)|;
             my $file = $1;
-            if ( !-w $file ) {
+            if ( $file =~ /sip\.log$/ ) {
+                push @log4perl_errors, 'sip_log_still_found';
+            } elsif ( !-w $file ) {
                 push @log4perl_errors, 'logfile_not_writable';
 
                 #NOTE: An unwritable logfile blocks plack.psgi. So you won't reach this script. (BZ 39155)
