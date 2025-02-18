@@ -37,9 +37,11 @@
 
 <span>This should be picked by xgettext.pl</span>
 
-<img alt="alt text">
+<img alt="alt text" />
 
 <option [% IF value == expected %]selected[% END %] title="foo title" value="foo">Foo</option>
 
+<!-- prettier-ignore-start -->
 <span [% IF show_title %]title="this is not translatable (known bug)"[% END %]></span>
 <span [% IF show_title %] title="but this is (thanks to space before attribute name)"[% END %]></span>
+<!-- prettier-ignore-end -->
