@@ -87,6 +87,26 @@ sub MultivaluePreference {
     return C4::Context->multivalue_preference($pref);
 }
 
+=head3 debug_flag
+
+This method checks if the currently logged in user is allowed
+access to the new debug ui permission. It should return
+0 if no one is logged in or context is unavailable for some other reason
+    or they do not have the permission
+1 if they are a superlibrarian
+1<<32 if they do have the permission
+
+=cut
+
+sub debug_flag {
+    return 0 unless C4::Context->userenv();
+    return 1 if C4::Context->IsSuperLibrarian();
+    my $flags = C4::Context->userenv()->{'flags'};
+    my $mask  = 1 << 32;
+    return $flags & $mask;
+
+}
+
 =head3 CSVDelimiter
 
 The delimiter option 'tabs' is stored in the DB as 'tabulation' to avoid issues

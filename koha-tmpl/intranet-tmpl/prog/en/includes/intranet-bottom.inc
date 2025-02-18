@@ -186,6 +186,16 @@
     [% END %]
 [% END %]
 
+[% IF Koha.debug_flag %]
+    <div style="position: fixed; bottom: 0;">
+        <button onclick="window.location.search += '&DISABLE_SYSPREF_IntranetUserCSS=yes&DISABLE_SYSPREF_OPACUserCSS=yes'">Disable User CSS</button>
+        <button onclick="window.location.search += '&DISABLE_SYSPREF_IntranetUserJS=yes&DISABLE_SYSPREF_OPACUserJS=yes'">Disable User JS</button>
+        <button onclick="window.location.search += '&DISABLE_SYSPREF_OpacAdditionalStylesheet=yes&DISABLE_SYSPREF_opaclayoutstylesheet=yes&DISABLE_SYSPREF_intranetcolorstylesheet=yes&DISABLE_SYSPREF_intranetstylesheet=yes'"
+            >Load only default stylesheets</button
+        >
+    </div>
+[% END # IF %]
+
 [% IF ( footerjs ) %]
     [% INCLUDE js_includes.inc %]
     [% jsinclude | $raw # Parse the page template's JavaScript block if necessary %]

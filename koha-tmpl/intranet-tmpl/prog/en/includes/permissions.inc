@@ -90,6 +90,9 @@
     [%- CASE 'sip2' -%]
         <span class="main_permission sip2_permission">Manage the SIP2 module</span>
         <span class="permissioncode">([% name | html %])</span>
+    [%- CASE 'debug' -%]
+        <span class="main_permission debug_permission">Display the Debug UI</span>
+        <span class="permissioncode">([% name | html %])</span>
     [%- END -%]
 [%- END -%]
 
