@@ -34,6 +34,7 @@ use Koha::CsvProfiles;
 use Koha::Exporter::Record;
 use Koha::DateUtils qw( dt_from_string output_pref );
 use Koha::Reports;
+use Koha::File::Transports;
 
 my (
     $output_format,
@@ -62,7 +63,9 @@ my (
     $report,
     $sql,
     $params_needed,
-    $help
+    $destination_server_id,
+    $delete_local_after_run,
+    $help,
 );
 
 GetOptions(
@@ -89,7 +92,9 @@ GetOptions(
     'embed_see_from_headings' => \$embed_see_from_headings,
     'report_id=s'             => \$report_id,
     'report_param=s'          => \@report_params,
-    'h|help|?'                => \$help
+    'destination_server_id=s' => \$destination_server_id,
+    'delete_local_after_run'  => \$delete_local_after_run,
+    'h|help|?'                => \$help,
 ) || pod2usage(1);
 
 if ($help) {
@@ -119,12 +124,20 @@ if ( $deleted_barcodes and $record_type ne 'bibs' ) {
     pod2usage(q|--deleted_barcodes can only be used with biblios|);
 }
 
+my $sftp_server;
+if ($destination_server_id) {
+    $sftp_server = Koha::File::Transports->find($destination_server_id);
+
+    pod2usage( sprintf( "No FTP/SFTP Server (%s) found", $destination_server_id ) )
+        unless $sftp_server;
+}
+
 if ($report_id) {
 
     # Check report exists
     $report = Koha::Reports->find($report_id);
     unless ($report) {
-        pod2usage( sprintf( "No saved report (%s) found", $report_id ) );
+        pod2usage( sprintf( "No FTP/SFTP Server (%s) found", $report_id ) );
     }
     $sql = $report->savedsql;
 
@@ -340,6 +353,26 @@ if ($deleted_barcodes) {
         }
     );
 }
+
+if ($sftp_server) {
+    $sftp_server->connect
+        or die pod2usage( sprintf( "Unable to connect server (%s)", $destination_server_id ) );
+
+    my $upload_dir = $sftp_server->upload_directory;
+    if ($upload_dir) {
+        $sftp_server->change_directory( $upload_dir )
+            or die pod2usage( sprintf( "Unable to change directory on server (%s) to path (%s)", $destination_server_id, $upload_dir ) );
+    }
+
+    $sftp_server->upload_file ( $filename, $filename )
+        or die pod2usage( sprintf( "Unable to upload file (%s) to server (%s)", $filename, $destination_server_id ) );
+}
+
+if ($delete_local_after_run) {
+    unlink $filename
+        or die pod2usage( sprintf( "Unable to delete local file (%s)", $filename ) );
+}
+
 exit;
 
 =head1 NAME
@@ -482,6 +515,19 @@ Print a brief help message.
                                 report.
                                 Report params are not combined as on the staff side, so you may
                                 need to repeat params.
+
+=item B<--destination_server_id>
+
+--destination_server_id=ID      Provide this option, along with the destination server ID, to
+                                upload the resultant mrc file to the selected FTP/SFTP Server.
+                                You can create FTP/SFTP Servers via the Koha Staff client, under
+                                Koha Administration.
+
+=item B<--delete_local_after_run>
+
+--delete_local_after_run       Deletes the local file at the end of the script run. Can be
+                                useful if, for example, you are uploading the file to an
+                                FTP/SFTP server.
 
 =back
 
