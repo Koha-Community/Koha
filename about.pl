@@ -120,23 +120,6 @@ if ( $tab eq 'about' ) {
         environment_invalid    => $env_invalid
     };
 
-    {    # Logger checks
-        my $log4perl_config = C4::Context->config("log4perl_conf");
-        my @log4perl_errors;
-        if ( !$log4perl_config ) {
-            push @log4perl_errors, 'missing_config_entry';
-        } else {
-            my @lines = read_file($log4perl_config) or push @log4perl_errors, 'cannot_read_config_file';
-            for my $line (@lines) {
-                next unless $line =~ m|log4perl.appender.\w+.filename=(.*)|;
-                push @log4perl_errors, 'logfile_not_writable' unless -w $1;
-            }
-        }
-        eval { Koha::Logger->get };
-        push @log4perl_errors, 'cannot_init_module' and warn $@ if $@;
-        $template->param( log4perl_errors => @log4perl_errors );
-    }
-
     $template->param(
         time_zone             => $time_zone,
         current_date_and_time => output_pref( { dt => dt_from_string(), dateformat => 'iso' } )
@@ -274,9 +257,7 @@ if ( $tab eq 'sysinfo' ) {
         push @xml_config_warnings, { error => 'zebra_auth_index_mode_mismatch_warn' };
     }
 
-    if ( !defined C4::Context->config('log4perl_conf') ) {
-        push @xml_config_warnings, { error => 'log4perl_entry_missing' };
-    }
+    log4perl_check( $template, \@xml_config_warnings );
 
     if ( !defined C4::Context->config('lockdir') ) {
         push @xml_config_warnings, { error => 'lockdir_entry_missing' };
@@ -827,6 +808,34 @@ if ( $tab eq 'history' ) {
     } else {
         $template->param( timeline_read_error => 1 );
     }
+}
+
+sub log4perl_check {
+    my ( $template, $xml_config_warnings ) = @_;
+
+    if ( !defined C4::Context->config('log4perl_conf') ) {
+        push @$xml_config_warnings, { error => 'log4perl_entry_missing' };
+    }
+
+    my $log4perl_config = C4::Context->config("log4perl_conf");
+    my @log4perl_errors;
+    if ( !$log4perl_config ) {
+        push @log4perl_errors, 'missing_config_entry';
+    } else {
+        my @lines = read_file($log4perl_config) or push @log4perl_errors, 'cannot_read_config_file';
+        for my $line (@lines) {
+            next unless $line =~ m|log4perl\.appender\.\w+\.filename=(.*)|;
+            my $file = $1;
+            if ( !-w $file ) {
+                push @log4perl_errors, 'logfile_not_writable';
+
+                #NOTE: An unwritable logfile blocks plack.psgi. So you won't reach this script. (BZ 39155)
+            }
+        }
+    }
+    eval { Koha::Logger->get };
+    push @log4perl_errors, 'cannot_init_module' and warn $@ if $@;
+    $template->param( log4perl_errors => @log4perl_errors );
 }
 
 sub elasticsearch_check {
