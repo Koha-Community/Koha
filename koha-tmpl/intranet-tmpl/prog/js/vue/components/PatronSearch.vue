@@ -1,5 +1,8 @@
 <template>
-    <span class="user">
+    <span v-if="loading" class="user">
+        {{ $__("Loading...") }}
+    </span>
+    <span v-else class="user">
         {{ resource.patron_str }}
     </span>
     &nbsp;
@@ -28,6 +31,11 @@ export default {
         label: String,
         required: Boolean,
     },
+    data() {
+        return {
+            loading: false,
+        };
+    },
     beforeCreate() {
         this.resource.patron_str = $patron_to_html(this.resource.patron);
     },
@@ -53,16 +61,17 @@ export default {
             );
         },
         newUserSelected(e) {
+            this.loading = true;
             let selected_patron_id =
                 document.getElementById("selected_patron_id").value;
             let patron;
             const client = APIClient.patron;
-            // FIXME We are missing a "loading..."
             client.patrons.get(selected_patron_id).then(p => {
                 patron = p;
                 this.resource.patron = patron;
                 this.resource.patron_str = $patron_to_html(patron);
                 this.resource.user_id = patron.patron_id;
+                this.loading = false;
             });
         },
     },
