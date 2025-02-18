@@ -4,6 +4,7 @@
         :getOptionLabel="
             relatedResource => relatedResource[relationshipOptionLabelAttr]
         "
+        :id="name"
         :reduce="relatedResource => relatedResource[relationshipRequiredKey]"
         :options="relatedResourcesOptions"
         :multiple="allowMultipleChoices"
