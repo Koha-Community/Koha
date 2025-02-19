@@ -212,7 +212,7 @@ subtest 'Koha::SearchEngine::Elasticsearch::marc_records_to_documents () tests' 
     plan tests => 70;
 
     t::lib::Mocks::mock_preference( 'marcflavour',             'MARC21' );
-    t::lib::Mocks::mock_preference( 'ElasticsearchMARCFormat', 'ISO2709' );
+    t::lib::Mocks::mock_preference( 'ElasticsearchMARCFormat', 'base64ISO2709' );
 
     my @mappings = (
         {
@@ -744,7 +744,7 @@ subtest 'Koha::SearchEngine::Elasticsearch::marc_records_to_documents () tests' 
 
     ok( !( defined $docs->[0]->{unimarc_title} ), "No mapping when marc_type doesn't match marc flavour" );
 
-    # Marc serialization format fallback for records exceeding ISO2709 max record size
+    # Marc serialization format fallback for records exceeding base64ISO2709 max record size
 
     my $large_marc_record = MARC::Record->new();
     $large_marc_record->leader('     cam  22      a 4500');
@@ -970,7 +970,7 @@ subtest 'Koha::SearchEngine::Elasticsearch::marc_records_to_documents () authori
     plan tests => 5;
 
     t::lib::Mocks::mock_preference( 'marcflavour',             'MARC21' );
-    t::lib::Mocks::mock_preference( 'ElasticsearchMARCFormat', 'ISO2709' );
+    t::lib::Mocks::mock_preference( 'ElasticsearchMARCFormat', 'base64ISO2709' );
 
     my $builder = t::lib::TestBuilder->new;
     my $auth_type =

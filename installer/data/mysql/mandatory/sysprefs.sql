@@ -235,7 +235,7 @@ INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `
 ('ElasticsearchCrossFields', '1', '', 'Enable "cross_fields" option for searches using Elastic search.', 'YesNo'),
 ('ElasticsearchIndexStatus_authorities', '0', 'Authorities index status', NULL, NULL),
 ('ElasticsearchIndexStatus_biblios', '0', 'Biblios index status', NULL, NULL),
-('ElasticsearchMARCFormat', 'ISO2709', 'ISO2709|ARRAY', 'Elasticsearch MARC format. ISO2709 format is recommended as it is faster and takes less space, whereas array is searchable.', 'Choice'),
+('ElasticsearchMARCFormat', 'base64ISO2709', 'base64ISO2709|ARRAY', 'Elasticsearch MARC format. ISO2709 format is recommended as it is faster and takes less space, whereas array is searchable.', 'Choice'),
 ('EmailAddressForPatronRegistrations', '', '', ' If you choose EmailAddressForPatronRegistrations you have to enter a valid email address: ', 'free'),
 ('EmailAddressForSuggestions','','',' If you choose EmailAddressForSuggestions you have to enter a valid email address: ','free'),
 ('EmailFieldPrecedence','email|emailpro|B_email','','Ordered list of patron email fields to use when AutoEmailPrimaryAddress is set to first valid','multiple'),
