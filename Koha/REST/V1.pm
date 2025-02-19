@@ -219,7 +219,7 @@ sub startup {
     $self->plugin('Koha::REST::Plugin::Responses');
     $self->plugin('Koha::REST::Plugin::Auth::IdP');
     $self->plugin('Koha::REST::Plugin::Auth::PublicRoutes');
-    $self->plugin( 'Mojolicious::Plugin::OAuth2' => $oauth_configuration );
+    $self->plugin( 'OAuth2' => $oauth_configuration );
 }
 
 =head3 _route_wants_raw_payload
