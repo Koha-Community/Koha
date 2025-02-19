@@ -1099,30 +1099,12 @@ subtest checkin_withdrawn => sub {
 };
 
 subtest _get_sort_bin => sub {
-    plan tests => 6;
+    plan tests => 24;
 
     my $library  = $builder->build_object( { class => 'Koha::Libraries' } );
     my $branch   = $library->branchcode;
     my $library2 = $builder->build_object( { class => 'Koha::Libraries' } );
     my $branch2  = $library2->branchcode;
-
-    # Rules starts with malformed line, empty line and a comment to prove they are skipped
-    my $rules = <<"RULES";
-$branch:homebranch:ne:\$holdingbranch:X\r
-$branch:effective_itemtype:eq:CD:0\r
-$branch:itemcallnumber:<:340:1\r
-$branch:itemcallnumber:<:370:2\r
-$branch:itemcallnumber:<:600:3\r
-$branch2:homebranch:ne:\$holdingbranch:X\r
-$branch2:effective_itemtype:eq:CD:4\r
-$branch2:itemcallnumber:>:600:5\r
-$branch2:effective_itemtype:eq:BOOK:ccode:eq:TEEN:6\r
-# Comment line to skip\r
-\r
-$branch:homebranch:Z\r
-RULES
-
-    t::lib::Mocks::mock_preference( 'SIP2SortBinMapping', $rules );
 
     my $item_cd = $builder->build_sample_item(
         {
@@ -1156,27 +1138,84 @@ RULES
 
     my $bin;
 
+    my @line_endings = ( "\n", "\r\n", "\r" );
+    my %eol_display  = ( "\n" => '\\n', "\r\n" => '\\r\\n', "\r" => '\\r' );
+
+    foreach my $eol (@line_endings) {
+
+        # Rules contain malformed line, empty line and a comment to prove they are skipped
+        my $rules = join(
+            $eol,
+            (
+                "$branch:homebranch:ne:\$holdingbranch:X",
+                "$branch:effective_itemtype:eq:CD:0",
+                "$branch:itemcallnumber:<:340:1",
+                "$branch:itemcallnumber:<:370:2",
+                "$branch:itemcallnumber:<:600:3",
+                "$branch2:homebranch:ne:\$holdingbranch:X",
+                "$branch2:effective_itemtype:eq:CD:4",
+                "$branch2:itemcallnumber:>:600:5",
+                "$branch2:effective_itemtype:eq:BOOK:ccode:eq:TEEN:6",
+                "# Comment line to skip",
+                "",                        # Empty line
+                "$branch:homebranch:Z",    # Malformed line
+            )
+        );
+
+        t::lib::Mocks::mock_preference( 'SIP2SortBinMapping', $rules );
+
+        # Set holdingbranch as though item returned to library other than homebranch (As AddReturn would)
+        $item_cd->holdingbranch( $library2->branchcode )->store();
+        $bin = C4::SIP::ILS::Transaction::Checkin::_get_sort_bin( $item_cd, $library2->branchcode );
+        is( $bin, 'X', "Item parameter on RHS of comparison works (ne comparator) with EOL '$eol_display{$eol}'" );
+
+        # Reset holdingbranch as though item returned to home library
+        $item_cd->holdingbranch( $library->branchcode )->store();
+        $bin = C4::SIP::ILS::Transaction::Checkin::_get_sort_bin( $item_cd, $library->branchcode );
+        is( $bin, '0', "Fixed value on RHS of comparison works (eq comparator) with EOL '$eol_display{$eol}'" );
+        $bin = C4::SIP::ILS::Transaction::Checkin::_get_sort_bin( $item_book, $library->branchcode );
+        is( $bin, '1', "Rules applied in order (< comparator) with EOL '$eol_display{$eol}'" );
+        $item_book->itemcallnumber('350.20')->store();
+        $bin = C4::SIP::ILS::Transaction::Checkin::_get_sort_bin( $item_book, $library->branchcode );
+        is( $bin, '2', "Rules applied in order (< comparator) with EOL '$eol_display{$eol}'" );
+
+        $bin = C4::SIP::ILS::Transaction::Checkin::_get_sort_bin( $item_book2, $library2->branchcode );
+        is( $bin, '6', "Rules with multiple field matches with EOL '$eol_display{$eol}'" );
+
+        warnings_are { $bin = C4::SIP::ILS::Transaction::Checkin::_get_sort_bin( $item_dvd, $library2->branchcode ); }
+        ["Malformed preference line found: '$branch:homebranch:Z'"],
+            "Comments and blank lines are skipped, Malformed lines are warned and skipped with EOL '$eol_display{$eol}'";
+
+        # Reset for next loop
+        $item_book->itemcallnumber('200.01')->store();
+    }
+
+    my $mixed_rules =
+        "$branch:homebranch:ne:\$holdingbranch:X\n$branch:effective_itemtype:eq:CD:0\r\n$branch:itemcallnumber:<:340:1\r$branch:itemcallnumber:<:370:2\r\n$branch:itemcallnumber:<:600:3\n$branch2:homebranch:ne:\$holdingbranch:X\r$branch2:effective_itemtype:eq:CD:4\r\n$branch2:itemcallnumber:>:600:5\n$branch2:effective_itemtype:eq:BOOK:ccode:eq:TEEN:6\r# Comment line to skip\r\n\r\n\n$branch:homebranch:Z";
+    t::lib::Mocks::mock_preference( 'SIP2SortBinMapping', $mixed_rules );
+
     # Set holdingbranch as though item returned to library other than homebranch (As AddReturn would)
     $item_cd->holdingbranch( $library2->branchcode )->store();
     $bin = C4::SIP::ILS::Transaction::Checkin::_get_sort_bin( $item_cd, $library2->branchcode );
-    is( $bin, 'X', "Item parameter on RHS of comparison works (ne comparator)" );
+    is( $bin, 'X', "Item parameter on RHS of comparison works (ne comparator) with mixed EOL" );
 
     # Reset holdingbranch as though item returned to home library
     $item_cd->holdingbranch( $library->branchcode )->store();
     $bin = C4::SIP::ILS::Transaction::Checkin::_get_sort_bin( $item_cd, $library->branchcode );
-    is( $bin, '0', "Fixed value on RHS of comparison works (eq comparator)" );
+    is( $bin, '0', "Fixed value on RHS of comparison works (eq comparator) with mixed EOL" );
     $bin = C4::SIP::ILS::Transaction::Checkin::_get_sort_bin( $item_book, $library->branchcode );
-    is( $bin, '1', "Rules applied in order (< comparator)" );
+    is( $bin, '1', "Rules applied in order (< comparator) with mixed EOL" );
     $item_book->itemcallnumber('350.20')->store();
     $bin = C4::SIP::ILS::Transaction::Checkin::_get_sort_bin( $item_book, $library->branchcode );
-    is( $bin, '2', "Rules applied in order (< comparator)" );
+    is( $bin, '2', "Rules applied in order (< comparator) with mixed EOL" );
 
     $bin = C4::SIP::ILS::Transaction::Checkin::_get_sort_bin( $item_book2, $library2->branchcode );
-    is( $bin, '6', "Rules with multiple field matches" );
+    is( $bin, '6', "Rules with multiple field matches with mixed EOL" );
 
     warnings_are { $bin = C4::SIP::ILS::Transaction::Checkin::_get_sort_bin( $item_dvd, $library2->branchcode ); }
     ["Malformed preference line found: '$branch:homebranch:Z'"],
-        "Comments and blank lines are skipped, Malformed lines are warned and skipped";
+        "Comments and blank lines are skipped, Malformed lines are warned and skipped with mixed EOL";
+
 };
 
 subtest item_circulation_status => sub {
