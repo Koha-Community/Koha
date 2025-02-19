@@ -28,7 +28,6 @@ use Koha::Libraries;
 use Koha::MarcSubfieldStructures;
 use Business::ISBN;
 use Business::ISSN;
-use autouse 'Data::cselectall_arrayref' => qw(Dumper);
 
 our ( @ISA, @EXPORT_OK );
 
