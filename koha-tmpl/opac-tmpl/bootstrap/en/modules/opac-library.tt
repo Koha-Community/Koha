@@ -12,7 +12,11 @@
         [% library.branchname | html %]
         &rsaquo;
     [% END %]
-    Libraries &rsaquo;
+    [% IF public_count > 1 %]
+        Libraries &rsaquo;
+    [% ELSE %]
+        Contact &rsaquo;
+    [% END %]
     [% IF ( LibraryNameTitle ) %]
         [% LibraryNameTitle | html %]
     [% ELSE %]
