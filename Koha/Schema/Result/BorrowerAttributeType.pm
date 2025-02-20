@@ -143,7 +143,15 @@ defines if this field is copied to anonymized_borrower_attributes (1 for yes, 0 
   default_value: 0
   is_nullable: 0
 
-defines if the attribute is mandatory or not
+defines if the attribute is mandatory or not in the staff interface
+
+=head2 opac_mandatory
+
+  data_type: 'tinyint'
+  default_value: 0
+  is_nullable: 0
+
+defines if the attribute is mandatory or not in the OPAC
 
 =cut
 
@@ -177,6 +185,8 @@ __PACKAGE__->add_columns(
   "keep_for_pseudonymization",
   { data_type => "tinyint", default_value => 0, is_nullable => 0 },
   "mandatory",
+  { data_type => "tinyint", default_value => 0, is_nullable => 0 },
+  "opac_mandatory",
   { data_type => "tinyint", default_value => 0, is_nullable => 0 },
 );
 
@@ -260,8 +270,8 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07051 @ 2024-05-10 14:00:56
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:ZmiiXHqRGV2SDb4IgSPvJQ
+# Created by DBIx::Class::Schema::Loader v0.07051 @ 2025-02-20 15:56:54
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:Os1rn9zKu7/rVLVjZM3Mbg
 
 __PACKAGE__->add_columns(
     '+keep_for_pseudonymization' => { is_boolean => 1 },
