@@ -535,20 +535,22 @@
                             </a>
                         [% END %]
                     [% END %]
-                    <div class="dropdown btn-group">
-                        <button class="btn btn-default dropdown-toggle" type="button" id="ill-notice-dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                            <i class="fa-solid fa-envelope"></i> Send notice to patron
-                        </button>
-                        <ul class="dropdown-menu" aria-labelledby="ill-notice-dropdown">
-                            [% FOREACH notice IN notices %]
-                                <li
-                                    ><a class="dropdown-item" href="/cgi-bin/koha/ill/ill-requests.pl?op=send_notice&amp;illrequest_id=[% request.illrequest_id | uri %]&amp;notice_code=[% notice.code | uri %]"
-                                        >[% notice.name | html %]</a
-                                    ></li
-                                >
-                            [% END %]
-                        </ul>
-                    </div>
+                    [% IF request.borrowernumber %]
+                        <div class="dropdown btn-group">
+                            <button class="btn btn-default dropdown-toggle" type="button" id="ill-notice-dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                <i class="fa-solid fa-envelope"></i> Send notice to patron
+                            </button>
+                            <ul class="dropdown-menu" aria-labelledby="ill-notice-dropdown">
+                                [% FOREACH notice IN notices %]
+                                    <li
+                                        ><a class="dropdown-item" href="/cgi-bin/koha/ill/ill-requests.pl?op=send_notice&amp;illrequest_id=[% request.illrequest_id | uri %]&amp;notice_code=[% notice.code | uri %]"
+                                            >[% notice.name | html %]</a
+                                        ></li
+                                    >
+                                [% END %]
+                            </ul>
+                        </div>
+                    [% END %]
                     <a title="Display supplier metadata" id="ill-request-display-metadata" class="btn btn-default" href="#">
                         <span class="fa-solid fa-eye"></span>
                         Display supplier metadata
