@@ -446,6 +446,7 @@ if ( @$barcodes && $op eq 'cud-checkout' ) {
             my $claims = Koha::Checkouts::ReturnClaims->search(
                 {
                     itemnumber => $item->id,
+                    resolution => undef,
                 }
             );
             if ( $claims->count ) {
