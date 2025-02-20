@@ -16,7 +16,7 @@ return {
                     MODIFY COLUMN `mandatory` tinyint(1) DEFAULT 0 COMMENT 'defines if the attribute is mandatory or not in the staff interface'
                 }
             );
-            say $out "Modified column 'borrower_attribute_types.mandatory'";
+            say_success( $out, "Modified column 'borrower_attribute_types.mandatory'" );
 
             $dbh->do(
                 q{
@@ -25,7 +25,7 @@ return {
                     AFTER `mandatory`
                 }
             );
-            say $out "Added column 'borrower_attribute_types.opac_mandatory'";
+            say_success( $out, "Added column 'borrower_attribute_types.opac_mandatory'" );
 
             $dbh->do(
                 q{
@@ -33,7 +33,7 @@ return {
                 SET opac_mandatory = 1 WHERE mandatory = 1;
             }
             );
-            say $out "Update opac_mandatory to match mandatory column";
+            say_success( $out, "Update opac_mandatory to match mandatory column" );
         }
     },
 
