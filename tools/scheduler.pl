@@ -61,7 +61,7 @@ if ( $op eq 'cud-add' ) {
     my $starttime = $input->param('starttime');
     $starttime =~ s/\://g;
     my $start  = $startdate . $starttime;
-    my $report = $input->param('report');
+    my $report = int( $input->param('report') );
     if ($report) {
         my $saved_report;
         my $report_id = int($report);
