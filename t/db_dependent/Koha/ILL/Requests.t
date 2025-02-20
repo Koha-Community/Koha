@@ -1065,7 +1065,7 @@ subtest 'Backend core methods' => sub {
 
 subtest 'Helpers' => sub {
 
-    plan tests => 25;
+    plan tests => 26;
 
     $schema->storage->txn_begin;
 
@@ -1339,6 +1339,29 @@ Attribute: Pages=[% illrequestattributes.pages %]
         $illrq_obj->notesstaff,
         qr/Some text$/,
         'appending to a note works'
+    );
+
+    my $illrq_without_patron = $builder->build(
+        {
+            source => 'Illrequest',
+            value  => { branchcode => "HDE", borrowernumber => undef }
+        }
+    );
+    my $illrq_obj_without_patron = Koha::ILL::Requests->find( $illrq_without_patron->{illrequest_id} );
+    $illrq_obj_without_patron->_config($config);
+    $illrq_obj_without_patron->_backend($backend);
+
+    my $get_notice_without_patron = $illrq_obj_without_patron->get_notice(
+        {
+            notice_code => 'ILL_REQUEST_CANCEL',
+            transport   => 'email'
+        }
+    );
+
+    is(
+        $get_notice_without_patron->{lang},
+        "default",
+        'Koha::ILL::Request->get_notice lang correctly defaults to "default" for a request without a patron'
     );
 
     $schema->storage->txn_rollback;
