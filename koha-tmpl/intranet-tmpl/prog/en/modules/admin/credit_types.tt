@@ -143,7 +143,9 @@
                     </li>
                 </ol>
             </fieldset>
-
+            [% IF additional_fields.size %]
+                [% INCLUDE 'additional-fields-entry.inc' available=additional_fields values=additional_field_values wrap_fieldset=1 %]
+            [% END %]
             <fieldset class="action">
                 <button id="save_credit_type" class="btn btn-primary">Save</button>
                 <a class="cancel" href="/cgi-bin/koha/admin/credit_types.pl">Cancel</a>
@@ -165,6 +167,9 @@
                         <th>System</th>
                         <th>Code</th>
                         <th>Description</th>
+                        [% IF additional_fields.size %]
+                            <th>Additional fields</th>
+                        [% END %]
                         <th>Available for</th>
                         <th>Credit number enabled</th>
                         <th>Library limitations</th>
@@ -177,6 +182,17 @@
                                 <td>[% credit_type.is_system | html %]</td>
                                 <td>[% credit_type.code | html %]</td>
                                 <td>[%- PROCESS credit_type_description credit_type = credit_type -%]</td>
+                                [% IF additional_fields.size %]
+                                    <td>
+                                        [% IF credit_type.additional_field_values.count > 0 %]
+                                            [% FOREACH additional_field IN credit_type.additional_field_values %]
+                                                <div><span class="label">[% additional_field.field.name | html %]</span>: [% additional_field.value | html %]</div>
+                                            [% END %]
+                                        [% ELSE %]
+                                            <span>No additional fields</span>
+                                        [% END %]
+                                    </td>
+                                [% END %]
                                 <td>[% IF credit_type.can_be_added_manually %]Manual credit[% END %]</td>
                                 <td>[% IF credit_type.credit_number_enabled %]Yes[% ELSE %]No[% END %]</td>
                                 <td>
@@ -236,6 +252,7 @@
 
 [% MACRO jsinclude BLOCK %]
     [% Asset.js("js/admin-menu.js") | $raw %]
+    [% Asset.js("js/additional-fields-entry.js") | $raw %]
     [% INCLUDE 'datatables.inc' %]
     <script>
         $(document).ready(function () {

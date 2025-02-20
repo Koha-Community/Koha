@@ -27,6 +27,7 @@ use C4::Output qw( output_html_with_http_headers );
 
 use Koha::Account::CreditType;
 use Koha::Account::CreditTypes;
+use Koha::AdditionalFields;
 
 my $input = CGI->new;
 my $code  = $input->param('code');
@@ -41,6 +42,9 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
         flagsrequired => { parameters => 'manage_accounts' },
     }
 );
+
+my @additional_fields = Koha::AdditionalFields->search( { tablename => 'account_credit_types' } )->as_list;
+$template->param( additional_fields => \@additional_fields, );
 
 my $credit_type;
 if ($code) {
@@ -66,9 +70,12 @@ if ( $op eq 'add_form' ) {
             };
     }
 
+    my @additional_field_values = $credit_type ? $credit_type->get_additional_field_values_for_template : ();
+
     $template->param(
-        credit_type   => $credit_type,
-        branches_loop => \@branches_loop
+        credit_type             => $credit_type,
+        branches_loop           => \@branches_loop,
+        additional_field_values => @additional_field_values,
     );
 } elsif ( $op eq 'cud-add_validate' ) {
     my $description           = $input->param('description');
@@ -90,6 +97,10 @@ if ( $op eq 'add_form' ) {
         unless ( $credit_type->is_system ) {
             $credit_type->replace_library_limits( \@branches );
         }
+
+        my @additional_fields = $credit_type->prepare_cgi_additional_field_values( $input, 'account_credit_types' );
+        $credit_type->set_additional_fields( \@additional_fields );
+
         push @messages, { type => 'message', code => 'success_on_saving' };
     } catch {
         push @messages, { type => 'error', code => 'error_on_saving' };
