@@ -1905,7 +1905,7 @@ sub get_notice {
         letter_code            => $params->{notice_code},
         branchcode             => $self->branchcode,
         message_transport_type => $params->{transport},
-        lang                   => $self->patron->lang,
+        lang                   => $self->patron ? $self->patron->lang : undef,
         tables                 => {
             illrequests => $self->illrequest_id,
             borrowers   => $self->borrowernumber,
