@@ -134,6 +134,22 @@ __PACKAGE__->add_columns(
     '+archived'              => { is_boolean => 1 }
 );
 
+__PACKAGE__->has_many(
+    "additional_field_values",
+    "Koha::Schema::Result::AdditionalFieldValue",
+    sub {
+        my ($args) = @_;
+
+        return {
+            "$args->{foreign_alias}.record_id" => { -ident => "$args->{self_alias}.code" },
+
+            "$args->{foreign_alias}.field_id" =>
+                { -in => \'(SELECT id FROM additional_fields WHERE tablename="account_credit_types")' },
+        };
+    },
+    { cascade_copy => 0, cascade_delete => 0 },
+);
+
 =head2 koha_objects_class
 
 Missing POD for koha_objects_class.
