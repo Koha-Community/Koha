@@ -796,7 +796,7 @@ sub _set_requested_partners {
         type          => 'requested_partners'
     };
     Koha::ILL::Request::Attributes->search($where)->delete();
-    Koha::ILL::Request::Attributes->new(
+    Koha::ILL::Request::Attribute->new(
         {
             illrequest_id => $args->{request}->id,
             column_exists( 'illrequestattributes', 'backend' ) ? ( backend => "Standard" ) : (),
