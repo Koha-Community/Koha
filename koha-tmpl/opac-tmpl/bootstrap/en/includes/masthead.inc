@@ -427,7 +427,7 @@
                     <li class="nav-item">
                         <a id="library_page" href="/cgi-bin/koha/opac-library.pl">
                             [% IF ( singleBranchMode || AllPublicBranches.size == 1 ) %]
-                                <span>Library</span>
+                                <span>Contact</span>
                             [% ELSE %]
                                 <span>Libraries</span>
                             [% END %]

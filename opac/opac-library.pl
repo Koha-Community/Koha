@@ -45,16 +45,17 @@ my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
 );
 
 my $library;
-if ( $template->{VARS}->{singleBranchMode} ) {
-    $library = Koha::Libraries->search( { public => 1 } )->next;
+my $libraries = Koha::Libraries->search( { public => 1 }, { order_by => ['branchname'] } );
+$template->param( public_count => $libraries->count );
+if ( $template->{VARS}->{singleBranchMode} || $libraries->count == 1 ) {
+    $library = $libraries->next;
 } elsif ($branchcode) {
-    $library = Koha::Libraries->search( { branchcode => $branchcode, public => 1 } )->next;
+    $library = $libraries->search( { branchcode => $branchcode } )->next;
 }
 
 if ($library) {
     $template->param( library => $library );
 } else {
-    my $libraries = Koha::Libraries->search( { public => 1 }, { order_by => ['branchname'] } );
     $template->param(
         libraries  => $libraries,
         branchcode => C4::Context->userenv ? C4::Context->userenv->{branch} : q{},
