@@ -28,7 +28,7 @@
         "create-requests-button"
     );
     var statusesSelect = document.getElementById("status_code");
-    var cancelButton = document.getElementById("lhs").querySelector("button");
+    var cancelButton = document.getElementById("button_cancel_batch");
     var cancelButtonOriginalText = cancelButton.innerHTML;
 
     // We need a data structure keyed on identifier type, which tells us how to parse that
@@ -134,6 +134,9 @@
     // Are we updating an existing batch
     var isUpdate = false;
 
+    // Have requests been created?
+    var requestsCreated = false;
+
     // The datatable
     var table;
     var tableEl = document.getElementById("identifier-table");
@@ -188,6 +191,7 @@
             fetchBatch();
             isUpdate = true;
             setModalHeading();
+            finishButton.removeAttribute("disabled");
             createButton.style.display = "none";
         } else {
             batch.data = emptyBatch;
@@ -316,6 +320,9 @@
                     }
                     return row;
                 });
+            })
+            .then(function (data) {
+                requestsCreated = true;
             })
             .catch(function () {
                 window.handleApiError(ill_batch_api_request_fail);
@@ -470,6 +477,18 @@
     }
 
     function doFinish() {
+        if (!requestsCreated && textarea.value.trim().length !== 0) {
+            if (
+                !confirm(
+                    __(
+                        "Staged identifiers have not yet been added as requests. Proceed?"
+                    )
+                )
+            ) {
+                return;
+            }
+        }
+
         updateBatch().then(function () {
             $("#ill-batch-modal").modal({ show: false });
             location.href =
