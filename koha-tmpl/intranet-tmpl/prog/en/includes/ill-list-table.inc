@@ -2,7 +2,7 @@
 [% IF patron.borrowernumber %]
     [% table_id = 'ill-requests-patron-' _ patron.borrowernumber %]
 [% ELSIF batch.id %]
-    [% table_id = 'ill-requests-patron-' _ batch.id %]
+    [% table_id = 'ill-requests-batch-' _ batch.id %]
 [% END %]
 <table id="[% table_id | html %]">
     <thead>
