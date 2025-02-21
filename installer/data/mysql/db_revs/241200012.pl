@@ -1,4 +1,5 @@
 use Modern::Perl;
+use Koha::Installer::Output qw(say_warning say_failure say_success say_info);
 
 return {
     bug_number  => 30888,
@@ -23,7 +24,7 @@ CREATE TABLE `deletedauth_header` (
   PRIMARY KEY (`authid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;|
             );
-            say $out "Added new table 'deletedauth_header'";
+            say_success( $out, "Added new table 'deletedauth_header'" );
         }
     },
 };
