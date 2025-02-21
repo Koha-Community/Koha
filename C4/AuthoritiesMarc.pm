@@ -815,8 +815,14 @@ sub DelAuthority {
     Koha::Authority::MergeRequests->search($condition)->delete;
 
     merge({ mergefrom => $authid }) if !$skip_merge;
+    my $del_info;
+    if ( C4::Context->preference("AuthoritiesLog") ) {
+        my $record = GetAuthority($authid);
+        $del_info = 'authority';
+        $del_info .= " BEFORE=>" . $record->as_formatted if $record;
+    }
     $dbh->do( "DELETE FROM auth_header WHERE authid=?", undef, $authid );
-    logaction( "AUTHORITIES", "DELETE", $authid, "authority" ) if C4::Context->preference("AuthoritiesLog");
+    logaction( "AUTHORITIES", "DELETE", $authid, $del_info ) if C4::Context->preference("AuthoritiesLog");
     unless ( $skip_record_index ) {
         my $indexer = Koha::SearchEngine::Indexer->new({ index => $Koha::SearchEngine::AUTHORITIES_INDEX });
         $indexer->index_records( $authid, "recordDelete", "authorityserver", undef );
