@@ -61,7 +61,7 @@
                                     [% FOREACH priority IN all_priorities %]
                                         [% IF priority == this_priority %]
                                             <option value="[% priority | html %]" selected="selected">[% priority | html %]</option>
-                                        [% ELSE %]
+                                        [% ELSIF priority > 0 %]
                                             <option value="[% priority | html %]">[% priority | html %]</option>
                                         [% END %]
                                     [% END %]
