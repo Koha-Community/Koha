@@ -50,22 +50,25 @@
         [% END %]
 
         [% IF ( build1 ) %]
-            [% t("Build a report, step 1 of 6: Choose a module") | html %]
+            [% t("Build a report, step 1 of 7: Choose a module") | html %]
             &rsaquo;
         [% ELSIF ( build2 ) %]
-            [% t("Build a report, step 2 of 6: Pick a report type") | html %]
+            [% t("Build a report, step 2 of 7: Pick a report type") | html %]
             &rsaquo;
         [% ELSIF ( build3 ) %]
-            [% t("Build a report, step 3 of 6: Select columns for display") | html %]
+            [% t("Build a report, step 3 of 7: Select columns for display") | html %]
             &rsaquo;
         [% ELSIF ( build4 ) %]
-            [% t("Build a report, step 4 of 6: Select criteria to limit on") | html %]
+            [% t("Build a report, step 4 of 7: Select criteria to limit on") | html %]
             &rsaquo;
         [% ELSIF ( build5 ) %]
-            [% t("Build a report, step 5 of 6: Pick which columns to total") | html %]
+            [% t("Build a report, step 5 of 7: Pick which columns to total") | html %]
             &rsaquo;
         [% ELSIF ( build6 ) %]
-            [% t("Build a report, step 6 of 6: Select how you want the report ordered") | html %]
+            [% t("Build a report, step 6 of 7: Select how you want the report ordered") | html %]
+            &rsaquo;
+        [% ELSIF ( showreport ) %]
+            [% t("Build a report, step 7 of 7: Confirm custom report") | html %]
             &rsaquo;
         [% END %]
         [% t("Guided reports wizard") | html %]
@@ -172,23 +175,25 @@
             [% WRAPPER breadcrumb_item bc_active= 1 %]
                 <span>Run</span>
             [% END %]
-        [% ELSIF ( build1 || build2 || build3 || build4 || build5 || build6 ) %]
+        [% ELSIF ( build1 || build2 || build3 || build4 || build5 || build6 || showreport ) %]
             [% WRAPPER breadcrumb_item %]
                 <a href="/cgi-bin/koha/reports/guided_reports.pl?op=add_form">Build a report</a>
             [% END %]
             [% WRAPPER breadcrumb_item bc_active= 1 %]
                 [% IF ( build1 ) %]
-                    <span>Step 1 of 6: Choose a module</span>
+                    <span>Step 1 of 7: Choose a module</span>
                 [% ELSIF ( build2 ) %]
-                    <span>Step 2 of 6: Pick a report type</span>
+                    <span>Step 2 of 7: Pick a report type</span>
                 [% ELSIF ( build3 ) %]
-                    <span>Step 3 of 6: Select columns for display</span>
+                    <span>Step 3 of 7: Select columns for display</span>
                 [% ELSIF ( build4 ) %]
-                    <span>Step 4 of 6: Select criteria to limit on</span>
+                    <span>Step 4 of 7: Select criteria to limit on</span>
                 [% ELSIF ( build5 ) %]
-                    <span>Step 5 of 6: Pick which columns to total</span>
+                    <span>Step 5 of 7: Pick which columns to total</span>
                 [% ELSIF ( build6 ) %]
-                    <span>Step 6 of 6: Select how you want the report ordered</span>
+                    <span>Step 6 of 7: Select how you want the report ordered</span>
+                [% ELSIF ( showreport ) %]
+                    <span>Step 7 of 7: Confirm custom report</span>
                 [% END # /IF ( build1 ) %]
             [% END # /WRAPPER breadcrumb_item %]
         [% END # /IF ( saved1 ) %]
@@ -228,7 +233,7 @@
                     <h1>Guided reports</h1>
                     <p>Use the guided reports engine to create non standard reports. This feature aims to provide some middle ground between the built in canned reports and writing custom SQL reports.</p>
 
-                    <h3>Build and run reports</h3>
+                    <h2>Build and run reports</h2>
 
                     [% IF ( CAN_user_reports_create_reports ) %]
                         <a href="/cgi-bin/koha/reports/guided_reports.pl?op=add_form" class="btn btn-primary">Build new</a>
@@ -242,7 +247,7 @@
                         <a href="/cgi-bin/koha/reports/guided_reports.pl?op=add_form_sql" class="btn btn-primary">Create report from SQL</a>
                     [% END %]
 
-                    <h3>Reports Dictionary</h3>
+                    <h2>Reports Dictionary</h2>
                     <p>Use the reports dictionary to define custom criteria to use in your reports</p>
                     <a href="/cgi-bin/koha/reports/dictionary.pl?op=list" class="btn btn-primary">View dictionary</a>
                 [% END # /IF (start) %]
@@ -504,7 +509,7 @@
                     <form method="post" action="/cgi-bin/koha/reports/guided_reports.pl">
                         [% INCLUDE 'csrf-token.inc' %]
                         <fieldset class="rows">
-                            <legend>Step 1 of 6: Choose a module to report on,[% IF (usecache) %]Set cache expiry,[% END %] and choose report visibility </legend>
+                            <legend>Step 1 of 7: Choose a module to report on,[% IF (usecache) %]Set cache expiry,[% END %] and choose report visibility </legend>
                             <ol>
                                 <li>
                                     <label for="area">Choose: </label>
@@ -562,7 +567,7 @@
                         <input type="hidden" name="public" value="[% public | html %]" />
                         <input type="hidden" name="cache_expiry" value="[% cache_expiry | html %]" />
                         <fieldset class="rows">
-                            <legend>Step 2 of 6: Pick a report type</legend>
+                            <legend>Step 2 of 7: Pick a report type</legend>
                             <ol>
                                 <li>
                                     <label for="types">Choose: </label>
@@ -585,8 +590,6 @@
 
                 [% IF ( build3 ) %]
                     <h1>Build a report</h1>
-                    <h3>Step 3 of 6: Select columns for display</h3>
-                    <p>Note: Be careful selecting when selecting columns. If your choice is too broad it could result in a very large report that will either not complete, or slow your system down.</p>
 
                     <form id="column_submit" action="/cgi-bin/koha/reports/guided_reports.pl" method="post">
                         [% INCLUDE 'csrf-token.inc' %]
@@ -595,6 +598,9 @@
                         <input type="hidden" name="public" value="[% public | html %]" />
                         <input type="hidden" name="cache_expiry" value="[% cache_expiry | html %]" />
                         <fieldset>
+                            <legend>Step 3 of 7: Select columns for display</legend>
+                            <p>Note: Be careful selecting when selecting columns. If your choice is too broad it could result in a very large report that will either not complete, or slow your system down.</p>
+
                             <div id="column_selection">
                                 <div id="column_options">
                                     <select id="availableColumns" name="oldcolumns2" multiple="multiple" size="25" style="min-width: 200px;height:300px;">
@@ -642,7 +648,7 @@
                         <input type="hidden" name="public" value="[% public | html %]" />
                         <input type="hidden" name="cache_expiry" value="[% cache_expiry | html %]" />
                         <fieldset>
-                            <legend>Step 4 of 6: Select criteria to limit on</legend>
+                            <legend>Step 4 of 7: Select criteria to limit on</legend>
                             <table>
                                 [% FOREACH criteri IN criteria %]
                                     <tr>
@@ -727,7 +733,6 @@
 
                 [% IF ( build5 ) %]
                     <h1>Build a report</h1>
-                    <h3>Step 5 of 6: Pick which columns to total</h3>
                     <form action="/cgi-bin/koha/reports/guided_reports.pl" method="post">
                         [% INCLUDE 'csrf-token.inc' %]
                         <input type="hidden" name="area" value="[% area | html %]" />
@@ -738,6 +743,7 @@
                         <input type="hidden" name="public" value="[% public | html %]" />
                         <input type="hidden" name="cache_expiry" value="[% cache_expiry | html %]" />
                         <fieldset>
+                            <legend>Step 5 of 7: Pick which columns to total</legend>
                             <table>
                                 [% FOREACH total_b IN total_by %]
                                     <tr>
@@ -767,7 +773,6 @@
 
                 [% IF ( build6 ) %]
                     <h1>Build a report</h1>
-                    <h3>Step 6 of 6: Choose how you want the report ordered</h3>
                     <form action="/cgi-bin/koha/reports/guided_reports.pl" method="post">
                         [% INCLUDE 'csrf-token.inc' %]
                         <input type="hidden" name="area" value="[% area | html %]" />
@@ -779,6 +784,7 @@
                         <input type="hidden" name="public" value="[% public | html %]" />
                         <input type="hidden" name="cache_expiry" value="[% cache_expiry | html %]" />
                         <fieldset>
+                            <legend>Step 6 of 7: Choose how you want the report ordered</legend>
                             <table>
                                 [% FOREACH order_b IN order_by %]
                                     <tr>
@@ -799,15 +805,20 @@
                         </fieldset>
                         <fieldset class="action">
                             <input type="hidden" name="op" value="cud-build_report" />
-                            <input type="submit" name="submit" class="btn btn-primary" value="Finish" />
+                            <button type="submit" class="btn btn-default goback" name="back"> <i class="fa fa-left-long" aria-hidden="true"></i> Back</button>
+                            <button type="submit" class="btn btn-primary">Next <i class="fa fa-right-long" aria-hidden="true"></i></button>
                         </fieldset>
                     </form>
                 [% END #/ IF ( build6 ) %]
 
                 [% IF ( showreport ) %]
-                    <h1>Confirm custom report</h1>
-                    <p>Your report will be generated with the following SQL statement.</p>
-                    <p> [% sql | html %] </p>
+                    <h1>Build a report</h1>
+                    <div class="page-section">
+                        <h2>Step 7 of 7: Confirm custom report</h2>
+                        <p>Your report will be generated with the following SQL statement.</p>
+                        <textarea id="sql" readonly="readonly">[% sql | html %]</textarea>
+                        <div class="alert alert-info">You may add a title to your report in the next step.</div>
+                    </div>
 
                     <form action="/cgi-bin/koha/reports/guided_reports.pl" method="post">
                         [% INCLUDE 'csrf-token.inc' %]
@@ -815,10 +826,10 @@
                         <input type="hidden" name="type" value="[% type | html %]" />
                         <input type="hidden" name="public" value="[% public | html %]" />
                         <input type="hidden" name="cache_expiry" value="[% cache_expiry | html %]" />
-                        <p>You will need to save the report before you can execute it.</p>
                         <fieldset class="action"
                             ><input type="hidden" name="op" value="cud-save" />
-                            <input type="submit" name="submit" class="btn btn-primary" value="Save" />
+                            <button type="submit" class="btn btn-default goback" name="back"> <i class="fa fa-left-long" aria-hidden="true"></i> Back</button>
+                            <button type="submit" class="btn btn-primary">Next <i class="fa fa-right-long" aria-hidden="true"></i></button>
                         </fieldset>
                     </form>
                 [% END #/ IF ( showreport ) %]
@@ -1524,9 +1535,11 @@
                     [% UNLESS ( errors ) %]
                         <br />
                         <div id="report_updated">
-                            <div class="alert alert-info">
-                                <p>Your report "[% reportname | html %]" has been saved</p>
-                            </div>
+                            [% IF ( reportname ) %]
+                                <div class="alert alert-info"> Your report "[% reportname | html %]" has been saved </div>
+                            [% ELSE %]
+                                <div class="alert alert-warning"> Your report has been saved without a title </div>
+                            [% END %]
                         </div>
                     [% END %]
                 [% END %]
@@ -1908,7 +1921,7 @@
             }
         [% END %]
 
-        [% IF ( showsql ) %]
+        [% IF ( showsql || showreport ) %]
 
             var editor = CodeMirror.fromTextArea(sql, {
                 lineNumbers: false,
