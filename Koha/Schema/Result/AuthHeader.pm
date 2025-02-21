@@ -66,11 +66,6 @@ __PACKAGE__->table("auth_header");
   data_type: 'longtext'
   is_nullable: 1
 
-=head2 marc
-
-  data_type: 'blob'
-  is_nullable: 1
-
 =head2 linkid
 
   data_type: 'bigint'
@@ -108,8 +103,6 @@ __PACKAGE__->add_columns(
   { data_type => "varchar", is_nullable => 1, size => 20 },
   "authtrees",
   { data_type => "longtext", is_nullable => 1 },
-  "marc",
-  { data_type => "blob", is_nullable => 1 },
   "linkid",
   { data_type => "bigint", is_nullable => 1 },
   "marcxml",
@@ -146,8 +139,8 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07051 @ 2024-07-31 14:45:08
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:qQKXXu/9rBZ89hnDzJMsvA
+# Created by DBIx::Class::Schema::Loader v0.07051 @ 2025-02-21 09:20:19
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:JkZ9DrxanaiZVU6d8pzpSA
 
 sub koha_object_class {
     'Koha::Authority';
