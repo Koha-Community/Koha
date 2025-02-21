@@ -59,7 +59,7 @@
         [% IF patron.account_locked %]
             <li class="blocker [% patron.login_attempts < 0 ? 'account_admin_locked' : 'account_locked' | html %]">
                 [% IF patron.login_attempts < 0 %]
-                        <span class="circ-hlt">Locked: </span><span> Patron's account has been administratively locked</span>
+                    <span class="circ-hlt">Locked: </span><span> Patron's account has been administratively locked</span>
                 [% ELSE %]
                     <span class="circ-hlt">Locked: </span><span> Patron's account has been locked (due to [% patron.login_attempts | html %] failed login attempts)</span>
                 [% END %]
@@ -71,8 +71,6 @@
                 [% END %]
             </li>
         [% END %]
-
-
 
         [% IF ( patron.gonenoaddress ) %]
             <li class="gonenoaddress blocker">
