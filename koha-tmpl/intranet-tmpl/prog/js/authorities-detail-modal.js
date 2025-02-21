@@ -1,4 +1,4 @@
-/* global template_path */
+/* global __ template_path */
 $(document).ready(function () {
     $(".authority_preview a").on("click", function (e) {
         e.preventDefault();

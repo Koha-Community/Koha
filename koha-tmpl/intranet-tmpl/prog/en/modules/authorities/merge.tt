@@ -140,7 +140,7 @@
 [% END %]
 
 [% MACRO jsinclude BLOCK %]
-    [% INCLUDE 'authorities_js.inc' %]
+    [% Asset.js("js/authorities.js") | $raw %]
     [% Asset.js("js/merge-record.js") | $raw %]
     <script>
         // When submiting the form

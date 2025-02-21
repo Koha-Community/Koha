@@ -145,6 +145,8 @@
     <script>
         var index = "[% index | html %]";
         var authtypecode = "[% authtypecode | html %]";
+        const searchType = "[% marclist | html %]";
+        const template_path = "[% interface | html %]/[% theme | html %]";
     </script>
     [% Asset.js("js/auth-finder-search.js") | $raw %]
     [% Asset.js("js/authorities-detail-modal.js") | $raw %]

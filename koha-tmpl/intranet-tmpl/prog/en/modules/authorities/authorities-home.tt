@@ -40,7 +40,10 @@
     [%- END -%]
 [% END %]
 [% MACRO jsinclude BLOCK %]
-    [% INCLUDE 'authorities_js.inc' %]
+    <script>
+        const searchType = "[% marclist | html %]";
+    </script>
+    [% Asset.js("js/authorities.js") | $raw %]
 [% END %]
 
 [% INCLUDE 'intranet-bottom.inc' %]

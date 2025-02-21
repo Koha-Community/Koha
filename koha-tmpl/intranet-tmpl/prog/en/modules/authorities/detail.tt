@@ -134,7 +134,11 @@
 [% END %]
 
 [% MACRO jsinclude BLOCK %]
-    [% INCLUDE 'authorities_js.inc' %]
+    <script>
+        const authid = "[% authid | html %]";
+        const searchType = "[% marclist | html %]";
+    </script>
+    [% Asset.js("js/authorities.js") | $raw %]
     [% IF ( displayhierarchy ) %]
         [% Asset.js("lib/jquery/plugins/jstree/jstree-3.3.12.min.js") | $raw %]
     [% END %]
