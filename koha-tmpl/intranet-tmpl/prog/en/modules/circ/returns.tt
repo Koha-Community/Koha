@@ -712,7 +712,7 @@
                                                     <button type="button" class="btn btn-default print" accesskey="P">
                                                         <i class="fa fa-print"></i> Print slip and confirm (P)
                                                     </button>
-                                                    <button data-bs-dismiss="modal" type="submit" class="btn btn-default" accesskey="I">
+                                                    <button data-bs-dismiss="modal" type="submit" class="btn btn-default ignore" accesskey="I">
                                                         <i class="fa fa-times"></i> Ignore (I)
                                                     </button>
 
@@ -1608,6 +1608,9 @@
                 let barcode = document.getElementById('confirm-hold-barcode');
                 if ( barcode ) barcode.remove();
                 this.form.submit();
+            });
+            $(".ignore").on("click",function(e){
+                e.preventDefault();
             });
             $('.cancel-hold').on("click",function(e){
                 let cancel_form = document.getElementById('cancellation-reason');
