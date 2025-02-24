@@ -29,7 +29,8 @@ use Exception::Class (
     },
     'Koha::Exceptions::ArticleRequest::WrongFormat' => {
         isa         => 'Koha::Exceptions::ArticleRequest',
-        description => 'Passed format is not locally supported'
+        description => 'Passed format is not locally supported',
+        fields      => ['format'],
     },
 );
 

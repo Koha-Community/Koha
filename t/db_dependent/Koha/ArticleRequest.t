@@ -224,13 +224,14 @@ subtest 'cancel() tests' => sub {
 };
 
 subtest 'store' => sub {
-    plan tests => 2;
+    plan tests => 3;
     $schema->storage->txn_begin;
 
     t::lib::Mocks::mock_preference( 'ArticleRequestsSupportedFormats', 'SCAN' );
     my $ar = $builder->build_object( { class => 'Koha::ArticleRequests', value => { format => 'PHOTOCOPY' } } );
     throws_ok { $ar->format('test')->store } 'Koha::Exceptions::ArticleRequest::WrongFormat',
         'Format not supported';
+    is( $@->format, 'test', 'Passed format returned with the exception' );
     t::lib::Mocks::mock_preference( 'ArticleRequestsSupportedFormats', 'SCAN|PHOTOCOPY|ELSE' );
     lives_ok { $ar->format('PHOTOCOPY')->store } 'Now we do support it';
 
