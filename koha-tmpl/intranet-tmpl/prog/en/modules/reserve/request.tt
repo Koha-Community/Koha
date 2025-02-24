@@ -341,9 +341,9 @@
                                     [% END %]
                                         <td>
                                             [% UNLESS ( biblioloo.warn ) %]
-                                                <input id="holdable_bibs" name="holdable_bibs" class="multi_hold_item_checkbox" type="checkbox" checked="checked" title="[% biblioloo.biblionumber | html %]" value="[% biblioloo.biblionumber | html %]"/>
+                                                    <input class="multi_hold_item_checkbox" type="checkbox" checked="checked" title="[% biblioloo.biblionumber | html %]"/>
+                                                </td>
                                             [% END %]
-                                        </td>
                                         <td>
                                             <ul>
                                                 <li>
@@ -501,6 +501,7 @@
                             <input type="hidden" name="request" value="any"/>
                             [% FOREACH biblioloo IN biblioloop %]
                                 [% UNLESS biblioloo.none_avail %]
+                                    <input type="hidden" name="holdable_bibs" id="holdable_bibs" value="[% biblioloo.biblionumber | html %]"/>
                                     <input type="hidden" name="title_[% biblioloo.biblionumber | html %]" value="[% biblioloo.title | html %]"/>
                                     <input type="hidden" name="rank_[% biblioloo.biblionumber | html %]" value="[% biblioloo.rank | html %]"/>
                                 [% END %]
