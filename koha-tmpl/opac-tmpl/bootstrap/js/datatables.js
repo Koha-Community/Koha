@@ -164,11 +164,11 @@ function _dt_buttons(params) {
         {
             fade: 100,
             className: "dt_button_clear_filter",
-            titleAttr: _("Clear filter"),
+            titleAttr: __("Clear filter"),
             enabled: false,
             text:
                 '<i class="fa fa-lg fa-times" aria-hidden="true"></i> <span class="dt-button-text">' +
-                _("Clear filter") +
+                __("Clear filter") +
                 "</span>",
             action: function (e, dt, node, config) {
                 dt.search("").draw("page");
@@ -177,7 +177,7 @@ function _dt_buttons(params) {
         },
         {
             extend: "csvHtml5",
-            text: _("CSV"),
+            text: __("CSV"),
             exportOptions: {
                 columns: exportColumns,
                 format: export_format,
@@ -185,7 +185,7 @@ function _dt_buttons(params) {
         },
         {
             extend: "copyHtml5",
-            text: _("Copy"),
+            text: __("Copy"),
             exportOptions: {
                 columns: exportColumns,
                 format: export_format,
@@ -193,7 +193,7 @@ function _dt_buttons(params) {
         },
         {
             extend: "print",
-            text: _("Print"),
+            text: __("Print"),
             exportOptions: {
                 columns: exportColumns,
                 format: export_format,
@@ -228,7 +228,7 @@ function _dt_buttons(params) {
             titleAttr: __("Columns settings"),
             text:
                 '<i class="fa fa-lg fa-gear" aria-hidden="true"></i> <span class="dt-button-text">' +
-                _("Columns") +
+                __("Columns") +
                 "</span>",
             exportOptions: {
                 columns: exportColumns,
