@@ -1985,8 +1985,11 @@
 
                 // Early return if the tab is not shown (ie. no table)
                 if (!$("#%s-tab".format(tab_id)).length) return;
-
-                build_items_table(tab_id, false, {}, build_items_table_drawncallback);
+                [% IF Koha.Preference('AlwaysShowHoldingsTableFilters') %]
+                    build_items_table(tab_id, true, {}, build_items_table_drawncallback);
+                [% ELSE %]
+                    build_items_table(tab_id, false, {}, build_items_table_drawncallback);
+                [% END %]
 
                 [% IF bundlesEnabled %]
                     // Add event listener for opening and closing bundle details
