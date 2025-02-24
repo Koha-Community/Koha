@@ -60,7 +60,7 @@ $.fn.selectTabByID = function (tabID) {
 };
 
 function togglePanel(node) {
-    var panel = node.nextAll();
+    var panel = node.next();
     if (panel.is(":visible")) {
         node.addClass("collapsed")
             .removeClass("expanded")

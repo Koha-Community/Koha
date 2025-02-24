@@ -587,12 +587,6 @@
         $(document).ready(function(){
             var browser = KOHA.browser('[% searchid | html %]', parseInt('[% biblionumber | html %]', 10));
             browser.show();
-            $(".collapsed, .expanded").on("click",function(e){
-                e.preventDefault();
-                var linkid = this.id;
-                window.scrollTo( 0, getScrollto( linkid, "" ) );
-                togglePanel( $(this) );
-            });
 
             $(".item_sublink").on("click", function () {
                 /* If the user clicks a sub-menu link in the sidebar,
@@ -604,23 +598,12 @@
                     $("#" + href)
                         .addClass("expanded")
                         .removeClass("collapsed")
-                        .attr("title", __("Collapse this section"));
+                        .attr("title", _("Collapse this section"));
                     panel.show();
                 }
             });
 
         });
-
-        function togglePanel( node ){
-            var panel = node.next( ".page-section" );
-            if(panel.is(":visible")){
-                node.addClass("collapsed").removeClass("expanded").attr("title", __("Click to expand this section") );
-                panel.hide();
-            } else {
-                node.addClass("expanded").removeClass("collapsed").attr("title", __("Click to collapse this section") );
-                panel.show();
-            }
-        }
     </script>
 [% END %]
 [% INCLUDE 'intranet-bottom.inc' %]
