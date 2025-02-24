@@ -49,8 +49,13 @@
 [% BLOCK items_table %]
     <div class="[% tab | html %]_table_table_controls">
         <span class="show_hide_filters">
-            <button class="btn btn-link show_filters" data-tab="[% tab | html %]"><i class="fa fa-filter"></i> Show filters</button>
-            <button class="btn btn-link hide_filters" data-tab="[% tab | html %]" style="display: none;"><i class="fa fa-filter"></i> Hide filters</button>
+            [% IF Koha.Preference('AlwaysShowHoldingsTableFilters') %]
+                <button class="btn btn-link show_filters" data-tab="[% tab | html %]" style="display: none;"><i class="fa fa-filter"></i> Show filters</button>
+                <button class="btn btn-link hide_filters" data-tab="[% tab | html %]"><i class="fa fa-filter"></i> Hide filters</button>
+            [% ELSE %]
+                <button class="btn btn-link show_filters" data-tab="[% tab | html %]"><i class="fa fa-filter"></i> Show filters</button>
+                <button class="btn btn-link hide_filters" data-tab="[% tab | html %]" style="display: none;"><i class="fa fa-filter"></i> Hide filters</button>
+            [% END %]
         </span>
         <button class="btn btn-link SelectAll" data-tab="[% tab | html %]"><i class="fa fa-check"></i> Select all</button>
         <button class="btn btn-link ClearAll" data-tab="[% tab | html %]"><i class="fa fa-times"></i> Clear all</button>
