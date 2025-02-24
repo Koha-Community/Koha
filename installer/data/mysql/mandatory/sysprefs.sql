@@ -56,6 +56,7 @@ INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `
 ('AlternateHoldingsField','',NULL,'The MARC field/subfield that contains alternate holdings information for bibs taht do not have items attached (e.g. 852abchi for libraries converting from MARC Magician).','free'),
 ('AlternateHoldingsSeparator','',NULL,'The string to use to separate subfields in alternate holdings displays.','free'),
 ('AlwaysLoadCheckoutsTable','0','','Option to always load the checkout table','Yes/No'),
+('AlwaysShowHoldingsTableFilters','0','','Option to always show filters when loading the holdings table','Yes/No'),
 ('AmazonAssocTag','','','See:  http://aws.amazon.com','free'),
 ('AmazonCoverImages','0','','Display Cover Images in staff interface from Amazon Web Services','YesNo'),
 ('AmazonLocale','US','US|CA|DE|FR|IN|JP|UK','Use to set the Locale of your Amazon.com Web Services','Choice'),
