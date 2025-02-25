@@ -44,11 +44,20 @@
 
         [% IF ( lists ) %]
 
+        <form action="/cgi-bin/koha/patron_lists/delete.pl" method="post" id="patrons_lists_form">
+            [% INCLUDE 'csrf-token.inc' %]
+            <input type="hidden" name="op" value="cud-delete" />
+            <div id="searchheader" class="searchheader noprint sticky">
+                <div class="btn-group">
+                    <button type="submit" class="btn btn-default btn-sm disabled" id="delete_selected_lists"><i class="fa fa-trash" aria-hidden="true"></i> Delete selected lists</button>
+                </div>
+            </div>
+
         <div class="page-section">
             <table id="patron-lists-table">
                 <thead>
                     <tr>
-                        <input type="button" type="submit" class="btn btn-default btn-sm disabled" value="Delete selected lists" id="delete_selected_lists"/>
+                        <th class="NoSort"></th>
                         <th>Name</th>
                         <th>Patrons in list</th>
                         <th>Shared</th>
@@ -61,7 +70,9 @@
                         [% SET shared_by_other = l.owner.id != logged_in_user.id %]
                         <tr>
                             <td>
-                                <input class="select_patron" type="checkbox" autocomplete="off" data-patron-list-id="[% l.patron_list_id | html %]">
+                                <input class="select_list" name="patron_lists_ids" value="[% l.patron_list_id | html %]" type="checkbox" autocomplete="off" data-patron-list-id="[% l.patron_list_id | html %]" />
+                            </td>
+                            <td>
                                 <a href="/cgi-bin/koha/patron_lists/list.pl?patron_list_id=[% l.patron_list_id | uri %]">[% l.name | html %]</a>
                             </td>
                             <td>[% l.patron_list_patrons_rs.count || 0 | html %]</td>
@@ -84,7 +95,9 @@
                                         <li><a href="/cgi-bin/koha/patron_lists/list.pl?patron_list_id=[% l.patron_list_id | uri %]"><i class="fa fa-user"></i> Add patrons</a></li>
                                         [% UNLESS shared_by_other %]
                                             <li><a href="/cgi-bin/koha/patron_lists/add-modify.pl?patron_list_id=[% l.patron_list_id | uri %]"><i class="fa-solid fa-pencil" aria-hidden="true"></i> Edit list</a></li>
-                                            <li><a class="delete_patron" href="/cgi-bin/koha/patron_lists/delete.pl?patron_list_id=[% l.patron_list_id | html %]" data-list-name="[% l.name | html %]"><i class="fa fa-trash-can"></i> Delete list</a></li>
+                                            <li>
+                                                <a class="dropdown-item submit-form-link" href="#" data-patron_list_id="[% l.patron_list_id | html %]" data-action="delete.pl" data-method="post" data-op="cud-delete" data-confirmation-msg="Are you sure you want to delete this list?" ><i class="fa fa-trash-can"></i> Delete list</a>
+                                            </li>
                                         [% END %]
                                         [% IF ( l.patron_list_patrons_rs.count ) %]
                                             <li class="divider"></li>
@@ -114,6 +127,8 @@
                 </tbody>
             </table>
         </div> <!-- /.page-section -->
+        </form>
+        <!-- /#patron_lists_form -->
 
             <!-- Modal to print patron cards -->
             <div class="modal" id="patronExportModal" tabindex="-1" role="dialog" aria-labelledby="patronExportModal_label" aria-hidden="true">
@@ -146,6 +161,7 @@
 
 [% MACRO jsinclude BLOCK %]
     [% Asset.js("js/tools-menu.js") | $raw %]
+    [% Asset.js("js/form-submit.js") | $raw %]
     [% INCLUDE 'datatables.inc' %]
 
     <script>
@@ -160,35 +176,31 @@
                 "columnDefs": [
                     { "orderable": false, "searchable":  false, "targets": [ 'NoSort' ] }
                 ],
-                "pagingType": "full"
+                "pagingType": "full",
+                "sorting": [[ 1, "asc" ]]
             } ));
-            $(".delete_patron").on("click", function(){
-                $(".dropdown").removeClass("open");
-                var list = $(this).data("list-name");
-                return confirmDelete( _("Are you sure you want to delete the list %s?").format(list));
-            });
 
-            $("#delete_selected_lists").on("click", function() {
-                if (selectedPatronLists.length != 0) {
-                    if (confirm(_("Are you sure you want to delete the selected lists ?"))) {
-                    var delete_lists_url = '/cgi-bin/koha/patron_lists/delete.pl?patron_lists_ids=' + selectedPatronLists.join("&patron_lists_ids=");
-                    window.location.href = delete_lists_url;
-                    }
-                }
-            });
+            $("#patrons_lists_form").submit(function(){
+                var checkedItems = $("input[name=patron_lists_ids]:checked");
+                if ( checkedItems.size() == 0) {
+                    alert(_("You must select one or more lists to delete"));
+                    return false;
+                 }
+                if( confirm(_("Are you sure you want to delete the selected lists?")) ) {
+                    return true;
+                } else {
+                    return false;
+                 }
+             });
 
-            $(document).on("click", ".select_patron", function() {
-                if($(this).is(':checked')){
-                    $("#delete_selected_lists").attr("class","btn btn-default btn-sm");
-                    selectedPatronLists.push($(this).data("patron-list-id"));
-                }
-                else {
-                    selectedPatronLists = selectedPatronLists.filter(item => item !== $(this).data("patron-list-id"));
-                    if(selectedPatronLists.length === 0){
-                        $("#delete_selected_lists").attr("class","btn btn-default btn-sm disabled");
-                    }
-                }
-            });
+            $(document).on("click", ".select_list", function() {
+                var checkedItems = $("input[name=patron_lists_ids]:checked");
+                if ( checkedItems.size() == 0 ) {
+                    $("#delete_selected_lists").addClass("disabled").prop("disabled", true);
+                } else {
+                    $("#delete_selected_lists").removeClass("disabled").prop("disabled", false);
+                 }
+             });
 
             $(".print_cards").on("click", function(e){
                 e.preventDefault();
