@@ -10,11 +10,28 @@ import {
     faPencil,
     faTrash,
     faSpinner,
+    faCog,
+    faEye,
+    faEllipsisVertical,
+    faArrowRight,
+    faArrowLeft,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import vSelect from "vue-select";
 
-library.add(faList, faPlus, faMinus, faPencil, faTrash, faSpinner);
+library.add(
+    faList,
+    faPlus,
+    faMinus,
+    faPencil,
+    faTrash,
+    faSpinner,
+    faCog,
+    faEye,
+    faEllipsisVertical,
+    faArrowRight,
+    faArrowLeft
+);
 
 import App from "../components/ERM/Main.vue";
 
