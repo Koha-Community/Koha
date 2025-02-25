@@ -182,4 +182,7 @@ subtest 'elasticsearch_to_document() hooks tests' => sub {
     ok( ref( $documents->[0] ) eq 'HASH',           'The document is a HASH' );
     ok( exists( $documents->[0]->{ppn} ),           'Generated field ppn exists' );
     ok( $documents->[0]->{ppn}->[0] eq '123456789', 'Field ppn contains 123456789' );
+
+    Koha::Plugins->RemovePlugins;
+    $schema->storage->txn_rollback;
 };
