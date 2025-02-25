@@ -16,6 +16,6 @@ return {
         );
 
         # sysprefs
-        say $out "Added new system preference 'AlwaysShowHoldingsTableFilters'";
+        say_success( $out, "Added new system preference 'AlwaysShowHoldingsTableFilters'" );
     },
 };
