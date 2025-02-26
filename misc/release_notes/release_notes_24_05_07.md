@@ -19,7 +19,7 @@ Installation instructions can be found at:
 
 Koha 24.05.07 is a bugfix/maintenance release.
 
-It includes 2 enhancements, 15 bugfixes.
+It includes 2 enhancements, 15 bugfixes and 12 security fixes.
 
 **System requirements**
 
@@ -106,7 +106,7 @@ The Git repository for the Koha manual can be found at
 
 Complete or near-complete translations of the OPAC and staff
 interface are available in this release for the following languages:
-<div style="column-count: 2;">
+<!--<div style="column-count: 2;">-->
 
 - Arabic (ar_ARAB) (97%)
 - Armenian (hy_ARMN) (100%)
@@ -139,7 +139,7 @@ interface are available in this release for the following languages:
 - Turkish (84%)
 - Ukrainian (72%)
 - hyw_ARMN (generated) (hyw_ARMN) (63%)
-</div>
+<!--</div>-->
 
 Partial translations are available for various other languages.
 
@@ -229,14 +229,14 @@ The release team for Koha 24.05.07 is
 
 We thank the following libraries, companies, and other institutions who are known to have sponsored
 new features in Koha 24.05.07
-<div style="column-count: 2;">
+<!--<div style="column-count: 2;">-->
 
 - Athens County Public Libraries
 - Chetco Community Public Library
-</div>
+<!--</div>-->
 
 We thank the following individuals who contributed patches to Koha 24.05.07
-<div style="column-count: 2;">
+<!--<div style="column-count: 2;">-->
 
 - Pedro Amorim (2)
 - Tomás Cohen Arazi (4)
@@ -252,11 +252,11 @@ We thank the following individuals who contributed patches to Koha 24.05.07
 - Phil Ringnalda (3)
 - Marcel de Rooy (3)
 - Lari Taskula (9)
-</div>
+<!--</div>-->
 
 We thank the following libraries, companies, and other institutions who contributed
 patches to Koha 24.05.07
-<div style="column-count: 2;">
+<!--<div style="column-count: 2;">-->
 
 - Athens County Public Libraries (1)
 - [BibLibre](https://www.biblibre.com) (1)
@@ -271,11 +271,11 @@ patches to Koha 24.05.07
 - [PTFS Europe](https://ptfs-europe.com) (4)
 - Rijksmuseum, Netherlands (3)
 - [Theke Solutions](https://theke.io) (4)
-</div>
+<!--</div>-->
 
 We also especially thank the following individuals who tested patches
 for Koha
-<div style="column-count: 2;">
+<!--<div style="column-count: 2;">-->
 
 - Tomás Cohen Arazi (6)
 - Alex Buckley (34)
@@ -295,7 +295,7 @@ for Koha
 - Marcel de Rooy (19)
 - wainuiwitikapark (7)
 - Baptiste Wojtkowski (1)
-</div>
+<!--</div>-->
 
 
 
