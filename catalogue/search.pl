@@ -200,6 +200,9 @@ my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
 
 my $lang = C4::Languages::getlanguage($cgi);
 
+my $userenv_branch = C4::Context->userenv->{'branch'} || '';
+$template->param( userbranch => $userenv_branch );
+
 if ( C4::Context->preference("marcflavour") eq "UNIMARC" ) {
     $template->param( 'UNIMARC' => 1 );
 }

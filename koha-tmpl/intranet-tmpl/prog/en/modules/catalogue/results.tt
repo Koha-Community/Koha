@@ -773,12 +773,15 @@
                                                             [% ELSE %]
                                                                 , <span>None available</span>
                                                             [% END %]
-                                                        </span>
-                                                    [% ELSE %]
-                                                        [% tnx('{count} item', '{count} items', SEARCH_RESULT.items_count, {count = SEARCH_RESULT.items_count}) | html %][% IF ( SEARCH_RESULT.availablecount ) %]
-                                                            , [% SEARCH_RESULT.availablecount | html %] <span>available:</span>
-                                                        [% ELSE %]
-                                                            , <span>None available</span>
+                                                        </div>
+                                                        [% IF SEARCH_RESULT.branchtotalcount > 0 %]
+                                                            <div class="branch_specific">
+                                                                [% tnx('{count} item', '{count} items', SEARCH_RESULT.branchtotalcount, {count = SEARCH_RESULT.branchtotalcount}) | html %][% IF ( SEARCH_RESULT.branchavailablecount ) %]
+                                                                    , [% SEARCH_RESULT.branchavailablecount | html %] <span>available:</span>
+                                                                [% ELSE %]
+                                                                    , <span>None available</span>
+                                                                [% END %]
+                                                            </div>
                                                         [% END %]
                                                     [% END %]
                                                 </div>
@@ -875,7 +878,7 @@
                                                         [% END %]
                                                     </ul>
                                                 [% ELSE %]
-                                                    <span class="unavailable">No items</span>
+                                                    <span class="unavailable all">No items</span>
                                                 [% END %]
                                             [% END # /IF ( SEARCH_RESULT.items_count ) %]
                                             [% IF SEARCH_RESULT.branchtotalcount == 0 && Koha.Preference('FilterSearchResultsByLoggedInBranch') %]
