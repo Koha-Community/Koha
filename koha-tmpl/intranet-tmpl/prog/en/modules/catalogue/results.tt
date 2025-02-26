@@ -554,7 +554,9 @@
         [% ELSE # /IF scan %]
             <div id="searchresults">
                 [% INCLUDE 'page-numbers.inc' %]
-
+                [% IF Koha.Preference('FilterSearchResultsByLoggedInBranch') %]
+                    <button href="#" id="toggleitems" class="btn btn-primary btn-xs" style="float: right;">Show local items only</button>
+                [% END %]
                 <form action="/cgi-bin/koha/catalogue/search.pl" method="get" name="bookbag_form" id="bookbag_form">
                     [% IF ( searchdesc ) %]
                         [% FOREACH QUERY_INPUT IN QUERY_INPUTS %]
@@ -747,6 +749,25 @@
                                                 <div class="results_available_count">
                                                     [% IF MaxSearchResultsItemsPerRecordStatusCheck && SEARCH_RESULT.items_count > MaxSearchResultsItemsPerRecordStatusCheck %]
                                                         <span class="blocker inaccurate-item-statuses" title="Item statuses may be inaccurate. Please view the record details for accurate item statuses">
+                                                            <div class="all">
+                                                                [% tnx('{count} item', '{count} items', SEARCH_RESULT.items_count, {count = SEARCH_RESULT.items_count}) | html %][% IF ( SEARCH_RESULT.availablecount ) %]
+                                                                    , [% SEARCH_RESULT.availablecount | html %] <span>available:</span>
+                                                                [% ELSE %]
+                                                                    , <span>None available</span>
+                                                                [% END %]
+                                                            </div>
+                                                            [% IF SEARCH_RESULT.branchtotalcount > 0 && Koha.Preference('FilterSearchResultsByLoggedInBranch') %]
+                                                                <div class="branch_specific">
+                                                                    [% tnx('{count} item', '{count} items', SEARCH_RESULT.branchtotalcount, {count = SEARCH_RESULT.branchtotalcount}) | html %][% IF ( SEARCH_RESULT.branchavailablecount ) %]
+                                                                        , [% SEARCH_RESULT.branchavailablecount | html %] <span>available:</span>
+                                                                    [% ELSE %]
+                                                                        , <span>None available</span>
+                                                                    [% END %]
+                                                                </div>
+                                                            [% END %]
+                                                        </span>
+                                                    [% ELSE %]
+                                                        <div class="all">
                                                             [% tnx('{count} item', '{count} items', SEARCH_RESULT.items_count, {count = SEARCH_RESULT.items_count}) | html %][% IF ( SEARCH_RESULT.availablecount ) %]
                                                                 , [% SEARCH_RESULT.availablecount | html %] <span>available:</span>
                                                             [% ELSE %]
@@ -766,11 +787,17 @@
                                                 [% BLOCK search_result_items %]
                                                     [% IF status_count == "onloancount" %]
                                                         [% IF SEARCH_RESULT.${status_count} > 0 %]
-                                                            <div class="results_checkedout">[% SEARCH_RESULT.${status_count} | html %] checked out:</div>
+                                                            <div class="results_checkedout all">[% SEARCH_RESULT.${status_count} | html %] checked out:</div>
+                                                            [% IF Koha.Preference('FilterSearchResultsByLoggedInBranch') %]
+                                                                <div class="results_checkedout branch_specific">[% SEARCH_RESULT.branchonloancount | html %] checked out:</div>
+                                                            [% END %]
                                                         [% END %]
                                                     [% ELSIF status_count == "othercount" %]
                                                         [% IF SEARCH_RESULT.${status_count} > 0 %]
-                                                            <div class="results_unavailable">[% SEARCH_RESULT.${status_count} | html %] unavailable:</div>
+                                                            <div class="results_unavailable all">[% SEARCH_RESULT.${status_count} | html %] unavailable:</div>
+                                                            [% IF Koha.Preference('FilterSearchResultsByLoggedInBranch') %]
+                                                                <div class="results_unavailable branch_specific">[% SEARCH_RESULT.branchothercount | html %] unavailable:</div>
+                                                            [% END %]
                                                         [% END %]
                                                     [% END %]
                                                     [% IF SEARCH_RESULT.${items_loop}.size > 0 %]
@@ -851,6 +878,9 @@
                                                     <span class="unavailable">No items</span>
                                                 [% END %]
                                             [% END # /IF ( SEARCH_RESULT.items_count ) %]
+                                            [% IF SEARCH_RESULT.branchtotalcount == 0 && Koha.Preference('FilterSearchResultsByLoggedInBranch') %]
+                                                <span class="unavailable branch_specific">No items</span>
+                                            [% END %]
                                         </div>
                                         <!-- /.availability -->
                                     </td>
@@ -935,6 +965,19 @@
         var biblionumber = "[% biblionumber | html %]";
         var holdfor_cardnumber = "[% holdfor_patron.cardnumber | html %]";
         var holdforclub = "[% holdforclub | html %]";
+        var userbranch = "[% userbranch | html %]";
+        [% IF Koha.Preference('FilterSearchResultsByLoggedInBranch') %]
+            $('#toggleitems').click( function() {
+                $('#toggleitems').text() === 'Show local items only' ? $('#toggleitems').text("Show items in all libraries") : $('#toggleitems').text("Show local items only");
+                $('.branch_specific').toggle();
+                $('.all').toggle();
+                $('ul[class*="_loop_items"] li').each( function() {
+                    if ( !$(this).hasClass(userbranch) ) {
+                        $(this).toggle();
+                    }
+                });
+            });
+        [% END %]
         [% IF SEARCH_RESULTS %]
             var SEARCH_RESULTS = 1;
         [% ELSE %]
