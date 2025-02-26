@@ -692,6 +692,9 @@ sub _gen_default_values {
         AuthHeader => {
             marcxml => '',
         },
+        DeletedauthHeader => {
+            marcxml => '',
+        },
         BorrowerAttributeType => {
             mandatory => 0,
             is_date   => 0,

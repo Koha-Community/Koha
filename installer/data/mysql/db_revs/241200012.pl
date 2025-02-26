@@ -12,7 +12,7 @@ return {
             $dbh->do(
                 q|
 CREATE TABLE `deletedauth_header` (
-  `authid` bigint(20) unsigned NOT NULL,
+  `authid` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `authtypecode` varchar(10) NOT NULL DEFAULT '',
   `datecreated` date DEFAULT NULL,
   `modification_time` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
