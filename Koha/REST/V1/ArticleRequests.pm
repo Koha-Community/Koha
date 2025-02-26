@@ -80,32 +80,33 @@ Controller function that handles cancelling a patron's Koha::ArticleRequest obje
 sub patron_cancel {
     my $c = shift->openapi->valid_input or return;
 
-    my $patron = Koha::Patrons->find( $c->validation->param('patron_id') );
-
-    unless ( $patron ) {
-        return $c->render(
-            status  => 404,
-            openapi => { error => "Patron not found" }
-        );
-    }
-
-    $c->auth->public($patron->id);
-
-    # patron_id has been validated by the allow-owner check, so the following call to related
-    # article requests covers the case of article requests not belonging to the patron
-    my $article_request = $patron->article_requests->find( $c->validation->param('article_request_id') );
-
-    unless ( $article_request ) {
-        return $c->render(
-            status  => 404,
-            openapi => { error => "Article request not found" }
-        );
-    }
-
-    my $reason = $c->validation->param('cancellation_reason');
-    my $notes  = $c->validation->param('notes');
-
     return try {
+
+        my $patron_id = $c->param('patron_id');
+        $c->auth->public($patron_id);
+
+        my $patron = Koha::Patrons->find($patron_id);
+
+        unless ( $patron ) {
+            return $c->render(
+                status  => 404,
+                openapi => { error => "Patron not found" }
+            );
+        }
+
+        # patron_id has been validated by the allow-owner check, so the following call to related
+        # article requests covers the case of article requests not belonging to the patron
+        my $article_request = $patron->article_requests->find( $c->param('article_request_id') );
+
+        unless ( $article_request ) {
+            return $c->render(
+                status  => 404,
+                openapi => { error => "Article request not found" }
+            );
+        }
+
+        my $reason = $c->param('cancellation_reason');
+        my $notes  = $c->param('notes');
 
         $article_request->cancel(
             {
