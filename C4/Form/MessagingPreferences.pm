@@ -139,6 +139,51 @@ sub set_form_values {
     $template->param(messaging_preferences => $messaging_options);
 }
 
+=head2 restore_form_values
+
+    C4::Form::MessagingPreferences::restore_form_values({ borrowernumber => 51 }, $template, $input);
+
+Restores patron message preferences if error occurs while creating a patron.
+
+C<$input> is the CGI query object.
+
+C<$template> is the Template::Toolkit object for the response.
+
+=cut
+
+sub restore_form_values {
+    my ( $input, $template ) = @_;
+    my $messaging_options = C4::Members::Messaging::GetMessagingOptions();
+    foreach my $option (@$messaging_options) {
+        $option->{ $option->{'message_name'} } = 1;
+
+        my $message_attribute_id = $option->{'message_attribute_id'};
+        if ( $option->{'takes_days'} ) {
+            my $selected_value  = $input->param( $message_attribute_id . '-DAYS' );
+            my $days_in_advance = $selected_value ? $selected_value : 0;
+            $option->{days_in_advance} = $days_in_advance;
+            @{ $option->{'select_days'} } = map {
+                {
+                    day      => $_,
+                    selected => $_ == $days_in_advance
+                }
+            } ( 0 .. MAX_DAYS_IN_ADVANCE );
+        }
+
+        my @transport_types = $input->multi_param($message_attribute_id);
+        foreach my $transport_type (@transport_types) {
+            $option->{ 'transports_' . $transport_type } = 1;
+        }
+
+        if ( $option->{'has_digest'} ) {
+            if ( List::Util::first { $_ == $message_attribute_id } $input->multi_param('digest') ) {
+                $option->{'digest'} = 1;
+            }
+        }
+    }
+    $template->param( messaging_preferences => $messaging_options );
+}
+
 =head1 TODO
 
 =over 4
