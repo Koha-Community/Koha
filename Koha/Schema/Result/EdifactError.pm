@@ -99,6 +99,27 @@ __PACKAGE__->belongs_to(
 # Created by DBIx::Class::Schema::Loader v0.07051 @ 2025-02-21 15:22:01
 # DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:e6TNAJbngU94ZrRDcp1OlQ
 
+=head1 OBJECT HELPERS
+
+=head2 koha_objects_class
+
+Name of corresponding Koha::Objects class
+
+=cut
+
+sub koha_objects_class {
+    'Koha::Edifact::File::Errors';
+}
+
+=head2 koha_object_class
+
+Name of corresponding Koha::Object class
+
+=cut
+
+sub koha_object_class {
+    'Koha::Edifact::File::Error';
+}
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration
 1;
