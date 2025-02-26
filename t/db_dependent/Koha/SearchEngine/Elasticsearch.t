@@ -16,6 +16,7 @@
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
+use Encode;
 
 use Test::More tests => 8;
 use Test::Exception;
@@ -680,7 +681,7 @@ subtest 'Koha::SearchEngine::Elasticsearch::marc_records_to_documents () tests' 
         MARC::Field->new('999', '', '', c => '1234567'),
     );
 
-    my $item_field = MARC::Field->new('952', '', '', o => '123456789123456789123456789', p => '123456789', z => 'test');
+    my $item_field = MARC::Field->new('952', '', '', o => '123456789123456789123456789', p => '123456789', z => Encode::decode('UTF-8','To naprawdę bardzo długa notatka. Myślę, że będzie sprawiać kłopoty.'));
     my $items_count = 1638;
     while(--$items_count) {
         $large_marc_record->append_fields($item_field);

@@ -793,8 +793,9 @@ sub marc_records_to_documents {
                 my $usmarc_record = $record->as_usmarc();
 
                 #NOTE: Try to round-trip the record to prove it will work for retrieval after searching
-                my $decoded_usmarc_record = MARC::Record->new_from_usmarc($usmarc_record);
-                if ( $decoded_usmarc_record->warnings() ) {
+                my $decoded_usmarc_record;
+                eval { $decoded_usmarc_record = MARC::Record->new_from_usmarc($usmarc_record); };
+                if ( $@ || $decoded_usmarc_record->warnings() ) {
 
                     #NOTE: We override the warnings since they're many and misleading
                     @warnings = (
