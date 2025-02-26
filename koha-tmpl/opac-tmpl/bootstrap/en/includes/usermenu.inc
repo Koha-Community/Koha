@@ -150,7 +150,7 @@
             [% END %]
 
             [% IF Koha.Preference( 'CurbsidePickup' ) %]
-                [% IF ( ermview ) %]
+                [% IF ( curbside_pickups_view ) %]
                     <li class="active">
                 [% ELSE %]
                     <li>

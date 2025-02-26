@@ -387,86 +387,89 @@
         </div> <!-- /.container-fluid -->
     [% END # / OpacPublic %]
 
-    <!-- Login form hidden by default, used for modal window -->
-    <div id="loginModal" class="modal" tabindex="-1" role="dialog" aria-labelledby="modalLoginLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h1 class="modal-title" id="modalLoginLabel">Log in to your account</h1>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <form action="/cgi-bin/koha/opac-user.pl" method="post" name="auth" id="modalAuth">
-                    [% INCLUDE 'csrf-token.inc' %]
-                    <input type="hidden" name="has-search-query" id="has-search-query" value="" />
-                    <div class="modal-body">
-                        [% IF ( Koha.Preference('GoogleOpenIDConnect') == 1 ) %]
-                            <a href="/cgi-bin/koha/svc/auth/googleopenidconnect" class="btn btn-light" id="openid_connect"><i class="fa-brands fa-google" aria-hidden="true"></i> Log in with Google</a>
-                            <p>If you do not have a Google account, but do have a local account, you can still log in: </p>
-                        [% END # /IF GoogleOpenIDConnect %]
-                        [% IF ( shibbolethAuthentication ) %]
-                            [% IF ( invalidShibLogin ) %]
-                                <!-- This is what is displayed if shibboleth login has failed to match a koha user -->
-                                <div class="alert alert-info">
-                                    <p>Sorry, your Shibboleth identity does not match a valid library identity. If you have a local login, you may use that below.</p>
-                                </div>
-                            [% ELSE %]
-                                <h3 class="shib_title">Shibboleth login</h3>
-                                <p><a id="shib_url" class="shib_url" href="[% shibbolethLoginUrl | $raw %]">Log in using a Shibboleth account</a>.</p>
-                                [% UNLESS Koha.Preference('opacShibOnly') %]
-                                    <h3 class="shib_local_title">Local login</h3>
+    [% IF ( Koha.Preference( 'opacuserlogin' ) == 1 ) %]
+        <!-- Login form hidden by default, used for modal window -->
+        <div id="loginModal" class="modal" tabindex="-1" role="dialog" aria-labelledby="modalLoginLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title" id="modalLoginLabel">Log in to your account</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <form action="/cgi-bin/koha/opac-user.pl" method="post" name="auth" id="modalAuth">
+                        [% INCLUDE 'csrf-token.inc' %]
+                        <input type="hidden" name="has-search-query" id="has-search-query" value="" />
+                        <div class="modal-body">
+                            [% IF ( Koha.Preference('GoogleOpenIDConnect') == 1 ) %]
+                                <a href="/cgi-bin/koha/svc/auth/googleopenidconnect" class="btn btn-light" id="openid_connect"><i class="fa-brands fa-google" aria-hidden="true"></i> Log in with Google</a>
+                                <p>If you do not have a Google account, but do have a local account, you can still log in: </p>
+                            [% END # /IF GoogleOpenIDConnect %]
+                            [% IF ( shibbolethAuthentication ) %]
+                                [% IF ( invalidShibLogin ) %]
+                                    <!-- This is what is displayed if shibboleth login has failed to match a koha user -->
+                                    <div class="alert alert-info">
+                                        <p>Sorry, your Shibboleth identity does not match a valid library identity. If you have a local login, you may use that below.</p>
+                                    </div>
+                                [% ELSE %]
+                                    <h3 class="shib_title">Shibboleth login</h3>
+                                    <p><a id="shib_url" class="shib_url" href="[% shibbolethLoginUrl | $raw %]">Log in using a Shibboleth account</a>.</p>
+                                    [% UNLESS Koha.Preference('opacShibOnly') %]
+                                        <h3 class="shib_local_title">Local login</h3>
+                                    [% END %]
                                 [% END %]
                             [% END %]
-                        [% END %]
-                        [% UNLESS Koha.Preference('opacShibOnly') %]
-                            [% SET identity_providers = AuthClient.get_providers('opac') %]
-                            [% IF ( ! identity_providers.empty ) %]
-                                [% FOREACH provider IN identity_providers %]
-                                    <p class="clearfix">
-                                        <a href="[% provider.url | url %]" class="btn btn-light col-md-12" id="provider_[% provider.code | html %]">
-                                            [% IF provider.icon_url %]
-                                            <img src="[% provider.icon_url | url %]" />
-                                            [% ELSE %]
-                                            <i class="fa fa-user" aria-hidden="true"></i>
-                                            [% END %]
-                                            Log in with [% provider.description | html %]
-                                        </a>
-                                    </p>
-                                [% END %]
-                                <hr/>
-                                <p>If you do not have an external account, but do have a local account, you can still log in: </p>
-                            [% END # /IF  identity_providers.size %]
-                            <input type="hidden" name="koha_login_context" value="opac" />
-                            <fieldset class="brief">
-                                <div class="local-login">
-                                    [% PROCESS login_label for="muserid" %]<input type="text" id="muserid" name="login_userid" autocomplete="off" />
-                                    <label for="mpassword">Password:</label><input type="password" id="mpassword" name="login_password" autocomplete="off" />
-                                    <fieldset class="action">
-                                        <input type="hidden" name="op" value="cud-login" />
-                                        <input type="submit" class="btn btn-primary" value="Log in" />
-                                    </fieldset>
-                                </div>
-                                [% IF OpacLoginInstructions %]
-                                    <div id="nologininstructions-modal" class="nologininstructions">
-                                        [% PROCESS koha_news_block news => OpacLoginInstructions %]
+                            [% UNLESS Koha.Preference('opacShibOnly') %]
+                                [% SET identity_providers = AuthClient.get_providers('opac') %]
+                                [% IF ( ! identity_providers.empty ) %]
+                                    [% FOREACH provider IN identity_providers %]
+                                        <p class="clearfix">
+                                            <a href="[% provider.url | url %]" class="btn btn-light col-md-12" id="provider_[% provider.code | html %]">
+                                                [% IF provider.icon_url %]
+                                                <img src="[% provider.icon_url | url %]" />
+                                                [% ELSE %]
+                                                <i class="fa fa-user" aria-hidden="true"></i>
+                                                [% END %]
+                                                Log in with [% provider.description | html %]
+                                            </a>
+                                        </p>
+                                    [% END %]
+                                    <hr/>
+                                    <p>If you do not have an external account, but do have a local account, you can still log in: </p>
+                                [% END # /IF  identity_providers.size %]
+                                <input type="hidden" name="koha_login_context" value="opac" />
+                                <fieldset class="brief">
+                                    <div class="local-login">
+                                        [% PROCESS login_label for="muserid" %]<input type="text" id="muserid" name="login_userid" autocomplete="off" />
+                                        <label for="mpassword">Password:</label><input type="password" id="mpassword" name="login_password" autocomplete="off" />
+                                        <fieldset class="action">
+                                            <input type="hidden" name="op" value="cud-login" />
+                                            <input type="submit" class="btn btn-primary" value="Log in" />
+                                        </fieldset>
                                     </div>
-                                [% END %]
-                                [% IF Koha.Preference('OpacPasswordChange') && Categories.can_any_reset_password %]
-                                    <div id="forgotpassword-modal" class="forgotpassword">
-                                        <p><a href="/cgi-bin/koha/opac-password-recovery.pl">Forgot your password?</a></p>
-                                    </div>
-                                [% END %]
-                                [% IF Koha.Preference('PatronSelfRegistration') && Categories.all( categorycode => Koha.Preference('PatronSelfRegistrationDefaultCategory') ).count %]
-                                    <div id="patronregistration-modal" class="patronregistration">
-                                        <p><a href="/cgi-bin/koha/opac-memberentry.pl">Create an account</a></p>
-                                    </div>
-                                [% END %]
-                            </fieldset>
-                        [% END %]
-                    </div>
-                </form> <!-- /#auth -->
-            </div> <!-- /.modal-content -->
-        </div> <!-- /.modal-dialog -->
-    </div>  <!-- /#modalAuth  -->
+                                    [% IF OpacLoginInstructions %]
+                                        <div id="nologininstructions-modal" class="nologininstructions">
+                                            [% PROCESS koha_news_block news => OpacLoginInstructions %]
+                                        </div>
+                                    [% END %]
+                                    [% IF Koha.Preference('OpacPasswordChange') && Categories.can_any_reset_password %]
+                                        <div id="forgotpassword-modal" class="forgotpassword">
+                                            <p><a href="/cgi-bin/koha/opac-password-recovery.pl">Forgot your password?</a></p>
+                                        </div>
+                                    [% END %]
+                                    [% IF Koha.Preference('PatronSelfRegistration') && Categories.all( categorycode => Koha.Preference('PatronSelfRegistrationDefaultCategory') ).count %]
+                                        <div id="patronregistration-modal" class="patronregistration">
+                                            <p><a href="/cgi-bin/koha/opac-memberentry.pl">Create an account</a></p>
+                                        </div>
+                                    [% END %]
+                                </fieldset>
+                            [% END %]
+                        </div>
+                    </form> <!-- /#auth -->
+                </div> <!-- /.modal-content -->
+            </div> <!-- /.modal-dialog -->
+        </div>  <!-- /#modalAuth  -->
+    [% END # / IF opacuserlogin %]
+
     [% IF Koha.Preference( 'CookieConsent' ) %]
             <!-- Cookie consent bar -->
             <div id="cookieConsentBar" aria-hidden="true">

@@ -1,4 +1,5 @@
 [% USE raw %]
+[% USE Koha %]
 [% USE Asset %]
 [% PROCESS 'i18n.inc' %]
 [% SET footerjs = 1 %]
@@ -193,7 +194,7 @@
               [% END %]
             </tbody>
           </table>
-          <div class="note"><i class="fa fa-exclamation"></i> Reminder: this action will delete all selected bibliographic records, attached subscriptions, existing holds, and attached items!</div>
+          <div class="alert alert-info"><i class="fa fa-exclamation"></i> Reminder: this action will delete all selected bibliographic records, attached subscriptions, existing holds, and attached items!</div>
       [% ELSE %]
         <div class="btn-toolbar selections-toolbar">
           <a id="selectall" href="#"><i class="fa fa-check"></i> Select all</a>
@@ -222,7 +223,7 @@
               [% END %]
             </tbody>
           </table>
-          <div class="note"><i class="fa fa-exclamation"></i> Reminder: this action will delete all selected authorities!</div>
+          <div class="alert alert-info"><i class="fa fa-exclamation"></i> Reminder: this action will delete all selected authorities!</div>
       [% END %]
         <fieldset class="action">
             [% INCLUDE 'csrf-token.inc' %]

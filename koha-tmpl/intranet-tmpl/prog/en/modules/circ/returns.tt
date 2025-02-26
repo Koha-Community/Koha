@@ -626,7 +626,7 @@
 
                         [% IF ( found ) %]
                             [% IF ( waiting ) %]
-                                <div id="hold-found1" class="modal modal-lg audio-alert-action" data-bs-backdrop="static" data-bs-keyboard="false" >
+                                <div id="hold-found1" class="modal modal-lg block audio-alert-action" data-bs-backdrop="static" data-bs-keyboard="false" >
                                     <div class="modal-dialog">
                                         <div class="modal-content">
                                             <form method="post" action="returns.pl" class="confirm">
@@ -770,18 +770,19 @@
                                                     <input type="hidden" name="tobranch" value="[% returnbranch | html %]" />
                                                     <input type="hidden" name="transferitem" value="[% itemnumber | html %]" />
                                                     <input type="hidden" name="barcode" value="0" />
-                                                    <input type="hidden" name="op" value="cud-dotransfer" />
                                                     <input type="hidden" name="trigger" value="[% trigger | html %]" />
                                                     [% INCLUDE all_checkin_messages %]
                                                 </div>
                                                 <div class="modal-footer">
                                                     [% IF !transfer %]
+                                                        <input type="hidden" name="op" value="cud-dotransfer" />
                                                         <button type="submit" name="dotransfer" value="Yes" class="btn btn-default approve" accesskey="y"><i class="fa fa-check"></i> Yes (Y)</button>
                                                         <button type="button" name="dotransfer" class="btn btn-default print openWin" data-url="transfer-slip.pl?transferitem=[% itemnumber | uri %]&amp;&amp;branchcode=[% returnbranch | uri %]&amp;op=slip"><i class="fa fa-print"></i> Yes, print slip</button>
                                                         <button type="button" data-bs-dismiss="modal" class="btn btn-default deny" name="notransfer" value="No" accesskey="n"><i class="fa fa-times"></i> No (N)</button>
                                                     [% ELSE %]
+                                                        <input type="hidden" name="op" value="cud-transfer" />
                                                         <input type="hidden" name="transit" value="[% transfer | uri %]"/>
-                                                        <button type="button" data-bs-dismiss="modal" class="btn btn-default" accesskey="y"><i class="fa fa-check"></i> OK (Y)</button>
+                                                        <button type="submit" data-bs-dismiss="modal" class="btn btn-default" accesskey="y"><i class="fa fa-check"></i> OK (Y)</button>
                                                         <button type="button" data-bs-dismiss="modal" class="btn btn-default print openWin" data-url="transfer-slip.pl?transferitem=[% itemnumber | uri %]&amp;branchcode=[% transfer | uri %]&amp;op=slip" accesskey="p"><i class="fa fa-print"></i> Print slip (P)</button>
                                                     [% END %]
                                                     <input type="hidden" name="return_date_override" value="[% return_date_override | html %]" />

@@ -94,7 +94,17 @@ my $bookseller = Koha::Acquisition::Booksellers->find( $booksellerid );
 my $schema = Koha::Database->new()->schema();
 my $rs = $schema->resultset('VendorEdiAccount')->search(
     { vendor_id => $booksellerid, } );
-$template->param( ediaccount => ($rs->count > 0));
+my $ediaccount = ( $rs->count > 0 );
+$template->param( ediaccount => $ediaccount );
+if ($ediaccount) {
+    my @eans = $schema->resultset('EdifactEan')->search(
+        {},
+        {
+            join => 'branch',
+        }
+    );
+    $template->param( eans => \@eans );
+}
 
 unless (CanUserManageBasket($loggedinuser, $basket, $userflags)) {
     $template->param(
@@ -242,6 +252,7 @@ if ( $op eq 'cud-delete-order' ) {
     print $query->redirect('/cgi-bin/koha/acqui/basket.pl?basketno='.$basket->{'basketno'})
 }
 elsif ( $op eq 'cud-ediorder' ) {
+    $template->param( booksellername => $bookseller->name );
     edi_close_and_order()
 } elsif ( $op eq 'cud-mod_users' ) {
     my $basketusers_ids = $query->param('users_ids');

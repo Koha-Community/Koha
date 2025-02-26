@@ -1,4 +1,5 @@
 [% USE raw %]
+[% USE Koha %]
 [% USE Asset %]
 [% PROCESS 'i18n.inc' %]
 [% SET footerjs = 1 %]
@@ -195,7 +196,7 @@
                                         </tbody>
                                     </table> <!-- /#checkouts -->
                                 </div> <!-- /.page-section -->
-                                <div class="note"><i class="fa fa-exclamation"></i> Reminder: this action will modify all selected checkouts!</div>
+                                <div class="alert alert-info"><i class="fa fa-exclamation"></i> Reminder: this action will modify all selected checkouts!</div>
                                 <fieldset class="action">
                                     <input type="hidden" name="op" value="cud-modify" />
                                     <input type="hidden" name="new_hard_due_date" value="[% new_hard_due_date | $KohaDates dateformat => 'iso' %]" />

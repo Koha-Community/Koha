@@ -78,6 +78,36 @@ $enable-dark-mode: false;
     )
 }
 
+.text-bg-primary {
+    background-color: shift-color( $primary, -55% );
+    color: $black;
+}
+
+.text-bg-secondary {
+    background-color: shift-color( $secondary, -55% );
+    color: $black;
+}
+
+.text-bg-success {
+    background-color: shift-color( $success, -55% );
+    color: $black;
+}
+
+.text-bg-info {
+    background-color: shift-color( $info, -55% );
+    color: $black;
+}
+
+.text-bg-warning {
+    background-color: shift-color( $warning, -55% );
+    color: $black;
+}
+
+.text-bg-danger {
+    background-color: shift-color( $danger, -55% );
+    color: $black;
+}
+
 ::selection {
     background: $background-color-primary;
     color: #FFFFFF;
@@ -404,16 +434,8 @@ aside {
 
             & + .action {
                 background-color: #FFF;
-                display: flex;
                 margin-left: 0;
                 padding: 1rem;
-
-                input,
-                button,
-                a {
-                    display: block;
-                    flex-grow: 1;
-                }
             }
         }
     }
@@ -554,11 +576,7 @@ div {
         text-align: justify;
     }
 
-    &.note {
-        background-color: #CFE2FF;
-        margin: .5em 0;
-        padding: .5em;
-
+    &.alert-info {
         i {
             &.fa-exclamation {
                 color: $warning-text-color;
@@ -1927,6 +1945,14 @@ li {
     box-shadow: 8px 8px 12px rgba( 170, 170, 170, .356 );
     margin-top: 20px;
     padding: 20px;
+}
+
+#memberresultst {
+    border-collapse: unset;
+    thead {
+        position: sticky;
+        top: 40px;
+    }
 }
 
 #searchresults {
@@ -4769,6 +4795,29 @@ div .suggestion_note {
 
     .patroninfo-container {
         flex-direction: column;
+    }
+
+    aside {
+        fieldset {
+            &.brief {
+                & + .action {
+                    display: flex;
+                    gap: .5rem;
+
+                    input,
+                    button,
+                    a {
+                        display: block;
+                        flex-grow: 1;
+
+                        &.clear_search {
+                            flex-grow: 0;
+                            flex-shrink: 1;
+                        }
+                    }
+                }
+            }
+        }
     }
 }
 

@@ -261,6 +261,9 @@
                                                 [% IF CanUpdatePasswordExpiration %]
                                                     <th>Password expiration date</th>
                                                 [% END %]
+                                                [% IF CanUpdateProtectPatron %]
+                                                    <th>Protected</th>
+                                                [% END %]
                                                 <th>Circulation note</th>
                                                 <th>OPAC note</th>
                                                 <th>Message</th>
@@ -307,6 +310,15 @@
                                                         [% ELSE %]
                                                             <td data-order="9999-99-99">Never</td>
                                                         [% END %]
+                                                    [% END %]
+                                                    [% IF CanUpdateProtectPatron %]
+                                                        <td>
+                                                        [% IF borrower.protected %]
+                                                            Yes
+                                                        [% ELSE %]
+                                                            No
+                                                        [% END %]
+                                                        </td>
                                                     [% END %]
                                                     <td>[% borrower.borrowernotes | $raw | html_line_break %]</td>
                                                     <td>[% borrower.opacnote | html %]</td>
@@ -378,6 +390,7 @@
                                                 [% CASE 'debarred' %]<span>Restriction expiration:</span>
                                                 [% CASE 'debarredcomment' %]<span>Restriction comment:</span>
                                                 [% CASE 'password_expiration_date' %]<span>Password expiration date:</span>
+                                                [% CASE 'protected' %]<span>Protected:</span>
                                             [% END %]
                                             </label>
                                             [% IF ( field.type == 'text' ) %]
@@ -400,6 +413,13 @@
                                                 [% ELSE %]
                                                     There is no value defined for [% field.name | html %]
                                                 [% END %]
+                                            [% END %]
+                                            [% IF ( field.type == 'bool' ) %]
+                                                <select name="[% field.name | html %]" >
+                                                    <option value=""></option>
+                                                    <option value="1">Yes</option>
+                                                    <option value="0">No</option>
+                                                </select>
                                             [% END %]
                                             [% IF ( field.type == 'date' ) %]
                                                 <input type="text" name="[% field.name | html %]" id="[% field.name | html %]" value="" size="10" maxlength="10" class="flatpickr" />

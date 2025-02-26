@@ -220,7 +220,7 @@
         [% END %]
     </div>
 
-    <form id="add_additional_content" method="post" action="/cgi-bin/koha/tools/additional-contents.pl" class="validate">
+    <form id="add_additional_content" method="post" action="/cgi-bin/koha/tools/additional-contents.pl" class="validated">
         [% INCLUDE 'csrf-token.inc' %]
         <input type="hidden" name="op" value="cud-add_validate" />
         <input type="hidden" name="category" value="[% category | html %]" />
@@ -260,8 +260,9 @@
                     </li>
                 [% END %]
                 <li>
-                    <label for="from">Publication date: </label>
-                    <input id="from" type="text" name="published_on" size="15" value="[% additional_content.published_on | html %]" class="flatpickr" data-date_to="to" />
+                    <label for="from" class="required">Publication date: </label>
+                    <input id="from" type="text" name="published_on" size="15" value="[% additional_content.published_on | html %]" class="flatpickr" data-date_to="to" required="required" class="required" />
+                    <span class="required">Required</span>
                     <div class="hint">[% INCLUDE 'date-format.inc' %]</div>
                 </li>
                 <li>
@@ -538,7 +539,7 @@
             [% END %]
         </optgroup>
         [% SET staff_available_options = [ 'IntranetmainUserblock', 'StaffAcquisitionsHome', 'StaffAuthoritiesHome', 'StaffCataloguingHome', 'StaffListsHome', 'StaffPatronsHome', 'StaffPOSHome', 'StaffSerialsHome' ] %]
-        <optgroup label="Staff">
+        <optgroup label="Staff interface">
             [% FOREACH l IN staff_available_options.sort %]
                 [% IF l == location %]
                     <option value="[% l | html %]" selected="selected">[% l | html %]</option>

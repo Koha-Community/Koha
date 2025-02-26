@@ -283,6 +283,7 @@
                                     <form id="holds_clubsearch" action="request.pl" method="get">
                                         <div class="hint">Enter club ID or partial name:</div>
                                         <input type="text" size="40" id="club" class="focus" name="findclub" autocomplete="off" />
+                                        <input type="hidden" name="form_submitted" value="1" />
                                         <input type="submit" class="btn btn-primary" value="Search" />
                                         [% FOREACH biblionumber IN biblionumbers %]
                                         <input type="hidden" name="biblionumber" value="[% biblionumber | html %]"/>
@@ -1289,7 +1290,7 @@
                                         [% END %]
                                         [% branchcodes = branchcodes.unique %]
                                         [% IF ( branchcodes.empty ) %]
-                                            <div class="note">
+                                            <div class="alert alert-info">
                                                 There are no holds on this title.
                                             </div>
                                         [% ELSE %]
@@ -1319,7 +1320,7 @@
                                         [% END %]
                                         [% itemtypes = itemtypes.unique %]
                                         [% IF ( itemtypes.empty ) %]
-                                            <div class="note">
+                                            <div class="alert alert-info">
                                                 There are no holds on this title.
                                             </div>
                                         [% ELSE %]
@@ -1352,7 +1353,7 @@
                                         [% END %]
                                         [% branchcodes = branchcodes.unique %]
                                         [% IF ( branchcodes.empty ) %]
-                                            <div class="note">
+                                            <div class="alert alert-info">
                                                 There are no holds on this title.
                                             </div>
                                         [% ELSE %]
@@ -1403,7 +1404,7 @@
                                         [% IF ( biblioloo.reserveloop.size ) %]
                                             [% INCLUDE holds_table.inc holds=biblioloo.reserveloop %]
                                         [% ELSE %]
-                                            <div class="note">
+                                            <div class="alert alert-info">
                                                 There are no holds on this title.
                                             </div>
                                         [% END %]

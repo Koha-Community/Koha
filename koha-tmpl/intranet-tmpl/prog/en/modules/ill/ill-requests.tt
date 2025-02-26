@@ -108,10 +108,10 @@
                                     <input type="text" name="illfilter_patron" id="illfilter_patron" />
                                 </li>
                             </ol>
-                            <fieldset class="action">
-                                <input type="submit" class="btn btn-primary" value="Search" />
-                                <input type="button" value="Clear" id="clear_search" />
-                            </fieldset>
+                        </fieldset>
+                        <fieldset class="action">
+                            <input type="submit" class="btn btn-primary" value="Search" />
+                            <input type="button" value="Clear" class="clear_search" />
                         </fieldset>
                     </form> <!-- /#illfilter_form -->
                 </aside>
@@ -601,7 +601,7 @@
                                         <ul class="dropdown-menu" aria-labelledby="ill-migrate-dropdown">
                                             [% FOREACH backend IN backends %]
                                                 [% IF backend != request.backend %]
-                                                    <li><a href="/cgi-bin/koha/ill/ill-requests.pl?op=[% action.method | uri %]&amp;illrequest_id=[% request.illrequest_id | uri %]&amp;backend=[% backend | uri %]">[% backend | html %]</a></li>
+                                                    <li><a class="dropdown-item" href="/cgi-bin/koha/ill/ill-requests.pl?op=[% action.method | uri %]&amp;illrequest_id=[% request.illrequest_id | uri %]&amp;backend=[% backend | uri %]">[% backend | html %]</a></li>
                                                 [% END %]
                                             [% END %]
                                         </ul>

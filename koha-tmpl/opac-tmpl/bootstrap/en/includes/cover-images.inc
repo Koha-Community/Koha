@@ -20,7 +20,7 @@
         [% END %]
 
         [% IF ( SyndeticsCoverImages ) %]
-            [% IF ( content_identifier_exists ) %]
+            [% IF ( SEARCH_RESULT.normalized_isbn ) %]
                 <div class="cover-image syndetics-coverimg">
                     <a href="https://secure.syndetics.com/index.aspx?isbn=[% SEARCH_RESULT.normalized_isbn | uri %]/[% SyndeticsCoverImageSize | uri %].GIF&amp;client=[% SyndeticsClientCode | uri %]&amp;type=xw10&amp;upc=[% normalized_upc | uri %]&amp;oclc=[% normalized_oclc | uri %]">
                         <img src="https://secure.syndetics.com/index.aspx?isbn=[% SEARCH_RESULT.normalized_isbn | uri %]/[% SyndeticsCoverImageSize | uri %].GIF&amp;client=[% SyndeticsClientCode | uri %]&amp;type=xw10&amp;upc=[% normalized_upc | uri %]&amp;oclc=[% normalized_oclc | uri %]" id="syndetics-thumbnail-[% SEARCH_RESULT.biblionumber | html %]" alt="Syndetics cover image" />

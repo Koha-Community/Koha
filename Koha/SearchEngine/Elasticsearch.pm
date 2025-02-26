@@ -534,8 +534,32 @@ sub _process_mappings {
 
         $values = [ grep(!/^$/, @{$values}) ];
 
+        # 4 bytes is the max size of a UTF-8 char.
+        # 32766 bytes is the max size of the data ES can add to an index
+        # 32766 / 4 =~ 8191
+        my $MAX_SIZE = 8191;
+
+        my @chunks;
+
+        foreach my $value ( @{$values} ) {
+            while ( length($value) > $MAX_SIZE ) {
+                $value =~ s/^\s*//;
+                # Match up to MAX_SIZE characters, stopping at the last full word before MAX_SIZE
+                if ( $value =~ /\G(.{1,$MAX_SIZE})(?:\s|$)/g ) {
+                    push @chunks, $1;
+                    $value = substr( $value, length($1) );
+                } else {
+
+                    # Catch-all for very long words
+                    push @chunks, substr( $value, 0, $MAX_SIZE );
+                    $value = substr( $value, $MAX_SIZE );
+                }
+            }
+            push @chunks, $value if length($value);
+        }
+
         $record_document->{$target} //= [];
-        push @{$record_document->{$target}}, @{$values};
+        push @{ $record_document->{$target} }, @chunks;
     }
 }
 
@@ -818,8 +842,9 @@ sub marc_records_to_documents {
                 my $usmarc_record = $record->as_usmarc();
 
                 #NOTE: Try to round-trip the record to prove it will work for retrieval after searching
-                my $decoded_usmarc_record = MARC::Record->new_from_usmarc($usmarc_record);
-                if ( $decoded_usmarc_record->warnings() ) {
+                my $decoded_usmarc_record;
+                eval { $decoded_usmarc_record = MARC::Record->new_from_usmarc($usmarc_record); };
+                if ( $@ || $decoded_usmarc_record->warnings() ) {
 
                     #NOTE: We override the warnings since they're many and misleading
                     @warnings = (

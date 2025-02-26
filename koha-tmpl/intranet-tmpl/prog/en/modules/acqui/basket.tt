@@ -110,13 +110,26 @@
                                         [% PROCESS csv_export %]
 
                                         [% IF Koha.Preference('EDIFACT') && ediaccount %]
-                                            <div class="btn-group"><form action="/cgi-bin/koha/acqui/edi_ean.pl" method="post">
-                                                [% INCLUDE 'csrf-token.inc' %]
-                                                <input type="hidden" name="op" value="cud-ediorder" />
-                                                <input type="hidden" name="basketno" value="[% basketno | html %]" />
-                                                <input type="hidden" name="booksellerid" value="[% booksellerid | html %]" />
-                                                <button type="submit" class="btn btn-default" id="ediorderbutton"><i class="fa fa-download"></i> Create EDIFACT order</button>
-                                            </form></div>
+                                            [% UNLESS eans.size %]
+                                            <div class="btn-group" title="You must define an EAN in Administration -> Library EANs">
+                                                <button class="btn btn-default btn-xs disabled" disabled="disabled" href="#"><i class="fa fa-download"></i> Create EDIFACT order</button>
+                                            </div>
+                                            [% ELSE %]
+                                            <div class="btn-group">
+                                                [% IF eans.size == 1 %]
+                                                    <a class="btn btn-default btn-xs submit-form-link" href="#" data-ean="[% eans.0 | html %]" data-basketno="[% basketno | html %]" data-action="basket.pl" data-method="post" data-op="cud-ediorder"><i class="fa fa-download"></i> Create EDIFACT order</a>
+                                                [% ELSE %]
+                                                    <button class="btn btn-default dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false" id="ediorderbutton"><i class="fa fa-download"></i> Create EDIFACT order</button>
+                                                    <ul class="dropdown-menu">
+                                                        [% FOREACH eanacct IN eans %]
+                                                        <li>
+                                                            <a class="btn btn-default btn-xs submit-form-link" href="#" data-ean="[% eanacct.ean | html %]" data-basketno="[% basketno | html %]" data-action="basket.pl" data-method="post" data-op="cud-ediorder">[% eanacct.branch.branchname | html %] ([% eanacct.ean | html %]) [% IF eanacct     .description %][[% eanacct.description | html %]][% END %]</a>
+                                                        </li>
+                                                        [% END %]
+                                                    </ul>
+                                                [% END %]
+                                            </div>
+                                            [% END %]
                                         [% END %]
 
                                         [% IF ( active && books_loop ) %]
@@ -1007,6 +1020,7 @@
 
 [% MACRO jsinclude BLOCK %]
     [% Asset.js("js/acquisitions-menu.js") | $raw %]
+    [% Asset.js("js/form-submit.js") | $raw %]
     [% INCLUDE 'datatables.inc' %]
     [% INCLUDE 'columns_settings.inc' %]
     [% Asset.js("js/acq.js") | $raw %]

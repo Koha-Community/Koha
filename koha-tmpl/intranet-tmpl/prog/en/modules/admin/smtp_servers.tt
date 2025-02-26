@@ -1,4 +1,5 @@
 [% USE raw %]
+[% USE Koha %]
 [% USE Asset %]
 [% PROCESS 'i18n.inc' %]
 [% SET footerjs = 1 %]
@@ -255,6 +256,7 @@
 
     [% IF servers_count > 0 %]
         <div class="page-section">
+            <h3>All SMTP servers</h3>
             <table id="smtp_servers">
                 <thead>
                     <tr>
@@ -401,10 +403,11 @@
                     {
                         "data": function( row, type, val, meta ) {
                             if ( row.debug ) {
-                                return "[% tp("Active", "On") | html %]";
+                                let result = '<span class="badge text-bg-warning">' + "[% tp("Active", "On") | html %]" + '</span>';
+                                return result;
                             }
                             else {
-                                return _("Off");
+                                return _("");
                             }
                         },
                         "searchable": false,
@@ -413,10 +416,10 @@
                     {
                         "data": function( row, type, val, meta ) {
                             if ( row.is_default ) {
-                                return _("Yes");
-                            }
-                            else {
-                                return _("No");
+                                let result = '<span class="badge text-bg-success">' + _("Default") + '</span>';
+                                return result;
+                            } else {
+                                return "";
                             }
                         },
                         "searchable": false,
@@ -432,14 +435,6 @@
                         "orderable": false
                     }
                 ],
-                createdRow: function (row, data, dataIndex) {
-                    if ( data.is_default ) {
-                        $(row).addClass('default warn');
-                    }
-                    if ( data.debug ) {
-                        $(row).addClass('debug');
-                    }
-                },
             });
 
             $('#smtp_servers').on( "click", '.delete_server', function () {
@@ -488,16 +483,20 @@
 [% END %]
 
 [% BLOCK default_server_info %]
-    <div class="alert alert-info" id="default_server_message">
-        <p>Current default configuration:</p>
-
-        <ul>
-            <li><strong>Host</strong>: [%- default_config.host | html -%]</li>
-            <li><strong>Port</strong>: [%- default_config.port | html -%]</li>
-            <li><strong>Timeout (secs)</strong>: [%- default_config.timeout | html -%]</li>
-            <li><strong>SSL</strong>: [%- IF default_config.ssl_mode == 'disabled' -%]<span>Disabled</span>[%- ELSIF default_config.ssl_mode == 'ssl' -%]<span>SSL</span>[%- ELSE -%]<span>STARTTLS</span>[%- END -%]</li>
-            <li><strong>Debug mode</strong>: [%- IF default_config.debug -%]Yes[%- ELSE -%]No[%- END -%]</li>
-        </ul>
+    <div class="page-section">
+        <div class="rows" id="default_server_message">
+            <h2>Current default configuration</h2>
+            <ul>
+                <li><span class="label">Host: </span> [%- default_config.host | html -%]</li>
+                <li><span class="label">Port: </span> [%- default_config.port | html -%]</li>
+                <li><span class="label">Timeout (secs): </span> [%- default_config.timeout | html -%]</li>
+                <li><span class="label">SSL: </span> [%- IF default_config.ssl_mode == 'disabled' -%]<span>Disabled</span>[%- ELSIF default_config.ssl_mode == 'ssl' -%]<span>SSL</span>[%- ELSE -%]<span>STARTTLS</span>[%- END -%]</li>
+                <li><span class="label">Debug mode: </span> [%- IF default_config.debug -%]Yes[%- ELSE -%]No[%- END -%]</li>
+                [% IF op == 'list' %]
+                    <li><a href="/cgi-bin/koha/admin/smtp_servers.pl?op=edit_form&smtp_server_id=[% default_config.id | uri %]"><i class="fa fa-pencil"></i> Edit</a></li>
+                [% END %]
+            </ul>
+        </div>
     </div>
 [% END %]
 

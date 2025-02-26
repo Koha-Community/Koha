@@ -16,6 +16,7 @@
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
+use Encode;
 
 use Test::More tests => 8;
 use Test::Exception;
@@ -186,7 +187,7 @@ subtest 'get_elasticsearch_mappings() tests' => sub {
 
 subtest 'Koha::SearchEngine::Elasticsearch::marc_records_to_documents () tests' => sub {
 
-    plan tests => 69;
+    plan tests => 70;
 
     t::lib::Mocks::mock_preference('marcflavour', 'MARC21');
     t::lib::Mocks::mock_preference('ElasticsearchMARCFormat', 'ISO2709');
@@ -392,6 +393,16 @@ subtest 'Koha::SearchEngine::Elasticsearch::marc_records_to_documents () tests' 
             sort => 1,
             marc_type => 'marc21',
             marc_field => '650(avxyz)',
+        },
+        {
+            name        => 'note',
+            type        => 'string',
+            facet       => 0,
+            suggestible => 0,
+            searchable  => 1,
+            sort        => 1,
+            marc_type   => 'marc21',
+            marc_field  => '522a',
         },
     );
 
@@ -680,7 +691,7 @@ subtest 'Koha::SearchEngine::Elasticsearch::marc_records_to_documents () tests' 
         MARC::Field->new('999', '', '', c => '1234567'),
     );
 
-    my $item_field = MARC::Field->new('952', '', '', o => '123456789123456789123456789', p => '123456789', z => 'test');
+    my $item_field = MARC::Field->new('952', '', '', o => '123456789123456789123456789', p => '123456789', z => Encode::decode('UTF-8','To naprawdę bardzo długa notatka. Myślę, że będzie sprawiać kłopoty.'));
     my $items_count = 1638;
     while(--$items_count) {
         $large_marc_record->append_fields($item_field);
@@ -755,14 +766,31 @@ subtest 'Koha::SearchEngine::Elasticsearch::marc_records_to_documents () tests' 
     my $marc_record_with_large_field = MARC::Record->new();
     $marc_record_with_large_field->leader('     cam  22      a 4500');
 
+    my $xs = 'X' x 8191;
+    my $ys = 'Y' x 8191;
+    my $zs = 'Z' x 8191 . 'W';    # one extra character so it needs splitting
+
     $marc_record_with_large_field->append_fields(
         MARC::Field->new( '100', '', '', a => 'Author 1' ),
         MARC::Field->new( '245', '', '', a => 'Title:', b => 'record with large field' ),
         MARC::Field->new( '500', '', '', a => 'X' x 15000 ),
+        MARC::Field->new( '522', '', '', a => "$xs $ys $zs" ),
         MARC::Field->new( '999', '', '', c => '1234567' ),
     );
 
     $docs = $see->marc_records_to_documents( [$marc_record_with_large_field] );
+
+    subtest '_process_mappings() split tests' => sub {
+
+        plan tests => 4;
+
+        my $note_indexes = $docs->[0]->{note};
+
+        is( $note_indexes->[0], $xs,                    'First chunk split using the space' );
+        is( $note_indexes->[1], $ys,                    'Second chunk split using the space' );
+        is( $note_indexes->[2], substr( $zs, 0, 8191 ), 'Third chunk is forced to split' );
+        is( $note_indexes->[3], substr( $zs, 8191, 1 ), 'Fourth chunk is just the remaining char' );
+    };
 
     is( $docs->[0]->{marc_format}, 'MARCXML', 'For record with large field marc_format should be set correctly' );
 
