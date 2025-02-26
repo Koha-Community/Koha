@@ -510,6 +510,7 @@ function logOut() {
     localStorage.removeItem("copiedPermissions");
     localStorage.removeItem("popup_window_width");
     localStorage.removeItem("popup_window_height");
+    localStorage.removeItem("show_local_items");
 
     // Remove DataTables states
     Object.keys(localStorage).forEach(k => {
