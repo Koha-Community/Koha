@@ -20,6 +20,12 @@ use Modern::Perl;
 use Mojo::Base 'Mojolicious::Controller';
 
 use Koha::Patrons;
+use Koha::ERM::Agreements;
+use Koha::ERM::Licenses;
+use Koha::ERM::Documents;
+use Koha::ERM::EHoldings::Titles;
+use Koha::ERM::EHoldings::Packages;
+use Koha::ERM::EUsage::UsageDataProviders;
 
 use Try::Tiny qw( catch try );
 
@@ -48,6 +54,37 @@ sub config {
             },
 
             # TODO Add permissions
+        },
+    );
+}
+
+=head3 counts
+
+Return the ERM resources counts
+
+=cut
+
+sub counts {
+    my $c = shift->openapi->valid_input or return;
+
+    my $agreements_count           = Koha::ERM::Agreements->search->count;
+    my $documents_count            = Koha::ERM::Documents->search->count;
+    my $eholdings_packages_count   = Koha::ERM::EHoldings::Packages->search->count;
+    my $eholdings_titles_count     = Koha::ERM::EHoldings::Titles->search->count;
+    my $licenses_count             = Koha::ERM::Licenses->search->count;
+    my $usage_data_providers_count = Koha::ERM::EUsage::UsageDataProviders->search->count;
+
+    return $c->render(
+        status  => 200,
+        openapi => {
+            counts => {
+                agreements_count           => $agreements_count,
+                documents_count            => $documents_count,
+                eholdings_packages_count   => $eholdings_packages_count,
+                eholdings_titles_count     => $eholdings_titles_count,
+                licenses_count             => $licenses_count,
+                usage_data_providers_count => $usage_data_providers_count,
+            }
         },
     );
 }

@@ -50,6 +50,8 @@ definitions:
     $ref: ./definitions/desk.yaml
   edifact_file:
     $ref: ./definitions/edifact_file.yaml
+  erm_counts:
+    $ref: ./definitions/erm_counts.yaml
   erm_config:
     $ref: ./definitions/erm_config.yaml
   erm_agreement:
@@ -343,6 +345,8 @@ paths:
     $ref: "./paths/deleted_biblios.yaml#/~1deleted~1biblios~1{biblio_id}"
   /erm/config:
     $ref: ./paths/erm_config.yaml#/~1erm~1config
+  /erm/counts:
+    $ref: ./paths/erm_counts.yaml#/~1erm~1counts
   /erm/agreements:
     $ref: ./paths/erm_agreements.yaml#/~1erm~1agreements
   "/erm/agreements/{agreement_id}":
@@ -1254,6 +1258,9 @@ tags:
   - description: "Manage ERM configuration\n"
     name: erm_config
     x-displayName: ERM configuration
+  - description: "Get ERM resources counts\n"
+    name: erm_counts
+    x-displayName: ERM counts
   - description: "Manage ERM counter files\n"
     name: erm_counter_files
     x-displayName: ERM counter files
