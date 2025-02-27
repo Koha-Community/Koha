@@ -23,15 +23,17 @@ import { $__ } from "@koha-vue/i18n";
 export const routes = [
     {
         path: "/cgi-bin/koha/erm/erm.pl",
+        redirect: "/cgi-bin/koha/erm/home",
         is_default: true,
         is_base: true,
         title: $__("E-resource management"),
         children: [
             {
-                path: "",
+                path: "/cgi-bin/koha/erm/home",
                 name: "Home",
                 component: markRaw(Home),
-                is_navigation_item: false,
+                title: $__("Home"),
+                icon: "fa fa-home",
             },
             {
                 path: "/cgi-bin/koha/erm/agreements",
