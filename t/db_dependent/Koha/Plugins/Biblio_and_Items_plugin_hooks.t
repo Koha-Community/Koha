@@ -24,6 +24,8 @@ use File::Basename;
 use C4::Biblio qw(AddBiblio ModBiblio);
 use C4::Items;
 
+use Koha::SearchEngine::Elasticsearch::Indexer;
+
 use t::lib::Mocks;
 use t::lib::TestBuilder;
 
