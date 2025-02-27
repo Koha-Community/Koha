@@ -12,8 +12,17 @@
 [% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
 <style>
-div.record ul, div.record li { float:none; display:block; }
-div#result { margin-top: 1em; }
+div.record ul,
+div.record li {
+    float: none;
+    display: block;
+}
+div#result {
+    margin-top: 3.5rem;
+}
+div#mergetarget {
+    margin-top: 0.4rem;
+}
 /* We use this style "against" the li ui-tabs-nav style automatically applied */
 #dataPreview { width : 80%; } @media (max-width: 767px) { #dataPreview { margin: 0; width : auto; } }
 </style>
@@ -171,14 +180,11 @@ div#result { margin-top: 1em; }
 [% ELSE %]
 <form id="mergeform" action="/cgi-bin/koha/cataloguing/merge.pl" method="post" onsubmit="return mergeformsubmit()">
     [% INCLUDE 'csrf-token.inc' %]
-
-<div class="col-sm-6">
-[% PROCESS mergesource sourcerecords=records %]
+<div class="row">
+    <div class="col-sm-6" id="sourcerecords"> [% PROCESS mergesource sourcerecords=records %] </div>
+    <div class="col-sm-6" id="mergetarget"> [% PROCESS mergetarget %] </div>
+    <!-- .col-sm-6 -->
 </div>
-<div class="col-sm-6">
-[% PROCESS mergetarget %]
-</div> <!-- .col-sm-6 -->
-
 <input type="hidden" name="ref_biblionumber" value="[% ref_biblionumber | html %]" />
 [% FOREACH record IN records %]
     <input type="hidden" name="biblionumber" value="[% record.recordid | html %]" />
