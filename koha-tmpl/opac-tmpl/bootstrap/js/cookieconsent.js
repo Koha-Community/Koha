@@ -63,12 +63,36 @@
         const consentBar = $('#cookieConsentBar');
         consentBar.attr('aria-hidden', 'false');
         consentBar.css("display", "flex");
+
+        // Set focus to the first focusable element within the consent bar
+        const firstFocusableElement = consentBar
+            .find("a, button, input, select, textarea")
+            .filter(":visible")
+            .first();
+        if (firstFocusableElement.length) {
+            firstFocusableElement.focus();
+        } else {
+            // If no focusable elements exist, add tabindex to the bar itself to make it focusable
+            consentBar.attr("tabindex", "-1").focus();
+        }
     }
 
     function hideConsentBar() {
         const consentBar = $('#cookieConsentBar');
         consentBar.attr('aria-hidden', 'true');
         consentBar.hide();
+
+        // Remove focus from any currently focused element
+        if (document.activeElement) {
+            document.activeElement.blur();
+        }
+
+        // Set focus to the body, which effectively removes visible focus indicators
+        // This allows the first Tab press to highlight the "Skip to main content" link
+        document.body.focus();
+        document.querySelector("body").setAttribute("tabindex", "-1");
+        document.querySelector("body").focus();
+        document.querySelector("body").removeAttribute("tabindex");
     }
 
     // Hides the appropriate consent container, depending on what
