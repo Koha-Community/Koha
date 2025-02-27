@@ -69,6 +69,7 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
 # Extract the tag number from the index
 my $tag_number = $index;
 $tag_number =~ s/^tag_(\d*)_.*$/$1/;
+my $subfield_code = $1 if $index =~ /^.*subfield_(\w)_.*$/;
 
 # fill arrays
 my @subfield_loop;
@@ -93,6 +94,7 @@ if ($authid) {
         push @subfield_loop, {marc_subfield => $letter, marc_values => \@values };
         $done_subfields{$letter} = 1;
     }
+    @subfield_loop = ( { marc_subfield => $subfield_code, marc_values => [ $field->subfield('a') ] } ) if $subfield_code && $subfield_code ne 'a';
 
     push( @subfield_loop, { marc_subfield => 'w', marc_values => $relationship } ) if ( $relationship );
 
