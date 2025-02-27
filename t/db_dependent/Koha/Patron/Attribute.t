@@ -524,7 +524,7 @@ subtest 'merge_and_replace_with' => sub {
 };
 
 subtest 'action log tests' => sub {
-    plan tests => 11;
+    plan tests => 12;
     my $schema = Koha::Database->new->schema;
     $schema->storage->txn_begin;
 
@@ -739,6 +739,32 @@ subtest 'action log tests' => sub {
         $action_logs->count,
         1,
         "New action log entry has been created when updating repeatable patron attribute with existing multiple values with multiple values"
+    );
+
+    my $attribute = {
+        attribute => 'Qux',
+        code => $attribute_type->code,
+    };
+    $patron->add_extended_attribute($attribute);
+
+    $info = $get_info->(
+        ['Foo', 'Bar', 'Baz'],
+        ['Foo', 'Bar', 'Baz', 'Qux'],
+        $attribute_type->code,
+        1
+    );
+    $action_logs = Koha::ActionLogs->search(
+        {
+            module => "MEMBERS",
+            action => "MODIFY",
+            object => $patron->borrowernumber,
+            info => $info
+        }
+    );
+    is(
+        $action_logs->count,
+        1,
+        "New action log entry has been created when updating patron attributes using add_extended_attribute"
     );
 
     $schema->storage->txn_rollback;
