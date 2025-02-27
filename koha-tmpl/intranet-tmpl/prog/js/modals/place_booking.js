@@ -1216,6 +1216,7 @@ $("#placeBookingForm").on("submit", function (e) {
         let putting = $.ajax({
             method: "PUT",
             url: url,
+            contentType: "application/json",
             data: JSON.stringify({
                 booking_id: booking_id,
                 start_date: start_date,
