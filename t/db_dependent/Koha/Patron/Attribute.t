@@ -743,13 +743,13 @@ subtest 'action log tests' => sub {
 
     my $attribute = {
         attribute => 'Qux',
-        code => $attribute_type->code,
+        code      => $attribute_type->code,
     };
     $patron->add_extended_attribute($attribute);
 
     $info = $get_info->(
-        ['Foo', 'Bar', 'Baz'],
-        ['Foo', 'Bar', 'Baz', 'Qux'],
+        [ 'Foo', 'Bar', 'Baz' ],
+        [ 'Foo', 'Bar', 'Baz', 'Qux' ],
         $attribute_type->code,
         1
     );
@@ -758,7 +758,7 @@ subtest 'action log tests' => sub {
             module => "MEMBERS",
             action => "MODIFY",
             object => $patron->borrowernumber,
-            info => $info
+            info   => $info
         }
     );
     is(

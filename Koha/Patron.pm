@@ -2238,29 +2238,29 @@ sub add_extended_attribute {
     my ( $self, $attribute ) = @_;
 
     my $change;
-    if (C4::Context->preference("BorrowersLog")) {
-        my @attribute_values_before = map { $_->attribute }
-            $self->extended_attributes->search({ 'me.code' => $attribute->{code} })->as_list;
-        my @attribute_values_after = sort ($attribute->{attribute}, @attribute_values_before);
+    if ( C4::Context->preference("BorrowersLog") ) {
+        my @attribute_values_before =
+            map { $_->attribute } $self->extended_attributes->search( { 'me.code' => $attribute->{code} } )->as_list;
+        my @attribute_values_after = sort ( $attribute->{attribute}, @attribute_values_before );
         $change = {
             before => \@attribute_values_before,
-            after => \@attribute_values_after
-        }
+            after  => \@attribute_values_after
+        };
     }
 
-    my $added_attribute =  Koha::Patron::Attribute->new(
+    my $added_attribute = Koha::Patron::Attribute->new(
         {
             %{$attribute},
             ( borrowernumber => $self->borrowernumber ),
         }
     )->store;
 
-    if (C4::Context->preference("BorrowersLog")) {
+    if ( C4::Context->preference("BorrowersLog") ) {
         logaction(
             "MEMBERS",
             "MODIFY",
             $self->borrowernumber,
-            "Patron attribute " . $attribute->{code} . ": " . to_json($change, { pretty => 1, canonical => 1 })
+            "Patron attribute " . $attribute->{code} . ": " . to_json( $change, { pretty => 1, canonical => 1 } )
         );
     }
 

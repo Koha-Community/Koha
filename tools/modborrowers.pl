@@ -445,16 +445,15 @@ if ( $op eq 'cud-do' ) {
 
             # The attribute is disabled, we remove it for this borrower !
             if ( !$attributes->{$code}->{disabled} ) {
-                push @extended_attributes, { code => $code, attribute => $_}
-                    for @{ $attributes->{$code}->{values} };
+                push @extended_attributes, { code => $code, attribute => $_ } for @{ $attributes->{$code}->{values} };
             }
 
         }
 
         try {
-            $patron->extended_attributes(\@extended_attributes);
+            $patron->extended_attributes( \@extended_attributes );
         } catch {
-            my $message =  blessed $_ ? $_->full_message() : $_;
+            my $message = blessed $_ ? $_->full_message() : $_;
             push @errors, { error => $message };
         };
 
