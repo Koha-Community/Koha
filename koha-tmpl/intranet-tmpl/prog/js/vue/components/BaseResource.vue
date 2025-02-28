@@ -68,6 +68,7 @@ export default {
             resourceListFiltersRequired:
                 props.resourceListFiltersRequired || null,
             formGroupsDisplayMode: props.formGroupsDisplayMode || null,
+            getToolbarButtons: props.getToolbarButtons || (() => []),
         };
 
         return {

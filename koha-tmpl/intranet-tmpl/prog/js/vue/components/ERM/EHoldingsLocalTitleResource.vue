@@ -17,6 +17,21 @@ export default {
         const vendorStore = inject("vendorStore");
         const { vendors } = storeToRefs(vendorStore);
 
+        function getToolbarButtons() {
+            return [
+                {
+                    to: { name: "EHoldingsLocalTitlesFormImport" },
+                    icon: "plus",
+                    title: __("Import from list"),
+                },
+                {
+                    to: { name: "EHoldingsLocalTitlesKBARTImport" },
+                    icon: "plus",
+                    title: __("Import from KBART file"),
+                },
+            ];
+        }
+
         return {
             ...BaseResource.setup({
                 resourceName: "title",
@@ -36,6 +51,7 @@ export default {
                 },
                 av_title_publication_types,
                 vendors,
+                getToolbarButtons,
             }),
         };
     },
@@ -450,20 +466,6 @@ export default {
                     error => {}
                 );
             }
-        },
-        getToolbarButtons() {
-            return [
-                {
-                    to: { name: "EHoldingsLocalTitlesFormImport" },
-                    icon: "plus",
-                    title: __("Import from list"),
-                },
-                {
-                    to: { name: "EHoldingsLocalTitlesKBARTImport" },
-                    icon: "plus",
-                    title: __("Import from KBART file"),
-                },
-            ];
         },
     },
     emits: ["select-resource"],
