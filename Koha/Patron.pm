@@ -2256,11 +2256,12 @@ sub add_extended_attribute {
     )->store;
 
     if ( C4::Context->preference("BorrowersLog") ) {
+        my $code = $attribute->{code};
         logaction(
             "MEMBERS",
             "MODIFY",
             $self->borrowernumber,
-            "Patron attribute " . $attribute->{code} . ": " . to_json( $change, { pretty => 1, canonical => 1 } )
+            to_json( { "attribute.$code" => $change }, { pretty => 1, canonical => 1 } )
         );
     }
 
@@ -2325,6 +2326,7 @@ sub extended_attributes {
         my $schema = $self->_result->result_source->schema;
         $schema->txn_do(
             sub {
+                my $all_changes = {};
                 while ( my ( $repeatable, $changes ) = each %attribute_changes ) {
                     while ( my ( $code, $change ) = each %{$changes} ) {
                         $change->{before} //= [];
@@ -2348,14 +2350,7 @@ sub extended_attributes {
                                 $attribute->store() if ( $attribute->code eq $code );
                             }
                             if ( C4::Context->preference("BorrowersLog") ) {
-                                logaction(
-                                    "MEMBERS",
-                                    "MODIFY",
-                                    $self->borrowernumber,
-                                    "Patron attribute "
-                                        . $code . ": "
-                                        . to_json( $change, { pretty => 1, canonical => 1 } )
-                                );
+                                $all_changes->{"attribute.$code"} = $change;
                             }
                         }
                     }
@@ -2385,6 +2380,14 @@ sub extended_attributes {
                     Koha::Exceptions::Patron::MissingMandatoryExtendedAttribute->throw(
                         type => $type,
                     ) if !$new_types->{$type};
+                }
+                if ( %{$all_changes} ) {
+                    logaction(
+                        "MEMBERS",
+                        "MODIFY",
+                        $self->borrowernumber,
+                        to_json( $all_changes, { pretty => 1, canonical => 1 } )
+                    );
                 }
             }
         );

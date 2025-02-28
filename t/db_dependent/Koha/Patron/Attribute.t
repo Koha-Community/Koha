@@ -543,7 +543,7 @@ subtest 'action log tests' => sub {
                 }
             }
         }
-        return "Patron attribute " . $code . ": " . to_json( $change, { pretty => 1, canonical => 1 } );
+        return to_json( { "attribute.$code" => $change }, { pretty => 1, canonical => 1 } );
     };
 
     my $patron         = $builder->build_object( { class => 'Koha::Patrons' } );
