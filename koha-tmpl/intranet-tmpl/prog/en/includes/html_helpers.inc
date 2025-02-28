@@ -630,3 +630,85 @@
         </fieldset>
     </form>
 [% END %]
+
+[% BLOCK modal_wrapper %]
+    <div id="[% modal_id | $raw %]" class="modal modal-lg audio-alert-action [% IF noblock %]noblock[% ELSE %]block[% END %]" [% UNLESS noblock %]data-bs-backdrop="static" data-bs-keyboard="false"[% END %]>
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form class="modal-form" method="post" action="[% modal_action | $raw %]" id="[% modal_id | $raw %]-form">
+                    [% INCLUDE 'csrf-token.inc' %]
+
+                    <div class="modal-header" id="[% modal_id | $raw %]-header"> [% modal_header_contents | $raw %] </div>
+                    <div class="modal-body" id="[% modal_id | $raw %]-body"> [% content | $raw %] </div>
+                    <div class="modal-footer" id="[% modal_id | $raw %]-footer">
+                        [% footer_has_content = 0 %]
+
+                        [% IF modal_confirm_text %]
+                            <button
+                                type="submit"
+                                class="btn btn-default confirm"
+                                id="[% modal_id | $raw %]-confirm"
+                                [% IF modal_confirm_name %]name="[% modal_confirm_name | $raw %]"[% END %]
+                                [% IF modal_confirm_val %]value="[% modal_confirm_val | $raw %]"[% END %]
+                                [% IF modal_confirm_accesskey %]accesskey="[% modal_confirm_accesskey | $raw %]"[% END %]
+                            >
+                                <i class="fa fa-check"></i>
+                                [% modal_confirm_text | $raw %] [% IF modal_confirm_accesskey %]([% modal_confirm_accesskey | $raw %])[% END %]
+                            </button>
+                            [% footer_has_content = 1 %]
+                        [% END %]
+                        [% IF modal_custom_confirm %]
+                            [% modal_custom_confirm | $raw %]
+                            [% footer_has_content = 1 %]
+                        [% END %]
+                        [% IF modal_print_text && modal_print_url %]
+                            <button
+                                type="button"
+                                class="btn btn-default openWin"
+                                data-bs-dismiss="modal"
+                                id="[% modal_id | $raw %]-print"
+                                [% IF modal_print_name %]name="[% modal_print_name | $raw %]"[% END %]
+                                data-url="[% modal_print_url | $raw %]"
+                                [% IF modal_print_accesskey %]accesskey="[% modal_print_accesskey | $raw %]"[% END %]
+                            >
+                                <i class="fa fa-print"></i>
+                                [% modal_print_text | $raw %] [% IF modal_print_accesskey %]([% modal_print_accesskey | $raw %])[% END %]
+                            </button>
+                            [% footer_has_content = 1 %]
+                        [% END %]
+                        [% IF modal_custom_utility_button %]
+                            [% modal_custom_utility_button | $raw %]
+                            [% footer_has_content = 1 %]
+                        [% END %]
+                        [% IF modal_deny_text %]
+                            <button
+                                [% IF modal_deny_action == "submit" %]type="submit"[% ELSE %]type="button"[% END %]
+                                [% IF modal_deny_action == "dismiss" %]data-bs-dismiss="modal"[% END %]
+                                class="btn btn-default deny"
+                                id="[% modal_id | $raw %]-deny"
+                                [% IF modal_deny_name %]name="[% modal_deny_name | $raw %]"[% END %]
+                                [% IF modal_deny_val %]value="[% modal_deny_val | $raw %]"[% END %]
+                                [% IF modal_deny_accesskey %]accesskey="[% modal_deny_accesskey | $raw %]"[% END %]
+                            >
+                                <i class="fa fa-times"></i>
+                                [% modal_deny_text | $raw %] [% IF modal_deny_accesskey %]([% modal_deny_accesskey | $raw %])[% END %]
+                            </button>
+                            [% footer_has_content = 1 %]
+                        [% END %]
+                        [% IF modal_custom_deny %]
+                            [% modal_custom_deny | $raw %]
+                            [% footer_has_content = 1 %]
+                        [% END %]
+                        [% IF modal_footer_append %]
+                            [% modal_footer_append | $raw %]
+                            [% footer_has_content = 1 %]
+                        [% END %]
+                        [% IF !footer_has_content %]
+                            <button type="button" data-bs-dismiss="modal" class="btn btn-default" id="[% modal_id | $raw %]-ok">OK</button>
+                        [% END %]
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+[% END %]
