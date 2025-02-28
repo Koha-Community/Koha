@@ -4,6 +4,7 @@ use Modern::Perl;
 use Test::More tests => 2;
 
 use t::lib::TestBuilder;
+use t::lib::Mocks;
 use C4::Auth;
 use Koha::Session;
 
@@ -29,8 +30,17 @@ subtest 'basic session fetch' => sub {
 };
 
 subtest 'test session driver' => sub {
-    plan tests => 1;
+    plan tests => 3;
 
+    t::lib::Mocks::mock_preference( 'SessionStorage', 'mysql' );
     my $params = Koha::Session->_get_session_params();
     is( $params->{dsn}, 'serializer:yamlxs;driver:MySQL;id:md5', 'dsn setup correctly' );
+
+    t::lib::Mocks::mock_preference( 'SessionStorage', 'tmp' );
+    $params = Koha::Session->_get_session_params();
+    is( $params->{dsn}, 'serializer:yamlxs;driver:File;id:md5', 'dsn setup correctly' );
+
+    t::lib::Mocks::mock_preference( 'SessionStorage', 'memcached' );
+    $params = Koha::Session->_get_session_params();
+    is( $params->{dsn}, 'serializer:yamlxs;driver:memcached;id:md5', 'dsn setup correctly' );
 };
