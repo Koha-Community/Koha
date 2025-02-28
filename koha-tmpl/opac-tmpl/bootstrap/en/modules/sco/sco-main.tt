@@ -297,9 +297,12 @@
                             [% PROCESS display_errors %]
 
                             [% IF patronid && nouser %]
-                                <div class="alert alert-warning">
-                                    <h3>Sorry</h3>
-                                    <p>The userid <strong>[% patronid | html %]</strong> was not found in the database. Please try again.</p>
+                                <div class="alert alert-info">
+                                    <p
+                                        >You entered an incorrect username or password. Please try again! But note that passwords are case
+                                        sensitive[% IF Koha.Preference('FailedLoginAttempts') %] and that your account will be locked after a fixed number of failed login attempts[% END %]. Please contact a library staff member if you
+                                        continue to have problems.</p
+                                    >
                                 </div>
                             [% END %]
 
