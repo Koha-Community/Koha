@@ -100,7 +100,7 @@ sub build_tabs {
                         if (
                             $tagslib->{ $field->tag() }->{ '@' }->{tab}
                             ne $tabloop );
-                      next if ($tagslib->{$field->tag()}->{'@'}->{hidden});
+                    #   next if ($tagslib->{$field->tag()}->{'@'}->{hidden});
                       my %subfield_data;
                       $subfield_data{marc_lib}=$tagslib->{$field->tag()}->{'@'}->{lib};
                       $subfield_data{marc_value}=$field->data();
@@ -116,9 +116,9 @@ sub build_tabs {
                         if (
                             $tagslib->{ $field->tag() }->{ $subf[$i][0] }->{tab}
                             ne $tabloop );
-                        next
-                        if ( $tagslib->{ $field->tag() }->{ $subf[$i][0] }
-                            ->{hidden} );
+                        # next
+                        # if ( $tagslib->{ $field->tag() }->{ $subf[$i][0] }
+                        #     ->{hidden} );
                         my %subfield_data;
                         $subfield_data{marc_lib}=$tagslib->{$field->tag()}->{$subf[$i][0]}->{lib};
                         if ($tagslib->{$field->tag()}->{$subf[$i][0]}->{isurl}) {
