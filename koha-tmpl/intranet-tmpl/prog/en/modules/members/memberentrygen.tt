@@ -1365,91 +1365,93 @@
                                     <i class="fa fa-caret-down" aria-hidden="true"></i>
                                     Patron restrictions
                                 </legend>
-                                [% IF ( patron.restrictions.count ) %]
-                                    <table>
-                                        <thead>
-                                            <tr>
-                                                <th>Type</th>
-                                                <th>Comment</th>
-                                                <th>Expiration</th>
-                                                <th>[% tp('patron restriction created on', 'Created') | html %]</th>
-                                                [% IF CAN_user_borrowers_edit_borrowers && CAN_user_circulate_manage_restrictions %]
-                                                    <th>Remove?</th>
-                                                [% END %]
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            [% FOREACH restriction IN patron.restrictions %]
+                                <div class="patron_restrictions">
+                                    [% IF ( patron.restrictions.count ) %]
+                                        <table>
+                                            <thead>
                                                 <tr>
-                                                    <td>[% PROCESS restriction_type_description restriction_type=restriction.type %]</td>
-                                                    <td>
-                                                        [% IF restriction.comment.search('OVERDUES_PROCESS') %]
-                                                            Restriction added by overdues process [% restriction.comment.remove('OVERDUES_PROCESS ') | $raw %]
-                                                        [% ELSE %]
-                                                            [% restriction.comment | $raw %]
-                                                        [% END %]
-                                                    </td>
-                                                    <td>
-                                                        [% IF restriction.expiration %]
-                                                            [% restriction.expiration | $KohaDates %]
-                                                        [% ELSE %]
-                                                            <em>Indefinite</em>
-                                                        [% END %]
-                                                    </td>
-                                                    <td>[% restriction.created | $KohaDates %]</td>
+                                                    <th>Type</th>
+                                                    <th>Comment</th>
+                                                    <th>Expiration</th>
+                                                    <th>[% tp('patron restriction created on', 'Created') | html %]</th>
                                                     [% IF CAN_user_borrowers_edit_borrowers && CAN_user_circulate_manage_restrictions %]
-                                                        <td>
-                                                            <input type="checkbox" id="debarment_[% restriction.borrower_debarment_id | html %]" name="remove_debarment" value="[% restriction.borrower_debarment_id | html %]" />
-                                                        </td>
+                                                        <th>Remove?</th>
                                                     [% END %]
                                                 </tr>
-                                            [% END # /FOREACH d %]
-                                        </tbody>
-                                    </table>
-                                [% ELSE %]
-                                    <p>Patron is currently unrestricted.</p>
-                                [% END # /IF ( patron.restrictions.count ) %]
+                                            </thead>
+                                            <tbody>
+                                                [% FOREACH restriction IN patron.restrictions %]
+                                                    <tr>
+                                                        <td>[% PROCESS restriction_type_description restriction_type=restriction.type %]</td>
+                                                        <td>
+                                                            [% IF restriction.comment.search('OVERDUES_PROCESS') %]
+                                                                Restriction added by overdues process [% restriction.comment.remove('OVERDUES_PROCESS ') | $raw %]
+                                                            [% ELSE %]
+                                                                [% restriction.comment | $raw %]
+                                                            [% END %]
+                                                        </td>
+                                                        <td>
+                                                            [% IF restriction.expiration %]
+                                                                [% restriction.expiration | $KohaDates %]
+                                                            [% ELSE %]
+                                                                <em>Indefinite</em>
+                                                            [% END %]
+                                                        </td>
+                                                        <td>[% restriction.created | $KohaDates %]</td>
+                                                        [% IF CAN_user_borrowers_edit_borrowers && CAN_user_circulate_manage_restrictions %]
+                                                            <td>
+                                                                <input type="checkbox" id="debarment_[% restriction.borrower_debarment_id | html %]" name="remove_debarment" value="[% restriction.borrower_debarment_id | html %]" />
+                                                            </td>
+                                                        [% END %]
+                                                    </tr>
+                                                [% END # /FOREACH d %]
+                                            </tbody>
+                                        </table>
+                                    [% ELSE %]
+                                        <p>Patron is currently unrestricted.</p>
+                                    [% END # /IF ( patron.restrictions.count ) %]
 
-                                [% IF CAN_user_borrowers_edit_borrowers && CAN_user_circulate_manage_restrictions %]
-                                    <p
-                                        ><a href="#" id="add_manual_restriction"><i class="fa fa-plus"></i> Add manual restriction</a></p
-                                    >
-                                    <fieldset id="manual_restriction_form">
-                                        <input type="hidden" id="add_debarment" name="add_debarment" value="0" />
-                                        <legend id="manual_restriction_lgd">Add manual restriction</legend>
-                                        <ol>
-                                            [% IF Koha.Preference('PatronRestrictionTypes') %]
-                                                <li>
-                                                    <label for="debarred_type">Type:</label>
-                                                    <select name="debarred_type">
-                                                        [% FOREACH restriction_type IN restriction_types %]
-                                                            [% IF !restriction_type.is_system %]
-                                                                [% IF restriction_type.is_default %]
-                                                                    <option value="[% restriction_type.code | html %]" selected>[% PROCESS restriction_type_description %]</option>
-                                                                [% ELSE %]
-                                                                    <option value="[% restriction_type.code | html %]">[% PROCESS restriction_type_description %]</option>
+                                    [% IF CAN_user_borrowers_edit_borrowers && CAN_user_circulate_manage_restrictions %]
+                                        <p
+                                            ><a href="#" id="add_manual_restriction"><i class="fa fa-plus"></i> Add manual restriction</a></p
+                                        >
+                                        <fieldset id="manual_restriction_form">
+                                            <input type="hidden" id="add_debarment" name="add_debarment" value="0" />
+                                            <legend id="manual_restriction_lgd">Add manual restriction</legend>
+                                            <ol>
+                                                [% IF Koha.Preference('PatronRestrictionTypes') %]
+                                                    <li>
+                                                        <label for="debarred_type">Type:</label>
+                                                        <select name="debarred_type">
+                                                            [% FOREACH restriction_type IN restriction_types %]
+                                                                [% IF !restriction_type.is_system %]
+                                                                    [% IF restriction_type.is_default %]
+                                                                        <option value="[% restriction_type.code | html %]" selected>[% PROCESS restriction_type_description %]</option>
+                                                                    [% ELSE %]
+                                                                        <option value="[% restriction_type.code | html %]">[% PROCESS restriction_type_description %]</option>
+                                                                    [% END %]
                                                                 [% END %]
                                                             [% END %]
-                                                        [% END %]
-                                                    </select>
+                                                        </select>
+                                                    </li>
+                                                [% END %]
+                                                <li>
+                                                    <label for="debarred_comment">Comment: </label>
+                                                    <input type="text" id="debarred_comment" name="debarred_comment" />
                                                 </li>
-                                            [% END %]
-                                            <li>
-                                                <label for="debarred_comment">Comment: </label>
-                                                <input type="text" id="debarred_comment" name="debarred_comment" />
-                                            </li>
-                                            <li>
-                                                <label for="debarred_expiration">Expiration: </label>
-                                                <input name="debarred_expiration" id="debarred_expiration" size="10" value="" class="flatpickr" type="text" />
-                                                <a href="#" id="clear_debarred_expiration">Clear date</a>
-                                            </li>
-                                        </ol>
-                                        <p>
-                                            <a class="cancel" id="cancel_manual_restriction" href="#">Cancel</a>
-                                        </p>
-                                    </fieldset>
-                                    <!-- /#manual_restriction_form -->
-                                [% END # /IF CAN_user_borrowers_edit_borrowers %]
+                                                <li>
+                                                    <label for="debarred_expiration">Expiration: </label>
+                                                    <input name="debarred_expiration" id="debarred_expiration" size="10" value="" class="flatpickr" type="text" />
+                                                    <a href="#" id="clear_debarred_expiration">Clear date</a>
+                                                </li>
+                                            </ol>
+                                            <p>
+                                                <a class="cancel" id="cancel_manual_restriction" href="#">Cancel</a>
+                                            </p>
+                                        </fieldset>
+                                        <!-- /#manual_restriction_form -->
+                                    [% END # /IF CAN_user_borrowers_edit_borrowers %]
+                                </div>
                             </fieldset>
                             <!-- /#memberentry_restrictions -->
                         [% END # /IF ( step_3 ) %]
@@ -1505,78 +1507,81 @@
                                             <i class="fa fa-caret-down" aria-hidden="true"></i>
                                             Additional attributes and identifiers
                                         </legend>
-                                        <input type="hidden" name="setting_extended_patron_attributes" value="1" />
-                                        [% FOREACH pa_loo IN patron_attributes %]
-                                            <ol class="attributes_table">
-                                                <div id="aai_[% pa_loo.class | html %]">
-                                                    [% IF pa_loo.class %]
-                                                        <h3 id="[% pa_loo.class | html %]_lgd">[% pa_loo.lib | html %]</h3>
-                                                    [% END %]
-                                                    [% FOREACH patron_attribute IN pa_loo.items %]
-                                                        <li data-category_code="[% patron_attribute.category_code | html %]" data-pa_code="[% patron_attribute.code | replace('[^a-zA-Z0-9_-]', '') %]">
-                                                            [% IF patron_attribute.mandatory %]
-                                                                <label for="[% patron_attribute.form_id | html %]" class="required" required="required">[% patron_attribute.description | html %]: </label>
-                                                            [% ELSE %]
-                                                                <label for="[% patron_attribute.form_id | html %]">[% patron_attribute.description | html %]: </label>
-                                                            [% END %]
-                                                            [% IF ( patron_attribute.use_dropdown ) %]
-                                                                <select id="[% patron_attribute.form_id | html %]" name="[% patron_attribute.form_id | html %]" [% IF patron_attribute.mandatory %]required="required"[% END %]>
-                                                                    <option value=""></option>
-                                                                    [% FOREACH auth_val_loo IN patron_attribute.auth_val_loop %]
-                                                                        [% IF auth_val_loo.authorised_value == patron_attribute.value %]
-                                                                            <option value="[% auth_val_loo.authorised_value | html %]" selected="selected"> [% auth_val_loo.lib | html %] </option>
+                                        <div class="attributes_tables">
+                                            <input type="hidden" name="setting_extended_patron_attributes" value="1" />
+                                            [% FOREACH pa_loo IN patron_attributes %]
+                                                <ol class="attributes_table">
+                                                    <div id="aai_[% pa_loo.class | html %]">
+                                                        [% IF pa_loo.class %]
+                                                            <h3 id="[% pa_loo.class | html %]_lgd">[% pa_loo.lib | html %]</h3>
+                                                        [% END %]
+                                                        [% FOREACH patron_attribute IN pa_loo.items %]
+                                                            <li data-category_code="[% patron_attribute.category_code | html %]" data-pa_code="[% patron_attribute.code | replace('[^a-zA-Z0-9_-]', '') %]">
+                                                                [% IF patron_attribute.mandatory %]
+                                                                    <label for="[% patron_attribute.form_id | html %]" class="required" required="required">[% patron_attribute.description | html %]: </label>
+                                                                [% ELSE %]
+                                                                    <label for="[% patron_attribute.form_id | html %]">[% patron_attribute.description | html %]: </label>
+                                                                [% END %]
+                                                                [% IF ( patron_attribute.use_dropdown ) %]
+                                                                    <select id="[% patron_attribute.form_id | html %]" name="[% patron_attribute.form_id | html %]" [% IF patron_attribute.mandatory %]required="required"[% END %]>
+                                                                        <option value=""></option>
+                                                                        [% FOREACH auth_val_loo IN patron_attribute.auth_val_loop %]
+                                                                            [% IF auth_val_loo.authorised_value == patron_attribute.value %]
+                                                                                <option value="[% auth_val_loo.authorised_value | html %]" selected="selected"> [% auth_val_loo.lib | html %] </option>
+                                                                            [% ELSE %]
+                                                                                <option value="[% auth_val_loo.authorised_value | html %]"> [% auth_val_loo.lib | html %] </option>
+                                                                            [% END %]
+                                                                        [% END %]
+                                                                    </select>
+                                                                [% ELSE %]
+                                                                    [% IF patron_attribute.mandatory %]
+                                                                        [% IF patron_attribute.is_date %]
+                                                                            <input
+                                                                                type="text"
+                                                                                id="[% patron_attribute.form_id | html %]"
+                                                                                name="[% patron_attribute.form_id | html %]"
+                                                                                maxlength="10"
+                                                                                size="10"
+                                                                                value="[% patron_attribute.value | html %]"
+                                                                                required="required"
+                                                                                class="flatpickr"
+                                                                            />
                                                                         [% ELSE %]
-                                                                            <option value="[% auth_val_loo.authorised_value | html %]"> [% auth_val_loo.lib | html %] </option>
+                                                                            <textarea rows="2" cols="30" id="[% patron_attribute.form_id | html %]" name="[% patron_attribute.form_id | html %]" required="required">
+    [% patron_attribute.value | html %]</textarea
+                                                                            >
+                                                                        [% END %]
+                                                                    [% ELSE %]
+                                                                        [% IF patron_attribute.is_date %]
+                                                                            <input
+                                                                                type="text"
+                                                                                id="[% patron_attribute.form_id | html %]"
+                                                                                name="[% patron_attribute.form_id | html %]"
+                                                                                maxlength="10"
+                                                                                size="10"
+                                                                                value="[% patron_attribute.value | html %]"
+                                                                                class="flatpickr"
+                                                                            />
+                                                                        [% ELSE %]
+                                                                            <textarea rows="2" cols="30" id="[% patron_attribute.form_id | html %]" name="[% patron_attribute.form_id | html %]">[% patron_attribute.value | html %]</textarea>
                                                                         [% END %]
                                                                     [% END %]
-                                                                </select>
-                                                            [% ELSE %]
-                                                                [% IF patron_attribute.mandatory %]
-                                                                    [% IF patron_attribute.is_date %]
-                                                                        <input
-                                                                            type="text"
-                                                                            id="[% patron_attribute.form_id | html %]"
-                                                                            name="[% patron_attribute.form_id | html %]"
-                                                                            maxlength="10"
-                                                                            size="10"
-                                                                            value="[% patron_attribute.value | html %]"
-                                                                            required="required"
-                                                                            class="flatpickr"
-                                                                        />
-                                                                    [% ELSE %]
-                                                                        <textarea rows="2" cols="30" id="[% patron_attribute.form_id | html %]" name="[% patron_attribute.form_id | html %]" required="required">
-[% patron_attribute.value | html %]</textarea
-                                                                        >
-                                                                    [% END %]
-                                                                [% ELSE %]
-                                                                    [% IF patron_attribute.is_date %]
-                                                                        <input
-                                                                            type="text"
-                                                                            id="[% patron_attribute.form_id | html %]"
-                                                                            name="[% patron_attribute.form_id | html %]"
-                                                                            maxlength="10"
-                                                                            size="10"
-                                                                            value="[% patron_attribute.value | html %]"
-                                                                            class="flatpickr"
-                                                                        />
-                                                                    [% ELSE %]
-                                                                        <textarea rows="2" cols="30" id="[% patron_attribute.form_id | html %]" name="[% patron_attribute.form_id | html %]">[% patron_attribute.value | html %]</textarea>
-                                                                    [% END %]
+                                                                [% END # /IF ( patron_attribute.use_dropdown ) %]
+                                                                <input type="hidden" id="[% patron_attribute.form_id | html %]_code" name="[% patron_attribute.form_id | html %]_code" value="[% patron_attribute.code | html %]" />
+                                                                [% IF ( !patron_attribute.is_date ) %]
+                                                                    <a href="#" class="clear_attribute"><i class="fa fa-fw fa-trash-can"></i> Clear</a>
                                                                 [% END %]
-                                                            [% END # /IF ( patron_attribute.use_dropdown ) %]
-                                                            <input type="hidden" id="[% patron_attribute.form_id | html %]_code" name="[% patron_attribute.form_id | html %]_code" value="[% patron_attribute.code | html %]" />
-                                                            [% IF ( !patron_attribute.is_date ) %]
-                                                                <a href="#" class="clear_attribute"><i class="fa fa-fw fa-trash-can"></i> Clear</a>
-                                                            [% END %]
-                                                            [% IF ( patron_attribute.repeatable ) %]
-                                                                <a href="#" class="clone_attribute"><i class="fa fa-fw fa-plus"></i> New</a>
-                                                            [% END %]
-                                                            [% IF patron_attribute.mandatory %]<span class="required">Required</span>[% END %]
-                                                        </li>
-                                                    [% END # /FOREACH patron_attribute %]
-                                                </div>
-                                            </ol>
-                                        [% END # /FOREACH pa_loo %]
+                                                                [% IF ( patron_attribute.repeatable ) %]
+                                                                    <a href="#" class="clone_attribute"><i class="fa fa-fw fa-plus"></i> New</a>
+                                                                [% END %]
+                                                                [% IF patron_attribute.mandatory %]<span class="required">Required</span>[% END %]
+                                                            </li>
+                                                        [% END # /FOREACH patron_attribute %]
+                                                    </div>
+                                                </ol>
+                                            [% END # /FOREACH pa_loo %]
+                                        </div>
+                                        <!-- /.attributes_tables -->
                                     </fieldset>
                                     <!-- /#memberentry_patron_attributes -->
                                 [% END # UNLESS ( no_patron_attribute_types ) %]
@@ -1590,33 +1595,36 @@
                                         <i class="fa fa-caret-down" aria-hidden="true"></i>
                                         Patron messaging preferences
                                     </legend>
-                                    <div id="messaging_prefs_loading" class="form-message" style="display:none"> <img src="[% interface | html %]/[% theme | html %]/img/spinner-small.gif" alt="" /> Loading new messaging defaults </div>
-                                    <input type="hidden" name="setting_messaging_prefs" value="1" />
-                                    [% INCLUDE 'messaging-preference-form.inc' %]
-                                    [% IF ( SMSSendDriver ) %]
-                                        [% IF !nosmsalertnumber %]
-                                            <p>
-                                                <label for="SMSnumber">SMS number:</label>
-                                                <input type="text" id="SMSnumber" name="SMSnumber" value="[% SMSnumber | html %]" />
-                                                <span class="hint sms_number_help">Please enter numbers only. Prefix the number with + or 00 if including the country code.</span>
-                                            </p>
-                                        [% END %]
-                                        [% IF SMSSendDriver == 'Email' && !nosms_provider_id %]
-                                            <p>
-                                                <label for="sms_provider_id">SMS provider:</label>
-                                                <select id="sms_provider_id" name="sms_provider_id">
-                                                    <option value="">Unknown</option>
-                                                    [% FOREACH s IN sms_providers %]
-                                                        [% IF s.id == borrower_data.sms_provider_id %]
-                                                            <option value="[% s.id | html %]" selected="selected">[% s.name | html %]</option>
-                                                        [% ELSE %]
-                                                            <option value="[% s.id | html %]">[% s.name | html %]</option>
+                                    <div class="messaging_prefs">
+                                        <div id="messaging_prefs_loading" class="form-message" style="display:none"> <img src="[% interface | html %]/[% theme | html %]/img/spinner-small.gif" alt="" /> Loading new messaging defaults </div>
+                                        <input type="hidden" name="setting_messaging_prefs" value="1" />
+                                        [% INCLUDE 'messaging-preference-form.inc' %]
+                                        [% IF ( SMSSendDriver ) %]
+                                            [% IF !nosmsalertnumber %]
+                                                <p>
+                                                    <label for="SMSnumber">SMS number:</label>
+                                                    <input type="text" id="SMSnumber" name="SMSnumber" value="[% SMSnumber | html %]" />
+                                                    <span class="hint sms_number_help">Please enter numbers only. Prefix the number with + or 00 if including the country code.</span>
+                                                </p>
+                                            [% END %]
+                                            [% IF SMSSendDriver == 'Email' && !nosms_provider_id %]
+                                                <p>
+                                                    <label for="sms_provider_id">SMS provider:</label>
+                                                    <select id="sms_provider_id" name="sms_provider_id">
+                                                        <option value="">Unknown</option>
+                                                        [% FOREACH s IN sms_providers %]
+                                                            [% IF s.id == borrower_data.sms_provider_id %]
+                                                                <option value="[% s.id | html %]" selected="selected">[% s.name | html %]</option>
+                                                            [% ELSE %]
+                                                                <option value="[% s.id | html %]">[% s.name | html %]</option>
+                                                            [% END %]
                                                         [% END %]
-                                                    [% END %]
-                                                </select>
-                                            </p>
-                                        [% END # /UNLESS nosms_provider_id %]
-                                    [% END # IF ( SMSSendDriver ) %]
+                                                    </select>
+                                                </p>
+                                            [% END # /UNLESS nosms_provider_id %]
+                                        [% END # IF ( SMSSendDriver ) %]
+                                    </div>
+                                    <!-- /.messaging_prefs -->
                                 </fieldset>
                             [% END # IF ( EnhancedMessagingPreferences ) %]
                         [% END # /IF step_5 %]
