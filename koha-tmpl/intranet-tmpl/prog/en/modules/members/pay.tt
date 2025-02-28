@@ -169,10 +169,17 @@
                                             [% END %]
                                         </td>
                                         <td class="actions">
-                                            <a href="#" class="add-note" data-accountlines_id="[% line.accountlines_id | html %]"><i class="fa fa-plus"></i> Add note</a>
-                                            <span class="payment_note" id="payment_note_[% line.accountlines_id | html %]" style="display:none"
-                                                ><input type="text" size="10" name="payment_note_[% line.accountlines_id | html %]" value="" /> <a href="#" class="cancel-note"><i class="fa fa-times"></i></a
-                                            ></span>
+                                            [% IF line.note %]
+                                                <a href="#" class="add-note" data-accountlines_id="[% line.accountlines_id | html %]" style="display:none;"><i class="fa fa-plus"></i> Add note</a>
+                                                <span class="payment_note" id="payment_note_[% line.accountlines_id | html %]"
+                                                    ><input type="text" size="10" name="payment_note_[% line.accountlines_id | html %]" value="[% line.note | html %]" /> <a href="#" class="cancel-note"><i class="fa fa-times"></i></a
+                                                ></span>
+                                            [% ELSE %]
+                                                <a href="#" class="add-note" data-accountlines_id="[% line.accountlines_id | html %]"><i class="fa fa-plus"></i> Add note</a>
+                                                <span class="payment_note" id="payment_note_[% line.accountlines_id | html %]" style="display:none"
+                                                    ><input type="text" size="10" name="payment_note_[% line.accountlines_id | html %]" value="" /> <a href="#" class="cancel-note"><i class="fa fa-times"></i></a
+                                                ></span>
+                                            [% END %]
                                         </td>
                                         <td class="debit" style="text-align: right;">[% line.amount | $Price %]</td>
                                         <td class="debit" style="text-align: right;">[% line.amountoutstanding | $Price %]</td>
@@ -275,8 +282,9 @@
             });
             $(".cancel-note").on("click", function(e){
                 e.preventDefault();
-                $(".payment_note").hide().find("input").val("");
-                $(".add-note").show();
+                this_td = $(this).closest('td.actions');
+                this_td.find(".payment_note").hide().find("input").val("");
+                this_td.find(".add-note").show();
             });
 
             var table_settings = [% TablesSettings.GetTableSettings('members', 'pay', 'pay-fines-table', 'json') | $raw %];
