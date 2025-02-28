@@ -44,7 +44,7 @@ my $op = $query->param('op') || q{};
 # The biblio to move the item to
 my $biblionumber = $query->param('biblionumber');
 # The barcode of the item to move
-my $barcode = barcodedecode($query->param('barcode'));
+my $barcode = barcodedecode( scalar $query->param('barcode') );
 
 my $biblio = Koha::Biblios->find( $biblionumber );
 $template->param(biblio => $biblio);
