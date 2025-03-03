@@ -29,8 +29,10 @@ use base qw(Koha::Object);
 
 our @allowed_accounts_types     = qw( writeoff payment );
 our @allowed_circulation_types  = qw( renew issue localuse return onsite_checkout recall item_found item_lost );
+our @allowed_ill_types          = qw( illreq_created illreq_comp );
 our @mandatory_accounts_keys    = qw( type branch borrowernumber value );    # note that amount is mapped to value
 our @mandatory_circulation_keys = qw( type branch borrowernumber itemnumber ccode itemtype );
+our @mandatory_ill_keys         = qw( type branch );
 
 =head1 NAME
 
@@ -82,12 +84,18 @@ sub new {
         $category = 'circulation';
     } elsif ( grep { $_ eq $params->{type} } @allowed_accounts_types ) {
         $category = 'accounts';
+    } elsif ( grep { $_ eq $params->{type} } @allowed_ill_types ) {
+        $category = 'ill';
     } else {
         Koha::Exceptions::WrongParameter->throw( name => 'type', value => $params->{type} );
     }
 
-    my @mandatory_keys = $category eq 'circulation' ? @mandatory_circulation_keys : @mandatory_accounts_keys;
-    my @missing        = map { exists $params->{$_} ? () : $_ } @mandatory_keys;
+    my @mandatory_keys =
+          $category eq 'circulation' ? @mandatory_circulation_keys
+        : $category eq 'accounts'    ? @mandatory_accounts_keys
+        : $category eq 'ill'         ? @mandatory_ill_keys
+        :                              ();
+    my @missing = grep { !exists $params->{$_} } @mandatory_keys;
     Koha::Exceptions::MissingParameter->throw( parameter => join( ',', @missing ) ) if @missing;
 
     my $datetime = $params->{datetime} ? $params->{datetime} : dt_from_string();
@@ -98,7 +106,8 @@ sub new {
             categorycode   => $params->{categorycode},
             ccode          => exists $params->{ccode} ? $params->{ccode} : q{},
             datetime       => $datetime,
-            interface      => $params->{interface} // C4::Context->interface,
+            illrequest_id  => $params->{illrequest_id} // q{},
+            interface      => $params->{interface}     // C4::Context->interface,
             itemnumber     => $params->{itemnumber},
             itemtype       => exists $params->{itemtype} ? $params->{itemtype} : q{},
             location       => $params->{location},
@@ -167,7 +176,7 @@ sub pseudonymize {
 
 =cut
 
-our @pseudonymization_types = qw(renew issue return onsite_checkout);
+our @pseudonymization_types = qw(renew issue return onsite_checkout illreq_created illreq_comp);
 
 =head2 Internal methods
 
