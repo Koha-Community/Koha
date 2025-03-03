@@ -61,8 +61,8 @@ sub process_tt {
 
         my $tt = Template->new(
             {
-                EVAL_PERL   => 1,
-                ABSOLUTE    => 1,
+                EVAL_PERL   => 0,
+                ABSOLUTE    => 0,
                 PLUGIN_BASE => 'Koha::Template::Plugin',
                 COMPILE_EXT => $use_template_cache ? '.ttc'                                    : '',
                 COMPILE_DIR => $use_template_cache ? C4::Context->config('template_cache_dir') : '',
