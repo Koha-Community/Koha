@@ -5442,22 +5442,21 @@ CREATE TABLE `problem_reports` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Table structure for table `pseudonymized_borrower_attributes`
+-- Table structure for table `pseudonymized_metadata_values`
 --
 
-DROP TABLE IF EXISTS `pseudonymized_borrower_attributes`;
+DROP TABLE IF EXISTS `pseudonymized_metadata_values`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8mb4 */;
-CREATE TABLE `pseudonymized_borrower_attributes` (
+CREATE TABLE `pseudonymized_metadata_values` (
   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Row id field',
   `transaction_id` int(11) NOT NULL,
-  `code` varchar(64) NOT NULL COMMENT 'foreign key from the borrower_attribute_types table, defines which custom field this value was entered for',
-  `attribute` varchar(255) DEFAULT NULL COMMENT 'custom patron field value',
+  `tablename` varchar(64) NOT NULL COMMENT 'Name of the related table',
+  `key` varchar(64) NOT NULL COMMENT 'key for the metadata',
+  `value` varchar(255) DEFAULT NULL COMMENT 'value for the metadata',
   PRIMARY KEY (`id`),
-  KEY `pseudonymized_borrower_attributes_ibfk_1` (`transaction_id`),
-  KEY `anonymized_borrower_attributes_ibfk_2` (`code`),
-  CONSTRAINT `anonymized_borrower_attributes_ibfk_2` FOREIGN KEY (`code`) REFERENCES `borrower_attribute_types` (`code`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `pseudonymized_borrower_attributes_ibfk_1` FOREIGN KEY (`transaction_id`) REFERENCES `pseudonymized_transactions` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+  KEY `pseudonymized_metadata_values_ibfk_1` (`transaction_id`),
+  CONSTRAINT `pseudonymized_metadata_values_ibfk_1` FOREIGN KEY (`transaction_id`) REFERENCES `pseudonymized_transactions` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
