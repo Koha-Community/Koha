@@ -201,6 +201,7 @@ if ( $op eq 'cud-create' ) {
             $borrower{verification_token} = $verification_token;
 
             $borrower{extended_attributes} = to_json($attributes);
+            $borrower{borrowernumber}      = 0;                      # prevent warn Missing value for PK column
             Koha::Patron::Modification->new( \%borrower )->store();
 
             #Send verification email
