@@ -36,6 +36,15 @@ return {
             $dbh->do(q{ DROP TABLE pseudonymized_borrower_attributes; });
         }
 
+        unless ( column_exists( 'statistics', 'illrequest_id' ) ) {
+            $dbh->do(
+                q{
+                ALTER TABLE statistics
+                ADD COLUMN `illrequest_id` int(11) DEFAULT NULL AFTER `other`
+            }
+            );
+        }
+
         say_success( $out, "Finished" );
     },
 };
