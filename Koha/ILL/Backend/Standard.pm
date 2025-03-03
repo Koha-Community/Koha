@@ -1017,6 +1017,8 @@ sub add_request {
     $request->extended_attributes( \@request_details_array );
     $request->add_unauthenticated_data( $params->{other} ) if $unauthenticated_request;
 
+    $request->after_created;
+
     return $request;
 }
 
