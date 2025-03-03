@@ -22,6 +22,7 @@ use List::MoreUtils            qw(any);
 use Koha::Database;
 use Koha::Exceptions::Config;
 use Koha::Patrons;
+use Koha::ILL::Requests;
 
 use base qw(Koha::Object);
 
@@ -116,6 +117,40 @@ sub create_from_statistic {
                 $attribute->{tablename} = 'borrower_attributes';
 
                 $self->_result->create_related( 'pseudonymized_metadata_values', $attribute );
+            }
+        }
+    }
+
+    if ( $statistic->illrequest_id ) {
+        my $illrequest = Koha::ILL::Requests->find( $statistic->illrequest_id );
+        if ($illrequest) {
+            my @illattributes_to_pseudonymize = qw(
+                type
+            );
+
+            my $extended_attributes_to_pseudonymize =
+                $illrequest->extended_attributes->search( { type => { -in => \@illattributes_to_pseudonymize } } );
+
+            while ( my $attribute = $extended_attributes_to_pseudonymize->next ) {
+                $self->_result->create_related(
+                    'pseudonymized_metadata_values',
+                    {
+                        key       => $attribute->type,
+                        value     => $attribute->value,
+                        tablename => 'illrequestattributes',
+                    }
+                );
+            }
+
+            if ( $illrequest->backend ) {
+                $self->_result->create_related(
+                    'pseudonymized_metadata_values',
+                    {
+                        key       => 'backend',
+                        value     => $illrequest->backend,
+                        tablename => 'illrequestattributes',
+                    }
+                );
             }
         }
     }
