@@ -59,23 +59,23 @@
             [% IF patron.holds.count %]
                 <div id="current_holds_filters" data-table-id="table_holdshistory">
                     <p>
-                        <span class="selected">
+                        <span class="select_hold_status" id="status_show_all">
                             <input id="current_show_all" type="checkbox" checked="checked" class="show_all" />
                             <label for="current_show_all">Show all</label>
                         </span>
-                        <span class="selected">
+                        <span class="select_hold_status" id="status_show_pending">
                             <input id="current_pending_filter" type="checkbox" checked="checked" />
                             <label for="current_pending_filter">Pending</label>
                         </span>
-                        <span class="selected">
+                        <span class="select_hold_status" id="status_show_waiting">
                             <input id="current_waiting_filter" type="checkbox" checked="checked" />
                             <label for="current_waiting_filter">Waiting</label>
                         </span>
-                        <span class="selected">
+                        <span class="select_hold_status" id="status_show_processing">
                             <input id="current_processing_filter" type="checkbox" checked="checked" />
                             <label for="current_processing_filter">Processing</label>
                         </span>
-                        <span class="selected">
+                        <span class="select_hold_status" id="status_show_intransit">
                             <input id="current_transit_filter" type="checkbox" checked="checked" />
                             <label for="current_transit_filter">In transit</label>
                         </span>
@@ -101,7 +101,7 @@
                     </thead>
                 </table>
             [% ELSE %]
-                <div class="dialog message">This patron has no current holds.</div>
+                <div class="alert alert-info">This patron has no current holds.</div>
             [% END %]
 
             <h2 id="past_holds_heading">Past holds</h2>
@@ -111,15 +111,15 @@
             [% IF patron.old_holds.count %]
                 <div id="old_holds_filters" data-table-id="table_oldholdshistory">
                     <p>
-                        <span class="selected">
+                        <span class="select_hold_status" id="status_show_all_old">
                             <input id="old_show_all" type="checkbox" checked="checked" class="show_all" />
                             <label for="old_show_all">Show all</label>
                         </span>
-                        <span class="selected">
+                        <span class="select_hold_status" id="status_show_fulfilled">
                             <input id="old_fulfilled_filter" type="checkbox" checked="checked" />
                             <label for="old_fulfilled_filter">Fulfilled</label>
                         </span>
-                        <span class="selected">
+                        <span class="select_hold_status" id="status_show_cancelled">
                             <input id="old_cancelled_filter" type="checkbox" checked="checked" />
                             <label for="old_cancelled_filter">Cancelled</label>
                         </span>
@@ -145,7 +145,7 @@
                     </thead>
                 </table>
             [% ELSE %]
-                <div class="dialog message">This patron has no historical holds.</div>
+                <div class="alert alert-info">This patron has no historical holds.</div>
             [% END %]
         </div>
     [% END %]
