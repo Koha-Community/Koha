@@ -340,6 +340,7 @@
                                                     [% IF ( JacketImages ) %]<th class="no-sort">&nbsp;</th>[% END %]
                                                     <th class="all anti-the">Title</th>
                                                     <th>Author</th>
+                                                    <th>Checked out on</th>
                                                     <th class="psort">Due</th>
                                                     [% IF ( Koha.Preference('BiblioItemtypeInfo') || !item_level_itypes ) %]
                                                         <th>Item type</th>
@@ -428,6 +429,7 @@
                                                         </td>
 
                                                         <td class="author">[% ISSUE.author | html %]</td>
+                                                        <td class="checkout_date" data-order="[% ISSUE.issuedate | html %]"> [% ISSUE.issuedate | $KohaDates as_due_date => 1 %] </td>
                                                         [% IF ( ISSUE.overdue ) %]
                                                             <td class="date_due overdue" data-order="[% ISSUE.date_due | html %]"> [% ISSUE.date_due | $KohaDates as_due_date => 1 %] </td>
                                                         [% ELSE %]
@@ -710,7 +712,6 @@
                                                         <td> [% c.item.barcode | html %] </td>
 
                                                         <td> [% c.item.itemcallnumber | html %] </td>
-
                                                         <td> [% r.firstname | html %] [% r.surname | html %] </td>
                                                         <td></td>
                                                     </tr>
@@ -733,6 +734,7 @@
                                                 [% UNLESS ( item_level_itypes ) %]<th>Item type</th>[% END %]
                                                 [% IF ( show_barcode ) %]<th>Barcode</th>[% END %]
                                                 <th>Call number</th>
+                                                <th>Checked out on</th>
                                                 <th class="psort">Due</th>
                                                 [% IF ( OpacRenewalAllowed ) %]
                                                     <th class="no-sort">Renew</th>
@@ -803,6 +805,7 @@
                                                         <td> [% OVERDUE.barcode | html %] </td>
                                                     [% END %]
                                                     <td> [% OVERDUE.itemcallnumber | html %] </td>
+                                                    <td data-order="[% OVERDUE.issuedate | html %]"> [% OVERDUE.issuedate | $KohaDates as_due_date => 1 %] </td>
                                                     <td data-order="[% OVERDUE.date_due | html %]"> [% OVERDUE.date_due | $KohaDates as_due_date => 1 %] </td>
                                                     [% IF ( OpacRenewalAllowed ) %]
                                                         <td>
