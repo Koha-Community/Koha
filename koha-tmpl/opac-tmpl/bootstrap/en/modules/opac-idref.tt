@@ -1,5 +1,12 @@
+[% PROCESS 'i18n.inc' %]
+[% PROCESS 'html_helpers.inc' %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>Your search IDREF for ppn [% unimarc3 | html %] &rsaquo; [% IF ( LibraryNameTitle ) %][% LibraryNameTitle | html %][% ELSE %]Koha online[% END %] catalog</title>
+<title
+    >[% FILTER collapse %]
+        [% tx("Your search IDREF for ppn {ppn}", { ppn = unimarc3 }) | html %]
+        &rsaquo; [% PROCESS 'library_name_title' %]
+    [% END %]</title
+>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 [% INCLUDE 'doc-head-close.inc' %]
 [% BLOCK cssinclude %]

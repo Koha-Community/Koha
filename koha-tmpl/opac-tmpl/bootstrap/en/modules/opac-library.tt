@@ -1,29 +1,24 @@
 [% USE raw %]
 [% USE Asset %]
 [% USE Koha %]
-[% PROCESS 'display-library-address.inc' %]
 [% USE AdditionalContents %]
+[% PROCESS 'i18n.inc' %]
+[% PROCESS 'html_helpers.inc' %]
+[% PROCESS 'display-library-address.inc' %]
 [% IF library %][% SET OpacLibraryInfo = library.opac_info( lang => lang ) %][% END %]
 [% SET OpacNav = AdditionalContents.get( location => "OpacNav", lang => lang, library => logged_in_user.branchcode || default_branch, blocktitle => 0 ) %]
 [% SET OpacNavBottom = AdditionalContents.get( location => "OpacNavBottom", lang => lang, library => logged_in_user.branchcode || default_branch, blocktitle => 0 ) %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>
-    [% IF ( library ) %]
-        [% library.branchname | html %]
-        &rsaquo;
-    [% END %]
-    [% IF public_count > 1 %]
-        Libraries &rsaquo;
-    [% ELSE %]
-        Contact &rsaquo;
-    [% END %]
-    [% IF ( LibraryNameTitle ) %]
-        [% LibraryNameTitle | html %]
-    [% ELSE %]
-        Koha online
-    [% END %]
-    catalog
-</title>
+<title
+    >[% FILTER collapse %]
+        [% IF ( library ) %]
+            [% library.branchname | html %]
+            &rsaquo;
+        [% END %]
+        [% t("Libraries") | html %]
+        &rsaquo; [% PROCESS 'library_name_title' %]
+    [% END %]</title
+>
 [% INCLUDE 'doc-head-close.inc' %]
 [% BLOCK cssinclude %]
     <style>

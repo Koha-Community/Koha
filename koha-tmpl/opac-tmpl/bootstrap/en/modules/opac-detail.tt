@@ -8,6 +8,8 @@
 [% USE AuthorisedValues %]
 [% USE KohaPlugins %]
 [% USE SafeURL %]
+[% PROCESS 'i18n.inc' %]
+[% PROCESS 'html_helpers.inc' %]
 [% SET TagsShowEnabled = ( ( Koha.Preference( 'TagsEnabled' ) == 1 ) && TagsShowOnDetail ) %]
 [% SET TagsInputEnabled = ( ( Koha.Preference( 'opacuserlogin' ) == 1 ) && ( Koha.Preference( 'TagsEnabled' ) == 1 ) && TagsInputOnDetail ) %]
 [% SET CoverImagePlugins = KohaPlugins.get_plugins_opac_cover_images %]
@@ -31,7 +33,13 @@
 [% END %]
 
 [% INCLUDE 'doc-head-open.inc' %]
-<title>Details for: [% INCLUDE 'biblio-title-head.inc' %] &rsaquo; [% IF ( LibraryNameTitle ) %][% LibraryNameTitle | html %][% ELSE %]Koha online[% END %] catalog</title>
+<title
+    >[% FILTER collapse %]
+        [% title_in_title = INCLUDE 'biblio-title-head.inc' %]
+        [% tx("Details for {title}", { title = title_in_title }) | html %]
+        &rsaquo; [% PROCESS 'library_name_title' %]
+    [% END %]</title
+>
 <link rel="canonical" href="[% OPACBaseURL | url %]/bib/[% biblio.biblionumber | url %]" />
 [% Asset.css("lib/emoji-picker/css/emoji.css") | $raw %]
 [% IF ( Koha.Preference('OPACShowMusicalInscripts') ) %]
