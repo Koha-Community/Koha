@@ -51,10 +51,12 @@ my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
     }
 );
 
+my $library;
 if ($branchcode) {
+    $library = Koha::Libraries->find($branchcode);
     my @additional_fields = Koha::AdditionalFields->search( { tablename => 'branches' } )->as_list;
     my @additional_field_values;
-    @additional_field_values = Koha::Libraries->find($branchcode)->get_additional_field_values_for_template;
+    @additional_field_values = $library ? $library->get_additional_field_values_for_template : ();
 
     $template->param(
         additional_fields       => \@additional_fields,
@@ -64,11 +66,10 @@ if ($branchcode) {
 
 if ( $op eq 'add_form' ) {
     $template->param(
-        library      => Koha::Libraries->find($branchcode),
+        library      => $library,
         smtp_servers => Koha::SMTP::Servers->search,
     );
 } elsif ( $branchcode && $op eq 'view' ) {
-    my $library = Koha::Libraries->find($branchcode);
     $template->param(
         library => $library,
     );
@@ -101,7 +102,6 @@ if ( $op eq 'add_form' ) {
     my $is_a_modif = $input->param('is_a_modif');
 
     if ($is_a_modif) {
-        my $library = Koha::Libraries->find($branchcode);
         for my $field (@fields) {
             if ( $field =~ /^(pickup_location|public)$/ ) {
 
@@ -172,7 +172,7 @@ if ( $op eq 'add_form' ) {
         };
     } else {
         $branchcode =~ s|\s||g;
-        my $library = Koha::Library->new(
+        $library = Koha::Library->new(
             {
                 branchcode => $branchcode,
                 (
@@ -225,9 +225,8 @@ if ( $op eq 'add_form' ) {
                         $index++;
                     }
 
-                    my @additional_fields =
-                        Koha::Libraries->find($branchcode)->prepare_cgi_additional_field_values( $input, 'branches' );
-                    Koha::Libraries->find($branchcode)->set_additional_fields( \@additional_fields );
+                    my @additional_fields = $library->prepare_cgi_additional_field_values( $input, 'branches' );
+                    $library->set_additional_fields( \@additional_fields );
 
                     push @messages, { type => 'message', code => 'success_on_insert' };
                 }
@@ -238,7 +237,6 @@ if ( $op eq 'add_form' ) {
     }
     $op = 'list';
 } elsif ( $op eq 'delete_confirm' ) {
-    my $library     = Koha::Libraries->find($branchcode);
     my $items_count = Koha::Items->search(
         {
             -or => {
@@ -268,7 +266,6 @@ if ( $op eq 'add_form' ) {
         );
     }
 } elsif ( $op eq 'cud-delete_confirmed' ) {
-    my $library = Koha::Libraries->find($branchcode);
 
     my $deleted = eval { $library->delete; };
 
