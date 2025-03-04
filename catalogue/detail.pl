@@ -450,7 +450,10 @@ if ( C4::Context->preference("virtualshelves") ) {
     my $shelves = Koha::Virtualshelves->search(
         {
             biblionumber => $biblionumber,
-            public       => 1,
+            '-or'        => {
+                public => 1,
+                owner  => $patron->borrowernumber
+            }
         },
         {
             join => 'virtualshelfcontents',
