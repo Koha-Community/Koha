@@ -113,7 +113,7 @@ while ( my $line = $lines->next ) {
                 my $writeoff_offset = Koha::Account::Offset->new(
                     {
                         credit_id => $writeoff->accountlines_id,
-                        type      => 'WRITEOFF',
+                        type      => 'CREATE',
                         amount    => $line->amountoutstanding
                     }
                 )->store();
