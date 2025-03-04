@@ -18,7 +18,7 @@
 [% SET OverDriveCirculation = ( OverDriveEnabled && Koha.Preference( "OverDriveCirculation" ) ) %]
 
 [% INCLUDE 'doc-head-open.inc' %]
-<title>Your library home &rsaquo; [% IF ( LibraryNameTitle ) %][% LibraryNameTitle | html %][% ELSE %]Koha online[% END %] catalog</title>
+<title>Your summary &rsaquo; [% IF ( LibraryNameTitle ) %][% LibraryNameTitle | html %][% ELSE %]Koha online[% END %] catalog</title>
 [% INCLUDE 'doc-head-close.inc' %]
 [% Asset.css("css/overdrive.css") | $raw %]
 [% BLOCK cssinclude %]
