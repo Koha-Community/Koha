@@ -6,10 +6,15 @@ use feature 'say';
 use Getopt::Long qw( GetOptions );
 use Pod::Usage qw( pod2usage );
 
+use C4::Log qw( cronlogaction );
+
 use Koha::Account::Lines;
 use Koha::DateUtils qw( dt_from_string );
 
 use Koha::Script -cron;
+
+my $command_line_options = join( " ", @ARGV );
+cronlogaction( { info => $command_line_options } );
 
 my ( $help, $verbose, @type, $before, $after, @category_code, $file, $confirm );
 GetOptions(
@@ -141,6 +146,8 @@ while ( my $line = $lines->next ) {
         }
     }
 }
+
+cronlogaction( { action => 'End', info => "COMPLETED" } );
 
 exit(0);
 
