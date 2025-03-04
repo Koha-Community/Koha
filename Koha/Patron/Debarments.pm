@@ -23,6 +23,7 @@ use C4::Context;
 use C4::Log qw( logaction );
 
 use Koha::Database;
+use Koha::Patrons;
 use Koha::Patron::Restriction::Types;
 use Koha::Patron::Restrictions;
 
