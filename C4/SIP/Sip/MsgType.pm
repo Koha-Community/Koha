@@ -1289,10 +1289,10 @@ sub handle_item_information {
               : timestamp( $item->due_date );
             $resp .= add_field( FID_DUE_DATE, $due_date, $server );
         }
-        if ( ( $i = $item->recall_date ) != 0 ) {
+        if ( $i = $item->recall_date ) {
             $resp .= add_field( FID_RECALL_DATE, timestamp($i), $server );
         }
-        if ( ( $i = $item->hold_pickup_date ) != 0 ) {
+        if ( $i = $item->hold_pickup_date ) {
             $resp .= add_field( FID_HOLD_PICKUP_DATE, timestamp($i), $server );
         }
 
