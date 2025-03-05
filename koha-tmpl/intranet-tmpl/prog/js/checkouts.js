@@ -245,16 +245,19 @@ function LoadIssuesTable() {
                         return title;
                     },
                     type: "anti-the",
+                    orderData: [1, 3],
                 },
                 {
                     data: function (oObj) {
                         return oObj.recordtype_description.escapeHtml();
                     },
+                    orderData: [1, 4],
                 },
                 {
                     data: function (oObj) {
                         return oObj.itemtype_description.escapeHtml();
                     },
+                    orderData: [1, 5],
                 },
                 {
                     data: function (oObj) {
@@ -262,11 +265,13 @@ function LoadIssuesTable() {
                             ? oObj.collection.escapeHtml()
                             : "";
                     },
+                    orderData: [1, 6],
                 },
                 {
                     data: function (oObj) {
                         return oObj.location ? oObj.location.escapeHtml() : "";
                     },
+                    orderData: [1, 7],
                 },
                 {
                     data: function (oObj) {
@@ -274,13 +279,14 @@ function LoadIssuesTable() {
                             ? oObj.homebranch.escapeHtml()
                             : "";
                     },
+                    orderData: [1, 8],
                 },
                 {
                     data: "issuedate",
                     visible: false,
                 },
                 {
-                    orderData: 10, // Sort on hidden unformatted issuedate column
+                    orderData: [1, 10], // Sort on hidden unformatted issuedate column
                     data: function (oObj) {
                         return $datetime(oObj.issuedate, {
                             no_tz_adjust: true,
@@ -293,6 +299,7 @@ function LoadIssuesTable() {
                             ? oObj.branchname.escapeHtml()
                             : "";
                     },
+                    orderData: [1, 11],
                 },
                 {
                     data: function (oObj) {
@@ -300,6 +307,7 @@ function LoadIssuesTable() {
                             ? oObj.itemcallnumber.escapeHtml()
                             : "";
                     },
+                    orderData: [1, 12],
                 },
                 {
                     data: function (oObj) {
@@ -307,6 +315,7 @@ function LoadIssuesTable() {
                             ? oObj.copynumber.escapeHtml()
                             : "";
                     },
+                    orderData: [1, 13],
                 },
                 {
                     data: function (oObj) {
@@ -317,6 +326,7 @@ function LoadIssuesTable() {
                             "<span>"
                         );
                     },
+                    orderData: [1, 14],
                     className: "nowrap",
                 },
                 {
@@ -328,6 +338,7 @@ function LoadIssuesTable() {
                             "<span>"
                         );
                     },
+                    orderData: [1, 15],
                     className: "nowrap",
                 },
                 {
@@ -339,6 +350,7 @@ function LoadIssuesTable() {
                             "<span>"
                         );
                     },
+                    orderData: [1, 16],
                     className: "nowrap",
                 },
                 {
@@ -702,6 +714,16 @@ function LoadIssuesTable() {
             collision: "none",
         });
     }
+
+    // Disable rowGroup when sorting on due date
+    $("#issues-table").on("order.dt", function () {
+        var order = issuesTable.api().order();
+        if (order[0][0] === 3) {
+            issuesTable.api().rowGroup().disable();
+        } else {
+            issuesTable.api().rowGroup().enable();
+        }
+    });
 }
 
 var loadIssuesTableDelayTimeoutId;
