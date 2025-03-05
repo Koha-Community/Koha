@@ -1,5 +1,13 @@
+[% PROCESS 'i18n.inc' %]
+[% PROCESS 'html_helpers.inc' %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>Comments on [% INCLUDE 'biblio-title-head.inc' %] &rsaquo; [% IF ( LibraryNameTitle ) %][% LibraryNameTitle | html %][% ELSE %]Koha online[% END %] catalog</title>
+<title
+    >[% FILTER collapse %]
+        [% title_in_title = INCLUDE 'biblio-title-head.inc' %]
+        [% tx("Comments on {title}", { title = title_in_title }) | html %]
+        [% PROCESS 'library_name_title' %]
+    [% END %]</title
+>
 [% INCLUDE 'doc-head-close.inc' %]
 [% BLOCK cssinclude %]
 [% END %]

@@ -5,12 +5,19 @@
 [% USE Price %]
 [% USE ItemTypes %]
 [% USE AuthorisedValues %]
+[% PROCESS 'i18n.inc' %]
+[% PROCESS 'html_helpers.inc' %]
 [% SET reserve_input_type = 'radio' %]
 [% IF ( Koha.Preference('DisplayMultiItemHolds') ) %]
     [% SET reserve_input_type = 'checkbox' %]
 [% END %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>Placing a hold &rsaquo; [% IF ( LibraryNameTitle ) %][% LibraryNameTitle | html %][% ELSE %]Koha online[% END %] catalog</title>
+<title
+    >[% FILTER collapse %]
+        [% t("Placing a hold") | html %]
+        &rsaquo; [% PROCESS 'library_name_title' %]
+    [% END %]</title
+>
 [% INCLUDE 'doc-head-close.inc' %]
 [% BLOCK cssinclude %]
 [% END %]

@@ -4,9 +4,17 @@
 [% USE ItemTypes %]
 [% USE AdditionalContents %]
 [% USE Price %]
+[% PROCESS 'i18n.inc' %]
+[% PROCESS 'html_helpers.inc' %]
 [% INCLUDE 'doc-head-open.inc' %]
 
-<title>Request article &rsaquo; [% IF ( LibraryNameTitle ) %][% LibraryNameTitle | html %][% ELSE %]Koha online[% END %] catalog</title>
+<title
+    >[% FILTER collapse %]
+        [% title_in_title = INCLUDE 'biblio-title-head.inc' %]
+        [% tx("Request article from {title}", { title = title_in_title }) | html %]
+        &rsaquo; [% PROCESS 'library_name_title' %]
+    [% END %]</title
+>
 [% INCLUDE 'doc-head-close.inc' %]
 [% BLOCK cssinclude %]
 [% END %]
