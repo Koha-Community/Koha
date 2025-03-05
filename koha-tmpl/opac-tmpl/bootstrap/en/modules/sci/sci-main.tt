@@ -4,6 +4,8 @@
 [% USE Koha %]
 [% USE KohaDates %]
 [% USE AdditionalContents %]
+[% PROCESS 'i18n.inc' %]
+[% PROCESS 'html_helpers.inc' %]
 [%# Helper template functions %]
 [% BLOCK error_message %]
     [% IF messages.BadBarcode %]
@@ -25,7 +27,12 @@
 [% SET SelfCheckInMainUserBlock = AdditionalContents.get( location => "SelfCheckInMainUserBlock", lang => lang, library => logged_in_user.branchcode || default_branch, blocktitle => 0 ) %]
 [% INCLUDE 'doc-head-open.inc' %]
 [% SET OpacLangSelectorMode = Koha.Preference('OpacLangSelectorMode') %]
-<title>Self check-in &rsaquo; [% IF ( LibraryNameTitle ) %][% LibraryNameTitle | html %][% ELSE %]Koha[% END %]</title>
+<title
+    >[% FILTER collapse %]
+        [% t("Self check-in") | html %]
+        &rsaquo; [% PROCESS 'library_name_title' %]
+    [% END %]</title
+>
 
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="generator" content="Koha" />

@@ -1,6 +1,25 @@
 [% USE Koha %]
+[% PROCESS 'i18n.inc' %]
+[% PROCESS 'html_helpers.inc' %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>Sending your list &rsaquo; [% IF ( LibraryNameTitle ) %][% LibraryNameTitle | html %][% ELSE %]Koha online[% END %] catalog</title>
+<title
+    >[% FILTER collapse %]
+        [% IF ( email ) %]
+            [% IF ( SENT ) %]
+                [% t("Message sent") | html %]
+            [% ELSIF ( error ) %]
+                [% t("Error") | html %]
+            [% END %]
+        [% ELSE %]
+            [% IF ( invalidlist ) %]
+                [% t("Error") | html %]
+            [% ELSE %]
+                [% t("Sending your list") | html %]
+            [% END %]
+        [% END %]
+        &rsaquo; [% PROCESS 'library_name_title' %]
+    [% END %]</title
+>
 [% INCLUDE 'doc-head-close.inc' %]
 [% BLOCK cssinclude %]
 [% END %]

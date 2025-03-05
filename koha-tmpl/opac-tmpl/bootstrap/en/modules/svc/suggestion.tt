@@ -18,7 +18,12 @@
 
 [% IF (render=='standalone') %]
     [% INCLUDE 'doc-head-open.inc' %]
-    <title>Search suggestions</title>
+    <title
+        >[% FILTER collapse %]
+            [% t("Search suggestions") | html %]
+            &rsaquo; [% PROCESS 'library_name_title' %]
+        [% END %]</title
+    >
     [% INCLUDE 'doc-head-close.inc' %]
     [% BLOCK cssinclude %]
     [% END %]

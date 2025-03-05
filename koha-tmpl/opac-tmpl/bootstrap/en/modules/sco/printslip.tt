@@ -1,8 +1,15 @@
 [% USE raw %]
 [% USE Asset %]
 [% USE Koha %]
+[% PROCESS 'i18n.inc' %]
+[% PROCESS 'html_helpers.inc' %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>Print receipt for [% borrowernumber | html %] &rsaquo; Self-checkout &rsaquo; [% IF ( LibraryNameTitle ) %][% LibraryNameTitle | html %][% ELSE %]Koha[% END %]</title>
+<title
+    >[% FILTER collapse %]
+        [% tx("Print receipt for {borrowernumber}", {borrowernumber = borrowernumber}) | html %]
+        &rsaquo; [% t("Self checkout") | html %] &rsaquo; [% PROCESS 'library_name_title' %]
+    [% END %]</title
+>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <link rel="shortcut icon" href="[% IF ( OpacFavicon  ) %][% OpacFavicon | url %][% ELSE %][% interface | html %]/[% theme | html %]/images/favicon.ico[% END %]" type="image/x-icon" />
 [% IF ( bidi ) %]

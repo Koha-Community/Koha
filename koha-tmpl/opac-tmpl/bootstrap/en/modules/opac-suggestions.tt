@@ -5,15 +5,23 @@
 [% USE AuthorisedValues %]
 [% USE KohaDates %]
 [% USE AdditionalContents %]
+[% PROCESS 'i18n.inc' %]
+[% PROCESS 'html_helpers.inc' %]
 [% SET opacsuggestion = AdditionalContents.get( location => "OpacSuggestioninstructions", lang => lang, library => logged_in_user.branchcode || default_branch ) %]
 [% SET OpacNav = AdditionalContents.get( location => "OpacNav", lang => lang, library => logged_in_user.branchcode || default_branch, blocktitle => 0 ) %]
 [% SET OpacNavBottom = AdditionalContents.get( location => "OpacNavBottom", lang => lang, library => logged_in_user.branchcode || default_branch, blocktitle => 0 ) %]
 [% SET AllPublicBranches = Branches.all(  search_params => { public => 1 }, selected => logged_in_user.branchcode ) %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title
-    >[% IF ( op_add_form ) %]Enter a new purchase suggestion[% END %]
-    [% IF ( op_else ) %]Purchase suggestions[% END %]
-    &rsaquo; [% IF ( LibraryNameTitle ) %][% LibraryNameTitle | html %][% ELSE %]Koha online[% END %] catalog</title
+    >[% FILTER collapse %]
+        [% IF ( op_add_form ) %]
+            [% t("New purchase suggestion") | html %]
+        [% END %]
+        [% IF ( op_else ) %]
+            [% t("Purchase suggestions") | html %]
+        [% END %]
+        &rsaquo; [% PROCESS 'library_name_title' %]
+    [% END %]</title
 >
 [% INCLUDE 'doc-head-close.inc' %]
 [% BLOCK cssinclude %]
@@ -66,8 +74,6 @@
                             [% IF ( opacsuggestion ) %]
                                 [% PROCESS koha_news_block news => opacsuggestion %]
                             [% ELSE %]
-                                <h2>Enter a new purchase suggestion</h2>
-
                                 <p>Please fill out this form to make a purchase suggestion. You will receive an email when the library processes your suggestion.</p>
                                 <p
                                     >Only certain fields (marked in red) are required, but the more information you enter the easier it will be for the librarians to find the title you're requesting. The "Notes" field can be used to provide
@@ -90,6 +96,7 @@
                             <form action="/cgi-bin/koha/opac-suggestions.pl" method="post" id="add_suggestion_form">
                                 [% INCLUDE 'csrf-token.inc' %]
                                 <fieldset class="rows">
+                                    <legend>New purchase suggestion</legend>
                                     <ol>
                                         [% IF Koha.Preference( 'OPACSuggestionAutoFill' ) %]
                                             <li>
