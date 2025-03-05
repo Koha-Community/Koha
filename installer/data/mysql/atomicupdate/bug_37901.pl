@@ -1,5 +1,6 @@
 use Modern::Perl;
 use Koha::Installer::Output qw(say_warning say_success say_info);
+use Koha::Reports;
 
 return {
     bug_number  => "37901",
@@ -42,6 +43,29 @@ return {
                 ALTER TABLE statistics
                 ADD COLUMN `illrequest_id` int(11) DEFAULT NULL AFTER `other`
             }
+            );
+        }
+
+        my $reports = join(
+            "\n",
+            map( "\tReport ID: "
+                    . $_->id
+                    . ' | Edit link: '
+                    . C4::Context->preference('staffClientBaseURL')
+                    . '/cgi-bin/koha/reports/guided_reports.pl?reports='
+                    . $_->id
+                    . "&phase=Edit%20SQL",
+                Koha::Reports->search( { savedsql => { -like => "%pseudonymized_borrower_attributes%" } } )->as_list )
+        );
+
+        if ($reports) {
+            say_warning(
+                $out,
+                "Bug 37901: **ACTION REQUIRED**: Saved SQL reports containing occurrences of 'pseudonymized_borrower_attributes' were found. The following reports MUST be updated accordingly ('pseudonymized_borrower_attributes' -> 'pseudonymized_metadata_values', 'code' -> 'key', 'attribute' -> 'value'):"
+            );
+            say_info(
+                $out,
+                $reports
             );
         }
 
