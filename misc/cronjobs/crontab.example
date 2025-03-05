@@ -88,6 +88,9 @@ KOHA_CRON_PATH = /usr/share/koha/bin/cronjobs
 # clean up databases nightly.  Be sure not to run this with --sessions during a time when the system is in use!
 16 1 * * * __KOHA_USER__ $KOHA_CRON_PATH/cleanup_database.pl --confirm --sessions --zebraqueue 10 --list-invites --temp-uploads --del-unv-selfreg 14
 
+# archive older purchase suggestions. Replace XX to define age in years (or change to days or months)
+@daily __KOHA_USER__  $KOHA_CRON_PATH/archive_purchase_suggestions.pl -c --age=years:XX
+
 # delete old purchase suggestions weekly. Replace XX with a number to define the age of suggestions to delete.
 @weekly	__KOHA_USER__  $KOHA_CRON_PATH/purge_suggestions.pl --confirm --days XX > /dev/null 2>&1
 

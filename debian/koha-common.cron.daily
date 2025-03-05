@@ -16,6 +16,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 koha-run-backups --days 2 --output /var/spool/koha
+#koha-foreach --chdir --enabled /usr/share/koha/bin/cronjobs/archive_purchase_suggestions.pl -c --age=years:1
 koha-foreach --chdir --enabled /usr/share/koha/bin/cronjobs/automatic_renewals.pl -c
 koha-foreach --chdir --enabled /usr/share/koha/bin/cronjobs/automatic_checkin.pl
 koha-foreach --chdir --enabled /usr/share/koha/bin/cronjobs/recalls/expire_recalls.pl
