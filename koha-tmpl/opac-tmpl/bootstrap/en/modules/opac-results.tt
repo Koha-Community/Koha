@@ -3,6 +3,8 @@
 [% USE Koha %]
 [% USE KohaPlugins %]
 [% USE To %]
+[% PROCESS 'i18n.inc' %]
+[% PROCESS 'html_helpers.inc' %]
 [% SET LoginEnabled = ( Koha.Preference('opacuserlogin') == 1 ) %]
 [% IF ( Koha.Preference('TagsEnabled') ) %]
     [% SET TagsShowEnabled = ( ( Koha.Preference('TagsEnabled') == 1 ) && ( Koha.Preference('TagsShowOnList') > 0 ) ) %]
@@ -30,18 +32,20 @@
 [% SET OverDriveEnabled = ( Koha.Preference( "OPACOverDrive" ) && Koha.Preference('OverDriveLibraryID') && Koha.Preference('OverDriveClientKey') && Koha.Preference('OverDriveClientSecret') ) %]
 
 [% INCLUDE 'doc-head-open.inc' %]
-<title>
-    [% IF ( searchdesc ) %]
-        [% IF ( ms_value ) %]
-            Results of search for '[% ms_value | html %]'
+<title
+    >[% FILTER collapse %]
+        [% IF ( searchdesc ) %]
+            [% IF ( ms_value ) %]
+                [% tx("Results of search for '{keyword}'", {keyword = ms_value}) | html %]
+            [% ELSE %]
+                [% t("Search results") | html %]
+            [% END %]
         [% ELSE %]
-            Search results
+            [% t("You did not specify any search criteria") | html %]
         [% END %]
-    [% ELSE %]
-        You did not specify any search criteria.
-    [% END %]
-    &rsaquo; [% IF ( LibraryNameTitle ) %][% LibraryNameTitle | html %][% ELSE %]Koha online[% END %] catalog
-</title>
+        &rsaquo; [% PROCESS 'library_name_title' %]
+    [% END %]</title
+>
 <meta name="robots" content="noindex" />
 [% Asset.css("lib/Chocolat/css/chocolat.css") | $raw %]
 [% INCLUDE 'doc-head-close.inc' %]
