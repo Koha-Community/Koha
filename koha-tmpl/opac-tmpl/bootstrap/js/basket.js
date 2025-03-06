@@ -209,7 +209,7 @@ function showCartUpdate(msg) {
     // set body of popup window
     $("#cartDetails").html(msg);
     showCart();
-    setTimeout("hideCart()", 2000);
+    setTimeout(hideCart, 2000);
 }
 
 function showListsUpdate(msg) {
