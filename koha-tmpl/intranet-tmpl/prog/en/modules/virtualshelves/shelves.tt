@@ -686,15 +686,13 @@
                     $('a[href="#publicshelves_tab_panel"]').tab("show");
                 }
 
-                $('a[data-bs-toggle="tab"]').on("click", function(e){
+                $('#tabs a[data-bs-toggle="tab"]').on('shown.bs.tab', function (e) {
                     let target = $(this).attr("href");
                     if( target == "#publicshelves_tab_panel" ){
                         public = 1;
                     } else {
                         public = 0;
                     }
-                })
-                .on('shown.bs.tab', function (e) {
                     dtListResults.DataTable().draw();
                 });
 
