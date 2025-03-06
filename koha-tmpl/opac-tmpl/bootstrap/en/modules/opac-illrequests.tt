@@ -152,23 +152,6 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    [% FOREACH request IN requests %]
-                                        [% status = request.status | html %]
-                                        [% type = request.get_type %]
-                                        <tr>
-                                            <td>[% request.id | html %]</td>
-                                            <td> [% IF request.metadata.Author %][% request.metadata.Author | html %][% ELSE %]<span>N/A</span>[% END %] </td>
-                                            <td> [% IF request.metadata.Title %][% request.metadata.Title | html %][% ELSE %]<span>N/A</span>[% END %] </td>
-                                            <td>[% request.backend | html %]</td>
-                                            <td> [% IF type %][% type | html %][% ELSE %]<span>N/A</span>[% END %] </td>
-                                            <td>[% request.status_alias ? request.statusalias.lib_opac : request.capabilities.$status.name | html %]</td>
-                                            <td data-order="[% request.placed | html %]">[% request.placed | $KohaDates %]</td>
-                                            <td data-order="[% request.updated | html %]">[% request.updated | $KohaDates %]</td>
-                                            <td>
-                                                <a href="/cgi-bin/koha/opac-illrequests.pl?op=view&amp;illrequest_id=[% request.id | uri %]" class="btn btn-primary btn-sm">View</a>
-                                            </td>
-                                        </tr>
-                                    [% END %]
                                 </tbody>
                             </table>
                         [% ELSIF op == 'view' %]
@@ -369,9 +352,131 @@
 [% BLOCK jsinclude %]
     [% INCLUDE 'datatables.inc' %]
     <script>
-        $("#illrequestlist").kohaTable({
-            order: [[3, "desc"]],
-        });
+        function display_extended_attribute(row, type) {
+            var arr = $.grep(row.extended_attributes, ( x => x.type === type ));
+            if (arr.length > 0) {
+                return escape_str(arr[0].value);
+            }
+
+            return '';
+        }
+
+        function display_request_status(row) {
+            let status       = row._strings.status.str;
+            let status_alias = row._strings.status_av ?
+                                    row._strings.status_av.str ?
+                                        row._strings.status_av.str :
+                                    row._strings.status_av.code :
+                               null;
+
+            let status_label = status + (status_alias ? " <i><strong>"+status_alias+"</strong></i>" : "");
+
+            return status_label;
+        }
+        $("#illrequestlist").dataTable($.extend(true, {}, dataTablesDefaults, {
+            columns: [
+                {
+                    data: 'ill_request_id',
+                    sortable: true,
+                    render: (data, type, row, meta) => {
+                        return data;
+                    },
+                },
+                {
+                    data: 'author',
+                    sortable: false,
+                    render: (data, type, row, meta) => {
+                        return display_extended_attribute(row, 'author');
+                    },
+                },
+                {
+                    data: 'title',
+                    sortable: false,
+                    render: (data, type, row, meta) => {
+                        return display_extended_attribute(row, 'title');
+                    },
+                },
+                {
+                    data: 'ill_backend_id',
+                    sortable: true,
+                    render: (data, type, row, meta) => {
+                        return escape_str(data);
+                    },
+                },
+                {
+                    data: 'type',
+                    sortable: false,
+                    render: (data, type, row, meta) => {
+                        return display_extended_attribute(row, 'type');
+                    },
+                },
+                {
+                    data: 'status',
+                    sortable: true,
+                    render: (data, type, row, meta) => {
+                        return display_request_status(row);
+                    },
+                },
+                {
+                    data: 'requested_date',
+                    sortable: true,
+                    render: (data, type, row, meta) => {
+                        return $date(data);
+                    },
+                },
+                {
+                    data: 'timestamp',
+                    sortable: true,
+                    render: (data, type, row, meta) => {
+                        return $date(data);
+                    },
+                },
+                {
+                    data: '',
+                    sortable: false,
+                    render: (data, type, row, meta) => {
+                        return `<a href="/cgi-bin/koha/opac-illrequests.pl?op=view&amp;illrequest_id=${row.ill_request_id}" class="btn btn-primary btn-sm">View</a>`;
+                    },
+                }
+            ],
+            "order": [[ 0, "desc" ]],
+            "dom": '<"dt-info"i><"top pager"<"table_entries"lp>>tr<"bottom pager"ip>',
+            "paging": true,
+            "serverSide": true,
+            "ajax": {
+                "cache": true,
+                "url": '/api/v1/patrons/[% logged_in_user.borrowernumber %]/ill/requests',
+                'beforeSend': function (xhr, settings) {
+                    this._xhr = xhr;
+                    xhr.setRequestHeader('x-koha-embed', '+strings,extended_attributes');
+                },
+                "data": (data, settings) => {
+                    const order = data.order[0];
+                    const order_by = (order.dir == 'asc' ? '+' : '-') + 'me.' + data.columns[order.column].data;
+                    const page = Math.floor(data.start / data.length) + 1;
+                    return {
+                        _page: page,
+                        _per_page: data.length,
+                        _order_by: order_by,
+                    };
+                },
+                'dataFilter': function (data, type) {
+                    const json = {data: JSON.parse(data)};
+                    if (total = this._xhr.getResponseHeader('x-total-count')) {
+                        json.recordsTotal = total;
+                        json.recordsFiltered = total;
+                    }
+                    if (total = this._xhr.getResponseHeader('x-base-total-count')) {
+                        json.recordsTotal = total;
+                    }
+                    if (draw = this._xhr.getResponseHeader('x-koha-request-id')) {
+                        json.draw = draw;
+                    }
+
+                    return JSON.stringify(json);
+                },
+            },
+        }));
         $("#backend-dropdown-options").removeClass("nojs");
         [% IF services_json.length > 0 %]
             var services = [% services_json | $raw %];

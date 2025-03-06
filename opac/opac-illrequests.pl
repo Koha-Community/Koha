@@ -94,19 +94,11 @@ if ( ( $op eq 'cud-create' || $op eq 'cancreq' || $op eq 'cud-update' ) && !$can
 }
 
 if ( $op eq 'list' ) {
-
-    my $requests = Koha::ILL::Requests->search( { borrowernumber => $loggedinuser } );
-    $template->param(
-        requests => $requests,
-        backends => $backends
-    );
-
+    $template->param( backends => $backends );
 } elsif ( $op eq 'view' ) {
     $template->param( request => $request );
-
 } elsif ( $op eq 'cud-update' ) {
     $request->notesopac( $params->{notesopac} )->store;
-
     # Send a notice to staff alerting them of the update
     $request->send_staff_notice('ILL_REQUEST_MODIFIED');
     print $query->redirect(

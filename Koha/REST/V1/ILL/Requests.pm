@@ -58,6 +58,31 @@ sub list {
     };
 }
 
+sub patron_list {
+    my $c = shift->openapi->valid_input or return;
+    my $user = $c->stash('koha.user');
+
+    if ($user->borrowernumber != $c->param('patron_id') and !$user->is_superlibrarian) {
+        return $c->render(
+            status => 403,
+            openapi => { error => "Cannot lookup ILL requests for other users" }
+        );
+    }
+
+    return try {
+        my $reqs = $c->objects->search(Koha::ILL::Requests->search(
+            { borrowernumber => $c->param('patron_id') }
+        ));
+
+        return $c->render(
+            status  => 200,
+            openapi => $reqs,
+        );
+    } catch {
+        $c->unhandled_exception($_);
+    };
+}
+
 =head3 add
 
 Adds a new ILL request
