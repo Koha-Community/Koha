@@ -205,7 +205,8 @@ sub can_add_item_from_marc_record {
     # Check that holdingbranch is set
     my $holdingbranch_mss = Koha::MarcSubfieldStructures->find(
         {
-            kohafield => 'items.holdingbranch',
+            frameworkcode => '',
+            kohafield     => 'items.holdingbranch',
         }
     );
     my @holdingbranch_exists =
@@ -215,7 +216,8 @@ sub can_add_item_from_marc_record {
     # Check that homebranch is set
     my $homebranch_mss = Koha::MarcSubfieldStructures->find(
         {
-            kohafield => 'items.homebranch',
+            frameworkcode => '',
+            kohafield     => 'items.homebranch',
         }
     );
     my @homebranch_exists =
@@ -225,7 +227,8 @@ sub can_add_item_from_marc_record {
     # Check that itemtype is set
     my $item_mss = Koha::MarcSubfieldStructures->find(
         {
-            kohafield => C4::Context->preference('item-level_itypes') ? 'items.itype' : 'biblioitems.itemtype',
+            frameworkcode => '',
+            kohafield     => C4::Context->preference('item-level_itypes') ? 'items.itype' : 'biblioitems.itemtype',
         }
     );
     my @itemtype_exists = grep { $_->subfield( $item_mss->tagsubfield ) } $record->field( $item_mss->tagfield );
