@@ -339,10 +339,7 @@
                         <div id="payout_error" class="alert alert-warning">
                             <p> You must have at least one cash register associated with this branch before you can record cash payouts. </p>
                             [% IF ( CAN_user_parameters_manage_cash_registers ) %]
-                                <form action="/cgi-bin/koha/admin/cash_registers.pl" method="get">
-                                    <input type="hidden" name="op" value="add_form" />
-                                    <button class="new" type="submit"><i class="fa fa-plus"></i> Create a new cash register</button>
-                                </form>
+                                <a href="/cgi-bin/koha/admin/cash_registers.pl?op=add_form" class="new  btn btn-default"><i class="fa fa-plus"></i> Create a new cash register</a>
                             [% END %]
                         </div>
                     [% END %]
@@ -407,10 +404,7 @@
                         <div id="refund_error" class="alert alert-warning">
                             <p> You must have at least one cash register associated with this branch before you can record cash refunds. </p>
                             [% IF ( CAN_user_parameters_manage_cash_registers ) %]
-                                <form action="/cgi-bin/koha/admin/cash_registers.pl" method="get">
-                                    <input type="hidden" name="op" value="add_form" />
-                                    <button class="new" type="submit"><i class="fa fa-plus"></i> Create a new cash register</button>
-                                </form>
+                                <a href="/cgi-bin/koha/admin/cash_registers.pl?op=add_form" class="new  btn btn-default"><i class="fa fa-plus"></i> Create a new cash register</a>
                             [% END %]
                         </div>
                     [% END %]
