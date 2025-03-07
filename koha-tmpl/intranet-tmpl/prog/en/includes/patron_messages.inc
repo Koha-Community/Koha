@@ -102,7 +102,7 @@
                         [% END %] </em
                     ><br />
                 [% END %]
-                <a class="btn btn-xs btn-default" href="#reldebarments-tab" onclick="$('#reldebarments-tab').click()"><i class="fa fa-ban"></i> View restrictions</a>
+                <a class="btn btn-xs btn-default" href="#reldebarments-tab" onclick="(new bootstrap.Tab($('#reldebarments-tab'))).show()"><i class="fa fa-ban"></i> View restrictions</a>
             </li>
             <!-- /.blocker -->
         [% END # /IF userdebarred %]
