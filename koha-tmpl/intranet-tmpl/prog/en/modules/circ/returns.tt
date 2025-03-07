@@ -8,6 +8,7 @@
 [% USE TablesSettings %]
 [% PROCESS 'i18n.inc' %]
 [% PROCESS 'member-display-address-style.inc' %]
+[% PROCESS 'html_helpers.inc' %]
 [% SET footerjs = 1 %]
 [% BLOCK display_bormessagepref %]
     [% IF ( bormessagepref ) %]
@@ -841,132 +842,103 @@
 
         <!-- case of simple return no issue or transfer but with a hold  -->
         [% IF ( reserved and !recalled and !waitingrecall ) %]
-            <!-- reserved -->
-            <div id="hold-found2" class="modal modal-lg block audio-alert-action" data-bs-backdrop="static" data-bs-keyboard="false">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                        <form method="post" action="returns.pl" class="confirm">
-                            [% INCLUDE 'csrf-token.inc' %]
 
-                            <input type="hidden" name="print_slip" value="0" />
+            [% SET confirm_button_text = '' %]
+            [% SET print_button = '' %]
 
-                            <div class="modal-header">
-                                <h1 class="modal-title">
-                                    Hold found:
-                                    <br />
-                                    <a href="/cgi-bin/koha/catalogue/detail.pl?type=intra&amp;biblionumber=[% itembiblionumber | uri %]">[% title | html %]</a>
-                                    <div class="hold-found-barcode"> (<a href="/cgi-bin/koha/catalogue/moredetail.pl?biblionumber=[% itembiblionumber | uri %]&amp;itemnumber=[% itemnumber | uri %]">[% item.barcode | html %]</a>) </div>
-                                </h1>
-                            </div>
+            [% IF transfertodo %]
+                [% confirm_button_text = 'Confirm hold and transfer' %]
+                [% print_button = '<button type="button" class="btn btn-default print" accesskey="p"> <i class="fa fa-print"></i> Print slip, transfer, and confirm (P) </button>' %]
+            [% ELSE %]
+                [% confirm_button_text = 'Confirm hold' %]
+                [% print_button = '<button type="button" class="btn btn-default print" accesskey="p"> <i class="fa fa-print"></i> Print slip and confirm (P) </button>' %]
+            [% END %]
 
-                            <div class="modal-body">
-                                [% IF ( reservenotes ) %]
-                                    <h4>Notes:</h4>
-                                    <p>[% reservenotes | html %]</p>
-                                    <hr />
+            [% SET modal_print_url = reserve_id | uri %]
+            [% modal_print_url = "/cgi-bin/koha/circ/hold-transfer-slip.pl?reserve_id=" _ modal_print_url %]
+
+            [% WRAPPER modal_wrapper modal_id="hold-found-modal" modal_header_contents='<h1 class="modal-title">Hold found</h1>' modal_confirm_text=confirm_button_text modal_confirm_accesskey="Y" modal_custom_utility_button=print_button modal_deny_text="Ignore" modal_deny_accesskey="I" modal_deny_action="dismiss" %]
+                <h1>
+                    <a href="/cgi-bin/koha/catalogue/detail.pl?type=intra&amp;biblionumber=[% itembiblionumber | uri %]">[% title | html %]</a>
+                    <div class="hold-found-barcode"> (<a href="/cgi-bin/koha/catalogue/moredetail.pl?biblionumber=[% itembiblionumber | uri %]&amp;itemnumber=[% itemnumber | uri %]">[% item.barcode | html %]</a>) </div>
+                </h1>
+                [% IF ( reservenotes ) %]
+                    <h4>Notes:</h4>
+                    <p>[% reservenotes | html %]</p>
+                    <hr />
+                [% END %]
+                <h4>Hold for:</h4>
+                <ul>
+                    <li>
+                        [% INCLUDE 'patron-title.inc' patron=patron hide_patron_infos_if_needed=1 invert_name=1 link_to="circulation_reserves" %]
+                        <span class="patron-category"> - [% patron.category.description | html %]</span>
+                    </li>
+
+                    [% INCLUDE display_holdpatron_address %]
+
+                    [% IF ( patron.phone ) %]
+                        <li>[% patron.phone | html %]</li>
+                    [% END %]
+
+                    [% IF ( patron.email ) %]
+                        <li>
+                            [% IF ( transfertodo ) %]
+                                [% patron.email | html %]
+                            [% ELSE %]
+                                <a id="boremail" href="mailto:[% patron.email | html %]">[% patron.email | html %]</a>
+                            [% END %]
+                        </li>
+                    [% END %]
+
+                    [% UNLESS ( transfertodo) %]
+                        [% INCLUDE display_bormessagepref %]
+                        [% IF patron.primary_contact_method %]
+                            <li id="main_contact_method"
+                                >Main contact method:
+                                [% SWITCH patron.primary_contact_method %]
+                                [% CASE 'phone' %]
+                                    <span>Primary phone</span>
+                                [% CASE 'phonepro' %]
+                                    <span>Secondary phone</span>
+                                [% CASE 'mobile' %]
+                                    <span>Other phone</span>
+                                [% CASE 'email' %]
+                                    <span>Primary email</span>
+                                [% CASE 'emailpro' %]
+                                    <span>Secondary email</span>
+                                [% CASE 'fax' %]
+                                    <span>Fax</span>
                                 [% END %]
-                                <h5>Hold for:</h5>
-                                <ul>
-                                    <li>
-                                        [% INCLUDE 'patron-title.inc' patron=patron hide_patron_infos_if_needed=1 invert_name=1 link_to="circulation_reserves" %]
-                                        <span class="patron-category"> - [% patron.category.description | html %]</span>
-                                    </li>
+                            </li>
+                        [% END %]
+                    [% END %]
 
-                                    [% INCLUDE display_holdpatron_address %]
+                    [% IF ( patron.is_debarred ) %]
+                        <li class="error">Patron is RESTRICTED</li>
+                    [% END %]
 
-                                    [% IF ( patron.phone ) %]
-                                        <li>[% patron.phone | html %]</li>
-                                    [% END %]
+                    [% IF ( patron.gonenoaddress ) %]
+                        <li class="error">Patron's address is in doubt</li>
+                    [% END %]
+                </ul>
+                [% IF ( transfertodo ) %]
+                    <h4><strong>Transfer to:</strong> [% Branches.GetName( destbranch ) | html %]</h4>
+                [% ELSE %]
+                    <h4><strong>Hold at</strong> [% Branches.GetName( destbranch ) | html %]</h4>
+                [% END %]
 
-                                    [% IF ( patron.email ) %]
-                                        <li>
-                                            [% IF ( transfertodo ) %]
-                                                [% patron.email | html %]
-                                            [% ELSE %]
-                                                <a id="boremail" href="mailto:[% patron.email | html %]">[% patron.email | html %]</a>
-                                            [% END %]
-                                        </li>
-                                    [% END %]
+                [% PROCESS passthrough_data %]
 
-                                    [% UNLESS ( transfertodo) %]
-                                        [% INCLUDE display_bormessagepref %]
-                                        [% IF patron.primary_contact_method %]
-                                            <li id="main_contact_method"
-                                                >Main contact method:
-                                                [% SWITCH patron.primary_contact_method %]
-                                                [% CASE 'phone' %]
-                                                    <span>Primary phone</span>
-                                                [% CASE 'phonepro' %]
-                                                    <span>Secondary phone</span>
-                                                [% CASE 'mobile' %]
-                                                    <span>Other phone</span>
-                                                [% CASE 'email' %]
-                                                    <span>Primary email</span>
-                                                [% CASE 'emailpro' %]
-                                                    <span>Secondary email</span>
-                                                [% CASE 'fax' %]
-                                                    <span>Fax</span>
-                                                [% END %]
-                                            </li>
-                                        [% END %]
-                                    [% END %]
-
-                                    [% IF ( patron.is_debarred ) %]
-                                        <li class="error">Patron is RESTRICTED</li>
-                                    [% END %]
-
-                                    [% IF ( patron.gonenoaddress ) %]
-                                        <li class="error">Patron's address is in doubt</li>
-                                    [% END %]
-                                </ul>
-                                [% IF ( transfertodo ) %]
-                                    <h4><strong>Transfer to:</strong> [% Branches.GetName( destbranch ) | html %]</h4>
-                                [% ELSE %]
-                                    <h4><strong>Hold at</strong> [% Branches.GetName( destbranch ) | html %]</h4>
-                                [% END %]
-
-                                [% FOREACH checkin IN checkins %]
-                                    <input type="hidden" name="checkin_counter" value="[% loop.count | html %]" />
-                                    <input type="hidden" name="checkin_barcode_[% loop.count | html %]" value="[% checkin.barcode | html %]" />
-                                    <input type="hidden" name="checkin_duedate_[% loop.count | html %]" value="[% checkin.duedate | html %]" />
-                                    <input type="hidden" name="checkin_borrowernumber_[% loop.count | html %]" value="[% checkin.borrowernumber | html %]" />
-                                    <input type="hidden" name="checkin_not_returned_[% loop.count | html %]" value="[% checkin.not_returned | html %]" />
-                                [% END %]
-
-                                <input type="hidden" name="op" value="cud-affect_reserve" />
-                                <input type="hidden" name="itemnumber" value="[% itemnumber | html %]" />
-                                <input type="hidden" name="borrowernumber" value="[% patron.borrowernumber | html %]" />
-                                <input type="hidden" name="biblionumber" value="[% itembiblionumber | html %]" />
-                                <input type="hidden" name="reserve_id" value="[% reserve_id | html %]" />
-                                <input type="hidden" name="diffBranch" value="[% destbranch | html %]" />
-                                <input type="hidden" name="exemptfine" value="[% exemptfine | html %]" />
-                                <input type="hidden" name="dropboxmode" value="[% dropboxmode | html %]" />
-                                <input type="hidden" name="forgivemanualholdsexpire" value="[% forgivemanualholdsexpire | html %]" />
-                                <input type="hidden" name="return_date_override" value="[% return_date_override | html %]" />
-                                <input type="hidden" name="return_date_override_remember" value="[% return_date_override_remember | html %]" />
-                                [% INCLUDE all_checkin_messages %]
-                            </div>
-
-                            <div class="modal-footer">
-                                [% IF ( transfertodo ) %]
-                                    <button type="submit" class="btn btn-default approve" accesskey="y"> <i class="fa fa-check"></i> Confirm hold and transfer (Y) </button>
-                                    <button type="button" class="btn btn-default print" accesskey="p"> <i class="fa fa-print"></i> Print slip, transfer, and confirm (P) </button>
-                                [% ELSE %]
-                                    <button type="submit" class="btn btn-default approve" accesskey="y"> <i class="fa fa-check"></i> Confirm hold (Y) </button>
-                                    <button type="button" class="btn btn-default print" accesskey="p"> <i class="fa fa-print"></i> Print slip and confirm (P) </button>
-                                [% END %]
-
-                                <button type="button" data-bs-dismiss="modal" class="btn btn-default deny" accesskey="i"> <i class="fa fa-times"></i> Ignore (I) </button>
-                            </div>
-                            <!-- /.modal-footer -->
-                        </form>
-                        <!-- /.confirm -->
-                    </div>
-                    <!-- /.modal-content -->
-                </div>
-                <!-- /.modal-dialog -->
-            </div>
-            <!-- /#hold-found2 -->
+                <input type="hidden" name="op" value="cud-affect_reserve" />
+                <input type="hidden" name="itemnumber" value="[% itemnumber | html %]" />
+                <input type="hidden" name="borrowernumber" value="[% patron.borrowernumber | html %]" />
+                <input type="hidden" name="biblionumber" value="[% itembiblionumber | html %]" />
+                <input type="hidden" name="reserve_id" value="[% reserve_id | html %]" />
+                <input type="hidden" name="diffBranch" value="[% destbranch | html %]" />
+                <input type="hidden" name="forgivemanualholdsexpire" value="[% forgivemanualholdsexpire | html %]" />
+                <input type="hidden" name="print_slip" value="0" />
+                [% INCLUDE all_checkin_messages %]
+            [% END #/hold-found-modal %]
         [% END #/IF reserved %]
 
         [% IF ( recalled ) %]
@@ -1486,11 +1458,12 @@
         <input type="hidden" name="return_date_override_remember" value="[% return_date_override_remember | html %]" />
         <input type="hidden" name="dropboxmode" value="[% dropboxmode | html %]" />
         <input type="hidden" name="exemptfine" value="[% exemptfine | html %]" />
-        [% FOREACH inputloo IN inputloop %]
-            <input type="hidden" name="ri-[% inputloo.counter | html %]" value="[% inputloo.barcode | html %]" />
-            <input type="hidden" name="dd-[% inputloo.counter | html %]" value="[% inputloo.duedate | html %]" />
-            <input type="hidden" name="bn-[% inputloo.counter | html %]" value="[% inputloo.borrowernumber | html %]" />
-            <input type="hidden" name="nr-[% inputloo.counter | html %]" value="[% inputloo.not_returned | html %]" />
+        [% FOREACH checkin IN checkins %]
+            <input type="hidden" name="checkin_counter" value="[% loop.count | html %]" />
+            <input type="hidden" name="checkin_barcode_[% loop.count | html %]" value="[% checkin.barcode | html %]" />
+            <input type="hidden" name="checkin_duedate_[% loop.count | html %]" value="[% checkin.duedate | html %]" />
+            <input type="hidden" name="checkin_borrowernumber_[% loop.count | html %]" value="[% checkin.borrowernumber | html %]" />
+            <input type="hidden" name="checkin_not_returned_[% loop.count | html %]" value="[% checkin.not_returned | html %]" />
         [% END %]
     </fieldset>
 [% END %]
