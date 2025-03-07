@@ -19,6 +19,6 @@ return {
         );
 
         # Other information
-        say_success( $out, "Updated borrowernumber constraint" );
+        say_success( $out, "Updated borrowernumber constraint on illrequests table" );
     },
 };
