@@ -1479,6 +1479,22 @@
     [% INCLUDE 'modals/add_catalog_concern.inc' %]
 [% END %]
 
+[%# passthrough_data: adds hidden inputs for any data that needs to be preserved and passed back to the controller after a modal response %]
+[% BLOCK passthrough_data %]
+    <fieldset id="checkin_passthrough">
+        <input type="hidden" name="return_date_override" value="[% return_date_override | html %]" />
+        <input type="hidden" name="return_date_override_remember" value="[% return_date_override_remember | html %]" />
+        <input type="hidden" name="dropboxmode" value="[% dropboxmode | html %]" />
+        <input type="hidden" name="exemptfine" value="[% exemptfine | html %]" />
+        [% FOREACH inputloo IN inputloop %]
+            <input type="hidden" name="ri-[% inputloo.counter | html %]" value="[% inputloo.barcode | html %]" />
+            <input type="hidden" name="dd-[% inputloo.counter | html %]" value="[% inputloo.duedate | html %]" />
+            <input type="hidden" name="bn-[% inputloo.counter | html %]" value="[% inputloo.borrowernumber | html %]" />
+            <input type="hidden" name="nr-[% inputloo.counter | html %]" value="[% inputloo.not_returned | html %]" />
+        [% END %]
+    </fieldset>
+[% END %]
+
 [% MACRO jsinclude BLOCK %]
     [% INCLUDE 'datatables.inc' %]
     [% INCLUDE 'calendar.inc' %]
