@@ -353,15 +353,20 @@ $("#placeBookingModal").on("show.bs.modal", function (e) {
 
                 // Merge current checkouts into bookings
                 for (checkout of checkouts) {
-                    let booking = {
-                        biblio_id: biblionumber,
-                        booking_id: null,
-                        end_date: checkout.due_date,
-                        item_id: checkout.item_id,
-                        patron_id: checkout.patron_id,
-                        start_date: new Date().toISOString(),
-                    };
-                    bookings.unshift(booking);
+                    let already_booked = bookings.some(
+                        b => b.item_id === checkout.item_id
+                    );
+                    if (!already_booked) {
+                        let booking = {
+                            biblio_id: biblionumber,
+                            booking_id: null,
+                            end_date: checkout.due_date,
+                            item_id: checkout.item_id,
+                            patron_id: checkout.patron_id,
+                            start_date: new Date().toISOString(),
+                        };
+                        bookings.unshift(booking);
+                    }
                 }
 
                 // Update flatpickr mode
