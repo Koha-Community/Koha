@@ -68,7 +68,7 @@ if ( $op eq "do_search" ) {
     my $startfrom      = $query->param('startfrom')      || 0;
     my $resultsperpage = $query->param('resultsperpage') || 20;
 
-    if ( C4::Context->preference('ConsiderHeadingUse') ) {
+    if ( C4::Context->preference('ConsiderHeadingUse') && $source ne 'auth' ) {
         my $marcflavour = C4::Context->preference('marcflavour');
         my $biblio_tag  = substr( $index, 4, 3 );
         if ( $marcflavour eq 'MARC21' ) {
