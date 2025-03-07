@@ -45,7 +45,24 @@ function addItem( node, unique_item_fields ) {
 }
 
 function addMulti( count, node, unique_item_fields){
-    var index = $(node).closest("div").attr('id');
+    var item_form = $(node).closest("div");
+    var index = $(node).closest("div").attr("id");
+
+    //We need to verify the item form before saving
+    var empty_item_mandatory = CheckMandatorySubfields(item_form);
+    if (empty_item_mandatory > 0) {
+        var _alertString =
+            __("Form not submitted because of the following problem(s)") + "\n";
+
+        _alertString +=
+            "-------------------------------------------------------------------\n\n";
+        _alertString +=
+            "\n- " +
+            __("%s item mandatory fields empty").format(empty_item_mandatory);
+        alert(_alertString);
+        return false;
+    }
+
     var countItemsBefore = $("#items_list tbody tr").length;
     var current_qty = parseInt( $('#quantity').val(), 10 );
     $("#procModal").modal('show');
