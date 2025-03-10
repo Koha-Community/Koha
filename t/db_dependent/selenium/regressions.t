@@ -293,7 +293,8 @@ subtest 'XSS vulnerabilities in pagination' => sub {
     $s->add_error_handler;
     is( $alert_text, undef, 'No alert box displayed, even if evil intent' );
 
-    my $second_page = $driver->find_element('//div[@class="pages"]/span[@class="currentPage"]/following-sibling::a');
+    my $second_page =
+        $driver->find_element('//div[@class="pages"]/ul/li[@class="page-item active"]/following-sibling::li/a');
     like(
         $second_page->get_attribute('href'), qr{(?|&)public=1(&|$)},
         'The second page should display category without the invalid value'

@@ -46,7 +46,7 @@
                     <h1>Authority search results</h1>
 
                     [% IF total %]
-                        <div class="pages">[% pagination_bar | $raw %]</div>
+                        <div class="pages" id="pagination_top"> [% pagination_bar | $raw %] </div>
                     [% END %]
                     <div id="results">
                         [% IF ( total ) %]
@@ -103,7 +103,7 @@
                         </div>
                         <!-- / .searchresults -->
 
-                        <div class="pages">[% pagination_bar | $raw %]</div>
+                        <div class="pages" id="pagination_bottom"> [% pagination_bar | $raw %] </div>
                     [% END # / IF total %]
                 </div>
                 <!-- / #userauthsearchresults -->
