@@ -188,7 +188,7 @@
                 [% IF ( holdcount ) %]
                     <span class="results_summary">
                         <span class="label">Holds:</span>
-                        <span class="badge text-bg-info">
+                        <span class="badge bg-info-subtle">
                             [% IF CAN_user_reserveforothers_place_holds %]
                                 <a href="/cgi-bin/koha/reserve/request.pl?biblionumber=[% biblionumber | uri %]">[% holdcount | html %]</a>
                             [% ELSE %]
@@ -216,7 +216,7 @@
                 [% IF ( article_requests_count = biblio.article_requests.filter_by_current.count ) %]
                     <span class="results_summary">
                         <span class="label">Article requests:</span>
-                        <span class="badge text-bg-info">
+                        <span class="badge bg-info-subtle">
                             <a href="/cgi-bin/koha/circ/request-article.pl?biblionumber=[% biblionumber | uri %]">[% article_requests_count | html %]</a>
                         </span>
                     </span>

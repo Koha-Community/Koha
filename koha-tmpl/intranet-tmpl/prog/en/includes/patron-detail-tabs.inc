@@ -50,7 +50,7 @@
                     ([% IF patron.return_claims.resolved.count == 0 %]
                         <span title="Resolved claims" class="badge text-bg-info" id="return-claims-count-resolved">[% patron.return_claims.resolved.count | html %]</span>
                     [% ELSE %]
-                        <span title="Resolved claims" class="badge text-bg-success" id="return-claims-count-resolved">[% patron.return_claims.resolved.count | html %]</span>
+                        <span title="Resolved claims" class="badge text-bg-info" id="return-claims-count-resolved">[% patron.return_claims.resolved.count | html %]</span>
                     [% END %]
                     [% IF patron.return_claims.unresolved.count == 0 %]
                         <span title="Unresolved claims" class="badge text-bg-info" id="return-claims-count-unresolved">[% patron.return_claims.unresolved.count | html %]</span>

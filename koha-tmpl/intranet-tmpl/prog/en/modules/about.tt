@@ -130,10 +130,10 @@
                 <tr>
                     <th scope="row">Elasticsearch: </th>
                     [% IF elasticsearch_fatal_config_error %]
-                        <td><span class="text-bg-warning">[% elasticsearch_fatal_config_error | html %]</span></td>
+                        <td><span class="bg-warning-subtle">[% elasticsearch_fatal_config_error | html %]</span></td>
                     [% ELSE %]
                         [% IF elasticsearch_status.running %]
-                            [% SET td_class="text-bg-info" %]
+                            [% SET td_class="bg-info-subtle" %]
                         [% END %]
                         <td class="[% td_class | html %]">
                             <span>Version:</span>
@@ -152,7 +152,7 @@
                                     (<span>count:</span> <em>[% index.index_count | html %]</em>) [% UNLESS loop.last %],[% END %]
                                 [% END %]
                             [% ELSE %]
-                                <span class="text-bg-warning">not running</span>
+                                <span class="bg-warning-subtle">not running</span>
                             [% END %]
                         </td>
                     [% END # /IF elasticsearch_fatal_config_error %]
@@ -161,7 +161,7 @@
             <tr>
                 <th scope="row">Memcached: </th>
                 [% IF memcached_running AND is_memcached_still_active AND where_is_memcached_config == 'config_only' %]
-                    [% SET td_class="text-bg-info" %]
+                    [% SET td_class="bg-info-subtle" %]
                 [% END %]
                 <td class="[% td_class | html %]">
                     <span>Servers:</span>
@@ -181,9 +181,9 @@
                     <span>Status:</span>
                     [% IF memcached_servers %]
                         [% IF memcached_running and is_memcached_still_active %]
-                            <span class="text-bg-info">running</span>.
+                            <span class="bg-info-subtle">running</span>.
                         [% ELSE %]
-                            <span class="text-bg-warning">not running</span>.
+                            <span class="bg-warning-subtle">not running</span>.
                             [% IF is_psgi %]
                                 <span>Remember memcached needs to be started before Plack.</span>
                             [% END %]
@@ -195,14 +195,14 @@
                     <span>Config read from:</span>
                     [% SWITCH where_is_memcached_config %]
                     [% CASE 'config_only' %]
-                        <span class="text-bg-info">koha-conf.xml</span>
+                        <span class="bg-info-subtle">koha-conf.xml</span>
                     [% CASE 'ENV_only' %]
-                        <span class="text-bg-warning">ENV</span> <span>Note that the right place to define the memcached config is in your $KOHA_CONF file</span>
+                        <span class="bg-warning-subtle">ENV</span> <span>Note that the right place to define the memcached config is in your $KOHA_CONF file</span>
                     [% CASE 'both' %]
-                        <span class="text-bg-warning">ENV and koha-conf.xml</span>
+                        <span class="bg-warning-subtle">ENV and koha-conf.xml</span>
                         <span>Note that the right place to define the memcached config is in your $KOHA_CONF file. To avoid any misunderstanding you should not export the memcached config from ENV.</span>
                     [% CASE # nowhere %]
-                        <span class="text-bg-warning">Nowhere</span> <span>Note that the right place to define the memcached config is in your $KOHA_CONF file. Currently you do not have a valid memcached configuration defined.</span>
+                        <span class="bg-warning-subtle">Nowhere</span> <span>Note that the right place to define the memcached config is in your $KOHA_CONF file. Currently you do not have a valid memcached configuration defined.</span>
                     [% END %]
                     [% IF effective_caching_method != 'Cache::Memcached::Fast::Safe' %]
                         | <span>Effective caching method:</span> [% effective_caching_method | html %]
@@ -216,22 +216,22 @@
             <tr>
                 <th scope="row">Zebra status: </th>
                 [% IF (errZebraConnection == 10000) %]
-                    <td class="text-bg-danger"><strong>Zebra server seems not to be available. Is it started?</strong></td>
+                    <td class="bg-danger-subtle"><strong>Zebra server seems not to be available. Is it started?</strong></td>
                 [% ELSIF (errZebraConnection) %]
-                    <td class="text-bg-warning"><strong>Error message from Zebra: [% ( errZebraConnection ) | html %]</strong></td>
+                    <td class="bg-warning-subtle"><strong>Error message from Zebra: [% ( errZebraConnection ) | html %]</strong></td>
                 [% ELSE %]
-                    <td class="text-bg-info">Running</td>
+                    <td class="bg-info-subtle">Running</td>
                 [% END %]
             </tr>
             <tr>
                 <th scope="row">Message broker: </th>
                 [% IF warnConnectBroker %]
-                    <td class="text-bg-warning"><strong>Using SQL polling (Fallback, Error connecting to RabbitMQ)</strong></td>
+                    <td class="bg-warning-subtle"><strong>Using SQL polling (Fallback, Error connecting to RabbitMQ)</strong></td>
                 [% ELSE %]
                     [% IF Koha.Preference('JobsNotificationMethod') == 'polling' %]
-                        <td class="text-bg-info">Using SQL polling</td>
+                        <td class="bg-info-subtle">Using SQL polling</td>
                     [% ELSE %]
-                        <td class="text-bg-info">Using RabbitMQ</td>
+                        <td class="bg-info-subtle">Using RabbitMQ</td>
                     [% END %]
                 [% END %]
             </tr>
@@ -240,8 +240,8 @@
                 <td>[% current_date_and_time | $KohaDates  with_hours => 1 %]</td>
             </tr>
             <tr>
-                [% timezone_config_class = (time_zone.config_invalid) ? 'text-bg-warning' : '' %]
-                [% timezone_env_class    = (time_zone.env_invalid)    ? 'text-bg-warning' : '' %]
+                [% timezone_config_class = (time_zone.config_invalid) ? 'bg-warning-subtle' : '' %]
+                [% timezone_env_class    = (time_zone.env_invalid)    ? 'bg-warning-subtle' : '' %]
                 <th scope="row">Time zone: </th>
                 <td>
                     <span>Used:</span> <span>[% time_zone.actual | html %]</span>

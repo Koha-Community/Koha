@@ -446,7 +446,7 @@
                                                         <td class="call_no"> [% ISSUE.itemcallnumber | html %] </td>
                                                         [% IF ( OpacRenewalAllowed && !( logged_in_user.is_expired && logged_in_user.category.effective_BlockExpiredPatronOpacActions_contains('renew') ) ) %]
                                                             <td class="renew" data-order="[% ISSUE.status && canrenew ? ISSUE.renewsleft : 0 | html %]">
-                                                                [% IF ISSUE.renewed %]<span class="bbadge text-bg-success">Renewed!</span><br />[% END %]
+                                                                [% IF ISSUE.renewed %]<span class="badge text-bg-success">Renewed!</span><br />[% END %]
                                                                 [% IF ( ISSUE.status ) %]
                                                                     [% IF ( canrenew ) %]
                                                                         <input type="checkbox" name="issue" value="[% ISSUE.issue_id | uri %]" />

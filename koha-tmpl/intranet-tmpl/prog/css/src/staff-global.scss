@@ -78,34 +78,10 @@ $enable-dark-mode: false;
     )
 }
 
-.text-bg-primary {
-    background-color: shift-color( $primary, -55% );
-    color: $black;
-}
-
-.text-bg-secondary {
-    background-color: shift-color( $secondary, -55% );
-    color: $black;
-}
-
-.text-bg-success {
-    background-color: shift-color( $success, -55% );
-    color: $black;
-}
-
-.text-bg-info {
-    background-color: shift-color( $info, -55% );
-    color: $black;
-}
-
-.text-bg-warning {
-    background-color: shift-color( $warning, -55% );
-    color: $black;
-}
-
-.text-bg-danger {
-    background-color: shift-color( $danger, -55% );
-    color: $black;
+.badge {
+    &[class$="-subtle"] {
+        color: #000;
+    }
 }
 
 ::selection {

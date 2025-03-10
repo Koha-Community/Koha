@@ -1243,7 +1243,7 @@
                                 [% IF ( multi_hold ) %]
                                     <h3>
                                         <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% biblioloo.biblionumber | uri %]"> [% biblioloo.title | html %] </a>
-                                        <span class="badge text-bg-info"><span>[% biblioloo.reserveloop.size | html %] [% tn('Hold', 'Holds', biblioloo.reserveloop.size) | $raw %]</span></span>
+                                        <span class="badge bg-info-subtle"><span>[% biblioloo.reserveloop.size | html %] [% tn('Hold', 'Holds', biblioloo.reserveloop.size) | $raw %]</span></span>
                                     </h3>
                                 [% END %]
 

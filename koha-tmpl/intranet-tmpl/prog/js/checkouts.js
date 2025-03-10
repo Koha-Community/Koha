@@ -1550,17 +1550,6 @@ $(document).ready(function () {
                         let resolved = json.resolved;
                         let unresolved = json.unresolved;
 
-                        if (resolved > 0) {
-                            $("#return-claims-count-resolved")
-                                .text(resolved)
-                                .removeClass("text-bg-info")
-                                .addClass("text-bg-success");
-                        } else {
-                            $("#return-claims-count-resolved")
-                                .text(resolved)
-                                .removeClass("text-bg-success")
-                                .addClass("text-bg-info");
-                        }
                         if (unresolved > 0) {
                             $("#return-claims-count-unresolved")
                                 .text(unresolved)
