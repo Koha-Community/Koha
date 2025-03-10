@@ -22,6 +22,7 @@ use Encode;
 use Test::More tests => 6;
 use Test::MockModule;
 use Test::Exception;
+use Test::Warn;
 
 use Koha::Database;
 use Koha::BackgroundJobs;
@@ -299,16 +300,16 @@ subtest 'decoded_data() and set_encoded_data() tests' => sub {
 };
 
 subtest 'decoded_data() and set_encoded_data() tests' => sub {
-    plan tests => 2;
+    plan tests => 3;
 
-    $ENV{KOHA_STOMP_HOSTNAME} = "not_localhost";
-    $ENV{KOHA_STOMP_PORT} = "99999";
+    t::lib::Mocks::mock_config( 'message_broker', { hostname => 'not_localhost', port => '99999' } );
 
     t::lib::Mocks::mock_preference('JobsNotificationMethod', 'STOMP');
-    my $job = Koha::BackgroundJob->connect();
+    my $job;
+    warning_like { $job = Koha::BackgroundJob->connect() } qr{Cannot connect to broker};
     is( $job, undef, "Return undef if unable to connect when using stomp" );
 
     t::lib::Mocks::mock_preference('JobsNotificationMethod', 'polling');
     $job = Koha::BackgroundJob->connect();
     is( $job, undef, "Return undef if using polling" );
-}
+};
