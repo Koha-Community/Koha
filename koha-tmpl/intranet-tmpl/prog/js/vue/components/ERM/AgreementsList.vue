@@ -128,14 +128,14 @@ export default {
                             e["_str"] = e["name"];
                             return e;
                         }),
-                    3: () => this.map_av_dt_filter("av_agreement_statuses"),
-                    4: () =>
+                    4: () => this.map_av_dt_filter("av_agreement_statuses"),
+                    5: () =>
                         this.map_av_dt_filter("av_agreement_closure_reasons"),
-                    5: [
+                    6: [
                         { _id: 0, _str: this.$__("No") },
                         { _id: 1, _str: this.$__("Yes") },
                     ],
-                    6: () =>
+                    7: () =>
                         this.map_av_dt_filter(
                             "av_agreement_renewal_priorities"
                         ),
