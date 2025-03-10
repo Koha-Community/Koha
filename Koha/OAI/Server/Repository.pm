@@ -216,12 +216,16 @@ sub get_biblio_marcxml {
     }
     if ($record) {
 
+        # Check if the bibliographic record is suppressed in OPAC
+        if ( C4::Context->preference('OpacSuppression') && $biblio->opac_suppressed ) {
+            return;
+        }
+
         my $rules = C4::Context->yaml_preference('OpacHiddenItems') // {};
         if ( $biblio->hidden_in_opac( { rules => $rules } ) ) {
             return;
         }
 
-        #TODO: Also hide record if OpacSuppression is in use
     }
 
     return ( $record ? $record->as_xml_record( C4::Context->preference('marcflavour') ) : undef, $decoding_error );
