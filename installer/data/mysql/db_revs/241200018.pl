@@ -16,6 +16,6 @@ return {
 
         $dbh->do(q{ ALTER TABLE additional_field_values RENAME COLUMN new_record_id TO record_id; });
 
-        say_success( $out, "Converted record_id to VARCHAR" );
+        say_success( $out, "Converted additional_field_values.record_id to VARCHAR" );
     },
 };
