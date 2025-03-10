@@ -303,17 +303,36 @@ subtest 'decoded_data() and set_encoded_data() tests' => sub {
     $schema->storage->txn_rollback;
 };
 
-subtest 'decoded_data() and set_encoded_data() tests' => sub {
-    plan tests => 3;
+subtest 'connect' => sub {
+    plan tests => 2;
 
-    t::lib::Mocks::mock_config( 'message_broker', { hostname => 'not_localhost', port => '99999' } );
+    subtest 'JobsNotificationMethod' => sub {
+        plan tests => 3;
+        t::lib::Mocks::mock_config( 'message_broker', { hostname => 'not_localhost', port => '99999' } );
 
-    t::lib::Mocks::mock_preference( 'JobsNotificationMethod', 'STOMP' );
-    my $job;
-    warning_like { $job = Koha::BackgroundJob->connect() } qr{Cannot connect to broker};
-    is( $job, undef, "Return undef if unable to connect when using stomp" );
+        t::lib::Mocks::mock_preference( 'JobsNotificationMethod', 'STOMP' );
+        my $job;
+        warning_like { $job = Koha::BackgroundJob->connect() } qr{Cannot connect to broker};
+        is( $job, undef, "Return undef if unable to connect when using stomp" );
 
-    t::lib::Mocks::mock_preference( 'JobsNotificationMethod', 'polling' );
-    $job = Koha::BackgroundJob->connect();
-    is( $job, undef, "Return undef if using polling" );
+        t::lib::Mocks::mock_preference( 'JobsNotificationMethod', 'polling' );
+        $job = Koha::BackgroundJob->connect();
+        is( $job, undef, "Return undef if using polling" );
+    };
+
+    subtest 'wrong credentials' => sub {
+        plan tests => 2;
+        t::lib::Mocks::mock_preference( 'JobsNotificationMethod', 'STOMP' );
+
+        t::lib::Mocks::mock_config(
+            'message_broker',
+            { hostname => 'localhost', port => '61613', username => 'guest', password => 'wrong_password' }
+        );
+
+        my $job;
+        warning_is { $job = Koha::BackgroundJob->connect() }
+        q{Cannot connect to broker (Access refused for user 'guest')};
+        is( $job, undef, "Return undef if unable to connect when using stomp" );
+
+    };
 };
