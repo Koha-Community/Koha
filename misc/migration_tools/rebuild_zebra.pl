@@ -100,7 +100,7 @@ my $result           = GetOptions(
     'run-as-root'   => \$run_as_root,
     'wait-for-lock' => \$wait_for_lock,
     't|table:s'     => \$table,
-    'forks:i'       => \$forks,
+    'processes:i'   => \$forks,
 );
 
 if ( not $result or $want_help ) {
@@ -1040,6 +1040,10 @@ Parameters:
 
     --table                 specify a table (can be items, biblioitems, biblio, biblio_metadata) to retrieve biblionumber to index.
                             biblioitems is the default value.
+
+    --processes             specify the number of processes (forks) for
+                            parallel exporting authority or biblio records
+                            (does not apply to the indexing step)
 
     --help or -h            show this message.
 _USAGE_
