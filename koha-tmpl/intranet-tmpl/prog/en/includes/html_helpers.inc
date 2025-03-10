@@ -704,7 +704,7 @@
                             [% footer_has_content = 1 %]
                         [% END %]
                         [% IF !footer_has_content %]
-                            <button type="button" data-bs-dismiss="modal" class="btn btn-default" id="[% modal_id | $raw %]-ok">OK</button>
+                            <button type="button" data-bs-dismiss="modal" class="btn btn-default" id="[% modal_id | $raw %]-ok">[% t('OK') | html %]</button>
                         [% END %]
                     </div>
                 </form>

@@ -847,27 +847,27 @@
             [% SET print_button = '' %]
 
             [% IF transfertodo %]
-                [% confirm_button_text = 'Confirm hold and transfer' %]
-                [% print_button = '<button type="button" class="btn btn-default print" accesskey="p"> <i class="fa fa-print"></i> Print slip, transfer, and confirm (P) </button>' %]
+                [% confirm_button_text = t('Confirm hold and transfer') %]
+                [% print_button = '<button type="button" class="btn btn-default print" accesskey="p"> <i class="fa fa-print"></i> ' _ t('Print slip, transfer, and confirm') _ ' (P) </button>' %]
             [% ELSE %]
-                [% confirm_button_text = 'Confirm hold' %]
-                [% print_button = '<button type="button" class="btn btn-default print" accesskey="p"> <i class="fa fa-print"></i> Print slip and confirm (P) </button>' %]
+                [% confirm_button_text = t('Confirm hold') %]
+                [% print_button = '<button type="button" class="btn btn-default print" accesskey="p"> <i class="fa fa-print"></i> ' _ t('Print slip and confirm') _ ' (P) </button>' %]
             [% END %]
 
             [% SET modal_print_url = reserve_id | uri %]
             [% modal_print_url = "/cgi-bin/koha/circ/hold-transfer-slip.pl?reserve_id=" _ modal_print_url %]
 
-            [% WRAPPER modal_wrapper modal_id="hold-found-modal" modal_header_contents='<h1 class="modal-title">Hold found</h1>' modal_confirm_text=confirm_button_text modal_confirm_accesskey="Y" modal_custom_utility_button=print_button modal_deny_text="Ignore" modal_deny_accesskey="I" modal_deny_action="dismiss" %]
+            [% WRAPPER modal_wrapper modal_id="hold-found-modal" modal_header_contents='<h1 class="modal-title">' _ t('Hold found') _ '</h1>' modal_confirm_text=confirm_button_text modal_confirm_accesskey="Y" modal_custom_utility_button=print_button modal_deny_text= t('Ignore') modal_deny_accesskey="I" modal_deny_action="dismiss" %]
                 <h1>
                     <a href="/cgi-bin/koha/catalogue/detail.pl?type=intra&amp;biblionumber=[% itembiblionumber | uri %]">[% title | html %]</a>
                     <div class="hold-found-barcode"> (<a href="/cgi-bin/koha/catalogue/moredetail.pl?biblionumber=[% itembiblionumber | uri %]&amp;itemnumber=[% itemnumber | uri %]">[% item.barcode | html %]</a>) </div>
                 </h1>
                 [% IF ( reservenotes ) %]
-                    <h4>Notes:</h4>
+                    <h4>[% t('Notes') | html %]:</h4>
                     <p>[% reservenotes | html %]</p>
                     <hr />
                 [% END %]
-                <h4>Hold for:</h4>
+                <h4>[% t('Hold for') | html %]:</h4>
                 <ul>
                     <li>
                         [% INCLUDE 'patron-title.inc' patron=patron hide_patron_infos_if_needed=1 invert_name=1 link_to="circulation_reserves" %]
@@ -893,38 +893,38 @@
                     [% UNLESS ( transfertodo) %]
                         [% INCLUDE display_bormessagepref %]
                         [% IF patron.primary_contact_method %]
-                            <li id="main_contact_method"
-                                >Main contact method:
+                            <li id="main_contact_method">
+                                [% t('Main contact method') | html %]:
                                 [% SWITCH patron.primary_contact_method %]
                                 [% CASE 'phone' %]
-                                    <span>Primary phone</span>
+                                    <span>[% t('Primary phone') | html %]</span>
                                 [% CASE 'phonepro' %]
-                                    <span>Secondary phone</span>
+                                    <span>[% t('Secondary phone') | html %]</span>
                                 [% CASE 'mobile' %]
-                                    <span>Other phone</span>
+                                    <span>[% t('Other phone') | html %]</span>
                                 [% CASE 'email' %]
-                                    <span>Primary email</span>
+                                    <span>[% t('Primary email') | html %]</span>
                                 [% CASE 'emailpro' %]
-                                    <span>Secondary email</span>
+                                    <span>[% t('Secondary email') | html %]</span>
                                 [% CASE 'fax' %]
-                                    <span>Fax</span>
+                                    <span>[% t('Fax') | html %]</span>
                                 [% END %]
                             </li>
                         [% END %]
                     [% END %]
 
                     [% IF ( patron.is_debarred ) %]
-                        <li class="error">Patron is RESTRICTED</li>
+                        <li class="error">[% t('Patron is RESTRICTED') | html %]</li>
                     [% END %]
 
                     [% IF ( patron.gonenoaddress ) %]
-                        <li class="error">Patron's address is in doubt</li>
+                        <li class="error">[% t("Patron's address is in doubt") | html %]</li>
                     [% END %]
                 </ul>
                 [% IF ( transfertodo ) %]
-                    <h4><strong>Transfer to:</strong> [% Branches.GetName( destbranch ) | html %]</h4>
+                    <h4><strong>[% t('Transfer to') | html %]:</strong> [% Branches.GetName( destbranch ) | html %]</h4>
                 [% ELSE %]
-                    <h4><strong>Hold at</strong> [% Branches.GetName( destbranch ) | html %]</h4>
+                    <h4><strong>[% t('Hold at') | html %]</strong> [% Branches.GetName( destbranch ) | html %]</h4>
                 [% END %]
 
                 [% PROCESS passthrough_data %]
