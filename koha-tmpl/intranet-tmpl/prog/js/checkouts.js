@@ -398,7 +398,7 @@ function LoadIssuesTable() {
                     let content = "";
 
                     if ( oObj.return_claim_id ) {
-                      content = '<span class="badge text-bg-info">' + oObj.return_claim_created_on_formatted + '</span>';
+                      content = '<span class="badge bg-info-subtle">' + oObj.return_claim_created_on_formatted + '</span>';
                     } else if ( ClaimReturnedLostValue ) {
                       content = '<a class="btn btn-default btn-xs claim-returned-btn" data-itemnumber="' + oObj.itemnumber + '"><i class="fa fa-exclamation-circle"></i> ' + __("Claim returned") + '</a>';
                     } else {
@@ -1152,21 +1152,21 @@ $(document).ready(function() {
 
                         if ( resolved > 0 ) {
                             $('#return-claims-count-resolved').text(resolved)
-                                                              .removeClass('text-bg-info')
+                                                              .removeClass('bg-info-subtle')
                                                               .addClass('text-bg-success');
                         } else {
                             $('#return-claims-count-resolved').text(resolved)
                                                               .removeClass('text-bg-success')
-                                                              .addClass('text-bg-info');
+                                                              .addClass('bg-info-subtle');
                         }
                         if ( unresolved > 0 ) {
                             $('#return-claims-count-unresolved').text(unresolved)
-                                                                .removeClass('text-bg-info')
+                                                                .removeClass('bg-info-subtle')
                                                                 .addClass('text-bg-warning');
                         } else {
                             $('#return-claims-count-unresolved').text(unresolved)
                                                                 .removeClass('text-bg-warning')
-                                                                .addClass('text-bg-info');
+                                                                .addClass('bg-info-subtle');
                         }
                     }
                 },
