@@ -89,10 +89,16 @@ sub connect {
 
     try {
         $stomp = Net::Stomp->new( { hostname => $hostname, port => $port } );
-        $stomp->connect($credentials);
+        my $connected_frame = $stomp->connect($credentials);
+        if ( $connected_frame->command ne 'CONNECTED' ) {
+            my $message = $connected_frame->body;
+            chomp $message;
+            warn sprintf "Cannot connect to broker (%s)", $message;
+            undef $stomp;
+        }
     } catch {
-        warn "Cannot connect to broker " . $_;
-        $stomp = undef;
+        warn sprintf "Cannot connect to broker (%s)", $_;
+        undef $stomp;
     };
 
     return $stomp;
