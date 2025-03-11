@@ -226,6 +226,28 @@ if ( $op eq 'cud-send_receipt' ) {
     }
 }
 
+if ( $op eq 'cud-edit_note' ) {
+
+    output_and_exit_if_error( $input, $cookie, $template, { check => 'csrf_token' } );
+
+    my $payment_id = scalar $input->param('accountlines_id');
+    my $note       = scalar $input->param('edited_note');
+
+    my $payment = Koha::Account::Lines->find($payment_id);
+
+    $schema->txn_do(
+        sub {
+            # Update the note and date in the account line
+            $payment->set(
+                {
+                    date => \'NOW()',
+                    note => $note
+                }
+            )->store();
+        }
+    );
+}
+
 #get account details
 my $total = $patron->account->balance;
 

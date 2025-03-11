@@ -132,6 +132,21 @@
                                     [% account.checkout.library.branchname | html %]
                                 [% END %]
                             </td>
+                            <td>
+                                [% account.note | html_line_break %]
+                                [% IF CAN_user_updatecharges_edit_notes %]
+                                    <button
+                                        type="button"
+                                        class="btn btn-default btn-xs edit-action"
+                                        data-toggle="modal"
+                                        data-target="#editNoteModal"
+                                        data-accountline="[% account.accountlines_id | html %]"
+                                        data-note="[% account.note | html %]"
+                                        data-member="[% account.borrowernumber | html %]"
+                                        ><i class="fa-solid fa-pen"></i> Edit</button
+                                    >
+                                [% END %]
+                            </td>
                             <td>[% IF account.itemnumber %][% Branches.GetName( account.item.homebranch ) | html %][% END %]</td>
                             <td>[% account.note | html_line_break %]</td>
                             [% IF account.amount <= 0 %]
@@ -477,6 +492,50 @@
 </div>
 <!-- /#voidPaymentModal -->
 
+<!-- Edit note modal -->
+<div class="modal" id="editNoteModal" tabindex="-1" role="dialog" aria-labelledby="editNoteLabel">
+    <form id="edit_form" action="/cgi-bin/koha/members/boraccount.pl" method="post" enctype="multipart/form-data" class="validated">
+        [% INCLUDE 'csrf-token.inc' %]
+        <input type="hidden" name="accountlines_id" value="" id="noteline" />
+        <input type="hidden" name="op" value="cud-edit_note" />
+        <input type="hidden" name="borrowernumber" value="[% account.borrowernumber | html %]" />
+
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="closebtn" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h4 class="modal-title" id="editNoteLabel">Edit note</h4>
+                </div>
+
+                <div class="modal-body">
+                    <fieldset class="rows">
+                        <ol>
+                            <li>
+                                <label for="edited_note">Note: </label>
+                                <input name="edited_note" id="edited_note" value="" />
+                            </li>
+                        </ol>
+                    </fieldset>
+                    <!-- /.rows -->
+                </div>
+                <!-- /.modal-body -->
+
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-default">Confirm</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                </div>
+                <!-- /.modal-footer -->
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </form>
+    <!-- /#void_form -->
+</div>
+<!-- /#editNoteModal -->
+
 <!-- Cancel charge modal -->
 <div class="modal" id="cancelChargeModal" tabindex="-1" role="dialog" aria-labelledby="cancelChangreLabel">
     <form method="post" action="/cgi-bin/koha/members/cancel-charge.pl">
@@ -604,6 +663,18 @@
                 var button = $(e.relatedTarget);
                 var item = button.data('accountlines_id');
                 $('#accountlines_id').val(item);
+            });
+
+            $("#editNoteModal").on("shown.bs.modal", function(e) {
+                var button = $(e.relatedTarget);
+                var item = button.data('item');
+                $("#item + span").replaceWith(item);
+
+                var accountline = button.data('accountline');
+                $('#noteline').val(accountline);
+
+                var note = button.data('note');
+                $('#edited_note').val(note);
             });
 
             $(".receipt-email-action").on("click", function(e){
