@@ -291,7 +291,11 @@ if ($op eq 'add_form') {
         # Hidden feature: If search was field$subfield, redirect to the subfield edit form
         my ( $tagfield, $tagsubfield ) = split /\$/, $searchfield;
         if ( $tagsubfield ) {
-            print $input->redirect('/cgi-bin/koha/admin/marc_subfields_structure.pl?op=add_form&tagfield='.$tagfield.'&frameworkcode='.$frameworkcode.'#sub'.$tagsubfield.'field');
+            print $input->redirect(
+                sprintf
+                    '/cgi-bin/koha/admin/marc_subfields_structure.pl?op=add_form&tagfield=%s&frameworkcode=%s#%s_panel',
+                $tagfield, $frameworkcode, $tagsubfield
+            );
             exit;
         }
 		#here, normal old style : display every tags
