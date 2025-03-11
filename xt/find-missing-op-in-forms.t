@@ -18,7 +18,7 @@
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
-use Test::More tests => 1;
+use Test::More tests => 2;
 use File::Slurp;
 use Data::Dumper;
 
@@ -31,12 +31,13 @@ push @files, `git ls-files 'koha-tmpl/opac-tmpl/bootstrap/en/*.inc'`;
 # Staff
 push @files, `git ls-files 'koha-tmpl/intranet-tmpl/prog/en/*.tt'`;
 push @files, `git ls-files 'koha-tmpl/intranet-tmpl/prog/en/*.inc'`;
+ok( @files > 0, 'We should test something' );
 
 my @errors;
-for my $file ( @files ) {
+for my $file (@files) {
     chomp $file;
     my @e = catch_missing_op($file);
-    push @errors, sprintf "%s:%s", $file, join (",", @e) if @e;
+    push @errors, sprintf "%s:%s", $file, join( ",", @e ) if @e;
 }
 
 is(
@@ -72,7 +73,7 @@ sub catch_missing_op {
             } else {
                 push @errors, $line_open_form;
             }
-            $has_op = 0;
+            $has_op  = 0;
             $in_form = 0;
         }
     }

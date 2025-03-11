@@ -19,19 +19,20 @@
 
 use Modern::Perl;
 use Test::More;
-plan tests => 1;
+plan tests => 2;
 
 use File::Spec;
 use File::Slurp qw( read_file );
 use Data::Dumper;
 
 my $curdir = File::Spec->curdir();
-my @dirs = `git ls-tree -d --name-only HEAD`;
+my @dirs   = `git ls-tree -d --name-only HEAD`;
+ok( @dirs > 0, 'We should test something' );
 my $makefile = read_file("$curdir/Makefile.PL");
 my @missing;
 for my $d ( sort @dirs ) {
     chomp $d;
-    next if $d =~ /^debian$/;
+    next if $d        =~ /^debian$/;
     next if $makefile =~ m{'\./$d('|\/)}xms;
     push @missing, $d;
 }
