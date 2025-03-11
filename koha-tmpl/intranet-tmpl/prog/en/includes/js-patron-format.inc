@@ -25,10 +25,12 @@
 
             if (patron.middle_name != null && patron.middle_name != "") {
                 firstname += " " + escape_str(patron.middle_name);
+                preferred_name += " " + escape_str(patron.middle_name);
             }
 
             if (patron.other_name != null && patron.other_name != "") {
                 firstname += " (" + escape_str(patron.other_name) + ")";
+                preferred_name += " (" + escape_str(patron.other_name) + ")";
             }
             if (config && config.invert_name) {
                 name = surname + (preferred_name ? ", " + preferred_name : "");
