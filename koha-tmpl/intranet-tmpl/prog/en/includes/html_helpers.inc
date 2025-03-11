@@ -159,7 +159,7 @@
                         [% ELSE %]
                             <input type="text" id="[%- mv.id | html -%]" name="[% kohafield | html %]" class="input_marceditor [% kohafield | html %]" maxlength="[%- mv.maxlength | html -%]" value="[%- mv.value | html -%]" />
                             [% SET dopop = "Dopop('/cgi-bin/koha/authorities/auth_finder.pl?authtypecode=\"${mv.authtypecode}\"&index=${mv.id}','${mv.id}')" %]
-                            <a href="#" class="buttonDot" onclick="[%- dopop | html -%]; return false;" title="Tag editor">...</a>
+                            <a href="#" class="buttonDot tag_editor" onclick="[%- dopop | html -%]; return false;" title="Tag editor">...</a>
                         [% END %]
                     [% ELSIF ( mv.type == 'text_plugin' ) %]
                         [% IF mv.readonly %]
