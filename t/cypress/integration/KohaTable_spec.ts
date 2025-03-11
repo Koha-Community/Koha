@@ -591,9 +591,23 @@ describe("Hit all tables", () => {
                             });
                         });
                 });
+            cy.query(
+                "SELECT value FROM systempreferences WHERE variable='AlwaysShowHoldingsTableFilters'"
+            ).then(value => {
+                cy.wrap(value).as("syspref_AlwaysShowHoldingsTableFilters");
+            });
         });
 
-        afterEach(() => {});
+        afterEach(
+            () =>
+                function () {
+                    cleanup();
+                    cy.set_syspref(
+                        "AlwaysShowHoldingsTableFilters",
+                        this.syspref_AlwaysShowHoldingsTableFilters
+                    );
+                }
+        );
 
         it("Correctly init the table", function () {
             // Do not use `() => {` or this.biblio_id won't be retrieved
@@ -610,6 +624,7 @@ describe("Hit all tables", () => {
                     damaged_status: 0,
                     not_for_loan_status: 0,
                     course_item: null,
+                    cover_image_ids: [],
                 },
             }).then(items => {
                 cy.intercept("get", `/api/v1/biblios/${biblio_id}/items*`, {
@@ -638,7 +653,6 @@ describe("Hit all tables", () => {
                     RESTdefaultPageSize
                 );
 
-                cy.get(".show_filters").click();
                 cy.get(`#${table_id}_wrapper .dt-info`).contains(
                     `Showing 1 to ${RESTdefaultPageSize} of ${baseTotalCount} entries`
                 );
@@ -660,6 +674,7 @@ describe("Hit all tables", () => {
                     damaged_status: 0,
                     not_for_loan_status: 0,
                     course_item: null,
+                    cover_image_ids: [],
                 },
             }).then(items => {
                 cy.intercept("get", `/api/v1/biblios/${biblio_id}/items*`, {
@@ -671,52 +686,108 @@ describe("Hit all tables", () => {
                     },
                 });
 
-                cy.visit(
-                    "/cgi-bin/koha/catalogue/detail.pl?biblionumber=" +
-                        biblio_id
-                );
+                cy.set_syspref("AlwaysShowHoldingsTableFilters", 0).then(() => {
+                    cy.visit(
+                        "/cgi-bin/koha/catalogue/detail.pl?biblionumber=" +
+                            biblio_id
+                    );
 
-                // Hide the 'URL' column
-                mock_table_settings(
-                    {
-                        columns: { uri: { is_hidden: 1 } },
-                    },
-                    "items_table_settings.holdings"
-                );
+                    // Hide the 'URL' column
+                    mock_table_settings(
+                        {
+                            columns: { uri: { is_hidden: 1 } },
+                        },
+                        "items_table_settings.holdings"
+                    );
 
-                cy.window().then(win => {
-                    win.libraries_map = items.reduce((map, i) => {
-                        map[i.library_id] = i.library_id;
-                        return map;
-                    }, {});
+                    cy.window().then(win => {
+                        win.libraries_map = items.reduce((map, i) => {
+                            map[i.library_id] = i.library_id;
+                            return map;
+                        }, {});
+                    });
+
+                    cy.get("@columns").then(columns => {
+                        cy.get(`#${table_id}_wrapper tbody tr`).should(
+                            "have.length",
+                            RESTdefaultPageSize
+                        );
+
+                        // Filters are not displayed
+                        cy.get(`#${table_id} thead tr`).should(
+                            "have.length",
+                            1
+                        );
+
+                        cy.get(`#${table_id} th`).contains("Status");
+                        cy.get(`#${table_id} th`)
+                            .contains("URL")
+                            .should("not.exist");
+                        cy.get(`#${table_id} th`)
+                            .contains("Course reserves")
+                            .should("not.exist");
+
+                        cy.get(".show_filters").click();
+                        cy.get(`#${table_id}_wrapper .dt-info`).contains(
+                            `Showing 1 to ${RESTdefaultPageSize} of ${baseTotalCount} entries`
+                        );
+                        // Filters are displayed
+                        cy.get(`#${table_id} thead tr`).should(
+                            "have.length",
+                            2
+                        );
+
+                        cy.get(`#${table_id} th`).contains("Status");
+                        cy.get(`#${table_id} th`)
+                            .contains("URL")
+                            .should("not.exist");
+                        cy.get(`#${table_id} th`)
+                            .contains("Course reserves")
+                            .should("not.exist");
+                    });
                 });
 
-                cy.get("@columns").then(columns => {
-                    cy.get(`#${table_id}_wrapper tbody tr`).should(
-                        "have.length",
-                        RESTdefaultPageSize
+                cy.set_syspref("AlwaysShowHoldingsTableFilters", 1).then(() => {
+                    cy.visit(
+                        "/cgi-bin/koha/catalogue/detail.pl?biblionumber=" +
+                            biblio_id
                     );
 
-                    cy.get(`#${table_id} th`).contains("Status");
-                    cy.get(`#${table_id} th`)
-                        .contains("URL")
-                        .should("not.exist");
-                    cy.get(`#${table_id} th`)
-                        .contains("Course reserves")
-                        .should("not.exist");
-
-                    cy.get(".show_filters").click();
-                    cy.get(`#${table_id}_wrapper .dt-info`).contains(
-                        `Showing 1 to ${RESTdefaultPageSize} of ${baseTotalCount} entries`
+                    // Hide the 'URL' column
+                    mock_table_settings(
+                        {
+                            columns: { uri: { is_hidden: 1 } },
+                        },
+                        "items_table_settings.holdings"
                     );
 
-                    cy.get(`#${table_id} th`).contains("Status");
-                    cy.get(`#${table_id} th`)
-                        .contains("URL")
-                        .should("not.exist");
-                    cy.get(`#${table_id} th`)
-                        .contains("Course reserves")
-                        .should("not.exist");
+                    cy.window().then(win => {
+                        win.libraries_map = items.reduce((map, i) => {
+                            map[i.library_id] = i.library_id;
+                            return map;
+                        }, {});
+                    });
+
+                    cy.get("@columns").then(columns => {
+                        cy.get(`#${table_id}_wrapper tbody tr`).should(
+                            "have.length",
+                            RESTdefaultPageSize
+                        );
+
+                        // Filters are displayed
+                        cy.get(`#${table_id} thead tr`).should(
+                            "have.length",
+                            2
+                        );
+
+                        cy.get(".hide_filters").click();
+
+                        // Filters are not displayed
+                        cy.get(`#${table_id} thead tr`).should(
+                            "have.length",
+                            1
+                        );
+                    });
                 });
             });
         });
