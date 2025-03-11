@@ -12,23 +12,24 @@ use Koha::Patrons;
 use C4::Log qw( cronlogaction );
 
 my (
-    $help,          $verbose,    $not_borrowed_since, $expired_before, $last_seen,
-    @category_code, $branchcode, $file, $confirm
+    $help,          $verbose,    $not_borrowed_since, $expired_before,            $last_seen,
+    @category_code, $branchcode, $file,               @without_restriction_types, $confirm
 );
 
 my $command_line_options = join( " ", @ARGV );
 cronlogaction( { info => $command_line_options } );
 
 GetOptions(
-    'h|help'               => \$help,
-    'v|verbose'            => \$verbose,
-    'not_borrowed_since:s' => \$not_borrowed_since,
-    'expired_before:s'     => \$expired_before,
-    'last_seen:s'          => \$last_seen,
-    'category_code:s'      => \@category_code,
-    'library:s'            => \$branchcode,
-    'file:s'               => \$file,
-    'c|confirm'            => \$confirm,
+    'h|help'                     => \$help,
+    'v|verbose'                  => \$verbose,
+    'not_borrowed_since:s'       => \$not_borrowed_since,
+    'expired_before:s'           => \$expired_before,
+    'last_seen:s'                => \$last_seen,
+    'category_code:s'            => \@category_code,
+    'library:s'                  => \$branchcode,
+    'file:s'                     => \$file,
+    'without_restriction_type:s' => \@without_restriction_types,
+    'c|confirm'                  => \$confirm,
 ) || pod2usage(1);
 
 if ($help) {
@@ -49,6 +50,21 @@ unless ( $not_borrowed_since or $expired_before or $last_seen or @category_code 
     pod2usage(q{At least one filter is mandatory});
 }
 
+if ( @without_restriction_types > 0 ) {
+    my %restriction_types;
+    @restriction_types{ map { $_->code() } Koha::Patron::Restriction::Types->search()->as_list } = ();
+
+    my @invalid_restriction_types;
+    foreach my $restriction_type (@without_restriction_types) {
+        if ( !exists $restriction_types{$restriction_type} ) {
+            push @invalid_restriction_types, $restriction_type;
+        }
+    }
+    if ( @invalid_restriction_types > 0 ) {
+        die 'Invalid restriction type(s): ' . join ', ', @invalid_restriction_types;
+    }
+}
+
 my @file_members;
 if ($file) {
     open( my $fh, '<:encoding(UTF-8)', $file ) or die "Could not open file $file' $!";
@@ -65,11 +81,12 @@ my $members;
 if ( $not_borrowed_since or $expired_before or $last_seen or @category_code or $branchcode ) {
     $members = GetBorrowersToExpunge(
         {
-            not_borrowed_since => $not_borrowed_since,
-            expired_before     => $expired_before,
-            last_seen          => $last_seen,
-            category_code      => \@category_code,
-            branchcode         => $branchcode,
+            not_borrowed_since        => $not_borrowed_since,
+            expired_before            => $expired_before,
+            last_seen                 => $last_seen,
+            category_code             => \@category_code,
+            branchcode                => $branchcode,
+            without_restriction_types => \@without_restriction_types
         }
     );
 }
@@ -149,7 +166,7 @@ delete_patrons - This script deletes patrons
 
 =head1 SYNOPSIS
 
-delete_patrons.pl [-h|--help] [-v|--verbose] [-c|--confirm] [--not_borrowed_since=DATE] [--expired_before=DATE] [--last-seen=DATE] [--category_code=CAT] [--category_code=CAT ...] [--library=LIBRARY] [--file=FILE]
+delete_patrons.pl [-h|--help] [-v|--verbose] [-c|--confirm] [--not_borrowed_since=DATE] [--expired_before=DATE] [--last-seen=DATE] [--category_code=CAT] [--category_code=CAT ...] [--library=LIBRARY] [--file=FILE] [--without_restriction_type=TYPE] [--without_restriction_type=TYPE ...]
 
 Dates should be in ISO format, e.g., 2013-07-19, and can be generated
 with `date -d '-3 month' --iso-8601`.
@@ -201,6 +218,12 @@ Delete patrons in this library.
 
 Delete patrons whose borrower numbers are in this file.  If other criteria are defined
 it will only delete those in the file that match those criteria.
+
+=item B<--without_restriction_type>
+
+Delete patrons who DO NOT have a restriction with this restriction type.
+
+Can be used multiple times for additional restriction types.
 
 =item B<-c|--confirm>
 

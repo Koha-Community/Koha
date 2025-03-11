@@ -248,7 +248,8 @@ sub GetBorrowersToExpunge {
         ? C4::Context->userenv->{branch}
         : ""
         );
-    my $filterpatronlist = $params->{'patron_list_id'};
+    my $filterpatronlist          = $params->{'patron_list_id'};
+    my $without_restriction_types = $params->{'without_restriction_types'};
 
     my $dbh   = C4::Context->dbh;
     my $query = q|
@@ -307,6 +308,19 @@ sub GetBorrowersToExpunge {
     if ($filterdate) {
         $query .= " AND ( latestissue < ? OR latestissue IS NULL ) ";
         push @query_params, $filterdate;
+    }
+    if ( ref($without_restriction_types) ne 'ARRAY' ) {
+        $without_restriction_types = [$without_restriction_types];
+    }
+    if ( @$without_restriction_types > 0 ) {
+        $query .= q|
+            AND NOT EXISTS (
+                SELECT 1
+                FROM borrower_debarments
+                WHERE borrower_debarments.borrowernumber = xxx.borrowernumber
+                    AND borrower_debarments.type IN (|
+            . join( ',', ('?') x @$without_restriction_types ) . "))";
+        push @query_params, @$without_restriction_types;
     }
 
     if ( my $anonymous_patron = C4::Context->preference("AnonymousPatron") ) {
