@@ -1298,65 +1298,68 @@
                                         <i class="fa fa-caret-down" aria-hidden="true"></i>
                                         Patron account flags
                                     </legend>
-                                    <p>Setting a value here will prevent patron from circulating materials and placing holds on the OPAC</p>
-                                    <ol class="radio">
-                                        [% UNLESS nogonenoaddress %]
-                                            <li>
-                                                <label class="radio [% IF mandatorygonenoaddress %]required[% END %]" for="yesgonenoaddress"> Gone no address: </label>
-                                                [% IF CAN_user_circulate_manage_restrictions %]
-                                                    <label for="yesgonenoaddress">
-                                                        [% IF ( borrower_data.gonenoaddress ) %]
-                                                            <input type="radio" id="yesgonenoaddress" name="gonenoaddress" value="1" checked="checked" />
-                                                        [% ELSE %]
-                                                            <input type="radio" id="yesgonenoaddress" name="gonenoaddress" value="1" />
-                                                        [% END %]
-                                                        Yes
-                                                    </label>
-                                                    <label for="nogonenoaddress">
-                                                        [% IF ( borrower_data.gonenoaddress ) %]
-                                                            <input type="radio" id="nogonenoaddress" name="gonenoaddress" value="0" />
-                                                        [% ELSE %]
-                                                            <input type="radio" id="nogonenoaddress" name="gonenoaddress" value="0" checked="checked" />
-                                                        [% END %]
-                                                        No
-                                                    </label>
-                                                [% ELSE %]
-                                                    [% IF borrower_data.gonenoaddress %]<span>Yes</span>[% ELSE %]<span>No</span>[% END %]
-                                                [% END # /IF CAN_user_circulate_manage_restrictions %]
-                                                [% IF mandatorygonenoaddress %]
-                                                    <span class="required">Required</span>
-                                                [% END %]
-                                            </li>
-                                        [% END # /UNLESS nogonenoaddress %]
-                                        [% UNLESS nolost %]
-                                            <li>
-                                                <label class="radio [% IF mandatorylost %]required[% END %]" for="yeslost"> Lost card: </label>
-                                                [% IF CAN_user_circulate_manage_restrictions %]
-                                                    <label for="yeslost">
-                                                        [% IF ( borrower_data.lost ) %]
-                                                            <input type="radio" id="yeslost" name="lost" value="1" checked="checked" />
-                                                        [% ELSE %]
-                                                            <input type="radio" id="yeslost" name="lost" value="1" />
-                                                        [% END %]
-                                                        Yes
-                                                    </label>
-                                                    <label for="nolost">
-                                                        [% IF ( borrower_data.lost ) %]
-                                                            <input type="radio" id="nolost" name="lost" value="0" />
-                                                        [% ELSE %]
-                                                            <input type="radio" id="nolost" name="lost" value="0" checked="checked" />
-                                                        [% END %]
-                                                        No
-                                                    </label>
-                                                [% ELSE %]
-                                                    [% IF borrower_data.lost %]<span>Yes</span>[% ELSE %]<span>No</span>[% END %]
-                                                [% END # /IF CAN_user_circulate_manage_restrictions %]
-                                                [% IF mandatorylost %]
-                                                    <span class="required">Required</span>
-                                                [% END %]
-                                            </li>
-                                        [% END # /UNLESS nogonenoaddress %]
-                                    </ol>
+                                    <div class="patron_account_flags">
+                                        <p>Setting a value here will prevent patron from circulating materials and placing holds on the OPAC</p>
+                                        <ol class="radio">
+                                            [% UNLESS nogonenoaddress %]
+                                                <li>
+                                                    <label class="radio [% IF mandatorygonenoaddress %]required[% END %]" for="yesgonenoaddress"> Gone no address: </label>
+                                                    [% IF CAN_user_circulate_manage_restrictions %]
+                                                        <label for="yesgonenoaddress">
+                                                            [% IF ( borrower_data.gonenoaddress ) %]
+                                                                <input type="radio" id="yesgonenoaddress" name="gonenoaddress" value="1" checked="checked" />
+                                                            [% ELSE %]
+                                                                <input type="radio" id="yesgonenoaddress" name="gonenoaddress" value="1" />
+                                                            [% END %]
+                                                            Yes
+                                                        </label>
+                                                        <label for="nogonenoaddress">
+                                                            [% IF ( borrower_data.gonenoaddress ) %]
+                                                                <input type="radio" id="nogonenoaddress" name="gonenoaddress" value="0" />
+                                                            [% ELSE %]
+                                                                <input type="radio" id="nogonenoaddress" name="gonenoaddress" value="0" checked="checked" />
+                                                            [% END %]
+                                                            No
+                                                        </label>
+                                                    [% ELSE %]
+                                                        [% IF borrower_data.gonenoaddress %]<span>Yes</span>[% ELSE %]<span>No</span>[% END %]
+                                                    [% END # /IF CAN_user_circulate_manage_restrictions %]
+                                                    [% IF mandatorygonenoaddress %]
+                                                        <span class="required">Required</span>
+                                                    [% END %]
+                                                </li>
+                                            [% END # /UNLESS nogonenoaddress %]
+                                            [% UNLESS nolost %]
+                                                <li>
+                                                    <label class="radio [% IF mandatorylost %]required[% END %]" for="yeslost"> Lost card: </label>
+                                                    [% IF CAN_user_circulate_manage_restrictions %]
+                                                        <label for="yeslost">
+                                                            [% IF ( borrower_data.lost ) %]
+                                                                <input type="radio" id="yeslost" name="lost" value="1" checked="checked" />
+                                                            [% ELSE %]
+                                                                <input type="radio" id="yeslost" name="lost" value="1" />
+                                                            [% END %]
+                                                            Yes
+                                                        </label>
+                                                        <label for="nolost">
+                                                            [% IF ( borrower_data.lost ) %]
+                                                                <input type="radio" id="nolost" name="lost" value="0" />
+                                                            [% ELSE %]
+                                                                <input type="radio" id="nolost" name="lost" value="0" checked="checked" />
+                                                            [% END %]
+                                                            No
+                                                        </label>
+                                                    [% ELSE %]
+                                                        [% IF borrower_data.lost %]<span>Yes</span>[% ELSE %]<span>No</span>[% END %]
+                                                    [% END # /IF CAN_user_circulate_manage_restrictions %]
+                                                    [% IF mandatorylost %]
+                                                        <span class="required">Required</span>
+                                                    [% END %]
+                                                </li>
+                                            [% END # /UNLESS nogonenoaddress %]
+                                        </ol>
+                                    </div>
+                                    <!-- /.patron_account_flags -->
                                 </fieldset>
                                 <!-- /#memberentry_account_flags -->
                             [% END %]
