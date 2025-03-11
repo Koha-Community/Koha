@@ -18,7 +18,7 @@
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
-use Test::More tests => 1;
+use Test::More tests => 2;
 use File::Slurp qw( read_file );
 
 my @files;
@@ -30,6 +30,7 @@ push @files, `git ls-files 'koha-tmpl/opac-tmpl/bootstrap/en/*.inc'`;
 # Staff
 push @files, `git ls-files 'koha-tmpl/intranet-tmpl/prog/en/*.tt'`;
 push @files, `git ls-files 'koha-tmpl/intranet-tmpl/prog/en/*.inc'`;
+ok( @files > 0, 'We should test something' );
 
 my @errors;
 for my $file (@files) {

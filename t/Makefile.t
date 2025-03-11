@@ -17,10 +17,11 @@
 
 use Modern::Perl;
 use Test::NoWarnings;
-use Test::More tests => 2;
+use Test::More tests => 3;
 use File::Slurp;
 
 my @files = `git ls-tree HEAD|tr -s '\t' ' '|cut -d' ' -f4`;
+ok( @files > 0, 'We should test something' );
 
 my $MakeFile = read_file('Makefile.PL');
 my @MakeFile = split "\n", $MakeFile;
