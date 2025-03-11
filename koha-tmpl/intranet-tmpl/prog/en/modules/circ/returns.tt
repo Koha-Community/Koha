@@ -447,11 +447,12 @@
                             <input type="hidden" name="multiple_confirm" value="1" />
                             <input type="hidden" name="dropboxmode" value="[% dropboxmode | html %]" />
                             <input type="hidden" name="exemptfine" value="[% exemptfine | html %]" />
-                            [% FOREACH inputloo IN inputloop %]
-                                <input type="hidden" name="ri-[% inputloo.counter | html %]" value="[% inputloo.barcode | html %]" />
-                                <input type="hidden" name="dd-[% inputloo.counter | html %]" value="[% inputloo.duedate | html %]" />
-                                <input type="hidden" name="bn-[% inputloo.counter | html %]" value="[% inputloo.borrowernumber | html %]" />
-                                <input type="hidden" name="nr-[% inputloo.counter | html %]" value="[% inputloo.not_returned | html %]" />
+                            [% FOREACH checkin IN checkins %]
+                                <input type="hidden" name="checkin_counter" value="[% loop.count | html %]" />
+                                <input type="hidden" name="checkin_barcode_[% loop.count | html %]" value="[% checkin.barcode | html %]" />
+                                <input type="hidden" name="checkin_duedate_[% loop.count | html %]" value="[% checkin.duedate | html %]" />
+                                <input type="hidden" name="checkin_borrowernumber_[% loop.count | html %]" value="[% checkin.borrowernumber | html %]" />
+                                <input type="hidden" name="checkin_not_returned_[% loop.count | html %]" value="[% checkin.not_returned | html %]" />
                             [% END %]
                             <button type="submit" class="btn btn-default approve" accesskey="y"><i class="fa fa-check"></i> Yes, checkin (Y)</button>
                         </form>
@@ -531,11 +532,12 @@
                             <input type="hidden" name="barcode" value="[% item.barcode | html %]" />
                             <input type="hidden" name="op" value="cud-checkin" />
                             <input type="hidden" name="confirm_items_bundle_return" value="1" />
-                            [% FOREACH inputloo IN inputloop %]
-                                <input type="hidden" name="ri-[% inputloo.counter | html %]" value="[% inputloo.barcode | html %]" />
-                                <input type="hidden" name="dd-[% inputloo.counter | html %]" value="[% inputloo.duedate | html %]" />
-                                <input type="hidden" name="bn-[% inputloo.counter | html %]" value="[% inputloo.borrowernumber | html %]" />
-                                <input type="hidden" name="nr-[% inputloo.counter | html %]" value="[% inputloo.not_returned | html %]" />
+                            [% FOREACH checkin IN checkins %]
+                                <input type="hidden" name="checkin_counter" value="[% loop.count | html %]" />
+                                <input type="hidden" name="checkin_barcode_[% loop.count | html %]" value="[% checkin.barcode | html %]" />
+                                <input type="hidden" name="checkin_duedate_[% loop.count | html %]" value="[% checkin.duedate | html %]" />
+                                <input type="hidden" name="checkin_borrowernumber_[% loop.count | html %]" value="[% checkin.borrowernumber | html %]" />
+                                <input type="hidden" name="checkin_not_returned_[% loop.count | html %]" value="[% checkin.not_returned | html %]" />
                             [% END %]
                             [% IF item.onloan %]
                                 <button type="submit" class="btn btn-default"><i class="fa fa-check"></i> Confirm checkin and mark missing items as lost</button>
@@ -601,11 +603,12 @@
                             <input type="hidden" name="return_date_override_remember" value="[% return_date_override_remember | html %]" />
                             <input type="hidden" name="itemnumber" value="[% itemnumber | html %]" />
                             <input type="hidden" name="transit" value="[% NewTransfer | html %]" />
-                            [% FOREACH inputloo IN inputloop %]
-                                <input type="hidden" name="ri-[% inputloo.counter | html %]" value="[% inputloo.barcode | html %]" />
-                                <input type="hidden" name="dd-[% inputloo.counter | html %]" value="[% inputloo.duedate | html %]" />
-                                <input type="hidden" name="bn-[% inputloo.counter | html %]" value="[% inputloo.borrowernumber | html %]" />
-                                <input type="hidden" name="nr-[% inputloo.counter | html %]" value="[% inputloo.not_returned | html %]" />
+                            [% FOREACH checkin IN checkins %]
+                                <input type="hidden" name="checkin_counter" value="[% loop.count | html %]" />
+                                <input type="hidden" name="checkin_barcode_[% loop.count | html %]" value="[% checkin.barcode | html %]" />
+                                <input type="hidden" name="checkin_duedate_[% loop.count | html %]" value="[% checkin.duedate | html %]" />
+                                <input type="hidden" name="checkin_borrowernumber_[% loop.count | html %]" value="[% checkin.borrowernumber | html %]" />
+                                <input type="hidden" name="checkin_not_returned_[% loop.count | html %]" value="[% checkin.not_returned | html %]" />
                             [% END %]
 
                             <div class="modal-header">
@@ -701,11 +704,12 @@
                                     <h4><strong>Hold at</strong> [% Branches.GetName( destbranch ) | html %]</h4>
                                 [% END %]
 
-                                [% FOREACH inputloo IN inputloop %]
-                                    <input type="hidden" name="ri-[% inputloo.counter | html %]" value="[% inputloo.barcode | html %]" />
-                                    <input type="hidden" name="dd-[% inputloo.counter | html %]" value="[% inputloo.duedate | html %]" />
-                                    <input type="hidden" name="bn-[% inputloo.counter | html %]" value="[% inputloo.borrowernumber | html %]" />
-                                    <input type="hidden" name="nr-[% inputloo.counter | html %]" value="[% inputloo.not_returned | html %]" />
+                                [% FOREACH checkin IN checkins %]
+                                    <input type="hidden" name="checkin_counter" value="[% loop.count | html %]" />
+                                    <input type="hidden" name="checkin_barcode_[% loop.count | html %]" value="[% checkin.barcode | html %]" />
+                                    <input type="hidden" name="checkin_duedate_[% loop.count | html %]" value="[% checkin.duedate | html %]" />
+                                    <input type="hidden" name="checkin_borrowernumber_[% loop.count | html %]" value="[% checkin.borrowernumber | html %]" />
+                                    <input type="hidden" name="checkin_not_returned_[% loop.count | html %]" value="[% checkin.not_returned | html %]" />
                                 [% END %]
 
                                 <input type="hidden" name="op" value="cud-affect_reserve" />
@@ -815,11 +819,13 @@
                                 <input type="hidden" name="exemptfine" value="[% exemptfine | html %]" />
                                 <input type="hidden" name="dropboxmode" value="[% dropboxmode | html %]" />
                                 <input type="hidden" name="forgivemanualholdsexpire" value="[% forgivemanualholdsexpire | html %]" />
-                                [% FOREACH inputloo IN inputloop %]
-                                    <input type="hidden" name="ri-[% inputloo.counter | html %]" value="[% inputloo.barcode | html %]" />
-                                    <input type="hidden" name="dd-[% inputloo.counter | html %]" value="[% inputloo.duedate | html %]" />
-                                    <input type="hidden" name="bn-[% inputloo.counter | html %]" value="[% inputloo.borrowernumber | html %]" />
-                                    <input type="hidden" name="nr-[% inputloo.counter | html %]" value="[% inputloo.not_returned | html %]" />
+
+                                [% FOREACH checkin IN checkins %]
+                                    <input type="hidden" name="checkin_counter" value="[% loop.count | html %]" />
+                                    <input type="hidden" name="checkin_barcode_[% loop.count | html %]" value="[% checkin.barcode | html %]" />
+                                    <input type="hidden" name="checkin_duedate_[% loop.count | html %]" value="[% checkin.duedate | html %]" />
+                                    <input type="hidden" name="checkin_borrowernumber_[% loop.count | html %]" value="[% checkin.borrowernumber | html %]" />
+                                    <input type="hidden" name="checkin_not_returned_[% loop.count | html %]" value="[% checkin.not_returned | html %]" />
                                 [% END %]
                             </div>
                             <!-- /.modal-footer -->
@@ -919,11 +925,12 @@
                                     <h4><strong>Hold at</strong> [% Branches.GetName( destbranch ) | html %]</h4>
                                 [% END %]
 
-                                [% FOREACH inputloo IN inputloop %]
-                                    <input type="hidden" name="ri-[% inputloo.counter | html %]" value="[% inputloo.barcode | html %]" />
-                                    <input type="hidden" name="dd-[% inputloo.counter | html %]" value="[% inputloo.duedate | html %]" />
-                                    <input type="hidden" name="bn-[% inputloo.counter | html %]" value="[% inputloo.borrowernumber | html %]" />
-                                    <input type="hidden" name="nr-[% inputloo.counter | html %]" value="[% inputloo.not_returned | html %]" />
+                                [% FOREACH checkin IN checkins %]
+                                    <input type="hidden" name="checkin_counter" value="[% loop.count | html %]" />
+                                    <input type="hidden" name="checkin_barcode_[% loop.count | html %]" value="[% checkin.barcode | html %]" />
+                                    <input type="hidden" name="checkin_duedate_[% loop.count | html %]" value="[% checkin.duedate | html %]" />
+                                    <input type="hidden" name="checkin_borrowernumber_[% loop.count | html %]" value="[% checkin.borrowernumber | html %]" />
+                                    <input type="hidden" name="checkin_not_returned_[% loop.count | html %]" value="[% checkin.not_returned | html %]" />
                                 [% END %]
 
                                 <input type="hidden" name="op" value="cud-affect_reserve" />
@@ -1175,13 +1182,15 @@
                             <a href="#" title="Checkin settings"><i class="fa-solid fa-sliders"></i></a>
                         </div>
 
-                        <button type="submit" class="btn btn-primary">Check in</button>
-                        [% FOREACH inputloo IN inputloop %]
-                            <input type="hidden" name="ri-[% inputloo.counter | html %]" value="[% inputloo.barcode | html %]" />
-                            <input type="hidden" name="dd-[% inputloo.counter | html %]" value="[% inputloo.duedate | html %]" />
-                            <input type="hidden" name="bn-[% inputloo.counter | html %]" value="[% inputloo.borrowernumber | html %]" />
-                            <input type="hidden" name="nr-[% inputloo.counter | html %]" value="[% inputloo.not_returned | html %]" />
+                        [% FOREACH checkin IN checkins %]
+                            <input type="hidden" name="checkin_counter" value="[% loop.count | html %]" />
+                            <input type="hidden" name="checkin_barcode_[% loop.count | html %]" value="[% checkin.barcode | html %]" />
+                            <input type="hidden" name="checkin_duedate_[% loop.count | html %]" value="[% checkin.duedate | html %]" />
+                            <input type="hidden" name="checkin_borrowernumber_[% loop.count | html %]" value="[% checkin.borrowernumber | html %]" />
+                            <input type="hidden" name="checkin_not_returned_[% loop.count | html %]" value="[% checkin.not_returned | html %]" />
                         [% END %]
+
+                        <button type="submit" class="btn btn-primary">Check in</button>
                     </div>
                 </div>
                 <div class="col-sm-6">
@@ -1271,7 +1280,7 @@
     </form>
     <!-- /#checkin-form -->
 
-    [% IF ( riloop ) %]
+    [% IF ( checkins.size ) %]
         <div class="page-section">
             <h2>Checked-in items</h2>
             <table id="checkedintable">
@@ -1295,121 +1304,127 @@
                     </tr>
                 </thead>
 
-                [% FOREACH riloo IN riloop %]
+                [% FOREACH checkin IN checkins %]
                     <tr>
                         <td class="ci-duedate">
-                            [% IF ( riloo.not_returned AND riloo.duedate ) %]
+                            [% IF ( checkin.not_returned AND checkin.duedate ) %]
                                 <span class="problem not_returned">Item was not checked in</span>
                             [% END %]
-                            [% IF ( riloo.duedate ) %]
-                                [% IF ( riloo.return_overdue ) %]
-                                    <span class="overdue">[% riloo.duedate | $KohaDates as_due_date => 1 %] (overdue)</span>
+                            [% IF ( checkin.duedate ) %]
+                                [% IF ( checkin.return_overdue ) %]
+                                    <span class="overdue">[% checkin.duedate | $KohaDates as_due_date => 1 %] (overdue)</span>
                                 [% ELSE %]
-                                    [% riloo.duedate | $KohaDates as_due_date => 1 %]
+                                    [% checkin.duedate | $KohaDates as_due_date => 1 %]
                                 [% END %]
                             [% ELSE %]
                                 <span>Not checked out</span>
                             [% END %]
-                            [% IF ( riloo.damaged ) %]
-                                <span class="dmg">[% AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.damaged', authorised_value => riloo.damaged ) | html %]</span>
+                            [% IF ( checkin.item.damaged ) %]
+                                <span class="dmg">[% AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.damaged', authorised_value => checkin.item.damaged ) | html %]</span>
                             [% END %]
-                            [% IF ( riloo.withdrawn ) %]
-                                <span class="withdrawn">[% AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.withdrawn', authorised_value => riloo.withdrawn ) | html %]</span>
+                            [% IF ( checkin.item.withdrawn ) %]
+                                <span class="withdrawn">[% AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.withdrawn', authorised_value => checkin.item.withdrawn ) | html %]</span>
                             [% END %]
                         </td>
                         <td class="ci-title">
-                            <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% riloo.itembiblionumber | uri %]">
-                                [% riloo.itemtitle | html %]
+                            <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% checkin.biblio.biblionumber | uri %]">
+                                [% checkin.biblio.title | html %]
                                 <!-- prettier-ignore-start -->
-                                                    [% FOREACH subtitle IN riloo.subtitle.split(' \\| ') %] <span class="subtitle">[% subtitle | html %]</span>[% END %]
-                                                    [% FOREACH part_number IN riloo.part_number.split(' \\| ') %] <span class="part_number">[% part_number | html %]</span>[% END %]
-                                                    [% FOREACH part_name IN riloo.part_name.split(' \\| ') %] <span class="part_name">[% part_name | html %]<span>[% END %]
-                                                    <!-- prettier-ignore-end -->
+                                [% FOREACH subtitle IN checkin.biblio.subtitle.split(' \\| ') %] <span class="subtitle">[% subtitle | html %]</span>[% END %]
+                                [% FOREACH part_number IN checkin.biblio.part_number.split(' \\| ') %] <span class="part_number">[% part_number | html %]</span>[% END %]
+                                [% FOREACH part_name IN checkin.biblio.part_name.split(' \\| ') %] <span class="part_name">[% part_name | html %]<span>[% END %]
+                                <!-- prettier-ignore-end -->
                             </a>
-                            [% IF ( riloo.enumchron ) %]
+                            [% IF ( checkin.item.enumchron ) %]
                                 <br />
-                                <span class="item_enumeration" style="white-space: nowrap;">[% riloo.enumchron | html %]</span>
+                                <span class="item_enumeration" style="white-space: nowrap;">[% checkin.item.enumchron | html %]</span>
                             [% END %]
                         </td>
-                        <td class="ci-author">[% riloo.itemauthor | html %]</td>
+                        <td class="ci-author">[% checkin.biblio.author | html %]</td>
                         <td class="ci-barcode">
-                            <a href="/cgi-bin/koha/catalogue/moredetail.pl?biblionumber=[% riloo.itembiblionumber | uri %]&amp;itemnumber=[% riloo.itemnumber | uri %]#item[% riloo.itemnumber | uri %]">[% riloo.barcode | html %]</a>
+                            <a href="/cgi-bin/koha/catalogue/moredetail.pl?biblionumber=[% checkin.biblio.biblionumber | uri %]&amp;itemnumber=[% checkin.item.itemnumber | uri %]#item[% checkin.item.itemnumber | uri %]"
+                                >[% checkin.barcode | html %]</a
+                            >
                         </td>
-                        <td class="ci-homelibrary"> [% Branches.GetName( riloo.homebranch ) | html %] </td>
-                        <td class="ci-transferlibrary"> [% Branches.GetName( riloo.transferbranch ) | html %] </td>
+                        <td class="ci-homelibrary"> [% Branches.GetName( checkin.item.homebranch ) | html %] </td>
+                        [% SET transfer = checkin.item.get_transfer %]
+                        <td class="ci-transferlibrary"> [% IF transfer %][% Branches.GetName( transfer.tobranch ) | html %][% END %]</td>
                         <td class="ci-transferreason">
-                            [%- SWITCH riloo.transferreason -%]
+                            [% IF transfer %]
+                                [%- SWITCH transfer.reason -%]
 
-                            [%- CASE 'Manual' -%]
-                                <span>Manual</span>
-                            [%- CASE 'StockrotationAdvance' -%]
-                                <span>Stock rotation advance</span>
-                            [%- CASE 'StockrotationRepatriation' -%]
-                                <span>Stock rotation repatriation</span>
-                            [%- CASE 'ReturnToHome' -%]
-                                <span>Return to home library</span>
-                            [%- CASE 'ReturnToHolding' -%]
-                                <span>Return to holding library</span>
-                            [%- CASE 'RotatingCollection' -%]
-                                <span>Rotating collection</span>
-                            [%- CASE 'Reserve' -%]
-                                <span>Hold</span>
-                            [%- CASE 'LostReserve' -%]
-                                <span>Lost hold</span>
-                            [%- CASE 'CancelReserve' -%]
-                                <span>Cancelled hold</span>
-                            [%- CASE 'TransferCancellation' -%]
-                                <span>Transfer was cancelled whilst in transit</span>
-                            [%- CASE 'Recall' -%]
-                                <span>Recall</span>
-                            [%- CASE 'RecallCancellation' -%]
-                                <span>Cancelled recall</span>
+                                [%- CASE 'Manual' -%]
+                                    <span>Manual</span>
+                                [%- CASE 'StockrotationAdvance' -%]
+                                    <span>Stock rotation advance</span>
+                                [%- CASE 'StockrotationRepatriation' -%]
+                                    <span>Stock rotation repatriation</span>
+                                [%- CASE 'ReturnToHome' -%]
+                                    <span>Return to home library</span>
+                                [%- CASE 'ReturnToHolding' -%]
+                                    <span>Return to holding library</span>
+                                [%- CASE 'RotatingCollection' -%]
+                                    <span>Rotating collection</span>
+                                [%- CASE 'Reserve' -%]
+                                    <span>Hold</span>
+                                [%- CASE 'LostReserve' -%]
+                                    <span>Lost hold</span>
+                                [%- CASE 'CancelReserve' -%]
+                                    <span>Cancelled hold</span>
+                                [%- CASE 'TransferCancellation' -%]
+                                    <span>Transfer was cancelled whilst in transit</span>
+                                [%- CASE 'Recall' -%]
+                                    <span>Recall</span>
+                                [%- CASE 'RecallCancellation' -%]
+                                    <span>Cancelled recall</span>
+                                [%- END -%]
                             [%- END -%]
                         </td>
                         <td class="ci-shelvinglocation">
-                            <span class="shelvingloc">[% riloo.location | html %]</span>
+                            <span class="shelvingloc">[% checkin.item_location | html %]</span>
                         </td>
-                        <td class="ci-callnumber"> [% riloo.itemcallnumber | html %] </td>
-                        <td class="ci-dateaccessioned"> [% riloo.dateaccessioned | $KohaDates %] </td>
-                        <td class="ci-recordlevelitemtype"> [% ItemTypes.GetDescription( riloo.recordtype ) | html %] </td>
-                        <td class="ci-itemtype"> [% ItemTypes.GetDescription( riloo.itemtype ) | html %] </td>
-                        <td class="ci-collection"> [% AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.ccode', authorised_value => riloo.ccode) | html %] </td>
+                        <td class="ci-callnumber"> [% checkin.item.itemcallnumber | html %] </td>
+                        <td class="ci-dateaccessioned"> [% checkin.item.dateaccessioned | $KohaDates %] </td>
+                        <td class="ci-recordlevelitemtype"> [% ItemTypes.GetDescription( checkin.biblio.itemtype ) | html %] </td>
+                        <td class="ci-itemtype"> [% ItemTypes.GetDescription( checkin.item.itype ) | html %] </td>
+                        <td class="ci-collection"> [% AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.ccode', authorised_value => checkin.item.ccode) | html %] </td>
                         <td class="ci-patron">
-                            [% IF ( riloo.duedate ) %]
-                                [% INCLUDE 'patron-title.inc' patron=riloo.patron hide_patron_infos_if_needed=1 invert_name=1 %]
-                                [% IF riloo.borissuescount %]
+                            [% IF ( checkin.duedate ) %]
+                                [% INCLUDE 'patron-title.inc' patron=checkin.patron hide_patron_infos_if_needed=1 invert_name=1 %]
+                                [% SET issues_count = checkin.patron.checkouts.count %]
+                                [% IF issues_count %]
                                     <span class="results_summary nowrap">
                                         <span class="label">Checkouts:</span>
                                         <span class="badge text-bg-info">
-                                            <a href="/cgi-bin/koha/circ/circulation.pl?borrowernumber=[% riloo.patron.borrowernumber | uri %]">[% riloo.borissuescount | html %]</a>
+                                            <a href="/cgi-bin/koha/circ/circulation.pl?borrowernumber=[% checkin.patron.borrowernumber | uri %]">[% issues_count | html %]</a>
                                         </span>
                                     </span>
                                 [% END %]
-                                [% IF riloo.patron.privacy < 2 %]
+                                [% IF checkin.patron.privacy < 2 %]
                                     [%# 2 is the privacy rule "Never" (Delete my history immediately) %]
-                                    <a class="btn btn-default btn-xs printcheckinslip" href="#" data-borrowernumber="[% riloo.patron.borrowernumber | html %]"><i class="fa fa-print"></i> Print checkin slip</a>
+                                    <a class="btn btn-default btn-xs printcheckinslip" href="#" data-borrowernumber="[% checkin.patron.borrowernumber | html %]"><i class="fa fa-print"></i> Print checkin slip</a>
                                 [% END %]
                             [% ELSE %]
                                 Not checked out
                             [% END %]
                         </td>
                         <td class="ci-note">
-                            [% IF ( riloo.patron.borrowernotes ) %]
-                                <p><span class="circ-hlt patron-note">[% riloo.patron.borrowernotes | $raw | html_line_break %]</span></p>
+                            [% IF ( checkin.patron.borrowernotes ) %]
+                                <p><span class="circ-hlt patron-note">[% checkin.patron.borrowernotes | $raw | html_line_break %]</span></p>
                             [% END %]
-                            [% IF ( riloo.itemnote ) %]
-                                <p><span class="circ-hlt item-note-public">[% riloo.itemnote | html %]</span></p>
+                            [% IF ( checkin.item.itemnotes ) %]
+                                <p><span class="circ-hlt item-note-public">[% checkin.item.itemnotes | html %]</span></p>
                             [% END %]
-                            [% IF ( riloo.itemnotes_nonpublic ) %]
-                                <p><span class="circ-hlt item-note-nonpublic">[% riloo.itemnotes_nonpublic | html %]</span></p>
+                            [% IF ( checkin.item.itemnotes_nonpublic ) %]
+                                <p><span class="circ-hlt item-note-nonpublic">[% checkin.item.itemnotes_nonpublic | html %]</span></p>
                             [% END %]
                         </td>
                     </tr>
-                [% END # /FOREACH riloo %]
+                [% END # /FOREACH checkins %]
             </table>
             <!-- /#checkedintable --> </div
         ><!-- /.page-section -->
-    [% END # /IF riloop %]
+    [% END # /IF checkins.count %]
 [% END %]
 
 [% IF ( ReturnClaims ) %]
