@@ -45,7 +45,13 @@ unless ( C4::Context->preference('Pseudonymization') ) {
 $before //= format_sqldatetime( dt_from_string(), 'sql', undef, 1 );
 print "Searching for statistics before $before\n" if $verbose;
 
-my $statistics = Koha::Statistics->search( { datetime => { '<=' => $before } } );
+my $statistics = Koha::Statistics->search(
+    {
+        datetime       => { '<='  => $before },
+        type           => { '-in' => \@Koha::Statistic::pseudonymization_types },
+        borrowernumber => { '!='  => undef }
+    }
+);
 print $statistics->count() . " statistics found\n" if $verbose;
 
 
@@ -67,7 +73,7 @@ if ( !$confirm ) {
 }
 
 while ( my $statistic = $statistics->next ) {
-    $statistic->pseudonymize();
+    Koha::PseudonymizedTransaction->new_from_statistic($statistic)->store();
 }
 
 print $statistics->count() . " statistics pseudonymized\n" if $verbose;
