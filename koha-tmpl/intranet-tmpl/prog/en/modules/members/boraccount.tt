@@ -132,14 +132,15 @@
                                     [% account.checkout.library.branchname | html %]
                                 [% END %]
                             </td>
+                            <td>[% IF account.itemnumber %][% Branches.GetName( account.item.homebranch ) | html %][% END %]</td>
                             <td>
                                 [% account.note | html_line_break %]
                                 [% IF CAN_user_updatecharges_edit_notes %]
                                     <button
                                         type="button"
                                         class="btn btn-default btn-xs edit-action"
-                                        data-toggle="modal"
-                                        data-target="#editNoteModal"
+                                        data-bs-toggle="modal"
+                                        data-bs-target="#editNoteModal"
                                         data-accountline="[% account.accountlines_id | html %]"
                                         data-note="[% account.note | html %]"
                                         data-member="[% account.borrowernumber | html %]"
@@ -147,8 +148,6 @@
                                     >
                                 [% END %]
                             </td>
-                            <td>[% IF account.itemnumber %][% Branches.GetName( account.item.homebranch ) | html %][% END %]</td>
-                            <td>[% account.note | html_line_break %]</td>
                             [% IF account.amount <= 0 %]
                                 [% SET td_class="credit" %]
                             [% ELSE %]
@@ -503,10 +502,8 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <button type="button" class="closebtn" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                    <h4 class="modal-title" id="editNoteLabel">Edit note</h4>
+                    <h1 class="modal-title" id="editNoteLabel">Edit note</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
 
                 <div class="modal-body">
@@ -524,7 +521,7 @@
 
                 <div class="modal-footer">
                     <button type="submit" class="btn btn-default">Confirm</button>
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-default" data-bs-dismiss="modal">Cancel</button>
                 </div>
                 <!-- /.modal-footer -->
             </div>
@@ -667,12 +664,8 @@
 
             $("#editNoteModal").on("shown.bs.modal", function(e) {
                 var button = $(e.relatedTarget);
-                var item = button.data('item');
-                $("#item + span").replaceWith(item);
-
                 var accountline = button.data('accountline');
                 $('#noteline').val(accountline);
-
                 var note = button.data('note');
                 $('#edited_note').val(note);
             });
