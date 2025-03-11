@@ -286,7 +286,7 @@ sub draw_text {
 
                 #                $font_units_width = $m->string_width($line);
                 #                $string_width = ($font_units_width * $text_attribs->{'font_size'}) / $units_per_em;
-                if ( ( $string_width + $text_attribs->{'llx'} ) < $self->{'width'} ) {
+                if ( $string_width && ( ( $string_width + $text_attribs->{'llx'} ) < $self->{'width'} ) ) {
                     ( $Tx, $Tw ) = text_alignment(
                         $origin_llx, $self->{'width'}, $text_attribs->{'llx'}, $string_width, $line,
                         $text_attribs->{'text_alignment'}
