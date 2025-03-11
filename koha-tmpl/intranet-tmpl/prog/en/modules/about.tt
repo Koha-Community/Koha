@@ -98,12 +98,14 @@
                 <th scope="row">Apache version: </th>
                 <td>[% apacheVersion | html %]</td>
             </tr>
-            [% IF (is_psgi) %]
-                <tr>
-                    <th scope="row">PSGI: </th>
+            <tr>
+                <th scope="row">PSGI: </th>
+                [% IF is_psgi %]
                     <td>[% psgi_server | html %]</td>
-                </tr>
-            [% END %]
+                [% ELSE %]
+                    <td class="error">Koha is running in CGI mode. This is a security issue! Use <code>koha-plack --help</code></td>
+                [% END %]
+            </tr>
             [% IF Koha.Preference('SearchEngine') == 'Elasticsearch' %]
                 <tr>
                     <th scope="row">Elasticsearch: </th>
