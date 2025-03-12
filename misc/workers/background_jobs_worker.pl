@@ -90,12 +90,14 @@ unless (@queues) {
     push @queues, 'default';
 }
 
-my $conn;
+my ( $conn, $error );
 try {
     $conn = Koha::BackgroundJob->connect;
 } catch {
-    warn sprintf "Cannot connect to the message broker, the jobs will be processed anyway (%s)", $_;
+    $error = sprintf "Cannot connect to the message broker, the jobs will be processed anyway (%s)", $_;
 };
+$error ||= "Cannot connect to the message broker, the jobs will be processed anyway" unless $conn;
+warn $error if $error;
 
 my $pm = Parallel::ForkManager->new($max_processes);
 
