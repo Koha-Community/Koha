@@ -243,7 +243,7 @@ subtest 'add_biblio_from_import_record()' => sub {
 };
 
 subtest 'add_items_from_import_record() - addorderiso2709.pl' => sub {
-    plan tests => 6;
+    plan tests => 2;
 
     $schema->storage->txn_begin;
 
@@ -337,105 +337,235 @@ subtest 'add_items_from_import_record() - addorderiso2709.pl' => sub {
         }
     );
 
-    my $client_item_fields = {
-        'notforloans' => [
-            '',
-        ],
-        'c_budget_id'       => 2,
-        'replacementprices' => [
-            '0.00',
-        ],
-        'uris' => [
-            '',
-        ],
-        'c_replacement_price' => '0.00',
-        'public_notes'        => [''],
-        'itemcallnumbers'     => [
-            '',
-        ],
-        'budget_codes' => [
-            '',
-        ],
-        'nonpublic_notes' => [
-            '',
-        ],
-        'homebranches' => [
-            $branchcode,
-            $branchcode
-        ],
-        'copynos' => [
-            '',
-        ],
-        'holdingbranches' => [
-            $branchcode,
-            $branchcode
-        ],
-        'ccodes' => [
-            '',
-        ],
-        'locs' => [
-            '',
-            ''
-        ],
-        'itemprices' => [
-            '10.00',
-        ],
-        'c_discount' => '',
-        'c_price'    => '0.00',
-        'c_sort2'    => '',
-        'c_sort1'    => '',
-        'c_quantity' => '1',
-        'itypes'     => [
-            'BK',
-        ],
-        'coded_location_qualifiers' => [],
-        'barcodes'                  => [],
-        'enumchrons'                => []
+    subtest "Using MarcItemFieldsToOrder" => sub {
+        plan tests => 6;
+
+        my $client_item_fields = {
+            'notforloans' => [
+                '',
+            ],
+            'c_budget_id'       => 2,
+            'replacementprices' => [
+                '0.00',
+            ],
+            'uris' => [
+                '',
+            ],
+            'c_replacement_price' => '0.00',
+            'public_notes'        => [''],
+            'itemcallnumbers'     => [
+                '',
+            ],
+            'budget_codes' => [
+                '',
+            ],
+            'nonpublic_notes' => [
+                '',
+            ],
+            'homebranches' => [
+                $branchcode,
+                $branchcode
+            ],
+            'copynos' => [
+                '',
+            ],
+            'holdingbranches' => [
+                $branchcode,
+                $branchcode
+            ],
+            'ccodes' => [
+                '',
+            ],
+            'locs' => [
+                '',
+                ''
+            ],
+            'itemprices' => [
+                '10.00',
+            ],
+            'c_discount' => '',
+            'c_price'    => '0.00',
+            'c_sort2'    => '',
+            'c_sort1'    => '',
+            'c_quantity' => '1',
+            'itypes'     => [
+                'BK',
+            ],
+            'coded_location_qualifiers' => [],
+            'barcodes'                  => [],
+            'enumchrons'                => []
+        };
+        my $itemnumbers = Koha::MarcOrder::add_items_from_import_record(
+            {
+                record_result      => $result->{record_result},
+                basket_id          => $basket->basketno,
+                vendor             => $bookseller,
+                budget_id          => $budgetid,
+                agent              => 'client',
+                client_item_fields => $client_item_fields,
+            }
+        );
+
+        my $orders =
+            Koha::Acquisition::Orders->search( { biblionumber => $result->{record_result}->{biblionumber} } )
+            ->unblessed;
+
+        is(
+            @{$orders}[0]->{rrp} + 0, '10',
+            "Price has been read correctly"
+        );
+
+        my $active_currency = Koha::Acquisition::Currencies->get_active;
+        is(
+            sprintf( "%.6f", @{$orders}[0]->{listprice} + 0 ), sprintf( "%.6f", 10 / $active_currency->rate + 0 ),
+            "Listprice has been created successfully"
+        );
+        is(
+            @{$orders}[0]->{quantity}, 1,
+            "Quantity has been read correctly"
+        );
+        is(
+            @{$orders}[0]->{budget_id}, $budgetid,
+            "Budget code has been read correctly"
+        );
+
+        my $new_item = Koha::Items->find( ${$itemnumbers}[0] );
+
+        isnt(
+            $new_item, undef,
+            'Item was successfully created'
+        );
+        is(
+            $new_item->price, '10.00',
+            'Item values mapped correctly'
+        );
     };
 
-    my $itemnumbers = Koha::MarcOrder::add_items_from_import_record(
-        {
-            record_result      => $result->{record_result},
-            basket_id          => $basket->basketno,
-            vendor             => $bookseller,
-            budget_id          => $budgetid,
-            agent              => 'client',
-            client_item_fields => $client_item_fields,
-        }
-    );
+    subtest "Using MarcFieldsToOrder only" => sub {
+        plan tests => 9;
 
-    my $orders =
-        Koha::Acquisition::Orders->search( { biblionumber => $result->{record_result}->{biblionumber} } )->unblessed;
+        my $client_item_fields = {
+            'tags' => [
+                '952',
+                '952',
+                '952',
+                '952',
+            ],
+            'subfields' => [
+                'a',
+                'b',
+                'g',
+                'y'
+            ],
+            field_values => [
+                $branchcode,
+                $branchcode,
+                "10.00",
+                'BK'
+            ],
+            'notforloans' => [
+                '',
+            ],
+            'c_budget_id'       => 2,
+            'replacementprices' => [
+                '0.00',
+            ],
+            'uris' => [
+                '',
+            ],
+            'c_replacement_price' => '0.00',
+            'public_notes'        => [''],
+            'itemcallnumbers'     => [
+                '',
+            ],
+            'budget_codes' => [
+                '',
+            ],
+            'nonpublic_notes' => [
+                '',
+            ],
+            'homebranches' => [],
+            'copynos'      => [
+                '',
+            ],
+            'holdingbranches' => [],
+            'ccodes'          => [
+                '',
+            ],
+            'locs' => [
+                '',
+                ''
+            ],
+            'itemprices' => [
+                '10.00',
+            ],
+            'c_discount'                => '',
+            'c_price'                   => '0.00',
+            'c_sort2'                   => '',
+            'c_sort1'                   => '',
+            'c_quantity'                => '1',
+            'itypes'                    => [],
+            'coded_location_qualifiers' => [],
+            'barcodes'                  => [],
+            'enumchrons'                => []
+        };
+        my $itemnumbers = Koha::MarcOrder::add_items_from_import_record(
+            {
+                record_result      => $result->{record_result},
+                basket_id          => $basket->basketno,
+                vendor             => $bookseller,
+                budget_id          => $budgetid,
+                agent              => 'client',
+                client_item_fields => $client_item_fields,
+            }
+        );
 
-    is(
-        @{$orders}[0]->{rrp} + 0, '10',
-        "Price has been read correctly"
-    );
+        my $orders =
+            Koha::Acquisition::Orders->search( { biblionumber => $result->{record_result}->{biblionumber} } )
+            ->unblessed;
 
-    my $active_currency = Koha::Acquisition::Currencies->get_active;
-    is(
-        sprintf( "%.6f", @{$orders}[0]->{listprice} + 0 ), sprintf( "%.6f", 10 / $active_currency->rate + 0 ),
-        "Listprice has been created successfully"
-    );
-    is(
-        @{$orders}[0]->{quantity}, 1,
-        "Quantity has been read correctly"
-    );
-    is(
-        @{$orders}[0]->{budget_id}, $budgetid,
-        "Budget code has been read correctly"
-    );
+        is(
+            @{$orders}[0]->{rrp} + 0, '10',
+            "Price has been read correctly"
+        );
 
-    my $new_item = Koha::Items->find( ${$itemnumbers}[0] );
+        my $active_currency = Koha::Acquisition::Currencies->get_active;
+        is(
+            sprintf( "%.6f", @{$orders}[0]->{listprice} + 0 ), sprintf( "%.6f", 10 / $active_currency->rate + 0 ),
+            "Listprice has been created successfully"
+        );
+        is(
+            @{$orders}[0]->{quantity}, 1,
+            "Quantity has been read correctly"
+        );
+        is(
+            @{$orders}[0]->{budget_id}, $budgetid,
+            "Budget code has been read correctly"
+        );
 
-    isnt(
-        $new_item, undef,
-        'Item was successfully created'
-    );
-    is(
-        $new_item->price, '10.00',
-        'Item values mapped correctly'
-    );
+        my $new_item = Koha::Items->find( ${$itemnumbers}[0] );
+
+        isnt(
+            $new_item, undef,
+            'Item was successfully created'
+        );
+        is(
+            $new_item->price, '10.00',
+            'Item value for price mapped correctly'
+        );
+        is(
+            $new_item->homebranch, $branchcode,
+            'Item value for homebranch mapped correctly'
+        );
+        is(
+            $new_item->holdingbranch, $branchcode,
+            'Item value for holdingbranch mapped correctly'
+        );
+        is(
+            $new_item->itype, 'BK',
+            'Item value for itemtype mapped correctly'
+        );
+    };
 
     $schema->storage->txn_rollback;
 };
