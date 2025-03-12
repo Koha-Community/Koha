@@ -151,13 +151,6 @@ describe("catalogue/detail/holdings_table", () => {
                 "/cgi-bin/koha/catalogue/detail.pl?biblionumber=" + biblio_id
             );
 
-            cy.window().then(win => {
-                win.libraries_map = items.reduce((map, i) => {
-                    map[i.library_id] = i.library_id;
-                    return map;
-                }, {});
-            });
-
             cy.get(`#${table_id}_wrapper tbody tr`).should(
                 "have.length",
                 RESTdefaultPageSize
@@ -210,13 +203,6 @@ describe("catalogue/detail/holdings_table", () => {
                     "items_table_settings.holdings"
                 );
 
-                cy.window().then(win => {
-                    win.libraries_map = items.reduce((map, i) => {
-                        map[i.library_id] = i.library_id;
-                        return map;
-                    }, {});
-                });
-
                 cy.get("@columns").then(columns => {
                     cy.get(`#${table_id}_wrapper tbody tr`).should(
                         "have.length",
@@ -234,7 +220,7 @@ describe("catalogue/detail/holdings_table", () => {
                         .contains("Course reserves")
                         .should("not.exist");
 
-                    cy.get(".show_filters").click();
+                    cy.get(`.${table_id}_table_controls .show_filters`).click();
                     cy.get(`#${table_id}_wrapper .dt-info`).contains(
                         `Showing 1 to ${RESTdefaultPageSize} of ${baseTotalCount} entries`
                     );
@@ -265,13 +251,6 @@ describe("catalogue/detail/holdings_table", () => {
                     "items_table_settings.holdings"
                 );
 
-                cy.window().then(win => {
-                    win.libraries_map = items.reduce((map, i) => {
-                        map[i.library_id] = i.library_id;
-                        return map;
-                    }, {});
-                });
-
                 cy.get("@columns").then(columns => {
                     cy.get(`#${table_id}_wrapper tbody tr`).should(
                         "have.length",
@@ -281,11 +260,107 @@ describe("catalogue/detail/holdings_table", () => {
                     // Filters are displayed
                     cy.get(`#${table_id} thead tr`).should("have.length", 2);
 
-                    cy.get(".hide_filters").click();
+                    cy.get(`.${table_id}_table_controls .hide_filters`).click();
 
                     // Filters are not displayed
                     cy.get(`#${table_id} thead tr`).should("have.length", 1);
                 });
+            });
+        });
+    });
+
+    it("Filters by code and description", function () {
+        // Do not use `() => {` or this.biblio_id won't be retrieved
+        const biblio_id = this.biblio_id;
+        cy.task("buildSampleObjects", {
+            object: "item",
+            count: RESTdefaultPageSize,
+            values: {
+                biblio_id,
+                checkout: null,
+                transfer: null,
+                lost_status: 0,
+                withdrawn: 0,
+                damaged_status: 0,
+                not_for_loan_status: 0,
+                course_item: null,
+                cover_image_ids: [],
+            },
+        }).then(items => {
+            cy.intercept("get", `/api/v1/biblios/${biblio_id}/items*`, {
+                statuscode: 200,
+                body: items,
+                headers: {
+                    "X-Base-Total-Count": baseTotalCount,
+                    "X-Total-Count": baseTotalCount,
+                },
+            }).as("searchItems");
+
+            cy.visit(
+                "/cgi-bin/koha/catalogue/detail.pl?biblionumber=" + biblio_id
+            );
+
+            cy.window().then(win => {
+                win.coded_values.library = new Map(
+                    items.map(i => [
+                        i.home_library.name,
+                        i.home_library.library_id,
+                    ])
+                );
+                win.coded_values.item_type = new Map(
+                    items.map(i => [
+                        i.item_type.description,
+                        i.item_type.item_type_id,
+                    ])
+                );
+            });
+            cy.wait("@searchItems");
+
+            let library_id = items[0].home_library.library_id;
+            let library_name = items[0].home_library.name;
+            cy.get(`#${table_id}_wrapper input.dt-input`).type(library_id);
+
+            cy.wait("@searchItems").then(interception => {
+                const q = interception.request.query.q;
+                expect(q).to.match(
+                    new RegExp(
+                        `"me.home_library_id":{"like":"%${library_id}%"}`
+                    )
+                );
+            });
+
+            cy.get(`#${table_id}_wrapper input.dt-input`).clear();
+            cy.get(`#${table_id}_wrapper input.dt-input`).type(library_name);
+
+            cy.wait("@searchItems").then(interception => {
+                const q = interception.request.query.q;
+                expect(q).to.match(
+                    new RegExp(`"me.home_library_id":\\["${library_id}"\\]`)
+                );
+            });
+
+            let item_type_id = items[0].item_type.item_type_id;
+            let item_type_description = items[0].item_type.description;
+            cy.get(`#${table_id}_wrapper input.dt-input`).clear();
+            cy.get(`#${table_id}_wrapper input.dt-input`).type(item_type_id);
+
+            cy.wait("@searchItems").then(interception => {
+                const q = interception.request.query.q;
+                expect(q).to.match(
+                    new RegExp(`"me.item_type_id":{"like":"%${item_type_id}%"}`)
+                );
+            });
+
+            cy.get(`#${table_id}_wrapper input.dt-input`).clear();
+            cy.get(`#${table_id}_wrapper input.dt-input`).type(
+                item_type_description
+            );
+
+            cy.wait("@searchItems").then(interception => {
+                const q = interception.request.query.q;
+                expect(q).to.match(
+                    new RegExp(`"me.item_type_id":\\["${item_type_id}"\\]`)
+                );
             });
         });
     });
