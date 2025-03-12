@@ -123,7 +123,7 @@
                 [% IF is_psgi %]
                     <td>[% psgi_server | html %]</td>
                 [% ELSE %]
-                    <td class="error">Koha is running in CGI mode. This is a security issue! Use <code>koha-plack --help</code></td>
+                    <td class="error">Koha is running in CGI mode. This is a security issue! Run Koha using Plack for CSRF (cross-site request forgery) protection. More information: <code>koha-plack --help</code></td>
                 [% END %]
             </tr>
             [% IF Koha.Preference('SearchEngine') == 'Elasticsearch' %]
