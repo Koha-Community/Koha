@@ -4,7 +4,7 @@
         [% IF ( OPACLocalCoverImages && SEARCH_RESULT.has_local_cover_image ) %]
             <div class="cover-image local-coverimg">
                 <a href="/cgi-bin/koha/opac-image.pl?biblionumber=[% SEARCH_RESULT.biblionumber | uri %]">
-                    <span class="[% SEARCH_RESULT.biblionumber | html %]" id="local-thumbnail-[% SEARCH_RESULT.biblionumber | html %]" data-link="/cgi-bin/koha/opac-image.pl?biblionumber=[% SEARCH_RESULT.biblionumber | html %]"></span>
+                    <img src="/cgi-bin/koha/opac-image.pl?thumbnail=1&biblionumber=[% SEARCH_RESULT.biblionumber | uri %]" alt="Local cover image" />
                 </a>
                 <div class="hint">Local cover image</div>
             </div>
