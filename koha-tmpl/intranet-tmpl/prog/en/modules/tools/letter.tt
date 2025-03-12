@@ -366,7 +366,7 @@
         </div>
         <!-- /#toolbar -->
 
-        <form id="add_notice" name="Aform" method="post" enctype="multipart/form-data" class="validate">
+        <form id="add_notice" name="Aform" method="post" enctype="multipart/form-data" action="/cgi-bin/koha/tools/letter.pl" class="validate">
             [% INCLUDE 'csrf-token.inc' %]
             [% IF add_form %]
                 <input type="hidden" name="op" id="op" value="cud-add_validate" />
