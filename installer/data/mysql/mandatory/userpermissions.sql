@@ -52,6 +52,7 @@ INSERT INTO permissions (module_bit, code, description) VALUES
    ( 4, 'view_borrower_infos_from_any_libraries', 'View patron infos from any libraries'),
    ( 6, 'place_holds', 'Place holds for patrons'),
    ( 6, 'modify_holds_priority', 'Modify holds priority'),
+   ( 6, 'alter_hold_targets', 'Move holds between items and records'),
    ( 9, 'edit_catalogue', 'Edit catalog (Modify bibliographic/holdings data)'),
    ( 9, 'fast_cataloging', 'Fast cataloging'),
    ( 9, 'advanced_editor', 'Use the advanced cataloging editor (requires edit_catalogue)'),

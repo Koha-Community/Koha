@@ -248,6 +248,9 @@
     [%- CASE 'place_holds' -%]
         <span class="sub_permission place_holds_subpermission"> Place holds for patrons </span>
         <span class="permissioncode">([% name | html %])</span>
+    [%- CASE 'alter_hold_targets' -%]
+        <span class="sub_permission place_holds_subpermission"> Move holds between items and records </span>
+        <span class="permissioncode">([% name | html %])</span>
     [%- CASE 'delete_all_items' -%]
         <span class="sub_permission delete_all_items_subpermission"> Delete all items at once </span>
         <span class="permissioncode">([% name | html %])</span>
