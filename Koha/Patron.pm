@@ -865,6 +865,10 @@ sub do_check_for_previous_checkout {
         itemnumber     => \@item_nos,
     };
 
+    # Check current issues table
+    my $issues = Koha::Checkouts->search($criteria);
+    return "currentlycheckedout" if $issues->count;    # 0 || N
+
     my $delay = C4::Context->preference('CheckPrevCheckoutDelay') || 0;
     if ($delay) {
         my $dtf        = Koha::Database->new->schema->storage->datetime_parser;
@@ -872,13 +876,9 @@ sub do_check_for_previous_checkout {
         $criteria->{'returndate'} = { '>' => $dtf->format_datetime($newer_than), };
     }
 
-    # Check current issues table
-    my $issues = Koha::Checkouts->search($criteria);
-    return 1 if $issues->count;    # 0 || N
-
     # Check old issues table
     my $old_issues = Koha::Old::Checkouts->search($criteria);
-    return $old_issues->count;     # 0 || N
+    return $old_issues->count;                         # 0 || N
 }
 
 =head3 is_debarred

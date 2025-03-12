@@ -8,7 +8,7 @@ use Koha::DateUtils qw( dt_from_string );
 use Koha::Patrons;
 
 use Test::NoWarnings;
-use Test::More tests => 62;
+use Test::More tests => 64;
 
 use_ok('Koha::Patron');
 
@@ -315,6 +315,52 @@ my $cpvPmappings = [
         msg    => "Same item, same patron [1]",
         item   => $item_1,
         patron => $patron,
+        result => "currentlycheckedout",
+    },
+    {
+        msg    => "Diff item, same bib, same patron [1]",
+        item   => $item_2,
+        patron => $patron,
+        result => "currentlycheckedout",
+    },
+    {
+        msg    => "Diff item, diff bib, same patron [0]",
+        item   => $item_d,
+        patron => $patron,
+        result => 0,
+    },
+    {
+        msg    => "Same item, diff patron [0]",
+        item   => $item_1,
+        patron => $patron_d,
+        result => 0,
+    },
+    {
+        msg    => "Diff item, same bib, diff patron [0]",
+        item   => $item_2,
+        patron => $patron_d,
+        result => 0,
+    },
+    {
+        msg    => "Diff item, diff bib, diff patron [0]",
+        item   => $item_d,
+        patron => $patron_d,
+        result => 0,
+    },
+];
+
+test_it( $cpvPmappings, "PostIssue" );
+
+# Return item_1 from patron:
+BAIL_OUT("Return Failed") unless AddReturn( $item_1->{barcode}, $patron->{branchcode} );
+
+#Since currently checked in item now return status "currentlycheckedout" we need use
+#same test scenarions for returned item as above but without "currentlycheckedout"
+$cpvPmappings = [
+    {
+        msg    => "Same item, same patron [1]",
+        item   => $item_1,
+        patron => $patron,
         result => 1,
     },
     {
@@ -349,11 +395,6 @@ my $cpvPmappings = [
     },
 ];
 
-test_it( $cpvPmappings, "PostIssue" );
-
-# Return item_1 from patron:
-BAIL_OUT("Return Failed") unless AddReturn( $item_1->{barcode}, $patron->{branchcode} );
-
 # Then:
 test_it( $cpvPmappings, "PostReturn" );
 
@@ -364,7 +405,18 @@ test_it( $cpvPmappings, "PostReturn" );
 # whetherthe different combinational outcomes of the above return values in
 # CanBookBeIssued result in the appropriate $needsconfirmation.
 
-# We want to test:
+# We want to test when item is currently issued to the patron:
+# - DESCRIPTION [RETURNVALUE (0/1)]
+# - patron, !wants_check_for_previous_checkout, !do_check_for_previous_checkout
+#   [!$issuingimpossible,!$needsconfirmation->{CURRENTISSUE}]
+# - patron, wants_check_for_previous_checkout, !do_check_for_previous_checkout
+#   [!$issuingimpossible,!$needsconfirmation->{CURRENTISSUE}]
+# - patron, !wants_check_for_previous_checkout, do_check_for_previous_checkout
+#   [!$issuingimpossible,!$needsconfirmation->{CURRENTISSUE}]
+# - patron, wants_check_for_previous_checkout, do_check_for_previous_checkout
+#   [!$issuingimpossible,$needsconfirmation->{CURRENTISSUE}]
+
+# And we also need to test when item has been previously issued to the patron:
 # - DESCRIPTION [RETURNVALUE (0/1)]
 # - patron, !wants_check_for_previous_checkout, !do_check_for_previous_checkout
 #   [!$issuingimpossible,!$needsconfirmation->{PREVISSUE}]
@@ -428,6 +480,32 @@ my $CBBI_mappings = [
 map {
     t::lib::Mocks::mock_preference( 'checkprevcheckout', $_->{syspref} );
     my ( $issuingimpossible, $needsconfirmation ) = C4::Circulation::CanBookBeIssued( $patron, $_->{item}->{barcode} );
+    is( $needsconfirmation->{CURRENTISSUE}, $_->{result}, $_->{msg} );
+} @{$CBBI_mappings};
+
+# Return $prev_item from patron:
+BAIL_OUT("Return Failed") unless AddReturn( $prev_item->{barcode}, $patron->{branchcode} );
+
+# Mappings
+$CBBI_mappings = [
+    {
+        syspref => 'hardno',
+        item    => $prev_item,
+        result  => undef,
+        msg     => "patron, !wants_check_for_previous_checkout, do_check_for_previous_checkout"
+    },
+    {
+        syspref => 'hardyes',
+        item    => $prev_item,
+        result  => 1,
+        msg     => "patron, wants_check_for_previous_checkout, do_check_for_previous_checkout"
+    },
+];
+
+# Tests
+map {
+    t::lib::Mocks::mock_preference( 'checkprevcheckout', $_->{syspref} );
+    my ( $issuingimpossible, $needsconfirmation ) = C4::Circulation::CanBookBeIssued( $patron, $_->{item}->{barcode} );
     is( $needsconfirmation->{PREVISSUE}, $_->{result}, $_->{msg} );
 } @{$CBBI_mappings};
 
@@ -456,7 +534,7 @@ subtest 'Check previous checkouts for serial' => sub {
     AddIssue( $patron, $item1->barcode );
 
     is(
-        $patron->do_check_for_previous_checkout( $item1->unblessed ), 1,
+        $patron->do_check_for_previous_checkout( $item1->unblessed ), "currentlycheckedout",
         'Check only one item if bibliographic record is serial'
     );
     is(
