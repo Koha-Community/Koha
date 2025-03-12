@@ -53,3 +53,25 @@ describe("Generate Random Libraries", () => {
         );
     });
 });
+
+describe("Generate objects", () => {
+    it("should generate an object for library", () => {
+        cy.task("buildSampleObject", { object: "item" }).then(mockItem => {
+            expect(mockItem.home_library).to.have.property("library_id");
+            expect(mockItem.home_library).to.have.property("name");
+            expect(mockItem.home_library_id).to.equal(
+                mockItem.home_library.library_id
+            );
+            expect(mockItem.holding_library).to.have.property("library_id");
+            expect(mockItem.holding_library).to.have.property("name");
+            expect(mockItem.holding_library_id).to.equal(
+                mockItem.holding_library.library_id
+            );
+            expect(mockItem.item_type).to.have.property("item_type_id");
+            expect(mockItem.item_type).to.have.property("description");
+            expect(mockItem.item_type_id).to.equal(
+                mockItem.item_type.item_type_id
+            );
+        });
+    });
+});

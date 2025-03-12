@@ -3,9 +3,6 @@ const { readYamlFile } = require("./../plugins/readYamlFile.js");
 const fs = require('fs');
 
 const generateMockData = (type, properties) => {
-    if (Array.isArray(type)) {
-        type = type.filter(t => t != '"null"')[0];
-    }
     switch (type) {
         case "string":
             if(properties?.maxLength){
@@ -31,17 +28,52 @@ const generateMockData = (type, properties) => {
 
 const generateDataFromSchema = (properties, values = {}) => {
     const mockData = {};
+    const ids = {};
     Object.entries(properties).forEach(([key, value]) => {
         if (values.hasOwnProperty(key)) {
             mockData[key] = values[key];
         } else {
-            let type =
+            let data;
+            let type = value.type;
+            if (Array.isArray(type)) {
+                type = type.filter(t => t != '"null"')[0];
+            }
+
+            type =
                 value?.format == "date" || value?.format == "date-time"
                     ? value.format
-                    : value.type;
-            mockData[key] = generateMockData(type, value);
+                    : type;
+            let fk_name;
+            if (type == "object") {
+                switch (key) {
+                    case "home_library":
+                    case "holding_library":
+                        data = buildSampleObject({ object: "library" });
+                        fk_name = "library_id";
+                        break;
+                    case "item_type":
+                        data = buildSampleObject({ object: "item_type" });
+                        fk_name = "item_type_id";
+                        break;
+                    default:
+                        data = generateMockData(type, value);
+                }
+                if (typeof data === "object") {
+                    ids[key] = data[fk_name];
+                }
+            } else {
+                data = generateMockData(type, value);
+            }
+            mockData[key] = data;
         }
     });
+
+    Object.keys(ids).forEach(k => {
+        if (mockData.hasOwnProperty(k + "_id")) {
+            mockData[k + "_id"] = ids[k];
+        }
+    });
+
     return mockData;
 };
 
