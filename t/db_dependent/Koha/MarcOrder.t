@@ -443,6 +443,7 @@ subtest 'add_items_from_import_record() - addorderiso2709.pl' => sub {
 
     subtest "Using MarcFieldsToOrder only" => sub {
         plan tests => 9;
+        t::lib::Mocks::mock_userenv( { branchcode => $branchcode } );
 
         my $client_item_fields = {
             'tags' => [
