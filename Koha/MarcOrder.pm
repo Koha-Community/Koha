@@ -868,7 +868,7 @@ sub parse_input_into_order_line_fields {
     my @budget_codes        = $fields->{budget_codes} ? @{ $fields->{budget_codes} } : ();
     my $c_quantity          = $fields->{c_quantity};
     my $c_budget            = GetBudgetByCode( $fields->{c_budget_code} );
-    my $c_budget_code       = $c_budget->{budget_id};
+    my $c_budget_id         = $c_budget->{budget_id} || $fields->{c_budget_id};
     my $c_discount          = $fields->{c_discount};
     my $c_sort1             = $fields->{c_sort1};
     my $c_sort2             = $fields->{c_sort2};
@@ -878,9 +878,8 @@ sub parse_input_into_order_line_fields {
     # If using the cronjob, we want to default to the account budget if not mapped on the record
     if ( !$client && ( !@budget_codes || scalar(@budget_codes) == 0 ) ) {
         for ( 1 .. $quantity ) {
-            my $item_budget = GetBudgetByCode($c_budget_code);
-            if ($item_budget) {
-                push( @budget_codes, $item_budget->{budget_id} );
+            if ($c_budget_id) {
+                push( @budget_codes, $c_budget_id );
             } else {
                 push( @budget_codes, $budget_id );
             }
@@ -911,7 +910,7 @@ sub parse_input_into_order_line_fields {
         basket_id                => $basket_id,
         budget_id                => $budget_id,
         c_quantity               => $c_quantity,
-        c_budget_code            => $c_budget_code,
+        c_budget_id              => $c_budget_id,
         c_discount               => $c_discount,
         c_sort1                  => $c_sort1,
         c_sort2                  => $c_sort2,
@@ -1062,7 +1061,7 @@ sub create_items_and_generate_order_hash {
             basketno           => $basket_id,
             quantity           => $fields->{c_quantity},
             branchcode         => C4::Context->userenv()->{'branch'},
-            budget_id          => $fields->{c_budget_code},
+            budget_id          => $fields->{c_budget_id},
             uncertainprice     => 1,
             sort1              => $fields->{c_sort1},
             sort2              => $fields->{c_sort2},
