@@ -958,7 +958,8 @@ sub create_items_and_generate_order_hash {
     my $itemcreation    = 0;
     my @itemnumbers;
 
-    if ( C4::Context->preference('AcqCreateItem') ne 'cataloguing' ) {
+    # We directly create the items if MarcItemFieldsToOrder is populated (item fields have values)
+    if ( C4::Context->preference('AcqCreateItem') ne 'cataloguing' && @{ $fields->{homebranch} } ) {
         for ( my $i = 0 ; $i < $loop_limit ; $i++ ) {
             $itemcreation = 1;
             my $item = Koha::Item->new(
@@ -1052,6 +1053,7 @@ sub create_items_and_generate_order_hash {
         }
     } else {
 
+        # Here we are using the 'MARC' for items from the 'Item information' tab for creating the items
         # Add an orderline for each MARC record
         # Get quantity in the MARC record (1 if none)
         my $quantity  = GetMarcQuantity( $fields->{marcrecord}, C4::Context->preference('marcflavour') ) || 1;
