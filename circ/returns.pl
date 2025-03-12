@@ -768,6 +768,7 @@ for my $checkin (@checkins) {
         $checkin->{patron}         = $patron;
     }
 
+    $checkin->{item} = $item;
     my $biblio = $item->biblio;
     $checkin->{biblio} = $item->biblio;
 
