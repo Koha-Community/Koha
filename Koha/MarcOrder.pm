@@ -1117,8 +1117,9 @@ sub create_items_and_generate_order_hash {
             my $record       = MARC::Record::new_from_xml( $xml, 'UTF-8' );
             for ( my $qtyloop = 1 ; $qtyloop <= $fields->{c_quantity} ; $qtyloop++ ) {
                 my ( $biblionumber, undef, $itemnumber ) =
-                    AddItemFromMarc( $fields->{marcrecord}, $fields->{biblionumber} );
+                    AddItemFromMarc( $record, $fields->{biblionumber} );
                 $order->add_item($itemnumber);
+                push @itemnumbers, $itemnumber;
             }
         }
     }
