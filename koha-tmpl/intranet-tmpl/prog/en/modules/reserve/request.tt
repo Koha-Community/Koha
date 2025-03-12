@@ -1259,6 +1259,15 @@
                             </select>
                         [% END %]
                     </fieldset>
+                    [% IF ( CAN_user_reserveforothers_alter_hold_targets ) %]
+                        <div class="btn-group">
+                            <a class="btn btn-default btn-xs dropdown-toggle move_selected_holds" id="item_record_choice" role="button" data-bs-toggle="dropdown" href="#" aria-expanded="false"></a>
+                            <ul class="dropdown-menu" role="menu" aria-labelledby="item_record_choice" style="">
+                                <li><a class="dropdown-item move_hold_item" href="#">Item level holds to a different item</a></li>
+                                <li><a class="dropdown-item move_hold_record" href="#">Record level holds to a different record</a></li>
+                            </ul>
+                        </div>
+                    [% END %]
                 </div>
                 <div class="page-section">
                     [% FOREACH biblioloo IN biblioloop %]
@@ -1403,6 +1412,104 @@
 
 [% PROCESS 'cancel-hold-modal' form_action = 'request.pl' %]
 
+<div id="moveHoldItemModal" class="modal modal-lg" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title">Move hold(s) to a different item</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div id="move_hold_item_selection">
+                    <h3>1. Review holds to move</h3>
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Hold ID</th>
+                                <th>Original hold</th>
+                                <th>Problem</th>
+                            </tr>
+                        </thead>
+                        <tbody> </tbody>
+                    </table>
+                </div>
+                <hr />
+                <div id="move_hold_item_search" class="alert alert-danger" style="display:none;"></div>
+                <form id="itemSearchForm">
+                    <div id="move_hold_item_searchform">
+                        <h3>2. Enter the item barcode of new hold target: </h3>
+                        <fieldset class="action">
+                            <input type="text" class="form-control" name="external_id" id="external_id" required />
+                            <button type="submit" class="btn btn-default mt-3">Search</button>
+                        </fieldset>
+                    </div>
+                </form>
+                <form id="move_hold_item_form" method="post" action="request.pl">
+                    <div id="itemResultMessage" class="mt-3"> </div>
+                    <div id="move_hold_item_confirm" style="display:none;">
+                        <h3>3. Confirm moving of holds:</h3>
+                        [% INCLUDE 'csrf-token.inc' %]
+                        <input type="hidden" name="op" value="cud-move_hold_item" />
+                        <button type="submit" class="btn btn-primary mt-3">Move selected holds</button>
+                        <input type="hidden" name="original_biblionumber" value="[% biblio.biblionumber %]" />
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-bs-dismiss="modal">Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="moveHoldBiblioModal" class="modal modal-lg" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title">Move hold(s) to a different record</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div id="move_hold_item_selection">
+                    <h3>1. Review holds to move</h3>
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Hold ID</th>
+                                <th>Original hold</th>
+                                <th>Problem</th>
+                            </tr>
+                        </thead>
+                        <tbody> </tbody>
+                    </table>
+                </div>
+                <hr />
+                <div id="move_hold_biblio_search" class="alert alert-danger" style="display:none;"></div>
+                <form id="biblioSearchForm">
+                    <div id="move_hold_item_searchform">
+                        <h3>2. Enter the bibloinumber of the new hold target: </h3>
+                        <fieldset class="action">
+                            <input type="text" class="form-control" name="biblio_id" id="biblio_id" required />
+                            <button type="submit" class="btn btn-default mt-3">Search</button>
+                        </fieldset>
+                    </div>
+                </form>
+                <form id="move_hold_biblio_form" method="post" action="request.pl">
+                    <div id="biblioResultMessage" class="mt-3"> </div>
+                    <div id="move_hold_biblio_confirm" style="display:none;">
+                        <h3>3. Confirm moving of holds:</h3>
+                        [% INCLUDE 'csrf-token.inc' %]
+                        <input type="hidden" name="op" value="cud-move_hold_biblio" />
+                        <button type="submit" class="btn btn-primary mt-3">Move selected holds</button>
+                        <input type="hidden" name="original_biblionumber" value="[% biblio.biblionumber %]" />
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-bs-dismiss="modal">Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>
 <div id="hold-actions">
     <form id="hold-actions-form"> [% INCLUDE 'csrf-token.inc' %] </form>
 </div>
@@ -1718,6 +1825,91 @@
         }
 
          $(document).ready(function() {
+            $("#itemSearchForm").on("submit", function (event) {
+                event.preventDefault();
+
+                let externalID = $("#external_id").val();
+                let apiUrl = `/api/v1/items?external_id=${encodeURIComponent(externalID)}`;
+
+                $.ajax({
+                    url: apiUrl,
+                    method: "GET",
+                    dataType: "json",
+                    success: function (data) {
+                        if (data.length > 0) {
+                            let resultHtml = "";
+                            $.each(data, function (index, item) {
+                                resultHtml += `
+                                    <div class="alert alert-success">
+                                        <strong>Biblionumber:</strong> ${item.biblio_id} <br>
+                                        <strong>Item:</strong> ${item.external_id} <br>
+                                        <input id="new_itemnumber_${item.item_id}" name="new_itemnumber" type="checkbox" value="${item.item_id}">
+                                        <label for="new_itemnumber_${item.item_id}">Move all selected item level holds to this item</label>
+                                        <input id="new_biblionumber_${item.item_id}" name="new_biblionumber" type="hidden" value="${item.biblio_id}">
+                                    </div>
+                                    <hr />
+                                `;
+                            });
+                            $("#itemResultMessage").html(resultHtml);
+                        } else {
+                            $("#itemResultMessage").html(`
+                                <div class="alert alert-warning">No item found with barcode: ${externalID}.</div>
+                            `);
+                        }
+                    },
+                });
+            });
+
+            $("#biblioSearchForm").on("submit", function (event) {
+                event.preventDefault();
+
+                let biblioID = $("#biblio_id").val();
+                let apiUrl = `/api/v1/items?q={"biblio_id":"${encodeURIComponent(biblioID)}"}`;
+
+                $.ajax({
+                    url: apiUrl,
+                    method: "GET",
+                    dataType: "json",
+                    success: function (data) {
+                        if (data.length > 0) {
+                            let resultHtml = "";
+                            $.each(data, function (index, item) {
+                                resultHtml += `
+                                    <div class="alert alert-success">
+                                        <strong>Biblionumber:</strong> ${item.biblio_id} <br>
+                                        <input id="new_biblionumber_${item.biblio_id}" name="new_biblionumber" type="checkbox" value="${item.biblio_id}">
+                                        <label for="new_biblionumber_${item.biblio_id}">Move all selected record level holds to this record</label>
+                                    </div>
+                                    <hr />
+                                `;
+                            });
+                            $("#biblioResultMessage").html(resultHtml);
+                        } else {
+                            $("#biblioResultMessage").html(`
+                                <div class="alert alert-warning">No item found with barcode: ${biblioID}.</div>
+                            `);
+                        }
+                    },
+                });
+            });
+
+            $(document).on("change", 'input[name="new_itemnumber"]', function() {
+                $('input[name="new_itemnumber"]').not(this).prop("checked", false);
+                if ( $('input[name="new_itemnumber"]:checked').length ){
+                    $('#move_hold_item_confirm').show();
+                } else {
+                    $('#move_hold_item_confirm').hide();
+                }
+            });
+
+            $(document).on("change", 'input[name="new_biblionumber"]', function() {
+                $('input[name="new_biblionumber"]').not(this).prop("checked", false);
+                if ( $('input[name="new_biblionumber"]:checked').length ){
+                    $('#move_hold_biblio_confirm').show();
+                } else {
+                    $('#move_hold_biblio_confirm').hide();
+                }
+            });
 
             $("#always_show_holds").change(function(){
                 if( $(this).prop('checked') ){
@@ -1818,6 +2010,48 @@
                     $(':radio[name="item_group_id"]').prop('checked', false);
                 });
             [% END %]
+
+            $('.move_hold_item').click(function(e) {
+                e.preventDefault();
+                if($('.holds_table .select_hold:checked').length) {
+                    $('#itemResultMessage').empty();
+                    $('#move_hold_item_selection table tbody').empty();
+                    $('#moveHoldItemModal').modal('show');
+                    $('.select_hold:checked').each( function() {
+                        let reserve_id = $(this).data('id');
+                        let reserve_biblionumber = $(this).data('biblionumber');
+                        let reserve_itemnumber = $(this).data('itemnumber');
+                        let item_level_hold = $(this).data('item_level_hold');
+                        let error_message = $(this).data('item_level_hold') ? "" : _("Cannot move a waiting or record level hold");
+                        let found_status = $(this).data('found');
+                        $('#move_hold_item_selection table').append(`<tr><td>${reserve_id}</td><td>Biblionumber: <a target="_blank" href="/cgi-bin/koha/reserve/request.pl?biblionumber=${reserve_biblionumber}">${reserve_biblionumber}</a> Itemnumber: <a target="_blank" href="/cgi-bin/koha/catalogue/moredetail.pl?biblionumber=${reserve_biblionumber}#item${reserve_itemnumber}">${reserve_itemnumber}</a></td><td>${error_message}</td></tr>`)
+                        if ( item_level_hold ) {
+                            $('#move_hold_item_form').append(`<input type="hidden" name="hold_id" value="${reserve_id}">`);
+                        }
+                    });
+                }
+            });
+
+            $('.move_hold_record').click(function(e) {
+                e.preventDefault();
+                if($('.holds_table .select_hold:checked').length) {
+                    $('#biblioResultMessage').empty();
+                    $('#move_hold_item_selection table tbody').empty();
+                    $('#moveHoldBiblioModal').modal('show');
+                    $('.select_hold:checked').each( function() {
+                        let reserve_id = $(this).data('id');
+                        let reserve_biblionumber = $(this).data('biblionumber');
+                        let reserve_itemnumber = $(this).data('itemnumber');
+                        let item_level_hold = $(this).data('item_level_hold');
+                        let error_message = $(this).data('item_level_hold') ? _("Cannot move a waiting or item level hold") : "";
+                        let found_status = $(this).data('found');
+                        $('#move_hold_item_selection table').append(`<tr><td>${reserve_id}</td><td>Biblionumber: <a target="_blank" href="/cgi-bin/koha/reserve/request.pl?biblionumber=${reserve_biblionumber}">${reserve_biblionumber}</a></td><td>${error_message}</td></tr>`)
+                        if ( !item_level_hold ) {
+                            $('#move_hold_biblio_form').append(`<input type="hidden" name="hold_id" value="${reserve_id}">`);
+                        }
+                    });
+                }
+            });
 
             $(".hold-arrow").click(function(e) {
                 e.preventDefault();
