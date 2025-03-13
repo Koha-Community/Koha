@@ -183,7 +183,7 @@
                                 data-plugin="[% mv.plugin | html %]"
                             />
                             [% IF ( mv.nopopup ) %]
-                                <a href="#" id="buttonDot_[%- mv.id | html -%]" class="[%- mv.class | html -%] tag_editor framework_plugin" title="No  popup" data-plugin="[% mv.plugin | html %]">...</a>
+                                <a href="#" id="buttonDot_[%- mv.id | html -%]" class="[%- mv.class | html -%] tag_editor framework_plugin" title="No popup" data-plugin="[% mv.plugin | html %]">...</a>
                             [% ELSE %]
                                 <a href="#" id="buttonDot_[%- mv.id | html -%]" class="[%- mv.class | html -%] tag_editor framework_plugin" title="Tag editor" data-plugin="[% mv.plugin | html %]">...</a>
                             [% END %]
