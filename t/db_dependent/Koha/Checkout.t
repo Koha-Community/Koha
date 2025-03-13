@@ -136,3 +136,53 @@ subtest 'renewals() tests' => sub {
 
     $schema->storage->txn_rollback;
 };
+
+subtest 'public_read_list() tests' => sub {
+
+    $schema->storage->txn_begin;
+
+    my @all_attrs = Koha::Checkouts->columns();
+    my $public_attrs =
+        { map { $_ => 1 } @{ Koha::Checkout->public_read_list() } };
+    my $mapping = Koha::Checkout->to_api_mapping;
+
+    plan tests => scalar @all_attrs * 2;
+
+    # Create a sample checkout
+    my $checkout = $builder->build_object( { class => 'Koha::Checkouts' } );
+
+    my $unprivileged_representation = $checkout->to_api( { public => 1 } );
+    my $privileged_representation   = $checkout->to_api;
+
+    foreach my $attr (@all_attrs) {
+        my $mapped = exists $mapping->{$attr} ? $mapping->{$attr} : $attr;
+        if ( defined($mapped) ) {
+            ok(
+                exists $privileged_representation->{$mapped},
+                "Attribute '$attr' is present when privileged"
+            );
+            if ( exists $public_attrs->{$attr} ) {
+                ok(
+                    exists $unprivileged_representation->{$mapped},
+                    "Attribute '$attr' is present when public"
+                );
+            } else {
+                ok(
+                    !exists $unprivileged_representation->{$mapped},
+                    "Attribute '$attr' is not present when public"
+                );
+            }
+        } else {
+            ok(
+                !exists $privileged_representation->{$attr},
+                "Unmapped attribute '$attr' is not present when privileged"
+            );
+            ok(
+                !exists $unprivileged_representation->{$attr},
+                "Unmapped attribute '$attr' is not present when public"
+            );
+        }
+    }
+
+    $schema->storage->txn_rollback;
+};
