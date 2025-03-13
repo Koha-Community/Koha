@@ -98,7 +98,7 @@ sub create_from_statistic {
 
     $self->store();
 
-    if ($patron) {
+    if ( $patron && Koha::Patron::Attribute::Types->search( { keep_for_pseudonymization => 1 } )->count > 0 ) {
         my $extended_attributes = $patron->extended_attributes->unblessed;
         for my $attribute (@$extended_attributes) {
             next unless Koha::Patron::Attribute::Types->find( $attribute->{code} )->keep_for_pseudonymization;
