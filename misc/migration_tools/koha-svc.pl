@@ -73,7 +73,7 @@ Koha's records from other machine without bringing all Koha dependencies with it
 
 =head1 USAGE
 
-This same script can be used as module (as it defines T<Koha::SVC> package) using
+This same script can be used as module (as it defines C<Koha::SVC> package) using
 
   require "koha-svc.pl"
 
