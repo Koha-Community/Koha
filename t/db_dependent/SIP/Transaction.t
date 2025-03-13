@@ -5,7 +5,7 @@
 
 use Modern::Perl;
 use Test::NoWarnings;
-use Test::More tests => 20;
+use Test::More tests => 21;
 use Test::Warn;
 
 use DateTime;
@@ -221,6 +221,90 @@ subtest cancel_hold => sub {
     my $hold = $transaction->drop_hold();
     is( $item->biblio->holds->count(), 0, "Bib has 0 holds remaining" );
     is( $item->holds->count(),         0, "Item has 0 holds remaining" );
+};
+
+subtest cancel_waiting_hold => sub {
+    plan tests => 14;
+
+    my $library = $builder->build_object( { class => 'Koha::Libraries' } );
+    my $patron  = $builder->build_object(
+        {
+            class => 'Koha::Patrons',
+            value => {
+                branchcode => $library->branchcode,
+            }
+        }
+    );
+    t::lib::Mocks::mock_userenv( { branchcode => $library->branchcode, flags => 1 } );
+    t::lib::Mocks::mock_preference( 'HoldCancellationRequestSIP', 0 );
+
+    my $item = $builder->build_sample_item(
+        {
+            library => $library->branchcode,
+        }
+    );
+
+    Koha::CirculationRules->set_rules(
+        {
+            categorycode => $patron->categorycode,
+            branchcode   => $library->branchcode,
+            itemtype     => $item->effective_itemtype,
+            rules        => {
+                onshelfholds     => 1,
+                reservesallowed  => 3,
+                holds_per_record => 3,
+                issuelength      => 5,
+                lengthunit       => 'days',
+            }
+        }
+    );
+
+    my $reserve_id = AddReserve(
+        {
+            branchcode     => $library->branchcode,
+            borrowernumber => $patron->borrowernumber,
+            biblionumber   => $item->biblio->biblionumber,
+            itemnumber     => $item->itemnumber,
+        }
+    );
+    is( $item->biblio->holds->count(), 1, "Hold was placed on bib" );
+    is( $item->holds->count(),         1, "Hold was placed on specific item" );
+
+    my $sip_patron  = C4::SIP::ILS::Patron->new( $patron->cardnumber );
+    my $sip_item    = C4::SIP::ILS::Item->new( $item->barcode );
+    my $transaction = C4::SIP::ILS::Transaction::Hold->new();
+    is( ref $transaction,                  "C4::SIP::ILS::Transaction::Hold", "New transaction created" );
+    is( $transaction->patron($sip_patron), $sip_patron,                       "Patron assigned to transaction" );
+    is( $transaction->item($sip_item),     $sip_item,                         "Item assigned to transaction" );
+    my $hold = $transaction->drop_hold();
+    is( $item->biblio->holds->count(), 0, "Bib has 0 holds remaining" );
+    is( $item->holds->count(),         0, "Item has 0 holds remaining" );
+
+    t::lib::Mocks::mock_preference( 'HoldCancellationRequestSIP', 1 );
+
+    $reserve_id = AddReserve(
+        {
+            branchcode     => $library->branchcode,
+            borrowernumber => $patron->borrowernumber,
+            biblionumber   => $item->biblio->biblionumber,
+            itemnumber     => $item->itemnumber,
+        }
+    );
+
+    $hold = Koha::Holds->find($reserve_id);
+    ok( $hold, 'Get hold object' );
+    $hold->update( { found => 'W' } );
+    $hold->get_from_storage;
+
+    is( $hold->found, 'W', "Hold was correctly set to waiting." );
+
+    $transaction = C4::SIP::ILS::Transaction::Hold->new();
+    is( ref $transaction,                  "C4::SIP::ILS::Transaction::Hold", "New transaction created" );
+    is( $transaction->patron($sip_patron), $sip_patron,                       "Patron assigned to transaction" );
+    is( $transaction->item($sip_item),     $sip_item,                         "Item assigned to transaction" );
+    $hold = $transaction->drop_hold();
+    is( $item->biblio->holds->count(), 1, "Bib has 1 holds remaining" );
+    is( $item->holds->count(),         1, "Item has 1 holds remaining" );
 };
 
 subtest do_hold => sub {

@@ -192,7 +192,7 @@ subtest cancel_hold => sub {
 };
 
 subtest cancel_waiting_hold => sub {
-    plan tests => 7;
+    plan tests => 12;
 
     my $library = $builder->build_object( { class => 'Koha::Libraries' } );
     my $patron  = $builder->build_object(
@@ -204,6 +204,7 @@ subtest cancel_waiting_hold => sub {
         }
     );
     t::lib::Mocks::mock_userenv( { branchcode => $library->branchcode, flags => 1 } );
+    t::lib::Mocks::mock_preference( 'HoldCancellationRequestSIP', 0 );
 
     my $item = $builder->build_sample_item(
         {
@@ -252,6 +253,33 @@ subtest cancel_waiting_hold => sub {
 
     is( $item->biblio->holds->count(), 0, "Bib has 0 holds remaining" );
     is( $item->holds->count(),         0, "Item has 0 holds remaining" );
+
+    t::lib::Mocks::mock_preference( 'HoldCancellationRequestSIP', 1 );
+
+    $reserve_id = AddReserve(
+        {
+            branchcode     => $library->branchcode,
+            borrowernumber => $patron->borrowernumber,
+            biblionumber   => $item->biblio->biblionumber,
+            itemnumber     => $item->itemnumber,
+        }
+    );
+    $hold = Koha::Holds->find($reserve_id);
+    ok( $hold, 'Get hold object' );
+    $hold->update( { found => 'W' } );
+    $hold->get_from_storage;
+
+    is( $hold->found, 'W', "Hold was correctly set to waiting." );
+
+    $transaction = $ils->cancel_hold( $patron->cardnumber, undef, $item->barcode, undef );
+
+    is(
+        $transaction->{screen_msg}, "Hold Cancellation Requested.",
+        "We get a success message when hold cancellation requested"
+    );
+
+    is( $item->biblio->holds->count(), 1, "Bib has 1 holds remaining" );
+    is( $item->holds->count(),         1, "Item has 1 holds remaining" );
 };
 
 subtest checkout => sub {
