@@ -734,7 +734,7 @@ sub merge_with {
         sub {
             foreach my $patron_id (@patron_ids) {
 
-                next if $patron_id eq $anonymous_patron;
+                next if $anonymous_patron && $patron_id eq $anonymous_patron;
 
                 my $patron = Koha::Patrons->find($patron_id);
 
