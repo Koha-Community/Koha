@@ -70,7 +70,7 @@ been provided so that a users login information is passed along
 automatically. This gets loaded into the template.
 This package is different from C4::Auth in so far as
 C4::Auth uses many preferences which are supposed NOT to be obtainable when installing the database.
-    
+
 As in C4::Auth, Authentication is based on cookies.
 
 =head1 FUNCTIONS

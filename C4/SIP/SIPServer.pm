@@ -1,5 +1,9 @@
 #!/usr/bin/perl
 
+=head1 NAME
+    C4::SIP::SIPServer
+=cut
+
 package C4::SIP::SIPServer;
 
 use strict;
@@ -93,7 +97,7 @@ __PACKAGE__->run(@parms);
 # Server
 #
 
-=head3 options
+=head2 options
 
 As per Net::Server documentation, override "options" to provide your own
 custom options to the Net::Server* object. This allows us to use the Net::Server
@@ -120,7 +124,7 @@ sub options {
     $template->{'custom_tcp_keepalive_intvl'} = \$prop->{'custom_tcp_keepalive_intvl'};
 }
 
-=head3 post_configure_hook
+=head2 post_configure_hook
 
 As per Net::Server documentation, this method validates our custom configuration.
 
@@ -148,7 +152,7 @@ sub post_configure_hook {
     }
 }
 
-=head3 post_accept_hook
+=head2 post_accept_hook
 
 This hook occurs after the client connection socket is created, which gives
 us an opportunity to enable support for TCP keepalives using the SO_KEEPALIVE

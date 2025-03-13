@@ -23,6 +23,7 @@ Koha::SuggestionEngine::Plugin::Null - an example plugin that does nothing but a
 
 =head1 SYNOPSIS
 
+=cut
 
 =head1 DESCRIPTION
 

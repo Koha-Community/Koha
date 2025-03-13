@@ -23,6 +23,7 @@ Koha::Filter::MARC::Null - an example filter that does nothing but allow us to r
 
 =head1 SYNOPSIS
 
+=cut
 
 =head1 DESCRIPTION
 

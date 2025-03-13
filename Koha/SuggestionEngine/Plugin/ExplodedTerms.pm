@@ -23,6 +23,7 @@ Koha::SuggestionEngine::Plugin::ExplodedTerms - suggest searches for broader/nar
 
 =head1 SYNOPSIS
 
+=cut
 
 =head1 DESCRIPTION
 

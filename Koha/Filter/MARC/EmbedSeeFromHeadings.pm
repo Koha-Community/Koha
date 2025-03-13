@@ -23,6 +23,7 @@ Koha::Filter::MARC::EmbedSeeFromHeadings - embeds see from headings into MARC fo
 
 =head1 SYNOPSIS
 
+=cut
 
 =head1 DESCRIPTION
 

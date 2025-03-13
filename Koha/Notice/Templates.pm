@@ -33,7 +33,7 @@ Koha::Notice::Templates - Koha notice template Object set class, related to the 
 
 =cut
 
-=head3
+=head3 find_effective_template
 
 my $template = Koha::Notice::Templates->find_effective_template(
     {

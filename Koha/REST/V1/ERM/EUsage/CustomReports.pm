@@ -678,7 +678,7 @@ sub _create_report_rows {
     }
 }
 
-=head3
+=head3 _get_usage_total
 
 A method for summing the usage counts for a data  object
 

@@ -21,7 +21,7 @@
 
 =head1 NAME
 
- acqui/spent.pl
+acqui/spent.pl
 
 =head1 DESCRIPTION
 

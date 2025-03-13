@@ -48,6 +48,7 @@ yaml_valid.t
 
 =head1 DESCRIPTION
 
+=cut
 
 =head1 USAGE
 

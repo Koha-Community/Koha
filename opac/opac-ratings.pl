@@ -17,7 +17,7 @@
 # You should have received a copy of the GNU General Public License
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
-=head1
+=head1 SYNOPSIS
 
 A non-javascript method to add/modify a biblio's rating, called from opac-detail.pl
 

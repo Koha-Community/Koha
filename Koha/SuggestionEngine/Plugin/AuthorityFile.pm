@@ -23,6 +23,7 @@ Koha::SuggestionEngine::Plugin::AuthorityFile - get suggestions from the authori
 
 =head1 SYNOPSIS
 
+=cut
 
 =head1 DESCRIPTION
 
