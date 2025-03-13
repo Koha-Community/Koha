@@ -35,7 +35,7 @@
         [% END %]
         [% IF ( run_report ) %]
             [% WRAPPER breadcrumb_item %]
-                <a href="/cgi-bin/koha/circ/view_holdsqueue.pl">Holds queue</a>
+                <a href="/cgi-bin/koha/circ/view_holdsqueue.pl?branchlimit=[% Branches.GetLoggedInBranchcode | html %]&run_report=1">Holds queue</a>
             [% END %]
             [% WRAPPER breadcrumb_item bc_active= 1 %]
                 <span>Results</span>
