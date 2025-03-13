@@ -157,7 +157,7 @@ sub get_js_files {
 }
 
 sub get_tt_files {
-    my $cmd   = sprintf q{git ls-files '*.tt' '*.inc' %s}, build_git_exclude('js');
+    my $cmd   = sprintf q{git ls-files '*.tt' '*.inc' %s}, build_git_exclude('tt');
     my @files = qx{$cmd};
     chomp for @files;
     return @files;
