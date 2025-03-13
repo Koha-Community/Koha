@@ -237,6 +237,21 @@ sub to_api_mapping {
     };
 }
 
+=head3 public_read_list
+
+This method returns the list of publicly readable database fields for both API and UI output purposes
+
+=cut
+
+sub public_read_list {
+    return [
+        'checkin_library', 'issue_id',        'borrowernumber',
+        'itemnumber',      'date_due',        'branchcode',
+        'returndate',      'lastreneweddate', 'issuedate',
+        'notedate',        'noteseen'
+    ];
+}
+
 =head3 claim_returned
 
   my $return_claim = $checkout->claim_returned();
