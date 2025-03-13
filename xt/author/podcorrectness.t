@@ -1,5 +1,4 @@
 #!/usr/bin/env perl
-use Modern::Perl;
 
 =head2 podcorrectness.t
 
@@ -8,16 +7,17 @@ correctness. It typically finds things like pod tags withouth blank
 lines immediately before or after them, unknown directives, or =over,
 =item, and =back in the wrong order.
 
-You must have Test::Pod installed.
-
-One good way to run this is with C<prove -v
-xt/author/podcorrectness.t>
+One good way to run this is with C<prove -v xt/author/podcorrectness.t>
 
 =cut
 
+use Modern::Perl;
 use Test::More;
-eval "use Test::Pod 1.00";
-plan skip_all => "Test::Pod 1.00 required for testing POD" if $@;
-my @poddirs = qw( C4 Koha );
-all_pod_files_ok( all_pod_files(@poddirs) );
+use Test::Pod;
 
+my @files;
+push @files, qx{git ls-files '*.pl' '*.PL' '*.pm' '*.t'};
+push @files, qx{git ls-files svc opac/svc};                 # Files without extension
+chomp for @files;
+
+all_pod_files_ok(@files);
