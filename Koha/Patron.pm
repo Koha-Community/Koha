@@ -2305,11 +2305,9 @@ sub extended_attributes {
             $attribute->validate_type();
         }
 
-        # Sort new attributes by code
-        @new_attributes = sort { $a->attribute cmp $b->attribute } @new_attributes;
-
         # Stash changes after
-        for my $attribute ( values @new_attributes ) {
+        # Sort attributes to ensure order is the same as for current attributes retrieved above
+        for my $attribute ( sort { $a->attribute cmp $b->attribute } @new_attributes ) {
             my $repeatable = $attribute->type->repeatable ? 1 : 0;
             $attribute_changes{$repeatable}->{ $attribute->code }->{after} //= [];
             push(
@@ -2327,12 +2325,15 @@ sub extended_attributes {
         $schema->txn_do(
             sub {
                 my $all_changes = {};
+                my %changed_attributes_codes;
                 while ( my ( $repeatable, $changes ) = each %attribute_changes ) {
                     while ( my ( $code, $change ) = each %{$changes} ) {
                         $change->{before} //= [];
                         $change->{after}  //= [];
 
                         if ( $is_different->( $change->{before}, $change->{after} ) ) {
+                            $changed_attributes_codes{$code} = 1;
+
                             unless ($repeatable) {
                                 $change->{before} = @{ $change->{before} } ? $change->{before}->[0] : '';
                                 $change->{after}  = @{ $change->{after} }  ? $change->{after}->[0]  : '';
@@ -2345,49 +2346,54 @@ sub extended_attributes {
                                 }
                             )->delete;
 
-                            # Add possible new attribute values
-                            for my $attribute (@new_attributes) {
-                                $attribute->store() if ( $attribute->code eq $code );
-                            }
                             if ( C4::Context->preference("BorrowersLog") ) {
                                 $all_changes->{"attribute.$code"} = $change;
                             }
                         }
                     }
                 }
-                my $new_types = {};
-                for my $attribute ( @{$attributes} ) {
-                    $new_types->{ $attribute->{code} } = 1;
-                }
 
-                # Check globally mandatory types
-                my $interface = C4::Context->interface;
-                my $params    = {
-                    mandatory                                        => 1,
-                    category_code                                    => [ undef, $self->categorycode ],
-                    'borrower_attribute_types_branches.b_branchcode' => undef,
-                };
+                if (%changed_attributes_codes) {
 
-                if ( $interface eq 'opac' ) {
-                    $params->{opac_editable} = 1;
-                }
+                    # Store changed attributes in the order they where passed in as some tests
+                    # relies on ids being assigned in that order
+                    my $new_types = {};
+                    for my $new_attribute (@new_attributes) {
+                        $new_attribute->store() if $changed_attributes_codes{ $new_attribute->code };
+                        $new_types->{ $new_attribute->code } = 1;
+                    }
 
-                my @required_attribute_types = Koha::Patron::Attribute::Types->search(
-                    $params,
-                    { join => 'borrower_attribute_types_branches' }
-                )->get_column('code');
-                for my $type (@required_attribute_types) {
-                    Koha::Exceptions::Patron::MissingMandatoryExtendedAttribute->throw(
-                        type => $type,
-                    ) if !$new_types->{$type};
-                }
-                if ( %{$all_changes} ) {
-                    logaction(
-                        "MEMBERS",
-                        "MODIFY",
-                        $self->borrowernumber,
-                        to_json( $all_changes, { pretty => 1, canonical => 1 } )
-                    );
+                    # Check globally mandatory types
+                    my $interface = C4::Context->interface;
+                    my $params    = {
+                        mandatory                                        => 1,
+                        category_code                                    => [ undef, $self->categorycode ],
+                        'borrower_attribute_types_branches.b_branchcode' => undef,
+                    };
+
+                    if ( $interface eq 'opac' ) {
+                        $params->{opac_editable} = 1;
+                    }
+
+                    my @required_attribute_types = Koha::Patron::Attribute::Types->search(
+                        $params,
+                        { join => 'borrower_attribute_types_branches' }
+                    )->get_column('code');
+
+                    for my $type (@required_attribute_types) {
+                        Koha::Exceptions::Patron::MissingMandatoryExtendedAttribute->throw(
+                            type => $type,
+                        ) if !$new_types->{$type};
+                    }
+
+                    if ( %{$all_changes} ) {
+                        logaction(
+                            "MEMBERS",
+                            "MODIFY",
+                            $self->borrowernumber,
+                            to_json( $all_changes, { pretty => 1, canonical => 1 } )
+                        );
+                    }
                 }
             }
         );
