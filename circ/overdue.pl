@@ -386,6 +386,7 @@ if ($noreport) {
             return_claim_id         => $data->{return_claim_id},
             enumchron               => $data->{enumchron},
             itemtype                => $data->{itype},
+            overdue                 => DateTime->compare( dt_from_string( $data->{date_due} ), $today_dt ) == -1 ? 1 : 0,
             patron_attr_value_loop  => \@patron_attr_value_loop,
         };
     }

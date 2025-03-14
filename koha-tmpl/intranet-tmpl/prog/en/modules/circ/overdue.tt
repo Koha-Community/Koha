@@ -107,7 +107,13 @@
       <tbody>
       [% FOREACH overdueloo IN overdueloop %]
         <tr>
-          <td data-order="[% overdueloo.duedate | html %]"><span class='overdue'>[% overdueloo.duedate | $KohaDates %]</span></td>
+          <td data-order="[% overdueloo.duedate | html %]">
+              [% IF ( overdueloo.overdue ) %]
+                  <span class="overdue">[% overdueloo.duedate | $KohaDates %]</span>
+              [% ELSE %]
+                  [% overdueloo.duedate | $KohaDates %]
+              [% END %]
+          </td>
           <td>
             [% INCLUDE 'patron-title.inc' patron=overdueloo.patron hide_patron_infos_if_needed=1 %]
             [% IF logged_in_user.can_see_patron_infos( overdueloo.patron ) %]
@@ -121,7 +127,7 @@
             <td>[% Branches.GetName( overdueloo.homebranchcode ) | html %]</td>
             <td>[% Branches.GetName( overdueloo.holdingbranchcode ) | html %]</td>
             <td>[% AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.location', authorised_value => overdueloo.location ) | html %]</td>
-            <td data-order="[% overdueloo.datelastborrowed | html %]"><span class='overdue'>[% overdueloo.datelastborrowed | $KohaDates %]</span></td>
+            <td data-order="[% overdueloo.datelastborrowed | html %]">[% overdueloo.datelastborrowed | $KohaDates %]</td>
           <td><a href="/cgi-bin/koha/catalogue/moredetail.pl?biblionumber=[% overdueloo.biblionumber | uri %]&amp;itemnumber=[% overdueloo.itemnum | uri %]#item[% overdueloo.itemnum | uri %]">[% overdueloo.barcode | html %]</a></td>
           <td>[% overdueloo.itemcallnumber | html %]</td>
             <td>[% ItemTypes.GetDescription( overdueloo.itemtype ) | html %]</td>
