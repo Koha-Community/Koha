@@ -100,23 +100,6 @@ sub get_control_number {
     return $control_number;
 }
 
-=head2 get_opac_suppression
-
-    my $opac_suppressed = $extractor->get_opac_suppression();
-
-Returns whether the record is flagged as suppressed in the OPAC.
-FIXME: Revisit after 38330 discussion
-
-=cut
-
-sub get_opac_suppression {
-    my ($self) = @_;
-
-    my $record = $self->metadata;
-
-    return $record->subfield( '942', 'n' ) ? 1 : 0;
-}
-
 =head3 _normalize_string
 
     my $normalized_string = $self->_normalize_string($string);
