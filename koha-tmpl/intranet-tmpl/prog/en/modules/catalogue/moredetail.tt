@@ -136,418 +136,422 @@
         [% END %]
 
         [% FOREACH ITEM_DAT IN ITEM_DATA %]
-            <h3 id="item[% ITEM_DAT.itemnumber | html %]" class="expanded">
-                <i class="fa fa-caret-down" title="Collapse this section"></i>
-                [% IF ITEM_DAT.barcode -%]
-                    Barcode [% ITEM_DAT.barcode | html %]
-                [% ELSE -%]
-                    Item number [% ITEM_DAT.itemnumber | html %]
-                [% END %]
-                [% IF not_for_loan %][% not_for_loan_description | html %][% END %]
-            </h3>
-            <div id="collapse_item[% ITEM_DAT.itemnumber | html %]" class="page-section clearfix">
-                [% SET not_for_loan = 0 %]
-                [% IF ITEM_DAT.notforloan || ITEM_DAT.effective_itemtype.notforloan %]
-                    [% SET not_for_loan = 1 %]
-                    [% SET not_for_loan_description = AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.notforloan', authorised_value => item.notforloan ) %]
-                [% END %]
-                <div class="listgroup">
-                    <h4>
-                        Item information
-                        [% UNLESS ( ITEM_DAT.nomod ) %]
-                            [% IF ( CAN_user_editcatalogue_edit_items ) %]
-                                <a href="/cgi-bin/koha/cataloguing/additem.pl?op=edititem&amp;biblionumber=[% ITEM_DAT.biblionumber | uri %]&amp;itemnumber=[% ITEM_DAT.itemnumber | uri %]"
-                                    ><i class="fa-solid fa-pencil" aria-hidden="true"></i> Edit item</a
-                                >
+            <div id="container[% ITEM_DAT.itemnumber | html %]">
+                <h3 id="item[% ITEM_DAT.itemnumber | html %]" class="expanded">
+                    <i class="fa fa-caret-down" title="Collapse this section"></i>
+                    [% IF ITEM_DAT.barcode -%]
+                        Barcode [% ITEM_DAT.barcode | html %]
+                    [% ELSE -%]
+                        Item number [% ITEM_DAT.itemnumber | html %]
+                    [% END %]
+                    [% IF not_for_loan %][% not_for_loan_description | html %][% END %]
+                </h3>
+                <div id="collapse_item[% ITEM_DAT.itemnumber | html %]" class="page-section clearfix">
+                    [% SET not_for_loan = 0 %]
+                    [% IF ITEM_DAT.notforloan || ITEM_DAT.effective_itemtype.notforloan %]
+                        [% SET not_for_loan = 1 %]
+                        [% SET not_for_loan_description = AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.notforloan', authorised_value => item.notforloan ) %]
+                    [% END %]
+                    <div class="listgroup">
+                        <h4>
+                            Item information
+                            [% UNLESS ( ITEM_DAT.nomod ) %]
+                                [% IF ( CAN_user_editcatalogue_edit_items ) %]
+                                    <a href="/cgi-bin/koha/cataloguing/additem.pl?op=edititem&amp;biblionumber=[% ITEM_DAT.biblionumber | uri %]&amp;itemnumber=[% ITEM_DAT.itemnumber | uri %]"
+                                        ><i class="fa-solid fa-pencil" aria-hidden="true"></i> Edit item</a
+                                    >
+                                [% END %]
                             [% END %]
-                        [% END %]
-                    </h4>
+                        </h4>
 
-                    <div class="rows">
-                        <ol class="bibliodetails">
-                            <li class="homebranch"><span class="label">Home library:</span> [% Branches.GetName( ITEM_DAT.homebranch ) | html %]&nbsp;</li>
-                            [% IF ( item_level_itypes ) %]
-                                <li class="itype"><span class="label">Item type:</span> [% ITEM_DAT.itype | html %]&nbsp;</li>
-                            [% END %]
-                            [% IF ( ITEM_DAT.ccode) %]
-                                <li class="ccode"><span class="label">Collection:</span> [% ITEM_DAT.ccode | html %]</li>
-                            [% END %]
-                            <li class="itemcallnumber"><span class="label">Item call number:</span> [% ITEM_DAT.itemcallnumber | html %]</li>
-                            [% IF ( ITEM_DAT.displaycopy ) %]
-                                <li class="copynumber"><span class="label">Copy number:</span> [% ITEM_DAT.copyvol | html %]&nbsp;</li>
-                            [% END %]
-                            [% IF ( ITEM_DAT.location ) %]
-                                <li class="location">
-                                    <span class="label">Shelving location:</span>
-                                    [% AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.location', authorised_value => ITEM_DAT.location ) | html %]
-                                </li>
-                            [% END %]
-                            [% IF ( ITEM_DAT.replacementprice ) %]
-                                <li class="replacementprice"><span class="label">Replacement price:</span> [% ITEM_DAT.replacementprice | $Price %]&nbsp;</li>
-                            [% END %]
-                            [% IF ITEM_DAT.materials %]
-                                <li class="materials"><span class="label">Materials specified:</span> [% ITEM_DAT.materials | html %]</li>
-                            [% END %]
-                        </ol>
-                        <!-- /.bibliodetails -->
+                        <div class="rows">
+                            <ol class="bibliodetails">
+                                <li class="homebranch"><span class="label">Home library:</span> [% Branches.GetName( ITEM_DAT.homebranch ) | html %]&nbsp;</li>
+                                [% IF ( item_level_itypes ) %]
+                                    <li class="itype"><span class="label">Item type:</span> [% ITEM_DAT.itype | html %]&nbsp;</li>
+                                [% END %]
+                                [% IF ( ITEM_DAT.ccode) %]
+                                    <li class="ccode"><span class="label">Collection:</span> [% ITEM_DAT.ccode | html %]</li>
+                                [% END %]
+                                <li class="itemcallnumber"><span class="label">Item call number:</span> [% ITEM_DAT.itemcallnumber | html %]</li>
+                                [% IF ( ITEM_DAT.displaycopy ) %]
+                                    <li class="copynumber"><span class="label">Copy number:</span> [% ITEM_DAT.copyvol | html %]&nbsp;</li>
+                                [% END %]
+                                [% IF ( ITEM_DAT.location ) %]
+                                    <li class="location">
+                                        <span class="label">Shelving location:</span>
+                                        [% AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.location', authorised_value => ITEM_DAT.location ) | html %]
+                                    </li>
+                                [% END %]
+                                [% IF ( ITEM_DAT.replacementprice ) %]
+                                    <li class="replacementprice"><span class="label">Replacement price:</span> [% ITEM_DAT.replacementprice | $Price %]&nbsp;</li>
+                                [% END %]
+                                [% IF ITEM_DAT.materials %]
+                                    <li class="materials"><span class="label">Materials specified:</span> [% ITEM_DAT.materials | html %]</li>
+                                [% END %]
+                            </ol>
+                            <!-- /.bibliodetails -->
+                        </div>
+                        <!-- /.rows -->
                     </div>
-                    <!-- /.rows -->
-                </div>
-                <!-- /.listgroup -->
+                    <!-- /.listgroup -->
 
-                <div class="listgroup">
-                    <h4>
-                        <span>Statuses</span>
-                        [% IF ( ITEM_DAT.status_advisory ) %]
-                            ([% IF ( not_for_loan ) %]
-                                [% IF not_for_loan_description %]
-                                    [% not_for_loan_description | html %]
-                                [% ELSE %]
-                                    <span>Not for loan</span>
-                                [% END %]
-                            [% END %]
-                            [% IF ( ITEM_DAT.itemlost ) %]<span>Lost</span>[% END %]
-                            [% IF ( ITEM_DAT.damaged ) %]<span>Damaged</span>[% END %]
-                            [% IF ( ITEM_DAT.withdrawn ) %]<span>Withdrawn</span>[% END %]
-                            )
-                        [% END %]
-                    </h4>
-
-                    <div class="rows">
-                        <ol class="bibliodetails">
-                            <li class="holdingbranch"><span class="label">Current library:</span> [% Branches.GetName( ITEM_DAT.holdingbranch ) | html %]&nbsp;</li>
-                            <li class="checkout_status">
-                                <span class="label">Checkout status:</span>
-                                [% SET checkout = ITEM_DAT.object.checkout %]
-                                [% IF ( checkout ) %]
-                                    <span>Checked out to [% INCLUDE 'patron-title.inc' patron => checkout.patron hide_patron_infos_if_needed=1 %]</span>
-                                    [% IF ( checkout.lastreneweddate ) %]
-                                        <span>Last renewed [% checkout.lastreneweddate | $KohaDates %]</span>,
-                                    [% END %]
-                                    [% IF ( checkout.date_due ) %]
-                                        <span>Due back on [% checkout.date_due | $KohaDates as_due_date => 1 %]</span>
+                    <div class="listgroup">
+                        <h4>
+                            <span>Statuses</span>
+                            [% IF ( ITEM_DAT.status_advisory ) %]
+                                ([% IF ( not_for_loan ) %]
+                                    [% IF not_for_loan_description %]
+                                        [% not_for_loan_description | html %]
                                     [% ELSE %]
-                                        <span>Not checked out</span>
+                                        <span>Not for loan</span>
                                     [% END %]
                                 [% END %]
-                            </li>
-                            [% IF ITEM_DAT.object.checkout.renewals_count %]
-                                <li class="renewals_count">
-                                    <span class="label">Current renewals:</span>
-                                    [% ITEM_DAT.object.checkout.renewals_count | html %] [
-                                    <a class="checkout_renewals_view" data-renewals="[% ITEM_DAT.object.checkout.renewals_count | html | html %]" data-issueid="[% ITEM_DAT.object.checkout.id | html %]" href="#">View</a> ]
-                                </li>
+                                [% IF ( ITEM_DAT.itemlost ) %]<span>Lost</span>[% END %]
+                                [% IF ( ITEM_DAT.damaged ) %]<span>Damaged</span>[% END %]
+                                [% IF ( ITEM_DAT.withdrawn ) %]<span>Withdrawn</span>[% END %]
+                                )
                             [% END %]
-                            [% IF itemlostloop %]
-                                <li class="lost">
-                                    <span class="label">Lost status:</span>
-                                    [% IF ( CAN_user_circulate ) %]
-                                        [% SET ClaimReturnedLostValue = Koha.Preference('ClaimReturnedLostValue') %]
-                                        <form action="updateitem.pl" method="post">
-                                            [% INCLUDE 'csrf-token.inc' %]
-                                            <input type="hidden" name="biblionumber" value="[% ITEM_DAT.biblionumber | html %]" />
-                                            <input type="hidden" name="biblioitemnumber" value="[% ITEM_DAT.biblioitemnumber | html %]" />
-                                            <input type="hidden" name="itemnumber" value="[% ITEM_DAT.itemnumber | html %]" />
+                        </h4>
 
-                                            <select name="itemlost">
-                                                <option value="">Choose</option>
-                                                [% FOREACH itemlostloo IN itemlostloop %]
-                                                    [% IF itemlostloo.authorised_value == ITEM_DAT.itemlost %]
-                                                        <option value="[% itemlostloo.authorised_value | html %]" selected="selected">[% itemlostloo.lib | html %]</option>
-                                                    [% ELSIF ClaimReturnedLostValue && itemlostloo.authorised_value == ClaimReturnedLostValue #Filter claims returned status from pulldown %]
-                                                        <option value="[% itemlostloo.authorised_value | html %]" disabled="disabled" title="Return claims must be processed from the patron details page">[% itemlostloo.lib | html %]</option>
-                                                    [% ELSE %]
-                                                        <option value="[% itemlostloo.authorised_value | html %]">[% itemlostloo.lib | html %]</option>
-                                                    [% END %]
-                                                [% END %]
-                                            </select>
-                                            <input type="hidden" name="withdrawn" value="[% ITEM_DAT.withdrawn | html %]" />
-                                            <input type="hidden" name="damaged" value="[% ITEM_DAT.damaged | html %]" />
-
-                                            <input type="hidden" name="op" value="cud-set_lost" />
-                                            <input type="submit" name="submit" class="btn btn-primary btn-xs" value="Set status" />
-                                            [% IF ClaimReturnedLostValue && ITEM_DAT.has_return_claim %]
-                                                <p class="help-block">Item has been claimed as returned.</p>
-                                            [% END %]
-                                        </form>
-                                    [% ELSE %]
-                                        [% FOREACH itemlostloo IN itemlostloop %]
-                                            [% IF ( itemlostloo.selected ) %]
-                                                [% itemlostloo.lib | html %]
-                                            [% END %]
+                        <div class="rows">
+                            <ol class="bibliodetails">
+                                <li class="holdingbranch"><span class="label">Current library:</span> [% Branches.GetName( ITEM_DAT.holdingbranch ) | html %]&nbsp;</li>
+                                <li class="checkout_status">
+                                    <span class="label">Checkout status:</span>
+                                    [% SET checkout = ITEM_DAT.object.checkout %]
+                                    [% IF ( checkout ) %]
+                                        <span>Checked out to [% INCLUDE 'patron-title.inc' patron => checkout.patron hide_patron_infos_if_needed=1 %]</span>
+                                        [% IF ( checkout.lastreneweddate ) %]
+                                            <span>Last renewed [% checkout.lastreneweddate | $KohaDates %]</span>,
                                         [% END %]
-                                    [% END %]
-                                </li>
-                                [% IF ITEM_DAT.itemlost != "" && ITEM_DAT.itemlost_on %]
-                                    <li><span class="label">Lost on:</span>[% ITEM_DAT.itemlost_on | $KohaDates %]</li>
-                                [% END %]
-                            [% END %]
-
-                            [% IF itemdamagedloop %]
-                                <li class="damaged">
-                                    <span class="label">Damaged status:</span>
-                                    [% IF ( CAN_user_circulate ) %]
-                                        <form action="updateitem.pl" method="post">
-                                            [% INCLUDE 'csrf-token.inc' %]
-                                            <input type="hidden" name="biblionumber" value="[% ITEM_DAT.biblionumber | html %]" />
-                                            <input type="hidden" name="biblioitemnumber" value="[% ITEM_DAT.biblioitemnumber | html %]" />
-                                            <input type="hidden" name="itemnumber" value="[% ITEM_DAT.itemnumber | html %]" />
-                                            <select name="damaged">
-                                                <option value="">Choose</option>
-                                                [% FOREACH itemdamagedloo IN itemdamagedloop %]
-                                                    [% IF itemdamagedloo.authorised_value == ITEM_DAT.damaged %]
-                                                        <option value="[% itemdamagedloo.authorised_value | html %]" selected="selected">[% itemdamagedloo.lib | html %]</option>
-                                                    [% ELSE %]
-                                                        <option value="[% itemdamagedloo.authorised_value | html %]">[% itemdamagedloo.lib | html %]</option>
-                                                    [% END %]
-                                                [% END %]
-                                            </select>
-                                            <input type="hidden" name="op" value="cud-set_damaged" />
-                                            <input type="submit" name="submit" class="btn btn-primary btn-xs" value="Set status" />
-                                        </form>
-                                    [% ELSE %]
-                                        [% FOREACH itemdamagedloo IN itemdamagedloop %]
-                                            [% IF ( itemdamagedloo.selected ) %]
-                                                [% itemdamagedloo.lib | html %]
-                                            [% END %]
-                                        [% END %]
-                                    [% END %]
-                                </li>
-                                [% IF ITEM_DAT.damaged != "" && ITEM_DAT.damaged_on %]
-                                    <li><span class="label">Damaged on:</span>[% ITEM_DAT.damaged_on | $KohaDates %]</li>
-                                [% END %]
-                            [% END %]
-
-                            [% IF itemwithdrawnloop %]
-                                <li class="withdrawn">
-                                    <span class="label">Withdrawn status:</span>
-                                    [% IF ( CAN_user_circulate ) %]
-                                        <form action="updateitem.pl" method="post">
-                                            [% INCLUDE 'csrf-token.inc' %]
-                                            <input type="hidden" name="biblionumber" value="[% ITEM_DAT.biblionumber | html %]" />
-                                            <input type="hidden" name="biblioitemnumber" value="[% ITEM_DAT.biblioitemnumber | html %]" />
-                                            <input type="hidden" name="itemnumber" value="[% ITEM_DAT.itemnumber | html %]" />
-                                            <select name="withdrawn">
-                                                <option value="">Choose</option>
-                                                [% FOREACH itemwithdrawn IN itemwithdrawnloop %]
-                                                    [% IF itemwithdrawn.authorised_value == ITEM_DAT.withdrawn %]
-                                                        <option value="[% itemwithdrawn.authorised_value | html %]" selected="selected">[% itemwithdrawn.lib | html %]</option>
-                                                    [% ELSE %]
-                                                        <option value="[% itemwithdrawn.authorised_value | html %]">[% itemwithdrawn.lib | html %]</option>
-                                                    [% END %]
-                                                [% END %]
-                                            </select>
-                                            <input type="hidden" name="op" value="cud-set_withdrawn" />
-                                            <input type="submit" name="submit" class="btn btn-primary btn-xs" value="Set status" />
-                                        </form>
-                                    [% ELSE %]
-                                        [% FOREACH itemwithdrawn IN itemwithdrawnloop %]
-                                            [% IF itemwithdrawn.authorised_value == ITEM_DAT.withdrawn %]
-                                                [% itemwithdrawn.lib | html %]
-                                            [% END %]
-                                        [% END %]
-                                    [% END %]
-                                </li>
-                                [% IF ITEM_DAT.withdrawn != "" && ITEM_DAT.withdrawn_on %]
-                                    <li><span class="label">Withdrawn on:</span>[% ITEM_DAT.withdrawn_on | $KohaDates %]</li>
-                                [% END %]
-                            [% END %]
-                        </ol>
-                        <!-- /.bibliodetails -->
-                    </div>
-                    <!-- /.rows -->
-                </div>
-                <!-- /.listgroup -->
-
-                <div class="listgroup">
-                    <h4>Priority</h4>
-                    <div class="rows">
-                        <ol class="bibliodetails">
-                            <li class="local_holds_priority">
-                                <span class="label">Exclude from local holds priority:</span>
-                                <form action="updateitem.pl" method="post">
-                                    [% INCLUDE 'csrf-token.inc' %]
-                                    <input type="hidden" name="biblionumber" value="[% ITEM_DAT.biblionumber | html %]" />
-                                    <input type="hidden" name="biblioitemnumber" value="[% ITEM_DAT.biblioitemnumber | html %]" />
-                                    <input type="hidden" name="itemnumber" value="[% ITEM_DAT.itemnumber | html %]" />
-                                    <select id="exclude_from_local_holds_priority" name="exclude_from_local_holds_priority">
-                                        [% IF ITEM_DAT.exclude_from_local_holds_priority %]
-                                            <option value="1" selected>Yes</option>
-                                            <option value="0">No</option>
+                                        [% IF ( checkout.date_due ) %]
+                                            <span>Due back on [% checkout.date_due | $KohaDates as_due_date => 1 %]</span>
                                         [% ELSE %]
-                                            <option value="1">Yes</option>
-                                            <option value="0" selected>No</option>
+                                            <span>Not checked out</span>
                                         [% END %]
-                                    </select>
-                                    <input type="hidden" name="op" value="cud-set_exclude_priority" />
-                                    <input type="submit" name="submit" class="btn btn-primary btn-xs" value="Update" />
-                                </form>
-                            </li>
-                            <li class="bookable">
-                                <span class="label"> Bookable: </span>
-                                [% IF ( CAN_user_circulate ) %]
+                                    [% END %]
+                                </li>
+                                [% IF ITEM_DAT.object.checkout.renewals_count %]
+                                    <li class="renewals_count">
+                                        <span class="label">Current renewals:</span>
+                                        [% ITEM_DAT.object.checkout.renewals_count | html %] [
+                                        <a class="checkout_renewals_view" data-renewals="[% ITEM_DAT.object.checkout.renewals_count | html | html %]" data-issueid="[% ITEM_DAT.object.checkout.id | html %]" href="#">View</a> ]
+                                    </li>
+                                [% END %]
+                                [% IF itemlostloop %]
+                                    <li class="lost">
+                                        <span class="label">Lost status:</span>
+                                        [% IF ( CAN_user_circulate ) %]
+                                            [% SET ClaimReturnedLostValue = Koha.Preference('ClaimReturnedLostValue') %]
+                                            <form action="updateitem.pl" method="post">
+                                                [% INCLUDE 'csrf-token.inc' %]
+                                                <input type="hidden" name="biblionumber" value="[% ITEM_DAT.biblionumber | html %]" />
+                                                <input type="hidden" name="biblioitemnumber" value="[% ITEM_DAT.biblioitemnumber | html %]" />
+                                                <input type="hidden" name="itemnumber" value="[% ITEM_DAT.itemnumber | html %]" />
+
+                                                <select name="itemlost">
+                                                    <option value="">Choose</option>
+                                                    [% FOREACH itemlostloo IN itemlostloop %]
+                                                        [% IF itemlostloo.authorised_value == ITEM_DAT.itemlost %]
+                                                            <option value="[% itemlostloo.authorised_value | html %]" selected="selected">[% itemlostloo.lib | html %]</option>
+                                                        [% ELSIF ClaimReturnedLostValue && itemlostloo.authorised_value == ClaimReturnedLostValue #Filter claims returned status from pulldown %]
+                                                            <option value="[% itemlostloo.authorised_value | html %]" disabled="disabled" title="Return claims must be processed from the patron details page"
+                                                                >[% itemlostloo.lib | html %]</option
+                                                            >
+                                                        [% ELSE %]
+                                                            <option value="[% itemlostloo.authorised_value | html %]">[% itemlostloo.lib | html %]</option>
+                                                        [% END %]
+                                                    [% END %]
+                                                </select>
+                                                <input type="hidden" name="withdrawn" value="[% ITEM_DAT.withdrawn | html %]" />
+                                                <input type="hidden" name="damaged" value="[% ITEM_DAT.damaged | html %]" />
+
+                                                <input type="hidden" name="op" value="cud-set_lost" />
+                                                <input type="submit" name="submit" class="btn btn-primary btn-xs" value="Set status" />
+                                                [% IF ClaimReturnedLostValue && ITEM_DAT.has_return_claim %]
+                                                    <p class="help-block">Item has been claimed as returned.</p>
+                                                [% END %]
+                                            </form>
+                                        [% ELSE %]
+                                            [% FOREACH itemlostloo IN itemlostloop %]
+                                                [% IF ( itemlostloo.selected ) %]
+                                                    [% itemlostloo.lib | html %]
+                                                [% END %]
+                                            [% END %]
+                                        [% END %]
+                                    </li>
+                                    [% IF ITEM_DAT.itemlost != "" && ITEM_DAT.itemlost_on %]
+                                        <li><span class="label">Lost on:</span>[% ITEM_DAT.itemlost_on | $KohaDates %]</li>
+                                    [% END %]
+                                [% END %]
+
+                                [% IF itemdamagedloop %]
+                                    <li class="damaged">
+                                        <span class="label">Damaged status:</span>
+                                        [% IF ( CAN_user_circulate ) %]
+                                            <form action="updateitem.pl" method="post">
+                                                [% INCLUDE 'csrf-token.inc' %]
+                                                <input type="hidden" name="biblionumber" value="[% ITEM_DAT.biblionumber | html %]" />
+                                                <input type="hidden" name="biblioitemnumber" value="[% ITEM_DAT.biblioitemnumber | html %]" />
+                                                <input type="hidden" name="itemnumber" value="[% ITEM_DAT.itemnumber | html %]" />
+                                                <select name="damaged">
+                                                    <option value="">Choose</option>
+                                                    [% FOREACH itemdamagedloo IN itemdamagedloop %]
+                                                        [% IF itemdamagedloo.authorised_value == ITEM_DAT.damaged %]
+                                                            <option value="[% itemdamagedloo.authorised_value | html %]" selected="selected">[% itemdamagedloo.lib | html %]</option>
+                                                        [% ELSE %]
+                                                            <option value="[% itemdamagedloo.authorised_value | html %]">[% itemdamagedloo.lib | html %]</option>
+                                                        [% END %]
+                                                    [% END %]
+                                                </select>
+                                                <input type="hidden" name="op" value="cud-set_damaged" />
+                                                <input type="submit" name="submit" class="btn btn-primary btn-xs" value="Set status" />
+                                            </form>
+                                        [% ELSE %]
+                                            [% FOREACH itemdamagedloo IN itemdamagedloop %]
+                                                [% IF ( itemdamagedloo.selected ) %]
+                                                    [% itemdamagedloo.lib | html %]
+                                                [% END %]
+                                            [% END %]
+                                        [% END %]
+                                    </li>
+                                    [% IF ITEM_DAT.damaged != "" && ITEM_DAT.damaged_on %]
+                                        <li><span class="label">Damaged on:</span>[% ITEM_DAT.damaged_on | $KohaDates %]</li>
+                                    [% END %]
+                                [% END %]
+
+                                [% IF itemwithdrawnloop %]
+                                    <li class="withdrawn">
+                                        <span class="label">Withdrawn status:</span>
+                                        [% IF ( CAN_user_circulate ) %]
+                                            <form action="updateitem.pl" method="post">
+                                                [% INCLUDE 'csrf-token.inc' %]
+                                                <input type="hidden" name="biblionumber" value="[% ITEM_DAT.biblionumber | html %]" />
+                                                <input type="hidden" name="biblioitemnumber" value="[% ITEM_DAT.biblioitemnumber | html %]" />
+                                                <input type="hidden" name="itemnumber" value="[% ITEM_DAT.itemnumber | html %]" />
+                                                <select name="withdrawn">
+                                                    <option value="">Choose</option>
+                                                    [% FOREACH itemwithdrawn IN itemwithdrawnloop %]
+                                                        [% IF itemwithdrawn.authorised_value == ITEM_DAT.withdrawn %]
+                                                            <option value="[% itemwithdrawn.authorised_value | html %]" selected="selected">[% itemwithdrawn.lib | html %]</option>
+                                                        [% ELSE %]
+                                                            <option value="[% itemwithdrawn.authorised_value | html %]">[% itemwithdrawn.lib | html %]</option>
+                                                        [% END %]
+                                                    [% END %]
+                                                </select>
+                                                <input type="hidden" name="op" value="cud-set_withdrawn" />
+                                                <input type="submit" name="submit" class="btn btn-primary btn-xs" value="Set status" />
+                                            </form>
+                                        [% ELSE %]
+                                            [% FOREACH itemwithdrawn IN itemwithdrawnloop %]
+                                                [% IF itemwithdrawn.authorised_value == ITEM_DAT.withdrawn %]
+                                                    [% itemwithdrawn.lib | html %]
+                                                [% END %]
+                                            [% END %]
+                                        [% END %]
+                                    </li>
+                                    [% IF ITEM_DAT.withdrawn != "" && ITEM_DAT.withdrawn_on %]
+                                        <li><span class="label">Withdrawn on:</span>[% ITEM_DAT.withdrawn_on | $KohaDates %]</li>
+                                    [% END %]
+                                [% END %]
+                            </ol>
+                            <!-- /.bibliodetails -->
+                        </div>
+                        <!-- /.rows -->
+                    </div>
+                    <!-- /.listgroup -->
+
+                    <div class="listgroup">
+                        <h4>Priority</h4>
+                        <div class="rows">
+                            <ol class="bibliodetails">
+                                <li class="local_holds_priority">
+                                    <span class="label">Exclude from local holds priority:</span>
                                     <form action="updateitem.pl" method="post">
                                         [% INCLUDE 'csrf-token.inc' %]
                                         <input type="hidden" name="biblionumber" value="[% ITEM_DAT.biblionumber | html %]" />
                                         <input type="hidden" name="biblioitemnumber" value="[% ITEM_DAT.biblioitemnumber | html %]" />
                                         <input type="hidden" name="itemnumber" value="[% ITEM_DAT.itemnumber | html %]" />
-                                        <select name="bookable">
-                                            [% IF ITEM_DAT.bookable == 1 %]
-                                                <option value="">Follow item type</option>
-                                                <option value="1" selected="selected">Yes</option>
+                                        <select id="exclude_from_local_holds_priority" name="exclude_from_local_holds_priority">
+                                            [% IF ITEM_DAT.exclude_from_local_holds_priority %]
+                                                <option value="1" selected>Yes</option>
                                                 <option value="0">No</option>
-                                            [% ELSIF ITEM_DAT.bookable == 0 %]
-                                                <option value="">Follow item type</option>
-                                                <option value="1">Yes</option>
-                                                <option value="0" selected="selected">No</option>
                                             [% ELSE %]
-                                                <option value="" selected="selected">Follow item type</option>
                                                 <option value="1">Yes</option>
-                                                <option value="0">No</option>
+                                                <option value="0" selected>No</option>
                                             [% END %]
                                         </select>
-                                        <input type="hidden" name="op" value="cud-set_bookable" />
+                                        <input type="hidden" name="op" value="cud-set_exclude_priority" />
                                         <input type="submit" name="submit" class="btn btn-primary btn-xs" value="Update" />
                                     </form>
-                                [% ELSE %]
-                                    [% IF ITEM_DAT.bookable == 1 %]Yes[% ELSIF ITEM_DAT.bookable == 0 %]No[% ELSE %]Follow item type[% END %]
-                                [% END %]
-                                <span class="hint"> Item type bookable: [% IF ITEM_DAT.effective_itemtype.bookable == 1 %]Yes[% ELSE %]No[% END %]</span>
-                            </li>
-                        </ol>
-                        <!-- /.bibliodetails -->
+                                </li>
+                                <li class="bookable">
+                                    <span class="label"> Bookable: </span>
+                                    [% IF ( CAN_user_circulate ) %]
+                                        <form action="updateitem.pl" method="post">
+                                            [% INCLUDE 'csrf-token.inc' %]
+                                            <input type="hidden" name="biblionumber" value="[% ITEM_DAT.biblionumber | html %]" />
+                                            <input type="hidden" name="biblioitemnumber" value="[% ITEM_DAT.biblioitemnumber | html %]" />
+                                            <input type="hidden" name="itemnumber" value="[% ITEM_DAT.itemnumber | html %]" />
+                                            <select name="bookable">
+                                                [% IF ITEM_DAT.bookable == 1 %]
+                                                    <option value="">Follow item type</option>
+                                                    <option value="1" selected="selected">Yes</option>
+                                                    <option value="0">No</option>
+                                                [% ELSIF ITEM_DAT.bookable == 0 %]
+                                                    <option value="">Follow item type</option>
+                                                    <option value="1">Yes</option>
+                                                    <option value="0" selected="selected">No</option>
+                                                [% ELSE %]
+                                                    <option value="" selected="selected">Follow item type</option>
+                                                    <option value="1">Yes</option>
+                                                    <option value="0">No</option>
+                                                [% END %]
+                                            </select>
+                                            <input type="hidden" name="op" value="cud-set_bookable" />
+                                            <input type="submit" name="submit" class="btn btn-primary btn-xs" value="Update" />
+                                        </form>
+                                    [% ELSE %]
+                                        [% IF ITEM_DAT.bookable == 1 %]Yes[% ELSIF ITEM_DAT.bookable == 0 %]No[% ELSE %]Follow item type[% END %]
+                                    [% END %]
+                                    <span class="hint"> Item type bookable: [% IF ITEM_DAT.effective_itemtype.bookable == 1 %]Yes[% ELSE %]No[% END %]</span>
+                                </li>
+                            </ol>
+                            <!-- /.bibliodetails -->
+                        </div>
+                        <!-- /.rows -->
                     </div>
-                    <!-- /.rows -->
-                </div>
-                <!-- /.listgroup -->
+                    <!-- /.listgroup -->
 
-                <div class="listgroup">
-                    <h4>History</h4>
-                    <div class="rows">
-                        <ol class="bibliodetails">
-                            [% IF ITEM_DAT.basketno %]
-                                <li class="order_info">
-                                    <span class="label">Order date:</span>
-                                    [% IF ( CAN_user_acquisition_order_manage ) %]
-                                        <a href="/cgi-bin/koha/acqui/basket.pl?basketno=[% ITEM_DAT.basketno | uri %]">[% ITEM_DAT.orderdate | $KohaDates %]</a>
+                    <div class="listgroup">
+                        <h4>History</h4>
+                        <div class="rows">
+                            <ol class="bibliodetails">
+                                [% IF ITEM_DAT.basketno %]
+                                    <li class="order_info">
+                                        <span class="label">Order date:</span>
+                                        [% IF ( CAN_user_acquisition_order_manage ) %]
+                                            <a href="/cgi-bin/koha/acqui/basket.pl?basketno=[% ITEM_DAT.basketno | uri %]">[% ITEM_DAT.orderdate | $KohaDates %]</a>
+                                        [% ELSE %]
+                                            [% ITEM_DAT.orderdate | $KohaDates %]
+                                        [% END %]
+                                    </li>
+                                    <li>
+                                        <span class="label">Vendor:</span>
+                                        [% ITEM_DAT.vendor | html %]
+                                    </li>
+                                [% END %]
+
+                                [% IF ITEM_DAT.dateaccessioned %]
+                                    <li class="dateaccessioned">
+                                        <span class="label">Accession date:</span>
+                                        [% IF ( CAN_user_acquisition_order_receive && ITEM_DAT.invoiceid ) %]
+                                            <a href="/cgi-bin/koha/acqui/parcel.pl?invoiceid=[% ITEM_DAT.invoiceid | uri %]">[% ITEM_DAT.dateaccessioned | $KohaDates %]</a>
+                                        [% ELSE %]
+                                            [% ITEM_DAT.dateaccessioned | $KohaDates %]
+                                        [% END %]
+                                    </li>
+                                [% END %]
+
+                                [% IF ( ITEM_DAT.invoicenumber ) %]
+                                    <li class="invoice">
+                                        <span class="label">Invoice number:</span>
+                                        [% ITEM_DAT.invoicenumber | html %]
+                                    </li>
+                                [% END %]
+
+                                <li class="issues">
+                                    <span class="label">Total checkouts:</span>
+                                    [% IF ( ITEM_DAT.issues ) %]
+                                        [% ITEM_DAT.issues | html %]
                                     [% ELSE %]
-                                        [% ITEM_DAT.orderdate | $KohaDates %]
+                                        0
+                                    [% END %]
+                                    (<a href="/cgi-bin/koha/circ/bookcount.pl?&amp;biblionumber=[% ITEM_DAT.biblionumber | uri %]&amp;itm=[% ITEM_DAT.itemnumber | uri %]">View item's checkout history</a>)
+                                </li>
+
+                                <li class="datelastseen">
+                                    <span class="label">Last seen:</span>
+                                    [% IF ( ITEM_DAT.datelastseen ) %]
+                                        [% ITEM_DAT.datelastseen | $KohaDates with_hours => 1 %]
                                     [% END %]
                                 </li>
-                                <li>
-                                    <span class="label">Vendor:</span>
-                                    [% ITEM_DAT.vendor | html %]
+                                <li class="datelastborrowed">
+                                    <span class="label">Last borrowed:</span>
+                                    [% IF (ITEM_DAT.datelastborrowed ) %][% ITEM_DAT.datelastborrowed | $KohaDates %][% END %]
                                 </li>
-                            [% END %]
+                                [% IF Koha.Preference('StoreLastBorrower') && ITEM_DAT.object.last_returned_by %]
+                                    [% SET last_returned_by = ITEM_DAT.object.last_returned_by.cardnumber || ITEM_DAT.object.last_returned_by.borrowernumber %]
+                                    <li>
+                                        <span class="label">Last returned by:</span>
+                                        <a href="/cgi-bin/koha/circ/circulation.pl?borrowernumber=[% ITEM_DAT.object.last_returned_by.borrowernumber | uri %]">[% last_returned_by | html %]</a>
+                                    </li>
+                                [% END %]
+                                [% FOR i IN ITEM_DAT.old_issues %]
+                                    [% SET b = i.patron %]
+                                    <li class="previous_borrowers">
+                                        [% IF loop.first %]
+                                            <span class="label">Last borrower:</span>
+                                        [% ELSE %]
+                                            <span class="label">Previous borrower:</span>
+                                        [% END %]
+                                        [% SET last_or_previous_borrower = b.cardnumber || b.borrowernumber %]
+                                        <a href="/cgi-bin/koha/circ/circulation.pl?borrowernumber=[% b.borrowernumber | uri %]">[% last_or_previous_borrower | html %]</a>&nbsp;
+                                    </li>
+                                [% END %]
+                                [% IF ( ITEM_DAT.paidfor ) %]
+                                    <li class="paidfor">
+                                        <span class="label">Paid for?:</span>
+                                        [% INCLUDE 'patron-title.inc' patron=ITEM_DAT.paidfor.patron hide_patron_infos_if_needed=1 %] on [% ITEM_DAT.paidfor.created_on | $KohaDates %]
+                                    </li>
+                                [% END %]
 
-                            [% IF ITEM_DAT.dateaccessioned %]
-                                <li class="dateaccessioned">
-                                    <span class="label">Accession date:</span>
-                                    [% IF ( CAN_user_acquisition_order_receive && ITEM_DAT.invoiceid ) %]
-                                        <a href="/cgi-bin/koha/acqui/parcel.pl?invoiceid=[% ITEM_DAT.invoiceid | uri %]">[% ITEM_DAT.dateaccessioned | $KohaDates %]</a>
+                                [% IF ( ITEM_DAT.enumchron ) %]
+                                    <li class="enumchron">
+                                        <span class="label">Serial enumeration:</span>
+                                        [% ITEM_DAT.enumchron | html %]&nbsp;
+                                    </li>
+                                [% END %]
+
+                                <li class="itemnotes">
+                                    <span class="label">Public note:</span>
+                                    [% IF ( CAN_user_editcatalogue_edit_items ) %]
+                                        <form class="inline" action="updateitem.pl" method="post"
+                                            ><input type="hidden" name="biblionumber" value="[% ITEM_DAT.biblionumber | html %]" />
+                                            [% INCLUDE 'csrf-token.inc' %]
+                                            <input type="hidden" name="biblioitemnumber" value="[% ITEM_DAT.biblioitemnumber | html %]" /><input type="hidden" name="itemnumber" value="[% ITEM_DAT.itemnumber | html %]" />
+                                            <input type="hidden" name="op" value="cud-set_public_note" />
+                                            <textarea name="itemnotes" rows="2" cols="30">[% ITEM_DAT.itemnotes | html %]</textarea><input type="submit" name="submit" class="btn btn-primary btn-xs" value="Update" />
+                                        </form>
                                     [% ELSE %]
-                                        [% ITEM_DAT.dateaccessioned | $KohaDates %]
+                                        [% ITEM_DAT.itemnotes | html %]
                                     [% END %]
                                 </li>
-                            [% END %]
 
-                            [% IF ( ITEM_DAT.invoicenumber ) %]
-                                <li class="invoice">
-                                    <span class="label">Invoice number:</span>
-                                    [% ITEM_DAT.invoicenumber | html %]
-                                </li>
-                            [% END %]
-
-                            <li class="issues">
-                                <span class="label">Total checkouts:</span>
-                                [% IF ( ITEM_DAT.issues ) %]
-                                    [% ITEM_DAT.issues | html %]
-                                [% ELSE %]
-                                    0
-                                [% END %]
-                                (<a href="/cgi-bin/koha/circ/bookcount.pl?&amp;biblionumber=[% ITEM_DAT.biblionumber | uri %]&amp;itm=[% ITEM_DAT.itemnumber | uri %]">View item's checkout history</a>)
-                            </li>
-
-                            <li class="datelastseen">
-                                <span class="label">Last seen:</span>
-                                [% IF ( ITEM_DAT.datelastseen ) %]
-                                    [% ITEM_DAT.datelastseen | $KohaDates with_hours => 1 %]
-                                [% END %]
-                            </li>
-                            <li class="datelastborrowed">
-                                <span class="label">Last borrowed:</span>
-                                [% IF (ITEM_DAT.datelastborrowed ) %][% ITEM_DAT.datelastborrowed | $KohaDates %][% END %]
-                            </li>
-                            [% IF Koha.Preference('StoreLastBorrower') && ITEM_DAT.object.last_returned_by %]
-                                [% SET last_returned_by = ITEM_DAT.object.last_returned_by.cardnumber || ITEM_DAT.object.last_returned_by.borrowernumber %]
-                                <li>
-                                    <span class="label">Last returned by:</span>
-                                    <a href="/cgi-bin/koha/circ/circulation.pl?borrowernumber=[% ITEM_DAT.object.last_returned_by.borrowernumber | uri %]">[% last_returned_by | html %]</a>
-                                </li>
-                            [% END %]
-                            [% FOR i IN ITEM_DAT.old_issues %]
-                                [% SET b = i.patron %]
-                                <li class="previous_borrowers">
-                                    [% IF loop.first %]
-                                        <span class="label">Last borrower:</span>
+                                <li class="itemnotes_nonpublic">
+                                    <span class="label">Non-public note:</span>
+                                    [% IF ( CAN_user_editcatalogue_edit_items ) %]
+                                        <form class="inline" action="updateitem.pl" method="post"
+                                            ><input type="hidden" name="biblionumber" value="[% ITEM_DAT.biblionumber | html %]" />
+                                            [% INCLUDE 'csrf-token.inc' %]
+                                            <input type="hidden" name="biblioitemnumber" value="[% ITEM_DAT.biblioitemnumber | html %]" /><input type="hidden" name="itemnumber" value="[% ITEM_DAT.itemnumber | html %]" />
+                                            <input type="hidden" name="op" value="cud-set_non_public_note" />
+                                            <textarea name="itemnotes_nonpublic" rows="2" cols="30">[% ITEM_DAT.itemnotes_nonpublic | html %]</textarea><input type="submit" name="submit" class="btn btn-primary btn-xs" value="Update" />
+                                        </form>
                                     [% ELSE %]
-                                        <span class="label">Previous borrower:</span>
+                                        [% ITEM_DAT.itemnotes_nonpublic | html %]
                                     [% END %]
-                                    [% SET last_or_previous_borrower = b.cardnumber || b.borrowernumber %]
-                                    <a href="/cgi-bin/koha/circ/circulation.pl?borrowernumber=[% b.borrowernumber | uri %]">[% last_or_previous_borrower | html %]</a>&nbsp;
                                 </li>
-                            [% END %]
-                            [% IF ( ITEM_DAT.paidfor ) %]
-                                <li class="paidfor">
-                                    <span class="label">Paid for?:</span>
-                                    [% INCLUDE 'patron-title.inc' patron=ITEM_DAT.paidfor.patron hide_patron_infos_if_needed=1 %] on [% ITEM_DAT.paidfor.created_on | $KohaDates %]
-                                </li>
-                            [% END %]
-
-                            [% IF ( ITEM_DAT.enumchron ) %]
-                                <li class="enumchron">
-                                    <span class="label">Serial enumeration:</span>
-                                    [% ITEM_DAT.enumchron | html %]&nbsp;
-                                </li>
-                            [% END %]
-
-                            <li class="itemnotes">
-                                <span class="label">Public note:</span>
-                                [% IF ( CAN_user_editcatalogue_edit_items ) %]
-                                    <form class="inline" action="updateitem.pl" method="post"
-                                        ><input type="hidden" name="biblionumber" value="[% ITEM_DAT.biblionumber | html %]" />
-                                        [% INCLUDE 'csrf-token.inc' %]
-                                        <input type="hidden" name="biblioitemnumber" value="[% ITEM_DAT.biblioitemnumber | html %]" /><input type="hidden" name="itemnumber" value="[% ITEM_DAT.itemnumber | html %]" />
-                                        <input type="hidden" name="op" value="cud-set_public_note" />
-                                        <textarea name="itemnotes" rows="2" cols="30">[% ITEM_DAT.itemnotes | html %]</textarea><input type="submit" name="submit" class="btn btn-primary btn-xs" value="Update" />
-                                    </form>
-                                [% ELSE %]
-                                    [% ITEM_DAT.itemnotes | html %]
-                                [% END %]
-                            </li>
-
-                            <li class="itemnotes_nonpublic">
-                                <span class="label">Non-public note:</span>
-                                [% IF ( CAN_user_editcatalogue_edit_items ) %]
-                                    <form class="inline" action="updateitem.pl" method="post"
-                                        ><input type="hidden" name="biblionumber" value="[% ITEM_DAT.biblionumber | html %]" />
-                                        [% INCLUDE 'csrf-token.inc' %]
-                                        <input type="hidden" name="biblioitemnumber" value="[% ITEM_DAT.biblioitemnumber | html %]" /><input type="hidden" name="itemnumber" value="[% ITEM_DAT.itemnumber | html %]" />
-                                        <input type="hidden" name="op" value="cud-set_non_public_note" />
-                                        <textarea name="itemnotes_nonpublic" rows="2" cols="30">[% ITEM_DAT.itemnotes_nonpublic | html %]</textarea><input type="submit" name="submit" class="btn btn-primary btn-xs" value="Update" />
-                                    </form>
-                                [% ELSE %]
-                                    [% ITEM_DAT.itemnotes_nonpublic | html %]
-                                [% END %]
-                            </li>
-                        </ol>
-                        <!-- /.bibliodetails -->
+                            </ol>
+                            <!-- /.bibliodetails -->
+                        </div>
+                        <!-- /.rows -->
                     </div>
-                    <!-- /.rows -->
+                    <!-- /.listgroup -->
                 </div>
-                <!-- /.listgroup -->
+                <!-- /.page-section -->
             </div>
-            <!-- /.page-section -->
         [% END # /FOREACH ITEM_DAT %]
     </div>
     <!-- /#catalogue_detail_biblio -->
