@@ -989,6 +989,10 @@ sub patron_attributes_form {
 sub add_guarantors {
     my ( $patron, $input ) = @_;
 
+    unless ( $patron->category->can_be_guarantee ) {
+        return;
+    }
+
     my @new_guarantor_id           = $input->multi_param('new_guarantor_id');
     my @new_guarantor_relationship = $input->multi_param('new_guarantor_relationship');
 
