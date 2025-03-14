@@ -34,7 +34,8 @@ Koha::Database::Columns
 =head3 columns
 
 Static method that returns a hashref with mappings from column names
-to descriptions, for several tables. Currently
+to descriptions for several tables.
+Should be extended.
 
 =over
 
@@ -60,6 +61,14 @@ to descriptions, for several tables. Currently
 
 sub columns {
     return {
+        # TODO stub for the check in C4::Reports::Guided, get_columns (see BZ 37784)
+        accountlines            => {},
+        serial                  => {},
+        serialitems             => {},
+        subscriptionhistory     => {},
+        subscriptionroutinglist => {},
+        aqbooksellers           => {},
+
         aqorders => {
             "basketno"                      => __("Basket ID (internal)"),
             "biblionumber"                  => __("Biblionumber (internal)"),
