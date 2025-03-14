@@ -2401,7 +2401,7 @@ subtest "AllowRenewalIfOtherItemsAvailable tests" => sub {
 }
 
 subtest 'CanBookBeIssued & AllowReturnToBranch' => sub {
-    plan tests => 26;
+    plan tests => 27;
 
     my $homebranch    = $builder->build( { source => 'Branch' } );
     my $holdingbranch = $builder->build( { source => 'Branch' } );
@@ -2460,6 +2460,12 @@ subtest 'CanBookBeIssued & AllowReturnToBranch' => sub {
     is(
         keys(%$error) + keys(%$alerts), 0,
         'There should not be any errors or alerts (impossible)' . str( $error, $question, $alerts )
+    );
+    ( $error, $question, $alerts ) = CanBookBeIssued( $patron_2, undef, undef, 0, 0, { item => $item } );
+    is(
+        keys(%$error) + keys(%$alerts), 0,
+        'There should not be any errors or alerts (impossible) when passing a valid item object rather than a barcode'
+            . str( $error, $question, $alerts )
     );
     is( exists $question->{ISSUED_TO_ANOTHER}, 1, 'ISSUED_TO_ANOTHER must be set' );
     ## Can be issued from holdingbranch
