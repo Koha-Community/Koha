@@ -15,6 +15,21 @@ return {
                     ADD COLUMN `opac_suppressed` tinyint(1) NOT NULL DEFAULT 0 COMMENT 'whether the record should be suppressed in the OPAC' AFTER `abstract`;
                 }
             );
+
+            $dbh->do(
+                q{
+                    UPDATE biblio b
+                    JOIN biblio_metadata m ON b.biblionumber = m.biblionumber
+                    SET b.opac_suppressed =
+                        CASE
+                            WHEN ExtractValue(m.metadata, '//datafield[@tag="952"]/subfield[@code="n"]') REGEXP '^[01]$' THEN
+                                ExtractValue(m.metadata, '//datafield[@tag="952"]/subfield[@code="n"]')
+                            ELSE 0
+                        END
+                    WHERE m.metadata LIKE '%<datafield tag="952">%';
+                }
+            );
+
             say $out "Added column 'biblio.opac_suppressed'";
         }
 
@@ -25,6 +40,21 @@ return {
                     ADD COLUMN `opac_suppressed` tinyint(1) NOT NULL DEFAULT 0 COMMENT 'whether the record should be suppressed in the OPAC' AFTER `abstract`;
                 }
             );
+
+            $dbh->do(
+                q{
+                    UPDATE deletedbiblio b
+                    JOIN deletedbiblio_metadata m ON b.biblionumber = m.biblionumber
+                    SET b.opac_suppressed =
+                        CASE
+                            WHEN ExtractValue(m.metadata, '//datafield[@tag="952"]/subfield[@code="n"]') REGEXP '^[01]$' THEN
+                                ExtractValue(m.metadata, '//datafield[@tag="952"]/subfield[@code="n"]')
+                            ELSE 0
+                        END
+                    WHERE m.metadata LIKE '%<datafield tag="952">%';
+                }
+            );
+
             say $out "Added column 'deletedbiblio.opac_suppressed'";
         }
 
@@ -33,6 +63,7 @@ return {
                 UPDATE marc_subfield_structure SET kohafield='biblio.opac_suppressed' WHERE tagfield=942 AND tagsubfield='n';
             }
         );
+
         say $out "Set the 942\$n => biblio.opac_suppressed mapping for all MARC frameworks";
         say_warning( $out, "You need to run the `maintenance/touch_all_biblios.pl` script" );
     },
