@@ -83,8 +83,8 @@ elsif ( $op eq 'cud-add_form_4' ) {
     my $columnstring = join( ',', @columns );
     my $forbidden    = Koha::Report->new->check_columns( undef, \@columns );
     my @column_loop;
-    foreach my $column (@columns) {
-        unless ($forbidden) {
+    unless ($forbidden) {
+        foreach my $column (@columns) {
             my %tmp_hash;
             $tmp_hash{'name'} = $column;
             my $type = get_column_type($column);
@@ -114,16 +114,7 @@ elsif ( $op eq 'cud-add_form_4' ) {
             'columnstring'           => $columnstring,
         );
     } else {
-        my $columns = get_columns( $area, $input );
-        $template->param(
-            'step_3'                 => 1,
-            'area'                   => $area,
-            'definition_name'        => $definition_name,
-            'definition_description' => $definition_description,
-            'columns'                => \@column_loop,
-            'columnstring'           => $columnstring,
-            'passworderr'            => 1,
-        );
+        $template->param( 'new_dictionary' => 1, passworderr => 1 );
     }
 }
 
