@@ -140,6 +140,9 @@
 [% END %]
 
 [% MACRO jsinclude BLOCK %]
+    <script>
+        const searchType = "";
+    </script>
     [% Asset.js("js/authorities.js") | $raw %]
     [% Asset.js("js/merge-record.js") | $raw %]
     <script>
