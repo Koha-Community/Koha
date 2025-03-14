@@ -467,7 +467,7 @@ subtest 'add_items_from_import_record() - addorderiso2709.pl' => sub {
             'notforloans' => [
                 '',
             ],
-            'c_budget_id'       => 2,
+            'c_budget_id'       => $budgetid2,
             'replacementprices' => [
                 '0.00',
             ],
