@@ -42,6 +42,29 @@ sub _type {
     return 'SftpServer';
 }
 
+=head3 _polymorphic_field
+
+Return the field in the table that defines the polymorphic class to be built
+
+=cut
+
+sub _polymorphic_field {
+    return 'transport';    # This field defines which subclass to use
+}
+
+=head3 _polymorphic_map
+
+Return the mapping for field value to class name for the polymorphic class
+
+=cut
+
+sub _polymorphic_map {
+    return {
+        sftp => 'Koha::File::Transport::SFTP',
+        ftp  => 'Koha::File::Transport::FTP',
+    };
+}
+
 =head3 object_class
 
 Return object class
@@ -49,7 +72,14 @@ Return object class
 =cut
 
 sub object_class {
-    return 'Koha::SFTP::Server';
+    my ( $self, $object ) = @_;
+
+    return 'Koha::File::Transport' unless $object;
+
+    my $field = $self->_polymorphic_field;
+    my $map   = $self->_polymorphic_map;
+
+    return $map->{ lc( $object->$field ) } || 'Koha::File::Transport';
 }
 
 1;
