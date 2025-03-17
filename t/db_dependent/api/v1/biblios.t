@@ -1923,7 +1923,7 @@ subtest 'add_item() tests' => sub {
             value  => {
                 borrowernumber => $patron->borrowernumber,
                 module_bit     => 9,
-                code           => 'edit_catalogue'
+                code           => 'edit_items'
             }
         }
     );
@@ -1986,7 +1986,7 @@ subtest 'update_item() tests' => sub {
             value  => {
                 borrowernumber => $patron->borrowernumber,
                 module_bit     => 9,
-                code           => 'edit_catalogue'
+                code           => 'edit_items'
             }
         }
     );
