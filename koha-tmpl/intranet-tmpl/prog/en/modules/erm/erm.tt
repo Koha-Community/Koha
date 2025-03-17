@@ -21,37 +21,35 @@
     [% INCLUDE 'erm-search.inc' %]
 [% END %]
 
-<div id="erm">
-    <!-- this is closed in intranet-bottom.inc -->
+<div id="erm"></div>
 
-    [% MACRO jsinclude BLOCK %]
-        [% INCLUDE 'calendar.inc' %]
-        [% INCLUDE 'datatables.inc' %]
-        [% INCLUDE 'js-patron-format.inc' %]
-        [% INCLUDE 'js-date-format.inc' %]
-        <script>
-            const agreement_table_settings = [% TablesSettings.GetTableSettings( 'erm', 'agreements', 'agreements', 'json' ) | $raw %];
-            const license_table_settings = [% TablesSettings.GetTableSettings( 'erm', 'licenses', 'licenses', 'json' ) | $raw %];
-            const eholdings_packages_table_settings = [% TablesSettings.GetTableSettings( 'erm', 'eholdings', 'packages', 'json' ) | $raw %];
-            const eholdings_titles_table_settings = [% TablesSettings.GetTableSettings( 'erm', 'eholdings', 'titles', 'json' ) | $raw %];
-            const usage_data_provider_table_settings = [% TablesSettings.GetTableSettings( 'erm', 'usage_data_providers', 'usage_data_providers', 'json' ) | $raw %];
-            const title_table_settings = [% TablesSettings.GetTableSettings( 'erm', 'titles', 'titles', 'json' ) | $raw %];
-            const counter_log_table_settings = [% TablesSettings.GetTableSettings( 'erm', 'counter_logs', 'counter_logs', 'json' ) | $raw %];
-            const monthly_usage_table_settings = [% TablesSettings.GetTableSettings( 'erm', 'monthly_usages', 'monthly_usages', 'json' ) | $raw %];
-            const yearly_usage_table_settings = [% TablesSettings.GetTableSettings( 'erm', 'yearly_usages', 'yearly_usages', 'json' ) | $raw %];
+[% MACRO jsinclude BLOCK %]
+    [% INCLUDE 'calendar.inc' %]
+    [% INCLUDE 'datatables.inc' %]
+    [% INCLUDE 'js-patron-format.inc' %]
+    [% INCLUDE 'js-date-format.inc' %]
+    <script>
+        const agreement_table_settings = [% TablesSettings.GetTableSettings( 'erm', 'agreements', 'agreements', 'json' ) | $raw %];
+        const license_table_settings = [% TablesSettings.GetTableSettings( 'erm', 'licenses', 'licenses', 'json' ) | $raw %];
+        const eholdings_packages_table_settings = [% TablesSettings.GetTableSettings( 'erm', 'eholdings', 'packages', 'json' ) | $raw %];
+        const eholdings_titles_table_settings = [% TablesSettings.GetTableSettings( 'erm', 'eholdings', 'titles', 'json' ) | $raw %];
+        const usage_data_provider_table_settings = [% TablesSettings.GetTableSettings( 'erm', 'usage_data_providers', 'usage_data_providers', 'json' ) | $raw %];
+        const title_table_settings = [% TablesSettings.GetTableSettings( 'erm', 'titles', 'titles', 'json' ) | $raw %];
+        const counter_log_table_settings = [% TablesSettings.GetTableSettings( 'erm', 'counter_logs', 'counter_logs', 'json' ) | $raw %];
+        const monthly_usage_table_settings = [% TablesSettings.GetTableSettings( 'erm', 'monthly_usages', 'monthly_usages', 'json' ) | $raw %];
+        const yearly_usage_table_settings = [% TablesSettings.GetTableSettings( 'erm', 'yearly_usages', 'yearly_usages', 'json' ) | $raw %];
 
-            const max_allowed_packet = [% To.json(max_allowed_packet) | $raw %];
+        const max_allowed_packet = [% To.json(max_allowed_packet) | $raw %];
 
-            const logged_in_user_lists = [% To.json(logged_in_user.virtualshelves.unblessed) | $raw %];
+        const logged_in_user_lists = [% To.json(logged_in_user.virtualshelves.unblessed) | $raw %];
 
-            const logged_in_user = [% To.json(logged_in_user.unblessed) | $raw %];
-        </script>
-        [% Asset.js("js/vue/dist/erm.js") | $raw %]
-        [% INCLUDE 'select2.inc' %]
-        [% SET columns = ['cardnumber','name','category','branch','action'] %]
-        [% SET filter = "erm_users" %]
-        [% PROCESS patron_search_modal columns => columns, modal_title => t("Select user") %]
-        [% PROCESS patron_search_js columns => columns, actions => ["select"], preview_on_name_click => 1 %]
-    [% END %]
-    [% INCLUDE 'intranet-bottom.inc' %]</div
->
+        const logged_in_user = [% To.json(logged_in_user.unblessed) | $raw %];
+    </script>
+    [% Asset.js("js/vue/dist/erm.js") | $raw %]
+    [% INCLUDE 'select2.inc' %]
+    [% SET columns = ['cardnumber','name','category','branch','action'] %]
+    [% SET filter = "erm_users" %]
+    [% PROCESS patron_search_modal columns => columns, modal_title => t("Select user") %]
+    [% PROCESS patron_search_js columns => columns, actions => ["select"], preview_on_name_click => 1 %]
+[% END %]
+[% INCLUDE 'intranet-bottom.inc' %]
