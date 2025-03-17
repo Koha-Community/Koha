@@ -184,13 +184,9 @@ sub tidy_tt {
     my ( $success, $error_message, $full_buf, $stdout_buf, $stderr_buf );
 
     my ( $file_fh, $file );    # Keep this scope for $file_fh, or the file will be deleted after the following block
-    if ($no_write) {
-        $file_fh = File::Temp->new( CLEANUP => 1, SUFFIX => '.tt', DIR => '.' );
-        $file    = $file_fh->filename;
-        write_file( $file, read_file($original_file) );
-    } else {
-        $file = $original_file;
-    }
+    $file_fh = File::Temp->new( CLEANUP => 1, SUFFIX => '.tt', DIR => '.' );
+    $file    = $file_fh->filename;
+    write_file( $file, read_file($original_file) );
 
     for my $pass ( 1 .. 2 ) {
         ( $success, $error_message, $full_buf, $stdout_buf, $stderr_buf ) =
@@ -207,8 +203,13 @@ sub tidy_tt {
             $content =~ s#\n*( *)</script>\n*#\n$1</script>\n#g;
             $content =~ s#(\[%\s*SWITCH[^\]]*\]\n)\n#$1#g;
 
+            unless ($content) {
+                return ( 0, "Something went wrong, Prettier generated an empty file.", [], [], [] );
+            }
             if ( $no_write && $pass == 2 ) {
                 print $content;
+            } elsif ( $pass == 2 ) {
+                write_file( $original_file, $content );
             } else {
                 write_file( $file, $content );
             }
