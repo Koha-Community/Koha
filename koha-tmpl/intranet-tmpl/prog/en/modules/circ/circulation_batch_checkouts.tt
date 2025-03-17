@@ -45,7 +45,7 @@
     [% END #/ WRAPPER breadcrumbs %]
 [% END #/ WRAPPER sub-header.inc %]
 
-[% SET aside = Koha.Preference('CircSidebar') ? 'circ-nav' : '' %]
+[% SET aside = Koha.Preference('CircSidebar') ? 'circ-menu' : '' %]
 [% WRAPPER 'main-container.inc' aside=aside %]
     [% IF patron %]
         [% INCLUDE 'members-toolbar.inc' %]
