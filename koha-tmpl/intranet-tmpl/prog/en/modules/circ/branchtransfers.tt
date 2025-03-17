@@ -303,9 +303,11 @@
             var to_branch = $(this).attr('data-tobranch');
             window.open("/cgi-bin/koha/circ/transfer-slip.pl?transferitem=" + itemnumber + "&branchcode=" + to_branch);
         });
+        $(document).ready( function() {
         [% IF ( found ) %]
-            $("#transfer_confirm").modal("show");
+                $("#transfer_confirm").modal('show');
         [% END %]
+        });
     </script>
 [% END %]
 
