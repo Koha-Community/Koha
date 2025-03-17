@@ -23,6 +23,7 @@ use C4::Context;
 my $content = read_file( C4::Context->config("intranetdir") . '/installer/data/mysql/kohastructure.sql' );
 my @drop_stmt_missing;
 my $ccc = $content;
+
 while ( $content =~ m|CREATE TABLE `?([^`\n ]*)`?\s?\(\s*\n|g ) {
     my $match = $1;
     next if $match =~ m|^IF NOT EXISTS |;
