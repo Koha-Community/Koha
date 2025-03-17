@@ -8,7 +8,6 @@ return {
         my ($args) = @_;
         my ( $dbh, $out ) = @$args{qw(dbh out)};
 
-        # Do you stuffs here
         $dbh->do(
             q{
             INSERT IGNORE INTO systempreferences (`variable`,`value`,`options`,`explanation`,`type`)
@@ -16,7 +15,6 @@ return {
         }
         );
 
-        # sysprefs
-        say $out "Added new system preference '38615'";
+        say_success( $out, "Added new system preference 'HoldCancellationRequestSIP'" );
     },
 };
