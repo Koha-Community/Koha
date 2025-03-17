@@ -10,8 +10,9 @@ export class AdditionalFieldsAPIClient extends HttpClient {
     get additional_fields() {
         return {
             getAll: resource_type =>
-                this.get({
-                    endpoint: "?resource_type=" + resource_type,
+                this.getAll({
+                    endpoint: "",
+                    params: { resource_type },
                 }),
         };
     }
