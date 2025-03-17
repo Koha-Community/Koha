@@ -603,7 +603,7 @@
           $ref: "../swagger.yaml#/definitions/error"
     x-koha-authorization:
       permissions:
-        editcatalogue: edit_catalogue
+        editcatalogue: edit_items
 "/biblios/{biblio_id}/items/{item_id}":
   put:
     x-mojo-to: Biblios#update_item
@@ -660,7 +660,7 @@
           $ref: "../swagger.yaml#/definitions/error"
     x-koha-authorization:
       permissions:
-        editcatalogue: edit_catalogue
+        editcatalogue: edit_items
 "/biblios/{biblio_id}/pickup_locations":
   get:
     x-mojo-to: Biblios#pickup_locations
