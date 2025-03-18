@@ -33,6 +33,10 @@ my %fields = (
     hold             => undef,
 );
 
+=head1 Functions
+
+=cut
+
 =head2 new
 
 Missing POD for new.

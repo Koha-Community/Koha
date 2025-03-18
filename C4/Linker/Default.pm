@@ -24,6 +24,10 @@ use C4::Heading;
 
 use base qw(C4::Linker);
 
+=head1 Functions
+
+=cut
+
 =head2 get_link
 
 Missing POD for get_link.

@@ -403,6 +403,7 @@ Missing POD for koha_objects_class.
 sub koha_objects_class {
     'Koha::Course::Items';
 }
+
 =head2 koha_object_class
 
 Missing POD for koha_object_class.

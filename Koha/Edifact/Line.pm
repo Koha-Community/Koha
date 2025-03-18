@@ -176,12 +176,6 @@ sub _format_item_description {
     return $bibrec;
 }
 
-=head2 marc_record
-
-Missing POD for marc_record.
-
-=cut
-
 sub marc_record {
     my $self = shift;
     my $b    = $self->{item_description};
@@ -276,12 +270,6 @@ sub marc_record {
     return $bib;
 }
 
-=head2 corpcon
-
-Missing POD for corpcon.
-
-=cut
-
 sub corpcon {
     my ( $self, $level ) = @_;
     my $test_these = {
@@ -315,12 +303,6 @@ sub corpcon {
     return new_field( $self->{item_description}, [ $tag, $i1, $i2 ], @spec );
 }
 
-=head2 new_field
-
-Missing POD for new_field.
-
-=cut
-
 sub new_field {
     my ( $b, $tag_ind, @sfd_elem ) = @_;
     my @sfd;
@@ -340,44 +322,20 @@ sub new_field {
 
 # Accessor methods to line data
 
-=head2 item_number_id
-
-Missing POD for item_number_id.
-
-=cut
-
 sub item_number_id {
     my $self = shift;
     return $self->{item_number_id};
 }
-
-=head2 line_item_number
-
-Missing POD for line_item_number.
-
-=cut
 
 sub line_item_number {
     my $self = shift;
     return $self->{line_item_number};
 }
 
-=head2 additional_product_ids
-
-Missing POD for additional_product_ids.
-
-=cut
-
 sub additional_product_ids {
     my $self = shift;
     return $self->{additional_product_ids};
 }
-
-=head2 action_notification
-
-Missing POD for action_notification.
-
-=cut
 
 sub action_notification {
     my $self = shift;
@@ -388,154 +346,70 @@ sub action_notification {
     return $a;
 }
 
-=head2 item_description
-
-Missing POD for item_description.
-
-=cut
-
 sub item_description {
     my $self = shift;
     return $self->{item_description};
 }
-
-=head2 monetary_amount
-
-Missing POD for monetary_amount.
-
-=cut
 
 sub monetary_amount {
     my $self = shift;
     return $self->{monetary_amount};
 }
 
-=head2 quantity
-
-Missing POD for quantity.
-
-=cut
-
 sub quantity {
     my $self = shift;
     return $self->{quantity};
 }
-
-=head2 quantity_invoiced
-
-Missing POD for quantity_invoiced.
-
-=cut
 
 sub quantity_invoiced {
     my $self = shift;
     return $self->{quantity_invoiced};
 }
 
-=head2 price
-
-Missing POD for price.
-
-=cut
-
 sub price {
     my $self = shift;
     return $self->{price};
 }
-
-=head2 reference
-
-Missing POD for reference.
-
-=cut
 
 sub reference {
     my $self = shift;
     return $self->{reference};
 }
 
-=head2 orderline_reference_number
-
-Missing POD for orderline_reference_number.
-
-=cut
-
 sub orderline_reference_number {
     my $self = shift;
     return $self->{orderline_reference_number};
 }
-
-=head2 ordernumber
-
-Missing POD for ordernumber.
-
-=cut
 
 sub ordernumber {
     my $self = shift;
     return $self->{ordernumber};
 }
 
-=head2 free_text
-
-Missing POD for free_text.
-
-=cut
-
 sub free_text {
     my $self = shift;
     return $self->{free_text};
 }
-
-=head2 coded_free_text
-
-Missing POD for coded_free_text.
-
-=cut
 
 sub coded_free_text {
     my $self = shift;
     return $self->{coded_free_text}->{code};
 }
 
-=head2 internal_notes
-
-Missing POD for internal_notes.
-
-=cut
-
 sub internal_notes {
     my $self = shift;
     return $self->{internal_notes};
 }
-
-=head2 coded_internal_note
-
-Missing POD for coded_internal_note.
-
-=cut
 
 sub coded_internal_note {
     my $self = shift;
     return $self->{coded_internal_note}->{code};
 }
 
-=head2 orderline_free_text
-
-Missing POD for orderline_free_text.
-
-=cut
-
 sub orderline_free_text {
     my $self = shift;
     return $self->{orderline_free_text};
 }
-
-=head2 coded_orderline_text
-
-Missing POD for coded_orderline_text.
-
-=cut
 
 sub coded_orderline_text {
     my $self  = shift;
@@ -553,22 +427,10 @@ sub coded_orderline_text {
     return $txt;
 }
 
-=head2 substitute_free_text
-
-Missing POD for substitute_free_text.
-
-=cut
-
 sub substitute_free_text {
     my $self = shift;
     return $self->{substitute_free_text};
 }
-
-=head2 coded_substitute_text
-
-Missing POD for coded_substitute_text.
-
-=cut
 
 sub coded_substitute_text {
     my $self = shift;
@@ -578,12 +440,6 @@ sub coded_substitute_text {
 # This will take a standard code as returned
 # by (orderline|substitue)-free_text (FTX seg LIN)
 # and expand it using EditEUR code list 8B
-
-=head2 translate_8B
-
-Missing POD for translate_8B.
-
-=cut
 
 sub translate_8B {
     my ($code) = @_;
@@ -631,12 +487,6 @@ sub translate_8B {
         return 'no match';
     }
 }
-
-=head2 translate_12B
-
-Missing POD for translate_12B.
-
-=cut
 
 sub translate_12B {
     my ($code) = @_;
@@ -693,12 +543,6 @@ sub translate_12B {
 
 # item_desription_fields accessors
 
-=head2 title
-
-Missing POD for title.
-
-=cut
-
 sub title {
     my $self       = shift;
     my $titlefield = q{050};
@@ -707,12 +551,6 @@ sub title {
     }
     return;
 }
-
-=head2 author
-
-Missing POD for author.
-
-=cut
 
 sub author {
     my $self  = shift;
@@ -729,12 +567,6 @@ sub author {
     return;
 }
 
-=head2 series
-
-Missing POD for series.
-
-=cut
-
 sub series {
     my $self  = shift;
     my $field = q{190};
@@ -743,12 +575,6 @@ sub series {
     }
     return;
 }
-
-=head2 publisher
-
-Missing POD for publisher.
-
-=cut
 
 sub publisher {
     my $self  = shift;
@@ -759,12 +585,6 @@ sub publisher {
     return;
 }
 
-=head2 publication_date
-
-Missing POD for publication_date.
-
-=cut
-
 sub publication_date {
     my $self  = shift;
     my $field = q{170};
@@ -773,12 +593,6 @@ sub publication_date {
     }
     return;
 }
-
-=head2 dewey_class
-
-Missing POD for dewey_class.
-
-=cut
 
 sub dewey_class {
     my $self  = shift;
@@ -789,12 +603,6 @@ sub dewey_class {
     return;
 }
 
-=head2 lc_class
-
-Missing POD for lc_class.
-
-=cut
-
 sub lc_class {
     my $self  = shift;
     my $field = q{240};
@@ -803,12 +611,6 @@ sub lc_class {
     }
     return;
 }
-
-=head2 girfield
-
-Missing POD for girfield.
-
-=cut
 
 sub girfield {
     my ( $self, $field, $occ ) = @_;
@@ -825,12 +627,6 @@ sub girfield {
     }
 }
 
-=head2 number_of_girs
-
-Missing POD for number_of_girs.
-
-=cut
-
 sub number_of_girs {
     my $self = shift;
     if ( $self->{GIR} ) {
@@ -842,12 +638,6 @@ sub number_of_girs {
         return 0;
     }
 }
-
-=head2 extract_gir
-
-Missing POD for extract_gir.
-
-=cut
 
 sub extract_gir {
     my $s    = shift;
@@ -896,12 +686,6 @@ sub extract_gir {
 
 # mainly for invoice processing amt_ will derive from MOA price_ from PRI and tax_ from TAX/MOA pairsn
 
-=head2 moa_amt
-
-Missing POD for moa_amt.
-
-=cut
-
 sub moa_amt {
     my ( $self, $qualifier ) = @_;
     foreach my $s ( @{ $self->{segs} } ) {
@@ -911,12 +695,6 @@ sub moa_amt {
     }
     return;
 }
-
-=head2 moa_multiple_amt
-
-Missing POD for moa_multiple_amt.
-
-=cut
 
 sub moa_multiple_amt {
     my ( $self, $qualifier ) = @_;
@@ -936,22 +714,10 @@ sub moa_multiple_amt {
     return;
 }
 
-=head2 amt_discount
-
-Missing POD for amt_discount.
-
-=cut
-
 sub amt_discount {
     my $self = shift;
     return $self->moa_amt('52');
 }
-
-=head2 amt_prepayment
-
-Missing POD for amt_prepayment.
-
-=cut
 
 sub amt_prepayment {
     my $self = shift;
@@ -960,24 +726,12 @@ sub amt_prepayment {
 
 # total including allowances & tax
 
-=head2 amt_total
-
-Missing POD for amt_total.
-
-=cut
-
 sub amt_total {
     my $self = shift;
     return $self->moa_amt('128');
 }
 
 # Used to give price in currency other than that given in price
-
-=head2 amt_unitprice
-
-Missing POD for amt_unitprice.
-
-=cut
 
 sub amt_unitprice {
     my $self = shift;
@@ -986,33 +740,15 @@ sub amt_unitprice {
 
 # item amount after allowances excluding tax
 
-=head2 amt_lineitem
-
-Missing POD for amt_lineitem.
-
-=cut
-
 sub amt_lineitem {
     my $self = shift;
     return $self->moa_amt('203');
 }
 
-=head2 amt_taxoncharge
-
-Missing POD for amt_taxoncharge.
-
-=cut
-
 sub amt_taxoncharge {
     my $self = shift;
     return $self->moa_multiple_amt('124');
 }
-
-=head2 pri_price
-
-Missing POD for pri_price.
-
-=cut
 
 sub pri_price {
     my ( $self, $price_qualifier ) = @_;
@@ -1044,12 +780,6 @@ sub pri_price {
 
 # unit price that will be chaged excl tax
 
-=head2 price_net
-
-Missing POD for price_net.
-
-=cut
-
 sub price_net {
     my $self = shift;
     my $p    = $self->pri_price('AAA');
@@ -1060,12 +790,6 @@ sub price_net {
 }
 
 # unit price excluding all allowances, charges and taxes
-
-=head2 price_gross
-
-Missing POD for price_gross.
-
-=cut
 
 sub price_gross {
     my $self = shift;
@@ -1078,12 +802,6 @@ sub price_gross {
 
 # information price incl tax excluding allowances, charges
 
-=head2 price_info
-
-Missing POD for price_info.
-
-=cut
-
 sub price_info {
     my $self = shift;
     my $p    = $self->pri_price('AAE');
@@ -1095,12 +813,6 @@ sub price_info {
 
 # information price incl tax,allowances, charges
 
-=head2 price_info_inclusive
-
-Missing POD for price_info_inclusive.
-
-=cut
-
 sub price_info_inclusive {
     my $self = shift;
     my $p    = $self->pri_price('AAF');
@@ -1110,22 +822,10 @@ sub price_info_inclusive {
     return;
 }
 
-=head2 tax
-
-Missing POD for tax.
-
-=cut
-
 sub tax {
     my $self = shift;
     return $self->moa_amt('124');
 }
-
-=head2 tax_rate
-
-Missing POD for tax_rate.
-
-=cut
 
 sub tax_rate {
     my $self = shift;
@@ -1151,12 +851,6 @@ sub tax_rate {
     }
     return;
 }
-
-=head2 availability_date
-
-Missing POD for availability_date.
-
-=cut
 
 sub availability_date {
     my $self = shift;
@@ -1207,6 +901,214 @@ Koha::Edifact::Line
 =head2 new
 
    Called with an array ref of segments constituting the line
+
+
+=head2 marc_record
+
+Missing POD for marc_record.
+
+
+=head2 corpcon
+
+Missing POD for corpcon.
+
+=head2 new_field
+
+Missing POD for new_field.
+
+
+=head2 item_number_id
+
+Missing POD for item_number_id.
+
+
+=head2 line_item_number
+
+Missing POD for line_item_number.
+
+=head2 additional_product_ids
+
+Missing POD for additional_product_ids.
+
+=head2 action_notification
+
+Missing POD for action_notification.
+
+=head2 item_description
+
+Missing POD for item_description.
+
+=head2 monetary_amount
+
+Missing POD for monetary_amount.
+
+=head2 quantity
+
+Missing POD for quantity.
+
+=head2 quantity_invoiced
+
+Missing POD for quantity_invoiced.
+
+=head2 price
+
+Missing POD for price.
+
+=head2 reference
+
+Missing POD for reference.
+
+=head2 orderline_reference_number
+
+Missing POD for orderline_reference_number.
+
+=head2 ordernumber
+
+Missing POD for ordernumber.
+
+=head2 free_text
+
+Missing POD for free_text.
+
+=head2 coded_free_text
+
+Missing POD for coded_free_text.
+
+=head2 internal_notes
+
+Missing POD for internal_notes.
+
+=head2 coded_internal_note
+
+Missing POD for coded_internal_note.
+
+=head2 orderline_free_text
+
+Missing POD for orderline_free_text.
+
+=head2 coded_orderline_text
+
+Missing POD for coded_orderline_text.
+
+=head2 substitute_free_text
+
+Missing POD for substitute_free_text.
+
+=head2 coded_substitute_text
+
+Missing POD for coded_substitute_text.
+
+=head2 translate_8B
+
+Missing POD for translate_8B.
+
+=head2 translate_12B
+
+Missing POD for translate_12B.
+
+=head2 title
+
+Missing POD for title.
+
+=head2 author
+
+Missing POD for author.
+
+=head2 series
+
+Missing POD for series.
+
+=head2 publisher
+
+Missing POD for publisher.
+
+=head2 publication_date
+
+Missing POD for publication_date.
+
+=head2 dewey_class
+
+Missing POD for dewey_class.
+
+=head2 lc_class
+
+Missing POD for lc_class.
+
+=head2 girfield
+
+Missing POD for girfield.
+
+=head2 number_of_girs
+
+Missing POD for number_of_girs.
+
+=head2 extract_gir
+
+Missing POD for extract_gir.
+
+=head2 moa_amt
+
+Missing POD for moa_amt.
+
+=head2 moa_multiple_amt
+
+Missing POD for moa_multiple_amt.
+
+=head2 amt_discount
+
+Missing POD for amt_discount.
+
+=head2 amt_prepayment
+
+Missing POD for amt_prepayment.
+
+=head2 amt_total
+
+Missing POD for amt_total.
+
+=head2 amt_unitprice
+
+Missing POD for amt_unitprice.
+
+=head2 amt_lineitem
+
+Missing POD for amt_lineitem.
+
+=head2 amt_taxoncharge
+
+Missing POD for amt_taxoncharge.
+
+=head2 pri_price
+
+Missing POD for pri_price.
+
+=head2 price_net
+
+Missing POD for price_net.
+
+=head2 price_gross
+
+Missing POD for price_gross.
+
+=head2 price_info
+
+Missing POD for price_info.
+
+=head2 price_info_inclusive
+
+Missing POD for price_info_inclusive.
+
+=head2 tax
+
+Missing POD for tax.
+
+=head2 tax_rate
+
+Missing POD for tax_rate.
+
+=head2 availability_date
+
+Missing POD for availability_date.
 
 =head1 AUTHOR
 

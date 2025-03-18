@@ -95,7 +95,24 @@ BEGIN {
     );
 }
 
-=head2 GetOrderFromItemnumber
+=head1 NAME
+
+C4::Acquisition - Koha functions for dealing with orders and acquisitions
+
+=head1 SYNOPSIS
+
+use C4::Acquisition;
+
+=head1 DESCRIPTION
+
+The functions in this module deal with acquisitions, managing book
+orders, basket and parcels.
+
+=head1 FUNCTIONS
+
+=head2 FUNCTIONS ABOUT BASKETS
+
+=head3 GetOrderFromItemnumber
 
 Missing POD for GetOrderFromItemnumber.
 
@@ -120,23 +137,6 @@ sub GetOrderFromItemnumber {
     return ($order);
 
 }
-
-=head1 NAME
-
-C4::Acquisition - Koha functions for dealing with orders and acquisitions
-
-=head1 SYNOPSIS
-
-use C4::Acquisition;
-
-=head1 DESCRIPTION
-
-The functions in this module deal with acquisitions, managing book
-orders, basket and parcels.
-
-=head1 FUNCTIONS
-
-=head2 FUNCTIONS ABOUT BASKETS
 
 =head3 GetBasket
 

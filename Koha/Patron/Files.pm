@@ -32,7 +32,7 @@ Koha::Patron::Files - Module for managing patron files
 
 =cut
 
-=head2 new
+=item new
 
 Missing POD for new.
 

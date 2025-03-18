@@ -34,6 +34,10 @@ BEGIN {
     @ISA = qw(C4::Barcodes);
 }
 
+=head1 Functions
+
+=cut
+
 # Generates barcode where hb = home branch Code, yymm = year/month catalogued, incr = incremental number,
 # 	increment resets yearly -fbcit
 

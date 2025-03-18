@@ -504,12 +504,6 @@ LABEL_FIELDS:    # process data for requested fields on current label
     return \@label_text;
 }
 
-=head2 draw_guide_box
-
-Missing POD for draw_guide_box.
-
-=cut
-
 sub draw_guide_box {
     return $_[0]->{'guidebox'};
 }
@@ -801,6 +795,10 @@ R       = Right
                                                 font_size           => $text_font_size,
                                                 justify             => $text_justification,
                         );>
+
+=head2 draw_guide_box
+
+Missing POD for draw_guide_box.
 
 =head2 barcode()
 

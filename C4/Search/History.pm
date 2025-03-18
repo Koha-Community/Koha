@@ -118,12 +118,6 @@ sub delete {
     );
 }
 
-=head2 delete_from_cookie
-
-Missing POD for delete_from_cookie.
-
-=cut
-
 sub delete_from_cookie {
     my ($params) = @_;
     my $cookie   = $params->{cookie};
@@ -291,6 +285,10 @@ If the sessionid is missing all searches for all sessions will be deleted.
 It is possible to delete searches for current session or all previous sessions using the previous flag.
 If the type ("biblio" or "authority") is missing, all type will be deleted.
 To delete *all* searches for a given userid, just pass a userid.
+
+=head2 delete_from_cookie
+
+Missing POD for delete_from_cookie.
 
 =head2 get
 

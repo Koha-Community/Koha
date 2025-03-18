@@ -161,12 +161,6 @@ sub build {
     );
 }
 
-=head2 build_sample_biblio
-
-Missing POD for build_sample_biblio.
-
-=cut
-
 sub build_sample_biblio {
     my ( $self, $args ) = @_;
 
@@ -197,12 +191,6 @@ sub build_sample_biblio {
     my ($biblio_id) = C4::Biblio::AddBiblio( $record, $frameworkcode );
     return Koha::Biblios->find($biblio_id);
 }
-
-=head2 build_sample_item
-
-Missing POD for build_sample_item.
-
-=cut
 
 sub build_sample_item {
     my ( $self, $args ) = @_;
@@ -602,12 +590,6 @@ sub _gen_text {
     return $random->randregex($regex);
 }
 
-=head2 alt_rand
-
-Missing POD for alt_rand.
-
-=cut
-
 sub alt_rand {    #Alternative randomizer
     my ($max)  = @_;
     my $random = Bytes::Random::Secure->new( NonBlocking => 1 );
@@ -830,6 +812,14 @@ if a record with that primary key already exists.
 Given a plural Koha::Object-derived class, it creates a random element, and
 returns the corresponding Koha::Object.
 
+=head2 build_sample_biblio
+
+Missing POD for build_sample_biblio.
+
+=head2 build_sample_item
+
+Missing POD for build_sample_item.
+
 =head2 build_sample_ill_request
 
     my $ill_request = $builder->build_sample_ill_request({ biblio_id => $biblio_id });
@@ -847,6 +837,10 @@ C<$args> is a hashref with the following optional keys:
 =item * C<branchcode> (default: a random branch)
 
 =back
+
+=head2 alt_rand
+
+Missing POD for alt_rand.
 
 =head1 AUTHOR
 

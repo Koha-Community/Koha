@@ -19,12 +19,6 @@ sub new {
     return $self;
 }
 
-=head2 prereqs
-
-Missing POD for prereqs.
-
-=cut
-
 sub prereqs {
     my $self = shift;
 
@@ -124,6 +118,10 @@ A module for manipulating Koha Perl dependency list objects.
 
     example:
         C<my $perl_modules = C4::Installer::PerlModules->new;>
+
+=head2 prereqs
+
+Missing POD for prereqs.
 
 =head2 prereq_pm()
 

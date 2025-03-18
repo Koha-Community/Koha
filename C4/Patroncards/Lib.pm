@@ -84,12 +84,6 @@ sub box {
     $pdf->Add($obj_stream);
 }
 
-=head2 get_borrower_attributes
-
-Missing POD for get_borrower_attributes.
-
-=cut
-
 sub get_borrower_attributes {
     my ( $borrower_number, @fields ) = @_;
     my $get_branch = 0;
@@ -123,12 +117,6 @@ sub get_borrower_attributes {
     return $borrower_attributes;
 }
 
-=head2 put_image
-
-Missing POD for put_image.
-
-=cut
-
 sub put_image {
     my ( $image_name, $image_file ) = @_;
     if ( my $image_limit = C4::Context->preference('ImageLimit') ) {    # enforce quota if set
@@ -152,12 +140,6 @@ sub put_image {
     return;
 }
 
-=head2 get_image
-
-Missing POD for get_image.
-
-=cut
-
 sub get_image {
     my ( $image_name, $fields ) = @_;
     $fields = '*' unless $fields;
@@ -175,12 +157,6 @@ sub get_image {
     }
     return $sth->fetchall_arrayref( {} );
 }
-
-=head2 rm_image
-
-Missing POD for rm_image.
-
-=cut
 
 sub rm_image {
     my $image_ids = shift;
@@ -276,7 +252,21 @@ This library provides functions used by various sections of the Patroncard Creat
 
         box($llx, $lly, $width, $height, $pdf);
 
-=cut
+=head2 get_borrower_attributes
+
+Missing POD for get_borrower_attributes.
+
+=head2 put_image
+
+Missing POD for put_image.
+
+=head2 get_image
+
+Missing POD for get_image.
+
+=head2 rm_image
+
+Missing POD for rm_image.
 
 =head1 AUTHOR
 

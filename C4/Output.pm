@@ -276,7 +276,7 @@ sub output_with_http_headers {
     print $query->header($options), $data;
 }
 
-=head2 output_html_with_http_headers
+=item output_html_with_http_headers
 
 Missing POD for output_html_with_http_headers.
 
@@ -287,7 +287,7 @@ sub output_html_with_http_headers {
     output_with_http_headers( $query, $cookie, $data, 'html', $status, $extra_options );
 }
 
-=head2 output_ajax_with_http_headers
+=item output_ajax_with_http_headers
 
 Missing POD for output_ajax_with_http_headers.
 
@@ -304,7 +304,7 @@ sub output_ajax_with_http_headers {
     ), $js;
 }
 
-=head2 is_ajax
+=item is_ajax
 
 Missing POD for is_ajax.
 
@@ -387,7 +387,7 @@ sub output_and_exit {
     exit;
 }
 
-=head2 output_error
+=item output_error
 
 Missing POD for output_error.
 
@@ -411,7 +411,7 @@ sub output_error {
     output_with_http_headers $query, $cookie, $template->output, 'html', '404 Not Found';
 }
 
-=head2 parametrized_url
+=item parametrized_url
 
 Missing POD for parametrized_url.
 

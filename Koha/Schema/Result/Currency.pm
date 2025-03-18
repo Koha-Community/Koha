@@ -197,6 +197,7 @@ Missing POD for koha_object_class.
 sub koha_object_class {
     'Koha::Acquisition::Currency';
 }
+
 =head2 koha_objects_class
 
 Missing POD for koha_objects_class.

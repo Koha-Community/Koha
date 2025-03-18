@@ -40,12 +40,6 @@ BEGIN {
 
 # Check that shib config is not malformed
 
-=head2 shib_ok
-
-Missing POD for shib_ok.
-
-=cut
-
 sub shib_ok {
     my $config = _get_shib_config();
 
@@ -377,6 +371,10 @@ It should be as simple as that; you should now be able to login via shibboleth i
 If you need more help configuring your B<S>ervice B<P>rovider to authenticate against a chosen B<Id>entity B<P>rovider then it might be worth taking a look at the community wiki L<page|http://wiki.koha-community.org/wiki/Shibboleth_Configuration>
 
 =head1 FUNCTIONS
+
+=head2 shib_ok
+
+Missing POD for shib_ok.
 
 =head2 logout_shib
 

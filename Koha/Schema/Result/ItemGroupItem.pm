@@ -141,6 +141,7 @@ Missing POD for koha_object_class.
 sub koha_object_class {
     'Koha::Biblio::ItemGroup::Item';
 }
+
 =head2 koha_objects_class
 
 Missing POD for koha_objects_class.

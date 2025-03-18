@@ -35,12 +35,6 @@ sub GetByCode {
         : $code;
 }
 
-=head2 Get
-
-Missing POD for Get.
-
-=cut
-
 sub Get {
     my ( $self, $category, $selected, $opac ) = @_;
     return GetAuthorisedValues( $category, $selected, $opac );
@@ -59,12 +53,6 @@ sub GetAuthValueDropbox {
         $branch_limit
     );
 }
-
-=head2 GetCategories
-
-Missing POD for GetCategories.
-
-=cut
 
 sub GetCategories {
     my ( $self, $params ) = @_;
@@ -122,9 +110,17 @@ Koha::Template::Plugin::AuthorisedValues - TT Plugin for authorised values
 In a template, you can get the description for an authorised value with
 the following TT code: [% AuthorisedValues.GetByCode( 'CATEGORY', 'AUTHORISED_VALUE_CODE', 'IS_OPAC' ) %]
 
+=head2 Get
+
+Missing POD for Get.
+
 =head2 GetAuthValueDropbox
 
 The parameters are identical to those used by the subroutine C4::Koha::GetAuthValueDropbox
+
+=head2 GetCategories
+
+Missing POD for GetCategories.
 
 =head2 GetDescriptionsByKohaField
 

@@ -62,21 +62,6 @@ use Koha::Session;
 use vars qw($ldap $cas $caslogout);
 our ( @ISA, @EXPORT_OK );
 
-#NOTE: The utility of keeping the safe_exit function is that it can be easily re-defined in unit tests and plugins
-
-=head2 safe_exit
-
-Missing POD for safe_exit.
-
-=cut
-
-sub safe_exit {
-
-    # It's fine for us to "exit" because CGI::Compile (used in Plack::App::WrapCGI) redefines "exit" for us automatically.
-    # Since we only seem to use C4::Auth::safe_exit in a CGI context, we don't actually need PSGI detection at all here.
-    exit;
-}
-
 BEGIN {
     C4::Context->set_remote_address;
 
@@ -133,6 +118,46 @@ been provided so that a users login information is passed along
 automatically. This gets loaded into the template.
 
 =head1 FUNCTIONS
+
+=cut
+
+=head2 safe_exit
+
+Missing POD for safe_exit.
+
+NOTE: The utility of keeping the safe_exit function is that it can be easily re-defined in unit tests and plugins
+
+=cut
+
+sub safe_exit {
+
+    # It's fine for us to "exit" because CGI::Compile (used in Plack::App::WrapCGI) redefines "exit" for us automatically.
+    # Since we only seem to use C4::Auth::safe_exit in a CGI context, we don't actually need PSGI detection at all here.
+    exit;
+}
+
+BEGIN {
+    C4::Context->set_remote_address;
+
+    require Exporter;
+    @ISA = qw(Exporter);
+
+    @EXPORT_OK = qw(
+        checkauth check_api_auth get_session check_cookie_auth checkpw checkpw_internal checkpw_hash
+        get_all_subpermissions get_cataloguing_page_permissions get_user_subpermissions in_iprange
+        get_template_and_user haspermission create_basic_session
+    );
+
+    $cas       = C4::Context->preference('casAuthentication');
+    $caslogout = C4::Context->preference('casLogout');
+
+    if ($cas) {
+        require C4::Auth_with_cas;    # no import
+        import C4::Auth_with_cas
+            qw(check_api_auth_cas checkpw_cas login_cas logout_cas login_cas_url logout_if_required multipleAuth getMultipleAuth);
+    }
+
+}
 
 =head2 get_template_and_user
 

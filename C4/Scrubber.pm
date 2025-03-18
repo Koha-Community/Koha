@@ -37,12 +37,6 @@ my %scrubbertypes = (
     },
 );
 
-=head2 new
-
-Missing POD for new.
-
-=cut
-
 sub new {
     shift;    # ignore our class we are wrapper
     my $type = (@_) ? shift : 'default';
@@ -71,7 +65,10 @@ Standardized wrapper with settings for building HTML::Scrubber tailored to vario
 The default is to scrub everything, leaving no markup at all.  This is compatible with the expectations
 for Tags.
 
-=head2 TODO: Add real perldoc
+=head1 Functions
+
+=head2 new
+
+Missing POD for new.
 
 =cut
-

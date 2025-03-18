@@ -88,12 +88,6 @@ sub upload_messages {
     return;
 }
 
-=head2 file_download
-
-Missing POD for file_download.
-
-=cut
-
 sub file_download {
     my $self = shift;
     my @downloaded_files;
@@ -351,12 +345,6 @@ sub sftp_upload {
     return;
 }
 
-=head2 file_upload
-
-Missing POD for file_upload.
-
-=cut
-
 sub file_upload {
     my ( $self, @messages ) = @_;
     my $dir = $self->{account}->upload_directory;
@@ -418,12 +406,6 @@ sub _get_file_ext {
     return 'XXXX';    # non matching type
 }
 
-=head2 message_hash
-
-Missing POD for message_hash.
-
-=cut
-
 sub message_hash {
     my $self = shift;
     my $msg  = {
@@ -478,6 +460,10 @@ Or FILE to access a local directory (useful for testing)
 
    passed an array of messages will upload them to the supplier site
 
+=head2 file_download
+
+Missing POD for file_download.
+
 =head2 sftp_download
 
    called by download_messages to perform the download using SFTP
@@ -498,6 +484,10 @@ Or FILE to access a local directory (useful for testing)
 
   called by upload_messages to perform the upload using sftp
 
+=head2 file_upload
+
+Missing POD for file_upload.
+
 =head2 _abort_download
 
    internal routine to halt operation on error and supply a stacktrace
@@ -511,6 +501,10 @@ Or FILE to access a local directory (useful for testing)
 
   sets the direct ingest flag so that the object reads files from
   the local file system useful in debugging
+
+=head2 message_hash
+
+Missing POD for message_hash.
 
 =head1 AUTHOR
 

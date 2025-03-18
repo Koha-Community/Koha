@@ -49,12 +49,6 @@ sub _initialize {
     #"Mozilla/4.76 [en] (Win98; U)",	#  if for some reason you want to go stealth, you might prefer this
 }
 
-=head2 image_url
-
-Missing POD for image_url.
-
-=cut
-
 sub image_url {
     _initialize();
     ( $user and $pass ) or return;
@@ -62,12 +56,6 @@ sub image_url {
     $isbn =~ s/(p|-)//g;    # sanitize
     return $image_url . $isbn;
 }
-
-=head2 link_url
-
-Missing POD for link_url.
-
-=cut
 
 sub link_url {
     _initialize();
@@ -77,12 +65,6 @@ sub link_url {
     return $link_url . $isbn;
 }
 
-=head2 content_cafe_url
-
-Missing POD for content_cafe_url.
-
-=cut
-
 sub content_cafe_url {
     _initialize();
     ( $user and $pass ) or return;
@@ -91,12 +73,6 @@ sub content_cafe_url {
     return
         "https://contentcafe2.btol.com/ContentCafeClient/ContentCafe.aspx?UserID=$user&Password=$pass&Options=Y&ItemKey=$isbn";
 }
-
-=head2 http_jacket_link
-
-Missing POD for http_jacket_link.
-
-=cut
 
 sub http_jacket_link {
     _initialize();
@@ -146,6 +122,22 @@ The settings for this module are controlled by System Preferences:
 These can be overridden for testing purposes using the initialize function.
 
 =head1 FUNCTIONS
+
+=head2 image_url
+
+Missing POD for image_url.
+
+=head2 link_url
+
+Missing POD for link_url.
+
+=head2 content_cafe_url
+
+Missing POD for content_cafe_url.
+
+=head2 http_jacket_link
+
+Missing POD for http_jacket_link.
 
 =head2 availability($isbn);
 

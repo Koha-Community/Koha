@@ -266,12 +266,6 @@ sub get_label_position {
     }
 }
 
-=head2 get_next_label_pos
-
-Missing POD for get_next_label_pos.
-
-=cut
-
 sub get_next_label_pos {
     my $self          = shift;
     my $current_label = $self->{'current_label'};
@@ -416,6 +410,10 @@ CM      = SI Centimeters (28.3464567 points per)
 
     examples:
         C<my ($row_count, $col_count, $llx, $lly) = $template->get_label_position($start_label);>
+
+=head2 get_next_label_pos
+
+Missing POD for get_next_label_pos.
 
 =head1 AUTHOR
 

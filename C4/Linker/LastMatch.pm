@@ -24,6 +24,10 @@ use C4::Linker::Default;    # Use Default for flipping
 
 use base qw(C4::Linker);
 
+=head1 Functions
+
+=cut
+
 =head2 new
 
 Missing POD for new.

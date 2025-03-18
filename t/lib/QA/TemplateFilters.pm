@@ -122,12 +122,6 @@ sub _process_tt_content {
     return { errors => \@errors, new_content => $new_content };
 }
 
-=head2 process_tt_block
-
-Missing POD for process_tt_block.
-
-=cut
-
 sub process_tt_block {
     my ( $line, $params ) = @_;
     my $tt_block   = $params->{tt_block};
@@ -280,6 +274,9 @@ and to not duplicate the code.
     * line is the line where the error has been found.
     * line_number is the line number where the error has been found.
 
+=head2 process_tt_block
+
+Missing POD for process_tt_block.
 
 =head1 AUTHORS
 

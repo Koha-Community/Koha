@@ -61,6 +61,8 @@ Generic exception.
 
 Generic method for exception stringifying.
 
+=head2 description
+
 =cut
 
 1;
