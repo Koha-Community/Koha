@@ -48,6 +48,12 @@ our $field_delimiter  = '|';    # Protocol Default
 
 our $last_response = '';
 
+=head2 y_or_n
+
+Missing POD for y_or_n.
+
+=cut
+
 =head2 timestamp
 
 Missing POD for timestamp.
