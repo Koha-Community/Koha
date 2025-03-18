@@ -21,6 +21,7 @@ use Koha::Database;
 
 use base qw(Koha::Object);
 
+use Koha::Caches;
 my $cache = Koha::Caches->get_instance();
 
 =head1 NAME
