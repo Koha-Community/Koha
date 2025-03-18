@@ -82,7 +82,6 @@ sub launch_zebra {
     my $zebra_pid = fork();
     if ( $zebra_pid == 0 ) {
         exec("zebrasrv -f $koha_conf -v none,request -l $datadir/zebra.log");
-        exit;
     }
     sleep(1);
     $self->{zebra_pid} = $zebra_pid;
@@ -97,7 +96,6 @@ sub launch_indexer {
 
     if ( $indexer_pid == 0 ) {
         exec("$rebuild_zebra -daemon -sleep 5");
-        exit;
     }
     sleep(1);
     $self->{indexer_pid} = $indexer_pid;
