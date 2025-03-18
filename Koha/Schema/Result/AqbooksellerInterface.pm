@@ -147,9 +147,21 @@ __PACKAGE__->belongs_to(
 # Created by DBIx::Class::Schema::Loader v0.07049 @ 2023-05-05 12:54:39
 # DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:NOk5VsJp5v7nTw39qxrEbw
 
+=head2 koha_object_class
+
+Missing POD for koha_object_class.
+
+=cut
+
 sub koha_object_class {
     'Koha::Acquisition::Bookseller::Interface';
 }
+=head2 koha_objects_class
+
+Missing POD for koha_objects_class.
+
+=cut
+
 sub koha_objects_class {
     'Koha::Acquisition::Bookseller::Interfaces';
 }

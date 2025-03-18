@@ -274,9 +274,21 @@ __PACKAGE__->belongs_to(
 # DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:4BXk0QleJJOQVdWh9YQYWA
 
 
+=head2 koha_object_class
+
+Missing POD for koha_object_class.
+
+=cut
+
 sub koha_object_class {
     'Koha::ERM::EUsage::MonthlyUsage';
 }
+=head2 koha_objects_class
+
+Missing POD for koha_objects_class.
+
+=cut
+
 sub koha_objects_class {
     'Koha::ERM::EUsage::MonthlyUsages';
 }

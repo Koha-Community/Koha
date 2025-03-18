@@ -63,6 +63,13 @@ use vars qw($ldap $cas $caslogout);
 our ( @ISA, @EXPORT_OK );
 
 #NOTE: The utility of keeping the safe_exit function is that it can be easily re-defined in unit tests and plugins
+
+=head2 safe_exit
+
+Missing POD for safe_exit.
+
+=cut
+
 sub safe_exit {
 
     # It's fine for us to "exit" because CGI::Compile (used in Plack::App::WrapCGI) redefines "exit" for us automatically.
@@ -2029,6 +2036,13 @@ sub create_basic_session {
 # (or something similar)
 # Currently it's only passed from C4::SIP::ILS::Patron::check_password, but
 # not having a userenv defined could cause a crash.
+
+=head2 checkpw
+
+Missing POD for checkpw.
+
+=cut
+
 sub checkpw {
     my ( $userid, $password, $query, $type, $no_set_userenv ) = @_;
     $type = 'opac' unless $type;
@@ -2138,6 +2152,12 @@ sub checkpw {
     return @return;
 }
 
+=head2 checkpw_internal
+
+Missing POD for checkpw_internal.
+
+=cut
+
 sub checkpw_internal {
     my ( $userid, $password, $no_set_userenv ) = @_;
 
@@ -2168,6 +2188,12 @@ sub checkpw_internal {
     }
     return 0;
 }
+
+=head2 checkpw_hash
+
+Missing POD for checkpw_hash.
+
+=cut
 
 sub checkpw_hash {
     my ( $password, $stored_hash ) = @_;
@@ -2433,6 +2459,12 @@ sub in_iprange {
     }
     return $result ? 1 : 0;
 }
+
+=head2 getborrowernumber
+
+Missing POD for getborrowernumber.
+
+=cut
 
 sub getborrowernumber {
     my ($userid) = @_;

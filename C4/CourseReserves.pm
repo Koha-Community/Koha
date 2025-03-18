@@ -1081,8 +1081,27 @@ sub SearchCourses {
     return $courses;
 }
 
-sub whoami  { ( caller(1) )[3] }
+=head2 whoami
+
+Missing POD for whoami.
+
+=cut
+
+sub whoami { ( caller(1) )[3] }
+
+=head2 whowasi
+
+Missing POD for whowasi.
+
+=cut
+
 sub whowasi { ( caller(2) )[3] }
+
+=head2 stringify_params
+
+Missing POD for stringify_params.
+
+=cut
 
 sub stringify_params {
     my (%params) = @_;

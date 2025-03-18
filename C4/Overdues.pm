@@ -456,6 +456,12 @@ C<$itemnumber> is  item number.
 
 =cut
 
+=head2 GetWdayFromItemnumber
+
+Missing POD for GetWdayFromItemnumber.
+
+=cut
+
 sub GetWdayFromItemnumber {
     my ($itemnumber) = @_;
     my $iteminfo = GetIssuesIteminfo($itemnumber);

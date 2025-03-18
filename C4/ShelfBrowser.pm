@@ -216,6 +216,13 @@ sub GetNearbyItems {
 
 # populate an item list with its title and upc, oclc and isbn normalized.
 # Not really intended to be exported.
+
+=head2 GetShelfInfo
+
+Missing POD for GetShelfInfo.
+
+=cut
+
 sub GetShelfInfo {
     my @items       = @_;
     my $marcflavour = C4::Context->preference("marcflavour");

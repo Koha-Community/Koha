@@ -48,9 +48,21 @@ common methods for getting Koha patron.
 
 =cut
 
+=head2 agent_string
+
+Missing POD for agent_string.
+
+=cut
+
 sub agent_string {
     return 'Koha/' . Koha::version();
 }
+
+=head2 new
+
+Missing POD for new.
+
+=cut
 
 sub new {
     my $class  = shift;
@@ -67,12 +79,24 @@ sub _koha_session {
     return C4::Auth::get_session($session_id);
 }
 
+=head2 get_from_koha_session
+
+Missing POD for get_from_koha_session.
+
+=cut
+
 sub get_from_koha_session {
     my $self    = shift;
     my $key     = shift                or croak "No key";
     my $session = $self->_koha_session or return;
     return $session->param($key);
 }
+
+=head2 set_in_koha_session
+
+Missing POD for set_in_koha_session.
+
+=cut
 
 sub set_in_koha_session {
     my $self    = shift;
@@ -81,6 +105,12 @@ sub set_in_koha_session {
     my $session = $self->_koha_session or croak "No Koha session";
     return $session->param( $key, $value );
 }
+
+=head2 koha_patron
+
+Missing POD for koha_patron.
+
+=cut
 
 sub koha_patron {
     my $self = shift;

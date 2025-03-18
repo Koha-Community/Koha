@@ -92,9 +92,21 @@ __PACKAGE__->belongs_to(
 # Created by DBIx::Class::Schema::Loader v0.07042 @ 2017-04-13 13:53:21
 # DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:Z43jqmURevaJeui7l8ThlQ
 
+=head2 koha_object_class
+
+Missing POD for koha_object_class.
+
+=cut
+
 sub koha_object_class {
     'Koha::Serial::Item';
 }
+=head2 koha_objects_class
+
+Missing POD for koha_objects_class.
+
+=cut
+
 sub koha_objects_class {
     'Koha::Serial::Items';
 }

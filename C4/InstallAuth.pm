@@ -413,6 +413,12 @@ sub checkauth {
     exit;
 }
 
+=head2 checkpw
+
+Missing POD for checkpw.
+
+=cut
+
 sub checkpw {
 
     my ( $userid, $password ) = @_;

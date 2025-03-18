@@ -461,6 +461,12 @@ sub batch_update {
     return ( { modified_itemnumbers => \@modified_itemnumbers, modified_fields => $modified_fields }, $self );
 }
 
+=head2 apply_regex
+
+Missing POD for apply_regex.
+
+=cut
+
 sub apply_regex {
 
     # FIXME Should be moved outside of Koha::Items

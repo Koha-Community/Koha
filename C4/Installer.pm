@@ -662,6 +662,12 @@ sub get_file_path_from_name {
 
 }
 
+=head2 primary_key_exists
+
+Missing POD for primary_key_exists.
+
+=cut
+
 sub primary_key_exists {
     my ( $table_name, $key_name ) = @_;
     my $dbh = C4::Context->dbh;
@@ -677,6 +683,12 @@ sub primary_key_exists {
     return $exists;
 }
 
+=head2 foreign_key_exists
+
+Missing POD for foreign_key_exists.
+
+=cut
+
 sub foreign_key_exists {
     my ( $table_name, $constraint_name ) = @_;
     my $dbh = C4::Context->dbh;
@@ -684,12 +696,24 @@ sub foreign_key_exists {
     return $infos =~ m|CONSTRAINT `$constraint_name` FOREIGN KEY|;
 }
 
+=head2 unique_key_exists
+
+Missing POD for unique_key_exists.
+
+=cut
+
 sub unique_key_exists {
     my ( $table_name, $constraint_name ) = @_;
     my $dbh = C4::Context->dbh;
     my ( undef, $infos ) = $dbh->selectrow_array(qq|SHOW CREATE TABLE $table_name|);
     return $infos =~ m|UNIQUE KEY `$constraint_name`|;
 }
+
+=head2 index_exists
+
+Missing POD for index_exists.
+
+=cut
 
 sub index_exists {
     my ( $table_name, $key_name ) = @_;
@@ -702,6 +726,12 @@ sub index_exists {
     );
     return $exists;
 }
+
+=head2 column_exists
+
+Missing POD for column_exists.
+
+=cut
 
 sub column_exists {
     my ( $table_name, $column_name ) = @_;
@@ -716,6 +746,12 @@ sub column_exists {
     return $exists;
 }
 
+=head2 TableExists
+
+Missing POD for TableExists.
+
+=cut
+
 sub TableExists {    # Could be renamed table_exists for consistency
     my $table = shift;
     eval {
@@ -728,11 +764,23 @@ sub TableExists {    # Could be renamed table_exists for consistency
     return 0;
 }
 
+=head2 version_from_file
+
+Missing POD for version_from_file.
+
+=cut
+
 sub version_from_file {
     my $file = shift;
     return unless $file =~ m|(^\|/)(\d{2})(\d{2})(\d{2})(\d{3}).pl$|;
     return sprintf "%s.%s.%s.%s", $2, $3, $4, $5;
 }
+
+=head2 get_db_entries
+
+Missing POD for get_db_entries.
+
+=cut
 
 sub get_db_entries {
     my $db_revs_dir = C4::Context->config('intranetdir') . '/installer/data/mysql/db_revs';
@@ -753,6 +801,12 @@ sub get_db_entries {
     }
     return \@need_update;
 }
+
+=head2 run_db_rev
+
+Missing POD for run_db_rev.
+
+=cut
 
 sub run_db_rev {
     my ($file) = @_;
@@ -790,6 +844,12 @@ sub run_db_rev {
     return $db_entry;
 }
 
+=head2 update
+
+Missing POD for update.
+
+=cut
+
 sub update {
     my ( $files, $params ) = @_;
 
@@ -812,6 +872,12 @@ sub update {
     }
     return { success => \@done, error => \@errors };
 }
+
+=head2 generate_output_db_entry
+
+Missing POD for generate_output_db_entry.
+
+=cut
 
 sub generate_output_db_entry {
     my ($db_entry) = @_;
@@ -859,10 +925,22 @@ sub generate_output_db_entry {
     return \@output;
 }
 
+=head2 get_atomic_updates
+
+Missing POD for get_atomic_updates.
+
+=cut
+
 sub get_atomic_updates {
     my $atomic_updates = Koha::Installer::get_atomic_updates();
     return $atomic_updates;
 }
+
+=head2 run_atomic_updates
+
+Missing POD for run_atomic_updates.
+
+=cut
 
 sub run_atomic_updates {
     my ($files) = @_;
@@ -990,6 +1068,13 @@ sub SetVersion {
 
 # DEPRECATED Don't use it!
 # Used for compatibility with older versions (from updatedatabase.pl)
+
+=head2 NewVersion
+
+Missing POD for NewVersion.
+
+=cut
+
 sub NewVersion {
     my ( $DBversion, $bug_number, $descriptions ) = @_;
 
@@ -1043,6 +1128,12 @@ sub CheckVersion {
 
     return 0;
 }
+
+=head2 sanitize_zero_date
+
+Missing POD for sanitize_zero_date.
+
+=cut
 
 sub sanitize_zero_date {
     my ( $table_name, $column_name ) = @_;

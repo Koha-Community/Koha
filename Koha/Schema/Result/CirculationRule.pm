@@ -180,9 +180,21 @@ __PACKAGE__->belongs_to(
 # Created by DBIx::Class::Schema::Loader v0.07042 @ 2018-10-05 14:29:17
 # DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:QHMqvrtX0ohJe70PHUYZ0Q
 
+=head2 koha_objects_class
+
+Missing POD for koha_objects_class.
+
+=cut
+
 sub koha_objects_class {
     'Koha::CirculationRules';
 }
+
+=head2 koha_object_class
+
+Missing POD for koha_object_class.
+
+=cut
 
 sub koha_object_class {
     'Koha::CirculationRule';

@@ -47,6 +47,12 @@ can centralize the behaviour control (e.g. production vs. development environmet
 
 =cut
 
+=head2 register
+
+Missing POD for register.
+
+=cut
+
 sub register {
     my ( $self, $app ) = @_;
 

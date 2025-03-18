@@ -32,6 +32,12 @@ Koha::Patron::Files - Module for managing patron files
 
 =cut
 
+=head2 new
+
+Missing POD for new.
+
+=cut
+
 sub new {
     my ( $class, %args ) = @_;
     my $self = bless( {}, $class );

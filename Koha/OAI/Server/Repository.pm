@@ -102,6 +102,12 @@ Note the 'include_items' parameter which is the only mean to return item-level i
 
 =cut
 
+=head2 new
+
+Missing POD for new.
+
+=cut
+
 sub new {
     my ( $class, %args ) = @_;
     my $self = $class->SUPER::new(%args);
@@ -167,6 +173,12 @@ sub DESTROY {
         if $self->{mysql_orig_tz};
 }
 
+=head2 get_biblio_marcxml
+
+Missing POD for get_biblio_marcxml.
+
+=cut
+
 sub get_biblio_marcxml {
     my ( $self, $biblionumber, $format ) = @_;
     my $with_items   = 0;
@@ -210,6 +222,12 @@ sub get_biblio_marcxml {
     return ( $record ? $record->as_xml_record( C4::Context->preference('marcflavour') ) : undef, $decoding_error );
 }
 
+=head2 stylesheet
+
+Missing POD for stylesheet.
+
+=cut
+
 sub stylesheet {
     my ( $self, $format ) = @_;
     my $xsl_file =
@@ -221,6 +239,12 @@ sub stylesheet {
             . 'slim2OAIDC.xsl' );
     return $xsl_file;
 }
+
+=head2 items_included
+
+Missing POD for items_included.
+
+=cut
 
 sub items_included {
     my ( $self, $format ) = @_;

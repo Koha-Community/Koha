@@ -223,6 +223,12 @@ B<Example>:
 
 =cut
 
+=head2 is_disabled_for
+
+Missing POD for is_disabled_for.
+
+=cut
+
 sub is_disabled_for {
     my ( $class, $opts ) = @_;
     $valid->($opts);

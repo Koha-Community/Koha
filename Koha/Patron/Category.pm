@@ -145,6 +145,12 @@ sub default_messaging {
     return \@messaging;
 }
 
+=head2 get_expiry_date
+
+Missing POD for get_expiry_date.
+
+=cut
+
 sub get_expiry_date {
     my ( $self, $date ) = @_;
     if ( $self->enrolmentperiod ) {

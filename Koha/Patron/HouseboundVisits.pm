@@ -89,6 +89,12 @@ sub _type {
     return 'HouseboundVisit';
 }
 
+=head2 object_class
+
+Missing POD for object_class.
+
+=cut
+
 sub object_class {
     return 'Koha::Patron::HouseboundVisit';
 }

@@ -194,9 +194,21 @@ __PACKAGE__->has_many(
 # Created by DBIx::Class::Schema::Loader v0.07042 @ 2018-02-12 17:59:47
 # DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:Ih/HQM4KIRDZ0ESXVR9FwA
 
+=head2 koha_object_class
+
+Missing POD for koha_object_class.
+
+=cut
+
 sub koha_object_class {
     'Koha::Club::Enrollment';
 }
+=head2 koha_objects_class
+
+Missing POD for koha_objects_class.
+
+=cut
+
 sub koha_objects_class {
     'Koha::Club::Enrollments';
 }

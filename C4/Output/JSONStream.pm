@@ -41,6 +41,12 @@ use warnings;
 
 use JSON qw( to_json );
 
+=head2 new
+
+Missing POD for new.
+
+=cut
+
 sub new {
     my $class = shift;
     my $self  = {
@@ -53,6 +59,12 @@ sub new {
     return $self;
 }
 
+=head2 param
+
+Missing POD for param.
+
+=cut
+
 sub param {
     my $self = shift;
 
@@ -64,6 +76,12 @@ sub param {
         $self->{data}->{ $_[$i] } = $_[ $i + 1 ];
     }
 }
+
+=head2 output
+
+Missing POD for output.
+
+=cut
 
 sub output {
     my $self = shift;

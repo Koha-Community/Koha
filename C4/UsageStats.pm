@@ -38,6 +38,12 @@ their structure,...
 
 =cut
 
+=head2 BuildReport
+
+Missing POD for BuildReport.
+
+=cut
+
 sub BuildReport {
     my $report;
     my @libraries;

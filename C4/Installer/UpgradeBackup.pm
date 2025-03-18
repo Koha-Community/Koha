@@ -41,6 +41,12 @@ creates backups of files updated during an upgrade.
 
 =cut
 
+=head2 backup_changed_files
+
+Missing POD for backup_changed_files.
+
+=cut
+
 sub backup_changed_files {
     my $from_to       = shift;
     my $suffix        = shift;

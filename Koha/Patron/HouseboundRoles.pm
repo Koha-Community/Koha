@@ -44,6 +44,12 @@ sub _type {
     return 'HouseboundRole';
 }
 
+=head2 object_class
+
+Missing POD for object_class.
+
+=cut
+
 sub object_class {
     return 'Koha::Patron::HouseboundRole';
 }

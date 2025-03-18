@@ -266,6 +266,12 @@ sub get_label_position {
     }
 }
 
+=head2 get_next_label_pos
+
+Missing POD for get_next_label_pos.
+
+=cut
+
 sub get_next_label_pos {
     my $self          = shift;
     my $current_label = $self->{'current_label'};

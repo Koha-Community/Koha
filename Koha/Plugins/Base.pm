@@ -37,6 +37,12 @@ Koha::Plugins::Base - Base Module for plugins
 
 =cut
 
+=head2 new
+
+Missing POD for new.
+
+=cut
+
 sub new {
     my ( $class, $args ) = @_;
 
@@ -190,6 +196,12 @@ sub get_template {
 
     return $template;
 }
+
+=head2 get_metadata
+
+Missing POD for get_metadata.
+
+=cut
 
 sub get_metadata {
     my ( $self, $args ) = @_;

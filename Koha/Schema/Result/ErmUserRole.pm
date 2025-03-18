@@ -151,9 +151,21 @@ __PACKAGE__->belongs_to(
 # Created by DBIx::Class::Schema::Loader v0.07049 @ 2022-11-16 12:23:11
 # DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:HbkogqUuTLQCaUY1VrT6Hw
 
+=head2 koha_object_class
+
+Missing POD for koha_object_class.
+
+=cut
+
 sub koha_object_class {
     'Koha::ERM::UserRole';
 }
+=head2 koha_objects_class
+
+Missing POD for koha_objects_class.
+
+=cut
+
 sub koha_objects_class {
     'Koha::ERM::UserRoles';
 }

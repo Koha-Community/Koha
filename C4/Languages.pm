@@ -476,6 +476,12 @@ sub _build_languages_arrayref {
     return \@languages_loop;
 }
 
+=head2 language_get_description
+
+Missing POD for language_get_description.
+
+=cut
+
 sub language_get_description {
     my ( $script, $lang, $type ) = @_;
     my $dbh = C4::Context->dbh;
@@ -587,6 +593,13 @@ sub regex_lang_subtags {
 
 # Script Direction Resources:
 # http://www.w3.org/International/questions/qa-scripts
+
+=head2 get_bidi
+
+Missing POD for get_bidi.
+
+=cut
+
 sub get_bidi {
     my ($language_script) = @_;
     my $dbh = C4::Context->dbh;
@@ -598,6 +611,12 @@ sub get_bidi {
     }
     return $bidi;
 }
+
+=head2 accept_language
+
+Missing POD for accept_language.
+
+=cut
 
 sub accept_language {
 

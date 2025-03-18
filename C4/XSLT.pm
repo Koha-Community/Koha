@@ -85,6 +85,12 @@ sub _get_best_default_xslt_filename {
     return $xslfilename;
 }
 
+=head2 get_xslt_sysprefs
+
+Missing POD for get_xslt_sysprefs.
+
+=cut
+
 sub get_xslt_sysprefs {
     my $sysxml = "<sysprefs>\n";
     foreach my $syspref (
@@ -117,6 +123,12 @@ sub get_xslt_sysprefs {
     $sysxml .= "</sysprefs>\n";
     return $sysxml;
 }
+
+=head2 get_xsl_filename
+
+Missing POD for get_xsl_filename.
+
+=cut
 
 sub get_xsl_filename {
     my ($xslsyspref) = @_;

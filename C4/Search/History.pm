@@ -118,6 +118,12 @@ sub delete {
     );
 }
 
+=head2 delete_from_cookie
+
+Missing POD for delete_from_cookie.
+
+=cut
+
 sub delete_from_cookie {
     my ($params) = @_;
     my $cookie   = $params->{cookie};

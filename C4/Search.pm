@@ -563,6 +563,12 @@ sub getRecords {
     return ( undef, $results_hashref, \@facets_loop );
 }
 
+=head2 GetFacets
+
+Missing POD for GetFacets.
+
+=cut
+
 sub GetFacets {
 
     my $rs = shift;

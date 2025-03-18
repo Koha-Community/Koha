@@ -77,6 +77,12 @@ sub club_enrollments {
 
 =cut
 
+=head2 branch
+
+Missing POD for branch.
+
+=cut
+
 sub branch {
     my ($self) = @_;
 

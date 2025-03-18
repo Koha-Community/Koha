@@ -417,6 +417,12 @@ sub transferbook {
     return ( $dotransfer, $messages );
 }
 
+=head2 TooMany
+
+Missing POD for TooMany.
+
+=cut
+
 sub TooMany {
     my ( $patron, $item, $params ) = @_;
     my $onsite_checkout        = $params->{onsite_checkout}        || 0;
@@ -1413,6 +1419,12 @@ sub CanBookBeReturned {
     used when syspref decreaseLoanHighHolds is active. Returns 1 or 0 to define whether the minimum value held in
     decreaseLoanHighHoldsValue is exceeded, the total number of outstanding holds, the number of days the loan
     has been decreased to (held in syspref decreaseLoanHighHoldsValue), and the new due date
+
+=cut
+
+=head2 checkHighHolds
+
+Missing POD for checkHighHolds.
 
 =cut
 
@@ -3533,6 +3545,12 @@ sub AddRenewal {
     return $datedue;
 }
 
+=head2 GetRenewCount
+
+Missing POD for GetRenewCount.
+
+=cut
+
 sub GetRenewCount {
 
     # check renewal status
@@ -4154,6 +4172,12 @@ sub CalcDateDue {
     return $datedue;
 }
 
+=head2 CheckValidBarcode
+
+Missing POD for CheckValidBarcode.
+
+=cut
+
 sub CheckValidBarcode {
     my ($barcode) = @_;
     my $dbh       = C4::Context->dbh;
@@ -4243,6 +4267,12 @@ sub DeleteBranchTransferLimits {
     return $sth->execute($branch);
 }
 
+=head2 ReturnLostItem
+
+Missing POD for ReturnLostItem.
+
+=cut
+
 sub ReturnLostItem {
     my ( $borrowernumber, $itemnum ) = @_;
     MarkIssueReturned( $borrowernumber, $itemnum );
@@ -4330,6 +4360,12 @@ sub LostItem {
     }
 }
 
+=head2 GetOfflineOperations
+
+Missing POD for GetOfflineOperations.
+
+=cut
+
 sub GetOfflineOperations {
     my $dbh = C4::Context->dbh;
     my $sth = $dbh->prepare("SELECT * FROM pending_offline_operations WHERE branchcode=? ORDER BY timestamp");
@@ -4337,6 +4373,12 @@ sub GetOfflineOperations {
     my $results = $sth->fetchall_arrayref( {} );
     return $results;
 }
+
+=head2 GetOfflineOperation
+
+Missing POD for GetOfflineOperation.
+
+=cut
 
 sub GetOfflineOperation {
     my $operationid = shift;
@@ -4346,6 +4388,12 @@ sub GetOfflineOperation {
     $sth->execute($operationid);
     return $sth->fetchrow_hashref;
 }
+
+=head2 AddOfflineOperation
+
+Missing POD for AddOfflineOperation.
+
+=cut
 
 sub AddOfflineOperation {
     my ( $userid, $branchcode, $timestamp, $action, $barcode, $cardnumber, $amount ) = @_;
@@ -4357,12 +4405,24 @@ sub AddOfflineOperation {
     return "Added.";
 }
 
+=head2 DeleteOfflineOperation
+
+Missing POD for DeleteOfflineOperation.
+
+=cut
+
 sub DeleteOfflineOperation {
     my $dbh = C4::Context->dbh;
     my $sth = $dbh->prepare("DELETE FROM pending_offline_operations WHERE operationid=?");
     $sth->execute(shift);
     return "Deleted.";
 }
+
+=head2 ProcessOfflineOperation
+
+Missing POD for ProcessOfflineOperation.
+
+=cut
 
 sub ProcessOfflineOperation {
     my $operation = shift;
@@ -4380,6 +4440,12 @@ sub ProcessOfflineOperation {
 
     return $report;
 }
+
+=head2 ProcessOfflineReturn
+
+Missing POD for ProcessOfflineReturn.
+
+=cut
 
 sub ProcessOfflineReturn {
     my $operation = shift;
@@ -4407,6 +4473,12 @@ sub ProcessOfflineReturn {
         return "Item not found.";
     }
 }
+
+=head2 ProcessOfflineIssue
+
+Missing POD for ProcessOfflineIssue.
+
+=cut
 
 sub ProcessOfflineIssue {
     my $operation = shift;
@@ -4443,6 +4515,12 @@ sub ProcessOfflineIssue {
         return "Borrower not found.";
     }
 }
+
+=head2 ProcessOfflinePayment
+
+Missing POD for ProcessOfflinePayment.
+
+=cut
 
 sub ProcessOfflinePayment {
     my $operation = shift;
@@ -4616,6 +4694,12 @@ sub GetPendingOnSiteCheckouts {
     |, { Slice => {} }
     );
 }
+
+=head2 GetTopIssues
+
+Missing POD for GetTopIssues.
+
+=cut
 
 sub GetTopIssues {
     my ($params) = @_;

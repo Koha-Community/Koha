@@ -73,6 +73,12 @@ sub remove_error_handler {
     $self->{driver}->error_handler( sub { } );
 }
 
+=head2 config
+
+Missing POD for config.
+
+=cut
+
 sub config {
     return {
         login    => $ENV{KOHA_USER} || 'koha',
@@ -96,6 +102,12 @@ sub auth {
     my $login_button = $self->driver->find_element('//input[@id="submit-button"]');
     $login_button->click();
 }
+
+=head2 opac_auth
+
+Missing POD for opac_auth.
+
+=cut
 
 sub opac_auth {
     my ( $self, $login, $password ) = @_;
@@ -296,6 +308,12 @@ sub click_when_visible {
     $self->add_error_handler;
     $elt->click unless $clicked;    # finally Raise the error
 }
+
+=head2 max_retries
+
+Missing POD for max_retries.
+
+=cut
 
 sub max_retries { 10 }
 

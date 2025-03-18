@@ -1077,6 +1077,12 @@ __PACKAGE__->might_have(
 );
 
 use C4::Context;
+=head2 effective_itemtype
+
+Missing POD for effective_itemtype.
+
+=cut
+
 sub effective_itemtype {
     my ( $self ) = @_;
 

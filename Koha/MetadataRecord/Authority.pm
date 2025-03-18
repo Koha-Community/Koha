@@ -162,6 +162,12 @@ sub get_from_breeding {
     return $self;
 }
 
+=head2 authorized_heading
+
+Missing POD for authorized_heading.
+
+=cut
+
 sub authorized_heading {
     my ($self) = @_;
     if ( $self->schema =~ m/marc/ ) {

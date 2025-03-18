@@ -109,6 +109,12 @@ sub GetContract {
     return $contracts->[0];
 }
 
+=head2 AddContract
+
+Missing POD for AddContract.
+
+=cut
+
 sub AddContract {
     my ($contract) = @_;
     return unless ( $contract->{booksellerid} );
@@ -116,6 +122,12 @@ sub AddContract {
     my $rs = Koha::Database->new()->schema->resultset('Aqcontract');
     return $rs->create($contract)->id;
 }
+
+=head2 ModContract
+
+Missing POD for ModContract.
+
+=cut
 
 sub ModContract {
     my ($contract) = @_;
@@ -125,6 +137,12 @@ sub ModContract {
     $result = $result->update($contract);
     return $result->in_storage;
 }
+
+=head2 DelContract
+
+Missing POD for DelContract.
+
+=cut
 
 sub DelContract {
     my ($contract) = @_;

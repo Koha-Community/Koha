@@ -73,6 +73,12 @@ my $allowed_setenvs = qr/^(
     TZ
 )\ /x;
 
+=head2 call
+
+Missing POD for call.
+
+=cut
+
 sub call {
     my ( $self, $env ) = @_;
     my $req = Plack::Request->new($env);

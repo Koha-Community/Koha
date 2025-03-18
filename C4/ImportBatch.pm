@@ -1165,6 +1165,12 @@ WHERE import_batch_id = ?|;
 
 =cut
 
+=head2 GetNumberOfNonZ3950ImportBatches
+
+Missing POD for GetNumberOfNonZ3950ImportBatches.
+
+=cut
+
 sub GetNumberOfNonZ3950ImportBatches {
     my $dbh = C4::Context->dbh;
     my $sth = $dbh->prepare("SELECT COUNT(*) FROM import_batches WHERE batch_type != 'z3950'");

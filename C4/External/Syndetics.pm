@@ -61,6 +61,12 @@ Get Summary data from Syndetics
 
 =cut
 
+=head2 get_syndetics_index
+
+Missing POD for get_syndetics_index.
+
+=cut
+
 sub get_syndetics_index {
     my ( $isbn, $upc, $oclc ) = @_;
 
@@ -114,6 +120,12 @@ sub get_syndetics_summary {
     return $summary if $summary;
 }
 
+=head2 get_syndetics_toc
+
+Missing POD for get_syndetics_toc.
+
+=cut
+
 sub get_syndetics_toc {
     my ( $isbn, $upc, $oclc ) = @_;
 
@@ -135,6 +147,12 @@ sub get_syndetics_toc {
     return $toc                                                        if $toc;
 }
 
+=head2 get_syndetics_excerpt
+
+Missing POD for get_syndetics_excerpt.
+
+=cut
+
 sub get_syndetics_excerpt {
     my ( $isbn, $upc, $oclc ) = @_;
 
@@ -155,6 +173,12 @@ sub get_syndetics_excerpt {
     $excerpt = \@{ $response->{VarFlds}->{VarDFlds}->{Notes}->{Fld520} } if $response;
     return XMLout( $excerpt, NoEscape => 1 )                             if $excerpt;
 }
+
+=head2 get_syndetics_reviews
+
+Missing POD for get_syndetics_reviews.
+
+=cut
 
 sub get_syndetics_reviews {
     my ( $isbn, $upc, $oclc, $syndetics_elements ) = @_;
@@ -208,6 +232,12 @@ sub get_syndetics_reviews {
     return \@reviews;
 }
 
+=head2 get_syndetics_editions
+
+Missing POD for get_syndetics_editions.
+
+=cut
+
 sub get_syndetics_editions {
     my ( $isbn, $upc, $oclc ) = @_;
 
@@ -229,6 +259,12 @@ sub get_syndetics_editions {
     $similar_items = \@{ $response->{VarFlds}->{VarDFlds}->{NumbCode}->{Fld020} } if $response;
     return $similar_items                                                         if $similar_items;
 }
+
+=head2 get_syndetics_anotes
+
+Missing POD for get_syndetics_anotes.
+
+=cut
 
 sub get_syndetics_anotes {
     my ( $isbn, $upc, $oclc ) = @_;

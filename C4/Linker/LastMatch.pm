@@ -24,6 +24,12 @@ use C4::Linker::Default;    # Use Default for flipping
 
 use base qw(C4::Linker);
 
+=head2 new
+
+Missing POD for new.
+
+=cut
+
 sub new {
     my $class = shift;
     my $param = shift;
@@ -34,11 +40,23 @@ sub new {
     return $self;
 }
 
+=head2 get_link
+
+Missing POD for get_link.
+
+=cut
+
 sub get_link {
     my $self    = shift;
     my $heading = shift;
     return $self->{'default_linker'}->get_link( $heading, 'last' );
 }
+
+=head2 update_cache
+
+Missing POD for update_cache.
+
+=cut
 
 sub update_cache {
     my $self    = shift;
@@ -46,6 +64,12 @@ sub update_cache {
     my $authid  = shift;
     $self->{'default_linker'}->update_cache( $heading, $authid );
 }
+
+=head2 flip_heading
+
+Missing POD for flip_heading.
+
+=cut
 
 sub flip_heading {
     my $self    = shift;

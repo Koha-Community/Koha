@@ -37,6 +37,12 @@ use base qw(Class::Accessor);
 
 __PACKAGE__->mk_accessors(qw( trackingmethod ));
 
+=head2 trackclick
+
+Missing POD for trackclick.
+
+=cut
+
 sub trackclick {
     my ( $self, $linkinfo ) = @_;
     my $dbh   = C4::Context->dbh();

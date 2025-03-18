@@ -234,6 +234,12 @@ sub config {
     return _common_config( $_[1], 'config' );
 }
 
+=head2 zebraconfig
+
+Missing POD for zebraconfig.
+
+=cut
+
 sub zebraconfig {
     return _common_config( $_[1], 'server' );
 }
@@ -823,6 +829,13 @@ sub interface {
 }
 
 # always returns a string for OK comparison via "eq" or "ne"
+
+=head2 mybranch
+
+Missing POD for mybranch.
+
+=cut
+
 sub mybranch {
     C4::Context->userenv or return '';
     return C4::Context->userenv->{branch} || '';

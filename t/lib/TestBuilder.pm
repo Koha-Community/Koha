@@ -161,6 +161,12 @@ sub build {
     );
 }
 
+=head2 build_sample_biblio
+
+Missing POD for build_sample_biblio.
+
+=cut
+
 sub build_sample_biblio {
     my ( $self, $args ) = @_;
 
@@ -191,6 +197,12 @@ sub build_sample_biblio {
     my ($biblio_id) = C4::Biblio::AddBiblio( $record, $frameworkcode );
     return Koha::Biblios->find($biblio_id);
 }
+
+=head2 build_sample_item
+
+Missing POD for build_sample_item.
+
+=cut
 
 sub build_sample_item {
     my ( $self, $args ) = @_;
@@ -589,6 +601,12 @@ sub _gen_text {
     # rand_gen is only supported from 0.27 onward
     return $random->randregex($regex);
 }
+
+=head2 alt_rand
+
+Missing POD for alt_rand.
+
+=cut
 
 sub alt_rand {    #Alternative randomizer
     my ($max)  = @_;

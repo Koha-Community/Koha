@@ -992,6 +992,12 @@ sub _can_item_fill_request {
 
 =cut
 
+=head2 CreatePicklistFromItemMap
+
+Missing POD for CreatePicklistFromItemMap.
+
+=cut
+
 sub CreatePicklistFromItemMap {
     my $item_map = shift;
 
@@ -1073,6 +1079,12 @@ sub _trim {
     $_[0];
 }
 
+=head2 load_branches_to_pull_from
+
+Missing POD for load_branches_to_pull_from.
+
+=cut
+
 sub load_branches_to_pull_from {
     my $use_transport_cost_matrix = shift;
 
@@ -1097,6 +1109,12 @@ sub load_branches_to_pull_from {
 
     return \@branches_to_use;
 }
+
+=head2 least_cost_branch
+
+Missing POD for least_cost_branch.
+
+=cut
 
 sub least_cost_branch {
 

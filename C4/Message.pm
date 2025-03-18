@@ -279,6 +279,13 @@ sub metadata {
 }
 
 # turn $object->metadata into a string suitable for $object->content
+
+=head2 render_metadata
+
+Missing POD for render_metadata.
+
+=cut
+
 sub render_metadata {
     my ( $self, $format ) = @_;
     $format ||= sub { $_[0] || "" };

@@ -125,6 +125,12 @@ sub add_at_job {
     }
 }
 
+=head2 remove_at_job
+
+Missing POD for remove_at_job.
+
+=cut
+
 sub remove_at_job {
     my ($jobid) = @_;
     Schedule::At::remove( JOBID => $jobid );

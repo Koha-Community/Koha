@@ -47,6 +47,12 @@ my %supports = (
     "renew all"             => 1,
 );
 
+=head2 new
+
+Missing POD for new.
+
+=cut
+
 sub new {
     my ( $class, $institution ) = @_;
     my $type = ref($class) || $class;
@@ -56,10 +62,22 @@ sub new {
     return bless $self, $type;
 }
 
+=head2 find_patron
+
+Missing POD for find_patron.
+
+=cut
+
 sub find_patron {
     my $self = shift;
     return C4::SIP::ILS::Patron->new(@_);
 }
+
+=head2 find_item
+
+Missing POD for find_item.
+
+=cut
 
 sub find_item {
     my $self = shift;
@@ -71,15 +89,33 @@ sub institution {
     return $self->{institution}->{id};    # consider making this return the whole institution
 }
 
+=head2 institution_id
+
+Missing POD for institution_id.
+
+=cut
+
 sub institution_id {
     my $self = shift;
     return $self->{institution}->{id};
 }
 
+=head2 supports
+
+Missing POD for supports.
+
+=cut
+
 sub supports {
     my ( $self, $op ) = @_;
     return ( exists( $supports{$op} ) && $supports{$op} );
 }
+
+=head2 check_inst_id
+
+Missing POD for check_inst_id.
+
+=cut
 
 sub check_inst_id {
     my ( $self, $id, $whence ) = @_;
@@ -92,6 +128,12 @@ sub check_inst_id {
         # Just an FYI check, we don't expect the user to change location from that in SIPconfig.xml
     }
 }
+
+=head2 to_bool
+
+Missing POD for to_bool.
+
+=cut
 
 sub to_bool {
     my $bool = shift;
@@ -242,6 +284,12 @@ sub _ci_cardnumber_cmp {
 }
 
 # wrapper which allows above to be called for testing
+
+=head2 test_cardnumber_compare
+
+Missing POD for test_cardnumber_compare.
+
+=cut
 
 sub test_cardnumber_compare {
     my ( $self, $str1, $str2 ) = @_;

@@ -19,6 +19,12 @@ sub new {
     return $self;
 }
 
+=head2 prereqs
+
+Missing POD for prereqs.
+
+=cut
+
 sub prereqs {
     my $self = shift;
 

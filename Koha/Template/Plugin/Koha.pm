@@ -65,10 +65,22 @@ sub new {
     }, $class;
 }
 
+=head2 Preference
+
+Missing POD for Preference.
+
+=cut
+
 sub Preference {
     my ( $self, $pref ) = @_;
     return C4::Context->preference($pref);
 }
+
+=head2 MultivaluePreference
+
+Missing POD for MultivaluePreference.
+
+=cut
 
 sub MultivaluePreference {
     my ( $self, $pref ) = @_;
@@ -90,6 +102,12 @@ sub CSVDelimiter {
     my ( $self, $val ) = @_;
     return C4::Context->csv_delimiter($val);
 }
+
+=head2 Version
+
+Missing POD for Version.
+
+=cut
 
 sub Version {
     my $version_string = Koha::version();

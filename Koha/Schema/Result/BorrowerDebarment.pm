@@ -165,9 +165,21 @@ __PACKAGE__->belongs_to(
 # Created by DBIx::Class::Schema::Loader v0.07049 @ 2022-08-19 17:53:04
 # DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:kDCkA7XrjKXlrFG5lk8Lgg
 
+=head2 koha_objects_class
+
+Missing POD for koha_objects_class.
+
+=cut
+
 sub koha_objects_class {
     'Koha::Patron::Restrictions';
 }
+=head2 koha_object_class
+
+Missing POD for koha_object_class.
+
+=cut
+
 sub koha_object_class {
     'Koha::Patron::Restriction';
 }

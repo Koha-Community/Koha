@@ -35,6 +35,12 @@ use Koha::OAI::Server::DeletedRecord;
 use C4::OAI::Sets qw( GetOAISetBySpec GetOAISetsBiblio );
 use MARC::File::XML;
 
+=head2 GetRecords
+
+Missing POD for GetRecords.
+
+=cut
+
 sub GetRecords {
     my ( $class, $self, $repository, $metadata, %args ) = @_;
 

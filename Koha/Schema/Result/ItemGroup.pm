@@ -175,9 +175,21 @@ __PACKAGE__->has_many(
 # Created by DBIx::Class::Schema::Loader v0.07049 @ 2023-05-10 17:06:39
 # DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:OPwObeUEFgzNwMYlEgHkQw
 
+=head2 koha_objects_class
+
+Missing POD for koha_objects_class.
+
+=cut
+
 sub koha_objects_class {
     'Koha::Biblio::ItemGroups';
 }
+=head2 koha_object_class
+
+Missing POD for koha_object_class.
+
+=cut
+
 sub koha_object_class {
     'Koha::Biblio::ItemGroup';
 }

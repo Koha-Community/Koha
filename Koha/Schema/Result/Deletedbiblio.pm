@@ -228,9 +228,21 @@ __PACKAGE__->has_one(
     { cascade_copy           => 0, cascade_delete => 0 },
 );
 
+=head2 koha_objects_class
+
+Missing POD for koha_objects_class.
+
+=cut
+
 sub koha_objects_class {
     'Koha::Old::Biblios';
 }
+
+=head2 koha_object_class
+
+Missing POD for koha_object_class.
+
+=cut
 
 sub koha_object_class {
     'Koha::Old::Biblio';

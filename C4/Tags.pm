@@ -68,6 +68,12 @@ BEGIN {
 
 =cut
 
+=head2 get_filters
+
+Missing POD for get_filters.
+
+=cut
+
 sub get_filters {
     my $query = "SELECT * FROM tags_filters ";
     my ($sth);
@@ -83,6 +89,12 @@ sub get_filters {
 
 # 	(SELECT count(*) FROM tags_all     ) as tags_all,
 # 	(SELECT count(*) FROM tags_index   ) as tags_index,
+
+=head2 approval_counts
+
+Missing POD for approval_counts.
+
+=cut
 
 sub approval_counts {
     my $query = "SELECT
@@ -114,6 +126,12 @@ sub get_count_by_tag_status {
     return $sth->fetchrow;
 }
 
+=head2 remove_tag
+
+Missing POD for remove_tag.
+
+=cut
+
 sub remove_tag {
     my $tag_id  = shift or return;
     my $user_id = (@_) ? shift : undef;
@@ -140,6 +158,12 @@ sub remove_tag {
     }
     Koha::Tags->search( { tag_id => $tag_id } )->delete;
 }
+
+=head2 get_tag_rows
+
+Missing POD for get_tag_rows.
+
+=cut
 
 sub get_tag_rows {
     my $hash      = shift || {};
@@ -178,6 +202,12 @@ sub get_tag_rows {
     }
     return $sth->fetchall_arrayref( {} );
 }
+
+=head2 get_tags
+
+Missing POD for get_tags.
+
+=cut
 
 sub get_tags {    # i.e., from tags_index
     my $hash      = shift || {};
@@ -244,6 +274,12 @@ sub get_tags {    # i.e., from tags_index
     }
     return $sth->fetchall_arrayref( {} );
 }
+
+=head2 get_approval_rows
+
+Missing POD for get_approval_rows.
+
+=cut
 
 sub get_approval_rows {    # i.e., from tags_approval
     my $hash      = shift || {};
@@ -315,6 +351,12 @@ sub get_approval_rows {    # i.e., from tags_approval
     return $sth->fetchall_arrayref( {} );
 }
 
+=head2 is_approved
+
+Missing POD for is_approved.
+
+=cut
+
 sub is_approved {
     my $term = shift or return;
     my $sth  = C4::Context->dbh->prepare("SELECT approved FROM tags_approval WHERE term = ?");
@@ -326,6 +368,12 @@ sub is_approved {
     }
     return $sth->fetchrow;
 }
+
+=head2 get_tag_index
+
+Missing POD for get_tag_index.
+
+=cut
 
 sub get_tag_index {
     my $term = shift or return;
@@ -339,6 +387,12 @@ sub get_tag_index {
     }
     return $sth->fetchrow_hashref;
 }
+
+=head2 whitelist
+
+Missing POD for whitelist.
+
+=cut
 
 sub whitelist {
     my $operator = shift;
@@ -364,6 +418,13 @@ sub whitelist {
 # note: there is no "unwhitelist" operation because there is no remove for Ispell.
 # The blacklist regexps should operate "in front of" the whitelist, so if you approve
 # a term mistakenly, you can still reverse it. But there is no going back to "neutral".
+
+=head2 blacklist
+
+Missing POD for blacklist.
+
+=cut
+
 sub blacklist {
     my $operator = shift;
     defined $operator or return;    # have to test defined to allow =0 (kohaadmin)
@@ -378,6 +439,12 @@ sub blacklist {
     return scalar @_;
 }
 
+=head2 add_filter
+
+Missing POD for add_filter.
+
+=cut
+
 sub add_filter {
     my $operator = shift;
     defined $operator or return;    # have to test defined to allow =0 (kohaadmin)
@@ -386,6 +453,12 @@ sub add_filter {
     # my $sth = C4::Context->dbh->prepare($query);
     return scalar @_;
 }
+
+=head2 remove_filter
+
+Missing POD for remove_filter.
+
+=cut
 
 sub remove_filter {
     my $operator = shift;
@@ -396,6 +469,12 @@ sub remove_filter {
     # $sth->execute($term);
     return scalar @_;
 }
+
+=head2 add_tag_approval
+
+Missing POD for add_tag_approval.
+
+=cut
 
 sub add_tag_approval {    # or disapproval
     my $term  = shift or return;
@@ -421,6 +500,12 @@ sub add_tag_approval {    # or disapproval
     return $sth->rows;
 }
 
+=head2 mod_tag_approval
+
+Missing POD for mod_tag_approval.
+
+=cut
+
 sub mod_tag_approval {
     my $operator = shift;
     defined $operator or return;                 # have to test defined to allow =0 (kohaadmin)
@@ -430,6 +515,12 @@ sub mod_tag_approval {
     my $sth      = C4::Context->dbh->prepare($query);
     $sth->execute( $operator, $approval, $term );
 }
+
+=head2 add_tag_index
+
+Missing POD for add_tag_index.
+
+=cut
 
 sub add_tag_index {
     my $term         = shift or return;
@@ -444,27 +535,63 @@ sub add_tag_index {
     return $sth->rows;
 }
 
+=head2 increment_weights
+
+Missing POD for increment_weights.
+
+=cut
+
 sub increment_weights {
     increment_weight(@_);
     increment_weight_total(shift);
 }
+
+=head2 decrement_weights
+
+Missing POD for decrement_weights.
+
+=cut
 
 sub decrement_weights {
     decrement_weight(@_);
     decrement_weight_total(shift);
 }
 
+=head2 increment_weight_total
+
+Missing POD for increment_weight_total.
+
+=cut
+
 sub increment_weight_total {
     _set_weight_total( 'weight_total+1', shift );
 }
+
+=head2 increment_weight
+
+Missing POD for increment_weight.
+
+=cut
 
 sub increment_weight {
     _set_weight( 'weight+1', shift, shift );
 }
 
+=head2 decrement_weight_total
+
+Missing POD for decrement_weight_total.
+
+=cut
+
 sub decrement_weight_total {
     _set_weight_total( 'weight_total-1', shift );
 }
+
+=head2 decrement_weight
+
+Missing POD for decrement_weight.
+
+=cut
 
 sub decrement_weight {
     _set_weight( 'weight-1', shift, shift );
@@ -538,6 +665,13 @@ sub add_tag {    # biblionumber,term,[borrowernumber,approvernumber]
 # is only one weight. Beware of divide by zeros.
 # This will add a field to the tag called "stratum" containing the calculated
 # value.
+
+=head2 stratify_tags
+
+Missing POD for stratify_tags.
+
+=cut
+
 sub stratify_tags {
     my ( $strata, $tags ) = @_;
     return ( 0, 0 ) if !@$tags;

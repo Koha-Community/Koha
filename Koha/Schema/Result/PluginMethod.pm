@@ -62,9 +62,21 @@ __PACKAGE__->set_primary_key("plugin_class", "plugin_method");
 # Created by DBIx::Class::Schema::Loader v0.07046 @ 2018-07-13 12:37:57
 # DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:koGk3Dh0wkslqYPUqUcK0w
 
+=head2 koha_objects_class
+
+Missing POD for koha_objects_class.
+
+=cut
+
 sub koha_objects_class {
     'Koha::Plugins::Methods';
 }
+=head2 koha_object_class
+
+Missing POD for koha_object_class.
+
+=cut
+
 sub koha_object_class {
     'Koha::Plugins::Method';
 }

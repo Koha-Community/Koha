@@ -95,6 +95,12 @@ BEGIN {
     );
 }
 
+=head2 GetOrderFromItemnumber
+
+Missing POD for GetOrderFromItemnumber.
+
+=cut
+
 sub GetOrderFromItemnumber {
     my ($itemnumber) = @_;
     my $dbh          = C4::Context->dbh;
@@ -488,6 +494,12 @@ sub CloseBasketgroup {
   &ReOpenBaskergroup($basketgroupno);
 
 reopen a basketgroup
+
+=cut
+
+=head2 ReOpenBasketgroup
+
+Missing POD for ReOpenBasketgroup.
 
 =cut
 
@@ -2903,6 +2915,12 @@ sub ModOrderUsers {
         $sth->execute( $ordernumber, $order_user_id );
     }
 }
+
+=head2 NotifyOrderUsers
+
+Missing POD for NotifyOrderUsers.
+
+=cut
 
 sub NotifyOrderUsers {
     my ($ordernumber) = @_;

@@ -185,9 +185,21 @@ __PACKAGE__->add_columns(
     '+seen' => { is_boolean => 1 }
 );
 
+=head2 koha_objects_class
+
+Missing POD for koha_objects_class.
+
+=cut
+
 sub koha_objects_class {
     'Koha::Checkouts::Renewals';
 }
+=head2 koha_object_class
+
+Missing POD for koha_object_class.
+
+=cut
+
 sub koha_object_class {
     'Koha::Checkouts::Renewal';
 }

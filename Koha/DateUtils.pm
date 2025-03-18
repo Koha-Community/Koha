@@ -57,6 +57,12 @@ to the system preferences. If the date string is empty DateTime->now is returned
 
 =cut
 
+=head2 dt_from_string
+
+Missing POD for dt_from_string.
+
+=cut
+
 sub dt_from_string {
     my ( $date_string, $date_format, $tz ) = @_;
 

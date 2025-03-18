@@ -827,6 +827,12 @@ sub GetMarcItem {
 
 }
 
+=head2 Item2Marc
+
+Missing POD for Item2Marc.
+
+=cut
+
 sub Item2Marc {
     my ( $itemrecord, $biblionumber ) = @_;
     my $mungeditem = {
@@ -1652,6 +1658,12 @@ sub PrepareItemrecordDisplay {
         'iteminformation' => \@loop_data
     };
 }
+
+=head2 ToggleNewStatus
+
+Missing POD for ToggleNewStatus.
+
+=cut
 
 sub ToggleNewStatus {
     my ($params)    = @_;

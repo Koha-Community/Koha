@@ -42,6 +42,12 @@ sub _type {
     return 'BranchTransferLimit';
 }
 
+=head2 object_class
+
+Missing POD for object_class.
+
+=cut
+
 sub object_class {
     return 'Koha::Item::Transfer::Limit';
 }

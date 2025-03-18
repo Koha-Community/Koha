@@ -125,6 +125,12 @@ sub copy_field {
     }
 }
 
+=head2 copy_and_replace_field
+
+Missing POD for copy_and_replace_field.
+
+=cut
+
 sub copy_and_replace_field {
     my ($params)         = @_;
     my $record           = $params->{record};
@@ -165,6 +171,12 @@ sub copy_and_replace_field {
         );
     }
 }
+
+=head2 update_field
+
+Missing POD for update_field.
+
+=cut
 
 sub update_field {
     my ($params)      = @_;
@@ -518,6 +530,12 @@ sub move_field {
 
   If $n is passed, only the Nth field will be deleted. $n = 1
   will delete the first repeatable field, $n = 3 will delete the third.
+
+=cut
+
+=head2 delete_field
+
+Missing POD for delete_field.
 
 =cut
 

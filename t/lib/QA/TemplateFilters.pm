@@ -122,6 +122,12 @@ sub _process_tt_content {
     return { errors => \@errors, new_content => $new_content };
 }
 
+=head2 process_tt_block
+
+Missing POD for process_tt_block.
+
+=cut
+
 sub process_tt_block {
     my ( $line, $params ) = @_;
     my $tt_block   = $params->{tt_block};

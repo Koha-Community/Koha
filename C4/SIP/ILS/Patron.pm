@@ -38,6 +38,12 @@ our $kp;    # koha patron
 
 =cut
 
+=head2 new
+
+Missing POD for new.
+
+=cut
+
 sub new {
     my ( $class, $patron_id ) = @_;
     my $type = ref($class) || $class;
@@ -302,6 +308,12 @@ If errors are encountered in processing template we log them and return nothing
 
 =cut
 
+=head2 format
+
+Missing POD for format.
+
+=cut
+
 sub format {
     my ( $self, $template ) = @_;
 
@@ -335,6 +347,12 @@ This method checks if number of checkouts of lost items exceeds a threshold (def
 
 =cut
 
+=head2 too_many_lost
+
+Missing POD for too_many_lost.
+
+=cut
+
 sub too_many_lost {
     my ( $self, $server ) = @_;
     my $too_many_lost = 0;
@@ -357,6 +375,12 @@ sub fee_amount {
     return 0;
 }
 
+=head2 fines_amount
+
+Missing POD for fines_amount.
+
+=cut
+
 sub fines_amount {
     my $self = shift;
     return $self->fee_amount;
@@ -366,6 +390,12 @@ sub language {
     my $self = shift;
     return $self->{language} || '000';    # Unspecified
 }
+
+=head2 expired
+
+Missing POD for expired.
+
+=cut
 
 sub expired {
     my $self = shift;
@@ -396,6 +426,13 @@ sub drop_hold {
 # Accessor method for array_ref values, designed to get the "start" and "end" values
 # from the SIP request.  Note those incoming values are 1-indexed, not 0-indexed.
 #
+
+=head2 x_items
+
+Missing POD for x_items.
+
+=cut
+
 sub x_items {
     my $self      = shift;
     my $array_var = shift or return;
@@ -424,6 +461,13 @@ sub x_items {
 #
 # List of outstanding holds placed
 #
+
+=head2 hold_items
+
+Missing POD for hold_items.
+
+=cut
+
 sub hold_items {
     my $self     = shift;
     my $item_arr = $self->x_items( 'hold_items', @_ );
@@ -434,15 +478,33 @@ sub hold_items {
     return $item_arr;
 }
 
+=head2 overdue_items
+
+Missing POD for overdue_items.
+
+=cut
+
 sub overdue_items {
     my $self = shift;
     return $self->x_items( 'overdue_items', @_ );
 }
 
+=head2 charged_items
+
+Missing POD for charged_items.
+
+=cut
+
 sub charged_items {
     my $self = shift;
     return $self->x_items( 'items', @_ );
 }
+
+=head2 fine_items
+
+Missing POD for fine_items.
+
+=cut
 
 sub fine_items {
 
@@ -481,10 +543,22 @@ sub fine_items {
 
 }
 
+=head2 recall_items
+
+Missing POD for recall_items.
+
+=cut
+
 sub recall_items {
     my $self = shift;
     return $self->x_items( 'recall_items', @_ );
 }
+
+=head2 unavail_holds
+
+Missing POD for unavail_holds.
+
+=cut
 
 sub unavail_holds {
     my $self = shift;
@@ -517,25 +591,55 @@ sub enable {
     return $self;
 }
 
+=head2 inet_privileges
+
+Missing POD for inet_privileges.
+
+=cut
+
 sub inet_privileges {
     my $self = shift;
     return $self->{inet} ? 'Y' : 'N';
 }
+
+=head2 excessive_fees
+
+Missing POD for excessive_fees.
+
+=cut
 
 sub excessive_fees {
     my $self = shift;
     return ( $self->fee_amount and $self->fee_amount > $self->fee_limit );
 }
 
+=head2 excessive_fines
+
+Missing POD for excessive_fines.
+
+=cut
+
 sub excessive_fines {
     my $self = shift;
     return $self->excessive_fees;    # excessive_fines is the same thing as excessive_fees for Koha
 }
 
+=head2 holds_blocked_by_excessive_fees
+
+Missing POD for holds_blocked_by_excessive_fees.
+
+=cut
+
 sub holds_blocked_by_excessive_fees {
     my $self = shift;
     return ( $self->fee_amount && $self->fee_amount > C4::Context->preference("maxoutstanding") );
 }
+
+=head2 library_name
+
+Missing POD for library_name.
+
+=cut
 
 sub library_name {
     my $self = shift;
@@ -549,10 +653,22 @@ sub library_name {
 # Messages
 #
 
+=head2 invalid_patron
+
+Missing POD for invalid_patron.
+
+=cut
+
 sub invalid_patron {
     my $self = shift;
     return "Please contact library staff";
 }
+
+=head2 charge_denied
+
+Missing POD for charge_denied.
+
+=cut
 
 sub charge_denied {
     my $self = shift;
@@ -608,6 +724,12 @@ attributes as defined in the sip config
 
 =cut
 
+=head2 build_patron_attributes_string
+
+Missing POD for build_patron_attributes_string.
+
+=cut
+
 sub build_patron_attributes_string {
     my ( $self, $server ) = @_;
 
@@ -639,6 +761,12 @@ sub build_patron_attributes_string {
 =head2 build_custom_field_string
 
 This method builds the part of the sip message for custom patron fields as defined in the sip config
+
+=cut
+
+=head2 build_custom_field_string
+
+Missing POD for build_custom_field_string.
 
 =cut
 

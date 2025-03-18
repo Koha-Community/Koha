@@ -77,6 +77,12 @@ BEGIN {
     $_unknown           = &$new( 7, 'UNKNOWN' );
 }
 
+=head2 to_string
+
+Missing POD for to_string.
+
+=cut
+
 sub to_string {
     my $this = shift;
     return $this->{'name'};

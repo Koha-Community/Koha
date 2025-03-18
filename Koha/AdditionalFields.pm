@@ -12,7 +12,14 @@ use base 'Koha::Objects';
 
 use Koha::AdditionalField;
 
-sub _type        { 'AdditionalField' }
+sub _type { 'AdditionalField' }
+
+=head2 object_class
+
+Missing POD for object_class.
+
+=cut
+
 sub object_class { 'Koha::AdditionalField' }
 
 =head1 AUTHOR

@@ -17,6 +17,12 @@ C4::Utils::DataTables::TablesSettings - Koha DataTables Settings
 
 =cut
 
+=head2 get_yaml
+
+Missing POD for get_yaml.
+
+=cut
+
 sub get_yaml {
     my $yml_path = C4::Context->config('intranetdir') . '/admin/columns_settings.yml';
     my $cache    = Koha::Caches->get_instance();
@@ -31,6 +37,12 @@ sub get_yaml {
 
     return $yaml;
 }
+
+=head2 get_columns
+
+Missing POD for get_columns.
+
+=cut
 
 sub get_columns {
     my ( $module, $page, $tablename ) = @_;
@@ -118,6 +130,12 @@ sub get_table_settings {
     };
 }
 
+=head2 get_modules
+
+Missing POD for get_modules.
+
+=cut
+
 sub get_modules {
     my $list = get_yaml;
 
@@ -135,6 +153,12 @@ sub get_modules {
 
     return $list->{modules};
 }
+
+=head2 update_columns
+
+Missing POD for update_columns.
+
+=cut
 
 sub update_columns {
     my ($params) = @_;

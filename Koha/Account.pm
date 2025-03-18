@@ -45,6 +45,12 @@ Koha::Accounts - Module for managing payments and fees for patrons
 
 =cut
 
+=head2 new
+
+Missing POD for new.
+
+=cut
+
 sub new {
     my ( $class, $params ) = @_;
 

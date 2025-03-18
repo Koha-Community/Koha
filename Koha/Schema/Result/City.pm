@@ -95,6 +95,12 @@ __PACKAGE__->set_primary_key("cityid");
 # Created by DBIx::Class::Schema::Loader v0.07049 @ 2021-01-21 13:39:29
 # DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:PF0pi+dNbKvxVDSpvHgB1Q
 
+=head2 koha_objects_class
+
+Missing POD for koha_objects_class.
+
+=cut
+
 sub koha_objects_class {
     'Koha::Cities';
 }

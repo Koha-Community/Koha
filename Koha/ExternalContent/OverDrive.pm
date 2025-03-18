@@ -47,6 +47,12 @@ Takes "OverDrive*" Koha preferences
 
 =cut
 
+=head2 new
+
+Missing POD for new.
+
+=cut
+
 sub new {
     my $class  = shift;
     my $params = shift || {};
@@ -181,12 +187,24 @@ sub _return_url {
 
 use constant RETURN_PAGE_SESSION_KEY => "overdrive.return_page";
 
+=head2 get_return_page_from_koha_session
+
+Missing POD for get_return_page_from_koha_session.
+
+=cut
+
 sub get_return_page_from_koha_session {
     my $self        = shift;
     my $return_page = $self->get_from_koha_session(RETURN_PAGE_SESSION_KEY) || "";
     $self->logger->debug("get_return_page_from_koha_session: $return_page");
     return $return_page;
 }
+
+=head2 set_return_page_in_koha_session
+
+Missing POD for set_return_page_in_koha_session.
+
+=cut
 
 sub set_return_page_in_koha_session {
     my $self        = shift;
@@ -198,6 +216,12 @@ sub set_return_page_in_koha_session {
 use constant ACCESS_TOKEN_SESSION_KEY => "overdrive.access_token";
 my $ACCESS_TOKEN_DELIMITER = ":";
 
+=head2 get_token_from_koha_session
+
+Missing POD for get_token_from_koha_session.
+
+=cut
+
 sub get_token_from_koha_session {
     my $self = shift;
     my ( $token, $token_type ) = split $ACCESS_TOKEN_DELIMITER,
@@ -205,6 +229,12 @@ sub get_token_from_koha_session {
     $self->logger->debug( "get_token_from_koha_session: " . ( $token || "(none)" ) );
     return ( $token, $token_type );
 }
+
+=head2 set_token_in_koha_session
+
+Missing POD for set_token_in_koha_session.
+
+=cut
 
 sub set_token_in_koha_session {
     my $self       = shift;
@@ -255,6 +285,12 @@ sub is_logged_in {
     $token ||= $self->auth_by_saved_token;
     return $token;
 }
+
+=head2 auth_by_saved_token
+
+Missing POD for auth_by_saved_token.
+
+=cut
 
 sub auth_by_saved_token {
     my $self = shift;

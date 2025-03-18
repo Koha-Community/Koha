@@ -53,6 +53,12 @@ use base qw(Class::Accessor);
 
 __PACKAGE__->mk_accessors(qw( ));
 
+=head2 new
+
+Missing POD for new.
+
+=cut
+
 sub new {
     my $class = shift;
     my $param = shift;

@@ -188,9 +188,21 @@ __PACKAGE__->add_columns(
     "+p_cs_precedes" => { is_boolean => 1 },
 );
 
+=head2 koha_object_class
+
+Missing POD for koha_object_class.
+
+=cut
+
 sub koha_object_class {
     'Koha::Acquisition::Currency';
 }
+=head2 koha_objects_class
+
+Missing POD for koha_objects_class.
+
+=cut
+
 sub koha_objects_class {
     'Koha::Acquisition::Currencies';
 }

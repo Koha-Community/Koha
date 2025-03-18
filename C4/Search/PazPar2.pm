@@ -39,6 +39,12 @@ C4::Search::PazPar2 - implement client for PazPar2
 
 =cut
 
+=head2 new
+
+Missing POD for new.
+
+=cut
+
 sub new {
     my $class    = shift;
     my $endpoint = shift;
@@ -51,6 +57,12 @@ sub new {
 
     return $self;
 }
+
+=head2 init
+
+Missing POD for init.
+
+=cut
 
 sub init {
     my $self = shift;
@@ -67,6 +79,12 @@ sub init {
         warn $response->status_line;
     }
 }
+
+=head2 search
+
+Missing POD for search.
+
+=cut
 
 sub search {
     my $self  = shift;
@@ -86,6 +104,12 @@ sub search {
 
 }
 
+=head2 stat
+
+Missing POD for stat.
+
+=cut
+
 sub stat {
     my $self = shift;
 
@@ -100,6 +124,12 @@ sub stat {
         return;
     }
 }
+
+=head2 show
+
+Missing POD for show.
+
+=cut
 
 sub show {
     my $self  = shift;
@@ -125,6 +155,12 @@ sub show {
 
 }
 
+=head2 record
+
+Missing POD for record.
+
+=cut
+
 sub record {
     my $self   = shift;
     my $id     = shift;
@@ -144,6 +180,12 @@ sub record {
         return;
     }
 }
+
+=head2 termlist
+
+Missing POD for termlist.
+
+=cut
 
 sub termlist {
     my $self = shift;

@@ -361,6 +361,12 @@ sub _transformWithStylesheet {
     return C4::XSLT::engine->transform( $xmlrecord, $xslfile );
 }
 
+=head2 marc2endnote
+
+Missing POD for marc2endnote.
+
+=cut
+
 sub marc2endnote {
     my ($marc) = @_;
     my $marc_rec_obj = MARC::Record->new_from_usmarc($marc);

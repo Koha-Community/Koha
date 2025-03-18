@@ -121,6 +121,12 @@ __PACKAGE__->add_columns(
     '+is_integer_only' => { is_boolean => 1 },
 );
 
+=head2 koha_objects_class
+
+Missing POD for koha_objects_class.
+
+=cut
+
 sub koha_objects_class {
     'Koha::AuthorisedValueCategories';
 }

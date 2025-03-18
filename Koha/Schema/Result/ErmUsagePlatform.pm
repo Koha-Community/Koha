@@ -122,9 +122,21 @@ __PACKAGE__->belongs_to(
 # DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:7Qu5XYiD2K+Pn590ZoTs7Q
 
 
+=head2 koha_object_class
+
+Missing POD for koha_object_class.
+
+=cut
+
 sub koha_object_class {
     'Koha::ERM::EUsage::UsagePlatform';
 }
+
+=head2 koha_objects_class
+
+Missing POD for koha_objects_class.
+
+=cut
 
 sub koha_objects_class {
     'Koha::ERM::EUsage::UsagePlatforms';

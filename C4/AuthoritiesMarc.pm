@@ -1797,6 +1797,12 @@ sub _merge_newtag {
     return @same_block ? $same_block[0] : $new_tags->[0];
 }
 
+=head2 append_fields_ordered
+
+Missing POD for append_fields_ordered.
+
+=cut
+
 sub append_fields_ordered {
 
     # while we lack this function in MARC::Record

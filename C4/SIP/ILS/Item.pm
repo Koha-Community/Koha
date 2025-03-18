@@ -72,6 +72,12 @@ use Koha::TemplateUtils qw( process_tt );
 
 =cut
 
+=head2 new
+
+Missing POD for new.
+
+=cut
+
 sub new {
     my ( $class, $item_id ) = @_;
     my $type = ref($class) || $class;
@@ -162,6 +168,12 @@ my %fields = (
     itemtype                    => 0,
 );
 
+=head2 next_hold
+
+Missing POD for next_hold.
+
+=cut
+
 sub next_hold {
     my $self = shift;
 
@@ -181,6 +193,13 @@ sub next_hold {
 # hold_patron_id is NOT the barcode.  It's the borrowernumber.
 # If a return triggers capture for a hold the borrowernumber is passed
 # and saved so that other hold info can be retrieved
+
+=head2 hold_patron_id
+
+Missing POD for hold_patron_id.
+
+=cut
+
 sub hold_patron_id {
     my $self = shift;
     my $id   = shift;
@@ -193,6 +212,12 @@ sub hold_patron_id {
     return;
 
 }
+
+=head2 hold_patron_name
+
+Missing POD for hold_patron_name.
+
+=cut
 
 sub hold_patron_name {
     my ( $self, $template ) = @_;
@@ -218,6 +243,12 @@ sub hold_patron_name {
     return $name;
 }
 
+=head2 hold_patron_bcode
+
+Missing POD for hold_patron_bcode.
+
+=cut
+
 sub hold_patron_bcode {
     my $self           = shift;
     my $borrowernumber = ( @_ ? shift : $self->hold_patron_id() ) or return q{};
@@ -227,6 +258,12 @@ sub hold_patron_bcode {
     }
     return q();
 }
+
+=head2 destination_loc
+
+Missing POD for destination_loc.
+
+=cut
 
 sub destination_loc {
     my $self    = shift;
@@ -262,6 +299,12 @@ sub AUTOLOAD {
         return $self->{$name};
     }
 }
+
+=head2 status_update
+
+Missing POD for status_update.
+
+=cut
 
 sub status_update {    # FIXME: this looks unimplemented
     my ( $self, $props ) = @_;
@@ -339,11 +382,23 @@ sub hold_queue {
     return $self->{hold_queue};
 }
 
+=head2 pending_queue
+
+Missing POD for pending_queue.
+
+=cut
+
 sub pending_queue {
     my $self = shift;
     ( defined $self->{pending_queue} ) or return [];
     return $self->{pending_queue};
 }
+
+=head2 hold_attached
+
+Missing POD for hold_attached.
+
+=cut
 
 sub hold_attached {
     my $self = shift;
@@ -422,6 +477,12 @@ sub _barcode_to_borrowernumber {
     return $patron->borrowernumber;
 }
 
+=head2 barcode_is_borrowernumber
+
+Missing POD for barcode_is_borrowernumber.
+
+=cut
+
 sub barcode_is_borrowernumber {    # because hold_queue only has borrowernumber...
     my $self    = shift;
     my $barcode = shift;
@@ -436,6 +497,12 @@ sub barcode_is_borrowernumber {    # because hold_queue only has borrowernumber.
 
 This method builds the part of the sip message for additional item fields
 to send in the item related message responses
+
+=cut
+
+=head2 build_additional_item_fields_string
+
+Missing POD for build_additional_item_fields_string.
 
 =cut
 
@@ -482,6 +549,12 @@ This method builds the part of the sip message for custom item fields as defined
 
 =cut
 
+=head2 build_custom_field_string
+
+Missing POD for build_custom_field_string.
+
+=cut
+
 sub build_custom_field_string {
     my ( $self, $server ) = @_;
 
@@ -494,6 +567,12 @@ sub build_custom_field_string {
 
 This method uses a template to build a string from a Koha::Item object
 If errors are encountered in processing template we log them and return nothing
+
+=cut
+
+=head2 format
+
+Missing POD for format.
 
 =cut
 

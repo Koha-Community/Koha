@@ -50,6 +50,12 @@ sub club_template_fields {
     return Koha::Club::Template::Fields->search( { club_template_id => $self->id() } );
 }
 
+=head2 club_template_enrollment_fields
+
+Missing POD for club_template_enrollment_fields.
+
+=cut
+
 sub club_template_enrollment_fields {
     my ($self) = @_;
 

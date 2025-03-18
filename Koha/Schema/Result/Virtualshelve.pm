@@ -222,9 +222,21 @@ __PACKAGE__->has_many(
 # Created by DBIx::Class::Schema::Loader v0.07049 @ 2022-08-17 19:59:33
 # DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:EKq7nDW2AeZ2NQce2BPMWA
 
+=head2 koha_object_class
+
+Missing POD for koha_object_class.
+
+=cut
+
 sub koha_object_class {
     'Koha::Virtualshelf';
 }
+=head2 koha_objects_class
+
+Missing POD for koha_objects_class.
+
+=cut
+
 sub koha_objects_class {
     'Koha::Virtualshelves';
 }

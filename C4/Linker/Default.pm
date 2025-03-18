@@ -24,6 +24,12 @@ use C4::Heading;
 
 use base qw(C4::Linker);
 
+=head2 get_link
+
+Missing POD for get_link.
+
+=cut
+
 sub get_link {
     my $self        = shift;
     my $heading     = shift;
@@ -82,6 +88,12 @@ sub get_link {
     return $self->SUPER::_handle_auth_limit($authid), $fuzzy, $match_count;
 }
 
+=head2 update_cache
+
+Missing POD for update_cache.
+
+=cut
+
 sub update_cache {
     my $self        = shift;
     my $heading     = shift;
@@ -96,6 +108,12 @@ sub update_cache {
     $self->{'cache'}->{ $search_form . $auth_type . $thesaurus }->{'authid'} = $authid;
     $self->{'cache'}->{ $search_form . $auth_type . $thesaurus }->{'fuzzy'}  = $fuzzy;
 }
+
+=head2 flip_heading
+
+Missing POD for flip_heading.
+
+=cut
 
 sub flip_heading {
     my $self    = shift;

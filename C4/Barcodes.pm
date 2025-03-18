@@ -40,23 +40,53 @@ sub _prefformat {
     return $prefformat;
 }
 
+=head2 initial
+
+Missing POD for initial.
+
+=cut
+
 sub initial {
     return '0000001';
 }
 
+=head2 width
+
+Missing POD for width.
+
+=cut
+
 sub width {
     return;
 }
+
+=head2 process_head
+
+Missing POD for process_head.
+
+=cut
 
 sub process_head {    # (self,head,whole,specific)
     my $self = shift;
     return shift;     # Default: just return the head unchanged.
 }
 
+=head2 process_tail
+
+Missing POD for process_tail.
+
+=cut
+
 sub process_tail {    # (self,tail,whole,specific)
     my $self = shift;
     return shift;     # Default: just return the tail unchanged.
 }
+
+=head2 is_max
+
+Missing POD for is_max.
+
+=cut
 
 sub is_max {
     my $self = shift;
@@ -64,6 +94,12 @@ sub is_max {
     (@_) and $self->{is_max} = shift;
     return $self->{is_max} || 0;
 }
+
+=head2 value
+
+Missing POD for value.
+
+=cut
 
 sub value {
     my $self = shift;
@@ -76,6 +112,12 @@ sub value {
     return $self->{value};
 }
 
+=head2 autoBarcode
+
+Missing POD for autoBarcode.
+
+=cut
+
 sub autoBarcode {
     (@_) or return _prefformat;
     my $self  = shift;
@@ -83,6 +125,12 @@ sub autoBarcode {
     $value =~ s/^.*:://;    # in case we get C4::Barcodes::incremental, we just want 'incremental'
     return $value;
 }
+
+=head2 parse
+
+Missing POD for parse.
+
+=cut
 
 sub parse {    # return 3 parts of barcode: non-incrementing, incrementing, non-incrementing
     my $self    = shift;
@@ -94,6 +142,12 @@ sub parse {    # return 3 parts of barcode: non-incrementing, incrementing, non-
     return ( $1, $2, '' );                    # the third part is in anticipation of barcodes that include checkdigits
 }
 
+=head2 max
+
+Missing POD for max.
+
+=cut
+
 sub max {
     my $self = shift;
     if ( $self->{is_max} ) {
@@ -101,6 +155,12 @@ sub max {
     }
     return $self->db_max;
 }
+
+=head2 db_max
+
+Missing POD for db_max.
+
+=cut
 
 sub db_max {
     my $self  = shift;
@@ -110,6 +170,12 @@ sub db_max {
     $sth->execute();
     return $sth->fetchrow_array || $self->initial;
 }
+
+=head2 next_value
+
+Missing POD for next_value.
+
+=cut
 
 sub next_value {
     my $self     = shift;
@@ -136,11 +202,23 @@ sub next_value {
     return $next_value;
 }
 
+=head2 next
+
+Missing POD for next.
+
+=cut
+
 sub next {
     my $self = shift or return;
     (@_) and $self->{next} = shift;
     return $self->{next};
 }
+
+=head2 previous
+
+Missing POD for previous.
+
+=cut
 
 sub previous {
     my $self = shift or return;
@@ -148,11 +226,23 @@ sub previous {
     return $self->{previous};
 }
 
+=head2 serial
+
+Missing POD for serial.
+
+=cut
+
 sub serial {
     my $self = shift or return;
     (@_) and $self->{serial} = shift;
     return $self->{serial};
 }
+
+=head2 default_self
+
+Missing POD for default_self.
+
+=cut
 
 sub default_self {
     (@_) or carp "default_self called with no argument.  Reverting to _prefformat.";
@@ -220,6 +310,12 @@ sub new {
     carp "Failed new C4::Barcodes::$autoBarcodeType";
     return;
 }
+
+=head2 new_object
+
+Missing POD for new_object.
+
+=cut
 
 sub new_object {
     my $class_or_object = shift;

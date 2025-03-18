@@ -87,6 +87,12 @@ C<$record> - a MARC::Record object
 
 =cut
 
+=head2 marc2ris
+
+Missing POD for marc2ris.
+
+=cut
+
 sub marc2ris {
     my ($record) = @_;
 
@@ -337,6 +343,13 @@ sub marc2ris {
 ## Argument: the leader of a MARC dataset
 ## Returns: the value at leader position 06
 ##********************************************************************
+
+=head2 print_typetag
+
+Missing POD for print_typetag.
+
+=cut
+
 sub print_typetag {
     my ($leader) = @_;
     ## the keys of typehash are the allowed values at position 06
@@ -426,6 +439,13 @@ sub print_typetag {
 ##                               3=family, clan, dynasty name
 ## Returns: the normalized authorname
 ##********************************************************************
+
+=head2 normalize_author
+
+Missing POD for normalize_author.
+
+=cut
+
 sub normalize_author {
     my ( $rawauthora, $rawauthorb, $rawauthorc, $nametype ) = @_;
 
@@ -465,6 +485,13 @@ sub normalize_author {
 ## Argument: field (100 or 700)
 ## Returns: an author string in the format found in the record
 ##********************************************************************
+
+=head2 get_author
+
+Missing POD for get_author.
+
+=cut
+
 sub get_author {
     my ($authorfield) = @_;
     my ($indicator);
@@ -503,6 +530,13 @@ sub get_author {
 ## Argument: field (110, 111, 710, or 711)
 ## Returns: an author string in the format found in the record
 ##********************************************************************
+
+=head2 get_editor
+
+Missing POD for get_editor.
+
+=cut
+
 sub get_editor {
     my ($editorfield) = @_;
 
@@ -521,6 +555,13 @@ sub get_editor {
 ## Arguments: field (245)
 ## Returns:
 ##********************************************************************
+
+=head2 print_title
+
+Missing POD for print_title.
+
+=cut
+
 sub print_title {
     my ($titlefield) = @_;
     if ( !$titlefield ) {
@@ -572,6 +613,13 @@ sub print_title {
 ## Arguments: field
 ## Returns:
 ##********************************************************************
+
+=head2 print_stitle
+
+Missing POD for print_stitle.
+
+=cut
+
 sub print_stitle {
     my ($titlefield) = @_;
 
@@ -603,6 +651,13 @@ sub print_stitle {
 ## print_isbn(): gets info from MARC field 020
 ## Arguments: field (020)
 ##********************************************************************
+
+=head2 print_isbn
+
+Missing POD for print_isbn.
+
+=cut
+
 sub print_isbn {
     my ($isbnfield) = @_;
 
@@ -624,6 +679,13 @@ sub print_isbn {
 ## print_issn(): gets info from MARC field 022
 ## Arguments: field (022)
 ##********************************************************************
+
+=head2 print_issn
+
+Missing POD for print_issn.
+
+=cut
+
 sub print_issn {
     my ($issnfield) = @_;
 
@@ -644,6 +706,13 @@ sub print_issn {
 ###
 # print_uri() prints info from 856 u
 ###
+
+=head2 print_uri
+
+Missing POD for print_uri.
+
+=cut
+
 sub print_uri {
     my @f856s = @_;
 
@@ -658,6 +727,13 @@ sub print_uri {
 ## print_loc_callno(): gets info from MARC field 050
 ## Arguments: field (050)
 ##********************************************************************
+
+=head2 print_loc_callno
+
+Missing POD for print_loc_callno.
+
+=cut
+
 sub print_loc_callno {
     my ($callnofield) = @_;
 
@@ -673,6 +749,13 @@ sub print_loc_callno {
 ## print_dewey(): gets info from MARC field 082
 ## Arguments: field (082)
 ##********************************************************************
+
+=head2 print_dewey
+
+Missing POD for print_dewey.
+
+=cut
+
 sub print_dewey {
     my ($deweyfield) = @_;
 
@@ -688,6 +771,13 @@ sub print_dewey {
 ## print_pubinfo(): gets info from MARC field 260
 ## Arguments: field (260)
 ##********************************************************************
+
+=head2 print_pubinfo
+
+Missing POD for print_pubinfo.
+
+=cut
+
 sub print_pubinfo {
     my ($pubinfofield) = @_;
 
@@ -802,6 +892,13 @@ sub print_pubinfo {
 ## get_keywords(): prints info from MARC fields 6XX
 ## Arguments: list of fields (6XX)
 ##********************************************************************
+
+=head2 get_keywords
+
+Missing POD for get_keywords.
+
+=cut
+
 sub get_keywords {
     my ( $fieldname, @keywords ) = @_;
 
@@ -859,6 +956,13 @@ sub get_keywords {
 ##            field name
 ##            list of fields (5XX)
 ##********************************************************************
+
+=head2 pool_subx
+
+Missing POD for pool_subx.
+
+=cut
+
 sub pool_subx {
     my ( $aref, $fieldname, @notefields ) = @_;
 
@@ -948,6 +1052,13 @@ sub pool_subx {
 ## print_abstract(): prints abstract fields
 ## Arguments: list of fields (520)
 ##********************************************************************
+
+=head2 print_abstract
+
+Missing POD for print_abstract.
+
+=cut
+
 sub print_abstract {
 
     # ToDo: take care of repeatable subfields

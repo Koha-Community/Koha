@@ -41,6 +41,12 @@ Koha::Virtualshelf - Koha Virtualshelf Object class
 
 =cut
 
+=head2 store
+
+Missing POD for store.
+
+=cut
+
 sub store {
     my ($self) = @_;
 
@@ -67,15 +73,33 @@ sub store {
     return $self->SUPER::store($self);
 }
 
+=head2 is_public
+
+Missing POD for is_public.
+
+=cut
+
 sub is_public {
     my ($self) = @_;
     return $self->public;
 }
 
+=head2 is_private
+
+Missing POD for is_private.
+
+=cut
+
 sub is_private {
     my ($self) = @_;
     return !$self->public;
 }
+
+=head2 is_shelfname_valid
+
+Missing POD for is_shelfname_valid.
+
+=cut
 
 sub is_shelfname_valid {
     my ($self) = @_;
@@ -107,6 +131,12 @@ sub is_shelfname_valid {
     return $count ? 0 : 1;
 }
 
+=head2 get_shares
+
+Missing POD for get_shares.
+
+=cut
+
 sub get_shares {
     my ($self) = @_;
     my $rs     = $self->_result->virtualshelfshares;
@@ -114,12 +144,24 @@ sub get_shares {
     return $shares;
 }
 
+=head2 get_contents
+
+Missing POD for get_contents.
+
+=cut
+
 sub get_contents {
     my ($self)   = @_;
     my $rs       = $self->_result->virtualshelfcontents;
     my $contents = Koha::Virtualshelfcontents->_new_from_dbic($rs);
     return $contents;
 }
+
+=head2 share
+
+Missing POD for share.
+
+=cut
 
 sub share {
     my ( $self, $key ) = @_;
@@ -135,6 +177,12 @@ sub share {
     )->store;
 }
 
+=head2 is_shared
+
+Missing POD for is_shared.
+
+=cut
+
 sub is_shared {
     my ($self) = @_;
     return $self->get_shares->search(
@@ -143,6 +191,12 @@ sub is_shared {
         }
     )->count;
 }
+
+=head2 is_shared_with
+
+Missing POD for is_shared_with.
+
+=cut
 
 sub is_shared_with {
     my ( $self, $borrowernumber ) = @_;
@@ -153,6 +207,12 @@ sub is_shared_with {
         }
     )->count;
 }
+
+=head2 remove_share
+
+Missing POD for remove_share.
+
+=cut
 
 sub remove_share {
     my ( $self, $borrowernumber ) = @_;
@@ -167,6 +227,12 @@ sub remove_share {
     # Only 1 share with 1 patron can exist
     return $shelves->next->delete;
 }
+
+=head2 add_biblio
+
+Missing POD for add_biblio.
+
+=cut
 
 sub add_biblio {
     my ( $self, $biblionumber, $borrowernumber ) = @_;
@@ -199,6 +265,12 @@ sub add_biblio {
     return $content;
 }
 
+=head2 remove_biblios
+
+Missing POD for remove_biblios.
+
+=cut
+
 sub remove_biblios {
     my ( $self, $params ) = @_;
     my $biblionumbers  = $params->{biblionumbers} || [];
@@ -221,6 +293,12 @@ sub remove_biblios {
     return $number_removed;
 }
 
+=head2 can_be_viewed
+
+Missing POD for can_be_viewed.
+
+=cut
+
 sub can_be_viewed {
     my ( $self, $borrowernumber ) = @_;
     return 1 if $self->is_public;
@@ -232,6 +310,12 @@ sub can_be_viewed {
         }
     )->count;
 }
+
+=head2 can_be_deleted
+
+Missing POD for can_be_deleted.
+
+=cut
 
 sub can_be_deleted {
     my ( $self, $borrowernumber ) = @_;
@@ -246,6 +330,12 @@ sub can_be_deleted {
     return 0;
 }
 
+=head2 can_be_managed
+
+Missing POD for can_be_managed.
+
+=cut
+
 sub can_be_managed {
     my ( $self, $borrowernumber ) = @_;
     return 1
@@ -256,6 +346,12 @@ sub can_be_managed {
         if $self->is_public and C4::Auth::haspermission( $patron->userid, { lists => 'edit_public_lists' } );
     return 0;
 }
+
+=head2 can_biblios_be_added
+
+Missing POD for can_biblios_be_added.
+
+=cut
 
 sub can_biblios_be_added {
     my ( $self, $borrowernumber ) = @_;
@@ -271,6 +367,12 @@ sub can_biblios_be_added {
         or !$self->public );
     return 0;
 }
+
+=head2 can_biblios_be_removed
+
+Missing POD for can_biblios_be_removed.
+
+=cut
 
 sub can_biblios_be_removed {
     my ( $self, $borrowernumber ) = @_;

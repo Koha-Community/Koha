@@ -163,9 +163,21 @@ __PACKAGE__->belongs_to(
 # Created by DBIx::Class::Schema::Loader v0.07046 @ 2020-08-04 18:43:05
 # DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:KjJWzFhPwQk0SZqrHQ4Alw
 
+=head2 koha_objects_class
+
+Missing POD for koha_objects_class.
+
+=cut
+
 sub koha_objects_class {
     'Koha::Club::Hold::PatronHolds';
 }
+=head2 koha_object_class
+
+Missing POD for koha_object_class.
+
+=cut
+
 sub koha_object_class {
     'Koha::Club::Hold::PatronHold';
 }

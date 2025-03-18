@@ -46,10 +46,22 @@ sub new {
     return $self;
 }
 
+=head2 message_refno
+
+Missing POD for message_refno.
+
+=cut
+
 sub message_refno {
     my $self = shift;
     return $self->{message_reference_number};
 }
+
+=head2 function
+
+Missing POD for function.
+
+=cut
 
 sub function {
     my $self         = shift;
@@ -62,25 +74,55 @@ sub function {
     return;
 }
 
+=head2 message_reference_number
+
+Missing POD for message_reference_number.
+
+=cut
+
 sub message_reference_number {
     my $self = shift;
     return $self->{header}->elem(0);
 }
+
+=head2 message_type
+
+Missing POD for message_type.
+
+=cut
 
 sub message_type {
     my $self = shift;
     return $self->{header}->elem( 1, 0 );
 }
 
+=head2 message_code
+
+Missing POD for message_code.
+
+=cut
+
 sub message_code {
     my $self = shift;
     return $self->{bgm}->elem( 0, 0 );
 }
 
+=head2 docmsg_number
+
+Missing POD for docmsg_number.
+
+=cut
+
 sub docmsg_number {
     my $self = shift;
     return $self->{bgm}->elem(1);
 }
+
+=head2 message_date
+
+Missing POD for message_date.
+
+=cut
 
 sub message_date {
     my $self = shift;
@@ -94,6 +136,12 @@ sub message_date {
     return;    # this should not happen
 }
 
+=head2 tax_point_date
+
+Missing POD for tax_point_date.
+
+=cut
+
 sub tax_point_date {
     my $self = shift;
     if ( $self->message_type eq 'INVOIC' ) {
@@ -106,6 +154,12 @@ sub tax_point_date {
     return;
 }
 
+=head2 expiry_date
+
+Missing POD for expiry_date.
+
+=cut
+
 sub expiry_date {
     my $self = shift;
     if ( $self->message_type eq 'QUOTES' ) {
@@ -117,6 +171,12 @@ sub expiry_date {
     }
     return;
 }
+
+=head2 shipment_charge
+
+Missing POD for shipment_charge.
+
+=cut
 
 sub shipment_charge {
     my $self = shift;
@@ -150,6 +210,12 @@ sub shipment_charge {
 
 # return NAD fields
 
+=head2 buyer_ean
+
+Missing POD for buyer_ean.
+
+=cut
+
 sub buyer_ean {
     my $self = shift;
     foreach my $s ( @{ $self->{datasegs} } ) {
@@ -165,6 +231,12 @@ sub buyer_ean {
     }
     return;
 }
+
+=head2 supplier_ean
+
+Missing POD for supplier_ean.
+
+=cut
 
 sub supplier_ean {
     my $self = shift;
@@ -182,6 +254,12 @@ sub supplier_ean {
     return;
 
 }
+
+=head2 lineitems
+
+Missing POD for lineitems.
+
+=cut
 
 sub lineitems {
     my $self = shift;

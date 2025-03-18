@@ -45,6 +45,12 @@ sub _type {
     return 'ClubTemplateEnrollmentField';
 }
 
+=head2 object_class
+
+Missing POD for object_class.
+
+=cut
+
 sub object_class {
     return 'Koha::Club::Template::EnrollmentField';
 }

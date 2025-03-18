@@ -276,10 +276,22 @@ sub output_with_http_headers {
     print $query->header($options), $data;
 }
 
+=head2 output_html_with_http_headers
+
+Missing POD for output_html_with_http_headers.
+
+=cut
+
 sub output_html_with_http_headers {
     my ( $query, $cookie, $data, $status, $extra_options ) = @_;
     output_with_http_headers( $query, $cookie, $data, 'html', $status, $extra_options );
 }
+
+=head2 output_ajax_with_http_headers
+
+Missing POD for output_ajax_with_http_headers.
+
+=cut
 
 sub output_ajax_with_http_headers {
     my ( $query, $js ) = @_;
@@ -291,6 +303,12 @@ sub output_ajax_with_http_headers {
         -expires         => '-1d',
     ), $js;
 }
+
+=head2 is_ajax
+
+Missing POD for is_ajax.
+
+=cut
 
 sub is_ajax {
     my $x_req = $ENV{HTTP_X_REQUESTED_WITH};
@@ -369,6 +387,12 @@ sub output_and_exit {
     exit;
 }
 
+=head2 output_error
+
+Missing POD for output_error.
+
+=cut
+
 sub output_error {
     my ( $query, $error ) = @_;
     my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
@@ -386,6 +410,12 @@ sub output_error {
     );
     output_with_http_headers $query, $cookie, $template->output, 'html', '404 Not Found';
 }
+
+=head2 parametrized_url
+
+Missing POD for parametrized_url.
+
+=cut
 
 sub parametrized_url {
     my $url  = shift || '';    # ie page.pl?ln={LANG}

@@ -33,6 +33,12 @@ my %fields = (
     hold             => undef,
 );
 
+=head2 new
+
+Missing POD for new.
+
+=cut
+
 sub new {
     my $class = shift;
     my $self  = $class->SUPER::new();    # start with an ILS::Transaction object
@@ -44,6 +50,12 @@ sub new {
     @{$self}{ keys %fields } = values %fields;      # copying defaults into object
     return bless $self, $class;
 }
+
+=head2 do_checkin
+
+Missing POD for do_checkin.
+
+=cut
 
 sub do_checkin {
     my $self        = shift;
@@ -190,6 +202,12 @@ sub do_checkin {
     return { messages => $messages };
 }
 
+=head2 resensitize
+
+Missing POD for resensitize.
+
+=cut
+
 sub resensitize {
     my $self = shift;
     unless ( $self->{item} ) {
@@ -198,6 +216,12 @@ sub resensitize {
     }
     return !$self->{item}->magnetic_media;
 }
+
+=head2 patron_id
+
+Missing POD for patron_id.
+
+=cut
 
 sub patron_id {
     my $self = shift;

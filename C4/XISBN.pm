@@ -82,6 +82,12 @@ sub _get_biblio_from_xisbn {
 
 =cut
 
+=head2 get_xisbns
+
+Missing POD for get_xisbns.
+
+=cut
+
 sub get_xisbns {
     my ( $isbn, $biblionumber ) = @_;
     my ( $response, $thing_response, $syndetics_response, $errors );

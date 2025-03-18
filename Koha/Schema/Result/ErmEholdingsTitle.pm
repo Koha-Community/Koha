@@ -297,9 +297,21 @@ __PACKAGE__->has_many(
 # Created by DBIx::Class::Schema::Loader v0.07049 @ 2023-09-13 11:06:45
 # DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:SOFpN45kBTi/qvW5OBnYDA
 
+=head2 koha_objects_class
+
+Missing POD for koha_objects_class.
+
+=cut
+
 sub koha_objects_class {
     'Koha::ERM::EHoldings::Titles';
 }
+=head2 koha_object_class
+
+Missing POD for koha_object_class.
+
+=cut
+
 sub koha_object_class {
     'Koha::ERM::EHoldings::Title';
 }

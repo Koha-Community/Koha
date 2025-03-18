@@ -958,6 +958,12 @@ sub _parse_match_component {
     return $component;
 }
 
+=head2 valid_normalization_routines
+
+Missing POD for valid_normalization_routines.
+
+=cut
+
 sub valid_normalization_routines {
 
     return (

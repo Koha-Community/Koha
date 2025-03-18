@@ -81,6 +81,12 @@ This will return a list of all the available report areas
 
 =cut
 
+=head2 get_area_name_sql_snippet
+
+Missing POD for get_area_name_sql_snippet.
+
+=cut
+
 sub get_area_name_sql_snippet {
     my @REPORT_AREA = (
         [ CIRC => "Circulation" ],
@@ -100,6 +106,12 @@ sub get_report_areas {
 
     return $report_areas;
 }
+
+=head2 get_table_areas
+
+Missing POD for get_table_areas.
+
+=cut
 
 sub get_table_areas {
     return (
@@ -432,6 +444,12 @@ sub get_criteria {
     return ( \@criteria_array );
 }
 
+=head2 nb_rows
+
+Missing POD for nb_rows.
+
+=cut
+
 sub nb_rows {
     my $sql = shift or return;
 
@@ -692,6 +710,12 @@ sub save_report {
     return $report->id;
 }
 
+=head2 update_sql
+
+Missing POD for update_sql.
+
+=cut
+
 sub update_sql {
     my $id           = shift || croak "No Id given";
     my $fields       = shift;
@@ -722,6 +746,12 @@ sub update_sql {
     return $report;
 }
 
+=head2 store_results
+
+Missing POD for store_results.
+
+=cut
+
 sub store_results {
     my ( $id, $json ) = @_;
     my $dbh = C4::Context->dbh();
@@ -731,6 +761,12 @@ sub store_results {
     |, undef, $id, $json
     );
 }
+
+=head2 format_results
+
+Missing POD for format_results.
+
+=cut
 
 sub format_results {
     my ($id) = @_;
@@ -751,6 +787,12 @@ sub format_results {
     };
 }
 
+=head2 delete_report
+
+Missing POD for delete_report.
+
+=cut
+
 sub delete_report {
     my (@ids) = @_;
     return unless @ids;
@@ -765,6 +807,12 @@ sub delete_report {
     return $sth->execute(@ids);
 }
 
+=head2 get_saved_reports_base_query
+
+Missing POD for get_saved_reports_base_query.
+
+=cut
+
 sub get_saved_reports_base_query {
     my $area_name_sql_snippet = get_area_name_sql_snippet;
     return <<EOQ;
@@ -777,6 +825,12 @@ LEFT OUTER JOIN authorised_values av_sg ON (av_sg.category = 'REPORT_SUBGROUP' A
 LEFT OUTER JOIN borrowers b USING (borrowernumber)
 EOQ
 }
+
+=head2 get_saved_reports
+
+Missing POD for get_saved_reports.
+
+=cut
 
 sub get_saved_reports {
 
@@ -876,6 +930,12 @@ sub get_distinct_values {
     return $sth->fetchall_arrayref( {} );
 }
 
+=head2 save_dictionary
+
+Missing POD for save_dictionary.
+
+=cut
+
 sub save_dictionary {
     my ( $name, $description, $sql, $area ) = @_;
     my $dbh   = C4::Context->dbh();
@@ -885,6 +945,12 @@ sub save_dictionary {
     $sth->execute( $name, $description, $sql, $area ) || return 0;
     return 1;
 }
+
+=head2 get_from_dictionary
+
+Missing POD for get_from_dictionary.
+
+=cut
 
 sub get_from_dictionary {
     my ( $area, $id ) = @_;
@@ -915,6 +981,12 @@ EOQ
     return ( \@loop );
 }
 
+=head2 delete_definition
+
+Missing POD for delete_definition.
+
+=cut
+
 sub delete_definition {
     my ($id)  = @_ or return;
     my $dbh   = C4::Context->dbh();
@@ -939,6 +1011,12 @@ sub get_sql {
     my $data = $sth->fetchrow_hashref();
     return $data->{'savedsql'};
 }
+
+=head2 get_results
+
+Missing POD for get_results.
+
+=cut
 
 sub get_results {
     my ($report_id) = @_;

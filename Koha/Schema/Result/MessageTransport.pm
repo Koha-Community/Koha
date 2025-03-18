@@ -135,9 +135,21 @@ __PACKAGE__->belongs_to(
 
 # You can replace this text with custom content, and it will be preserved on regeneration
 
+=head2 koha_object_class
+
+Missing POD for koha_object_class.
+
+=cut
+
 sub koha_object_class {
   'Koha::Patron::MessagePreference::Transport';
 }
+=head2 koha_objects_class
+
+Missing POD for koha_objects_class.
+
+=cut
+
 sub koha_objects_class {
   'Koha::Patron::MessagePreference::Transports';
 }

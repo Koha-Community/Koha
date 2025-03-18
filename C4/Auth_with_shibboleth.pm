@@ -39,6 +39,13 @@ BEGIN {
 }
 
 # Check that shib config is not malformed
+
+=head2 shib_ok
+
+Missing POD for shib_ok.
+
+=cut
+
 sub shib_ok {
     my $config = _get_shib_config();
 

@@ -71,6 +71,12 @@ sub _type {
     return 'Branch';
 }
 
+=head2 object_class
+
+Missing POD for object_class.
+
+=cut
+
 sub object_class {
     return 'Koha::Library';
 }

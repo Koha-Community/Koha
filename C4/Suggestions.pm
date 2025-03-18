@@ -384,6 +384,12 @@ sub DelSuggestionsOlderThan {
     $sth->execute("-$days");
 }
 
+=head2 GetUnprocessedSuggestions
+
+Missing POD for GetUnprocessedSuggestions.
+
+=cut
+
 sub GetUnprocessedSuggestions {
     my ($number_of_days_since_the_last_modification) = @_;
 

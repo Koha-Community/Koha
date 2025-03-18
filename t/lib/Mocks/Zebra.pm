@@ -39,6 +39,12 @@ and the usual zebra db will not be affected. However you must pass $ENV{KOHA_CON
 
 =cut
 
+=head2 new
+
+Missing POD for new.
+
+=cut
+
 sub new {
     my ( $class, $params ) = @_;
 
@@ -72,6 +78,13 @@ sub new {
 }
 
 # function that launches the zebra daemon
+
+=head2 launch_zebra
+
+Missing POD for launch_zebra.
+
+=cut
+
 sub launch_zebra {
     my ($self) = @_;
 
@@ -87,6 +100,12 @@ sub launch_zebra {
     $self->{zebra_pid} = $zebra_pid;
 }
 
+=head2 launch_indexer
+
+Missing POD for launch_indexer.
+
+=cut
+
 sub launch_indexer {
     my ($self)        = @_;
     my $rootdir       = dirname(__FILE__) . '/../../../';
@@ -100,6 +119,12 @@ sub launch_indexer {
     sleep(1);
     $self->{indexer_pid} = $indexer_pid;
 }
+
+=head2 load_records
+
+Missing POD for load_records.
+
+=cut
 
 sub load_records {
     my ( $self, $marc_dir, $marc_format, $record_type, $init ) = @_;
@@ -121,6 +146,12 @@ sub load_records {
         system($cmd);
     }
 }
+
+=head2 load_records_ui
+
+Missing POD for load_records_ui.
+
+=cut
 
 sub load_records_ui {
     my ( $self, $file ) = @_;
@@ -209,6 +240,12 @@ sub load_records_ui {
 
 }
 
+=head2 clean_records
+
+Missing POD for clean_records.
+
+=cut
+
 sub clean_records {
     my ( $self, $batch_id ) = @_;
 
@@ -228,6 +265,12 @@ sub clean_records {
     $agent->get_ok( "$cgi_root/cataloguing/addbiblio.pl?op=delete&biblionumber=$biblionumber", 'biblio deleted' );
 
 }
+
+=head2 cleanup
+
+Missing POD for cleanup.
+
+=cut
 
 sub cleanup {
     my ($self) = @_;

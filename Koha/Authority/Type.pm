@@ -31,6 +31,12 @@ Koha::Authority::Type - Koha Authority Type Object class
 
 =cut
 
+=head2 auth_tag_structures
+
+Missing POD for auth_tag_structures.
+
+=cut
+
 sub auth_tag_structures {
     my ($self) = @_;
     return $self->_result->auth_tag_structures;

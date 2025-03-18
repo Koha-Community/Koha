@@ -133,9 +133,21 @@ __PACKAGE__->belongs_to(
 # Created by DBIx::Class::Schema::Loader v0.07049 @ 2022-05-25 11:46:59
 # DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:EYK21+2xV7p1yCXR8OFKIA
 
+=head2 koha_object_class
+
+Missing POD for koha_object_class.
+
+=cut
+
 sub koha_object_class {
     'Koha::ERM::Agreement::Relationship';
 }
+=head2 koha_objects_class
+
+Missing POD for koha_objects_class.
+
+=cut
+
 sub koha_objects_class {
     'Koha::ERM::Agreement::Relationships';
 }

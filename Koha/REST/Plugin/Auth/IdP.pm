@@ -39,6 +39,12 @@ Koha::REST::Plugin::Auth::IdP
 
 =cut
 
+=head2 register
+
+Missing POD for register.
+
+=cut
+
 sub register {
     my ( $self, $app ) = @_;
 

@@ -35,6 +35,12 @@ sub GetByCode {
         : $code;
 }
 
+=head2 Get
+
+Missing POD for Get.
+
+=cut
+
 sub Get {
     my ( $self, $category, $selected, $opac ) = @_;
     return GetAuthorisedValues( $category, $selected, $opac );
@@ -53,6 +59,12 @@ sub GetAuthValueDropbox {
         $branch_limit
     );
 }
+
+=head2 GetCategories
+
+Missing POD for GetCategories.
+
+=cut
 
 sub GetCategories {
     my ( $self, $params ) = @_;

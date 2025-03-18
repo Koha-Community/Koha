@@ -146,9 +146,21 @@ __PACKAGE__->load_components(qw( Ordered ));
 
 __PACKAGE__->grouping_column('rota_id'); # Our group_id
 
+=head2 koha_object_class
+
+Missing POD for koha_object_class.
+
+=cut
+
 sub koha_object_class {
     'Koha::StockRotationStage';
 }
+=head2 koha_objects_class
+
+Missing POD for koha_objects_class.
+
+=cut
+
 sub koha_objects_class {
     'Koha::StockRotationStages';
 }

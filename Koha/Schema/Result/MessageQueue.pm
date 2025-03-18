@@ -247,9 +247,21 @@ __PACKAGE__->belongs_to(
 # Created by DBIx::Class::Schema::Loader v0.07049 @ 2023-09-18 14:26:23
 # DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:eJFHJ3sXu+kLt+uW4ILPIA
 
+=head2 koha_object_class
+
+Missing POD for koha_object_class.
+
+=cut
+
 sub koha_object_class {
     'Koha::Notice::Message';
 }
+=head2 koha_objects_class
+
+Missing POD for koha_objects_class.
+
+=cut
+
 sub koha_objects_class {
     'Koha::Notice::Messages';
 }

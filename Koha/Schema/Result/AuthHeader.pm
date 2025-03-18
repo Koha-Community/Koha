@@ -142,9 +142,21 @@ __PACKAGE__->has_many(
 # Created by DBIx::Class::Schema::Loader v0.07051 @ 2025-02-21 09:20:19
 # DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:JkZ9DrxanaiZVU6d8pzpSA
 
+=head2 koha_object_class
+
+Missing POD for koha_object_class.
+
+=cut
+
 sub koha_object_class {
     'Koha::Authority';
 }
+=head2 koha_objects_class
+
+Missing POD for koha_objects_class.
+
+=cut
+
 sub koha_objects_class {
     'Koha::Authorities';
 }

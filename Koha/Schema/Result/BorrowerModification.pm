@@ -658,9 +658,21 @@ __PACKAGE__->set_primary_key("verification_token", "borrowernumber");
 # Created by DBIx::Class::Schema::Loader v0.07051 @ 2024-11-11 11:07:06
 # DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:QOqDkQ+8LuTY6qYrPhsQWw
 
+=head2 koha_object_class
+
+Missing POD for koha_object_class.
+
+=cut
+
 sub koha_object_class {
     'Koha::Patron::Modification';
 }
+=head2 koha_objects_class
+
+Missing POD for koha_objects_class.
+
+=cut
+
 sub koha_objects_class {
     'Koha::Patron::Modifications';
 }

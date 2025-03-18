@@ -162,9 +162,21 @@ __PACKAGE__->belongs_to(
 # Created by DBIx::Class::Schema::Loader v0.07049 @ 2021-06-21 15:27:32
 # DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:zCeE/SWvdz898zlfcvfRGg
 
+=head2 koha_object_class
+
+Missing POD for koha_object_class.
+
+=cut
+
 sub koha_object_class {
     'Koha::Account::Offset';
 }
+=head2 koha_objects_class
+
+Missing POD for koha_objects_class.
+
+=cut
+
 sub koha_objects_class {
     'Koha::Account::Offsets';
 }

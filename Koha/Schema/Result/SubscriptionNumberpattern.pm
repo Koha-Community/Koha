@@ -231,9 +231,21 @@ __PACKAGE__->has_many(
 # Created by DBIx::Class::Schema::Loader v0.07049 @ 2023-12-27 17:02:33
 # DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:CUmBGK1rIiVf1BFuR3Kkrg
 
+=head2 koha_object_class
+
+Missing POD for koha_object_class.
+
+=cut
+
 sub koha_object_class {
     'Koha::Subscription::Numberpattern';
 }
+=head2 koha_objects_class
+
+Missing POD for koha_objects_class.
+
+=cut
+
 sub koha_objects_class {
     'Koha::Subscription::Numberpatterns';
 }

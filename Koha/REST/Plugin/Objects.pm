@@ -31,6 +31,12 @@ Koha::REST::Plugin::Objects
 
 =cut
 
+=head2 register
+
+Missing POD for register.
+
+=cut
+
 sub register {
     my ( $self, $app ) = @_;
 

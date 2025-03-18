@@ -78,6 +78,12 @@ The Elasticsearch index name with Koha instance prefix.
 
 =cut
 
+=head2 new
+
+Missing POD for new.
+
+=cut
+
 sub new {
     my $class = shift @_;
     my ($params) = @_;
@@ -369,6 +375,12 @@ sub _load_elasticsearch_mappings {
     return YAML::XS::LoadFile($mappings_yaml);
 }
 
+=head2 reset_elasticsearch_mappings
+
+Missing POD for reset_elasticsearch_mappings.
+
+=cut
+
 sub reset_elasticsearch_mappings {
     my ($self) = @_;
     my $indexes = $self->_load_elasticsearch_mappings();
@@ -422,6 +434,13 @@ sub reset_elasticsearch_mappings {
 
 # This overrides the accessor provided by Class::Accessor so that if
 # sort_fields isn't set, then it'll generate it.
+
+=head2 sort_fields
+
+Missing POD for sort_fields.
+
+=cut
+
 sub sort_fields {
     my $self = shift;
     if (@_) {

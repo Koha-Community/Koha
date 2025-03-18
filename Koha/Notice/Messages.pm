@@ -61,6 +61,12 @@ sub _type {
     return 'MessageQueue';
 }
 
+=head2 object_class
+
+Missing POD for object_class.
+
+=cut
+
 sub object_class {
     return 'Koha::Notice::Message';
 }

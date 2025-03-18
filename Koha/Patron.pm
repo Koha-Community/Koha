@@ -148,6 +148,12 @@ Could be moved to Koha::Object if need to be reused
 
 =cut
 
+=head2 trim_whitespaces
+
+Missing POD for trim_whitespaces.
+
+=cut
+
 sub trim_whitespaces {
     my ($self) = @_;
 

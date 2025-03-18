@@ -31,6 +31,12 @@ Koha::SearchMarcMap - Koha SearchMarcMap Object class
 
 =cut
 
+=head2 add_to_search_fields
+
+Missing POD for add_to_search_fields.
+
+=cut
+
 sub add_to_search_fields {
     my ( $self, $params ) = @_;
     $self->_result->add_to_search_fields($params);

@@ -99,9 +99,21 @@ __PACKAGE__->has_many(
 # Created by DBIx::Class::Schema::Loader v0.07042 @ 2015-12-31 16:48:38
 # DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:U3LGi1zy3YN2Amin+bhXlA
 
+=head2 koha_object_class
+
+Missing POD for koha_object_class.
+
+=cut
+
 sub koha_object_class {
     'Koha::SMS::Provider';
 }
+=head2 koha_objects_class
+
+Missing POD for koha_objects_class.
+
+=cut
+
 sub koha_objects_class {
     'Koha::SMS::Providers';
 }
