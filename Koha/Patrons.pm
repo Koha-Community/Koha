@@ -357,7 +357,7 @@ sub anonymize {
                       fine_max      => $fine_max,
                       fine_min      => $fin_min,
                       too_young     => $too_young,
-                      too_old      => $too_old,
+                      too_old       => $too_old,
                   });
 
 This method returns all patron who should be updated from one category to another meeting criteria:
@@ -367,6 +367,9 @@ fine_min      - with fines totaling at least this amount
 fine_max      - with fines above this amount
 too_young     - if passed, select patrons who are under the age limit for the current category
 too_old       - if passed, select patrons who are over the age limit for the current category
+
+too_young and too_old logically cannot be used in combination (One cannot be both too old and too young)
+fine_min takes precedence over fine_max if both are passed
 
 =cut
 

@@ -20,10 +20,11 @@
 use Modern::Perl;
 
 use Test::NoWarnings;
-use Test::More tests => 45;
+use Test::More tests => 46;
 use Test::Warn;
 use Test::Exception;
 use Test::MockModule;
+use Test::Deep;
 use Time::Fake;
 use DateTime;
 use JSON;
@@ -2658,6 +2659,342 @@ subtest 'anonymize' => sub {
     isnt( $patron1->surname, $surname, 'Surname patron1 changed again' );
     $patron2->discard_changes;                # refresh
     is( $patron2->firstname, undef, 'First name patron2 cleared' );
+};
+
+subtest "search_patrons_to_update_category tests" => sub {
+
+    plan tests => 9;
+
+    $schema->storage->txn_begin();
+
+    my $current_dt = dt_from_string();
+
+    # Set up category with age limits
+    my $category_code = 'TEST_CAT';
+    my $category      = $builder->build_object(
+        {
+            class => 'Koha::Patron::Categories',
+            value => {
+                categorycode        => $category_code,
+                description         => 'Test category',
+                dateofbirthrequired => 13,                # Must be 13 or older
+                upperagelimit       => 17,                # Must be 17 or younger
+            }
+        }
+    );
+
+    # Create test patrons with various ages and fines
+    my $patron_12 = $builder->build_object(
+        {    # Too young
+            class => 'Koha::Patrons',
+            value => {
+                categorycode => $category_code,
+                dateofbirth  => $current_dt->clone->subtract( years => 12 )->ymd,
+            }
+        }
+    );
+
+    my $patron_13 = $builder->build_object(
+        {    # Minimum age (not too young)
+            class => 'Koha::Patrons',
+            value => {
+                categorycode => $category_code,
+                dateofbirth  => $current_dt->clone->subtract( years => 13 )->ymd,
+            }
+        }
+    );
+
+    my $patron_17 = $builder->build_object(
+        {    # Maximum age (not too old)
+            class => 'Koha::Patrons',
+            value => {
+                categorycode => $category_code,
+                dateofbirth  => $current_dt->clone->subtract( years => 17 )->ymd,
+            }
+        }
+    );
+
+    my $patron_18 = $builder->build_object(
+        {    # Too old
+            class => 'Koha::Patrons',
+            value => {
+                categorycode => $category_code,
+                dateofbirth  => $current_dt->clone->subtract( years => 18 )->ymd,
+            }
+        }
+    );
+
+    my $patron_no_dob = $builder->build_object(
+        {    # No date of birth
+            class => 'Koha::Patrons',
+            value => {
+                categorycode => $category_code,
+                dateofbirth  => undef,
+            }
+        }
+    );
+
+    # Add fines to patrons
+    add_fines( $patron_12->borrowernumber,     5.00 );     # $5
+    add_fines( $patron_13->borrowernumber,     0.00 );     # $0
+    add_fines( $patron_17->borrowernumber,     10.00 );    # $10
+    add_fines( $patron_18->borrowernumber,     20.00 );    # $20
+    add_fines( $patron_no_dob->borrowernumber, 15.00 );    # $15
+
+    # Helper function to add fines
+    sub add_fines {
+        my ( $borrowernumber, $amount ) = @_;
+        if ( $amount > 0 ) {
+            $builder->build_object(
+                {
+                    class => 'Koha::Account::Lines',
+                    value => {
+                        borrowernumber    => $borrowernumber,
+                        amountoutstanding => $amount,
+                        debit_type_code   => 'OVERDUE',
+                    }
+                }
+            );
+        }
+    }
+
+    # Tests for the search_patrons_to_update_category method
+    subtest 'Basic test - from category only' => sub {
+        plan tests => 2;
+
+        my $patrons = Koha::Patrons->search_patrons_to_update_category(
+            {
+                from => $category_code,
+            }
+        );
+
+        is( $patrons->count, 5, "Returns all patrons in the category" );
+        my @expected_patrons = (
+            $patron_12->borrowernumber, $patron_13->borrowernumber,
+            $patron_17->borrowernumber, $patron_18->borrowernumber,
+            $patron_no_dob->borrowernumber
+        );
+
+        is_deeply(
+            [ sort $patrons->get_column('borrowernumber') ],
+            [ sort @expected_patrons ],
+            "Returns the correct patrons"
+        );
+    };
+
+    subtest 'Test too_young parameter' => sub {
+        plan tests => 2;
+
+        my $patrons = Koha::Patrons->search_patrons_to_update_category(
+            {
+                from      => $category_code,
+                too_young => 1,
+            }
+        );
+
+        is( $patrons->count,                1,                          "Returns patrons who are too young" );
+        is( $patrons->next->borrowernumber, $patron_12->borrowernumber, "Returns the correct patron" );
+    };
+
+    subtest 'Test too_old parameter' => sub {
+        plan tests => 2;
+
+        my $patrons = Koha::Patrons->search_patrons_to_update_category(
+            {
+                from    => $category_code,
+                too_old => 1,
+            }
+        );
+
+        is( $patrons->count,                1,                          "Returns patrons who are too old" );
+        is( $patrons->next->borrowernumber, $patron_18->borrowernumber, "Returns the correct patron" );
+    };
+
+    subtest 'Test fine_min parameter' => sub {
+        plan tests => 2;
+
+        my $patrons = Koha::Patrons->search_patrons_to_update_category(
+            {
+                from     => $category_code,
+                fine_min => 10.00,
+            }
+        );
+
+        is( $patrons->count, 3, "Returns patrons with fines >= 10.00" );
+        cmp_bag(
+            [ $patrons->get_column('borrowernumber') ],
+            [ $patron_17->borrowernumber, $patron_18->borrowernumber, $patron_no_dob->borrowernumber ],
+            "Returns the correct patrons"
+        );
+    };
+
+    subtest 'Test fine_max parameter' => sub {
+        plan tests => 2;
+
+        my $patrons = Koha::Patrons->search_patrons_to_update_category(
+            {
+                from     => $category_code,
+                fine_max => 10.00,
+            }
+        );
+
+        is( $patrons->count, 3, "Returns patrons with fines <= 10.00" );
+        cmp_bag(
+            [ $patrons->get_column('borrowernumber') ],
+            [ $patron_12->borrowernumber, $patron_13->borrowernumber, $patron_17->borrowernumber ],
+            "Returns the correct patrons"
+        );
+    };
+
+    subtest 'Test combining age and fine criteria' => sub {
+        plan tests => 2;
+
+        my $patrons = Koha::Patrons->search_patrons_to_update_category(
+            {
+                from     => $category_code,
+                too_old  => 1,
+                fine_min => 15.00,
+            }
+        );
+
+        is( $patrons->count,                1,                          "Returns too old patrons with fines >= 15.00" );
+        is( $patrons->next->borrowernumber, $patron_18->borrowernumber, "Returns the correct patron" );
+    };
+
+    subtest 'Test with empty result' => sub {
+        plan tests => 1;
+
+        my $patrons = Koha::Patrons->search_patrons_to_update_category(
+            {
+                from      => $category_code,
+                too_young => 1,
+                fine_max  => 1.00,
+            }
+        );
+
+        is( $patrons->count, 0, "Returns no patrons when criteria don't match any" );
+    };
+
+    subtest 'Test having both age and fine criteria with multiple matches' => sub {
+        plan tests => 2;
+
+        # Add another patron who is both too young and has fines
+        my $another_young = $builder->build_object(
+            {
+                class => 'Koha::Patrons',
+                value => {
+                    categorycode => $category_code,
+                    dateofbirth  => $current_dt->clone->subtract( years => 12 )->subtract( months => 6 )->ymd,
+                }
+            }
+        );
+
+        add_fines( $another_young->borrowernumber, 7.50 );
+
+        my $patrons = Koha::Patrons->search_patrons_to_update_category(
+            {
+                from      => $category_code,
+                too_young => 1,
+                fine_min  => 5.00,
+            }
+        );
+
+        is( $patrons->count, 2, "Returns too young patrons with fines >= 5.00" );
+        cmp_bag(
+            [ $patrons->get_column('borrowernumber') ],
+            [ $patron_12->borrowernumber, $another_young->borrowernumber ],
+            "Returns the correct patrons"
+        );
+    };
+
+    subtest 'Test edge cases with date calculations' => sub {
+        plan tests => 4;
+
+        # Test edge case: Patron exactly at minimum age
+        my $edge_min = $builder->build_object(
+            {
+                class => 'Koha::Patrons',
+                value => {
+                    categorycode => $category_code,
+                    dateofbirth  => $current_dt->clone->subtract( years => $category->dateofbirthrequired )->ymd,
+                }
+            }
+        );
+
+        # Test edge case: Patron exactly at upper age limit
+        my $edge_max = $builder->build_object(
+            {
+                class => 'Koha::Patrons',
+                value => {
+                    categorycode => $category_code,
+                    dateofbirth  => $current_dt->clone->subtract( years => $category->upperagelimit )->ymd,
+                }
+            }
+        );
+
+        # Test edge case: Patron one day younger than minimum age
+        my $edge_too_young = $builder->build_object(
+            {
+                class => 'Koha::Patrons',
+                value => {
+                    categorycode => $category_code,
+                    dateofbirth  =>
+                        $current_dt->clone->subtract( years => $category->dateofbirthrequired )->add( days => 1 )->ymd,
+                }
+            }
+        );
+
+        # Test edge case: Patron one day older than upper age limit
+        my $edge_too_old = $builder->build_object(
+            {
+                class => 'Koha::Patrons',
+                value => {
+                    categorycode => $category_code,
+                    dateofbirth  =>
+                        $current_dt->clone->subtract( years => $category->upperagelimit + 1 )->subtract( days => 1 )
+                        ->ymd,
+                }
+            }
+        );
+
+        # Test too_young with edge cases
+        my $patrons = Koha::Patrons->search_patrons_to_update_category(
+            {
+                from      => $category_code,
+                too_young => 1,
+            }
+        );
+
+        my @too_young_patrons = $patrons->get_column('borrowernumber');
+        ok(
+            ( grep { $_ eq $edge_too_young->borrowernumber } @too_young_patrons ),
+            "Patron one day younger than min age is marked as too young"
+        );
+        ok(
+            !( grep { $_ eq $edge_min->borrowernumber } @too_young_patrons ),
+            "Patron exactly at min age is not marked as too young"
+        );
+
+        # Test too_old with edge cases
+        $patrons = Koha::Patrons->search_patrons_to_update_category(
+            {
+                from    => $category_code,
+                too_old => 1,
+            }
+        );
+
+        my @too_old_patrons = $patrons->get_column('borrowernumber');
+        ok(
+            ( grep { $_ eq $edge_too_old->borrowernumber } @too_old_patrons ),
+            "Patron just above upper age limit is marked as too old"
+        );
+        ok(
+            !( grep { $_ eq $edge_max->borrowernumber } @too_old_patrons ),
+            "Patron exactly at upper age limit is not marked as too old"
+        );
+    };
+
+    $schema->storage->txn_rollback();
 };
 
 subtest 'queue_notice' => sub {
