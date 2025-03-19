@@ -109,11 +109,11 @@ Supply a number and only account with fines under this number will be updated.
 
 =item B<--regbefore=date | -rb=date>
 
-Enter a date in ISO format YYYY-MM-DD and only patrons registered before this date FIXME CODESPELL (wil ==> will, well) be updated.
+Enter a date in ISO format YYYY-MM-DD and only patrons registered before this date will be updated.
 
 =item B<--regafter=date | -ra=date>
 
-Enter a date in ISO format YYYY-MM-DD and only patrons registered after this date FIXME CODESPELL (wil ==> will, well) be updated.
+Enter a date in ISO format YYYY-MM-DD and only patrons registered after this date will be updated.
 
 =item B<--field column=value | -d column=value>
 

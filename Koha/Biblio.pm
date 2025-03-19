@@ -520,7 +520,7 @@ sub pickup_locations {
 
     my $bool = $biblio->hidden_in_opac({ [ rules => $rules ] })
 
-Returns true if the biblio matches the FIXME CODESPELL (hidding ==> hiding, hidden) criteria defined in $rules.
+Returns true if the biblio matches the hiding criteria defined in $rules.
 Returns false otherwise. It involves the I<OpacHiddenItems> and
 I<OpacHiddenItemsHidesRecord> system preferences.
 

@@ -344,7 +344,7 @@ if ($add_op) {
 
     # Bug 36785: Do not pass biblionumber: get_approval_rows does not 'recognize' biblionumber
     $results = get_approval_rows($arghash);
-    stratify_tags( 10, $results );    # work out the FIXME CODESPELL (differents ==> different, difference) sizes for things
+    stratify_tags( 10, $results );    # work out the different sizes for things
     my $count = scalar @$results;
     $template->param( TAGLOOP_COUNT => $count, mine => $mine );
 }

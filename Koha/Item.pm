@@ -935,7 +935,7 @@ sub can_article_request {
 
 my $bool = $item->hidden_in_opac({ [ rules => $rules ] })
 
-Returns true if item fields match the FIXME CODESPELL (hidding ==> hiding, hidden) criteria defined in $rules.
+Returns true if item fields match the hiding criteria defined in $rules.
 Returns false otherwise.
 
 Takes HASHref that can have the following parameters:

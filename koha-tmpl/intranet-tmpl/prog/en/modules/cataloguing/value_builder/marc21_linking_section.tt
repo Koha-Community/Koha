@@ -84,33 +84,33 @@
                         <th>Concise description</th>
                         <th>&nbsp;</th>
                     </tr>
-                    [% FOREACH result IN resultt %]
-                        [% IF ( result.title ) %]
+                    [% FOREACH line IN result %]
+                        [% IF ( line.title ) %]
                             <tr>
                                 [% SET td_class = '' %]
-                                [% IF ( result.even ) %]
+                                [% IF ( line.even ) %]
                                     [% td_class = 'hilighted' %]
                                 [% END %]
                                 <td class="[% td_class | html %]">
-                                    [% IF ( result.MARC_ON ) %]
-                                        <a class="transparent resultttlist" href="/cgi-bin/koha/MARCdetail.pl?biblionumber=[% resultt.biblionumber |url %]">[% resultt.title | html %]</a>
+                                    [% IF ( line.MARC_ON ) %]
+                                        <a class="transparent resultlist" href="/cgi-bin/koha/MARCdetail.pl?biblionumber=[% line.biblionumber |url %]">[% line.title | html %]</a>
                                     [% ELSE %]
-                                        <a class="transparent resultttlist" href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% resultt.biblionumber |url %]">[% resultt.title | html %]</a>
+                                        <a class="transparent resultlist" href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% line.biblionumber |url %]">[% line.title | html %]</a>
                                     [% END %]
                                     <p
-                                        >[% result.author | html %]
-                                        [% IF ( resultt.publishercode ) %]- [% resultt.publishercode | html %][% END %]
-                                        [% IF ( resultt.place ) %]; [% resultt.place | html %][% END %]
-                                        [% IF ( resultt.pages ) %]- [% resultt.pages | html %][% END %]
-                                        [% IF ( resultt.notes ) %]: [% resultt.notes | html %][% END %]
-                                        [% IF ( resultt.size ) %]; [% resultt.size | html %][% END %]
+                                        >[% line.author | html %]
+                                        [% IF ( line.publishercode ) %]- [% line.publishercode | html %][% END %]
+                                        [% IF ( line.place ) %]; [% line.place | html %][% END %]
+                                        [% IF ( line.pages ) %]- [% line.pages | html %][% END %]
+                                        [% IF ( line.notes ) %]: [% line.notes | html %][% END %]
+                                        [% IF ( line.size ) %]; [% line.size | html %][% END %]
                                     </p>
                                 </td>
 
                                 <td>
-                                    [% IF ( result.biblionumber ) %]
+                                    [% IF ( line.biblionumber ) %]
                                         <a
-                                            href="javascript:jumpfull('/cgi-bin/koha/cataloguing/plugin_launcher.pl?plugin_name=marc21_linking_section.pl&amp;index=[% index | uri %]&amp;biblionumber=[% result.biblionumber | uri %]&amp;type=intranet&amp;op=fillinput')"
+                                            href="javascript:jumpfull('/cgi-bin/koha/cataloguing/plugin_launcher.pl?plugin_name=marc21_linking_section.pl&amp;index=[% index | uri %]&amp;biblionumber=[% line.biblionumber | uri %]&amp;type=intranet&amp;op=fillinput')"
                                             >Choose</a
                                         >
                                     [% ELSE %]

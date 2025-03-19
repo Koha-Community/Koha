@@ -202,7 +202,7 @@ unless ( defined $days ) {
     $days = 0;
 }
 
-# Unless one ore more branchcodes are passed we use all the branches
+# Unless one or more branchcodes are passed we use all the branches
 if ( scalar @branchcodes > 0 ) {
     my $branchcodes_word = scalar @branchcodes > 1 ? 'branches' : 'branch';
     $verbose and warn "$branchcodes_word @branchcodes passed on parameter\n";

@@ -1574,8 +1574,8 @@ AddIssue does the following things :
               - fill recall if recall to this patron
               - cancel recall or not
               - revert recall's waiting status or not
-          * FIXME CODESPELL (TRANSFERT ==> TRANSFER, TRANSFERRED) PENDING ?
-              - complete the FIXME CODESPELL (transfert ==> transfer, transferred)
+          * TRANSFER PENDING ?
+              - complete the transfer
           * ISSUE THE BOOK
 
 =back
@@ -1704,7 +1704,7 @@ sub AddIssue {
 
             C4::Reserves::MoveReserve( $item_object->itemnumber, $patron->borrowernumber, $cancelreserve );
 
-            # Starting process for transfer job (checking FIXME CODESPELL (transfert ==> transfer, transferred) and validate it if we have one)
+            # Starting process for transfer job (checking transfer and validate it if we have one)
             if ( my $transfer = $item_object->get_transfer ) {
 
                 # updating line of branchtranfert to finish it, and changing the to branch value, implement a comment for visibility of this case (maybe for stats ....)

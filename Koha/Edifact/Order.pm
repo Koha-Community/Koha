@@ -776,7 +776,7 @@ Make handling of GIR segments more customizable
     pass the string 'new'.
     In practice we encode 1 message per transmission so there is only one message
     referenced. were we to encode multiple messages a new reference would be
-    FIXME CODESPELL (neaded ==> needed, kneaded, headed) for each
+    needed for each
 
 =head2 message_header
 

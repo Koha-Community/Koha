@@ -257,7 +257,7 @@ if ( $op =~ /cud-save/ ) {
             my $suggestions = Koha::Suggestions->search_limited($suggestion_only);
             if ( $suggestions->count ) {
 
-                #some suggestion are answering the request FIXME CODESPELL (Donot ==> Do not, Donut) Add
+                #some suggestion are answering the request, do not add
                 my @messages;
                 while ( my $suggestion = $suggestions->next ) {
                     push @messages, { type => 'error', code => 'already_exists', id => $suggestion->suggestionid };

@@ -89,36 +89,36 @@
                     <th>Location</th>
                     <th>&nbsp;</th>
                 </tr>
-                [% FOREACH result IN resultt %]
-                    [% IF ( result.title ) %]
+                [% FOREACH line IN result %]
+                    [% IF ( line.title ) %]
                         <tr>
                             [% SET td_class = '' %]
-                            [% IF ( result.even ) %]
+                            [% IF ( line.even ) %]
                                 [% td_class = 'hilighted' %]
                             [% END %]
                             <td class="[% td_class | html %]">
-                                [% IF ( result.MARC_ON ) %]
-                                    <a class="transparent resultttlist" href="/cgi-bin/koha/MARCdetail.pl?biblionumber=[% resultt.biblionumber |url %]">[% resultt.title | html %]</a>
+                                [% IF ( line.MARC_ON ) %]
+                                    <a class="transparent resultlist" href="/cgi-bin/koha/MARCdetail.pl?biblionumber=[% line.biblionumber |url %]">[% line.title | html %]</a>
                                 [% ELSE %]
-                                    <a class="transparent resultttlist" href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% resultt.biblionumber |url %]">[% resultt.fulltitle | html %]</a>
+                                    <a class="transparent resultlist" href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% line.biblionumber |url %]">[% line.fulltitle | html %]</a>
                                 [% END %]
                                 <p
-                                    >[% result.author | html %]
-                                    [% IF ( resultt.publishercode ) %]- [% resultt.publishercode | html %][% END %]
-                                    [% IF ( resultt.place ) %]; [% resultt.place | html %][% END %]
-                                    [% IF ( resultt.pages ) %]- [% resultt.pages | html %][% END %]
-                                    [% IF ( resultt.notes ) %]: [% resultt.notes | html %][% END %]
-                                    [% IF ( resultt.item('size') ) %]; [% resultt.item('size') | html %][% END %]
+                                    >[% line.author | html %]
+                                    [% IF ( line.publishercode ) %]- [% line.publishercode | html %][% END %]
+                                    [% IF ( line.place ) %]; [% line.place | html %][% END %]
+                                    [% IF ( line.pages ) %]- [% line.pages | html %][% END %]
+                                    [% IF ( line.notes ) %]: [% line.notes | html %][% END %]
+                                    [% IF ( line.item('size') ) %]; [% line.item('size') | html %][% END %]
                                 </p>
                             </td>
-                            <td align="center" class="[% td_class | html %]"> [% result.totitem | html %] </td>
-                            <td class="[% td_class | html %]"> [% result.CN | html %] </td>
+                            <td align="center" class="[% td_class | html %]"> [% line.totitem | html %] </td>
+                            <td class="[% td_class | html %]"> [% line.CN | html %] </td>
                             <td>
-                                [% IF ( result.biblionumber ) %]
+                                [% IF ( line.biblionumber ) %]
                                     <a
                                         href="#"
                                         class="btn btn-default btn-xs redirect_link"
-                                        data-url="/cgi-bin/koha/cataloguing/plugin_launcher.pl?plugin_name=unimarc_field_4XX.pl&amp;index=[% index | html %]&amp;biblionumber=[% result.biblionumber | html %]&amp;type=intranet&amp;op=fillinput"
+                                        data-url="/cgi-bin/koha/cataloguing/plugin_launcher.pl?plugin_name=unimarc_field_4XX.pl&amp;index=[% index | html %]&amp;biblionumber=[% line.biblionumber | html %]&amp;type=intranet&amp;op=fillinput"
                                         >Choose</a
                                     >
                                 [% ELSE %]

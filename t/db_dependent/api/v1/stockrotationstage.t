@@ -86,11 +86,11 @@ subtest 'move() tests' => sub {
     $t->put_ok( "//$unauth_userid:$password@/api/v1/rotas/$rota_id/stages/$stage1_id/position" => json => 2 )
         ->status_is(403);
 
-    # Invalid attempt to move a stage on a non-existant rota
+    # Invalid attempt to move a stage on a non-existent rota
     $t->put_ok( "//$auth_userid:$password@/api/v1/rotas/99999999/stages/$stage1_id/position" => json => 2 )
         ->status_is(404)->json_is( '/error' => "Rota not found" );
 
-    # Invalid attempt to move an non-existant stage
+    # Invalid attempt to move an non-existent stage
     $t->put_ok( "//$auth_userid:$password@/api/v1/rotas/$rota_id/stages/999999999/position" => json => 2 )
         ->status_is(404)->json_is( '/error' => "Stage not found" );
 

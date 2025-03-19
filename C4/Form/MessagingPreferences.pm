@@ -156,7 +156,7 @@ PREF: foreach my $option (@$messaging_options) {
 
 =item Handle when form input is invalid
 
-=item Generalize into a system of form handler FIXME CODESPELL (clases ==> classes, clashes, cases)
+=item Generalize into a system of form handler classes
 
 =back
 

@@ -32,12 +32,12 @@ my $schema  = Koha::Database->new->schema;
 
 $schema->storage->txn_begin;
 
-subtest 'transfer a non-existant item' => sub {
+subtest 'transfer a non-existent item' => sub {
     plan tests => 2;
 
     my $library = $builder->build( { source => 'Branch' } );
 
-    #FIXME CODESPELL (Transfert ==> Transfer, Transferred) on unknown barcode
+    #Transfer on unknown barcode
     my $item  = $builder->build_sample_item();
     my $badbc = $item->barcode;
     $item->delete;

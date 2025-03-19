@@ -68,15 +68,15 @@
                 <th>Used</th>
                 <th>Get it!</th>
             </tr>
-            [% FOREACH result IN resultt %]
+            [% FOREACH line IN result %]
                 <tr>
-                    <td>[% PROCESS authresulttt summary=resultt.summary authid=resultt.authid %]</td>
-                    <td>[% result.summary.label | html %]</td>
-                    <td>[% result.used | html %] times</td>
+                    <td>[% PROCESS authresult summary=line.summary authid=line.authid %]</td>
+                    <td>[% line.summary.label | html %]</td>
+                    <td>[% line.used | html %] times</td>
                     <td>
-                        [% IF ( result.to_report ) %]
+                        [% IF ( line.to_report ) %]
                             <button class="choosebt">Choose</button>
-                            <p class="toreport" style="display:none">[% result.to_report |replace('\n', '\\n') |replace('\r', '\\r') |html %]</p>
+                            <p class="toreport" style="display:none">[% line.to_report |replace('\n', '\\n') |replace('\r', '\\r') |html %]</p>
                         [% END %]
                     </td>
                 </tr>

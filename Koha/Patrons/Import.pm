@@ -768,9 +768,9 @@ sub format_dates {
     my ( $self, $params ) = @_;
 
     foreach my $date_type (qw(dateofbirth dateenrolled dateexpiry date_renewed)) {
-        my $template = $params->{borrower}->{$date_type} or next();
+        my $tmp_date = $params->{borrower}->{$date_type} or next();
         my $formatted_date =
-            eval { output_pref( { dt => dt_from_string($template), dateonly => 1, dateformat => 'iso' } ); };
+            eval { output_pref( { dt => dt_from_string($tmp_date), dateonly => 1, dateformat => 'iso' } ); };
 
         if ($formatted_date) {
             $params->{borrower}->{$date_type} = $formatted_date;

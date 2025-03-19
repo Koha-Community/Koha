@@ -534,7 +534,7 @@ if ( $messages->{'Wrongbranch'} ) {
     );
 }
 
-# case of wrong FIXME CODESPELL (transfert ==> transfer, transferred), if the document wasn't transferred to the right library (according to branchtransfer (tobranch) BDD)
+# case of wrong transfer, if the document wasn't transferred to the right library (according to branchtransfer (tobranch) BDD)
 
 if ( $messages->{'WrongTransfer'} and not $messages->{'WasTransfered'} ) {
 

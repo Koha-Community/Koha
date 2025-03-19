@@ -142,7 +142,7 @@ not the borrower has an email address. This can be useful for libraries that
 prefer to deal with print notices.
 
 Notices can contain variables enclosed in double angle brackets like
-E<lt>E<lt>FIXME CODESPELL (thisE ==> these, this)<gt>E<gt>. Those variables will be replaced with values
+<<this>>. Those variables will be replaced with values
 specific to the soon expiring members.
 Available variables are:
 

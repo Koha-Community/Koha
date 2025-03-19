@@ -255,7 +255,7 @@ sub index_status {
 Generate Elasticsearch mappings from mappings stored in database and
 perform a request to update Elasticsearch index mappings. Will throw an
 error and set index status to C<INDEX_STATUS_RECREATE_REQUIRED> if update
-fails.
+failed.
 
 =cut
 

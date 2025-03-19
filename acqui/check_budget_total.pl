@@ -26,7 +26,7 @@ use C4::Budgets qw( GetBudget );
 
 =head1 DESCRIPTION
 
-fetches the budget amount FIXME CODESPELL (fron ==> from, front) the DB
+fetches the budget amount from the DB
 
 =cut
 

@@ -186,7 +186,7 @@ if ( $op eq "cud-add_confirm" ) {
         push @messages, { type => 'error', code => 'too_many' };
     } elsif ( $suggestions->count >= 1 ) {
 
-        #some suggestion are answering the request FIXME CODESPELL (Donot ==> Do not, Donut) Add
+        #some suggestion are answering the request, do not add
         while ( my $suggestion = $suggestions->next ) {
             push @messages,
                 {

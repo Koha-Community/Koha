@@ -197,9 +197,9 @@
             <option value="ctype:l">Legislation</option>
         [% END %]
         [% IF (limits.ctype.0 == 'm' ) %]
-            <option value="ctype:m" selected="selected">FIXME CODESPELL (Theses ==> These, Thesis)</option>
+            <option value="ctype:m" selected="selected">Thesis</option>
         [% ELSE %]
-            <option value="ctype:m">FIXME CODESPELL (Theses ==> These, Thesis)</option>
+            <option value="ctype:m">Thesis</option>
         [% END %]
         [% IF (limits.ctype.0 == 'n' ) %]
             <option value="ctype:n" selected="selected">Surveys</option>

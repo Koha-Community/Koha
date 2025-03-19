@@ -44,7 +44,7 @@
             [% IF ( HOLD.is_at_destination ) %]
                 [% tr_class = 'reserved' %]
             [% ELSIF HOLD.is_in_transit %]
-                [% tr_class = 'transfered' %]
+                [% tr_class = 'transferred' %]
             [% END %]
             <tr class="[% tr_class | html %]">
                 <td class="title">

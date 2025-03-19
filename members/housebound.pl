@@ -122,7 +122,7 @@ if ( $op eq 'cud-updateconfirm' and $houseboundprofile ) {
     $houseboundvisit = $visit;
 } elsif ( $op eq 'cud-visit_delete' and $visit ) {
 
-    # We want ot delete a specific visit.
+    # We want to delete a specific visit.
     my $success = eval { return $visit->delete };
     push @messages, { type => 'error', code => 'error_on_visit_delete' }
         if ( $@ or !$success );

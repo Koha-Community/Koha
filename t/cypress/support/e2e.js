@@ -1298,7 +1298,7 @@ cy.get_title = () => {
         num_last_vol_online: "num last vol",
         online_identifier: "online identifier",
         parent_publication_title_id: "parent id",
-        preceding_publication_title_id: "FIXME CODESPELL (preceeding ==> preceding, proceeding) id",
+        preceding_publication_title_id: "preceding id",
         print_identifier: "print identifier",
         publication_title: "publication title",
         publication_type: "journal",

@@ -264,7 +264,7 @@ sub marc2dcxml {
     my ( $marcxml, $record, $output );
 
     # set the default path for intranet xslts
-    # FIXME CODESPELL (differents ==> different, difference) xslts to process (OAIDC, SRWDC and RDFDC)
+    # different xslts to process (OAIDC, SRWDC and RDFDC)
     my $xsl =
           C4::Context->config('intrahtdocs')
         . '/prog/en/xslt/'

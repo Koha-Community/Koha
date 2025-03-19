@@ -3,10 +3,10 @@
     // If we're working with an existing batch, set the ID so the
     // modal can access it
     window.openBatchModal = function (id, backend) {
-        var idle = document.getElementById("ill-batch-details");
-        idle.dataset.backend = backend;
+        var elId = document.getElementById("ill-batch-details");
+        elId.dataset.backend = backend;
         if (id) {
-            idle.dataset.batchId = id;
+            elId.dataset.batchId = id;
         }
         $("#ill-batch-modal").modal("show");
     };

@@ -83,7 +83,7 @@ subtest 'ModBiblio() + holds_queue update tests' => sub {
         $biblio->frameworkcode, { skip_holds_queue => 0 }
     );
 
-    # this call FIXME CODESPELL (shoul ==> should, shoal, shawl) not trigger the mocked 'enqueue'
+    # this call should not trigger the mocked 'enqueue'
     C4::Biblio::ModBiblio(
         $biblio->metadata->record, $biblio->id,
         $biblio->frameworkcode, { skip_holds_queue => 1 }

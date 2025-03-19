@@ -778,7 +778,7 @@ sub pri_price {
     return;
 }
 
-# unit price that will be FIXME CODESPELL (chaged ==> changed, charged) excl tax
+# unit price that will be charged excl tax
 
 sub price_net {
     my $self = shift;

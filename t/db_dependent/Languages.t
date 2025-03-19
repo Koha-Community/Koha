@@ -27,7 +27,7 @@ my $schema = Koha::Database->new->schema;
 $schema->storage->txn_begin;
 my $dbh = C4::Context->dbh;
 
-isnt( C4::Languages::_get_themes(), undef, 'testing _get_themes FIXME CODESPELL (doesnt ==> doesn't, does not) return undef' );
+isnt( C4::Languages::_get_themes(), undef, 'testing _get_themes does not return undef' );
 
 ok( C4::Languages::_get_language_dirs(), 'test getting _get_language_dirs' );
 

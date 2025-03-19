@@ -2059,7 +2059,7 @@ subtest "Bug 13841 - Do not create new 0 amount fines" => sub {
     );
     my $count = $hr->{count};
 
-    is( $count, 0, "Calling UpdateFine on non-existant fine with an amount of 0 does not result in an empty fine" );
+    is( $count, 0, "Calling UpdateFine on non-existent fine with an amount of 0 does not result in an empty fine" );
 };
 
 subtest "AllowRenewalIfOtherItemsAvailable tests" => sub {

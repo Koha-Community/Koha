@@ -176,7 +176,7 @@ isa_ok( $set, 'HASH', '$set is a hash describing the set whose spec is $oai_sets
 is( $set->{spec}, 'specSet2', 'spec field is "specSet2"' );
 is( $set->{name}, 'nameSet2', 'name field is "nameSet2"' );
 
-#GetOAISetBySpec does't return the description field.
+#GetOAISetBySpec does not return the description field.
 
 # ---------- Testing ModOAISet ------------------
 ok( !defined(ModOAISet), 'ModOAISet without argument is undef' );

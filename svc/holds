@@ -125,7 +125,7 @@ while ( my $h = $holds_rs->next() ) {
     };
 
     $hold->{transferred}     = 0;
-    $hold->{not_transfered} = 0;
+    $hold->{not_transferred} = 0;
 
     if ($item) {
         $hold->{itemnumber}           = $item->itemnumber();

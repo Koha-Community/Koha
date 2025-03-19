@@ -93,19 +93,19 @@
                     <th>Get it!</th>
                     <th>Other action</th>
                 </tr>
-                [% FOREACH result IN resultt %]
+                [% FOREACH line IN result %]
                     <tr>
                         <td>
-                            [% IF result.html %]
-                                [% result.html | $raw %]
+                            [% IF line.html %]
+                                [% line.html | $raw %]
                             [% ELSE %]
-                                [% PROCESS authresulttt summary=resultt.summary authid=resultt.authid auth_preview=1 %]
+                                [% PROCESS authresult summary=line.summary authid=line.authid auth_preview=1 %]
                             [% END %]
                         </td>
-                        <td>[% result.summary.label | html %]</td>
+                        <td>[% line.summary.label | html %]</td>
                         <td>
-                            [% IF result.used > 0 %]
-                                <a href="/cgi-bin/koha/catalogue/search.pl?type=intranet&amp;op=do_search&amp;idx=an,phr&amp;q=[% resultt.authid | uri %]" class="button">[% resultt.used | html %] times</a>
+                            [% IF line.used > 0 %]
+                                <a href="/cgi-bin/koha/catalogue/search.pl?type=intranet&amp;op=do_search&amp;idx=an,phr&amp;q=[% line.authid | uri %]" class="button">[% line.used | html %] times</a>
                             [% ELSE %]
                                 0 times
                             [% END %]
@@ -113,23 +113,23 @@
                         [% IF Koha.Preference('ShowHeadingUse') %]
                             <td class="heading_use"
                                 ><ul class="usefor">
-                                    <li>[% IF result.main %]<i class="fa fa-check"></i>[% ELSE %]<i class="fa fa-times"></i>[% END %] Main/Added Entry</li>
-                                    <li>[% IF result.subject %]<i class="fa fa-check"></i>[% ELSE %]<i class="fa fa-times"></i>[% END %] Subject</li>
-                                    <li>[% IF result.series %]<i class="fa fa-check"></i>[% ELSE %]<i class="fa fa-times"></i>[% END %] Series Title</li>
+                                    <li>[% IF line.main %]<i class="fa fa-check"></i>[% ELSE %]<i class="fa fa-times"></i>[% END %] Main/Added Entry</li>
+                                    <li>[% IF line.subject %]<i class="fa fa-check"></i>[% ELSE %]<i class="fa fa-times"></i>[% END %] Subject</li>
+                                    <li>[% IF line.series %]<i class="fa fa-check"></i>[% ELSE %]<i class="fa fa-times"></i>[% END %] Series Title</li>
                                 </ul></td
                             >
                         [% END %]
                         <td>
-                            [% IF resulttt.summary && resulttt.summary.authorized && resulttt.summary.authorized.size > 1 %]
-                                [% FOREACH authorized IN result.summary.authorized %]
-                                    <a href="javascript:doauth('[% result.authid | uri %]', '[% index | uri %]', '[% loop.count | uri %]')" title="[% authorized.heading | html %]">[% loop.count | html %]</a>
+                            [% IF line.summary && line.summary.authorized && line.summary.authorized.size > 1 %]
+                                [% FOREACH authorized IN line.summary.authorized %]
+                                    <a href="javascript:doauth('[% line.authid | uri %]', '[% index | uri %]', '[% loop.count | uri %]')" title="[% authorized.heading | html %]">[% loop.count | html %]</a>
                                 [% END %]
                             [% ELSE %]
-                                <a class="btn btn-xs btn-default" href="javascript:doauth('[% result.authid | html %]', '[% index | html %]', '')"><i class="fa fa-plus"></i> Choose</a>
+                                <a class="btn btn-xs btn-default" href="javascript:doauth('[% line.authid | html %]', '[% index | html %]', '')"><i class="fa fa-plus"></i> Choose</a>
                             [% END %]
                         </td>
                         <td
-                            ><a class="btn btn-xs btn-default" href="authorities.pl?authid=[% result.authid | html %]"><i class="fa-solid fa-pencil" aria-hidden="true"></i> Edit authority</a></td
+                            ><a class="btn btn-xs btn-default" href="authorities.pl?authid=[% line.authid | html %]"><i class="fa-solid fa-pencil" aria-hidden="true"></i> Edit authority</a></td
                         >
                     </tr>
                 [% END %]

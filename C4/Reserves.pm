@@ -59,7 +59,7 @@ C4::Reserves - Koha functions for dealing with reservation.
 
 =head1 DESCRIPTION
 
-This modules provides FIXME CODESPELL (somes ==> some, sums) functions to deal with reservations.
+This modules provides some functions to deal with reservations.
 
   Reserves are stored in reserves table.
   The following columns contains important values :

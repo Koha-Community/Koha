@@ -251,7 +251,7 @@ for ( my $tabloop = 0 ; $tabloop <= 10 ; $tabloop++ ) {
 # now, build item tab !
 # the main difference is that datas are in lines and not in columns : thus, we build the <th> first, then the values...
 # loop through each tag
-# warning : we may have FIXME CODESPELL (differents ==> different, difference) number of columns in each row. Thus, we first build a hash, complete it if necessary
+# warning : we may have different number of columns in each row. Thus, we first build a hash, complete it if necessary
 # then construct template.
 my @fields = $record->fields();
 my %witness;    #---- stores the list of subfields used at least once, with the "meaning" of the code

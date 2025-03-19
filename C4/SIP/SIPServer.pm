@@ -55,13 +55,13 @@ my %transports = (
 # Read configuration
 #
 my $config = C4::SIP::Sip::Configuration->new( $ARGV[0] );
-my @FIXME CODESPELL (parms ==> params, prams);
+my @params;
 
 #
 # Ports to bind
 #
 foreach my $svc ( keys %{ $config->{listeners} } ) {
-    push @FIXME CODESPELL (parms ==> params, prams), "port=" . $svc;
+    push @params, "port=" . $svc;
 }
 
 #
@@ -81,17 +81,17 @@ foreach my $svc ( keys %{ $config->{listeners} } ) {
 #
 if ( defined( $config->{'server-params'} ) ) {
     while ( my ( $key, $val ) = each %{ $config->{'server-params'} } ) {
-        push @FIXME CODESPELL (parms ==> params, prams), $key . '=' . $val;
+        push @params, $key . '=' . $val;
     }
 }
 
 # Add user and group to prevent warn from Net::Server.
-push @FIXME CODESPELL (parms ==> params, prams), 'user=' . $>;
-push @FIXME CODESPELL (parms ==> params, prams), 'group=' . $>;
+push @params, 'user=' . $>;
+push @params, 'group=' . $>;
 
 #
 # This is the main event.
-__PACKAGE__->run(@FIXME CODESPELL (parms ==> params, prams));
+__PACKAGE__->run(@params);
 
 #
 # Server

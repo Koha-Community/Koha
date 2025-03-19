@@ -359,7 +359,7 @@ sub _version_compare {
 
 =head2 is_enabled
 
-Method that returns FIXME CODESPELL (wether ==> weather, whether) the plugin is enabled or not
+Method that returns whether the plugin is enabled or not
 
 $plugin->enable
 

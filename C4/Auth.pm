@@ -1032,7 +1032,7 @@ sub checkauth {
     if ($logout) {
 
         # voluntary logout the user
-        # check FIXME CODESPELL (wether ==> weather, whether) the user was using their shibboleth session or a local one
+        # check whether the user was using their shibboleth session or a local one
         my $shibSuccess = C4::Context->userenv ? C4::Context->userenv->{'shibboleth'} : undef;
         if ($session) {
             $session->delete();

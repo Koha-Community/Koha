@@ -140,7 +140,7 @@
 
     // The element that potentially holds the ID of the batch
     // we're working with
-    var idle = document.getElementById("ill-batch-details");
+    var elId = document.getElementById("ill-batch-details");
     var batchId = null;
     var backend = null;
 
@@ -157,8 +157,8 @@
         $("#ill-batch-modal").on("hidden.bs.modal", function () {
             // Reset our state when we close the modal
             // TODO: need to also reset progress bar and already processed identifiers
-            delete idle.dataset.batchId;
-            delete idle.dataset.backend;
+            delete elId.dataset.batchId;
+            delete elId.dataset.backend;
             batchId = null;
             tableEl.style.display = "none";
             tableContent.data = [];
@@ -176,8 +176,8 @@
     }
 
     function init() {
-        batchId = idle.dataset.batchId;
-        backend = idle.dataset.backend;
+        batchId = elId.dataset.batchId;
+        backend = elId.dataset.backend;
         emptyBatch.backend = backend;
         progressTotals.data = {
             total: 0,
@@ -714,9 +714,9 @@
         var tabIdentifiers = tableContent.data.map(function (tabId) {
             return tabId.value;
         });
-        var notInTable = deaduped.filter(function (dead) {
-            if (!tabIdentifiers.includes(dead.value)) {
-                return dead;
+        var notInTable = deduped.filter(function (d) {
+            if (!tabIdentifiers.includes(d.value)) {
+                return d;
             }
         });
         if (notInTable.length > 0) {

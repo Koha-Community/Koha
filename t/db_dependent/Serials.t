@@ -404,7 +404,7 @@ subtest 'GetSubscriptionsFromBiblionumber' => sub {
 is( C4::Serials::GetSerials(),  undef, 'test getting serials when you enter nothing' );
 is( C4::Serials::GetSerials2(), undef, 'test getting serials when you enter nothing' );
 
-is( C4::Serials::GetLatestSerials(), undef, 'test getting FIXME CODESPELL (lastest ==> latest, last) serials' );
+is( C4::Serials::GetLatestSerials(), undef, 'test getting latest serials' );
 
 is( C4::Serials::GetNextSeq(), undef, 'test getting next seq when you enter nothing' );
 

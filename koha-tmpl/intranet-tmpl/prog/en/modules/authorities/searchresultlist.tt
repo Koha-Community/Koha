@@ -73,20 +73,20 @@
                             <th>&nbsp;</th>
                         [% END %]
                     </tr>
-                    [% FOREACH result IN resultt %]
+                    [% FOREACH line IN result %]
                         <tr data-authid="[% result.authid | html %]">
                             <td>
                                 [% IF result.html %]
                                     [% result.html | $raw %]
                                 [% ELSE %]
-                                    [% PROCESS authresulttt summary=resultt.summary authid=resultt.authid %]
+                                    [% PROCESS authresult summary=line.summary authid=line.authid %]
                                 [% END %]
                             </td>
-                            <td>[% result.authtype | html %]</td>
-                            [% UNLESS ( result.isEDITORS ) %]
+                            <td>[% line.authtype | html %]</td>
+                            [% UNLESS ( line.isEDITORS ) %]
                                 <td>
-                                    [% IF result.used > 0 %]
-                                        <a href="/cgi-bin/koha/catalogue/search.pl?type=intranet&amp;op=do_search&amp;idx=an,phr&amp;q=[% resultt.authid | uri %]" class="button">[% resultt.used | html %] record(s)</a>
+                                    [% IF line.used > 0 %]
+                                        <a href="/cgi-bin/koha/catalogue/search.pl?type=intranet&amp;op=do_search&amp;idx=an,phr&amp;q=[% line.authid | uri %]" class="button">[% line.used | html %] record(s)</a>
                                     [% ELSE %]
                                         0 records
                                     [% END %]
@@ -95,29 +95,29 @@
                             [% IF Koha.Preference('ShowHeadingUse') %]
                                 <td class="heading_use"
                                     ><ul class="usefor">
-                                        <li>[% IF result.main %]<i class="fa fa-check"></i>[% ELSE %]<i class="fa fa-times"></i>[% END %] Main/Added Entry</li>
-                                        <li>[% IF result.subject %]<i class="fa fa-check"></i>[% ELSE %]<i class="fa fa-times"></i>[% END %] Subject</li>
-                                        <li>[% IF result.series %]<i class="fa fa-check"></i>[% ELSE %]<i class="fa fa-times"></i>[% END %] Series Title</li>
+                                        <li>[% IF line.main %]<i class="fa fa-check"></i>[% ELSE %]<i class="fa fa-times"></i>[% END %] Main/Added Entry</li>
+                                        <li>[% IF line.subject %]<i class="fa fa-check"></i>[% ELSE %]<i class="fa fa-times"></i>[% END %] Subject</li>
+                                        <li>[% IF line.series %]<i class="fa fa-check"></i>[% ELSE %]<i class="fa fa-times"></i>[% END %] Series Title</li>
                                     </ul></td
                                 >
                             [% END %]
                             [% IF ( CAN_user_editauthorities ) %]
                                 <td>
                                     <div class="btn-group dropup">
-                                        <a class="btn btn-default btn-xs dropdown-toggle" id="authactions[% result.authid | html %]" role="button" data-bs-toggle="dropdown" href="#"> Actions</a>
-                                        <ul class="dropdown-menu dropdown-menu-end" role="menu" aria-labelledby="authactions[% result.authid | html %]">
+                                        <a class="btn btn-default btn-xs dropdown-toggle" id="authactions[% line.authid | html %]" role="button" data-bs-toggle="dropdown" href="#"> Actions</a>
+                                        <ul class="dropdown-menu dropdown-menu-end" role="menu" aria-labelledby="authactions[% line.authid | html %]">
                                             <li
-                                                ><a class="dropdown-item" href="/cgi-bin/koha/authorities/authorities.pl?authid=[% result.authid | uri %]"><i class="fa-solid fa-pencil" aria-hidden="true"></i> Edit</a></li
+                                                ><a class="dropdown-item" href="/cgi-bin/koha/authorities/authorities.pl?authid=[% line.authid | uri %]"><i class="fa-solid fa-pencil" aria-hidden="true"></i> Edit</a></li
                                             >
                                             <li
                                                 ><a class="merge_auth dropdown-item" href="#merge"><i class="fa fa-compress"></i> Merge</a></li
                                             >
-                                            [% UNLESS ( result.used ) %]
+                                            [% UNLESS ( line.used ) %]
                                                 <li
                                                     ><form class="form_delete" method="post" action="/cgi-bin/koha/authorities/authorities-home.pl">
                                                         [% INCLUDE 'csrf-token.inc' %]
                                                         <input type="hidden" name="op" value="cud-delete" />
-                                                        <input type="hidden" name="authid" value="[% result.authid | html %]" />
+                                                        <input type="hidden" name="authid" value="[% line.authid | html %]" />
                                                         <input type="hidden" name="type" value="intranet" />
                                                         <input type="hidden" name="authtypecode" value="[% authtypecode | html %]" />
                                                         <input type="hidden" name="marclist" value="[% marclist | html %]" />
@@ -133,7 +133,7 @@
                                                 >
                                             [% END %]
                                             <li class="authority_preview">
-                                                <a class="dropdown-item" data-authid="[% resultt.authid | html %]" href="/cgi-bin/koha/authorities/detail.pl?authid=[% resultt.authid | uri %]"><i class="fa-solid fa-eye"></i> MARC preview</a>
+                                                <a class="dropdown-item" data-authid="[% line.authid | html %]" href="/cgi-bin/koha/authorities/detail.pl?authid=[% line.authid | uri %]"><i class="fa-solid fa-eye"></i> MARC preview</a>
                                             </li>
                                         </ul>
                                     </div>

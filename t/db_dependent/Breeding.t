@@ -132,12 +132,12 @@ sub test_build_translate_query {
     is( $queries[0] =~ /$str/, 1, 'First Z39.50 query contains ISBN' );
 
     #SRU query should contain translation for ISBN
-    my $server = { sru_fields => 'isbn=ie-es-bee-en,srchany=overal' };
+    my $server = { sru_fields => 'isbn=ie-es-bee-en,srchany=overall' };
     my $squery = C4::Breeding::_translate_query( $server, $queries[1] );
     is( $squery =~ /ie-es-bee-en/, 1, 'SRU query has translated ISBN index' );
 
     #Another try with fallback to any
-    $server = { sru_fields => 'srchany=overal' };
+    $server = { sru_fields => 'srchany=overall' };
     $squery = C4::Breeding::_translate_query( $server, $queries[1] );
     is( $squery =~ /overall/, 1, 'SRU query fallback to translated any' );
 
@@ -170,7 +170,7 @@ sub test_build_translate_query {
     );
 
     #SRU revisited
-    $server = { sru_fields => 'isbn=nb,title=dc.title,srchany=overal' };
+    $server = { sru_fields => 'isbn=nb,title=dc.title,srchany=overall' };
     $squery = C4::Breeding::_translate_query( $server, $queries[1] );
     is( $squery =~ /dc.title/ && $squery =~ / and / && $squery =~ /nb=/, 1, 'SRU query with two parameters' );
 

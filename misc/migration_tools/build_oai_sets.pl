@@ -180,7 +180,7 @@ sub print_usage {
     print "build_oai_sets.pl: Build OAI-PMH sets, according to mappings defined in Koha\n";
     print "Usage: build_oai_sets.pl [-h] [-v] [-i] [-l LENGTH [-o OFFSET]]\n\n";
     print "\t-h\t\tPrint this help and exit\n";
-    print "\t-v\t\the verbose\n";
+    print "\t-v\t\t" . " Be verbose\n";
     print "\t-i\t\tEmbed items information, mandatory if you defined mappings on item fields\n";
     print "\t-l LENGTH\tProcess LENGTH biblios\n";
     print "\t-o OFFSET\tIf LENGTH is defined, start processing from OFFSET\n\n";

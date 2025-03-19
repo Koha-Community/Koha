@@ -116,11 +116,11 @@ is(
 
 try {
     my $basket_csv4 = C4::Acquisition::GetBasketAsCSV( $basketno, $query, 'non_existant_profile_id' );
-    fail("It is not possible to export basket using non-existant profile");
+    fail("It is not possible to export basket using non-existent profile");
 } catch {
     ok(
         $_->isa("Koha::Exceptions::ObjectNotFound"),
-        "Using non-existant profile should throw ObjectNotFound exception"
+        "Using non-existent profile should throw ObjectNotFound exception"
     );
 };
 

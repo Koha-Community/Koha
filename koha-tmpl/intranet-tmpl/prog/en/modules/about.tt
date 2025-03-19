@@ -272,9 +272,9 @@
     [% WRAPPER tab_panel tabname= "perl" bt_active = 1 %]
         <table style="cursor:pointer">
             <caption>Perl modules</caption>
-            [% FOREACH table IN tablee %]
+            [% FOREACH line IN table %]
                 <tr>
-                    [% FOREACH ro IN table.row %]
+                    [% FOREACH ro IN line.row %]
                         [% IF ( ro.require ) %]
                             [% SET th_font_weight = "bold" %]
                         [% ELSE %]
@@ -313,7 +313,7 @@
                         [% END %]
                     [% END # /FOREACH ro %]
                 </tr>
-            [% END # /FOREACH table %]
+            [% END # /FOREACH line %]
         </table>
     [% END # tab=perl %]
 [% END %]
@@ -1246,9 +1246,9 @@
                         <td style="font-weight:bold;">Description</td>
                     </tr>
                 </thead>
-                [% FOREACH table IN tablee2 %]
+                [% FOREACH line IN table2 %]
                     <tr class="[% loop.parity | html %]">
-                        [% FOREACH ro IN table.row2 %]
+                        [% FOREACH ro IN line.row2 %]
                             <td>[% ro.date | html %]</td>
                             <td>[% ro.desc | html %]</td>
                         [% END %]

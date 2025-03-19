@@ -2303,7 +2303,7 @@ sub TransformHtmlToMarc {
             $newfield = 0;
             my $j = $i + 2;
 
-            if ( $tag < 10 ) {    # no code for FIXME CODESPELL (theses ==> these, thesis) fields
+            if ( $tag < 10 ) {    # no code for this field
                                   # in MARC editor, 000 contains the leader.
                 next if $tag == $biblionumbertagfield;
                 my $fval = $cgi->param( $params[ $j + 1 ] );

@@ -307,8 +307,8 @@ sub _build_query {
         my @definitions = split( ',', $definition );
         my $deftext;
         foreach my $def (@definitions) {
-            my $define = get_from_dictionary( '', $def );
-            $deftext .= " " . $defin->[0]->{'saved_sql'};
+            my $report = get_from_dictionary( '', $def );
+            $deftext .= " " . $report->[0]->{'saved_sql'};
         }
         if ( $query =~ /WHERE/i ) {
             $query .= $deftext;

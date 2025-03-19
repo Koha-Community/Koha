@@ -48,9 +48,9 @@ $verbose and print "================================\n";
 $date_created_marc = '099c' unless $date_created_marc;
 my ( $c_field, $c_subfield ) = _read_marc_code($date_created_marc);
 die "date-created-marc '$date_created_marc' is not correct." unless $c_field;
-die "date-created-marc field is FIXME CODESPELL (greated ==> greater, grated, graded) that 009, it should have a subfield."
+die "date-created-marc field is greater than 009, it should have a subfield."
     if ( $c_field > 9 && !defined $c_subfield );
-die "date-created-marc field is lower that 010, it should not have a subfield."
+die "date-created-marc field is lower than 010, it should not have a subfield."
     if ( $c_field < 10 && defined $c_subfield );
 if ($verbose) {
     print "Date created on $c_field";
@@ -62,9 +62,9 @@ if ($verbose) {
 $date_modified_marc = '099d' unless $date_modified_marc;
 my ( $m_field, $m_subfield ) = _read_marc_code($date_modified_marc);
 die "date-modified-marc '$date_modified_marc' is not correct." unless $m_field;
-die "date-modified-marc field is FIXME CODESPELL (greated ==> greater, grated, graded) that 009, it should have a subfield."
+die "date-modified-marc field is greater than 009, it should have a subfield."
     if ( $m_field > 9 && !defined $m_subfield );
-die "date-modified-marc field is lower that 010, it should not have a subfield."
+die "date-modified-marc field is lower than 010, it should not have a subfield."
     if ( $m_field < 10 && defined $m_subfield );
 die "When date-created-marc and date-modified-marc are on same field, they should have distinct subfields"
     if ( $c_field eq $m_field )
