@@ -204,7 +204,10 @@ sub tidy_tt {
             $content =~ s#(\[%\s*SWITCH[^\]]*\]\n)\n#$1#g;
 
             unless ($content) {
-                return ( 0, "Something went wrong, Prettier generated an empty file.", [], [], [] );
+                return (
+                    0,  "Something went wrong, Prettier generated an empty file. The original file was kept", [],
+                    [], []
+                );
             }
             if ( $no_write && $pass == 2 ) {
                 print $content;
