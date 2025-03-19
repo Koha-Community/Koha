@@ -27,7 +27,6 @@ use constant WHEREAMI => 't/db_dependent/Record/testrecords';
 # specify the number of tests
 use Test::NoWarnings;
 use Test::More tests => 22;    #FIXME Commented out two failing tests
-#use C4::Context;
 use C4::Record qw( marc2marc marc2marcxml marc2dcxml changeEncoding );
 
 =head1 NAME
