@@ -121,7 +121,7 @@ while ( my $library = $libraries->next ) {
         }
 
         # 		If we have a return of reservloop we put it in the branchloop sequence
-        $branchloop{'reserv'} = \@transferloop;
+        $branchloop{'reserve'} = \@transferloop;
     }
     push( @branchesloop, \%branchloop ) if %branchloop;
 }
