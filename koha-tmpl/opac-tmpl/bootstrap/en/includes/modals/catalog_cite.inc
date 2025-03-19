@@ -4,12 +4,12 @@
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
-                <h3 class="modal-title" id="citeModalLabel">[% biblio.title | html %]</h3>
+                <h1 class="modal-title" id="citeModalLabel">[% biblio.title | html %]</h1>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
                 [% FOREACH system IN cites.keys.sort %]
-                    <h3>[% system | html %]</h3>
+                    <h2>[% system | html %]</h2>
                     <p>[% cites.$system | html %]</p>
                 [% END %]
             </div>

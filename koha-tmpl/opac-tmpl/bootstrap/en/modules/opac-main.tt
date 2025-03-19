@@ -86,13 +86,13 @@
                         [% SET show_author = Koha.Preference('NewsAuthorDisplay') == 'opac' || Koha.Preference('NewsAuthorDisplay') == 'both' %]
                         [% FOREACH koha_new IN koha_news.content %]
                             <div class="newsitem">
-                                <h4 class="newsheader">
+                                <h2 class="newsheader">
                                     [% IF ( news_item ) %]
                                         [% koha_new.title | html %]
                                     [% ELSE %]
                                         <a id="newsitem[% koha_new.additional_content.id | html %]" href="/cgi-bin/koha/opac-main.pl?news_id=[% koha_new.additional_content.id | uri %]">[% koha_new.title | html %]</a>
                                     [% END %]
-                                </h4>
+                                </h2>
                                 <div class="newsbody">[% koha_new.content | $raw %]</div>
                                 <div class="newsfooter">
                                     Published on [% koha_new.published_on | $KohaDates %]
@@ -167,6 +167,7 @@
                                     <form action="/cgi-bin/koha/opac-user.pl" method="post" name="auth" id="auth" autocomplete="off">
                                         [% INCLUDE 'csrf-token.inc' %]
                                         <input type="hidden" name="koha_login_context" value="opac" />
+                                        <h2 class="sr-only">Login form</h2>
                                         <fieldset class="brief">
                                             <legend>Log in to your account:</legend>
                                             [% IF ( Koha.Preference('GoogleOpenIDConnect') == 1 ) %]

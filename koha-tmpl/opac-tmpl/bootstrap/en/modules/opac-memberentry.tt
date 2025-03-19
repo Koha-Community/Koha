@@ -152,6 +152,7 @@
                     [% IF has_guarantor_flag && !Koha.Preference('OPACPrivacy') && ( Koha.Preference('AllowPatronToSetCheckoutsVisibilityForGuarantor') || Koha.Preference('AllowPatronToSetFinesVisibilityForGuarantor') ) %]
                         <div class="row">
                             <div class="col">
+                                <h2 class="sr-only">Privacy</h2>
                                 <fieldset class="rows" id="memberentry_privacy">
                                     <legend id="privacy_legend">Privacy</legend>
                                     <ol>
@@ -228,6 +229,7 @@
                         [% UNLESS ( hidden.defined('cardnumber') || ( !borrower && Koha.Preference('autoMemberNum') ) ) && hidden.defined('dateexpiry') && hidden.defined('branchcode') && hidden.defined('categorycode') %]
                             <div class="row">
                                 <div class="col">
+                                    <h2 class="sr-only">Library</h2>
                                     <fieldset class="rows" id="memberentry_library">
                                         <legend id="library_legend">Library</legend>
                                         <ol>
@@ -373,6 +375,7 @@
                         [% UNLESS hidden.defined('title') && hidden.defined('surname') && hidden.defined('firstname') && hidden.defined('preferred_name') && hidden.defined('middle_name') && hidden.defined('dateofbirth') && hidden.defined('initials') && hidden.defined('pronouns') && hidden.defined('othernames') && hidden.defined('sex') %]
                             <div class="row">
                                 <div class="col">
+                                    <h2 class="sr-only">Identity</h2>
                                     <fieldset class="rows" id="memberentry_identity">
                                         <legend id="identity_legend">Identity</legend>
 
@@ -519,6 +522,7 @@
                         [% UNLESS hidden.defined('streetnumber') && hidden.defined('address') && hidden.defined('address2') && hidden.defined('city') && hidden.defined('state') && hidden.defined('zipcode') && hidden.defined('country') %]
                             <div class="row">
                                 <div class="col">
+                                    <h2 class="sr-only">Main address</h2>
                                     <fieldset class="rows" id="memberentry_mainaddress">
                                         <legend id="mainaddress_legend">Main address</legend>
 
@@ -613,6 +617,7 @@
                         [% UNLESS hidden.defined('phone') && hidden.defined('phonepro') && hidden.defined('mobile') && hidden.defined('email') && hidden.defined('emailpro') && hidden.defined('fax') %]
                             <div class="row">
                                 <div class="col">
+                                    <h2 class="sr-only">Contact information</h2>
                                     <fieldset class="rows" id="memberentry_contact">
                                         <legend id="contact_legend">Contact information</legend>
 
@@ -785,6 +790,7 @@
                         [% UNLESS hidden.defined('B_streetnumber') && hidden.defined('B_address') && hidden.defined('B_address2') && hidden.defined('B_city') && hidden.defined('B_state') && hidden.defined('B_zipcode') && hidden.defined('B_country') && hidden.defined('B_phone') && hidden.defined('B_email') && hidden.defined('contactnote') %]
                             <div class="row">
                                 <div class="col">
+                                    <h2 class="sr-only">Alternate address</h2>
                                     <fieldset class="rows" id="memberentry_alternateaddress">
                                         <legend id="alternateaddress_legend">Alternate address</legend>
 
@@ -905,6 +911,7 @@
                         [% UNLESS hidden.defined('altcontactsurname') && hidden.defined('altcontactfirstname') && hidden.defined('altcontactaddress1') && hidden.defined('altcontactaddress2') && hidden.defined('altcontactaddress3') && hidden.defined('altcontactstate') && hidden.defined('altcontactzipcode') && hidden.defined('altcontactcountry') && hidden.defined('altcontactphone') %]
                             <div class="row">
                                 <div class="col">
+                                    <h2 class="sr-only">Alternate contact</h2>
                                     <fieldset class="rows" id="memberentry_alternatecontact">
                                         <legend id="alternatecontact_legend">Alternate contact</legend>
 
@@ -1006,6 +1013,7 @@
                         [% UNLESS op == 'edit' || hidden.defined('password') %]
                             <div class="row">
                                 <div class="col">
+                                    <h2 class="sr-only">Password</h2>
                                     <fieldset class="rows" id="memberentry_password">
                                         <legend id="contact_legend">Password</legend>
                                         <div class="alert alert-info">
@@ -1122,6 +1130,7 @@
                         [% IF Koha.Preference('PrivacyPolicyConsent') && op != 'edit' %]
                             <div class="row">
                                 <div class="col">
+                                    <h2 class="sr-only">Data privacy policy consent</h2>
                                     <fieldset class="rows" id="memberentry_gdpr_consent">
                                         <legend>Data privacy policy consent</legend>
                                         <ol>
@@ -1145,6 +1154,7 @@
                         [% UNLESS op == 'edit' %]
                             <div class="row">
                                 <div class="col">
+                                    <h2 class="sr-only">Verification</h2>
                                     <fieldset class="rows" id="memberentry_captcha">
                                         <legend>Verification</legend>
                                         <ol>
