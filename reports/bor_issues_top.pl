@@ -344,11 +344,11 @@ sub calculate {
             $grantotal += $patrons{$id}->{total};
         }
         push @looprow, {
-            'rowtitle'  => $i++,
-            'loopcell'  => \@loopcell,
-            'hilighted' => ( $i % 2 ),
-            'patron'    => $patrons{$id}->{name},
-            'reference' => $id,
+            'rowtitle'    => $i++,
+            'loopcell'    => \@loopcell,
+            'highlighted' => ( $i % 2 ),
+            'patron'      => $patrons{$id}->{name},
+            'reference'   => $id,
         };
 
         # use a limit, if a limit is defined
