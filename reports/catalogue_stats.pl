@@ -401,7 +401,7 @@ sub calculate {
         push @loopcol, \%cell;
     }
 
-    my $i         = 0;
+    my $i           = 0;
     my $highlighted = -1;
 
     #Initialization of cell values.....
@@ -540,11 +540,11 @@ sub calculate {
         }
         push @looprow,
             {
-            'rowtitle'  => $row->{rowtitle},
-            'value'     => $row->{value},
-            'loopcell'  => \@loopcell,
+            'rowtitle'    => $row->{rowtitle},
+            'value'       => $row->{value},
+            'loopcell'    => \@loopcell,
             'highlighted' => ( $highlighted *= -1 > 0 ),
-            'totalrow'  => $table{ $row->{value} }->{totalrow}
+            'totalrow'    => $table{ $row->{value} }->{totalrow}
             };
     }
 

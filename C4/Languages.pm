@@ -423,10 +423,10 @@ sub _build_languages_arrayref {
 
     my %idx          = map { $enabled_languages->[$_] => $_ } reverse 0 .. @$enabled_languages - 1;
     my @ordered_keys = sort {
-        my $aa     = '';
-        my $bb     = '';
+        my $aa      = '';
+        my $bb      = '';
         my $account = @{ $language_groups->{$a} };
-        my $bcount = @{ $language_groups->{$b} };
+        my $bcount  = @{ $language_groups->{$b} };
         if ( $language_groups->{$a}->[0]->{enabled} ) {
             $aa = $language_groups->{$a}->[0]->{rfc4646_subtag};
         } elsif ( $account > 1 ) {

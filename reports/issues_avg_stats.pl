@@ -386,7 +386,7 @@ sub calculate {
 
     #	warn "fin des titres colonnes";
 
-    my $i         = 0;
+    my $i           = 0;
     my $highlighted = -1;
 
     #Initialization of cell values.....
@@ -515,10 +515,10 @@ sub calculate {
         }
         push @looprow,
             {
-            'rowtitle'  => ( $row eq "zzEMPTY" ) ? "NULL" : $row,
-            'loopcell'  => \@loopcell,
+            'rowtitle'    => ( $row eq "zzEMPTY" ) ? "NULL" : $row,
+            'loopcell'    => \@loopcell,
             'highlighted' => ( $highlighted > 0 ),
-            'totalrow'  => ($total) ? sprintf( "%.2f", $total ) : 0
+            'totalrow'    => ($total) ? sprintf( "%.2f", $total ) : 0
             };
         $highlighted = -$highlighted;
     }

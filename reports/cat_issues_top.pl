@@ -406,8 +406,8 @@ sub calculate {
 
         #my $total = $table[$i]->{totalrow}/$colcount if ($colcount>0);
         push @looprow, {
-            'rowtitle'  => $i,
-            'loopcell'  => \@loopcell,
+            'rowtitle'    => $i,
+            'loopcell'    => \@loopcell,
             'highlighted' => ( $highlighted > 0 ),
         };
         $highlighted = -$highlighted;

@@ -379,7 +379,7 @@ sub calculate {
         }
     }
 
-    my $i         = 0;
+    my $i           = 0;
     my $highlighted = -1;
 
     #Initialization of cell values.....
@@ -478,10 +478,10 @@ sub calculate {
             push @loopcell, { value => $value };
         }
         my $r = {
-            rowtitle  => ( $row eq "zzEMPTY" ) ? "NULL" : $row,
-            loopcell  => \@loopcell,
+            rowtitle    => ( $row eq "zzEMPTY" ) ? "NULL" : $row,
+            loopcell    => \@loopcell,
             highlighted => ( $highlighted > 0 ),
-            totalrow  => $table{$row}->{totalrow}
+            totalrow    => $table{$row}->{totalrow}
         };
         $r->{totalrow} = sprintf( "%.2f", $r->{totalrow} ) if ( $r->{totalrow} and grep /$process/, ( 3, 4, 5 ) );
         push @looprow, $r;
