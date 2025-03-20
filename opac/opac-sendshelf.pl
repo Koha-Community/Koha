@@ -52,6 +52,12 @@ my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
     }
 );
 
+if ( C4::Context->preference('OPACDisableSendList') ) {
+    output_html_with_http_headers $query, $cookie, $template->output, undef,
+        { force_no_caching => 1 };
+    exit;
+}
+
 my $shelfid = $query->param('shelfid');
 my $email   = $query->param('email');
 my $op      = $query->param('op') // q{};

@@ -258,7 +258,7 @@
                                             </div>
                                         </div>
 
-                                        [% IF Koha.Preference( 'opacuserlogin' ) == 1 %]
+                                        [% IF ( Koha.Preference( 'opacuserlogin' ) == 1 ) && ( ! Koha.Preference('OPACDisableSendList') ) %]
                                             <span class="sendlist"
                                                 ><a href="/cgi-bin/koha/opac-sendshelf.pl?shelfid=[% shelf.shelfnumber | uri %]" class="btn btn-link send"><i class="fa fa-fw fa-envelope" aria-hidden="true"></i> Send list</a></span
                                             >
