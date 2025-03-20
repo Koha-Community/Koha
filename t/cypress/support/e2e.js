@@ -1818,7 +1818,7 @@ mysql.addCommands();
 
 Cypress.Commands.add("set_syspref", (variable, value) => {
     cy.window().then(win => {
-        const client = win.APIClient.syspref;
+        const client = win.APIClient.sysprefs;
         return client.sysprefs.update(variable, value);
     });
 });

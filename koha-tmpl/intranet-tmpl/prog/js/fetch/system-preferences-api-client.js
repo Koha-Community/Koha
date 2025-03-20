@@ -14,10 +14,9 @@ export class SysprefAPIClient {
             update: (variable, value) =>
                 this.httpClient.post({
                     endpoint: "",
-                    body: "pref_%s=%s&csrf_token=%s".format(
+                    body: "pref_%s=%s".format(
                         encodeURIComponent(variable),
-                        encodeURIComponent(value),
-                        csrf_token
+                        encodeURIComponent(value)
                     ),
                     headers: {
                         "Content-Type":
