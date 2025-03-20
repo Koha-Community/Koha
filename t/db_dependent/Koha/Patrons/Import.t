@@ -682,7 +682,7 @@ is( $result_6->{overwritten}, 0, 'Got the expected 0 overwritten result from imp
 
 # Given ... 2 new inputs. One without dateofbirth, dateenrolled and dateexpiry values.
 my $input_complete =
-    '1009,Christina,Harris,Dr,Philip,CH,99,Street,Grayhawk,Baton Rogue,Dallas,Louisiana,70810,United States,pharris9@hp.com,9-(317)603-5513,7-(005)062-7593,8-(349)134-1627,06/19/1969,IPT,PT,04/09/2015,07/01/2015,pharris9,NcAhcvvnB';
+    '1009,Christina,Harris,Dr,Philip,CH,99,Street,Grayhawk,Baton Rouge,Dallas,Louisiana,70810,United States,pharris9@hp.com,9-(317)603-5513,7-(005)062-7593,8-(349)134-1627,06/19/1969,IPT,PT,04/09/2015,07/01/2015,pharris9,NcAhcvvnB';
 my $input_no_date =
     '1010,Ralph,Warren,Ms,Linda,RW,6,Way,Barby,Orlando,Albany,Florida,32803,United States,lwarrena@multiply.com,7-(579)753-7752,6-(847)086-7566,9-(122)729-8226,26/01/2001,LPL,T,25/01/2001,24/01/2001,lwarrena,tJ56RD4uV';
 

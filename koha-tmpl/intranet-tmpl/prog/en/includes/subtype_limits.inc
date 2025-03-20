@@ -197,9 +197,9 @@
             <option value="ctype:l">Legislation</option>
         [% END %]
         [% IF (limits.ctype.0 == 'm' ) %]
-            <option value="ctype:m" selected="selected">Thesis</option>
+            <option value="ctype:m" selected="selected">Theses</option>
         [% ELSE %]
-            <option value="ctype:m">Thesis</option>
+            <option value="ctype:m">Theses</option>
         [% END %]
         [% IF (limits.ctype.0 == 'n' ) %]
             <option value="ctype:n" selected="selected">Surveys</option>

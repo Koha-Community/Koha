@@ -150,7 +150,7 @@ my $file = $mf->GetFile( id => $file_id );
 For an individual, specific file ID this method returns a hashref
 containing all metadata (file_id, table_tag, record_id, file_name,
 file_type, file_description, file_content, date_uploaded), plus
-an actually contents of a file (in 'file_content'). In typical usage
+actual contents of a file (in 'file_content'). In typical usage
 scenarios, for a given $mf object, specific file IDs have to be
 obtained first by GetFilesInfo() call.
 
