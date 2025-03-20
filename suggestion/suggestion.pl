@@ -506,7 +506,7 @@ $template->param(
     "op"            => $op,
 );
 
-if ( defined($returnsuggested) and $returnsuggested ne "no one" ) {
+if ( defined($returnsuggested) and $returnsuggested ne "no_one" ) {
     print $input->redirect( "/cgi-bin/koha/members/moremember.pl?borrowernumber=" . $returnsuggested . "#suggestions" );
 }
 
