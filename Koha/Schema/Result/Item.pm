@@ -387,7 +387,7 @@ inventory number (MARC21 952$i)
   is_nullable: 1
   size: 32
 
-'new' value, you can put whatever free-text information. This field is intended to be managed by the automatic_item_modification_by_age cronjob.
+'new' value, you can put whatever free-text information. This field is intented to be managed by the automatic_item_modification_by_age cronjob.
 
 =head2 exclude_from_local_holds_priority
 
