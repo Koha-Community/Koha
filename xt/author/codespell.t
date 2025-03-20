@@ -5,7 +5,7 @@ use Test::More;
 
 my @files;
 push @files,
-    qx{git ls-files '*.pl' '*.PL' '*.pm' '*.t' ':(exclude)installer/data/mysql/updatedatabase.pl' ':(exclude)installer/data/mysql/update22to30.pl' ':(exclude)misc/cronjobs/build_browser_and_cloud.pl'};
+    qx{git ls-files '*.pl' '*.PL' '*.pm' '*.t' ':(exclude)installer/data/mysql/updatedatabase.pl' ':(exclude)installer/data/mysql/update22to30.pl' ':(exclude)installer/data/mysql/db_revs/241200035.pl' ':(exclude)misc/cronjobs/build_browser_and_cloud.pl'};
 push @files, qx{git ls-files svc opac/svc};     # Files without extension
 push @files, qx{git ls-files '*.tt' '*.inc'};
 push @files,
