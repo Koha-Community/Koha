@@ -6,6 +6,7 @@ class HttpClient {
         this._headers = options.headers || {
             "Content-Type": "application/json;charset=utf-8",
         };
+        this.csrf_token = $('meta[name="csrf-token"]').attr("content");
     }
 
     async _fetchJSON(
@@ -83,9 +84,11 @@ class HttpClient {
                 ? params.body
                 : JSON.stringify(params.body)
             : undefined;
+        let csrf_token = { "CSRF-TOKEN": this.csrf_token };
+        let headers = { ...csrf_token, ...params.headers };
         return this._fetchJSON(
             params.endpoint,
-            params.headers,
+            headers,
             {
                 ...params.options,
                 body,
@@ -102,9 +105,11 @@ class HttpClient {
                 ? params.body
                 : JSON.stringify(params.body)
             : undefined;
+        let csrf_token = { "CSRF-TOKEN": this.csrf_token };
+        let headers = { ...csrf_token, ...params.headers };
         return this._fetchJSON(
             params.endpoint,
-            params.headers,
+            headers,
             {
                 ...params.options,
                 body,
@@ -116,9 +121,11 @@ class HttpClient {
     }
 
     delete(params = {}) {
+        let csrf_token = { "CSRF-TOKEN": this.csrf_token };
+        let headers = { ...csrf_token, ...params.headers };
         return this._fetchJSON(
             params.endpoint,
-            params.headers,
+            headers,
             {
                 parseResponse: false,
                 ...params.options,
