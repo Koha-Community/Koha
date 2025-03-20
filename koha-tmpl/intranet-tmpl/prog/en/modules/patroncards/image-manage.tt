@@ -82,11 +82,11 @@
                     <fieldset class="brief">
                         <div class="hint"> Select one or more images to delete. </div>
                         <table>
-                            [% FOREACH TABL IN TABLE %]
+                            [% FOREACH TABLE IN TABLEE %]
 
-                                [% IF ( TABL.header_fields ) %]
+                                [% IF ( TABLE.header_fields ) %]
                                     <tr>
-                                        [% FOREACH header_field IN TABL.header_fields %]
+                                        [% FOREACH header_field IN TABLE.header_fields %]
                                             [% SWITCH header_field.field_label -%]
                                             [% CASE "ID" %]
                                                 <th>Image ID</th>
@@ -101,7 +101,7 @@
                                     </tr>
                                 [% ELSE %]
                                     <tr>
-                                        [% FOREACH text_field IN TABL.text_fields %]
+                                        [% FOREACH text_field IN TABLE.text_fields %]
                                             [% IF ( text_field.select_field ) %]
                                                 <td>
                                                     <a

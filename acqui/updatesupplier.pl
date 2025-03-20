@@ -32,7 +32,7 @@ a supplier. This script is called from acqui/supplier.pl.
 
 =head1 CGI PARAMETERS
 
-All informations regarding this supplier are listed on input parameter.
+All information regarding this supplier are listed on input parameter.
 Here is the list :
 
 supplier, id, company, company_postal, physical, company_phone,

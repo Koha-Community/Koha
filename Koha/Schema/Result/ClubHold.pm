@@ -51,7 +51,7 @@ id for the bibliographic record the hold has been placed against
   is_foreign_key: 1
   is_nullable: 1
 
-If item-level, the id for the item the hold has been placed agains
+If item-level, the id for the item the hold has been placed FIXME CODESPELL (agains ==> against, again)
 
 =head2 date_created
 

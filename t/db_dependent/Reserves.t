@@ -228,7 +228,7 @@ $itemnum_fpl = $builder->build_sample_item(
     }
 )->itemnumber;
 
-# Ensure that priorities are numbered correcly when a hold is moved to waiting
+# Ensure that priorities are numbered correctly when a hold is moved to waiting
 # (bug 11947)
 $dbh->do( "DELETE FROM reserves WHERE biblionumber=?", undef, ($bibnum2) );
 AddReserve(

@@ -124,32 +124,32 @@ my @test_data = (
     },
     {
         amount      => 5, days_ago => $days - 1,
-        description => 'purge_zero_balance_fees should not delete fees with positive amout owed before threshold day',
+        description => 'purge_zero_balance_fees should not delete fees with positive amount owed before threshold day',
         delete      => 0, credit_type => undef, debit_type => 'OVERDUE'
     },
     {
         amount      => 5, days_ago => $days,
-        description => 'purge_zero_balance_fees should not delete fees with positive amout owed on threshold day',
+        description => 'purge_zero_balance_fees should not delete fees with positive amount owed on threshold day',
         delete      => 0, credit_type => undef, debit_type => 'OVERDUE'
     },
     {
         amount      => 5, days_ago => $days + 1,
-        description => 'purge_zero_balance_fees should not delete fees with positive amout owed after threshold day',
+        description => 'purge_zero_balance_fees should not delete fees with positive amount owed after threshold day',
         delete      => 0, credit_type => undef, debit_type => 'OVERDUE'
     },
     {
         amount      => -5, days_ago => $days - 1,
-        description => 'purge_zero_balance_fees should not delete fees with negative amout owed before threshold day',
+        description => 'purge_zero_balance_fees should not delete fees with negative amount owed before threshold day',
         delete      => 0, credit_type => 'PAYMENT', debit_type => undef
     },
     {
         amount      => -5, days_ago => $days,
-        description => 'purge_zero_balance_fees should not delete fees with negative amout owed on threshold day',
+        description => 'purge_zero_balance_fees should not delete fees with negative amount owed on threshold day',
         delete      => 0, credit_type => 'PAYMENT', debit_type => undef
     },
     {
         amount      => -5, days_ago => $days + 1,
-        description => 'purge_zero_balance_fees should not delete fees with negative amout owed after threshold day',
+        description => 'purge_zero_balance_fees should not delete fees with negative amount owed after threshold day',
         delete      => 0, credit_type => 'PAYMENT', debit_type => undef
     }
 );

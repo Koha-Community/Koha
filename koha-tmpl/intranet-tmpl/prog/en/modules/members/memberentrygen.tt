@@ -284,7 +284,7 @@
                         [% ELSE %]
                             <input type="hidden" name="op" value="cud-save" />
                             [% IF step == 4 || step == 5 || step == 6 || step == 2 || step == 1 || step == 7 %]
-                                [%# Only put the card number if we arent showing it in the form later %]
+                                [%# Only put the card number if we aren't showing it in the form later %]
                                 [% IF borrower_data.cardnumber %]
                                     <input type="hidden" name="cardnumber" value="[% borrower_data.cardnumber | html %]" />
                                 [% END %]

@@ -205,7 +205,7 @@ my $return_date_override = $query->param('return_date_override') || q{};
 if ($return_date_override) {
     if ( C4::Context->preference('SpecifyReturnDate') ) {
 
-        # note that we've overriden the return date
+        # note that we've overridden the return date
         $template->param( return_date_was_overriden => 1 );
 
         my $return_date_override_remember = $query->param('return_date_override_remember');
@@ -534,7 +534,7 @@ if ( $messages->{'Wrongbranch'} ) {
     );
 }
 
-# case of wrong transfert, if the document wasn't transferred to the right library (according to branchtransfer (tobranch) BDD)
+# case of wrong FIXME CODESPELL (transfert ==> transfer, transferred), if the document wasn't transferred to the right library (according to branchtransfer (tobranch) BDD)
 
 if ( $messages->{'WrongTransfer'} and not $messages->{'WasTransfered'} ) {
 

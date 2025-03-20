@@ -751,7 +751,7 @@ item withdrawn.
 item is restricted (set by ??)
 
 C<$needsconfirmation> a reference to a hash. It contains reasons why the loan 
-could be prevented, but ones that can be overriden by the operator.
+could be prevented, but ones that can be overridden by the operator.
 
 Possible values are :
 
@@ -1574,8 +1574,8 @@ AddIssue does the following things :
               - fill recall if recall to this patron
               - cancel recall or not
               - revert recall's waiting status or not
-          * TRANSFERT PENDING ?
-              - complete the transfert
+          * FIXME CODESPELL (TRANSFERT ==> TRANSFER, TRANSFERRED) PENDING ?
+              - complete the FIXME CODESPELL (transfert ==> transfer, transferred)
           * ISSUE THE BOOK
 
 =back
@@ -1704,7 +1704,7 @@ sub AddIssue {
 
             C4::Reserves::MoveReserve( $item_object->itemnumber, $patron->borrowernumber, $cancelreserve );
 
-            # Starting process for transfer job (checking transfert and validate it if we have one)
+            # Starting process for transfer job (checking FIXME CODESPELL (transfert ==> transfer, transferred) and validate it if we have one)
             if ( my $transfer = $item_object->get_transfer ) {
 
                 # updating line of branchtranfert to finish it, and changing the to branch value, implement a comment for visibility of this case (maybe for stats ....)
@@ -2010,7 +2010,7 @@ category only
 default branch and category
 
 If no rule has been found in the database, it will default to
-the buillt in rule:
+the built in rule:
 
 patron_maxissueqty - undef
 patron_maxonsiteissueqty - undef
@@ -2699,7 +2699,7 @@ Ideally, this function would be internal to C<C4::Circulation>,
 not exported, but it is currently used in misc/cronjobs/longoverdue.pl
 and offline_circ/process_koc.pl.
 
-The last optional parameter allos passing skip_record_index to the item store call.
+The last optional parameter allows passing skip_record_index to the item store call.
 
 =cut
 
@@ -4140,7 +4140,7 @@ sub CalcDateDue {
 
         # if the calculated due date is after the 'before' Hard Due Date (ceiling), override
         # if the calculated date is before the 'after' Hard Due Date (floor), override
-        # if the hard due date is set to 'exactly', overrride
+        # if the hard due date is set to 'exactly', override
         if ( $hardduedatecompare == 0 || $hardduedatecompare == $cmp ) {
             $datedue = $hardduedate->clone;
         }

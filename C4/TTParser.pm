@@ -15,7 +15,7 @@
 # You should have received a copy of the GNU General Public License
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
-#simple parser for HTML with Template Toolkit directives. Tokens are put into @tokens and are accesible via next_token and peep_token
+#simple parser for HTML with Template Toolkit directives. Tokens are put into @tokens and are accessible via next_token and peep_token
 package C4::TTParser;
 use base qw(HTML::Parser);
 use C4::TmplToken;

@@ -397,7 +397,7 @@ sub run_tests {
     my $data = GetBiblioData($biblionumber);
     is(
         $data->{isbn}, $isbn,
-        '(GetBiblioData) ISBN correctly retireved.'
+        '(GetBiblioData) ISBN correctly retrieved.'
     );
     is(
         $data->{title}, undef,

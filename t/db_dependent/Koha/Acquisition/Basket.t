@@ -225,7 +225,7 @@ subtest 'estimated_delivery_date' => sub {
     $bookseller->deliverytime(2)->store;                                # 2 delivery days
     is(
         $basket->estimated_delivery_date,
-        undef, 'return undef if closedate is not defined (basket stil open)'
+        undef, 'return undef if closedate is not defined (basket still open)'
     );
 
     $bookseller->deliverytime(2)->store;                                # 2 delivery days

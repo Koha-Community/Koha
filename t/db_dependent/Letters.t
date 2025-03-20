@@ -224,7 +224,7 @@ isnt(
     $messages->[0]->{updated_on}, $messages->[0]->{time_queued},
     'Time status changed differs from time queued when status changes'
 );
-is( dt_from_string( $messages->[0]->{time_queued} ), $yesterday, 'Time queued remaines inmutable' );
+is( dt_from_string( $messages->[0]->{time_queued} ), $yesterday, 'Time queued FIXME CODESPELL (remaines ==> remains, remained) inmutable' );
 
 # ResendMessage
 my $resent = C4::Letters::ResendMessage( $messages->[0]->{message_id} );

@@ -60,7 +60,7 @@ subtest 'GetMatcherList' => sub {
     ok( $testmatcher = C4::Matcher->new( 'blue', 0 ), 'testing matcher new' );
 
     $testmatcher->threshold(1000);
-    is( $testmatcher->threshold(), 1000, 'testing threshhold accessor method' );
+    is( $testmatcher->threshold(), 1000, 'testing threshold accessor method' );
 
     $testmatcher->_id(53);
     is( $testmatcher->_id(), 53, 'testing _id accessor' );

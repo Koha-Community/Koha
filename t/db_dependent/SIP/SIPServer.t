@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 
 # This test is db dependent: SIPServer needs MsgType which needs Auth.
-# And Auth needs config vars and prefences in its BEGIN block.
+# And Auth needs config vars and preferences in its BEGIN block.
 
 # This file is part of Koha.
 #

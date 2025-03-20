@@ -181,7 +181,7 @@ my ( $biblionumber3, $biblioitemnumber3 ) = AddBiblio( MARC::Record->new, '' );
 my ( $biblionumber4, $biblioitemnumber4 ) = AddBiblio( MARC::Record->new, '' );
 my ( $biblionumber5, $biblioitemnumber5 ) = AddBiblio( MARC::Record->new, '' );
 
-# Prepare 6 orders, and make distinction beween fields to be tested with eq and with ==
+# Prepare 6 orders, and make distinction between fields to be tested with eq and with ==
 # Ex : a price of 50.1 will be stored internally as 5.100000
 
 my @order_content = (

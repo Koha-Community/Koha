@@ -362,7 +362,7 @@ test_it( $cpvPmappings, "PostReturn" );
 # We have already tested ->wants_check_for_previous_checkout and
 # ->do_check_for_previous_checkout, so all that remains to be tested is
 # whetherthe different combinational outcomes of the above return values in
-# CanBookBeIssued result in the approriate $needsconfirmation.
+# CanBookBeIssued result in the appropriate $needsconfirmation.
 
 # We want to test:
 # - DESCRIPTION [RETURNVALUE (0/1)]

@@ -54,7 +54,7 @@ The branchcode of a branch belonging to the parent group
   is_nullable: 1
   size: 100
 
-Short description of the goup
+Short description of the group
 
 =head2 description
 

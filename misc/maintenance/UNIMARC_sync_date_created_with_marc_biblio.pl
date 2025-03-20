@@ -48,7 +48,7 @@ $verbose and print "================================\n";
 $date_created_marc = '099c' unless $date_created_marc;
 my ( $c_field, $c_subfield ) = _read_marc_code($date_created_marc);
 die "date-created-marc '$date_created_marc' is not correct." unless $c_field;
-die "date-created-marc field is greated that 009, it should have a subfield."
+die "date-created-marc field is FIXME CODESPELL (greated ==> greater, grated, graded) that 009, it should have a subfield."
     if ( $c_field > 9 && !defined $c_subfield );
 die "date-created-marc field is lower that 010, it should not have a subfield."
     if ( $c_field < 10 && defined $c_subfield );
@@ -62,7 +62,7 @@ if ($verbose) {
 $date_modified_marc = '099d' unless $date_modified_marc;
 my ( $m_field, $m_subfield ) = _read_marc_code($date_modified_marc);
 die "date-modified-marc '$date_modified_marc' is not correct." unless $m_field;
-die "date-modified-marc field is greated that 009, it should have a subfield."
+die "date-modified-marc field is FIXME CODESPELL (greated ==> greater, grated, graded) that 009, it should have a subfield."
     if ( $m_field > 9 && !defined $m_subfield );
 die "date-modified-marc field is lower that 010, it should not have a subfield."
     if ( $m_field < 10 && defined $m_subfield );
@@ -175,7 +175,7 @@ sub updateMarc {
         }
     }
 
-    # apply to databse
+    # apply to database
     if ( &ModBiblio( $biblio, $id, $frameworkcode ) ) {
         return 1;
     }
@@ -216,7 +216,7 @@ sub process {
 if ( lc( C4::Context->preference('marcflavour') ) eq "unimarc" ) {
     $verbose
         and !$run
-        and print "*** Not in run mode, modifications will not be applyed ***\n";
+        and print "*** Not in run mode, modifications will not be applied ***\n";
 
     $verbose and print "================================\n";
     process();

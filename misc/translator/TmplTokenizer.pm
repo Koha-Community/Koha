@@ -311,7 +311,7 @@ sub _parametrize_internal {
     # }
     my $s = join( "", map { _formalize $_ } @parts );
 
-    # should both the string and form be $s? maybe only the later? posibly the former....
+    # should both the string and form be $s? maybe only the later? possibly the former....
     # used line number from first token, should suffice
     my $t = C4::TmplToken->new( $s, C4::TmplTokenType::TEXT_PARAMETRIZED, $parts[0]->line_number, $this->filename );
     $t->set_children(@parts);

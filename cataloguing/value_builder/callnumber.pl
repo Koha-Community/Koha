@@ -31,9 +31,9 @@ use C4::Output qw( output_html_with_http_headers );
 Is used for callnumber computation.
 
 If the user send an empty string, we return a simple incremented callnumber.
-If a prefix is submited, we look for the highest callnumber with this prefix, and return it incremented.
+If a prefix is submitted, we look for the highest callnumber with this prefix, and return it incremented.
 In this case, a callnumber has this form : "PREFIX 0009678570".
- - PREFIX is an upercase word
+ - PREFIX is an uppercase word
  - a space separator
  - 10 digits, with leading 0s if needed
 

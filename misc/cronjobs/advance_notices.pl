@@ -141,7 +141,7 @@ program. They may be redirected to a file if desired.
 =head2 Templates
 
 Templates can contain variables enclosed in double angle brackets like
-E<lt>E<lt>thisE<gt>E<gt>. Those variables will be replaced with values
+E<lt>E<lt>FIXME CODESPELL (thisE ==> these, this)<gt>E<gt>. Those variables will be replaced with values
 specific to the overdue items or relevant patron. Available variables
 are:
 

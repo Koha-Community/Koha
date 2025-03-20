@@ -110,8 +110,8 @@ if ( $op eq 'acct_form' ) {
         $schema->resultset('VendorEdiAccount')->search( { id => scalar $input->param('id'), } )->delete_all;
     }
 
-    # we do a default dispaly after deletes and saves
-    # as well as when thats all you want
+    # we do a default display after deletes and saves
+    # as well as when that's all you want
     $template->param( display => 1 );
     my @ediaccounts = $schema->resultset('VendorEdiAccount')->search(
         {},

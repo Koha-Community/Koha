@@ -52,7 +52,7 @@ from this table. However, this method does accept an arbitrary
 string as 'tabletag', and an arbitrary integer as 'recordid'.
 
 Particular Koha::Misc::Files object can have one or more file records
-(actuall file contents + various file metadata) associated with it.
+(FIXME CODESPELL (actuall ==> actually, actual) file contents + various file metadata) associated with it.
 
 In case of an error (wrong parameter format) it returns undef.
 
@@ -150,7 +150,7 @@ my $file = $mf->GetFile( id => $file_id );
 For an individual, specific file ID this method returns a hashref
 containing all metadata (file_id, table_tag, record_id, file_name,
 file_type, file_description, file_content, date_uploaded), plus
-an actuall contents of a file (in 'file_content'). In typical usage
+an FIXME CODESPELL (actuall ==> actually, actual) contents of a file (in 'file_content'). In typical usage
 scenarios, for a given $mf object, specific file IDs have to be
 obtained first by GetFilesInfo() call.
 
@@ -218,7 +218,7 @@ sub DelAllFiles {
 
 $mf->MergeFileRecIds(@ids_to_be_merged);
 
-This method re-associates all individuall file records associated with
+This method re-associates all FIXME CODESPELL (individuall ==> individually, individual) file records associated with
 some "parent" records IDs (provided in @ids_to_be_merged) with the given
 single $mf object (which would be treated as a "parent" destination).
 

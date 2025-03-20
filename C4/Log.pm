@@ -181,7 +181,7 @@ sub logaction {
   &cronlogaction($infos);
 
 Convenience routine to add a record into action_logs table from a cron job.
-Logs the path and name of the calling script plus the information privided by param $infos.
+Logs the path and name of the calling script plus the information provided by param $infos.
 
 =cut
 

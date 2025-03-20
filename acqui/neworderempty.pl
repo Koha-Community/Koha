@@ -448,7 +448,7 @@ $template->param(
 $template->param(
     existing => $biblionumber,
 
-    # basket informations
+    # basket information
     basketname           => $basket->{'basketname'},
     basketnote           => $basket->{'note'},
     booksellerid         => $basket->{'booksellerid'},

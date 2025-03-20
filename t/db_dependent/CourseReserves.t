@@ -76,7 +76,7 @@ $course_id = ModCourse(
 my $course = GetCourse($course_id);
 
 ok( $course->{'course_name'} eq "Test Course",      "GetCourse returned correct course" );
-ok( $course->{'staff_note'} eq "Test staff note 2", "ModCourse updated course succesfully" );
+ok( $course->{'staff_note'} eq "Test staff note 2", "ModCourse updated course successfully" );
 is( $course->{'enabled'}, 'no', "Test Course is disabled" );
 
 my $courses = GetCourses();

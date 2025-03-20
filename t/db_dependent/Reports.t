@@ -13,5 +13,5 @@ BEGIN {
     use_ok( 'C4::Reports', qw( GetDelimiterChoices ) );
 }
 
-ok( GetDelimiterChoices(), "Testing getting delimeter choices" )
+ok( GetDelimiterChoices(), "Testing getting delimiter choices" )
     ;    #Not testing the value of the output just that it returns something.

@@ -146,7 +146,7 @@ B<$days> -- Zero balance fees older than B<$days> days old will be deleted.
 
 B<Warning:> Because fines and payments are not linked in accountlines, it is
 possible for a fine to be deleted without the accompanying payment,
-or vise versa. This won't affect the account balance, but might be
+or vice versa. This won't affect the account balance, but might be
 confusing to staff.
 
 =cut

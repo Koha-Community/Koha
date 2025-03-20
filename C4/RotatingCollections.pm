@@ -2,7 +2,7 @@ package C4::RotatingCollections;
 
 # $Id: RotatingCollections.pm,v 0.1 2007/04/20 kylemhall
 
-# This package is inteded to keep track of what library
+# This package is intended to keep track of what library
 # Items of a certain collection should be at.
 
 # Copyright 2007 Kyle Hall

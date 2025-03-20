@@ -275,7 +275,7 @@ function _dt_visibility(table_settings, table_dt) {
      *                                                allows setting the 'comparison operator' used in searches
      *                                                Supports `contains`, `starts_with`, `ends_with` and `exact` match
      * @param  {string}  [options.columns.*.type      Data type the field is stored in so we may impose some additional
-     *                                                manipulation to search strings. Supported types are currenlty 'date'
+     *                                                manipulation to search strings. Supported types are currently 'date'
      * @param  {Object}  table_settings               The arrayref as returned by TableSettings.GetTableSettings function
      *                                                available from the columns_settings template toolkit include
      * @return {Object}                               The dataTables instance

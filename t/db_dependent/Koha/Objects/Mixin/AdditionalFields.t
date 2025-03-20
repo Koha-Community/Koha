@@ -76,7 +76,7 @@ is_deeply(
     [
         map {
             {
-                # We are bascially removing the 'id' field here
+                # We are basically removing the 'id' field here
                 field_id  => $_->{field_id},
                 record_id => $_->{record_id},
                 value     => $_->{value},

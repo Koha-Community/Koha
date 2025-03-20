@@ -290,7 +290,7 @@ sub _url_with_get_params {
 sub logout_if_required {
     my ($query) = @_;
 
-    # Check we havent been hit by a logout call
+    # Check we haven't been hit by a logout call
     my $xml = $query->param('logoutRequest');
     return 0 unless $xml;
 

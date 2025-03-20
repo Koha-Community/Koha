@@ -63,8 +63,8 @@ if (
 {
     if ( !$userenv_branch or $userenv_branch ne $branch ) {
         my $branchname = $library->branchname;
-        $session->param( 'branchname', $branchname );    # update sesssion in DB
-        $session->param( 'branch',     $branch );        # update sesssion in DB
+        $session->param( 'branchname', $branchname );    # update session in DB
+        $session->param( 'branch',     $branch );        # update session in DB
         $updated = 1;
     }
 } else {

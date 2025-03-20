@@ -407,7 +407,7 @@ sub load_sql_in_order {
                 unless ( index( $systempreference, $file[ scalar(@file) - 1 ] ) >= 0 );
         }
 
-        #Bulding here a hierarchy to display files by level.
+        #Building here a hierarchy to display files by level.
         push @{ $hashlevel{$level} },
             { "fwkname" => $file[ scalar(@file) - 1 ], "error" => $error };
     }
@@ -628,7 +628,7 @@ sub load_sql {
   my $filename = $installer->get_file_path_from_name('script_name');
 
 searches through the set of known SQL scripts and finds the fully
-qualified path name for the script that mathches the input.
+qualified path name for the script that matches the input.
 
 returns undef if no match was found.
 

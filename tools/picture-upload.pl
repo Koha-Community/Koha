@@ -240,10 +240,10 @@ sub handle_dir {
             chomp $line;
             $logger->debug("Examining line: $line");
             my $delim = ( $line =~ /\t/ ) ? "\t" : ( $line =~ /,/ ) ? "," : "";
-            $logger->debug("Delimeter is \'$delim\'");
+            $logger->debug("Delimiter is \'$delim\'");
             unless ( $delim eq "," || $delim eq "\t" ) {
                 warn
-                    "Unrecognized or missing field delimeter. Please verify that you are using either a ',' or a 'tab'";
+                    "Unrecognized or missing field delimiter. Please verify that you are using either a ',' or a 'tab'";
                 $direrrors{'DELERR'} = 1;
 
                 # This error is fatal to the import of this directory contents

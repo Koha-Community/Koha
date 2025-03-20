@@ -193,7 +193,7 @@ subtest 'search_related' => sub {
         ->search_related('branchcode');
     is(
         ref($libraries), 'Koha::Libraries',
-        'Koha::Objects->search_related should return an instanciated Koha::Objects-based object'
+        'Koha::Objects->search_related should return an instantiated Koha::Objects-based object'
     );
     is(
         $libraries->count, 2,
@@ -518,7 +518,7 @@ subtest 'Return same values as DBIx::Class' => sub {
                     !defined $e_us && !defined $e_them,
                     'Successful delete should not raise an exception'
                 );
-                is( ref($r_us), 'Koha::City', 'Successful delete should return our Koha::Obect based object' );
+                is( ref($r_us), 'Koha::City', 'Successful delete should return our Koha::Object based object' );
 
                 # CASE 2 - Delete an object that is not in storage
                 try { $r_us   = $r_us->delete; } catch   { $e_us   = $_ };
@@ -528,7 +528,7 @@ subtest 'Return same values as DBIx::Class' => sub {
                     'Delete an object that is not in storage should raise an exception'
                 );
                 is( ref($e_us), 'DBIx::Class::Exception' )
-                    ;    # FIXME This needs adjustement, we want to throw a Koha::Exception
+                    ;    # FIXME This needs adjustment, we want to throw a Koha::Exception
 
             };
 
@@ -647,7 +647,7 @@ subtest 'Return same values as DBIx::Class' => sub {
                 );
                 is(
                     ref($r_us), 'Koha::Patron',
-                    'Successful delete should return our Koha::Obect based object'
+                    'Successful delete should return our Koha::Object based object'
                 );
 
                 # CASE 2 - Delete a patron that is not in storage
@@ -658,7 +658,7 @@ subtest 'Return same values as DBIx::Class' => sub {
                     'Delete a patron that is not in storage should raise an exception'
                 );
                 is( ref($e_us), 'DBIx::Class::Exception' )
-                    ;    # FIXME This needs adjustement, we want to throw a Koha::Exception
+                    ;    # FIXME This needs adjustment, we want to throw a Koha::Exception
 
                 # CASE 3 - Delete a patron that cannot be deleted (as a checkout)
                 $patron = Koha::Patron->new($patron_data)->store;
@@ -676,7 +676,7 @@ subtest 'Return same values as DBIx::Class' => sub {
                     'Delete a patron that cannot be deleted should raise an exception'
                 );
                 is( ref($e_us), 'DBIx::Class::Exception' )
-                    ;    # FIXME This needs adjustement, we want to throw a Koha::Exception
+                    ;    # FIXME This needs adjustment, we want to throw a Koha::Exception
             };
 
             subtest 'Koha::Objects->delete' => sub {
@@ -871,7 +871,7 @@ subtest 'Return same values as DBIx::Class' => sub {
                     !defined $e_us && !defined $e_them,
                     'Successful update should not raise an exception'
                 );
-                is( ref($r_us), 'Koha::City', 'Successful update should return our Koha::Obect based object' );
+                is( ref($r_us), 'Koha::City', 'Successful update should return our Koha::Object based object' );
 
                 # CASE 2 - Update an object that is not in storage
                 $c_us->delete;
@@ -1008,7 +1008,7 @@ subtest 'Return same values as DBIx::Class' => sub {
                 );
                 is(
                     ref($r_us), 'Koha::Patron',
-                    'Successful update should return our Koha::Obect based object'
+                    'Successful update should return our Koha::Object based object'
                 );
 
                 # CASE 2 - Update a patron that is not in storage

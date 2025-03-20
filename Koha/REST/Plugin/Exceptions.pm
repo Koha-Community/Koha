@@ -43,7 +43,7 @@ Koha::REST::Plugin::Exceptions
     }
 
 Provides a generic and reusable way to throw unhandled exceptions. This way we
-can centralize the behaviour control (e.g. production vs. development environmet)
+can centralize the behaviour control (e.g. production vs. development environment)
 
 =cut
 

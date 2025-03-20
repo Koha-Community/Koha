@@ -43,7 +43,7 @@ This module lets you modify a patron's messaging preferences.
   my $preferences = C4::Members::Messaging::GetMessagingPreferences( { categorycode => 'LIBRARY',
                                                                        message_name   => 'Item_Due ' } );
 
-returns: a hashref of messaging preferences for a borrower or patron category for a particlar message_name
+returns: a hashref of messaging preferences for a borrower or patron category for a particular message_name
 
 Requires either a borrowernumber or a categorycode key, but not both.
 

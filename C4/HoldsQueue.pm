@@ -711,7 +711,7 @@ RETRY:
 sub MapItemsToHoldRequests {
     my ( $hold_requests, $available_items, $branches_to_use, $transport_cost_matrix ) = @_;
 
-    # handle trival cases
+    # handle trivial cases
     return unless scalar(@$hold_requests) > 0;
     return unless scalar(@$available_items) > 0;
 

@@ -79,7 +79,7 @@ if ( $op eq 'cud-sendEmail' || $op eq 'cud-resendEmail' ) {
     } elsif ( $username && $search_results->count > 1 ) {    # Multiple accounts for username
         $hasError           = 1;
         $errNoBorrowerFound = 1;
-    } elsif ( $email && $search_results->count > 1 ) {       # Muliple accounts for E-Mail
+    } elsif ( $email && $search_results->count > 1 ) {       # Multiple accounts for E-Mail
         $hasError                    = 1;
         $errMultipleAccountsForEmail = 1;
     } elsif ( $borrower = $search_results->next() ) {        # One matching borrower

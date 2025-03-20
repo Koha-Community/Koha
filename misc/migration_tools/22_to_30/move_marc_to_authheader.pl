@@ -51,7 +51,7 @@ while ( my ( $authid, $authtypecode ) = $sth->fetchrow ) {
         $record->insert_fields_ordered( MARC::Field->new( '001', $authid ) );
     }
 
-    #Force UTF-8 in record leaded
+    #Force UTF-8 in record FIXME CODESPELL (leaded ==> led, lead)
     $record->encoding('UTF-8');
 
     #     warn "REC : ".$record->as_formatted;

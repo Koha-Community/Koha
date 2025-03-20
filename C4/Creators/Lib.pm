@@ -271,7 +271,7 @@ ADD_LAYOUTS:
   my $profiles = get_all_profiles({ fields => [@fields], filters => { filters => [$value1, $value2] } });
 
 This function returns an arrayref whose elements are hashes containing all profiles upon success and 1 upon failure. Errors are logged
-to the Apache log. Two parameters are accepted. The first limits the field(s) returned. This parameter should be string of comma separted
+to the Apache log. Two parameters are accepted. The first limits the field(s) returned. This parameter should be string of comma separated
 fields. ie. "field_1, field_2, ...field_n" The second limits the records returned based on a string containing a valud SQL 'WHERE' filter.
 
 NOTE: Do not pass in the keyword 'WHERE.'
@@ -382,7 +382,7 @@ sub get_label_summary {
         $record->{'author'} =~ s/[^\.|\w]$//
             if $record->{'author'};    # strip off ugly trailing chars... but not periods or word chars
         $record->{'title'} =~ s/\W*$//;    # strip off ugly trailing chars
-         # FIXME contructing staff interface URLs should be done *much* higher up the stack - for the most part, C4 module code
+         # FIXME constructing staff interface URLs should be done *much* higher up the stack - for the most part, C4 module code
          # should not know that it's part of a web app
         $label_summary->{'_summary'} =
             { title => $record->{title}, author => $record->{author}, biblionumber => $record->{biblionumber} };
@@ -527,7 +527,7 @@ sub get_table_names {
 
 =head2 C4::Creators::Lib::html_table()
 
-This function returns an arrayref of an array of hashes contianing the supplied data formatted suitably to
+This function returns an arrayref of an array of hashes containing the supplied data formatted suitably to
 be passed off as a template parameter and used to build an html table.
 
    my $table = html_table(header_fields, array_of_row_data);

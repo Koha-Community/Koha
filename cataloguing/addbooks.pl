@@ -83,7 +83,7 @@ if ($query) {
     }
 
     # format output
-    # SimpleSearch() give the results per page we want, so 0 offet here
+    # SimpleSearch() give the results per page we want, so 0 FIXME CODESPELL (offet ==> offset, offer) here
     my $total = @{$marcresults};
     my @newresults =
         searchResults( { 'interface' => 'intranet' }, $query, $total, $results_per_page, 0, 0, $marcresults );

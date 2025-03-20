@@ -76,20 +76,20 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    [% FOREACH resul IN result %]
+                                    [% FOREACH result IN resultt %]
                                         <tr>
                                             <td>
-                                                [% IF resul.html %]
-                                                    [% resul.html | $raw %]
+                                                [% IF result.html %]
+                                                    [% result.html | $raw %]
                                                 [% ELSE %]
-                                                    [% PROCESS authresult summary=resul.summary authid=resul.authid %]
+                                                    [% PROCESS authresulttt summary=resultt.summary authid=resultt.authid %]
                                                 [% END %]
                                             </td>
-                                            <td><a href="/cgi-bin/koha/opac-authoritiesdetail.pl?authid=[% resul.authid | uri %]">Details</a> </td><td>[% resul.authtype | html %]</td>
-                                            [% UNLESS ( resul.isEDITORS ) %]
+                                            <td><a href="/cgi-bin/koha/opac-authoritiesdetail.pl?authid=[% resultt.authid | uri %]">Details</a> </td><td>[% resultt.authtype | html %]</td>
+                                            [% UNLESS ( result.isEDITORS ) %]
                                                 <td>
-                                                    [% IF resul.used > 0 %]
-                                                        <a href="/cgi-bin/koha/opac-search.pl?type=opac&amp;op=do_search&amp;q=an,phr:[% resul.authid | uri %]">[% resul.used | html %] [% tn('record', 'records', resul.used ) | html %]</a>
+                                                    [% IF result.used > 0 %]
+                                                        <a href="/cgi-bin/koha/opac-search.pl?type=opac&amp;op=do_search&amp;q=an,phr:[% resulttt.authid | uri %]">[% resulttt.used | html %] [% tn('record', 'records', resulttt.used ) | html %]</a>
                                                     [% ELSE %]
                                                         0 records
                                                     [% END %]

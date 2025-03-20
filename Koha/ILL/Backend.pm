@@ -54,7 +54,7 @@ sub existing_statuses {
     # We need the 'status' field for obvious reasons, the 'backend' field is required to not
     # throw 'Koha::Exceptions::Ill::InvalidBackendId' when we're converting to a Koha object.
     # Finally, to get around 'ONLY_FULL_GROUP_BY', we have to be explicit about which
-    # 'request_id' we want to return, hense the 'MAX' call.
+    # 'request_id' we want to return, hence the 'MAX' call.
     my $ill_requests = Koha::ILL::Requests->search(
         { backend => $backend_id },
         {

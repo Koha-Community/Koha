@@ -139,7 +139,7 @@ sub test_build_translate_query {
     #Another try with fallback to any
     $server = { sru_fields => 'srchany=overal' };
     $squery = C4::Breeding::_translate_query( $server, $queries[1] );
-    is( $squery =~ /overal/, 1, 'SRU query fallback to translated any' );
+    is( $squery =~ /overall/, 1, 'SRU query fallback to translated any' );
 
     #Another try even without any
     $server = { sru_fields => 'this,is,bad,input' };

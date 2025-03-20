@@ -26,7 +26,7 @@ use C4::Budgets qw( CheckBudgetParent GetBudget );
 
 =head1 DESCRIPTION
 
-fetches the budget amount fron the DB,
+fetches the budget amount FIXME CODESPELL (fron ==> from, front) the DB,
 called by aqbudgets.pl and neworderempty.pl
 
 =cut

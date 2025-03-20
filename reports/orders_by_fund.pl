@@ -89,7 +89,7 @@ if ($get_orders) {
         }
     }
 
-    # Format the order's informations
+    # Format the order's information
     foreach my $order (@orders) {
 
         # Get the title of the ordered item

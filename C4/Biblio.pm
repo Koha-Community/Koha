@@ -371,7 +371,7 @@ task to rebuild the holds queue for the biblio if I<RealTimeHoldsQueue> is enabl
 
 =item C<skip_record_index>
 
-Used when the indexing schedulling will be handled by the caller
+Used when the indexing scheduling will be handled by the caller
 
 =item C<record_source_id>
 
@@ -528,7 +528,7 @@ I<$params> is a hashref containing extra parameters. Valid keys are:
 
 =item B<skip_holds_queue>: used when the holds queue update will be handled by the caller
 
-=item B<skip_record_index>: used when the indexing schedulling will be handled by the caller
+=item B<skip_record_index>: used when the indexing scheduling will be handled by the caller
 
 =back
 =cut
@@ -939,11 +939,11 @@ sub GetISBDView {
     my $tagslib = GetMarcStructure( 1, $itemtype, { unsafe => 1 } );
 
     my $ISBD = C4::Context->preference($sysprefname);
-    my $bloc = $ISBD;
+    my $block = $ISBD;
     my $res;
     my $blocres;
 
-    foreach my $isbdfield ( split( /#/, $bloc ) ) {
+    foreach my $isbdfield ( split( /#/, $block ) ) {
 
         #         $isbdfield= /(.?.?.?)/;
         $isbdfield =~ /(\d\d\d)([^\|])?\|(.*)\|(.*)\|(.*)/;
@@ -982,7 +982,7 @@ sub GetISBDView {
                                 $calculated =~ s#/cgi-bin/koha/[^/]+/([^.]*.pl\?.*)$#opac-$1#g;
                             }
 
-                            # field builded, store the result
+                            # field built, store the result
                             if ( $calculated && !$hasputtextbefore ) {    # put textbefore if not done
                                 $blocres .= $textbefore;
                                 $hasputtextbefore = 1;
@@ -1027,7 +1027,7 @@ sub GetISBDView {
                             }
                         }
 
-                        # field builded, store the result
+                        # field built, store the result
                         if ( $calculated && !$hasputtextbefore ) {    # put textbefore if not done
                             $blocres .= $textbefore;
                             $hasputtextbefore = 1;
@@ -1199,7 +1199,7 @@ The following options are supported:
 
 Pass { unsafe => 1 } do disable cached object cloning,
 and instead get a shared reference, resulting in better
-performance (but care must be taken so that retured object
+performance (but care must be taken so that returned object
 is never modified).
 
 Note: If you call GetMarcSubfieldStructure with unsafe => 1, do not modify or
@@ -2303,7 +2303,7 @@ sub TransformHtmlToMarc {
             $newfield = 0;
             my $j = $i + 2;
 
-            if ( $tag < 10 ) {    # no code for theses fields
+            if ( $tag < 10 ) {    # no code for FIXME CODESPELL (theses ==> these, thesis) fields
                                   # in MARC editor, 000 contains the leader.
                 next if $tag == $biblionumbertagfield;
                 my $fval = $cgi->param( $params[ $j + 1 ] );

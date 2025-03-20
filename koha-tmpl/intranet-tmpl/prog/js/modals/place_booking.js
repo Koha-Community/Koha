@@ -140,7 +140,7 @@ $("#placeBookingModal").on("show.bs.modal", function (e) {
     // Note: For now, we apply the pickup library rules for issuelength, renewalsallowed and renewalperiod.
     // This effectively makes these circulation rules hard coded to CircControl: ItemHomeLibrary + HomeOrHolding: holdingbranch
     // Whilst it would be beneficial to make this follow those rules more closely, this would require some significant thinking
-    // around how to best display this in the calender component for the 'Any item' case.
+    // around how to best display this in the calendar component for the 'Any item' case.
     function getCirculationRules() {
         let rules_url = "/api/v1/circulation_rules";
         if (booking_patron && pickup_library_id && booking_itemtype_id) {

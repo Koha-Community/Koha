@@ -142,9 +142,9 @@ sub GetOrderFromItemnumber {
 
   $aqbasket = &GetBasket($basketnumber);
 
-get all basket informations in aqbasket for a given basket
+get all basket information in aqbasket for a given basket
 
-B<returns:> informations for a given basket returned as a hashref.
+B<returns:> information for a given basket returned as a hashref.
 
 =cut
 
@@ -2022,7 +2022,7 @@ sub get_rounded_price {
 
   \@order_loop = GetHistory( %params );
 
-Retreives some acquisition history information
+Retrieves some acquisition history information
 
 params:
   title
@@ -2547,7 +2547,7 @@ sub GetInvoices {
 
     my $invoice = GetInvoice($invoiceid);
 
-Get informations about invoice with given $invoiceid
+Get information about invoice with given $invoiceid
 
 Return a hash filled with aqinvoices.* fields
 
@@ -2576,9 +2576,9 @@ sub GetInvoice {
 
     my $invoice = GetInvoiceDetails($invoiceid)
 
-Return informations about an invoice + the list of related order lines
+Return information about an invoice + the list of related order lines
 
-Orders informations are in $invoice->{orders} (array ref)
+Orders information are in $invoice->{orders} (array ref)
 
 =cut
 

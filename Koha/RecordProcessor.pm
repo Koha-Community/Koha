@@ -37,7 +37,7 @@ B<filter ($record)> - apply the filter and return the result. $record
 may be either a scalar or an arrayref, and the return result will be
 the same type.
 
-These methods may be overriden:
+These methods may be overridden:
 
 B<initialize (%params)> - initialize the filter
 

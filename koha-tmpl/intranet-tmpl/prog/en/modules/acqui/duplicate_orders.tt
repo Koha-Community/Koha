@@ -266,7 +266,7 @@
                 [% END %]
                 <input type="hidden" name="op" value="cud-do_duplicate" />
                 <input type="hidden" name="basketno" value="[% basket.basketno | html %]" />
-                <!-- origquantityrec only here for javascript compatibility (additem.js needs it, useless here, useful when receiveing an order -->
+                <!-- origquantityrec only here for javascript compatibility (additem.js needs it, useless here, useful when receiving an order -->
                 <input id="origquantityrec" readonly="readonly" type="hidden" name="origquantityrec" value="1" />
                 <button type="submit" class="btn btn-primary">Duplicate orders</button>
                 <a class="cancel" href="/cgi-bin/koha/acqui/duplicate_orders.pl?basketno=[% basket.basketno | html %]">Cancel</a>

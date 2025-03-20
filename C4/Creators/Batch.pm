@@ -286,7 +286,7 @@ This module provides methods for creating, and otherwise manipulating batch obje
 =head2 delete()
 
     Invoking the delete method attempts to delete the template from the database. The method returns -1 upon failure. Errors are logged to the Apache log.
-    NOTE: This method may also be called as a function and passed a key/value pair simply deleteing that batch from the database. See the example below.
+    NOTE: This method may also be called as a function and passed a key/value pair simply deleting that batch from the database. See the example below.
 
     examples:
         my $exitstat = $batch->delete(); # to delete the record behind the $batch object

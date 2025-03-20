@@ -31,7 +31,7 @@
         };
 
         /*
-         * A JS equivilent of the KohaDates TT Plugin. Passed an rfc3339 formatted date string,
+         * A JS equivalent of the KohaDates TT Plugin. Passed an rfc3339 formatted date string,
          * or JS Date, the function will return a date string formatted as per the koha instance config.
          * Optionally accepts a dateformat parameter to allow override of the configured output format
          * as well as a 'withtime' boolean denoting whether to include time or not in the output string.

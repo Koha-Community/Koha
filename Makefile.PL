@@ -450,7 +450,7 @@ Name of DBMS user account for Koha's database.
 
 =item DB_PASS
 
-Pasword of DMBS user account for Koha's database.
+Password of DMBS user account for Koha's database.
 
 =item ZEBRA_MARC_FORMAT
 

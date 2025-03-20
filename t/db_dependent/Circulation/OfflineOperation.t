@@ -84,7 +84,7 @@ is_deeply(
         cardnumber => 'Cardnumber1',
         amount     => '10.000000'
     },
-    "GetOffline returns offlineoperation's informations"
+    "GetOffline returns offlineoperation's information"
 );
 is(
     GetOfflineOperation(), undef,

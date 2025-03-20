@@ -68,7 +68,7 @@ ok( !column_exists( 'borrowers', 'xxx' ),        'Column xxx does not exist' );
 }
 my @constraint_names = $source->unique_constraint_names();
 my $constraint_name  = $constraint_names[0];
-ok( index_exists( 'borrowers',  $constraint_name ), 'Known contraint does exist' );
+ok( index_exists( 'borrowers',  $constraint_name ), 'Known constraint does exist' );
 ok( !index_exists( 'borrowers', 'xxx' ),            'Constraint xxx does not exist' );
 
 ok( foreign_key_exists( 'borrowers',  'borrowers_ibfk_1' ), 'FK borrowers_ibfk_1 exists' );

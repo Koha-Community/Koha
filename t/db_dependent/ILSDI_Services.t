@@ -866,7 +866,7 @@ subtest 'GetRecords' => sub {
         'GetRecords returns transfer informations'
     );
 
-    # Check informations exposed
+    # Check information exposed
     my $reply_issue = $reply->{record}->[0]->{issues}->{issue}->[0];
     is( $reply_issue->{itemnumber},     $item->itemnumber, 'GetRecords has an issue tag' );
     is( $reply_issue->{borrowernumber}, undef,             'GetRecords does not expose borrowernumber in issue tag' );

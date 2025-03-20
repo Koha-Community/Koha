@@ -199,7 +199,7 @@
     };
 
     /*
-     * @fields object: Google Books API item propreties map for
+     * @fields object: Google Books API item properties map for
      *                 mapping against a target element. Expected
      *                 type:
      *                 {
@@ -210,7 +210,7 @@
      *                 }
      *
      *                 "target" is optional and if specified alone (i.e no
-     *                 handle proprety) autofill will automaticly fill this
+     *                 handle property) autofill will automatically fill this
      *                 target element with returned data.
      *
      *                 "handle" is optional and will be called when ajax request

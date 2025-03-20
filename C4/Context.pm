@@ -107,7 +107,7 @@ sub import {
 
     # Create the default context ($C4::Context::Context)
     # the first time the module is called
-    # (a config file can be optionaly passed)
+    # (a config file can be optionally passed)
 
     # default context already exists?
     return if $context;

@@ -66,7 +66,7 @@ sub ldap_search {
     $query->code and die sprintf 'error (code:%s) - %s', $query->code, $query->error;
     my $size = scalar( $query->entries );
     my $i    = 5;
-    print "\nNumber of records returned from search: $size.\n";
+    print "\number of records returned from search: $size.\n";
     ( $size > $i ) and print "Displaying the last $i records.\n\n";
     foreach ( $query->entries ) {
         ( $size-- > $i ) and next;

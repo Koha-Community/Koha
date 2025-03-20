@@ -32,8 +32,8 @@ C4::UsageStats
 =head1 DESCRIPTION
 
 This package contains what is needed to report Koha statistics to hea
-hea.koha-community.org is the server that centralize Koha setups informations
-Koha libraries are encouraged to provide informations about their collections,
+hea.koha-community.org is the server that centralize Koha setups information
+Koha libraries are encouraged to provide information about their collections,
 their structure,...
 
 =cut
@@ -85,7 +85,7 @@ sub BuildReport {
 
   ReportToCommunity;
 
-Send to hea.koha-community.org database informations
+Send to hea.koha-community.org database information
 
 =cut
 

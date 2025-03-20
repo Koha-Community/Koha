@@ -130,7 +130,7 @@ is(
 );
 is(
     $budgetperiod->{budget_period_active}, $my_budgetperiod->{budget_period_active},
-    'ModBudgetPeriod upates active correctly'
+    'ModBudgetPeriod updates active correctly'
 );
 
 $budgetperiods = GetBudgetPeriods();

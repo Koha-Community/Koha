@@ -307,7 +307,7 @@ sub _build_query {
         my @definitions = split( ',', $definition );
         my $deftext;
         foreach my $def (@definitions) {
-            my $defin = get_from_dictionary( '', $def );
+            my $define = get_from_dictionary( '', $def );
             $deftext .= " " . $defin->[0]->{'saved_sql'};
         }
         if ( $query =~ /WHERE/i ) {
@@ -347,7 +347,7 @@ sub get_criteria {
     my ( $area, $cgi ) = @_;
     my $dbh = C4::Context->dbh();
 
-    # have to do someting here to know if its dropdown, free text, date etc
+    # have to do something here to know if its dropdown, free text, date etc
     my %criteria = (
         CIRC => [
             'statistics.type', 'borrowers.categorycode', 'statistics.branch',
@@ -915,7 +915,7 @@ sub get_column_type {
 
 =head2 get_distinct_values($column)
 
-Given a column name, return an arrary ref of hashrefs suitable for use as a tmpl_loop 
+Given a column name, return an array ref of hashrefs suitable for use as a tmpl_loop
 with the distinct values of the column
 
 =cut
@@ -1034,7 +1034,7 @@ sub get_results {
 
     my %reserved_authorised_values = GetReservedAuthorisedValues();
 
-Returns a hash containig all reserved words
+Returns a hash containing all reserved words
 
 =cut
 

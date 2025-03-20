@@ -112,7 +112,7 @@ my $reserve_id = AddReserve(
     }
 );
 my ($status) = CheckReserves($item);
-is( $status, 'Reserved', "Hold where itemtype matches item's itemtype targed" );
+is( $status, 'Reserved', "Hold where itemtype matches item's itemtype target" );
 Koha::Holds->find($reserve_id)->cancel;
 
 # Itemtypes don't match

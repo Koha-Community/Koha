@@ -311,7 +311,7 @@ cloud-kw.pl - Creates HTML keywords clouds from Koha Zebra Indexes
 
 =item cloud-kw.pl [--verbose|--help] --conf=F<cloud.conf> 
 
-Creates multiple HTML files containing kewords cloud with top terms sorted
+Creates multiple HTML files containing keywords cloud with top terms sorted
 by their logarithmic weight.
 F<cloud.conf> is a YAML configuration file driving cloud generation
 process.
@@ -346,7 +346,7 @@ Configuration file looks like that:
   KohaConf: /home/koha/mylibray/etc/koha-conf.xml
   # Zebra index to scan
   ZebraIndex: Author
-  # Koha index used to link found kewords with an opac search URL
+  # Koha index used to link found keywords with an opac search URL
   KohaIndex: au
   # Number of top keyword to use for the cloud
   Count: 50
@@ -366,7 +366,7 @@ Configuration file looks like that:
 
 =head1 IMPROVEMENTS
 
-Generated top terms have more informations than those outputted from
+Generated top terms have more information than those outputted from
 the time being. Some parameters could be easily added to improve
 this script:
 

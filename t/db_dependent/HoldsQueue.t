@@ -400,7 +400,7 @@ C4::Calendar->new( branchcode => $branchcodes[0] )->insert_single_holiday(
     description => "$today",
 );
 
-# If the test below is removed, aother tests using the holiday will fail. For some reason if we call is_holiday now
+# If the test below is removed, FIXME CODESPELL (aother ==> another, other, mother) tests using the holiday will fail. For some reason if we call is_holiday now
 # the holiday will get set in cache correctly, but not if we let C4::HoldsQueue call is_holiday instead.
 is(
     Koha::Calendar->new( branchcode => $branchcodes[0] )->is_holiday($today), 1,
@@ -861,7 +861,7 @@ $holds_queue = $dbh->selectall_arrayref( "SELECT * FROM tmp_holdsqueue", { Slice
 is( @$holds_queue, 0, "Hold where pickup ne home, pickup ne holding not targeted" );
 Koha::Holds->find($reserve_id)->cancel;
 
-# With hold_fulfillment_policy = any, hold should be pikcup up reguardless of matching home or holding branch
+# With hold_fulfillment_policy = any, hold should be pikcup up regardless of matching home or holding branch
 $dbh->do("DELETE FROM circulation_rules");
 Koha::CirculationRules->set_rules(
     {

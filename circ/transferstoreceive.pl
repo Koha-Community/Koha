@@ -103,7 +103,7 @@ while ( my $library = $libraries->next ) {
                 itemcallnumber => $item->itemcallnumber,
             );
 
-            # we check if we have a reserv for this transfer
+            # we check if we have a reserve for this transfer
             my $holds = $item->current_holds;
             if ( my $first_hold = $holds->next ) {
                 $getransf{patron} = Koha::Patrons->find( $first_hold->borrowernumber );

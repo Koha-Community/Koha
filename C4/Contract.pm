@@ -46,7 +46,7 @@ use C4::Contract;
 =head1 DESCRIPTION
 
 The functions in this module deal with contracts. They allow to
-add a new contract, to modify it or to get some informations around
+add a new contract, to modify it or to get some information around
 a contract.
 
 =cut

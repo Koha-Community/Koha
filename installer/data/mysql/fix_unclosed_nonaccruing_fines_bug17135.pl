@@ -167,7 +167,7 @@ sub Bug_17135_fix {
 
             ## If we are here: item is due again, but fine is not accruing
             ## yet (overdue may be in the grace period, 1st charging period
-            ## is not over yet, all days beetwen due date and today are
+            ## is not over yet, all days between due date and today are
             ## holidays etc.). Old fine record needs to be closed
             $is_not_accruing = 1;
         }

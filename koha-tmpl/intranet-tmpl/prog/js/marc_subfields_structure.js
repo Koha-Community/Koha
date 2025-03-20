@@ -186,7 +186,7 @@ function populateHiddenCheckboxes(tab) {
     // read the serialized value
     var hidden_value = $("#hidden-" + tab).val();
     var hidden_protected = $("#hidden-" + tab).attr("data-koha-protected");
-    // deafult to false
+    // default to false
     var opac_checked = false;
     var intranet_checked = false;
     var editor_checked = false;

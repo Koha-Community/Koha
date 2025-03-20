@@ -122,10 +122,10 @@ sub GetSuggestionFromBiblionumber {
 
 =head2 GetSuggestionInfoFromBiblionumber
 
-Get a suggestion and borrower's informations from it's biblionumber.
+Get a suggestion and borrower's information from it's biblionumber.
 
 return :
-all informations (suggestion and borrower) of the suggestion which is related to the biblionumber given.
+all information (suggestion and borrower) of the suggestion which is related to the biblionumber given.
 
 =cut
 
@@ -149,10 +149,10 @@ sub GetSuggestionInfoFromBiblionumber {
 
 =head2 GetSuggestionInfo
 
-Get a suggestion and borrower's informations from it's suggestionid
+Get a suggestion and borrower's information from it's suggestionid
 
 return :
-all informations (suggestion and borrower) of the suggestion which is related to the suggestionid given.
+all information (suggestion and borrower) of the suggestion which is related to the suggestionid given.
 
 =cut
 

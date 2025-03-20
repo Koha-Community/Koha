@@ -187,7 +187,7 @@ sub test05 {
     foreach my $f (@$plugins) {
         $objs->{$f} = Koha::FrameworkPlugin->new($f);
         my $pars = { dbh => $dbh, id => $f };
-        is( $objs->{$f}->build($pars), 1, "Builded " . $objs->{$f}->name );
+        is( $objs->{$f}->build($pars), 1, "Built " . $objs->{$f}->name );
     }
 
     # test launching them (but we cannot verify returned results here)

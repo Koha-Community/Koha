@@ -366,7 +366,7 @@ function checkBudgetParent(budgetId, newBudgetParent) {
     if (result == "1") {
         return "- " + __("New budget-parent is beneath budget") + "\n";
         //     } else if (result == '2') {
-        //            return "- New budget-parent has insufficent funds\n";
+        //            return "- New budget-parent has insufficient funds\n";
         //     } else  {
         //              return false;
     }

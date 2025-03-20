@@ -49,7 +49,7 @@ subtest 'GenerateCSRF() tests' => sub {
     $schema->storage->txn_rollback;
 };
 
-subtest 'GenerateCSRF - New CSRF token generated everytime we need one' => sub {
+subtest 'GenerateCSRF - New CSRF token generated every time we need one' => sub {
     plan tests => 2;
 
     $schema->storage->txn_begin;

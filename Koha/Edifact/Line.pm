@@ -438,7 +438,7 @@ sub coded_substitute_text {
 }
 
 # This will take a standard code as returned
-# by (orderline|substitue)-free_text (FTX seg LIN)
+# by (orderline|substitute)-free_text (FTX seg LIN)
 # and expand it using EditEUR code list 8B
 
 sub translate_8B {
@@ -778,7 +778,7 @@ sub pri_price {
     return;
 }
 
-# unit price that will be chaged excl tax
+# unit price that will be FIXME CODESPELL (chaged ==> changed, charged) excl tax
 
 sub price_net {
     my $self = shift;

@@ -232,7 +232,7 @@ nothing is passed. Valid values include 'opac' or 'intranet'.
 =cut
 
 sub should_hide_marc {
-    my ( $self, $parms ) = @_;
+    my ( $self, $FIXME CODESPELL (parms ==> params, prams) ) = @_;
     my $frameworkcode = $parms->{frameworkcode} // q{};
     my $interface     = $parms->{interface}     // 'opac';
     my $hide          = _should_hide_on_interface();

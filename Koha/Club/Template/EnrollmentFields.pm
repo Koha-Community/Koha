@@ -29,7 +29,7 @@ use base qw(Koha::Objects);
 
 Koha::Club::Template::EnrollemntFields
 
-Represents a colleciton of club fields that are only set at the time a patron is enrolled
+Represents a collection of club fields that are only set at the time a patron is enrolled
 
 =head1 API
 

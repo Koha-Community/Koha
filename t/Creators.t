@@ -1,8 +1,8 @@
 #!/usr/bin/perl
 #
-# This module will excercise pdf creation routines
+# This module will exercise pdf creation routines
 #
-# When run with KEEP_PDF enviroment variable it will keep
+# When run with KEEP_PDF environment variable it will keep
 # test.pdf for manual inspection. This can be used to verify
 # that ttf font configuration is complete like:
 #

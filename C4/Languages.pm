@@ -425,12 +425,12 @@ sub _build_languages_arrayref {
     my @ordered_keys = sort {
         my $aa     = '';
         my $bb     = '';
-        my $acount = @{ $language_groups->{$a} };
+        my $account = @{ $language_groups->{$a} };
         my $bcount = @{ $language_groups->{$b} };
         if ( $language_groups->{$a}->[0]->{enabled} ) {
             $aa = $language_groups->{$a}->[0]->{rfc4646_subtag};
-        } elsif ( $acount > 1 ) {
-            for ( my $i = 1 ; $i < $acount ; $i++ ) {
+        } elsif ( $account > 1 ) {
+            for ( my $i = 1 ; $i < $account ; $i++ ) {
                 if ( $language_groups->{$a}->[$i]->{enabled} ) {
                     $aa = $language_groups->{$a}->[$i]->{rfc4646_subtag};
                     last;
@@ -625,7 +625,7 @@ sub accept_language {
     my @languages = ();
     if ($clientPreferences) {
 
-        # There should be no whitespace anways, but a cleanliness/sanity check
+        # There should be no whitespace anyway, but a cleanliness/sanity check
         $clientPreferences =~ s/\s//g;
 
         # Prepare the list of client-acceptable languages

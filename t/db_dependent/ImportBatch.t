@@ -79,7 +79,7 @@ delete $importbatch2->{profile};
 
 is_deeply(
     $importbatch2, $sample_import_batch2,
-    "GetImportBatch returns the right informations about $sample_import_batch2"
+    "GetImportBatch returns the right information about $sample_import_batch2"
 );
 
 my $importbatch1 = C4::ImportBatch::GetImportBatch($id_import_batch1);
@@ -92,7 +92,7 @@ delete $importbatch1->{profile};
 
 is_deeply(
     $importbatch1, $sample_import_batch1,
-    "GetImportBatch returns the right informations about $sample_import_batch1"
+    "GetImportBatch returns the right information about $sample_import_batch1"
 );
 
 my $record          = MARC::Record->new;

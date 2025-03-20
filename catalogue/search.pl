@@ -411,7 +411,7 @@ if ( $params->{'limit-yr'} ) {
     }
     push @limits, $limit_yr;
 
-    #FIXME: Should return a error to the user, incorect date format specified
+    #FIXME: Should return a error to the user, incorrect date format specified
 }
 
 # convert indexes and operands to corresponding parameter names for the z3950 search

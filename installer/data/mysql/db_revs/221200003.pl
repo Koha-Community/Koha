@@ -9,7 +9,7 @@ return {
 
         my $permission_added = $dbh->do(
             q{
-            INSERT IGNORE INTO permissions (module_bit, code, description) VALUES ( 9, 'edit_any_item', 'Edit any item reguardless of home library');
+            INSERT IGNORE INTO permissions (module_bit, code, description) VALUES ( 9, 'edit_any_item', 'Edit any item regardless of home library');
         }
         );
 

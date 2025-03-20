@@ -65,7 +65,7 @@ preferences (OAI-PMH:archiveID and OAI-PMH:MaxCount) and the server returns
 records in marcxml or dublin core format. Dublin core records are created from
 koha marcxml records transformed with XSLT. Used XSL file is located in koha-
 tmpl/intranet-tmpl/prog/en/xslt directory and chosen based on marcflavour,
-respecively MARC21slim2OAIDC.xsl for MARC21 and  MARC21slim2OAIDC.xsl for
+respectively MARC21slim2OAIDC.xsl for MARC21 and  MARC21slim2OAIDC.xsl for
 UNIMARC.
 
 In extended mode, it's possible to parameter other format than marcxml or

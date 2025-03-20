@@ -20,7 +20,7 @@
 =head1 stockrotation.pl
 
  Script to manage item assignments to stock rotation rotas. Including their
- assiciated stages
+ associated stages
 
 =cut
 

@@ -41,6 +41,6 @@ return {
         $dbh->do(
             q{ALTER TABLE aqbudgets ADD CONSTRAINT `aqbudgetperiods_ibfk_1` FOREIGN KEY (`budget_period_id`) REFERENCES aqbudgetperiods(`budget_period_id`) ON DELETE CASCADE ON UPDATE CASCADE}
         );
-        say $out "Readded foreign key aqbudgetperiods_ibfk_1";
+        say $out "Read foreign key aqbudgetperiods_ibfk_1";
     },
 };

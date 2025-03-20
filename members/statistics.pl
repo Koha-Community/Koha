@@ -115,7 +115,7 @@ sub add_actual_state {
 =head2 build_array
 
   Build a new array containing values of hashes.
-  It used by template whitch display silly values.
+  It used by template which display silly values.
   ex:
     $array = [
       {

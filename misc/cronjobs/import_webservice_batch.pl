@@ -61,7 +61,7 @@ Specify frameworkcode when overlaying records.  Current framework is preserved i
 
 =head1 DESCRIPTION
 
-This script is designed to import batches staged by webservices (e.g. connexion).
+This script is designed to import batches staged by webservices (e.g. connection).
 
 =head1 USAGE EXAMPLES
 

@@ -281,7 +281,7 @@ if ( $op eq "add_form" ) {
             selectedbaskets => $selecteds
         );
 
-        # Get general informations about the basket group to prefill the form
+        # Get general information about the basket group to prefill the form
         my $basketgroup = GetBasketgroup($basketgroupid);
         $template->param(
             name              => $basketgroup->{name},

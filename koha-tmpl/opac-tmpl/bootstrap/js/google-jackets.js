@@ -13,7 +13,7 @@ KOHA.Google = {
      * or
      *    <div title="biblionumber" id="isbn" class="gbs-thumbnail-preview"></div>
      * and run a search with all collected isbns to Google Book Search.
-     * The result is asynchronously returned by Google and catched by
+     * The result is asynchronously returned by Google and caught by
      * gbsCallBack().
      */
     GetCoverFromIsbn: function (newWindow) {

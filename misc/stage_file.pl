@@ -238,7 +238,7 @@ Parameters:
     --add-items             use this option to specify that
                             item data is embedded in the MARC
                             bibs and should be parsed.
-    --item-action           action to take if --add-items is specifed;
+    --item-action           action to take if --add-items is specified;
                             choices are 'always_add',
                             'add_only_for_matches', 'add_only_for_new',
                             'ignore', or 'replace'

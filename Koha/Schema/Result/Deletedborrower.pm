@@ -184,7 +184,7 @@ the fax number for your patron/borrower's primary address
   data_type: 'mediumtext'
   is_nullable: 1
 
-the secondary email addres for your patron/borrower's primary address
+the secondary email address for your patron/borrower's primary addresss
 
 =head2 phonepro
 
@@ -366,7 +366,7 @@ comment on the stop of patron
   data_type: 'longtext'
   is_nullable: 1
 
-used for children and profesionals to include surname or last name of guarantor or organization name
+used for children and professionals to include surname or last name of guarantor or organization name
 
 =head2 contactfirstname
 
@@ -618,7 +618,7 @@ lang to use to send notices to this patron
   default_value: 0
   is_nullable: 0
 
-number of failed login attemps
+number of failed login attempts
 
 =head2 overdrive_auth_token
 

@@ -113,7 +113,7 @@ C4::Auth - Authenticates Koha users
 =head1 DESCRIPTION
 
 The main function of this module is to provide
-authentification. However the get_template_and_user function has
+authentication. However the get_template_and_user function has
 been provided so that a users login information is passed along
 automatically. This gets loaded into the template.
 
@@ -173,7 +173,7 @@ BEGIN {
      );
 
 This call passes the C<query>, C<flagsrequired> and C<authnotrequired>
-to C<&checkauth> (in this module) to perform authentification.
+to C<&checkauth> (in this module) to perform authentication.
 See C<&checkauth> for an explanation of these parameters.
 
 The C<template_name> is then used to find the correct template for
@@ -766,7 +766,7 @@ user has authenticated, C<&checkauth> restarts the original script
 The login page is provided using a HTML::Template, which is set in the
 systempreferences table or at the top of this file. The variable C<$type>
 selects which template to use, either the opac or the intranet
-authentification template.
+authentication template.
 
 C<&checkauth> returns a user ID, a cookie, and a session ID. The
 cookie should be sent back to the browser; it verifies that the user
@@ -1032,7 +1032,7 @@ sub checkauth {
     if ($logout) {
 
         # voluntary logout the user
-        # check wether the user was using their shibboleth session or a local one
+        # check FIXME CODESPELL (wether ==> weather, whether) the user was using their shibboleth session or a local one
         my $shibSuccess = C4::Context->userenv ? C4::Context->userenv->{'shibboleth'} : undef;
         if ($session) {
             $session->delete();
@@ -1413,7 +1413,7 @@ sub checkauth {
         }
     }
 
-    # finished authentification, now respond
+    # finished authentication, now respond
     if ( $auth_state eq 'completed' || $authnotrequired ) {
 
         # successful login
@@ -1691,7 +1691,7 @@ sub check_api_auth {
     if ( C4::Context->preference('Version') < $kohaversion ) {
 
         # database in need of version update; assume that
-        # no API should be called while databsae is in
+        # no API should be called while database is in
         # this condition.
         return ( "maintenance", undef, undef );
     }
@@ -1737,7 +1737,7 @@ sub check_api_auth {
             # User / password auth
             unless ( $userid and $password ) {
 
-                # caller did something wrong, fail the authenticateion
+                # caller did something wrong, fail the authentication
                 return ( "failed", undef, undef );
             }
             my $newuserid;
@@ -1858,7 +1858,7 @@ sub check_api_auth {
 Given a CGISESSID cookie set during a previous login to Koha, determine
 if the user has the privileges specified by C<$userflags>. C<$userflags>
 is passed unaltered into C<haspermission> and as such accepts all options
-avaiable to that routine with the one caveat that C<check_api_auth> will
+available to that routine with the one caveat that C<check_api_auth> will
 also allow 'undef' to be passed and in such a case the permissions check
 will be skipped altogether.
 
@@ -1906,7 +1906,7 @@ sub check_cookie_auth {
         if ( C4::Context->preference('Version') < $kohaversion ) {
 
             # database in need of version update; assume that
-            # no API should be called while databsae is in
+            # no API should be called while database is in
             # this condition.
             return ( "maintenance", undef );
         }

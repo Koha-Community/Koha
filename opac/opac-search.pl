@@ -480,7 +480,7 @@ if ( $params->{'limit-yr'} ) {
         push @limits, "yr,st-numeric=$params->{'limit-yr'}";
     } else {
 
-        #FIXME: Should return a error to the user, incorect date format specified
+        #FIXME: Should return a error to the user, incorrect date format specified
     }
 }
 

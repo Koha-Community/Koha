@@ -2,7 +2,7 @@ use Modern::Perl;
 
 return {
     bug_number  => "22690",
-    description => "Add contraints to the linktracker table",
+    description => "Add constraints to the linktracker table",
     up          => sub {
         my ($args) = @_;
         my ( $dbh, $out ) = @$args{qw(dbh out)};

@@ -402,7 +402,7 @@ sub calculate {
     }
 
     my $i         = 0;
-    my $hilighted = -1;
+    my $highlighted = -1;
 
     #Initialization of cell values.....
     my %table;
@@ -543,7 +543,7 @@ sub calculate {
             'rowtitle'  => $row->{rowtitle},
             'value'     => $row->{value},
             'loopcell'  => \@loopcell,
-            'hilighted' => ( $hilighted *= -1 > 0 ),
+            'highlighted' => ( $highlighted *= -1 > 0 ),
             'totalrow'  => $table{ $row->{value} }->{totalrow}
             };
     }

@@ -335,7 +335,7 @@ if ( defined $href ) {
             || $msg->{msgstr} eq '""'
             || $msg->{obsolete}
             || grep { /fuzzy/ } @{ $msg->{_flags} };
-        warn_normal( "unconsistent %s count: ($id_count/$str_count):\n"
+        warn_normal( "inconsistent %s count: ($id_count/$str_count):\n"
                 . "  line:   "
                 . $msg->{loaded_line_number} . "\n"
                 . "  msgid:  "

@@ -60,9 +60,9 @@
                     </tr>
                     [% FOREACH loopro IN mainloo.looprow %]
                         <tr>
-                            <td [% IF loopro.hilighted %]class="hilighted"[% END %]> [% loopro.rowtitle | html %]</td>
+                            <td [% IF loopro.highlighted %]class="highlighted"[% END %]> [% loopro.rowtitle | html %]</td>
                             [% FOREACH loopcel IN loopro.loopcell %]
-                                <td [% IF loopcel.hilighted %]class="hilighted"[% END %]> [% IF ( loopcel.value ) %][% loopcel.value | html %][% END %] </td>
+                                <td [% IF loopcel.highlighted %]class="highlighted"[% END %]> [% IF ( loopcel.value ) %][% loopcel.value | html %][% END %] </td>
                             [% END %]
                             <td> [% loopro.totalrow | html %] </td>
                         </tr>
@@ -92,7 +92,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr class="hilighted">
+                        <tr class="highlighted">
                             <td>Checkout date</td>
                             <td><input type="radio" name="Line" value="timestamp" /></td>
                             <td><input type="radio" checked="checked" name="Column" value="timestamp" /></td>
@@ -105,7 +105,7 @@
                                 <span class="hint">[% INCLUDE 'date-format.inc' %]</span>
                             </td>
                         </tr>
-                        <tr class="hilighted">
+                        <tr class="highlighted">
                             <td>&nbsp;</td>
                             <td colspan="2"
                                 >by
@@ -144,7 +144,7 @@
                             </td>
                             <td><input type="hidden" name="Filter" value="" /><input type="hidden" name="Filter" value="" /></td>
                         </tr>
-                        <tr class="hilighted">
+                        <tr class="highlighted">
                             <td>Patron category</td>
                             <td><input type="radio" checked="checked" name="Line" value="borrowers.categorycode" /></td>
                             <td><input type="radio" name="Column" value="borrowers.categorycode" /></td>
@@ -170,7 +170,7 @@
                                 </select>
                             </td>
                         </tr>
-                        <tr class="hilighted">
+                        <tr class="highlighted">
                             <td>Library</td>
                             <td><input type="radio" name="Line" value="branchcode" /></td>
                             <td><input type="radio" name="Column" value="branchcode" /></td>
@@ -182,7 +182,7 @@
                             </td>
                         </tr>
                         [% IF ( hassort1 ) %]
-                            <tr class="hilighted">
+                            <tr class="highlighted">
                                 <td>Sort1</td>
                                 <td><input type="radio" name="Line" value="borrowers.sort1" /></td>
                                 <td><input type="radio" name="Column" value="borrowers.sort1" /></td>
@@ -197,7 +197,7 @@
                             </tr>
                         [% END %]
                         [% IF ( hassort2 ) %]
-                            <tr [% IF HglghtSort2 %]class="hilighted"[% END %]>
+                            <tr [% IF HglghtSort2 %]class="highlighted"[% END %]>
                                 <td>Sort2</td>
                                 <td><input type="radio" name="Line" value="borrowers.sort2" /></td>
                                 <td><input type="radio" name="Column" value="borrowers.sort2" /></td>

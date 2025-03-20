@@ -34,7 +34,7 @@ sub print_usage {
     print <<USAGE;
 
 $basename
-    Export patron informations in CSV format.
+    Export patron information in CSV format.
     It prints to standard output. Use redirection to save CSV in a file.
 
 Usage:
@@ -97,7 +97,7 @@ unless ($separator) {
 my $csv = Text::CSV->new( { sep_char => $separator, binary => 1, formula => 'empty' } );
 
 # If the user did not specify any field to export, we assume they want them all
-# We retrieve the first borrower informations to get field names
+# We retrieve the first borrower information to get field names
 my ($borrowernumber) = $sth->fetchrow_array or die "No borrower to export";
 my $patron           = Koha::Patrons->find($borrowernumber);               # FIXME Now is_expired is no longer available
     # We will have to use Koha::Patron and allow method calls

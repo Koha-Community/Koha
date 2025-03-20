@@ -131,7 +131,7 @@ sub offline_ok {
 # Checkout(patron_id, item_id, sc_renew):
 #    patron_id & item_id are the identifiers send by the terminal
 #    sc_renew is the renewal policy configured on the terminal
-# returns a status opject that can be queried for the various bits
+# returns a status object that can be queried for the various bits
 # of information that the protocol (SIP or NCIP) needs to generate
 # the response.
 

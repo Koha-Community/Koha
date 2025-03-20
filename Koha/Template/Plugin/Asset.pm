@@ -25,7 +25,7 @@ Koha::Template::Plugin::Asset
 
 The Asset plugin is a helper that generates HTML tags for JS and CSS files
 
-=head1 SYNOPSYS
+=head1 SYNOPSIS
 
     [% USE Asset %]
 

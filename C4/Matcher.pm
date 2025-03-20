@@ -487,7 +487,7 @@ parameter identifies the index that will be searched, while $score
 is the weight that will be added if a match is found.
 
 $matchcomponents should be a reference to an array of matchpoint
-compoents, each of which should be a hash containing the following 
+components, each of which should be a hash containing the following
 keys:
     tag
     subfields
@@ -524,7 +524,7 @@ sub add_matchpoint {
 
 
 Adds a simple matchpoint rule -- after composing a key based on the source tag and subfields,
-normalized per the normalization fuction, search the index.  All records retrieved
+normalized per the normalization function, search the index.  All records retrieved
 will receive the assigned score.
 
 =cut
@@ -865,7 +865,7 @@ sub _get_match_keys {
     # matchpoint includes both 003 and 001), any repeats
     # of the first component's tag are identified; repeats
     # of the subsequent components' tags are appended to
-    # each parallel key dervied from the first component,
+    # each parallel key derived from the first component,
     # up to the number of repeats of the first component's tag.
     #
     # For example, if the record has one 003 and two 001s, only

@@ -64,7 +64,7 @@ use File::Spec;
 
 =cut
 
-# The previous implmentation used username and password.
+# The previous implementation used username and password.
 # our $user = C4::Context->config('smsuser');
 # our $pwd  = C4::Context->config('smspass');
 

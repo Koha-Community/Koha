@@ -404,7 +404,7 @@ subtest 'GetSubscriptionsFromBiblionumber' => sub {
 is( C4::Serials::GetSerials(),  undef, 'test getting serials when you enter nothing' );
 is( C4::Serials::GetSerials2(), undef, 'test getting serials when you enter nothing' );
 
-is( C4::Serials::GetLatestSerials(), undef, 'test getting lastest serials' );
+is( C4::Serials::GetLatestSerials(), undef, 'test getting FIXME CODESPELL (lastest ==> latest, last) serials' );
 
 is( C4::Serials::GetNextSeq(), undef, 'test getting next seq when you enter nothing' );
 
@@ -618,7 +618,7 @@ subtest "Do not generate an expected if one already exists" => sub {
         $publisheddate, $publisheddate, '1', 'an useless note'
     );
     @serialsByStatus = C4::Serials::findSerialsByStatus( 1, $subscriptionid );
-    is( @serialsByStatus, 1, "ModSerialStatus delete corectly serial expected and create another if not exist" );
+    is( @serialsByStatus, 1, "ModSerialStatus delete correctly serial expected and create another if not exist" );
 
     # add 1 serial with status=Expected 1
     C4::Serials::ModSerialStatus(
@@ -635,7 +635,7 @@ subtest "Do not generate an expected if one already exists" => sub {
 
     #try if create or not another serial with status is expected
     @serialsByStatus = C4::Serials::findSerialsByStatus( 1, $subscriptionid );
-    is( @serialsByStatus, 1, "ModSerialStatus delete corectly serial expected and not create another if exists" );
+    is( @serialsByStatus, 1, "ModSerialStatus delete correctly serial expected and not create another if exists" );
 };
 
 subtest "PreserveSerialNotes preference" => sub {

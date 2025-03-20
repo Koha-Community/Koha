@@ -6,7 +6,7 @@ use Test::More tests => 38;
 use Test::MockModule;
 use t::lib::Mocks;
 
-# Number formating depends by default on system environement
+# Number formatting depends by default on system environment
 # See http://search.cpan.org/~wrw/Number-Format/Format.pm
 use POSIX qw(setlocale LC_NUMERIC);
 
@@ -74,7 +74,7 @@ is(
 );
 
 SKIP: {
-    # Bug 18900 - Check params are not from system environement
+    # Bug 18900 - Check params are not from system environment
     setlocale( LC_NUMERIC, "fr_FR.UTF-8" );
     my $current_locale = setlocale(LC_NUMERIC);
 
@@ -102,7 +102,7 @@ $currency = Koha::Acquisition::Currency->new(
     }
 );
 
-# Actually,the price formating for France is 3,00€
+# Actually,the price formatting for France is 3,00€
 # How put the symbol at the end with Number::Format?
 is( Koha::Number::Price->new->format($format),    '0,00', 'FR: format 0' );
 is( Koha::Number::Price->new(3)->format($format), '3,00', 'FR: format 3' );

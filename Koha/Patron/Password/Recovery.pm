@@ -52,7 +52,7 @@ use Koha::Patron::Password::Recovery;
 
 =head2 ValidateBorrowernumber
 
-$alread = ValidateBorrowernumber( $borrower_number );
+$already = ValidateBorrowernumber( $borrower_number );
 
 Check if the system already start recovery
 

@@ -571,7 +571,7 @@ seen. It is ordered by callnumber then title.
 
 The required minlocation & maxlocation parameters are used to specify a range of item callnumbers
 the datelastseen can be used to specify that you want to see items not seen since a past date only.
-offset & size can be used to retrieve only a part of the whole listing (defaut behaviour)
+offset & size can be used to retrieve only a part of the whole listing (default behaviour)
 $statushash requires a hashref that has the authorized values fieldname (intems.notforloan, etc...) as keys, and an arrayref of statuscodes we are searching for as values.
 
 $iTotalRecords is the number of rows that would have been returned without the $offset, $size limit clause

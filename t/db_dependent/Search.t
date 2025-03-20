@@ -1156,12 +1156,12 @@ sub run_unimarc_search_tests {
         ['mainentry'], ['and'], [''], ['contains'],
         ['wil'], 0, 10, '', '', 1
     );
-    is( $count, 11, 'UNIMARC authorities: hits on mainentry contains "wil"' );
+    is( $count, 11, 'UNIMARC authorities: hits on mainentry contains "FIXME CODESPELL (wil ==> will, well)"' );
     ( $auths, $count ) = SearchAuthorities(
         ['match'], ['and'], [''], ['contains'],
         ['wil'],   0, 10, '', '', 1
     );
-    is( $count, 11, 'UNIMARC authorities: hits on match contains "wil"' );
+    is( $count, 11, 'UNIMARC authorities: hits on match contains "FIXME CODESPELL (wil ==> will, well)"' );
     ( $auths, $count ) = SearchAuthorities(
         ['mainentry'], ['and'], [''], ['contains'],
         ['michel'],    0, 20, '', '', 1

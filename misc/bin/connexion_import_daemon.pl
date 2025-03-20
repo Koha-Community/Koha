@@ -62,11 +62,11 @@ Config file format:
                       add_only_for_matches, add_only_for_new or ignore
   import_mode    - stage or direct
   framework      - to be used if import_mode is direct, if blank, will use default
-  connexion_user      - User sent from connexion client
-  connexion_password  - Password sent from connexion client
+  connection_user      - User sent from connection client
+  connection_password  - Password sent from connection client
 
-  Note: If connexion parameters are not defined request authentication will not be checked
-  You should specify a different user for connexion to protect the Koha credentials
+  Note: If connection parameters are not defined request authentication will not be checked
+  You should specify a different user for connection to protect the Koha credentials
 
   All process related parameters (all but ip and port) have default values as
   per Koha import process.

@@ -1262,7 +1262,7 @@ subtest 'Koha::Account::pay() generates credit number (Koha::Account::Line->stor
     $accountlines_id =
         $account->pay( { type => 'WRITEOFF', amount => '1.00', library_id => $library->id } )->{payment_id};
     $accountline = Koha::Account::Lines->find($accountlines_id);
-    is( $accountline->credit_number, undef, "Annual format credit number not aded for writeoff" );
+    is( $accountline->credit_number, undef, "Annual format credit number not added for writeoff" );
 
     t::lib::Mocks::mock_preference( 'AutoCreditNumber', 'branchyyyymmincr' );
     for my $i ( 1 .. 11 ) {

@@ -569,7 +569,7 @@ subtest '->build parameter' => sub {
     warnings_like {
         $builder->build( { source => 'Borrower', categorycode => 'foobar' } );
     }
-    qr{Unknown parameter\(s\): categorycode}, "Unkown parameter detected";
+    qr{Unknown parameter\(s\): categorycode}, "Unknown parameter detected";
 
     $schema->storage->txn_rollback;
 };

@@ -632,7 +632,7 @@ This module provides methods for creating, and otherwise manipulating single lab
 =head2 new()
 
     Invoking the I<new> method constructs a new label object containing the supplied values. Depending on the final output format of the label data
-    the minimal required parameters change. (See the implimentation of this object type in labels/label-create-pdf.pl and labels/label-create-csv.pl
+    the minimal required parameters change. (See the implementation of this object type in labels/label-create-pdf.pl and labels/label-create-csv.pl
     and labels/label-create-xml.pl for examples.) The following parameters are optionally accepted as key => value pairs:
 
         C<batch_id>             Batch id with which this label is associated
@@ -765,7 +765,7 @@ R       = Right
 
 =head2 create_label()
 
-    Invoking the I<create_label> method generates the text for that label and returns it as an arrayref of an array contianing the formatted text as well as creating the barcode
+    Invoking the I<create_label> method generates the text for that label and returns it as an arrayref of an array containing the formatted text as well as creating the barcode
     and writing it directly to the pdf stream. The handling of the barcode is not quite good OO form due to the linear format of PDF::Reuse::Barcode. Be aware that the instantiating
     code is responsible to properly format the text for insertion into the pdf stream as well as the actual insertion.
 

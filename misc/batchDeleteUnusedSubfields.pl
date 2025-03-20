@@ -50,7 +50,7 @@ foreach my $tag ( sort keys( %{$tags} ) ) {
         next if $subfield eq "tab";
 
         # DO NOT drop biblionumber, biblioitemnumber and itemnumber.
-        # they are stored internally, and are mapped to tab -1. This script must keep them or it will completly break Koha DB !!!
+        # they are stored internally, and are mapped to tab -1. This script must keep them or it will completely break Koha DB !!!
         next if ( $tags->{$tag}->{$subfield}->{kohafield} eq "biblio.biblionumber" );
         next if ( $tags->{$tag}->{$subfield}->{kohafield} eq "biblioitems.biblioitemnumber" );
         next if ( $tags->{$tag}->{$subfield}->{kohafield} eq "items.itemnumber" );

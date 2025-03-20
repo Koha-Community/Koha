@@ -2007,10 +2007,10 @@ subtest "GetUpcomingDueIssues" => sub {
     is( scalar(@$upcoming_dues), 1, "1 item is due today, none tomorrow" );
 
     $upcoming_dues = C4::Circulation::GetUpcomingDueIssues( { days_in_advance => 2 } );
-    is( scalar(@$upcoming_dues), 2, "2 items are due withing 2 days" );
+    is( scalar(@$upcoming_dues), 2, "2 items are due within 2 days" );
 
     $upcoming_dues = C4::Circulation::GetUpcomingDueIssues( { days_in_advance => 3 } );
-    is( scalar(@$upcoming_dues), 2, "2 items are due withing 2 days" );
+    is( scalar(@$upcoming_dues), 2, "2 items are due within 2 days" );
 
     $upcoming_dues = C4::Circulation::GetUpcomingDueIssues();
     is( scalar(@$upcoming_dues), 2, "days_in_advance is 7 in GetUpcomingDueIssues if not provided" );
@@ -5709,7 +5709,7 @@ subtest 'Incremented fee tests' => sub {
         }
     );
 
-    is( $itemtype->rentalcharge_daily + 0, 1,             'Daily rental charge stored and retreived correctly' );
+    is( $itemtype->rentalcharge_daily + 0, 1,             'Daily rental charge stored and retrieved correctly' );
     is( $item->effective_itemtype,         $itemtype->id, "Itemtype set correctly for item" );
 
     my $now         = dt_from_string;
@@ -5774,7 +5774,7 @@ subtest 'Incremented fee tests' => sub {
 
     my $calendar = C4::Calendar->new( branchcode => $library->id );
 
-    # DateTime 1..7 (Mon..Sun), C4::Calender 0..6 (Sun..Sat)
+    # DateTime 1..7 (Mon..Sun), C4::Calendar 0..6 (Sun..Sat)
     my $closed_day =
           ( $dt_from->day_of_week == 6 ) ? 0
         : ( $dt_from->day_of_week == 7 ) ? 1
@@ -5812,7 +5812,7 @@ subtest 'Incremented fee tests' => sub {
     $issue->delete();
 
     $itemtype->rentalcharge(2)->store;
-    is( $itemtype->rentalcharge + 0, 2, 'Rental charge updated and retreived correctly' );
+    is( $itemtype->rentalcharge + 0, 2, 'Rental charge updated and retrieved correctly' );
     $issue = AddIssue( $patron, $item->barcode, $dt_to, undef, $dt_from );
     my $accountlines = Koha::Account::Lines->search( { itemnumber => $item->id } );
     is( $accountlines->count, '2', "Fixed charge and accrued charge recorded distinctly" );
@@ -5831,7 +5831,7 @@ subtest 'Incremented fee tests' => sub {
     $accountlines->delete();
     $issue->delete();
     $itemtype->rentalcharge(0)->store;
-    is( $itemtype->rentalcharge + 0, 0, 'Rental charge reset and retreived correctly' );
+    is( $itemtype->rentalcharge + 0, 0, 'Rental charge reset and retrieved correctly' );
 
     # Hourly
     Koha::CirculationRules->set_rule(
@@ -5845,7 +5845,7 @@ subtest 'Incremented fee tests' => sub {
     );
 
     $itemtype->rentalcharge_hourly('0.25')->store();
-    is( $itemtype->rentalcharge_hourly, '0.25', 'Hourly rental charge stored and retreived correctly' );
+    is( $itemtype->rentalcharge_hourly, '0.25', 'Hourly rental charge stored and retrieved correctly' );
 
     $dt_to       = $now->clone->add( hours => 168 );
     $dt_to_renew = $now->clone->add( hours => 312 );

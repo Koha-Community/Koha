@@ -380,7 +380,7 @@ sub calculate {
     }
 
     my $i         = 0;
-    my $hilighted = -1;
+    my $highlighted = -1;
 
     #Initialization of cell values.....
     my %table;
@@ -480,12 +480,12 @@ sub calculate {
         my $r = {
             rowtitle  => ( $row eq "zzEMPTY" ) ? "NULL" : $row,
             loopcell  => \@loopcell,
-            hilighted => ( $hilighted > 0 ),
+            highlighted => ( $highlighted > 0 ),
             totalrow  => $table{$row}->{totalrow}
         };
         $r->{totalrow} = sprintf( "%.2f", $r->{totalrow} ) if ( $r->{totalrow} and grep /$process/, ( 3, 4, 5 ) );
         push @looprow, $r;
-        $hilighted = -$hilighted;
+        $highlighted = -$highlighted;
     }
 
     foreach my $col (@loopcol) {

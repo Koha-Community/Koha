@@ -50,7 +50,7 @@ basket.pl
 
 =head1 DESCRIPTION
 
- This script display all informations about basket for the supplier given
+ This script display all information about basket for the supplier given
  on input arg.  Moreover, it allows us to add a new order for this supplier from
  an existing record, a suggestion or a new record.
 

@@ -86,7 +86,7 @@ my $launcher = sub {
         }
     );
 
-    # If a prefix is submited, we look for the highest stocknumber with this prefix, and return it incremented
+    # If a prefix is submitted, we look for the highest stocknumber with this prefix, and return it incremented
     $code =~ s/ *$//g;
     if ( $code =~ m/^[a-zA-Z]+$/ ) {
         my $av = Koha::AuthorisedValues->find(

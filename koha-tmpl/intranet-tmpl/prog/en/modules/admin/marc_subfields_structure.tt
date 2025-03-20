@@ -132,7 +132,7 @@
                         [% outputsubfield = PROCESS outputsubfield subfieldanchor = loo.subfieldcode %]
                         [% WRAPPER tab_panel tabname=outputsubfield %]
                             <input type="hidden" name="tab_id" value="[% loo.row | html %]" />
-                            <div id="basic[%- outputsubfield | html -%]" class="contraints">
+                            <div id="basic[%- outputsubfield | html -%]" class="constraints">
                                 <fieldset class="rows">
                                     <legend>Basic constraints</legend>
                                     <ol>
@@ -211,7 +211,7 @@
                             </div>
                             <!-- /#basic[%- PROCESS outputsubfield subfieldanchor = subfieldcode -%] -->
 
-                            <div id="advanced[%- outputsubfield | html -%]" class="contraints">
+                            <div id="advanced[%- outputsubfield | html -%]" class="constraints">
                                 <fieldset class="rows">
                                     <legend>Advanced constraints</legend>
                                     <ol>

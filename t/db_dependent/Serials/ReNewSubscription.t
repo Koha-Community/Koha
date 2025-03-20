@@ -155,7 +155,7 @@ is( $monthlength, undef, "Subscription length is undef months, invalid month dat
 ( $numberlength, $weeklength, $monthlength ) = GetSubscriptionLength( 'issues', 'w' );
 is( $monthlength, undef, "Subscription length is undef issues, invalid issue data was not stored" );
 
-# Check subscription length when a special character is inputted into numberic sublength field
+# Check subscription length when a special character is inputted into numeric sublength field
 ( $numberlength, $weeklength, $monthlength ) = GetSubscriptionLength( 'weeks', '!' );
 is( $weeklength, undef, "Subscription length is undef weeks, invalid weeks data was not stored" );
 

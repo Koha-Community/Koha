@@ -387,7 +387,7 @@ sub calculate {
     #	warn "fin des titres colonnes";
 
     my $i         = 0;
-    my $hilighted = -1;
+    my $highlighted = -1;
 
     #Initialization of cell values.....
     my %table;
@@ -517,10 +517,10 @@ sub calculate {
             {
             'rowtitle'  => ( $row eq "zzEMPTY" ) ? "NULL" : $row,
             'loopcell'  => \@loopcell,
-            'hilighted' => ( $hilighted > 0 ),
+            'highlighted' => ( $highlighted > 0 ),
             'totalrow'  => ($total) ? sprintf( "%.2f", $total ) : 0
             };
-        $hilighted = -$hilighted;
+        $highlighted = -$highlighted;
     }
     #
     # #	warn "footer processing";

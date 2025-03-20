@@ -177,7 +177,7 @@ C4::ImportExportFramework - Import/Export Framework to Excel-xml/ODS Module Func
 Module to Import/Export Framework to Excel-xml/ODS on intranet administration - MARC Frameworks section
 
 Module to Import/Export Framework to Excel-xml/ODS on intranet administration - MARC Frameworks section
-exporting the tables marc_tag_structure, marc_subfield_structure to excel-xml/ods or viceversa
+exporting the tables marc_tag_structure, marc_subfield_structure to excel-xml/ods or vice-versa
 
 Functions for handling import/export.
 
@@ -191,7 +191,7 @@ Functions for handling import/export.
 Export all information of a bibliographic or authority MARC framework to an Excel "xml" file, comma separated values "csv" or OpenDocument SpreadSheet "ods".
 
 return :
-succes
+success
 
 =cut
 
@@ -746,7 +746,7 @@ sub ImportFramework {
         }
         unlink($filename) if ($deleteFilename);    # remove temporary file
     } else {
-        Koha::Logger->get->warn("Error ImportFramework no conex to database or not readeable $filename");
+        Koha::Logger->get->warn("Error ImportFramework no conex to database or not readable $filename");
     }
     if ( $deleteFilename && $tempdir && -d $tempdir && -w $tempdir ) {
         eval {
@@ -1009,7 +1009,7 @@ sub _import_table_csv {
     while ( my $row = $csv->getline($dom) ) {
         my @fields = @$row;
         @arrData = @fields;
-        next if scalar @arrData == grep { $_ eq '' } @arrData;    # Emtpy lines
+        next if scalar @arrData == grep { $_ eq '' } @arrData;    # Empty lines
             #$arrData[0] = substr($arrData[0], 1) if ($arrData[0] =~ /^"/);
             #$arrData[$#arrData] =~ s/[\r\n]+$//;
             #chop $arrData[$#arrData] if ($arrData[$#arrData] =~ /"$/);

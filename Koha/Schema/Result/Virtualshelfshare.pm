@@ -53,7 +53,7 @@ borrower that accepted access to this list
   is_nullable: 1
   size: 10
 
-temporary string used in accepting the invitation to access thist list; not-empty means that the invitation has not been accepted yet
+temporary string used in accepting the invitation to access this list; not-empty means that the invitation has not been accepted yet
 
 =head2 sharedate
 

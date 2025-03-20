@@ -23,7 +23,7 @@
 # File format
 #
 # cardnumber,surname,firstname,title,othernames,initials,streetnumber,streettype,
-# address line , address line 2, city, zipcode, contry, email, phone, mobile, fax, work email, work phone,
+# address line , address line 2, city, zipcode, country, email, phone, mobile, fax, work email, work phone,
 # alternate streetnumber, alternate streettype, alternate address line 1, alternate city,
 # alternate zipcode, alternate country, alternate email, alternate phone, date of birth, branchcode,
 # categorycode, enrollment date, expiry date, noaddress, lost, debarred, contact surname,

@@ -59,7 +59,7 @@ my $new_review_2_1 = Koha::Review->new(
     {
         borrowernumber => $patron_2->borrowernumber,
         biblionumber   => $biblio_1->biblionumber,
-        review         => 'just anoter review',
+        review         => 'just another review',
     }
 )->store;
 

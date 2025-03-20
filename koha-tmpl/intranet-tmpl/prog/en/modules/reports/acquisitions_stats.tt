@@ -90,7 +90,7 @@
                     </tr>
                     [% FOREACH loopro IN mainloo.looprow %]
                         <tr>
-                            <td [% IF loopro.hilighted %]class="hilighted"[% END %]> [% loopro.rowtitle | html %]</td>
+                            <td [% IF loopro.highlighted %]class="highlighted"[% END %]> [% loopro.rowtitle | html %]</td>
                             [% FOREACH loopcel IN loopro.loopcell %]
                                 <td>
                                     [% IF ( loopcel.value ) %]
@@ -128,7 +128,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr class="hilighted">
+                        <tr class="highlighted">
                             <td>Placed on</td>
                             <td><input type="radio" name="Line" value="aqbasket.closedate" /></td>
                             <td><input type="radio" checked="checked" name="Column" value="aqbasket.closedate" /> </td>
@@ -139,7 +139,7 @@
                                 <span class="hint">[% INCLUDE 'date-format.inc' %]</span>
                             </td>
                         </tr>
-                        <tr class="hilighted">
+                        <tr class="highlighted">
                             <td>&nbsp;</td>
                             <td colspan="2"
                                 >group by
@@ -176,7 +176,7 @@
                             </td>
                             <td>&nbsp;</td>
                         </tr>
-                        <tr class="hilighted">
+                        <tr class="highlighted">
                             <td>Vendor</td>
                             <td><input type="radio" checked="checked" name="Line" value="aqbooksellers.name" /></td>
                             <td><input type="radio" name="Column" value="aqbooksellers.name" /></td>
@@ -254,7 +254,7 @@
                         </tr>
 
                         [% IF ( hassort1 ) %]
-                            <tr class="hilighted">
+                            <tr class="highlighted">
                                 <td>Sort1</td>
                                 <td><input type="radio" name="Line" value="aqorders.sort1" /></td>
                                 <td><input type="radio" name="Column" value="aqorders.sort1" /></td>
@@ -269,7 +269,7 @@
                             </tr>
                         [% END %]
                         [% IF ( hassort2 ) %]
-                            <tr [% IF HglghtSort2 %]class="hilighted"[% END %]>
+                            <tr [% IF HglghtSort2 %]class="highlighted"[% END %]>
                                 <td>Sort2</td>
                                 <td><input type="radio" name="Line" value="aqorders.sort2" /></td>
                                 <td><input type="radio" name="Column" value="aqorders.sort2" /></td>

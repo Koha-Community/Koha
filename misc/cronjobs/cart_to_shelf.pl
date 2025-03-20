@@ -44,7 +44,7 @@ GetOptions( 'h|hours=s' => \$hours, );
 
 my $usage = << 'ENDUSAGE';
 cart_to_shelf.pl: This cron script will set any item of the location CART ( Shelving Cart ) to it's original shelving location
-                 after the given numer of hours has passed.
+                 after the given number of hours has passed.
 
 This script takes the following parameters :
 

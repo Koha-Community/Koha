@@ -520,7 +520,7 @@ sub pickup_locations {
 
     my $bool = $biblio->hidden_in_opac({ [ rules => $rules ] })
 
-Returns true if the biblio matches the hidding criteria defined in $rules.
+Returns true if the biblio matches the FIXME CODESPELL (hidding ==> hiding, hidden) criteria defined in $rules.
 Returns false otherwise. It involves the I<OpacHiddenItems> and
 I<OpacHiddenItemsHidesRecord> system preferences.
 
@@ -1261,7 +1261,7 @@ sub get_coins {
         [ 'rft.issn', $issn ],
     );
 
-    # If it's a subscription, these informations have no meaning.
+    # If it's a subscription, these information have no meaning.
     if ( $genre ne 'journal' ) {
         push @params, (
             [ 'rft.aulast',  $aulast ],
@@ -1332,7 +1332,7 @@ sub is_serial {
 my $image_url = $biblio->custom_cover_image_url
 
 Return the specific url of the cover image for this bibliographic record.
-It is built regaring the value of the system preference CustomCoverImagesURL
+It is built regarding the value of the system preference CustomCoverImagesURL
 
 =cut
 

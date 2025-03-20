@@ -11,7 +11,7 @@ return {
         $dbh->do(
             q{
             INSERT IGNORE INTO letter (module, code, name, title, content, message_transport_type) VALUES ('members', 'PASSWORD_CHANGE', 'Notification of password change', 'Library account password change notification',
-            "Dear [% borrower.firstname %] [% borrower.surname %],\r\n\r\nWe want to notify you that your password has been changed. If you did not change it yourself (or requested that change), please contact library staff.\r\n\r\nYour library.", 'email');
+            "Dear [% borrower.firstname %] [% borrower.surname %],\r\n\r\new want to notify you that your password has been changed. If you did not change it yourself (or requested that change), please contact library staff.\r\n\r\nYour library.", 'email');
         }
         );
 

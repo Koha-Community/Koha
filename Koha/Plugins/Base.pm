@@ -156,7 +156,7 @@ Then name of the plugin method used. For example 'tool' or 'report'.
 =item B<PLUGIN_PATH>
 
 The URL path to the plugin. It can be used in templates in order to localize
-ressources like images in html tags, or other templates.
+resources like images in html tags, or other templates.
 
 =item B<PLUGIN_DIR>
 
@@ -344,7 +344,7 @@ sub _version_compare {
         push( @v1, 0 ) unless defined( $v1[$i] );
         push( @v2, 0 ) unless defined( $v2[$i] );
 
-        # Strip letters before comparing, supresses 'Argument "v1" isn't numeric in int' warning
+        # Strip letters before comparing, suppresses 'Argument "v1" isn't numeric in int' warning
         $v1[$i] =~ s/^v//g;
         $v2[$i] =~ s/^v//g;
 
@@ -359,7 +359,7 @@ sub _version_compare {
 
 =head2 is_enabled
 
-Method that returns wether the plugin is enabled or not
+Method that returns FIXME CODESPELL (wether ==> weather, whether) the plugin is enabled or not
 
 $plugin->enable
 

@@ -123,7 +123,7 @@ sub checkpw_ldap {
     my @hosts = split( ',', $prefhost );
     my $db    = Net::LDAP->new( \@hosts );
     unless ($db) {
-        warn "LDAP connexion failed";
+        warn "LDAP connection failed";
         return 0;
     }
 
@@ -456,7 +456,7 @@ C4::Auth - Authenticates Koha users
 
 =head1 LDAP Configuration
 
-    This module is specific to LDAP authentification. It requires Net::LDAP package and one or more
+    This module is specific to LDAP authentication. It requires Net::LDAP package and one or more
 	working LDAP servers.
 	To use it :
 	   * Modify ldapserver element in KOHA_CONF

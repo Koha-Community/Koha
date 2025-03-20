@@ -189,7 +189,7 @@ sub summary {
 
 =head3 to_api_mapping
 
-This method returns the mapping for representing a Koha::Cash::Regiser::Cashup object
+This method returns the mapping for representing a Koha::Cash::Register::Cashup object
 on the API.
 
 =cut

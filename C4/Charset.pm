@@ -368,7 +368,7 @@ removed.
 This function exists to work around a problem
 that can occur with badly-encoded MARC records.
 Specifically, if a UTF-8 MARC record also
-has excape (\x1b) characters, MARC::File::XML
+has escape (\x1b) characters, MARC::File::XML
 will let the escape characters pass through
 when as_xml() or as_xml_record() is called.  The
 problem is that the escape character is not
@@ -707,7 +707,7 @@ sub _marc_to_utf8_via_text_iconv {
     my $decoder;
     eval { $decoder = Text::Iconv->new( $source_encoding, 'utf8' ); };
     if ($@) {
-        push @errors, "Could not initialze $source_encoding => utf8 converter: $@";
+        push @errors, "Could not initialize $source_encoding => utf8 converter: $@";
         return @errors;
     }
 
@@ -1043,7 +1043,7 @@ $chars{0xc777} = 0x1e87;    # small w with dot above
 $chars{0xc778} = 0x1e8b;    # small x with dot above
 $chars{0xc779} = 0x1e8f;    # small y with dot above
 $chars{0xc77a} = 0x017c;    # small z with dot above
-                            # 4/8 trema, diaresis
+                            # 4/8 trema, diaeresis
 $chars{0xc820} = 0x00a8;    # diaeresis
 $chars{0xc841} = 0x00c4;    # capital a with diaeresis
 $chars{0xc845} = 0x00cb;    # capital e with diaeresis

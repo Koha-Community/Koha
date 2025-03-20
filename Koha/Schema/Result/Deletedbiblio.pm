@@ -38,7 +38,7 @@ unique identifier assigned to each bibliographic record
   is_nullable: 0
   size: 4
 
-foriegn key from the biblio_framework table to identify which framework was used in cataloging this record
+foreign key from the biblio_framework table to identify which framework was used in cataloging this record
 
 =head2 author
 

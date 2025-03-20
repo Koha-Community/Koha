@@ -395,7 +395,7 @@ if ( !$op ) {
     my @columns = split( ',', $column );
     my @total_by;
 
-    # build structue for use by tmpl_loop to choose columns to order by
+    # build structure for use by tmpl_loop to choose columns to order by
     # need to do something about the order of the order :)
     # we also want to use the %columns hash to get the plain english names
     foreach my $col (@columns) {
@@ -436,7 +436,7 @@ if ( !$op ) {
     my @columns = split( ',', $column );
     my @order_by;
 
-    # build structue for use by tmpl_loop to choose columns to order by
+    # build structure for use by tmpl_loop to choose columns to order by
     # need to do something about the order of the order :)
     foreach my $col (@columns) {
         my %order   = ( name => $col );

@@ -36,7 +36,7 @@ namespace, and provide the following methods:
 B<get_suggestions ($search)> - get suggestions from the plugin for the
 specified search.
 
-These methods may be overriden:
+These methods may be overridden:
 
 B<initialize (%params)> - initialize the plugin
 

@@ -28,7 +28,7 @@ booksellers.pl
 =head1 DESCRIPTION
 
 this script displays the list of suppliers & baskets like C<$supplier> given on input arg.
-thus, this page brings differents features like to display supplier's details,
+thus, this page brings FIXME CODESPELL (differents ==> different, difference) features like to display supplier's details,
 to add an order for a specific supplier or to just add a new supplier.
 
 =head1 CGI PARAMETERS

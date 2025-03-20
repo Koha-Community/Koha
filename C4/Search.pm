@@ -191,7 +191,7 @@ for my $r ( @{$marcresults} ) {
     my $marcrecord = MARC::File::USMARC::decode($r);
     my $biblio = TransformMarcToKoha({ record => $marcrecord });
 
-    #build the iarray of hashs for the template.
+    #build the iarray of hashes for the template.
     push @results, {
         title           => $biblio->{'title'},
         subtitle        => $biblio->{'subtitle'},
@@ -307,7 +307,7 @@ sub getRecords {
     my @results;
     my $results_hashref = ();
 
-    # TODO simplify this structure ( { branchcode => $branchname } is enought) and remove this parameter
+    # TODO simplify this structure ( { branchcode => $branchname } is enough) and remove this parameter
     $branches ||= { map { $_->branchcode => { branchname => $_->branchname } } Koha::Libraries->search->as_list };
 
     # Initialize variables for the faceted results objects

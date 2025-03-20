@@ -51,17 +51,17 @@ The letter language (es-ES, fr-FR, ...)
 =item B<--repeat REPEAT>
 
 A JSON formatted string that will be used as repeat parameter. See
-documentation of GetPreparedLetter for more informations.
+documentation of GetPreparedLetter for more information.
 
 =item B<--tables TABLES>
 
 A JSON formatted string that will be used as tables parameter. See
-documentation of GetPreparedLetter for more informations.
+documentation of GetPreparedLetter for more information.
 
 =item B<--loops LOOPS>
 
 A JSON formatted string that will be used as loops parameter. See
-documentation of GetPreparedLetter for more informations.
+documentation of GetPreparedLetter for more information.
 
 =back
 

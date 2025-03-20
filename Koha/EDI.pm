@@ -1197,7 +1197,7 @@ sub _get_budget {
         }
     );
 
-    # db does not ensure budget code is unque
+    # db does not ensure budget code is unique
     return $schema->resultset('Aqbudget')->single(
         {
             budget_code      => $budget_code,
@@ -1340,7 +1340,7 @@ Koha::EDI
 
     passed a message object for an invoice, add the contained invoices
     and update the orderlines referred to in the invoice
-    As an Edifact invoice is in effect a despatch note this receipts the
+    As an Edifact invoice is in effect a dispatch note this receipts the
     appropriate quantities in the orders
 
     no meaningful return value
@@ -1409,7 +1409,7 @@ Koha::EDI
 
       classmark = title_level_class(edi_item)
 
-      Trys to return a title level classmark from a quote message line
+      Tries to return a title level classmark from a quote message line
       Will return a dewey or lcc classmark if one exists according to the
       value in DefaultClassificationSource syspref
 

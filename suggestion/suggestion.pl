@@ -257,14 +257,14 @@ if ( $op =~ /cud-save/ ) {
             my $suggestions = Koha::Suggestions->search_limited($suggestion_only);
             if ( $suggestions->count ) {
 
-                #some suggestion are answering the request Donot Add
+                #some suggestion are answering the request FIXME CODESPELL (Donot ==> Do not, Donut) Add
                 my @messages;
                 while ( my $suggestion = $suggestions->next ) {
                     push @messages, { type => 'error', code => 'already_exists', id => $suggestion->suggestionid };
                 }
                 $template->param( messages => \@messages );
             } else {
-                ## Adding some informations related to suggestion
+                ## Adding some information related to suggestion
                 if ( $librarian->has_permission( { 'suggestions' => 'suggestions_create' } ) ) {
                     Koha::Suggestion->new($suggestion_only)->store();
                 } else {
@@ -305,7 +305,7 @@ if ( $op =~ /cud-save/ ) {
 } elsif ( $op eq "cud-update_status" ) {
     my $suggestion;
 
-    # set accepted/rejected/managed informations if applicable
+    # set accepted/rejected/managed information if applicable
     # ie= if the librarian has chosen some action on the suggestions
     my $STATUS      = $input->param('STATUS');
     my $accepted_by = $input->param('acceptedby');
@@ -506,7 +506,7 @@ $template->param(
     "op"            => $op,
 );
 
-if ( defined($returnsuggested) and $returnsuggested ne "noone" ) {
+if ( defined($returnsuggested) and $returnsuggested ne "no one" ) {
     print $input->redirect( "/cgi-bin/koha/members/moremember.pl?borrowernumber=" . $returnsuggested . "#suggestions" );
 }
 

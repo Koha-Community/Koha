@@ -1209,7 +1209,7 @@ each call to C<MARC::Record>->field) we create an optimized structure of mapping
 rules keyed by MARC field tags holding all the mapping rules for that particular tag.
 
 We can then iterate through all MARC fields for each record and apply all relevant
-rules once per fields instead of retreiving fields multiple times for each mapping rule
+rules once per fields instead of retrieving fields multiple times for each mapping rule
 which is terribly slow.
 
 =cut

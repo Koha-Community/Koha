@@ -819,7 +819,7 @@ sub _recursiveAdd {
     }
 }
 
-# Recursive method to add a budget and its chidren to an array
+# Recursive method to add a budget and its children to an array
 sub _add_budget_children {
     my $res    = shift;
     my $budget = shift;
@@ -1054,7 +1054,7 @@ sub GetBudgetsByActivity {
 
 Get all but cancelled orders for all funds.
 
-If the optionnal activity parameter is passed, returns orders for active/inactive budgets only.
+If the optional activity parameter is passed, returns orders for active/inactive budgets only.
 
 active = 1
 inactive = 0

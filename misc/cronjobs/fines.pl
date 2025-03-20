@@ -3,7 +3,7 @@
 #  This script loops through each overdue item, determines the fine,
 #  and updates the total amount of fines due by each user.  It relies on
 #  the existence of /tmp/fines, which is created by ???
-# Doesn't really rely on it, it relys on being able to write to /tmp/
+# Doesn't really rely on it, it relies on being able to write to /tmp/
 # It creates the fines file
 #
 #  This script is meant to be run nightly out of cron.
@@ -71,7 +71,7 @@ or not calculated ("Don't calculate").
 This script has the following parameters :
     -h --help: this message
     -l --log: log the output to a file (optional if the -o parameter is given)
-    -o --out:  ouput directory for logs (defaults to env or /tmp if !exist)
+    -o --out:  output directory for logs (defaults to env or /tmp if !exist)
     -v --verbose
     -m --maxdays: how many days back of overdues to process
     -i --verifyissue: verify the issue before updating the fine in case the

@@ -1719,7 +1719,7 @@ sub NewIssue {
 
 1 or 0 = HasSubscriptionStrictlyExpired($subscriptionid)
 
-the subscription has stricly expired when today > the end subscription date 
+the subscription has strictly expired when today > the end subscription date
 
 return :
 1 if true, 0 if false, -1 if the expiration date is not set.
@@ -1744,7 +1744,7 @@ sub HasSubscriptionStrictlyExpired {
         # Getting today's date
         my ( $nowyear, $nowmonth, $nowday ) = Today();
 
-        # if today's date > expiration date, then the subscription has stricly expired
+        # if today's date > expiration date, then the subscription has strictly expired
         if ( Delta_Days( $nowyear, $nowmonth, $nowday, $endyear, $endmonth, $endday ) < 0 ) {
             return 1;
         } else {
@@ -2486,7 +2486,7 @@ this function it takes the publisheddate and will return the next issue's date
 and will skip dates if there exists an irregularity.
 $publisheddate has to be an ISO date
 $subscription is a hashref containing at least 'firstacquidate', 'irregularity', and 'countissuesperunit'
-$frequency is a hashref containing frequency informations
+$frequency is a hashref containing frequency information
 $updatecount is a boolean value which, when set to true, update the 'countissuesperunit' in database
 - eg if periodicity is monthly and $publisheddate is 2007-02-10 but if March and April is to be
 skipped then the returned date will be 2007-05-10

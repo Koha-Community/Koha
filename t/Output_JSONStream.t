@@ -22,7 +22,7 @@ like( $json->output, '/"stuff":\["realia"\]/', "Making sure JSON output has adde
 like( $json->output, '/"issues":\["yes!","please","no"\]/', "Making sure existing elements remain in JSON output" );
 $json->param( stuff => [ 'fun', 'love' ] );
 like( $json->output, '/"stuff":\["fun","love"\]/',          "Making sure JSON output can overwrite params." );
-like( $json->output, '/"issues":\["yes!","please","no"\]/', "Making non overwitten elements remain in JSON output" );
+like( $json->output, '/"issues":\["yes!","please","no"\]/', "Making non overwritten elements remain in JSON output" );
 
 eval { $json->param(die) };
 ok( $@, 'Dies' );

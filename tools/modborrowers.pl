@@ -61,7 +61,7 @@ if ( $logged_in_user->is_superlibrarian ) {
 }
 my $dbh = C4::Context->dbh;
 
-# Show borrower informations
+# Show borrower information
 if ( $op eq 'cud-show' || $op eq 'show' ) {
     my @borrowers;
     my @patronidnumbers;
@@ -154,7 +154,7 @@ if ( $op eq 'cud-show' || $op eq 'show' ) {
     my @patron_categories =
         Koha::Patron::Categories->search_with_library_limits( {}, { order_by => ['description'] } )->as_list;
     while ( my $attr_type = $patron_attribute_types->next ) {
-        next if $attr_type->unique_id;    # Don't display patron attributes that must be unqiue
+        next if $attr_type->unique_id;    # Don't display patron attributes that must be unique
         my $options =
             $attr_type->authorised_value_category
             ? GetAuthorisedValues( $attr_type->authorised_value_category )

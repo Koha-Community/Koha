@@ -61,7 +61,7 @@ Branch this stage relates to
   default_value: 4
   is_nullable: 0
 
-The number of days items shoud occupy this stage
+The number of days items should occupy this stage
 
 =cut
 

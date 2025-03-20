@@ -59,12 +59,12 @@ C4::Reserves - Koha functions for dealing with reservation.
 
 =head1 DESCRIPTION
 
-This modules provides somes functions to deal with reservations.
+This modules provides FIXME CODESPELL (somes ==> some, sums) functions to deal with reservations.
 
   Reserves are stored in reserves table.
   The following columns contains important values :
   - priority >0      : then the reserve is at 1st stage, and not yet affected to any item.
-             =0      : then the reserve is being dealed
+             =0      : then the reserve is being dealt
   - found : NULL         : means the patron requested the 1st available, and we haven't chosen the item
             T(ransit)    : the reserve is linked to an item but is in transit to the pickup branch
             W(aiting)    : the reserve is linked to an item, is at the pickup branch, and is waiting on the hold shelf
@@ -162,7 +162,7 @@ BEGIN {
 
 Adds reserve and generates HOLDPLACED message and HOLDPLACED_PATRON message.
 
-The following tables are available witin the HOLDPLACED message:
+The following tables are available within the HOLDPLACED message:
 
     branches
     borrowers
@@ -230,7 +230,7 @@ sub AddReserve {
 
     my $waitingdate;
 
-    # If the reserv had the waiting status, we had the value of the resdate
+    # If the reserve had the waiting status, we had the value of the resdate
     if ( $found && $found eq 'W' ) {
         $waitingdate = $resdate;
     }
@@ -891,9 +891,9 @@ sub CheckReserves {
             if ( $res->{'found'} && $res->{'found'} eq 'W' ) {
                 return ( "Waiting", $res, \@reserves );    # Found it, it is waiting
             } elsif ( $res->{'found'} && $res->{'found'} eq 'P' ) {
-                return ( "Processing", $res, \@reserves );    # Found determinated hold, e. g. the transferred one
+                return ( "Processing", $res, \@reserves );    # Found determined hold, e. g. the transferred one
             } elsif ( $res->{'found'} && $res->{'found'} eq 'T' ) {
-                return ( "Transferred", $res, \@reserves );    # Found determinated hold, e. g. the transferred one
+                return ( "Transferred", $res, \@reserves );    # Found determined hold, e. g. the transferred one
             } else {
                 my $patron;
                 my $local_hold_match;
@@ -1308,7 +1308,7 @@ Reduce the values of queued list
 sub ModReserveMinusPriority {
     my ( $itemnumber, $reserve_id ) = @_;
 
-    #first step update the value of the first person on reserv
+    #first step update the value of the first person on reserve
     my $dbh   = C4::Context->dbh;
     my $query = "
         UPDATE reserves
@@ -1627,7 +1627,7 @@ sub _FixPriority {
     }
     my @priority;
 
-    # get whats left
+    # get what's left
     my $query = "
         SELECT reserve_id, borrowernumber, reservedate
         FROM   reserves
@@ -1802,7 +1802,7 @@ The letter code for this notice may be found using the following query:
 This will probably sipmly be 'HOLD', but because it is defined in the database,
 it is subject to addition or change.
 
-The following tables are availalbe witin the notice:
+The following tables are available within the notice:
 
     branches
     borrowers

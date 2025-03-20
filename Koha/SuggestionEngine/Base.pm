@@ -38,7 +38,7 @@ B<NAME> - return a string with the name of the plugin.
 
 B<VERSION> - return a string with the version of the plugin.
 
-These methods may be overriden:
+These methods may be overridden:
 
 B<initialize (%params)> - initialize the plugin
 
@@ -81,7 +81,7 @@ sub new {
 
 =head2 initialize
 
-    $plugin->initalize(%params);
+    $plugin->initialize(%params);
 
 Initialize a filter using the specified parameters.
 

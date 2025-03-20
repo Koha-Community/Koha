@@ -21,7 +21,7 @@ package Koha::Template::Plugin::TablesSettings;
 
 Koha::Template::Plugin::TablesSettings
 
-=head2 SYNOPSYS
+=head2 SYNOPSIS
 
     [% USE TablesSettings %]
 

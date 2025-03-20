@@ -172,7 +172,7 @@ if ( $op eq 'cud-process' && $fileID ) {
 
                         unless ( $delim eq "," || $delim eq "\t" ) {
                             warn
-                                "Unrecognized or missing field delimeter. Please verify that you are using either a ',' or a 'tab'";
+                                "Unrecognized or missing field delimiter. Please verify that you are using either a ',' or a 'tab'";
                             $error = 'DELERR';
                             next;
                         } else {

@@ -182,7 +182,7 @@ sub build {
 =head2 launch
 
     Launches the popup for this plugin by calling its launcher sub
-    Old style plugins still expect to receive a CGI oject, new style
+    Old style plugins still expect to receive a CGI object, new style
     plugins expect a params hashref.
     Returns undef on failure, otherwise launcher return value (if any).
 

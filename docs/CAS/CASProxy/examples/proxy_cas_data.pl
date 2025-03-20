@@ -26,7 +26,7 @@
 =head2 PGTIOU
 
 The Proxy Granting Ticket IOU the CAS Server returned to us when we gave him the Service Ticket
-This PGTIOU will allow us to retrive the matching PGTID
+This PGTIOU will allow us to retrieve the matching PGTID
 
 =cut 
 

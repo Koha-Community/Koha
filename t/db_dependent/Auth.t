@@ -82,7 +82,7 @@ subtest 'checkauth() tests' => sub {
 
     my $is_allowed = C4::Auth::haspermission( $db_user_id, { can_do => 'everything' } );
 
-    # FIXME This belongs to t/db_dependent/Auth/haspermission.t but we do not want to c/p the pervious mock statements
+    # FIXME This belongs to t/db_dependent/Auth/haspermission.t but we do not want to c/p the previous mock statements
     ok( !$is_allowed, 'DB user should not have any permissions' );
 
     subtest 'Prevent authentication when sending credential via GET' => sub {

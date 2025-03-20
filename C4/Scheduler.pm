@@ -108,7 +108,7 @@ sub add_at_job {
     #    not check all error conditions - in particular, it does
     #    not check the return value of the "at" run; it basically
     #    complains only if it can't find at.
-    # 3. Similary, Schedule::At::add() does not do something more useful,
+    # 3. Similarly, Schedule::At::add() does not do something more useful,
     #    such as returning the job ID.  To be fair, it is possible
     #    that 'at' does not allow this in any portable way.
     # 4. Although unlikely, it is possible that a job could be added

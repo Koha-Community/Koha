@@ -2399,7 +2399,7 @@ subtest '->set_password' => sub {
 
     # Refresh patron from DB, just to make sure
     $patron->discard_changes;
-    is( $patron->login_attempts, 3, 'Previous tests kept login attemps count' );
+    is( $patron->login_attempts, 3, 'Previous tests kept login attempts count' );
 
     $patron->set_password( { password => 'abcD12 34' } );
     $patron->discard_changes;
@@ -2418,7 +2418,7 @@ subtest '->set_password' => sub {
 
     isnt( $patron->password, $old_digest, 'Password has been updated' );
     ok( checkpw_hash( 'abcd   a', $patron->password ), 'Password hash is correct' );
-    is( $patron->login_attempts, 0, 'Login attemps have been reset' );
+    is( $patron->login_attempts, 0, 'Login attempts have been reset' );
 
     my $number_of_logs = $schema->resultset('ActionLog')
         ->search( { module => 'MEMBERS', action => 'CHANGE PASS', object => $patron->borrowernumber } )->count;

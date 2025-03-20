@@ -226,7 +226,7 @@ sub message_reference {
     my ( $self, $function ) = @_;
     if ( $function eq 'new' || !$self->{message_reference_no} ) {
 
-        # unique 14 char mesage ref
+        # unique 14 char message ref
         $self->{message_reference_no} = sprintf 'ME%012d', int rand($NINES_12);
     }
     return $self->{message_reference_no};
@@ -776,7 +776,7 @@ Make handling of GIR segments more customizable
     pass the string 'new'.
     In practice we encode 1 message per transmission so there is only one message
     referenced. were we to encode multiple messages a new reference would be
-    neaded for each
+    FIXME CODESPELL (neaded ==> needed, kneaded, headed) for each
 
 =head2 message_header
 
@@ -784,7 +784,7 @@ Make handling of GIR segments more customizable
 
 =head2 interchange_trailer
 
-    returns the UNZ segment which ends the tranmission encoding the
+    returns the UNZ segment which ends the transmission encoding the
     message count and control reference for the interchange
 
 =head2 order_msg_header
@@ -801,7 +801,7 @@ Make handling of GIR segments more customizable
                 Id
                 Agency
 
-    Returns a NAD segment containg the id and agency for for the Function
+    Returns a NAD segment containing the id and agency for for the Function
     value. Handles the fact that NAD segments encode the value for 'EAN' differently
     to elsewhere.
 
@@ -854,7 +854,7 @@ Make handling of GIR segments more customizable
 
 =head2 _interchange_sr_identifier
 
-    Format sender and receipient identifiers for use in the interchange header
+    Format sender and recipient identifiers for use in the interchange header
 
 =head2 encode_text
 

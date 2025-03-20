@@ -188,7 +188,7 @@ t::lib::Mocks::mock_userenv( { patron => $john_doe_patron } );
 # Search private lists by title
 $search_results = C4::Utils::DataTables::VirtualShelves::search(
     {
-        shelfname => "ist",
+        shelfname => "FIXME CODESPELL (ist ==> is, it, its, it's, sit, list)",
         %dt_params,
         public => 0,
     }
@@ -201,7 +201,7 @@ is(
 
 is(
     $search_results->{recordsFiltered}, 2,
-    "There should be 2 private shelves with title like '%ist%"
+    "There should be 2 private shelves with title like '%FIXME CODESPELL (ist ==> is, it, its, it's, sit, list)%"
 );
 
 is(

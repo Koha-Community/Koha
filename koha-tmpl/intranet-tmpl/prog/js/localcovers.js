@@ -14,7 +14,7 @@ KOHA.LocalCover = {
      * or
      *    <div title="biblionumber" id="isbn" class="openlibrary-thumbnail-preview"></div>
      * and run a search with all collected isbns to Open Library Book Search.
-     * The result is asynchronously returned by OpenLibrary and catched by
+     * The result is asynchronously returned by OpenLibrary and caught by
      * olCallBack().
      */
     GetCoverFromBibnumber: function (uselink) {

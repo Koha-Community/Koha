@@ -322,7 +322,7 @@ if ( $data =~ '^941' ) {    ## we are logged in
 sub build_command_message {
     my ($message) = @_;
 
-    ##FIXME It would be much better to use exception handling so we aren't priting from subs
+    ##FIXME It would be much better to use exception handling so we aren't printing from subs
     unless ( $handlers->{$message} ) {
         say "$message is an unsupported command!";
         return;

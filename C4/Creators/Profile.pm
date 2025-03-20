@@ -265,7 +265,7 @@ CM      = SI Centimeters (28.3464567 points per)
 =head2 delete()
 
     Invoking the delete method attempts to delete the profile from the database. The method returns -1 upon failure. Errors are logged to the Apache log.
-    NOTE: This method may also be called as a function and passed a key/value pair simply deleteing that profile from the database. See the example below.
+    NOTE: This method may also be called as a function and passed a key/value pair simply deleting that profile from the database. See the example below.
 
     examples:
         C<my $exitstat = $profile->delete(); # to delete the record behind the $profile object>

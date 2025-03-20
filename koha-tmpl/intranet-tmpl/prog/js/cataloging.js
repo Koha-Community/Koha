@@ -579,7 +579,7 @@ function UnCloneField(index) {
     if ($(original).hasClass("tag")) {
         // unclone a field, check if there will remain one field
         var fieldCode = getFieldCode(index);
-        // tag divs with id begining with original field code
+        // tag divs with id beginning with original field code
         var cloneFields = $('.tag[id^="tag_' + fieldCode + '"]');
         if (cloneFields.length > 1) {
             canUnclone = true;
@@ -587,7 +587,7 @@ function UnCloneField(index) {
     } else {
         // unclone a subfield, check if there will remain one subfield
         var subfieldCode = getFieldAndSubfieldCode(index);
-        // subfield divs of same field with id begining with original field and subfield field code
+        // subfield divs of same field with id beginning with original field and subfield field code
         var cloneSubfields = $(original)
             .parent()
             .children('.subfield_line[id^="subfield' + subfieldCode + '"]');

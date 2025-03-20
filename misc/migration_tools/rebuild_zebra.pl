@@ -1030,7 +1030,7 @@ Parameters:
     --where                 let you specify a WHERE query, like itemtype='BOOK'
                             or something like that
 
-    --run-as-root           explicitily allow script to run as 'root' user
+    --run-as-root           explicitly allow script to run as 'root' user
 
     --wait-for-lock         when not running in daemon mode, the default
                             behavior is to abort a rebuild if the rebuild

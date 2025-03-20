@@ -54,7 +54,7 @@ $period = GetBudgetPeriod($period_id) if $period_id;
 $parent = GetBudget($parent_id)       if defined $parent_id;
 $budget = GetBudget($budget_id)       if defined $budget_id;
 
-# CHECK THE PARENT BUDGET FOR ENOUGHT AMOUNT UNALLOCATED,  IF NOT THEN RETURN 1
+# CHECK THE PARENT BUDGET FOR ENOUGH AMOUNT UNALLOCATED,  IF NOT THEN RETURN 1
 my ( $sub_unalloc, $period_sum, $budget_period_unalloc );
 
 if ($parent) {

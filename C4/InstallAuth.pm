@@ -65,7 +65,7 @@ InstallAuth - Authenticates Koha users for Install process
 =head1 DESCRIPTION
 
 The main function of this module is to provide
-authentification. However the get_template_and_user function has
+authentication. However the get_template_and_user function has
 been provided so that a users login information is passed along
 automatically. This gets loaded into the template.
 This package is different from C4::Auth in so far as
@@ -87,7 +87,7 @@ As in C4::Auth, Authentication is based on cookies.
     );
 
 This call passes the C<query>, C<flagsrequired> and C<authnotrequired>
-to C<&checkauth> (in this module) to perform authentification.
+to C<&checkauth> (in this module) to perform authentication.
 See C<&checkauth> for an explanation of these parameters.
 
 The C<template_name> is then used to find the correct template for
@@ -222,7 +222,7 @@ user has authenticated, C<&checkauth> restarts the original script
 The login page is provided using a HTML::Template, which is set in the
 systempreferences table or at the top of this file. The variable C<$type>
 selects which template to use, either the opac or the intranet 
-authentification template.
+authentication template.
 
 C<&checkauth> returns a user ID, a cookie, and a session ID. The
 cookie should be sent back to the browser; it verifies that the user
@@ -341,7 +341,7 @@ sub checkauth {
         }
     }
 
-    # finished authentification, now respond
+    # finished authentication, now respond
     if ($loggedin) {
 
         # successful login

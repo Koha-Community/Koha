@@ -212,7 +212,7 @@ if ( $borrowernumber_hold && !$op ) {
         );
     }
 
-    # check if the borrower make the reserv in a different branch
+    # check if the borrower make the reserve in a different branch
     if ( $patron->branchcode ne C4::Context->userenv->{'branch'} ) {
         $diffbranch = 1;
     }
@@ -468,7 +468,7 @@ if (   ( $findborrower && $borrowernumber_hold || $findclub && $club_hold )
                 $item->{notforloan} ||= 0;
 
                 # if independent branches is on we need to check if the person can reserve
-                # for branches they arent logged in to
+                # for branches they aren't logged in to
                 if ( C4::Context->preference("IndependentBranches") ) {
                     if ( !C4::Context->preference("canreservefromotherbranches") ) {
 
@@ -584,7 +584,7 @@ if (   ( $findborrower && $borrowernumber_hold || $findclub && $club_hold )
 
             $biblioloopiter{biblioitem} = $biblio->biblioitem;
 
-            # While we can't override an alreay held item, we should be able to override the others
+            # While we can't override an already held item, we should be able to override the others
             # Unless all items are already held
             if ( $num_override > 0 && ( $num_override + $num_alreadyheld ) == scalar( @{ $biblioloopiter{itemloop} } ) )
             {

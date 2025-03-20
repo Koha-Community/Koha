@@ -538,7 +538,7 @@ sub get_all_langs {
 
 LangInstaller.pm - Handle templates and preferences translation
 
-=head1 SYNOPSYS
+=head1 SYNOPSIS
 
   my $installer = LangInstaller->new( 'fr-FR' );
   $installer->create();
@@ -566,7 +566,7 @@ For the current language, update .po files.
 
 =head2 install
 
-For the current langage C<$self->{lang}, use .po files to translate the english
+For the current language C<$self->{lang}, use .po files to translate the english
 version of templates and preferences files and copy those files in the
 appropriate directory.
 

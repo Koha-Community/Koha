@@ -80,7 +80,7 @@ C4::Letters - Give functions for Letters management
 
 =head1 DESCRIPTION
 
-  "Letters" is the tool used in Koha to manage informations sent to the patrons and/or the library. This include some cron jobs like
+  "Letters" is the tool used in Koha to manage information sent to the patrons and/or the library. This include some cron jobs like
   late issues, as well as other tasks like sending a mail to users that have subscribed to a "serial issue alert" (= being warned every time a new issue has arrived at the library)
 
   Letters are managed through "alerts" sent by Koha on some events. All "alert" related functions are in this module too.
@@ -88,7 +88,7 @@ C4::Letters - Give functions for Letters management
 =head2 GetLetters([$module])
 
   $letters = &GetLetters($module);
-  returns informations about letters.
+  returns information about letters.
   if needed, $module filters for letters given module
 
   DEPRECATED - You must use Koha::Notice::Templates instead
@@ -236,7 +236,7 @@ sub GetLettersAvailableForALibrary {
     );
 
     Delete the letter. The mtt parameter is facultative.
-    If not given, all templates mathing the other parameters will be removed.
+    If not given, all templates matching the other parameters will be removed.
 
 =cut
 
@@ -1597,7 +1597,7 @@ sub _send_message_by_email {
     }
 
     # if initial message address was empty, coming here means that a to address was found and
-    # queue should be updated; same if to address was overriden by Koha::Email->create
+    # queue should be updated; same if to address was overridden by Koha::Email->create
     _update_message_to_address( $message->{'message_id'}, $email->email->header('To') )
         if !$message->{to_address}
         || $message->{to_address} ne $email->email->header('To');
@@ -1975,7 +1975,7 @@ sub _get_tt_params {
         },
         problem_reports => {
             module   => 'Koha::ProblemReports',
-            singluar => 'problemreport',
+            singular => 'problemreport',
             plural   => 'problemreports',
             pk       => 'reportid'
         },
@@ -2040,7 +2040,7 @@ sub _get_tt_params {
                 my $object;
                 if ( @{ $tables->{$table} } == 1 ) {    # Param is a single key
                     $object = $module->search( { $pk => $tables->{$table} } )->last();
-                } else {                                # Params are mutliple foreign keys
+                } else {                                # Params are multiple foreign keys
                     croak "Multiple foreign keys (table $table) should be passed using an hashref";
                 }
                 $params->{ $config->{$table}->{singular} } = $object;

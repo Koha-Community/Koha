@@ -345,7 +345,7 @@ $template->param(
 defined($invoice_files) && $template->param( files => $invoice_files->GetFilesInfo() );
 
 # FIXME
-# Fonction dupplicated from basket.pl
+# Function duplicated from basket.pl
 # Code must to be exported. Where ??
 sub get_infos {
     my $order      = shift;

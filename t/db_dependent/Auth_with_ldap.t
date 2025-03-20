@@ -146,7 +146,7 @@ subtest 'checkpw_ldap tests' => sub {
     warning_is {
         $ret = C4::Auth_with_ldap::checkpw_ldap( 'hola', password => 'hey' );
     }
-    'LDAP connexion failed',
+    'LDAP connection failed',
         'checkpw_ldap prints correct warning if LDAP conexion fails';
     is( $ret, 0, 'checkpw_ldap returns 0 if LDAP conexion fails' );
 

@@ -26,7 +26,7 @@
             <option value="Material-type:h">hand-written</option>
             <option value="Material-type:i">multimedia</option>
             <option value="Material-type:j">mini-print</option>
-            <option value="Material-type:s">electronic ressource</option>
+            <option value="Material-type:s">electronic resource</option>
             <option value="Material-type:t">microform</option>
             <option value="Material-type:z">other form of textual material</option>
         </select>

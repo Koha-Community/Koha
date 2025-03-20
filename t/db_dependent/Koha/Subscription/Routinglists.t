@@ -8,7 +8,7 @@
 # (at your option) any later version.
 #
 # Koha is distributed in the hope that it will be useful, but
-# WIT HOUT ANY WARRANTY; without even the implied warranty of
+# WITH HOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 # GNU General Public License for more details.
 #

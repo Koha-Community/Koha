@@ -253,7 +253,7 @@ sub GetRecords {
         foreach my $item (@items) {
             my %item = %{ $item->unblessed };
 
-            # This hides additionnal XML subfields, we don't need these info
+            # This hides additional XML subfields, we don't need these info
             delete $item{'more_subfields_xml'};
 
             # Display branch names instead of branch codes
@@ -493,7 +493,7 @@ sub GetPatronInfo {
 
             my ( $item, $biblio, $biblioitem ) = ( {}, {}, {} );
 
-            # Get additional informations
+            # Get additional information
             if ( $hold->itemnumber ) {    # item level holds
                 $item       = Koha::Items->find( $hold->itemnumber );
                 $biblio     = $item->biblio;

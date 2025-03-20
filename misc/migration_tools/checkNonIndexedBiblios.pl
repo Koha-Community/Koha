@@ -19,7 +19,7 @@
 
 # Small script that checks if each biblio in the DB is properly indexed
 # if it is not and if you use -z the not-indexed biblios are inserted in zebraqueue
-# To test just ommit the -z option you will have the biblionumber of non-indexed biblios and the total
+# To test just omit the -z option you will have the biblionumber of non-indexed biblios and the total
 
 use strict;
 

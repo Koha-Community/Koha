@@ -365,7 +365,7 @@ subtest 'accumulate_rentalcharge tests' => sub {
 
     my $calendar = C4::Calendar->new( branchcode => $library->id );
 
-    # DateTime 1..7 (Mon..Sun), C4::Calender 0..6 (Sun..Sat)
+    # DateTime 1..7 (Mon..Sun), C4::Calendar 0..6 (Sun..Sat)
     my $closed_day =
           ( $dt_from->day_of_week == 6 ) ? 0
         : ( $dt_from->day_of_week == 7 ) ? 1

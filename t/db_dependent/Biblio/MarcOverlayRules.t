@@ -1088,7 +1088,7 @@ subtest 'context option in ModBiblio is handled correctly' => sub {
     DelBiblio($biblionumber);
 };
 
-# Explicityly delete rule to trigger clearing of cache
+# Explicitly delete rule to trigger clearing of cache
 $rule->delete();
 
 $schema->storage->txn_rollback;

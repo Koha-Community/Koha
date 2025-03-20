@@ -297,7 +297,7 @@ for ( my $tabloop = 0 ; $tabloop <= 9 ; $tabloop++ ) {
 # now, build item tab !
 # the main difference is that datas are in lines and not in columns : thus, we build the <th> first, then the values...
 # loop through each tag
-# warning : we may have differents number of columns in each row. Thus, we first build a hash, complete it if necessary
+# warning : we may have FIXME CODESPELL (differents ==> different, difference) number of columns in each row. Thus, we first build a hash, complete it if necessary
 # then construct template.
 # $record has already had all the item fields filtered above.
 my @fields = $record->fields();

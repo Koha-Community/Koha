@@ -56,7 +56,7 @@ sub split_callnumber {
     }
 
     if ( $lines[0] =~ /^([-a-zA-Z]+)\s?($possible_decimal)$/ ) {
-        shift @lines;              # pull off the mathching first element, like example 1
+        shift @lines;              # pull off the matching first element, like example 1
         unshift @lines, $1, $2;    # replace it with the two pieces
     }
 

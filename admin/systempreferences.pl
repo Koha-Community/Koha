@@ -422,7 +422,7 @@ sub get_prefs_from_files {
     return @names;
 }
 
-# Return an array containg all preferences defined in DB
+# Return an array containing all preferences defined in DB
 
 sub get_prefs_from_db {
     my $dbh = C4::Context->dbh;
