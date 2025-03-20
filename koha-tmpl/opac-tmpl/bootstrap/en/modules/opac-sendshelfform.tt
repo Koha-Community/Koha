@@ -24,7 +24,7 @@
                                 </div>
                             [% END %]
                         [% ELSE %]
-                            [% IF ( invalidlist ) %]
+                            [% IF ( invalidlist || Koha.Preference('OPACDisableSendList') ) %]
                                 <div class="alert alert-warning">
                                     <p>You do not have permission to send this list.</p>
                                 </div>

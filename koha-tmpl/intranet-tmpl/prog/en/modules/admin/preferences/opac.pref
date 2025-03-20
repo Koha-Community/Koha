@@ -594,6 +594,13 @@ OPAC:
                   iata2of5: "IATA 2 of 5"
                   coop2of5: "COOP 2 of 5"
             - " barcode in the patron's virtual card."
+        -
+            - pref: OPACDisableSendList
+              default: 0
+              choices:
+                  1: "Don't allow"
+                  0: Allow
+            - "OPAC users to email lists via a 'Send list' button."
     OpenURL:
         -
             - 'Complete URL of OpenURL resolver (starting with <code>http://</code> or <code>https://</code>):'
