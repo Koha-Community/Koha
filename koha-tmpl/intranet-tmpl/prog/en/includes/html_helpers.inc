@@ -114,7 +114,7 @@
                         <select
                             name="[% kohafield | html %]"
                             id="[%- mv.id | html -%]"
-                            class="input_marceditor [% kohafield | html %]"
+                            class="input_marceditor [% select_class | html %]"
                             [% select_readonly | html %]
                             [% select_disabled | html %]
                             data-category="[% mv.category | html %]"
