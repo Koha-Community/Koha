@@ -632,28 +632,30 @@
 [% END %]
 
 [% BLOCK modal_wrapper %]
-    <div id="[% modal_id | $raw %]" class="modal modal-lg audio-alert-action [% IF noblock %]noblock[% ELSE %]block[% END %]" [% UNLESS noblock %]data-bs-backdrop="static" data-bs-keyboard="false"[% END %]>
+    <div id="[% modal_id | html %]" class="modal modal-lg audio-alert-action [% IF noblock %]noblock[% ELSE %]block[% END %]" [% UNLESS noblock %]data-bs-backdrop="static" data-bs-keyboard="false"[% END %]>
         <div class="modal-dialog">
             <div class="modal-content">
-                <form class="modal-form" method="post" action="[% modal_action | $raw %]" id="[% modal_id | $raw %]-form">
+                <form class="modal-form" method="post" action="[% modal_action | $raw %]" id="[% modal_id | html %]-form">
                     [% INCLUDE 'csrf-token.inc' %]
 
-                    <div class="modal-header" id="[% modal_id | $raw %]-header"> [% modal_header_contents | $raw %] </div>
-                    <div class="modal-body" id="[% modal_id | $raw %]-body"> [% content | $raw %] </div>
-                    <div class="modal-footer" id="[% modal_id | $raw %]-footer">
+                    <div class="modal-header" id="[% modal_id | html %]-header">
+                        <h1 class="modal-title"> [% modal_header_text | html %] </h1>
+                    </div>
+                    <div class="modal-body" id="[% modal_id | html %]-body"> [% content | $raw %] </div>
+                    <div class="modal-footer" id="[% modal_id | html %]-footer">
                         [% footer_has_content = 0 %]
 
                         [% IF modal_confirm_text %]
                             <button
                                 type="submit"
                                 class="btn btn-default confirm"
-                                id="[% modal_id | $raw %]-confirm"
-                                [% IF modal_confirm_name %]name="[% modal_confirm_name | $raw %]"[% END %]
-                                [% IF modal_confirm_val %]value="[% modal_confirm_val | $raw %]"[% END %]
-                                [% IF modal_confirm_accesskey %]accesskey="[% modal_confirm_accesskey | $raw %]"[% END %]
+                                id="[% modal_id | html %]-confirm"
+                                [% IF modal_confirm_name %]name="[% modal_confirm_name | html %]"[% END %]
+                                [% IF modal_confirm_val %]value="[% modal_confirm_val | html %]"[% END %]
+                                [% IF modal_confirm_accesskey %]accesskey="[% modal_confirm_accesskey | html %]"[% END %]
                             >
                                 <i class="fa fa-check"></i>
-                                [% modal_confirm_text | $raw %] [% IF modal_confirm_accesskey %]([% modal_confirm_accesskey | $raw %])[% END %]
+                                [% modal_confirm_text | html %] [% IF modal_confirm_accesskey %]([% modal_confirm_accesskey | html %])[% END %]
                             </button>
                             [% footer_has_content = 1 %]
                         [% END %]
@@ -666,13 +668,13 @@
                                 type="button"
                                 class="btn btn-default openWin"
                                 data-bs-dismiss="modal"
-                                id="[% modal_id | $raw %]-print"
-                                [% IF modal_print_name %]name="[% modal_print_name | $raw %]"[% END %]
+                                id="[% modal_id | html %]-print"
+                                [% IF modal_print_name %]name="[% modal_print_name | html %]"[% END %]
                                 data-url="[% modal_print_url | $raw %]"
-                                [% IF modal_print_accesskey %]accesskey="[% modal_print_accesskey | $raw %]"[% END %]
+                                [% IF modal_print_accesskey %]accesskey="[% modal_print_accesskey | html %]"[% END %]
                             >
                                 <i class="fa fa-print"></i>
-                                [% modal_print_text | $raw %] [% IF modal_print_accesskey %]([% modal_print_accesskey | $raw %])[% END %]
+                                [% modal_print_text | html %] [% IF modal_print_accesskey %]([% modal_print_accesskey | html %])[% END %]
                             </button>
                             [% footer_has_content = 1 %]
                         [% END %]
@@ -685,13 +687,13 @@
                                 [% IF modal_deny_action == "submit" %]type="submit"[% ELSE %]type="button"[% END %]
                                 [% IF modal_deny_action == "dismiss" %]data-bs-dismiss="modal"[% END %]
                                 class="btn btn-default deny"
-                                id="[% modal_id | $raw %]-deny"
-                                [% IF modal_deny_name %]name="[% modal_deny_name | $raw %]"[% END %]
-                                [% IF modal_deny_val %]value="[% modal_deny_val | $raw %]"[% END %]
-                                [% IF modal_deny_accesskey %]accesskey="[% modal_deny_accesskey | $raw %]"[% END %]
+                                id="[% modal_id | html %]-deny"
+                                [% IF modal_deny_name %]name="[% modal_deny_name | html %]"[% END %]
+                                [% IF modal_deny_val %]value="[% modal_deny_val | html %]"[% END %]
+                                [% IF modal_deny_accesskey %]accesskey="[% modal_deny_accesskey | html %]"[% END %]
                             >
                                 <i class="fa fa-times"></i>
-                                [% modal_deny_text | $raw %] [% IF modal_deny_accesskey %]([% modal_deny_accesskey | $raw %])[% END %]
+                                [% modal_deny_text | html %] [% IF modal_deny_accesskey %]([% modal_deny_accesskey | html %])[% END %]
                             </button>
                             [% footer_has_content = 1 %]
                         [% END %]
@@ -704,7 +706,7 @@
                             [% footer_has_content = 1 %]
                         [% END %]
                         [% IF !footer_has_content %]
-                            <button type="button" data-bs-dismiss="modal" class="btn btn-default" id="[% modal_id | $raw %]-ok">[% t('OK') | html %]</button>
+                            <button type="button" data-bs-dismiss="modal" class="btn btn-default" id="[% modal_id | html %]-ok">[% t('OK') | html %]</button>
                         [% END %]
                     </div>
                 </form>
