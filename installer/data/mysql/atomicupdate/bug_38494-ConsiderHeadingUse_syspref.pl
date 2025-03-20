@@ -9,7 +9,7 @@ return {
         my ( $dbh, $out ) = @$args{qw(dbh out)};
 
         $dbh->do(
-            q{INSERT IGNORE INTO systempreferences (variable,value,options,explanation,type) VALUES ('ConsiderHeadingUse', '0', NULL, 'Consider authority heading use (main/added entry, or subject, or series title) in cataloging and linking', 'YesNo')}
+            q{INSERT IGNORE INTO systempreferences (variable,value,options,explanation,type) VALUES ('ConsiderHeadingUse', '0', NULL, 'Consider MARC21 authority heading use (main/added entry, or subject, or series title) in cataloging and linking', 'YesNo')}
         );
 
         say_success( $out, "Added system preference 'ConsiderHeadingUse'" );
