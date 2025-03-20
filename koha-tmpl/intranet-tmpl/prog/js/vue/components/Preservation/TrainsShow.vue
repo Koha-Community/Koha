@@ -598,7 +598,7 @@ export default {
             let train = this.train;
             let updateSelectedItems = this.updateSelectedItems;
 
-            let table = KohaTable(table_id, {
+            let table = $("#" + table_id).kohaTable({
                 data: item_table.data,
                 ordering: false,
                 autoWidth: false,
