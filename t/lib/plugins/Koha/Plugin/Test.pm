@@ -453,6 +453,16 @@ sub auth_client_get_user {
     return;
 }
 
+sub overwrite_calc_fine {
+    my ( $self, $params ) = @_;
+
+    my $days = $params->{end_date}->delta_days( $params->{due_date} )->delta_days;
+
+    return $params->{categorycode} && $params->{branchcode}
+        ? undef
+        : [ 3 * $days, $days, $days - 2 ];
+}
+
 sub _private_sub {
     return "";
 }
