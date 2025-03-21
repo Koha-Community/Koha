@@ -93,14 +93,14 @@ sub Getoverdues {
     if ( C4::Context->preference('item-level_itypes') ) {
         $statement = "
    SELECT issues.*, items.itype as itemtype, items.homebranch, items.barcode, items.itemlost, items.replacementprice, items.biblionumber, items.holdingbranch
-     FROM issues 
+     FROM issues
 LEFT JOIN items       USING (itemnumber)
     WHERE date_due < NOW()
 ";
     } else {
         $statement = "
    SELECT issues.*, biblioitems.itemtype, items.itype, items.homebranch, items.barcode, items.itemlost, replacementprice, items.biblionumber, items.holdingbranch
-     FROM issues 
+     FROM issues
 LEFT JOIN items       USING (itemnumber)
 LEFT JOIN biblioitems USING (biblioitemnumber)
     WHERE date_due < NOW()
@@ -222,6 +222,22 @@ sub CalcFine {
 
     # Skip calculations if item is not overdue
     return ( 0, 0, 0 ) unless (DateTime->compare( $due_dt, $end_date ) == -1);
+
+    # Call the plugin hook overwrite_calc_fine of all plugins and return
+    # the first defined fine.
+    my @fines = Koha::Plugins->call(
+        'overwrite_calc_fine',
+        {
+            itemnumber   => $item->{itemnumber},
+            categorycode => $bortype,
+            branchcode   => $branchcode,
+            due_date     => $due_dt,
+            end_date     => $end_date,
+        }
+    );
+    foreach my $fine (@fines) {
+        return @$fine if ( defined $fine );
+    }
 
     my $start_date = $due_dt->clone();
     # get issuingrules (fines part will be used)
@@ -645,7 +661,7 @@ C<$itemnum> is item number
 
 C<$borrowernumber> is the borrowernumber
 
-=cut 
+=cut
 
 sub GetFine {
     my ( $itemnum, $borrowernumber ) = @_;
