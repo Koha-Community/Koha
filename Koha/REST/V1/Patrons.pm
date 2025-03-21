@@ -121,9 +121,8 @@ sub add {
                             module      => 'members',
                             letter_code => 'WELCOME',
                             branchcode  => $patron->branchcode,
-                            ,
-                            lang   => $patron->lang || 'default',
-                            tables => {
+                            lang        => $patron->lang || 'default',
+                            tables      => {
                                 'branches'  => $patron->branchcode,
                                 'borrowers' => $patron->borrowernumber,
                             },
@@ -139,7 +138,9 @@ sub add {
                                     message_transport_type => 'email'
                                 }
                             );
-                            SendQueuedMessages( { message_id => $message_id } );
+
+                            # Don't send a message if we didn't generate one for some reason
+                            SendQueuedMessages( { message_id => $message_id } ) if $message_id;
                         }
                     }
                 }
