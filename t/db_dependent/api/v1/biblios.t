@@ -1806,7 +1806,7 @@ subtest 'put() tests' => sub {
 
 subtest 'list() tests' => sub {
 
-    plan tests => 17;
+    plan tests => 20;
 
     $schema->storage->txn_begin;
 
@@ -1870,6 +1870,19 @@ subtest 'list() tests' => sub {
     my $isbn_query = encode_json( { isbn => 'TOMAS' } );
     $biblio->biblioitem->set( { isbn => 'TOMAS' } )->store;
     $t->get_ok( "//$userid:$password@/api/v1/biblios?q=$isbn_query" => { Accept => 'text/plain' } )->status_is(200);
+
+    my $fixed_date = dt_from_string("2017-01-01 01:00:00");
+    my $next_day   = $fixed_date->clone->add( days => 1 );
+
+    # bug 39397
+    $biblio->timestamp($fixed_date)->store();
+    $biblio->biblioitem->timestamp($next_day)->store();
+
+    $query = encode_json( { biblio_id => $biblio->id } );
+
+    $t->get_ok( "//$userid:$password@/api/v1/biblios?q=$query" => { Accept => 'application/json' } )->status_is(200)
+        ->json_is( '/0/timestamp' =>
+            output_pref( { dt => $fixed_date, dateformat => 'rfc3339' }, 'biblio table timestamp takes precedence' ) );
 
     $schema->storage->txn_rollback;
 };
