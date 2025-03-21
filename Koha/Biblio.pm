@@ -1735,7 +1735,7 @@ sub to_api {
     my $json_biblioitem = $biblioitem->to_api($args);
     return unless $json_biblioitem;
 
-    return { %$json_biblio, %$json_biblioitem };
+    return { %$json_biblioitem, %$json_biblio };
 }
 
 =head3 to_api_mapping
