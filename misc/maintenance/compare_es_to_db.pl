@@ -33,7 +33,6 @@ use Modern::Perl;
 
 use Array::Utils qw( array_minus );
 use Getopt::Long qw( GetOptions );
-use Try::Tiny    qw( catch try );
 
 use C4::Context;
 
@@ -160,15 +159,10 @@ foreach my $index ( ( 'biblios', 'authorities' ) ) {
         if (@koha_problems) {
 
             print "=================\n";
-            print "Fixing missing records in the index ($index):\n\n";
+            print "Scheduling indexing of missing records ($index):\n\n";
 
-            foreach my $id (@koha_problems) {
-                try {
-                    $indexer->update_index( [$id] );
-                } catch {
-                    print STDERR "ERROR: record #$id failed: $_\n\n";
-                };
-            }
+            # index_records() takes care of splitting into chunks.
+            $indexer->index_records( \@koha_problems, 'specialUpdate', $server );
         }
 
         if (@es_problems) {
