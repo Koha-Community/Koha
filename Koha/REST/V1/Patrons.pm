@@ -197,13 +197,12 @@ sub add {
                 );
             }
             elsif ( $_->isa('Koha::Exceptions::BadParameter') ) {
+                my $parameter = $to_api_mapping->{ $_->parameter } || $_->parameter;
+                my $error =
+                    $parameter ? "Given " . $to_api_mapping->{ $_->parameter } . " does not exist" : $_->full_message;
                 return $c->render(
                     status  => 400,
-                    openapi => {
-                            error => "Given "
-                            . $to_api_mapping->{ $_->parameter }
-                            . " does not exist"
-                    }
+                    openapi => { error => $error }
                 );
             }
             elsif (
