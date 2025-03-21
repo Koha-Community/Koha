@@ -144,13 +144,13 @@ my $display_order          = $input->param('item_group_display_order');
 our $frameworkcode = &GetFrameworkCode($biblionumber);
 
 # Defining which userflag is needing according to the framework currently used
-my $userflags;
+my $fast_cataloging_mode;
 if ( defined $input->param('frameworkcode') ) {
-    $userflags = ( $input->param('frameworkcode') eq 'FA' ) ? "fast_cataloging" : "edit_items";
+    $fast_cataloging_mode = ( $input->param('frameworkcode') eq 'FA' ) ? 1 : 0;
 }
 
-if ( not defined $userflags ) {
-    $userflags = ( $frameworkcode eq 'FA' ) ? "fast_cataloging" : "edit_items";
+if ( not defined $fast_cataloging_mode ) {
+    $fast_cataloging_mode = ( $frameworkcode eq 'FA' ) ? 1 : 0;
 }
 
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
@@ -158,7 +158,8 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
         template_name => "cataloguing/additem.tt",
         query         => $input,
         type          => "intranet",
-        flagsrequired => { editcatalogue => $userflags },
+        flagsrequired =>
+            { editcatalogue => $fast_cataloging_mode ? [ 'fast_cataloging', 'edit_items' ] : 'edit_items' },
     }
 );
 
