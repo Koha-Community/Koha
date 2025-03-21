@@ -83,7 +83,7 @@ my $bib_heading_fields = {
     },
     '151' => {
         auth_type  => 'GEOGR_NAME',
-        subfields  => 'avxyz68',
+        subfields  => 'agvxyz68',
         main_entry => 1
     },
     '155' => {
@@ -199,7 +199,7 @@ my $auth_heading_fields = {
     },
     '151' => {
         auth_type  => 'GEOGR_NAME',
-        subfields  => 'avxyz68',
+        subfields  => 'agvxyz68',
         main_entry => 1
     },
     '155' => {
