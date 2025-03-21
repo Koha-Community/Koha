@@ -128,6 +128,19 @@ use C4::Biblio qw( GetMarcFromKohaField );
         }
     }
 
+    my @item_fields_in_marc;
+    my ( $item_tag, $item_subfield ) = C4::Biblio::GetMarcFromKohaField("items.itemnumber");
+    my $search_string                     = q{ExtractValue(metadata,'count(//datafield[@tag="} . $item_tag . q{"])')>0};
+    my $biblio_metadatas_with_item_fields = Koha::Biblio::Metadatas->search( \$search_string );
+    if ( $biblio_metadatas_with_item_fields->count ) {
+        while ( my $biblio_metadata_with_item_fields = $biblio_metadatas_with_item_fields->next ) {
+            push @item_fields_in_marc,
+                {
+                biblionumber => $biblio_metadata_with_item_fields->biblionumber,
+                };
+        }
+    }
+
     my ( @decoding_errors, @ids_not_in_marc );
     my $biblios = Koha::Biblios->search;
     my ( $biblio_tag,     $biblio_subfield )     = C4::Biblio::GetMarcFromKohaField("biblio.biblionumber");
@@ -200,6 +213,19 @@ use C4::Biblio qw( GetMarcFromKohaField );
             }
         }
         new_hint("The bibliographic records must have the biblionumber and biblioitemnumber in MARCXML");
+    }
+    if (@item_fields_in_marc) {
+        new_section("Bibliographic records have item fields in the MARC");
+        for my $biblionumber (@item_fields_in_marc) {
+            new_item(
+                sprintf(
+                    q{Biblionumber %s has item fields (%s) in the marc record},
+                    $biblionumber->{biblionumber},
+                    $item_tag,
+                )
+            );
+        }
+        new_hint("You can fix these by running misc/maintenance/touch_all_biblios.pl");
     }
 }
 
