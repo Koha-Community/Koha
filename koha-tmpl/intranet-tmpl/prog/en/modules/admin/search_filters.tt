@@ -30,11 +30,9 @@
 [% END #/ WRAPPER sub-header.inc %]
 
 [% WRAPPER 'main-container.inc' aside='admin-menu' %]
-
+    <h1>Search filters</h1>
     [% IF filters_count %]
-        <div id="search_filters_list">
-            <h2>Search filters</h2>
-
+        <div id="search_filters_list" class="page-section">
             <table id="search_filters_table">
                 <thead>
                     <tr>
@@ -44,7 +42,7 @@
                         <th>Limits</th>
                         <th>OPAC</th>
                         <th>Staff interface</th>
-                        <th>&nbsp;</th>
+                        <th data-class-name="actions noExport">Actions</th>
                     </tr>
                 </thead>
             </table>
@@ -62,14 +60,16 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <div class="form-group">
+                <div class="mb-3">
                     <input type="hidden" id="filter_edit_id" name="filter_edit_id" />
                     <label for="filter_edit_name">Name:</label>
                     <input id="filter_edit_name" name="filter_edit_name" type="text" />
-                    <label for="filter_edit_opac">Show in OPAC?</label>
-                    <input type="checkbox" id="filter_edit_opac" name="filter_edit_opac" />
-                    <label for="filter_edit_staff_client">Show in staff interface?</label>
-                    <input type="checkbox" id="filter_edit_staff_client" name="filter_edit_staff_client" />
+                </div>
+                <div class="mb-3">
+                    <label for="filter_edit_opac"><input type="checkbox" id="filter_edit_opac" name="filter_edit_opac" /> Show in OPAC?</label>
+                </div>
+                <div class="mb-3">
+                    <label for="filter_edit_staff_client"><input type="checkbox" id="filter_edit_staff_client" name="filter_edit_staff_client" /> Show in staff interface?</label>
                 </div>
             </div>
             <div class="modal-footer">
