@@ -168,7 +168,7 @@ $(document).ready(function () {
 
     $("#newitem_jump").on("click", function (e) {
         e.preventDefault();
-        document.getElementById("additema").scrollIntoView();
+        document.getElementById("f").scrollIntoView();
     });
 });
 
