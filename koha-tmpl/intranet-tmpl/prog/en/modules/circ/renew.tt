@@ -209,6 +209,9 @@
                     <input name="barcode" size="14" class="barcode focus" type="text" placeholder="Enter item barcode" />
                 [% END %]
                 <input type="hidden" name="op" value="cud-renew" />
+                <div id="show-circ-settings">
+                    <a href="#" title="Checkin settings"><i class="fa-solid fa-sliders"></i></a>
+                </div>
                 <button type="submit" class="btn btn-primary">Submit</button>
 
                 <div class="circ-settings show">
@@ -233,6 +236,7 @@
 [% END %]
 
 [% MACRO jsinclude BLOCK %]
+    [% Asset.js("js/pages/circulation.js") | $raw %]
     [% INCLUDE 'calendar.inc' %]
     [% IF error %]
         <script>
