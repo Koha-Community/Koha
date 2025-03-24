@@ -13,8 +13,8 @@
 >
 [% INCLUDE 'doc-head-close.inc' %]
 <style>
-    fieldset.rows fieldset.rows {
-        width: 90%;
+    fieldset.rows li {
+        display: flex;
     }
 </style>
 </head>
@@ -84,7 +84,6 @@
                             <li>
                                 <label for="itemtype">Item type: </label>
                                 <select name="itemtype" id="itemtype" multiple>
-                                    <option value="">-- All --</option>
                                     [% FOREACH itemtype IN itemtypes %]
                                         <option value="[% itemtype.itemtype | html %]">[% itemtype.translated_description | html %]</option>
                                     [% END %]
@@ -92,38 +91,40 @@
                             </li>
 
                             <li>
-                                <label>With items owned by the following libraries: </label>
-                                [% INCLUDE 'branch-selector.inc' branches = libraries %]
+                                <label for="select_library">Home library: </label>
+                                <select id="select_library" name="branch" multiple>
+                                    [% PROCESS options_for_libraries libraries => Branches.all( selected => branch_limit, unfiltered => 1, do_not_select_my_library => 1 ) %]
+                                </select>
                             </li>
                         </ol>
+                    </fieldset>
 
-                        <fieldset class="rows">
-                            <legend>Call number range</legend>
-                            <ol>
-                                <li>
-                                    <label for="startcn">From item call number: </label>
-                                    <input id="startcn" type="text" name="start_callnumber" size="15" />
-                                </li>
-                                <li>
-                                    <label for="endcn">To item call number: </label>
-                                    <input id="endcn" type="text" name="end_callnumber" size="15" />
-                                </li>
-                            </ol>
-                        </fieldset>
+                    <fieldset class="rows">
+                        <legend>Call number range</legend>
+                        <ol>
+                            <li>
+                                <label for="startcn">From item call number: </label>
+                                <input id="startcn" type="text" name="start_callnumber" size="15" />
+                            </li>
+                            <li>
+                                <label for="endcn">To item call number: </label>
+                                <input id="endcn" type="text" name="end_callnumber" size="15" />
+                            </li>
+                        </ol>
+                    </fieldset>
 
-                        <fieldset class="rows">
-                            <legend>Accession date (inclusive)</legend>
-                            <ol>
-                                <li>
-                                    <label for="from">Start date:</label>
-                                    <input type="text" size="10" id="from" name="start_accession" value="[% from | html %]" class="flatpickr" data-date_to="to" />
-                                </li>
-                                <li>
-                                    <label for="to">End date:</label>
-                                    <input size="10" id="to" name="end_accession" value="[% end_accession | html %]" type="text" class="flatpickr" />
-                                </li>
-                            </ol>
-                        </fieldset>
+                    <fieldset class="rows">
+                        <legend>Accession date (inclusive)</legend>
+                        <ol>
+                            <li>
+                                <label for="from">Start date:</label>
+                                <input type="text" size="10" id="from" name="start_accession" value="[% from | html %]" class="flatpickr" data-date_to="to" />
+                            </li>
+                            <li>
+                                <label for="to">End date:</label>
+                                <input size="10" id="to" name="end_accession" value="[% end_accession | html %]" type="text" class="flatpickr" />
+                            </li>
+                        </ol>
                     </fieldset>
 
                     <fieldset class="rows">
@@ -327,16 +328,23 @@
 
 [% MACRO jsinclude BLOCK %]
     [% INCLUDE 'calendar.inc' %]
+    [% INCLUDE 'select2.inc' %]
     <script>
         $(document).ready(function () {
-            $("li.csv_profiles").hide();
+            const output_format = $("#output_format");
+            const csv_profiles = $("li.csv_profiles");
+            if (output_format.val() == "csv") {
+                csv_profiles.show();
+            } else {
+                csv_profiles.hide();
+            }
 
-            $("#bibs_panel select[name='output_format']").on("change", function () {
+            output_format.on("change", function () {
                 var format = $(this).val();
                 if (format == "csv") {
-                    $("#bibs_panel li.csv_profiles").show();
+                    csv_profiles.show();
                 } else {
-                    $("#bibs_panel li.csv_profiles").hide();
+                    csv_profiles.hide();
                 }
             });
             $("#checkall").on("click", function (e) {
@@ -365,6 +373,13 @@
                     extension = "mrc";
                 }
                 $("#filename_auth").val(file_name_auth[0] + "." + extension);
+            });
+
+            // Apply select2 to all select fields having a "multiple" attribute
+            let selectFields = document.querySelectorAll("select[multiple]");
+            selectFields.forEach(selectField => {
+                selectField.style.minWidth = "320px";
+                $(selectField).select2();
             });
         });
     </script>
