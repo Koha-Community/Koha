@@ -2,7 +2,7 @@
 [% USE Asset %]
 [% USE AuthorisedValues %]
 [% USE TablesSettings %]
-[% SET footerjs = 1 %]
+[% USE HtmlScrubber %]
 [% PROCESS 'i18n.inc' %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Course reserves &rsaquo; Koha</title>
@@ -71,7 +71,7 @@
                                             [% END %]
                                         </td>
                                         <td>[% c.staff_note | html %]</td>
-                                        <td>[% c.public_note | $raw %]</td>
+                                        <td>[% c.public_note | scrub_html type => 'note' | $raw %]</td>
                                         <td>[% c.students_count | html %]</td>
                                         <td>
                                             [% IF c.enabled == 'yes' %]

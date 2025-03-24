@@ -6,6 +6,7 @@
 [% PROCESS 'i18n.inc' %]
 
 [% INCLUDE 'doc-head-open.inc' %]
+[% USE HtmlScrubber %]
 <title>Courses &rsaquo; [% IF ( LibraryNameTitle ) %][% LibraryNameTitle | html %][% ELSE %]Koha online[% END %] catalog</title>
 [% INCLUDE 'doc-head-close.inc' %]
 [% BLOCK cssinclude %]
@@ -62,7 +63,7 @@
                                           <div class="instructor"><span class="inst_surname">[% i.surname | html %]</span>[% IF i.firstname %]<span class="instr_separator">, </span><span class="instr_firstname">[% i.firstname | html %]</span>[% END %]</div>
                                       [% END %]
                                     </td>
-                                    <td>[% c.public_note | $raw %]</td>
+                                    <td>[% c.public_note | scrub_html type => 'note' | $raw %]</td>
                                     <td></td>
                             [% END %]
                         </tbody>

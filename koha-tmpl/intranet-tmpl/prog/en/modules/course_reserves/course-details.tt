@@ -5,6 +5,7 @@
 [% USE ItemTypes %]
 [% USE Branches %]
 [% USE TablesSettings %]
+[% USE HtmlScrubber %]
 [% PROCESS 'i18n.inc' %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
@@ -87,7 +88,7 @@
                         </div>
                     </li>
                     <li><span class="label">Staff note</span> [% course.staff_note | html %]</li>
-                    <li><span class="label">Public note</span> [% course.public_note | $raw %]</li>
+                    <li><span class="label">Public note</span> [% course.public_note | scrub_html type => 'note' | $raw %]</li>
                     <li><span class="label">Student count</span> [% course.students_count | html %]</li>
                     <li><span class="label">Status</span> [% IF course.enabled == 'yes' %]Active[% ELSE %]Inactive[% END %]</li>
                 </ol>
@@ -248,9 +249,9 @@
                                         [% END %]
                                     </td>
                                     <td>[% IF (cr.public_note) %]
-                                            [% cr.public_note | $raw %]
+                                            [% cr.public_note | scrub_html type => 'note' | $raw %]
                                         [% ELSIF (cr.item.itemnotes) %]
-                                            [% cr.item.itemnotes | $raw %]
+                                            [% cr.item.itemnotes | scrub_html type => 'note' | $raw %]
                                         [% END %]
                                     </td>
 

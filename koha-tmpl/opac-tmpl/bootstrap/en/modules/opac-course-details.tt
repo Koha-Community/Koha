@@ -6,6 +6,7 @@
 [% USE ItemTypes %]
 [% USE Branches %]
 [% USE TablesSettings %]
+[% USE HtmlScrubber %]
 [% PROCESS 'i18n.inc' %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Course reserves for [% course.course_name | html %] &rsaquo; [% IF ( LibraryNameTitle ) %][% LibraryNameTitle | html %][% ELSE %]Koha online[% END %] catalog</title>
@@ -54,7 +55,7 @@
                                     </ul>
                                 </li>
                             [% END %]
-                            [% IF ( course.public_note ) %]<li><span class="label">Notes:</span> [% course.public_note | $raw %]</li>[% END %]
+                            [% IF ( course.public_note ) %]<li><span class="label">Notes:</span> [% course.public_note | scrub_html type => 'note' | $raw %]</li>[% END %]
                         </ol>
                     </div>
 
@@ -95,9 +96,9 @@
                                         </td>
                                         <td data-order="[% cr.issue.date_due | html %]">[% cr.issue.date_due | $KohaDates  as_due_date => 1 %]</td>
                                         <td>[% IF ( cr.public_note ) %]
-                                                [% cr.public_note | $raw %]
+                                                [% cr.public_note | scrub_html type => 'note' | $raw %]
                                             [% ELSIF ( cr.item.itemnotes ) %]
-                                                [% cr.item.itemnotes | $raw %]
+                                                [% cr.item.itemnotes | scrub_html type => 'note' | $raw %]
                                             [% END %]
                                         </td>
                                         <td>[% IF (cr.item.uri) %]
