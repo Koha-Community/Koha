@@ -534,13 +534,14 @@ describe("Agreement CRUD operations", () => {
             "get-agreement"
         );
         cy.visit("/cgi-bin/koha/erm/agreements");
-        let name_link = cy.get(
-            "#agreements_list table tbody tr:first td:first a"
-        );
-        name_link.should(
-            "have.text",
-            agreement.name + " (#" + agreement.agreement_id + ")"
-        );
+        let id_cell = cy.get("#agreements_list table tbody tr:first td:first");
+        id_cell.contains(agreement.agreement_id);
+
+        let name_link = cy
+            .get("#agreements_list table tbody tr:first td")
+            .eq(1)
+            .find("a");
+        name_link.should("have.text", agreement.name);
         name_link.click();
         cy.wait("@get-agreement");
         cy.wait(500); // Cypress is too fast! Vue hasn't populated the form yet!
@@ -618,14 +619,14 @@ describe("Agreement CRUD operations", () => {
         cy.intercept("GET", "/api/v1/erm/agreements/*", agreement).as(
             "get-agreement"
         );
-        cy.visit("/cgi-bin/koha/erm/agreements");
-        let name_link = cy.get(
-            "#agreements_list table tbody tr:first td:first a"
-        );
-        name_link.should(
-            "have.text",
-            agreement.name + " (#" + agreement.agreement_id + ")"
-        );
+        let id_cell = cy.get("#agreements_list table tbody tr:first td:first");
+        id_cell.contains(agreement.agreement_id);
+
+        let name_link = cy
+            .get("#agreements_list table tbody tr:first td")
+            .eq(1)
+            .find("a");
+        name_link.should("have.text", agreement.name);
         name_link.click();
         cy.wait("@get-agreement");
         cy.wait(500); // Cypress is too fast! Vue hasn't populated the form yet!

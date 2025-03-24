@@ -246,13 +246,14 @@ describe("License CRUD operations", () => {
             "get-license"
         );
         cy.visit("/cgi-bin/koha/erm/licenses");
-        let name_link = cy.get(
-            "#licenses_list table tbody tr:first td:first a"
-        );
-        name_link.should(
-            "have.text",
-            license.name + " (#" + license.license_id + ")"
-        );
+        let id_cell = cy.get("#licenses_list table tbody tr:first td:first");
+        id_cell.contains(license.license_id);
+
+        let name_link = cy
+            .get("#licenses_list table tbody tr:first td")
+            .eq(1)
+            .find("a");
+        name_link.should("have.text", license.name);
         name_link.click();
         cy.wait("@get-license");
         cy.wait(500); // Cypress is too fast! Vue hasn't populated the form yet!
@@ -323,13 +324,14 @@ describe("License CRUD operations", () => {
             "get-license"
         );
         cy.visit("/cgi-bin/koha/erm/licenses");
-        let name_link = cy.get(
-            "#licenses_list table tbody tr:first td:first a"
-        );
-        name_link.should(
-            "have.text",
-            license.name + " (#" + license.license_id + ")"
-        );
+        let id_cell = cy.get("#licenses_list table tbody tr:first td:first");
+        id_cell.contains(license.license_id);
+
+        let name_link = cy
+            .get("#licenses_list table tbody tr:first td")
+            .eq(1)
+            .find("a");
+        name_link.should("have.text", license.name);
         name_link.click();
         cy.wait("@get-license");
         cy.wait(500); // Cypress is too fast! Vue hasn't populated the form yet!
