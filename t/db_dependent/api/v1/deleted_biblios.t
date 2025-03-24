@@ -36,6 +36,7 @@ use C4::Circulation qw( AddIssue AddReturn );
 
 use Koha::Biblios;
 use Koha::Database;
+use Koha::DateUtils qw( dt_from_string output_pref );
 use Koha::Checkouts;
 use Koha::Old::Checkouts;
 
@@ -164,7 +165,7 @@ subtest 'get() tests' => sub {
 
 subtest 'list() tests' => sub {
 
-    plan tests => 17;
+    plan tests => 21;
 
     $schema->storage->txn_begin;
 
@@ -227,6 +228,27 @@ subtest 'list() tests' => sub {
         ->status_is(200);
 
     $t->get_ok( "//$userid:$password@/api/v1/deleted/biblios?q=$query" => { Accept => 'text/plain' } )->status_is(200);
+
+    my $old_biblio_1 = Koha::Old::Biblios->find($biblio_id_1);
+    my $old_biblio_2 = Koha::Old::Biblios->find($biblio_id_2);
+
+    $old_biblio_1->set( { timestamp => dt_from_string('2024-12-12T17:33:57+00:00') } )->store();
+    $old_biblio_2->set( { timestamp => dt_from_string('2024-12-11T17:33:57+00:00') } )->store();
+
+    $query = encode_json(
+        {
+            "-and" => [
+                { 'me.deleted_on' => { '>=' => '2024-12-12T00:00:00+00:00' } },
+                [
+                    { biblio_id => $old_biblio_1->id },
+                    { biblio_id => $old_biblio_2->id },
+                ]
+            ]
+        }
+    );
+
+    $t->get_ok( "//$userid:$password@/api/v1/deleted/biblios?q=$query" => { Accept => 'application/json' } )
+        ->status_is(200)->json_is( '/0/biblio_id' => $old_biblio_1->id )->json_is( '/1/biblio_id' => undef );
 
     # DELETE any biblio with ISBN = TOMAS
     Koha::Biblios->search( { 'biblioitem.isbn' => 'TOMAS' }, { join => ['biblioitem'] } )->delete;
