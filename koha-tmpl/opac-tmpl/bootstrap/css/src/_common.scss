@@ -579,12 +579,6 @@ table {
                         line-height: .5rem;
                     }
 
-                    &.dt-ordering-asc span.dt-column-order::before
-                    &.dt-ordering-desc span.dt-column-order::after {
-                        color: #006100;
-                        opacity: 1;
-                    }
-
                     &.dt-orderable-asc span.dt-column-order::before,
                     &.dt-ordering-asc span.dt-column-order::before {
                         content: "\f0d8"; /* fa-cart-up */
@@ -619,12 +613,6 @@ table {
                         }
                     }
 
-
-                    &.dt-ordering-asc span.dt-column-order::after,
-                    &.dt-ordering-desc span.dt-column-order::before {
-                        opacity: 1;
-                    }
-
                     &.dt-ordering-asc span.dt-column-order::before,
                     &.dt-ordering-desc span.dt-column-order::after {
                         opacity: .2;
@@ -637,6 +625,12 @@ table {
 
                     &:active {
                         outline: none;
+                    }
+
+                    &.dt-ordering-asc span.dt-column-order::before,
+                    &.dt-ordering-desc span.dt-column-order::after {
+                        color: #006100;
+                        opacity: 1;
                     }
                 }
             }
