@@ -798,7 +798,7 @@
                                                     [% ELSIF status_count == "othercount" %]
                                                         [% IF SEARCH_RESULT.${status_count} > 0 %]
                                                             <div class="results_unavailable all">[% SEARCH_RESULT.${status_count} | html %] unavailable:</div>
-                                                            [% IF Koha.Preference('FilterSearchResultsByLoggedInBranch') %]
+                                                            [% IF Koha.Preference('FilterSearchResultsByLoggedInBranch') && SEARCH_RESULT.branchothercount > 0 %]
                                                                 <div class="results_unavailable branch_specific">[% SEARCH_RESULT.branchothercount | html %] unavailable:</div>
                                                             [% END %]
                                                         [% END %]
