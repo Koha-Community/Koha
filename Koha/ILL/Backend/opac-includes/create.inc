@@ -30,11 +30,7 @@
 [% SET opac = whole.value.other.opac %]
 
 [% IF whole.stage == "form" %]
-[% IF Koha.Preference('AutoILLBackendPriority') %]
-  <h2>Create an automatic ILL request</h2>
-[% ELSE %]
-  <h2>Create a manual ILL request</h2>
-[% END %]
+<h2>Create an ILL request</h2>
 <form id="create_form" method="POST" action="">
   [% INCLUDE 'csrf-token.inc' %]
     <fieldset class="rows">

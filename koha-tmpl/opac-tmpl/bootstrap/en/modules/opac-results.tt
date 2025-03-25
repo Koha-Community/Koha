@@ -445,9 +445,9 @@
                                 [% END %]
                                 [% IF Koha.Preference( 'ILLModule' ) == 1 && loggedinusername %]
                                     [% IF Koha.Preference( 'AutoILLBackendPriority' ) %]
-                                        <li>Make an automatic <a href="/cgi-bin/koha/opac-illrequests.pl?op=create&backend=Standard">Interlibrary loan request</a></li>
+                                        <li>Make an <a href="/cgi-bin/koha/opac-illrequests.pl?op=create&amp;backend=Standard">interlibrary loan request</a></li>
                                     [% ELSE %]
-                                        <li>Make an <a href="/cgi-bin/koha/opac-illrequests.pl?op=create">Interlibrary loan request</a></li>
+                                        <li>Make an <a href="/cgi-bin/koha/opac-illrequests.pl?op=create">interlibrary loan request</a></li>
                                     [% END %]
                                 [% END %]
                             </ul>

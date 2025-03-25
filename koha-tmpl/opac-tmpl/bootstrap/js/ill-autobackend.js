@@ -34,7 +34,7 @@ $(document).ready(function () {
                         __("Verification timed out.")
                     );
                 } else {
-                    let message = "Error";
+                    let message = __("Error");
                     if (request.hasOwnProperty("responseJSON")) {
                         if (request.responseJSON.error) {
                             message = request.responseJSON.error;
@@ -61,12 +61,8 @@ $(document).ready(function () {
     function getBackendsAvailability(auto_backends, metadata) {
         let promises = [];
         for (const auto_backend of auto_backends) {
-            try {
-                const prom = getBackendAvailability(auto_backend, metadata);
-                promises.push(prom);
-            } catch (e) {
-                console.log(e);
-            }
+            const prom = getBackendAvailability(auto_backend, metadata);
+            promises.push(prom);
         }
         Promise.allSettled(promises).then(() => {
             let auto_backend = auto_backends.find(backend => backend.available);
