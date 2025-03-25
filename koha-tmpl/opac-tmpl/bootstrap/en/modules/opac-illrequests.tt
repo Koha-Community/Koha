@@ -167,7 +167,12 @@
                                             <td>
                                                 [% IF type %][% type | html %][% ELSE %]<span>N/A</span>[% END %]
                                             </td>
-                                            <td>[% request.status_alias ? request.statusalias.lib_opac : request.capabilities.$status.name | html %]</td>
+                                            <td>
+                                            [% request.capabilities.$status.name | html %]
+                                            [% IF request.status_alias && request.statusalias.lib_opac %]
+                                                <i><strong>([% request.statusalias.lib_opac | html %])</strong></i>
+                                            [% END %]
+                                            </td>
                                             <td data-order="[% request.placed | html %]">[% request.placed | $KohaDates %]</td>
                                             <td data-order="[% request.updated | html %]">[% request.updated | $KohaDates %]</td>
                                             <td>
@@ -207,7 +212,10 @@
                                         </li>
                                         <li>
                                             <label for="status">Status:</label>
-                                            [% request.status_alias ? request.statusalias.lib_opac : request.capabilities.$status.name | html %]
+                                            [% request.capabilities.$status.name | html %]
+                                            [% IF request.status_alias && request.statusalias.lib_opac %]
+                                                <i><strong>([% request.statusalias.lib_opac | html %])</strong></i>
+                                            [% END %]
                                         </li>
                                         <li>
                                             <label for="medium">Request type:</label>
