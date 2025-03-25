@@ -299,9 +299,11 @@
                             [% IF patronid && nouser %]
                                 <div class="alert alert-info">
                                     <p
-                                        >You entered an incorrect username or password. Please try again! But note that passwords are case
-                                        sensitive[% IF Koha.Preference('FailedLoginAttempts') %] and that your account will be locked after a fixed number of failed login attempts[% END %]. Please contact a library staff member if you
-                                        continue to have problems.</p
+                                        >You entered an incorrect username or password. Please try again! But note that passwords are case sensitive.
+                                        [% IF Koha.Preference('FailedLoginAttempts') %]
+                                            Your account will be locked after a fixed number of failed login attempts.
+                                        [% END %]
+                                        Please contact a library staff member if you continue to have problems.</p
                                     >
                                 </div>
                             [% END %]
