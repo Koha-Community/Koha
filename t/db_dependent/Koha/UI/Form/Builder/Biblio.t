@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 7;
+use Test::More tests => 8;
 use Test::MockModule;
 
 use C4::ClassSource;
@@ -200,6 +200,12 @@ subtest 'generate_subfield_form framework plugin' => sub {
     is($subfield->{marc_value}->{plugin}, 'barcode.pl');
     is($subfield->{marc_value}->{noclick}, 1);
     like($subfield->{marc_value}->{javascript}, qr,<script>.*</script>,s);
+};
+
+subtest 'generate_subfield_form default value' => sub {
+    my $builder = Koha::UI::Form::Builder::Biblio->new( { biblionumber => 1 } );
+
+    is( $builder->{biblionumber}, 1, "Biblionumber correctly stored in object" );
 };
 
 $schema->storage->txn_rollback;
