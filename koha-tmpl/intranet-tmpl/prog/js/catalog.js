@@ -171,11 +171,6 @@ $(document).ready(function () {
         );
     });
 
-    $("#addtoshelf").click(function () {
-        addToShelf();
-        $(".btn-group").removeClass("open");
-        return false;
-    });
     $("#export").remove(); // Hide embedded export form if JS menus available
 
     $(".addtolist").on("click", function (e) {

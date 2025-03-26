@@ -23,18 +23,17 @@ $(document).ready(function () {
         });
     }
     if (CAN_user_borrowers_edit_borrowers) {
-        $("#renewpatron").click(function () {
+        $("#renewpatron").click(function (e) {
+            e.preventDefault();
             confirm_reregistration();
-            $(".btn-group").removeClass("open");
-            return false;
         });
+
         $("#updatechild").click(function (e) {
+            e.preventDefault();
             if ($(this).data("toggle") == "tooltip") {
                 // Disabled menu option has tooltip attribute
-                e.preventDefault();
             } else {
                 update_child();
-                $(".btn-group").removeClass("open");
             }
         });
     }
@@ -47,21 +46,20 @@ $(document).ready(function () {
         );
     });
 
-    $("#exportcheckins").click(function () {
+    $("#exportcheckins").click(function (e) {
+        e.preventDefault();
         export_barcodes();
-        $(".btn-group").removeClass("open");
-        return false;
     });
-    $("#print_overdues").click(function () {
+    $("#print_overdues").click(function (e) {
+        e.preventDefault();
         window.open(
             "/cgi-bin/koha/members/print_overdues.pl?borrowernumber=" +
                 borrowernumber,
             "printwindow"
         );
-        $(".btn-group").removeClass("open");
-        return false;
     });
-    $(".printslip").click(function () {
+    $(".printslip").click(function (e) {
+        e.preventDefault();
         let slip_code = $(this).data("code");
         let clear_screen = $(this).data("clear");
         if (slip_code == "printsummary") {
@@ -81,9 +79,6 @@ $(document).ready(function () {
         }
         if (clear_screen) {
             window.location.replace("/cgi-bin/koha/circ/circulation.pl");
-        } else {
-            $(".btn-group").removeClass("open");
-            return false;
         }
     });
     $("#searchtohold").click(function () {

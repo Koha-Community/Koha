@@ -130,29 +130,26 @@
                 AutomaticLinker();
             });
 
-            $("#saverecord").click(function(){
-                $(".btn-group").removeClass("open");
+            $("#saverecord").click(function(e){
+                e.preventDefault();
                 onOption();
-                return false;
             });
 
-            $("#saveandview").click(function(){
-                $(".btn-group").removeClass("open");
+            $("#saveandview").click(function(e){
+                e.preventDefault();
                 redirect("view");
-                return false;
             });
 
-            $("#saveanditems").click(function(){
-                $(".btn-group").removeClass("open");
+            $("#saveanditems").click(function(e){
+                e.preventDefault();
                 redirect("items");
-                return false;
             });
-            $("#saveandcontinue").click(function(){
-                $(".btn-group").removeClass("open");
+
+            $("#saveandcontinue").click(function(e){
+                e.preventDefault();
                 var tab = $("#addbibliotabs div.active:first").attr('id');
                 $("#current_tab").val(tab);
                 redirect("just_save", tab);
-                return false;
             });
 
             $( '#toggleEditor' ).change( function() {

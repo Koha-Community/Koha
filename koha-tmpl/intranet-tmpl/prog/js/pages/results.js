@@ -199,30 +199,26 @@ $(document).ready(function () {
         return false;
     });
 
-    $("#searchheader").on("click", ".placehold", function () {
+    $("#searchheader").on("click", ".placehold", function (e) {
+        e.preventDefault();
         $("#holdFor").val("");
         $("#holdForClub").val("");
         placeHold();
-        $(".btn-group").removeClass("open");
-        return false;
     });
 
-    $(".placeholdfor").click(function () {
+    $(".placeholdfor").click(function (e) {
+        e.preventDefault();
         holdForPatron();
-        $(".btn-group").removeClass("open");
-        return false;
     });
 
-    $(".placeholdforclub").click(function () {
+    $(".placeholdforclub").click(function (e) {
+        e.preventDefault();
         holdForClub();
-        $(".btn-group").removeClass("open");
-        return false;
     });
 
-    $("#forgetholdfor, #forgetholdforclub").click(function () {
+    $("#forgetholdfor, #forgetholdforclub").click(function (e) {
+        e.preventDefault();
         forgetPatronAndClub();
-        $(".btn-group").removeClass("open");
-        return false;
     });
 
     $(".selection").show();

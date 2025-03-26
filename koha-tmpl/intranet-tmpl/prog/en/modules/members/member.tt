@@ -242,7 +242,7 @@
                 var patron_search_selections = JSON.parse(localStorage.getItem("patron_search_selections")) || [];
                 if (patron_search_selections.length == 0) {
                     alert(_("You have not selected any patrons to add to a list!"));
-                    $(".btn-group").removeClass("open"); /* Close button menu */
+                    $(".dropdown-menu").removeClass("show");
                     return false;
                 }
 
@@ -253,7 +253,6 @@
                     $("#new-patron-list").modal("show");
                 } else {
                     /* Ajax submit the patrons to list */
-
                     patronListAdd();
                 }
             });
