@@ -514,7 +514,7 @@
 
                                         [% IF ( ediaccount ) %]
                                             [%- BLOCK edi_status -%]
-                                                [%- SWITCH edi_order.status -%]
+                                                [%- SWITCH edi_order.status.lower -%]
 
                                                 [%- CASE 'pending' -%]
                                                     <span>Pending</span>
