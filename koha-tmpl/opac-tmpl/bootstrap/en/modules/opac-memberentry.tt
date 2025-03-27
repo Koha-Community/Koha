@@ -46,7 +46,7 @@
 [% END %]
 [% INCLUDE 'masthead.inc' %]
 
-<div class="main">
+<main class="main">
     [% WRAPPER breadcrumbs %]
         [% IF op == 'edit' %]
             [% WRAPPER breadcrumb_item %]
@@ -1357,9 +1357,11 @@
                 ><!--/div#update-account -->
             </div>
         </div>
+        <!-- / .row -->
     </div>
-</div>
-
+    <!-- / .container-fluid -->
+</main>
+<!-- / .main -->
 [% INCLUDE 'opac-bottom.inc' %]
 [% BLOCK jsinclude %]
     [% INCLUDE 'validator-strings.inc' %]

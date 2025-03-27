@@ -22,7 +22,7 @@
     [% AmazonAssocTag = '' %]
 [% END %]
 
-<div class="main">
+<main class="main">
     [% WRAPPER breadcrumbs %]
         [% WRAPPER breadcrumb_item %]
             <a href="/cgi-bin/koha/opac-user.pl">[% INCLUDE 'patron-title.inc' patron = logged_in_user %]</a>
@@ -102,7 +102,7 @@
         <!-- / .row -->
     </div>
     <!-- / .container-fluid -->
-</div>
+</main>
 <!-- / .main -->
 
 [% BLOCK checkout_history_table %]

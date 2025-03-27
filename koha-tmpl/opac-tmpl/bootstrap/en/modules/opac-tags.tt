@@ -58,7 +58,7 @@
 [% IF ( loggedinusername ) %][% INCLUDE 'bodytag.inc' bodyid='opac-usertags' bodyclass='scrollto' %][% ELSE %][% INCLUDE 'bodytag.inc' bodyid='opac-tags' bodyclass='scrollto' %][% END %]
 [% INCLUDE 'masthead.inc' %]
 
-<div class="main">
+<main class="main">
     [% WRAPPER breadcrumbs %]
         [% IF ( loggedinusername ) %]
             [% WRAPPER breadcrumb_item %]
@@ -236,7 +236,7 @@
         <!-- / .row -->
     </div>
     <!-- / .container-fluid -->
-</div>
+</main>
 <!-- / .main -->
 
 [% INCLUDE 'opac-bottom.inc' %]

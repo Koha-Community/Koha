@@ -15,7 +15,7 @@
 </head>
 [% INCLUDE 'bodytag.inc' bodyid='opac-marcdetail' bodyclass='scrollto' %]
 [% INCLUDE 'masthead.inc' %]
-<div class="main">
+<main class="main">
     [% WRAPPER breadcrumbs %]
         [% WRAPPER breadcrumb_item bc_active= 1 %]
             <span>MARC view: [% bibliotitle | html %]</span>
@@ -185,7 +185,7 @@
         <!-- / .row -->
     </div>
     <!-- / .container-fluid -->
-</div>
+</main>
 <!-- / .main -->
 
 [% IF Koha.Preference('OpacCatalogConcerns') %]

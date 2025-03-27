@@ -24,7 +24,7 @@
 [% INCLUDE 'bodytag.inc' bodyid='opac-login-page' bodyclass='scrollto' %]
 [% INCLUDE 'masthead.inc' %]
 
-<div class="main">
+<main class="main">
     [% WRAPPER breadcrumbs %]
         [% WRAPPER breadcrumb_item bc_active= 1 %]
             [% IF Koha.Preference( 'opacuserlogin' ) == 1 %]
@@ -300,8 +300,8 @@
         <!-- /.row -->
     </div>
     <!-- /.container-fluid -->
-</div>
-<!-- /.main -->
+</main>
+<!-- / .main -->
 
 [% INCLUDE 'opac-bottom.inc' %]
 [% BLOCK jsinclude %]

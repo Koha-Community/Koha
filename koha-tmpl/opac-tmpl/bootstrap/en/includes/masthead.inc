@@ -23,7 +23,7 @@
 <!-- closed in opac-bottom.inc -->
 <div id="wrapper">
 <!-- prettier-ignore-end -->
-<div id="header-region" class="noprint">
+<header id="header-region" class="noprint">
     <nav class="navbar navbar-expand">
         <div id="logo">
             <a class="navbar-brand" href="/cgi-bin/koha/opac-main.pl">
@@ -220,7 +220,7 @@
             </div>
         </div>
     [% END %]
-</div>
+    </header>
 <!-- / header-region -->
 
 [% IF ( OpacPublic ) %]
