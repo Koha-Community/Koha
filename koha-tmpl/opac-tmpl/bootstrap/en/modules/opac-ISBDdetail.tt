@@ -15,7 +15,7 @@
 </head>
 [% INCLUDE 'bodytag.inc' bodyid='opac-isbddetail' bodyclass='scrollto' %]
 [% INCLUDE 'masthead.inc' %]
-<div class="main">
+<main class="main">
     [% WRAPPER breadcrumbs %]
         [% WRAPPER breadcrumb_item bc_active= 1 %]
             [% tx("ISBD view for {title}", { title = biblio.title }) | html %]
@@ -56,7 +56,7 @@
         <!-- / .row -->
     </div>
     <!-- / .container-fluid -->
-</div>
+</main>
 <!-- / .main -->
 
 [% IF Koha.Preference('OpacCatalogConcerns') %]

@@ -14,7 +14,7 @@
 <body id="opac-recall" class="scrollto">
 [% INCLUDE 'masthead.inc' %]
 
-<div class="main">
+<main class="main">
     [% WRAPPER breadcrumbs %]
         [% WRAPPER breadcrumb_item %]
             <a href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% biblio.biblionumber | uri %]">Details for: [% biblio.title | html %]</a>
@@ -181,7 +181,7 @@
         <!-- / .row -->
     </div>
     <!-- / .container-fluid -->
-</div>
+</main>
 <!-- / .main -->
 
 [% INCLUDE 'opac-bottom.inc' %]

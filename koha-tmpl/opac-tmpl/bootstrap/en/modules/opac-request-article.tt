@@ -18,7 +18,7 @@
 [% SET disclaimer = AdditionalContents.get( location => "ArticleRequestsDisclaimerText", lang => lang, library => logged_in_user.branchcode || default_branch ) %]
 [% SET AllPublicBranches = Branches.all(  search_params => { public => 1 } ) %]
 
-<div class="main">
+<main class="main">
     [% WRAPPER breadcrumbs %]
         [% WRAPPER breadcrumb_item %]
             <a href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% biblio.biblionumber | uri %]">Details for: [% biblio.title | html %]</a>
@@ -249,7 +249,7 @@
         <!-- /.row -->
     </div>
     <!-- / .container-fluid -->
-</div>
+</main>
 <!-- / .main -->
 
 [% INCLUDE 'opac-bottom.inc' %]

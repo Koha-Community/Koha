@@ -16,7 +16,7 @@
 
 </head>
 [% INCLUDE 'bodytag.inc' bodyid='idref' bodyclass='scrollto' %]
-<div class="main">
+<main class="main">
     [% IF error %]
         This ppn is not found on the idref service.
     [% ELSE %]
@@ -47,7 +47,7 @@
             </div>
         [% END %]
     [% END %]
-</div>
+</main>
 [% BLOCK jsinclude %]
     [% INCLUDE 'datatables.inc' %]
     <script>

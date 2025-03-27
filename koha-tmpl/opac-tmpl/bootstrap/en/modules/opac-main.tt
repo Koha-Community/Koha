@@ -23,7 +23,7 @@
 [% INCLUDE 'bodytag.inc' bodyid='opac-main' %]
 [% INCLUDE 'masthead.inc' %]
 
-<div class="main">
+<main class="main">
     [% WRAPPER breadcrumbs %]
         [% IF news_item %]
             [% WRAPPER breadcrumb_item bc_active= 1 %]
@@ -302,10 +302,10 @@
                 <!-- / .col -->
             [% END # /opacuserlogin || OpacNavRight %]
         </div>
-        <!-- /.container-fluid -->
+        <!-- /.row -->
     </div>
-    <!-- /.row -->
-</div>
+    <!-- /.container-fluid -->
+</main>
 <!-- /.main -->
 
 [% INCLUDE 'opac-bottom.inc' %]
