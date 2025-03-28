@@ -125,104 +125,200 @@
         </h1>
         <form action="/cgi-bin/koha/admin/branches.pl" id="Aform" name="Aform" class="validated" method="post">
             [% INCLUDE 'csrf-token.inc' %]
-            <fieldset class="rows">
+            <fieldset class="fg">
                 <input type="hidden" name="op" value="cud-add_validate" />
                 [% IF library %]
                     <input type="hidden" name="is_a_modif" value="1" />
                 [% END %]
-                <ol>
-                    <li>
-                        [% IF library %]
+                <div class="fg-row">
+                    [% IF library %]
+                        <div class="fg-label">
                             <span class="label">Library code: </span>
+                        </div>
+                        <div class="fg-input">
                             <input type="hidden" name="branchcode" value="[% library.branchcode | html %]" />
-                            [% library.branchcode | html %]
-                        [% ELSE %]
+                            <div class="fg-text">[% library.branchcode | html %]</div>
+                        </div>
+                    [% ELSE %]
+                        <div class="fg-label">
                             <label for="branchcode" class="required">Library code: </label>
+                        </div>
+                        <div class="fg-input">
                             <input type="text" name="branchcode" id="branchcode" size="10" maxlength="10" value="[% library.branchcode | html %]" class="required focus" required="required" />
-                            <span class="required">Required</span>
-                        [% END %]
-                    </li>
-                    <li>
+                        </div>
+                        <div class="required">Required</div>
+                    [% END %]
+                </div>
+                <div class="fg-row">
+                    <div class="fg-label">
                         <label for="branchname" class="required">Name: </label>
+                    </div>
+                    <div class="fg-input">
                         [% IF library %]
                             <input type="text" name="branchname" id="branchname" size="80" value="[% library.branchname | html %]" class="required focus" required="required" />
                         [% ELSE %]
                             <input type="text" name="branchname" id="branchname" size="80" value="[% library.branchname | html %]" class="required" required="required" />
                         [% END %]
-                        <span class="required">Required</span>
-                    </li>
-                </ol>
+                    </div>
+                    <div class="required">Required</div>
+                </div>
             </fieldset>
             [% IF categories %]
-                <fieldset class="rows"
+                <fieldset class="fg"
                     ><legend>Group(s):</legend>
-                    <ol>
-                        [% FOREACH category IN categories %]
-                            <li>
+                    [% FOREACH category IN categories %]
+                        <div class="fg-row">
+                            <div class="fg-label">
                                 <label for="[% category.categorycode | html %]">[% category.categoryname | html %]: </label>
+                            </div>
+                            <div class="fg-input">
                                 [% IF category and selected_categorycodes.grep(category.categorycode).size %]
                                     <input type="checkbox" id="[% category.categorycode | html %]" name="selected_categorycode_[% category.categorycode | html %]" checked="checked" />
                                 [% ELSE %]
                                     <input type="checkbox" id="[% category.categorycode | html %]" name="selected_categorycode_[% category.categorycode | html %]" />
                                 [% END %]
-                                <div class="hint">[% category.codedescription | html %]</div>
-                            </li>
-                        [% END %]
-                    </ol>
+                            </div>
+                            <div class="hint">[% category.codedescription | html %]</div>
+                        </div>
+                    [% END %]
                 </fieldset>
             [% END %]
-            <fieldset class="rows">
-                <ol>
-                    <li><label for="branchaddress1">Address line 1: </label><input type="text" name="branchaddress1" id="branchaddress1" size="60" value="[% library.branchaddress1 | html %]" /></li>
-                    <li><label for="branchaddress2">Address line 2: </label><input type="text" name="branchaddress2" id="branchaddress2" size="60" value="[% library.branchaddress2 | html %]" /></li>
-                    <li><label for="branchaddress3">Address line 3: </label><input type="text" name="branchaddress3" id="branchaddress3" size="60" value="[% library.branchaddress3 | html %]" /></li>
-                    <li><label for="branchcity">City: </label><input type="text" name="branchcity" id="branchcity" size="60" value="[% library.branchcity | html %]" /></li>
-                    <li><label for="branchstate">State: </label><input type="text" name="branchstate" id="branchstate" size="60" value="[% library.branchstate | html %]" /></li>
-                    <li><label for="branchzip">ZIP/Postal code: </label><input type="text" name="branchzip" id="branchzip" size="25" maxlength="25" value="[% library.branchzip | html %]" /></li>
-                    <li><label for="branchcountry">Country: </label><input type="text" name="branchcountry" id="branchcountry" size="60" value="[% library.branchcountry | html %]" /></li>
-                    <li><label for="branchphone">Phone: </label><input type="text" name="branchphone" id="branchphone" size="60" value="[% library.branchphone | html %]" /></li>
-                    <li><label for="branchfax">Fax: </label><input type="text" name="branchfax" id="branchfax" size="60" value="[% library.branchfax | html %]" /></li>
-                    <li><label for="branchemail">Email: </label><input type="text" name="branchemail" id="branchemail" class="email" size="80" value="[% library.branchemail | html %]" /></li>
-                    [% IF (Koha.Preference('ILLModule')) %]
-                        <li>
+            <fieldset class="fg">
+                <div class="fg-row">
+                    <div class="fg-label">
+                        <label for="branchaddress1">Address line 1: </label>
+                    </div>
+                    <div class="fg-input">
+                        <input type="text" name="branchaddress1" id="branchaddress1" size="60" value="[% library.branchaddress1 | html %]" />
+                    </div>
+                </div>
+                <div class="fg-row">
+                    <div class="fg-label">
+                        <label for="branchaddress2">Address line 2: </label>
+                    </div>
+                    <div class="fg-input">
+                        <input type="text" name="branchaddress2" id="branchaddress2" size="60" value="[% library.branchaddress2 | html %]" />
+                    </div>
+                </div>
+                <div class="fg-row">
+                    <div class="fg-label">
+                        <label for="branchaddress3">Address line 3: </label>
+                    </div>
+                    <div class="fg-input">
+                        <input type="text" name="branchaddress3" id="branchaddress3" size="60" value="[% library.branchaddress3 | html %]" />
+                    </div>
+                </div>
+                <div class="fg-row">
+                    <div class="fg-label">
+                        <label for="branchcity">City: </label>
+                    </div>
+                    <div class="fg-input">
+                        <input type="text" name="branchcity" id="branchcity" size="60" value="[% library.branchcity | html %]" />
+                    </div>
+                </div>
+                <div class="fg-row">
+                    <div class="fg-label">
+                        <label for="branchstate">State: </label>
+                    </div>
+                    <div class="fg-input">
+                        <input type="text" name="branchstate" id="branchstate" size="60" value="[% library.branchstate | html %]" />
+                    </div>
+                </div>
+                <div class="fg-row">
+                    <div class="fg-label">
+                        <label for="branchzip">ZIP/Postal code: </label>
+                    </div>
+                    <div class="fg-input">
+                        <input type="text" name="branchzip" id="branchzip" size="25" maxlength="25" value="[% library.branchzip | html %]" />
+                    </div>
+                </div>
+                <div class="fg-row">
+                    <div class="fg-label">
+                        <label for="branchcountry">Country: </label>
+                    </div>
+                    <div class="fg-input">
+                        <input type="text" name="branchcountry" id="branchcountry" size="60" value="[% library.branchcountry | html %]" />
+                    </div>
+                </div>
+                <div class="fg-row">
+                    <div class="fg-label">
+                        <label for="branchphone">Phone: </label>
+                    </div>
+                    <div class="fg-input">
+                        <input type="text" name="branchphone" id="branchphone" size="60" value="[% library.branchphone | html %]" />
+                    </div>
+                </div>
+                <div class="fg-row">
+                    <div class="fg-label">
+                        <label for="branchfax">Fax: </label>
+                    </div>
+                    <div class="fg-input">
+                        <input type="text" name="branchfax" id="branchfax" size="60" value="[% library.branchfax | html %]" />
+                    </div>
+                </div>
+                <div class="fg-row">
+                    <div class="fg-label">
+                        <label for="branchemail">Email: </label>
+                    </div>
+                    <div class="fg-input">
+                        <input type="text" name="branchemail" id="branchemail" class="email" size="80" value="[% library.branchemail | html %]" />
+                    </div>
+                </div>
+                [% IF (Koha.Preference('ILLModule')) %]
+                    <div class="fg-row">
+                        <div class="fg-label">
                             <label for="branchillemail">ILL staff email: </label>
+                        </div>
+                        <div class="fg-input">
                             <input type="text" name="branchillemail" id="branchillemail" class="email" size="80" value="[% library.branchillemail | html %]" />
-                            <div class="hint">
-                                [% IF ( CAN_user_parameters_manage_sysprefs ) %]
-                                    [% pref_ILLDefaultStaffEmail_link = BLOCK %]<a href="/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=ILLDefaultStaffEmail">ILLDefaultStaffEmail</a>[% END %]
-                                    Default: [% pref_ILLDefaultStaffEmail_link | $raw | $KohaSpan %] system preference
-                                [% ELSE %]
-                                    Default: ILLDefaultStaffEmail system preference
-                                [% END %]
-                            </div>
-                        </li>
-                    [% END %]
-                    <li>
+                        </div>
+                        <div class="hint">
+                            [% IF ( CAN_user_parameters_manage_sysprefs ) %]
+                                [% pref_ILLDefaultStaffEmail_link = BLOCK %]<a href="/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=ILLDefaultStaffEmail">ILLDefaultStaffEmail</a>[% END %]
+                                Default: [% pref_ILLDefaultStaffEmail_link | $raw | $KohaSpan %] system preference
+                            [% ELSE %]
+                                Default: ILLDefaultStaffEmail system preference
+                            [% END %]
+                        </div>
+                    </div>
+                [% END %]
+                <div class="fg-row">
+                    <div class="fg-label">
                         <label for="branchreplyto">Reply-To: </label>
+                    </div>
+                    <div class="fg-input">
                         <input type="text" name="branchreplyto" id="branchreplyto" class="email" size="80" value="[% library.branchreplyto | html %]" />
-                        <div class="hint">
-                            [% IF ( CAN_user_parameters_manage_sysprefs ) %]
-                                [% pref_ReplyToDefault_link = BLOCK %]<a href="/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=ReplyToDefault">ReplyToDefault</a>[% END %]
-                                Default: [% pref_ReplyToDefault_link | $raw | $KohaSpan %] system preference
-                            [% ELSE %]
-                                Default: ReplyToDefault system preference
-                            [% END %]
-                        </div>
-                    </li>
-                    <li>
+                    </div>
+                    <div class="hint">
+                        [% IF ( CAN_user_parameters_manage_sysprefs ) %]
+                            [% pref_ReplyToDefault_link = BLOCK %]<a href="/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=ReplyToDefault">ReplyToDefault</a>[% END %]
+                            Default: [% pref_ReplyToDefault_link | $raw | $KohaSpan %] system preference
+                        [% ELSE %]
+                            Default: ReplyToDefault system preference
+                        [% END %]
+                    </div>
+                </div>
+                <div class="fg-row">
+                    <div class="fg-label">
                         <label for="branchreturnpath">Return-Path: </label>
+                    </div>
+                    <div class="fg-input">
                         <input type="text" name="branchreturnpath" id="branchreturnpath" class="email" size="80" value="[% library.branchreturnpath | html %]" />
-                        <div class="hint">
-                            [% IF ( CAN_user_parameters_manage_sysprefs ) %]
-                                [% pref_ReturnpathDefault_link = BLOCK %]<a href="/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=ReturnpathDefault">ReturnpathDefault</a>[% END %]
-                                Default: [% pref_ReturnpathDefault_link | $raw | $KohaSpan %] system preference
-                            [% ELSE %]
-                                Default: ReturnpathDefault system preference
-                            [% END %]
-                        </div>
-                    </li>
-                    <li
-                        ><label for="smtp_server">SMTP server: </label>
+                    </div>
+                    <div class="hint">
+                        [% IF ( CAN_user_parameters_manage_sysprefs ) %]
+                            [% pref_ReturnpathDefault_link = BLOCK %]<a href="/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=ReturnpathDefault">ReturnpathDefault</a>[% END %]
+                            Default: [% pref_ReturnpathDefault_link | $raw | $KohaSpan %] system preference
+                        [% ELSE %]
+                            Default: ReturnpathDefault system preference
+                        [% END %]
+                    </div>
+                </div>
+                <div class="fg-row">
+                    <div class="fg-label">
+                        <label for="smtp_server">SMTP server: </label>
+                    </div>
+                    <div class="fg-input">
                         <select name="smtp_server" id="smtp_server">
                             [% IF library AND library.smtp_server.is_system_default %]
                                 <option value="*" selected="selected">Default</option>
@@ -237,39 +333,69 @@
                                 [% END %]
                             [% END %]
                         </select>
-                    </li>
-                    <li><label for="branchurl">URL: </label><input type="text" name="branchurl" id="branchurl" size="80" value="[% library.branchurl | html %]" class="url" /></li>
-                    <li
-                        ><label for="opac_info">OPAC information: </label>
+                    </div>
+                </div>
+                <div class="fg-row">
+                    <div class="fg-label">
+                        <label for="branchurl">URL: </label>
+                    </div>
+                    <div class="fg-input">
+                        <input type="text" name="branchurl" id="branchurl" size="80" value="[% library.branchurl | html %]" class="url" />
+                    </div>
+                </div>
+                <div class="fg-row">
+                    <div class="fg-label">
+                        <label for="opac_info">OPAC information: </label>
+                    </div>
+                    <div class="fg-input">
                         [% IF OpacLibraryInfo %]
                             <!-- opac_info -->
                             <div>[% OpacLibraryInfo.content | $raw %]</div>
-                            <div class="hint"><a href="/cgi-bin/koha/tools/additional-contents.pl?category=html_customizations&op=add_form&id=[% OpacLibraryInfo.id | $raw %]&editmode=wysiwyg" target="_blank">Edit HTML content</a></div>
+                            <a class="btn btn-link" href="/cgi-bin/koha/tools/additional-contents.pl?category=html_customizations&op=add_form&id=[% OpacLibraryInfo.id | $raw %]&editmode=wysiwyg" target="_blank">Edit HTML content</a>
                         [% ELSE %]
-                            <a href="/cgi-bin/koha/tools/additional-contents.pl?category=html_customizations&op=add_form&editmode=wysiwyg" target="_blank">Add HTML content</a>
+                            <a class="btn btn-link" href="/cgi-bin/koha/tools/additional-contents.pl?category=html_customizations&op=add_form&editmode=wysiwyg" target="_blank">Add HTML content</a>
                         [% END %]
-                    </li>
-                    <li>
+                    </div>
+                </div>
+                <div class="fg-row">
+                    <div class="fg-label">
                         <label for="branchip">IP: </label>
+                    </div>
+                    <div class="fg-input">
                         <input type="text" name="branchip" id="branchip" size="15" maxlength="15" value="[% library.branchip | html %]" />
-                        <div class="hint">Enter as a single IP address, or a subnet such as 192.168.1.*</div>
-                    </li>
-                    <li>
+                    </div>
+                    <div class="hint">Enter as a single IP address, or a subnet such as 192.168.1.*</div>
+                </div>
+                <div class="fg-row">
+                    <div class="fg-label">
                         <label for="marcorgcode">MARC organization code: </label>
+                    </div>
+                    <div class="fg-input">
                         <input type="text" name="marcorgcode" id="marcorgcode" size="16" maxlength="16" value="[% library.marcorgcode | html %]" />
-                        <div class="hint">
-                            [% IF ( CAN_user_parameters_manage_sysprefs ) %]
-                                [% pref_MARCOrgCode_link = BLOCK %]<a href="/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=MARCOrgCode">MARCOrgCode</a>[% END %]
-                                Default: [% pref_MARCOrgCode_link | $raw | $KohaSpan %] system preference.
-                            [% ELSE %]
-                                Default: MARCOrgCode system preference.
-                            [% END %]
-                            Obtain a library code from the <a href="https://www.loc.gov/marc/organizations/orgshome.html" target="_blank">Library of Congress</a>.
-                        </div>
-                    </li>
-                    <li><label for="branchnotes">Notes: </label><input type="text" name="branchnotes" id="branchnotes" size="80" value="[% library.branchnotes | html %]" /></li>
-                    <li
-                        ><label for="pickup_location">Pickup location: </label>
+                    </div>
+                    <div class="hint">
+                        [% IF ( CAN_user_parameters_manage_sysprefs ) %]
+                            [% pref_MARCOrgCode_link = BLOCK %]<a href="/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=MARCOrgCode">MARCOrgCode</a>[% END %]
+                            Default: [% pref_MARCOrgCode_link | $raw | $KohaSpan %] system preference.
+                        [% ELSE %]
+                            Default: MARCOrgCode system preference.
+                        [% END %]
+                        Obtain a library code from the <a href="https://www.loc.gov/marc/organizations/orgshome.html" target="_blank">Library of Congress</a>.
+                    </div>
+                </div>
+                <div class="fg-row">
+                    <div class="fg-label">
+                        <label for="branchnotes">Notes: </label>
+                    </div>
+                    <div class="fg-input">
+                        <input type="text" name="branchnotes" id="branchnotes" size="80" value="[% library.branchnotes | html %]" />
+                    </div>
+                </div>
+                <div class="fg-row">
+                    <div class="fg-label">
+                        <label for="pickup_location">Pickup location: </label>
+                    </div>
+                    <div class="fg-input">
                         <select name="pickup_location" id="pickup_location">
                             [% IF !library || library.pickup_location == 1 %]
                                 <option value="1" selected="selected">Yes</option>
@@ -279,9 +405,13 @@
                                 <option value="0" selected="selected">No</option>
                             [% END %]
                         </select>
-                    </li>
-                    <li
-                        ><label for="public">Public: </label>
+                    </div>
+                </div>
+                <div class="fg-row">
+                    <div class="fg-label">
+                        <label for="public">Public: </label>
+                    </div>
+                    <div class="fg-input">
                         <select name="public" id="public">
                             [% IF !library || library.public == 1 %]
                                 <option value="1" selected="selected">Yes</option>
@@ -291,10 +421,14 @@
                                 <option value="0" selected="selected">No</option>
                             [% END %]
                         </select>
-                        <div class="hint">Set to 'Yes' to show this library as a search option and on the libraries page in the OPAC.</div>
-                    </li>
-                    <li>
+                    </div>
+                    <div class="hint">Set to 'Yes' to show this library as a search option and on the libraries page in the OPAC.</div>
+                </div>
+                <div class="fg-row wide">
+                    <div class="fg-label">
                         <label for="library_hours">Library hours: </label>
+                    </div>
+                    <div class="fg-table">
                         <table id="library_hours_table">
                             <thead>
                                 <tr>
@@ -351,24 +485,28 @@
                                 [% END %]
                             </tbody>
                         </table>
-                    </li>
-                    <li>
+                    </div>
+                </div>
+                <div class="fg-row">
+                    <div class="fg-label">
                         <label for="opacuserjs">Specific OPAC JS: </label>
-                        <div style="display:flex; flex-direction:column;">
-                            <a class="expand-textarea" id="expand_opacuserjs" data-target="opacuserjs" data-syntax="javascript" href="#">Edit</a>
-                            <textarea style="display:none" name="opacuserjs" id="opacuserjs" class="codemirror" rows="10" cols="40">[% library.opacuserjs | html %]</textarea>
-                            <a class="collapse-textarea" id="collapse_opacuserjs" data-target="opacuserjs" data-syntax="javascript" style="display:none" href="#">Collapse<br /></a>
-                        </div>
-                    </li>
-                    <li>
+                    </div>
+                    <div class="fg-input">
+                        <a class="expand-textarea btn btn-link" id="expand_opacuserjs" data-target="opacuserjs" data-syntax="javascript" href="#">Edit</a>
+                        <textarea style="display:none" name="opacuserjs" id="opacuserjs" class="codemirror" rows="10" cols="40">[% library.opacuserjs | html %]</textarea>
+                        <a class="collapse-textarea btn btn-link" id="collapse_opacuserjs" data-target="opacuserjs" data-syntax="javascript" style="display:none" href="#">Collapse<br /></a>
+                    </div>
+                </div>
+                <div class="fg-row">
+                    <div class="fg-label">
                         <label for="opacusercss">Specific OPAC CSS: </label>
-                        <div style="display:flex; flex-direction:column;">
-                            <a class="expand-textarea" id="expand_opacusercss" data-target="opacusercss" data-syntax="css" href="#">Edit</a>
-                            <textarea style="display:none" name="opacusercss" id="opacusercss" class="" rows="10" cols="40">[% library.opacusercss | html %]</textarea>
-                            <a class="collapse-textarea" id="collapse_opacusercss" data-target="opacusercss" data-syntax="css" style="display:none" href="#">Collapse<br /></a>
-                        </div>
-                    </li>
-                </ol>
+                    </div>
+                    <div class="fg-input">
+                        <a class="expand-textarea btn btn-link" id="expand_opacusercss" data-target="opacusercss" data-syntax="css" href="#">Edit</a>
+                        <textarea style="display:none" name="opacusercss" id="opacusercss" class="" rows="10" cols="40">[% library.opacusercss | html %]</textarea>
+                        <a class="collapse-textarea btn btn-link" id="collapse_opacusercss" data-target="opacusercss" data-syntax="css" style="display:none" href="#">Collapse<br /></a>
+                    </div>
+                </div>
             </fieldset>
             [% IF additional_fields.size %]
                 [% INCLUDE 'additional-fields-entry.inc' available=additional_fields values=additional_field_values wrap_fieldset=1 %]

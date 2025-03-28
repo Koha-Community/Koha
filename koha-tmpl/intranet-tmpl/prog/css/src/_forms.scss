@@ -18,6 +18,93 @@ fieldset {
         padding: 0;
     }
 
+    &.fg {
+        .btn.btn-link {
+            padding: .175rem 0;
+        }
+
+        .fg-checkbox {
+            grid-column-start: 2;
+        }
+
+        .fg-row {
+            display: block;
+            margin-bottom: .7rem;
+
+            label,
+            .label {
+                font-weight: bold;
+            }
+        }
+
+        .fg-row input[type="text"],
+        .fg-row select {
+            background-color: #FFF;
+            border: 1px solid #AAAAAA;
+            border-radius: 4px;
+            color: #495057;
+            display: inline-block;
+            height: calc( 1.5em + .75rem + 2px );
+            line-height: 1.5;
+            padding: .375rem .75rem;
+            width: 100%;
+        }
+
+        .fg-row input[type="text"].flatpickr-input {
+            padding-left: calc( 1.5em + 10px );
+            width: calc( 100% - 20px );
+        }
+
+        .fg-row input[type="checkbox"] {
+            margin: 0;
+        }
+
+        .fg-label,
+        .fg-row .required {
+            margin: .3rem 0;
+        }
+
+        .fg-text {
+            padding: .375rem .75rem;
+        }
+
+        @media only screen and ( min-width: 608px ) {
+            .fg-row {
+                column-gap: .7rem;
+                display: grid;
+                grid-template-columns: 15% 50% 15%;
+                grid-template-rows: 1fr min-content;
+
+                &.wide {
+                    grid-template-columns: 15% 85%;
+                }
+
+                input[type="text"].flatpickr-input {
+                    padding-left: calc( 1.5em + 10px );
+                    width: calc( 100% - 20px );
+                }
+            }
+
+            .fg-label {
+                justify-self: right;
+                text-align: right;
+            }
+        }
+
+        @media only screen and ( min-width: 1700px ) {
+            .fg-row {
+                grid-template-columns: 10% 35% 15%;
+            }
+        }
+
+        .hint {
+            color: #666;
+            font-size: 95%;
+            grid-column-start: 2;
+            margin: .3rem 0;
+        }
+    }
+
     &.rows {
         clear: left;
         float: left;
