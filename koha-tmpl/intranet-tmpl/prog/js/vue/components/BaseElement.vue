@@ -44,13 +44,19 @@ export default {
                     acc[key] = this.resource;
                 }
                 if (prop.hasOwnProperty("resourceProperty")) {
+                    let propertyValue;
                     if (prop.resourceProperty.includes(".")) {
-                        acc[key] = this.accessNestedProperty(
+                        propertyValue = this.accessNestedProperty(
                             prop.resourceProperty,
                             this.resource
                         );
                     } else {
-                        acc[key] = this.resource[prop.resourceProperty];
+                        propertyValue = this.resource[prop.resourceProperty];
+                    }
+                    if (Object.keys(prop).length === 1) {
+                        acc[key] = propertyValue;
+                    } else {
+                        prop.value = propertyValue;
                     }
                 }
                 if (key === "relationshipStrings") {
@@ -72,8 +78,19 @@ export default {
                 }
 
                 if (key === "disabled") {
-                    const currentValue = acc[key];
-                    acc[key] = !!currentValue;
+                    if (
+                        typeof prop === "object" &&
+                        prop.hasOwnProperty("qualifier")
+                    ) {
+                        let currentValue = prop.value;
+                        if (prop.qualifier === "!") {
+                            currentValue = !currentValue;
+                        }
+                        acc[key] = !!currentValue;
+                    } else {
+                        const currentValue = acc[key];
+                        acc[key] = !!currentValue;
+                    }
                 }
 
                 if (prop.type === "filter") {
