@@ -443,8 +443,8 @@
                     function playSound( sound ) {
                         if (!(sound.indexOf("http://") === 0 || sound.indexOf("https://") === 0)) {
                             sound = '[% interface | html %]' + '/bootstrap/sound/' + sound;
-                            document.getElementById("audio-alert").innerHTML = '<audio src="' + sound + '" autoplay="autoplay" autobuffer="autobuffer"></audio>';
                         }
+                        document.getElementById("audio-alert").innerHTML = '<audio src="' + sound + '" autoplay="autoplay" autobuffer="autobuffer"></audio>';
                     }
                 [% END %]
 
