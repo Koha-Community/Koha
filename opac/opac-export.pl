@@ -166,6 +166,7 @@ if ($error){
     print $query->end_html();
 }
 else {
+    binmode STDOUT, ':encoding(UTF-8)' if $format ne 'marc8';
     if ($format eq 'marc8'){
         print $query->header(
             -type => 'application/marc',
@@ -186,7 +187,6 @@ else {
             -attachment => "$file_pre$file_id.$format"
         );
     } else {
-        binmode STDOUT, ':encoding(UTF-8)';
         print $query->header(
             -type => 'application/octet-stream',
             -charset => 'utf-8',
