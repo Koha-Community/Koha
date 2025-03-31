@@ -598,6 +598,36 @@ For example, for holds, _type should return 'Reserve'.
 
 sub _type { }
 
+=head3 _polymorphic_field
+
+    sub _polymorphic_field {
+        return 'transport';
+    }
+
+The _polymorphic_field method must be set for all child classes that implement
+their own polymorphic children.
+
+It should return the field name that distinguishes the classes.
+
+=cut
+
+=head3 _polymorphic_map
+
+    sub _polymorphic_map {
+        return {
+            sftp => 'Koha::File::Transport::SFTP',
+            ftp  => 'Koha::File::Transport::FTP',
+        };
+    }
+
+The _polymorphic_map method must be implemented by all child classes that implement
+their own polymorphic children.
+
+It should return a simple hashmap mapping for field value to class name for the
+polymorphic class using the value from the _polymorphic_field defined above.
+
+=cut
+
 =head3 object_class
 
 This method must be set for all child classes.
