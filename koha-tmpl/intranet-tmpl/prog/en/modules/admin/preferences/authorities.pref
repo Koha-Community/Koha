@@ -154,3 +154,10 @@ Authorities:
                   1: Do
                   0: "Don't"
             - compare the source for 6XX headings to the thesaurus source for authority records when linking. Enabling this preference may require a reindex, and may generate new authority records if AutoCreateAuthorities is enabled.
+        -
+            - pref: LinkerConsiderDiacritics
+              default: no
+              choices:
+                  1: Do
+                  0: "Don't"
+            - consider diacritics when linking, i.e. distinguish between 'A', 'Å', 'Ä', etc. Enabling this preference may generate new authority records if AutoCreateAuthorities is enabled.
