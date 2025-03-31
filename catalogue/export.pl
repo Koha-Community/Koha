@@ -70,7 +70,7 @@ if ( $op eq "export" ) {
             ( $error, $marc ) = marc2marc( $marc, 'marcstd', C4::Context->preference('marcflavour') );
             $format = "marcstd";
         }
-        if ( $format =~ /utf8/ or $format =~ /marcstd/ ) {
+        if ( $format ne 'marc8' ) {
             binmode STDOUT, ':encoding(UTF-8)';
         }
         print $query->header(
