@@ -1851,16 +1851,6 @@
             <ul class="resource_list">
             <xsl:for-each select="$authorfield">
             <li>
-            <xsl:choose>
-                <xsl:when test="not(@tag=111) or @tag=700 or @tag=710 or @tag=711"/>
-                <xsl:when test="marc:subfield[@code='n']">
-                    <xsl:text> </xsl:text>
-                    <xsl:call-template name="subfieldSelect">
-                        <xsl:with-param name="codes">n</xsl:with-param>
-                    </xsl:call-template>
-                    <xsl:text> </xsl:text>
-                </xsl:when>
-            </xsl:choose>
             <a>
                 <xsl:choose>
                     <xsl:when test="marc:subfield[@code=9] and $UseAuthoritiesForTracings='1'">
