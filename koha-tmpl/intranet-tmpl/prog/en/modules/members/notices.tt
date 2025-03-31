@@ -137,13 +137,13 @@
                                     [% END %]
                                 [% END %]
                                 [% IF ( QUEUED_MESSAGE.status == 'sent' ) %]
-                                    [% IF ( QUEUED_MESSAGE.from_address ) %]
+                                    [% IF ( QUEUED_MESSAGE.from_address && QUEUED_MESSAGE.message_transport_type != 'print') %]
                                         <span class="clearfix"><span class="label">From:</span> [% QUEUED_MESSAGE.from_address | html %]</span>
                                     [% END %]
                                     [% IF ( QUEUED_MESSAGE.to_address && QUEUED_MESSAGE.message_transport_type != 'print') %]
                                         <span class="clearfix"><span class="label">To:</span> [% QUEUED_MESSAGE.to_address | html %]</span>
                                     [% END %]
-                                    [% IF ( QUEUED_MESSAGE.cc_address ) %]
+                                    [% IF ( QUEUED_MESSAGE.cc_address && QUEUED_MESSAGE.message_transport_type != 'print') %]
                                         <span class="clearfix"><span class="label">CC:</span> [% QUEUED_MESSAGE.cc_address | html %]</span>
                                     [% END %]
                                 [% END %]
