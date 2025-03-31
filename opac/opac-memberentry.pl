@@ -354,6 +354,7 @@ elsif ( $op eq 'cud-update' ) {
 
             Koha::Patron::Modifications->search({ borrowernumber => $borrowernumber })->delete;
 
+            $borrower_changes{verification_token} = q{};    # prevent warn Missing value for PK column
             my $m = Koha::Patron::Modification->new( \%borrower_changes )->store();
             #Automatically approve patron profile changes if set in syspref
 
