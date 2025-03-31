@@ -87,7 +87,7 @@
         </div>
     [% END %]
     <h1>Items for [% biblio.title | html %] [% IF ( biblio.author ) %]by [% biblio.author | html %][% END %] (Record #[% biblio.biblionumber | html %])</h1>
-    <a id="newitem_jump" href="#f"><i class="fa fa-arrow-down"></i> Jump to add item form</a>
+    <a id="newitem_jump" href="#f"><i class="fa fa-arrow-down"></i> Jump to form</a>
 
     [% IF ( barcode_not_unique ) %]<div class="alert alert-warning"><strong>Error saving item</strong>: Barcode must be unique.</div>[% END %]
     [% IF ( no_next_barcode ) %]<div class="alert alert-warning"><strong>Error saving items</strong>: Unable to automatically determine values for barcodes. No item has been inserted.</div>[% END %]
