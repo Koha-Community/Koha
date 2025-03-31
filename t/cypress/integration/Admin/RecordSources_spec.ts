@@ -40,7 +40,7 @@ describe("Record sources CRUD tests", () => {
             statusCode: 201,
             body: {},
         });
-        cy.get("#record_source_edit").contains("Submit").click();
+        cy.get("#record_source_add").contains("Submit").click();
 
         cy.get("main div[class='alert alert-info']").contains(
             "Record source created!"
@@ -57,7 +57,7 @@ describe("Record sources CRUD tests", () => {
             },
         });
         cy.visit("/cgi-bin/koha/admin/record_sources");
-        cy.get("#record_sources_list").contains(
+        cy.get("#record_source_list").contains(
             "There are no record sources defined"
         );
 
@@ -89,7 +89,7 @@ describe("Record sources CRUD tests", () => {
             },
         });
         cy.visit("/cgi-bin/koha/admin/record_sources");
-        cy.get("#record_sources_list").contains("Showing 1 to 3 of 3 entries");
+        cy.get("#record_source_list").contains("Showing 1 to 3 of 3 entries");
 
         cy.get(".dataTable > tbody > tr:first-child").within(() => {
             // Test true => "Yes"
@@ -151,7 +151,7 @@ describe("Record sources CRUD tests", () => {
                 can_be_edited: true,
             },
         });
-        cy.get("#record_sources_list table tbody tr:first")
+        cy.get("#record_source_list table tbody tr:first")
             .contains("Edit")
             .click();
         cy.get("#name").should("have.value", "Source 1");
@@ -178,7 +178,7 @@ describe("Record sources CRUD tests", () => {
                 can_be_edited: false,
             },
         });
-        cy.get("#record_source_edit").contains("Submit").click();
+        cy.get("#record_source_add").contains("Submit").click();
     });
 
     it("Delete", () => {
@@ -214,22 +214,22 @@ describe("Record sources CRUD tests", () => {
             statusCode: 204,
             body: {},
         });
-        cy.get("#record_sources_list table tbody tr:nth-child(2n+2)")
+        cy.get("#record_source_list table tbody tr:nth-child(2n+2)")
             .contains("Delete")
             .click();
         cy.get(".alert-warning.confirmation h1").contains(
-            "Are you sure you want to delete this record source?"
+            "Are you sure you want to remove this record source?"
         );
         cy.contains("Source 2");
         cy.contains("No, do not delete").click();
 
-        cy.get("#record_sources_list table tbody tr:nth-child(2n+2)")
+        cy.get("#record_source_list table tbody tr:nth-child(2n+2)")
             .contains("Delete")
             .click();
         cy.contains("Source 2");
         cy.contains("Yes, delete").click();
         cy.get("main div[class='alert alert-info']").contains(
-            "Record source 'Source 2' deleted"
+            "Record source Source 2 deleted"
         );
     });
 });

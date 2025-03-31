@@ -93,7 +93,7 @@ describe("Title CRUD operations", () => {
             },
         });
         cy.visit("/cgi-bin/koha/erm/eholdings/local/titles");
-        cy.get("#titles_list").contains("There are no titles defined");
+        cy.get("#title_list").contains("There are no titles defined");
 
         // GET titles returns something
         let erm_title = cy.get_title();
@@ -108,7 +108,7 @@ describe("Title CRUD operations", () => {
             },
         });
         cy.visit("/cgi-bin/koha/erm/eholdings/local/titles");
-        cy.get("#titles_list").contains("Showing 1 to 1 of 1 entries");
+        cy.get("#title_list").contains("Showing 1 to 1 of 1 entries");
     });
 
     it("Add title", () => {
@@ -126,73 +126,69 @@ describe("Title CRUD operations", () => {
         // Click the button in the toolbar
         cy.visit("/cgi-bin/koha/erm/eholdings/local/titles");
         cy.contains("New title").click();
-        cy.get("#titles_add h2").contains("New title");
+        cy.get("#title_add h2").contains("New title");
         cy.left_menu_active_item_is("Titles");
 
         // Fill in the form for normal attributes
         let erm_title = cy.get_title();
 
-        cy.get("#titles_add").contains("Submit").click();
+        cy.get("#title_add").contains("Submit").click();
         cy.get("input:invalid,textarea:invalid,select:invalid").should(
             "have.length",
             1
         );
-        cy.get("#title_publication_title").type(erm_title.publication_title);
-        cy.get("#title_print_identifier").type(erm_title.print_identifier);
-        cy.get("#title_online_identifier").type(erm_title.online_identifier);
-        cy.get("#title_date_first_issue_online").type(
+        cy.get("#publication_title").type(erm_title.publication_title);
+        cy.get("#print_identifier").type(erm_title.print_identifier);
+        cy.get("#online_identifier").type(erm_title.online_identifier);
+        cy.get("#date_first_issue_online").type(
             erm_title.date_first_issue_online
         );
-        cy.get("#title_num_first_vol_online").type(
-            erm_title.num_first_vol_online
-        );
-        cy.get("#title_num_first_issue_online").type(
+        cy.get("#num_first_vol_online").type(erm_title.num_first_vol_online);
+        cy.get("#num_first_issue_online").type(
             erm_title.num_first_issue_online
         );
-        cy.get("#title_date_last_issue_online").type(
+        cy.get("#date_last_issue_online").type(
             erm_title.date_last_issue_online
         );
-        cy.get("#title_num_last_vol_online").type(
-            erm_title.num_last_vol_online
-        );
-        cy.get("#title_num_last_issue_online").type(
-            erm_title.num_last_issue_online
-        );
-        cy.get("#title_title_url").type(erm_title.title_url);
-        cy.get("#title_first_author").type(erm_title.first_author);
-        cy.get("#title_embargo_info").type(erm_title.embargo_info);
-        cy.get("#title_coverage_depth").type(erm_title.coverage_depth);
-        cy.get("#title_notes").type(erm_title.notes);
-        cy.get("#title_publisher_name").type(erm_title.publisher_name);
-        cy.get("#title_publication_type .vs__search").type(
+        cy.get("#num_last_vol_online").type(erm_title.num_last_vol_online);
+        cy.get("#num_last_issue_online").type(erm_title.num_last_issue_online);
+        cy.get("#title_url").type(erm_title.title_url);
+        cy.get("#first_author").type(erm_title.first_author);
+        cy.get("#embargo_info").type(erm_title.embargo_info);
+        cy.get("#coverage_depth").type(erm_title.coverage_depth);
+        cy.get("#notes").type(erm_title.notes);
+        cy.get("#publisher_name").type(erm_title.publisher_name);
+        cy.get("#publication_type .vs__search").type(
             erm_title.publication_type + "{enter}",
             { force: true }
         );
-        cy.get("#title_date_monograph_published_print").type(
+        cy.get("#date_monograph_published_print").type(
             erm_title.date_monograph_published_print
         );
-        cy.get("#title_date_monograph_published_online").type(
+        cy.get("#date_monograph_published_online").type(
             erm_title.date_monograph_published_online
         );
-        cy.get("#title_monograph_volume").type(erm_title.monograph_volume);
-        cy.get("#title_monograph_edition").type(erm_title.monograph_edition);
-        cy.get("#title_first_editor").type(erm_title.first_editor);
-        cy.get("#title_parent_publication_title_id").type(
+        cy.get("#monograph_volume").type(erm_title.monograph_volume);
+        cy.get("#monograph_edition").type(erm_title.monograph_edition);
+        cy.get("#first_editor").type(erm_title.first_editor);
+        cy.get("#parent_publication_title_id").type(
             erm_title.parent_publication_title_id
         );
-        cy.get("#title_preceding_publication_title_id").type(
+        cy.get("#preceding_publication_title_id").type(
             erm_title.preceding_publication_title_id
         );
-        cy.get("#title_access_type").type(erm_title.access_type);
+        cy.get("#access_type").type(erm_title.access_type);
 
-        cy.get("#resources").contains("There are no packages created yet");
+        cy.get("#resources_relationship").contains(
+            "There are no packages created yet"
+        );
 
         // Submit the form, get 500
         cy.intercept("POST", "/api/v1/erm/eholdings/local/titles", {
             statusCode: 500,
             error: "Something went wrong",
         });
-        cy.get("#titles_add").contains("Submit").click();
+        cy.get("#title_add").contains("Submit").click();
         cy.get("main div[class='alert alert-warning']").contains(
             "Something went wrong: Error: Internal Server Error"
         );
@@ -202,7 +198,7 @@ describe("Title CRUD operations", () => {
             statusCode: 201,
             body: erm_title,
         });
-        cy.get("#titles_add").contains("Submit").click();
+        cy.get("#title_add").contains("Submit").click();
         cy.get("main div[class='alert alert-info']").contains("Title created");
 
         // Add new related package (resource)
@@ -212,12 +208,12 @@ describe("Title CRUD operations", () => {
             body: get_packages_to_relate(),
         }).as("get-related-packages");
         cy.visit("/cgi-bin/koha/erm/eholdings/local/titles/add");
-        cy.get("#resources").contains("Add to another package").click();
-        cy.get("#resources").contains("Package 1");
-        cy.get("#resources #resource_package_id_0 .vs__search").type(
+        cy.get("#resources_relationship").contains("Add new package").click();
+        cy.get("#resources_relationship").contains("Package 1");
+        cy.get("#resources_relationship #package_id_0 .vs__search").type(
             related_package.package.name
         );
-        cy.get("#resources #resource_package_id_0 .vs__dropdown-menu li")
+        cy.get("#resources_relationship #package_id_0 .vs__dropdown-menu li")
             .eq(0)
             .click({ force: true }); //click first package suggestion
     });
@@ -247,102 +243,90 @@ describe("Title CRUD operations", () => {
             body: get_packages_to_relate(),
         }).as("get-related-packages");
 
-        cy.get("#titles_list table tbody tr:first").contains("Edit").click();
+        cy.get("#title_list table tbody tr:first").contains("Edit").click();
         cy.wait("@get-title");
-        cy.get("#titles_add h2").contains("Edit title");
+        cy.get("#title_add h2").contains("Edit title");
         cy.left_menu_active_item_is("Titles");
 
         // Form has been correctly filled in
-        cy.get("#title_publication_title").should(
+        cy.get("#publication_title").should(
             "have.value",
             erm_title.publication_title
         );
-        cy.get("#title_print_identifier").should(
+        cy.get("#print_identifier").should(
             "have.value",
             erm_title.print_identifier
         );
-        cy.get("#title_online_identifier").should(
+        cy.get("#online_identifier").should(
             "have.value",
             erm_title.online_identifier
         );
-        cy.get("#title_date_first_issue_online").should(
+        cy.get("#date_first_issue_online").should(
             "have.value",
             erm_title.date_first_issue_online
         );
-        cy.get("#title_num_first_vol_online").should(
+        cy.get("#num_first_vol_online").should(
             "have.value",
             erm_title.num_first_vol_online
         );
-        cy.get("#title_num_first_issue_online").should(
+        cy.get("#num_first_issue_online").should(
             "have.value",
             erm_title.num_first_issue_online
         );
-        cy.get("#title_date_last_issue_online").should(
+        cy.get("#date_last_issue_online").should(
             "have.value",
             erm_title.date_last_issue_online
         );
-        cy.get("#title_num_last_vol_online").should(
+        cy.get("#num_last_vol_online").should(
             "have.value",
             erm_title.num_last_vol_online
         );
-        cy.get("#title_num_last_issue_online").should(
+        cy.get("#num_last_issue_online").should(
             "have.value",
             erm_title.num_last_issue_online
         );
-        cy.get("#title_title_url").should("have.value", erm_title.title_url);
-        cy.get("#title_first_author").should(
-            "have.value",
-            erm_title.first_author
-        );
-        cy.get("#title_embargo_info").should(
-            "have.value",
-            erm_title.embargo_info
-        );
-        cy.get("#title_coverage_depth").should(
+        cy.get("#title_url").should("have.value", erm_title.title_url);
+        cy.get("#first_author").should("have.value", erm_title.first_author);
+        cy.get("#embargo_info").should("have.value", erm_title.embargo_info);
+        cy.get("#coverage_depth").should(
             "have.value",
             erm_title.coverage_depth
         );
-        cy.get("#title_notes").should("have.value", erm_title.notes);
-        cy.get("#title_publisher_name").should(
+        cy.get("#notes").should("have.value", erm_title.notes);
+        cy.get("#publisher_name").should(
             "have.value",
             erm_title.publisher_name
         );
-        cy.get("#title_publication_type .vs__selected").contains("Journal");
-        cy.get("#title_date_monograph_published_print").should(
+        cy.get("#publication_type .vs__selected").contains("Journal");
+        cy.get("#date_monograph_published_print").should(
             "have.value",
             erm_title.date_monograph_published_print
         );
-        cy.get("#title_date_monograph_published_online").should(
+        cy.get("#date_monograph_published_online").should(
             "have.value",
             erm_title.date_monograph_published_online
         );
-        cy.get("#title_monograph_volume").should(
+        cy.get("#monograph_volume").should(
             "have.value",
             erm_title.monograph_volume
         );
-        cy.get("#title_monograph_edition").should(
+        cy.get("#monograph_edition").should(
             "have.value",
             erm_title.monograph_edition
         );
-        cy.get("#title_first_editor").should(
-            "have.value",
-            erm_title.first_editor
-        );
-        cy.get("#title_parent_publication_title_id").should(
+        cy.get("#first_editor").should("have.value", erm_title.first_editor);
+        cy.get("#parent_publication_title_id").should(
             "have.value",
             erm_title.parent_publication_title_id
         );
-        cy.get("#title_preceding_publication_title_id").should(
+        cy.get("#preceding_publication_title_id").should(
             "have.value",
             erm_title.preceding_publication_title_id
         );
-        cy.get("#title_access_type").should(
-            "have.value",
-            erm_title.access_type
-        );
+        cy.get("#access_type").should("have.value", erm_title.access_type);
 
         //Test related content
-        cy.get("#resources #resource_package_id_0 .vs__selected").contains(
+        cy.get("#resources_relationship #package_id_0 .vs__selected").contains(
             "package name"
         );
 
@@ -350,7 +334,7 @@ describe("Title CRUD operations", () => {
         cy.intercept("PUT", "/api/v1/erm/eholdings/local/titles/*", {
             statusCode: 500,
         });
-        cy.get("#titles_add").contains("Submit").click();
+        cy.get("#title_add").contains("Submit").click();
         cy.get("main div[class='alert alert-warning']").contains(
             "Something went wrong: Error: Internal Server Error"
         );
@@ -360,11 +344,11 @@ describe("Title CRUD operations", () => {
             statusCode: 200,
             body: erm_title,
         });
-        cy.get("#titles_add").contains("Submit").click();
+        cy.get("#title_add").contains("Submit").click();
         cy.get("main div[class='alert alert-info']").contains("Title updated");
     });
 
-    it("Show title", () => {
+    it.only("Show title", () => {
         let erm_title = cy.get_title();
         let titles = [erm_title];
         // Click the "name" link from the list
@@ -393,19 +377,17 @@ describe("Title CRUD operations", () => {
         ).as("get-title");
         cy.visit("/cgi-bin/koha/erm/eholdings/local/titles");
         cy.wait("@get-titles");
-        let title_link = cy.get("#titles_list table tbody tr:first td:first a");
+        let title_link = cy.get("#title_list table tbody tr:first td:first a");
         title_link.should(
             "have.text",
             erm_title.publication_title + " (#" + erm_title.title_id + ")"
         );
-        cy.get("#titles_list table tbody tr:first td:first a").click();
+        cy.get("#title_list table tbody tr:first td:first a").click();
         cy.wait("@get-title");
-        cy.get("#eholdings_title_show h2").contains(
-            "Title #" + erm_title.title_id
-        );
+        cy.get("#title_show h2").contains("Title #" + erm_title.title_id);
         cy.left_menu_active_item_is("Titles");
         // There are no packages, the table should not be displayed
-        cy.contains("Packages (0)");
+        cy.contains("Packages");
         cy.get("#table#package_list").should("not.exist");
 
         // Test now with all values
@@ -415,21 +397,22 @@ describe("Title CRUD operations", () => {
             erm_title
         ).as("get-title");
 
-        // List packages
-        cy.visit("/cgi-bin/koha/erm/eholdings/local/titles/1");
-        cy.wait("@get-title");
-        cy.contains("Packages (1)");
-
-        // Visit resource
         let related_package = erm_title.resources[0];
         // cy.get("#package_list tbody tr:first td a").contains("first package name").click();
         cy.intercept(
             "GET",
-            "/api/v1/erm/eholdings/local/resources/" +
-                related_package.resource_id,
+            "/api/v1/erm/eholdings/local/resources*",
             related_package
         ).as("get-related-package");
-        cy.get("table#package_list").contains("first package name").click();
+        // List packages
+        cy.visit("/cgi-bin/koha/erm/eholdings/local/titles/1");
+        cy.wait("@get-related-package");
+        cy.contains("Packages");
+        cy.wait(500);
+
+        cy.get("#package_relationship_list table")
+            .contains("first package name")
+            .click();
         cy.contains("Resource #" + related_package.resource_id);
         cy.contains(related_package.package.name);
     });
@@ -450,7 +433,7 @@ describe("Title CRUD operations", () => {
         cy.intercept("GET", "/api/v1/erm/eholdings/local/titles/*", erm_title);
         cy.visit("/cgi-bin/koha/erm/eholdings/local/titles");
 
-        cy.get("#titles_list table tbody tr:first").contains("Delete").click();
+        cy.get("#title_list table tbody tr:first").contains("Delete").click();
         cy.get(".alert-warning.confirmation h1").contains(
             "remove this local title"
         );
@@ -470,7 +453,7 @@ describe("Title CRUD operations", () => {
             statusCode: 204,
             body: null,
         });
-        cy.get("#titles_list table tbody tr:first").contains("Delete").click();
+        cy.get("#title_list table tbody tr:first").contains("Delete").click();
         cy.get(".alert-warning.confirmation h1").contains(
             "remove this local title"
         );
@@ -506,12 +489,12 @@ describe("Title CRUD operations", () => {
         ).as("get-title");
         cy.visit("/cgi-bin/koha/erm/eholdings/local/titles");
         cy.wait("@get-titles");
-        let title_link = cy.get("#titles_list table tbody tr:first td:first a");
+        let title_link = cy.get("#title_list table tbody tr:first td:first a");
         title_link.should(
             "have.text",
             erm_title.publication_title + " (#" + erm_title.title_id + ")"
         );
-        cy.get("#titles_list table tbody tr:first td:first a").click();
+        cy.get("#title_list table tbody tr:first td:first a").click();
         cy.wait("@get-title");
         cy.get("#eholdings_title_show h2").contains(
             "Title #" + erm_title.title_id
@@ -524,6 +507,6 @@ describe("Title CRUD operations", () => {
         cy.contains("Yes, delete").click();
 
         //Make sure we return to list after deleting from show
-        cy.get("#titles_list table tbody tr:first");
+        cy.get("#title_list table tbody tr:first");
     });
 });

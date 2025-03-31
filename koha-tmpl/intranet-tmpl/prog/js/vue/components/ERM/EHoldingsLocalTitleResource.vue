@@ -341,11 +341,13 @@ export default {
                             requiredKey: "package_id",
                             selectLabel: "name",
                             required: true,
+                            indexRequired: true,
                         },
                         {
                             name: "vendor_id",
                             type: "vendor",
                             label: __("Vendor"),
+                            indexRequired: true,
                             showElement: {
                                 type: "text",
                                 value: "vendor.name",

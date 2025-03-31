@@ -77,6 +77,7 @@ export default {
                     textAreaCols: 50,
                     label: __("Description"),
                     showInTable: true,
+                    required: true,
                 },
                 {
                     name: "type",
@@ -260,16 +261,25 @@ export default {
                             },
                         },
                         {
+                            name: "physical_location",
+                            required: false,
+                            type: "text",
+                            label: __("Physical location"),
+                            indexRequired: true,
+                        },
+                        {
                             name: "uri",
                             required: false,
                             type: "text",
                             label: __("URI"),
+                            indexRequired: true,
                         },
                         {
                             name: "notes",
                             required: false,
                             type: "text",
                             label: __("Notes"),
+                            indexRequired: true,
                         },
                     ],
                 },

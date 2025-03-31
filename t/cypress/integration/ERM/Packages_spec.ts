@@ -34,7 +34,7 @@ describe("Package CRUD operations", () => {
             },
         });
         cy.visit("/cgi-bin/koha/erm/eholdings/local/packages");
-        cy.get("#packages_list").contains("There are no packages defined");
+        cy.get("#package_list").contains("There are no packages defined");
 
         // GET packages returns something
         let erm_package = cy.get_package();
@@ -54,7 +54,7 @@ describe("Package CRUD operations", () => {
             erm_package
         );
         cy.visit("/cgi-bin/koha/erm/eholdings/local/packages");
-        cy.get("#packages_list").contains("Showing 1 to 1 of 1 entries");
+        cy.get("#package_list").contains("Showing 1 to 1 of 1 entries");
     });
 
     it("Add package", () => {
@@ -63,28 +63,28 @@ describe("Package CRUD operations", () => {
         // Click the button in the toolbar
         cy.visit("/cgi-bin/koha/erm/eholdings/local/packages");
         cy.contains("New package").click();
-        cy.get("#packages_add h2").contains("New package");
+        cy.get("#package_add h2").contains("New package");
         cy.left_menu_active_item_is("Packages");
 
         // Fill in the form for normal attributes
         let erm_package = cy.get_package();
 
-        cy.get("#packages_add").contains("Submit").click();
+        cy.get("#package_add").contains("Submit").click();
         cy.get("input:invalid,textarea:invalid,select:invalid").should(
             "have.length",
             1
         );
-        cy.get("#package_name").type(erm_package.name);
+        cy.get("#name").type(erm_package.name);
         cy.get("#package_type .vs__search").type(
             erm_package.package_type + "{enter}",
             { force: true }
         );
-        cy.get("#package_content_type .vs__search").type(
+        cy.get("#content_type .vs__search").type(
             erm_package.content_type + "{enter}",
             { force: true }
         );
 
-        cy.get("#package_agreements").contains(
+        cy.get("#package_agreements_relationship").contains(
             "There are no agreements created yet"
         );
 
@@ -92,7 +92,7 @@ describe("Package CRUD operations", () => {
         cy.intercept("POST", "/api/v1/erm/eholdings/local/packages", {
             statusCode: 500,
         });
-        cy.get("#packages_add").contains("Submit").click();
+        cy.get("#package_add").contains("Submit").click();
         cy.get("main div[class='alert alert-warning']").contains(
             "Something went wrong: Error: Internal Server Error"
         );
@@ -102,7 +102,7 @@ describe("Package CRUD operations", () => {
             statusCode: 201,
             body: erm_package,
         });
-        cy.get("#packages_add").contains("Submit").click();
+        cy.get("#package_add").contains("Submit").click();
         cy.get("main div[class='alert alert-info']").contains(
             "Package created"
         );
@@ -114,8 +114,10 @@ describe("Package CRUD operations", () => {
             body: cy.get_agreements_to_relate(),
         });
         cy.visit("/cgi-bin/koha/erm/eholdings/local/packages/add");
-        cy.get("#package_agreements").contains("Add new agreement").click();
-        cy.get("#package_agreement_0").contains("Agreement 1");
+        cy.get("#package_agreements_relationship")
+            .contains("Add new agreement")
+            .click();
+        cy.get("#package_agreements_0").contains("Agreement 1");
         cy.get("#agreement_id_0 .vs__search").type(
             related_agreement.agreement.name
         );
@@ -148,18 +150,18 @@ describe("Package CRUD operations", () => {
             statusCode: 200,
             body: cy.get_agreements_to_relate(),
         }).as("get-related-agreements");
-        cy.get("#packages_list table tbody tr:first").contains("Edit").click();
+        cy.get("#package_list table tbody tr:first").contains("Edit").click();
         cy.wait("@get-package");
-        cy.get("#packages_add h2").contains("Edit package");
+        cy.get("#package_add h2").contains("Edit package");
         cy.left_menu_active_item_is("Packages");
 
         // Form has been correctly filled in
-        cy.get("#package_name").should("have.value", erm_package.name);
+        cy.get("#name").should("have.value", erm_package.name);
         cy.get("#package_type .vs__selected").contains("Complete");
-        cy.get("#package_content_type .vs__selected").contains("Print");
+        cy.get("#content_type .vs__selected").contains("Print");
 
         //Test related content
-        cy.get("#package_agreement_0 #agreement_id_0 .vs__selected").contains(
+        cy.get("#package_agreements_0 #agreement_id_0 .vs__selected").contains(
             "second agreement name"
         );
 
@@ -167,7 +169,7 @@ describe("Package CRUD operations", () => {
         cy.intercept("PUT", "/api/v1/erm/eholdings/local/packages/*", {
             statusCode: 500,
         });
-        cy.get("#packages_add").contains("Submit").click();
+        cy.get("#package_add").contains("Submit").click();
         cy.get("main div[class='alert alert-warning']").contains(
             "Something went wrong: Error: Internal Server Error"
         );
@@ -177,7 +179,7 @@ describe("Package CRUD operations", () => {
             statusCode: 200,
             body: erm_package,
         });
-        cy.get("#packages_add").contains("Submit").click();
+        cy.get("#package_add").contains("Submit").click();
         cy.get("main div[class='alert alert-info']").contains(
             "Package updated"
         );
@@ -202,56 +204,45 @@ describe("Package CRUD operations", () => {
         ).as("get-package");
         cy.visit("/cgi-bin/koha/erm/eholdings/local/packages");
         cy.wait("@get-packages");
-        let name_link = cy.get(
-            "#packages_list table tbody tr:first td:first a"
-        );
+        let name_link = cy.get("#package_list table tbody tr:first td:first a");
         name_link.should(
             "have.text",
             erm_package.name + " (#" + erm_package.package_id + ")"
         );
         name_link.click();
         cy.wait("@get-package");
-        cy.get("#packages_show h2").contains(
-            "Package #" + erm_package.package_id
+        cy.get("#package_show h2").contains(
+            "Local package #" + erm_package.package_id
         );
         cy.left_menu_active_item_is("Packages");
-
-        // There are no resources, the table should not be displayed
-        cy.contains("Titles (0)");
-        cy.get("#title_list_result table").should("not.exist");
 
         // List resources
         cy.intercept("GET", "/api/v1/erm/eholdings/local/packages/*", {
             ...erm_package,
             resources_count: 1,
         });
-        cy.intercept(
-            "GET",
-            "/api/v1/erm/eholdings/local/packages/1/resources*",
-            {
-                statusCode: 200,
-                body: [
-                    {
-                        package_id: erm_package.package_id,
-                        resource_id: 1,
-                        title_id: 1,
-                        title: {
-                            biblio_id: 42,
-                            publication_title: "A great title",
-                            publication_type: "",
-                        },
+        cy.intercept("GET", "/api/v1/erm/eholdings/local/resources*", {
+            statusCode: 200,
+            body: [
+                {
+                    package_id: erm_package.package_id,
+                    resource_id: 1,
+                    title_id: 1,
+                    title: {
+                        biblio_id: 42,
+                        publication_title: "A great title",
+                        publication_type: "",
                     },
-                ],
-                headers: {
-                    "X-Base-Total-Count": "1",
-                    "X-Total-Count": "1",
                 },
-            }
-        ).as("get-resource");
+            ],
+            headers: {
+                "X-Base-Total-Count": "1",
+                "X-Total-Count": "1",
+            },
+        }).as("get-resource");
         cy.visit("/cgi-bin/koha/erm/eholdings/local/packages/1");
         cy.wait("@get-resource");
-        cy.contains("Titles (1)");
-        cy.get("#title_list_result table").contains("A great title");
+        cy.get("#title_relationship_list table").contains("A great title");
     });
 
     it("Delete package", () => {
@@ -274,9 +265,7 @@ describe("Package CRUD operations", () => {
         );
         cy.visit("/cgi-bin/koha/erm/eholdings/local/packages");
 
-        cy.get("#packages_list table tbody tr:first")
-            .contains("Delete")
-            .click();
+        cy.get("#package_list table tbody tr:first").contains("Delete").click();
         cy.get(".alert-warning.confirmation h1").contains(
             "remove this local package"
         );
@@ -296,9 +285,7 @@ describe("Package CRUD operations", () => {
             statusCode: 204,
             body: null,
         });
-        cy.get("#packages_list table tbody tr:first")
-            .contains("Delete")
-            .click();
+        cy.get("#package_list table tbody tr:first").contains("Delete").click();
         cy.get(".alert-warning.confirmation h1").contains(
             "remove this local package"
         );
@@ -324,26 +311,24 @@ describe("Package CRUD operations", () => {
         ).as("get-package");
         cy.visit("/cgi-bin/koha/erm/eholdings/local/packages");
         cy.wait("@get-packages");
-        let name_link = cy.get(
-            "#packages_list table tbody tr:first td:first a"
-        );
+        let name_link = cy.get("#package_list table tbody tr:first td:first a");
         name_link.should(
             "have.text",
             erm_package.name + " (#" + erm_package.package_id + ")"
         );
         name_link.click();
         cy.wait("@get-package");
-        cy.get("#packages_show h2").contains(
-            "Package #" + erm_package.package_id
+        cy.get("#package_show h2").contains(
+            "Local package #" + erm_package.package_id
         );
 
-        cy.get("#packages_show #toolbar").contains("Delete").click();
+        cy.get("#package_show #toolbar").contains("Delete").click();
         cy.get(".alert-warning.confirmation h1").contains(
             "remove this local package"
         );
         cy.contains("Yes, delete").click();
 
         //Make sure we return to list after deleting from show
-        cy.get("#packages_list table tbody tr:first");
+        cy.get("#package_list table tbody tr:first");
     });
 });
