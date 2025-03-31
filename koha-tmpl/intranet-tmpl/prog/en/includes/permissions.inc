@@ -309,9 +309,7 @@
         <span class="sub_permission suggestions_create_subpermission"> Create purchase suggestions </span>
         <span class="permissioncode">([% name | html %])</span>
     [%- CASE 'edit_notes' -%]
-        <span class="sub_permission edit_notes_subpermission">
-            Edit accountline notes
-        </span>
+        <span class="sub_permission edit_notes_subpermission"> Edit accountline notes </span>
         <span class="permissioncode">([% name | html %])</span>
     [%- CASE 'suggestions_manage' -%]
         <span class="sub_permission suggestions_manage_subpermission"> Edit purchase suggestions </span>

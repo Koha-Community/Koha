@@ -17,7 +17,7 @@ return {
         );
 
         # permissions
-        say_success( $out, "Added new permission 'updatecharges:edit_notes'");
+        say_success( $out, "Added new permission 'updatecharges:edit_notes'" );
 
     },
 };
