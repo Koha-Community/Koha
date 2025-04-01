@@ -18,6 +18,12 @@
             [% CASE 'viaf' %]
                 <span>VIAF ID: </span>
                 <a href="https://viaf.org/viaf/[% info.number | url %]">[% info.number | html %]</a>
+            [% CASE 'isni' %]
+                <span>ISNI ID: </span>
+                <a href="https://isni.org/isni/[% info.number | url %]">[% info.number | html %]</a>
+            [% CASE 'wikidata' %]
+                <span>WIKIDATA ID: </span>
+                <a href="http://www.wikidata.org/entity/[% info.number | url %]">[% info.number | html %]</a>
             [% END %]
         </li>
     [% CASE 'activity' %]
