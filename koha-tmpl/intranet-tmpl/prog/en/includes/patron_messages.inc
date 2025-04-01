@@ -92,32 +92,28 @@
 
         [% IF ( userdebarred ) %]
             <li class="userdebarred blocker">
-                <span class="circ-hlt"> Restricted since [% debarredsince | $KohaDates %]:</span> Patron's account is restricted
-                [% IF ( userdebarreddate ) %]
-                    until [% userdebarreddate | $KohaDates %]
-                [% END %]
-
-                [% IF ( debarredcomment ) %]
-                    with the explanation: <br />
-                    <em>
-                        [% IF debarredcomment.search('OVERDUES_PROCESS') %]
-                            Restriction added by overdues process [% debarredcomment.remove('OVERDUES_PROCESS ') | $raw | html_line_break %]
-                        [% ELSE %]
-                            [% FOREACH restriction IN patron.restrictions %]
-                                <div class="[% restriction.type.code | lower | html %]_restriction">
-                                    <span class="restriction_expiration">
-                                        [% IF restriction.expiration %]
-                                            [% restriction.expiration | $KohaDates %]
-                                        [% ELSE %]
-                                            <strong>Indefinite</strong>
-                                        [% END %]
-                                    </span>
-                                    <span class="restriction_detail"> [%- restriction.type.display_text | html -%][%- IF restriction.comment -%]: [%- restriction.comment | html_line_break -%][%- END -%] </span>
-                                </div>
+                <span class="circ-hlt">Account restricted since [% debarredsince | $KohaDates %]</span>
+                <ul>
+                    [% FOREACH restriction IN patron.restrictions %]
+                        <li class="[% restriction.type.code | lower | html %]_restriction">
+                            <span class="restriction_expiration">
+                                [% IF restriction.expiration %]
+                                    <strong>Restriction expiring [% restriction.expiration | $KohaDates %]</strong>
+                                [% ELSE %]
+                                    <strong>Indefinite restriction</strong>
+                                [% END %]
+                            </span>
+                            [% IF restriction.comment.search('OVERDUES_PROCESS') %]
+                                Restriction added by overdues process [% restriction.comment.remove('OVERDUES_PROCESS ') | $raw | html_line_break %]
+                            [% ELSE %]
+                                [% IF restriction.comment %]
+                                    <span class="restriction_detail">[%- restriction.comment | html_line_break -%]</span>
+                                [% END %]
                             [% END %]
-                        [% END %] </em
-                    ><br />
-                [% END %]
+                            <span class="restriction_type">([%- restriction.type.display_text | html -%])</span>
+                        </li>
+                    [% END %]
+                </ul>
                 <a class="btn btn-xs btn-default" href="#reldebarments-tab" onclick="(new bootstrap.Tab($('#reldebarments-tab'))).show()"><i class="fa fa-ban"></i> View restrictions</a>
             </li>
             <!-- /.blocker -->

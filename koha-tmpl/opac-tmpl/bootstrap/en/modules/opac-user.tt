@@ -167,36 +167,7 @@
                                     [% IF ( discharge_available ) %]
                                         <li id="discharged"> <strong>Please note:</strong> Your account is frozen because it has been discharged. <a href="/cgi-bin/koha/opac-discharge.pl?op=get">Get your discharge</a> </li>
                                     [% ELSE %]
-                                        <li id="userdebarred">
-                                            <strong>Please note:</strong> Your account has been frozen.
-                                            [% IF ( borrower.debarredcomment ) %]
-                                                Comment:<br />
-                                                <ul id="userdebarred_comment">
-                                                    [% FOREACH restriction IN logged_in_user.restrictions %]
-                                                        <li class="patron_restriction">
-                                                            <strong>[%- restriction.type.display_text | html -%]: </strong>
-                                                            [% IF restriction.comment.search('OVERDUES_PROCESS') %]
-                                                                Restriction added by overdues process [% restriction.comment.remove('OVERDUES_PROCESS ') | html_line_break %]
-                                                            [% ELSE %]
-                                                                [%- IF restriction.comment -%]
-                                                                    <span class="restriction_comment">[% restriction.comment | html_line_break %]</span>.
-                                                                [%- END -%]
-                                                            [% END %]
-                                                            [%- IF restriction.expiration -%]
-                                                                Account frozen until <span class="restriction_expiration">[%- restriction.expiration | $KohaDates -%]</span>
-                                                            [%- ELSE -%]
-                                                                <strong>Account frozen indefinitely</strong>
-                                                            [%- END -%]
-                                                        </li>
-                                                    [% END %]
-                                                </ul>
-                                            [% END %]
-
-                                            <p
-                                                ><em>Usually the reason for freezing an account is old overdues or damage fees. If your account shows to be clear, please contact the library.</em>
-                                                <a href="/cgi-bin/koha/opac-account.pl">Go to your charges page</a></p
-                                            >
-                                        </li>
+                                        [% INCLUDE "patron-restrictions.inc" %]
                                     [% END %]
                                 [% END %]
                                 [% IF ( borrower.gonenoaddress ) %]
@@ -1093,8 +1064,9 @@
         $(document).ready(function(){
             [% IF ( opac_user_holds ) %]
                 $("#opac-user-views a[href='#opac-user-holds_panel']").tab("show");
-            [% END %]
-            [% IF ( opac_user_article_requests ) %]
+            [% ELSIF ( opac_user_overdues ) %]
+                $("#opac-user-views a[href='#opac-user-overdues_panel']").tab("show");
+            [% ELSIF ( opac_user_article_requests ) %]
                 $("#opac-user-views a[href='#opac-user-article-requests_panel']").tab("show");
             [% END %]
             $('#article-requests-table caption .count').html(AR_CAPTION_COUNT.format('[% current_article_requests.size | html %]'));
