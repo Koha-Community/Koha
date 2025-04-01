@@ -5,7 +5,7 @@
 
 <div id="search-facets">
     <form method="get" action="/cgi-bin/koha/opac-topissues.pl">
-        <h2><a href="#" class="menu-collapse-toggle">Refine your search</a></h2>
+        <h2><a href="#" class="menu-collapse-toggle" aria-expanded="false">Refine your search</a></h2>
         <ul class="menu-collapse">
             <li
                 ><label for="limit">Show the top </label>

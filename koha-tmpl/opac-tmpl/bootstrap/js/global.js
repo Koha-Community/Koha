@@ -233,10 +233,13 @@ if (typeof enquire == "object") {
 
 function facetMenu(action) {
     if (action == "show") {
-        $(".menu-collapse-toggle").off("click", facetHandler);
+        $(".menu-collapse-toggle")
+            .removeAttr("aria-expanded")
+            .off("click", facetHandler);
         $(".menu-collapse").show();
     } else {
         $(".menu-collapse-toggle")
+            .attr("aria-expanded", "false")
             .on("click", facetHandler)
             .removeClass("menu-open");
         $(".menu-collapse").hide();
@@ -247,7 +250,13 @@ var facetHandler = function (e) {
     e.preventDefault();
     $(this).toggleClass("menu-open");
     $(".menu-collapse").toggle();
+    setAriaExpandable(e);
 };
+
+function setAriaExpandable(e) {
+    let currentValue = $(e.target).attr("aria-expanded");
+    $(e.target).attr("aria-expanded", currentValue === "false");
+}
 
 function setPlaceholder() {
     let search_placeholder = $("#masthead_search option:selected").data(
