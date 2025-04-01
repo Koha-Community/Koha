@@ -30,8 +30,8 @@
         <div id="holds" class="maincontent">
             <h1>Placing a hold</h1>
             [% IF ( message ) %]
-                <div id="holdmessages" class="alert">
-                    <p>Sorry, you cannot place holds.</p>
+                <div id="holdmessages" class="alert alert-warning">
+                    <h2>Sorry, you cannot place holds.</h2>
                     <ul>
                         [% IF ( GNA ) %]
                             <li id="gna">
@@ -49,41 +49,7 @@
                         [% END %]
 
                         [% IF ( debarred ) %]
-                            <li id="debarred">
-                                Your account has been frozen.
-                                [% IF debarred_comment %]
-                                    Comment:<br />
-                                    <span id="userdebarred_comment">
-                                        <strong>
-                                            [% IF debarred_comment.search('OVERDUES_PROCESS') %]
-                                                Restriction added by overdues process [% debarred_comment.remove('OVERDUES_PROCESS ') | html_line_break %]
-                                            [% ELSE %]
-                                                [% FOR restriction IN logged_in_user.restrictions %]
-                                                    <div class="patron_restriction">
-                                                        [%- restriction.type.display_text | html -%][%- IF restriction.comment -%]
-                                                            : <span class="restriction_comment">[% restriction.comment | html_line_break %]</span>, frozen until:
-                                                            <span class="restriction_expiration">
-                                                                [%- IF restriction.expiration -%]
-                                                                    [%- restriction.expiration | $KohaDates -%]
-                                                                [%- ELSE -%]
-                                                                    <strong>Indefinite</strong>
-                                                                [%- END -%]
-                                                            </span>
-                                                        [% END %]
-                                                    </div>
-                                                [% END %]
-                                            [% END %]
-                                        </strong>
-                                    </span>
-                                [% END %]
-
-                                [% IF debarred_date && debarred_date != '9999-12-31' %]
-                                    End date:
-                                    <span id="userdebarred_date">[% debarred_date | $KohaDates %]</span>
-                                [% END %]
-                                <br /><em>Usually the reason for freezing an account is old overdues or damage fees. If shows your account to be clear, please contact the library.</em>
-                                <a href="/cgi-bin/koha/opac-account.pl">Go to your charges page</a>
-                            </li>
+                            [% INCLUDE "patron-restrictions.inc" %]
                         [% END %]
 
                         [% IF ( too_much_oweing ) %]
@@ -273,9 +239,9 @@
                                                                 [% END %]
                                                             </select>
                                                             [% IF at_least_one_library_not_available_for_pickup %]
-                                                                <div class="at_least_one_library_not_available_note"
-                                                                    >Note: Library policy does not allow hold/pickup of an item available locally. Please come to the library to retrieve these items</div
-                                                                >
+                                                                <div class="at_least_one_library_not_available_note">
+                                                                    Note: Library policy does not allow hold/pickup of an item available locally. Please come to the library to retrieve these items
+                                                                </div>
                                                             [% END %]
                                                         [% END # / UNLESS bibitemloo.holdable %]
                                                     </li>
