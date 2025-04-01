@@ -20,7 +20,7 @@
 use Modern::Perl;
 
 use Test::NoWarnings;
-use Test::More tests => 24;
+use Test::More tests => 25;
 use Test::Exception;
 use Test::MockModule;
 use Test::Warn;
@@ -151,7 +151,7 @@ subtest 'new' => sub {
 };
 
 subtest 'find' => sub {
-    plan tests => 4;
+    plan tests => 5;
 
     # check find on a single PK
     my $patron = $builder->build( { source => 'Borrower' } );
@@ -179,6 +179,20 @@ subtest 'find' => sub {
     );
 
     is( Koha::Patrons->find(), undef, 'Find returns undef if no params passed' );
+
+    # Test that find passes $result in object_class call
+    my $module = Test::MockModule->new('Koha::Patrons');
+    $module->mock(
+        'object_class',
+        sub {
+            my ( $self, $params ) = @_;
+            warn "Found " . ref $params;
+            return $module->original("object_class")->( $self, $params );
+        }
+    );
+    warning_is { $obj = Koha::Patrons->find( $patron->{borrowernumber} ); }
+    'Found Koha::Schema::Result::Borrower', "Koha::Objects->find passed DBIx::Class::Result to \$self->object_class";
+    $module->unmock('object_class');
 };
 
 subtest 'search_related' => sub {
@@ -209,7 +223,7 @@ subtest 'search_related' => sub {
 };
 
 subtest 'single' => sub {
-    plan tests => 2;
+    plan tests => 3;
     my $builder  = t::lib::TestBuilder->new;
     my $patron_1 = $builder->build( { source => 'Borrower' } );
     my $patron_2 = $builder->build( { source => 'Borrower' } );
@@ -217,10 +231,49 @@ subtest 'single' => sub {
     is( ref($patron), 'Koha::Patron', 'Koha::Objects->single returns a single Koha::Patron object.' );
     warning_like { Koha::Patrons->search->single } qr/SQL that returns multiple rows/,
         "Warning is presented if single is used for a result with multiple rows.";
+
+    # Test that single passes $result in object_class call
+    my $module = Test::MockModule->new('Koha::Patrons');
+    $module->mock(
+        'object_class',
+        sub {
+            my ( $self, $params ) = @_;
+            warn "Found " . ref $params;
+            return $module->original("object_class")->( $self, $params );
+        }
+    );
+    warning_is { $patron = Koha::Patrons->search( {}, { rows => 1 } )->single; }
+    'Found Koha::Schema::Result::Borrower',
+        "Koha::Objects->single passed DBIx::Class::Result into \$self->object_class";
+
+    $module->unmock('object_class');
+};
+
+subtest 'next' => sub {
+    plan tests => 1;
+
+    my $builder  = t::lib::TestBuilder->new;
+    my $patron_1 = $builder->build( { source => 'Borrower' } );
+    my $patron_2 = $builder->build( { source => 'Borrower' } );
+
+    # Test that single passes $result in object_class call
+    my $module = Test::MockModule->new('Koha::Patrons');
+    $module->mock(
+        'object_class',
+        sub {
+            my ( $self, $params ) = @_;
+            warn "Found " . ref $params;
+            return $module->original("object_class")->( $self, $params );
+        }
+    );
+    warning_is { my $next_patron = Koha::Patrons->search->next; }
+    'Found Koha::Schema::Result::Borrower', "Koha::Objects->next passed DBIx::Class::Result into \$self->object_class";
+
+    $module->unmock('object_class');
 };
 
 subtest 'last' => sub {
-    plan tests => 3;
+    plan tests => 4;
     my $builder     = t::lib::TestBuilder->new;
     my $patron_1    = $builder->build( { source => 'Borrower' } );
     my $patron_2    = $builder->build( { source => 'Borrower' } );
@@ -233,6 +286,21 @@ subtest 'last' => sub {
     );
     $last_patron = Koha::Patrons->search( { surname => 'should_not_exist' } )->last;
     is( $last_patron, undef, '->last should return undef if search does not return any results' );
+
+    # Test that single passes $result in object_class call
+    my $module = Test::MockModule->new('Koha::Patrons');
+    $module->mock(
+        'object_class',
+        sub {
+            my ( $self, $params ) = @_;
+            warn "Found " . ref $params;
+            return $module->original("object_class")->( $self, $params );
+        }
+    );
+    warning_is { $last_patron = Koha::Patrons->search->last; }
+    'Found Koha::Schema::Result::Borrower', "Koha::Objects->last passed DBIx::Class::Result into \$self->object_class";
+
+    $module->unmock('object_class');
 };
 
 subtest 'get_column' => sub {
