@@ -1890,7 +1890,7 @@
 
             var serial_table_settings = [% TablesSettings.GetTableSettings( 'opac', 'biblio-detail', 'subscriptionst', 'json' ) | $raw %];
 
-            $("#subscriptionst").kohaTable(
+            $(".subscriptionst").kohaTable(
                 {
                     dom: '<"clearfix">t',
                     sorting: [[1, "desc"]],
