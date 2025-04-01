@@ -456,11 +456,13 @@ sub auth_client_get_user {
 sub overwrite_calc_fine {
     my ( $self, $params ) = @_;
 
-    my $days = $params->{end_date}->delta_days( $params->{due_date} )->delta_days;
+    warn "itemnumber:" . $params->{itemnumber};
+    warn "branchcode:" . $params->{branchcode};
+    warn "categorycode:" . $params->{categorycode};
+    warn "due_date_type:" . ref( $params->{due_date} );
+    warn "end_date_type:" . ref( $params->{end_date} );
 
-    return $params->{categorycode} && $params->{branchcode}
-        ? undef
-        : [ 3 * $days, $days, $days - 2 ];
+    return [ 1, 2, 3 ];
 }
 
 sub _private_sub {
