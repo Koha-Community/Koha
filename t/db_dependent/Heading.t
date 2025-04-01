@@ -73,7 +73,7 @@ subtest "UNIMARC tests" => sub {
 
 subtest "_search tests" => sub {
 
-    plan tests => 10;
+    plan tests => 11;
 
     t::lib::Mocks::mock_preference( 'marcflavour',  'MARC21' );
     t::lib::Mocks::mock_preference( 'SearchEngine', 'Elasticsearch' );
@@ -184,48 +184,93 @@ subtest "_search tests" => sub {
         "Search formed as expected for a non-subject field with double punctuation, period+comma "
     );
 
+    # Special case where thesaurus defined in subfield 2 should also match record with no thesaurus
+    # In the ES index an auth rec. without 040 $f, so 'z' from 008/11 is present in subject-heading-thesaurus
+    my $expected_authid = 12345;
     $search->mock(
         'search_auth_compat',
         sub {
             my $self         = shift;
             my $search_query = shift;
-            if ( scalar @{ $search_query->{query}->{bool}->{must} } == 2
-                && $search_query->{query}->{bool}->{must}[1]->{term}->{'subject-heading-thesaurus.ci_raw'} eq
-                'special_sauce' )
-            {
-                return;
+            if ( scalar @{ $search_query->{query}->{bool}->{must} } == 2 ) {
+                if ( $search_query->{query}->{bool}->{must}[1]->{term}->{'subject-heading-thesaurus.ci_raw'} eq
+                    'special_sauce' )
+                {
+                    # no record with 'special_sauce'
+                    return ( [], 0 );
+                } elsif (
+                    $search_query->{query}->{bool}->{must}[1]->{term}->{'subject-heading-thesaurus.ci_raw'} eq 'z' )
+                {
+                    # for 'notdefined' we return the only record with 008/11 = 'z'
+                    return ( [ { authid => $expected_authid } ], 1 );
+                } else {
+
+                    # other cases - nothing
+                    return ( [], 0 );
+                }
+            } elsif ( scalar @{ $search_query->{query}->{bool}->{must} } == 1 ) {
+                return ['no thesaurus checking at all'];
             }
-            return ( $search_query, 1 );
+        }
+    );
+    $field   = MARC::Field->new( '650', ' ', '7', a => 'Uncles', x => 'Fiction', 2 => 'special_sauce' );
+    $heading = C4::Heading->new_from_field($field);
+    my ($matched_auths) = $heading->_search('match-heading');
+    my $expected_result = [ { authid => $expected_authid } ];
+    is_deeply(
+        $matched_auths, $expected_result,
+        "When thesaurus in subfield 2, we should search again for notdefined (008_11 = z) and get a result"
+    );
+
+    # In the ES index an auth rec. with 040 $f 'special_sauce', so 'z' from 008/11 not present in subject-heading-thesaurus
+    $search->mock(
+        'search_auth_compat',
+        sub {
+            my $self         = shift;
+            my $search_query = shift;
+            if ( scalar @{ $search_query->{query}->{bool}->{must} } == 2 ) {
+                if ( $search_query->{query}->{bool}->{must}[1]->{term}->{'subject-heading-thesaurus.ci_raw'} eq
+                    'special_sauce' )
+                {
+                    # no record with 'special_sauce'
+                    return ( [ { authid => $expected_authid } ], 1 );
+                } elsif (
+                    $search_query->{query}->{bool}->{must}[1]->{term}->{'subject-heading-thesaurus.ci_raw'} eq 'z' )
+                {
+                    # for 'notdefined' we return the only record with 008/11 = 'z'
+                    return ( [], 0 );
+                } else {
+
+                    # other cases - nothing
+                    return ( [], 0 );
+                }
+            } elsif ( scalar @{ $search_query->{query}->{bool}->{must} } == 1 ) {
+                return ['no thesaurus checking at all'];
+            }
         }
     );
 
-    # Special case where thesaurus defined in subfield 2 should also match record with no thesaurus
-    $field   = MARC::Field->new( '650', ' ', '7', a => 'Uncles', x => 'Fiction', 2 => 'special_sauce' );
+    # Special case continued: but it should not match an authority record with a different thesaurus
+    # defined in 040 $f
+    $field   = MARC::Field->new( '650', ' ', '7', a => 'Uncles', x => 'Fiction', 2 => 'special_sauce_2' );
     $heading = C4::Heading->new_from_field($field);
-    ($search_query) = $heading->_search('match-heading');
-    $terms          = $search_query->{query}->{bool}->{must};
-    $expected_terms = [
-        { term => { 'match-heading.ci_raw'             => 'Uncles generalsubdiv Fiction' } },
-        { term => { 'subject-heading-thesaurus.ci_raw' => 'z' } },
-    ];
+
+    ($matched_auths) = $heading->_search('match-heading');
+    $expected_result = [];
     is_deeply(
-        $terms, $expected_terms,
-        "When thesaurus in subfield 2, and nothing is found, we should search again for notdefined (008_11 = z) "
+        $matched_auths, $expected_result,
+        'When thesaurus in subfield 2, and nothing is found, we search again for notdefined (008_11 = z), and get no results because 040 $f with different value exists in the auth rec.'
     );
 
+    # When LinkerConsiderThesaurus off, no attantion is being paid on the thesaurus
     t::lib::Mocks::mock_preference( 'LinkerConsiderThesaurus', '0' );
 
-    $search_query = undef;
-    ($search_query) = $heading->_search('match-heading');
-    $terms          = $search_query->{query}->{bool}->{must};
-    $expected_terms = [
-        { term => { 'match-heading.ci_raw' => 'Uncles generalsubdiv Fiction' } },
-    ];
+    ($matched_auths) = $heading->_search('match-heading');
+    $expected_result = ['no thesaurus checking at all'];
     is_deeply(
-        $terms, $expected_terms,
-        "When thesaurus in subfield 2, and nothing is found, we don't search again if LinkerConsiderThesaurusDisabled"
+        $matched_auths, $expected_result,
+        "When thesaurus in subfield 2, and nothing is found, we don't search again if LinkerConsiderThesaurus disabled"
     );
-
 };
 
 subtest "authorities exact match tests" => sub {

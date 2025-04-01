@@ -967,7 +967,7 @@ subtest 'Koha::SearchEngine::Elasticsearch::marc_records_to_documents_array () t
 
 subtest 'Koha::SearchEngine::Elasticsearch::marc_records_to_documents () authority tests' => sub {
 
-    plan tests => 5;
+    plan tests => 9;
 
     t::lib::Mocks::mock_preference( 'marcflavour',             'MARC21' );
     t::lib::Mocks::mock_preference( 'ElasticsearchMARCFormat', 'base64ISO2709' );
@@ -996,6 +996,26 @@ subtest 'Koha::SearchEngine::Elasticsearch::marc_records_to_documents () authori
             sort        => 0,
             marc_type   => 'marc21',
             marc_field  => '185v',
+        },
+        {
+            name        => 'subject-heading-thesaurus',
+            type        => 'string',
+            facet       => 0,
+            suggestible => 0,
+            searchable  => 1,
+            sort        => 0,
+            marc_type   => 'marc21',
+            marc_field  => '008_/11',
+        },
+        {
+            name        => 'subject-heading-thesaurus',
+            type        => 'string',
+            facet       => 0,
+            suggestible => 0,
+            searchable  => 1,
+            sort        => 0,
+            marc_type   => 'marc21',
+            marc_field  => '040f',
         }
     );
 
@@ -1041,7 +1061,20 @@ subtest 'Koha::SearchEngine::Elasticsearch::marc_records_to_documents () authori
     $marc_record_3->append_fields(
         MARC::Field->new( '185', '', '', v => 'Formsubdiv' ),
     );
-    my $records = [ $marc_record_1, $marc_record_2, $marc_record_3 ];
+
+    my $marc_record_4 = MARC::Record->new();
+    $marc_record_4->append_fields(
+        MARC::Field->new( '008', ' ' x 11 . 'z' . ' ' x 28 ),
+        MARC::Field->new( '040', ' ', ' ', f => 'special_sauce' ),
+        MARC::Field->new( '150', ' ', ' ', a => 'Philosophy' ),
+    );
+
+    my $marc_record_5 = MARC::Record->new();
+    $marc_record_5->append_fields(
+        MARC::Field->new( '008', ' ' x 11 . 'z' . ' ' x 28 ),
+        MARC::Field->new( '150', ' ', ' ', a => 'Philosophy' ),
+    );
+    my $records = [ $marc_record_1, $marc_record_2, $marc_record_3, $marc_record_4, $marc_record_5 ];
 
     $see->get_elasticsearch_mappings(); #sort_fields will call this and use the actual db values unless we call it first
 
@@ -1067,6 +1100,25 @@ subtest 'Koha::SearchEngine::Elasticsearch::marc_records_to_documents () authori
         ["Formsubdiv"],
         $docs->[2]->{'match'},
         "Third record heading should contain the subfield"
+    );
+    is(
+        scalar( @{ $docs->[3]->{'subject-heading-thesaurus'} } ),
+        1,
+        "Only one subject-heading-thesaurus element for a record with 040 \$f"
+    );
+    is_deeply(
+        $docs->[3]->{'subject-heading-thesaurus'}->[0],
+        'special_sauce',
+        "Fourth record's subject-heading-thesaurus taken from 040 \$f"
+    );
+    is(
+        scalar( @{ $docs->[4]->{'subject-heading-thesaurus'} } ),
+        1,
+        "Just one subject-heading-thesaurus element for a record with 008/11 = 'z' and without 040 \$f"
+    );
+    is_deeply(
+        $docs->[4]->{'subject-heading-thesaurus'}->[0],
+        'z', "Fifth record's subject-heading-thesaurus taken from 008/11"
     );
 
 };
