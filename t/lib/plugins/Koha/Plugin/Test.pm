@@ -458,6 +458,7 @@ sub overwrite_calc_fine {
     my ( $self, $params ) = @_;
 
     warn "itemnumber:" . $params->{itemnumber};
+    warn "borrowernumber:" . $params->{borrowernumber};
     warn "branchcode:" . $params->{branchcode};
     warn "categorycode:" . $params->{categorycode};
     warn "due_date_type:" . ref( $params->{due_date} );

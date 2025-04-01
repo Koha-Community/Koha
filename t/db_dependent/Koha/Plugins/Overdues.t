@@ -54,6 +54,7 @@ subtest 'overwrite_calc_fine hook tests' => sub {
     my $library  = $builder->build_object( { class => 'Koha::Libraries', } );
     my $category = $builder->build_object( { class => 'Koha::Patron::Categories', } );
     my $item     = $builder->build_sample_item;
+    my $patron   = $builder->build_object( { class => 'Koha::Patrons', } );
 
     Koha::Plugins->new->InstallPlugins();
     my $test_plugin = Koha::Plugin::Test->new->disable();
@@ -129,13 +130,18 @@ subtest 'overwrite_calc_fine hook tests' => sub {
     $empty_value_plugin->disable();
     $bad_value_plugin->disable();
 
+    my $borrowernumber = $patron->borrowernumber;
+    my $overdue        = $item->unblessed;
+    $overdue->{borrowernumber} = $borrowernumber;
+
     my $itemnumber   = $item->itemnumber;
     my $branchcode   = $library->branchcode;
     my $categorycode = $category->categorycode;
 
-    warnings_like { CalcFine( $item->unblessed, $category->categorycode, $library->branchcode, $due_date, $end_date ); }
+    warnings_like { CalcFine( $overdue, $category->categorycode, $library->branchcode, $due_date, $end_date ); }
     [
         qr/itemnumber:$itemnumber/,
+        qr/borrowernumber:$borrowernumber/,
         qr/branchcode:$branchcode/,
         qr/categorycode:$categorycode/,
         qr/due_date_type:DateTime/,
