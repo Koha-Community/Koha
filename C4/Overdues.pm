@@ -224,7 +224,7 @@ sub CalcFine {
 
     # Call the plugin hook overwrite_calc_fine of all plugins and return
     # the first defined fine.
-    my @fines = Koha::Plugins->call(
+    my @fines = grep { defined $_ } Koha::Plugins->call(
         'overwrite_calc_fine',
         {
             itemnumber   => $item->{itemnumber},
@@ -234,9 +234,9 @@ sub CalcFine {
             end_date     => $end_date,
         }
     );
-    foreach my $fine (@fines) {
-        return @$fine if ( defined $fine );
-    }
+
+    return @{ $fines[0] }
+        if scalar @fines;
 
     my $start_date = $due_dt->clone();
 
