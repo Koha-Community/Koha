@@ -76,8 +76,8 @@
                     [% FOREACH line IN result %]
                         <tr data-authid="[% result.authid | html %]">
                             <td>
-                                [% IF result.html %]
-                                    [% result.html | $raw %]
+                                [% IF line.html %]
+                                    [% line.html | $raw %]
                                 [% ELSE %]
                                     [% PROCESS authresult summary=line.summary authid=line.authid %]
                                 [% END %]

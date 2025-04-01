@@ -755,9 +755,9 @@ sub pri_price {
 
     # In practice qualifier is AAE in the quote and AAA & AAB in invoices
     # but the following are defined
-    # AAA calculation price net (unit price excl tax but incl any allowances or charges)
-    # AAB calculation price gross (unit price excl all taxes, allowances and charges )
-    # AAE information price (incl tax but excl allowances or charges )
+    # AAA calculation price net (unit price excluding tax but including any allowances or charges)
+    # AAB calculation price gross (unit price excluding all taxes, allowances and charges )
+    # AAE information price (including tax but excluding allowances or charges )
     # AAF information price (including all taxes, allowances or charges)
     foreach my $s ( @{ $self->{segs} } ) {
         if ( $s->tag eq 'PRI' && $s->elem( 0, 0 ) eq $price_qualifier ) {

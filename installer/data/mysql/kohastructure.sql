@@ -2763,7 +2763,7 @@ CREATE TABLE `deletedborrowers` (
   `updated_on` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp() COMMENT 'time of last change could be useful for synchronization with external systems (among others)',
   `lastseen` datetime DEFAULT NULL COMMENT 'last time a patron has been seen (connected at the OPAC or staff interface)',
   `lang` varchar(25) NOT NULL DEFAULT 'default' COMMENT 'lang to use to send notices to this patron',
-  `login_attempts` int(4) NOT NULL DEFAULT 0 COMMENT 'number of failed login attemps',
+  `login_attempts` int(4) NOT NULL DEFAULT 0 COMMENT 'number of failed login attempts',
   `overdrive_auth_token` mediumtext DEFAULT NULL COMMENT 'persist OverDrive auth token',
   `anonymized` tinyint(1) NOT NULL DEFAULT 0 COMMENT 'flag for data anonymization',
   `autorenew_checkouts` tinyint(1) NOT NULL DEFAULT 1 COMMENT 'flag for allowing auto-renewal',

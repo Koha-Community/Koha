@@ -252,7 +252,7 @@
         [% WRAPPER tab_panel tabname= "perl" bt_active = 1 %]
             <table style="cursor:pointer">
                 <caption>Perl modules</caption>
-                [% FOREACH table IN tablee %]
+                [% FOREACH table IN tables %]
                     <tr>
                         [% FOREACH ro IN table.row %]
                             [% IF ( ro.require ) %]
@@ -1192,7 +1192,7 @@
                             <td style="font-weight:bold;">Description</td>
                         </tr>
                     </thead>
-                    [% FOREACH table IN tablee2 %]
+                    [% FOREACH table IN tables2 %]
                         <tr class="[% loop.parity | html %]">
                             [% FOREACH ro IN table.row2 %]
                                 <td>[% ro.date | html %]</td>

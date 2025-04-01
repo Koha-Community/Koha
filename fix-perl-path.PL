@@ -28,8 +28,8 @@ my $bindir = $Config{installbin};
 $bindir =~ s!\\!/!g;    # make all directory separators uniform since Win32 does not care and *nix does...
 my $shebang = "#!$bindir\/perl";
 
-warn "Perl binary located in $bindir on this system.\n"         if $DEBUG;
-warn "The shebang line for this systems should be $shebang\n\n" if $DEBUG;
+warn "Perl binary located in $bindir on this system.\n"        if $DEBUG;
+warn "The shebang line for this system should be $shebang\n\n" if $DEBUG;
 
 die if $basedir eq 'test';
 

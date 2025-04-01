@@ -280,7 +280,7 @@ Edifact - Edifact message handler
 
 =head2 get_transmission
 
-     This method is useful in debug:ing. Call on an Edifact object
+     This method is useful in debugging. Call on an Edifact object
      it returns the object's transmission member
 
 =head2 message_type

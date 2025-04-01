@@ -184,7 +184,7 @@ $reserve_id = AddReserve(
 is( $status, q{}, "Hold where pickup ne home, pickup ne holding not targeted" );
 Koha::Holds->find($reserve_id)->cancel;
 
-# With hold_fulfillment_policy = any, hold should be pikcup up regardless of matching home or holding branch
+# With hold_fulfillment_policy = any, hold should be picked regardless of matching home or holding branch
 $dbh->do("DELETE FROM circulation_rules");
 Koha::CirculationRules->set_rules(
     {
