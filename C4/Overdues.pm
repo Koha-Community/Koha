@@ -227,11 +227,12 @@ sub CalcFine {
     my @fines = grep { defined $_ } Koha::Plugins->call(
         'overwrite_calc_fine',
         {
-            itemnumber   => $item->{itemnumber},
-            categorycode => $bortype,
-            branchcode   => $branchcode,
-            due_date     => $due_dt,
-            end_date     => $end_date,
+            itemnumber     => $item->{itemnumber},
+            borrowernumber => $item->{borrowernumber},
+            categorycode   => $bortype,
+            branchcode     => $branchcode,
+            due_date       => $due_dt,
+            end_date       => $end_date,
         }
     );
 
