@@ -16,8 +16,8 @@
 
 use Modern::Perl;
 
-use Test::NoWarnings;
-use Test::More tests => 6;
+use Test::More tests => 8;
+use Test::Warn;
 
 use C4::Overdues qw(CalcFine);
 
@@ -34,36 +34,29 @@ BEGIN {
     use_ok('C4::Overdues');
     use_ok('Koha::Plugins');
     use_ok('Koha::Plugins::Handler');
+    use_ok('Koha::Plugin::1_CalcFineEmpty');
+    use_ok('Koha::Plugin::2_CalcFineNotEmpty');
+    use_ok('Koha::Plugin::3_CalcFineBadValue');
     use_ok('Koha::Plugin::Test');
 }
 
 t::lib::Mocks::mock_config( 'enable_plugins', 1 );
 
 my $builder = t::lib::TestBuilder->new;
-
-my $branch = $builder->build(
-    {
-        source => 'Branch',
-    }
-);
-
-my $category = $builder->build(
-    {
-        source => 'Category',
-    }
-);
-
-my $item = $builder->build_sample_item;
+my $schema  = Koha::Database->new->schema;
 
 subtest 'overwrite_calc_fine hook tests' => sub {
-    plan tests => 6;
 
-    my $schema = Koha::Database->new->schema;
+    plan tests => 13;
+
     $schema->storage->txn_begin;
 
-    my $plugins = Koha::Plugins->new;
-    $plugins->InstallPlugins;
-    Koha::Plugin::Test->new->enable;
+    my $library  = $builder->build_object( { class => 'Koha::Libraries', } );
+    my $category = $builder->build_object( { class => 'Koha::Patron::Categories', } );
+    my $item     = $builder->build_sample_item;
+
+    Koha::Plugins->new->InstallPlugins();
+    my $test_plugin = Koha::Plugin::Test->new->disable();
 
     Koha::CirculationRules->set_rules(
         {
@@ -93,19 +86,64 @@ subtest 'overwrite_calc_fine hook tests' => sub {
         day   => 30,
     );
 
-    my ( $amount, $units, $chargable_units ) = CalcFine( $item->{itemnumber}, undef, undef, $due_date, $end_date );
-
-    is( $amount,          87, 'Amount is calculated correctly with custom function' );
-    is( $units,           29, 'Units are calculated correctly with custom function' );
-    is( $chargable_units, 27, 'Chargable units are calculated correctly with custom function' );
-
-    ( $amount, $units, $chargable_units ) =
-        CalcFine( $item->{itemnumber}, $category->{categorycode}, $branch->{branchcode}, $due_date, $end_date );
+    my ( $amount, $units, $chargable_units ) =
+        CalcFine( $item->unblessed, $category->categorycode, $library->branchcode, $due_date, $end_date );
 
     is( $amount,          58, 'Amount is calculated correctly with original function' );
     is( $units,           29, 'Units are calculated correctly with original function' );
     is( $chargable_units, 29, 'Chargable units are calculated correctly with original function' );
 
-    Koha::Plugins->RemovePlugins;
+    # initialize undef value plugin
+    my $empty_value_plugin = Koha::Plugin::1_CalcFineEmpty->new->enable();
+    ( $amount, $units, $chargable_units ) =
+        CalcFine( $item->unblessed, $category->categorycode, $library->branchcode, $due_date, $end_date );
+
+    is( $amount,          58, 'Amount is calculated correctly with original function, undef plugin skipped' );
+    is( $units,           29, 'Units are calculated correctly with original function, undef plugin skipped' );
+    is( $chargable_units, 29, 'Chargable units are calculated correctly with original function, undef plugin skipped' );
+
+    # initialize valid value plugin
+    my $not_empty_value_plugin = Koha::Plugin::2_CalcFineNotEmpty->new->enable();
+
+    ( $amount, $units, $chargable_units ) = CalcFine( $item->unblessed, undef, undef, $due_date, $end_date );
+
+    is( $amount,          1, 'Amount is calculated correctly with custom function' );
+    is( $units,           2, 'Units are calculated correctly with custom function' );
+    is( $chargable_units, 3, 'Chargable units are calculated correctly with custom function' );
+
+    # initialize bad value plugin
+    my $bad_value_plugin = Koha::Plugin::3_CalcFineBadValue->new->enable();
+    $not_empty_value_plugin->disable();
+
+    ( $amount, $units, $chargable_units ) = CalcFine( $item->unblessed, undef, undef, $due_date, $end_date );
+
+    is( $amount, 'a', 'Amount is calculated correctly with custom function, bad value returned anyway' );
+    is( $units,  'b', 'Units are calculated correctly with custom function, bad value returned anyway' );
+    is(
+        $chargable_units, undef,
+        'Chargable units are calculated correctly with custom function, bad value returned anyway'
+    );
+
+    Koha::Plugin::Test->new->enable();
+
+    $empty_value_plugin->disable();
+    $bad_value_plugin->disable();
+
+    my $itemnumber   = $item->itemnumber;
+    my $branchcode   = $library->branchcode;
+    my $categorycode = $category->categorycode;
+
+    warnings_like { CalcFine( $item->unblessed, $category->categorycode, $library->branchcode, $due_date, $end_date ); }
+    [
+        qr/itemnumber:$itemnumber/,
+        qr/branchcode:$branchcode/,
+        qr/categorycode:$categorycode/,
+        qr/due_date_type:DateTime/,
+        qr/end_date_type:DateTime/
+    ],
+        'Parameters are correct';
+
+    Koha::Plugins->RemovePlugins();
+
     $schema->storage->txn_rollback;
 };
