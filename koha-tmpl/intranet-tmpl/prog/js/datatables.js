@@ -1334,6 +1334,11 @@ function update_search_description(
      *                                                Supports `contains`, `starts_with`, `ends_with` and `exact` match
      * @param  {string}  [options.columns.*.type      Data type the field is stored in so we may impose some additional
      *                                                manipulation to search strings. Supported types are currenlty 'date'
+     * @param  {string}  [options.columns.*.datatype  Data type the field is stored in so we may impose some additional
+     *                                                manipulation logic to search. Supported types are currently 'related-object',
+     *                                                for implimenting joins in api search queries, and 'coded_value:TABLE' to allow
+     *                                                for clientside translations of description to code to reduce join requirements.
+     *                                                See bug 39011 for an example implimentation.
      * @param  {Object}  table_settings               The arrayref as returned by TableSettings.GetTableSettings function
      *                                                available from the columns_settings template toolkit include
      * @param  {Boolean} add_filters                  Add a filters row as the top row of the table
