@@ -1,6 +1,8 @@
 [% USE To %]
+[% USE Koha %]
 [% PROCESS 'i18n.inc' %]
 [% SET footerjs = 1 %]
+[% SET marcflavour = Koha.Preference('marcflavour') %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title
     >[% FILTER collapse %]
@@ -38,7 +40,10 @@
                         [%- FOREACH marc_value IN SUBFIELD_LOO.marc_values -%]
                             [%- To.json( marc_value ) | html -%]
                         [%- END -%]
-                    [%- END -%]‡9[% authid | html %]";
+                    [%- END -%]
+                    [% IF ( marcflavour == 'UNIMARC' ) %]‡3[% authid | html %]";
+                    [% ELSIF ( marcflavour == 'MARC21' ) %]‡9[% authid | html %]";
+                    [% END %]
                 [% END %]
                 RancorReplaceField( new_line, "[% indicator1 | html %]", "[% indicator2 | html %]" );
             [% ELSE %]
@@ -167,7 +172,16 @@
                     [% IF ( clear ) %]
                         if (subfield){subfield.value="" ;}
                     [% ELSE %]
-                        if(code.value=='9'){
+                        [% IF ( marcflavour == 'UNIMARC' ) %]
+                            [% IF ( source == 'auth' ) %]
+                                var authid_subfield = "3";
+                            [% ELSIF ( source == 'biblio' ) %]
+                                var authid_subfield = "9";
+                            [% END %]
+                        [% ELSIF ( marcflavour == 'MARC21' ) %]
+                            var authid_subfield = "9";
+                        [% END %]
+                        if(code.value==authid_subfield){
                             subfield.value = "[% To.json(authid) | $raw %]";
                             subfield.className = subfield.className.replace("no_matching_authority_field", "matching_authority_field");
                             break;

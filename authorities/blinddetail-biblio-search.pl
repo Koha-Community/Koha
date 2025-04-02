@@ -55,6 +55,8 @@ my $authid       = $query->param('authid');
 my $index        = $query->param('index');
 my $tagid        = $query->param('tagid');
 my $relationship = $query->param('relationship');
+my $source       = $query->param('source');
+my $marcflavour  = C4::Context->preference("marcflavour");
 
 # open template
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
@@ -85,7 +87,10 @@ if ($authid) {
     # Get all values for each distinct subfield and add to subfield loop
     my %done_subfields;
     for ( $field->subfields ) {
-        next if $_->[0] eq '9';    # $9 will be set with authid value
+        if ( $marcflavour eq 'UNIMARC' ) {
+            next if $_->[0] eq '3';    # $3 will be set with authid value (in UNIMARC authority records)
+        }
+        next if $_->[0] eq '9';        # $9 will be set with authid value
         my $letter = $_->[0];
         $letter ||= '@';
         next if defined $done_subfields{$letter};
@@ -94,7 +99,17 @@ if ($authid) {
         $done_subfields{$letter} = 1;
     }
 
-    push( @subfield_loop, { marc_subfield => 'w', marc_values => $relationship } ) if ($relationship);
+    # If a relationship code has been selected, add it to the appropriate
+    # subfield of @subfield_loop, depending on the MARC flavour being used.
+    if ($relationship) {
+        my $relationship_subfield;
+        if ( $marcflavour eq 'UNIMARC' ) {
+            $relationship_subfield = '5';
+        } elsif ( $marcflavour eq 'MARC21' ) {
+            $relationship_subfield = 'w';
+        }
+        push @subfield_loop, { marc_subfield => $relationship_subfield, marc_values => $relationship };
+    }
 
     # Copy the ISNI number over (should one exist) to subfield $o when linking
     # authorities with authorities in UNIMARC instances. This only applies to
@@ -142,7 +157,8 @@ $template->param(
     indicator2    => $indicator2,
     SUBFIELD_LOOP => \@subfield_loop,
     tag_number    => $tag_number,
-    rancor        => $index =~ /rancor$/,
+    rancor        => ( $index =~ /rancor$/ ) ? 1 : 0,
+    source        => $source,
 );
 
 output_html_with_http_headers $query, $cookie, $template->output;

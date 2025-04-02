@@ -156,14 +156,15 @@
         }
 
         function doauth(authid, index, repet){
-            [% IF source == 'auth' %]
+            var source = "[% source | uri %]";
+            if ( source == 'auth' ) {
                 var elem = document.getElementById("special_relationship");
                 var relationship = elem.options[elem.selectedIndex].value;
 
-                jumpfull('blinddetail-biblio-search.pl?authid=' + authid + '&index=' + index + '&repet=' + repet + '&relationship=' + relationship);
-            [% ELSE %]
-                jumpfull('blinddetail-biblio-search.pl?authid=' + authid + '&index=' + index + '&repet=' + repet);
-            [% END %]
+                jumpfull('blinddetail-biblio-search.pl?authid=' + authid + '&index=' + index + '&repet=' + repet + '&source=' + source + '&relationship=' + relationship);
+            } else {
+                jumpfull('blinddetail-biblio-search.pl?authid=' + authid + '&index=' + index + '&repet=' + repet + '&source=' + source);
+            }
         }
     </script>
 [% END %]
