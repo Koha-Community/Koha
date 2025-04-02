@@ -3,7 +3,7 @@
         "[data-copy-to-clipboard]"
     );
     if (copyToClipboardButtons.length) {
-        const copyToClipboard = e => {
+        const copyToClipboard = async e => {
             const target = e.target;
             if (!(target instanceof HTMLButtonElement)) {
                 return;
@@ -13,7 +13,11 @@
                 return;
             }
 
-            navigator.clipboard.writeText(value);
+            try {
+                await navigator.clipboard.writeText(value);
+            } catch (_) {
+                return;
+            }
 
             target.title = __("Copied to clipboard");
             const tooltip = bootstrap.Tooltip.getOrCreateInstance(target);
