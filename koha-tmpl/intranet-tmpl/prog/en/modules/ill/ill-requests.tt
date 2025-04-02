@@ -51,7 +51,7 @@
                 <a href="/cgi-bin/koha/ill/ill-requests.pl">ILL requests</a>
             [% END %]
             [% WRAPPER breadcrumb_item bc_active= 1 %]
-                <span>Confirm automatic request</span>
+                <span>Confirm request</span>
             [% END %]
         [% ELSE %]
             [% WRAPPER breadcrumb_item bc_active= 1 %]
@@ -855,7 +855,7 @@
                 </div>
             [% ELSIF op == 'confirmautoill' %]
                 <!-- confirmautoill -->
-                <h1>Confirm automatic request</h1>
+                <h1>Confirm request</h1>
                 <div id="results" class="page-section">
                     <form method="post" id="confirmautoill-form">
                         [% INCLUDE 'csrf-token.inc' %]

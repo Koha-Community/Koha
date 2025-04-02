@@ -48,7 +48,7 @@
                 [% END %]
             [% ELSIF op == 'confirmautoill' %]
                 [% WRAPPER breadcrumb_item bc_active= 1 %]
-                    <span>Confirm automatic request</span>
+                    <span>Confirm request</span>
                 [% END %]
             [% END %]
         [% ELSE %]
@@ -323,7 +323,7 @@
                                 </form>
                             </div>
                         [% ELSIF op == 'confirmautoill' %]
-                            <h1>Confirming automatic request</h1>
+                            <h1>Confirming request</h1>
                             <div id="results" class="page-section">
                                 <form method="post" id="confirmautoill-form">
                                     [%# This will get its name="op" value="cud-" from the loop over whole.keys below %]
