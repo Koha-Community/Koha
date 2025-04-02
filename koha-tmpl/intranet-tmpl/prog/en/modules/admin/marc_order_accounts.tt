@@ -139,6 +139,7 @@
                         <input type="text" name="basket_name_field" id="basket_name_field" size="20" value="[% account.basket_name_field | html %]" />
                         <div class="hint">(Optional): If you want the basket name to be dynamic based on a value in the MARC file, you can set a field here that will be read on import and used for the basket name.</div>
                         <div class="hint">The format for this field is the same as MARCFieldsToOrder - the field and the subfield separated by a dollar sign e.g. 245$a</div>
+                        <div class="hint">The first record in the file must be the record to contain this field, others will be ignored. If a value is not found the filename will be used for the basket name.</div>
                     </li>
                 </ol>
             </fieldset>
