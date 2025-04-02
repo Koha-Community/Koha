@@ -136,7 +136,7 @@ if ( $op eq 'cud-create' ) {
     $borrower{categorycode} ||= $PatronSelfRegistrationDefaultCategory;
 
     my @empty_mandatory_fields = (CheckMandatoryFields( \%borrower, $op ), CheckMandatoryAttributes( \%borrower, $attributes ) );
-    my $invalidformfields = CheckForInvalidFields(\%borrower);
+    my $invalidformfields = CheckForInvalidFields( { borrower => \%borrower, context => 'create' } );
     delete $borrower{'password2'};
     my $is_cardnumber_valid;
     if ( !grep { $_ eq 'cardnumber' } @empty_mandatory_fields ) {
@@ -315,7 +315,7 @@ elsif ( $op eq 'cud-update' ) {
 
     my @empty_mandatory_fields = grep { $_ ne 'password' } # password is not required when editing personal details
       ( CheckMandatoryFields( \%borrower, $op ), CheckMandatoryAttributes( \%borrower, $attributes ) );
-    my $invalidformfields = CheckForInvalidFields(\%borrower);
+    my $invalidformfields = CheckForInvalidFields( { borrower => \%borrower, context => 'update' } );
 
     # Send back the data to the template
     %borrower = ( %$borrower, %borrower );
@@ -485,12 +485,14 @@ sub CheckMandatoryAttributes{
 }
 
 sub CheckForInvalidFields {
-    my $borrower = shift;
+    my $params   = shift;
+    my $borrower = $params->{borrower};
+    my $context  = $params->{context};
     my @invalidFields;
     if ($borrower->{'email'}) {
         unless ( Koha::Email->is_valid($borrower->{email}) ) {
             push(@invalidFields, "email");
-        } elsif ( C4::Context->preference("PatronSelfRegistrationEmailMustBeUnique") ) {
+        } elsif ( C4::Context->preference("PatronSelfRegistrationEmailMustBeUnique") && $context eq 'create' ) {
             my $patrons_with_same_email = Koha::Patrons->search( # FIXME Should be search_limited?
                 {
                     email => $borrower->{email},
