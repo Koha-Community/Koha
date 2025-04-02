@@ -25,14 +25,18 @@ export default {
                 attr.componentPath = "./RelationshipWidget.vue";
             }
             const importPath = show
-                ? attr.showElement.componentPath
+                ? attr.showElement?.componentPath
+                    ? attr.showElement.componentPath
+                    : attr.componentPath
                 : attr.componentPath;
 
             return defineAsyncComponent(() => import(`${importPath}`));
         },
         getComponentProps(show = false) {
             const propList = show
-                ? this.attr.showElement.componentProps
+                ? this.attr.showElement?.componentProps
+                    ? this.attr.showElement.componentProps
+                    : this.attr.componentProps
                 : this.attr.componentProps;
             if (!propList) {
                 return {};
@@ -120,7 +124,11 @@ export default {
                 }
                 return acc;
             }, {});
-            const attr = show ? this.attr.showElement : this.attr;
+            const attr = show
+                ? this.attr.showElement
+                    ? this.attr.showElement
+                    : this.attr
+                : this.attr;
             if (attr.relationshipFields?.length) {
                 props.relationshipFields = attr.relationshipFields;
             }

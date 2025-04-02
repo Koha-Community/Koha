@@ -31,6 +31,14 @@
                     </li>
                 </ol>
             </fieldset>
+            <fieldset
+                class="rows"
+                v-for="(item, counter) in appendToShow"
+                v-bind:key="counter"
+            >
+                <legend v-if="item.name">{{ item.name }}</legend>
+                <ShowElement :resource="resource" :attr="item" />
+            </fieldset>
             <fieldset class="action">
                 <router-link
                     :to="{ name: listComponent }"
@@ -65,6 +73,7 @@ export default {
         doResourceDelete: Function,
         resourceName: String,
         getFieldGroupings: Function,
+        appendToShow: Array,
     },
     created() {
         this.getResource(this.$route.params[this.idAttr]);

@@ -69,6 +69,7 @@ export default {
                 props.resourceListFiltersRequired || null,
             formGroupsDisplayMode: props.formGroupsDisplayMode || null,
             getToolbarButtons: props.getToolbarButtons || (() => []),
+            appendToShow: props.appendToShow || [],
         };
 
         return {
@@ -379,6 +380,7 @@ export default {
                     },
                 ];
             }
+            // FIXME - if no group is defined in accordion mode then the section doesn't have the dropdown applied
             return groupings.reduce((acc, group) => {
                 const groupFields = attributesToConsider.filter(
                     ra => ra.group === group
@@ -391,13 +393,9 @@ export default {
                 if (component === "Show" && resource) {
                     groupFields.forEach(field => {
                         if (
-                            (resource[field.name] != null &&
-                                (field.type !== "relationshipWidget" ||
-                                    resource[field.name].length > 0)) ||
-                            (field.hasOwnProperty("showElement") &&
-                                field.showElement.componentPath?.includes(
-                                    "RelationshipTableDisplay"
-                                ))
+                            resource[field.name] != null &&
+                            (field.type !== "relationshipWidget" ||
+                                resource[field.name].length > 0)
                         ) {
                             groupInfo.hasDataToDisplay = true;
                         }

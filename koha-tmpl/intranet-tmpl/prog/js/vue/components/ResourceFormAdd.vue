@@ -67,7 +67,6 @@
             </div>
             <div v-else-if="formGroupsDisplayMode == 'accordion'">
                 <div
-                    v-if="formGroupsDisplayMode == 'accordion'"
                     v-for="(group, counter) in getFieldGroupings('Form')"
                     v-bind:key="counter"
                     class="accordion"
