@@ -111,7 +111,7 @@
                         <th class="fixed_sort">Patron category</th>
                         <th>&nbsp;</th>
                         <th class="fixed_sort">Item type</th>
-                        <th class="noExport">Actions</th>
+                        <th class="no-export">Actions</th>
                         <th>Note</th>
                         <th>Current checkouts allowed</th>
                         <th>Current on-site checkouts allowed</th>
@@ -158,7 +158,7 @@
                             <th>Recall overdue fine amount</th>
                             <th>Recall pickup period (day)</th>
                         [% END %]
-                        <th class="noExport">Actions</th>
+                        <th class="no-export">Actions</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -440,7 +440,7 @@
                             [% END %]
                         [% END %]
                     [% END %]
-                    <tr class="noExport" id="edit_row">
+                    <tr class="no-export" id="edit_row">
                         <td>2</td>
                         <td>
                             <select name="categorycode" id="categorycode">
@@ -664,7 +664,7 @@
                     <th>Booking pre-processing (days)</th>
                     <th>Booking post-processing (days)</th>
                     <th>Return policy</th>
-                    <th class="noExport">Actions</th>
+                    <th class="no-export">Actions</th>
                 </tr>
                 [% SET patron_maxissueqty = CirculationRules.Search( current_branch, undef, undef, 'patron_maxissueqty', { want_rule => 1 } ) %]
                 [% SET patron_maxonsiteissueqty = CirculationRules.Search( current_branch, undef, undef, 'patron_maxonsiteissueqty', { want_rule => 1 } ) %]

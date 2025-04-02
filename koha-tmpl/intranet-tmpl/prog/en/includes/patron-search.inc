@@ -161,7 +161,7 @@
                     [% FOR column IN columns %]
                         [% SWITCH column %]
                         [% CASE 'checkbox' %]
-                            <th class="noExport"></th>
+                            <th class="no-export"></th>
                         [% CASE 'cardnumber' %]
                             <th>Card</th>
                         [% CASE 'dateofbirth' %]
@@ -201,7 +201,7 @@
                                 <th>Sort 2</th>
                             [% END %]
                         [% CASE 'action' %]
-                            <th class="noExport">&nbsp;</th>
+                            <th class="no-export">&nbsp;</th>
                         [% END %]
                     [% END %]
                 </tr>

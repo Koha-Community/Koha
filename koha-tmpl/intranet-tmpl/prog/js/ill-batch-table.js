@@ -81,7 +81,7 @@
                     render: createActions,
                     width: "10%",
                     orderable: false,
-                    className: "noExport",
+                    className: "no-export",
                 },
             ],
             processing: true,

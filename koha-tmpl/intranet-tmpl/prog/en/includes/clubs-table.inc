@@ -16,7 +16,7 @@
             <th>End date</th>
             <th>Enrolled patrons</th>
             [% UNLESS destination == 'holds' %]
-                <th class="NoSort">&nbsp;</th>
+                <th class="no-sort">&nbsp;</th>
             [% END %]
         </tr>
     </thead>

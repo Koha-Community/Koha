@@ -19,7 +19,7 @@
             <th class="return-claim-updated-on">Updated on</th>
             <th class="return-claim-updated-on">Updated on</th>
             <th class="return-claim-resolution">Resolution</th>
-            <th class="return-claim-actions NoSort">&nbsp;</th>
+            <th class="return-claim-actions no-sort">&nbsp;</th>
         </tr>
     </thead>
 </table>

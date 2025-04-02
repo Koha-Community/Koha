@@ -85,13 +85,13 @@
                                 <thead>
                                     <tr>
                                         <th>Patron category</th>
-                                        <th class="NoSort" scope="col">Delay</th>
-                                        <th class="NoSort" scope="col">Letter</th>
-                                        <th class="NoSort" scope="col">Restrict</th>
+                                        <th class="no-sort" scope="col">Delay</th>
+                                        <th class="no-sort" scope="col">Letter</th>
+                                        <th class="no-sort" scope="col">Restrict</th>
                                         [% FOREACH mtt IN message_transport_types %]
                                             [% NEXT IF mtt == 'itiva' AND !Koha.Preference('TalkingTechItivaPhoneNotification') %]
                                             [% NEXT IF mtt == 'phone' AND !Koha.Preference('PhoneNotification') %]
-                                            <th class="NoSort" scope="col">
+                                            <th class="no-sort" scope="col">
                                                 [% SWITCH mtt %]
                                                 [% CASE 'email' %]
                                                     <span>Email</span>

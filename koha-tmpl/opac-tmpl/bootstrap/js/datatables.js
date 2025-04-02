@@ -110,15 +110,15 @@ function _dt_buttons(params) {
     let settings = params.settings || {};
     let table_settings = params.table_settings;
 
-    var exportColumns = ":visible:not(.noExport)";
+    var exportColumns = ":visible:not(.no-export)";
 
     var export_format = {
         body: function (data, row, column, node) {
             var newnode = $(node);
 
-            if (newnode.find(".noExport").length > 0) {
+            if (newnode.find(".no-export").length > 0) {
                 newnode = newnode.clone();
-                newnode.find(".noExport").remove();
+                newnode.find(".no-export").remove();
             }
 
             return newnode.text().replace(/\n/g, " ").trim();
@@ -333,7 +333,7 @@ function _dt_visibility(table_settings, table_dt) {
         var default_column_defs = [
             { targets: ["string-sort"], type: "string" },
             { targets: ["anti-the"], type: "anti-the" },
-            { targets: ["NoSort"], orderable: false, searchable: false },
+            { targets: ["no-sort"], orderable: false, searchable: false },
         ];
         if (settings["columnDefs"] === undefined) {
             settings["columnDefs"] = default_column_defs;

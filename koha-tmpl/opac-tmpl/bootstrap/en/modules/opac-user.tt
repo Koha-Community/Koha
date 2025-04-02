@@ -337,7 +337,7 @@
                                             <caption>[% issues_count | html %] Item(s) checked out</caption>
                                             <thead>
                                                 <tr>
-                                                    [% IF ( JacketImages ) %]<th class="NoSort">&nbsp;</th>[% END %]
+                                                    [% IF ( JacketImages ) %]<th class="no-sort">&nbsp;</th>[% END %]
                                                     <th class="all anti-the">Title</th>
                                                     <th>Author</th>
                                                     <th class="psort">Due</th>
@@ -355,11 +355,11 @@
                                                         <th>Fines</th>
                                                     [% END %]
                                                     [% IF Koha.Preference('OPACMySummaryHTML') %]
-                                                        <th class="NoSort">Links</th>
+                                                        <th class="no-sort">Links</th>
                                                     [% END %]
                                                     [% IF ( Koha.Preference('AllowCheckoutNotes') ) %]
                                                         <th class="hidden">Checkout note</th>
-                                                        <th id="checkout-notes" class="NoSort noExport" title="Use this to report any problems with your currently checked out items">Report a problem</th>
+                                                        <th id="checkout-notes" class="no-sort no-export" title="Use this to report any problems with your currently checked out items">Report a problem</th>
                                                     [% END %]
                                                     <th></th>
                                                 </tr>
@@ -728,14 +728,14 @@
                                         <!-- OVERDUES TABLE ROWS -->
                                         <thead>
                                             <tr>
-                                                [% IF ( JacketImages ) %]<th class="NoSort">&nbsp;</th>[% END %]
+                                                [% IF ( JacketImages ) %]<th class="no-sort">&nbsp;</th>[% END %]
                                                 <th class="all anti-the">Title</th>
                                                 [% UNLESS ( item_level_itypes ) %]<th>Item type</th>[% END %]
                                                 [% IF ( show_barcode ) %]<th>Barcode</th>[% END %]
                                                 <th>Call number</th>
                                                 <th class="psort">Due</th>
                                                 [% IF ( OpacRenewalAllowed ) %]
-                                                    <th class="NoSort">Renew</th>
+                                                    <th class="no-sort">Renew</th>
                                                 [% END %]
                                                 [% IF ( OPACFinesTab ) %]
                                                     <th>Fines</th>
@@ -862,7 +862,7 @@
                                                 <th>Expires on</th>
                                                 <th>Pickup location</th>
                                                 <th>Status</th>
-                                                <th class="NoSort">&nbsp;</th>
+                                                <th class="no-sort">&nbsp;</th>
                                                 <th></th>
                                             </tr>
                                         </thead>
@@ -1229,15 +1229,15 @@
                         {
                             extend: "print",
                             exportOptions: {
-                                /* Print view should show all columns (even invisible ones) unless they are .noExport */
-                                columns: ":not(.noExport)"
+                                /* Print view should show all columns (even invisible ones) unless they are .no-export */
+                                columns: ":not(.no-export)"
                             }
                         },
                         {
                             extend: "csv",
                             exportOptions: {
-                                /* CSV export should include all columns (even invisible ones) unless they are .noExport */
-                                columns: ":not(.noExport)"
+                                /* CSV export should include all columns (even invisible ones) unless they are .no-export */
+                                columns: ":not(.no-export)"
                             }
                         }
                     ]

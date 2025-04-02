@@ -405,7 +405,7 @@
             <div class="page-section">
                 <table id="table_item_type">
                     <thead>
-                        [% UNLESS Koha.Preference('noItemTypeImages') && Koha.Preference('OpacNoItemTypeImages') %]<th class="noExport">Image</th>[% END %]
+                        [% UNLESS Koha.Preference('noItemTypeImages') && Koha.Preference('OpacNoItemTypeImages') %]<th class="no-export">Image</th>[% END %]
                         <th>Description</th>
                         <th>Code</th>
                         <th>Parent code</th>
@@ -420,7 +420,7 @@
                         <th>Checkin message</th>
                         <th>Library limitations</th>
                         <th>Automatic check-in</th>
-                        <th class="noExport NoSort">Actions</th>
+                        <th class="no-export no-sort">Actions</th>
                     </thead>
                     [% FOREACH itemtype IN itemtypes %]
                         <tr>

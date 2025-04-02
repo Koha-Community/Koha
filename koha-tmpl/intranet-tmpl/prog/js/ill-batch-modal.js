@@ -1046,7 +1046,7 @@
                 {
                     width: "6.5%",
                     render: createActions,
-                    className: "action-column noExport",
+                    className: "action-column no-export",
                 },
             ],
             createdRow: function (row, data) {

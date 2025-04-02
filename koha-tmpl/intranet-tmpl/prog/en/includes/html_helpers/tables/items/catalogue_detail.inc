@@ -10,7 +10,7 @@
     <table class="items_table" id="[% tab | html %]_table">
         <thead>
             <tr>
-                <th id="[% tab | html %]_checkbox" data-colname="checkbox" class="NoSort"></th>
+                <th id="[% tab | html %]_checkbox" data-colname="checkbox" class="no-sort"></th>
                 [% IF Koha.Preference('LocalCoverImages') %]
                     <th id="[% tab | html %]_cover_image" data-colname="cover_image">Cover image</th>
                 [% END %]
@@ -42,8 +42,8 @@
                 [% IF Koha.Preference('EasyAnalyticalRecords') %]<th id="[% tab | html %]_hostrecord" data-colname="hostrecord">Host records</th>[% END %]
                 [% IF ( analyze ) %]<th id="[% tab | html %]_usedin" data-colname="usedin">Used in</th><th></th>[% END %]
                 [% IF Koha.Preference('UseCourseReserves') %]<th id="[% tab | html %]_course_reserves" data-colname="course_reserves">Course reserves</th>[% END %]
-                [% IF ( SpineLabelShowPrintOnBibDetails ) %]<th id="[% tab | html %]_spinelabel" data-colname="spinelabel" class="NoSort">Spine label</th>[% END %]
-                [% IF ( CAN_user_editcatalogue_edit_items ) %]<th id="[% tab | html %]_actions" data-colname="actions" class="NoSort noExport">&nbsp;</th>[% END %]
+                [% IF ( SpineLabelShowPrintOnBibDetails ) %]<th id="[% tab | html %]_spinelabel" data-colname="spinelabel" class="no-sort">Spine label</th>[% END %]
+                [% IF ( CAN_user_editcatalogue_edit_items ) %]<th id="[% tab | html %]_actions" data-colname="actions" class="no-sort no-export">&nbsp;</th>[% END %]
             </tr>
         </thead>
     </table>

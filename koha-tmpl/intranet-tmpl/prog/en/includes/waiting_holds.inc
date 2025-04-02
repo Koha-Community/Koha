@@ -4,7 +4,7 @@
 <table class="holds_table" id="[% table_name | html %]">
     <thead>
         <tr>
-            <th class="NoSort"><input type="checkbox" class="select_hold_all" /></th>
+            <th class="no-sort"><input type="checkbox" class="select_hold_all" /></th>
             <th>Waiting since</th>
             <th>Date hold placed</th>
             [% IF table_name == 'holdscr' %]
@@ -19,7 +19,7 @@
             <th>Call number</th>
             <th>Copy number</th>
             <th>Enumeration</th>
-            <th class="NoSort noExport">Actions</th>
+            <th class="no-sort no-export">Actions</th>
         </tr>
     </thead>
     <tbody>
