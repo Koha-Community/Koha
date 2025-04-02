@@ -428,6 +428,42 @@ sub _restart_after_change {
     kill 'HUP', $parent_pid;
 }
 
+=head2 get_valuebuilders_installed
+
+    my @valuebuilders = Koha::Plugins->new->get_valuebuilders_installed();
+
+Returns a list of all valuebuilder plugins provided by plugins.
+
+=cut
+
+sub get_valuebuilders_installed {
+    my ($self) = @_;
+
+    # Get ENABLED plugins
+    my @plugins = $self->get_enabled_plugins();
+
+    my @valuebuilders;
+
+    foreach my $plugin (@plugins) {
+
+        # Check if plugin implements get_valuebuilder method
+        if ( $plugin->can('get_valuebuilder') ) {
+
+            # Get the value builder from the plugin
+            my $valuebuilder = $plugin->get_valuebuilder();
+
+            if ($valuebuilder) {
+                push @valuebuilders, {
+                    name   => $valuebuilder,
+                    plugin => $plugin,
+                };
+            }
+        }
+    }
+
+    return @valuebuilders;
+}
+
 1;
 __END__
 

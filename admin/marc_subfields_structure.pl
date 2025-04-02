@@ -126,6 +126,31 @@ if ( $op eq 'add_form' ) {
     @value_builder = sort { $a cmp $b } @value_builder;
     closedir $dir_h;
 
+    # Add valuebuilders from plugins
+    if ( C4::Context->config("enable_plugins") ) {
+        require Koha::Plugins;
+        my $plugins = Koha::Plugins->new();
+
+        # Get all plugins first to debug
+        my @all_plugins = $plugins->GetPlugins();
+        foreach my $plugin (@all_plugins) {
+            ( $plugin->can('get_valuebuilders') ? "yes" : "no" );
+        }
+
+        # Use the dedicated get_valuebuilders_installed method
+        my @plugin_valuebuilders = $plugins->get_valuebuilders_installed();
+
+        foreach my $vb_entry (@plugin_valuebuilders) {
+            my $vb_name = $vb_entry->{name};
+
+            # Avoid duplicates
+            push( @value_builder, $vb_name ) unless grep { $_ eq $vb_name } @value_builder;
+        }
+
+        # Re-sort the list after adding plugin valuebuilders
+        @value_builder = sort { $a cmp $b } @value_builder;
+    }
+
     # build values list
     my $mss = Koha::MarcSubfieldStructures->search(
         { tagfield => $tagfield, frameworkcode => $frameworkcode },

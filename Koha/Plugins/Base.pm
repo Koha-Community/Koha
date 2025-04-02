@@ -212,6 +212,26 @@ sub get_metadata {
     return $metadata;
 }
 
+=head2 get_valuebuilders
+
+    Get valuebuilder identifier provided by this plugin
+    my $valuebuilder_id = $plugin->get_valuebuilders();
+
+=cut
+
+sub get_valuebuilders {
+    my ($self) = @_;
+
+    # If this plugin has a get_valuebuilder method that returns a non-empty value,
+    # return that value in an array reference
+    if ( $self->can('get_valuebuilder') ) {
+        my $vb = $self->get_valuebuilder();
+        return $vb ? [$vb] : [];
+    }
+
+    return [];
+}
+
 =head2 get_qualified_table_name
 
 To avoid naming conflict, each plugins tables should use a fully qualified namespace.
@@ -401,6 +421,22 @@ sub disable {
     $self->store_data( { '__ENABLED__' => 0 } );
 
     return $self;
+}
+
+=head2 get_valuebuilder_url
+
+    Returns the full URL to launch this plugin's value builder
+
+    my $url = $plugin->get_valuebuilder_url();
+
+=cut
+
+sub get_valuebuilder_url {
+    my ($self) = @_;
+
+    # Generate the URL to run.pl with the launcher method
+    my $plugin_class = ref($self);
+    return "/cgi-bin/koha/plugins/run.pl?class=$plugin_class&method=launcher";
 }
 
 1;

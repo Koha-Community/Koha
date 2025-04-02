@@ -213,6 +213,37 @@ sub _error {
 sub _load {
     my ($self) = @_;
 
+    # Try to find the class that can handle this plugin
+    my @plugins = Koha::Plugins->new()->get_valuebuilders_installed();
+
+    foreach my $vb (@plugins) {
+        my $plugin = $vb->{plugin};
+
+        # Check if this plugin provides the value builder we need
+        if ( $vb->{name} eq $self->{name} ) {
+
+            # Store the plugin object for later use
+            $self->{plugin} = $plugin;
+
+            # Get the builder and launcher directly from the plugin object
+            if ( $plugin->can('builder_code') ) {
+                $self->{builder} = sub { return $plugin->builder_code(@_); };
+            }
+
+            if ( $plugin->can('launcher') ) {
+                $self->{launcher} = sub { return $plugin->launcher(@_); };
+            }
+
+            if ( !$self->{builder} && !$self->{launcher} ) {
+                return $self->_error('Plugin does not contain builder_code nor launcher methods');
+            }
+
+            $self->{_loaded} = 1;
+            return 1;
+        }
+    }
+
+    # If not found via plugin, try in standard dir
     my ( $rv, $file );
     return $self->_error('Plugin needs a name') if !$self->{name};    #2chk
     $self->{path} //= _valuebuilderpath();
@@ -291,12 +322,20 @@ sub _generate_js {
         return $self->_error('Builder sub not defined');
     }
 
+    # Make a copy of params and add the plugin object to it
+    my $builder_params = {%$params};
+
+    # Add the value builder's plugin if available
+    if ( $self->{name} && $self->{plugin} ) {
+        $builder_params->{plugin} = $self->{plugin};
+    }
+
     my @params = $self->{oldschool} // 0
         ? (
         $params->{dbh}, $params->{record}, $params->{tagslib},
         $params->{id}
         )
-        : ($params);
+        : ($builder_params);
     my @rv = &$sub(@params);
     return $self->_error( 'Builder sub failed: ' . $@ ) if $@;
 
