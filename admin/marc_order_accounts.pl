@@ -81,6 +81,7 @@ if ( $op eq 'acct_form' ) {
             encoding           => scalar $input->param('encoding') || 'UTF-8',
             match_field        => scalar $input->param('match_field'),
             match_value        => scalar $input->param('match_value'),
+            basket_name_field  => scalar $input->param('basket_name_field'),
         };
 
         if ( scalar $input->param('id') ) {

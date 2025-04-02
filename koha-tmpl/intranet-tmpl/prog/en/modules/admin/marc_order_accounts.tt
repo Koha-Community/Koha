@@ -134,6 +134,12 @@
                         <input type="text" name="match_value" id="match_value" size="20" value="[% account.match_value | html %]" />
                         <div class="hint">(Optional): This is the value that will be checked against the match field to see if the file matches this account. If it does it will be processed by this account, if not it will be skipped.</div>
                     </li>
+                    <li>
+                        <label for="basket_name_field">Basket name field: </label>
+                        <input type="text" name="basket_name_field" id="basket_name_field" size="20" value="[% account.basket_name_field | html %]" />
+                        <div class="hint">(Optional): If you want the basket name to be dynamic based on a value in the MARC file, you can set a field here that will be read on import and used for the basket name.</div>
+                        <div class="hint">The format for this field is the same as MARCFieldsToOrder - the field and the subfield separated by a dollar sign e.g. 245$a</div>
+                    </li>
                 </ol>
             </fieldset>
             <fieldset class="rows">
