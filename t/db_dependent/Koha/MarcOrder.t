@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 5;
+use Test::More tests => 6;
 
 use Koha::MarcOrder;
 use Koha::MarcOrderAccount;
@@ -624,6 +624,61 @@ subtest 'match_file_to_account' => sub {
     );
 
     is( $file_match2, 0, 'File not matched to the account' );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest '_check_file_for_basket_name' => sub {
+    plan tests => 2;
+
+    $schema->storage->txn_begin;
+
+    my ( $fh, $name ) = tempfile( SUFFIX => '.marcxml' );
+
+    my $rec = MARC::Record->new;
+    my $fld = MARC::Field->new( '975', '', '', 'p', 'This is a basket' );
+    $rec->append_fields($fld);
+    my $str = $rec->as_xml;
+
+    print $fh $str;
+
+    close $fh;
+
+    my $account1 = Koha::MarcOrderAccount->new(
+        {
+            basket_name_field => '975$p',
+            encoding          => 'UTF-8',
+            description       => 'test',
+        }
+    )->store;
+
+    my $basket_name = Koha::MarcOrder::_check_file_for_basket_name(
+        {
+            filename => $name,
+            filepath => $name,
+            profile  => $account1,
+        }
+    );
+
+    is( $basket_name, "This is a basket", 'Basket name identified correctly' );
+
+    my $account2 = Koha::MarcOrderAccount->new(
+        {
+            basket_name_field => '975$z',
+            encoding          => 'UTF-8',
+            description       => 'test',
+        }
+    )->store;
+
+    my $basket_name2 = Koha::MarcOrder::_check_file_for_basket_name(
+        {
+            filename => $name,
+            filepath => $name,
+            profile  => $account2,
+        }
+    );
+
+    is( $basket_name2, $name, 'No filename provided in the file' );
 
     $schema->storage->txn_rollback;
 };

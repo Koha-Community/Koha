@@ -99,7 +99,9 @@ sub create_order_lines_from_file {
     my $basket_id = _create_basket_for_file(
         {
             filename  => $filename,
-            vendor_id => $vendor_id
+            filepath  => $filepath,
+            vendor_id => $vendor_id,
+            profile   => $profile
         }
     );
 
@@ -223,7 +225,8 @@ sub import_record_and_create_order_lines {
 
     my $basket_id = _create_basket_for_file({
         filename  => $filename,
-        vendor_id => $vendor_id
+        vendor_id => $vendor_id,
+        profile   => $profile
     });
 
     Creates a basket ready to receive order lines based on the imported file
@@ -236,8 +239,10 @@ sub _create_basket_for_file {
     my $filename  = $args->{filename};
     my $vendor_id = $args->{vendor_id};
 
+    my $basket_name = _check_file_for_basket_name($args);
+
     # aqbasketname.basketname has a max length of 50 characters so long file names will need to be truncated
-    my $basketname = length($filename) > 50 ? substr( $filename, 0, 50 ) : $filename;
+    my $basketname = length($basket_name) > 50 ? substr( $basket_name, 0, 50 ) : $basket_name;
 
     my $basketno = NewBasket(
         $vendor_id, 0, $basketname, q{},
@@ -543,23 +548,11 @@ sub add_items_from_import_record {
 sub match_file_to_account {
     my ( $self, $args ) = @_;
 
-    my $match    = 0;
-    my $filename = $args->{filename};
-    my $filepath = $args->{filepath};
-    my $profile  = $args->{profile};
-    my $format   = index( $filename, '.mrc' ) != -1 ? 'ISO2709' : 'MARCXML';
+    my $profile = $args->{profile};
 
-    my ( $errors, $marcrecords );
-    if ( $format eq 'MARCXML' ) {
-        ( $errors, $marcrecords ) = C4::ImportBatch::RecordsFromMARCXMLFile( $filepath, $profile->encoding );
-    } elsif ( $format eq 'ISO2709' ) {
-        ( $errors, $marcrecords ) = C4::ImportBatch::RecordsFromISO2709File(
-            $filepath, $profile->record_type,
-            $profile->encoding
-        );
-    }
+    my $match        = 0;
+    my $match_record = _retrieve_first_record_from_batch($args);
 
-    my $match_record = @{$marcrecords}[0];
     my ( $field, $subfield ) = split /\$/, $profile->match_field;
 
     my $field_value = $match_record->subfield( $field, $subfield ) || '';
@@ -570,6 +563,37 @@ sub match_file_to_account {
     }
 
     return $match;
+}
+
+=head3 _check_file_for_basket_name
+
+    my $basket_name = _check_file_for_basket_name({
+        filename => $filename,
+        filepath => $filepath,
+        profile  => $profile
+    });
+
+    Checks to see if the account has a basket name field assigned.
+    If yes, it retrieves this value to use as the name.
+    If not, to uses the filename.
+
+=cut
+
+sub _check_file_for_basket_name {
+    my ($args) = @_;
+
+    my $profile = $args->{profile};
+
+    my $filename = $args->{filename};
+    return $filename if !$profile->basket_name_field;
+
+    my $first_record = _retrieve_first_record_from_batch($args);
+
+    my ( $field, $subfield ) = split /\$/, $profile->basket_name_field;
+
+    my $field_value = $first_record->subfield( $field, $subfield ) || '';
+
+    return $field_value ? $field_value : $filename;
 }
 
 =head3 import_batches_list
@@ -1249,6 +1273,33 @@ sub _create_item_fields_from_syspref {
     };
 
     return $item_fields;
+}
+
+=head3 _retrieve_first_record_from_batch
+
+=cut
+
+sub _retrieve_first_record_from_batch {
+    my ($args) = @_;
+
+    my $filename = $args->{filename};
+    my $filepath = $args->{filepath};
+    my $profile  = $args->{profile};
+    my $format   = index( $filename, '.mrc' ) != -1 ? 'ISO2709' : 'MARCXML';
+
+    my ( $errors, $marcrecords );
+    if ( $format eq 'MARCXML' ) {
+        ( $errors, $marcrecords ) = C4::ImportBatch::RecordsFromMARCXMLFile( $filepath, $profile->encoding );
+    } elsif ( $format eq 'ISO2709' ) {
+        ( $errors, $marcrecords ) = C4::ImportBatch::RecordsFromISO2709File(
+            $filepath, $profile->record_type,
+            $profile->encoding
+        );
+    }
+
+    my $first_record = @{$marcrecords}[0];
+    return $first_record;
+
 }
 
 1;
