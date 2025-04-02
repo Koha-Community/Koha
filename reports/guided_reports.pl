@@ -956,7 +956,7 @@ if ($op eq 'run'){
                             'auth_val_errors'  => \@authval_errors,
                             'enter_params' => 1,
                             'id'           => $report_id,
-                'template_id'     => $template_id,
+                            'template_id'  => $template_id,
                             );
         } else {
             my ($sql,$header_types) = $report->prep_report( \@param_names, \@sql_params );

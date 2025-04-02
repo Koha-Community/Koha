@@ -896,7 +896,7 @@
                             <fieldset class="action">
                                 <input type="hidden" name="op" value="run" />
                                 [% IF ( template_id ) %]
-                                    <input type="hidden" name="template" value="[% template_id %]" />
+                                    <input type="hidden" name="template" value="[% template_id | html %]" />
                                 [% END %]
                                 <button type="submit" class="btn btn-primary">Run the report</button>
                             </fieldset>
