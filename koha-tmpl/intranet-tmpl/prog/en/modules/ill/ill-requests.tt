@@ -60,7 +60,11 @@
             [% ELSIF op == 'typedisclaimer' %]
                 <span>Request type disclaimer</span>
             [% ELSIF op == 'confirmautoill' %]
-                <span>Confirm request</span>
+                [% IF(auto_migrate) %]
+                    <span>Confirm switch provider</span>
+                [% ELSE %]
+                    <span>Confirm request</span>
+                [% END %]
             [% END %]
         [% END %]
     [% END #/ WRAPPER breadcrumbs %]
@@ -870,7 +874,11 @@
                 </div>
             [% ELSIF op == 'confirmautoill' %]
                 <!-- confirmautoill -->
-                <h1>Confirm request</h1>
+                [% IF(auto_migrate) %]
+                    <h1>Confirm switch provider</h1>
+                [% ELSE %]
+                    <h1>Confirm request</h1>
+                [% END %]
                 <div id="results" class="page-section">
                     <form method="post" id="confirmautoill-goback-form">
                         [% INCLUDE 'csrf-token.inc' %]
