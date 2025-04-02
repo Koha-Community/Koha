@@ -14,6 +14,14 @@
             }
 
             navigator.clipboard.writeText(value);
+
+            target.title = __("Copied to clipboard");
+            const tooltip = bootstrap.Tooltip.getOrCreateInstance(target);
+            tooltip.show();
+            setTimeout(() => {
+                tooltip.dispose();
+                target.title = "";
+            }, 3000);
         };
 
         copyToClipboardButtons.forEach(copyToClipboardButton => {
