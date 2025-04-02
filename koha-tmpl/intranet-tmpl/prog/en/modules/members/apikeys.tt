@@ -48,10 +48,12 @@
                 <li>
                     <span class="label">Client ID: </span>
                     [% fresh_api_key.client_id | html %]
+                    [% INCLUDE 'copy-to-clipboard-button.inc' copy_to_clipboard_value = fresh_api_key.client_id %]
                 </li>
                 <li>
                     <span class="label">Secret: </span>
                     [% fresh_api_key.plain_text_secret | html %]
+                    [% INCLUDE 'copy-to-clipboard-button.inc' copy_to_clipboard_value = fresh_api_key.plain_text_secret %]
                 </li>
             </ol>
         </div>
@@ -137,6 +139,7 @@
 [% MACRO jsinclude BLOCK %]
     [% INCLUDE 'str/members-menu.inc' %]
     [% Asset.js("js/members-menu.js") | $raw %]
+    [% Asset.js("js/copyToClipboard.js") | $raw %]
     <script>
         $(document).ready(function () {
             $(".delete").on("click", function (e) {
