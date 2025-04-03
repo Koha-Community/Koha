@@ -158,6 +158,19 @@ sub available_backends {
     return \@all_uniq_backends;
 }
 
+=head3 installed_backends
+
+    my $installed_backends = $config->installed_backends();
+
+Returns a list of installed backends.
+
+=cut
+
+sub installed_backends {
+    my ($self) = @_;
+    return [ grep { !/Standard/ } @{ $self->available_backends } ];
+}
+
 =head3 has_branch
 
 Return whether a 'branch' block is defined

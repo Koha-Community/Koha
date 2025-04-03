@@ -22,7 +22,6 @@ use Modern::Perl;
 use base qw(Koha::ILL::Request::Workflow);
 
 use JSON qw( encode_json );
-use Koha::ILL::Backends;
 
 =head1 NAME
 

@@ -29,7 +29,7 @@ use C4::Output      qw( output_html_with_http_headers output_and_exit_if_error )
 use C4::Templates;
 use Koha::Acquisition::Currencies;
 use Koha::Database::Columns;
-use Koha::ILL::Backends;
+use Koha::ILL::Request::Config;
 use IO::File;
 use YAML::XS;
 use Encode;
@@ -85,7 +85,7 @@ sub _get_chunk {
         my @priority_enabled_backends = split ",", C4::Context->preference('AutoILLBackendPriority');
         my @sys_pref_backends         = map( { name => $_, enabled => 1 }, @priority_enabled_backends );
 
-        my $installed_backends = Koha::ILL::Backends->installed_backends;
+        my $installed_backends = Koha::ILL::Request::Config->new->installed_backends;
         foreach my $installed_backend ( @{$installed_backends} ) {
             if ( not grep { $installed_backend eq $_->{name} } @sys_pref_backends ) {
                 my $backend = Koha::ILL::Request->new->load_backend($installed_backend);
