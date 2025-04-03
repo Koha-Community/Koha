@@ -918,7 +918,7 @@ tables:
           lang: default
           content:
             - "[%- USE Price -%]"
-            - "The following [% IF overdues > 1 %]items are[% ELSE %]item is[% END %] currently overdue:"
+            - "The following [% IF overdues.count() > 1 %]items are[% ELSE %]item is[% END %] currently overdue:"
             - ""
             - "[% FOREACH odue IN overdues %]"
             - "[% odue.item.biblio.title %]"
