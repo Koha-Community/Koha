@@ -241,7 +241,7 @@ sub _create_basket_for_file {
 
     my $basketno = NewBasket(
         $vendor_id, 0, $basketname, q{},
-        q{}, q{}, q{}, q{}, 0, 'ordering'
+        q{}, q{}, q{}, q{}, 0, undef
     );
 
     return $basketno;
