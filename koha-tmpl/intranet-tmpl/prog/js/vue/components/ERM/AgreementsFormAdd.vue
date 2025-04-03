@@ -290,13 +290,6 @@ export default {
                 errors.push(this.$__("Only one controlling license is allowed"))
             }
 
-            if (
-                agreement_licenses.filter(al => al.status == "controlling")
-                    .length > 1
-            ) {
-                errors.push(this.$__("Only one controlling license is allowed"))
-            }
-
             let documents_with_uploaded_files = agreement.documents.filter(
                 doc => typeof doc.file_content !== "undefined"
             )
