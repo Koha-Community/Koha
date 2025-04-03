@@ -30,6 +30,7 @@ use Koha::CirculationRules;
 use Koha::Patron::Categories;
 use Koha::Caches;
 use Koha::Patrons;
+use Koha::Plugins;
 
 my $input = CGI->new;
 my $dbh   = C4::Context->dbh;
@@ -789,6 +790,18 @@ my $rules = {};
 while ( my $r = $all_rules->next ) {
     $r = $r->unblessed;
     $rules->{ $r->{categorycode} // q{} }->{ $r->{itemtype} // q{} }->{ $r->{rule_name} } = $r->{rule_value};
+}
+
+if ( C4::Context->config("enable_plugins") ) {
+    $template->param(
+        overwrite_calc_fine_plugins => [
+            Koha::Plugins->new->GetPlugins(
+                {
+                    method => 'overwrite_calc_fine',
+                }
+            )
+        ]
+    );
 }
 
 $template->param( show_branch_cat_rule_form => 1 );

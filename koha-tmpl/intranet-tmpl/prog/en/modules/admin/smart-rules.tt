@@ -50,6 +50,16 @@
         [% END %]
     </h1>
 
+    [% IF overwrite_calc_fine_plugins.size %]
+        <div class="alert alert-warning">
+            The standard fine calculation is overwritten by the following plugin(s):
+            [% FOREACH plugin IN overwrite_calc_fine_plugins %]
+                [%- ", " | html IF !loop.first -%]
+                [%- plugin.get_metadata.name | html -%]
+            [%- END -%]
+        </div>
+    [% END %]
+
     <div class="page-section bg-info">
         <p>The rules are applied from most specific to less specific, using the first found in this order:</p>
         <ul>
