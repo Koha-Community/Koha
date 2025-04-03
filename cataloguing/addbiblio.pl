@@ -644,6 +644,7 @@ if ($hostbiblionumber) {
 if ($parentbiblio) {
     my $marcflavour = C4::Context->preference('marcflavour');
     $record = MARC::Record->new();
+    $record->leader('     naa a22      i 4500');
     SetMarcUnicodeFlag( $record, $marcflavour );
     my $parent    = Koha::Biblios->find($parentbiblio);
     my $hostfield = $parent->generate_marc_host_field;
