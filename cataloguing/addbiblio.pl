@@ -509,6 +509,7 @@ my $fa_duedatespec        = $input->param('duedatespec');
 $op            = $input->param('op') // q{};
 $frameworkcode = &GetFrameworkCode($biblionumber)
     if ( $biblionumber and not( defined $frameworkcode ) and $op ne 'cud-addbiblio' );
+$frameworkcode //= '';
 
 my $userflags =
     $frameworkcode eq 'FA'
