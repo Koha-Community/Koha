@@ -161,7 +161,7 @@ sub create_input {
     }
 
     $subfield_data{visibility} = "display:none;"
-        if ( $tagslib->{$tag}->{$subfield}->{hidden} and $value ne ''
+        if ( $tagslib->{$tag}->{$subfield}->{hidden} and $value eq ''
         or ( $value eq '' and !$tagslib->{$tag}->{$subfield}->{mandatory} ) );
 
     # it's an authorised field
@@ -381,7 +381,7 @@ sub build_tabs {
                             $subfield = '@';
                         }
                         next if ( $tagslib->{$tag}->{$subfield}->{tab} ne $tabloop );
-                        next if $tagslib->{$tag}->{$subfield}->{hidden} && $subfield ne '9';
+                        next if $tagslib->{$tag}->{$subfield}->{hidden} && $subfield ne '9' && !$value;
                         push(
                             @subfields_data,
                             &create_input(
@@ -396,7 +396,10 @@ sub build_tabs {
                             my $value    = $subfields[$subfieldcount][1];
                             next if ( length $subfield != 1 );
                             next if ( $tagslib->{$tag}->{$subfield}->{tab} ne $tabloop );
-                            next if $tagslib->{$tag}->{$subfield}->{hidden} && $subfield ne '9';
+                            next
+                                if $tagslib->{$tag}->{$subfield}->{hidden}
+                                && $subfield ne '9'
+                                && ( !$value || $tag eq '942' );
                             push(
                                 @subfields_data,
                                 &create_input(
