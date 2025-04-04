@@ -606,7 +606,6 @@
 
 [% MACRO jsinclude BLOCK %]
     [% INCLUDE 'datatables.inc' %]
-    [% Asset.js("js/form-submit.js") | $raw %]
     [% IF print %]
         <script>
             $( document ).ready(function() {

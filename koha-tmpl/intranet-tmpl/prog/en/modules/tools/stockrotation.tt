@@ -667,7 +667,6 @@
     [% INCLUDE 'columns_settings.inc' %]
     [% Asset.js( "lib/sortable/Sortable.min.js" ) | $raw %]
     [% Asset.js("js/pages/stockrotation.js") | $raw %]
-    [% Asset.js("js/form-submit.js") | $raw %]
     <script>
         var stock_rotation_items_table_settings = [% TablesSettings.GetTableSettings( 'tools', 'stockrotation', 'stock_rotation_manage_items', 'json' ) | $raw %];
         var stock_rotation_table_settings = [% TablesSettings.GetTableSettings( 'tools', 'stockrotation', 'stock_rotation', 'json' ) | $raw %];
