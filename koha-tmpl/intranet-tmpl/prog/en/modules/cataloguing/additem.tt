@@ -117,7 +117,7 @@
                         [% FOREACH item IN items %]
                             [% SET can_be_edited = ! ( Koha.Preference('IndependentBranches') && ! logged_in_user.is_superlibrarian && item.homebranch != Branches.GetLoggedInBranchname() ) %]
                             [% SET tr_class = '' %]
-                            [% IF item.itemnumber == itemnumber %]
+                            [% IF item.itemnumber == itemnumber AND op == 'cud-saveitem' %]
                                 [% UNLESS can_be_edited %]
                                     [% SET tr_class='active' %]
                                 [% ELSE %]
