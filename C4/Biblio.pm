@@ -2648,7 +2648,8 @@ sub _koha_modify_biblio {
                serial = ?,
                seriestitle = ?,
                copyrightdate = ?,
-               abstract = ?
+               abstract = ?,
+               timestamp = current_timestamp()
         WHERE  biblionumber = ?
         "
         ;
@@ -2716,7 +2717,8 @@ sub _koha_modify_biblioitem_nonmarc {
         cn_sort         = ?,
         totalissues     = ?,
         ean             = ?,
-        agerestriction  = ?
+        agerestriction  = ?,
+        timestamp       = current_timestamp()
         where biblioitemnumber = ?
         ";
     my $sth = $dbh->prepare($query);
