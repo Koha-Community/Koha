@@ -270,7 +270,7 @@
 	<fieldset class="rows">
         [% PROCESS subfields_for_item subfields => subfields %]
     </fieldset>
-    [% IF op != 'add_item' %]
+    [% IF op != 'cud-additem' %]
         <input type="hidden" name="itemnumber" value="[% itemnumber | html %]" />
     [% END %]
 
