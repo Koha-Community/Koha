@@ -50,7 +50,7 @@
                                     <th>Date of request</th>
                                     <th class="anti-the">Title</th>
                                     <th>Reason</th>
-                                    <th>On loan</th>
+                                    <th>Date due</th>
                                     <th>Home library</th>
                                     <th>Call number</th>
                                     <th class="no-sort">Actions</th>
@@ -67,7 +67,7 @@
                                                 <br />Barcode: [% transfer.item.barcode | html %]
                                             </td>
                                             <td><p>[% PROCESS transfer_reason transfer=transfer %]</p></td>
-                                            <td>[% IF transfer.item.onloan %]Due [% transfer.item.onloan | $KohaDates %][% ELSE %]On shelf[% END %]</td>
+                                            <td>[% IF transfer.item.onloan %]Due [% transfer.item.onloan | $KohaDates %][% ELSE %]Not checked out[% END %]</td>
                                             <td>[% Branches.GetName( transfer.item.homebranch ) | html %]</td>
                                             <td>[% transfer.item.itemcallnumber | html %]</td>
                                             <td class="actions">
