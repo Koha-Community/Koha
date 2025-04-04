@@ -103,7 +103,7 @@
 </script>
 [% Asset.js("js/global.js") | $raw %]
 <script type="module">
-    import { submit_form } from "/bootstrap/js/form-submit.js";
+    import { submit_form } from "/opac-tmpl/bootstrap/js/form-submit.js";
     $("body").on("click", ".submit-form-link", function (e) {
         e.preventDefault();
         submit_form(this);
