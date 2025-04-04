@@ -131,6 +131,7 @@ sub create_input {
         $month = sprintf( "%02d", $month );
         $day   = sprintf( "%02d", $day );
         $value =~ s/YYYY/$year/g;
+        $value =~ s/YY/substr($year,2)/eg;
         $value =~ s/MM/$month/g;
         $value =~ s/DD/$day/g;
     }
