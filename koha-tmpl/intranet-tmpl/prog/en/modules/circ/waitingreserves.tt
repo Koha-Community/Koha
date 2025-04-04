@@ -65,7 +65,7 @@
                             [% FOREACH cancel_result %]
                                 [% IF ( messagetransfert ) %]
                                     <div class="alert alert-info">
-                                        <h2>This item is on hold for pick-up at [% Branches.GetName( branchname ) | html %]</h2>
+                                        <h2>This item is on hold for pick-up at [% Branches.GetName( branchcode ) | html %]</h2>
                                         <p><strong>[% nextreservtitle | html %]</strong> is on hold for <strong> [% nextreservsurname | html %], [% nextreservfirstname | html %]</strong>.
                                         Please retain this item and check it in to process the hold.
                                         </p>
