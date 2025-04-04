@@ -319,12 +319,14 @@ if ($logfile) {
     print $loghandle "id;operation;status\n";
 }
 
-my $record_number = 0;
-my $logger        = Koha::Logger->get;
-my $schema        = Koha::Database->schema;
-my $marc_records  = [];
-my $lint          = MARC::Lint->new;
-RECORD: while () {
+my $record_number     = 0;
+my $records_exhausted = 0;
+my $logger            = Koha::Logger->get;
+my $schema            = Koha::Database->schema;
+my $lint              = MARC::Lint->new;
+
+while () {
+
     my $record;
     $record_number++;
 
@@ -342,6 +344,7 @@ RECORD: while () {
         next;
     }
     if ($record) {
+        $record_number++;
 
         if ($skip_bad_records) {
             my $xml = $record->as_xml_record();
@@ -371,366 +374,362 @@ RECORD: while () {
         }
         SetUTF8Flag($record);
         &$localcust($record) if $localcust;
-        push @{$marc_records}, $record;
-    } else {
-        last;
-    }
-}
 
-$record_number = 0;
-my $records_total = @{$marc_records};
-$schema->txn_begin;
-RECORD: foreach my $record ( @{$marc_records} ) {
-    $record_number++;
-    if ( ( $verbose // 1 ) == 1 ) {    #no dot for verbose==2
-        print "." . ( $record_number % 100 == 0 ? "\n$record_number" : '' );
-    }
-
-    if ( $marc_mod_template_id > 0 ) {
-        print "Modifying MARC\n" if $verbose;
-        ModifyRecordWithTemplate( $marc_mod_template_id, $record );
-    }
-
-    my $isbn;
-
-    # remove trailing - in isbn (only for biblios, of course)
-    if ( $biblios && ( $cleanisbn || $isbn_check ) ) {
-        my $tag   = $marc_flavour eq 'UNIMARC' ? '010' : '020';
-        my $field = $record->field($tag);
-        $isbn = $field && $field->subfield('a');
-        if ( $isbn && $cleanisbn ) {
-            $isbn =~ s/-//g;
-            $field->update( 'a' => $isbn );
-        }
-    }
-
-    # search for duplicates (based on Local-number)
-    my $originalid        = GetRecordId( $record, $tagid, $subfieldid );
-    my $matched_record_id = undef;
-    if ($match) {
-        require C4::Search;
-        my $server = ( $authorities ? 'authorityserver' : 'biblioserver' );
-        my $query  = build_query( $match, $record );
-        $logger->debug("Bulkmarcimport: $query");
-        my ( $error, $results, $totalhits ) = $searcher->simple_search_compat( $query, 0, 3, [$server] );
-
-        # changed to warn so able to continue with one broken record
-        if ( defined $error ) {
-            warn "unable to search the database for duplicates : $error";
-            printlog( { id => $originalid, op => "match", status => "ERROR" } ) if ($logfile);
-            next RECORD;
-        }
-        $logger->debug("Bulkmarcimport: $query $server : $totalhits");
-
-        # sub SimpleSearch could return undefined, but only on error, so
-        # should not really need to safeguard here, but do so anyway
-        $results //= [];
-        if ( @{$results} == 1 ) {
-            my $matched_record = C4::Search::new_record_from_zebra( $server, $results->[0] );
-            SetUTF8Flag($matched_record);
-            $matched_record_id = GetRecordId( $matched_record, $tagid, $subfieldid );
-
-            if ( $authorities && $marc_flavour ) {
-
-                #Skip if authority in database is the same or newer than the incoming record
-                if ( RecordRevisionIsGtOrEq( $matched_record, $record ) ) {
-                    if ($yamlfile) {
-                        $yamlhash->{$originalid} = YAMLFileEntry(
-                            $matched_record,
-                            $matched_record_id,
-                            0
-                        );
-                    }
-                    next;
-                }
-            }
-        } elsif ( @{$results} > 1 ) {
-            $logger->debug("More than one match for: $query");
-            next;
-        } else {
-            $logger->debug("No match for: $query");
+        if ( ( $verbose // 1 ) == 1 ) {    #no dot for verbose==2
+            print "." . ( $record_number % 100 == 0 ? "\n$record_number" : '' );
         }
 
-        if ( $keepids && $originalid ) {
-            my $storeidfield;
-            if ( length($keepids) == 3 ) {
-                $storeidfield = MARC::Field->new( $keepids, $originalid );
-            } else {
-                $storeidfield =
-                    MARC::Field->new( substr( $keepids, 0, 3 ), "", "", substr( $keepids, 3, 1 ), $originalid );
-            }
-            $record->insert_fields_ordered($storeidfield);
-            $record->delete_field( $record->field($tagid) );
+        if ( $marc_mod_template_id > 0 ) {
+            print "Modifying MARC\n" if $verbose;
+            ModifyRecordWithTemplate( $marc_mod_template_id, $record );
         }
-    }
 
-    foreach my $stringfilter (@$filters) {
-        if ( length($stringfilter) == 3 ) {
-            foreach my $field ( $record->field($stringfilter) ) {
-                $record->delete_field($field);
-                $logger->debug( "Removed: ", $field->as_string );
-            }
-        } elsif ( $stringfilter =~ /([0-9]{3})([a-z0-9])(.*)/ ) {
-            my $removetag      = $1;
-            my $removesubfield = $2;
-            my $removematch    = $3;
-            if ( ( $removetag > "010" ) && $removesubfield ) {
-                foreach my $field ( $record->field($removetag) ) {
-                    $field->delete_subfield( code => "$removesubfield", match => $removematch );
-                    $logger->debug( "Potentially removed: ", $field->subfield($removesubfield) );
-                }
+        my $isbn;
+
+        # remove trailing - in isbn (only for biblios, of course)
+        if ( $biblios && ( $cleanisbn || $isbn_check ) ) {
+            my $tag   = $marc_flavour eq 'UNIMARC' ? '010' : '020';
+            my $field = $record->field($tag);
+            $isbn = $field && $field->subfield('a');
+            if ( $isbn && $cleanisbn ) {
+                $isbn =~ s/-//g;
+                $field->update( 'a' => $isbn );
             }
         }
-    }
-    unless ($test_parameter) {
-        if ($authorities) {
-            my $authtypecode = GuessAuthTypeCode( $record, $heading_fields );
-            my $authid;
 
-            if ($matched_record_id) {
-                if ($update) {
-                    ## Authority has an id and is in database: update
-                    eval {
-                        ($authid) = ModAuthority(
-                            $matched_record_id, $record, $authtypecode,
-                            $mod_authority_options,
-                        );
-                    };
-                    if ($@) {
-                        warn "ERROR: Update authority $matched_record_id failed: $@\n";
-                        printlog( { id => $matched_record_id, op => "update", status => "ERROR" } ) if ($logfile);
-                        next RECORD;
-                    } else {
-                        printlog( { id => $authid, op => "update", status => "ok" } ) if ($logfile);
-                    }
-                } elsif ($logfile) {
-                    warn "WARNING: Update authority $originalid skipped";
-                    printlog(
-                        {
-                            id     => $matched_record_id,
-                            op     => "update",
-                            status =>
-                                "warning: authority already in database and option -update not enabled, skipping..."
+        # search for duplicates (based on Local-number)
+        my $originalid        = GetRecordId( $record, $tagid, $subfieldid );
+        my $matched_record_id = undef;
+        if ($match) {
+            require C4::Search;
+            my $server = ( $authorities ? 'authorityserver' : 'biblioserver' );
+            my $query  = build_query( $match, $record );
+            $logger->debug("Bulkmarcimport: $query");
+            my ( $error, $results, $totalhits ) = $searcher->simple_search_compat( $query, 0, 3, [$server] );
+
+            # changed to warn so able to continue with one broken record
+            if ( defined $error ) {
+                warn "unable to search the database for duplicates : $error";
+                printlog( { id => $originalid, op => "match", status => "ERROR" } ) if ($logfile);
+                next RECORD;
+            }
+            $logger->debug("Bulkmarcimport: $query $server : $totalhits");
+
+            # sub SimpleSearch could return undefined, but only on error, so
+            # should not really need to safeguard here, but do so anyway
+            $results //= [];
+            if ( @{$results} == 1 ) {
+                my $matched_record = C4::Search::new_record_from_zebra( $server, $results->[0] );
+                SetUTF8Flag($matched_record);
+                $matched_record_id = GetRecordId( $matched_record, $tagid, $subfieldid );
+
+                if ( $authorities && $marc_flavour ) {
+
+                    #Skip if authority in database is the same or newer than the incoming record
+                    if ( RecordRevisionIsGtOrEq( $matched_record, $record ) ) {
+                        if ($yamlfile) {
+                            $yamlhash->{$originalid} = YAMLFileEntry(
+                                $matched_record,
+                                $matched_record_id,
+                                0
+                            );
                         }
-                    );
+                        next;
+                    }
                 }
-            } elsif ($insert) {
-                ## An authid is defined but no authority in database: insert
-                eval { ($authid) = AddAuthority( $record, undef, $authtypecode, $add_authority_options ); };
-                if ($@) {
-                    warn "ERROR: Insert authority $originalid failed: $@\n";
-                    printlog( { id => $originalid, op => "insert", status => "ERROR" } ) if ($logfile);
-                    next RECORD;
-                } else {
-                    printlog( { id => $authid, op => "insert", status => "ok" } ) if ($logfile);
-                }
+            } elsif ( @{$results} > 1 ) {
+                $logger->debug("More than one match for: $query");
+                next;
             } else {
-                warn "WARNING: Insert authority $originalid skipped";
-                printlog(
-                    {
-                        id     => $originalid, op => "insert",
-                        status => "warning : authority not in database and option -insert not enabled, skipping..."
-                    }
-                ) if ($logfile);
+                $logger->debug("No match for: $query");
             }
 
-            if ($yamlfile) {
-                $yamlhash->{$originalid} = YAMLFileEntry(
-                    $record,
-                    $authid,
-                    1    #@FIXME: Really always updated?
-                );
-            }
-            push @search_engine_record_ids, $authid;
-            push @search_engine_records,    $record;
-        } else {
-            my ( $biblioitemnumber, $itemnumbers_ref, $errors_ref, $record_id );
-
-            # check for duplicate, based on ISBN (skip it if we already have found a duplicate with match parameter
-            if ( !$matched_record_id && $isbn_check && $isbn ) {
-                $sth_isbn->execute($isbn);
-                ( $matched_record_id, $biblioitemnumber ) = $sth_isbn->fetchrow;
-            }
-
-            if ( defined $idmapfl && $matched_record_id ) {
-                if ( $sourcetag < "010" ) {
-                    if ( $record->field($sourcetag) ) {
-                        my $source = $record->field($sourcetag)->data();
-                        printf( $idmapfh "%s|%s\n", $source, $matched_record_id );
-                    }
+            if ( $keepids && $originalid ) {
+                my $storeidfield;
+                if ( length($keepids) == 3 ) {
+                    $storeidfield = MARC::Field->new( $keepids, $originalid );
                 } else {
-                    my $source = $record->subfield( $sourcetag, $sourcesubfield );
-                    printf( $idmapfh "%s|%s\n", $source, $matched_record_id );
+                    $storeidfield =
+                        MARC::Field->new( substr( $keepids, 0, 3 ), "", "", substr( $keepids, 3, 1 ), $originalid );
+                }
+                $record->insert_fields_ordered($storeidfield);
+                $record->delete_field( $record->field($tagid) );
+            }
+        }
+
+        foreach my $stringfilter (@$filters) {
+            if ( length($stringfilter) == 3 ) {
+                foreach my $field ( $record->field($stringfilter) ) {
+                    $record->delete_field($field);
+                    $logger->debug( "Removed: ", $field->as_string );
+                }
+            } elsif ( $stringfilter =~ /([0-9]{3})([a-z0-9])(.*)/ ) {
+                my $removetag      = $1;
+                my $removesubfield = $2;
+                my $removematch    = $3;
+                if ( ( $removetag > "010" ) && $removesubfield ) {
+                    foreach my $field ( $record->field($removetag) ) {
+                        $field->delete_subfield( code => "$removesubfield", match => $removematch );
+                        $logger->debug( "Potentially removed: ", $field->subfield($removesubfield) );
+                    }
                 }
             }
+        }
+        unless ($test_parameter) {
+            $schema->txn_begin;
 
-            # Create biblio, unless we already have it (either match or ISBN)
-            if ($matched_record_id) {
-                eval { $biblioitemnumber = Koha::Biblios->find($matched_record_id)->biblioitem->biblioitemnumber; };
-                if ($update) {
-                    my $success;
-                    eval {
-                        $success = ModBiblio(
-                            $record, $matched_record_id, GetFrameworkCode($matched_record_id),
-                            $mod_biblio_options
+            if ($authorities) {
+                my $authtypecode = GuessAuthTypeCode( $record, $heading_fields );
+                my $authid;
+
+                if ($matched_record_id) {
+                    if ($update) {
+                        ## Authority has an id and is in database: update
+                        eval {
+                            ($authid) = ModAuthority(
+                                $matched_record_id, $record, $authtypecode,
+                                $mod_authority_options,
+                            );
+                        };
+                        if ($@) {
+                            warn "ERROR: Update authority $matched_record_id failed: $@\n";
+                            printlog( { id => $matched_record_id, op => "update", status => "ERROR" } ) if ($logfile);
+                            next RECORD;
+                        } else {
+                            printlog( { id => $authid, op => "update", status => "ok" } ) if ($logfile);
+                        }
+                    } elsif ($logfile) {
+                        warn "WARNING: Update authority $originalid skipped";
+                        printlog(
+                            {
+                                id     => $matched_record_id,
+                                op     => "update",
+                                status =>
+                                    "warning: authority already in database and option -update not enabled, skipping..."
+                            }
                         );
-                    };
+                    }
+                } elsif ($insert) {
+                    ## An authid is defined but no authority in database: insert
+                    eval { ($authid) = AddAuthority( $record, undef, $authtypecode, $add_authority_options ); };
                     if ($@) {
-                        warn "ERROR: Update biblio $matched_record_id failed: $@\n";
-                        printlog( { id => $matched_record_id, op => "update", status => "ERROR" } ) if ($logfile);
-                        next RECORD;
-                    } elsif ( !$success ) {
-                        warn "ERROR: Update biblio $matched_record_id failed for unknown reason";
-                        printlog( { id => $matched_record_id, op => "update", status => "ERROR" } ) if ($logfile);
+                        warn "ERROR: Insert authority $originalid failed: $@\n";
+                        printlog( { id => $originalid, op => "insert", status => "ERROR" } ) if ($logfile);
                         next RECORD;
                     } else {
-                        $record_id = $matched_record_id;
-                        printlog( { id => $record_id, op => "update", status => "ok" } ) if ($logfile);
+                        printlog( { id => $authid, op => "insert", status => "ok" } ) if ($logfile);
                     }
                 } else {
-                    warn "WARNING: Update biblio $originalid skipped";
+                    warn "WARNING: Insert authority $originalid skipped";
                     printlog(
                         {
-                            id     => $matched_record_id, op => "update",
-                            status => "warning : already in database and option -update not enabled, skipping..."
+                            id     => $originalid, op => "insert",
+                            status => "warning : authority not in database and option -insert not enabled, skipping..."
                         }
                     ) if ($logfile);
                 }
-            } elsif ($insert) {
-                my $record_clone = $record->clone();
-                C4::Biblio::_strip_item_fields($record_clone);
-                eval { ( $record_id, $biblioitemnumber ) = AddBiblio( $record_clone, $framework, $add_biblio_options ) };
-                if ($@) {
-                    warn "ERROR: Insert biblio $originalid failed: $@\n";
-                    printlog( { id => $originalid, op => "insert", status => "ERROR" } ) if ($logfile);
-                    next RECORD;
-                } else {
-                    printlog( { id => $originalid, op => "insert", status => "ok" } ) if ($logfile);
-                }
 
-                # If incoming record has bib ids set we need to transfer
-                # new ids from record_clone to incoming record to avoid
-                # working on wrong record (the original record) later on
-                # when adding items for example
-                C4::Biblio::_koha_marc_update_bib_ids( $record, $framework, $record_id, $biblioitemnumber );
+                if ($yamlfile) {
+                    $yamlhash->{$originalid} = YAMLFileEntry(
+                        $record,
+                        $authid,
+                        1    #@FIXME: Really always updated?
+                    );
+                }
+                push @search_engine_record_ids, $authid;
+                push @search_engine_records,    $record;
             } else {
-                warn "WARNING: Insert biblio $originalid skipped";
-                printlog(
-                    {
-                        id     => $originalid, op => "insert",
-                        status => "warning : biblio not in database and option -insert not enabled, skipping..."
-                    }
-                ) if ($logfile);
-                next RECORD;
-            }
-            my $record_has_added_items = 0;
-            if ($record_id) {
-                $yamlhash->{$originalid} = $record_id if $yamlfile;
-                eval {
-                    ( $itemnumbers_ref, $errors_ref ) =
-                        AddItemBatchFromMarc( $record, $record_id, $biblioitemnumber, $framework );
-                };
-                my $error_adding = $@;
+                my ( $biblioitemnumber, $itemnumbers_ref, $errors_ref, $record_id );
 
-                if ($error_adding) {
-                    warn "ERROR: Adding items to bib $record_id failed: $error_adding";
-                    printlog( { id => $record_id, op => "insert items", status => "ERROR" } ) if ($logfile);
-
-                    # if we failed because of an exception, assume that
-                    # the MARC columns in biblioitems were not set.
-                    next RECORD;
+                # check for duplicate, based on ISBN (skip it if we already have found a duplicate with match parameter
+                if ( !$matched_record_id && $isbn_check && $isbn ) {
+                    $sth_isbn->execute($isbn);
+                    ( $matched_record_id, $biblioitemnumber ) = $sth_isbn->fetchrow;
                 }
 
-                $record_has_added_items = @{$itemnumbers_ref};
-
-                if ( $dedup_barcode && grep { exists $_->{error_code} && $_->{error_code} eq 'duplicate_barcode' }
-                    @$errors_ref )
-                {
-                    # Find the record called 'barcode'
-                    my ( $tag, $sub ) = C4::Biblio::GetMarcFromKohaField('items.barcode');
-
-                    # Now remove any items that didn't have a duplicate_barcode error,
-                    # erase the barcodes on items that did, and re-add those items.
-                    my %dupes;
-                    foreach my $i ( 0 .. $#{$errors_ref} ) {
-                        my $ref = $errors_ref->[$i];
-                        if ( $ref && ( $ref->{error_code} eq 'duplicate_barcode' ) ) {
-                            $dupes{ $ref->{item_sequence} } = 1;
-
-                            # Delete the error message because we're going to
-                            # retry this one.
-                            delete $errors_ref->[$i];
+                if ( defined $idmapfl && $matched_record_id ) {
+                    if ( $sourcetag < "010" ) {
+                        if ( $record->field($sourcetag) ) {
+                            my $source = $record->field($sourcetag)->data();
+                            printf( $idmapfh "%s|%s\n", $source, $matched_record_id );
                         }
+                    } else {
+                        my $source = $record->subfield( $sourcetag, $sourcesubfield );
+                        printf( $idmapfh "%s|%s\n", $source, $matched_record_id );
                     }
-                    my $seq = 0;
-                    foreach my $field ( $record->field($tag) ) {
-                        $seq++;
-                        if ( $dupes{$seq} ) {
+                }
 
-                            # Here we remove the barcode
-                            $field->delete_subfield( code => $sub );
+                # Create biblio, unless we already have it (either match or ISBN)
+                if ($matched_record_id) {
+                    eval { $biblioitemnumber = Koha::Biblios->find($matched_record_id)->biblioitem->biblioitemnumber; };
+                    if ($update) {
+                        my $success;
+                        eval {
+                            $success = ModBiblio(
+                                $record, $matched_record_id, GetFrameworkCode($matched_record_id),
+                                $mod_biblio_options
+                            );
+                        };
+                        if ($@) {
+                            warn "ERROR: Update biblio $matched_record_id failed: $@\n";
+                            printlog( { id => $matched_record_id, op => "update", status => "ERROR" } ) if ($logfile);
+                            next RECORD;
+                        } elsif ( !$success ) {
+                            warn "ERROR: Update biblio $matched_record_id failed for unknown reason";
+                            printlog( { id => $matched_record_id, op => "update", status => "ERROR" } ) if ($logfile);
+                            next RECORD;
                         } else {
-
-                            # otherwise we delete the field because we don't want
-                            # two of them
-                            $record->delete_fields($field);
+                            $record_id = $matched_record_id;
+                            printlog( { id => $record_id, op => "update", status => "ok" } ) if ($logfile);
                         }
+                    } else {
+                        warn "WARNING: Update biblio $originalid skipped";
+                        printlog(
+                            {
+                                id     => $matched_record_id, op => "update",
+                                status => "warning : already in database and option -update not enabled, skipping..."
+                            }
+                        ) if ($logfile);
                     }
-
-                    # Now re-add the record as before, adding errors to the prev list
-                    my $more_errors;
+                } elsif ($insert) {
+                    my $record_clone = $record->clone();
+                    C4::Biblio::_strip_item_fields($record_clone);
                     eval {
-                        ( $itemnumbers_ref, $more_errors ) =
-                            AddItemBatchFromMarc( $record, $record_id, $biblioitemnumber, '' );
+                        ( $record_id, $biblioitemnumber ) = AddBiblio( $record_clone, $framework, $add_biblio_options );
                     };
                     if ($@) {
-                        warn "ERROR: Adding items to bib $record_id failed: $@\n";
+                        warn "ERROR: Insert biblio $originalid failed: $@\n";
+                        printlog( { id => $originalid, op => "insert", status => "ERROR" } ) if ($logfile);
+                        next RECORD;
+                    } else {
+                        printlog( { id => $originalid, op => "insert", status => "ok" } ) if ($logfile);
+                    }
+
+                    # If incoming record has bib ids set we need to transfer
+                    # new ids from record_clone to incoming record to avoid
+                    # working on wrong record (the original record) later on
+                    # when adding items for example
+                    C4::Biblio::_koha_marc_update_bib_ids( $record, $framework, $record_id, $biblioitemnumber );
+                } else {
+                    warn "WARNING: Insert biblio $originalid skipped";
+                    printlog(
+                        {
+                            id     => $originalid, op => "insert",
+                            status => "warning : biblio not in database and option -insert not enabled, skipping..."
+                        }
+                    ) if ($logfile);
+                    next RECORD;
+                }
+                my $record_has_added_items = 0;
+                if ($record_id) {
+                    $yamlhash->{$originalid} = $record_id if $yamlfile;
+                    eval {
+                        ( $itemnumbers_ref, $errors_ref ) =
+                            AddItemBatchFromMarc( $record, $record_id, $biblioitemnumber, $framework );
+                    };
+                    my $error_adding = $@;
+
+                    if ($error_adding) {
+                        warn "ERROR: Adding items to bib $record_id failed: $error_adding";
                         printlog( { id => $record_id, op => "insert items", status => "ERROR" } ) if ($logfile);
 
                         # if we failed because of an exception, assume that
                         # the MARC columns in biblioitems were not set.
                         next RECORD;
                     }
-                    $record_has_added_items ||= @{$itemnumbers_ref};
-                    if ( @{$more_errors} ) {
-                        push @$errors_ref, @{$more_errors};
+
+                    $record_has_added_items = @{$itemnumbers_ref};
+
+                    if ( $dedup_barcode && grep { exists $_->{error_code} && $_->{error_code} eq 'duplicate_barcode' }
+                        @$errors_ref )
+                    {
+                        # Find the record called 'barcode'
+                        my ( $tag, $sub ) = C4::Biblio::GetMarcFromKohaField('items.barcode');
+
+                        # Now remove any items that didn't have a duplicate_barcode error,
+                        # erase the barcodes on items that did, and re-add those items.
+                        my %dupes;
+                        foreach my $i ( 0 .. $#{$errors_ref} ) {
+                            my $ref = $errors_ref->[$i];
+                            if ( $ref && ( $ref->{error_code} eq 'duplicate_barcode' ) ) {
+                                $dupes{ $ref->{item_sequence} } = 1;
+
+                                # Delete the error message because we're going to
+                                # retry this one.
+                                delete $errors_ref->[$i];
+                            }
+                        }
+                        my $seq = 0;
+                        foreach my $field ( $record->field($tag) ) {
+                            $seq++;
+                            if ( $dupes{$seq} ) {
+
+                                # Here we remove the barcode
+                                $field->delete_subfield( code => $sub );
+                            } else {
+
+                                # otherwise we delete the field because we don't want
+                                # two of them
+                                $record->delete_fields($field);
+                            }
+                        }
+
+                        # Now re-add the record as before, adding errors to the prev list
+                        my $more_errors;
+                        eval {
+                            ( $itemnumbers_ref, $more_errors ) =
+                                AddItemBatchFromMarc( $record, $record_id, $biblioitemnumber, '' );
+                        };
+                        if ($@) {
+                            warn "ERROR: Adding items to bib $record_id failed: $@\n";
+                            printlog( { id => $record_id, op => "insert items", status => "ERROR" } ) if ($logfile);
+
+                            # if we failed because of an exception, assume that
+                            # the MARC columns in biblioitems were not set.
+                            next RECORD;
+                        }
+                        $record_has_added_items ||= @{$itemnumbers_ref};
+                        if ( @{$more_errors} ) {
+                            push @$errors_ref, @{$more_errors};
+                        }
                     }
+
+                    if ($record_has_added_items) {
+                        printlog( { id => $record_id, op => "insert items", status => "ok" } ) if ($logfile);
+                    }
+
+                    if ( @{$errors_ref} ) {
+                        report_item_errors( $record_id, $errors_ref );
+                    }
+
+                    my $biblio = Koha::Biblios->find($record_id);
+                    $record = $biblio->metadata_record( { embed_items => 1 } );
+
+                    push @search_engine_record_ids, $record_id;
+                    push @search_engine_records,    $record;
                 }
-
-                if ($record_has_added_items) {
-                    printlog( { id => $record_id, op => "insert items", status => "ok" } ) if ($logfile);
-                }
-
-                if ( @{$errors_ref} ) {
-                    report_item_errors( $record_id, $errors_ref );
-                }
-
-                my $biblio = Koha::Biblios->find($record_id);
-                $record = $biblio->metadata_record( { embed_items => 1 } );
-
-                push @search_engine_record_ids, $record_id;
-                push @search_engine_records,    $record;
             }
         }
-        if ( $record_number % $commitnum == 0 || $record_number == $number || $record_number == $records_total ) {
-            $schema->txn_commit;
-            $schema->txn_begin;
-            if ($indexer) {
-                $indexer->update_index( \@search_engine_record_ids, \@search_engine_records ) unless $skip_indexing;
-                if ( C4::Context->preference('AutoLinkBiblios') ) {
-                    foreach my $record (@search_engine_records) {
-                        BiblioAutoLink( $record, $framework );
-                    }
-                }
-                @search_engine_record_ids = ();
-                @search_engine_records    = ();
-            }
-        }
+        print $record->as_formatted() . "\n" if ( $verbose // 0 ) == 2;
+    } else {
+        $records_exhausted = 1;
     }
-    print $record->as_formatted() . "\n" if ( $verbose // 0 ) == 2;
-    last                                 if $record_number == $number;
+
+    if ( !$test_parameter && $record_number % $commitnum == 0 || $record_number == $number || $records_exhausted ) {
+        if ($indexer) {
+            $indexer->update_index( \@search_engine_record_ids, \@search_engine_records ) unless $skip_indexing;
+            if ( C4::Context->preference('AutoLinkBiblios') ) {
+                foreach my $record (@search_engine_records) {
+                    BiblioAutoLink( $record, $framework );
+                }
+            }
+            @search_engine_record_ids = ();
+            @search_engine_records    = ();
+        }
+        $schema->txn_commit;
+    }
+    last if $record_number == $number || $records_exhausted;
 }
-$schema->txn_commit;
 
 if ($fk_off) {
     $dbh->do("SET FOREIGN_KEY_CHECKS = 1");
