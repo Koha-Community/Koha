@@ -1,9 +1,6 @@
 import { defineStore } from "pinia";
-import {
-    loadAuthorisedValues,
-    get_lib_from_av_handler,
-    map_av_dt_filter_handler,
-} from "../composables/authorisedValues";
+
+import { withAuthorisedValueActions } from "../composables/authorisedValues";
 
 export const useERMStore = defineStore("erm", {
     state: () => ({
@@ -65,12 +62,6 @@ export const useERMStore = defineStore("erm", {
         },
     }),
     actions: {
-        loadAuthorisedValues,
-        get_lib_from_av(arr_name, av) {
-            return get_lib_from_av_handler(arr_name, av, this);
-        },
-        map_av_dt_filter(arr_name) {
-            return map_av_dt_filter_handler(arr_name, this);
-        },
+        ...withAuthorisedValueActions(this),
     },
 });

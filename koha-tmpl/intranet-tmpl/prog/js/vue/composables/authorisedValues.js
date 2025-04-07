@@ -1,6 +1,6 @@
 import { APIClient } from "../fetch/api-client.js";
 
-export const get_lib_from_av_handler = (arr_name, av, store) => {
+const get_lib_from_av_handler = (arr_name, av, store) => {
     if (store.authorisedValues[arr_name] === undefined) {
         console.warn(
             "The authorised value category for '%s' is not defined.".format(
@@ -12,14 +12,17 @@ export const get_lib_from_av_handler = (arr_name, av, store) => {
     let o = store.authorisedValues[arr_name].find(e => e.value == av);
     return o ? o.description : av;
 };
-export const map_av_dt_filter_handler = (arr_name, store) => {
+const map_av_dt_filter_handler = (arr_name, store) => {
     return store.authorisedValues[arr_name].map(e => {
         e["_id"] = e["value"];
         e["_str"] = e["description"];
         return e;
     });
 };
-export const loadAuthorisedValues = async (authorisedValues, targetStore) => {
+const load_authorised_values_handler = async (
+    authorisedValues,
+    targetStore
+) => {
     const AVsToFetch = Object.keys(authorisedValues).reduce((acc, avKey) => {
         if (Array.isArray(authorisedValues[avKey])) return acc;
         acc[avKey] = authorisedValues[avKey];
@@ -48,3 +51,20 @@ export const loadAuthorisedValues = async (authorisedValues, targetStore) => {
 
     return Promise.all(promises);
 };
+
+export function withAuthorisedValueActions(store) {
+    return {
+        loadAuthorisedValues(authorisedValues, targetStore) {
+            return load_authorised_values_handler(
+                authorisedValues,
+                targetStore
+            );
+        },
+        get_lib_from_av(arr_name, av) {
+            return get_lib_from_av_handler(arr_name, av, store);
+        },
+        map_av_dt_filter(arr_name) {
+            return map_av_dt_filter_handler(arr_name, store);
+        },
+    };
+}
