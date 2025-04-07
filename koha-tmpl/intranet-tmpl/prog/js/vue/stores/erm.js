@@ -1,9 +1,9 @@
 import { defineStore } from "pinia";
-
+import { reactive, toRefs } from "vue";
 import { withAuthorisedValueActions } from "../composables/authorisedValues";
 
-export const useERMStore = defineStore("erm", {
-    state: () => ({
+export const useERMStore = defineStore("erm", () => {
+    const store = reactive({
         config: {
             settings: {
                 ERMModule: false,
@@ -60,8 +60,11 @@ export const useERMStore = defineStore("erm", {
                 { value: "related_to", description: __("related to") },
             ],
         },
-    }),
-    actions: {
-        ...withAuthorisedValueActions(this),
-    },
+    });
+    const sharedActions = withAuthorisedValueActions(store);
+
+    return {
+        ...toRefs(store),
+        ...sharedActions,
+    };
 });
