@@ -715,34 +715,40 @@
                     [% ELSIF op == 'list' %]
                         <h1>Lists</h1>
                         <div class="toptabs">
-                            <ul class="nav nav-tabs" id="list-tabs">
+                            <ul class="nav nav-tabs" id="list-tabs" role="tablist">
                                 [% IF Koha.Preference( 'opacuserlogin' ) == 1 %]
-                                    [% IF !public %]
-                                        <li id="privateshelves_tab" class="nav-item">
-                                            <a class="nav-link active" id="your_lists" href="/cgi-bin/koha/opac-shelves.pl?op=list&amp;public=0">Your lists</a>
-                                        </li>
-                                    [% ELSE %]
-                                        <li id="privateshelves_tab" class="nav-item">
-                                            <a class="nav-link" id="your_lists" href="/cgi-bin/koha/opac-shelves.pl?op=list&amp;public=0">Your lists</a>
-                                        </li>
-                                    [% END %]
-                                [% END %]
-                                [% IF public %]
-                                    <li id="publicshelves_tab" class="nav-item">
-                                        <a class="nav-link active" id="public_lists" href="/cgi-bin/koha/opac-shelves.pl?op=list&amp;public=1">Public lists</a>
+                                    <li id="privateshelves_tab" class="nav-item" role="presentation">
+                                        <a
+                                            class="[% !public ? 'nav-link active' : 'nav-link' %]"
+                                            id="your_lists"
+                                            href="/cgi-bin/koha/opac-shelves.pl?op=list&amp;public=0"
+                                            data-tabname="your_lists"
+                                            aria-controls="privateshelves"
+                                            role="tab"
+                                            aria-selected="[% !public ? 'true' : 'false' | html %]"
+                                            >Your lists</a
+                                        >
                                     </li>
-                                [% ELSE %]
-                                    <li id="publicshelves_tab" class="nav-item">
-                                        <a class="nav-link" id="public_lists" href="/cgi-bin/koha/opac-shelves.pl?op=list&amp;public=1">Public lists</a>
+                                    <li id="publicshelves_tab" class="nav-item" role="presentation">
+                                        <a
+                                            class="[% public ? 'nav-link active' : 'nav-link' %]"
+                                            id="public_lists"
+                                            href="/cgi-bin/koha/opac-shelves.pl?op=list&amp;public=1"
+                                            data-tabname="public_lists"
+                                            aria-controls="publicshelves"
+                                            role="tab"
+                                            aria-selected="[% public ? 'true' : 'false' | html %]"
+                                            >Public lists</a
+                                        >
                                     </li>
                                 [% END %]
                             </ul>
 
                             <div class="tab-content">
                                 [% IF !public %]
-                                    <div id="privateshelves" class="tab-pane active"> </div>
+                                    <div id="privateshelves" class="tab-pane active" role="tabpanel" aria-labelledby="your_lists"> </div>
                                 [% ELSE %]
-                                    <div id="publicshelves" class="tab-pane active"> </div>
+                                    <div id="publicshelves" class="tab-pane active" role="tabpanel" aria-labelledby="public_lists"> </div>
                                 [% END %]
 
                                 [% IF !public || Koha.Preference('OpacAllowPublicListCreation') %]
