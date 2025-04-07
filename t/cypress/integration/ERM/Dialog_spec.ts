@@ -83,7 +83,7 @@ describe("Dialog operations", () => {
         cy.intercept("GET", "/api/v1/erm/agreements*", []);
 
         cy.visit("/cgi-bin/koha/erm/eholdings/local/packages/add");
-        cy.get("#package_name").type(erm_package.name);
+        cy.get("#name").type(erm_package.name);
         cy.get("#package_type .vs__search").type(
             erm_package.package_type + "{enter}",
             { force: true }
@@ -105,7 +105,7 @@ describe("Dialog operations", () => {
         cy.get("main div[class='alert alert-info']").contains(
             "Package created"
         );
-        cy.get("#package_list_result").should("exist");
+        cy.get("#packages_list").should("exist");
         cy.get("main div[class='alert alert-info']").should("have.length", 1);
 
         cy.intercept("GET", "/api/v1/erm/eholdings/local/titles*", {

@@ -708,9 +708,11 @@ describe("Additional Fields operations", () => {
         // Pick one value
         cy.get("#additional_fields #additional_field_1 .vs__search").click();
         cy.get(
-            "#additional_fields #additional_field_1 #vs4__option-0"
+            "#additional_fields #additional_field_1 [id^='vs'][id$='_option-0']"
         ).contains(av_cats[0].authorised_values[0].description);
-        cy.get("#additional_fields #additional_field_1 #vs4__option-0").click();
+        cy.get(
+            "#additional_fields #additional_field_1 [id^='vs'][id$='_option-0']"
+        ).click();
         cy.get("#additional_fields #additional_field_1 .vs__selected").contains(
             av_cats[0].authorised_values[0].description
         );
@@ -722,9 +724,11 @@ describe("Additional Fields operations", () => {
         // Pick a second value for the same repeatable AV field
         cy.get("#additional_fields #additional_field_1 .vs__search").click();
         cy.get(
-            "#additional_fields #additional_field_1 #vs4__option-1"
+            "#additional_fields #additional_field_1 [id^='vs'][id$='_option-1']"
         ).contains(av_cats[0].authorised_values[1].description);
-        cy.get("#additional_fields #additional_field_1 #vs4__option-1").click();
+        cy.get(
+            "#additional_fields #additional_field_1 [id^='vs'][id$='_option-1']"
+        ).click();
         cy.get("#additional_fields #additional_field_1 .vs__selected").contains(
             av_cats[0].authorised_values[1].description
         );
@@ -736,9 +740,11 @@ describe("Additional Fields operations", () => {
         // Attempt to pick the same value again - should not be possible
         cy.get("#additional_fields #additional_field_1 .vs__search").click();
         cy.get(
-            "#additional_fields #additional_field_1 #vs4__option-1"
+            "#additional_fields #additional_field_1 [id^='vs'][id$='_option-1']"
         ).contains(av_cats[0].authorised_values[1].description);
-        cy.get("#additional_fields #additional_field_1 #vs4__option-1").click();
+        cy.get(
+            "#additional_fields #additional_field_1 [id^='vs'][id$='_option-1']"
+        ).click();
         cy.get("#additional_fields #additional_field_1 .vs__selected").should(
             "have.length",
             2
@@ -1101,9 +1107,11 @@ describe("Additional Fields operations", () => {
         // Pick one value
         cy.get("#additional_fields #additional_field_1 .vs__search").click();
         cy.get(
-            "#additional_fields #additional_field_1 #vs5__option-0"
+            "#additional_fields #additional_field_1 [id^='vs'][id$='_option-0']"
         ).contains(av_cats[0].authorised_values[0].description);
-        cy.get("#additional_fields #additional_field_1 #vs5__option-0").click();
+        cy.get(
+            "#additional_fields #additional_field_1 [id^='vs'][id$='_option-0']"
+        ).click();
         cy.get("#additional_fields #additional_field_1 .vs__selected").contains(
             av_cats[0].authorised_values[0].description
         );
@@ -1115,9 +1123,11 @@ describe("Additional Fields operations", () => {
         // Pick a second value for the same repeatable AV field
         cy.get("#additional_fields #additional_field_1 .vs__search").click();
         cy.get(
-            "#additional_fields #additional_field_1 #vs5__option-1"
+            "#additional_fields #additional_field_1 [id^='vs'][id$='_option-1']"
         ).contains(av_cats[0].authorised_values[1].description);
-        cy.get("#additional_fields #additional_field_1 #vs5__option-1").click();
+        cy.get(
+            "#additional_fields #additional_field_1 [id^='vs'][id$='_option-1']"
+        ).click();
         cy.get("#additional_fields #additional_field_1 .vs__selected").contains(
             av_cats[0].authorised_values[1].description
         );
@@ -1129,9 +1139,11 @@ describe("Additional Fields operations", () => {
         // Attempt to pick the same value again - should not be possible
         cy.get("#additional_fields #additional_field_1 .vs__search").click();
         cy.get(
-            "#additional_fields #additional_field_1 #vs5__option-1"
+            "#additional_fields #additional_field_1 [id^='vs'][id$='_option-1']"
         ).contains(av_cats[0].authorised_values[1].description);
-        cy.get("#additional_fields #additional_field_1 #vs5__option-1").click();
+        cy.get(
+            "#additional_fields #additional_field_1 [id^='vs'][id$='_option-1']"
+        ).click();
         cy.get("#additional_fields #additional_field_1 .vs__selected").should(
             "have.length",
             2
@@ -1507,9 +1519,11 @@ describe("Additional Fields operations", () => {
         // Pick one value
         cy.get("#additional_fields #additional_field_1 .vs__search").click();
         cy.get(
-            "#additional_fields #additional_field_1 #vs4__option-0"
+            "#additional_fields #additional_field_1 [id^='vs'][id$='_option-0']"
         ).contains(av_cats[0].authorised_values[0].description);
-        cy.get("#additional_fields #additional_field_1 #vs4__option-0").click();
+        cy.get(
+            "#additional_fields #additional_field_1 [id^='vs'][id$='_option-0']"
+        ).click();
         cy.get("#additional_fields #additional_field_1 .vs__selected").contains(
             av_cats[0].authorised_values[0].description
         );
@@ -1521,9 +1535,11 @@ describe("Additional Fields operations", () => {
         // Pick a second value for the same repeatable AV field
         cy.get("#additional_fields #additional_field_1 .vs__search").click();
         cy.get(
-            "#additional_fields #additional_field_1 #vs4__option-1"
+            "#additional_fields #additional_field_1 [id^='vs'][id$='_option-1']"
         ).contains(av_cats[0].authorised_values[1].description);
-        cy.get("#additional_fields #additional_field_1 #vs4__option-1").click();
+        cy.get(
+            "#additional_fields #additional_field_1 [id^='vs'][id$='_option-1']"
+        ).click();
         cy.get("#additional_fields #additional_field_1 .vs__selected").contains(
             av_cats[0].authorised_values[1].description
         );
@@ -1535,9 +1551,11 @@ describe("Additional Fields operations", () => {
         // Attempt to pick the same value again - should not be possible
         cy.get("#additional_fields #additional_field_1 .vs__search").click();
         cy.get(
-            "#additional_fields #additional_field_1 #vs4__option-1"
+            "#additional_fields #additional_field_1 [id^='vs'][id$='_option-1']"
         ).contains(av_cats[0].authorised_values[1].description);
-        cy.get("#additional_fields #additional_field_1 #vs4__option-1").click();
+        cy.get(
+            "#additional_fields #additional_field_1 [id^='vs'][id$='_option-1']"
+        ).click();
         cy.get("#additional_fields #additional_field_1 .vs__selected").should(
             "have.length",
             2

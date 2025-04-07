@@ -48,7 +48,7 @@ describe("Title CRUD operations", () => {
         cy.wait("@get-empty-packages");
         cy.get("h2").contains("Import from a list");
         cy.left_menu_active_item_is("Titles");
-        cy.get("#package_list .vs__selected").should("not.exist");
+        cy.get("#packages_list .vs__selected").should("not.exist");
 
         // Make sure packages are returned
         cy.intercept("GET", "/api/v1/erm/eholdings/local/packages*", {
@@ -93,7 +93,7 @@ describe("Title CRUD operations", () => {
             },
         });
         cy.visit("/cgi-bin/koha/erm/eholdings/local/titles");
-        cy.get("#title_list").contains("There are no titles defined");
+        cy.get("#titles_list").contains("There are no titles defined");
 
         // GET titles returns something
         let erm_title = cy.get_title();
@@ -108,7 +108,7 @@ describe("Title CRUD operations", () => {
             },
         });
         cy.visit("/cgi-bin/koha/erm/eholdings/local/titles");
-        cy.get("#title_list").contains("Showing 1 to 1 of 1 entries");
+        cy.get("#titles_list").contains("Showing 1 to 1 of 1 entries");
     });
 
     it("Add title", () => {
@@ -126,13 +126,13 @@ describe("Title CRUD operations", () => {
         // Click the button in the toolbar
         cy.visit("/cgi-bin/koha/erm/eholdings/local/titles");
         cy.contains("New title").click();
-        cy.get("#title_add h2").contains("New title");
+        cy.get("#titles_add h2").contains("New title");
         cy.left_menu_active_item_is("Titles");
 
         // Fill in the form for normal attributes
         let erm_title = cy.get_title();
 
-        cy.get("#title_add").contains("Submit").click();
+        cy.get("#titles_add").contains("Submit").click();
         cy.get("input:invalid,textarea:invalid,select:invalid").should(
             "have.length",
             1
@@ -188,7 +188,7 @@ describe("Title CRUD operations", () => {
             statusCode: 500,
             error: "Something went wrong",
         });
-        cy.get("#title_add").contains("Submit").click();
+        cy.get("#titles_add").contains("Submit").click();
         cy.get("main div[class='alert alert-warning']").contains(
             "Something went wrong: Error: Internal Server Error"
         );
@@ -198,7 +198,7 @@ describe("Title CRUD operations", () => {
             statusCode: 201,
             body: erm_title,
         });
-        cy.get("#title_add").contains("Submit").click();
+        cy.get("#titles_add").contains("Submit").click();
         cy.get("main div[class='alert alert-info']").contains("Title created");
 
         // Add new related package (resource)
@@ -243,9 +243,9 @@ describe("Title CRUD operations", () => {
             body: get_packages_to_relate(),
         }).as("get-related-packages");
 
-        cy.get("#title_list table tbody tr:first").contains("Edit").click();
+        cy.get("#titles_list table tbody tr:first").contains("Edit").click();
         cy.wait("@get-title");
-        cy.get("#title_add h2").contains("Edit title");
+        cy.get("#titles_add h2").contains("Edit title");
         cy.left_menu_active_item_is("Titles");
 
         // Form has been correctly filled in
@@ -334,7 +334,7 @@ describe("Title CRUD operations", () => {
         cy.intercept("PUT", "/api/v1/erm/eholdings/local/titles/*", {
             statusCode: 500,
         });
-        cy.get("#title_add").contains("Submit").click();
+        cy.get("#titles_add").contains("Submit").click();
         cy.get("main div[class='alert alert-warning']").contains(
             "Something went wrong: Error: Internal Server Error"
         );
@@ -344,11 +344,11 @@ describe("Title CRUD operations", () => {
             statusCode: 200,
             body: erm_title,
         });
-        cy.get("#title_add").contains("Submit").click();
+        cy.get("#titles_add").contains("Submit").click();
         cy.get("main div[class='alert alert-info']").contains("Title updated");
     });
 
-    it.only("Show title", () => {
+    it("Show title", () => {
         let erm_title = cy.get_title();
         let titles = [erm_title];
         // Click the "name" link from the list
@@ -377,18 +377,18 @@ describe("Title CRUD operations", () => {
         ).as("get-title");
         cy.visit("/cgi-bin/koha/erm/eholdings/local/titles");
         cy.wait("@get-titles");
-        let title_link = cy.get("#title_list table tbody tr:first td:first a");
+        let title_link = cy.get("#titles_list table tbody tr:first td:first a");
         title_link.should(
             "have.text",
             erm_title.publication_title + " (#" + erm_title.title_id + ")"
         );
-        cy.get("#title_list table tbody tr:first td:first a").click();
+        cy.get("#titles_list table tbody tr:first td:first a").click();
         cy.wait("@get-title");
-        cy.get("#title_show h2").contains("Title #" + erm_title.title_id);
+        cy.get("#titles_show h2").contains("Title #" + erm_title.title_id);
         cy.left_menu_active_item_is("Titles");
         // There are no packages, the table should not be displayed
         cy.contains("Packages");
-        cy.get("#table#package_list").should("not.exist");
+        cy.get("#table#packages_list").should("not.exist");
 
         // Test now with all values
         cy.intercept(
@@ -398,26 +398,44 @@ describe("Title CRUD operations", () => {
         ).as("get-title");
 
         let related_package = erm_title.resources[0];
-        // cy.get("#package_list tbody tr:first td a").contains("first package name").click();
-        cy.intercept(
-            "GET",
-            "/api/v1/erm/eholdings/local/resources*",
-            related_package
-        ).as("get-related-package");
+        // cy.get("#packages_list tbody tr:first td a").contains("first package name").click();
+
+        cy.intercept("GET", "/api/v1/erm/eholdings/local/packages*", {
+            body: [related_package],
+            headers: {
+                "X-Base-Total-Count": "1",
+                "X-Total-Count": "1",
+            },
+        });
+
+        cy.intercept("GET", "/api/v1/erm/eholdings/local/resources*", [
+            {
+                package_id: related_package.package_id,
+                resource_id: 1,
+                title_id: 1,
+                ...related_package,
+            },
+        ]).as("get-related-package");
         // List packages
         cy.visit("/cgi-bin/koha/erm/eholdings/local/titles/1");
         cy.wait("@get-related-package");
         cy.contains("Packages");
         cy.wait(500);
 
-        cy.get("#package_relationship_list table")
+        cy.intercept(
+            "GET",
+            "/api/v1/erm/eholdings/local/resources/" +
+                related_package.resource_id,
+            related_package
+        );
+        cy.get("#packages_relationship_list table")
             .contains("first package name")
             .click();
         cy.contains("Resource #" + related_package.resource_id);
         cy.contains(related_package.package.name);
     });
 
-    it("Delete title", () => {
+    it.only("Delete title", () => {
         let erm_title = cy.get_title();
         let titles = [erm_title];
 
@@ -433,10 +451,8 @@ describe("Title CRUD operations", () => {
         cy.intercept("GET", "/api/v1/erm/eholdings/local/titles/*", erm_title);
         cy.visit("/cgi-bin/koha/erm/eholdings/local/titles");
 
-        cy.get("#title_list table tbody tr:first").contains("Delete").click();
-        cy.get(".alert-warning.confirmation h1").contains(
-            "remove this local title"
-        );
+        cy.get("#titles_list table tbody tr:first").contains("Delete").click();
+        cy.get(".alert-warning.confirmation h1").contains("remove this title");
         cy.contains(erm_title.publication_title);
 
         // Accept the confirmation dialog, get 500
@@ -453,13 +469,11 @@ describe("Title CRUD operations", () => {
             statusCode: 204,
             body: null,
         });
-        cy.get("#title_list table tbody tr:first").contains("Delete").click();
-        cy.get(".alert-warning.confirmation h1").contains(
-            "remove this local title"
-        );
+        cy.get("#titles_list table tbody tr:first").contains("Delete").click();
+        cy.get(".alert-warning.confirmation h1").contains("remove this title");
         cy.contains("Yes, delete").click();
         cy.get("main div[class='alert alert-info']")
-            .contains("Local title")
+            .contains("title")
             .contains("deleted");
 
         // Delete from show
@@ -489,24 +503,20 @@ describe("Title CRUD operations", () => {
         ).as("get-title");
         cy.visit("/cgi-bin/koha/erm/eholdings/local/titles");
         cy.wait("@get-titles");
-        let title_link = cy.get("#title_list table tbody tr:first td:first a");
+        let title_link = cy.get("#titles_list table tbody tr:first td:first a");
         title_link.should(
             "have.text",
             erm_title.publication_title + " (#" + erm_title.title_id + ")"
         );
-        cy.get("#title_list table tbody tr:first td:first a").click();
+        cy.get("#titles_list table tbody tr:first td:first a").click();
         cy.wait("@get-title");
-        cy.get("#eholdings_title_show h2").contains(
-            "Title #" + erm_title.title_id
-        );
+        cy.get("#titles_show h2").contains("Title #" + erm_title.title_id);
 
-        cy.get("#eholdings_title_show #toolbar").contains("Delete").click();
-        cy.get(".alert-warning.confirmation h1").contains(
-            "remove this local title"
-        );
+        cy.get("#titles_show #toolbar").contains("Delete").click();
+        cy.get(".alert-warning.confirmation h1").contains("remove this title");
         cy.contains("Yes, delete").click();
 
         //Make sure we return to list after deleting from show
-        cy.get("#title_list table tbody tr:first");
+        cy.get("#titles_list table tbody tr:first");
     });
 });

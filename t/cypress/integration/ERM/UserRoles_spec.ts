@@ -84,6 +84,8 @@ describe("Add/search user", () => {
         cy.get("#patron_search_modal table").contains("bar, foo");
         cy.get("#patron_search_modal td").contains("Select").click();
 
-        cy.get("#user_roles li:first span.user").contains("foo bar");
+        cy.get("#user_roles_relationship li:first span.user").contains(
+            "foo bar"
+        );
     });
 });

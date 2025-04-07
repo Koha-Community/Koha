@@ -387,7 +387,7 @@ export default {
                             componentProps: {
                                 id: {
                                     type: "string",
-                                    value: "license_id_",
+                                    value: "license_id",
                                     indexRequired: true,
                                 },
                                 selectedData: {

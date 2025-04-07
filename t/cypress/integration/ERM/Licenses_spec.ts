@@ -34,7 +34,7 @@ describe("License CRUD operations", () => {
         // GET licenses returns empty list
         cy.intercept("GET", "/api/v1/erm/licenses*", []);
         cy.visit("/cgi-bin/koha/erm/licenses");
-        cy.get("#license_list").contains("There are no licenses defined");
+        cy.get("#licenses_list").contains("There are no licenses defined");
 
         // GET licenses returns something
         let license = cy.get_license();
@@ -50,7 +50,7 @@ describe("License CRUD operations", () => {
         });
         cy.intercept("GET", "/api/v1/erm/licenses/*", license);
         cy.visit("/cgi-bin/koha/erm/licenses");
-        cy.get("#license_list").contains("Showing 1 to 1 of 1 entries");
+        cy.get("#licenses_list").contains("Showing 1 to 1 of 1 entries");
     });
 
     it("Add license", () => {
@@ -64,18 +64,18 @@ describe("License CRUD operations", () => {
         // Click the button in the toolbar
         cy.visit("/cgi-bin/koha/erm/licenses");
         cy.contains("New license").click();
-        cy.get("#license_add h2").contains("New license");
+        cy.get("#licenses_add h2").contains("New license");
         cy.left_menu_active_item_is("Licenses");
 
         // Fill in the form for normal attributes
-        cy.get("#license_add").contains("Submit").click();
+        cy.get("#licenses_add").contains("Submit").click();
         cy.get("input:invalid,textarea:invalid,select:invalid").should(
             "have.length",
             4
         );
         cy.get("#name").type(license.name);
         cy.get("#description").type(license.description);
-        cy.get("#license_add").contains("Submit").click();
+        cy.get("#licenses_add").contains("Submit").click();
         cy.get("#type .vs__search").type(license.type + "{enter}", {
             force: true,
         });
@@ -131,7 +131,7 @@ describe("License CRUD operations", () => {
         cy.intercept("POST", "/api/v1/erm/licenses", {
             statusCode: 500,
         });
-        cy.get("#license_add").contains("Submit").click();
+        cy.get("#licenses_add").contains("Submit").click();
         cy.get("main div[class='alert alert-warning']").contains(
             "Something went wrong: Error: Internal Server Error"
         );
@@ -141,7 +141,7 @@ describe("License CRUD operations", () => {
             statusCode: 201,
             body: license,
         });
-        cy.get("#license_add").contains("Submit").click();
+        cy.get("#licenses_add").contains("Submit").click();
         cy.get("main div[class='alert alert-info']").contains(
             "License created"
         );
@@ -172,9 +172,9 @@ describe("License CRUD operations", () => {
         );
         cy.visit("/cgi-bin/koha/erm/licenses");
         cy.wait("@get-licenses");
-        cy.get("#license_list table tbody tr:first").contains("Edit").click();
+        cy.get("#licenses_list table tbody tr:first").contains("Edit").click();
         cy.wait("@get-license");
-        cy.get("#license_add h2").contains("Edit license");
+        cy.get("#licenses_add h2").contains("Edit license");
         cy.left_menu_active_item_is("Licenses");
 
         // Form has been correctly filled in
@@ -207,7 +207,7 @@ describe("License CRUD operations", () => {
         cy.intercept("PUT", "/api/v1/erm/licenses/*", {
             statusCode: 500,
         });
-        cy.get("#license_add").contains("Submit").click();
+        cy.get("#licenses_add").contains("Submit").click();
         cy.get("main div[class='alert alert-warning']").contains(
             "Something went wrong: Error: Internal Server Error"
         );
@@ -217,7 +217,7 @@ describe("License CRUD operations", () => {
             statusCode: 200,
             body: license,
         });
-        cy.get("#license_add").contains("Submit").click();
+        cy.get("#licenses_add").contains("Submit").click();
         cy.get("main div[class='alert alert-info']").contains(
             "License updated"
         );
@@ -240,17 +240,17 @@ describe("License CRUD operations", () => {
         );
         cy.visit("/cgi-bin/koha/erm/licenses");
         cy.wait("@get-licenses");
-        let id_cell = cy.get("#license_list table tbody tr:first td:first");
+        let id_cell = cy.get("#licenses_list table tbody tr:first td:first");
         id_cell.contains(license.license_id);
 
         let name_link = cy
-            .get("#license_list table tbody tr:first td")
+            .get("#licenses_list table tbody tr:first td")
             .eq(1)
             .find("a");
         name_link.should("have.text", license.name);
         name_link.click();
         cy.wait("@get-license");
-        cy.get("#license_show h2").contains("License #" + license.license_id);
+        cy.get("#licenses_show h2").contains("License #" + license.license_id);
         cy.left_menu_active_item_is("Licenses");
     });
 
@@ -270,7 +270,9 @@ describe("License CRUD operations", () => {
         cy.intercept("GET", "/api/v1/erm/licenses/*", license);
         cy.visit("/cgi-bin/koha/erm/licenses");
 
-        cy.get("#license_list table tbody tr:first").contains("Delete").click();
+        cy.get("#licenses_list table tbody tr:first")
+            .contains("Delete")
+            .click();
         cy.get(".alert-warning.confirmation h1").contains(
             "remove this license"
         );
@@ -290,7 +292,9 @@ describe("License CRUD operations", () => {
             statusCode: 204,
             body: null,
         });
-        cy.get("#license_list table tbody tr:first").contains("Delete").click();
+        cy.get("#licenses_list table tbody tr:first")
+            .contains("Delete")
+            .click();
         cy.get(".alert-warning.confirmation h1").contains(
             "remove this license"
         );
@@ -314,25 +318,25 @@ describe("License CRUD operations", () => {
         );
         cy.visit("/cgi-bin/koha/erm/licenses");
         cy.wait("@get-licenses");
-        let id_cell = cy.get("#license_list table tbody tr:first td:first");
+        let id_cell = cy.get("#licenses_list table tbody tr:first td:first");
         id_cell.contains(license.license_id);
 
         let name_link = cy
-            .get("#license_list table tbody tr:first td")
+            .get("#licenses_list table tbody tr:first td")
             .eq(1)
             .find("a");
         name_link.should("have.text", license.name);
         name_link.click();
         cy.wait("@get-license");
-        cy.get("#license_show h2").contains("License #" + license.license_id);
+        cy.get("#licenses_show h2").contains("License #" + license.license_id);
 
-        cy.get("#license_show #toolbar").contains("Delete").click();
+        cy.get("#licenses_show #toolbar").contains("Delete").click();
         cy.get(".alert-warning.confirmation h1").contains(
             "remove this license"
         );
         cy.contains("Yes, delete").click();
 
         //Make sure we return to list after deleting from show
-        cy.get("#license_list table tbody tr:first");
+        cy.get("#licenses_list table tbody tr:first");
     });
 });
