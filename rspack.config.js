@@ -6,14 +6,14 @@ const rspack = require("@rspack/core");
 module.exports = [
     {
         resolve: {
-        alias: {
-            "@fetch": path.resolve(
-                __dirname,
-                "koha-tmpl/intranet-tmpl/prog/js/fetch"
-            ),
+            alias: {
+                "@fetch": path.resolve(
+                    __dirname,
+                    "koha-tmpl/intranet-tmpl/prog/js/fetch"
+                ),
+            },
         },
-    },
-    experiments: {
+        experiments: {
             css: true,
         },
         entry: {
@@ -22,7 +22,6 @@ module.exports = [
                 "./koha-tmpl/intranet-tmpl/prog/js/vue/modules/preservation.ts",
             "admin/record_sources":
                 "./koha-tmpl/intranet-tmpl/prog/js/vue/modules/admin/record_sources.ts",
-            islands: "./koha-tmpl/intranet-tmpl/prog/js/vue/modules/islands.ts",
         },
         output: {
             filename: "[name].js",
