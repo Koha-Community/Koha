@@ -415,7 +415,11 @@
                                         <caption class="sr-only">Your purchase suggestions</caption>
                                         <thead>
                                             <tr>
-                                                [% IF ( loggedinusername ) %]<th>&nbsp;</th>[% END %]
+                                                [% IF ( loggedinusername ) %]
+                                                    <th>
+                                                        <i data-bs-toggle="tooltip" title="Check the boxes in this column to select purchase suggestions for deletion" data-bs-placement="right" class="fa fa-info-circle" tabindex="0"></i>
+                                                    </th>
+                                                [% END %]
                                                 <th class="all">Summary</th>
                                                 <th>Suggested on</th>
                                                 <th>Note</th>
