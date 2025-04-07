@@ -3,13 +3,26 @@
     <div v-else id="usage_data_providers_show">
         <Toolbar>
             <ToolbarButton
-                action="edit"
-                @go-to-edit-resource="goToResourceEdit"
+                :to="{
+                    name: 'UsageStatisticsDataProvidersFormAddEdit',
+                    params: {
+                        usage_data_provider_id:
+                            usage_data_provider.erm_usage_data_provider_id,
+                    },
+                }"
+                icon="pencil"
+                :title="$__('Edit')"
             />
-            <ToolbarButton
-                action="delete"
-                @delete-resource="doResourceDelete"
-            />
+            <a
+                @click="
+                    delete_usage_data_provider(
+                        usage_data_provider.erm_usage_data_provider_id,
+                        usage_data_provider.name
+                    )
+                "
+                class="btn btn-default"
+                ><font-awesome-icon icon="trash" /> {{ $__("Delete") }}</a
+            >
         </Toolbar>
 
         <h2>
@@ -112,10 +125,8 @@ import UsageStatisticsDataProvidersFileImport from "./UsageStatisticsDataProvide
 import UsageStatisticsDataProvidersCounterLogs from "./UsageStatisticsDataProvidersCounterLogs.vue";
 import UsageStatisticsDataProviderDetails from "./UsageStatisticsDataProviderDetails.vue";
 import UsageStatisticsProviderDataList from "./UsageStatisticsProviderDataList.vue";
-import UsageStatisticsDataProviderResource from "./UsageStatisticsDataProviderResource.vue";
 
 export default {
-    extends: UsageStatisticsDataProviderResource,
     setup() {
         const ERMStore = inject("ERMStore");
         const { get_lib_from_av } = ERMStore;
@@ -123,7 +134,6 @@ export default {
         const { setConfirmationDialog, setMessage } = inject("mainStore");
 
         return {
-            ...UsageStatisticsDataProviderResource.setup(),
             get_lib_from_av,
             setConfirmationDialog,
             setMessage,
@@ -188,6 +198,40 @@ export default {
         },
         change_tab_content(e) {
             this.tab_content = e.target.getAttribute("data-content");
+        },
+        delete_usage_data_provider: function (
+            usage_data_provider_id,
+            usage_data_provider_name
+        ) {
+            this.setConfirmationDialog(
+                {
+                    title: this.$__(
+                        "Are you sure you want to remove this data provider?"
+                    ),
+                    message: usage_data_provider_name,
+                    accept_label: this.$__("Yes, delete"),
+                    cancel_label: this.$__("No, do not delete"),
+                },
+                () => {
+                    const client = APIClient.erm;
+                    client.usage_data_providers
+                        .delete(usage_data_provider_id)
+                        .then(
+                            success => {
+                                this.setMessage(
+                                    this.$__(
+                                        "Usage data provider %s deleted"
+                                    ).format(usage_data_provider_name),
+                                    true
+                                );
+                                this.$router.push({
+                                    name: "UsageStatisticsDataProvidersList",
+                                });
+                            },
+                            error => {}
+                        );
+                }
+            );
         },
     },
     name: "UsageStatisticsDataProvidersShow",
