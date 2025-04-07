@@ -1,7 +1,8 @@
 import { defineStore } from "pinia";
+import { reactive, toRefs } from "vue";
 
-export const useReportsStore = defineStore("reports", {
-    state: () => ({
+export const useReportsStore = defineStore("reports", () => {
+    const store = reactive({
         months_data: [
             { short: "Jan", description: "January", value: 1, active: true },
             { short: "Feb", description: "February", value: 2, active: true },
@@ -122,8 +123,8 @@ export const useReportsStore = defineStore("reports", {
             TR_J3: ["Access_Type"],
             TR_J4: ["YOP"],
         },
-    }),
-    actions: {
+    });
+    const actions = {
         getMonthsData() {
             return this.months_data;
         },
@@ -134,5 +135,7 @@ export const useReportsStore = defineStore("reports", {
             if (!this.report_type_map.hasOwnProperty(report_type)) return false;
             return this.report_type_map[report_type].includes(column);
         },
-    },
+    };
+
+    return { ...toRefs(store), ...actions };
 });

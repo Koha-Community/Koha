@@ -1,7 +1,8 @@
 import { defineStore } from "pinia";
+import { reactive, toRefs } from "vue";
 
-export const usePreservationStore = defineStore("preservation", {
-    state: () => ({
+export const usePreservationStore = defineStore("preservation", () => {
+    const store = reactive({
         config: {
             settings: {
                 enabled: 0,
@@ -9,5 +10,9 @@ export const usePreservationStore = defineStore("preservation", {
                 not_for_loan_default_train_in: 0,
             },
         },
-    }),
+    });
+
+    return {
+        ...toRefs(store),
+    };
 });

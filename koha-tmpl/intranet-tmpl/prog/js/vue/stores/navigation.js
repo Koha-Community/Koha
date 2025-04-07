@@ -1,7 +1,8 @@
 import { defineStore } from "pinia";
+import { reactive, toRefs, computed } from "vue";
 
-export const useNavigationStore = defineStore("navigation", {
-    state: () => ({
+export const useNavigationStore = defineStore("navigation", () => {
+    const store = reactive({
         routeState: {
             alt: "Home",
             href: "/cgi-bin/koha/mainpage.pl",
@@ -11,8 +12,8 @@ export const useNavigationStore = defineStore("navigation", {
         },
         current: null,
         params: {},
-    }),
-    actions: {
+    });
+    const actions = {
         setRoutes(routesDef) {
             if (!Array.isArray(routesDef)) {
                 routesDef = [routesDef];
@@ -68,17 +69,18 @@ export const useNavigationStore = defineStore("navigation", {
                 child.meta.self = child;
             }
         },
-    },
-    getters: {
-        breadcrumbs() {
-            if (this.current)
+    };
+
+    const getters = {
+        breadcrumbs: computed(() => {
+            if (store.current)
                 return _buildFromCurrentMatches(
-                    this.current,
-                    this.routeState,
-                    this.params
+                    store.current,
+                    store.routeState,
+                    store.params
                 );
 
-            return _getBaseElements(this.routeState);
+            return _getBaseElements(store.routeState);
 
             // Function declarations
 
@@ -150,9 +152,9 @@ export const useNavigationStore = defineStore("navigation", {
                         };
                     });
             }
-        },
-        leftNavigation() {
-            return _getNavigationElements(this.routeState);
+        }),
+        leftNavigation: computed(() => {
+            return _getNavigationElements(store.routeState);
 
             // Function declarations
 
@@ -203,9 +205,9 @@ export const useNavigationStore = defineStore("navigation", {
                     (!parent.children || !parent.children.length)
                 );
             }
-        },
-        navigationRoutes() {
-            let routes = _toRoute(this.routeState);
+        }),
+        navigationRoutes: computed(() => {
+            let routes = _toRoute(store.routeState);
             return Array.isArray(routes) ? routes : [routes];
 
             // Function declarations
@@ -220,8 +222,14 @@ export const useNavigationStore = defineStore("navigation", {
                     .map(child => _toRoute(child))
                     .flat(Infinity);
             }
-        },
-    },
+        }),
+    };
+
+    return {
+        ...toRefs(store),
+        ...actions,
+        ...getters,
+    };
 });
 
 function addSlashIfNotPresent(path) {

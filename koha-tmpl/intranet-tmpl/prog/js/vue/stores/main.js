@@ -1,40 +1,42 @@
 import { defineStore } from "pinia";
+import { reactive, toRefs } from "vue";
 
-export const useMainStore = defineStore("main", {
-    state: () => ({
-        _message: null,
-        _error: null,
-        _warning: null,
-        _confirmation: null,
-        _accept_callback: null,
+export const useMainStore = defineStore("main", () => {
+    const store = reactive({
+        message: null,
+        error: null,
+        warning: null,
+        confirmation: null,
+        accept_callback: null,
         previousMessage: null,
         previousError: null,
         displayed_already: false,
-        _is_submitting: false,
-        _is_loading: false,
-    }),
-    actions: {
+        is_submitting: false,
+        is_loading: false,
+    });
+
+    const actions = {
         setMessage(message, displayed = false) {
-            this._error = null;
-            this._warning = null;
-            this._message = message;
-            this._confirmation = null;
+            this.error = null;
+            this.warning = null;
+            this.message = message;
+            this.confirmation = null;
             this.displayed_already =
                 displayed; /* Will be displayed on the next view */
         },
         setError(error, displayed = true) {
-            this._error = error;
-            this._warning = null;
-            this._message = null;
-            this._confirmation = null;
+            this.error = error;
+            this.warning = null;
+            this.message = null;
+            this.confirmation = null;
             this.displayed_already =
                 displayed; /* Is displayed on the current view */
         },
         setWarning(warning, displayed = true) {
-            this._error = null;
-            this._warning = warning;
-            this._message = null;
-            this._confirmation = null;
+            this.error = null;
+            this.warning = warning;
+            this.message = null;
+            this.confirmation = null;
             this.displayed_already =
                 displayed; /* Is displayed on the current view */
         },
@@ -55,63 +57,45 @@ export const useMainStore = defineStore("main", {
          */
         setConfirmationDialog(confirmation, accept_callback, displayed = true) {
             if (accept_callback) {
-                this._accept_callback = async () => {
+                this.accept_callback = async () => {
                     await accept_callback(confirmation);
                     this.removeConfirmationMessages();
                 };
             }
-            this._confirmation = confirmation;
+            this.confirmation = confirmation;
             this.displayed_already =
                 displayed; /* Is displayed on the current view */
         },
         removeMessages() {
             if (this.displayed_already) {
-                this._error = null;
-                this._warning = null;
-                this._message = null;
-                this._confirmation = null;
-                this._accept_callback = null;
+                this.error = null;
+                this.warning = null;
+                this.message = null;
+                this.confirmation = null;
+                this.accept_callback = null;
             }
             this.displayed_already = true;
         },
         removeConfirmationMessages() {
-            this._confirmation = null;
-            this._accept_callback = null;
+            this.confirmation = null;
+            this.accept_callback = null;
         },
         submitting() {
-            this._is_submitting = true;
+            this.is_submitting = true;
         },
         submitted() {
-            this._is_submitting = false;
+            this.is_submitting = false;
         },
         loading() {
-            this._is_loading = true;
+            this.is_loading = true;
         },
         loaded() {
-            this._is_loading = false;
+            this.is_loading = false;
         },
-    },
-    getters: {
-        error() {
-            return this._error;
-        },
-        warning() {
-            return this._warning;
-        },
-        message() {
-            return this._message;
-        },
-        confirmation() {
-            return this._confirmation;
-        },
-        accept_callback() {
-            return this._accept_callback;
-        },
-        is_submitting() {
-            return this._is_submitting;
-        },
-        is_loading() {
-            return this._is_loading;
-        },
-    },
+    };
+
+    return {
+        ...toRefs(store),
+        ...actions,
+    };
 });
