@@ -124,6 +124,7 @@ export default {
                 extendedAttributesResourceType: "package",
                 av_package_types,
                 av_package_content_types,
+                eholdings_packages_table_settings,
                 vendors,
                 appendToShow: appendToShow(get_lib_from_av),
             }),

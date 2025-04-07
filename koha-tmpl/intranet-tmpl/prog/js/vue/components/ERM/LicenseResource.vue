@@ -38,6 +38,7 @@ export default {
                 av_license_types,
                 av_license_statuses,
                 av_user_roles,
+                license_table_settings,
                 vendors,
             }),
         };

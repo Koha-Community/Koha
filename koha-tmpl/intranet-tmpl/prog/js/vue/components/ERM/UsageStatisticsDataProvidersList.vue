@@ -56,6 +56,7 @@ export default {
             setConfirmationDialog,
             setMessage,
             setWarning,
+            usage_data_provider_table_settings,
             table,
         };
     },

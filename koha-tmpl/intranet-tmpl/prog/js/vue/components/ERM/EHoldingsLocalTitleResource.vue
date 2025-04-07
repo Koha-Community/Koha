@@ -51,6 +51,7 @@ export default {
                     displayNamePlural: __("titles"),
                 },
                 av_title_publication_types,
+                eholdings_titles_table_settings,
                 vendors,
                 getToolbarButtons,
             }),
