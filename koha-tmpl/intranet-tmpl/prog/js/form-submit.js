@@ -1,8 +1,5 @@
-/* keep tidy */
-$(document).ready(function () {
-    $("body").on("click", ".submit-form-link", function (e) {
-        e.preventDefault();
-        let form_data = $(this).data();
+export function submit_form(form) {
+    let form_data = $(form).data();
 
         let confirm_msg = form_data.confirmationMsg;
         if (confirm_msg) {
@@ -35,5 +32,4 @@ $(document).ready(function () {
         }
         $("body").append(the_form);
         the_form.submit();
-    });
-});
+}

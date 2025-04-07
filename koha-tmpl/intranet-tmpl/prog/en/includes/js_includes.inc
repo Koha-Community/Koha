@@ -26,6 +26,13 @@
 [% Asset.js("lib/jquery/plugins/jquery.validate.min.js") | $raw %]
 <!-- koha core js -->
 [% Asset.js("js/staff-global.js") | $raw %]
+<script type="module">
+    import { submit_form } from "/intranet-tmpl/prog/js/form-submit.js";
+    $("body").on("click", ".submit-form-link", function (e) {
+        e.preventDefault();
+        submit_form(this);
+    });
+</script>
 [% INCLUDE 'js-date-format.inc' %]
 [% INCLUDE 'js-patron-get-age.inc' %]
 [% INCLUDE 'js-patron-format-address.inc' %]
