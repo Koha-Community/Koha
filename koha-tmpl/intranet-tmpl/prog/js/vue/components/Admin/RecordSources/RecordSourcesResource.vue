@@ -18,7 +18,7 @@ export default {
                 addComponent: "RecordSourcesFormAdd",
                 editComponent: "RecordSourcesFormAddEdit",
                 apiClient: APIClient.record_sources.record_sources,
-                resourceTableUrl: APIClient.record_sources._baseURL,
+                resourceTableUrl: APIClient.record_sources.httpClient._baseURL,
                 i18n: {
                     displayName: __("Record source"),
                     displayNameLowerCase: __("record source"),

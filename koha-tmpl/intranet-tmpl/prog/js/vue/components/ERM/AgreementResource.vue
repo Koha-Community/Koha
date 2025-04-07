@@ -35,7 +35,8 @@ export default {
                 addComponent: "AgreementsFormAdd",
                 editComponent: "AgreementsFormAddEdit",
                 apiClient: APIClient.erm.agreements,
-                resourceTableUrl: APIClient.erm._baseURL + "agreements",
+                resourceTableUrl:
+                    APIClient.erm.httpClient._baseURL + "agreements",
                 i18n: {
                     displayName: __("Agreement"),
                     displayNameLowerCase: __("agreement"),

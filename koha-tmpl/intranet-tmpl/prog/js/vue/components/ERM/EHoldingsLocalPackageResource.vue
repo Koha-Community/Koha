@@ -77,7 +77,7 @@ export default {
                                     embed: "title",
                                 },
                                 url:
-                                    APIClient.erm._baseURL +
+                                    APIClient.erm.httpClient._baseURL +
                                     "eholdings/local/resources",
                             },
                         },
@@ -114,7 +114,8 @@ export default {
                 editComponent: "EHoldingsLocalPackagesFormAddEdit",
                 apiClient: APIClient.erm.localPackages,
                 resourceTableUrl:
-                    APIClient.erm._baseURL + "eholdings/local/packages",
+                    APIClient.erm.httpClient._baseURL +
+                    "eholdings/local/packages",
                 i18n: {
                     displayName: __("Local package"),
                     displayNameLowerCase: __("package"),

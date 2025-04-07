@@ -43,7 +43,8 @@ export default {
                 editComponent: "EHoldingsLocalTitlesFormAddEdit",
                 apiClient: APIClient.erm.localTitles,
                 resourceTableUrl:
-                    APIClient.erm._baseURL + "eholdings/local/titles",
+                    APIClient.erm.httpClient._baseURL +
+                    "eholdings/local/titles",
                 i18n: {
                     displayName: __("Title"),
                     displayNameLowerCase: __("title"),
@@ -282,7 +283,7 @@ export default {
                                         embed: "package",
                                     },
                                     url:
-                                        APIClient.erm._baseURL +
+                                        APIClient.erm.httpClient._baseURL +
                                         "eholdings/local/resources",
                                 },
                             },

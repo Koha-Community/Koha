@@ -15,7 +15,8 @@ export default {
                 addComponent: "TrainsFormAdd",
                 editComponent: "TrainsFormAddEdit",
                 apiClient: APIClient.preservation.trains,
-                resourceTableUrl: APIClient.preservation._baseURL + "trains",
+                resourceTableUrl:
+                    APIClient.preservation.httpClient._baseURL + "trains",
                 i18n: {
                     displayName: __("Train"),
                 },

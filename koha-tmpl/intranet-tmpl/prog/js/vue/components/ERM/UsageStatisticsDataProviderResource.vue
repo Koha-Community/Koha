@@ -16,7 +16,7 @@ export default {
                 editComponent: "UsageStatisticsDataProvidersFormAddEdit",
                 apiClient: APIClient.erm.usage_data_providers,
                 resourceTableUrl:
-                    APIClient.erm._baseURL + "usage_data_providers",
+                    APIClient.erm.httpClient._baseURL + "usage_data_providers",
                 i18n: {
                     displayName: __("Data provider"),
                 },

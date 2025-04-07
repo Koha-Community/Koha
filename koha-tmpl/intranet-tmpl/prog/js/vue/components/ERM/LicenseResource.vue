@@ -27,7 +27,8 @@ export default {
                 addComponent: "LicensesFormAdd",
                 editComponent: "LicensesFormAddEdit",
                 apiClient: APIClient.erm.licenses,
-                resourceTableUrl: APIClient.erm._baseURL + "licenses",
+                resourceTableUrl:
+                    APIClient.erm.httpClient._baseURL + "licenses",
                 i18n: {
                     displayName: __("License"),
                     displayNameLowerCase: __("license"),
