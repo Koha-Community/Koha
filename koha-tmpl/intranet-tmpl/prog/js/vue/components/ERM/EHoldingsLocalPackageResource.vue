@@ -140,7 +140,21 @@ export default {
                     required: true,
                     type: "text",
                     label: __("Package name"),
-                    showInTable: true,
+                    showInTable: {
+                        title: __("Package name"),
+                        data: "name:package_id",
+                        searchable: true,
+                        orderable: true,
+                        render: function (data, type, row, meta) {
+                            return (
+                                '<a role="button" class="show">' +
+                                escape_str(
+                                    `${row["name"]} (#${row["package_id"]})`
+                                ) +
+                                "</a>"
+                            );
+                        },
+                    },
                 },
                 {
                     name: "vendor_id",

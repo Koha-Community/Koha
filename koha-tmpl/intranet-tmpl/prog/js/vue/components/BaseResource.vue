@@ -418,18 +418,32 @@ export default {
                         acc.push(attr.showInTable);
                         return acc;
                     }
-                    if (i === 0) {
+                    if (attr.name === this.idAttr) {
                         acc.push({
                             title: attr.label,
-                            data: `me.${attr.name}:me.${idAttr}`,
+                            data: attr.name,
                             searchable: true,
                             orderable: true,
                             render: function (data, type, row, meta) {
                                 return (
                                     '<a role="button" class="show">' +
-                                    escape_str(
-                                        `${row[`${attr.name}`]} (#${row[`${idAttr}`]})`
-                                    ) +
+                                    escape_str(row[attr.name]) +
+                                    "</a>"
+                                );
+                            },
+                        });
+                        return acc;
+                    }
+                    if (attr.name === this.nameAttr) {
+                        acc.push({
+                            title: attr.label,
+                            data: attr.name,
+                            searchable: true,
+                            orderable: true,
+                            render: function (data, type, row, meta) {
+                                return (
+                                    '<a role="button" class="show">' +
+                                    escape_str(row[attr.name]) +
                                     "</a>"
                                 );
                             },

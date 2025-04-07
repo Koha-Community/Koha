@@ -49,6 +49,14 @@ export default {
         return {
             resourceAttrs: [
                 {
+                    name: this.idAttr,
+                    label: __("ID"),
+                    type: "text",
+                    hideInForm: true,
+                    hideInShow: true,
+                    showInTable: true,
+                },
+                {
                     name: "name",
                     required: true,
                     type: "text",
@@ -291,14 +299,14 @@ export default {
                 table_settings: this.license_table_settings,
                 add_filters: true,
                 filters_options: {
-                    1: () =>
+                    2: () =>
                         this.vendors.map(e => {
                             e["_id"] = e["id"];
                             e["_str"] = e["name"];
                             return e;
                         }),
-                    3: () => this.map_av_dt_filter("av_license_types"),
-                    4: () => this.map_av_dt_filter("av_license_statuses"),
+                    4: () => this.map_av_dt_filter("av_license_types"),
+                    5: () => this.map_av_dt_filter("av_license_statuses"),
                 },
                 actions: {
                     0: ["show"],

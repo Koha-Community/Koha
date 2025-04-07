@@ -67,7 +67,21 @@ export default {
                     required: true,
                     type: "text",
                     label: __("Publication title"),
-                    showInTable: true,
+                    showInTable: {
+                        title: __("Publication title"),
+                        data: "publication_title:title_id",
+                        searchable: true,
+                        orderable: true,
+                        render: function (data, type, row, meta) {
+                            return (
+                                '<a role="button" class="show">' +
+                                escape_str(
+                                    `${row["publication_title"]} (#${row["title_id"]})`
+                                ) +
+                                "</a>"
+                            );
+                        },
+                    },
                 },
                 {
                     name: "print_identifier",
@@ -399,7 +413,7 @@ export default {
                 table_settings: this.eholdings_titles_table_settings,
                 add_filters: true,
                 filters_options: {
-                    2: () =>
+                    3: () =>
                         this.map_av_dt_filter("av_title_publication_types"),
                 },
                 actions: {

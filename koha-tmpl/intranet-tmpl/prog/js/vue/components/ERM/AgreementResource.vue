@@ -65,6 +65,14 @@ export default {
         return {
             resourceAttrs: [
                 {
+                    name: this.idAttr,
+                    label: __("ID"),
+                    type: "text",
+                    hideInForm: true,
+                    hideInShow: true,
+                    showInTable: true,
+                },
+                {
                     name: "name",
                     required: true,
                     type: "text",
