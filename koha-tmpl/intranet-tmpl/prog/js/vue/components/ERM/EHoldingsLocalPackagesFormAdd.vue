@@ -37,7 +37,7 @@
                                 v-model="erm_package.package_type"
                                 label="description"
                                 :reduce="av => av.value"
-                                :options="av_package_types"
+                                :options="authorisedValues.av_package_types"
                             />
                         </li>
                         <li>
@@ -49,7 +49,9 @@
                                 v-model="erm_package.content_type"
                                 label="description"
                                 :reduce="av => av.value"
-                                :options="av_package_content_types"
+                                :options="
+                                    authorisedValues.av_package_content_types
+                                "
                             />
                         </li>
                         <li>
@@ -100,13 +102,11 @@ import { storeToRefs } from "pinia";
 
 export default {
     setup() {
-        const AVStore = inject("AVStore");
-        const { av_package_types, av_package_content_types } =
-            storeToRefs(AVStore);
+        const ERMStore = inject("ERMStore");
+        const { authorisedValues } = storeToRefs(ERMStore);
 
         return {
-            av_package_types,
-            av_package_content_types,
+            authorisedValues,
         };
     },
     data() {

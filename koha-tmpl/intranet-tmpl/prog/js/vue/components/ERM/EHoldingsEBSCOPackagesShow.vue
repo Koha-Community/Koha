@@ -122,8 +122,8 @@ export default {
     setup() {
         const format_date = $date;
 
-        const AVStore = inject("AVStore");
-        const { get_lib_from_av } = AVStore;
+        const ERMStore = inject("ERMStore");
+        const { get_lib_from_av } = ERMStore;
 
         return {
             format_date,

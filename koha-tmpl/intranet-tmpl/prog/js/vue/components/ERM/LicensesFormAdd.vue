@@ -53,7 +53,7 @@
                                 v-model="license.type"
                                 label="description"
                                 :reduce="av => av.value"
-                                :options="av_license_types"
+                                :options="authorisedValues.av_license_types"
                             >
                                 <template #search="{ attributes, events }">
                                     <input
@@ -74,7 +74,7 @@
                                 id="license_status"
                                 v-model="license.status"
                                 :reduce="av => av.value"
-                                :options="av_license_statuses"
+                                :options="authorisedValues.av_license_statuses"
                                 label="description"
                             >
                                 <template #search="{ attributes, events }">
@@ -117,7 +117,7 @@
                 <UserRoles
                     :user_type="$__('License user %s')"
                     :user_roles="license.user_roles"
-                    :av_user_roles="av_user_roles"
+                    :av_user_roles="authorisedValues.av_user_roles"
                 />
                 <Documents :documents="license.documents" />
                 <fieldset class="action">
@@ -151,14 +151,11 @@ import { storeToRefs } from "pinia";
 
 export default {
     setup() {
-        const AVStore = inject("AVStore");
-        const { av_license_types, av_license_statuses, av_user_roles } =
-            storeToRefs(AVStore);
+        const ERMStore = inject("ERMStore");
+        const { authorisedValues } = storeToRefs(ERMStore);
 
         return {
-            av_license_types,
-            av_license_statuses,
-            av_user_roles,
+            authorisedValues,
             max_allowed_packet,
         };
     },

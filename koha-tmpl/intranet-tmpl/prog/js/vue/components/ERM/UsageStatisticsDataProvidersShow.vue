@@ -128,8 +128,8 @@ import UsageStatisticsProviderDataList from "./UsageStatisticsProviderDataList.v
 
 export default {
     setup() {
-        const AVStore = inject("AVStore");
-        const { get_lib_from_av } = AVStore;
+        const ERMStore = inject("ERMStore");
+        const { get_lib_from_av } = ERMStore;
 
         const { setConfirmationDialog, setMessage } = inject("mainStore");
 

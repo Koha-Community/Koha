@@ -49,9 +49,8 @@ import KohaTable from "../KohaTable.vue";
 
 export default {
     setup() {
-        const AVStore = inject("AVStore");
-        const { av_title_publication_types } = storeToRefs(AVStore);
-        const { get_lib_from_av, map_av_dt_filter } = AVStore;
+        const ERMStore = inject("ERMStore");
+        const { get_lib_from_av, map_av_dt_filter } = ERMStore;
 
         const { setConfirmationDialog, setMessage } = inject("mainStore");
 
@@ -62,7 +61,6 @@ export default {
         });
 
         return {
-            av_title_publication_types,
             get_lib_from_av,
             map_av_dt_filter,
             escape_str,

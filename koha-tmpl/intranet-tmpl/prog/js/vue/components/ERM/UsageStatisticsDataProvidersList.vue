@@ -42,8 +42,8 @@ import KohaTable from "../KohaTable.vue";
 
 export default {
     setup() {
-        const AVStore = inject("AVStore"); // Left in for future permissions fixes
-        const { get_lib_from_av, map_av_dt_filter } = AVStore;
+        const ERMStore = inject("ERMStore"); // Left in for future permissions fixes
+        const { get_lib_from_av, map_av_dt_filter } = ERMStore;
 
         const { setConfirmationDialog, setMessage, setWarning } =
             inject("mainStore");

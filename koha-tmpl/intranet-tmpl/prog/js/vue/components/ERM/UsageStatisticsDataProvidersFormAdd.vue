@@ -392,11 +392,11 @@ import { storeToRefs } from "pinia";
 
 export default {
     setup() {
-        const AVStore = inject("AVStore");
-        const { av_report_types } = storeToRefs(AVStore);
+        const ERMStore = inject("ERMStore");
+        const { authorisedValues } = storeToRefs(ERMStore);
 
         return {
-            av_report_types,
+            authorisedValues,
         };
     },
     data() {
@@ -425,7 +425,7 @@ export default {
                 { description: this.$__("Inactive"), value: 0 },
             ],
             registry_data: [],
-            valid_report_types: [...this.av_report_types],
+            valid_report_types: [...this.authorisedValues.av_report_types],
             selected_provider: null,
             manual_form: false,
             required_fields: [],

@@ -234,7 +234,9 @@
                                 v-model="title.publication_type"
                                 label="description"
                                 :reduce="av => av.value"
-                                :options="av_title_publication_types"
+                                :options="
+                                    authorisedValues.av_title_publication_types
+                                "
                             />
                         </li>
 
@@ -420,12 +422,12 @@ import { storeToRefs } from "pinia";
 
 export default {
     setup() {
-        const AVStore = inject("AVStore");
-        const { av_title_publication_types } = storeToRefs(AVStore);
-        const { get_lib_from_av } = AVStore;
+        const ERMStore = inject("ERMStore");
+        const { authorisedValues } = storeToRefs(ERMStore);
+        const { get_lib_from_av } = ERMStore;
 
         return {
-            av_title_publication_types,
+            authorisedValues,
             get_lib_from_av,
         };
     },

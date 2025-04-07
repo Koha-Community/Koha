@@ -11,11 +11,7 @@
             {{ $__("Content type") }}:
             <select id="content_type_filter" v-model="filters.content_type">
                 <option value="">{{ $__("All") }}</option>
-                <option
-                    v-for="type in av_package_content_types"
-                    :key="type.authorised_values"
-                    :value="type.value"
-                >
+                <option :key="type.authorised_values" :value="type.value">
                     {{ type.description }}
                 </option>
             </select>
@@ -73,13 +69,9 @@ import KohaTable from "../KohaTable.vue";
 
 export default {
     setup() {
-        const AVStore = inject("AVStore");
-        const { av_package_types, av_package_content_types } =
-            storeToRefs(AVStore);
-        const { get_lib_from_av, map_av_dt_filter } = AVStore;
-
         const ERMStore = inject("ERMStore");
-        const { config } = ERMStore;
+        const { config, get_lib_from_av, map_av_dt_filter } = ERMStore;
+        const { authorisedValues } = storeToRefs(ERMStore);
 
         const table = ref();
         const filters = reactive({
@@ -89,13 +81,12 @@ export default {
         });
 
         return {
-            av_package_types,
-            av_package_content_types,
             get_lib_from_av,
             escape_str,
             map_av_dt_filter,
             config,
             table,
+            authorisedValues,
         };
     },
     data: function () {
@@ -241,12 +232,7 @@ export default {
                     searchable: false,
                     orderable: false,
                     render: function (data, type, row, meta) {
-                        return escape_str(
-                            get_lib_from_av(
-                                "av_package_content_types",
-                                row.content_type
-                            )
-                        );
+                        return escape_str(get_lib_from_av(row.content_type));
                     },
                 },
             ];

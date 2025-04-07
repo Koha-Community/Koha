@@ -133,8 +133,8 @@ export default {
 
         const { setConfirmationDialog, setMessage } = inject("mainStore");
 
-        const AVStore = inject("AVStore");
-        const { get_lib_from_av } = AVStore;
+        const ERMStore = inject("ERMStore");
+        const { get_lib_from_av } = ERMStore;
 
         return {
             format_date,

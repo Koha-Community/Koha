@@ -41,9 +41,6 @@ import { APIClient } from "../../fetch/api-client.js";
 
 export default {
     setup() {
-        const AVStore = inject("AVStore"); // Left in for future permissions fixes
-        const { get_lib_from_av, map_av_dt_filter } = AVStore;
-
         const { setMessage } = inject("mainStore");
 
         return {

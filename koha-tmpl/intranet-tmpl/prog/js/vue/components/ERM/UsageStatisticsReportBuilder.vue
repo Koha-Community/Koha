@@ -364,14 +364,8 @@ import { APIClient } from "../../fetch/api-client.js";
 
 export default {
     setup() {
-        const AVStore = inject("AVStore");
-        const {
-            av_report_types,
-            av_platform_reports_metrics,
-            av_database_reports_metrics,
-            av_title_reports_metrics,
-            av_item_reports_metrics,
-        } = storeToRefs(AVStore);
+        const ERMStore = inject("ERMStore");
+        const { authorisedValues } = storeToRefs(ERMStore);
 
         const { setConfirmationDialog, setMessage, setError } =
             inject("mainStore");
@@ -382,11 +376,7 @@ export default {
         const title_property_column_options = getColumnOptions();
 
         return {
-            av_report_types,
-            av_platform_reports_metrics,
-            av_database_reports_metrics,
-            av_title_reports_metrics,
-            av_item_reports_metrics,
+            authorisedValues,
             setConfirmationDialog,
             setMessage,
             setError,
@@ -472,7 +462,7 @@ export default {
             },
             metric_types_options: [],
             access_types_options: [],
-            report_types_options: [...this.av_report_types],
+            report_types_options: [...this.authorisedValues.av_report_types],
             filter_data: [],
             usage_data_provider_list: [...this.usage_data_providers],
             time_period_columns_builder: null,
@@ -788,19 +778,22 @@ export default {
             if (report_type) {
                 switch (report_type.substring(0, 1)) {
                     case "P":
-                        av_type = this.av_platform_reports_metrics;
+                        av_type =
+                            this.authorisedValues.av_platform_reports_metrics;
                         this.data_type = "platform";
                         break;
                     case "T":
-                        av_type = this.av_title_reports_metrics;
+                        av_type =
+                            this.authorisedValues.av_title_reports_metrics;
                         this.data_type = "title";
                         break;
                     case "I":
-                        av_type = this.av_item_reports_metrics;
+                        av_type = this.authorisedValues.av_item_reports_metrics;
                         this.data_type = "item";
                         break;
                     case "D":
-                        av_type = this.av_database_reports_metrics;
+                        av_type =
+                            this.authorisedValues.av_database_reports_metrics;
                         this.data_type = "database";
                         break;
                 }
@@ -859,7 +852,8 @@ export default {
         setReportTypesAndResetFilterData(providers) {
             const permittedReportTypes = [];
             if (providers.length === 0) {
-                this.report_types_options = this.av_report_types;
+                this.report_types_options =
+                    this.authorisedValues.av_report_types;
                 this.query.keywords = null;
                 this.filter_data.length = 0;
                 return;
@@ -874,9 +868,10 @@ export default {
                 single_report_types.pop(); // remove trailing "" from array
 
                 single_report_types.forEach(type => {
-                    const report_type = this.av_report_types.find(
-                        rt => rt.value === type
-                    );
+                    const report_type =
+                        this.authorisedValues.av_report_types.find(
+                            rt => rt.value === type
+                        );
                     permittedReportTypes.push(report_type);
                 });
                 // If we change/remove a data provider then we don't want data being displayed from that provider in the dropdown

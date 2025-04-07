@@ -26,7 +26,7 @@
                         >
                             <option value="">{{ $__("All") }}</option>
                             <option
-                                v-for="type in av_title_publication_types"
+                                v-for="type in authorisedValues.av_title_publication_types"
                                 :key="type.value"
                                 :value="type.value"
                             >
@@ -66,9 +66,9 @@ import KohaTable from "../KohaTable.vue";
 
 export default {
     setup() {
-        const AVStore = inject("AVStore");
-        const { av_title_publication_types } = storeToRefs(AVStore);
-        const { get_lib_from_av, map_av_dt_filter } = AVStore;
+        const ERMStore = inject("ERMStore");
+        const { authorisedValues } = storeToRefs(ERMStore);
+        const { get_lib_from_av, map_av_dt_filter } = ERMStore;
 
         const table = ref();
         const filters = reactive({
@@ -78,11 +78,11 @@ export default {
         });
 
         return {
-            av_title_publication_types,
             get_lib_from_av,
             escape_str,
             map_av_dt_filter,
             table,
+            authorisedValues,
         };
     },
     data() {

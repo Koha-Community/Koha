@@ -10,8 +10,8 @@ import KohaTable from "../KohaTable.vue";
 
 export default {
     setup() {
-        const AVStore = inject("AVStore");
-        const { get_lib_from_av, map_av_dt_filter } = AVStore;
+        const ERMStore = inject("ERMStore");
+        const { get_lib_from_av, map_av_dt_filter } = ERMStore;
 
         const table = ref();
         return {
