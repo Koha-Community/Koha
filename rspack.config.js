@@ -13,9 +13,6 @@ module.exports = [
                 ),
             },
         },
-        experiments: {
-            css: true,
-        },
         entry: {
             erm: "./koha-tmpl/intranet-tmpl/prog/js/vue/modules/erm.ts",
             preservation:
@@ -129,12 +126,7 @@ module.exports = [
                         path.resolve(__dirname, "t/cypress/"),
                     ],
                     type: "javascript/auto",
-                },
-                {
-                    test: /\.css$/i,
-                    type: "javascript/auto",
-                    use: ["style-loader", "css-loader"],
-                },
+                }
             ],
         },
         plugins: [
