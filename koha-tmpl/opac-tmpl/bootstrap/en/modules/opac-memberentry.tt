@@ -405,7 +405,7 @@
                                                 <li>
                                                     <label for="borrower_surname" class="[% required.surname | html %]">Surname:</label>
 
-                                                    <input type="text" id="borrower_surname" name="borrower_surname" value="[% borrower.surname | html %]" class="[% required.surname | html %]" />
+                                                    <input type="text" id="borrower_surname" name="borrower_surname" value="[% borrower.surname | html %]" class="[% required.surname | html %]" [% IF required.surname %]required[% END %] />
                                                     <div class="required_label [% required.surname | html %]">Required</div>
                                                 </li>
                                             [% END %]
@@ -414,7 +414,14 @@
                                                 <li>
                                                     <label for="borrower_firstname" class="[% required.firstname | html %]">First name:</label>
 
-                                                    <input type="text" id="borrower_firstname" name="borrower_firstname" value="[% borrower.firstname | html %]" class="[% required.firstname | html %]" />
+                                                    <input
+                                                        type="text"
+                                                        id="borrower_firstname"
+                                                        name="borrower_firstname"
+                                                        value="[% borrower.firstname | html %]"
+                                                        class="[% required.firstname | html %]"
+                                                        [% IF required.firstname %]required[% END %]
+                                                    />
                                                     <div class="required_label [% required.firstname | html %]">Required</div>
                                                 </li>
                                             [% END %]
@@ -423,7 +430,14 @@
                                                 <li>
                                                     <label for="borrower_middle_name" class="[% required.middle_name | html %]">Middle name:</label>
 
-                                                    <input type="text" id="borrower_middle_name" name="borrower_middle_name" value="[% borrower.middle_name | html %]" class="[% required.middle_name | html %]" />
+                                                    <input
+                                                        type="text"
+                                                        id="borrower_middle_name"
+                                                        name="borrower_middle_name"
+                                                        value="[% borrower.middle_name | html %]"
+                                                        class="[% required.middle_name | html %]"
+                                                        [% IF required.middle_name %]required[% END %]
+                                                    />
                                                     <div class="required_label [% required.middle_name | html %]">Required</div>
                                                 </li>
                                             [% END %]
@@ -432,7 +446,14 @@
                                                 <li>
                                                     <label for="borrower_preferred_name" class="[% required.preferred_name | html %]">Preferred name:</label>
 
-                                                    <input type="text" id="borrower_preferred_name" name="borrower_preferred_name" value="[% borrower.preferred_name | html %]" class="[% required.preferred_name | html %]" />
+                                                    <input
+                                                        type="text"
+                                                        id="borrower_preferred_name"
+                                                        name="borrower_preferred_name"
+                                                        value="[% borrower.preferred_name | html %]"
+                                                        class="[% required.preferred_name | html %]"
+                                                        [% IF required.preferred_name %]required[% END %]
+                                                    />
                                                     <div class="required_label [% required.preferred_name | html %]">Required</div>
                                                 </li>
                                             [% END %]
@@ -441,7 +462,15 @@
                                                 <li>
                                                     <label for="borrower_dateofbirth" class="[% required.dateofbirth | html %]">Date of birth:</label>
 
-                                                    <input type="text" id="borrower_dateofbirth" name="borrower_dateofbirth" value="[% borrower.dateofbirth | html %]" size="10" class="[% required.dateofbirth | html %] flatpickr pastdate" />
+                                                    <input
+                                                        type="text"
+                                                        id="borrower_dateofbirth"
+                                                        name="borrower_dateofbirth"
+                                                        value="[% borrower.dateofbirth | html %]"
+                                                        size="10"
+                                                        class="[% required.dateofbirth | html %] flatpickr pastdate"
+                                                        [% IF required.dateofbirth %]required[% END %]
+                                                    />
 
                                                     <div class="required_label [% required.dateofbirth | html %]">Required</div>
                                                 </li>
@@ -451,7 +480,14 @@
                                                 <li>
                                                     <label for="borrower_initials" class="[% required.initials | html %]">Initials:</label>
 
-                                                    <input type="text" id="borrower_initials" name="borrower_initials" value="[% borrower.initials | html %]" class="[% required.initials | html %]" />
+                                                    <input
+                                                        type="text"
+                                                        id="borrower_initials"
+                                                        name="borrower_initials"
+                                                        value="[% borrower.initials | html %]"
+                                                        class="[% required.initials | html %]"
+                                                        [% IF required.initials %]required[% END %]
+                                                    />
                                                     <div class="required_label [% required.initials | html %]">Required</div>
                                                 </li>
                                             [% END %]
@@ -460,7 +496,14 @@
                                                 <li>
                                                     <label for="borrower_pronouns" class="[% required.pronouns | html %]">Pronouns:</label>
 
-                                                    <input type="text" id="borrower_pronouns" name="borrower_pronouns" value="[% borrower.pronouns | html %]" class="[% required.prnouns | html %]" />
+                                                    <input
+                                                        type="text"
+                                                        id="borrower_pronouns"
+                                                        name="borrower_pronouns"
+                                                        value="[% borrower.pronouns | html %]"
+                                                        class="[% required.pronouns | html %]"
+                                                        [% IF required.pronouns %]required[% END %]
+                                                    />
                                                     <div class="required_label [% required.pronouns | html %]">Required</div>
                                                 </li>
                                             [% END %]
@@ -469,7 +512,14 @@
                                                 <li>
                                                     <label for="borrower_othernames" class="[% required.othernames | html %]">Other names:</label>
 
-                                                    <input type="text" id="borrower_othernames" name="borrower_othernames" value="[% borrower.othernames | html %]" class="[% required.othernames | html %]" />
+                                                    <input
+                                                        type="text"
+                                                        id="borrower_othernames"
+                                                        name="borrower_othernames"
+                                                        value="[% borrower.othernames | html %]"
+                                                        class="[% required.othernames | html %]"
+                                                        [% IF required.othernames %]required[% END %]
+                                                    />
                                                     <div class="required_label [% required.othernames | html %]">Required</div>
                                                 </li>
                                             [% END %]
@@ -538,7 +588,7 @@
                                                     <li>
                                                         <label for="borrower_streettype" class="[% required.streettype | html %]">Street type:</label>
 
-                                                        <select name="borrower_streettype" name="borrower_streettype" class="[% required.streettype | html %]">
+                                                        <select name="borrower_streettype" name="borrower_streettype" class="[% required.streettype | html %]" [% IF required.streettype %]required[% END %]>
                                                             <option value=""></option>
                                                             [% FOR roadtype IN roadtypes %]
                                                                 [% IF roadtype.authorised_value == patron.streettype %]
@@ -557,7 +607,7 @@
                                                 <li>
                                                     <label for="borrower_address" class="[% required.address | html %]">Address:</label>
 
-                                                    <input type="text" id="borrower_address" name="borrower_address" value="[% borrower.address | html %]" class="[% required.address | html %]" />
+                                                    <input type="text" id="borrower_address" name="borrower_address" value="[% borrower.address | html %]" class="[% required.address | html %]" [% IF required.address %]required[% END %] />
                                                     <div class="required_label [% required.address | html %]">Required</div>
                                                 </li>
                                             [% END %]
@@ -568,7 +618,14 @@
                                                 <li>
                                                     <label for="borrower_address2" class="[% required.address2 | html %]">Address 2:</label>
 
-                                                    <input type="text" id="borrower_address2" name="borrower_address2" value="[% borrower.address2 | html %]" class="[% required.address2 | html %]" />
+                                                    <input
+                                                        type="text"
+                                                        id="borrower_address2"
+                                                        name="borrower_address2"
+                                                        value="[% borrower.address2 | html %]"
+                                                        class="[% required.address2 | html %]"
+                                                        [% IF required.address2 %]required[% END %]
+                                                    />
                                                     <div class="required_label [% required.address2 | html %]">Required</div>
                                                 </li>
                                             [% END %]
@@ -577,7 +634,7 @@
                                                 <li>
                                                     <label for="borrower_city" class="[% required.city | html %]">City:</label>
 
-                                                    <input type="text" id="borrower_city" name="borrower_city" value="[% borrower.city | html %]" class="[% required.city | html %]" />
+                                                    <input type="text" id="borrower_city" name="borrower_city" value="[% borrower.city | html %]" class="[% required.city | html %]" [% IF required.city %]required[% END %] />
                                                     <div class="required_label [% required.city | html %]">Required</div>
                                                 </li>
                                             [% END %]
@@ -586,7 +643,7 @@
                                                 <li>
                                                     <label for="borrower_state" class="[% required.state | html %]">State:</label>
 
-                                                    <input type="text" id="borrower_state" name="borrower_state" value="[% borrower.state | html %]" class="[% required.state | html %]" />
+                                                    <input type="text" id="borrower_state" name="borrower_state" value="[% borrower.state | html %]" class="[% required.state | html %]" [% IF required.state %]required[% END %] />
                                                     <div class="required_label [% required.state | html %]">Required</div>
                                                 </li>
                                             [% END %]
@@ -595,7 +652,7 @@
                                                 <li>
                                                     <label for="borrower_zipcode" class="[% required.zipcode | html %]">ZIP/Postal code:</label>
 
-                                                    <input type="text" id="borrower_zipcode" name="borrower_zipcode" value="[% borrower.zipcode | html %]" class="[% required.zipcode | html %]" />
+                                                    <input type="text" id="borrower_zipcode" name="borrower_zipcode" value="[% borrower.zipcode | html %]" class="[% required.zipcode | html %]" [% IF required.zipcode %]required[% END %] />
                                                     <div class="required_label [% required.zipcode | html %]">Required</div>
                                                 </li>
                                             [% END %]
@@ -604,7 +661,7 @@
                                                 <li>
                                                     <label for="borrower_country" class="[% required.country | html %]">Country:</label>
 
-                                                    <input type="text" id="borrower_country" name="borrower_country" value="[% borrower.country | html %]" class="[% required.country | html %]" />
+                                                    <input type="text" id="borrower_country" name="borrower_country" value="[% borrower.country | html %]" class="[% required.country | html %]" [% IF required.country %]required[% END %] />
                                                     <div class="required_label [% required.country | html %]">Required</div>
                                                 </li>
                                             [% END %]
@@ -629,7 +686,7 @@
                                                 <li>
                                                     <label for="borrower_phone" class="[% required.phone | html %]">Primary phone:</label>
 
-                                                    <input type="text" id="borrower_phone" name="borrower_phone" value="[% borrower.phone | html %]" class="[% required.phone | html %]" />
+                                                    <input type="text" id="borrower_phone" name="borrower_phone" value="[% borrower.phone | html %]" class="[% required.phone | html %]" [% IF required.phone %]required[% END %] />
                                                     <div class="required_label [% required.phone | html %]">Required</div>
                                                 </li>
                                             [% END %]
@@ -638,7 +695,14 @@
                                                 <li>
                                                     <label for="borrower_phonepro" class="[% required.phonepro | html %]">Secondary phone:</label>
 
-                                                    <input type="text" id="borrower_phonepro" name="borrower_phonepro" value="[% borrower.phonepro | html %]" class="[% required.phonepro | html %]" />
+                                                    <input
+                                                        type="text"
+                                                        id="borrower_phonepro"
+                                                        name="borrower_phonepro"
+                                                        value="[% borrower.phonepro | html %]"
+                                                        class="[% required.phonepro | html %]"
+                                                        [% IF required.phonepro %]required[% END %]
+                                                    />
                                                     <div class="required_label [% required.phonepro | html %]">Required</div>
                                                 </li>
                                             [% END %]
@@ -647,7 +711,7 @@
                                                 <li>
                                                     <label for="borrower_mobile" class="[% required.mobile | html %]">Other phone:</label>
 
-                                                    <input type="text" id="borrower_mobile" name="borrower_mobile" value="[% borrower.mobile | html %]" class="[% required.mobile | html %]" />
+                                                    <input type="text" id="borrower_mobile" name="borrower_mobile" value="[% borrower.mobile | html %]" class="[% required.mobile | html %]" [% IF required.mobile %]required[% END %] />
                                                     <div class="required_label [% required.mobile | html %]">Required</div>
                                                 </li>
                                             [% END %]
@@ -656,7 +720,7 @@
                                                 <li>
                                                     <label for="borrower_email" class="[% required.email | html %]">Primary email:</label>
 
-                                                    <input type="text" id="borrower_email" name="borrower_email" value="[% borrower.email | html %]" class="[% required.email | html %]" />
+                                                    <input type="text" id="borrower_email" name="borrower_email" value="[% borrower.email | html %]" class="[% required.email | html %]" [% IF required.email %]required[% END %] />
                                                     <div class="required_label [% required.email | html %]">Required</div>
                                                 </li>
 
@@ -664,7 +728,7 @@
                                                     <li>
                                                         <label for="borrower_repeat_email" class="[% required.email | html %]">Confirm primary email:</label>
 
-                                                        <input type="text" id="borrower_repeat_email" name="borrower_repeat_email" autocomplete="off" class="[% required.email | html %]" />
+                                                        <input type="text" id="borrower_repeat_email" name="borrower_repeat_email" autocomplete="off" class="[% required.email | html %]" [% IF required.email %]required[% END %] />
                                                         <div class="required_label [% required.email | html %]">Required</div>
                                                     </li>
                                                 [% END %]
@@ -674,7 +738,14 @@
                                                 <li>
                                                     <label for="borrower_emailpro" class="[% required.emailpro | html %]">Secondary email:</label>
 
-                                                    <input type="text" id="borrower_emailpro" name="borrower_emailpro" value="[% borrower.emailpro | html %]" class="[% required.emailpro | html %]" />
+                                                    <input
+                                                        type="text"
+                                                        id="borrower_emailpro"
+                                                        name="borrower_emailpro"
+                                                        value="[% borrower.emailpro | html %]"
+                                                        class="[% required.emailpro | html %]"
+                                                        [% IF required.emailpro %]required[% END %]
+                                                    />
                                                     <div class="required_label [% required.emailpro | html %]">Required</div>
                                                 </li>
                                             [% END %]
@@ -683,7 +754,7 @@
                                                 <li>
                                                     <label for="borrower_fax" class="[% required.fax | html %]">Fax:</label>
 
-                                                    <input type="text" id="borrower_fax" name="borrower_fax" value="[% borrower.fax | html %]" class="[% required.fax | html %]" />
+                                                    <input type="text" id="borrower_fax" name="borrower_fax" value="[% borrower.fax | html %]" class="[% required.fax | html %]" [% IF required.fax %]required[% END %] />
                                                     <div class="required_label [% required.fax | html %]">Required</div>
                                                 </li>
                                             [% END %]
@@ -696,7 +767,7 @@
                                                         <label for="borrower_primary_contact_method">Main contact method:</label>
                                                     [% END %]
 
-                                                    <select id="borrower_primary_contact_method" name="borrower_primary_contact_method">
+                                                    <select id="borrower_primary_contact_method" name="borrower_primary_contact_method" [% IF ( mandatory.defined('primary_contact_method') ) %]required[% END %]>
                                                         <option value=""></option>
                                                         [% UNLESS hidden.defined('phone') %]
                                                             [% IF ( borrower.primary_contact_method == 'phone' ) %]
@@ -750,7 +821,7 @@
                                                         [% ELSE %]
                                                             <label for="borrower_lang">Preferred language for notices: </label>
                                                         [% END %]
-                                                        <select id="borrower_lang" name="borrower_lang">
+                                                        <select id="borrower_lang" name="borrower_lang" [% IF ( mandatory.defined('lang') ) %]required[% END %]>
                                                             <option value="default">Default</option>
                                                             [% FOR language IN languages %]
                                                                 [% FOR sublanguage IN language.sublanguages_loop %]
@@ -806,7 +877,7 @@
                                                     <li>
                                                         <label for="borrower_B_streettype" class="[% required.B_streettype | html %]">Street type:</label>
 
-                                                        <select name="borrower_B_streettype" name="borrower_B_streettype" class="[% required.B_streettype | html %]">
+                                                        <select name="borrower_B_streettype" name="borrower_B_streettype" class="[% required.B_streettype | html %]" [% IF required.B_streettype %]required[% END %]>
                                                             <option value=""></option>
                                                             [% FOR roadtype IN roadtypes %]
                                                                 [% IF roadtype.authorised_value == patron.streettype %]
@@ -824,7 +895,14 @@
                                                 <li>
                                                     <label for="borrower_B_address" class="[% required.B_address | html %]">Address:</label>
 
-                                                    <input type="text" id="borrower_B_address" name="borrower_B_address" value="[% borrower.B_address | html %]" class="[% required.B_address | html %]" />
+                                                    <input
+                                                        type="text"
+                                                        id="borrower_B_address"
+                                                        name="borrower_B_address"
+                                                        value="[% borrower.B_address | html %]"
+                                                        class="[% required.B_address | html %]"
+                                                        [% IF required.B_address %]required[% END %]
+                                                    />
                                                     <div class="required_label [% required.B_address | html %]">Required</div>
                                                 </li>
                                             [% END %]
@@ -835,7 +913,14 @@
                                                 <li>
                                                     <label for="borrower_B_address2" class="[% required.B_address | html %]">Address 2:</label>
 
-                                                    <input type="text" id="borrower_B_address2" name="borrower_B_address2" value="[% borrower.B_address2 | html %]" class="[% required.B_address2 | html %]" />
+                                                    <input
+                                                        type="text"
+                                                        id="borrower_B_address2"
+                                                        name="borrower_B_address2"
+                                                        value="[% borrower.B_address2 | html %]"
+                                                        class="[% required.B_address2 | html %]"
+                                                        [% IF required.B_address2 %]required[% END %]
+                                                    />
                                                     <div class="required_label [% required.B_address2 | html %]">Required</div>
                                                 </li>
                                             [% END %]
@@ -844,7 +929,7 @@
                                                 <li>
                                                     <label for="borrower_B_city" class="[% required.B_city | html %]">City:</label>
 
-                                                    <input type="text" id="borrower_B_city" name="borrower_B_city" value="[% borrower.B_city | html %]" class="[% required.B_city | html %]" />
+                                                    <input type="text" id="borrower_B_city" name="borrower_B_city" value="[% borrower.B_city | html %]" class="[% required.B_city | html %]" [% IF required.B_city %]required[% END %] />
                                                     <div class="required_label [% required.B_city | html %]">Required</div>
                                                 </li>
                                             [% END %]
@@ -853,7 +938,7 @@
                                                 <li>
                                                     <label for="borrower_B_state" class="[% required.B_state | html %]">State:</label>
 
-                                                    <input type="text" id="borrower_B_state" name="borrower_B_state" value="[% borrower.B_state | html %]" class="[% required.B_state | html %]" />
+                                                    <input type="text" id="borrower_B_state" name="borrower_B_state" value="[% borrower.B_state | html %]" class="[% required.B_state | html %]" [% IF required.B_state %]required[% END %] />
                                                     <div class="required_label [% required.B_state | html %]">Required</div>
                                                 </li>
                                             [% END %]
@@ -862,7 +947,14 @@
                                                 <li>
                                                     <label for="borrower_B_zipcode" class="[% required.B_zipcode | html %]">ZIP/Postal code:</label>
 
-                                                    <input type="text" id="borrower_B_zipcode" name="borrower_B_zipcode" value="[% borrower.B_zipcode | html %]" class="[% required.B_zipcode | html %]" />
+                                                    <input
+                                                        type="text"
+                                                        id="borrower_B_zipcode"
+                                                        name="borrower_B_zipcode"
+                                                        value="[% borrower.B_zipcode | html %]"
+                                                        class="[% required.B_zipcode | html %]"
+                                                        [% IF required.B_zipcode %]required[% END %]
+                                                    />
                                                     <div class="required_label [% required.B_zipcode | html %]">Required</div>
                                                 </li>
                                             [% END %]
@@ -871,7 +963,14 @@
                                                 <li>
                                                     <label for="borrower_B_country" class="[% required.B_country | html %]">Country:</label>
 
-                                                    <input type="text" id="borrower_B_country" name="borrower_B_country" value="[% borrower.B_country | html %]" class="[% required.B_country | html %]" />
+                                                    <input
+                                                        type="text"
+                                                        id="borrower_B_country"
+                                                        name="borrower_B_country"
+                                                        value="[% borrower.B_country | html %]"
+                                                        class="[% required.B_country | html %]"
+                                                        [% IF required.B_country %]required[% END %]
+                                                    />
                                                     <div class="required_label [% required.B_country | html %]">Required</div>
                                                 </li>
                                             [% END %]
@@ -880,7 +979,7 @@
                                                 <li>
                                                     <label for="borrower_B_phone" class="[% required.B_phone | html %]">Phone:</label>
 
-                                                    <input type="text" id="borrower_B_phone" name="borrower_B_phone" value="[% borrower.B_phone | html %]" class="[% required.B_phone | html %]" />
+                                                    <input type="text" id="borrower_B_phone" name="borrower_B_phone" value="[% borrower.B_phone | html %]" class="[% required.B_phone | html %]" [% IF required.B_phone %]required[% END %] />
                                                     <div class="required_label [% required.B_phone | html %]">Required</div>
                                                 </li>
                                             [% END %]
@@ -889,14 +988,14 @@
                                                 <li>
                                                     <label for="borrower_B_email" class="[% required.B_email | html %]">Email:</label>
 
-                                                    <input type="text" id="borrower_B_email" name="borrower_B_email" value="[% borrower.B_email | html %]" class="[% required.B_email | html %]" />
+                                                    <input type="text" id="borrower_B_email" name="borrower_B_email" value="[% borrower.B_email | html %]" class="[% required.B_email | html %]" [% IF required.B_email %]required[% END %] />
                                                     <div class="required_label [% required.B_email | html %]">Required</div>
                                                 </li>
                                             [% END %]
 
                                             [% UNLESS hidden.defined('contactnote') %]
                                                 <li>
-                                                    <label for="borrower_contactnote" class="[% required.contactnote | html %]">Contact note:</label>
+                                                    <label for="borrower_contactnote" class="[% required.contactnote | html %]" [% IF required.contactnote %]required[% END %]>Contact note:</label>
 
                                                     <textarea id="borrower_contactnote" name="borrower_contactnote" cols="30" rows="2" class="[% required.contactnote | html %]">[% borrower.contactnote | html %]</textarea>
                                                     <div class="required_label [% required.contactnote | html %]">Required</div>
@@ -923,7 +1022,14 @@
                                                 <li>
                                                     <label for="borrower_altcontactsurname" class="[% required.altcontactsurname | html %]">Surname:</label>
 
-                                                    <input type="text" id="borrower_altcontactsurname" name="borrower_altcontactsurname" value="[% borrower.altcontactsurname | html %]" class="[% required.altcontactsurname | html %]" />
+                                                    <input
+                                                        type="text"
+                                                        id="borrower_altcontactsurname"
+                                                        name="borrower_altcontactsurname"
+                                                        value="[% borrower.altcontactsurname | html %]"
+                                                        class="[% required.altcontactsurname | html %]"
+                                                        [% IF required.altcontactsurname %]required[% END %]
+                                                    />
                                                     <div class="required_label [% required.altcontactsurname | html %]">Required</div>
                                                 </li>
                                             [% END %]
@@ -938,6 +1044,7 @@
                                                         name="borrower_altcontactfirstname"
                                                         value="[% borrower.altcontactfirstname | html %]"
                                                         class="[% required.altcontactfirstname | html %]"
+                                                        [% IF required.altcontactfirstname %]required[% END %]
                                                     />
                                                     <div class="required_label [% required.altcontactfirstname | html %]">Required</div>
                                                 </li>
@@ -947,7 +1054,14 @@
                                                 <li>
                                                     <label for="borrower_altcontactaddress1" class="[% required.altcontactaddress1 | html %]">Address:</label>
 
-                                                    <input type="text" id="borrower_altcontactaddress1" name="borrower_altcontactaddress1" value="[% borrower.altcontactaddress1 | html %]" class="[% required.altcontactaddress1 | html %]" />
+                                                    <input
+                                                        type="text"
+                                                        id="borrower_altcontactaddress1"
+                                                        name="borrower_altcontactaddress1"
+                                                        value="[% borrower.altcontactaddress1 | html %]"
+                                                        class="[% required.altcontactaddress1 | html %]"
+                                                        [% IF required.altcontactaddress1 %]required[% END %]
+                                                    />
                                                     <div class="required_label [% required.altcontactaddress1 | html %]">Required</div>
                                                 </li>
                                             [% END %]
@@ -956,7 +1070,14 @@
                                                 <li>
                                                     <label for="borrower_altcontactaddress2" class="[% required.altcontactaddress2 | html %]">Address 2:</label>
 
-                                                    <input type="text" id="borrower_altcontactaddress2" name="borrower_altcontactaddress2" value="[% borrower.altcontactaddress2 | html %]" class="[% required.altcontactaddress2 | html %]" />
+                                                    <input
+                                                        type="text"
+                                                        id="borrower_altcontactaddress2"
+                                                        name="borrower_altcontactaddress2"
+                                                        value="[% borrower.altcontactaddress2 | html %]"
+                                                        class="[% required.altcontactaddress2 | html %]"
+                                                        [% IF required.altcontactaddress2 %]required[% END %]
+                                                    />
                                                     <div class="required_label [% required.altcontactaddress2 | html %]">Required</div>
                                                 </li>
                                             [% END %]
@@ -965,7 +1086,14 @@
                                                 <li>
                                                     <label for="borrower_altcontactaddress3" class="[% required.altcontactaddress3 | html %]">City:</label>
 
-                                                    <input type="text" id="borrower_altcontactaddress3" name="borrower_altcontactaddress3" value="[% borrower.altcontactaddress3 | html %]" class="[% required.altcontactaddress3 | html %]" />
+                                                    <input
+                                                        type="text"
+                                                        id="borrower_altcontactaddress3"
+                                                        name="borrower_altcontactaddress3"
+                                                        value="[% borrower.altcontactaddress3 | html %]"
+                                                        class="[% required.altcontactaddress3 | html %]"
+                                                        [% IF required.altcontactaddress3 %]required[% END %]
+                                                    />
                                                     <div class="required_label [% required.altcontactaddress3 | html %]">Required</div>
                                                 </li>
                                             [% END %]
@@ -974,7 +1102,14 @@
                                                 <li>
                                                     <label for="borrower_altcontactstate" class="[% required.altcontactstate | html %]">State:</label>
 
-                                                    <input type="text" id="borrower_altcontactstate" name="borrower_altcontactstate" value="[% borrower.altcontactstate | html %]" class="[% required.altcontactstate | html %]" />
+                                                    <input
+                                                        type="text"
+                                                        id="borrower_altcontactstate"
+                                                        name="borrower_altcontactstate"
+                                                        value="[% borrower.altcontactstate | html %]"
+                                                        class="[% required.altcontactstate | html %]"
+                                                        [% IF required.altcontactstate %]required[% END %]
+                                                    />
                                                     <div class="required_label [% required.altcontactstate | html %]">Required</div>
                                                 </li>
                                             [% END %]
@@ -983,7 +1118,14 @@
                                                 <li>
                                                     <label for="borrower_altcontactzipcode" class="[% required.altcontactzipcode | html %]">ZIP/Postal code:</label>
 
-                                                    <input type="text" id="borrower_altcontactzipcode" name="borrower_altcontactzipcode" value="[% borrower.altcontactzipcode | html %]" class="[% required.altcontactzipcode | html %]" />
+                                                    <input
+                                                        type="text"
+                                                        id="borrower_altcontactzipcode"
+                                                        name="borrower_altcontactzipcode"
+                                                        value="[% borrower.altcontactzipcode | html %]"
+                                                        class="[% required.altcontactzipcode | html %]"
+                                                        [% IF required.altcontactzipcode %]required[% END %]
+                                                    />
                                                     <div class="required_label [% required.altcontactzipcode | html %]">Required</div>
                                                 </li>
                                             [% END %]
@@ -992,7 +1134,14 @@
                                                 <li>
                                                     <label for="borrower_altcontactcountry" class="[% required.altcontactcountry | html %]">Country:</label>
 
-                                                    <input type="text" id="borrower_altcontactcountry" name="borrower_altcontactcountry" value="[% borrower.altcontactcountry | html %]" class="[% required.altcontactcountry | html %]" />
+                                                    <input
+                                                        type="text"
+                                                        id="borrower_altcontactcountry"
+                                                        name="borrower_altcontactcountry"
+                                                        value="[% borrower.altcontactcountry | html %]"
+                                                        class="[% required.altcontactcountry | html %]"
+                                                        [% IF required.altcontactcountry %]required[% END %]
+                                                    />
                                                     <div class="required_label [% required.altcontactcountry | html %]">Required</div>
                                                 </li>
                                             [% END %]
@@ -1001,7 +1150,14 @@
                                                 <li>
                                                     <label for="borrower_altcontactphone" class="[% required.altcontactphone | html %]">Phone:</label>
 
-                                                    <input type="text" id="borrower_altcontactphone" name="borrower_altcontactphone" value="[% borrower.altcontactphone | html %]" class="[% required.altcontactphone | html %]" />
+                                                    <input
+                                                        type="text"
+                                                        id="borrower_altcontactphone"
+                                                        name="borrower_altcontactphone"
+                                                        value="[% borrower.altcontactphone | html %]"
+                                                        class="[% required.altcontactphone | html %]"
+                                                        [% IF required.altcontactphone %]required[% END %]
+                                                    />
                                                     <div class="required_label [% required.altcontactphone | html %]">Required</div>
                                                 </li>
                                             [% END %]
