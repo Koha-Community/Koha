@@ -69,8 +69,8 @@ import KohaTable from "../KohaTable.vue";
 
 export default {
     setup() {
-        const AVStore = inject("AVStore");
-        const { get_lib_from_av, map_av_dt_filter } = AVStore;
+        const PreservationStore = inject("PreservationStore");
+        const { get_lib_from_av, map_av_dt_filter } = PreservationStore;
         const { setConfirmationDialog, setMessage, setWarning } =
             inject("mainStore");
         const table = ref();

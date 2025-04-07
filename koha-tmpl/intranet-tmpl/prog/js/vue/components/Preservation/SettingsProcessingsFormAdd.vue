@@ -204,9 +204,6 @@ import { storeToRefs } from "pinia";
 
 export default {
     setup() {
-        const AVStore = inject("AVStore");
-        const {} = storeToRefs(AVStore);
-
         const { setMessage, setWarning } = inject("mainStore");
 
         const db_column_options = Object.keys(db_columns).map(function (c) {

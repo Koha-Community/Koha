@@ -291,8 +291,8 @@ export default {
     setup() {
         const format_date = $date;
 
-        const AVStore = inject("AVStore");
-        const { get_lib_from_av } = AVStore;
+        const PreservationStore = inject("PreservationStore");
+        const { get_lib_from_av } = PreservationStore;
 
         const { setConfirmationDialog, setMessage, setWarning } =
             inject("mainStore");

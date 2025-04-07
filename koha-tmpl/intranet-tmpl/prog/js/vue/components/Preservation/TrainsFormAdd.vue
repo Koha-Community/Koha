@@ -47,7 +47,7 @@
                                 v-model="train.not_for_loan"
                                 label="description"
                                 :reduce="av => av.value"
-                                :options="av_notforloan"
+                                :options="authorisedValues.av_notforloan"
                             />
                         </li>
                         <li>
@@ -101,15 +101,13 @@ import { APIClient } from "../../fetch/api-client.js";
 
 export default {
     setup() {
-        const AVStore = inject("AVStore");
-        const { av_notforloan } = storeToRefs(AVStore);
+        const PreservationStore = inject("PreservationStore");
+        const { authorisedValues } = storeToRefs(PreservationStore);
+        const { config } = PreservationStore;
 
         const { setMessage, setWarning } = inject("mainStore");
 
-        const PreservationStore = inject("PreservationStore");
-        const { config } = PreservationStore;
-
-        return { av_notforloan, setMessage, setWarning, config };
+        return { authorisedValues, setMessage, setWarning, config };
     },
     data() {
         return {

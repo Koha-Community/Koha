@@ -29,7 +29,7 @@
                                 "
                                 label="description"
                                 :reduce="av => av.value"
-                                :options="av_notforloan"
+                                :options="authorisedValues.av_notforloan"
                             >
                                 <template #search="{ attributes, events }">
                                     <input
@@ -60,7 +60,7 @@
                                 "
                                 label="description"
                                 :reduce="av => av.value"
-                                :options="av_notforloan"
+                                :options="authorisedValues.av_notforloan"
                             />
                         </li>
                     </ol>
@@ -124,16 +124,14 @@ import SettingsProcessings from "./SettingsProcessings.vue";
 
 export default {
     setup() {
-        const AVStore = inject("AVStore");
-        const { av_notforloan } = storeToRefs(AVStore);
-        const { get_lib_from_av } = AVStore;
+        const PreservationStore = inject("PreservationStore");
+        const { authorisedValues } = storeToRefs(PreservationStore);
+        const { get_lib_from_av, config } = PreservationStore;
 
         const { setMessage, setWarning } = inject("mainStore");
-        const PreservationStore = inject("PreservationStore");
-        const { config } = PreservationStore;
 
         return {
-            av_notforloan,
+            authorisedValues,
             get_lib_from_av,
             setMessage,
             setWarning,

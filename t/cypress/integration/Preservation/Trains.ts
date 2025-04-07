@@ -212,47 +212,50 @@ describe("Trains", () => {
             '{"permissions":{"manage_sysprefs":"1"},"settings":{"enabled":"1","not_for_loan_default_train_in":"42","not_for_loan_waiting_list_in": "24"}}'
         );
 
-        cy.intercept(
-            "GET",
-            "/api/v1/authorised_value_categories/NOT_LOAN/authorised_values",
-            [
-                {
-                    category_name: "NOT_LOAN",
-                    description: "Ordered",
-                    value: "-1",
-                },
-                {
-                    category_name: "NOT_LOAN",
-                    description: "Not for loan",
-                    value: "1",
-                },
-                {
-                    category_name: "NOT_LOAN",
-                    description: "Staff collection",
-                    value: "2",
-                },
-                {
-                    category_name: "NOT_LOAN",
-                    description: "Added to bundle",
-                    value: "3",
-                },
-                {
-                    category_name: "NOT_LOAN",
-                    description: "In preservation",
-                    value: "24",
-                },
-                {
-                    category_name: "NOT_LOAN",
-                    description: "In preservation external",
-                    value: "42",
-                },
-                {
-                    category_name: "NOT_LOAN",
-                    description: "In preservation other",
-                    value: "43",
-                },
-            ]
-        );
+        cy.intercept("GET", "/api/v1/authorised_value_categories?q=*", [
+            {
+                authorised_values: [
+                    {
+                        category_name: "NOT_LOAN",
+                        description: "Ordered",
+                        value: "-1",
+                    },
+                    {
+                        category_name: "NOT_LOAN",
+                        description: "Not for loan",
+                        value: "1",
+                    },
+                    {
+                        category_name: "NOT_LOAN",
+                        description: "Staff collection",
+                        value: "2",
+                    },
+                    {
+                        category_name: "NOT_LOAN",
+                        description: "Added to bundle",
+                        value: "3",
+                    },
+                    {
+                        category_name: "NOT_LOAN",
+                        description: "In preservation",
+                        value: "24",
+                    },
+                    {
+                        category_name: "NOT_LOAN",
+                        description: "In preservation external",
+                        value: "42",
+                    },
+                    {
+                        category_name: "NOT_LOAN",
+                        description: "In preservation other",
+                        value: "43",
+                    },
+                ],
+                category_name: "NOT_LOAN",
+                is_integer_only: false,
+                is_system: true,
+            },
+        ]);
     });
 
     it("List trains", () => {
@@ -668,6 +671,14 @@ describe("Trains", () => {
                 });
             }
         );
+        cy.intercept("GET", "/api/v1/authorised_value_categories?q=*", [
+            {
+                authorised_values: [],
+                category_name: "COUNTRY",
+                is_integer_only: false,
+                is_system: false,
+            },
+        ]);
         cy.get("#add_to_train .approve").click();
         train.items = get_train_items().filter(
             train_item => train_item.item_id == 1 || train_item.item_id == 2

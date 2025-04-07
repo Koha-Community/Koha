@@ -42,42 +42,45 @@ describe("Processings", () => {
             '{"permissions":{"manage_sysprefs":"1"},"settings":{"enabled":"1","not_for_loan_default_train_in":"42","not_for_loan_waiting_list_in": "24"}}'
         );
 
-        cy.intercept(
-            "GET",
-            "/api/v1/authorised_value_categories/NOT_LOAN/authorised_values",
-            [
-                {
-                    category_name: "NOT_LOAN",
-                    description: "Ordered",
-                    value: "-1",
-                },
-                {
-                    category_name: "NOT_LOAN",
-                    description: "Not for loan",
-                    value: "1",
-                },
-                {
-                    category_name: "NOT_LOAN",
-                    description: "Staff collection",
-                    value: "2",
-                },
-                {
-                    category_name: "NOT_LOAN",
-                    description: "Added to bundle",
-                    value: "3",
-                },
-                {
-                    category_name: "NOT_LOAN",
-                    description: "In preservation",
-                    value: "24",
-                },
-                {
-                    category_name: "NOT_LOAN",
-                    description: "In preservation external",
-                    value: "42",
-                },
-            ]
-        );
+        cy.intercept("GET", "/api/v1/authorised_value_categories?q=*", [
+            {
+                authorised_values: [
+                    {
+                        category_name: "NOT_LOAN",
+                        description: "Ordered",
+                        value: "-1",
+                    },
+                    {
+                        category_name: "NOT_LOAN",
+                        description: "Not for loan",
+                        value: "1",
+                    },
+                    {
+                        category_name: "NOT_LOAN",
+                        description: "Staff collection",
+                        value: "2",
+                    },
+                    {
+                        category_name: "NOT_LOAN",
+                        description: "Added to bundle",
+                        value: "3",
+                    },
+                    {
+                        category_name: "NOT_LOAN",
+                        description: "In preservation",
+                        value: "24",
+                    },
+                    {
+                        category_name: "NOT_LOAN",
+                        description: "In preservation external",
+                        value: "42",
+                    },
+                ],
+                category_name: "NOT_LOAN",
+                is_integer_only: false,
+                is_system: true,
+            },
+        ]);
     });
 
     it("Settings", () => {
