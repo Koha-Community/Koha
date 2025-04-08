@@ -1,15 +1,14 @@
 import { markRaw } from "vue";
 
 import Home from "../components/Preservation/Home.vue";
-import TrainsList from "../components/Preservation/TrainsList.vue";
-import TrainsShow from "../components/Preservation/TrainsShow.vue";
-import TrainsFormAdd from "../components/Preservation/TrainsFormAdd.vue";
 import TrainsFormAddItem from "../components/Preservation/TrainsFormAddItem.vue";
 import TrainsFormAddItems from "../components/Preservation/TrainsFormAddItems.vue";
 import WaitingList from "../components/Preservation/WaitingList.vue";
 import Settings from "../components/Preservation/Settings.vue";
 import SettingsProcessingsShow from "../components/Preservation/SettingsProcessingsShow.vue";
 import SettingsProcessingsFormAdd from "../components/Preservation/SettingsProcessingsFormAdd.vue";
+
+import ResourceWrapper from "../components/ResourceWrapper.vue";
 
 import { $__ } from "../i18n";
 
@@ -39,11 +38,12 @@ export const routes = [
                 title: $__("Trains"),
                 icon: "fa fa-train",
                 is_end_node: true,
+                resource: "Preservation/TrainResource.vue",
                 children: [
                     {
                         path: "",
                         name: "TrainsList",
-                        component: markRaw(TrainsList),
+                        component: markRaw(ResourceWrapper),
                     },
                     {
                         path: ":train_id",
@@ -54,7 +54,7 @@ export const routes = [
                             {
                                 path: "",
                                 name: "TrainsShow",
-                                component: markRaw(TrainsShow),
+                                component: markRaw(ResourceWrapper),
                             },
                             {
                                 path: "items",
@@ -85,13 +85,13 @@ export const routes = [
                     {
                         path: "add",
                         name: "TrainsFormAdd",
-                        component: markRaw(TrainsFormAdd),
+                        component: markRaw(ResourceWrapper),
                         title: $__("Add train"),
                     },
                     {
                         path: "edit/:train_id",
                         name: "TrainsFormAddEdit",
-                        component: markRaw(TrainsFormAdd),
+                        component: markRaw(ResourceWrapper),
                         title: $__("Edit train"),
                     },
                 ],

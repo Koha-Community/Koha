@@ -58,8 +58,6 @@ export default {
         i18n: Object,
         resourceAttrs: Array,
         listComponent: String,
-        goToResourceEdit: Function,
-        doResourceDelete: Function,
         resourceNamePlural: String,
         getFieldGroupings: Function,
         appendToShow: Array,
