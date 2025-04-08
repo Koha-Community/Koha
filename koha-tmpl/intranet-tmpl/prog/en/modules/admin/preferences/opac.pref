@@ -571,6 +571,29 @@ OPAC:
                   summary: "in user summary box on OPAC homepage (the system preference 'OPACUserSummary' must be enabled)"
                   user: "on patron's 'your summary' page"
             - ". Note that displayed savings may be inaccurate if checkout history is anonymized."
+        -
+            - pref: OPACVirtualCard
+              choices:
+                  1: Allow
+                  0: "Don't allow"
+            - patrons to access the 'My virtual card' tab on their account page on the OPAC.
+            - "If set to allow, show a "
+            - pref: OPACVirtualCardBarcode
+              default: code39
+              choices:
+                  code39: "CODE39"
+                  code128: "CODE128"
+                  ean13: "EAN-13"
+                  upca: "UPC-A"
+                  upce: "UPC-E"
+                  ean8: "EAN-8"
+                  itf14: "ITF-14"
+                  qrcode: "QR Code"
+                  matrix2of5: "Matrix 2 of 5"
+                  industrial2of5: "Industrial 2 of 5"
+                  iata2of5: "IATA 2 of 5"
+                  coop2of5: "COOP 2 of 5"
+            - " barcode in the patron's virtual card."
     OpenURL:
         -
             - 'Complete URL of OpenURL resolver (starting with <code>http://</code> or <code>https://</code>):'
@@ -919,29 +942,6 @@ OPAC:
                   1: Show
                   0: "Don't show"
             - purchase suggestions from other patrons on the OPAC.
-        -
-            - pref: OPACVirtualCard
-              choices:
-                  1: Allow
-                  0: "Don't allow"
-            - patrons to access the 'My virtual card' tab on their account page on the OPAC.
-            - "If set to allow, show a "
-            - pref: OPACVirtualCardBarcode
-              default: code39
-              choices:
-                  code39: "CODE39"
-                  code128: "CODE128"
-                  ean13: "EAN-13"
-                  upca: "UPC-A"
-                  upce: "UPC-E"
-                  ean8: "EAN-8"
-                  itf14: "ITF-14"
-                  qrcode: "QR Code"
-                  matrix2of5: "Matrix 2 of 5"
-                  industrial2of5: "Industrial 2 of 5"
-                  iata2of5: "IATA 2 of 5"
-                  coop2of5: "COOP 2 of 5"
-            - " barcode in the patron's virtual card."
         -
             - "Fields that should be mandatory for patron purchase suggestions:"
             - pref: OPACSuggestionMandatoryFields
