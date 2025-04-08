@@ -311,9 +311,7 @@ export default {
                 errors.push(this.$__("An agreement is used several times"));
             }
 
-            errors.forEach(function (e) {
-                this.setWarning(e);
-            });
+            this.setWarning(errors.join("<br>"));
             return !errors.length;
         },
         onSubmit(e, packageToSave) {
