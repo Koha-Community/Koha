@@ -193,10 +193,7 @@ export default {
     },
     computed: {
         resourceToAddOrEdit() {
-            if (this.resourceToEdit) {
-                return this.resourceToEdit;
-            }
-            return this.resource;
+            return this.resourceToEdit || this.resource;
         },
     },
     components: {
