@@ -73,10 +73,8 @@ export default {
                         type: "text",
                         value: "vendor.name",
                         link: {
-                            href: "/cgi-bin/koha/acqui/supplier.pl",
-                            params: {
-                                bookseller_id: "vendor_id",
-                            },
+                            href: "/cgi-bin/koha/acquisition/vendors",
+                            slug: "vendor_id",
                         },
                     },
                 },
