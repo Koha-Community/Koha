@@ -3,6 +3,7 @@
 [% USE Asset %]
 [% USE Koha %]
 [% USE Branches %]
+[% USE KohaDates %]
 [% SET OpacNav = AdditionalContents.get( location => "OpacNav", lang => lang, library => logged_in_user.branchcode || default_branch, blocktitle => 0 ) %]
 [% SET OpacNavBottom = AdditionalContents.get( location => "OpacNavBottom", lang => lang, library => logged_in_user.branchcode || default_branch, blocktitle => 0 ) %]
 [% INCLUDE 'doc-head-open.inc' %]
@@ -45,6 +46,12 @@
                     </div>
                     <div id="lib-container">
                         <p id="patron-lib"><strong>Library:</strong> [% Branches.GetName( patron.branchcode ) | html %]</p>
+                    </div>
+                    <div id="cardnumber-container">
+                        <p id="patron-cardnumber"><strong>Card number:</strong> [% patron.cardnumber | html %]</p>
+                    </div>
+                    <div id="dateexpiry-container">
+                        <p id="patron-dateexpiry"><strong>Expiration date:</strong> [% patron.dateexpiry | $KohaDates %]</p>
                     </div>
                 </div>
             </div> <!-- / .col-10 -->
