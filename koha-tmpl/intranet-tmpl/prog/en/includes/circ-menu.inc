@@ -27,7 +27,7 @@
 
         [% IF Koha.Preference('showLastPatron') %]
             <input type="hidden" id="hiddenborrowernumber" value="[% patron.borrowernumber | html %]" />
-            <input type="hidden" id="hiddenborrowername" value="[% patron.surname | html %] [% patron.firstname | html %]" />
+            <input type="hidden" id="hiddenborrowername" value="[% patron.surname | html %] [% patron.preferred_name | html %]" />
             <input type="hidden" id="hiddenborrowercard" value="[% patron.cardnumber | html %]" />
         [% END %]
 
