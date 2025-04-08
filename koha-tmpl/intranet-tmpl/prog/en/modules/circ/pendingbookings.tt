@@ -234,7 +234,7 @@
                         "render": function(data,type,row,meta) {
                             if ( row.item ) {
                                 if ( row.item.checked_out_date ) {
-                                    return _("On loan, due: ") . $date(row.item.checked_out_date);
+                                    return _("On loan, due: ") + $date(row.item.checked_out_date);
                                 } else {
                                     return row.item._strings.location.str;
                                 }
