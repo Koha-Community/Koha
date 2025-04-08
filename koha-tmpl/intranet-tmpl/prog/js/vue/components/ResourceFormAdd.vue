@@ -1,6 +1,6 @@
 <template>
     <div v-if="!initialized">{{ $__("Loading") }}</div>
-    <div v-else :id="`${resourceName}_add`">
+    <div v-else :id="`${resourceNamePlural}_add`">
         <h2 v-if="resourceToAddOrEdit[idAttr]">
             {{
                 $__("Edit") +
@@ -164,7 +164,7 @@ export default {
         listComponent: String,
         resource: Object,
         onSubmit: Function,
-        resourceName: String,
+        resourceNamePlural: String,
         getFieldGroupings: Function,
         formGroupsDisplayMode: String,
     },

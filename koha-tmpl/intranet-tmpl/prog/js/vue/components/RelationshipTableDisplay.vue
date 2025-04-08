@@ -1,6 +1,6 @@
 <template>
     <div v-if="!initialized">{{ $__("Loading") }}</div>
-    <div v-else :id="`${resourceName}_relationship_list`">
+    <div v-else :id="`${resourceNamePlural}_relationship_list`">
         <div v-if="resourceCount > 0" class="page-section">
             <KohaTable
                 ref="table"
@@ -37,6 +37,7 @@ export default {
         },
         resource: Object,
         resourceName: String,
+        resourceNamePlural: String,
         hasAdditionalFields: {
             type: Boolean,
             default: false,

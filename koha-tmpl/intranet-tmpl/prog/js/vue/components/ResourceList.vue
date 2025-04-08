@@ -1,6 +1,6 @@
 <template>
     <div v-if="!initialized">{{ $__("Loading") }}</div>
-    <div v-else :id="`${resourceName}_list`">
+    <div v-else :id="`${resourceNamePlural}_list`">
         <Toolbar v-if="!embedded">
             <ToolbarButton
                 action="add"
@@ -67,6 +67,7 @@ export default {
         goToResourceAdd: Function,
         doResourceSelect: Function,
         resourceName: String,
+        resourceNamePlural: String,
         hasAdditionalFields: { type: Boolean, default: false },
         extendedAttributesResourceType: String,
         resourceAttrs: Array,

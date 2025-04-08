@@ -117,7 +117,7 @@ export default {
                 getFieldGroupings: this.getFieldGroupings,
                 resourceAttrs: this.resourceAttrs,
                 listComponent: this.listComponent,
-                resourceName: this.resourceName,
+                resourceNamePlural: this.resourceNamePlural,
             };
 
             return commonProps;
@@ -469,6 +469,19 @@ export default {
             return this.resourceAttrs.some(
                 attr => attr.name === "additional_fields"
             );
+        },
+        /**
+         * Returns the plural form of the resource name.
+         *
+         * This method checks if the `resourceName` ends with 's'. If it does not,
+         * it appends 's' to create the plural form. Otherwise returns `resourceName`.
+         *
+         * @return {String} The plural form of the resource name.
+         */
+        resourceNamePlural() {
+            if (!this.resourceName.endsWith("s"))
+                return this.resourceName + "s";
+            return this.resourceName;
         },
     },
     created() {

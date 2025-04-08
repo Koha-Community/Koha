@@ -319,6 +319,10 @@ export default {
                                 type: "string",
                                 value: "package",
                             },
+                            resourceNamePlural: {
+                                type: "string",
+                                value: "packages",
+                            },
                             hasAdditionalFields: {
                                 type: "boolean",
                                 value: true,

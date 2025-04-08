@@ -1,6 +1,6 @@
 <template>
     <div v-if="!initialized">{{ $__("Loading") }}</div>
-    <div v-else :id="`${resourceName}_show`">
+    <div v-else :id="`${resourceNamePlural}_show`">
         <Toolbar>
             <ToolbarButton
                 action="edit"
@@ -71,7 +71,7 @@ export default {
         listComponent: String,
         goToResourceEdit: Function,
         doResourceDelete: Function,
-        resourceName: String,
+        resourceNamePlural: String,
         getFieldGroupings: Function,
         appendToShow: Array,
     },

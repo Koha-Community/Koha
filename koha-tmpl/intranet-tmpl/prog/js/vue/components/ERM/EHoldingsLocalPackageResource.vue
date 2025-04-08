@@ -98,6 +98,10 @@ export default {
                             type: "string",
                             value: "title",
                         },
+                        resourceNamePlural: {
+                            type: "string",
+                            value: "titles",
+                        },
                     },
                 },
             ];
