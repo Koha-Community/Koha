@@ -15,7 +15,7 @@
             :required="attr.required ? true : false"
         />
     </template>
-    <template v-if="attr.type == 'text'">
+    <template v-else-if="attr.type == 'text'">
         <input
             :id="getElementId"
             v-model="resource[attr.name]"
@@ -37,6 +37,16 @@
         <input
             type="checkbox"
             :id="getElementId"
+            v-model="resource[attr.name]"
+            @change="attr.onChange && attr.onChange(resource)"
+        />
+    </template>
+    <template v-else-if="attr.type == 'radio'">
+        <input
+            type="radio"
+            :name="attr.name"
+            :id="getElementId"
+            :value="attr.value"
             v-model="resource[attr.name]"
             @change="attr.onChange && attr.onChange(resource)"
         />
@@ -146,6 +156,11 @@
             @additional-fields-changed="additionalFieldsChanged"
         ></AdditionalFieldsEntry>
     </template>
+    <template v-else>
+        <span>{{
+            $__("Programming error: unknown type %s").format(attr.type)
+        }}</span>
+    </template>
     <ToolTip v-if="attr.toolTip" :toolTip="attr.toolTip"></ToolTip>
     <span v-if="attr.required" class="required">{{ $__("Required") }}</span>
 </template>
@@ -171,9 +186,11 @@ export default {
     },
     computed: {
         getElementId() {
-            return this.attr.indexRequired
-                ? `${this.attr.name}_${this.index}`
-                : this.attr.name;
+            return this.attr.id
+                ? this.attr.id
+                : this.attr.indexRequired
+                  ? `${this.attr.name}_${this.index}`
+                  : this.attr.name;
         },
         requiredComponent() {
             const component = this.identifyAndImportComponent(this.attr);
@@ -237,5 +254,9 @@ input::-webkit-inner-spin-button {
 /* Firefox */
 input[type="number"] {
     -moz-appearance: textfield;
+}
+
+.filters > input[type="radio"] {
+    min-width: 0 !important;
 }
 </style>
