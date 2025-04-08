@@ -134,6 +134,12 @@
                                 [% patron.firstname | html %]
                             </li>
                         [% END %]
+                        [% IF ( patron.surname ) %]
+                            <li id="patron_surname">
+                                <span class="label">Surname: </span>
+                                [% patron.surname | html %]
+                            </li>
+                        [% END %]
                         [% IF ( patron.phone ) %]
                             <li>
                                 <span class="label">Primary phone: </span>
