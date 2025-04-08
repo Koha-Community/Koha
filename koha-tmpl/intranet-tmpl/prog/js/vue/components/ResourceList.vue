@@ -21,7 +21,7 @@
         <div v-if="resourceCount > 0" class="page-section">
             <KohaTable
                 ref="table"
-                v-bind="tableOptions"
+                v-bind="tableOptionsWithColumns"
                 :searchable_additional_fields="searchable_additional_fields"
                 :searchable_av_options="searchable_av_options"
                 @show="goToResourceShow"
@@ -39,7 +39,7 @@
 <script>
 import Toolbar from "./Toolbar.vue";
 import ToolbarButton from "./ToolbarButton.vue";
-import { ref } from "vue";
+import { ref, inject } from "vue";
 import { APIClient } from "../fetch/api-client.js";
 import KohaTable from "./KohaTable.vue";
 
@@ -48,8 +48,12 @@ export default {
     setup(props) {
         const table = ref();
 
+        const AVStore = inject("AVStore");
+        const { get_lib_from_av } = AVStore;
+
         return {
             table,
+            get_lib_from_av,
         };
     },
     props: {
@@ -62,12 +66,12 @@ export default {
         doResourceDelete: Function,
         goToResourceAdd: Function,
         doResourceSelect: Function,
-        // tableFilters: { type: Array, default: [] },
-        // getFilters: Function,
-        // filterTable: Function | null,
         resourceName: String,
         hasAdditionalFields: { type: Boolean, default: false },
         extendedAttributesResourceType: String,
+        resourceAttrs: Array,
+        nameAttr: String,
+        idAttr: String,
         getToolbarButtons: {
             type: Function,
             default: () => [],
@@ -144,6 +148,125 @@ export default {
                             }));
                     });
                 });
+        },
+        getTableColumns(resourceAttrs) {
+            let get_lib_from_av = this.get_lib_from_av;
+
+            const columns = resourceAttrs
+                ?.filter(attr => attr.showInTable)
+                .reduce((acc, attr, i) => {
+                    if (typeof attr.showInTable === "object") {
+                        acc.push(attr.showInTable);
+                        return acc;
+                    }
+                    if (attr.name === this.idAttr) {
+                        acc.push({
+                            title: attr.label,
+                            data: attr.name,
+                            searchable: true,
+                            orderable: true,
+                            render: function (data, type, row, meta) {
+                                return (
+                                    '<a role="button" class="show">' +
+                                    escape_str(row[attr.name]) +
+                                    "</a>"
+                                );
+                            },
+                        });
+                        return acc;
+                    }
+                    if (attr.name === this.nameAttr) {
+                        acc.push({
+                            title: attr.label,
+                            data: attr.name,
+                            searchable: true,
+                            orderable: true,
+                            render: function (data, type, row, meta) {
+                                return (
+                                    '<a role="button" class="show">' +
+                                    escape_str(row[attr.name]) +
+                                    "</a>"
+                                );
+                            },
+                        });
+                        return acc;
+                    }
+                    if (attr.type === "vendor") {
+                        acc.push({
+                            title: attr.label,
+                            data: attr.name,
+                            searchable: true,
+                            orderable: true,
+                            render: function (data, type, row, meta) {
+                                return row.vendor_id != undefined
+                                    ? '<a href="/cgi-bin/koha/acquisition/vendors/' +
+                                          row.vendor_id +
+                                          '">' +
+                                          escape_str(row.vendor.name) +
+                                          "</a>"
+                                    : "";
+                            },
+                        });
+                        return acc;
+                    }
+                    if (attr.type === "select" && attr.avCat) {
+                        acc.push({
+                            title: attr.label,
+                            data: attr.name,
+                            searchable: true,
+                            orderable: true,
+                            render: function (data, type, row, meta) {
+                                return get_lib_from_av(
+                                    attr.avCat,
+                                    row[`${attr.name}`]
+                                );
+                            },
+                        });
+                        return acc;
+                    }
+                    if (attr.type === "date") {
+                        acc.push({
+                            title: attr.label,
+                            data: attr.name,
+                            searchable: true,
+                            orderable: true,
+                            render: function (data, type, row, meta) {
+                                return $date(row[`${attr.name}`]);
+                            },
+                        });
+                        return acc;
+                    }
+                    if (attr.type === "boolean" || attr.type === "checkbox") {
+                        acc.push({
+                            title: attr.label,
+                            data: attr.name,
+                            searchable: true,
+                            orderable: true,
+                            render: function (data, type, row, meta) {
+                                return escape_str(
+                                    row[`${attr.name}`] ? __("Yes") : __("No")
+                                );
+                            },
+                        });
+                        return acc;
+                    }
+                    acc.push({
+                        title: attr.label,
+                        data: attr.name,
+                        searchable: true,
+                        orderable: true,
+                    });
+                    return acc;
+                }, []);
+            return columns;
+        },
+    },
+    computed: {
+        tableOptionsWithColumns() {
+            this.tableOptions.columns = this.getTableColumns(
+                this.resourceAttrs
+            );
+            return this.tableOptions;
         },
     },
     components: { Toolbar, ToolbarButton, KohaTable },
