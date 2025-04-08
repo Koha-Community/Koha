@@ -60,7 +60,7 @@ use C4::Acquisition qw( CancelReceipt GetInvoice GetInvoiceDetails get_rounded_p
 use C4::Budgets     qw( GetBudget GetBudgetByOrderNumber GetBudgetName );
 use CGI             qw ( -utf8 );
 use C4::Output      qw( output_html_with_http_headers );
-use C4::Suggestions qw( GetSuggestion GetSuggestionInfoFromBiblionumber GetSuggestionInfo );
+use C4::Suggestions qw( GetSuggestionInfoFromBiblionumber GetSuggestionInfo );
 
 use Koha::Acquisition::Baskets;
 use Koha::Acquisition::Bookseller;

@@ -69,7 +69,7 @@ BEGIN {
 use Carp qw( carp croak );
 use Text::CSV_XS;
 use C4::Context;
-use C4::Suggestions qw( GetSuggestion GetSuggestionFromBiblionumber ModSuggestion );
+use C4::Suggestions qw( GetSuggestionFromBiblionumber ModSuggestion );
 use C4::Biblio      qw( GetMarcFromKohaField GetMarcStructure IsMarcStructureInternal );
 use C4::Contract    qw( GetContract );
 use C4::Log         qw( logaction );

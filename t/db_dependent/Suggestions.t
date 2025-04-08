@@ -19,7 +19,7 @@ use Modern::Perl;
 
 use DateTime::Duration;
 use Test::NoWarnings;
-use Test::More tests => 96;
+use Test::More tests => 95;
 use Test::Warn;
 
 use t::lib::Mocks;
@@ -38,7 +38,7 @@ use Koha::Suggestions;
 BEGIN {
     use_ok(
         'C4::Suggestions',
-        qw( GetSuggestion ModSuggestion GetSuggestionInfo GetSuggestionFromBiblionumber GetSuggestionInfoFromBiblionumber GetSuggestionByStatus ConnectSuggestionAndBiblio DelSuggestion MarcRecordFromNewSuggestion GetUnprocessedSuggestions DelSuggestionsOlderThan )
+        qw( ModSuggestion GetSuggestionInfo GetSuggestionFromBiblionumber GetSuggestionInfoFromBiblionumber GetSuggestionByStatus ConnectSuggestionAndBiblio DelSuggestion MarcRecordFromNewSuggestion GetUnprocessedSuggestions DelSuggestionsOlderThan )
     );
 }
 
@@ -177,8 +177,7 @@ isnt( $my_suggestionid, 0, 'Suggestion is correctly saved' );
 my $my_suggestion_with_budget_object = Koha::Suggestion->new($my_suggestion_with_budget)->store;
 my $my_suggestionid_with_budget      = $my_suggestion_with_budget_object->id;
 
-is( GetSuggestion(), undef, 'GetSuggestion without the suggestion id returns undef' );
-my $suggestion = GetSuggestion($my_suggestionid);
+my $suggestion = Koha::Suggestions->find($my_suggestionid)->unblessed();
 is( $suggestion->{title},         $my_suggestion->{title},         'Suggestion stores the title correctly' );
 is( $suggestion->{author},        $my_suggestion->{author},        'Suggestion stores the author correctly' );
 is( $suggestion->{publishercode}, $my_suggestion->{publishercode}, 'Suggestion stores the publishercode correctly' );
@@ -203,7 +202,7 @@ is( $status, undef, 'ModSuggestion without the suggestion id returns undef' );
 $mod_suggestion1->{suggestionid} = $my_suggestionid;
 $status = ModSuggestion($mod_suggestion1);
 is( $status, 1, 'ModSuggestion modifies one entry' );
-$suggestion = GetSuggestion($my_suggestionid);
+$suggestion = Koha::Suggestions->find($my_suggestionid)->unblessed();
 is( $suggestion->{title},  $mod_suggestion1->{title},  'ModSuggestion modifies the title  correctly' );
 is( $suggestion->{author}, $mod_suggestion1->{author}, 'ModSuggestion modifies the author correctly' );
 is(
@@ -247,7 +246,7 @@ my $mod_suggestion3 = {
 t::lib::Mocks::mock_preference( 'FallbackToSMSIfNoEmail', 0 );
 $status = ModSuggestion($mod_suggestion3);
 is( $status, 1, 'ModSuggestion modifies one entry' );
-$suggestion = GetSuggestion($my_suggestionid);
+$suggestion = Koha::Suggestions->find($my_suggestionid)->unblessed();
 is( $suggestion->{STATUS}, $mod_suggestion3->{STATUS}, 'ModSuggestion modifies the status correctly' );
 $messages = C4::Letters::GetQueuedMessages( { borrowernumber => $borrowernumber } );
 is( @$messages, 1, 'ModSuggestion sends an email if the status is updated' );
@@ -438,7 +437,7 @@ is( ConnectSuggestionAndBiblio(), '0E0', 'ConnectSuggestionAndBiblio without arg
 my $biblio_2                      = $builder->build_object( { class => 'Koha::Biblios' } );
 my $connect_suggestion_and_biblio = ConnectSuggestionAndBiblio( $my_suggestionid, $biblio_2->biblionumber );
 is( $connect_suggestion_and_biblio, '1', 'ConnectSuggestionAndBiblio returns 1' );
-$suggestion = GetSuggestion($my_suggestionid);
+$suggestion = Koha::Suggestions->find($my_suggestionid)->unblessed();
 is(
     $suggestion->{biblionumber}, $biblio_2->biblionumber,
     'ConnectSuggestionAndBiblio updates the biblio number correctly'
@@ -469,12 +468,12 @@ is( $suggestions->[1]->{title}, $del_suggestion->{title}, 'DelSuggestion deletes
 $my_suggestion->{budgetid} = '';    # If budgetid == '', NULL should be set in DB
 my $my_suggestionid_test_budget_object = Koha::Suggestion->new($my_suggestion)->store;
 my $my_suggestionid_test_budgetid      = $my_suggestionid_test_budget_object->id;
-$suggestion = GetSuggestion($my_suggestionid_test_budgetid);
+$suggestion = Koha::Suggestions->find($my_suggestionid_test_budgetid)->unblessed();
 is( $suggestion->{budgetid}, undef, 'Suggestion Should set budgetid to NULL if equals an empty string' );
 
 $my_suggestion->{budgetid} = '';    # If budgetid == '', NULL should be set in DB
 ModSuggestion($my_suggestion);
-$suggestion = GetSuggestion($my_suggestionid_test_budgetid);
+$suggestion = Koha::Suggestions->find($my_suggestionid_test_budgetid)->unblessed();
 is( $suggestion->{budgetid}, undef, 'Suggestion Should set budgetid to NULL if equals an empty string' );
 
 my $suggestion2 = {
@@ -511,10 +510,10 @@ subtest 'GetUnprocessedSuggestions' => sub {
         'GetUnprocessedSuggestions should return 0 if a suggestion has been processed but not linked to a fund'
     );
     my $status     = ModSuggestion($mod_suggestion1);
-    my $suggestion = GetSuggestion($my_suggestionid);
+    my $suggestion = Koha::Suggestions->find($my_suggestionid)->unblessed();
     is( $suggestion->{budgetid}, undef, 'ModSuggestion should set budgetid to NULL if not given' );
     ModSuggestion( { suggestionid => $my_suggestionid, budgetid => $budget_id } );
-    $suggestion = GetSuggestion($my_suggestionid);
+    $suggestion = Koha::Suggestions->find($my_suggestionid)->unblessed();
     is( $suggestion->{budgetid}, $budget_id, 'ModSuggestion should modify budgetid if given' );
 
     $unprocessed_suggestions = C4::Suggestions::GetUnprocessedSuggestions;
@@ -734,7 +733,7 @@ subtest 'ModSuggestion should work on suggestions without a suggester' => sub {
 
     $dbh->do(q|DELETE FROM suggestions|);
     my $my_suggestionid = Koha::Suggestion->new($my_suggestion_without_suggestedby)->store()->id;
-    $suggestion = GetSuggestion($my_suggestionid);
+    $suggestion = Koha::Suggestions->find($my_suggestionid)->unblessed();
     is( $suggestion->{suggestedby}, undef, "Suggestedby is undef" );
 
     ModSuggestion(
@@ -744,7 +743,7 @@ subtest 'ModSuggestion should work on suggestions without a suggester' => sub {
             note         => "Test note"
         }
     );
-    $suggestion = GetSuggestion($my_suggestionid);
+    $suggestion = Koha::Suggestions->find($my_suggestionid)->unblessed();
 
     is( $suggestion->{note}, "Test note", "ModSuggestion works on suggestions without a suggester" );
 };

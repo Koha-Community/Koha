@@ -67,7 +67,7 @@ use C4::Output      qw( output_html_with_http_headers );
 use C4::Budgets     qw( GetBudget GetBudgetPeriods GetBudgetPeriod GetBudgetHierarchy CanUserUseBudget );
 use C4::Members;
 use C4::Biblio      qw( GetMarcStructure );
-use C4::Suggestions qw( GetSuggestion GetSuggestionInfoFromBiblionumber GetSuggestionInfo );
+use C4::Suggestions qw( GetSuggestionInfoFromBiblionumber GetSuggestionInfo );
 
 use Koha::Acquisition::Booksellers;
 use Koha::Acquisition::Currencies;

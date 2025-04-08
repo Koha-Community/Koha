@@ -28,7 +28,7 @@ use C4::Acquisition
     qw( GetBasket CanUserManageBasket GetBasketAsCSV NewBasket NewBasketgroup ModBasket ReopenBasket ModBasketUsers GetBasketgroup GetBasketgroups GetBasketUsers GetOrders GetOrder get_rounded_price );
 use C4::Budgets     qw( GetBudgetHierarchy GetBudget CanUserUseBudget );
 use C4::Contract    qw( GetContract );
-use C4::Suggestions qw( GetSuggestion GetSuggestionInfoFromBiblionumber GetSuggestionInfo );
+use C4::Suggestions qw( GetSuggestionInfoFromBiblionumber GetSuggestionInfo );
 use Koha::Biblios;
 use Koha::Acquisition::Baskets;
 use Koha::Acquisition::Booksellers;

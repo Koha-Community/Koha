@@ -73,30 +73,6 @@ Suggestions done by other borrowers can be seen when not "AVAILABLE"
 
 =head1 FUNCTIONS
 
-=head2 GetSuggestion
-
-\%sth = &GetSuggestion($suggestionid)
-
-this function get the detail of the suggestion $suggestionid (input arg)
-
-return :
-    the result of the SQL query as a hash : $sth->fetchrow_hashref.
-
-=cut
-
-sub GetSuggestion {
-    my ($suggestionid) = @_;
-    my $dbh            = C4::Context->dbh;
-    my $query          = q{
-        SELECT *
-        FROM   suggestions
-        WHERE  suggestionid=?
-    };
-    my $sth = $dbh->prepare($query);
-    $sth->execute($suggestionid);
-    return ( $sth->fetchrow_hashref );
-}
-
 =head2 GetSuggestionFromBiblionumber
 
 $ordernumber = &GetSuggestionFromBiblionumber($biblionumber)
@@ -267,7 +243,7 @@ sub ModSuggestion {
     {
 
         # fetch the entire updated suggestion so that we can populate the letter
-        my $full_suggestion = GetSuggestion( $suggestion->{suggestionid} );
+        my $full_suggestion = Koha::Suggestions->find( $suggestion->{suggestionid} )->unblessed();
 
         my $patron = Koha::Patrons->find( $full_suggestion->{suggestedby} );
 

@@ -302,7 +302,7 @@ if ( $op =~ /cud-save/ ) {
 } elsif ( $op eq 'edit_form' ) {
 
     #Edit suggestion
-    $suggestion_ref = &GetSuggestion( $$suggestion_ref{'suggestionid'} );
+    $suggestion_ref = Koha::Suggestions->find( $suggestion_ref->{suggestionid} )->unblessed();
     $suggestion_ref->{reasonsloop} = $reasonsloop;
     my $other_reason = 1;
     foreach my $reason ( @{$reasonsloop} ) {
@@ -395,7 +395,7 @@ if ( $op =~ /cud-save/ ) {
         $template->param( messages => \@messages, );
     }
 } elsif ( $op eq 'show' ) {
-    $suggestion_ref = &GetSuggestion( $$suggestion_ref{'suggestionid'} );
+    $suggestion_ref = Koha::Suggestions->find( $suggestion_ref->{suggestionid} )->unblessed();
     my $budget = GetBudget $$suggestion_ref{budgetid};
     $$suggestion_ref{budgetname} = $$budget{budget_name};
     Init($suggestion_ref);

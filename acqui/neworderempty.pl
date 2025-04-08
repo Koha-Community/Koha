@@ -72,7 +72,7 @@ use C4::Budgets qw( GetBudget GetBudgetHierarchy CanUserUseBudget );
 
 use C4::Acquisition qw( GetOrder GetBasket FillWithDefaultValues GetOrderUsers );
 use C4::Contract    qw( GetContract );
-use C4::Suggestions qw( GetSuggestion GetSuggestionInfo );
+use C4::Suggestions qw( GetSuggestionInfo );
 use C4::Biblio      qw(
     AddBiblio
     GetBiblioData
@@ -209,7 +209,7 @@ if ( not $ordernumber ) {    # create order
     # get suggestion fields if applicable. If it's a subscription renewal, then the biblio already exists
     # otherwise, retrieve suggestion information.
     elsif ($suggestionid) {
-        $data = GetSuggestion($suggestionid);
+        $data = Koha::Suggestions->find($suggestionid)->unblessed();
         $data->{quantitysugg} = $data->{quantity};
         undef $data->{quantity};
         $budget_id ||= $data->{'budgetid'} // 0;
