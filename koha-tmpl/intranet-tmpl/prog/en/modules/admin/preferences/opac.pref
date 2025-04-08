@@ -924,6 +924,11 @@ OPAC:
                 0: "Don't show"
                 1: "Show"
             - an alert on staff interface home page when there are patrons in the category defined by <a href="/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=PatronSelfRegistrationDefaultCategory">PatronSelfRegistrationDefaultCategory</a>.
+        -
+            - "Patron's maximum age when registering: "
+            - pref: PatronSelfRegistrationAgeRestriction
+              class: integer
+            - "<br />Note: If empty, do not restrict patron's age during self registration"
     Suggestions:
         -
             - pref: OpacSuggestionManagedBy

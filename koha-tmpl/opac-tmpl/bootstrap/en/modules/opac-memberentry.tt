@@ -115,6 +115,9 @@
                                     [% IF field == "ERROR_age_limitations" %]
                                         <li>Patron's age is incorrect for their category.</li>
                                     [% END %]
+                                    [% IF field == "ERROR_age_limitations_self_registration" %]
+                                        <li> Patron's age exceeds the maximum age allowed.</li>
+                                    [% END %]
                                 [% END %]
                             </ul>
                             <span>Please correct and resubmit.</span>
