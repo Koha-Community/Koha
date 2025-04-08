@@ -82,7 +82,6 @@ module.exports = [
     },
     {
         experiments: {
-            css: true,
             outputModule: true,
         },
         entry: {
@@ -126,7 +125,12 @@ module.exports = [
                         path.resolve(__dirname, "t/cypress/"),
                     ],
                     type: "javascript/auto",
-                }
+                },
+                {
+                    test: /\.css$/i,
+                    type: "javascript/auto",
+                    use: ["style-loader", "css-loader"],
+                },
             ],
         },
         plugins: [
