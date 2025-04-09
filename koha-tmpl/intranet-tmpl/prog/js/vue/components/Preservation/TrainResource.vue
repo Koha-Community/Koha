@@ -170,6 +170,42 @@ export default {
         };
     },
     methods: {
+        async updateTrainDate(resource, attribute) {
+            let train = JSON.parse(JSON.stringify(resource));
+            let train_id = train.train_id;
+            delete train.train_id;
+            delete train.items;
+            delete train.default_processing;
+            train[attribute] = new Date();
+            const client = APIClient.preservation;
+            //if (train_id) {
+            return client.trains
+                .update(train, train_id)
+                .then(() => this.getTrain(train_id));
+            //} else {
+            //    return client.trains
+            //        .create(train)
+            //        .then(() => this.getTrain(this.train.train_id));
+            //}
+        },
+        closeTrain(resource) {
+            this.updateTrainDate(resource, "closed_on");
+        },
+        sendTrain(resource) {
+            this.updateTrainDate(resource, "sent_on");
+        },
+        receiveTrain(resource) {
+            this.updateTrainDate(resource, "received_on").then(
+                success => {
+                    // Rebuild the table to show the "copy" button
+                    $("#" + this.table_id)
+                        .DataTable()
+                        .destroy();
+                    this.build_datatable();
+                },
+                error => {}
+            );
+        },
         onSubmit(e, trainToSave) {
             e.preventDefault();
 
@@ -284,25 +320,54 @@ export default {
             //table.redraw(this.tableUrl(filters));
         },
         getToolbarButtons() {
-            console.log(this)
             const baseToolbarButtons =
                 BaseResource.methods.getToolbarButtons.call(this);
             return {
                 list: () => {
-                    return [
-                        ...baseToolbarButtons.list(),
-                ]
+                    return [...baseToolbarButtons.list()];
                 },
 
                 show: resource => {
                     return [
-                        resource.closed_on == null ?
-                            {to: { name: "TrainsFormAddItem", params: { train_id: resource.train_id }},
-                            icon: "plus",
-                            title: __("Add items"),} : {},
-                    ...baseToolbarButtons.show(resource)
-                    ];
-
+                        resource.closed_on == null
+                            ? {
+                                  to: {
+                                      name: "TrainsFormAddItem",
+                                      params: { train_id: resource.train_id },
+                                  },
+                                  icon: "plus",
+                                  title: __("Add items"),
+                              }
+                            : {},
+                        ...baseToolbarButtons.show(resource),
+                        !resource.closed_on &&
+                        !resource.sent_on &&
+                        !resource.received_on
+                            ? {
+                                  onclick: () => this.closeTrain(resource),
+                                  icon: "remove",
+                                  title: __("Close"),
+                              }
+                            : {},
+                        resource.closed_on &&
+                        !resource.sent_on &&
+                        !resource.received_on
+                            ? {
+                                  onclick: () => this.sendTrain(resource),
+                                  icon: "paper-plane",
+                                  title: __("Send"),
+                              }
+                            : {},
+                        resource.closed_on &&
+                        resource.sent_on &&
+                        !resource.received_on
+                            ? {
+                                  onclick: () => this.receiveTrain(resource),
+                                  icon: "inbox",
+                                  title: __("Receive"),
+                              }
+                            : {},
+                    ].filter(b => Object.keys(b).length);
                 },
             };
         },
