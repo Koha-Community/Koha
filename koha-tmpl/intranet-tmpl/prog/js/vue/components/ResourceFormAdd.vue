@@ -2,15 +2,9 @@
     <div v-if="!initialized">{{ $__("Loading") }}</div>
     <div v-else :id="`${resourceNamePlural}_add`">
         <h2 v-if="resourceToAddOrEdit[idAttr]">
-            {{
-                $__("Edit") +
-                " " +
-                i18n.displayNameLowerCase +
-                " #" +
-                resourceToAddOrEdit[idAttr]
-            }}
+            {{ i18n.editLabel.format(resourceToAddOrEdit[idAttr]) }}
         </h2>
-        <h2 v-else>{{ $__("New") + " " + i18n.displayNameLowerCase }}</h2>
+        <h2 v-else>{{ i18n.newLabel }}</h2>
         <ul
             v-if="formGroupsDisplayMode == 'tabs'"
             class="nav nav-tabs"

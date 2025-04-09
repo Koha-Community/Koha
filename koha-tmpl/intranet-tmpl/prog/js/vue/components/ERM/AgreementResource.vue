@@ -38,9 +38,14 @@ export default {
                 resourceTableUrl:
                     APIClient.erm.httpClient._baseURL + "agreements",
                 i18n: {
+                    deleteConfirmationMessage: __(
+                        "Are you sure you want to remove this agreement?"
+                    ),
+                    deleteSuccessMessage: __("Agreement %s deleted"),
                     displayName: __("Agreement"),
-                    displayNameLowerCase: __("agreement"),
-                    displayNamePlural: __("agreements"),
+                    editLabel: __("Edit agreement #%s"),
+                    emptyListMessage: __("There are no agreements defined"),
+                    newLabel: __("New agreement"),
                 },
                 embedded: props.embedded,
                 extendedAttributesResourceType: "agreement",

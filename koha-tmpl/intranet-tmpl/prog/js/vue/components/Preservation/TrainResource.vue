@@ -18,6 +18,10 @@ export default {
                 resourceTableUrl:
                     APIClient.preservation.httpClient._baseURL + "trains",
                 i18n: {
+                    deleteConfirmationMessage: __(
+                        "Are you sure you want to remove this train?"
+                    ),
+                    deleteSuccessMessage: __("Train %s deleted"),
                     displayName: __("Train"),
                 },
             }),

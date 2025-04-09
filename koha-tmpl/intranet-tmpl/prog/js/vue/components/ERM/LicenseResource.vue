@@ -30,9 +30,14 @@ export default {
                 resourceTableUrl:
                     APIClient.erm.httpClient._baseURL + "licenses",
                 i18n: {
+                    deleteConfirmationMessage: __(
+                        "Are you sure you want to remove this license?"
+                    ),
+                    deleteSuccessMessage: __("License %s deleted"),
                     displayName: __("License"),
-                    displayNameLowerCase: __("license"),
-                    displayNamePlural: __("licenses"),
+                    editLabel: __("Edit license #%s"),
+                    emptyListMessage: __("There are no licenses defined"),
+                    newLabel: __("New license"),
                 },
                 extendedAttributesResourceType: "license",
                 av_license_types,

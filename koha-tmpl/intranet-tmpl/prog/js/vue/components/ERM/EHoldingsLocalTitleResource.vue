@@ -46,9 +46,14 @@ export default {
                     APIClient.erm.httpClient._baseURL +
                     "eholdings/local/titles",
                 i18n: {
+                    deleteConfirmationMessage: __(
+                        "Are you sure you want to remove this title?"
+                    ),
+                    deleteSuccessMessage: __("Title %s deleted"),
                     displayName: __("Title"),
-                    displayNameLowerCase: __("title"),
-                    displayNamePlural: __("titles"),
+                    editLabel: __("Edit title #%s"),
+                    emptyListMessage: __("There are no titles defined"),
+                    newLabel: __("New title"),
                 },
                 av_title_publication_types,
                 eholdings_titles_table_settings,

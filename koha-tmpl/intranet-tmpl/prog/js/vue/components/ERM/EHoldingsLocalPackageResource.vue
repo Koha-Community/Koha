@@ -121,9 +121,14 @@ export default {
                     APIClient.erm.httpClient._baseURL +
                     "eholdings/local/packages",
                 i18n: {
+                    deleteConfirmationMessage: __(
+                        "Are you sure you want to remove this local package?"
+                    ),
+                    deleteSuccessMessage: __("Local package %s deleted"),
                     displayName: __("Local package"),
-                    displayNameLowerCase: __("package"),
-                    displayNamePlural: __("packages"),
+                    editLabel: __("Edit package #%s"),
+                    emptyListMessage: __("There are no packages defined"),
+                    newLabel: __("New package"),
                 },
                 extendedAttributesResourceType: "package",
                 av_package_types,

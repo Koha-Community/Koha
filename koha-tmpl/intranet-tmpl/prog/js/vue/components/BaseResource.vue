@@ -209,9 +209,7 @@ export default {
 
             this.setConfirmationDialog(
                 {
-                    title: this.$__(
-                        "Are you sure you want to remove this %s?"
-                    ).format(this.i18n.displayName.toLowerCase()),
+                    title: this.i18n.deleteConfirmationMessage,
                     message: resourceName,
                     accept_label: this.$__("Yes, delete"),
                     cancel_label: this.$__("No, do not delete"),
@@ -220,8 +218,7 @@ export default {
                     this.apiClient.delete(resourceId).then(
                         success => {
                             this.setMessage(
-                                this.$__("%s %s deleted").format(
-                                    this.i18n.displayName,
+                                this.i18n.deleteSuccessMessage.format(
                                     resourceName
                                 ),
                                 true

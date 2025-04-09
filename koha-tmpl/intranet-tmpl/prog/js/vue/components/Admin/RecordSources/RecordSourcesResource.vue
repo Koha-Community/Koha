@@ -20,9 +20,14 @@ export default {
                 apiClient: APIClient.record_sources.record_sources,
                 resourceTableUrl: APIClient.record_sources.httpClient._baseURL,
                 i18n: {
+                    deleteConfirmationMessage: __(
+                        "Are you sure you want to remove this record source?"
+                    ),
+                    deleteSuccessMessage: __("Record source %s deleted"),
                     displayName: __("Record source"),
-                    displayNameLowerCase: __("record source"),
-                    displayNamePlural: __("record sources"),
+                    editLabel: __("Edit record source #%s"),
+                    emptyListMessage: __("There are no record sources defined"),
+                    newLabel: __("New record source"),
                 },
             }),
         };
