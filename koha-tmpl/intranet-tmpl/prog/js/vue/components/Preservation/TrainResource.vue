@@ -12,6 +12,7 @@ export default {
     setup(props) {
         const AVStore = inject("AVStore");
         const { av_notforloan } = storeToRefs(AVStore);
+
         return {
             ...BaseResource.setup({
                 resourceName: "train",
@@ -281,6 +282,29 @@ export default {
             //    this.$router.push(new_route);
             //}
             //table.redraw(this.tableUrl(filters));
+        },
+        getToolbarButtons() {
+            console.log(this)
+            const baseToolbarButtons =
+                BaseResource.methods.getToolbarButtons.call(this);
+            return {
+                list: () => {
+                    return [
+                        ...baseToolbarButtons.list(),
+                ]
+                },
+
+                show: resource => {
+                    return [
+                        resource.closed_on == null ?
+                            {to: { name: "TrainsFormAddItem", params: { train_id: resource.train_id }},
+                            icon: "plus",
+                            title: __("Add items"),} : {},
+                    ...baseToolbarButtons.show(resource)
+                    ];
+
+                },
+            };
         },
     },
     name: "TrainResource",
