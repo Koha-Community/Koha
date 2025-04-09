@@ -1580,6 +1580,9 @@
                             <xsl:when test="@ind2=7">
                                 <span class="label">Separated from:</span>
                             </xsl:when>
+                            <xsl:otherwise>
+                                <span class="label">Preceding entry:</span>
+                            </xsl:otherwise>
                         </xsl:choose>
                         <xsl:text> </xsl:text>
 
@@ -1668,6 +1671,9 @@
                             <xsl:when test="@ind2=8">
                                 <span class="label">Changed back to:</span>
                             </xsl:when>
+                            <xsl:otherwise>
+                               <span class="label">Succeeding entry:</span>
+                            </xsl:otherwise>
                         </xsl:choose>
                         <xsl:text> </xsl:text>
 
