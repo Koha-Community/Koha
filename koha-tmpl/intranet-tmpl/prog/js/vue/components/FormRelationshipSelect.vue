@@ -1,6 +1,5 @@
 <template>
     <v-select
-        v-if="relatedResources"
         :getOptionLabel="
             relatedResource => relatedResource[relationshipOptionLabelAttr]
         "
@@ -10,6 +9,8 @@
         :multiple="allowMultipleChoices"
         :filter-by="filterRelatedResourcesOptions"
         v-model="resource[name]"
+        :disabled="shouldBeDisabled"
+        :placeholder="!relatedResourcesLoaded ? $__('Loading...') : ''"
     >
         <template v-slot:option="relatedResource">
             {{ relatedResource[relationshipOptionLabelAttr] }}
@@ -26,6 +27,7 @@ export default {
         name: String | null,
         allowMultipleChoices: Boolean | null,
         relationshipRequiredKey: String | null,
+        disabled: Boolean | false,
     },
     data() {
         return {
@@ -45,10 +47,13 @@ export default {
     },
     computed: {
         relatedResourcesOptions() {
-            return this.relatedResources.map(resource => ({
+            return this.relatedResources?.map(resource => ({
                 ...resource,
                 full_search: resource[this.relationshipOptionLabelAttr],
             }));
+        },
+        shouldBeDisabled() {
+            return this.disabled || !this.relatedResourcesLoaded;
         },
     },
     methods: {
