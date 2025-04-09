@@ -11,10 +11,13 @@ export default {
     props: {
         action: {
             type: String,
+            required: false,
         },
         to: {
             type: [String, Object],
+            required: false,
         },
+        onclick: { type: Function, required: false },
         icon: {
             type: String,
             required: false,

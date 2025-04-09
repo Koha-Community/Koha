@@ -9,6 +9,12 @@
         ><font-awesome-icon icon="pencil" /> {{ title }}</a
     >
     <a
+        v-else-if="action === undefined && onclick"
+        @click="onclick"
+        class="btn btn-default"
+        ><font-awesome-icon v-if="icon" :icon="icon" /> {{ title }}</a
+    >
+    <a
         v-if="callback"
         @click="typeof callback === 'string' ? redirect() : callback(this)"
         :class="cssClass"
@@ -47,6 +53,7 @@ export default {
             default: "btn btn-default",
             required: false,
         },
+        onclick: { type: Function, required: false },
     },
     methods: {
         redirect(url) {
