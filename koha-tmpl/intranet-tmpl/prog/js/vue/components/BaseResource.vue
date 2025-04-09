@@ -113,6 +113,7 @@ export default {
                 doResourceDelete: this.doResourceDelete,
                 goToResourceAdd: this.goToResourceAdd,
                 doResourceSelect: this.doResourceSelect,
+                getResourceShowURL: this.getResourceShowURL,
                 hasAdditionalFields: this.hasAdditionalFields,
                 getFieldGroupings: this.getFieldGroupings,
                 resourceAttrs: this.resourceAttrs,
@@ -125,14 +126,30 @@ export default {
         /**
          * Navigates to the show page of the given resource.
          *
-         * @param {Object} resource - The resource to navigate to
+         * @param {Object} [resource] - The resource to navigate to
+         * @param {DataTable} [dt] - The DataTable (optional)
+         * @param {Event} [event] - The event to prevent default handling of (optional)
          * @return {void}
          */
-        goToResourceShow(resource) {
+        goToResourceShow(resource, dt, event) {
+            event?.preventDefault();
             this.$router.push({
                 name: this.showComponent,
                 params: { [this.idAttr]: resource[this.idAttr] },
             });
+        },
+
+        /**
+         * Generates the URL for the show page of the given resource.
+         *
+         * @param {Object} resource - The resource to generate the URL for
+         * @return {string} The URL for the show page of the given resource
+         */
+        getResourceShowURL(id) {
+            return this.$router.resolve({
+                name: this.showComponent,
+                params: { [this.idAttr]: id },
+            }).href;
         },
 
         /**

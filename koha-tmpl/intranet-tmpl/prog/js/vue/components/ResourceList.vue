@@ -66,6 +66,7 @@ export default {
         doResourceDelete: Function,
         goToResourceAdd: Function,
         doResourceSelect: Function,
+        getResourceShowURL: Function,
         resourceName: String,
         resourceNamePlural: String,
         hasAdditionalFields: { type: Boolean, default: false },
@@ -152,6 +153,7 @@ export default {
         },
         getTableColumns(resourceAttrs) {
             let get_lib_from_av = this.get_lib_from_av;
+            let thisResource = this;
 
             const columns = resourceAttrs
                 ?.filter(attr => attr.showInTable)
@@ -168,8 +170,12 @@ export default {
                             orderable: true,
                             render: function (data, type, row, meta) {
                                 return (
-                                    '<a role="button" class="show">' +
-                                    escape_str(row[attr.name]) +
+                                    '<a href="' +
+                                    thisResource.getResourceShowURL(
+                                        row[thisResource.idAttr]
+                                    ) +
+                                    '" class="show">' +
+                                    escape_str(row[thisResource.idAttr]) +
                                     "</a>"
                                 );
                             },
@@ -184,7 +190,11 @@ export default {
                             orderable: true,
                             render: function (data, type, row, meta) {
                                 return (
-                                    '<a role="button" class="show">' +
+                                    '<a href="' +
+                                    thisResource.getResourceShowURL(
+                                        row[thisResource.idAttr]
+                                    ) +
+                                    '" class="show">' +
                                     escape_str(row[attr.name]) +
                                     "</a>"
                                 );
