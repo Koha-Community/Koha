@@ -17,7 +17,7 @@ export default {
         const vendorStore = inject("vendorStore");
         const { vendors } = storeToRefs(vendorStore);
 
-        function additionalToolbarButtons() {
+        function additionalToolbarButtons(resource) {
             return {
                 list: [
                     {

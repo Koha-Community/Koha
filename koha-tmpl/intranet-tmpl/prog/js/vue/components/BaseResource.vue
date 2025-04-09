@@ -10,8 +10,8 @@
         <template #toolbar="{ resource }">
             <Toolbar
                 v-if="!embedded"
-                :buttons="toolbarButtons"
-                :component="'list'"
+                :toolbarButtons="toolbarButtons"
+                component="list"
                 :resource="resource"
                 :i18n="i18n"
             />
@@ -36,8 +36,8 @@
     >
         <template #toolbar="{ resource }">
             <Toolbar
-                :buttons="toolbarButtons"
-                :component="'show'"
+                :toolbarButtons="toolbarButtons"
+                component="show"
                 :resource="resource"
                 :i18n="i18n"
             />
@@ -382,6 +382,7 @@ export default {
                         action: "add",
                         onClick: () => this.goToResourceAdd(),
                         title: i18n.newLabel,
+                        index: 0,
                     },
                 ],
                 show: [
@@ -389,11 +390,13 @@ export default {
                         action: "edit",
                         onClick: () => this.goToResourceEdit(resource),
                         title: __("Edit"),
+                        index: 0,
                     },
                     {
                         action: "delete",
                         onClick: () => this.doResourceDelete(resource),
                         title: __("Delete"),
+                        index: 1,
                     },
                 ],
             };
@@ -557,6 +560,18 @@ export default {
                 return this.resourceName + "s";
             return this.resourceName;
         },
+        /**
+         * A function that returns a set of buttons to display in the toolbar, based on the current resource and component.
+         * The function takes three arguments: the resource, the component and the i18n object.
+         * It returns an array of buttons. The buttons are a combination of the default buttons and the additional buttons.
+         * The default buttons are defined in the defaultToolbarButtons function and the additional buttons are defined in the
+         * additionalToolbarButtons function at the resource level.
+         *
+         * @param {Object} resource The current resource
+         * @param {String} component The current component
+         * @param {Object} i18n The i18n object
+         * @return {Array<Object>} An array of buttons
+         */
         toolbarButtons() {
             const defaultToolbarButtons = this.defaultToolbarButtons;
             const additionalToolbarButtons = this.additionalToolbarButtons;
@@ -564,10 +579,14 @@ export default {
             return (resource, component, i18n) => {
                 const defaultButtons = defaultToolbarButtons(resource, i18n);
                 const additionalButtons = additionalToolbarButtons(resource);
+
+                //FIXME: we need to check that no indexes match between the default buttons and additional buttons
+                // If we add to the default buttons in future it could mess up indexing
+
                 return [
                     ...(defaultButtons[component] || []),
                     ...(additionalButtons[component] || []),
-                ];
+                ].sort((a, b) => a.index - b.index);
             };
         },
     },

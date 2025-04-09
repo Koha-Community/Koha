@@ -6,7 +6,7 @@
     >
         <template
             :key="`toolbar-button-${i}`"
-            v-for="(button, i) in buttons(resource, component, i18n)"
+            v-for="(button, i) in toolbarButtons(resource, component, i18n)"
         >
             <ToolbarButton
                 :action="button.action"
@@ -23,7 +23,7 @@
 import ToolbarButton from "./ToolbarButton.vue";
 export default {
     props: {
-        buttons: Function,
+        toolbarButtons: Function,
         component: String,
         resource: Object,
         i18n: Object,
