@@ -1,19 +1,7 @@
 <template>
     <div v-if="!initialized">{{ $__("Loading") }}</div>
     <div v-else :id="`${resourceNamePlural}_list`">
-        <Toolbar v-if="!embedded">
-            <ToolbarButton
-                action="add"
-                @go-to-add-resource="goToResourceAdd"
-                :title="i18n.newLabel"
-            />
-            <ToolbarButton
-                v-for="(button, i) in getToolbarButtons()"
-                v-bind:key="i"
-                :to="button.to"
-                :icon="button.icon"
-                :title="button.title"
-            />
+        <Toolbar v-if="!embedded" :buttons="getToolbarButtons().list()">
         </Toolbar>
         <template v-if="resourceCount > 0">
             <slot name="filters" :table="table" />
@@ -38,7 +26,6 @@
 
 <script>
 import Toolbar from "./Toolbar.vue";
-import ToolbarButton from "./ToolbarButton.vue";
 import { ref, inject } from "vue";
 import { APIClient } from "../fetch/api-client.js";
 import KohaTable from "./KohaTable.vue";
@@ -74,10 +61,7 @@ export default {
         resourceAttrs: Array,
         nameAttr: String,
         idAttr: String,
-        getToolbarButtons: {
-            type: Function,
-            default: () => [],
-        },
+        getToolbarButtons: Function,
     },
     data() {
         return {
@@ -280,7 +264,7 @@ export default {
             return this.tableOptions;
         },
     },
-    components: { Toolbar, ToolbarButton, KohaTable },
+    components: { Toolbar, KohaTable },
     name: "ResourcesList",
 };
 </script>

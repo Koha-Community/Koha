@@ -68,7 +68,6 @@ export default {
             resourceListFiltersRequired:
                 props.resourceListFiltersRequired || null,
             formGroupsDisplayMode: props.formGroupsDisplayMode || null,
-            getToolbarButtons: props.getToolbarButtons || (() => []),
             appendToShow: props.appendToShow || [],
             nameAttr: props.nameAttr || null,
             idAttr: props.idAttr || null,
@@ -116,6 +115,7 @@ export default {
                 getResourceShowURL: this.getResourceShowURL,
                 hasAdditionalFields: this.hasAdditionalFields,
                 getFieldGroupings: this.getFieldGroupings,
+                getToolbarButtons: this.getToolbarButtons,
                 resourceAttrs: this.resourceAttrs,
                 listComponent: this.listComponent,
                 resourceNamePlural: this.resourceNamePlural,
@@ -349,6 +349,41 @@ export default {
          */
         getTableFilters() {
             return [];
+        },
+        /**
+         * Gets the list of buttons to add to the toolbar, for each view: list, show, edit
+         * It can be overridden at the resource level if other buttons are required
+         *
+         * @return {Object} keys must be "list", "show" or "edit", values are functions.
+         */
+        getToolbarButtons() {
+            return {
+                list: () => {
+                    return [
+                        {
+                            action: "add",
+                            onClick: () => this.goToResourceAdd(),
+                            title: __("New %s").format(
+                                this.i18n.displayNameLowerCase
+                            ),
+                        },
+                    ];
+                },
+                show: resource => {
+                    return [
+                        {
+                            action: "edit",
+                            onClick: () => this.goToResourceEdit(resource),
+                            title: __("Edit"),
+                        },
+                        {
+                            action: "delete",
+                            onClick: () => this.doResourceDelete(resource),
+                            title: __("Delete"),
+                        },
+                    ];
+                },
+            };
         },
         /**
          * This method takes a component name (e.g. 'Form' or 'Show') and an optional resource object

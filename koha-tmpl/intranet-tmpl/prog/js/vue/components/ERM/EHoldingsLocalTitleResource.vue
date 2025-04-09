@@ -18,18 +18,44 @@ export default {
         const { vendors } = storeToRefs(vendorStore);
 
         function getToolbarButtons() {
-            return [
-                {
-                    to: { name: "EHoldingsLocalTitlesFormImport" },
-                    icon: "plus",
-                    title: __("Import from list"),
+            return {
+                list: () => {
+                    return [
+                        {
+                            action: "add",
+                            onClick: () => this.goToResourceAdd(),
+                            title: __("New %s").format(
+                                this.i18n.displayNameLowerCase
+                            ),
+                        },
+                        {
+                            to: { name: "EHoldingsLocalTitlesFormImport" },
+                            icon: "plus",
+                            title: __("Import from list"),
+                        },
+                        {
+                            to: { name: "EHoldingsLocalTitlesKBARTImport" },
+                            icon: "plus",
+                            title: __("Import from KBART file"),
+                        },
+                    ];
                 },
-                {
-                    to: { name: "EHoldingsLocalTitlesKBARTImport" },
-                    icon: "plus",
-                    title: __("Import from KBART file"),
+
+                show: resource => {
+                    return [
+                        {
+                            action: "edit",
+                            onClick: () => this.goToResourceEdit(resource),
+                            title: __("Edit"),
+                        },
+                        {
+                            action: "delete",
+                            onClick: () => this.doResourceDelete(resource),
+                            title: __("Delete"),
+                        },
+                    ];
                 },
-            ];
+            };
         }
 
         return {

@@ -1,16 +1,7 @@
 <template>
     <div v-if="!initialized">{{ $__("Loading") }}</div>
     <div v-else :id="`${resourceNamePlural}_show`">
-        <Toolbar>
-            <ToolbarButton
-                action="edit"
-                @go-to-edit-resource="goToResourceEdit(resource)"
-            />
-            <ToolbarButton
-                action="delete"
-                @delete-resource="doResourceDelete(resource)"
-            />
-        </Toolbar>
+        <Toolbar :buttons="getToolbarButtons().show(resource)"></Toolbar>
 
         <h2>
             {{ i18n.displayName + " #" + resource[idAttr] }}
@@ -53,7 +44,6 @@
 
 <script>
 import Toolbar from "./Toolbar.vue";
-import ToolbarButton from "./ToolbarButton.vue";
 import ShowElement from "./ShowElement.vue";
 
 export default {
@@ -74,6 +64,7 @@ export default {
         resourceNamePlural: String,
         getFieldGroupings: Function,
         appendToShow: Array,
+        getToolbarButtons: Function,
     },
     created() {
         this.getResource(this.$route.params[this.idAttr]);
@@ -92,7 +83,7 @@ export default {
             );
         },
     },
-    components: { Toolbar, ToolbarButton, ShowElement },
+    components: { Toolbar, ShowElement },
     name: "ResourceShow",
 };
 </script>

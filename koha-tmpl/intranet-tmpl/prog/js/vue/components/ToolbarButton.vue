@@ -1,9 +1,6 @@
 <template>
     <Link
         v-bind="$props"
-        @go-to-add-resource="$emit('go-to-add-resource')"
-        @delete-resource="$emit('delete-resource')"
-        @go-to-edit-resource="$emit('go-to-edit-resource')"
     />
 </template>
 
@@ -35,7 +32,6 @@ export default {
             required: false,
         },
     },
-    emits: ["go-to-add-resource", "delete-resource", "go-to-edit-resource"],
     name: "Toolbar",
 };
 </script>
