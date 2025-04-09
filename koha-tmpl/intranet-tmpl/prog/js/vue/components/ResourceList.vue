@@ -1,8 +1,7 @@
 <template>
     <div v-if="!initialized">{{ $__("Loading") }}</div>
     <div v-else :id="`${resourceNamePlural}_list`">
-        <Toolbar v-if="!embedded" :buttons="getToolbarButtons().list()">
-        </Toolbar>
+        <slot name="toolbar" />
         <template v-if="resourceCount > 0">
             <slot name="filters" :table="table" />
         </template>

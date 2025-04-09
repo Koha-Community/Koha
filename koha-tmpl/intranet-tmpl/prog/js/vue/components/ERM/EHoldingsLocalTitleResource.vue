@@ -17,44 +17,20 @@ export default {
         const vendorStore = inject("vendorStore");
         const { vendors } = storeToRefs(vendorStore);
 
-        function getToolbarButtons() {
+        function additionalToolbarButtons() {
             return {
-                list: () => {
-                    return [
-                        {
-                            action: "add",
-                            onClick: () => this.goToResourceAdd(),
-                            title: __("New %s").format(
-                                this.i18n.displayNameLowerCase
-                            ),
-                        },
-                        {
-                            to: { name: "EHoldingsLocalTitlesFormImport" },
-                            icon: "plus",
-                            title: __("Import from list"),
-                        },
-                        {
-                            to: { name: "EHoldingsLocalTitlesKBARTImport" },
-                            icon: "plus",
-                            title: __("Import from KBART file"),
-                        },
-                    ];
-                },
-
-                show: resource => {
-                    return [
-                        {
-                            action: "edit",
-                            onClick: () => this.goToResourceEdit(resource),
-                            title: __("Edit"),
-                        },
-                        {
-                            action: "delete",
-                            onClick: () => this.doResourceDelete(resource),
-                            title: __("Delete"),
-                        },
-                    ];
-                },
+                list: [
+                    {
+                        to: { name: "EHoldingsLocalTitlesFormImport" },
+                        icon: "plus",
+                        title: __("Import from list"),
+                    },
+                    {
+                        to: { name: "EHoldingsLocalTitlesKBARTImport" },
+                        icon: "plus",
+                        title: __("Import from KBART file"),
+                    },
+                ],
             };
         }
 
@@ -84,7 +60,7 @@ export default {
                 av_title_publication_types,
                 eholdings_titles_table_settings,
                 vendors,
-                getToolbarButtons,
+                additionalToolbarButtons,
             }),
         };
     },

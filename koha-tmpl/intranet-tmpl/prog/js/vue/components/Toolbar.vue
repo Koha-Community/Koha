@@ -4,7 +4,10 @@
         :class="sticky ? 'btn-toolbar sticky' : 'btn-toolbar'"
         ref="toolbar"
     >
-        <template v-for="(button, i) in buttons">
+        <template
+            :key="`toolbar-button-${i}`"
+            v-for="(button, i) in buttons(resource, component, i18n)"
+        >
             <ToolbarButton
                 :action="button.action"
                 @click="button.onClick"
@@ -20,9 +23,10 @@
 import ToolbarButton from "./ToolbarButton.vue";
 export default {
     props: {
-        buttons: {
-            type: Array,
-        },
+        buttons: Function,
+        component: String,
+        resource: Object,
+        i18n: Object,
     },
     components: { ToolbarButton },
     name: "Toolbar",

@@ -1,8 +1,7 @@
 <template>
     <div v-if="!initialized">{{ $__("Loading") }}</div>
     <div v-else :id="`${resourceNamePlural}_show`">
-        <Toolbar :buttons="getToolbarButtons().show(resource)"></Toolbar>
-
+        <slot name="toolbar" :resource="{ resource }" />
         <h2>
             {{ i18n.displayName + " #" + resource[idAttr] }}
         </h2>

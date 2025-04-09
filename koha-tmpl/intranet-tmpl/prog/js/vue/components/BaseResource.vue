@@ -7,6 +7,15 @@
         }"
         @select-resource="$emit('select-resource', $event)"
     >
+        <template #toolbar="{ resource }">
+            <Toolbar
+                v-if="!embedded"
+                :buttons="toolbarButtons"
+                :component="'list'"
+                :resource="resource"
+                :i18n="i18n"
+            />
+        </template>
         <template #filters="{ table }">
             <ResourceListFilters
                 v-if="optionalResourceProps.resourceListFiltersRequired"
@@ -24,7 +33,16 @@
             ...passCommonProps(),
             ...optionalResourceProps,
         }"
-    />
+    >
+        <template #toolbar="{ resource }">
+            <Toolbar
+                :buttons="toolbarButtons"
+                :component="'show'"
+                :resource="resource"
+                :i18n="i18n"
+            />
+        </template>
+    </ResourceShow>
     <ResourceFormAdd
         v-if="['add', 'edit'].includes(routeAction)"
         v-bind="{
@@ -43,6 +61,7 @@ import ResourceListFilters from "./ResourceListFilters.vue";
 import ResourceShow from "./ResourceShow.vue";
 import ResourceFormAdd from "./ResourceFormAdd.vue";
 import ResourceList from "./ResourceList.vue";
+import Toolbar from "./Toolbar.vue";
 
 export default {
     components: {
@@ -50,6 +69,7 @@ export default {
         ResourceShow,
         ResourceFormAdd,
         ResourceList,
+        Toolbar,
     },
     setup(props) {
         const { setConfirmationDialog, setMessage, setError, setWarning } =
@@ -115,7 +135,6 @@ export default {
                 getResourceShowURL: this.getResourceShowURL,
                 hasAdditionalFields: this.hasAdditionalFields,
                 getFieldGroupings: this.getFieldGroupings,
-                getToolbarButtons: this.getToolbarButtons,
                 resourceAttrs: this.resourceAttrs,
                 listComponent: this.listComponent,
                 resourceNamePlural: this.resourceNamePlural,
@@ -356,33 +375,39 @@ export default {
          *
          * @return {Object} keys must be "list", "show" or "edit", values are functions.
          */
-        getToolbarButtons() {
+        defaultToolbarButtons(resource, i18n) {
             return {
-                list: () => {
-                    return [
-                        {
-                            action: "add",
-                            onClick: () => this.goToResourceAdd(),
-                            title: __("New %s").format(
-                                this.i18n.displayNameLowerCase
-                            ),
-                        },
-                    ];
-                },
-                show: resource => {
-                    return [
-                        {
-                            action: "edit",
-                            onClick: () => this.goToResourceEdit(resource),
-                            title: __("Edit"),
-                        },
-                        {
-                            action: "delete",
-                            onClick: () => this.doResourceDelete(resource),
-                            title: __("Delete"),
-                        },
-                    ];
-                },
+                list: [
+                    {
+                        action: "add",
+                        onClick: () => this.goToResourceAdd(),
+                        title: i18n.newLabel,
+                    },
+                ],
+                show: [
+                    {
+                        action: "edit",
+                        onClick: () => this.goToResourceEdit(resource),
+                        title: __("Edit"),
+                    },
+                    {
+                        action: "delete",
+                        onClick: () => this.doResourceDelete(resource),
+                        title: __("Delete"),
+                    },
+                ],
+            };
+        },
+        /**
+         * Returns a default empty set of additional buttons
+         * Additional buttons should be added in the resource specific component
+         *
+         * @returns {Object}
+         */
+        additionalToolbarButtons() {
+            return {
+                list: [],
+                show: [],
             };
         },
         /**
@@ -531,6 +556,19 @@ export default {
             if (!this.resourceName.endsWith("s"))
                 return this.resourceName + "s";
             return this.resourceName;
+        },
+        toolbarButtons() {
+            const defaultToolbarButtons = this.defaultToolbarButtons;
+            const additionalToolbarButtons = this.additionalToolbarButtons;
+
+            return (resource, component, i18n) => {
+                const defaultButtons = defaultToolbarButtons(resource, i18n);
+                const additionalButtons = additionalToolbarButtons(resource);
+                return [
+                    ...(defaultButtons[component] || []),
+                    ...(additionalButtons[component] || []),
+                ];
+            };
         },
     },
     created() {
