@@ -682,6 +682,34 @@
                             [% END %]
                         </ol>
                     </div>
+                    [% IF req_status == 'UNAUTH' %]
+                        <div class="rows">
+                            <h4>Unauthenticated request details</h4>
+                            <ol>
+                                [% unauthenticated_first_name = request.extended_attributes.find({'type'=>'unauthenticated_first_name'}).value %]
+                                [% IF unauthenticated_first_name %]
+                                    <li>
+                                        <span class="label unauthenticated_first_name">First name:</span>
+                                        [% unauthenticated_first_name | html %]
+                                    </li>
+                                [% END %]
+                                [% unauthenticated_last_name = request.extended_attributes.find({'type'=>'unauthenticated_last_name'}).value %]
+                                [% IF unauthenticated_last_name %]
+                                    <li>
+                                        <span class="label unauthenticated_last_name">Last name:</span>
+                                        [% unauthenticated_last_name | html %]
+                                    </li>
+                                [% END %]
+                                [% unauthenticated_email = request.extended_attributes.find({'type'=>'unauthenticated_email'}).value %]
+                                [% IF unauthenticated_email %]
+                                    <li>
+                                        <span class="label unauthenticated_email">Email:</span>
+                                        [% unauthenticated_email | html %]
+                                    </li>
+                                [% END %]
+                            </ol>
+                        </div>
+                    [% END %]
                     <div class="rows">
                         <h4>Details from supplier ([% request.backend | html %])</h4>
                         <ol>

@@ -34,7 +34,7 @@ use Koha::Cache::Memory::Lite;
 use Koha::Database;
 use Koha::DateUtils qw( dt_from_string );
 use Koha::Exceptions::Ill;
-use Koha::I18N qw(__ __x);
+use Koha::I18N qw(__);
 use Koha::ILL::Backend::Standard;
 use Koha::ILL::Batches;
 use Koha::ILL::Comments;
@@ -1939,24 +1939,33 @@ sub attach_processors {
     }
 }
 
-=head3 append_unauthenticated_notes
+=head3 add_unauthenticated_data
 
-    append_unauthenticated_notes($metadata);
+    add_unauthenticated_data($metadata);
 
-Append unauthenticated details to staff and opac notes
+Adds unauthenticated data as I<Koha::ILL::Request::Attributes>
 
 =cut
 
-sub append_unauthenticated_notes {
+sub add_unauthenticated_data {
     my ( $self, $metadata ) = @_;
-    my $unauthenticated_notes_text = __x(
-        "Unauthenticated request.\nFirst name: {first_name}.\nLast name: {last_name}.\nEmail: {email}.",
-        first_name => $metadata->{'unauthenticated_first_name'},
-        last_name  => $metadata->{'unauthenticated_last_name'},
-        email      => $metadata->{'unauthenticated_email'}
+
+    my $extended_attributes = $self->extended_attributes(
+        [
+            {
+                type  => 'unauthenticated_first_name',
+                value => $metadata->{'unauthenticated_first_name'},
+            },
+            {
+                type  => 'unauthenticated_last_name',
+                value => $metadata->{'unauthenticated_last_name'},
+            },
+            {
+                type  => 'unauthenticated_email',
+                value => $metadata->{'unauthenticated_email'},
+            },
+        ]
     );
-    $self->append_to_note($unauthenticated_notes_text);
-    $self->notesopac($unauthenticated_notes_text)->store;
 }
 
 =head3 unauth_request_data_check

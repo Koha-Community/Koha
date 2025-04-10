@@ -253,7 +253,7 @@
                                 [% END %]
                             </form>
                         [% ELSIF op == 'unauth_view' %]
-                            <div class="alert alert-success" role="alert">Your request has been placed. Please check your email for further instructions.</div>
+                            <div class="alert alert-success" role="alert">Your request has been placed. We'll contact you shortly.</div>
                             <h1>View interlibrary loan request</h1>
                             [% INCLUDE messages %]
                             [% status = request.status %]
@@ -294,6 +294,18 @@
                                     <li>
                                         <label for="updated">Last updated:</label>
                                         [% request.updated | $KohaDates %]
+                                    </li>
+                                    <li>
+                                        <label for="unauthenticated_first_name">Unauthenticated first name:</label>
+                                        [% request.extended_attributes.find({'type'=>'unauthenticated_first_name'}).value | html %]
+                                    </li>
+                                    <li>
+                                        <label for="unauthenticated_last_name">Unauthenticated last name:</label>
+                                        [% request.extended_attributes.find({'type'=>'unauthenticated_last_name'}).value | html %]
+                                    </li>
+                                    <li>
+                                        <label for="unauthenticated_email">Unauthenticated email:</label>
+                                        [% request.extended_attributes.find({'type'=>'unauthenticated_email'}).value | html %]
                                     </li>
                                     <li>
                                         <label for="notesopac">Notes:</label>

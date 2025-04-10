@@ -146,9 +146,12 @@ that we do not consider to be metadata
 
 sub metadata {
     my ( $self, $request ) = @_;
-    my $attrs       = $request->extended_attributes;
-    my $metadata    = {};
-    my @ignore      = ( 'requested_partners', 'type', 'type_disclaimer_value', 'type_disclaimer_date' );
+    my $attrs    = $request->extended_attributes;
+    my $metadata = {};
+    my @ignore   = (
+        'requested_partners', 'type', 'type_disclaimer_value', 'type_disclaimer_date', 'unauthenticated_first_name',
+        'unauthenticated_last_name', 'unauthenticated_email'
+    );
     my $core_fields = _get_core_fields();
     while ( my $attr = $attrs->next ) {
         my $type = $attr->type;
@@ -1016,7 +1019,7 @@ sub add_request {
         }
     } keys %{$request_details};
     $request->extended_attributes( \@request_details_array );
-    $request->append_unauthenticated_notes( $params->{other} ) if $unauthenticated_request;
+    $request->add_unauthenticated_data( $params->{other} ) if $unauthenticated_request;
 
     return $request;
 }
