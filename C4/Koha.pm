@@ -101,6 +101,7 @@ sub GetItemTypesCategorized {
         FROM itemtypes
         LEFT JOIN authorised_values ON searchcategory = authorised_value
         WHERE searchcategory > '' and hideinopac=1
+        AND category = 'ITEMTYPECAT'
         UNION
         SELECT DISTINCT searchcategory AS `itemtype`,
                         COALESCE(authorised_values.lib_opac,authorised_values.lib) AS description,
@@ -109,6 +110,7 @@ sub GetItemTypesCategorized {
         FROM itemtypes
         LEFT JOIN authorised_values ON searchcategory = authorised_value
         WHERE searchcategory > '' and hideinopac=0
+        AND category = 'ITEMTYPECAT'
         |;
 return ($dbh->selectall_hashref($query,'itemtype'));
 }
