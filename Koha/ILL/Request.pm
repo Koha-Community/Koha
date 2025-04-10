@@ -2139,6 +2139,18 @@ sub TO_JSON {
     return $object;
 }
 
+=head3 public_read_list
+
+This method returns the list of publicly readable database fields for both API and UI output purposes
+
+=cut
+
+sub public_read_list {
+    return [qw(
+        illrequest_id backend status extended_attributes placed updated
+    )];
+}
+
 =head2 Internal methods
 
 =head3 to_api_mapping

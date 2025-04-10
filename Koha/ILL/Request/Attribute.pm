@@ -58,6 +58,10 @@ sub request {
     return Koha::ILL::Request->_new_from_dbic( $self->_result->illrequest );
 }
 
+sub public_read_list {
+    return [qw(backend illrequest_id readonly type value)];
+}
+
 =head2 Internal methods
 
 =head3 _type

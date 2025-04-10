@@ -61,6 +61,7 @@ sub list {
 sub patron_list {
     my $c = shift->openapi->valid_input or return;
     my $user = $c->stash('koha.user');
+    $c->stash(is_public => 1);
 
     if ($user->borrowernumber != $c->param('patron_id') and !$user->is_superlibrarian) {
         return $c->render(
