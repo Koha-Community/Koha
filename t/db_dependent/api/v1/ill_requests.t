@@ -18,7 +18,7 @@
 use Modern::Perl;
 
 use Test::NoWarnings;
-use Test::More tests => 3;
+use Test::More tests => 4;
 
 use Test::MockModule;
 use Test::MockObject;
@@ -260,6 +260,86 @@ subtest 'list() tests' => sub {
     $t->delete_ok("//$unauth_userid:$password@/api/v1/ill/requests/1")->status_is(404);
 
     #TODO; test complex query on extended_attributes
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'patron_list() tests' => sub {
+
+    plan tests => 15;
+
+    # Mock ILLBackend (as object)
+    my $backend = Test::MockObject->new;
+    $backend->set_isa('Koha::Illbackends::Mock');
+    $backend->set_always( 'name', 'Mock' );
+    $backend->mock(
+        'status_graph', sub { },
+    );
+
+    # Mock Koha::ILL::Request::load_backend (to load Mocked Backend)
+    my $illreqmodule = Test::MockModule->new('Koha::ILL::Request');
+    $illreqmodule->mock(
+        'load_backend',
+        sub { my $self = shift; $self->{_my_backend} = $backend; return $self }
+    );
+
+    $schema->storage->txn_begin;
+
+    Koha::ILL::Requests->search->delete;
+
+    my $requester = $builder->build_object(
+        {
+            class => 'Koha::Patrons',
+            value => { flags => 0 }
+        }
+    );
+    my $password = 'thePassword123';
+    $requester->set_password( { password => $password, skip_validation => 1 } );
+    my $requester_userid = $requester->userid;
+    my $requester_number = $requester->borrowernumber;
+
+    my $observer = $builder->build_object(
+        {
+            class => 'Koha::Patrons',
+            value => { flags => 0 }
+        }
+    );
+
+    $observer->set_password( { password => $password, skip_validation => 1 } );
+    my $observer_userid = $observer->userid;
+    my $observer_number = $observer->borrowernumber;
+
+    # No requests yet, expect empty for both
+    $t->get_ok("//$requester_userid:$password@/api/v1/patrons/$requester_number/ill/requests")->status_is(200)->json_is( [] );
+    $t->get_ok("//$observer_userid:$password@/api/v1/patrons/$observer_number/ill/requests")->status_is(200)->json_is( [] );
+
+    for (0..25) {
+        $builder->build_object(
+            {
+                class => 'Koha::ILL::Requests',
+                value => {
+                    borrowernumber => $requester_number,
+                    batch_id       => undef,
+                    status         => 'NEW',
+                    backend        => $backend->name,
+                    notesstaff     => 'secret staff notes'
+                }
+            }
+        );
+    }
+
+    # Other user should not see anything
+    $t->get_ok("//$observer_userid:$password@/api/v1/patrons/$observer_number/ill/requests")->status_is(200)->json_is( [] );
+
+    # Staff notes hidden in the public API
+    $t->get_ok("//$requester_userid:$password@/api/v1/patrons/$requester_number/ill/requests")->status_is(200)->json_is(
+        '/0/staff_notes' => undef,
+    );
+
+    # Not all requests get returned, pagination works
+    $t->get_ok("//$requester_userid:$password@/api/v1/patrons/$requester_number/ill/requests")->status_is(200)->json_is(
+        '/21' => undef,
+    );
 
     $schema->storage->txn_rollback;
 };
