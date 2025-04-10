@@ -250,6 +250,7 @@ export default {
                         { value: "sent", description: __("Sent") },
                         { value: "received", description: __("Received") },
                     ],
+                    default: "all",
                 },
             ];
         },

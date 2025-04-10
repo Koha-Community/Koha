@@ -42,6 +42,8 @@
         />
     </template>
     <template v-else-if="attr.type == 'radio'">
+        {{ resource }}
+        {{ Object.keys(resource).includes(attr.name) }}
         <template v-for="option in attr.options">
             <label
                 v-if="option.description"
@@ -53,6 +55,12 @@
                 :name="option.description"
                 :id="attr.name + '_' + option.value"
                 :value="option.value"
+                :checked="
+                    (!Object.keys(resource).includes(attr.name) &&
+                        attr.default == option.value) ||
+                    (Object.keys(resource).includes(attr.name) &&
+                        option.value == resource[attr.name])
+                "
                 v-model="resource[attr.name]"
                 @change="attr.onChange && attr.onChange(resource)"
             />
