@@ -46,7 +46,7 @@
     <h5>Holds</h5>
     <ul>
         <li>
-            <a href="/cgi-bin/koha/circ/view_holdsqueue.pl?branchlimit=[% Branches.GetLoggedInBranchcode | html %]&run_report=1">Holds queue</a>
+            <a href="/cgi-bin/koha/circ/view_holdsqueue.pl?branchlimit=[% Branches.GetLoggedInBranchcode | uri %]&run_report=1">Holds queue</a>
         </li>
         <li>
             <a href="/cgi-bin/koha/circ/pendingreserves.pl">Holds to pull</a>
