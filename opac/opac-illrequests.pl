@@ -58,11 +58,10 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
 );
 
 # Are we able to actually work?
-my $reduced            = C4::Context->preference('ILLOpacbackends');
-my $backends           = Koha::ILL::Request::Config->new->available_backends($reduced);
+my $patron             = Koha::Patrons->find($loggedinuser);
+my $backends           = Koha::ILL::Request::Config->new->opac_available_backends($patron);
 my $backends_available = ( scalar @{$backends} > 0 );
 $template->param( backends_available => $backends_available );
-my $patron = Koha::Patrons->find($loggedinuser);
 
 my $op = Koha::ILL::Request->get_op_param_deprecation( 'opac', $params );
 
