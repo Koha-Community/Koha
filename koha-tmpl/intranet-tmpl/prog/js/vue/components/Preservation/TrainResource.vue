@@ -238,32 +238,15 @@ export default {
         getTableFilters() {
             return [
                 {
-                    id: "all_status_filter",
+                    id: "status_filter",
                     name: "status_filter",
                     type: "radio",
-                    label: __("All"),
-                    value: "",
-                },
-                {
-                    id: "closed_status_filter",
-                    name: "status_filter",
-                    type: "radio",
-                    label: __("Closed"),
-                    value: "closed",
-                },
-                {
-                    id: "sent_status_filter",
-                    name: "status_filter",
-                    type: "radio",
-                    label: __("Sent"),
-                    value: "sent",
-                },
-                {
-                    id: "received_status_filter",
-                    name: "status_filter",
-                    type: "radio",
-                    label: __("Received"),
-                    value: "received",
+                    options: [
+                        { value: "all", description: __("All") },
+                        { value: "closed", description: _("Closed") },
+                        { value: "sent", description: __("Sent") },
+                        { value: "received", description: __("Received") },
+                    ],
                 },
             ];
         },

@@ -42,14 +42,21 @@
         />
     </template>
     <template v-else-if="attr.type == 'radio'">
-        <input
-            type="radio"
-            :name="attr.name"
-            :id="getElementId"
-            :value="attr.value"
-            v-model="resource[attr.name]"
-            @change="attr.onChange && attr.onChange(resource)"
-        />
+        <template v-for="option in attr.options">
+            <label
+                v-if="option.description"
+                :for="attr.name + '_' + option.value"
+                >{{ option.description }}:</label
+            >
+            <input
+                type="radio"
+                :name="option.description"
+                :id="attr.name + '_' + option.value"
+                :value="option.value"
+                v-model="resource[attr.name]"
+                @change="attr.onChange && attr.onChange(resource)"
+            />
+        </template>
     </template>
     <template v-else-if="attr.type == 'boolean'">
         <label class="radio" :for="getElementId + '_yes'"
