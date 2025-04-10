@@ -235,6 +235,9 @@ export default {
                 );
             }
         },
+        getTableFiltersLabel() {
+            return this.$__("Filter by:");
+        },
         getTableFilters() {
             return [
                 {

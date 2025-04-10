@@ -23,6 +23,7 @@
                 :embedded="optionalResourceProps.embedded"
                 :filterTable="filterTable"
                 :getFilters="getFilters"
+                :label="getTableFiltersLabel()"
                 :table="table"
             />
         </template>
@@ -358,6 +359,14 @@ export default {
                 }
             });
             return filterOptions;
+        },
+        /**
+         * Gets the label to display before the filters
+         *
+         * @return {String} The label
+         */
+        getTableFiltersLabel() {
+            return "";
         },
         /**
          * Gets the array of filters for the table, if required.

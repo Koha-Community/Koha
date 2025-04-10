@@ -1,5 +1,6 @@
 <template>
     <fieldset v-if="tableFilters?.length > 0" class="filters">
+        <template v-if="label">{{ label }}{{ " " }}</template>
         <template v-for="(filter, index) in tableFilters" v-bind:key="index">
             <FormElement :resource="filters" :attr="filter" :index="index" />
         </template>
@@ -21,6 +22,7 @@ export default {
         tableFilters: { type: Array, default: [] },
         getFilters: Function,
         filterTable: Function | null,
+        label: String | "",
         table: Object,
     },
     data() {
