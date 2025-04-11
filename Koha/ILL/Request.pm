@@ -2146,9 +2146,11 @@ This method returns the list of publicly readable database fields for both API a
 =cut
 
 sub public_read_list {
-    return [qw(
-        illrequest_id backend status extended_attributes placed updated
-    )];
+    return [
+        qw(
+            illrequest_id backend status extended_attributes placed updated
+        )
+    ];
 }
 
 =head2 Internal methods

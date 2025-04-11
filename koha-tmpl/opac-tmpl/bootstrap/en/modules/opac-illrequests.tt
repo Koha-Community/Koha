@@ -151,8 +151,7 @@
                                         <th class="no-sort"></th>
                                     </tr>
                                 </thead>
-                                <tbody>
-                                </tbody>
+                                <tbody> </tbody>
                             </table>
                         [% ELSIF op == 'view' %]
                             <h1>View interlibrary loan request</h1>
@@ -445,7 +444,7 @@
             "serverSide": true,
             "ajax": {
                 "cache": true,
-                "url": '/api/v1/patrons/[% logged_in_user.borrowernumber %]/ill/requests',
+                "url": '/api/v1/patrons/[% logged_in_user.borrowernumber | html %]/ill/requests',
                 'beforeSend': function (xhr, settings) {
                     this._xhr = xhr;
                     xhr.setRequestHeader('x-koha-embed', '+strings,extended_attributes');

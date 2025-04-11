@@ -58,22 +58,30 @@ sub list {
     };
 }
 
-sub patron_list {
-    my $c = shift->openapi->valid_input or return;
-    my $user = $c->stash('koha.user');
-    $c->stash(is_public => 1);
+=head3 patron_list
 
-    if ($user->borrowernumber != $c->param('patron_id') and !$user->is_superlibrarian) {
+Controller function that handles listing Koha::ILL::Request objects for a given patron.
+
+The patron must match the requesting user unless the requesting user is a superlibrarian.
+
+This is a public route, so some request details are omitted.
+
+=cut
+
+sub patron_list {
+    my $c    = shift->openapi->valid_input or return;
+    my $user = $c->stash('koha.user');
+    $c->stash( is_public => 1 );
+
+    if ( $user->borrowernumber != $c->param('patron_id') and !$user->is_superlibrarian ) {
         return $c->render(
-            status => 403,
+            status  => 403,
             openapi => { error => "Cannot lookup ILL requests for other users" }
         );
     }
 
     return try {
-        my $reqs = $c->objects->search(Koha::ILL::Requests->search(
-            { borrowernumber => $c->param('patron_id') }
-        ));
+        my $reqs = $c->objects->search( Koha::ILL::Requests->search( { borrowernumber => $c->param('patron_id') } ) );
 
         return $c->render(
             status  => 200,

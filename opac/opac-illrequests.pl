@@ -99,6 +99,7 @@ if ( $op eq 'list' ) {
     $template->param( request => $request );
 } elsif ( $op eq 'cud-update' ) {
     $request->notesopac( $params->{notesopac} )->store;
+
     # Send a notice to staff alerting them of the update
     $request->send_staff_notice('ILL_REQUEST_MODIFIED');
     print $query->redirect(

@@ -58,6 +58,12 @@ sub request {
     return Koha::ILL::Request->_new_from_dbic( $self->_result->illrequest );
 }
 
+=head3 public_read_list
+
+This method returns the list of publicly readable database fields for both API and UI output purposes
+
+=cut
+
 sub public_read_list {
     return [qw(backend illrequest_id readonly type value)];
 }

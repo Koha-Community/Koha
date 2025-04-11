@@ -310,10 +310,12 @@ subtest 'patron_list() tests' => sub {
     my $observer_number = $observer->borrowernumber;
 
     # No requests yet, expect empty for both
-    $t->get_ok("//$requester_userid:$password@/api/v1/patrons/$requester_number/ill/requests")->status_is(200)->json_is( [] );
-    $t->get_ok("//$observer_userid:$password@/api/v1/patrons/$observer_number/ill/requests")->status_is(200)->json_is( [] );
+    $t->get_ok("//$requester_userid:$password@/api/v1/patrons/$requester_number/ill/requests")->status_is(200)
+        ->json_is( [] );
+    $t->get_ok("//$observer_userid:$password@/api/v1/patrons/$observer_number/ill/requests")->status_is(200)
+        ->json_is( [] );
 
-    for (0..25) {
+    for ( 0 .. 25 ) {
         $builder->build_object(
             {
                 class => 'Koha::ILL::Requests',
@@ -329,17 +331,20 @@ subtest 'patron_list() tests' => sub {
     }
 
     # Other user should not see anything
-    $t->get_ok("//$observer_userid:$password@/api/v1/patrons/$observer_number/ill/requests")->status_is(200)->json_is( [] );
+    $t->get_ok("//$observer_userid:$password@/api/v1/patrons/$observer_number/ill/requests")->status_is(200)
+        ->json_is( [] );
 
     # Staff notes hidden in the public API
-    $t->get_ok("//$requester_userid:$password@/api/v1/patrons/$requester_number/ill/requests")->status_is(200)->json_is(
+    $t->get_ok("//$requester_userid:$password@/api/v1/patrons/$requester_number/ill/requests")->status_is(200)
+        ->json_is(
         '/0/staff_notes' => undef,
-    );
+        );
 
     # Not all requests get returned, pagination works
-    $t->get_ok("//$requester_userid:$password@/api/v1/patrons/$requester_number/ill/requests")->status_is(200)->json_is(
+    $t->get_ok("//$requester_userid:$password@/api/v1/patrons/$requester_number/ill/requests")->status_is(200)
+        ->json_is(
         '/21' => undef,
-    );
+        );
 
     $schema->storage->txn_rollback;
 };
