@@ -676,11 +676,8 @@ $file_map->{'koha-tmpl/intranet-tmpl/prog/css/holds.css'}        = 'blib/INTRANE
 $file_map->{'koha-tmpl/intranet-tmpl/prog/css/installer.css'}    = 'blib/INTRANET_TMPL_DIR/prog/css/installer.css';
 $file_map->{'koha-tmpl/intranet-tmpl/prog/css/mainpage.css'}     = 'blib/INTRANET_TMPL_DIR/prog/css/mainpage.css';
 $file_map->{'koha-tmpl/intranet-tmpl/prog/css/staff-global.css'} = 'blib/INTRANET_TMPL_DIR/prog/css/staff-global.css';
-$file_map->{'koha-tmpl/intranet-tmpl/prog/js/vue/dist/erm.js'}   = 'blib/INTRANET_TMPL_DIR/prog/js/vue/dist/erm.js';
-$file_map->{'koha-tmpl/intranet-tmpl/prog/js/vue/dist/preservation.js'} =
-    'blib/INTRANET_TMPL_DIR/prog/js/vue/dist/preservation.js';
-$file_map->{'koha-tmpl/intranet-tmpl/prog/js/vue/dist/admin/record_sources.js'} =
-    'blib/INTRANET_TMPL_DIR/prog/js/vue/dist/admin/record_sources.js';
+
+#NOTE: The 'koha-tmpl/intranet-tmpl/prog/js/vue/dist' directory is now handled in the "top_targets" function
 
 #OPAC_TMPL_DIR
 $file_map->{'koha-tmpl/opac-tmpl/bootstrap/css/opac.css'}      = 'blib/OPAC_TMPL_DIR/bootstrap/css/opac.css';
@@ -1910,11 +1907,19 @@ sub postamble {
 sub top_targets {
     my $inherited = shift->SUPER::top_targets(@_);
     my $compile_step;
+
+    #NOTE: Make "all" depend on "compile_css_js"
     $compile_step .= "all :: compile_css_js\n";
     $compile_step .= "\t" . '$(NOECHO) $(NOOP)' . "\n";
     $compile_step .= "\n";
-    $compile_step .= "compile_css_js:\n";
+
+    #NOTE: Make compile_css_js depend on pm_to_blib, so we have access to the blib directory
+    $compile_step .= "compile_css_js: pm_to_blib\n";
     $compile_step .= "\t" . '$(PERLRUN) build-resources.PL' . "\n";
+
+    #NOTE: Copy the generated vue dist files into the relevant blib
+    $compile_step .= "\t" . 'cp -r koha-tmpl/intranet-tmpl/prog/js/vue/dist blib/INTRANET_TMPL_DIR/prog/js/vue/' . "\n";
+
     my $top_targets = $compile_step . "\n" . $inherited;
     return $top_targets;
 }
