@@ -28,6 +28,7 @@ use C4::Output     qw( output_html_with_http_headers );
 use Digest::MD5    qw( md5_base64 );
 use POSIX          qw( strftime );
 use String::Random qw( random_string );
+use URI::Escape    qw( uri_escape );
 
 use Koha::ILL::Request::Config;
 use Koha::ILL::Requests;
@@ -197,7 +198,30 @@ if ( $op eq 'list' ) {
                     $type_disclaimer->after_request_created( $params, $request );
                 }
                 if ( C4::Context->preference('ILLOpacUnauthenticatedRequest') && !$patron ) {
-                    $op = 'unauth_view';
+                    my $sessionID = $query->cookie('CGISESSID');
+                    my $session   = C4::Auth::get_session($sessionID);
+
+                    my $request_unblessed = $request->unblessed;
+                    $request_unblessed->{updated} = $request_unblessed->{updated}->ymd;
+                    $request_unblessed->{placed}  = $request_unblessed->{placed}->ymd;
+                    $request_unblessed->{unauthenticated_first_name} =
+                        $request->extended_attributes->find( { 'type' => 'unauthenticated_first_name' } )->value;
+                    $request_unblessed->{unauthenticated_last_name} =
+                        $request->extended_attributes->find( { 'type' => 'unauthenticated_last_name' } )->value;
+                    $request_unblessed->{unauthenticated_email} =
+                        $request->extended_attributes->find( { 'type' => 'unauthenticated_email' } )->value;
+                    $request_unblessed->{metadata} = $request->metadata;
+
+                    my $capabilities = $request->capabilities;
+                    $request_unblessed->{status} = $capabilities->{ $request->status }->{name};
+                    $request_unblessed->{type}   = $request->get_type;
+
+                    $session->param(
+                        'ill_request_unauthenticated',
+                        uri_escape( encode_json($request_unblessed) )
+                    );
+                    $session->flush;
+                    print $query->redirect('/cgi-bin/koha/opac-illrequests-unauthenticated.pl');
                 } else {
                     print $query->redirect('/cgi-bin/koha/opac-illrequests.pl?message=2');
                     exit;

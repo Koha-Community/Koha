@@ -1,0 +1,115 @@
+[% USE raw %]
+[% USE KohaDates %]
+[% USE Branches %]
+[% USE AdditionalContents %]
+[% SET OpacNav = AdditionalContents.get( location => "OpacNav", lang => lang, library => logged_in_user.branchcode || default_branch, blocktitle => 0 ) %]
+[% INCLUDE 'doc-head-open.inc' %]
+<title>ILL requests</title>
+[% INCLUDE 'doc-head-close.inc' %]
+[% BLOCK cssinclude %]
+[% END %]
+[% INCLUDE 'bodytag.inc' bodyid='opac-illrequests' %]
+
+[% INCLUDE 'masthead.inc' %]
+<div class="main">
+    [% WRAPPER breadcrumbs %]
+        [% IF op != 'list' %]
+            [% WRAPPER breadcrumb_item %]
+                <a href="/cgi-bin/koha/opac-illrequests.pl">Interlibrary loan requests</a>
+            [% END %]
+        [% END %]
+    [% END #/ WRAPPER breadcrumbs %]
+
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-2">
+                [% IF op == 'list' %]
+                    <h1>Interlibrary loan requests</h1>
+                [% ELSIF op == 'view' %]
+                    <h1>View interlibrary loan request</h1>
+                [% ELSIF op == 'unauth_view' %]
+                    <h1>View interlibrary loan request</h1>
+                [% ELSIF op == 'availability' %]
+                    <h1>Interlibrary loan item availability</h1>
+                [% ELSIF op == 'typedisclaimer' %]
+                    <h1>ILL request disclaimer</h1>
+                [% ELSIF op == 'confirmautoill' %]
+                    <h1>Confirming request</h1>
+                [% END %]
+            </div>
+            [% SET column_class = "col order-first order-md-first order-lg-2" %]
+            [% IF ( OpacNav||loggedinusername ) %]
+                [% column_class = "col-lg-10 order-first order-md-first order-lg-2" %]
+            [% END %]
+            <div class="[% column_class | html %]">
+                <div class="maincontent">
+                    <div class="alert alert-success" role="alert">Your request has been placed. We'll contact you shortly.</div>
+                    <h1>View interlibrary loan request</h1>
+                    [% status = request.status %]
+                    <fieldset class="rows">
+                        <legend id="library_legend">Details from library</legend>
+                        <ol>
+                            [% type = request.get_type %]
+                            <li>
+                                <label for="request_id">Request ID:</label>
+                                [% request.illrequest_id | html %]
+                            </li>
+                            <li>
+                                <label for="backend">Requested from:</label>
+                                [% request.backend | html %]
+                            </li>
+                            <li>
+                                <label for="branchcode">Collection library:</label>
+                                [% Branches.GetName(request.branchcode) | html %]
+                            </li>
+                            <li>
+                                <label for="status">Status:</label>
+                                [% request.status | html %]
+                            </li>
+                            <li>
+                                <label for="medium">Request type:</label>
+                                [% IF type %][% type | html %][% ELSE %]<span>N/A</span>[% END %]
+                            </li>
+                            <li>
+                                <label for="placed">Request placed:</label>
+                                [% request.placed | $KohaDates %]
+                            </li>
+                            <li>
+                                <label for="updated">Last updated:</label>
+                                [% request.updated | $KohaDates %]
+                            </li>
+                            <li>
+                                <label for="unauthenticated_first_name">Unauthenticated first name:</label>
+                                [% request.unauthenticated_first_name | html %]
+                            </li>
+                            <li>
+                                <label for="unauthenticated_last_name">Unauthenticated last name:</label>
+                                [% request.unauthenticated_last_name | html %]
+                            </li>
+                            <li>
+                                <label for="unauthenticated_email">Unauthenticated email:</label>
+                                [% request.unauthenticated_email| html %]
+                            </li>
+                        </ol>
+                    </fieldset>
+                    <div id="ill-supplier-metadata" class="rows">
+                        <legend id="backend_legend">Request details</legend>
+                        [% FOREACH meta IN request.metadata %]
+                            [% IF meta.value %]
+                                <div class="requestattr-[% meta.key | replace(' ', '_') | html %]">
+                                    <span class="label">[% meta.key | html %]:</span>
+                                    <span class="value">[% meta.value | html %]</span>
+                                </div>
+                            [% END %]
+                        [% END %]
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+[% INCLUDE 'opac-bottom.inc' %]
+
+[% BLOCK jsinclude %]
+[% END %]
