@@ -296,8 +296,10 @@ sub create {
             C4::Context->preference("ILLOpacUnauthenticatedRequest") && !$other->{'cardnumber'};
         if ($unauthenticated_request) {
             ( $failed, $result ) = _validate_form_params( $other, $result, $params );
-            if ( !Koha::ILL::Request::unauth_request_data_check($other) ) {
-                $result->{status} = "missing_unauth_data";
+            return $result if $failed;
+            my $unauth_request_error = Koha::ILL::Request::unauth_request_data_error($other);
+            if ($unauth_request_error) {
+                $result->{status} = $unauth_request_error;
                 $result->{value}  = $params;
                 $failed           = 1;
             }

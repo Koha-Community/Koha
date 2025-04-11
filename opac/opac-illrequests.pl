@@ -24,8 +24,10 @@ use JSON qw( encode_json );
 use CGI      qw ( -utf8 );
 use C4::Auth qw( get_template_and_user );
 use C4::Koha;
-use C4::Output qw( output_html_with_http_headers );
-use POSIX      qw( strftime );
+use C4::Output     qw( output_html_with_http_headers );
+use Digest::MD5    qw( md5_base64 );
+use POSIX          qw( strftime );
+use String::Random qw( random_string );
 
 use Koha::ILL::Request::Config;
 use Koha::ILL::Requests;
@@ -119,6 +121,15 @@ if ( $op eq 'list' ) {
         my $req = Koha::ILL::Request->new;
         $template->param( backends => $backends );
     } else {
+
+        if ( C4::Context->preference('ILLOpacUnauthenticatedRequest') && !$patron ) {
+            my $captcha = random_string("CCCCC");
+            $template->param(
+                captcha        => $captcha,
+                captcha_digest => md5_base64($captcha),
+            );
+        }
+
         $params->{backend} = 'Standard' if $params->{backend} eq 'FreeForm';
         my $request = Koha::ILL::Request->new->load_backend( $params->{backend} );
 
@@ -153,6 +164,12 @@ if ( $op eq 'list' ) {
                 $template->output, undef,
                 { force_no_caching => 1 };
             exit;
+        }
+
+        if ( $request->_backend_capability( 'can_create_request', $params ) ) {
+            if ( md5_base64( uc( $params->{captcha} ) ) ne $params->{captcha_digest} ) {
+                $params->{failed_captcha} = 1;
+            }
         }
 
         $params->{cardnumber} = $patron->cardnumber if $patron;

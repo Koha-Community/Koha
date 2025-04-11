@@ -1968,23 +1968,25 @@ sub add_unauthenticated_data {
     );
 }
 
-=head3 unauth_request_data_check
+=head3 unauth_request_data_error
 
-    unauth_request_data_check($metadata);
+    unauth_request_data_error($metadata);
 
-Checks if unauthenticated request data is present
+Checks if unauthenticated request data errored, returns error_code if so, else 0
 
 =cut
 
-sub unauth_request_data_check {
+sub unauth_request_data_error {
     my ($metadata) = @_;
 
-    return 1 unless C4::Context->preference("ILLOpacUnauthenticatedRequest");
-
-    return
-           $metadata->{unauthenticated_first_name}
+    return 0 unless C4::Context->preference("ILLOpacUnauthenticatedRequest");
+    return 'missing_unauth_data'
+        unless $metadata->{unauthenticated_first_name}
         && $metadata->{unauthenticated_last_name}
         && $metadata->{unauthenticated_email};
+
+    return 'failed_captcha' if $metadata->{failed_captcha};
+    return 0;
 }
 
 =head3 append_to_note

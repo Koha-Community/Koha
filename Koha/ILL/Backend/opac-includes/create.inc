@@ -27,6 +27,8 @@
     <div class="alert alert-warning">
         <strong>Please note:</strong> The library you chose is invalid.
     </div>
+[% ELSIF whole.status == 'failed_captcha' %]
+    <div class="alert alert-warning">You typed in the wrong characters in the box before submitting. Please try again.</div>
 [% ELSE %]
 <p>Unhandled error</p>
 [% END %]
@@ -119,6 +121,22 @@
       [% INCLUDE "${cwd}/shared-includes/forms/${type}.inc" %]
   [% END %]
   [% INCLUDE "${cwd}/shared-includes/custom_fields.inc" %]
+  [% IF whole.value.other.type && unauthenticated_ill && !logged_in_user%]
+    <fieldset class="rows" id="illrequest_captcha">
+        <legend>Verification</legend>
+        <ol>
+            <li>
+                <label for="captcha" class="required">Verification:</label>
+
+                <input type="text" name="captcha" id="captcha" class="form-control input-fluid" style="text-transform: uppercase;" />
+                <div class="required_label required">Required</div>
+                <input type="hidden" name="captcha_digest" value="[% captcha_digest | html %]" />
+
+                <span class="hint">Please type the following characters into the preceding box: <strong>[% captcha | html %]</strong></span>
+            </li>
+        </ol>
+    </fieldset>
+  [% END %]
   <fieldset class="action">
     <input id="ill-submit" class="btn btn-primary" type="submit" value="Create"/>
     <a class="cancel" href="/cgi-bin/koha/opac-illrequests.pl">Cancel</a>
