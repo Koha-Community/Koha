@@ -937,6 +937,16 @@ sub marc_records_to_documents {
             }
         }
 
+        if (   $self->index eq $AUTHORITIES_INDEX
+            && exists $record_document->{'subject-heading-thesaurus'}
+            && scalar @{ $record_document->{'subject-heading-thesaurus'} } > 1 )
+        {
+            # We should really only have two thesauri defined in the case where 008/_11 = 'z' and 040$f is defined
+            # In that case, we should drop the z
+            @{ $record_document->{'subject-heading-thesaurus'} } =
+                map { $_ eq 'z' ? () : $_ } @{ $record_document->{'subject-heading-thesaurus'} };
+        }
+
         # Check if there is at least one available item
         if ( $self->index eq $BIBLIOS_INDEX ) {
             my ( $tag, $code ) = C4::Biblio::GetMarcFromKohaField('biblio.biblionumber');
