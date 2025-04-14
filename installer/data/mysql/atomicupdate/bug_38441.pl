@@ -14,7 +14,7 @@ return {
             q{
                     INSERT IGNORE INTO systempreferences (variable,value,options,explanation,type) VALUES (
                             'ILLHistoryCheck', '', '',
-                                'If ON, during the ILL request process, a check is performed to see if the ILL request has already been previously placed',
+                                'If ON, a verification is performed to check if the ILL request has previously been placed by the same patron. Verification is done using one of the following identifier fields: DOI, Pubmed ID or ISBN',
                         'YesNo'
                     );
                 }

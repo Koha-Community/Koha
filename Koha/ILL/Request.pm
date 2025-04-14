@@ -2297,6 +2297,23 @@ sub can_patron_place_ill_in_opac {
     return 1;
 }
 
+=head3 get_history_check_requests
+
+    $self->get_history_check_requests();
+
+Returns a list of history check requests for this request
+
+=cut
+
+sub get_history_check_requests {
+    my ($self) = @_;
+
+    my $historycheck_attribute = $self->extended_attributes->find( { 'type' => 'historycheck_requests' } );
+    return unless $historycheck_attribute;
+
+    return Koha::ILL::Requests->search( { 'me.illrequest_id' => [ split qr{\|}, $historycheck_attribute->value ] } );
+}
+
 =head3 get_op_param_deprecation
 
     my $op = $req->check_url_param_deprecation($params);

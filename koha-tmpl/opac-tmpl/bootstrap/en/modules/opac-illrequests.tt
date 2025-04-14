@@ -320,9 +320,11 @@
                                     [% IF matching_requests_for_patron.size %]
                                         <ul class="list-unstyled">
                                             [% FOREACH matching_request_for_patron IN matching_requests_for_patron %]
+                                                [% SET matching_req_status = matching_request_for_patron.status %]
                                                 <li>
-                                                    <a href="/cgi-bin/koha/opac-illrequests.pl?op=view&amp;illrequest_id=[% matching_request_for_patron.illrequest_id | uri %]"
-                                                        >ILL Request #[% matching_request_for_patron.illrequest_id | html %]</a
+                                                    <a target="_blank" href="/cgi-bin/koha/opac-illrequests.pl?op=view&amp;illrequest_id=[% matching_request_for_patron.illrequest_id | uri %]"
+                                                        ><i aria-hidden="true" class="fa fa-fw fa-external-link-square"></i>Request [% matching_request_for_patron.id_prefix | html %][% matching_request_for_patron.illrequest_id | html %]
+                                                        ([% matching_request_for_patron.capabilities.$matching_req_status.name | html %]) on [% matching_request_for_patron.placed | $KohaDates %]</a
                                                     >
                                                 </li>
                                             [% END %]

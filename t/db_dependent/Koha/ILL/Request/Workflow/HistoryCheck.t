@@ -30,7 +30,7 @@ use Koha::Database;
 
 my $schema = Koha::Database->new->schema;
 
-my $issn = '321321321';
+my $isbn = '321321321';
 
 subtest 'show_history_check' => sub {
 
@@ -53,7 +53,7 @@ subtest 'show_history_check' => sub {
     my $metadata = {
         title      => 'This is a title',
         author     => 'This is an author',
-        issn       => $issn,
+        isbn       => $isbn,
         cardnumber => $fake_cardnumber,
     };
 
@@ -70,7 +70,7 @@ subtest 'show_history_check' => sub {
 
     is(
         $history_check->prep_metadata($sorted),
-        'eyJhdXRob3IiOiJUaGlzIGlzIGFuIGF1dGhvciIsImNhcmRudW1iZXIiOiIxMjM0NTY3ODkiLCJp%0Ac3NuIjoiMzIxMzIxMzIxIiwidGl0bGUiOiJUaGlzIGlzIGEgdGl0bGUifQ%3D%3D%0A',
+        'eyJhdXRob3IiOiJUaGlzIGlzIGFuIGF1dGhvciIsImNhcmRudW1iZXIiOiIxMjM0NTY3ODkiLCJp%0Ac2JuIjoiMzIxMzIxMzIxIiwidGl0bGUiOiJUaGlzIGlzIGEgdGl0bGUifQ%3D%3D%0A',
         'prep_metadata works'
     );
 
@@ -89,19 +89,19 @@ subtest 'show_history_check' => sub {
     my $ill_request = $builder->build_sample_ill_request( { borrowernumber => $ill_patron->borrowernumber } );
     is(
         $history_check->show_history_check($ill_request),
-        0, 'Request with ISSN ' . $issn . ' does not exist even though syspref is on. Not showing history check screen'
+        0, 'Request with ISBN ' . $isbn . ' does not exist even though syspref is on. Not showing history check screen'
     );
 
     $builder->build(
         {
             source => 'Illrequestattribute',
-            value  => { illrequest_id => $ill_request->illrequest_id, type => 'issn', value => $issn }
+            value  => { illrequest_id => $ill_request->illrequest_id, type => 'isbn', value => $isbn }
         }
     );
 
     is(
         $history_check->show_history_check($ill_request),
-        1, 'Request with ISSN ' . $issn . ' exists, syspref is on and is same patron. Able to show history check screen'
+        1, 'Request with ISBN ' . $isbn . ' exists, syspref is on and is same patron. Able to show history check screen'
     );
 
     # Mock ILLHistoryCheck disabled
@@ -128,7 +128,7 @@ subtest 'after_request_created' => sub {
     my $metadata        = {
         title  => 'This is a title',
         author => 'This is an author',
-        issn   => $issn
+        isbn   => $isbn
     };
 
     my $authenticated_patron = $builder->build_object(
@@ -139,48 +139,49 @@ subtest 'after_request_created' => sub {
 
     t::lib::Mocks::mock_userenv( { patron => $authenticated_patron } );
 
-    # Create a new request with new issn
+    # Create a new request with new isbn
     my $new_ill_request =
         $builder->build_sample_ill_request( { borrowernumber => $authenticated_patron->borrowernumber } );
     my $original_staff_notes = $new_ill_request->notesstaff;
-    $metadata->{issn} = 'nonexistentissn';
+    $metadata->{isbn} = 'nonexistentisbn';
     $builder->build(
         {
             source => 'Illrequestattribute',
-            value  => { illrequest_id => $new_ill_request->illrequest_id, type => 'issn', value => $metadata->{issn} }
+            value  => { illrequest_id => $new_ill_request->illrequest_id, type => 'isbn', value => $metadata->{isbn} }
         }
     );
     my $opac_history_check = Koha::ILL::Request::Workflow::HistoryCheck->new( $metadata, 'opac' );
     $opac_history_check->after_request_created( $metadata, $new_ill_request );
 
     is(
-        $new_ill_request->notesstaff,
-        $original_staff_notes,
-        'History check didn\'t find any matching requests. Staff notes have not been updated.'
+        $new_ill_request->extended_attributes->find( { 'type' => 'historycheck_requests' } ),
+        undef,
+        'History check didn\'t find any matching requests. historycheck_requests illrequestattribute has not been updated.'
     );
 
-    # Create a second request with preexisting issn by self patron
+    # Create a second request with preexisting isbn by self patron
     my $second_ill_request =
         $builder->build_sample_ill_request( { borrowernumber => $authenticated_patron->borrowernumber } );
     my $third_ill_request =
         $builder->build_sample_ill_request( { borrowernumber => $authenticated_patron->borrowernumber } );
-    $metadata->{issn} = $issn;
+    $metadata->{isbn} = $isbn;
     $builder->build(
         {
             source => 'Illrequestattribute',
-            value  => { illrequest_id => $second_ill_request->illrequest_id, type => 'issn', value => $issn }
+            value  => { illrequest_id => $second_ill_request->illrequest_id, type => 'isbn', value => $isbn }
         }
     );
     $builder->build(
         {
             source => 'Illrequestattribute',
-            value  => { illrequest_id => $third_ill_request->illrequest_id, type => 'issn', value => $issn }
+            value  => { illrequest_id => $third_ill_request->illrequest_id, type => 'isbn', value => $isbn }
         }
     );
     $opac_history_check->after_request_created( $metadata, $third_ill_request );
 
-    like(
-        $third_ill_request->notesstaff, qr/Request has been submitted by this patron in the past/,
+    is(
+        $third_ill_request->extended_attributes->find( { 'type' => 'historycheck_requests' } )->value,
+        $second_ill_request->illrequest_id,
         'Contains staffnotes related submissions by self patron'
     );
 

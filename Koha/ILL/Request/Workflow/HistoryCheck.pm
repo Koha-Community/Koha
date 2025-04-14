@@ -85,15 +85,31 @@ sub history_check_template_params {
 
     $params->{cardnumber} = C4::Context->userenv->{'cardnumber'} || 0 if $self->{ui_context} eq 'opac';
 
-    my $backend = Koha::ILL::Request->new->load_backend( $params->{backend} );
+    my $backend        = Koha::ILL::Request->new->load_backend( $params->{backend} );
+    my $fields_mapping = {
+        cardnumber => __('Cardnumber'),
+        branchcode => __('Library'),
+        backend    => __('Backend'),
+    };
     my $mapping_function;
     eval {
-        $mapping_function = sub { return $backend->{_my_backend}->_get_core_fields()->{ $_[0] } };
-        $backend->{_my_backend}->_get_core_fields();
+        my $backend_mapping = $backend->{_my_backend}->_get_core_fields();
+        $fields_mapping   = { %$fields_mapping, %$backend_mapping };
+        $mapping_function = sub { return $fields_mapping->{ $_[0] } };
     };
     if ($@) {
-        $mapping_function = sub { return $_[0] };
+        $mapping_function = sub { return $fields_mapping->{ $_[0] } };
     }
+
+    my @sorted_params = sort {
+        my $a_val = $mapping_function->($a) // $a;
+        my $b_val = $mapping_function->($b) // $b;
+        lc($a_val) cmp lc($b_val)
+    } keys %$params;
+
+    @sorted_params = map {
+        { $_ => $params->{$_} }
+    } @sorted_params;
 
     my $matching_requests_for_patron = $self->_find_matching_requests();
 
@@ -103,6 +119,7 @@ sub history_check_template_params {
         matching_requests_for_patron => $matching_requests_for_patron,
         $self->{ui_context} eq 'staff'
         ? (
+            sorted_params      => \@sorted_params,
             key_mapping        => $mapping_function,
             request_patron_obj => Koha::Patrons->find( { cardnumber => $params->{cardnumber} } )
             )
@@ -133,53 +150,37 @@ sub after_request_created {
     my $patron_cardnumber            = C4::Context->userenv->{'cardnumber'} || 0;
     my $matching_requests_for_patron = $self->_find_matching_requests();
 
-    my $staffnotes;
-
+    my $historycheck_requests;
     if ($matching_requests_for_patron) {
-        my $appended_self_note = 0;
         foreach my $matching_request ( @{$matching_requests_for_patron} ) {
             next if $matching_request->illrequest_id eq $request->illrequest_id;
-            if ( $appended_self_note == 0 ) {
-                $staffnotes .= __("Request has been submitted by this patron in the past:");
-                $appended_self_note = 1;
-            }
-            $staffnotes .= ' ' . $self->_get_request_staff_link($matching_request);
+            $historycheck_requests .=
+                $historycheck_requests ? '|' . $matching_request->illrequest_id : $matching_request->illrequest_id;
         }
     }
 
-    $request->append_to_note($staffnotes)->store() if $staffnotes;
-}
-
-=head3 _get_request_staff_link
-
-    $self->_get_request_staff_link($matching_request);
-
-Returns an HTML staff link to the provided request
-
-=cut
-
-sub _get_request_staff_link {
-    my ( $self, $request ) = @_;
-
-    return
-          '<a href="/cgi-bin/koha/ill/ill-requests.pl?op=illview&illrequest_id='
-        . $request->illrequest_id . '">'
-        . __("ILL Request #")
-        . $request->illrequest_id . '</a>';
+    $request->extended_attributes(
+        [
+            {
+                type  => 'historycheck_requests',
+                value => $historycheck_requests,
+            },
+        ]
+    ) if $historycheck_requests;
 }
 
 =head3 _find_matching_requests
 
     my $matching_requests = $self->_find_matching_requests();
 
-Returns a list of matching requests (match is done by doi, issn, isbn, pubmedid)
+Returns a list of matching requests (match is done by doi, isbn, pubmedid)
 
 =cut
 
 sub _find_matching_requests {
     my ($self) = @_;
 
-    my @id_fields = ( 'doi', 'issn', 'isbn', 'pubmedid' );
+    my @id_fields = ( 'doi', 'isbn', 'pubmedid' );
 
     my @existing_id_fields = grep { $self->{metadata}->{$_} } @id_fields;
     return 0 unless scalar @existing_id_fields;
