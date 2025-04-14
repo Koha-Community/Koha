@@ -984,13 +984,16 @@
                         <th>&nbsp;</th>
                     </tr>
                     [% FOREACH c IN categorycodes %]
-                        [% NEXT UNLESS c %]
                         [% SET i = undef %]
                         [% SET open_article_requests_limit = all_rules.$c.$i.open_article_requests_limit %]
 
                         [% IF ( open_article_requests_limit.defined && open_article_requests_limit != '' ) %]
                             <tr>
-                                <td> [% Categories.GetName(c) | html %] </td>
+                                [% IF c == undef %]
+                                    <td><em>All</em></td>
+                                [% ELSE %]
+                                    <td> [% Categories.GetName(c) | html %] </td>
+                                [% END %]
                                 <td>
                                     [% IF open_article_requests_limit.defined && open_article_requests_limit != '' %]
                                         [% open_article_requests_limit | html %]
@@ -1008,6 +1011,7 @@
                     <tr>
                         <td>
                             <select name="categorycode">
+                                <option value="*">All</option>
                                 [% FOREACH patron_category IN patron_categories %]
                                     <option value="[% patron_category.categorycode | html %]">[% patron_category.description | html %]</option>
                                 [% END %]
