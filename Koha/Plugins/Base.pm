@@ -68,7 +68,7 @@ sub new {
                 warn "Plugin $class failed during installation!";
             }
         } catch {
-            Koha::Exceptions::Plugin::InstallDied->throw( plugin_class => $class );
+            Koha::Exceptions::Plugin::InstallDied->throw( plugin_class => $class, install_error => "$_" );
         };
     } elsif ( $self->can('upgrade') ) {
         if ( _version_compare( $plugin_version, $database_version ) == 1 ) {
@@ -79,7 +79,7 @@ sub new {
                     warn "Plugin $class failed during upgrade!";
                 }
             } catch {
-                Koha::Exceptions::Plugin::UpgradeDied->throw( plugin_class => $class );
+                Koha::Exceptions::Plugin::UpgradeDied->throw( plugin_class => $class, upgrade_error => "$_" );
             };
         }
     } elsif ( $plugin_version ne $database_version ) {
