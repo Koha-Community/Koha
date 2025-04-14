@@ -65,7 +65,7 @@ requires 'LWP::UserAgent', '2.033';
 requires 'Library::CallNumber::LC', '0.22';
 requires 'Lingua::Stem', '0.82';
 requires 'Lingua::Stem::Snowball', '0.952';
-requires 'List::MoreUtils', '0.21';
+requires 'List::MoreUtils', '0.423';
 requires 'List::Util', '1.18';
 requires 'Locale::Currency::Format', '1.28';
 requires 'Locale::Messages', '1.20';
