@@ -287,6 +287,7 @@ subtest 'superlibrarian tests' => sub {
         'CAN_user_tools_view_system_logs'                           => 1,
         'CAN_user_tools'                                            => 1,
         'CAN_user_updatecharges_discount'                           => 1,
+        'CAN_user_updatecharges_edit_accountline_notes'             => 1,
         'CAN_user_updatecharges_manual_credit'                      => 1,
         'CAN_user_updatecharges_manual_invoice'                     => 1,
         'CAN_user_updatecharges_payout'                             => 1,
