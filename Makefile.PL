@@ -1689,7 +1689,7 @@ KOHA_DEST_$key = $target_directories->{$key}
 ) unless exists $skip_directories->{$key};
 		}
 		$install .= qq(
-install :: all install_koha set_koha_ownership set_koha_permissions warn_koha_env_vars
+install :: install_koha set_koha_ownership set_koha_permissions warn_koha_env_vars
 \t\$(NOECHO) \$(NOOP)
 );
 			$install .= "install_koha ::\n";
