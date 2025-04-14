@@ -315,24 +315,31 @@ subtest 'Koha::Exceptions::Plugin tests' => sub {
     use_ok("Koha::Exceptions::Plugin");
 
     my $plugin_class = 'yahey';
+    my $error_string = 'This is an error';
 
     throws_ok {
-        Koha::Exceptions::Plugin::InstallDied->throw( plugin_class => $plugin_class );
+        Koha::Exceptions::Plugin::InstallDied->throw(
+            plugin_class  => $plugin_class,
+            install_error => $error_string,
+        );
     }
     'Koha::Exceptions::Plugin::InstallDied',
         'Exception is thrown :-D';
 
     # stringify the exception
-    is( "$@", "Calling 'install' died for plugin $plugin_class", 'Exception stringified correctly' );
+    is( "$@", "Calling 'install' died for plugin $plugin_class: $error_string", 'Exception stringified correctly' );
 
     throws_ok {
-        Koha::Exceptions::Plugin::UpgradeDied->throw( plugin_class => $plugin_class );
+        Koha::Exceptions::Plugin::UpgradeDied->throw(
+            plugin_class  => $plugin_class,
+            upgrade_error => $error_string,
+        );
     }
     'Koha::Exceptions::Plugin::UpgradeDied',
         'Exception is thrown :-D';
 
     # stringify the exception
-    is( "$@", "Calling 'upgrade' died for plugin $plugin_class", 'Exception stringified correctly' );
+    is( "$@", "Calling 'upgrade' died for plugin $plugin_class: $error_string", 'Exception stringified correctly' );
 };
 
 subtest 'Koha::Exceptions::Booking tests' => sub {
