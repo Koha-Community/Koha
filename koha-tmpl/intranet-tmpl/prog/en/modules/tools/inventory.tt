@@ -284,19 +284,19 @@
                             <thead>
                                 <tr>
                                     [% UNLESS uploadedbarcodesflag %]
-                                        <th>Seen</th>
+                                        <th id="seen" data-colname="seen">Seen</th>
                                     [% END %]
-                                    <th>Barcode</th>
-                                    <th>Call number</th>
-                                    <th>Library</th>
-                                    <th>Collection</th>
-                                    <th class="anti-the">Title</th>
-                                    <th>Not for loan</th>
-                                    <th>Lost</th>
-                                    <th>Damaged</th>
-                                    <th>Withdrawn</th>
-                                    <th>Last seen</th>
-                                    <th>Problems</th>
+                                    <th id="barcode" data-colname="barcode">Barcode</th>
+                                    <th id="call_number" data-colname="call_number">Call number</th>
+                                    <th id="library" data-colname="library">Library</th>
+                                    <th id="collection" data-colname="collection">Collection</th>
+                                    <th id="title" data-colname="title" class="anti-the">Title</th>
+                                    <th id="notforloan" data-colname="notforloan">Not for loan</th>
+                                    <th id="lost" data-colname="lost">Lost</th>
+                                    <th id="damaged" data-colname="damaged">Damaged</th>
+                                    <th id="withdrawn" data-colname="withdrawn">Withdrawn</th>
+                                    <th id="last_seen" data-colname="last_seen">Last seen</th>
+                                    <th id="problems" data-colname="problems">Problems</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -459,9 +459,10 @@
             var table_settings = [% TablesSettings.GetTableSettings( 'tools', 'inventory', 'inventoryt', 'json' ) | $raw %];
             inventorydt = KohaTable("inventoryt", {
                 "pagingType": 'full_numbers',
-                [% IF compareinv2barcd %]
+                "bKohaColumnsUseNames": true,
+                [% IF uploadedbarcodesflag %]
                     // sort on callnumber
-                    "order": [[ 1, "asc" ]],
+                    "order": [[ 2, "asc" ]],
                 [% ELSE %]
                     // first column contains checkboxes
                     "columnDefs": [
