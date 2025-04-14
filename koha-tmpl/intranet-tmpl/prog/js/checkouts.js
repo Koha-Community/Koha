@@ -1729,6 +1729,12 @@ $(document).ready(function () {
             sessionConfirmations.push($(this).val());
         });
 
+        // Add cancelreserve checkbox state if it's checked
+        if (rememberForSession) {
+            if ($("#cancelreserve").is(":checked")) {
+                sessionConfirmations.push("cancelreserve");
+            }
+        }
         if (currentPatron != borrowernumber && !rememberForSession) {
             Cookies.set("patronSessionConfirmation", borrowernumber + ":", {
                 sameSite: "Lax",
