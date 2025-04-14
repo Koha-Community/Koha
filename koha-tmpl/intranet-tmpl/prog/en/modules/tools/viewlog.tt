@@ -244,6 +244,7 @@
                             <th>Object</th>
                             <th>Info</th>
                             <th>Interface</th>
+                            <th>Diff</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -361,6 +362,7 @@
                                     [% END %]
                                 </td>
                                 <td>[% PROCESS translate_log_interface log_interface=loopro.interface %]</td>
+                                <td>[% loopro.diff | html %]</td>
                             </tr>
                         [% END %]
                     </tbody>
