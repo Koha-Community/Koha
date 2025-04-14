@@ -325,7 +325,8 @@ my $logger            = Koha::Logger->get;
 my $schema            = Koha::Database->schema;
 my $lint              = MARC::Lint->new;
 
-while () {
+$schema->txn_begin;
+RECORD: while () {
 
     my $record;
     $record_number++;
@@ -475,7 +476,6 @@ while () {
             }
         }
         unless ($test_parameter) {
-            $schema->txn_begin;
 
             if ($authorities) {
                 my $authtypecode = GuessAuthTypeCode( $record, $heading_fields );
@@ -726,8 +726,13 @@ while () {
             @search_engine_records    = ();
         }
         $schema->txn_commit;
+        $schema->txn_begin;
     }
     last if $record_number == $number || $records_exhausted;
+}
+
+if ( !$test_parameter ) {
+    $schema->txn_commit;
 }
 
 if ($fk_off) {
