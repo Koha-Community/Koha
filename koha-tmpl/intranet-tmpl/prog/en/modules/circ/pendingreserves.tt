@@ -96,7 +96,7 @@
             <td><p><strong>[% hold_info.pull_count | html %]</strong></p></td>
             <td>[% hold_info.items_count | html %]</td>
             <td>[% hold_info.patrons_count | html %]</td>
-            <td><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% patron.borrowernumber | uri %]">[% patron.firstname | html %] [% patron.surname | html %]</a></td>
+                                            <td><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% patron.borrowernumber | uri %]">[% INCLUDE 'patron-title.inc' patron=patron invert_name=1 no_title=1 %]</a></td>
             <td>
                 <p>
                     [% INCLUDE 'biblio-title.inc' biblio=biblio link = 1 %]
