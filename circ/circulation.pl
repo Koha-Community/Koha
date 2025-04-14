@@ -487,6 +487,9 @@ if ( @$barcodes && $op eq 'cud-checkout' ) {
                 my ( $patron_for_session, $session_confirmations ) = split( /:/, $patron_session_confirmation, 2 );
                 my $patron_match = $borrowernumber == $patron_for_session;
                 my @conf_keys    = split( /\|/, $session_confirmations );
+                if ( $patron_match && grep { $_ eq 'cancelreserve' } @conf_keys ) {
+                    $cancelreserve = 1;
+                }
                 $template_params->{sessionConfirmationKeys} = ();
 
                 # pass needsconfirmation to template if issuing is possible and user hasn't yet confirmed.
