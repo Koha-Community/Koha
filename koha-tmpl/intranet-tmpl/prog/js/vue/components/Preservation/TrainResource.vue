@@ -13,6 +13,9 @@ export default {
         const AVStore = inject("AVStore");
         const { av_notforloan } = storeToRefs(AVStore);
 
+        const PreservationStore = inject("PreservationStore");
+        const { config } = storeToRefs(PreservationStore);
+
         return {
             ...BaseResource.setup({
                 resourceName: "train",
@@ -39,6 +42,7 @@ export default {
                     newLabel: __("New train"),
                 },
                 av_notforloan,
+                config,
             }),
         };
     },
@@ -78,6 +82,8 @@ export default {
                     label: __("Status for item added to this train"),
                     avCat: "av_notforloan",
                     disabled: train => (train.train_id ? true : false),
+                    defaultValue:
+                        this.config.settings.not_for_loan_default_train_in,
                 },
                 {
                     name: "default_processing_id",
