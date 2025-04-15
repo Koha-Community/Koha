@@ -17,7 +17,10 @@ package Koha::Item::Transfer;
 
 use Modern::Perl;
 
+use JSON qw(to_json);
+
 use C4::Items qw( CartToShelf ModDateLastSeen );
+use C4::Log   qw( logaction );
 
 use Koha::Database;
 use Koha::DateUtils qw( dt_from_string );
@@ -31,9 +34,38 @@ Koha::Item::Transfer - Koha Item Transfer Object class
 
 =head1 API
 
-=head2 Class Methods
+=head2 Class methods
+
+=head3 store
+
+Overloaded I<store> method.
 
 =cut
+
+sub store {
+    my ($self) = @_;
+
+    $self->_result->result_source->schema->txn_do(
+        sub {
+            my $action = $self->in_storage ? 'UPDATE' : 'CREATE';
+
+            $self = $self->SUPER::store;
+            $self->discard_changes;
+
+            logaction(
+                "TRANSFERS",
+                $action,
+                $self->itemnumber,
+                to_json(
+                    $self->TO_JSON,
+                    { utf8 => 1, pretty => 1, canonical => 1, }
+                )
+            ) if C4::Context->preference("TransfersLog");
+        }
+    );
+
+    return $self;
+}
 
 =head3 item
 

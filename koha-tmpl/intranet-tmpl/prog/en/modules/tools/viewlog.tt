@@ -123,7 +123,7 @@
                             [% ELSE %]
                                 <label for="moduleALL" class="viewlog"><input type="checkbox" id="moduleALL" name="modules" value="" /> All</label>
                             [% END %]
-                            [% FOREACH modx IN [ 'AUTH' 'CATALOGUING' 'AUTHORITIES' 'MEMBERS' 'ACQUISITIONS' 'SERIAL' 'HOLDS' 'ILL' 'CIRCULATION' 'CLAIMS' 'FINES' 'SYSTEMPREFERENCE' 'CRONJOBS', 'REPORTS', 'SEARCHENGINE', 'NOTICES', 'NEWS', 'RECALLS', 'SUGGESTION' ] %]
+                            [% FOREACH modx IN [ 'AUTH' 'CATALOGUING' 'AUTHORITIES' 'MEMBERS' 'ACQUISITIONS' 'SERIAL' 'HOLDS' 'ILL' 'CIRCULATION' 'CLAIMS' 'FINES' 'SYSTEMPREFERENCE' 'CRONJOBS', 'REPORTS', 'SEARCHENGINE', 'NOTICES', 'NEWS', 'RECALLS', 'SUGGESTION', 'TRANSFERS' ] %]
                                 [% IF modules.grep(modx).size %]
                                     <label for="module[% modx | html %]" class="viewlog"
                                         ><input type="checkbox" id="module[% modx | html %]" name="modules" value="[% modx | html %]" checked="checked" /> [% PROCESS translate_log_module module=modx %]</label
