@@ -183,7 +183,12 @@
                                         </li>
                                         <li>
                                             <label for="status">Status:</label>
-                                            [% request.status_alias ? request.statusalias.lib_opac : request.capabilities.$status.name | html %]
+                                            [% request.capabilities.$status.name | html %]
+                                            [% IF request.status_alias && request.statusalias.lib_opac %]
+                                                <i><strong>[% request.statusalias.lib_opac | html %]</strong></i>
+                                            [% ELSE %]
+                                                <i><strong>[% request.statusalias.authorised_value | html %]</strong></i>
+                                            [% END %]
                                         </li>
                                         <li>
                                             <label for="medium">Request type:</label>

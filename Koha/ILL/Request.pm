@@ -2161,7 +2161,7 @@ This method returns the list of publicly readable database fields for both API a
 sub public_read_list {
     return [
         qw(
-            illrequest_id backend status extended_attributes placed updated
+            illrequest_id backend status status_alias extended_attributes placed updated
         )
     ];
 }
