@@ -67,7 +67,6 @@ export default {
             initialized: false,
             searchable_additional_fields: [],
             searchable_av_options: [],
-            filters: this.getFilters ? this.getFilters(this.$route.query) : {},
         };
     },
     created() {

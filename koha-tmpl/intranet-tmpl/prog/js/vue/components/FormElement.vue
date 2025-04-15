@@ -42,9 +42,10 @@
         />
     </template>
     <template v-else-if="attr.type == 'radio'">
-        {{ resource }}
-        {{ Object.keys(resource).includes(attr.name) }}
-        <template v-for="option in attr.options">
+        <template
+            v-for="(option, index) in attr.options"
+            :key="`radio-option-${index}`"
+        >
             <label
                 v-if="option.description"
                 :for="attr.name + '_' + option.value"

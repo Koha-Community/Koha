@@ -128,31 +128,16 @@ export default {
                 },
             ],
             tableOptions: {
-                //options: {
-                //    embed: "user_roles,vendor,extended_attributes,+strings",
-                //},
+                options: {
+                    order: [
+                        [2, "desc"],
+                        [3, "asc"],
+                        [4, "asc"],
+                        [5, "asc"],
+                    ],
+                },
                 url: () => this.tableUrl(defaults),
-                //table_settings: this.agreement_table_settings,
                 add_filters: true,
-                //filters_options: {
-                //    2: () =>
-                //        this.vendors.map(e => {
-                //            e["_id"] = e["id"];
-                //            e["_str"] = e["name"];
-                //            return e;
-                //        }),
-                //    4: () => this.map_av_dt_filter("av_agreement_statuses"),
-                //    5: () =>
-                //        this.map_av_dt_filter("av_agreement_closure_reasons"),
-                //    6: [
-                //        { _id: 0, _str: this.$__("No") },
-                //        { _id: 1, _str: this.$__("Yes") },
-                //    ],
-                //    7: () =>
-                //        this.map_av_dt_filter(
-                //            "av_agreement_renewal_priorities"
-                //        ),
-                //},
                 actions: {
                     0: ["show"],
                     1: ["show"],
@@ -167,13 +152,6 @@ export default {
                         },
                     ],
                 },
-                //default_filters: {
-                //    "user_roles.user_id": function () {
-                //        return defaults.by_mine
-                //            ? logged_in_user.borrowernumber
-                //            : "";
-                //    },
-                //},
             },
             tableFilters,
         };
@@ -254,12 +232,12 @@ export default {
                     name: "status_filter",
                     type: "radio",
                     options: [
-                        { value: "all", description: __("All") },
+                        { value: "", description: __("All") },
                         { value: "closed", description: _("Closed") },
                         { value: "sent", description: __("Sent") },
                         { value: "received", description: __("Received") },
                     ],
-                    default: "all",
+                    value: "",
                 },
             ];
         },
