@@ -4,6 +4,11 @@
     <div id="menu">
         <ul>
             <li [% IF userview %]class="active"[% END %]> <a href="/cgi-bin/koha/opac-user.pl">Summary</a></li>
+
+            [% IF Koha.Preference( 'OPACVirtualCard' ) %]
+                <li [% IF virtualcardview %]class="active"[% END %]> <a href="/cgi-bin/koha/opac-virtual-card.pl">Library card</a></li>
+            [% END %]
+
             [% IF ( OPACFinesTab ) %]
                 <li [% IF accountview %]class="active"[% END %]> <a href="/cgi-bin/koha/opac-account.pl">Charges</a></li>
             [% END %]
@@ -75,10 +80,6 @@
 
             [% IF logged_in_user.alert_subscriptions.count %]
                 <li [% IF alertsview %]class="active"[% END %]> <a href="/cgi-bin/koha/opac-alert-subscriptions.pl">Alert subscriptions ([% logged_in_user.alert_subscriptions.count | html %])</a></li>
-            [% END %]
-
-            [% IF Koha.Preference( 'OPACVirtualCard' ) %]
-                <li [% IF virtualcardview %]class="active"[% END %]> <a href="/cgi-bin/koha/opac-virtual-card.pl">My virtual card</a></li>
             [% END %]
         </ul>
     </div>
