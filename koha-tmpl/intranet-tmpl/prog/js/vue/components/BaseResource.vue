@@ -9,7 +9,7 @@
     >
         <template #toolbar="{ resource }">
             <Toolbar
-                v-if="!embedded"
+                v-if="!optionalResourceProps.embedded"
                 :toolbarButtons="toolbarButtons"
                 component="list"
                 :resource="resource"
@@ -83,7 +83,7 @@ export default {
         const patron_to_html = $patron_to_html;
 
         const optionalResourceProps = {
-            embedded: props.embedded || null,
+            embedded: props.embedded || false,
             extendedAttributesResourceType:
                 props.extendedAttributesResourceType || null,
             resourceListFiltersRequired:
