@@ -205,6 +205,7 @@ export default {
                             addItems: {
                                 text: this.$__("Add items"),
                                 icon: "fa fa-plus",
+                                callback: this.doAddItems,
                             },
                         },
                     ],
@@ -349,6 +350,16 @@ export default {
             //    this.$router.push(new_route);
             //}
             //table.redraw(this.tableUrl(filters));
+        },
+        doAddItems(train, dt, event) {
+            if (train.closed_on != null) {
+                this.setWarning(this.$__("Cannot add items to a closed train"));
+            } else {
+                this.$router.push({
+                    name: "TrainsFormAddItem",
+                    params: { train_id: train.train_id },
+                });
+            }
         },
     },
     name: "TrainResource",

@@ -11,10 +11,7 @@
                 v-bind="tableOptionsWithColumns"
                 :searchable_additional_fields="searchable_additional_fields"
                 :searchable_av_options="searchable_av_options"
-                @show="goToResourceShow"
-                @edit="goToResourceEdit"
-                @delete="doResourceDelete"
-                @select="doResourceSelect"
+                v-on="tableEventList"
             ></KohaTable>
         </div>
         <div v-else class="alert alert-info">
@@ -67,6 +64,12 @@ export default {
             initialized: false,
             searchable_additional_fields: [],
             searchable_av_options: [],
+            tableEvents: {
+                show: this.goToResourceShow,
+                edit: this.goToResourceEdit,
+                delete: this.doResourceDelete,
+                select: this.doResourceSelect,
+            },
         };
     },
     created() {
@@ -260,6 +263,19 @@ export default {
                 this.resourceAttrs
             );
             return this.tableOptions;
+        },
+        tableEventList() {
+            const actionButtons = this.tableOptions.actions["-1"].reduce(
+                (acc, curr) => {
+                    if (typeof curr === "object") {
+                        const actionName = Object.keys(curr)[0];
+                        acc[actionName] = curr[actionName].callback;
+                    }
+                    return acc;
+                },
+                {}
+            );
+            return { ...this.tableEvents, ...actionButtons };
         },
     },
     components: { Toolbar, KohaTable },
