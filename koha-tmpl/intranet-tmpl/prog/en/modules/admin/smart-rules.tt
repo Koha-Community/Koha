@@ -1003,7 +1003,7 @@
                                 </td>
 
                                 <td class="actions">
-                                    <a href="#" class="del-open-article-requests-limit btn btn-default btn-xs" data-categorycode="[% c | html %]" data-branch="[% current_branch | html %]"><i class="fa fa-trash-can"></i> Delete</a>
+                                    <a href="#" class="del-open-article-requests-limit btn btn-default btn-xs" data-categorycode="[% c || '*' | html %]" data-branch="[% current_branch | html %]"><i class="fa fa-trash-can"></i> Delete</a>
                                 </td>
                             </tr>
                         [% END %]
