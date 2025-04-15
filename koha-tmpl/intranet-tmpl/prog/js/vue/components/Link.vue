@@ -1,21 +1,21 @@
 <template>
-    <a v-if="action === 'add'" class="btn btn-default"
+    <a v-if="action === 'add'" @click="onClick" class="btn btn-default"
         ><font-awesome-icon icon="plus" /> {{ title }}</a
     >
-    <a v-if="action === 'delete'" class="btn btn-default"
+    <a v-else-if="action === 'delete'" @click="onClick" class="btn btn-default"
         ><font-awesome-icon icon="trash" /> {{ title }}</a
     >
-    <a v-if="action === 'edit'" class="btn btn-default"
+    <a v-else-if="action === 'edit'" @click="onClick" class="btn btn-default"
         ><font-awesome-icon icon="pencil" /> {{ title }}</a
     >
     <a
-        v-else-if="action === undefined && onclick"
+        v-else-if="action === undefined && onClick"
         @click="onclick"
         class="btn btn-default"
         ><font-awesome-icon v-if="icon" :icon="icon" /> {{ title }}</a
     >
     <a
-        v-if="callback"
+        v-else-if="callback"
         @click="typeof callback === 'string' ? redirect() : callback(this)"
         :class="cssClass"
         style="cursor: pointer"
@@ -32,10 +32,11 @@ export default {
     props: {
         action: {
             type: String,
-            required: true,
+            required: false,
         },
         to: {
             type: [String, Object],
+            required: false,
         },
         icon: {
             type: String,
@@ -53,7 +54,7 @@ export default {
             default: "btn btn-default",
             required: false,
         },
-        onclick: { type: Function, required: false },
+        onClick: { type: Function, required: false },
     },
     methods: {
         redirect(url) {

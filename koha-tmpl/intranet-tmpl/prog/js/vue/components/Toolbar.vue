@@ -4,27 +4,21 @@
         :class="sticky ? 'btn-toolbar sticky' : 'btn-toolbar'"
         ref="toolbar"
     >
-        <template
-            :key="`toolbar-button-${i}`"
-            v-for="(button, i) in toolbarButtons(resource, component, i18n)"
-        >
-            <ToolbarButton
-                v-if="button.onclick"
-                :action="button.action"
-                @click="button.onclick"
-                :title="button.title"
-                :to="button.to"
-                :icon="button.icon"
-            />
-            <ToolbarButton
-                v-else-if="button"
-                :action="button.action"
-                @click="button.onClick"
-                :title="button.title"
-                :to="button.to"
-                :icon="button.icon"
-            />
+        <template v-if="toolbarButtons">
+            <template
+                :key="`toolbar-button-${i}`"
+                v-for="(button, i) in toolbarButtons(resource, component, i18n)"
+            >
+                <ToolbarButton
+                    :action="button.action"
+                    @click="button.onClick"
+                    :title="button.title"
+                    :to="button.to"
+                    :icon="button.icon"
+                />
+            </template>
         </template>
+        <slot></slot>
     </div>
 </template>
 

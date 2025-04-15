@@ -17,7 +17,7 @@ export default {
             type: [String, Object],
             required: false,
         },
-        onclick: { type: Function, required: false },
+        onClick: { type: Function, required: false },
         icon: {
             type: String,
             required: false,
