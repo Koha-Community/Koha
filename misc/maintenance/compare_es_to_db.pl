@@ -152,7 +152,7 @@ foreach my $index (@indices) {
         print "Records that exist in ES but not in Koha\n";
         for my $problem (@es_problems) {
             print "  #$problem";
-            print "  Enter this command to view record: curl $es_base/data/$problem?pretty=true\n";
+            print "  Enter this command to view record: curl $es_base/_doc/$problem?pretty=true\n";
         }
     }
 
