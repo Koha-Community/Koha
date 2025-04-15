@@ -1,10 +1,12 @@
 <template>
     <template
         v-if="
-            attribute.type == 'text' ||
-            attribute.type == 'textarea' ||
-            (attribute.type == 'select' && !attribute.avCat) ||
-            attribute?.type == 'text'
+            (attribute.type == 'text' ||
+                attribute.type == 'textarea' ||
+                (attribute.type == 'select' && !attribute.avCat) ||
+                attribute?.type == 'date') &&
+            (!attribute.hidden ||
+                (attribute.hidden && attribute.hidden(resource)))
         "
     >
         <label>{{ attribute.label }}:</label>
@@ -170,11 +172,14 @@ export default {
     },
     methods: {
         formatValue(attr, resource) {
-            if (attr.value.includes(".")) {
-                return this.accessNestedProperty(attr.value, resource);
+            const valueKey = attr.hasOwnProperty("value")
+                ? attr.value
+                : attr.name;
+            if (valueKey?.includes(".")) {
+                return this.accessNestedProperty(valueKey, resource);
             }
             return attr.format(
-                resource[attr.value] ? resource[attr.value] : attr.value,
+                resource[valueKey] ? resource[valueKey] : valueKey,
                 resource
             );
         },

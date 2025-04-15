@@ -93,6 +93,10 @@ export default {
                     relationshipAPIClient: APIClient.preservation.processings,
                     relationshipOptionLabelAttr: "name",
                     relationshipRequiredKey: "processing_id",
+                    showElement: {
+                        type: "text",
+                        value: "default_processing.name",
+                    },
                 },
                 {
                     name: "created_on",
@@ -101,6 +105,7 @@ export default {
                     required: false,
                     hideInForm: true,
                     showInTable: true,
+                    hideInShow: true,
                 },
                 {
                     name: "closed_on",
@@ -109,6 +114,8 @@ export default {
                     required: false,
                     hideInForm: true,
                     showInTable: true,
+                    format: this.format_date,
+                    hidden: resource => resource.closed_on,
                 },
                 {
                     name: "sent_on",
@@ -117,6 +124,8 @@ export default {
                     required: false,
                     hideInForm: true,
                     showInTable: true,
+                    format: this.format_date,
+                    hidden: resource => resource.sent_on,
                 },
                 {
                     name: "received_on",
@@ -125,6 +134,8 @@ export default {
                     required: false,
                     hideInForm: true,
                     showInTable: true,
+                    format: this.format_date,
+                    hidden: resource => resource.received_on,
                 },
             ],
             tableOptions: {
