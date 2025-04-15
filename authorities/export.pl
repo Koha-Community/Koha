@@ -37,7 +37,7 @@ if ( $op eq "export" ) {
             $marc = $marc->as_usmarc();
         }
         elsif ( $format =~ /utf8/ ) {
-            C4::Charset::SetUTF8Flag( $marc, 1 );
+            C4::Charset::SetUTF8Flag( $marc, 0 );
             $marc = $marc->as_usmarc();
         }
         print $query->header(
