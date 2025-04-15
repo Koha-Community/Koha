@@ -62,6 +62,7 @@ export default {
         getFieldGroupings: Function,
         appendToShow: Array,
         getToolbarButtons: Function,
+        afterResourceFetch: Function,
     },
     created() {
         this.getResource(this.$route.params[this.idAttr]);
@@ -74,6 +75,7 @@ export default {
             this.apiClient.get(resourceId).then(
                 resource => {
                     this.resource = resource;
+                    this.afterResourceFetch(this, resource, "show");
                     this.initialized = true;
                 },
                 error => {}

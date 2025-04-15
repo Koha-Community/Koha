@@ -359,6 +359,77 @@ export default {
                 ].filter(b => Object.keys(b).length),
             };
         },
+        afterResourceFetch(component, resource, caller) {
+            if (caller === "show") {
+                let display_table = component.resource.items.every(
+                    item =>
+                        item.processing_id ==
+                        component.resource.default_processing_id
+                );
+                if (display_table) {
+                    component.item_table = {
+                        display: false,
+                        data: [],
+                        columns: [],
+                    };
+                    component.item_table.data = [];
+                    component.resource.items.forEach(item => {
+                        let item_row = {};
+                        component.resource.default_processing.attributes.forEach(
+                            attribute => {
+                                item_row[attribute.processing_attribute_id] =
+                                    item.attributes
+                                        .filter(
+                                            a =>
+                                                a.processing_attribute_id ==
+                                                attribute.processing_attribute_id
+                                        )
+                                        .map(a => a._strings.value.str);
+                            }
+                        );
+                        item_row.item = item;
+                        component.item_table.data.push(item_row);
+                    });
+                    component.item_table.columns = [];
+                    component.item_table.columns.push(
+                        {
+                            name: "checkboxes",
+                            className: "checkboxes",
+                            width: "5%",
+                            render: (data, type, row) => {
+                                return "";
+                            },
+                        },
+                        {
+                            name: "",
+                            title: component.$__("ID"),
+                            data: "item.user_train_item_id",
+                        }
+                    );
+                    resource.default_processing.attributes.forEach(a =>
+                        component.item_table.columns.push({
+                            name: a.name,
+                            title: a.name,
+                            data: a.processing_attribute_id,
+                            render: (data, type, row) => {
+                                return data.join("<br/>");
+                            },
+                        })
+                    );
+                    component.item_table.columns.push({
+                        name: "actions",
+                        className: "actions noExport",
+                        title: component.$__("Actions"),
+                        searchable: false,
+                        orderable: false,
+                        render: (data, type, row) => {
+                            return "";
+                        },
+                    });
+                }
+                component.item_table.display = display_table;
+            }
+        },
     },
     name: "TrainResource",
 };

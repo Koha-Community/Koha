@@ -108,6 +108,9 @@ export default {
             appendToShow: this.appendToShow ? this.appendToShow() : [],
             nameAttr: this.nameAttr || null,
             idAttr: this.idAttr || null,
+            afterResourceFetch:
+                this.afterResourceFetch ||
+                ((component, resource, caller) => null),
         };
         return {
             resourceToBeGenerated: {},

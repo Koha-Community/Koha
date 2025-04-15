@@ -161,6 +161,7 @@ export default {
         resourceNamePlural: String,
         getFieldGroupings: Function,
         formGroupsDisplayMode: String,
+        afterResourceFetch: Function,
     },
     created() {
         if (this.$route.params[this.idAttr]) {
@@ -185,6 +186,7 @@ export default {
                         }
                     });
                     this.resourceToEdit = resource;
+                    this.afterResourceFetch(this, resource, "form");
                     this.initialized = true;
                 },
                 error => {}
