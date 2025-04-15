@@ -2940,38 +2940,43 @@ $star-selected: #EDB867;
 }
 
 #patron-virtual-card {
-    width: 100%;
-    min-width: 300px;
-    max-width: 500px;
+    border: 1px solid #BBB;
     border-radius: 15px;
-    box-shadow: 0 1px 6px rgba(0, 0, 0, 0.3);
+    box-shadow: 5px 5px 6px rgba( 4, 0, 0, .2 );
+    margin: 1rem 0;
+    padding: 1rem;
+    width: 100%;
+}
+
+#image-container {
+    padding: 0 .5rem;
+}
+
+#patron-image {
+    border-radius: 15px;
     display: flex;
     flex-direction: column;
-    align-items: flex-start;
+    flex-shrink: 1;
+    width: auto;
+}
 
-    #image-container {
+#card-details {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    padding: 0 .5rem;
+}
+
+#barcode-container {
+    margin-bottom: 1rem;
+
+    svg {
+        display: block;
         width: 100%;
-        #patron-image {
-            height: 75%;
-            width: auto;
-            border-radius: 15px;
-            padding: 0.5rem;
-        }
     }
 
-    #barcode-container {
-        width: 100%;
-        padding: 0.25rem 0.5rem 0.25rem 0.5rem;
-        &.qrcode {
-            width: 50%; // Set a smaller width for QR codes
-        }
-    }
-
-    #lib-container {
-        width: 100%;
-        #patron-lib {
-            padding-left: 0.5rem;
-        }
+    &.qrcode {
+        width: 50%; // Set a smaller width for QR codes
     }
 }
 
