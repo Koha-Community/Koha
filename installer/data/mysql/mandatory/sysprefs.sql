@@ -819,6 +819,7 @@ INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `
 ('TrackClicks','0',NULL,'Track links clicked','Integer'),
 ('TrackLastPatronActivityTriggers','',NULL,'If set, the field borrowers.lastseen will be updated everytime a patron performs a selected action','multiple'),
 ('TransfersBlockCirc','1',NULL,'Should the transfer modal block circulation staff from continuing scanning items','YesNo'),
+('TransfersLog','0',NULL,'If enabled, log item transfer changes','YesNo'),
 ('TransfersMaxDaysWarning','3',NULL,'Define the days before a transfer is suspected of having a problem','Integer'),
 ('TransferWhenCancelAllWaitingHolds','0',NULL,'Transfer items when cancelling all waiting holds','YesNo'),
 ('TranslateNotices','0',NULL, 'Allow notices to be translated','YesNo'),
