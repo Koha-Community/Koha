@@ -21,11 +21,13 @@ use Modern::Perl;
 
 use Koha::Database;
 use Koha::DateUtils qw( dt_from_string );
+use Koha::Item::Transfers;
 
+use t::lib::Mocks;
 use t::lib::TestBuilder;
 
 use Test::NoWarnings;
-use Test::More tests => 8;
+use Test::More tests => 9;
 use Test::Exception;
 
 my $schema  = Koha::Database->new->schema;
@@ -311,6 +313,81 @@ subtest 'cancel tests' => sub {
     $transfer->cancel( { reason => $cancellation_reason } );
     ok( $transfer->datecancelled, 'Cancellation date set upon call to cancel' );
     is( $transfer->cancellation_reason, 'Manual', 'Cancellation reason is set' );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'store() tests' => sub {
+
+    plan tests => 5;
+
+    $schema->storage->txn_begin;
+
+    my $library_a = $builder->build_object( { class => 'Koha::Libraries' } );
+    my $library_b = $builder->build_object( { class => 'Koha::Libraries' } );
+
+    my $item = $builder->build_sample_item(
+        {
+            homebranch    => $library_a->branchcode,
+            holdingbranch => $library_b->branchcode,
+        }
+    );
+
+    # make sure there aren't transfer logs
+    $schema->resultset('ActionLog')->search( { module => 'TRANSFERS' } )->delete();
+    is( $schema->resultset('ActionLog')->search( { module => 'TRANSFERS' } )->count(), 0, 'No transfer logs' );
+
+    # enable logging
+    t::lib::Mocks::mock_preference( 'TransfersLog', 1 );
+
+    # Add a new transfer entry
+    my $transfer = Koha::Item::Transfer->new(
+        {
+            itemnumber          => $item->itemnumber,
+            frombranch          => $library_b->branchcode,
+            tobranch            => $library_a->branchcode,
+            datesent            => \'NOW()',
+            datearrived         => undef,
+            datecancelled       => undef,
+            reason              => 'Manual',
+            cancellation_reason => undef,
+        }
+    )->store();
+    is(
+        $schema->resultset('ActionLog')->search( { module => 'TRANSFERS', action => 'CREATE' } )->count(), 1,
+        'Logging enabled, log added on creation'
+    );
+
+    $transfer->reason('Reserve')->store();
+    is(
+        $schema->resultset('ActionLog')->search( { module => 'TRANSFERS', action => 'UPDATE' } )->count(), 1,
+        'Logging enabled, log added on update'
+    );
+
+    # enable logging
+    t::lib::Mocks::mock_preference( 'TransfersLog', 0 );
+    $transfer = Koha::Item::Transfer->new(
+        {
+            itemnumber          => $item->itemnumber,
+            frombranch          => $library_b->branchcode,
+            tobranch            => $library_a->branchcode,
+            datesent            => \'NOW()',
+            datearrived         => undef,
+            datecancelled       => undef,
+            reason              => 'Manual',
+            cancellation_reason => undef,
+        }
+    )->store();
+    is(
+        $schema->resultset('ActionLog')->search( { module => 'TRANSFERS', action => 'CREATE' } )->count(), 1,
+        'Logging disabled, log not generated on creation'
+    );
+
+    $transfer->reason('Reserve')->store();
+    is(
+        $schema->resultset('ActionLog')->search( { module => 'TRANSFERS', action => 'UPDATE' } )->count(), 1,
+        'Logging enabled, log not generated on update'
+    );
 
     $schema->storage->txn_rollback;
 };
