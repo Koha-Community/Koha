@@ -82,18 +82,6 @@ export default {
         const format_date = $date;
         const patron_to_html = $patron_to_html;
 
-        const optionalResourceProps = {
-            embedded: props.embedded || false,
-            extendedAttributesResourceType:
-                props.extendedAttributesResourceType || null,
-            resourceListFiltersRequired:
-                props.resourceListFiltersRequired || null,
-            formGroupsDisplayMode: props.formGroupsDisplayMode || null,
-            appendToShow: props.appendToShow || [],
-            nameAttr: props.nameAttr || null,
-            idAttr: props.idAttr || null,
-        };
-
         return {
             ...props,
             setConfirmationDialog,
@@ -107,12 +95,23 @@ export default {
             get_lib_from_av,
             map_av_dt_filter,
             build_url,
-            optionalResourceProps,
         };
     },
     data() {
+        const optionalResourceProps = {
+            embedded: this.embedded || false,
+            extendedAttributesResourceType:
+                this.extendedAttributesResourceType || null,
+            resourceListFiltersRequired:
+                this.resourceListFiltersRequired || null,
+            formGroupsDisplayMode: this.formGroupsDisplayMode || null,
+            appendToShow: this.appendToShow ? this.appendToShow() : [],
+            nameAttr: this.nameAttr || null,
+            idAttr: this.idAttr || null,
+        };
         return {
             resourceToBeGenerated: {},
+            optionalResourceProps,
         };
     },
     methods: {

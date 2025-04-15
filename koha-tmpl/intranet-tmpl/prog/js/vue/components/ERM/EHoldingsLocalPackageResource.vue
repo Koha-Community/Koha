@@ -19,94 +19,6 @@ export default {
         const vendorStore = inject("vendorStore");
         const { vendors } = storeToRefs(vendorStore);
 
-        const appendToShow = get_lib_from_av => {
-            return [
-                {
-                    type: "component",
-                    name: __("Titles"),
-                    hidden: erm_package => erm_package,
-                    componentPath: "./RelationshipTableDisplay.vue",
-                    componentProps: {
-                        tableOptions: {
-                            type: "object",
-                            value: {
-                                columns: [
-                                    {
-                                        title: __("Name"),
-                                        data: "title.publication_title",
-                                        searchable: true,
-                                        orderable: true,
-                                        render: function (
-                                            data,
-                                            type,
-                                            row,
-                                            meta
-                                        ) {
-                                            return (
-                                                '<a href="/cgi-bin/koha/erm/eholdings/local/resources/' +
-                                                row.resource_id +
-                                                '" class="show">' +
-                                                escape_str(
-                                                    `${row.title.publication_title} (#${row.title.title_id})`
-                                                ) +
-                                                "</a>"
-                                            );
-                                        },
-                                    },
-                                    {
-                                        title: __("Publication type"),
-                                        data: "title.publication_type",
-                                        searchable: true,
-                                        orderable: true,
-                                        render: function (
-                                            data,
-                                            type,
-                                            row,
-                                            meta
-                                        ) {
-                                            return escape_str(
-                                                get_lib_from_av(
-                                                    "av_title_publication_types",
-                                                    row.title.publication_type
-                                                )
-                                            );
-                                        },
-                                    },
-                                ],
-                                options: {
-                                    embed: "title",
-                                },
-                                url:
-                                    APIClient.erm.httpClient._baseURL +
-                                    "eholdings/local/resources",
-                            },
-                        },
-                        apiClient: {
-                            type: "object",
-                            value: APIClient.erm.localPackages,
-                        },
-                        filters: {
-                            type: "filter",
-                            keys: {
-                                package_id: { property: "package_id" },
-                            },
-                        },
-                        resource: {
-                            type: "resource",
-                        },
-                        resourceName: {
-                            type: "string",
-                            value: "title",
-                        },
-                        resourceNamePlural: {
-                            type: "string",
-                            value: "titles",
-                        },
-                    },
-                },
-            ];
-        };
-
         return {
             ...BaseResource.setup({
                 resourceName: "package",
@@ -135,7 +47,7 @@ export default {
                 av_package_content_types,
                 eholdings_packages_table_settings,
                 vendors,
-                appendToShow: appendToShow(get_lib_from_av),
+                get_lib_from_av,
             }),
         };
     },
@@ -366,6 +278,94 @@ export default {
                     error => {}
                 );
             }
+        },
+        appendToShow() {
+            let get_lib_from_av = this.get_lib_from_av;
+            return [
+                {
+                    type: "component",
+                    name: __("Titles"),
+                    hidden: erm_package => erm_package,
+                    componentPath: "./RelationshipTableDisplay.vue",
+                    componentProps: {
+                        tableOptions: {
+                            type: "object",
+                            value: {
+                                columns: [
+                                    {
+                                        title: __("Name"),
+                                        data: "title.publication_title",
+                                        searchable: true,
+                                        orderable: true,
+                                        render: function (
+                                            data,
+                                            type,
+                                            row,
+                                            meta
+                                        ) {
+                                            return (
+                                                '<a href="/cgi-bin/koha/erm/eholdings/local/resources/' +
+                                                row.resource_id +
+                                                '" class="show">' +
+                                                escape_str(
+                                                    `${row.title.publication_title} (#${row.title.title_id})`
+                                                ) +
+                                                "</a>"
+                                            );
+                                        },
+                                    },
+                                    {
+                                        title: __("Publication type"),
+                                        data: "title.publication_type",
+                                        searchable: true,
+                                        orderable: true,
+                                        render: function (
+                                            data,
+                                            type,
+                                            row,
+                                            meta
+                                        ) {
+                                            return escape_str(
+                                                get_lib_from_av(
+                                                    "av_title_publication_types",
+                                                    row.title.publication_type
+                                                )
+                                            );
+                                        },
+                                    },
+                                ],
+                                options: {
+                                    embed: "title",
+                                },
+                                url:
+                                    APIClient.erm.httpClient._baseURL +
+                                    "eholdings/local/resources",
+                            },
+                        },
+                        apiClient: {
+                            type: "object",
+                            value: APIClient.erm.localPackages,
+                        },
+                        filters: {
+                            type: "filter",
+                            keys: {
+                                package_id: { property: "package_id" },
+                            },
+                        },
+                        resource: {
+                            type: "resource",
+                        },
+                        resourceName: {
+                            type: "string",
+                            value: "title",
+                        },
+                        resourceNamePlural: {
+                            type: "string",
+                            value: "titles",
+                        },
+                    },
+                },
+            ];
         },
     },
     name: "EHoldingsLocalPackageResource",

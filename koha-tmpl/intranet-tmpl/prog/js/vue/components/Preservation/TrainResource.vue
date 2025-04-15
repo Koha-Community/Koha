@@ -16,51 +16,6 @@ export default {
         const PreservationStore = inject("PreservationStore");
         const { config } = storeToRefs(PreservationStore);
 
-        function additionalToolbarButtons(resource) {
-            return {
-                show: [
-                    resource?.closed_on == null
-                        ? {
-                              to: {
-                                  name: "TrainsFormAddItem",
-                                  params: { train_id: resource?.train_id },
-                              },
-                              icon: "plus",
-                              title: __("Add items"),
-                              index: -1,
-                          }
-                        : {},
-                    !resource?.closed_on &&
-                    !resource?.sent_on &&
-                    !resource?.received_on
-                        ? {
-                              onClick: () => this.closeTrain(resource),
-                              icon: "remove",
-                              title: __("Close"),
-                          }
-                        : {},
-                    resource?.closed_on &&
-                    !resource?.sent_on &&
-                    !resource?.received_on
-                        ? {
-                              onClick: () => this.sendTrain(resource),
-                              icon: "paper-plane",
-                              title: __("Send"),
-                          }
-                        : {},
-                    resource?.closed_on &&
-                    resource?.sent_on &&
-                    !resource?.received_on
-                        ? {
-                              onClick: () => this.receiveTrain(resource),
-                              icon: "inbox",
-                              title: __("Receive"),
-                          }
-                        : {},
-                ].filter(b => Object.keys(b).length),
-            };
-        }
-
         return {
             ...BaseResource.setup({
                 resourceName: "train",
@@ -88,7 +43,6 @@ export default {
                 },
                 av_notforloan,
                 config,
-                additionalToolbarButtons,
             }),
         };
     },
@@ -360,6 +314,50 @@ export default {
                     params: { train_id: train.train_id },
                 });
             }
+        },
+        additionalToolbarButtons(resource) {
+            return {
+                show: [
+                    resource?.closed_on == null
+                        ? {
+                              to: {
+                                  name: "TrainsFormAddItem",
+                                  params: { train_id: resource?.train_id },
+                              },
+                              icon: "plus",
+                              title: __("Add items"),
+                              index: -1,
+                          }
+                        : {},
+                    !resource?.closed_on &&
+                    !resource?.sent_on &&
+                    !resource?.received_on
+                        ? {
+                              onClick: () => this.closeTrain(resource),
+                              icon: "remove",
+                              title: __("Close"),
+                          }
+                        : {},
+                    resource?.closed_on &&
+                    !resource?.sent_on &&
+                    !resource?.received_on
+                        ? {
+                              onClick: () => this.sendTrain(resource),
+                              icon: "paper-plane",
+                              title: __("Send"),
+                          }
+                        : {},
+                    resource?.closed_on &&
+                    resource?.sent_on &&
+                    !resource?.received_on
+                        ? {
+                              onClick: () => this.receiveTrain(resource),
+                              icon: "inbox",
+                              title: __("Receive"),
+                          }
+                        : {},
+                ].filter(b => Object.keys(b).length),
+            };
         },
     },
     name: "TrainResource",
