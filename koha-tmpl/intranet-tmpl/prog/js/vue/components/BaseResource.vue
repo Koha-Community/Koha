@@ -23,7 +23,7 @@
                 :embedded="optionalResourceProps.embedded"
                 :filterTable="filterTable"
                 :getFilters="getFilters"
-                :label="getTableFiltersLabel()"
+                :label="getTableFilterFormElementsLabel()"
                 :table="table"
             />
         </template>
@@ -365,7 +365,7 @@ export default {
          *
          * @return {String} The label
          */
-        getTableFiltersLabel() {
+        getTableFilterFormElementsLabel() {
             return "";
         },
         /**
@@ -375,7 +375,7 @@ export default {
          *
          * @return {Array} The array of filters for the table.
          */
-        getTableFilters() {
+        getTableFilterFormElements() {
             return [];
         },
         /**

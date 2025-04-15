@@ -47,7 +47,7 @@ export default {
         };
     },
     data() {
-        const tableFilters = this.getTableFilters();
+        const tableFilters = this.getTableFilterFormElements();
         const defaults = this.getFilters(this.$route.query, tableFilters);
 
         return {
@@ -222,10 +222,10 @@ export default {
                 );
             }
         },
-        getTableFiltersLabel() {
+        getTableFilterFormElementsLabel() {
             return this.$__("Filter by:");
         },
-        getTableFilters() {
+        getTableFilterFormElements() {
             return [
                 {
                     id: "status_filter",

@@ -63,7 +63,7 @@ export default {
         };
     },
     data() {
-        const tableFilters = this.getTableFilters();
+        const tableFilters = this.getTableFilterFormElements();
         const defaults = this.getFilters(this.$route.query, tableFilters);
 
         return {
@@ -804,7 +804,7 @@ export default {
                 );
             }
         },
-        getTableFilters() {
+        getTableFilterFormElements() {
             return [
                 {
                     name: "by_expired",
