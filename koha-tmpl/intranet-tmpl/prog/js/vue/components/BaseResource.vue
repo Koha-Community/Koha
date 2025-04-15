@@ -22,7 +22,7 @@
                 :tableFilters="tableFilters"
                 :embedded="optionalResourceProps.embedded"
                 :filterTable="filterTable"
-                :getFilters="getFilters"
+                :getFilterValues="getFilterValues"
                 :label="getTableFilterFormElementsLabel()"
                 :table="table"
             />
@@ -336,7 +336,7 @@ export default {
          * @param {Array} filterData - The array of filter objects (optional).
          * @return {Object}
          */
-        getFilters(query, filterData) {
+        getFilterValues(query, filterData) {
             const filters = filterData
                 ? filterData
                 : this.tableFilters

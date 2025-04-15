@@ -20,14 +20,16 @@ export default {
     props: {
         embedded: Boolean,
         tableFilters: { type: Array, default: [] },
-        getFilters: Function,
+        getFilterValues: Function,
         filterTable: Function | null,
         label: String | "",
         table: Object,
     },
     data() {
         return {
-            filters: this.getFilters ? this.getFilters(this.$route.query) : {},
+            filters: this.getFilterValues
+                ? this.getFilterValues(this.$route.query)
+                : {},
         };
     },
 };

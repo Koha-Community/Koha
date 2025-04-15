@@ -48,7 +48,7 @@ export default {
     },
     data() {
         const tableFilters = this.getTableFilterFormElements();
-        const defaults = this.getFilters(this.$route.query, tableFilters);
+        const defaults = this.getFilterValues(this.$route.query, tableFilters);
 
         return {
             resourceAttrs: [
