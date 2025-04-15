@@ -102,6 +102,13 @@
     let logged_in_user_id = "[% logged_in_user.borrowernumber | html %]";
 </script>
 [% Asset.js("js/global.js") | $raw %]
+<script type="module">
+    import { submit_form } from "/bootstrap/js/form-submit.js";
+    $("body").on("click", ".submit-form-link", function (e) {
+        e.preventDefault();
+        submit_form(this);
+    });
+</script>
 [% IF ( OPACAmazonCoverImages || SyndeticsCoverImages ) %]
     [% Asset.js("js/amazonimages.js") | $raw %]
 [% END %]
