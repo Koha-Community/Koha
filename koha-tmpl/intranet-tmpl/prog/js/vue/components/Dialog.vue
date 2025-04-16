@@ -40,36 +40,22 @@
                     <p v-html="confirmation.message"></p>
                     <div class="inputs" v-if="confirmation.inputs">
                         <form ref="confirmationform">
-                            <div
-                                class="row"
-                                v-for="input in confirmation.inputs"
-                                v-bind:key="input.id"
-                            >
-                                <div class="col-md-6">
-                                    <label
-                                        :for="`confirmation_input_${input.id}`"
-                                        v-bind:class="{
-                                            required: input.required,
-                                        }"
-                                        >{{ input.label }}:</label
+                            <fieldset class="rows">
+                                <ol>
+                                    <li
+                                        v-for="(
+                                            attr, index
+                                        ) in confirmation.inputs"
+                                        v-bind:key="`dialog-field-${index}`"
                                     >
-                                </div>
-                                <div class="col-md-6">
-                                    <flat-pickr
-                                        v-if="input.type == 'Date'"
-                                        :id="`confirmation_input_${input.id}`"
-                                        v-model="input.value"
-                                        :required="input.required"
-                                        :config="fp_config"
-                                    />
-                                    <input
-                                        v-if="input.type == 'Text'"
-                                        :id="`confirmation_input_${input.id}`"
-                                        v-model="input.value"
-                                        :required="input.required"
-                                    />
-                                </div>
-                            </div>
+                                        <FormElement
+                                            :resource="inputFields"
+                                            :attr="attr"
+                                            :index="index"
+                                        />
+                                    </li>
+                                </ol>
+                            </fieldset>
                         </form>
                     </div>
                 </div>
@@ -118,7 +104,8 @@
 <script>
 import { inject, watch, nextTick } from "vue";
 import { storeToRefs } from "pinia";
-import flatPickr from "vue-flatpickr-component";
+import FormElement from "./FormElement.vue";
+
 export default {
     data() {
         return {
@@ -126,18 +113,19 @@ export default {
         };
     },
     methods: {
-        submit: function (e) {
+        submit(e) {
             if (
                 this.confirmation.inputs &&
                 this.confirmation.inputs.filter(
                     input =>
                         input.required &&
-                        (input.value == null || input.value == "")
+                        (this.inputFields[input.name] == null ||
+                            this.inputFields[input.name] == "")
                 ).length
             ) {
                 this.$refs.confirmationform.reportValidity();
             } else {
-                this.accept_callback().then(() => {
+                this.accept_callback(this.inputFields).then(() => {
                     nextTick(() => {
                         $("#confirmation.modal").modal("hide");
                     });
@@ -190,8 +178,16 @@ export default {
             removeConfirmationMessages,
         };
     },
+    computed: {
+        inputFields() {
+            return this.confirmation.inputs.reduce((acc, curr) => {
+                acc[curr.name] = curr.value || null;
+                return acc;
+            }, {});
+        },
+    },
     components: {
-        flatPickr,
+        FormElement,
     },
 };
 </script>
@@ -236,7 +232,7 @@ export default {
 :deep(.flatpickr-input) {
     width: auto;
     margin: 0px;
-    float: left;
+    /* float: left; */
 }
 
 :deep(.flatpickr-input) {
@@ -245,6 +241,6 @@ export default {
 
 .confirmation .inputs label {
     padding: 0.4em;
-    float: right;
+    /* float: right; */
 }
 </style>

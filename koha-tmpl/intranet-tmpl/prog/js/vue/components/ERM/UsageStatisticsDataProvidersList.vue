@@ -213,34 +213,37 @@ export default {
                         cancel_label: this.$__("No, do not run"),
                         inputs: [
                             {
-                                id: "begin_date",
-                                type: "Date",
+                                name: "begin_date",
+                                type: "date",
                                 value: null,
-                                required: true,
                                 label: this.$__("Begin date"),
+                                required: true,
+                                componentProps: {
+                                    required: {
+                                        type: "boolean",
+                                        value: true,
+                                    },
+                                },
                             },
                             {
-                                id: "end_date",
-                                type: "Date",
+                                name: "end_date",
+                                type: "date",
                                 value: $date_to_rfc3339($date(date.toString())),
-                                required: true,
                                 label: this.$__("End date"),
+                                required: true,
+                                componentProps: {
+                                    required: {
+                                        type: "boolean",
+                                        value: true,
+                                    },
+                                },
                             },
                         ],
                     },
-                    callback_result => {
+                    (callback_result, inputFields) => {
                         const client = APIClient.erm;
                         client.usage_data_providers
-                            .process_SUSHI_response(id, {
-                                begin_date: callback_result.inputs.find(
-                                    input => {
-                                        return input.id == "begin_date";
-                                    }
-                                ).value,
-                                end_date: callback_result.inputs.find(input => {
-                                    return input.id == "end_date";
-                                }).value,
-                            })
+                            .process_SUSHI_response(id, inputFields)
                             .then(
                                 success => {
                                     let message = "";
