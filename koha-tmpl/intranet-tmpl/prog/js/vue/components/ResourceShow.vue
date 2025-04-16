@@ -23,7 +23,7 @@
             </fieldset>
             <fieldset
                 class="rows"
-                v-for="(item, counter) in appendToShow"
+                v-for="(item, counter) in appendToShow(this)"
                 v-bind:key="counter"
             >
                 <legend v-if="item.name">{{ item.name }}</legend>
@@ -60,7 +60,7 @@ export default {
         listComponent: String,
         resourceNamePlural: String,
         getFieldGroupings: Function,
-        appendToShow: Array,
+        appendToShow: Function,
         getToolbarButtons: Function,
         afterResourceFetch: Function,
     },

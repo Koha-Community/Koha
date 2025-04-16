@@ -359,23 +359,23 @@ export default {
                 ].filter(b => Object.keys(b).length),
             };
         },
-        afterResourceFetch(component, resource, caller) {
+        afterResourceFetch(componentData, resource, caller) {
             if (caller === "show") {
-                let display_table = component.resource.items.every(
+                let display_table = componentData.resource.items.every(
                     item =>
                         item.processing_id ==
-                        component.resource.default_processing_id
+                        componentData.resource.default_processing_id
                 );
+                componentData.item_table = {
+                    display: false,
+                    data: [],
+                    columns: [],
+                };
                 if (display_table) {
-                    component.item_table = {
-                        display: false,
-                        data: [],
-                        columns: [],
-                    };
-                    component.item_table.data = [];
-                    component.resource.items.forEach(item => {
+                    componentData.item_table.data = [];
+                    componentData.resource.items.forEach(item => {
                         let item_row = {};
-                        component.resource.default_processing.attributes.forEach(
+                        componentData.resource.default_processing.attributes.forEach(
                             attribute => {
                                 item_row[attribute.processing_attribute_id] =
                                     item.attributes
@@ -388,10 +388,10 @@ export default {
                             }
                         );
                         item_row.item = item;
-                        component.item_table.data.push(item_row);
+                        componentData.item_table.data.push(item_row);
                     });
-                    component.item_table.columns = [];
-                    component.item_table.columns.push(
+                    componentData.item_table.columns = [];
+                    componentData.item_table.columns.push(
                         {
                             name: "checkboxes",
                             className: "checkboxes",
@@ -402,12 +402,12 @@ export default {
                         },
                         {
                             name: "",
-                            title: component.$__("ID"),
+                            title: componentData.$__("ID"),
                             data: "item.user_train_item_id",
                         }
                     );
                     resource.default_processing.attributes.forEach(a =>
-                        component.item_table.columns.push({
+                        componentData.item_table.columns.push({
                             name: a.name,
                             title: a.name,
                             data: a.processing_attribute_id,
@@ -416,10 +416,10 @@ export default {
                             },
                         })
                     );
-                    component.item_table.columns.push({
+                    componentData.item_table.columns.push({
                         name: "actions",
                         className: "actions noExport",
-                        title: component.$__("Actions"),
+                        title: componentData.$__("Actions"),
                         searchable: false,
                         orderable: false,
                         render: (data, type, row) => {
@@ -427,8 +427,27 @@ export default {
                         },
                     });
                 }
-                component.item_table.display = display_table;
+                componentData.item_table.display = display_table;
             }
+        },
+        appendToShow(componentData) {
+            return [
+                {
+                    type: "component",
+                    name: __("Items"),
+                    hidden: train => train.items.length,
+                    componentPath: "./Preservation/TrainItemsTable.vue",
+                    componentProps: {
+                        train: {
+                            type: "resource",
+                        },
+                        item_table: {
+                            type: "object",
+                            value: componentData.item_table,
+                        },
+                    },
+                },
+            ];
         },
     },
     name: "TrainResource",

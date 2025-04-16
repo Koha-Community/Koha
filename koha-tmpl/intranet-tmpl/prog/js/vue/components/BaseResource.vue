@@ -105,7 +105,7 @@ export default {
             resourceListFiltersRequired:
                 this.resourceListFiltersRequired || null,
             formGroupsDisplayMode: this.formGroupsDisplayMode || null,
-            appendToShow: this.appendToShow ? this.appendToShow() : [],
+            appendToShow: this.appendToShow || null,
             nameAttr: this.nameAttr || null,
             idAttr: this.idAttr || null,
             afterResourceFetch:
