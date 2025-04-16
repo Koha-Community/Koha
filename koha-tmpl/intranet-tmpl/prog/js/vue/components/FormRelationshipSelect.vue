@@ -38,6 +38,10 @@ export default {
         relationshipRequiredKey: String | null,
         disabled: Boolean | false,
         required: Boolean | false,
+        query: {
+            type: Object,
+            default: {},
+        },
     },
     data() {
         return {
@@ -47,7 +51,7 @@ export default {
     },
     created() {
         const relatedResources = this.relationshipAPIClient;
-        relatedResources.getAll().then(
+        relatedResources.getAll(this.query).then(
             relatedResources => {
                 this.relatedResources = relatedResources;
                 this.relatedResourcesLoaded = true;

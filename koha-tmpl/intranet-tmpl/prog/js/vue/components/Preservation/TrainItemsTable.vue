@@ -190,8 +190,33 @@ export default {
             );
         },
         selectTrainForCopy(train_item_id) {
-            $("#copy_item_to_train").modal("show");
             this.train_item_id_to_copy = train_item_id;
+            let copyItem = this.copyItem;
+
+            this.setConfirmationDialog(
+                {
+                    title: this.$__("Copy item to the following train"),
+                    message: null,
+                    accept_label: this.$__("Save"),
+                    cancel_label: this.$__("Cancel"),
+                    inputs: [
+                        {
+                            name: "train_id",
+                            type: "relationshipSelect",
+                            label: __("Select a train"),
+                            required: true,
+                            relationshipAPIClient:
+                                APIClient.preservation.trains,
+                            relationshipOptionLabelAttr: "name",
+                            relationshipRequiredKey: "train_id",
+                            query: {
+                                "me.closed_on": null,
+                            },
+                        },
+                    ],
+                },
+                copyItem
+            );
         },
         clearAll() {
             this.selected_items = [];
@@ -235,6 +260,27 @@ export default {
                 );
             }
         },
+        copyItem(result, trainToCopy) {
+            const client = APIClient.preservation;
+            client.train_items
+                .copy(
+                    trainToCopy.train_id,
+                    this.train.train_id,
+                    this.train_item_id_to_copy
+                )
+                .then(
+                    success => {
+                        this.setMessage(this.$__("Item copied successfully."));
+                    },
+                    error => {
+                        this.setWarning(
+                            this.$__(
+                                "Item cannot be copied to a train, it is already in a non-received train."
+                            )
+                        );
+                    }
+                );
+        },
         build_datatable() {
             let table_id = this.table_id;
             let item_table = this.item_table;
@@ -244,6 +290,7 @@ export default {
             let selectTrainForCopy = this.selectTrainForCopy;
             let train = this.train;
             let updateSelectedItems = this.updateSelectedItems;
+            let copyItem = this.copyItem;
 
             let table = $("#" + table_id).kohaTable({
                 data: item_table.data,

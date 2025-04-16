@@ -194,16 +194,7 @@ export default {
             this.updateTrainDate(resource, "sent_on");
         },
         receiveTrain(resource) {
-            this.updateTrainDate(resource, "received_on").then(
-                success => {
-                    // Rebuild the table to show the "copy" button
-                    $("#" + this.table_id)
-                        .DataTable()
-                        .destroy();
-                    this.build_datatable();
-                },
-                error => {}
-            );
+            this.updateTrainDate(resource, "received_on");
         },
         onSubmit(e, trainToSave) {
             e.preventDefault();
