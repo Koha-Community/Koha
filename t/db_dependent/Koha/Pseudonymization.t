@@ -79,7 +79,7 @@ subtest 'Config does not exist' => sub {
 
 subtest 'Koha::Anonymized::Transactions tests' => sub {
 
-    plan tests => 15;
+    plan tests => 16;
 
     $schema->storage->txn_begin;
 
@@ -135,12 +135,20 @@ subtest 'Koha::Anonymized::Transactions tests' => sub {
     is( $pseudonymized->itemcallnumber,         $item->itemcallnumber,     'itemcallnumber copied correctly' );
     is( $pseudonymized->ccode,                  $item->ccode,              'ccode copied correctly' );
 
+    my $next_p = Koha::PseudonymizedTransaction->new_from_statistic($statistic)->store;
+
+    isnt(
+        $pseudonymized->id,
+        $next_p->id,
+        'The id of the 2nd pseudonymized transaction should be different'
+    );
+
     $schema->storage->txn_rollback;
 };
 
 subtest 'PseudonymizedBorrowerAttributes tests' => sub {
 
-    plan tests => 3;
+    plan tests => 5;
 
     $schema->storage->txn_begin;
 
@@ -234,6 +242,37 @@ subtest 'PseudonymizedBorrowerAttributes tests' => sub {
         { attribute => $attribute_2->attribute, code => $attribute_2->code->code },
         $attribute_values->[2],
         'Attribute 2 should be retrieved correctly'
+    );
+
+    my $number_of_attributes_before_2nd_p = $attributes->count;
+
+    my $second_statistic = Koha::Statistic->new(
+        {
+            type           => 'issue',
+            branch         => $library->branchcode,
+            itemnumber     => $item->itemnumber,
+            borrowernumber => $patron->borrowernumber,
+            itemtype       => $item->effective_itemtype,
+            location       => $item->location,
+            ccode          => $item->ccode,
+        }
+    );
+
+    my $next_p = Koha::PseudonymizedTransaction->new_from_statistic($second_statistic)->store;
+    my $next_attributes =
+        Koha::Database->new->schema->resultset('PseudonymizedBorrowerAttribute')
+        ->search( { transaction_id => $next_p->id }, { order_by => 'attribute' } );
+
+    is(
+        $attributes->count,
+        $number_of_attributes_before_2nd_p,
+        'The number of attributes for the original transaction should remain the same'
+    );
+
+    isnt(
+        $p->id,
+        $next_p->id,
+        'The id of the 2nd pseudonymized transaction should be different'
     );
 
     $schema->storage->txn_rollback;
