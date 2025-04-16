@@ -149,7 +149,7 @@ subtest 'Koha::Anonymized::Transactions tests' => sub {
 
 subtest 'PseudonymizedMetadataValues tests' => sub {
 
-    plan tests => 5;
+    plan tests => 7;
 
     $schema->storage->txn_begin;
 
@@ -275,6 +275,38 @@ subtest 'PseudonymizedMetadataValues tests' => sub {
         $next_p->id,
         'The id of the 2nd pseudonymized transaction should be different'
     );
+
+    my $ill_request = $builder->build_sample_ill_request();
+    $builder->build(
+        {
+            source => 'Illrequestattribute',
+            value  => { illrequest_id => $ill_request->illrequest_id, type => 'type', value => 'book' }
+        }
+    );
+
+    my $ill_request_statistic = Koha::Statistic->new(
+        {
+            type           => 'illreq_created',
+            branch         => $library->branchcode,
+            itemnumber     => undef,
+            borrowernumber => $patron->borrowernumber,
+            itemtype       => undef,
+            location       => undef,
+            illrequest_id  => $ill_request->illrequest_id,
+            ccode          => undef,
+        }
+    );
+
+    my $p2 = Koha::PseudonymizedTransaction->create_from_statistic($ill_request_statistic)->store;
+
+    my $ill_metadata_values =
+        Koha::Database->new->schema->resultset('PseudonymizedMetadataValue')
+        ->search( { transaction_id => $p2->id, tablename => 'illrequestattributes' }, { order_by => 'value' } );
+
+    my $ill_metadata_value = $ill_metadata_values->next;
+
+    is( $ill_metadata_value->key,   'type' );
+    is( $ill_metadata_value->value, 'book' );
 
     $schema->storage->txn_rollback;
 };
