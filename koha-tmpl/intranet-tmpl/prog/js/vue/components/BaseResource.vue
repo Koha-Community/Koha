@@ -48,7 +48,7 @@
         v-if="['add', 'edit'].includes(routeAction)"
         v-bind="{
             ...passCommonProps(),
-            resource: newResource,
+            newResource,
             onSubmit,
             ...optionalResourceProps,
         }"
@@ -108,13 +108,11 @@ export default {
             appendToShow: this.appendToShow || null,
             nameAttr: this.nameAttr || null,
             idAttr: this.idAttr || null,
-            afterResourceFetch:
-                this.afterResourceFetch ||
-                ((component, resource, caller) => null),
         };
         return {
             resourceToBeGenerated: {},
             optionalResourceProps,
+            refreshTemplate: false,
         };
     },
     methods: {
@@ -141,6 +139,8 @@ export default {
                 resourceAttrs: this.resourceAttrs,
                 listComponent: this.listComponent,
                 resourceNamePlural: this.resourceNamePlural,
+                getResource: this.getResource,
+                key: this.refreshTemplate,
             };
 
             return commonProps;
@@ -496,6 +496,25 @@ export default {
                 }
                 return [...acc, groupInfo];
             }, []);
+        },
+        async getResource(resourceId, componentData, caller) {
+            this.apiClient.get(resourceId).then(
+                resource => {
+                    componentData.resource = resource;
+                    if (this.afterResourceFetch) {
+                        this.afterResourceFetch(
+                            componentData,
+                            resource,
+                            caller
+                        );
+                    }
+                    componentData.initialized = true;
+                },
+                error => {}
+            );
+        },
+        refreshTemplateState() {
+            this.refreshTemplate = !this.refreshTemplate;
         },
     },
     computed: {

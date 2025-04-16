@@ -147,7 +147,7 @@ export default {
     data() {
         return {
             initialized: false,
-            resourceToEdit: null,
+            resource: null,
         };
     },
     props: {
@@ -156,46 +156,23 @@ export default {
         i18n: Object,
         resourceAttrs: Array,
         listComponent: String,
-        resource: Object,
+        newResource: Object,
         onSubmit: Function,
         resourceNamePlural: String,
         getFieldGroupings: Function,
         formGroupsDisplayMode: String,
-        afterResourceFetch: Function,
+        getResource: Function,
     },
     created() {
         if (this.$route.params[this.idAttr]) {
-            this.getResource(this.$route.params[this.idAttr]);
+            this.getResource(this.$route.params[this.idAttr], this, "form");
         } else {
             this.initialized = true;
         }
     },
-    methods: {
-        async getResource(resourceId) {
-            const resourceAttrs = this.resourceAttrs;
-            this.apiClient.get(resourceId).then(
-                resource => {
-                    resourceAttrs.forEach(attr => {
-                        if (
-                            attr.formatForForm &&
-                            typeof attr.formatForForm === "function"
-                        ) {
-                            resource[attr.name] = attr.formatForForm(
-                                resource[attr.name]
-                            );
-                        }
-                    });
-                    this.resourceToEdit = resource;
-                    this.afterResourceFetch(this, resource, "form");
-                    this.initialized = true;
-                },
-                error => {}
-            );
-        },
-    },
     computed: {
         resourceToAddOrEdit() {
-            return this.resourceToEdit || this.resource;
+            return this.resource || this.newResource;
         },
     },
     components: {

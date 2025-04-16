@@ -63,24 +63,10 @@ export default {
         appendToShow: Function,
         getToolbarButtons: Function,
         afterResourceFetch: Function,
+        getResource: Function,
     },
     created() {
-        this.getResource(this.$route.params[this.idAttr]);
-    },
-    // beforeRouteUpdate(to, from) {
-    //     this.resource = this.getResource(to.params[this.idAttr])
-    // },
-    methods: {
-        async getResource(resourceId) {
-            this.apiClient.get(resourceId).then(
-                resource => {
-                    this.resource = resource;
-                    this.afterResourceFetch(this, resource, "show");
-                    this.initialized = true;
-                },
-                error => {}
-            );
-        },
+        this.getResource(this.$route.params[this.idAttr], this, "show");
     },
     components: { Toolbar, ShowElement },
     name: "ResourceShow",

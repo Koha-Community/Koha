@@ -180,7 +180,7 @@ export default {
             //if (train_id) {
             return client.trains
                 .update(train, train_id)
-                .then(() => this.getTrain(train_id));
+                .then(() => this.refreshTemplateState());
             //} else {
             //    return client.trains
             //        .create(train)
