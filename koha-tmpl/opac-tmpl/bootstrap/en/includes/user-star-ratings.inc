@@ -16,6 +16,7 @@
         </div>
     </div>
 
+    <label class="sr-only" for="star_rating-[% item.itemnumber | html %]">star rating</label>
     <select class="star_rating" id="star_rating-[% item.itemnumber | html %]" name="rating" autocomplete="off" data-biblionumber="[% item.biblionumber | html %]" data-context="rating-[% item.itemnumber | html %]">
         [% IF ( rating_avg_int == 0 ) %]
             <option value="" selected="selected"></option>

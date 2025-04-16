@@ -390,6 +390,7 @@
                                                     [% INCLUDE "openlibrary-readapi.inc" bib = SEARCH_RESULT %]
 
                                                     [% IF ( OpacStarRatings == 'all' ) %]
+                                                        <span class="sr-only"> star rating </span>
                                                         <div class="results_summary ratings">
                                                             [% SET rating_avg = SEARCH_RESULT.ratings.get_avg_rating() %]
                                                             [% rating_avg_int = BLOCK %][% rating_avg | format("%.0f") %][% END %]
@@ -397,16 +398,16 @@
                                                                 <div class="br-widget br-readonly">
                                                                     [% FOREACH i IN [ 1 2 3 4 5  ] %]
                                                                         [% IF rating_avg_int == i %]
-                                                                            <a href="#" class="br-selected br-current"></a>
+                                                                            <span class="br-selected br-current"></span>
                                                                         [% ELSIF rating_avg_int > i %]
-                                                                            <a href="#" class="br-selected"></a>
+                                                                            <span class="br-selected"></span>
                                                                         [% ELSE %]
-                                                                            <a href="#"></a>
+                                                                            <span></span>
                                                                         [% END %]
                                                                     [% END %]
                                                                 </div>
                                                             </div>
-
+                                                            <span class="sr-only"> Average : [% rating_avg | html %] out of 5 stars</span>
                                                             [% IF SEARCH_RESULT.ratings.count > 0 %]
                                                                 <span id="rating_total_[% SEARCH_RESULT.biblionumber | html %]">&nbsp;&nbsp;([% SEARCH_RESULT.ratings.count | html %] votes)</span>
                                                             [% ELSE %]

@@ -58,4 +58,19 @@ $(document).ready(function () {
         var context = "#" + $(this).data("context");
         $(context).barrating("set", "");
     });
+
+    $(".br-widget a").each(function () {
+        if (!is_logged_in) {
+            var span = $("<span></span>");
+            $.each(this.attributes, function () {
+                if (this.name != "href") {
+                    span.attr(this.name, this.value);
+                }
+            });
+            $(this).replaceWith(span);
+        } else {
+            var data_rating = $(this).attr("data-rating-value");
+            $(this).append('<span class="sr-only">' + data_rating + "</span>");
+        }
+    });
 });
