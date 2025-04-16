@@ -96,6 +96,8 @@ sub new_from_statistic {
 
     my $self = $class->SUPER::new($values);
 
+    $self->store();
+
     if ($patron) {
         my $extended_attributes = $patron->extended_attributes->unblessed;
         for my $attribute (@$extended_attributes) {

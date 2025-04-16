@@ -135,7 +135,7 @@ subtest 'Koha::Anonymized::Transactions tests' => sub {
     is( $pseudonymized->itemcallnumber,         $item->itemcallnumber,     'itemcallnumber copied correctly' );
     is( $pseudonymized->ccode,                  $item->ccode,              'ccode copied correctly' );
 
-    my $next_p = Koha::PseudonymizedTransaction->new_from_statistic($statistic)->store;
+    my $next_p = Koha::PseudonymizedTransaction->new_from_statistic($statistic);
 
     isnt(
         $pseudonymized->id,
@@ -223,7 +223,7 @@ subtest 'PseudonymizedBorrowerAttributes tests' => sub {
         }
     );
 
-    my $p = Koha::PseudonymizedTransaction->new_from_statistic($statistic)->store;
+    my $p = Koha::PseudonymizedTransaction->new_from_statistic($statistic);
     my $attributes =
         Koha::Database->new->schema->resultset('PseudonymizedBorrowerAttribute')
         ->search( { transaction_id => $p->id }, { order_by => 'attribute' } );
@@ -258,7 +258,7 @@ subtest 'PseudonymizedBorrowerAttributes tests' => sub {
         }
     );
 
-    my $next_p = Koha::PseudonymizedTransaction->new_from_statistic($second_statistic)->store;
+    my $next_p = Koha::PseudonymizedTransaction->new_from_statistic($second_statistic);
     my $next_attributes =
         Koha::Database->new->schema->resultset('PseudonymizedBorrowerAttribute')
         ->search( { transaction_id => $next_p->id }, { order_by => 'attribute' } );
