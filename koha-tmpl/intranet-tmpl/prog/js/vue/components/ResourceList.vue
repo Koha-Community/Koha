@@ -1,7 +1,7 @@
 <template>
     <div v-if="!initialized">{{ $__("Loading") }}</div>
     <div v-else :id="`${resourceNamePlural}_list`">
-        <slot name="toolbar" />
+        <slot name="toolbar" :componentPropData="{ ...$props, ...$data }" />
         <template v-if="resourceCount > 0">
             <slot name="filters" :table="table" />
         </template>

@@ -7,13 +7,14 @@
         }"
         @select-resource="$emit('select-resource', $event)"
     >
-        <template #toolbar="{ resource }">
+        <template #toolbar="{ resource, componentPropData }">
             <Toolbar
                 v-if="!optionalResourceProps.embedded"
                 :toolbarButtons="toolbarButtons"
                 component="list"
                 :resource="resource"
                 :i18n="i18n"
+                :componentPropData="componentPropData"
             />
         </template>
         <template #filters="{ table }">
@@ -35,12 +36,13 @@
             ...optionalResourceProps,
         }"
     >
-        <template #toolbar="{ resource }">
+        <template #toolbar="{ resource, componentPropData }">
             <Toolbar
                 :toolbarButtons="toolbarButtons"
                 component="show"
                 :resource="resource"
                 :i18n="i18n"
+                :componentPropData="componentPropData"
             />
         </template>
     </ResourceShow>
@@ -381,8 +383,8 @@ export default {
             return [];
         },
         /**
-         * Gets the list of buttons to add to the toolbar, for each view: list, show, edit
-         * It can be overridden at the resource level if other buttons are required
+         * Gets the list of default buttons to add to the toolbar, for each view: list, show, edit
+         * It can be overridden at the resource level if the default buttons are not required
          *
          * @return {Object} keys must be "list", "show" or "edit", values are functions.
          */
@@ -606,16 +608,21 @@ export default {
             const defaultToolbarButtons = this.defaultToolbarButtons;
             const additionalToolbarButtons = this.additionalToolbarButtons;
 
-            return (resource, component, i18n) => {
+            return (resource, component, i18n, componentData) => {
                 const defaultButtons = defaultToolbarButtons(resource, i18n);
-                const additionalButtons = additionalToolbarButtons(resource);
+                const additionalButtons = additionalToolbarButtons(
+                    resource,
+                    componentData
+                );
 
                 //FIXME: we need to check that no indexes match between the default buttons and additional buttons
                 // If we add to the default buttons in future it could mess up indexing
 
                 return [
                     ...(defaultButtons[component] || []),
-                    ...(additionalButtons[component] || []),
+                    ...(additionalButtons[component] || []).filter(
+                        button => Object.keys(button).length > 0
+                    ),
                 ].sort((a, b) => a.index - b.index);
             };
         },

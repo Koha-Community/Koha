@@ -7,7 +7,12 @@
         <template v-if="toolbarButtons">
             <template
                 :key="`toolbar-button-${i}`"
-                v-for="(button, i) in toolbarButtons(resource, component, i18n)"
+                v-for="(button, i) in toolbarButtons(
+                    resource,
+                    component,
+                    i18n,
+                    componentPropData
+                )"
             >
                 <ToolbarButton
                     :action="button.action"
@@ -30,6 +35,7 @@ export default {
         component: String,
         resource: Object,
         i18n: Object,
+        componentPropData: Object,
     },
     components: { ToolbarButton },
     name: "Toolbar",

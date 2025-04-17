@@ -1,7 +1,11 @@
 <template>
     <div v-if="!initialized">{{ $__("Loading") }}</div>
     <div v-else :id="`${resourceNamePlural}_show`">
-        <slot name="toolbar" :resource="resource" />
+        <slot
+            name="toolbar"
+            :resource="resource"
+            :componentPropData="{ ...$props, ...$data }"
+        />
         <h2>
             {{ i18n.displayName + " #" + resource[idAttr] }}
         </h2>

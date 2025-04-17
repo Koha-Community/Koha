@@ -347,7 +347,7 @@ export default {
                               title: __("Receive"),
                           }
                         : {},
-                ].filter(b => Object.keys(b).length),
+                ],
             };
         },
         afterResourceFetch(componentData, resource, caller) {
