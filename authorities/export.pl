@@ -40,6 +40,9 @@ if ( $op eq "export" ) {
             C4::Charset::SetUTF8Flag( $marc, 0 );
             $marc = $marc->as_usmarc();
         }
+        if ( $format =~ /utf8/ ) {
+            binmode STDOUT, ':encoding(UTF-8)';
+        }        
         print $query->header(
             -type       => 'application/octet-stream',
             -attachment => "auth-$authid.$format"
