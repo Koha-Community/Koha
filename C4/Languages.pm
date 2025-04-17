@@ -251,7 +251,9 @@ sub getLanguages {
     AND native_language_descriptions.type = 'language'
 
     WHERE language_subtag_registry.type = 'language'
-    ${language_list_cond}");
+    ${language_list_cond}
+
+    ORDER BY language_rfc4646_to_iso639.iso639_2_code ASC");
 
     if ($language_list) {
         $sth->execute($current_language, join ',' => split(/,|\|/, $language_list));
