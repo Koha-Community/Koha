@@ -52,7 +52,7 @@ sub process {
     $self->start;
     my $statistic   = $args->{statistic};
     my $stat_object = Koha::Statistic->new($statistic);
-    Koha::PseudonymizedTransaction->new_from_statistic($stat_object);
+    Koha::PseudonymizedTransaction->create_from_statistic($stat_object);
     $self->finish( { data => "" } );    # We want to clear the job data to avoid storing patron information
 
 }

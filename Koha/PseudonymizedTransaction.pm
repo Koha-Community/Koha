@@ -33,13 +33,13 @@ Koha::PseudonymizedTransaction - Koha Koha::PseudonymizedTransaction Object clas
 
 =head2 Class methods
 
-=head3 new_from_statistic
+=head3 create_from_statistic
 
-    Creates new object from a passed Koha::Statistic object
+    Creates a new object from a passed Koha::Statistic object and stores it in the database
 
 =cut
 
-sub new_from_statistic {
+sub create_from_statistic {
     my ( $class, $statistic ) = @_;
 
     my $values = {
