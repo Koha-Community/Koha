@@ -291,6 +291,12 @@ while ( my $expiring_patron = $upcoming_mem_expires->next ) {
         message_name  => 'Patron_Expiry',
     };
 
+    my $is_notice_mandatory = grep( $expiring_patron->categorycode, @mandatory_expiry_notice_categories );
+    if ($is_notice_mandatory) {
+        $sending_params->{expiry_notice_mandatory} = 1;
+        $sending_params->{primary_contact_method}  = $expiring_patron->primary_contact_method;
+    }
+
     my $result = $expiring_patron->queue_notice($sending_params);
     $count_enqueued++ if $result->{sent};
 }
