@@ -19,6 +19,6 @@ return {
                     );
                 }
         );
-        say $out "Added new system preference 'ILLHistoryCheck'";
+        say_success( $out, "Added new system preference 'ILLHistoryCheck'" );
     },
 };

@@ -28,7 +28,8 @@ use t::lib::Mocks;
 use Koha::ILL::Request::Workflow::HistoryCheck;
 use Koha::Database;
 
-my $schema = Koha::Database->new->schema;
+my $schema  = Koha::Database->new->schema;
+my $builder = t::lib::TestBuilder->new;
 
 my $isbn = '321321321';
 
@@ -37,8 +38,6 @@ subtest 'show_history_check' => sub {
     plan tests => 6;
 
     $schema->storage->txn_begin;
-
-    my $builder = t::lib::TestBuilder->new;
 
     use_ok('Koha::ILL::Request::Workflow::HistoryCheck');
 
@@ -122,8 +121,6 @@ subtest 'after_request_created' => sub {
 
     $schema->storage->txn_begin;
 
-    my $builder = t::lib::TestBuilder->new;
-
     my $fake_cardnumber = '123456789';
     my $metadata        = {
         title      => 'This is a title',
@@ -187,6 +184,7 @@ subtest 'after_request_created' => sub {
         'Contains staffnotes related submissions by self patron'
     );
 
+    $schema->storage->txn_rollback;
 };
 
 1;
