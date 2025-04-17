@@ -195,8 +195,10 @@ sub _find_matching_requests {
 
     my $patron = Koha::Patrons->find( { cardnumber => $self->{metadata}->{cardnumber} } );
 
+    return 0 unless $patron;
+
     my $query;
-    $query->{'-and'} = [ { 'me.borrowernumber' => $patron->borrowernumber } ] if $patron;
+    $query->{'-and'} = [ { 'me.borrowernumber' => $patron->borrowernumber } ];
     foreach my $id_field (@existing_id_fields) {
         push @{ $query->{'-or'} }, {
             'illrequestattributes.type'  => $id_field,
