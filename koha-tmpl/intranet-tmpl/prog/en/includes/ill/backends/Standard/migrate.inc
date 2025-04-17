@@ -1,3 +1,4 @@
+[% USE raw %]
 [% IF whole.error %]
     [% IF whole.status == 'missing_identifier' %]
         <p><em>Please note:</em> Mandatory field Identifier is missing.</p>
@@ -74,12 +75,11 @@
                 </li>
             </ol>
         </fieldset>
-        [% cwd = whole.cwd %]
         [% type = whole.value.other.type %]
         [% IF type %]
-            [% INCLUDE "${cwd}/shared-includes/forms/${type}.inc" %]
+            [% INCLUDE "ill/backends/Standard/shared/forms/${type}.inc" %]
         [% END %]
-        [% INCLUDE "${cwd}/shared-includes/custom_fields.inc" %]
+        [% INCLUDE "ill/backends/Standard/shared/custom_fields.inc" %]
         <fieldset class="rows">
             <legend>Patron options</legend>
             <ol>
@@ -107,8 +107,9 @@
     </form>
     [% BLOCK backend_jsinclude %]
         <script>
+            var core = [ [% whole.core | $raw %] ];
             // <![CDATA[]
-            [% INCLUDE "${cwd}/shared-includes/shared.js" %]
+            [% INCLUDE "ill/backends/Standard/shared/shared.js" %]
             // ]]>
         </script>
     [% END %]

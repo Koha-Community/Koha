@@ -1,7 +1,6 @@
 [% USE Koha %]
 [% PROCESS 'i18n.inc' %]
-[% cwd = whole.cwd %]
-[% PROCESS "${cwd}/shared-includes/form_input_helpers.inc" %]
+[% PROCESS "ill/backends/Standard/shared/form_input_helpers.inc" %]
 [% IF whole.error %]
     [% IF whole.status == 'missing_identifier' %]
         <div class="alert alert-warning"> <strong>Please note:</strong> Mandatory field Identifier is missing. </div>
@@ -102,9 +101,9 @@
         </fieldset>
         [% type = whole.value.other.type %]
         [% IF type %]
-            [% INCLUDE "${cwd}/shared-includes/forms/${type}.inc" %]
+            [% INCLUDE "ill/backends/Standard/shared/forms/${type}.inc" %]
         [% END %]
-        [% INCLUDE "${cwd}/shared-includes/custom_fields.inc" %]
+        [% INCLUDE "ill/backends/Standard/shared/custom_fields.inc" %]
         [% IF whole.value.other.type && unauthenticated_ill && !logged_in_user %]
             <fieldset class="rows" id="illrequest_captcha">
                 <legend>Verification</legend>
@@ -134,8 +133,9 @@
 [% END %]
 [% BLOCK backend_jsinclude %]
     <script>
+        var core = [ [% whole.core | $raw %] ];
         // <![CDATA[]
-        [% INCLUDE "${cwd}/shared-includes/shared.js" %]
+        [% INCLUDE "ill/backends/Standard/shared/shared.js" %]
         // ]]>
     </script>
 [% END %]
