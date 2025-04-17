@@ -24,7 +24,6 @@ use C4::Installer;
 
 use Koha::DateUtils qw/ dt_from_string /;
 use Koha::I18N      qw(__);
-use Koha::ILL::Request;
 use Koha::ILL::Requests;
 use Koha::ILL::Request::Attribute;
 use C4::Biblio  qw( AddBiblio );
