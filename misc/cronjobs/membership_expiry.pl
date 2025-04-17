@@ -57,6 +57,12 @@ Verbose. Without this flag set, only fatal errors are reported.
 Do not send any email. Membership expire notices that would have been sent to
 the patrons are printed to standard out.
 
+
+=item B<-p>
+
+Force the generation of print notices, even if the borrower has an email address.
+Note that this flag cannot be used in combination with -n
+
 =item B<-c>
 
 Confirm flag: Add this option. The script will only print a usage
@@ -132,6 +138,10 @@ In the event that the C<-n> flag is passed to this program, no emails
 are sent. Instead, messages are sent on standard output from this
 program.
 
+When using the C<-p> flag, print notices are generated regardless of whether or
+not the borrower has an email address. This can be useful for libraries that
+prefer to deal with print notices.
+
 Notices can contain variables enclosed in double angle brackets like
 <<this>>. Those variables will be replaced with values
 specific to the soon expiring members.
@@ -165,6 +175,7 @@ use Koha::Patrons;
 # These are defaults for command line options.
 my $confirm;        # -c: Confirm that the user has read and configured this script.
 my $nomail;         # -n: No mail. Will not send any emails.
+my $forceprint;     # -p: Force print notices, even if email is found
 my $verbose = 0;    # -v: verbose
 my $help    = 0;
 my $man     = 0;
@@ -186,6 +197,7 @@ GetOptions(
     'man'            => \$man,
     'c'              => \$confirm,
     'n'              => \$nomail,
+    'p'              => \$forceprint,
     'v'              => \$verbose,
     'branch:s'       => \$branch,
     'before:i'       => \$before,
@@ -289,12 +301,13 @@ while ( my $expiring_patron = $upcoming_mem_expires->next ) {
     my $sending_params = {
         letter_params => $letter_params,
         message_name  => 'Patron_Expiry',
+        forceprint    => $forceprint
     };
 
     my $is_notice_mandatory = grep( $expiring_patron->categorycode, @mandatory_expiry_notice_categories );
     if ($is_notice_mandatory) {
         $sending_params->{expiry_notice_mandatory} = 1;
-        $sending_params->{primary_contact_method}  = $expiring_patron->primary_contact_method;
+        $sending_params->{primary_contact_method}  = $forceprint ? 'print' : $expiring_patron->primary_contact_method;
     }
 
     my $result = $expiring_patron->queue_notice($sending_params);

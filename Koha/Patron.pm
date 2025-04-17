@@ -2834,6 +2834,7 @@ sub queue_notice {
     if ( $params->{expiry_notice_mandatory} ) {
         push( @message_transports, $params->{primary_contact_method} || 'print' ) if scalar(@message_transports) == 0;
     }
+    push @message_transports, 'print' if $params->{forceprint};
 
     $letter_params->{letter_code} = $letter_code;
     my $print_sent = 0;
