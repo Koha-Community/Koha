@@ -180,6 +180,7 @@ export default {
     },
     computed: {
         inputFields() {
+            if (!this.confirmation.inputs) return null;
             return this.confirmation.inputs.reduce((acc, curr) => {
                 acc[curr.name] = curr.value || null;
                 return acc;

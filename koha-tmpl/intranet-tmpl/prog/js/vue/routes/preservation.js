@@ -3,7 +3,6 @@ import { markRaw } from "vue";
 import Home from "../components/Preservation/Home.vue";
 import TrainsFormAddItem from "../components/Preservation/TrainsFormAddItem.vue";
 import TrainsFormAddItems from "../components/Preservation/TrainsFormAddItems.vue";
-import WaitingList from "../components/Preservation/WaitingList.vue";
 import Settings from "../components/Preservation/Settings.vue";
 import SettingsProcessingsShow from "../components/Preservation/SettingsProcessingsShow.vue";
 import SettingsProcessingsFormAdd from "../components/Preservation/SettingsProcessingsFormAdd.vue";
@@ -101,11 +100,12 @@ export const routes = [
                 title: $__("Waiting list"),
                 icon: "fa fa-recycle",
                 is_end_node: true,
+                resource: "Preservation/WaitingListResource.vue",
                 children: [
                     {
                         path: "",
                         name: "WaitingList",
-                        component: markRaw(WaitingList),
+                        component: markRaw(ResourceWrapper),
                     },
                 ],
             },
