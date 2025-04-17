@@ -64,7 +64,7 @@ subtest 'Config does not exist' => sub {
                 ccode          => $item->ccode,
             }
         );
-        my $pseudo = Koha::PseudonymizedTransaction->new_from_statistic($stat);
+        my $pseudo = Koha::PseudonymizedTransaction->create_from_statistic($stat);
 
     } catch {
         ok(
@@ -119,7 +119,7 @@ subtest 'Koha::Anonymized::Transactions tests' => sub {
     ["Called"], "Background job enqueued when pseudonymization enabled";
 
     my $statistic     = Koha::Statistics->search( { itemnumber => $item->itemnumber } )->next;
-    my $pseudonymized = Koha::PseudonymizedTransaction->new_from_statistic($statistic);
+    my $pseudonymized = Koha::PseudonymizedTransaction->create_from_statistic($statistic);
     like(
         $pseudonymized->hashed_borrowernumber,
         qr{^\$2a\$08\$}, "The hashed_borrowernumber must be a bcrypt hash"
@@ -135,7 +135,7 @@ subtest 'Koha::Anonymized::Transactions tests' => sub {
     is( $pseudonymized->itemcallnumber,         $item->itemcallnumber,     'itemcallnumber copied correctly' );
     is( $pseudonymized->ccode,                  $item->ccode,              'ccode copied correctly' );
 
-    my $next_p = Koha::PseudonymizedTransaction->new_from_statistic($statistic);
+    my $next_p = Koha::PseudonymizedTransaction->create_from_statistic($statistic);
 
     isnt(
         $pseudonymized->id,
@@ -223,7 +223,7 @@ subtest 'PseudonymizedBorrowerAttributes tests' => sub {
         }
     );
 
-    my $p = Koha::PseudonymizedTransaction->new_from_statistic($statistic);
+    my $p = Koha::PseudonymizedTransaction->create_from_statistic($statistic);
     my $attributes =
         Koha::Database->new->schema->resultset('PseudonymizedBorrowerAttribute')
         ->search( { transaction_id => $p->id }, { order_by => 'attribute' } );
@@ -258,7 +258,7 @@ subtest 'PseudonymizedBorrowerAttributes tests' => sub {
         }
     );
 
-    my $next_p = Koha::PseudonymizedTransaction->new_from_statistic($second_statistic);
+    my $next_p = Koha::PseudonymizedTransaction->create_from_statistic($second_statistic);
     my $next_attributes =
         Koha::Database->new->schema->resultset('PseudonymizedBorrowerAttribute')
         ->search( { transaction_id => $next_p->id }, { order_by => 'attribute' } );

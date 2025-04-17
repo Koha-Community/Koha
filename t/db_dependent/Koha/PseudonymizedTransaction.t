@@ -56,7 +56,7 @@ subtest 'get_hash() tests' => sub {
     );
 };
 
-subtest 'new_from_statistic() tests' => sub {
+subtest 'create_from_statistic() tests' => sub {
 
     plan tests => 15;
 
@@ -100,7 +100,7 @@ subtest 'new_from_statistic() tests' => sub {
         }
     );
 
-    my $pseudonymized = Koha::PseudonymizedTransaction->new_from_statistic($statistic);
+    my $pseudonymized = Koha::PseudonymizedTransaction->create_from_statistic($statistic);
 
     is(
         $pseudonymized->hashed_borrowernumber,
@@ -123,7 +123,7 @@ subtest 'new_from_statistic() tests' => sub {
     $patron->cardnumber(undef)->store;
 
     ok(
-        !Koha::PseudonymizedTransaction->new_from_statistic($statistic)->has_cardnumber,
+        !Koha::PseudonymizedTransaction->create_from_statistic($statistic)->has_cardnumber,
         'has_cardnumber set to false'
     );
 
