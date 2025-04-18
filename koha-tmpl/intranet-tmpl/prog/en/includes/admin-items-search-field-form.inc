@@ -26,7 +26,7 @@
         <input type="text" id="tagsubfield" name="tagsubfield" pattern="[a-zA-Z0-9]+" maxlength="1" size="1" value="[% field.tagsubfield | html %]" />
     </li>
     <li>
-        <label for="authorised_values_category">Authorised values category: </label>
+        <label for="authorised_values_category">Authorized value category: </label>
         <select id="authorised_values_category" name="authorised_values_category">
             <option value="">- None -</option>
             [% PROCESS options_for_authorised_value_categories authorised_value_categories => AuthorisedValues.GetCategories( selected => field.authorised_values_category ) %]
