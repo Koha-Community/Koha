@@ -219,11 +219,11 @@ MARC order accounts
                                 </li>
                                 <li>
                                     <label for="overlay_action">Action if matching record found: </label>
-                                    [% INCLUDE 'tools-overlay-action.inc' class_name='select2' %]
+                                    [% INCLUDE 'tools-overlay-action.inc' action=account.overlay_action class_name='select2' %]
                                 </li>
                                 <li>
                                     <label for="nomatch_action">Action if no match is found: </label>
-                                    [% INCLUDE 'tools-nomatch-action.inc' class_name='select2' %]
+                                    [% INCLUDE 'tools-nomatch-action.inc' action=account.nomatch_action class_name='select2' %]
                                 </li>
                             </ol>
                         </fieldset>
@@ -250,7 +250,7 @@ MARC order accounts
                             <ol>
                                 <li>
                                     <label for="item_action">How to process items: </label>
-                                    [% INCLUDE 'tools-item-action.inc' class_name='select2' %]
+                                    [% INCLUDE 'tools-item-action.inc' action=account.item_action class_name='select2' %]
                                 </li>
                             </ol>
                         </fieldset>

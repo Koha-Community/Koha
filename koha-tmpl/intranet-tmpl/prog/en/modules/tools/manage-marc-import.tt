@@ -209,7 +209,7 @@
                                 <li>
                                     [% IF ( can_commit ) %]
                                         <label for="overlay_action">Action if matching record found:</label>
-                                        [% INCLUDE 'tools-overlay-action.inc' %] <span class="change-status">Changed. <a href="#" class="reset" id="reset_overlay_action">Reset</a></span>
+                                        [% INCLUDE 'tools-overlay-action.inc' action=overlay_action %] <span class="change-status">Changed. <a href="#" class="reset" id="reset_overlay_action">Reset</a></span>
                                     [% ELSE %]
                                         <span class="label">Action if matching record found:</span>
                                         [% IF ( overlay_action == 'replace' ) %]
@@ -226,7 +226,7 @@
                                 <li>
                                     [% IF ( can_commit ) %]
                                         <label for="nomatch_action">Action if no match found:</label>
-                                        [% INCLUDE 'tools-nomatch-action.inc' %] <span class="change-status">Changed. <a href="#" class="reset" id="reset_nomatch_action">Reset</a></span>
+                                        [% INCLUDE 'tools-nomatch-action.inc' action=nomatch_action %] <span class="change-status">Changed. <a href="#" class="reset" id="reset_nomatch_action">Reset</a></span>
                                     [% ELSE %]
                                         <span class="label">Action if no match found:</span>
                                         [% IF ( nomatch_action == 'create_new' ) %]
@@ -242,7 +242,7 @@
                                     <li>
                                         [% IF ( can_commit ) %]
                                             <label for="item_action">Item processing:</label>
-                                            [% INCLUDE 'tools-item-action.inc' %] <span class="change-status">Changed. <a href="#" class="reset" id="reset_item_action">Reset</a></span>
+                                            [% INCLUDE 'tools-item-action.inc' action=item_action %] <span class="change-status">Changed. <a href="#" class="reset" id="reset_item_action">Reset</a></span>
                                         [% ELSE %]
                                             <span class="label">Item processing:</span>
                                             [% IF ( item_action == 'always_add' ) %]
