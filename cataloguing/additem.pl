@@ -144,14 +144,10 @@ my $display_order          = $input->param('item_group_display_order');
 our $frameworkcode = &GetFrameworkCode($biblionumber);
 
 # Defining which userflag is needing according to the framework currently used
-my $fast_cataloging_mode;
-if ( defined $input->param('frameworkcode') ) {
-    $fast_cataloging_mode = ( $input->param('frameworkcode') eq 'FA' ) ? 1 : 0;
-}
-
-if ( not defined $fast_cataloging_mode ) {
-    $fast_cataloging_mode = ( $frameworkcode eq 'FA' ) ? 1 : 0;
-}
+my $fast_cataloging_mode =
+    defined $input->param('frameworkcode')
+    ? $input->param('frameworkcode') eq 'FA'
+    : $frameworkcode eq 'FA';
 
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     {
