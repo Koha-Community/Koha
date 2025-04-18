@@ -53,7 +53,7 @@
         </div>
     [% END %]
     [% UNLESS can_be_discharged %]
-        <p>A discharge cannot be generated for this patron because:</p>
+        <p>A discharge cannot be generated for this patron for following reasons:</p>
         <ul>
             [% IF discharge_problems.checkouts %]
                 <li>The patron has [% discharge_problems.checkouts | html %] item(s) checked out</li>
@@ -68,9 +68,6 @@
             <p>The patron has holds. The holds will be cancelled if the discharge is generated.</p>
         [% END %]
 
-        [% IF discharge_problems.debt %]
-            <li>The patron has unpaid charges of [% discharge_problems.debt | $Price %]</li>
-        [% END %]
         <div class="btn-toolbar">
             <form method="post">
                 [% INCLUDE 'csrf-token.inc' %]
