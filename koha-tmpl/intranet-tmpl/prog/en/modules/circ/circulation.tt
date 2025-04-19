@@ -859,8 +859,17 @@
                                                     <div id="onsite_checkout-select" class="circ-setting">
                                                         [% IF noissues %]
                                                             <div class="onsite-checkout-only">
-                                                                <input type="checkbox" id="onsite_checkout" name="onsite_checkout_forced" checked="checked" disabled="disabled" /> <label for="onsite_checkout">On-site checkouts only. Automatic due date: </label>
-                                                                <input type="text" name="duedatespec" id="duedatespec" class="flatpickr" data-flatpickr-enable-time="true" data-flatpickr-on-close-focus="#barcode" />
+                                                                <input type="checkbox" id="onsite_checkout" name="onsite_checkout_forced" checked="checked" disabled="disabled" />
+                                                                <label for="onsite_checkout">On-site checkouts only. Automatic due date: </label>
+                                                                <input
+                                                                    type="text"
+                                                                    name="duedatespec"
+                                                                    id="duedatespec"
+                                                                    class="flatpickr"
+                                                                    data-flatpickr-enable-time="true"
+                                                                    data-flatpickr-on-close-focus="#barcode"
+                                                                    value="[% today_due_date_and_time | $KohaDates dateformat => 'iso', with_hours => 1 %]"
+                                                                />
                                                                 <input type="hidden" name="onsite_checkout" checked="checked" value="1" />
                                                             </div>
                                                         [% ELSE %]
