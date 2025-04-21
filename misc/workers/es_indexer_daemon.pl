@@ -64,7 +64,8 @@ use Koha::BackgroundJobs;
 use Koha::SearchEngine;
 use Koha::SearchEngine::Indexer;
 
-my ( $help, $batch_size );
+my $help;
+my $batch_size = 10;
 
 my $not_found_retries = {};
 my $max_retries       = $ENV{MAX_RETRIES} || 10;
@@ -75,8 +76,6 @@ GetOptions(
 ) || pod2usage(1);
 
 pod2usage(0) if $help;
-
-$batch_size //= 10;
 
 warn "Not using Elasticsearch" unless C4::Context->preference('SearchEngine') eq 'Elasticsearch';
 
@@ -172,7 +171,10 @@ while (1) {
         }
 
     } else {
-        @jobs = Koha::BackgroundJobs->search( { status => 'new', queue => 'elastic_index' } )->as_list;
+        @jobs = Koha::BackgroundJobs->search(
+            { status => 'new', queue => 'elastic_index' },
+            { rows   => $batch_size }
+        )->as_list;
         commit(@jobs);
         @jobs = ();
         sleep 10;
