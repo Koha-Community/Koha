@@ -732,7 +732,7 @@ sub MapItemsToHoldRequests {
     my $num_items_remaining = scalar(@$available_items);
 
     # Look for Local Holds Priority matches first
-    if ( C4::Context->preference('LocalHoldsPriority') ) {
+    if ( C4::Context->preference( 'LocalHoldsPriority' ne "None" ) ) {
         my $LocalHoldsPriorityPatronControl = C4::Context->preference('LocalHoldsPriorityPatronControl');
         my $LocalHoldsPriorityItemControl   = C4::Context->preference('LocalHoldsPriorityItemControl');
 

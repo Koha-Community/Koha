@@ -43,6 +43,7 @@ use Koha::Holds;
 use Koha::ItemTypes;
 use Koha::Items;
 use Koha::Libraries;
+use Koha::Library;
 use Koha::Patrons;
 use Koha::Plugins;
 use Koha::Policy::Holds;
@@ -897,8 +898,8 @@ sub CheckReserves {
             } else {
                 my $patron;
                 my $local_hold_match;
-
-                if ($LocalHoldsPriority) {
+                my $local_hold_group_match;
+                if ( $LocalHoldsPriority ne 'None' ) {
                     $patron = Koha::Patrons->find( $res->{borrowernumber} );
 
                     unless ( $item->exclude_from_local_holds_priority
@@ -909,13 +910,31 @@ sub CheckReserves {
                               ( $LocalHoldsPriorityPatronControl eq 'PickupLibrary' ) ? $res->{branchcode}
                             : ( $LocalHoldsPriorityPatronControl eq 'HomeLibrary' )   ? $patron->branchcode
                             :                                                           undef;
-                        $local_hold_match =
-                            $local_holds_priority_item_branchcode eq $local_holds_priority_patron_branchcode;
+                        if ( $LocalHoldsPriority eq 'GiveLibrary' || $LocalHoldsPriority eq 'GiveLibraryAndGroup' )
+                        {    #Check the library first
+                            $local_hold_match =
+                                $local_holds_priority_item_branchcode eq $local_holds_priority_patron_branchcode;
+                            if ( !$local_hold_match && $LocalHoldsPriority eq ('GiveLibraryAndGroup') )
+                            {    # If there's no match at the library level, check hold groups
+                                $local_hold_group_match =
+                                    Koha::Libraries->find( { branchcode => $local_holds_priority_item_branchcode } )
+                                    ->validate_hold_sibling(
+                                    { branchcode => $local_holds_priority_patron_branchcode } );
+                            }
+                        }
+                        if ( $LocalHoldsPriority eq 'GiveLibraryGroup' ) {    #Check only the group
+                            $local_hold_group_match =
+                                Koha::Libraries->find( { branchcode => $local_holds_priority_item_branchcode } )
+                                ->validate_hold_sibling( { branchcode => $local_holds_priority_patron_branchcode } );
+                        }
                     }
                 }
 
                 # See if this item is more important than what we've got so far
-                if ( ( $res->{'priority'} && $res->{'priority'} < $priority ) || $local_hold_match ) {
+                if (   ( $res->{'priority'} && $res->{'priority'} < $priority )
+                    || $local_hold_match
+                    || $local_hold_group_match )
+                {
                     next
                         if $res->{item_group_id}
                         && ( !$item->item_group || $item->item_group->id != $res->{item_group_id} );
@@ -944,7 +963,10 @@ sub CheckReserves {
                     next unless $item->can_be_transferred( { to => Koha::Libraries->find( $res->{branchcode} ) } );
                     $priority = $res->{'priority'};
                     $highest  = $res;
-                    last if $local_hold_match;
+                    last
+                        if $local_hold_match
+                        || ( ( $LocalHoldsPriority eq 'GiveLibraryGroup' ) && $local_hold_group_match );
+                    next if $local_hold_group_match;
                 }
             }
         }

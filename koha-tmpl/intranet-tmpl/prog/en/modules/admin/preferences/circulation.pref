@@ -1024,8 +1024,10 @@ Circulation:
         -
             - pref: LocalHoldsPriority
               choices:
-                  1: Give
-                  0: "Don't give"
+                  GiveLibrary: Give library
+                  None: "Don't give"
+                  GiveLibraryGroup: Give library group
+                  GiveLibraryAndGroup: Give library then library group
             - priority for filling holds to patrons whose
             - pref: LocalHoldsPriorityPatronControl
               choices:
@@ -1036,6 +1038,7 @@ Circulation:
               choices:
                   homebranch: "home library"
                   holdingbranch: "holding library"
+            - <br/><strong>Note:</strong> If a group option is selected, LocalHoldsPriorityPatronControl and LocalHoldsPriorityItemControl will use the <a href="/cgi-bin/koha/admin/library_groups.pl">library hold group</a> of the selected libraries.
         -
             - pref: OPACHoldsIfAvailableAtPickup
               choices:
