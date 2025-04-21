@@ -1,6 +1,6 @@
 <template>
     <div v-if="!initialized">{{ $__("Loading") }}</div>
-    <div v-else :id="`${resourceNamePlural}_list`">
+    <div v-else :id="`${instancedResource.resourceNamePlural}_list`">
         <slot name="toolbar" :componentPropData="{ ...$props, ...$data }" />
         <template v-if="resourceCount > 0">
             <slot name="filters" :table="table" />
@@ -15,7 +15,7 @@
             ></KohaTable>
         </div>
         <div v-else class="alert alert-info">
-            {{ i18n.emptyListMessage }}
+            {{ instancedResource.i18n.emptyListMessage }}
         </div>
     </div>
 </template>
@@ -40,22 +40,7 @@ export default {
         };
     },
     props: {
-        embedded: Boolean,
-        apiClient: Object,
-        i18n: Object,
-        tableOptions: Object,
-        goToResourceShow: Function,
-        goToResourceEdit: Function,
-        doResourceDelete: Function,
-        doResourceSelect: Function,
-        getResourceShowURL: Function,
-        resourceName: String,
-        resourceNamePlural: String,
-        hasAdditionalFields: { type: Boolean, default: false },
-        extendedAttributesResourceType: String,
-        resourceAttrs: Array,
-        nameAttr: String,
-        idAttr: String,
+        instancedResource: Object,
     },
     data() {
         return {
@@ -64,19 +49,21 @@ export default {
             searchable_additional_fields: [],
             searchable_av_options: [],
             tableEvents: {
-                show: this.goToResourceShow,
-                edit: this.goToResourceEdit,
-                delete: this.doResourceDelete,
-                select: this.doResourceSelect,
+                show: this.instancedResource.goToResourceShow,
+                edit: this.instancedResource.goToResourceEdit,
+                delete: this.instancedResource.doResourceDelete,
+                select: this.instancedResource.doResourceSelect,
             },
         };
     },
     created() {
-        if (this.embedded) {
-            this.getResourceCount().then(() => (this.initialized = true));
+        if (this.instancedResource.embedded) {
+            this.getResourceCount().then(
+                () => (this.instancedResource.initialized = true)
+            );
         } else {
             this.getResourceCount().then(() => {
-                if (this.hasAdditionalFields) {
+                if (this.instancedResource.hasAdditionalFields) {
                     this.getSearchableAdditionalFields().then(() =>
                         this.getSearchableAVOptions().then(
                             () => (this.initialized = true)
@@ -90,7 +77,7 @@ export default {
     },
     methods: {
         async getResourceCount() {
-            await this.apiClient.count().then(
+            await this.instancedResource.apiClient.count().then(
                 count => {
                     this.resourceCount = count;
                 },
@@ -100,7 +87,7 @@ export default {
         async getSearchableAdditionalFields() {
             const client = APIClient.additional_fields;
             await client.additional_fields
-                .getAll(this.extendedAttributesResourceType)
+                .getAll(this.instancedResource.extendedAttributesResourceType)
                 .then(
                     searchable_additional_fields => {
                         this.searchable_additional_fields =
@@ -135,8 +122,8 @@ export default {
                 });
         },
         getTableColumns(resourceAttrs) {
-            let get_lib_from_av = this.get_lib_from_av;
-            let thisResource = this;
+            let get_lib_from_av = this.instancedResource.get_lib_from_av;
+            let thisResource = this.instancedResource;
 
             const columns = resourceAttrs.reduce((acc, attr, i) => {
                 if (
@@ -151,7 +138,7 @@ export default {
                     acc.push(attr.tableColumnDefinition);
                     return acc;
                 }
-                if (attr.name === this.idAttr) {
+                if (attr.name === this.instancedResource.idAttr) {
                     acc.push({
                         title: attr.label,
                         data: attr.name,
@@ -171,7 +158,7 @@ export default {
                     });
                     return acc;
                 }
-                if (attr.name === this.nameAttr) {
+                if (attr.name === this.instancedResource.nameAttr) {
                     acc.push({
                         title: attr.label,
                         data: attr.name,
@@ -264,22 +251,21 @@ export default {
     },
     computed: {
         tableOptionsWithColumns() {
-            this.tableOptions.columns = this.getTableColumns(
-                this.resourceAttrs
+            this.instancedResource.tableOptions.columns = this.getTableColumns(
+                this.instancedResource.resourceAttrs
             );
-            return this.tableOptions;
+            return this.instancedResource.tableOptions;
         },
         tableEventList() {
-            const actionButtons = this.tableOptions.actions["-1"].reduce(
-                (acc, curr) => {
-                    if (typeof curr === "object") {
-                        const actionName = Object.keys(curr)[0];
-                        acc[actionName] = curr[actionName].callback;
-                    }
-                    return acc;
-                },
-                {}
-            );
+            const actionButtons = this.instancedResource.tableOptions.actions[
+                "-1"
+            ].reduce((acc, curr) => {
+                if (typeof curr === "object") {
+                    const actionName = Object.keys(curr)[0];
+                    acc[actionName] = curr[actionName].callback;
+                }
+                return acc;
+            }, {});
             return { ...this.tableEvents, ...actionButtons };
         },
     },

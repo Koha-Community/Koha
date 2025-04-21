@@ -1,17 +1,23 @@
 <template>
     <div v-if="!initialized">{{ $__("Loading") }}</div>
-    <div v-else :id="`${resourceNamePlural}_add`">
-        <h2 v-if="resourceToAddOrEdit[idAttr]">
-            {{ i18n.editLabel.format(resourceToAddOrEdit[idAttr]) }}
+    <div v-else :id="`${instancedResource.resourceNamePlural}_add`">
+        <h2 v-if="resourceToAddOrEdit[instancedResource.idAttr]">
+            {{
+                instancedResource.i18n.editLabel.format(
+                    resourceToAddOrEdit[instancedResource.idAttr]
+                )
+            }}
         </h2>
-        <h2 v-else>{{ i18n.newLabel }}</h2>
+        <h2 v-else>{{ instancedResource.i18n.newLabel }}</h2>
         <ul
-            v-if="formGroupsDisplayMode == 'tabs'"
+            v-if="instancedResource.formGroupsDisplayMode == 'tabs'"
             class="nav nav-tabs"
             role="tablist"
         >
             <li
-                v-for="(tab, counter) in getFieldGroupings('Form')"
+                v-for="(tab, counter) in instancedResource.getFieldGroupings(
+                    'Form'
+                )"
                 class="nav-item"
                 :key="`tab${counter}`"
             >
@@ -27,10 +33,15 @@
                 >
             </li>
         </ul>
-        <form @submit="onSubmit($event, resourceToAddOrEdit)">
-            <div v-if="formGroupsDisplayMode == 'tabs'" class="tab-content">
+        <form @submit="instancedResource.onSubmit($event, resourceToAddOrEdit)">
+            <div
+                v-if="instancedResource.formGroupsDisplayMode == 'tabs'"
+                class="tab-content"
+            >
                 <div
-                    v-for="(group, counter) in getFieldGroupings('Form')"
+                    v-for="(
+                        group, counter
+                    ) in instancedResource.getFieldGroupings('Form')"
                     v-bind:key="counter"
                     :id="group.name?.replace(/\s/g, '_')"
                     role="tabpanel"
@@ -59,9 +70,15 @@
                     </fieldset>
                 </div>
             </div>
-            <div v-else-if="formGroupsDisplayMode == 'accordion'">
+            <div
+                v-else-if="
+                    instancedResource.formGroupsDisplayMode == 'accordion'
+                "
+            >
                 <div
-                    v-for="(group, counter) in getFieldGroupings('Form')"
+                    v-for="(
+                        group, counter
+                    ) in instancedResource.getFieldGroupings('Form')"
                     v-bind:key="counter"
                     class="accordion"
                 >
@@ -106,7 +123,9 @@
             </div>
             <div v-else>
                 <fieldset
-                    v-for="(group, counter) in getFieldGroupings('Form')"
+                    v-for="(
+                        group, counter
+                    ) in instancedResource.getFieldGroupings('Form')"
                     v-bind:key="counter"
                     class="rows"
                 >
@@ -128,7 +147,7 @@
             <fieldset class="action">
                 <ButtonSubmit />
                 <router-link
-                    :to="{ name: listComponent }"
+                    :to="{ name: instancedResource.listComponent }"
                     role="button"
                     class="cancel"
                     >{{ $__("Cancel") }}</router-link
@@ -139,6 +158,7 @@
 </template>
 
 <script>
+import { reactive } from "vue";
 import FormElement from "./FormElement.vue";
 import ButtonSubmit from "./ButtonSubmit.vue";
 
@@ -151,27 +171,24 @@ export default {
         };
     },
     props: {
-        idAttr: String,
-        apiClient: Object,
-        i18n: Object,
-        listComponent: String,
-        newResource: Object,
-        onSubmit: Function,
-        resourceNamePlural: String,
-        getFieldGroupings: Function,
-        formGroupsDisplayMode: String,
-        getResource: Function,
+        instancedResource: Object,
     },
     created() {
-        if (this.$route.params[this.idAttr]) {
-            this.getResource(this.$route.params[this.idAttr], this, "form");
+        if (this.$route.params[this.instancedResource.idAttr]) {
+            this.instancedResource.getResource(
+                this.$route.params[this.instancedResource.idAttr],
+                this,
+                "form"
+            );
         } else {
             this.initialized = true;
         }
     },
     computed: {
         resourceToAddOrEdit() {
-            return this.resource || this.newResource;
+            return (
+                this.resource || reactive(this.instancedResource.newResource)
+            );
         },
     },
     components: {

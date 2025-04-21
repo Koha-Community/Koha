@@ -1,18 +1,25 @@
 <template>
     <div v-if="!initialized">{{ $__("Loading") }}</div>
-    <div v-else :id="`${resourceNamePlural}_show`">
+    <div v-else :id="`${instancedResource.resourceNamePlural}_show`">
         <slot
             name="toolbar"
             :resource="resource"
             :componentPropData="{ ...$props, ...$data }"
         />
         <h2>
-            {{ i18n.displayName + " #" + resource[idAttr] }}
+            {{
+                instancedResource.i18n.displayName +
+                " #" +
+                resource[instancedResource.idAttr]
+            }}
         </h2>
         <div>
             <fieldset
                 class="rows"
-                v-for="(group, counter) in getFieldGroupings('Show', resource)"
+                v-for="(group, counter) in instancedResource.getFieldGroupings(
+                    'Show',
+                    resource
+                )"
                 v-bind:key="counter"
             >
                 <legend v-if="group.name">{{ group.name }}</legend>
@@ -27,7 +34,7 @@
             </fieldset>
             <fieldset
                 class="rows"
-                v-for="(item, counter) in appendToShow(this)"
+                v-for="(item, counter) in instancedResource.appendToShow(this)"
                 v-bind:key="counter"
             >
                 <legend v-if="item.name">{{ item.name }}</legend>
@@ -35,7 +42,7 @@
             </fieldset>
             <fieldset class="action">
                 <router-link
-                    :to="{ name: listComponent }"
+                    :to="{ name: instancedResource.listComponent }"
                     role="button"
                     class="cancel"
                     >{{ $__("Close") }}</router-link
@@ -57,18 +64,14 @@ export default {
         };
     },
     props: {
-        idAttr: String,
-        apiClient: Object,
-        i18n: Object,
-        listComponent: String,
-        resourceNamePlural: String,
-        getFieldGroupings: Function,
-        appendToShow: Function,
-        afterResourceFetch: Function,
-        getResource: Function,
+        instancedResource: Object,
     },
     created() {
-        this.getResource(this.$route.params[this.idAttr], this, "show");
+        this.instancedResource.getResource(
+            this.$route.params[this.instancedResource.idAttr],
+            this,
+            "show"
+        );
     },
     components: { Toolbar, ShowElement },
     name: "ResourceShow",

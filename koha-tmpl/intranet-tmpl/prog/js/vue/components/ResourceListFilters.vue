@@ -1,11 +1,23 @@
 <template>
-    <fieldset v-if="tableFilters?.length > 0" class="filters">
-        <template v-if="label">{{ label }}{{ " " }}</template>
-        <template v-for="(filter, index) in tableFilters" v-bind:key="index">
+    <fieldset v-if="instancedResource.tableFilters?.length > 0" class="filters">
+        <template v-if="instancedResource.getTableFilterFormElementsLabel()"
+            >{{ instancedResource.getTableFilterFormElementsLabel()
+            }}{{ " " }}</template
+        >
+        <template
+            v-for="(filter, index) in instancedResource.tableFilters"
+            v-bind:key="index"
+        >
             <FormElement :resource="filters" :attr="filter" :index="index" />
         </template>
         <input
-            @click="filterTable(filters, table, embedded)"
+            @click="
+                instancedResource.filterTable(
+                    filters,
+                    table,
+                    instancedResource.embedded
+                )
+            "
             id="filterTable"
             type="button"
             :value="$__('Filter')"
@@ -18,17 +30,13 @@ import FormElement from "./FormElement.vue";
 export default {
     components: { FormElement },
     props: {
-        embedded: Boolean,
-        tableFilters: { type: Array, default: [] },
-        getFilterValues: Function,
-        filterTable: Function | null,
-        label: String | "",
+        instancedResource: Object,
         table: Object,
     },
     data() {
         return {
-            filters: this.getFilterValues
-                ? this.getFilterValues(this.$route.query)
+            filters: this.instancedResource.getFilterValues
+                ? this.instancedResource.getFilterValues(this.$route.query)
                 : {},
         };
     },

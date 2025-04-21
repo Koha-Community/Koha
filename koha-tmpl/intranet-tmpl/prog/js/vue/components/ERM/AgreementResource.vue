@@ -1,16 +1,26 @@
+<template>
+    <BaseResource
+        :routeAction="routeAction"
+        :instancedResource="this"
+    ></BaseResource>
+</template>
 <script>
 import { inject } from "vue";
 import BaseResource from "../BaseResource.vue";
+import { useBaseResource } from "../../composables/base-resource.js";
 import { storeToRefs } from "pinia";
 import { APIClient } from "../../fetch/api-client.js";
 
 export default {
-    extends: BaseResource,
+    // extends: BaseResource,
     props: {
         routeAction: String,
         embedded: { type: Boolean, default: false },
     },
+
     setup(props) {
+        const format_date = $date;
+        const patron_to_html = $patron_to_html;
         const AVStore = inject("AVStore");
         const {
             av_agreement_statuses,
@@ -25,52 +35,74 @@ export default {
         const vendorStore = inject("vendorStore");
         const { vendors } = storeToRefs(vendorStore);
 
-        return {
-            ...BaseResource.setup({
-                resourceName: "agreement",
-                nameAttr: "name",
-                idAttr: "agreement_id",
-                showComponent: "AgreementsShow",
-                listComponent: "AgreementsList",
-                addComponent: "AgreementsFormAdd",
-                editComponent: "AgreementsFormAddEdit",
-                apiClient: APIClient.erm.agreements,
-                resourceTableUrl:
-                    APIClient.erm.httpClient._baseURL + "agreements",
-                i18n: {
-                    deleteConfirmationMessage: __(
-                        "Are you sure you want to remove this agreement?"
-                    ),
-                    deleteSuccessMessage: __("Agreement %s deleted"),
-                    displayName: __("Agreement"),
-                    editLabel: __("Edit agreement #%s"),
-                    emptyListMessage: __("There are no agreements defined"),
-                    newLabel: __("New agreement"),
+        const getTableFilterFormElements = () => {
+            return [
+                {
+                    name: "by_expired",
+                    type: "checkbox",
+                    label: __("Filter by expired"),
+                    value: false,
+                    onChange: function (filters) {
+                        if (filters.by_expired) {
+                            filters.max_expiration_date = new Date()
+                                .toISOString()
+                                .substring(0, 10);
+                        } else {
+                            filters.max_expiration_date = "";
+                        }
+                        return filters;
+                    },
                 },
-                embedded: props.embedded,
-                extendedAttributesResourceType: "agreement",
-                addFiltersToList: true,
-                av_agreement_statuses,
-                av_agreement_closure_reasons,
-                av_agreement_renewal_priorities,
-                av_user_roles,
-                av_agreement_license_statuses,
-                av_agreement_license_location,
-                av_agreement_relationships,
-                agreement_table_settings,
-                vendors,
-            }),
+                {
+                    name: "max_expiration_date",
+                    type: "date",
+                    label: __("on"),
+                    componentProps: {
+                        disabled: {
+                            resourceProperty: "by_expired",
+                            qualifier: "!",
+                        },
+                    },
+                    value: "",
+                },
+                {
+                    name: "by_mine",
+                    type: "checkbox",
+                    label: __("Show mine only"),
+                    value: false,
+                },
+            ];
         };
-    },
-    data() {
-        const tableFilters = this.getTableFilterFormElements();
-        const defaults = this.getFilterValues(this.$route.query, tableFilters);
 
-        return {
+        const extendedAttributesResourceType = "agreement";
+
+        const baseResource = useBaseResource({
+            resourceName: "agreement",
+            nameAttr: "name",
+            idAttr: "agreement_id",
+            showComponent: "AgreementsShow",
+            listComponent: "AgreementsList",
+            addComponent: "AgreementsFormAdd",
+            editComponent: "AgreementsFormAddEdit",
+            apiClient: APIClient.erm.agreements,
+            resourceTableUrl: APIClient.erm.httpClient._baseURL + "agreements",
+            i18n: {
+                deleteConfirmationMessage: __(
+                    "Are you sure you want to remove this agreement?"
+                ),
+                deleteSuccessMessage: __("Agreement %s deleted"),
+                displayName: __("Agreement"),
+                editLabel: __("Edit agreement #%s"),
+                emptyListMessage: __("There are no agreements defined"),
+                newLabel: __("New agreement"),
+            },
+            embedded: props.embedded,
+            addFiltersToList: true,
+            extendedAttributesResourceType,
             resourceAttrs: [
                 {
-                    name: this.idAttr,
-                    label: this.$__("ID"),
+                    name: "agreement_id",
+                    label: __("ID"),
                     type: "text",
                     hideIn: ["Form", "Show"],
                 },
@@ -147,17 +179,17 @@ export default {
                             {
                                 name: this.$__("Period start"),
                                 value: "started_on",
-                                format: this.format_date,
+                                format: format_date,
                             },
                             {
                                 name: this.$__("Period end"),
                                 value: "ended_on",
-                                format: this.format_date,
+                                format: format_date,
                             },
                             {
                                 name: this.$__("Cancellation deadline"),
                                 value: "cancellation_deadline",
-                                format: this.format_date,
+                                format: format_date,
                             },
                             {
                                 name: this.$__("Notes"),
@@ -240,7 +272,7 @@ export default {
                             {
                                 name: this.$__("Name"),
                                 value: "patron",
-                                format: this.patron_to_html,
+                                format: patron_to_html,
                             },
                             {
                                 name: this.$__("Role"),
@@ -609,6 +641,30 @@ export default {
                     hideIn: ["List"],
                 },
             ],
+            av_agreement_statuses,
+            av_agreement_closure_reasons,
+            av_agreement_renewal_priorities,
+            av_user_roles,
+            av_agreement_license_statuses,
+            av_agreement_license_location,
+            av_agreement_relationships,
+            agreement_table_settings,
+            vendors,
+            tableFilters: getTableFilterFormElements(),
+            props: props,
+        });
+
+        baseResource.created();
+        return {
+            ...baseResource,
+        };
+    },
+    data() {
+        const defaults = this.getFilterValues(
+            this.$route.query,
+            this.tableFilters
+        );
+        return {
             tableOptions: {
                 options: {
                     embed: "user_roles,vendor,extended_attributes,+strings",
@@ -657,7 +713,6 @@ export default {
                     },
                 },
             },
-            tableFilters,
         };
     },
     methods: {
@@ -794,44 +849,6 @@ export default {
                 );
             }
         },
-        getTableFilterFormElements() {
-            return [
-                {
-                    name: "by_expired",
-                    type: "checkbox",
-                    label: this.$__("Filter by expired"),
-                    value: false,
-                    onChange: function (filters) {
-                        if (filters.by_expired) {
-                            filters.max_expiration_date = new Date()
-                                .toISOString()
-                                .substring(0, 10);
-                        } else {
-                            filters.max_expiration_date = "";
-                        }
-                        return filters;
-                    },
-                },
-                {
-                    name: "max_expiration_date",
-                    type: "date",
-                    label: this.$__("on"),
-                    componentProps: {
-                        disabled: {
-                            resourceProperty: "by_expired",
-                            qualifier: "!",
-                        },
-                    },
-                    value: "",
-                },
-                {
-                    name: "by_mine",
-                    type: "checkbox",
-                    label: this.$__("Show mine only"),
-                    value: false,
-                },
-            ];
-        },
         tableUrl(filters) {
             let url = this.getResourceTableUrl();
             if (filters?.by_expired)
@@ -857,5 +874,8 @@ export default {
     },
     emits: ["select-resource"],
     name: "AgreementResource",
+    components: {
+        BaseResource,
+    },
 };
 </script>
