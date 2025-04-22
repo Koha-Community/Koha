@@ -35,6 +35,7 @@ $("#placeBookingModal").on("show.bs.modal", function (e) {
     booking_item_id = button.data("itemnumber");
     let start_date = button.data("start_date");
     let end_date = button.data("end_date");
+    let item_type_id = button.data("item_type_id");
 
     // Get booking id if this is an edit
     booking_id = button.data("booking");
@@ -198,6 +199,7 @@ $("#placeBookingModal").on("show.bs.modal", function (e) {
     });
     function setLocationsPicker(response) {
         let $pickupSelect = $("#pickup_library_id");
+        let $itemTypeSelect = $("#booking_itemtype");
         let bookableItemnumbers = bookable_items.map(function (object) {
             return object.item_id;
         });
@@ -235,6 +237,13 @@ $("#placeBookingModal").on("show.bs.modal", function (e) {
             $pickupSelect.val(pickup_library_id).trigger("change");
         } else {
             $pickupSelect.val(null).trigger("change");
+        }
+
+        // If item_type_id already exists, pre-select
+        if (item_type_id) {
+            $itemTypeSelect.val(item_type_id).trigger("change");
+        } else {
+            $itemTypeSelect.val(null).trigger("change");
         }
     }
 
