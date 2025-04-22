@@ -344,15 +344,15 @@
             [% END %]
             };
             window.identity_provider_domains = $("#identity_provider_domains").kohaTable({
-                "ajax": {
+                ajax: {
                     "url": identity_provider_domains_url
                 },
-                'language': {
-                    'emptyTable': '<div class="alert alert-info">'+_("There are no identity provider domains defined.")+'</div>'
+                language: {
+                    emptyTable: '<div class="alert alert-info">'+_("There are no identity provider domains defined.")+'</div>'
                 },
-                "columnDefs": [ {
-                    "targets": [1],
-                    "render": function (data, type, row, meta) {
+                columnDefs: [ {
+                    targets: [1],
+                    render: function (data, type, row, meta) {
                         if ( type == 'display' ) {
                             if ( data != null ) {
                                 return data.escapeHtml();
@@ -364,12 +364,12 @@
                         return data;
                     }
                 } ],
-                "columns": [
+                columns: [
                     {
-                        "data": "domain",
-                        "searchable": true,
-                        "orderable": true,
-                        "render": function(data, type, row, meta) {
+                        data: "domain",
+                        searchable: true,
+                        orderable: true,
+                        render: function(data, type, row, meta) {
                             if ( data != null ) {
                                 return data.escapeHtml();
                             }
@@ -379,82 +379,82 @@
                         }
                     },
                     {
-                        "data": function( row, type, val, meta ) {
+                        data: function( row, type, val, meta ) {
                             if (row.update_on_auth) {
                                 return _("Yes");
                             } else {
                                 return _("No");
                             }
                         },
-                        "searchable": true,
-                        "orderable": true
+                        searchable: true,
+                        orderable: true
                     },
                     {
-                        "data": function( row, type, val, meta ) {
+                        data: function( row, type, val, meta ) {
                             if (row.auto_register_opac) {
                                 return _("Yes");
                             } else {
                                 return _("No");
                             }
                         },
-                        "searchable": true,
-                        "orderable": true
+                        searchable: true,
+                        orderable: true
                     },
                     {
-                        "data": function( row, type, val, meta ) {
+                        data: function( row, type, val, meta ) {
                             if (row.auto_register_staff) {
                                 return _("Yes");
                             } else {
                                 return _("No");
                             }
                         },
-                        "searchable": true,
-                        "orderable": true
+                        searchable: true,
+                        orderable: true
                     },
                     {
-                        "data": function( row, type, val, meta ) {
+                        data: function( row, type, val, meta ) {
                             return libraries[row.default_library_id] || "";
                         },
-                        "searchable": true,
-                        "orderable": true
+                        searchable: true,
+                        orderable: true
                     },
                     {
-                        "data": function( row, type, val, meta ) {
+                        data: function( row, type, val, meta ) {
                             return categories[row.default_category_id] || "";
                         },
-                        "searchable": true,
-                        "orderable": true
+                        searchable: true,
+                        orderable: true
                     },
                     {
-                        "data": function( row, type, val, meta ) {
+                        data: function( row, type, val, meta ) {
                             if (row.allow_opac) {
                                 return _("Yes");
                             } else {
                                 return _("No");
                             }
                         },
-                        "searchable": true,
-                        "orderable": true
+                        searchable: true,
+                        orderable: true
                     },
                     {
-                        "data": function( row, type, val, meta ) {
+                        data: function( row, type, val, meta ) {
                             if (row.allow_staff) {
                                 return _("Yes");
                             } else {
                                 return _("No");
                             }
                         },
-                        "searchable": true,
-                        "orderable": true
+                        searchable: true,
+                        orderable: true
                     },
                     {
-                        "data": function( row, type, val, meta ) {
+                        data: function( row, type, val, meta ) {
                             var result = '<a class="btn btn-default btn-xs" role="button" href="/cgi-bin/koha/admin/identity_providers.pl?domain_ops=1&amp;identity_provider_id=[%- identity_provider_id | html -%]&amp;op=edit_form&amp;identity_provider_domain_id='+ encodeURIComponent(row.identity_provider_domain_id) +'"><i class="fa-solid fa-pencil" aria-hidden="true"></i> '+_("Edit")+'</a>'+"\n";
                             result += '<a class="btn btn-default btn-xs delete_identity_provider_domain" role="button" href="#" data-bs-toggle="modal" data-bs-target="#delete_confirm_modal" data-auth-provider-domain-id="'+ encodeURIComponent(row.identity_provider_domain_id) +'" data-auth-provider-domain="'+ encodeURIComponent((row.domain || '').escapeHtml()) +'"><i class="fa fa-trash-can" aria-hidden="true"></i> '+_("Delete")+'</a>';
                             return result;
                         },
-                        "searchable": false,
-                        "orderable": false
+                        searchable: false,
+                        orderable: false
                     }
                 ],
                 createdRow: function (row, data, dataIndex) {

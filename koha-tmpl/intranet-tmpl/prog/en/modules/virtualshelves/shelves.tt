@@ -677,25 +677,25 @@
                         }
                     },
                     bKohaAjaxSVC: true,
-                    'columns':[
-                        { "data": 'dt_public' },
-                        { "data": 'dt_shelfname' },
-                        { "data": 'dt_count' },
-                        { "data": 'dt_is_shared' },
-                        { "data": 'dt_owner' },
-                        { "data": 'dt_sortby' },
-                        { "data": 'dt_created_on' },
-                        { "data": 'dt_modification_time' },
-                        { "data": 'dt_action', "orderable": false, "className":  'actions' }
+                    columns: [
+                        { data: 'dt_public' },
+                        { data: 'dt_shelfname' },
+                        { data: 'dt_count' },
+                        { data: 'dt_is_shared' },
+                        { data: 'dt_owner' },
+                        { data: 'dt_sortby' },
+                        { data: 'dt_created_on' },
+                        { data: 'dt_modification_time' },
+                        { data: 'dt_action', orderable: false, className:  'actions' }
                     ],
-                    "columnDefs": [
-                        { "visible": false, "targets": [ 'NoVisible' ] }
+                    columnDefs: [
+                        { visible: false, targets: [ 'NoVisible' ] }
                     ],
-                    "autoWidth": false,
-                    "pagingType": 'full_numbers',
-                    "searching": false,
-                    "processing": true,
-                    "orderCellsTop":  true
+                    autoWidth: false,
+                    pagingType: 'full_numbers',
+                    searching: false,
+                    processing: true,
+                    orderCellsTop: true
                 });
                 _dt_add_delay_filters(dtListResults.api(), $("#listresultst"));
 

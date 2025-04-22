@@ -523,27 +523,27 @@
 
         var cashups_table_url = "/api/v1/cash_registers/[% register.id | html %]/cashups?";
         var cashups_table = $("#table_cashups").kohaTable({
-            "ajax": {
+            ajax: {
                 "url": cashups_table_url
             },
-            "embed": [
+            embed: [
                "manager"
             ],
-            "order": [[ 0, "desc" ]],
-            "columns": [
+            order: [[ 0, "desc" ]],
+            columns: [
                 {
-                    "data": "timestamp",
-                    "searchable": true,
-                    "orderable": true,
-                    "render": function(data, type, row, meta) {
+                    data: "timestamp",
+                    searchable: true,
+                    orderable: true,
+                    render: function(data, type, row, meta) {
                         return $datetime(row.timestamp);
                     }
                 },
                 {
-                    "data": "manager.firstname:manager.surname",
-                    "searchable": true,
-                    "orderable": true,
-                    "render": function(data, type, row, meta) {
+                    data: "manager.firstname:manager.surname",
+                    searchable: true,
+                    orderable: true,
+                    render: function(data, type, row, meta) {
                         var fullname;
                         if ( row.manager.firstname == null ) {
                             fullname = row.manager.surname;
@@ -555,21 +555,21 @@
                     }
                 },
                 {
-                    "data": "amount",
-                    "searchable": true,
-                    "orderable": true,
-                    "render": function(data, type, row, meta) {
+                    data: "amount",
+                    searchable: true,
+                    orderable: true,
+                    render: function(data, type, row, meta) {
                         var amt = row.amount * -1;
                         return escape_price(amt);
                     }
                 },
                 {
-                    "data": function( row, type, val, meta ) {
+                    data: function( row, type, val, meta ) {
                         var result = '<a class="btn btn-default btn-xs" role="button" data-bs-toggle="modal" data-cashup="'+encodeURIComponent(row.cashup_id)+'" data-register="[% register.description | html %]" href="#cashupSummaryModal"><i class="fa-solid fa-pencil" aria-hidden="true"></i> '+_("Summary")+'</a>\n';
                         return result;
                     },
-                    "searchable": false,
-                    "orderable": false
+                    searchable: false,
+                    orderable: false
                 }
             ]
         }, null, 1);

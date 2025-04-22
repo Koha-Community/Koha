@@ -590,7 +590,7 @@
             [% IF closed %]
               var oTable = $("#closed_report").kohaTable({
                 // The following is a c/p from aqbudgets.tt and is a candidate for refactoring.
-                "drawCallback": function ( oSettings ) {
+                drawCallback: function ( oSettings ) {
                     if ( oSettings.aiDisplay.length == 0 )
                     {
                         return;
@@ -616,14 +616,14 @@
                         }
                     }
                 },
-                "columnDefs": [
-                    { "visible": false, "targets": [ 0, 1 ] },
-                    { "orderable": false, "targets": ["_all"] }
+                columnDefs: [
+                    { visible: false, targets: [ 0, 1 ] },
+                    { orderable: false, targets: ["_all"] }
                 ],
-                "ordering": true,
-                "orderFixed": [[ 1, 'asc' ]],
-                "autoWidth": false,
-                "pagingType": "full_numbers"
+                ordering: true,
+                orderFixed: [[ 1, 'asc' ]],
+                autoWidth: false,
+                pagingType: "full_numbers"
               });
             [% END %]
             $("#add_modify_budget").validate({

@@ -1336,10 +1336,10 @@
 
                 var tickets_url = '/api/v1/tickets';
                 var tickets = $("#table_concerns").kohaTable({
-                    "ajax": {
+                    ajax: {
                         "url": tickets_url
                     },
-                    "embed": [
+                    embed: [
                         "assignee",
                         "reporter",
                         "resolver",
@@ -1347,10 +1347,10 @@
                         "updates+count",
                         "+strings"
                     ],
-                    'emptyTable': '<div class="alert alert-info">' + _("Congratulations, there are no catalog concerns.") + '</div>',
-                    "columnDefs": [ {
-                        "targets": [0,1,2,3],
-                        "render": function (data, type, row, meta) {
+                    emptyTable: '<div class="alert alert-info">' + _("Congratulations, there are no catalog concerns.") + '</div>',
+                    columnDefs: [ {
+                        targets: [0,1,2,3],
+                        render: function (data, type, row, meta) {
                             if ( type == 'display' ) {
                                 if ( data != null ) {
                                     return data.escapeHtml();
@@ -1362,10 +1362,10 @@
                             return data;
                         }
                     } ],
-                    "columns": [
+                    columns: [
                         {
-                            "data": "reported_date:reporter.firstname",
-                            "render": function(data, type, row, meta) {
+                            data: "reported_date:reporter.firstname",
+                            render: function(data, type, row, meta) {
                                 let reported = '<div class="d-flex justify-content-between align-items-start">';
                                 reported += '<span class="reporter">' + $patron_to_html(row.reporter, {
                                     display_cardnumber: false,
@@ -1375,12 +1375,12 @@
                                 reported += '</div>';
                                 return reported;
                             },
-                            "searchable": true,
-                            "orderable": true
+                            searchable: true,
+                            orderable: true
                         },
                         {
-                            "data": "title:body",
-                            "render": function(data, type, row, meta) {
+                            data: "title:body",
+                            render: function(data, type, row, meta) {
                                 let result = '<div class="d-flex justify-content-between align-items-start">';
 
                                 // Title link on the left
@@ -1397,22 +1397,22 @@
 
                                 return result;
                             },
-                            "searchable": true,
-                            "orderable": true
+                            searchable: true,
+                            orderable: true
                         },
                         {
-                            "data": "biblio.title",
-                            "render": function(data, type, row, meta) {
+                            data: "biblio.title",
+                            render: function(data, type, row, meta) {
                                 return $biblio_to_html(row.biblio, {
                                     link: 1
                                 });
                             },
-                            "searchable": true,
-                            "orderable": true
+                            searchable: true,
+                            orderable: true
                         },
                         {
-                            "data": "assignee.firstname:assignee.surname:resolver.firstname:resolver.surname:resolved_date:status",
-                            "render": function(data, type, row, meta) {
+                            data: "assignee.firstname:assignee.surname:resolver.firstname:resolver.surname:resolved_date:status",
+                            render: function(data, type, row, meta) {
                                 let result = '';
                                 if (row.resolved_date) {
                                     result += "<div>";
@@ -1447,17 +1447,17 @@
                                 }
                                 return result;
                             },
-                            "searchable": true,
-                            "orderable": true
+                            searchable: true,
+                            orderable: true
                         },
                         {
-                            "data": function(row, type, val, meta) {
+                            data: function(row, type, val, meta) {
                                 let resolved = ( row.resolved_date ) ? true : false;
                                 let result = '<a class="btn btn-default btn-xs main-trigger" role="button" href="#" data-bs-toggle="modal" data-bs-target="#ticketDetailsModal" data-concern="' + encodeURIComponent(row.ticket_id) + '" data-resolved="' + resolved + '" data-assignee="'+$patron_to_html(row.assignee, { display_cardnumber: false, url: false })+'"><i class="fa-solid fa-eye" aria-hidden="true"></i> ' + _("Details") + '</a>';
                                 return result;
                             },
-                            "searchable": false,
-                            "orderable": false
+                            searchable: false,
+                            orderable: false
                         },
                     ]
                 }, table_settings, 0, additional_filters, undefined, external_filter_nodes);

@@ -552,28 +552,28 @@
             var base_query = { "order_id": {"-in": [[% multiple_orders | html %]]}};
             var pending_orders_url = "/api/v1/acquisitions/orders?only_active=1";
             var options = {
-                "ajax": {
+                ajax: {
                     "url": pending_orders_url + "&q=" + encodeURI(JSON.stringify(base_query))
                 },
-                "embed": [
+                embed: [
                     "basket",
                     "biblio.suggestions.suggester",
                     "fund.budget",
                     "items+strings",
                     "creator"
                 ],
-                'dom': 'C<"top pager"ilpfB><"#filter_c">tr<"bottom pager"ip>',
-                "columns": [
+                dom: 'C<"top pager"ilpfB><"#filter_c">tr<"bottom pager"ip>',
+                columns: [
                     {
-                        "data": "order_id",
-                        "searchable": true,
-                        "orderable": true
+                        data: "order_id",
+                        searchable: true,
+                        orderable: true
                     },
                     {
-                        "data": "biblio.title",
-                        "searchable": true,
-                        "orderable": true,
-                        "render": function(data, type, row, meta) {
+                        data: "biblio.title",
+                        searchable: true,
+                        orderable: true,
+                        render: function(data, type, row, meta) {
                             if ( data == null ) {
                                 return "";
                             }
@@ -583,10 +583,10 @@
                         }
                     },
                     {
-                        "data": "biblio.author",
-                        "searchable": true,
-                        "orderable": true,
-                        "render": function(data, type, row, meta) {
+                        data: "biblio.author",
+                        searchable: true,
+                        orderable: true,
+                        render: function(data, type, row, meta) {
                             if ( data == null ) {
                                 return "";
                             }
@@ -596,10 +596,10 @@
                         }
                     },
                     {
-                        "data": "biblio.isbn",
-                        "searchable": true,
-                        "orderable": true,
-                        "render": function(data, type, row, meta) {
+                        data: "biblio.isbn",
+                        searchable: true,
+                        orderable: true,
+                        render: function(data, type, row, meta) {
                             if ( data == null ) {
                                 return "";
                             }
@@ -609,39 +609,39 @@
                         }
                     },
                     {
-                        "searchable": false,
-                        "orderable": false,
-                        "data": function(row, type, val, meta) {
+                        searchable: false,
+                        orderable: false,
+                        data: function(row, type, val, meta) {
                             return $date(row.date_received||new Date().toISOString());
                         }
                     },
                     {
-                        "data": "fund.name",
-                        "searchable": true,
-                        "orderable": false,
-                        "render": function(data, type, row, meta) {
+                        data: "fund.name",
+                        searchable: true,
+                        orderable: false,
+                        render: function(data, type, row, meta) {
                             return row.fund.budget.budget_period_description+" - "+row.fund.name;
                         }
                     },
                     {
-                        "searchable": false,
-                        "orderable": true,
-                        "data": "quantity_received",
-                        "render": function(data, type, row, meta) {
+                        searchable: false,
+                        orderable: true,
+                        data: "quantity_received",
+                        render: function(data, type, row, meta) {
                             var data = $("#order_edit").data();
                             return QTY_TOTAL.format(row.subscription_id&&(!data.saved||!data.saved.hasOwnProperty(row.order_id))?row.quantity:row.quantity_received, row.quantity);
                         }
                     },
                     {
-                        "searchable": false,
-                        "orderable": false,
-                        "render": function(data, type, row, meta) {
+                        searchable: false,
+                        orderable: false,
+                        render: function(data, type, row, meta) {
                             return '<a class="btn btn-default btn-xs order_edit_toggle" data-bs-toggle="modal" href="#order_edit" data-row="'+meta.row+'" role="button"><i class="fa fa-pencil" aria-hidden="true"></i> '+EDIT+'</a>';
                         }
                     }
                 ],
                 [% IF only_one_order %]
-                    "drawCallback": function( settings ) {
+                    drawCallback: function( settings ) {
                         $("#order_edit").modal("show");
                     },
                 [% END %]
@@ -1017,20 +1017,20 @@
                 var base_query = { "subscription_id": row.subscription_id, "parent_order_id": row.order_id, "order_id": {"!=": row.order_id}};
                 var pending_orders_url = "/api/v1/acquisitions/orders";
                 var options = {
-                    "ajax": {
+                    ajax: {
                         "url": pending_orders_url + "?q=" + encodeURI(JSON.stringify(base_query))
                     },
-                    "embed": [
+                    embed: [
                         "invoice",
                         "basket"
                     ],
-                    "order": [[1, 'asc']],
-                    'dom': 'C<"top pager"ilpfB>tr<"bottom pager"ip>',
-                    "columns": [
+                    order: [[1, 'asc']],
+                    dom: 'C<"top pager"ilpfB>tr<"bottom pager"ip>',
+                    columns: [
                         {
-                            "searchable": false,
-                            "orderable": false,
-                            "data": function(row, type, val, meta) {
+                            searchable: false,
+                            orderable: false,
+                            data: function(row, type, val, meta) {
                                 if(row.invoice) {
                                     if(CAN_user_acquisition) {
                                         return '<a href="/cgi-bin/koha/acqui/invoice.pl?invoiceid='+row.invoice_id+'" title="Invoice detail page">'+row.invoice.invoice_number+"</a>";
@@ -1040,53 +1040,53 @@
                             }
                         },
                         {
-                            "data": "order_id",
-                            "searchable": false,
-                            "orderable": false
+                            data: "order_id",
+                            searchable: false,
+                            orderable: false
                         },
                         {
-                            "searchable": false,
-                            "orderable": false,
-                            "data": "basket.creation_date",
-                            "render": function(data, type, row, meta) {
+                            searchable: false,
+                            orderable: false,
+                            data: "basket.creation_date",
+                            render: function(data, type, row, meta) {
                                 return $date(row.basket.creation_date);
                             }
                         },
                         {
-                            "searchable": false,
-                            "orderable": false,
-                            "data": function(row, type, val, meta) {
+                            searchable: false,
+                            orderable: false,
+                            data: function(row, type, val, meta) {
                                 return $date(row.date_received);
                             }
                         },
                         {
-                            "searchable": false,
-                            "orderable": false,
-                            "data": function(row, type, val, meta) {
+                            searchable: false,
+                            orderable: false,
+                            data: function(row, type, val, meta) {
                                 return row.quantity_received;
                             }
                         },
                         {
-                            "searchable": false,
-                            "orderable": true,
-                            "data": function(row, type, val, meta) {
+                            searchable: false,
+                            orderable: true,
+                            data: function(row, type, val, meta) {
                                 if(!row.status) return;
                                 var first_letter = row.status[0].toUpperCase();
                                 return first_letter+row.status.substr(1).toLowerCase();
                             }
                         },
                         {
-                            "searchable": false,
-                            "orderable": false,
-                            "data": function(row, type, val, meta) {
+                            searchable: false,
+                            orderable: false,
+                            data: function(row, type, val, meta) {
                                 if(!row.date_received) return;
                                 return Number(row.unit_price_tax_excluded * row.quantity_received).format_price()+' / '+Number(row.unit_price_tax_included * row.quantity_received).format_price()
                             }
                         },
                         {
-                            "searchable": false,
-                            "orderable": false,
-                            "data": function(row, type, val, meta) {
+                            searchable: false,
+                            orderable: false,
+                            data: function(row, type, val, meta) {
                                 return row.internal_note;
                             }
                         }

@@ -336,37 +336,36 @@
         $(document).ready(function() {
             const sale_table = document.getElementById('sale');
             const sale_kohaTable = $("#sale").kohaTable({
-                "paginate": false,
-                "searching": false,
-                "info": false,
-                "columnDefs": [{
+                paging: false,
+                searching: false,
+                info: false,
+                columnDefs: [{
                     "targets": [-2],
                     "orderable": false,
                     "searchable":  false,
                 }, {
-                    "targets": [-3],
-                    "render": function ( data, type, full ) {
+                    targets: [-3],
+                    render: function ( data, type, full ) {
                         var price = Number.parseFloat(data);
                         return price.format_price();
                     }
                 }, {
-                    "targets": [-5],
-                    "className":  "editable",
+                    targets: [-5],
+                    className:  "editable",
                 }, {
-                    "targets": [-4],
-                    "className":  "editable_int",
+                    targets: [-4],
+                    className:  "editable_int",
                 }, {
-                    "targets": [-1],
-                    "visible": false,
-                    "searchable": false
+                    targets: [-1],
+                    visible: false,
+                    searchable: false
                 }],
-                "order": [],
-                "rowCallback": function( row, data ) {
+                rowCallback: function( row, data ) {
                     const total = data[1] * data[2];
                     data[3] = total;
                     sale_kohaTable.api().cell(row, 3).invalidate();
                 },
-                "footerCallback": function(tfoot, data, start, end, display) {
+                footerCallback: function(tfoot, data, start, end, display) {
                     let total_price = 0;
 
                     // Loop through the data to calculate the total
@@ -383,7 +382,7 @@
                     // Update a related element and trigger change
                     $('#paid').val(total_price).trigger('change');
                 },
-                "autoWidth": false
+                autoWidth: false
             });
 
             $("#sale").on("click", "button.drop", function(){

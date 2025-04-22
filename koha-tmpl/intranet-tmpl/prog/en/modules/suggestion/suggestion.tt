@@ -1329,7 +1329,7 @@
                         let tabSuggestionData = suggestionData.find(s => s.suggestiontype === `${tabName}`)
                         $("#table_" + tabName).kohaTable(
                             {
-                                sorting: [[4, "asc"]],
+                                order: [[4, "asc"]],
                                 autoWidth: false,
                                 ajax: {
                                     url: "/api/v1/suggestions?q=" + JSON.stringify(tabSuggestionData.search_params),

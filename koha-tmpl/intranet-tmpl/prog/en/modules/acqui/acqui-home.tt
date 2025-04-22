@@ -213,7 +213,7 @@
             $(document).ready(function() {
                 var table_settings = [% TablesSettings.GetTableSettings( 'acqui', 'acq_acqui-home', 'accounts', 'json' ) | $raw %];
                 var oTable = $("#accounts").kohaTable({
-                    "drawCallback": function ( oSettings ) {
+                    drawCallback: function ( oSettings ) {
                         if ( oSettings.aiDisplay.length == 0 )
                         {
                             return;
@@ -239,17 +239,17 @@
                             }
                         }
                     },
-                    "footerCallback": function ( row, data, start, end, display ) {
+                    footerCallback: function ( row, data, start, end, display ) {
                         var api = this.api(), data;
                         footer_column_sum( api, [ 6, 7, 8, 9 ] );
                     },
-                    "columnDefs": [
+                    columnDefs: [
                         { "orderable": false, "targets": ["_all"] }
                     ],
-                    "ordering": true,
-                    "orderFixed": [[ 1, 'asc' ]],
-                    "paging": false,
-                    "autoWidth": false
+                    ordering: true,
+                    orderFixed: [[ 1, 'asc' ]],
+                    paging: false,
+                    autoWidth: false
                 }, table_settings );
                 let table_dt = oTable.DataTable();
 

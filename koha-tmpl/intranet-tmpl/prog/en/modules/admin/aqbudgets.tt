@@ -680,7 +680,7 @@
             $(document).ready(function() {
                 [% IF budgets %]
                     var oTable = $("#budgeth").kohaTable({
-                        "drawCallback": function ( oSettings ) {
+                        drawCallback: function ( oSettings ) {
                             if ( oSettings.aiDisplay.length == 0 )
                             {
                                 return;
@@ -706,18 +706,18 @@
                                 }
                             }
                         },
-                        "footerCallback": function ( row, data, start, end, display ) {
+                        footerCallback: function ( row, data, start, end, display ) {
                             var api = this.api(), data;
                             footer_column_sum( api, [ 4, 6, 8, 10 ], 2 );
                         },
-                        "columnDefs": [
-                            { "visible": false, "targets": [ 0, 1 ] },
-                            { "orderable": false, "targets": ["_all"] }
+                        columnDefs: [
+                            { visible: false, targets: [ 0, 1 ] },
+                            { orderable: false, targets: ["_all"] }
                         ],
-                        "ordering": true,
-                        "orderFixed": [[ 1, 'asc' ]],
-                        "paging": false,
-                        "autoWidth": false
+                        ordering: true,
+                        orderFixed: [[ 1, 'asc' ]],
+                        paging: false,
+                        autoWidth: false
                     });
                     let table_dt = oTable.DataTable();
 

@@ -324,15 +324,15 @@
 
             var smtp_servers_url = '/api/v1/config/smtp_servers';
             window.smtp_servers = $("#smtp_servers").kohaTable({
-                "ajax": {
+                ajax: {
                     "url": smtp_servers_url
                 },
                 'language': {
-                    'emptyTable': '<div class="alert alert-info">'+_("There are no SMTP servers defined.")+'</div>'
+                    emptyTable: '<div class="alert alert-info">'+_("There are no SMTP servers defined.")+'</div>'
                 },
-                "columnDefs": [ {
-                    "targets": [0,1],
-                    "render": function (data, type, row, meta) {
+                columnDefs: [ {
+                    targets: [0,1],
+                    render: function (data, type, row, meta) {
                         if ( type == 'display' ) {
                             if ( data != null ) {
                                 return data.escapeHtml();
@@ -344,30 +344,30 @@
                         return data;
                     }
                 } ],
-                "columns": [
+                columns: [
                     {
-                        "data": "name",
-                        "searchable": true,
-                        "orderable": true
+                        data: "name",
+                        searchable: true,
+                        orderable: true
                     },
                     {
-                        "data": "host",
-                        "searchable": true,
-                        "orderable": true
+                        data: "host",
+                        searchable: true,
+                        orderable: true
                     },
                     {
-                        "data": "port",
-                        "searchable": true,
-                        "orderable": false
+                        data: "port",
+                        searchable: true,
+                        orderable: false
                     },
                     {
-                        "data": "timeout",
-                        "searchable": true,
-                        "orderable": false
+                        data: "timeout",
+                        searchable: true,
+                        orderable: false
                     },
                     {
-                        "data": "ssl_mode",
-                        "render": function (data, type, row, meta) {
+                        data: "ssl_mode",
+                        render: function (data, type, row, meta) {
                             if (data == 'disabled') {
                                 return _("Disabled");
                             }
@@ -378,11 +378,11 @@
                                 return _("STARTTLS");
                             }
                         },
-                        "searchable": false,
-                        "orderable": false
+                        searchable: false,
+                        orderable: false
                     },
                     {
-                        "data": function( row, type, val, meta ) {
+                        data: function( row, type, val, meta ) {
                             if ( row.user_name != null ) {
                                 return _("Yes");
                             }
@@ -390,11 +390,11 @@
                                 return _("No");
                             }
                         },
-                        "searchable": false,
-                        "orderable": false
+                        searchable: false,
+                        orderable: false
                     },
                     {
-                        "data": function( row, type, val, meta ) {
+                        data: function( row, type, val, meta ) {
                             if ( row.debug ) {
                                 let result = '<span class="badge text-bg-warning">' + "[% tp("Active", "On") | html %]" + '</span>';
                                 return result;
@@ -403,11 +403,11 @@
                                 return _("");
                             }
                         },
-                        "searchable": false,
-                        "orderable": false
+                        searchable: false,
+                        orderable: false
                     },
                     {
-                        "data": function( row, type, val, meta ) {
+                        data: function( row, type, val, meta ) {
                             if ( row.is_default ) {
                                 let result = '<span class="badge text-bg-success">' + _("Default") + '</span>';
                                 return result;
@@ -415,17 +415,17 @@
                                 return "";
                             }
                         },
-                        "searchable": false,
-                        "orderable": false
+                        searchable: false,
+                        orderable: false
                     },
                     {
-                        "data": function( row, type, val, meta ) {
+                        data: function( row, type, val, meta ) {
                             var result = '<a class="btn btn-default btn-xs" role="button" href="/cgi-bin/koha/admin/smtp_servers.pl?op=edit_form&amp;smtp_server_id='+ encodeURIComponent(row.smtp_server_id) +'"><i class="fa-solid fa-pencil" aria-hidden="true"></i> '+_("Edit")+'</a>'+"\n";
                             result += '<a class="btn btn-default btn-xs delete_server" role="button" href="#" data-bs-toggle="modal" data-bs-target="#delete_confirm_modal" data-smtp-server-id="'+ encodeURIComponent(row.smtp_server_id) +'" data-smtp-server-name="'+ encodeURIComponent(row.name.escapeHtml()) +'"><i class="fa fa-trash-can" aria-hidden="true"></i> '+_("Delete")+'</a>';
                             return result;
                         },
-                        "searchable": false,
-                        "orderable": false
+                        searchable: false,
+                        orderable: false
                     }
                 ],
             });

@@ -668,11 +668,11 @@
 
             var table_settings = [% TablesSettings.GetTableSettings( 'catalogue', 'itemsearch', 'results', 'json' ) | $raw %];
             $('#item_search').kohaTable( {
-                "bKohaColumnsUseNames": true,
-                "destroy": true,
-                "serverSide": true,
-                "processing": true,
-                "ajax": {
+                bKohaColumnsUseNames: true,
+                destroy: true,
+                serverSide: true,
+                processing: true,
+                ajax: {
                     url: '/cgi-bin/koha/catalogue/itemsearch.pl',
                     data: function ( d ) {
                         for (i in params) {
@@ -688,9 +688,9 @@
                     }
                 },
                 bKohaAjaxSVC: true,
-                'dom': 'C<"top pager"ilpB>tr<"bottom pager"ip>',
-                'order': [[1, 'asc']],
-                'columns': [
+                dom: 'C<"top pager"ilpB>tr<"bottom pager"ip>',
+                order: [[1, 'asc']],
+                columns: [
                     { 'name': 'checkbox', 'orderable': false, searchable: false, },
                     { 'name': 'title' },
                     { 'name': 'publicationyear' },
@@ -715,8 +715,8 @@
                     { 'name': 'date_due' },
                     { 'name': 'actions', 'orderable': false, searchable: false, }
                 ],
-                "pagingType": "full_numbers",
-                "drawCallback": function( settings ) {
+                pagingType: "full_numbers",
+                drawCallback: function( settings ) {
                     prepSelections();
                 },
                 fixedHeader: false // There is a bug on this view

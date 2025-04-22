@@ -474,7 +474,7 @@
                     dTables.each(function(){
                         var thIndex = $(this).find("th.psort").index();
                         $(this).kohaTable({
-                            sorting: [[thIndex, "asc"]],
+                            order: [[thIndex, "asc"]],
                             dom: '<"top"<"table_entries"><"table_controls"f>>t<"clear">',
                             columnDefs: [
                                 { targets: ["noshow"], visible: false, searchable: false },

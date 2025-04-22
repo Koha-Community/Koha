@@ -472,9 +472,9 @@
                 [% SET embed = ['extended_attributes','library'] %]
                 let table_node = $("#[% table_id | html %]");
                 patrons_table = table_node.kohaTable({
-                    "ajax": {
-                        "url": patron_search_url,
-                        "dataSrc": function ( json ) {
+                    ajax: {
+                        url: patron_search_url,
+                        dataSrc: function ( json ) {
                             [% IF redirect_if_one_result %]
                                 // redirect if there is only 1 result.
                                 // Do not redirect if state has been loaded
@@ -492,7 +492,7 @@
                         }
                     },
                     [% IF open_on_row_click OR preview_on_name_click OR remember_selections %]
-                    "drawCallback": function( settings ) {
+                    drawCallback: function( settings ) {
                         var api = this.api();
                         var data = api.data();
                         if ( data.length == 0 ) return;
@@ -516,8 +516,8 @@
                         [% END %]
                     },
                     [% END %]
-                    "deferLoading": defer_loading,
-                    "columns": [
+                    deferLoading: defer_loading,
+                    columns: [
                         [% FOR column IN columns %]
                             [% IF default_sort_column == column %]
                                 [% order_column_index = loop.count - 1%]
@@ -525,19 +525,19 @@
                             [% SWITCH column %]
                                 [% CASE 'checkbox' %]
                                 {
-                                    "data": "patron_id",
-                                    "searchable": false,
-                                    "orderable": false,
-                                    "render": function( data, type, row, meta ) {
+                                    data: "patron_id",
+                                    searchable: false,
+                                    orderable: false,
+                                    render: function( data, type, row, meta ) {
                                         return "<label for='check" + data + "' class='content_hidden'>" + _("Select patron") + "</label><input type='checkbox' class='check" + data + " selection' name='borrowernumber' value='" + data + "' />";
                                     }
                                 }
                                 [% CASE 'cardnumber' %]
                                 {
-                                    "data": "cardnumber",
-                                    "searchable": true,
-                                    "orderable": true,
-                                    "render": function( data, type, row, meta ) {
+                                    data: "cardnumber",
+                                    searchable: true,
+                                    orderable: true,
+                                    render: function( data, type, row, meta ) {
                                         let patron_id = encodeURIComponent(row.patron_id);
                                         [% IF !open_on_row_click AND CAN_user_circulate_circulate_remaining_permissions %]
                                             return "<a href=\"/cgi-bin/koha/circ/circulation.pl?borrowernumber=" + patron_id + "\" title=\"[% I18N.t("Check out") | html %]\" class=\"patron_name\" data-borrowernumber=\"" + patron_id + "\" style=\"white-space:nowrap\">" + escape_str(data) + "</a>";
@@ -549,20 +549,20 @@
                                 }
                                 [% CASE 'dateofbirth' %]
                                 {
-                                    "data": "date_of_birth",
-                                    "type": "date",
-                                    "searchable": true,
-                                    "orderable": true,
-                                    "render": function( data, type, row, meta ) {
+                                    data: "date_of_birth",
+                                    type:  "date",
+                                    searchable: true,
+                                    orderable: true,
+                                    render: function( data, type, row, meta ) {
                                         return data ? "<span class=\"dateofbirth\">" + escape_str($date(data)) + "<span class=\"agehint\"> (" + _("%s years").format($get_age(data)) + ")</span></span>" : "";
                                     }
                                 }
                                 [% CASE 'address' %]
                                 {
-                                    "data": "me.street_number:me.address:me.address2:me.city:me.state:me.postal_code:me.country",
-                                    "searchable": true,
-                                    "orderable": true,
-                                     "render": function( data, type, row, meta ) {
+                                    data: "me.street_number:me.address:me.address2:me.city:me.state:me.postal_code:me.country",
+                                    searchable: true,
+                                    orderable: true,
+                                     render: function( data, type, row, meta ) {
                                         let r = '<div class="address"><ul>';
                                         r += $format_address(row, { no_line_break: true, include_li: true });
                                         r += '</div></ul>';
@@ -571,10 +571,10 @@
                                 }
                                 [% CASE 'address-library' %]
                                 {
-                                    "data": "me.street_number:me.address:me.address2:me.city:me.state:me.postal_code:me.country",
-                                    "searchable": true,
-                                    "orderable": true,
-                                    "render": function( data, type, row, meta ) {
+                                    data: "me.street_number:me.address:me.address2:me.city:me.state:me.postal_code:me.country",
+                                    searchable: true,
+                                    orderable: true,
+                                    render: function( data, type, row, meta ) {
                                         let r = '<div class="address"><ul>';
                                         r += $format_address(row, { no_line_break: true, include_li: true });
                                         r += '</div></ul>';
@@ -584,10 +584,10 @@
                                 }
                                 [% CASE 'name-address' %]
                                 {
-                                    "data": "me.surname:me.preferred_name:me.firstname:me.middle_name:me.othernames:me.street_number:me.address:me.address2:me.city:me.state:me.postal_code:me.country",
-                                    "searchable": true,
-                                    "orderable": true,
-                                    "render": function( data, type, row, meta ) {
+                                    data: "me.surname:me.preferred_name:me.firstname:me.middle_name:me.othernames:me.street_number:me.address:me.address2:me.city:me.state:me.postal_code:me.country",
+                                    searchable: true,
+                                    orderable: true,
+                                    render: function( data, type, row, meta ) {
                                         let patron_id = encodeURIComponent(row.patron_id);
                                         let r = '';
                                         [% IF ! open_on_row_click %]
@@ -610,10 +610,10 @@
                                 }
                                 [% CASE 'name' %]
                                 {
-                                    "data": "me.surname:me.preferred_name:me.firstname:me.middle_name:me.othernames",
-                                    "searchable": true,
-                                    "orderable": true,
-                                    "render": function( data, type, row, meta ) {
+                                    data: "me.surname:me.preferred_name:me.firstname:me.middle_name:me.othernames",
+                                    searchable: true,
+                                    orderable: true,
+                                    render: function( data, type, row, meta ) {
                                         let patron_id = encodeURIComponent(row.patron_id);
                                         [% IF ! open_on_row_click %]
                                         return "<a href=\"/cgi-bin/koha/members/moremember.pl?borrowernumber=" + patron_id + "\" class=\"patron_name\" data-borrowernumber=\"" + patron_id + "\" style=\"white-space:nowrap\">" + $patron_to_html(row, { invert_name: 1 }) + "</a>";
@@ -650,36 +650,36 @@
                                 }
                                 [% CASE 'dateexpiry' %]
                                 {
-                                    "data": "expiry_date",
-                                    "type": "date",
-                                    "searchable": true,
-                                    "orderable": true,
-                                    "render": function( data, type, row, meta ) {
+                                    data: "expiry_date",
+                                    type:  "date",
+                                    searchable: true,
+                                    orderable: true,
+                                    render: function( data, type, row, meta ) {
                                         return "<span class=\"dateexpiry" + (new Date(data) < new Date() ? ' expired' : '') + "\">" + (data ? escape_str($date(data)) : '') + "</span>";
                                     }
                                 }
                                 [% CASE 'borrowernotes' %]
                                 {
-                                    "data": "staff_notes",
-                                    "searchable": true,
-                                    "orderable": true,
+                                    data: "staff_notes",
+                                    searchable: true,
+                                    orderable: true,
                                     [%# We don't escape here, we allow html tag in staff notes %]
                                 }
                                 [% CASE 'phone' %]
                                 {
-                                    "data": "phone",
-                                    "searchable": true,
-                                    "orderable": true,
-                                    "render": function( data, type, row, meta ) {
+                                    data: "phone",
+                                    searchable: true,
+                                    orderable: true,
+                                    render: function( data, type, row, meta ) {
                                         return escape_str(data);
                                     }
                                 }
                                 [% CASE 'checkouts' %][% embed.push('checkouts+count', 'overdues+count') %]
                                 {
-                                    "data": "",
-                                    "searchable": false,
-                                    "orderable": false,
-                                    "render": function( data, type, row, meta ) {
+                                    data: "",
+                                    searchable: false,
+                                    orderable: false,
+                                    render: function( data, type, row, meta ) {
                                         if ( row.overdues_count ) {
                                             return "<span class='overdue'><strong>"+row.overdues_count + "</strong></span>" + " / " + row.checkouts_count;
                                         } else {
@@ -689,10 +689,10 @@
                                 }
                                 [% CASE 'account_balance' %][% embed.push('account_balance') %]
                                 {
-                                    "data": "",
-                                    "searchable": false,
-                                    "orderable": false,
-                                    "render": function( data, type, row, meta ) {
+                                    data: "",
+                                    searchable: false,
+                                    orderable: false,
+                                    render: function( data, type, row, meta ) {
                                         let r = "<span style='text-align: right; display: block;'><a href=\"/cgi-bin/koha/members/boraccount.pl?borrowernumber="+row.patron_id+"\">";
                                         let balance_str = row.account_balance || 0;
                                         balance_str = balance_str.escapeHtml().format_price();
@@ -743,7 +743,7 @@
 
                                 [% CASE 'action' %]
                                 {
-                                    "data": function( row, type, val, meta ) {
+                                    data: function( row, type, val, meta ) {
 
                                         let patron_id = encodeURIComponent(row.patron_id);
                                         let action_node = "";
@@ -771,21 +771,21 @@
 
                                         return action_node;
                                     },
-                                    "searchable": false,
-                                    "orderable": false
+                                    searchable: false,
+                                    orderable: false
                                 }
                             [% END %]
                             [% UNLESS loop.last %],[% END %]
                         [% END %]
                     ],
-                    'embed': [% To.json(embed) | $raw %],
-                    "order": [[ [% order_column_index | html %], "asc" ]],
-                    "autoWidth": false,
-                    'lengthMenu': [aLengthMenu, aLengthMenuLabel],
-                    "pagingType": 'full_numbers',
-                    "pageLength": [% Koha.Preference('PatronsPerPage') | html %],
+                    embed: [% To.json(embed) | $raw %],
+                    order: [[ [% order_column_index | html %], "asc" ]],
+                    autoWidth: false,
+                    lengthMenu: [aLengthMenu, aLengthMenuLabel],
+                    pagingType: 'full_numbers',
+                    pageLength: [% Koha.Preference('PatronsPerPage') | html %],
                     [% IF sticky_header %]
-                        "initComplete": function(settings, json) {
+                        initComplete: function(settings, json) {
                             $("#[% sticky_header | html %]").show();
                         },
                     [% END %]

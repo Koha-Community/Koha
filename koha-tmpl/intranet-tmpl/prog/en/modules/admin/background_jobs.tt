@@ -262,74 +262,74 @@
             }
 
             let jobs_table = $("#table_jobs").kohaTable({
-                "ajax": {
+                ajax: {
                     "url": "/api/v1/jobs?" + only_current_filter()
                 },
-                "order": [[ 4, "desc" ]],
-                "columns": [
+                order: [[ 4, "desc" ]],
+                columns: [
                     {
-                        "data": "job_id",
-                        "searchable": true,
-                        "orderable": true
+                        data: "job_id",
+                        searchable: true,
+                        orderable: true
                     },
                     {
-                        "data": "status",
-                        "searchable": true,
-                        "orderable": true,
-                        "render": function(data, type, row, meta) {
+                        data: "status",
+                        searchable: true,
+                        orderable: true,
+                        render: function(data, type, row, meta) {
                             return get_job_status(row.status).escapeHtml();
                         }
                     },
                     {
-                        "data": "progress,size",
-                        "searchable": false,
-                        "orderable": true,
-                        "render": function(data, type, row, meta) {
+                        data: "progress,size",
+                        searchable: false,
+                        orderable: true,
+                        render: function(data, type, row, meta) {
                             return "%s/%s".format(row.progress, row.size).escapeHtml();
                         }
                     },
                     {
-                        "data": "type",
-                        "searchable": true,
-                        "orderable": true,
-                        "render": function(data, type, row, meta) {
+                        data: "type",
+                        searchable: true,
+                        orderable: true,
+                        render: function(data, type, row, meta) {
                             return get_job_type(row.type);
                         }
                     },
                     {
-                        "data": "enqueued_date",
-                        "searchable": true,
-                        "orderable": true,
-                        "render": function(data, type, row, meta) {
+                        data: "enqueued_date",
+                        searchable: true,
+                        orderable: true,
+                        render: function(data, type, row, meta) {
                             return $datetime(row.enqueued_date);
                         }
                     },
                     {
-                        "data": "started_date",
-                        "searchable": true,
-                        "orderable": true,
-                        "render": function(data, type, row, meta) {
+                        data: "started_date",
+                        searchable: true,
+                        orderable: true,
+                        render: function(data, type, row, meta) {
                             return $datetime(row.started_date);
                         }
                     },
                     {
-                        "data": "ended_date",
-                        "searchable": true,
-                        "orderable": true,
-                        "render": function(data, type, row, meta) {
+                        data: "ended_date",
+                        searchable: true,
+                        orderable: true,
+                        render: function(data, type, row, meta) {
                             return $datetime(row.ended_date);
                         }
                     },
                     {
-                        "data": function( row, type, val, meta ) {
+                        data: function( row, type, val, meta ) {
                             var result = '<a class="btn btn-default btn-xs" role="button" href="/cgi-bin/koha/admin/background_jobs.pl?op=view&amp;id='+ encodeURIComponent(row.job_id) +'"><i class="fa-solid fa-eye aria-hidden="true"></i> '+_("View")+'</a>'+"\n";
                             if ( row.status == 'new' || row.status == 'started' ) {
                                 result += '<a class="btn btn-default btn-xs submit-form-link" role="button" href="#" data-action="/cgi-bin/koha/admin/background_jobs.pl" data-method="post" data-op="cud-cancel" data-confirmation-msg="[% t('Are you sure you want to cancel this job?') | html %]" data-id="'+ encodeURIComponent(row.job_id) +'"><i class="fa fa-trash-can" aria-hidden="true"></i> '+_("Cancel")+'</a>';
                             }
                             return result;
                         },
-                        "searchable": false,
-                        "orderable": false
+                        searchable: false,
+                        orderable: false
                     }
                 ]
             }, null, 1);

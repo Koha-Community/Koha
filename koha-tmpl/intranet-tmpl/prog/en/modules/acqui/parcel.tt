@@ -396,10 +396,10 @@
             }
 
             var options = {
-                "ajax": {
+                ajax: {
                     "url": '/api/v1/acquisitions/orders?only_active=1'
                 },
-                "embed": [
+                embed: [
                     "basket.basket_group",
                     "biblio.uncancelled_orders+count",
                     "biblio.holds+count",
@@ -409,18 +409,18 @@
                     "current_item_level_holds+count",
                     "items"
                 ],
-                "columns": [
-                    { "data": "basket.name",
-                      "searchable": true,
-                      "orderable": true,
-                      "render": function(data, type, row, meta) {
+                columns: [
+                    { data: "basket.name",
+                      searchable: true,
+                      orderable: true,
+                      render: function(data, type, row, meta) {
                         if (type != 'display') return escape_str(data);
                         return "<a href=\"/cgi-bin/koha/acqui/basket.pl?basketno=" + encodeURIComponent(row.basket.basket_id) + "\">" + escape_str(data) + " (" + escape_str(row.basket.basket_id) + ")</a>";
                       }
                     },
-                    { "data": "basket.basket_group.name",
-                      "orderable": true,
-                      "render": function(data, type, row, meta) {
+                    { data: "basket.basket_group.name",
+                      orderable: true,
+                      render: function(data, type, row, meta) {
                         if ( type != 'display' ) {
                             return escape_str(data);
                         }
@@ -436,8 +436,8 @@
                       }
                     },
                     {
-                        "data": "order_id",
-                        "render": function(data, type, row, meta) {
+                        data: "order_id",
+                        render: function(data, type, row, meta) {
                             if (type != 'display') return escape_str(data);
                             return "<a href=\"neworderempty.pl?ordernumber="+encodeURIComponent(data)+"&amp;booksellerid="+encodeURIComponent(row.basket.vendor_id)+"\">"+escape_str(data)+"</a>";
                         }
@@ -445,8 +445,8 @@
                     {
                         [% SET summary_fields = "biblio.title:biblio.author:biblio.isbn:biblio.publisher:me.internal_note:me.vendor_note" %]
                         [% IF Koha.Preference('marcflavour')=='UNIMARC' %][% SET summary_fields = summary_fields _ ":biblio.ean" %][% END %]
-                        "data": "[% summary_fields | html %]",
-                        "render": function(data, type, row, meta) {
+                        data: "[% summary_fields | html %]",
+                        render: function(data, type, row, meta) {
                             var result = '';
                             if ( row && row.biblio_id != null ) {
                                 result = "<p><a href=\"/cgi-bin/koha/catalogue/detail.pl?biblionumber="+encodeURIComponent(row.biblio_id)+"\">"+escape_str(row.biblio.title)+"</a>";
@@ -520,11 +520,11 @@
 
                             return result;
                         },
-                        "orderable": true,
+                        orderable: true,
                     },
                     {
-                        "data": "",
-                        "render": function(data, type, row, meta) {
+                        data: "",
+                        render: function(data, type, row, meta) {
                             var result = '<div class="btn-group dropup">';
 
                             result += '<button id="view' + row.order_id + '" type="button" class="btn btn-default btn-xs">' + _("View") + '</button>';
@@ -538,55 +538,55 @@
                             result += '</div>';
                             return result;
                         },
-                        "orderable": false,
-                        "searchable": false
+                        orderable: false,
+                        searchable: false
                     },
                     {
-                        "data": "replacement_price",
-                        "render": function(data, type, row, meta) {
+                        data: "replacement_price",
+                        render: function(data, type, row, meta) {
                             return escape_price(row.replacement_price);
                         },
                     },
                     {
-                        "data": "quantity",
-                        "orderable": true
+                        data: "quantity",
+                        orderable: true
                     },
                     {
-                        "data": "ecost",
-                        "render": function(data, type, row, meta) {
+                        data: "ecost",
+                        render: function(data, type, row, meta) {
                             return escape_price(row.ecost);
                         },
                     },
                     {
-                        "data": "",
-                        "render": function(data, type, row, meta) {
+                        data: "",
+                        render: function(data, type, row, meta) {
                             return escape_price(row.quantity * row.ecost);
                         },
-                        "orderable": false, // FIXME: How can we do it in DBIC?
-                        "searchable": false
+                        orderable: false, // FIXME: How can we do it in DBIC?
+                        searchable: false
                     },
                     {
-                        "data": "fund.name",
-                        "render": function(data, type, row, meta) {
+                        data: "fund.name",
+                        render: function(data, type, row, meta) {
                             if (type != 'display') return escape_str(data);
                             return escape_str(row.fund.name);
                         }
                     },
                     {
-                        "data": "",
-                        "render": function(data, type, row, meta) {
+                        data: "",
+                        render: function(data, type, row, meta) {
                             return '<a href="orderreceive.pl?multiple_orders='
                                     + encodeURIComponent(row.order_id) + '&amp;invoiceid=[% invoiceid | uri %]' + '">'
                                     + _("Receive") + '</a><br/>'
                                     + '<a href="#" onclick="transfer_order_popup(' + escape_str(row.order_id) + '); return false;">'
                                     + _("Transfer") + '</a>';
                         },
-                        "orderable": false,
-                        "searchable": false
+                        orderable: false,
+                        searchable: false
                     },
                     {
-                        "data": "",
-                        "render": function(data, type, row, meta) {
+                        data: "",
+                        render: function(data, type, row, meta) {
                             var result = "";
 
                             if ( row.current_holds_count > 0 ) {
@@ -644,8 +644,8 @@
 
                             return result;
                         },
-                        "orderable": false,
-                        "searchable": false
+                        orderable: false,
+                        searchable: false
                     }
                 ]
             };
@@ -658,11 +658,11 @@
             }).html(PENDING_MULTI_SELECTION.format('0'))
             options.order = [[1, 'asc']];
             options.columns.unshift({
-                "data": function (row, type, val, meta) {
+                data: function (row, type, val, meta) {
                     return '<input type="checkbox" class="selOrder" />';
                 },
-                "searchable": false,
-                "orderable": false
+                searchable: false,
+                orderable: false
             });
 
             let table_settings = [% TablesSettings.GetTableSettings( 'acqui', 'parcel', 'pending_orders', 'json' ) | $raw %];

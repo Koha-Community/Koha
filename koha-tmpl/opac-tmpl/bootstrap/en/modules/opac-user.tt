@@ -1182,17 +1182,17 @@
                         tableInit( $(this).attr("id") );
                     })
                     .kohaTable({
-                    "sorting" : [[ thIndex, 'asc' ]],
-                    "dom": '<"top"<"table_entries"><"table_controls"fB>>t',
-                    "columnDefs": [
-                        { "visible": false, "targets" : [ "hidden" ] },
-                        { "className": 'dtr-control', "orderable": false, "targets": -1 }
+                    order: [[ thIndex, 'asc' ]],
+                    dom: '<"top"<"table_entries"><"table_controls"fB>>t',
+                    columnDefs: [
+                        { visible: false, "targets" : [ "hidden" ] },
+                        { className: 'dtr-control', orderable: false, targets: -1 }
                     ],
-                    "language": {
-                        "search": "_INPUT_",
-                        "searchPlaceholder": _("Search")
+                    language: {
+                        search: "_INPUT_",
+                        searchPlaceholder: _("Search")
                     },
-                    "responsive": {
+                    responsive: {
                         details: {
                             type: 'column',
                             target: -1

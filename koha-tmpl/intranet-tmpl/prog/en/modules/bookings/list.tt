@@ -228,18 +228,18 @@
 
             var bookings_table_url = "/api/v1/biblios/%s/bookings".format(biblionumber);
             bookings_table = $('#bookings_table').kohaTable({
-                "ajax": {
+                ajax: {
                     "url": bookings_table_url
                 },
-                "embed": [
+                embed: [
                     "item",
                     "patron",
                     "pickup_library"
                 ],
-                "columns": [{
-                    "data": "booking_id",
-                    "title": _("Booking ID"),
-                    "visible": false
+                columns: [{
+                    data: "booking_id",
+                    title: _("Booking ID"),
+                    visible: false
                 },
                 {
                     data: "",
@@ -302,12 +302,12 @@
                     }
                 },
                 {
-                    "data": "item.external_id",
-                    "title": _("Item"),
-                    "searchable": true,
-                    "orderable": true,
-                    "defaultContent": _("Any item"),
-                    "render": function(data,type,row,meta) {
+                    data: "item.external_id",
+                    title: _("Item"),
+                    searchable: true,
+                    orderable: true,
+                    defaultContent: _("Any item"),
+                    render: function(data,type,row,meta) {
                         if ( row.item ) {
                             return row.item.external_id + " (" + row.booking_id + ")";
                         } else {
@@ -316,11 +316,11 @@
                     }
                 },
                 {
-                    "data": "patron.firstname:patron.surname",
-                    "title": _("Patron"),
-                    "searchable": true,
-                    "orderable": true,
-                    "render": function(data, type, row, meta) {
+                    data: "patron.firstname:patron.surname",
+                    title: _("Patron"),
+                    searchable: true,
+                    orderable: true,
+                    render: function(data, type, row, meta) {
                         return $patron_to_html(row.patron, {
                             display_cardnumber: true,
                             url: true
@@ -328,39 +328,39 @@
                     }
                 },
                 {
-                    "data": "pickup_library.name",
-                    "title": _("Pickup library"),
-                    "searchable": true,
-                    "orderable": true,
-                    "render": function(data, type, row, meta) {
+                    data: "pickup_library.name",
+                    title: _("Pickup library"),
+                    searchable: true,
+                    orderable: true,
+                    render: function(data, type, row, meta) {
                         return row.pickup_library.name;
                     }
                 },
                 {
-                    "data": "start_date",
-                    "title": _("Start date"),
-                    "searchable": true,
-                    "orderable": true,
-                    "render": function(data, type, row, meta) {
+                    data: "start_date",
+                    title: _("Start date"),
+                    searchable: true,
+                    orderable: true,
+                    render: function(data, type, row, meta) {
                         return $date(row.start_date);
                     }
                 },
                 {
-                    "data": "end_date",
-                    "title": _("End date"),
-                    "searchable": true,
-                    "orderable": true,
-                    "render": function(data, type, row, meta) {
+                    data: "end_date",
+                    title: _("End date"),
+                    searchable: true,
+                    orderable: true,
+                    render: function(data, type, row, meta) {
                         return $date(row.end_date);
                     }
                 },
                 {
-                    "data": "",
-                    "title": _("Actions"),
-                    "class": "actions",
-                    "searchable": false,
-                    "orderable": false,
-                    "render": function(data, type, row, meta) {
+                    data: "",
+                    title: _("Actions"),
+                    class:"actions",
+                    searchable: false,
+                    orderable: false,
+                    render: function(data, type, row, meta) {
                         let result = "";
                         const is_readonly = ["cancelled", "completed"].includes(row.status);
                         [% IF CAN_user_circulate_manage_bookings %]

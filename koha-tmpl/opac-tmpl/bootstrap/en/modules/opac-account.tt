@@ -91,30 +91,30 @@
 
             var fines_table = $("#finestable").kohaTable({
                  [% IF ENABLE_OPAC_PAYMENTS %]
-                 "order": [[ 1, "desc" ]],
+                 order: [[ 1, "desc" ]],
                  [% ELSE %]
-                 "order": [[ 0, "desc" ]],
+                 order: [[ 0, "desc" ]],
                  [% END %]
-                 "dom": '<"#filter_p">',
-                 "responsive": {
-                    "details": { "type": 'column',"target": -1 }
+                 dom: '<"#filter_p">',
+                 responsive: {
+                    details: { "type": 'column',"target": -1 }
                  },
-                 "columnDefs": [
-                    { "className": 'dtr-control', "orderable": false, "targets": -1 }
+                 columnDefs: [
+                    { className: 'dtr-control', orderable: false, targets: -1 }
                  ],
-                 'drawCallback': function() {
+                 drawCallback: function() {
                     show_hiddentfoot('#finestable');
                  }
             } );
 
             $('table[id^="finestable-"]').kohaTable({
-                 "responsive": {
-                    "details": { "type": 'column',"target": -1 }
+                 responsive: {
+                    details: { "type": 'column',"target": -1 }
                  },
-                 "columnDefs": [
-                    { "className": 'dtr-control', "orderable": false, "targets": -1 }
+                 columnDefs: [
+                    { className: 'dtr-control', orderable: false, targets: -1 }
                  ],
-                 'drawCallback': function() {
+                 drawCallback: function() {
                     show_hiddentfoot('table[id^="finestable-"]');
                  }
             });

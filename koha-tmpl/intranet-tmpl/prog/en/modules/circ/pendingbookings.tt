@@ -169,51 +169,51 @@
 
             var bookings_table_url = '/api/v1/bookings?';
             var bookings_table = $("#bookingst").kohaTable({
-                "ajax": {
-                    "url": bookings_table_url
+                ajax: {
+                    url: bookings_table_url
                 },
-                "embed": [
+                embed: [
                     "biblio",
                     "item+strings",
                     "item.checkout",
                     "patron",
                     "pickup_library"
                 ],
-                "order": [[ 7, "asc" ]],
-                "columns": [{
-                    "data": "booking_id",
-                    "title": _("Booking ID"),
-                    "visible": false
+                order: [[ 7, "asc" ]],
+                columns: [{
+                    data: "booking_id",
+                    title: _("Booking ID"),
+                    visible: false
                 },
                 {
-                    "data": "me.pickup_library_id",
-                    "title": _("Pickup library"),
+                    data: "me.pickup_library_id",
+                    title: _("Pickup library"),
                     datatype: "coded_value:library",
                     dataFilter: "libraries",
-                    "searchable": true,
-                    "orderable": true,
-                    "render": function( data, type, row, meta ) {
+                    searchable: true,
+                    orderable: true,
+                    render: function( data, type, row, meta ) {
                         return escape_str(row.pickup_library_id ? row.pickup_library.name : row.pickup_library_id);
                     }
                 },
                 {
-                    "data": "biblio.title",
-                    "title": _("Title"),
-                    "searchable": true,
-                    "orderable": true,
-                    "render": function(data,type,row,meta) {
+                    data: "biblio.title",
+                    title: _("Title"),
+                    searchable: true,
+                    orderable: true,
+                    render: function(data,type,row,meta) {
                         return $biblio_to_html(row.biblio, {
                             link: 'bookings'
                         });
                     }
                 },
                 {
-                    "data": "item.external_id",
-                    "title": _("Item"),
-                    "searchable": true,
-                    "orderable": true,
-                    "defaultContent": _("Any item"),
-                    "render": function(data,type,row,meta) {
+                    data: "item.external_id",
+                    title: _("Item"),
+                    searchable: true,
+                    orderable: true,
+                    defaultContent: _("Any item"),
+                    render: function(data,type,row,meta) {
                         if ( row.item ) {
                             return row.item.external_id + " (" + row.booking_id + ")";
                         } else {
@@ -222,11 +222,11 @@
                     }
                 },
                 {
-                    "data": "item.callnumber",
-                    "title": _("Callnumber"),
-                    "searchable": true,
-                    "orderable": true,
-                    "render": function(data,type,row,meta) {
+                    data: "item.callnumber",
+                    title: _("Callnumber"),
+                    searchable: true,
+                    orderable: true,
+                    render: function(data,type,row,meta) {
                         if ( row.item ) {
                             return row.item.callnumber;
                         } else {
@@ -235,11 +235,11 @@
                     }
                 },
                 {
-                    "data": "item.location",
-                    "title": _("Location"),
-                    "searchable": false,
-                    "orderable": false,
-                    "render": function(data,type,row,meta) {
+                    data: "item.location",
+                    title: _("Location"),
+                    searchable: false,
+                    orderable: false,
+                    render: function(data,type,row,meta) {
                         if ( row.item ) {
                             if ( row.item.checked_out_date ) {
                                 return _("On loan, due: ") + $date(row.item.checked_out_date);
@@ -252,11 +252,11 @@
                     }
                 },
                 {
-                    "data": "patron.firstname:patron.surname",
-                    "title": _("Patron"),
-                    "searchable": true,
-                    "orderable": true,
-                    "render": function(data, type, row, meta) {
+                    data: "patron.firstname:patron.surname",
+                    title: _("Patron"),
+                    searchable: true,
+                    orderable: true,
+                    render: function(data, type, row, meta) {
                         return $patron_to_html(row.patron, {
                             display_cardnumber: true,
                             url: true
@@ -264,13 +264,13 @@
                     }
                 },
                 {
-                    "data": "start_date",
-                    "name": "start_date",
-                    "title": _("Booking dates"),
-                    "type": "date",
-                    "searchable": false,
-                    "orderable": true,
-                    "render": function(data, type, row, meta) {
+                    data: "start_date",
+                    name: "start_date",
+                    title: _("Booking dates"),
+                    type: "date",
+                    searchable: false,
+                    orderable: true,
+                    render: function(data, type, row, meta) {
                         return $date(row.start_date) + ' - ' + $date(row.end_date);
                     }
                 }]

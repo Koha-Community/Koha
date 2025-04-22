@@ -472,10 +472,10 @@
 
             [% IF import_batch_id %]
                 $("#records-table").kohaTable({
-                    "autoWidth": false,
-                    "searching": false,
-                    "processing": true,
-                    "serverSide":  true,
+                    autoWidth: false,
+                    searching: false,
+                    processing: true,
+                    serverSide:  true,
                     ajax: {
                         url: "batch_records_ajax.pl",
                         data: function ( d ) {
@@ -484,18 +484,18 @@
                         },
                     },
                     bKohaAjaxSVC: true,
-                    "pagingType": "full_numbers",
-                    "dom": '<"top pager"iflp>rt<"bottom pager"flp><"clear">',
-                    "columns": [
-                        { "data": "import_record_id" },
-                        { "data": "citation" },
-                        { "data": "status" },
-                        { "data": "overlay_status" },
-                        { "data": null, "defaultContent": "" },
-                        { "data": null, "defaultContent": "" },
-                        { "data": "matched" }
+                    pagingType: "full_numbers",
+                    dom: '<"top pager"iflp>rt<"bottom pager"flp><"clear">',
+                    columns: [
+                        { data: "import_record_id" },
+                        { data: "citation" },
+                        { data: "status" },
+                        { data: "overlay_status" },
+                        { data: null, defaultContent: "" },
+                        { data: null, defaultContent: "" },
+                        { data: "matched" }
                     ],
-                    "rowCallback": function(nRow, aData, iDisplayIndex, iDisplayIndexFull) {
+                    rowCallback: function(nRow, aData, iDisplayIndex, iDisplayIndexFull) {
                         [% IF(record_type == 'auth') %]
                             var record_details_url = "/cgi-bin/koha/authorities/detail.pl?authid=";
                         [% ELSE %]

@@ -639,7 +639,7 @@
             let dt_tables = new Array("to_be_stagedt", "staged_and_readyt", "patron_is_outsidet", "delivered_todayt");
             dt_tables.forEach(function( id, index ){
                 $("#" + id).kohaTable({
-                    "autoWidth": false
+                    autoWidth: false
                 }, dt_settings[ index ] );
             });
 

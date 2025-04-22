@@ -461,20 +461,20 @@
         $(document).ready(function(){
             var table_settings = [% TablesSettings.GetTableSettings( 'tools', 'inventory', 'inventoryt', 'json' ) | $raw %];
             inventorydt = $("#inventoryt").kohaTable({
-                "pagingType": 'full_numbers',
-                "bKohaColumnsUseNames": true,
+                pagingType: 'full_numbers',
+                bKohaColumnsUseNames: true,
                 [% IF uploadedbarcodesflag %]
                     // sort on callnumber
-                    "order": [[ 2, "asc" ]],
+                    order: [[ 2, "asc" ]],
                 [% ELSE %]
                     // first column contains checkboxes
-                    "columnDefs": [
-                        { "orderable": false, "searchable":  false, "targets": [ 0 ] }
+                    columnDefs: [
+                        { orderable: false, searchable:  false, targets: [ 0 ] }
                     ],
                     // 3rd column is callnumber
-                    "order": [[ 2, "asc" ]],
+                    order: [[ 2, "asc" ]],
                 [% END %]
-                "drawCallback": function() {
+                drawCallback: function() {
                     //bind the click handler script to the newly created elements held in the table
                     $('.openWin').bind('click',function(e){
                         e.preventDefault();
