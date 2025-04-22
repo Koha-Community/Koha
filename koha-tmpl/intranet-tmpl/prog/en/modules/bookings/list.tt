@@ -387,7 +387,7 @@
                     let is_cancelled = row.status === "cancelled";
                     [% IF CAN_user_circulate_manage_bookings %]
                     if (!is_cancelled) {
-                        result += '<button type="button" class="btn btn-default btn-xs edit-action" data-bs-toggle="modal" data-bs-target="#placeBookingModal" data-booking="%s" data-biblionumber="%s" data-itemnumber="%s" data-patron="%s" data-pickup_library="%s" data-start_date="%s" data-end_date="%s"><i class="fa fa-pencil" aria-hidden="true"></i> %s</button>'.format(row.booking_id, biblionumber, row.item_id,  row.patron_id, row.pickup_library_id, row.start_date, row.end_date, _("Edit"));
+                        result += '<button type="button" class="btn btn-default btn-xs edit-action" data-bs-toggle="modal" data-bs-target="#placeBookingModal" data-booking="%s" data-biblionumber="%s" data-itemnumber="%s" data-patron="%s" data-pickup_library="%s" data-start_date="%s" data-end_date="%s" data-item_type_id="%s"><i class="fa fa-pencil" aria-hidden="true"></i> %s</button>'.format(row.booking_id, biblionumber, row.item_id,  row.patron_id, row.pickup_library_id, row.start_date, row.end_date, row.item.item_type_id, _("Edit"));
                         result += '<button type="button" class="btn btn-default btn-xs cancel-action" data-bs-toggle="modal" data-bs-target="#cancelBookingModal" data-booking="%s"><i class="fa fa-trash" aria-hidden="true"></i> %s</button>'.format(row.booking_id, _("Cancel"));
                     }
                     [% END %]
