@@ -330,6 +330,7 @@ describe("catalogue/detail/holdings_table", () => {
             });
 
             cy.get(`#${table_id}_wrapper input.dt-input`).clear();
+            cy.wait("@searchItems");
             cy.get(`#${table_id}_wrapper input.dt-input`).type(library_name);
 
             cy.wait("@searchItems").then(interception => {
@@ -342,6 +343,7 @@ describe("catalogue/detail/holdings_table", () => {
             let item_type_id = items[0].item_type.item_type_id;
             let item_type_description = items[0].item_type.description;
             cy.get(`#${table_id}_wrapper input.dt-input`).clear();
+            cy.wait("@searchItems");
             cy.get(`#${table_id}_wrapper input.dt-input`).type(item_type_id);
 
             cy.wait("@searchItems").then(interception => {
@@ -352,6 +354,7 @@ describe("catalogue/detail/holdings_table", () => {
             });
 
             cy.get(`#${table_id}_wrapper input.dt-input`).clear();
+            cy.wait("@searchItems");
             cy.get(`#${table_id}_wrapper input.dt-input`).type(
                 item_type_description
             );
@@ -362,6 +365,44 @@ describe("catalogue/detail/holdings_table", () => {
                     new RegExp(`"me.item_type_id":\\["${item_type_id}"\\]`)
                 );
             });
+
+            cy.viewport(2999, 2999);
+            cy.get(`#${table_id}_wrapper input.dt-input`).clear();
+            cy.wait("@searchItems");
+            // Show filters if not there already
+            cy.get(`.${table_id}_table_controls .show_filters`)
+                .then(link => {
+                    if (link.is(":visible")) {
+                        cy.wrap(link).click();
+                        cy.wait("@searchItems");
+                    }
+                })
+                .then(() => {
+                    // Select first (non-empty) option
+                    cy.get(
+                        `#${table_id}_wrapper th#holdings_itype select`
+                    ).then(select => {
+                        const raw_value = select.find("option").eq(1).val();
+                        expect(raw_value).to.match(/^\^/);
+                        expect(raw_value).to.match(/\$$/);
+                        item_type_id = raw_value.replace(/^\^|\$$/g, ""); // Remove ^ and $
+                    });
+                    cy.get(
+                        `#${table_id}_wrapper th#holdings_itype select option`
+                    )
+                        .eq(1)
+                        .then(o => {
+                            cy.get(
+                                `#${table_id}_wrapper th#holdings_itype select`
+                            ).select(o.val(), { force: true });
+                        });
+                    cy.wait("@searchItems").then(interception => {
+                        const q = interception.request.query.q;
+                        expect(q).to.match(
+                            new RegExp(`{"me.item_type_id":"${item_type_id}"}`)
+                        );
+                    });
+                });
         });
     });
 });
