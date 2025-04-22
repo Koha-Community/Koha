@@ -148,7 +148,7 @@ export default {
         doEdit({ id }, dt, event) {
             this.$router.push({
                 name: "VendorFormAddEdit",
-                params: { vendor_id: id },
+                params: { id: id },
             });
         },
         doDelete(vendor, dt, event) {

@@ -10,7 +10,11 @@
                 <VendorDetails :vendor="vendor" />
                 <VendorContacts :vendor="vendor" />
                 <VendorInterfaces :vendor="vendor" />
-                <VendorOrderingInformation :vendor="vendor" />
+                <VendorOrderingInformation
+                    :vendor="vendor"
+                    :verifyDiscountValue="verifyDiscountValue"
+                    :discountValid="discountValid"
+                />
                 <fieldset class="action">
                     <ButtonSubmit />
                     <router-link
@@ -27,7 +31,7 @@
 
 <script>
 import ButtonSubmit from "../ButtonSubmit.vue";
-import { setMessage } from "../../messages";
+import { setMessage, setWarning } from "../../messages";
 import { APIClient } from "../../fetch/api-client.js";
 import VendorDetails from "./VendorDetails.vue";
 import VendorContacts from "./VendorContacts.vue";
@@ -66,6 +70,7 @@ export default {
                 interfaces: [],
             },
             initialized: false,
+            discountValid: true,
         };
     },
     beforeRouteEnter(to, from, next) {
@@ -89,6 +94,15 @@ export default {
                     vendor.address3 && (physical += vendor.address3 + "\n");
                     vendor.address4 && (physical += vendor.address4 + "\n");
                     this.vendor.physical = physical;
+
+                    if (!this.vendor.discount) this.vendor.discount = 0.0;
+                    const decimalPlaces =
+                        this.vendor.discount.toString().split(".")[1]?.length ||
+                        0;
+                    if (!decimalPlaces) {
+                        this.vendor.discount = this.vendor.discount.toFixed(1);
+                    }
+
                     this.initialized = true;
                 },
                 error => {}
@@ -96,7 +110,7 @@ export default {
         },
         onSubmit(e) {
             e.preventDefault();
-
+            const errors = [];
             const vendor = JSON.parse(JSON.stringify(this.vendor));
 
             const vendorId = vendor.id;
@@ -114,6 +128,9 @@ export default {
             delete vendor.physical;
             delete vendor.subscriptions_count;
 
+            if (!this.discountValid)
+                errors.push(this.$__("Invalid discount value"));
+
             vendor.contacts = this.checkContactOrInterface(
                 vendor.contacts.map(
                     ({ id, booksellerid, ...requiredProperties }) =>
@@ -126,6 +143,9 @@ export default {
                         requiredProperties
                 )
             );
+
+            setWarning(errors.join("<br>"));
+            if (errors.length) return false;
 
             const client = APIClient.acquisition;
             if (vendorId) {
@@ -156,6 +176,11 @@ export default {
                 }
                 return acc;
             }, []);
+        },
+        verifyDiscountValue(e) {
+            this.discountValid = /^[\-]?\d{0,2}(\.\d{0,3})*$/.test(
+                this.vendor.discount
+            );
         },
     },
     components: {

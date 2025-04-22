@@ -143,7 +143,11 @@
             </li>
             <li>
                 <label for="vendor_aliases">{{ $__("Aliases") }}:</label>
-                <input id="vendor_aliases" v-model="newAlias" />
+                <input
+                    id="vendor_aliases"
+                    class="noEnterSubmit"
+                    v-model="newAlias"
+                />
                 <span class="aliasAction" @click="addAlias()"
                     ><i class="fa fa-plus"></i> {{ $__("Add") }}</span
                 >
@@ -201,7 +205,7 @@ export default {
         },
         removeAlias(e) {
             const aliasIndex = this.vendor.aliases
-                .map(e => e.alias)
+                .map(a => a.alias)
                 .indexOf(e.alias);
             this.vendor.aliases.splice(aliasIndex, 1);
         },

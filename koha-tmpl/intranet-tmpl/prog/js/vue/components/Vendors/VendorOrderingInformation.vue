@@ -192,8 +192,14 @@
                     id="discount"
                     name="discount"
                     v-model="vendor.discount"
+                    @change="verifyDiscountValue(e)"
                 />
                 %
+                <span class="error" v-if="!discountValid">
+                    {{
+                        $__("Please enter a decimal number in the format: 0.0")
+                    }}
+                </span>
             </li>
             <li>
                 <label for="deliverytime">{{ $__("Delivery time") }}: </label>
@@ -228,6 +234,8 @@ export default {
     props: {
         vendor: Object,
         display: Boolean,
+        verifyDiscountValue: Function,
+        discountValid: Boolean,
     },
     setup() {
         const vendorStore = inject("vendorStore");
@@ -244,6 +252,16 @@ export default {
             const decimalPlaces = taxRate.toString().split(".")[1]?.length || 0;
             const multiplier = 10 ** decimalPlaces;
             return Math.round(taxRate * multiplier) / (multiplier / 100);
+        },
+        formatDiscount() {
+            if (!this.vendor.discount) return 0.0;
+            const decimalPlaces =
+                this.vendor.discount.toString().split(".")[1]?.length || 0;
+            if (decimalPlaces) {
+                return this.vendor.discount;
+            } else {
+                return this.vendor.discount.toFixed(1);
+            }
         },
     },
 };

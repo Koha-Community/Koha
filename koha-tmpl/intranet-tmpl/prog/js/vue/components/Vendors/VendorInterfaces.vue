@@ -127,7 +127,7 @@
                     />
                 </li>
             </ol>
-            <span class="btn btn-default" @click.prevent="deleteContact(i)"
+            <span class="btn btn-default" @click.prevent="deleteInterface(i)"
                 ><font-awesome-icon icon="trash" />
                 {{ $__("Delete interface") }}</span
             >
