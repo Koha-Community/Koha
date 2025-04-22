@@ -11,5 +11,3 @@
     contractsmanage="[% CAN_user_acquisition_contracts_manage | html %]"
     issuemanage="[% CAN_user_acquisition_issue_manage | html %]"
 ></vendor-menu>
-
-[% Asset.js("js/vue/dist/islands.js", "init" => "1") | $raw %]

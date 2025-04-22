@@ -1,4 +1,5 @@
 [% USE raw %]
+[% USE Asset %]
 <div class="main container-fluid">
     <div class="row">
         [% IF aside && !asides %]
@@ -82,3 +83,9 @@
         [% END %]
     </div>
 </div>
+[% SET islands = Asset.js("js/vue/dist/islands.esm.js").match('(src="([^"]+)")').1 %] <script src="[% islands %]" type="module">
+</script>
+<script type="module">
+    import { hydrate } from "[% islands %]";
+    hydrate();
+</script>

@@ -21,10 +21,3 @@
     marcorderautomation="[% Koha.Preference('MarcOrderingAutomation') | html %]"
     marcordermanage="[% CAN_user_acquisition_marc_order_manage | html %]"
 ></acquisitions-menu>
-
-[% SET islands = Asset.js("js/vue/dist/islands.esm.js").match('(src="([^"]+)")').1 %] <script src="[% islands %]" type="module">
-</script>
-<script type="module">
-    import { hydrate } from "[% islands %]";
-    hydrate();
-</script>
