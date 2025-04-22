@@ -188,7 +188,7 @@ sub store {
             }
         }
 
-        my $prevent_withdrawing_of = C4::Context->preference('PreventWithDrawingItemsStatus');
+        my $prevent_withdrawing_of = C4::Context->preference('PreventWithdrawingItemsStatus');
         my @statuses_to_prevent    = defined $prevent_withdrawing_of ? split( ',', $prevent_withdrawing_of ) : ();
         my $prevent_onloan         = grep { $_ eq 'checkedout' } @statuses_to_prevent;
         my $prevent_intransit      = grep { $_ eq 'intransit' } @statuses_to_prevent;

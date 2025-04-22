@@ -191,11 +191,11 @@ subtest '_status() tests' => sub {
     $schema->storage->txn_rollback;
 };
 
-subtest 'store PreventWithDrawingItemsStatus' => sub {
+subtest 'store PreventWithdrawingItemsStatus' => sub {
     plan tests => 2;
     $schema->storage->txn_begin;
 
-    t::lib::Mocks::mock_preference( 'PreventWithDrawingItemsStatus', 'intransit,checkedout' );
+    t::lib::Mocks::mock_preference( 'PreventWithdrawingItemsStatus', 'intransit,checkedout' );
     my $library_1 = $builder->build( { source => 'Branch' } );
     my $library_2 = $builder->build( { source => 'Branch' } );
 
@@ -238,7 +238,7 @@ subtest 'store PreventWithDrawingItemsStatus' => sub {
     'Koha::Exceptions::Item::Transfer::InTransit',
         'Exception thrown when trying to withdraw item in transit';
 
-    t::lib::Mocks::mock_preference( 'PreventWithDrawingItemsStatus', '' );
+    t::lib::Mocks::mock_preference( 'PreventWithdrawingItemsStatus', '' );
 
     $schema->storage->txn_rollback;
 };
