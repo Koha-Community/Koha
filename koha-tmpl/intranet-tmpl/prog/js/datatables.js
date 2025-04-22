@@ -1052,7 +1052,7 @@ function _dt_add_filters(table_node, table_dt, filters_options = {}) {
                 }
                 $(filters_options[i]).each(function () {
                     let o = $(
-                        '<option value="%s">%s</option>'.format(
+                        '<option value="^%s$">%s</option>'.format(
                             this._id,
                             this._str
                         )
