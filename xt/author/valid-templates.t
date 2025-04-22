@@ -88,11 +88,30 @@ foreach my $theme (@themes) {
             # they cannot stand alone
             'doc-head-close.inc',
             'opac-bottom.inc',
+            'ill/backends/Standard/shared/forms/article.inc',
+            'ill/backends/Standard/shared/forms/book.inc',
+            'ill/backends/Standard/shared/forms/chapter.inc',
+            'ill/backends/Standard/shared/forms/conference.inc',
+            'ill/backends/Standard/shared/forms/dvd.inc',
+            'ill/backends/Standard/shared/forms/journal.inc',
+            'ill/backends/Standard/shared/forms/resource.inc',
+            'ill/backends/Standard/shared/forms/thesis.inc',
         );
     } else {
         run_template_test(
             $theme->{'modules'},
             $theme->{'includes'},
+
+            # templates to exclude from testing because
+            # they cannot stand alone
+            'ill/backends/Standard/shared/forms/article.inc',
+            'ill/backends/Standard/shared/forms/book.inc',
+            'ill/backends/Standard/shared/forms/chapter.inc',
+            'ill/backends/Standard/shared/forms/conference.inc',
+            'ill/backends/Standard/shared/forms/dvd.inc',
+            'ill/backends/Standard/shared/forms/journal.inc',
+            'ill/backends/Standard/shared/forms/resource.inc',
+            'ill/backends/Standard/shared/forms/thesis.inc',
         );
     }
     $pm->finish;
