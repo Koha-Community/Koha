@@ -160,7 +160,7 @@ $schema->storage->txn_rollback();
 
 subtest "store() tests" => sub {
 
-    plan tests => 7;
+    plan tests => 8;
 
     $schema->storage->txn_begin();
 
@@ -290,6 +290,26 @@ subtest "store() tests" => sub {
         $hold->expirationdate,
         $patron_expiration_date,
         'Expiration date set same as patron_expiration_date after reverting holds waiting status.'
+    );
+
+    # Do not set expiration date for hold if no period is set
+    t::lib::Mocks::mock_preference( 'DefaultHoldExpirationdatePeriod', '' );
+    $hold = Koha::Hold->new(
+        {
+            biblionumber   => $biblio->biblionumber,
+            itemnumber     => $item->id,
+            reservedate    => '2022-12-14',
+            waitingdate    => '2022-12-14',
+            borrowernumber => $borrower->borrowernumber,
+            branchcode     => $library->branchcode,
+            suspend        => 0,
+        }
+    )->store;
+    $hold->discard_changes;
+
+    is(
+        $hold->expirationdate,
+        undef, 'Expiration date not set if "DefaultHoldExpirationdatePeriod" is left empty.'
     );
 
     $schema->storage->txn_rollback();
