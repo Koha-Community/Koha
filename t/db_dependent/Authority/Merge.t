@@ -697,7 +697,7 @@ subtest 'ModBiblio calls from merge' => sub {
     my $biblio_record = MARC::Record->new();
     $biblio_record->insert_fields_ordered(
         MARC::Field->new( '609', '1', '1', a => 'Brown,', 'c' => 'Father', 9 => $authid ) );
-    my $biblionumber = AddBiblio( $biblio_record, '', { skip_record_index => 1 } );
+    my ($biblionumber) = AddBiblio( $biblio_record, '', { skip_record_index => 1 } );
 
     my $biblio_module = Test::MockModule->new('C4::AuthoritiesMarc');
     $biblio_module->mock(
@@ -748,7 +748,7 @@ subtest 'ModBiblio calls from merge' => sub {
     my $biblio_record2 = MARC::Record->new();
     $biblio_record2->insert_fields_ordered(
         MARC::Field->new( '109', '1', ' ', a => 'Chesterton, G.K.', 9 => $authid2 ) );
-    my $biblionumber2 = AddBiblio( $biblio_record2, '', { skip_record_index => 1 } );
+    my ($biblionumber2) = AddBiblio( $biblio_record2, '', { skip_record_index => 1 } );
 
     my $num_biblio_edited;
     warnings_are {
