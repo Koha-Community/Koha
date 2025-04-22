@@ -16,7 +16,6 @@ return {
                 value=CASE value WHEN '1' THEN 'GiveLibrary' ELSE 'None' END,
                 type="Choice"
             WHERE variable="LocalHoldsPriority"
-            'Enables the LocalHoldsPriority feature', 'None'  'Choice'),
         },
         );
 
