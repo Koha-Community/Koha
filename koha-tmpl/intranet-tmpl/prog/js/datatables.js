@@ -848,7 +848,7 @@ function _dt_add_filters(table_node, table_dt, filters_options = {}) {
                     filters_options[i] = filters_options[i](table_dt)
                 }
                 $(filters_options[i]).each(function(){
-                    let o = $('<option value="%s">%s</option>'.format(this._id, this._str));
+                    let o = $('<option value="^%s$">%s</option>'.format(this._id, this._str));
                     // Compare with lc, or selfreg won't match ^SELFREG$ for instance, see bug 32517
                     // This is only for category, we might want to apply it only in this case.
                     existing_search = existing_search.toLowerCase()
