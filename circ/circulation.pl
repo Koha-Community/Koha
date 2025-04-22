@@ -627,8 +627,7 @@ if ($patron) {
         $template->param( is_anonymous => 1 );
         $noissues = 1;
     }
-    my $lines                = Koha::Account::Lines->search( { borrowernumber => $patron->id } );
-    my $credits_balance      = $lines->credits_total;
+
     my $patron_charge_limits = $patron->is_patron_inside_charge_limits();
     if ( $patron_charge_limits->{noissuescharge}->{charge} > 0 ) {
         my $noissuescharge =
@@ -640,6 +639,8 @@ if ($patron) {
             chargesamount => $patron_charge_limits->{noissuescharge}->{charge},
         );
     }
+
+    my $credits_balance = $patron->account->outstanding_credits->total_outstanding;
     if ( $credits_balance < 0 ) {
         $template->param(
             credits       => 1,
