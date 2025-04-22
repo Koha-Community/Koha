@@ -53,31 +53,29 @@
                                 [% END %]
                             [% ELSE %]
                                 [% FOREACH av IN AuthorisedValues.GetAuthValueDropbox( authorised_value_category ) %]
-                                    [% IF !field.repeatable %]
-                                        [% IF av.authorised_value == values.${field.id}.0 %]
-                                            <option value="[% av.authorised_value | html %]" selected="selected">[% av.lib | html %]</option>
-                                        [% ELSE %]
-                                            <option value="[% av.authorised_value | html %]">[% av.lib | html %]</option>
-                                        [% END %]
+                                    [% IF av.authorised_value == values.${field.id}.0 %]
+                                        <option value="[% av.authorised_value | html %]" selected="selected">[% av.lib | html %]</option>
                                     [% ELSE %]
-                                        [% SET av_field_value_rendered = 0 %]
-                                        [% FOR value IN values.${field.id} %]
-                                            [% IF av.authorised_value == value %]
-                                                <label class="radio">
-                                                    <input type="checkbox" id="additional_field_[% field.id | html %]" checked name="additional_field_[% field.id | html %]" value="[% av.authorised_value | html %]" />[% av.lib | html %]
-                                                </label>
-                                                [% SET av_field_value_rendered = 1 %]
-                                            [% END %]
-                                        [% END %]
-                                        [% IF !av_field_value_rendered %]
-                                            <label class="radio">
-                                                <input type="checkbox" id="additional_field_[% field.id | html %]" name="additional_field_[% field.id | html %]" value="[% av.authorised_value | html %]" />[% av.lib | html %]
-                                            </label>
-                                        [% END %]
+                                        <option value="[% av.authorised_value | html %]">[% av.lib | html %]</option>
                                     [% END %]
                                 [% END %]
                             [% END %]
                         </select>
+                    [% ELSE %]
+                        [% FOREACH av IN AuthorisedValues.GetAuthValueDropbox( authorised_value_category ) %]
+                            [% SET av_field_value_rendered = 0 %]
+                            [% FOR value IN values.${field.id} %]
+                                [% IF av.authorised_value == value %]
+                                    <label class="radio">
+                                        <input type="checkbox" id="additional_field_[% field.id | html %]" checked name="additional_field_[% field.id | html %]" value="[% av.authorised_value | html %]" />[% av.lib | html %]
+                                    </label>
+                                    [% SET av_field_value_rendered = 1 %]
+                                [% END %]
+                            [% END %]
+                            [% IF !av_field_value_rendered %]
+                                <label class="radio"> <input type="checkbox" id="additional_field_[% field.id | html %]" name="additional_field_[% field.id | html %]" value="[% av.authorised_value | html %]" />[% av.lib | html %] </label>
+                            [% END %]
+                        [% END %]
                     [% END %]
                     [% IF !search_form %]
                         <span>(Authorised values for [% authorised_value_category | html %])</span>
