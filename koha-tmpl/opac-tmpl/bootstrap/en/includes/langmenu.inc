@@ -62,7 +62,7 @@
             <!-- /# .dropdown-menu -->
         </li>
         <!-- / .dropdown -->
-        <li class="divider-vertical" aria-hidden="false"></li>
+        <li class="divider-vertical" aria-hidden="false" role="presentation"></li>
     </ul>
     <!-- /.navbar-nav -->
 </div>
