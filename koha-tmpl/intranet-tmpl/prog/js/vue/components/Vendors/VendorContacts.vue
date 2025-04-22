@@ -46,19 +46,19 @@
                 <span class="label">{{ $__("Acquisitions options") }}:</span>
                 <ol>
                     <li v-if="contact.acqprimary">
-                        <span
+                        <span class="contact_details"
                             ><i class="fa fa-check"></i>
                             {{ $__("Primary acquisitions contact") }}</span
                         >
                     </li>
                     <li v-if="contact.orderacquisition">
-                        <span
+                        <span class="contact_details"
                             ><i class="fa fa-check"></i>
                             {{ $__("Receives orders") }}</span
                         >
                     </li>
                     <li v-if="contact.claimacquisition">
-                        <span
+                        <span class="contact_details"
                             ><i class="fa fa-check"></i>
                             {{ $__("Receives claims for late orders") }}</span
                         >
@@ -69,13 +69,13 @@
                 <span class="label">{{ $__("Serials options") }}:</span>
                 <ol>
                     <li v-if="contact.serialsprimary">
-                        <span
+                        <span class="contact_details"
                             ><i class="fa fa-check"></i>
                             {{ $__("Primary serials contact") }}</span
                         >
                     </li>
                     <li v-if="contact.claimissues">
-                        <span
+                        <span class="contact_details"
                             ><i class="fa fa-check"></i>
                             {{ $__("Receives claims for late issues") }}</span
                         >
@@ -281,4 +281,8 @@ export default {
 };
 </script>
 
-<style></style>
+<style scoped>
+.contact_details {
+    margin-left: 9em;
+}
+</style>

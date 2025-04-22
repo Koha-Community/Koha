@@ -49,7 +49,7 @@
                     :to="{
                         path: vendor.url,
                     }"
-                    class=""
+                    :cssClass="''"
                     :title="vendor.url"
                     callback="redirect"
                 />

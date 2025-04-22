@@ -10,7 +10,12 @@
                             query: { booksellerid: vendor.id, op: 'add_form' },
                         },
                         title: 'Basket',
-                        callback: 'redirect',
+                        callback: toolbarComponent => {
+                            const url = toolbarComponent.handleQuery(
+                                toolbarComponent.to
+                            );
+                            toolbarComponent.redirect(url);
+                        },
                     },
                     {
                         to: {
@@ -18,7 +23,12 @@
                             query: { booksellerid: vendor.id, op: 'add_form' },
                         },
                         title: 'Contract',
-                        callback: 'redirect',
+                        callback: toolbarComponent => {
+                            const url = toolbarComponent.handleQuery(
+                                toolbarComponent.to
+                            );
+                            toolbarComponent.redirect(url);
+                        },
                     },
                     {
                         to: { name: 'VendorFormAdd' },

@@ -12,6 +12,7 @@
                     :to="item.to"
                     :title="$__(item.title)"
                     :callback="item.callback"
+                    :cssClass="'dropdown-item'"
                 />
             </li>
         </ul>

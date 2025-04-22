@@ -17,7 +17,7 @@
                     :to="{
                         path: vi.uri,
                     }"
-                    class=""
+                    :cssClass="''"
                     :title="vi.uri"
                     callback="redirect"
                 />

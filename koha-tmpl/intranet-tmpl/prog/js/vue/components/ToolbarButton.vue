@@ -1,16 +1,13 @@
 <template>
     <a
         v-if="callback"
-        @click="typeof callback === 'string' ? redirect() : callback"
-        class="btn btn-default"
+        @click="typeof callback === 'string' ? redirect() : callback(this)"
+        :class="cssClass"
         style="cursor: pointer"
     >
         <font-awesome-icon v-if="icon" :icon="icon" /> {{ title }}
     </a>
-    <router-link
-        v-else
-        :to="to"
-        class="btn btn-default"
+    <router-link v-else :to="to" :class="cssClass"
         ><font-awesome-icon v-if="icon" :icon="icon" /> {{ title }}</router-link
     >
 </template>
@@ -32,24 +29,20 @@ export default {
             type: [String, Function],
             required: false,
         },
+        cssClass: {
+            type: String,
+            default: "btn btn-default",
+            required: false,
+        },
     },
     methods: {
-        redirect() {
-            if (typeof this.to === "string")
-                window.location.href = this.formatUrl(this.to);
-            if (typeof this.to === "object") {
-                let url = this.to.path;
-                if (this.to.hasOwnProperty("query")) {
-                    url +=
-                        "?" +
-                        Object.keys(this.to.query)
-                            .map(
-                                queryParam =>
-                                    `${queryParam}=${this.to.query[queryParam]}`
-                            )
-                            .join("&");
-                }
-                window.open(this.formatUrl(url, this.to.internal), "_blank");
+        redirect(url) {
+            const redirectParams = url ? url : this.to;
+            if (typeof redirectParams === "string")
+                window.location.href = this.formatUrl(redirectParams);
+            if (typeof redirectParams === "object") {
+                const url = this.handleQuery(redirectParams);
+                window.open(this.formatUrl(url), "_blank");
             }
         },
         formatUrl(url) {
@@ -57,6 +50,20 @@ export default {
             if (url.includes("cgi-bin/koha"))
                 return `//${window.location.host}/${url}`;
             return `//${url}`;
+        },
+        handleQuery(query) {
+            let url = this.to.path;
+            if (this.to.hasOwnProperty("query")) {
+                url +=
+                    "?" +
+                    Object.keys(this.to.query)
+                        .map(
+                            queryParam =>
+                                `${queryParam}=${this.to.query[queryParam]}`
+                        )
+                        .join("&");
+            }
+            return url;
         },
     },
     name: "ToolbarButton",
