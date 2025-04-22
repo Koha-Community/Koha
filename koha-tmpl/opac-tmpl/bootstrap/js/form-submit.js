@@ -1,4 +1,4 @@
-export function submit_form(form) {
+function submit_form(form) {
     let form_data = $(form).data();
 
     let confirm_msg = form_data.confirmationMsg;
@@ -33,3 +33,8 @@ export function submit_form(form) {
     $("body").append(the_form);
     the_form.submit();
 }
+
+$("body").on("click", ".submit-form-link", function (e) {
+    e.preventDefault();
+    submit_form(this);
+});
