@@ -46,7 +46,7 @@
                         </a>
                     </li>
                 [% END %]
-                <li class="divider-vertical"></li>
+                <li role="presentation" class="divider-vertical"></li>
                 [% IF ( Koha.Preference( 'virtualshelves' ) == 1 ) %]
                     [% IF Koha.Preference( 'opacuserlogin' ) == 1 || some_public_shelves.count > 0 %]
                         <li class="nav-item dropdown">
@@ -169,7 +169,7 @@
                                 [% IF Koha.Preference( 'EnableOpacSearchHistory' ) %]
                                     <p>
                                         <a tabindex="0" role="menuitem" class="login-link" href="/cgi-bin/koha/opac-search-history.pl" title="View your search history">Search history</a>
-                                        <span class="divider-vertical"></span>
+                                        <span role="presentation" class="divider-vertical"></span>
                                         <a
                                             class="clearsh submit-form-link"
                                             href="#"
@@ -189,7 +189,7 @@
                 </li>
                 <!-- Cookie consent button for non logged-in users -->
                 [% IF !loggedinusername %]
-                    <li style="display:none" id="cookieConsentDivider" class="divider-vertical" aria-hidden="true"></li>
+                    <li role="presentation" style="display:none" id="cookieConsentDivider" class="divider-vertical" aria-hidden="true"></li>
                     <li style="display:none" id="cookieConsentLi" class="nav-item" aria-hidden="true">
                         <a id="cookieConsentButton" href="#" name="Your cookies" class="nav-link" title="View and amend cookies you have consented to" role="button">
                             <i class="fa fa-cookie-bite fa-fw fa-icon-black" aria-hidden="true"></i>
@@ -199,7 +199,7 @@
                 [% END %]
                 [% IF OpacPublic && ( !Koha.Preference( 'opacuserlogin') || !loggedinusername ) %]
                     [% IF Koha.Preference( 'EnableOpacSearchHistory' ) %]
-                        <li class="divider-vertical"></li>
+                        <li role="presentation" class="divider-vertical"></li>
                         <li class="nav-item search_history">
                             <a class="nav-link" href="/cgi-bin/koha/opac-search-history.pl" title="View your search history">
                                 <i class="fa fa-calendar-days fa-fw fa-icon-black" aria-hidden="true"></i>
