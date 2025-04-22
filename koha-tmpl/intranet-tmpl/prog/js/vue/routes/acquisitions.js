@@ -21,7 +21,7 @@ export const routes = [
                 is_navigation_item: false,
             },
             {
-                path: "/cgi-bin/koha/vendors",
+                path: "/cgi-bin/koha/acquisition/vendors",
                 title: $__("Vendors"),
                 icon: "fa fa-shopping-cart",
                 is_end_node: true,

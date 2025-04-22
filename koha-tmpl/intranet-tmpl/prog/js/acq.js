@@ -445,7 +445,7 @@ $(document).ready(function () {
             contentType: "application/json",
         };
         $.ajax(options).then(function (thing, result) {
-            window.location.href = "/cgi-bin/koha/vendors";
+            window.location.href = "/cgi-bin/koha/acquisition/vendors";
         });
     });
 });

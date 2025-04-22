@@ -201,7 +201,7 @@ export default {
                     orderable: true,
                     render(data, type, row, meta) {
                         return (
-                            '<a href="/cgi-bin/koha/vendors/' +
+                            '<a href="/cgi-bin/koha/acquisition/vendors/' +
                             row.id +
                             '" class="show">' +
                             escape_str(`${row.name} (#${row.id})`) +

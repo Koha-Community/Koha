@@ -66,7 +66,7 @@ describe("Vendor CRUD operations", () => {
         cy.visit("/cgi-bin/koha/acqui/acqui-home.pl");
 
         cy.intercept("GET", "/api/v1/acquisitions/vendors*", []);
-        cy.visit("/cgi-bin/koha/vendors");
+        cy.visit("/cgi-bin/koha/acquisition/vendors");
         cy.get("#vendors_list").contains("There are no vendors defined");
 
         const vendor = getVendor();
@@ -79,7 +79,7 @@ describe("Vendor CRUD operations", () => {
             },
         });
         cy.intercept("GET", "/api/v1/acquisitions/vendors/*", vendor);
-        cy.visit("/cgi-bin/koha/vendors");
+        cy.visit("/cgi-bin/koha/acquisition/vendors");
         cy.get("#vendors_list").contains("Showing 1 to 1 of 1 entries");
     });
 
@@ -92,7 +92,7 @@ describe("Vendor CRUD operations", () => {
         });
 
         // Click the button in the toolbar
-        cy.visit("/cgi-bin/koha/vendors");
+        cy.visit("/cgi-bin/koha/acquisition/vendors");
         cy.contains("New vendor").click();
         cy.get("#vendor_add h1").contains("Add vendor");
 
@@ -180,7 +180,7 @@ describe("Vendor CRUD operations", () => {
     it("should edit a vendor", () => {
         const vendor = getVendor();
 
-        cy.visit("/cgi-bin/koha/vendors");
+        cy.visit("/cgi-bin/koha/acquisition/vendors");
         cy.intercept("GET", "/api/v1/acquisitions/vendors/*", vendor).as(
             "get-vendor"
         );
@@ -218,7 +218,7 @@ describe("Vendor CRUD operations", () => {
                 "X-Total-Count": "1",
             },
         });
-        cy.visit("/cgi-bin/koha/vendors");
+        cy.visit("/cgi-bin/koha/acquisition/vendors");
         const name_link = cy.get(
             "#vendors_list table tbody tr:first td:first a"
         );
@@ -244,7 +244,7 @@ describe("Vendor CRUD operations", () => {
             },
         });
         cy.intercept("GET", "/api/v1/acquisitions/vendors/*", vendor);
-        cy.visit("/cgi-bin/koha/vendors");
+        cy.visit("/cgi-bin/koha/acquisition/vendors");
 
         cy.get("#vendors_list table tbody tr:first").contains("Delete").click();
         cy.get(".alert-warning.confirmation h1").contains("remove this vendor");

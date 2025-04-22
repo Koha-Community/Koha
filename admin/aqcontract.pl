@@ -126,7 +126,7 @@ elsif ( $op eq 'cud-add_validate' ) {
         );
     }
 
-    print $input->redirect("/cgi-bin/koha/vendors/$booksellerid");
+    print $input->redirect("/cgi-bin/koha/acquisition/vendors/$booksellerid");
     exit;
 
     # END $OP eq ADD_VALIDATE
@@ -154,7 +154,7 @@ elsif ( $op eq 'cud-delete_confirmed' ) {
     my $deleted = DelContract( { contractnumber => $contractnumber } );
 
     if ($deleted) {
-        print $input->redirect("/cgi-bin/koha/vendors/$booksellerid");
+        print $input->redirect("/cgi-bin/koha/acquisition/vendors/$booksellerid");
         exit;
     } else {
         $template->param( error => 'not_deleted' );
