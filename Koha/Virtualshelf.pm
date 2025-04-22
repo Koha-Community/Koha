@@ -337,6 +337,19 @@ sub cannot_be_transferred {
         if ( !Koha::Patrons->find($to) ) {
             return 'new_owner_not_found';
         }
+        my $to_patron = Koha::Patrons->find($to);
+
+        if ( $self->public ) {
+            return 'unauthorized_transfer'
+                unless C4::Auth::haspermission(
+                $to_patron->userid,
+                {
+                    lists => [
+                        'create_public_lists', 'delete_public_lists', 'edit_public_list_contents', 'edit_public_lists'
+                    ]
+                }
+                );
+        }
         if ( !$self->public && !$shares->search( { borrowernumber => $to } )->count ) {
             return 'new_owner_has_no_share';
         }
