@@ -738,7 +738,7 @@ subtest 'Get shelves containing biblios' => sub {
 };
 
 subtest 'cannot_be_transferred' => sub {
-    plan tests => 12;
+    plan tests => 13;
 
     # Three patrons and a deleted one
     my $staff = $builder->build_object({ class => 'Koha::Patrons', value => { flags => undef } });
@@ -759,10 +759,28 @@ subtest 'cannot_be_transferred' => sub {
     # Test on public list
     is( $public_list->cannot_be_transferred, 'missing_by_parameter', 'Public list, no parameters' );
     is( $public_list->cannot_be_transferred({ by => $staff->id, to => $receiver->id }), 'unauthorized_transfer', 'Lacks permission' );
+
+    # Give recipient MINIMUM permission
+    $builder->build(
+        {
+            source => 'UserPermission',
+            value  => {
+                borrowernumber => $receiver->id,
+                module_bit     => 20,
+                code           => 'edit_public_list_contents',
+            }
+        }
+    );
+    is(
+        $public_list->cannot_be_transferred( { by => $staff->id, to => $receiver->id } ),
+        'unauthorized_transfer',
+        'Recipient lacks necessary permissions to own public list'
+    );
+
     my $perms = $builder->build({ source => 'UserPermission', value  => {
         borrowernumber => $staff->id, module_bit => 20, code => 'edit_public_lists',
     }});
-    is( $public_list->cannot_be_transferred({ by => $staff->id, to => $receiver->id }), 0, 'Minimum permission passes' );
+    is( $public_list->cannot_be_transferred({ by => $staff->id, to => $receiver->id }), 0, 'Recipient with minimum required permission can accept ownership' );
     $staff->flags(1)->store;
     is( $public_list->cannot_be_transferred({ by => $staff->id, to => $receiver->id }), 0, 'Superlibrarian permission passes' );
     is( $public_list->cannot_be_transferred({ by => $staff->id, to => $receiver->id, interface => 'opac' }), 'unauthorized_transfer',
