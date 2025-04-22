@@ -937,62 +937,62 @@ and to display information about the patron's borrowing activity.
 
 =head1 SYNOPSIS
 
-	use ILS;
-	use ILS::Patron;
+    use ILS;
+    use ILS::Patron;
 
-	# Look up patron based on patron_id
-	my $patron = new ILS::Patron $patron_id
+    # Look up patron based on patron_id
+    my $patron = new ILS::Patron $patron_id
 
-	# Basic object access methods
-	$patron_id = $patron->id;
-	$str = $patron->name;
-	$str = $patron->address;
-	$str = $patron->email_addr;
-	$str = $patron->home_phone;
-	$str = $patron->sip_birthdate;
-	$str = $patron->ptype;
-	$str = $patron->language;
-	$str = $patron->password;
-	$str = $patron->check_password($password);
-	$str = $patron->currency;
-	$str = $patron->screen_msg;
-	$str = $patron->print_line;
+    # Basic object access methods
+    $patron_id = $patron->id;
+    $str = $patron->name;
+    $str = $patron->address;
+    $str = $patron->email_addr;
+    $str = $patron->home_phone;
+    $str = $patron->sip_birthdate;
+    $str = $patron->ptype;
+    $str = $patron->language;
+    $str = $patron->password;
+    $str = $patron->check_password($password);
+    $str = $patron->currency;
+    $str = $patron->screen_msg;
+    $str = $patron->print_line;
 
-	# Check patron permissions
-	$bool = $patron->charge_ok;
-	$bool = $patron->renew_ok;
-	$bool = $patron->recall_ok;
-	$bool = $patron->hold_ok;
-	$bool = $patron->card_lost;
-	$bool = $patron->too_many_charged;
-	$bool = $patron->too_many_overdue;
-	$bool = $patron->too_many_renewal;
-	$bool = $patron->too_many_claim_return;
-	$bool = $patron->too_many_lost( $server );
-	$bool = $patron->excessive_fines;
-	$bool = $patron->excessive_fees;
-	$bool = $patron->too_many_billed;
+    # Check patron permissions
+    $bool = $patron->charge_ok;
+    $bool = $patron->renew_ok;
+    $bool = $patron->recall_ok;
+    $bool = $patron->hold_ok;
+    $bool = $patron->card_lost;
+    $bool = $patron->too_many_charged;
+    $bool = $patron->too_many_overdue;
+    $bool = $patron->too_many_renewal;
+    $bool = $patron->too_many_claim_return;
+    $bool = $patron->too_many_lost( $server );
+    $bool = $patron->excessive_fines;
+    $bool = $patron->excessive_fees;
+    $bool = $patron->too_many_billed;
 
-	# Patron borrowing activity
-	$num = $patron->recall_overdue;
-	$num = $patron->fee_amount;
-	$bool = $patron->drop_hold($item_id);
-	@holds = $patron->hold_items($start, $end);
-	@items = $patron->overdue_items($start, $end);
-	@items = $patron->charged_items($start, $end);
-	@items = $patron->fine_items($start, $end);
-	@items = $patron->recall_items($start, $end);
-	@items = $patron->unavail_holds($start, $end);
+    # Patron borrowing activity
+    $num = $patron->recall_overdue;
+    $num = $patron->fee_amount;
+    $bool = $patron->drop_hold($item_id);
+    @holds = $patron->hold_items($start, $end);
+    @items = $patron->overdue_items($start, $end);
+    @items = $patron->charged_items($start, $end);
+    @items = $patron->fine_items($start, $end);
+    @items = $patron->recall_items($start, $end);
+    @items = $patron->unavail_holds($start, $end);
 
-	# Changing a patron's status
-	$patron->block($card_retained, $blocked_msg);
-	$patron->enable;
+    # Changing a patron's status
+    $patron->block($card_retained, $blocked_msg);
+    $patron->enable;
 
 =head1 INITIALIZATION
 
 A patron object is created by calling
 
-	$patron = new ILS::Patron $patron_id;
+    $patron = new ILS::Patron $patron_id;
 
 where C<$patron_id> is the patron's barcode as received from the
 self service terminal.  If the patron barcode is not registered,
@@ -1004,14 +1004,14 @@ The following functions return the corresponding information
 about the given patron, or C<undef> if the information is
 unavailable.
 
-	$patron_id = $patron-E<gt>id;
-	$str = $patron-E<gt>name;
-	$str = $patron-E<gt>address;
-	$str = $patron-E<gt>email_addr;
-	$str = $patron-E<gt>home_phone;
+    $patron_id = $patron-E<gt>id;
+    $str = $patron-E<gt>name;
+    $str = $patron-E<gt>address;
+    $str = $patron-E<gt>email_addr;
+    $str = $patron-E<gt>home_phone;
 
-	$str = $patron-E<gt>screen_msg;
-	$str = $patron-E<gt>print_line;
+    $str = $patron-E<gt>screen_msg;
+    $str = $patron-E<gt>print_line;
 
 If there are outstanding display messages associated with the
 patron, then these return the screen message and print line,
@@ -1025,7 +1025,7 @@ explication however.
 Returns the patron's birthday formatted according to the SIP
 specification:
 
-	YYYYMMDD    HHMMSS
+    YYYYMMDD    HHMMSS
 
 =head2 C<$str = $patron-E<gt>ptype;>
 
@@ -1043,14 +1043,14 @@ A three-digit string encoding the patron's preferred language.
 The full list is defined in the SIP specification, but some of
 the important values are:
 
-	000 Unknown (default)
-	001 English
-	002 French
-	008 Spanish
-	011 Canadian French
-	016 Arabic
-	019 Chinese
-	021 North American Spanish
+    000 Unknown (default)
+    001 English
+    002 French
+    008 Spanish
+    011 Canadian French
+    016 Arabic
+    019 Chinese
+    021 North American Spanish
 
 =head2 C<$bool = $patron-E<gt>check_password($password);>
 
@@ -1066,20 +1066,20 @@ patron's preferred currency.
 Most of the methods associated with Patrons are related to
 checking if they're authorized to perform various actions:
 
-	$bool = $patron-E<gt>charge_ok;
-	$bool = $patron-E<gt>renew_ok;
-	$bool = $patron-E<gt>recall_ok;
-	$bool = $patron-E<gt>hold_ok;
-	$bool = $patron-E<gt>card_lost;
-	$bool = $patron-E<gt>recall_overdue;
-	$bool = $patron-E<gt>too_many_charged;
-	$bool = $patron-E<gt>too_many_overdue;
-	$bool = $patron-E<gt>too_many_renewal;
-	$bool = $patron-E<gt>too_many_claim_return;
-	$bool = $patron-E<gt>too_many_lost( $server );
-	$bool = $patron-E<gt>excessive_fines;
-	$bool = $patron-E<gt>excessive_fees;
-	$bool = $patron-E<gt>too_many_billed;
+    $bool = $patron-E<gt>charge_ok;
+    $bool = $patron-E<gt>renew_ok;
+    $bool = $patron-E<gt>recall_ok;
+    $bool = $patron-E<gt>hold_ok;
+    $bool = $patron-E<gt>card_lost;
+    $bool = $patron-E<gt>recall_overdue;
+    $bool = $patron-E<gt>too_many_charged;
+    $bool = $patron-E<gt>too_many_overdue;
+    $bool = $patron-E<gt>too_many_renewal;
+    $bool = $patron-E<gt>too_many_claim_return;
+    $bool = $patron-E<gt>too_many_lost( $server );
+    $bool = $patron-E<gt>excessive_fines;
+    $bool = $patron-E<gt>excessive_fees;
+    $bool = $patron-E<gt>too_many_billed;
 
 =head1 LISTS OF ITEMS ASSOCIATED WITH THE USER
 
@@ -1090,17 +1090,17 @@ and C<$end>, which define a subset of the list of items to be
 returned (C<1> is the first item in the list).  The following
 methods all return a reference to a list of C<$item_id>s:
 
-	$items = $patron-E<gt>hold_items($start, $end);
-	$items = $patron-E<gt>overdue_items($start, $end);
-	$items = $patron-E<gt>charged_items($start, $end);
-	$items = $patron-E<gt>recall_items($start, $end);
-	$items = $patron-E<gt>unavail_holds($start, $end);
+    $items = $patron-E<gt>hold_items($start, $end);
+    $items = $patron-E<gt>overdue_items($start, $end);
+    $items = $patron-E<gt>charged_items($start, $end);
+    $items = $patron-E<gt>recall_items($start, $end);
+    $items = $patron-E<gt>unavail_holds($start, $end);
 
 It is also possible to retrieve an itemized list of the fines
 outstanding.  This method returns a reference to an itemized list
 of fines:
 
-	$fines = $patron-E<gt>fine_items($start, $end);
+    $fines = $patron-E<gt>fine_items($start, $end);
 
 =head1 PATRON BORROWING ACTIVITY
 
@@ -1132,6 +1132,6 @@ blocked, or C<undef> if the patron ID is not valid.
 
 =head2 C<$patron-E<gt>enable;>
 
-Reenable the patron after she's been blocked.  This is a test
+Re-enable the patron after she's been blocked.  This is a test
 function and will not normally be called by self-service
 terminals in production.

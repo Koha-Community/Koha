@@ -556,11 +556,11 @@ sub renew {
     # This is gross, but in a real ILS it would be better
 
     # if (defined($title_id)) {
-    #	foreach my $i (@{$patron->{items}}) {
-    #		$item = new ILS::Item $i;
-    #		last if ($title_id eq $item->title_id);
-    #		$item = undef;
-    #	}
+    #    foreach my $i (@{$patron->{items}}) {
+    #        $item = new ILS::Item $i;
+    #        last if ($title_id eq $item->title_id);
+    #        $item = undef;
+    #    }
     # } else {
     my $j     = 0;
     my $count = scalar @{ $patron->{items} };
@@ -665,8 +665,8 @@ ILS - Portability layer to interface between Open-SIP and ILS
                             $currency);
 
     $status = $ils->add_hold($patron_id, $patron_pwd, $item_id,
-			     $title_id, $expiry_date,
-			     $pickup_locn, $hold_type, $fee_ack);
+                 $title_id, $expiry_date,
+                 $pickup_locn, $hold_type, $fee_ack);
 
     $status = $ils->cancel_hold($patron_id, $patron_pwd,
                                 $item_id, $title_id);
@@ -1019,7 +1019,7 @@ take.
 
 =item C<$fee_ack>
 
-Boolean.  If true, the patron has acknowleged that she is willing
+Boolean.  If true, the patron has acknowledged that she is willing
 to pay the fee associated with placing a hold on this item.  If
 C<$fee_ack> is false, then the ILS should refuse to place the
 hold.

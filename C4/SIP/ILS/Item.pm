@@ -593,13 +593,13 @@ ILS::Item - Portable Item status object class for SIP
 
 =head1 SYNOPSIS
 
-	use ILS;
-	use ILS::Item;
+    use ILS;
+    use ILS::Item;
 
-	# Look up item based on item_id
-	my $item = new ILS::Item $item_id;
+    # Look up item based on item_id
+    my $item = new ILS::Item $item_id;
 
-	# Basic object access methods
+    # Basic object access methods
     $item_id    = $item->id;
     $title      = $item->title_id;
     $media_type = $item->sip_media_type;
@@ -637,11 +637,11 @@ For the most part, C<ILS::Item>s are not operated on directly,
 but are passed to C<ILS> methods as part of a transaction.  That
 is, rather than having an item check itself in:
 
-	$item->checkin;
+    $item->checkin;
 
 the code tells the ILS that the item has returned:
 
-	$ils->checkin($item_id);
+    $ils->checkin($item_id);
 
 Similarly, patron's don't check things out (a la,
 C<$patron-E<gt>checkout($item)>), but the ILS checks items out to
@@ -665,17 +665,17 @@ the item.
 Return the SIP-defined media type of the item.  The specification
 provides the following definitions:
 
-	000 Other
-	001 Book
-	002 Magazine
-	003 Bound journal
-	004 Audio tape
-	005 Video tape
-	006 CD/CDROM
-	007 Diskette
-	008 Book with diskette
-	009 Book with CD
-	010 Book with audio tape
+    000 Other
+    001 Book
+    002 Magazine
+    003 Bound journal
+    004 Audio tape
+    005 Video tape
+    006 CD/CDROM
+    007 Diskette
+    008 Book with diskette
+    009 Book with CD
+    010 Book with audio tape
 
 The SIP server does not use the media type code to alter its
 behavior at all; it merely passes it through to the self-service
@@ -730,19 +730,19 @@ institution or library that owns the item."
 Returns a two-character string describing the circulation status
 of the item, as defined in the specification:
 
-	01 Other
-	02 On order
-	03 Available
-	04 Charged
-	05 Charged; not to be recalled until earliest recall date
-	06 In process
-	07 Recalled
-	08 Waiting on hold shelf
-	09 Waiting to be re-shelved
-	10 In transit between library locations
-	11 Claimed returned
-	12 Lost
-	13 Missing
+    01 Other
+    02 On order
+    03 Available
+    04 Charged
+    05 Charged; not to be recalled until earliest recall date
+    06 In process
+    07 Recalled
+    08 Waiting on hold shelf
+    09 Waiting to be re-shelved
+    10 In transit between library locations
+    11 Claimed returned
+    12 Lost
+    13 Missing
 
 =item C<$bool = $item-E<gt>available>
 
@@ -767,7 +767,7 @@ hold on the item.
 These functions all return the corresponding date as a standard
 SIP-format timestamp:
 
-	YYYYMMDDZZZZHHMMSS
+    YYYYMMDDZZZZHHMMSS
 
 Where the C<'Z'> characters indicate spaces.
 
@@ -793,24 +793,24 @@ than one currency, however.
 The type of fee being charged, as defined by the SIP protocol
 specification:
 
-	01 Other/unknown
-	02 Administrative
-	03 Damage
-	04 Overdue
-	05 Processing
-	06 Rental
-	07 Replacement
-	08 Computer access charge
-	09 Hold fee
+    01 Other/unknown
+    02 Administrative
+    03 Damage
+    04 Overdue
+    05 Processing
+    06 Rental
+    07 Replacement
+    08 Computer access charge
+    09 Hold fee
 
 =item C<$mark = $item-E<gt>sip_security_marker>
 
 The type of security system with which the item is tagged:
 
-	00 Other
-	01 None
-	02 3M Tattle-tape
-	03 3M Whisper tape
+    00 Other
+    01 None
+    02 3M Tattle-tape
+    03 3M Whisper tape
 
 =item C<$msg = $item-E<gt>screen_msg>
 
