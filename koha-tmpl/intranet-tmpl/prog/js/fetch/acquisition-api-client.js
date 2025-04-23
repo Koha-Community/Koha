@@ -5,6 +5,15 @@ export class AcquisitionAPIClient {
         });
     }
 
+    get config() {
+        return {
+            get: moduleEndpoint =>
+                this.httpClient.get({
+                    endpoint: moduleEndpoint + "/config",
+                }),
+        };
+    }
+
     get vendors() {
         return {
             get: id =>

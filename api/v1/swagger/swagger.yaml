@@ -188,6 +188,8 @@ definitions:
     $ref: ./definitions/vendor.yaml
   vendor_issue:
     $ref: ./definitions/vendor_issue.yaml
+  vendors_config:
+    $ref: ./definitions/vendors_config.yaml
 paths:
   /acquisitions/baskets:
     $ref: ./paths/acquisitions_baskets.yaml#/~1acquisitions~1baskets
@@ -207,6 +209,8 @@ paths:
     $ref: "./paths/acquisitions_orders.yaml#/~1acquisitions~1orders~1{order_id}"
   /acquisitions/vendors:
     $ref: ./paths/acquisitions_vendors.yaml#/~1acquisitions~1vendors
+  /acquisitions/vendors/config:
+    $ref: ./paths/acquisitions_vendors_config.yaml#/~1acquisitions~1vendors~1config
   "/acquisitions/vendors/{vendor_id}":
     $ref: "./paths/acquisitions_vendors.yaml#/~1acquisitions~1vendors~1{vendor_id}"
   "/acquisitions/vendors/{vendor_id}/issues":

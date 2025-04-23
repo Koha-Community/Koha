@@ -32,6 +32,7 @@ import LeftMenu from "../LeftMenu.vue";
 import Dialog from "../Dialog.vue";
 import "vue-select/dist/vue-select.css";
 import { storeToRefs } from "pinia";
+import { APIClient } from "../../fetch/api-client.js";
 
 export default {
     setup() {
@@ -61,18 +62,22 @@ export default {
 
         this.loadAuthorisedValues(this.authorisedValues, this.vendorStore).then(
             () => {
-                this.userPermissions = userPermissions;
-                this.config.settings.edifact = edifact;
-                this.config.settings.marcOrderAutomation = marcOrderAutomation;
-                this.vendorStore.currencies = currencies;
-                this.vendorStore.gstValues = gstValues.map(gv => {
-                    return {
-                        label: `${Number(gv.option * 100).format_price()}%`,
-                        value: gv.option,
-                    };
+                const client = APIClient.acquisition;
+                client.config.get("vendors").then(config => {
+                    this.userPermissions = config.permissions;
+                    this.config.settings.edifact = edifact;
+                    this.config.settings.marcOrderAutomation =
+                        marcOrderAutomation;
+                    this.vendorStore.currencies = currencies;
+                    this.vendorStore.gstValues = gstValues.map(gv => {
+                        return {
+                            label: `${Number(gv.option * 100).format_price()}%`,
+                            value: gv.option,
+                        };
+                    });
+                    this.loaded();
+                    this.initialized = true;
                 });
-                this.loaded();
-                this.initialized = true;
             }
         );
     },
