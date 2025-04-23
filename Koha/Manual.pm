@@ -59,9 +59,9 @@ our $mapping = {
     'acqui/orderreceive'                       => '/acquisitions.html#receiving-orders',
     'acqui/parcel'                             => '/acquisitions.html#receiving-orders',
     'acqui/parcels'                            => '/acquisitions.html#receiving-orders',
-    'acqui/supplier'                           => '/acquisitions.html#vendors',
     'acqui/uncertainprice'                     => '/acquisitions.html#create-a-basket',
     'acqui/z3950_search'                       => '/acquisitions.html#create-a-basket',
+    'acquisition/vendors'                      => '/acquisitions.html#vendors',
     'admin/additional-fields'                  => '/administration.html#additional-fields',
     'admin/admin-home'                         => '/administration.html',
     'admin/aqbudgetperiods'                    => '/administration.html#budgets',
@@ -314,14 +314,18 @@ our $mapping = {
 sub get_url {
     my ( $url, $preferred_language ) = @_;
     my $file;
-    if ( $url =~ /koha\/(.*)\.pl/ || $url =~ '/koha/(erm.*)' || $url =~ '/koha/(preservation.*)' ) {
+    if (   $url =~ /koha\/(.*)\.pl/
+        || $url =~ '/koha/(erm.*)'
+        || $url =~ '/koha/(preservation.*)'
+        || $url =~ '/koha/(acquisition/vendors.*)' )
+    {
         $file = $1;
     } else {
         $file = 'mainpage';
     }
     $file =~ s/[^a-zA-Z0-9_\-\/]*//g;
 
-    if ( $file =~ m|^erm| || $file =~ m|^preservation| ) {
+    if ( $file =~ m|^erm| || $file =~ m|^preservation| || $file =~ m|^vendors| ) {
         $file =~ s|\d*+||g;
     }
 
