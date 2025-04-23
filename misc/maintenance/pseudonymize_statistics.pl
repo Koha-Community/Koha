@@ -72,7 +72,7 @@ if ( !$confirm ) {
 }
 
 while ( my $statistic = $statistics->next ) {
-    Koha::PseudonymizedTransaction->new_from_statistic($statistic)->store();
+    Koha::PseudonymizedTransaction->create_from_statistic($statistic);
 }
 
 print $statistics->count() . " statistics pseudonymized\n" if $verbose;
