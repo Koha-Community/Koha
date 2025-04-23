@@ -257,44 +257,28 @@
 [% BLOCK jsinclude %]
     <script>
         $(document).ready( function() {
-                    allow_submit = false;
-                    $('#place-article-request').on('submit', function( event ){
-                        if ( ! allow_submit ) {
-                            event.preventDefault();
+            allow_submit = false;
+            $('#place-article-request').on('submit', function( event ){
+                if ( ! allow_submit ) {
+                    event.preventDefault();
 
-                            [% IF article_request_type == 'item_only' %]
-                                if ( ! $("input:radio[name='itemnumber']").is(":checked") ) {
-                                    alert( _("Please select a specific item for this article request.") );
-                                    return 0;
-                                }
-                            [% END %]
-
-                            var mandatory_fields = "[% mandatory_fields | html %]";
-                            var m = new Array();
-                            if ( mandatory_fields ) m = mandatory_fields.split(",");
-                            var f = new Array();
-
-                            for (i = 0; i < m.length; i++) {
-                                if ( ! $("#" + m[i]).val() ) {
-                                    f.push( m[i] );
-                                }
-                            }
-
-                            if ( f.length ) {
-                                alert( _("The following fields are required and not filled in: ") + f.join(", ") );
-                                return 0;
-                            }
-
-                            // Check if all fields are blank
-                            if( m.length == 0 && $('#title').val()=='' && $('#author').val()=='' && $('#volume').val()=='' && $('#issue').val()=='' && $('#date').val()=='' && $('#pages').val()=='' && $('#chapters').val()=='' && $('#patron_notes').val()=='' && !$('input[name="toc_request"]').prop('checked') ) {
-                                alert( _("Please fill in at least one field.") );
-                                return 0;
-                            }
-
-                            allow_submit = true;
-                            $('#place-article-request').submit();
+                    [% IF article_request_type == 'item_only' %]
+                        if ( ! $("input:radio[name='itemnumber']").is(":checked") ) {
+                            alert( _("Please select a specific item for this article request.") );
+                            return 0;
                         }
-                    });
+                    [% END %]
+
+                    var mandatory_fields = "[% mandatory_fields | html %]";
+                    var m = new Array();
+                    if ( mandatory_fields ) m = mandatory_fields.split(",");
+                    var f = new Array();
+
+                    for (i = 0; i < m.length; i++) {
+                        if ( ! $("#" + m[i]).val() ) {
+                            f.push( m[i] );
+                        }
+                    }
 
                     // Initialize format(s)
                     var supported_formats = "[% Koha.Preference('ArticleRequestsSupportedFormats') | $raw %]";
