@@ -13,6 +13,13 @@
             [% IF job.status == 'cancelled' %]<span>The job has been cancelled before it finished.</span>[% END %]
             <a href="/cgi-bin/koha/tools/batchMod.pl" title="New batch item modification">New batch item modification</a>
         </div>
+        <div>
+            [% IF report.errors.size %]
+                <div class="alert alert-warning">
+                    <span>[% report.errors.size | html %] item(s) could not be modified.</span>
+                </div>
+            [% END %]
+        </div>
     [% END %]
 [% END %]
 

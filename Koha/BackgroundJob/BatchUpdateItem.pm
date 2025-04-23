@@ -113,6 +113,7 @@ sub process {
                 callback                          => sub { $self->step; },
             }
         );
+        $report->{errors}               = $results->{errors};
         $report->{modified_itemnumbers} = $results->{modified_itemnumbers};
         $report->{modified_fields}      = $results->{modified_fields};
     } catch {
@@ -123,7 +124,6 @@ sub process {
 
     my $data = $self->decoded_data;
     $data->{report} = $report;
-
     $self->finish($data);
 }
 
