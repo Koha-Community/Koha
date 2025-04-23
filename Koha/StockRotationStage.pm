@@ -255,7 +255,7 @@ Koha::Object Wrapper around DBIx::Class::Ordered.
 sub move_to {
     my ( $self, $position ) = @_;
     return $self->_result->move_to($position)
-        if ( $position le $self->rota->stockrotationstages->count );
+        if ( $position <= $self->rota->stockrotationstages->count );
     return 0;
 }
 

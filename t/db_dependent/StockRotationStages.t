@@ -68,7 +68,7 @@ subtest 'Basic object tests' => sub {
 };
 
 subtest 'DBIx::Class::Ordered tests' => sub {
-    plan tests => 33;
+    plan tests => 34;
 
     $schema->storage->txn_begin;
 
@@ -156,6 +156,18 @@ subtest 'DBIx::Class::Ordered tests' => sub {
     ok( $srstage->move_to(3), "Move." );
     is( $srstage->previous_sibling->stage_id, $stageprevious->{stage_id}, "Move, correct previous." );
     is( $srstage->next_sibling->stage_id,     $stagenext->{stage_id},     "Move, correct next." );
+
+    for ( my $i = 6 ; $i < 20 ; $i++ ) {
+        $builder->build(
+            {
+                source => 'Stockrotationstage',
+                value  => { rota_id => $rota->{rota_id}, position => $i }
+            }
+        );
+    }
+
+    # 4 <= 20 = true, but 4 le 20 = false
+    ok( $srstage->move_to(4), "Moved." );
 
     # Group manipulation
     my $newrota = $builder->build( { source => 'Stockrotationrota' } );
