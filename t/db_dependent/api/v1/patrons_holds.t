@@ -36,7 +36,7 @@ t::lib::Mocks::mock_preference( 'RESTBasicAuth', 1 );
 
 subtest 'list() tests' => sub {
 
-    plan tests => 18;
+    plan tests => 21;
 
     $schema->storage->txn_begin;
 
@@ -79,6 +79,13 @@ subtest 'list() tests' => sub {
         ->status_is( 200, 'REST3.2.2' )->json_is(
         '' => [ $old_hold_1->get_from_storage->to_api, $hold_3->to_api ],
         'Old holds even after item and library removed'
+        );
+
+    $old_hold_1->biblio->delete;
+    $t->get_ok( "//$userid:$password@/api/v1/patrons/" . $patron->id . '/holds?old=1&_order_by=+me.hold_id' )
+        ->status_is( 200, 'REST3.2.2' )->json_is(
+        '' => [ $old_hold_1->get_from_storage->to_api, $hold_3->to_api ],
+        'Old holds even after biblio removed'
         );
 
     my $non_existent_patron    = $builder->build_object( { class => 'Koha::Patrons' } );
