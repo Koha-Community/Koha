@@ -22,6 +22,7 @@ use Modern::Perl;
 
 use C4::Auth qw( get_template_and_user );
 use CGI      qw ( -utf8 );
+use JSON;
 use Text::CSV::Encoded;
 use C4::Context;
 use C4::Output  qw( output_html_with_http_headers );
@@ -152,17 +153,44 @@ if ($do_it) {
         $result->{'biblioitemnumber'} = q{};
         $result->{'barcode'}          = q{};
 
-        if ( substr( $log->info, 0, 4 ) eq 'item' || $log->module eq "CIRCULATION" ) {
+        if ( substr( $log->info, 0, 4 ) eq 'item' ) {
 
             # get item information so we can create a working link
             my $itemnumber = $log->object;
-            $itemnumber = $log->info if ( $log->module eq "CIRCULATION" );
-            my $item = Koha::Items->find($itemnumber);
+            my $item       = Koha::Items->find($itemnumber);
             if ($item) {
                 $result->{'object_found'}     = 1;
                 $result->{'biblionumber'}     = $item->biblionumber;
                 $result->{'biblioitemnumber'} = $item->biblionumber;
                 $result->{'barcode'}          = $item->barcode;
+            }
+        }
+
+        if ( $log->module eq "CIRCULATION" ) {
+            my $info = $log->info;
+            my $decoded;
+            my $is_json = eval {
+                $decoded = decode_json($info);
+                1;
+            };
+
+            if ( $is_json && ref($decoded) ) {
+                $result->{'json_found'} = 1;
+                my $item = Koha::Items->find( $decoded->{itemnumber} );
+                if ($item) {
+                    $decoded->{biblionumber}     = $item->biblionumber;
+                    $decoded->{biblioitemnumber} = $item->biblionumber;
+                    $decoded->{barcode}          = $item->barcode;
+                }
+                $result->{'json'} = $decoded;
+            } else {
+                my $item = Koha::Items->find($info);
+                if ($item) {
+                    $result->{'object_found'}     = 1;
+                    $result->{'biblionumber'}     = $item->biblionumber;
+                    $result->{'biblioitemnumber'} = $item->biblionumber;
+                    $result->{'barcode'}          = $item->barcode;
+                }
             }
         }
 
