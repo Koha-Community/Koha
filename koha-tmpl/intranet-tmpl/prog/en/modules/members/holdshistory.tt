@@ -201,13 +201,17 @@
                 };
 
                 let table_url = '/api/v1/patrons/[% patron.borrowernumber | uri %]/holds';
-                if (old){table_url += '?old=1'}
+                let table_embeds = ['biblio', 'item', 'pickup_library', 'pickup_library.branchname'];
+                if (old){
+                    table_url += '?old=1';
+                    table_embeds.push('deleted_biblio');
+                }
                 return $(table_id).kohaTable({
                     ajax: {
                         url: table_url,
                     },
                     order: [],
-                    embed: ['biblio', 'deleted_biblio', 'item', 'pickup_library', 'pickup_library.branchname'],
+                    embed: table_embeds,
                     columns: [
                         {
                             data: "biblio.title:biblio.subtitle:biblio.medium",
