@@ -4,7 +4,7 @@
             class="btn btn-default dropdown-toggle"
             data-bs-toggle="dropdown"
             href="#"
-            ><i class="fa fa-plus"></i>{{ title }}</a
+            ><i class="fa fa-plus"></i> {{ title }}</a
         >
         <ul class="dropdown-menu">
             <li v-for="(item, index) in items" :key="index">

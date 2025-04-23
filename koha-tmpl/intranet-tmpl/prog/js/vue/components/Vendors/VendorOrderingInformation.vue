@@ -42,9 +42,7 @@
             </li>
             <li>
                 <label>{{ $__("Discount") }}:</label>
-                <span>
-                    {{ vendor.discount || 0 }}
-                </span>
+                <span> {{ vendor.discount || 0 }}% </span>
             </li>
             <li>
                 <label>{{ $__("Tax rate") }}:</label>

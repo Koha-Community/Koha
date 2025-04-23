@@ -132,7 +132,11 @@
                     <label :for="`contact_${i}_email`"
                         >{{ $__("Email") }}:</label
                     >
-                    <input :id="`contact_${i}_email`" v-model="contact.email" />
+                    <input
+                        :id="`contact_${i}_email`"
+                        v-model="contact.email"
+                        type="email"
+                    />
                 </li>
                 <li>
                     <label :for="`contact_${i}_notes`"

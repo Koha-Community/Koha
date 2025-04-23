@@ -113,6 +113,7 @@
                     <input
                         :id="`vendorInterface_${i}_accountemail`"
                         v-model="vendorInterface.account_email"
+                        type="email"
                     />
                 </li>
                 <li>
