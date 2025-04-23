@@ -30,7 +30,16 @@
             </li>
             <li v-if="vi.password">
                 <label>{{ $__("Password") }}:</label>
-                <span>
+
+                <a
+                    href="#"
+                    @click="showPassword = !showPassword"
+                    v-if="!showPassword"
+                >
+                    <i class="fa fa-eye"></i>
+                    {{ $__("Show password") }}
+                </a>
+                <span v-if="showPassword">
                     {{ vi.password }}
                 </span>
             </li>
@@ -142,7 +151,6 @@
 
 <script>
 import { inject } from "vue";
-import { storeToRefs } from "pinia";
 import ToolbarButton from "../ToolbarButton.vue";
 
 export default {
@@ -156,6 +164,11 @@ export default {
         return {
             get_lib_from_av,
             authorisedValues,
+        };
+    },
+    data() {
+        return {
+            showPassword: false,
         };
     },
     methods: {
