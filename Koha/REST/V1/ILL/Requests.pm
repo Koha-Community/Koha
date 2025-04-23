@@ -60,32 +60,48 @@ sub list {
 
 =head3 patron_list
 
-Controller function that handles listing Koha::ILL::Request objects for a given patron.
-
-The patron must match the requesting user unless the requesting user is a superlibrarian.
-
-This is a public route, so some request details are omitted.
+Controller function that returns a patron's list of ILL requests.
 
 =cut
 
 sub patron_list {
-    my $c    = shift->openapi->valid_input or return;
-    my $user = $c->stash('koha.user');
-    $c->stash( is_public => 1 );
+    my $c = shift->openapi->valid_input or return;
 
-    if ( $user->borrowernumber != $c->param('patron_id') and !$user->is_superlibrarian ) {
-        return $c->render(
-            status  => 403,
-            openapi => { error => "Cannot lookup ILL requests for other users" }
-        );
-    }
+    my $patron = Koha::Patrons->find( $c->param('patron_id') );
+
+    return $c->render_resource_not_found('Patron')
+        unless $patron;
 
     return try {
-        my $reqs = $c->objects->search( Koha::ILL::Requests->search( { borrowernumber => $c->param('patron_id') } ) );
 
         return $c->render(
             status  => 200,
-            openapi => $reqs,
+            openapi => $c->objects->search( $patron->ill_requests ),
+        );
+    } catch {
+        $c->unhandled_exception($_);
+    };
+}
+
+=head3 public_patron_list
+
+Controller function that returns a patron's list of ILL requests for unprivileged
+access.
+
+=cut
+
+sub public_patron_list {
+    my $c = shift->openapi->valid_input or return;
+
+    return try {
+
+        $c->auth->public( $c->param('patron_id') );
+
+        my $patron = $c->stash('koha.user');
+
+        return $c->render(
+            status  => 200,
+            openapi => $c->objects->search( $patron->ill_requests() ),
         );
     } catch {
         $c->unhandled_exception($_);

@@ -667,7 +667,6 @@
     x-mojo-to: ILL::Requests#patron_list
     operationId: getPatronIllRequests
     tags:
-      - patrons
       - ill_requests
     summary: Get patron's ILL requests
     parameters:
@@ -727,4 +726,5 @@
         schema:
           $ref: "../swagger.yaml#/definitions/error"
     x-koha-authorization:
-      permissions: {}
+      permissions:
+        ill: "1"
