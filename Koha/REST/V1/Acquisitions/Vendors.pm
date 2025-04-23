@@ -85,13 +85,13 @@ Controller function that handles adding a new Koha::Acquisition::Bookseller obje
 sub add {
     my $c = shift->openapi->valid_input or return;
 
-    my $vendor        = $c->req->json;
-    my $contacts      = delete $vendor->{contacts};
-    my $interfaces    = delete $vendor->{interfaces};
-    my $aliases       = delete $vendor->{aliases};
-    my $subscriptions = delete $vendor->{subscriptions};
-    my $baskets       = delete $vendor->{baskets};
-    my $contracts     = delete $vendor->{contracts};
+    my $vendor     = $c->req->json;
+    my $contacts   = delete $vendor->{contacts};
+    my $interfaces = delete $vendor->{interfaces};
+    my $aliases    = delete $vendor->{aliases};
+    delete $vendor->{subscriptions};
+    delete $vendor->{baskets};
+    delete $vendor->{contracts};
 
     my $vendor_to_store = Koha::Acquisition::Bookseller->new_from_api( $c->req->json );
 

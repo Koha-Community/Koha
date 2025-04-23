@@ -246,7 +246,9 @@ export default {
                                   row.id +
                                   '" class="show">' +
                                   escape_str(
-                                      `${row.baskets.length} basket(s)`
+                                      __("%s basket(s)").format(
+                                          row.baskets.length
+                                      )
                                   ) +
                                   "</a>"
                             : escape_str(__("No baskets"));
@@ -260,11 +262,13 @@ export default {
                     render(data, type, row, meta) {
                         return row.subscriptions_count
                             ? '<a href="/cgi-bin/koha/serials/serials-search.pl?bookseller_filter=' +
-                                  row.name +
+                                  escape_str(row.name) +
                                   "&searched=1" +
                                   '" class="show">' +
                                   escape_str(
-                                      `${row.subscriptions_count} subscription(s)`
+                                      __("%s subscription(s)").format(
+                                          row.subscriptions_count
+                                      )
                                   ) +
                                   "</a>"
                             : escape_str(__("No subscriptions"));

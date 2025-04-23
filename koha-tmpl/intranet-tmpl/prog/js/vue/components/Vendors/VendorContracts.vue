@@ -44,7 +44,7 @@ export default {
                     data: contracts,
                     embed: [],
                     ordering: false,
-                    dom: '<"top pager"<"table_entries"ilp>>tr<"bottom pager"ip>',
+                    dom: '<<"table_entries">>',
                     aLengthMenu: [
                         [10, 20, 50, 100],
                         [10, 20, 50, 100],

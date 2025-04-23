@@ -9,7 +9,7 @@
 [% INCLUDE 'doc-head-open.inc' %]
 <title
     >[% FILTER collapse %]
-        [% tx("Search for vendor {vendor}", { vendor = supplier }) | html %]
+        [% tx("Search for vendor {vendor}", { vendor = booksellerid }) | html %]
         &rsaquo; [% t("Koha") | html %]
     [% END %]</title
 >
@@ -32,7 +32,7 @@
             <a href="/cgi-bin/koha/acqui/acqui-home.pl">Acquisitions</a>
         [% END %]
         [% WRAPPER breadcrumb_item bc_active= 1 %]
-            <span>Search for vendor [% supplier | html | $HtmlTags tag='em' %]</span>
+            <span>Search for vendor [% booksellerid | html | $HtmlTags tag='em' %]</span>
         [% END %]
     [% END #/ WRAPPER breadcrumbs %]
 [% END #/ WRAPPER sub-header.inc %]

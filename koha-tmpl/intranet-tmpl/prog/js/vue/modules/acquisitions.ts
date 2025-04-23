@@ -55,7 +55,7 @@ app.provide("mainStore", mainStore);
 app.provide("navigationStore", navigationStore);
 app.provide("permissionsStore", permissionsStore);
 
-app.mount("#__vendors");
+app.mount("#vendors");
 
 const { removeMessages } = mainStore;
 router.beforeEach((to, from) => {

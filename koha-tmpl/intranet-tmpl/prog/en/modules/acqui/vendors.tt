@@ -21,7 +21,7 @@
     [% INCLUDE 'acquisitions-search.inc' %]
 [% END %]
 
-<div id="__vendors">
+<div id="vendors">
     <!-- this is closed in intranet-bottom.inc -->
 
     [% MACRO jsinclude BLOCK %]
@@ -40,9 +40,6 @@
         </script>
         [% Asset.js("js/vue/dist/acquisitions.js") | $raw %]
         [% INCLUDE 'select2.inc' %]
-        [% SET columns = ['cardnumber','name','category','branch','action'] %]
-        [% PROCESS patron_search_modal columns => columns, modal_title => t("Select user") %]
-        [% PROCESS patron_search_js columns => columns, filter => erm_users, actions => ["select"], preview_on_name_click => 1 %]
     [% END %]
     [% INCLUDE 'intranet-bottom.inc' %]</div
 >

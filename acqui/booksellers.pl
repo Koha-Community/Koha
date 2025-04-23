@@ -114,7 +114,7 @@ if ($booksellerid) {
 
 $template->param(
     loop_suppliers => $loop_suppliers,
-    supplier       => $booksellerid,
+    booksellerid   => $booksellerid,
     count          => $vendor ? 1 : 0,
 );
 $template->{VARS}->{'allbaskets'} = $allbaskets;
