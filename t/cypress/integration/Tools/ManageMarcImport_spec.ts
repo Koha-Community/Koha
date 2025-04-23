@@ -34,23 +34,22 @@ describe("loads the manage MARC import page", () => {
             cy.get('button[id="fileuploadbutton"]').click();
         });
 
-        //wait after file upload, it can go to quickly here
-        cy.wait(2000);
+        cy.get("#fileuploadstatus").contains("100%");
+        cy.get("legend")
+            .contains("Look for existing records in catalog?")
+            .should("be.visible");
 
         //check default values
-        cy.get('select[name="matcher"] option:selected').should(
-            "have.value",
-            ""
-        );
-        cy.get('select[name="overlay_action"] option:selected').should(
+        cy.get("select#matcher option:selected").should("have.value", "");
+        cy.get("select#overlay_action option:selected").should(
             "have.value",
             "replace"
         );
-        cy.get('select[name="nomatch_action"] option:selected').should(
+        cy.get("select#nomatch_action option:selected").should(
             "have.value",
             "create_new"
         );
-        cy.get('select[name="item_action"] option:selected').should(
+        cy.get("select#item_action option:selected").should(
             "have.value",
             "always_add"
         );
@@ -64,28 +63,18 @@ describe("loads the manage MARC import page", () => {
         cy.get("#nomatch_action").select("ignore", { force: true });
         cy.get("#item_action").select("ignore", { force: true });
 
-        //remove focus
-        //cy.get('#item_action').blur();
-        cy.screenshot("after_selection");
-
         // Now verify all values
         cy.get("#matcher").should("have.value", "3");
         cy.get("#overlay_action").should("have.value", "create_new");
         cy.get("#nomatch_action").should("have.value", "ignore");
         cy.get("#item_action").should("have.value", "ignore");
 
-        cy.screenshot("right_before_submission");
         cy.get("#mainformsubmit").click();
 
         cy.get("#job_callback").should("exist");
 
-        //wait for View batch link to load with the batch ID
-        cy.wait(5000);
-
-        cy.screenshot("after_waiting");
         cy.contains("View batch").click();
 
-        cy.wait(2000);
         // Now verify all values are retained
         cy.get("#new_matcher_id").should("have.value", "3");
         cy.get("#overlay_action").should("have.value", "create_new");
