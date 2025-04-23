@@ -23,6 +23,7 @@ use base qw(Koha::Hold);
 
 use C4::Context;
 use Koha::Exceptions::SysPref;
+use Koha::Old::Biblios;
 
 =head1 NAME
 
@@ -45,6 +46,18 @@ sub biblio {
     my $rs = $self->_result->biblionumber;
     return unless $rs;
     return Koha::Biblio->_new_from_dbic($rs);
+}
+
+=head3 deleted_biblio
+
+Returns the related Koha::Deletedbiblio object for this old hold
+
+=cut
+
+sub deleted_biblio {
+    my ($self) = @_;
+    my $db = $self->_result->deleted_biblionumber;
+    return Koha::Old::Biblios->find($db);
 }
 
 =head3 item
