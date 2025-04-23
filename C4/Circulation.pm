@@ -1418,12 +1418,14 @@ sub CanBookBeIssued {
     if ( $restriction_age && $patron->dateofbirth && $restriction_age > $patron->get_age() ) {
         if ( C4::Context->preference('AgeRestrictionOverride') ) {
             $needsconfirmation{AGE_RESTRICTION} = "$agerestriction";
-            if ($message) {
-                $message = "$message + age restriction";
-            } else {
-                $message = "age restriction";
+            if ($issueconfirmed) {
+                if ($message) {
+                    $message = "$message + age restriction";
+                } else {
+                    $message = "age restriction";
+                }
+                push( @message_log, "age restriction" );
             }
-            push( @message_log, "age restriction" );
         } else {
             $issuingimpossible{AGE_RESTRICTION} = "$agerestriction";
         }
