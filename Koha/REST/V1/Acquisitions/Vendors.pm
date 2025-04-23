@@ -89,9 +89,6 @@ sub add {
     my $contacts   = delete $vendor->{contacts};
     my $interfaces = delete $vendor->{interfaces};
     my $aliases    = delete $vendor->{aliases};
-    delete $vendor->{subscriptions};
-    delete $vendor->{baskets};
-    delete $vendor->{contracts};
 
     my $vendor_to_store = Koha::Acquisition::Bookseller->new_from_api( $c->req->json );
 
@@ -132,9 +129,6 @@ sub update {
         my $contacts      = delete $vendor_update->{contacts};
         my $interfaces    = delete $vendor_update->{interfaces};
         my $aliases       = delete $vendor_update->{aliases};
-        my $subscriptions = delete $vendor_update->{subscriptions};
-        my $baskets       = delete $vendor_update->{baskets};
-        my $contracts     = delete $vendor_update->{contracts};
 
         $vendor->set_from_api($vendor_update);
         $vendor->store();

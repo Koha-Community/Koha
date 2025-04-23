@@ -127,6 +127,9 @@ export default {
             }
             delete vendor.physical;
             delete vendor.subscriptions_count;
+            delete vendor.baskets;
+            delete vendor.subscriptions;
+            delete vendor.contracts;
 
             if (!this.discountValid)
                 errors.push(this.$__("Invalid discount value"));
