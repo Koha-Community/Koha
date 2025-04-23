@@ -219,14 +219,18 @@
                         url: table_url,
                     },
                     order: [],
-                    embed: ['biblio', 'item', 'pickup_library', 'pickup_library.branchname'],
+                    embed: ['biblio', 'deleted_biblio', 'item', 'pickup_library', 'pickup_library.branchname'],
                     columns: [
                         {
                             data: "biblio.title:biblio.subtitle:biblio.medium",
                             searchable: true,
                             orderable: true,
                             render: function (data, type, row, meta) {
-                                return $biblio_to_html(row.biblio, { link: 1 });
+                                if( row.biblio ){
+                                    return $biblio_to_html(row.biblio, { link: 1 });
+                                } else {
+                                    return $biblio_to_html(row.deleted_biblio, { link: 0, deleted: 1 });
+                                }
                             }
                         },
                         {
@@ -234,7 +238,8 @@
                             searchable: true,
                             orderable: true,
                             render: function (data, type, row, meta) {
-                                return row.biblio ? row.biblio.author : "" ;
+                                let biblio = row.biblio ? row.biblio : row.deleted_biblio;
+                                return biblio ? biblio.author : "";
                             }
                         },
                         {

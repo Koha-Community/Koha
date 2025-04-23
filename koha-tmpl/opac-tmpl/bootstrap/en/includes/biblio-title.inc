@@ -1,6 +1,8 @@
 [%- IF link && ! biblio %][% link = 0 %][% END %]
 [%- IF ( link ) -%]
     <a href="[%- PROCESS biblio_a_href biblionumber => biblio.biblionumber -%]" class="title">[% PROCESS 'show-biblio-title' %]</a>
+[%- ELSIF (deleted) -%]
+    <span class="deleted-biblio">(Deleted bibliographic record) [%- PROCESS 'show-biblio-title' -%]</span>
 [%- ELSE -%]
     [%- PROCESS 'show-biblio-title' -%]
 [%- END -%]

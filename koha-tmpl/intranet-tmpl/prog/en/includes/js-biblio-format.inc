@@ -20,6 +20,9 @@
             }
             else {
                 title = '<span class="biblio-title">';
+                if (config && config.deleted) {
+                    title += _("(Bibliographic record deleted) ");
+                }
                 if (biblio.title != null && biblio.title != '') {
                     title += escape_str(biblio.title);
                 } else {
