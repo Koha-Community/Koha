@@ -3,7 +3,7 @@
         <ol class="breadcrumb">
             <template v-for="(item, idx) in breadcrumbs" v-bind:key="idx">
                 <NavigationItem
-                    v-if="idx < breadcrumbs.length - 1"
+                    v-if="idx < breadcrumbs.length - 1 || item.breadcrumbFormat"
                     :item="item"
                     :params="params"
                 ></NavigationItem>
@@ -31,6 +31,7 @@ export default {
         const navigationStore = inject("navigationStore");
         const { breadcrumbs } = storeToRefs(navigationStore);
         const { params } = navigationStore;
+
         return {
             breadcrumbs,
             params,

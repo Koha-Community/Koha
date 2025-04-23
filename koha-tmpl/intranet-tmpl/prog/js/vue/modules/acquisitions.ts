@@ -62,6 +62,10 @@ router.beforeEach((to, from) => {
     if (to.path === "/cgi-bin/koha/acqui/vendors.pl") {
         router.push({ name: "VendorList" });
     }
-    navigationStore.$patch({ current: to.matched, params: to.params || {} });
+    navigationStore.$patch({
+        current: to.matched,
+        params: to.params || {},
+        query: to.query || {},
+    });
     removeMessages(); // This will actually flag the messages as displayed already
 });

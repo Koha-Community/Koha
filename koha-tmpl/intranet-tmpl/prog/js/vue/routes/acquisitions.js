@@ -7,6 +7,13 @@ import VendorFormAdd from "../components/Vendors/VendorFormAdd.vue";
 
 import { $__ } from "../i18n";
 
+const vendorSearchBreadcrumb = ({ match, query }) => {
+    if (!query || !query.supplier) return match.meta.self;
+    match.meta.self.title = $__("Search for vendor: %s").format(query.supplier);
+    match.meta.self.disabled = true;
+    return match.meta.self;
+};
+
 export const routes = [
     {
         path: "/cgi-bin/koha/acqui/acqui-home.pl",
@@ -25,6 +32,7 @@ export const routes = [
                 title: $__("Vendors"),
                 icon: "fa fa-shopping-cart",
                 is_end_node: true,
+                breadcrumbFormat: vendorSearchBreadcrumb,
                 children: [
                     {
                         path: "",

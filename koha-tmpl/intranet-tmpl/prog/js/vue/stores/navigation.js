@@ -12,6 +12,7 @@ export const useNavigationStore = defineStore("navigation", () => {
         },
         current: null,
         params: {},
+        query: {},
     });
     const actions = {
         setRoutes(routesDef) {
@@ -145,7 +146,17 @@ export const useNavigationStore = defineStore("navigation", () => {
                     .map(match => {
                         let path = _getPath(match, params);
                         const externalPath = path.includes(".pl");
-                        const test = {
+                        let {
+                            meta: { self },
+                        } = match;
+                        if (self.breadcrumbFormat) {
+                            self = self.breadcrumbFormat({
+                                match: self,
+                                params: store.params,
+                                query: store.query,
+                            });
+                        }
+                        const breadcrumbInfo = {
                             ...match.meta.self,
                             icon: null,
                             ...(externalPath
@@ -153,7 +164,7 @@ export const useNavigationStore = defineStore("navigation", () => {
                                 : { path }),
                             children: null,
                         };
-                        return test;
+                        return breadcrumbInfo;
                     });
                 return matches;
             }
