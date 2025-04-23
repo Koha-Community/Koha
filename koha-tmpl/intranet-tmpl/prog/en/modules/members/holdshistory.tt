@@ -222,7 +222,7 @@
                             searchable: true,
                             orderable: true,
                             render: function (data, type, row, meta) {
-                                return row.biblio.author;
+                                return row.biblio ? row.biblio.author : "" ;
                             }
                         },
                         {
