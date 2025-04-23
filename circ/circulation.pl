@@ -552,9 +552,13 @@ if ( @$barcodes && $op eq 'cud-checkout' ) {
                     $cancelreserve,
                     undef, undef,
                     {
-                        onsite_checkout        => $onsite_checkout,        auto_renew => $session->param('auto_renew'),
-                        switch_onsite_checkout => $switch_onsite_checkout, cancel_recall => $cancel_recall,
+                        onsite_checkout        => $onsite_checkout,
+                        auto_renew             => $session->param('auto_renew'),
+                        switch_onsite_checkout => $switch_onsite_checkout,
+                        cancel_recall          => $cancel_recall,
                         recall_id              => $recall_id,
+                        confirmations          => [ grep { /^[A-Z_]+$/ } keys %{$needsconfirmation} ],
+                        forced                 => [ keys %{$issuingimpossible} ]
                     }
                 );
                 $template_params->{issue} = $issue;

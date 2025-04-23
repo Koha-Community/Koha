@@ -281,7 +281,13 @@ if ( $patron && $op eq "cud-returnbook" && $allowselfcheckreturns ) {
                     )->count;
                 }
 
-                my $new_issue = AddIssue( $patron, $barcode );
+                my $new_issue = AddIssue(
+                    $patron, $barcode, undef, undef, undef, undef,
+                    {
+                        confirmations => [ grep { /^[A-Z_]+$/ } keys %{$needconfirm} ],
+                        forced        => [ keys %{$impossible} ]
+                    }
+                );
                 $template->param( issued => 1, new_issue => $new_issue );
                 push @newissueslist, $barcode unless ( grep /^$barcode$/, @newissueslist );
 

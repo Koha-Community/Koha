@@ -174,7 +174,16 @@ sub do_checkout {
                 $recall_id = $messages->{RECALLED};
             }
         }
-        my $issue = AddIssue( $patron, $barcode, $overridden_duedate, 0, undef, undef, { recall_id => $recall_id } );
+        my $issue = AddIssue(
+            $patron, $barcode,
+            $overridden_duedate,
+            0, undef, undef,
+            {
+                recall_id     => $recall_id,
+                confirmations => [ grep { /^[A-Z_]+$/ } keys %{$needsconfirmation} ],
+                forced        => [ keys %{$issuingimpossible} ]
+            }
+        );
         $self->{due} = $self->duedatefromissue( $issue, $itemnumber );
     }
 

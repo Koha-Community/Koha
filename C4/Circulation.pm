@@ -1674,6 +1674,8 @@ sub AddIssue {
     my $auto_renew             = $params && $params->{auto_renew};
     my $cancel_recall          = $params && $params->{cancel_recall};
     my $recall_id              = $params && $params->{recall_id};
+    my $confirmations          = $params->{confirmations};
+    my $forced                 = $params->{forced};
     my $dbh                    = C4::Context->dbh;
     my $barcodecheck           = CheckValidBarcode($barcode);
 
@@ -2011,11 +2013,27 @@ sub AddIssue {
                     }
                 );
             }
-            logaction(
-                "CIRCULATION", "ISSUE",
-                $patron->borrowernumber,
-                $item_object->itemnumber,
-            ) if C4::Context->preference("IssueLog");
+
+            # Log the checkout
+            if ( C4::Context->preference('IssueLog') ) {
+                my $info = $item_object->itemnumber;
+                if ( defined($confirmations) || defined($forced) ) {
+                    $info = to_json(
+                        {
+                            issue         => $issue->issue_id,
+                            itemnumber    => $item_object->itemnumber,
+                            confirmations => $confirmations,
+                            forced        => $forced
+                        },
+                        { pretty => 1, canonical => 1 }
+                    );
+                }
+                logaction(
+                    "CIRCULATION", "ISSUE",
+                    $patron->borrowernumber,
+                    $info,
+                );
+            }
 
             Koha::Plugins->call(
                 'after_circ_action',

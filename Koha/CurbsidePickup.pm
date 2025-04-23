@@ -252,7 +252,15 @@ sub mark_as_delivered {
                 C4::Circulation::CanBookBeIssued( $patron, $hold->item->barcode );
 
             unless ( keys %$issuingimpossible ) {
-                my $issue = C4::Circulation::AddIssue( $patron, $hold->item->barcode );
+                my $issue = C4::Circulation::AddIssue(
+                    $patron,
+                    $hold->item->barcode,
+                    undef, undef, undef, undef,
+                    {
+                        confirmations => [ grep { /^[A-Z_]+$/ } keys %{$needsconfirmation} ],
+                        forced        => [ keys %{$issuingimpossible} ]
+                    }
+                );
                 if ($issue) {
                     Koha::CurbsidePickupIssue->new(
                         {

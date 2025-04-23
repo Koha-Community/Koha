@@ -176,3 +176,62 @@
         <span>[% log_interface | html %]</span>
     [% END %]
 [% END %]
+
+[% BLOCK translate_log_override %]
+    [% SWITCH override %]
+    [% CASE 'INVALID_DATE' %]
+        <span>Invalid date confirmed</span>
+    [% CASE 'DEBT_GUARANTEES' %]
+        <span>Guarantees had debts</span>
+    [% CASE 'DEBT_GUARANTORS' %]
+        <span>Guarantors had debts</span>
+    [% CASE 'DEBT' %]
+        <span>Patron had debt</span>
+    [% CASE 'USERBLOCKEDOVERDUE' %]
+        <span>Patron had overdues</span>
+    [% CASE 'ADDITIONAL_MATERIALS' %]
+        <span>Additional materials were confirmed</span>
+    [% CASE 'RENEW_ISSUE' %]
+        <span>Renewal</span>
+    [% CASE 'ISSUED_TO_ANOTHER' %]
+        <span>Item was issued to another patron prior to this checkout</span>
+    [% CASE 'PATRON_CANT' %]
+        <span>Max renewals reached</span>
+    [% CASE 'TOO_MANY' %]
+        <span>Max renewals reached</span>
+    [% CASE 'PREVISSUE' %]
+        <span>Patron was notified of previous issues</span>
+    [% CASE 'NOT_FOR_LOAN' %]
+        <span>Item was not for loan</span>
+    [% CASE 'NOT_FOR_LOAN_FORCING' %]
+        <span>Item was not for loan</span>
+    [% CASE 'ITEM_LOST' %]
+        <span>Item was reported lost</span>
+    [% CASE 'BORRNOTSAMEBRANCH' %]
+        <span>Patron does not belong to this library</span>
+    [% CASE 'RENTALCHARGE' %]
+        <span>Item had a rental charge</span>
+    [% CASE 'RECALLED' %]
+        <span>Item was recalled</span>
+    [% CASE 'RESERVE_WAITING' %]
+        <span>Item had a reserve waiting</span>
+    [% CASE 'RESERVED' %]
+        <span>Item was reserved</span>
+    [% CASE 'TRANSFERRED' %]
+        <span>Item was transferred</span>
+    [% CASE 'PROCESSING' %]
+        <span>Item was in processing</span>
+    [% CASE 'BOOKED_EARLY' %]
+        <span>Item was booked and checked out early</span>
+    [% CASE 'BOOKED_TO_ANOTHER' %]
+        <span>Item was booked to another patron</span>
+    [% CASE 'AGE_RESTRICTION' %]
+        <span>Item has an eage restriction</span>
+    [% CASE 'HIGHHOLDS' %]
+        <span>Item had high holds</span>
+    [% CASE 'BIBLIO_ALREADY_ISSUED' %]
+        <span>Biblio was already issued</span>
+    [% CASE %]
+        <span>[% override | html %]</span>
+    [% END %]
+[% END %]
