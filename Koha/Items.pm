@@ -459,6 +459,7 @@ sub batch_update {
 
     my ( @modified_itemnumbers, $modified_fields );
     my $i;
+    my @errors;
     my $schema = Koha::Database->new->schema;
     while ( my $item = $self->next ) {
 
@@ -578,6 +579,9 @@ sub batch_update {
                 }
             )
         } catch {
+            push @errors, {
+                error => eval { $_->{error} } || "$_",
+            };
             warn $_
         };
 
@@ -600,7 +604,10 @@ sub batch_update {
         }
     }
 
-    return ( { modified_itemnumbers => \@modified_itemnumbers, modified_fields => $modified_fields }, $self );
+    return (
+        { modified_itemnumbers => \@modified_itemnumbers, modified_fields => $modified_fields, errors => \@errors },
+        $self
+    );
 }
 
 =head2 apply_regex
