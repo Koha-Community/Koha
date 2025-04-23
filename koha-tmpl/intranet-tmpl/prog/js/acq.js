@@ -439,13 +439,12 @@ $(document).ready(function () {
     $("#deleteVendorForm").on("submit", function (e) {
         e.preventDefault();
         var id = $("#booksellerid").val();
-        let options = {
-            url: "/api/v1/acquisitions/vendors/" + id,
-            method: "DELETE",
-            contentType: "application/json",
-        };
-        $.ajax(options).then(function (thing, result) {
-            window.location.href = "/cgi-bin/koha/acquisition/vendors";
-        });
+        const client = APIClient.acquisition;
+        client.vendors.delete(id).then(
+            success => {
+                window.location.href = "/cgi-bin/koha/acquisition/vendors";
+            },
+            error => {}
+        );
     });
 });
