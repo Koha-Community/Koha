@@ -68,7 +68,6 @@ if ( $op eq 'cud-renew' && $barcode ) {
             my $borrowernumber = $patron->borrowernumber;
             my $user           = C4::Context->userenv->{number};
             my $branchcode     = C4::Context->userenv->{branch};
-            my $message;
             my @message;
 
             if ( ( $patron->is_debarred || q{} ) lt dt_from_string()->ymd() ) {
@@ -81,7 +80,6 @@ if ( $op eq 'cud-renew' && $barcode ) {
                         $can_renew = 1;
                         $error     = undef;
 
-                        $message = "Override Renew hold for another";
                         @message = ("Override Renew hold for another");
 
                         my $infos = (
@@ -133,7 +131,6 @@ if ( $op eq 'cud-renew' && $barcode ) {
                     );
                     $template->param( date_due => $date_due );
 
-                    $message = "Override limit Renew";
                     @message = ("Override limit Renew");
 
                     my $infos = (
