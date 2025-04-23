@@ -1439,7 +1439,7 @@ sub _is_safe_to_auto_truncate {
     # Do not auto truncate fields that should not be auto truncated,
     # primarily various types of identifiers, above all record identifiers.
     # Other search fields that should not be auto truncated can be defined
-    # with ESPreventAutoTruncate syspref.
+    # with ElasticsearchPreventAutoTruncate syspref.
     my %do_not_autotruncate_fields;
     my $cache                          = Koha::Caches->get_instance();
     my $cache_key                      = 'elasticsearch_search_do_not_autotruncate';
@@ -1465,7 +1465,7 @@ sub _is_safe_to_auto_truncate {
     # processing of the syspref is done outside cache since the systempreference
     # can be modified and the modification should be reflected in the
     # $do_not_autotruncate_fields array
-    my $prevent_autotruncate = C4::Context->preference('ESPreventAutoTruncate');
+    my $prevent_autotruncate = C4::Context->preference('ElasticsearchPreventAutoTruncate');
     for my $field ( split( /\s*[,;|]\s*/, $prevent_autotruncate ) ) {
         $do_not_autotruncate_fields{$field} = 1;
     }

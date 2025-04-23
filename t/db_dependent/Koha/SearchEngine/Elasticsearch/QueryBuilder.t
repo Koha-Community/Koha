@@ -443,8 +443,8 @@ subtest 'build_query tests' => sub {
         "all quoted strings are unaltered if more than one in query"
     );
 
-    # Reset ESPreventAutoTruncate syspref
-    t::lib::Mocks::mock_preference( 'ESPreventAutoTruncate', '' );
+    # Reset ElasticsearchPreventAutoTruncate syspref
+    t::lib::Mocks::mock_preference( 'ElasticsearchPreventAutoTruncate', '' );
 
     ( undef, $query ) = $qb->build_query_compat( undef, ['barcode:123456'] );
     is(
@@ -481,14 +481,14 @@ subtest 'build_query tests' => sub {
         "query of specific field including period and quoted is not truncated, field name is converted to lower case"
     );
 
-    # Set ESPreventAutoTruncate syspref
-    t::lib::Mocks::mock_preference( 'ESPreventAutoTruncate', 'barcode' );
+    # Set ElasticsearchPreventAutoTruncate syspref
+    t::lib::Mocks::mock_preference( 'ElasticsearchPreventAutoTruncate', 'barcode' );
 
     ( undef, $query ) = $qb->build_query_compat( undef, ['barcode:123456'] );
     is(
         $query->{query}{bool}{must}[0]{query_string}{query},
         '(barcode:123456)',
-        "query of specific field excluded by ESPreventAutoTruncate is not truncated"
+        "query of specific field excluded by ElasticsearchPreventAutoTruncate is not truncated"
     );
 
     ( undef, $query ) = $qb->build_query_compat( undef, ['Local-number:123456'] );
