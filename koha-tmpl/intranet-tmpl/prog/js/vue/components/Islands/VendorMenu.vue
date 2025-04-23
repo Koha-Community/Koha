@@ -1,5 +1,5 @@
 <template>
-    <div id="menu" v-if="vendorId">
+    <div id="vendor-menu" class="sidebar_menu" v-if="vendorId">
         <ul>
             <li
                 v-if="

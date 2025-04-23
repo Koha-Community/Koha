@@ -8,7 +8,7 @@ export class AcquisitionAPIClient {
     get vendors() {
         return {
             get: id =>
-                this.get({
+                this.httpClient.get({
                     endpoint: "vendors/" + id,
                     headers: {
                         "x-koha-embed":
@@ -25,21 +25,21 @@ export class AcquisitionAPIClient {
                     },
                 }),
             delete: id =>
-                this.delete({
+                this.httpClient.delete({
                     endpoint: "vendors/" + id,
                 }),
             create: vendor =>
-                this.post({
+                this.httpClient.post({
                     endpoint: "vendors",
                     body: vendor,
                 }),
             update: (vendor, id) =>
-                this.put({
+                this.httpClient.put({
                     endpoint: "vendors/" + id,
                     body: vendor,
                 }),
             count: (query = {}) =>
-                this.count({
+                this.httpClient.count({
                     endpoint:
                         "vendors?" +
                         new URLSearchParams({
@@ -54,7 +54,7 @@ export class AcquisitionAPIClient {
     get baskets() {
         return {
             count: (query = {}) =>
-                this.count({
+                this.httpClient.count({
                     endpoint:
                         "baskets?" +
                         new URLSearchParams({

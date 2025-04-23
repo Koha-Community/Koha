@@ -84,6 +84,14 @@ module.exports = [
         },
     },
     {
+        resolve: {
+            alias: {
+                "@fetch": path.resolve(
+                    __dirname,
+                    "koha-tmpl/intranet-tmpl/prog/js/fetch"
+                ),
+            },
+        },
         experiments: {
             outputModule: true,
         },

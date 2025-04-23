@@ -12,10 +12,12 @@ import PatronListAPIClient from "./patron-list-api-client.js";
 import RecallAPIClient from "./recall-api-client.js";
 import SysprefAPIClient from "./system-preferences-api-client.js";
 import TicketAPIClient from "./ticket-api-client.js";
+import AcquisitionAPIClient from "./acquisition-api-client.js";
 
 export const APIClient = {
     article_request: new ArticleRequestAPIClient(HttpClient),
     authorised_values: new AVAPIClient(HttpClient),
+    acquisition: new AcquisitionAPIClient(HttpClient),
     cataloguing: new CataloguingAPIClient(HttpClient),
     circulation: new CirculationAPIClient(HttpClient),
     club: new ClubAPIClient(HttpClient),

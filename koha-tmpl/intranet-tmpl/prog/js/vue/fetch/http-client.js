@@ -6,7 +6,9 @@ class HttpClient {
         this._headers = options.headers || {
             "Content-Type": "application/json;charset=utf-8",
         };
-        this.csrf_token = $('meta[name="csrf-token"]').attr("content");
+        this.csrf_token = document
+            .querySelector('meta[name="csrf-token"]')
+            .getAttribute("content");
     }
 
     async _fetchJSON(
