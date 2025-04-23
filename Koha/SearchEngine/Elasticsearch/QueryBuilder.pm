@@ -291,7 +291,7 @@ sub build_query_compat {
         my @sort_params  = $self->_convert_sort_fields(@$sort_by);
         my @index_params = $self->_convert_index_fields(@$indexes);
         my $field_match_boost_query =
-            C4::Context->preference('ESBoostFieldMatch')
+            C4::Context->preference('ElasticsearchBoostFieldMatch')
             ? $self->_build_field_match_boost_query( { operands => $operands, indexes => \@index_params } )
             : [];
         $limits = $self->_fix_limit_special_cases($orig_limits);

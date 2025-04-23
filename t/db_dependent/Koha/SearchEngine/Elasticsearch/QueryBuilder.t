@@ -1245,8 +1245,8 @@ subtest "_build_field_match_boost_query() tests" => sub {
         'Title is not converted to title-cover'
     );
 
-    t::lib::Mocks::mock_preference( 'ESBoostFieldMatch', '0' );
-    t::lib::Mocks::mock_preference( 'QueryAutoTruncate', '1' );
+    t::lib::Mocks::mock_preference( 'ElasticsearchBoostFieldMatch', '0' );
+    t::lib::Mocks::mock_preference( 'QueryAutoTruncate',            '1' );
     my ( undef, $query ) = $qb->build_query_compat( ['AND'], [ 'donald duck', 'disney' ], [ 'title', 'author' ] );
     is(
         $query->{query}{bool}{must}[0]{query_string}{query},
@@ -1259,7 +1259,7 @@ subtest "_build_field_match_boost_query() tests" => sub {
         'No should query added for boosting'
     );
 
-    t::lib::Mocks::mock_preference( 'ESBoostFieldMatch', '1' );
+    t::lib::Mocks::mock_preference( 'ElasticsearchBoostFieldMatch', '1' );
     ( undef, $query ) = $qb->build_query_compat( ['AND'], [ 'donald duck', 'disney' ], [ 'title', 'author' ] );
     is_deeply(
         $query->{query}{bool}{should},

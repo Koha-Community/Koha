@@ -96,13 +96,13 @@ Searching:
             - "the cross_fields option for Elasticsearch searches, supported in Elasticsearch 6.X and above."
             - See the <a href="https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-multi-match-query.html#type-cross-fields">Elasticsearch cross_fields documentation</a>.
         -
-            - pref: ESBoostFieldMatch
+            - pref: ElasticsearchBoostFieldMatch
               default: 0
               choices:
                   1: Enable
                   0: Disable
             - "adding a second 'match' field search to the ES query to boost relevancy. Keyword and title fields will be boosted with title-cover, other fields will boost directly."
-            - "This will not boost CCL style searches, only standard or advanced searches"
+            - "This will not boost CCL style searches, only standard or advanced searches."
         -
             - pref: SavedSearchFilters
               default: 0
