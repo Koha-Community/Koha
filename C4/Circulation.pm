@@ -1487,8 +1487,6 @@ sub CanBookBeIssued {
     my $borrower   = $patron;
     my $user       = C4::Context->userenv->{number};
     my $branchcode = C4::Context->userenv->{branch};
-    my $item       = Koha::Items->find( { barcode => $barcode } );
-    my $itemnumber = $item->itemnumber;
 
     # action, cardnumber, barcode, date, heure, user, branche
     if ($issueconfirmed) {
