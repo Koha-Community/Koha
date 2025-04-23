@@ -19,7 +19,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 38;
+use Test::More tests => 39;
 use Test::Exception;
 use Test::Warn;
 use Time::Fake;
@@ -2845,4 +2845,26 @@ subtest 'preferred_name' => sub {
     $patron->preferred_name("Preferred again")->store();
     is( $patron->preferred_name, "Preferred again", "Preferred name set on update when passed" );
 
+};
+
+subtest 'ill_requests() tests' => sub {
+
+    plan tests => 3;
+
+    $schema->storage->txn_begin;
+
+    my $patron = $builder->build_object( { class => 'Koha::Patrons' } );
+
+    my $reqs_rs = $patron->ill_requests();
+    is( ref($reqs_rs),   'Koha::ILL::Requests', 'Returned object type is correct' );
+    is( $reqs_rs->count, 0,                     'No linked ILL requests for the patron' );
+
+    # add two requests
+    $builder->build_object( { class => 'Koha::ILL::Requests', value => { borrowernumber => $patron->id } } );
+    $builder->build_object( { class => 'Koha::ILL::Requests', value => { borrowernumber => $patron->id } } );
+
+    $reqs_rs = $patron->ill_requests();
+    is( $reqs_rs->count, 2, 'Two linked ILL requests for the patron' );
+
+    $schema->storage->txn_rollback;
 };

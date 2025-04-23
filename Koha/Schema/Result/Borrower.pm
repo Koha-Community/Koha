@@ -2230,6 +2230,13 @@ __PACKAGE__->add_columns(
     '+protected'               => { is_boolean => 1 },
 );
 
+__PACKAGE__->has_many(
+  "ill_requests",
+  "Koha::Schema::Result::Illrequest",
+  { "foreign.borrowernumber" => "self.borrowernumber" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+
 =head2 koha_objects_class
 
 Missing POD for koha_objects_class.

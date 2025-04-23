@@ -46,6 +46,7 @@ use Koha::Encryption;
 use Koha::Exceptions;
 use Koha::Exceptions::Password;
 use Koha::Holds;
+use Koha::ILL::Requests;
 use Koha::Old::Checkouts;
 use Koha::OverdueRules;
 use Koha::Patron::Attributes;
@@ -1479,6 +1480,19 @@ sub checkouts {
     my ($self) = @_;
     my $checkouts = $self->_result->issues;
     return Koha::Checkouts->_new_from_dbic($checkouts);
+}
+
+=head3 ill_requests
+
+    my $ill_requests = $patron->ill_requests();
+
+Method that returns the related I<Koha::ILL::Requests> iterator.
+
+=cut
+
+sub ill_requests {
+    my ($self) = @_;
+    return Koha::ILL::Requests->_new_from_dbic( scalar $self->_result->ill_requests );
 }
 
 =head3 pending_checkouts
