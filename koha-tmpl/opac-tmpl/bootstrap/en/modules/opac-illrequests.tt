@@ -372,14 +372,24 @@
 
             return status_label;
         }
-        $("#illrequestlist").dataTable($.extend(true, {}, dataTablesDefaults, {
+        $("#illrequestlist").kohaTable({
+            order: [[ 0, "desc" ]],
+            dom: '<"dt-info"i><"top pager"<"table_entries"lp>>tr<"bottom pager"ip>',
+            paging: true,
+            embed: ['+strings','extended_attributes'],
+            ajax: { url: '/api/v1/public/patrons/[% logged_in_user.borrowernumber | uri %]/ill/requests' },
+            columnDefs: [ {
+                render: function (data, type, row, meta) {
+                    if ( data && type == 'display' ) {
+                        return data.escapeHtml();
+                    }
+                    return data;
+                }
+            } ],
             columns: [
                 {
                     data: 'ill_request_id',
-                    sortable: true,
-                    render: (data, type, row, meta) => {
-                        return data;
-                    },
+                    sortable: true
                 },
                 {
                     data: 'author',
@@ -397,10 +407,7 @@
                 },
                 {
                     data: 'ill_backend_id',
-                    sortable: true,
-                    render: (data, type, row, meta) => {
-                        return escape_str(data);
-                    },
+                    sortable: true
                 },
                 {
                     data: 'type',
@@ -437,45 +444,8 @@
                         return `<a href="/cgi-bin/koha/opac-illrequests.pl?op=view&amp;illrequest_id=${row.ill_request_id}" class="btn btn-primary btn-sm">View</a>`;
                     },
                 }
-            ],
-            "order": [[ 0, "desc" ]],
-            "dom": '<"dt-info"i><"top pager"<"table_entries"lp>>tr<"bottom pager"ip>',
-            "paging": true,
-            "serverSide": true,
-            "ajax": {
-                "cache": true,
-                "url": '/api/v1/patrons/[% logged_in_user.borrowernumber | html %]/ill/requests',
-                'beforeSend': function (xhr, settings) {
-                    this._xhr = xhr;
-                    xhr.setRequestHeader('x-koha-embed', '+strings,extended_attributes');
-                },
-                "data": (data, settings) => {
-                    const order = data.order[0];
-                    const order_by = (order.dir == 'asc' ? '+' : '-') + 'me.' + data.columns[order.column].data;
-                    const page = Math.floor(data.start / data.length) + 1;
-                    return {
-                        _page: page,
-                        _per_page: data.length,
-                        _order_by: order_by,
-                    };
-                },
-                'dataFilter': function (data, type) {
-                    const json = {data: JSON.parse(data)};
-                    if (total = this._xhr.getResponseHeader('x-total-count')) {
-                        json.recordsTotal = total;
-                        json.recordsFiltered = total;
-                    }
-                    if (total = this._xhr.getResponseHeader('x-base-total-count')) {
-                        json.recordsTotal = total;
-                    }
-                    if (draw = this._xhr.getResponseHeader('x-koha-request-id')) {
-                        json.draw = draw;
-                    }
-
-                    return JSON.stringify(json);
-                },
-            },
-        }));
+            ]
+        });
         $("#backend-dropdown-options").removeClass("nojs");
         [% IF services_json.length > 0 %]
             var services = [% services_json | $raw %];
