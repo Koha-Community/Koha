@@ -157,12 +157,6 @@ elsif ( $rego_found
             $patron->notify_library_of_registration($notify_library);
         }
 
-        $template->param(
-            PatronSelfRegistrationAdditionalInstructions =>
-              C4::Context->preference(
-                'PatronSelfRegistrationAdditionalInstructions')
-        );
-
         my ($theme, $news_lang, $availablethemes) = C4::Templates::themelanguage(C4::Context->config('opachtdocs'),'opac-registration-confirmation.tt','opac',$cgi);
         $template->param( news_lang => $news_lang );
     }
