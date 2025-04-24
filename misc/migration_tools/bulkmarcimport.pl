@@ -536,8 +536,10 @@ RECORD: while () {
                         1    #@FIXME: Really always updated?
                     );
                 }
-                push @search_engine_record_ids, $authid;
-                push @search_engine_records,    $record;
+                if ($indexer) {
+                    push @search_engine_record_ids, $authid;
+                    push @search_engine_records,    $record;
+                }
             } else {
                 my ( $biblioitemnumber, $itemnumbers_ref, $errors_ref, $record_id );
 
@@ -705,8 +707,10 @@ RECORD: while () {
                     my $biblio = Koha::Biblios->find($record_id);
                     $record = $biblio->metadata_record( { embed_items => 1 } );
 
-                    push @search_engine_record_ids, $record_id;
-                    push @search_engine_records,    $record;
+                    if ($indexer) {
+                        push @search_engine_record_ids, $record_id;
+                        push @search_engine_records,    $record;
+                    }
                 }
             }
         }
