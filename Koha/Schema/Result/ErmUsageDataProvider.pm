@@ -96,27 +96,24 @@ report_release of the harvester
 
 =head2 customer_id
 
-  data_type: 'varchar'
+  data_type: 'text'
   is_nullable: 1
-  size: 50
 
-sushi customer id
+SUSHI customer ID
 
 =head2 requestor_id
 
-  data_type: 'varchar'
+  data_type: 'text'
   is_nullable: 1
-  size: 50
 
-sushi requestor id
+SUSHI requestor ID
 
 =head2 api_key
 
-  data_type: 'varchar'
+  data_type: 'text'
   is_nullable: 1
-  size: 80
 
-sushi api key
+SUSHI API key
 
 =head2 requestor_name
 
@@ -172,11 +169,11 @@ __PACKAGE__->add_columns(
   "report_release",
   { data_type => "varchar", is_nullable => 1, size => 80 },
   "customer_id",
-  { data_type => "varchar", is_nullable => 1, size => 50 },
+  { data_type => "text", is_nullable => 1 },
   "requestor_id",
-  { data_type => "varchar", is_nullable => 1, size => 50 },
+  { data_type => "text", is_nullable => 1 },
   "api_key",
-  { data_type => "varchar", is_nullable => 1, size => 80 },
+  { data_type => "text", is_nullable => 1 },
   "requestor_name",
   { data_type => "varchar", is_nullable => 1, size => 80 },
   "requestor_email",
@@ -338,8 +335,8 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07051 @ 2024-09-27 15:57:24
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:YyiiRHSl3tJTzuLsoy9oPw
+# Created by DBIx::Class::Schema::Loader v0.07051 @ 2025-04-24 17:38:40
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:ToAsyGMN6zZW/ffmCqE8XA
 
 # __PACKAGE__->add_columns(
 #     '+active' => { is_boolean => 1 }
