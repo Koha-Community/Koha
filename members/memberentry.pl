@@ -845,11 +845,7 @@ if ( C4::Context->preference('EnhancedMessagingPreferences') ) {
             C4::Form::MessagingPreferences::set_form_values( { borrowernumber => $borrowernumber }, $template );
         }
     } else {
-        if ( $op eq 'add_form' ) {
-            C4::Form::MessagingPreferences::restore_form_values( $input, $template );
-        } else {
-            C4::Form::MessagingPreferences::restore_form_values( $input, $template );
-        }
+        C4::Form::MessagingPreferences::restore_form_values( $input, $template );
     }
     $template->param( SMSSendDriver         => C4::Context->preference("SMSSendDriver") );
     $template->param( SMSnumber             => $data{'smsalertnumber'} );
