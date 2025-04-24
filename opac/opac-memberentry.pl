@@ -298,8 +298,6 @@ if ( $op eq 'cud-create' ) {
                 }
 
             }
-            $template->param( PatronSelfRegistrationAdditionalInstructions =>
-                    C4::Context->preference('PatronSelfRegistrationAdditionalInstructions') );
         }
     }
 } elsif ( $op eq 'cud-update' ) {
