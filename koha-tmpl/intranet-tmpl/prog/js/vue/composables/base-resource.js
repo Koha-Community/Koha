@@ -1,10 +1,11 @@
 import { computed, inject } from "vue";
-import { useRouter } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 import { $__ } from "../i18n";
 import { build_url } from "../composables/datatables";
 
 export function useBaseResource(context) {
     const router = useRouter();
+    const route = useRoute();
     const { setConfirmationDialog, setMessage, setError, setWarning } =
         inject("mainStore");
 
@@ -589,5 +590,8 @@ export function useBaseResource(context) {
         map_av_dt_filter,
         get_lib_from_av,
         build_url,
+        route,
+        router,
+        $__,
     };
 }

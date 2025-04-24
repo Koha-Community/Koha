@@ -12,7 +12,6 @@ import { storeToRefs } from "pinia";
 import { APIClient } from "../../fetch/api-client.js";
 
 export default {
-    // extends: BaseResource,
     props: {
         routeAction: String,
         embedded: { type: Boolean, default: false },
@@ -35,46 +34,43 @@ export default {
         const vendorStore = inject("vendorStore");
         const { vendors } = storeToRefs(vendorStore);
 
-        const getTableFilterFormElements = () => {
-            return [
-                {
-                    name: "by_expired",
-                    type: "checkbox",
-                    label: __("Filter by expired"),
-                    value: false,
-                    onChange: function (filters) {
-                        if (filters.by_expired) {
-                            filters.max_expiration_date = new Date()
-                                .toISOString()
-                                .substring(0, 10);
-                        } else {
-                            filters.max_expiration_date = "";
-                        }
-                        return filters;
-                    },
-                },
-                {
-                    name: "max_expiration_date",
-                    type: "date",
-                    label: __("on"),
-                    componentProps: {
-                        disabled: {
-                            resourceProperty: "by_expired",
-                            qualifier: "!",
-                        },
-                    },
-                    value: "",
-                },
-                {
-                    name: "by_mine",
-                    type: "checkbox",
-                    label: __("Show mine only"),
-                    value: false,
-                },
-            ];
-        };
-
         const extendedAttributesResourceType = "agreement";
+        const tableFilters = [
+            {
+                name: "by_expired",
+                type: "checkbox",
+                label: __("Filter by expired"),
+                value: false,
+                onChange: function (filters) {
+                    if (filters.by_expired) {
+                        filters.max_expiration_date = new Date()
+                            .toISOString()
+                            .substring(0, 10);
+                    } else {
+                        filters.max_expiration_date = "";
+                    }
+                    return filters;
+                },
+            },
+            {
+                name: "max_expiration_date",
+                type: "date",
+                label: __("on"),
+                componentProps: {
+                    disabled: {
+                        resourceProperty: "by_expired",
+                        qualifier: "!",
+                    },
+                },
+                value: "",
+            },
+            {
+                name: "by_mine",
+                type: "checkbox",
+                label: __("Show mine only"),
+                value: false,
+            },
+        ];
 
         const baseResource = useBaseResource({
             resourceName: "agreement",
@@ -650,73 +646,68 @@ export default {
             av_agreement_relationships,
             agreement_table_settings,
             vendors,
-            tableFilters: getTableFilterFormElements(),
+            tableFilters,
             props: props,
         });
 
-        baseResource.created();
-        return {
-            ...baseResource,
-        };
-    },
-    data() {
-        const defaults = this.getFilterValues(
-            this.$route.query,
-            this.tableFilters
+        const defaults = baseResource.getFilterValues(
+            baseResource.route.query,
+            tableFilters
         );
-        return {
-            tableOptions: {
-                options: {
-                    embed: "user_roles,vendor,extended_attributes,+strings",
-                },
-                url: () => this.tableUrl(defaults),
-                table_settings: this.agreement_table_settings,
-                add_filters: true,
-                filters_options: {
-                    2: () =>
-                        this.vendors.map(e => {
-                            e["_id"] = e["id"];
-                            e["_str"] = e["name"];
-                            return e;
-                        }),
-                    4: () => this.map_av_dt_filter("av_agreement_statuses"),
-                    5: () =>
-                        this.map_av_dt_filter("av_agreement_closure_reasons"),
-                    6: [
-                        { _id: 0, _str: this.$__("No") },
-                        { _id: 1, _str: this.$__("Yes") },
-                    ],
-                    7: () =>
-                        this.map_av_dt_filter(
-                            "av_agreement_renewal_priorities"
-                        ),
-                },
-                actions: {
-                    0: ["show"],
-                    1: ["show"],
-                    "-1": this.embedded
-                        ? [
-                              {
-                                  select: {
-                                      text: this.$__("Select"),
-                                      icon: "fa fa-check",
-                                  },
+
+        const tableOptions = {
+            options: {
+                embed: "user_roles,vendor,extended_attributes,+strings",
+            },
+            url: () => tableUrl(defaults),
+            table_settings: baseResource.agreement_table_settings,
+            add_filters: true,
+            filters_options: {
+                2: [
+                    ...vendors.value.map(e => {
+                        e["_id"] = e["id"];
+                        e["_str"] = e["name"];
+                        return e;
+                    }),
+                ],
+                4: () => baseResource.map_av_dt_filter("av_agreement_statuses"),
+                5: () =>
+                    baseResource.map_av_dt_filter(
+                        "av_agreement_closure_reasons"
+                    ),
+                6: [
+                    { _id: 0, _str: __("No") },
+                    { _id: 1, _str: __("Yes") },
+                ],
+                7: () =>
+                    baseResource.map_av_dt_filter(
+                        "av_agreement_renewal_priorities"
+                    ),
+            },
+            actions: {
+                0: ["show"],
+                1: ["show"],
+                "-1": baseResource.embedded
+                    ? [
+                          {
+                              select: {
+                                  text: __("Select"),
+                                  icon: "fa fa-check",
                               },
-                          ]
-                        : ["edit", "delete"],
-                },
-                default_filters: {
-                    "user_roles.user_id": function () {
-                        return defaults.by_mine
-                            ? logged_in_user.borrowernumber
-                            : "";
-                    },
+                          },
+                      ]
+                    : ["edit", "delete"],
+            },
+            default_filters: {
+                "user_roles.user_id": function () {
+                    return defaults.by_mine
+                        ? logged_in_user.borrowernumber
+                        : "";
                 },
             },
         };
-    },
-    methods: {
-        checkForm(agreement) {
+
+        const checkForm = agreement => {
             let errors = [];
 
             let agreement_licenses = agreement.agreement_licenses;
@@ -728,7 +719,9 @@ export default {
             );
 
             if (duplicate_license_ids.length) {
-                errors.push(this.$__("A license is used several times"));
+                errors.push(
+                    baseResource.$__("A license is used several times")
+                );
             }
 
             const related_agreement_ids = agreement.agreement_relationships.map(
@@ -741,7 +734,7 @@ export default {
 
             if (duplicate_related_agreement_ids.length) {
                 errors.push(
-                    this.$__(
+                    baseResource.$__(
                         "An agreement is used as relationship several times"
                     )
                 );
@@ -752,7 +745,7 @@ export default {
                     .length > 1
             ) {
                 errors.push(
-                    this.$__("Only one controlling license is allowed")
+                    baseResource.$__("Only one controlling license is allowed")
                 );
             }
 
@@ -765,31 +758,30 @@ export default {
                 ).length >= 1
             ) {
                 errors.push(
-                    this.$__("File size exceeds maximum allowed: %s MB").format(
-                        (max_allowed_packet / (1024 * 1024)).toFixed(2)
-                    )
+                    baseResource
+                        .$__("File size exceeds maximum allowed: %s MB")
+                        .format((max_allowed_packet / (1024 * 1024)).toFixed(2))
                 );
             }
             agreement.user_roles.forEach((user, i) => {
                 if (user.patron_str === "") {
                     errors.push(
-                        this.$__("Agreement user %s is missing a user").format(
-                            i + 1
-                        )
+                        baseResource
+                            .$__("Agreement user %s is missing a user")
+                            .format(i + 1)
                     );
                 }
             });
-            this.setWarning(errors.join("<br>"));
+            baseResource.setWarning(errors.join("<br>"));
             return !errors.length;
-        },
-        onSubmit(e, agreementToSave) {
+        };
+        const onSubmit = (e, agreementToSave) => {
             e.preventDefault();
 
-            //let agreement= Object.assign( {} ,this.agreement); // copy
             let agreement = JSON.parse(JSON.stringify(agreementToSave)); // copy
             let agreement_id = agreement.agreement_id;
 
-            if (!this.checkForm(agreement)) {
+            if (!checkForm(agreement)) {
                 return false;
             }
 
@@ -832,30 +824,34 @@ export default {
             delete agreement.agreement_packages;
 
             if (agreement_id) {
-                this.apiClient.update(agreement, agreement_id).then(
+                baseResource.apiClient.update(agreement, agreement_id).then(
                     success => {
-                        this.setMessage(this.$__("Agreement updated"));
-                        this.$router.push({ name: "AgreementsList" });
+                        baseResource.setMessage(
+                            baseResource.$__("Agreement updated")
+                        );
+                        baseResource.router.push({ name: "AgreementsList" });
                     },
                     error => {}
                 );
             } else {
-                this.apiClient.create(agreement).then(
+                baseResource.apiClient.create(agreement).then(
                     success => {
-                        this.setMessage(this.$__("Agreement created"));
-                        this.$router.push({ name: "AgreementsList" });
+                        baseResource.setMessage(
+                            baseResource.$__("Agreement created")
+                        );
+                        baseResource.router.push({ name: "AgreementsList" });
                     },
                     error => {}
                 );
             }
-        },
-        tableUrl(filters) {
-            let url = this.getResourceTableUrl();
+        };
+        const tableUrl = filters => {
+            let url = baseResource.getResourceTableUrl();
             if (filters?.by_expired)
                 url += "?max_expiration_date=" + filters.max_expiration_date;
             return url;
-        },
-        async filterTable(filters, table, embedded = false) {
+        };
+        const filterTable = async (filters, table, embedded = false) => {
             if (!embedded) {
                 if (filters.by_expired && !filters.max_expiration_date) {
                     filters.max_expiration_date = new Date()
@@ -865,12 +861,25 @@ export default {
                 if (!filters.by_expired) {
                     filters.max_expiration_date = "";
                 }
-                let { href } = this.$router.resolve({ name: "AgreementsList" });
-                let new_route = this.build_url(href, filters);
-                this.$router.push(new_route);
+                let { href } = baseResource.router.resolve({
+                    name: "AgreementsList",
+                });
+                let new_route = baseResource.build_url(href, filters);
+                baseResource.router.push(new_route);
             }
-            table.redraw(this.tableUrl(filters));
-        },
+            table.redraw(tableUrl(filters));
+        };
+
+        baseResource.created();
+
+        return {
+            ...baseResource,
+            tableOptions,
+            checkForm,
+            onSubmit,
+            tableUrl,
+            filterTable,
+        };
     },
     emits: ["select-resource"],
     name: "AgreementResource",
