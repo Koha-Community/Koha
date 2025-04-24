@@ -502,7 +502,6 @@ sub get_template_and_user {
             IndependentBranches           => C4::Context->preference("IndependentBranches"),
             intranetcolorstylesheet       => C4::Context->preference("intranetcolorstylesheet"),
             IntranetFavicon               => C4::Context->preference("IntranetFavicon"),
-            IntranetmainUserblock         => C4::Context->preference("IntranetmainUserblock"),
             IntranetNav                   => C4::Context->preference("IntranetNav"),
             intranetreadinghistory        => C4::Context->preference("intranetreadinghistory"),
             IntranetReadingHistoryHolds   => C4::Context->preference("IntranetReadingHistoryHolds"),
