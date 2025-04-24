@@ -106,7 +106,7 @@ CHECK {
     $branch_type     = C4::Context->preference('HomeOrHoldingBranch') || 'homebranch';
     $mode            = C4::Context->preference('finesMode');
     $dbname          = C4::Context->config('database');
-    $delim           = "\t";    # ?  C4::Context->preference('delimiter') || "\t";
+    $delim           = "\t";    # TODO use system preference CSVDelimiter ?
 
 }
 
