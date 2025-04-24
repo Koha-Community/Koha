@@ -150,7 +150,7 @@ PREF: foreach my $option (@$messaging_options) {
 
 =head2 restore_form_values
 
-    C4::Form::MessagingPreferences::restore_form_values({ borrowernumber => 51 }, $template, $input);
+    C4::Form::MessagingPreferences::restore_form_values( $input, $template );
 
 Restores patron message preferences if error occurs while creating a patron.
 
