@@ -84,34 +84,20 @@ foreach my $theme (@themes) {
             $theme->{'modules'},
             $theme->{'includes'},
 
-            # templates to exclude from testing because
+            # templates or dirs to exclude from testing because
             # they cannot stand alone
             'doc-head-close.inc',
             'opac-bottom.inc',
-            'ill/backends/Standard/shared/forms/article.inc',
-            'ill/backends/Standard/shared/forms/book.inc',
-            'ill/backends/Standard/shared/forms/chapter.inc',
-            'ill/backends/Standard/shared/forms/conference.inc',
-            'ill/backends/Standard/shared/forms/dvd.inc',
-            'ill/backends/Standard/shared/forms/journal.inc',
-            'ill/backends/Standard/shared/forms/resource.inc',
-            'ill/backends/Standard/shared/forms/thesis.inc',
+            'ill/backends/Standard/shared/forms',
         );
     } else {
         run_template_test(
             $theme->{'modules'},
             $theme->{'includes'},
 
-            # templates to exclude from testing because
+            # templates or dirs to exclude from testing because
             # they cannot stand alone
-            'ill/backends/Standard/shared/forms/article.inc',
-            'ill/backends/Standard/shared/forms/book.inc',
-            'ill/backends/Standard/shared/forms/chapter.inc',
-            'ill/backends/Standard/shared/forms/conference.inc',
-            'ill/backends/Standard/shared/forms/dvd.inc',
-            'ill/backends/Standard/shared/forms/journal.inc',
-            'ill/backends/Standard/shared/forms/resource.inc',
-            'ill/backends/Standard/shared/forms/thesis.inc',
+            'ill/backends/Standard/shared/forms'
         );
     }
     $pm->finish;
@@ -150,7 +136,7 @@ sub create_template_test {
             }
         );
         foreach my $exclusion (@exclusions) {
-            if ( $_ =~ /${exclusion}$/ ) {
+            if ( $_ =~ /${exclusion}/ ) {
                 diag("excluding template $_ because it cannot stand on its own");
                 return;
             }
