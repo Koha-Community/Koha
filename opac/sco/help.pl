@@ -52,10 +52,6 @@ if (C4::Context->preference('SelfCheckTimeout')) {
 
 $template->param(SelfCheckTimeout => $selfchecktimeout);
 
-if (C4::Context->preference('SelfCheckHelpMessage')) {
-    $template->param(SelfCheckHelpMessage => C4::Context->preference('SelfCheckHelpMessage'));
-}
-
 $template->param(
     SCOUserJS  => C4::Context->preference('SCOUserJS'),
     SCOUserCSS => C4::Context->preference('SCOUserCSS'),
