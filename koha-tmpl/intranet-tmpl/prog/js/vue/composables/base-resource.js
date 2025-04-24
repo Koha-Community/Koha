@@ -3,7 +3,7 @@ import { useRoute, useRouter } from "vue-router";
 import { $__ } from "../i18n";
 import { build_url } from "../composables/datatables";
 
-export function useBaseResource(context) {
+export function useBaseResource(instancedResource) {
     const router = useRouter();
     const route = useRoute();
     const { setConfirmationDialog, setMessage, setError, setWarning } =
@@ -14,13 +14,6 @@ export function useBaseResource(context) {
 
     const format_date = $date;
     const patron_to_html = $patron_to_html;
-
-    const instancedResource = {
-        ...Object.keys(context).reduce((acc, key) => {
-            acc[key] = context[key];
-            return acc;
-        }, {}),
-    };
 
     /**
      * Navigates to the creation page of the given resource.
@@ -432,17 +425,6 @@ export function useBaseResource(context) {
      */
     const getTableFilterFormElementsLabel = () => {
         return "";
-    };
-
-    /**
-     * Gets the array of filters for the table, if required.
-     * This is a default method that returns an empty array.
-     * It can be overridden at the resource level if filters are required
-     *
-     * @return {Array} The array of filters for the table.
-     */
-    const getTableFilterFormElements = () => {
-        return [];
     };
 
     const refreshTemplateState = () => {
