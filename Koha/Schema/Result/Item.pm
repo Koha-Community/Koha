@@ -377,7 +377,7 @@ copy number (MARC21 952$t)
 
   data_type: 'varchar'
   is_nullable: 1
-  size: 32
+  size: 80
 
 inventory number (MARC21 952$i)
 
@@ -525,7 +525,7 @@ __PACKAGE__->add_columns(
   "copynumber",
   { data_type => "varchar", is_nullable => 1, size => 32 },
   "stocknumber",
-  { data_type => "varchar", is_nullable => 1, size => 32 },
+  { data_type => "varchar", is_nullable => 1, size => 80 },
   "new_status",
   { data_type => "varchar", is_nullable => 1, size => 32 },
   "exclude_from_local_holds_priority",
@@ -991,8 +991,8 @@ __PACKAGE__->might_have(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07051 @ 2024-10-25 13:25:14
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:gsZwsPbmOacCDxRbnl5w/A
+# Created by DBIx::Class::Schema::Loader v0.07051 @ 2025-04-24 17:38:40
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:dD7ifmgpBATegI25Xs4sXg
 
 __PACKAGE__->belongs_to( biblioitem => "Koha::Schema::Result::Biblioitem", "biblioitemnumber" );
 
