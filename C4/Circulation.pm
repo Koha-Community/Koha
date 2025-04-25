@@ -3488,6 +3488,8 @@ sub AddRenewal {
     my $seen              = $params->{seen};
     my $automatic         = $params->{automatic};
     my $skip_record_index = $params->{skip_record_index};
+    my $confirmations     = $params->{confirmations};
+    my $forced            = $params->{forced};
 
     # Fallback on a 'seen' renewal
     $seen = defined $seen && $seen == 0 ? 0 : 1;
@@ -3561,10 +3563,12 @@ sub AddRenewal {
                 );
                 if ( !$seen && $rule && looks_like_number( $rule->rule_value ) ) {
                     $unseen_renewals++;
+                    push @{$confirmations}, 'UNSEEN';
                 } else {
 
                     # If the renewal is seen, unseen should revert to 0
                     $unseen_renewals = 0;
+                    push @{$confirmations}, 'SEEN';
                 }
             }
 
@@ -3677,8 +3681,24 @@ sub AddRenewal {
             };
 
             #Log the renewal
-            logaction( "CIRCULATION", "RENEWAL", $borrowernumber, $itemnumber )
-                if C4::Context->preference("RenewalLog");
+            if ( C4::Context->preference("RenewalLog") ) {
+                my $info = $itemnumber;
+                if ( defined($confirmations) || defined($forced) ) {
+                    $info = to_json(
+                        {
+                            issue         => $issue->issue_id,
+                            itemnumber    => $itemnumber,
+                            confirmations => $confirmations,
+                            forced        => $forced
+                        },
+                        {
+                            pretty    => 1,
+                            cononical => 1
+                        }
+                    );
+                }
+                logaction( "CIRCULATION", "RENEWAL", $borrowernumber, $info );
+            }
 
             Koha::Plugins->call(
                 'after_circ_action',

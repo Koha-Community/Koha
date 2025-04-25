@@ -71,9 +71,11 @@ if ( $op eq 'cud-renew' && $barcode ) {
             my @message;
 
             if ( ( $patron->is_debarred || q{} ) lt dt_from_string()->ymd() ) {
+                my $confirmations;
                 my $can_renew;
                 my $info;
                 ( $can_renew, $error, $info ) = CanBookBeRenewed( $patron, $checkout, $override_limit );
+                push @{$confirmations}, $override_limit if $override_limit;
 
                 if ( $error && ( $error eq 'on_reserve' ) ) {
                     if ($override_holds) {
@@ -123,10 +125,11 @@ if ( $op eq 'cud-renew' && $barcode ) {
 
                     $date_due = AddRenewal(
                         {
-                            itemnumber => $item->itemnumber(),
-                            branch     => $branchcode,
-                            datedue    => $date_due,
-                            seen       => !$unseen
+                            itemnumber    => $item->itemnumber(),
+                            branch        => $branchcode,
+                            datedue       => $date_due,
+                            seen          => !$unseen,
+                            confirmations => $confirmations
                         }
                     );
                     $template->param( date_due => $date_due );
