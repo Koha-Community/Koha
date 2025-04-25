@@ -132,6 +132,14 @@ the field that a vendor account has been mapped to in a marc record
 
 the value to be matched against the marc record
 
+=head2 basket_name_field
+
+  data_type: 'varchar'
+  is_nullable: 1
+  size: 10
+
+the field that a vendor can use to include a basket name that will be used to create the basket for the file
+
 =cut
 
 __PACKAGE__->add_columns(
@@ -163,6 +171,8 @@ __PACKAGE__->add_columns(
   { data_type => "varchar", is_nullable => 1, size => 10 },
   "match_value",
   { data_type => "varchar", is_nullable => 1, size => 50 },
+  "basket_name_field",
+  { data_type => "varchar", is_nullable => 1, size => 10 },
 );
 
 =head1 PRIMARY KEY
@@ -220,8 +230,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07051 @ 2024-11-11 15:30:10
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:fbpPZlp8dGbDfmdsYTW0GQ
+# Created by DBIx::Class::Schema::Loader v0.07051 @ 2025-04-24 19:44:04
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:LvRybSXMjycTWsAp2Bd4Dw
 
 __PACKAGE__->add_columns(
     '+parse_items' => { is_boolean => 1 },
