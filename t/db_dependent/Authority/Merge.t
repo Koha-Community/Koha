@@ -4,7 +4,7 @@
 
 use Modern::Perl;
 use Test::NoWarnings;
-use Test::More tests => 14;
+use Test::More tests => 15;
 
 use Getopt::Long;
 use MARC::Record;
