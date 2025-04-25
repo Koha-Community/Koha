@@ -1738,7 +1738,7 @@ subtest 'DefaultHoldExpiration tests' => sub {
 
     t::lib::Mocks::mock_preference( 'DefaultHoldExpirationdate', 1 );
     t::lib::Mocks::mock_preference( 'DefaultHoldExpirationdatePeriod', 365 );
-    t::lib::Mocks::mock_preference( 'DefaultHoldExpirationUnitOfTime', 'days;' );
+    t::lib::Mocks::mock_preference( 'DefaultHoldExpirationdateUnitOfTime', 'days' );
 
     my $patron  = $builder->build_object( { class => 'Koha::Patrons' } );
     my $item    = $builder->build_sample_item();
