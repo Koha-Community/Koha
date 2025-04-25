@@ -153,7 +153,7 @@ my $subscription = $builder->build(
 
 t::lib::Mocks::mock_userenv( { patron => $loggedinuser } );
 
-t::lib::Mocks::mock_preference( 'language', 'en' );
+t::lib::Mocks::mock_preference( 'StaffInterfaceLanguages', 'en' );
 
 $post_request = 1;
 $result       = Koha::SharedContent::send_entity(

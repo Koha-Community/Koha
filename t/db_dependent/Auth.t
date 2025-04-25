@@ -527,8 +527,8 @@ subtest 'get_template_and_user' => sub {    # Tests for the language URL paramet
     t::lib::Mocks::mock_preference( 'EnableOpacSearchHistory', 1 );
 
     # Enable es-ES for the OPAC and staff interfaces
-    t::lib::Mocks::mock_preference( 'OPACLanguages', 'en,es-ES' );
-    t::lib::Mocks::mock_preference( 'language',      'en,es-ES' );
+    t::lib::Mocks::mock_preference( 'OPACLanguages',           'en,es-ES' );
+    t::lib::Mocks::mock_preference( 'StaffInterfaceLanguages', 'en,es-ES' );
 
     # we need a session cookie
     $ENV{"SERVER_PORT"} = 80;
@@ -1192,7 +1192,7 @@ subtest 'checkpw() return values tests' => sub {
         $password_expired = 1;
         @return           = checkpw( $patron->userid, $password, undef, );
 
-        is( scalar @return,    2,  "Two results on expired password scenario" );
+        is( scalar @return,     2, "Two results on expired password scenario" );
         is( $return[0],        -2, '-2 returned' );
         is( ref( $return[1] ), 'Koha::Patron' );
         is( $return[1]->id,    $patron->id, 'Patron matched correctly' );
@@ -1200,7 +1200,7 @@ subtest 'checkpw() return values tests' => sub {
         t::lib::Mocks::mock_preference( 'AnonymousPatron', $patron->id );
         @return = checkpw( $patron->userid, $password, undef, );
 
-        is( scalar @return,    2,  "Two results on expired password scenario" );
+        is( scalar @return,     2, "Two results on expired password scenario" );
         is( $return[0],        -3, '-3 returned' );
         is( ref( $return[1] ), 'Koha::Patron' );
         is( $return[1]->id,    $patron->id, 'Patron matched correctly' );
@@ -1284,14 +1284,14 @@ subtest 'checkpw() return values tests' => sub {
         $password_expired = 1;
         @return           = checkpw( $patron->userid, $password, $query, );
 
-        is( scalar @return,    2,  "Two results on expired password scenario" );
+        is( scalar @return,     2, "Two results on expired password scenario" );
         is( $return[0],        -2, '-2 returned' );
         is( ref( $return[1] ), 'Koha::Patron' );
         is( $return[1]->id,    $patron->id, 'Patron matched correctly' );
 
         t::lib::Mocks::mock_preference( 'AnonymousPatron', $patron->id );
         @return = checkpw( $patron->userid, $password, undef, );
-        is( scalar @return,    2,  "Two results on expired password scenario" );
+        is( scalar @return,     2, "Two results on expired password scenario" );
         is( $return[0],        -3, '-3 returned' );
         is( ref( $return[1] ), 'Koha::Patron' );
         is( $return[1]->id,    $patron->id, 'Patron matched correctly' );
