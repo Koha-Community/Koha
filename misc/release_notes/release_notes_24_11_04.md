@@ -1,5 +1,5 @@
 # RELEASE NOTES FOR KOHA 24.11.04
-24 Apr 2025
+25 Apr 2025
 
 Koha is the first free and open source software library automation
 package (ILS). Development is sponsored by libraries of varying types
@@ -19,7 +19,7 @@ Installation instructions can be found at:
 
 Koha 24.11.04 is a bugfix/maintenance and security release.
 
-It includes 20 enhancements, 97 bugfixes and 2 security fixes.
+It includes 22 enhancements, 97 bugfixes and 2 security fixes.
 
 **System requirements**
 
@@ -520,6 +520,23 @@ You can learn about the system components (like OS and database) needed for runn
 - [33454](https://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=33454) Improve breadcrumbs for patron lists
   >This fixes the breadcrumbs for patron lists (Tools > Patrons and circulation > Patron lists) so that they are now more consistent with other breadcrumbs, and improves their translatability (Tools > Patron lists > Add patrons to 'List name', instead of Tools > Patron lists > List name).
 
+### Plugin architecture
+
+#### Enhancements
+
+- [39405](https://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=39405) Add plugin hook `overwrite_calc_fine` to override fine calculation
+  >This new hook allows to overwrite the internal Koha standard calculation of fines. This can be useful if your library needs to implement its own algorithm. For example, if it has a fine policy with graduated fines per overdue letter.
+
+  **Sponsored by** *Karlsruhe Institute of Technology (KIT)*
+
+### REST API
+
+#### Enhancements
+
+- [38905](https://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=38905) Updating an item of a bibliographic record should use edit_items instead edit_catalogue permission
+
+  **Sponsored by** *Koha-Suomi Oy*
+
 ### Searching - Elasticsearch
 
 #### Enhancements
@@ -616,13 +633,13 @@ documentation is
 As of the date of these release notes, the Koha manual is available in the following languages:
 
 - [Armenian (hy_ARMN)](https://koha-community.org/manual/24.11//html/) (100%)
-- [Chinese (Traditional)](https://koha-community.org/manual/24.11/zh_Hant/html/) (99%)
+- [Chinese (Traditional)](https://koha-community.org/manual/24.11/zh_Hant/html/) (98%)
 - [English](https://koha-community.org/manual/24.11//html/) (100%)
 - [English (USA)](https://koha-community.org/manual/24.11/en/html/)
 - [French](https://koha-community.org/manual/24.11/fr/html/) (71%)
-- [German](https://koha-community.org/manual/24.11/de/html/) (99%)
+- [German](https://koha-community.org/manual/24.11/de/html/) (98%)
 - [Greek](https://koha-community.org/manual/24.11//html/) (96%)
-- [Hindi](https://koha-community.org/manual/24.11/hi/html/) (71%)
+- [Hindi](https://koha-community.org/manual/24.11/hi/html/) (70%)
 
 The Git repository for the Koha manual can be found at
 
@@ -761,6 +778,8 @@ new features in Koha 24.11.04
 - Deutsches Elektronen-Synchrotron DESY, Library
 - Gothenburg University Library
 - Ignatianum University in Cracow
+- Karlsruhe Institute of Technology (KIT)
+- [Koha-Suomi Oy](https://koha-suomi.fi)
 - [PTFS Europe](https://ptfs-europe.com)
 <!-- </div> -->
 
@@ -768,13 +787,13 @@ We thank the following individuals who contributed patches to Koha 24.11.04
 <!-- <div style="column-count: 2;"> -->
 
 - Pedro Amorim (28)
-- Tomás Cohen Arazi (15)
+- Tomás Cohen Arazi (17)
 - Sukhmandeep Benipal (1)
 - Matt Blenkinsop (7)
 - Nick Clemens (17)
 - David Cook (4)
 - Jake Deery (1)
-- Paul Derscheid (8)
+- Paul Derscheid (9)
 - Roman Dolny (2)
 - Jonathan Druart (52)
 - Magnus Enger (1)
@@ -800,10 +819,12 @@ We thank the following individuals who contributed patches to Koha 24.11.04
 - Martin Renvoize (13)
 - Phil Ringnalda (3)
 - Caroline Cyr La Rose (2)
+- Johanna Räisä (1)
 - Lisette Scheer (1)
 - Danyon Sewell (1)
 - Leo Stoyanov (2)
 - Lari Strand (1)
+- Raphael Straub (2)
 - Lari Taskula (1)
 - Imani Thomas (1)
 - Alexander Wagner (1)
@@ -825,21 +846,22 @@ patches to Koha 24.11.04
 - desy.de (1)
 - Göteborgs Universitet (4)
 - [Hypernova Oy](https://www.hypernova.fi) (1)
-- Independant Individuals (5)
+- Independant Individuals (6)
 - Informatics Publishing Ltd (1)
 - jezuici.pl (2)
+- Karlsruhe Institute of Technology (KIT) (2)
 - Koha Community Developers (54)
 - [Koha-Suomi Oy](https://koha-suomi.fi) (1)
 - Kreablo AB (1)
 - laposte.net (1)
 - [Libriotech](https://libriotech.no) (1)
-- [LMSCloud](lmscloud.de) (8)
+- [LMSCloud](lmscloud.de) (9)
 - [Montgomery County Public Libraries](montgomerycountymd.gov) (8)
 - openfifth.co.uk (1)
 - [Prosentient Systems](https://www.prosentient.com.au) (4)
 - [PTFS Europe](https://ptfs-europe.com) (48)
 - [Solutions inLibro inc](https://inlibro.com) (3)
-- [Theke Solutions](https://theke.io) (15)
+- [Theke Solutions](https://theke.io) (17)
 <!-- </div> -->
 
 We also especially thank the following individuals who tested patches
@@ -847,7 +869,7 @@ for Koha
 <!-- <div style="column-count: 2;"> -->
 
 - Pedro Amorim (11)
-- Tomás Cohen Arazi (7)
+- Tomás Cohen Arazi (8)
 - Matt Blenkinsop (14)
 - Fiona Borthwick (1)
 - Amanda Campbell (1)
@@ -856,12 +878,12 @@ for Koha
 - David Cook (2)
 - Jake Deery (2)
 - Ray Delahunty (5)
-- Paul Derscheid (235)
+- Paul Derscheid (241)
 - Roman Dolny (4)
 - Jonathan Druart (21)
 - Magnus Enger (9)
 - Laura Escamilla (1)
-- Katrin Fischer (217)
+- Katrin Fischer (222)
 - Lucas Gass (3)
 - Victor Grousset (30)
 - Kyle M Hall (8)
@@ -869,7 +891,7 @@ for Koha
 - Heather Hernandez (1)
 - Bibliothèque Ifao (1)
 - JesseM (3)
-- Jan Kissig (6)
+- Jan Kissig (7)
 - Thomas Klausner (2)
 - Emily Lamancusa (7)
 - William Lavoie (5)
@@ -878,7 +900,7 @@ for Koha
 - Jesse Maseto (2)
 - Gretchen Maxeiner (2)
 - David Nind (59)
-- Martin Renvoize (71)
+- Martin Renvoize (75)
 - Phil Ringnalda (14)
 - Marcel de Rooy (28)
 - Lisette Scheer (3)
@@ -917,4 +939,4 @@ tracker at:
 He rau ringa e oti ai.
 (Many hands finish the work)
 
-Autogenerated release notes updated last on 24 Apr 2025 16:51:29.
+Autogenerated release notes updated last on 25 Apr 2025 09:40:51.

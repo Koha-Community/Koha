@@ -1,6 +1,6 @@
 <h1 id="releasenotesforkoha24.11.04">RELEASE NOTES FOR KOHA 24.11.04</h1>
 
-<p>24 Apr 2025</p>
+<p>25 Apr 2025</p>
 
 <p>Koha is the first free and open source software library automation
 package (ILS). Development is sponsored by libraries of varying types
@@ -26,7 +26,7 @@ website for the Koha project is:</p>
 
 <p>Koha 24.11.04 is a bugfix/maintenance and security release.</p>
 
-<p>It includes 20 enhancements, 97 bugfixes and 2 security fixes.</p>
+<p>It includes 22 enhancements, 97 bugfixes and 2 security fixes.</p>
 
 <p><strong>System requirements</strong></p>
 
@@ -778,8 +778,32 @@ website for the Koha project is:</p>
   <p>This fixes the breadcrumbs for patron lists (Tools > Patrons and circulation > Patron lists) so that they are now more consistent with other breadcrumbs, and improves their translatability (Tools > Patron lists > Add patrons to 'List name', instead of Tools > Patron lists > List name).</li>
   </ul></p>
   
-  <h3 id="searching-elasticsearch">Searching - Elasticsearch</h3>
+  <h3 id="pluginarchitecture">Plugin architecture</h3>
 </blockquote>
+
+<h4 id="enhancements">Enhancements</h4>
+
+<ul>
+<li><p><a href="https://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=39405">39405</a> Add plugin hook <code>overwrite_calc_fine</code> to override fine calculation</p>
+
+<blockquote>
+  <p>This new hook allows to overwrite the internal Koha standard calculation of fines. This can be useful if your library needs to implement its own algorithm. For example, if it has a fine policy with graduated fines per overdue letter.</p>
+</blockquote>
+
+<p><strong>Sponsored by</strong> <em>Karlsruhe Institute of Technology (KIT)</em></p></li>
+</ul>
+
+<h3 id="restapi">REST API</h3>
+
+<h4 id="enhancements">Enhancements</h4>
+
+<ul>
+<li><p><a href="https://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=38905">38905</a> Updating an item of a bibliographic record should use edit_items instead edit_catalogue permission</p>
+
+<p><strong>Sponsored by</strong> <em>Koha-Suomi Oy</em></p></li>
+</ul>
+
+<h3 id="searching-elasticsearch">Searching - Elasticsearch</h3>
 
 <h4 id="enhancements">Enhancements</h4>
 
@@ -898,13 +922,13 @@ documentation is</p>
 <li><p><a href="https://koha-community.org/documentation/">Koha Documentation</a>
 As of the date of these release notes, the Koha manual is available in the following languages:</p></li>
 <li><p><a href="https://koha-community.org/manual/24.11//html/">Armenian (hy_ARMN)</a> (100%)</p></li>
-<li><a href="https://koha-community.org/manual/24.11/zh_Hant/html/">Chinese (Traditional)</a> (99%)</li>
+<li><a href="https://koha-community.org/manual/24.11/zh_Hant/html/">Chinese (Traditional)</a> (98%)</li>
 <li><a href="https://koha-community.org/manual/24.11//html/">English</a> (100%)</li>
 <li><a href="https://koha-community.org/manual/24.11/en/html/">English (USA)</a></li>
 <li><a href="https://koha-community.org/manual/24.11/fr/html/">French</a> (71%)</li>
-<li><a href="https://koha-community.org/manual/24.11/de/html/">German</a> (99%)</li>
+<li><a href="https://koha-community.org/manual/24.11/de/html/">German</a> (98%)</li>
 <li><a href="https://koha-community.org/manual/24.11//html/">Greek</a> (96%)</li>
-<li><a href="https://koha-community.org/manual/24.11/hi/html/">Hindi</a> (71%)</li>
+<li><a href="https://koha-community.org/manual/24.11/hi/html/">Hindi</a> (70%)</li>
 </ul>
 
 <p>The Git repository for the Koha manual can be found at</p>
@@ -1066,6 +1090,8 @@ new features in Koha 24.11.04
 <li>Deutsches Elektronen-Synchrotron DESY, Library</li>
 <li>Gothenburg University Library</li>
 <li>Ignatianum University in Cracow</li>
+<li>Karlsruhe Institute of Technology (KIT)</li>
+<li><a href="https://koha-suomi.fi">Koha-Suomi Oy</a></li>
 <li><a href="https://ptfs-europe.com">PTFS Europe</a>
 </div></li>
 </ul>
@@ -1075,13 +1101,13 @@ new features in Koha 24.11.04
 
 <ul>
 <li>Pedro Amorim (28)</li>
-<li>Tomás Cohen Arazi (15)</li>
+<li>Tomás Cohen Arazi (17)</li>
 <li>Sukhmandeep Benipal (1)</li>
 <li>Matt Blenkinsop (7)</li>
 <li>Nick Clemens (17)</li>
 <li>David Cook (4)</li>
 <li>Jake Deery (1)</li>
-<li>Paul Derscheid (8)</li>
+<li>Paul Derscheid (9)</li>
 <li>Roman Dolny (2)</li>
 <li>Jonathan Druart (52)</li>
 <li>Magnus Enger (1)</li>
@@ -1107,10 +1133,12 @@ new features in Koha 24.11.04
 <li>Martin Renvoize (13)</li>
 <li>Phil Ringnalda (3)</li>
 <li>Caroline Cyr La Rose (2)</li>
+<li>Johanna Räisä (1)</li>
 <li>Lisette Scheer (1)</li>
 <li>Danyon Sewell (1)</li>
 <li>Leo Stoyanov (2)</li>
 <li>Lari Strand (1)</li>
+<li>Raphael Straub (2)</li>
 <li>Lari Taskula (1)</li>
 <li>Imani Thomas (1)</li>
 <li>Alexander Wagner (1)</li>
@@ -1134,21 +1162,22 @@ patches to Koha 24.11.04
 <li>desy.de (1)</li>
 <li>Göteborgs Universitet (4)</li>
 <li><a href="https://www.hypernova.fi">Hypernova Oy</a> (1)</li>
-<li>Independant Individuals (5)</li>
+<li>Independant Individuals (6)</li>
 <li>Informatics Publishing Ltd (1)</li>
 <li>jezuici.pl (2)</li>
+<li>Karlsruhe Institute of Technology (KIT) (2)</li>
 <li>Koha Community Developers (54)</li>
 <li><a href="https://koha-suomi.fi">Koha-Suomi Oy</a> (1)</li>
 <li>Kreablo AB (1)</li>
 <li>laposte.net (1)</li>
 <li><a href="https://libriotech.no">Libriotech</a> (1)</li>
-<li><a href="lmscloud.de">LMSCloud</a> (8)</li>
+<li><a href="lmscloud.de">LMSCloud</a> (9)</li>
 <li><a href="montgomerycountymd.gov">Montgomery County Public Libraries</a> (8)</li>
 <li>openfifth.co.uk (1)</li>
 <li><a href="https://www.prosentient.com.au">Prosentient Systems</a> (4)</li>
 <li><a href="https://ptfs-europe.com">PTFS Europe</a> (48)</li>
 <li><a href="https://inlibro.com">Solutions inLibro inc</a> (3)</li>
-<li><a href="https://theke.io">Theke Solutions</a> (15)
+<li><a href="https://theke.io">Theke Solutions</a> (17)
 </div></li>
 </ul>
 
@@ -1158,7 +1187,7 @@ for Koha
 
 <ul>
 <li>Pedro Amorim (11)</li>
-<li>Tomás Cohen Arazi (7)</li>
+<li>Tomás Cohen Arazi (8)</li>
 <li>Matt Blenkinsop (14)</li>
 <li>Fiona Borthwick (1)</li>
 <li>Amanda Campbell (1)</li>
@@ -1167,12 +1196,12 @@ for Koha
 <li>David Cook (2)</li>
 <li>Jake Deery (2)</li>
 <li>Ray Delahunty (5)</li>
-<li>Paul Derscheid (235)</li>
+<li>Paul Derscheid (241)</li>
 <li>Roman Dolny (4)</li>
 <li>Jonathan Druart (21)</li>
 <li>Magnus Enger (9)</li>
 <li>Laura Escamilla (1)</li>
-<li>Katrin Fischer (217)</li>
+<li>Katrin Fischer (222)</li>
 <li>Lucas Gass (3)</li>
 <li>Victor Grousset (30)</li>
 <li>Kyle M Hall (8)</li>
@@ -1180,7 +1209,7 @@ for Koha
 <li>Heather Hernandez (1)</li>
 <li>Bibliothèque Ifao (1)</li>
 <li>JesseM (3)</li>
-<li>Jan Kissig (6)</li>
+<li>Jan Kissig (7)</li>
 <li>Thomas Klausner (2)</li>
 <li>Emily Lamancusa (7)</li>
 <li>William Lavoie (5)</li>
@@ -1189,7 +1218,7 @@ for Koha
 <li>Jesse Maseto (2)</li>
 <li>Gretchen Maxeiner (2)</li>
 <li>David Nind (59)</li>
-<li>Martin Renvoize (71)</li>
+<li>Martin Renvoize (75)</li>
 <li>Phil Ringnalda (14)</li>
 <li>Marcel de Rooy (28)</li>
 <li>Lisette Scheer (3)</li>
@@ -1229,4 +1258,4 @@ tracker at:</p>
 <p>He rau ringa e oti ai.
 (Many hands finish the work)</p>
 
-<p>Autogenerated release notes updated last on 24 Apr 2025 16:51:29.</p>
+<p>Autogenerated release notes updated last on 25 Apr 2025 09:40:51.</p>
