@@ -16,6 +16,7 @@
 [% IF whole.stage == "form" %]
     <h2>Migrating an ILL request</h2>
     <form id="standard_migrate_form" method="POST" action="">
+        [% INCLUDE 'csrf-token.inc' %]
         <fieldset class="rows">
             <legend>General details</legend>
             <ol id="general-standard-fields">
@@ -104,6 +105,7 @@
             <input id="ill-submit" type="submit" value="Migrate" />
             <a class="cancel" href="/cgi-bin/koha/ill/ill-requests.pl">Cancel</a>
         </fieldset>
+        <input type="hidden" name="op" value="cud-migrate" />
     </form>
     [% BLOCK backend_jsinclude %]
         <script>

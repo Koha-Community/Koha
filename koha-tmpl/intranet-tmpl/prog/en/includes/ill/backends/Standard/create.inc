@@ -112,6 +112,7 @@
         <input type="hidden" name="method" value="create" />
         <input type="hidden" name="stage" value="form" />
         <input type="hidden" name="backend" value="Standard" />
+        <input type="hidden" name="op" value="cud-create" />
     </form>
     [% BLOCK backend_jsinclude %]
         <script>
@@ -168,6 +169,7 @@
     <!-- We need to clarify the borrower that has been requested. -->
     <h2>Borrower selection</h2>
     <form method="POST" action="">
+        [% INCLUDE 'csrf-token.inc' %]
         [% FOREACH prop IN whole.value.other.keys %]
             [% IF prop != 'custom_key' &&  prop != 'custom_value' && prop != 'cardnumber' %]
                 <input type="hidden" name="[% prop | html %]" value="[% whole.value.other.$prop | html %]" />
@@ -203,6 +205,7 @@
             <input type="submit" value="Select" />
             <a class="cancel" href="[% parent | url %]">Cancel</a>
         </fieldset>
+        <input type="hidden" name="op" value="cud-choose-borrower" />
     </form>
 [% ELSE %]
     <p>Unknown stage. This should not have happened. </p>
