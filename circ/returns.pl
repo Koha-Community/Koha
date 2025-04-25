@@ -585,11 +585,18 @@ if ( $messages->{'WrongTransfer'} and not $messages->{'WasTransfered'}) {
     # Update the transfer to reflect the new item holdingbranch
     my $item = Koha::Items->find($messages->{'WrongTransferItem'});
     my $old_transfer = $item->get_transfer;
+
+    # We need to ignore limits here. While we can't transfer from this branch, it is, wrongly, here right now
+    # and that fact must be recorded
     my $new_transfer = $item->request_transfer(
-        { to => $old_transfer->to_library, reason => $old_transfer->reason, replace => 'WrongTransfer' } );
-    $template->param(
-        NewTransfer => $new_transfer->id
+        {
+            to            => $old_transfer->to_library,
+            reason        => $old_transfer->reason,
+            replace       => 'WrongTransfer',
+            ignore_limits => 1
+        }
     );
+    $template->param( NewTransfer => $new_transfer->id );
 
     my $reserve    = $messages->{'ResFound'};
     if ( $reserve ) {
