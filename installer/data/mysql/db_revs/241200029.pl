@@ -1,8 +1,9 @@
 use Modern::Perl;
+use Koha::Installer::Output qw(say_warning say_success say_info);
 
 return {
     bug_number  => "38142",
-    description => "LanguageToReportOnMerge",
+    description => "Choose language for heading to copy from authority to bibliographic record",
     up          => sub {
         my ($args) = @_;
         my ( $dbh, $out ) = @$args{qw(dbh out)};
@@ -13,6 +14,6 @@ return {
         }
         );
 
-        say $out "Added new syspref 'LanguageToReportOnMerge'";
+        say_success( $out, "Added new system preference 'LanguageToReportOnMerge'" );
     }
 };
