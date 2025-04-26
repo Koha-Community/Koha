@@ -171,7 +171,7 @@
         [% END %]
 
         [% IF ( credits ) %]
-            <li class="credits"> <span class="circ-hlt">Credits:</span> Patron has outstanding credits[% IF ( creditsamount ) %]of <span class="credit"><strong>[% creditsamount | $Price %]</strong></span>[% END %] </li>
+            <li class="credits"><span class="circ-hlt">Credits:</span> Patron has outstanding credits [% IF ( creditsamount ) %]of <span class="credit"><strong>[% creditsamount | $Price %]</strong></span>[% END %]</li>
         [% END %]
         [% IF (noissues && CAN_user_circulate_force_checkout && !moremember) %]
             <li>
