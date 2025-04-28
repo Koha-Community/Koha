@@ -30,18 +30,26 @@
             </li>
             <li v-if="vi.password">
                 <label>{{ $__("Password") }}:</label>
-
-                <a
-                    href="#"
-                    @click="showPassword = !showPassword"
-                    v-if="!showPassword"
-                >
-                    <i class="fa fa-eye"></i>
-                    {{ $__("Show password") }}
-                </a>
                 <span v-if="showPassword">
                     {{ vi.password }}
                 </span>
+
+                <a
+                    @click="showPassword = !showPassword"
+                    style="cursor: pointer"
+                    v-if="!showPassword"
+                >
+                    <font-awesome-icon icon="eye" />
+                    {{ $__("Show password") }}
+                </a>
+                <a
+                    @click="showPassword = !showPassword"
+                    v-else
+                    style="cursor: pointer"
+                >
+                    <font-awesome-icon icon="eye-slash" />
+                    {{ $__("Hide password") }}
+                </a>
             </li>
             <li v-if="vi.account_email">
                 <label>{{ $__("Account email") }}:</label>

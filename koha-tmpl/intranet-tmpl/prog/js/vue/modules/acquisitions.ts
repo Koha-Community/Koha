@@ -4,17 +4,28 @@ import { createPinia } from "pinia";
 
 import { library } from "@fortawesome/fontawesome-svg-core";
 import {
-    faPlus,
+    faEye,
+    faEyeSlash,
+    faInbox,
     faMinus,
     faPencil,
-    faTrash,
+    faPlus,
     faSpinner,
-    faInbox,
+    faTrash,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import vSelect from "vue-select";
 
-library.add(faPlus, faMinus, faPencil, faTrash, faSpinner, faInbox);
+library.add(
+    faEye,
+    faEyeSlash,
+    faInbox,
+    faMinus,
+    faPencil,
+    faPlus,
+    faSpinner,
+    faTrash
+);
 
 import App from "../components/Vendors/Main.vue";
 
