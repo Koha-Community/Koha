@@ -383,7 +383,7 @@ inventory number (MARC21 952$i)
   is_nullable: 1
   size: 32
 
-'new' value, you can put whatever free-text information. This field is intented to be managed by the automatic_item_modification_by_age cronjob.
+'new' value, you can put whatever free-text information. This field is intended to be managed by the automatic_item_modification_by_age cronjob.
 
 =head2 exclude_from_local_holds_priority
 
@@ -531,8 +531,8 @@ __PACKAGE__->add_columns(
 __PACKAGE__->set_primary_key("itemnumber");
 
 
-# Created by DBIx::Class::Schema::Loader v0.07051 @ 2025-04-24 17:38:40
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:2KCD+M8tIenGpVk62j2n1A
+# Created by DBIx::Class::Schema::Loader v0.07051 @ 2025-04-28 16:41:47
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:HKee88cG4WAK2dbWrPNrLg
 
 __PACKAGE__->add_columns(
     '+bookable'                          => { is_boolean => 1 },

@@ -38,7 +38,7 @@ unique identifier assigned to each bibliographic record
   is_nullable: 0
   size: 4
 
-foriegn key from the biblio_framework table to identify which framework was used in cataloging this record
+foreign key from the biblio_framework table to identify which framework was used in cataloging this record
 
 =head2 author
 
@@ -211,8 +211,8 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07049 @ 2021-01-21 13:39:29
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:KwlqhkWWX6CYWb3l2fCcSg
+# Created by DBIx::Class::Schema::Loader v0.07051 @ 2025-04-28 16:41:47
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:+K3LNX9YRsTWv+TVCEKhSQ
 
 __PACKAGE__->has_many(
     "biblioitem",

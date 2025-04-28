@@ -387,7 +387,7 @@ inventory number (MARC21 952$i)
   is_nullable: 1
   size: 32
 
-'new' value, you can put whatever free-text information. This field is intented to be managed by the automatic_item_modification_by_age cronjob.
+'new' value, you can put whatever free-text information. This field is intended to be managed by the automatic_item_modification_by_age cronjob.
 
 =head2 exclude_from_local_holds_priority
 
@@ -991,8 +991,8 @@ __PACKAGE__->might_have(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07051 @ 2025-04-24 17:38:40
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:dD7ifmgpBATegI25Xs4sXg
+# Created by DBIx::Class::Schema::Loader v0.07051 @ 2025-04-28 16:41:47
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:hGbnnGBWKaKzsVipsyN7ww
 
 __PACKAGE__->belongs_to( biblioitem => "Koha::Schema::Result::Biblioitem", "biblioitemnumber" );
 

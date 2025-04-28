@@ -51,7 +51,7 @@ id for the bibliographic record the hold has been placed against
   is_foreign_key: 1
   is_nullable: 1
 
-If item-level, the id for the item the hold has been placed agains
+If item-level, the id for the item the hold has been placed against
 
 =head2 date_created
 
@@ -162,8 +162,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07049 @ 2021-01-21 13:39:29
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:dGkIYbw9CX0LqiH8XmuGAQ
+# Created by DBIx::Class::Schema::Loader v0.07051 @ 2025-04-28 16:41:47
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:XzTY0bZ31Mu2yY7XPn8lcg
 
 =head2 koha_objects_class
 

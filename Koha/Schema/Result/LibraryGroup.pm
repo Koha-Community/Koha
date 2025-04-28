@@ -54,7 +54,7 @@ The branchcode of a branch belonging to the parent group
   is_nullable: 1
   size: 100
 
-Short description of the goup
+Short description of the group
 
 =head2 description
 
@@ -266,8 +266,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07049 @ 2023-10-04 17:58:31
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:M9YgMuCWhncegAzkH8uoJg
+# Created by DBIx::Class::Schema::Loader v0.07051 @ 2025-04-28 16:41:47
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:CkZe+3Qm2ZlmoSmXBGChag
 
 =head2 koha_object_class
 

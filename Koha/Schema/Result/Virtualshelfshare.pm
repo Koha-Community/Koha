@@ -53,7 +53,7 @@ borrower that accepted access to this list
   is_nullable: 1
   size: 10
 
-temporary string used in accepting the invitation to access thist list; not-empty means that the invitation has not been accepted yet
+temporary string used in accepting the invitation to access this list; not-empty means that the invitation has not been accepted yet
 
 =head2 sharedate
 
@@ -132,8 +132,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07049 @ 2021-01-21 13:39:29
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:Aovcx4icmIsaRskB9qUSlA
+# Created by DBIx::Class::Schema::Loader v0.07051 @ 2025-04-28 16:41:47
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:YWvVuOeor2WoBERfGGL45A
 
 
 # You can replace this text with custom content, and it will be preserved on regeneration
