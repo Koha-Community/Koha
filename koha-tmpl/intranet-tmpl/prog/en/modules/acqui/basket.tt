@@ -120,7 +120,7 @@
                                                     <a class="btn btn-default btn-xs submit-form-link" href="#" data-ean="[% eans.0 | html %]" data-basketno="[% basketno | html %]" data-action="basket.pl" data-method="post" data-op="cud-ediorder"><i class="fa fa-download"></i> Create EDIFACT order</a>
                                                 [% ELSE %]
                                                     <button class="btn btn-default dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false" id="ediorderbutton"><i class="fa fa-download"></i> Create EDIFACT order</button>
-                                                    <ul class="dropdown-menu">
+                                                    <ul class="dropdown-menu overflow-y-auto overflow-x-hidden" style="max-height: 75vh;">
                                                         [% FOREACH eanacct IN eans %]
                                                         <li>
                                                             <a class="btn btn-default btn-xs submit-form-link" href="#" data-ean="[% eanacct.ean | html %]" data-ean_description="[% eanacct.description | html %]" data-ean_branch="[% eanacct.branch.branchname | html %]" data-basketno="[% basketno | html %]" data-action="basket.pl" data-method="post" data-op="cud-ediorder">[% eanacct.branch.branchname | html %] ([% eanacct.ean | html %]) [% IF eanacct     .description %][[% eanacct.description | html %]][% END %]</a>
