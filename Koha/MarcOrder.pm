@@ -393,11 +393,11 @@ sub add_biblio_from_import_record {
     my $matches      = $import_record->get_import_record_matches( { chosen => 1 } );
     my $match        = $matches->count ? $matches->next             : undef;
     my $biblionumber = $match          ? $match->candidate_match_id : 0;
+    my $biblio       = $biblionumber   ? Koha::Biblios->find($biblionumber) : undef;
 
-    if ($biblionumber) {
+    if ($biblio) {
         $import_record->status('imported')->store;
         if ( $overlay_action eq 'replace' ) {
-            my $biblio = Koha::Biblios->find($biblionumber);
             $import_record->replace( { biblio => $biblio } );
         }
     } else {
