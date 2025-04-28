@@ -544,8 +544,313 @@ div.dt-button-collection button.dt-button.buttons-print:not( .disabled )::before
     }
 }
 
+/* div.dt-container .dt-paging .dt-paging-button {
+    background: transparent;
+    border: 1px solid transparent;
+    border-radius: 2px;
+    box-sizing: border-box;
+    cursor: pointer;
+    display: inline-block;
+    margin-left: 2px;
+    min-width: 1.5em;
+    padding: .5em 1em;
+    text-align: center;
+}
+
+div.dt-container .dt-paging .dt-paging-button.current
+div.dt-container .dt-paging .dt-paging-button.current:hover {
+    border: 1px solid rgba( 0, 0, 0, .3 );
+}
+
+div.dt-container .dt-paging .dt-paging-button.disabled,
+div.dt-container .dt-paging .dt-paging-button.disabled:hover,
+div.dt-container .dt-paging .dt-paging-button.disabled:active {
+    border: 1px solid transparent;
+    box-shadow: none;
+    cursor: default;
+}
+
+div.dt-container .dt-paging .dt-paging-button:hover {
+    border: 1px solid #111;
+}
+
+div.dt-container .dt-paging .dt-paging-button:active {
+}
+
+div.dt-container .dt-paging .ellipsis {
+    padding: 0 1em;
+}
+
+div.dt-container .dt-length,
+div.dt-container .dt-search,
+div.dt-container .dt-info,
+div.dt-container .dt-processing,
+div.dt-container .dt-paging {
+    color: inherit;
+} */
+
+.table_entries {
+    clear: both;
+    display: flex;
+}
+
+div.dt-container .dt-length {
+    display: none;
+    float: none;
+    line-height: 1.5em;
+    padding-right: 1em;
+}
+
+.dt-paging-button {
+    background: transparent none;
+    border: 1px solid transparent;
+    border-radius: .375rem;
+    color: $link-color;
+    font-weight: bold;
+    padding: .2rem 1rem;
+
+    &:hover,
+    &:active {
+        background: transparent none;
+        border: 1px solid rgba( 0, 99, 148, .5 );
+        box-shadow: none;
+        color: darken( $link-color, 5 );
+        text-decoration: none;
+    }
+
+    &.current {
+        background: transparent none;
+        border: 1px solid transparent;
+        color: $black;
+
+        &:hover,
+        &:active {
+            background: transparent none;
+            border: 1px solid transparent;
+            box-shadow: none;
+            color: $black;
+            cursor: default;
+            text-decoration: none;
+        }
+    }
+
+    &.disabled {
+        color: lighten( desaturate( adjust-hue( $link-color, -1 ), 75 ), 9 );
+
+        &:hover,
+        &:active {
+            background: transparent none;
+            border: 1px solid transparent;
+            box-shadow: none;
+            color: $link-color;
+            cursor: default;
+            text-decoration: none;
+        }
+    }
+
+    &.first,
+    &.previous,
+    &.next,
+    &.last {
+        &::before,
+        &::after {
+            display: inline-block;
+            font-family: "Font Awesome 6 Free";
+            width: 1em;
+        }
+    }
+
+    &.first {
+        display: none;
+
+        &::before {
+            content: "\f100";
+            padding-right: 1.1rem;
+        }
+    }
+
+    &.previous {
+        &::before {
+            content: "\f104";
+            padding-right: 1rem;
+        }
+    }
+
+    &.next {
+        &::after {
+            content: "\f105";
+            padding-left: .5rem;
+        }
+    }
+
+    &.last {
+        display: none;
+
+        &::after {
+            content: "\f101";
+            padding-left: .5rem;
+        }
+    }
+}
+
+.dt-info + .pager {
+    border-top: 1px solid #BCBCBC;
+    margin-top: .3em;
+}
+
+.dt-paging + .dt-info {
+    border-top: 1px solid #BCBCBC;
+    padding-top: .5rem;
+}
+
+@media ( min-width: 1275px ) {
+    .dt-button-text {
+        display: inline;
+    }
+
+    div {
+        .dt-container {
+            .dt-paging {
+                .dt-paging-button {
+                    &.first,
+                    &.last {
+                        display: inline-block;
+                    }
+                }
+            }
+        }
+    }
+}
+
+@media only screen and ( min-width: 500px ) {
+    div {
+        .dt-container {
+            .dt-length {
+                display: block;
+            }
+        }
+    }
+}
+
+@media only screen and ( max-width: 767px ) {
+    div {
+        .dt-container {
+            .dt-info,
+            .dt-paging {
+                float: none;
+                text-align: left;
+            }
+        }
+    }
+}
+
+@media only screen and ( min-width: 950px ) and ( max-width: 1125px ) {
+    .dt-button-text {
+        display: none;
+    }
+}
+
+@media only screen and ( min-width: 950px ) {
+    .table_entries,
+    .table_controls {
+        border-top: 0;
+        clear: none;
+        margin: 0;
+        padding: 0;
+    }
+}
+
+@media only screen and ( min-width: 1500px ) {
+    div {
+        .dt-container {
+            .dt-paging {
+                span {
+                    .dt-paging-button,
+                    .ellipsis {
+                        display: inline-block;
+                    }
+                }
+            }
+        }
+    }
+}
+
+.dt-button.processing {
+    color: rgba( 0, 0, 0, .2 );
+
+    &::after {
+        animation: dtb-spinner 1500ms infinite linear;
+        border: 2px solid rgb( 40, 40, 40 );
+        border-left-color: transparent;
+        border-radius: 50%;
+        border-right-color: transparent;
+        box-sizing: border-box;
+        content: " ";
+        display: block;
+        height: 16px;
+        left: 50%;
+        margin: -8px 0 0 -8px;
+        position: absolute;
+        top: 50%;
+        width: 16px;
+    }
+}
+
+.dt-processing {
+    background-color: #F4F8F9;
+    border: 1px solid darken( $base-theme-color, 10% );
+    box-shadow: 2px 2px 3px 1px rgba( 0, 0, 0, .2 );
+    left: 50%;
+    margin-left: -100px;
+    margin-top: -22px;
+    padding: .7rem;
+    position: absolute;
+    text-align: center;
+    top: 50%;
+    width: 200px;
+    z-index: 10;
+
+    > div:last-child {
+        // background: $base-theme-color;
+        height: 15px;
+        margin: 1em auto;
+        position: relative;
+        width: 80px;
+
+        > div {
+            animation-timing-function: cubic-bezier( 0, 1, 1, 0 );
+            background: $base-theme-color none;
+            border-radius: 50%;
+            height: 13px;
+            position: absolute;
+            top: 0;
+            width: 13px;
+
+            &:nth-child( 1 ) {
+                animation: datatables-loader-1 .6s infinite;
+                left: 8px;
+            }
+
+            &:nth-child( 2 ) {
+                animation: datatables-loader-2 .6s infinite;
+                left: 8px;
+            }
+
+            &:nth-child( 3 ) {
+                animation: datatables-loader-2 .6s infinite;
+                left: 32px;
+            }
+
+            &:nth-child( 4 ) {
+                animation: datatables-loader-3 .6s infinite;
+                left: 56px;
+            }
+        }
+    }
+}
+
 table {
-    th
+    th,
     td {
         line-height: 135%;
     }

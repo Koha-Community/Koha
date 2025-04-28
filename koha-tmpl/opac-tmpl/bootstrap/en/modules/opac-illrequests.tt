@@ -421,7 +421,7 @@
         }
         $("#illrequestlist").kohaTable({
             order: [[ 0, "desc" ]],
-            dom: '<"dt-info"i><"top pager"<"table_entries"lp>>tr<"bottom pager"ip>',
+            dom: '<"dt-info"i><"top pager"<"table_entries"lp>t<"bottom pager"pi>',
             paging: true,
             embed: ['+strings','extended_attributes'],
             ajax: { url: '/api/v1/public/patrons/[% logged_in_user.borrowernumber | uri %]/ill/requests' },
