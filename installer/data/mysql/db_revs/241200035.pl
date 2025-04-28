@@ -105,5 +105,7 @@ return {
         }
         );
 
+        say_success( $out, "Fixed spelling mistakes in database documentation" );
+
     },
 };
