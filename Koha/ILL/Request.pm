@@ -449,18 +449,23 @@ Returns the installed I<Koha::Plugin> corresponding to the given backend_id or u
 sub get_backend_plugin {
     my ( $self, $backend_id ) = @_;
 
-    my $koha_plugins    = Koha::Plugins->new();
-    my @backend_plugins = $koha_plugins
-        ? Koha::Plugins->new()->GetPlugins(
-        {
-            method   => 'ill_backend',
-            metadata => { name => $backend_id },
-            all      => 1,
-        }
-        )
-        : ();
+    if ( !$self->{_plugin} ) {
+        my $koha_plugins    = Koha::Plugins->new();
+        my @backend_plugins = $koha_plugins
+            ? Koha::Plugins->new()->GetPlugins(
+            {
+                method   => 'ill_backend',
+                metadata => { name => $backend_id },
+                all      => 1,
+            }
+            )
+            : ();
 
-    return $backend_plugins[0];
+        $self->{_plugin} = $backend_plugins[0]
+            if scalar @backend_plugins;
+    }
+
+    return $self->{_plugin};
 }
 
 =head3 load_backend
@@ -497,7 +502,6 @@ sub load_backend {
     } elsif ($plugin) {
 
         $self->{_my_backend} = $plugin->new_ill_backend($backend_params);
-        $self->{_plugin}     = $plugin;
     } elsif ($backend_name) {
 
         # Fallback to loading through backend_dir config
@@ -1166,10 +1170,7 @@ sub expand_template {
         $params->{opac_template} = $template_name;
 
     } else {
-        my $plugin =
-              $self->{_plugin}
-            ? $self->{_plugin}
-            : $self->get_plugin( $self->_backend->name );
+        my $plugin = $self->get_backend_plugin( $self->_backend->name );
 
         # Generate path to file to load
         my $backend_dir;
