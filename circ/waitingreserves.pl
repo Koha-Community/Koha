@@ -135,7 +135,7 @@ $template->param(
 $template->param( fast_cataloging => 1 ) if Koha::BiblioFrameworks->find( 'FA' );
 
 if ($item && $tab eq 'holdsover' && !@cancel_result) {
-    print $input->redirect("/cgi-bin/koha/circ/waitingreserves.pl#holdsover");
+    print $input->redirect("/cgi-bin/koha/circ/waitingreserves.pl?tab=holdsover");
 } elsif ( $op eq 'cud-cancelall' ) {
     print $input->redirect("/cgi-bin/koha/circ/waitingreserves.pl");
 } else {

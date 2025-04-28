@@ -69,7 +69,8 @@
                                         <p><strong>[% nextreservtitle | html %]</strong> is on hold for <strong> [% nextreservsurname | html %], [% nextreservfirstname | html %]</strong>.
                                         Please retain this item and check it in to process the hold.
                                         </p>
-                                        <form name="cancelReservewithtransfert" action="waitingreserves.pl#[% tab | html %]" method="get">
+                                        <form name="cancelReservewithtransfert" action="waitingreserves.pl" method="get">
+                                            <input type="hidden" name="tab" value="[% tab | html %]" />
                                             <button type="submit" class="btn btn-default approve"><i class="fa fa-fw fa-check"></i> OK</button>
                                         </form>
                                     </div>
@@ -80,7 +81,8 @@
                                         <p><strong>[% nextreservtitle | html %]</strong> is on hold for <strong>[% nextreservsurname | html %], [% nextreservfirstname | html %]</strong>.
                                         Please retain this item and check it in to process the hold.
                                         </p>
-                                        <form name="cancelReservewithwaiting" action="waitingreserves.pl#[% tab | html %]" method="get">
+                                        <form name="cancelReservewithwaiting" action="waitingreserves.pl" method="get">
+                                            <input type="hidden" name="tab" value="[% tab | html %]" />
                                             <button type="submit" class="btn btn-default approve"><i class="fa fa-fw fa-check"></i> OK</button>
                                         </form>
                                     </div>
