@@ -61,6 +61,309 @@ function toggledClearFilter(searchText, tableId) {
     }
 }
 
+function _dt_default_ajax(params) {
+    let default_filters = params.default_filters;
+    let options = params.options;
+
+    if (
+        !options.criteria ||
+        ["contains", "starts_with", "ends_with", "exact"].indexOf(
+            options.criteria.toLowerCase()
+        ) === -1
+    )
+        options.criteria = "contains";
+    options.criteria = options.criteria.toLowerCase();
+
+    return {
+        type: "GET",
+        cache: true,
+        dataSrc: "data",
+        beforeSend: function (xhr, settings) {
+            this._xhr = xhr;
+            if (options.embed) {
+                xhr.setRequestHeader(
+                    "x-koha-embed",
+                    Array.isArray(options.embed)
+                        ? options.embed.join(",")
+                        : options.embed
+                );
+            }
+        },
+        dataFilter: function (data, type) {
+            var json = { data: JSON.parse(data) };
+            if ((total = this._xhr.getResponseHeader("x-total-count"))) {
+                json.recordsTotal = total;
+                json.recordsFiltered = total;
+            }
+            if ((total = this._xhr.getResponseHeader("x-base-total-count"))) {
+                json.recordsTotal = total;
+            }
+            if ((draw = this._xhr.getResponseHeader("x-koha-request-id"))) {
+                json.draw = draw;
+            }
+
+            return JSON.stringify(json);
+        },
+        data: function (data, settings) {
+            var length = data.length;
+            var start = data.start;
+
+            let api = new $.fn.dataTable.Api(settings);
+            const global_search = api.search();
+
+            var dataSet = {
+                _page: Math.floor(start / length) + 1,
+                _per_page: length,
+            };
+
+            function build_query(col, value) {
+                var parts = [];
+                var attributes = col.data.split(":");
+                for (var i = 0; i < attributes.length; i++) {
+                    var part = {};
+                    var attr = attributes[i];
+                    let default_build = true;
+                    let criteria = options.criteria;
+                    if (value.match(/^\^(.*)\$$/)) {
+                        value = value.replace(/^\^/, "").replace(/\$$/, "");
+                        criteria = "exact";
+                    } else {
+                        // escape SQL LIKE special characters %
+                        value = value.replace(/(\%|\\)/g, "\\$1");
+                    }
+
+                    let built_value;
+                    if (col.type == "date") {
+                        let rfc3339 = $date_to_rfc3339(value);
+                        if (rfc3339 != "Invalid Date") {
+                            built_value = rfc3339;
+                        }
+                    }
+
+                    if (col.datatype !== undefined) {
+                        default_build = false;
+                        let coded_datatype =
+                            col.datatype.match(/^coded_value:(.*)/);
+                        if (col.datatype == "related-object") {
+                            let query_term = value;
+
+                            if (criteria != "exact") {
+                                query_term = {
+                                    like:
+                                        (["contains", "ends_with"].indexOf(
+                                            criteria
+                                        ) !== -1
+                                            ? "%"
+                                            : "") +
+                                        value +
+                                        (["contains", "starts_with"].indexOf(
+                                            criteria
+                                        ) !== -1
+                                            ? "%"
+                                            : ""),
+                                };
+                            }
+
+                            part = {
+                                [col.related + "." + col.relatedKey]:
+                                    col.relatedValue,
+                                [col.related + "." + col.relatedSearchOn]:
+                                    query_term,
+                            };
+                        } else if (
+                            coded_datatype &&
+                            coded_datatype.length > 1
+                        ) {
+                            if (global_search.length || value.length) {
+                                coded_datatype = coded_datatype[1];
+                                const search_value = value.length
+                                    ? value
+                                    : global_search;
+                                const regex = new RegExp(
+                                    `^${search_value}`,
+                                    "i"
+                                );
+                                if (
+                                    coded_values &&
+                                    coded_values.hasOwnProperty(coded_datatype)
+                                ) {
+                                    let codes = [
+                                        ...coded_values[
+                                            coded_datatype
+                                        ].entries(),
+                                    ]
+                                        .filter(([label]) => regex.test(label))
+                                        .map(([, code]) => code);
+
+                                    if (codes.length) {
+                                        part[
+                                            !attr.includes(".")
+                                                ? "me." + attr
+                                                : attr
+                                        ] = codes;
+                                    } else {
+                                        // Coded value not found using the description, fallback to code
+                                        default_build = true;
+                                    }
+                                } else {
+                                    console.log(
+                                        "coded datatype %s not supported yet".format(
+                                            coded_datatype
+                                        )
+                                    );
+                                }
+                            } else {
+                                default_build = true;
+                            }
+                        } else {
+                            console.log(
+                                "datatype %s not supported yet".format(
+                                    col.datatype
+                                )
+                            );
+                        }
+                    }
+                    if (default_build) {
+                        let value_part;
+                        if (criteria === "exact") {
+                            value_part = built_value
+                                ? [value, built_value]
+                                : value;
+                        } else {
+                            let like = {
+                                like:
+                                    (["contains", "ends_with"].indexOf(
+                                        criteria
+                                    ) !== -1
+                                        ? "%"
+                                        : "") +
+                                    value +
+                                    (["contains", "starts_with"].indexOf(
+                                        criteria
+                                    ) !== -1
+                                        ? "%"
+                                        : ""),
+                            };
+                            value_part = built_value
+                                ? [like, built_value]
+                                : like;
+                        }
+
+                        part[!attr.includes(".") ? "me." + attr : attr] =
+                            value_part;
+                    }
+
+                    if (Object.keys(part).length) parts.push(part);
+                }
+                return parts;
+            }
+
+            var filter = data.search.value;
+            // Build query for each column filter
+            var and_query_parameters = settings.aoColumns
+                .filter(function (col) {
+                    return (
+                        col.bSearchable &&
+                        typeof col.data == "string" &&
+                        data.columns[col.idx].search.value != ""
+                    );
+                })
+                .map(function (col) {
+                    var value = data.columns[col.idx].search.value;
+                    return build_query(col, value);
+                })
+                .map(function r(e) {
+                    return $.isArray(e) ? $.map(e, r) : e;
+                });
+
+            // Build query for the global search filter
+            var or_query_parameters = settings.aoColumns
+                .filter(function (col) {
+                    return col.bSearchable && filter != "";
+                })
+                .map(function (col) {
+                    var value = filter;
+                    return build_query(col, value);
+                })
+                .map(function r(e) {
+                    return $.isArray(e) ? $.map(e, r) : e;
+                });
+
+            if (default_filters) {
+                let additional_filters = {};
+                for (f in default_filters) {
+                    let k;
+                    let v;
+                    if (typeof default_filters[f] === "function") {
+                        let val = default_filters[f]();
+                        if (val != undefined && val != "") {
+                            k = f;
+                            v = val;
+                        }
+                    } else {
+                        k = f;
+                        v = default_filters[f];
+                    }
+
+                    // Pass to -or if you want a separate OR clause
+                    // It's not the usual DBIC notation!
+                    if (f == "-or") {
+                        if (v) or_query_parameters.push(v);
+                    } else if (f == "-and") {
+                        if (v) and_query_parameters.push(v);
+                    } else if (v) {
+                        additional_filters[k] = v;
+                    }
+                }
+                if (Object.keys(additional_filters).length) {
+                    and_query_parameters.push(additional_filters);
+                }
+            }
+            query_parameters = and_query_parameters;
+            if (or_query_parameters.length) {
+                query_parameters.push(or_query_parameters);
+            }
+
+            if (query_parameters.length) {
+                query_parameters = JSON.stringify(
+                    query_parameters.length === 1
+                        ? query_parameters[0]
+                        : { "-and": query_parameters }
+                );
+                dataSet.q = query_parameters;
+            }
+
+            dataSet._match = options.criteria;
+
+            if (data["draw"] !== undefined) {
+                settings.ajax.headers = { "x-koha-request-id": data.draw };
+            }
+
+            if (options.columns) {
+                var order = data.order;
+                var orderArray = new Array();
+                order.forEach(function (e, i) {
+                    var order_col = e.column;
+                    var order_by = options.columns[order_col].data;
+                    order_by = order_by.split(":");
+                    var order_dir = e.dir == "asc" ? "+" : "-";
+                    Array.prototype.push.apply(
+                        orderArray,
+                        order_by.map(
+                            x => order_dir + (!x.includes(".") ? "me." + x : x)
+                        )
+                    );
+                });
+                dataSet._order_by = orderArray
+                    .filter((v, i, a) => a.indexOf(v) === i)
+                    .join(",");
+            }
+
+            return dataSet;
+        },
+    };
+}
+
 (function () {
     /* Plugin to allow text sorting to ignore articles
      *
@@ -280,7 +583,12 @@ function _dt_visibility(table_settings, table_dt) {
      *                                                available from the columns_settings template toolkit include
      * @return {Object}                               The dataTables instance
      */
-    $.fn.kohaTable = function (options = {}, table_settings = undefined) {
+    $.fn.kohaTable = function (
+        options = {},
+        table_settings = undefined,
+        add_filters,
+        default_filters
+    ) {
         // Early return if the node does not exist
         if (!this.length) return;
 
@@ -292,6 +600,17 @@ function _dt_visibility(table_settings, table_dt) {
                     our_initComplete(settings, json);
                     dataTablesDefaults.initComplete(settings, json);
                 };
+            }
+
+            if (options.ajax && !options.bKohaAjaxSVC) {
+                options.ajax = Object.assign(
+                    {},
+                    options.ajax,
+                    _dt_default_ajax({ default_filters, options })
+                );
+                options.serverSide = true;
+                options.processing = true;
+                options.pagingType = "full_numbers";
             }
         }
 
