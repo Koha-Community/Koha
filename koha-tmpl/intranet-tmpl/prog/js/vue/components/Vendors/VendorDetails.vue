@@ -45,7 +45,7 @@
             </li>
             <li v-if="vendor.url" id="vendorWebsite">
                 <label>{{ $__("Website") }}:</label>
-                <ToolbarButton
+                <Link
                     :to="{
                         path: vendor.url,
                     }"
@@ -174,7 +174,7 @@
 
 <script>
 import { inject } from "vue";
-import ToolbarButton from "../ToolbarButton.vue";
+import Link from "../Link.vue";
 
 export default {
     props: {
@@ -211,7 +211,7 @@ export default {
         },
     },
     components: {
-        ToolbarButton,
+        Link,
     },
 };
 </script>

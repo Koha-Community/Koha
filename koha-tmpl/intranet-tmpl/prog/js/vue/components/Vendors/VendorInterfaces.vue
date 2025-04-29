@@ -13,7 +13,7 @@
             </li>
             <li v-if="vi.uri">
                 <label>{{ $__("URI") }}:</label>
-                <ToolbarButton
+                <Link
                     :to="{
                         path: vi.uri,
                     }"
@@ -159,7 +159,7 @@
 
 <script>
 import { inject } from "vue";
-import ToolbarButton from "../ToolbarButton.vue";
+import Link from "../Link.vue";
 
 export default {
     props: {
@@ -196,7 +196,7 @@ export default {
         },
     },
     components: {
-        ToolbarButton,
+        Link,
     },
 };
 </script>
