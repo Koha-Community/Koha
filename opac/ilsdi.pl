@@ -161,36 +161,38 @@ my $out;
 unless ( C4::Context->preference('ILS-DI') ) {
     $out->{'code'}    = "NotAllowed";
     $out->{'message'} = "ILS-DI is disabled.";
-}
+} else {
 
-# If the remote address is not allowed, redirect to 403
-my @AuthorizedIPs = split( /,/, C4::Context->preference('ILS-DI:AuthorizedIPs') );
-if (@AuthorizedIPs) {    # If no filter set, allow access to everybody
-    my $authorized = 0;
-    foreach my $ip (@AuthorizedIPs) {
-        my $netmask = Net::Netmask->new2($ip);
-        if ( $netmask && $netmask->match( $ENV{REMOTE_ADDR} ) ) {
-            $authorized = 1;
-            last;
+    # If the remote address is not allowed, redirect to 403
+    my @AuthorizedIPs = split( /,/, C4::Context->preference('ILS-DI:AuthorizedIPs') );
+    if (@AuthorizedIPs) {    # If no filter set, allow access to everybody
+        my $authorized = 0;
+        foreach my $ip (@AuthorizedIPs) {
+            my $netmask = Net::Netmask->new2($ip);
+            if ( $netmask && $netmask->match( $ENV{REMOTE_ADDR} ) ) {
+                $authorized = 1;
+                last;
+            }
         }
-    }
-    unless ($authorized) {
+        unless ($authorized) {
+            $out->{'code'}    = "NotAllowed";
+            $out->{'message'} = "Unauthorized IP address: $ENV{REMOTE_ADDR}.";
+        }
+    } else {
         $out->{'code'}    = "NotAllowed";
         $out->{'message'} = "Unauthorized IP address: $ENV{REMOTE_ADDR}.";
-    }
-} else {
-    $out->{'code'}    = "NotAllowed";
-    $out->{'message'} = "Unauthorized IP address: $ENV{REMOTE_ADDR}.";
 
-    print XMLout(
-        $out,
-        noattr        => 1,
-        nosort        => 1,
-        xmldecl       => '<?xml version="1.0" encoding="UTF-8" ?>',
-        RootName      => "ilsdi",
-        SuppressEmpty => 1
-    );
-    exit 0;
+        print XMLout(
+            $out,
+            noattr        => 1,
+            nosort        => 1,
+            xmldecl       => '<?xml version="1.0" encoding="UTF-8" ?>',
+            RootName      => "ilsdi",
+            SuppressEmpty => 1
+        );
+        exit 0;
+    }
+
 }
 
 my $service = $cgi->param('service') || "ilsdi";
