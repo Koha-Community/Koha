@@ -175,7 +175,7 @@ budget_code: 975$h'
 };
 
 subtest 'add_biblio_from_import_record()' => sub {
-    plan tests => 4;
+    plan tests => 5;
 
     $schema->storage->txn_begin;
 
@@ -219,6 +219,39 @@ subtest 'add_biblio_from_import_record()' => sub {
     isnt(
         $result->{record_result}->{biblionumber}, undef,
         'A new biblionumber is added or an existing biblionumber is returned'
+    );
+
+    my $match_biblio    = $builder->build_sample_biblio();
+    my $match_biblio_id = $match_biblio->biblionumber;
+    $match_biblio->delete;
+    my $match_record = MARC::Record->new();
+    $match_record->add_fields(
+        [ '001', '1234' ],
+        [ '020', ' ', ' ', a => '9780596004931' ],
+        [ '975', ' ', ' ', p => 10, q => 1, h => 1 ],
+    );
+
+    my $match_import_record_id = C4::ImportBatch::AddBiblioToBatch( $import_batch_id, 0, $match_record, 'utf8', 0 );
+    my $match_import_record    = Koha::Import::Records->find($match_import_record_id);
+    my $import_record_match    = Koha::Import::Record::Match->new(
+        {
+            import_record_id   => $match_import_record_id,
+            candidate_match_id => $match_biblio_id,
+            chosen             => 1,
+        }
+    )->store;
+    my $match_result = Koha::MarcOrder::add_biblio_from_import_record(
+        {
+            import_record   => $match_import_record,
+            matcher_id      => $sample_import_batch->{matcher_id},
+            overlay_action  => 'replace',
+            agent           => 'interface',
+            import_batch_id => $import_batch_id
+        }
+    );
+    isnt(
+        $match_result->{record_result}->{biblionumber}, $match_biblio_id,
+        'A new biblionumber is added when the matched biblionumber does not exist'
     );
 
     # Check that records are skipped if not selected when called from addorderiso2709.pl
