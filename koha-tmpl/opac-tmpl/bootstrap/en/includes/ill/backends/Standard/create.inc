@@ -111,7 +111,7 @@
                     <li>
                         <label for="captcha" class="required">Verification:</label>
 
-                        <input type="text" name="captcha" id="captcha" class="form-control input-fluid" style="text-transform: uppercase;" />
+                        <input required type="text" name="captcha" id="captcha" class="form-control input-fluid" style="text-transform: uppercase;" />
                         <div class="required_label required">Required</div>
                         <input type="hidden" name="captcha_digest" value="[% captcha_digest | html %]" />
 
