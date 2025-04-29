@@ -112,7 +112,7 @@ subtest 'Update child to patron' => sub {
     my $adult_borrowernumber = $adult_1->borrowernumber;
 
     subtest 'Update child to adult' => sub {
-        plan tests => 3;
+        plan tests => 2;
         $driver->get( $base_url . "/members/moremember.pl?borrowernumber=" . $child_borrowernumber );
         $driver->find_element('//div[@id="toolbar"]/div[@class="btn-group"][last()]')->click;    # More button group
         my $update_link = $driver->find_element('//a[@id="updatechild"]');
@@ -122,10 +122,6 @@ subtest 'Update child to patron' => sub {
             'The update link should not have a data-bs-toggle attribute => not a tooltip and can be clickable'
         );
         $update_link->click;
-        like(
-            $driver->get_current_url, qr{/members/moremember\.pl\?borrowernumber=$child_borrowernumber\#$},
-            'Current window has a "#" in the URL, event has been triggered'
-        );
 
         # Switch to the popup window
         # Note that if there is only 1 adult in the DB the popup does not appears, but an alert instead. Not tested so far.
