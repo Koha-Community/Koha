@@ -406,6 +406,7 @@ my $target_map = {
     'webpack.config.js'      => 'NONE',
     'rspack.config.js'       => 'NONE',
     'eslint.config.mjs'      => 'NONE',
+    '.codespell-ignore'      => 'NONE',
 };
 
 =head1 CONFIGURATION OPTIONS
