@@ -87,7 +87,7 @@
     [% END %]
 [% END %]
 
-<div id="add-group-modal" class="modal" tabindex="-1" role="dialog" aria-labelledby="add-group-modal-label" aria-hidden="true">
+<div id="add-group-modal" class="modal modal-lg" tabindex="-1" role="dialog" aria-labelledby="add-group-modal-label" aria-hidden="true">
     <form method="post" id="add-group-form" action="/cgi-bin/koha/admin/library_groups.pl" class="form-horizontal">
         [% INCLUDE 'csrf-token.inc' %]
         <div class="modal-dialog">
@@ -97,64 +97,81 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <fieldset class="brief">
+                    <fieldset class="fg">
                         <input type="hidden" id="add-group-modal-parent-id" name="parent_id" value="" />
                         <input type="hidden" id="add-group-modal-action" name="op" value="cud-add" />
-                        <ol>
-                            <li>
+                        <div class="fg-row">
+                            <div class="fg-label">
                                 <label for="add-group-modal-title">Title: </label>
-                                <input type="text" size="40" maxlength="100" name="title" id="add-group-modal-title" required="required" />
-                                <span class="required">Required</span>
-                                <div class="hint">Displayed in the library group search dropdowns.</div>
-                            </li>
-                            <li>
-                                <label for="add-group-modal-description">Description: </label>
-                                <input type="text" size="40" name="description" id="add-group-modal-description" />
-                            </li>
-                        </ol>
-                    </fieldset>
-                    <div id="root-group-features-add">
-                        <h3>Features</h3>
-                        <div class="checkbox">
-                            <p>
-                                <label>
-                                    <input type="checkbox" name="ft_hide_patron_info" id="add-group-modal-ft_hide_patron_info" value="1" />
-                                    Limit patron data access by group
-                                </label>
-                            </p>
-                            <p>
-                                <label>
-                                    <input type="checkbox" name="ft_limit_item_editing" id="add-group-modal-ft_limit_item_editing" value="1" />
-                                    Limit item editing by group
-                                </label>
-                            </p>
-                            <p>
-                                <label>
-                                    <input type="checkbox" name="ft_search_groups_opac" id="add-group-modal-ft_search_groups_opac" value="1" />
-                                    Use for OPAC search groups
-                                </label>
-                            </p>
-                            <p>
-                                <label>
-                                    <input type="checkbox" name="ft_search_groups_staff" id="add-group-modal-ft_search_groups_staff" value="1" />
-                                    Use for staff search groups
-                                </label>
-                            </p>
-                            <p>
-                                <label>
-                                    <input type="checkbox" name="ft_local_hold_group" id="add-group-modal-ft_local_hold_group" value="1" />
-                                    Is local hold group
-                                </label>
-                            </p>
-                            <p>
-                                <label>
-                                    <input type="checkbox" name="ft_local_float_group" id="add-group-modal-ft_local_float_group" value="1" />
-                                    Is local float group
-                                </label>
-                            </p>
+                            </div>
+                            <div class="fg-input">
+                                <input type="text" maxlength="100" name="title" id="add-group-modal-title" required="required" />
+                            </div>
+                            <div class="required">Required</div>
+                            <div class="hint">Displayed in the library group search dropdowns.</div>
                         </div>
-                    </div>
+                        <div class="fg-row">
+                            <div class="fg-label">
+                                <label for="add-group-modal-description">Description: </label>
+                            </div>
+                            <div class="fg-input">
+                                <input type="text" name="description" id="add-group-modal-description" />
+                            </div>
+                        </div>
+                    </fieldset>
+                    <fieldset id="root-group-features-add" class="fg">
+                        <legend>Features</legend>
+                        <div class="fg-row input-checkbox">
+                            <div class="fg-label">
+                                <label for="add-group-modal-ft_hide_patron_info">Limit patron data access by group</label>
+                            </div>
+                            <div class="fg-input">
+                                <input type="checkbox" name="ft_hide_patron_info" id="add-group-modal-ft_hide_patron_info" value="1" />
+                            </div>
+                        </div>
+                        <div class="fg-row input-checkbox">
+                            <div class="fg-label">
+                                <label for="add-group-modal-ft_limit_item_editing">Limit item editing by group</label>
+                            </div>
+                            <div class="fg-input">
+                                <input type="checkbox" name="ft_limit_item_editing" id="add-group-modal-ft_limit_item_editing" value="1" />
+                            </div>
+                        </div>
+                        <div class="fg-row input-checkbox">
+                            <div class="fg-label">
+                                <label for="add-group-modal-ft_search_groups_opac">Use for OPAC search groups</label>
+                            </div>
+                            <div class="fg-input">
+                                <input type="checkbox" name="ft_search_groups_opac" id="add-group-modal-ft_search_groups_opac" value="1" />
+                            </div>
+                        </div>
+                        <div class="fg-row input-checkbox">
+                            <div class="fg-label">
+                                <label for="add-group-modal-ft_search_groups_staff">Use for staff search groups</label>
+                            </div>
+                            <div class="fg-input">
+                                <input type="checkbox" name="ft_search_groups_staff" id="add-group-modal-ft_search_groups_staff" value="1" />
+                            </div>
+                        </div>
+                        <div class="fg-row input-checkbox">
+                            <div class="fg-label">
+                                <label for="add-group-modal-ft_local_hold_group">Is local hold group</label>
+                            </div>
+                            <div class="fg-input">
+                                <input type="checkbox" name="ft_local_hold_group" id="add-group-modal-ft_local_hold_group" value="1" />
+                            </div>
+                        </div>
+                        <div class="fg-row input-checkbox">
+                            <div class="fg-label">
+                                <label for="add-group-modal-ft_local_float_group">Is local float group</label>
+                            </div>
+                            <div class="fg-input">
+                                <input type="checkbox" name="ft_local_float_group" id="add-group-modal-ft_local_float_group" value="1" />
+                            </div>
+                        </div>
+                    </fieldset>
                 </div>
+                <!-- /.modal-body -->
                 <div class="modal-footer">
                     <button type="submit" class="btn btn-primary">Save</button>
                     <button type="button" class="btn btn-default" data-bs-dismiss="modal">Close</button>
@@ -181,62 +198,77 @@
                 <div class="modal-body">
                     <input type="hidden" id="edit-group-modal-id" name="id" value="" />
                     <input type="hidden" id="edit-group-modal-action" name="op" value="cud-edit" />
-                    <fieldset class="brief">
-                        <ol>
-                            <li>
+                    <fieldset class="fg">
+                        <div class="fg-row">
+                            <div class="fg-label">
                                 <label for="edit-group-modal-title">Title: </label>
-                                <input type="text" size="40" maxlength="100" id="edit-group-modal-title" name="title" value="" required="required" />
-                                <span class="required">Required</span>
-                                <div class="hint">Displayed in the library group search dropdowns.</div>
-                            </li>
-
-                            <li>
+                            </div>
+                            <div class="fg-input">
+                                <input type="text" maxlength="100" id="edit-group-modal-title" name="title" value="" required="required" />
+                            </div>
+                            <div class="required">Required</div>
+                            <div class="hint">Displayed in the library group search dropdowns.</div>
+                        </div>
+                        <div class="fg-row">
+                            <div class="fg-label">
                                 <label for="edit-group-modal-description">Description: </label>
-                                <input type="text" size="40" id="edit-group-modal-description" name="description" value="" />
-                            </li>
-                        </ol>
+                            </div>
+                            <div class="fg-input">
+                                <input type="text" id="edit-group-modal-description" name="description" value="" />
+                            </div>
+                        </div>
                     </fieldset>
-                    <div id="root-group-features-edit">
-                        <h3>Features</h3>
-                        <div class="checkbox">
-                            <p>
+                    <fieldset id="root-group-features-edit" class="fg">
+                        <legend>Features</legend>
+                        <div class="fg-row">
+                            <div class="fg-checkbox">
                                 <label>
                                     <input type="checkbox" id="edit-group-modal-ft_hide_patron_info" name="ft_hide_patron_info" value="1" />
                                     Limit patron data access by group
                                 </label>
-                            </p>
-                            <p>
+                            </div>
+                        </div>
+                        <div class="fg-row">
+                            <div class="fg-checkbox">
                                 <label>
                                     <input type="checkbox" id="edit-group-modal-ft_limit_item_editing" name="ft_limit_item_editing" value="1" />
                                     Limit item editing by group
                                 </label>
-                            </p>
-                            <p>
+                            </div>
+                        </div>
+                        <div class="fg-row">
+                            <div class="fg-checkbox">
                                 <label>
                                     <input type="checkbox" id="edit-group-modal-ft_search_groups_opac" name="ft_search_groups_opac" value="1" />
                                     Use for OPAC search groups
                                 </label>
-                            </p>
-                            <p>
+                            </div>
+                        </div>
+                        <div class="fg-row">
+                            <div class="fg-checkbox">
                                 <label>
                                     <input type="checkbox" id="edit-group-modal-ft_search_groups_staff" name="ft_search_groups_staff" value="1" />
                                     Use for staff search groups
                                 </label>
-                            </p>
-                            <p>
+                            </div>
+                        </div>
+                        <div class="fg-row">
+                            <div class="fg-checkbox">
                                 <label>
                                     <input type="checkbox" id="edit-group-modal-ft_local_hold_group" name="ft_local_hold_group" value="1" />
                                     Is local hold group
                                 </label>
-                            </p>
-                            <p>
+                            </div>
+                        </div>
+                        <div class="fg-row">
+                            <div class="fg-checkbox">
                                 <label>
                                     <input type="checkbox" id="edit-group-modal-ft_local_float_group" name="ft_local_float_group" value="1" />
                                     Is local float group
                                 </label>
-                            </p>
+                            </div>
                         </div>
-                    </div>
+                    </fieldset>
                 </div>
                 <div class="modal-footer">
                     <button type="submit" class="btn btn-primary">Update</button>

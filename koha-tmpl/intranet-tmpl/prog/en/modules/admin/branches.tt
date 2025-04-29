@@ -142,21 +142,21 @@
                 [% IF library %]
                     <input type="hidden" name="is_a_modif" value="1" />
                 [% END %]
-                <div class="fg-row">
+                <div class="fg-row input-sm">
                     [% IF library %]
                         <div class="fg-label">
                             <span class="label">Library code: </span>
                         </div>
-                        <div class="fg-input">
+                        <div class="fg-text">
                             <input type="hidden" name="branchcode" value="[% library.branchcode | html %]" />
-                            <div class="fg-text">[% library.branchcode | html %]</div>
+                            [% library.branchcode | html %]
                         </div>
                     [% ELSE %]
                         <div class="fg-label">
                             <label for="branchcode" class="required">Library code: </label>
                         </div>
                         <div class="fg-input">
-                            <input type="text" name="branchcode" id="branchcode" size="10" maxlength="10" value="[% library.branchcode | html %]" class="required focus" required="required" />
+                            <input type="text" name="branchcode" id="branchcode" maxlength="10" value="[% library.branchcode | html %]" class="required focus" required="required" />
                         </div>
                         <div class="required">Required</div>
                         <div class="hint">Note: Whitespace is not permitted. The use of hyphens, dashes, or other punctuation may cause searching issues.</div>
@@ -168,9 +168,9 @@
                     </div>
                     <div class="fg-input">
                         [% IF library %]
-                            <input type="text" name="branchname" id="branchname" size="80" value="[% library.branchname | html %]" class="required focus" required="required" />
+                            <input type="text" name="branchname" id="branchname" value="[% library.branchname | html %]" class="required focus" required="required" />
                         [% ELSE %]
-                            <input type="text" name="branchname" id="branchname" size="80" value="[% library.branchname | html %]" class="required" required="required" />
+                            <input type="text" name="branchname" id="branchname" value="[% library.branchname | html %]" class="required" required="required" />
                         [% END %]
                     </div>
                     <div class="required">Required</div>
@@ -182,7 +182,7 @@
                         <label for="branchaddress1">Address line 1: </label>
                     </div>
                     <div class="fg-input">
-                        <input type="text" name="branchaddress1" id="branchaddress1" size="60" value="[% library.branchaddress1 | html %]" />
+                        <input type="text" name="branchaddress1" id="branchaddress1" value="[% library.branchaddress1 | html %]" />
                     </div>
                 </div>
                 <div class="fg-row">
@@ -190,7 +190,7 @@
                         <label for="branchaddress2">Address line 2: </label>
                     </div>
                     <div class="fg-input">
-                        <input type="text" name="branchaddress2" id="branchaddress2" size="60" value="[% library.branchaddress2 | html %]" />
+                        <input type="text" name="branchaddress2" id="branchaddress2" value="[% library.branchaddress2 | html %]" />
                     </div>
                 </div>
                 <div class="fg-row">
@@ -198,7 +198,7 @@
                         <label for="branchaddress3">Address line 3: </label>
                     </div>
                     <div class="fg-input">
-                        <input type="text" name="branchaddress3" id="branchaddress3" size="60" value="[% library.branchaddress3 | html %]" />
+                        <input type="text" name="branchaddress3" id="branchaddress3" value="[% library.branchaddress3 | html %]" />
                     </div>
                 </div>
                 <div class="fg-row">
@@ -206,7 +206,7 @@
                         <label for="branchcity">City: </label>
                     </div>
                     <div class="fg-input">
-                        <input type="text" name="branchcity" id="branchcity" size="60" value="[% library.branchcity | html %]" />
+                        <input type="text" name="branchcity" id="branchcity" value="[% library.branchcity | html %]" />
                     </div>
                 </div>
                 <div class="fg-row">
@@ -214,15 +214,15 @@
                         <label for="branchstate">State: </label>
                     </div>
                     <div class="fg-input">
-                        <input type="text" name="branchstate" id="branchstate" size="60" value="[% library.branchstate | html %]" />
+                        <input type="text" name="branchstate" id="branchstate" value="[% library.branchstate | html %]" />
                     </div>
                 </div>
-                <div class="fg-row">
+                <div class="fg-row input-md">
                     <div class="fg-label">
                         <label for="branchzip">ZIP/Postal code: </label>
                     </div>
                     <div class="fg-input">
-                        <input type="text" name="branchzip" id="branchzip" size="25" maxlength="25" value="[% library.branchzip | html %]" />
+                        <input type="text" name="branchzip" id="branchzip" maxlength="25" value="[% library.branchzip | html %]" />
                     </div>
                 </div>
                 <div class="fg-row">
@@ -230,7 +230,7 @@
                         <label for="branchcountry">Country: </label>
                     </div>
                     <div class="fg-input">
-                        <input type="text" name="branchcountry" id="branchcountry" size="60" value="[% library.branchcountry | html %]" />
+                        <input type="text" name="branchcountry" id="branchcountry" value="[% library.branchcountry | html %]" />
                     </div>
                 </div>
                 <div class="fg-row">
@@ -238,7 +238,7 @@
                         <label for="branchphone">Phone: </label>
                     </div>
                     <div class="fg-input">
-                        <input type="text" name="branchphone" id="branchphone" size="60" value="[% library.branchphone | html %]" />
+                        <input type="text" name="branchphone" id="branchphone" value="[% library.branchphone | html %]" />
                     </div>
                 </div>
                 <div class="fg-row">
@@ -246,7 +246,7 @@
                         <label for="branchfax">Fax: </label>
                     </div>
                     <div class="fg-input">
-                        <input type="text" name="branchfax" id="branchfax" size="60" value="[% library.branchfax | html %]" />
+                        <input type="text" name="branchfax" id="branchfax" value="[% library.branchfax | html %]" />
                     </div>
                 </div>
                 <div class="fg-row">
@@ -254,7 +254,7 @@
                         <label for="branchemail">Email: </label>
                     </div>
                     <div class="fg-input">
-                        <input type="text" name="branchemail" id="branchemail" class="email" size="80" value="[% library.branchemail | html %]" />
+                        <input type="text" name="branchemail" id="branchemail" class="email" value="[% library.branchemail | html %]" />
                     </div>
                 </div>
                 [% IF (Koha.Preference('ILLModule')) %]
@@ -263,7 +263,7 @@
                             <label for="branchillemail">ILL staff email: </label>
                         </div>
                         <div class="fg-input">
-                            <input type="text" name="branchillemail" id="branchillemail" class="email" size="80" value="[% library.branchillemail | html %]" />
+                            <input type="text" name="branchillemail" id="branchillemail" class="email" value="[% library.branchillemail | html %]" />
                         </div>
                         <div class="hint">
                             [% IF ( CAN_user_parameters_manage_sysprefs ) %]
@@ -280,7 +280,7 @@
                         <label for="branchreplyto">Reply-To: </label>
                     </div>
                     <div class="fg-input">
-                        <input type="text" name="branchreplyto" id="branchreplyto" class="email" size="80" value="[% library.branchreplyto | html %]" />
+                        <input type="text" name="branchreplyto" id="branchreplyto" class="email" value="[% library.branchreplyto | html %]" />
                     </div>
                     <div class="hint">
                         [% IF ( CAN_user_parameters_manage_sysprefs ) %]
@@ -296,7 +296,7 @@
                         <label for="branchreturnpath">Return-Path: </label>
                     </div>
                     <div class="fg-input">
-                        <input type="text" name="branchreturnpath" id="branchreturnpath" class="email" size="80" value="[% library.branchreturnpath | html %]" />
+                        <input type="text" name="branchreturnpath" id="branchreturnpath" class="email" value="[% library.branchreturnpath | html %]" />
                     </div>
                     <div class="hint">
                         [% IF ( CAN_user_parameters_manage_sysprefs ) %]
@@ -333,7 +333,7 @@
                         <label for="branchurl">URL: </label>
                     </div>
                     <div class="fg-input">
-                        <input type="text" name="branchurl" id="branchurl" size="80" value="[% library.branchurl | html %]" class="url" />
+                        <input type="text" name="branchurl" id="branchurl" value="[% library.branchurl | html %]" class="url" />
                     </div>
                 </div>
                 <div class="fg-row">
@@ -360,21 +360,21 @@
                         [% END %]
                     </div>
                 </div>
-                <div class="fg-row">
+                <div class="fg-row input-md">
                     <div class="fg-label">
                         <label for="branchip">IP: </label>
                     </div>
                     <div class="fg-input">
-                        <input type="text" name="branchip" id="branchip" size="15" maxlength="15" value="[% library.branchip | html %]" />
+                        <input type="text" name="branchip" id="branchip" maxlength="15" value="[% library.branchip | html %]" />
                     </div>
                     <div class="hint">Enter as a single IP address, or a subnet such as 192.168.1.*</div>
                 </div>
-                <div class="fg-row">
+                <div class="fg-row input-md">
                     <div class="fg-label">
                         <label for="marcorgcode">MARC organization code: </label>
                     </div>
                     <div class="fg-input">
-                        <input type="text" name="marcorgcode" id="marcorgcode" size="16" maxlength="16" value="[% library.marcorgcode | html %]" />
+                        <input type="text" name="marcorgcode" id="marcorgcode" maxlength="16" value="[% library.marcorgcode | html %]" />
                     </div>
                     <div class="hint">
                         [% IF ( CAN_user_parameters_manage_sysprefs ) %]
@@ -391,7 +391,7 @@
                         <label for="branchnotes">Notes: </label>
                     </div>
                     <div class="fg-input">
-                        <input type="text" name="branchnotes" id="branchnotes" size="80" value="[% library.branchnotes | html %]" />
+                        <input type="text" name="branchnotes" id="branchnotes" value="[% library.branchnotes | html %]" />
                     </div>
                 </div>
                 <div class="fg-row">
@@ -455,16 +455,16 @@
                                             </td>
                                             <td>
                                                 [% IF hr.open_time %]
-                                                    <input type="text" size="5" value="[% hr.open_time | html %]" name="open_time" class="flatpickr" data-flatpickr-time-only="true" />
+                                                    <input type="text" value="[% hr.open_time | html %]" name="open_time" class="flatpickr" data-flatpickr-time-only="true" />
                                                 [% ELSE %]
-                                                    <input type="text" size="5" value="" name="open_time" class="flatpickr" data-flatpickr-time-only="true" />
+                                                    <input type="text" value="" name="open_time" class="flatpickr" data-flatpickr-time-only="true" />
                                                 [% END %]
                                             </td>
                                             <td>
                                                 [% IF hr.close_time %]
-                                                    <input type="text" size="5" value="[% hr.close_time | html %]" name="close_time" class="flatpickr" data-flatpickr-time-only="true" />
+                                                    <input type="text" value="[% hr.close_time | html %]" name="close_time" class="flatpickr" data-flatpickr-time-only="true" />
                                                 [% ELSE %]
-                                                    <input type="text" size="5" value="" name="close_time" class="flatpickr" data-flatpickr-time-only="true" />
+                                                    <input type="text" value="" name="close_time" class="flatpickr" data-flatpickr-time-only="true" />
                                                 [% END %]
                                             </td>
                                         </tr>
@@ -478,10 +478,10 @@
                                                 <input type="hidden" value="[% d | html %]" name="day" />
                                             </td>
                                             <td>
-                                                <input type="text" size="5" name="open_time" class="noEnterSubmit flatpickr" data-flatpickr-time-only="true" />
+                                                <input type="text" name="open_time" class="noEnterSubmit flatpickr" data-flatpickr-time-only="true" />
                                             </td>
                                             <td>
-                                                <input type="text" size="5" name="close_time" class="noEnerSubmit flatpickr" data-flatpickr-time-only="true" />
+                                                <input type="text" name="close_time" class="noEnerSubmit flatpickr" data-flatpickr-time-only="true" />
                                             </td>
                                         </tr>
                                     [% END %]

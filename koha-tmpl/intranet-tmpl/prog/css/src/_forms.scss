@@ -19,11 +19,26 @@ fieldset {
     }
 
     &.fg {
+        container-name: form-grid;
+        container-type: inline-size;
+
         .btn.btn-link {
             padding: .175rem 0;
         }
 
         .fg-checkbox {
+            .hint {
+                display: inline;
+            }
+        }
+
+        .fg-pair {
+            display: flex;
+            flex-wrap: nowrap;
+            gap: .5rem;
+        }
+
+        .fg-radio {
             grid-column-start: 2;
         }
 
@@ -35,28 +50,98 @@ fieldset {
             .label {
                 font-weight: bold;
             }
-        }
 
-        .fg-row input[type="text"],
-        .fg-row select {
-            background-color: #FFF;
-            border: 1px solid #AAAAAA;
-            border-radius: 4px;
-            color: #495057;
-            display: inline-block;
-            height: calc( 1.5em + .75rem + 2px );
-            line-height: 1.5;
-            padding: .375rem .75rem;
-            width: 100%;
-        }
+            .btn-default {
+                border: 1px solid #aaa;
+                border-radius: 0.375rem;
+                height: calc( 1.5em + .75rem + 2px );
+                padding: .375rem .75rem;
+            }
 
-        .fg-row input[type="text"].flatpickr-input {
-            padding-left: calc( 1.5em + 10px );
-            width: calc( 100% - 20px );
+            .fg-input,
+            .fg-text {
+                display: flex;
+                gap: .5rem;
+
+                label {
+                    margin-right: 1rem;
+                }
+            }
+
+            &.input-checkbox {
+                display: grid;
+                grid-template-columns: 2rem 85%;
+
+                .fg-label {
+                    grid-column: 2 / 3;
+                    grid-row: 1 / 2;
+                }
+
+                .fg-input,
+                .fg-text {
+                    grid-column: 1 / 1;
+                }
+
+                .hint {
+                    grid-column: 2 / 3;
+                }
+            }
+
+            input[type="text"],
+            input[type="password"],
+            select {
+                background-color: #FFF;
+                border: 1px solid #AAAAAA;
+                border-radius: 4px;
+                color: #495057;
+                display: inline-block;
+                height: calc( 1.5em + .75rem + 2px );
+                line-height: 1.5;
+                padding: .375rem .75rem;
+                width: 100%;
+            }
+
+            input[type="text"]{
+                &.readonly,
+                &:read-only {
+                    background: #EEE url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='13' height='13' fill='currentColor'%3E%3Cpath d='M6.5 1.371c.962 0 1.742.78 1.742 1.742v1.549H4.758V3.113c0-.962.78-1.742 1.742-1.742m2.613 5.226V3.113c0-3.484-5.226-3.484-5.226 0v1.549c-.962 0-1.742.78-1.742 1.741v4.355c0 .962.78 1.742 1.742 1.742h5.226c.962 0 1.742-.78 1.742-1.742V6.403c0-.962-.78-1.741-1.742-1.741' style='fill:%23838383'/%3E%3C/svg%3E") 1% 50% no-repeat;
+                    border-style: inset;
+                    border-width: 1px;
+                    cursor: default;
+                    padding-left: 20px;
+
+                    &:focus {
+                        border-color: unset;
+                        border-radius: unset;
+                    }
+                }
+            }
+
+            input[type="text"].flatpickr-input {
+                padding-left: calc( 1.5em + 10px );
+                width: calc( 100% - 20px );
+            }
+
+            input[type="checkbox"],
+            input[type="radio"] {
+                margin: .4em 0 0 0;
+            }
+
+            textarea {
+                border: 1px solid #AAAAAA;
+                border-radius: 4px;
+                color: #495057;
+                padding: .375rem .75rem;
+                width: 100%;
+            }
         }
 
         .fg-row input[type="checkbox"] {
-            margin: 0;
+            margin: .4em .4em .4em 0;
+        }
+
+        .fg-row + .fg-row {
+            margin-top: 1rem;
         }
 
         .fg-label,
@@ -66,17 +151,55 @@ fieldset {
 
         .fg-text {
             padding: .375rem .75rem;
+
+            label {
+                margin-right: 1rem;
+            }
         }
 
-        @media only screen and ( min-width: 608px ) {
+        .form-control[type="file"]{
+            background-color: #FFF;
+            border: 1px solid #aaa;
+            display: inline-block;
+            width: 80%;
+        }
+
+        @container form-grid ( width > 768px ) {
             .fg-row {
                 column-gap: .7rem;
                 display: grid;
-                grid-template-columns: 15% 50% 15%;
+                grid-template-columns: 25% 50% 15%;
                 grid-template-rows: 1fr min-content;
 
+                .fg-input,
+                .fg-text {
+                    grid-column-start: 2;
+                }
+
+                &.input-md {
+                    grid-template-columns: 25% 30% 15%
+                }
+
+                &.input-sm {
+                    grid-template-columns: 25% 15% 15%
+                }
+
                 &.wide {
-                    grid-template-columns: 15% 85%;
+                    grid-template-columns: 25% 85%;
+                }
+
+                &.input-checkbox {
+                    grid-template-columns: 25% 1.5rem 65%;
+
+                    .fg-label,
+                    .fg-input {
+                        grid-column: unset;
+                    }
+
+                    .hint {
+                        grid-column-end: unset;
+                        grid-column-start: unset;
+                    }
                 }
 
                 input[type="text"].flatpickr-input {
@@ -91,15 +214,28 @@ fieldset {
             }
         }
 
-        @media only screen and ( min-width: 1700px ) {
+        @container form-grid ( width > 1700px ) {
             .fg-row {
-                grid-template-columns: 10% 35% 15%;
+                grid-template-columns: 20% 35% 15%;
+
+                &.input-md {
+                    grid-template-columns: 20% 30% 25%
+                }
+
+                &.input-sm {
+                    grid-template-columns: 20% 15% 25%
+                }
+
+                &.wide {
+                    grid-template-columns: 20% 80%;
+                }
             }
         }
 
         .hint {
             color: #666;
             font-size: 95%;
+            grid-column-end: 4;
             grid-column-start: 2;
             margin: .3rem 0;
         }
