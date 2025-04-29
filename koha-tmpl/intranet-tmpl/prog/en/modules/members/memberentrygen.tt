@@ -427,6 +427,7 @@
                                         [% UNLESS ( patron_category.category_type == 'I' ) %]
                                             [% UNLESS nosex %]
                                                 <li class="radio">
+                                                    <label for="gender">Gender:</label>
                                                     [% UNLESS ( op == 'duplicate' ) %]
                                                         [% IF ( female ) %]
                                                             <label for="sex-female"><input type="radio" name="sex" id="sex-female" value="F" checked="checked" /><span class="patronsex-female"> Female</span></label>
