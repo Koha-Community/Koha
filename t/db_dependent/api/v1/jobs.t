@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 31;
+use Test::More tests => 32;
 use Test::Mojo;
 
 use t::lib::TestBuilder;
@@ -145,3 +145,55 @@ my $job_current = $builder->build_object(
 }
 
 $schema->storage->txn_rollback;
+
+subtest 'finished jobs' => sub {
+
+    plan tests => 10;
+
+    $schema->storage->txn_begin;
+
+    my $password = 'thePassword123';
+    my $patron   = $builder->build_object(
+        {
+            class => 'Koha::Patrons',
+            value => { flags => 1 },    # superlibrarian
+        }
+    );
+    $patron->set_password( { password => $password, skip_validation => 1 } );
+    my $userid = $patron->userid;
+
+    my $job = $builder->build_object(
+        {
+            class => 'Koha::BackgroundJobs',
+            value => {
+                status   => 'new',
+                progress => 0,
+                size     => 100,
+                type     => 'batch_item_record_modification',
+                queue    => 'default',
+                data     =>
+                    '{"regex_mod":null,"report":{"total_records":1,"modified_fields":1,"modified_itemnumbers":[1]},"new_values":{"itemnotes":"xxx"},"record_ids":["1"],"exclude_from_local_holds_priority":null}',
+            }
+        }
+    );
+
+    $t->get_ok( "//$userid:$password@/api/v1/jobs/" . $job->id )->status_is(200)->json_is( $job->to_api );
+
+    $job->finish( { french => 'fries' } )->discard_changes;
+
+    $t->get_ok( "//$userid:$password@/api/v1/jobs/" . $job->id )->status_is(200)->json_is( $job->to_api );
+
+    $job->set(
+        {
+            ended_on => undef,
+            data     => undef,
+        }
+    )->store();
+
+    $job->finish()->discard_changes();
+
+    $t->get_ok( "//$userid:$password@/api/v1/jobs/" . $job->id )->status_is(200)->json_is( $job->to_api )
+        ->json_is( '/data' => undef );
+
+    $schema->storage->txn_rollback;
+};
