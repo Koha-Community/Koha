@@ -634,6 +634,9 @@ sub relationships_debt {
     my $non_issues_charges = 0;
     my $seen = $include_this_patron ? {} : { $self->id => 1 };    # For tracking members already added to the total
     foreach my $guarantor (@guarantors) {
+        if ( !$only_this_guarantor && $seen->{ $guarantor->id } ) {
+            next;
+        }
         $non_issues_charges += $guarantor->account->non_issues_charges
             if $include_guarantors && !$seen->{ $guarantor->id };
 
