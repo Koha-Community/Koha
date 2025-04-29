@@ -82,4 +82,21 @@ $template->param(
     op       => $op,
 );
 
+my @plugins = Koha::Plugins::GetPlugins(
+    {
+        method => 'background_tasks',
+    }
+);
+my @plugin_job_types;
+for my $plugin (@plugins) {
+    my $tasks = $plugin->background_tasks;
+    for my $id ( keys %$tasks ) {
+        push @plugin_job_types, {
+            id  => 'plugin_' . $plugin->get_metadata->{namespace} . "_$id",
+            str => $tasks->{$id},
+        };
+    }
+}
+$template->param( plugin_job_types => \@plugin_job_types );
+
 output_html_with_http_headers $input, $cookie, $template->output;
