@@ -709,6 +709,7 @@
                             <button type="button" data-bs-dismiss="modal" class="btn btn-default" id="[% modal_id | html %]-ok">[% t('OK') | html %]</button>
                         [% END %]
                     </div>
+                    <input type="hidden" name="op" value="cud-null" /> [%# Must be passed in the content of the modal %]
                 </form>
             </div>
         </div>
