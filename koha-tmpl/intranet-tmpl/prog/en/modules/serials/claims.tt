@@ -133,24 +133,6 @@
                             </tr>
                         [% END # /FOREACH missingissue %]
                     </tbody>
-                    <tfoot>
-                        <tr>
-                            <td></td>
-                            <td><input type="text" class="filter" data-column_num="1" placeholder="Search vendor" /></td>
-                            <td><input type="text" class="filter" data-column_num="2" placeholder="Search library" /></td>
-                            <td><input type="text" class="filter" data-column_num="3" placeholder="Search title" /></td>
-                            <td><input type="text" class="filter" data-column_num="4" placeholder="Search ISSN" /></td>
-                            <td><input type="text" class="filter" data-column_num="5" placeholder="Search issue number" /></td>
-                            <td><input type="text" class="filter" data-column_num="6" placeholder="Search status" /></td>
-                            <td><input type="text" class="filter" data-column_num="7" placeholder="Search since" /></td>
-                            <td><input type="text" class="filter" data-column_num="8" placeholder="Search publication date" /></td>
-                            <td><input type="text" class="filter" data-column_num="9" placeholder="Search claim count" /></td>
-                            <td><input type="text" class="filter" data-column_num="10" placeholder="Search claim date" /></td>
-                            [% FOR field IN additional_fields_for_subscription %]
-                                <td><input type="text" class="filter" data-column_num="[% loop.count + 10 | html %]" placeholder="Search [% field.name | html %]" /></td>
-                            [% END %]
-                        </tr>
-                    </tfoot>
                 </table>
                 <!-- /#claimst -->
             </div>
@@ -238,12 +220,16 @@
         var sTable;
         $(document).ready(function () {
             enableSelectedActions();
-            sTable = $("#claimst").kohaTable({
-                dom: "t",
-                order: [[7, "asc"]],
-                columnDefs: [{ sortable: false, targets: ["no-sort"] }],
-                paging: false,
-            });
+            sTable = $("#claimst").kohaTable(
+                {
+                    dom: "t",
+                    order: [[7, "asc"]],
+                    columnDefs: [{ sortable: false, targets: ["no-sort"] }],
+                    paging: false,
+                },
+                null,
+                true
+            );
 
             // Checkboxes : Select All / None
             $("span.checkall").html('<input type="checkbox" name="CheckAll"> ' + _("Check all") + "</input>");
