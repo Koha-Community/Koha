@@ -123,16 +123,14 @@ subtest 'after_request_created' => sub {
 
     my $fake_cardnumber = '123456789';
     my $metadata        = {
-        title      => 'This is a title',
-        author     => 'This is an author',
-        isbn       => $isbn,
-        cardnumber => $fake_cardnumber,
+        title  => 'This is a title',
+        author => 'This is an author',
+        isbn   => $isbn,
     };
 
     my $authenticated_patron = $builder->build_object(
         {
             class => 'Koha::Patrons',
-            value => { cardnumber => $fake_cardnumber }
         }
     );
 
