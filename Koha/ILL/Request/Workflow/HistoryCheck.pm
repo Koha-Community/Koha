@@ -193,7 +193,8 @@ sub _find_matching_requests {
         @existing_id_fields = grep { $_ eq 'pubmedid' } @existing_id_fields;
     }
 
-    my $patron = Koha::Patrons->find( { cardnumber => $self->{metadata}->{cardnumber} } );
+    my $patron = Koha::Patrons->find(
+        { cardnumber => $self->{metadata}->{cardnumber} || C4::Context->userenv->{'cardnumber'} } );
 
     return 0 unless $patron;
 
