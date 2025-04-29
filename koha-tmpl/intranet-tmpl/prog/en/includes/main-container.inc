@@ -83,9 +83,9 @@
         [% END %]
     </div>
 </div>
-[% SET islands = Asset.js("js/vue/dist/islands.esm.js").match('(src="([^"]+)")').1 %] <script src="[% islands %]" type="module">
+[% SET islands = Asset.js("js/vue/dist/islands.esm.js").match('(src="([^"]+)")').1 %] <script src="[% islands | $raw %]" type="module">
 </script>
 <script type="module">
-    import { hydrate } from "[% islands %]";
+    import { hydrate } from "[% islands | $raw %]";
     hydrate();
 </script>
