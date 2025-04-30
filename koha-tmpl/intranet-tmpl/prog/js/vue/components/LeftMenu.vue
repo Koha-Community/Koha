@@ -3,16 +3,14 @@
         <VendorMenu v-if="leftNavigation === 'VendorMenu'" />
         <AcquisitionsMenu v-else-if="leftNavigation === 'AcquisitionsMenu'" />
         <div v-else class="sidebar_menu">
-            <template>
-                <h5>{{ $__(title) }}</h5>
-                <ul>
-                    <NavigationItem
-                        v-for="(item, key) in leftNavigation"
-                        v-bind:key="key"
-                        :item="item"
-                    ></NavigationItem>
-                </ul>
-            </template>
+            <h5>{{ $__(title) }}</h5>
+            <ul>
+                <NavigationItem
+                    v-for="(item, key) in leftNavigation"
+                    v-bind:key="key"
+                    :item="item"
+                ></NavigationItem>
+            </ul>
         </div>
         <!-- /.sidebar_menu -->
     </aside>
