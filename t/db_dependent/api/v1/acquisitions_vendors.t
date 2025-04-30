@@ -398,7 +398,7 @@ subtest 'update() tests' => sub {
 
 subtest 'delete() tests' => sub {
 
-    plan tests => 7;
+    plan tests => 16;
 
     $schema->storage->txn_begin;
 
@@ -425,6 +425,25 @@ subtest 'delete() tests' => sub {
 
     # Unauthorized attempt to delete
     $t->delete_ok( "//$unauth_userid:$password@/api/v1/acquisitions/vendors/" . $vendor->id )->status_is(403);
+
+    my $subscription =
+        $builder->build_object( { class => 'Koha::Subscriptions', value => { aqbooksellerid => $vendor->id } } );
+    $t->delete_ok( "//$auth_userid:$password@/api/v1/acquisitions/vendors/" . $vendor->id )
+        ->status_is( 409, 'REST3.2.4' )
+        ->json_is( '/error' => 'Vendor cannot be deleted with existing baskets, subscriptions or invoices' );
+    $subscription->delete;
+    my $basket =
+        $builder->build_object( { class => 'Koha::Acquisition::Baskets', value => { booksellerid => $vendor->id } } );
+    $t->delete_ok( "//$auth_userid:$password@/api/v1/acquisitions/vendors/" . $vendor->id )
+        ->status_is( 409, 'REST3.2.4' )
+        ->json_is( '/error' => 'Vendor cannot be deleted with existing baskets, subscriptions or invoices' );
+    $basket->delete;
+    my $invoice =
+        $builder->build_object( { class => 'Koha::Acquisition::Invoices', value => { booksellerid => $vendor->id } } );
+    $t->delete_ok( "//$auth_userid:$password@/api/v1/acquisitions/vendors/" . $vendor->id )
+        ->status_is( 409, 'REST3.2.4' )
+        ->json_is( '/error' => 'Vendor cannot be deleted with existing baskets, subscriptions or invoices' );
+    $invoice->delete;
 
     $t->delete_ok( "//$auth_userid:$password@/api/v1/acquisitions/vendors/" . $vendor->id )
         ->status_is( 204, 'REST3.2.4' )->content_is( '', 'REST3.3.4' );
