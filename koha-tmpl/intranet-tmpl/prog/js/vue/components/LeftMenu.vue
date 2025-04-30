@@ -1,11 +1,9 @@
 <template>
     <aside v-if="leftNavigation !== 'none'">
-        <div class="sidebar_menu">
-            <VendorMenu v-if="leftNavigation === 'VendorMenu'" />
-            <AcquisitionsMenu
-                v-else-if="leftNavigation === 'AcquisitionsMenu'"
-            />
-            <template v-else>
+        <VendorMenu v-if="leftNavigation === 'VendorMenu'" />
+        <AcquisitionsMenu v-else-if="leftNavigation === 'AcquisitionsMenu'" />
+        <div v-else class="sidebar_menu">
+            <template>
                 <h5>{{ $__(title) }}</h5>
                 <ul>
                     <NavigationItem
