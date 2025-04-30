@@ -126,16 +126,16 @@ sub update {
 
     return try {
         my $vendor_update = $c->req->json;
-        my $contacts      = delete $vendor_update->{contacts};
-        my $interfaces    = delete $vendor_update->{interfaces};
-        my $aliases       = delete $vendor_update->{aliases};
+        my $contacts      = exists $vendor_update->{contacts}   ? delete $vendor_update->{contacts}   : undef;
+        my $interfaces    = exists $vendor_update->{interfaces} ? delete $vendor_update->{interfaces} : undef;
+        my $aliases       = exists $vendor_update->{aliases}    ? delete $vendor_update->{aliases}    : undef;
 
         $vendor->set_from_api($vendor_update);
         $vendor->store();
 
-        $vendor->contacts( $contacts     || [] );
-        $vendor->aliases( $aliases       || [] );
-        $vendor->interfaces( $interfaces || [] );
+        $vendor->contacts( $contacts     || [] ) if defined $contacts;
+        $vendor->aliases( $aliases       || [] ) if defined $aliases;
+        $vendor->interfaces( $interfaces || [] ) if defined $interfaces;
 
         return $c->render(
             status  => 200,

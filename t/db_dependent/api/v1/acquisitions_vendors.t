@@ -151,7 +151,7 @@ subtest 'get() test' => sub {
 
 subtest 'add() tests' => sub {
 
-    plan tests => 16;
+    plan tests => 17;
 
     $schema->storage->txn_begin;
 
@@ -220,12 +220,47 @@ subtest 'add() tests' => sub {
         ]
     );
 
+    subtest 'relationships contracts, interfaces, aliases' => sub {
+        plan tests => 32;
+        my $vendor    = { name => 'another vendor', contacts => [], interfaces => [], aliases => [] };
+        my $vendor_id = $t->post_ok( "//$auth_userid:$password@/api/v1/acquisitions/vendors" => json => $vendor )
+            ->status_is( 201, 'REST3 .2.1' )->json_is( '/name' => $vendor->{name} )
+
+            # FIXME Maybe we expect instead
+            # ->json_is( '/contacts' => [] )->json_is('/interfaces' => [], '/aliases' => [] );
+            ->json_hasnt('/contacts')->json_hasnt('/interfaces')->json_hasnt('/aliases')->tx->res->json->{id};
+        $t->get_ok( "//$auth_userid:$password@/api/v1/acquisitions/vendors/" . $vendor_id )->status_is(200)
+            ->json_hasnt('/contacts')->json_hasnt('/interfaces')->json_hasnt('/aliases');
+
+        $t->get_ok( "//$auth_userid:$password@/api/v1/acquisitions/vendors/"
+                . $vendor_id => { 'x-koha-embed' => 'contacts,interfaces,aliases' } )->status_is(200)
+            ->json_is( '/contacts', [] )->json_is( '/interfaces', [] )->json_is( '/aliases', [] );
+
+        $vendor = {
+            name       => 'yet another vendor', contacts => [ { name => 'contact name' } ],
+            interfaces => [ { name => 'interface name' } ], aliases => [ { alias => 'foo' } ]
+        };
+        $vendor_id = $t->post_ok( "//$auth_userid:$password@/api/v1/acquisitions/vendors" => json => $vendor )
+            ->status_is( 201, 'REST3 .2.1' )->json_is( '/name' => $vendor->{name} )
+
+            # FIXME Maybe we expect instead
+            # ->json_is( '/contacts' => [] )->json_is('/interfaces' => [], '/aliases' => [] );
+            ->json_hasnt('/contacts')->json_hasnt('/interfaces')->json_hasnt('/aliases')->tx->res->json->{id};
+
+        $t->get_ok( "//$auth_userid:$password@/api/v1/acquisitions/vendors/" . $vendor_id )->status_is(200)
+            ->json_hasnt('/contacts')->json_hasnt('/interfaces')->json_hasnt('/aliases');
+
+        $t->get_ok( "//$auth_userid:$password@/api/v1/acquisitions/vendors/"
+                . $vendor_id => { 'x-koha-embed' => 'contacts,interfaces,aliases' } )->status_is(200)
+            ->json_has('/contacts/0/name')->json_has('/interfaces/0/name')->json_has('/aliases/0/alias');
+    };
+
     $schema->storage->txn_rollback;
 };
 
 subtest 'update() tests' => sub {
 
-    plan tests => 15;
+    plan tests => 16;
 
     $schema->storage->txn_begin;
 
@@ -294,12 +329,62 @@ subtest 'update() tests' => sub {
     $t->put_ok( "//$auth_userid:$password@/api/v1/acquisitions/vendors/"
             . $non_existent_id => json => $vendor_with_updated_field )->status_is(404);
 
-    $schema->storage->txn_rollback;
-
     # Wrong method (POST)
     $t->post_ok(
         "//$auth_userid:$password@/api/v1/acquisitions/vendors/" . $vendor->id => json => $vendor_with_updated_field )
         ->status_is(404);
+
+    subtest 'relationships contracts, interfaces, aliases' => sub {
+        plan tests => 30;
+        my $vendor = $builder->build_object( { class => 'Koha::Acquisition::Booksellers' } );
+        $vendor->contacts( [] );
+        $vendor->interfaces( [] );
+        $vendor->aliases( [] );
+
+        $t->get_ok( "//$auth_userid:$password@/api/v1/acquisitions/vendors/"
+                . $vendor->id => { 'x-koha-embed' => 'contacts,interfaces,aliases' } )->status_is(200)
+            ->json_is( '/contacts', [] )->json_is( '/interfaces', [] )->json_is( '/aliases', [] );
+
+        my $api_vendor = $vendor->to_api;
+        delete $api_vendor->{id};
+
+        $api_vendor->{contacts}   = [ { name  => 'contact name' } ];
+        $api_vendor->{interfaces} = [ { name  => 'interface name' } ];
+        $api_vendor->{aliases}    = [ { alias => 'foo' } ];
+
+        $t->put_ok( "//$auth_userid:$password@/api/v1/acquisitions/vendors/" . $vendor->id => json => $api_vendor )
+            ->status_is( 200, 'REST3 .2.1' )->json_is( '/name' => $vendor->name )->json_hasnt('/contacts')
+            ->json_hasnt('/interfaces')->json_hasnt('/aliases');
+
+        $t->get_ok( "//$auth_userid:$password@/api/v1/acquisitions/vendors/"
+                . $vendor->id => { 'x-koha-embed' => 'contacts,interfaces,aliases' } )->status_is(200)
+            ->json_has('/contacts/0/name')->json_has('/interfaces/0/name')->json_has('/aliases/0/alias');
+
+        delete $api_vendor->{contacts};
+        delete $api_vendor->{interfaces};
+        delete $api_vendor->{aliases};
+
+        $t->put_ok( "//$auth_userid:$password@/api/v1/acquisitions/vendors/" . $vendor->id => json => $api_vendor )
+            ->status_is( 200, 'REST3 .2.1' );
+
+        $t->get_ok( "//$auth_userid:$password@/api/v1/acquisitions/vendors/"
+                . $vendor->id => { 'x-koha-embed' => 'contacts,interfaces,aliases' } )->status_is(200)
+            ->json_has('/contacts/0/name')->json_has('/interfaces/0/name')->json_has('/aliases/0/alias');
+
+        $api_vendor->{contacts}   = [];
+        $api_vendor->{interfaces} = [];
+        $api_vendor->{aliases}    = [];
+
+        $t->put_ok( "//$auth_userid:$password@/api/v1/acquisitions/vendors/" . $vendor->id => json => $api_vendor )
+            ->status_is( 200, 'REST3 .2.1' );
+
+        $t->get_ok( "//$auth_userid:$password@/api/v1/acquisitions/vendors/"
+                . $vendor->id => { 'x-koha-embed' => 'contacts,interfaces,aliases' } )->status_is(200)
+            ->json_is( '/contacts', [] )->json_is( '/interfaces', [] )->json_is( '/aliases', [] );
+    };
+
+    $schema->storage->txn_rollback;
+
 };
 
 subtest 'delete() tests' => sub {
