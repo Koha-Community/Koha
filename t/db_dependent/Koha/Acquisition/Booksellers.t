@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 9;
+use Test::More tests => 8;
 
 use t::lib::TestBuilder;
 
@@ -309,26 +309,4 @@ subtest 'invoices' => sub {
     is( ref($invoices),   'Koha::Acquisition::Invoices', 'Type is correct' );
 
     $schema->storage->txn_rollback();
-};
-
-subtest 'to_api() tests' => sub {
-
-    plan tests => 4;
-
-    $schema->storage->txn_begin;
-
-    my $vendor = $builder->build_object( { class => 'Koha::Acquisition::Booksellers' } );
-
-    is( $vendor->interfaces->count, 0, 'Vendor has no interfaces' );
-
-    $vendor->interfaces(
-        [ { name => 'first interface' }, { name => 'second interface', login => 'one_login', password => 'Test1234' } ]
-    );
-
-    my $interfaces = $vendor->to_api->{interfaces};
-    is( scalar(@$interfaces),          2,          'Vendor has two interfaces' );
-    is( @{$interfaces}[0]->{password}, undef,      'No password set for the interface' );
-    is( @{$interfaces}[1]->{password}, 'Test1234', 'password is unhashed' );
-
-    $schema->storage->txn_rollback;
 };

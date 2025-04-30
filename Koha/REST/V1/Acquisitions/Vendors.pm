@@ -70,9 +70,20 @@ sub get {
         unless $vendor;
 
     return try {
+        my $vendor_to_return = $c->objects->to_api($vendor);
+        if ( $vendor_to_return->{interfaces} ) {
+            my $interfaces = $vendor->interfaces->as_list;
+            my @updated_interfaces;
+            foreach my $interface ( @{$interfaces} ) {
+                $interface->password( $interface->plain_text_password );
+                push @updated_interfaces, $interface->unblessed;
+            }
+            $vendor_to_return->{interfaces} = \@updated_interfaces;
+        }
+
         return $c->render(
             status  => 200,
-            openapi => $c->objects->to_api($vendor),
+            openapi => $vendor_to_return,
         );
     } catch {
         $c->unhandled_exception($_);
