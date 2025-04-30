@@ -52,7 +52,7 @@
             <li>
                 <a
                     ref="invoices"
-                    :href="`/cgi-bin/koha/acqui/invoices.pl?supplierid=${vendorId}&amp;op=do_search`"
+                    :href="`/cgi-bin/koha/acqui/invoices.pl?supplierid=${vendorId}`"
                     >{{ $__("Invoices") }}</a
                 >
             </li>
