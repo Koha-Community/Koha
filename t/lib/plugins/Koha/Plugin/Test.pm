@@ -365,7 +365,10 @@ sub intranet_catalog_biblio_tab {
 sub background_tasks {
     return {
         foo => 'MyPlugin::Class::Foo',
-        bar => 'MyPlugin::Class::Bar',
+        bar => {
+            class => 'MyPlugin::Class::Bar',
+            name  => "Bar task",
+        },
     };
 }
 
