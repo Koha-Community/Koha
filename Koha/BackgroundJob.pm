@@ -479,14 +479,17 @@ sub plugin_types_to_classes {
             my $namespace = $metadata->{namespace};
 
             foreach my $type ( keys %{$tasks} ) {
-                my $class = $tasks->{$type};
+                my $class =
+                    ( ref $tasks->{$type} eq 'HASH' )
+                    ? $tasks->{$type}{class}
+                    : $tasks->{$type};
 
                 # skip if conditions not met
                 next unless $type and $class;
 
                 my $key = "plugin_$namespace" . "_$type";
 
-                $self->{_plugin_mapping}->{$key} = $tasks->{$type};
+                $self->{_plugin_mapping}->{$key} = $class;
             }
         }
     }

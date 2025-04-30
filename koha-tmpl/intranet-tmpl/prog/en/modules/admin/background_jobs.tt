@@ -165,72 +165,72 @@
         const job_types = [
             {
                 '_id': 'batch_biblio_record_modification',
-                '_str': _("Batch bibliographic record modification")
+                '_str': _("Batch bibliographic record modification").escapeHtml()
             },
             {
                 '_id': 'batch_biblio_record_deletion',
-                '_str': _("Batch bibliographic record deletion")
+                '_str': _("Batch bibliographic record deletion").escapeHtml()
             },
             {
                 '_id': 'batch_authority_record_modification',
-                '_str': _("Batch authority record modification")
+                '_str': _("Batch authority record modification").escapeHtml()
             },
             {
                 '_id': 'batch_authority_record_deletion',
-                '_str': _("Batch authority record deletion")
+                '_str': _("Batch authority record deletion").escapeHtml()
             },
             {
                 '_id': 'batch_item_record_modification',
-                '_str': _("Batch item record modification")
+                '_str': _("Batch item record modification").escapeHtml()
             },
             {
                 '_id': 'batch_item_record_deletion',
-                '_str': _("Batch item record deletion")
+                '_str': _("Batch item record deletion").escapeHtml()
             },
             {
                 '_id': 'erm_sushi_harvester',
-                '_str': _("ERM Usage Statistics SUSHI Harvester")
+                '_str': _("ERM Usage Statistics SUSHI Harvester").escapeHtml()
             },
             {
                 '_id': 'batch_hold_cancel',
-                '_str': _("Batch hold cancellation")
+                '_str': _("Batch hold cancellation").escapeHtml()
             },
             {
                 '_id': 'pseudonymize_statistic',
-                '_str': _("Pseudonymize statistic")
+                '_str': _("Pseudonymize statistic").escapeHtml()
             },
             {
                 '_id': 'create_eholdings_from_biblios',
-                '_str': _("Create eHolding titles")
+                '_str': _("Create eHolding titles").escapeHtml()
             },
             {
                 '_id': 'update_elastic_index',
-                '_str': _("Update Elasticsearch index")
+                '_str': _("Update Elasticsearch index").escapeHtml()
             },
             {
                 '_id': 'update_holds_queue_for_biblios',
-                '_str': _("Holds queue update")
+                '_str': _("Holds queue update").escapeHtml()
             },
             {
                 '_id': 'stage_marc_for_import',
-                '_str': _("Staged MARC records for import")
+                '_str': _("Staged MARC records for import").escapeHtml()
             },
             {
                 '_id': 'marc_import_commit_batch',
-                '_str': _("Import MARC records")
+                '_str': _("Import MARC records").escapeHtml()
             },
             {
                 '_id': 'marc_import_revert_batch',
-                '_str': _("Revert import MARC records")
+                '_str': _("Revert import MARC records").escapeHtml()
             },
             {
                 '_id': 'import_from_kbart_file',
-                '_str': _("Import titles from a KBART file")
+                '_str': _("Import titles from a KBART file").escapeHtml()
             },
             [% FOR job_type IN plugin_job_types %]
             {
-                '_id': '[% job_type.id %]',
-                '_str': '[% job_type.str %]'
+                '_id': '[% job_type.id | html %]',
+                '_str': '[% job_type.str | html_entity %]'
             },
             [% END %]
         ];
@@ -290,7 +290,7 @@
                         "searchable": true,
                         "orderable": true,
                         "render": function(data, type, row, meta) {
-                            return get_job_type(row.type).escapeHtml();
+                            return get_job_type(row.type);
                         }
                     },
                     {

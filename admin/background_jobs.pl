@@ -88,9 +88,12 @@ my @plugin_job_types;
 for my $plugin (@plugins) {
     my $tasks = $plugin->background_tasks;
     for my $id ( keys %$tasks ) {
+
+        # fallback to package name if no human-readable name is available
+        my $name = ( ref $tasks->{$id} eq 'HASH' ) ? $tasks->{$id}{name} : $tasks->{$id};
         push @plugin_job_types, {
             id  => 'plugin_' . $plugin->get_metadata->{namespace} . "_$id",
-            str => $tasks->{$id},
+            str => $name,
         };
     }
 }
