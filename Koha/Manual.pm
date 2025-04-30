@@ -62,6 +62,9 @@ our $mapping = {
     'acqui/uncertainprice'                     => '/acquisitions.html#create-a-basket',
     'acqui/z3950_search'                       => '/acquisitions.html#create-a-basket',
     'acquisition/vendors'                      => '/acquisitions.html#vendors',
+    'acquisition/vendors/'                     => '/acquisitions.html#vendors',
+    'acquisition/vendors/add'                  => '/acquisitions.html#vendors',
+    'acquisition/vendors/edit/'                => '/acquisitions.html#vendors',
     'admin/additional-fields'                  => '/administration.html#additional-fields',
     'admin/admin-home'                         => '/administration.html',
     'admin/aqbudgetperiods'                    => '/administration.html#budgets',
@@ -325,7 +328,7 @@ sub get_url {
     }
     $file =~ s/[^a-zA-Z0-9_\-\/]*//g;
 
-    if ( $file =~ m|^erm| || $file =~ m|^preservation| || $file =~ m|^vendors| ) {
+    if ( $file =~ m|^erm| || $file =~ m|^preservation| || $file =~ m|^acquisition/vendors| ) {
         $file =~ s|\d*+||g;
     }
 
