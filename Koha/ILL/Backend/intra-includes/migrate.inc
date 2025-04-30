@@ -53,7 +53,7 @@
           <option value="conference">Conference</option>
           [% END %]
           [% IF whole.value.other.type.lower == "dvd" %]
-          <option value="dvd" selected="selected">DVD/option>
+          <option value="dvd" selected="selected">DVD</option>
           [% ELSE %]
           <option value="dvd">DVD</option>
           [% END %]
