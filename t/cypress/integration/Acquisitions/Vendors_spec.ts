@@ -65,12 +65,12 @@ describe("Vendor CRUD operations", () => {
     it("should list vendors", () => {
         cy.visit("/cgi-bin/koha/acqui/acqui-home.pl");
 
-        cy.intercept("GET", "/api/v1/acquisitions/vendors*", []);
+        cy.intercept("GET", "/api/v1/acquisitions/vendors\?*", []);
         cy.visit("/cgi-bin/koha/acquisition/vendors");
         cy.get("#vendors_list").contains("There are no vendors defined");
 
         const vendor = getVendor();
-        cy.intercept("GET", "/api/v1/acquisitions/vendors*", {
+        cy.intercept("GET", "/api/v1/acquisitions/vendors\?*", {
             statusCode: 200,
             body: [vendor],
             headers: {
@@ -78,7 +78,6 @@ describe("Vendor CRUD operations", () => {
                 "X-Total-Count": "1",
             },
         });
-        cy.intercept("GET", "/api/v1/acquisitions/vendors/*", vendor);
         cy.visit("/cgi-bin/koha/acquisition/vendors");
         cy.get("#vendors_list").contains("Showing 1 to 1 of 1 entries");
     });
@@ -86,7 +85,7 @@ describe("Vendor CRUD operations", () => {
     it("should add a vendor", () => {
         const vendor = getVendor();
 
-        cy.intercept("GET", "/api/v1/acquisitions/vendors*", {
+        cy.intercept("GET", "/api/v1/acquisitions/vendors\?*", {
             statusCode: 200,
             body: [],
         });
@@ -181,9 +180,11 @@ describe("Vendor CRUD operations", () => {
         const vendor = getVendor();
 
         cy.visit("/cgi-bin/koha/acquisition/vendors");
-        cy.intercept("GET", "/api/v1/acquisitions/vendors/*", vendor).as(
-            "get-vendor"
-        );
+        cy.intercept(
+            "GET",
+            new RegExp("/api/v1/acquisitions/vendors/(?!config$).+"),
+            vendor
+        ).as("get-vendor");
 
         // Click the 'Edit' button from the list
         cy.get("#vendors_list table tbody tr:first").contains("Edit").click();
@@ -210,7 +211,7 @@ describe("Vendor CRUD operations", () => {
         const vendor = getVendor();
 
         // Click the "name" link from the list
-        cy.intercept("GET", "/api/v1/acquisitions/vendors*", {
+        cy.intercept("GET", "/api/v1/acquisitions/vendors\?*", {
             statusCode: 200,
             body: [vendor],
             headers: {
@@ -235,7 +236,7 @@ describe("Vendor CRUD operations", () => {
 
         // Delete from list
         // Click the 'Delete' button from the list
-        cy.intercept("GET", "/api/v1/acquisitions/vendors*", {
+        cy.intercept("GET", "/api/v1/acquisitions/vendors\?*", {
             statusCode: 200,
             body: [vendor],
             headers: {
@@ -243,7 +244,11 @@ describe("Vendor CRUD operations", () => {
                 "X-Total-Count": "1",
             },
         });
-        cy.intercept("GET", "/api/v1/acquisitions/vendors/*", vendor);
+        cy.intercept(
+            "GET",
+            new RegExp("/api/v1/acquisitions/vendors/(?!config$).+"),
+            vendor
+        );
         cy.visit("/cgi-bin/koha/acquisition/vendors");
 
         cy.get("#vendors_list table tbody tr:first").contains("Delete").click();
