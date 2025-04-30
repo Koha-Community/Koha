@@ -116,7 +116,7 @@ export default {
         };
     },
     data() {
-        const vendorId = this.vendorid ? this.vendorid : this.params.id;
+        const vendorId = this.vendorid || this.params.id;
         return {
             vendorId,
         };
@@ -124,11 +124,9 @@ export default {
     mounted() {
         const path = location.pathname.substring(1);
 
-        Object.keys(this.$refs).forEach(ref => {
-            if (this.$refs[ref].href.includes(path)) {
-                this.$refs[ref].classList.add("current");
-            }
-        });
+        Object.values(this.$refs)
+            .find(a => a.href.includes(path))
+            ?.classList.add("current");
     },
 };
 </script>
