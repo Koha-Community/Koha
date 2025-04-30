@@ -128,6 +128,7 @@ export default {
             delete vendor.physical;
             delete vendor.subscriptions_count;
             delete vendor.baskets;
+            delete vendor.baskets_count;
             delete vendor.subscriptions;
             delete vendor.contracts;
 

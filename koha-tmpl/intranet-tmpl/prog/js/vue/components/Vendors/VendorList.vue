@@ -67,7 +67,7 @@ export default {
             tableOptions: {
                 columns: this.getTableColumns(),
                 options: {
-                    embed: "aliases,baskets,subscriptions+count,invoices",
+                    embed: "aliases,baskets+count,subscriptions+count,invoices+count",
                 },
                 url: () => this.tableURL(),
                 add_filters: true,
@@ -89,12 +89,9 @@ export default {
                                 text: this.$__("Delete"),
                                 icon: "fa fa-trash",
                                 should_display: row =>
-                                    (!row.baskets ||
-                                        row.baskets.length === 0) &&
-                                    (!row.subscriptions_count ||
-                                        row.subscriptions_count === 0) &&
-                                    (!row.invoices ||
-                                        row.invoices.length === 0),
+                                    row.baskets_count === 0 &&
+                                    row.subscriptions_count === 0 &&
+                                    row.invoices_count === 0,
                             },
                         },
                         {
@@ -103,7 +100,7 @@ export default {
                                 icon: "fa fa-inbox",
                                 should_display: row =>
                                     row.active &&
-                                    row.baskets?.length > 0 &&
+                                    row.baskets_count > 0 &&
                                     this.isUserPermitted(
                                         "CAN_user_acquisition_order_receive"
                                     ),
@@ -241,13 +238,13 @@ export default {
                     searchable: false,
                     orderable: false,
                     render(data, type, row, meta) {
-                        return row.baskets.length
+                        return row.baskets_count
                             ? '<a href="/cgi-bin/koha/acqui/booksellers.pl?booksellerid=' +
                                   row.id +
                                   '" class="show">' +
                                   escape_str(
                                       __("%s basket(s)").format(
-                                          row.baskets.length
+                                          row.baskets_count
                                       )
                                   ) +
                                   "</a>"

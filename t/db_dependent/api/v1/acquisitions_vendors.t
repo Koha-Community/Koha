@@ -37,7 +37,7 @@ my $t = Test::Mojo->new('Koha::REST::V1');
 
 subtest 'list() and delete() tests | authorized user' => sub {
 
-    plan tests => 44;
+    plan tests => 39;
 
     $schema->storage->txn_begin;
 
@@ -92,23 +92,32 @@ subtest 'list() and delete() tests | authorized user' => sub {
         ->json_is( '/0/aliases/0/alias' => 'alias 1', 'alias 1 is embedded' )
         ->json_is( '/0/aliases/1/alias' => 'alias 2', 'alias 2 is embedded' );
 
+    my @cleanup;
     for ( 0 .. 1 ) {
-        $builder->build_object( { class => 'Koha::Subscriptions', value => { aqbooksellerid => $vendor->id } } );
+        push @cleanup,
+            $builder->build_object( { class => 'Koha::Subscriptions', value => { aqbooksellerid => $vendor->id } } );
+        push @cleanup,
+            $builder->build_object(
+            { class => 'Koha::Acquisition::Baskets', value => { booksellerid => $vendor->id } } );
+        push @cleanup,
+            $builder->build_object(
+            { class => 'Koha::Acquisition::Invoices', value => { booksellerid => $vendor->id } } );
     }
-    $t->get_ok( "//$userid:$password@/api/v1/acquisitions/vendors" => { 'x-koha-embed' => 'subscriptions+count' } )
-        ->status_is(200)->json_has( '/0/subscriptions_count', 'subscriptions_count is embedded' )
-        ->json_is( '/0/subscriptions_count' => '2', 'subscription count is 2' );
+    $t->get_ok( "//$userid:$password@/api/v1/acquisitions/vendors" =>
+            { 'x-koha-embed' => 'subscriptions+count,baskets+count,invoices+count' } )->status_is(200)
+        ->json_is( '/0/subscriptions_count', 2, 'subscriptions_count is 2' )
+        ->json_is( '/0/baskets_count',       2, 'baskets_count is 2' )
+        ->json_is( '/0/invoices_count',      2, 'invoices_count is 2' );
+
+    # FIXME We need to add more tests/code here
+    # A vendor deletion should be rejected if it has baskets or subscriptions (or invoices?) linked to it
+    $_->delete for @cleanup;
 
     $t->delete_ok( "//$userid:$password@/api/v1/acquisitions/vendors/" . $vendor->id )->status_is( 204, 'REST3.2.4' )
         ->content_is( '', 'REST3.3.4' );
 
-    $t->get_ok("//$userid:$password@/api/v1/acquisitions/vendors")->status_is(200)
-        ->json_like( '/0/name' => qr/$other_vendor_name/ )->json_hasnt( '/1', 'Only one vendor' );
-
-    $t->delete_ok( "//$userid:$password@/api/v1/acquisitions/vendors/" . $other_vendor->id )
-        ->status_is( 204, 'REST3.2.4' )->content_is( '', 'REST3.3.4' );
-
-    $t->get_ok("//$userid:$password@/api/v1/acquisitions/vendors")->status_is(200)->json_is( [] );
+    $t->get_ok( "//$userid:$password@/api/v1/acquisitions/vendors/" . $other_vendor->id )->status_is(200);
+    $t->get_ok( "//$userid:$password@/api/v1/acquisitions/vendors/" . $vendor->id )->status_is(404);
 
     $schema->storage->txn_rollback;
 };

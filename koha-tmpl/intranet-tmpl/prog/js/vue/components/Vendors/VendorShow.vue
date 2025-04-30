@@ -48,7 +48,7 @@
             <ToolbarButton
                 v-if="
                     vendor.active &&
-                    vendor.baskets?.length > 0 &&
+                    vendor.baskets_count > 0 &&
                     isUserPermitted('CAN_user_acquisition_order_receive')
                 "
                 :to="{
@@ -61,10 +61,9 @@
             />
             <a
                 v-if="
-                    (!vendor.baskets || vendor.baskets.length === 0) &&
-                    (!vendor.subscriptions_count ||
-                        vendor.subscriptions_count === 0) &&
-                    (!vendor.invoices || vendor.invoices.length === 0)
+                    vendor.baskets_count === 0 &&
+                    vendor.subscriptions_count === 0 &&
+                    vendor.invoices_count === 0
                 "
                 @click="doDelete(vendor.id, vendor.name)"
                 class="btn btn-default"

@@ -21,7 +21,7 @@ export class AcquisitionAPIClient {
                     endpoint: "vendors/" + id,
                     headers: {
                         "x-koha-embed":
-                            "aliases,subscriptions+count,interfaces,contacts,contracts,baskets",
+                            "aliases,subscriptions+count,interfaces,contacts,contracts,baskets+count",
                     },
                 }),
             getAll: (query, params) =>
@@ -30,7 +30,7 @@ export class AcquisitionAPIClient {
                     query,
                     params: { _order_by: "name", ...params },
                     headers: {
-                        "x-koha-embed": "aliases,baskets",
+                        "x-koha-embed": "aliases,baskets+count",
                     },
                 }),
             delete: id =>
