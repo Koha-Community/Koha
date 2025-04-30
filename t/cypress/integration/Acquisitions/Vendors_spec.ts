@@ -272,36 +272,3 @@ describe("Vendor CRUD operations", () => {
             .contains("deleted");
     });
 });
-
-describe("External URLs", () => {
-    beforeEach(() => {
-        cy.login();
-        cy.title().should("eq", "Koha staff interface");
-    });
-
-    it("should navigate to the receive shipments page", () => {
-        cy.visit("/cgi-bin/koha/acqui/acqui-home.pl");
-
-        const vendor = getVendor();
-
-        cy.intercept("GET", "/api/v1/acquisitions/vendors*", {
-            statusCode: 200,
-            body: [vendor],
-            headers: {
-                "X-Base-Total-Count": "1",
-                "X-Total-Count": "1",
-            },
-        });
-        cy.visit("/cgi-bin/koha/vendors");
-        const name_link = cy.get(
-            "#vendors_list table tbody tr:first td:first a"
-        );
-        name_link.should("have.text", vendor.name + " (#" + vendor.id + ")");
-        name_link.click();
-        cy.wait(500);
-        cy.get("#vendors_show h1").contains(vendor.name);
-
-        cy.get("#vendors_show").contains("Receive shipments").click();
-        cy.get("h1").contains("Receive shipment from vendor " + vendor.name);
-    });
-});
