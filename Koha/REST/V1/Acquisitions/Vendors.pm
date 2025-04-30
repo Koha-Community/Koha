@@ -20,6 +20,9 @@ use Modern::Perl;
 use Mojo::Base 'Mojolicious::Controller';
 
 use Koha::Acquisition::Booksellers;
+use Koha::Acquisition::Currencies;
+
+use C4::Context;
 
 use Try::Tiny qw( catch try );
 
@@ -182,10 +185,16 @@ sub config {
     my $userflags   = C4::Auth::getuserflags( $patron->flags, $patron->id );
     my $permissions = Koha::Auth::Permissions->get_authz_from_flags( { flags => $userflags } );
 
+    my @gst_values = map { option => $_ + 0.0 }, split( '\|', C4::Context->preference("TaxRates") );
+
     return $c->render(
         status  => 200,
         openapi => {
             permissions => $permissions,
+            currencies  => Koha::Acquisition::Currencies->search->unblessed,
+            gst_values  => \@gst_values,
+            edifact     => C4::Context->preference('EDIFACT'),
+            marc_orders => C4::Context->preference('MarcOrderingAutomation'),
         },
     );
 }

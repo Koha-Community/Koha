@@ -65,11 +65,11 @@ export default {
                 const client = APIClient.acquisition;
                 client.config.get("vendors").then(config => {
                     this.userPermissions = config.permissions;
-                    this.config.settings.edifact = edifact;
+                    this.config.settings.edifact = config.edifact;
                     this.config.settings.marcOrderAutomation =
-                        marcOrderAutomation;
-                    this.vendorStore.currencies = currencies;
-                    this.vendorStore.gstValues = gstValues.map(gv => {
+                        config.marcOrderAutomation;
+                    this.vendorStore.currencies = config.currencies;
+                    this.vendorStore.gstValues = config.gst_values.map(gv => {
                         return {
                             label: `${Number(gv.option * 100).format_price()}%`,
                             value: gv.option,

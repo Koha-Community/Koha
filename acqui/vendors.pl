@@ -36,20 +36,4 @@ my ( $template, $loggedinuser, $cookie, $userflags ) = get_template_and_user(
     }
 );
 
-my $user_permissions = {};
-my $var_data         = $template->{VARS};
-foreach my $key ( keys %{$var_data} ) {
-    $user_permissions->{$key} = $var_data->{$key} if ( $key =~ /CAN_user_(.*)/ );
-}
-
-my @gst_values = map { option => $_ + 0.0 }, split( '\|', C4::Context->preference("TaxRates") );
-
-$template->param(
-    user_permissions => $user_permissions,
-    currencies       => Koha::Acquisition::Currencies->search->unblessed,
-    gst_values       => \@gst_values,
-    edifact          => C4::Context->preference('EDIFACT'),
-    marc_orders      => C4::Context->preference('MarcOrderingAutomation'),
-);
-
 output_html_with_http_headers $query, $cookie, $template->output;
