@@ -8,6 +8,7 @@ const getVendor = () => {
         address4: null,
         aliases: [{ alias: "Test alias" }],
         baskets: [],
+        baskets_count: 0,
         contacts: [
             {
                 name: "Test contact",
@@ -43,6 +44,7 @@ const getVendor = () => {
         ],
         invoice_currency: "USD",
         invoice_includes_gst: false,
+        invoices_count: 0,
         list_currency: "USD",
         list_includes_gst: false,
         name: "My Vendor",
@@ -50,6 +52,7 @@ const getVendor = () => {
         phone: "555-555-5555",
         postal: "567 Main St. PO Box 25 Springfield, MA 44224",
         subscriptions: [],
+        subscriptions_count: 0,
         tax_rate: 0.1965,
         type: "Print books",
         url: "https://koha-community.org/",
