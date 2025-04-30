@@ -95,9 +95,9 @@ sub add {
     return try {
         $vendor_to_store->store;
 
-        $vendor_to_store->contacts($contacts)     if scalar($contacts) > 0;
-        $vendor_to_store->aliases($aliases)       if scalar($aliases) > 0;
-        $vendor_to_store->interfaces($interfaces) if scalar($interfaces) > 0;
+        $vendor_to_store->contacts( $contacts     || [] );
+        $vendor_to_store->aliases( $aliases       || [] );
+        $vendor_to_store->interfaces( $interfaces || [] );
 
         $c->res->headers->location( $c->req->url->to_string . '/' . $vendor_to_store->id );
         return $c->render(
@@ -133,9 +133,9 @@ sub update {
         $vendor->set_from_api($vendor_update);
         $vendor->store();
 
-        $vendor->contacts($contacts)     if scalar($contacts) > 0;
-        $vendor->aliases($aliases)       if scalar($aliases) > 0;
-        $vendor->interfaces($interfaces) if scalar($interfaces) > 0;
+        $vendor->contacts( $contacts     || [] );
+        $vendor->aliases( $aliases       || [] );
+        $vendor->interfaces( $interfaces || [] );
 
         return $c->render(
             status  => 200,
