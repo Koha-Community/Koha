@@ -10,6 +10,7 @@ export const useVendorStore = defineStore("vendors", () => {
         config: {
             settings: {
                 edifact: false,
+                marcOrderAutomation: false,
             },
         },
         authorisedValues: {
