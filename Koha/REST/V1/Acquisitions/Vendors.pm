@@ -171,7 +171,16 @@ sub delete {
     my $c = shift->openapi->valid_input or return;
 
     return try {
-        my $vendor = Koha::Acquisition::Booksellers->find( $c->param('vendor_id') );
+        my $vendor             = Koha::Acquisition::Booksellers->find( $c->param('vendor_id') );
+        my $basket_count       = $vendor->baskets->count;
+        my $subscription_count = $vendor->subscriptions->count;
+        my $invoice_count      = $vendor->invoices->count;
+
+        my $safe_to_delete = ( $basket_count == 0 && $subscription_count == 0 && $invoice_count == 0 ) ? 1 : 0;
+        return $c->render(
+            status  => 409,
+            openapi => { error => "Vendor cannot be deleted with existing baskets, subscriptions or invoices" }
+        ) unless $safe_to_delete;
 
         return $c->render_resource_not_found("Vendor")
             unless $vendor;
