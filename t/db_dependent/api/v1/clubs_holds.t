@@ -61,13 +61,14 @@ subtest 'add() tests' => sub {
 
     subtest 'librarian access tests' => sub {
 
-        plan tests => 21;
+        plan tests => 29;
 
         $schema->storage->txn_begin;
 
         my ( $club_with_enrollments, $club_without_enrollments, $item, @enrollments ) = create_test_data();
         my $club_with_enrollments_id = $club_with_enrollments->id;
 
+        #staff with top level reserveforothers permissions
         my $librarian = $builder->build_object(
             {
                 class => 'Koha::Patrons',
@@ -77,6 +78,38 @@ subtest 'add() tests' => sub {
         my $password = 'thePassword123';
         $librarian->set_password( { password => $password, skip_validation => 1 } );
         my $userid = $librarian->userid;
+
+        #staff with only the specific place_holds permission
+        my $librarian_2 = $builder->build_object(
+            {
+                class => 'Koha::Patrons',
+                value => { userid => 'lukeg', flags => 0 }
+            }
+        );
+        $builder->build(
+            {
+                source => 'UserPermission',
+                value  => {
+                    borrowernumber => $librarian_2->borrowernumber,
+                    module_bit     => 6,
+                    code           => 'place_holds',
+                },
+            }
+        );
+        my $password_2 = 'AbcdEFG123';
+        $librarian_2->set_password( { password => $password_2, skip_validation => 1 } );
+        my $userid_2 = $librarian_2->userid;
+
+        # staff with no reserveforothers permissions
+        my $librarian_3 = $builder->build_object(
+            {
+                class => 'Koha::Patrons',
+                value => { userid => 'no_club_for_you', flags => 0 }
+            }
+        );
+        my $password_3 = 'noholdsforyou123';
+        $librarian_3->set_password( { password => $password_3, skip_validation => 1 } );
+        my $userid_3 = $librarian_3->userid;
 
         my $non_existent_item   = $builder->build_sample_item;
         my $non_existent_biblio = $non_existent_item->biblio;
@@ -125,6 +158,7 @@ subtest 'add() tests' => sub {
         $t->post_ok( "//$userid:$password@/api/v1/clubs/" . $club_without_enrollments->id . "/holds" => json => $data )
             ->status_is(409)->json_is( '/error' => "Cannot place a hold on a club without patrons." );
 
+        # place a club hold with top level reserveforothers permission - should succeed
         $t->post_ok( "//$userid:$password@/api/v1/clubs/" . $club_with_enrollments->id . "/holds" => json => $data )
             ->status_is( 201, 'Created Hold' )->json_has( '/club_hold_id', 'got a club hold id' )
             ->json_is( '/club_id' => $club_with_enrollments->id )->json_is( '/biblio_id' => $item->biblionumber )
@@ -132,6 +166,17 @@ subtest 'add() tests' => sub {
             'Location' => '/api/v1/clubs/' . $club_with_enrollments->id . '/holds/' . $t->tx->res->json->{club_hold_id},
             'REST3.4.1'
             );
+
+        # place a club hold with the place_hold specific permsision - should succeed
+        $t->post_ok( "//$userid_2:$password_2@/api/v1/clubs/" . $club_with_enrollments->id . "/holds" => json => $data )
+            ->status_is( 201, 'Created Hold with specific place_holds permission' )
+            ->json_has( '/club_hold_id', 'got a club hold id' )->json_is( '/club_id' => $club_with_enrollments->id )
+            ->json_is( '/biblio_id' => $item->biblionumber );
+
+        # place a club hold with no reserveforothers or specific permsision - should fail
+        $t->post_ok( "//$userid_3:$password_3@/api/v1/clubs/" . $club_with_enrollments->id . "/holds" => json => $data )
+            ->status_is( 403, 'User with no relevant permissions cannot place club holds' )
+            ->json_is( '/error' => 'Authorization failure. Missing required permission(s).' );
 
         $schema->storage->txn_rollback;
     };
