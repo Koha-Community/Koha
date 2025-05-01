@@ -546,7 +546,7 @@
                                                 [% IF ( !item_level_itypes ) || Koha.Preference('BiblioItemtypeInfo') %]
                                                     <div class="result-biblio-itemtype">
                                                         [% IF !noItemTypeImages && SEARCH_RESULT.imageurl %]
-                                                            <img class="itemtype-image" src="[% SEARCH_RESULT.imageurl | html %]" alt="[%  SEARCH_RESULT.description | html %]" />
+                                                    <img class="itemtype-image" src="[% SEARCH_RESULT.imageurl | html %]" alt="" />
                                                         [% END %]
                                                         <span class="itypetext">[% SEARCH_RESULT.description | html %]</span>
                                                     </div>

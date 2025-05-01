@@ -246,7 +246,7 @@
                                                 <label for="[% itemtypeloo.ccl FILTER remove(',') | html %]-[% itemtypeloo.number | html %]">
                                                     [% UNLESS ( Koha.Preference('noItemTypeImages') ) %]
                                                         [% IF ( itemtypeloo.imageurl ) %]
-                                                            <img class="itemtype-image" src="[% itemtypeloo.imageurl | html %]" alt="[% itemtypeloo.description | html %]" />
+                                                            <img class="itemtype-image" src="[% itemtypeloo.imageurl | html %]" alt="" />
                                                         [% END %]
                                                             &nbsp;
                                                     [% END %]

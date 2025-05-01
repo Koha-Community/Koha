@@ -1250,7 +1250,7 @@
                     <td class="itype">
                         [% UNLESS ( Koha.Preference('OpacNoItemTypeImages') ) %]
                             [% IF ( ITEM_RESULT.imageurl ) %]
-                                <img class="itemtype-image" src="[% ITEM_RESULT.imageurl | html %]" title="[% ITEM_RESULT.description | html %]" alt="[% ITEM_RESULT.description | html %]" />
+                                    <img class="itemtype-image" src="[% ITEM_RESULT.imageurl | html %]" title="[% ITEM_RESULT.description | html %]" alt="" />
                             [% END %]
                         [% END %]
                        <span class="itypetext">[% ITEM_RESULT.description | html %]</span>
