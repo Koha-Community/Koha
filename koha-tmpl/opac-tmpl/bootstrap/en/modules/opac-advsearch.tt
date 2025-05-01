@@ -223,7 +223,7 @@
                                                                 [% UNLESS ( Koha.Preference('OpacNoItemTypeImages')) %]
                                                                     [% IF ( itemtypeloo.imageurl ) %]
                                                                         <label for="[% itemtypeloo.ccl FILTER remove(',') | html %]-[% itemtypeloo.number | html %]">
-                                                                            <img class="itemtype-image" src="[% itemtypeloo.imageurl | html %]" alt="[% itemtypeloo.description | html %]" />
+                                                                            <img class="itemtype-image" src="[% itemtypeloo.imageurl | html %]" alt="" aria-hidden="true" />
                                                                         </label>
                                                                     [% END %]
                                                                     &nbsp;

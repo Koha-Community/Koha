@@ -197,7 +197,7 @@
         <span class="results_summary type"><span class="label">Material type: </span>
         <xsl:element name="img">
             <xsl:attribute name="src">/opac-tmpl/lib/famfamfam/<xsl:value-of select="$materialTypeCode"/>.png</xsl:attribute>
-            <xsl:attribute name="alt"><xsl:value-of select="$materialTypeLabel"/></xsl:attribute>
+            <xsl:attribute name="alt"></xsl:attribute>
             <xsl:attribute name="class">materialtype mt_icon_<xsl:value-of select="$materialTypeCode"/></xsl:attribute>
         </xsl:element>
         <xsl:value-of select="$materialTypeLabel"/>
