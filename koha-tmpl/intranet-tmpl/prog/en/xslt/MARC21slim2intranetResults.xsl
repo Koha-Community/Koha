@@ -512,20 +512,20 @@
                     <xsl:choose>
                         <xsl:when test="$leader7='c' or $leader7='d' or $leader7='m'"><img src="/intranet-tmpl/prog/img/famfamfam/silk/book.png" alt="book" title="book" class="materialtype mt_icon_BK"/> Text</xsl:when>
                         <xsl:when test="$leader7='i' or $leader7='s'"><img src="/intranet-tmpl/prog/img/famfamfam/silk/newspaper.png" alt="serial" title="serial" class="materialtype mt_icon_CR"/> Continuing resource</xsl:when>
-                        <xsl:when test="$leader7='a' or $leader7='b'"><img src="/intranet-tmpl/prog/img/famfamfam/silk/book_open.png" alt="article" title="article" class="materialtype mt_icon_AR"/> Article</xsl:when>
+                        <xsl:when test="$leader7='a' or $leader7='b'"><img src="/intranet-tmpl/prog/img/famfamfam/silk/book_open.png" alt="" title="article" class="materialtype mt_icon_AR"/> Article</xsl:when>
                     </xsl:choose>
                 </xsl:when>
                 <xsl:when test="$leader6='t'"><img src="/intranet-tmpl/prog/img/famfamfam/silk/book.png" alt="book" title="book" class="materialtype mt_icon_BK"/> Text</xsl:when>
-                <xsl:when test="$leader6='o'"><img src="/intranet-tmpl/prog/img/famfamfam/silk/report_disk.png" alt="kit" title="kit" class="materialtype mt_icon_MX"/> Kit</xsl:when>
-                <xsl:when test="$leader6='p'"><img src="/intranet-tmpl/prog/img/famfamfam/silk/report_disk.png" alt="mixed materials" title="mixed materials" class="materialtype mt_icon_MX"/>Mixed materials</xsl:when>
-                <xsl:when test="$leader6='m'"><img src="/intranet-tmpl/prog/img/famfamfam/silk/computer_link.png" alt="computer file" title="computer file" class="materialtype mt_icon_CF"/> Computer file</xsl:when>
-                <xsl:when test="$leader6='e' or $leader6='f'"><img src="/intranet-tmpl/prog/img/famfamfam/silk/map.png" alt="map" title="map" class="materialtype mt_icon_MP"/> Map</xsl:when>
-                <xsl:when test="$leader6='g'"><img src="/intranet-tmpl/prog/img/famfamfam/silk/film.png" alt="Film" class="materialtype mt_icon_VM"/> Film</xsl:when>
-                <xsl:when test="$leader6='k'"><img src="/intranet-tmpl/prog/img/famfamfam/silk/picture.png" alt="Picture" class="materialtype mt_icon_GR"/> Picture</xsl:when>
-                <xsl:when test="$leader6='r'"><img src="/intranet-tmpl/prog/img/famfamfam/silk/object.png" alt="Object" title="Object" class="materialtype mt_icon_OB"/> Object</xsl:when>
-                <xsl:when test="$leader6='c' or $leader6='d'"><img src="/intranet-tmpl/prog/img/famfamfam/silk/music.png" alt="score" title="score" class="materialtype mt_icon_PR"/> Score</xsl:when>
-                <xsl:when test="$leader6='i'"><img src="/intranet-tmpl/prog/img/famfamfam/silk/sound.png" alt="sound" title="sound" class="materialtype mt_icon_MU"/> Sound</xsl:when>
-                <xsl:when test="$leader6='j'"><img src="/intranet-tmpl/prog/img/famfamfam/silk/sound.png" alt="music" title="music" class="materialtype mt_icon_MU"/> Music</xsl:when>
+                <xsl:when test="$leader6='o'"><img src="/intranet-tmpl/prog/img/famfamfam/silk/report_disk.png" alt="" title="kit" class="materialtype mt_icon_MX"/> Kit</xsl:when>
+                <xsl:when test="$leader6='p'"><img src="/intranet-tmpl/prog/img/famfamfam/silk/report_disk.png" alt="" title="mixed materials" class="materialtype mt_icon_MX"/>Mixed materials</xsl:when>
+                <xsl:when test="$leader6='m'"><img src="/intranet-tmpl/prog/img/famfamfam/silk/computer_link.png" alt="" title="computer file" class="materialtype mt_icon_CF"/> Computer file</xsl:when>
+                <xsl:when test="$leader6='e' or $leader6='f'"><img src="/intranet-tmpl/prog/img/famfamfam/silk/map.png" alt="" title="map" class="materialtype mt_icon_MP"/> Map</xsl:when>
+                <xsl:when test="$leader6='g'"><img src="/intranet-tmpl/prog/img/famfamfam/silk/film.png" alt="" class="materialtype mt_icon_VM"/> Film</xsl:when>
+                <xsl:when test="$leader6='k'"><img src="/intranet-tmpl/prog/img/famfamfam/silk/picture.png" alt="" class="materialtype mt_icon_GR"/> Picture</xsl:when>
+                <xsl:when test="$leader6='r'"><img src="/intranet-tmpl/prog/img/famfamfam/silk/object.png" alt="" title="Object" class="materialtype mt_icon_OB"/> Object</xsl:when>
+                <xsl:when test="$leader6='c' or $leader6='d'"><img src="/intranet-tmpl/prog/img/famfamfam/silk/music.png" alt="" title="score" class="materialtype mt_icon_PR"/> Score</xsl:when>
+                <xsl:when test="$leader6='i'"><img src="/intranet-tmpl/prog/img/famfamfam/silk/sound.png" alt="" title="sound" class="materialtype mt_icon_MU"/> Sound</xsl:when>
+                <xsl:when test="$leader6='j'"><img src="/intranet-tmpl/prog/img/famfamfam/silk/sound.png" alt="" title="music" class="materialtype mt_icon_MU"/> Music</xsl:when>
             </xsl:choose>
         </span>
     </xsl:if>
