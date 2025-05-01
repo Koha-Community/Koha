@@ -131,8 +131,8 @@
                         [% END %]
                     </li>
                     <li>
-                        <label for="branches">Libraries limitation: </label>
-                        <select id="branches" name="branches" multiple size="10">
+                        <label for="library_limitation">Libraries limitation: </label>
+                        <select id="library_limitation" name="branches" multiple size="10">
                             <option value="">All libraries</option>
                             [% FOREACH branch IN branches_loop %]
                                 [% IF ( branch.selected ) %]
@@ -142,7 +142,7 @@
                                 [% END %]
                             [% END %]
                         </select>
-                        <div class="hint">Select 'All libraries' if this debit type should be available at all libraries. Otherwise select libraries you want to associate debit type with.</div>
+                        <div class="hint">Limit use of this debit type to the selected libraries.</div>
                     </li>
                 </ol>
             </fieldset>
@@ -270,6 +270,7 @@
     [% Asset.js("js/admin-menu.js") | $raw %]
     [% Asset.js("js/additional-fields-entry.js") | $raw %]
     [% INCLUDE 'datatables.inc' %]
+    [% INCLUDE 'select2.inc' %]
     <script>
         $(document).ready(function () {
             var txtActivefilter = _("Filter system debit types");
@@ -304,6 +305,9 @@
 
             //Start filtered
             $("#filter_system").click();
+
+            $("#library_limitation")[0].style.minWidth = "450px";
+            $("#library_limitation").select2();
         });
     </script>
 [% END %]

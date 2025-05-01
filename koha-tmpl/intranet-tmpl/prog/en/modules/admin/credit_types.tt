@@ -124,12 +124,11 @@
                         <span class="hint">Enable automatic generation of credit number (see <a href="/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=AutoCreditNumber">AutoCreditNumber</a>)</span>
                     </li>
                     <li>
-                        <label for="branches">Libraries limitation: </label>
+                        <label for="library_limitation">Libraries limitation: </label>
                         [% IF credit_type && credit_type.is_system %]
                             <span>No library limitation</span>
                         [% ELSE %]
-                            <select id="branches" name="branches" multiple size="10">
-                                <option value="">All libraries</option>
+                            <select id="library_limitation" name="branches" multiple size="10">
                                 [% FOREACH branch IN branches_loop %]
                                     [% IF ( branch.selected ) %]
                                         <option selected="selected" value="[% branch.branchcode | html %]">[% branch.branchname | html %]</option>
@@ -138,7 +137,7 @@
                                     [% END %]
                                 [% END %]
                             </select>
-                            <div class="hint">Select 'All libraries' if this credit type should be available at all libraries. Otherwise select libraries you want to associate credit type with.</div>
+                            <div class="hint">Limit the use of this credit type to the selected libraries.</div>
                         [% END %]
                     </li>
                 </ol>
@@ -254,6 +253,7 @@
     [% Asset.js("js/admin-menu.js") | $raw %]
     [% Asset.js("js/additional-fields-entry.js") | $raw %]
     [% INCLUDE 'datatables.inc' %]
+    [% INCLUDE 'select2.inc' %]
     <script>
         $(document).ready(function () {
             var txtActivefilter = _("Filter system credit types");
@@ -288,6 +288,9 @@
 
             //Start filtered
             $("#filter_system").click();
+
+            $("#library_limitation")[0].style.minWidth = "450px";
+            $("#library_limitation").select2();
         });
     </script>
 [% END %]
