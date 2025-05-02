@@ -355,7 +355,7 @@ test_it( $cpvPmappings, "PostIssue" );
 BAIL_OUT("Return Failed") unless AddReturn( $item_1->{barcode}, $patron->{branchcode} );
 
 #Since currently checked in item now return status "currentlycheckedout" we need use
-#same test scenarions for returned item as above but without "currentlycheckedout"
+#same test scenarios for returned item as above but without "currentlycheckedout"
 $cpvPmappings = [
     {
         msg    => "Same item, same patron [1]",
