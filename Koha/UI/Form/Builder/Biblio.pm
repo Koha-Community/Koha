@@ -93,7 +93,7 @@ sub generate_subfield_form {
     # Substitute date parts, user name
     my $applydefaults = C4::Context->preference('ApplyFrameworkDefaults');
     if ( $value eq '' && (
-        ( $applydefaults =~ /new/ && !$self->{biblionumber} ) ||
+        ( $applydefaults =~ /new/ && !defined $self->{biblionumber} ) ||
         ( $applydefaults =~ /duplicate/ && $op eq 'duplicate' ) ||
         ( $applydefaults =~ /changed/ && $changed_framework ) ||
         ( $applydefaults =~ /imported/ && $breedingid )
