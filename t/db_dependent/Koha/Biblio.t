@@ -1016,46 +1016,92 @@ subtest 'get_volumes_query' => sub {
 };
 
 subtest 'generate_marc_host_field' => sub {
-    plan tests => 24;
+    plan tests => 35;
 
     $schema->storage->txn_begin;
 
+    # Set up MARC21 tests
     t::lib::Mocks::mock_preference( 'marcflavour', 'MARC21' );
 
-    my $biblio = $builder->build_sample_biblio();
-    my $record = $biblio->metadata->record;
+    # 1. Complete MARC21 record test
+    my $record = MARC::Record->new();
+    $record->leader('00000nam a22000007a 4500');
     $record->append_fields(
-        MARC::Field->new( '001', '1234' ),
-        MARC::Field->new( '003', 'FIRST' ),
-        MARC::Field->new( '240', '', '', a => 'A uniform title' ),
-        MARC::Field->new( '260', '', '', a => 'Publication 260' ),
-        MARC::Field->new( '250', '', '', a => 'Edition a', b => 'Edition b' ),
-        MARC::Field->new( '022', '', '', a => '0317-8471' ),
+        MARC::Field->new( '001', '12345' ),
+        MARC::Field->new( '003', 'NB' ),
+        MARC::Field->new( '020', '',  '',  'a' => '978-3-16-148410-0' ),
+        MARC::Field->new( '022', '',  '',  'a' => '1234-5678' ),
+        MARC::Field->new( '100', '1', '',  'a' => 'Smith, John',  'e' => 'author',   '9' => 'xyz', '4' => 'aut' ),
+        MARC::Field->new( '245', '1', '0', 'a' => 'The Title',    'b' => 'Subtitle', 'c' => 'John Smith' ),
+        MARC::Field->new( '250', '',  '',  'a' => '2nd edition',  'b' => 'revised' ),
+        MARC::Field->new( '260', '',  '',  'a' => 'New York',     'b' => 'Publisher', 'c' => '2023' ),
+        MARC::Field->new( '830', '',  '',  'a' => 'Series Title', 'v' => 'vol. 2',    'x' => '2345-6789' )
     );
-    C4::Biblio::ModBiblio( $record, $biblio->biblionumber );
-    $biblio = Koha::Biblios->find( $biblio->biblionumber );
+    my ($biblio_id) = AddBiblio( $record, qw{} );
+    my $biblio = Koha::Biblios->find($biblio_id);
 
-    t::lib::Mocks::mock_preference( 'UseControlNumber', '0' );
+    # Test MARC21 with UseControlNumber off
+    t::lib::Mocks::mock_preference( 'UseControlNumber', 0 );
     my $link = $biblio->generate_marc_host_field();
 
-    is( ref($link),           'MARC::Field',         "->generate_marc_host_field returns a MARC::Field object" );
-    is( $link->tag,           '773',                 "MARC::Field->tag returns '773' when marcflavour is 'MARC21" );
-    is( $link->subfield('a'), 'Some boring author',  'MARC::Field->subfield(a) returns content from 100ab' );
-    is( $link->subfield('b'), 'Edition a Edition b', 'MARC::Field->subfield(b) returns content from 250ab' );
-    is( $link->subfield('d'), 'Publication 260',     'MARC::Field->subfield(c) returns content from 260abc' );
-    is( $link->subfield('s'), 'A uniform title',     'MARC::Field->subfield(s) returns content from 240a' );
-    is( $link->subfield('t'), 'Some boring read',    'MARC::Field->subfield(s) returns content from 245ab' );
-    is( $link->subfield('x'), '0317-8471',           'MARC::Field->subfield(s) returns content from 022a' );
-    is( $link->subfield('z'), undef,                 'MARC::Field->subfield(s) returns undef when 020a is empty' );
-    is( $link->subfield('w'), undef, 'MARC::Field->subfield(w) returns undef when "UseControlNumber" is disabled' );
+    # Test standard MARC21 field
+    is( ref($link),          'MARC::Field', 'Returns a MARC::Field object' );
+    is( $link->tag(),        '773',         'Field tag is 773 for MARC21' );
+    is( $link->indicator(1), '0',           'First indicator is 0' );
+    is( $link->indicator(2), ' ',           'Second indicator is blank' );
 
+    # Check all subfields
+    is( $link->subfield('7'), 'p1am',        'Subfield 7 correctly formed' );
+    is( $link->subfield('a'), 'Smith, John', 'Subfield a contains author from 100a' );
+    is(
+        $link->subfield('t'), 'The Title Subtitle',
+        'Subfield t contains title without trailing punctuation from 245ab'
+    );
+    is( $link->subfield('b'), '2nd edition revised',     'Subfield b contains edition info from 250ab' );
+    is( $link->subfield('d'), 'New York Publisher 2023', 'Subfield d contains publication info from 260abc' );
+    is( $link->subfield('k'), 'Series Title, ISSN 2345-6789 ; vol. 2', 'Subfield k contains series info from 830' );
+    is( $link->subfield('x'), '1234-5678',                             'Subfield x contains ISSN from 022a' );
+    is( $link->subfield('z'), '978-3-16-148410-0',                     'Subfield z contains ISBN from 020a' );
+    is( $link->subfield('w'), undef, 'Subfield w is undefined when UseControlNumber is disabled' );
+
+    # Test with UseControlNumber enabled
     t::lib::Mocks::mock_preference( 'UseControlNumber', '1' );
     $link = $biblio->generate_marc_host_field();
     is(
-        $link->subfield('w'), '(FIRST)1234',
-        'MARC::Field->subfield(w) returns content from 003 and 001 when "UseControlNumber" is enabled'
+        $link->subfield('w'), '(NB)12345',
+        'Subfield w contains control number with source when UseControlNumber is enabled'
     );
 
+    # 245 punctuation handling tests
+    # Trailing slash
+    $record->field('245')->update( a => 'A title /', b => '', c => '', 'ind2' => '0' );
+    ($biblio_id) = AddBiblio( $record, qw{} );
+    $biblio = Koha::Biblios->find($biblio_id);
+    $link   = $biblio->generate_marc_host_field();
+    is( $link->subfield('t'), 'A title', "Trailing slash is removed from 245a" );
+
+    # Trailing period
+    $record->field('245')->update( a => 'Another title.', 'ind2' => '0' );
+    ($biblio_id) = AddBiblio( $record, qw{} );
+    $biblio = Koha::Biblios->find($biblio_id);
+    $link   = $biblio->generate_marc_host_field();
+    is( $link->subfield('t'), 'Another title', "Trailing period is removed from 245a" );
+
+    # Offset from indicator 2 = 4
+    $record->field('245')->update( a => 'The offset title', 'ind2' => '4' );
+    ($biblio_id) = AddBiblio( $record, qw{} );
+    $biblio = Koha::Biblios->find($biblio_id);
+    $link   = $biblio->generate_marc_host_field();
+    is( $link->subfield('t'), 'Offset title', "Title offset applied from indicator 2" );
+
+    # Capitalization after offset
+    $record->field('245')->update( a => 'the capital test', 'ind2' => '0' );
+    ($biblio_id) = AddBiblio( $record, qw{} );
+    $biblio = Koha::Biblios->find($biblio_id);
+    $link   = $biblio->generate_marc_host_field();
+    is( $link->subfield('t'), 'The capital test', "Title is capitalized after indicator offset" );
+
+    # 260/264 handling tests
     $record->append_fields(
         MARC::Field->new( '264', '', '', a => 'Publication 264' ),
     );
@@ -1080,36 +1126,96 @@ subtest 'generate_marc_host_field' => sub {
         'MARC::Field->subfield(d) returns content from 264 with indicator 1 = 3 in preference to 264 without'
     );
 
-    # UNIMARC tests
-    t::lib::Mocks::mock_preference( 'marcflavour', 'UNIMARC' );
-
-    $biblio = $builder->build_sample_biblio();
-    $record = $biblio->metadata->record;
-    $record->append_fields(
-        MARC::Field->new( '001', '1234' ),
-        MARC::Field->new( '700', '', '', a => 'A nice author' ),
-        MARC::Field->new( '210', '', '', a => 'A publication', d => 'A date' ),
-        MARC::Field->new( '205', '', '', a => "Fun things" ),
-        MARC::Field->new( '856', '', '', u => 'http://myurl.com/' ),
-        MARC::Field->new( '011', '', '', a => '0317-8471' ),
-        MARC::Field->new( '545', '', '', a => 'Invisible on OPAC' ),
+    # 2. Test MARC21 with corporate author (110)
+    my $record_corporate = MARC::Record->new();
+    $record_corporate->leader('00000nam a22000007a 4500');
+    $record_corporate->append_fields(
+        MARC::Field->new( '110', '2', '',  'a' => 'Corporate Author', 'e' => 'sponsor', '9' => 'xyz', '4' => 'spn' ),
+        MARC::Field->new( '245', '1', '0', 'a' => 'The Title' )
     );
-    C4::Biblio::ModBiblio( $record, $biblio->biblionumber );
-    $biblio = Koha::Biblios->find( $biblio->biblionumber );
+    ($biblio_id) = AddBiblio( $record_corporate, qw{} );
+    $biblio = Koha::Biblios->find($biblio_id);
+
+    $link = $biblio->generate_marc_host_field();
+    is( $link->subfield('7'), 'c2am',             'Subfield 7 correctly formed for corporate author' );
+    is( $link->subfield('a'), 'Corporate Author', 'Subfield a contains corporate author' );
+
+    # 3. Test MARC21 with meeting name (111)
+    my $record_meeting = MARC::Record->new();
+    $record_meeting->leader('00000nam a22000007a 4500');
+    $record_meeting->append_fields(
+        MARC::Field->new( '111', '2', '',  'a' => 'Conference Name', 'j' => 'relator', '9' => 'xyz', '4' => 'spn' ),
+        MARC::Field->new( '245', '1', '0', 'a' => 'The Title' )
+    );
+    ($biblio_id) = AddBiblio( $record_meeting, qw{} );
+    $biblio = Koha::Biblios->find($biblio_id);
+
+    $link = $biblio->generate_marc_host_field();
+    is( $link->subfield('7'), 'm2am', 'Subfield 7 correctly formed for meeting name' );
+
+    # 4. Test MARC21 with minimal record
+    my $record_minimal = MARC::Record->new();
+    $record_minimal->leader('00000nam a22000007a 4500');
+    $record_minimal->append_fields( MARC::Field->new( '245', '0', '0', 'a' => 'Title Only' ) );
+    ($biblio_id) = AddBiblio( $record_minimal, qw{} );
+    $biblio = Koha::Biblios->find($biblio_id);
+
+    $link = $biblio->generate_marc_host_field();
+    is( $link->subfield('7'), 'nnam', 'Subfield 7 correctly formed with no main entry' );
+
+    # 5. Test UNIMARC
+    t::lib::Mocks::mock_preference( 'marcflavour', 'UNIMARC' );
+    $biblio = $builder->build_sample_biblio();
+    my $record_unimarc = MARC::Record->new();
+    $record_unimarc->append_fields(
+        MARC::Field->new( '001', '54321' ),
+        MARC::Field->new( '010', '', '', 'a' => '978-0-12-345678-9' ),
+        MARC::Field->new( '011', '', '', 'a' => '2345-6789' ),
+        MARC::Field->new( '200', '', '', 'a' => 'UNIMARC Title' ),
+        MARC::Field->new( '205', '', '', 'a' => 'Third edition' ),
+        MARC::Field->new( '210', '', '', 'a' => 'Paris', 'd' => '2023' ),
+        MARC::Field->new( '700', '', '', 'a' => 'Doe',   'b' => 'Jane' ),
+        MARC::Field->new( '856', '', '', 'u' => 'http://example.com' )
+    );
+    ($biblio_id) = AddBiblio( $record_unimarc, qw{} );
+    $biblio = Koha::Biblios->find($biblio_id);
 
     $link = $biblio->generate_marc_host_field();
 
-    is( ref($link),           'MARC::Field',       "->generate_marc_host_field returns a MARC::Field object" );
-    is( $link->tag,           '461',               "MARC::Field->tag returns '461' when marcflavour is 'UNIMARC" );
-    is( $link->subfield('a'), 'A nice author',     'MARC::Field->subfield(a) returns content from 700ab' );
-    is( $link->subfield('c'), 'A publication',     'MARC::Field->subfield(b) returns content from 210a' );
-    is( $link->subfield('d'), 'A date',            'MARC::Field->subfield(c) returns content from 210d' );
-    is( $link->subfield('e'), 'Fun things',        'MARC::Field->subfield(s) returns content from 205' );
-    is( $link->subfield('t'), 'Some boring read',  'MARC::Field->subfield(s) returns content from 200a' );
-    is( $link->subfield('u'), 'http://myurl.com/', 'MARC::Field->subfield(s) returns content from 856u' );
-    is( $link->subfield('x'), '0317-8471',         'MARC::Field->subfield(s) returns content from 011a' );
-    is( $link->subfield('y'), undef,               'MARC::Field->subfield(w) returns undef if 010a is empty' );
-    is( $link->subfield('0'), '1234',              'MARC::Field->subfield(0) returns content from 001' );
+    is( ref($link),          'MARC::Field', 'Returns a MARC::Field object for UNIMARC' );
+    is( $link->tag(),        '461',         'Field tag is 461 for UNIMARC' );
+    is( $link->indicator(1), '0',           'First indicator is 0 for UNIMARC' );
+    is( $link->indicator(2), ' ',           'Second indicator is blank for UNIMARC' );
+
+    # Check UNIMARC subfields
+    is( $link->subfield('a'), 'Doe Jane',      'Subfield a contains author for UNIMARC' );
+    is( $link->subfield('t'), 'UNIMARC Title', 'Subfield t contains title for UNIMARC' );
+    is( $link->subfield('c'), 'Paris',         'Subfield c contains place of publication for UNIMARC' );
+    is( $link->subfield('d'), '2023',          'Subfield d contains date of publication for UNIMARC' );
+    is( $link->subfield('0'), '54321',         'Subfield 0 contains control number for UNIMARC' );
+
+    # 6. Test UNIMARC with different author types
+    my $record_unimarc_corporate = MARC::Record->new();
+    $record_unimarc_corporate->append_fields(
+        MARC::Field->new( '710', '', '', 'a' => 'Corporate', 'b' => 'Department' ),
+        MARC::Field->new( '200', '', '', 'a' => 'Title' )
+    );
+    C4::Biblio::ModBiblio( $record_unimarc_corporate, $biblio->biblionumber );
+    $biblio = Koha::Biblios->find( $biblio->biblionumber );
+
+    $link = $biblio->generate_marc_host_field();
+    is( $link->subfield('a'), 'Corporate Department', 'Subfield a contains corporate author for UNIMARC' );
+
+    my $record_unimarc_family = MARC::Record->new();
+    $record_unimarc_family->append_fields(
+        MARC::Field->new( '720', '', '', 'a' => 'Family', 'b' => 'Name' ),
+        MARC::Field->new( '200', '', '', 'a' => 'Title' )
+    );
+    C4::Biblio::ModBiblio( $record_unimarc_family, $biblio->biblionumber );
+    $biblio = Koha::Biblios->find( $biblio->biblionumber );
+
+    $link = $biblio->generate_marc_host_field();
+    is( $link->subfield('a'), 'Family Name', 'Subfield a contains family name for UNIMARC' );
 
     $schema->storage->txn_rollback;
     t::lib::Mocks::mock_preference( 'marcflavour', 'MARC21' );
