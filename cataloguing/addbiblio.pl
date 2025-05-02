@@ -651,6 +651,12 @@ if ($parentbiblio) {
     my $marcflavour = C4::Context->preference('marcflavour');
     $record = MARC::Record->new();
     SetMarcUnicodeFlag($record, $marcflavour);
+    if ( $marcflavour eq 'MARC21' ) {
+        my $leader = $record->leader;
+        substr( $leader, 5,  4, 'naa ' );
+        substr( $leader, 17, 7, ' i 4500' );
+        $record->leader($leader);
+    }
     my $hostfield = prepare_host_field($parentbiblio,$marcflavour);
     if ($hostfield) {
         $record->append_fields($hostfield);
