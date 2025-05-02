@@ -335,7 +335,7 @@
 
         $(document).ready(function() {
             const sale_table = document.getElementById('sale');
-            const saleDataTable = $("#sale").DataTable({
+            const sale_kohaTable = $("#sale").kohaTable({
                 "paginate": false,
                 "searching": false,
                 "info": false,
@@ -364,7 +364,7 @@
                 "rowCallback": function( row, data ) {
                     const total = data[1] * data[2];
                     data[3] = total;
-                    saleDataTable.cell(row, 3).invalidate();
+                    sale_kohaTable.api().cell(row, 3).invalidate();
                 },
                 "footerCallback": function(tfoot, data, start, end, display) {
                     let total_price = 0;
@@ -387,7 +387,7 @@
             });
 
             $("#sale").on("click", "button.drop", function(){
-                    saleDataTable.row($(this).parents('tr')).remove().draw(false);
+                    sale_kohaTable.api().row($(this).parents('tr')).remove().draw(false);
             });
 
             // Set up editable columns based on header classes
@@ -430,7 +430,7 @@
                     function updateCell() {
                         const newValue = input.value.trim() || originalContent; // Fallback to original content
                         cell.textContent = newValue; // Set the final value in the cell
-                        saleDataTable.cell(cell).data(newValue).invalidate().draw(false); // Update DataTable data
+                        sale_kohaTable.api().cell(cell).data(newValue).invalidate().draw(false); // Update dataTable data
                     }
                 }
             });
@@ -448,7 +448,7 @@
 
             $("#invoices").on("click", ".add_button", function(e) {
                 e.preventDefault();
-                fnClickAddRow(saleDataTable, $( this ).data('invoiceCode'), $( this ).data('invoiceTitle'), $( this ).data('invoicePrice') );
+                fnClickAddRow(sale_kohaTable.api(), $( this ).data('invoiceCode'), $( this ).data('invoiceTitle'), $( this ).data('invoicePrice') );
                 if($('#invoices_filter').find('input[type=search]').val() !== ''){
                     items_table.DataTable().search('').draw();
                 }
@@ -494,12 +494,12 @@
                     });
                 }
 
-                // now, process the current & fresh contents of the saleDataTable
+                // now, process the current & fresh contents of the sale_kohaTable
                 if (change != undefined && change.innerHTML > 0.00 && !checked) {
                     e.preventDefault();
                     $("#confirm_change_form").modal("show");
                 } else {
-                    var rows = saleDataTable.data().toArray();
+                    var rows = sale_kohaTable.api().data().toArray();
                     rows.forEach(function (row, index) {
                         var sale = {
                             code: row[5],
