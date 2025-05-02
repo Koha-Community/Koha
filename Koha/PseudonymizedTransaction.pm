@@ -98,15 +98,22 @@ sub create_from_statistic {
 
     $self->store();
 
-    if ( $patron && Koha::Patron::Attribute::Types->search( { keep_for_pseudonymization => 1 } )->count > 0 ) {
-        my $extended_attributes = $patron->extended_attributes->unblessed;
-        for my $attribute (@$extended_attributes) {
-            next unless Koha::Patron::Attribute::Types->find( $attribute->{code} )->keep_for_pseudonymization;
+    if ($patron) {
+        my @kept_types = Koha::Patron::Attribute::Types->search(
+            { keep_for_pseudonymization => 1 },
+            { columns                   => ['code'] }
+        )->get_column('code');
 
-            delete $attribute->{id};
-            delete $attribute->{borrowernumber};
+        if (@kept_types) {
+            my $extended_attributes =
+                $patron->extended_attributes->search( { code => { -in => \@kept_types } } )->unblessed;
 
-            $self->_result->create_related( 'pseudonymized_borrower_attributes', $attribute );
+            for my $attribute (@$extended_attributes) {
+                delete $attribute->{id};
+                delete $attribute->{borrowernumber};
+
+                $self->_result->create_related( 'pseudonymized_borrower_attributes', $attribute );
+            }
         }
     }
 
