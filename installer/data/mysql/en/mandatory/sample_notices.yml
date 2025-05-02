@@ -896,7 +896,7 @@ tables:
             - "If you have registered a password with the library, and you have a renewal available, you may renew online."
             - "If an item becomes more than 30 days overdue, you will be unable to use your library card until the item is returned."
             - ""
-            - "The following [% IF overdues.count > 1 %]items are[% ELSE %]item is[% END %] currently overdue:"
+            - "[%- IF overdues.count > 1 %]The following items are currently overdue:[%- ELSE -%]The following item is currently overdue:[%- END -%]"
             - ""
             - "[% FOREACH overdue IN overdues %]"
             - "[%- SET item = overdue.item -%]"
