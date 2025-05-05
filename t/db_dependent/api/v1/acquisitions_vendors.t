@@ -124,7 +124,7 @@ subtest 'list() and delete() tests | authorized user' => sub {
 
 subtest 'get() test' => sub {
 
-    plan tests => 9;
+    plan tests => 14;
 
     $schema->storage->txn_begin;
 
@@ -145,6 +145,12 @@ subtest 'get() test' => sub {
 
     $t->get_ok( "//$userid:$password@/api/v1/acquisitions/vendors/" . $vendor->id )->status_is(200)
         ->json_is( $vendor->to_api );
+
+    $t->get_ok( "//$userid:$password@/api/v1/acquisitions/vendors/"
+            . $vendor->id => { 'x-koha-embed' => 'subscriptions+count,baskets+count,invoices+count' } )->status_is(200)
+        ->json_has( '/subscriptions_count', 'subscriptions_count is embedded' )
+        ->json_has( '/baskets_count',       'baskets_count is embedded' )
+        ->json_has( '/invoices_count',      'invoices_count is embedded' );
 
     $t->get_ok( "//$userid:$password@/api/v1/acquisitions/vendors/" . $non_existent_id )->status_is(404)
         ->json_is( '/error' => 'Vendor not found' );
