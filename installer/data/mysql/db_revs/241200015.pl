@@ -12,7 +12,7 @@ return {
             if ( column_exists( 'erm_counter_files', 'date_uploaded' ) ) {
                 $dbh->do(
                     q{
-                    ALTER TABLE erm_counter_files CHANGE COLUMN date_uploaded date_uploaded timestamp DEFAULT current_timestamp() COMMENT 'counter file upload date'
+                    ALTER TABLE erm_counter_files CHANGE COLUMN date_uploaded date_uploaded timestamp NOT NULL DEFAULT current_timestamp() COMMENT 'counter file upload date'
                 }
                 );
                 say_success(
@@ -26,7 +26,7 @@ return {
             if ( column_exists( 'erm_counter_logs', 'importdate' ) ) {
                 $dbh->do(
                     q{
-                    ALTER TABLE erm_counter_logs CHANGE COLUMN importdate importdate timestamp DEFAULT current_timestamp() COMMENT 'counter file import date'
+                    ALTER TABLE erm_counter_logs CHANGE COLUMN importdate importdate timestamp NOT NULL DEFAULT current_timestamp() COMMENT 'counter file import date'
                 }
                 );
                 say_success( $out, "Successfully corrected incorrect default value for 'erm_counter_logs.importdate" );
