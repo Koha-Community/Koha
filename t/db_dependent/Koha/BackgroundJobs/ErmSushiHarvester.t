@@ -42,42 +42,38 @@ my $sushi_counter_5_response_TR_J1 = read_file($sushi_response_file_TR_J1);
 my $sushi_counter_report_TR_J1 =
     Koha::ERM::EUsage::SushiCounter->new( { response => decode_json($sushi_counter_5_response_TR_J1) } );
 
-my $usage_data_provider_module = Test::MockModule->new('Koha::ERM::EUsage::UsageDataProvider');
-
-# Mock harvest_sushi to have data coming from TR_J1.json act as a SUSHI response
-$usage_data_provider_module->mock(
-    'harvest_sushi',
+my $ua = Test::MockModule->new('LWP::UserAgent');
+$ua->mock(
+    'simple_request',
     sub {
-        my ( $self, $args ) = @_;
+        my $response = Test::MockObject->new();
 
-        # Set class wide vars
-        $self->{report_type} = $args->{report_type};
-        $self->{begin_date}  = $args->{begin_date};
-        $self->{end_date}    = $args->{end_date};
-        my $response = $sushi_counter_5_response_TR_J1;
-
-        my $decoded_response = decode_json($response);
-
-        return if $self->_sushi_errors($decoded_response);
-
-        # Parse the SUSHI response
-        my $sushi_counter = Koha::ERM::EUsage::SushiCounter->new( { response => $decoded_response } );
-        my $counter_file  = $sushi_counter->get_COUNTER_from_SUSHI;
-
-        return if $self->_counter_file_size_too_large($counter_file);
-
-        $self->counter_files(
-            [
-                {
-                    usage_data_provider_id => $self->erm_usage_data_provider_id,
-                    file_content           => $counter_file,
-                    date_uploaded          => POSIX::strftime( "%Y%m%d%H%M%S", localtime ),
-
-                    #TODO: add ".csv" to end of filename here
-                    filename => $self->name . "_" . $self->{report_type},
-                }
-            ]
+        $response->mock(
+            'code',
+            sub {
+                return 200;
+            }
         );
+        $response->mock(
+            'is_error',
+            sub {
+                return 0;
+            }
+        );
+        $response->mock(
+            'is_redirect',
+            sub {
+                return 0;
+            }
+        );
+        $response->mock(
+            'decoded_content',
+            sub {
+                return $sushi_counter_5_response_TR_J1;
+            }
+        );
+        $response->{_rc} = 200;
+        return $response;
     }
 );
 
