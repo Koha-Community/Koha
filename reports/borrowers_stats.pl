@@ -322,7 +322,7 @@ sub calculate {
     #Initialization of cell values.....
     my %table;
 
-    #	warn "init table";
+    #    warn "init table";
     foreach my $row (@loopline) {
         foreach my $col (@loopcol) {
             my $rowtitle = $row->{rowtitle} // '';
@@ -415,7 +415,7 @@ sub calculate {
     my $emptycol;
     while ( my ( $row, $col, $value ) = $dbcalc->fetchrow ) {
 
-        #		warn "filling table $row / $col / $value ";
+        #        warn "filling table $row / $col / $value ";
         $emptycol = 1         if ( !defined($col) );
         $col      = "zzEMPTY" if ( !defined($col) );
         $row      = "zzEMPTY" if ( !defined($row) );
@@ -456,10 +456,10 @@ sub calculate {
 
             $total += $table{$rowtitle}->{$coltitle} || 0;
 
-            #			warn "value added ".$table{$row->{rowtitle}}->{$col->{coltitle}}. "for line ".$row->{rowtitle};
+            #            warn "value added ".$table{$row->{rowtitle}}->{$col->{coltitle}}. "for line ".$row->{rowtitle};
         }
 
-        #		warn "summ for column ".$col->{coltitle}."  = ".$total;
+        #        warn "summ for column ".$col->{coltitle}."  = ".$total;
         push @loopfooter, { 'totalcol' => $total };
     }
 
@@ -470,7 +470,7 @@ sub calculate {
     $globalline{looprow} = \@looprow;
     $globalline{loopcol} = \@loopcol;
 
-    # 	# the foot (totals by borrower type)
+    #     # the foot (totals by borrower type)
     $globalline{loopfooter} = \@loopfooter;
     $globalline{total}      = $grantotal;
     $globalline{line}       = ($line_attribute_type)   ? $line_attribute_type   : $line;

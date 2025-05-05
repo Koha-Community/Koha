@@ -143,7 +143,7 @@ if ($do_it) {
                                   LEFT JOIN aqbooksellers ON (subscription.aqbooksellerid=aqbooksellers.id ) 
                                 GROUP BY aqbooksellerid, aqbooksellers.name
                                 ORDER BY aqbooksellers.name ASC
-				"
+        "
     );
     $sth->execute();
 

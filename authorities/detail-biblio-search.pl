@@ -84,7 +84,6 @@ foreach my $field (@fields) {
     # if tag <10, there's no subfield, use the "@" trick
     if ( $field->tag() < 10 ) {
 
-        # 			next if ($tagslib->{$field->tag()}->{'@'}->{tab}  ne $tabloop);
         next if ( $tagslib->{ $field->tag() }->{'@'}->{hidden} );
         my %subfield_data;
         $subfield_data{marc_lib}      = $tagslib->{ $field->tag() }->{'@'}->{lib};
@@ -99,7 +98,6 @@ foreach my $field (@fields) {
         for my $i ( 0 .. $#subf ) {
             $subf[$i][0] = "@" unless defined $subf[$i][0];
 
-            # 				next if ($tagslib->{$field->tag()}->{$subf[$i][0]}->{tab}  ne $tabloop);
             next if ( $tagslib->{ $field->tag() }->{ $subf[$i][0] }->{hidden} );
             my %subfield_data;
             $subfield_data{marc_lib} = $tagslib->{ $field->tag() }->{ $subf[$i][0] }->{lib};

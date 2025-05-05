@@ -2241,7 +2241,7 @@ sub HasItems {
     my $query            = q|
             SELECT COUNT(serialitems.itemnumber)
             FROM   serial 
-			LEFT JOIN serialitems USING(serialid)
+            LEFT JOIN serialitems USING(serialid)
             WHERE  subscriptionid=? AND serialitems.serialid IS NOT NULL
         |;
     my $sth = $dbh->prepare($query);

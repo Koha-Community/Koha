@@ -196,7 +196,7 @@ sub NormalizeString {
 =head2 MarcToUTF8Record
 
   ($marc_record, $converted_from, $errors_arrayref) = MarcToUTF8Record($marc_blob, 
-					$marc_flavour, [, $source_encoding]);
+                    $marc_flavour, [, $source_encoding]);
 
 Given a MARC blob or a C<MARC::Record>, the MARC flavour, and an 
 optional source encoding, return a C<MARC::Record> that is 

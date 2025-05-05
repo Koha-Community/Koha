@@ -19,8 +19,6 @@
 
 =head1 cataloguing:addbooks.pl
 
-	TODO
-
 =cut
 
 use Modern::Perl;

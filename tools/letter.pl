@@ -22,18 +22,18 @@
  ALGO :
  this script use an $op to know what to do.
  if $op is empty or none of the values listed below,
-	- the default screen is built (with all or filtered (if search string is set) records).
-	- the   user can click on add, modify or delete record.
+    - the default screen is built (with all or filtered (if search string is set) records).
+    - the   user can click on add, modify or delete record.
     - filtering is done on the code field
  if $op=add_form
-	- if primary key (module + code) exists, this is a modification,so we read the required record
-	- builds the add/modify form
+    - if primary key (module + code) exists, this is a modification,so we read the required record
+    - builds the add/modify form
  if $op=add_validate
-	- the user has just send data, so we create/modify the record
+    - the user has just send data, so we create/modify the record
  if $op=delete_form
-	- we show the record selected and ask for confirmation
+    - we show the record selected and ask for confirmation
  if $op=delete_confirm
-	- we delete the designated record
+    - we delete the designated record
 
 =cut
 

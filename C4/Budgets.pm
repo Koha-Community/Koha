@@ -620,7 +620,7 @@ sub DelBudgetPeriod {
     ## get information about the record that will be deleted
     my $sth = $dbh->prepare(
         qq|
-		DELETE 
+         DELETE
          FROM aqbudgetperiods
          WHERE budget_period_id=? |
     );

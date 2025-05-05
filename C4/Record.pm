@@ -731,8 +731,8 @@ sub changeEncoding {
     if ( lc($format) =~ /^marc$/o ) {
 
         # if we're converting encoding of an ISO2709 file, we need to roundtrip through XML
-        # 	because MARC::Record doesn't directly provide us with an encoding method
-        # 	It's definitely less than idea and should be fixed eventually - kados
+        #     because MARC::Record doesn't directly provide us with an encoding method
+        #     It's definitely less than idea and should be fixed eventually - kados
         my $marcxml;    # temporary storage of MARCXML scalar
         ( $error, $marcxml ) = marc2marcxml( $record, $to_encoding, $flavour );
         unless ($error) {

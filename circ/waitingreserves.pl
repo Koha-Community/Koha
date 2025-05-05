@@ -164,7 +164,7 @@ sub cancel {
 
     my ( $messages, $nextreservinfo ) = ModReserveCancelAll( $itemnumber, $borrowernumber );
 
-    # 	if the document is not in his homebranch location and there is not reservation after, we transfer it
+    # if the document is not in his homebranch location and there is not reservation after, we transfer it
     if ( $transfer && !$nextreservinfo && !$item->itemlost ) {
         ModItemTransfer( $itemnumber, $fbr, $tbr, 'CancelReserve' );
     }

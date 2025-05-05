@@ -45,24 +45,24 @@ my $cgi = CGI->new;
 my @services = (
     'Describe',    # Not part of ILS-DI, online API doc
 
-    #	Level 1: Basic Discovery Interfaces
-    #	'HarvestBibliographicRecords',       # OAI-PMH
-    #	'HarvestExpandedRecords',            # OAI-PMH
+    #    Level 1: Basic Discovery Interfaces
+    #    'HarvestBibliographicRecords',       # OAI-PMH
+    #    'HarvestExpandedRecords',            # OAI-PMH
     'GetAvailability',    # FIXME Add bibliographic level
 
-    #	'GoToBibliographicRequestPage'       # I don't understant this one
-    #	Level 2: Elementary OPAC supplement
-    #	'HarvestAuthorityRecords',           # OAI-PMH
-    #	'HarvestHoldingsRecords',            # OAI-PMH
+    #    'GoToBibliographicRequestPage'       # I don't understant this one
+    #    Level 2: Elementary OPAC supplement
+    #    'HarvestAuthorityRecords',           # OAI-PMH
+    #    'HarvestHoldingsRecords',            # OAI-PMH
     'GetRecords',    # Note that we can use OAI-PMH for this too
 
-    #	'Search',                            # TODO
-    #	'Scan',	                             # TODO
+    #    'Search',                            # TODO
+    #    'Scan',                                 # TODO
     'GetAuthorityRecords',
 
-    #	'OutputRewritablePage',              # I don't understant this one
-    #	'OutputIntermediateFormat',          # I don't understant this one
-    #	Level 3: Elementary OPAC alternative
+    #    'OutputRewritablePage',              # I don't understant this one
+    #    'OutputIntermediateFormat',          # I don't understant this one
+    #    Level 3: Elementary OPAC alternative
     'LookupPatron',
     'AuthenticatePatron',
     'GetPatronInfo',
@@ -73,11 +73,11 @@ my @services = (
     'HoldItem',       # FIXME Add dates support
     'CancelHold',
 
-    #	'RecallItem',                        # Not supported by Koha
-    #	'CancelRecall',                      # Not supported by Koha
-    #	Level 4: Robust/domain specific discovery platforms
-    #	'SearchCourseReserves',              # TODO
-    #	'Explain'                            # TODO
+    #    'RecallItem',                        # Not supported by Koha
+    #    'CancelRecall',                      # Not supported by Koha
+    #    Level 4: Robust/domain specific discovery platforms
+    #    'SearchCourseReserves',              # TODO
+    #    'Explain'                            # TODO
 );
 
 # List of required arguments

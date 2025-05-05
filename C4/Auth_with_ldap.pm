@@ -457,90 +457,90 @@ C4::Auth - Authenticates Koha users
 =head1 LDAP Configuration
 
     This module is specific to LDAP authentication. It requires Net::LDAP package and one or more
-	working LDAP servers.
-	To use it :
-	   * Modify ldapserver element in KOHA_CONF
-	   * Establish field mapping in <mapping> element.
+    working LDAP servers.
+    To use it :
+       * Modify ldapserver element in KOHA_CONF
+       * Establish field mapping in <mapping> element.
 
-	For example, if your user records are stored according to the inetOrgPerson schema, RFC#2798,
-	the username would match the "uid" field, and the password should match the "userpassword" field.
+    For example, if your user records are stored according to the inetOrgPerson schema, RFC#2798,
+    the username would match the "uid" field, and the password should match the "userpassword" field.
 
-	Make sure that ALL required fields are populated by your LDAP database (and mapped in KOHA_CONF).  
-	What are the required fields?  Well, in mysql you can check the database table "borrowers" like this:
+    Make sure that ALL required fields are populated by your LDAP database (and mapped in KOHA_CONF).
+    What are the required fields?  Well, in mysql you can check the database table "borrowers" like this:
 
-	mysql> show COLUMNS from borrowers;
-		+---------------------+--------------+------+-----+---------+----------------+
-		| Field               | Type         | Null | Key | Default | Extra          |
-		+---------------------+--------------+------+-----+---------+----------------+
-		| borrowernumber      | int(11)      | NO   | PRI | NULL    | auto_increment |
-		| cardnumber          | varchar(16)  | YES  | UNI | NULL    |                |
-		| surname             | mediumtext   | NO   |     | NULL    |                |
-		| firstname           | text         | YES  |     | NULL    |                |
-		| title               | mediumtext   | YES  |     | NULL    |                |
-		| othernames          | mediumtext   | YES  |     | NULL    |                |
-		| initials            | text         | YES  |     | NULL    |                |
-		| streetnumber        | varchar(10)  | YES  |     | NULL    |                |
-		| streettype          | varchar(50)  | YES  |     | NULL    |                |
-		| address             | mediumtext   | NO   |     | NULL    |                |
-		| address2            | text         | YES  |     | NULL    |                |
-		| city                | mediumtext   | NO   |     | NULL    |                |
-		| state               | mediumtext   | YES  |     | NULL    |                |
-		| zipcode             | varchar(25)  | YES  |     | NULL    |                |
-		| country             | text         | YES  |     | NULL    |                |
-		| email               | mediumtext   | YES  |     | NULL    |                |
-		| phone               | text         | YES  |     | NULL    |                |
-		| mobile              | varchar(50)  | YES  |     | NULL    |                |
-		| fax                 | mediumtext   | YES  |     | NULL    |                |
-		| emailpro            | text         | YES  |     | NULL    |                |
-		| phonepro            | text         | YES  |     | NULL    |                |
-		| B_streetnumber      | varchar(10)  | YES  |     | NULL    |                |
-		| B_streettype        | varchar(50)  | YES  |     | NULL    |                |
-		| B_address           | varchar(100) | YES  |     | NULL    |                |
-		| B_address2          | text         | YES  |     | NULL    |                |
-		| B_city              | mediumtext   | YES  |     | NULL    |                |
-		| B_state             | mediumtext   | YES  |     | NULL    |                |
-		| B_zipcode           | varchar(25)  | YES  |     | NULL    |                |
-		| B_country           | text         | YES  |     | NULL    |                |
-		| B_email             | text         | YES  |     | NULL    |                |
-		| B_phone             | mediumtext   | YES  |     | NULL    |                |
-		| dateofbirth         | date         | YES  |     | NULL    |                |
-		| branchcode          | varchar(10)  | NO   | MUL |         |                |
-		| categorycode        | varchar(10)  | NO   | MUL |         |                |
-		| dateenrolled        | date         | YES  |     | NULL    |                |
-		| dateexpiry          | date         | YES  |     | NULL    |                |
-		| gonenoaddress       | tinyint(1)   | YES  |     | NULL    |                |
-		| lost                | tinyint(1)   | YES  |     | NULL    |                |
-		| debarred            | date         | YES  |     | NULL    |                |
-		| debarredcomment     | varchar(255) | YES  |     | NULL    |                |
-		| contactname         | mediumtext   | YES  |     | NULL    |                |
-		| contactfirstname    | text         | YES  |     | NULL    |                |
-		| contacttitle        | text         | YES  |     | NULL    |                |
-		| borrowernotes       | mediumtext   | YES  |     | NULL    |                |
-		| relationship        | varchar(100) | YES  |     | NULL    |                |
-		| ethnicity           | varchar(50)  | YES  |     | NULL    |                |
-		| ethnotes            | varchar(255) | YES  |     | NULL    |                |
-		| sex                 | varchar(1)   | YES  |     | NULL    |                |
-		| password            | varchar(30)  | YES  |     | NULL    |                |
-		| flags               | int(11)      | YES  |     | NULL    |                |
-		| userid              | varchar(30)  | YES  | MUL | NULL    |                |
-		| opacnote            | mediumtext   | YES  |     | NULL    |                |
-		| contactnote         | varchar(255) | YES  |     | NULL    |                |
-		| sort1               | varchar(80)  | YES  |     | NULL    |                |
-		| sort2               | varchar(80)  | YES  |     | NULL    |                |
-		| altcontactfirstname | varchar(255) | YES  |     | NULL    |                |
-		| altcontactsurname   | varchar(255) | YES  |     | NULL    |                |
-		| altcontactaddress1  | varchar(255) | YES  |     | NULL    |                |
-		| altcontactaddress2  | varchar(255) | YES  |     | NULL    |                |
-		| altcontactaddress3  | varchar(255) | YES  |     | NULL    |                |
-		| altcontactstate     | mediumtext   | YES  |     | NULL    |                |
-		| altcontactzipcode   | varchar(50)  | YES  |     | NULL    |                |
-		| altcontactcountry   | text         | YES  |     | NULL    |                |
-		| altcontactphone     | varchar(50)  | YES  |     | NULL    |                |
-		| smsalertnumber      | varchar(50)  | YES  |     | NULL    |                |
-		| privacy             | int(11)      | NO   |     | 1       |                |
-		+---------------------+--------------+------+-----+---------+----------------+
-		66 rows in set (0.00 sec)
-		Where Null="NO", the field is required.
+    mysql> show COLUMNS from borrowers;
+        +---------------------+--------------+------+-----+---------+----------------+
+        | Field               | Type         | Null | Key | Default | Extra          |
+        +---------------------+--------------+------+-----+---------+----------------+
+        | borrowernumber      | int(11)      | NO   | PRI | NULL    | auto_increment |
+        | cardnumber          | varchar(16)  | YES  | UNI | NULL    |                |
+        | surname             | mediumtext   | NO   |     | NULL    |                |
+        | firstname           | text         | YES  |     | NULL    |                |
+        | title               | mediumtext   | YES  |     | NULL    |                |
+        | othernames          | mediumtext   | YES  |     | NULL    |                |
+        | initials            | text         | YES  |     | NULL    |                |
+        | streetnumber        | varchar(10)  | YES  |     | NULL    |                |
+        | streettype          | varchar(50)  | YES  |     | NULL    |                |
+        | address             | mediumtext   | NO   |     | NULL    |                |
+        | address2            | text         | YES  |     | NULL    |                |
+        | city                | mediumtext   | NO   |     | NULL    |                |
+        | state               | mediumtext   | YES  |     | NULL    |                |
+        | zipcode             | varchar(25)  | YES  |     | NULL    |                |
+        | country             | text         | YES  |     | NULL    |                |
+        | email               | mediumtext   | YES  |     | NULL    |                |
+        | phone               | text         | YES  |     | NULL    |                |
+        | mobile              | varchar(50)  | YES  |     | NULL    |                |
+        | fax                 | mediumtext   | YES  |     | NULL    |                |
+        | emailpro            | text         | YES  |     | NULL    |                |
+        | phonepro            | text         | YES  |     | NULL    |                |
+        | B_streetnumber      | varchar(10)  | YES  |     | NULL    |                |
+        | B_streettype        | varchar(50)  | YES  |     | NULL    |                |
+        | B_address           | varchar(100) | YES  |     | NULL    |                |
+        | B_address2          | text         | YES  |     | NULL    |                |
+        | B_city              | mediumtext   | YES  |     | NULL    |                |
+        | B_state             | mediumtext   | YES  |     | NULL    |                |
+        | B_zipcode           | varchar(25)  | YES  |     | NULL    |                |
+        | B_country           | text         | YES  |     | NULL    |                |
+        | B_email             | text         | YES  |     | NULL    |                |
+        | B_phone             | mediumtext   | YES  |     | NULL    |                |
+        | dateofbirth         | date         | YES  |     | NULL    |                |
+        | branchcode          | varchar(10)  | NO   | MUL |         |                |
+        | categorycode        | varchar(10)  | NO   | MUL |         |                |
+        | dateenrolled        | date         | YES  |     | NULL    |                |
+        | dateexpiry          | date         | YES  |     | NULL    |                |
+        | gonenoaddress       | tinyint(1)   | YES  |     | NULL    |                |
+        | lost                | tinyint(1)   | YES  |     | NULL    |                |
+        | debarred            | date         | YES  |     | NULL    |                |
+        | debarredcomment     | varchar(255) | YES  |     | NULL    |                |
+        | contactname         | mediumtext   | YES  |     | NULL    |                |
+        | contactfirstname    | text         | YES  |     | NULL    |                |
+        | contacttitle        | text         | YES  |     | NULL    |                |
+        | borrowernotes       | mediumtext   | YES  |     | NULL    |                |
+        | relationship        | varchar(100) | YES  |     | NULL    |                |
+        | ethnicity           | varchar(50)  | YES  |     | NULL    |                |
+        | ethnotes            | varchar(255) | YES  |     | NULL    |                |
+        | sex                 | varchar(1)   | YES  |     | NULL    |                |
+        | password            | varchar(30)  | YES  |     | NULL    |                |
+        | flags               | int(11)      | YES  |     | NULL    |                |
+        | userid              | varchar(30)  | YES  | MUL | NULL    |                |
+        | opacnote            | mediumtext   | YES  |     | NULL    |                |
+        | contactnote         | varchar(255) | YES  |     | NULL    |                |
+        | sort1               | varchar(80)  | YES  |     | NULL    |                |
+        | sort2               | varchar(80)  | YES  |     | NULL    |                |
+        | altcontactfirstname | varchar(255) | YES  |     | NULL    |                |
+        | altcontactsurname   | varchar(255) | YES  |     | NULL    |                |
+        | altcontactaddress1  | varchar(255) | YES  |     | NULL    |                |
+        | altcontactaddress2  | varchar(255) | YES  |     | NULL    |                |
+        | altcontactaddress3  | varchar(255) | YES  |     | NULL    |                |
+        | altcontactstate     | mediumtext   | YES  |     | NULL    |                |
+        | altcontactzipcode   | varchar(50)  | YES  |     | NULL    |                |
+        | altcontactcountry   | text         | YES  |     | NULL    |                |
+        | altcontactphone     | varchar(50)  | YES  |     | NULL    |                |
+        | smsalertnumber      | varchar(50)  | YES  |     | NULL    |                |
+        | privacy             | int(11)      | NO   |     | 1       |                |
+        +---------------------+--------------+------+-----+---------+----------------+
+        66 rows in set (0.00 sec)
+        Where Null="NO", the field is required.
 
 =head1 KOHA_CONF and field mapping
 
@@ -678,11 +678,11 @@ sprintf()
 # Using attrs instead of {asn}->attributes
 # ========================================
 #
-# 	LDAP key: ->{             cn} = ARRAY w/ 3 members.
-# 	LDAP key: ->{             cn}->{           sss} = sss
-# 	LDAP key: ->{             cn}->{   Steve Smith} = Steve Smith
-# 	LDAP key: ->{             cn}->{Steve S. Smith} = Steve S. Smith
+#     LDAP key: ->{             cn} = ARRAY w/ 3 members.
+#     LDAP key: ->{             cn}->{           sss} = sss
+#     LDAP key: ->{             cn}->{   Steve Smith} = Steve Smith
+#     LDAP key: ->{             cn}->{Steve S. Smith} = Steve S. Smith
 #
-# 	LDAP key: ->{      givenname} = ARRAY w/ 1 members.
-# 	LDAP key: ->{      givenname}->{Steve} = Steve
+#     LDAP key: ->{      givenname} = ARRAY w/ 1 members.
+#     LDAP key: ->{      givenname}->{Steve} = Steve
 #

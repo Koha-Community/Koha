@@ -26,17 +26,17 @@ script to administer the budget periods table
  ALGO :
  this script use an $op to know what to do.
  if $op is empty or none of the above values,
-	- the default screen is build (with all records, or filtered datas).
-	- the   user can clic on add, modify or delete record.
+    - the default screen is build (with all records, or filtered datas).
+    - the   user can clic on add, modify or delete record.
  if $op=add_form
-	- if primkey exists, this is a modification,so we read the $primkey record
-	- builds the add/modify form
+    - if primkey exists, this is a modification,so we read the $primkey record
+    - builds the add/modify form
  if $op=add_validate
-	- the user has just send datas, so we create/modify the record
+    - the user has just send datas, so we create/modify the record
  if $op=delete_confirm
-	- we show the record having primkey=$primkey and ask for deletion validation form
+    - we show the record having primkey=$primkey and ask for deletion validation form
  if $op=delete_confirmed
-	- we delete the record having primkey=$primkey
+    - we delete the record having primkey=$primkey
  if $op=duplicate_form
   - displays the duplication of budget period form (allowing specification of dates)
  if $op=duplicate_budget

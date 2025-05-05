@@ -129,7 +129,7 @@ sub calculate {
         LEFT JOIN old_issues  USING (itemnumber)
           WHERE       issues.itemnumber IS NULL
            AND    old_issues.itemnumber IS NULL
-	";
+    ";
     if ( $filters->[0] ) {
         $filters->[0] =~ s/\*/%/g;
         push @exe_args, $filters->[0];

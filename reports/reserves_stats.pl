@@ -217,7 +217,7 @@ sub calculate {
     $strcalc .= "
         FROM (select * from reserves union select * from old_reserves) reserves
         LEFT JOIN borrowers USING (borrowernumber)
-	";
+    ";
     $strcalc .= "LEFT JOIN biblio ON reserves.biblionumber=biblio.biblionumber "
         if ( $linefield =~ /^biblio\./ or $colfield =~ /^biblio\./ or any { $_ =~ /biblio/ } keys %$filters_hashref );
     $strcalc .= "LEFT JOIN items ON reserves.itemnumber=items.itemnumber "
@@ -279,7 +279,7 @@ sub calculate {
             push @loopcell, {
                 value => ( $$data{$row}{$col}{calculation} or "" ),
 
-                #						url_complement=>($urlbase=~/&amp;$/?$urlbase."&amp;":$urlbase)."filter_$linefield=$row&amp;filter_$colfield=$col"
+                # url_complement=>($urlbase=~/&amp;$/?$urlbase."&amp;":$urlbase)."filter_$linefield=$row&amp;filter_$colfield=$col"
             };
         }
         push @looprow, {
@@ -308,7 +308,7 @@ sub calculate {
     $globalline{looprow} = \@looprow;
     $globalline{loopcol} = \@loopcol;
 
-    # 	# the foot (totals by borrower type)
+    # # the foot (totals by borrower type)
     $globalline{loopfooter} = \@loopfooter;
     $globalline{total}      = $grantotal;
     $globalline{line}       = $linefield;

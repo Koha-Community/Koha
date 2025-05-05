@@ -204,7 +204,7 @@ EOF
                 $fmt =~ s/^%/%$n\$/;
                 if ( $type == C4::TmplTokenType::DIRECTIVE ) {
 
-                    #		    $type = "Template::Toolkit Directive";
+                    # $type = "Template::Toolkit Directive";
                     $type = $param->string =~ /\[%(.*?)%\]/is ? $1 : 'ERROR';
                     my $name = $param->string =~ /\bname=(["']?)([^\s"']+)\1/is ? $2 : undef;
                     printf $OUTPUT "#. %s: %s\n", $fmt,
@@ -473,7 +473,7 @@ The JavaScript must actually define a _ function
 so that the code remains correct JavaScript.
 A suitable definition of such a function can be
 
-	function _(s) { return s } // dummy function for gettext
+    function _(s) { return s } // dummy function for gettext
 
 =head1 SEE ALSO
 
