@@ -1264,7 +1264,7 @@
                             <a class="btn btn-default btn-xs dropdown-toggle move_selected_holds" id="item_record_choice" role="button" data-bs-toggle="dropdown" href="#" aria-expanded="false"></a>
                             <ul class="dropdown-menu" role="menu" aria-labelledby="item_record_choice" style="">
                                 <li><a class="dropdown-item move_hold_item" href="#">Item level holds to a different item</a></li>
-                                <li><a class="dropdown-item move_hold_record" href="#">Record level holds to a different record</a></li>
+                                <li><a class="dropdown-item move_hold_biblio" href="#">Record level holds to a different record</a></li>
                             </ul>
                         </div>
                     [% END %]
@@ -1466,39 +1466,36 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <div id="move_hold_item_selection">
-                    <h3>1. Review holds to move</h3>
-                    <table class="table table-striped">
-                        <thead>
-                            <tr>
-                                <th>Hold ID</th>
-                                <th>Original hold</th>
-                                <th>Problem</th>
-                            </tr>
-                        </thead>
-                        <tbody> </tbody>
-                    </table>
-                </div>
-                <hr />
-                <div id="move_hold_biblio_search" class="alert alert-danger" style="display:none;"></div>
+                <div id="move_hold_bibio_search" class="alert alert-danger" style="display:none;"></div>
                 <form id="biblioSearchForm">
-                    <div id="move_hold_item_searchform">
-                        <h3>2. Enter the bibloinumber of the new hold target: </h3>
-                        <fieldset class="action">
+                    <div id="move_hold_biblio_searchform">
+                        <h3>Enter the biblionumber of new hold target: </h3>
+                        <fieldset class="action d-flex">
                             <input type="text" class="form-control" name="biblio_id" id="biblio_id" required />
-                            <button type="submit" class="btn btn-default mt-3">Search</button>
+                            <button type="submit" class="btn btn-default">Search</button>
                         </fieldset>
                     </div>
                 </form>
                 <form id="move_hold_biblio_form" method="post" action="request.pl">
+                    [% INCLUDE 'csrf-token.inc' %]
+                    <input type="hidden" name="op" value="cud-move_hold_biblio" />
+                    <input type="hidden" name="original_biblionumber" value="[% biblio.biblionumber | html %]" />
                     <div id="biblioResultMessage" class="mt-3"> </div>
-                    <div id="move_hold_biblio_confirm" style="display:none;">
-                        <h3>3. Confirm moving of holds:</h3>
-                        [% INCLUDE 'csrf-token.inc' %]
-                        <input type="hidden" name="op" value="cud-move_hold_biblio" />
-                        <button type="submit" class="btn btn-primary mt-3">Move selected holds</button>
-                        <input type="hidden" name="original_biblionumber" value="[% biblio.biblionumber | html %]" />
+                    <div id="move_hold_biblio_selection">
+                        <h3>Review holds to move</h3>
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th></th>
+                                    <th>Hold ID</th>
+                                    <th>Original hold</th>
+                                    <th>Problem</th>
+                                </tr>
+                            </thead>
+                            <tbody> </tbody>
+                        </table>
                     </div>
+                    <button id="move_hold_biblio_confirm" type="submit" class="btn btn-primary" disabled="disabled">Move selected holds</button>
                 </form>
             </div>
             <div class="modal-footer">
@@ -1860,6 +1857,7 @@
 
             $("#biblioSearchForm").on("submit", function (event) {
                 event.preventDefault();
+                $('#move_hold_biblio_confirm').prop('disabled' , true );
 
                 let biblioID = $("#biblio_id").val();
                 let apiUrl = `/api/v1/items?q={"biblio_id":"${encodeURIComponent(biblioID)}"}`;
@@ -1903,9 +1901,9 @@
             $(document).on("change", 'input[name="new_biblionumber"]', function() {
                 $('input[name="new_biblionumber"]').not(this).prop("checked", false);
                 if ( $('input[name="new_biblionumber"]:checked').length ){
-                    $('#move_hold_biblio_confirm').show();
+                    $('#move_hold_biblio_confirm').prop('disabled' , false );
                 } else {
-                    $('#move_hold_biblio_confirm').hide();
+                    $('#move_hold_biblio_confirm').prop('disabled' , true );
                 }
             });
 
@@ -2024,19 +2022,20 @@
                         let error_message = $(this).data('item_level_hold') ? "" : _("Cannot move a waiting or record level hold");
                         let found_status = $(this).data('found');
                         if ( item_level_hold ) {
-                            $('#move_hold_item_selection table').append(`<tr><td><input type="checkbox" name="move_hold_id" value="${reserve_id}" checked/></td><td>${reserve_id}</td><td>Biblionumber: <a target="_blank" href="/cgi-bin/koha/reserve/request.pl?biblionumber=${reserve_biblionumber}">${reserve_biblionumber}</a> Itemnumber: <a target="_blank" href="/cgi-bin/koha/catalogue/moredetail.pl?biblionumber=${reserve_biblionumber}#item${reserve_itemnumber}">${reserve_itemnumber}</a></td><td>${error_message}</td></tr>`)
+                            $('#move_hold_item_selection table').append(`<tr><td><input type="checkbox" name="move_hold_id" value="${reserve_id}" checked /></td><td>${reserve_id}</td><td>Biblionumber: <a target="_blank" href="/cgi-bin/koha/reserve/request.pl?biblionumber=${reserve_biblionumber}">${reserve_biblionumber}</a> Itemnumber: <a target="_blank" href="/cgi-bin/koha/catalogue/moredetail.pl?biblionumber=${reserve_biblionumber}#item${reserve_itemnumber}">${reserve_itemnumber}</a></td><td>${error_message}</td></tr>`)
                         } else {
-                            $('#move_hold_item_selection table').append(`<tr><td><input type="checkbox" name="move_hold_id" value="${reserve_id}" checked/></td><td>${reserve_id}</td><td>Biblionumber: <a target="_blank" href="/cgi-bin/koha/reserve/request.pl?biblionumber=${reserve_biblionumber}">${reserve_biblionumber}</a> Itemnumber: <a target="_blank" href="/cgi-bin/koha/catalogue/moredetail.pl?biblionumber=${reserve_biblionumber}#item${reserve_itemnumber}">${reserve_itemnumber}</a></td><td>${error_message}</td></tr>`)
+                            $('#move_hold_item_selection table').append(`<tr><td><input type="checkbox" name="move_hold_id" value="${reserve_id}" disabled /></td><td>${reserve_id}</td><td>Biblionumber: <a target="_blank" href="/cgi-bin/koha/reserve/request.pl?biblionumber=${reserve_biblionumber}">${reserve_biblionumber}</a> Itemnumber: <a target="_blank" href="/cgi-bin/koha/catalogue/moredetail.pl?biblionumber=${reserve_biblionumber}#item${reserve_itemnumber}">${reserve_itemnumber}</a></td><td>${error_message}</td></tr>`)
                         }
                     });
                 }
             });
 
-            $('.move_hold_record').click(function(e) {
+            $('.move_hold_biblio').click(function(e) {
                 e.preventDefault();
+                $('#move_hold_biblio_confirm').prop('disabled' , true );
                 if($('.holds_table .select_hold:checked').length) {
                     $('#biblioResultMessage').empty();
-                    $('#move_hold_item_selection table tbody').empty();
+                    $('#move_hold_biblio_selection table tbody').empty();
                     $('#moveHoldBiblioModal').modal('show');
                     $('.select_hold:checked').each( function() {
                         let reserve_id = $(this).data('id');
@@ -2045,9 +2044,11 @@
                         let item_level_hold = $(this).data('item_level_hold');
                         let error_message = $(this).data('item_level_hold') ? _("Cannot move a waiting or item level hold") : "";
                         let found_status = $(this).data('found');
-                        $('#move_hold_item_selection table').append(`<tr><td>${reserve_id}</td><td>Biblionumber: <a target="_blank" href="/cgi-bin/koha/reserve/request.pl?biblionumber=${reserve_biblionumber}">${reserve_biblionumber}</a></td><td>${error_message}</td></tr>`)
                         if ( !item_level_hold ) {
-                            $('#move_hold_biblio_form').append(`<input type="hidden" name="hold_id" value="${reserve_id}">`);
+                            $('#move_hold_biblio_selection table').append(`<tr><td><input type="checkbox" name="move_hold_id" value="${reserve_id}" checked /><td>${reserve_id}</td><td>Biblionumber: <a target="_blank" href="/cgi-bin/koha/reserve/request.pl?biblionumber=${reserve_biblionumber}">${reserve_biblionumber}</a></td><td>${error_message}</td></tr>`)
+                        } else {
+                            $('#move_hold_biblio_selection table').append(`<tr><td><input type="checkbox" name="move_hold_id" value="${reserve_id}" disabled /><td>${reserve_id}</td><td>Biblionumber: <a target="_blank" href="/cgi-bin/koha/reserve/request.pl?biblionumber=${reserve_biblionumber}">${reserve_biblionumber}</a></td><td>${error_message}</td></tr>`)
+
                         }
                     });
                 }
