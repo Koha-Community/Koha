@@ -20,7 +20,7 @@
 use Modern::Perl;
 
 use Test::NoWarnings;
-use Test::More tests => 17;
+use Test::More tests => 18;
 
 use Test::Exception;
 use Test::MockModule;
@@ -1672,4 +1672,152 @@ subtest 'revert_found() tests' => sub {
 
         $schema->storage->txn_rollback;
     };
+};
+subtest 'move_hold() tests' => sub {
+    plan tests => 11;
+    $schema->storage->txn_begin;
+
+    my $patron = Koha::Patron->new(
+        {
+            surname      => 'Luke',
+            categorycode => 'PT',
+            branchcode   => 'CPL'
+        }
+    )->store;
+
+    my $patron_2 = Koha::Patron->new(
+        {
+            surname      => 'Gass',
+            categorycode => 'PT',
+            branchcode   => 'CPL'
+        }
+    )->store;
+
+    my $patron_3 = Koha::Patron->new(
+        {
+            surname      => 'Test',
+            categorycode => 'PT',
+            branchcode   => 'CPL'
+        }
+    )->store;
+
+    my $patron_4 = Koha::Patron->new(
+        {
+            surname      => 'Guy',
+            categorycode => 'PT',
+            branchcode   => 'CPL'
+        }
+    )->store;
+
+    my $biblio1 = $builder->build_sample_biblio();
+    my $item_1  = $builder->build_sample_item( { biblionumber => $biblio1->biblionumber } );
+
+    my $biblio2 = $builder->build_sample_biblio();
+    my $item_2  = $builder->build_sample_item( { biblionumber => $biblio2->biblionumber } );
+
+    my $biblio3 = $builder->build_sample_biblio();
+    my $item_3  = $builder->build_sample_item( { biblionumber => $biblio3->biblionumber } );
+
+    my $biblio4 = $builder->build_sample_biblio();
+    my $item_4  = $builder->build_sample_item( { biblionumber => $biblio4->biblionumber } );
+
+    # Create an item level hold
+    my $hold = Koha::Hold->new(
+        {
+            borrowernumber => $patron->borrowernumber,
+            biblionumber   => $biblio1->biblionumber,
+            itemnumber     => $item_1->itemnumber,
+            branchcode     => 'CPL',
+        }
+    )->store;
+
+    # Create a record level hold
+    my $hold_2 = Koha::Hold->new(
+        {
+            borrowernumber => $patron->borrowernumber,
+            biblionumber   => $biblio1->biblionumber,
+            itemnumber     => undef,
+            branchcode     => 'CPL',
+        }
+    )->store;
+
+    # Move the hold from item 1 to item 2
+    my $result = $hold->move_hold( { new_itemnumber => $item_2->itemnumber } );
+    ok( $result->{success}, 'Hold successfully moved' );
+    $hold->discard_changes();
+    is( $hold->biblionumber, $biblio2->biblionumber, 'Biblionumber updated correctly' );
+    is( $hold->itemnumber,   $item_2->itemnumber,    'Itemnumber updated correctly' );
+    is( $hold->priority,     1,                      "Hold priority is set to 1" );
+
+    my $logs = Koha::ActionLogs->search(
+        {
+            action => 'MODIFY',
+            module => 'HOLDS',
+            object => $hold->id
+        }
+    );
+
+    is( $logs->count, 0, 'HoldsLog disabled, no logs added' );
+
+    my $result_2 = $hold_2->move_hold( { new_biblionumber => $biblio3->biblionumber } );
+    ok( $result_2->{success}, 'Hold successfully moved' );
+    $hold_2->discard_changes();
+    is( $hold_2->biblionumber, $biblio3->biblionumber, 'Biblionumber updated correctly' );
+    is( $hold->priority,       1,                      "Hold priority is set to 1" );
+
+    # Create an item level hold
+    my $hold_3 = Koha::Hold->new(
+        {
+            borrowernumber => $patron_3->borrowernumber,
+            biblionumber   => $biblio4->biblionumber,
+            itemnumber     => $item_4->itemnumber,
+            branchcode     => 'CPL',
+            priority       => 1,
+        }
+    )->store;
+
+    # Create an item level hold
+    my $hold_4 = Koha::Hold->new(
+        {
+            borrowernumber => $patron_2->borrowernumber,
+            biblionumber   => $biblio4->biblionumber,
+            itemnumber     => $item_4->itemnumber,
+            branchcode     => 'CPL',
+            priority       => 2,
+        }
+    )->store;
+
+    # Create an item level hold
+    my $hold_5 = Koha::Hold->new(
+        {
+            borrowernumber => $patron_4->borrowernumber,
+            biblionumber   => $biblio4->biblionumber,
+            itemnumber     => $item_4->itemnumber,
+            branchcode     => 'CPL',
+            priority       => 3,
+        }
+    )->store;
+
+    #enable HoldsLog
+    t::lib::Mocks::mock_preference( 'HoldsLog', 1 );
+
+    my $result_3 = $hold_2->move_hold( { new_biblionumber => $biblio4->biblionumber } );
+    ok( $result_3->{success}, 'Hold successfully moved' );
+    $hold_2->discard_changes;
+    is( $hold_2->priority, 4, "Hold priority is set to 4" );
+
+    my $logs_2 = Koha::ActionLogs->search(
+        {
+            action => 'MODIFY',
+            module => 'HOLDS',
+            object => $hold_2->id
+        }
+    );
+
+    is( $logs_2->count, 1, 'Hold modification was logged' );
+
+    #disable HoldsLog
+    t::lib::Mocks::mock_preference( 'HoldsLog', 1 );
+
+    $schema->storage->txn_rollback;
 };
