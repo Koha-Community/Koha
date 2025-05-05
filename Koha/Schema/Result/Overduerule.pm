@@ -198,6 +198,12 @@ __PACKAGE__->has_many(
 # Created by DBIx::Class::Schema::Loader v0.07049 @ 2021-01-21 13:39:29
 # DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:pORigxtC5qztZWHI29mZ/g
 
+__PACKAGE__->add_columns(
+    '+debarred1' => { is_boolean => 1 },
+    '+debarred2' => { is_boolean => 1 },
+    '+debarred3' => { is_boolean => 1 },
+);
+
 =head2 koha_object_class
 
 Missing POD for koha_object_class.

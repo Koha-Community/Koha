@@ -369,6 +369,10 @@ __PACKAGE__->belongs_to(
   { is_deferrable => 1, on_delete => "CASCADE", on_update => "CASCADE" },
 );
 
+__PACKAGE__->add_columns(
+    '+budget_permission' => { is_boolean => 0 },
+);
+
 =head2 koha_object_class
 
 Missing POD for koha_object_class.

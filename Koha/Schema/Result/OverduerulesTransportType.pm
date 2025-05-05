@@ -116,6 +116,8 @@ __PACKAGE__->belongs_to(
 # Created by DBIx::Class::Schema::Loader v0.07042 @ 2016-03-31 15:44:38
 # DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:GV2VZ1kIA9Fl8pQd0qkrjg
 
+__PACKAGE__->add_columns(
+    '+letternumber' => { is_boolean => 0 },
+);
 
-# You can replace this text with custom code or comments, and it will be preserved on regeneration
 1;

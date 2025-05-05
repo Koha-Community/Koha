@@ -98,6 +98,9 @@ __PACKAGE__->set_primary_key("module", "page", "tablename", "columnname");
 # Created by DBIx::Class::Schema::Loader v0.07046 @ 2019-12-12 16:06:36
 # DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:IhREpW2PRxxFF9EYOGt2Qg
 
+__PACKAGE__->add_columns(
+    '+cannot_be_toggled' => { is_boolean => 1 },
+    '+is_hidden' => { is_boolean => 1 },
+);
 
-# You can replace this text with custom code or comments, and it will be preserved on regeneration
 1;

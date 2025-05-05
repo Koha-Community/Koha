@@ -219,6 +219,9 @@ __PACKAGE__->set_primary_key("layout_id");
 # Created by DBIx::Class::Schema::Loader v0.07051 @ 2024-05-24 13:05:15
 # DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:W/ICw+9yY7wxZ0IgqqXcFg
 
-
-# You can replace this text with custom content, and it will be preserved on regeneration
+__PACKAGE__->add_columns(
+    '+guidebox' => { is_boolean => 0 },
+    '+oblique_title' => { is_boolean => 0 },
+    '+callnum_split' => { is_boolean => 0 },
+);
 1;
