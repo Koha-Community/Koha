@@ -112,7 +112,7 @@ if ( $op eq 'cud-move' ) {
         );
     }
 } elsif ( $op eq 'cud-move_hold_item' or $op eq 'cud-move_hold_biblio' ) {
-    my @hold_ids              = $input->multi_param('hold_id');
+    my @hold_ids              = $input->multi_param('move_hold_id');
     my $original_biblionumber = $input->param('original_biblionumber');
     my @moving_holds          = Koha::Holds->search(
         { reserve_id => \@hold_ids },
