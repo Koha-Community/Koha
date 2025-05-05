@@ -179,6 +179,77 @@ sub delete {
     return $deleted;
 }
 
+=head3 move_hold
+
+$hold->move_hold();
+
+=cut
+
+sub move_hold {
+    my ( $self, $args ) = @_;
+
+    my $original              = $self;
+    my $original_biblionumber = $self->biblionumber;
+
+    my $found = $original->found // '';
+
+    if ( $found eq 'W' ) {
+        return { success => 0, error => 'Cannot move a waiting hold' };
+    }
+
+    if ( $found eq 'T' ) {
+        return { success => 0, error => 'Cannot move a hold in transit' };
+    }
+
+    my $patron = Koha::Patrons->find( { borrowernumber => $self->borrowernumber } );
+    return { success => 0, error => 'Missing patron or target' } unless $patron;
+
+    my ( $new_biblionumber, $new_itemnumber, $item, $canReserve );
+
+    if ( $args->{new_itemnumber} ) {
+        $item = Koha::Items->find( { itemnumber => $args->{new_itemnumber} } )
+            or return { success => 0, error => 'Target item not found' };
+
+        $new_itemnumber   = $item->itemnumber;
+        $new_biblionumber = $item->biblionumber;
+
+        $canReserve = C4::Reserves::CanItemBeReserved( $patron, $item, $self->branchcode, { ignore_hold_counts => 1 } );
+    } elsif ( $args->{new_biblionumber} ) {
+        $new_biblionumber = $args->{new_biblionumber};
+
+        $canReserve = C4::Reserves::CanBookBeReserved(
+            $patron->borrowernumber, $new_biblionumber, $self->branchcode,
+            { ignore_hold_counts => 1 }
+        );
+    } else {
+        return { success => 0, error => 'Missing itemnumber or biblionumber' };
+    }
+
+    return { success => 0, error => $canReserve->{status} }
+        unless $canReserve->{status} eq 'OK';
+
+    my $max = Koha::Holds->search(
+        { biblionumber => $new_biblionumber },
+        { order_by     => { -desc => 'priority' }, rows => 1 }
+    )->next;
+    my $base_priority = $max ? $max->priority : 0;
+    my $priority      = $base_priority + 1;
+    my $new_priority  = C4::Reserves::_ShiftPriority( $new_biblionumber, $priority );
+
+    $self->update(
+        {
+            itemnumber   => $new_itemnumber,     # undef for biblio-level is fine
+            biblionumber => $new_biblionumber,
+            priority     => $new_priority,
+        }
+    );
+
+    C4::Log::logaction( 'HOLDS', 'MODIFY', $self->reserve_id, $self, undef, $original )
+        if C4::Context->preference('HoldsLog');
+
+    return { success => 1, hold => $self };
+}
+
 =head3 set_transfer
 
 =cut

@@ -1674,7 +1674,7 @@ subtest 'revert_found() tests' => sub {
     };
 };
 subtest 'move_hold() tests' => sub {
-    plan tests => 11;
+    plan tests => 13;
     $schema->storage->txn_begin;
 
     my $patron = Koha::Patron->new(
@@ -1817,7 +1817,33 @@ subtest 'move_hold() tests' => sub {
     is( $logs_2->count, 1, 'Hold modification was logged' );
 
     #disable HoldsLog
-    t::lib::Mocks::mock_preference( 'HoldsLog', 1 );
+    t::lib::Mocks::mock_preference( 'HoldsLog', 0 );
+
+    my $hold_6 = Koha::Hold->new(
+        {
+            borrowernumber => $patron_4->borrowernumber,
+            biblionumber   => $biblio4->biblionumber,
+            itemnumber     => $item_4->itemnumber,
+            branchcode     => 'CPL',
+            found          => 'W',
+        }
+    )->store;
+
+    my $result_4 = $hold_6->move_hold( { new_biblionumber => $biblio1->biblionumber } );
+    is( $result_4->{error}, 'Cannot move a waiting hold', 'Correct error for waiting hold' );
+
+    my $hold_7 = Koha::Hold->new(
+        {
+            borrowernumber => $patron_4->borrowernumber,
+            biblionumber   => $biblio4->biblionumber,
+            itemnumber     => $item_4->itemnumber,
+            branchcode     => 'CPL',
+            found          => 'T',
+        }
+    )->store;
+
+    my $result_5 = $hold_7->move_hold( { new_biblionumber => $biblio1->biblionumber } );
+    is( $result_5->{error}, 'Cannot move a hold in transit', 'Correct error for hold instransit' );
 
     $schema->storage->txn_rollback;
 };

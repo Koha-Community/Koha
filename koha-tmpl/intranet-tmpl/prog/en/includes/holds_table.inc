@@ -46,7 +46,7 @@
             [%- END -%]
             [% SET tr_class = hold.suspend ? 'suspend' : '' %]
             <tr class="[% tr_class | html %]">
-                <td><input type="checkbox" class="select_hold" data-id="[% hold.reserve_id | html %]" /></td>
+                <td><input type="checkbox" class="select_hold" data-id="[% hold.reserve_id | html %]"  data-item_level_hold="[% hold.item_level_hold | html %]" data-itemnumber="[% hold.itemnumber | html %]" data-biblionumber="[% hold.biblionumber | html %]" data-waiting="[% hold.atdestination | html %]" data-intransit="[% hold.intransit | html %]"/></td>
                 <td style="min-width:185px;" data-order="[% priority | html %]">
                     <div>
                         <input type="hidden" name="reserve_id" value="[% hold.reserve_id | html %]" />
