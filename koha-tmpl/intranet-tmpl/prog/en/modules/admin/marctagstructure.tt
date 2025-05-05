@@ -97,6 +97,11 @@
             [% IF framework %]
                 <a class="btn btn-default" href="/cgi-bin/koha/admin/biblio_framework.pl?op=add_form&amp;frameworkcode=[% framework.frameworkcode | uri %]"><i class="fa-solid fa-pencil" aria-hidden="true"></i> Edit framework</a>
             [% END %]
+            [% IF items_tag %]
+                <a class="btn btn-default" id="itemstag" href="/cgi-bin/koha/admin/marc_subfields_structure.pl?tagfield=[% items_tag | uri %]&frameworkcode=[% framework.frameworkcode | uri %]"
+                    ><i class="fa-solid fa-eye" aria-hidden="true"></i> View items tag ([% items_tag | html %])</a
+                >
+            [% END %]
         </div>
     [% END %]
 

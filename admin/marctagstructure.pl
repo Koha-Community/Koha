@@ -18,11 +18,12 @@
 # along with Koha; if not, see <https://www.gnu.org/licenses>.
 
 use Modern::Perl;
-use CGI      qw ( -utf8 );
-use C4::Auth qw( get_template_and_user );
+use CGI qw ( -utf8 );
+
+use C4::Auth   qw( get_template_and_user );
+use C4::Biblio qw( GetMarcFromKohaField );
 use C4::Context;
 use C4::Output qw( output_html_with_http_headers );
-use C4::Context;
 
 use Koha::Caches;
 use Koha::AuthorisedValues;
@@ -229,6 +230,9 @@ if ( $op eq 'add_form' ) {
             $template->param( 'blocking_error' => $error_code );
         }
     }
+
+    my ( $items_tag, $items_subtag ) = GetMarcFromKohaField('items.itemnumber');
+    $template->param( items_tag => $items_tag );
 
     # here, $op can be unset or set to "cud-framework_create_confirm".
     if ( $searchfield ne '' ) {
