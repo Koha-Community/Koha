@@ -168,6 +168,7 @@ __PACKAGE__->has_many(
 
 __PACKAGE__->add_columns(
     '+repeatable' => { is_boolean => 1 },
+    '+searchable' => { is_boolean => 1 },
 );
 
 1;

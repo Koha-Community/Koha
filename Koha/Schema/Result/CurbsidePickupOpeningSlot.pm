@@ -112,6 +112,8 @@ __PACKAGE__->belongs_to(
 # Created by DBIx::Class::Schema::Loader v0.07049 @ 2022-06-27 11:58:44
 # DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:5kzC0AAB9LL0gR+FFnmYgw
 
+__PACKAGE__->add_columns(
+    '+day' => { is_boolean => 1 },
+);
 
-# You can replace this text with custom code or comments, and it will be preserved on regeneration
 1;

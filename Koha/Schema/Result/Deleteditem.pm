@@ -536,7 +536,13 @@ __PACKAGE__->set_primary_key("itemnumber");
 
 __PACKAGE__->add_columns(
     '+bookable'                          => { is_boolean => 1 },
+    '+damaged'                           => { is_boolean => 1 },
     '+exclude_from_local_holds_priority' => { is_boolean => 1 },
+    '+itemlost'                          => { is_boolean => 1 },
+    '+notforloan'                        => { is_boolean => 1 },
+    '+restricted'                        => { is_boolean => 1 },
+    '+stack'                             => { is_boolean => 1 },
+    '+withdrawn'                         => { is_boolean => 1 },
 );
 
 =head2 koha_objects_class

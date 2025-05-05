@@ -428,9 +428,14 @@ sub koha_objects_class {
 __PACKAGE__->add_columns(
     '+can_be_guarantee'                       => { is_boolean => 1 },
     '+can_place_ill_in_opac'                  => { is_boolean => 1 },
+    '+change_password'                        => { is_boolean => 1 },
+    '+dateofbirthrequired'                    => { is_boolean => 1 },
     '+exclude_from_local_holds_priority'      => { is_boolean => 1 },
-    '+require_strong_password'                => { is_boolean => 1 },
     '+force_password_reset_when_set_by_staff' => { is_boolean => 1 },
+    '+hidelostitems'                          => { is_boolean => 1 },
+    '+overduenoticerequired'                  => { is_boolean => 1 },
+    '+require_strong_password'                => { is_boolean => 1 },
+    '+reset_password'                         => { is_boolean => 1 },
 );
 
 1;

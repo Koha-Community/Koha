@@ -121,6 +121,8 @@ __PACKAGE__->belongs_to(
 # Created by DBIx::Class::Schema::Loader v0.07049 @ 2021-01-21 13:39:29
 # DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:wUwI/h1WR8kVGMNCrv/tUQ
 
+__PACKAGE__->add_columns(
+    '+rating_value' => { is_boolean => 1 },
+);
 
-# You can replace this text with custom content, and it will be preserved on regeneration
 1;

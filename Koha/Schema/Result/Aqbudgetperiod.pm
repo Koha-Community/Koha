@@ -149,6 +149,11 @@ __PACKAGE__->has_many(
 # Created by DBIx::Class::Schema::Loader v0.07049 @ 2021-01-21 13:39:29
 # DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:F/ipbU/Wrqy3pDInlmLOTw
 
+__PACKAGE__->add_columns(
+    '+budget_period_active' => { is_boolean => 1 },
+    '+budget_period_locked' => { is_boolean => 1 },
+);
+
 =head2 koha_object_class
 
 Missing POD for koha_object_class.

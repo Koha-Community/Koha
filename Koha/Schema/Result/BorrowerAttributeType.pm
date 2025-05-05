@@ -274,15 +274,17 @@ __PACKAGE__->has_many(
 # DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:Os1rn9zKu7/rVLVjZM3Mbg
 
 __PACKAGE__->add_columns(
+    '+display_checkout'          => { is_boolean => 1 },
+    '+is_date'                   => { is_boolean => 1 },
     '+keep_for_pseudonymization' => { is_boolean => 1 },
     '+mandatory'                 => { is_boolean => 1 },
+    '+opac_display'              => { is_boolean => 1 },
+    '+opac_editable'             => { is_boolean => 1 },
     '+opac_mandatory'            => { is_boolean => 1 },
+    '+repeatable'                => { is_boolean => 1 },
     '+searched_by_default'       => { is_boolean => 1 },
     '+staff_searchable'          => { is_boolean => 1 },
-);
-
-__PACKAGE__->add_columns(
-    '+is_date' => { is_boolean => 1 },
+    '+unique_id'                 => { is_boolean => 1 },
 );
 
 =head2 koha_object_class

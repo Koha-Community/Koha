@@ -191,8 +191,9 @@ __PACKAGE__->many_to_many(
 # Created by DBIx::Class::Schema::Loader v0.07049 @ 2023-05-12 20:33:58
 # DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:KVYT5xqcXSDijZBaEHLV+g
 
-
-# You can replace this text with custom content, and it will be preserved on regeneration
+__PACKAGE__->add_columns(
+    '+wants_digest' => { is_boolean => 1 },
+);
 
 =head2 koha_object_class
 

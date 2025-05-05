@@ -184,7 +184,9 @@ __PACKAGE__->has_many(
 # DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:/WPJEu04y32zDMr+vnK5og
 
 __PACKAGE__->add_columns(
-    '+mandatory' => { is_boolean => 1 },
+    '+mandatory'    => { is_boolean => 1 },
+    '+opac'         => { is_boolean => 1 },
+    '+staff_client' => { is_boolean => 1 },
 );
 
 __PACKAGE__->many_to_many("search_marc_maps", "search_marc_to_fields", "search_marc_map");

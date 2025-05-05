@@ -336,7 +336,8 @@ __PACKAGE__->belongs_to(
 
 __PACKAGE__->add_columns(
     '+auto_renew'      => { is_boolean => 1 },
-    '+onsite_checkout' => { is_boolean => 1 }
+    '+noteseen'        => { is_boolean => 1 },
+    '+onsite_checkout' => { is_boolean => 1 },
 );
 
 __PACKAGE__->belongs_to(

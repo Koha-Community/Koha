@@ -658,6 +658,11 @@ __PACKAGE__->set_primary_key("verification_token", "borrowernumber");
 # Created by DBIx::Class::Schema::Loader v0.07051 @ 2024-11-11 11:07:06
 # DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:QOqDkQ+8LuTY6qYrPhsQWw
 
+__PACKAGE__->add_columns(
+    '+gonenoaddress' => { is_boolean => 1 },
+    '+lost'          => { is_boolean => 1 },
+);
+
 =head2 koha_object_class
 
 Missing POD for koha_object_class.

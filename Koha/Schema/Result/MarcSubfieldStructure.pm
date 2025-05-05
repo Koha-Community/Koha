@@ -233,6 +233,10 @@ __PACKAGE__->belongs_to(
 # Created by DBIx::Class::Schema::Loader v0.07049 @ 2020-12-10 09:06:23
 # DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:KVbDXEVf96eDkbPYpcmQVA
 
+__PACKAGE__->add_columns(
+    '+hidden' => { is_boolean => 1 },
+    '+isurl'  => { is_boolean => 1 },
+    '+tab'    => { is_boolean => 1 },
+);
 
-# You can replace this text with custom content, and it will be preserved on regeneration
 1;

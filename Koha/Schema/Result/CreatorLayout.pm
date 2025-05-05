@@ -220,8 +220,9 @@ __PACKAGE__->set_primary_key("layout_id");
 # DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:W/ICw+9yY7wxZ0IgqqXcFg
 
 __PACKAGE__->add_columns(
-    '+guidebox' => { is_boolean => 0 },
-    '+oblique_title' => { is_boolean => 0 },
     '+callnum_split' => { is_boolean => 0 },
+    '+guidebox'      => { is_boolean => 0 },
+    '+oblique_title' => { is_boolean => 0 },
 );
+
 1;

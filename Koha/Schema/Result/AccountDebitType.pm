@@ -149,19 +149,11 @@ __PACKAGE__->has_many(
 # DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:9+mMPMSWcc/PwryYNQ2Jqg
 
 __PACKAGE__->add_columns(
-    '+is_system' => { is_boolean => 1 }
-);
-
-__PACKAGE__->add_columns(
-    "+can_be_sold" => { is_boolean => 1 }
-);
-
-__PACKAGE__->add_columns(
-    "+can_be_invoiced" => { is_boolean => 1 }
-);
-
-__PACKAGE__->add_columns(
-    "+restricts_checkouts" => { is_boolean => 1 }
+    '+archived'            => { is_boolean => 1 },
+    '+is_system'           => { is_boolean => 1 },
+    "+can_be_invoiced"     => { is_boolean => 1 },
+    "+can_be_sold"         => { is_boolean => 1 },
+    "+restricts_checkouts" => { is_boolean => 1 },
 );
 
 =head2 koha_objects_class
@@ -184,5 +176,4 @@ sub koha_object_class {
     'Koha::Account::DebitType';
 }
 
-# You can replace this text with custom code or comments, and it will be preserved on regeneration
 1;

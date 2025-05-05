@@ -115,8 +115,9 @@ __PACKAGE__->has_many(
 # Created by DBIx::Class::Schema::Loader v0.07025 @ 2013-10-14 20:56:21
 # DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:N033AvWwG2CDBDuTj2unqQ
 
-
-# You can replace this text with custom content, and it will be preserved on regeneration
+__PACKAGE__->add_columns(
+    '+takes_days' => { is_boolean => 1 },
+);
 
 =head2 koha_object_class
 

@@ -237,6 +237,8 @@ __PACKAGE__->belongs_to(
 # Created by DBIx::Class::Schema::Loader v0.07049 @ 2023-02-24 20:18:23
 # DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:yDK2nFt+Fj3UuXAij1UwQw
 
+__PACKAGE__->add_columns(
+    '+conditional_regex' => { is_boolean => 1 },
+);
 
-# You can replace this text with custom code or comments, and it will be preserved on regeneration
 1;

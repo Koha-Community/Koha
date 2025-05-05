@@ -91,6 +91,11 @@ __PACKAGE__->belongs_to(
 # Created by DBIx::Class::Schema::Loader v0.07049 @ 2021-01-21 13:39:29
 # DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:BocU8VE+5j4lYlxNU6Lofw
 
+__PACKAGE__->add_columns(
+    '+housebound_chooser'   => { is_boolean => 1 },
+    '+housebound_deliverer' => { is_boolean => 1 },
+);
+
 =head2 koha_object_class
 
 Missing POD for koha_object_class.

@@ -192,6 +192,12 @@ __PACKAGE__->has_many(
 # Created by DBIx::Class::Schema::Loader v0.07042 @ 2018-02-16 17:54:53
 # DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:1UuejI9kkTb9eeNKvSLAQQ
 
+__PACKAGE__->add_columns(
+    '+is_deletable'            => { is_boolean => 1 },
+    '+is_email_required'       => { is_boolean => 1 },
+    '+is_enrollable_from_opac' => { is_boolean => 1 },
+);
+
 =head2 koha_object_class
 
 Missing POD for koha_object_class.

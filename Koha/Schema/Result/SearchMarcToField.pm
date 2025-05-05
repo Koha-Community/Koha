@@ -146,9 +146,10 @@ __PACKAGE__->belongs_to(
 # DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:rJQhUx0rIc6RVz4HJ5vy/g
 
 __PACKAGE__->add_columns(
-    '+facet' => { is_boolean => 1 },
+    '+facet'       => { is_boolean => 1 },
+    '+search'      => { is_boolean => 1 },
+    '+sort'        => { is_boolean => 1 },
     '+suggestible' => { is_boolean => 1 },
-    '+sort' => { is_boolean => 1 },
 );
 
 1;

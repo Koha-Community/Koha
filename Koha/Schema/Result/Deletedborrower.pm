@@ -861,12 +861,13 @@ __PACKAGE__->add_columns(
 # DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:5QA+/eORyEKhkG++0f3Hvw
 
 __PACKAGE__->add_columns(
-    '+anonymized'              => { is_boolean => 1 },
-    '+autorenew_checkouts'     => { is_boolean => 1 },
-    '+gonenoaddress'           => { is_boolean => 1 },
-    '+lost'                    => { is_boolean => 1 },
-    '+privacy_guarantor_fines' => { is_boolean => 1 },
-    '+protected'               => { is_boolean => 1 },
+    '+anonymized'                  => { is_boolean => 1 },
+    '+autorenew_checkouts'         => { is_boolean => 1 },
+    '+gonenoaddress'               => { is_boolean => 1 },
+    '+lost'                        => { is_boolean => 1 },
+    '+privacy_guarantor_checkouts' => { is_boolean => 1 },
+    '+privacy_guarantor_fines'     => { is_boolean => 1 },
+    '+protected'                   => { is_boolean => 1 },
 );
 
 =head2 koha_objects_class

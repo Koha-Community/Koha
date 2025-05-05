@@ -185,7 +185,10 @@ __PACKAGE__->has_many(
 # DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:FhViwrd64xn2bqz7D054Mw
 
 __PACKAGE__->add_columns(
-    "+p_cs_precedes" => { is_boolean => 1 },
+    '+active'         => { is_boolean => 1 },
+    '+archived'       => { is_boolean => 1 },
+    '+p_sep_by_space' => { is_boolean => 1 },
+    "+p_cs_precedes"  => { is_boolean => 1 },
 );
 
 =head2 koha_object_class

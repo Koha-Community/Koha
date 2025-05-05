@@ -132,8 +132,9 @@ __PACKAGE__->belongs_to(
 # Created by DBIx::Class::Schema::Loader v0.07042 @ 2017-05-09 21:01:19
 # DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:v0JbPeSBKkHyINem9W9vxw
 
-
-# You can replace this text with custom content, and it will be preserved on regeneration
+__PACKAGE__->add_columns(
+    '+is_digest' => { is_boolean => 1 },
+);
 
 =head2 koha_object_class
 
