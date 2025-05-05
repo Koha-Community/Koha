@@ -65,7 +65,7 @@
                 <ul style="margin-left: 8rem">
                     <li
                         v-for="(alias, i) in vendor.aliases"
-                        :key="alias.alias_id"
+                        :key="alias.vendor_alias_id"
                     >
                         {{ $__("Alias") + " " + (i + 1) }}: {{ alias.alias }}
                     </li>

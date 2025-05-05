@@ -1355,7 +1355,7 @@ cy.get_vendors_to_relate = () => {
         {
             id: 2,
             name: "My Vendor 2",
-            aliases: [{ alias: "alias", alias_id: 1, vendor_id: 2 }],
+            aliases: [{ alias: "alias", vendor_alias_id: 1, vendor_id: 2 }],
         },
     ];
 };
