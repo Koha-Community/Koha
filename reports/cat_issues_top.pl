@@ -282,22 +282,22 @@ sub calculate {
             push @loopcol, \%cell;
         }
 
-        #	warn "fin des titres colonnes";
+        #    warn "fin des titres colonnes";
     }
 
     my $i = 0;
 
-    #	my @totalcol;
+    #    my @totalcol;
     my $highlighted = -1;
 
     #Initialization of cell values.....
     my @table;
 
-    #	warn "init table";
+    #    warn "init table";
     for ( my $i = 1 ; $i <= $line ; $i++ ) {
         foreach my $col (@loopcol) {
 
-            #			warn " init table : $row->{rowtitle} / $col->{coltitle} ";
+            #            warn " init table : $row->{rowtitle} / $col->{coltitle} ";
             $table[$i]->{ ( $col->{coltitle} ) ? $col->{coltitle} : "total" }->{'name'} = 0;
         }
     }
@@ -421,7 +421,7 @@ sub calculate {
     $globalline{looprow} = \@looprow;
     $globalline{loopcol} = \@loopcol;
 
-    # 	# the foot (totals by borrower type)
+    #     # the foot (totals by borrower type)
     $globalline{total}  = $grantotal;
     $globalline{line}   = $line;
     $globalline{column} = $column;

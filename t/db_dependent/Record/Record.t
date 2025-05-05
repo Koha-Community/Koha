@@ -98,8 +98,8 @@ ok(
 ok( !$error, 'no errors in conversion' );
 
 #FIXME This test fails
-#	$marcxml =~ s/\n//g;
-#	$marcxml =~ s/v\/ s/v\/s/g; # FIXME: bug in new_from_xml_record!!
+#\t$marcxml =~ s/\n//g;
+#\t$marcxml =~ s/v\/ s/v\/s/g; # FIXME: bug in new_from_xml_record!!
 #is ($marcxml,$marcxml_utf8, 'record matches antitype');
 
 ok(
@@ -109,8 +109,8 @@ ok(
 ok( !$error, 'no errors in conversion' );
 
 #FIXME This test fails
-#	$marcxml =~ s/\n//g;
-#	$marcxml =~ s/v\/ s/v\/s/g;
+#\t$marcxml =~ s/\n//g;
+#\t$marcxml =~ s/v\/ s/v\/s/g;
 #is ($marcxml,$marcxml_utf8, 'record matches antitype');
 
 print "\n2. checking binary MARC21 records with combining characters to MARCXML\n";

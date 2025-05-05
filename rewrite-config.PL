@@ -17,7 +17,7 @@
 #
 # Current maintainer MJR http://mjr.towers.org.uk/
 #
-# 2007/11/12	Added DB_PORT and changed other keywords to reflect multi-dbms support.	-fbcit
+# 2007/11/12    Added DB_PORT and changed other keywords to reflect multi-dbms support.    -fbcit
 
 use Modern::Perl;
 use Sys::Hostname;
@@ -29,7 +29,7 @@ rewrite-config.PL - helper for the Koha packager and installer
 
 =head1 SYNOPSIS
 
-	perl rewrite-config.PL configurationfile
+    perl rewrite-config.PL configurationfile
 
 =head1 DESCRIPTION
 
@@ -52,8 +52,8 @@ WEBSERVER_HOST, WEBSERVER_IP, WEBSERVER_PORT, WEBSERVER_PORT_LIBRARIAN, ZEBRA_PA
 
 To override the guessed hostname and email address, run:
 
-	WEBSERVER_HOST=mysecrethostname.com.invalid \
-	WEBMASTER_EMAIL=webmaster@publichost.com make install
+    WEBSERVER_HOST=mysecrethostname.com.invalid \
+    WEBMASTER_EMAIL=webmaster@publichost.com make install
 
 Note that if WEBSERVER_HOST does not resolve to an IP address, you will
 also need to override WEBSERVER_IP.

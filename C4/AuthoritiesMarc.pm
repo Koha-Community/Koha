@@ -388,18 +388,18 @@ sub GuessAuthTypeCode {
             '185' => { authtypecode => 'FORM_SUBD' },
         },
 
-        #200 Personal name	700, 701, 702 4-- with embedded 700, 701, 702 600
+        #200 Personal name    700, 701, 702 4-- with embedded 700, 701, 702 600
         #                    604 with embedded 700, 701, 702
-        #210 Corporate or meeting name	710, 711, 712 4-- with embedded 710, 711, 712 601 604 with embedded 710, 711, 712
-        #215 Territorial or geographic name 	710, 711, 712 4-- with embedded 710, 711, 712 601, 607 604 with embedded 710, 711, 712
-        #216 Trademark 	716 [Reserved for future use]
-        #220 Family name 	720, 721, 722 4-- with embedded 720, 721, 722 602 604 with embedded 720, 721, 722
-        #230 Title 	500 4-- with embedded 500 605
-        #240 Name and title (embedded 200, 210, 215, or 220 and 230) 	4-- with embedded 7-- and 500 7--  604 with embedded 7-- and 500 500
-        #245 Name and collective title (embedded 200, 210, 215, or 220 and 235) 	4-- with embedded 7-- and 501 604 with embedded 7-- and 501 7-- 501
-        #250 Topical subject 	606
-        #260 Place access 	620
-        #280 Form, genre or physical characteristics 	608
+        #210 Corporate or meeting name    710, 711, 712 4-- with embedded 710, 711, 712 601 604 with embedded 710, 711, 712
+        #215 Territorial or geographic name     710, 711, 712 4-- with embedded 710, 711, 712 601, 607 604 with embedded 710, 711, 712
+        #216 Trademark     716 [Reserved for future use]
+        #220 Family name     720, 721, 722 4-- with embedded 720, 721, 722 602 604 with embedded 720, 721, 722
+        #230 Title     500 4-- with embedded 500 605
+        #240 Name and title (embedded 200, 210, 215, or 220 and 230)     4-- with embedded 7-- and 500 7--  604 with embedded 7-- and 500 500
+        #245 Name and collective title (embedded 200, 210, 215, or 220 and 235)     4-- with embedded 7-- and 501 604 with embedded 7-- and 501 7-- 501
+        #250 Topical subject     606
+        #260 Place access     620
+        #280 Form, genre or physical characteristics     608
         #
         #
         # Could also be represented with :

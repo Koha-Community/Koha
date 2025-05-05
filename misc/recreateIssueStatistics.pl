@@ -77,7 +77,7 @@ if ( $issues == 1 ) {
                 # Inserting missing issue
                 my $insert =
                     "INSERT INTO statistics (datetime, branch, value, type, other, itemnumber, itemtype, borrowernumber)
-					 VALUES(?, ?, ?, ?, ?, ?, ?, ?)";
+                     VALUES(?, ?, ?, ?, ?, ?, ?, ?)";
                 $substh = $dbh->prepare($insert);
                 my $item     = Koha::Items->find( $hashref->{'itemnumber'} );
                 my $itemtype = $item->effective_itemtype;
@@ -119,7 +119,7 @@ if ( $issues == 1 ) {
                     # Inserting missing renewals
                     my $insert =
                         "INSERT INTO statistics (datetime, branch, value, type, other, itemnumber, itemtype, borrowernumber)
-					 VALUES(?, ?, ?, ?, ?, ?, ?, ?)";
+                     VALUES(?, ?, ?, ?, ?, ?, ?, ?)";
                     $substh = $dbh->prepare($insert);
                     my $item     = Koha::Items->find( $hashref->{'itemnumber'} );
                     my $itemtype = $item->effective_itemtype;
@@ -164,7 +164,7 @@ if ( $returns == 1 ) {
             # Inserting missing issue
             my $insert =
                 "INSERT INTO statistics (datetime, branch, value, type, other, itemnumber, itemtype, borrowernumber)
-				     VALUES(?, ?, ?, ?, ?, ?, ?, ?)";
+                     VALUES(?, ?, ?, ?, ?, ?, ?, ?)";
             $substh = $dbh->prepare($insert);
             my $item     = Koha::Items->find( $hashref->{'itemnumber'} );
             my $itemtype = $item->effective_itemtype;

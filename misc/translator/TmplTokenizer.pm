@@ -47,15 +47,15 @@ sub SYNTAXERROR_P () { 'syntaxerror-p' }
 
 sub FILENAME () { 'input' }
 
-#sub HANDLE		() {'handle'}
+#sub HANDLE () {'handle'}
 
-#sub READAHEAD		() {'readahead'}
+#sub READAHEAD () {'readahead'}
 sub LINENUM_START () { 'lc_0' }
 sub LINENUM ()       { 'lc' }
 sub CDATA_MODE_P ()  { 'cdata-mode-p' }
 sub CDATA_CLOSE ()   { 'cdata-close' }
 
-#sub PCDATA_MODE_P	() {'pcdata-mode-p'}	# additional submode for CDATA
+#sub PCDATA_MODE_P () {'pcdata-mode-p'}    # additional submode for CDATA
 sub JS_MODE_P () { 'js-mode-p' }    # cdata-mode-p must also be true
 
 sub ALLOW_CFORMAT_P () { 'allow-cformat-p' }

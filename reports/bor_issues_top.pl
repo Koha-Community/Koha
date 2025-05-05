@@ -282,10 +282,10 @@ sub calculate {
     my %patrons = ();
 
     # DATA STRUCTURE is going to look like this:
-    # 	(2253=> {name=>"John Doe",
-    # 				allcols=>{MAIN=>12, MEDIA_LIB=>3}
-    # 			},
-    # 	)
+    #     (2253=> {name=>"John Doe",
+    #                 allcols=>{MAIN=>12, MEDIA_LIB=>3}
+    #             },
+    #     )
     while ( my @data = $dbcalc->fetchrow ) {
         my ( $row, $rank, $id, $col ) = @data;
         $col = "zzEMPTY" if ( !defined($col) );

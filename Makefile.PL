@@ -71,7 +71,7 @@ Makefile.PL - Koha packager and installer
 
 =head2 CLEANING UP
 
-	make clean
+    make clean
 
 =head2 CLI PARAMETERS
 

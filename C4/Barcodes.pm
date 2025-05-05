@@ -245,19 +245,19 @@ The default behavior here in Barcodes should be essentially a more flexible vers
 
 To add a new barcode format, a developer should:
 
-	create a module in C4/Barcodes/, like C4/Barcodes/my_new_format.pm;
-	add to the $types hashref in this file; 
-	add tests under the "t" directory; and
-	edit autoBarcode syspref to include new type.
+    create a module in C4/Barcodes/, like C4/Barcodes/my_new_format.pm;
+    add to the $types hashref in this file;
+    add tests under the "t" directory; and
+    edit autoBarcode syspref to include new type.
 
 =head2 Adding a new module
 
 Each new module that needs differing behavior must override these subs:
 
-	new_object
-	initial
-	db_max
-	parse
+    new_object
+    initial
+    db_max
+    parse
 
 Or else the CLASS subs will be used.
 

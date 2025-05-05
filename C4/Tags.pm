@@ -87,8 +87,8 @@ sub get_filters {
     return $sth->fetchall_arrayref( {} );
 }
 
-# 	(SELECT count(*) FROM tags_all     ) as tags_all,
-# 	(SELECT count(*) FROM tags_index   ) as tags_index,
+#     (SELECT count(*) FROM tags_all     ) as tags_all,
+#     (SELECT count(*) FROM tags_index   ) as tags_index,
 
 =head2 approval_counts
 
@@ -98,10 +98,10 @@ Missing POD for approval_counts.
 
 sub approval_counts {
     my $query = "SELECT
-		(SELECT count(*) FROM tags_approval WHERE approved= 1) as approved_count,
-		(SELECT count(*) FROM tags_approval WHERE approved=-1) as rejected_count,
-		(SELECT count(*) FROM tags_approval WHERE approved= 0) as unapproved_count
-	";
+        (SELECT count(*) FROM tags_approval WHERE approved= 1) as approved_count,
+        (SELECT count(*) FROM tags_approval WHERE approved=-1) as rejected_count,
+        (SELECT count(*) FROM tags_approval WHERE approved= 0) as unapproved_count
+    ";
     my $sth = C4::Context->dbh->prepare($query);
     $sth->execute;
     my $result = $sth->fetchrow_hashref();
@@ -261,11 +261,11 @@ sub get_tags {    # i.e., from tags_index
         }
     }
     my $query = "
-	SELECT    tags_index.term as term,biblionumber,weight,weight_total
-	FROM      tags_index
-	LEFT JOIN tags_approval 
-	ON        tags_index.term = tags_approval.term
-	" . ( $wheres || '' ) . $order . $limit;
+    SELECT    tags_index.term as term,biblionumber,weight,weight_total
+    FROM      tags_index
+    LEFT JOIN tags_approval
+    ON        tags_index.term = tags_approval.term
+    " . ( $wheres || '' ) . $order . $limit;
     my $sth = C4::Context->dbh->prepare($query);
     if (@exe_args) {
         $sth->execute(@exe_args);
@@ -332,15 +332,15 @@ sub get_approval_rows {    # i.e., from tags_approval
         }
     }
     my $query = "
-	SELECT 	tags_approval.term          AS term,
-			tags_approval.approved      AS approved,
-			tags_approval.date_approved AS date_approved,
-			tags_approval.approved_by   AS approved_by,
-			tags_approval.weight_total  AS weight_total,
-			CONCAT(borrowers.surname, ', ', borrowers.firstname) AS approved_by_name
-	FROM 	tags_approval
-	LEFT JOIN borrowers
-	ON      tags_approval.approved_by = borrowers.borrowernumber ";
+    SELECT     tags_approval.term          AS term,
+            tags_approval.approved      AS approved,
+            tags_approval.date_approved AS date_approved,
+            tags_approval.approved_by   AS approved_by,
+            tags_approval.weight_total  AS weight_total,
+            CONCAT(borrowers.surname, ', ', borrowers.firstname) AS approved_by_name
+    FROM     tags_approval
+    LEFT JOIN borrowers
+    ON      tags_approval.approved_by = borrowers.borrowernumber ";
     $query .= ( $wheres || '' ) . $order . $limit;
     my $sth = C4::Context->dbh->prepare($query);
     if (@exe_args) {
@@ -599,21 +599,21 @@ sub decrement_weight {
 
 sub _set_weight_total {
     my $sth = C4::Context->dbh->prepare( "
-	UPDATE tags_approval
-	SET    weight_total=" . (shift) . "
-	WHERE  term=?
-	" );    # note: CANNOT use "?" for weight_total (see the args above).
+    UPDATE tags_approval
+    SET    weight_total=" . (shift) . "
+    WHERE  term=?
+    " );    # note: CANNOT use "?" for weight_total (see the args above).
     $sth->execute(shift);    # just the term
 }
 
 sub _set_weight {
     my $dbh = C4::Context->dbh;
     my $sth = $dbh->prepare( "
-	UPDATE tags_index
-	SET    weight=" . (shift) . "
-	WHERE  term=?
-	AND    biblionumber=?
-	" );
+    UPDATE tags_index
+    SET    weight=" . (shift) . "
+    WHERE  term=?
+    AND    biblionumber=?
+    " );
     $sth->execute(@_);
 }
 
@@ -627,8 +627,8 @@ sub add_tag {    # biblionumber,term,[borrowernumber,approvernumber]
     my $rows =
         get_tag_rows( { biblionumber => $biblionumber, borrowernumber => $borrowernumber, term => $term, limit => 1 } );
     my $query = "INSERT INTO tags_all
-	(borrowernumber,biblionumber,term,date_created)
-	VALUES (?,?,?,NOW())";
+    (borrowernumber,biblionumber,term,date_created)
+    VALUES (?,?,?,NOW())";
 
     if ( scalar @$rows ) {
         return;
@@ -726,10 +726,10 @@ instructions.
 =head2 Table Structure
 
 The tables used by tags are:
-	tags_all
-	tags_index
-	tags_approval
-	tags_blacklist
+    tags_all
+    tags_index
+    tags_approval
+    tags_blacklist
 
 Your first thought may be that this looks a little complicated.  It is, but only because
 it has to be.  I'll try to explain.
@@ -737,21 +737,21 @@ it has to be.  I'll try to explain.
 tags_all - This table would be all we really need if we didn't care about moderation or
 performance or tags disappearing when borrowers are removed.  Too bad, we do.  Otherwise
 though, it contains all the relevant info about a given tag:
-	tag_id         - unique id number for it
-	borrowernumber - user that entered it
-	biblionumber   - book record it is attached to
-	term           - tag "term" itself
-	language       - perhaps used later to influence weighting
-	date_created   - date and time it was created
+    tag_id         - unique id number for it
+    borrowernumber - user that entered it
+    biblionumber   - book record it is attached to
+    term           - tag "term" itself
+    language       - perhaps used later to influence weighting
+    date_created   - date and time it was created
 
 tags_approval - Since we need to provide moderation, this table is used to track it.  If no
 external dictionary is used, this table is the sole reference for approval and rejection.
 With an external dictionary, it tracks pending terms and past whitelist/blacklist actions.
 This could be called an "approved terms" table.  See above regarding the External Dictionary.
-	term           - tag "term" itself 
-	approved       - Negative, 0 or positive if tag is rejected, pending or approved.
-	date_approved  - date of last action
-	approved_by    - staffer performing the last action
+    term           - tag "term" itself
+    approved       - Negative, 0 or positive if tag is rejected, pending or approved.
+    date_approved  - date of last action
+    approved_by    - staffer performing the last action
     weight_total   - total occurrence of term in any biblio by any users
 
 tags_index - This table is for performance, because by far the most common operation will 
@@ -759,9 +759,9 @@ be fetching tags for a list of search results.  We will have a set of biblios, a
 want ONLY their approved tags and overall weighting.  While we could implement a query that
 would traverse tags_all filtered against tags_approval, the performance implications of
 trying to calculate that and the "weight" (number of times a tag appears) on the fly are drastic.
-	term           - approved term as it appears in tags_approval
-	biblionumber   - book record it is attached to
-	weight         - number of times tag applied by any user
+    term           - approved term as it appears in tags_approval
+    biblionumber   - book record it is attached to
+    weight         - number of times tag applied by any user
 
 tags_blacklist - A set of regular expression filters.  Unsurprisingly, these should be perl-
 compatible (PCRE) for your version of perl.  Since this is a blacklist, a term will be

@@ -46,7 +46,7 @@ sub _initialize {
         "https://contentcafe2.btol.com/ContentCafe/Jacket.aspx?UserID=$user&Password=$pass&Options=Y&Return=T&Type=S&Value=";
     $agent = "Koha/$VERSION [en] (Linux)";
 
-    #"Mozilla/4.76 [en] (Win98; U)",	#  if for some reason you want to go stealth, you might prefer this
+    #"Mozilla/4.76 [en] (Win98; U)",    #  if for some reason you want to go stealth, you might prefer this
 }
 
 sub image_url {

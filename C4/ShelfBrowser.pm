@@ -63,12 +63,12 @@ to take into account.
 
   foreach (@items) {
       # These won't format well like this, but here are the fields
-  	  print $_->{title};
-  	  print $_->{biblionumber};
-  	  print $_->{itemnumber};
-  	  print $_->{browser_normalized_upc};
-  	  print $_->{browser_normalized_oclc};
-  	  print $_->{browser_normalized_isbn};
+        print $_->{title};
+        print $_->{biblionumber};
+        print $_->{itemnumber};
+        print $_->{browser_normalized_upc};
+        print $_->{browser_normalized_oclc};
+        print $_->{browser_normalized_isbn};
       print $_->{browser_normalized_ean};
   }
 

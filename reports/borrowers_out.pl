@@ -164,7 +164,7 @@ sub calculate {
         my @colfilter;
         $colfilter[0] = @$filters[0] if ( $column =~ /category/ );
 
-        # 	$colfilter[0] = @$filters[11] if ($column =~ /sort2/ ) ;
+        #     $colfilter[0] = @$filters[11] if ($column =~ /sort2/ ) ;
         #warn "filtre col ".$colfilter[0]." ".$colfilter[1];
 
         # loop cols.
@@ -189,25 +189,25 @@ sub calculate {
         while ( my ($celvalue) = $sth2->fetchrow ) {
             my %cell;
 
-            #		my %ft;
-            #		warn "coltitle :".$celvalue;
+            #        my %ft;
+            #        warn "coltitle :".$celvalue;
             $cell{coltitle} = $celvalue;
 
-            #		$ft{totalcol} = 0;
+            #        $ft{totalcol} = 0;
             push @loopcol, \%cell;
         }
 
-        #	warn "fin des titres colonnes";
+        #    warn "fin des titres colonnes";
     }
 
     my $i = 0;
 
-    #	my @totalcol;
+    #    my @totalcol;
 
     #Initialization of cell values.....
     my @table;
 
-    #	warn "init table";
+    #    warn "init table";
     if ($line) {
         for ( my $i = 1 ; $i <= $line ; $i++ ) {
             foreach my $col (@loopcol) {
@@ -262,7 +262,7 @@ sub calculate {
     my $dbcalc = $dbh->prepare($strcalc);
     $dbcalc->execute(@query_args);
 
-    # 	warn "filling table";
+    #     warn "filling table";
     my $previous_col;
     $i = 1;
     while ( my @data = $dbcalc->fetchrow ) {
@@ -271,7 +271,7 @@ sub calculate {
         $i                 = 1         if ( ($previous_col) and not( $col eq $previous_col ) );
         $table[$i]->{$col} = $row;
 
-        #		warn " $i $col $row";
+        #        warn " $i $col $row";
         $i++;
         $previous_col = $col;
     }
@@ -311,7 +311,7 @@ sub calculate {
     $globalline{looprow} = \@looprow;
     $globalline{loopcol} = \@loopcol;
 
-    # 	# the foot (totals by borrower type)
+    #     # the foot (totals by borrower type)
     $globalline{loopfooter} = \@loopfooter;
     $globalline{total}      = $grantotal;
     $globalline{line}       = $line;

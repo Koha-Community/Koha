@@ -4191,10 +4191,11 @@ Missing POD for CheckValidBarcode.
 sub CheckValidBarcode {
     my ($barcode) = @_;
     my $dbh       = C4::Context->dbh;
-    my $query     = qq|SELECT count(*) 
-	     FROM items 
-             WHERE barcode=?
-	    |;
+    my $query     = q|
+        SELECT count(*)
+        FROM items
+        WHERE barcode=?
+    |;
     my $sth = $dbh->prepare($query);
     $sth->execute($barcode);
     my $exist = $sth->fetchrow;
