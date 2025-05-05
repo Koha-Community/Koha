@@ -39,82 +39,69 @@ export default {
             $.fn.dataTable.ext.search = $.fn.dataTable.ext.search.filter(
                 search => search.name != "apply_filter"
             );
-            $("#" + table_id).dataTable(
-                $.extend(true, {}, dataTablesDefaults, {
-                    data: contracts,
-                    embed: [],
-                    ordering: false,
-                    dom: '<<"table_entries">>',
-                    aLengthMenu: [
-                        [10, 20, 50, 100],
-                        [10, 20, 50, 100],
-                    ],
-                    autoWidth: false,
-                    columns: [
-                        {
-                            title: __("Name"),
-                            data: "contractname",
-                            searchable: false,
-                            orderable: false,
-                            render: function (data, type, row, meta) {
-                                return (
-                                    `<a href="/cgi-bin/koha/admin/aqcontract.pl?op=add_form&booksellerid=${row.booksellerid}&contractnumber=${row.contractnumber}">` +
-                                    escape_str(row.contractname) +
-                                    "</a>"
-                                );
-                            },
+            $("#" + table_id).kohaTable({
+                data: contracts,
+                embed: [],
+                dom: '<<"table_entries">>',
+                autoWidth: false,
+                columns: [
+                    {
+                        title: __("Name"),
+                        data: "contractname",
+                        render: function (data, type, row, meta) {
+                            return (
+                                `<a href="/cgi-bin/koha/admin/aqcontract.pl?op=add_form&booksellerid=${row.booksellerid}&contractnumber=${row.contractnumber}">` +
+                                escape_str(row.contractname) +
+                                "</a>"
+                            );
                         },
-                        {
-                            title: __("Description"),
-                            data: "contractdescription",
-                            searchable: false,
-                            orderable: false,
+                    },
+                    {
+                        title: __("Description"),
+                        data: "contractdescription",
+                    },
+                    {
+                        title: __("Start date"),
+                        data: "contractstartdate",
+                        render: function (data, type, row, meta) {
+                            return type == "sort"
+                                ? row.contractstartdate
+                                : format_date(row.contractstartdate);
                         },
-                        {
-                            title: __("Start date"),
-                            data: "contractstartdate",
-                            searchable: false,
-                            orderable: false,
-                            render: function (data, type, row, meta) {
-                                return format_date(row.contractstartdate);
-                            },
+                    },
+                    {
+                        title: __("End date"),
+                        data: "contractenddate",
+                        render: function (data, type, row, meta) {
+                            return type == "sort"
+                                ? row.contractenddate
+                                : format_date(row.contractenddate);
                         },
-                        {
-                            title: __("End date"),
-                            data: "contractenddate",
-                            searchable: false,
-                            orderable: false,
-                            render: function (data, type, row, meta) {
-                                return format_date(row.contractenddate);
-                            },
-                        },
-                        ...(isUserPermitted(
-                            "CAN_user_acquisition_contracts_manage"
-                        )
-                            ? [
-                                  {
-                                      title: __("Actions"),
-                                      data: "contractnumber",
-                                      searchable: false,
-                                      orderable: false,
-                                      render: function (data, type, row, meta) {
-                                          return (
-                                              `<a class="btn btn-default btn-xs" href="/cgi-bin/koha/admin/aqcontract.pl?op=add_form&contractnumber=${row.contractnumber}&booksellerid=${row.booksellerid}"><i class="fa-solid fa-pencil" aria-hidden="true"></i>` +
-                                              " " +
-                                              __("Edit") +
-                                              "</a>" +
-                                              `<a style="margin-left: 5px;" class="btn btn-default btn-xs" href="/cgi-bin/koha/admin/aqcontract.pl?op=delete_confirm&contractnumber=${row.contractnumber}&booksellerid=${row.booksellerid}"><i class="fa-solid fa-trash-can" aria-hidden="true"></i>` +
-                                              " " +
-                                              __("Delete") +
-                                              "</a>"
-                                          );
-                                      },
+                    },
+                    ...(isUserPermitted("CAN_user_acquisition_contracts_manage")
+                        ? [
+                              {
+                                  title: __("Actions"),
+                                  data: "contractnumber",
+                                  searchable: false,
+                                  orderable: false,
+                                  render: function (data, type, row, meta) {
+                                      return (
+                                          `<a class="btn btn-default btn-xs" href="/cgi-bin/koha/admin/aqcontract.pl?op=add_form&contractnumber=${row.contractnumber}&booksellerid=${row.booksellerid}"><i class="fa-solid fa-pencil" aria-hidden="true"></i>` +
+                                          " " +
+                                          __("Edit") +
+                                          "</a>" +
+                                          `<a style="margin-left: 5px;" class="btn btn-default btn-xs" href="/cgi-bin/koha/admin/aqcontract.pl?op=delete_confirm&contractnumber=${row.contractnumber}&booksellerid=${row.booksellerid}"><i class="fa-solid fa-trash-can" aria-hidden="true"></i>` +
+                                          " " +
+                                          __("Delete") +
+                                          "</a>"
+                                      );
                                   },
-                              ]
-                            : []),
-                    ],
-                })
-            );
+                              },
+                          ]
+                        : []),
+                ],
+            });
         },
     },
     mounted() {
