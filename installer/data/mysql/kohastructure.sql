@@ -2898,6 +2898,25 @@ CREATE TABLE `edifact_ean` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
+-- Table structure for table `edifact_errors`
+--
+
+DROP TABLE IF EXISTS `edifact_errors`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `edifact_errors` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `message_id` int(11) NOT NULL,
+  `date` date DEFAULT NULL,
+  `section` mediumtext DEFAULT NULL,
+  `details` mediumtext DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `messageid` (`message_id`),
+  CONSTRAINT `emfk_message` FOREIGN KEY (`message_id`) REFERENCES `edifact_messages` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
 -- Table structure for table `edifact_messages`
 --
 
@@ -2922,25 +2941,6 @@ CREATE TABLE `edifact_messages` (
   CONSTRAINT `emfk_basketno` FOREIGN KEY (`basketno`) REFERENCES `aqbasket` (`basketno`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `emfk_edi_acct` FOREIGN KEY (`edi_acct`) REFERENCES `vendor_edi_accounts` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `emfk_vendor` FOREIGN KEY (`vendor_id`) REFERENCES `aqbooksellers` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Table structure for table `edifact_errors`
---
-
-DROP TABLE IF EXISTS `edifact_errors`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `edifact_errors` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `message_id` int(11) NOT NULL,
-  `date` date DEFAULT NULL,
-  `section` mediumtext DEFAULT NULL,
-  `details` mediumtext DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  KEY `messageid` (`message_id`),
-  CONSTRAINT `emfk_message` FOREIGN KEY (`message_id`) REFERENCES `edifact_messages` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
