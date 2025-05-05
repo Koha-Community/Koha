@@ -17,6 +17,7 @@
 
 use Modern::Perl;
 
+use utf8;
 use Test::More tests => 6;
 
 use t::lib::TestBuilder;
@@ -210,7 +211,7 @@ subtest 'interfaces' => sub {
     is( $interfaces->count, 2, '2 interfaces stored' );
     is( ref($interfaces), 'Koha::Acquisition::Bookseller::Interfaces', 'Type is correct' );
 
-    $vendor->interfaces( [ { name => 'first interface', login => 'one_login', password => 'oneP@sswOrd' } ] );
+    $vendor->interfaces( [ { name => 'first interface', login => 'one_login', password => 'oneP@sswOrd❤' } ] );
     $vendor     = $vendor->get_from_storage;
     $interfaces = $vendor->interfaces;
     is( $interfaces->count, 1, '1 interface stored' );
@@ -218,10 +219,10 @@ subtest 'interfaces' => sub {
     is( $interface->name,  'first interface', 'name correctly saved' );
     is( $interface->login, 'one_login',       'login correctly saved' );
     is( $interface->uri,   undef,             'no value is stored as NULL' );
-    isnt( $interface->password, 'oneP@sswOrd', 'Password is not stored in plain text' );
+    isnt( $interface->password, 'oneP@sswOrd❤', 'Password is not stored in plain text' );
     isnt( $interface->password, '',            'Password is not removed' );
     isnt( $interface->password, undef,         'Password is not set to NULL' );
-    is( $interface->plain_text_password, 'oneP@sswOrd', 'Password can be retrieved using ->plain_text_password' );
+    is( $interface->plain_text_password, 'oneP@sswOrd❤', 'Password can be retrieved using ->plain_text_password' );
 
     $schema->storage->txn_rollback();
 };
