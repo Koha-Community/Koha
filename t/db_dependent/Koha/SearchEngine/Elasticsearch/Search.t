@@ -40,7 +40,8 @@ $se->mock(
                 subject              => { type => 'text' },
                 itemnumber           => { type => 'integer' },
                 sortablenumber       => { type => 'integer' },
-                sortablenumber__sort => { type => 'integer' }
+                sortablenumber__sort => { type => 'integer' },
+                'local-number'       => { type => 'integer' },
             }
         };
         $all_mappings{ $self->index } = $mappings;
