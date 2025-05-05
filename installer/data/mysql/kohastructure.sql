@@ -2568,8 +2568,7 @@ CREATE TABLE `deletedauth_header` (
   `authtrees` longtext DEFAULT NULL,
   `linkid` bigint(20) DEFAULT NULL,
   `marcxml` longtext NOT NULL,
-  PRIMARY KEY (`authid`),
-  KEY `origincode` (`origincode`)
+  PRIMARY KEY (`authid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
