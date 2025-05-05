@@ -16,6 +16,7 @@ package Koha::Acquisition::Bookseller::Interface;
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
+use Encode qw(decode_utf8);
 use Koha::Encryption;
 
 use base qw( Koha::Object );
@@ -58,7 +59,7 @@ Decrypt the password and return its plain text form.
 
 sub plain_text_password {
     my ($self) = @_;
-    return Koha::Encryption->new->decrypt_hex( $self->password )
+    return decode_utf8( Koha::Encryption->new->decrypt_hex( $self->password ) )
         if $self->password;
 }
 
