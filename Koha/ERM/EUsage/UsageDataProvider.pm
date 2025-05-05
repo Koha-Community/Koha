@@ -443,6 +443,24 @@ sub _check_trailing_character {
     return $url;
 }
 
+=head3 sushi_code_is_error
+
+    my $is_error = $self->sushi_code_is_error($code);
+
+Determines if a given SUSHI response code is considered an error. Codes greater than 1000 are generally errors unless they are in the list of known warning codes, in which case they are treated as non-errors. Docs at:
+https://cop5.projectcounter.org/en/5.0.2/appendices/f-handling-errors-and-exceptions.html
+
+=cut
+
+sub _sushi_code_is_error {
+    my ($code) = @_;
+
+    return 0 unless $code;
+
+    my @warning_codes = ( 1011, 3032, 3040, 3050, 3060, 3061, 3062, 3070 );
+    return 1 if $code > 1000 && !grep { $_ == $code } @warning_codes;
+}
+
 =head3 _sushi_errors
 
 Checks and handles possible errors in the SUSHI response
@@ -457,12 +475,12 @@ sub _sushi_errors {
     my $message  = $decoded_response->{Message}  // $decoded_response->{message};
     my $code     = $decoded_response->{Code}     // $decoded_response->{code};
 
-    if ($severity) {
+    if ( $severity || _sushi_code_is_error($code) ) {
         $self->{job_callbacks}->{add_message_callback}->(
             {
                 type    => 'error',
                 code    => $code,
-                message => $severity . ' - ' . $message,
+                message => ( $severity ? "$severity - " : '' ) . $message,
             }
         ) if $self->{job_callbacks};
         return 1;
