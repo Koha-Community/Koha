@@ -20,7 +20,7 @@
 use Modern::Perl;
 
 use Test::NoWarnings;
-use Test::More tests => 14;
+use Test::More tests => 15;
 use Test::Exception;
 
 use t::lib::TestBuilder;
@@ -442,6 +442,25 @@ subtest 'close() tests' => sub {
         Koha::ActionLogs->search( { module => 'ACQUISITIONS', action => 'CLOSE_BASKET', object => $basket->id } )
         ->as_list;
     is( scalar @close_logs, 1, 'Basket closure is logged' );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'vendor() tests' => sub {
+
+    plan tests => 2;
+
+    $schema->storage->txn_begin;
+
+    my $basket = $builder->build_object( { class => 'Koha::Acquisition::Baskets' } );
+    my $vendor = $basket->vendor;
+    is( ref($vendor), 'Koha::Acquisition::Bookseller', 'Right object type' );
+    my $other_vendor = $builder->build_object( { class => 'Koha::Acquisition::Booksellers' } );
+
+    # change the vendor
+    $basket->set( { booksellerid => $other_vendor->id } )->store()->discard_changes();
+
+    is( $basket->vendor->id, $other_vendor->id, 'Method returns the new vendor' );
 
     $schema->storage->txn_rollback;
 };
