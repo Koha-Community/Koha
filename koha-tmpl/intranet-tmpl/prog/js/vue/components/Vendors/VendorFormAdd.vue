@@ -144,8 +144,11 @@ export default {
             );
             vendor.interfaces = this.checkContactOrInterface(
                 vendor.interfaces.map(
-                    ({ interface_id, vendor_id, ...requiredProperties }) =>
-                        requiredProperties
+                    ({
+                        vendor_interface_id,
+                        vendor_id,
+                        ...requiredProperties
+                    }) => requiredProperties
                 )
             );
 
