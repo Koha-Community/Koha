@@ -22,6 +22,7 @@ use Modern::Perl;
 use DateTime;
 use POSIX qw( floor );
 use Encode;
+use Try::Tiny;
 
 use C4::Context;
 use C4::Stats qw( UpdateStats );
@@ -1783,7 +1784,14 @@ sub AddIssue {
                 );
             }
             $issue->discard_changes;
-            $patron->update_lastseen('check_out');
+            #Update borrowers.lastseen
+            try{
+                $patron->update_lastseen('check_out');
+            }
+            catch {
+                my $exception = $_;
+                warn "Problem updating lastseen date for borrowernumber " . $patron->borrowernumber . ": $exception";
+            };
             if (   $item_object->location
                 && $item_object->location eq 'CART'
                 && ( !$item_object->permanent_location || $item_object->permanent_location ne 'CART' ) )
@@ -2581,7 +2589,14 @@ sub AddReturn {
             if C4::Context->preference("ReturnLog");
 
         #Update borrowers.lastseen
-        $patron->update_lastseen('check_in');
+        try{
+            $patron->update_lastseen('check_in');
+        }
+        catch {
+            my $exception = $_;
+            warn "Problem updating lastseen date for borrowernumber " . $patron->borrowernumber . ": $exception";
+            $messages->{UpdateLastSeenError} = "$exception";
+        };
     }
 
     # Check if this item belongs to a biblio record that is attached to an
@@ -3529,7 +3544,13 @@ sub AddRenewal {
             );
 
             #Update borrowers.lastseen
-            $patron->update_lastseen('renewal');
+            try{
+                $patron->update_lastseen('renewal');
+            }
+            catch {
+                my $exception = $_;
+                warn "Problem updating lastseen date for borrowernumber " . $patron->borrowernumber . ": $exception";
+            };
 
             #Log the renewal
             logaction( "CIRCULATION", "RENEWAL", $borrowernumber, $itemnumber )
