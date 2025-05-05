@@ -1,8 +1,8 @@
--- MariaDB dump 10.19  Distrib 10.11.6-MariaDB, for debian-linux-gnu (x86_64)
+-- MariaDB dump 10.19  Distrib 10.11.11-MariaDB, for debian-linux-gnu (x86_64)
 --
 -- Host: db    Database: koha_kohadev
 -- ------------------------------------------------------
--- Server version	11.5.2-MariaDB-ubu2404
+-- Server version	11.7.2-MariaDB-ubu2404
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -21,7 +21,7 @@
 
 DROP TABLE IF EXISTS `account_credit_types`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `account_credit_types` (
   `code` varchar(80) NOT NULL,
   `description` varchar(200) DEFAULT NULL,
@@ -39,7 +39,7 @@ CREATE TABLE `account_credit_types` (
 
 DROP TABLE IF EXISTS `account_credit_types_branches`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `account_credit_types_branches` (
   `credit_type_code` varchar(80) DEFAULT NULL,
   `branchcode` varchar(10) DEFAULT NULL,
@@ -56,7 +56,7 @@ CREATE TABLE `account_credit_types_branches` (
 
 DROP TABLE IF EXISTS `account_debit_types`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `account_debit_types` (
   `code` varchar(80) NOT NULL,
   `description` varchar(200) DEFAULT NULL,
@@ -76,7 +76,7 @@ CREATE TABLE `account_debit_types` (
 
 DROP TABLE IF EXISTS `account_debit_types_branches`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `account_debit_types_branches` (
   `debit_type_code` varchar(80) DEFAULT NULL,
   `branchcode` varchar(10) DEFAULT NULL,
@@ -93,7 +93,7 @@ CREATE TABLE `account_debit_types_branches` (
 
 DROP TABLE IF EXISTS `account_offsets`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `account_offsets` (
   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'unique identifier for each offset',
   `credit_id` int(11) DEFAULT NULL COMMENT 'The id of the accountline the increased the patron''s balance',
@@ -115,7 +115,7 @@ CREATE TABLE `account_offsets` (
 
 DROP TABLE IF EXISTS `accountlines`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `accountlines` (
   `accountlines_id` int(11) NOT NULL AUTO_INCREMENT,
   `issue_id` int(11) DEFAULT NULL,
@@ -166,7 +166,7 @@ CREATE TABLE `accountlines` (
 
 DROP TABLE IF EXISTS `action_logs`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `action_logs` (
   `action_id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'unique identifier for each action',
   `timestamp` timestamp NOT NULL DEFAULT current_timestamp() COMMENT 'the date and time the action took place',
@@ -196,7 +196,7 @@ CREATE TABLE `action_logs` (
 
 DROP TABLE IF EXISTS `additional_contents`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `additional_contents` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT 'unique identifier for the additional content category',
   `category` varchar(20) NOT NULL COMMENT 'category for the additional content',
@@ -223,7 +223,7 @@ CREATE TABLE `additional_contents` (
 
 DROP TABLE IF EXISTS `additional_contents_localizations`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `additional_contents_localizations` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT 'unique identifier for the additional content',
   `additional_content_id` int(10) unsigned NOT NULL COMMENT 'link to the additional content',
@@ -243,7 +243,7 @@ CREATE TABLE `additional_contents_localizations` (
 
 DROP TABLE IF EXISTS `additional_field_values`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `additional_field_values` (
   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'primary key identifier',
   `field_id` int(11) NOT NULL COMMENT 'foreign key references additional_fields(id)',
@@ -261,7 +261,7 @@ CREATE TABLE `additional_field_values` (
 
 DROP TABLE IF EXISTS `additional_fields`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `additional_fields` (
   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'primary key identifier',
   `tablename` varchar(255) NOT NULL DEFAULT '' COMMENT 'tablename of the new field',
@@ -282,7 +282,7 @@ CREATE TABLE `additional_fields` (
 
 DROP TABLE IF EXISTS `advanced_editor_macros`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `advanced_editor_macros` (
   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Unique ID of the macro',
   `name` varchar(80) NOT NULL COMMENT 'Name of the macro',
@@ -301,7 +301,7 @@ CREATE TABLE `advanced_editor_macros` (
 
 DROP TABLE IF EXISTS `alert`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `alert` (
   `alertid` int(11) NOT NULL AUTO_INCREMENT,
   `borrowernumber` int(11) NOT NULL DEFAULT 0,
@@ -320,7 +320,7 @@ CREATE TABLE `alert` (
 
 DROP TABLE IF EXISTS `api_keys`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `api_keys` (
   `client_id` varchar(191) NOT NULL COMMENT 'API client ID',
   `secret` varchar(191) NOT NULL COMMENT 'API client secret used for API authentication',
@@ -340,7 +340,7 @@ CREATE TABLE `api_keys` (
 
 DROP TABLE IF EXISTS `aqbasket`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `aqbasket` (
   `basketno` int(11) NOT NULL AUTO_INCREMENT COMMENT 'primary key, Koha defined number',
   `basketname` varchar(50) DEFAULT NULL COMMENT 'name given to the basket at creation',
@@ -377,7 +377,7 @@ CREATE TABLE `aqbasket` (
 
 DROP TABLE IF EXISTS `aqbasketgroups`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `aqbasketgroups` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(50) DEFAULT NULL,
@@ -399,7 +399,7 @@ CREATE TABLE `aqbasketgroups` (
 
 DROP TABLE IF EXISTS `aqbasketusers`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `aqbasketusers` (
   `basketno` int(11) NOT NULL,
   `borrowernumber` int(11) NOT NULL,
@@ -416,7 +416,7 @@ CREATE TABLE `aqbasketusers` (
 
 DROP TABLE IF EXISTS `aqbookseller_aliases`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `aqbookseller_aliases` (
   `alias_id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'primary key and unique identifier assigned by Koha',
   `vendor_id` int(11) NOT NULL COMMENT 'link to the vendor',
@@ -433,7 +433,7 @@ CREATE TABLE `aqbookseller_aliases` (
 
 DROP TABLE IF EXISTS `aqbookseller_interfaces`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `aqbookseller_interfaces` (
   `interface_id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'primary key and unique identifier assigned by Koha',
   `vendor_id` int(11) NOT NULL COMMENT 'link to the vendor',
@@ -456,7 +456,7 @@ CREATE TABLE `aqbookseller_interfaces` (
 
 DROP TABLE IF EXISTS `aqbookseller_issues`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `aqbookseller_issues` (
   `issue_id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'primary key and unique identifier assigned by Koha',
   `vendor_id` int(11) NOT NULL COMMENT 'link to the vendor',
@@ -476,7 +476,7 @@ CREATE TABLE `aqbookseller_issues` (
 
 DROP TABLE IF EXISTS `aqbooksellers`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `aqbooksellers` (
   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'primary key and unique identifier assigned by Koha',
   `name` longtext NOT NULL COMMENT 'vendor name',
@@ -516,7 +516,7 @@ CREATE TABLE `aqbooksellers` (
 
 DROP TABLE IF EXISTS `aqbudgetborrowers`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `aqbudgetborrowers` (
   `budget_id` int(11) NOT NULL,
   `borrowernumber` int(11) NOT NULL,
@@ -533,7 +533,7 @@ CREATE TABLE `aqbudgetborrowers` (
 
 DROP TABLE IF EXISTS `aqbudgetperiods`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `aqbudgetperiods` (
   `budget_period_id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'primary key and unique number assigned by Koha',
   `budget_period_startdate` date NOT NULL COMMENT 'date when the budget starts',
@@ -554,7 +554,7 @@ CREATE TABLE `aqbudgetperiods` (
 
 DROP TABLE IF EXISTS `aqbudgets`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `aqbudgets` (
   `budget_id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'primary key and unique number assigned to each fund by Koha',
   `budget_parent_id` int(11) DEFAULT NULL COMMENT 'if this fund is a child of another this will include the parent id (aqbudgets.budget_id)',
@@ -587,7 +587,7 @@ CREATE TABLE `aqbudgets` (
 
 DROP TABLE IF EXISTS `aqbudgets_planning`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `aqbudgets_planning` (
   `plan_id` int(11) NOT NULL AUTO_INCREMENT,
   `budget_id` int(11) NOT NULL,
@@ -609,7 +609,7 @@ CREATE TABLE `aqbudgets_planning` (
 
 DROP TABLE IF EXISTS `aqcontacts`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `aqcontacts` (
   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'primary key and unique number assigned by Koha',
   `name` varchar(100) DEFAULT NULL COMMENT 'name of contact at vendor',
@@ -637,7 +637,7 @@ CREATE TABLE `aqcontacts` (
 
 DROP TABLE IF EXISTS `aqcontract`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `aqcontract` (
   `contractnumber` int(11) NOT NULL AUTO_INCREMENT,
   `contractstartdate` date DEFAULT NULL,
@@ -657,7 +657,7 @@ CREATE TABLE `aqcontract` (
 
 DROP TABLE IF EXISTS `aqinvoice_adjustments`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `aqinvoice_adjustments` (
   `adjustment_id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'primary key for adjustments',
   `invoiceid` int(11) NOT NULL COMMENT 'foreign key to link an adjustment to an invoice',
@@ -681,7 +681,7 @@ CREATE TABLE `aqinvoice_adjustments` (
 
 DROP TABLE IF EXISTS `aqinvoices`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `aqinvoices` (
   `invoiceid` int(11) NOT NULL AUTO_INCREMENT COMMENT 'ID of the invoice, primary key',
   `invoicenumber` longtext NOT NULL COMMENT 'Name of invoice',
@@ -708,7 +708,7 @@ CREATE TABLE `aqinvoices` (
 
 DROP TABLE IF EXISTS `aqorder_users`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `aqorder_users` (
   `ordernumber` int(11) NOT NULL COMMENT 'the order this patrons receive notifications from (aqorders.ordernumber)',
   `borrowernumber` int(11) NOT NULL COMMENT 'the borrowernumber for the patron receiving notifications for this order (borrowers.borrowernumber)',
@@ -725,7 +725,7 @@ CREATE TABLE `aqorder_users` (
 
 DROP TABLE IF EXISTS `aqorders`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `aqorders` (
   `ordernumber` int(11) NOT NULL AUTO_INCREMENT COMMENT 'primary key and unique identifier assigned by Koha to each line',
   `biblionumber` int(11) DEFAULT NULL COMMENT 'links the order to the biblio being ordered (biblio.biblionumber)',
@@ -807,7 +807,7 @@ CREATE TABLE `aqorders` (
 
 DROP TABLE IF EXISTS `aqorders_claims`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `aqorders_claims` (
   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'ID of the claims',
   `ordernumber` int(11) NOT NULL COMMENT 'order linked to this claim',
@@ -824,7 +824,7 @@ CREATE TABLE `aqorders_claims` (
 
 DROP TABLE IF EXISTS `aqorders_items`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `aqorders_items` (
   `ordernumber` int(11) NOT NULL COMMENT 'the order this item is attached to (aqorders.ordernumber)',
   `itemnumber` int(11) NOT NULL COMMENT 'the item number for this item (items.itemnumber)',
@@ -841,7 +841,7 @@ CREATE TABLE `aqorders_items` (
 
 DROP TABLE IF EXISTS `aqorders_transfers`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `aqorders_transfers` (
   `ordernumber_from` int(11) DEFAULT NULL,
   `ordernumber_to` int(11) DEFAULT NULL,
@@ -859,7 +859,7 @@ CREATE TABLE `aqorders_transfers` (
 
 DROP TABLE IF EXISTS `article_requests`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `article_requests` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `borrowernumber` int(11) NOT NULL,
@@ -903,7 +903,7 @@ CREATE TABLE `article_requests` (
 
 DROP TABLE IF EXISTS `audio_alerts`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `audio_alerts` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `precedence` smallint(5) unsigned NOT NULL,
@@ -920,7 +920,7 @@ CREATE TABLE `audio_alerts` (
 
 DROP TABLE IF EXISTS `auth_header`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `auth_header` (
   `authid` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `authtypecode` varchar(10) NOT NULL DEFAULT '',
@@ -942,7 +942,7 @@ CREATE TABLE `auth_header` (
 
 DROP TABLE IF EXISTS `auth_subfield_structure`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `auth_subfield_structure` (
   `authtypecode` varchar(10) NOT NULL DEFAULT '',
   `tagfield` varchar(3) NOT NULL DEFAULT '',
@@ -974,7 +974,7 @@ CREATE TABLE `auth_subfield_structure` (
 
 DROP TABLE IF EXISTS `auth_tag_structure`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `auth_tag_structure` (
   `authtypecode` varchar(10) NOT NULL DEFAULT '',
   `tagfield` varchar(3) NOT NULL DEFAULT '',
@@ -994,7 +994,7 @@ CREATE TABLE `auth_tag_structure` (
 
 DROP TABLE IF EXISTS `auth_types`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `auth_types` (
   `authtypecode` varchar(10) NOT NULL DEFAULT '',
   `authtypetext` varchar(255) NOT NULL DEFAULT '',
@@ -1010,7 +1010,7 @@ CREATE TABLE `auth_types` (
 
 DROP TABLE IF EXISTS `authorised_value_categories`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `authorised_value_categories` (
   `category_name` varchar(32) NOT NULL DEFAULT '',
   `is_system` tinyint(1) DEFAULT 0,
@@ -1025,7 +1025,7 @@ CREATE TABLE `authorised_value_categories` (
 
 DROP TABLE IF EXISTS `authorised_values`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `authorised_values` (
   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'unique key, used to identify the authorized value',
   `category` varchar(32) NOT NULL DEFAULT '' COMMENT 'key used to identify the authorized value category',
@@ -1048,7 +1048,7 @@ CREATE TABLE `authorised_values` (
 
 DROP TABLE IF EXISTS `authorised_values_branches`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `authorised_values_branches` (
   `av_id` int(11) NOT NULL,
   `branchcode` varchar(10) NOT NULL,
@@ -1065,7 +1065,7 @@ CREATE TABLE `authorised_values_branches` (
 
 DROP TABLE IF EXISTS `background_jobs`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `background_jobs` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `status` varchar(32) DEFAULT NULL,
@@ -1092,7 +1092,7 @@ CREATE TABLE `background_jobs` (
 
 DROP TABLE IF EXISTS `biblio`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `biblio` (
   `biblionumber` int(11) NOT NULL AUTO_INCREMENT COMMENT 'unique identifier assigned to each bibliographic record',
   `frameworkcode` varchar(4) NOT NULL DEFAULT '' COMMENT 'foreign key from the biblio_framework table to identify which framework was used in cataloging this record',
@@ -1121,7 +1121,7 @@ CREATE TABLE `biblio` (
 
 DROP TABLE IF EXISTS `biblio_framework`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `biblio_framework` (
   `frameworkcode` varchar(4) NOT NULL DEFAULT '' COMMENT 'the unique code assigned to the framework',
   `frameworktext` varchar(255) NOT NULL DEFAULT '' COMMENT 'the description/name given to the framework',
@@ -1135,7 +1135,7 @@ CREATE TABLE `biblio_framework` (
 
 DROP TABLE IF EXISTS `biblio_metadata`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `biblio_metadata` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `biblionumber` int(11) NOT NULL,
@@ -1159,7 +1159,7 @@ CREATE TABLE `biblio_metadata` (
 
 DROP TABLE IF EXISTS `biblioitems`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `biblioitems` (
   `biblioitemnumber` int(11) NOT NULL AUTO_INCREMENT COMMENT 'primary key, unique identifier assigned by Koha',
   `biblionumber` int(11) NOT NULL DEFAULT 0 COMMENT 'foreign key linking this table to the biblio table',
@@ -1212,7 +1212,7 @@ CREATE TABLE `biblioitems` (
 
 DROP TABLE IF EXISTS `bookings`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `bookings` (
   `booking_id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'primary key',
   `patron_id` int(11) NOT NULL DEFAULT 0 COMMENT 'foreign key from the borrowers table defining which patron this booking is for',
@@ -1243,7 +1243,7 @@ CREATE TABLE `bookings` (
 
 DROP TABLE IF EXISTS `borrower_attribute_types`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `borrower_attribute_types` (
   `code` varchar(64) NOT NULL COMMENT 'unique key used to identify each custom field',
   `description` varchar(255) NOT NULL COMMENT 'description for each custom field',
@@ -1274,7 +1274,7 @@ CREATE TABLE `borrower_attribute_types` (
 
 DROP TABLE IF EXISTS `borrower_attribute_types_branches`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `borrower_attribute_types_branches` (
   `bat_code` varchar(64) DEFAULT NULL,
   `b_branchcode` varchar(10) DEFAULT NULL,
@@ -1291,7 +1291,7 @@ CREATE TABLE `borrower_attribute_types_branches` (
 
 DROP TABLE IF EXISTS `borrower_attributes`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `borrower_attributes` (
   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Row id field',
   `borrowernumber` int(11) NOT NULL COMMENT 'foreign key from the borrowers table, defines which patron/borrower has this attribute',
@@ -1311,7 +1311,7 @@ CREATE TABLE `borrower_attributes` (
 
 DROP TABLE IF EXISTS `borrower_debarments`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `borrower_debarments` (
   `borrower_debarment_id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'unique key for the restriction',
   `borrowernumber` int(11) NOT NULL COMMENT 'foreign key for borrowers.borrowernumber for patron who is restricted',
@@ -1335,7 +1335,7 @@ CREATE TABLE `borrower_debarments` (
 
 DROP TABLE IF EXISTS `borrower_files`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `borrower_files` (
   `file_id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'unique key',
   `borrowernumber` int(11) NOT NULL COMMENT 'foreign key linking to the patron via the borrowernumber',
@@ -1356,7 +1356,7 @@ CREATE TABLE `borrower_files` (
 
 DROP TABLE IF EXISTS `borrower_message_preferences`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `borrower_message_preferences` (
   `borrower_message_preference_id` int(11) NOT NULL AUTO_INCREMENT,
   `borrowernumber` int(11) DEFAULT NULL,
@@ -1380,7 +1380,7 @@ CREATE TABLE `borrower_message_preferences` (
 
 DROP TABLE IF EXISTS `borrower_message_transport_preferences`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `borrower_message_transport_preferences` (
   `borrower_message_preference_id` int(11) NOT NULL DEFAULT 0,
   `message_transport_type` varchar(20) NOT NULL DEFAULT '0',
@@ -1397,7 +1397,7 @@ CREATE TABLE `borrower_message_transport_preferences` (
 
 DROP TABLE IF EXISTS `borrower_modifications`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `borrower_modifications` (
   `timestamp` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
   `verification_token` varchar(255) NOT NULL DEFAULT '',
@@ -1486,7 +1486,7 @@ CREATE TABLE `borrower_modifications` (
 
 DROP TABLE IF EXISTS `borrower_password_recovery`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `borrower_password_recovery` (
   `borrowernumber` int(11) NOT NULL COMMENT 'the user asking a password recovery',
   `uuid` varchar(128) NOT NULL COMMENT 'a unique string to identify a password recovery attempt',
@@ -1502,7 +1502,7 @@ CREATE TABLE `borrower_password_recovery` (
 
 DROP TABLE IF EXISTS `borrower_relationships`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `borrower_relationships` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `guarantor_id` int(11) NOT NULL,
@@ -1522,7 +1522,7 @@ CREATE TABLE `borrower_relationships` (
 
 DROP TABLE IF EXISTS `borrowers`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `borrowers` (
   `borrowernumber` int(11) NOT NULL AUTO_INCREMENT COMMENT 'primary key, Koha assigned ID number for patrons/borrowers',
   `cardnumber` varchar(32) DEFAULT NULL COMMENT 'unique key, library assigned ID number for patrons/borrowers',
@@ -1632,7 +1632,7 @@ CREATE TABLE `borrowers` (
 
 DROP TABLE IF EXISTS `branch_transfer_limits`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `branch_transfer_limits` (
   `limitId` int(8) NOT NULL AUTO_INCREMENT,
   `toBranch` varchar(10) NOT NULL,
@@ -1650,7 +1650,7 @@ CREATE TABLE `branch_transfer_limits` (
 
 DROP TABLE IF EXISTS `branches`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `branches` (
   `branchcode` varchar(10) NOT NULL DEFAULT '' COMMENT 'a unique key assigned to each branch',
   `branchname` longtext NOT NULL COMMENT 'the name of your library or branch',
@@ -1687,7 +1687,7 @@ CREATE TABLE `branches` (
 
 DROP TABLE IF EXISTS `branches_overdrive`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `branches_overdrive` (
   `branchcode` varchar(10) NOT NULL,
   `authname` varchar(255) NOT NULL,
@@ -1702,7 +1702,7 @@ CREATE TABLE `branches_overdrive` (
 
 DROP TABLE IF EXISTS `branchtransfers`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `branchtransfers` (
   `branchtransfer_id` int(12) NOT NULL AUTO_INCREMENT COMMENT 'primary key',
   `itemnumber` int(11) NOT NULL DEFAULT 0 COMMENT 'the itemnumber that it is in transit (items.itemnumber)',
@@ -1731,7 +1731,7 @@ CREATE TABLE `branchtransfers` (
 
 DROP TABLE IF EXISTS `browser`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `browser` (
   `level` int(11) NOT NULL,
   `classification` varchar(20) NOT NULL,
@@ -1747,7 +1747,7 @@ CREATE TABLE `browser` (
 
 DROP TABLE IF EXISTS `cash_register_actions`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `cash_register_actions` (
   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'unique identifier for each account register action',
   `code` varchar(24) NOT NULL COMMENT 'action code denoting the type of action recorded (enum),',
@@ -1769,7 +1769,7 @@ CREATE TABLE `cash_register_actions` (
 
 DROP TABLE IF EXISTS `cash_registers`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `cash_registers` (
   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'unique identifier for each account register',
   `name` varchar(24) NOT NULL COMMENT 'the user friendly identifier for each account register',
@@ -1791,7 +1791,7 @@ CREATE TABLE `cash_registers` (
 
 DROP TABLE IF EXISTS `categories`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `categories` (
   `categorycode` varchar(10) NOT NULL DEFAULT '' COMMENT 'unique primary key used to idenfity the patron category',
   `description` longtext DEFAULT NULL COMMENT 'description of the patron category',
@@ -1830,7 +1830,7 @@ CREATE TABLE `categories` (
 
 DROP TABLE IF EXISTS `categories_branches`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `categories_branches` (
   `categorycode` varchar(10) DEFAULT NULL,
   `branchcode` varchar(10) DEFAULT NULL,
@@ -1847,7 +1847,7 @@ CREATE TABLE `categories_branches` (
 
 DROP TABLE IF EXISTS `checkout_renewals`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `checkout_renewals` (
   `renewal_id` int(11) NOT NULL AUTO_INCREMENT,
   `checkout_id` int(11) DEFAULT NULL COMMENT 'the id of the checkout this renewal pertains to',
@@ -1868,7 +1868,7 @@ CREATE TABLE `checkout_renewals` (
 
 DROP TABLE IF EXISTS `circulation_rules`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `circulation_rules` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `branchcode` varchar(10) DEFAULT NULL,
@@ -1893,7 +1893,7 @@ CREATE TABLE `circulation_rules` (
 
 DROP TABLE IF EXISTS `cities`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `cities` (
   `cityid` int(11) NOT NULL AUTO_INCREMENT COMMENT 'unique identifier added by Koha',
   `city_name` varchar(100) NOT NULL DEFAULT '' COMMENT 'name of the city',
@@ -1910,7 +1910,7 @@ CREATE TABLE `cities` (
 
 DROP TABLE IF EXISTS `class_sort_rules`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `class_sort_rules` (
   `class_sort_rule` varchar(10) NOT NULL DEFAULT '',
   `description` longtext DEFAULT NULL,
@@ -1926,7 +1926,7 @@ CREATE TABLE `class_sort_rules` (
 
 DROP TABLE IF EXISTS `class_sources`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `class_sources` (
   `cn_source` varchar(10) NOT NULL DEFAULT '',
   `description` longtext DEFAULT NULL,
@@ -1949,7 +1949,7 @@ CREATE TABLE `class_sources` (
 
 DROP TABLE IF EXISTS `class_split_rules`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `class_split_rules` (
   `class_split_rule` varchar(10) NOT NULL DEFAULT '',
   `description` longtext DEFAULT NULL,
@@ -1966,7 +1966,7 @@ CREATE TABLE `class_split_rules` (
 
 DROP TABLE IF EXISTS `club_enrollment_fields`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `club_enrollment_fields` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `club_enrollment_id` int(11) NOT NULL,
@@ -1986,7 +1986,7 @@ CREATE TABLE `club_enrollment_fields` (
 
 DROP TABLE IF EXISTS `club_enrollments`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `club_enrollments` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `club_id` int(11) NOT NULL,
@@ -2012,7 +2012,7 @@ CREATE TABLE `club_enrollments` (
 
 DROP TABLE IF EXISTS `club_fields`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `club_fields` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `club_template_field_id` int(11) NOT NULL,
@@ -2032,7 +2032,7 @@ CREATE TABLE `club_fields` (
 
 DROP TABLE IF EXISTS `club_holds`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `club_holds` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `club_id` int(11) NOT NULL COMMENT 'id for the club the hold was generated for',
@@ -2055,7 +2055,7 @@ CREATE TABLE `club_holds` (
 
 DROP TABLE IF EXISTS `club_holds_to_patron_holds`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `club_holds_to_patron_holds` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `club_hold_id` int(11) NOT NULL,
@@ -2079,7 +2079,7 @@ CREATE TABLE `club_holds_to_patron_holds` (
 
 DROP TABLE IF EXISTS `club_template_enrollment_fields`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `club_template_enrollment_fields` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `club_template_id` int(11) NOT NULL,
@@ -2098,7 +2098,7 @@ CREATE TABLE `club_template_enrollment_fields` (
 
 DROP TABLE IF EXISTS `club_template_fields`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `club_template_fields` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `club_template_id` int(11) NOT NULL,
@@ -2117,7 +2117,7 @@ CREATE TABLE `club_template_fields` (
 
 DROP TABLE IF EXISTS `club_templates`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `club_templates` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` text NOT NULL,
@@ -2140,7 +2140,7 @@ CREATE TABLE `club_templates` (
 
 DROP TABLE IF EXISTS `clubs`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `clubs` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `club_template_id` int(11) NOT NULL,
@@ -2165,7 +2165,7 @@ CREATE TABLE `clubs` (
 
 DROP TABLE IF EXISTS `collections`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `collections` (
   `colId` int(11) NOT NULL AUTO_INCREMENT,
   `colTitle` varchar(100) NOT NULL DEFAULT '',
@@ -2183,7 +2183,7 @@ CREATE TABLE `collections` (
 
 DROP TABLE IF EXISTS `collections_tracking`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `collections_tracking` (
   `collections_tracking_id` int(11) NOT NULL AUTO_INCREMENT,
   `colId` int(11) NOT NULL DEFAULT 0 COMMENT 'collections.colId',
@@ -2200,7 +2200,7 @@ CREATE TABLE `collections_tracking` (
 
 DROP TABLE IF EXISTS `columns_settings`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `columns_settings` (
   `module` varchar(255) NOT NULL,
   `page` varchar(255) NOT NULL,
@@ -2218,7 +2218,7 @@ CREATE TABLE `columns_settings` (
 
 DROP TABLE IF EXISTS `course_instructors`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `course_instructors` (
   `course_id` int(11) NOT NULL COMMENT 'foreign key to link to courses.course_id',
   `borrowernumber` int(11) NOT NULL COMMENT 'foreign key to link to borrowers.borrowernumber for instructor information',
@@ -2235,7 +2235,7 @@ CREATE TABLE `course_instructors` (
 
 DROP TABLE IF EXISTS `course_items`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `course_items` (
   `ci_id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'course item id',
   `itemnumber` int(11) DEFAULT NULL COMMENT 'items.itemnumber for the item on reserve',
@@ -2277,7 +2277,7 @@ CREATE TABLE `course_items` (
 
 DROP TABLE IF EXISTS `course_reserves`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `course_reserves` (
   `cr_id` int(11) NOT NULL AUTO_INCREMENT,
   `course_id` int(11) NOT NULL COMMENT 'foreign key to link to courses.course_id',
@@ -2300,7 +2300,7 @@ CREATE TABLE `course_reserves` (
 
 DROP TABLE IF EXISTS `courses`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `courses` (
   `course_id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'unique id for the course',
   `department` varchar(80) DEFAULT NULL COMMENT 'the authorised value for the DEPARTMENT',
@@ -2323,7 +2323,7 @@ CREATE TABLE `courses` (
 
 DROP TABLE IF EXISTS `cover_images`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `cover_images` (
   `imagenumber` int(11) NOT NULL AUTO_INCREMENT COMMENT 'unique identifier for the image',
   `biblionumber` int(11) DEFAULT NULL COMMENT 'foreign key from biblio table to link to biblionumber',
@@ -2346,7 +2346,7 @@ CREATE TABLE `cover_images` (
 
 DROP TABLE IF EXISTS `creator_batches`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `creator_batches` (
   `label_id` int(11) NOT NULL AUTO_INCREMENT,
   `batch_id` int(10) NOT NULL DEFAULT 1,
@@ -2372,7 +2372,7 @@ CREATE TABLE `creator_batches` (
 
 DROP TABLE IF EXISTS `creator_images`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `creator_images` (
   `image_id` int(4) NOT NULL AUTO_INCREMENT,
   `imagefile` mediumblob DEFAULT NULL,
@@ -2388,7 +2388,7 @@ CREATE TABLE `creator_images` (
 
 DROP TABLE IF EXISTS `creator_layouts`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `creator_layouts` (
   `layout_id` int(4) NOT NULL AUTO_INCREMENT,
   `barcode_type` char(100) NOT NULL DEFAULT 'CODE39',
@@ -2417,7 +2417,7 @@ CREATE TABLE `creator_layouts` (
 
 DROP TABLE IF EXISTS `creator_templates`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `creator_templates` (
   `template_id` int(4) NOT NULL AUTO_INCREMENT,
   `profile_id` int(4) DEFAULT NULL,
@@ -2448,7 +2448,7 @@ CREATE TABLE `creator_templates` (
 
 DROP TABLE IF EXISTS `curbside_pickup_issues`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `curbside_pickup_issues` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `curbside_pickup_id` int(11) NOT NULL,
@@ -2466,7 +2466,7 @@ CREATE TABLE `curbside_pickup_issues` (
 
 DROP TABLE IF EXISTS `curbside_pickup_opening_slots`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `curbside_pickup_opening_slots` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `curbside_pickup_policy_id` int(11) NOT NULL,
@@ -2487,7 +2487,7 @@ CREATE TABLE `curbside_pickup_opening_slots` (
 
 DROP TABLE IF EXISTS `curbside_pickup_policy`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `curbside_pickup_policy` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `branchcode` varchar(10) NOT NULL,
@@ -2508,7 +2508,7 @@ CREATE TABLE `curbside_pickup_policy` (
 
 DROP TABLE IF EXISTS `curbside_pickups`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `curbside_pickups` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `borrowernumber` int(11) NOT NULL,
@@ -2536,7 +2536,7 @@ CREATE TABLE `curbside_pickups` (
 
 DROP TABLE IF EXISTS `currency`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `currency` (
   `currency` varchar(10) NOT NULL DEFAULT '',
   `symbol` varchar(5) DEFAULT NULL,
@@ -2557,7 +2557,7 @@ CREATE TABLE `currency` (
 
 DROP TABLE IF EXISTS `deletedauth_header`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `deletedauth_header` (
   `authid` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `authtypecode` varchar(10) NOT NULL DEFAULT '',
@@ -2578,7 +2578,7 @@ CREATE TABLE `deletedauth_header` (
 
 DROP TABLE IF EXISTS `deletedbiblio`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `deletedbiblio` (
   `biblionumber` int(11) NOT NULL AUTO_INCREMENT COMMENT 'unique identifier assigned to each bibliographic record',
   `frameworkcode` varchar(4) NOT NULL DEFAULT '' COMMENT 'foreign key from the biblio_framework table to identify which framework was used in cataloging this record',
@@ -2607,7 +2607,7 @@ CREATE TABLE `deletedbiblio` (
 
 DROP TABLE IF EXISTS `deletedbiblio_metadata`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `deletedbiblio_metadata` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `biblionumber` int(11) NOT NULL,
@@ -2631,7 +2631,7 @@ CREATE TABLE `deletedbiblio_metadata` (
 
 DROP TABLE IF EXISTS `deletedbiblioitems`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `deletedbiblioitems` (
   `biblioitemnumber` int(11) NOT NULL DEFAULT 0 COMMENT 'primary key, unique identifier assigned by Koha',
   `biblionumber` int(11) NOT NULL DEFAULT 0 COMMENT 'foreign key linking this table to the biblio table',
@@ -2682,7 +2682,7 @@ CREATE TABLE `deletedbiblioitems` (
 
 DROP TABLE IF EXISTS `deletedborrowers`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `deletedborrowers` (
   `borrowernumber` int(11) NOT NULL DEFAULT 0 COMMENT 'primary key, Koha assigned ID number for patrons/borrowers',
   `cardnumber` varchar(32) DEFAULT NULL COMMENT 'unique key, library assigned ID number for patrons/borrowers',
@@ -2780,7 +2780,7 @@ CREATE TABLE `deletedborrowers` (
 
 DROP TABLE IF EXISTS `deleteditems`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `deleteditems` (
   `itemnumber` int(11) NOT NULL DEFAULT 0 COMMENT 'primary key and unique identifier added by Koha',
   `biblionumber` int(11) NOT NULL DEFAULT 0 COMMENT 'foreign key from biblio table used to link this item to the right bib record',
@@ -2848,7 +2848,7 @@ CREATE TABLE `deleteditems` (
 
 DROP TABLE IF EXISTS `desks`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `desks` (
   `desk_id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'unique identifier',
   `desk_name` varchar(100) NOT NULL DEFAULT '' COMMENT 'name of the desk',
@@ -2865,7 +2865,7 @@ CREATE TABLE `desks` (
 
 DROP TABLE IF EXISTS `discharges`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `discharges` (
   `discharge_id` int(11) NOT NULL AUTO_INCREMENT,
   `borrower` int(11) DEFAULT NULL,
@@ -2883,7 +2883,7 @@ CREATE TABLE `discharges` (
 
 DROP TABLE IF EXISTS `edifact_ean`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `edifact_ean` (
   `ee_id` int(11) NOT NULL AUTO_INCREMENT,
   `description` varchar(128) DEFAULT NULL,
@@ -2902,7 +2902,7 @@ CREATE TABLE `edifact_ean` (
 
 DROP TABLE IF EXISTS `edifact_errors`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `edifact_errors` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `message_id` int(11) NOT NULL,
@@ -2921,7 +2921,7 @@ CREATE TABLE `edifact_errors` (
 
 DROP TABLE IF EXISTS `edifact_messages`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `edifact_messages` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `message_type` varchar(10) NOT NULL,
@@ -2949,7 +2949,7 @@ CREATE TABLE `edifact_messages` (
 
 DROP TABLE IF EXISTS `erm_agreement_licenses`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `erm_agreement_licenses` (
   `agreement_license_id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'primary key',
   `agreement_id` int(11) NOT NULL COMMENT 'link to the agreement',
@@ -2972,7 +2972,7 @@ CREATE TABLE `erm_agreement_licenses` (
 
 DROP TABLE IF EXISTS `erm_agreement_periods`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `erm_agreement_periods` (
   `agreement_period_id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'primary key',
   `agreement_id` int(11) NOT NULL COMMENT 'link to the agreement',
@@ -2992,7 +2992,7 @@ CREATE TABLE `erm_agreement_periods` (
 
 DROP TABLE IF EXISTS `erm_agreement_relationships`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `erm_agreement_relationships` (
   `agreement_id` int(11) NOT NULL COMMENT 'link to the agreement',
   `related_agreement_id` int(11) NOT NULL COMMENT 'link to the related agreement',
@@ -3011,7 +3011,7 @@ CREATE TABLE `erm_agreement_relationships` (
 
 DROP TABLE IF EXISTS `erm_agreements`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `erm_agreements` (
   `agreement_id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'primary key',
   `vendor_id` int(11) DEFAULT NULL COMMENT 'foreign key to aqbooksellers',
@@ -3034,7 +3034,7 @@ CREATE TABLE `erm_agreements` (
 
 DROP TABLE IF EXISTS `erm_counter_files`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `erm_counter_files` (
   `erm_counter_files_id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'primary key',
   `usage_data_provider_id` int(11) DEFAULT NULL COMMENT 'foreign key to erm_usage_data_providers',
@@ -3054,7 +3054,7 @@ CREATE TABLE `erm_counter_files` (
 
 DROP TABLE IF EXISTS `erm_counter_logs`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `erm_counter_logs` (
   `erm_counter_log_id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'primary key',
   `borrowernumber` int(11) DEFAULT NULL COMMENT 'foreign key to borrowers',
@@ -3079,7 +3079,7 @@ CREATE TABLE `erm_counter_logs` (
 
 DROP TABLE IF EXISTS `erm_default_usage_reports`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `erm_default_usage_reports` (
   `erm_default_usage_report_id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'primary key',
   `report_name` varchar(50) DEFAULT NULL COMMENT 'name of the default report',
@@ -3094,7 +3094,7 @@ CREATE TABLE `erm_default_usage_reports` (
 
 DROP TABLE IF EXISTS `erm_documents`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `erm_documents` (
   `document_id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'primary key',
   `agreement_id` int(11) DEFAULT NULL COMMENT 'link to the agreement',
@@ -3121,7 +3121,7 @@ CREATE TABLE `erm_documents` (
 
 DROP TABLE IF EXISTS `erm_eholdings_packages`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `erm_eholdings_packages` (
   `package_id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'primary key',
   `vendor_id` int(11) DEFAULT NULL COMMENT 'foreign key to aqbooksellers',
@@ -3144,7 +3144,7 @@ CREATE TABLE `erm_eholdings_packages` (
 
 DROP TABLE IF EXISTS `erm_eholdings_packages_agreements`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `erm_eholdings_packages_agreements` (
   `package_id` int(11) NOT NULL COMMENT 'link to the package',
   `agreement_id` int(11) NOT NULL COMMENT 'link to the agreement',
@@ -3161,7 +3161,7 @@ CREATE TABLE `erm_eholdings_packages_agreements` (
 
 DROP TABLE IF EXISTS `erm_eholdings_resources`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `erm_eholdings_resources` (
   `resource_id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'primary key',
   `title_id` int(11) NOT NULL,
@@ -3186,7 +3186,7 @@ CREATE TABLE `erm_eholdings_resources` (
 
 DROP TABLE IF EXISTS `erm_eholdings_titles`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `erm_eholdings_titles` (
   `title_id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'primary key',
   `biblio_id` int(11) DEFAULT NULL,
@@ -3227,7 +3227,7 @@ CREATE TABLE `erm_eholdings_titles` (
 
 DROP TABLE IF EXISTS `erm_licenses`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `erm_licenses` (
   `license_id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'primary key',
   `vendor_id` int(11) DEFAULT NULL COMMENT 'foreign key to aqbooksellers',
@@ -3249,7 +3249,7 @@ CREATE TABLE `erm_licenses` (
 
 DROP TABLE IF EXISTS `erm_usage_data_providers`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `erm_usage_data_providers` (
   `erm_usage_data_provider_id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'primary key',
   `name` varchar(80) NOT NULL COMMENT 'name of the data provider',
@@ -3277,7 +3277,7 @@ CREATE TABLE `erm_usage_data_providers` (
 
 DROP TABLE IF EXISTS `erm_usage_databases`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `erm_usage_databases` (
   `database_id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'primary key',
   `database` varchar(255) DEFAULT NULL COMMENT 'item title',
@@ -3297,7 +3297,7 @@ CREATE TABLE `erm_usage_databases` (
 
 DROP TABLE IF EXISTS `erm_usage_items`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `erm_usage_items` (
   `item_id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'primary key',
   `item` varchar(500) DEFAULT NULL COMMENT 'item title',
@@ -3316,7 +3316,7 @@ CREATE TABLE `erm_usage_items` (
 
 DROP TABLE IF EXISTS `erm_usage_mus`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `erm_usage_mus` (
   `monthly_usage_summary_id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'primary key',
   `title_id` int(11) DEFAULT NULL COMMENT 'item title id number',
@@ -3351,7 +3351,7 @@ CREATE TABLE `erm_usage_mus` (
 
 DROP TABLE IF EXISTS `erm_usage_platforms`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `erm_usage_platforms` (
   `platform_id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'primary key',
   `platform` varchar(255) DEFAULT NULL COMMENT 'item title',
@@ -3368,7 +3368,7 @@ CREATE TABLE `erm_usage_platforms` (
 
 DROP TABLE IF EXISTS `erm_usage_titles`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `erm_usage_titles` (
   `title_id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'primary key',
   `title` mediumtext DEFAULT NULL COMMENT 'item title',
@@ -3394,7 +3394,7 @@ CREATE TABLE `erm_usage_titles` (
 
 DROP TABLE IF EXISTS `erm_usage_yus`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `erm_usage_yus` (
   `yearly_usage_summary_id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'primary key',
   `title_id` int(11) DEFAULT NULL COMMENT 'item title id number',
@@ -3428,7 +3428,7 @@ CREATE TABLE `erm_usage_yus` (
 
 DROP TABLE IF EXISTS `erm_user_roles`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `erm_user_roles` (
   `user_role_id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'primary key',
   `agreement_id` int(11) DEFAULT NULL COMMENT 'link to the agreement',
@@ -3451,7 +3451,7 @@ CREATE TABLE `erm_user_roles` (
 
 DROP TABLE IF EXISTS `export_format`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `export_format` (
   `export_format_id` int(11) NOT NULL AUTO_INCREMENT,
   `profile` varchar(255) NOT NULL,
@@ -3476,7 +3476,7 @@ CREATE TABLE `export_format` (
 
 DROP TABLE IF EXISTS `hold_cancellation_requests`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `hold_cancellation_requests` (
   `hold_cancellation_request_id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Unique ID of the cancellation request',
   `hold_id` int(11) NOT NULL COMMENT 'ID of the hold',
@@ -3491,7 +3491,7 @@ CREATE TABLE `hold_cancellation_requests` (
 
 DROP TABLE IF EXISTS `hold_fill_targets`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `hold_fill_targets` (
   `borrowernumber` int(11) NOT NULL,
   `biblionumber` int(11) NOT NULL,
@@ -3516,7 +3516,7 @@ CREATE TABLE `hold_fill_targets` (
 
 DROP TABLE IF EXISTS `housebound_profile`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `housebound_profile` (
   `borrowernumber` int(11) NOT NULL COMMENT 'Number of the borrower associated with this profile.',
   `day` mediumtext NOT NULL COMMENT 'The preferred day of the week for delivery.',
@@ -3537,7 +3537,7 @@ CREATE TABLE `housebound_profile` (
 
 DROP TABLE IF EXISTS `housebound_role`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `housebound_role` (
   `borrowernumber_id` int(11) NOT NULL COMMENT 'borrowernumber link',
   `housebound_chooser` tinyint(1) NOT NULL DEFAULT 0 COMMENT 'set to 1 to indicate this patron is a housebound chooser volunteer',
@@ -3553,7 +3553,7 @@ CREATE TABLE `housebound_role` (
 
 DROP TABLE IF EXISTS `housebound_visit`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `housebound_visit` (
   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'ID of the visit.',
   `borrowernumber` int(11) NOT NULL COMMENT 'Number of the borrower, & the profile, linked to this visit.',
@@ -3577,7 +3577,7 @@ CREATE TABLE `housebound_visit` (
 
 DROP TABLE IF EXISTS `identity_provider_domains`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `identity_provider_domains` (
   `identity_provider_domain_id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'unique key, used to identify providers domain',
   `identity_provider_id` int(11) NOT NULL COMMENT 'Reference to provider',
@@ -3607,7 +3607,7 @@ CREATE TABLE `identity_provider_domains` (
 
 DROP TABLE IF EXISTS `identity_providers`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `identity_providers` (
   `identity_provider_id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'unique key, used to identify the provider',
   `code` varchar(20) NOT NULL COMMENT 'Provider code',
@@ -3629,7 +3629,7 @@ CREATE TABLE `identity_providers` (
 
 DROP TABLE IF EXISTS `illbatch_statuses`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `illbatch_statuses` (
   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Status ID',
   `name` varchar(100) NOT NULL COMMENT 'Name of status',
@@ -3646,7 +3646,7 @@ CREATE TABLE `illbatch_statuses` (
 
 DROP TABLE IF EXISTS `illbatches`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `illbatches` (
   `ill_batch_id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Batch ID',
   `name` varchar(100) NOT NULL COMMENT 'Unique name of batch',
@@ -3671,7 +3671,7 @@ CREATE TABLE `illbatches` (
 
 DROP TABLE IF EXISTS `illcomments`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `illcomments` (
   `illcomment_id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Unique ID of the comment',
   `illrequest_id` bigint(20) unsigned NOT NULL COMMENT 'ILL request number',
@@ -3692,7 +3692,7 @@ CREATE TABLE `illcomments` (
 
 DROP TABLE IF EXISTS `illrequestattributes`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `illrequestattributes` (
   `illrequest_id` bigint(20) unsigned NOT NULL COMMENT 'ILL request number',
   `backend` varchar(80) NOT NULL COMMENT 'API ILL backend name',
@@ -3710,7 +3710,7 @@ CREATE TABLE `illrequestattributes` (
 
 DROP TABLE IF EXISTS `illrequests`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `illrequests` (
   `illrequest_id` bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT 'ILL request number',
   `borrowernumber` int(11) DEFAULT NULL COMMENT 'Patron associated with request',
@@ -3753,7 +3753,7 @@ CREATE TABLE `illrequests` (
 
 DROP TABLE IF EXISTS `import_auths`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `import_auths` (
   `import_record_id` int(11) NOT NULL,
   `matched_authid` int(11) DEFAULT NULL,
@@ -3773,7 +3773,7 @@ CREATE TABLE `import_auths` (
 
 DROP TABLE IF EXISTS `import_batch_profiles`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `import_batch_profiles` (
   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'unique identifier and primary key',
   `name` varchar(100) NOT NULL COMMENT 'name of this profile',
@@ -3798,7 +3798,7 @@ CREATE TABLE `import_batch_profiles` (
 
 DROP TABLE IF EXISTS `import_batches`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `import_batches` (
   `import_batch_id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'unique identifier and primary key',
   `matcher_id` int(11) DEFAULT NULL COMMENT 'the id of the match rule used (matchpoints.matcher_id)',
@@ -3829,7 +3829,7 @@ CREATE TABLE `import_batches` (
 
 DROP TABLE IF EXISTS `import_biblios`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `import_biblios` (
   `import_record_id` int(11) NOT NULL,
   `matched_biblionumber` int(11) DEFAULT NULL,
@@ -3855,7 +3855,7 @@ CREATE TABLE `import_biblios` (
 
 DROP TABLE IF EXISTS `import_items`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `import_items` (
   `import_items_id` int(11) NOT NULL AUTO_INCREMENT,
   `import_record_id` int(11) NOT NULL,
@@ -3878,7 +3878,7 @@ CREATE TABLE `import_items` (
 
 DROP TABLE IF EXISTS `import_oai_authorities`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `import_oai_authorities` (
   `import_oai_authority_id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'unique identifier assigned by Koha',
   `authid` bigint(20) unsigned NOT NULL COMMENT 'unique identifier assigned to each koha record',
@@ -3899,7 +3899,7 @@ CREATE TABLE `import_oai_authorities` (
 
 DROP TABLE IF EXISTS `import_oai_biblios`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `import_oai_biblios` (
   `import_oai_biblio_id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'unique identifier assigned by Koha',
   `biblionumber` int(11) NOT NULL COMMENT 'unique identifier assigned to each koha record',
@@ -3920,7 +3920,7 @@ CREATE TABLE `import_oai_biblios` (
 
 DROP TABLE IF EXISTS `import_record_matches`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `import_record_matches` (
   `import_record_id` int(11) NOT NULL COMMENT 'the id given to the imported bib record (import_records.import_record_id)',
   `candidate_match_id` int(11) NOT NULL COMMENT 'the biblio the imported record matches (biblio.biblionumber)',
@@ -3938,7 +3938,7 @@ CREATE TABLE `import_record_matches` (
 
 DROP TABLE IF EXISTS `import_records`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `import_records` (
   `import_record_id` int(11) NOT NULL AUTO_INCREMENT,
   `import_batch_id` int(11) NOT NULL,
@@ -3968,7 +3968,7 @@ CREATE TABLE `import_records` (
 
 DROP TABLE IF EXISTS `issues`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `issues` (
   `issue_id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'primary key for issues table',
   `borrowernumber` int(11) NOT NULL COMMENT 'foreign key, linking this to the borrowers table for the patron this item was checked out to',
@@ -4008,7 +4008,7 @@ CREATE TABLE `issues` (
 
 DROP TABLE IF EXISTS `item_bundles`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `item_bundles` (
   `item` int(11) NOT NULL,
   `host` int(11) NOT NULL,
@@ -4025,7 +4025,7 @@ CREATE TABLE `item_bundles` (
 
 DROP TABLE IF EXISTS `item_circulation_alert_preferences`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `item_circulation_alert_preferences` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `branchcode` varchar(10) NOT NULL,
@@ -4043,7 +4043,7 @@ CREATE TABLE `item_circulation_alert_preferences` (
 
 DROP TABLE IF EXISTS `item_editor_templates`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `item_editor_templates` (
   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'id for the template',
   `patron_id` int(11) DEFAULT NULL COMMENT 'creator of this template',
@@ -4062,7 +4062,7 @@ CREATE TABLE `item_editor_templates` (
 
 DROP TABLE IF EXISTS `item_group_items`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `item_group_items` (
   `item_group_items_id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'id for the group/item link',
   `item_group_id` int(11) NOT NULL DEFAULT 0 COMMENT 'foreign key making this table a 1 to 1 join from items to item groups',
@@ -4081,7 +4081,7 @@ CREATE TABLE `item_group_items` (
 
 DROP TABLE IF EXISTS `item_groups`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `item_groups` (
   `item_group_id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'id for the items group',
   `biblio_id` int(11) NOT NULL COMMENT 'id for the bibliographic record the group belongs to',
@@ -4101,7 +4101,7 @@ CREATE TABLE `item_groups` (
 
 DROP TABLE IF EXISTS `items`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `items` (
   `itemnumber` int(11) NOT NULL AUTO_INCREMENT COMMENT 'primary key and unique identifier added by Koha',
   `biblionumber` int(11) NOT NULL DEFAULT 0 COMMENT 'foreign key from biblio table used to link this item to the right bib record',
@@ -4176,7 +4176,7 @@ CREATE TABLE `items` (
 
 DROP TABLE IF EXISTS `items_last_borrower`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `items_last_borrower` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `itemnumber` int(11) NOT NULL,
@@ -4196,7 +4196,7 @@ CREATE TABLE `items_last_borrower` (
 
 DROP TABLE IF EXISTS `items_search_fields`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `items_search_fields` (
   `name` varchar(255) NOT NULL,
   `label` varchar(255) NOT NULL,
@@ -4215,7 +4215,7 @@ CREATE TABLE `items_search_fields` (
 
 DROP TABLE IF EXISTS `itemtypes`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `itemtypes` (
   `itemtype` varchar(10) NOT NULL DEFAULT '' COMMENT 'unique key, a code associated with the item type',
   `parent_type` varchar(10) DEFAULT NULL COMMENT 'unique key, a code associated with the item type',
@@ -4250,7 +4250,7 @@ CREATE TABLE `itemtypes` (
 
 DROP TABLE IF EXISTS `itemtypes_branches`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `itemtypes_branches` (
   `itemtype` varchar(10) NOT NULL,
   `branchcode` varchar(10) NOT NULL,
@@ -4267,7 +4267,7 @@ CREATE TABLE `itemtypes_branches` (
 
 DROP TABLE IF EXISTS `keyboard_shortcuts`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `keyboard_shortcuts` (
   `shortcut_name` varchar(80) NOT NULL,
   `shortcut_keys` varchar(80) NOT NULL,
@@ -4281,7 +4281,7 @@ CREATE TABLE `keyboard_shortcuts` (
 
 DROP TABLE IF EXISTS `language_descriptions`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `language_descriptions` (
   `subtag` varchar(25) DEFAULT NULL,
   `type` varchar(25) DEFAULT NULL,
@@ -4300,7 +4300,7 @@ CREATE TABLE `language_descriptions` (
 
 DROP TABLE IF EXISTS `language_rfc4646_to_iso639`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `language_rfc4646_to_iso639` (
   `rfc4646_subtag` varchar(25) DEFAULT NULL,
   `iso639_2_code` varchar(25) DEFAULT NULL,
@@ -4317,7 +4317,7 @@ CREATE TABLE `language_rfc4646_to_iso639` (
 
 DROP TABLE IF EXISTS `language_script_bidi`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `language_script_bidi` (
   `rfc4646_subtag` varchar(25) DEFAULT NULL COMMENT 'script subtag, Arab, Hebr, etc.',
   `bidi` varchar(3) DEFAULT NULL COMMENT 'rtl ltr',
@@ -4331,7 +4331,7 @@ CREATE TABLE `language_script_bidi` (
 
 DROP TABLE IF EXISTS `language_script_mapping`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `language_script_mapping` (
   `language_subtag` varchar(25) NOT NULL,
   `script_subtag` varchar(25) DEFAULT NULL,
@@ -4345,7 +4345,7 @@ CREATE TABLE `language_script_mapping` (
 
 DROP TABLE IF EXISTS `language_subtag_registry`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `language_subtag_registry` (
   `subtag` varchar(25) DEFAULT NULL,
   `type` varchar(25) DEFAULT NULL COMMENT 'language-script-region-variant-extension-privateuse',
@@ -4364,7 +4364,7 @@ CREATE TABLE `language_subtag_registry` (
 
 DROP TABLE IF EXISTS `letter`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `letter` (
   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'primary key identifier',
   `module` varchar(20) NOT NULL DEFAULT '' COMMENT 'Koha module that triggers this notice or slip',
@@ -4391,7 +4391,7 @@ CREATE TABLE `letter` (
 
 DROP TABLE IF EXISTS `library_groups`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `library_groups` (
   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'unique id for each group',
   `parent_id` int(11) DEFAULT NULL COMMENT 'if this is a child group, the id of the parent group',
@@ -4421,7 +4421,7 @@ CREATE TABLE `library_groups` (
 
 DROP TABLE IF EXISTS `library_hours`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `library_hours` (
   `library_id` varchar(10) NOT NULL,
   `day` enum('0','1','2','3','4','5','6') NOT NULL DEFAULT '0',
@@ -4438,7 +4438,7 @@ CREATE TABLE `library_hours` (
 
 DROP TABLE IF EXISTS `library_smtp_servers`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `library_smtp_servers` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `library_id` varchar(10) NOT NULL,
@@ -4457,7 +4457,7 @@ CREATE TABLE `library_smtp_servers` (
 
 DROP TABLE IF EXISTS `linktracker`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `linktracker` (
   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'primary key identifier',
   `biblionumber` int(11) DEFAULT NULL COMMENT 'biblionumber of the record the link is from',
@@ -4482,7 +4482,7 @@ CREATE TABLE `linktracker` (
 
 DROP TABLE IF EXISTS `localization`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `localization` (
   `localization_id` int(11) NOT NULL AUTO_INCREMENT,
   `entity` varchar(16) NOT NULL,
@@ -4500,7 +4500,7 @@ CREATE TABLE `localization` (
 
 DROP TABLE IF EXISTS `marc_matchers`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `marc_matchers` (
   `matcher_id` int(11) NOT NULL AUTO_INCREMENT,
   `code` varchar(10) NOT NULL DEFAULT '',
@@ -4519,7 +4519,7 @@ CREATE TABLE `marc_matchers` (
 
 DROP TABLE IF EXISTS `marc_modification_template_actions`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `marc_modification_template_actions` (
   `mmta_id` int(11) NOT NULL AUTO_INCREMENT,
   `template_id` int(11) NOT NULL,
@@ -4553,7 +4553,7 @@ CREATE TABLE `marc_modification_template_actions` (
 
 DROP TABLE IF EXISTS `marc_modification_templates`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `marc_modification_templates` (
   `template_id` int(11) NOT NULL AUTO_INCREMENT,
   `name` mediumtext NOT NULL,
@@ -4567,7 +4567,7 @@ CREATE TABLE `marc_modification_templates` (
 
 DROP TABLE IF EXISTS `marc_order_accounts`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `marc_order_accounts` (
   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'unique identifier and primary key',
   `description` varchar(250) NOT NULL COMMENT 'description of this account',
@@ -4598,7 +4598,7 @@ CREATE TABLE `marc_order_accounts` (
 
 DROP TABLE IF EXISTS `marc_overlay_rules`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `marc_overlay_rules` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `tag` varchar(255) NOT NULL,
@@ -4618,7 +4618,7 @@ CREATE TABLE `marc_overlay_rules` (
 
 DROP TABLE IF EXISTS `marc_subfield_structure`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `marc_subfield_structure` (
   `tagfield` varchar(3) NOT NULL DEFAULT '',
   `tagsubfield` varchar(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL DEFAULT '',
@@ -4655,7 +4655,7 @@ CREATE TABLE `marc_subfield_structure` (
 
 DROP TABLE IF EXISTS `marc_tag_structure`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `marc_tag_structure` (
   `tagfield` varchar(3) NOT NULL DEFAULT '',
   `liblibrarian` varchar(255) NOT NULL DEFAULT '',
@@ -4677,7 +4677,7 @@ CREATE TABLE `marc_tag_structure` (
 
 DROP TABLE IF EXISTS `matchchecks`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `matchchecks` (
   `matcher_id` int(11) NOT NULL,
   `matchcheck_id` int(11) NOT NULL AUTO_INCREMENT,
@@ -4699,7 +4699,7 @@ CREATE TABLE `matchchecks` (
 
 DROP TABLE IF EXISTS `matcher_matchpoints`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `matcher_matchpoints` (
   `matcher_id` int(11) NOT NULL,
   `matchpoint_id` int(11) NOT NULL,
@@ -4716,7 +4716,7 @@ CREATE TABLE `matcher_matchpoints` (
 
 DROP TABLE IF EXISTS `matchpoint_component_norms`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `matchpoint_component_norms` (
   `matchpoint_component_id` int(11) NOT NULL,
   `sequence` int(11) NOT NULL DEFAULT 0,
@@ -4732,7 +4732,7 @@ CREATE TABLE `matchpoint_component_norms` (
 
 DROP TABLE IF EXISTS `matchpoint_components`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `matchpoint_components` (
   `matchpoint_id` int(11) NOT NULL,
   `matchpoint_component_id` int(11) NOT NULL AUTO_INCREMENT,
@@ -4753,7 +4753,7 @@ CREATE TABLE `matchpoint_components` (
 
 DROP TABLE IF EXISTS `matchpoints`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `matchpoints` (
   `matcher_id` int(11) NOT NULL,
   `matchpoint_id` int(11) NOT NULL AUTO_INCREMENT,
@@ -4771,7 +4771,7 @@ CREATE TABLE `matchpoints` (
 
 DROP TABLE IF EXISTS `message_attributes`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `message_attributes` (
   `message_attribute_id` int(11) NOT NULL AUTO_INCREMENT,
   `message_name` varchar(40) NOT NULL DEFAULT '',
@@ -4787,7 +4787,7 @@ CREATE TABLE `message_attributes` (
 
 DROP TABLE IF EXISTS `message_queue`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `message_queue` (
   `message_id` int(11) NOT NULL AUTO_INCREMENT,
   `letter_id` int(11) DEFAULT NULL COMMENT 'Foreign key to the letters table',
@@ -4822,7 +4822,7 @@ CREATE TABLE `message_queue` (
 
 DROP TABLE IF EXISTS `message_transport_types`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `message_transport_types` (
   `message_transport_type` varchar(20) NOT NULL,
   PRIMARY KEY (`message_transport_type`)
@@ -4835,7 +4835,7 @@ CREATE TABLE `message_transport_types` (
 
 DROP TABLE IF EXISTS `message_transports`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `message_transports` (
   `message_attribute_id` int(11) NOT NULL,
   `message_transport_type` varchar(20) NOT NULL,
@@ -4857,7 +4857,7 @@ CREATE TABLE `message_transports` (
 
 DROP TABLE IF EXISTS `messages`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `messages` (
   `message_id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'unique identifier assigned by Koha',
   `borrowernumber` int(11) NOT NULL COMMENT 'foreign key linking this message to the borrowers table',
@@ -4881,7 +4881,7 @@ CREATE TABLE `messages` (
 
 DROP TABLE IF EXISTS `misc_files`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `misc_files` (
   `file_id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'unique id for the file record',
   `table_tag` varchar(255) NOT NULL COMMENT 'usually table name, or arbitrary unique tag',
@@ -4903,7 +4903,7 @@ CREATE TABLE `misc_files` (
 
 DROP TABLE IF EXISTS `need_merge_authorities`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `need_merge_authorities` (
   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'unique id',
   `authid` bigint(20) NOT NULL COMMENT 'reference to original authority record',
@@ -4921,7 +4921,7 @@ CREATE TABLE `need_merge_authorities` (
 
 DROP TABLE IF EXISTS `oai_servers`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `oai_servers` (
   `oai_server_id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'unique identifier assigned by Koha',
   `endpoint` varchar(255) NOT NULL COMMENT 'OAI endpoint (host + port + path)',
@@ -4940,7 +4940,7 @@ CREATE TABLE `oai_servers` (
 
 DROP TABLE IF EXISTS `oai_sets`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `oai_sets` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `spec` varchar(80) NOT NULL,
@@ -4956,7 +4956,7 @@ CREATE TABLE `oai_sets` (
 
 DROP TABLE IF EXISTS `oai_sets_biblios`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `oai_sets_biblios` (
   `biblionumber` int(11) NOT NULL,
   `set_id` int(11) NOT NULL,
@@ -4972,7 +4972,7 @@ CREATE TABLE `oai_sets_biblios` (
 
 DROP TABLE IF EXISTS `oai_sets_descriptions`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `oai_sets_descriptions` (
   `set_id` int(11) NOT NULL,
   `description` varchar(255) NOT NULL,
@@ -4987,7 +4987,7 @@ CREATE TABLE `oai_sets_descriptions` (
 
 DROP TABLE IF EXISTS `oai_sets_mappings`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `oai_sets_mappings` (
   `set_id` int(11) NOT NULL,
   `rule_order` int(11) DEFAULT NULL,
@@ -5007,7 +5007,7 @@ CREATE TABLE `oai_sets_mappings` (
 
 DROP TABLE IF EXISTS `oauth_access_tokens`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `oauth_access_tokens` (
   `access_token` varchar(191) NOT NULL COMMENT 'generarated access token',
   `client_id` varchar(191) NOT NULL COMMENT 'the client id the access token belongs to',
@@ -5023,7 +5023,7 @@ CREATE TABLE `oauth_access_tokens` (
 
 DROP TABLE IF EXISTS `old_issues`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `old_issues` (
   `issue_id` int(11) NOT NULL COMMENT 'primary key for issues table',
   `borrowernumber` int(11) DEFAULT NULL COMMENT 'foreign key, linking this to the borrowers table for the patron this item was checked out to',
@@ -5062,7 +5062,7 @@ CREATE TABLE `old_issues` (
 
 DROP TABLE IF EXISTS `old_reserves`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `old_reserves` (
   `reserve_id` int(11) NOT NULL COMMENT 'primary key',
   `borrowernumber` int(11) DEFAULT NULL COMMENT 'foreign key from the borrowers table defining which patron this hold is for',
@@ -5112,7 +5112,7 @@ CREATE TABLE `old_reserves` (
 
 DROP TABLE IF EXISTS `overduerules`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `overduerules` (
   `overduerules_id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'unique identifier for the overduerules',
   `branchcode` varchar(10) NOT NULL DEFAULT '' COMMENT 'foreign key from the branches table to define which branch this rule is for (if blank it''s all libraries)',
@@ -5137,7 +5137,7 @@ CREATE TABLE `overduerules` (
 
 DROP TABLE IF EXISTS `overduerules_transport_types`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `overduerules_transport_types` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `letternumber` int(1) NOT NULL DEFAULT 1,
@@ -5157,7 +5157,7 @@ CREATE TABLE `overduerules_transport_types` (
 
 DROP TABLE IF EXISTS `patron_consent`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `patron_consent` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `borrowernumber` int(11) NOT NULL,
@@ -5176,7 +5176,7 @@ CREATE TABLE `patron_consent` (
 
 DROP TABLE IF EXISTS `patron_list_patrons`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `patron_list_patrons` (
   `patron_list_patron_id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'unique identifier',
   `patron_list_id` int(11) NOT NULL COMMENT 'the list this entry is part of',
@@ -5195,7 +5195,7 @@ CREATE TABLE `patron_list_patrons` (
 
 DROP TABLE IF EXISTS `patron_lists`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `patron_lists` (
   `patron_list_id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'unique identifier',
   `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT 'the list''s name',
@@ -5213,7 +5213,7 @@ CREATE TABLE `patron_lists` (
 
 DROP TABLE IF EXISTS `patronimage`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `patronimage` (
   `borrowernumber` int(11) NOT NULL COMMENT 'the borrowernumber of the patron this image is attached to (borrowers.borrowernumber)',
   `mimetype` varchar(15) NOT NULL COMMENT 'the format of the image (png, jpg, etc)',
@@ -5229,7 +5229,7 @@ CREATE TABLE `patronimage` (
 
 DROP TABLE IF EXISTS `pending_offline_operations`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `pending_offline_operations` (
   `operationid` int(11) NOT NULL AUTO_INCREMENT,
   `userid` varchar(30) NOT NULL,
@@ -5249,7 +5249,7 @@ CREATE TABLE `pending_offline_operations` (
 
 DROP TABLE IF EXISTS `permissions`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `permissions` (
   `module_bit` int(11) NOT NULL DEFAULT 0,
   `code` varchar(64) NOT NULL DEFAULT '',
@@ -5265,7 +5265,7 @@ CREATE TABLE `permissions` (
 
 DROP TABLE IF EXISTS `plugin_data`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `plugin_data` (
   `plugin_class` varchar(255) NOT NULL,
   `plugin_key` varchar(255) NOT NULL,
@@ -5280,7 +5280,7 @@ CREATE TABLE `plugin_data` (
 
 DROP TABLE IF EXISTS `plugin_methods`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `plugin_methods` (
   `plugin_class` varchar(255) NOT NULL,
   `plugin_method` varchar(255) NOT NULL,
@@ -5294,7 +5294,7 @@ CREATE TABLE `plugin_methods` (
 
 DROP TABLE IF EXISTS `preservation_processing_attributes`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `preservation_processing_attributes` (
   `processing_attribute_id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'primary key',
   `processing_id` int(11) NOT NULL COMMENT 'link to the processing',
@@ -5313,7 +5313,7 @@ CREATE TABLE `preservation_processing_attributes` (
 
 DROP TABLE IF EXISTS `preservation_processing_attributes_items`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `preservation_processing_attributes_items` (
   `processing_attribute_item_id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'primary key',
   `processing_attribute_id` int(11) NOT NULL COMMENT 'link with preservation_processing_attributes',
@@ -5333,7 +5333,7 @@ CREATE TABLE `preservation_processing_attributes_items` (
 
 DROP TABLE IF EXISTS `preservation_processings`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `preservation_processings` (
   `processing_id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'primary key',
   `name` varchar(80) NOT NULL COMMENT 'name of the processing',
@@ -5348,7 +5348,7 @@ CREATE TABLE `preservation_processings` (
 
 DROP TABLE IF EXISTS `preservation_trains`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `preservation_trains` (
   `train_id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'primary key',
   `name` varchar(80) NOT NULL COMMENT 'name of the train',
@@ -5371,7 +5371,7 @@ CREATE TABLE `preservation_trains` (
 
 DROP TABLE IF EXISTS `preservation_trains_items`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `preservation_trains_items` (
   `train_item_id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'primary key',
   `train_id` int(11) NOT NULL COMMENT 'link with preservation_train',
@@ -5395,7 +5395,7 @@ CREATE TABLE `preservation_trains_items` (
 
 DROP TABLE IF EXISTS `printers_profile`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `printers_profile` (
   `profile_id` int(4) NOT NULL AUTO_INCREMENT,
   `printer_name` varchar(40) NOT NULL DEFAULT 'Default Printer',
@@ -5418,7 +5418,7 @@ CREATE TABLE `printers_profile` (
 
 DROP TABLE IF EXISTS `problem_reports`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `problem_reports` (
   `reportid` int(11) NOT NULL AUTO_INCREMENT COMMENT 'unique identifier assigned by Koha',
   `title` varchar(40) NOT NULL DEFAULT '' COMMENT 'report subject line',
@@ -5444,7 +5444,7 @@ CREATE TABLE `problem_reports` (
 
 DROP TABLE IF EXISTS `pseudonymized_borrower_attributes`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `pseudonymized_borrower_attributes` (
   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Row id field',
   `transaction_id` int(11) NOT NULL,
@@ -5464,7 +5464,7 @@ CREATE TABLE `pseudonymized_borrower_attributes` (
 
 DROP TABLE IF EXISTS `pseudonymized_transactions`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `pseudonymized_transactions` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `hashed_borrowernumber` varchar(60) NOT NULL,
@@ -5506,7 +5506,7 @@ CREATE TABLE `pseudonymized_transactions` (
 
 DROP TABLE IF EXISTS `quotes`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `quotes` (
   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'unique id for the quote',
   `source` mediumtext DEFAULT NULL COMMENT 'source/credit for the quote',
@@ -5522,7 +5522,7 @@ CREATE TABLE `quotes` (
 
 DROP TABLE IF EXISTS `ratings`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `ratings` (
   `borrowernumber` int(11) NOT NULL COMMENT 'the borrowernumber of the patron who left this rating (borrowers.borrowernumber)',
   `biblionumber` int(11) NOT NULL COMMENT 'the biblio this rating is for (biblio.biblionumber)',
@@ -5541,7 +5541,7 @@ CREATE TABLE `ratings` (
 
 DROP TABLE IF EXISTS `recalls`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `recalls` (
   `recall_id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Unique identifier for this recall',
   `patron_id` int(11) NOT NULL DEFAULT 0 COMMENT 'Identifier for patron who requested recall',
@@ -5576,7 +5576,7 @@ CREATE TABLE `recalls` (
 
 DROP TABLE IF EXISTS `record_sources`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `record_sources` (
   `record_source_id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Primary key for the `record_sources` table',
   `name` text NOT NULL COMMENT 'User defined name for the record source',
@@ -5591,7 +5591,7 @@ CREATE TABLE `record_sources` (
 
 DROP TABLE IF EXISTS `repeatable_holidays`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `repeatable_holidays` (
   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'unique identifier assigned by Koha',
   `branchcode` varchar(10) NOT NULL COMMENT 'foreign key from the branches table, defines which branch this closing is for',
@@ -5612,7 +5612,7 @@ CREATE TABLE `repeatable_holidays` (
 
 DROP TABLE IF EXISTS `reports_dictionary`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `reports_dictionary` (
   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'unique identifier assigned by Koha',
   `name` varchar(255) DEFAULT NULL COMMENT 'name for this definition',
@@ -5632,7 +5632,7 @@ CREATE TABLE `reports_dictionary` (
 
 DROP TABLE IF EXISTS `reserves`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `reserves` (
   `reserve_id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'primary key',
   `borrowernumber` int(11) NOT NULL DEFAULT 0 COMMENT 'foreign key from the borrowers table defining which patron this hold is for',
@@ -5685,7 +5685,7 @@ CREATE TABLE `reserves` (
 
 DROP TABLE IF EXISTS `restriction_types`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `restriction_types` (
   `code` varchar(50) NOT NULL,
   `display_text` text NOT NULL,
@@ -5703,7 +5703,7 @@ CREATE TABLE `restriction_types` (
 
 DROP TABLE IF EXISTS `return_claims`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `return_claims` (
   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Unique ID of the return claim',
   `itemnumber` int(11) NOT NULL COMMENT 'ID of the item',
@@ -5738,7 +5738,7 @@ CREATE TABLE `return_claims` (
 
 DROP TABLE IF EXISTS `reviews`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `reviews` (
   `reviewid` int(11) NOT NULL AUTO_INCREMENT COMMENT 'unique identifier for this comment',
   `borrowernumber` int(11) DEFAULT NULL COMMENT 'foreign key from the borrowers table defining which patron left this comment',
@@ -5760,7 +5760,7 @@ CREATE TABLE `reviews` (
 
 DROP TABLE IF EXISTS `saved_reports`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `saved_reports` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `report_id` int(11) DEFAULT NULL,
@@ -5776,7 +5776,7 @@ CREATE TABLE `saved_reports` (
 
 DROP TABLE IF EXISTS `saved_sql`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `saved_sql` (
   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'unique id and primary key assigned by Koha',
   `borrowernumber` int(11) DEFAULT NULL COMMENT 'the staff member who created this report (borrowers.borrowernumber)',
@@ -5805,7 +5805,7 @@ CREATE TABLE `saved_sql` (
 
 DROP TABLE IF EXISTS `search_field`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `search_field` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL COMMENT 'the name of the field as it will be stored in the search engine',
@@ -5828,7 +5828,7 @@ CREATE TABLE `search_field` (
 
 DROP TABLE IF EXISTS `search_filters`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `search_filters` (
   `search_filter_id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL COMMENT 'filter name',
@@ -5846,7 +5846,7 @@ CREATE TABLE `search_filters` (
 
 DROP TABLE IF EXISTS `search_history`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `search_history` (
   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'search history id',
   `userid` int(11) NOT NULL COMMENT 'the patron who performed the search (borrowers.borrowernumber)',
@@ -5868,7 +5868,7 @@ CREATE TABLE `search_history` (
 
 DROP TABLE IF EXISTS `search_marc_map`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `search_marc_map` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `index_name` enum('biblios','authorities') NOT NULL COMMENT 'what storage index this map is for',
@@ -5886,7 +5886,7 @@ CREATE TABLE `search_marc_map` (
 
 DROP TABLE IF EXISTS `search_marc_to_field`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `search_marc_to_field` (
   `search` tinyint(1) NOT NULL DEFAULT 1,
   `filter` varchar(100) NOT NULL DEFAULT '' COMMENT 'specify a filter to be applied to field',
@@ -5908,7 +5908,7 @@ CREATE TABLE `search_marc_to_field` (
 
 DROP TABLE IF EXISTS `serial`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `serial` (
   `serialid` int(11) NOT NULL AUTO_INCREMENT COMMENT 'unique key for the issue',
   `biblionumber` int(11) NOT NULL COMMENT 'foreign key for the biblio.biblionumber that this issue is attached to',
@@ -5939,7 +5939,7 @@ CREATE TABLE `serial` (
 
 DROP TABLE IF EXISTS `serialitems`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `serialitems` (
   `itemnumber` int(11) NOT NULL,
   `serialid` int(11) NOT NULL,
@@ -5956,7 +5956,7 @@ CREATE TABLE `serialitems` (
 
 DROP TABLE IF EXISTS `sessions`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `sessions` (
   `id` varchar(32) NOT NULL,
   `a_session` longblob NOT NULL,
@@ -5970,7 +5970,7 @@ CREATE TABLE `sessions` (
 
 DROP TABLE IF EXISTS `sms_providers`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `sms_providers` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL,
@@ -5986,7 +5986,7 @@ CREATE TABLE `sms_providers` (
 
 DROP TABLE IF EXISTS `smtp_servers`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `smtp_servers` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(80) NOT NULL,
@@ -6009,7 +6009,7 @@ CREATE TABLE `smtp_servers` (
 
 DROP TABLE IF EXISTS `social_data`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `social_data` (
   `isbn` varchar(30) NOT NULL DEFAULT '',
   `num_critics` int(11) DEFAULT NULL,
@@ -6028,7 +6028,7 @@ CREATE TABLE `social_data` (
 
 DROP TABLE IF EXISTS `special_holidays`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `special_holidays` (
   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'unique identifier assigned by Koha',
   `branchcode` varchar(10) NOT NULL COMMENT 'foreign key from the branches table, defines which branch this closing is for',
@@ -6050,7 +6050,7 @@ CREATE TABLE `special_holidays` (
 
 DROP TABLE IF EXISTS `statistics`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `statistics` (
   `datetime` datetime DEFAULT NULL COMMENT 'date and time of the transaction',
   `branch` varchar(10) DEFAULT NULL COMMENT 'foreign key, branch where the transaction occurred',
@@ -6080,7 +6080,7 @@ CREATE TABLE `statistics` (
 
 DROP TABLE IF EXISTS `stockrotationitems`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `stockrotationitems` (
   `itemnumber_id` int(11) NOT NULL COMMENT 'Itemnumber to link to a stage & rota',
   `stage_id` int(11) NOT NULL COMMENT 'stage ID to link the item to',
@@ -6099,7 +6099,7 @@ CREATE TABLE `stockrotationitems` (
 
 DROP TABLE IF EXISTS `stockrotationrotas`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `stockrotationrotas` (
   `rota_id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Stockrotation rota ID',
   `title` varchar(100) NOT NULL COMMENT 'Title for this rota',
@@ -6117,7 +6117,7 @@ CREATE TABLE `stockrotationrotas` (
 
 DROP TABLE IF EXISTS `stockrotationstages`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `stockrotationstages` (
   `stage_id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Unique stage ID',
   `position` int(11) NOT NULL COMMENT 'The position of this stage within its rota',
@@ -6138,7 +6138,7 @@ CREATE TABLE `stockrotationstages` (
 
 DROP TABLE IF EXISTS `subscription`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `subscription` (
   `biblionumber` int(11) NOT NULL COMMENT 'foreign key for biblio.biblionumber that this subscription is attached to',
   `subscriptionid` int(11) NOT NULL AUTO_INCREMENT COMMENT 'unique key for this subscription',
@@ -6203,7 +6203,7 @@ CREATE TABLE `subscription` (
 
 DROP TABLE IF EXISTS `subscription_frequencies`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `subscription_frequencies` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `description` mediumtext NOT NULL,
@@ -6221,7 +6221,7 @@ CREATE TABLE `subscription_frequencies` (
 
 DROP TABLE IF EXISTS `subscription_numberpatterns`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `subscription_numberpatterns` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `label` varchar(255) NOT NULL,
@@ -6256,7 +6256,7 @@ CREATE TABLE `subscription_numberpatterns` (
 
 DROP TABLE IF EXISTS `subscriptionhistory`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `subscriptionhistory` (
   `biblionumber` int(11) NOT NULL,
   `subscriptionid` int(11) NOT NULL,
@@ -6279,7 +6279,7 @@ CREATE TABLE `subscriptionhistory` (
 
 DROP TABLE IF EXISTS `subscriptionroutinglist`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `subscriptionroutinglist` (
   `routingid` int(11) NOT NULL AUTO_INCREMENT COMMENT 'unique identifier assigned by Koha',
   `borrowernumber` int(11) NOT NULL COMMENT 'foreign key from the borrowers table, defines with patron is on the routing list',
@@ -6299,7 +6299,7 @@ CREATE TABLE `subscriptionroutinglist` (
 
 DROP TABLE IF EXISTS `suggestions`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `suggestions` (
   `suggestionid` int(8) NOT NULL AUTO_INCREMENT COMMENT 'unique identifier assigned automatically by Koha',
   `suggestedby` int(11) DEFAULT NULL COMMENT 'borrowernumber for the person making the suggestion, foreign key linking to the borrowers table',
@@ -6363,7 +6363,7 @@ CREATE TABLE `suggestions` (
 
 DROP TABLE IF EXISTS `systempreferences`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `systempreferences` (
   `variable` varchar(50) NOT NULL DEFAULT '' COMMENT 'system preference name',
   `value` mediumtext DEFAULT NULL COMMENT 'system preference values',
@@ -6380,7 +6380,7 @@ CREATE TABLE `systempreferences` (
 
 DROP TABLE IF EXISTS `tables_settings`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `tables_settings` (
   `module` varchar(255) NOT NULL,
   `page` varchar(255) NOT NULL,
@@ -6399,7 +6399,7 @@ CREATE TABLE `tables_settings` (
 
 DROP TABLE IF EXISTS `tags`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `tags` (
   `entry` varchar(255) NOT NULL DEFAULT '',
   `weight` bigint(20) NOT NULL DEFAULT 0,
@@ -6413,7 +6413,7 @@ CREATE TABLE `tags` (
 
 DROP TABLE IF EXISTS `tags_all`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `tags_all` (
   `tag_id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'unique id and primary key',
   `borrowernumber` int(11) DEFAULT NULL COMMENT 'the patron who added the tag (borrowers.borrowernumber)',
@@ -6435,7 +6435,7 @@ CREATE TABLE `tags_all` (
 
 DROP TABLE IF EXISTS `tags_approval`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `tags_approval` (
   `term` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL COMMENT 'the tag',
   `approved` int(1) NOT NULL DEFAULT 0 COMMENT 'whether the tag is approved or not (1=yes, 0=pending, -1=rejected)',
@@ -6454,7 +6454,7 @@ CREATE TABLE `tags_approval` (
 
 DROP TABLE IF EXISTS `tags_index`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `tags_index` (
   `term` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL COMMENT 'the tag',
   `biblionumber` int(11) NOT NULL COMMENT 'the bib record this tag was used on (biblio.biblionumber)',
@@ -6472,7 +6472,7 @@ CREATE TABLE `tags_index` (
 
 DROP TABLE IF EXISTS `ticket_updates`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `ticket_updates` (
   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'primary key',
   `ticket_id` int(11) NOT NULL COMMENT 'id of catalog ticket the update relates to',
@@ -6498,7 +6498,7 @@ CREATE TABLE `ticket_updates` (
 
 DROP TABLE IF EXISTS `tickets`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `tickets` (
   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'primary key',
   `source` enum('catalog') NOT NULL DEFAULT 'catalog' COMMENT 'source of ticket',
@@ -6529,7 +6529,7 @@ CREATE TABLE `tickets` (
 
 DROP TABLE IF EXISTS `tmp_holdsqueue`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `tmp_holdsqueue` (
   `biblionumber` int(11) DEFAULT NULL,
   `itemnumber` int(11) NOT NULL,
@@ -6563,7 +6563,7 @@ CREATE TABLE `tmp_holdsqueue` (
 
 DROP TABLE IF EXISTS `transport_cost`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `transport_cost` (
   `frombranch` varchar(10) NOT NULL,
   `tobranch` varchar(10) NOT NULL,
@@ -6582,7 +6582,7 @@ CREATE TABLE `transport_cost` (
 
 DROP TABLE IF EXISTS `uploaded_files`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `uploaded_files` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `hashvalue` char(40) NOT NULL,
@@ -6604,7 +6604,7 @@ CREATE TABLE `uploaded_files` (
 
 DROP TABLE IF EXISTS `user_permissions`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `user_permissions` (
   `borrowernumber` int(11) NOT NULL DEFAULT 0,
   `module_bit` int(11) NOT NULL DEFAULT 0,
@@ -6623,7 +6623,7 @@ CREATE TABLE `user_permissions` (
 
 DROP TABLE IF EXISTS `userflags`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `userflags` (
   `bit` int(11) NOT NULL DEFAULT 0,
   `flag` varchar(30) DEFAULT NULL,
@@ -6639,7 +6639,7 @@ CREATE TABLE `userflags` (
 
 DROP TABLE IF EXISTS `vendor_edi_accounts`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `vendor_edi_accounts` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `description` mediumtext NOT NULL,
@@ -6677,7 +6677,7 @@ CREATE TABLE `vendor_edi_accounts` (
 
 DROP TABLE IF EXISTS `virtualshelfcontents`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `virtualshelfcontents` (
   `shelfnumber` int(11) NOT NULL DEFAULT 0 COMMENT 'foreign key linking to the virtualshelves table, defines the list that this record has been added to',
   `biblionumber` int(11) NOT NULL DEFAULT 0 COMMENT 'foreign key linking to the biblio table, defines the bib record that has been added to the list',
@@ -6698,7 +6698,7 @@ CREATE TABLE `virtualshelfcontents` (
 
 DROP TABLE IF EXISTS `virtualshelfshares`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `virtualshelfshares` (
   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'unique key',
   `shelfnumber` int(11) NOT NULL COMMENT 'foreign key for virtualshelves',
@@ -6719,7 +6719,7 @@ CREATE TABLE `virtualshelfshares` (
 
 DROP TABLE IF EXISTS `virtualshelves`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `virtualshelves` (
   `shelfnumber` int(11) NOT NULL AUTO_INCREMENT COMMENT 'unique identifier assigned by Koha',
   `shelfname` varchar(255) DEFAULT NULL COMMENT 'name of the list',
@@ -6744,7 +6744,7 @@ CREATE TABLE `virtualshelves` (
 
 DROP TABLE IF EXISTS `z3950servers`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `z3950servers` (
   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'unique identifier assigned by Koha',
   `host` varchar(255) NOT NULL COMMENT 'target''s host name',
@@ -6774,7 +6774,7 @@ CREATE TABLE `z3950servers` (
 
 DROP TABLE IF EXISTS `zebraqueue`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `zebraqueue` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `biblio_auth_number` bigint(20) unsigned NOT NULL DEFAULT 0,
@@ -6796,4 +6796,4 @@ CREATE TABLE `zebraqueue` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-11-25 12:13:27
+-- Dump completed on 2025-05-05 12:15:00
