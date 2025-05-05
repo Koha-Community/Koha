@@ -18,7 +18,7 @@
 use Modern::Perl;
 
 use Test::NoWarnings;
-use Test::More tests => 3;
+use Test::More tests => 4;
 
 use Koha::Database;
 use Koha::BackgroundJobs;
@@ -153,7 +153,6 @@ subtest 'enqueue_sushi_harvest_jobs' => sub {
     is( $another_report->{us_report_info}->{added_mus},           0 );
     is( $another_report->{us_report_info}->{added_usage_objects}, 0 );
 
-    #TODO: Test a harvest with sushi errors
     #TODO: Test more report types
 
     $schema->storage->txn_rollback;
@@ -232,6 +231,77 @@ subtest 'enqueue_counter_file_processing_job' => sub {
 
     #TODO: Test a big file larger than max_allowed_packets
     #TODO: Test more report types
+
+    $schema->storage->txn_rollback;
+
+};
+
+$ua->unmock_all;
+$ua->mock(
+    'simple_request',
+    sub {
+        my $response = Test::MockObject->new();
+
+        $response->mock(
+            'code',
+            sub {
+                return 200;
+            }
+        );
+        $response->mock(
+            'is_error',
+            sub {
+                return 0;
+            }
+        );
+        $response->mock(
+            'is_redirect',
+            sub {
+                return 0;
+            }
+        );
+        $response->mock(
+            'decoded_content',
+            sub {
+                return '{
+                "Code": 2010,
+                "Message": "Requestor is Not Authorized to Access Usage for Institution"
+            }';
+            }
+        );
+        $response->{_rc} = 200;
+        return $response;
+    }
+);
+
+subtest 'enqueue_sushi_harvest_jobs_error_handling' => sub {
+    plan tests => 2;
+
+    $schema->storage->txn_begin;
+
+    my $usage_data_provider_error = $builder->build_object(
+        { class => 'Koha::ERM::EUsage::UsageDataProviders', value => { name => 'TestProvider' } } );
+
+    my $job = Koha::BackgroundJob::ErmSushiHarvester->new(
+        {
+            status => 'new',
+            size   => 1,
+            type   => 'erm_sushi_harvester'
+        }
+    )->store;
+
+    $job = Koha::BackgroundJobs->find( $job->id );
+
+    $job->process(
+        {
+            job_id         => $job->id,
+            ud_provider_id => $usage_data_provider_error->erm_usage_data_provider_id,
+            report_type    => 'TR_J1',
+        }
+    );
+
+    is( ref $job->messages,          'ARRAY', 'messages is an array' );
+    is( $job->messages->[0]->{code}, 2010,    'first message has code 2010' );
 
     $schema->storage->txn_rollback;
 
