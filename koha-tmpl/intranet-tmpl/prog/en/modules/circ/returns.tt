@@ -294,6 +294,14 @@
                             [% END %]
                         </p>
                     [% END %]
+                    [% IF ( errmsgloo.UpdateLastSeenError ) %]
+                        <div id="update_last_seen_error" class="alert alert-warning audio-alert-warning">
+                            <h3>Error updating patron's last seen date</h3>
+                            <p>The item has been checked in, but the issue below must be corrected:</p>
+                            <p>The system encountered an error when updating the patron's last seen date:</p>
+                            <p>[% errmsgloo.UpdateLastSeenError | html %]</p>
+                        </div>
+                    [% END %]
                     [% IF ( errmsgloo.ItemLocationUpdated ) %]
                         <p class="problem ret_location_update">
                             Item shelving location updated.
