@@ -267,8 +267,17 @@
                                         <p><a href="/cgi-bin/koha/catalogue/detail.pl?type=intra&amp;biblionumber=[% itembiblionumber | uri %]">[% item.barcode | html %]: [% title | html %]</a></p>
                                     [% END %]
                                     [% FOREACH errmsgloo IN errmsgloop %]
+                                        [% IF ( errmsgloo.UpdateLastSeenError ) %]
+                                            <div id="update_last_seen_error" class="alert alert-warning audio-alert-warning">
+                                                <h3>Error updating patron's last seen date</h3>
+                                                <p>The item has been checked in, but the issue below must be corrected:</p>
+                                                <p>The system encountered an error when updating the patron's last seen date:</p>
+                                                <p>[% errmsgloo.UpdateLastSeenError | html %]</p>
+                                            </div>
+                                        [% END %]
                                         [% IF ( errmsgloo.NotForLoanStatusUpdated ) %]
                                             <p class="problem ret_nflupdate">
+
                                             [% IF errmsgloo.NotForLoanStatusUpdated.to == 'ONLYMESSAGE' %]
                                                 [% AuthorisedValues.GetByCode( 'NOT_LOAN', errmsgloo.NotForLoanStatusUpdated.from ) | html %]
                                             [% ELSE %]

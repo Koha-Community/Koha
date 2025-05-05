@@ -768,6 +768,8 @@ foreach my $code ( keys %$messages ) {
         ;
     } elsif ( $code eq 'InBundle' ) {
         $template->param( InBundle => $messages->{InBundle} );
+    } elsif ( $code eq 'UpdateLastSeenError' ) {
+        $err{UpdateLastSeenError}           = $messages->{UpdateLastSeenError};
     } else {
         die "Unknown error code $code";    # note we need all the (empty) elsif's above, or we die.
                                            # This forces the issue of staying in sync w/ Circulation.pm
