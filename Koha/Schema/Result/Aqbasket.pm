@@ -379,6 +379,13 @@ __PACKAGE__->has_many(
   { cascade_copy => 0, cascade_delete => 0 },
 );
 
+__PACKAGE__->belongs_to(
+  "vendor",
+  "Koha::Schema::Result::Aqbookseller",
+  { id => "booksellerid" },
+  { is_deferrable => 1, on_delete => "RESTRICT", on_update => "CASCADE" },
+);
+
 =head2 koha_object_class
 
 Missing POD for koha_object_class.

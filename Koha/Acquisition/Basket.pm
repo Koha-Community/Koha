@@ -22,6 +22,7 @@ use Modern::Perl;
 use Koha::Database;
 use Koha::DateUtils qw( dt_from_string );
 use Koha::Acquisition::BasketGroups;
+use Koha::Acquisition::Booksellers;
 use Koha::Acquisition::Orders;
 use Koha::Exceptions::Acquisition::Basket;
 use Koha::Patrons;
@@ -49,6 +50,20 @@ sub bookseller {
     my ($self) = @_;
     my $bookseller_rs = $self->_result->booksellerid;
     return Koha::Acquisition::Bookseller->_new_from_dbic($bookseller_rs);
+}
+
+=head3 vendor
+
+    my $vendor = $basket->vendor;
+
+Returns the related I<Koha::Acquisition::Bookseller> object.
+
+=cut
+
+sub vendor {
+    my ($self) = @_;
+    my $vendor_rs = $self->_result->vendor;
+    return Koha::Acquisition::Bookseller->_new_from_dbic($vendor_rs);
 }
 
 =head3 creator
