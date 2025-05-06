@@ -41,5 +41,10 @@ return {
             }
         );
 
+        say_success(
+            $out,
+            "Updated 'issues.onsite_checkout', 'issues.noteseen', 'old_issues.onsite_checkout', 'old_issues.noteseen', 'overduerules.debarred1', 'overduerules.debarred2', 'overduerules.debarred3', 'columns_settings.cannot_be_toggled', and 'columns_settings.is_hidden'"
+        );
+
     },
 };
