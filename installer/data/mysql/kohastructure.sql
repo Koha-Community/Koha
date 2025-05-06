@@ -2207,8 +2207,8 @@ CREATE TABLE `columns_settings` (
   `page` varchar(255) NOT NULL,
   `tablename` varchar(255) NOT NULL,
   `columnname` varchar(255) NOT NULL,
-  `cannot_be_toggled` int(1) NOT NULL DEFAULT 0,
-  `is_hidden` int(1) NOT NULL DEFAULT 0,
+  `cannot_be_toggled` tinyint(1) NOT NULL DEFAULT 0,
+  `is_hidden` tinyint(1) NOT NULL DEFAULT 0,
   PRIMARY KEY (`module`(191),`page`(191),`tablename`(191),`columnname`(191))
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;

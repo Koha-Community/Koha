@@ -32,5 +32,14 @@ return {
             MODIFY COLUMN `debarred3` tinyint(1) DEFAULT 0 COMMENT 'is the patron restricted when the third notice is sent (1 for yes, 0 for no)'
         }
         );
+
+        $dbh->do(
+            q{
+            ALTER TABLE `columns_settings`
+            MODIFY COLUMN `cannot_be_toggled` tinyint(1) NOT NULL DEFAULT 0,
+            MODIFY COLUMN `is_hidden` tinyint(1) NOT NULL DEFAULT 0
+            }
+        );
+
     },
 };
