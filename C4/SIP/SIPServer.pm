@@ -24,6 +24,7 @@ use C4::SIP::Sip::Checksum qw(checksum verify_cksum);
 use C4::SIP::Sip::MsgType  qw( handle login_core );
 use C4::SIP::Logger        qw(set_logger);
 
+use Koha::SIP2::ServerParams;
 use Koha::Caches;
 use Koha::Logger;
 
@@ -213,6 +214,31 @@ sub post_accept_hook {
     }
 }
 
+# Check if the configuration is up to date. Returns 1 if the configuration is up to date, 0 otherwise.
+#
+# This method is used to check if the configuration stored in the database is different from
+# the one stored in the object. If the configuration in the database is newer, the method
+# returns 0 and the object must be updated.
+
+sub _config_up_to_date {
+    my ($self) = @_;
+
+    my $serverparam = Koha::SIP2::ServerParams->find( { key => 'config_timestamp' } );
+
+    unless ($serverparam) {
+
+        # This should never happen, config_timestamp server param should always exist, but handle it just in case
+        siplog( "LOG_WARNING", "Couldn't find config_timestamp server param, considering configuration up to date" );
+        return 1;
+    }
+
+    return 1 if !$serverparam;
+    my $old_timestamp = $self->{config}->{'server-params'}->{config_timestamp};
+    my $new_timestamp = $serverparam->value;
+
+    return $old_timestamp eq $new_timestamp;
+}
+
 #
 # Child
 #
@@ -227,6 +253,9 @@ sub process_request {
     my $transport;
 
     $self->{config} = $config;
+    unless ( $self->_config_up_to_date() ) {
+        $self->{config} = C4::SIP::Sip::Configuration->get_configuration();
+    }
 
     # Flushing L1 to make sure the request will be processed using the correct data
     Koha::Caches->flush_L1_caches();

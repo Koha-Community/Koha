@@ -16,6 +16,7 @@ use Koha::Libraries;
 use Koha::SIP2::Institutions;
 use Koha::SIP2::Accounts;
 use Koha::SIP2::Listeners;
+use Koha::SIP2::ServerParam;
 use Koha::SIP2::ServerParams;
 use Koha::SIP2::SystemPreferenceOverrides;
 
@@ -38,9 +39,10 @@ my $parser = XML::Simple->new(
     }
 );
 
-sub new {
+sub get_configuration {
     my ( $class, $config_file ) = @_;
-    my $cfg = $parser->XMLin($config_file);
+
+    my $cfg = $parser->XMLin($config_file) if $config_file;
     my %listeners;
 
     # The key to the listeners hash is the 'port' component of the
@@ -69,7 +71,12 @@ sub new {
             "ERROR: Institution $i does does not match a branchcode. This can cause unexpected behavior."
         ) unless grep( /^$i$/, @branchcodes );
     }
+    return $cfg;
+}
 
+sub new {
+    my ( $class, $config_file ) = @_;
+    my $cfg = $class->get_configuration($config_file);
     return bless $cfg, $class;
 }
 
