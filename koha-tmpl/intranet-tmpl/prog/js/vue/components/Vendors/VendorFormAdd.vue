@@ -7,11 +7,12 @@
         <h1 v-else>{{ $__("Add vendor") }}</h1>
         <form @submit="onSubmit($event)" id="add_vendor">
             <Toolbar :sticky="true">
-                <ButtonSubmit :text="$__('Save')" />
+                <ButtonSubmit :text="$__('Save')" icon="save" />
                 <ToolbarButton
                     :to="{ name: 'VendorList' }"
                     :title="$__('Cancel')"
                     icon="times"
+                    cssClass="btn btn-link"
                 >
                 </ToolbarButton>
             </Toolbar>
