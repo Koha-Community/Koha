@@ -732,51 +732,104 @@ sub MapItemsToHoldRequests {
     my $num_items_remaining = scalar(@$available_items);
 
     # Look for Local Holds Priority matches first
-    if ( C4::Context->preference( 'LocalHoldsPriority' ne "None" ) ) {
+
+    my $LocalHoldsPriority = C4::Context->preference('LocalHoldsPriority');
+    if ( $LocalHoldsPriority ne 'None' ) {
         my $LocalHoldsPriorityPatronControl = C4::Context->preference('LocalHoldsPriorityPatronControl');
         my $LocalHoldsPriorityItemControl   = C4::Context->preference('LocalHoldsPriorityItemControl');
-
         foreach my $request (@$hold_requests) {
             last if $num_items_remaining == 0;
             my $patron = Koha::Patrons->find( $request->{borrowernumber} );
             next if $patron->category->exclude_from_local_holds_priority;
+            if ( $LocalHoldsPriority eq 'GiveLibrary' || $LocalHoldsPriority eq 'GiveLibraryAndGroup' ) {
+                my $local_hold_match;
+                foreach my $item (@$available_items) {
+                    next if $item->{_object}->exclude_from_local_holds_priority;
 
-            my $local_hold_match;
-            foreach my $item (@$available_items) {
-                next if $item->{_object}->exclude_from_local_holds_priority;
+                    next unless _can_item_fill_request( $item, $request, $libraries );
 
-                next unless _can_item_fill_request( $item, $request, $libraries );
+                    next if $request->{itemnumber} && $request->{itemnumber} != $item->{itemnumber};
 
-                next if $request->{itemnumber} && $request->{itemnumber} != $item->{itemnumber};
+                    my $local_holds_priority_item_branchcode = $item->{$LocalHoldsPriorityItemControl};
 
-                my $local_holds_priority_item_branchcode = $item->{$LocalHoldsPriorityItemControl};
+                    my $local_holds_priority_patron_branchcode =
+                          ( $LocalHoldsPriorityPatronControl eq 'PickupLibrary' ) ? $request->{branchcode}
+                        : ( $LocalHoldsPriorityPatronControl eq 'HomeLibrary' )   ? $request->{borrowerbranch}
+                        :                                                           undef;
 
-                my $local_holds_priority_patron_branchcode =
-                      ( $LocalHoldsPriorityPatronControl eq 'PickupLibrary' ) ? $request->{branchcode}
-                    : ( $LocalHoldsPriorityPatronControl eq 'HomeLibrary' )   ? $request->{borrowerbranch}
-                    :                                                           undef;
+                    $local_hold_match =
+                        $local_holds_priority_item_branchcode eq $local_holds_priority_patron_branchcode;
 
-                $local_hold_match = $local_holds_priority_item_branchcode eq $local_holds_priority_patron_branchcode;
+                    if ($local_hold_match) {
+                        if (    exists $items_by_itemnumber{ $item->{itemnumber} }
+                            and not exists $allocated_items{ $item->{itemnumber} }
+                            and not $request->{allocated} )
+                        {
+                            $item_map{ $item->{itemnumber} } = {
+                                borrowernumber => $request->{borrowernumber},
+                                biblionumber   => $request->{biblionumber},
+                                holdingbranch  => $item->{holdingbranch},
+                                pickup_branch  => $request->{branchcode}
+                                    || $request->{borrowerbranch},
+                                reserve_id   => $request->{reserve_id},
+                                item_level   => $request->{item_level_hold},
+                                reservedate  => $request->{reservedate},
+                                reservenotes => $request->{reservenotes},
+                            };
+                            $allocated_items{ $item->{itemnumber} }++;
+                            $request->{allocated} = 1;
+                            $num_items_remaining--;
+                        }
+                    }
+                }
+            }
+        }
 
-                if ($local_hold_match) {
-                    if (    exists $items_by_itemnumber{ $item->{itemnumber} }
-                        and not exists $allocated_items{ $item->{itemnumber} }
-                        and not $request->{allocated} )
-                    {
-                        $item_map{ $item->{itemnumber} } = {
-                            borrowernumber => $request->{borrowernumber},
-                            biblionumber   => $request->{biblionumber},
-                            holdingbranch  => $item->{holdingbranch},
-                            pickup_branch  => $request->{branchcode}
-                                || $request->{borrowerbranch},
-                            reserve_id   => $request->{reserve_id},
-                            item_level   => $request->{item_level_hold},
-                            reservedate  => $request->{reservedate},
-                            reservenotes => $request->{reservenotes},
-                        };
-                        $allocated_items{ $item->{itemnumber} }++;
-                        $request->{allocated} = 1;
-                        $num_items_remaining--;
+        # Look for local group matches if no library matches were found
+        if ( $LocalHoldsPriority eq 'GiveLibraryGroup' || $LocalHoldsPriority eq 'GiveLibraryAndGroup' ) {
+            my $local_hold_group_match;
+            foreach my $request (@$hold_requests) {
+                last if $num_items_remaining == 0;
+                my $patron = Koha::Patrons->find( $request->{borrowernumber} );
+                next if $patron->category->exclude_from_local_holds_priority;
+                foreach my $item (@$available_items) {
+                    next if $item->{_object}->exclude_from_local_holds_priority;
+
+                    next unless _can_item_fill_request( $item, $request, $libraries );
+
+                    next if $request->{itemnumber} && $request->{itemnumber} != $item->{itemnumber};
+
+                    my $local_holds_priority_item_branchcode = $item->{$LocalHoldsPriorityItemControl};
+
+                    my $local_holds_priority_patron_branchcode =
+                          ( $LocalHoldsPriorityPatronControl eq 'PickupLibrary' ) ? $request->{branchcode}
+                        : ( $LocalHoldsPriorityPatronControl eq 'HomeLibrary' )   ? $request->{borrowerbranch}
+                        :                                                           undef;
+
+                    $local_hold_group_match =
+                        Koha::Libraries->find( { branchcode => $local_holds_priority_item_branchcode } )
+                        ->validate_hold_sibling( { branchcode => $local_holds_priority_patron_branchcode } );
+
+                    if ($local_hold_group_match) {
+                        if (    exists $items_by_itemnumber{ $item->{itemnumber} }
+                            and not exists $allocated_items{ $item->{itemnumber} }
+                            and not $request->{allocated} )
+                        {
+                            $item_map{ $item->{itemnumber} } = {
+                                borrowernumber => $request->{borrowernumber},
+                                biblionumber   => $request->{biblionumber},
+                                holdingbranch  => $item->{holdingbranch},
+                                pickup_branch  => $request->{branchcode}
+                                    || $request->{borrowerbranch},
+                                reserve_id   => $request->{reserve_id},
+                                item_level   => $request->{item_level_hold},
+                                reservedate  => $request->{reservedate},
+                                reservenotes => $request->{reservenotes},
+                            };
+                            $allocated_items{ $item->{itemnumber} }++;
+                            $request->{allocated} = 1;
+                            $num_items_remaining--;
+                        }
                     }
                 }
             }

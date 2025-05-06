@@ -112,7 +112,7 @@ foreach ( 0 .. $borrowers_count - 1 ) {
 # Create five record level holds
 AddReserve(
     {
-        branchcode     => $library1,
+        branchcode     => $library1->{branchcode},
         borrowernumber => $borrowernumbers[0],
         biblionumber   => $item->biblionumber,
         priority       => 1,
@@ -120,7 +120,7 @@ AddReserve(
 );
 AddReserve(
     {
-        branchcode     => $library2,
+        branchcode     => $library2->{branchcode},
         borrowernumber => $borrowernumbers[1],
         biblionumber   => $item->biblionumber,
         priority       => 1,
@@ -128,7 +128,7 @@ AddReserve(
 );
 AddReserve(
     {
-        branchcode     => $library3,
+        branchcode     => $library3->{branchcode},
         borrowernumber => $borrowernumbers[2],
         biblionumber   => $item->biblionumber,
         priority       => 1,
@@ -136,7 +136,7 @@ AddReserve(
 );
 AddReserve(
     {
-        branchcode     => $library4,
+        branchcode     => $library4->{branchcode},
         borrowernumber => $borrowernumbers[3],
         biblionumber   => $item->biblionumber,
         priority       => 1,
@@ -257,7 +257,7 @@ subtest 'LocalHoldsPriority, GiveLibraryGroup' => sub {    #Test hold group only
     ( $status, $reserve, $all_reserves ) = CheckReserves($item);
     ok(
         $reserve->{borrowernumber} eq $borrowernumbers[3],
-        "Local patron in group is given priority when patron home library and item home branch matchh"
+        "Local patron in group is given priority when patron home library and item home branch match"
     );
 };
 

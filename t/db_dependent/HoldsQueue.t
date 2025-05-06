@@ -84,7 +84,7 @@ my $itemtype               = $builder->build( { source => 'Itemtype', value => {
 #Set up the stage
 # Sysprefs and cost matrix
 t::lib::Mocks::mock_preference( 'HoldsQueueSkipClosed', 0 );
-t::lib::Mocks::mock_preference( 'LocalHoldsPriority',   0 );
+t::lib::Mocks::mock_preference( 'LocalHoldsPriority',   'None' );
 $dbh->do(
     "UPDATE systempreferences SET value = ? WHERE variable = 'StaticHoldsQueueWeight'", undef,
     join( ',', @other_branches, $borrower_branchcode, $least_cost_branch_code )
@@ -436,7 +436,7 @@ is( scalar(@$holds_queue), 2, "Holds not filled with items from closed libraries
 t::lib::Mocks::mock_preference( 'HoldsQueueSkipClosed', 0 );
 
 ## Test LocalHoldsPriority
-t::lib::Mocks::mock_preference( 'LocalHoldsPriority', 1 );
+t::lib::Mocks::mock_preference( 'LocalHoldsPriority', 'GiveLibrary' );
 
 $dbh->do("DELETE FROM circulation_rules");
 Koha::CirculationRules->set_rule(
@@ -583,7 +583,7 @@ is(
     "Holds queue giving priority to patron who's home library matches item's holding library"
 );
 
-t::lib::Mocks::mock_preference( 'LocalHoldsPriority', 0 );
+t::lib::Mocks::mock_preference( 'LocalHoldsPriority', 'None' );
 ## End testing of LocalHoldsPriority
 
 # Bug 14297
@@ -1018,7 +1018,7 @@ subtest "Test Local Holds Priority - Bib level" => sub {
     plan tests => 3;
 
     Koha::Biblios->delete();
-    t::lib::Mocks::mock_preference( 'LocalHoldsPriority',              1 );
+    t::lib::Mocks::mock_preference( 'LocalHoldsPriority',              'GiveLibrary' );
     t::lib::Mocks::mock_preference( 'LocalHoldsPriorityPatronControl', 'PickupLibrary' );
     t::lib::Mocks::mock_preference( 'LocalHoldsPriorityItemControl',   'homebranch' );
     my $branch   = $builder->build_object( { class => 'Koha::Libraries' } );
@@ -1089,7 +1089,7 @@ subtest "Test Local Holds Priority - Item level" => sub {
     plan tests => 2;
 
     Koha::Biblios->delete();
-    t::lib::Mocks::mock_preference( 'LocalHoldsPriority',              1 );
+    t::lib::Mocks::mock_preference( 'LocalHoldsPriority',              'GiveLibrary' );
     t::lib::Mocks::mock_preference( 'LocalHoldsPriorityPatronControl', 'PickupLibrary' );
     t::lib::Mocks::mock_preference( 'LocalHoldsPriorityItemControl',   'homebranch' );
     my $branch   = $builder->build_object( { class => 'Koha::Libraries' } );
@@ -1161,7 +1161,7 @@ subtest "Test Local Holds Priority - Item level hold over Record level hold (Bug
     plan tests => 2;
 
     Koha::Biblios->delete();
-    t::lib::Mocks::mock_preference( 'LocalHoldsPriority',              1 );
+    t::lib::Mocks::mock_preference( 'LocalHoldsPriority',              'GiveLibrary' );
     t::lib::Mocks::mock_preference( 'LocalHoldsPriorityPatronControl', 'PickupLibrary' );
     t::lib::Mocks::mock_preference( 'LocalHoldsPriorityItemControl',   'homebranch' );
     my $branch   = $builder->build_object( { class => 'Koha::Libraries' } );
@@ -1232,7 +1232,7 @@ subtest "Test Local Holds Priority - Get correct item for item level hold" => su
     plan tests => 3;
 
     Koha::Biblios->delete();
-    t::lib::Mocks::mock_preference( 'LocalHoldsPriority',              1 );
+    t::lib::Mocks::mock_preference( 'LocalHoldsPriority',              'GiveLibrary' );
     t::lib::Mocks::mock_preference( 'LocalHoldsPriorityPatronControl', 'PickupLibrary' );
     t::lib::Mocks::mock_preference( 'LocalHoldsPriorityItemControl',   'homebranch' );
     my $branch   = $builder->build_object( { class => 'Koha::Libraries' } );
@@ -1316,7 +1316,7 @@ subtest "Test Local Holds Priority - Ensure no duplicate requests in holds queue
     $dbh->do("DELETE FROM circulation_rules");
     Koha::Biblios->delete();
 
-    t::lib::Mocks::mock_preference( 'LocalHoldsPriority',              1 );
+    t::lib::Mocks::mock_preference( 'LocalHoldsPriority',              'GiveLibrary' );
     t::lib::Mocks::mock_preference( 'LocalHoldsPriorityPatronControl', 'PickupLibrary' );
     t::lib::Mocks::mock_preference( 'LocalHoldsPriorityItemControl',   'homebranch' );
     my $branch   = $builder->build_object( { class => 'Koha::Libraries' } );
@@ -1481,7 +1481,7 @@ subtest 'Excludes from local holds priority' => sub {
 
     Koha::Holds->delete;
 
-    t::lib::Mocks::mock_preference( 'LocalHoldsPriority',              1 );
+    t::lib::Mocks::mock_preference( 'LocalHoldsPriority',              'GiveLibrary' );
     t::lib::Mocks::mock_preference( 'LocalHoldsPriorityPatronControl', 'PickupLibrary' );
     t::lib::Mocks::mock_preference( 'LocalHoldsPriorityItemControl',   'homebranch' );
 
@@ -1612,7 +1612,7 @@ subtest "Test item group holds" => sub {
     $dbh->do("DELETE FROM circulation_rules");
 
     t::lib::Mocks::mock_preference( 'HoldsQueueSkipClosed', 0 );
-    t::lib::Mocks::mock_preference( 'LocalHoldsPriority',   0 );
+    t::lib::Mocks::mock_preference( 'LocalHoldsPriority',   'None' );
 
     my $library  = $builder->build_object( { class => 'Koha::Libraries' } );
     my $category = $builder->build_object(
@@ -2200,7 +2200,7 @@ subtest "Test HoldsQueuePrioritizeBranch" => sub {
 
     $schema->storage->txn_begin;
 
-    t::lib::Mocks::mock_preference( 'LocalHoldsPriority',     0 );
+    t::lib::Mocks::mock_preference( 'LocalHoldsPriority',     'None' );
     t::lib::Mocks::mock_preference( 'UseTransportCostMatrix', 0 );
 
     my $branch1  = $builder->build_object( { class => 'Koha::Libraries' } );
@@ -2409,7 +2409,7 @@ subtest "Canceled holds should be removed from the holds queue" => sub {
 
     $schema->storage->txn_begin;
 
-    t::lib::Mocks::mock_preference( 'LocalHoldsPriority',     0 );
+    t::lib::Mocks::mock_preference( 'LocalHoldsPriority',     'None' );
     t::lib::Mocks::mock_preference( 'UseTransportCostMatrix', 0 );
 
     my $branch1  = $builder->build_object( { class => 'Koha::Libraries' } );
