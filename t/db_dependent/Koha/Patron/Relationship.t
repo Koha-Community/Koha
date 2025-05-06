@@ -117,7 +117,7 @@ subtest 'store() tests' => sub {
             'Koha::Exceptions::Patron::Relationship::DuplicateRelationship',
                 'Exception is thrown for duplicated relationship';
         },
-        qr{Duplicate entry.* for key 'guarantor_guarantee_idx'}
+        qr{Duplicate entry.* for key '(borrower_relationships\.)?guarantor_guarantee_idx'}
     );
 
     is(

@@ -1000,7 +1000,7 @@ subtest 'store() tests' => sub {
             'Koha::Exceptions::Object::DuplicateID',
                 'Exception is thrown correctly';
         },
-        qr{Duplicate entry.* for key 'title'}
+        qr{Duplicate entry.* for key '(library_groups\.)?title'}
     );
 
     is(
