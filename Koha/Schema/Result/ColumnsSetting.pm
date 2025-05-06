@@ -49,13 +49,13 @@ __PACKAGE__->table("columns_settings");
 
 =head2 cannot_be_toggled
 
-  data_type: 'integer'
+  data_type: 'tinyint'
   default_value: 0
   is_nullable: 0
 
 =head2 is_hidden
 
-  data_type: 'integer'
+  data_type: 'tinyint'
   default_value: 0
   is_nullable: 0
 
@@ -71,9 +71,9 @@ __PACKAGE__->add_columns(
   "columnname",
   { data_type => "varchar", is_nullable => 0, size => 255 },
   "cannot_be_toggled",
-  { data_type => "integer", default_value => 0, is_nullable => 0 },
+  { data_type => "tinyint", default_value => 0, is_nullable => 0 },
   "is_hidden",
-  { data_type => "integer", default_value => 0, is_nullable => 0 },
+  { data_type => "tinyint", default_value => 0, is_nullable => 0 },
 );
 
 =head1 PRIMARY KEY
@@ -95,8 +95,8 @@ __PACKAGE__->add_columns(
 __PACKAGE__->set_primary_key("module", "page", "tablename", "columnname");
 
 
-# Created by DBIx::Class::Schema::Loader v0.07046 @ 2019-12-12 16:06:36
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:IhREpW2PRxxFF9EYOGt2Qg
+# Created by DBIx::Class::Schema::Loader v0.07051 @ 2025-05-06 16:22:12
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:R8o+1pqMYgYJE/eXivpn1w
 
 __PACKAGE__->add_columns(
     '+cannot_be_toggled' => { is_boolean => 1 },
