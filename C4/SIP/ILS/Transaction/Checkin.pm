@@ -91,6 +91,12 @@ sub do_checkin {
     my ( $return, $messages, $issue, $borrower );
 
     my $item = Koha::Items->find( { barcode => $barcode } );
+    if ($item) {
+        my $waiting_holds_to_be_cancelled = $item->holds->waiting->filter_by_has_cancellation_requests;
+        while ( my $hold = $waiting_holds_to_be_cancelled->next ) {
+            $hold->cancel;
+        }
+    }
 
     my $human_required = 0;
     if (   C4::Context->preference("CircConfirmItemParts")
