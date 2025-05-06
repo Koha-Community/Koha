@@ -95,6 +95,7 @@ sub new {
     } else {
         $self->{permanent_location} = $item->homebranch;
     }
+    $self->{current_location}              = $item->holdingbranch;
     $self->{collection_code}               = $item->ccode;
     $self->{call_number}                   = $item->itemcallnumber;
     $self->{'shelving_location'}           = $item->location;
