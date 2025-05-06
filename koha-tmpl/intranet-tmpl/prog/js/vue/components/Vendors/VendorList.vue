@@ -56,6 +56,7 @@ export default {
             setMessage,
             escape_str,
             isUserPermitted,
+            vendorTableSettings,
         };
     },
     data() {
@@ -70,6 +71,7 @@ export default {
                     embed: "aliases,baskets+count,subscriptions+count,invoices+count",
                 },
                 url: () => this.tableURL(),
+                table_settings: this.vendorTableSettings,
                 add_filters: true,
                 filters_options: {
                     1: [
@@ -227,7 +229,7 @@ export default {
                     },
                 },
                 {
-                    title: __("Currency"),
+                    title: __("Invoice currency"),
                     data: "invoice_currency",
                     searchable: true,
                     orderable: true,
