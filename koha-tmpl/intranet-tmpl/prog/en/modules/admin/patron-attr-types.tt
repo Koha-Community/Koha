@@ -235,12 +235,12 @@
                         >
                     </li>
                     <li
-                        ><label for="branches">Library limitation: </label>
-                        <select id="branches" name="branches" multiple size="10">
+                        ><label for="library_limitation">Library limitation: </label>
+                        <select id="library_limitation" name="branches" multiple size="10">
                             <option value="">All libraries</option>
                             [% PROCESS options_for_libraries libraries => Branches.all( selected => attribute_type.library_limits ) %]
                         </select>
-                        <div class="hint">Select "All libraries" if this attribute type should always be displayed. Otherwise select libraries you want to associate with this value. </div>
+                        <div class="hint">Limits the use of this attribute to the selected libraries. </div>
                     </li>
                     <li>
                         <label for="category">Category: </label>
@@ -406,6 +406,7 @@
 [% MACRO jsinclude BLOCK %]
     [% Asset.js("js/admin-menu.js") | $raw %]
     [% INCLUDE 'datatables.inc' %]
+    [% INCLUDE 'select2.inc' %]
     <script>
         $(document).ready(function () {
             function toggle_search_default() {
@@ -466,6 +467,9 @@
                     null
                 );
             });
+
+            $("#library_limitation")[0].style.minWidth = "450px";
+            $("#library_limitation").select2();
         });
     </script>
 [% END %]

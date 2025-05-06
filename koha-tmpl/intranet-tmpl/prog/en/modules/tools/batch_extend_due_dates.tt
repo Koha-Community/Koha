@@ -87,7 +87,7 @@
                 <legend>Checkout criteria:</legend>
                 <ol>
                     <li>
-                        <label for="categorycodes">Patrons' categories: </label>
+                        <label for="categorycodes">Patrons categories: </label>
                         [% SET categories = Categories.all() %]
                         <select id="categorycodes" name="categorycodes" multiple="multiple">
                             [% FOREACH cat IN categories %]
@@ -248,6 +248,7 @@
     [% Asset.js("js/tools-menu.js") | $raw %]
     [% INCLUDE 'calendar.inc' %]
     [% INCLUDE 'datatables.inc' %]
+    [% INCLUDE 'select2.inc' %]
     [% Asset.js("lib/jquery/plugins/humanmsg.js") | $raw %]
     <script>
         $(document).ready(function () {
@@ -297,6 +298,9 @@
                 }
                 return true;
             });
+
+            $("#extend_due_dates_form select[multiple]").css("minWidth", "450px");
+            $("#extend_due_dates_form select[multiple]").select2();
         });
     </script>
 [% END %]
