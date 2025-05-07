@@ -189,7 +189,7 @@ sub get_biblio_marcxml {
         $record = $biblio->metadata_record(
             {
                 embed_items         => $with_items,
-                expand_coded_values => $expanded_avs,
+                expand_coded_fields => $expanded_avs,
                 interface           => 'opac'
             }
         );
