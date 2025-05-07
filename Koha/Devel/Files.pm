@@ -1,7 +1,7 @@
 package Koha::Devel::Files;
 
 use Modern::Perl;
-our ( @ISA, @EXPORT_OK );
+use Array::Utils qw( array_minus );
 
 =head1 NAME
 
@@ -155,11 +155,22 @@ Lists Perl files (with extensions .pl, .PL, .pm, .t) that have been modified wit
 =cut
 
 sub ls_perl_files {
-    my ($self) = @_;
-    my $cmd = sprintf q{git ls-files '*.pl' '*.PL' '*.pm' '*.t' svc opac/svc opac/unapi debian/build-git-snapshot %s},
-        $self->build_git_exclude('pl');
-    my @files = qx{$cmd};
-    chomp for @files;
+    my ( $self, $git_range ) = @_;
+    my @files;
+    if ($git_range) {
+        $git_range =~ s|\.\.| |;
+        my @modified_files = qx{git diff --name-only $git_range};
+        chomp @modified_files;
+        push @files, grep { /\.(pl|PL|pm|t)$/ } @modified_files;
+        push @files, grep { /^(svc|opac\/svc)/ } @modified_files;
+        my @exception_files = $exceptions->{pl}->{ $self->{context} };
+        @files = array_minus( @files, @exception_files );
+    } else {
+        my $cmd = sprintf q{git ls-files '*.pl' '*.PL' '*.pm' '*.t' svc opac/svc opac/unapi debian/build-git-snapshot %s},
+            $self->build_git_exclude('pl');
+        @files = qx{$cmd};
+        chomp for @files;
+    }
     return @files;
 }
 

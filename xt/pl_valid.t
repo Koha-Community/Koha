@@ -18,16 +18,17 @@
 use Modern::Perl;
 use threads;    # used for parallel
 use Test::More;
+
 use Test::NoWarnings;
 use Pod::Checker;
 
 use Parallel::ForkManager;
 use Sys::CPU;
 
-use Koha::Devel::Files;
+use Koha::Devel::CI::IncrementalRuns;
 
-my $dev_files = Koha::Devel::Files->new( { context => 'valid' } );
-my @files     = $dev_files->ls_perl_files;
+my $ci    = Koha::Devel::CI::IncrementalRuns->new( { context => 'valid' } );
+my @files = $ci->get_files_to_test('pl');
 
 my $ncpu;
 if ( $ENV{KOHA_PROVE_CPUS} ) {
@@ -37,16 +38,25 @@ if ( $ENV{KOHA_PROVE_CPUS} ) {
 }
 
 my $pm = Parallel::ForkManager->new($ncpu);
+my %results;
+$pm->run_on_finish(
+    sub {
+        my ( $pid, $exit_code, $ident, $exit_signal, $core_dump, $data ) = @_;
+        $results{$ident} = $exit_code;
+    }
+);
 
 plan tests => scalar(@files) + 1;
 
 for my $file (@files) {
-    $pm->start and next;
+    $pm->start($file) and next;
     my $output = `perl -cw '$file' 2>&1`;
     chomp $output;
+    my $exit_code = 0;
     if ($?) {
         fail("$file has syntax errors");
         diag($output);
+        $exit_code = 1;
     } elsif ( $output =~ /^$file syntax OK$/ ) {
         pass("$file passed syntax check");
     } else {
@@ -62,11 +72,14 @@ for my $file (@files) {
         if (@fails) {
             fail("$file has syntax warnings.");
             diag( join "\n", @fails );
+            $exit_code = 1;
         } else {
             pass("$file passed syntax check");
         }
     }
-    $pm->finish;
+    $pm->finish($exit_code);
 }
 
 $pm->wait_all_children;
+
+$ci->report_results( \%results );
