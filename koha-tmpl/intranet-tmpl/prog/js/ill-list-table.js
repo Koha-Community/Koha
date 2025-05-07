@@ -17,25 +17,63 @@ $(document).ready(function () {
         $("#addcomment").toggleClass("content_hidden");
     });
 
+    // Handle filter by status for defined ILLRequestsTabs
     $("div#ill-list-tabs a[id^='ill-list-tab'").on("click", function (e) {
         e.preventDefault();
         var select_status_el = $("form#illfilter_form select#illfilter_status");
-        var tab_statuses = $(this).children('span').attr("data-statuses");
-        if (tab_statuses) {
-            tab_statuses.split('|').forEach((select_status_option) => {
-                if ($("#illfilter_status option[value='"+select_status_option+"']").length === 0) {
-                    select_status_el.append($('<option>', {
-                        value: select_status_option,
-                        text: select_status_option // how to access status.str when no ILL requests with that status exist?
-                    }));
-                }
-            })
-            select_status_el.val(tab_statuses.split('|')).trigger("change");
+        var tab_statuses = $(this).children("span").attr("data-statuses");
+
+        // Check if multipleSelect is already initialized
+        var msInitialized = isMultipleSelectInitialized(select_status_el);
+
+        // First, reset all options to enabled state
+        $("#illfilter_status option").each(function () {
+            $(this).prop("disabled", false);
+        });
+
+        // Deselect all options first
+        if (msInitialized) {
+            select_status_el.multipleSelect("uncheckAll");
         } else {
-            select_status_el.val("").trigger("change");
+            select_status_el.val([]);
         }
+
+        if (tab_statuses) {
+            // Get array of status codes from the tab
+            var statusCodes = tab_statuses.split("|");
+
+            // Make non-tab statuses read-only by disabling them
+            $("#illfilter_status option").each(function () {
+                if (!statusCodes.includes($(this).val())) {
+                    $(this).prop("disabled", true);
+                }
+            });
+
+            // Select all statuses assigned to the tab
+            if (msInitialized) {
+                select_status_el.multipleSelect("setSelects", statusCodes);
+                select_status_el.multipleSelect("refresh");
+            } else {
+                select_status_el.val(statusCodes);
+            }
+        }
+
+        // If multipleSelect is already initialized, refresh the control
+        if (msInitialized) {
+            select_status_el.multipleSelect("refresh");
+        }
+
+        // Trigger DataTables redraw with filtering
         filter();
     });
+
+    // Helper function to check if the multipleSelect plugin is already initialized
+    function isMultipleSelectInitialized(element) {
+        return (
+            $(element).hasClass("ms-parent") ||
+            $(element).next().hasClass("ms-parent")
+        );
+    }
 
     // Filter partner list
     // Record the list of all options
@@ -542,7 +580,40 @@ $(document).ready(function () {
             $("#" + filter).val("");
         });
 
-        $("#illfilter_status").prop("selectedIndex", 0);
+        // For status filter, check if we have an active tab with defined statuses
+        var activeTabWithStatuses = $(
+            "div#ill-list-tabs a.active span[data-statuses]"
+        ).attr("data-statuses");
+
+        if (activeTabWithStatuses) {
+            // If an active tab with statuses exists, select all its non-disabled options
+            var statusCodes = activeTabWithStatuses.split("|");
+
+            // Check if multipleSelect is initialized
+            if (isMultipleSelectInitialized($("#illfilter_status"))) {
+                // First uncheck all
+                $("#illfilter_status").multipleSelect("uncheckAll");
+                // Then select all enabled (non-disabled) options
+                $("#illfilter_status").multipleSelect(
+                    "setSelects",
+                    statusCodes
+                );
+                $("#illfilter_status").multipleSelect("refresh");
+            } else {
+                // If multipleSelect is not initialized, use standard select methods
+                $("#illfilter_status").val(statusCodes);
+            }
+        } else {
+            // If no active tab with statuses, clear the status filter completely
+            if (isMultipleSelectInitialized($("#illfilter_status"))) {
+                $("#illfilter_status").multipleSelect("uncheckAll");
+                $("#illfilter_status").multipleSelect("refresh");
+            } else {
+                $("#illfilter_status").prop("selectedIndex", 0);
+            }
+        }
+
+        // Reset status alias filter
         $("#illfilter_status_alias").prop("selectedIndex", 0);
 
         //Clear flatpickr date filters
@@ -575,13 +646,20 @@ $(document).ready(function () {
                         "</option>"
                 );
             });
-        $("select#illfilter_status").multipleSelect( {
-            placeholder: _("Please select ..."),
-            selectAllText: _("Select all"),
-            allSelected: _("All selected"),
-            countSelected: _("# of % selected"),
-            noMatchesFound: _("No matches found"),
-        } );
+        $("select#illfilter_status").multipleSelect({
+            placeholder: __("Please select ..."),
+            selectAllText: __("Select all"),
+            allSelected: __("All selected"),
+            countSelected: __("# of % selected"),
+            noMatchesFound: __("No matches found"),
+            styler: function (value) {
+                // Apply styling to disabled options
+                var option = $(`#illfilter_status option[value='${value}']`);
+                if (option.prop("disabled")) {
+                    return { opacity: "0.6", cursor: "not-allowed" };
+                }
+            },
+        });
     }
 
     function addStatusAliasOptions(status_aliases) {
@@ -735,7 +813,6 @@ $(document).ready(function () {
             populateBackendFilter();
         }
     });
-
     populateBackendFilter();
 
     // Clear all filters
