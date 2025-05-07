@@ -32,6 +32,8 @@ use Koha::RecordProcessor;
 use Koha::XSLT::Base;
 use Koha::Libraries;
 use Koha::Recalls;
+use Koha::TemplateUtils qw( process_tt );
+use C4::Scrubber;
 
 my $engine;    #XSLT Handler object
 
@@ -238,6 +240,16 @@ sub XSLTParse4Display {
             $variables->{OpenURLResolverURL} = $biblio->get_openurl;
         }
     }
+    my $extracontent = '';
+
+    # Check if we should add extra content based on system preference
+    if ( C4::Context->preference('ExtraContentForXSLTDisplay') ) {
+
+        my $scrubber               = C4::Scrubber->new('staff');
+        my $extracontentvalue      = C4::Context->preference('ExtraContentForXSLTDisplay');
+        my $extracontentproccessed = process_tt( $extracontentvalue, { record => $record } );
+        $extracontent = $scrubber->scrub($extracontentproccessed);
+    }
 
     # embed variables
     my $varxml = "<variables>\n";
@@ -260,7 +272,10 @@ sub XSLTParse4Display {
     #If the xslt should fail, we will return undef (old behavior was
     #raw MARC)
     #Note that we did set do_not_return_source at object construction
-    return $engine->transform( $xmlrecord, $xslfilename );    #file or URL
+    my $transformed_xml = $engine->transform( $xmlrecord, $xslfilename );
+
+    my $concatenated_content = $transformed_xml . $extracontent;
+    return $concatenated_content;
 }
 
 =head2 buildKohaItemsNamespace

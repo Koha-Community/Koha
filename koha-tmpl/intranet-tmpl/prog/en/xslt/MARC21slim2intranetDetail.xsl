@@ -14,7 +14,6 @@
     <xsl:template match="/">
             <xsl:apply-templates/>
     </xsl:template>
-
     <xsl:template match="marc:record">
 
         <!-- Option: Display Alternate Graphic Representation (MARC 880)  -->
