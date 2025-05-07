@@ -147,7 +147,11 @@
                         [% ELSIF ( HOLD.is_in_processing ) %]
                             <span>Item in processing</span>
                         [% ELSIF ( HOLD.suspend ) %]
-                            <span>Suspended</span>[% IF ( HOLD.suspend_until ) %]<span>until</span> [% HOLD.suspend_until | $KohaDates %][% END %]
+                            [% IF ( HOLD.suspend_until ) %]
+                                <span>Suspended until [% HOLD.suspend_until | $KohaDates %]</span>
+                            [% ELSE %]
+                                <span>Suspended</span>
+                            [% END %]
                         [% ELSE %]
                             [% IF HOLD.itemtype %]
                                 <span>Pending for next available item of item type '[% ItemTypes.GetDescription( HOLD.itemtype ) | html %]'</span>
