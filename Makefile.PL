@@ -1909,17 +1909,22 @@ sub top_targets {
     my $inherited = shift->SUPER::top_targets(@_);
     my $compile_step;
 
-    #NOTE: Make "all" depend on "compile_css_js"
-    $compile_step .= "all :: compile_css_js\n";
+    #NOTE: Make "all" depend on "compile_css_js" and "move_compiled_js", so that it runs those targets/steps
+    $compile_step .= "all :: compile_css_js move_compiled_js\n";
     $compile_step .= "\t" . '$(NOECHO) $(NOOP)' . "\n";
     $compile_step .= "\n";
 
-    #NOTE: Make compile_css_js depend on pm_to_blib, so we have access to the blib directory
-    $compile_step .= "compile_css_js: pm_to_blib\n";
+    #NOTE: Build CSS and Javascript assets
+    $compile_step .= "compile_css_js:\n";
     $compile_step .= "\t" . '$(PERLRUN) build-resources.PL' . "\n";
+    $compile_step .= "\n";
 
+    #NOTE: Make move_compiled_js depend on compile_css_js, so we have our generated Javascript assets
+    #NOTE: Make move_compiled_js depend on pm_to_blib, so we have access to the blib directory
     #NOTE: Copy the generated vue dist files into the relevant blib
+    $compile_step .= "move_compiled_js: compile_css_js pm_to_blib\n";
     $compile_step .= "\t" . 'cp -r koha-tmpl/intranet-tmpl/prog/js/vue/dist blib/INTRANET_TMPL_DIR/prog/js/vue/' . "\n";
+    $compile_step .= "\n";
 
     my $top_targets = $compile_step . "\n" . $inherited;
     return $top_targets;
