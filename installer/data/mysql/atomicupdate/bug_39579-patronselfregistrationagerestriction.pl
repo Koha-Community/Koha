@@ -10,7 +10,7 @@ return {
 
         $dbh->do( "
             INSERT IGNORE INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `type` ) VALUES
-            ('PatronSelfRegistrationAgeRestriction', '', NULL, 'Patron\'s maximum age during self registration. If empty, no age restriction is applied.', 'Integer')
+            ('PatronSelfRegistrationAgeRestriction', '', NULL, 'Patron''s maximum age during self registration. If empty, no age restriction is applied.', 'Integer')
         " );
         say_success( $out, "Added new system preference 'PatronSelfRegistrationAgeRestriction'" );
     },
