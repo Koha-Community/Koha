@@ -147,6 +147,8 @@
         <span>Overdue</span>
     [% CASE 'EXPIRE' %]
         <span>Expire</span>
+    [% CASE 'MODIFY_CARDNUMBER' %]
+        <span>Modify cardnumber</span>
     [% CASE %]
         [% action | html %]
     [% END %]

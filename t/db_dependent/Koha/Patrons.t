@@ -2019,10 +2019,11 @@ $nb_of_patrons = Koha::Patrons->search->count;
 $retrieved_patron_1->delete;
 is( Koha::Patrons->search->count, $nb_of_patrons - 1, 'Delete should have deleted the patron' );
 
-subtest 'BorrowersLog tests' => sub {
-    plan tests => 5;
+subtest 'BorrowersLog and CardnumberLog tests' => sub {
+    plan tests => 13;
 
-    t::lib::Mocks::mock_preference( 'BorrowersLog', 1 );
+    t::lib::Mocks::mock_preference( 'BorrowersLog',  1 );
+    t::lib::Mocks::mock_preference( 'CardnumberLog', 0 );
     my $patron = $builder->build_object( { class => 'Koha::Patrons' } );
 
     my $cardnumber = $patron->cardnumber;
@@ -2042,7 +2043,8 @@ subtest 'BorrowersLog tests' => sub {
         ->search( { module => 'MEMBERS', action => 'MODIFY', object => $patron->borrowernumber } );
     is( scalar @logs, 1, 'With BorrowerLogs and TrackLastPatronActivityTriggers we should not spam the logs' );
 
-    Koha::ActionLogs->search()->delete();
+    # Clear the logs for this patron
+    Koha::ActionLogs->search( { object => $patron->borrowernumber } )->delete();
     $patron->get_from_storage();
     $patron->set( { debarred => "" } );
     $patron->store;
@@ -2057,6 +2059,52 @@ subtest 'BorrowersLog tests' => sub {
         defined $log,
         "No action log generated where incoming changed column is empty string and value in storage is NULL"
     );
+
+    t::lib::Mocks::mock_preference( 'CardnumberLog', 1 );
+    $patron->set( { cardnumber => 'TESTCARDNUMBER_1' } )->store;
+    @logs = $schema->resultset('ActionLog')
+        ->search( { module => 'MEMBERS', action => 'MODIFY', object => $patron->borrowernumber } );
+    is( scalar @logs, 1, 'With BorrowersLog, one detailed MODIFY action should be logged for the modification.' );
+    @logs = $schema->resultset('ActionLog')
+        ->search( { module => 'MEMBERS', action => 'MODIFY_CARDNUMBER', object => $patron->borrowernumber } );
+    is(
+        scalar @logs, 1,
+        'With CardnumberLog, one detailed MODIFY_CARDNUMBER action should be logged for the modification.'
+    );
+
+    t::lib::Mocks::mock_preference( 'BorrowersLog', 0 );
+    $patron->set( { cardnumber => 'TESTCARDNUMBER' } )->store;
+    @logs = $schema->resultset('ActionLog')
+        ->search( { module => 'MEMBERS', action => 'MODIFY', object => $patron->borrowernumber } );
+    is(
+        scalar @logs, 1,
+        'With Cardnumberlog and not BorrowersLog, no more detailed MODIFY action should be logged for the modification.'
+    );
+    @logs = $schema->resultset('ActionLog')
+        ->search( { module => 'MEMBERS', action => 'MODIFY_CARDNUMBER', object => $patron->borrowernumber } );
+    is(
+        scalar @logs, 2,
+        'With CardnumberLogs, one more detailed MODIFY_CARDNUMBER action should be logged for the modification.'
+    );
+    $log_info = from_json( $logs[1]->info );
+    is( $log_info->{after},  'TESTCARDNUMBER',   'Got correct new cardnumber' );
+    is( $log_info->{before}, 'TESTCARDNUMBER_1', 'Got correct old cardnumber' );
+
+    t::lib::Mocks::mock_preference( 'CardnumberLog', 0 );
+    $patron->set( { cardnumber => 'TESTCARDNUMBER_1' } )->store;
+    @logs = $schema->resultset('ActionLog')
+        ->search( { module => 'MEMBERS', action => 'MODIFY', object => $patron->borrowernumber } );
+    is(
+        scalar @logs, 1,
+        'With neither Cardnumberlog nor BorrowersLog, no more detailed MODIFY action should be logged for the modification.'
+    );
+    @logs = $schema->resultset('ActionLog')
+        ->search( { module => 'MEMBERS', action => 'MODIFY_CARDNUMBER', object => $patron->borrowernumber } );
+    is(
+        scalar @logs, 2,
+        'With neither CardnumberLog nor BorrowersLog, one detailed MODIFY_CARDNUMBER action should be logged for the modification.'
+    );
+
 };
 $schema->storage->txn_rollback;
 

@@ -1514,7 +1514,7 @@
                         <td class="barcode" property="serialNumber">[% ITEM_RESULT.barcode | html %]</td>
                     [% END %]
 
-                    [% IF item_level_holds > 0 %]
+                    [% IF item_level_holds > 0 || show_priority %]
                         <td class="holds_count">
                             [% IF holds_count.defined %][% ITEM_RESULT.holds_count | html %][% END %]
                             [% IF ITEM_RESULT.priority %]

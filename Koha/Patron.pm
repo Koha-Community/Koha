@@ -401,7 +401,7 @@ sub store {
                 }
 
                 # Actionlogs
-                if ( C4::Context->preference("BorrowersLog") ) {
+                if ( C4::Context->preference("BorrowersLog") || C4::Context->preference("CardnumberLog") ) {
                     my $info;
                     my $from_storage = $self_from_storage->unblessed;
                     my $from_object  = $self->unblessed;
@@ -413,7 +413,8 @@ sub store {
                         if $from_object->{dateexpiry};
 
                     my @skip_fields = (qw/lastseen updated_on/);
-                    for my $key ( keys %{$from_storage} ) {
+                    my @keys        = C4::Context->preference("BorrowersLog") ? keys %{$from_storage} : ('cardnumber');
+                    for my $key (@keys) {
                         next if any { /$key/ } @skip_fields;
                         my $storage_value = $from_storage->{$key} // q{};
                         my $object_value  = $from_object->{$key}  // q{};
@@ -436,7 +437,17 @@ sub store {
                                 $info,
                                 { utf8 => 1, pretty => 1, canonical => 1 }
                             )
-                        );
+                        ) if C4::Context->preference("BorrowersLog");
+                        logaction(
+                            "MEMBERS",
+                            "MODIFY_CARDNUMBER",
+                            $self->borrowernumber,
+                            to_json(
+                                $info->{cardnumber},
+                                { utf8 => 1, pretty => 1, canonical => 1 }
+                            )
+                        ) if defined $info->{cardnumber} && C4::Context->preference("CardnumberLog");
+
                     }
                 }
 
