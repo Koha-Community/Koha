@@ -222,8 +222,8 @@ __PACKAGE__->belongs_to(
 
 __PACKAGE__->add_columns(
     '+isurl'  => { is_boolean => 1 },
-    '+linkid' => { is_boolean => 1 },
-    '+tab'    => { is_boolean => 1 },
+    '+linkid' => { is_boolean => 0 },
+    '+tab'    => { is_boolean => 0 },
 );
 
 =head2 koha_object_class

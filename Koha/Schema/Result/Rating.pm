@@ -122,7 +122,7 @@ __PACKAGE__->belongs_to(
 # DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:wUwI/h1WR8kVGMNCrv/tUQ
 
 __PACKAGE__->add_columns(
-    '+rating_value' => { is_boolean => 1 },
+    '+rating_value' => { is_boolean => 0 },
 );
 
 1;

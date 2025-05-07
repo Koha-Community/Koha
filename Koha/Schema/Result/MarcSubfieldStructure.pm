@@ -234,9 +234,9 @@ __PACKAGE__->belongs_to(
 # DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:KVbDXEVf96eDkbPYpcmQVA
 
 __PACKAGE__->add_columns(
-    '+hidden' => { is_boolean => 1 },
+    '+hidden' => { is_boolean => 0 },
     '+isurl'  => { is_boolean => 1 },
-    '+tab'    => { is_boolean => 1 },
+    '+tab'    => { is_boolean => 0 },
 );
 
 1;
