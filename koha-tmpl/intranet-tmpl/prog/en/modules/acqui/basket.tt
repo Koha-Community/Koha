@@ -131,7 +131,14 @@
                                 [% ELSE %]
                                     <div class="btn-group">
                                         [% IF eans.size == 1 %]
-                                            <a class="btn btn-default btn-xs submit-form-link" href="#" data-ean="[% eans.0 | html %]" data-basketno="[% basketno | html %]" data-action="basket.pl" data-method="post" data-op="cud-ediorder"
+                                            <a
+                                                class="btn btn-default btn-xs submit-form-link"
+                                                href="#"
+                                                data-ean="[% eans.0.ean | html %]"
+                                                data-basketno="[% basketno | html %]"
+                                                data-action="basket.pl"
+                                                data-method="post"
+                                                data-op="cud-ediorder"
                                                 ><i class="fa fa-download"></i> Create EDIFACT order</a
                                             >
                                         [% ELSE %]
