@@ -646,9 +646,7 @@ if ( $op eq "cud-additem" ) {
         try {
             $item->store;
         } catch {
-            if ( ref $_ && $_->can('error') ) {
-                push @errors, $_->error;
-            }
+            push @errors, $_->error;
         }
     }
 
