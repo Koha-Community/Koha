@@ -182,6 +182,9 @@
                                                                     <th>Call number</th>
                                                                     <th class="psort">Due</th>
                                                                     <th class="all no-sort">Renew</th>
+                                                                    [% IF Koha.Preference('SCOAllowCheckin') %]
+                                                                        <th class="all no-sort">Check in</th>
+                                                                    [% END %]
                                                                     [% UNLESS ( nofines ) %]
                                                                         <th>Fines</th>
                                                                     [% END %]
@@ -236,19 +239,26 @@
                                                                                     [% ELSE %]
                                                                                         <span>No renewals allowed</span>
                                                                                     [% END %]
-                                                                                    [% IF Koha.Preference('SCOAllowCheckin') %]
-                                                                                        <div>
-                                                                                            <input type="submit" value="Check in item" name="confirm" class="btn btn-info btn-sm return" />
-                                                                                            <input type="hidden" name="op" value="cud-returnbook" />
-                                                                                            <input type="hidden" name="confirmed" value="" />
-                                                                                        </div>
-                                                                                    [% END %]
                                                                                 [% END %]
                                                                                 [% IF ISSUE.auto_renew %]
                                                                                     <br /><span>This item is scheduled for automatic renewal</span>
                                                                                 [% END %]
                                                                             </form>
                                                                         </td>
+                                                                        [% IF Koha.Preference('SCOAllowCheckin') %]
+                                                                            <td>
+                                                                                <form action="/cgi-bin/koha/sco/sco-main.pl" method="post">
+                                                                                    [% INCLUDE 'csrf-token.inc' %]
+                                                                                    <legend class="sr-only">Issue renews</legend>
+                                                                                    <input type="hidden" name="patronid" value="[% patronid | html %]" />
+                                                                                    <input type="hidden" name="load_checkouts" value="[% load_checkouts | html %]" />
+                                                                                    <input type="hidden" name="barcode" value="[% ISSUE.barcode | html %]" />
+                                                                                    <input type="submit" value="Check in item" name="confirm" class="btn btn-info btn-sm return" />
+                                                                                    <input type="hidden" name="op" value="cud-returnbook" />
+                                                                                    <input type="hidden" name="confirmed" value="" />
+                                                                                </form>
+                                                                            </td>
+                                                                        [% END %]
                                                                         [% UNLESS ( nofines ) %]
                                                                             <td> [% IF ( ISSUE.charges ) %]Yes[% ELSE %]No[% END %] </td>
                                                                         [% END %]
