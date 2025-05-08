@@ -2,7 +2,7 @@
 
 use Modern::Perl;
 use Test::NoWarnings;
-use Test::More tests => 21;
+use Test::More tests => 23;
 use MARC::Record;
 use MARC::Field;
 use DateTime;
@@ -390,6 +390,110 @@ C4::Items::ToggleNewStatus( { rules => \@rules } );
 
 $modified_item = Koha::Items->find($itemnumber);
 is( $modified_item->new_status, 'new_updated_value_biblio', q|ToggleNewStatus: conditions on biblio| );
+
+# Test for error handling in ToggleNewStatus with an on-loan item
+subtest "ToggleNewStatus onloan error handling" => sub {
+    plan tests => 3;
+
+    # Create a new test item
+    my $test_item2 = $builder->build_object( { class => 'Koha::Items' } );
+    my $patron2    = $builder->build_object( { class => 'Koha::Patrons' } );
+
+    # Check out the item to create the condition for an error
+    $test_item2->checkout( $patron2->borrowernumber );
+    ok( $test_item2->onloan, "Item is checked out" );
+
+    # Create rules to try to modify the withdrawn status
+    my @withdrawal_rules = (
+        {
+            conditions => [
+                {
+                    field => "items.itemnumber",
+                    value => $test_item2->itemnumber
+                }
+            ],
+            substitutions => [
+                {
+                    field => "items.withdrawn",
+                    value => 1
+                }
+            ]
+        }
+    );
+
+    # Run ToggleNewStatus with the rules and catch errors in the report
+    my $error_report = C4::Items::ToggleNewStatus(
+        {
+            rules       => \@withdrawal_rules,
+            report_only => 0
+        }
+    );
+
+    # Verify report structure
+    ok( exists $error_report->{ $test_item2->itemnumber }, "Error item appears in report" );
+
+    is( $test_item2->withdrawn, 0, 'Item should not be withdrawn' );
+
+};
+
+subtest "ToggleNewStatus in-transit error handling" => sub {
+    plan tests => 3;
+
+    # Create a new test item
+    my $test_item3 = $builder->build_object( { class => 'Koha::Items' } );
+
+    # Create a transfer to put item in-transit
+    my $from_library = $builder->build_object( { class => 'Koha::Libraries' } );
+    my $to_library   = $builder->build_object( { class => 'Koha::Libraries' } );
+
+    my $transfer = Koha::Item::Transfer->new(
+        {
+            itemnumber => $test_item3->itemnumber,
+            frombranch => $from_library->branchcode,
+            tobranch   => $to_library->branchcode,
+            datesent   => dt_from_string(),
+        }
+    )->store;
+
+    # Mark transfer as in transit
+    $transfer->datearrived(undef);
+    $transfer->store;
+
+    # Verify item is in transit
+    my $item_transfer = $test_item3->get_transfer;
+    ok( $item_transfer && !$item_transfer->datearrived, "Item is in transit" );
+
+    # Create rules to try to modify the withdrawn status
+    my @withdrawal_rules = (
+        {
+            conditions => [
+                {
+                    field => "items.itemnumber",
+                    value => $test_item3->itemnumber
+                }
+            ],
+            substitutions => [
+                {
+                    field => "items.withdrawn",
+                    value => 1
+                }
+            ]
+        }
+    );
+
+    # Run ToggleNewStatus with the rules and catch errors in the report
+    my $error_report = C4::Items::ToggleNewStatus(
+        {
+            rules       => \@withdrawal_rules,
+            report_only => 0
+        }
+    );
+
+    # Verify report structure
+    ok( exists $error_report->{ $test_item3->itemnumber }, "Error item appears in report" );
+
+    is( $test_item3->withdrawn, 0, 'Item should not be withdrawn' );
+};
 
 # Run twice
 t::lib::Mocks::mock_preference( 'CataloguingLog', 1 );
