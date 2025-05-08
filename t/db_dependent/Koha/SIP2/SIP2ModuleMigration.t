@@ -17,7 +17,9 @@
 
 use Modern::Perl;
 
-use Test::More tests => 1;
+use Test::More tests => 2;
+
+use t::lib::TestBuilder;
 
 use C4::Installer;
 use C4::SIP::Sip::Configuration;
@@ -74,6 +76,87 @@ subtest 'Config from XML matches config from database' => sub {
         $fileSIPconfig,
         $databaseSIPconfig,
         'config from XML file matches config from database'
+    );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'config_timestamp is updated when database configuration changes' => sub {
+
+    plan tests => 3;
+
+    my $schema = Koha::Database->new->schema;
+    $schema->storage->txn_begin;
+
+    Koha::SIP2::Institutions->delete;
+    Koha::SIP2::Accounts->delete;
+    Koha::SIP2::Listeners->delete;
+    Koha::SIP2::ServerParams->delete;
+    Koha::SIP2::SystemPreferenceOverrides->delete;
+
+    my $builder    = t::lib::TestBuilder->new();
+    my $branchcode = $builder->build( { source => 'Branch' } )->{branchcode};
+    my ( $response, $findpatron );
+    my $seen_patron = $builder->build_object(
+        {
+            class => 'Koha::Patrons',
+            value => {
+                branchcode => $branchcode,
+                password   => '123456',
+            },
+        }
+    )->store();
+
+    Koha::SIP2::Institutions->search()->delete;
+    my $sip_institution = $builder->build_object(
+        {
+            class => 'Koha::SIP2::Institutions',
+            value => {
+                name           => 'CPL',
+                implementation => 'ILS',
+                retries        => 5,
+                status_update  => 0,
+                timeout        => 25,
+            },
+        }
+    )->store();
+
+    my $sip_account = $builder->build_object(
+        {
+            class => 'Koha::SIP2::Accounts',
+            value => {
+                login_id           => $seen_patron->userid,
+                login_password     => '123456',
+                sip_institution_id => $sip_institution->sip_institution_id,
+                allow_fields       => '',
+                hide_fields        => '',
+            },
+        }
+    )->store();
+
+    my $cfg = C4::SIP::Sip::Configuration->get_configuration();
+
+    is(
+        $cfg->{accounts}->{ $sip_account->login_id }->{allow_fields}, '',
+        '$cfg->{accounts}->{$sip_account->login_id}->{allow_fields} is empty'
+    );
+
+    my $original_timestamp = Koha::SIP2::ServerParams->find( { key => 'config_timestamp' } );
+
+    sleep 1;
+    $sip_account->allow_fields('AB')->store();
+    my $new_cfg = C4::SIP::Sip::Configuration->get_configuration();
+
+    my $last_timestamp = Koha::SIP2::ServerParams->find( { key => 'config_timestamp' } );
+
+    isnt(
+        $original_timestamp->value, $last_timestamp->value,
+        'config_timestamp should be updated when database configuration changes'
+    );
+
+    is(
+        $cfg->{accounts}->{ $sip_account->login_id }->{allow_fields}, $sip_account->allow_fields,
+        '$cfg->{accounts}->{$sip_account->login_id}->{allow_fields} should now return the new value'
     );
 
     $schema->storage->txn_rollback;
