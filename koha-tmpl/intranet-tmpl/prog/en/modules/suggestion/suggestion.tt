@@ -3,6 +3,7 @@
 [% USE Branches %]
 [% USE AuthorisedValues %]
 [% USE KohaDates %]
+[% USE To %]
 [% USE Price %]
 [% USE TablesSettings %]
 [% PROCESS 'i18n.inc' %]
@@ -759,7 +760,7 @@
                                             <span>No name</span>
                                         [% END %]
                                     [% END %]
-                                    ([% suggestion.suggestions.size| html %])
+                                    ([% suggestion.tab_count | html %])
                                 [% END %]
                             [% END # /FOREACH suggestion %]
                         [% END # /WRAPPER tabs_nav %]
@@ -776,7 +777,7 @@
                                         [% INCLUDE 'csrf-token.inc' %]
                                         <input type="hidden" name="op" value="cud-" />[%# filled by submit %]
 
-                                        [% IF suggestion.suggestions.size %]
+                                        [% IF suggestion.tab_count %]
                                             <p> <a class="checkall" href="#">Check all</a> | <a class="uncheckall" href="#">Uncheck all</a> </p>
 
                                             <table id="table_[% suggestion.suggestiontype | html %]" class="sorted" data-tab-name="[% suggestion.suggestiontype | html %]">
@@ -800,132 +801,6 @@
                                                         <th class="no-sort no-export">&nbsp;</th>
                                                     </tr>
                                                 </thead>
-                                                <tbody>
-                                                    [% FOREACH s IN suggestion.suggestions %]
-                                                        <tr>
-                                                            <td>
-                                                                <input type="checkbox" name="suggestionid" value="[% s.suggestionid | html %]" />
-                                                            </td>
-                                                            <td>
-                                                                <a href="suggestion.pl?suggestionid=[% s.suggestionid | uri %]&amp;op=show" title="suggestion">
-                                                                    [% s.title | html %][% IF ( s.author ) %], by [% s.author | html %][% END %]
-                                                                </a>
-                                                                <br />
-                                                                [% IF ( s.copyrightdate ) %]
-                                                                    &copy; <span class="suggestion_copyrightdate">[% s.copyrightdate | html %]</span>
-                                                                [% END %]
-                                                                [% IF ( s.volumedesc ) %]
-                                                                    ; <span class="suggestion_volume">Volume:<em>[% s.volumedesc | html %]</em></span>
-                                                                [% END %]
-                                                                [% IF ( s.isbn ) %]
-                                                                    ; <span class="suggestion_isbn">ISBN: <em>[% s.isbn | html %]</em></span>
-                                                                [% END %]
-                                                                [% IF ( s.publishercode ) %]
-                                                                    ; <span class="suggestion_publishercode">Published by [% s.publishercode | html %]</span>
-                                                                [% END %]
-                                                                [% IF ( s.publicationyear ) %]
-                                                                    in <span class="suggestion_publicationyear"><em>[% s.publicationyear | html %]</em></span>
-                                                                [% END %]
-                                                                [% IF ( s.place ) %]
-                                                                    in <span class="suggestion_place"><em>[% s.place | html %]</em></span>
-                                                                [% END %]
-                                                                [% IF ( s.collectiontitle ) %]
-                                                                    ; <span class="suggestion_collectiontitle">[% s.collectiontitle | html %]</span>
-                                                                [% END %]
-                                                                [% IF ( s.itemtype ) %]
-                                                                    ; <span class="suggestion_itype">[% AuthorisedValues.GetByCode( 'SUGGEST_FORMAT', s.itemtype, 0 ) | html %]</span>
-                                                                [% END %]
-                                                                <br />
-                                                                [% IF ( s.note ) %]
-                                                                    <div class="suggestion_note">[% s.note | html %]</div>
-                                                                [% END %]
-                                                                [% IF s.archived %]
-                                                                    <br /><i class="fa fa-archive"></i> Archived
-                                                                [% END %]
-                                                            </td>
-                                                            <td>
-                                                                [% SET suggester = s.suggester %]
-                                                                <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% suggester.borrowernumber | uri %]"
-                                                                    >[% suggester.surname | html %][% IF suggester.firstname %], [% suggester.firstname | html %][% END %]
-                                                                    [% IF suggester.cardnumber %]([% suggester.cardnumber | html %])[% END %]</a
-                                                                >
-                                                            </td>
-                                                            <td> [% suggester.category.description | html %] </td>
-                                                            <td data-order="[% s.suggesteddate | html %]"> [% IF ( s.suggesteddate ) %][% s.suggesteddate | $KohaDates %][% END %] </td>
-                                                            <td>[% AuthorisedValues.GetByCode( 'OPAC_SUG', s.patronreason ) | html %]</td>
-                                                            <td>
-                                                                [% SET manager = s.manager %]
-                                                                <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% manager.borrowernumber | uri %]"
-                                                                    >[% manager.surname | html %][% IF manager.firstname %], [% manager.firstname | html %][% END %]</a
-                                                                >
-                                                            </td>
-                                                            <td data-order="[% s.manageddate | html %]"> [% IF ( s.manageddate ) %][% s.manageddate | $KohaDates %][% END %] </td>
-                                                            <td>
-                                                                [% SET last_modifier = s.last_modifier %]
-                                                                <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% last_modifier.borrowernumber | uri %]"
-                                                                    >[% last_modifier.surname | html %][% IF last_modifier.firstname %], [% last_modifier.firstname | html %][% END %]</a
-                                                                >
-                                                            </td>
-                                                            <td data-order="[% s.lastmodificationdate | html %]"> [% IF ( s.lastmodificationdate ) %][% s.lastmodificationdate | $KohaDates %][% END %] </td>
-                                                            <td> [% s.lastmodificationdate | $KohaDates %] </td>
-                                                            <td> [% Branches.GetName( s.branchcode ) | html %] </td>
-                                                            <td> [% s.fund.budget_name | html %] </td>
-                                                            <td> [% s.staff_note | html %] </td>
-                                                            <td>
-                                                                [% IF s.STATUS == 'ASKED' %]
-                                                                    <span>Pending</span>
-                                                                [% ELSIF s.STATUS == 'ACCEPTED' %]
-                                                                    <span>Accepted</span>
-                                                                [% ELSIF s.STATUS == 'ORDERED' %]
-                                                                    <span>Ordered</span>
-                                                                [% ELSIF s.STATUS == 'REJECTED' %]
-                                                                    <span>Rejected</span>
-                                                                [% ELSIF s.STATUS == 'CHECKED' %]
-                                                                    <span>Checked</span>
-                                                                [% ELSIF s.STATUS == 'AVAILABLE' %]
-                                                                    <span>Available</span>
-                                                                [% ELSIF AuthorisedValues.GetByCode( 'SUGGEST_STATUS', s.STATUS ) %]
-                                                                    [% AuthorisedValues.GetByCode( 'SUGGEST_STATUS', s.STATUS ) | html %]
-                                                                [% ELSE %]
-                                                                    <span>Status unknown</span>
-                                                                [% END %]
-
-                                                                [% IF ( s.reason ) %]
-                                                                    <br />([% s.reason | html %])
-                                                                [% END %]
-                                                            </td>
-                                                            <td class="actions">
-                                                                [% IF CAN_user_suggestions_suggestions_manage %]
-                                                                    <div class="btn-group dropup">
-                                                                        <a class="btn btn-default btn-xs" role="button" href="suggestion.pl?suggestionid=[% s.suggestionid | html %]&amp;op=edit_form"
-                                                                            ><i class="fa-solid fa-pencil" aria-hidden="true"></i> Edit</a
-                                                                        ><a class="btn btn-default btn-xs dropdown-toggle" id="more_actions_[% s.suggestionid | html %]" role="button" data-bs-toggle="dropdown" href="#"
-                                                                            ><b class="caret"></b
-                                                                        ></a>
-                                                                        <ul class="dropdown-menu" role="menu" aria-labelledby="more_actions_[% s.suggestionid | html %]">
-                                                                            [% IF CAN_user_suggestions_suggestions_delete %]
-                                                                                <li>
-                                                                                    <a href="#" data-op="cud-delete" data-suggestionid="[% s.suggestionid | html %]" class="dropdown-item trigger_action">Delete</a>
-                                                                                </li>
-                                                                            [% END %]
-                                                                            [% UNLESS s.archived %]
-                                                                                <li>
-                                                                                    <a href="#" class="dropdown-item trigger_action" data-op="cud-archive" data-suggestionid="[% s.suggestionid | html %]">Archive</a>
-                                                                                </li>
-                                                                            [% ELSE %]
-                                                                                <li>
-                                                                                    <a href="#" class="dropdown-item trigger_action" data-op="cud-unarchive" data-suggestionid="[% s.suggestionid | html %]">Unarchive</a>
-                                                                                </li>
-                                                                            [% END %]
-                                                                        </ul>
-                                                                    </div>
-                                                                [% ELSIF CAN_user_suggestions_suggestions_delete %]
-                                                                    <button data-op="cud-delete" data-suggestionid="[% s.suggestionid | html %]" class="btn btn-xs btn-default trigger_action"><i class="fa fa-trash-can"></i> Delete</button>
-                                                                [% END %]
-                                                            </td>
-                                                        </tr>
-                                                    [% END # /FOREACH s %]
-                                                </tbody>
                                             </table>
                                             <!-- /#table_[% suggestion.suggestiontype | html %] -->
 
@@ -1447,21 +1322,232 @@
         [% INCLUDE 'datatables.inc' %]
         <script>
             $(document).ready(function() {
-                if( $("#suggestiontabs .tab-pane.active").length < 1 ){
-                    $("#suggestiontabs a:first").tab("show");
-                }
-
-                var table_settings = [% TablesSettings.GetTableSettings( 'acqui', 'suggestions', 'suggestions', 'json' ) | $raw %]
-
-                [% FOREACH suggestion IN suggestions %]
-                    [% IF suggestion.suggestions.size %]
-                        $("#table_[% suggestion.suggestiontype | html %]").kohaTable(
+                [% IF suggestions.size %]
+                    let suggestionData = [% To.json(suggestions) | $raw %];
+                    var table_settings = [% TablesSettings.GetTableSettings( 'acqui', 'suggestions', 'suggestions', 'json' ) | $raw %]
+                    function loadDatatable(tabName) {
+                        let tabSuggestionData = suggestionData.find(s => s.suggestiontype === tabName)
+                        $("#table_" + tabName).kohaTable(
                             {
                                 sorting: [[4, "asc"]],
                                 autoWidth: false,
+                                ajax: {
+                                    url: "/api/v1/suggestions?q=" + JSON.stringify(tabSuggestionData.search_params),
+                                    delay: 300, // wait 300 milliseconds before triggering the request
+                                    cache: true,
+                                    dataType: "json",
+                                },
+                                serverSide: true,
+                                embed: ["suggester", "suggester.category", "manager", "last_modifier", "library", "fund", "+strings"],
+                                columns: [
+                                    {
+                                        data: "me.suggestion_id",
+                                        searchable: false,
+                                        orderable: false,
+                                        render: function (data, type, row, meta) {
+                                            return '<input type="checkbox" value="%s" name="suggestionid" />'.format(row.suggestion_id);
+                                        }
+                                    },
+                                    {
+                                        data: "me.title",
+                                        searchable: true,
+                                        orderable: false,
+                                        render: function (data, type, row, meta) {
+                                            let node = '<a href="suggestion.pl?suggestionid=%s&amp;op=show" title="%s">%s'.format(row.suggestion_id, _("suggestion"), row.title);
+                                            if(row.author) node += ', by %s'.format(row.author);
+                                            node += '</a><br />';
+                                            if(row.copyright_date) node += ' &copy; <span class="suggestion_copyrightdate">%s</span>'.format(row.copyright_date);
+                                            if(row.volume_desc) node += '; <span class="suggestion_volume">%s:<em>%s</em></span>'.format(_("Volume"), row.volume_desc);
+                                            if(row.isbn) node += '; <span class="suggestion_isbn">%s:<em>%s</em></span>'.format(_("ISBN"), row.isbn);
+                                            if(row.publisher_code) node += '; <span class="suggestion_publishercode">%s %s</span>'.format(_("Published by"), row.publisher_code);
+                                            if(row.publication_year && row.publication_year != 0) node += '; <span class="suggestion_publicationyear"><em>%s</em></span>'.format(row.publication_year);
+                                            if(row.publication_place) node += '; <span class="suggestion_place"><em>%s</em></span>'.format(row.publication_place);
+                                            if(row.collection_title) node += '; <span class="suggestion_collectiontitle"><em>%s</em></span>'.format(row.collection_title);
+                                            if(row.item_type && row._strings.item_type.str) node += '; <span class="suggestion_itype"><em>%s</em></span>'.format(row._strings.item_type.str);
+                                            if(row.note) node += '<div class="suggestion_note">%s</div>'.format(row.note);
+                                            if(row.archived) node += '<br /><i class="fa fa-archive"></i> %s'.format(_("Archived"));
+                                            return node;
+                                        }
+                                    },
+                                    {
+                                        data: "suggester.surname:suggester.firstname:suggester.cardnumber",
+                                        searchable: true,
+                                        orderable: false,
+                                        render: function (data, type, row, meta) {
+                                            let suggester = row.suggester;
+                                            let node = '<a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=%s">%s'.format(suggester.patron_id, suggester.surname);
+                                            if(suggester.firstname) node += ', %s'.format(suggester.firstname);
+                                            if(suggester.cardnumber) node += ' (%s)'.format(suggester.cardnumber);
+                                            node += '</a>';
+                                            return node;
+                                        }
+                                    },
+                                    {
+                                        data: "suggester.category.name",
+                                        searchable: false,
+                                        orderable: false,
+                                        render: function (data, type, row, meta) {
+                                            return escape_str(row.suggester.category.name);
+                                        },
+                                    },
+                                    {
+                                        data: "suggestion_date",
+                                        searchable: false,
+                                        orderable: true,
+                                        render: function (data, type, row, meta) {
+                                            return escape_str(row.suggestion_date ? $date(row.suggestion_date) : '');
+                                        },
+                                    },
+                                    {
+                                        data: "",
+                                        searchable: false,
+                                        orderable: false,
+                                        render: function (data, type, row, meta) {
+                                            return escape_str(row._strings.patron_reason.str ? row._strings.patron_reason.str : '');
+                                        },
+                                    },
+                                    {
+                                        data: "manager.surname:manager.firstname",
+                                        searchable: true,
+                                        orderable: false,
+                                        render: function (data, type, row, meta) {
+                                            let node = '<a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=%s">%s'.format(row.manager.patron_id, row.manager.surname);
+                                            if(row.manager.firstname) node += ', %s'.format(row.manager.firstname);
+                                            node += '</a>';
+                                            return node;
+                                        },
+                                    },
+                                    {
+                                        data: "managed_date",
+                                        searchable: false,
+                                        orderable: true,
+                                        render: function (data, type, row, meta) {
+                                            return escape_str(row.managed_date ? $date(row.managed_date) : '');
+                                        },
+                                    },
+                                    {
+                                        data: "last_modifier.surname:last_modifier.firstname",
+                                        searchable: true,
+                                        orderable: false,
+                                        render: function (data, type, row, meta) {
+                                            let node = '<a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=%s">%s'.format(row.last_modifier.patron_id, row.last_modifier.surname);
+                                            if(row.last_modifier.firstname) node += ', %s'.format(row.last_modifier.firstname);
+                                            node += '</a>';
+                                            return node;
+                                        },
+                                    },
+                                    {
+                                        data: "last_status_change_date",
+                                        searchable: false,
+                                        orderable: true,
+                                        render: function (data, type, row, meta) {
+                                            return escape_str(row.last_status_change_date ? $date(row.last_status_change_date) : '');
+                                        },
+                                    },
+                                    {
+                                        data: "last_status_change_date",
+                                        searchable: false,
+                                        orderable: true,
+                                        render: function (data, type, row, meta) {
+                                            return escape_str(row.last_status_change_date ? $date(row.last_status_change_date) : '');
+                                        },
+                                    },
+                                    {
+                                        data: "library.name",
+                                        searchable: false,
+                                        orderable: false,
+                                        render: function (data, type, row, meta) {
+                                            return escape_str(row.library.name ? row.library.name : '');
+                                        },
+                                    },
+                                    {
+                                        data: "fund.name",
+                                        searchable: false,
+                                        orderable: false,
+                                        render: function (data, type, row, meta) {
+                                            return escape_str(row.fund ? row.fund.name : '');
+                                        },
+                                    },
+                                    {
+                                        data: "staff_note",
+                                        searchable: false,
+                                        orderable: false,
+                                        render: function (data, type, row, meta) {
+                                            return escape_str(row.staff_note ? row.staff_note : '');
+                                        },
+                                    },
+                                    {
+                                        data: "status",
+                                        searchable: false,
+                                        orderable: false,
+                                        render: function (data, type, row, meta) {
+                                            if(row.status === 'ASKED') return '<span>%s</span>'.format(_("Pending"));
+                                            if(row.status === 'ACCEPTED') return '<span>%s</span>'.format(_("Accepted"));
+                                            if(row.status === 'ORDERED') return '<span>%s</span>'.format(_("Ordered"));
+                                            if(row.status === 'REJECTED') return '<span>%s</span>'.format(_("Rejected"));
+                                            if(row.status === 'CHECKED') return '<span>%s</span>'.format(_("Checked"));
+                                            if(row.status === 'AVAILABLE') return '<span>%s</span>'.format(_("Available"));
+                                            if(row._strings.status.str) return '<span>%s</span>'.format(row._strings.status.str);
+                                            return '<span>%s</span>'.format(_("Status unknown"));
+                                        },
+                                    },
+                                    {
+                                        data: "suggestion_id",
+                                        searchable: false,
+                                        orderable: false,
+                                        render: function (data, type, row, meta) {
+                                            [% IF CAN_user_suggestions_suggestions_manage %]
+                                                let node = '<div class="btn-group dropup">'
+                                                node += '<a class="btn btn-default btn-xs" role="button" href="suggestion.pl?suggestionid=%s&amp;op=edit_form"><i class="fa-solid fa-pencil" aria-hidden="true"></i> %s</a>'.format(row.suggestion_id, _("Edit"))
+                                                node += '<a class="btn btn-default btn-xs dropdown-toggle" id="more_actions_%s" role="button" data-bs-toggle="dropdown" href="#"><b class="caret"></b></a>'.format(row.suggestion_id)
+                                                node += '<ul class="dropdown-menu" role="menu" aria-labelledby="more_actions_%s">'.format(row.suggestion_id)
+                                                [% IF CAN_user_suggestions_suggestions_delete %]
+                                                    node += '<li><a href="#" data-op="cud-delete" data-suggestionid="%s" class="dropdown-item trigger_action">%s</a></li>'.format(row.suggestion_id, _("Delete"))
+                                                [% END %]
+                                                [% UNLESS s.archived %]
+                                                    node += '<li><a href="#" class="dropdown-item trigger_action" data-op="cud-archive" data-suggestionid="%s">%s</a></li>'.format(row.suggestion_id, _("Archive"))
+                                                [% ELSE %]
+                                                    node += '<li><a href="#" class="dropdown-item trigger_action" data-op="cud-unarchive" data-suggestionid="%s">%s</a></li>'.format(row.suggestion_id, _("Unarchive"))
+                                                [% END %]
+                                                node += '</ul></div>'
+                                                return node
+                                            [% ELSIF CAN_user_suggestions_suggestions_delete %]
+                                                return '<button data-op="cud-delete" data-suggestionid="%s" class="btn btn-xs btn-default trigger_action"><i class="fa fa-trash-can"></i> %s</button>'.format(row.suggestion_id, _("Delete"))
+                                            [% END %]
+                                        },
+                                        createdCell: function (cell, cellData, rowData, rowIndex, colIndex) {
+                                            $(cell).find(".trigger_action").on("click", function(e) {
+                                                var id = $(this).data('suggestionid');
+                                                var op = $(this).data('op');
+                                                if ( op == 'cud-delete' && !confirm(_("Are you sure you want to delete this suggestion?")) ) {
+                                                    e.preventDefault();
+                                                    return false;
+                                                }
+                                                $('#action_form input[name="op"]').val(op);
+                                                $('#action_form input[name="suggestionid"]').val(id);
+                                                $('#action_form').submit();
+                                                return false;
+                                            })
+                                        }
+                                    },
+                                ]
                             },
                             table_settings
                         );
+                    }
+                    if( $("#suggestiontabs .tab-pane.active").length < 1 ){
+                        $("#suggestiontabs a:first").tab("show");
+                        loadDatatable($("#suggestiontabs a:first").data("tabname"))
+                        $("#suggestiontabs a:first").attr("data-table_loaded", 'true')
+                    }
+
+                    [% FOREACH suggestion IN suggestions %]
+                        $("#suggestiontabs #[% suggestion.suggestiontype | html %]-tab").on("click", function() {
+                            if(!$(this).data("table_loaded")) {
+                                loadDatatable("[% suggestion.suggestiontype | html%]")
+                                $(this).attr("data-table_loaded", "true")
+                            }
+                        });
                     [% END %]
                 [% END %]
 
@@ -1503,19 +1589,6 @@
                     e.preventDefault();
                     const target = $(this).data("target");
                     $("." + target).toggle();
-                });
-
-                $(".trigger_action").on("click", function(e) {
-                    var id = $(this).data('suggestionid');
-                    var op = $(this).data('op');
-                    if ( op == 'cud-delete' && !confirm(_("Are you sure you want to delete this suggestion?")) ) {
-                        e.preventDefault();
-                        return false;
-                    }
-                    $('#action_form input[name="op"]').val(op);
-                    $('#action_form input[name="suggestionid"]').val(id);
-                    $('#action_form').submit();
-                    return false;
                 });
 
                 $("form.update_suggestions button[type='submit']").on("click", function(e) {
