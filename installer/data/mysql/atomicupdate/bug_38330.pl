@@ -12,7 +12,8 @@ return {
             $dbh->do(
                 q{
                 ALTER TABLE `biblio`
-                    ADD COLUMN `opac_suppressed` tinyint(1) NOT NULL DEFAULT 0 COMMENT 'whether the record should be suppressed in the OPAC' AFTER `abstract`;
+                    ADD COLUMN `opac_suppressed` tinyint(1) NOT NULL DEFAULT 0 COMMENT 'whether the record should be suppressed in the OPAC' AFTER `abstract`
+                    ADD INDEX `suppressedidx` (`opac_suppressed`);
                 }
             );
 

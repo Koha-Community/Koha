@@ -1112,7 +1112,8 @@ CREATE TABLE `biblio` (
   `abstract` longtext DEFAULT NULL COMMENT 'summary from the MARC record (520$a in MARC21)',
   `opac_suppressed` tinyint(1) NOT NULL DEFAULT 0 COMMENT 'whether the record should be suppressed in the OPAC',
   PRIMARY KEY (`biblionumber`),
-  KEY `blbnoidx` (`biblionumber`)
+  KEY `blbnoidx` (`biblionumber`),
+  KEY `suppressedidx` (`opac_suppressed`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
