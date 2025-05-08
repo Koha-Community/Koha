@@ -1732,7 +1732,17 @@ sub ToggleNewStatus {
                 $item->$field($value);
                 push @{ $report->{$itemnumber} }, $substitution;
             }
-            $item->store unless $report_only;
+            unless ($report_only) {
+                try {
+                    $item->store;
+                } catch {
+                    push @{ $report->{$itemnumber} }, {
+                        field => 'ERROR',
+                        error => 1,
+                        value => $_->error,
+                    }
+                }
+            }
         }
     }
 
