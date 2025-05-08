@@ -1351,7 +1351,7 @@ subtest "CanBookBeRenewed tests" => sub {
         );
         C4::Context->set_preference( 'OPACFineNoRenewalsBlockAutoRenew', '1' );
         C4::Context->set_preference( 'OPACFineNoRenewals',               '10' );
-        C4::Context->set_preference( 'OPACFineNoRenewalsIncludeCredits',  '1' );
+        C4::Context->set_preference( 'OPACFineNoRenewalsIncludeCredits', '1' );
         my $fines_amount = 5;
         my $account      = Koha::Account->new( { patron_id => $renewing_borrowernumber } );
         $account->add_debit(
@@ -7051,13 +7051,8 @@ subtest "CanBookBeIssued + needsconfirmation message" => sub {
 
     my $patron  = $builder->build_object( { class => 'Koha::Patrons' } );
     my $library = $builder->build_object( { class => 'Koha::Libraries' } );
-    my $biblio  = $builder->build_object( { class => 'Koha::Biblios' } );
-    my $biblioitem =
-        $builder->build_object( { class => 'Koha::Biblioitems', value => { biblionumber => $biblio->biblionumber } } );
-    my $item = $builder->build_object(
-        { class => 'Koha::Items', value => { itype => $itemtype, biblionumber => $biblio->biblionumber } } );
-
-    my $hold = $builder->build_object(
+    my $item    = $builder->build_sample_item;
+    my $hold    = $builder->build_object(
         {
             class => 'Koha::Holds',
             value => {
