@@ -94,7 +94,7 @@
 
             let content = "";
             if ( data.claim_id ) {
-                content = '<span class="badge">' + formatted_date + '</span>';
+                content = '<span class="badge text-bg-info">' + formatted_date + '</span>';
                 $(id).parent().parent().addClass('ok');
             } else {
                 content = _("Unable to claim as returned");
