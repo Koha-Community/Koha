@@ -321,7 +321,7 @@
                 $("#serverst").kohaTable({
                     pagingType: "full",
                 });
-                $(".delete").on("click",function(e){
+                $("#serverst").on("click", ".delete", function(e) {
                     var servername = $(this).data("servername");
                     let formid = $(this).data("formid");
                     if( confirm( _("Are you sure you want to delete server %s?").format(servername) ) ) {
