@@ -4,9 +4,6 @@ var browser = KOHA.browser(searchid, parseInt(biblionumber, 10));
 browser.show();
 
 $(document).ready(function () {
-    $(
-        '#cataloguing_additem_newitem #f[action^="/cgi-bin/koha/cataloguing/additem.pl"]'
-    );
     // Remove the onclick event defined in browser.js,
     // otherwise the deletion confirmation will not work correctly
     $('a[href*="biblionumber="]').off("click");
