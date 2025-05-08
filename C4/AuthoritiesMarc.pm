@@ -1770,7 +1770,7 @@ sub merge {
             $indexer->index_records( $biblio->biblionumber, "specialUpdate", "biblioserver" );
         }
         next if !$update;
-        ModBiblio( $marcrecord, $biblio->biblionumber, $biblio->frameworkcode, { disable_autolink => 1 } );
+        ModBiblio( $marcrecord, $biblio->biblionumber, $biblio->frameworkcode, { disable_autolink => 1, merge => 1 } );
         $counteditedbiblio++;
     }
     return $counteditedbiblio;

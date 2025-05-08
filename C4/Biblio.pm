@@ -413,7 +413,8 @@ sub ModBiblio {
             $decoding_error = "There was an error with this bibliographic record: " . $exception;
             $record         = $biblio->metadata->record_strip_nonxml;
         }
-        logaction( "CATALOGUING", "MODIFY", $biblionumber, "biblio $decoding_error BEFORE=>" . $record->as_formatted );
+        my $action = $options->{'merge'} ? 'MERGE' : 'MODIFY';
+        logaction( "CATALOGUING", $action, $biblionumber, "biblio $decoding_error BEFORE=>" . $record->as_formatted );
     }
 
     if ( !$options->{disable_autolink} && C4::Context->preference('AutoLinkBiblios') ) {

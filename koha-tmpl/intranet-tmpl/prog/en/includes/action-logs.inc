@@ -43,6 +43,7 @@
 [%        CASE 'ADD'    %]<span>Add</span>
 [%        CASE 'DELETE' %]<span>Delete</span>
 [%        CASE 'MODIFY' %]<span>Modify</span>
+[%        CASE 'MERGE'  %]<span>Merge</span>
 [%        CASE 'ISSUE'  %]<span>Checkout</span>
 [%        CASE 'RETURN' %]<span>Return</span>
 [%        CASE 'CREATE' %]<span>Create</span>
