@@ -20,7 +20,7 @@
 use Modern::Perl;
 
 use Test::NoWarnings;
-use Test::More tests => 2;
+use Test::More tests => 3;
 
 use Koha::Database;
 use Koha::Suggestions;
@@ -48,4 +48,61 @@ subtest 'suggester() tests' => sub {
     is_deeply( $patron->unblessed, $suggester->unblessed, 'It returns the right patron' );
 
     $schema->storage->txn_rollback;
+};
+
+subtest 'strings_map() tests' => sub {
+    plan tests => 2;
+
+    $schema->txn_begin;
+
+    my $av_value1 = Koha::AuthorisedValue->new(
+        {
+            category         => "SUGGEST_FORMAT",
+            authorised_value => 'RECORD',
+            lib              => "Test format"
+        }
+    )->store;
+    my $av_value2 = Koha::AuthorisedValue->new(
+        {
+            category         => "SUGGEST_STATUS",
+            authorised_value => 'WANTED',
+            lib              => "Test status"
+        }
+    )->store;
+    my $suggestion = $builder->build_object(
+        { class => 'Koha::Suggestions', value => { suggestedby => undef, STATUS => 'WANTED', itemtype => 'RECORD' } } );
+
+    my $strings_map = $suggestion->strings_map( { public => 0 } );
+    is_deeply(
+        $strings_map,
+        {
+            STATUS       => { str => 'Test status',             type => 'av', category => 'SUGGEST_STATUS' },
+            itemtype     => { str => 'Test format',             type => 'av', category => 'SUGGEST_FORMAT' },
+            patronreason => { str => $suggestion->patronreason, type => 'av', category => 'OPAC_SUG' },
+        },
+        'Strings map is correct'
+    );
+
+    my $av_value3 = Koha::AuthorisedValue->new(
+        {
+            category         => "OPAC_SUG",
+            authorised_value => 'OPAC',
+            lib              => "An OPAC reason"
+        }
+    )->store;
+
+    $suggestion->patronreason('OPAC');
+    $strings_map = $suggestion->strings_map( { public => 0 } );
+    is_deeply(
+        $strings_map,
+        {
+            STATUS       => { str => 'Test status',    type => 'av', category => 'SUGGEST_STATUS' },
+            itemtype     => { str => 'Test format',    type => 'av', category => 'SUGGEST_FORMAT' },
+            patronreason => { str => 'An OPAC reason', type => 'av', category => 'OPAC_SUG' },
+        },
+        'Strings map is correct'
+    );
+
+    $schema->txn_rollback;
+
 };

@@ -294,6 +294,42 @@ sub to_api_mapping {
     };
 }
 
+=head3 strings_map
+
+Returns a map of column name to string representations including the string.
+
+=cut
+
+sub strings_map {
+    my ( $self, $params ) = @_;
+
+    my $strings = {};
+
+    my $required_strings = {
+        STATUS       => 'SUGGEST_STATUS',
+        itemtype     => 'SUGGEST_FORMAT',
+        patronreason => 'OPAC_SUG',
+    };
+
+    foreach my $key ( keys %$required_strings ) {
+        my $av = Koha::AuthorisedValues->search(
+            { category => $required_strings->{$key}, authorised_value => $self->$key } );
+        my $status_str =
+              $av->count
+            ? $params->{public}
+                ? $av->next->opac_description
+                : $av->next->lib
+            : $self->$key;
+
+        $strings->{$key} = {
+            category => $required_strings->{$key},
+            str      => $status_str,
+            type     => 'av',
+        };
+    }
+    return $strings;
+}
+
 =head1 AUTHOR
 
 Kyle M Hall <kyle@bywatersolutions.com>
