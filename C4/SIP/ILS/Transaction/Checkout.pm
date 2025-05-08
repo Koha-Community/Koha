@@ -112,6 +112,10 @@ sub do_checkout {
                 $self->screen_msg("This item was previously checked out by you");
                 $noerror = 0 if ($prevcheckout_block_checkout);
                 last;
+            } elsif ( $confirmation eq 'CURRENTISSUE' ) {
+                $self->screen_msg("This item is currently checked out by you");
+                $noerror = 0 if ($prevcheckout_block_checkout);
+                last;
             } elsif ( $confirmation eq 'ADDITIONAL_MATERIALS' ) {
                 if ($allow_additional_materials_checkout) {
                     my $item = Koha::Items->find( { barcode => $barcode } );
