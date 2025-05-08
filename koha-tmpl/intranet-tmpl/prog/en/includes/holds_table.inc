@@ -232,7 +232,7 @@
                                         <option selected="selected" value=""
                                             >Only item
                                             [%- IF ( hold.barcodenumber ) -%]
-                                                [%- hold.barcodenumber | html -%]
+                                                [%- ' ' _ hold.barcodenumber | html -%]
                                             [%- ELSE -%]
                                                 No barcode
                                             [%- END -%]
