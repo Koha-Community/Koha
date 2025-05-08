@@ -425,67 +425,85 @@ if ( $op eq 'else' ) {
         $suggestion_ref->{branchcode} = C4::Context->userenv->{'branch'};
     }
 
+    my $search_params = {%$suggestion_ref};
+
+    # filter on date fields
+    foreach my $field (qw( suggesteddate manageddate accepteddate )) {
+        my $from = delete $search_params->{"${field}_from"};
+        my $to   = delete $search_params->{"${field}_to"};
+
+        my $from_dt = $from && eval { dt_from_string($from) };
+        my $to_dt   = $to   && eval { dt_from_string($to) };
+
+        if ( $from_dt || $to_dt ) {
+            my $dtf = Koha::Database->new->schema->storage->datetime_parser;
+            if ( $from_dt && $to_dt ) {
+                $search_params->{$field} =
+                    { -between => [ $dtf->format_date($from_dt), $dtf->format_date($to_dt) ] };
+            } elsif ($from_dt) {
+                $search_params->{$field} = { '>=' => $dtf->format_date($from_dt) };
+            } elsif ($to_dt) {
+                $search_params->{$field} = { '<=' => $dtf->format_date($to_dt) };
+            }
+        }
+    }
+    if ( $search_params->{budgetid} && $search_params->{budgetid} eq '__NONE__' ) {
+        $search_params->{budgetid} = [ undef, '' ];
+    }
+    for my $f (qw (branchcode budgetid)) {
+        delete $search_params->{$f}
+            if $search_params->{$f} eq '__ANY__'
+            || $search_params->{$f} eq '';
+    }
+    for my $bi (qw (title author isbn publishercode copyrightdate collectiontitle)) {
+        $search_params->{$bi} = { 'LIKE' => "%" . $search_params->{$bi} . "%" } if $search_params->{$bi};
+    }
+
+    $search_params->{archived} = 0 if !$filter_archived;
+    foreach my $key ( keys %$search_params ) {
+        if ( $key eq 'branchcode' ) {
+            my $branch_param = delete $search_params->{$key};
+            $search_params->{"me.branchcode"} = $branch_param;
+        }
+    }
+
+    # Retrieve the count to display on each tab
+    my $suggestion_tabs = Koha::Suggestions->search_limited(
+        $search_params,
+        {
+            select   => [ $displayby, { count => $displayby, -as => 'count' } ],
+            as       => [ $displayby, 'count' ],
+            group_by => [$displayby],
+        }
+    );
+    my $tab_counts = { map { $_->get_column($displayby) => $_->get_column('count') } $suggestion_tabs->as_list };
+
     my @allsuggestions;
     foreach my $criteriumvalue (@criteria_dv) {
-        my $search_params = {%$suggestion_ref};
 
+        # By default, display suggestions from current working branch
+        my $definedvalue = defined $$suggestion_ref{$displayby} && $$suggestion_ref{$displayby} ne "";
         next
             if $search_params->{STATUS}
             && $displayby eq 'STATUS'
             && $criteriumvalue ne $search_params->{STATUS};
 
-        # By default, display suggestions from current working branch
-        my $definedvalue = defined $$suggestion_ref{$displayby} && $$suggestion_ref{$displayby} ne "";
-
         next
             if ( $definedvalue && $$suggestion_ref{$displayby} ne $criteriumvalue )
             and ( $displayby ne 'branchcode' && $branchfilter ne '__ANY__' );
 
-        $search_params->{$displayby} = $criteriumvalue;
-
-        # filter on date fields
-        foreach my $field (qw( suggesteddate manageddate accepteddate )) {
-            my $from = delete $search_params->{"${field}_from"};
-            my $to   = delete $search_params->{"${field}_to"};
-
-            my $from_dt = $from && eval { dt_from_string($from) };
-            my $to_dt   = $to   && eval { dt_from_string($to) };
-
-            if ( $from_dt || $to_dt ) {
-                my $dtf = Koha::Database->new->schema->storage->datetime_parser;
-                if ( $from_dt && $to_dt ) {
-                    $search_params->{$field} =
-                        { -between => [ $dtf->format_date($from_dt), $dtf->format_date($to_dt) ] };
-                } elsif ($from_dt) {
-                    $search_params->{$field} = { '>=' => $dtf->format_date($from_dt) };
-                } elsif ($to_dt) {
-                    $search_params->{$field} = { '<=' => $dtf->format_date($to_dt) };
-                }
-            }
-        }
-        if ( $search_params->{budgetid} && $search_params->{budgetid} eq '__NONE__' ) {
-            $search_params->{budgetid} = [ undef, '' ];
-        }
-        for my $f (qw (branchcode budgetid)) {
-            delete $search_params->{$f}
-                if $search_params->{$f} eq '__ANY__'
-                || $search_params->{$f} eq '';
-        }
-        for my $bi (qw (title author isbn publishercode copyrightdate collectiontitle)) {
-            $search_params->{$bi} = { 'LIKE' => "%" . $search_params->{$bi} . "%" } if $search_params->{$bi};
-        }
-
-        $search_params->{archived} = 0 if !$filter_archived;
-        my @suggestions = Koha::Suggestions->search_limited($search_params)->as_list;
+        my $criterium_search_params = {%$search_params};
+        $criterium_search_params->{"me.$displayby"} = $criteriumvalue;
 
         push @allsuggestions,
             {
             "suggestiontype"      => $criteriumvalue                                 || "suggest",
             "suggestiontypelabel" => GetCriteriumDesc( $criteriumvalue, $displayby ) || "",
-            'suggestions'         => \@suggestions,
             'reasonsloop'         => $reasonsloop,
+            'search_params'       => $criterium_search_params,
+            'tab_count'           => $tab_counts->{$criteriumvalue},
             }
-            if scalar @suggestions > 0;
+            if $tab_counts->{$criteriumvalue} > 0;
 
         delete $$suggestion_ref{$displayby} unless $definedvalue;
     }
