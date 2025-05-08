@@ -90,7 +90,7 @@
                     <div class="required_label required">Required</div>
                 </li>
                 <li>
-                    <label class="required" for="branchcode">Destination library:</label>xxx
+                    <label class="required" for="branchcode">Destination library:</label>
                     <select id="branchcode" name="branchcode">
                         <option value=""></option>
                         [% FOREACH branch IN branches %]
