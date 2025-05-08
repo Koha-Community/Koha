@@ -22,11 +22,11 @@ return {
                     JOIN biblio_metadata m ON b.biblionumber = m.biblionumber
                     SET b.opac_suppressed =
                         CASE
-                            WHEN ExtractValue(m.metadata, '//datafield[@tag="952"]/subfield[@code="n"]') REGEXP '^[01]$' THEN
-                                ExtractValue(m.metadata, '//datafield[@tag="952"]/subfield[@code="n"]')
+                            WHEN ExtractValue(m.metadata, '//datafield[@tag="942"]/subfield[@code="n"]') REGEXP '^[01]$' THEN
+                                ExtractValue(m.metadata, '//datafield[@tag="942"]/subfield[@code="n"]')
                             ELSE 0
                         END
-                    WHERE m.metadata LIKE '%<datafield tag="952">%';
+                    WHERE m.metadata LIKE '%<datafield tag="942">%';
                 }
             );
 
@@ -47,11 +47,11 @@ return {
                     JOIN deletedbiblio_metadata m ON b.biblionumber = m.biblionumber
                     SET b.opac_suppressed =
                         CASE
-                            WHEN ExtractValue(m.metadata, '//datafield[@tag="952"]/subfield[@code="n"]') REGEXP '^[01]$' THEN
-                                ExtractValue(m.metadata, '//datafield[@tag="952"]/subfield[@code="n"]')
+                            WHEN ExtractValue(m.metadata, '//datafield[@tag="942"]/subfield[@code="n"]') REGEXP '^[01]$' THEN
+                                ExtractValue(m.metadata, '//datafield[@tag="942"]/subfield[@code="n"]')
                             ELSE 0
                         END
-                    WHERE m.metadata LIKE '%<datafield tag="952">%';
+                    WHERE m.metadata LIKE '%<datafield tag="942">%';
                 }
             );
 
