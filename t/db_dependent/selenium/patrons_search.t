@@ -344,9 +344,9 @@ subtest 'Search patrons' => sub {
 
     $s->driver->find_element( '//table[@id="'
             . $table_id
-            . '"]//th[@data-filter="libraries"]/select/option[@value="'
+            . '"]//th[@data-filter="libraries"]/select/option[@value="^'
             . $first_patron->library->branchcode
-            . '"]' )->click;
+            . '$"]' )->click;
     sleep $DT_delay && $s->wait_for_ajax;
     is(
         $driver->find_element( '//div[@id="' . $table_id . '_wrapper"]//div[@class="dt-info"]' )->get_text,
