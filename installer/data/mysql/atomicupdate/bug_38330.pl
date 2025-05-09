@@ -27,7 +27,7 @@ return {
                         WHEN LOWER(TRIM(ExtractValue(m.metadata, '//datafield[@tag="942"]/subfield[@code="n"]'))) IN ('0', 'no', 'false', '') THEN 0
                         ELSE 0
                     END
-                WHERE m.metadata LIKE '%<datafield tag="942">%';
+                WHERE m.metadata LIKE '%<datafield tag="942" %';
                 }
             );
 
@@ -52,7 +52,7 @@ return {
                             WHEN LOWER(TRIM(ExtractValue(m.metadata, '//datafield[@tag="942"]/subfield[@code="n"]'))) IN ('0', 'no', 'false', '') THEN 0
                             ELSE 0
                         END
-                    WHERE m.metadata LIKE '%<datafield tag="942">%';
+                    WHERE m.metadata LIKE '%<datafield tag="942" %';
                 }
             );
 
@@ -66,6 +66,9 @@ return {
         );
 
         say $out "Set the 942\$n => biblio.opac_suppressed mapping for all MARC frameworks";
-        say_warning( $out, "You need to run the `maintenance/touch_all_biblios.pl` script" );
+        say_warning(
+            $out,
+            "The biblio.opac_suppressed column should be updated, but you can run the `maintenance/touch_all_biblios.pl` script to be certain"
+        );
     },
 };
