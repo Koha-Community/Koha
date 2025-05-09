@@ -156,6 +156,16 @@ sub before_send_messages {
     Koha::Exception->throw("before_send_messages called");
 }
 
+sub notices_content {
+    my ( $self, $params ) = @_;
+    return {
+        custom_attribute => {
+            module  => $params->{module},
+            message => 'notices_content() called',
+        },
+    };
+}
+
 sub before_biblio_action {
     my ( $self, $params ) = @_;
 
