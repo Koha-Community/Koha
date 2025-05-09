@@ -33,7 +33,7 @@
 [% END %]
 </head>
 [% INCLUDE 'bodytag.inc' bodyid='opac-user' bodyclass='scrollto' %]
-[% INCLUDE 'masthead.inc' %]
+[% INCLUDE 'masthead.inc' IsPatronPage=1 %]
 
 [% IF Koha.Preference('AmazonAssocTag') %]
     [% AmazonAssocTag = '?tag=' _ Koha.Preference('AmazonAssocTag') %]

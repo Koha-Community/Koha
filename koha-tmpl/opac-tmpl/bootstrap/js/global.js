@@ -355,6 +355,45 @@ $(document).ready(function () {
         }
     });
 
+    $("#scrolltofooter").click(function () {
+        var content = $(".footercontent");
+        if (content.length > 0) {
+            $("html,body").animate(
+                {
+                    scrollTop: content.first().offset().top,
+                },
+                "slow"
+            );
+            content.first().find(":focusable").eq(0).focus();
+        }
+    });
+
+    $("#scrolltomenu").click(function () {
+        var content = $(".menu");
+        if (content.length > 0) {
+            $("html,body").animate(
+                {
+                    scrollTop: content.first().offset().top,
+                },
+                "slow"
+            );
+            content.first().find(":focusable").eq(0).focus();
+        }
+    });
+
+    $("#scrolltosearch").click(function () {
+        var content = $(".mastheadsearch");
+        if (content.length > 0) {
+            $("html,body").animate(
+                {
+                    scrollTop: content.first().offset().top,
+                },
+                "slow"
+            );
+            content.first().find(":focusable").eq(0).focus();
+        }
+    });
+
     if (typeof bootstrap == "object") {
         $('[data-bs-toggle="tooltip"]').tooltip();
     }

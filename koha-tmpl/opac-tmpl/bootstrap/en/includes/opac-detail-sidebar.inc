@@ -2,7 +2,7 @@
 [% USE Biblio %]
 [% INCLUDE 'modals/catalog_cite.inc' %]
 
-<ul id="action">
+<ul class="menu" id="action">
     [% IF Koha.Preference( 'opacuserlogin' ) == 1 %]
         [% IF Koha.Preference( 'OPACHoldRequests' ) == 1 %]
             [% IF ( ReservableItems ) %]

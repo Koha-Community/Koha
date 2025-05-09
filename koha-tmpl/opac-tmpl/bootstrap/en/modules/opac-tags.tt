@@ -63,7 +63,7 @@
 [% END %]
 </head>
 [% IF ( loggedinusername ) %][% INCLUDE 'bodytag.inc' bodyid='opac-usertags' bodyclass='scrollto' %][% ELSE %][% INCLUDE 'bodytag.inc' bodyid='opac-tags' bodyclass='scrollto' %][% END %]
-[% INCLUDE 'masthead.inc' %]
+[% INCLUDE 'masthead.inc' IsPatronPage=1 %]
 
 <main class="main">
     [% WRAPPER breadcrumbs %]

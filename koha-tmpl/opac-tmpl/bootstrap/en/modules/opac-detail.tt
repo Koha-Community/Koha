@@ -61,7 +61,7 @@
 </head>
 [% BLOCK cssinclude %][% END %]
 [% INCLUDE 'bodytag.inc' bodyid='opac-detail' bodyclass='scrollto' %]
-[% INCLUDE 'masthead.inc' %]
+[% INCLUDE 'masthead.inc' IsMenuPage=1 %]
 
 [% SET hidden_columns_force = {} %]
 <main class="main">
@@ -1037,7 +1037,7 @@
             <!-- /.col-lg-10 -->
 
             <div class="col-lg-3">
-                <div id="ulactioncontainer">
+                <div class="menu" id="ulactioncontainer">
                     [% IF ( Koha.Preference('OpacBrowseResults') && busc ) %]
                         <div class="nav_results">
                             <div class="l_Results" style="display:none;">
