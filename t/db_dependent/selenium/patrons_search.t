@@ -303,7 +303,7 @@ subtest 'Search patrons' => sub {
     sleep $DT_delay && $s->wait_for_ajax;
     is( $driver->find_element('//div[@id="'.$table_id.'_wrapper"]//div[@class="dt-info"]')->get_text, sprintf('Showing 1 to %s of %s entries (filtered from %s total entries)', $PatronsPerPage, 26, $total_number_of_patrons), 'Searching in standard brings back correct results' );
 
-    $s->driver->find_element('//table[@id="'.$table_id.'"]//th[@data-filter="libraries"]/select/option[@value="'.$first_patron->library->branchcode.'"]')->click;
+    $s->driver->find_element('//table[@id="'.$table_id.'"]//th[@data-filter="libraries"]/select/option[@value="^'.$first_patron->library->branchcode.'$"]')->click;
     sleep $DT_delay && $s->wait_for_ajax;
     is( $driver->find_element('//div[@id="'.$table_id.'_wrapper"]//div[@class="dt-info"]')->get_text, sprintf('Showing 1 to %s of %s entries (filtered from %s total entries)', $PatronsPerPage, 25, $total_number_of_patrons), 'Filtering on library works in combination with main search' );
 
