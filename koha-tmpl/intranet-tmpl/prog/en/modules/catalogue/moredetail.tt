@@ -153,7 +153,7 @@
                         [% SET not_for_loan_description = AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.notforloan', authorised_value => item.notforloan ) %]
                     [% END %]
                     [% IF withdraw_error %]
-                        <div class="alert alert-info">
+                        <div class="alert alert-warning">
                             [% IF withdraw_error == 'intransit_cannot_withdraw' %]
                                 Cannot withdraw item in transit.
                             [% END %]

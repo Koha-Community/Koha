@@ -646,7 +646,7 @@ INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `
 ('PreservationNotForLoanDefaultTrainIn', '', '', 'Not for loan to apply to items removed from the preservation waiting list', 'TextArea'),
 ('PreservationNotForLoanWaitingListIn', '', '', 'Not for loan to apply to items added to the preservation waiting list', 'TextArea'),
 ('PreserveSerialNotes','1','','When a new "Expected" issue is generated, should it be prefilled with last created issue notes?','YesNo'),
-('PreventWithdrawingItemsStatus', '1', '', 'Prevent the withdrawing of items based on certain statuses' , 'multiple'),
+('PreventWithdrawingItemsStatus', '', '', 'Prevent the withdrawing of items based on certain statuses' , 'multiple'),
 ('previousIssuesDefaultSortOrder','asc','asc|desc','Specify the sort order of Previous Issues on the circulation page','Choice'),
 ('PrintNoticesMaxLines','0','','If greater than 0, sets the maximum number of lines an overdue notice will print. If the number of items is greater than this number, the notice will end with a warning asking the borrower to check their online account for a full list of overdue items.','Integer'),
 ('PrivacyPolicyConsent','','Enforced|Permissive|Disabled','Data privacy policy consent in the OPAC', 'Choice'),
