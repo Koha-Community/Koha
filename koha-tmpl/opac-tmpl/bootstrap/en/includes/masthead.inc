@@ -18,7 +18,16 @@
 [% SET CookieConsentPopup = AdditionalContents.get( location => "CookieConsentPopup", lang => lang, library => branchcode || default_branch ) %]
 [% SET AllPublicBranches = Branches.all(  search_params => { public => 1 }, selected => opac_name, unfiltered => 1 ) %]
 
+[% UNLESS ( advsearch ) %]
+    <button id="scrolltosearch">Skip to search</button>
+[% END %]
+[% IF ( ( IsPatronPage && loggedinusername ) || opacfacets || IsMenuPage ) %]
+    <button id="scrolltomenu">Skip to menu</button>
+[% END %]
 <button id="scrolltocontent">Skip to main content</button>
+[% IF ( Koha.Preference('OPACReportProblem') && Koha.Preference('KohaAdminEmailAddress') ) || Koha.Preference( 'CookieConsent' ) || OpacKohaUrl || ( ( OpacLangSelectorMode == 'both' || OpacLangSelectorMode == 'footer') ) %]
+    <button id="scrolltofooter">Skip to footer</button>
+[% END %]
 <!-- prettier-ignore-start -->
 <!-- closed in opac-bottom.inc -->
 <div id="wrapper">

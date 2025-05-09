@@ -3,7 +3,7 @@
 [% PROCESS 'html_helpers.inc' %]
 [% SET AllPublicBranches = Branches.all(  search_params => { public => 1 }, selected => branch, unfiltered => 1 ) %]
 
-<div id="search-facets">
+<div class="menu" id="search-facets">
     <form method="get" action="/cgi-bin/koha/opac-topissues.pl">
         <h2><a href="#" class="menu-collapse-toggle" aria-expanded="false">Refine your search</a></h2>
         <ul class="menu-collapse">

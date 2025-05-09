@@ -1,7 +1,7 @@
 [% USE Koha %]
 [% USE KohaPlugins %]
 [% IF ( ( Koha.Preference( 'opacuserlogin' ) == 1 ) && loggedinusername ) %]
-    <div id="menu">
+    <div class="menu" id="menu">
         <ul>
             <li [% IF userview %]class="active"[% END %]> <a href="/cgi-bin/koha/opac-user.pl">Summary</a></li>
 
