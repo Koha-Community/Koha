@@ -310,10 +310,12 @@ sub calculate {
     $strsth .= " ORDER BY $line";
 
     my $sth = $dbh->prepare($strsth);
-    if ( (@linefilter) and ( $linefilter[1] ) ) {
+    if ( (@linefilter) and ( $linefilter[0] && $linefilter[1] ) ) {
         $sth->execute( $linefilter[0], $linefilter[1] );
     } elsif ( $linefilter[0] ) {
         $sth->execute( $linefilter[0] );
+    } elsif ( $linefilter[1] ) {
+        $sth->execute( $linefilter[1] );
     } else {
         $sth->execute;
     }
@@ -364,10 +366,12 @@ sub calculate {
 
     my $sth2 = $dbh->prepare($strsth2);
 
-    if ( (@colfilter) and ( $colfilter[1] ) ) {
+    if ( (@colfilter) and ( $colfilter[0] and $colfilter[1] ) ) {
         $sth2->execute( $colfilter[0], $colfilter[1] );
     } elsif ( $colfilter[0] ) {
         $sth2->execute( $colfilter[0] );
+    } elsif ( $colfilter[1] ) {
+        $sth2->execute( $colfilter[1] );
     } else {
         $sth2->execute;
     }
