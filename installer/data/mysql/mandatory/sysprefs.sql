@@ -395,7 +395,7 @@ INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `
 ('LoadCheckoutsTableDelay','0','','Delay before auto-loading checkouts table on checkouts screen','Integer'),
 ('LoadSearchHistoryToTheFirstLoggedUser', '1', NULL, 'If ON, the next user will automatically get the last searches in their history', 'YesNo'),
 ('LocalCoverImages','0','1','Display local cover images on intranet details pages.','YesNo'),
-('LocalHoldsPriority',  'None', 'GiveLibrary|None|GiveLibraryGroup|GiveLibraryAndGroup' 'Enables the LocalHoldsPriority feature', 'Choice'),
+('LocalHoldsPriority',  'None', 'GiveLibrary|None|GiveLibraryGroup|GiveLibraryAndGroup', 'Enables the LocalHoldsPriority feature', 'Choice'),
 ('LocalHoldsPriorityItemControl',  'holdingbranch',  'holdingbranch|homebranch',  'decides if the feature operates using the item''s home or holding library.',  'Choice'),
 ('LocalHoldsPriorityPatronControl',  'PickupLibrary',  'HomeLibrary|PickupLibrary',  'decides if the feature operates using the library set as the patron''s home library, or the library set as the pickup library for the given hold.',  'Choice'),
 ('LockExpiredDelay','','','Delay for locking expired patrons (empty means no locking)','Integer'),
