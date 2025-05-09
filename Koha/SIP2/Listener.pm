@@ -19,6 +19,8 @@ use Modern::Perl;
 
 use base qw(Koha::Object);
 
+use IO::Socket;
+
 =head1 NAME
 
 Koha::SIP2::Listener- Koha Sip Listener Object class
@@ -28,6 +30,34 @@ Koha::SIP2::Listener- Koha Sip Listener Object class
 =head2 Class Methods
 
 =cut
+
+=head3 store
+
+store
+
+=cut
+
+sub store {
+    my ($self) = @_;
+
+    my ($port) = $self->port =~ /:(\d+)/;
+    my ($addr) = $self->port =~ /([0-9.]+)/;
+
+    my $socket = IO::Socket::INET->new(
+        LocalAddr => $addr,
+        LocalPort => $port,
+        Proto     => 'tcp',
+        ReuseAddr => 0,
+        Listen    => 1
+    );
+
+    unless ($socket) {
+        Koha::Exceptions::ObjectNotCreated->throw(
+            error => "Can't listen on port " . $self->port . ". Port already in use." );
+    }
+
+    return $self->SUPER::store;
+}
 
 =head3 get_for_config
 

@@ -108,6 +108,12 @@ sub add {
                     openapi => { error => "Given " . $to_api_mapping->{ $_->parameter } . " does not exist" }
                 );
             }
+            elsif ( $_->isa('Koha::Exceptions::ObjectNotCreated') ) {
+                return $c->render(
+                    status  => 500,
+                    openapi => { error => $_->error }
+                );
+            }
         }
 
         $c->unhandled_exception($_);
