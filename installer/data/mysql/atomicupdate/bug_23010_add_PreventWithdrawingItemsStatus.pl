@@ -11,10 +11,10 @@ return {
         $dbh->do(
             q{
             INSERT IGNORE INTO systempreferences (`variable`,`value`,`options`,`explanation`,`type`)
-            VALUES ('PreventWithdrawingItemsStatus',NULL,'','Prevent the withdrawing of items based on statuses','Choice')
+            VALUES ('PreventWithdrawingItemsStatus','','','Prevent the withdrawing of items based on statuses','multiple')
         }
         );
 
-        say $out "Added new system preference 'PreventWithdrawingItemsStatus'";
+        say_success( $out, "Added new system preference 'PreventWithdrawingItemsStatus'" );
     },
 };
