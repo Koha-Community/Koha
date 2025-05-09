@@ -53,14 +53,15 @@ $mocked_letters->mock(
         return 1;
     }
 );
+my $message_has_content = 1;
 my $letter_enqueued;
 $mocked_letters->mock(
     'EnqueueLetter',
     sub {
-        $letter_enqueued = 1;
+        $letter_enqueued = $message_has_content ? 1 : 0;
 
         # return a 'message_id'
-        return 42;
+        return $message_has_content ? 42 : undef;
     }
 );
 $mocked_letters->mock(
@@ -430,7 +431,7 @@ subtest 'add() tests' => sub {
     $schema->storage->txn_rollback;
 
     subtest 'librarian access tests' => sub {
-        plan tests => 25;
+        plan tests => 37;
 
         $schema->storage->txn_begin;
 
@@ -472,11 +473,20 @@ subtest 'add() tests' => sub {
 
         $newpatron->{library_id} = $deleted_library_id;
 
-        $t->post_ok("//$userid:$password@/api/v1/patrons" => json => $newpatron)
-          ->status_is(400)
+        # Test duplicate userid constraint
+        $t->post_ok( "//$userid:$password@/api/v1/patrons" => json => $newpatron )->status_is(400)
           ->json_is('/error' => "Problem with ". $newpatron->{userid} );
 
         $newpatron->{library_id} = $patron->branchcode;
+
+        # Test duplicate cardnumber constraint
+        $newpatron->{userid} = undef;    # force regeneration
+        warning_like {
+            $t->post_ok( "//$userid:$password@/api/v1/patrons" => json => $newpatron )->status_is(409)
+                ->json_has( '/error', 'Fails when trying to POST duplicate cardnumber' )
+                ->json_like( '/conflict' => qr/(borrowers\.)?cardnumber/ );
+        }
+        qr/DBD::mysql::st execute failed: Duplicate entry '(.*?)' for key '(borrowers\.)?cardnumber'/;
 
         # Create a library just to make sure its ID doesn't exist on the DB
         my $category_to_delete = $builder->build_object({ class => 'Koha::Patron::Categories' });
@@ -512,6 +522,7 @@ subtest 'add() tests' => sub {
         # Set a date-time field
         $newpatron->{last_seen} = output_pref({ dt => dt_from_string->add( days => -1 ), dateformat => 'rfc3339' });
 
+        # Test welcome email sending with AutoEmailNewUser = 0 but welcome_yes override
         t::lib::Mocks::mock_preference( 'AutoEmailNewUser', 0 );
         $letter_enqueued = 0;
         $t->post_ok(
@@ -529,19 +540,52 @@ subtest 'add() tests' => sub {
           ->json_is( '/last_seen'     => $newpatron->{last_seen}, 'Date-time field set (Bug 28585)' );
 
         my $p = Koha::Patrons->find( { cardnumber => $newpatron->{cardnumber} } );
-        is( $letter_enqueued, 1 , "Patron got welcome notice" );
+        is( $letter_enqueued, 1, "Patron got welcome notice due to welcome_yes override" );
 
-        $newpatron->{userid} = undef; # force regeneration
-        warning_like {
-            $t->post_ok("//$userid:$password@/api/v1/patrons" => json => $newpatron)
-              ->status_is(409)
-              ->json_has( '/error', 'Fails when trying to POST duplicate cardnumber' )
-              ->json_like( '/conflict' => qr/(borrowers\.)?cardnumber/ ); }
-            qr/DBD::mysql::st execute failed: Duplicate entry '(.*?)' for key '(borrowers\.)?cardnumber'/;
+        # Test when AutoEmailNewUser = 1 but welcome_no override
+        $newpatron->{cardnumber} = "NewCard12345";
+        $newpatron->{userid}     = "newuserid";
+        $letter_enqueued         = 0;
+        t::lib::Mocks::mock_preference( 'AutoEmailNewUser', 1 );
+        $t->post_ok(
+            "//$userid:$password@/api/v1/patrons" => { 'x-koha-override' => 'welcome_no' } => json => $newpatron )
+            ->status_is( 201, 'Patron created successfully with welcome_no override' );
+        is( $letter_enqueued, 0, "No welcome notice sent due to welcome_no override" );
+
+        # Test when AutoEmailNewUser = 1 with no overrides
+        $newpatron->{cardnumber} = "NewCard54321";
+        $newpatron->{userid}     = "newuserid2";
+        $letter_enqueued         = 0;
+        t::lib::Mocks::mock_preference( 'AutoEmailNewUser', 1 );
+        $t->post_ok( "//$userid:$password@/api/v1/patrons" => json => $newpatron )
+            ->status_is( 201, 'Patron created successfully with AutoEmailNewUser = 1' );
+        is( $letter_enqueued, 1, "Welcome notice sent due to AutoEmailNewUser = 1" );
+
+        # Test case when patron has no valid email address
+        $mocked_patron->mock( 'notice_email_address', sub { return; } );
+        $newpatron->{cardnumber} = "NewCard99999";
+        $newpatron->{userid}     = "newuserid3";
+        $letter_enqueued         = 0;
+        t::lib::Mocks::mock_preference( 'AutoEmailNewUser', 1 );
+        $t->post_ok( "//$userid:$password@/api/v1/patrons" => json => $newpatron )
+            ->status_is( 201, 'Patron created successfully but email will not be sent' );
+        is( $letter_enqueued, 0, "No welcome notice sent due to missing email address" );
+        $mocked_patron->unmock('notice_email_address');
+
+        # Test case when notice template returns an empty string
+        $newpatron->{cardnumber} = "NewCardPidgeon";
+        $newpatron->{userid}     = "newuserid4";
+        $letter_enqueued         = 0;
+        $message_has_content     = 0;
+        t::lib::Mocks::mock_preference( 'AutoEmailNewUser', 1 );
+        $t->post_ok( "//$userid:$password@/api/v1/patrons" => json => $newpatron )
+            ->status_is( 201, 'Patron created successfully with AutoEmailNewUser = 1 and empty WELCOME notice' );
+        is( $letter_enqueued, 0, "Welcome not sent as it would be empty" );
+        $message_has_content = 1;
 
         subtest 'extended_attributes handling tests' => sub {
 
-            plan tests => 19;
+            plan tests => 25;
 
             $mocked_patron->mock(
                 'extended_attributes',
@@ -653,6 +697,28 @@ subtest 'add() tests' => sub {
                     }
                 }
             );
+            my $non_repeatable = $builder->build_object(
+                {
+                    class => 'Koha::Patron::Attribute::Types',
+                    value => {
+                        mandatory     => 0,
+                        repeatable    => 0,
+                        unique_id     => 0,
+                        category_code => 'ST'
+                    }
+                }
+            );
+            my $unique_id = $builder->build_object(
+                {
+                    class => 'Koha::Patron::Attribute::Types',
+                    value => {
+                        mandatory     => 0,
+                        repeatable    => 1,
+                        unique_id     => 1,
+                        category_code => 'ST'
+                    }
+                }
+            );
 
             my $patron_id = $t->post_ok(
                 "//$userid:$password@/api/v1/patrons" => json => {
@@ -667,17 +733,49 @@ subtest 'add() tests' => sub {
                         { type => $repeatable_1->code, value => 'b' },
                         { type => $repeatable_1->code, value => 'c' },
                         { type => $repeatable_2->code, value => 'd' },
-                        { type => $repeatable_2->code, value => 'e' }
+                        { type => $repeatable_2->code,   value => 'e' },
+                        { type => $non_repeatable->code, value => 'single' },
+                        { type => $unique_id->code,      value => 'unique1' }
                     ]
                 }
             )->status_is(201, 'Patron added')->tx->res->json->{patron_id};
-            my $extended_attributes = join( ' ', sort map {$_->attribute} Koha::Patrons->find($patron_id)->extended_attributes->as_list);
-            is( $extended_attributes, 'a b c d e', 'Extended attributes are stored correctly');
+            my $extended_attributes =
+                join( ' ', sort map { $_->attribute } Koha::Patrons->find($patron_id)->extended_attributes->as_list );
+            is( $extended_attributes, 'a b c d e single unique1', 'Extended attributes are stored correctly' );
+
+            # Test non-repeatable constraint in real scenario
+            $t->post_ok(
+                "//$userid:$password@/api/v1/patrons" => json => {
+                    "firstname"           => "Another",
+                    "surname"             => "User",
+                    "address"             => "Somewhere",
+                    "category_id"         => "ST",
+                    "city"                => "Konstanz",
+                    "library_id"          => "MPL",
+                    "extended_attributes" => [
+                        { type => $non_repeatable->code, value => 'first' },
+                        { type => $non_repeatable->code, value => 'second' }
+                    ]
+                }
+            )->status_is(400)->json_like( '/error' => qr/Tried to add more than one non-repeatable attributes/ );
+
+            # Test unique ID constraint in real scenario
+            $t->post_ok(
+                "//$userid:$password@/api/v1/patrons" => json => {
+                    "firstname"           => "Another",
+                    "surname"             => "User",
+                    "address"             => "Somewhere",
+                    "category_id"         => "ST",
+                    "city"                => "Konstanz",
+                    "library_id"          => "MPL",
+                    "extended_attributes" => [ { type => $unique_id->code, value => 'unique1' } ]
+                }
+            )->status_is(400)->json_like( '/error' => qr/Your action breaks a unique constraint on the attribute/ );
         };
 
         subtest 'default patron messaging preferences handling' => sub {
 
-            plan tests => 3;
+            plan tests => 6;
 
             t::lib::Mocks::mock_preference( 'EnhancedMessagingPreferences', 1 );
 
@@ -709,6 +807,30 @@ subtest 'add() tests' => sub {
                     transports => { email => 'DUEDGST' }
                 } ,
                 'Default messaging preferences set correctly'
+            );
+
+            # Test with EnhancedMessagingPreferences disabled
+            t::lib::Mocks::mock_preference( 'EnhancedMessagingPreferences', 0 );
+
+            my $patron_id2 = $t->post_ok(
+                "//$userid:$password@/api/v1/patrons" => json => {
+                    "firstname"   => "David",
+                    "surname"     => "Nolan",
+                    "address"     => "Elsewhere",
+                    "category_id" => "ST",
+                    "city"        => "Bigtown",
+                    "library_id"  => "MPL",
+                }
+            )->status_is( 201, 'Patron added with EnhancedMessagingPreferences disabled' )
+                ->tx->res->json->{patron_id};
+
+            # No messaging preferences should be set
+            my $no_messaging_preferences = C4::Members::Messaging::GetMessagingPreferences(
+                { borrowernumber => $patron_id2, message_name => 'Item_Due' } );
+
+            ok(
+                !$no_messaging_preferences->{transports}->{email},
+                'No email messaging preferences set when EnhancedMessagingPreferences disabled'
             );
         };
 
