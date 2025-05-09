@@ -37,6 +37,9 @@ export default {
                     label: __("Name"),
                     showInTable: true,
                     group: "Details",
+                    toolTip: __(
+                        "Name of the institution. Should match a library's branch code."
+                    ),
                 },
                 {
                     name: "implementation",
@@ -45,6 +48,11 @@ export default {
                     label: __("Implementation"),
                     showInTable: true,
                     group: "Details",
+                    placeholder: "ILS",
+                    defaultValue: "ILS",
+                    toolTip: __(
+                        "Use 'ILS' unless you have a specific implementation name"
+                    ),
                 },
                 {
                     name: "checkin",
@@ -52,6 +60,9 @@ export default {
                     label: __("Checkin"),
                     showInTable: true,
                     group: "Policy",
+                    toolTip: __(
+                        "Are the self service terminals permitted to check items in?"
+                    ),
                 },
                 {
                     name: "checkout",
@@ -59,6 +70,9 @@ export default {
                     label: __("Checkout"),
                     showInTable: true,
                     group: "Policy",
+                    toolTip: __(
+                        "Are the self service terminals permitted to check items out to patrons?"
+                    ),
                 },
                 {
                     name: "offline",
@@ -66,6 +80,9 @@ export default {
                     label: __("Offline"),
                     showInTable: true,
                     group: "Policy",
+                    toolTip: __(
+                        "Does the ILS allow self-check units to operate when unconnected to the ILS?  That is, can a self-check unit check out items to patrons without checking the status of the items and patrons in real time?"
+                    ),
                 },
                 {
                     name: "renewal",
@@ -73,6 +90,9 @@ export default {
                     label: __("Renewal"),
                     showInTable: true,
                     group: "Policy",
+                    toolTip: __(
+                        "Are the self service terminals permitted to renew items?"
+                    ),
                 },
                 {
                     name: "retries",
@@ -83,6 +103,9 @@ export default {
                     group: "Policy",
                     showInTable: true,
                     defaultValue: 5,
+                    toolTip: __(
+                        "Number of times the system will attempt to connect"
+                    ),
                 },
                 {
                     name: "status_update",
@@ -91,6 +114,9 @@ export default {
                     label: __("Status update"),
                     showInTable: true,
                     group: "Policy",
+                    toolTip: __(
+                        "Are the self service terminals permitted to update patron status information. For example, can terminals block patrons?"
+                    ),
                 },
                 {
                     name: "timeout",
@@ -100,6 +126,9 @@ export default {
                     showInTable: true,
                     group: "Policy",
                     defaultValue: 100,
+                    toolTip: __(
+                        "Time, in seconds, that the system will wait for a response from the ILS before timing out the request."
+                    ),
                 },
             ],
             tableOptions: {
