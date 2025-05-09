@@ -229,12 +229,11 @@
                                     </a>
                                 [%- ELSE -%]
                                     <select name="change_hold_type_[% hold.reserve_id | html %]">
-                                        <option selected="selected" value=""
-                                            >Only item
+                                        <option selected="selected" value="">
                                             [%- IF ( hold.barcodenumber ) -%]
-                                                [%- ' ' _ hold.barcodenumber | html -%]
+                                                Only item [%- hold.barcodenumber | html -%]
                                             [%- ELSE -%]
-                                                No barcode
+                                                Only item [No barcode]
                                             [%- END -%]
                                         </option>
                                         <option value="1">Next available</option>
