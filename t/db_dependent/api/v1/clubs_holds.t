@@ -19,6 +19,7 @@ use Modern::Perl;
 
 use Test::NoWarnings;
 use Test::More tests => 3;
+use Test::MockModule;
 use Test::Mojo;
 use Test::Warn;
 
@@ -61,7 +62,7 @@ subtest 'add() tests' => sub {
 
     subtest 'librarian access tests' => sub {
 
-        plan tests => 29;
+        plan tests => 14;
 
         $schema->storage->txn_begin;
 
@@ -150,33 +151,136 @@ subtest 'add() tests' => sub {
             }
         )->status_is(404)->json_is( '/error' => 'Item not found' );
 
-        my $data = {
-            biblio_id         => $item->biblionumber,
-            pickup_library_id => $item->home_branch->branchcode
+        my $can_be_reserved_status;
+
+        my $c4_reserves = Test::MockModule->new('C4::Reserves');
+        $c4_reserves->mock( 'CanBookBeReserved', sub { return { status => $can_be_reserved_status }; } );
+        $c4_reserves->mock( 'CanItemBeReserved', sub { return { status => $can_be_reserved_status }; } );
+
+        subtest 'biblio-level holds tests' => sub {
+
+            plan tests => 23;
+
+            $can_be_reserved_status = 'OK';
+
+            my $data = {
+                biblio_id         => $item->biblionumber,
+                pickup_library_id => $item->home_branch->branchcode
+            };
+
+            $t->post_ok(
+                "//$userid:$password@/api/v1/clubs/" . $club_without_enrollments->id . "/holds" => json => $data )
+                ->status_is(409)->json_is( '/error' => "Cannot place a hold on a club without patrons." );
+
+            # place a club hold with top level reserveforothers permission - should succeed
+            $t->post_ok( "//$userid:$password@/api/v1/clubs/" . $club_with_enrollments->id . "/holds" => json => $data )
+                ->status_is( 201, 'Created Hold' )->json_has( '/club_hold_id', 'got a club hold id' )
+                ->json_is( '/club_id' => $club_with_enrollments->id )->json_is( '/biblio_id' => $item->biblionumber )
+                ->header_is(
+                      'Location' => '/api/v1/clubs/'
+                    . $club_with_enrollments->id
+                    . '/holds/'
+                    . $t->tx->res->json->{club_hold_id},
+                'REST3.4.1'
+                );
+
+            # place a club hold with the place_hold specific permsision - should succeed
+            $t->post_ok(
+                "//$userid_2:$password_2@/api/v1/clubs/" . $club_with_enrollments->id . "/holds" => json => $data )
+                ->status_is( 201, 'Created Hold with specific place_holds permission' )
+                ->json_has( '/club_hold_id', 'got a club hold id' )
+                ->json_is( '/club_id' => $club_with_enrollments->id )->json_is( '/biblio_id' => $item->biblionumber );
+
+            # place a club hold with no reserveforothers or specific permsision - should fail
+            $t->post_ok(
+                "//$userid_3:$password_3@/api/v1/clubs/" . $club_with_enrollments->id . "/holds" => json => $data )
+                ->status_is( 403, 'User with no relevant permissions cannot place club holds' )
+                ->json_is( '/error' => 'Authorization failure. Missing required permission(s).' );
+
+            $can_be_reserved_status = 'tooManyHoldsForThisRecord';
+
+            # place a club hold with the place_hold specific permsision - should succeed
+            warnings_like {
+                $t->post_ok(
+                    "//$userid_2:$password_2@/api/v1/clubs/" . $club_with_enrollments->id . "/holds" => json => $data )
+                    ->status_is( 201, 'Created Hold with specific place_holds permission' )
+                    ->json_has( '/club_hold_id', 'got a club hold id' )
+                    ->json_is( '/club_id'   => $club_with_enrollments->id )
+                    ->json_is( '/biblio_id' => $item->biblionumber );
+            }
+            [
+                qr/Hold cannot be placed. Reason: tooManyHoldsForThisRecord/,
+                qr/Hold cannot be placed. Reason: tooManyHoldsForThisRecord/,
+                qr/Hold cannot be placed. Reason: tooManyHoldsForThisRecord/,
+                qr/Hold cannot be placed. Reason: tooManyHoldsForThisRecord/,
+                qr/Hold cannot be placed. Reason: tooManyHoldsForThisRecord/,
+                qr/Hold cannot be placed. Reason: tooManyHoldsForThisRecord/,
+            ],
+                "Print warning when CanBookBeReserved doesn't return 'OK'";
         };
 
-        $t->post_ok( "//$userid:$password@/api/v1/clubs/" . $club_without_enrollments->id . "/holds" => json => $data )
-            ->status_is(409)->json_is( '/error' => "Cannot place a hold on a club without patrons." );
+        subtest 'item-level holds tests' => sub {
 
-        # place a club hold with top level reserveforothers permission - should succeed
-        $t->post_ok( "//$userid:$password@/api/v1/clubs/" . $club_with_enrollments->id . "/holds" => json => $data )
-            ->status_is( 201, 'Created Hold' )->json_has( '/club_hold_id', 'got a club hold id' )
-            ->json_is( '/club_id' => $club_with_enrollments->id )->json_is( '/biblio_id' => $item->biblionumber )
-            ->header_is(
-            'Location' => '/api/v1/clubs/' . $club_with_enrollments->id . '/holds/' . $t->tx->res->json->{club_hold_id},
-            'REST3.4.1'
-            );
+            plan tests => 23;
 
-        # place a club hold with the place_hold specific permsision - should succeed
-        $t->post_ok( "//$userid_2:$password_2@/api/v1/clubs/" . $club_with_enrollments->id . "/holds" => json => $data )
-            ->status_is( 201, 'Created Hold with specific place_holds permission' )
-            ->json_has( '/club_hold_id', 'got a club hold id' )->json_is( '/club_id' => $club_with_enrollments->id )
-            ->json_is( '/biblio_id' => $item->biblionumber );
+            $can_be_reserved_status = 'OK';
 
-        # place a club hold with no reserveforothers or specific permsision - should fail
-        $t->post_ok( "//$userid_3:$password_3@/api/v1/clubs/" . $club_with_enrollments->id . "/holds" => json => $data )
-            ->status_is( 403, 'User with no relevant permissions cannot place club holds' )
-            ->json_is( '/error' => 'Authorization failure. Missing required permission(s).' );
+            my $data = {
+                biblio_id         => $item->biblionumber,
+                item_id           => $item->id,
+                pickup_library_id => $item->home_branch->branchcode
+            };
+
+            $t->post_ok(
+                "//$userid:$password@/api/v1/clubs/" . $club_without_enrollments->id . "/holds" => json => $data )
+                ->status_is(409)->json_is( '/error' => "Cannot place a hold on a club without patrons." );
+
+            # place a club hold with top level reserveforothers permission - should succeed
+            $t->post_ok( "//$userid:$password@/api/v1/clubs/" . $club_with_enrollments->id . "/holds" => json => $data )
+                ->status_is( 201, 'Created Hold' )->json_has( '/club_hold_id', 'got a club hold id' )
+                ->json_is( '/club_id' => $club_with_enrollments->id )->json_is( '/biblio_id' => $item->biblionumber )
+                ->header_is(
+                      'Location' => '/api/v1/clubs/'
+                    . $club_with_enrollments->id
+                    . '/holds/'
+                    . $t->tx->res->json->{club_hold_id},
+                'REST3.4.1'
+                );
+
+            # place a club hold with the place_hold specific permsision - should succeed
+            $t->post_ok(
+                "//$userid_2:$password_2@/api/v1/clubs/" . $club_with_enrollments->id . "/holds" => json => $data )
+                ->status_is( 201, 'Created Hold with specific place_holds permission' )
+                ->json_has( '/club_hold_id', 'got a club hold id' )
+                ->json_is( '/club_id' => $club_with_enrollments->id )->json_is( '/biblio_id' => $item->biblionumber );
+
+            # place a club hold with no reserveforothers or specific permsision - should fail
+            $t->post_ok(
+                "//$userid_3:$password_3@/api/v1/clubs/" . $club_with_enrollments->id . "/holds" => json => $data )
+                ->status_is( 403, 'User with no relevant permissions cannot place club holds' )
+                ->json_is( '/error' => 'Authorization failure. Missing required permission(s).' );
+
+            $can_be_reserved_status = 'tooManyHoldsForThisRecord';
+
+            # place a club hold with the place_hold specific permsision - should succeed
+            warnings_like {
+                $t->post_ok(
+                    "//$userid_2:$password_2@/api/v1/clubs/" . $club_with_enrollments->id . "/holds" => json => $data )
+                    ->status_is( 201, 'Created Hold with specific place_holds permission' )
+                    ->json_has( '/club_hold_id', 'got a club hold id' )
+                    ->json_is( '/club_id'   => $club_with_enrollments->id )
+                    ->json_is( '/biblio_id' => $item->biblionumber );
+            }
+            [
+                qr/Hold cannot be placed. Reason: tooManyHoldsForThisRecord/,
+                qr/Hold cannot be placed. Reason: tooManyHoldsForThisRecord/,
+                qr/Hold cannot be placed. Reason: tooManyHoldsForThisRecord/,
+                qr/Hold cannot be placed. Reason: tooManyHoldsForThisRecord/,
+                qr/Hold cannot be placed. Reason: tooManyHoldsForThisRecord/,
+                qr/Hold cannot be placed. Reason: tooManyHoldsForThisRecord/,
+            ],
+                "Print warning when CanItemBeReserved doesn't return 'OK'";
+        };
 
         $schema->storage->txn_rollback;
     };
