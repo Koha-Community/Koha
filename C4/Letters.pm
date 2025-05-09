@@ -623,6 +623,30 @@ sub GetPreparedLetter {
         $objects->{librarian} = Koha::Patrons->find( C4::Context->userenv->{number} ) if ($userenv);
     }
 
+    # add plugin-generated objects
+    if ( C4::Context->config("enable_plugins") ) {
+        my @plugins = Koha::Plugins->new->GetPlugins(
+            {
+                method => 'notices_content',
+            }
+        );
+
+        if (@plugins) {
+            foreach my $plugin (@plugins) {
+                my $namespace = $plugin->get_metadata()->{namespace};
+                if ($namespace) {
+                    try {
+                        if ( my $content = $plugin->notices_content( \%params ) ) {
+                            $objects->{plugin_content}->{$namespace} = $content;
+                        }
+                    } catch {
+                        next;
+                    };
+                }
+            }
+        }
+    }
+
     # Best guess at language 'default' notice is written for include handling
     if ( $lang eq 'default' ) {
 
