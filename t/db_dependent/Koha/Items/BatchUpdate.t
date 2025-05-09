@@ -284,7 +284,7 @@ subtest 'mark_items_returned' => sub {
 };
 
 subtest 'report' => sub {
-    plan tests => 5;
+    plan tests => 7;
 
     my $item_1 = $builder->build_sample_item( { biblionumber => $biblio->biblionumber } );
     my $item_2 = $builder->build_sample_item( { biblionumber => $biblio->biblionumber } );
@@ -297,7 +297,8 @@ subtest 'report' => sub {
         $report,
         {
             modified_itemnumbers => [ $item_1->itemnumber, $item_2->itemnumber ],
-            modified_fields      => 2
+            modified_fields      => 2,
+            errors               => []
         }
     );
 
@@ -308,7 +309,8 @@ subtest 'report' => sub {
         $report,
         {
             modified_itemnumbers => [ $item_1->itemnumber, $item_2->itemnumber ],
-            modified_fields      => 2
+            modified_fields      => 2,
+            errors               => []
         }
     );
 
@@ -320,7 +322,8 @@ subtest 'report' => sub {
         $report,
         {
             modified_itemnumbers => [ $item_1->itemnumber ],
-            modified_fields      => 1
+            modified_fields      => 1,
+            errors               => []
         }
     );
 
@@ -331,7 +334,8 @@ subtest 'report' => sub {
         $report,
         {
             modified_itemnumbers => [ $item_1->itemnumber, $item_2->itemnumber ],
-            modified_fields      => 4
+            modified_fields      => 4,
+            errors               => []
         }
     );
 
@@ -349,10 +353,61 @@ subtest 'report' => sub {
         $report,
         {
             modified_itemnumbers => [ $item_1->itemnumber, $item_2->itemnumber ],
-            modified_fields      => 7
+            modified_fields      => 7,
+            errors               => []
+        }
+    );
+    t::lib::Mocks::mock_preference( 'PreventWithDrawingItemsStatus', 'intransit,checkedout' );
+
+    $item_2->get_from_storage->update( { onloan => '2025-01-01' } );
+
+    local $SIG{__WARN__} = sub { };
+    my ($report2) = $items->batch_update( { new_values => { withdrawn => 1 } } );
+
+    $items->reset;
+
+    is_deeply(
+        $report2,
+        {
+            modified_itemnumbers => [ $item_1->itemnumber ],
+            modified_fields      => 1,
+            errors               => [
+                { error => "Exception 'Koha::Exceptions::Item::Transfer::OnLoan' thrown 'onloan_cannot_withdraw'\n" }
+            ]
         }
     );
 
+    my $item_3 = $builder->build_sample_item( { biblionumber => $biblio->biblionumber } );
+    my $item_4 = $builder->build_sample_item( { biblionumber => $biblio->biblionumber } );
+
+    Koha::Item::Transfer->new(
+        {
+            itemnumber => $item_3->itemnumber,
+            frombranch => $item_3->homebranch,
+            tobranch   => $builder->build( { source => 'Branch' } )->{branchcode},
+            datesent   => '1999-01-01',
+        }
+    )->store;
+
+    my $items2 = Koha::Items->search( { itemnumber => [ $item_3->itemnumber, $item_4->itemnumber ] } );
+
+    local $SIG{__WARN__} = sub { };
+    my ($report3) = $items2->batch_update( { new_values => { withdrawn => 1 } } );
+
+    $items2->reset;
+    is_deeply(
+        $report3,
+        {
+            modified_itemnumbers => [ $item_4->itemnumber ],
+            modified_fields      => 1,
+            errors               => [
+                {
+                    error =>
+                        "Exception 'Koha::Exceptions::Item::Transfer::InTransit' thrown 'intransit_cannot_withdraw'\n"
+                }
+            ]
+        }
+    );
 };
 
 Koha::Caches->get_instance->clear_from_cache("MarcStructure-1-");
