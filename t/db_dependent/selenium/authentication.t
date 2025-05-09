@@ -205,7 +205,7 @@ SKIP: {
         );
         $driver->find_element('//div[@id="userdetails"]');
         like(
-            $driver->get_title, qr(Your library home),
+            $driver->get_title, qr(Your summary),
             'Patron without permissions should be able to login to the OPAC using the modal'
         );
 
@@ -257,7 +257,7 @@ SKIP: {
         $s->submit_form;
         $driver->find_element('//div[@id="userdetails"]');
         like(
-            $driver->get_title, qr(Your library home),
+            $driver->get_title, qr(Your summary),
             'Patron without permissions should be able to login to the OPAC using the form on the right'
         );
 
@@ -270,7 +270,7 @@ SKIP: {
         $s->submit_form;
         $driver->find_element('//div[@id="userdetails"]');
         like(
-            $driver->get_title, qr(Your library home),
+            $driver->get_title, qr(Your summary),
             'Patron with catalogue permission should be able to login to the OPAC'
         );
 
@@ -283,7 +283,7 @@ SKIP: {
         $s->submit_form;
         $driver->find_element('//div[@id="userdetails"]');
         like(
-            $driver->get_title, qr(Your library home),
+            $driver->get_title, qr(Your summary),
             'Patron with superlibrarian permission should be able to login to the OPAC'
         );
 
@@ -311,7 +311,7 @@ SKIP: {
             $s->submit_form;
 
             # After logged in, the same cookie is reused
-            like( $driver->get_title, qr(Your library home) );
+            like( $driver->get_title, qr(Your summary) );
             $cookie = $driver->get_cookie_named('CGISESSID');
             is( $cookie->{value}, $first_sessionID, );
             $driver->get( $s->opac_base_url . q|opac-search.pl| );

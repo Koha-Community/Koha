@@ -205,7 +205,7 @@ SKIP: {
         );
         $driver->find_element('//div[@id="userdetails"]');
         like(
-            $driver->get_title, qr(Your library home),
+            $driver->get_title, qr(Your summary),
             'Patron without permissions should be able to login to the OPAC using the modal'
         );
 
