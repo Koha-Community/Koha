@@ -1620,7 +1620,7 @@ CREATE TABLE `borrowers` (
   KEY `cardnumber_idx` (`cardnumber`),
   KEY `userid_idx` (`userid`),
   KEY `middle_name_idx` (`middle_name`(768)),
-  KEY `preferred_name_idx` (`preferred_name`),
+  KEY `preferred_name_idx` (`preferred_name`(768)),
   CONSTRAINT `borrowers_ibfk_1` FOREIGN KEY (`categorycode`) REFERENCES `categories` (`categorycode`),
   CONSTRAINT `borrowers_ibfk_2` FOREIGN KEY (`branchcode`) REFERENCES `branches` (`branchcode`),
   CONSTRAINT `borrowers_ibfk_3` FOREIGN KEY (`sms_provider_id`) REFERENCES `sms_providers` (`id`) ON DELETE SET NULL ON UPDATE CASCADE
