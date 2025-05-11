@@ -12,7 +12,7 @@ return {
             $dbh->do(
                 q{
                 ALTER TABLE `borrowers`
-                ADD KEY `preferred_name_idx` (`preferred_name`)
+                ADD KEY `preferred_name_idx` (`preferred_name`(768))
             }
             );
             say_success( $out, "Added index to borrowers.preferred_name" );
