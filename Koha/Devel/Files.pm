@@ -161,8 +161,8 @@ sub ls_perl_files {
         $git_range =~ s|\.\.| |;
         my @modified_files = qx{git diff --name-only $git_range};
         chomp @modified_files;
-        push @files, grep { /\.(pl|PL|pm|t)$/ } @modified_files;
-        push @files, grep { /^(svc|opac\/svc)/ } @modified_files;
+        push @files, grep { -e && /\.(pl|PL|pm|t)$/ } @modified_files;
+        push @files, grep { -e && /^(svc|opac\/svc)/ } @modified_files;
         my @exception_files = $exceptions->{pl}->{ $self->{context} };
         @files = array_minus( @files, @exception_files );
     } else {
