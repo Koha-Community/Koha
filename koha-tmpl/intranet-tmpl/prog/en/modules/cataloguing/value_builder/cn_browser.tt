@@ -61,6 +61,7 @@
                     <th>Title</th>
                     <th>Library</th>
                     <th>Collection</th>
+                    <th>Shelving location</th>
                     [% IF Koha.Preference('item-level_itypes') %]
                         <th>Item type</th>
                     [% END %]
@@ -81,6 +82,7 @@
                         </td>
                         <td style="background:[% cn_loo.background | html %];">[% cn_loo.branchname | html %]</td>
                         <td style="background:[% cn_loo.background | html %];">[% AuthorisedValues.GetByCode( 'CCODE', cn_loo.ccode ) | html %]</td>
+                        <td style="background:[% cn_loo.background | html %];">[% AuthorisedValues.GetByCode( 'LOC', cn_loo.location ) | html %]</td>
                         [% IF Koha.Preference('item-level_itypes') %]
                             <td style="background:[% cn_loo.background | html %];">[% ItemTypes.GetDescription( cn_loo.itype ) | html %]</td>
                         [% END %]

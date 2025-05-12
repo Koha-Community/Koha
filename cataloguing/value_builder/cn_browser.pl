@@ -110,7 +110,7 @@ my $launcher = sub {
 
         #Results before the cn_sort
         $query =
-            "SELECT b.title, b.subtitle, itemcallnumber, biblionumber, barcode, cn_sort, branchname, author, ccode, itype
+            "SELECT b.title, b.subtitle, itemcallnumber, biblionumber, barcode, cn_sort, branchname, author, ccode, location, itype
         FROM items AS i
         JOIN biblio AS b USING (biblionumber)
         LEFT OUTER JOIN branches ON (branches.branchcode = homebranch)
@@ -141,7 +141,7 @@ my $launcher = sub {
 
         #Results after the cn_sort
         $query =
-            "SELECT b.title, b.subtitle, itemcallnumber, biblionumber, barcode, cn_sort, branchname, author, ccode, itype
+            "SELECT b.title, b.subtitle, itemcallnumber, biblionumber, barcode, cn_sort, branchname, author, ccode, location, itype
         FROM items AS i
         JOIN biblio AS b USING (biblionumber)
         LEFT OUTER JOIN branches ON (branches.branchcode = homebranch)
