@@ -85,6 +85,9 @@
                                     [% reser.patron.notice_email_address | html %]
                                 </a>
                             [% END %]
+                            [% IF reser.patron.cardnumber %]
+                                <div class="cardnumber">Card number: [% reser.patron.cardnumber | html %]</div>
+                            [% END %]
                         [% ELSIF ( reser.recall ) %]
                             Recall requested by <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% reser.recall.patron_id | uri %]">[% reser.recall.patron.surname | html %][% IF reser.recall.patron.firstname %], [% reser.recall.patron.firstname | html %][% END %] ([% reser.recall.patron.cardnumber | html %])</a>
                         [% ELSE %]
