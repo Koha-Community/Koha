@@ -110,10 +110,10 @@ sub store {
 
             C4::Letters::EnqueueLetter(
                 {
-                    letter                 => $letter,
-                    borrowernumber         => $result->suggestedby,
-                    suggestionid           => $result->id,
-                    to_address             => $toaddress,
+                    letter         => $letter,
+                    borrowernumber => undef,        #NEW_SUGGESION notices should not end up in the borrowers notice tab
+                    suggestionid   => $result->id,
+                    to_address     => $toaddress,
                     message_transport_type => 'email',
                 }
             ) or warn "can't enqueue letter $letter";
