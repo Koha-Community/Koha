@@ -1,5 +1,9 @@
 <template>
-    <button type="submit" class="btn btn-primary">
+    <button v-if="form" @click="form.requestSubmit()" class="btn btn-primary">
+        <font-awesome-icon v-if="icon" :icon="icon" />
+        {{ text }}
+    </button>
+    <button v-else type="submit" class="btn btn-primary">
         <font-awesome-icon v-if="icon" :icon="icon" />
         {{ text }}
     </button>
@@ -17,6 +21,9 @@ export default {
         icon: {
             type: String,
             required: false,
+        },
+        form: {
+            type: Object,
         },
     },
 };

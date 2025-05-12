@@ -1,12 +1,12 @@
 <template>
     <div v-if="!initialized">{{ $__("Loading") }}</div>
-    <template v-else>
+    <main id="vendors_add" v-else>
         <h1 v-if="vendor.id">
             {{ $__("Edit vendor #%s").format(vendor.id) }}
         </h1>
         <h1 v-else>{{ $__("Add vendor") }}</h1>
         <Toolbar :sticky="true">
-            <ButtonSubmit :text="$__('Save')" icon="save" />
+            <ButtonSubmit :text="$__('Save')" icon="save" :form="vendorForm" />
             <ToolbarButton
                 :to="{ name: 'VendorList' }"
                 :title="$__('Cancel')"
@@ -15,7 +15,7 @@
             >
             </ToolbarButton>
         </Toolbar>
-        <form @submit="onSubmit($event)" id="add_vendor">
+        <form @submit="onSubmit($event)" ref="vendorForm">
             <VendorDetails :vendor="vendor" />
             <VendorContacts :vendor="vendor" />
             <VendorInterfaces :vendor="vendor" />
@@ -25,7 +25,7 @@
                 :discountValid="discountValid"
             />
         </form>
-    </template>
+    </main>
 </template>
 
 <script>
@@ -38,8 +38,15 @@ import VendorOrderingInformation from "./VendorOrderingInformation.vue";
 import VendorInterfaces from "./VendorInterfaces.vue";
 import Toolbar from "../Toolbar.vue";
 import ToolbarButton from "../ToolbarButton.vue";
+import { ref } from "vue";
 
 export default {
+    setup() {
+        const vendorForm = ref();
+        return {
+            vendorForm,
+        };
+    },
     data() {
         return {
             vendor: {
