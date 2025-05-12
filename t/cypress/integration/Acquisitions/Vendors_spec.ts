@@ -38,7 +38,7 @@ describe("Vendor CRUD operations", () => {
         cy.get("h1").contains("Add vendor");
 
         // Fill in the form for normal attributes
-        cy.get("#vendors_add").contains("Save").click();
+        cy.get("#toolbar").contains("Save").click();
         cy.get("input:invalid,textarea:invalid,select:invalid").should(
             "have.length",
             1
@@ -114,7 +114,7 @@ describe("Vendor CRUD operations", () => {
             statusCode: 201,
             body: vendor,
         });
-        cy.get("#vendors_add").contains("Save").click();
+        cy.get("#toolbar").contains("Save").click();
         cy.get("main div[class='alert alert-info']").contains("Vendor created");
     });
 
@@ -153,7 +153,7 @@ describe("Vendor CRUD operations", () => {
             statusCode: 200,
             body: vendor,
         });
-        cy.get("#vendors_add").contains("Save").click();
+        cy.get("#toolbar").contains("Save").click();
         cy.get("main div[class='alert alert-info']").contains("Vendor updated");
     });
 
