@@ -5,17 +5,17 @@
             {{ $__("Edit vendor #%s").format(vendor.id) }}
         </h1>
         <h1 v-else>{{ $__("Add vendor") }}</h1>
+        <Toolbar :sticky="true">
+            <ButtonSubmit :text="$__('Save')" icon="save" />
+            <ToolbarButton
+                :to="{ name: 'VendorList' }"
+                :title="$__('Cancel')"
+                icon="times"
+                cssClass="btn btn-link"
+            >
+            </ToolbarButton>
+        </Toolbar>
         <form @submit="onSubmit($event)" id="add_vendor">
-            <Toolbar :sticky="true">
-                <ButtonSubmit :text="$__('Save')" icon="save" />
-                <ToolbarButton
-                    :to="{ name: 'VendorList' }"
-                    :title="$__('Cancel')"
-                    icon="times"
-                    cssClass="btn btn-link"
-                >
-                </ToolbarButton>
-            </Toolbar>
             <VendorDetails :vendor="vendor" />
             <VendorContacts :vendor="vendor" />
             <VendorInterfaces :vendor="vendor" />
