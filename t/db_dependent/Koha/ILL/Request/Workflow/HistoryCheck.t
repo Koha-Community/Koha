@@ -35,7 +35,7 @@ my $isbn = '321321321';
 
 subtest 'show_history_check' => sub {
 
-    plan tests => 6;
+    plan tests => 7;
 
     $schema->storage->txn_begin;
 
@@ -101,6 +101,22 @@ subtest 'show_history_check' => sub {
     is(
         $history_check->show_history_check($ill_request),
         1, 'Request with ISBN ' . $isbn . ' exists, syspref is on and is same patron. Able to show history check screen'
+    );
+
+    my $metadata_with_no_cardnumber = {
+        title  => 'This is a title',
+        author => 'This is an author',
+        isbn   => $isbn,
+    };
+
+    my $ill_request_with_no_borrowernumber = $builder->build_sample_ill_request( { borrowernumber => undef } );
+
+    my $new_opac_history_check =
+        Koha::ILL::Request::Workflow::HistoryCheck->new( $metadata_with_no_cardnumber, 'staff' );
+
+    is(
+        $new_opac_history_check->show_history_check($ill_request_with_no_borrowernumber),
+        0, 'Don\'t show history check for unauthenticated requests'
     );
 
     # Mock ILLHistoryCheck disabled
