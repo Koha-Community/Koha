@@ -8,6 +8,8 @@ use File::Slurp  qw( read_file write_file );
 use IPC::Cmd     qw( run );
 use Parallel::ForkManager;
 
+use Koha::Devel::Files;
+
 my ( $perl_files, $js_files, $tt_files, $nproc, $no_write, $silent, $help );
 
 our $perltidyrc = '.perltidyrc';
@@ -34,13 +36,7 @@ pod2usage("--no-write can only be passed with a single file") if $no_write && @f
 pod2usage("--perl, --js and --tt can only be passed without any other files in parameter")
     if @files && ( $perl_files || $js_files || $tt_files );
 
-my $exceptions = {
-    pl => [qw(Koha/Schema/Result Koha/Schema.pm)],
-    js => [
-        qw(koha-tmpl/intranet-tmpl/lib koha-tmpl/intranet-tmpl/js/Gettext.js koha-tmpl/opac-tmpl/lib Koha/ILL/Backend/)
-    ],
-    tt => [qw(Koha/ILL/Backend/ *doc-head-open.inc misc/cronjobs/rss)],
-};
+my $dev_files = Koha::Devel::Files->new;
 
 my @original_files = @files;
 if (@files) {
@@ -48,8 +44,8 @@ if (@files) {
     # This is inefficient if the list of files is long but most of the time we will have only one
     @files = map {
         my $file     = $_;
-        my $filetype = get_filetype($file);
-        my $cmd      = sprintf q{git ls-files %s | grep %s}, build_git_exclude($filetype), $file;
+        my $filetype = $dev_files->get_filetype($file);
+        my $cmd      = sprintf q{git ls-files %s | grep %s}, $dev_files->build_git_exclude($filetype), $file;
         my $output   = qx{$cmd};
         chomp $output;
         $output ? $file : ();
@@ -69,14 +65,14 @@ if (@files) {
         }
     }
 } else {
-    push @files, get_perl_files() if $perl_files;
-    push @files, get_js_files()   if $js_files;
-    push @files, get_tt_files()   if $tt_files;
+    push @files, $dev_files->ls_perl_files() if $perl_files;
+    push @files, $dev_files->ls_js_files()   if $js_files;
+    push @files, $dev_files->ls_tt_files()   if $tt_files;
 
     unless (@files) {
-        push @files, get_perl_files();
-        push @files, get_js_files();
-        push @files, get_tt_files();
+        push @files, $dev_files->ls_perl_files();
+        push @files, $dev_files->ls_js_files();
+        push @files, $dev_files->ls_tt_files();
     }
 }
 
@@ -124,7 +120,7 @@ if (@errors) {
 sub tidy {
     my ($file) = @_;
 
-    my $filetype = get_filetype($file);
+    my $filetype = $dev_files->get_filetype($file);
 
     if ( $filetype eq 'pl' ) {
         return tidy_perl($file);
@@ -135,32 +131,6 @@ sub tidy {
     } else {
         die sprintf 'Cannot process file with filetype "%s"', $filetype;
     }
-}
-
-sub build_git_exclude {
-    my ($filetype) = @_;
-    return join( " ", map( "':(exclude)$_'", @{ $exceptions->{$filetype} } ) );
-}
-
-sub get_perl_files {
-    my $cmd   = sprintf q{git ls-files '*.pl' '*.PL' '*.pm' '*.t' svc opac/svc %s}, build_git_exclude('pl');
-    my @files = qx{$cmd};
-    chomp for @files;
-    return @files;
-}
-
-sub get_js_files {
-    my $cmd   = sprintf q{git ls-files '*.js' '*.ts' '*.vue' %s}, build_git_exclude('js');
-    my @files = qx{$cmd};
-    chomp for @files;
-    return @files;
-}
-
-sub get_tt_files {
-    my $cmd   = sprintf q{git ls-files '*.tt' '*.inc' %s}, build_git_exclude('tt');
-    my @files = qx{$cmd};
-    chomp for @files;
-    return @files;
 }
 
 sub tidy_perl {
@@ -219,19 +189,6 @@ sub tidy_tt {
         }
     }
     return ( $success, $error_message, $full_buf, $stdout_buf, $stderr_buf );
-}
-
-sub get_filetype {
-    my ($file) = @_;
-    return 'pl' if $file =~ m{^svc}  || $file =~ m{^opac/svc};
-    return 'pl' if $file =~ m{\.pl$} || $file =~ m{\.pm} || $file =~ m{\.t$};
-    return 'pl' if $file =~ m{\.PL$};
-
-    return 'js' if $file =~ m{\.js$} || $file =~ m{\.ts$} || $file =~ m{\.vue$};
-
-    return 'tt' if $file =~ m{\.inc$} || $file =~ m{\.tt$};
-
-    die sprintf 'Cannot guess filetype for %s', $file;
 }
 
 sub l {
