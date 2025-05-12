@@ -1,4 +1,4 @@
-#/usr/bin/perl
+#!/usr/bin/perl
 
 # This file is part of Koha.
 #
@@ -20,13 +20,20 @@ use File::Slurp qw( read_file );
 use Test::More;
 use Test::NoWarnings;
 
-my @js_files = qx{git ls-files '*.js' '*.ts'};
+use Koha::Devel::CI::IncrementalRuns;
 
-plan tests => scalar(@js_files) + 1;
+my $ci = Koha::Devel::CI::IncrementalRuns->new( { context => 'tidy' } );
 
-foreach my $filepath (@js_files) {
+my @files = $ci->get_files_to_test('js');
+
+plan tests => scalar @files + 1;
+
+my %results;
+foreach my $filepath (@files) {
     chomp $filepath;
     my $tidy    = qx{perl misc/devel/tidy.pl --silent --no-write $filepath};
     my $content = read_file $filepath;
-    ok( $content eq $tidy, "$filepath should be kept tidy" );
+    ok( $content eq $tidy, "$filepath should be kept tidy" ) or $results{$filepath} = 1;
 }
+
+$ci->report_results( \%results );
