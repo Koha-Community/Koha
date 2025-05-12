@@ -4,7 +4,7 @@
 # Current state is very rudimentary. Please help to extend it!
 
 use Modern::Perl;
-use Test::More tests => 19;
+use Test::More tests => 20;
 use Test::Warn;
 
 use DateTime;
@@ -623,6 +623,78 @@ subtest do_checkin => sub {
         );
 
     };
+};
+
+subtest 'cancel_waiting_holds_with_cancellation_requests at checkin' => sub {
+    plan tests => 5;
+
+    my $library = $builder->build_object( { class => 'Koha::Libraries' } );
+    my $patron1 = $builder->build_object(
+        {
+            class => 'Koha::Patrons',
+            value => {
+                branchcode => $library->branchcode,
+            }
+        }
+    );
+
+    t::lib::Mocks::mock_userenv( { branchcode => $library->branchcode, flags => 1 } );
+
+    my $item = $builder->build_sample_item(
+        {
+            library => $library->branchcode,
+        }
+    );
+
+    # Set up a hold for patron1
+    my $hold = AddReserve(
+        {
+            branchcode     => $library->branchcode,
+            borrowernumber => $patron1->borrowernumber,
+            biblionumber   => $item->biblio->biblionumber,
+            itemnumber     => $item->itemnumber,
+        }
+    );
+
+    # Mark the hold as waiting
+    my $hold_obj = Koha::Holds->find($hold);
+    $hold_obj->update( { found => 'W' } )->store();
+
+    # Add a cancellation request for the hold
+    my $cancellation_request = Koha::Hold::CancellationRequest->new(
+        {
+            hold_id       => $hold_obj->id,
+            creation_date => \'NOW()',
+        }
+    )->store;
+
+    is(
+        $item->holds->waiting->filter_by_has_cancellation_requests->count, 1,
+        'Hold has a cancellation request'
+    );
+
+    my $sip_item    = C4::SIP::ILS::Item->new( $item->barcode );
+    my $transaction = C4::SIP::ILS::Transaction::Checkin->new();
+
+    $transaction->item($sip_item);
+    $transaction->do_checkin( $library->branchcode, C4::SIP::Sip::timestamp );
+
+    # Check if the hold still exists
+    $hold_obj = Koha::Holds->find($hold);
+    ok( !defined( $hold_obj ), 'Hold has been cancelled and deleted' );
+
+    my $old_hold = Koha::Old::Holds->find($hold);
+    ok( $old_hold, 'Hold was moved to old reserves');
+    # QUESTION: Should the cancellation reason be set to "Cancelled by SIP"?
+    is( $old_hold->cancellation_reason, undef, 'No cancellation reason was set' );
+
+    # FIXME: What should happen to the cancellation request?
+    # Check that the cancellation request is deleted
+    # my $existing_cancellation_requests = Koha::Hold::CancellationRequests->search( { hold_id => $hold } );
+    # is( $existing_cancellation_requests->count, 0, 'Cancellation request is deleted after processing' );
+
+    # Verify the item's hold count
+    is( $item->holds->count, 0, 'No holds remain on the item after cancellation' );
 };
 
 subtest do_checkout_with_sysprefs_override => sub {
