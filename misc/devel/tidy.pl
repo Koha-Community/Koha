@@ -36,7 +36,7 @@ pod2usage("--no-write can only be passed with a single file") if $no_write && @f
 pod2usage("--perl, --js and --tt can only be passed without any other files in parameter")
     if @files && ( $perl_files || $js_files || $tt_files );
 
-my $dev_files = Koha::Devel::Files->new;
+my $dev_files = Koha::Devel::Files->new( { context => 'tidy' } );
 
 my @original_files = @files;
 if (@files) {

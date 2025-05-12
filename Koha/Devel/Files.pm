@@ -30,11 +30,13 @@ The module defines a set of exceptions for different file types and contexts. Th
 =cut
 
 my $exceptions = {
-    pl => [qw(Koha/Schema/Result Koha/Schema.pm)],
-    js => [
-        qw(koha-tmpl/intranet-tmpl/lib koha-tmpl/intranet-tmpl/js/Gettext.js koha-tmpl/opac-tmpl/lib Koha/ILL/Backend/)
-    ],
-    tt => [qw(Koha/ILL/Backend/ *doc-head-open.inc misc/cronjobs/rss)],
+    pl => { tidy => [qw(Koha/Schema/Result Koha/Schema.pm)] },
+    js => {
+        tidy => [
+            qw(koha-tmpl/intranet-tmpl/lib koha-tmpl/intranet-tmpl/js/Gettext.js koha-tmpl/opac-tmpl/lib Koha/ILL/Backend/)
+        ]
+    },
+    tt => { tidy => [qw(Koha/ILL/Backend/ *doc-head-open.inc misc/cronjobs/rss)] },
 };
 
 =head1 METHODS
@@ -50,8 +52,8 @@ Creates a new instance of Koha::Devel::Files. The constructor accepts a hash ref
 =cut
 
 sub new {
-    my ($class) = @_;
-    my $self = {};
+    my ( $class, $args ) = @_;
+    my $self = { context => $args->{context} };
     bless $self, $class;
     return $self;
 }
@@ -66,7 +68,9 @@ Builds a Git exclude pattern for a given file type based on the context provided
 
 sub build_git_exclude {
     my ( $self, $filetype ) = @_;
-    return join( " ", map( "':(exclude)$_'", @{ $exceptions->{$filetype} } ) );
+    return $self->{context} && exists $exceptions->{$filetype}->{ $self->{context} }
+        ? join( " ", map( "':(exclude)$_'", @{ $exceptions->{$filetype}->{ $self->{context} } } ) )
+        : q{};
 }
 
 =head2 ls_perl_files
