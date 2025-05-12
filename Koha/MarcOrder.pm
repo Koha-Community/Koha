@@ -49,6 +49,7 @@ use C4::Biblio      qw(
     GetMarcFromKohaField
     TransformHtmlToXml
     GetMarcQuantity
+    GetMarcPrice
 );
 use C4::Items   qw( AddItemFromMarc );
 use C4::Budgets qw( GetBudgetByCode );
@@ -698,8 +699,8 @@ sub import_biblios_list {
         my $marcrecord = $import_record->get_marc_record || die "couldn't translate MARC information";
 
         my $infos = _get_syspref_mappings( $marcrecord, 'MarcFieldsToOrder' );
-
-        my $price            = $infos->{price}            || undef;
+        my $price =
+            $infos->{price} ? $infos->{price} : GetMarcPrice( $marcrecord, C4::Context->preference('marcflavour') );
         my $replacementprice = $infos->{replacementprice} || undef;
         my $quantity         = $infos->{quantity}         || undef;
         my $budget_code      = $infos->{budget_code}      || undef;
