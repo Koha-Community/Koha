@@ -30,13 +30,58 @@ The module defines a set of exceptions for different file types and contexts. Th
 =cut
 
 my $exceptions = {
-    pl => { tidy => [qw(Koha/Schema/Result Koha/Schema.pm)] },
+    pl => {
+        tidy => [
+            qw(
+                Koha/Schema/Result
+                Koha/Schema.pm
+            )
+        ],
+        valid => [
+            qw(
+                Koha/Account/Credit.pm
+                Koha/Account/Debit.pm
+                Koha/Old/Hold.pm
+                misc/translator/TmplTokenizer.pm
+            )
+        ],
+        codespell => [
+            qw(
+                installer/data/mysql/updatedatabase.pl
+                installer/data/mysql/update22to30.pl
+                installer/data/mysql/db_revs/241200035.pl
+                misc/cronjobs/build_browser_and_cloud.pl
+            )
+        ],
+    },
     js => {
         tidy => [
-            qw(koha-tmpl/intranet-tmpl/lib koha-tmpl/intranet-tmpl/js/Gettext.js koha-tmpl/opac-tmpl/lib Koha/ILL/Backend/)
-        ]
+            qw(
+                koha-tmpl/intranet-tmpl/lib
+                koha-tmpl/intranet-tmpl/js/Gettext.js
+                koha-tmpl/opac-tmpl/lib
+                Koha/ILL/Backend/
+            )
+        ],
+        codespell => [
+            qw(
+                koha-tmpl/intranet-tmpl/lib
+                koha-tmpl/intranet-tmpl/js/Gettext.js
+                koha-tmpl/opac-tmpl/lib
+                koha-tmpl/opac-tmpl/bootstrap/js/Gettext.js
+            )
+        ],
     },
-    tt => { tidy => [qw(Koha/ILL/Backend/ *doc-head-open.inc misc/cronjobs/rss)] },
+    tt => {
+        tidy => [
+            qw(
+                Koha/ILL/Backend/
+                *doc-head-open.inc
+                misc/cronjobs/rss
+            )
+        ],
+        codespell => [],
+    },
 };
 
 =head1 METHODS

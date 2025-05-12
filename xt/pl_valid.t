@@ -24,17 +24,10 @@ use Pod::Checker;
 use Parallel::ForkManager;
 use Sys::CPU;
 
-my @files;
-push @files, qx{git ls-files '*.pl' '*.PL' '*.pm' '*.t'};
-push @files, qx{git ls-files svc opac/svc};                 # Files without extension
-chomp for @files;
+use Koha::Devel::Files;
 
-my @exceptions = qw(
-    Koha/Account/Credit.pm
-    Koha/Account/Debit.pm
-    Koha/Old/Hold.pm
-    misc/translator/TmplTokenizer.pm
-);
+my $dev_files = Koha::Devel::Files->new( { context => 'valid' } );
+my @files     = $dev_files->ls_perl_files;
 
 my $ncpu;
 if ( $ENV{KOHA_PROVE_CPUS} ) {
@@ -48,10 +41,6 @@ my $pm = Parallel::ForkManager->new($ncpu);
 plan tests => scalar(@files) + 1;
 
 for my $file (@files) {
-    if ( grep { $file eq $_ } @exceptions ) {
-        pass("$file is skipped - exception");
-        next;
-    }
     $pm->start and next;
     my $output = `perl -cw '$file' 2>&1`;
     chomp $output;

@@ -20,21 +20,15 @@ use Test::More tests => 2;
 use File::Slurp qw( read_file );
 use Data::Dumper;
 use t::lib::QA::TemplateFilters;
+use Koha::Devel::Files;
 
-my @files;
+my $dev_files = Koha::Devel::Files->new;
+my @files     = $dev_files->ls_tt_files;
 
-# OPAC
-push @files, `git ls-files 'koha-tmpl/opac-tmpl/bootstrap/en/*.tt'`;
-push @files, `git ls-files 'koha-tmpl/opac-tmpl/bootstrap/en/*.inc'`;
-
-# Staff
-push @files, `git ls-files 'koha-tmpl/intranet-tmpl/prog/en/*.tt'`;
-push @files, `git ls-files 'koha-tmpl/intranet-tmpl/prog/en/*.inc'`;
 ok( @files > 0, 'We should test something' );
 
 my @errors;
 for my $file (@files) {
-    chomp $file;
     my $content = read_file($file);
     my @e       = t::lib::QA::TemplateFilters::missing_filters($content);
     push @errors, { file => $file, errors => \@e } if @e;

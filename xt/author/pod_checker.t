@@ -4,11 +4,10 @@ use Modern::Perl;
 use Test::More;
 use Test::NoWarnings;
 use Pod::Checker;
+use Koha::Devel::Files;
 
-my @files;
-push @files, qx{git ls-files '*.pl' '*.PL' '*.pm' '*.t'};
-push @files, qx{git ls-files svc opac/svc};                 # Files without extension
-chomp for @files;
+my $dev_files = Koha::Devel::Files->new;
+my @files     = $dev_files->ls_perl_files;
 
 plan tests => scalar @files + 1;
 

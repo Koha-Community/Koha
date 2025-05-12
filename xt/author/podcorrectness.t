@@ -15,9 +15,9 @@ use Modern::Perl;
 use Test::More;
 use Test::Pod;
 
-my @files;
-push @files, qx{git ls-files '*.pl' '*.PL' '*.pm' '*.t'};
-push @files, qx{git ls-files svc opac/svc};                 # Files without extension
-chomp for @files;
+use Koha::Devel::Files;
+
+my $dev_files = Koha::Devel::Files->new;
+my @files     = $dev_files->ls_perl_files;
 
 all_pod_files_ok(@files);

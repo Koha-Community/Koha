@@ -22,20 +22,15 @@ use Test::More tests => 2;
 use File::Slurp;
 use Data::Dumper;
 
-my @files;
+use Koha::Devel::Files;
 
-# OPAC
-push @files, `git ls-files 'koha-tmpl/opac-tmpl/bootstrap/en/*.tt'`;
-push @files, `git ls-files 'koha-tmpl/opac-tmpl/bootstrap/en/*.inc'`;
+my $dev_files = Koha::Devel::Files->new;
+my @files     = $dev_files->ls_tt_files;
 
-# Staff
-push @files, `git ls-files 'koha-tmpl/intranet-tmpl/prog/en/*.tt'`;
-push @files, `git ls-files 'koha-tmpl/intranet-tmpl/prog/en/*.inc'`;
 ok( @files > 0, 'We should test something' );
 
 my @errors;
 for my $file (@files) {
-    chomp $file;
     my @e = check_csrf_in_forms($file);
     push @errors, sprintf "%s:%s", $file, join( ",", @e ) if @e;
 }

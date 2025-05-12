@@ -22,20 +22,14 @@ use Test::More tests => 2;
 use File::Slurp;
 use Data::Dumper;
 
-my @files;
+use Koha::Devel::Files;
 
-# OPAC
-push @files, `git ls-files 'koha-tmpl/opac-tmpl/bootstrap/en/*.tt'`;
-push @files, `git ls-files 'koha-tmpl/opac-tmpl/bootstrap/en/*.inc'`;
-
-# Staff
-push @files, `git ls-files 'koha-tmpl/intranet-tmpl/prog/en/*.tt'`;
-push @files, `git ls-files 'koha-tmpl/intranet-tmpl/prog/en/*.inc'`;
+my $dev_files = Koha::Devel::Files->new;
+my @files     = $dev_files->ls_perl_files;
 ok( @files > 0, 'We should test something' );
 
 my @errors;
 for my $file (@files) {
-    chomp $file;
     my @e = catch_missing_op($file);
     push @errors, sprintf "%s:%s", $file, join( ",", @e ) if @e;
 }

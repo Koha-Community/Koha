@@ -23,7 +23,10 @@ use Test::Strict;
 use Parallel::ForkManager;
 use Sys::CPU;
 
-my @tt_files = qx{git ls-files '*.tt' '*.inc'};
+use Koha::Devel::Files;
+
+my $dev_files = Koha::Devel::Files->new( { context => 'tidy' } );
+my @tt_files  = $dev_files->ls_perl_files;
 
 $Test::Strict::TEST_STRICT = 0;
 
@@ -39,7 +42,6 @@ my $pm = Parallel::ForkManager->new($ncpu);
 foreach my $filepath (@tt_files) {
     $pm->start and next;
 
-    chomp $filepath;
     my $tidy    = qx{perl misc/devel/tidy.pl --silent --no-write $filepath};
     my $content = read_file $filepath;
     ok( $content eq $tidy, "$filepath should be kept tidy" );
