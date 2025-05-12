@@ -231,9 +231,9 @@
                                     <select name="change_hold_type_[% hold.reserve_id | html %]">
                                         <option selected="selected" value="">
                                             [%- IF ( hold.barcodenumber ) -%]
-                                                Only item [%- hold.barcodenumber | html -%]
+                                                [% tx("Only item {barcode}", {barcode = hold.barcodenumber}) | html %]
                                             [%- ELSE -%]
-                                                Only item [No barcode]
+                                                [% t("Only item [No barcode]") | html %]
                                             [%- END -%]
                                         </option>
                                         <option value="1">Next available</option>
