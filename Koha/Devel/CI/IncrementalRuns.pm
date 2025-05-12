@@ -129,7 +129,7 @@ sub get_files_to_test {
             @koha_commit_history;
             if ($last_build_commit) {
                 @files = @{ from_json( read_file("$self->{git_repo_dir}/$self->{test_name}/$last_build_commit") ) };
-                push @files, $dev_files->ls_perl_files("$last_build_commit HEAD");
+                push @files, $dev_files->ls_files( $filetype, "$last_build_commit HEAD" );
             } else {
 
                 # In case we run on a branch that does not have ancestor commits in the history
@@ -140,7 +140,7 @@ sub get_files_to_test {
             $no_history = 1;
         }
     }
-    @files = $dev_files->ls_perl_files if !$self->{incremental_run} || $no_history;
+    @files = $dev_files->ls_files($filetype) if !$self->{incremental_run} || $no_history;
 
     return @files;
 }

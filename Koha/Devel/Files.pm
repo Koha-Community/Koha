@@ -146,6 +146,44 @@ sub build_git_exclude {
     return $exclude_list;
 }
 
+=head2 ls_files
+
+    my @files = $file_manager->ls_files($filetype, $git_range);
+
+Lists files that have been modified within a specified Git range. If no range is provided, it lists all Perl files, excluding those specified in the exceptions.
+
+=cut
+
+sub ls_files {
+    my ( $self, $filetype, $git_range ) = @_;
+    my @files;
+    if ($git_range) {
+        $git_range =~ s|\.\.| |;
+        my @modified_files = qx{git diff --name-only $git_range};
+        chomp @modified_files;
+        if ( $filetype eq 'pl' ) {
+            push @files, grep { -e && /\.(pl|PL|pm|t)$/ } @modified_files;
+            push @files, grep { -e && /^(svc|opac\/svc)/ } @modified_files;
+        } elsif ( $filetype eq 'js' ) {
+            push @files, grep { -e && /\.(js|ts|vue)$/ } @modified_files;
+        } elsif ( $filetype eq 'tt' ) {
+            push @files, grep { -e && /\.(tt|inc)$/ } @modified_files;
+        }
+
+        my @exception_files = $exceptions->{$filetype}->{ $self->{context} };
+        @files = array_minus( @files, @exception_files );
+    } else {
+        if ( $filetype eq 'pl' ) {
+            @files = $self->ls_perl_files;
+        } elsif ( $filetype eq 'js' ) {
+            @files = $self->ls_js_files;
+        } elsif ( $filetype eq 'tt' ) {
+            @files = $self->ls_tt_files;
+        }
+    }
+    return @files;
+}
+
 =head2 ls_perl_files
 
     my @perl_files = $file_manager->ls_perl_files($git_range);
