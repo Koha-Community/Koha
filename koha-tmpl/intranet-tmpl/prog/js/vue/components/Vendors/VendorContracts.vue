@@ -36,9 +36,6 @@ export default {
             let isUserPermitted = this.isUserPermitted;
             let format_date = this.format_date;
 
-            $.fn.dataTable.ext.search = $.fn.dataTable.ext.search.filter(
-                search => search.name != "apply_filter"
-            );
             $("#" + table_id).kohaTable({
                 data: contracts,
                 embed: [],
