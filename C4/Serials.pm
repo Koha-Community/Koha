@@ -1842,10 +1842,9 @@ sub DelSubscription {
 
     Koha::AdditionalFieldValues->search(
         {
-            'field.tablename' => 'subscription',
+            'me.record_table' => 'subscription',
             'me.record_id'    => $subscriptionid,
-        },
-        { join => 'field' }
+        }
     )->delete;
 
     logaction( "SERIAL", "DELETE", $subscriptionid, "" ) if C4::Context->preference("SubscriptionLog");

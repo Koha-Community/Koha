@@ -19,7 +19,7 @@ use t::lib::Mocks;
 use t::lib::TestBuilder;
 use Test::MockModule;
 use Test::NoWarnings;
-use Test::More tests => 64;
+use Test::More tests => 65;
 
 BEGIN {
     use_ok(
@@ -737,6 +737,85 @@ subtest "test numbering pattern with dates in GetSeq GetNextSeq" => sub {
         'GetNextSeq correctly calculates numbering from planned date, leap year'
     );
 
+};
+
+subtest "DelSubscription" => sub {
+    plan tests => 5;
+
+    # Create a mock for C4::Context preferences
+    t::lib::Mocks::mock_preference( "SubscriptionLog", 1 );
+
+    # Create a Subscription for testing
+    my $subscription_to_delete = NewSubscription(
+        undef,        "",            undef, undef,          $budget_id, $biblionumber,
+        '2013-01-01', $frequency_id, undef, undef,          undef,
+        undef,        undef,         undef, undef,          undef, undef,
+        1,            $notes,        undef, '2013-01-01',   undef, $pattern_id,
+        undef,        undef,         0,     $internalnotes, 0,
+        undef,        undef,         0,     undef,          '2013-12-31', 0
+    );
+
+    # Verify subscription was created
+    my $subscription = GetSubscription($subscription_to_delete);
+    is(
+        $subscription->{subscriptionid}, $subscription_to_delete,
+        'Subscription created successfully for deletion test'
+    );
+
+    # Create an additional field value for this subscription
+    my $additional_field = $builder->build_object(
+        {
+            class => 'Koha::AdditionalFields',
+            value => {
+                tablename                 => 'subscription',
+                name                      => 'test_field',
+                authorised_value_category => undef,
+            }
+        }
+    );
+
+    my $field_value = Koha::AdditionalFieldValue->new(
+        {
+            field_id     => $additional_field->id,
+            record_id    => $subscription_to_delete,
+            value        => 'test_value',
+            record_table => 'subscription',
+        }
+    )->store;
+
+    # Verify additional field value exists
+    my $count = Koha::AdditionalFieldValues->search(
+        {
+            'me.record_table' => 'subscription',
+            'me.record_id'    => $subscription_to_delete,
+        }
+    )->count;
+    is( $count, 1, 'Additional field value was created for the subscription' );
+
+    my $action_logs_before = $schema->resultset('ActionLog')->search()->count;
+
+    # Delete the subscription
+    DelSubscription($subscription_to_delete);
+
+    # Test 1: Subscription should be deleted
+    $subscription = GetSubscription($subscription_to_delete);
+    is( $subscription, undef, 'Subscription was successfully deleted' );
+
+    # Test 2: Additional field values should be deleted
+    $count = Koha::AdditionalFieldValues->search(
+        {
+            'me.record_table' => 'subscription',
+            'me.record_id'    => $subscription_to_delete,
+        }
+    )->count;
+    is( $count, 0, 'Additional field values were deleted with the subscription' );
+
+    # Test 3: Logaction should have been called with correct parameters
+    my $action_logs_after = $schema->resultset('ActionLog')->search()->count;
+    is(
+        $action_logs_after, $action_logs_before + 1,
+        'logaction was called when SubscriptionLog preference is enabled'
+    );
 };
 
 subtest "_numeration" => sub {
