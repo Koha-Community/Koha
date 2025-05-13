@@ -52,7 +52,7 @@ overdue_notices.pl
  Options:
    --help                          Brief help message.
    --man                           Full documentation.
-   --verbose | -v                  Verbose mode. Can be repeated for increased output
+   --verbose | -v                  Verbose mode. Can be repeated for increased output.
    --nomail | -n                   No email will be sent.
    --max          <days>           Maximum days overdue to deal with.
    --library      <branchcode>     Only deal with overdues from this library.
@@ -89,7 +89,7 @@ Prints the manual page and exits.
 
 Verbose. Without this flag set, only fatal errors are reported.
 A single 'v' will report info on branches, letter codes, and patrons.
-A second 'v' will report The SQL code used to search for triggered patrons.
+A second 'v' will report the SQL code used to search for triggered patrons.
 
 =item B<-n> | B<--nomail>
 
@@ -107,19 +107,19 @@ any CSV files. Defaults to 90 to match F<longoverdues.pl>.
 
 =item B<--library>
 
-select overdues for one specific library. Use the value in the
+Select overdues for one specific library. Use the value in the
 branches.branchcode table. This option can be repeated in order 
 to select overdues for a group of libraries.
 
 =item B<--csv>
 
-Produces CSV data. if -n (no mail) flag is set, then this CSV data is
+Produces CSV data. If -n (no mail) flag is set, then this CSV data is
 sent to standard out or to a filename if provided. Otherwise, only
 overdues that could not be emailed are sent in CSV format to the admin.
 
 =item B<--html>
 
-Produces html data. If patron does not have an email address or
+Produces HTML data. If patron does not have an email address or
 -n (no mail) flag is set, an HTML file is generated in the specified
 directory. This can be downloaded or further processed by library staff.
 The file will be called notices-YYYY-MM-DD.html and placed in the directory
@@ -135,20 +135,24 @@ specified.
 
 =item B<--itemscontent>
 
-comma separated list of fields that get substituted into templates in
+Comma separated list of fields that get substituted into templates in
 places of the E<lt>E<lt>items.contentE<gt>E<gt> placeholder. This
-defaults to due date,title,barcode,author
+defaults to due date,title,barcode,author,itemnumber
 
 Other possible values come from fields in the biblios, items and
 issues tables.
 
 =item B<--borcat>
 
-Repeatable field, that permits to select only some patron categories.
+Repeatable field that permits selecting only specific patron categories.
+For example, --borcat STUDENT --borcat FACULTY would only process overdues
+for patrons in the STUDENT and FACULTY categories.
 
 =item B<--borcatout>
 
-Repeatable field, that permits to exclude some patron categories.
+Repeatable field that permits excluding specific patron categories.
+For example, --borcatout STAFF would skip processing overdues for
+patrons in the STAFF category.
 
 =item B<-t> | B<--triggered>
 
@@ -165,8 +169,9 @@ being generated if the cron fails to run on time.
 
 This option makes the script run in test mode.
 
-In test mode, the script won't make any changes on the DB. This is useful
-for debugging configuration.
+In test mode, the script won't make any changes to the database. This is useful
+for debugging configuration and testing notice generation without affecting
+production data.
 
 =item B<--list-all>
 
@@ -176,17 +181,32 @@ Choose --list-all to include all overdue items in the list (limited by B<--max> 
 
 =item B<--date>
 
-use it in order to send overdues on a specific date and not Now. Format: YYYY-MM-DD.
+Use it in order to send overdues on a specific date and not Now. Format: YYYY-MM-DD.
+
+This allows running the script for a different date than the current one,
+which can be helpful for testing, or for running overdues that should have
+been sent earlier.
 
 =item B<--email>
 
 Allows to specify which type of email will be used. Can be email, emailpro or B_email. Repeatable.
 
+This determines which email address field from the borrowers table will be used
+for notification. If multiple types are specified, the script will try all of them
+in the order provided until it finds a valid address.
+
+If this parameter is not specified, the script will fall back to using Koha::Patron->notice_email_address,
+which respects the patron's preferences and Koha system settings.
+
 =item B<--frombranch>
 
 Organize overdue notices either by checkout library (item-issuebranch) or item home library (item-homebranch)  or patron home library (patron-homebranch).
-This option is only used, if the OverdueNoticeFrom system preference is set to use 'command-line option'.
+This option is only used if the OverdueNoticeFrom system preference is set to use 'command-line option'.
 Defaults to checkout library (item-issuebranch).
+
+This setting affects which branch is considered the "source" of the notice, which
+in turn affects various aspects of the notice, including the content, branding,
+and from email address.
 
 =back
 
@@ -279,6 +299,17 @@ items.
 
 C<overdue_notices.pl --library MAIN max 14> - prepare notices of
 overdues in the last 2 weeks for the MAIN library.
+
+C<overdue_notices.pl --triggered --date 2023-05-01> - Run the script as if it
+were May 1, 2023, and send only notices for items that are exactly at the trigger
+point (rather than within the trigger range).
+
+C<overdue_notices.pl --borcat STUDENT --email email --email B_email> - Only send
+notices to patrons in the STUDENT category, trying both primary and alternate email
+addresses.
+
+C<overdue_notices.pl --html /tmp/notices> - Generate HTML files for patrons without
+email addresses in the /tmp/notices directory.
 
 =head1 SEE ALSO
 
