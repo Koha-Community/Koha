@@ -26,7 +26,7 @@ use Sys::CPU;
 use Koha::Devel::Files;
 
 my $dev_files = Koha::Devel::Files->new( { context => 'tidy' } );
-my @tt_files  = $dev_files->ls_perl_files;
+my @tt_files  = $dev_files->ls_tt_files;
 
 $Test::Strict::TEST_STRICT = 0;
 
