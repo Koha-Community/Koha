@@ -106,11 +106,11 @@ while ( my $patron = $patrons->next ) {
 
     # Don't crash, but keep debarring as long as you can!
     eval {
-        Koha::Patron::Debarments::AddUniqueDebarment(
+        Koha::Patron::Debarments::AddDebarment(
             {
                 borrowernumber => $patron->id,
                 expiration     => $expiration,
-                type           => 'SUSPENSION',
+                type           => 'MANUAL',
                 comment        => $message,
             }
         );
