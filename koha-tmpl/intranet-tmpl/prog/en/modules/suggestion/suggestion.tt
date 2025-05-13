@@ -1351,7 +1351,7 @@
                                     {
                                         data: "me.title",
                                         searchable: true,
-                                        orderable: false,
+                                        orderable: true,
                                         render: function (data, type, row, meta) {
                                             let node = '<a href="suggestion.pl?suggestionid=%s&amp;op=show" title="%s">%s'.format(row.suggestion_id, _("suggestion"), row.title);
                                             if(row.author) node += ', by %s'.format(row.author);
@@ -1372,7 +1372,7 @@
                                     {
                                         data: "suggester.surname:suggester.firstname:suggester.cardnumber",
                                         searchable: true,
-                                        orderable: false,
+                                        orderable: true,
                                         render: function (data, type, row, meta) {
                                             let suggester = row.suggester;
                                             let node = '<a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=%s">%s'.format(suggester.patron_id, suggester.surname);
@@ -1385,7 +1385,7 @@
                                     {
                                         data: "suggester.category.name",
                                         searchable: false,
-                                        orderable: false,
+                                        orderable: true,
                                         render: function (data, type, row, meta) {
                                             return escape_str(row.suggester.category.name);
                                         },
@@ -1399,9 +1399,9 @@
                                         },
                                     },
                                     {
-                                        data: "",
+                                        data: "patron_reason",
                                         searchable: false,
-                                        orderable: false,
+                                        orderable: true,
                                         render: function (data, type, row, meta) {
                                             return escape_str(row._strings.patron_reason.str ? row._strings.patron_reason.str : '');
                                         },
@@ -1409,7 +1409,7 @@
                                     {
                                         data: "manager.surname:manager.firstname",
                                         searchable: true,
-                                        orderable: false,
+                                        orderable: true,
                                         render: function (data, type, row, meta) {
                                             let node = '<a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=%s">%s'.format(row.manager.patron_id, row.manager.surname);
                                             if(row.manager.firstname) node += ', %s'.format(row.manager.firstname);
@@ -1428,7 +1428,7 @@
                                     {
                                         data: "last_modifier.surname:last_modifier.firstname",
                                         searchable: true,
-                                        orderable: false,
+                                        orderable: true,
                                         render: function (data, type, row, meta) {
                                             let node = '<a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=%s">%s'.format(row.last_modifier.patron_id, row.last_modifier.surname);
                                             if(row.last_modifier.firstname) node += ', %s'.format(row.last_modifier.firstname);
@@ -1455,7 +1455,7 @@
                                     {
                                         data: "library.name",
                                         searchable: false,
-                                        orderable: false,
+                                        orderable: true,
                                         render: function (data, type, row, meta) {
                                             return escape_str(row.library.name ? row.library.name : '');
                                         },
@@ -1463,7 +1463,7 @@
                                     {
                                         data: "fund.name",
                                         searchable: false,
-                                        orderable: false,
+                                        orderable: true,
                                         render: function (data, type, row, meta) {
                                             return escape_str(row.fund ? row.fund.name : '');
                                         },
@@ -1471,7 +1471,7 @@
                                     {
                                         data: "staff_note",
                                         searchable: false,
-                                        orderable: false,
+                                        orderable: true,
                                         render: function (data, type, row, meta) {
                                             return escape_str(row.staff_note ? row.staff_note : '');
                                         },

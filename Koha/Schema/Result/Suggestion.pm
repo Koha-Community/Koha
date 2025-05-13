@@ -596,6 +596,30 @@ __PACKAGE__->belongs_to(
     },
 );
 
+__PACKAGE__->belongs_to(
+    "library",
+    "Koha::Schema::Result::Branch",
+    { "foreign.branchcode" => "self.branchcode" },
+    {
+        is_deferrable => 1,
+        join_type     => "LEFT",
+        on_delete     => "SET NULL",
+        on_update     => "CASCADE",
+    },
+);
+
+__PACKAGE__->belongs_to(
+    "fund",
+    "Koha::Schema::Result::Aqbudget",
+    { budget_id => "budgetid" },
+    {
+        is_deferrable => 1,
+        join_type     => "LEFT",
+        on_delete     => "SET NULL",
+        on_update     => "CASCADE",
+    },
+);
+
 __PACKAGE__->add_columns(
     '+archived' => { is_boolean => 1 },
 );

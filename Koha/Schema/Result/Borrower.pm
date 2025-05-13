@@ -2238,6 +2238,14 @@ __PACKAGE__->has_many(
   { cascade_copy => 0, cascade_delete => 0 },
 );
 
+__PACKAGE__->belongs_to(
+    "category",
+    "Koha::Schema::Result::Category",
+    { "foreign.categorycode"  => "self.categorycode" },
+    { is_deferrable => 1, on_delete => "RESTRICT", on_update => "RESTRICT" },
+);
+
+
 =head2 koha_objects_class
 
 Missing POD for koha_objects_class.
