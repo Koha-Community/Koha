@@ -23,7 +23,7 @@ __PACKAGE__->table("aqbookseller_aliases");
 
 =head1 ACCESSORS
 
-=head2 alias_id
+=head2 vendor_alias_id
 
   data_type: 'integer'
   is_auto_increment: 1
@@ -50,7 +50,7 @@ the alias
 =cut
 
 __PACKAGE__->add_columns(
-  "alias_id",
+  "vendor_alias_id",
   { data_type => "integer", is_auto_increment => 1, is_nullable => 0 },
   "vendor_id",
   { data_type => "integer", is_foreign_key => 1, is_nullable => 0 },
@@ -62,13 +62,13 @@ __PACKAGE__->add_columns(
 
 =over 4
 
-=item * L</alias_id>
+=item * L</vendor_alias_id>
 
 =back
 
 =cut
 
-__PACKAGE__->set_primary_key("alias_id");
+__PACKAGE__->set_primary_key("vendor_alias_id");
 
 =head1 RELATIONS
 
@@ -88,8 +88,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07049 @ 2023-04-20 18:19:43
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:FmrIDHGkX2A+3aFZV2FZCA
+# Created by DBIx::Class::Schema::Loader v0.07051 @ 2025-05-13 16:36:20
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:y5DViXa8QqOFm3uhRp3jVw
 
 =head2 koha_object_class
 
