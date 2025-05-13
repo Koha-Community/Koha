@@ -23,7 +23,7 @@ __PACKAGE__->table("aqbookseller_interfaces");
 
 =head1 ACCESSORS
 
-=head2 interface_id
+=head2 vendor_interface_id
 
   data_type: 'integer'
   is_auto_increment: 1
@@ -94,7 +94,7 @@ notes
 =cut
 
 __PACKAGE__->add_columns(
-  "interface_id",
+  "vendor_interface_id",
   { data_type => "integer", is_auto_increment => 1, is_nullable => 0 },
   "vendor_id",
   { data_type => "integer", is_foreign_key => 1, is_nullable => 0 },
@@ -118,13 +118,13 @@ __PACKAGE__->add_columns(
 
 =over 4
 
-=item * L</interface_id>
+=item * L</vendor_interface_id>
 
 =back
 
 =cut
 
-__PACKAGE__->set_primary_key("interface_id");
+__PACKAGE__->set_primary_key("vendor_interface_id");
 
 =head1 RELATIONS
 
@@ -144,8 +144,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07049 @ 2023-05-05 12:54:39
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:NOk5VsJp5v7nTw39qxrEbw
+# Created by DBIx::Class::Schema::Loader v0.07051 @ 2025-05-13 16:42:58
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:cnPudwMkyrLXuXhMhre/og
 
 =head2 koha_object_class
 
