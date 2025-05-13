@@ -1974,9 +1974,10 @@ sub TransferOrder {
     foreach my $afv ( $order->additional_field_values->as_list ) {
         Koha::AdditionalFieldValue->new(
             {
-                field_id  => $afv->field_id,
-                record_id => $newordernumber,
-                value     => $afv->value,
+                field_id     => $afv->field_id,
+                record_id    => $newordernumber,
+                record_table => 'aqorders',
+                value        => $afv->value,
             }
         )->store;
     }
