@@ -1,6 +1,7 @@
 [% USE raw %]
 [% USE Koha %]
 [% USE Asset %]
+[% USE TablesSettings %]
 [% PROCESS 'i18n.inc' %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
@@ -293,83 +294,103 @@
         [% IF ( ediaccounts ) %]
             <h1>EDI accounts</h1>
             <div class="page-section">
-                <table>
-                    <tr>
-                        <th>ID</th>
-                        <th>Vendor</th>
-                        <th>Description</th>
-                        <th>Transport</th>
-                        <th>Remote host</th>
-                        <th>Username</th>
-                        <th>Password</th>
-                        <th>Upload port</th>
-                        <th>Download port</th>
-                        <th>Download directory</th>
-                        <th>Upload directory</th>
-                        <th>Qualifier</th>
-                        <th>SAN</th>
-                        <th>Standard</th>
-                        <th>[% tp('EDIFACT message QUOTE', 'Quotes') | html %]</th>
-                        <th>Orders</th>
-                        <th>Invoices</th>
-                        <th>Responses</th>
-                        <th>Auto ordering</th>
-                        <th class="no-export">Actions</th>
-                    </tr>
-                    [% FOREACH account IN ediaccounts %]
+                <table id="edi_accounts_table">
+                    <thead>
                         <tr>
-                            <td>[% account.id | html %]</td>
-                            <td><a href="/cgi-bin/koha/acquisition/vendors/[% account.vendor_id | uri %]">[% account.vendor.name | html %]</a></td>
-                            <td>[% account.description | html %]</td>
-                            <td>[% account.transport | html %]</td>
-                            <td>[% account.host | html %]</td>
-                            <td>[% account.username | html %]</td>
-                            <td>[% IF account.password %]*****[% END %]</td>
-                            <td>[% account.upload_port | html %]</td>
-                            <td>[% account.download_port | html %]</td>
-                            <td>[% account.download_directory | html %]</td>
-                            <td>[% account.upload_directory | html %]</td>
-                            <td>
-                                [% FOREACH qualifier IN code_qualifiers %]
-                                    [% IF qualifier.code == account.id_code_qualifier %]
-                                        [% qualifier.description | html %]
-                                    [% END %]
-                                [% END %]
-                                ([% account.id_code_qualifier | html %])
-                            </td>
-                            <td>[% account.san | html %]</td>
-                            <td>[% IF account.standard == 'BIC' %]BiC[% ELSE %]EDItEUR[% END %]</td>
-                            [% IF account.quotes_enabled %]
-                                <td>Yes</td>
-                            [% ELSE %]
-                                <td>No</td>
-                            [% END %]
-                            [% IF account.orders_enabled %]
-                                <td>Yes</td>
-                            [% ELSE %]
-                                <td>No</td>
-                            [% END %]
-                            [% IF account.invoices_enabled %]
-                                <td>Yes</td>
-                            [% ELSE %]
-                                <td>No</td>
-                            [% END %]
-                            [% IF account.responses_enabled %]
-                                <td>Yes</td>
-                            [% ELSE %]
-                                <td>No</td>
-                            [% END %]
-                            [% IF account.auto_orders %]
-                                <td>Yes</td>
-                            [% ELSE %]
-                                <td>No</td>
-                            [% END %]
-                            <td class="actions">
-                                <a class="btn btn-default btn-xs" href="/cgi-bin/koha/admin/edi_accounts.pl?op=acct_form&id=[% account.id | html %]"><i class="fa-solid fa-pencil" aria-hidden="true"></i> Edit</a>
-                                <a class="btn btn-default btn-xs" href="/cgi-bin/koha/admin/edi_accounts.pl?op=delete_confirm&id=[% account.id | html %]"><i class="fa fa-trash-can"></i> Delete</a>
-                            </td>
+                            <th>ID</th>
+                            <th>Vendor</th>
+                            <th>Description</th>
+                            <th>Transport</th>
+                            <th>Remote host</th>
+                            <th>Username</th>
+                            <th>Password</th>
+                            <th>Upload port</th>
+                            <th>Download port</th>
+                            <th>Download directory</th>
+                            <th>Upload directory</th>
+                            <th>Qualifier</th>
+                            <th>SAN</th>
+                            <th>Standard</th>
+                            <th>[% tp('EDIFACT message QUOTE', 'Quotes') | html %]</th>
+                            <th>Orders</th>
+                            <th>Invoices</th>
+                            <th>Responses</th>
+                            <th>Auto ordering</th>
+                            <th class="no-sort no-export">Actions</th>
                         </tr>
-                    [% END %]
+                    </thead>
+                    <tbody>
+                        [% FOREACH account IN ediaccounts %]
+                            <tr>
+                                <td>[% account.id | html %]</td>
+                                <td><a href="/cgi-bin/koha/acquisition/vendors/[% account.vendor_id | uri %]">[% account.vendor.name | html %]</a></td>
+                                <td>[% account.description | html %]</td>
+                                <td>[% account.transport | html %]</td>
+                                <td>[% account.host | html %]</td>
+                                <td>[% account.username | html %]</td>
+                                <td>[% IF account.password %]*****[% END %]</td>
+                                <td>[% account.upload_port | html %]</td>
+                                <td>[% account.download_port | html %]</td>
+                                <td>[% account.download_directory | html %]</td>
+                                <td>[% account.upload_directory | html %]</td>
+                                <td>
+                                    [% FOREACH qualifier IN code_qualifiers %]
+                                        [% IF qualifier.code == account.id_code_qualifier %]
+                                            [% qualifier.description | html %]
+                                        [% END %]
+                                    [% END %]
+                                    ([% account.id_code_qualifier | html %])
+                                </td>
+                                <td>[% account.san | html %]</td>
+                                <td>
+                                    [% IF account.standard == 'BIC' %]
+                                        BiC
+                                    [% ELSE %]
+                                        EDItEUR
+                                    [% END %]
+                                </td>
+                                <td>
+                                    [% IF account.quotes_enabled %]
+                                        Yes
+                                    [% ELSE %]
+                                        No
+                                    [% END %]
+                                </td>
+                                <td>
+                                    [% IF account.orders_enabled %]
+                                        Yes
+                                    [% ELSE %]
+                                        No
+                                    [% END %]
+                                </td>
+                                <td>
+                                    [% IF account.invoices_enabled %]
+                                        Yes
+                                    [% ELSE %]
+                                        No
+                                    [% END %]
+                                </td>
+                                <td>
+                                    [% IF account.responses_enabled %]
+                                        Yes
+                                    [% ELSE %]
+                                        No
+                                    [% END %]
+                                </td>
+                                <td>
+                                    [% IF account.auto_orders %]
+                                        Yes
+                                    [% ELSE %]
+                                        No
+                                    [% END %]
+                                </td>
+                                <td class="actions">
+                                    <a class="btn btn-default btn-xs" href="/cgi-bin/koha/admin/edi_accounts.pl?op=acct_form&id=[% account.id | html %]"><i class="fa-solid fa-pencil" aria-hidden="true"></i> Edit</a>
+                                    <a class="btn btn-default btn-xs" href="/cgi-bin/koha/admin/edi_accounts.pl?op=delete_confirm&id=[% account.id | html %]"><i class="fa fa-trash-can"></i> Delete</a>
+                                </td>
+                            </tr>
+                        [% END %]
+                    </tbody>
                 </table>
             </div>
             <!-- /.page-section -->
@@ -381,5 +402,17 @@
 
 [% MACRO jsinclude BLOCK %]
     [% Asset.js("js/admin-menu.js") | $raw %]
+    [% INCLUDE 'datatables.inc' %]
+    <script>
+        $(document).ready(function(){
+            var table_settings = [% TablesSettings.GetTableSettings( 'admin', 'edi_accounts', 'edi_accounts_table', 'json' ) | $raw %];
+            $("#edi_accounts_table").kohaTable(
+                {
+                    pagingType: "full",
+                },
+                table_settings
+            );
+        });
+    </script>
 [% END %]
 [% INCLUDE 'intranet-bottom.inc' %]
