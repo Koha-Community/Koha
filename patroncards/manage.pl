@@ -34,6 +34,7 @@ use C4::Creators qw(
 );
 use C4::Labels;
 use Koha::List::Patron qw( GetPatronLists );
+use C4::Patroncards;
 
 my $cgi = CGI->new;
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
