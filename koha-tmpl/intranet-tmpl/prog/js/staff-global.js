@@ -75,17 +75,21 @@ function togglePanel(node) {
     }
 }
 
-$(document).ready(function () {
-    //check if sticky element is stuck, if so add floating class
-    if ($(".sticky").length) {
+function apply_sticky(nodes) {
+    if (nodes) {
         const observer = new IntersectionObserver(
             ([e]) =>
                 e.target.classList.toggle("floating", e.intersectionRatio < 1),
             { threshold: [1] }
         );
 
-        observer.observe(document.querySelector(".sticky"));
+        observer.observe(nodes);
     }
+}
+
+$(document).ready(function () {
+    //check if sticky element is stuck, if so add floating class
+    apply_sticky(document.querySelector(".sticky"));
 
     //check for a hash before setting focus
     let hash = window.location.hash;
