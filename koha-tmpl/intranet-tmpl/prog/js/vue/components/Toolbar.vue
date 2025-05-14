@@ -22,17 +22,10 @@ export default {
             observer: null,
         };
     },
-    methods: {
-        stickyToolbar([e]) {
-            e.target.classList.toggle("floating", e.intersectionRatio < 1);
-        },
-    },
+    methods: {},
     mounted() {
         if (this.sticky) {
-            this.observer = new IntersectionObserver(this.stickyToolbar, {
-                threshold: [1],
-            });
-            this.observer.observe(this.$refs.toolbar);
+            apply_sticky(this.$refs.toolbar);
         }
     },
 };
