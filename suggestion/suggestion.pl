@@ -456,14 +456,21 @@ if ( $op eq 'else' ) {
             || $search_params->{$f} eq '';
     }
     for my $bi (qw (title author isbn publishercode copyrightdate collectiontitle)) {
-        $search_params->{$bi} = { 'LIKE' => "%" . $search_params->{$bi} . "%" } if $search_params->{$bi};
+        if ( $search_params->{$bi} ) {
+            $search_params->{"me.$bi"} = { 'like' => "%" . $search_params->{$bi} . "%" };
+            delete $search_params->{$bi};
+        }
     }
 
     $search_params->{archived} = 0 if !$filter_archived;
     foreach my $key ( keys %$search_params ) {
         if ( $key eq 'branchcode' ) {
-            my $branch_param = delete $search_params->{$key};
-            $search_params->{"me.branchcode"} = $branch_param;
+            if ( $displayby ne 'branchcode' ) {
+                my $branch_param = delete $search_params->{$key};
+                $search_params->{"me.branchcode"} = $branch_param;
+            } else {
+                delete $search_params->{$key};
+            }
         }
     }
 

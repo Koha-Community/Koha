@@ -1326,7 +1326,7 @@
                     let suggestionData = [% To.json(suggestions) | $raw %];
                     var table_settings = [% TablesSettings.GetTableSettings( 'acqui', 'suggestions', 'suggestions', 'json' ) | $raw %]
                     function loadDatatable(tabName) {
-                        let tabSuggestionData = suggestionData.find(s => s.suggestiontype === tabName)
+                        let tabSuggestionData = suggestionData.find(s => s.suggestiontype === `${tabName}`)
                         $("#table_" + tabName).kohaTable(
                             {
                                 sorting: [[4, "asc"]],
@@ -1479,7 +1479,7 @@
                                     {
                                         data: "status",
                                         searchable: false,
-                                        orderable: false,
+                                        orderable: true,
                                         render: function (data, type, row, meta) {
                                             if(row.status === 'ASKED') return '<span>%s</span>'.format(_("Pending"));
                                             if(row.status === 'ACCEPTED') return '<span>%s</span>'.format(_("Accepted"));
