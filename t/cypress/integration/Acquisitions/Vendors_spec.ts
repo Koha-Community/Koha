@@ -182,6 +182,14 @@ describe("Vendor CRUD operations", () => {
     it("should edit a vendor", () => {
         const vendor = getVendor();
 
+        cy.intercept("GET", "/api/v1/acquisitions/vendors\?*", {
+            statusCode: 200,
+            body: [vendor],
+            headers: {
+                "X-Base-Total-Count": "1",
+                "X-Total-Count": "1",
+            },
+        });
         cy.visit("/cgi-bin/koha/acquisition/vendors");
         cy.intercept(
             "GET",
@@ -223,6 +231,12 @@ describe("Vendor CRUD operations", () => {
             },
         });
         cy.visit("/cgi-bin/koha/acquisition/vendors");
+        cy.intercept(
+            "GET",
+            new RegExp("/api/v1/acquisitions/vendors/(?!config$).+"),
+            vendor
+        ).as("get-vendor");
+
         const name_link = cy.get(
             "#vendors_list table tbody tr:first td:first a"
         );
