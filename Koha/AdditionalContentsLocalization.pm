@@ -189,6 +189,19 @@ sub borrowernumber {
     return $self->additional_content->borrowernumber(@params);
 }
 
+=head3 public_read_list
+
+This method returns the list of publicly readable database fields for both API and UI output purposes
+
+=cut
+
+sub public_read_list {
+    return [
+        'id',      'additional_content_id', 'title',
+        'content', 'lang',                  'updated_on',
+    ];
+}
+
 =head2 Class Methods
 
 =cut
