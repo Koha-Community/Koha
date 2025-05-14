@@ -142,6 +142,43 @@ sub translated_content {
     return $content;
 }
 
+=head3 public_read_list
+
+This method returns the list of publicly readable database fields for both API and UI output purposes
+
+=cut
+
+sub public_read_list {
+    return [
+        'id',         'category',       'code',
+        'location',   'branchcode',     'published_on',
+        'updated_on', 'expirationdate', 'number',
+        'borrowernumber'
+    ];
+}
+
+=head3 to_api_mapping
+
+This method returns the mapping for representing a Koha::AdditionalContent object
+on the API.
+
+=cut
+
+sub to_api_mapping {
+    return {
+        id             => 'additional_content_id',
+        category       => 'category',
+        code           => 'code',
+        location       => 'location',
+        branchcode     => 'library_id',
+        published_on   => 'published_on',
+        updated_on     => 'updated_on',
+        expirationdate => 'expirationdate',
+        number         => 'number',
+        borrowernumber => 'patron_id',
+    };
+}
+
 =head3 _type
 
 =cut

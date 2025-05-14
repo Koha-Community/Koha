@@ -1,0 +1,43 @@
+---
+additionalProperties: false
+properties:
+  additional_content_id:
+    description: Internal identifier for the additional content
+    type: integer
+  category:
+    description: Category of the additional content
+    type: string
+  code:
+    description: Code of the additional content
+    type: string
+  location:
+    description: Location of the additional content
+    type: string
+  library_id:
+    description: Library id of the additional content
+    type:
+      - string
+      - "null"
+  published_on:
+    description: Publication date of the additional content
+    type: string
+  updated_on:
+    description: Last modification date of the additional content
+    type: string
+  expirationdate:
+    description: Expiration date of the additional content
+    type: string
+  number:
+    description: The order in which this additional content appears in that specific location
+    type: integer
+  patron_id:
+    description: The author of the additional content
+    type:
+      - string
+      - "null"
+required:
+  - additional_content_id
+  - category
+  - code
+  - location
+type: object
