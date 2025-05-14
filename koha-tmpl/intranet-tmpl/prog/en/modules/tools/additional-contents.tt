@@ -532,7 +532,6 @@
             [% END %]
         [% END %]
     [% ELSE %]
-        [% SET opac_available_options = [ 'OpacNavRight', 'opacheader', 'OpacCustomSearch', 'OpacMainUserBlock', 'opaccredits', 'OpacLoginInstructions', 'OpacNav', 'OpacNavBottom', 'OpacSuggestionInstructions', 'ArticleRequestsDisclaimerText', 'OpacMoreSearches', 'OpacMySummaryNote', 'OpacLibraryInfo', 'OpacMaintenanceNotice', 'OPACResultsSidebar', 'OpacSuppressionMessage', 'SCOMainUserBlock', 'SelfCheckInMainUserBlock', 'SelfCheckHelpMessage', 'CatalogConcernHelp', 'CatalogConcernTemplate', 'CookieConsentBar', 'CookieConsentPopup', 'PatronSelfRegistrationAdditionalInstructions', 'ILLModuleCopyrightClearance' ] %]
         <optgroup label="OPAC">
             [% FOREACH l IN opac_available_options.sort %]
                 [% IF l == location %]
@@ -542,7 +541,6 @@
                 [% END %]
             [% END %]
         </optgroup>
-        [% SET staff_available_options = [ 'IntranetmainUserblock', 'StaffReportsHome', 'RoutingListNote', 'StaffAcquisitionsHome', 'StaffAuthoritiesHome', 'StaffCataloguingHome', 'StaffListsHome', 'StaffLoginInstructions', 'StaffPatronsHome', 'StaffPOSHome', 'StaffSerialsHome' ] %]
         <optgroup label="Staff interface">
             [% FOREACH l IN staff_available_options.sort %]
                 [% IF l == location %]

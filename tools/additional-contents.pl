@@ -72,8 +72,10 @@ if ( $op eq 'add_form' ) {
         $category            = $additional_content->category;
     }
     $template->param(
-        additional_content  => $additional_content,
-        translated_contents => $translated_contents,
+        additional_content      => $additional_content,
+        translated_contents     => $translated_contents,
+        opac_available_options  => Koha::AdditionalContents::get_html_customizations_options('opac'),
+        staff_available_options => Koha::AdditionalContents::get_html_customizations_options('staff'),
     );
 } elsif ( $op eq 'cud-add_validate' ) {
     output_and_exit_if_error( $cgi, $cookie, $template, { check => 'csrf_token' } );
