@@ -889,7 +889,9 @@
                                 <th>Date</th>
                                 <th>Status</th>
                                 <th>Comment</th>
-                                <th class="no-sort">Actions</th>
+                                [% IF ( CAN_user_tools_moderate_comments ) %]
+                                    <th class="no-sort">Actions</th>
+                                [% END %]
                             </tr>
                         </thead>
                         <tbody>
