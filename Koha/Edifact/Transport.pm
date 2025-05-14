@@ -228,13 +228,13 @@ sub ftp_download {
         )
         or return $self->_abort_download(
         undef,
-        "Cannot connect to $self->{account}->host: $EVAL_ERROR"
+        "Cannot connect to " . $self->{account}->host . ": $EVAL_ERROR"
         );
     $ftp->login( $self->{account}->username, Koha::Encryption->new->decrypt_hex($self->{account}->password) )
       or return $self->_abort_download( $ftp, "Cannot login: $ftp->message()" );
     $ftp->cwd( $self->{account}->download_directory )
       or return $self->_abort_download( $ftp,
-        "Cannot change remote dir : $ftp->message()" );
+        "Cannot change remote dir : " . $ftp->message() );
     my $file_list = $ftp->ls()
       or
       return $self->_abort_download( $ftp, 'cannot get file list from server' );
@@ -273,13 +273,13 @@ sub ftp_upload {
         )
         or return $self->_abort_download(
         undef,
-        "Cannot connect to $self->{account}->host: $EVAL_ERROR"
+        "Cannot connect to " . $self->{account}->host . ": $EVAL_ERROR"
         );
     $ftp->login( $self->{account}->username, Koha::Encryption->new->decrypt_hex($self->{account}->password) )
       or return $self->_abort_download( $ftp, "Cannot login: $ftp->message()" );
     $ftp->cwd( $self->{account}->upload_directory )
       or return $self->_abort_download( $ftp,
-        "Cannot change remote dir : $ftp->message()" );
+        "Cannot change remote dir : " . $ftp->message() );
     foreach my $m (@messages) {
         my $content = $m->raw_msg;
         if ($content) {
@@ -311,7 +311,7 @@ sub sftp_upload {
         port     => $port,
         timeout  => 10,
     );
-    $sftp->die_on_error("Cannot ssh to $self->{account}->host");
+    $sftp->die_on_error( "Cannot ssh to " . $self->{account}->host );
     $sftp->setcwd( $self->{account}->upload_directory )
       or return $self->_abort_download( $sftp,
         "Cannot change remote dir : " . $sftp->error );
