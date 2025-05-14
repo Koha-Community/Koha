@@ -153,6 +153,39 @@ sub find_best_match {
     return $alt1 // $alt2 // $alt3;
 }
 
+=head3 get_html_customizations_options
+
+    Koha::AdditionalContents->get_html_customizations_options('opac');
+
+=cut
+
+sub get_html_customizations_options {
+    my ($interface) = @_;
+
+    if ( $interface eq 'opac' ) {
+        return [
+            'OpacNavRight',                  'opacheader',       'OpacCustomSearch', 'OpacMainUserBlock', 'opaccredits',
+            'OpacLoginInstructions',         'OpacNav',          'OpacNavBottom',     'OpacSuggestionInstructions',
+            'ArticleRequestsDisclaimerText', 'OpacMoreSearches', 'OpacMySummaryNote', 'OpacLibraryInfo',
+            'OpacMaintenanceNotice',         'OPACResultsSidebar',   'OpacSuppressionMessage', 'SCOMainUserBlock',
+            'SelfCheckInMainUserBlock',      'SelfCheckHelpMessage', 'CatalogConcernHelp',     'CatalogConcernTemplate',
+            'CookieConsentBar',              'CookieConsentPopup',   'PatronSelfRegistrationAdditionalInstructions',
+            'ILLModuleCopyrightClearance'
+        ];
+    }
+
+    if ( $interface eq 'staff' ) {
+        return [
+            'IntranetmainUserblock', 'StaffReportsHome',     'RoutingListNote', 'StaffAcquisitionsHome',
+            'StaffAuthoritiesHome',  'StaffCataloguingHome', 'StaffListsHome',  'StaffLoginInstructions',
+            'StaffPatronsHome',      'StaffPOSHome',         'StaffSerialsHome'
+        ];
+    }
+
+    return [];
+
+}
+
 =head3 _type
 
 =cut
