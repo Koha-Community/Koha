@@ -4,6 +4,8 @@ basePath: /api/v1
 definitions:
   account_line:
     $ref: ./definitions/account_line.yaml
+  additional_content:
+    $ref: ./definitions/additional_content.yaml
   advancededitormacro:
     $ref: ./definitions/advancededitormacro.yaml
   allows_renewal:
@@ -513,6 +515,8 @@ paths:
     $ref: ./paths/preservation_waiting_list.yaml#/~1preservation~1waiting-list~1items
   "/preservation/waiting-list/items/{item_id}":
     $ref: "./paths/preservation_waiting_list.yaml#/~1preservation~1waiting-list~1items~1{item_id}"
+  "/public/additional_contents":
+    $ref: ./paths/additional_contents.yaml#/~1public~1additional_contents
   "/public/biblios/{biblio_id}":
     $ref: "./paths/biblios.yaml#/~1public~1biblios~1{biblio_id}"
   "/public/checkouts/availability":
