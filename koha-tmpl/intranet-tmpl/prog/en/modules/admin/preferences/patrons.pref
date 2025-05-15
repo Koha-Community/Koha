@@ -403,12 +403,13 @@ Patrons:
                0: "Don't allow"
          - staff to set the ability for a patron's charges to be viewed by linked patrons in the OPAC.
      -
-         - "A child patron"
+         - "Any patron of a patron type than can have a guarantor"
          - pref: "ChildNeedsGuarantor"
            choices:
-               1: "must have"
-               0: "doesn't need"
-         - a guarantor when adding the patron.
+               1: "requires"
+               0: "does not require"
+         - a guarantor be set when adding the patron.
+         - <p><strong>WARNING:</strong> Setting this preference to <em>requires</em> will cause errors for any pre-existing patrons that would now require a guarantor and do not have one.
      -
          - pref: RestrictPatronsWithFailedNotices
            choices:
