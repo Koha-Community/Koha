@@ -419,6 +419,8 @@
     <xsl:param name="tag" />
     <xsl:param name="label" />
     <xsl:param name="spanclass" />
+    <xsl:param name="AuthorLinkSortBy"/>
+    <xsl:param name="AuthorLinkSortOrder"/>
     <xsl:if test="marc:datafield[@tag=$tag]">
       <span class="results_summary author {$spanclass}">
         <span class="label">
@@ -434,6 +436,12 @@
                   <xsl:attribute name="href">
                     <xsl:text>/cgi-bin/koha/catalogue/search.pl?q=an:</xsl:text>
                     <xsl:value-of select="str:encode-uri(marc:subfield[@code=9], true())"/>
+                    <xsl:if test="$AuthorLinkSortBy!='default'">
+                        <xsl:text>&amp;sort_by=</xsl:text>
+                        <xsl:value-of select="$AuthorLinkSortBy"/>
+                        <xsl:text>_</xsl:text>
+                        <xsl:value-of select="$AuthorLinkSortOrder"/>
+                    </xsl:if>
                   </xsl:attribute>
                 </xsl:when>
                 <xsl:otherwise>
@@ -442,6 +450,12 @@
                       <xsl:value-of select="str:encode-uri(marc:subfield[@code='a'], true())"/>
                       <xsl:text>%20</xsl:text>
                       <xsl:value-of select="str:encode-uri(marc:subfield[@code='b'], true())"/>
+                      <xsl:if test="$AuthorLinkSortBy!='default'">
+                        <xsl:text>&amp;sort_by=</xsl:text>
+                        <xsl:value-of select="$AuthorLinkSortBy"/>
+                        <xsl:text>_</xsl:text>
+                        <xsl:value-of select="$AuthorLinkSortOrder"/>
+                    </xsl:if>
                   </xsl:attribute>
                 </xsl:otherwise>
               </xsl:choose>
