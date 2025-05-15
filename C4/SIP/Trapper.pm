@@ -56,4 +56,12 @@ sub BINMODE {
     binmode( STDOUT, $mode );
 }
 
+$SIG{__DIE__} = sub {
+    my $msg    = shift;
+    my $logger = Koha::Logger->get( { interface => 'sip', category => 'STDERR' } );
+    $logger->error($msg) if $logger;
+    warn $msg;    # die doesn't output the message, warn before dying
+    die $msg;
+};
+
 1;
