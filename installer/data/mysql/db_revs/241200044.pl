@@ -1,4 +1,5 @@
 use Modern::Perl;
+use Koha::Installer::Output qw(say_warning say_success say_info);
 
 return {
     bug_number  => "20747",
@@ -19,6 +20,6 @@ return {
         },
         );
 
-        say $out "Updated system preference 'LocalHoldsPriority'";
+        say_success( $out, "Updated system preference 'LocalHoldsPriority'" );
     },
 };
