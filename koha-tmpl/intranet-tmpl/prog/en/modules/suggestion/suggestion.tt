@@ -1411,10 +1411,13 @@
                                         searchable: true,
                                         orderable: true,
                                         render: function (data, type, row, meta) {
-                                            let node = '<a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=%s">%s'.format(row.manager.patron_id, row.manager.surname);
-                                            if(row.manager.firstname) node += ', %s'.format(row.manager.firstname);
-                                            node += '</a>';
-                                            return node;
+                                            if(row?.manager) {
+                                                let node = '<a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=%s">%s'.format(row.manager?.patron_id, row.manager?.surname);
+                                                if(row.manager?.firstname) node += ', %s'.format(row.manager?.firstname);
+                                                node += '</a>';
+                                                return node;
+                                            }
+                                            return ''
                                         },
                                     },
                                     {
@@ -1430,10 +1433,13 @@
                                         searchable: true,
                                         orderable: true,
                                         render: function (data, type, row, meta) {
-                                            let node = '<a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=%s">%s'.format(row.last_modifier.patron_id, row.last_modifier.surname);
-                                            if(row.last_modifier.firstname) node += ', %s'.format(row.last_modifier.firstname);
-                                            node += '</a>';
-                                            return node;
+                                            if(row.last_modifier) {
+                                                let node = '<a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=%s">%s'.format(row.last_modifier?.patron_id, row.last_modifier?.surname);
+                                                if(row.last_modifier?.firstname) node += ', %s'.format(row.last_modifier?.firstname);
+                                                node += '</a>';
+                                                return node;
+                                            }
+                                            return ''
                                         },
                                     },
                                     {
@@ -1457,7 +1463,7 @@
                                         searchable: false,
                                         orderable: true,
                                         render: function (data, type, row, meta) {
-                                            return escape_str(row.library.name ? row.library.name : '');
+                                            return escape_str(row.library?.name ? row.library.name : '');
                                         },
                                     },
                                     {
@@ -1465,7 +1471,7 @@
                                         searchable: false,
                                         orderable: true,
                                         render: function (data, type, row, meta) {
-                                            return escape_str(row.fund ? row.fund.name : '');
+                                            return escape_str(row.fund?.name ? row.fund.name : '');
                                         },
                                     },
                                     {
