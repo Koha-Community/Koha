@@ -987,6 +987,9 @@ sub store {
                 }
             }
         }
+        if ( exists $updated_columns{branchcode} ) {
+            Koha::BackgroundJob::BatchUpdateBiblioHoldsQueue->new->enqueue( { biblio_ids => [ $self->biblionumber ] } );
+        }
     }
 
     $self = $self->SUPER::store;

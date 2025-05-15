@@ -321,22 +321,28 @@ subtest 'fill() tests' => sub {
 
     subtest 'holds_queue update tests' => sub {
 
-        plan tests => 1;
+        plan tests => 2;
 
         my $biblio = $builder->build_sample_biblio;
 
-        my $mock = Test::MockModule->new('Koha::BackgroundJob::BatchUpdateBiblioHoldsQueue');
-        $mock->mock( 'enqueue', sub {
-            my ( $self, $args ) = @_;
-            is_deeply(
-                $args->{biblio_ids},
-                [ $biblio->id ],
-                '->fill triggers a holds queue update for the related biblio'
-            );
-        } );
+        # The check of the pref is in the Koha::BackgroundJob::BatchUpdateBiblioHoldsQueue
+        # so we mock the base enqueue method here to see if it is called
+        my $mock = Test::MockModule->new('Koha::BackgroundJob');
+        $mock->mock(
+            'enqueue',
+            sub {
+                my ( $self, $args ) = @_;
+                is_deeply(
+                    $args->{job_args}->{biblio_ids},
+                    [ $biblio->id ],
+                    'when pref enabled the previous action triggers a holds queue update for the related biblio'
+                );
+            }
+        );
 
         t::lib::Mocks::mock_preference( 'RealTimeHoldsQueue', 1 );
 
+        diag("Filling a hold when pref enabled should trigger a test");
         $builder->build_object(
             {
                 class => 'Koha::Holds',
@@ -347,7 +353,7 @@ subtest 'fill() tests' => sub {
         )->fill;
 
         t::lib::Mocks::mock_preference( 'RealTimeHoldsQueue', 0 );
-        # this call shouldn't add a new test
+        diag("Filling a hold when pref disabled should not trigger a test");
         $builder->build_object(
             {
                 class => 'Koha::Holds',
@@ -356,6 +362,41 @@ subtest 'fill() tests' => sub {
                 }
             }
         )->fill;
+
+        my $library_1 = $builder->build_object(
+            {
+                class => 'Koha::Libraries',
+            }
+        )->store;
+        my $library_2 = $builder->build_object(
+            {
+                class => 'Koha::Libraries',
+            }
+        )->store;
+
+        my $hold = $builder->build_object(
+            {
+                class => 'Koha::Holds',
+                value => {
+                    biblionumber => $biblio->id,
+                    branchcode   => $library_1->branchcode,
+                }
+            }
+        )->store;
+
+        # Pref is off, no test triggered
+        diag("Updating a hold location when pref disabled should not trigger a test");
+        $hold->branchcode( $library_2->branchcode )->store;
+
+        t::lib::Mocks::mock_preference( 'RealTimeHoldsQueue', 1 );
+        diag("Updating a hold location when pref enabled should trigger a test");
+
+        # Pref is on, test triggered
+        $hold->branchcode( $library_1->branchcode )->store;
+
+        diag("Update with no change to pickup location should not trigger a test");
+        $hold->branchcode( $library_1->branchcode )->store;
+
     };
 
     $schema->storage->txn_rollback;
