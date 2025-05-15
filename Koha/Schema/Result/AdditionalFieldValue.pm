@@ -44,7 +44,7 @@ foreign key references additional_fields(id)
   data_type: 'varchar'
   default_value: (empty string)
   is_nullable: 0
-  size: 11
+  size: 80
 
 record_id
 
@@ -65,7 +65,7 @@ __PACKAGE__->add_columns(
   "field_id",
   { data_type => "integer", is_foreign_key => 1, is_nullable => 0 },
   "record_id",
-  { data_type => "varchar", default_value => "", is_nullable => 0, size => 11 },
+  { data_type => "varchar", default_value => "", is_nullable => 0, size => 80 },
   "value",
   { data_type => "varchar", default_value => "", is_nullable => 0, size => 255 },
 );
@@ -100,8 +100,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07051 @ 2025-05-05 11:29:54
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:zjqT3FugMgXT43XCfs6G6g
+# Created by DBIx::Class::Schema::Loader v0.07051 @ 2025-05-15 07:10:26
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:cCtjuS1xNixY2E8SZZrgMw
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration
