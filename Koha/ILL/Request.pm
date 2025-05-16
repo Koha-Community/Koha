@@ -910,17 +910,38 @@ Mark a request as completed (status = COMP).
 =cut
 
 sub mark_completed {
-    my ($self) = @_;
-    $self->status('COMP')->store;
-    $self->completed( dt_from_string() )->store;
-    return {
-        error   => 0,
-        status  => '',
-        message => '',
-        method  => 'mark_completed',
-        stage   => 'commit',
-        next    => 'illview',
-    };
+    my ( $self, $params ) = @_;
+
+    my $stage = $params->{stage};
+
+    my $status_aliases_exist = Koha::AuthorisedValues->search( { category => 'ILL_STATUS_ALIAS' } )->count;
+
+    if ( ( !$stage || $stage eq 'init' ) && $status_aliases_exist ) {
+        return {
+            method => 'mark_completed',
+        };
+    } elsif ( !$stage || $stage eq 'complete' ) {
+
+        $self->status('COMP');
+        $self->status_alias( $params->{status_alias} ) if $params->{status_alias};
+        $self->completed( dt_from_string() );
+        $self->store;
+        return {
+            stage => 'commit',
+            next  => 'illview',
+        };
+    } else {
+
+        # Invalid stage, return error.
+        return {
+            error   => 1,
+            status  => 'unknown_stage',
+            message => '',
+            method  => 'confirm',
+            stage   => $params->{stage},
+            value   => {},
+        };
+    }
 }
 
 =head2 backend_illview
