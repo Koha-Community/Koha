@@ -117,8 +117,18 @@
           <td>
             [% INCLUDE 'patron-title.inc' patron=overdueloo.patron hide_patron_infos_if_needed=1 %]
             [% IF logged_in_user.can_see_patron_infos( overdueloo.patron ) %]
-                [% IF ( overdueloo.email ) %][<a href="mailto:[% overdueloo.email | uri %]?subject=[% INCLUDE subject %] [% overdueloo.title | uri %]">email</a>][% END %]
-                [% IF ( overdueloo.phone ) %]([% overdueloo.phone | html %])[% ELSIF ( overdueloo.mobile ) %]([% overdueloo.mobile | html %])[% ELSIF ( overdueloo.phonepro ) %]([% overdueloo.phonepro | html %])[% END %]
+                [% IF ( overdueloo.email ) %]
+                    <span class="overdue_email"> [<a href="mailto:[% overdueloo.email | uri %]?subject=[% INCLUDE subject %] [% overdueloo.title | uri %]">email</a>] </span>
+                [% END %]
+                <span class="overdue_phone">
+                    [% IF ( overdueloo.phone ) %]
+                        ([% overdueloo.phone | html %])
+                    [% ELSIF ( overdueloo.mobile ) %]
+                        ([% overdueloo.mobile | html %])
+                    [% ELSIF ( overdueloo.phonepro ) %]
+                        ([% overdueloo.phonepro | html %])
+                    [% END %]
+                </span>
             [% END %]
           </td>
             <td>[% Categories.GetName( overdueloo.patron.categorycode ) | html %]</td>
