@@ -24,6 +24,9 @@
 // -- This will overwrite an existing command --
 // Cypress.Commands.overwrite('visit', (originalFn, url, options) => { ... })
 
+// Import Select2 helpers
+import "./select2";
+
 // Error on JS warnings
 function safeToString(arg) {
     try {
