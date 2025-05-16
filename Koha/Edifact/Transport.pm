@@ -233,7 +233,7 @@ sub ftp_download {
         "Cannot connect to " . $self->{account}->host . ": $EVAL_ERROR"
         );
     $ftp->login( $self->{account}->username, Koha::Encryption->new->decrypt_hex( $self->{account}->password ) )
-        or return $self->_abort_download( $ftp, "Cannot login: $ftp->message()" );
+        or return $self->_abort_download( $ftp, "Cannot login: " . $ftp->message() );
     $ftp->cwd( $self->{account}->download_directory )
         or return $self->_abort_download(
         $ftp,
@@ -249,7 +249,7 @@ sub ftp_download {
             if ( !$ftp->get( $filename, "$self->{working_dir}/$filename" ) ) {
                 $self->_abort_download(
                     $ftp,
-                    "Error retrieving $filename: $ftp->message"
+                    "Error retrieving $filename: " . $ftp->message
                 );
                 last;
             }
@@ -281,7 +281,7 @@ sub ftp_upload {
         "Cannot connect to " . $self->{account}->host . ": $EVAL_ERROR"
         );
     $ftp->login( $self->{account}->username, Koha::Encryption->new->decrypt_hex( $self->{account}->password ) )
-        or return $self->_abort_download( $ftp, "Cannot login: $ftp->message()" );
+        or return $self->_abort_download( $ftp, "Cannot login: " . $ftp->message() );
     $ftp->cwd( $self->{account}->upload_directory )
         or return $self->_abort_download(
         $ftp,
@@ -361,7 +361,7 @@ sub file_upload {
                     $m->status('sent');
                     $m->update;
                 } else {
-                    carp "Could not transfer $m->filename : $ERRNO";
+                    carp "Could not transfer " . $m->filename . " : $ERRNO";
                     next;
                 }
             }
