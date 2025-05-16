@@ -268,6 +268,7 @@
             $("#ExportSelected").click(function() {
                 // We need to use "input[name=serialid]:checked" instead of "input:checked". Otherwise, the "check all" box will pass the value of "on" as a serialid, which produces a SQL error.
                 var selected = $("input[name=serialid]:checked");
+                var supplierid = [% supplierid | html %]
 
                 if (selected.length == 0) {
                     alert(_("Please select at least one item to export."));
@@ -275,7 +276,7 @@
                 }
 
                 // Building the url from currently checked boxes
-                var url = '/cgi-bin/koha/serials/lateissues-export.pl?supplierid=&amp;op=claims';
+                var url = "/cgi-bin/koha/serials/lateissues-export.pl?supplierid=" + supplierid + "&amp;op=claims";
                 for (var i = 0; i < selected.length; i++) {
                     url += '&amp;serialid=' + selected[i].value;
                 }
