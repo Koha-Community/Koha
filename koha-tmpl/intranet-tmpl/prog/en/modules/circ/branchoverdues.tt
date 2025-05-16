@@ -5,7 +5,7 @@
 [% PROCESS 'i18n.inc' %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>[% FILTER collapse %]
-    [% tx("Overdues at {library}", { library = Branches.GetLoggedInBranchname }) | html %] &rsaquo;
+    [% tx("Overdues with fines at {library}", { library = Branches.GetLoggedInBranchname }) | html %] &rsaquo;
     [% t("Circulation") | html %] &rsaquo;
     [% t("Koha") | html %]
 [% END %]</title>
@@ -23,7 +23,7 @@
             <a href="/cgi-bin/koha/circ/circulation-home.pl">Circulation</a>
         [% END %]
         [% WRAPPER breadcrumb_item bc_active= 1 %]
-            [% tx('Overdues at {library}', { library = Branches.GetLoggedInBranchname }) %]
+            [% tx('Overdues at with fines {library}', { library = Branches.GetLoggedInBranchname }) %]
         [% END %]
     [% END #/ WRAPPER breadcrumbs %]
 [% END #/ WRAPPER sub-header.inc %]
@@ -38,10 +38,10 @@
             <main>
                 [% INCLUDE 'messages.inc' %]
 
-<h1>Circulation: Overdues at [% Branches.GetLoggedInBranchname | html %]</h1>
+<h1>Overdues with fines at [% Branches.GetLoggedInBranchname | html %]</h1>
 
 <form name="selectlocation" action="branchoverdues.pl" method="get">
-    <label for="location">Shelving location selected: </label><select id="location" name="location">
+    <label for="location">Shelving location: </label><select id="location" name="location">
         <option value="">All shelving locations</option>
         [% FOREACH locationsloo IN locationsloop %]
             [% IF ( locationsloo.selected ) %]<option value="[% locationsloo.authorised_value | html %]" selected="selected">[% locationsloo.lib | html %]</option>[% ELSE %]<option value="[% locationsloo.authorised_value | html %]">[% locationsloo.lib | html %]</option>[% END %]
