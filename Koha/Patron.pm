@@ -850,7 +850,7 @@ sub do_check_for_previous_checkout {
     # Create (old)issues search criteria
     my $criteria = {
         borrowernumber => $self->borrowernumber,
-        itemnumber => \@item_nos,
+        itemnumber     => { -in => \@item_nos },
     };
 
     my $delay = C4::Context->preference('CheckPrevCheckoutDelay') || 0;
