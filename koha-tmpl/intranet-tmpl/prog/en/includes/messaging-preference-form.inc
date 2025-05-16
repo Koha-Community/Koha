@@ -44,7 +44,7 @@
                             <span>Item checkout</span>
                         [% END %]
                     [% ELSIF ( messaging_preference.Patron_Expiry ) %]
-                        <span>Patron expiry</span>
+                        <span>Patron account expiry</span>
                     [% ELSIF ( messaging_preference.Ill_ready ) %]
                         <span>Interlibrary loan ready</span>
                     [% ELSIF ( messaging_preference.Ill_unavailable ) %]
