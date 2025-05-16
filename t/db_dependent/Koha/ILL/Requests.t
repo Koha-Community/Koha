@@ -51,7 +51,7 @@ use_ok('Koha::ILL::Requests');
 
 subtest 'Basic object tests' => sub {
 
-    plan tests => 24;
+    plan tests => 27;
 
     $schema->storage->txn_begin;
 
@@ -160,7 +160,58 @@ subtest 'Basic object tests' => sub {
         $illrq_obj->status, 'COMP',
         "ILL is not currently marked complete."
     );
-    $illrq_obj->mark_completed;
+
+    my $backend = Test::MockObject->new;
+    $backend->set_isa('Koha::Illbackends::Mock');
+    $backend->set_always( 'name', 'Mock' );
+    $backend->mock( 'capabilities', sub { return 'Mock'; } );
+
+    my $config = Test::MockObject->new;
+    $config->set_always( 'backend_dir', "/tmp" );
+
+    $illrq_obj->_config($config);
+    $illrq_obj->_backend($backend);
+
+    my $cat = Koha::AuthorisedValueCategories->search( { category_name => 'ILL_STATUS_ALIAS' } );
+
+    if ( $cat->count == 0 ) {
+        $cat = $builder->build_object(
+            {
+                class => 'Koha::AuthorisedValueCategory',
+                value => { category_name => 'ILL_STATUS_ALIAS' }
+            }
+        );
+    }
+
+    my $av = $builder->build_object(
+        {
+            class => 'Koha::AuthorisedValues',
+            value => { category => 'ILL_STATUS_ALIAS' }
+        }
+    );
+
+    my $mark_comp_return = $illrq_obj->mark_completed;
+
+    isnt(
+        $illrq_obj->status, 'COMP',
+        "ILL_STATUS_ALIAS is not empty. ILL is not immediatelly complete."
+    );
+
+    is(
+        $mark_comp_return->{method}, 'mark_completed',
+        "ILL_STATUS_ALIAS is not empty. Rendering 'mark_completed' view"
+    );
+
+    Koha::AuthorisedValues->search( { 'category' => 'ILL_STATUS_ALIAS' } )->delete;
+
+    $mark_comp_return = $illrq_obj->mark_completed;
+
+    is_deeply(
+        $mark_comp_return,
+        { next => 'illview', stage => 'commit' },
+        "ILL_STATUS_ALIAS is empty. Skip 'complete' view and go straight to illview"
+    );
+
     is(
         $illrq_obj->status, 'COMP',
         "ILL is now marked complete."
