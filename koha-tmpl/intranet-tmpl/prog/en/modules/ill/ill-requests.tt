@@ -133,7 +133,7 @@
                         </select>
                         <input type="hidden" name="method" value="mark_completed">
                         <input type="hidden" name="stage" value="complete">
-                        <input type="hidden" name="illrequest_id" value="[% request.illrequest_id %]">
+                        <input type="hidden" name="illrequest_id" value="[% request.illrequest_id | html%]">
                         <fieldset class="action">
                             <button type="submit" class="btn btn-sm btn-primary">Complete request</button>
                             <a class="btn btn-sm btn-default cancel" href="[% base_url | url %]">Cancel</a>
