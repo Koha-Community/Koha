@@ -279,24 +279,26 @@
                                 </div>
                             [% END %]
 
-                            [% IF self_registered_count %]
-                                <div class="pending-info" id="self_registered_patrons_info">
-                                    Self-registrations from:
-                                    <a
-                                        class="self-registration-link pending-number-link self-registration-link-all"
-                                        href="/cgi-bin/koha/members/member.pl?categorycode_filter=[% Koha.Preference('PatronSelfRegistrationDefaultCategory') | html %]"
-                                        >All libraries: [% self_registered_count | html %]</a
-                                    >
-
-                                    [% IF self_registered_mybranch_count %]
-                                        <span>/</span>
+                            [% IF (CAN_user_borrowers_edit_borrowers) || (CAN_user_borrowers_list_borrowers) %]
+                                [% IF self_registered_count %]
+                                    <div class="pending-info" id="self_registered_patrons_info">
+                                        Self-registrations from:
                                         <a
-                                            class="self-registration-link pending-number-link self-registration-link-branch"
-                                            href="/cgi-bin/koha/members/member.pl?categorycode_filter=[% Koha.Preference('PatronSelfRegistrationDefaultCategory') | html %]&branchcode_filter=[% Branches.GetLoggedInBranchcode | html %]"
-                                            >[% Branches.GetLoggedInBranchname | html %]: [% self_registered_mybranch_count | html %]</a
+                                            class="self-registration-link pending-number-link self-registration-link-all"
+                                            href="/cgi-bin/koha/members/member.pl?categorycode_filter=[% Koha.Preference('PatronSelfRegistrationDefaultCategory') | html %]"
+                                            >All libraries: [% self_registered_count | html %]</a
                                         >
-                                    [% END %]
-                                </div>
+
+                                        [% IF self_registered_mybranch_count %]
+                                            <span>/</span>
+                                            <a
+                                                class="self-registration-link pending-number-link self-registration-link-branch"
+                                                href="/cgi-bin/koha/members/member.pl?categorycode_filter=[% Koha.Preference('PatronSelfRegistrationDefaultCategory') | html %]&branchcode_filter=[% Branches.GetLoggedInBranchcode | html %]"
+                                                >[% Branches.GetLoggedInBranchname | html %]: [% self_registered_mybranch_count | html %]</a
+                                            >
+                                        [% END %]
+                                    </div>
+                                [% END %]
                             [% END %]
                         </div>
                     [% END %]
