@@ -1443,6 +1443,44 @@ sub columns_to_str {
     return $values;
 }
 
+=head3 _status
+
+    my @statuses = $item->_status();
+
+Returns a list of statuses for the current item. Possible values are:
+
+=over 4
+
+=item B<checked_out> (mutually exclussive with B<local_use>)
+
+=item B<local_use> (mutually exclussive with B<checked_out>)
+
+=item B<in_transit>
+
+=item B<lost>
+
+=item B<lost>
+
+=item B<withdrawn>
+
+=item B<damaged>
+
+=item B<not_for_loan>
+
+=item B<on_hold>
+
+=item B<recalled>
+
+=item B<available>
+
+=item B<restricted>
+
+=item B<in_bundle>
+
+=back
+
+=cut
+
 sub _status {
     my ($self) = @_;
 
