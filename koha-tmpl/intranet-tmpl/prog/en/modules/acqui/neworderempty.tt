@@ -800,8 +800,8 @@
 </div> <!-- /.col-md-2.order-md-1 -->
 </div> <!-- /.row -->
 
-[% PROCESS patron_search_modal columns => columns, modal_title => t("Add user") %]
 [% SET columns = ['cardnumber','name','category','branch','action'] %]
+[% PROCESS patron_search_modal columns => columns, modal_title => t("Add user") %]
 [% PROCESS patron_search_js columns => columns, actions => ["add"], preview_on_name_click => 1 %]
 
 [% MACRO jsinclude BLOCK %]
