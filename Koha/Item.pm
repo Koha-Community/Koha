@@ -1489,7 +1489,7 @@ sub _status {
         push @statuses, 'in_bundle';
     }
 
-    return join ',', @statuses;
+    return \@statuses;
 }
 
 =head3 additional_attributes
