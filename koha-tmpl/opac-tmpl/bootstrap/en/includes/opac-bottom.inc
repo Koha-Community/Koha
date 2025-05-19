@@ -119,10 +119,6 @@
         var biblionumber = $(this).data("biblionumber");
         delSingleRecord( biblionumber );
     });
-    $(".clearsh").on("click", function(){
-        return confirmDelete( _("Are you sure you want to delete your search history?") );
-    });
-
 </script>
 
 [% IF Koha.Preference( 'opacbookbag' ) == 1 %]
