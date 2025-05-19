@@ -26,6 +26,7 @@
 
 // Import Select2 helpers
 import "./select2";
+import "./flatpickr.js";
 
 // Error on JS warnings
 function safeToString(arg) {
