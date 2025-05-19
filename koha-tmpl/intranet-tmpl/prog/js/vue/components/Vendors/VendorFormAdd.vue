@@ -1,6 +1,6 @@
 <template>
     <div v-if="!initialized">{{ $__("Loading") }}</div>
-    <main id="vendors_add" v-else>
+    <template v-else>
         <h1 v-if="vendor.id">
             {{ $__("Edit vendor #%s").format(vendor.id) }}
         </h1>
@@ -15,7 +15,7 @@
             >
             </ToolbarButton>
         </Toolbar>
-        <form @submit="onSubmit($event)" ref="vendorForm">
+        <form @submit="onSubmit($event)" ref="vendorForm" id="vendors_add">
             <VendorDetails :vendor="vendor" />
             <VendorContacts :vendor="vendor" />
             <VendorInterfaces :vendor="vendor" />
@@ -25,7 +25,7 @@
                 :discountValid="discountValid"
             />
         </form>
-    </main>
+    </template>
 </template>
 
 <script>
