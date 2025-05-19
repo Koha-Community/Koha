@@ -37,7 +37,7 @@ use Koha::Old::Items;
 use Koha::Recalls;
 use Koha::AuthorisedValues;
 
-use List::MoreUtils qw(all);
+use List::MoreUtils qw(all any);
 
 use t::lib::TestBuilder;
 use t::lib::Mocks;
@@ -46,8 +46,9 @@ use t::lib::Dates;
 my $schema  = Koha::Database->new->schema;
 my $builder = t::lib::TestBuilder->new;
 
-subtest '_status' => sub {
-    plan tests => 12;
+subtest '_status() tests' => sub {
+
+    plan tests => 15;
 
     $schema->storage->txn_begin;
 
@@ -66,7 +67,7 @@ subtest '_status' => sub {
                 AddIssue( $patron, $onloan_item->barcode, dt_from_string );
                 return $onloan_item;
             },
-            expected_status => 'checked_out',
+            expected_status => ['checked_out'],
             description     => 'Checked out status correctly returned',
         },
         {
@@ -78,14 +79,14 @@ subtest '_status' => sub {
                 );
                 return $onsite_item;
             },
-            expected_status => 'local_use',
+            expected_status => ['local_use'],
             description     => 'Local use status correctly returned',
         },
         {
             setup => sub {
                 return $item;
             },
-            expected_status => 'available',
+            expected_status => ['available'],
             description     => 'Available status correctly returned',
         },
         {
@@ -93,7 +94,7 @@ subtest '_status' => sub {
                 $item->itemlost(1)->store();
                 return $item;
             },
-            expected_status => 'lost',
+            expected_status => ['lost'],
             description     => 'Lost status correctly returned',
         },
         {
@@ -101,7 +102,7 @@ subtest '_status' => sub {
                 $item->withdrawn(1)->store();
                 return $item;
             },
-            expected_status => qr/lost,withdrawn/,
+            expected_status => [qw(lost withdrawn)],
             description     => 'Lost and withdrawn status correctly returned',
         },
         {
@@ -109,7 +110,7 @@ subtest '_status' => sub {
                 $item->damaged(1)->store();
                 return $item;
             },
-            expected_status => qr/lost,withdrawn,damaged/,
+            expected_status => [qw(lost withdrawn damaged)],
             description     => 'Lost, withdrawn, and damaged status correctly returned',
         },
         {
@@ -117,7 +118,7 @@ subtest '_status' => sub {
                 $item->notforloan(1)->store();
                 return $item;
             },
-            expected_status => 'not_for_loan',
+            expected_status => ['not_for_loan'],
             description     => 'Positive not_for_loan status correctly returned',
         },
         {
@@ -125,7 +126,7 @@ subtest '_status' => sub {
                 $item->notforloan(-1)->store();
                 return $item;
             },
-            expected_status => 'not_for_loan',
+            expected_status => ['not_for_loan'],
             description     => 'Negative not_for_loan status correctly returned',
         },
         {
@@ -134,7 +135,7 @@ subtest '_status' => sub {
                 my $notforloan_item = $builder->build_sample_item( { itype => $itemtype->itemtype, } );
                 return $notforloan_item;
             },
-            expected_status => 'not_for_loan',
+            expected_status => ['not_for_loan'],
             description     => 'Item type not_for_loan status correctly returned',
         },
         {
@@ -150,7 +151,7 @@ subtest '_status' => sub {
                 );
                 return $onhold_item;
             },
-            expected_status => 'on_hold',
+            expected_status => ['on_hold'],
             description     => 'On hold status correctly returned',
         },
         {
@@ -161,7 +162,7 @@ subtest '_status' => sub {
                     { biblio => $recalled_item->biblio, item => $recalled_item, patron => $patron } );
                 return $recalled_item;
             },
-            expected_status => 'recalled',
+            expected_status => ['recalled'],
             description     => 'Recalled status correctly returned',
         },
         {
@@ -169,14 +170,21 @@ subtest '_status' => sub {
                 $item->restricted(1)->store();
                 return $item;
             },
-            expected_status => 'restricted',
+            expected_status => ['restricted'],
             description     => 'Restricted status correctly returned',
         },
     );
 
     foreach my $test_case (@test_cases) {
         my $item = $test_case->{setup}->();
-        ok( $item->_status() =~ /$test_case->{expected_status}/, $test_case->{description} );
+
+        my $expected_statuses = $test_case->{expected_status};
+        foreach my $expected_status ( @{$expected_statuses} ) {
+            ok(
+                ( any { $expected_status eq $_ } @{ $item->_status() } ),
+                $test_case->{description} . " ($expected_status)"
+            );
+        }
     }
 
     t::lib::Mocks::mock_preference( 'UseRecalls', 0 );
