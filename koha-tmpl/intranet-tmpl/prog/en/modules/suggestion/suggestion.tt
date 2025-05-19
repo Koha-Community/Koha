@@ -1375,11 +1375,14 @@
                                         orderable: true,
                                         render: function (data, type, row, meta) {
                                             let suggester = row.suggester;
-                                            let node = '<a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=%s">%s'.format(suggester.patron_id, suggester.surname);
-                                            if(suggester.firstname) node += ', %s'.format(suggester.firstname);
-                                            if(suggester.cardnumber) node += ' (%s)'.format(suggester.cardnumber);
-                                            node += '</a>';
-                                            return node;
+                                            if(suggester) {
+                                                let node = '<a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=%s">%s'.format(suggester.patron_id, suggester.surname);
+                                                if(suggester.firstname) node += ', %s'.format(suggester.firstname);
+                                                if(suggester.cardnumber) node += ' (%s)'.format(suggester.cardnumber);
+                                                node += '</a>';
+                                                return node;
+                                            }
+                                            return ''
                                         }
                                     },
                                     {
@@ -1387,7 +1390,7 @@
                                         searchable: false,
                                         orderable: true,
                                         render: function (data, type, row, meta) {
-                                            return escape_str(row.suggester.category.name);
+                                            return escape_str(row.suggester ? row.suggester.category.name : '');
                                         },
                                     },
                                     {
@@ -1411,7 +1414,7 @@
                                         searchable: true,
                                         orderable: true,
                                         render: function (data, type, row, meta) {
-                                            if(row?.manager) {
+                                            if(row.manager) {
                                                 let node = '<a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=%s">%s'.format(row.manager?.patron_id, row.manager?.surname);
                                                 if(row.manager?.firstname) node += ', %s'.format(row.manager?.firstname);
                                                 node += '</a>';
