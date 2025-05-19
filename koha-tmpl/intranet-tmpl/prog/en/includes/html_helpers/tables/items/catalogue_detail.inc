@@ -504,7 +504,7 @@
                 orderable: false,
                 render: function (data, type, row, meta) {
                     let nodes = "";
-                    row._status.split(",").forEach( status => {
+                    row._status.forEach( status => {
                     if ( status == 'checked_out' || status == 'local_use') {
                         nodes += '<span>';
 
