@@ -714,7 +714,9 @@ function _dt_default_ajax(params) {
                     } else if (f == "-and") {
                         if (v) and_query_parameters.push(v);
                     } else if (v) {
-                        additional_filters[k] = v;
+                        additional_filters[k] = v
+                            .replace(/^\^/, "")
+                            .replace(/\$$/, "");
                     }
                 }
                 if (Object.keys(additional_filters).length) {
