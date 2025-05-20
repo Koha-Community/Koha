@@ -118,6 +118,10 @@ properties:
   force_password_reset_when_set_by_staff:
     type: boolean
     description: If patrons of this category are required to reset password after being created by a staff member
+  enforce_expiry_notice:
+    type:
+      - boolean
+    description: Set threshold of debt allowed before issues are blocked
 additionalProperties: false
 required:
   - patron_category_id
