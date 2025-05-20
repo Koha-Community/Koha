@@ -132,6 +132,7 @@ if ($backends_available) {
 
         # Load the ILL backend
         my $request = Koha::ILL::Request->new->load_backend( $params->{backend} );
+        $params = $request->trim_form_params($params);
 
         # Before request creation operations - Preparation
         my $history_check   = Koha::ILL::Request::Workflow::HistoryCheck->new( $params, 'staff' );

@@ -2510,6 +2510,30 @@ sub can_patron_place_ill_in_opac {
     return 1;
 }
 
+=head3 trim_form_params
+
+    my $params = trim_form_params($params);
+
+    Trims $params. Needed to ensure submitted data is not saved with leading or trailing white spaces:
+
+    This:
+    {
+        'doi' => ' 123',
+    };
+
+    Becomes:
+    {
+        'doi' => '123',
+    };
+
+=cut
+
+sub trim_form_params {
+    my ( $self, $params ) = @_;
+
+    return { map { $_ => $params->{$_} =~ s/^\s+|\s+$//gr } keys %$params };
+}
+
 =head3 get_history_check_requests
 
     $self->get_history_check_requests();
