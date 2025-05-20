@@ -213,7 +213,8 @@ subtest 'Test merge A1 to modified A1, test strict mode' => sub {
 subtest 'Test merge A1 to B1 (choosing language)' => sub {
     plan tests => 4;
 
-    t::lib::Mocks::mock_preference( 'LanguageToReportOnMerge', '' );
+    t::lib::Mocks::mock_preference( 'marcflavour',          'UNIMARC' );
+    t::lib::Mocks::mock_preference( 'LanguageToUseOnMerge', '' );
 
     my $auth1 = MARC::Record->new;
     $auth1->append_fields(
@@ -236,27 +237,27 @@ subtest 'Test merge A1 to B1 (choosing language)' => sub {
 
     is(
         $biblio->subfield( '609', 'a' ), 'language da',
-        'When LanguageToReportOnMerge is not set, the first authority field is used'
+        'When LanguageToUseOnMerge is not set, the first authority field is used'
     );
 
-    t::lib::Mocks::mock_preference( 'LanguageToReportOnMerge', 'ba' );
+    t::lib::Mocks::mock_preference( 'LanguageToUseOnMerge', 'ba' );
     C4::AuthoritiesMarc::merge( { mergefrom => $authid1, MARCfrom => $auth1, mergeto => $authid1, MARCto => $auth1 } );
     $biblio = Koha::Biblios->find($biblionumber)->metadata->record;
     is(
         $biblio->subfield( '609', 'a' ), 'language ba',
-        'When LanguageToReportOnMerge is set, the field with the matching language is reported'
+        'When LanguageToUseOnMerge is set, the field with the matching language is used'
     );
 
-    t::lib::Mocks::mock_preference( 'LanguageToReportOnMerge', 'xx' );
+    t::lib::Mocks::mock_preference( 'LanguageToUseOnMerge', 'xx' );
     C4::AuthoritiesMarc::merge( { mergefrom => $authid1, MARCfrom => $auth1, mergeto => $authid1, MARCto => $auth1 } );
     $biblio = Koha::Biblios->find($biblionumber)->metadata->record;
     is(
         $biblio->subfield( '609', 'a' ), 'language da',
-        'When LanguageToReportOnMerge is set to a value that does not exist in the authority, the first authority field is used'
+        'When LanguageToUseOnMerge is set to a value that does not exist in the authority, the first authority field is used'
     );
 
     # Long form of lang code
-    t::lib::Mocks::mock_preference( 'LanguageToReportOnMerge', 'ba' );
+    t::lib::Mocks::mock_preference( 'LanguageToUseOnMerge', 'ba' );
     my $auth2 = MARC::Record->new;
     $auth2->append_fields(
         MARC::Field->new( '109', '0', '0', 'a' => 'language da (long form)', '7' => 'ba0yda0y' ),
@@ -277,9 +278,10 @@ subtest 'Test merge A1 to B1 (choosing language)' => sub {
     my $biblio2 = Koha::Biblios->find($biblionumber2)->metadata->record;
     is(
         $biblio2->subfield( '609', 'a' ), 'language ba (long form)',
-        'When LanguageToReportOnMerge is set, the field with the matching language in its long form is reported'
+        'When LanguageToUseOnMerge is set, the field with the matching language in its long form is used'
     );
 
+    t::lib::Mocks::mock_preference( 'marcflavour', $marcflavour ) if $marcflavour;
 };
 
 subtest 'Test merge A1 to B1 (changing authtype)' => sub {

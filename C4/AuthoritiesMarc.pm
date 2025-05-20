@@ -1620,10 +1620,10 @@ sub merge {
 
     my @record_to;
 
-    my $short_langcode = C4::Context->preference('LanguageToReportOnMerge');
+    my $short_langcode = C4::Context->preference('LanguageToUseOnMerge');
     if ( $auth_tag_to_report_to && $MARCto && $MARCto->field($auth_tag_to_report_to) ) {
         my $chosen_field = $MARCto->field($auth_tag_to_report_to);
-        if ($short_langcode) {
+        if ( uc( C4::Context->preference('marcflavour') ) eq 'UNIMARC' && $short_langcode ) {
             foreach my $field ( $MARCto->field($auth_tag_to_report_to) ) {
                 my $subfield = $field->subfield('7');
                 if (
