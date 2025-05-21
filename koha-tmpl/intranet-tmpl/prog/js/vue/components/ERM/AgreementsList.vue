@@ -121,7 +121,7 @@ export default {
                 table_settings: this.agreement_table_settings,
                 add_filters: true,
                 filters_options: {
-                    1: () =>
+                    2: () =>
                         this.vendors.map(e => {
                             e["_id"] = e["id"];
                             e["_str"] = e["name"];
