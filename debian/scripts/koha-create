@@ -908,8 +908,10 @@ then
     # Start Zebra.
     koha-zebra --start "$name"
 
-    # Start worker
-    koha-worker --start "$name"
+    # Start workers
+    for queue in $(get_worker_queues); do
+        koha-worker --queue $queue --start "$name"
+    done
 
     if [ "$USE_INDEXER_DAEMON" = "yes" ]; then
         # Start Indexer daemon
