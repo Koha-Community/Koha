@@ -1844,6 +1844,9 @@
         $(document).ready(function(){
 
             var activeTab = localStorage.getItem("sql_reports_activetab");
+            if( activeTab == 0 ){
+                $("#subgroup_filter_block").hide();
+            }
 
             $("body").on('click',".fetch_chart_data",function(){
                 if( [% unlimited_total || 0 | $raw %] > 1000 ){
@@ -2343,13 +2346,17 @@
 
             if (g_id && g_id.length > 0) {
                 col4.search(g_id, {exact:true}).visible(false);
-                for(var i in group_subgroups[g_id]) {
-                    $("#subgroup_filter").append(
-                        '<option value="' + group_subgroups[g_id][i][0] + '">'
-                        + group_subgroups[g_id][i][1] + '</option>'
-                    );
+                if( group_subgroups[g_id] && group_subgroups[g_id].length > 0 ){
+                    for(var i in group_subgroups[g_id]) {
+                        $("#subgroup_filter").append(
+                            '<option value="' + group_subgroups[g_id][i][0] + '">'
+                            + group_subgroups[g_id][i][1] + '</option>'
+                        );
+                    }
+                    $("#subgroup_filter_block").show();
+                } else {
+                    $("#subgroup_filter_block").hide();
                 }
-                $("#subgroup_filter_block").show();
             } else {
                 $("#subgroup_filter_block").hide();
             }
