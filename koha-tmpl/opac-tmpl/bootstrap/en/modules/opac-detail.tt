@@ -664,7 +664,7 @@
                         [% IF ComponentParts && ComponentParts.size %]
                             [% WRAPPER tab_panel tabname="components" %]
                                 <div class="content_set">
-                                    <table>
+                                    <table role="presentation">
                                         [% FOR PART IN ComponentParts %]
                                             <tr>
                                                 <td> [% PART | $raw %] </td>
