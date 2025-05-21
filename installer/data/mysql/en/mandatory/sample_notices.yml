@@ -2457,81 +2457,82 @@ tables:
           code: RETURN_RECALLED_ITEM
           branchcode: ""
           name: "Notification to return a recalled item"
-          is_html: 0
+          is_html: 1
           title: "Notification to return a recalled item"
           message_transport_type: email
           lang: default
           content:
-            - "Date: <<today>>"
-            - ""
-            - "<<borrowers.firstname>> <<borrowers.surname>>,"
-            - ""
-            - "A recall has been placed on the following item: <<biblio.title>> / <<biblio.author>> (<<items.barcode>>). The due date has been updated, and is now <<issues.date_due>>. Please return the item before the due date."
-            - ""
+            - "Date: [% today | $KohaDates %]<br>"
+            - "<br>"
+            - "[%~ INCLUDE 'patron-title.inc' patron => borrower, no_title => 1, no_cardnumber => 1 ~%],<br>"
+            - "<br>"
+            - "A recall has been placed on the following item:[%~ INCLUDE 'biblio-title.inc' biblio=biblio link = 0 %][% IF biblio.author %]/ [% biblio.author %][% END %] ([% item.barcode %]). The due date has been updated, and is now [% item.onloan | $KohaDates %]. Please return the item before the due date.<br>"
+            - "<br>"
             - "Thank you!"
 
         - module: circulation
           code: PICKUP_RECALLED_ITEM
           branchcode: ""
           name: "Recalled item awaiting pickup"
-          is_html: 0
+          is_html: 1
           title: "Recalled item awaiting pickup"
           message_transport_type: email
           lang: default
           content:
-            - "Date: <<today>>"
-            - ""
-            - "<<borrowers.firstname>> <<borrowers.surname>>,"
-            - ""
-            - "A recall that you requested on the following item: <<biblio.title>> / <<biblio.author>> (<<items.barcode>>) is now ready for you to pick up at <<recalls.pickup_library_id>>. Please pick up your item by <<recalls.expiration_date>>."
-            - ""
+            - "[%- USE Branches -%]<br>"
+            - "Date: [% today | $KohaDates %]<br>"
+            - "<br>"
+            - "[%~ INCLUDE 'patron-title.inc' patron => borrower, no_title => 1, no_cardnumber => 1, no_html = 1 ~%],<br>"
+            - "<br>"
+            - "A recall that you requested on the following item: [% INCLUDE 'biblio-title.inc' biblio=biblio link = 0 %][% IF biblio.author %] / [% biblio.author %][% END %] ([% item.barcode %]) is now ready for you to pick up at [% Branches.GetName( recall.pickup_library_id) %]. Please pick up your item by [% recall.expiration_date | $KohaDates %].<br>"
+            - "<br>"
             - "Thank you!"
 
         - module: circulation
           code: RETURN_RECALLED_ITEM
           branchcode: ""
           name: "Notification to return a recalled item"
-          is_html: 0
+          is_html: 1
           title: "Return recalled item"
           message_transport_type: sms
           lang: default
           content:
-            - "Your item has been recalled: <<biblio.title>> (<<items.barcode>>). Please return it by <<issues.date_due>."
+            - "Your item has been recalled: [% INCLUDE 'biblio-title.inc' biblio=biblio link = 0 %] ([% item.barcode %]). Please return it by [% item.onloan | $KohaDates %]."
 
         - module: circulation
           code: PICKUP_RECALLED_ITEM
           branchcode: ""
           name: "Recalled item awaiting pickup"
-          is_html: 0
+          is_html: 1
           title: "Recalled item awaiting pickup"
           message_transport_type: sms
           lang: default
           content:
-            - "A recalled item: <<biblio.title>> (<<items.barcode>>) is ready for you to pick up at <<recalls.branchcode>>. Please collect by <<recalls.expirationdate>>."
+            - "A recalled item: [% INCLUDE 'biblio-title.inc' biblio=biblio link = 0 %]([% item.barcode %]) is ready for you to pick up at [% recall.pickup_library_id %]. Please collect by [% recall.expiration_date | $KohaDates %]."
 
         - module: circulation
           code: RECALL_REQUESTER_DET
           branchcode: ""
           name: "Details of patron who recalled item"
-          is_html: 0
+          is_html: 1
           title: "Details of patron who recalled item"
           message_transport_type: print
           lang: default
           content:
-            - "Date: <<today>>"
-            - ""
-            - "Recall for pickup at <<branches.branchname>>"
-            - "<<borrowers.surname>>, <<borrowers.firstname>> (<<borrowers.cardnumber>>)"
-            - "<<borrowers.phone>>"
-            - "<<borrowers.streetnumber>> <<borrowers.address>>, <<borrowers.address2>>, <<borrowers.city>> <<borrowers.zipcode>>"
-            - "<<borrowers.email>>"
-            - ""
-            - "ITEM RECALLED"
-            - "<<biblio.title>> by <<biblio.author>>"
-            - "Barcode: <<items.barcode>>"
-            - "Callnumber: <<items.itemcallnumber>>"
-            - "Waiting since: <<recalls.waiting_date>>"
-            - "Notes: <<recalls.notes>>"
+            - "Date: [% today | $KohaDates %]<br>"
+            - "<br>"
+            - "Recall for pickup at [% branch.branchname %]<br>"
+            - "[% INCLUDE 'patron-title.inc' patron => borrower, no_title => 1, no_html = 1 %]<br>"
+            - "[% borrower.phone %]<br>"
+            - "[% borrower.streetnumber %][% IF borrower.address %] [% borrower.address %],[% END %][% IF borrower.address2 %] [% borrower.address2 %],[% END %] [% borrower.city %] [% borrower.state %] [% borrower.zipcode %]<br>"
+            - "[% borrower.email %]<br>"
+            - "<br>"
+            - "ITEM RECALLED<br>"
+            - "[% INCLUDE 'biblio-title.inc' biblio=biblio link = 0 %][% IF biblio.author %] by [% biblio.author %][% END %]<br>"
+            - "Barcode: [% item.barcode %]<br>"
+            - "Callnumber: [% item.itemcallnumber %]<br>"
+            - "Waiting since: [% recall.waiting_date | $KohaDates %]<br>"
+            - "[% IF recall.notes %]Notes: [% recall.notes %]<br>[% END %]"
 
         - module: members
           code: 2FA_DISABLE
