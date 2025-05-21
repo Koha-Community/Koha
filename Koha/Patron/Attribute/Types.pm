@@ -42,6 +42,7 @@ Params:
     $template   - The template object to be populated with patron attributes.
     $attributes - Arrayref of hashrefs containing patron attribute data.
     $op         - Operation type, such as 'duplicate', used to handle unique attributes.
+    $query      - Query to filter attributes e.g. { mandatory => 1 }.
 
 =cut
 
@@ -49,9 +50,10 @@ sub patron_attributes_form {
     my $template   = shift;
     my $attributes = shift;
     my $op         = shift;
+    my $query      = shift // {};
 
     my $library_id      = C4::Context->userenv ? C4::Context->userenv->{'branch'} : undef;
-    my $attribute_types = Koha::Patron::Attribute::Types->search_with_library_limits( {}, {}, $library_id );
+    my $attribute_types = Koha::Patron::Attribute::Types->search_with_library_limits( $query, {}, $library_id );
     if ( $attribute_types->count == 0 ) {
         $template->param( no_patron_attribute_types => 1 );
         return;
