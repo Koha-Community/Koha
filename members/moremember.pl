@@ -76,7 +76,8 @@ output_and_exit_if_error(
     { module => 'members', logged_in_user => $logged_in_user, current_patron => $patron }
 );
 
-my $category_type = $patron->category->category_type;
+my $category      = $patron->category;
+my $category_type = $category->category_type;
 
 for (qw(gonenoaddress lost borrowernotes is_debarred)) {
     $patron->$_ and $template->param( flagged => 1 ) and last;
@@ -112,6 +113,13 @@ $template->param(
     guarantor_relationships => $guarantor_relationships,
     guarantees              => \@guarantees,
 );
+if (    C4::Context->preference('ChildNeedsGuarantor')
+    and ( $patron->is_child or $category->can_be_guarantee )
+    and $patron->contactname eq ""
+    and !@guarantors )
+{
+    $template->param( missing_guarantor => 1 );
+}
 
 my $relatives_issues_count = Koha::Checkouts->count( { borrowernumber => \@relatives } );
 

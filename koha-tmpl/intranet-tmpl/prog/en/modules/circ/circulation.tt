@@ -134,6 +134,10 @@
         <div class="alert alert-warning">This is the anonymous patron, so circulation is disabled.</div>
     [% END %]
 
+    [% IF missing_guarantor %]
+        <div class="alert alert-warning">System preference 'ChildNeedsGuarantor' is enabled and this patron does not have a guarantor.</div>
+    [% END %]
+
     [% IF ( NEEDSCONFIRMATION ) %]
         <div id="circ_needsconfirmation" class="alert alert-warning audio-alert-action focus" tabindex="-1">
             [% IF CAN_user_circulate_force_checkout or ADDITIONAL_MATERIALS %]

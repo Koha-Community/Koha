@@ -720,11 +720,19 @@ my $view =
 
 my @relatives;
 if ($patron) {
-    if ( my @guarantors = $patron->guarantor_relationships()->guarantors->as_list ) {
+    my @guarantors = $patron->guarantor_relationships()->guarantors->as_list;
+    if ( scalar @guarantors ) {
         push( @relatives, $_->id ) for @guarantors;
         push( @relatives, $_->id ) for $patron->siblings->as_list;
     } else {
         push( @relatives, $_->id ) for $patron->guarantee_relationships()->guarantees->as_list;
+    }
+    if (    C4::Context->preference('ChildNeedsGuarantor')
+        and ( $patron->is_child or $patron->category->can_be_guarantee )
+        and $patron->contactname eq ""
+        and !@guarantors )
+    {
+        $template->param( missing_guarantor => 1 );
     }
 }
 my $relatives_issues_count =
