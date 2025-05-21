@@ -72,11 +72,7 @@ do
             if is_indexer_running $name; then
                 koha-indexer --stop $name
             fi
-            for queue in $(get_worker_queues); do
-                if is_worker_running $name $queue; then
-                    koha-worker --queue $queue --stop $name
-                fi
-            done
+            koha-worker --all-queues --stop $name || /bin/true
         elif [ "$RET" = 2 ]; then
             warn "Error: Apache configuration file not present for instance $name."
         else
