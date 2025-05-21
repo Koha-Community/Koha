@@ -57,17 +57,19 @@
                             </form>
                         [% ELSE %]
                             [% IF failure %]
-                                <p> There was an error during the discharge process </p>
+                                <p>There was an error during the discharge process</p>
                             [% END %]
                             <div class="alert alert-info"
                                 >You cannot be discharged because:
                                 <ul>
-                                    [% IF discharge_problems.checkouts %]
-                                        <li> You have [% discharge_problems.checkouts | html %] item(s) checked out. Please return your checked out items before reapplying. </li>
+                                    [% IF discharge_problems.checkouts > 1 %]
+                                        <li>You have [% discharge_problems.checkouts | html %] items checked out. Please return them before reapplying.</li>
+                                    [% ELSIF discharge_problems.checkouts == 1 %]
+                                        <li>You currently have an item checked out. Please return it before reapplying.</li>
                                     [% END %]
 
                                     [% IF discharge_problems.debt %]
-                                        <li> You have unpaid charges of [% discharge_problems.debt | $Price %]. Please pay your charges before reapplying. </li>
+                                        <li>You have unpaid charges of [% discharge_problems.debt | $Price %]. Please pay them before reapplying.</li>
                                     [% END %]
                                 </ul>
                             </div>
