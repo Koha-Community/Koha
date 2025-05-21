@@ -54,6 +54,10 @@
         <div class="alert alert-warning">This is the anonymous patron.</div>
     [% END %]
 
+    [% IF missing_guarantor %]
+        <div class="alert alert-warning">System preference 'ChildNeedsGuarantor' is enabled and this patron does not have a guarantor.</div>
+    [% END %]
+
     [% IF ( error ) %]
         <div class="alert alert-warning">
             [% IF ( error == 'CANT_DELETE_STAFF' ) %]
