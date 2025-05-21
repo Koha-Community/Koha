@@ -4590,7 +4590,7 @@ subtest 'AddReturn | is_overdue' => sub {
         };
 
         subtest 'lostreturn | charge' => sub {
-            plan tests => 16;
+            plan tests => 18;
 
             t::lib::Mocks::mock_userenv( { patron => $manager, branchcode => $branchcode_charge } );
 
@@ -4714,6 +4714,44 @@ subtest 'AddReturn | is_overdue' => sub {
                 $overdue_fee->amountoutstanding + 0,
                 5,
                 'The new OVERDUE amountoutstanding is correct for the backdated return'
+            );
+
+            my $patron_2 = $builder->build_object(
+                {
+                    class => 'Koha::Patrons',
+                    value => { categorycode => $patron_category->{categorycode} }
+                }
+            );
+            $issue = C4::Circulation::AddIssue( $patron_2, $item->barcode, $five_days_ago );
+
+            # Do nothing
+            my $four_days_ago = $now->clone->subtract( days => 4 );
+            ( undef, $message ) = AddReturn( $item->barcode, $branchcode_charge, undef, $four_days_ago );
+            my $overdue_fees_2 = Koha::Account::Lines->search(
+                {
+                    borrowernumber  => $patron_2->id,
+                    itemnumber      => $item->itemnumber,
+                    debit_type_code => 'OVERDUE'
+                }
+            );
+            is( $overdue_fees_2->count, 1, 'Normal overdue generated when item returned late' );
+
+            # Simulate item marked as lost
+            $item->itemlost(2)->store;
+            $item->discard_changes();
+
+            #C4::Circulation::LostItem( $item->itemnumber, 1 );
+            ( undef, $message ) = AddReturn( $item->barcode, $branchcode_charge, undef );
+            $overdue_fees_2 = Koha::Account::Lines->search(
+                {
+                    borrowernumber  => $patron_2->id,
+                    itemnumber      => $item->itemnumber,
+                    debit_type_code => 'OVERDUE'
+                }
+            );
+            is(
+                $overdue_fees_2->count, 1,
+                'No overdue generated when an item previously lost by a patron is lost after another patron has borrwed it'
             );
         };
     };
