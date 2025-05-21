@@ -18,6 +18,7 @@ package Koha::Patron::Attribute::Types;
 use Modern::Perl;
 
 use Koha::Patron::Attribute::Type;
+use C4::Koha qw( GetAuthorisedValues );
 
 use base qw(Koha::Objects Koha::Objects::Limit::Library);
 
@@ -26,6 +27,90 @@ use base qw(Koha::Objects Koha::Objects::Limit::Library);
 Koha::Patron::Attribute::Types Object set class
 
 =head1 API
+
+=head2 Class Methods
+
+=cut
+
+=head3 patron_attributes_form
+
+    my $patron_attributes_form = Koha::Patron::Attribute::Types::patron_attributes_form
+
+    Static method that returns patron attribute types to be rendered in a form
+
+=cut
+
+sub patron_attributes_form {
+    my $template   = shift;
+    my $attributes = shift;
+    my $op         = shift;
+
+    my $library_id      = C4::Context->userenv ? C4::Context->userenv->{'branch'} : undef;
+    my $attribute_types = Koha::Patron::Attribute::Types->search_with_library_limits( {}, {}, $library_id );
+    if ( $attribute_types->count == 0 ) {
+        $template->param( no_patron_attribute_types => 1 );
+        return;
+    }
+
+    # map patron's attributes into a more convenient structure
+    my %attr_hash = ();
+    foreach my $attr (@$attributes) {
+        push @{ $attr_hash{ $attr->{code} } }, $attr;
+    }
+
+    my @attribute_loop = ();
+    my $i              = 0;
+    my %items_by_class;
+    while ( my ($attr_type) = $attribute_types->next ) {
+        my $entry = {
+            class         => $attr_type->class(),
+            code          => $attr_type->code(),
+            description   => $attr_type->description(),
+            repeatable    => $attr_type->repeatable(),
+            category      => $attr_type->authorised_value_category(),
+            category_code => $attr_type->category_code(),
+            mandatory     => $attr_type->mandatory(),
+            is_date       => $attr_type->is_date(),
+        };
+        if ( exists $attr_hash{ $attr_type->code() } ) {
+            foreach my $attr ( @{ $attr_hash{ $attr_type->code() } } ) {
+                my $newentry = {%$entry};
+                $newentry->{value}        = $attr->{attribute};
+                $newentry->{use_dropdown} = 0;
+                if ( $attr_type->authorised_value_category() ) {
+                    $newentry->{use_dropdown} = 1;
+                    $newentry->{auth_val_loop} =
+                        C4::Koha::GetAuthorisedValues( $attr_type->authorised_value_category(), $attr->{attribute} );
+                }
+                $i++;
+                undef $newentry->{value} if ( $attr_type->unique_id() && $op eq 'duplicate' );
+                $newentry->{form_id} = "patron_attr_$i";
+                push @{ $items_by_class{ $attr_type->class() } }, $newentry;
+            }
+        } else {
+            $i++;
+            my $newentry = {%$entry};
+            if ( $attr_type->authorised_value_category() ) {
+                $newentry->{use_dropdown}  = 1;
+                $newentry->{auth_val_loop} = C4::Koha::GetAuthorisedValues( $attr_type->authorised_value_category() );
+            }
+            $newentry->{form_id} = "patron_attr_$i";
+            push @{ $items_by_class{ $attr_type->class() } }, $newentry;
+        }
+    }
+    for my $class ( sort keys %items_by_class ) {
+        my $av  = Koha::AuthorisedValues->search( { category => 'PA_CLASS', authorised_value => $class } );
+        my $lib = $av->count ? $av->next->lib : $class;
+        push @attribute_loop, {
+            class => $class,
+            items => $items_by_class{$class},
+            lib   => $lib,
+        };
+    }
+
+    $template->param( patron_attributes => \@attribute_loop );
+
+}
 
 =head2 Internal methods
 
