@@ -52,8 +52,10 @@ $(document).ready(function () {
         table_settings
     );
 
-    $("#library_limitation")[0].style.minWidth = "450px";
-    $("#library_limitation").select2();
+    if ($("#library_limitation").length > 0) {
+        $("#library_limitation")[0].style.minWidth = "450px";
+        $("#library_limitation").select2();
+    }
 
     $("#categorycode").on("blur", function () {
         toUC(this);
