@@ -50,27 +50,6 @@ subtest "monthly_report" => sub {
 
     $schema->storage->txn_begin;
 
-    my $librarian = $builder->build_object(
-        {
-            class => 'Koha::Patrons',
-            value => { flags => 2**28 }
-        }
-    );
-    my $password = 'thePassword123';
-    $librarian->set_password( { password => $password, skip_validation => 1 } );
-    my $userid = $librarian->userid;
-    t::lib::Mocks::mock_userenv( { number => $userid } );
-
-    my $patron = $builder->build_object(
-        {
-            class => 'Koha::Patrons',
-            value => { flags => 0 }
-        }
-    );
-
-    $patron->set_password( { password => $password, skip_validation => 1 } );
-    my $unauth_userid = $patron->userid;
-
     # Run a harvest to populate the database with data
     my $usage_data_provider = $builder->build_object( { class => 'Koha::ERM::EUsage::UsageDataProviders' } );
     my $counter_file        = $sushi_counter_TR_J1->get_COUNTER_from_SUSHI;
@@ -84,6 +63,26 @@ subtest "monthly_report" => sub {
             }
         ]
     );
+
+    my $librarian = $builder->build_object(
+        {
+            class => 'Koha::Patrons',
+            value => { flags => 2**28 }
+        }
+    );
+    my $password = 'thePassword123';
+    $librarian->set_password( { password => $password, skip_validation => 1 } );
+    my $userid = $librarian->userid;
+
+    my $patron = $builder->build_object(
+        {
+            class => 'Koha::Patrons',
+            value => { flags => 0 }
+        }
+    );
+
+    $patron->set_password( { password => $password, skip_validation => 1 } );
+    my $unauth_userid = $patron->userid;
 
     # Unauthorized access
     $t->get_ok("//$unauth_userid:$password@/api/v1/erm/eUsage/monthly_report/title")->status_is(403);
@@ -149,27 +148,6 @@ subtest "yearly_report" => sub {
 
     $schema->storage->txn_begin;
 
-    my $librarian = $builder->build_object(
-        {
-            class => 'Koha::Patrons',
-            value => { flags => 2**28 }
-        }
-    );
-    my $password = 'thePassword123';
-    $librarian->set_password( { password => $password, skip_validation => 1 } );
-    my $userid = $librarian->userid;
-    t::lib::Mocks::mock_userenv( { number => $userid } );
-
-    my $patron = $builder->build_object(
-        {
-            class => 'Koha::Patrons',
-            value => { flags => 0 }
-        }
-    );
-
-    $patron->set_password( { password => $password, skip_validation => 1 } );
-    my $unauth_userid = $patron->userid;
-
     # Run a harvest to populate the database with data
     my $usage_data_provider = $builder->build_object( { class => 'Koha::ERM::EUsage::UsageDataProviders' } );
     my $counter_file        = $sushi_counter_TR_J1->get_COUNTER_from_SUSHI;
@@ -183,6 +161,26 @@ subtest "yearly_report" => sub {
             }
         ]
     );
+
+    my $librarian = $builder->build_object(
+        {
+            class => 'Koha::Patrons',
+            value => { flags => 2**28 }
+        }
+    );
+    my $password = 'thePassword123';
+    $librarian->set_password( { password => $password, skip_validation => 1 } );
+    my $userid = $librarian->userid;
+
+    my $patron = $builder->build_object(
+        {
+            class => 'Koha::Patrons',
+            value => { flags => 0 }
+        }
+    );
+
+    $patron->set_password( { password => $password, skip_validation => 1 } );
+    my $unauth_userid = $patron->userid;
 
     # Unauthorized access
     $t->get_ok("//$unauth_userid:$password@/api/v1/erm/eUsage/yearly_report/title")->status_is(403);
@@ -239,27 +237,6 @@ subtest "metric_types_report" => sub {
 
     $schema->storage->txn_begin;
 
-    my $librarian = $builder->build_object(
-        {
-            class => 'Koha::Patrons',
-            value => { flags => 2**28 }
-        }
-    );
-    my $password = 'thePassword123';
-    $librarian->set_password( { password => $password, skip_validation => 1 } );
-    my $userid = $librarian->userid;
-    t::lib::Mocks::mock_userenv( { number => $userid } );
-
-    my $patron = $builder->build_object(
-        {
-            class => 'Koha::Patrons',
-            value => { flags => 0 }
-        }
-    );
-
-    $patron->set_password( { password => $password, skip_validation => 1 } );
-    my $unauth_userid = $patron->userid;
-
     # Run a harvest to populate the database with data
     my $usage_data_provider = $builder->build_object( { class => 'Koha::ERM::EUsage::UsageDataProviders' } );
     my $counter_file        = $sushi_counter_TR_J1->get_COUNTER_from_SUSHI;
@@ -273,6 +250,26 @@ subtest "metric_types_report" => sub {
             }
         ]
     );
+
+    my $librarian = $builder->build_object(
+        {
+            class => 'Koha::Patrons',
+            value => { flags => 2**28 }
+        }
+    );
+    my $password = 'thePassword123';
+    $librarian->set_password( { password => $password, skip_validation => 1 } );
+    my $userid = $librarian->userid;
+
+    my $patron = $builder->build_object(
+        {
+            class => 'Koha::Patrons',
+            value => { flags => 0 }
+        }
+    );
+
+    $patron->set_password( { password => $password, skip_validation => 1 } );
+    my $unauth_userid = $patron->userid;
 
     # Unauthorized access
     $t->get_ok("//$unauth_userid:$password@/api/v1/erm/eUsage/metric_types_report/title")->status_is(403);
@@ -335,27 +332,6 @@ subtest "provider_rollup_report" => sub {
 
     $schema->storage->txn_begin;
 
-    my $librarian = $builder->build_object(
-        {
-            class => 'Koha::Patrons',
-            value => { flags => 2**28 }
-        }
-    );
-    my $password = 'thePassword123';
-    $librarian->set_password( { password => $password, skip_validation => 1 } );
-    my $userid = $librarian->userid;
-    t::lib::Mocks::mock_userenv( { number => $userid } );
-
-    my $patron = $builder->build_object(
-        {
-            class => 'Koha::Patrons',
-            value => { flags => 0 }
-        }
-    );
-
-    $patron->set_password( { password => $password, skip_validation => 1 } );
-    my $unauth_userid = $patron->userid;
-
     # Run a harvest to populate the database with data
     my $usage_data_provider = $builder->build_object( { class => 'Koha::ERM::EUsage::UsageDataProviders' } );
     my $counter_file        = $sushi_counter_TR_J1->get_COUNTER_from_SUSHI;
@@ -369,6 +345,26 @@ subtest "provider_rollup_report" => sub {
             }
         ]
     );
+
+    my $librarian = $builder->build_object(
+        {
+            class => 'Koha::Patrons',
+            value => { flags => 2**28 }
+        }
+    );
+    my $password = 'thePassword123';
+    $librarian->set_password( { password => $password, skip_validation => 1 } );
+    my $userid = $librarian->userid;
+
+    my $patron = $builder->build_object(
+        {
+            class => 'Koha::Patrons',
+            value => { flags => 0 }
+        }
+    );
+
+    $patron->set_password( { password => $password, skip_validation => 1 } );
+    my $unauth_userid = $patron->userid;
 
     # Unauthorized access
     $t->get_ok("//$unauth_userid:$password@/api/v1/erm/eUsage/provider_rollup_report/title")->status_is(403);
