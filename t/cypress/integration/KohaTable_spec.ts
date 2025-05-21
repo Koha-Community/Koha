@@ -22,24 +22,32 @@ function build_libraries() {
         });
 }
 
-function mock_table_settings(settings) {
+function mock_table_settings(settings, table_settings_var) {
     cy.window().then(win => {
-        win.table_settings.columns = win.table_settings.columns.map(c => ({
+
+        let table_settings =
+            typeof table_settings_var === "undefined"
+                ? win.table_settings
+                : table_settings_var
+                      .split(".")
+                      .reduce((acc, key) => acc[key], win);
+
+        table_settings.columns = table_settings.columns.map(c => ({
             ...c,
             is_hidden: 0,
             cannot_be_toggled: 0,
         }));
         if (settings && settings.hasOwnProperty("default_save_state")) {
-            win.table_settings.default_save_state = settings.default_save_state;
+            table_settings.default_save_state = settings.default_save_state;
         }
         if (settings && settings.hasOwnProperty("default_save_state_search")) {
-            win.table_settings.default_save_state_search =
+            table_settings.default_save_state_search =
                 settings.default_save_state_search;
         }
 
         if (settings && settings.columns) {
             Object.entries(settings.columns).forEach(([name, values]) => {
-                let column = win.table_settings.columns.find(
+                let column = table_settings.columns.find(
                     cc => cc.columnname == name
                 );
                 Object.entries(values).forEach(([prop, value]) => {
@@ -47,7 +55,7 @@ function mock_table_settings(settings) {
                 });
             });
         }
-        cy.wrap(win.table_settings.columns).as("columns");
+        cy.wrap(table_settings.columns).as("columns");
     });
 }
 describe("kohaTable (using REST API)", () => {

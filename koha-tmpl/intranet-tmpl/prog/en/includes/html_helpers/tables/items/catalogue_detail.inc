@@ -270,7 +270,7 @@
         embed.push('analytics_count');
     [% END %]
 
-    let items_table_settings = {
+    var items_table_settings = {
         holdings: [% TablesSettings.GetTableSettings('catalogue', 'detail','holdings_table','json') | $raw %],
         otherholdings: [% TablesSettings.GetTableSettings('catalogue', 'detail','otherholdings_table','json')  | $raw %],
     };
