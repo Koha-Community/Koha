@@ -2003,6 +2003,12 @@ sub _get_tt_params {
             plural   => 'problemreports',
             pk       => 'reportid'
         },
+        recalls => {
+            module   => 'Koha::Recalls',
+            singular => 'recall',
+            plural   => 'recalls',
+            pk       => 'recall_id'
+        },
     };
 
     my $dbh = C4::Context->dbh;
