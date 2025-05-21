@@ -34,9 +34,14 @@ Koha::Patron::Attribute::Types Object set class
 
 =head3 patron_attributes_form
 
-    my $patron_attributes_form = Koha::Patron::Attribute::Types::patron_attributes_form
+    $patron_attributes_form = Koha::Patron::Attribute::Types::patron_attributes_form($template, $attributes, $op);
 
-    Static method that returns patron attribute types to be rendered in a form
+Static method that prepares and populates the template with patron attribute types for rendering in a form. It organizes the attributes into a structure based on their class and type, taking into account repeatable and mandatory attributes, as well as those with authorized value categories. It also handles library-specific attribute type limitations and sets relevant template parameters for display.
+
+Params:
+    $template   - The template object to be populated with patron attributes.
+    $attributes - Arrayref of hashrefs containing patron attribute data.
+    $op         - Operation type, such as 'duplicate', used to handle unique attributes.
 
 =cut
 
