@@ -96,6 +96,9 @@
                     [% IF alert.RETURNED_FROM_ANOTHER %]
                         <div class="alert alert-warning">Item was checked out to [% INCLUDE 'patron-title.inc' patron = alert.RETURNED_FROM_ANOTHER.patron %] and was returned automatically.</div>
                     [% END %]
+                    [% IF missing_guarantor %]
+                        <div class="alert alert-warning">System preference 'ChildNeedsGuarantor' is enabled and this patron does not have a guarantor.</div>
+                    [% END %]
 
                     [% IF alert.BOOKED %]
                         <div class="alert alert-warning">Item is booked by this user</div>

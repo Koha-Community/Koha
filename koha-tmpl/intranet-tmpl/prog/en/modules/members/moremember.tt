@@ -61,6 +61,9 @@
 
                     [% IF ( error ) %]
                         <div class="alert alert-warning">
+                            [% IF missing_guarantor %]
+                                <div class="alert alert-warning">System preference 'ChildNeedsGuarantor' is enabled and this patron does not have a guarantor.</div>
+                            [% END %]
                             [% IF ( error == 'CANT_DELETE_STAFF' ) %]
                                 <h3>Unable to delete staff user</h3>
                                 <p>Insufficient privileges.</p>

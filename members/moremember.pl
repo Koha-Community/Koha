@@ -74,7 +74,8 @@ my $patron         = Koha::Patrons->find( $borrowernumber );
 my $logged_in_user = Koha::Patrons->find( $loggedinuser );
 output_and_exit_if_error( $input, $cookie, $template, { module => 'members', logged_in_user => $logged_in_user, current_patron => $patron } );
 
-my $category_type = $patron->category->category_type;
+my $category      = $patron->category;
+my $category_type = $category->category_type;
 
 if ( $patron->borrowernumber eq C4::Context->preference("AnonymousPatron") ) {
     $template->param( is_anonymous => 1 );
@@ -117,6 +118,13 @@ $template->param(
     guarantor_relationships => $guarantor_relationships,
     guarantees              => \@guarantees,
 );
+if (    C4::Context->preference('ChildNeedsGuarantor')
+    and ( $patron->is_child or $category->can_be_guarantee )
+    and $patron->contactname eq ""
+    and !@guarantors )
+{
+    $template->param( missing_guarantor => 1 );
+}
 
 my $relatives_issues_count =
     Koha::Checkouts->count({ borrowernumber => \@relatives });
