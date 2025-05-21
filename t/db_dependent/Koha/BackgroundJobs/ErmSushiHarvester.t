@@ -23,7 +23,7 @@ use Koha::Database;
 use Koha::BackgroundJobs;
 use Koha::BackgroundJob::ErmSushiHarvester;
 
-use JSON           qw( decode_json );
+use JSON qw( decode_json );
 use File::Basename qw( dirname );
 use File::Slurp;
 
@@ -85,9 +85,6 @@ subtest 'enqueue_sushi_harvest_jobs' => sub {
     plan tests => 16;
 
     $schema->storage->txn_begin;
-
-    my $patron = Koha::Patrons->search()->last;
-    t::lib::Mocks::mock_userenv( { number => $patron->borrowernumber } );    # Is superlibrarian
 
     my $usage_data_provider = $builder->build_object(
         { class => 'Koha::ERM::EUsage::UsageDataProviders', value => { name => 'TestProvider' } } );
