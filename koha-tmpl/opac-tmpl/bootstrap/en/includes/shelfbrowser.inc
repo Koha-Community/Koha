@@ -10,7 +10,7 @@
                 <a style="font-size: 75%;" href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% biblionumber | html %]" class="close_shelf" >Close shelf browser <span class="sr-only">(Hides shelf browser)</span></a>
             </h5>
 
-            <table class="table">
+            <table class="table" role="presentation ">
                 <tr>
                     <td class="nav-cell" rowspan="2">
                       [% IF shelfbrowser_prev_item %]
