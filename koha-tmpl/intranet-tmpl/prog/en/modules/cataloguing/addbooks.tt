@@ -233,10 +233,10 @@
                                                         Actions
                                                     </a>
                                                     <ul class="dropdown-menu dropdown-menu-end" role="menu" aria-labelledby="reservoirsearchactions[% breeding_loo.id | html %]">
-                                                        <li><a href="/cgi-bin/koha/catalogue/showmarc.pl?importid=[% breeding_loo.id | uri %]" class="previewData"><i class="fa-solid fa-eye"></i> MARC preview</a></li>
-                                                        <li><a href="/cgi-bin/koha/catalogue/showmarc.pl?viewas=card&amp;importid=[% breeding_loo.id | uri %]" class="previewData"><i class="fa-solid fa-eye"></i> Card preview</a></li>
+                                                        <li><a href="/cgi-bin/koha/catalogue/showmarc.pl?importid=[% breeding_loo.id | uri %]" class="dropdown-item previewData"><i class="fa-solid fa-eye"></i> MARC preview</a></li>
+                                                        <li><a href="/cgi-bin/koha/catalogue/showmarc.pl?viewas=card&amp;importid=[% breeding_loo.id | uri %]" class="dropdown-item previewData"><i class="fa-solid fa-eye"></i> Card preview</a></li>
                                                         [% IF ( CAN_user_editcatalogue_edit_catalogue ) %]
-                                                            <li><a href="/cgi-bin/koha/cataloguing/addbiblio.pl?breedingid=[% breeding_loo.id | uri %]"><i class="fa fa-plus"></i> Add biblio</a></li>
+                                                            <li><a class="dropdown-item" href="/cgi-bin/koha/cataloguing/addbiblio.pl?breedingid=[% breeding_loo.id | uri %]"><i class="fa fa-plus"></i> Add biblio</a></li>
                                                         [% END %]
                                                     </ul>
                                                 </div>
