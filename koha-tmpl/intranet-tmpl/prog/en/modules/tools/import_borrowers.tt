@@ -375,7 +375,7 @@
         [% END %]
 
         <div class="col-sm-6">
-            <div class="page-section bg-info">
+            <div class="page-section bg-info-subtle">
                 <h2>Notes:</h2>
                 <ul>
                     <li>The first line in the file must be a header row defining which columns you are supplying in the import file.</li>
@@ -390,7 +390,11 @@
                     <li>
                         OR choose which fields you want to supply from the following list:
                         <ul>
-                            <li> [% FOREACH columnkey IN borrower_fields.keys.sort %]'[% columnkey | html %]',[% END %] </li>
+                            <li>
+                                [% FOREACH columnkey IN borrower_fields.keys.sort %]
+                                    '[% columnkey | html %]',
+                                [% END %]
+                            </li>
                         </ul>
                     </li>
 
