@@ -18,7 +18,7 @@
 use Modern::Perl;
 use utf8;
 
-use Test::More tests => 75;
+use Test::More tests => 76;
 use Test::Exception;
 use Test::MockModule;
 use Test::Deep qw( cmp_deeply );
@@ -1801,7 +1801,8 @@ subtest "CanBookBeRenewed | bookings" => sub {
     my $schema = Koha::Database->schema;
     $schema->storage->txn_begin;
 
-    t::lib::Mocks::mock_preference( 'RenewalPeriodBase', 'date_due' );
+    t::lib::Mocks::mock_preference( 'RenewalPeriodBase',   'date_due' );
+    t::lib::Mocks::mock_preference( 'ChildNeedsGuarantor', 0 );
 
     my $renewing_patron = $builder->build_object( { class => 'Koha::Patrons' } );
     my $booked_patron   = $builder->build_object( { class => 'Koha::Patrons' } );
@@ -6968,6 +6969,209 @@ subtest 'NoRefundOnLostFinesPaidAge' => sub {
     );
 };
 
+subtest 'ChildNeedsGuarantor' => sub {
+    plan tests => 18;
+
+    t::lib::Mocks::mock_preference( 'ChildNeedsGuarantor', 0 );
+    my $library        = $builder->build_object( { class => 'Koha::Libraries' } );
+    my $child_category = $builder->build_object(
+        {
+            class => 'Koha::Patron::Categories',
+            value => {
+                category_type => 'C',
+                enrolmentfee  => 0,
+            }
+        }
+    );
+    my $guarantee_category = $builder->build_object(
+        {
+            class => 'Koha::Patron::Categories',
+            value => {
+                category_type    => 'P',
+                enrolmentfee     => 0,
+                can_be_guarantee => 1,
+            }
+        }
+    );
+    my $guarantor_category = $builder->build_object(
+        {
+            class => 'Koha::Patron::Categories',
+            value => {
+                category_type    => 'P',
+                enrolmentfee     => 0,
+                can_be_guarantee => 0,
+            }
+        }
+    );
+    my $child_patron = $builder->build_object(
+        {
+            class => 'Koha::Patrons',
+            value => { categorycode => $child_category->categorycode, contactname => '' }
+        }
+    );
+    my $guarantee_patron = $builder->build_object(
+        {
+            class => 'Koha::Patrons',
+            value => { categorycode => $guarantee_category->categorycode, contactname => '' }
+        }
+    );
+    my $guarantor_patron = $builder->build_object(
+        {
+            class => 'Koha::Patrons',
+            value => { categorycode => $guarantee_category->categorycode, contactname => '' }
+        }
+    );
+    t::lib::Mocks::mock_preference( 'ChildNeedsGuarantor',             1 );
+    t::lib::Mocks::mock_preference( 'TrackLastPatronActivityTriggers', 'check_in,check_out,renewal' );
+
+    my $biblionumber = $builder->build_sample_biblio(
+        {
+            branchcode => $library->branchcode,
+        }
+    )->biblionumber;
+
+    Koha::CirculationRules->set_rules(
+        {
+            categorycode => undef,
+            itemtype     => undef,
+            branchcode   => $library->branchcode,
+            rules        => {
+                issuelength => 14,
+                lengthunit  => 'days',
+            }
+        }
+    );
+
+    my $item = $builder->build_sample_item(
+        {
+            biblionumber => $biblionumber,
+            library      => $library->branchcode,
+        }
+    );
+    warnings_like {
+        AddIssue( $child_patron, $item->barcode, undef );
+    }
+    qr/Problem updating lastseen/,
+        "AddIssue generates a warning when Child type patron is missing a guarantor and ChildsNeedsGuarantor";
+    warnings_like {
+        AddRenewal(
+            {
+                borrowernumber => $child_patron->borrowernumber, itemnumber => $item->itemnumber,
+                branch         => $library->branchcode
+            }
+        );
+    }
+    qr/Problem updating lastseen/,
+        "AddRenewal generates a warning when Child type patron is missing a guarantor and ChildNeedsGuarantor";
+    warnings_like {
+        AddReturn( $item->barcode, $library->branchcode, undef, undef );
+    }
+    qr/Problem updating lastseen/,
+        "AddReturn generates a warning when Child type patron is missing a guarantor and ChildNeedsGuarantor";
+
+    warnings_like {
+        AddIssue( $guarantee_patron, $item->barcode, undef );
+    }
+    qr/Problem updating lastseen/,
+        "AddIssue generates a warning when can_be_guarantee type patron is missing a guarantor and ChildsNeedsGuarantor";
+    warnings_like {
+        AddRenewal(
+            {
+                borrowernumber => $guarantee_patron->borrowernumber, itemnumber => $item->itemnumber,
+                branch         => $library->branchcode
+            }
+        );
+    }
+    qr/Problem updating lastseen/,
+        "AddRenewal generates a warning when can_be_guarantee type patron is missing a guarantor and ChildNeedsGuarantor";
+    warnings_like {
+        AddReturn( $item->barcode, $library->branchcode, undef, undef );
+    }
+    qr/Problem updating lastseen/,
+        "AddReturn generates a warning when can_be_guarantee type patron is missing a guarantor and ChildNeedsGuarantor";
+
+    t::lib::Mocks::mock_preference( 'ChildNeedsGuarantor', 0 );
+    warnings_like {
+        AddIssue( $child_patron, $item->barcode, undef );
+    }
+    undef, "AddIssue generates no warning when Child type patron is missing a guarantor and not ChildsNeedsGuarantor";
+    warnings_like {
+        AddRenewal(
+            {
+                borrowernumber => $child_patron->borrowernumber, itemnumber => $item->itemnumber,
+                branch         => $library->branchcode
+            }
+        );
+    }
+    undef, "AddRenewal generates no warning when Child type patron is missing a guarantor and not ChildNeedsGuarantor";
+    warnings_like {
+        AddReturn( $item->barcode, $library->branchcode, undef, undef );
+    }
+    undef, "AddReturn generates no warning when Child type patron is missing a guarantor and not ChildNeedsGuarantor";
+
+    warnings_like {
+        AddIssue( $guarantee_patron, $item->barcode, undef );
+    }
+    undef,
+        "AddIssue generates no warning when can_be_guarantee type patron is missing a guarantor and not ChildsNeedsGuarantor";
+    warnings_like {
+        AddRenewal(
+            {
+                borrowernumber => $guarantee_patron->borrowernumber, itemnumber => $item->itemnumber,
+                branch         => $library->branchcode
+            }
+        );
+    }
+    undef,
+        "AddRenewal generates no warning when can_be_guarantee type patron is missing a guarantor and not ChildNeedsGuarantor";
+    warnings_like {
+        AddReturn( $item->barcode, $library->branchcode, undef, undef );
+    }
+    undef,
+        "AddReturn generates no warning when can_be_guarantee type patron is missing a guarantor and not ChildNeedsGuarantor";
+
+    t::lib::Mocks::mock_preference( 'ChildNeedsGuarantor', 1 );
+    $child_patron->contactname("Anybody")->store;
+    warnings_like {
+        AddIssue( $child_patron, $item->barcode, undef );
+    }
+    undef, "AddIssue generates no warning when Child type patron has a guarantor and ChildsNeedsGuarantor";
+    warnings_like {
+        AddRenewal(
+            {
+                borrowernumber => $child_patron->borrowernumber, itemnumber => $item->itemnumber,
+                branch         => $library->branchcode
+            }
+        );
+    }
+    undef, "AddRenewal generates no warning when Child type patron has a guarantor and not ChildNeedsGuarantor";
+    warnings_like {
+        AddReturn( $item->barcode, $library->branchcode, undef, undef );
+    }
+    undef, "AddReturn generates no warning when Child type patron has a guarantor and not ChildNeedsGuarantor";
+
+    $guarantee_patron->add_guarantor( { guarantor_id => $guarantor_patron->borrowernumber, relationship => 'father' } );
+    warnings_like {
+        AddIssue( $guarantee_patron, $item->barcode, undef );
+    }
+    undef,
+        "AddIssue generates no warning when can_be_guarantee type patron has a guarantor and not ChildsNeedsGuarantor";
+    warnings_like {
+        AddRenewal(
+            {
+                borrowernumber => $guarantee_patron->borrowernumber, itemnumber => $item->itemnumber,
+                branch         => $library->branchcode
+            }
+        );
+    }
+    undef,
+        "AddRenewal generates no warning when can_be_guarantee type patron has a guarantor and not ChildNeedsGuarantor";
+    warnings_like {
+        AddReturn( $item->barcode, $library->branchcode, undef, undef );
+    }
+    undef,
+        "AddReturn generates no warning when can_be_guarantee type patron has a guarantor and not ChildNeedsGuarantor";
+};
 
 $schema->storage->txn_rollback;
 C4::Context->clear_syspref_cache();
