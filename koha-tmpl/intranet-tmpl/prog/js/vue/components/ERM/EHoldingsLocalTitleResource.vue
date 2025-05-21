@@ -56,9 +56,9 @@ export default {
                     name: "publication_title",
                     required: true,
                     type: "text",
-                    label: __("Publication title"),
+                    label: this.$__("Publication title"),
                     showInTable: {
-                        title: __("Publication title"),
+                        title: this.$__("Publication title"),
                         data: "publication_title:title_id",
                         searchable: true,
                         orderable: true,
@@ -76,9 +76,9 @@ export default {
                 {
                     name: "print_identifier",
                     type: "text",
-                    label: __("Print-format identifier"),
+                    label: this.$__("Print-format identifier"),
                     showInTable: {
-                        title: __("Identifier"),
+                        title: this.$__("Identifier"),
                         data: "print_identifier:online_identifier",
                         searchable: true,
                         orderable: true,
@@ -107,47 +107,49 @@ export default {
                 {
                     name: "online_identifier",
                     type: "text",
-                    label: __("Online-format identifier"),
+                    label: this.$__("Online-format identifier"),
                 },
                 {
                     name: "date_first_issue_online",
                     type: "text",
-                    label: __("Date of first serial issue available online"),
+                    label: this.$__(
+                        "Date of first serial issue available online"
+                    ),
                 },
                 {
                     name: "num_first_vol_online",
                     type: "text",
-                    label: __("Number of first volume available online"),
+                    label: this.$__("Number of first volume available online"),
                 },
                 {
                     name: "num_first_issue_online",
                     type: "text",
-                    label: __("Number of first issue available online"),
+                    label: this.$__("Number of first issue available online"),
                 },
                 {
                     name: "date_last_issue_online",
                     type: "text",
-                    label: __("Date of last issue available online"),
+                    label: this.$__("Date of last issue available online"),
                 },
                 {
                     name: "num_last_vol_online",
                     type: "text",
-                    label: __("Number of last volume available online"),
+                    label: this.$__("Number of last volume available online"),
                 },
                 {
                     name: "num_last_issue_online",
                     type: "text",
-                    label: __("Number of last issue available online"),
+                    label: this.$__("Number of last issue available online"),
                 },
                 {
                     name: "title_url",
                     type: "text",
-                    label: __("Title-level URL"),
+                    label: this.$__("Title-level URL"),
                 },
                 {
                     name: "first_author",
                     type: "text",
-                    label: __("First author"),
+                    label: this.$__("First author"),
                     showInTable: {
                         title: __("Contributors"),
                         data: "first_author:first_editor",
@@ -167,89 +169,95 @@ export default {
                 {
                     name: "embargo_info",
                     type: "text",
-                    label: __("Embargo information"),
+                    label: this.$__("Embargo information"),
                 },
                 {
                     name: "coverage_depth",
                     type: "text",
-                    label: __("Coverage depth"),
+                    label: this.$__("Coverage depth"),
                 },
                 {
                     name: "notes",
                     type: "text",
-                    label: __("Notes"),
+                    label: this.$__("Notes"),
                 },
                 {
                     name: "publisher_name",
                     type: "text",
-                    label: __("Publisher name"),
+                    label: this.$__("Publisher name"),
                 },
                 {
                     name: "publication_type",
                     type: "select",
-                    label: __("Publication type"),
+                    label: this.$__("Publication type"),
                     avCat: "av_title_publication_types",
                     showInTable: true,
                 },
                 {
                     name: "date_monograph_published_print",
                     type: "text",
-                    label: __("Date the monograph is first published in print"),
+                    label: this.$__(
+                        "Date the monograph is first published in print"
+                    ),
                 },
                 {
                     name: "date_monograph_published_online",
                     type: "text",
-                    label: __("Date the monograph is first published online"),
+                    label: this.$__(
+                        "Date the monograph is first published online"
+                    ),
                 },
                 {
                     name: "monograph_volume",
                     type: "text",
-                    label: __("Number of volume for monograph"),
+                    label: this.$__("Number of volume for monograph"),
                 },
                 {
                     name: "monograph_edition",
                     type: "text",
-                    label: __("Edition of the monograph"),
+                    label: this.$__("Edition of the monograph"),
                 },
                 {
                     name: "first_editor",
                     type: "text",
-                    label: __("First editor"),
+                    label: this.$__("First editor"),
                 },
                 {
                     name: "parent_publication_title_id",
                     type: "text",
-                    label: __("Title identifier of the parent publication"),
+                    label: this.$__(
+                        "Title identifier of the parent publication"
+                    ),
                 },
                 {
                     name: "preceding_publication_title_id",
                     type: "text",
-                    label: __(
+                    label: this.$__(
                         "Title identifier of any preceding publication title"
                     ),
                 },
                 {
                     name: "access_type",
                     type: "text",
-                    label: __("Access type"),
+                    label: this.$__("Access type"),
                 },
                 {
                     name: "create_linked_biblio",
                     type: "checkbox",
                     group:
                         this.routeAction === "add"
-                            ? __("Create linked bibliographic record")
-                            : __("Update linked bibliographic record"),
+                            ? this.$__("Create linked bibliographic record")
+                            : this.$__("Update linked bibliographic record"),
                     label:
                         this.routeAction === "add"
-                            ? __("Create bibliographic record")
-                            : __("Update bibliographic record"),
+                            ? this.$__("Create bibliographic record")
+                            : this.$__("Update bibliographic record"),
                     value: false,
                 },
                 {
                     name: "resources",
                     type: "relationshipWidget",
-                    group: __("Packages"),
+                    group: this.$__("Packages"),
                     apiClient: APIClient.erm.localPackages,
                     showElement: {
                         type: "component",
@@ -333,9 +341,9 @@ export default {
                             resourceProperty: "resources",
                         },
                         relationshipStrings: {
-                            nameLowerCase: __("package"),
-                            nameUpperCase: __("Package"),
-                            namePlural: __("packages"),
+                            nameLowerCase: this.$__("package"),
+                            nameUpperCase: this.$__("Package"),
+                            namePlural: this.$__("packages"),
                         },
                         fetchOptions: {
                             type: "boolean",
@@ -346,7 +354,7 @@ export default {
                         {
                             name: "package_id",
                             type: "select",
-                            label: __("Package"),
+                            label: this.$__("Package"),
                             requiredKey: "package_id",
                             selectLabel: "name",
                             required: true,
@@ -355,7 +363,7 @@ export default {
                         {
                             name: "vendor_id",
                             type: "vendor",
-                            label: __("Vendor"),
+                            label: this.$__("Vendor"),
                             indexRequired: true,
                             showElement: {
                                 type: "text",
@@ -371,7 +379,7 @@ export default {
                         {
                             name: "started_on",
                             type: "date",
-                            label: __("Start date"),
+                            label: this.$__("Start date"),
                             componentProps: {
                                 date_to: {
                                     type: "string",
@@ -383,12 +391,12 @@ export default {
                         {
                             name: "ended_on",
                             type: "date",
-                            label: __("End date"),
+                            label: this.$__("End date"),
                         },
                         {
                             name: "proxy",
                             type: "text",
-                            label: __("Proxy"),
+                            label: this.$__("Proxy"),
                         },
                     ],
                 },
@@ -482,12 +490,12 @@ export default {
                     {
                         to: { name: "EHoldingsLocalTitlesFormImport" },
                         icon: "plus",
-                        title: __("Import from list"),
+                        title: this.$__("Import from list"),
                     },
                     {
                         to: { name: "EHoldingsLocalTitlesKBARTImport" },
                         icon: "plus",
-                        title: __("Import from KBART file"),
+                        title: this.$__("Import from KBART file"),
                     },
                 ],
             };

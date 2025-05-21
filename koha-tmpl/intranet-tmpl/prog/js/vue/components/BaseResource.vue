@@ -402,13 +402,13 @@ export default {
                     {
                         action: "edit",
                         onClick: () => this.goToResourceEdit(resource),
-                        title: __("Edit"),
+                        title: this.$__("Edit"),
                         index: 0,
                     },
                     {
                         action: "delete",
                         onClick: () => this.doResourceDelete(resource),
-                        title: __("Delete"),
+                        title: this.$__("Delete"),
                         index: 1,
                     },
                 ],

@@ -54,7 +54,7 @@ export default {
             resourceAttrs: [
                 {
                     name: this.idAttr,
-                    label: __("ID"),
+                    label: this.$__("ID"),
                     type: "text",
                     hideInForm: true,
                     hideInShow: true,
@@ -62,7 +62,7 @@ export default {
                 },
                 {
                     name: "name",
-                    label: __("Name"),
+                    label: this.$__("Name"),
                     required: true,
                     type: "text",
                     showInTable: true,
@@ -73,13 +73,13 @@ export default {
                     type: "textarea",
                     textAreaCols: 50,
                     textAreaRows: 10,
-                    label: __("Description"),
+                    label: this.$__("Description"),
                     showInTable: false,
                 },
                 {
                     name: "not_for_loan",
                     type: "select",
-                    label: __("Status for item added to this train"),
+                    label: this.$__("Status for item added to this train"),
                     avCat: "av_notforloan",
                     disabled: train => (train.train_id ? true : false),
                     defaultValue:
@@ -88,7 +88,7 @@ export default {
                 {
                     name: "default_processing_id",
                     type: "relationshipSelect",
-                    label: __("Default processing"),
+                    label: this.$__("Default processing"),
                     required: true,
                     relationshipAPIClient: APIClient.preservation.processings,
                     relationshipOptionLabelAttr: "name",
@@ -101,7 +101,7 @@ export default {
                 {
                     name: "created_on",
                     type: "date",
-                    label: __("Created on"),
+                    label: this.$__("Created on"),
                     required: false,
                     hideInForm: true,
                     showInTable: true,
@@ -110,7 +110,7 @@ export default {
                 {
                     name: "closed_on",
                     type: "date",
-                    label: __("Closed on"),
+                    label: this.$__("Closed on"),
                     required: false,
                     hideInForm: true,
                     showInTable: true,
@@ -120,7 +120,7 @@ export default {
                 {
                     name: "sent_on",
                     type: "date",
-                    label: __("Sent on"),
+                    label: this.$__("Sent on"),
                     required: false,
                     hideInForm: true,
                     showInTable: true,
@@ -130,7 +130,7 @@ export default {
                 {
                     name: "received_on",
                     type: "date",
-                    label: __("Received on"),
+                    label: this.$__("Received on"),
                     required: false,
                     hideInForm: true,
                     showInTable: true,
@@ -235,10 +235,13 @@ export default {
                     name: "status_filter",
                     type: "radio",
                     options: [
-                        { value: "", description: __("All") },
-                        { value: "closed", description: _("Closed") },
-                        { value: "sent", description: __("Sent") },
-                        { value: "received", description: __("Received") },
+                        { value: "", description: this.$__("All") },
+                        { value: "closed", description: this.$__("Closed") },
+                        { value: "sent", description: this.$__("Sent") },
+                        {
+                            value: "received",
+                            description: this.$__("Received"),
+                        },
                     ],
                     value: "",
                 },
@@ -316,7 +319,7 @@ export default {
                                   params: { train_id: resource?.train_id },
                               },
                               icon: "plus",
-                              title: __("Add items"),
+                              title: this.$__("Add items"),
                               index: -1,
                           }
                         : {},
@@ -326,7 +329,7 @@ export default {
                         ? {
                               onClick: () => this.closeTrain(resource),
                               icon: "remove",
-                              title: __("Close"),
+                              title: this.$__("Close"),
                           }
                         : {},
                     resource?.closed_on &&
@@ -335,7 +338,7 @@ export default {
                         ? {
                               onClick: () => this.sendTrain(resource),
                               icon: "paper-plane",
-                              title: __("Send"),
+                              title: this.$__("Send"),
                           }
                         : {},
                     resource?.closed_on &&
@@ -344,7 +347,7 @@ export default {
                         ? {
                               onClick: () => this.receiveTrain(resource),
                               icon: "inbox",
-                              title: __("Receive"),
+                              title: this.$__("Receive"),
                           }
                         : {},
                 ],
@@ -425,7 +428,7 @@ export default {
             return [
                 {
                     type: "component",
-                    name: __("Items"),
+                    name: this.$__("Items"),
                     hidden: train => train.items.length,
                     componentPath: "./Preservation/TrainItemsTable.vue",
                     componentProps: {

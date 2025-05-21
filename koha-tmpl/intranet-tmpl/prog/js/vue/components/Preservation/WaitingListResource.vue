@@ -53,13 +53,13 @@ export default {
             resourceAttrs: [
                 {
                     name: this.idAttr,
-                    label: __("ID"),
+                    label: this.$__("ID"),
                     type: "text",
                     showInTable: false,
                 },
                 {
                     name: "biblio.title",
-                    label: __("Title"),
+                    label: this.$__("Title"),
                     type: "text",
                     showInTable: {
                         data: "biblio.title",
@@ -73,19 +73,19 @@ export default {
                 },
                 {
                     name: "biblio.author",
-                    label: __("Author"),
+                    label: this.$__("Author"),
                     type: "text",
                     showInTable: true,
                 },
                 {
                     name: "callnumber",
-                    label: __("Call number"),
+                    label: this.$__("Call number"),
                     type: "text",
                     showInTable: true,
                 },
                 {
                     name: "external_id",
-                    label: __("Barcode"),
+                    label: this.$__("Barcode"),
                     type: "text",
                     showInTable: true,
                 },
@@ -134,7 +134,7 @@ export default {
                                             type: "textarea",
                                             textAreaRows: 10,
                                             textAreaCols: 50,
-                                            label: __("Barcode list"),
+                                            label: this.$__("Barcode list"),
                                             required: true,
                                         },
                                     ],
@@ -142,7 +142,7 @@ export default {
                                 addItemsToWaitingList
                             ),
                         icon: "plus",
-                        title: __("Add to waiting list"),
+                        title: this.$__("Add to waiting list"),
                     },
                     itemsRecentlyAddedToWaitingList.length > 0
                         ? {
@@ -158,7 +158,9 @@ export default {
                                               {
                                                   name: "train_id_selected_for_add",
                                                   type: "relationshipSelect",
-                                                  label: __("Select a train"),
+                                                  label: this.$__(
+                                                      "Select a train"
+                                                  ),
                                                   required: true,
                                                   relationshipAPIClient:
                                                       APIClient.preservation
