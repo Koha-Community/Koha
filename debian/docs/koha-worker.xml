@@ -27,6 +27,7 @@
       <arg><option>--start</option>|<option>--stop</option>|<option>--restart</option></arg>
       <arg><option>--status</option></arg>
       <arg><option>--queue</option></arg>
+      <arg><option>--all-queues</option></arg>
       <arg><option>--quiet</option>|<option>-q</option></arg>
       <arg><option>-h</option>|<option>--help</option></arg>
     </cmdsynopsis>
@@ -65,6 +66,12 @@
           <para>Allows specifying the queue worker (defaults to 'default').</para>
           <para>Current queues are: default, long_tasks.</para>
           <para>Note: There used to be a queue called elastic_index, but since the introduction of koha-es-indexer this queue should not be active.</para>
+        </listitem>
+    </varlistentry>
+    <varlistentry>
+        <term><option>--all-queues</option></term>
+        <listitem>
+          <para>Makes the requested action to be performed to all defined queues.</para>
         </listitem>
     </varlistentry>
     <varlistentry>

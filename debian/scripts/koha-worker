@@ -15,8 +15,6 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-set -e
-
 . /lib/lsb/init-functions
 
 # Read configuration variable file if it is present
@@ -40,15 +38,17 @@ $scriptname
 This script lets you manage the worker daemon for your Koha instances.
 
 Usage:
-$scriptname [--start|--stop|--restart] [--queue queue_name] [--quiet|-q] instancename1 [instancename2...]
+$scriptname [--start|--stop|--restart] [--queue queue_name|--all-queues] [--quiet|-q] instancename1 [instancename2...]
 $scriptname --status instancename1 [instancename2...]
 $scriptname -h|--help
 
     --start               Start the worker daemon for the specified instances
     --stop                Stop the worker daemon for the specified instances
     --restart             Restart the worker daemon for the specified instances
-    --queue               Specify the queue/worker to restart - 'default' is used if not specified
+    --queue               Specify the queue/worker to perform the action on - 'default' is
+                          used if not specified (unless --all-queues is passed)
                           current queues are: default, long_tasks
+    --all-queues          Perform the action on all defined queues
     --status              Show the status of the worker for the specified instances
     --quiet|-q            Make the script quiet about non existent instance names
                           (useful for calling from another scripts).
@@ -63,106 +63,119 @@ EOF
 start_worker()
 {
     local name=$1
-    local queue=$2
+    local queues=$2
 
-    if ! is_worker_running $name $queue; then
+    local error_count=0
 
-        worker_name=`get_worker_name $name $queue`
+    for queue in $queues; do
+        if ! is_worker_running "$name" "$queue"; then
 
-        export KOHA_CONF="/etc/koha/sites/$name/koha-conf.xml"
+            worker_name=$(get_worker_name "$name" "$queue")
+            export KOHA_CONF="/etc/koha/sites/${name}/koha-conf.xml"
 
-        DAEMONOPTS="--name=${worker_name} \
-            --errlog=/var/log/koha/$name/worker-error.log \
-            --output=/var/log/koha/$name/worker-output.log \
-            --pidfiles=/var/run/koha/$name/ \
-            --verbose=1 --respawn --delay=30 \
-            --user=$name-koha.$name-koha"
+            DAEMONOPTS="--name=${worker_name} \
+                --errlog=/var/log/koha/${name}/worker-error.log \
+                --output=/var/log/koha/${name}/worker-output.log \
+                --pidfiles=/var/run/koha/${name}/ \
+                --verbose=1 --respawn --delay=30 \
+                --user=${name}-koha.${name}-koha"
 
-        log_daemon_msg "Starting Koha worker daemon for $name ($queue)"
+            echo "Starting Koha worker daemon for ${name} (${queue})"
 
-        if daemon $DAEMONOPTS -- $worker_DAEMON --queue ${queue}; then
-            log_end_msg 0
+            if ! daemon $DAEMONOPTS -- "$worker_DAEMON" --queue "$queue"; then
+                ((error_count++))
+            fi
         else
-            log_end_msg 1
+            echo "Error: worker already running for ${name} (${queue})"
+            ((error_count++))
         fi
-    else
-        log_daemon_msg "Error: worker already running for $name ($queue)"
-        log_end_msg 1
-    fi
+    done
+
+    log_end_msg $error_count
 }
 
 stop_worker()
 {
     local name=$1
-    local queue=$2
+    local queues=$2
 
-    if is_worker_running $name $queue; then
-        export KOHA_CONF="/etc/koha/sites/$name/koha-conf.xml"
+    local error_count=0
 
-        worker_name=`get_worker_name $name $queue`
+    for queue in $queues; do
+        if is_worker_running "$name" "$queue"; then
+            export KOHA_CONF="/etc/koha/sites/${name}/koha-conf.xml"
 
-        DAEMONOPTS="--name=${worker_name} \
-            --errlog=/var/log/koha/$name/worker-error.log \
-            --output=/var/log/koha/$name/worker-output.log \
-            --pidfiles=/var/run/koha/$name/ \
-            --verbose=1 --respawn --delay=30 \
-            --user=$name-koha.$name-koha"
+            worker_name=$(get_worker_name "$name" "$queue")
 
-        log_daemon_msg "Stopping Koha worker daemon for $name ($queue)"
+            DAEMONOPTS="--name=${worker_name} \
+                --errlog=/var/log/koha/${name}/worker-error.log \
+                --output=/var/log/koha/${name}/worker-output.log \
+                --pidfiles=/var/run/koha/${name}/ \
+                --verbose=1 --respawn --delay=30 \
+                --user=${name}-koha.${name}-koha"
 
-        if daemon $DAEMONOPTS --stop -- $worker_DAEMON --queue ${queue}; then
-            log_end_msg 0
+            echo "Stopping Koha worker daemon for ${name} (${queue})"
+
+            if ! daemon $DAEMONOPTS --stop -- "$worker_DAEMON" --queue "$queue"; then
+                ((error_count++))
+            fi
         else
-            log_end_msg 1
+            echo "Error: worker not running for ${name} (${queue})"
+            ((error_count++))
         fi
-    else
-        log_daemon_msg "Error: worker not running for $name ($queue)"
-        log_end_msg 1
-    fi
+    done
+
+    log_end_msg $error_count
 }
 
 restart_worker()
 {
     local name=$1
-    local queue=$2
+    local queues=$2
 
-    if is_worker_running $name $queue; then
-        export KOHA_CONF="/etc/koha/sites/$name/koha-conf.xml"
+    local error_count=0
 
-        worker_name=`get_worker_name $name $queue`
+    for queue in $queues; do
+        if is_worker_running "$name" "$queue"; then
+            export KOHA_CONF="/etc/koha/sites/${name}/koha-conf.xml"
 
-        DAEMONOPTS="--name=${worker_name} \
-            --errlog=/var/log/koha/$name/worker-error.log \
-            --output=/var/log/koha/$name/worker-output.log \
-            --pidfiles=/var/run/koha/$name/ \
-            --verbose=1 --respawn --delay=30 \
-            --user=$name-koha.$name-koha"
+            worker_name=$(get_worker_name "$name" "$queue")
 
-        log_daemon_msg "Restarting Koha worker daemon for $name ($queue)"
+            DAEMONOPTS="--name=${worker_name} \
+                --errlog=/var/log/koha/${name}/worker-error.log \
+                --output=/var/log/koha/${name}/worker-output.log \
+                --pidfiles=/var/run/koha/${name}/ \
+                --verbose=1 --respawn --delay=30 \
+                --user=${name}-koha.${name}-koha"
 
-        if daemon $DAEMONOPTS --restart -- $worker_DAEMON --queue ${queue}; then
-            log_end_msg 0
+            echo "Restarting Koha worker daemon for ${name} (${queue})"
+
+            if ! daemon $DAEMONOPTS --restart -- "$worker_DAEMON" --queue "$queue"; then
+                ((error_count++))
+            fi
         else
-            log_end_msg 1
+            echo "Worker not running for ${name} (${queue})."
+            start_worker $name $queue
         fi
-    else
-        log_warning_msg "Worker not running for $name ($queue)."
-        start_worker $name $queue
-    fi
+    done
+
+    log_end_msg $error_count
 }
 
 worker_status()
 {
     local name=$1
-    local queue=$2
+    local queues=$2
 
-    if is_worker_running ${name} ${queue}; then
-        log_daemon_msg "worker running for ${name} ($queue)"
-        log_end_msg 0
-    else
-        log_daemon_msg "worker not running for ${name} ($queue)"
-        log_end_msg 3
-    fi
+    for queue in $queues; do
+        if is_worker_running "$name" "$queue"; then
+            log_daemon_msg "worker running for ${name} (${queue})"
+            log_end_msg 0
+        else
+            log_daemon_msg "worker not running for ${name} (${queue})"
+            log_end_msg 3
+        fi
+    done
 }
 
 set_action()
@@ -177,6 +190,7 @@ set_action()
 op=""
 queue="default"
 quiet="no"
+all_queues="no"
 
 # Read command line parameters
 while [ $# -gt 0 ]; do
@@ -202,6 +216,9 @@ while [ $# -gt 0 ]; do
         --queue)
             queue="$2"
             shift 2 ;;
+        --all-queues)
+            all_queues="yes";
+            shift ;;
         -*)
             die "Error: invalid option switch ($1)" ;;
         *)
@@ -221,18 +238,24 @@ if [ $# -gt 0 ]; then
             worker_DAEMON="${KOHA_HOME}/${KOHA_BINDIR}/workers/background_jobs_worker.pl"
             export PERL5LIB
 
+            if [ "$all_queues" = "yes" ]; then
+                queues=$(get_worker_queues | xargs)
+            else
+                queues=$queue
+            fi
+
             case $op in
                 "start")
-                    start_worker $name $queue
+                    start_worker "$name" "$queues"
                     ;;
                 "stop")
-                    stop_worker $name $queue
+                    stop_worker "$name" "$queues"
                     ;;
                 "restart")
-                    restart_worker $name $queue
+                    restart_worker "$name" "$queues"
                     ;;
                 "status")
-                    worker_status $name $queue
+                    worker_status "$name" "$queues"
             esac
 
         else
