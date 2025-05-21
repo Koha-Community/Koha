@@ -242,6 +242,13 @@ get_worker_name()
     fi
 }
 
+get_worker_queues()
+{
+    for queue in default long_tasks; do
+        echo $queue
+    done;
+}
+
 is_plack_enabled_opac()
 {
     local instancefile=$1
