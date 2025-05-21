@@ -824,7 +824,7 @@ $(document).ready(function(){
             <div class="col-md-10 offset-md-1">
                 [% INCLUDE 'messages.inc' %]
                 [% IF ( INVALID_METADATA ) %]
-                    <div class="page-section bg-danger">
+                    <div class="alert alert-warning">
                         <h1>Errors found</h1>
                         <p><strong>This record had encoding issues, non-xml characters have been stripped in order to allow editing. Please be cautious when saving that some data may have been removed from the record.</strong></p>
                         <pre class="problem">[% INVALID_METADATA | html %]</pre>
