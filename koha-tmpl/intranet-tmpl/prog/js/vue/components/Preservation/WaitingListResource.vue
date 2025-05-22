@@ -55,13 +55,13 @@ export default {
                     name: this.idAttr,
                     label: this.$__("ID"),
                     type: "text",
-                    showInTable: false,
+                    hideInTable: true,
                 },
                 {
                     name: "biblio.title",
                     label: this.$__("Title"),
                     type: "text",
-                    showInTable: {
+                    tableColumnDefinition: {
                         data: "biblio.title",
                         title: __("Title"),
                         searchable: true,
@@ -75,19 +75,16 @@ export default {
                     name: "biblio.author",
                     label: this.$__("Author"),
                     type: "text",
-                    showInTable: true,
                 },
                 {
                     name: "callnumber",
                     label: this.$__("Call number"),
                     type: "text",
-                    showInTable: true,
                 },
                 {
                     name: "external_id",
                     label: this.$__("Barcode"),
                     type: "text",
-                    showInTable: true,
                 },
             ],
             tableOptions: {

@@ -139,121 +139,123 @@ export default {
             let get_lib_from_av = this.get_lib_from_av;
             let thisResource = this;
 
-            const columns = resourceAttrs
-                ?.filter(attr => attr.showInTable)
-                .reduce((acc, attr, i) => {
-                    if (typeof attr.showInTable === "object") {
-                        acc.push(attr.showInTable);
-                        return acc;
-                    }
-                    if (attr.name === this.idAttr) {
-                        acc.push({
-                            title: attr.label,
-                            data: attr.name,
-                            searchable: true,
-                            orderable: true,
-                            render: function (data, type, row, meta) {
-                                return (
-                                    '<a href="' +
-                                    thisResource.getResourceShowURL(
-                                        row[thisResource.idAttr]
-                                    ) +
-                                    '" class="show">' +
-                                    escape_str(row[thisResource.idAttr]) +
-                                    "</a>"
-                                );
-                            },
-                        });
-                        return acc;
-                    }
-                    if (attr.name === this.nameAttr) {
-                        acc.push({
-                            title: attr.label,
-                            data: attr.name,
-                            searchable: true,
-                            orderable: true,
-                            render: function (data, type, row, meta) {
-                                return (
-                                    '<a href="' +
-                                    thisResource.getResourceShowURL(
-                                        row[thisResource.idAttr]
-                                    ) +
-                                    '" class="show">' +
-                                    escape_str(row[attr.name]) +
-                                    "</a>"
-                                );
-                            },
-                        });
-                        return acc;
-                    }
-                    if (attr.type === "vendor") {
-                        acc.push({
-                            title: attr.label,
-                            data: attr.name,
-                            searchable: true,
-                            orderable: true,
-                            render: function (data, type, row, meta) {
-                                return row.vendor_id != undefined
-                                    ? '<a href="/cgi-bin/koha/acquisition/vendors/' +
-                                          row.vendor_id +
-                                          '">' +
-                                          escape_str(row.vendor.name) +
-                                          "</a>"
-                                    : "";
-                            },
-                        });
-                        return acc;
-                    }
-                    if (attr.type === "select" && attr.avCat) {
-                        acc.push({
-                            title: attr.label,
-                            data: attr.name,
-                            searchable: true,
-                            orderable: true,
-                            render: function (data, type, row, meta) {
-                                return get_lib_from_av(
-                                    attr.avCat,
-                                    row[`${attr.name}`]
-                                );
-                            },
-                        });
-                        return acc;
-                    }
-                    if (attr.type === "date") {
-                        acc.push({
-                            title: attr.label,
-                            data: attr.name,
-                            type: "date",
-                            searchable: true,
-                            orderable: true,
-                            render: function (data, type, row, meta) {
-                                return $date(row[`${attr.name}`]);
-                            },
-                        });
-                        return acc;
-                    }
-                    if (attr.type === "boolean" || attr.type === "checkbox") {
-                        acc.push({
-                            title: attr.label,
-                            data: attr.name,
-                            searchable: true,
-                            orderable: true,
-                            render: function (data, type, row, meta) {
-                                return escape_str(
-                                    row[`${attr.name}`] ? __("Yes") : __("No")
-                                );
-                            },
-                        });
-                        return acc;
-                    }
+            const columns = resourceAttrs.reduce((acc, attr, i) => {
+                if (attr.hideInTable) return acc;
+                if (
+                    attr.hasOwnProperty("tableColumnDefinition") &&
+                    attr.tableColumnDefinition
+                ) {
+                    acc.push(attr.tableColumnDefinition);
+                    return acc;
+                }
+                if (attr.name === this.idAttr) {
                     acc.push({
                         title: attr.label,
                         data: attr.name,
                         searchable: true,
                         orderable: true,
+                        render: function (data, type, row, meta) {
+                            return (
+                                '<a href="' +
+                                thisResource.getResourceShowURL(
+                                    row[thisResource.idAttr]
+                                ) +
+                                '" class="show">' +
+                                escape_str(row[thisResource.idAttr]) +
+                                "</a>"
+                            );
+                        },
                     });
                     return acc;
-                }, []);
+                }
+                if (attr.name === this.nameAttr) {
+                    acc.push({
+                        title: attr.label,
+                        data: attr.name,
+                        searchable: true,
+                        orderable: true,
+                        render: function (data, type, row, meta) {
+                            return (
+                                '<a href="' +
+                                thisResource.getResourceShowURL(
+                                    row[thisResource.idAttr]
+                                ) +
+                                '" class="show">' +
+                                escape_str(row[attr.name]) +
+                                "</a>"
+                            );
+                        },
+                    });
+                    return acc;
+                }
+                if (attr.type === "vendor") {
+                    acc.push({
+                        title: attr.label,
+                        data: attr.name,
+                        searchable: true,
+                        orderable: true,
+                        render: function (data, type, row, meta) {
+                            return row.vendor_id != undefined
+                                ? '<a href="/cgi-bin/koha/acquisition/vendors/' +
+                                      row.vendor_id +
+                                      '">' +
+                                      escape_str(row.vendor.name) +
+                                      "</a>"
+                                : "";
+                        },
+                    });
+                    return acc;
+                }
+                if (attr.type === "select" && attr.avCat) {
+                    acc.push({
+                        title: attr.label,
+                        data: attr.name,
+                        searchable: true,
+                        orderable: true,
+                        render: function (data, type, row, meta) {
+                            return get_lib_from_av(
+                                attr.avCat,
+                                row[`${attr.name}`]
+                            );
+                        },
+                    });
+                    return acc;
+                }
+                if (attr.type === "date") {
+                    acc.push({
+                        title: attr.label,
+                        data: attr.name,
+                        type: "date",
+                        searchable: true,
+                        orderable: true,
+                        render: function (data, type, row, meta) {
+                            return $date(row[`${attr.name}`]);
+                        },
+                    });
+                    return acc;
+                }
+                if (attr.type === "boolean" || attr.type === "checkbox") {
+                    acc.push({
+                        title: attr.label,
+                        data: attr.name,
+                        searchable: true,
+                        orderable: true,
+                        render: function (data, type, row, meta) {
+                            return escape_str(
+                                row[`${attr.name}`] ? __("Yes") : __("No")
+                            );
+                        },
+                    });
+                    return acc;
+                }
+                acc.push({
+                    title: attr.label,
+                    data: attr.name,
+                    searchable: true,
+                    orderable: true,
+                });
+                return acc;
+            }, []);
             return columns;
         },
     },

@@ -62,7 +62,7 @@ export default {
                     required: true,
                     type: "text",
                     label: this.$__("Package name"),
-                    showInTable: {
+                    tableColumnDefinition: {
                         title: this.$__("Package name"),
                         data: "name:package_id",
                         searchable: true,
@@ -82,7 +82,6 @@ export default {
                     name: "vendor_id",
                     type: "vendor",
                     label: this.$__("Vendor"),
-                    showInTable: true,
                     showElement: {
                         type: "text",
                         value: "vendor.name",
@@ -96,21 +95,18 @@ export default {
                     name: "package_type",
                     type: "select",
                     label: this.$__("Type"),
-                    showInTable: true,
                     avCat: "av_package_types",
                 },
                 {
                     name: "content_type",
                     type: "select",
                     label: this.$__("Content type"),
-                    showInTable: true,
                     avCat: "av_package_content_types",
                 },
                 {
                     name: "created_on",
                     type: "date",
                     label: this.$__("Created on"),
-                    showInTable: true,
                     hideInForm: true,
                     showElement: {
                         type: "text",
@@ -123,12 +119,12 @@ export default {
                     required: false,
                     type: "text",
                     label: this.$__("Notes"),
-                    showInTable: true,
                 },
                 {
                     name: "additional_fields",
                     extended_attributes_resource_type:
                         this.extendedAttributesResourceType,
+                    hideInTable: true,
                 },
                 {
                     name: "package_agreements",
@@ -184,6 +180,7 @@ export default {
                             indexRequired: true,
                         },
                     ],
+                    hideInTable: true,
                 },
             ],
             tableOptions: {

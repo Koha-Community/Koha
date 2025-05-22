@@ -58,14 +58,12 @@ export default {
                     type: "text",
                     hideInForm: true,
                     hideInShow: true,
-                    showInTable: true,
                 },
                 {
                     name: "name",
                     label: this.$__("Name"),
                     required: true,
                     type: "text",
-                    showInTable: true,
                 },
                 {
                     name: "description",
@@ -74,7 +72,7 @@ export default {
                     textAreaCols: 50,
                     textAreaRows: 10,
                     label: this.$__("Description"),
-                    showInTable: false,
+                    hideInTable: true,
                 },
                 {
                     name: "not_for_loan",
@@ -84,6 +82,7 @@ export default {
                     disabled: train => (train.train_id ? true : false),
                     defaultValue:
                         this.config.settings.not_for_loan_default_train_in,
+                    hideInTable: true,
                 },
                 {
                     name: "default_processing_id",
@@ -97,6 +96,7 @@ export default {
                         type: "text",
                         value: "default_processing.name",
                     },
+                    hideInTable: true,
                 },
                 {
                     name: "created_on",
@@ -104,7 +104,6 @@ export default {
                     label: this.$__("Created on"),
                     required: false,
                     hideInForm: true,
-                    showInTable: true,
                     hideInShow: true,
                 },
                 {
@@ -113,7 +112,6 @@ export default {
                     label: this.$__("Closed on"),
                     required: false,
                     hideInForm: true,
-                    showInTable: true,
                     format: this.format_date,
                     hidden: resource => resource.closed_on,
                 },
@@ -123,7 +121,6 @@ export default {
                     label: this.$__("Sent on"),
                     required: false,
                     hideInForm: true,
-                    showInTable: true,
                     format: this.format_date,
                     hidden: resource => resource.sent_on,
                 },
@@ -133,7 +130,6 @@ export default {
                     label: this.$__("Received on"),
                     required: false,
                     hideInForm: true,
-                    showInTable: true,
                     format: this.format_date,
                     hidden: resource => resource.received_on,
                 },

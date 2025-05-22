@@ -44,7 +44,7 @@ export default {
                     type: "text",
                     label: this.$__("Id"),
                     hideInForm: true,
-                    showInTable: {
+                    tableColumnDefinition: {
                         title: this.$__("ID"),
                         data: "record_source_id",
                         searchable: true,
@@ -55,14 +55,12 @@ export default {
                     required: true,
                     type: "text",
                     label: this.$__("Name"),
-                    showInTable: true,
                 },
                 {
                     name: "can_be_edited",
                     type: "checkbox",
                     label: this.$__("Can be edited"),
                     value: false,
-                    showInTable: true,
                 },
             ],
             tableOptions: {
