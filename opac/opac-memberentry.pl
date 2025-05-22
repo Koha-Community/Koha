@@ -306,6 +306,7 @@ if ( $op eq 'cud-create' ) {
 
     my %borrower = ParseCgiForBorrower($cgi);
     $borrower{borrowernumber} = $borrowernumber;
+    $borrower{categorycode}   = $borrower->{categorycode};
 
     my @empty_mandatory_fields = grep { $_ ne 'password' }    # password is not required when editing personal details
         ( CheckMandatoryFields( \%borrower, $op ), CheckMandatoryAttributes( \%borrower, $attributes ) );
