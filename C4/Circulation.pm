@@ -2400,19 +2400,24 @@ sub AddReturn {
                         my $patron = $issue->patron;
                         $patron_unblessed = $patron->unblessed;
                     }
-                    _CalculateAndUpdateFine(
-                        {
-                            issue       => $issue,
-                            item        => $item->unblessed,
-                            borrower    => $patron_unblessed,
-                            return_date => $return_date
-                        }
-                    );
-                    _FixOverduesOnReturn(
-                        $patron_unblessed->{borrowernumber},
-                        $item->itemnumber, undef, 'RETURNED'
-                    );
-                    $messages->{'LostItemFeeCharged'} = 1;
+
+                    # Confirm the lost charge came from the most recent patron to return the item
+                    # and only charge the fine if so
+                    if ( $message->payload->{patron_id} == $patron_unblessed->{borrowernumber} ) {
+                        _CalculateAndUpdateFine(
+                            {
+                                issue       => $issue,
+                                item        => $item->unblessed,
+                                borrower    => $patron_unblessed,
+                                return_date => $return_date
+                            }
+                        );
+                        _FixOverduesOnReturn(
+                            $patron_unblessed->{borrowernumber},
+                            $item->itemnumber, undef, 'RETURNED'
+                        );
+                        $messages->{'LostItemFeeCharged'} = 1;
+                    }
                 }
             }
         }
