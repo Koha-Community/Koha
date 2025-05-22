@@ -136,7 +136,7 @@ describe("catalogue/detail/holdings_table", () => {
                 not_for_loan_status: 0,
                 course_item: null,
                 cover_image_ids: [],
-                _status: "available",
+                _status: ["available"],
             },
         }).then(items => {
             cy.intercept("get", `/api/v1/biblios/${biblio_id}/items*`, {
@@ -179,7 +179,7 @@ describe("catalogue/detail/holdings_table", () => {
                 not_for_loan_status: 0,
                 course_item: null,
                 cover_image_ids: [],
-                _status: "available",
+                _status: ["available"],
             },
         }).then(items => {
             cy.intercept("get", `/api/v1/biblios/${biblio_id}/items*`, {
@@ -287,6 +287,7 @@ describe("catalogue/detail/holdings_table", () => {
                 not_for_loan_status: 0,
                 course_item: null,
                 cover_image_ids: [],
+                _status: ["available"],
             },
         }).then(items => {
             cy.intercept("get", `/api/v1/biblios/${biblio_id}/items*`, {
