@@ -2387,47 +2387,44 @@ sub extended_attributes {
                     }
                 }
 
-                if (%changed_attributes_codes) {
+                # Store changed attributes in the order they where passed in as some tests
+                # relies on ids being assigned in that order
+                my $new_types = {};
+                for my $new_attribute (@new_attributes) {
+                    $new_attribute->store() if $changed_attributes_codes{ $new_attribute->code };
+                    $new_types->{ $new_attribute->code } = 1;
+                }
 
-                    # Store changed attributes in the order they where passed in as some tests
-                    # relies on ids being assigned in that order
-                    my $new_types = {};
-                    for my $new_attribute (@new_attributes) {
-                        $new_attribute->store() if $changed_attributes_codes{ $new_attribute->code };
-                        $new_types->{ $new_attribute->code } = 1;
-                    }
+                # Check globally mandatory types
+                my $interface = C4::Context->interface;
+                my $params    = {
+                    mandatory                                        => 1,
+                    category_code                                    => [ undef, $self->categorycode ],
+                    'borrower_attribute_types_branches.b_branchcode' => undef,
+                };
 
-                    # Check globally mandatory types
-                    my $interface = C4::Context->interface;
-                    my $params    = {
-                        mandatory                                        => 1,
-                        category_code                                    => [ undef, $self->categorycode ],
-                        'borrower_attribute_types_branches.b_branchcode' => undef,
-                    };
+                if ( $interface eq 'opac' ) {
+                    $params->{opac_editable} = 1;
+                }
 
-                    if ( $interface eq 'opac' ) {
-                        $params->{opac_editable} = 1;
-                    }
+                my @required_attribute_types = Koha::Patron::Attribute::Types->search(
+                    $params,
+                    { join => 'borrower_attribute_types_branches' }
+                )->get_column('code');
 
-                    my @required_attribute_types = Koha::Patron::Attribute::Types->search(
-                        $params,
-                        { join => 'borrower_attribute_types_branches' }
-                    )->get_column('code');
+                for my $type (@required_attribute_types) {
+                    Koha::Exceptions::Patron::MissingMandatoryExtendedAttribute->throw(
+                        type => $type,
+                    ) if !$new_types->{$type};
+                }
 
-                    for my $type (@required_attribute_types) {
-                        Koha::Exceptions::Patron::MissingMandatoryExtendedAttribute->throw(
-                            type => $type,
-                        ) if !$new_types->{$type};
-                    }
-
-                    if ( %{$all_changes} ) {
-                        logaction(
-                            "MEMBERS",
-                            "MODIFY",
-                            $self->borrowernumber,
-                            to_json( $all_changes, { pretty => 1, canonical => 1 } )
-                        );
-                    }
+                if ( %{$all_changes} ) {
+                    logaction(
+                        "MEMBERS",
+                        "MODIFY",
+                        $self->borrowernumber,
+                        to_json( $all_changes, { pretty => 1, canonical => 1 } )
+                    );
                 }
             }
         );
