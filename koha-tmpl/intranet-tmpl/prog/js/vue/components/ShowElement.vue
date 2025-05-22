@@ -178,10 +178,14 @@ export default {
             if (valueKey?.includes(".")) {
                 return this.accessNestedProperty(valueKey, resource);
             }
-            return attr.format(
+            const displayValue = attr.format(
                 resource[valueKey] ? resource[valueKey] : valueKey,
                 resource
             );
+            if (displayValue == "Invalid Date") {
+                return "";
+            }
+            return displayValue || "";
         },
     },
     name: "ShowElement",
