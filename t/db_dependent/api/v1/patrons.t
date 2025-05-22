@@ -926,7 +926,7 @@ subtest 'update() tests' => sub {
 
         subtest "extended_attributes tests" => sub {
 
-            plan tests => 26;
+            plan tests => 29;
 
             my $attr_type_repeatable = $builder->build_object(
                 {
@@ -967,6 +967,19 @@ subtest 'update() tests' => sub {
             $newpatron->{extended_attributes} = [
                 { type => $deleted_attr_code, value => 'potato' },
             ];
+
+            $t->post_ok(
+                "//$userid:$password@/api/v1/patrons" => json => {
+                    "firstname"   => "Katrina",
+                    "surname"     => "Fischer",
+                    "address"     => "Somewhere",
+                    "category_id" => "ST",
+                    "city"        => "Konstanz",
+                    "library_id"  => "MPL"
+                }
+            )->status_is(400)
+                ->json_is(
+                '/error' => "Missing mandatory extended attribute (type=" . $attr_type_mandatory->code . ")" );
 
             $t->put_ok( "//$userid:$password@/api/v1/patrons/"
                     . $superlibrarian->borrowernumber => { 'x-koha-embed' => 'extended_attributes' } => json =>
