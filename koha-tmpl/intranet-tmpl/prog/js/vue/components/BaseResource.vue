@@ -19,7 +19,7 @@
         </template>
         <template #filters="{ table }">
             <ResourceListFilters
-                v-if="optionalResourceProps.resourceListFiltersRequired"
+                v-if="optionalResourceProps.addFiltersToList"
                 :tableFilters="tableFilters"
                 :embedded="optionalResourceProps.embedded"
                 :filterTable="filterTable"
@@ -104,8 +104,7 @@ export default {
             embedded: this.embedded || false,
             extendedAttributesResourceType:
                 this.extendedAttributesResourceType || null,
-            resourceListFiltersRequired:
-                this.resourceListFiltersRequired || null,
+            addFiltersToList: this.addFiltersToList || null,
             formGroupsDisplayMode: this.formGroupsDisplayMode || null,
             appendToShow: this.appendToShow || null,
             nameAttr: this.nameAttr || null,

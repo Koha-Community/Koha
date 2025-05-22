@@ -28,7 +28,7 @@ export default {
                 apiClient: APIClient.preservation.trains,
                 resourceTableUrl:
                     APIClient.preservation.httpClient._baseURL + "trains",
-                resourceListFiltersRequired: true,
+                addFiltersToList: true,
                 i18n: {
                     deleteConfirmationMessage: __(
                         "Are you sure you want to remove this train?"

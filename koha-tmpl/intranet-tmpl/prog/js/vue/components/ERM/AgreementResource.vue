@@ -49,7 +49,7 @@ export default {
                 },
                 embedded: props.embedded,
                 extendedAttributesResourceType: "agreement",
-                resourceListFiltersRequired: true,
+                addFiltersToList: true,
                 av_agreement_statuses,
                 av_agreement_closure_reasons,
                 av_agreement_renewal_priorities,
