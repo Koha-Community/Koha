@@ -442,10 +442,17 @@ export default {
          * @return {Array} The array of group objects.
          */
         getFieldGroupings(component, resource) {
-            const displayProperty = `hideIn${component}`;
-            const attributesToConsider = this.resourceAttrs.filter(
-                ra =>
-                    !ra.hasOwnProperty(displayProperty) || !ra[displayProperty]
+            const attributesToConsider = this.resourceAttrs.reduce(
+                (acc, ra) => {
+                    if (ra.hideIn && !ra.hideIn.includes(component)) {
+                        return [...acc, ra];
+                    }
+                    if (ra.hideIn && ra.hideIn.includes(component)) {
+                        return acc;
+                    }
+                    return [...acc, ra];
+                },
+                []
             );
             const groupings = attributesToConsider.reduce((acc, attr) => {
                 if (

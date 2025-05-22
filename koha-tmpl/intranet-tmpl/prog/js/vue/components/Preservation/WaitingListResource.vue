@@ -55,7 +55,7 @@ export default {
                     name: this.idAttr,
                     label: this.$__("ID"),
                     type: "text",
-                    hideInTable: true,
+                    hideIn: ["List"],
                 },
                 {
                     name: "biblio.title",

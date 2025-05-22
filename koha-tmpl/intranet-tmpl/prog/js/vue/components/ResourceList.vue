@@ -140,7 +140,11 @@ export default {
             let thisResource = this;
 
             const columns = resourceAttrs.reduce((acc, attr, i) => {
-                if (attr.hideInTable) return acc;
+                if (
+                    attr.hasOwnProperty("hideIn") &&
+                    attr.hideIn.includes("List")
+                )
+                    return acc;
                 if (
                     attr.hasOwnProperty("tableColumnDefinition") &&
                     attr.tableColumnDefinition

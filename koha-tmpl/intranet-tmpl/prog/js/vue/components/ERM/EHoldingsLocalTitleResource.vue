@@ -108,7 +108,7 @@ export default {
                     name: "online_identifier",
                     type: "text",
                     label: this.$__("Online-format identifier"),
-                    hideInTable: true,
+                    hideIn: ["List"],
                 },
                 {
                     name: "date_first_issue_online",
@@ -116,43 +116,43 @@ export default {
                     label: this.$__(
                         "Date of first serial issue available online"
                     ),
-                    hideInTable: true,
+                    hideIn: ["List"],
                 },
                 {
                     name: "num_first_vol_online",
                     type: "text",
                     label: this.$__("Number of first volume available online"),
-                    hideInTable: true,
+                    hideIn: ["List"],
                 },
                 {
                     name: "num_first_issue_online",
                     type: "text",
                     label: this.$__("Number of first issue available online"),
-                    hideInTable: true,
+                    hideIn: ["List"],
                 },
                 {
                     name: "date_last_issue_online",
                     type: "text",
                     label: this.$__("Date of last issue available online"),
-                    hideInTable: true,
+                    hideIn: ["List"],
                 },
                 {
                     name: "num_last_vol_online",
                     type: "text",
                     label: this.$__("Number of last volume available online"),
-                    hideInTable: true,
+                    hideIn: ["List"],
                 },
                 {
                     name: "num_last_issue_online",
                     type: "text",
                     label: this.$__("Number of last issue available online"),
-                    hideInTable: true,
+                    hideIn: ["List"],
                 },
                 {
                     name: "title_url",
                     type: "text",
                     label: this.$__("Title-level URL"),
-                    hideInTable: true,
+                    hideIn: ["List"],
                 },
                 {
                     name: "first_author",
@@ -178,25 +178,25 @@ export default {
                     name: "embargo_info",
                     type: "text",
                     label: this.$__("Embargo information"),
-                    hideInTable: true,
+                    hideIn: ["List"],
                 },
                 {
                     name: "coverage_depth",
                     type: "text",
                     label: this.$__("Coverage depth"),
-                    hideInTable: true,
+                    hideIn: ["List"],
                 },
                 {
                     name: "notes",
                     type: "text",
                     label: this.$__("Notes"),
-                    hideInTable: true,
+                    hideIn: ["List"],
                 },
                 {
                     name: "publisher_name",
                     type: "text",
                     label: this.$__("Publisher name"),
-                    hideInTable: true,
+                    hideIn: ["List"],
                 },
                 {
                     name: "publication_type",
@@ -210,7 +210,7 @@ export default {
                     label: this.$__(
                         "Date the monograph is first published in print"
                     ),
-                    hideInTable: true,
+                    hideIn: ["List"],
                 },
                 {
                     name: "date_monograph_published_online",
@@ -218,25 +218,25 @@ export default {
                     label: this.$__(
                         "Date the monograph is first published online"
                     ),
-                    hideInTable: true,
+                    hideIn: ["List"],
                 },
                 {
                     name: "monograph_volume",
                     type: "text",
                     label: this.$__("Number of volume for monograph"),
-                    hideInTable: true,
+                    hideIn: ["List"],
                 },
                 {
                     name: "monograph_edition",
                     type: "text",
                     label: this.$__("Edition of the monograph"),
-                    hideInTable: true,
+                    hideIn: ["List"],
                 },
                 {
                     name: "first_editor",
                     type: "text",
                     label: this.$__("First editor"),
-                    hideInTable: true,
+                    hideIn: ["List"],
                 },
                 {
                     name: "parent_publication_title_id",
@@ -244,7 +244,7 @@ export default {
                     label: this.$__(
                         "Title identifier of the parent publication"
                     ),
-                    hideInTable: true,
+                    hideIn: ["List"],
                 },
                 {
                     name: "preceding_publication_title_id",
@@ -252,13 +252,13 @@ export default {
                     label: this.$__(
                         "Title identifier of any preceding publication title"
                     ),
-                    hideInTable: true,
+                    hideIn: ["List"],
                 },
                 {
                     name: "access_type",
                     type: "text",
                     label: this.$__("Access type"),
-                    hideInTable: true,
+                    hideIn: ["List"],
                 },
                 {
                     name: "create_linked_biblio",
@@ -272,7 +272,7 @@ export default {
                             ? this.$__("Create bibliographic record")
                             : this.$__("Update bibliographic record"),
                     value: false,
-                    hideInTable: true,
+                    hideIn: ["List"],
                 },
                 {
                     name: "resources",
@@ -419,7 +419,7 @@ export default {
                             label: this.$__("Proxy"),
                         },
                     ],
-                    hideInTable: true,
+                    hideIn: ["List"],
                 },
             ],
             tableOptions: {

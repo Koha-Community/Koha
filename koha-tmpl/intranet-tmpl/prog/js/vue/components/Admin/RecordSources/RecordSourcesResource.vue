@@ -43,12 +43,12 @@ export default {
                     required: true,
                     type: "text",
                     label: this.$__("Id"),
-                    hideInForm: true,
                     tableColumnDefinition: {
                         title: this.$__("ID"),
                         data: "record_source_id",
                         searchable: true,
                     },
+                    hideIn: ["Form"],
                 },
                 {
                     name: "name",
