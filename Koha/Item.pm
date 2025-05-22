@@ -1666,10 +1666,12 @@ sub _set_found_trigger {
             }
 
         } elsif ( $lostreturn_policy eq 'charge' && ( $lost_overdue || $lost_charge ) ) {
+            my $patron_id = $lost_overdue ? $lost_overdue->borrowernumber : $lost_charge->borrowernumber;
             $self->add_message(
                 {
                     type    => 'info',
                     message => 'lost_charge',
+                    payload => { patron_id => $patron_id }
                 }
             );
         }

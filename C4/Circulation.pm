@@ -2329,6 +2329,10 @@ sub AddReturn {
                         my $patron = $issue->patron;
                         $patron_unblessed = $patron->unblessed;
                     }
+
+                    # Confirm the lost charge came from the most recent patron to return the item
+                    # and only charge the fine if so
+                    if ( $message->payload->{patron_id} == $patron_unblessed->{borrowernumber} ) {
                     _CalculateAndUpdateFine(
                         {
                             issue       => $issue,
@@ -2343,6 +2347,7 @@ sub AddReturn {
                 }
             }
         }
+    }
     }
 
     # check if we have a transfer for this document
