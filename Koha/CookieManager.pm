@@ -25,7 +25,28 @@ use CGI::Cookie;
 
 use C4::Context;
 
-use constant DENY_LIST_VAR => 'do_not_remove_cookie';
+# The cookies on the following list are removed unless koha-conf.xml indicates otherwise.
+# koha-conf.xml may also contain additional cookies to be removed.
+# Not including here: always_show_holds, catalogue_editor_, issues-table-load-immediately-circulation,
+# and ItemEditorSessionTemplateId.
+# TODO Not sure about branch (rotatingcollections), patronSessionConfirmation (circulation.pl)
+use constant MANAGED_COOKIE_PREFIXES => qw{
+    bib_list
+    CGISESSID
+    holdfor holdforclub
+    intranet_bib_list
+    JWT
+    KohaOpacLanguage
+    LastCreatedItem
+    marctagstructure_selectdisplay
+    search_path_code
+    searchToOrder
+};
+use constant PATH_EXCEPTIONS => {
+    always_show_holds => '/cgi-bin/koha/reserve',
+};
+use constant KEEP_COOKIE_CONF_VAR   => 'do_not_remove_cookie';
+use constant REMOVE_COOKIE_CONF_VAR => 'remove_cookie';
 
 our $cookies;
 
@@ -41,18 +62,22 @@ Koha::CookieManager - Object for unified handling of cookies in Koha
     # Replace cookies
     $cookie_list = $mgr->replace_in_list( [ $cookie1, $cookie2_old ], $cookie2_new );
 
-    # Clear cookies (governed by deny list entries in koha-conf)
+    # Clear cookies
     $cookie_list = $mgr->clear_unless( $cookie1, $cookie2, $cookie3_name );
 
 =head1 DESCRIPTION
 
-The current object allows you to clear cookies in a list based on the deny list
-in koha-conf.xml. It also offers a method to replace the old version of a cookie
+The current object allows you to remove cookies on the hardcoded list
+in this module, refined by 'keep' or 'remove' entries in koha-conf.xml.
+Note that a keep entry overrules a remove.
+
+This module also offers a method to replace the old version of a cookie
 by a new one.
 
-It could be extended by (gradually) routing cookie creation through it in order
-to consistently fill cookie parameters like httponly, secure and samesite flag,
-etc. And could serve to register all our cookies in a central location.
+The module could be extended by (gradually) routing cookie creation
+through it in order to consistently fill cookie parameters like httponly,
+secure and samesite flag, etc. And could serve to register all our cookies
+in a central location.
 
 =head1 METHODS
 
@@ -64,11 +89,15 @@ etc. And could serve to register all our cookies in a central location.
 
 sub new {
     my ( $class, $params ) = @_;
-    my $self   = bless $params // {}, $class;
-    my $denied = C4::Context->config(DENY_LIST_VAR) || [];    # expecting scalar or arrayref
-    $denied                 = [$denied] if ref($denied) eq q{};
-    $self->{_remove_unless} = { map { $_ => 1 } @$denied };
-    $self->{_secure}        = C4::Context->https_enabled;
+    my $self = bless $params // {}, $class;
+
+    # Get keep and remove list from koha-conf (scalar or arrayref)
+    my $keep_list = C4::Context->config(KEEP_COOKIE_CONF_VAR) || [];
+    $self->{_keep_list} = ref($keep_list) ? $keep_list : [$keep_list];
+    my $remove_list = C4::Context->config(REMOVE_COOKIE_CONF_VAR) || [];
+    $self->{_remove_list} = ref($remove_list) ? $remove_list : [$remove_list];
+
+    $self->{_secure} = C4::Context->https_enabled;
     return $self;
 }
 
@@ -80,9 +109,9 @@ sub new {
     Note: in the example above $query->cookie is a list of cookie names as returned
     by the CGI object.
 
-    Returns an arrayref of cookie objects: empty, expired cookies for those passed
-    by name or objects that are not on the deny list, together with the remaining
-    (untouched) cookie objects that are on the deny list.
+    Returns an arrayref of cookie objects: empty, expired cookies for
+    cookies on the remove list, together with the remaining (untouched)
+    cookie objects.
 
 =cut
 
@@ -102,38 +131,20 @@ sub clear_unless {
         }
         next if !$name;
 
-        if ( $self->_should_be_cleared($name) ) {
+        if ( $self->_should_be_removed($name) ) {
             next if $seen->{$name};
-            push @rv, CGI::Cookie->new(
-
-                # -expires explicitly omitted to create shortlived 'session' cookie
-                # -HttpOnly explicitly set to 0: not really needed here for the
-                # cleared httponly cookies, while the js cookies should be 0
-                -name => $name, -value => q{}, -HttpOnly => 0,
-                $self->{_secure} ? ( -secure => 1 ) : (),
-            );
             $seen->{$name} = 1;    # prevent duplicates
+            if ($type) {
+                $c->max_age(0);
+                push @rv, _correct_path($c);
+            } else {
+                push @rv, _correct_path( CGI::Cookie->new( -name => $name, -value => q{}, '-max-age' => 0 ) );
+            }
         } elsif ( $type eq 'CGI::Cookie' ) {    # keep the last occurrence
             @rv = @{ $self->replace_in_list( \@rv, $c ) };
         }
     }
     return \@rv;
-}
-
-sub _should_be_cleared {    # when it is not on the deny list in koha-conf
-    my ( $self, $name ) = @_;
-
-    return if $self->{_remove_unless}->{$name};    # exact match
-
-    # Now try the entries as regex
-    foreach my $k ( keys %{ $self->{_remove_unless} } ) {
-        my $reg = $self->{_remove_unless}->{$k};
-
-        # The entry in koha-conf should match the complete string
-        # So adding a ^ and $
-        return if $name =~ qr/^${k}$/;
-    }
-    return 1;
 }
 
 =head2 replace_in_list
@@ -162,7 +173,44 @@ sub replace_in_list {
     return \@result;
 }
 
-=head1 INTERNAL ROUTINES
+# INTERNAL ROUTINES
+
+sub _should_be_removed {
+    my ( $self, $name ) = @_;
+
+    # Is this a controlled cookie? Or is it added as 'keep' or 'remove' in koha-conf.xml?
+    # The conf entries are treated as prefix (no longer as regex).
+    return unless grep { $name =~ /^$_/ } MANAGED_COOKIE_PREFIXES(), @{ $self->{_remove_list} };
+    return !grep { $name =~ /^$_/ } @{ $self->{_keep_list} };
+}
+
+sub _correct_path {
+    my $cookie_object = shift;
+    my $path          = PATH_EXCEPTIONS->{ $cookie_object->name } or return $cookie_object;
+    $cookie_object->path($path);
+    return $cookie_object;
+}
+
+=head1 ADDITIONAL COMMENTS
+
+    How do the keep or remove lines in koha-conf.xml work?
+
+    <do_not_remove_cookie>some_cookie</do_not_remove_cookie>
+    The name some_cookie should refer here to a cookie that is on the
+    hardcoded list in this module. If you do not want it to be cleared
+    (removed) on logout, include this line.
+    You might want to do this e.g. for KohaOpacLanguage.
+
+    <remove_cookie>another_cookie</remove_cookie>
+    The name another_cookie refers here to a cookie that is not on the
+    hardcoded list but you want this cookie to be cleared/removed on logout.
+    It could be a custom cookie.
+
+    Note that both directives use the cookie name as a prefix. So if you
+    add a remove line for cookie1, it also affects cookie12, etc.
+    Since a keep line overrules a remove line, this allows you to add
+    lines for removing cookie1 and not removing cookie12 in order to
+    remove cookie1, cookie11, cookie13 but not cookie12, etc.
 
 =cut
 

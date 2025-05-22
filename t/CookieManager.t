@@ -19,9 +19,10 @@
 
 use Modern::Perl;
 use CGI;
-use Data::Dumper qw(Dumper);
+
+#use Data::Dumper qw(Dumper);
 use Test::NoWarnings;
-use Test::More tests => 4;
+use Test::More tests => 5;
 
 use t::lib::Mocks;
 
@@ -29,29 +30,32 @@ use C4::Context;
 use Koha::CookieManager;
 
 subtest 'new' => sub {
-    plan tests => 3;
+    plan tests => 4;
 
-    t::lib::Mocks::mock_config( Koha::CookieManager::DENY_LIST_VAR, 'just_one' );
+    t::lib::Mocks::mock_config( Koha::CookieManager::KEEP_COOKIE_CONF_VAR, 'just_one' );
     my $cmgr = Koha::CookieManager->new;
-    is( scalar keys %{ $cmgr->{_remove_unless} }, 1, 'one entry' );
-    is( exists $cmgr->{_secure},                  1, 'secure key found' );
+    is( scalar @{ $cmgr->{_keep_list} }, 1, 'one entry to keep' );
+    is( exists $cmgr->{_secure},         1, 'secure key found' );
 
-    t::lib::Mocks::mock_config( Koha::CookieManager::DENY_LIST_VAR, [ 'two', 'entries' ] );
+    t::lib::Mocks::mock_config( Koha::CookieManager::KEEP_COOKIE_CONF_VAR,   [ 'two', 'entries' ] );
+    t::lib::Mocks::mock_config( Koha::CookieManager::REMOVE_COOKIE_CONF_VAR, ['test'] );
     $cmgr = Koha::CookieManager->new;
-    is( scalar keys %{ $cmgr->{_remove_unless} }, 2, 'two entries' );
+    is( scalar @{ $cmgr->{_keep_list} },   2, 'two entries to keep' );
+    is( scalar @{ $cmgr->{_remove_list} }, 1, 'one entry to remove' );
 };
 
 subtest 'clear_unless' => sub {
-    plan tests => 17;
+    plan tests => 14;
 
-    t::lib::Mocks::mock_config( Koha::CookieManager::DENY_LIST_VAR, [ 'aap', 'noot' ] );
+    t::lib::Mocks::mock_config( Koha::CookieManager::KEEP_COOKIE_CONF_VAR,   [ 'aap', 'noot' ] );
+    t::lib::Mocks::mock_config( Koha::CookieManager::REMOVE_COOKIE_CONF_VAR, ['mies'] );
 
     my $q    = CGI->new;
     my $cmgr = Koha::CookieManager->new;
 
     my $cookie1 = $q->cookie( -name => 'aap',  -value => 'aap', -expires => '+1d' );
     my $cookie2 = $q->cookie( -name => 'noot', -value => 'noot' );
-    my $cookie3 = $q->cookie( -name => 'wim',  -value => q{wim},  -HttpOnly => 1 );
+    my $cookie3 = $q->cookie( -name => 'wim',  -value => q{wim},  -HttpOnly => 0 );
     my $cookie4 = $q->cookie( -name => 'aap',  -value => q{aap2}, -HttpOnly => 1 );
     my $list    = [ $cookie1, $cookie2, $cookie3, $cookie4, 'mies', 'zus' ];    # 4 cookies, 2 names
 
@@ -59,54 +63,47 @@ subtest 'clear_unless' => sub {
     is( @{ $cmgr->clear_unless },                                 0, 'Empty list' );
     is( @{ $cmgr->clear_unless( { hash => 1 }, ['array'], $q ) }, 0, 'Empty list for invalid arguments' );
 
-    # Pass list, expect 5 cookies (3 cleared, last aap kept)
+    # Pass list, expecting 4 cookies (2 kept, 1 untouched, 1 cleared); duplicate aap and zus discarded
     my @rv = @{ $cmgr->clear_unless(@$list) };
-    is( @rv,              5,       '5 expected' );
+    is( @rv,              4,       '4 expected' );
     is( $rv[0]->name,     'noot',  '1st cookie' );
     is( $rv[1]->name,     'wim',   '2nd cookie' );
     is( $rv[2]->name,     'aap',   '3rd cookie' );
     is( $rv[3]->name,     'mies',  '4th cookie' );
-    is( $rv[4]->name,     'zus',   '5th cookie' );
-    is( $rv[0]->value,    q{noot}, 'noot not empty' );
-    is( $rv[1]->value,    q{},     'wim empty' );
-    is( $rv[2]->value,    q{aap2}, 'aap not empty' );
-    is( $rv[3]->value,    q{},     'mies empty' );
-    is( $rv[4]->value,    q{},     'zus empty' );
-    is( $rv[1]->httponly, 0,       'cleared wim is not httponly' );
+    is( $rv[0]->value,    q{noot}, 'noot kept' );
+    is( $rv[1]->value,    q{wim},  'wim untouched' );
+    is( $rv[2]->value,    q{aap2}, 'aap kept, last entry' );
+    is( $rv[3]->value,    q{},     'mies cleared' );
+    is( $rv[1]->httponly, undef,   'wim still not httponly' );
     is( $rv[2]->httponly, 1,       'aap httponly' );
 
-    # Test with numeric suffix (via regex)
-    t::lib::Mocks::mock_config( Koha::CookieManager::DENY_LIST_VAR, ['catalogue_editor_\d+'] );
+    # Test with prefix (note trailing underscore)
+    t::lib::Mocks::mock_config( Koha::CookieManager::KEEP_COOKIE_CONF_VAR,   'catalogue_editor_' );
+    t::lib::Mocks::mock_config( Koha::CookieManager::REMOVE_COOKIE_CONF_VAR, 'catalogue_editor' );
     $cmgr    = Koha::CookieManager->new;
-    $cookie1 = $q->cookie( -name => 'catalogue_editor_abc',  -value => '1', -expires => '+1y' );
-    $cookie2 = $q->cookie( -name => 'catalogue_editor_345',  -value => '1', -expires => '+1y' );
-    $cookie3 = $q->cookie( -name => 'catalogue_editor_',     -value => '1', -expires => '+1y' );
-    $cookie4 = $q->cookie( -name => 'catalogue_editor_123x', -value => '1', -expires => '+1y' );
+    $cookie1 = $q->cookie( -name => 'catalogue_editor',   -value => '1' );
+    $cookie2 = $q->cookie( -name => 'catalogue_editor2',  -value => '2' );
+    $cookie3 = $q->cookie( -name => 'catalogue_editor_3', -value => '3' );
 
-    $list = [ $cookie1, $cookie2, $cookie3, $cookie4 ];
-    @rv   = @{ $cmgr->clear_unless(@$list) };
-    is_deeply(
-        [ map { $_->value ? $_->name : () } @rv ],
-        ['catalogue_editor_345'],
-        'Cookie2 should be found only'
-    );
+    $list = [ $cookie1, $cookie2, $cookie3, 'catalogue_editor4' ];
+    my $result = [ map { defined( $_->max_age ) ? () : $_->name } @{ $cmgr->clear_unless(@$list) } ];
+    is_deeply( $result, ['catalogue_editor_3'], 'Only cookie3 is kept (not expired)' );
+};
 
-    # Test with another regex (yes, highly realistic examples :)
-    t::lib::Mocks::mock_config( Koha::CookieManager::DENY_LIST_VAR, ['next_\w+_number\d{2}_(now|never)'] );
-    $cmgr = Koha::CookieManager->new;
-    my $cookie5;
-    $cookie1 = $q->cookie( -name => 'next_mynewword_number99_never',          -value => '1', -expires => '+1y' );  #fine
-    $cookie2 = $q->cookie( -name => 'prefixed_next_mynewword_number99_never', -value => '1', -expires => '+1y' )
-        ;    # wrong prefix
-    $cookie3 = $q->cookie( -name => 'next_mynew-word_number99_never', -value => '1', -expires => '+1y' )
-        ;    # wrong: hyphen in word
-    $cookie4 =
-        $q->cookie( -name => 'mynewword_number999_never', -value => '1', -expires => '+1y' );    # wrong: three digits
-    $cookie5 =
-        $q->cookie( -name => 'next_mynewword_number99_always', -value => '1', -expires => '+1y' );    # wrong: always
-    @rv = @{ $cmgr->clear_unless( $cookie1, $cookie2, $cookie3, $cookie4, $cookie5 ) };
-    is_deeply( [ map { $_->value ? $_->name : () } @rv ], ['next_mynewword_number99_never'], 'Only cookie1 matched' );
+subtest 'path exception' => sub {
+    plan tests => 4;
 
+    t::lib::Mocks::mock_config( Koha::CookieManager::REMOVE_COOKIE_CONF_VAR, ['always_show_holds'] );
+    my $q       = CGI->new;
+    my $cmgr    = Koha::CookieManager->new;
+    my $cookie1 = $q->cookie( -name => 'always_show_holds', -value => 'DO', path => '/cgi-bin/koha/reserve' );
+    my @rv      = @{ $cmgr->clear_unless($cookie1) };
+    is( $rv[0]->name,    'always_show_holds',     'Check name' );
+    is( $rv[0]->path,    '/cgi-bin/koha/reserve', 'Check path' );
+    is( $rv[0]->max_age, 0,                       'Check max_age' );
+    my $cookie2 = $q->cookie( -name => 'always_show_holds', -value => 'DONT' );    # default path
+    @rv = @{ $cmgr->clear_unless($cookie2) };
+    is( $rv[0]->path, '/cgi-bin/koha/reserve', 'Check path cookie2, corrected here' );
 };
 
 subtest 'replace_in_list' => sub {
