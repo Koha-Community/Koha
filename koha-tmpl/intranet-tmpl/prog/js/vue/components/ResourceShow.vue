@@ -60,7 +60,6 @@ export default {
         idAttr: String,
         apiClient: Object,
         i18n: Object,
-        resourceAttrs: Array,
         listComponent: String,
         resourceNamePlural: String,
         getFieldGroupings: Function,

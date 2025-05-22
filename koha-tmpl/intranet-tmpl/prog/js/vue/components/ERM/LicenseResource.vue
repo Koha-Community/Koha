@@ -128,12 +128,6 @@ export default {
                     },
                 },
                 {
-                    name: "additional_fields",
-                    extended_attributes_resource_type:
-                        this.extendedAttributesResourceType,
-                    hideIn: ["List"],
-                },
-                {
                     name: "user_roles",
                     type: "relationshipWidget",
                     group: this.$__("Users"),

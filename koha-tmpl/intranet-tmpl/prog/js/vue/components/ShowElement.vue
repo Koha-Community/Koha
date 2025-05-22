@@ -123,7 +123,7 @@
     </template>
     <template
         v-else-if="
-            attr.name == 'additional_fields' &&
+            attr.type == 'additional_fields' &&
             resource._strings?.additional_field_values.length > 0
         "
     >

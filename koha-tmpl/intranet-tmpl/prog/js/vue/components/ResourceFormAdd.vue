@@ -154,7 +154,6 @@ export default {
         idAttr: String,
         apiClient: Object,
         i18n: Object,
-        resourceAttrs: Array,
         listComponent: String,
         newResource: Object,
         onSubmit: Function,

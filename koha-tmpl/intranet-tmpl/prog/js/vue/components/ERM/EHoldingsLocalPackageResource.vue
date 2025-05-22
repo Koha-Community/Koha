@@ -121,12 +121,6 @@ export default {
                     label: this.$__("Notes"),
                 },
                 {
-                    name: "additional_fields",
-                    extended_attributes_resource_type:
-                        this.extendedAttributesResourceType,
-                    hideIn: ["List"],
-                },
-                {
                     name: "package_agreements",
                     type: "relationshipWidget",
                     group: this.$__("Agreements"),

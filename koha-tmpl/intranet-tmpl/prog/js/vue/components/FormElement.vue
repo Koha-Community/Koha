@@ -162,7 +162,7 @@
             :resource="resource"
         ></FormRelationshipSelect>
     </template>
-    <template v-else-if="attr.name == 'additional_fields'">
+    <template v-else-if="attr.type == 'additional_fields'">
         <AdditionalFieldsEntry
             :resource="resource"
             :additional_field_values="resource.extended_attributes"

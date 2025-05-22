@@ -106,7 +106,7 @@ export default {
                 this.extendedAttributesResourceType || null,
             addFiltersToList: this.addFiltersToList || null,
             formGroupsDisplayMode: this.formGroupsDisplayMode || null,
-            appendToShow: this.appendToShow || null,
+            appendToShow: this.appendToShow || (() => []),
             nameAttr: this.nameAttr || null,
             idAttr: this.idAttr || null,
         };
@@ -454,6 +454,14 @@ export default {
                 },
                 []
             );
+            if (this.extendedAttributesResourceType) {
+                attributesToConsider.push({
+                    name: "additional_fields",
+                    type: "additional_fields",
+                    extended_attributes_resource_type:
+                        this.extendedAttributesResourceType,
+                });
+            }
             const groupings = attributesToConsider.reduce((acc, attr) => {
                 if (
                     attr.hasOwnProperty("group") &&
@@ -556,15 +564,8 @@ export default {
                         acc[attr.name] = false;
                         return acc;
                     }
-                    if (
-                        attr.name === "additional_fields" ||
-                        attr.type === "relationshipWidget"
-                    ) {
-                        acc[
-                            attr.name === "additional_fields"
-                                ? "extended_attributes"
-                                : attr.name
-                        ] = [];
+                    if (attr.type === "relationshipWidget") {
+                        acc[attr.name] = [];
                         return acc;
                     }
                     acc[attr.name] = null;
@@ -572,6 +573,9 @@ export default {
                 },
                 {}
             );
+            if (this.extendedAttributesResourceType) {
+                this.resourceToBeGenerated.extended_attributes = [];
+            }
             this.resourceToBeGenerated[this.idAttr] = null;
             return this.resourceToBeGenerated;
         },
@@ -581,9 +585,7 @@ export default {
          * @return {Boolean} true if the resource has additional fields, false otherwise.
          */
         hasAdditionalFields() {
-            return this.resourceAttrs.some(
-                attr => attr.name === "additional_fields"
-            );
+            return !!this.extendedAttributesResourceType;
         },
         /**
          * Returns the plural form of the resource name.
