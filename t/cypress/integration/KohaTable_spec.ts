@@ -24,7 +24,6 @@ function build_libraries() {
 
 function mock_table_settings(settings, table_settings_var) {
     cy.window().then(win => {
-
         let table_settings =
             typeof table_settings_var === "undefined"
                 ? win.table_settings
