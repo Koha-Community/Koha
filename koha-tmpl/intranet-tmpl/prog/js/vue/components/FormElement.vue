@@ -7,16 +7,15 @@
         >{{ attr.label }}:</label
     >
     <template v-if="attr.type == 'number'">
-        <InputElement
+        <InputNumberElement
             :id="getElementId"
-            type="number"
             v-model="resource[attr.name]"
             :placeholder="attr.placeholder || attr.label"
             :required="attr.required ? true : false"
         />
     </template>
     <template v-else-if="attr.type == 'text'">
-        <InputElement
+        <InputTextElement
             :id="getElementId"
             v-model="resource[attr.name]"
             :placeholder="attr.placeholder || attr.label"
@@ -184,7 +183,8 @@
 <script>
 import AdditionalFieldsEntry from "./AdditionalFieldsEntry.vue";
 import BaseElement from "./BaseElement.vue";
-import InputElement from "./Elements/InputElement.vue";
+import InputTextElement from "./Elements/InputTextElement.vue";
+import InputNumberElement from "./Elements/InputNumberElement.vue";
 import InputCheckboxElement from "./Elements/InputCheckboxElement.vue";
 import TextareaElement from "./Elements/TextareaElement.vue";
 import FormRelationshipSelect from "./FormRelationshipSelect.vue";
@@ -262,7 +262,8 @@ export default {
         FormRelationshipSelect,
         ToolTip,
         AdditionalFieldsEntry,
-        InputElement,
+        InputTextElement,
+        InputNumberElement,
         InputCheckboxElement,
         TextareaElement,
     },

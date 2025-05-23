@@ -1,7 +1,7 @@
 <template>
     <input
         :id="id"
-        :type="type"
+        type="number"
         v-model="model"
         :placeholder="placeholder"
         :required="required"
@@ -12,13 +12,9 @@
 export default {
     props: {
         id: String,
-        modelValue: String,
+        modelValue: Number,
         placeholder: String,
         required: Boolean,
-        type: {
-            type: String,
-            default: "text",
-        },
     },
     emits: ["update:modelValue"],
     computed: {
@@ -31,7 +27,7 @@ export default {
             },
         },
     },
-    name: "InputElement",
+    name: "InputNumberElement",
 };
 </script>
 
