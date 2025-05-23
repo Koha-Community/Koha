@@ -7,7 +7,7 @@
         >{{ attr.label }}:</label
     >
     <template v-if="attr.type == 'number'">
-        <input
+        <InputElement
             :id="getElementId"
             type="number"
             v-model="resource[attr.name]"
@@ -16,7 +16,7 @@
         />
     </template>
     <template v-else-if="attr.type == 'text'">
-        <input
+        <InputElement
             :id="getElementId"
             v-model="resource[attr.name]"
             :placeholder="attr.placeholder || attr.label"
@@ -184,6 +184,7 @@
 <script>
 import AdditionalFieldsEntry from "./AdditionalFieldsEntry.vue";
 import BaseElement from "./BaseElement.vue";
+import InputElement from "./Elements/InputElement.vue";
 import FormRelationshipSelect from "./FormRelationshipSelect.vue";
 import ToolTip from "./ToolTip.vue";
 
@@ -255,7 +256,12 @@ export default {
         },
     },
     name: "FormElement",
-    components: { FormRelationshipSelect, ToolTip, AdditionalFieldsEntry },
+    components: {
+        FormRelationshipSelect,
+        ToolTip,
+        AdditionalFieldsEntry,
+        InputElement,
+    },
 };
 </script>
 
