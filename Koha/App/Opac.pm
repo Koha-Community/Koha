@@ -21,6 +21,8 @@ use Modern::Perl;
 
 use Mojo::Base 'Mojolicious';
 
+use CGI::Compile;    # This module needs to be loaded early; do not remove
+
 use Koha::Caches;
 use Koha::Cache::Memory::Lite;
 
@@ -29,10 +31,7 @@ sub startup {
 
     push @{ $self->plugins->namespaces }, 'Koha::App::Plugin';
     push @{ $self->static->paths },       $self->home->rel_file('koha-tmpl');
-
-    # Create route for all CGI scripts, need to be loaded first because of
-    # CGI::Compile
-    $self->plugin( 'CGIBinKoha', opac => 1 );
+    $self->routes->namespaces( ['Koha::App::Controller'] );
 
     # Create routes for API
     $self->plugin('RESTV1');
@@ -44,6 +43,8 @@ sub startup {
     $self->hook( around_action   => \&_around_action );
 
     my $r = $self->routes;
+
+    $r->any('/cgi-bin/koha/*script')->to('CGI#opac')->name('cgi');
 
     $r->any('/')->to( cb => sub { shift->redirect_to('/cgi-bin/koha/opac-main.pl') } );
 }
