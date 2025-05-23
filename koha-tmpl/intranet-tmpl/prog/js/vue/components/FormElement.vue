@@ -34,11 +34,11 @@
         />
     </template>
     <template v-else-if="attr.type == 'checkbox'">
-        <input
-            type="checkbox"
+        <InputCheckboxElement
             :id="getElementId"
+            type="checkbox"
             v-model="resource[attr.name]"
-            @change="attr.onChange && attr.onChange(resource)"
+            :changeMethod="attr.onChange && attr.onChange.bind(this, resource)"
         />
     </template>
     <template v-else-if="attr.type == 'radio'">
@@ -185,6 +185,7 @@
 import AdditionalFieldsEntry from "./AdditionalFieldsEntry.vue";
 import BaseElement from "./BaseElement.vue";
 import InputElement from "./Elements/InputElement.vue";
+import InputCheckboxElement from "./Elements/InputCheckboxElement.vue";
 import TextareaElement from "./Elements/TextareaElement.vue";
 import FormRelationshipSelect from "./FormRelationshipSelect.vue";
 import ToolTip from "./ToolTip.vue";
@@ -262,6 +263,7 @@ export default {
         ToolTip,
         AdditionalFieldsEntry,
         InputElement,
+        InputCheckboxElement,
         TextareaElement,
     },
 };
