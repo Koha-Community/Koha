@@ -41,7 +41,7 @@
         [% END %]
         [% IF ( show || op == "enqueued") %]
             [% WRAPPER breadcrumb_item %]
-                <a href="/cgi-bin/koha/tools/batchMod.pl">Batch item deletion</a>
+                <a href="/cgi-bin/koha/tools/batchMod.pl?del=1">Batch item deletion</a>
             [% END %]
         [% ELSE %]
             [% WRAPPER breadcrumb_item bc_active= 1 %]
