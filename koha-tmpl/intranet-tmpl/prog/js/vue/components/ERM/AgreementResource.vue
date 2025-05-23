@@ -96,8 +96,6 @@ export default {
                 {
                     name: "description",
                     type: "textarea",
-                    textAreaRows: 10,
-                    textAreaCols: 50,
                     label: this.$__("Description"),
                 },
                 {
@@ -135,7 +133,6 @@ export default {
                     name: "license_info",
                     type: "textarea",
                     textAreaRows: 2,
-                    textAreaCols: 50,
                     label: this.$__("License info"),
                     hideIn: ["List"],
                 },

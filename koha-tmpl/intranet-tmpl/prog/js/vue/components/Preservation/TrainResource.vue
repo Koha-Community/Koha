@@ -68,8 +68,6 @@ export default {
                     name: "description",
                     required: true,
                     type: "textarea",
-                    textAreaCols: 50,
-                    textAreaRows: 10,
                     label: this.$__("Description"),
                     hideIn: ["List"],
                 },

@@ -24,7 +24,7 @@
         />
     </template>
     <template v-else-if="attr.type == 'textarea'">
-        <textarea
+        <TextareaElement
             :id="getElementId"
             v-model="resource[attr.name]"
             :rows="attr.textAreaRows"
@@ -185,6 +185,7 @@
 import AdditionalFieldsEntry from "./AdditionalFieldsEntry.vue";
 import BaseElement from "./BaseElement.vue";
 import InputElement from "./Elements/InputElement.vue";
+import TextareaElement from "./Elements/TextareaElement.vue";
 import FormRelationshipSelect from "./FormRelationshipSelect.vue";
 import ToolTip from "./ToolTip.vue";
 
@@ -261,6 +262,7 @@ export default {
         ToolTip,
         AdditionalFieldsEntry,
         InputElement,
+        TextareaElement,
     },
 };
 </script>
