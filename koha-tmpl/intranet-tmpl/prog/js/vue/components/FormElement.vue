@@ -50,8 +50,7 @@
                 :for="attr.name + '_' + option.value"
                 >{{ option.description }}:</label
             >
-            <input
-                type="radio"
+            <InputRadioElement
                 :name="option.description"
                 :id="attr.name + '_' + option.value"
                 :value="option.value"
@@ -62,27 +61,29 @@
                         option.value == resource[attr.name])
                 "
                 v-model="resource[attr.name]"
-                @change="attr.onChange && attr.onChange(resource)"
+                @change="attr.onChange && attr.onChange.bind(this, resource)"
             />
         </template>
     </template>
     <template v-else-if="attr.type == 'boolean'">
         <label class="radio" :for="getElementId + '_yes'"
             >{{ $__("Yes") }}:
-            <input
+            <InputRadioElement
                 type="radio"
                 :name="attr.name"
                 :id="attr.name + '_yes'"
                 :value="true"
+                :checked="resource[attr.name] == true"
                 v-model="resource[attr.name]"
             />
         </label>
         <label class="radio" :for="getElementId + '_no'"
             >{{ $__("No") }}:
-            <input
+            <InputRadioElement
                 type="radio"
                 :name="attr.name"
                 :id="attr.name + '_no'"
+                :checked="resource[attr.name] == false"
                 :value="false"
                 v-model="resource[attr.name]"
             />
@@ -189,6 +190,7 @@ import InputCheckboxElement from "./Elements/InputCheckboxElement.vue";
 import TextareaElement from "./Elements/TextareaElement.vue";
 import FormRelationshipSelect from "./FormRelationshipSelect.vue";
 import ToolTip from "./ToolTip.vue";
+import InputRadioElement from "./Elements/InputRadioElement.vue";
 
 export default {
     props: {
@@ -266,6 +268,7 @@ export default {
         InputNumberElement,
         InputCheckboxElement,
         TextareaElement,
+        InputRadioElement,
     },
 };
 </script>
