@@ -2466,7 +2466,7 @@ tables:
             - "<br>"
             - "[%~ INCLUDE 'patron-title.inc' patron => borrower, no_title => 1, no_cardnumber => 1 ~%],<br>"
             - "<br>"
-            - "A recall has been placed on the following item:[%~ INCLUDE 'biblio-title.inc' biblio=biblio link = 0 %][% IF biblio.author %]/ [% biblio.author %][% END %] ([% item.barcode %]). The due date has been updated, and is now [% item.onloan | $KohaDates %]. Please return the item before the due date.<br>"
+            - "A recall has been placed on the following item:[%~ INCLUDE 'biblio-title.inc' biblio=biblio link = 0 %][% IF biblio.author %]/ [% biblio.author %][% END %] ([% item.barcode %]). The due date has been updated, and is now [% checkout.date_due | $KohaDates %]. Please return the item before the due date.<br>"
             - "<br>"
             - "Thank you!"
 
@@ -2479,7 +2479,7 @@ tables:
           message_transport_type: email
           lang: default
           content:
-            - "[%- USE Branches -%]<br>"
+            - "[%- USE Branches -%]"
             - "Date: [% today | $KohaDates %]<br>"
             - "<br>"
             - "[%~ INCLUDE 'patron-title.inc' patron => borrower, no_title => 1, no_cardnumber => 1, no_html = 1 ~%],<br>"
@@ -2497,7 +2497,7 @@ tables:
           message_transport_type: sms
           lang: default
           content:
-            - "Your item has been recalled: [% INCLUDE 'biblio-title.inc' biblio=biblio link = 0 %] ([% item.barcode %]). Please return it by [% item.onloan | $KohaDates %]."
+            - "Your item has been recalled: [% INCLUDE 'biblio-title.inc' biblio=biblio link=0 %] ([% item.barcode %]). Please return by [% checkout.date_due | $KohaDates %]."
 
         - module: circulation
           code: PICKUP_RECALLED_ITEM
@@ -2523,14 +2523,14 @@ tables:
             - "<br>"
             - "Recall for pickup at [% branch.branchname %]<br>"
             - "[% INCLUDE 'patron-title.inc' patron => borrower, no_title => 1, no_html = 1 %]<br>"
-            - "[% borrower.phone %]<br>"
+            - "[% IF borrower.phone %][% borrower.phone %]<br>[% END %]"
             - "[% borrower.streetnumber %][% IF borrower.address %] [% borrower.address %],[% END %][% IF borrower.address2 %] [% borrower.address2 %],[% END %] [% borrower.city %] [% borrower.state %] [% borrower.zipcode %]<br>"
-            - "[% borrower.email %]<br>"
+            - "[% IF borrower.email %][% borrower.email %]<br>[% END %]"
             - "<br>"
             - "ITEM RECALLED<br>"
             - "[% INCLUDE 'biblio-title.inc' biblio=biblio link = 0 %][% IF biblio.author %] by [% biblio.author %][% END %]<br>"
             - "Barcode: [% item.barcode %]<br>"
-            - "Callnumber: [% item.itemcallnumber %]<br>"
+            - "[% IF item.itemcallnumber %] Callnumber: [% item.itemcallnumber %]<br>[% END %]"
             - "Waiting since: [% recall.waiting_date | $KohaDates %]<br>"
             - "[% IF recall.notes %]Notes: [% recall.notes %]<br>[% END %]"
 
