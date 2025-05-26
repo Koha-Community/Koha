@@ -915,6 +915,8 @@ subtest 'get_marc_components() tests' => sub {
 subtest 'get_components_query' => sub {
     plan tests => 12;
 
+    $schema->storage->txn_begin;
+
     my $biblio       = $builder->build_sample_biblio();
     my $biblionumber = $biblio->biblionumber;
     my $record       = $biblio->metadata->record;
@@ -959,10 +961,15 @@ subtest 'get_components_query' => sub {
         is( $comp_sort, "title_asc", "$engine: UseControlNumber enabled with MarcOrgCode sort if correct" );
         $record->delete_field($marc_003_field);
     }
+
+    $schema->storage->txn_rollback;
+
 };
 
 subtest 'get_volumes_query' => sub {
     plan tests => 3;
+
+    $schema->storage->txn_begin;
 
     my $biblio       = $builder->build_sample_biblio();
     my $biblionumber = $biblio->biblionumber;
@@ -1003,6 +1010,9 @@ subtest 'get_volumes_query' => sub {
         "(((rcn:$biblionumber AND cni:OSt) OR rcn:\"OSt $biblionumber\") NOT (bib-level:a OR bib-level:b))",
         "UseControlNumber enabled with MarcOrgCode"
     );
+
+    $schema->storage->txn_rollback;
+
 };
 
 subtest 'generate_marc_host_field' => sub {
@@ -1811,6 +1821,8 @@ subtest 'item_groups() tests' => sub {
 subtest 'normalized_isbn' => sub {
     plan tests => 1;
 
+    $schema->storage->txn_begin;
+
     # We will move the tests from GetNormalizedISBN here when it will get replaced
     my $biblio = $builder->build_sample_biblio();
     $biblio->biblioitem->set( { isbn => '9781250067128 | 125006712X' } )->store;
@@ -1818,10 +1830,15 @@ subtest 'normalized_isbn' => sub {
         $biblio->normalized_isbn, C4::Koha::GetNormalizedISBN( $biblio->biblioitem->isbn ),
         'normalized_isbn is a wrapper around C4::Koha::GetNormalizedISBN'
     );
+
+    $schema->storage->txn_rollback;
+
 };
 
 subtest 'normalized_upc' => sub {
     plan tests => 1;
+
+    $schema->storage->txn_begin;
 
     # We will move the tests from GetNormalizedUPC here when it will get replaced
     # Note that only a single test exist and it's not really meaningful...
@@ -1830,10 +1847,15 @@ subtest 'normalized_upc' => sub {
         $biblio->normalized_upc, C4::Koha::GetNormalizedUPC( $biblio->metadata->record ),
         'normalized_upc is a wrapper around C4::Koha::GetNormalizedUPC'
     );
+
+    $schema->storage->txn_rollback;
+
 };
 
 subtest 'normalized_oclc' => sub {
     plan tests => 1;
+
+    $schema->storage->txn_begin;
 
     # We will move the tests from GetNormalizedOCLC here when it will get replaced
     # Note that only a single test exist and it's not really meaningful...
@@ -1842,6 +1864,9 @@ subtest 'normalized_oclc' => sub {
         $biblio->normalized_oclc, C4::Koha::GetNormalizedOCLCNumber( $biblio->metadata->record ),
         'normalized_oclc is a wrapper around C4::Koha::GetNormalizedOCLCNumber'
     );
+
+    $schema->storage->txn_rollback;
+
 };
 
 subtest 'opac_suppressed() tests' => sub {
@@ -1885,13 +1910,19 @@ subtest 'opac_suppressed() tests' => sub {
 subtest 'ratings' => sub {
     plan tests => 1;
 
+    $schema->storage->txn_begin;
+
     # See t/db_dependent/Koha/Ratings.t
     ok(1);
+
+    $schema->storage->txn_rollback;
 };
 
 subtest 'opac_summary_html' => sub {
 
     plan tests => 2;
+
+    $schema->storage->txn_begin;
 
     my $author = 'my author';
     my $title  = 'my title';
@@ -1911,6 +1942,9 @@ subtest 'opac_summary_html' => sub {
         sprintf( 'Replace %s, %s, %s AND %s please', $author, $title, $biblio->normalized_isbn, $biblio->biblionumber ),
         'opac_summary_html replaces the different patterns'
     );
+
+    $schema->storage->txn_rollback;
+
 };
 
 subtest 'can_be_edited() tests' => sub {
