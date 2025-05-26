@@ -136,19 +136,17 @@
                                     [% IF closed %]
                                         <a class="btn btn-default btn-xs dropdown-toggle" id="closedsubactions[% subscription.subscriptionid | html %]" role="button" data-bs-toggle="dropdown" href="#"> Actions </a>
                                         <ul class="dropdown-menu" role="menu" aria-labelledby="closedsubactions[% subscription.subscriptionid | html %]">
-                                            [% IF ( routing && CAN_user_serials_routing ) %]
-                                                [% UNLESS ( subscription.cannotedit ) %]
-                                                    <li>
-                                                        <a
-                                                            class="dropdown-item"
-                                                            href="/cgi-bin/koha/serials/serials-search.pl?subscriptionid=[% subscription.subscriptionid | uri %]&amp;op=reopen&amp;routing=[% subscription.routing | uri %]&amp;searched=1&amp;title_filter=[% title_filter | uri %]&amp;ISSN_filter=[% ISSN_filter | uri %]&amp;EAN_filter=[% EAN_filter | uri %]&amp;published_filter=[% publisher_filter | uri %]&amp;bookseller_filter=[% bookseller_filter | uri %]&amp;branch_filter=[% branch_filter | uri %]"
-                                                            id="reopensub"
-                                                        >
-                                                            <i class="fa-solid fa-arrow-rotate-right"></i> Reopen</a
-                                                        >
-                                                    </li>
-                                                [% END %]
-                                            [% END # IF ( routing && CAN_user_serials_routing ) %]
+                                            [% UNLESS ( subscription.cannotedit ) %]
+                                                <li>
+                                                    <a
+                                                        class="dropdown-item"
+                                                        href="/cgi-bin/koha/serials/serials-search.pl?subscriptionid=[% subscription.subscriptionid | uri %]&amp;op=reopen&amp;[% IF ( routing && CAN_user_serials_routing ) %]routing=[% subscription.routing | uri %]&amp;[% END %]searched=1&amp;title_filter=[% title_filter | uri %]&amp;ISSN_filter=[% ISSN_filter | uri %]&amp;EAN_filter=[% EAN_filter | uri %]&amp;published_filter=[% publisher_filter | uri %]&amp;bookseller_filter=[% bookseller_filter | uri %]&amp;branch_filter=[% branch_filter | uri %]"
+                                                        id="reopensub"
+                                                    >
+                                                        <i class="fa-solid fa-arrow-rotate-right"></i> Reopen</a
+                                                    >
+                                                </li>
+                                            [% END %]
 
                                             <li>
                                                 <a class="dropdown-item" href="/cgi-bin/koha/serials/serials-collection.pl?subscriptionid=[% subscription.subscriptionid | uri %]"><i class="fa-solid fa-rectangle-list"></i> Issue history</a>
