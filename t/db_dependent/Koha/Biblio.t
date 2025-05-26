@@ -38,6 +38,7 @@ use Koha::Exception;
 use MARC::Field;
 use MARC::Record;
 
+use t::lib::Dates;
 use t::lib::TestBuilder;
 use t::lib::Mocks;
 use Test::MockModule;
@@ -549,6 +550,12 @@ subtest 'to_api() tests' => sub {
     plan tests => ( scalar keys %{$biblioitem_api} ) + 4;
 
     foreach my $key ( keys %{ $biblioitem_api } ) {
+        if ( $key eq 'timestamp' ) {
+            t::lib::Dates::compare(
+                $biblio_api->{$key}, $biblioitem_api->{$key},
+                "$key is added to the biblio object"
+            );
+        }
         is( $biblio_api->{$key}, $biblioitem_api->{$key}, "$key is added to the biblio object" );
     }
 
