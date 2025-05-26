@@ -1711,7 +1711,7 @@ subtest 'item_groups() tests' => sub {
     $schema->storage->txn_rollback;
 };
 
-subtest 'normalized_isbn' => sub {
+subtest 'normalized_isbn() tests' => sub {
     plan tests => 1;
 
     $schema->storage->txn_begin;
@@ -1728,7 +1728,7 @@ subtest 'normalized_isbn' => sub {
 
 };
 
-subtest 'normalized_upc' => sub {
+subtest 'normalized_upc() tests' => sub {
     plan tests => 1;
 
     $schema->storage->txn_begin;
@@ -1745,7 +1745,7 @@ subtest 'normalized_upc' => sub {
 
 };
 
-subtest 'normalized_oclc' => sub {
+subtest 'normalized_oclc() tests' => sub {
     plan tests => 1;
 
     $schema->storage->txn_begin;
