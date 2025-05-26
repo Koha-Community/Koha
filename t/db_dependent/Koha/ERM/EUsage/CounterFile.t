@@ -22,7 +22,7 @@ use Test::More tests => 2;
 use Koha::Database;
 use Koha::ERM::EUsage::CounterFile;
 
-use JSON           qw( decode_json );
+use JSON qw( decode_json );
 use File::Basename qw( dirname );
 use File::Slurp;
 
@@ -45,9 +45,6 @@ subtest 'store' => sub {
     plan tests => 3;
 
     $schema->storage->txn_begin;
-
-    my $patron = Koha::Patrons->search()->last;
-    t::lib::Mocks::mock_userenv( { number => $patron->borrowernumber } );    # Is superlibrarian
 
     my $usage_data_provider = $builder->build_object(
         { class => 'Koha::ERM::EUsage::UsageDataProviders', value => { name => 'TestProvider' } } );
