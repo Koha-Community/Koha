@@ -149,6 +149,7 @@ while ( my $o = $orders->next ) {
 }
 
 $template->param(
+    subscription   => $subscription,
     subscriptionid => $subscriptionid,
     serialslist => \@serialslist,
     hasRouting  => $hasRouting,
