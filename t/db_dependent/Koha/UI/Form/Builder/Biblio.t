@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 8;
+use Test::More tests => 9;
 use Test::MockModule;
 
 use C4::ClassSource;
@@ -35,6 +35,18 @@ my $schema = Koha::Database->new->schema;
 $schema->storage->txn_begin;
 
 use_ok('Koha::UI::Form::Builder::Biblio');
+
+subtest 'new' => sub {
+    plan tests => 1;
+
+    # No warning
+    Koha::UI::Form::Builder::Biblio->new();
+
+    # No warning if passing CGI->param('biblionumber')
+    Koha::UI::Form::Builder::Biblio->new( { biblionumber => undef } );
+
+    ok(1);
+};
 
 subtest 'generate_subfield_form default value' => sub {
     my $builder = Koha::UI::Form::Builder::Biblio->new();
