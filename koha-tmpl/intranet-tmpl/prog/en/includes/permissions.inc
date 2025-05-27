@@ -570,7 +570,7 @@
         <span class="sub_permission self_checkin_module_subpermission"> Log into the self check-in module. Note: this permission prevents the patron from using any other OPAC functionality </span>
         <span class="permissioncode">([% name | html %])</span>
     [%- CASE 'self_checkout_module' -%]
-        <span class="sub_permission self_checkout_module_subpermission"> Perform self checkout at the OPAC. It should be used for the patron matching the AutoSelfCheckID </span>
+        <span class="sub_permission self_checkout_module_subpermission"> Perform self-checkout at the OPAC. It should be used for the patron matching the AutoSelfCheckID </span>
         <span class="permissioncode">([% name | html %])</span>
     [%- CASE 'manage_rota_items' -%]
         <span class="sub_permission manage_rota_items_subpermission"> Add and remove items from rotas </span>

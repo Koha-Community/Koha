@@ -236,7 +236,7 @@ Circulation:
                   0: "Don't allow"
             - checkouts of items reserved to someone else via SIP checkout messages.
             - If allowed do not generate RESERVED warning.
-            - This allows self checkouts for those items. If using the holds queue items with pending holds will be marked as "unavailable" if this set to "Don't allow".
+            - This allows self-checkouts for those items. If using the holds queue items with pending holds will be marked as "unavailable" if this set to "Don't allow".
         -
             - pref: AllowItemsOnLoanCheckoutSIP
               choices:
@@ -244,19 +244,19 @@ Circulation:
                   0: "Don't allow"
             - checkouts of items already checked out to someone else via SIP checkout messages.
             - If allowed do not generate ISSUED_TO_ANOTHER warning.
-            - This allows self checkouts for those items.
+            - This allows self-checkouts for those items.
         -
             - pref: AllowItemsOnHoldCheckoutSCO
               choices:
                   1: Allow
                   0: "Don't allow"
-            - checkouts of items reserved to someone else in the SCO module. If allowed do not generate RESERVE_WAITING and RESERVED warning. This allows self checkouts for those items.
+            - checkouts of items reserved to someone else in the SCO module. If allowed do not generate RESERVE_WAITING and RESERVED warning. This allows self-checkouts for those items.
         -
             - pref: AllFinesNeedOverride
               choices:
                   1: Require
                   0: "Don't require"
-            - staff to manually override all fines, even fines less than set in the <a href="/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=noissuescharge">noissuescharge</a> system preference. Enabling this system preference will block all checkouts for patrons with fines both via the web-based self checkout system and via SIP.
+            - staff to manually override all fines, even fines less than set in the <a href="/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=noissuescharge">noissuescharge</a> system preference. Enabling this system preference will block all checkouts for patrons with fines both via the web-based self-checkout system and via SIP.
         -
             - pref: AllowFineOverride
               choices:
@@ -1254,13 +1254,13 @@ Circulation:
               class: code
     Self check-out module:
         -
-            - "Include the following JavaScript on all pages in the web-based self checkout:"
+            - "Include the following JavaScript on all pages in the web-based self-checkout:"
             - pref: SCOUserJS
               type: textarea
               syntax: javascript
               class: code
         -
-            - "Include the following CSS on all pages in the web-based self checkout:"
+            - "Include the following CSS on all pages in the web-based self-checkout:"
             - pref: SCOUserCSS
               type: textarea
               syntax: css
@@ -1270,28 +1270,28 @@ Circulation:
               choices:
                   1: Show
                   0: "Don't show"
-            - "the patron's list of current checkouts by default when they log in to the self checkout module."
+            - "the patron's list of current checkouts by default when they log in to the self-checkout module."
         -
             - pref: ShowPatronImageInWebBasedSelfCheck
               choices:
                   1: Show
                   0: "Don't show"
-            - "the patron's picture (if one has been added) when they use the web-based self checkout."
+            - "the patron's picture (if one has been added) when they use the web-based self-checkout."
         -
             - pref: WebBasedSelfCheck
               choices:
                   1: Enable
                   0: "Don't enable"
-            - "the web-based self checkout system (available at: /cgi-bin/koha/sco/sco-main.pl)."
+            - "the web-based self-checkout system (available at: /cgi-bin/koha/sco/sco-main.pl)."
         -
-            - Have patrons log into the web-based self checkout system with their
+            - Have patrons log into the web-based self-checkout system with their
             - pref: SelfCheckoutByLogin
               choices:
                   1: username and password
                   0: cardnumber
             - ".</br>NOTE: If using 'cardnumber' and AutoSelfCheckAllowed you should set SelfCheckAllowByIPRanges to prevent brute force attacks to gain patron information outside the library."
         -
-            - "Time out the current patron's web-based self checkout system login after"
+            - "Time out the current patron's web-based self-checkout system login after"
             - pref: SelfCheckTimeout
               class: integer
             - seconds.
@@ -1300,13 +1300,13 @@ Circulation:
               choices:
                   1: Allow
                   0: "Don't allow"
-            - patrons to return items through web-based self checkout system. 
+            - patrons to return items through web-based self-checkout system.
         -
             - pref: AutoSelfCheckAllowed
               choices:
                   1: Allow
                   0: "Don't allow"
-            - "the web-based self checkout system to automatically log in with this staff login"
+            - "the web-based self-checkout system to automatically log in with this staff login"
             - pref: AutoSelfCheckID
             - and this password
             - pref: AutoSelfCheckPass
@@ -1318,14 +1318,14 @@ Circulation:
               choices:
                   1: Show
                   0: "Don't show"
-            - "the print receipt popup dialog when self checkout is finished."
+            - "the print receipt popup dialog when self-checkout is finished."
         -
             - "Allow access to the self check from the following IP addresses:"
             - pref: SelfCheckAllowByIPRanges
               class: short
             - (Leave blank if not used. Use ranges or simple IP addresses separated by spaces, like <code>192.168.1.1 192.168.0.0/24</code>.)
         -
-            - "Patron categories allowed to check out in a batch while logged into the self checkout system:"
+            - "Patron categories allowed to check out in a batch while logged into the self-checkout system:"
             - pref: SCOBatchCheckoutsValidCategories
               choices: patron-categories
               class: multiple
