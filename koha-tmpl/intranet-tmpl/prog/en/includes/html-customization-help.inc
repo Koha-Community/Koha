@@ -52,9 +52,9 @@
 
 <div id="RoutingListNote" class="hint customization_note"> Include the following note on all routing list slips. </div>
 
-<div id="SCOMainUserBlock_notes" class="hint customization_note"> Show this content on the web-based self checkout screen. </div>
+<div id="SCOMainUserBlock_notes" class="hint customization_note"> Show this content on the web-based self-checkout screen. </div>
 
-<div id="SelfCheckHelpMessage_notes" class="hint customization_note"> Show this content on the Help page of the web-based self checkout system. </div>
+<div id="SelfCheckHelpMessage_notes" class="hint customization_note"> Show this content on the Help page of the web-based self-checkout system. </div>
 
 <div id="SelfCheckInMainUserBlock_notes" class="hint customization_note"> Show this content on the self check-in screen. </div>
 

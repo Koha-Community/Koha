@@ -112,7 +112,7 @@
                 [% IF Koha.Preference( 'OpacTrustedCheckout' ) %]
                     <li class="nav-item">
                         <a href="#" class="nav-link" title="Self check out" id="comenulink" role="button" data-bs-toggle="modal" data-bs-target="#checkoutModal">
-                            <i id="checkout-icon" class="fa fa-barcode fa-icon-black" aria-hidden="true"></i> <span class="checkout-label">Self checkout</span>
+                            <i id="checkout-icon" class="fa fa-barcode fa-icon-black" aria-hidden="true"></i> <span class="checkout-label">Self-checkout</span>
                         </a>
                     </li>
                 [% END %]
