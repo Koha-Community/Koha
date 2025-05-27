@@ -50,6 +50,7 @@
 
             <div class="page-section col-sm-12">
                 <h2>[% RECORDTITLE | html %]</h2>
+                    <div class="row">
                 <div id="col1" class="col-sm-6">
                     <h3>Original</h3>
                     [% IF ( ERROR_FORMATTED1 ) %]
@@ -72,6 +73,7 @@
                     [% END %]
                 </div>
             </div>
+                </div>
             <fieldset class="action">
                 <a class="btn btn-primary" href="/cgi-bin/koha/tools/manage-marc-import.pl?import_batch_id=[% batchid | uri %]">Return to staged MARC batch [% batchid | html %]</a>
             </fieldset>
