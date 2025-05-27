@@ -8,8 +8,17 @@ import { defineAsyncComponent } from "vue";
 export default {
     methods: {
         getComponent() {
-            const routeResource = this.$route.meta.self.parent.resource;
+            const routeResource = this.locateRouteParentWithResource(
+                this.$route
+            );
             return defineAsyncComponent(() => import(`./${routeResource}`));
+        },
+        locateRouteParentWithResource(route) {
+            const parent = route.meta.self.parent;
+            if (parent.hasOwnProperty("resource") && parent.resource) {
+                return parent.resource;
+            }
+            return this.locateRouteParentWithResource(parent);
         },
     },
     computed: {

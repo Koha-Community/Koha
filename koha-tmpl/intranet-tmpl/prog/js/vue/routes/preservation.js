@@ -48,7 +48,6 @@ export const routes = [
                         path: ":train_id",
                         title: $__("Show train"),
                         is_end_node: true,
-                        resource: "Preservation/TrainResource.vue",
                         children: [
                             {
                                 path: "",
