@@ -52,7 +52,7 @@ sub new {
 
     my $self = {};
 
-    if ( exists $params->{biblionumber} ) {
+    if ( defined $params->{biblionumber} ) {
         $self->{biblionumber} = $params->{biblionumber} =~ s/\D//gr;
 
         # just in case biblionumber obtained from CGI and passed directly here contains weird characters like spaces
