@@ -15,6 +15,15 @@
     [% END %]</title
 >
 [% INCLUDE 'doc-head-close.inc' %]
+[% FILTER collapse %]
+    <style>
+        .tab-toolbar {
+            padding: 0.5rem 0;
+            margin-bottom: 0.5rem;
+            border-bottom: 1px solid #eee;
+        }
+    </style>
+[% END %]
 </head>
 
 <body id="circ_waitingreserves" class="circ">
@@ -97,8 +106,8 @@
             [% WRAPPER tab_panels %]
                 [% WRAPPER tab_panel tabname="holdswaiting" bt_active= 1 %]
                     [% IF ( reserveloop ) %]
-                        <div id="toolbar" class="btn-toolbar">
-                            <button class="btn cancel_selected_holds" data-bulk="true"></button>
+                        <div class="tab-toolbar">
+                            <button class="btn btn-default cancel_selected_holds" data-bulk="true"></button>
                         </div>
                         [% INCLUDE waiting_holds.inc table_name='holdst' reserveloop=reserveloop tab='holdwaiting' %]
                     [% ELSE %]
@@ -108,8 +117,8 @@
 
                 [% WRAPPER tab_panel tabname="holdsover" %]
                     [% IF ( overloop ) %]
-                        <div id="toolbar" class="btn-toolbar">
-                            <button class="btn cancel_selected_holds" data-bulk="true"></button>
+                        <div class="tab-toolbar">
+                            <button class="btn btn-default cancel_selected_holds" data-bulk="true"></button>
                             <div class="btn-group">
                                 <form name="cancelAllReserve" action="waitingreserves.pl" method="post">
                                     [% INCLUDE 'csrf-token.inc' %]
@@ -117,15 +126,22 @@
                                     <input type="hidden" name="allbranches" value="[% allbranches | html %]" />
                                     <input type="hidden" name="tab" value="holdsover" />
                                     [% IF TransferWhenCancelAllWaitingHolds %]
-                                        <input type="submit" class="btn btn-primary" value="Cancel and transfer all" />
+                                        <button type="submit" class="btn btn-primary">Cancel and transfer all</button>
                                     [% ELSE %]
-                                        <input type="submit" class="btn btn-primary" value="Cancel all" />
+                                        <button type="submit" class="btn btn-primary">Cancel all</button>
                                     [% END %]
                                 </form>
                             </div>
                         </div>
                         [% UNLESS TransferWhenCancelAllWaitingHolds %]
-                            <div class="hint">Only items that need not be transferred will be cancelled (TransferWhenCancelAllWaitingHolds syspref)</div>
+                            <div class="hint"
+                                >Only items that need not be transferred will be cancelled
+                                [% IF ( CAN_user_parameters_manage_sysprefs ) %]
+                                    (<a href="/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=TransferWhenCancelAllWaitingHolds">TransferWhenCancelAllWaitingHolds syspref</a>)
+                                [% ELSE %]
+                                    (TransferWhenCancelAllWaitingHolds syspref)
+                                [% END %]
+                            </div>
                         [% END %]
                         [% INCLUDE waiting_holds.inc table_name='holdso' reserveloop=overloop tab='holdsover' %]
                     [% ELSE %]
@@ -135,8 +151,8 @@
 
                 [% WRAPPER tab_panel tabname="holdscancelled" %]
                     [% IF cancel_reqs_count %]
-                        <div id="toolbar" class="btn-toolbar">
-                            <button class="btn cancel_selected_holds" data-bulk="true"></button>
+                        <div class="tab-toolbar">
+                            <button class="btn btn-default cancel_selected_holds" data-bulk="true"></button>
                         </div>
                         [% INCLUDE waiting_holds.inc select_column='1' table_name='holdscr' reserveloop=cancel_reqs tab='holdscr' %]
                     [% ELSE %]
