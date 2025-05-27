@@ -680,6 +680,12 @@
                                     [% type | html %]
                                 </li>
                             [% END %]
+                            [% IF request.accessurl %]
+                                <li class="accessurl">
+                                    <span class="label accessurl">Access URL:</span>
+                                    <a href="[% request.accessurl | url %]" target="_blank" title="[% request.accessurl | html %]"><i class="fa-solid fa-arrow-up-right-from-square"></i> View document</a>
+                                </li>
+                            [% END %]
                             [% historycheck_requests = request.get_history_check_requests %]
                             [% IF historycheck_requests.count %]
                                 <li class="historycheck_requests_value">
