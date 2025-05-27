@@ -56,7 +56,6 @@ export default {
         resourceAttrs: Array,
         nameAttr: String,
         idAttr: String,
-        getToolbarButtons: Function,
     },
     data() {
         return {

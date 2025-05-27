@@ -64,7 +64,6 @@ export default {
         resourceNamePlural: String,
         getFieldGroupings: Function,
         appendToShow: Function,
-        getToolbarButtons: Function,
         afterResourceFetch: Function,
         getResource: Function,
     },
