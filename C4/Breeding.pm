@@ -368,50 +368,52 @@ sub _do_xslt_proc {
 sub _add_custom_field_rowdata {
     my ( $row, $record, $pref_newtags ) = @_;
     $pref_newtags //= '';
-    my $pref_flavour = C4::Context->preference('MarcFlavour');
-
-    $pref_newtags =~ s/^\s+|\s+$//g;
-    $pref_newtags =~ s/\h+/ /g;
+    $pref_newtags =~ s/\h+//g;
 
     my @addnumberfields;
-
-    foreach my $field ( split /\,/, $pref_newtags ) {
-        $field =~ s/^\s+|\s+$//g;    # trim whitespace
-        my ( $tag, $subtags ) = split( /\$/, $field );
-
-        if ( $record->field($tag) ) {
-            my @content = ();
-
+    foreach my $field ( split /,/, $pref_newtags ) {
+        my @content;
+        my ( $tag, $add_spec ) = ( $field =~ /^(\d+)(|\$[0-9a-z]+|p\d+-\d+|p\d+)$/ );
+        next if $tag && exists $row->{$tag};    # Silently ignore double entries in pref
+        if ( !$tag || ( $tag < 10 && $add_spec =~ /^\$/ ) || ( $tag >= 10 && $add_spec =~ /^p/ ) ) {
+            warn "Breeding: invalid expression in AdditionalFieldsInZ3950Result(Auth)Search: $field";
+            next;
+        } elsif ( $tag eq '000' ) {
+            push @content, ( _extract_positions( $record->leader, $add_spec ) );
+        } elsif ( $tag =~ /^00\d$/ ) {          # control field
+            my $marcfield = $record->field($tag);
+            push @content, ( _extract_positions( $marcfield->data, $add_spec ) );
+        } else {
             for my $marcfield ( $record->field($tag) ) {
-                if ($subtags) {
-                    my $str = '';
-                    for my $code ( split //, $subtags ) {
-                        if ( $marcfield->subfield($code) ) {
-                            $str .= $marcfield->subfield($code) . ' ';
-                        }
-                    }
-                    if ( not $str eq '' ) {
-                        push @content, $str;
-                    }
-                } elsif ( $tag == 10 ) {
-                    push @content, ( $pref_flavour eq "MARC21" ? $marcfield->data : $marcfield->as_string );
-                } elsif ( $tag < 10 ) {
-                    push @content, $marcfield->data();
-                } else {
-                    push @content, $marcfield->as_string();
+                foreach my $subfield ( $marcfield->subfields ) {
+                    next unless !$add_spec || $subfield->[0] =~ /[$add_spec]/;
+                    push @content, '[' . $subfield->[0] . ']' . $subfield->[1];
                 }
             }
-
-            if (@content) {
-                $row->{$field} = \@content;
-                push( @addnumberfields, $field );
-            }
+        }
+        if (@content) {
+            $row->{$tag} = [@content];
+            push @addnumberfields, $tag;
         }
     }
-
-    $row->{'addnumberfields'} = \@addnumberfields;
-
+    $row->{addnumberfields} = [ sort @addnumberfields ];
     return $row;
+}
+
+sub _extract_positions {
+    my ( $data, $spec ) = @_;
+    if ( !$spec ) {
+        return $data;
+    } elsif ( $spec =~ /p(\d+)$/ ) {
+        my $pos = $1;
+        return if $pos >= length($data);
+        return "[$pos]" . substr( $data, $pos, 1 );
+    } elsif ( $spec =~ /p(\d+)-(\d+)/ ) {
+        my ( $start, $end ) = ( $1, $2 );
+        return if $end < $start || $start >= length($data);
+        return "[$start-$end]" . substr( $data, $start, $end - $start + 1 );
+    }
+    return;
 }
 
 sub _isbn_replace {
