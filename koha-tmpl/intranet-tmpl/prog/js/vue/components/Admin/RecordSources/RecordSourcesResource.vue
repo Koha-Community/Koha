@@ -1,50 +1,48 @@
+<template>
+    <BaseResource
+        :routeAction="routeAction"
+        :instancedResource="this"
+    ></BaseResource>
+</template>
 <script>
 import BaseResource from "../../BaseResource.vue";
+import { useBaseResource } from "../../../composables/base-resource.js";
 import { APIClient } from "../../../fetch/api-client.js";
 
 export default {
-    extends: BaseResource,
     props: {
         routeAction: String,
     },
     setup(props) {
-        return {
-            ...BaseResource.setup({
-                resourceName: "record_source",
-                nameAttr: "name",
-                idAttr: "record_source_id",
-                showComponent: null,
-                listComponent: "RecordSourcesList",
-                addComponent: "RecordSourcesFormAdd",
-                editComponent: "RecordSourcesFormAddEdit",
-                apiClient: APIClient.record_sources.record_sources,
-                resourceTableUrl: APIClient.record_sources.httpClient._baseURL,
-                i18n: {
-                    deleteConfirmationMessage: __(
-                        "Are you sure you want to remove this record source?"
-                    ),
-                    deleteSuccessMessage: __("Record source %s deleted"),
-                    displayName: __("Record source"),
-                    editLabel: __("Edit record source #%s"),
-                    emptyListMessage: __("There are no record sources defined"),
-                    newLabel: __("New record source"),
-                },
-            }),
-        };
-    },
-    data() {
-        const tableFilters = this.getTableFilterFormElements();
-        const defaults = this.getFilterValues(this.$route.query, tableFilters);
-
-        return {
+        const baseResource = useBaseResource({
+            resourceName: "record_source",
+            nameAttr: "name",
+            idAttr: "record_source_id",
+            showComponent: null,
+            listComponent: "RecordSourcesList",
+            addComponent: "RecordSourcesFormAdd",
+            editComponent: "RecordSourcesFormAddEdit",
+            apiClient: APIClient.record_sources.record_sources,
+            resourceTableUrl: APIClient.record_sources.httpClient._baseURL,
+            i18n: {
+                deleteConfirmationMessage: __(
+                    "Are you sure you want to remove this record source?"
+                ),
+                deleteSuccessMessage: __("Record source %s deleted"),
+                displayName: __("Record source"),
+                editLabel: __("Edit record source #%s"),
+                emptyListMessage: __("There are no record sources defined"),
+                newLabel: __("New record source"),
+            },
+            props,
             resourceAttrs: [
                 {
                     name: "record_source_id",
                     required: true,
                     type: "text",
-                    label: this.$__("Id"),
+                    label: __("Id"),
                     tableColumnDefinition: {
-                        title: this.$__("ID"),
+                        title: __("ID"),
                         data: "record_source_id",
                         searchable: true,
                     },
@@ -54,39 +52,38 @@ export default {
                     name: "name",
                     required: true,
                     type: "text",
-                    label: this.$__("Name"),
+                    label: __("Name"),
                 },
                 {
                     name: "can_be_edited",
                     type: "checkbox",
-                    label: this.$__("Can be edited"),
+                    label: __("Can be edited"),
                     value: false,
                 },
             ],
-            tableOptions: {
-                options: { embed: "usage_count" },
-                url: this.getResourceTableUrl(),
-                actions: {
-                    "-1": [
-                        "edit",
-                        {
-                            delete: {
-                                text: __("Delete"),
-                                icon: "fa fa-trash",
-                                should_display: row => row.usage_count == 0,
-                            },
+        });
+
+        const tableOptions = {
+            options: { embed: "usage_count" },
+            url: baseResource.getResourceTableUrl(),
+            actions: {
+                "-1": [
+                    "edit",
+                    {
+                        delete: {
+                            text: __("Delete"),
+                            icon: "fa fa-trash",
+                            should_display: row => row.usage_count == 0,
+                            callback: baseResource.doResourceDelete,
                         },
-                    ],
-                },
+                    },
+                ],
             },
-            tableFilters,
         };
-    },
-    methods: {
-        onSubmit(e, recordSourceToSave) {
+
+        const onSubmit = (e, recordSourceToSave) => {
             e.preventDefault();
             let response;
-            // RO attribute
             const recordSource = JSON.parse(JSON.stringify(recordSourceToSave)); // copy
             const recordSourceId = recordSource.record_source_id;
 
@@ -94,26 +91,43 @@ export default {
 
             if (recordSourceId) {
                 // update
-                response = this.apiClient
+                response = baseResource.apiClient
                     .update(recordSource, recordSourceId)
                     .then(
                         success => {
-                            this.setMessage(this.$__("Record source updated!"));
-                            this.$router.push({ name: "RecordSourcesList" });
+                            baseResource.setMessage(
+                                baseResource.$__("Record source updated!")
+                            );
+                            baseResource.router.push({
+                                name: "RecordSourcesList",
+                            });
                         },
                         error => {}
                     );
             } else {
-                response = this.apiClient.create(recordSource).then(
+                response = baseResource.apiClient.create(recordSource).then(
                     success => {
-                        this.setMessage(this.$__("Record source created!"));
-                        this.$router.push({ name: "RecordSourcesList" });
+                        baseResource.setMessage(
+                            baseResource.$__("Record source created!")
+                        );
+                        baseResource.router.push({ name: "RecordSourcesList" });
                     },
                     error => {}
                 );
             }
-        },
+        };
+        baseResource.created();
+
+        return {
+            ...baseResource,
+            tableOptions,
+            onSubmit,
+        };
     },
     name: "RecordSourcesResource",
+    emits: ["select-resource"],
+    components: {
+        BaseResource,
+    },
 };
 </script>
