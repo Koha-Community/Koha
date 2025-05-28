@@ -1,16 +1,23 @@
+<template>
+    <BaseResource
+        :routeAction="routeAction"
+        :instancedResource="this"
+    ></BaseResource>
+</template>
 <script>
-import BaseResource from "../BaseResource.vue";
-import { APIClient } from "../../fetch/api-client.js";
 import { inject } from "vue";
+import BaseResource from "../BaseResource.vue";
+import { useBaseResource } from "../../composables/base-resource.js";
 import { storeToRefs } from "pinia";
+import { APIClient } from "../../fetch/api-client.js";
 
 export default {
-    extends: BaseResource,
     props: {
         routeAction: String,
         embedded: { type: Boolean, default: false },
     },
     setup(props) {
+        const format_date = $date;
         const AVStore = inject("AVStore");
         const { av_package_types, av_package_content_types } =
             storeToRefs(AVStore);
@@ -19,51 +26,42 @@ export default {
         const vendorStore = inject("vendorStore");
         const { vendors } = storeToRefs(vendorStore);
 
-        return {
-            ...BaseResource.setup({
-                resourceName: "package",
-                nameAttr: "name",
-                idAttr: "package_id",
-                showComponent: "EHoldingsLocalPackagesShow",
-                listComponent: "EHoldingsLocalPackagesList",
-                addComponent: "EHoldingsLocalPackagesFormAdd",
-                editComponent: "EHoldingsLocalPackagesFormAddEdit",
-                apiClient: APIClient.erm.localPackages,
-                resourceTableUrl:
-                    APIClient.erm.httpClient._baseURL +
-                    "eholdings/local/packages",
-                i18n: {
-                    deleteConfirmationMessage: __(
-                        "Are you sure you want to remove this local package?"
-                    ),
-                    deleteSuccessMessage: __("Local package %s deleted"),
-                    displayName: __("Local package"),
-                    editLabel: __("Edit package #%s"),
-                    emptyListMessage: __("There are no packages defined"),
-                    newLabel: __("New package"),
-                },
-                extendedAttributesResourceType: "package",
-                av_package_types,
-                av_package_content_types,
-                eholdings_packages_table_settings,
-                vendors,
-                get_lib_from_av,
-            }),
-        };
-    },
-    data() {
-        const tableFilters = this.getTableFilterFormElements();
-        const defaults = this.getFilterValues(this.$route.query, tableFilters);
-
-        return {
+        const baseResource = useBaseResource({
+            resourceName: "package",
+            nameAttr: "name",
+            idAttr: "package_id",
+            showComponent: "EHoldingsLocalPackagesShow",
+            listComponent: "EHoldingsLocalPackagesList",
+            addComponent: "EHoldingsLocalPackagesFormAdd",
+            editComponent: "EHoldingsLocalPackagesFormAddEdit",
+            apiClient: APIClient.erm.localPackages,
+            resourceTableUrl:
+                APIClient.erm.httpClient._baseURL + "eholdings/local/packages",
+            i18n: {
+                deleteConfirmationMessage: __(
+                    "Are you sure you want to remove this local package?"
+                ),
+                deleteSuccessMessage: __("Local package %s deleted"),
+                displayName: __("Local package"),
+                editLabel: __("Edit package #%s"),
+                emptyListMessage: __("There are no packages defined"),
+                newLabel: __("New package"),
+            },
+            extendedAttributesResourceType: "package",
+            av_package_types,
+            av_package_content_types,
+            eholdings_packages_table_settings,
+            vendors,
+            get_lib_from_av,
+            props,
             resourceAttrs: [
                 {
                     name: "name",
                     required: true,
                     type: "text",
-                    label: this.$__("Package name"),
+                    label: __("Package name"),
                     tableColumnDefinition: {
-                        title: this.$__("Package name"),
+                        title: __("Package name"),
                         data: "name:package_id",
                         searchable: true,
                         orderable: true,
@@ -81,7 +79,7 @@ export default {
                 {
                     name: "vendor_id",
                     type: "vendor",
-                    label: this.$__("Vendor"),
+                    label: __("Vendor"),
                     showElement: {
                         type: "text",
                         value: "vendor.name",
@@ -94,23 +92,23 @@ export default {
                 {
                     name: "package_type",
                     type: "select",
-                    label: this.$__("Type"),
+                    label: __("Type"),
                     avCat: "av_package_types",
                 },
                 {
                     name: "content_type",
                     type: "select",
-                    label: this.$__("Content type"),
+                    label: __("Content type"),
                     avCat: "av_package_content_types",
                 },
                 {
                     name: "created_on",
                     type: "date",
-                    label: this.$__("Created on"),
+                    label: __("Created on"),
                     showElement: {
                         type: "text",
                         value: "created_on",
-                        format: this.format_date,
+                        format: format_date,
                     },
                     hideIn: ["Form"],
                 },
@@ -118,12 +116,12 @@ export default {
                     name: "notes",
                     required: false,
                     type: "text",
-                    label: this.$__("Notes"),
+                    label: __("Notes"),
                 },
                 {
                     name: "package_agreements",
                     type: "relationshipWidget",
-                    group: this.$__("Agreements"),
+                    group: __("Agreements"),
                     showElement: {
                         type: "table",
                         columnData: "package_agreements",
@@ -131,7 +129,7 @@ export default {
                             !!erm_package.package_agreements?.length,
                         columns: [
                             {
-                                name: this.$__("Agreement name"),
+                                name: __("Agreement name"),
                                 value: "agreement.name",
                                 link: {
                                     name: "AgreementsShow",
@@ -154,9 +152,9 @@ export default {
                             resourceProperty: "package_agreements",
                         },
                         relationshipStrings: {
-                            nameLowerCase: this.$__("agreement"),
-                            nameUpperCase: this.$__("Agreement"),
-                            namePlural: this.$__("agreements"),
+                            nameLowerCase: __("agreement"),
+                            nameUpperCase: __("Agreement"),
+                            namePlural: __("agreements"),
                         },
                         fetchOptions: {
                             type: "boolean",
@@ -167,7 +165,7 @@ export default {
                         {
                             name: "agreement_id",
                             type: "select",
-                            label: this.$__("Agreement"),
+                            label: __("Agreement"),
                             requiredKey: "agreement_id",
                             selectLabel: "name",
                             required: true,
@@ -177,41 +175,43 @@ export default {
                     hideIn: ["List"],
                 },
             ],
-            tableOptions: {
-                url: this.getResourceTableUrl(),
-                options: {
-                    embed: "resources+count,vendor.name,extended_attributes,+strings",
-                    searchCols: [
-                        { search: defaults.package_name },
-                        null,
-                        null,
-                        { search: defaults.content_type },
-                        null,
-                        null,
-                    ],
-                },
-                table_settings: this.eholdings_packages_table_settings,
-                add_filters: true,
-                filters_options: {
-                    1: () =>
-                        this.vendors.map(e => {
-                            e["_id"] = e["id"];
-                            e["_str"] = e["name"];
-                            return e;
-                        }),
-                    2: () => this.map_av_dt_filter("av_package_types"),
-                    3: () => this.map_av_dt_filter("av_package_content_types"),
-                },
-                actions: {
-                    0: ["show"],
-                    "-1": ["edit", "delete"],
-                },
+        });
+
+        const defaults = baseResource.getFilterValues(baseResource.route.query);
+        const tableOptions = {
+            url: baseResource.getResourceTableUrl(),
+            options: {
+                embed: "resources+count,vendor.name,extended_attributes,+strings",
+                searchCols: [
+                    { search: defaults.package_name },
+                    null,
+                    null,
+                    { search: defaults.content_type },
+                    null,
+                    null,
+                ],
             },
-            tableFilters,
+            table_settings: baseResource.eholdings_packages_table_settings,
+            add_filters: true,
+            filters_options: {
+                1: [
+                    ...vendors.value.map(e => {
+                        e["_id"] = e["id"];
+                        e["_str"] = e["name"];
+                        return e;
+                    }),
+                ],
+                2: () => baseResource.map_av_dt_filter("av_package_types"),
+                3: () =>
+                    baseResource.map_av_dt_filter("av_package_content_types"),
+            },
+            actions: {
+                0: ["show"],
+                "-1": ["edit", "delete"],
+            },
         };
-    },
-    methods: {
-        checkForm(erm_package) {
+
+        const checkForm = erm_package => {
             let errors = [];
             let package_agreements = erm_package.package_agreements;
             const agreement_ids = package_agreements.map(pa => pa.agreement_id);
@@ -220,18 +220,20 @@ export default {
             );
 
             if (duplicate_agreement_ids.length) {
-                errors.push(this.$__("An agreement is used several times"));
+                errors.push(
+                    baseResource.$__("An agreement is used several times")
+                );
             }
 
-            this.setWarning(errors.join("<br>"));
+            baseResource.setWarning(errors.join("<br>"));
             return !errors.length;
-        },
-        onSubmit(e, packageToSave) {
+        };
+        const onSubmit = (e, packageToSave) => {
             e.preventDefault();
 
             let erm_package = JSON.parse(JSON.stringify(packageToSave)); // copy
 
-            if (!this.checkForm(erm_package)) {
+            if (!checkForm(erm_package)) {
                 return false;
             }
 
@@ -249,33 +251,37 @@ export default {
             );
 
             if (package_id) {
-                this.apiClient.update(erm_package, package_id).then(
+                baseResource.apiClient.update(erm_package, package_id).then(
                     success => {
-                        this.setMessage(this.$__("Package updated"));
-                        this.$router.push({
+                        baseResource.setMessage(
+                            baseResource.$__("Package updated")
+                        );
+                        baseResource.router.push({
                             name: "EHoldingsLocalPackagesList",
                         });
                     },
                     error => {}
                 );
             } else {
-                this.apiClient.create(erm_package).then(
+                baseResource.apiClient.create(erm_package).then(
                     success => {
-                        this.setMessage(this.$__("Package created"));
-                        this.$router.push({
+                        baseResource.setMessage(
+                            baseResource.$__("Package created")
+                        );
+                        baseResource.router.push({
                             name: "EHoldingsLocalPackagesList",
                         });
                     },
                     error => {}
                 );
             }
-        },
-        appendToShow() {
-            let get_lib_from_av = this.get_lib_from_av;
+        };
+        const appendToShow = () => {
+            let get_lib_from_av = baseResource.get_lib_from_av;
             return [
                 {
                     type: "component",
-                    name: this.$__("Titles"),
+                    name: baseResource.$__("Titles"),
                     hidden: erm_package => erm_package,
                     componentPath: "./RelationshipTableDisplay.vue",
                     componentProps: {
@@ -284,7 +290,7 @@ export default {
                             value: {
                                 columns: [
                                     {
-                                        title: this.$__("Name"),
+                                        title: baseResource.$__("Name"),
                                         data: "title.publication_title",
                                         searchable: true,
                                         orderable: true,
@@ -306,7 +312,9 @@ export default {
                                         },
                                     },
                                     {
-                                        title: this.$__("Publication type"),
+                                        title: baseResource.$__(
+                                            "Publication type"
+                                        ),
                                         data: "title.publication_type",
                                         searchable: true,
                                         orderable: true,
@@ -357,9 +365,22 @@ export default {
                     },
                 },
             ];
-        },
+        };
+        baseResource.created();
+
+        return {
+            ...baseResource,
+            tableOptions,
+            checkForm,
+            onSubmit,
+            appendToShow,
+        };
     },
-    name: "EHoldingsLocalPackageResource",
+    emits: ["select-resource"],
+    name: "EHoldingsLocalPackagesResource",
+    components: {
+        BaseResource,
+    },
 };
 </script>
 
