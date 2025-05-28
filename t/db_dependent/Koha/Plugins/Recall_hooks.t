@@ -16,8 +16,9 @@
 
 use Modern::Perl;
 use File::Basename;
-use Test::More tests => 4;
+use Test::More tests => 5;
 use Test::MockModule;
+use Test::NoWarnings;
 use Test::Warn;
 
 use t::lib::Mocks;
@@ -86,7 +87,7 @@ subtest 'after_recall_action hook' => sub {
 
     C4::Circulation::AddIssue( $patron2, $item->barcode );
 
-    warnings_exist {
+    warnings_like {
         Koha::Recalls->add_recall(
             {
                 patron         => $patron1,
@@ -98,7 +99,10 @@ subtest 'after_recall_action hook' => sub {
             }
         );
     }
-    qr/after_recall_action called with action: add, ref: Koha::Recall/,
+    [
+        qr/transform_prepared_letter called with letter content/,
+        qr/after_recall_action called with action: add, ref: Koha::Recall/
+    ],
         '->add_recall calls the after_recall_action hook with action add';
 
     Koha::Plugins->RemovePlugins;
