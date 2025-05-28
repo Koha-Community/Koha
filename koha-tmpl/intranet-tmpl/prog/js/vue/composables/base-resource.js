@@ -95,7 +95,7 @@ export function useBaseResource(instancedResource) {
      * @param {Array} filterData - The array of filter objects (optional).
      * @return {Object}
      */
-    const getFilterValues = (query, filterData) => {
+    const getFilterValues = (query, filterData = []) => {
         const filters = filterData
             ? filterData
             : instancedResource.tableFilters

@@ -1,15 +1,23 @@
+<template>
+    <BaseResource
+        :routeAction="routeAction"
+        :instancedResource="this"
+    ></BaseResource>
+</template>
 <script>
 import { inject } from "vue";
 import BaseResource from "../BaseResource.vue";
+import { useBaseResource } from "../../composables/base-resource.js";
 import { storeToRefs } from "pinia";
 import { APIClient } from "../../fetch/api-client.js";
 
 export default {
-    extends: BaseResource,
     props: {
         routeAction: String,
     },
     setup(props) {
+        const format_date = $date;
+        const patron_to_html = $patron_to_html;
         const AVStore = inject("AVStore");
         const { av_license_types, av_license_statuses, av_user_roles } =
             storeToRefs(AVStore);
@@ -17,46 +25,39 @@ export default {
         const vendorStore = inject("vendorStore");
         const { vendors } = storeToRefs(vendorStore);
 
-        return {
-            ...BaseResource.setup({
-                resourceName: "license",
-                nameAttr: "name",
-                idAttr: "license_id",
-                showComponent: "LicensesShow",
-                listComponent: "LicensesList",
-                addComponent: "LicensesFormAdd",
-                editComponent: "LicensesFormAddEdit",
-                apiClient: APIClient.erm.licenses,
-                resourceTableUrl:
-                    APIClient.erm.httpClient._baseURL + "licenses",
-                i18n: {
-                    deleteConfirmationMessage: __(
-                        "Are you sure you want to remove this license?"
-                    ),
-                    deleteSuccessMessage: __("License %s deleted"),
-                    displayName: __("License"),
-                    editLabel: __("Edit license #%s"),
-                    emptyListMessage: __("There are no licenses defined"),
-                    newLabel: __("New license"),
-                },
-                extendedAttributesResourceType: "license",
-                av_license_types,
-                av_license_statuses,
-                av_user_roles,
-                license_table_settings,
-                vendors,
-            }),
-        };
-    },
-    data() {
-        const tableFilters = this.getTableFilterFormElements();
-        const defaults = this.getFilterValues(this.$route.query, tableFilters);
+        const extendedAttributesResourceType = "license";
 
-        return {
+        const baseResource = useBaseResource({
+            resourceName: "license",
+            nameAttr: "name",
+            idAttr: "license_id",
+            showComponent: "LicensesShow",
+            listComponent: "LicensesList",
+            addComponent: "LicensesFormAdd",
+            editComponent: "LicensesFormAddEdit",
+            apiClient: APIClient.erm.licenses,
+            resourceTableUrl: APIClient.erm.httpClient._baseURL + "licenses",
+            i18n: {
+                deleteConfirmationMessage: __(
+                    "Are you sure you want to remove this license?"
+                ),
+                deleteSuccessMessage: __("License %s deleted"),
+                displayName: __("License"),
+                editLabel: __("Edit license #%s"),
+                emptyListMessage: __("There are no licenses defined"),
+                newLabel: __("New license"),
+            },
+            extendedAttributesResourceType,
+            av_license_types,
+            av_license_statuses,
+            av_user_roles,
+            license_table_settings,
+            vendors,
+            props,
             resourceAttrs: [
                 {
-                    name: this.idAttr,
-                    label: this.$__("ID"),
+                    name: "license_id",
+                    label: __("ID"),
                     type: "text",
                     hideIn: ["Form", "Show"],
                 },
@@ -64,12 +65,12 @@ export default {
                     name: "name",
                     required: true,
                     type: "text",
-                    label: this.$__("License name"),
+                    label: __("License name"),
                 },
                 {
                     name: "vendor_id",
                     type: "vendor",
-                    label: this.$__("Vendor"),
+                    label: __("Vendor"),
                     showElement: {
                         type: "text",
                         value: "vendor.name",
@@ -82,31 +83,31 @@ export default {
                 {
                     name: "description",
                     type: "textarea",
-                    label: this.$__("Description"),
+                    label: __("Description"),
                     required: true,
                 },
                 {
                     name: "type",
                     required: true,
                     type: "select",
-                    label: this.$__("Type"),
+                    label: __("Type"),
                     avCat: "av_license_types",
                 },
                 {
                     name: "status",
                     required: true,
                     type: "select",
-                    label: this.$__("Status"),
+                    label: __("Status"),
                     avCat: "av_license_statuses",
                 },
                 {
                     name: "started_on",
                     type: "date",
-                    label: this.$__("Start date"),
+                    label: __("Start date"),
                     showElement: {
                         type: "text",
                         value: "started_on",
-                        format: this.format_date,
+                        format: format_date,
                     },
                     componentProps: {
                         date_to: {
@@ -118,30 +119,30 @@ export default {
                 {
                     name: "ended_on",
                     type: "date",
-                    label: this.$__("End date"),
+                    label: __("End date"),
                     showElement: {
                         type: "text",
                         value: "ended_on",
-                        format: this.format_date,
+                        format: format_date,
                     },
                 },
                 {
                     name: "user_roles",
                     type: "relationshipWidget",
-                    group: this.$__("Users"),
+                    group: __("Users"),
                     showElement: {
                         type: "table",
                         columnData: "user_roles",
                         hidden: license => !!license.user_roles?.length,
-                        label: this.$__("License users"),
+                        label: __("License users"),
                         columns: [
                             {
-                                name: this.$__("Name"),
+                                name: __("Name"),
                                 value: "patron",
-                                format: this.patron_to_html,
+                                format: patron_to_html,
                             },
                             {
-                                name: this.$__("Role"),
+                                name: __("Role"),
                                 value: "role",
                                 av: "av_user_roles",
                             },
@@ -152,9 +153,9 @@ export default {
                             resourceProperty: "user_roles",
                         },
                         relationshipStrings: {
-                            nameLowerCase: this.$__("user"),
-                            nameUpperCase: this.$__("License user"),
-                            namePlural: this.$__("users"),
+                            nameLowerCase: __("user"),
+                            nameUpperCase: __("License user"),
+                            namePlural: __("users"),
                         },
                         newRelationshipDefaultAttrs: {
                             type: "object",
@@ -169,7 +170,7 @@ export default {
                         {
                             name: "user_id",
                             type: "component",
-                            label: this.$__("User"),
+                            label: __("User"),
                             componentPath: "./PatronSearch.vue",
                             required: true,
                             indexRequired: true,
@@ -188,14 +189,14 @@ export default {
                                 },
                                 label: {
                                     type: "string",
-                                    value: this.$__("User"),
+                                    value: __("User"),
                                 },
                             },
                         },
                         {
                             name: "role",
                             type: "select",
-                            label: this.$__("Role"),
+                            label: __("Role"),
                             avCat: "av_user_roles",
                             required: true,
                             indexRequired: true,
@@ -206,7 +207,7 @@ export default {
                 {
                     name: "documents",
                     type: "relationshipWidget",
-                    group: this.$__("Documents"),
+                    group: __("Documents"),
                     showElement: {
                         type: "component",
                         hidden: license => !!license.documents?.length,
@@ -223,9 +224,9 @@ export default {
                             resourceProperty: "documents",
                         },
                         relationshipStrings: {
-                            nameLowerCase: this.$__("document"),
-                            nameUpperCase: this.$__("Document"),
-                            namePlural: this.$__("documents"),
+                            nameLowerCase: __("document"),
+                            nameUpperCase: __("Document"),
+                            namePlural: __("documents"),
                         },
                         newRelationshipDefaultAttrs: {
                             type: "object",
@@ -245,7 +246,7 @@ export default {
                             name: "document",
                             type: "component",
                             componentPath: "./DocumentSelect.vue",
-                            label: this.$__("File"),
+                            label: __("File"),
                             componentProps: {
                                 counter: {
                                     type: "string",
@@ -262,53 +263,53 @@ export default {
                             name: "physical_location",
                             required: false,
                             type: "text",
-                            label: this.$__("Physical location"),
+                            label: __("Physical location"),
                             indexRequired: true,
                         },
                         {
                             name: "uri",
                             required: false,
                             type: "text",
-                            label: this.$__("URI"),
+                            label: __("URI"),
                             indexRequired: true,
                         },
                         {
                             name: "notes",
                             required: false,
                             type: "text",
-                            label: this.$__("Notes"),
+                            label: __("Notes"),
                             indexRequired: true,
                         },
                     ],
                     hideIn: ["List"],
                 },
             ],
-            tableOptions: {
-                url: this.getResourceTableUrl(),
-                options: { embed: "vendor,extended_attributes,+strings" },
-                table_settings: this.license_table_settings,
-                add_filters: true,
-                filters_options: {
-                    2: () =>
-                        this.vendors.map(e => {
-                            e["_id"] = e["id"];
-                            e["_str"] = e["name"];
-                            return e;
-                        }),
-                    4: () => this.map_av_dt_filter("av_license_types"),
-                    5: () => this.map_av_dt_filter("av_license_statuses"),
-                },
-                actions: {
-                    0: ["show"],
-                    1: ["show"],
-                    "-1": ["edit", "delete"],
-                },
+        });
+
+        const tableOptions = {
+            url: baseResource.getResourceTableUrl(),
+            options: { embed: "vendor,extended_attributes,+strings" },
+            table_settings: baseResource.license_table_settings,
+            add_filters: true,
+            filters_options: {
+                2: [
+                    ...vendors.value.map(e => {
+                        e["_id"] = e["id"];
+                        e["_str"] = e["name"];
+                        return e;
+                    }),
+                ],
+                4: () => baseResource.map_av_dt_filter("av_license_types"),
+                5: () => baseResource.map_av_dt_filter("av_license_statuses"),
             },
-            tableFilters,
+            actions: {
+                0: ["show"],
+                1: ["show"],
+                "-1": ["edit", "delete"],
+            },
         };
-    },
-    methods: {
-        checkForm(license) {
+
+        const checkForm = license => {
             let errors = [];
 
             let documents_with_uploaded_files = license.documents.filter(
@@ -320,30 +321,30 @@ export default {
                 ).length >= 1
             ) {
                 errors.push(
-                    this.$__("File size exceeds maximum allowed: %s MB").format(
-                        (max_allowed_packet / (1024 * 1024)).toFixed(2)
-                    )
+                    baseResource
+                        .$__("File size exceeds maximum allowed: %s MB")
+                        .format((max_allowed_packet / (1024 * 1024)).toFixed(2))
                 );
             }
             license.user_roles.forEach((user, i) => {
                 if (user.patron_str === "") {
                     errors.push(
-                        this.$__("License user %s is missing a user").format(
-                            i + 1
-                        )
+                        baseResource
+                            .$__("License user %s is missing a user")
+                            .format(i + 1)
                     );
                 }
             });
-            this.setWarning(errors.join("<br>"));
+            baseResource.setWarning(errors.join("<br>"));
             return !errors.length;
-        },
-        onSubmit(e, licenseToSave) {
+        };
+        const onSubmit = (e, licenseToSave) => {
             e.preventDefault();
 
             let license = JSON.parse(JSON.stringify(licenseToSave)); // copy
             let license_id = license.license_id;
 
-            if (!this.checkForm(license)) {
+            if (!checkForm(license)) {
                 return false;
             }
 
@@ -364,24 +365,41 @@ export default {
             );
 
             if (license_id) {
-                this.apiClient.update(license, license_id).then(
+                baseResource.apiClient.update(license, license_id).then(
                     success => {
-                        this.setMessage(this.$__("License updated"));
-                        this.$router.push({ name: "LicensesList" });
+                        baseResource.setMessage(
+                            baseResource.$__("License updated")
+                        );
+                        baseResource.router.push({ name: "LicensesList" });
                     },
                     error => {}
                 );
             } else {
-                this.apiClient.create(license).then(
+                baseResource.apiClient.create(license).then(
                     success => {
-                        this.setMessage(this.$__("License created"));
-                        this.$router.push({ name: "LicensesList" });
+                        baseResource.setMessage(
+                            baseResource.$__("License created")
+                        );
+                        baseResource.router.push({ name: "LicensesList" });
                     },
                     error => {}
                 );
             }
-        },
+        };
+
+        baseResource.created();
+
+        return {
+            ...baseResource,
+            tableOptions,
+            checkForm,
+            onSubmit,
+        };
     },
     name: "LicenseResource",
+    emits: ["select-resource"],
+    components: {
+        BaseResource,
+    },
 };
 </script>
