@@ -43,7 +43,6 @@
 </template>
 
 <script>
-import { inject } from "vue";
 import ResourceListFilters from "./ResourceListFilters.vue";
 import ResourceShow from "./ResourceShow.vue";
 import ResourceFormAdd from "./ResourceFormAdd.vue";

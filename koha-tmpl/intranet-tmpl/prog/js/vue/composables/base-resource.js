@@ -164,13 +164,13 @@ export function useBaseResource(instancedResource) {
                 {
                     action: "edit",
                     onClick: () => goToResourceEdit(resource),
-                    title: __("Edit"),
+                    title: $__("Edit"),
                     index: 0,
                 },
                 {
                     action: "delete",
                     onClick: () => doResourceDelete(resource),
-                    title: __("Delete"),
+                    title: $__("Delete"),
                     index: 1,
                 },
             ],
@@ -211,10 +211,26 @@ export function useBaseResource(instancedResource) {
      * @return {Array} The array of group objects.
      */
     const getFieldGroupings = (component, resource) => {
-        const displayProperty = `hideIn${component}`;
-        const attributesToConsider = instancedResource.resourceAttrs.filter(
-            ra => !ra.hasOwnProperty(displayProperty) || !ra[displayProperty]
+        const attributesToConsider = instancedResource.resourceAttrs.reduce(
+            (acc, ra) => {
+                if (ra.hideIn && !ra.hideIn.includes(component)) {
+                    return [...acc, ra];
+                }
+                if (ra.hideIn && ra.hideIn.includes(component)) {
+                    return acc;
+                }
+                return [...acc, ra];
+            },
+            []
         );
+        if (instancedResource.extendedAttributesResourceType) {
+            attributesToConsider.push({
+                name: "additional_fields",
+                type: "additional_fields",
+                extended_attributes_resource_type:
+                    instancedResource.extendedAttributesResourceType,
+            });
+        }
         const groupings = attributesToConsider.reduce((acc, attr) => {
             if (
                 attr.hasOwnProperty("group") &&
@@ -403,7 +419,10 @@ export function useBaseResource(instancedResource) {
      */
 
     const doResourceSelect = (resource, dt, event) => {
-        this.$emit("select-resource", resource[instancedResource.idAttr]);
+        instancedResource.$emit(
+            "select-resource",
+            resource[instancedResource.idAttr]
+        );
     };
 
     /**
@@ -426,9 +445,25 @@ export function useBaseResource(instancedResource) {
     const getTableFilterFormElementsLabel = () => {
         return "";
     };
-
+    /**
+     * Gets the array of filters for the table, if required.
+     * This is a default method that returns an empty array.
+     * It can be overridden at the resource level if filters are required
+     *
+     * @return {Array} The array of filters for the table.
+     */
+    const getTableFilterFormElements = () => {
+        return [];
+    };
+    /**
+     * Toggle the refreshTemplate flag of the resource.
+     * This flag is used to force a reload of the template by Vue.
+     * It is typically used when the data of the resource has been updated.
+     *
+     * @return {void}
+     */
     const refreshTemplateState = () => {
-        this.refreshTemplate = !this.refreshTemplate;
+        instancedResource.refreshTemplate = !instancedResource.refreshTemplate;
     };
 
     /**
@@ -493,20 +528,16 @@ export function useBaseResource(instancedResource) {
                     acc[attr.name] = false;
                     return acc;
                 }
-                if (
-                    attr.name === "additional_fields" ||
-                    attr.type === "relationshipWidget"
-                ) {
-                    acc[
-                        attr.name === "additional_fields"
-                            ? "extended_attributes"
-                            : attr.name
-                    ] = [];
+                if (attr.type === "relationshipWidget") {
+                    acc[attr.name] = [];
                     return acc;
                 }
                 acc[attr.name] = null;
                 return acc;
             }, {});
+        if (instancedResource.extendedAttributesResourceType) {
+            instancedResource.resourceToBeGenerated.extended_attributes = [];
+        }
         instancedResource.resourceToBeGenerated[instancedResource.idAttr] =
             null;
         return instancedResource.resourceToBeGenerated;
@@ -532,9 +563,7 @@ export function useBaseResource(instancedResource) {
      * @return {Boolean} true if the resource has additional fields, false otherwise.
      */
     const hasAdditionalFields = computed(() => {
-        return instancedResource.resourceAttrs.some(
-            attr => attr.name === "additional_fields"
-        );
+        return !!instancedResource.extendedAttributesResourceType;
     });
 
     return {

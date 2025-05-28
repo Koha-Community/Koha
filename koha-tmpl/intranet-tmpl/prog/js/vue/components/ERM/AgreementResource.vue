@@ -106,12 +106,12 @@ export default {
                     name: "name",
                     required: true,
                     type: "text",
-                    label: this.$__("Agreement name"),
+                    label: __("Agreement name"),
                 },
                 {
                     name: "vendor_id",
                     type: "vendor",
-                    label: this.$__("Vendor"),
+                    label: __("Vendor"),
                     showElement: {
                         type: "text",
                         value: "vendor.name",
@@ -124,13 +124,13 @@ export default {
                 {
                     name: "description",
                     type: "textarea",
-                    label: this.$__("Description"),
+                    label: __("Description"),
                 },
                 {
                     name: "status",
                     required: true,
                     type: "select",
-                    label: this.$__("Status"),
+                    label: __("Status"),
                     avCat: "av_agreement_statuses",
                     onSelected: resource => {
                         if (resource.status !== "closed") {
@@ -142,26 +142,26 @@ export default {
                 {
                     name: "closure_reason",
                     type: "select",
-                    label: this.$__("Closure reason"),
+                    label: __("Closure reason"),
                     avCat: "av_agreement_closure_reasons",
                     disabled: agreement => agreement.status !== "closed",
                 },
                 {
                     name: "is_perpetual",
                     type: "boolean",
-                    label: this.$__("Is perpetual"),
+                    label: __("Is perpetual"),
                 },
                 {
                     name: "renewal_priority",
                     type: "select",
-                    label: this.$__("Renewal priority"),
+                    label: __("Renewal priority"),
                     avCat: "av_agreement_renewal_priorities",
                 },
                 {
                     name: "license_info",
                     type: "textarea",
                     textAreaRows: 2,
-                    label: this.$__("License info"),
+                    label: __("License info"),
                     hideIn: ["List"],
                 },
                 {
@@ -173,35 +173,35 @@ export default {
                         hidden: agreement => !!agreement.periods?.length,
                         columns: [
                             {
-                                name: this.$__("Period start"),
+                                name: __("Period start"),
                                 value: "started_on",
                                 format: format_date,
                             },
                             {
-                                name: this.$__("Period end"),
+                                name: __("Period end"),
                                 value: "ended_on",
                                 format: format_date,
                             },
                             {
-                                name: this.$__("Cancellation deadline"),
+                                name: __("Cancellation deadline"),
                                 value: "cancellation_deadline",
                                 format: format_date,
                             },
                             {
-                                name: this.$__("Notes"),
+                                name: __("Notes"),
                                 value: "notes",
                             },
                         ],
                     },
-                    group: this.$__("Periods"),
+                    group: __("Periods"),
                     componentProps: {
                         resourceRelationships: {
                             resourceProperty: "periods",
                         },
                         relationshipStrings: {
-                            nameLowerCase: this.$__("period"),
-                            nameUpperCase: this.$__("Period"),
-                            namePlural: this.$__("periods"),
+                            nameLowerCase: __("period"),
+                            nameUpperCase: __("Period"),
+                            namePlural: __("periods"),
                         },
                         newRelationshipDefaultAttrs: {
                             type: "object",
@@ -217,7 +217,7 @@ export default {
                         {
                             name: "started_on",
                             type: "date",
-                            label: this.$__("Start date"),
+                            label: __("Start date"),
                             required: true,
                             indexRequired: true,
                             componentProps: {
@@ -235,14 +235,14 @@ export default {
                         {
                             name: "ended_on",
                             type: "date",
-                            label: this.$__("End date"),
+                            label: __("End date"),
                             required: false,
                             indexRequired: true,
                         },
                         {
                             name: "cancellation_deadline",
                             type: "date",
-                            label: this.$__("Cancellation deadline"),
+                            label: __("Cancellation deadline"),
                             required: false,
                             indexRequired: true,
                         },
@@ -250,7 +250,7 @@ export default {
                             name: "notes",
                             required: false,
                             type: "text",
-                            label: this.$__("Notes"),
+                            label: __("Notes"),
                             indexRequired: true,
                         },
                     ],
@@ -259,19 +259,19 @@ export default {
                 {
                     name: "user_roles",
                     type: "relationshipWidget",
-                    group: this.$__("Users"),
+                    group: __("Users"),
                     showElement: {
                         type: "table",
                         columnData: "user_roles",
                         hidden: agreement => !!agreement.user_roles?.length,
                         columns: [
                             {
-                                name: this.$__("Name"),
+                                name: __("Name"),
                                 value: "patron",
                                 format: patron_to_html,
                             },
                             {
-                                name: this.$__("Role"),
+                                name: __("Role"),
                                 value: "role",
                                 av: "av_user_roles",
                             },
@@ -282,9 +282,9 @@ export default {
                             resourceProperty: "user_roles",
                         },
                         relationshipStrings: {
-                            nameLowerCase: this.$__("user"),
-                            nameUpperCase: this.$__("Agreement user"),
-                            namePlural: this.$__("users"),
+                            nameLowerCase: __("user"),
+                            nameUpperCase: __("Agreement user"),
+                            namePlural: __("users"),
                         },
                         newRelationshipDefaultAttrs: {
                             type: "object",
@@ -299,7 +299,7 @@ export default {
                         {
                             name: "user_id",
                             type: "component",
-                            label: this.$__("User"),
+                            label: __("User"),
                             componentPath: "./PatronSearch.vue",
                             required: true,
                             indexRequired: true,
@@ -318,14 +318,14 @@ export default {
                                 },
                                 label: {
                                     type: "string",
-                                    value: this.$__("User"),
+                                    value: __("User"),
                                 },
                             },
                         },
                         {
                             name: "role",
                             type: "select",
-                            label: this.$__("Role"),
+                            label: __("Role"),
                             avCat: "av_user_roles",
                             required: true,
                             indexRequired: true,
@@ -336,7 +336,7 @@ export default {
                 {
                     name: "agreement_licenses",
                     type: "relationshipWidget",
-                    group: this.$__("Licenses"),
+                    group: __("Licenses"),
                     showElement: {
                         type: "table",
                         columnData: "agreement_licenses",
@@ -344,7 +344,7 @@ export default {
                             !!agreement.agreement_licenses?.length,
                         columns: [
                             {
-                                name: this.$__("Name"),
+                                name: __("Name"),
                                 value: "license.name",
                                 link: {
                                     name: "LicensesShow",
@@ -354,21 +354,21 @@ export default {
                                 },
                             },
                             {
-                                name: this.$__("Status"),
+                                name: __("Status"),
                                 value: "status",
                                 av: "av_agreement_license_statuses",
                             },
                             {
-                                name: this.$__("Physical location"),
+                                name: __("Physical location"),
                                 value: "physical_location",
                                 av: "av_agreement_license_location",
                             },
                             {
-                                name: this.$__("Notes"),
+                                name: __("Notes"),
                                 value: "notes",
                             },
                             {
-                                name: this.$__("URI"),
+                                name: __("URI"),
                                 value: "uri",
                             },
                         ],
@@ -390,16 +390,16 @@ export default {
                             resourceProperty: "agreement_licenses",
                         },
                         relationshipStrings: {
-                            nameLowerCase: this.$__("license"),
-                            nameUpperCase: this.$__("License"),
-                            namePlural: this.$__("licenses"),
+                            nameLowerCase: __("license"),
+                            nameUpperCase: __("License"),
+                            namePlural: __("licenses"),
                         },
                     },
                     relationshipFields: [
                         {
                             name: "license_id",
                             type: "component",
-                            label: this.$__("License"),
+                            label: __("License"),
                             componentPath: "./InfiniteScrollSelect.vue",
                             required: true,
                             indexRequired: true,
@@ -433,14 +433,14 @@ export default {
                         {
                             name: "status",
                             type: "select",
-                            label: this.$__("Status"),
+                            label: __("Status"),
                             avCat: "av_agreement_license_statuses",
                             indexRequired: true,
                         },
                         {
                             name: "physical_location",
                             type: "select",
-                            label: this.$__("Physical location"),
+                            label: __("Physical location"),
                             avCat: "av_agreement_license_location",
                             indexRequired: true,
                         },
@@ -448,14 +448,14 @@ export default {
                             name: "notes",
                             required: false,
                             type: "text",
-                            label: this.$__("Notes"),
+                            label: __("Notes"),
                             indexRequired: true,
                         },
                         {
                             name: "uri",
                             required: false,
                             type: "text",
-                            label: this.$__("URI"),
+                            label: __("URI"),
                             indexRequired: true,
                         },
                     ],
@@ -464,7 +464,7 @@ export default {
                 {
                     name: "agreement_relationships",
                     type: "relationshipWidget",
-                    group: this.$__("Related agreements"),
+                    group: __("Related agreements"),
                     showElement: {
                         type: "component",
                         hidden: agreement =>
@@ -492,9 +492,9 @@ export default {
                             resourceProperty: "agreement_relationships",
                         },
                         relationshipStrings: {
-                            nameLowerCase: this.$__("related agreement"),
-                            nameUpperCase: this.$__("Related agreement"),
-                            namePlural: this.$__("related agreements"),
+                            nameLowerCase: __("related agreement"),
+                            nameUpperCase: __("Related agreement"),
+                            namePlural: __("related agreements"),
                         },
                         filters: {
                             type: "filter",
@@ -514,7 +514,7 @@ export default {
                         {
                             name: "related_agreement_id",
                             type: "select",
-                            label: this.$__("Related agreement"),
+                            label: __("Related agreement"),
                             requiredKey: "agreement_id",
                             selectLabel: "name",
                             required: true,
@@ -523,7 +523,7 @@ export default {
                         {
                             name: "relationship",
                             type: "select",
-                            label: this.$__("Relationship"),
+                            label: __("Relationship"),
                             avCat: "av_agreement_relationships",
                             required: true,
                             indexRequired: true,
@@ -532,7 +532,7 @@ export default {
                             name: "notes",
                             required: false,
                             type: "text",
-                            label: this.$__("Notes"),
+                            label: __("Notes"),
                             indexRequired: true,
                         },
                     ],
@@ -559,10 +559,10 @@ export default {
                 {
                     name: "documents",
                     type: "relationshipWidget",
-                    group: this.$__("Documents"),
+                    group: __("Documents"),
                     showElement: {
                         type: "component",
-                        label: this.$__("Agreement users"),
+                        label: __("Agreement users"),
                         hidden: agreement => !!agreement.documents?.length,
                         componentPath: "./DocumentDisplay.vue",
                         componentProps: {
@@ -577,9 +577,9 @@ export default {
                             resourceProperty: "documents",
                         },
                         relationshipStrings: {
-                            nameLowerCase: this.$__("document"),
-                            nameUpperCase: this.$__("Document"),
-                            namePlural: this.$__("documents"),
+                            nameLowerCase: __("document"),
+                            nameUpperCase: __("Document"),
+                            namePlural: __("documents"),
                         },
                         newRelationshipDefaultAttrs: {
                             type: "object",
@@ -599,7 +599,7 @@ export default {
                             name: "document",
                             type: "component",
                             componentPath: "./DocumentSelect.vue",
-                            label: this.$__("File"),
+                            label: __("File"),
                             componentProps: {
                                 counter: {
                                     type: "string",
@@ -616,21 +616,21 @@ export default {
                             name: "physical_location",
                             required: false,
                             type: "text",
-                            label: this.$__("Physical location"),
+                            label: __("Physical location"),
                             indexRequired: true,
                         },
                         {
                             name: "uri",
                             required: false,
                             type: "text",
-                            label: this.$__("URI"),
+                            label: __("URI"),
                             indexRequired: true,
                         },
                         {
                             name: "notes",
                             required: false,
                             type: "text",
-                            label: this.$__("Notes"),
+                            label: __("Notes"),
                             indexRequired: true,
                         },
                     ],
