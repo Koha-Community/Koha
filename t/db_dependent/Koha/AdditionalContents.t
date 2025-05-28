@@ -19,8 +19,9 @@
 
 use Modern::Perl;
 
-use Test::More tests => 7;
+use Test::More tests => 8;
 use Test::Exception;
+use Test::NoWarnings;
 
 use Koha::AdditionalContents;
 use Koha::Database;
