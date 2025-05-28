@@ -49,6 +49,7 @@
 
 [% BLOCK journal_text_input_fields %]
     [% PROCESS ill_text_input_field id = 'title' label = t('Title') value = whole.value.other.title %]
+    [% PROCESS ill_text_input_field id = 'publisher' label = t('Publisher') value = whole.value.other.publisher %]
     [% PROCESS ill_text_input_field id = 'volume' label = t('Volume') value = whole.value.other.volume %]
     [% PROCESS ill_text_input_field id = 'issue' label = t('Issue number') value = whole.value.other.issue %]
     [% PROCESS ill_text_input_field id = 'year' label = t('Year') value = whole.value.other.year %]
