@@ -481,10 +481,14 @@ export function useBaseResource(instancedResource) {
     const toolbarButtons = computed(() => {
         return (resource, component, i18n, componentData) => {
             const defaultButtons = defaultToolbarButtons(resource, i18n);
-            const additionalButtons = additionalToolbarButtons(
-                resource,
-                componentData
-            );
+            const additionalButtons = instancedResource.hasOwnProperty(
+                "additionalToolbarButtons"
+            )
+                ? instancedResource.additionalToolbarButtons(
+                      resource,
+                      componentData
+                  )
+                : additionalToolbarButtons(resource, componentData);
 
             //FIXME: we need to check that no indexes match between the default buttons and additional buttons
             // If we add to the default buttons in future it could mess up indexing

@@ -1,11 +1,17 @@
+<template>
+    <BaseResource
+        :routeAction="routeAction"
+        :instancedResource="this"
+    ></BaseResource>
+</template>
 <script>
 import { inject } from "vue";
 import BaseResource from "../BaseResource.vue";
+import { useBaseResource } from "../../composables/base-resource.js";
 import { storeToRefs } from "pinia";
 import { APIClient } from "../../fetch/api-client.js";
 
 export default {
-    extends: BaseResource,
     props: {
         routeAction: String,
         embedded: { type: Boolean, default: false },
@@ -17,48 +23,57 @@ export default {
         const vendorStore = inject("vendorStore");
         const { vendors } = storeToRefs(vendorStore);
 
-        return {
-            ...BaseResource.setup({
-                resourceName: "title",
-                nameAttr: "publication_title",
-                idAttr: "title_id",
-                showComponent: "EHoldingsLocalTitlesShow",
-                listComponent: "EHoldingsLocalTitlesList",
-                addComponent: "EHoldingsLocalTitlesFormAdd",
-                editComponent: "EHoldingsLocalTitlesFormAddEdit",
-                apiClient: APIClient.erm.localTitles,
-                resourceTableUrl:
-                    APIClient.erm.httpClient._baseURL +
-                    "eholdings/local/titles",
-                i18n: {
-                    deleteConfirmationMessage: __(
-                        "Are you sure you want to remove this title?"
-                    ),
-                    deleteSuccessMessage: __("Title %s deleted"),
-                    displayName: __("Title"),
-                    editLabel: __("Edit title #%s"),
-                    emptyListMessage: __("There are no titles defined"),
-                    newLabel: __("New title"),
-                },
-                av_title_publication_types,
-                eholdings_titles_table_settings,
-                vendors,
-            }),
+        const additionalToolbarButtons = resource => {
+            return {
+                list: [
+                    {
+                        to: { name: "EHoldingsLocalTitlesFormImport" },
+                        icon: "plus",
+                        title: baseResource.$__("Import from list"),
+                    },
+                    {
+                        to: { name: "EHoldingsLocalTitlesKBARTImport" },
+                        icon: "plus",
+                        title: baseResource.$__("Import from KBART file"),
+                    },
+                ],
+            };
         };
-    },
-    data() {
-        const tableFilters = this.getTableFilterFormElements();
-        const defaults = this.getFilterValues(this.$route.query, tableFilters);
 
-        return {
+        const baseResource = useBaseResource({
+            resourceName: "title",
+            nameAttr: "publication_title",
+            idAttr: "title_id",
+            showComponent: "EHoldingsLocalTitlesShow",
+            listComponent: "EHoldingsLocalTitlesList",
+            addComponent: "EHoldingsLocalTitlesFormAdd",
+            editComponent: "EHoldingsLocalTitlesFormAddEdit",
+            apiClient: APIClient.erm.localTitles,
+            resourceTableUrl:
+                APIClient.erm.httpClient._baseURL + "eholdings/local/titles",
+            i18n: {
+                deleteConfirmationMessage: __(
+                    "Are you sure you want to remove this title?"
+                ),
+                deleteSuccessMessage: __("Title %s deleted"),
+                displayName: __("Title"),
+                editLabel: __("Edit title #%s"),
+                emptyListMessage: __("There are no titles defined"),
+                newLabel: __("New title"),
+            },
+            av_title_publication_types,
+            eholdings_titles_table_settings,
+            vendors,
+            props,
+            additionalToolbarButtons,
             resourceAttrs: [
                 {
                     name: "publication_title",
                     required: true,
                     type: "text",
-                    label: this.$__("Publication title"),
+                    label: __("Publication title"),
                     tableColumnDefinition: {
-                        title: this.$__("Publication title"),
+                        title: __("Publication title"),
                         data: "publication_title:title_id",
                         searchable: true,
                         orderable: true,
@@ -76,9 +91,9 @@ export default {
                 {
                     name: "print_identifier",
                     type: "text",
-                    label: this.$__("Print-format identifier"),
+                    label: __("Print-format identifier"),
                     tableColumnDefinition: {
-                        title: this.$__("Identifier"),
+                        title: __("Identifier"),
                         data: "print_identifier:online_identifier",
                         searchable: true,
                         orderable: true,
@@ -107,57 +122,55 @@ export default {
                 {
                     name: "online_identifier",
                     type: "text",
-                    label: this.$__("Online-format identifier"),
+                    label: __("Online-format identifier"),
                     hideIn: ["List"],
                 },
                 {
                     name: "date_first_issue_online",
                     type: "text",
-                    label: this.$__(
-                        "Date of first serial issue available online"
-                    ),
+                    label: __("Date of first serial issue available online"),
                     hideIn: ["List"],
                 },
                 {
                     name: "num_first_vol_online",
                     type: "text",
-                    label: this.$__("Number of first volume available online"),
+                    label: __("Number of first volume available online"),
                     hideIn: ["List"],
                 },
                 {
                     name: "num_first_issue_online",
                     type: "text",
-                    label: this.$__("Number of first issue available online"),
+                    label: __("Number of first issue available online"),
                     hideIn: ["List"],
                 },
                 {
                     name: "date_last_issue_online",
                     type: "text",
-                    label: this.$__("Date of last issue available online"),
+                    label: __("Date of last issue available online"),
                     hideIn: ["List"],
                 },
                 {
                     name: "num_last_vol_online",
                     type: "text",
-                    label: this.$__("Number of last volume available online"),
+                    label: __("Number of last volume available online"),
                     hideIn: ["List"],
                 },
                 {
                     name: "num_last_issue_online",
                     type: "text",
-                    label: this.$__("Number of last issue available online"),
+                    label: __("Number of last issue available online"),
                     hideIn: ["List"],
                 },
                 {
                     name: "title_url",
                     type: "text",
-                    label: this.$__("Title-level URL"),
+                    label: __("Title-level URL"),
                     hideIn: ["List"],
                 },
                 {
                     name: "first_author",
                     type: "text",
-                    label: this.$__("First author"),
+                    label: __("First author"),
                     tableColumnDefinition: {
                         title: __("Contributors"),
                         data: "first_author:first_editor",
@@ -177,79 +190,73 @@ export default {
                 {
                     name: "embargo_info",
                     type: "text",
-                    label: this.$__("Embargo information"),
+                    label: __("Embargo information"),
                     hideIn: ["List"],
                 },
                 {
                     name: "coverage_depth",
                     type: "text",
-                    label: this.$__("Coverage depth"),
+                    label: __("Coverage depth"),
                     hideIn: ["List"],
                 },
                 {
                     name: "notes",
                     type: "text",
-                    label: this.$__("Notes"),
+                    label: __("Notes"),
                     hideIn: ["List"],
                 },
                 {
                     name: "publisher_name",
                     type: "text",
-                    label: this.$__("Publisher name"),
+                    label: __("Publisher name"),
                     hideIn: ["List"],
                 },
                 {
                     name: "publication_type",
                     type: "select",
-                    label: this.$__("Publication type"),
+                    label: __("Publication type"),
                     avCat: "av_title_publication_types",
                 },
                 {
                     name: "date_monograph_published_print",
                     type: "text",
-                    label: this.$__(
-                        "Date the monograph is first published in print"
-                    ),
+                    label: __("Date the monograph is first published in print"),
                     hideIn: ["List"],
                 },
                 {
                     name: "date_monograph_published_online",
                     type: "text",
-                    label: this.$__(
-                        "Date the monograph is first published online"
-                    ),
+                    label: __("Date the monograph is first published online"),
                     hideIn: ["List"],
                 },
                 {
                     name: "monograph_volume",
                     type: "text",
-                    label: this.$__("Number of volume for monograph"),
+                    label: __("Number of volume for monograph"),
                     hideIn: ["List"],
                 },
                 {
                     name: "monograph_edition",
                     type: "text",
-                    label: this.$__("Edition of the monograph"),
+                    label: __("Edition of the monograph"),
                     hideIn: ["List"],
                 },
                 {
                     name: "first_editor",
                     type: "text",
-                    label: this.$__("First editor"),
+                    label: __("First editor"),
                     hideIn: ["List"],
                 },
                 {
                     name: "parent_publication_title_id",
                     type: "text",
-                    label: this.$__(
-                        "Title identifier of the parent publication"
-                    ),
+                    label: __("Title identifier of the parent publication"),
                     hideIn: ["List"],
                 },
                 {
                     name: "preceding_publication_title_id",
                     type: "text",
-                    label: this.$__(
+                    label: __(
                         "Title identifier of any preceding publication title"
                     ),
                     hideIn: ["List"],
@@ -257,27 +264,27 @@ export default {
                 {
                     name: "access_type",
                     type: "text",
-                    label: this.$__("Access type"),
+                    label: __("Access type"),
                     hideIn: ["List"],
                 },
                 {
                     name: "create_linked_biblio",
                     type: "checkbox",
                     group:
-                        this.routeAction === "add"
-                            ? this.$__("Create linked bibliographic record")
-                            : this.$__("Update linked bibliographic record"),
+                        props.routeAction === "add"
+                            ? __("Create linked bibliographic record")
+                            : __("Update linked bibliographic record"),
                     label:
-                        this.routeAction === "add"
-                            ? this.$__("Create bibliographic record")
-                            : this.$__("Update bibliographic record"),
+                        props.routeAction === "add"
+                            ? __("Create bibliographic record")
+                            : __("Update bibliographic record"),
                     value: false,
                     hideIn: ["List"],
                 },
                 {
                     name: "resources",
                     type: "relationshipWidget",
-                    group: this.$__("Packages"),
+                    group: __("Packages"),
                     apiClient: APIClient.erm.localPackages,
                     showElement: {
                         type: "component",
@@ -361,9 +368,9 @@ export default {
                             resourceProperty: "resources",
                         },
                         relationshipStrings: {
-                            nameLowerCase: this.$__("package"),
-                            nameUpperCase: this.$__("Package"),
-                            namePlural: this.$__("packages"),
+                            nameLowerCase: __("package"),
+                            nameUpperCase: __("Package"),
+                            namePlural: __("packages"),
                         },
                         fetchOptions: {
                             type: "boolean",
@@ -374,7 +381,7 @@ export default {
                         {
                             name: "package_id",
                             type: "select",
-                            label: this.$__("Package"),
+                            label: __("Package"),
                             requiredKey: "package_id",
                             selectLabel: "name",
                             required: true,
@@ -383,7 +390,7 @@ export default {
                         {
                             name: "vendor_id",
                             type: "vendor",
-                            label: this.$__("Vendor"),
+                            label: __("Vendor"),
                             indexRequired: true,
                             showElement: {
                                 type: "text",
@@ -399,7 +406,7 @@ export default {
                         {
                             name: "started_on",
                             type: "date",
-                            label: this.$__("Start date"),
+                            label: __("Start date"),
                             componentProps: {
                                 date_to: {
                                     type: "string",
@@ -411,44 +418,44 @@ export default {
                         {
                             name: "ended_on",
                             type: "date",
-                            label: this.$__("End date"),
+                            label: __("End date"),
                         },
                         {
                             name: "proxy",
                             type: "text",
-                            label: this.$__("Proxy"),
+                            label: __("Proxy"),
                         },
                     ],
                     hideIn: ["List"],
                 },
             ],
-            tableOptions: {
-                url: this.getResourceTableUrl(),
-                options: {
-                    embed: "resources.package",
-                    searchCols: [
-                        { search: defaults.publication_title },
-                        null,
-                        { search: defaults.publication_type },
-                        null,
-                    ],
-                },
-                table_settings: this.eholdings_titles_table_settings,
-                add_filters: true,
-                filters_options: {
-                    3: () =>
-                        this.map_av_dt_filter("av_title_publication_types"),
-                },
-                actions: {
-                    0: ["show"],
-                    "-1": ["edit", "delete"],
-                },
+        });
+
+        const defaults = baseResource.getFilterValues(baseResource.route.query);
+        const tableOptions = {
+            url: baseResource.getResourceTableUrl(),
+            options: {
+                embed: "resources.package",
+                searchCols: [
+                    { search: defaults.publication_title },
+                    null,
+                    { search: defaults.publication_type },
+                    null,
+                ],
             },
-            tableFilters,
+            table_settings: baseResource.eholdings_titles_table_settings,
+            add_filters: true,
+            filters_options: {
+                3: () =>
+                    baseResource.map_av_dt_filter("av_title_publication_types"),
+            },
+            actions: {
+                0: ["show"],
+                "-1": ["edit", "delete"],
+            },
         };
-    },
-    methods: {
-        checkForm(title) {
+
+        const checkForm = title => {
             let errors = [];
 
             let resources = title.resources;
@@ -458,18 +465,20 @@ export default {
             );
 
             if (duplicate_package_ids.length) {
-                errors.push(this.$__("A package is used several times"));
+                errors.push(
+                    baseResource.$__("A package is used several times")
+                );
             }
 
-            this.setWarning(errors.join("<br>"));
+            baseResource.setWarning(errors.join("<br>"));
             return !errors.length;
-        },
-        onSubmit(e, titleToSave) {
+        };
+        const onSubmit = (e, titleToSave) => {
             e.preventDefault();
 
             let title = JSON.parse(JSON.stringify(titleToSave)); // copy
 
-            if (!this.checkForm(title)) {
+            if (!checkForm(title)) {
                 return false;
             }
 
@@ -484,46 +493,46 @@ export default {
             });
 
             if (title_id) {
-                this.apiClient.update(title, title_id).then(
+                baseResource.apiClient.update(title, title_id).then(
                     success => {
-                        this.setMessage(this.$__("Title updated"));
-                        this.$router.push({
+                        baseResource.setMessage(
+                            baseResource.$__("Title updated")
+                        );
+                        baseResource.router.push({
                             name: "EHoldingsLocalTitlesList",
                         });
                     },
                     error => {}
                 );
             } else {
-                this.apiClient.create(title).then(
+                baseResource.apiClient.create(title).then(
                     success => {
-                        this.setMessage(this.$__("Title created"));
-                        this.$router.push({
+                        baseResource.setMessage(
+                            baseResource.$__("Title created")
+                        );
+                        baseResource.router.push({
                             name: "EHoldingsLocalTitlesList",
                         });
                     },
                     error => {}
                 );
             }
-        },
-        additionalToolbarButtons(resource) {
-            return {
-                list: [
-                    {
-                        to: { name: "EHoldingsLocalTitlesFormImport" },
-                        icon: "plus",
-                        title: this.$__("Import from list"),
-                    },
-                    {
-                        to: { name: "EHoldingsLocalTitlesKBARTImport" },
-                        icon: "plus",
-                        title: this.$__("Import from KBART file"),
-                    },
-                ],
-            };
-        },
+        };
+
+        baseResource.created();
+
+        return {
+            ...baseResource,
+            tableOptions,
+            checkForm,
+            onSubmit,
+        };
     },
     emits: ["select-resource"],
     name: "EHoldingsLocalTitlesResource",
+    components: {
+        BaseResource,
+    },
 };
 </script>
 
