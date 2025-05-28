@@ -19,10 +19,11 @@
 
 use Modern::Perl;
 
-use Test::More tests => 4;
+use Test::More tests => 5;
 
 use Test::MockModule;
 use Test::MockObject;
+use Test::NoWarnings;
 use Test::Exception;
 
 use JSON qw(encode_json);
@@ -51,7 +52,8 @@ subtest 'get_user() tests' => sub {
             value => { identity_provider_id => $provider->id, domain => '', update_on_auth => 0, allow_opac => 1, allow_staff => 0 }
         }
     );
-    my $patron  = $builder->build_object( { class => 'Koha::Patrons', value => { email => 'patron@test.com' } } );
+    my $patron = $builder->build_object( { class => 'Koha::Patrons', value => { email => 'patron@test.com' } } );
+    t::lib::Mocks::mock_userenv( { patron => $patron } );
     my $mapping = {
         email     => 'electronic_mail',
         firstname => 'given_name',
