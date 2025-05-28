@@ -17,10 +17,12 @@
 
 use Modern::Perl;
 
-use Test::More tests => 2;
+use Test::More tests => 3;
 
 use Template::Context;
 use Template::Stash;
+use Test::MockModule;
+use Test::NoWarnings;
 
 use C4::Auth;
 use Koha::Cache::Memory::Lite;
@@ -29,22 +31,26 @@ use Koha::Template::Plugin::Koha;
 
 my $schema = Koha::Database->new->schema;
 
+my $session_id  = 42;
+my $cgi_session = Test::MockModule->new('CGI::Session');
+$cgi_session->mock( 'load',  sub { return bless { id => $session_id }, 'CGI::Session' } );
+$cgi_session->mock( 'new',   sub { return bless { id => $session_id }, 'CGI::Session' } );
+$cgi_session->mock( 'param', sub { return $session_id } );
+
 subtest 'GenerateCSRF() tests' => sub {
 
     plan tests => 1;
 
     $schema->storage->txn_begin;
 
-    my $session = C4::Auth::get_session('');
-
-    my $stash   = Template::Stash->new( { sessionID => $session->id } );
+    my $stash   = Template::Stash->new( { sessionID => $session_id } );
     my $context = Template::Context->new( { STASH => $stash } );
 
     my $plugin = Koha::Template::Plugin::Koha->new($context);
 
     my $token = $plugin->GenerateCSRF();
 
-    ok( Koha::Token->new->check_csrf( { session_id => $session->id, token => $token } ) );
+    ok( Koha::Token->new->check_csrf( { session_id => $session_id, token => $token } ) );
 
     $schema->storage->txn_rollback;
 };
@@ -54,9 +60,7 @@ subtest 'GenerateCSRF - New CSRF token generated everytime we need one' => sub {
 
     $schema->storage->txn_begin;
 
-    my $session = C4::Auth::get_session('');
-
-    my $stash   = Template::Stash->new( { sessionID => $session->id } );
+    my $stash   = Template::Stash->new( { sessionID => $session_id } );
     my $context = Template::Context->new( { STASH => $stash } );
 
     my $plugin = Koha::Template::Plugin::Koha->new($context);
