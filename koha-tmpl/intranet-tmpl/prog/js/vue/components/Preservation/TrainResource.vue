@@ -1,66 +1,152 @@
+<template>
+    <BaseResource
+        :routeAction="routeAction"
+        :instancedResource="this"
+    ></BaseResource>
+</template>
 <script>
 import { inject } from "vue";
 import BaseResource from "../BaseResource.vue";
+import { useBaseResource } from "../../composables/base-resource.js";
 import { storeToRefs } from "pinia";
 import { APIClient } from "../../fetch/api-client.js";
 
 export default {
-    extends: BaseResource,
     props: {
         routeAction: String,
     },
     setup(props) {
+        const format_date = $date;
         const AVStore = inject("AVStore");
         const { av_notforloan } = storeToRefs(AVStore);
 
         const PreservationStore = inject("PreservationStore");
         const { config } = storeToRefs(PreservationStore);
 
-        return {
-            ...BaseResource.setup({
-                resourceName: "train",
-                nameAttr: "name",
-                idAttr: "train_id",
-                showComponent: "TrainsShow",
-                listComponent: "TrainsList",
-                addComponent: "TrainsFormAdd",
-                editComponent: "TrainsFormAddEdit",
-                apiClient: APIClient.preservation.trains,
-                resourceTableUrl:
-                    APIClient.preservation.httpClient._baseURL + "trains",
-                addFiltersToList: true,
-                i18n: {
-                    deleteConfirmationMessage: __(
-                        "Are you sure you want to remove this train?"
-                    ),
-                    deleteSuccessMessage: __("Train %s deleted"),
-                    displayName: __("Train"),
-                    displayNameLowerCase: __("train"),
-                    displayNamePlural: __("Train"),
-                    editLabel: __("Edit train #%s"),
-                    emptyListMessage: __("There are no trains defined"),
-                    newLabel: __("New train"),
-                },
-                av_notforloan,
-                config,
-            }),
-        };
-    },
-    data() {
-        const tableFilters = this.getTableFilterFormElements();
-        const defaults = this.getFilterValues(this.$route.query, tableFilters);
+        const tableFilters = [
+            {
+                id: "status_filter",
+                name: "status_filter",
+                type: "radio",
+                options: [
+                    { value: "", description: __("All") },
+                    { value: "closed", description: __("Closed") },
+                    { value: "sent", description: __("Sent") },
+                    {
+                        value: "received",
+                        description: __("Received"),
+                    },
+                ],
+                value: "",
+            },
+        ];
+        const additionalToolbarButtons = (resource, componentData) => {
+            const { instancedResource } = componentData;
 
-        return {
+            const updateTrainDate = async (resource, attribute) => {
+                let train = JSON.parse(JSON.stringify(resource));
+                let train_id = train.train_id;
+                delete train.train_id;
+                delete train.items;
+                delete train.default_processing;
+                train[attribute] = new Date();
+                const client = APIClient.preservation;
+                return client.trains
+                    .update(train, train_id)
+                    .then(() => instancedResource.refreshTemplateState());
+            };
+            const closeTrain = resource => {
+                updateTrainDate(resource, "closed_on");
+            };
+            const sendTrain = resource => {
+                updateTrainDate(resource, "sent_on");
+            };
+            const receiveTrain = resource => {
+                updateTrainDate(resource, "received_on");
+            };
+            return {
+                show: [
+                    resource?.closed_on == null
+                        ? {
+                              to: {
+                                  name: "TrainsFormAddItem",
+                                  params: { train_id: resource?.train_id },
+                              },
+                              icon: "plus",
+                              title: instancedResource.$__("Add items"),
+                              index: -1,
+                          }
+                        : {},
+                    !resource?.closed_on &&
+                    !resource?.sent_on &&
+                    !resource?.received_on
+                        ? {
+                              onClick: () => closeTrain(resource),
+                              icon: "remove",
+                              title: instancedResource.$__("Close"),
+                          }
+                        : {},
+                    resource?.closed_on &&
+                    !resource?.sent_on &&
+                    !resource?.received_on
+                        ? {
+                              onClick: () => sendTrain(resource),
+                              icon: "paper-plane",
+                              title: instancedResource.$__("Send"),
+                          }
+                        : {},
+                    resource?.closed_on &&
+                    resource?.sent_on &&
+                    !resource?.received_on
+                        ? {
+                              onClick: () => receiveTrain(resource),
+                              icon: "inbox",
+                              title: instancedResource.$__("Receive"),
+                          }
+                        : {},
+                ],
+            };
+        };
+
+        const baseResource = useBaseResource({
+            resourceName: "train",
+            nameAttr: "name",
+            idAttr: "train_id",
+            showComponent: "TrainsShow",
+            listComponent: "TrainsList",
+            addComponent: "TrainsFormAdd",
+            editComponent: "TrainsFormAddEdit",
+            apiClient: APIClient.preservation.trains,
+            resourceTableUrl:
+                APIClient.preservation.httpClient._baseURL + "trains",
+            addFiltersToList: true,
+            i18n: {
+                deleteConfirmationMessage: __(
+                    "Are you sure you want to remove this train?"
+                ),
+                deleteSuccessMessage: __("Train %s deleted"),
+                displayName: __("Train"),
+                displayNameLowerCase: __("train"),
+                displayNamePlural: __("Train"),
+                editLabel: __("Edit train #%s"),
+                emptyListMessage: __("There are no trains defined"),
+                newLabel: __("New train"),
+            },
+            av_notforloan,
+            config,
+            props,
+            additionalToolbarButtons,
+            tableFilters,
             resourceAttrs: [
                 {
-                    name: this.idAttr,
-                    label: this.$__("ID"),
+                    name: "train_id",
+                    label: __("ID"),
                     type: "text",
                     hideIn: ["Form", "Show"],
                 },
                 {
                     name: "name",
-                    label: this.$__("Name"),
+                    label: __("Name"),
                     required: true,
                     type: "text",
                 },
@@ -68,23 +154,23 @@ export default {
                     name: "description",
                     required: true,
                     type: "textarea",
-                    label: this.$__("Description"),
+                    label: __("Description"),
                     hideIn: ["List"],
                 },
                 {
                     name: "not_for_loan",
                     type: "select",
-                    label: this.$__("Status for item added to this train"),
+                    label: __("Status for item added to this train"),
                     avCat: "av_notforloan",
                     disabled: train => (train.train_id ? true : false),
                     defaultValue:
-                        this.config.settings.not_for_loan_default_train_in,
+                        config.value.settings.not_for_loan_default_train_in,
                     hideIn: ["List"],
                 },
                 {
                     name: "default_processing_id",
                     type: "relationshipSelect",
-                    label: this.$__("Default processing"),
+                    label: __("Default processing"),
                     required: true,
                     relationshipAPIClient: APIClient.preservation.processings,
                     relationshipOptionLabelAttr: "name",
@@ -98,97 +184,86 @@ export default {
                 {
                     name: "created_on",
                     type: "date",
-                    label: this.$__("Created on"),
+                    label: __("Created on"),
                     required: false,
                     hideIn: ["Form", "Show"],
                 },
                 {
                     name: "closed_on",
                     type: "date",
-                    label: this.$__("Closed on"),
+                    label: __("Closed on"),
                     required: false,
-                    format: this.format_date,
+                    format: format_date,
                     hidden: resource => resource.closed_on,
                     hideIn: ["Form"],
                 },
                 {
                     name: "sent_on",
                     type: "date",
-                    label: this.$__("Sent on"),
+                    label: __("Sent on"),
                     required: false,
-                    format: this.format_date,
+                    format: format_date,
                     hidden: resource => resource.sent_on,
                     hideIn: ["Form"],
                 },
                 {
                     name: "received_on",
                     type: "date",
-                    label: this.$__("Received on"),
+                    label: __("Received on"),
                     required: false,
-                    format: this.format_date,
+                    format: format_date,
                     hidden: resource => resource.received_on,
                     hideIn: ["Form"],
                 },
             ],
-            tableOptions: {
-                options: {
-                    order: [
-                        [2, "desc"],
-                        [3, "asc"],
-                        [4, "asc"],
-                        [5, "asc"],
-                    ],
-                },
-                url: () => this.tableUrl(defaults),
-                add_filters: true,
-                actions: {
-                    0: ["show"],
-                    1: ["show"],
-                    "-1": [
-                        "edit",
-                        "delete",
-                        {
-                            addItems: {
-                                text: this.$__("Add items"),
-                                icon: "fa fa-plus",
-                                callback: this.doAddItems,
-                            },
-                        },
-                    ],
-                },
-            },
-            tableFilters,
+        });
+
+        const doAddItems = (train, dt, event) => {
+            if (train.closed_on != null) {
+                baseResource.setWarning(
+                    baseResource.$__("Cannot add items to a closed train")
+                );
+            } else {
+                baseResource.router.push({
+                    name: "TrainsFormAddItem",
+                    params: { train_id: train.train_id },
+                });
+            }
         };
-    },
-    methods: {
-        async updateTrainDate(resource, attribute) {
-            let train = JSON.parse(JSON.stringify(resource));
-            let train_id = train.train_id;
-            delete train.train_id;
-            delete train.items;
-            delete train.default_processing;
-            train[attribute] = new Date();
-            const client = APIClient.preservation;
-            //if (train_id) {
-            return client.trains
-                .update(train, train_id)
-                .then(() => this.refreshTemplateState());
-            //} else {
-            //    return client.trains
-            //        .create(train)
-            //        .then(() => this.getTrain(this.train.train_id));
-            //}
-        },
-        closeTrain(resource) {
-            this.updateTrainDate(resource, "closed_on");
-        },
-        sendTrain(resource) {
-            this.updateTrainDate(resource, "sent_on");
-        },
-        receiveTrain(resource) {
-            this.updateTrainDate(resource, "received_on");
-        },
-        onSubmit(e, trainToSave) {
+
+        const defaults = baseResource.getFilterValues(
+            baseResource.route.query,
+            tableFilters
+        );
+        const tableOptions = {
+            options: {
+                order: [
+                    [2, "desc"],
+                    [3, "asc"],
+                    [4, "asc"],
+                    [5, "asc"],
+                ],
+            },
+            url: () => tableUrl(defaults),
+            add_filters: true,
+            actions: {
+                0: ["show"],
+                1: ["show"],
+                "-1": [
+                    "edit",
+                    "delete",
+                    {
+                        addItems: {
+                            text: baseResource.$__("Add items"),
+                            icon: "fa fa-plus",
+                            callback: doAddItems,
+                        },
+                    },
+                ],
+            },
+        };
+
+        const onSubmit = (e, trainToSave) => {
             e.preventDefault();
 
             let train = JSON.parse(JSON.stringify(trainToSave)); // copy
@@ -202,45 +277,30 @@ export default {
             if (train_id) {
                 client.trains.update(train, train_id).then(
                     success => {
-                        this.setMessage(this.$__("Train updated"));
-                        this.$router.push({ name: "TrainsList" });
+                        baseResource.setMessage(
+                            baseResource.$__("Train updated")
+                        );
+                        baseResource.router.push({ name: "TrainsList" });
                     },
                     error => {}
                 );
             } else {
                 client.trains.create(train).then(
                     success => {
-                        this.setMessage(this.$__("Train created"));
-                        this.$router.push({ name: "TrainsList" });
+                        baseResource.setMessage(
+                            baseResource.$__("Train created")
+                        );
+                        baseResource.router.push({ name: "TrainsList" });
                     },
                     error => {}
                 );
             }
-        },
-        getTableFilterFormElementsLabel() {
-            return this.$__("Filter by:");
-        },
-        getTableFilterFormElements() {
-            return [
-                {
-                    id: "status_filter",
-                    name: "status_filter",
-                    type: "radio",
-                    options: [
-                        { value: "", description: this.$__("All") },
-                        { value: "closed", description: this.$__("Closed") },
-                        { value: "sent", description: this.$__("Sent") },
-                        {
-                            value: "received",
-                            description: this.$__("Received"),
-                        },
-                    ],
-                    value: "",
-                },
-            ];
-        },
-        tableUrl(filters) {
-            let url = this.getResourceTableUrl();
+        };
+        const getTableFilterFormElementsLabel = () => {
+            return baseResource.$__("Filter by:");
+        };
+        const tableUrl = filters => {
+            let url = baseResource.getResourceTableUrl();
             let q;
             if (filters.status_filter == "closed") {
                 q = {
@@ -266,86 +326,15 @@ export default {
             }
 
             return url;
-        },
-        async filterTable(filters, table, embedded = false) {
-            let { href } = this.$router.resolve({ name: "TrainsList" });
-            let new_route = this.build_url(href, filters);
-            this.$router.push(new_route);
-            //if (this.$refs.table) {
-            //    this.$refs.table.redraw(this.table_url());
-            //}
-            table.redraw(this.tableUrl(filters));
+        };
+        const filterTable = async (filters, table, embedded = false) => {
+            let { href } = baseResource.router.resolve({ name: "TrainsList" });
+            let new_route = baseResource.build_url(href, filters);
+            baseResource.router.push(new_route);
 
-            //if (!embedded) {
-            //    if (filters.by_expired && !filters.max_expiration_date) {
-            //        filters.max_expiration_date = new Date()
-            //            .toISOString()
-            //            .substring(0, 10);
-            //    }
-            //    if (!filters.by_expired) {
-            //        filters.max_expiration_date = "";
-            //    }
-            //    let { href } = this.$router.resolve({ name: "AgreementsList" });
-            //    let new_route = this.build_url(href, filters);
-            //    this.$router.push(new_route);
-            //}
-            //table.redraw(this.tableUrl(filters));
-        },
-        doAddItems(train, dt, event) {
-            if (train.closed_on != null) {
-                this.setWarning(this.$__("Cannot add items to a closed train"));
-            } else {
-                this.$router.push({
-                    name: "TrainsFormAddItem",
-                    params: { train_id: train.train_id },
-                });
-            }
-        },
-        additionalToolbarButtons(resource) {
-            return {
-                show: [
-                    resource?.closed_on == null
-                        ? {
-                              to: {
-                                  name: "TrainsFormAddItem",
-                                  params: { train_id: resource?.train_id },
-                              },
-                              icon: "plus",
-                              title: this.$__("Add items"),
-                              index: -1,
-                          }
-                        : {},
-                    !resource?.closed_on &&
-                    !resource?.sent_on &&
-                    !resource?.received_on
-                        ? {
-                              onClick: () => this.closeTrain(resource),
-                              icon: "remove",
-                              title: this.$__("Close"),
-                          }
-                        : {},
-                    resource?.closed_on &&
-                    !resource?.sent_on &&
-                    !resource?.received_on
-                        ? {
-                              onClick: () => this.sendTrain(resource),
-                              icon: "paper-plane",
-                              title: this.$__("Send"),
-                          }
-                        : {},
-                    resource?.closed_on &&
-                    resource?.sent_on &&
-                    !resource?.received_on
-                        ? {
-                              onClick: () => this.receiveTrain(resource),
-                              icon: "inbox",
-                              title: this.$__("Receive"),
-                          }
-                        : {},
-                ],
-            };
-        },
-        afterResourceFetch(componentData, resource, caller) {
+            table.redraw(tableUrl(filters));
+        };
+        const afterResourceFetch = (componentData, resource, caller) => {
             if (caller === "show") {
                 let display_table = componentData.resource.items.every(
                     item =>
@@ -415,12 +404,12 @@ export default {
                 }
                 componentData.item_table.display = display_table;
             }
-        },
-        appendToShow(componentData) {
+        };
+        const appendToShow = componentData => {
             return [
                 {
                     type: "component",
-                    name: this.$__("Items"),
+                    name: baseResource.$__("Items"),
                     hidden: train => train.items.length,
                     componentPath: "./Preservation/TrainItemsTable.vue",
                     componentProps: {
@@ -434,8 +423,22 @@ export default {
                     },
                 },
             ];
-        },
+        };
+
+        return {
+            ...baseResource,
+            tableOptions,
+            onSubmit,
+            filterTable,
+            afterResourceFetch,
+            appendToShow,
+            getTableFilterFormElementsLabel,
+        };
     },
     name: "TrainResource",
+    emits: ["select-resource"],
+    components: {
+        BaseResource,
+    },
 };
 </script>

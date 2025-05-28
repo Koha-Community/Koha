@@ -333,8 +333,8 @@ export function useBaseResource(instancedResource) {
                 //TODO: Rename this 'resource' to 'fetchedResource'. Needs to also be renamed in ResourceFormAdd and ResourceShow
                 // This is to make it clear that this is the fetchedResource (data), not the resource component class
                 componentData.resource = resource;
-                if (instancedResource.afterResourceFetch) {
-                    instancedResource.afterResourceFetch(
+                if (componentData.instancedResource.afterResourceFetch) {
+                    componentData.instancedResource.afterResourceFetch(
                         componentData,
                         resource,
                         caller
@@ -480,7 +480,11 @@ export function useBaseResource(instancedResource) {
      */
     const toolbarButtons = computed(() => {
         return (resource, component, i18n, componentData) => {
-            const defaultButtons = defaultToolbarButtons(resource, i18n);
+            const defaultButtons = instancedResource.hasOwnProperty(
+                "defaultToolbarButtons"
+            )
+                ? instancedResource.defaultToolbarButtons(resource, i18n)
+                : defaultToolbarButtons(resource, i18n);
             const additionalButtons = instancedResource.hasOwnProperty(
                 "additionalToolbarButtons"
             )
