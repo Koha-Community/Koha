@@ -16,7 +16,7 @@ export default {
         id: String,
         modelValue: Boolean,
         name: String,
-        value: Boolean,
+        value: Boolean | String,
         checked: Boolean,
         changeMethod: {
             type: Function,
