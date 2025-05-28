@@ -73,7 +73,7 @@ location is one of this:
 
 sub search_for_display {
     my ( $self, $params ) = @_;
-    my $lang = $params->{lang};
+    my $lang = $params->{lang} || q{};
 
     # If lang is not default, we will search for entries matching $lang but fallback to default if $lang is not found
     # Then we need a subquery count in where clause; DBIx::Class/SQL::Abstract does not support it, fallback to literal SQL
