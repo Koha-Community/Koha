@@ -1,0 +1,20 @@
+name: close pull request
+on:
+  pull_request_target:
+    types: [opened, reopened]
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@v4
+        with:
+          sparse-checkout: "README.txt"
+          sparse-checkout-cone-mode: false
+      - name: close
+        env:
+          GH_TOKEN: ${{ github.token }}
+          PR: ${{ github.event.number }}
+        run: |
+          gh pr close ${{ env.PR }} --comment "(Automated Close) Please do not file pull requests here, this repo is merely a clone of https://git.koha-community.org/Koha-community/Koha and we use Bugzilla at https://bugs.koha-community.org to submit patches to its codebase.\n\nSee https://wiki.koha-community.org/wiki/Submitting_A_Patch for more information. Note that you can use [`koha-testing-docker`](https://gitlab.com/koha-community/koha-testing-docker) to easily set-up a full development environment, which includes the `git bz` command to easily push your patches with a single command, instead of manually fiddling with patch files!\n\nIf you have any more questions or need help, do not hesitate to ask in our Mattermost chat: https://chat.koha-community.org. Thank you."
+          gh pr lock ${{ env.PR }}
