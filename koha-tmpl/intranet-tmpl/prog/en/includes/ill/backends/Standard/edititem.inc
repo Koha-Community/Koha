@@ -75,7 +75,7 @@
         [% INCLUDE "ill/backends/Standard/shared/custom_fields.inc" %]
         <fieldset class="action">
             <input id="ill-submit" class="btn btn-primary" type="submit" value="Update" />
-            <a class="cancel" href="/cgi-bin/koha/ill/ill-requests.pl">Cancel</a>
+            <a class="cancel" href="/cgi-bin/koha/ill/ill-requests.pl?op=illview&amp;illrequest_id=[% whole.value.other.illrequest_id | html %]">Cancel</a>
         </fieldset>
         <input type="hidden" name="illrequest_id" value="[% whole.value.other.illrequest_id | html %]" />
         <input type="hidden" name="op" value="cud-edititem" />
