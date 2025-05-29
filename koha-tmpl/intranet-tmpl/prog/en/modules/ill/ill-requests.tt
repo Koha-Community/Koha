@@ -654,7 +654,7 @@
                                     [% request.statusalias.lib | html %]
                                 [% ELSE %]
                                     [% request.capabilities.$req_status.name | html %]
-                                    [% IF request.requested_partners.length > 0 %]
+                                    [% IF request.requested_partners %]
                                         ([% request.requested_partners | html %])
                                     [% END %]
                                 [% END %]
