@@ -368,11 +368,13 @@ th {
 }
 
 #loggedinuser-menu {
-    min-width: 300px;
+    line-height: 1.2;
     padding: .5em 1em;
 
     .divider-vertical {
-        margin: 5px 5px;
+        display: block;
+        border: none;
+        margin: 0;
     }
 }
 
@@ -1103,7 +1105,10 @@ fieldset {
     a:hover,
     button {
         font-size: .9rem;
-        white-space: nowrap;
+
+        &:not(.dropdown-item) {
+            white-space: nowrap;
+        }
     }
 
     label {
