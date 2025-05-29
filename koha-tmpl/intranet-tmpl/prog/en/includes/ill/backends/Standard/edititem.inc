@@ -9,7 +9,7 @@
 [% END %]
 
 [% IF whole.stage == "form" %]
-    <h2>Edit a manual ILL request</h2>
+    <h2>Edit ILL request item metadata</h2>
     <form id="standard_edit_form" method="POST" action="">
         [% INCLUDE 'csrf-token.inc' %]
         <fieldset class="rows">
