@@ -60,6 +60,19 @@ my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
     }
 );
 
+# Validate line and column
+if (
+    $do_it
+    && (  !$line
+        || $line !~ /^(aqbasket|aqorders|aqbooksellers|items|biblioitems|aqbudgets)\.\w+$/
+        || !$column
+        || $column !~ /^(aqbasket|aqorders|aqbooksellers|items|biblioitems|aqbudgets)\.\w+$/ )
+    )
+{
+    C4::Output::output_error( $input, 'Possible SQL injection' );
+    exit;
+}
+
 our $sep = C4::Context->csv_delimiter( scalar $input->param("sep") );
 
 $template->param(
