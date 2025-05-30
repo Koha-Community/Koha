@@ -82,7 +82,7 @@ $template->param(
     op       => $op,
 );
 
-my @plugins = Koha::Plugins::GetPlugins(
+my @plugins = Koha::Plugins->new()->GetPlugins(
     {
         method => 'background_tasks',
     }
