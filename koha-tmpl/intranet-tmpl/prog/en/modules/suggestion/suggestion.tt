@@ -1490,14 +1490,19 @@
                                         searchable: false,
                                         orderable: true,
                                         render: function (data, type, row, meta) {
-                                            if(row.status === 'ASKED') return '<span>%s</span>'.format(_("Pending"));
-                                            if(row.status === 'ACCEPTED') return '<span>%s</span>'.format(_("Accepted"));
-                                            if(row.status === 'ORDERED') return '<span>%s</span>'.format(_("Ordered"));
-                                            if(row.status === 'REJECTED') return '<span>%s</span>'.format(_("Rejected"));
-                                            if(row.status === 'CHECKED') return '<span>%s</span>'.format(_("Checked"));
-                                            if(row.status === 'AVAILABLE') return '<span>%s</span>'.format(_("Available"));
-                                            if(row._strings.status.str) return '<span>%s</span>'.format(row._strings.status.str);
-                                            return '<span>%s</span>'.format(_("Status unknown"));
+                                            let node = '';
+                                            if(row.status === 'ASKED') node += '<span class="status asked">%s</span>'.format(_("Pending"));
+                                            else if(row.status === 'ACCEPTED') node += '<span class="status accepted">%s</span>'.format(_("Accepted"));
+                                            else if(row.status === 'ORDERED') node += '<span class="status ordered">%s</span>'.format(_("Ordered"));
+                                            else if(row.status === 'REJECTED') node += '<span class="status rejected">%s</span>'.format(_("Rejected"));
+                                            else if(row.status === 'CHECKED') node += '<span class="status checked">%s</span>'.format(_("Checked"));
+                                            else if(row.status === 'AVAILABLE') node += '<span class="status available">%s</span>'.format(_("Available"));
+                                            else if(row._strings.status.str) node += '<span class="status '+ row.status +'">%s</span>'.format(row._strings.status.str);
+                                            else node += '<span class="status unknown">%s</span>'.format(_("Status unknown"));
+                                            if ( row.reason ) {
+                                                node += '<div class="reason" data-reason="'+row.reason+'">('+ row.reason +')</div>';
+                                            }
+                                            return node;
                                         },
                                     },
                                     {
