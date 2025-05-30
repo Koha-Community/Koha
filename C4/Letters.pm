@@ -631,18 +631,16 @@ sub GetPreparedLetter {
             }
         );
 
-        if (@plugins) {
-            foreach my $plugin (@plugins) {
-                my $namespace = $plugin->get_metadata()->{namespace};
-                if ($namespace) {
-                    try {
-                        if ( my $content = $plugin->notices_content( \%params ) ) {
-                            $objects->{plugin_content}->{$namespace} = $content;
-                        }
-                    } catch {
-                        next;
-                    };
-                }
+        foreach my $plugin (@plugins) {
+            my $namespace = $plugin->get_metadata()->{namespace};
+            if ($namespace) {
+                try {
+                    if ( my $content = $plugin->notices_content( \%params ) ) {
+                        $objects->{plugin_content}->{$namespace} = $content;
+                    }
+                } catch {
+                    next;
+                };
             }
         }
     }
