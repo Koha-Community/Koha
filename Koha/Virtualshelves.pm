@@ -48,7 +48,7 @@ sub disown_or_delete {
     my $list_pref = C4::Context->preference('ListOwnershipUponPatronDeletion');
     $self->_resultset->result_source->schema->txn_do(
         sub {
-            if ( $list_pref ne 'delete' ) { # transfer or transfer_public
+            if ( $list_pref ne 'delete' ) {    # transfer or transfer_public
                 my $new_owner;
 
                 $new_owner = C4::Context->preference('ListOwnerDesignated')
@@ -64,7 +64,7 @@ sub disown_or_delete {
                         $list->transfer_ownership($new_owner);
                     } elsif ( $new_owner && $list->is_shared && $list_pref eq 'transfer' ) {
                         $list->transfer_ownership($new_owner);
-                    } else { # private list, or shared list with transfer_public
+                    } else {    # private list, or shared list with transfer_public
                         $list->delete;
                     }
                 }

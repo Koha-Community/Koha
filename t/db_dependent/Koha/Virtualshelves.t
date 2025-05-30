@@ -175,9 +175,9 @@ subtest 'disown_or_delete() tests' => sub {
     subtest 'ListOwnershipUponPatronDeletion set to transfer_public' => sub {
         plan tests => 2;
         $schema->storage->txn_begin;
-        my $patron_1 = $builder->build_object( { class => 'Koha::Patrons' } );
-        my $patron_2 = $builder->build_object( { class => 'Koha::Patrons' } );
-        my $patron_3 = $builder->build_object( { class => 'Koha::Patrons' } );
+        my $patron_1    = $builder->build_object( { class => 'Koha::Patrons' } );
+        my $patron_2    = $builder->build_object( { class => 'Koha::Patrons' } );
+        my $patron_3    = $builder->build_object( { class => 'Koha::Patrons' } );
         my $public_list = $builder->build_object(
             {
                 class => "Koha::Virtualshelves",
@@ -201,13 +201,12 @@ subtest 'disown_or_delete() tests' => sub {
         t::lib::Mocks::mock_preference( 'ListOwnershipUponPatronDeletion', 'transfer_public' );
         t::lib::Mocks::mock_preference( 'ListOwnerDesignated',             $patron_3->id );
 
-        my $rs = Koha::Virtualshelves->search(
-            { shelfnumber => [ $public_list->id, $private_list_shared->id ] } );
+        my $rs = Koha::Virtualshelves->search( { shelfnumber => [ $public_list->id, $private_list_shared->id ] } );
 
         my $result = $rs->disown_or_delete;
         $rs->reset;
 
-        is( $rs->count, 1, 'Only public list should be transferred' );
+        is( $rs->count,    1,                'Only public list should be transferred' );
         is( $rs->next->id, $public_list->id, 'Check id too' );
 
         $schema->storage->txn_rollback;
