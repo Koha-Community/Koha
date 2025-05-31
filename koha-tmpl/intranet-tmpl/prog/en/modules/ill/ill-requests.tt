@@ -16,7 +16,11 @@
     [% END %]</title
 >
 [% INCLUDE 'doc-head-close.inc' %]
-[% Asset.css("css/ill-requests.css") | $raw %]
+[% IF ( bidi ) %]
+    [% Asset.css("css/ill-requests-rtl.css") | $raw %]
+[% ELSE %]
+    [% Asset.css("css/ill-requests.css") | $raw %]
+[% END %]
 [% Asset.css("lib/jquery/plugins/multiple-select/multiple-select.min.css") | $raw %]
 </head>
 
