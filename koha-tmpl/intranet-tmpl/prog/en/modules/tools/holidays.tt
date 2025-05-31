@@ -13,7 +13,11 @@
     [% END %]</title
 >
 [% INCLUDE 'doc-head-close.inc' %]
-[% Asset.css("css/calendar.css") | $raw %]
+[% IF ( bidi ) %]
+    [% Asset.css("css/calendar-rtl.css") | $raw %]
+[% ELSE %]
+    [% Asset.css("css/calendar.css") | $raw %]
+[% END %]
 </head>
 <body id="tools_holidays" class="tools">
 [% WRAPPER 'header.inc' %]

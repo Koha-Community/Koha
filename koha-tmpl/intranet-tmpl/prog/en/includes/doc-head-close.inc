@@ -30,7 +30,6 @@
 [% Asset.css("lib/datatables/datatables.min.css") | $raw %]
 [% Asset.css("css/print.css", { media = "print" }) | $raw %]
 [% INCLUDE intranetstylesheet.inc %]
-[% IF ( bidi ) %][% Asset.css("css/right-to-left.css") | $raw %][% END %]
 <script type="module">
     import { APIClient } from "/intranet-tmpl/prog/js/fetch/api-client.js";
     window.APIClient = APIClient;

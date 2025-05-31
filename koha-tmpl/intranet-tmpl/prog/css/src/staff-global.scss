@@ -1552,6 +1552,12 @@ i {
     }
 }
 
+/*rtl:raw:
+    i.fa.fa-arrow-right {
+        transform: scaleX(-1);
+    }
+*/
+
 .item_status {
     padding: .2rem 0;
 
@@ -3066,6 +3072,11 @@ nav {
             margin-right: .3rem;
             width: .8em;
         }
+      /*rtl:raw:
+        &::before {
+            transform: scaleX(-1);
+        }
+        */
     }
 }
 
@@ -4908,3 +4919,16 @@ div .suggestion_note {
         cursor: pointer;
     }
 }
+
+/*rtl:raw:
+.dropdown-menu-end[data-bs-popper] {
+  left: auto;
+  right: 0;
+}
+*/
+
+/*rtl:raw:
+.CodeMirror{
+    text-align: left;
+}
+*/

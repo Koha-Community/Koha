@@ -5,7 +5,11 @@
 [% Asset.css("lib/fontawesome/css/fontawesome.min.css") | $raw %]
 [% Asset.css("lib/fontawesome/css/brands.min.css") | $raw %]
 [% Asset.css("lib/fontawesome/css/solid.min.css") | $raw %]
-[% Asset.css("css/installer.css")  | $raw %]
+[% IF ( bidi ) %]
+    [% Asset.css("css/installer-rtl.css") | $raw %]
+[% ELSE %]
+    [% Asset.css("css/installer.css") | $raw %]
+[% END %]
 <script>
     var Koha = {};
 </script>

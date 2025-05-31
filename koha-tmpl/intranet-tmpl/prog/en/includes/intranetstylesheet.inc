@@ -1,6 +1,10 @@
 [% USE raw %]
 [% USE Asset %]
-[% SET intranetstylesheet='staff-global.css' UNLESS intranetstylesheet %]
+[% IF ( bidi ) %]
+    [% SET intranetstylesheet='staff-global-rtl.css' UNLESS intranetstylesheet %]
+[% ELSE %]
+    [% SET intranetstylesheet='staff-global.css' UNLESS intranetstylesheet %]
+[% END %]
 [% IF (intranetstylesheet.match('^https?:|^\/')) %]
     <link rel="stylesheet" type="text/css" href="[% intranetstylesheet | html %]" />
 [% ELSE %]

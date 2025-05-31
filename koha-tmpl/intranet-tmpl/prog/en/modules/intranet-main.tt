@@ -12,7 +12,11 @@
         [% t("Koha staff interface") | html %]
     [% END %]</title
 >
-[% Asset.css("css/mainpage.css") | $raw %]
+[% IF ( bidi ) %]
+    [% Asset.css("css/mainpage-rtl.css") | $raw %]
+[% ELSE %]
+    [% Asset.css("css/mainpage.css") | $raw %]
+[% END %]
 [% INCLUDE 'doc-head-close.inc' %]
 </head>
 
