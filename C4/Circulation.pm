@@ -1707,7 +1707,7 @@ sub AddIssue {
                 );
             }
 
-            C4::Reserves::MoveReserve( $item_object->itemnumber, $patron->borrowernumber, $cancelreserve );
+            C4::Reserves::MoveReserve( $item_object, $patron, $cancelreserve );
 
             # Starting process for transfer job (checking transfer and validate it if we have one)
             if ( my $transfer = $item_object->get_transfer ) {

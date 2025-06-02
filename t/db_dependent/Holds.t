@@ -2077,7 +2077,7 @@ subtest 'EmailPatronWhenHoldIsPlaced tests' => sub {
         $post_notices_count, $original_notices_count,
         "EmailPatronWhenHoldIsPlaced is disabled so no email is queued"
     );
-    MoveReserve( $item->itemnumber, $borrowernumber, 1 );
+    MoveReserve( $item, $patron, 1 );
 
     $original_notices_count = Koha::Notice::Messages->search(
         {

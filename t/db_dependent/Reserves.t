@@ -699,7 +699,7 @@ AddReserve(
         priority       => 1,
     }
 );
-MoveReserve( $item->itemnumber, $borrowernumber );
+MoveReserve( $item, $patron );
 ($status) = CheckReserves($item);
 is( $status, '', 'MoveReserve filled hold' );
 
@@ -715,7 +715,7 @@ AddReserve(
         itemnumber     => $other_item->id,
     }
 );
-MoveReserve( $item->itemnumber, $borrowernumber );
+MoveReserve( $item, $patron );
 ($status) = CheckReserves($item);
 is( $status, '', 'MoveReserve filled waiting hold' );
 
@@ -731,7 +731,7 @@ AddReserve(
         reservation_date => $resdate,
     }
 );
-MoveReserve( $item->itemnumber, $borrowernumber );
+MoveReserve( $item, $patron );
 ($status) = CheckReserves( $item, 1 );
 is( $status, 'Reserved', 'MoveReserve did not fill future hold' );
 $dbh->do( 'DELETE FROM reserves', undef, ($bibnum) );
@@ -747,7 +747,7 @@ AddReserve(
         reservation_date => $resdate,
     }
 );
-MoveReserve( $item->itemnumber, $borrowernumber );
+MoveReserve( $item, $patron );
 ($status) = CheckReserves( $item, undef, 2 );
 is( $status, '', 'MoveReserve filled future hold now' );
 
@@ -761,7 +761,7 @@ AddReserve(
         reservation_date => $resdate,
     }
 );
-MoveReserve( $item->itemnumber, $borrowernumber );
+MoveReserve( $item, $patron );
 ($status) = CheckReserves( $item, undef, 2 );
 is( $status, '', 'MoveReserve filled future waiting hold now' );
 
@@ -777,7 +777,7 @@ AddReserve(
         reservation_date => $resdate,
     }
 );
-MoveReserve( $item->itemnumber, $borrowernumber );
+MoveReserve( $item, $patron );
 ($status) = CheckReserves( $item, 3 );
 is( $status, 'Reserved', 'MoveReserve did not fill future hold of 3 days' );
 $dbh->do( 'DELETE FROM reserves', undef, ($bibnum) );
@@ -1176,7 +1176,7 @@ subtest 'MoveReserve additional test' => sub {
     );
 
     # The 2nd hold should be filled even if the item is preselected for the first hold
-    MoveReserve( $item_1->itemnumber, $patron_2->borrowernumber );
+    MoveReserve( $item_1, $patron_2 );
     is( $patron_2->holds->count, 0, "The 2nd patrons no longer has a hold" );
     is(
         $patron_2->old_holds->next()->reserve_id, $reserve_2,
@@ -1194,7 +1194,7 @@ subtest 'MoveReserve additional test' => sub {
     );
 
     # The 3rd hold should not be filled as it is an item level hold on a different item
-    MoveReserve( $item_1->itemnumber, $patron_2->borrowernumber );
+    MoveReserve( $item_1, $patron_2 );
     is( $patron_2->holds->count,     1, "The 2nd patron still has a hold" );
     is( $patron_2->old_holds->count, 1, "The 2nd patron has only 1 old holds" );
 
@@ -1202,7 +1202,7 @@ subtest 'MoveReserve additional test' => sub {
     $hold_3->item_level_hold(0)->store();
 
     # The 3rd hold should now be filled as it is a title level hold, even though associated with a different item
-    MoveReserve( $item_1->itemnumber, $patron_2->borrowernumber );
+    MoveReserve( $item_1, $patron_2 );
     is( $patron_2->holds->count,       0, "The 2nd patron no longer has a hold" );
     is( $patron_2->old_holds->count(), 2, "The 2nd patron's hold was filled and moved to old holds" );
 
