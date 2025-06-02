@@ -568,9 +568,10 @@ describe("Agreement CRUD operations", () => {
                 "X-Base-Total-Count": "1",
                 "X-Total-Count": "1",
             },
-        });
+        }).as("get-agreements");
         cy.intercept("GET", "/api/v1/erm/agreements/*", agreement);
         cy.visit("/cgi-bin/koha/erm/agreements");
+        cy.wait("@get-agreements");
 
         cy.get("#agreements_list table tbody tr:first")
             .contains("Delete")
@@ -607,14 +608,8 @@ describe("Agreement CRUD operations", () => {
 
         // Delete from show
         // Click the "name" link from the list
-        cy.intercept("GET", "/api/v1/erm/agreements*", {
-            statusCode: 200,
-            body: agreements,
-            headers: {
-                "X-Base-Total-Count": "1",
-                "X-Total-Count": "1",
-            },
-        });
+        cy.visit("/cgi-bin/koha/erm/agreements");
+        cy.wait("@get-agreements");
         cy.intercept("GET", "/api/v1/erm/agreements/*", agreement).as(
             "get-agreement"
         );
@@ -628,7 +623,6 @@ describe("Agreement CRUD operations", () => {
         );
         name_link.click();
         cy.wait("@get-agreement");
-        cy.wait(500); // Cypress is too fast! Vue hasn't populated the form yet!
         cy.get("#agreements_show h2").contains(
             "Agreement #" + agreement.agreement_id
         );
