@@ -835,10 +835,11 @@ sub CheckReserves {
 
     my $dont_trap = C4::Context->preference('TrapHoldsOnOrder') ? $item->notforloan > 0 : $item->notforloan;
     if ( !$dont_trap ) {
-        my $item_type = $item->effective_itemtype;
-        if ( $item_type ) {
-            return if Koha::ItemTypes->find( $item_type )->notforloan;
-        }
+        my $effective_item_type = $item->effective_itemtype;
+
+        my $item_type = Koha::ItemTypes->find($effective_item_type);
+        return
+            if $item_type && $item_type->notforloan;
     }
     else {
         return;
