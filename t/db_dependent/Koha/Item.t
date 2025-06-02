@@ -2334,7 +2334,10 @@ subtest 'store() tests' => sub {
 
         is( $message_2->type,    'info',        'type is correct' );
         is( $message_2->message, 'lost_charge', 'message is correct' );
-        is( $message_2->payload, undef,         'no payload' );
+        is_deeply(
+            $message_2->payload, { patron_id => $patron->borrowernumber },
+            'payload contains the borrowernumber or is NULL'
+        );
 
         my $message_3 = $messages->[2];
         is( $message_3->message, 'processing_refunded', 'message is correct' );
