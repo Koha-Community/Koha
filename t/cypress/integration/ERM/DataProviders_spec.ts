@@ -168,7 +168,7 @@ describe("Data provider CRUD operations", () => {
                 "X-Base-Total-Count": "1",
                 "X-Total-Count": "1",
             },
-        });
+        }).as("get-data-providers");
         cy.intercept(
             "GET",
             "/api/v1/erm/usage_data_providers/*",
@@ -188,11 +188,11 @@ describe("Data provider CRUD operations", () => {
         );
 
         cy.visit("/cgi-bin/koha/erm/eusage/usage_data_providers");
+        cy.wait("@get-data-providers");
         cy.get("#usage_data_providers_list table tbody tr:first")
             .contains("Edit")
             .click();
         cy.wait("@get-data-provider");
-        cy.wait(1000); // Cypress is too fast! Vue hasn't populated the form yet!
         cy.get("#data_providers_add h2").contains("Edit usage data provider");
 
         // Form has been correctly filled in
@@ -290,7 +290,6 @@ describe("Data provider CRUD operations", () => {
         );
         name_link.click();
         cy.wait("@get-data-provider");
-        cy.wait(500); // Cypress is too fast! Vue hasn't populated the form yet!
         cy.get("#usage_data_providers_show h2").contains(
             "Data provider #" + dataProvider.erm_usage_data_provider_id
         );
@@ -359,13 +358,14 @@ describe("Data provider CRUD operations", () => {
                 "X-Base-Total-Count": "1",
                 "X-Total-Count": "1",
             },
-        });
+        }).as("get-data-providers");
         cy.intercept(
             "GET",
             "/api/v1/erm/usage_data_providers/*",
             dataProvider
         ).as("get-data-provider");
         cy.visit("/cgi-bin/koha/erm/eusage/usage_data_providers");
+        cy.wait("@get-data-providers");
         let name_link = cy.get(
             "#usage_data_providers_list table tbody tr:first td:first a"
         );
@@ -378,7 +378,6 @@ describe("Data provider CRUD operations", () => {
         );
         name_link.click();
         cy.wait("@get-data-provider");
-        cy.wait(500);
         cy.get("#usage_data_providers_show h2").contains(
             "Data provider #" + dataProvider.erm_usage_data_provider_id
         );
@@ -501,13 +500,14 @@ describe("Data provider tab options", () => {
                 "X-Base-Total-Count": "1",
                 "X-Total-Count": "1",
             },
-        });
+        }).as("get-data-providers");
         cy.intercept(
             "GET",
             "/api/v1/erm/usage_data_providers/*",
             dataProvider
         ).as("get-data-provider");
         cy.visit("/cgi-bin/koha/erm/eusage/usage_data_providers");
+        cy.wait("@get-data-providers");
         let name_link = cy.get(
             "#usage_data_providers_list table tbody tr:first td:first a"
         );
@@ -520,7 +520,6 @@ describe("Data provider tab options", () => {
         );
         name_link.click();
         cy.wait("@get-data-provider");
-        cy.wait(500);
     });
 
     it("Should display provider details", () => {

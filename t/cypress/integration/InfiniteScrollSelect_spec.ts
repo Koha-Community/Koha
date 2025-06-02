@@ -396,7 +396,6 @@ describe("Infinite scroll", () => {
             .contains("Edit")
             .click();
         cy.wait("@get-agreement");
-        cy.wait(500); // Cypress is too fast! Vue hasn't populated the form yet!
 
         // Licenses should be labelled correctly
         cy.get("#agreement_license_0 #license_id_0 .vs__selected").contains(
