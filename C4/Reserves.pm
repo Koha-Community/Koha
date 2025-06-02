@@ -2029,25 +2029,36 @@ sub _ShiftPriority {
 
 =head2 MoveReserve
 
-  MoveReserve( $itemnumber, $borrowernumber, $cancelreserve )
+  MoveReserve( $item, $patron, $cancelreserve )
 
 Use when checking out an item to handle reserves
 If $cancelreserve boolean is set to true, it will remove existing reserve
 
+Parameters are:
+
+=over 4
+
+=item B<$item>: a I<Koha::Item> object
+
+=item B<$patron>: a I<Koha::Patron> object
+
+=item B<$cancelreserve>: a boolean telling if the existing hold should be removed
+
+=back
+
 =cut
 
 sub MoveReserve {
-    my ( $itemnumber, $borrowernumber, $cancelreserve ) = @_;
+    my ( $item, $patron, $cancelreserve ) = @_;
 
     $cancelreserve //= 0;
 
     my $lookahead = C4::Context->preference('ConfirmFutureHolds');    #number of days to look for future holds
-    my $item      = Koha::Items->find($itemnumber);
     my ( $restype, $res, undef ) = CheckReserves( $item, $lookahead );
 
-    if ( $res && $res->{borrowernumber} == $borrowernumber ) {
+    if ( $res && $res->{borrowernumber} == $patron->borrowernumber ) {
         my $hold = Koha::Holds->find( $res->{reserve_id} );
-        $hold->fill( { item_id => $itemnumber } );
+        $hold->fill( { item_id => $item->id } );
     } else {
 
         # The item is reserved by someone else.
@@ -2059,24 +2070,23 @@ sub MoveReserve {
                 dateformat => 'iso', dateonly => 1
             }
         );
-        my $borr_res = Koha::Holds->search(
+        my $hold = $patron->holds->search(
             {
-                borrowernumber => $borrowernumber,
-                biblionumber   => $item->biblionumber,
-                reservedate    => { '<=' => $lookahead_date },
-                -or            => [ item_level_hold => 0, itemnumber => $itemnumber ],
+                biblionumber => $item->biblionumber,
+                reservedate  => { '<=' => $lookahead_date },
+                -or          => [ item_level_hold => 0, itemnumber => $item->id ],
             },
             { order_by => 'priority' }
         )->next();
 
-        if ($borr_res) {
+        if ($hold) {
 
             # The item is reserved by the current patron
-            $borr_res->fill( { item_id => $itemnumber } );
+            $hold->fill( { item_id => $item->id } );
         }
 
         if ( $cancelreserve eq 'revert' ) {    ## Revert waiting reserve to priority 1
-            RevertWaitingStatus( { itemnumber => $itemnumber } );
+            RevertWaitingStatus( { itemnumber => $item->id } );
         } elsif ( $cancelreserve eq 'cancel' || $cancelreserve ) {    # cancel reserves on this item
             my $hold = Koha::Holds->find( $res->{reserve_id} );
             $hold->cancel;
