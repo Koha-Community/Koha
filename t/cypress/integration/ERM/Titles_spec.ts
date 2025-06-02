@@ -44,8 +44,8 @@ describe("Title CRUD operations", () => {
             body: [],
         }).as("get-empty-packages");
         cy.visit("/cgi-bin/koha/erm/eholdings/local/titles");
-        cy.wait(500);
         cy.get("#toolbar a").contains("Import from list").click();
+        cy.wait("@get-empty-packages");
         cy.get("h2").contains("Import from a list");
         cy.left_menu_active_item_is("Titles");
         cy.get("#package_list .vs__selected").should("not.exist");
@@ -57,8 +57,8 @@ describe("Title CRUD operations", () => {
         }).as("get-related-packages");
         cy.visit("/cgi-bin/koha/erm/eholdings/local/titles");
         cy.get("#toolbar a").contains("Import from list").click();
+        cy.wait("@get-related-packages");
         cy.get("h2").contains("Import from a list");
-        cy.wait(500);
 
         // Prepare background job response to the POST
         cy.intercept("POST", "/api/v1/erm/eholdings/local/titles/import", {
@@ -125,7 +125,6 @@ describe("Title CRUD operations", () => {
 
         // Click the button in the toolbar
         cy.visit("/cgi-bin/koha/erm/eholdings/local/titles");
-        cy.wait(500); // Cypress is too fast! Vue hasn't populated the form yet!
         cy.contains("New title").click();
         cy.get("#titles_add h2").contains("New title");
         cy.left_menu_active_item_is("Titles");
@@ -234,13 +233,14 @@ describe("Title CRUD operations", () => {
                 "X-Base-Total-Count": "1",
                 "X-Total-Count": "1",
             },
-        });
+        }).as("get-titles");
         cy.intercept(
             "GET",
             "/api/v1/erm/eholdings/local/titles/*",
             erm_title
         ).as("get-title");
         cy.visit("/cgi-bin/koha/erm/eholdings/local/titles");
+        cy.wait("@get-titles");
         // Intercept related packages request after entering title edit
         cy.intercept("GET", "/api/v1/erm/eholdings/local/packages*", {
             statusCode: 200,
@@ -249,7 +249,6 @@ describe("Title CRUD operations", () => {
 
         cy.get("#titles_list table tbody tr:first").contains("Edit").click();
         cy.wait("@get-title");
-        cy.wait(500); // Cypress is too fast! Vue hasn't populated the form yet!
         cy.get("#titles_add h2").contains("Edit title");
         cy.left_menu_active_item_is("Titles");
 
@@ -376,7 +375,7 @@ describe("Title CRUD operations", () => {
                 "X-Base-Total-Count": "1",
                 "X-Total-Count": "1",
             },
-        });
+        }).as("get-titles");
         // Title with empty resources.
         cy.intercept(
             {
@@ -393,6 +392,7 @@ describe("Title CRUD operations", () => {
             }
         ).as("get-title");
         cy.visit("/cgi-bin/koha/erm/eholdings/local/titles");
+        cy.wait("@get-titles");
         let title_link = cy.get("#titles_list table tbody tr:first td:first a");
         title_link.should(
             "have.text",
@@ -400,7 +400,6 @@ describe("Title CRUD operations", () => {
         );
         cy.get("#titles_list table tbody tr:first td:first a").click();
         cy.wait("@get-title");
-        cy.wait(500); // Cypress is too fast! Vue hasn't populated the form yet!
         cy.get("#eholdings_title_show h2").contains(
             "Title #" + erm_title.title_id
         );
@@ -418,8 +417,8 @@ describe("Title CRUD operations", () => {
 
         // List packages
         cy.visit("/cgi-bin/koha/erm/eholdings/local/titles/1");
+        cy.wait("@get-title");
         cy.contains("Packages (1)");
-        cy.wait(500);
 
         // Visit resource
         let related_package = erm_title.resources[0];
@@ -485,7 +484,7 @@ describe("Title CRUD operations", () => {
                 "X-Base-Total-Count": "1",
                 "X-Total-Count": "1",
             },
-        });
+        }).as("get-titles");
         // Title with empty resources.
         cy.intercept(
             {
@@ -502,6 +501,7 @@ describe("Title CRUD operations", () => {
             }
         ).as("get-title");
         cy.visit("/cgi-bin/koha/erm/eholdings/local/titles");
+        cy.wait("@get-titles");
         let title_link = cy.get("#titles_list table tbody tr:first td:first a");
         title_link.should(
             "have.text",
@@ -509,7 +509,6 @@ describe("Title CRUD operations", () => {
         );
         cy.get("#titles_list table tbody tr:first td:first a").click();
         cy.wait("@get-title");
-        cy.wait(500); // Cypress is too fast! Vue hasn't populated the form yet!
         cy.get("#eholdings_title_show h2").contains(
             "Title #" + erm_title.title_id
         );

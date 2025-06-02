@@ -774,7 +774,7 @@ describe("Additional Fields operations", () => {
                 "X-Base-Total-Count": "1",
                 "X-Total-Count": "1",
             },
-        });
+        }).as("get-licenses");
         cy.intercept("GET", "/api/v1/erm/licenses/*", license).as(
             "get-license"
         );
@@ -804,9 +804,9 @@ describe("Additional Fields operations", () => {
         ).as("avcategories");
 
         cy.visit("/cgi-bin/koha/erm/licenses");
+        cy.wait("@get-licenses");
         cy.get("#licenses_list table tbody tr:first").contains("Edit").click();
         cy.wait("@get-license");
-        cy.wait(500); // Cypress is too fast! Vue hasn't populated the form yet!
 
         // All additional fields should be pre-populated
         cy.get("#additional_fields #additional_field_1 .vs__selected").contains(
@@ -1167,7 +1167,7 @@ describe("Additional Fields operations", () => {
                 "X-Base-Total-Count": "1",
                 "X-Total-Count": "1",
             },
-        });
+        }).as("get-agreements");
         cy.intercept("GET", "/api/v1/erm/agreements/*", agreement).as(
             "get-agreement"
         );
@@ -1197,11 +1197,11 @@ describe("Additional Fields operations", () => {
         ).as("avcategories");
 
         cy.visit("/cgi-bin/koha/erm/agreements");
+        cy.wait("@get-agreements");
         cy.get("#agreements_list table tbody tr:first")
             .contains("Edit")
             .click();
         cy.wait("@get-agreement");
-        cy.wait(500); // Cypress is too fast! Vue hasn't populated the form yet!
 
         // All additional fields should be pre-populated
         cy.get("#additional_fields #additional_field_1 .vs__selected").contains(
@@ -1574,7 +1574,7 @@ describe("Additional Fields operations", () => {
                 "X-Base-Total-Count": "1",
                 "X-Total-Count": "1",
             },
-        });
+        }).as("get-eholdings-packages");
         cy.intercept(
             "GET",
             "/api/v1/erm/eholdings/local/packages/*",
@@ -1606,9 +1606,9 @@ describe("Additional Fields operations", () => {
         ).as("avcategories");
 
         cy.visit("/cgi-bin/koha/erm/eholdings/local/packages");
+        cy.wait("@get-eholdings-packages");
         cy.get("#packages_list table tbody tr:first").contains("Edit").click();
         cy.wait("@get-eholdings-package");
-        cy.wait(500); // Cypress is too fast! Vue hasn't populated the form yet!
 
         // All additional fields should be pre-populated
         cy.get("#additional_fields #additional_field_1 .vs__selected").contains(

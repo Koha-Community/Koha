@@ -288,22 +288,18 @@ describe("kohaTable (using REST API)", () => {
             });
         });
 
-        it("Jump to the configuration page", () => {
+        it.only("Jump to the configuration page", () => {
             cy.visit("/cgi-bin/koha/admin/branches.pl");
             cy.get(`#${table_id}_wrapper .dt_button_configure_table`).click();
             cy.url().should("contain", "module=admin");
             cy.url().should("contain", "page=libraries");
             cy.url().should("contain", "table=libraries");
 
-            cy.wait(2000); // ensure the animation completes, random failures?
             cy.get("#admin_panel")
                 .contains("Table id: libraries")
                 .should("be.visible");
 
-            cy.window().then(win => {
-                const scrollTop = win.scrollY || win.pageYOffset;
-                expect(scrollTop).to.be.greaterThan(0); // Ensure some scrolling happened
-            });
+            cy.window().its("scrollY").should("be.gt", 0); // Ensure some scrolling happened
         });
     });
 

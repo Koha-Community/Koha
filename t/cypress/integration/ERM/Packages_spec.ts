@@ -135,13 +135,14 @@ describe("Package CRUD operations", () => {
                 "X-Base-Total-Count": "1",
                 "X-Total-Count": "1",
             },
-        });
+        }).as("get-packages");
         cy.intercept(
             "GET",
             "/api/v1/erm/eholdings/local/packages/*",
             erm_package
         ).as("get-package");
         cy.visit("/cgi-bin/koha/erm/eholdings/local/packages");
+        cy.wait("@get-packages");
         // Intercept related agreements request after entering agreement edit
         cy.intercept("GET", "/api/v1/erm/agreements*", {
             statusCode: 200,
@@ -149,7 +150,6 @@ describe("Package CRUD operations", () => {
         }).as("get-related-agreements");
         cy.get("#packages_list table tbody tr:first").contains("Edit").click();
         cy.wait("@get-package");
-        cy.wait(500); // Cypress is too fast! Vue hasn't populated the form yet!
         cy.get("#packages_add h2").contains("Edit package");
         cy.left_menu_active_item_is("Packages");
 
@@ -194,13 +194,14 @@ describe("Package CRUD operations", () => {
                 "X-Base-Total-Count": "1",
                 "X-Total-Count": "1",
             },
-        });
+        }).as("get-packages");
         cy.intercept(
             "GET",
             "/api/v1/erm/eholdings/local/packages/*",
             erm_package
         ).as("get-package");
         cy.visit("/cgi-bin/koha/erm/eholdings/local/packages");
+        cy.wait("@get-packages");
         let name_link = cy.get(
             "#packages_list table tbody tr:first td:first a"
         );
@@ -210,7 +211,6 @@ describe("Package CRUD operations", () => {
         );
         name_link.click();
         cy.wait("@get-package");
-        cy.wait(500); // Cypress is too fast! Vue hasn't populated the form yet!
         cy.get("#packages_show h2").contains(
             "Package #" + erm_package.package_id
         );
@@ -249,9 +249,8 @@ describe("Package CRUD operations", () => {
             }
         ).as("get-resource");
         cy.visit("/cgi-bin/koha/erm/eholdings/local/packages/1");
-        cy.contains("Titles (1)");
         cy.wait("@get-resource");
-        cy.wait(500);
+        cy.contains("Titles (1)");
         cy.get("#title_list_result table").contains("A great title");
     });
 
@@ -317,13 +316,14 @@ describe("Package CRUD operations", () => {
                 "X-Base-Total-Count": "1",
                 "X-Total-Count": "1",
             },
-        });
+        }).as("get-packages");
         cy.intercept(
             "GET",
             "/api/v1/erm/eholdings/local/packages/*",
             erm_package
         ).as("get-package");
         cy.visit("/cgi-bin/koha/erm/eholdings/local/packages");
+        cy.wait("@get-packages");
         let name_link = cy.get(
             "#packages_list table tbody tr:first td:first a"
         );
@@ -333,7 +333,6 @@ describe("Package CRUD operations", () => {
         );
         name_link.click();
         cy.wait("@get-package");
-        cy.wait(500); // Cypress is too fast! Vue hasn't populated the form yet!
         cy.get("#packages_show h2").contains(
             "Package #" + erm_package.package_id
         );

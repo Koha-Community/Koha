@@ -139,7 +139,6 @@ describe("Vendor CRUD operations", () => {
         // Click the 'Edit' button from the list
         cy.get("#vendors_list table tbody tr:first").contains("Edit").click();
         cy.wait("@get-vendor");
-        cy.wait(500); // Cypress is too fast! Vue hasn't populated the form yet!
         cy.get("h1").contains("Edit vendor");
 
         // Form has been correctly filled in
@@ -168,8 +167,9 @@ describe("Vendor CRUD operations", () => {
                 "X-Base-Total-Count": "1",
                 "X-Total-Count": "1",
             },
-        });
+        }).as("get-vendors");
         cy.visit("/cgi-bin/koha/acquisition/vendors");
+        cy.wait("@get-vendors");
         cy.intercept(
             "GET",
             new RegExp("/api/v1/acquisitions/vendors/(?!config$).+"),
@@ -181,7 +181,6 @@ describe("Vendor CRUD operations", () => {
         );
         name_link.should("have.text", vendor.name + " (#" + vendor.id + ")");
         name_link.click();
-        cy.wait(500); // Cypress is too fast! Vue hasn't populated the form yet!
         cy.get("#vendors_show h1").contains(vendor.name);
 
         // TODO Test contracts table

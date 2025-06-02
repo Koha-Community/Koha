@@ -440,7 +440,6 @@ describe("Agreement CRUD operations", () => {
             .contains("Edit")
             .click();
         cy.wait("@get-agreement");
-        cy.wait(500); // Cypress is too fast! Vue hasn't populated the form yet!
         cy.get("#agreements_add h2").contains("Edit agreement");
         cy.left_menu_active_item_is("Agreements");
 
@@ -499,10 +498,10 @@ describe("Agreement CRUD operations", () => {
                 statusCode: 500,
                 delay: 1000,
             });
-        });
+        }).as("edit-agreement");
         cy.get("#agreements_add").contains("Submit").click();
         cy.get("main div[class='modal_centered']").contains("Submitting...");
-        cy.wait(1000);
+        cy.wait("@edit-agreement");
         cy.get("main div[class='alert alert-warning']").contains(
             "Something went wrong: Error: Internal Server Error"
         );
@@ -529,11 +528,12 @@ describe("Agreement CRUD operations", () => {
                 "X-Base-Total-Count": "1",
                 "X-Total-Count": "1",
             },
-        });
+        }).as("get-agreements");
         cy.intercept("GET", "/api/v1/erm/agreements/*", agreement).as(
             "get-agreement"
         );
         cy.visit("/cgi-bin/koha/erm/agreements");
+        cy.wait("@get-agreements");
         let id_cell = cy.get("#agreements_list table tbody tr:first td:first");
         id_cell.contains(agreement.agreement_id);
 
@@ -544,7 +544,6 @@ describe("Agreement CRUD operations", () => {
         name_link.should("have.text", agreement.name);
         name_link.click();
         cy.wait("@get-agreement");
-        cy.wait(500); // Cypress is too fast! Vue hasn't populated the form yet!
         cy.get("#agreements_show h2").contains(
             "Agreement #" + agreement.agreement_id
         );

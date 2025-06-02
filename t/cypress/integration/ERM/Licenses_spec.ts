@@ -167,14 +167,14 @@ describe("License CRUD operations", () => {
                 "X-Base-Total-Count": "1",
                 "X-Total-Count": "1",
             },
-        });
+        }).as("get-licenses");
         cy.intercept("GET", "/api/v1/erm/licenses/*", license).as(
             "get-license"
         );
         cy.visit("/cgi-bin/koha/erm/licenses");
+        cy.wait("@get-licenses");
         cy.get("#licenses_list table tbody tr:first").contains("Edit").click();
         cy.wait("@get-license");
-        cy.wait(500); // Cypress is too fast! Vue hasn't populated the form yet!
         cy.get("#licenses_add h2").contains("Edit license");
         cy.left_menu_active_item_is("Licenses");
 
@@ -241,11 +241,12 @@ describe("License CRUD operations", () => {
                 "X-Base-Total-Count": "1",
                 "X-Total-Count": "1",
             },
-        });
+        }).as("get-licenses");
         cy.intercept("GET", "/api/v1/erm/licenses/*", license).as(
             "get-license"
         );
         cy.visit("/cgi-bin/koha/erm/licenses");
+        cy.wait("@get-licenses");
         let id_cell = cy.get("#licenses_list table tbody tr:first td:first");
         id_cell.contains(license.license_id);
 
@@ -256,7 +257,6 @@ describe("License CRUD operations", () => {
         name_link.should("have.text", license.name);
         name_link.click();
         cy.wait("@get-license");
-        cy.wait(500); // Cypress is too fast! Vue hasn't populated the form yet!
         cy.get("#licenses_show h2").contains("License #" + license.license_id);
         cy.left_menu_active_item_is("Licenses");
     });
@@ -319,11 +319,12 @@ describe("License CRUD operations", () => {
                 "X-Base-Total-Count": "1",
                 "X-Total-Count": "1",
             },
-        });
+        }).as("get-licenses");
         cy.intercept("GET", "/api/v1/erm/licenses/*", license).as(
             "get-license"
         );
         cy.visit("/cgi-bin/koha/erm/licenses");
+        cy.wait("@get-licenses");
         let id_cell = cy.get("#licenses_list table tbody tr:first td:first");
         id_cell.contains(license.license_id);
 
@@ -334,7 +335,6 @@ describe("License CRUD operations", () => {
         name_link.should("have.text", license.name);
         name_link.click();
         cy.wait("@get-license");
-        cy.wait(500); // Cypress is too fast! Vue hasn't populated the form yet!
         cy.get("#licenses_show h2").contains("License #" + license.license_id);
 
         cy.get("#licenses_show #toolbar").contains("Delete").click();
