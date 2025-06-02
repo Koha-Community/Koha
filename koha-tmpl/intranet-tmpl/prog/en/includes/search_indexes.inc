@@ -1,4 +1,7 @@
 [% USE Koha %]
+[% UNLESS index %]
+    [% SET index = 0 %]
+[% END %]
 [% SET select_id = refiner ? 'refiner_idx_' _ index : 'idx_' _ index %]
 <select class="advsearch" name="idx" id="[% select_id | html %]">
     [% IF ms_kw %]
