@@ -379,10 +379,10 @@ sub _add_custom_field_rowdata {
             warn "Breeding: invalid expression in AdditionalFieldsInZ3950Result(Auth)Search: $field";
             next;
         } elsif ( $tag eq '000' ) {
-            push @content, ( _extract_positions( $record->leader, $add_spec ) );
+            push @content, ( _extract_positions( $record->leader, $add_spec ) ) if $record->leader;
         } elsif ( $tag =~ /^00\d$/ ) {          # control field
             my $marcfield = $record->field($tag);
-            push @content, ( _extract_positions( $marcfield->data, $add_spec ) );
+            push @content, ( _extract_positions( $marcfield->data, $add_spec ) ) if $marcfield;
         } else {
             for my $marcfield ( $record->field($tag) ) {
                 foreach my $subfield ( $marcfield->subfields ) {
@@ -402,7 +402,9 @@ sub _add_custom_field_rowdata {
 
 sub _extract_positions {
     my ( $data, $spec ) = @_;
-    if ( !$spec ) {
+    if ( !defined($data) ) {
+        return;
+    } elsif ( !$spec ) {
         return $data;
     } elsif ( $spec =~ /p(\d+)$/ ) {
         my $pos = $1;
