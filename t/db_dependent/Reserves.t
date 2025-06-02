@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 69;
+use Test::More tests => 70;
 use Test::MockModule;
 use Test::Warn;
 
@@ -2090,4 +2090,25 @@ subtest 'HOLDDGST tests' => sub {
     is( $email_count, 1, "Only one email hold digest message created for two holds" );
 
     $schema->txn_rollback;
+};
+
+# FIXME: This shouldn't be needed if the item type was a FK constraint for items
+subtest 'CheckReserves() item type tests' => sub {
+
+    plan tests => 1;
+
+    $schema->storage->txn_begin;
+
+    my $item_type_to_delete = $builder->build_object( { class => 'Koha::ItemTypes' } );
+    my $non_existent_itype  = $item_type_to_delete->itemtype;
+    $item_type_to_delete->delete;
+
+    t::lib::Mocks::mock_preference( 'TrapHoldsOnOrder', 0 );
+
+    my $item = $builder->build_sample_item( { itype => $non_existent_itype, notforloan => 0, damaged => 0 } );
+
+    my ($res) = CheckReserves($item);
+    is( $res, '', 'No holds on new item' );
+
+    $schema->storage->txn_rollback;
 };
