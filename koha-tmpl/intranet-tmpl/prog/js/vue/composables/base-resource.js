@@ -1,4 +1,4 @@
-import { computed, inject } from "vue";
+import { computed, inject, ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { $__ } from "../i18n";
 import { build_url } from "../composables/datatables";
@@ -455,16 +455,6 @@ export function useBaseResource(instancedResource) {
     const getTableFilterFormElements = () => {
         return [];
     };
-    /**
-     * Toggle the refreshTemplate flag of the resource.
-     * This flag is used to force a reload of the template by Vue.
-     * It is typically used when the data of the resource has been updated.
-     *
-     * @return {void}
-     */
-    const refreshTemplateState = () => {
-        instancedResource.refreshTemplate = !instancedResource.refreshTemplate;
-    };
 
     /**
      * A function that returns a set of buttons to display in the toolbar, based on the current resource and component.
@@ -574,6 +564,18 @@ export function useBaseResource(instancedResource) {
         return !!instancedResource.extendedAttributesResourceType;
     });
 
+    const refreshTemplate = ref(0);
+    /**
+     * Toggle the refreshTemplate flag of the resource.
+     * This flag is used to force a reload of the template by Vue.
+     * It is typically used when the data of the resource has been updated.
+     *
+     * @return {void}
+     */
+    const refreshTemplateState = () => {
+        refreshTemplate.value++;
+    };
+
     return {
         ...instancedResource,
         getFilterValues,
@@ -597,6 +599,7 @@ export function useBaseResource(instancedResource) {
         getTableFilterFormElementsLabel,
         getTableFilterFormElements,
         refreshTemplateState,
+        refreshTemplate,
         resourceNamePlural,
         hasAdditionalFields,
         newResource,

@@ -2,6 +2,7 @@
     <ResourceList
         v-if="routeAction === 'list'"
         :instancedResource="instancedResource"
+        :key="instancedResource.refreshTemplate"
         @select-resource="$emit('select-resource', $event)"
     >
         <template #toolbar="{ resource, componentPropData }">
@@ -25,6 +26,7 @@
     <ResourceShow
         v-if="routeAction === 'show'"
         :instancedResource="instancedResource"
+        :key="instancedResource.refreshTemplate"
     >
         <template #toolbar="{ resource, componentPropData }">
             <Toolbar
@@ -39,6 +41,7 @@
     <ResourceFormAdd
         v-if="['add', 'edit'].includes(routeAction)"
         :instancedResource="instancedResource"
+        :key="instancedResource.refreshTemplate"
     />
 </template>
 
