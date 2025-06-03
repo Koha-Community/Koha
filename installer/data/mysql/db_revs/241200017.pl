@@ -8,6 +8,22 @@ return {
         my ($args) = @_;
         my ( $dbh, $out ) = @$args{qw(dbh out)};
 
+        my $sth = $dbh->prepare(
+            q{
+            SELECT COUNT(*) FROM illrequests WHERE borrowernumber NOT IN (SELECT borrowernumber FROM borrowers)
+        }
+        );
+        $sth->execute;
+        my $count = $sth->fetchrow_array;
+
+        if ($count) {
+            say_warning( $out, "Found $count illrequests with a borrowernumber that doesn't exist in borrowers" );
+            $dbh->do(
+                q{ UPDATE illrequests SET borrowernumber = NULL WHERE borrowernumber NOT IN (SELECT borrowernumber FROM borrowers) }
+            );
+            say_info( $out, "Set those borrowernumbers to NULL" );
+        }
+
         $dbh->do(q{ ALTER TABLE illrequests DROP FOREIGN KEY illrequests_bnfk });
         $dbh->do(
             q{
