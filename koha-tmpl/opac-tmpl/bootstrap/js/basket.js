@@ -72,7 +72,7 @@ function openBasket() {
 
     if (strCookie) {
         var iW = 820;
-        var iH = 450;
+        var iH = 820;
         var optWin =
             "status=yes,scrollbars=yes,resizable=yes,toolbar=no,location=yes,height=" +
             iH +

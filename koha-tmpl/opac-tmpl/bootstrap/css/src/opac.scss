@@ -44,9 +44,22 @@
     padding-left: 0;
     padding-right: 0;
 
+    &:has(nav.fixed-top) {
+        padding-top: 4rem;
+    }
+
+    fieldset div {
+        margin-bottom: .3rem;
+    }
+
+    label {
+        font-weight: bold;
+    }
+
     .main {
         font-size: 90%;
-        padding: 0 1em;
+        margin: 0;
+        padding: 1rem;
     }
 
     legend {
@@ -1173,7 +1186,7 @@ fieldset {
 }
 
 .selections-toolbar {
-    background: linear-gradient( #B2B2B2 0%, #E0E0E0 14%, #E8E8E8 100% );
+    background: linear-gradient( #B2B2B2 0%, #E0E0E0 5%, #E8E8E8 100% );
     display: flex;
     flex-wrap: wrap;
     margin: 0;
@@ -1512,6 +1525,27 @@ nav {
         border: 1px solid #EEE;
         border-right-color: #FCF9FC;
         margin: 5px 0;
+    }
+
+    &.fixed-top {
+        background-color: #FFF;
+        border-bottom: 1px solid #DDD;
+        box-shadow: 1px 1px 3px 0px rgba(0,0,0,0.4);
+        padding: .2rem 1rem;
+
+        .navbar-brand {
+            flex-grow: 1;
+
+            h1 {
+                color: #444;
+                margin: 0;
+                padding: 0;
+            }
+        }
+
+        .navbar-nav {
+            flex-shrink: 1;
+        }
     }
 }
 
@@ -2179,7 +2213,7 @@ nav {
 
 /* Class to be added to toolbar when it starts being fixed at the top of the screen */
 .floating {
-    box-shadow: 0 3px 2px 0 rgba( 0, 0, 0, .4 );
+    box-shadow: 0 3px 2px 0 rgba(0, 0, 0, 0.2);
     margin-top: 0;
     z-index: 5;
 }

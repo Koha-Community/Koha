@@ -13,12 +13,21 @@
 [% END %]
 </head>
 [% INCLUDE 'bodytag.inc' bodyid='comment' bodyclass='popup' %]
+<nav class="navbar fixed-top">
+    <div class="navbar-brand">
+        <h1>Reviews</h1>
+    </div>
+    <ul class="navbar-nav">
+        <li class="nav-item">
+            <button type="button" class="btn-close close" aria-label="Close"></button>
+        </li>
+    </ul>
+</nav>
 <main class="main">
     <div class="container-fluid">
         <div class="row">
-            <div class="col order-first order-md-first order-lg-2">
+            <div class="col">
                 <div id="userreview" class="maincontent">
-                    <h1>Reviews</h1>
                     [% IF ( ERRORS ) %]
                         <div class="alert alert-warning">
                             [% FOREACH ERROR IN ERRORS %]
@@ -68,9 +77,9 @@
                         </fieldset>
                     </form>
                 </div>
-                <!-- / #usersendshelfform -->
+                <!-- / #userreview -->
             </div>
-            <!-- / .span12 -->
+            <!-- / .row -->
         </div>
         <!-- / .row -->
     </div>

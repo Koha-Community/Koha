@@ -61,7 +61,7 @@ function Dopop(link) {
     newin = window.open(
         link,
         "popup",
-        "width=660,height=450,toolbar=false,scrollbars=yes,resizable=yes"
+        "width=820,height=600,toolbar=false,scrollbars=yes,resizable=yes"
     );
 }
 
