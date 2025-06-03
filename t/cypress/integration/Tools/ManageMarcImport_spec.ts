@@ -27,12 +27,9 @@ describe("loads the manage MARC import page", () => {
     it("upload a MARC record", () => {
         cy.visit("/cgi-bin/koha/tools/stage-marc-import.pl");
 
-        cy.get('input[type="file"]').selectFile(
-            "t/cypress/fixtures/sample.mrc"
-        );
-        cy.get('form[id="uploadfile"]').within(() => {
-            cy.get('button[id="fileuploadbutton"]').click();
-        });
+        cy.fixture("sample.mrc", null).as("sample_mrc");
+        cy.get("input[type=file]").selectFile("@sample_mrc");
+        cy.get("#fileuploadbutton").click();
 
         cy.get("#fileuploadstatus").contains("100%");
         cy.get("legend")
@@ -54,20 +51,24 @@ describe("loads the manage MARC import page", () => {
             "always_add"
         );
 
-        cy.get('select[name="format"]').select("MARCXML", { force: true });
-        cy.get("#format").should("have.value", "MARCXML");
+        cy.get('select[name="format"]')
+            .select("MARCXML", { force: true })
+            .should("have.value", "MARCXML");
 
         //select some new options
         cy.get("#matcher").select("3", { force: true });
-        cy.get("#overlay_action").select("create_new", { force: true });
-        cy.get("#nomatch_action").select("ignore", { force: true });
-        cy.get("#item_action").select("ignore", { force: true });
-
-        // Now verify all values
-        cy.get("#matcher").should("have.value", "3");
-        cy.get("#overlay_action").should("have.value", "create_new");
-        cy.get("#nomatch_action").should("have.value", "ignore");
-        cy.get("#item_action").should("have.value", "ignore");
+        cy.get("#matcher")
+            .select("3", { force: true })
+            .should("have.value", "3");
+        cy.get("#overlay_action")
+            .select("create_new", { force: true })
+            .should("have.value", "create_new");
+        cy.get("#nomatch_action")
+            .select("ignore", { force: true })
+            .should("have.value", "ignore");
+        cy.get("#item_action")
+            .select("ignore", { force: true })
+            .should("have.value", "ignore");
 
         cy.get("#mainformsubmit").click();
 
