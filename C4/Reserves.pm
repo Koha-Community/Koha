@@ -137,8 +137,6 @@ BEGIN {
         GetMaxPatronHoldsForRecord
 
         MergeHolds
-
-        RevertWaitingStatus
     );
 }
 
@@ -2085,10 +2083,10 @@ sub MoveReserve {
             $hold->fill( { item_id => $item->id } );
         }
 
-        if ( $cancelreserve eq 'revert' ) {    ## Revert waiting reserve to priority 1
-            RevertWaitingStatus( { itemnumber => $item->id } );
+        $hold = Koha::Holds->find( $res->{reserve_id} );
+        if ( $cancelreserve eq 'revert' ) {
+            $hold->revert_waiting();
         } elsif ( $cancelreserve eq 'cancel' || $cancelreserve ) {    # cancel reserves on this item
-            my $hold = Koha::Holds->find( $res->{reserve_id} );
             $hold->cancel;
         }
     }
@@ -2133,65 +2131,6 @@ sub MergeHolds {
             $priority++;
         }
     }
-}
-
-=head2 RevertWaitingStatus
-
-  RevertWaitingStatus({ itemnumber => $itemnumber });
-
-  Reverts a 'waiting' hold back to a regular hold with a priority of 1.
-
-  Caveat: Any waiting hold fixed with RevertWaitingStatus will be an
-          item level hold, even if it was only a bibliolevel hold to
-          begin with. This is because we can no longer know if a hold
-          was item-level or bib-level after a hold has been set to
-          waiting status.
-
-=cut
-
-sub RevertWaitingStatus {
-    my ($params) = @_;
-    my $itemnumber = $params->{'itemnumber'};
-
-    return unless ($itemnumber);
-
-    my $dbh = C4::Context->dbh;
-
-    ## Get the waiting reserve we want to revert
-    my $hold = Koha::Holds->search(
-        {
-            itemnumber => $itemnumber,
-            found      => { not => undef },
-        }
-    )->next;
-
-    my $original = C4::Context->preference('HoldsLog') ? $hold->unblessed : undef;
-
-    ## Increment the priority of all other non-waiting
-    ## reserves for this bib record
-    my $holds = Koha::Holds->search( { biblionumber => $hold->biblionumber, priority => { '>' => 0 } } )
-        ->update( { priority => \'priority + 1' }, { no_triggers => 1 } );
-
-    ## Fix up the currently waiting reserve
-    $hold->set(
-        {
-            priority       => 1,
-            found          => undef,
-            waitingdate    => undef,
-            expirationdate => $hold->patron_expiration_date,
-            itemnumber     => $hold->item_level_hold ? $hold->itemnumber : undef,
-        }
-    )->store( { hold_reverted => 1 } );
-
-    logaction( 'HOLDS', 'MODIFY', $hold->id, $hold, undef, $original )
-        if C4::Context->preference('HoldsLog');
-
-    _FixPriority( { biblionumber => $hold->biblionumber } );
-
-    Koha::BackgroundJob::BatchUpdateBiblioHoldsQueue->new->enqueue( { biblio_ids => [ $hold->biblionumber ] } )
-        if C4::Context->preference('RealTimeHoldsQueue');
-
-    return $hold;
 }
 
 =head2 ReserveSlip

@@ -27,7 +27,7 @@ use Try::Tiny;
 use C4::Context;
 use C4::Stats qw( UpdateStats );
 use C4::Reserves
-    qw( CheckReserves CanItemBeReserved MoveReserve ModReserve ModReserveMinusPriority RevertWaitingStatus IsAvailableForItemLevelRequest );
+    qw( CheckReserves CanItemBeReserved MoveReserve ModReserve ModReserveMinusPriority IsAvailableForItemLevelRequest );
 use C4::Biblio qw( UpdateTotalIssues );
 use C4::Items  qw( ModItemTransfer ModDateLastSeen CartToShelf );
 use C4::Accounts;
@@ -2563,9 +2563,12 @@ sub AddReturn {
     my $lookahead = C4::Context->preference('ConfirmFutureHolds');    #number of days to look for future holds
     ( $resfound, $resrec, undef ) = C4::Reserves::CheckReserves( $item, $lookahead ) unless ( $item->withdrawn );
 
+    # FIXME: CheckReserves should return the Koha::Hold
+    my $hold = Koha::Holds->find( $resrec->{reserve_id} );
+
     # if a hold is found and is waiting at another branch, change the priority back to 1 and trigger the hold (this will trigger a transfer and update the hold status properly)
     if ( $resfound and $resfound eq "Waiting" and $branch ne $resrec->{branchcode} ) {
-        my $hold = C4::Reserves::RevertWaitingStatus( { itemnumber => $item->itemnumber } );
+        $hold->revert_waiting();
         $resfound = 'Reserved';
         $resrec   = $hold->unblessed;
     }
