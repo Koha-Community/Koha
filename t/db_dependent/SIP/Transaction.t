@@ -22,7 +22,7 @@ use C4::SIP::ILS::Transaction::Hold;
 use C4::SIP::ILS::Transaction::Checkout;
 use C4::SIP::ILS::Transaction::Checkin;
 
-use C4::Reserves qw( AddReserve ModReserve ModReserveAffect RevertWaitingStatus );
+use C4::Reserves qw( AddReserve ModReserve ModReserveAffect );
 use Koha::CirculationRules;
 use Koha::Item::Transfer;
 use Koha::DateUtils qw( dt_from_string output_pref );
@@ -1118,7 +1118,8 @@ subtest do_checkout_with_holds => sub {
     is( $patron->checkouts->count, 0, 'Checkout was not done due to attached hold (P)' );
 
     # Test non-attached holds
-    C4::Reserves::RevertWaitingStatus( { itemnumber => $hold->itemnumber } );
+    $hold->set_waiting();
+    $hold->revert_waiting();
     t::lib::Mocks::mock_preference( 'AllowItemsOnHoldCheckoutSIP', '0' );
     $co_transaction->do_checkout();
     is( $patron->checkouts->count, 0, 'Checkout refused due to hold and AllowItemsOnHoldCheckoutSIP' );

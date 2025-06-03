@@ -257,7 +257,7 @@ subtest "store() tests" => sub {
     $hold->discard_changes;
 
     $hold->set_waiting;
-    C4::Reserves::RevertWaitingStatus( { itemnumber => $item->itemnumber } );
+    $hold->revert_waiting();
     $hold->discard_changes;
 
     $expected_date = dt_from_string( $hold->reservedate )->add( years => 2 )->ymd;
@@ -283,7 +283,7 @@ subtest "store() tests" => sub {
     $hold->discard_changes;
 
     $hold->set_waiting;
-    C4::Reserves::RevertWaitingStatus( { itemnumber => $item->itemnumber } );
+    $hold->revert_waiting();
     $hold->discard_changes;
 
     is(

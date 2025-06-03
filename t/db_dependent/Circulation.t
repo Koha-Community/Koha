@@ -1529,7 +1529,7 @@ subtest "CanBookBeRenewed tests" => sub {
                 }
             }
         );
-        $latest_auto_renew_date = GetLatestAutoRenewDate( $renewing_borrower_obj,, $issue );
+        $latest_auto_renew_date = GetLatestAutoRenewDate( $renewing_borrower_obj, $issue );
         is(
             $latest_auto_renew_date->truncate( to => 'minute' ),
             $five_days_before->truncate( to => 'minute' ),
