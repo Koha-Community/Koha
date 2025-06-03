@@ -889,6 +889,59 @@ sub fill {
     return $self;
 }
 
+=head3 revert_waiting
+
+    $hold->revert_waiting();
+
+Reverts a 'waiting' hold back to a regular hold with a priority of 1.
+
+=cut
+
+sub revert_waiting {
+    my ( $self, $params ) = @_;
+
+    Koha::Exceptions::InvalidStatus->throw( invalid_status => 'hold_not_waiting' )
+        unless $self->is_waiting;
+
+    $self->_result->result_source->schema->txn_do(
+        sub {
+            my $original = C4::Context->preference('HoldsLog') ? $self->unblessed : undef;
+
+            # Increment the priority of all other non-waiting
+            # reserves for this bib record
+            my $holds = Koha::Holds->search(
+                {
+                    biblionumber => $self->biblionumber,
+                    priority     => { '>' => 0 }
+                }
+            )->update(
+                { priority    => \'priority + 1' },
+                { no_triggers => 1 }
+            );
+
+            ## Fix up the currently waiting reserve
+            $self->set(
+                {
+                    priority       => 1,
+                    found          => undef,
+                    waitingdate    => undef,
+                    expirationdate => $self->patron_expiration_date,
+                    itemnumber     => $self->item_level_hold ? $self->itemnumber : undef,
+                }
+            )->store( { hold_reverted => 1 } );
+
+            logaction( 'HOLDS', 'MODIFY', $self->id, $self, undef, $original )
+                if C4::Context->preference('HoldsLog');
+
+            C4::Reserves::_FixPriority( { biblionumber => $self->biblionumber } );
+
+            Koha::BackgroundJob::BatchUpdateBiblioHoldsQueue->new->enqueue( { biblio_ids => [ $self->biblionumber ] } )
+                if C4::Context->preference('RealTimeHoldsQueue');
+        }
+    );
+    return $self;
+}
+
 =head3 sub change_type
 
     $hold->change_type                # to record level
