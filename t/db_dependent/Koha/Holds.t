@@ -992,7 +992,7 @@ subtest 'set_waiting+patron_expiration_date' => sub {
         is( $hold->expirationdate,         $patron_expiration_date );
         is( $hold->patron_expiration_date, $patron_expiration_date );
 
-        C4::Reserves::RevertWaitingStatus( { itemnumber => $item->itemnumber } );
+        $hold->revert_waiting();
 
         $hold = $hold->get_from_storage;
         is( $hold->expirationdate,         $patron_expiration_date );
@@ -1033,7 +1033,7 @@ subtest 'set_waiting+patron_expiration_date' => sub {
         is( $hold->expirationdate,         $new_expiration_date );
         is( $hold->patron_expiration_date, $patron_expiration_date );
 
-        C4::Reserves::RevertWaitingStatus( { itemnumber => $item->itemnumber } );
+        $hold->revert_waiting();
 
         $hold = $hold->get_from_storage;
         is( $hold->expirationdate,         $patron_expiration_date );

@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 71;
+use Test::More tests => 70;
 use Test::NoWarnings;
 use Test::MockModule;
 use Test::Warn;
@@ -34,7 +34,7 @@ use C4::Biblio qw( GetMarcFromKohaField ModBiblio );
 use C4::HoldsQueue;
 use C4::Members;
 use C4::Reserves
-    qw( AddReserve AlterPriority CheckReserves ModReserve ModReserveAffect ReserveSlip CalculatePriority CanBookBeReserved IsAvailableForItemLevelRequest MoveReserve ChargeReserveFee RevertWaitingStatus CanItemBeReserved MergeHolds );
+    qw( AddReserve AlterPriority CheckReserves ModReserve ModReserveAffect ReserveSlip CalculatePriority CanBookBeReserved IsAvailableForItemLevelRequest MoveReserve ChargeReserveFee CanItemBeReserved MergeHolds );
 use Koha::ActionLogs;
 use Koha::Biblios;
 use Koha::Caches;
@@ -1029,118 +1029,6 @@ subtest 'ChargeReserveFee tests' => sub {
     is( $line->branchcode,        $library->id, "Library id is picked from userenv and stored correctly" );
 };
 
-subtest 'reserves.item_level_hold' => sub {
-    plan tests => 2;
-
-    my $item   = $builder->build_sample_item;
-    my $patron = $builder->build_object(
-        {
-            class => 'Koha::Patrons',
-            value => { branchcode => $item->homebranch }
-        }
-    );
-
-    subtest 'item level hold' => sub {
-        plan tests => 5;
-        my $reserve_id = AddReserve(
-            {
-                branchcode     => $item->homebranch,
-                borrowernumber => $patron->borrowernumber,
-                biblionumber   => $item->biblionumber,
-                priority       => 1,
-                itemnumber     => $item->itemnumber,
-            }
-        );
-
-        my $hold = Koha::Holds->find($reserve_id);
-        is( $hold->item_level_hold, 1, 'item_level_hold should be set when AddReserve is called with a specific item' );
-
-        # Mark it waiting
-        ModReserveAffect( $item->itemnumber, $patron->borrowernumber, 1 );
-
-        my $mock = Test::MockModule->new('Koha::BackgroundJob::BatchUpdateBiblioHoldsQueue');
-        $mock->mock(
-            'enqueue',
-            sub {
-                my ( $self, $args ) = @_;
-                is_deeply(
-                    $args->{biblio_ids},
-                    [ $hold->biblionumber ],
-                    "AlterPriority triggers a holds queue update for the related biblio"
-                );
-            }
-        );
-
-        t::lib::Mocks::mock_preference( 'RealTimeHoldsQueue', 1 );
-        t::lib::Mocks::mock_preference( 'HoldsLog',           1 );
-
-        # Revert the waiting status
-        C4::Reserves::RevertWaitingStatus( { itemnumber => $item->itemnumber } );
-
-        $hold = Koha::Holds->find($reserve_id);
-
-        is(
-            $hold->itemnumber, $item->itemnumber,
-            'Itemnumber should not be removed when the waiting status is revert'
-        );
-
-        my $log =
-            Koha::ActionLogs->search( { module => 'HOLDS', action => 'MODIFY', object => $hold->reserve_id } )->next;
-        my $expected = sprintf q{'timestamp' => '%s'}, $hold->timestamp;
-        like( $log->info, qr{$expected}, 'Timestamp logged is the current one' );
-        my $log_count =
-            Koha::ActionLogs->search( { module => 'HOLDS', action => 'MODIFY', object => $hold->reserve_id } )->count;
-
-        t::lib::Mocks::mock_preference( 'RealTimeHoldsQueue', 0 );
-        t::lib::Mocks::mock_preference( 'HoldsLog',           0 );
-
-        $hold->set_waiting;
-
-        # Revert the waiting status, RealTimeHoldsQueue => shouldn't add a test
-        C4::Reserves::RevertWaitingStatus( { itemnumber => $item->itemnumber } );
-
-        $hold->delete;    # cleanup
-
-        my $log_count_after =
-            Koha::ActionLogs->search( { module => 'HOLDS', action => 'MODIFY', object => $hold->reserve_id } )->count;
-        is( $log_count, $log_count_after, "No logging is added for RevertWaitingStatus when HoldsLog is disabled" );
-
-    };
-
-    subtest 'biblio level hold' => sub {
-        plan tests => 3;
-        my $reserve_id = AddReserve(
-            {
-                branchcode     => $item->homebranch,
-                borrowernumber => $patron->borrowernumber,
-                biblionumber   => $item->biblionumber,
-                priority       => 1,
-            }
-        );
-
-        my $hold = Koha::Holds->find($reserve_id);
-        is(
-            $hold->item_level_hold, 0,
-            'item_level_hold should not be set when AddReserve is called without a specific item'
-        );
-
-        # Mark it waiting
-        ModReserveAffect( $item->itemnumber, $patron->borrowernumber, 1 );
-
-        $hold = Koha::Holds->find($reserve_id);
-        is( $hold->itemnumber, $item->itemnumber, 'Itemnumber should be set on hold confirmation' );
-
-        # Revert the waiting status
-        C4::Reserves::RevertWaitingStatus( { itemnumber => $item->itemnumber } );
-
-        $hold = Koha::Holds->find($reserve_id);
-        is( $hold->itemnumber, undef, 'Itemnumber should be removed when the waiting status is revert' );
-
-        $hold->delete;
-    };
-
-};
-
 subtest 'MoveReserve additional test' => sub {
 
     plan tests => 8;
@@ -1216,7 +1104,8 @@ subtest 'MoveReserve additional test' => sub {
 
 };
 
-subtest 'RevertWaitingStatus' => sub {
+# FIXME: Should be in Circulation.t
+subtest 'AddIssue calls $hold->revert_waiting()' => sub {
 
     plan tests => 2;
 
