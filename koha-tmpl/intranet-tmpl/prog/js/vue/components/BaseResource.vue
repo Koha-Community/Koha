@@ -6,7 +6,7 @@
     >
         <template #toolbar="{ resource, componentPropData }">
             <Toolbar
-                v-if="!optionalResourceProps.embedded"
+                v-if="!instancedResource.embedded"
                 :toolbarButtons="instancedResource.toolbarButtons"
                 component="list"
                 :resource="resource"
@@ -63,25 +63,7 @@ export default {
     },
     setup(props) {
         return {
-            ...props,
             ...(typeof logged_in_user !== "undefined" && { logged_in_user }),
-        };
-    },
-    data() {
-        const optionalResourceProps = {
-            embedded: this.instancedResource.embedded || false,
-            extendedAttributesResourceType:
-                this.instancedResource.extendedAttributesResourceType || null,
-            addFiltersToList: this.instancedResource.addFiltersToList || null,
-            formGroupsDisplayMode:
-                this.instancedResource.formGroupsDisplayMode || null,
-            appendToShow: this.instancedResource.appendToShow || (() => []),
-            nameAttr: this.instancedResource.nameAttr || null,
-            idAttr: this.instancedResource.idAttr || null,
-        };
-        return {
-            optionalResourceProps,
-            refreshTemplate: false,
         };
     },
     name: "BaseResource",
