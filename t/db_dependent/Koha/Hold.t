@@ -29,6 +29,8 @@ use t::lib::Mocks;
 use t::lib::TestBuilder;
 use t::lib::Mocks;
 
+use C4::Reserves qw(AddReserve);
+
 use Koha::ActionLogs;
 use Koha::DateUtils qw(dt_from_string);
 use Koha::Holds;
@@ -1258,4 +1260,237 @@ subtest 'strings_map() tests' => sub {
     );
 
     $schema->txn_rollback;
+};
+
+subtest 'revert_waiting() tests' => sub {
+
+    plan tests => 3;
+
+    subtest 'item-level holds tests' => sub {
+
+        plan tests => 13;
+
+        $schema->storage->txn_begin;
+
+        my $item   = $builder->build_sample_item;
+        my $patron = $builder->build_object(
+            {
+                class => 'Koha::Patrons',
+                value => { branchcode => $item->homebranch }
+            }
+        );
+
+        # Create item-level hold
+        my $hold = Koha::Holds->find(
+            AddReserve(
+                {
+                    branchcode     => $item->homebranch,
+                    borrowernumber => $patron->borrowernumber,
+                    biblionumber   => $item->biblionumber,
+                    priority       => 1,
+                    itemnumber     => $item->itemnumber,
+                }
+            )
+        );
+
+        is( $hold->item_level_hold, 1, 'item_level_hold should be set when AddReserve is called with a specific item' );
+
+        my $mock = Test::MockModule->new('Koha::BackgroundJob::BatchUpdateBiblioHoldsQueue');
+        $mock->mock(
+            'enqueue',
+            sub {
+                my ( $self, $args ) = @_;
+                is_deeply(
+                    $args->{biblio_ids},
+                    [ $hold->biblionumber ],
+                    "AlterPriority triggers a holds queue update for the related biblio"
+                );
+            }
+        );
+
+        t::lib::Mocks::mock_preference( 'RealTimeHoldsQueue', 1 );
+        t::lib::Mocks::mock_preference( 'HoldsLog',           1 );
+
+        # Mark it waiting
+        $hold->set_waiting();
+
+        isnt( $hold->waitingdate, undef, "'waitingdate' set" );
+        is( $hold->priority, 0, "'priority' set to 0" );
+        ok( $hold->is_waiting, 'Hold set to waiting' );
+
+        # Revert the waiting status
+        $hold->revert_waiting();
+
+        is( $hold->waitingdate, undef, "'waitingdate' reset" );
+        ok( !$hold->is_waiting, 'Hold no longer set to waiting' );
+        is( $hold->priority, 1, "'priority' set to 1" );
+
+        is(
+            $hold->itemnumber, $item->itemnumber,
+            'Itemnumber should not be removed when the waiting status is revert'
+        );
+
+        my $log =
+            Koha::ActionLogs->search( { module => 'HOLDS', action => 'MODIFY', object => $hold->reserve_id } )->next;
+        my $expected = sprintf q{'timestamp' => '%s'}, $hold->timestamp;
+        like( $log->info, qr{$expected}, 'Timestamp logged is the current one' );
+        my $log_count =
+            Koha::ActionLogs->search( { module => 'HOLDS', action => 'MODIFY', object => $hold->reserve_id } )->count;
+
+        t::lib::Mocks::mock_preference( 'RealTimeHoldsQueue', 0 );
+        t::lib::Mocks::mock_preference( 'HoldsLog',           0 );
+
+        $hold->set_waiting();
+
+        # Revert the waiting status, RealTimeHoldsQueue => shouldn't add a test
+        $hold->revert_waiting();
+
+        my $log_count_after =
+            Koha::ActionLogs->search( { module => 'HOLDS', action => 'MODIFY', object => $hold->reserve_id } )->count;
+        is( $log_count, $log_count_after, "No logging is added for ->revert_waiting() when HoldsLog is disabled" );
+
+        # Set as 'processing' to test the exception behavior
+        $hold->found('P');
+        throws_ok { $hold->revert_waiting() }
+        'Koha::Exceptions::InvalidStatus',
+            "Hold is not in 'waiting' status, exception thrown";
+
+        is( $@->invalid_status, 'hold_not_waiting', "'invalid_status' set the right value" );
+
+        $schema->storage->txn_rollback;
+    };
+
+    subtest 'biblio-level hold tests' => sub {
+
+        plan tests => 8;
+
+        $schema->storage->txn_begin;
+
+        my $item   = $builder->build_sample_item;
+        my $patron = $builder->build_object(
+            {
+                class => 'Koha::Patrons',
+                value => { branchcode => $item->homebranch }
+            }
+        );
+
+        # Create biblio-level hold
+        my $hold = Koha::Holds->find(
+            AddReserve(
+                {
+                    branchcode     => $item->homebranch,
+                    borrowernumber => $patron->borrowernumber,
+                    biblionumber   => $item->biblionumber,
+                    priority       => 1,
+                }
+            )
+        );
+
+        is(
+            $hold->item_level_hold, 0,
+            'item_level_hold should not be set when AddReserve is called without a specific item'
+        );
+
+        # Mark it waiting
+        $hold->set( { itemnumber => $item->itemnumber } )->set_waiting();
+        $hold->set_waiting();
+
+        isnt( $hold->waitingdate, undef, "'waitingdate' set" );
+        is( $hold->priority, 0, "'priority' set to 0" );
+        ok( $hold->is_waiting, 'Hold set to waiting' );
+
+        # Revert the waiting status
+        $hold->revert_waiting();
+
+        is( $hold->waitingdate, undef, "'waitingdate' reset" );
+        ok( !$hold->is_waiting, 'Hold no longer set to waiting' );
+        is( $hold->priority,   1,     "'priority' set to 1" );
+        is( $hold->itemnumber, undef, "'itemnumber' unset" );
+
+        $schema->storage->txn_rollback;
+    };
+
+    subtest 'priority shift tests' => sub {
+
+        plan tests => 4;
+
+        $schema->storage->txn_begin;
+
+        # Create the items and patrons we need
+        my $library = $builder->build_object( { class => 'Koha::Libraries' } );
+        my $itype   = $builder->build_object( { class => "Koha::ItemTypes", value => { notforloan => 0 } } );
+        my $item    = $builder->build_sample_item(
+            {
+                itype   => $itype->itemtype,
+                library => $library->branchcode
+            }
+        );
+        my $patron_1 = $builder->build_object( { class => "Koha::Patrons" } );
+        my $patron_2 = $builder->build_object( { class => "Koha::Patrons" } );
+        my $patron_3 = $builder->build_object( { class => "Koha::Patrons" } );
+        my $patron_4 = $builder->build_object( { class => "Koha::Patrons" } );
+
+        # Place a hold on the title for both patrons
+        my $hold = Koha::Holds->find(
+            C4::Reserves::AddReserve(
+                {
+                    branchcode     => $library->branchcode,
+                    borrowernumber => $patron_1->borrowernumber,
+                    biblionumber   => $item->biblionumber,
+                    priority       => 1,
+                    itemnumber     => $item->itemnumber,
+                }
+            )
+        );
+
+        C4::Reserves::AddReserve(
+            {
+                branchcode     => $library->branchcode,
+                borrowernumber => $patron_2->borrowernumber,
+                biblionumber   => $item->biblionumber,
+                priority       => 1,
+                itemnumber     => $item->itemnumber,
+            }
+        );
+
+        C4::Reserves::AddReserve(
+            {
+                branchcode     => $library->branchcode,
+                borrowernumber => $patron_3->borrowernumber,
+                biblionumber   => $item->biblionumber,
+                priority       => 1,
+                itemnumber     => $item->itemnumber,
+            }
+        );
+
+        C4::Reserves::AddReserve(
+            {
+                branchcode     => $library->branchcode,
+                borrowernumber => $patron_4->borrowernumber,
+                biblionumber   => $item->biblionumber,
+                priority       => 1,
+                itemnumber     => $item->itemnumber,
+            }
+        );
+
+        is( $item->biblio->holds->count, 4, '4 holds on the biblio' );
+
+        $hold->set_waiting()->discard_changes();
+        is( $hold->priority, 0, "'priority' set to 0" );
+
+        $hold->revert_waiting()->discard_changes();
+        is( $hold->priority, 1, "'priority' set to 1" );
+
+        my $holds = $item->biblio->holds;
+        is_deeply(
+            [
+                $holds->next->priority, $holds->next->priority,
+                $holds->next->priority, $holds->next->priority,
+            ],
+            [ 1, 2, 3, 4 ],
+            'priorities have been reordered'
+        );
+
+        $schema->storage->txn_rollback;
+    };
 };
