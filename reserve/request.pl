@@ -33,7 +33,7 @@ use Date::Calc      qw( Date_to_Days );
 use C4::Output      qw( output_html_with_http_headers );
 use C4::Auth        qw( get_template_and_user );
 use C4::Reserves
-    qw( RevertWaitingStatus AlterPriority ToggleLowestPriority CanBookBeReserved GetMaxPatronHoldsForRecord CanItemBeReserved IsAvailableForItemLevelRequest );
+    qw( AlterPriority ToggleLowestPriority CanBookBeReserved GetMaxPatronHoldsForRecord CanItemBeReserved IsAvailableForItemLevelRequest );
 use C4::Items       qw( get_hostitemnumbers_of );
 use C4::Koha        qw( getitemtypeimagelocation );
 use C4::Serials     qw( CountSubscriptionFromBiblionumber );
@@ -102,7 +102,8 @@ if ( $op eq 'cud-move' ) {
     my $last_priority   = $input->param('last_priority');
     my $hold_itemnumber = $input->param('itemnumber');
     if ( $prev_priority == 0 && $next_priority == 1 ) {
-        C4::Reserves::RevertWaitingStatus( { itemnumber => $hold_itemnumber } );
+        my $hold = Koha::Holds->find($reserve_id);
+        $hold->revert_waiting();
     } else {
         AlterPriority(
             $where,         $reserve_id,     $prev_priority,
