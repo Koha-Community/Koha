@@ -137,46 +137,35 @@
 </template>
 
 <script>
-import { inject } from "vue";
 import LinkWrapper from "./LinkWrapper.vue";
-import BaseElement from "./BaseElement.vue";
 import AdditionalFieldsDisplay from "./AdditionalFieldsDisplay.vue";
+import { useBaseElement } from "../composables/base-element.js";
+import { computed, defineAsyncComponent } from "vue";
 
 export default {
     components: { LinkWrapper, AdditionalFieldsDisplay },
-    extends: BaseElement,
-    setup() {
-        const AVStore = inject("AVStore");
-        const { get_lib_from_av } = AVStore;
+    setup(props) {
+        const baseElement = useBaseElement({ ...props });
 
-        return {
-            ...BaseElement.setup({}),
-            get_lib_from_av,
-        };
-    },
-    props: {
-        resource: null,
-        attr: null,
-    },
-    computed: {
-        requiredComponent() {
-            const component = this.identifyAndImportComponent(this.attr, true);
-            return component;
-        },
-        attribute() {
-            if (this.attr.showElement) {
-                return { ...this.attr, ...this.attr.showElement };
+        const requiredComponent = computed(() => {
+            const importPath = baseElement.identifyAndImportComponent(
+                props.attr,
+                true
+            );
+            return defineAsyncComponent(() => import(`${importPath}`));
+        });
+        const attribute = computed(() => {
+            if (props.attr.showElement) {
+                return { ...props.attr, ...props.attr.showElement };
             }
-            return this.attr;
-        },
-    },
-    methods: {
-        formatValue(attr, resource) {
+            return props.attr;
+        });
+        const formatValue = (attr, resource) => {
             const valueKey = attr.hasOwnProperty("value")
                 ? attr.value
                 : attr.name;
             if (valueKey?.includes(".")) {
-                return this.accessNestedProperty(valueKey, resource);
+                return baseElement.accessNestedProperty(valueKey, resource);
             }
             const displayValue = attr.format(
                 resource[valueKey] ? resource[valueKey] : valueKey,
@@ -186,7 +175,18 @@ export default {
                 return "";
             }
             return displayValue || "";
-        },
+        };
+
+        return {
+            ...baseElement,
+            requiredComponent,
+            attribute,
+            formatValue,
+        };
+    },
+    props: {
+        resource: null,
+        attr: null,
     },
     name: "ShowElement",
 };

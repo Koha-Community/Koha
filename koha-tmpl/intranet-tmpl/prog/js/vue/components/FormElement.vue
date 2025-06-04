@@ -183,7 +183,6 @@
 
 <script>
 import AdditionalFieldsEntry from "./AdditionalFieldsEntry.vue";
-import BaseElement from "./BaseElement.vue";
 import InputTextElement from "./Elements/InputTextElement.vue";
 import InputNumberElement from "./Elements/InputNumberElement.vue";
 import InputCheckboxElement from "./Elements/InputCheckboxElement.vue";
@@ -191,6 +190,8 @@ import TextareaElement from "./Elements/TextareaElement.vue";
 import FormRelationshipSelect from "./FormRelationshipSelect.vue";
 import ToolTip from "./ToolTip.vue";
 import InputRadioElement from "./Elements/InputRadioElement.vue";
+import { useBaseElement } from "../composables/base-element.js";
+import { computed, defineAsyncComponent } from "vue";
 
 export default {
     props: {
@@ -199,45 +200,14 @@ export default {
         index: Number | null,
         options: Array,
     },
-    extends: BaseElement,
-    setup() {
-        return {
-            ...BaseElement.setup(),
+    setup(props) {
+        const baseElement = useBaseElement({ ...props });
+        const selectRequiredKey = av => {
+            if (props.attr.requiredKey == "package_id")
+                return parseInt(av[props.attr.requiredKey]);
+            return av[props.attr.requiredKey];
         };
-    },
-    computed: {
-        getElementId() {
-            return this.attr.id
-                ? this.attr.id
-                : this.attr.indexRequired
-                  ? `${this.attr.name}_${this.index}`
-                  : this.attr.name;
-        },
-        requiredComponent() {
-            const component = this.identifyAndImportComponent(this.attr);
-            return component;
-        },
-        selectOptions() {
-            if (this.attr.options) {
-                return this.attr.options;
-            }
-            return this.options;
-        },
-        disabled() {
-            if (typeof this.attr.disabled === "function") {
-                return this.attr.disabled(this.resource);
-            } else {
-                return this.attr.disabled || false;
-            }
-        },
-    },
-    methods: {
-        selectRequiredKey(av) {
-            if (this.attr.requiredKey == "package_id")
-                return parseInt(av[this.attr.requiredKey]);
-            return av[this.attr.requiredKey];
-        },
-        isVModelRequired(componentPath) {
+        const isVModelRequired = componentPath => {
             let vModelRequired = true;
             const componentsNotRequiringVModel = [
                 "PatronSearch",
@@ -250,14 +220,50 @@ export default {
                 }
             });
             return vModelRequired;
-        },
-        getEventHandlers() {
-            if (this.attr.events == null) return {};
-            return this.attr.events.reduce((acc, event) => {
+        };
+        const getEventHandlers = () => {
+            if (props.attr.events == null) return {};
+            return props.attr.events.reduce((acc, event) => {
                 acc[event.name] = event.callback;
                 return acc;
             }, {});
-        },
+        };
+        const getElementId = computed(() => {
+            return props.attr.id
+                ? props.attr.id
+                : props.attr.indexRequired
+                  ? `${props.attr.name}_${props.index}`
+                  : props.attr.name;
+        });
+        const requiredComponent = computed(() => {
+            const importPath = baseElement.identifyAndImportComponent(
+                props.attr
+            );
+            return defineAsyncComponent(() => import(`${importPath}`));
+        });
+        const selectOptions = computed(() => {
+            if (props.attr.options) {
+                return props.attr.options;
+            }
+            return props.options;
+        });
+        const disabled = computed(() => {
+            if (typeof props.disabled === "function") {
+                return props.disabled(props.resource);
+            } else {
+                return props.disabled || false;
+            }
+        });
+        return {
+            ...baseElement,
+            selectRequiredKey,
+            isVModelRequired,
+            getEventHandlers,
+            getElementId,
+            requiredComponent,
+            selectOptions,
+            disabled,
+        };
     },
     name: "FormElement",
     components: {
