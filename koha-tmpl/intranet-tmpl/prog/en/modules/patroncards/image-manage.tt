@@ -194,11 +194,12 @@
         }
 
         function selected_images() {
-            var image_ids = new Array;
-            if (document.delete_images.image_id.length) {
-                for (i=0;i<document.delete_images.image_id.length;i++){
-                    if (document.delete_images.image_id[i].checked){
-                        image_ids.push(document.delete_images.image_id[i].value);
+            var image_ids = new Array();
+            let checkboxes = document.getElementsByName("image_id");
+            if (checkboxes.length) {
+                for (i = 0; i < checkboxes.length; i++) {
+                    if (checkboxes[i].checked) {
+                        image_ids.push(checkboxes[i].value);
                     }
                 }
             }
