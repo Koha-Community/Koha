@@ -45,6 +45,7 @@ use C4::Output qw( output_html_with_http_headers );
 use CGI        qw ( -utf8 );
 
 use C4::Acquisition qw( GetBasket GetBasketsInfosByBookseller CanUserManageBasket GetBasketgroup );
+use C4::Budgets     qw( GetBudgetHierarchy CanUserUseBudget );
 
 use Koha::Acquisition::Booksellers;
 use Koha::Patrons;
@@ -110,12 +111,22 @@ if ($booksellerid) {
         basketcount       => $vendor->baskets->count,
         subscriptioncount => $vendor->subscriptions->count,
         };
+
+}
+my $budgets     = GetBudgetHierarchy;
+my $has_budgets = 0;
+foreach my $r ( @{$budgets} ) {
+    next unless ( CanUserUseBudget( $loggedinuser, $r, $userflags ) );
+
+    $has_budgets = 1;
+    last;
 }
 
 $template->param(
     loop_suppliers => $loop_suppliers,
     booksellerid   => $booksellerid,
     count          => $vendor ? 1 : 0,
+    has_budgets    => $has_budgets,
 );
 $template->{VARS}->{'allbaskets'} = $allbaskets;
 
