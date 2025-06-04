@@ -38,12 +38,11 @@ export default {
     methods: {
         redirect(url) {
             const redirectParams = url ? url : this.to;
-            if (typeof redirectParams === "string")
-                window.location.href = this.formatUrl(redirectParams);
-            if (typeof redirectParams === "object") {
-                const url = this.handleQuery(redirectParams);
-                window.location.href = this.formatUrl(url);
-            }
+            window.location.href = this.formatUrl(
+                typeof redirectParams === "object"
+                    ? this.handleQuery(redirectParams)
+                    : redirectParams
+            );
         },
         formatUrl(url) {
             if (url.includes("http://") || url.includes("https://")) return url;
