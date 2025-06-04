@@ -42,7 +42,7 @@ export default {
                 window.location.href = this.formatUrl(redirectParams);
             if (typeof redirectParams === "object") {
                 const url = this.handleQuery(redirectParams);
-                window.open(this.formatUrl(url), "_blank");
+                window.location.href = this.formatUrl(url);
             }
         },
         formatUrl(url) {
