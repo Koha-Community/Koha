@@ -503,9 +503,11 @@
                         } else if ( serial && serial.serialseq ) {
                             nodes += '<span class="serialseq">%s</span>'.format(escape_str(serial.serialseq));
                         }
-                        if ( serial && serial.publisheddate ) {
-                            nodes += ' <span class="pubdate">(%s)</span>'.format($date(serial.publisheddate));
-                        }
+                        [% IF Koha.Preference('DisplayPublishedDate') %]
+                            if ( serial && serial.publisheddate ) {
+                                nodes += ' <span class="pubdate">(%s)</span>'.format($date(serial.publisheddate));
+                            }
+                        [% END %]
                         return nodes;
                     }
                 },

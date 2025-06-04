@@ -1476,7 +1476,7 @@
                             [% ELSIF serial.serialseq %]
                                 <span class="serialseq">[% serial.serialseq | html %]</span>
                             [% END %]
-                            [% IF ( serial.publisheddate ) %]
+                            [% IF ( Koha.Preference('DisplayPublishedDate') && serial.publisheddate ) %]
                                 <span class="pubdate">([% serial.publisheddate | $KohaDates %])</span>
                             [% END %]
                         </td>
