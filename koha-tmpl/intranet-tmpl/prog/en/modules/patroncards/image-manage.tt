@@ -105,13 +105,18 @@
                                             [% IF ( text_field.select_field ) %]
                                                 <td>
                                                     <a
-                                                        class="delete_image btn btn-default btn-xs"
+                                                        class="btn btn-default btn-xs submit-form-link"
+                                                        href="#"
                                                         data-image_id="[% text_field.field_value | html %]"
-                                                        href="/cgi-bin/koha/patroncards/image-manage.pl?op=delete&image_id=[% text_field.field_value | html %]"
-                                                        ><i class="fa fa-trash-can"></i> Delete</a
+                                                        data-action="/cgi-bin/koha/patroncards/image-manage.pl"
+                                                        data-method="post"
+                                                        data-op="cud-delete"
+                                                        data-confirmation-msg="[% tx('Are you sure you want to delete image {image_id}?', {image_id = text_field.field_value} ) | html %]"
                                                     >
+                                                        <i class="fa fa-trash-can"></i> Delete
+                                                    </a>
                                                 </td>
-                                                <td align="center"><input type="checkbox" id="image_id_[% text_field.field_value | html %]" name="image_id" value="[% text_field.field_value | html %]" /></td>
+                                                <td><input type="checkbox" id="image_id_[% text_field.field_value | html %]" name="image_id" value="[% text_field.field_value | html %]" /></td>
                                             [% ELSIF ( text_field.field_value ) %]
                                                 <td>[% text_field.field_value | html %]</td>
                                             [% ELSE %]
@@ -185,24 +190,6 @@
         $(document).ready(function () {
             $("#delete").click(function () {
                 return DeleteConfirm();
-            });
-            $(".delete_image").on("click", function (ev) {
-                ev.preventDefault();
-                const this_image = ev.target;
-                const image_id = this_image.dataset.image_id;
-                for (i = 0; i < document.delete_images.image_id.length; i++) {
-                    const row_image_id = document.delete_images.image_id[i].value;
-                    const row_checkbox = document.querySelector(`#image_id_${row_image_id}`);
-                    if (image_id === row_image_id) {
-                        row_checkbox.checked = true;
-                    } else {
-                        row_checkbox.checked = false;
-                    }
-                }
-                const confirmed = confirmDelete(_("Are you sure you want to delete image: %s?").format(image_id));
-                if (confirmed) {
-                    document.delete_images.submit();
-                }
             });
         });
     </script>
