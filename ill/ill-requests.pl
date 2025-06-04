@@ -503,10 +503,13 @@ if ($backends_available) {
 }
 
 $template->param(
-    backends    => $backends,
-    types       => [ "Book", "Article", "Journal" ],
-    op          => $op,
-    branches    => Koha::Libraries->search,
+    backends => $backends,
+    types    => [ "Book", "Article", "Journal" ],
+    op       => $op,
+    branches => Koha::Libraries->search(
+        { pickup_location => 1 },
+        { order_by        => ['branchname'] }
+    ),
     illreq_tabs => C4::Context->yaml_preference('ILLRequestsTabs'),
 );
 
