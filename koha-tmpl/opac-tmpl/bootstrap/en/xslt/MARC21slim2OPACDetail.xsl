@@ -856,11 +856,11 @@
                 </span>
             </xsl:if>
 
-            <xsl:if test="marc:datafield[substring(@tag, 1, 1) = '6' and not(@tag=655)]">
+            <xsl:if test="marc:datafield[substring(@tag, 1, 1) = '6' and not(@tag=655) and not(@tag=658) and not(@tag=648)]">
                 <span class="results_summary subjects">
                     <span class="label">Subject(s): </span>
                     <ul class="resource_list">
-                        <xsl:for-each select="marc:datafield[substring(@tag, 1, 1) = '6'][not(@tag=655)]">
+                        <xsl:for-each select="marc:datafield[substring(@tag, 1, 1) = '6'][not(@tag=655) and not(@tag=658) and not(@tag=648)]">
                             <li>
                                 <span property="keywords">
                                     <a>
@@ -910,12 +910,104 @@
                 </span>
             </xsl:if>
 
+        <!-- Chronology -->
+        <xsl:if test="marc:datafield[@tag=648]">
+            <span class="results_summary genre">
+                <span class="label">Chronology: </span>
+                <ul class="resource_list">
+                    <xsl:for-each select="marc:datafield[@tag=648]">
+                        <li>
+                            <a>
+                                <xsl:choose>
+                                    <xsl:when test="marc:subfield[@code=9] and $UseAuthoritiesForTracings='1'">
+                                        <xsl:attribute name="href">/cgi-bin/koha/opac-search.pl?q=an:<xsl:value-of select="str:encode-uri(marc:subfield[@code=9], true())"/></xsl:attribute>
+                                    </xsl:when>
+                                    <xsl:when test="$TraceSubjectSubdivisions='1'">
+                                        <xsl:attribute name="href">/cgi-bin/koha/opac-search.pl?q=<xsl:call-template name="subfieldSelectSubject">
+                                            <xsl:with-param name="codes">avxyz</xsl:with-param>
+                                            <xsl:with-param name="delimeter"> AND </xsl:with-param>
+                                            <xsl:with-param name="prefix">(index-term-genre<xsl:value-of select="$SubjectModifier"/>:<xsl:value-of select="$TracingQuotesLeft"/></xsl:with-param>
+                                            <xsl:with-param name="suffix"><xsl:value-of select="$TracingQuotesRight"/>)</xsl:with-param>
+                                            <xsl:with-param name="urlencode">1</xsl:with-param>
+                                        </xsl:call-template>
+                                        </xsl:attribute>
+                                    </xsl:when>
+                                    <xsl:otherwise>
+                                        <xsl:attribute name="href">/cgi-bin/koha/opac-search.pl?q=index-term-genre<xsl:value-of select="$SubjectModifier"/>:<xsl:value-of select="$TracingQuotesLeft"/><xsl:value-of select="str:encode-uri(marc:subfield[@code='a'], true())"/><xsl:value-of select="$TracingQuotesRight"/></xsl:attribute>
+                                    </xsl:otherwise>
+                                </xsl:choose>
+                                <xsl:call-template name="subfieldSelect">
+                                    <xsl:with-param name="codes">avxyz</xsl:with-param>
+                                    <xsl:with-param name="subdivCodes">vxyz</xsl:with-param>
+                                    <xsl:with-param name="subdivDelimiter">-- </xsl:with-param>
+                                </xsl:call-template>
+                            </a>
+                            <xsl:if test="marc:subfield[@code=9]">
+                                <xsl:text> </xsl:text>
+                                <a class='authlink'>
+                                    <xsl:attribute name="href">/cgi-bin/koha/opac-authoritiesdetail.pl?authid=<xsl:value-of select="str:encode-uri(marc:subfield[@code=9], true())"/></xsl:attribute>
+                                    <xsl:element name="i">
+                                        <xsl:attribute name="class">fa fa-search</xsl:attribute>
+                                    </xsl:element>
+                                </a>
+                            </xsl:if>
+                        </li>
+                    </xsl:for-each>
+                </ul>
+            </span>
+        </xsl:if>
         <!-- Genre/Form -->
         <xsl:if test="marc:datafield[@tag=655]">
             <span class="results_summary genre">
                 <span class="label">Genre/Form: </span>
                 <ul class="resource_list">
                     <xsl:for-each select="marc:datafield[@tag=655]">
+                        <li>
+                            <a>
+                                <xsl:choose>
+                                    <xsl:when test="marc:subfield[@code=9] and $UseAuthoritiesForTracings='1'">
+                                        <xsl:attribute name="href">/cgi-bin/koha/opac-search.pl?q=an:<xsl:value-of select="str:encode-uri(marc:subfield[@code=9], true())"/></xsl:attribute>
+                                    </xsl:when>
+                                    <xsl:when test="$TraceSubjectSubdivisions='1'">
+                                        <xsl:attribute name="href">/cgi-bin/koha/opac-search.pl?q=<xsl:call-template name="subfieldSelectSubject">
+                                            <xsl:with-param name="codes">avxyz</xsl:with-param>
+                                            <xsl:with-param name="delimeter"> AND </xsl:with-param>
+                                            <xsl:with-param name="prefix">(index-term-genre<xsl:value-of select="$SubjectModifier"/>:<xsl:value-of select="$TracingQuotesLeft"/></xsl:with-param>
+                                            <xsl:with-param name="suffix"><xsl:value-of select="$TracingQuotesRight"/>)</xsl:with-param>
+                                            <xsl:with-param name="urlencode">1</xsl:with-param>
+                                        </xsl:call-template>
+                                        </xsl:attribute>
+                                    </xsl:when>
+                                    <xsl:otherwise>
+                                        <xsl:attribute name="href">/cgi-bin/koha/opac-search.pl?q=index-term-genre<xsl:value-of select="$SubjectModifier"/>:<xsl:value-of select="$TracingQuotesLeft"/><xsl:value-of select="str:encode-uri(marc:subfield[@code='a'], true())"/><xsl:value-of select="$TracingQuotesRight"/></xsl:attribute>
+                                    </xsl:otherwise>
+                                </xsl:choose>
+                                <xsl:call-template name="subfieldSelect">
+                                    <xsl:with-param name="codes">avxyz</xsl:with-param>
+                                    <xsl:with-param name="subdivCodes">vxyz</xsl:with-param>
+                                    <xsl:with-param name="subdivDelimiter">-- </xsl:with-param>
+                                </xsl:call-template>
+                            </a>
+                            <xsl:if test="marc:subfield[@code=9]">
+                                <xsl:text> </xsl:text>
+                                <a class='authlink'>
+                                    <xsl:attribute name="href">/cgi-bin/koha/opac-authoritiesdetail.pl?authid=<xsl:value-of select="str:encode-uri(marc:subfield[@code=9], true())"/></xsl:attribute>
+                                    <xsl:element name="i">
+                                        <xsl:attribute name="class">fa fa-search</xsl:attribute>
+                                    </xsl:element>
+                                </a>
+                            </xsl:if>
+                        </li>
+                    </xsl:for-each>
+                </ul>
+            </span>
+        </xsl:if>
+        <!-- Discipline -->
+        <xsl:if test="marc:datafield[@tag=658]">
+            <span class="results_summary genre">
+                <span class="label">Discipline: </span>
+                <ul class="resource_list">
+                    <xsl:for-each select="marc:datafield[@tag=658]">
                         <li>
                             <a>
                                 <xsl:choose>
