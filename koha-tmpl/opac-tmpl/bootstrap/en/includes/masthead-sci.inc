@@ -6,7 +6,7 @@
 [% SET OpacHeader = AdditionalContents.get( location => "opacheader", lang => lang, library => logged_in_user.branchcode || default_branch, blocktitle => 0 ) %]
 
 <div id="wrapper">
-    <div id="header-region" class="noprint">
+    <header id="header-region" class="noprint">
         <nav class="navbar navbar-expand">
             <h1 id="logo">
                 <a class="navbar-brand" href="/cgi-bin/koha/sci/sci-main.pl">
@@ -44,6 +44,6 @@
                 </div>
             </div>
         [% END # /IF opacheader %]
-    </div>
+    </header>
     <!-- /navbar -->
 </div>
