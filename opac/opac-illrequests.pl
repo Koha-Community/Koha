@@ -191,9 +191,12 @@ if ( $op eq 'list' ) {
         } else {
             $template->param(
                 types    => [ "Book", "Article", "Journal" ],
-                branches => Koha::Libraries->search->unblessed,
-                whole    => $backend_result,
-                request  => $request
+                branches => Koha::Libraries->search(
+                    { pickup_location => 1 },
+                    { order_by        => ['branchname'] }
+                ),
+                whole   => $backend_result,
+                request => $request
             );
             if ( $backend_result->{stage} eq 'commit' ) {
 
