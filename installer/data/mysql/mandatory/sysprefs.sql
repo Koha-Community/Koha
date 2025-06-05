@@ -229,6 +229,7 @@ INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `
 ('DisplayMultiItemHolds','0','','Display the ability to place holds on different items at the same time in staff interface and OPAC','YesNo'),
 ('DisplayMultiPlaceHold','1','','Display the ability to place multiple holds or not','YesNo'),
 ('DisplayOPACiconsXSLT','1','','If ON, displays the format, audience, and material type icons in XSLT MARC21 results and detail pages in the OPAC.','YesNo'),
+('DisplayPublishedDate', '1', NULL, 'Display serial publisheddate on detail pages', 'YesNo'),
 ('DumpSearchQueryTemplate',0,'','Add the search query being passed to the search engine into the template for debugging','YesNo'),
 ('DumpTemplateVarsIntranet',  '0', NULL ,  'If enabled, dump all Template Toolkit variable to a comment in the html source for the staff intranet.',  'YesNo'),
 ('DumpTemplateVarsOpac',  '0', NULL ,  'If enabled, dump all Template Toolkit variable to a comment in the html source for the opac.',  'YesNo'),
