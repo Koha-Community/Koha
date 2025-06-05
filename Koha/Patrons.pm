@@ -675,6 +675,33 @@ sub extended_attributes_config {
     };
 }
 
+=head3 check_for_existing_matches
+
+    my $match_result = Koha::Patrons->check_for_existing_matches( $patron_data );
+
+    Uses the fields from the PatronDuplicateMatchingAddFields preference to check for existing matches
+
+=cut
+
+sub check_for_existing_matches {
+    my ( $self, $new_patron_data ) = @_;
+
+    my @duplicate_match_fields = split '\|', C4::Context->preference('PatronDuplicateMatchingAddFields');
+    my $match_conditions;
+    for my $field (@duplicate_match_fields) {
+        $match_conditions->{$field} = $new_patron_data->{$field} if $new_patron_data->{$field};
+    }
+
+    my $patrons = Koha::Patrons->search($match_conditions);
+    if ( $patrons->count > 0 ) {
+        return {
+            'duplicate_found'  => 1,
+            'matching_patrons' => $patrons
+        };
+    }
+    return { 'duplicate_found' => 0 };
+}
+
 =head3 _type
 
 =cut

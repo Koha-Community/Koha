@@ -252,18 +252,13 @@ if ( $op eq 'cud-insert' || $op eq 'edit_form' || $op eq 'cud-save' || $op eq 'd
     }
 }
 
-# Test uniqueness of surname, firstname and dateofbirth
+#Test uniqueness of fields in PatronDuplicateMatchingAddFields
 if ( ( $op eq 'cud-insert' ) and !$nodouble ) {
-    my @dup_fields = split '\|', C4::Context->preference('PatronDuplicateMatchingAddFields');
-    my $conditions;
-    for my $f (@dup_fields) {
-        $conditions->{$f} = $newdata{$f} if $newdata{$f};
-    }
     $nodouble = 1;
-    my $patrons = Koha::Patrons->search($conditions);
-    if ( $patrons->count > 0 ) {
+    my $match_result = Koha::Patrons->check_for_existing_matches( \%newdata );
+    if ( $match_result->{duplicate_found} ) {
         $nodouble     = 0;
-        $check_patron = $patrons->next;
+        $check_patron = $match_result->{matching_patrons}->next;
         $check_member = $check_patron->borrowernumber;
     }
 }
