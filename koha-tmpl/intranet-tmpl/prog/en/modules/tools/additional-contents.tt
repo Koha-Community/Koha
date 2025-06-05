@@ -12,6 +12,8 @@
             [% t("Modify news item") | html %]
         [% ELSIF category == 'pages' %]
             [% t("Modify page") | html %]
+        [% ELSIF category == 'record_display' %]
+            [% t("Modify record display customization") | html %]
         [% ELSE %]
             [% t("Modify HTML customization") | html %]
         [% END %]
@@ -20,6 +22,8 @@
             [% t("New news item") | html %]
         [% ELSIF category == 'pages' %]
             [% t("New page") | html %]
+        [% ELSIF category == 'record_display' %]
+            [% t("New record display customization") | html %]
         [% ELSE %]
             [% t("New HTML customization") | html %]
         [% END %]
@@ -30,6 +34,8 @@
         [% t("News") | html %]
     [% ELSIF category == 'pages' %]
         [% t("Pages") | html %]
+    [% ELSIF category == 'record_display' %]
+        [% t("Record display customizations") | html %]
     [% ELSE %]
         [% t("HTML customizations") | html %]
     [% END %]
@@ -97,6 +103,8 @@
                     <a href="/cgi-bin/koha/tools/additional-contents.pl?category=news">News</a>
                 [% ELSIF category == 'pages' %]
                     <a href="/cgi-bin/koha/tools/additional-contents.pl?category=pages">Pages</a>
+                [% ELSIF category == 'record_display' %]
+                    <a href="/cgi-bin/koha/tools/additional-contents.pl?category=record_display">Record display customizations</a>
                 [% ELSE %]
                     <a href="/cgi-bin/koha/tools/additional-contents.pl?category=html_customizations">HTML customizations</a>
                 [% END %]
@@ -356,6 +364,8 @@
             [% t("News") | html %]
         [% ELSIF category == 'pages' %]
             [% t("Pages") | html %]
+        [% ELSIF category == 'record_display' %]
+            [% t("Record display customizations") | html %]
         [% ELSE %]
             [% t("HTML customizations") | html %]
         [% END %]
@@ -365,6 +375,7 @@
         <a class="customization-link" href="/cgi-bin/koha/tools/additional-contents.pl?category=news">News</a>
         <a class="customization-link" href="/cgi-bin/koha/tools/additional-contents.pl?category=html_customizations">HTML customizations</a>
         <a class="customization-link" href="/cgi-bin/koha/tools/additional-contents.pl?category=pages">Pages</a>
+        <a class="customization-link" href="/cgi-bin/koha/tools/additional-contents.pl?category=record_display">Record display customizations</a>
         [% IF ( CAN_user_parameters_manage_sysprefs ) %]
             <a class="syspref-link" href="/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=OPACUserJS">OPACUserJS</a>
             <a class="syspref-link" href="/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=OPACUserCSS">OPACUserCSS</a>
@@ -531,6 +542,27 @@
                 <option value="slip">Slip</option>
             [% END %]
         [% END %]
+    [% ELSIF category ==  'record_display' %]
+        [% SET staff_available_options = ['StaffResultsPage' , 'StaffDetailPage'] %]
+        <optgroup label="Staff interface">
+            [% FOREACH l IN staff_available_options.sort %]
+                [% IF l == location %]
+                    <option value="[% l | html %]" selected="selected">[% l | html %]</option>
+                [% ELSE %]
+                    <option value="[% l | html %]">[% l | html %]</option>
+                [% END %]
+            [% END %]
+        </optgroup>
+        [% SET opac_available_options = ['OPACResultsPage' , 'OPACResultsPage'] %]
+        <optgroup label="OPAC">
+            [% FOREACH l IN opac_available_options.sort %]
+                [% IF l == location %]
+                    <option value="[% l | html %]" selected="selected">[% l | html %]</option>
+                [% ELSE %]
+                    <option value="[% l | html %]">[% l | html %]</option>
+                [% END %]
+            [% END %]
+        </optgroup>
     [% ELSE %]
         <optgroup label="OPAC">
             [% FOREACH l IN opac_available_options.sort %]

@@ -33,7 +33,9 @@ use Koha::XSLT::Base;
 use Koha::Libraries;
 use Koha::Recalls;
 use Koha::TemplateUtils qw( process_tt );
+use Koha::AdditionalContents;
 use C4::Scrubber;
+use C4::Languages;
 
 my $engine;    #XSLT Handler object
 
@@ -241,13 +243,38 @@ sub XSLTParse4Display {
         }
     }
     my $extracontent = '';
+    my $location;
+    my $branch = C4::Context->userenv->{branch} || '';
+    my $lang   = C4::Languages::getlanguage;
 
-    # Check if we should add extra content based on system preference
-    if ( C4::Context->preference('ExtraContentForXSLTDisplay') ) {
+    if ( $xslsyspref eq "XSLTDetailsDisplay" ) {
+        $location = 'StaffDetailPage';
+    } elsif ( $xslsyspref eq "XSLTResultsDisplay" ) {
+        $location = 'StaffResultsPage';
+    } elsif ( $xslsyspref eq "OPACXSLTDetailsDisplay" ) {
+        $location = 'OPACDetailPage';
+    } elsif ( $xslsyspref eq "OPACXSLTResultsDisplay" ) {
+        $location = 'OPACResultsPage';
+    }
 
+    my @record_display_customizations = Koha::AdditionalContents->search_for_display(
+        {
+            category   => 'record_display',
+            location   => $location,
+            lang       => $lang,
+            library_id => $branch,
+        }
+    )->as_list;
+
+    if (@record_display_customizations) {
+        foreach my $customization (@record_display_customizations) {
+            $extracontent .= $customization->content;
+        }
+    }
+
+    if ($extracontent) {
         my $scrubber               = C4::Scrubber->new('staff');
-        my $extracontentvalue      = C4::Context->preference('ExtraContentForXSLTDisplay');
-        my $extracontentproccessed = process_tt( $extracontentvalue, { record => $record } );
+        my $extracontentproccessed = process_tt( $extracontent, { record => $record } );
         $extracontent = $scrubber->scrub($extracontentproccessed);
     }
 
