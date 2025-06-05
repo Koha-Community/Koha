@@ -15,18 +15,21 @@ describe("Sticky toolbar", () => {
                 "X-Base-Total-Count": "1",
                 "X-Total-Count": "1",
             },
-        });
-        cy.visit("/cgi-bin/koha/acquisition/vendors");
+        }).as("get-vendors");
         cy.intercept(
             "GET",
             new RegExp("/api/v1/acquisitions/vendors/(?!config$).+"),
             vendor
         ).as("get-vendor");
 
+        cy.visit("/cgi-bin/koha/acquisition/vendors");
+        cy.wait("@get-vendors");
+
         const name_link = cy.get(
             "#vendors_list table tbody tr:first td:first a"
         );
         name_link.click();
+        cy.wait("@get-vendor");
         cy.get("#toolbar a").contains("Receive shipments").click();
         cy.get("h1").contains("Receive shipment from vendor " + vendor.name);
     });
