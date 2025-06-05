@@ -1813,6 +1813,67 @@ cy.getSushiService = () => {
     };
 };
 
+cy.getVendor = () => {
+    return {
+        accountnumber: "69823",
+        active: true,
+        address1: "6897 Library Rd",
+        address2: "Springfield, MA 44224",
+        address3: null,
+        address4: null,
+        aliases: [{ alias: "Test alias" }],
+        baskets: [],
+        baskets_count: 0,
+        contacts: [
+            {
+                name: "Test contact",
+                position: "Test",
+                email: "test@email.com",
+                phone: "0123456789",
+                notes: "Some interesting notes",
+                altphone: "9876543210",
+                fax: "Who uses fax these days?",
+                acqprimary: false,
+                orderacquisition: false,
+                claimacquisition: false,
+                serialsprimary: false,
+                claimissues: false,
+            },
+        ],
+        deliverytime: 3,
+        discount: 10,
+        external_id: "test1234",
+        fax: "555-555-9999",
+        gst: false,
+        id: 1,
+        interfaces: [
+            {
+                type: "interface",
+                name: "fancy website",
+                uri: "www.uri.com",
+                login: "login",
+                password: "password",
+                account_email: "email@email.com",
+                notes: "This is a website",
+            },
+        ],
+        invoice_currency: "USD",
+        invoice_includes_gst: false,
+        invoices_count: 0,
+        list_currency: "USD",
+        list_includes_gst: false,
+        name: "My Vendor",
+        notes: "Sample vendor",
+        phone: "555-555-5555",
+        postal: "567 Main St. PO Box 25 Springfield, MA 44224",
+        subscriptions: [],
+        subscriptions_count: 0,
+        tax_rate: 0.1965,
+        type: "Print books",
+        url: "https://koha-community.org/",
+    };
+};
+
 const mysql = require("cypress-mysql");
 mysql.addCommands();
 
