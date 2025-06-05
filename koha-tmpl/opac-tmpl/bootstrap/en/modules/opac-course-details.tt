@@ -57,6 +57,7 @@
                     </div>
 
                     [% IF ( course_reserves ) %]
+                    <div class="rows">
                         <table id="course-items-table" class="table table-bordered table-striped table-condensed">
                         <caption class="sr-only">Courses</caption>
                             <thead>
@@ -109,6 +110,7 @@
                                 [% END %]
                             </tbody>
                         </table>
+                        </div>
                     [% ELSE %]
                         <br style="clear:both;" />
                         <div class="alert alert-info">
@@ -128,7 +130,7 @@
         $(document).ready(function() {
             table_settings = [% TablesSettings.GetTableSettings( 'opac', 'course_items', 'course-items-table', 'json' ) | $raw %];
             KohaTable("#course-items-table", {
-                "dom": '<"top"<"table_controls"f>>t',
+                "dom": '<"top"<"table_controls"f>>rt<"clear">',
                 "sorting": [[ 1, "asc" ]],
                 "language": {
                     "search": "_INPUT_",
