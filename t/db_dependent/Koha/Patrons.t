@@ -20,7 +20,7 @@
 use Modern::Perl;
 
 use Test::NoWarnings;
-use Test::More tests => 47;
+use Test::More tests => 48;
 use Test::Warn;
 use Test::Exception;
 use Test::MockModule;
@@ -3621,6 +3621,38 @@ subtest 'find_by_identifier() tests' => sub {
     # Test with undef identifier
     $found_patron = Koha::Patrons->find_by_identifier(undef);
     is( $found_patron, undef, 'Returns undef for undef identifier' );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'check_for_existing_matches' => sub {
+    plan tests => 5;
+
+    $schema->storage->txn_begin;
+
+    my $patron = $builder->build_object(
+        { class => 'Koha::Patrons', value => { firstname => 'John', surname => 'Smith', dateofbirth => '1980-01-01' } }
+    );
+
+    t::lib::Mocks::mock_preference( 'PatronDuplicateMatchingAddFields', 'dateofbirth|firstname|surname' );
+
+    my $match_result = Koha::Patrons->check_for_existing_matches(
+        { firstname => 'John', surname => 'Smith', dateofbirth => '1980-01-01' } );
+    is( $match_result->{duplicate_found},                        1,                       'Duplicate found' );
+    is( $match_result->{matching_patrons}->next->borrowernumber, $patron->borrowernumber, 'Matching patron' );
+
+    t::lib::Mocks::mock_preference( 'PatronDuplicateMatchingAddFields', 'dateofbirth|firstname|surname|city' );
+    $match_result = Koha::Patrons->check_for_existing_matches(
+        { firstname => 'John', surname => 'Smith', dateofbirth => '1980-01-01', city => '' } );
+    is( $match_result->{duplicate_found}, 1, 'Duplicate found despite missing data for the city field' );
+    is(
+        $match_result->{matching_patrons}->next->borrowernumber, $patron->borrowernumber,
+        'Patron match ignores undefined field and still identifies the match'
+    );
+
+    $match_result = Koha::Patrons->check_for_existing_matches(
+        { firstname => 'John', surname => 'Smith', dateofbirth => '1980-01-01', city => 'Sandwich, Kent' } );
+    is( $match_result->{duplicate_found}, 0, 'No duplicate found' );
 
     $schema->storage->txn_rollback;
 };

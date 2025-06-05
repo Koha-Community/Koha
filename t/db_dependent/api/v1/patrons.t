@@ -428,7 +428,7 @@ subtest 'add() tests' => sub {
     $schema->storage->txn_rollback;
 
     subtest 'librarian access tests' => sub {
-        plan tests => 37;
+        plan tests => 40;
 
         $schema->storage->txn_begin;
 
@@ -459,6 +459,14 @@ subtest 'add() tests' => sub {
         delete $newpatron->{expired};
         delete $newpatron->{anonymized};
 
+        my $password = 'thePassword123';
+        $librarian->set_password( { password => $password, skip_validation => 1 } );
+        my $userid = $librarian->userid;
+        t::lib::Mocks::mock_preference( 'PatronDuplicateMatchingAddFields', 'firstname|surname|dateofbirth' );
+
+        $t->post_ok( "//$userid:$password@/api/v1/patrons" => json => $newpatron )->status_is(409)
+            ->json_is( '/error' => "A patron record matching these details already exists" );
+
         # Create a library just to make sure its ID doesn't exist on the DB
         my $library_to_delete  = $builder->build_object( { class => 'Koha::Libraries' } );
         my $deleted_library_id = $library_to_delete->id;
@@ -466,23 +474,20 @@ subtest 'add() tests' => sub {
         # Delete library
         $library_to_delete->delete;
 
-        my $password = 'thePassword123';
-        $librarian->set_password( { password => $password, skip_validation => 1 } );
-        my $userid = $librarian->userid;
-
         $newpatron->{library_id} = $deleted_library_id;
 
         # Test duplicate userid constraint
-        $t->post_ok( "//$userid:$password@/api/v1/patrons" => json => $newpatron )->status_is(400)
-            ->json_is( '/error' => "Problem with " . $newpatron->{userid} );
+        $t->post_ok( "//$userid:$password@/api/v1/patrons" => { 'x-confirm-not-duplicate' => 1 } => json => $newpatron )
+            ->status_is(400)->json_is( '/error' => "Problem with " . $newpatron->{userid} );
 
         $newpatron->{library_id} = $patron->branchcode;
 
         # Test duplicate cardnumber constraint
         $newpatron->{userid} = undef;    # force regeneration
         warning_like {
-            $t->post_ok( "//$userid:$password@/api/v1/patrons" => json => $newpatron )->status_is(409)
-                ->json_has( '/error', 'Fails when trying to POST duplicate cardnumber' )
+            $t->post_ok(
+                "//$userid:$password@/api/v1/patrons" => { 'x-confirm-not-duplicate' => 1 } => json => $newpatron )
+                ->status_is(409)->json_has( '/error', 'Fails when trying to POST duplicate cardnumber' )
                 ->json_like( '/conflict' => qr/(borrowers\.)?cardnumber/ );
         }
         qr/DBD::mysql::st execute failed: Duplicate entry '(.*?)' for key '(borrowers\.)?cardnumber'/;
@@ -496,8 +501,8 @@ subtest 'add() tests' => sub {
 
         $newpatron->{category_id} = $deleted_category_id;    # Test invalid patron category
 
-        $t->post_ok( "//$userid:$password@/api/v1/patrons" => json => $newpatron )->status_is(400)
-            ->json_is( '/error' => "Given category_id does not exist" );
+        $t->post_ok( "//$userid:$password@/api/v1/patrons" => { 'x-confirm-not-duplicate' => 1 } => json => $newpatron )
+            ->status_is(400)->json_is( '/error' => "Given category_id does not exist" );
         $newpatron->{category_id} = $patron->categorycode;
 
         $newpatron->{falseproperty} = "Non existent property";
@@ -543,8 +548,8 @@ subtest 'add() tests' => sub {
         $newpatron->{userid}     = "newuserid";
         $letter_enqueued         = 0;
         t::lib::Mocks::mock_preference( 'AutoEmailNewUser', 1 );
-        $t->post_ok(
-            "//$userid:$password@/api/v1/patrons" => { 'x-koha-override' => 'welcome_no' } => json => $newpatron )
+        $t->post_ok( "//$userid:$password@/api/v1/patrons" =>
+                { 'x-koha-override' => 'welcome_no', 'x-confirm-not-duplicate' => 1 } => json => $newpatron )
             ->status_is( 201, 'Patron created successfully with welcome_no override' );
         is( $letter_enqueued, 0, "No welcome notice sent due to welcome_no override" );
 
@@ -553,7 +558,7 @@ subtest 'add() tests' => sub {
         $newpatron->{userid}     = "newuserid2";
         $letter_enqueued         = 0;
         t::lib::Mocks::mock_preference( 'AutoEmailNewUser', 1 );
-        $t->post_ok( "//$userid:$password@/api/v1/patrons" => json => $newpatron )
+        $t->post_ok( "//$userid:$password@/api/v1/patrons" => { 'x-confirm-not-duplicate' => 1 } => json => $newpatron )
             ->status_is( 201, 'Patron created successfully with AutoEmailNewUser = 1' );
         is( $letter_enqueued, 1, "Welcome notice sent due to AutoEmailNewUser = 1" );
 
@@ -563,7 +568,7 @@ subtest 'add() tests' => sub {
         $newpatron->{userid}     = "newuserid3";
         $letter_enqueued         = 0;
         t::lib::Mocks::mock_preference( 'AutoEmailNewUser', 1 );
-        $t->post_ok( "//$userid:$password@/api/v1/patrons" => json => $newpatron )
+        $t->post_ok( "//$userid:$password@/api/v1/patrons" => { 'x-confirm-not-duplicate' => 1 } => json => $newpatron )
             ->status_is( 201, 'Patron created successfully but email will not be sent' );
         is( $letter_enqueued, 0, "No welcome notice sent due to missing email address" );
         $mocked_patron->unmock('notice_email_address');
@@ -574,7 +579,7 @@ subtest 'add() tests' => sub {
         $letter_enqueued         = 0;
         $message_has_content     = 0;
         t::lib::Mocks::mock_preference( 'AutoEmailNewUser', 1 );
-        $t->post_ok( "//$userid:$password@/api/v1/patrons" => json => $newpatron )
+        $t->post_ok( "//$userid:$password@/api/v1/patrons" => { 'x-confirm-not-duplicate' => 1 } => json => $newpatron )
             ->status_is( 201, 'Patron created successfully with AutoEmailNewUser = 1 and empty WELCOME notice' );
         is( $letter_enqueued, 0, "Welcome not sent as it would be empty" );
         $message_has_content = 1;
