@@ -543,7 +543,7 @@
             [% END %]
         [% END %]
     [% ELSIF category ==  'record_display' %]
-        [% SET staff_available_options = ['StaffResultsPage' , 'StaffDetailPage'] %]
+        [% SET staff_available_options = ['StaffResultsPage' , 'StaffDetailPage', 'StaffListPage' ] %]
         <optgroup label="Staff interface">
             [% FOREACH l IN staff_available_options.sort %]
                 [% IF l == location %]
@@ -553,7 +553,7 @@
                 [% END %]
             [% END %]
         </optgroup>
-        [% SET opac_available_options = ['OPACResultsPage' , 'OPACDetailPage'] %]
+        [% SET opac_available_options = ['OPACResultsPage' , 'OPACDetailPage', 'OPACListPage' ] %]
         <optgroup label="OPAC">
             [% FOREACH l IN opac_available_options.sort %]
                 [% IF l == location %]

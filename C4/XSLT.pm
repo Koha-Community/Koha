@@ -255,6 +255,10 @@ sub XSLTParse4Display {
         $location = 'OPACDetailPage';
     } elsif ( $xslsyspref eq "OPACXSLTResultsDisplay" ) {
         $location = 'OPACResultsPage';
+    } elsif ( $xslsyspref eq "XSLTListsDisplay" ) {
+        $location = 'StaffListPage';
+    } elsif ( $xslsyspref eq "OPACXSLTListsDisplay" ) {
+        $location = 'OPACListPage';
     }
 
     my @record_display_customizations = Koha::AdditionalContents->search_for_display(
