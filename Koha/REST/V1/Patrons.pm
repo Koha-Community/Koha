@@ -108,6 +108,18 @@ sub add {
 
                 my $extended_attributes = delete $body->{extended_attributes} // [];
 
+                my $confirm_not_duplicate = $c->req->headers->header('x-confirm-not-duplicate');
+                if ( !$confirm_not_duplicate ) {
+                    my $match_result =
+                        Koha::Patrons->check_for_existing_matches( Koha::Patron->new_from_api($body)->unblessed );
+                    if ( $match_result->{duplicate_found} ) {
+                        return $c->render(
+                            status  => 409,
+                            openapi => { error => 'A patron record matching these details already exists' }
+                        );
+                    }
+                }
+
                 my $patron = Koha::Patron->new_from_api($body)->store;
 
                 my $overrides = $c->stash('koha.overrides');
