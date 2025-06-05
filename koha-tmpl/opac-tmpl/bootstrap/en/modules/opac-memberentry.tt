@@ -134,6 +134,12 @@
                         </div>
                     [% END %]
 
+                    [% IF duplicate_found %]
+                        <div class="alert alert-error">
+                            <span>An existing account matching these details has been found, please contact a member of staff</span>
+                        </div>
+                    [% END %]
+
                     [% IF cardnumber_wrong_length || cardnumber_already_exists %]
                         <div class="alert alert-error">
                             [% IF cardnumber_wrong_length %]
