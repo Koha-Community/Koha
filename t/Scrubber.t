@@ -4,7 +4,7 @@ use Modern::Perl;
 
 $| = 1;
 use Test::NoWarnings;
-use Test::More tests => 32;
+use Test::More tests => 27;
 use Test::Warn;
 
 BEGIN {
@@ -23,7 +23,7 @@ sub pretty_line {
 
 my ( $scrubber, $html, $result, @types, $collapse );
 $collapse = 1;
-@types    = qw(default comment tag staff);
+@types    = qw(default comment note);
 $html     = q|
 <![CDATA[selfdestruct]]&#x5d;>
 <?php  echo(" EVIL EVIL EVIL "); ?>    <!-- COMMENT -->
