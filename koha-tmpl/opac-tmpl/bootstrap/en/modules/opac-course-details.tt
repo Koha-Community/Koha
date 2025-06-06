@@ -60,64 +60,64 @@
                     </div>
 
                     [% IF ( course_reserves ) %]
-                    <div class="rows">
-                        <table id="course-items-table" class="table table-bordered table-striped table-condensed">
-                            <caption class="sr-only">Courses</caption>
-                            <thead>
-                                <tr>
-                                    <th class="anti-the">Title</th>
-                                    <th>Author</th>
-                                    <th>Item type</th>
-                                    <th>Location</th>
-                                    <th>Collection</th>
-                                    <th>Call number</th>
-                                    <th>Copy number</th>
-                                    <th>Status</th>
-                                    <th>Date due</th>
-                                    <th>Notes</th>
-                                    <th>Link</th>
-                                    <th></th>
-                                </tr>
-                            </thead>
-
-                            <tbody>
-                                [% FOREACH cr IN course_reserves %]
+                        <div class="rows">
+                            <table id="course-items-table" class="table table-bordered table-striped table-condensed">
+                                <caption class="sr-only">Courses</caption>
+                                <thead>
                                     <tr>
-                                        <td><a href="opac-detail.pl?biblionumber=[% cr.biblio.biblionumber | uri %]">[% INCLUDE 'biblio-title-head.inc' biblio=cr.biblio %]</a></td>
-                                        <td>[% cr.biblio.author | html %]</td>
-                                        <td>[% ItemTypes.GetDescription( cr.item.itype ) | html %]</td>
-                                        <td
-                                            >[% Branches.GetName( cr.item.holdingbranch ) | html %] <br />
-                                            <em>[% AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.location', authorised_value => cr.item.location, opac => 1 ) | html %]</em></td
-                                        >
-                                        <td>[% AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.ccode', authorised_value => cr.item.ccode, opac => 1 ) | html %]</td>
-                                        <td>[% cr.item.itemcallnumber | html %]</td>
-                                        <td>[% cr.item.copynumber | html %]</td>
-                                        <td>
-                                            [% IF cr.item %]
-                                                [% INCLUDE 'item-status.inc' item=cr.item issue=cr.issue show_recall_link=Koha.Preference('UseRecalls') %]
-                                            [% END %]
-                                        </td>
-                                        <td data-order="[% cr.issue.date_due | html %]">[% cr.issue.date_due | $KohaDates  as_due_date => 1 %]</td>
-                                        <td
-                                            >[% IF ( cr.public_note ) %]
-                                                [% cr.public_note | scrub_html type => 'note' | $raw %]
-                                            [% ELSIF ( cr.item.itemnotes ) %]
-                                                [% cr.item.itemnotes | $raw %]
-                                            [% END %]
-                                        </td>
-                                        <td
-                                            >[% IF (cr.item.uri) %]
-                                                <a href="[% cr.item.uri | url %]">Item URI</a>
-                                            [% ELSIF (cr.biblioitem.url) %]
-                                                <a href="[% cr.biblioitem.url | url %]">Record URL</a>
-                                            [% END %]
-                                        </td>
-                                        <td></td>
+                                        <th class="anti-the">Title</th>
+                                        <th>Author</th>
+                                        <th>Item type</th>
+                                        <th>Location</th>
+                                        <th>Collection</th>
+                                        <th>Call number</th>
+                                        <th>Copy number</th>
+                                        <th>Status</th>
+                                        <th>Date due</th>
+                                        <th>Notes</th>
+                                        <th>Link</th>
+                                        <th></th>
                                     </tr>
-                                [% END %]
-                            </tbody>
-                        </table>
+                                </thead>
+
+                                <tbody>
+                                    [% FOREACH cr IN course_reserves %]
+                                        <tr>
+                                            <td><a href="opac-detail.pl?biblionumber=[% cr.biblio.biblionumber | uri %]">[% INCLUDE 'biblio-title-head.inc' biblio=cr.biblio %]</a></td>
+                                            <td>[% cr.biblio.author | html %]</td>
+                                            <td>[% ItemTypes.GetDescription( cr.item.itype ) | html %]</td>
+                                            <td
+                                                >[% Branches.GetName( cr.item.holdingbranch ) | html %] <br />
+                                                <em>[% AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.location', authorised_value => cr.item.location, opac => 1 ) | html %]</em></td
+                                            >
+                                            <td>[% AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.ccode', authorised_value => cr.item.ccode, opac => 1 ) | html %]</td>
+                                            <td>[% cr.item.itemcallnumber | html %]</td>
+                                            <td>[% cr.item.copynumber | html %]</td>
+                                            <td>
+                                                [% IF cr.item %]
+                                                    [% INCLUDE 'item-status.inc' item=cr.item issue=cr.issue show_recall_link=Koha.Preference('UseRecalls') %]
+                                                [% END %]
+                                            </td>
+                                            <td data-order="[% cr.issue.date_due | html %]">[% cr.issue.date_due | $KohaDates  as_due_date => 1 %]</td>
+                                            <td
+                                                >[% IF ( cr.public_note ) %]
+                                                    [% cr.public_note | scrub_html type => 'note' | $raw %]
+                                                [% ELSIF ( cr.item.itemnotes ) %]
+                                                    [% cr.item.itemnotes | $raw %]
+                                                [% END %]
+                                            </td>
+                                            <td
+                                                >[% IF (cr.item.uri) %]
+                                                    <a href="[% cr.item.uri | url %]">Item URI</a>
+                                                [% ELSIF (cr.biblioitem.url) %]
+                                                    <a href="[% cr.biblioitem.url | url %]">Record URL</a>
+                                                [% END %]
+                                            </td>
+                                            <td></td>
+                                        </tr>
+                                    [% END %]
+                                </tbody>
+                            </table>
                         </div>
                     [% ELSE %]
                         <br style="clear:both;" />
