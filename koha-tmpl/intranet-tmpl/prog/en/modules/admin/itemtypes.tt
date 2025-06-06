@@ -437,6 +437,7 @@
                         <th>Checkin message</th>
                         <th>Library limitations</th>
                         <th>Automatic check-in</th>
+                        <th>Bookable</th>
                         <th class="no-export no-sort">Actions</th>
                     </thead>
                     [% FOREACH itemtype IN itemtypes %]
@@ -534,6 +535,7 @@
                                 [% END %]
                             </td>
                             <td>[% IF ( itemtype.automatic_checkin ) %]Yes[% ELSE %]&nbsp;[% END %]</td>
+                            <td>[% IF ( itemtype.bookable ) %]Yes[% ELSE %]&nbsp;[% END %]</td>
                             <td class="actions">
                                 <a href="/cgi-bin/koha/admin/itemtypes.pl?op=add_form&amp;itemtype=[% itemtype.itemtype | uri %]" class="btn btn-default btn-xs"><i class="fa-solid fa-pencil" aria-hidden="true"></i> Edit</a>
                                 <a href="/cgi-bin/koha/admin/itemtypes.pl?op=delete_confirm&amp;itemtype=[% itemtype.itemtype | uri %]" class="btn btn-default btn-xs"><i class="fa fa-trash-can"></i> Delete</a>
