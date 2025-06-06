@@ -112,7 +112,7 @@ subtest 'show_history_check' => sub {
     my $ill_request_with_no_borrowernumber = $builder->build_sample_ill_request( { borrowernumber => undef } );
 
     my $new_opac_history_check =
-        Koha::ILL::Request::Workflow::HistoryCheck->new( $metadata_with_no_cardnumber, 'staff' );
+        Koha::ILL::Request::Workflow::HistoryCheck->new( $metadata_with_no_cardnumber, 'opac' );
 
     is(
         $new_opac_history_check->show_history_check($ill_request_with_no_borrowernumber),
