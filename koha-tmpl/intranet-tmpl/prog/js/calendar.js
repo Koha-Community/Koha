@@ -1,4 +1,4 @@
-/* global debug sentmsg __ dateformat_pref flatpickr_dateformat_string bidi calendarFirstDayOfWeek */
+/* global debug sentmsg __ dateformat_pref flatpickr_dateformat_string bidi calendarFirstDayOfWeek __p */
 /* exported DateTime_from_syspref flatpickr_weekdays flatpickr_months */
 var MSG_PLEASE_ENTER_A_VALID_DATE = ( __("Please enter a valid date (should match %s).") );
 if (debug > 1) {
@@ -133,6 +133,9 @@ jQuery.validator.addMethod("date_on_or_after",
         var to = Date_from_syspref(value);
         return to >= from;
     });
+
+var flatpickr_rangeSeparator =
+    " " + __p("As in, from date1 to date2", "to") + " ";
 
 var flatpickr_weekdays = {
     shorthand: [ __("Sun"), __("Mon"), __("Tue"), __("Wed"), __("Thu"), __("Fri"), __("Sat")],

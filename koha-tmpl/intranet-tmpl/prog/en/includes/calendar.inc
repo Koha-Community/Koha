@@ -43,8 +43,9 @@
 [% Asset.js("lib/maskito/maskito.core.js") | $raw %]
 [% Asset.js("lib/maskito/maskito.kit.js") | $raw %]
 <script>
-    flatpickr.l10ns.default.weekdays = flatpickr_weekdays;
-    flatpickr.l10ns.default.months   = flatpickr_months;
+    flatpickr.l10ns.default.weekdays       = flatpickr_weekdays;
+    flatpickr.l10ns.default.months         = flatpickr_months;
+    flatpickr.l10ns.default.rangeSeparator = flatpickr_rangeSeparator;
     let flatpickr_defaults = {
         allowInput: true,
         dateFormat: "Y-m-d",
