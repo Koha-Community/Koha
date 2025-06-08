@@ -576,7 +576,7 @@
                     if ( elt.nodeName == 'SELECT' ) {
                         $(elt).siblings('.select2').find("span[role='combobox']").addClass(notFilledClass);
                     } else {
-                        elt.setAttribute('class','input_marceditor noEnterSubmit ' + notFilledClass);
+                        elt.setAttribute('class','input_marceditor noEnterSubmit framework_plugin ' + notFilledClass);
                     }
                     $('#' + subfields[i]).focus();
                     tabflag[tag+subfield+tagnumber][1]=label[i];
