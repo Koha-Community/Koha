@@ -19,7 +19,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 39;
+use Test::More tests => 40;
 use Test::Exception;
 use Test::Warn;
 use Time::Fake;
@@ -29,7 +29,8 @@ use Koha::Database;
 use Koha::DateUtils qw(dt_from_string);
 use Koha::ArticleRequests;
 use Koha::Patrons;
-use Koha::List::Patron qw(AddPatronList AddPatronsToList);
+use Koha::List::Patron       qw(AddPatronList AddPatronsToList);
+use Koha::Patron::Debarments qw(AddDebarment);
 use Koha::Patron::Relationships;
 use C4::Circulation qw( AddIssue AddReturn );
 
@@ -2867,4 +2868,227 @@ subtest 'ill_requests() tests' => sub {
     is( $reqs_rs->count, 2, 'Two linked ILL requests for the patron' );
 
     $schema->storage->txn_rollback;
+};
+
+subtest 'can_place_holds() tests' => sub {
+
+    plan tests => 7;
+
+    subtest "'expired' tests" => sub {
+
+        plan tests => 4;
+
+        $schema->storage->txn_begin;
+
+        t::lib::Mocks::mock_preference( 'BlockExpiredPatronOpacActions', 'hold' );
+
+        my $patron = $builder->build_object(
+            {
+                class => 'Koha::Patrons',
+                value => { dateexpiry => \'DATE_ADD(NOW(), INTERVAL -1 DAY)' }
+            }
+        );
+
+        my $result = $patron->can_place_holds();
+        ok( !$result, 'expired, cannot place holds' );
+
+        my $messages = $result->messages();
+        is( $messages->[0]->type,    'error' );
+        is( $messages->[0]->message, 'expired' );
+
+        ok( $patron->can_place_holds( { overrides => { expired => 1 } } ), "Override works for 'expired'" );
+
+        $schema->storage->txn_rollback;
+    };
+
+    subtest "'debt_limit' tests" => sub {
+
+        plan tests => 7;
+
+        $schema->storage->txn_begin;
+
+        # Add a patron, making sure it is not (yet) expired
+        my $patron = $builder->build_object( { class => 'Koha::Patrons', } );
+        $patron->account->add_debit( { amount => 10, interface => 'opac', type => 'ACCOUNT' } );
+
+        t::lib::Mocks::mock_preference( 'maxoutstanding', undef );
+
+        ok( $patron->can_place_holds(), "No 'maxoutstanding', can place holds" );
+
+        t::lib::Mocks::mock_preference( 'maxoutstanding', '5' );
+
+        my $result = $patron->can_place_holds();
+        ok( !$result, 'debt, cannot place holds' );
+
+        my $messages = $result->messages();
+        is( $messages->[0]->type,                         'error' );
+        is( $messages->[0]->message,                      'debt_limit' );
+        is( $messages->[0]->payload->{total_outstanding}, 10 );
+        is( $messages->[0]->payload->{max_outstanding},   5 );
+
+        ok( $patron->can_place_holds( { overrides => { debt_limit => 1 } } ), "Override works for 'debt_limit'" );
+
+        $schema->storage->txn_rollback;
+    };
+
+    subtest "'bad_address' tests" => sub {
+
+        plan tests => 4;
+
+        $schema->storage->txn_begin;
+
+        # Add a patron, making sure it is not (yet) expired
+        my $patron = $builder->build_object(
+            {
+                class => 'Koha::Patrons',
+                value => {
+                    gonenoaddress => 1,
+                }
+            }
+        );
+
+        my $result = $patron->can_place_holds();
+        ok( !$result, 'flagged for bad address, cannot place holds' );
+
+        my $messages = $result->messages();
+        is( $messages->[0]->type,    'error' );
+        is( $messages->[0]->message, 'bad_address' );
+
+        ok( $patron->can_place_holds( { overrides => { bad_address => 1 } } ), "Override works for 'bad_address'" );
+
+        $schema->storage->txn_rollback;
+    };
+
+    subtest "'card_lost' tests" => sub {
+
+        plan tests => 4;
+
+        $schema->storage->txn_begin;
+
+        # Add a patron, making sure it is not (yet) expired
+        my $patron = $builder->build_object(
+            {
+                class => 'Koha::Patrons',
+                value => {
+                    lost => 1,
+                }
+            }
+        );
+
+        my $result = $patron->can_place_holds();
+        ok( !$result, 'flagged for lost card, cannot place holds' );
+
+        my $messages = $result->messages();
+        is( $messages->[0]->type,    'error' );
+        is( $messages->[0]->message, 'card_lost' );
+
+        ok( $patron->can_place_holds( { overrides => { card_lost => 1 } } ), "Override works for 'card_lost'" );
+
+        $schema->storage->txn_rollback;
+    };
+
+    subtest "'restricted' tests" => sub {
+
+        plan tests => 4;
+
+        $schema->storage->txn_begin;
+
+        # Add a patron, making sure it is not (yet) expired
+        my $patron = $builder->build_object( { class => 'Koha::Patrons' } );
+        AddDebarment( { borrowernumber => $patron->borrowernumber } );
+        $patron->discard_changes();
+
+        my $result = $patron->can_place_holds();
+        ok( !$result, 'restricted, cannot place holds' );
+
+        my $messages = $result->messages();
+        is( $messages->[0]->type,    'error' );
+        is( $messages->[0]->message, 'restricted' );
+
+        ok( $patron->can_place_holds( { overrides => { restricted => 1 } } ), "Override works for 'restricted'" );
+
+        $schema->storage->txn_rollback;
+    };
+
+    subtest "'hold_limit' tests" => sub {
+
+        plan tests => 5;
+
+        $schema->storage->txn_begin;
+
+        # Add a patron, making sure it is not (yet) expired
+        my $patron = $builder->build_object( { class => 'Koha::Patrons' } );
+
+        # Add a hold
+        $builder->build_object( { class => 'Koha::Holds', value => { borrowernumber => $patron->borrowernumber } } );
+
+        t::lib::Mocks::mock_preference( 'maxreserves', undef );
+
+        ok( $patron->can_place_holds(), "No 'maxreserves', can place holds" );
+
+        t::lib::Mocks::mock_preference( 'maxreserves', 1 );
+
+        my $result = $patron->can_place_holds();
+        ok( !$result, 'hold limit reached, cannot place holds' );
+
+        my $messages = $result->messages();
+        is( $messages->[0]->type,    'error' );
+        is( $messages->[0]->message, 'hold_limit' );
+
+        ok( $patron->can_place_holds( { overrides => { hold_limit => 1 } } ), "Override works for 'hold_limit'" );
+
+        $schema->storage->txn_rollback;
+    };
+
+    subtest "'no_short_circuit' tests" => sub {
+
+        plan tests => 9;
+
+        $schema->storage->txn_begin;
+
+        # Create a patron with multiple issues
+        my $patron = $builder->build_object(
+            {
+                class => 'Koha::Patrons',
+                value => {
+                    dateexpiry    => \'DATE_ADD(NOW(), INTERVAL -1 DAY)',    # expired
+                    gonenoaddress => 1,                                      # bad address
+                    lost          => 1,                                      # card lost
+                }
+            }
+        );
+
+        # Add debt
+        $patron->account->add_debit( { amount => 10, interface => 'opac', type => 'ACCOUNT' } );
+
+        # Add restriction
+        AddDebarment( { borrowernumber => $patron->borrowernumber } );
+        $patron->discard_changes();
+
+        # Mock preferences
+        t::lib::Mocks::mock_preference( 'BlockExpiredPatronOpacActions', 'hold' );
+        t::lib::Mocks::mock_preference( 'maxoutstanding',                '5' );
+
+        # Test short-circuit behavior (default)
+        my $result = $patron->can_place_holds();
+        ok( !$result, 'patron cannot place holds' );
+        my $messages = $result->messages();
+        is( scalar @$messages, 1, 'short-circuit: only one error message returned' );
+
+        # Test no_short_circuit behavior
+        $result = $patron->can_place_holds( { no_short_circuit => 1 } );
+        ok( !$result, 'patron still cannot place holds with no_short_circuit' );
+        $messages = $result->messages();
+        is( scalar @$messages, 5, 'no_short_circuit: all error messages collected' );
+
+        # Verify we got all expected error types
+        my %message_types = map { $_->message => 1 } @$messages;
+        ok( $message_types{expired},     "'expired' error included" );
+        ok( $message_types{debt_limit},  "'debt_limit' error included" );
+        ok( $message_types{bad_address}, "'bad_address' error included" );
+        ok( $message_types{card_lost},   "'card_lost' error included" );
+        ok( $message_types{restricted},  "'restricted' error included" );
+
+        $schema->storage->txn_rollback;
+    };
 };

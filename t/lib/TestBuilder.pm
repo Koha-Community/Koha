@@ -658,9 +658,10 @@ sub _gen_default_values {
             reservefee   => 0,
 
             # Not X, used for statistics
-            category_type           => sub { return [qw( A C S I P )]->[ int( rand(5) ) ] },
-            min_password_length     => undef,
-            require_strong_password => undef,
+            category_type                 => sub { return [qw( A C S I P )]->[ int( rand(5) ) ] },
+            min_password_length           => undef,
+            require_strong_password       => undef,
+            BlockExpiredPatronOpacActions => q{follow_syspref_BlockExpiredPatronOpacActions},
         },
         Branch => {
             pickup_location => 0,
