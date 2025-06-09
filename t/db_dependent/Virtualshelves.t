@@ -129,6 +129,71 @@ subtest 'CRUD' => sub {
     teardown();
 };
 
+subtest 'Owner filter logic' => sub {
+    plan tests => 16;
+
+    my ( @where_strs, @args );
+
+    my $test_logic = sub {
+        my ($owner) = @_;
+        @where_strs = ();
+        @args       = ();
+
+        if ( defined $owner and $owner ne '' ) {
+            $owner =~ s/^\s+|\s+$//g;    # Trim leading/trailing spaces
+            $owner =~ s/\s+/ /g;         # Normalize internal whitespace
+
+            return ( [], [] ) if $owner eq '';
+
+            my @name_parts = split ' ', $owner;
+
+            if ( @name_parts == 2 ) {
+                push @where_strs, '( bo.firstname LIKE ? AND bo.surname LIKE ? )';
+                push @args, "%$name_parts[0]%", "%$name_parts[1]%";
+            } else {
+                push @where_strs, '(bo.firstname LIKE ? OR bo.surname LIKE ?)';
+                push @args, "%$owner%", "%$owner%";
+            }
+        }
+
+        return ( \@where_strs, \@args );
+    };
+
+    my ( $where, $args );
+
+    ( $where, $args ) = $test_logic->(undef);
+    is_deeply( $where, [], 'No where clause when owner is undef' );
+    is_deeply( $args,  [], 'No args when owner is undef' );
+
+    ( $where, $args ) = $test_logic->('');
+    is_deeply( $where, [], 'No where clause when owner is empty' );
+    is_deeply( $args,  [], 'No args when owner is empty' );
+
+    ( $where, $args ) = $test_logic->('John Smith');
+    is_deeply( $where, ['( bo.firstname LIKE ? AND bo.surname LIKE ? )'], 'AND clause for two name parts' );
+    is_deeply( $args,  [ '%John%', '%Smith%' ],                           'Args match both names' );
+
+    ( $where, $args ) = $test_logic->('  John Smith  ');
+    is_deeply( $where, ['( bo.firstname LIKE ? AND bo.surname LIKE ? )'], 'Trimmed whitespace around two name parts' );
+    is_deeply( $args,  [ '%John%', '%Smith%' ],                           'Args match trimmed names' );
+
+    ( $where, $args ) = $test_logic->('John     Smith');
+    is_deeply( $where, ['( bo.firstname LIKE ? AND bo.surname LIKE ? )'], 'Normalized internal whitespace' );
+    is_deeply( $args,  [ '%John%', '%Smith%' ],                           'Args match normalized names' );
+
+    ( $where, $args ) = $test_logic->('John ');
+    is_deeply( $where, ['(bo.firstname LIKE ? OR bo.surname LIKE ?)'], 'Single name with trailing space' );
+    is_deeply( $args,  [ '%John%', '%John%' ],                         'Args match single name trimmed' );
+
+    ( $where, $args ) = $test_logic->('   ');
+    is_deeply( $where, [], 'No where clause when owner is only whitespace' );
+    is_deeply( $args,  [], 'No args when owner is only whitespace' );
+
+    ( $where, $args ) = $test_logic->('   John    ');
+    is_deeply( $where, ['(bo.firstname LIKE ? OR bo.surname LIKE ?)'], 'Single name with leading/trailing spaces' );
+    is_deeply( $args,  [ '%John%', '%John%' ],                         'Args match cleaned single name' );
+};
+
 subtest 'Sharing' => sub {
     plan tests => 21;
     my $patron_wants_to_share = $builder->build(
