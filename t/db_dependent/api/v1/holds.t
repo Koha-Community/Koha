@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 15;
+use Test::More tests => 16;
 use Test::MockModule;
 use Test::Mojo;
 use t::lib::TestBuilder;
@@ -697,8 +697,12 @@ subtest 'add() tests (maxreserves behaviour)' => sub {
         item_id           => $item_3->itemnumber
     };
 
-    $t->post_ok( "//$userid:$password@/api/v1/holds" => json => $post_data )->status_is(403)
-        ->json_is( { error => 'Hold cannot be placed. Reason: tooManyReserves' } );
+    $t->post_ok( "//$userid:$password@/api/v1/holds" => json => $post_data )->status_is(409)->json_is(
+        {
+            error      => 'Hold cannot be placed. Reason: hold_limit',
+            error_code => 'hold_limit'
+        }
+    );
 
     t::lib::Mocks::mock_preference( 'maxreserves', 0 );
 
@@ -713,6 +717,66 @@ subtest 'add() tests (maxreserves behaviour)' => sub {
 
     $t->post_ok( "//$userid:$password@/api/v1/holds" => json => $post_data )
         ->status_is( 201, 'maxreserves == undef => no limit' );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'add() + can_place_holds() tests' => sub {
+
+    plan tests => 30;
+
+    $schema->storage->txn_begin;
+
+    my $password = 'AbcdEFG123';
+
+    my $library = $builder->build_object( { class => 'Koha::Libraries', value => { pickup_location => 1 } } );
+    my $patron =
+        $builder->build_object( { class => 'Koha::Patrons', value => { branchcode => $library->id, flags => 1 } } );
+    $patron->set_password( { password => $password, skip_validation => 1 } );
+    my $userid = $patron->userid;
+
+    my $current_message;
+    my $patron_mock = Test::MockModule->new('Koha::Patron');
+
+    $patron_mock->mock(
+        'can_place_holds',
+        sub {
+            return Koha::Result::Boolean->new(0)->add_message( { type => 'error', message => $current_message } );
+        }
+    );
+
+    my $item = $builder->build_sample_item( { library => $library->id } );
+
+    my @messages = qw(
+        expired
+        debt_limit
+        bad_address
+        card_lost
+        restricted
+        hold_limit);
+
+    foreach my $message (@messages) {
+
+        $current_message = $message;
+
+        my $post_data = {
+            patron_id         => $patron->id,
+            biblio_id         => $item->biblio->id,
+            pickup_library_id => $item->holdingbranch,
+            item_id           => $item->id
+        };
+
+        $t->post_ok( "//$userid:$password@/api/v1/holds" => json => $post_data )
+            ->status_is( 409, "Expected error related to '$message'" )
+            ->json_is( { error => "Hold cannot be placed. Reason: $message", error_code => $message } );
+
+        my $hold_id =
+            $t->post_ok(
+            "//$userid:$password@/api/v1/holds" => { 'x-koha-override' => $message } => json => $post_data )
+            ->status_is( 201, "Override works for '$message'" )->tx->res->json->{hold_id};
+
+        Koha::Holds->find($hold_id)->delete();
+    }
 
     $schema->storage->txn_rollback;
 };
