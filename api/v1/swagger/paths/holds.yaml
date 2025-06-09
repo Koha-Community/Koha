@@ -221,6 +221,12 @@
           type: string
           enum:
             - any
+            - bad_address
+            - card_lost
+            - debt_limit
+            - expired
+            - hold_limit
+            - restricted
         collectionFormat: csv
     consumes:
       - application/json
@@ -245,6 +251,18 @@
           $ref: "../swagger.yaml#/definitions/error"
       "404":
         description: Borrower not found
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "409":
+        description: |
+          Conflict. Possible `error_code` attribute values:
+
+            * `bad_address`
+            * `card_lost`
+            * `debt_limit`
+            * `expired`
+            * `hold_limit`
+            * `restricted`
         schema:
           $ref: "../swagger.yaml#/definitions/error"
       "500":
