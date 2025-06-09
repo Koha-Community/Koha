@@ -5,6 +5,7 @@
 [% USE AuthorisedValues %]
 [% USE Asset %]
 [% USE raw %]
+[% USE TablesSettings %]
 [% PROCESS 'i18n.inc' %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
@@ -207,8 +208,8 @@
                 <table id="article-requests-requested-table">
                     <thead>
                         <tr>
-                            <th />
-                            <th class="ar-title">Title</th>
+                            <th class="no-sort no-export"></th>
+                            <th class="ar-title anti-the">Title</th>
                             <th class="ar-request">Requested article</th>
                             <th class="ar-collection">Collection</th>
                             <th class="ar-itemtype">Item type</th>
@@ -314,8 +315,8 @@
                 <table id="article-requests-pending-table">
                     <thead>
                         <tr>
-                            <th />
-                            <th class="ar-title">Title</th>
+                            <th class="no-export no-sort"> </th>
+                            <th class="ar-title anti-the">Title</th>
                             <th class="ar-request">Requested article</th>
                             <th class="ar-collection">Collection</th>
                             <th class="ar-itemtype">Item type</th>
@@ -420,8 +421,8 @@
                 <table id="article-requests-processing-table">
                     <thead>
                         <tr>
-                            <th />
-                            <th class="ar-title">Title</th>
+                            <th class="no-export no-sort"> </th>
+                            <th class="ar-title anti-the">Title</th>
                             <th class="ar-request">Requested article</th>
                             <th class="ar-collection">Collection</th>
                             <th class="ar-itemtype">Item type</th>
@@ -574,13 +575,17 @@
                 if( link.length > 0 ) link[0].focus();
             });
 
-            requested_datatable = $("#article-requests-requested-table").kohaTable();
+            let requested_table_settings = [% TablesSettings.GetTableSettings( 'circ', 'article-requests', 'article-requests-requested-table', 'json' ) | $raw %]
+            let pending_table_settings = [% TablesSettings.GetTableSettings( 'circ', 'article-requests', 'article-requests-pending-table', 'json' ) | $raw %]
+            let processing_table_settings = [% TablesSettings.GetTableSettings( 'circ', 'article-requests', 'article-requests-processing-table', 'json' ) | $raw %]
+
+            requested_datatable = $("#article-requests-requested-table").kohaTable({}, requested_table_settings);
             requested_dt = requested_datatable.DataTable();
 
-            pending_datatable = $("#article-requests-pending-table").kohaTable();
+            pending_datatable = $("#article-requests-pending-table").kohaTable({}, pending_table_settings);
             pending_dt = pending_datatable.DataTable();
 
-            processing_datatable = $("#article-requests-processing-table").kohaTable();
+            processing_datatable = $("#article-requests-processing-table").kohaTable({}, processing_table_settings);
             processing_dt = processing_datatable.DataTable();
 
             active_datatable = requested_datatable;
