@@ -24,6 +24,7 @@ use base qw( Template::Plugin );
 use Try::Tiny qw( catch try );
 
 use Koha::Plugins;
+use Koha::AuthUtils qw( get_script_name );
 
 =head1 NAME
 
@@ -151,9 +152,13 @@ sub get_plugins_intranet_head {
 This method collects the output of all plugins with an intranet_js method
 to output to the javascript section of at the bottom of intranet pages.
 
+The method now passes the current script name (controller) to the plugin's intranet_js
+method as a parameter: { page => 'script_name' }
+
 =cut
 
 sub get_plugins_intranet_js {
+    my ($self) = @_;
     return q{} unless C4::Context->config("enable_plugins");
 
     my $p = Koha::Plugins->new();
@@ -166,10 +171,13 @@ sub get_plugins_intranet_js {
         }
     );
 
+    # Get script name (controller) instead of template name
+    my $script_name = get_script_name() || '';
+
     my @data = ();
     foreach my $plugin (@plugins) {
         try {
-            my $datum = $plugin->intranet_js || q{};
+            my $datum = $plugin->intranet_js( { page => $script_name } ) || q{};
             push( @data, $datum );
         } catch {
             warn "Error calling 'intranet_js' on the " . $plugin->{class} . "plugin ($_)";

@@ -3,7 +3,7 @@
 use Modern::Perl;
 
 use Test::NoWarnings;
-use Test::More tests => 19;
+use Test::More tests => 20;
 use Test::Warn;
 use CGI;
 use File::Basename;
@@ -91,5 +91,31 @@ is( $plugin->get_plugins_opac_js,       q{}, 'Test plugin opac_js return value i
 is( $plugin->get_plugins_opac_head,     q{}, 'Test plugin opac_head return value is empty' );
 is( $plugin->get_plugins_intranet_js,   q{}, 'Test plugin intranet_js return value is empty' );
 is( $plugin->get_plugins_intranet_head, q{}, 'Test plugin intranet_head return value is empty' );
+
+# Test intranet_js page parameter passing
+t::lib::Mocks::mock_config( 'enable_plugins', 1 );
+
+# Reset the mock to capture arguments
+my $captured_args;
+$mock_plugin->mock(
+    'intranet_js',
+    sub {
+        my ( $self, $args ) = @_;
+        $captured_args = $args;
+        return "test";
+    }
+);
+
+# Create plugin with context (minimal)
+my $plugin_with_context = bless {}, 'Koha::Template::Plugin::KohaPlugins';
+
+# Call get_plugins_intranet_js
+my $result = $plugin_with_context->get_plugins_intranet_js();
+
+# Verify that the plugin was called with page parameter containing script name
+ok(
+    defined $captured_args && ref($captured_args) eq 'HASH' && exists $captured_args->{page},
+    'Plugin intranet_js method receives page parameter with script name'
+);
 
 $schema->storage->txn_rollback;
