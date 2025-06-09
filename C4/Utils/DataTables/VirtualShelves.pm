@@ -62,9 +62,20 @@ sub search {
         push @args, "%$shelfname%";
     }
     if ( defined $owner and $owner ne '' ) {
-        push @where_strs, '( bo.firstname LIKE ? OR bo.surname LIKE ? )';
-    push @args, "%$owner%", "%$owner%";
-}
+        $owner =~ s/^\s+|\s+$//g;    # Trim leading/trailing spaces
+        $owner =~ s/\s+/ /g;         # Collapse multiple internal spaces to one
+        my @name_parts = split ' ', $owner;
+
+        if ( @name_parts == 2 ) {
+            push @where_strs, '( bo.firstname LIKE ? AND bo.surname LIKE ? )';
+            push @args, "%$name_parts[0]%", "%$name_parts[1]%";
+
+        } else {
+
+            push @where_strs, '( bo.firstname LIKE ? OR bo.surname LIKE ? )';
+            push @args, "%$owner%", "%$owner%";
+        }
+    }
     if ( defined $sortby and $sortby ne '' ) {
         push @where_strs, 'sortfield = ?';
         push @args, $sortby;
