@@ -88,7 +88,9 @@ sub add {
         my $non_priority      = $body->{non_priority};
 
         my $overrides    = $c->stash('koha.overrides');
-        my $can_override = $overrides->{any} && C4::Context->preference('AllowHoldPolicyOverride');
+        my $can_override = C4::Context->preference('AllowHoldPolicyOverride') // 0;
+
+        my $override_all = $overrides->{any} && C4::Context->preference('AllowHoldPolicyOverride') ? 1 : 0;
 
         if ( !C4::Context->preference('AllowHoldDateInFuture') && $hold_date ) {
             return $c->render(
@@ -142,7 +144,7 @@ sub add {
         }
 
         # If the hold is being forced, no need to validate
-        unless ($can_override) {
+        unless ($override_all) {
 
             # Validate pickup location
             my $valid_pickup_location;
@@ -161,21 +163,28 @@ sub add {
                 openapi => { error => 'The supplied pickup location is not valid' }
             ) unless $valid_pickup_location;
 
-            my $can_place_hold =
+            my $can_place_holds = $patron->can_place_holds();
+
+            if ( !$can_place_holds ) {
+                my $error_code = $can_place_holds->messages->[0]->message;
+                return $c->render(
+                    status  => 409,
+                    openapi => {
+                        error      => 'Hold cannot be placed. Reason: ' . $error_code,
+                        error_code => $error_code,
+                    }
+                ) unless $overrides->{$error_code};
+            }
+
+            my $can_hold_be_placed =
                 $item
                 ? C4::Reserves::CanItemBeReserved( $patron, $item )
                 : C4::Reserves::CanBookBeReserved( $patron_id, $biblio_id );
 
-            if ( C4::Context->preference('maxreserves')
-                && $patron->holds->count + 1 > C4::Context->preference('maxreserves') )
-            {
-                $can_place_hold->{status} = 'tooManyReserves';
-            }
-
-            unless ( $can_place_hold->{status} eq 'OK' ) {
+            unless ( $can_hold_be_placed->{status} eq 'OK' ) {
                 return $c->render(
                     status  => 403,
-                    openapi => { error => "Hold cannot be placed. Reason: " . $can_place_hold->{status} }
+                    openapi => { error => "Hold cannot be placed. Reason: " . $can_hold_be_placed->{status} }
                 );
             }
         }
