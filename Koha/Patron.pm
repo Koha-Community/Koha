@@ -1318,6 +1318,158 @@ sub move_to_deleted {
     return Koha::Database->new->schema->resultset('Deletedborrower')->create($patron_infos);
 }
 
+=head3 can_place_holds
+
+    my $result = $patron->can_place_holds();
+    my $result = $patron->can_place_holds(
+        {
+            overrides        => { debt_limit => 1, card_lost => 1 },
+            no_short_circuit => 1
+        }
+    );
+
+    if ( $patron->can_place_holds() ) {
+        # patron can place holds
+    } else {
+        my @messages = $result->messages;
+        # handle error messages
+    }
+
+Checks if a patron is allowed to place holds based on various patron conditions.
+
+=head4 Parameters
+
+=over 4
+
+=item * C<$options> (optional) - Hashref with the following keys:
+
+=over 8
+
+=item * C<overrides> - Hashref of checks to skip. Keys should match error message codes.
+
+=item * C<no_short_circuit> - Boolean. If true, performs all checks and collects all error messages instead of stopping at first failure. Default: false.
+
+=back
+
+=back
+
+=head4 Returns
+
+Koha::Result::Boolean object - true if patron can place holds, false otherwise.
+When false, the result object contains error messages with details about why
+holds are blocked.
+
+=head4 Error Messages
+
+The following error message codes may be returned:
+
+=over 4
+
+=item * C<expired> - Patron account has expired and expired patrons are blocked from placing holds
+
+=item * C<debt_limit> - Patron owes more than the maximum allowed outstanding amount
+
+=item * C<bad_address> - Patron's address is marked as incorrect
+
+=item * C<card_lost> - Patron's library card is marked as lost
+
+=item * C<restricted> - Patron account is restricted/debarred
+
+=item * C<hold_limit> - Patron has reached the maximum number of allowed holds
+
+=back
+
+Error messages may include additional payload data with relevant details
+(amounts, limits, counts, etc.).
+
+=cut
+
+sub can_place_holds {
+    my ( $self, $options ) = @_;
+    $options //= {};
+
+    my $overrides        = $options->{overrides}        // {};
+    my $no_short_circuit = $options->{no_short_circuit} // 0;
+
+    my $result = Koha::Result::Boolean->new(1);
+
+    # expired patron check
+    unless ( $overrides->{expired} ) {
+        if ( $self->is_expired && $self->category->effective_BlockExpiredPatronOpacActions_contains('hold') ) {
+            $result->set_value(0);
+            $result->add_message( { message => 'expired', type => 'error' } );
+
+            return $result unless $no_short_circuit;
+        }
+    }
+
+    # debt check
+    unless ( $overrides->{debt_limit} ) {
+        my $max_outstanding = C4::Context->preference("maxoutstanding");
+        my $outstanding     = $self->account->balance;
+
+        if ( $max_outstanding && $outstanding && ( $outstanding > $max_outstanding ) ) {
+            $result->set_value(0);
+            $result->add_message(
+                {
+                    message => 'debt_limit', type => 'error',
+                    payload => { total_outstanding => $outstanding, max_outstanding => $max_outstanding }
+                }
+            );
+
+            return $result unless $no_short_circuit;
+        }
+    }
+
+    # check address marked as incorrect
+    unless ( $overrides->{bad_address} ) {
+        if ( $self->gonenoaddress ) {
+            $result->set_value(0);
+            $result->add_message( { message => 'bad_address', type => 'error' } );
+
+            return $result unless $no_short_circuit;
+        }
+    }
+
+    # check lost card
+    unless ( $overrides->{card_lost} ) {
+        if ( $self->lost ) {
+            $result->set_value(0);
+            $result->add_message( { message => 'card_lost', type => 'error' } );
+            return $result unless $no_short_circuit;
+        }
+    }
+
+    # check restrictions
+    unless ( $overrides->{restricted} ) {
+        if ( $self->is_debarred ) {
+            $result->set_value(0);
+            $result->add_message( { message => 'restricted', type => 'error' } );
+
+            return $result unless $no_short_circuit;
+        }
+    }
+
+    # check max reserves
+    unless ( $overrides->{hold_limit} ) {
+        my $max_holds   = C4::Context->preference("maxreserves");
+        my $holds_count = $self->holds->count;
+        if ( $max_holds && ( $holds_count >= $max_holds ) ) {
+            $result->set_value(0);
+            $result->add_message(
+                {
+                    message => 'hold_limit', type => 'error',
+                    payload => { total_holds => $holds_count, max_holds => $max_holds }
+                }
+            );
+
+            return $result unless $no_short_circuit;
+        }
+    }
+
+    return $result;
+}
+
 =head3 can_request_article
 
     if ( $patron->can_request_article( $library->id ) ) { ... }
