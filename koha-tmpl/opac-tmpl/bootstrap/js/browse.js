@@ -68,7 +68,7 @@ $(document).ready(function () {
                     card.find(".card-header")
                         .attr("id", "heading" + index)
                         .find("a")
-                        .attr("data-target", "#collapse" + index)
+                        .attr("data-bs-target", "#collapse" + index)
                         .attr("aria-controls", "collapse" + index)
                         .text(object.text);
                     card.find(".collapse")
@@ -96,7 +96,7 @@ $(document).ready(function () {
         }
 
         var link = $(this);
-        var target = link.data("target");
+        var target = link.data("bs-target");
         var term = link.text();
 
         var field = $("#browse-searchresults").data("field");
