@@ -114,17 +114,10 @@
                         <label for="branchcode" class="required">Library: </label>
                         <select id="branchcode" name="branchcode" required="required">
                             <option value=""></option>
-                            [% FOREACH branch IN branches %]
-                                [% IF desk %]
-                                    [% IF (desk.branchcode == branch.branchcode) %]
-                                        <option value="[% branch.branchcode|html %]" selected="selected">[% branch.branchname|html %]</option>
-                                    [% END %]
-                                [% ELSE %]
-                                    [% IF (Branches.GetLoggedInBranchcode == branch.branchcode) %]
-                                        <option value="[% branch.branchcode|html %]" selected="selected">[% branch.branchname|html %]</option>
-                                    [% END %]
-                                    <option value="[% branch.branchcode|html %]">[% branch.branchname|html %]</option>
-                                [% END %]
+                            [% IF desk %]
+                                [% PROCESS options_for_libraries libraries => Branches.all( selected => desk.branchcode ) %]
+                            [% ELSE %]
+                                [% PROCESS options_for_libraries libraries => Branches.all() %]
                             [% END %]
                         </select>
                     </li>
