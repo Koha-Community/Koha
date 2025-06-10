@@ -1,5 +1,6 @@
 [% USE raw %]
 [% USE Koha %]
+[% USE AdditionalContents %]
 [% PROCESS 'i18n.inc' %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title
@@ -126,10 +127,26 @@
                 </div>
             </div>
             <!-- /.row -->
+
+            [% SET StaffReportsHomeHTML = AdditionalContents.get( location => "StaffReportsHomeHTML", lang => lang, library => Branches.GetLoggedInBranchcode || default_branch ) %]
+
+            [% IF ( StaffReportsHomeHTML.content && StaffReportsHomeHTML.content.count > 0 ) %]
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div id="[% StaffReportsHomeHTML.location | html %]">
+                            [% FOREACH n IN StaffReportsHomeHTML.content %]
+                                <div class="[% n.lang | html %]_item">
+                                    <div class="[% n.lang | html %]_body">[% n.content | $raw %]</div>
+                                </div>
+                            [% END %]
+                        </div>
+                        <!-- /#StaffReportsHomeHTML -->
+                    </div>
+                    <!-- /.col-sm-12 -->
+                </div>
+                <!-- /.row -->
+            [% END # /IF StaffReportsHomeHTML %]
         </div>
-    </div>
-    <div class="row">
-        <div class="col-md-10 offset-md-1 col-lg-8 offset-lg-2" id="intranet-reports-home-html"> [% Koha.Preference('IntranetReportsHomeHTML') | $raw %] </div>
     </div>
 </div>
 [% INCLUDE 'intranet-bottom.inc' %]

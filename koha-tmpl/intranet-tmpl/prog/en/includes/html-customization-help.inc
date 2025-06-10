@@ -16,6 +16,8 @@
 
 <div id="IntranetmainUserblock_notes" class="hint customization_note"> Include this content in its own section on the main page of the staff interface </div>
 
+<div id="StaffReportsHomeHTML_notes" class="hint customization_note"> Include this content in its own section on the reports home page</div>
+
 <div id="opaccredits_notes" class="hint customization_note"> Include this content in the footer of all pages in the OPAC. </div>
 
 <div id="OpacCustomSearch_notes" class="hint customization_note"> Replace the search box at the top of OPAC pages with this content. </div>
