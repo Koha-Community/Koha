@@ -513,15 +513,14 @@
                     $("#logout_form").on("click", function(e){
                         e.preventDefault(e);
                         [% IF Koha.Preference('SelfCheckReceiptPrompt') %]
-                            var confirmStart = Date.now();
                             confirmModal("", _("Would you like to print a receipt?"), _("Print receipt and end session"), _("End session"), function(result) {
-                                if ( result && (Date.now() - confirmStart) < [% Koha.Preference('SelfCheckTimeout') | html %] ) {
+                                if ( result ){
                                     var win = window.open("/cgi-bin/koha/sco/printslip.pl?print=qslip");
                                     location.href = '/cgi-bin/koha/sco/sco-main.pl?op=logout';
                                 } else {
                                     location.href = '/cgi-bin/koha/sco/sco-main.pl?op=logout';
                                 }
-                            })
+                            });
                         [% ELSE %]
                             location.href = '/cgi-bin/koha/sco/sco-main.pl?op=logout';
                         [% END %]
