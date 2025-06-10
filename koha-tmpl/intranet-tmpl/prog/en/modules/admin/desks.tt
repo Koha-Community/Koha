@@ -101,17 +101,29 @@
             <input type="hidden" name="op" value="cud-add_validate" />
             <input type="hidden" name="desk_id" value="[% desk.desk_id | html %]" />
 
-            <fieldset class="rows">
-                <ol>
-                    [% IF desk %]
-                        <li><span class="label">Desk ID: </span>[% desk.desk_id | html %]</li>
-                    [% END %]
-                    <li>
+            <fieldset class="fg">
+                [% IF desk %]
+                    <div class="fg-row">
+                        <div class="fg-label">
+                            <span class="label">Desk ID: </span>
+                        </div>
+                        <div class="fg-text"> [% desk.desk_id | html %] </div>
+                    </div>
+                [% END %]
+                <div class="fg-row">
+                    <div class="fg-label">
                         <label for="desk_name" class="required">Desk: </label>
-                        <input type="text" name="desk_name" id="desk_name" size="80" maxlength="100" value="[% desk.desk_name | html %]" required="required" class="required" /> <span class="required">Required</span>
-                    </li>
-                    <li>
+                    </div>
+                    <div class="fg-input">
+                        <input type="text" name="desk_name" id="desk_name" size="80" maxlength="100" value="[% desk.desk_name | html %]" required="required" class="required" />
+                    </div>
+                    <div class="required">Required</div>
+                </div>
+                <div class="fg-row">
+                    <div class="fg-label">
                         <label for="branchcode" class="required">Library: </label>
+                    </div>
+                    <div class="fg-input">
                         <select id="branchcode" name="branchcode" required="required">
                             <option value=""></option>
                             [% IF desk %]
@@ -120,8 +132,8 @@
                                 [% PROCESS options_for_libraries libraries => Branches.all() %]
                             [% END %]
                         </select>
-                    </li>
-                </ol>
+                    </div>
+                </div>
             </fieldset>
 
             <fieldset class="action">

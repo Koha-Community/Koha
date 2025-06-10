@@ -83,57 +83,89 @@
         <form action="/cgi-bin/koha/admin/debit_types.pl" name="Aform" method="post" class="validated">
             [% INCLUDE 'csrf-token.inc' %]
             <input type="hidden" name="op" value="cud-add_validate" />
-            <fieldset class="rows">
-                <ol>
-                    <li>
+            <fieldset class="fg">
+                <div class="fg-row">
+                    <div class="fg-label">
                         <label for="code" class="required">Debit type code: </label>
-                        [% IF debit_type %]
+                    </div>
+                    [% IF debit_type %]
+                        <div class="fg-text">
                             <strong>[% debit_type.code | html %]</strong>
                             <input type="hidden" name="code" value="[% code | html %]" />
-                        [% ELSE %]
-                            <input type="text" name="code" id="code" size="80" maxlength="64" class="required focus" required="required" /><span class="required">Required. Maximum length is 64 letters</span>
-                        [% END %]
-                    </li>
-                    <li>
+                        </div>
+                    [% ELSE %]
+                        <div class="fg-input">
+                            <input type="text" name="code" id="code" size="80" maxlength="64" class="required focus" required="required" />
+                        </div>
+                        <div class="required">Required</div>
+                        <div class="hint">Maximum length is 64 letters</div>
+                    [% END %]
+                </div>
+                <div class="fg-row input-sm">
+                    <div class="fg-label">
                         <label for="default_amount">Default amount: </label>
+                    </div>
+                    <div class="fg-input">
                         <input type="text" pattern="^\d+(\.\d{2})?$" name="default_amount" id="default_amount" size="80" maxlength="100" value="[% debit_type.default_amount | $Price on_editing => 1 %]" step="any" min="0" />
-                    </li>
-                    <li>
+                    </div>
+                </div>
+                <div class="fg-row">
+                    <div class="fg-label">
                         <label for="description" class="required">Description: </label>
-                        [% IF debit_type && debit_type.is_system %]
+                    </div>
+                    [% IF debit_type && debit_type.is_system %]
+                        <div class="fg-text">
                             <span>[%- PROCESS debit_type_description debit_type = debit_type -%]</span>
-                        [% ELSE %]
-                            <input type="text" name="description" id="description" required="required" class="required" size="80" maxlength="100" value="[% debit_type.description | html %]" /> <span class="required">Required</span>
-                        [% END %]
-                    </li>
-                    <li>
+                        </div>
+                    [% ELSE %]
+                        <div class="fg-input">
+                            <input type="text" name="description" id="description" required="required" class="required" size="80" maxlength="100" value="[% debit_type.description | html %]" />
+                        </div>
+                        <div class="required">Required</div>
+                    [% END %]
+                </div>
+                <div class="fg-row">
+                    <div class="fg-label">
                         <label for="can_be_invoiced">Can be manually invoiced? </label>
+                    </div>
+                    <div class="fg-input">
                         [% IF debit_type.can_be_invoiced %]
                             <input type="checkbox" name="can_be_invoiced" id="can_be_invoiced" checked="checked" value="1" />
                         [% ELSE %]
                             <input type="checkbox" name="can_be_invoiced" id="can_be_invoiced" value="1" />
                         [% END %]
-                    </li>
-                    <li>
+                    </div>
+                </div>
+                <div class="fg-row">
+                    <div class="fg-label">
                         <label for="can_be_sold">Can be sold? </label>
+                    </div>
+                    <div class="fg-input">
                         [% IF debit_type.can_be_sold %]
                             <input type="checkbox" name="can_be_sold" id="can_be_sold" checked="checked" value="1" />
                         [% ELSE %]
                             <input type="checkbox" name="can_be_sold" id="can_be_sold" value="1" />
                         [% END %]
-                    </li>
-                    <li>
+                    </div>
+                </div>
+                <div class="fg-row">
+                    <div class="fg-label">
                         <label for="restricts_checkouts">Included in noissuescharge? </label>
+                    </div>
+                    <div class="fg-input">
                         [% IF debit_type.restricts_checkouts %]
                             <input type="checkbox" name="restricts_checkouts" id="restricts_checkouts" checked="checked" value="1" />
                         [% ELSE %]
                             <input type="checkbox" name="restricts_checkouts" id="restricts_checkouts" value="1" />
                         [% END %]
-                    </li>
-                    <li>
+                    </div>
+                </div>
+                <div class="fg-row">
+                    <div class="fg-label">
                         <label for="library_limitation">Libraries limitation: </label>
+                    </div>
+                    <div class="fg-input">
                         <select id="library_limitation" name="branches" multiple size="10">
-                            <option value="">All libraries</option>
                             [% FOREACH branch IN branches_loop %]
                                 [% IF ( branch.selected ) %]
                                     <option selected="selected" value="[% branch.branchcode | html %]">[% branch.branchname | html %]</option>
@@ -142,9 +174,9 @@
                                 [% END %]
                             [% END %]
                         </select>
-                        <div class="hint">Limit use of this debit type to the selected libraries.</div>
-                    </li>
-                </ol>
+                    </div>
+                    <div class="hint">Limit use of this debit type to the selected libraries.</div>
+                </div>
             </fieldset>
             [% IF additional_fields.size %]
                 [% INCLUDE 'additional-fields-entry.inc' available=additional_fields values=additional_field_values wrap_fieldset=1 %]

@@ -103,27 +103,42 @@
         <form action="/cgi-bin/koha/admin/cash_registers.pl" id="Aform" name="Aform" class="validated" method="post">
             [% INCLUDE 'csrf-token.inc' %]
 
-            <fieldset class="rows">
+            <fieldset class="fg">
                 <input type="hidden" name="op" value="cud-add_validate" />
-                <ol>
-                    [% IF cash_register %]
-                        <li>
-                            <span class="label">Cash register ID: </span>[% cash_register.id | html %]
+                [% IF cash_register %]
+                    <div class="fg-row">
+                        <div class="fg-label">
+                            <span class="label">Cash register ID: </span>
+                        </div>
+                        <div class="fg-text">
+                            [% cash_register.id | html %]
                             <input type="hidden" name="id" value="[% cash_register.id | html %]" />
-                        </li>
-                    [% END %]
-                    <li>
+                        </div>
+                    </div>
+                [% END %]
+                <div class="fg-row">
+                    <div class="fg-label">
                         <label for="name" class="required">Name: </label>
+                    </div>
+                    <div class="fg-input">
                         <input type="text" name="name" id="name" size="24" maxlength="24" value="[% cash_register.name | html %]" class="required focus" />
-                        <span class="required">Required</span>
-                    </li>
+                        <div class="required">Required</div>
+                    </div>
+                </div>
 
-                    <li>
+                <div class="fg-row">
+                    <div class="fg-label">
                         <label for="description">Description: </label>
+                    </div>
+                    <div class="fg-input">
                         <input type="text" name="description" id="description" size="24" value="[% cash_register.description | html %]" />
-                    </li>
-                    <li>
+                    </div>
+                </div>
+                <div class="fg-row">
+                    <div class="fg-label">
                         <label for="branch">Library: </label>
+                    </div>
+                    <div class="fg-input">
                         <select id="branch" name="branch">
                             [% IF cash_register %]
                                 [% PROCESS options_for_libraries libraries => Branches.all( selected => cash_register.branch ) %]
@@ -131,13 +146,17 @@
                                 [% PROCESS options_for_libraries libraries => Branches.all() %]
                             [% END %]
                         </select>
-                    </li>
+                    </div>
+                </div>
 
-                    <li>
+                <div class="fg-row input-sm">
+                    <div class="fg-label">
                         <label for="starting_float">Initial float: </label>
+                    </div>
+                    <div class="fg-input">
                         <input type="text" pattern="^\d+(?:\.\d{0,2})$" name="starting_float" id="starting_float" size="24" value="[% cash_register.starting_float | $Price on_editing => 1 %]" />
-                    </li>
-                </ol>
+                    </div>
+                </div>
             </fieldset>
 
             <fieldset class="action">

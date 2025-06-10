@@ -85,27 +85,43 @@
         <form action="/cgi-bin/koha/admin/credit_types.pl" name="Aform" method="post" class="validated">
             [% INCLUDE 'csrf-token.inc' %]
             <input type="hidden" name="op" value="cud-add_validate" />
-            <fieldset class="rows">
-                <ol>
-                    <li>
+            <fieldset class="fg">
+                <div class="fg-row">
+                    <div class="fg-label">
                         <label for="code" class="required">Credit type code: </label>
-                        [% IF credit_type %]
+                    </div>
+                    [% IF credit_type %]
+                        <div class="fg-text">
                             <strong>[% credit_type.code | html %]</strong>
                             <input type="hidden" name="code" value="[% code | html %]" />
-                        [% ELSE %]
-                            <input type="text" name="code" id="code" size="80" maxlength="64" class="required focus" required="required" /><span class="required">Required. Maximum length is 64 letters</span>
-                        [% END %]
-                    </li>
-                    <li>
+                        </div>
+                    [% ELSE %]
+                        <div class="fg-input">
+                            <input type="text" name="code" id="code" size="80" maxlength="64" class="required focus" required="required" />
+                        </div>
+                        <div class="required">Required</div>
+                        <div class="hint">Maximum length is 64 letters</div>
+                    [% END %]
+                </div>
+                <div class="fg-row">
+                    <div class="fg-label">
                         <label for="description" class="required">Description: </label>
-                        [% IF credit_type && credit_type.is_system %]
+                    </div>
+                    [% IF credit_type && credit_type.is_system %]
+                        <div class="fg-text">
                             <span>[%- PROCESS credit_type_description credit_type = credit_type -%]</span>
-                        [% ELSE %]
+                        </div>
+                    [% ELSE %]
+                        <div class="fg-input">
                             <input type="text" name="description" id="description" required="required" class="required" size="80" maxlength="100" value="[% credit_type.description | html %]" /> <span class="required">Required</span>
-                        [% END %]
-                    </li>
-                    <li>
-                        <label for="can_be_added_manually">Can be manually added ? </label>
+                        </div>
+                    [% END %]
+                </div>
+                <div class="fg-row input-checkbox">
+                    <div class="fg-label">
+                        <label for="can_be_added_manually">Can be manually added? </label>
+                    </div>
+                    <div class="fg-input">
                         [% IF credit_type && credit_type.is_system %]
                             [% IF credit_type.can_be_added_manually %]<span>Yes</span>[% ELSE %]<span>No</span>[% END %]
                         [% ELSIF credit_type.can_be_added_manually %]
@@ -113,21 +129,31 @@
                         [% ELSE %]
                             <input type="checkbox" name="can_be_added_manually" id="can_be_added_manually" value="1" />
                         [% END %]
-                    </li>
-                    <li>
+                    </div>
+                </div>
+                <div class="fg-row input-checkbox">
+                    <div class="fg-label">
                         <label for="credit_number_enabled">Enable credit number</label>
+                    </div>
+                    <div class="fg-input">
                         [% IF credit_type.credit_number_enabled %]
                             <input type="checkbox" name="credit_number_enabled" id="credit_number_enabled" checked="checked" value="1" />
                         [% ELSE %]
                             <input type="checkbox" name="credit_number_enabled" id="credit_number_enabled" value="1" />
                         [% END %]
-                        <span class="hint">Enable automatic generation of credit number (see <a href="/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=AutoCreditNumber">AutoCreditNumber</a>)</span>
-                    </li>
-                    <li>
+                    </div>
+                    <div class="hint">Enable automatic generation of credit number (see <a href="/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=AutoCreditNumber">AutoCreditNumber</a>)</div>
+                </div>
+                <div class="fg-row">
+                    <div class="fg-label">
                         <label for="library_limitation">Libraries limitation: </label>
-                        [% IF credit_type && credit_type.is_system %]
+                    </div>
+                    [% IF credit_type && credit_type.is_system %]
+                        <div class="fg-text">
                             <span>No library limitation</span>
-                        [% ELSE %]
+                        </div>
+                    [% ELSE %]
+                        <div class="fg-input">
                             <select id="library_limitation" name="branches" multiple size="10">
                                 [% FOREACH branch IN branches_loop %]
                                     [% IF ( branch.selected ) %]
@@ -137,10 +163,10 @@
                                     [% END %]
                                 [% END %]
                             </select>
-                            <div class="hint">Limit the use of this credit type to the selected libraries.</div>
-                        [% END %]
-                    </li>
-                </ol>
+                        </div>
+                        <div class="hint">Limit the use of this credit type to the selected libraries.</div>
+                    [% END %]
+                </div>
             </fieldset>
             [% IF additional_fields.size %]
                 [% INCLUDE 'additional-fields-entry.inc' available=additional_fields values=additional_field_values wrap_fieldset=1 %]
