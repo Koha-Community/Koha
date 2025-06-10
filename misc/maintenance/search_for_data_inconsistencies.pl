@@ -353,7 +353,7 @@ use C4::Biblio qw( GetMarcFromKohaField );
                 "Column " . $rs->result_source->name . "." . $column . " contains $invalid_dates invalid dates" );
 
             if ( $invalid_dates > 0 ) {
-                new_hint("You may change the dates with script: misc/cronjobs/fix_invalid_dates.pl (-c -v)");
+                new_hint("You may change the dates with script: misc/maintenance/fix_invalid_dates.pl (-c -v)");
             }
 
         }
