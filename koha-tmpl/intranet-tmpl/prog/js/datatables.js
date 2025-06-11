@@ -1128,8 +1128,12 @@ function _dt_add_delay_filters(table_dt, table_node) {
     let col_input_search = DataTable.util.debounce(function (i, val) {
         table_dt.column(i).search(val).draw();
     }, delay_ms);
-    let col_select_search = DataTable.util.debounce(function (i, val) {
-        table_dt.column(i).search(val, true, false).draw();
+    let col_select_search = DataTable.util.debounce(function (
+        i,
+        val,
+        regex_search = true
+    ) {
+        table_dt.column(i).search(val, regex_search, false).draw();
     }, delay_ms);
 
     $(table_node)
@@ -1148,7 +1152,7 @@ function _dt_add_delay_filters(table_dt, table_node) {
                 .find("select")
                 .unbind()
                 .bind("keyup change", function () {
-                    col_select_search(i, this.value);
+                    col_select_search(i, this.value, false);
                 });
         });
 }
