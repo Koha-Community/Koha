@@ -310,7 +310,7 @@
             let options = [... new Set(column
                 .data()
                 .toArray()
-                .map(d => d.replace(regex, '').trim().split(/\n/gi).flat())
+                .map(d => d.replace(regex, '').trim().split(/\n/gi).map(s => s.trim()).flat())
                 .flat()
                 .sort())];
 
