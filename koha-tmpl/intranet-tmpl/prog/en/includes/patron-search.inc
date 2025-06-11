@@ -891,11 +891,11 @@
                     [% SWITCH c %]
                     [% CASE 'branch' %]
                         let library_id = patron_search_form.find(".branchcode_filter").val() || "";
-                        patrons_table.find('thead tr:eq(1) th[data-filter="libraries"] select').val(library_id);
+                        patrons_table.find('thead tr:eq(1) th[data-filter="libraries"] select').val('^' + library_id + '$');
                         table_dt.column([% loop.count - 1 %]).search(library_id ? '^'+library_id+'$' : '');
                     [% CASE 'category' %]
                         let category_id = patron_search_form.find(".categorycode_filter").val() || "";
-                        patrons_table.find('thead tr:eq(1) th[data-filter="categories"] select').val(category_id.toLowerCase());
+                        patrons_table.find('thead tr:eq(1) th[data-filter="categories"] select').val('^' + category_id.toLowerCase() + '$');
                         table_dt.column([% loop.count - 1 %]).search(category_id ? '^'+category_id+'$' : '');
                     [% END %]
                 [% END %]
