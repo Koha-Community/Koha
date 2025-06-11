@@ -524,7 +524,7 @@
     [% INCLUDE 'datatables.inc' %]
     <script>
         var active_tab = "#article-requests-requested_panel";
-        var last_cancel_reason, requested_datatable, pending_datatable, processing_datatable, active_datatable;
+        var last_cancel_reason, requested_datatable, pending_datatable, processing_datatable, active_datatable, requested_dt, pending_dt, processing_dt;
         $(document).ready(function() {
 
             $("#article-request-tabs a[data-bs-toggle='tab']").on("shown.bs.tab", function (e) {
@@ -575,8 +575,14 @@
             });
 
             requested_datatable = $("#article-requests-requested-table").kohaTable();
+            requested_dt = requested_datatable.DataTable();
+
             pending_datatable = $("#article-requests-pending-table").kohaTable();
+            pending_dt = pending_datatable.DataTable();
+
             processing_datatable = $("#article-requests-processing-table").kohaTable();
+            processing_dt = processing_datatable.DataTable();
+
             active_datatable = requested_datatable;
             activateBatchActions( active_tab );
         });
@@ -634,12 +640,11 @@
 
 
                 a.closest('td').prepend('<img src="[% interface | html %]/[% theme | html %]/img/spinner-small.gif"/>').find('div.dropdown').hide();
-
                 $.ajax({
                     type: "DELETE",
                     url: '/api/v1/article_requests/'+id+query,
                     success: function( data ) {
-                        active_datatable.row( a.closest('tr') ).remove().draw();
+                        active_datatable.DataTable().row( table_row ).remove().draw();
                         UpdateTabCounts();
                         activateBatchActions( active_tab );
                     }
@@ -674,7 +679,7 @@
         async function Process( id, a ) {
             var table_row = a.closest('tr');
             var table = a.closest('table');
-            var orig_datatable = table.attr('id')==='article-requests-pending-table'?pending_datatable:requested_datatable;
+            var orig_dt = table.attr('id')==='article-requests-pending-table'?pending_dt:requested_dt;
 
             a.closest('td').prepend('<img src="[% interface | html %]/[% theme | html %]/img/spinner-small.gif" class="spinner"/>').find('div.dropdown').hide();
 
@@ -684,8 +689,8 @@
                     $("img.spinner").remove();
                     table_row.find('.ar-process-request').remove();
                     table_row.find('input[type="checkbox"]').prop('checked', false);
-                    orig_datatable.row( table_row ).remove().draw();
-                    processing_datatable.row.add( table_row ).draw();
+                    orig_dt.row( table_row ).remove().draw();
+                    processing_dt.row.add( table_row ).draw();
                     UpdateTabCounts();
                     activateBatchActions( active_tab );
                 },
@@ -711,7 +716,7 @@
             await client.articleRequests.complete(id).then(
                 success => {
                     $("img.spinner").remove();
-                    active_datatable.row( a.closest('tr') ).remove().draw();
+                    active_datatable.DataTable().row( a.closest('tr') ).remove().draw();
                     UpdateTabCounts();
                     activateBatchActions( active_tab );
                 },
@@ -734,8 +739,8 @@
             await client.articleRequests.pending(id).then(
                 success => {
                     $("img.spinner").remove();
-                    requested_datatable.row( table_row ).remove().draw();
-                    pending_datatable.row.add( table_row ).draw();
+                    requested_dt.row( table_row ).remove().draw();
+                    pending_dt.row.add( table_row ).draw();
                     UpdateTabCounts();
                     activateBatchActions( active_tab );
                 },
@@ -750,9 +755,9 @@
         });
 
         function UpdateTabCounts() {
-            $("#ar_requested_count").html( requested_datatable.rows().count() );
-            $("#ar_pending_count").html( pending_datatable.rows().count() );
-            $("#ar_processing_count").html( processing_datatable.rows().count() );
+            $("#ar_requested_count").html( requested_dt.rows().count() );
+            $("#ar_pending_count").html( pending_dt.rows().count() );
+            $("#ar_processing_count").html( processing_dt.rows().count() );
         }
 
         function EditURLs(id) {
