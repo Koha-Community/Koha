@@ -111,3 +111,73 @@ describe("ExtendedPatronAttributes", () => {
         });
     });
 });
+
+describe("Filters", () => {
+    const table_id = "memberresultst";
+
+    beforeEach(() => {
+        cleanup();
+        cy.login();
+        cy.title().should("eq", "Koha staff interface");
+        cy.window().then(win => {
+            win.localStorage.clear();
+        });
+    });
+
+    it("Keep filters in the column filters", () => {
+        cy.task("buildSampleObjects", {
+            object: "patron",
+            count: RESTdefaultPageSize,
+            values: {},
+        }).then(patrons => {
+            // Needs more properties to not explode
+            // account_balace: balance_str.escapeHtml(...).format_price is not a function
+            patrons = patrons.map(p => ({ ...p, account_balance: 0 }));
+
+            cy.intercept("GET", "/api/v1/patrons*", {
+                statusCode: 200,
+                body: patrons,
+                headers: {
+                    "X-Base-Total-Count": baseTotalCount,
+                    "X-Total-Count": baseTotalCount,
+                },
+            });
+
+            cy.visit("/cgi-bin/koha/members/members-home.pl");
+
+            cy.window().then(win => {
+                win.categories_map = patrons.reduce((map, p) => {
+                    map[p.category_id] = p.category_id;
+                    return map;
+                }, {});
+            });
+            cy.get("form.patron_search_form .branchcode_filter").select("CPL");
+            cy.get("form.patron_search_form .categorycode_filter").select("S");
+            cy.get("form.patron_search_form input[type='submit']").click();
+
+            cy.get(`#${table_id}_wrapper .dt-info`).contains(
+                `Showing 1 to ${RESTdefaultPageSize} of ${baseTotalCount} entries`
+            );
+
+            cy.get(`#${table_id} thead tr`).should("have.length", 2);
+
+            cy.get(
+                `#${table_id} thead tr th[data-filter='libraries'] select`
+            ).should("have.value", "^CPL$");
+            // Lowercase see bug 32517 and related code in datatables.js
+            cy.get(
+                `#${table_id} thead tr th[data-filter='categories'] select`
+            ).should("have.value", "^s$");
+
+            cy.get(`form.patron_search_form input.clear_search`).click();
+            cy.get("form.patron_search_form input[type='submit']").click();
+            cy.get(
+                `#${table_id} thead tr th[data-filter='libraries'] select`
+            ).should("have.value", null);
+            // Lowercase see bug 32517 and related code in datatables.js
+            cy.get(
+                `#${table_id} thead tr th[data-filter='categories'] select`
+            ).should("have.value", null);
+        });
+    });
+});
