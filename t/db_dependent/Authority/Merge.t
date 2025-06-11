@@ -668,7 +668,7 @@ subtest 'merge should not reorder too much' => sub {
 };
 
 subtest 'Test how merge handles controlled indicators' => sub {
-    plan tests => 4;
+    plan tests => 8;
 
     # Note: See more detailed tests in t/Koha/Authority/ControlledIndicators.t
 
@@ -711,6 +711,41 @@ subtest 'Test how merge handles controlled indicators' => sub {
     );
     $biblio2 = Koha::Biblios->find($biblionumber)->metadata->record;
     is( $biblio2->subfield( '609', '2' ), undef, 'No subfield $2 left' );
+    isnt( $biblio2->subfield( '609', '2' ), '', 'Subfield $2 does not exist or exists and is not empty' );
+
+    # auth 040 / biblio 6XX $2 manipulation
+    # Case 1: auth 040 $f modification
+    my $auth_record = MARC::Record->new;
+    $auth_record->append_fields( MARC::Field->new( '008', ' ' x 11 . 'z' . ' ' x 28 ) );
+    $auth_record->append_fields( MARC::Field->new( '040', ' ', ' ', a => 'OrgCode', f => 'special_thes' ) );
+    $auth_record->append_fields( MARC::Field->new( '109', '0', ' ', a => 'Name' ) );
+    my $authid        = AddAuthority( $auth_record, undef, $authtype1 );
+    my $biblio_record = MARC::Record->new;
+    $biblio_record->append_fields(
+        MARC::Field->new( '609', '0', '7', a => 'Name', 2 => 'other_special', 9 => $authid ) );
+    ($biblionumber) = AddBiblio( $biblio_record, '' );
+    merge(
+        {
+            mergefrom     => $authid, MARCfrom => $auth_record, mergeto => $authid, MARCto => $auth_record,
+            biblionumbers => [$biblionumber],
+        }
+    );
+    $biblio_record = Koha::Biblios->find($biblionumber)->metadata->record;
+    is( $biblio_record->subfield( '609', '2' ), 'special_thes', 'Thesaurus correctly updated' );
+
+    # Case 2: auth 040 $f removal
+    $auth_record->field('040')->delete_subfield( code => 'f' );
+    ModAuthority( $authid, $auth_record, $authtype1 );
+    merge(
+        {
+            mergefrom     => $authid, MARCfrom => $auth_record, mergeto => $authid, MARCto => $auth_record,
+            biblionumbers => [$biblionumber],
+        }
+    );
+    $biblio_record = Koha::Biblios->find($biblionumber)->metadata->record;
+    isnt( $biblio_record->subfield( '609', '2' ), '', 'Subfield $2 does not exist or exists and is not empty' );
+    is( $biblio_record->subfield( '609', '2' ), 'special_thes', 'Subfield $2 contains didn\'t change' );
+
 };
 
 subtest "Test bibs not auto linked when merging" => sub {
