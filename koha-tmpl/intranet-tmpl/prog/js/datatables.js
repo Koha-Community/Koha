@@ -1057,27 +1057,31 @@ function _dt_add_filters(table_node, table_dt, filters_options = {}) {
                 } else if (typeof filters_options[i] === "function") {
                     filters_options[i] = filters_options[i](table_dt);
                 }
-                $(filters_options[i]).each(function () {
-                    let optionValue =
-                        table_dt.settings()[0].ajax !== null
-                            ? `^${this._id}$`
-                            : this._id;
-                    let o = $(
-                        `<option value="${optionValue}">${this._str}</option>`
-                    );
+                $(filters_options[i])
+                    .filter(function () {
+                        return this._id && this._str;
+                    })
+                    .each(function () {
+                        let optionValue =
+                            table_dt.settings()[0].ajax !== null
+                                ? `^${this._id}$`
+                                : this._id;
+                        let o = $(
+                            `<option value="${optionValue}">${this._str}</option>`
+                        );
 
-                    // Compare with lc, or selfreg won't match ^SELFREG$ for instance, see bug 32517
-                    // This is only for category, we might want to apply it only in this case.
-                    existing_search = existing_search.toLowerCase();
-                    if (
-                        existing_search === this._id ||
-                        (existing_search &&
-                            this._id.toLowerCase().match(existing_search))
-                    ) {
-                        o.prop("selected", "selected");
-                    }
-                    o.appendTo(select);
-                });
+                        // Compare with lc, or selfreg won't match ^SELFREG$ for instance, see bug 32517
+                        // This is only for category, we might want to apply it only in this case.
+                        existing_search = existing_search.toLowerCase();
+                        if (
+                            existing_search === this._id ||
+                            (existing_search &&
+                                this._id.toLowerCase().match(existing_search))
+                        ) {
+                            o.prop("selected", "selected");
+                        }
+                        o.appendTo(select);
+                    });
                 $(th).html(select);
             } else {
                 var title = $(th).text();
