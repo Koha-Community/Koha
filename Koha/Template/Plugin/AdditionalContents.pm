@@ -82,15 +82,6 @@ The function returns a hashref with keys:
  location: the passed in location param returned
  blocktitle: the passed in blocktitle param returned
 
-=head2 get_opac_news_by_id
-
-In a template, you can get a specific news item by passing
-the news id. E.g.:
-
-[% SET news_item = AdditionalContents.get_news_by_id( news_id => news_id ) %]
-
-The function returns a hashref with a Koha::AdditionalContents object in the 'contents' key
-
 =head1 AUTHOR
 
 Owen Leonard <oleonard@myacpl.org>
