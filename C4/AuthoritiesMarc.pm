@@ -1645,7 +1645,8 @@ sub merge {
                 }
                 if( exists $controlled_ind->{sub2} ) { # thesaurus info
                     if( defined $controlled_ind->{sub2} ) {
-                        # Add or replace
+                        # Add or replace when not empty. If empty, an existing
+                        # $2 value is retained (see also bug 40119).
                         if ( $controlled_ind->{sub2} ne q{} ) {
                             $field_to->update( 2 => $controlled_ind->{sub2} );
                         }
