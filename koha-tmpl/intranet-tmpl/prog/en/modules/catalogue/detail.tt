@@ -1686,7 +1686,7 @@
         items_tab_ids.forEach( function( tab_id, index ) {
 
             // Early return if the tab is not shown (ie. no table)
-            if (!$("#%s-tab".format(tab_id)).length) return;
+            if (!$("#%s_table".format(tab_id)).length) return;
             [% IF Koha.Preference('AlwaysShowHoldingsTableFilters') %]
                 build_items_table(tab_id, true, {}, build_items_table_drawncallback);
             [% ELSE %]
