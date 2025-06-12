@@ -471,7 +471,7 @@
                 $('#fileuploadbutton').show();
                 $("#fileuploadcancel").hide();
                 var filename=$('#fileToUpload').prop('files')[0].name;
-                if( filename.match( new RegExp(/\.[^.]+xml$/) ) ) {
+                if( filename.match( new RegExp(/[^.]+\.xml$/) ) ) {
                     $('#format').val('MARCXML');
                 }
                 $("#processfile").show();
