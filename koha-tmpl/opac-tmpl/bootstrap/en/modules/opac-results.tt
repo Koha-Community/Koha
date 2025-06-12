@@ -432,18 +432,14 @@
                     [% END # / IF total %]
 
                     [%# Display "Not finding what you're looking for" for suggestion or ILL %]
-                    [% IF suggestion || ( Koha.Preference( 'ILLModule' ) == 1 && ( loggedinusername || Koha.Preference( 'ILLOpacUnauthenticatedRequest') ) ) %]
+                    [% IF Koha.Preference( 'suggestion' ) || Koha.Preference( 'ILLModule' ) %]
                         <div class="suggestion">
                             Not finding what you're looking for?
                             <ul>
-                                [% IF suggestion %]
-                                    [% IF Koha.Preference( 'AnonSuggestions' ) == 1 %]
-                                        <li>Make a <a href="/cgi-bin/koha/opac-suggestions.pl?op=add_form">purchase suggestion</a></li>
-                                    [% ELSIF loggedinusername %]
-                                        <li>Make a <a href="/cgi-bin/koha/opac-suggestions.pl?op=add_form">purchase suggestion</a></li>
-                                    [% END %]
+                                [% IF Koha.Preference( 'suggestion' ) %]
+                                    <li>Make a <a href="/cgi-bin/koha/opac-suggestions.pl?op=add_form">purchase suggestion</a></li>
                                 [% END %]
-                                [% IF Koha.Preference( 'ILLModule' ) == 1 && ( loggedinusername || Koha.Preference( 'ILLOpacUnauthenticatedRequest' ) ) %]
+                                [% IF Koha.Preference( 'ILLModule' ) %]
                                     [% IF Koha.Preference( 'AutoILLBackendPriority' ) %]
                                         <li>Make an <a href="/cgi-bin/koha/opac-illrequests.pl?op=create&amp;backend=Standard">interlibrary loan request</a></li>
                                     [% ELSE %]
