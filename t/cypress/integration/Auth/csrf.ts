@@ -5,7 +5,7 @@ const branchname = "test_branchname";
 
 function cleanup() {
     const sql = "DELETE FROM branches WHERE branchcode=?";
-    cy.query(sql, branchcode);
+    cy.task("query", { sql, values: [branchcode] });
 }
 
 describe("CSRF", () => {
@@ -32,10 +32,10 @@ describe("CSRF", () => {
             .find(".alert")
             .contains(/No CSRF token passed for POST/);
 
-        cy.query(
-            "SELECT COUNT(*) as count FROM branches WHERE branchcode=?",
-            branchcode
-        ).then(result => {
+        cy.task("query", {
+            sql: "SELECT COUNT(*) as count FROM branches WHERE branchcode=?",
+            values: [branchcode],
+        }).then(result => {
             expect(result[0].count).to.equal(0);
         });
     });
@@ -53,10 +53,10 @@ describe("CSRF", () => {
             .find(".alert")
             .contains(/Wrong CSRF token/);
 
-        cy.query(
-            "SELECT COUNT(*) as count FROM branches WHERE branchcode=?",
-            branchcode
-        ).then(result => {
+        cy.task("query", {
+            sql: "SELECT COUNT(*) as count FROM branches WHERE branchcode=?",
+            values: [branchcode],
+        }).then(result => {
             expect(result[0].count).to.equal(0);
         });
     });
@@ -89,10 +89,10 @@ describe("CSRF", () => {
         // We do not want Wrong CSRF token here
         cy.get(".message").should("not.exist");
 
-        cy.query(
-            "SELECT COUNT(*) as count FROM branches WHERE branchcode=?",
-            branchcode
-        ).then(result => {
+        cy.task("query", {
+            sql: "SELECT COUNT(*) as count FROM branches WHERE branchcode=?",
+            values: [branchcode],
+        }).then(result => {
             expect(result[0].count).to.equal(0);
         });
     });
@@ -112,19 +112,19 @@ describe("CSRF", () => {
         cy.get("select[name='libraries_length']").select("-1");
         cy.get("td").contains(branchcode);
 
-        cy.query(
-            "SELECT COUNT(*) as count FROM branches WHERE branchcode=?",
-            branchcode
-        ).then(result => {
+        cy.task("query", {
+            sql: "SELECT COUNT(*) as count FROM branches WHERE branchcode=?",
+            values: [branchcode],
+        }).then(result => {
             expect(result[0].count).to.equal(1);
         });
     });
 
     it("Delete without CSRF", () => {
-        cy.query("INSERT INTO branches(branchcode, branchname) VALUES (?, ?)", [
-            branchcode,
-            branchname,
-        ]);
+        cy.task("query", {
+            sql: "INSERT INTO branches(branchcode, branchname) VALUES (?, ?)",
+            values: [branchcode, branchname],
+        });
 
         cy.visit("/cgi-bin/koha/admin/branches.pl");
         cy.get("select[name='libraries_length']").select("-1");
@@ -141,19 +141,19 @@ describe("CSRF", () => {
             .find(".alert")
             .contains(/No CSRF token passed for POST/);
 
-        cy.query(
-            "SELECT COUNT(*) as count FROM branches WHERE branchcode=?",
-            branchcode
-        ).then(result => {
+        cy.task("query", {
+            sql: "SELECT COUNT(*) as count FROM branches WHERE branchcode=?",
+            values: [branchcode],
+        }).then(result => {
             expect(result[0].count).to.equal(1);
         });
     });
 
     it("Delete", () => {
-        cy.query("INSERT INTO branches(branchcode, branchname) VALUES (?, ?)", [
-            branchcode,
-            branchname,
-        ]);
+        cy.task("query", {
+            sql: "INSERT INTO branches(branchcode, branchname) VALUES (?, ?)",
+            values: [branchcode, branchname],
+        });
 
         cy.visit("/cgi-bin/koha/admin/branches.pl");
         cy.get("select[name='libraries_length']").select("-1");
@@ -165,10 +165,10 @@ describe("CSRF", () => {
             .find(".alert")
             .contains(/Library deleted successfully/);
 
-        cy.query(
-            "SELECT COUNT(*) as count FROM branches WHERE branchcode=?",
-            branchcode
-        ).then(result => {
+        cy.task("query", {
+            sql: "SELECT COUNT(*) as count FROM branches WHERE branchcode=?",
+            values: [branchcode],
+        }).then(result => {
             expect(result[0].count).to.equal(0);
         });
     });

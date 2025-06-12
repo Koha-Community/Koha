@@ -23,12 +23,14 @@ describe("Acquisitions menu", () => {
     it("Should show/hide links based on permissions", () => {
         cy.get(".sidebar_menu").should("be.visible");
 
-        cy.query(
-            "UPDATE borrowers SET flags=2052 WHERE borrowernumber=51"
-        ).then(() => {
+        cy.task("query", {
+            sql: "UPDATE borrowers SET flags=2052 WHERE borrowernumber=51",
+        }).then(() => {
             cy.reload(true);
             cy.get(".sidebar_menu a").should("have.length", 8);
-            cy.query("UPDATE borrowers SET flags=1 WHERE borrowernumber=51");
+            cy.task("query", {
+                sql: "UPDATE borrowers SET flags=1 WHERE borrowernumber=51",
+            });
         });
     });
     it("Should correctly apply the 'current' class", () => {

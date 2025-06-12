@@ -1,8 +1,8 @@
 const { startDevServer } = require("@cypress/webpack-dev-server");
 
-const mysql = require("cypress-mysql");
-
 const { buildSampleObject, buildSampleObjects } = require("./mockData.js");
+
+const { query } = require("./db.js");
 
 module.exports = (on, config) => {
     on("dev-server:start", options =>
@@ -11,11 +11,10 @@ module.exports = (on, config) => {
         })
     );
 
-    mysql.configurePlugin(on);
-
     on("task", {
         buildSampleObject,
         buildSampleObjects,
+        query,
     });
     return config;
 };

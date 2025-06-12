@@ -42,7 +42,9 @@ describe("catalogue/detail/holdings_table with items", () => {
                 cy.wrap(Promise.resolve())
                     .then(() => {
                         return queries.reduce((chain, { query, values }) => {
-                            return chain.then(() => cy.query(query, values));
+                            return chain.then(() =>
+                                cy.task("query", { sql: query, values })
+                            );
                         }, Promise.resolve());
                     })
                     .then(() => {
@@ -102,9 +104,9 @@ describe("catalogue/detail/holdings_table with items", () => {
                         });
                     });
             });
-        cy.query(
-            "SELECT value FROM systempreferences WHERE variable='AlwaysShowHoldingsTableFilters'"
-        ).then(value => {
+        cy.task("query", {
+            sql: "SELECT value FROM systempreferences WHERE variable='AlwaysShowHoldingsTableFilters'",
+        }).then(value => {
             cy.wrap(value).as("syspref_AlwaysShowHoldingsTableFilters");
         });
     });
@@ -435,14 +437,16 @@ describe("catalogue/detail/holdings_table without items", () => {
                 const item_type = generated_objects["item_type"];
                 const queries = [
                     {
-                        query: "INSERT INTO itemtypes(itemtype, description) VALUES (?, ?)",
+                        sql: "INSERT INTO itemtypes(itemtype, description) VALUES (?, ?)",
                         values: [item_type.item_type_id, item_type.description],
                     },
                 ];
                 cy.wrap(Promise.resolve())
                     .then(() => {
-                        return queries.reduce((chain, { query, values }) => {
-                            return chain.then(() => cy.query(query, values));
+                        return queries.reduce((chain, { sql, values }) => {
+                            return chain.then(() =>
+                                cy.task("query", { sql, values })
+                            );
                         }, Promise.resolve());
                     })
                     .then(() => {
@@ -491,9 +495,9 @@ describe("catalogue/detail/holdings_table without items", () => {
                         });
                     });
             });
-        cy.query(
-            "SELECT value FROM systempreferences WHERE variable='AlwaysShowHoldingsTableFilters'"
-        ).then(value => {
+        cy.task("query", {
+            sql: "SELECT value FROM systempreferences WHERE variable='AlwaysShowHoldingsTableFilters'",
+        }).then(value => {
             cy.wrap(value).as("syspref_AlwaysShowHoldingsTableFilters");
         });
     });

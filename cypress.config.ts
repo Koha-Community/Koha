@@ -15,13 +15,5 @@ export default defineConfig({
         baseUrl: "http://localhost:8081",
         specPattern: "t/cypress/integration/**/*.*",
         supportFile: "t/cypress/support/e2e.js",
-        env: {
-            db: {
-                host: "db",
-                user: "koha_kohadev",
-                password: "password",
-                database: "koha_kohadev",
-            },
-        },
     },
 });
