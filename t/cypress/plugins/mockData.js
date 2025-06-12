@@ -1,19 +1,22 @@
 const { faker } = require("@faker-js/faker");
 const { readYamlFile } = require("./../plugins/readYamlFile.js");
+const { query } = require("./db.js");
 const fs = require("fs");
+
+const generatedDataCache = new Set();
 
 const generateMockData = (type, properties) => {
     switch (type) {
         case "string":
             if (properties?.maxLength) {
-                return faker.string.alpha({
+                return (value = faker.string.alpha({
                     length: {
                         min: properties.minLength || 1,
                         max: properties.maxLength,
                     },
-                });
+                }));
             }
-            return faker.lorem.words(3);
+            return (value = faker.lorem.words(3));
         case "integer":
             return faker.number.int();
         case "boolean":
@@ -56,18 +59,58 @@ const generateDataFromSchema = (properties, values = {}) => {
                         data = buildSampleObject({ object: "library" });
                         fk_name = "library_id";
                         break;
+                    case "pickup_library":
+                        data = buildSampleObject({ object: "library" });
+                        fk_name = "pickup_library_id";
+                        break;
+                    case "library":
+                        data = buildSampleObject({ object: "library" });
+                        fk_name = "library_id";
+                        break;
                     case "item_type":
                         data = buildSampleObject({ object: "item_type" });
                         fk_name = "item_type_id";
                         break;
+                    case "item":
+                        data = buildSampleObject({ object: "item" });
+                        fk_name = "item_id";
+                        break;
                     default:
-                        data = generateMockData(type, value);
+                        try {
+                            data = generateMockData(type, value);
+                        } catch (e) {
+                            throw new Error(
+                                `Failed to generate data for (${key}): ${e}`
+                            );
+                        }
                 }
                 if (typeof data === "object") {
                     ids[key] = data[fk_name];
                 }
             } else {
-                data = generateMockData(type, value);
+                try {
+                    if (key.match(/_id$/)) {
+                        let attempts = 0;
+
+                        do {
+                            data = generateMockData(type, value);
+                            attempts++;
+                            if (attempts > 10) {
+                                throw new Error(
+                                    "Could not generate unique string after 10 attempts"
+                                );
+                            }
+                        } while (generatedDataCache.has(data));
+
+                        generatedDataCache.add(data);
+                    } else {
+                        data = generateMockData(type, value);
+                    }
+                } catch (e) {
+                    throw new Error(
+                        `Failed to generate data for ${key} (${type}): ${e}`
+                    );
+                }
             }
             mockData[key] = data;
         }
@@ -93,9 +136,15 @@ const buildSampleObjects = ({ object, values, count = 1 }) => {
         );
     }
     const schema = readYamlFile(yamlPath);
-    return Array.from({ length: count }, () =>
-        generateDataFromSchema(schema.properties, values)
-    );
+    let generatedObject;
+    try {
+        generatedObject = Array.from({ length: count }, () =>
+            generateDataFromSchema(schema.properties, values)
+        );
+    } catch (e) {
+        throw new Error(`Failed to generate data for object '${object}': ${e}`);
+    }
+    return generatedObject;
 };
 
 const buildSampleObject = ({ object, values = {} }) => {
