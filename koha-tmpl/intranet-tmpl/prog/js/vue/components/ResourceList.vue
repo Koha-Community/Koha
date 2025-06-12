@@ -31,12 +31,8 @@ export default {
     setup(props) {
         const table = ref();
 
-        const AVStore = inject("AVStore");
-        const { get_lib_from_av } = AVStore;
-
         return {
             table,
-            get_lib_from_av,
         };
     },
     props: {

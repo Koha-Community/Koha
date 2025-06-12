@@ -18,10 +18,6 @@ export default {
     },
     setup(props) {
         const format_date = $date;
-        const AVStore = inject("AVStore");
-        const { av_package_types, av_package_content_types } =
-            storeToRefs(AVStore);
-        const { get_lib_from_av } = AVStore;
 
         const vendorStore = inject("vendorStore");
         const { vendors } = storeToRefs(vendorStore);
@@ -48,12 +44,10 @@ export default {
                 newLabel: __("New package"),
             },
             extendedAttributesResourceType: "package",
-            av_package_types,
-            av_package_content_types,
             eholdings_packages_table_settings,
             vendors,
-            get_lib_from_av,
             props,
+            moduleStore: "ERMStore",
             resourceAttrs: [
                 {
                     name: "name",

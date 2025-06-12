@@ -18,9 +18,6 @@ export default {
     setup(props) {
         const format_date = $date;
         const patron_to_html = $patron_to_html;
-        const AVStore = inject("AVStore");
-        const { av_license_types, av_license_statuses, av_user_roles } =
-            storeToRefs(AVStore);
 
         const vendorStore = inject("vendorStore");
         const { vendors } = storeToRefs(vendorStore);
@@ -48,12 +45,10 @@ export default {
                 newLabel: __("New license"),
             },
             extendedAttributesResourceType,
-            av_license_types,
-            av_license_statuses,
-            av_user_roles,
             license_table_settings,
             vendors,
             props,
+            moduleStore: "ERMStore",
             resourceAttrs: [
                 {
                     name: "license_id",

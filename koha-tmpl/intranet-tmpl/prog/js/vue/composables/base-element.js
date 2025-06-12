@@ -1,9 +1,4 @@
-import { defineAsyncComponent, inject } from "vue";
-
 export function useBaseElement(instancedElement) {
-    const AVStore = inject("AVStore");
-    const { get_lib_from_av } = AVStore;
-
     const identifyAndImportComponent = (attr, show = false) => {
         if (attr.type === "date") {
             attr.componentPath = "./FlatPickrWrapper.vue";
@@ -146,7 +141,6 @@ export function useBaseElement(instancedElement) {
 
     return {
         ...instancedElement,
-        get_lib_from_av,
         identifyAndImportComponent,
         getComponentProps,
         accessNestedProperty,

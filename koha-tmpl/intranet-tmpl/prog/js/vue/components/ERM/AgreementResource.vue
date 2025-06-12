@@ -20,16 +20,6 @@ export default {
     setup(props) {
         const format_date = $date;
         const patron_to_html = $patron_to_html;
-        const AVStore = inject("AVStore");
-        const {
-            av_agreement_statuses,
-            av_agreement_closure_reasons,
-            av_agreement_renewal_priorities,
-            av_user_roles,
-            av_agreement_license_statuses,
-            av_agreement_license_location,
-            av_agreement_relationships,
-        } = storeToRefs(AVStore);
 
         const vendorStore = inject("vendorStore");
         const { vendors } = storeToRefs(vendorStore);
@@ -637,14 +627,7 @@ export default {
                     hideIn: ["List"],
                 },
             ],
-            av_agreement_statuses,
-            av_agreement_closure_reasons,
-            av_agreement_renewal_priorities,
-            av_user_roles,
-            av_agreement_license_statuses,
-            av_agreement_license_location,
-            av_agreement_relationships,
-            agreement_table_settings,
+            moduleStore: "ERMStore",
             vendors,
             tableFilters,
             props: props,

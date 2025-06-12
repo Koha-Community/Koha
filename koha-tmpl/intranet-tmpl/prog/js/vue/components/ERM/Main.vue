@@ -87,20 +87,21 @@ export default {
             });
         };
 
-        const client = APIClient.erm;
-        client.config.get().then(config => {
-            this.config = config;
-            if (this.config.settings.ERMModule != 1) {
-                this.loaded();
-                return this.setError(
-                    this.$__(
-                        'The e-resource management module is disabled, turn on <a href="/cgi-bin/koha/admin/preferences.pl?tab=&op=search&searchfield=ERMModule">ERMModule</a> to use it'
-                    ),
-                    false
-                );
-            }
-            return fetch_config();
-        });
+            const client = APIClient.erm;
+            client.config
+                .get()
+                .then(result => {
+                    config.value = result;
+                    if (config.value.settings.ERMModule != 1) {
+                        return setError(
+                            $__(
+                                "The e-resource management module is disabled, turn on <a href='/cgi-bin/koha/admin/preferences.pl?tab=&op=search&searchfield=ERMModule'>ERMModule</a> to use it"
+                            ),
+                            false
+                        );
+                    }
+                    return fetch_config();
+                })
     },
     methods: {
         async filterProviders(navigationTree) {

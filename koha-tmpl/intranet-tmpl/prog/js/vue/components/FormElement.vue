@@ -198,7 +198,8 @@ export default {
         resource: Object | null,
         attr: Object | null,
         index: Number | null,
-        options: Array,
+        options: Array | null,
+        instancedResource: Object | null,
     },
     setup(props) {
         const baseElement = useBaseElement({ ...props });

@@ -2,6 +2,7 @@ import { computed, inject, ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { $__ } from "../i18n";
 import { build_url } from "../composables/datatables";
+import { storeToRefs } from "pinia";
 
 export function useBaseResource(instancedResource) {
     const router = useRouter();
@@ -9,8 +10,15 @@ export function useBaseResource(instancedResource) {
     const { setConfirmationDialog, setMessage, setError, setWarning } =
         inject("mainStore");
 
-    const AVStore = inject("AVStore");
-    const { get_lib_from_av, map_av_dt_filter } = AVStore;
+    const authorisedValuesData = {};
+    if (instancedResource.moduleStore) {
+        const moduleStore = inject(instancedResource.moduleStore);
+        const { get_lib_from_av, map_av_dt_filter } = moduleStore;
+        const { authorisedValues } = storeToRefs(moduleStore);
+        authorisedValuesData.get_lib_from_av = get_lib_from_av;
+        authorisedValuesData.map_av_dt_filter = map_av_dt_filter;
+        authorisedValuesData.authorisedValues = authorisedValues.value;
+    }
 
     const format_date = $date;
     const patron_to_html = $patron_to_html;
@@ -297,11 +305,12 @@ export function useBaseResource(instancedResource) {
      * @param {Array} attrs - The array of attributes to be populated with authorised values.
      */
     const populateAttributesWithAuthorisedValues = attrs => {
+        const { authorisedValues } = authorisedValuesData;
         if (!attrs) return;
         attrs.forEach(attr => {
             if (attr.type === "select" && typeof attr.avCat === "string") {
                 const avKey = attr.avCat;
-                const avArray = instancedResource[avKey].value;
+                const avArray = authorisedValues[avKey];
                 attr.options = avArray;
                 attr.requiredKey = "value";
                 attr.selectLabel = "description";
@@ -309,7 +318,7 @@ export function useBaseResource(instancedResource) {
             if (attr.type == "relationship" && attr.componentProps) {
                 Object.keys(attr.componentProps).forEach(key => {
                     if (attr.componentProps[key].type == "av") {
-                        attr.componentProps[key].av = instancedResource[key];
+                        attr.componentProps[key].av = authorisedValues[key];
                     }
                 });
             }
@@ -578,6 +587,7 @@ export function useBaseResource(instancedResource) {
 
     return {
         ...instancedResource,
+        ...authorisedValuesData,
         getFilterValues,
         getFilters,
         toolbarButtons,
@@ -609,8 +619,6 @@ export function useBaseResource(instancedResource) {
         setWarning,
         format_date,
         patron_to_html,
-        map_av_dt_filter,
-        get_lib_from_av,
         build_url,
         route,
         router,

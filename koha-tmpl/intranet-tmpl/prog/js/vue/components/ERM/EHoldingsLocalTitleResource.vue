@@ -17,9 +17,6 @@ export default {
         embedded: { type: Boolean, default: false },
     },
     setup(props) {
-        const AVStore = inject("AVStore");
-        const { av_title_publication_types } = storeToRefs(AVStore);
-
         const vendorStore = inject("vendorStore");
         const { vendors } = storeToRefs(vendorStore);
 
@@ -61,11 +58,11 @@ export default {
                 emptyListMessage: __("There are no titles defined"),
                 newLabel: __("New title"),
             },
-            av_title_publication_types,
             eholdings_titles_table_settings,
             vendors,
             props,
             additionalToolbarButtons,
+            moduleStore: "ERMStore",
             resourceAttrs: [
                 {
                     name: "publication_title",

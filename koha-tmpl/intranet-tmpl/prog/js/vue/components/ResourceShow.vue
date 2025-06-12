@@ -28,7 +28,11 @@
                         v-for="(attr, index) in group.fields"
                         v-bind:key="index"
                     >
-                        <ShowElement :resource="resource" :attr="attr" />
+                        <ShowElement
+                            :resource="resource"
+                            :attr="attr"
+                            :instancedResource="instancedResource"
+                        />
                     </li>
                 </ol>
             </fieldset>
@@ -38,7 +42,11 @@
                 v-bind:key="counter"
             >
                 <legend v-if="item.name">{{ item.name }}</legend>
-                <ShowElement :resource="resource" :attr="item" />
+                <ShowElement
+                    :resource="resource"
+                    :attr="item"
+                    :instancedResource="instancedResource"
+                />
             </fieldset>
             <fieldset class="action">
                 <router-link

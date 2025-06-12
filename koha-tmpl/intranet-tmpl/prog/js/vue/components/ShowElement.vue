@@ -30,7 +30,10 @@
         <label>{{ attribute.label }}:</label>
         <LinkWrapper :linkData="attribute?.link" :resource="resource">
             <span>{{
-                get_lib_from_av(attribute.avCat, resource[attribute.name])
+                instancedResource.get_lib_from_av(
+                    attribute.avCat,
+                    resource[attribute.name]
+                )
             }}</span>
         </LinkWrapper>
     </template>
@@ -81,7 +84,7 @@
                                     :resource="row"
                                 >
                                     {{
-                                        get_lib_from_av(
+                                        instancedResource.get_lib_from_av(
                                             dataColumn.av,
                                             row[dataColumn.value]
                                         )
@@ -185,8 +188,9 @@ export default {
         };
     },
     props: {
-        resource: null,
-        attr: null,
+        resource: Object | null,
+        attr: Object | null,
+        instancedResource: Object | null,
     },
     name: "ShowElement",
 };

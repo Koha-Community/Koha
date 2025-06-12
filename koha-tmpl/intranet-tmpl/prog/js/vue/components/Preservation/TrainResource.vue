@@ -17,8 +17,6 @@ export default {
     },
     setup(props) {
         const format_date = $date;
-        const AVStore = inject("AVStore");
-        const { av_notforloan } = storeToRefs(AVStore);
 
         const PreservationStore = inject("PreservationStore");
         const { config } = storeToRefs(PreservationStore);
@@ -132,11 +130,11 @@ export default {
                 emptyListMessage: __("There are no trains defined"),
                 newLabel: __("New train"),
             },
-            av_notforloan,
             config,
             props,
             additionalToolbarButtons,
             tableFilters,
+            moduleStore: "PreservationStore",
             resourceAttrs: [
                 {
                     name: "train_id",

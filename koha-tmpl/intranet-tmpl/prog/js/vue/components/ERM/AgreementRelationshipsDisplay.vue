@@ -36,8 +36,8 @@ export default {
         agreement: Object,
     },
     setup() {
-        const AVStore = inject("AVStore");
-        const { get_lib_from_av } = AVStore;
+        const ERMStore = inject("ERMStore");
+        const { get_lib_from_av } = ERMStore;
 
         return {
             get_lib_from_av,
