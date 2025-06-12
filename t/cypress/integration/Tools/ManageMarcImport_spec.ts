@@ -27,8 +27,8 @@ describe("loads the manage MARC import page", () => {
     it("upload a MARC record", () => {
         cy.visit("/cgi-bin/koha/tools/stage-marc-import.pl");
 
-        cy.fixture("sample.mrc", null).as("sample_mrc");
-        cy.get("input[type=file]").selectFile("@sample_mrc");
+        cy.fixture("sample.xml", null).as("sample_xml");
+        cy.get("input[type=file]").selectFile("@sample_xml");
         cy.get("#fileuploadbutton").click();
 
         cy.get("#fileuploadstatus").contains("100%");
@@ -51,9 +51,7 @@ describe("loads the manage MARC import page", () => {
             "always_add"
         );
 
-        cy.get('select[name="format"]')
-            .select("MARCXML", { force: true })
-            .should("have.value", "MARCXML");
+        cy.get('select[name="format"]').should("have.value", "MARCXML");
 
         //select some new options
         cy.get("#matcher").select("3", { force: true });
