@@ -139,7 +139,6 @@
                                 :resource="resourceToAddOrEdit"
                                 :attr="attr"
                                 :index="index"
-                                :instancedResource="instancedResource"
                             />
                         </li>
                     </ol>
