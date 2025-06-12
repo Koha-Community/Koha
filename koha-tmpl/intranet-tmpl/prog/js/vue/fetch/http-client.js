@@ -59,10 +59,16 @@ class HttpClient {
     }
 
     get(params = {}) {
-        return this._fetchJSON(params.endpoint, params.headers, {
-            ...params.options,
-            method: "GET",
-        });
+        return this._fetchJSON(
+            params.endpoint,
+            params.headers,
+            {
+                ...params.options,
+                method: "GET",
+            },
+            params.return_response ?? false,
+            params.mark_submitting ?? false
+        );
     }
 
     getAll(params = {}) {
@@ -74,10 +80,16 @@ class HttpClient {
                 ...(params.params && params.params),
                 ...(params.query && { q: JSON.stringify(params.query) }),
             });
-        return this._fetchJSON(url, params.headers, {
-            ...params.options,
-            method: "GET",
-        });
+        return this._fetchJSON(
+            url,
+            params.headers,
+            {
+                ...params.options,
+                method: "GET",
+            },
+            params.return_response ?? false,
+            params.mark_submitting ?? false
+        );
     }
 
     post(params = {}) {
@@ -96,8 +108,8 @@ class HttpClient {
                 body,
                 method: "POST",
             },
-            false,
-            true
+            params.return_response ?? false,
+            params.mark_submitting ?? true
         );
     }
 
@@ -117,8 +129,8 @@ class HttpClient {
                 body,
                 method: "PUT",
             },
-            false,
-            true
+            params.return_response ?? false,
+            params.mark_submitting ?? true
         );
     }
 
@@ -133,14 +145,20 @@ class HttpClient {
                 ...params.options,
                 method: "DELETE",
             },
-            true,
-            true
+            params.return_response ?? true,
+            params.mark_submitting ?? true
         );
     }
 
     count(params = {}) {
         let res;
-        return this._fetchJSON(params.endpoint, params.headers, {}, 1).then(
+        return this._fetchJSON(
+            params.endpoint,
+            params.headers,
+            {},
+            params.return_response ?? true,
+            params.mark_submitting ?? false
+        ).then(
             response => {
                 if (response) {
                     return response.headers.get("X-Total-Count");

@@ -105,6 +105,40 @@ class HttpClient {
         return res;
     }
 
+    get(params = {}) {
+        return this._fetchJSON(
+            params.endpoint,
+            params.headers,
+            {
+                ...params.options,
+                method: "GET",
+            },
+            params.return_response ?? false,
+            params.mark_submitting ?? false
+        );
+    }
+
+    getAll(params = {}) {
+        let url =
+            params.endpoint +
+            "?" +
+            new URLSearchParams({
+                _per_page: -1,
+                ...(params.params && params.params),
+                ...(params.query && { q: JSON.stringify(params.query) }),
+            });
+        return this._fetchJSON(
+            url,
+            params.headers,
+            {
+                ...params.options,
+                method: "GET",
+            },
+            params.return_response ?? false,
+            params.mark_submitting ?? false
+        );
+    }
+
     post(params = {}) {
         const body = params.body
             ? typeof params.body === "string"
@@ -121,8 +155,8 @@ class HttpClient {
                 body,
                 method: "POST",
             },
-            false,
-            true
+            params.return_response ?? false,
+            params.mark_submitting ?? true
         );
     }
 
@@ -142,8 +176,8 @@ class HttpClient {
                 body,
                 method: "PUT",
             },
-            false,
-            true
+            params.return_response ?? false,
+            params.mark_submitting ?? true
         );
     }
 
@@ -158,8 +192,8 @@ class HttpClient {
                 ...params.options,
                 method: "DELETE",
             },
-            true,
-            true
+            params.return_response ?? true,
+            params.mark_submitting ?? true
         );
     }
 }
