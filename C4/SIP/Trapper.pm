@@ -57,6 +57,14 @@ sub BINMODE {
     binmode( STDOUT, $mode );
 };
 
+=head2 DIE signal handler
+
+    A global die handler to capture fatal errors and ensures they are logged.
+    When DIE is emitted, the message will be logged using Koha::Logger if available,
+    and also printed to stderr
+
+=cut
+
 $SIG{__DIE__} = sub {
     my $msg    = shift;
     my $logger = Koha::Logger->get( { interface => 'sip', category => 'STDERR' } );
