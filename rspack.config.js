@@ -161,4 +161,38 @@ module.exports = [
             "datatables.net-buttons/js/buttons.colVis": "DataTable",
         },
     },
+    {
+        entry: {
+            "api-client.cjs":
+                "./koha-tmpl/intranet-tmpl/prog/js/fetch/api-client.js",
+        },
+        output: {
+            filename: "[name].js",
+            path: path.resolve(__dirname, "t/cypress/plugins/dist/"),
+            library: {
+                type: "commonjs",
+            },
+            globalObject: "global",
+        },
+        target: "node",
+        module: {
+            rules: [
+                {
+                    test: /\.js$/,
+                    loader: "builtin:swc-loader",
+                    options: {
+                        jsc: {
+                            parser: {
+                                syntax: "ecmascript",
+                            },
+                        },
+                    },
+                    exclude: [/node_modules/],
+                    type: "javascript/auto",
+                },
+            ],
+        },
+        externals: [],
+        plugins: [],
+    },
 ];
