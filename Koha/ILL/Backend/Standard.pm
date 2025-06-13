@@ -1095,7 +1095,7 @@ sub _openurl_to_ill {
             # Otherwise, pass it through untransformed and maybe move it
             # to our custom parameters array
             if ( !exists $ignore->{$meta_key} ) {
-                if ($meta_key eq 'id' || $meta_key eq 'rft_id') {
+                if ( $meta_key eq 'id' || $meta_key eq 'rft_id' ) {
                     if ( $params->{other}->{$meta_key} =~ /:/ ) {
                         my ( $k, $v ) = split /:/, $params->{other}->{$meta_key}, 2;
                         if ( defined $k && defined $v ) {
@@ -1104,7 +1104,7 @@ sub _openurl_to_ill {
                     } else {
                         $return->{doi} = $params->{other}->{$meta_key};
                     }
-                }else{
+                } else {
                     push @{$custom_key},   $meta_key;
                     push @{$custom_value}, $params->{other}->{$meta_key};
                 }
