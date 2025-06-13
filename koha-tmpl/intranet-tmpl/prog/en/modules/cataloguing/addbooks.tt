@@ -9,7 +9,7 @@
 <title
     >[% FILTER collapse %]
         [% IF ( total || breeding_loop ) %]
-            [% t("Search results") | html %]
+            [% tx("Search results for '{query}'", {query = query}) | html %]
             &rsaquo;
         [% ELSIF ( query ) %]
             [% t("No results found") | html %]
@@ -36,7 +36,7 @@
         [% END %]
         [% IF ( total || breeding_loop ) %]
             [% WRAPPER breadcrumb_item bc_active= 1 %]
-                <span>Search results</span>
+                [% tx("Search results for '{query}'", {query = query}) | html %]
             [% END %]
         [% ELSIF ( query ) %]
             [% WRAPPER breadcrumb_item bc_active= 1 %]
@@ -91,13 +91,14 @@
     <h1>Cataloging</h1>
 
     [% IF ( noitemsfound ) %]
-        No results found
+        <div class="alert alert-info"> [% tx("No catalog search results for '{query}'", {query = query}) | html %] </div>
+        <!-- /.page-section -->
     [% END %]
 
     [%# display the search results %]
 
     [% IF ( total ) %]
-        <h2>Records found in the catalog</h2>
+        <h2>[% tx("Catalog search results for '{query}'", {query = query}) | html %]</h2>
         <div class="page-section">
             <div>
                 [% total | html %] result(s) found in catalog,
@@ -242,7 +243,7 @@
         <!-- /.page-section -->
     [% ELSE # IF total %]
         [% IF ( query ) %]
-            <h3>No results found</h3>
+            <div class="alert alert-info"> [% tx("No catalog search results for '{query}'", {query = query}) | html %] </div>
             [% IF ( error ) %]
                 <div class="alert alert-warning"> Error: <span class="error">[% error | html %]</span> </div>
             [% END %]
@@ -251,9 +252,9 @@
 
     [% IF ( query ) %]
         <div id="searchresult-breeding">
-            <h2>Records found in the reservoir</h2>
-            <div class="page-section">
-                [% IF ( breeding_loop ) %]
+            [% IF ( breeding_loop ) %]
+                <h2>[% tx("Reservoir search results for '{query}'", {query = query}) | html %]</h2>
+                <div class="page-section">
                     <table id="reservoir-table">
                         <thead>
                             <tr>
@@ -293,11 +294,13 @@
                             [% END # /IF breeding_loo %]
                         </tbody>
                     </table>
-                [% ELSE %]
-                    <h3 id="searchresult-breeding">No results found</h3>
-                [% END # /IF breeding_loop %]
-            </div>
+                </div>
+                <!-- /.page-section -->
+            [% ELSE %]
+                <div class="alert alert-info" id="searchresult-breeding"> [% tx("No reservoir search results for '{query}'", {query = query}) | html %] </div>
+            [% END # /IF breeding_loop %]
         </div>
+        <!-- /#searchresult-breeding -->
     [% END # /IF query %]
 
     <div id="dataPreview" class="modal" tabindex="-1" role="dialog" aria-labelledby="dataPreviewLabel" aria-hidden="true">
