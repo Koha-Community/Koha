@@ -489,12 +489,12 @@
                                                             <li class="guarantor-details" data-borrowernumber="[% r.guarantor_id | $raw %]">
                                                                 <span class="label">Guarantor:</span>
                                                                 [% INCLUDE 'patron-title.inc' patron=r.guarantor hide_patron_infos_if_needed=1 %]
-                                                                <input type="hidden" class="new_guarantor_id relation-[% r.id | html %]" name="new_guarantor_id" value="[% r.guarantor_id | html %]" />
+                                                                <input type="hidden" class="guarantor_id relation-[% r.id | html %]" name="guarantor_id" value="[% r.guarantor_id | html %]" />
                                                             </li>
                                                             <li>
                                                                 <span class="label">Relationship:</span>
                                                                 <span>[% r.relationship | html %]</span>
-                                                                <input type="hidden" class="new_guarantor_relationship relation-[% r.id | html %]" name="new_guarantor_relationship" value="[% r.relationship | html %]" />
+                                                                <input type="hidden" class="guarantor_relationship relation-[% r.id | html %]" name="guarantor_relationship" value="[% r.relationship | html %]" />
                                                             </li>
 
                                                             <li>
