@@ -1,13 +1,11 @@
 <template>
     <div id="package_list_result">
         <div id="filters">
-            <a href="#" @click.prevent="toggle_filters($event)"
+            <a href="#" @click.prevent="toggleFilters($event)"
                 ><i class="fa fa-search"></i>
-                {{
-                    display_filters ? $__("Hide filters") : $__("Show filters")
-                }}
+                {{ displayFilters ? $__("Hide filters") : $__("Show filters") }}
             </a>
-            <fieldset v-if="display_filters" id="filters">
+            <fieldset v-if="displayFilters" id="filters">
                 <ol>
                     <li>
                         <label>{{ $__("Package name") }}:</label>
@@ -15,7 +13,7 @@
                             type="text"
                             id="package_name_filter"
                             v-model="filters.package_name"
-                            @keyup.enter="filter_table"
+                            @keyup.enter="filterTable"
                         />
                     </li>
                     <li>
@@ -31,8 +29,8 @@
                     </li>
                 </ol>
                 <input
-                    @click="filter_table"
-                    id="filter_table"
+                    @click="filterTable"
+                    id="filterTable"
                     type="button"
                     :value="$__('Filter')"
                 />
@@ -43,48 +41,42 @@
 </template>
 
 <script>
-import { createVNode, render } from "vue";
+import { createVNode, onMounted, ref, render } from "vue";
 import { useDataTable } from "../../composables/datatables";
+import { useRouter } from "vue-router";
 
 export default {
-    setup() {
-        const table_id = "package_list";
-        useDataTable(table_id);
+    setup(props) {
+        const router = useRouter();
+        const tableId = "package_list";
+        useDataTable(tableId);
 
-        return {
-            table_id,
-        };
-    },
-    data() {
-        return {
-            filters: {
-                package_name: "",
-                selection_type: 0,
-            },
-            display_filters: false,
-        };
-    },
-    methods: {
-        show_resource: function (resource_id) {
-            this.$router.push({
+        const filters = ref({
+            package_name: "",
+            selection_type: 0,
+        });
+        const displayFilters = ref(false);
+
+        const showResource = resource_id => {
+            router.push({
                 name: "EHoldingsEBSCOResourcesShow",
                 params: { resource_id },
             });
-        },
-        toggle_filters: function (e) {
-            this.display_filters = !this.display_filters;
-        },
-        filter_table: function () {
-            $("#" + this.table_id)
+        };
+        const toggleFilters = e => {
+            displayFilters.value = !displayFilters.value;
+        };
+        const filterTable = () => {
+            $("#" + tableId)
                 .DataTable()
                 .draw();
-        },
-        build_datatable: function () {
-            let show_resource = this.show_resource;
-            let resources = this.resources;
-            let filters = this.filters;
-            let table_id = this.table_id;
-            let router = this.$router;
+        };
+        const buildDatatable = () => {
+            let show_resource = showResource;
+            let resources = props.resources;
+            let tableFilters = filters.value;
+            let table_id = tableId;
+            let appRouter = router;
 
             $.fn.dataTable.ext.search = $.fn.dataTable.ext.search.filter(
                 search => search.name != "apply_filter"
@@ -123,7 +115,7 @@ export default {
                             let tr = $(this).parent();
                             let row = api.row(tr).data();
                             if (!row) return; // Happen if the table is empty
-                            let { href } = router.resolve({
+                            let { href } = appRouter.resolve({
                                 name: "EHoldingsEBSCOResourcesShow",
                                 params: { resource_id: row.resource_id },
                             });
@@ -162,22 +154,30 @@ export default {
                         function apply_filter(settings, data, dataIndex, row) {
                             return (
                                 row.package.name.match(
-                                    new RegExp(filters.package_name, "i")
+                                    new RegExp(tableFilters.package_name, "i")
                                 ) &&
-                                (filters.selection_type == 0 ||
-                                    (filters.selection_type == 1 &&
+                                (tableFilters.selection_type == 0 ||
+                                    (tableFilters.selection_type == 1 &&
                                         row.is_selected) ||
-                                    (filters.selection_type == 2 &&
+                                    (tableFilters.selection_type == 2 &&
                                         !row.is_selected))
                             );
                         }
                     );
                 },
             });
-        },
-    },
-    mounted() {
-        this.build_datatable();
+        };
+
+        onMounted(() => {
+            buildDatatable();
+        });
+        return {
+            tableId,
+            filters,
+            displayFilters,
+            toggleFilters,
+            filterTable,
+        };
     },
     props: {
         resources: Array,

@@ -35,52 +35,47 @@
 </template>
 
 <script>
-import { inject } from "vue";
+import { inject, onBeforeMount, ref } from "vue";
 import ButtonSubmit from "../ButtonSubmit.vue";
 import { APIClient } from "../../fetch/api-client.js";
+import { $__ } from "../../i18n";
+import { useRoute } from "vue-router";
 
 export default {
     setup() {
         const { setMessage } = inject("mainStore");
 
-        return {
-            setMessage,
-        };
-    },
-    data() {
-        return {
-            file: {
-                filename: null,
-                usage_data_provider_id: null,
-                file_type: null,
-                file_content: null,
-                date: null,
-                date_uploaded: null,
-            },
-        };
-    },
-    methods: {
-        selectFile(e) {
+        const file = ref({
+            filename: null,
+            usage_data_provider_id: null,
+            file_type: null,
+            file_content: null,
+            date: null,
+            date_uploaded: null,
+        });
+
+        const selectFile = e => {
             let files = e.target.files;
             if (!files) return;
             let file = files[0];
             const reader = new FileReader();
-            reader.onload = e => this.loadFile(file.name, e.target.result);
+            reader.onload = e => loadFile(file.name, e.target.result);
             reader.readAsBinaryString(file);
-        },
-        loadFile(filename, content) {
-            this.file.filename = filename;
-            this.file.file_content = btoa(content);
-            this.getDataProvider(this.$route.params.erm_usage_data_provider_id);
-        },
-        addDocument(e) {
+        };
+        const route = useRoute();
+        const loadFile = (filename, content) => {
+            file.value.filename = filename;
+            file.value.file_content = btoa(content);
+            getDataProvider(route.params.erm_usage_data_provider_id);
+        };
+        const addDocument = e => {
             e.preventDefault();
             const client = APIClient.erm;
             client.usage_data_providers
-                .process_COUNTER_file(this.file.usage_data_provider_id, {
-                    usage_data_provider_id: this.file.usage_data_provider_id,
-                    filename: this.file.filename,
-                    file_content: this.file.file_content,
+                .process_COUNTER_file(file.value.usage_data_provider_id, {
+                    usage_data_provider_id: file.value.usage_data_provider_id,
+                    filename: file.value.filename,
+                    file_content: file.value.file_content,
                 })
                 .then(
                     success => {
@@ -88,24 +83,22 @@ export default {
                         success.jobs.forEach((job, i) => {
                             message +=
                                 "<li>" +
-                                this.$__(
-                                    "Job for uploaded file has been queued"
-                                ) +
+                                $__("Job for uploaded file has been queued") +
                                 '. <a href="/cgi-bin/koha/admin/background_jobs.pl?op=view&id=' +
                                 job.job_id +
                                 '" target="_blank">' +
-                                this.$__("Check job progress") +
+                                $__("Check job progress") +
                                 ".</a></li>";
                         });
-                        this.setMessage(message, true);
+                        setMessage(message, true);
                     },
                     error => {}
                 );
-        },
-        clearForm(e) {
+        };
+        const clearForm = e => {
             e.preventDefault();
 
-            this.file = {
+            file.value = {
                 filename: null,
                 usage_data_provider_id: null,
                 file_type: null,
@@ -113,20 +106,29 @@ export default {
                 date: null,
                 date_uploaded: null,
             };
-        },
-        async getDataProvider(usage_data_provider_id) {
+        };
+
+        const getDataProvider = async usage_data_provider_id => {
             const client = APIClient.erm;
             await client.usage_data_providers.get(usage_data_provider_id).then(
                 usage_data_provider => {
-                    this.file.usage_data_provider_id =
+                    file.value.usage_data_provider_id =
                         usage_data_provider.erm_usage_data_provider_id;
                 },
                 error => {}
             );
-        },
-    },
-    mounted() {
-        this.getDataProvider(this.$route.params.erm_usage_data_provider_id);
+        };
+
+        onBeforeMount(() => {
+            getDataProvider(route.params.erm_usage_data_provider_id);
+        });
+        return {
+            setMessage,
+            file,
+            selectFile,
+            addDocument,
+            clearForm,
+        };
     },
     components: {
         ButtonSubmit,

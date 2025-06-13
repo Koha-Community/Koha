@@ -28,6 +28,7 @@
 </template>
 
 <script>
+import { computed, onBeforeMount, ref } from "vue";
 export default {
     props: {
         relationshipOptionLabelAttr: String | null,
@@ -43,41 +44,45 @@ export default {
             default: {},
         },
     },
-    data() {
-        return {
-            relatedResources: null,
-            relatedResourcesLoaded: false,
-        };
-    },
-    created() {
-        const relatedResources = this.relationshipAPIClient;
-        relatedResources.getAll(this.query).then(
-            relatedResources => {
-                this.relatedResources = relatedResources;
-                this.relatedResourcesLoaded = true;
-            },
-            error => {}
-        );
-    },
-    computed: {
-        relatedResourcesOptions() {
-            return this.relatedResources?.map(resource => ({
+    setup(props) {
+        const relatedResources = ref(null);
+        const relatedResourcesLoaded = ref(false);
+
+        onBeforeMount(() => {
+            const relatedResourcesClient = props.relationshipAPIClient;
+            relatedResourcesClient.getAll(props.query).then(
+                result => {
+                    relatedResources.value = result;
+                    relatedResourcesLoaded.value = true;
+                },
+                error => {}
+            );
+        });
+        const relatedResourcesOptions = computed(() => {
+            return relatedResources.value?.map(resource => ({
                 ...resource,
-                full_search: resource[this.relationshipOptionLabelAttr],
+                full_search: resource[props.relationshipOptionLabelAttr],
             }));
-        },
-        shouldBeDisabled() {
-            return this.disabled || !this.relatedResourcesLoaded;
-        },
-    },
-    methods: {
-        filterRelatedResourcesOptions(resource, label, search) {
+        });
+        const shouldBeDisabled = computed(() => {
+            return props.disabled || !relatedResourcesLoaded.value;
+        });
+
+        const filterRelatedResourcesOptions = (resource, label, search) => {
             return (
                 (resource.full_search || "")
                     .toLocaleLowerCase()
                     .indexOf(search.toLocaleLowerCase()) > -1
             );
-        },
+        };
+
+        return {
+            relatedResources,
+            relatedResourcesLoaded,
+            relatedResourcesOptions,
+            shouldBeDisabled,
+            filterRelatedResourcesOptions,
+        };
     },
 };
 </script>

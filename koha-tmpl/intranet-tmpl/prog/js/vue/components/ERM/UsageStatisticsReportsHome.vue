@@ -44,58 +44,58 @@
 </template>
 
 <script>
-import { inject } from "vue";
+import { inject, onBeforeMount, ref } from "vue";
 import ButtonSubmit from "../ButtonSubmit.vue";
 import { APIClient } from "../../fetch/api-client.js";
 import UsageStatisticsReportBuilder from "./UsageStatisticsReportBuilder.vue";
 import UsageStatisticsSavedReports from "./UsageStatisticsSavedReports.vue";
 
 export default {
-    setup() {
+    setup(props) {
         const { setConfirmationDialog, setMessage, setError } =
             inject("mainStore");
 
-        return {
-            setConfirmationDialog,
-            setMessage,
-            setError,
-        };
-    },
-    data() {
-        return {
-            initialized: false,
-            custom_or_default: "default",
-            default_usage_report: null,
-            default_usage_reports: [],
-            usage_data_providers: [],
-        };
-    },
-    beforeRouteEnter(to, from, next) {
-        next(vm => {
-            vm.getUsageDataProviders();
-        });
-    },
-    methods: {
-        async getUsageDataProviders() {
+        const initialized = ref(false);
+        const custom_or_default = ref("default");
+        const default_usage_report = ref(null);
+        const default_usage_reports = ref([]);
+        const usage_data_providers = ref([]);
+
+        const getUsageDataProviders = async () => {
             const client = APIClient.erm;
             await client.usage_data_providers.getAll().then(
-                usage_data_providers => {
-                    if (usage_data_providers.length === 0) {
+                result => {
+                    if (result.length === 0) {
                         this.setError(
                             this.$__(
                                 "No data providers have been created -  no report data will be available"
                             )
                         );
                     }
-                    this.usage_data_providers = usage_data_providers;
-                    this.initialized = true;
+                    usage_data_providers.value = result;
+                    initialized.value = true;
                 },
                 error => {}
             );
-        },
-        changeCustomOrDefault(e) {
-            this.custom_or_default = e.target.getAttribute("data-content");
-        },
+        };
+        const changeCustomOrDefault = e => {
+            custom_or_default.value = e.target.getAttribute("data-content");
+        };
+
+        onBeforeMount(() => {
+            getUsageDataProviders();
+        });
+        return {
+            setConfirmationDialog,
+            setMessage,
+            setError,
+            initialized,
+            custom_or_default,
+            default_usage_report,
+            default_usage_reports,
+            usage_data_providers,
+            changeCustomOrDefault,
+        };
     },
     components: {
         ButtonSubmit,

@@ -45,54 +45,40 @@
 </template>
 
 <script>
-import { inject } from "vue";
+import { inject, onMounted, ref } from "vue";
 import { APIClient } from "../../fetch/api-client.js";
+import { $__ } from "../../i18n";
 
 export default {
     setup() {
         const { setConfirmationDialog, setMessage, setError } =
             inject("mainStore");
-        return { setConfirmationDialog, setMessage, setError };
-    },
-    data() {
-        return {
-            processings: [],
-        };
-    },
-    beforeCreate() {
-        // FIXME Do we want that or a props passed from parent?
-        const client = APIClient.preservation;
-        client.processings.getAll().then(
-            processings => {
-                this.processings = processings;
-            },
-            error => {}
-        );
-    },
-    methods: {
-        deleteProcessing(processing) {
-            this.setConfirmationDialog(
+
+        const processings = ref([]);
+
+        const deleteProcessing = processing => {
+            setConfirmationDialog(
                 {
-                    title: this.$__(
+                    title: $__(
                         "Are you sure you want to remove this processing?"
                     ),
                     message: processing.name,
-                    accept_label: this.$__("Yes, delete"),
-                    cancel_label: this.$__("No, do not delete"),
+                    accept_label: $__("Yes, delete"),
+                    cancel_label: $__("No, do not delete"),
                 },
                 () => {
                     const client = APIClient.preservation;
                     client.processings.delete(processing.processing_id).then(
                         success => {
-                            this.setMessage(
-                                this.$__("Processing %s deleted").format(
+                            setMessage(
+                                $__("Processing %s deleted").format(
                                     processing.name
                                 ),
                                 true
                             );
                             client.processings.getAll().then(
-                                processings => {
-                                    this.processings = processings;
+                                result => {
+                                    processings.value = result;
                                 },
                                 error => {}
                             );
@@ -100,8 +86,8 @@ export default {
                         error => {
                             // FIXME We need a better way to do that
                             if (error.toString().match(/409/)) {
-                                this.setError(
-                                    this.$__(
+                                setError(
+                                    $__(
                                         "This processing cannot be deleted, it is already in used."
                                     )
                                 );
@@ -110,7 +96,25 @@ export default {
                     );
                 }
             );
-        },
+        };
+
+        onMounted(() => {
+            const client = APIClient.preservation;
+            client.processings.getAll().then(
+                result => {
+                    processings.value = result;
+                },
+                error => {}
+            );
+        });
+
+        return {
+            setConfirmationDialog,
+            setMessage,
+            setError,
+            processings,
+            deleteProcessing,
+        };
     },
     props: {},
     name: "SettingsProcessings",

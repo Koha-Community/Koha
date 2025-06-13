@@ -9,6 +9,7 @@
 </template>
 
 <script>
+import { computed } from "vue";
 import flatPickr from "vue-flatpickr-component";
 
 export default {
@@ -19,20 +20,19 @@ export default {
         date_to: String,
     },
     emits: ["update:modelValue"],
-    data() {
-        return {
-            fp_config: flatpickr_defaults,
-        };
-    },
-    computed: {
-        model: {
+    setup(props, { emit }) {
+        const model = computed({
             get() {
-                return this.modelValue;
+                return props.modelValue;
             },
             set(value) {
-                this.$emit("update:modelValue", value);
+                emit("update:modelValue", value);
             },
-        },
+        });
+        return {
+            fp_config: flatpickr_defaults,
+            model,
+        };
     },
     components: { flatPickr },
     name: "FlatPickrWrapper",

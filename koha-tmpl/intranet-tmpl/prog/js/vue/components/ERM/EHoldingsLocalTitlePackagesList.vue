@@ -1,37 +1,31 @@
 <template>
     <div id="package_list_result">
-        <table :id="table_id"></table>
+        <table :id="tableId"></table>
     </div>
 </template>
 
 <script>
-import { createVNode, render } from "vue";
+import { createVNode, onMounted, render } from "vue";
 import { useDataTable } from "../../composables/datatables";
+import { useRouter } from "vue-router";
 
 export default {
-    setup() {
-        const table_id = "package_list";
-        useDataTable(table_id);
+    setup(props) {
+        const router = useRouter();
+        const tableId = "package_list";
+        useDataTable(tableId);
 
-        return {
-            table_id,
-        };
-    },
-    data() {
-        return {};
-    },
-    methods: {
-        show_resource: function (resource_id) {
-            this.$router.push({
+        const showResource = resource_id => {
+            router.push({
                 name: "EHoldingsLocalResourcesShow",
                 params: { resource_id },
             });
-        },
-        build_datatable: function () {
-            let show_resource = this.show_resource;
-            let router = this.$router;
-            let resources = this.resources;
-            let table_id = this.table_id;
+        };
+        const buildDatatable = () => {
+            let show_resource = showResource;
+            let appRouter = router;
+            let resources = props.resources;
+            let table_id = tableId;
 
             $("#" + table_id).kohaTable({
                 data: resources,
@@ -60,7 +54,7 @@ export default {
                             let tr = $(this).parent();
                             let row = api.row(tr).data();
                             if (!row) return; // Happen if the table is empty
-                            let { href } = router.resolve({
+                            let { href } = appRouter.resolve({
                                 name: "EHoldingsLocalResourcesShow",
                                 params: { resource_id: row.resource_id },
                             });
@@ -81,10 +75,14 @@ export default {
                     );
                 },
             });
-        },
-    },
-    mounted() {
-        this.build_datatable();
+        };
+
+        onMounted(() => {
+            buildDatatable();
+        });
+        return {
+            tableId,
+        };
     },
     props: {
         resources: Array,

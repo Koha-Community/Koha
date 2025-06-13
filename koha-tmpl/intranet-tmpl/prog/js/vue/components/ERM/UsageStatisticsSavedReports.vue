@@ -1,7 +1,7 @@
 <template>
     <div v-if="!initialized">{{ $__("Loading") }}</div>
     <div v-else>
-        <div v-if="!this.default_usage_reports.length">
+        <div v-if="!default_usage_reports.length">
             {{
                 $__(
                     "You have not saved any reports yet, please create a report."
@@ -58,70 +58,69 @@
 <script>
 import ButtonSubmit from "../ButtonSubmit.vue";
 import { APIClient } from "../../fetch/api-client.js";
-import { inject } from "vue";
+import { inject, onMounted, ref } from "vue";
+import { useRouter } from "vue-router";
+import { $__ } from "../../i18n";
 
 export default {
     setup() {
+        const router = useRouter();
         const { setMessage, setError } = inject("mainStore");
 
-        return {
-            setMessage,
-            setError,
-        };
-    },
-    data() {
-        return {
-            initialized: false,
-            default_usage_report: null,
-            default_usage_reports: [],
-        };
-    },
-    mounted() {
-        this.getDefaultUsageReports();
-    },
-    methods: {
-        async getDefaultUsageReports() {
+        const initialized = ref(false);
+        const default_usage_report = ref(null);
+        const default_usage_reports = ref([]);
+
+        const getDefaultUsageReports = async () => {
             const client = APIClient.erm;
             await client.default_usage_reports.getAll().then(
-                default_usage_reports => {
-                    this.default_usage_reports = default_usage_reports;
-                    this.initialized = true;
+                result => {
+                    default_usage_reports.value = result;
+                    initialized.value = true;
                 },
                 error => {}
             );
-        },
-        async deleteSavedReport(e) {
+        };
+        const deleteSavedReport = async e => {
             e.preventDefault();
-            const id = this.default_usage_report.erm_default_usage_report_id;
+            const id = default_usage_report.value.erm_default_usage_report_id;
             if (id) {
                 const client = APIClient.erm;
                 await client.default_usage_reports.delete(id).then(
                     success => {
-                        this.setMessage(
-                            this.$__("Report deleted successfully")
-                        );
-                        this.default_usage_reports =
-                            this.default_usage_reports.filter(
+                        setMessage($__("Report deleted successfully"));
+                        default_usage_reports.value =
+                            default_usage_reports.value.filter(
                                 report =>
                                     report.erm_default_usage_report_id !== id
                             );
-                        this.default_usage_report = null;
+                        default_usage_report.value = null;
                     },
                     error => {}
                 );
             } else {
-                this.setError(
-                    this.$__("No report was selected - could not delete")
-                );
+                setError($__("No report was selected - could not delete"));
             }
-        },
-        displayDefaultReport(e) {
+        };
+        const displayDefaultReport = e => {
             e.preventDefault();
-            this.$router.push({
+            router.push({
                 name: "UsageStatisticsReportsViewer",
-                query: { data: this.default_usage_report.report_url_params },
+                query: { data: default_usage_report.value.report_url_params },
             });
-        },
+        };
+        onMounted(() => {
+            getDefaultUsageReports();
+        });
+        return {
+            setMessage,
+            setError,
+            initialized,
+            default_usage_report,
+            default_usage_reports,
+            deleteSavedReport,
+            displayDefaultReport,
+        };
     },
     components: {
         ButtonSubmit,

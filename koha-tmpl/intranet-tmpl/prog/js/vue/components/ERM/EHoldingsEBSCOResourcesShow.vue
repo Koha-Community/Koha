@@ -3,12 +3,12 @@
     <div v-else-if="resource" id="eholdings_resources_show">
         <h2>
             {{ $__("Resource #%s").format(resource.resource_id) }}
-            <span v-if="!updating_is_selected">
+            <span v-if="!updatingIsSelected">
                 <a
                     v-if="!resource.is_selected"
                     class="btn btn-default btn-xs"
                     role="button"
-                    @click="add_to_holdings"
+                    @click="addToHoldings"
                     ><font-awesome-icon icon="plus" />
                     {{ $__("Add title to holdings") }}</a
                 >
@@ -17,7 +17,7 @@
                     class="btn btn-default btn-xs"
                     role="button"
                     id="remove-from-holdings"
-                    @click="remove_from_holdings"
+                    @click="removeFromHoldings"
                     ><font-awesome-icon icon="minus" />
                     {{ $__("Remove title from holdings") }}</a
                 > </span
@@ -120,74 +120,72 @@
 </template>
 
 <script>
-import { inject } from "vue";
-import { storeToRefs } from "pinia";
+import { ref, onBeforeMount } from "vue";
 import { APIClient } from "../../fetch/api-client.js";
 
 export default {
     setup() {
         const format_date = $date;
 
-        return {
-            format_date,
-        };
-    },
-    data() {
-        return {
-            resource: {
-                resource_id: null,
-                title_id: null,
-                package_id: null,
-                started_on: "",
-                ended_on: "",
-                proxy: "",
-                title: {},
-                package: {},
-            },
-            initialized: false,
-            updating_is_selected: false,
-        };
-    },
-
-    beforeRouteEnter(to, from, next) {
-        next(vm => {
-            vm.getResource(to.params.resource_id);
+        const resource = ref({
+            resource_id: null,
+            title_id: null,
+            package_id: null,
+            started_on: "",
+            ended_on: "",
+            proxy: "",
+            title: {},
+            package: {},
         });
-    },
-    beforeRouteUpdate(to, from) {
-        this.resource = this.getResource(to.params.resource_id);
-    },
-    methods: {
-        getResource(resource_id) {
+        const initialized = ref(false);
+        const updatingIsSelected = ref(false);
+
+        const getResource = resource_id => {
             const client = APIClient.erm;
             client.EBSCOResources.get(resource_id).then(
                 resource => {
-                    this.resource = resource;
-                    this.initialized = true;
-                    this.updating_is_selected = false;
+                    resource.value = resource;
+                    initialized.value = true;
+                    updatingIsSelected.value = false;
                 },
                 error => {}
             );
-        },
-        edit_selected(is_selected) {
-            this.updating_is_selected = true;
+        };
+        const editSelected = is_selected => {
+            updatingIsSelected.value = true;
             const client = APIClient.erm;
-            client.EBSCOResources.patch(this.resource.resource_id, {
+            client.EBSCOResources.patch(resource.value.resource_id, {
                 is_selected,
             }).then(
                 result => {
                     // Refresh the page. We should not need that actually.
-                    this.getResource(this.resource.resource_id);
+                    getResource(resource.value.resource_id);
                 },
                 error => {}
             );
-        },
-        add_to_holdings() {
-            this.edit_selected(true);
-        },
-        remove_from_holdings() {
-            this.edit_selected(false);
-        },
+        };
+        const addToHoldings = () => {
+            editSelected(true);
+        };
+        const removeFromHoldings = () => {
+            editSelected(false);
+        };
+
+        onBeforeMount(() => {
+            getResource(route.params.resource_id);
+        });
+        onBeforeRouteUpdate((to, from) => {
+            resource.value = getResource(to.params.resource_id);
+        });
+
+        return {
+            format_date,
+            resource,
+            initialized,
+            updatingIsSelected,
+            addToHoldings,
+            removeFromHoldings,
+        };
     },
     name: "EHoldingsEBSCOResourcesShow",
 };

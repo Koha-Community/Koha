@@ -48,19 +48,64 @@
 </template>
 
 <script>
+import { onBeforeMount, ref } from "vue";
 import FormElement from "./FormElement.vue";
 
 export default {
     name: "RelationshipWidget",
-    setup() {
-        return {
-            noCountRequired: false,
+    setup(props) {
+        const initialized = ref(false);
+        const noCountRequired = ref(false);
+        const resourceRelationshipCount = ref(null);
+        const options = ref(null);
+
+        const addResourceRelationship = () => {
+            props.resourceRelationships.push({
+                ...props.newRelationshipDefaultAttrs,
+            });
         };
-    },
-    data() {
+        const deleteResourceRelationship = counter => {
+            props.resourceRelationships.splice(counter, 1);
+        };
+        const getSelectOptions = filters => {
+            const searchFilters = filters ? filters : {};
+            props.apiClient.getAll(searchFilters).then(response => {
+                options.value = response;
+                resourceRelationshipCount.value = response.length;
+                initialized.value = true;
+            });
+        };
+        const handleOptions = () => {
+            if (!options.value) return {};
+            return { options: options.value };
+        };
+
+        onBeforeMount(() => {
+            if (props.apiClient) {
+                props.apiClient.count().then(
+                    count => {
+                        if (props.fetchOptions) {
+                            getSelectOptions(props.filters);
+                        } else {
+                            resourceRelationshipCount.value = count;
+                            initialized.value = true;
+                        }
+                    },
+                    error => {}
+                );
+            } else {
+                noCountRequired.value = true;
+                initialized.value = true;
+            }
+        });
         return {
-            resourceRelationshipCount: null,
-            options: null,
+            noCountRequired,
+            resourceRelationshipCount,
+            options,
+            addResourceRelationship,
+            deleteResourceRelationship,
+            handleOptions,
+            initialized,
         };
     },
     props: {
@@ -73,46 +118,6 @@ export default {
         filters: Object,
         fetchOptions: Boolean,
         name: String,
-    },
-    beforeCreate() {
-        if (this.apiClient) {
-            this.apiClient.count().then(
-                count => {
-                    if (this.fetchOptions) {
-                        this.getSelectOptions(this.filters);
-                    } else {
-                        this.resourceRelationshipCount = count;
-                        this.initialized = true;
-                    }
-                },
-                error => {}
-            );
-        } else {
-            this.noCountRequired = true;
-            this.initialized = true;
-        }
-    },
-    methods: {
-        addResourceRelationship() {
-            this.resourceRelationships.push({
-                ...this.newRelationshipDefaultAttrs,
-            });
-        },
-        deleteResourceRelationship(counter) {
-            this.resourceRelationships.splice(counter, 1);
-        },
-        getSelectOptions(filters) {
-            const searchFilters = filters ? filters : {};
-            this.apiClient.getAll(searchFilters).then(options => {
-                this.options = options;
-                this.resourceRelationshipCount = options.length;
-                this.initialized = true;
-            });
-        },
-        handleOptions() {
-            if (!this.options) return {};
-            return { options: this.options };
-        },
     },
     components: {
         FormElement,

@@ -87,87 +87,91 @@
 </template>
 
 <script>
-import { inject } from "vue";
+import { computed, inject, onBeforeMount, ref } from "vue";
 import { APIClient } from "../../fetch/api-client.js";
 import Toolbar from "../Toolbar.vue";
 import ToolbarButton from "../ToolbarButton.vue";
+import { onBeforeRouteUpdate, useRoute, useRouter } from "vue-router";
+import { $__ } from "../../i18n";
 
 export default {
     setup() {
+        const route = useRoute();
+        const router = useRouter();
         const { setConfirmationDialog, setMessage } = inject("mainStore");
 
-        return {
-            notice_templates,
-            setConfirmationDialog,
-            setMessage,
-        };
-    },
-    computed: {
-        notice_template() {
-            return this.notice_templates.find(
-                n => n.id == this.processing.letter_code
-            );
-        },
-    },
-    data() {
-        return {
-            processing: {
-                processing_id: null,
-                letter_code: null,
-                name: "",
-                attributes: [],
-            },
-            initialized: false,
-        };
-    },
-    beforeRouteEnter(to, from, next) {
-        next(vm => {
-            vm.getProcessing(to.params.processing_id);
+        const processing = ref({
+            processing_id: null,
+            letter_code: null,
+            name: "",
+            attributes: [],
         });
-    },
-    beforeRouteUpdate(to, from) {
-        this.processing = this.getProcessing(to.params.processing_id);
-    },
-    methods: {
-        async getProcessing(processing_id) {
+        const initialized = ref(false);
+
+        const notice_template = computed(() => {
+            return notice_templates.find(
+                n => n.id == processing.value.letter_code
+            );
+        });
+
+        const getProcessing = async processing_id => {
             const client = APIClient.preservation;
             await client.processings.get(processing_id).then(
-                processing => {
-                    this.processing = processing;
-                    this.initialized = true;
+                result => {
+                    processing.value = result;
+                    initialized.value = true;
                 },
                 error => {}
             );
-        },
-        doDelete: function () {
-            this.setConfirmationDialog(
+        };
+
+        const doDelete = () => {
+            setConfirmationDialog(
                 {
-                    title: this.$__(
+                    title: $__(
                         "Are you sure you want to remove this processing?"
                     ),
-                    message: this.processing.name,
-                    accept_label: this.$__("Yes, delete"),
-                    cancel_label: this.$__("No, do not delete"),
+                    message: processing.value.name,
+                    accept_label: $__("Yes, delete"),
+                    cancel_label: $__("No, do not delete"),
                 },
                 () => {
                     const client = APIClient.preservation;
                     client.processings
-                        .delete(this.processing.processing_id)
+                        .delete(processing.value.processing_id)
                         .then(
                             success => {
-                                this.setMessage(
-                                    this.$__("Processing %s deleted").format(
-                                        this.processing.name
+                                setMessage(
+                                    $__("Processing %s deleted").format(
+                                        processing.value.name
                                     ),
                                     true
                                 );
-                                this.$router.push({ name: "Settings" });
+                                router.push({ name: "Settings" });
                             },
                             error => {}
                         );
                 }
             );
-        },
+        };
+
+        onBeforeMount(() => {
+            getProcessing(route.params.processing_id);
+        });
+
+        onBeforeRouteUpdate((to, from) => {
+            getProcessing(to.params.processing_id);
+        });
+
+        return {
+            notice_templates,
+            setConfirmationDialog,
+            setMessage,
+            processing,
+            initialized,
+            notice_template,
+            doDelete,
+        };
     },
     components: { Toolbar, ToolbarButton },
     name: "ProcessingsShow",

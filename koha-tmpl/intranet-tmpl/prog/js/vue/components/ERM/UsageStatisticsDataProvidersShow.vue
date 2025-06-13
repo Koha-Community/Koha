@@ -117,7 +117,7 @@
 </template>
 
 <script>
-import { inject } from "vue";
+import { inject, onBeforeMount, ref } from "vue";
 import { APIClient } from "../../fetch/api-client.js";
 import Toolbar from "../Toolbar.vue";
 import ToolbarButton from "../ToolbarButton.vue";
@@ -125,92 +125,79 @@ import UsageStatisticsDataProvidersFileImport from "./UsageStatisticsDataProvide
 import UsageStatisticsDataProvidersCounterLogs from "./UsageStatisticsDataProvidersCounterLogs.vue";
 import UsageStatisticsDataProviderDetails from "./UsageStatisticsDataProviderDetails.vue";
 import UsageStatisticsProviderDataList from "./UsageStatisticsProviderDataList.vue";
+import { $__ } from "../../i18n";
+import { useRoute, useRouter } from "vue-router";
 
 export default {
     setup() {
+        const route = useRoute();
+        const router = useRouter();
         const ERMStore = inject("ERMStore");
         const { get_lib_from_av } = ERMStore;
 
         const { setConfirmationDialog, setMessage } = inject("mainStore");
 
-        return {
-            get_lib_from_av,
-            setConfirmationDialog,
-            setMessage,
-        };
-    },
-    data() {
-        return {
-            usage_data_provider: {
-                erm_usage_data_provider_id: null,
-                name: "",
-                description: "",
-                active: 1,
-                method: "",
-                aggregator: "",
-                service_type: "",
-                service_url: "",
-                report_release: "",
-                customer_id: "",
-                requestor_id: "",
-                api_key: "",
-                requestor_name: "",
-                requestor_email: "",
-                report_types: [],
-            },
-            initialized: false,
-            tab_content: "detail",
-            available_data_types: [
-                {
-                    test: "TR",
-                    data_type: "title",
-                    tab_name: this.$__("Titles"),
-                },
-                {
-                    test: "PR",
-                    data_type: "platform",
-                    tab_name: this.$__("Platforms"),
-                },
-                { test: "IR", data_type: "item", tab_name: this.$__("Items") },
-                {
-                    test: "DR",
-                    data_type: "database",
-                    tab_name: this.$__("Databases"),
-                },
-            ],
-        };
-    },
-    beforeRouteEnter(to, from, next) {
-        next(vm => {
-            vm.getUsageDataProvider(to.params.erm_usage_data_provider_id);
+        const usage_data_provider = ref({
+            erm_usage_data_provider_id: null,
+            name: "",
+            description: "",
+            active: 1,
+            method: "",
+            aggregator: "",
+            service_type: "",
+            service_url: "",
+            report_release: "",
+            customer_id: "",
+            requestor_id: "",
+            api_key: "",
+            requestor_name: "",
+            requestor_email: "",
+            report_types: [],
         });
-    },
-    methods: {
-        async getUsageDataProvider(usage_data_provider_id) {
+        const initialized = ref(false);
+        const tab_content = ref("detail");
+        const available_data_types = ref([
+            {
+                test: "TR",
+                data_type: "title",
+                tab_name: $__("Titles"),
+            },
+            {
+                test: "PR",
+                data_type: "platform",
+                tab_name: $__("Platforms"),
+            },
+            { test: "IR", data_type: "item", tab_name: $__("Items") },
+            {
+                test: "DR",
+                data_type: "database",
+                tab_name: $__("Databases"),
+            },
+        ]);
+
+        const getUsageDataProvider = async usage_data_provider_id => {
             const client = APIClient.erm;
             client.usage_data_providers.get(usage_data_provider_id).then(
-                usage_data_provider => {
-                    this.usage_data_provider = usage_data_provider;
-                    this.initialized = true;
+                result => {
+                    usage_data_provider.value = result;
+                    initialized.value = true;
                 },
                 error => {}
             );
-        },
-        change_tab_content(e) {
-            this.tab_content = e.target.getAttribute("data-content");
-        },
-        delete_usage_data_provider: function (
+        };
+
+        const delete_usage_data_provider = (
             usage_data_provider_id,
             usage_data_provider_name
-        ) {
-            this.setConfirmationDialog(
+        ) => {
+            setConfirmationDialog(
                 {
-                    title: this.$__(
+                    title: $__(
                         "Are you sure you want to remove this data provider?"
                     ),
                     message: usage_data_provider_name,
-                    accept_label: this.$__("Yes, delete"),
-                    cancel_label: this.$__("No, do not delete"),
+                    accept_label: $__("Yes, delete"),
+                    cancel_label: $__("No, do not delete"),
                 },
                 () => {
                     const client = APIClient.erm;
@@ -218,13 +205,13 @@ export default {
                         .delete(usage_data_provider_id)
                         .then(
                             success => {
-                                this.setMessage(
-                                    this.$__(
+                                setMessage(
+                                    $__(
                                         "Usage data provider %s deleted"
                                     ).format(usage_data_provider_name),
                                     true
                                 );
-                                this.$router.push({
+                                router.push({
                                     name: "UsageStatisticsDataProvidersList",
                                 });
                             },
@@ -232,7 +219,24 @@ export default {
                         );
                 }
             );
-        },
+        };
+        const change_tab_content = e => {
+            tab_content.value = e.target.getAttribute("data-content");
+        };
+        onBeforeMount(() => {
+            getUsageDataProvider(route.params.erm_usage_data_provider_id);
+        });
+        return {
+            get_lib_from_av,
+            setConfirmationDialog,
+            setMessage,
+            usage_data_provider,
+            initialized,
+            tab_content,
+            available_data_types,
+            delete_usage_data_provider,
+            change_tab_content,
+        };
     },
     name: "UsageStatisticsDataProvidersShow",
     components: {

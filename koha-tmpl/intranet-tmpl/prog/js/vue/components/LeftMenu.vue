@@ -17,23 +17,28 @@
 </template>
 
 <script>
-import { inject } from "vue";
+import { inject, onBeforeMount, ref } from "vue";
 import NavigationItem from "./NavigationItem.vue";
 import VendorMenu from "./Islands/VendorMenu.vue";
-import { storeToRefs } from "pinia";
 import AcquisitionsMenu from "./Islands/AcquisitionsMenu.vue";
 
 export default {
     name: "LeftMenu",
-    setup: () => {
+    setup(props) {
         const navigationStore = inject("navigationStore");
-        const { leftNavigation } = storeToRefs(navigationStore);
+        const { leftNavigation } = navigationStore;
+
+        const navigationTree = ref(leftNavigation);
+        onBeforeMount(async () => {
+            if (props.condition)
+                navigationTree.value = await props.condition(
+                    navigationTree.value
+                );
+        });
         return {
             leftNavigation,
+            navigationTree,
         };
-    },
-    async beforeMount() {
-        if (this.condition) this.condition(this.leftNavigation);
     },
     props: {
         title: String,

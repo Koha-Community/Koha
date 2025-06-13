@@ -9,6 +9,7 @@
 </template>
 
 <script>
+import { computed } from "vue";
 export default {
     props: {
         id: String,
@@ -17,15 +18,16 @@ export default {
         required: Boolean,
     },
     emits: ["update:modelValue"],
-    computed: {
-        model: {
+    setup(props, { emit }) {
+        const model = computed({
             get() {
-                return this.modelValue;
+                return props.modelValue;
             },
             set(value) {
-                this.$emit("update:modelValue", value);
+                emit("update:modelValue", value);
             },
-        },
+        });
+        return { model };
     },
     name: "InputTextElement",
 };

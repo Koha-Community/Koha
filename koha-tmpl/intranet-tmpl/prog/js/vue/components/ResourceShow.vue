@@ -63,23 +63,38 @@
 <script>
 import Toolbar from "./Toolbar.vue";
 import ShowElement from "./ShowElement.vue";
+import { onBeforeMount, ref } from "vue";
 
 export default {
     inheritAttrs: false,
-    data() {
+    setup(props) {
+        const initialized = ref(false);
+        const resource = ref(null);
+        const additionalProps = ref({});
+
+        onBeforeMount(() => {
+            props.instancedResource.getResource(
+                props.instancedResource.route.params[
+                    props.instancedResource.idAttr
+                ],
+                {
+                    resource,
+                    initialized,
+                    instancedResource: props.instancedResource,
+                    additionalProps,
+                },
+                "show"
+            );
+        });
+
         return {
-            initialized: false,
+            initialized,
+            resource,
+            additionalProps,
         };
     },
     props: {
         instancedResource: Object,
-    },
-    created() {
-        this.instancedResource.getResource(
-            this.$route.params[this.instancedResource.idAttr],
-            this,
-            "show"
-        );
     },
     components: { Toolbar, ShowElement },
     name: "ResourceShow",

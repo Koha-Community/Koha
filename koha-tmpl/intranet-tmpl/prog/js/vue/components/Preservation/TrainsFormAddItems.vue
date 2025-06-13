@@ -105,99 +105,63 @@
 </template>
 
 <script>
-import { inject } from "vue";
+import { inject, onBeforeMount, ref } from "vue";
 import { APIClient } from "../../fetch/api-client";
+import { $__ } from "../../i18n";
+import { useRoute, useRouter } from "vue-router";
 
 export default {
     setup() {
+        const route = useRoute();
+        const router = useRouter();
         const { setMessage, setWarning, loading, loaded } = inject("mainStore");
-        return {
-            setMessage,
-            setWarning,
-            loading,
-            loaded,
-            api_mappings,
-        };
-    },
-    data() {
-        return {
-            train: {
-                train_id: null,
-                name: "",
-                description: "",
-            },
-            items: [],
-            train_items: [],
-            processings: [],
-            processing: null,
-            processing_id: null,
-            initialized: false,
-            av_options: {},
-            attributes: [],
-        };
-    },
-    beforeCreate() {
-        const client = APIClient.preservation;
-        client.processings
-            .getAll()
-            .then(processings => (this.processings = processings));
-    },
-    beforeRouteEnter(to, from, next) {
-        next(vm => {
-            vm.train = vm
-                .getTrain(to.params.train_id)
-                .then(() =>
-                    vm
-                        .getItems(to.params.item_ids.split(","))
-                        .then(() =>
-                            vm
-                                .refreshAttributes()
-                                .then(() => (vm.initialized = true))
-                        )
-                );
+
+        const train = ref({
+            train_id: null,
+            name: "",
+            description: "",
         });
-    },
-    methods: {
-        async getTrain(train_id) {
+        const items = ref([]);
+        const train_items = ref([]);
+        const processings = ref([]);
+        const processing = ref(null);
+        const processing_id = ref(null);
+        const initialized = ref(false);
+        const av_options = ref({});
+        const attributes = ref([]);
+
+        const getTrain = async train_id => {
             const client = APIClient.preservation;
             await client.trains.get(train_id).then(
-                train => {
-                    this.train = train;
-                    this.processing_id = train.default_processing_id;
+                result => {
+                    train.value = result;
+                    processing_id.value = result.default_processing_id;
                 },
                 error => {}
             );
-        },
-        async getItems(item_ids) {
+        };
+        const getItems = async item_ids => {
             const client = APIClient.item;
             let q = { "me.item_id": item_ids };
             await client.items.getAll(q, {}, { "x-koha-embed": "biblio" }).then(
-                items => {
-                    this.items = items;
+                result => {
+                    items.value = result;
                 },
                 error => {}
             );
-        },
-        columnApiMapping(item, db_column) {
-            let table_col = db_column.split(".");
-            let table = table_col[0];
-            let col = table_col[1];
-            let api_attribute = this.api_mappings[table][col] || col;
-            return table == "biblio" || table == "biblioitems"
-                ? item.biblio[api_attribute]
-                : item[api_attribute];
-        },
-        async refreshAttributes() {
-            this.loading();
+        };
+        const refreshAttributes = async () => {
+            loading();
 
             const client = APIClient.preservation;
-            await client.processings.get(this.processing_id).then(
-                processing => (this.processing = processing),
+            await client.processings.get(processing_id.value).then(
+                result => (processing.value = result),
                 error => {}
             );
-            this.attributes = [];
-            this.processing.attributes.forEach(attribute => {
-                this.attributes.push({
+
+            attributes.value = [];
+            processing.value.attributes.forEach(attribute => {
+                attributes.value.push({
                     processing_attribute_id: attribute.processing_attribute_id,
                     name: attribute.name,
                     type: attribute.type,
@@ -206,7 +170,7 @@ export default {
                 });
             });
             const client_av = APIClient.authorised_values;
-            let av_cat_array = this.processing.attributes
+            let av_cat_array = processing.value.attributes
                 .filter(attribute => attribute.type == "authorised_value")
                 .map(attribute => attribute.option_source);
 
@@ -219,35 +183,45 @@ export default {
                         let av_match = av_categories.find(
                             element => element.category_name == av_cat
                         );
-                        this.av_options[av_cat] = av_match.authorised_values;
+                        av_options.value[av_cat] = av_match.authorised_values;
                     });
                 })
-                .then(() => this.loaded());
-        },
-        addAttribute(processing_attribute_id) {
-            let last_index = this.attributes.findLastIndex(
+                .then(() => loaded());
+        };
+
+        const columnApiMapping = (item, db_column) => {
+            let table_col = db_column.split(".");
+            let table = table_col[0];
+            let col = table_col[1];
+            let api_attribute = this.api_mappings[table][col] || col;
+            return table == "biblio" || table == "biblioitems"
+                ? item.biblio[api_attribute]
+                : item[api_attribute];
+        };
+        const addAttribute = processing_attribute_id => {
+            let last_index = attributes.findLastIndex(
                 attribute =>
                     attribute.processing_attribute_id == processing_attribute_id
             );
             let new_attribute = (({ value, ...keepAttrs }) => keepAttrs)(
-                this.attributes[last_index]
+                attributes[last_index]
             );
-            this.attributes.splice(last_index + 1, 0, new_attribute);
-        },
-        removeAttribute(counter) {
-            this.attributes.splice(counter, 1);
-        },
-        onSubmit(e) {
+            attributes.splice(last_index + 1, 0, new_attribute);
+        };
+        const removeAttribute = counter => {
+            attributes.splice(counter, 1);
+        };
+        const onSubmit = e => {
             e.preventDefault();
 
-            let train_items = this.items.map(item => {
+            let trainItems = items.value.map(item => {
                 return {
                     item_id: item.item_id,
-                    processing_id: this.processing_id,
-                    attributes: this.attributes.map(a => {
+                    processsing_id: processing_id.value,
+                    attributes: attributes.value.map(a => {
                         let value =
                             a.type == "db_column"
-                                ? this.columnApiMapping(item, a.option_source)
+                                ? columnApiMapping(item, a.option_source)
                                 : a.value;
                         return {
                             processing_attribute_id: a.processing_attribute_id,
@@ -258,27 +232,65 @@ export default {
             });
 
             const client = APIClient.preservation;
-            client.train_items.createAll(train_items, this.train.train_id).then(
+            client.train_items.createAll(trainItems, train.value.train_id).then(
                 result => {
                     if (result.length) {
-                        this.setMessage(
-                            this.$__(
-                                "%s items have been added to train %s."
-                            ).format(result.length, this.train.train_id)
+                        setMessage(
+                            $__("%s items have been added to train %s.").format(
+                                result.length,
+                                train.value.train_id
+                            )
                         );
-                        this.$router.push({
+                        router.push({
                             name: "TrainsShow",
-                            params: { train_id: this.train.train_id },
+                            params: { train_id: train.value.train_id },
                         });
                     } else {
-                        this.setMessage(
-                            this.$__("No items have been added to the train.")
+                        setMessage(
+                            $__("No items have been added to the train.")
                         );
                     }
                 },
                 error => {}
             );
-        },
+        };
+
+        onBeforeMount(() => {
+            const client = APIClient.preservation;
+            client.processings
+                .getAll()
+                .then(result => (processings.value = result));
+
+            train.value = getTrain(route.params.train_id).then(() =>
+                getItems(route.params.item_ids.split(",")).then(() =>
+                    refreshAttributes().then(() => (initialized.value = true))
+                )
+            );
+        });
+
+        return {
+            setMessage,
+            setWarning,
+            loading,
+            loaded,
+            api_mappings,
+            train,
+            items,
+            train_items,
+            processings,
+            processing,
+            processing_id,
+            initialized,
+            av_options,
+            attributes,
+            getTrain,
+            getItems,
+            refreshAttributes,
+            columnApiMapping,
+            addAttribute,
+            removeAttribute,
+            onSubmit,
+        };
     },
     components: {},
     name: "TrainsFormAddItems",

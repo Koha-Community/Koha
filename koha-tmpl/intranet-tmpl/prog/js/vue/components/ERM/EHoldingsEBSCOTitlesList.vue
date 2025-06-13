@@ -69,145 +69,38 @@
 </template>
 
 <script>
-import { inject, ref, reactive } from "vue";
+import { inject, ref, reactive, computed, useTemplateRef } from "vue";
 import { storeToRefs } from "pinia";
 import { APIClient } from "../../fetch/api-client.js";
 import { build_url_params, build_url } from "../../composables/datatables";
 import KohaTable from "../KohaTable.vue";
+import { useRoute, useRouter } from "vue-router";
 
 export default {
     setup() {
+        const route = useRoute();
+        const router = useRouter();
         const ERMStore = inject("ERMStore");
         const { authorisedValues } = storeToRefs(ERMStore);
         const { get_lib_from_av, config } = ERMStore;
 
-        const table = ref();
+        const table = useTemplateRef("table");
         const filters = reactive({
-            publication_title: "",
-            publication_type: "",
-            selection_type: "",
+            publication_title: route.query.publication_title || "",
+            publication_type: route.query.publication_type || "",
+            selection_type: route.query.selection_type || "",
         });
+        const packages = ref([]);
+        const initialized = ref(false);
+        const local_title_count = ref(null);
+        const show_table = ref(
+            build_url_params(filters.value).length ? true : false
+        );
+        const cannot_search = ref(false);
 
-        return {
-            authorisedValues,
-            get_lib_from_av,
-            escape_str,
-            config,
-            table,
-        };
-    },
-    data: function () {
-        this.filters = {
-            publication_title: this.$route.query.publication_title || "",
-            publication_type: this.$route.query.publication_type || "",
-            selection_type: this.$route.query.selection_type || "",
-        };
-        let filters = this.filters;
-
-        return {
-            titles: [],
-            initialized: true,
-            tableOptions: {
-                columns: this.getTableColumns(),
-                url: "/api/v1/erm/eholdings/ebsco/titles",
-                options: {
-                    ordering: false,
-                    dom: '<"top pager"<"table_entries"ilp>>tr<"bottom pager"ip>',
-                    lengthMenu: [
-                        [10, 20, 50, 100],
-                        [10, 20, 50, 100],
-                    ],
-                },
-                filters_options: {
-                    1: () =>
-                        this.map_av_dt_filter("av_title_publication_types"),
-                },
-                actions: { 0: ["show"] },
-                default_filters: {
-                    publication_title: function () {
-                        return filters.publication_title || "";
-                    },
-                    publication_type: function () {
-                        return filters.publication_type || "";
-                    },
-                    selection_type: function () {
-                        return filters.selection_type || "";
-                    },
-                },
-            },
-            cannot_search: false,
-            show_table: build_url_params(filters).length ? true : false,
-            local_title_count: null,
-        };
-    },
-    computed: {
-        local_titles_url() {
-            let { href } = this.$router.resolve({
-                name: "EHoldingsLocalTitlesList",
-            });
-            return build_url(href, this.filters);
-        },
-    },
-    methods: {
-        doShow: function ({ title_id }, dt, event) {
-            event.preventDefault();
-            this.$router.push({
-                name: "EHoldingsEBSCOTitlesShow",
-                params: { title_id },
-            });
-        },
-        filter_table: async function () {
-            if (this.filters.publication_title.length) {
-                this.cannot_search = false;
-                let { href } = this.$router.resolve({
-                    name: "EHoldingsEBSCOTitlesList",
-                });
-                let new_route = build_url(href, this.filters);
-                this.$router.push(new_route);
-                this.show_table = true;
-                this.local_title_count = null;
-
-                if (this.$refs.table) {
-                    this.$refs.table.redraw(
-                        "/api/v1/erm/eholdings/ebsco/titles"
-                    );
-                }
-                if (this.config.settings.ERMProviders.includes("local")) {
-                    const client = APIClient.erm;
-
-                    const q = this.filters
-                        ? {
-                              ...(this.filters.publication_title
-                                  ? {
-                                        "me.publication_title": {
-                                            like:
-                                                "%" +
-                                                this.filters.publication_title +
-                                                "%",
-                                        },
-                                    }
-                                  : {}),
-                              ...(this.filters.publication_type
-                                  ? {
-                                        "me.publication_type":
-                                            this.filters.publication_type,
-                                    }
-                                  : {}),
-                          }
-                        : undefined;
-
-                    client.localTitles.count(q).then(
-                        count => (this.local_title_count = count),
-                        error => {}
-                    );
-                }
-            } else {
-                this.cannot_search = true;
-            }
-        },
-        getTableColumns: function () {
-            let get_lib_from_av = this.get_lib_from_av;
-            let escape_str = this.escape_str;
+        const getTableColumns = () => {
+            let get_lib_from_av = get_lib_from_av;
+            let escape_str = escape_str;
             return [
                 {
                     title: __("Title"),
@@ -283,7 +176,118 @@ export default {
                     },
                 },
             ];
-        },
+        };
+        const tableOptions = ref({
+            columns: getTableColumns(),
+            url: "/api/v1/erm/eholdings/ebsco/titles",
+            options: {
+                ordering: false,
+                dom: '<"top pager"<"table_entries"ilp>>tr<"bottom pager"ip>',
+                lengthMenu: [
+                    [10, 20, 50, 100],
+                    [10, 20, 50, 100],
+                ],
+            },
+            filters_options: {
+                1: () =>
+                    map_av_dt_filter(
+                        "av_title_publication_types"
+                    ),
+            },
+            actions: { 0: ["show"] },
+            default_filters: {
+                publication_title: function () {
+                    return filters.value.publication_title || "";
+                },
+                publication_type: function () {
+                    return filters.value.publication_type || "";
+                },
+                selection_type: function () {
+                    return filters.value.selection_type || "";
+                },
+            },
+        });
+
+        const local_titles_url = computed(() => {
+            let { href } = router.resolve({
+                name: "EHoldingsLocalTitlesList",
+            });
+            return build_url(href, filters.value);
+        });
+        const doShow = ({ title_id }, dt, event) => {
+            event.preventDefault();
+            router.push({
+                name: "EHoldingsEBSCOTitlesShow",
+                params: { title_id },
+            });
+        };
+
+        const filter_table = async () => {
+            if (filters.value.publication_title.length) {
+                cannot_search.value = false;
+                let { href } = router.resolve({
+                    name: "EHoldingsEBSCOTitlesList",
+                });
+                let new_route = build_url(href, filters.value);
+                router.push(new_route);
+                show_table.value = true;
+                local_title_count.value = null;
+
+                if (table.value) {
+                    table.value.redraw("/api/v1/erm/eholdings/ebsco/titles");
+                }
+                if (config.settings.ERMProviders.includes("local")) {
+                    const client = APIClient.erm;
+
+                    const q = filters.value
+                        ? {
+                              ...(filters.value.publication_title
+                                  ? {
+                                        "me.publication_title": {
+                                            like:
+                                                "%" +
+                                                filters.value
+                                                    .publication_title +
+                                                "%",
+                                        },
+                                    }
+                                  : {}),
+                              ...(filters.value.publication_type
+                                  ? {
+                                        "me.publication_type":
+                                            filters.value.publication_type,
+                                    }
+                                  : {}),
+                          }
+                        : undefined;
+
+                    client.localTitles.count(q).then(
+                        count => (local_title_count.value = count),
+                        error => {}
+                    );
+                }
+            } else {
+                cannot_search.value = true;
+            }
+        };
+
+        return {
+            authorisedValues,
+            get_lib_from_av,
+            escape_str,
+            config,
+            table,
+            packages,
+            filters,
+            initialized,
+            local_title_count,
+            show_table,
+            cannot_search,
+            tableOptions,
+            local_titles_url,
+            doShow,
+            filter_table,
+        };
     },
     components: { KohaTable },
     name: "EHoldingsEBSCOTitlesList",

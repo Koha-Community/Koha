@@ -158,38 +158,51 @@
 </template>
 
 <script>
-import { reactive } from "vue";
+import { computed, onBeforeMount, reactive, ref } from "vue";
 import FormElement from "./FormElement.vue";
 import ButtonSubmit from "./ButtonSubmit.vue";
 
 export default {
     inheritAttrs: false,
-    data() {
+    setup(props) {
+        const initialized = ref(false);
+        const resource = ref(null);
+
+        const resourceToAddOrEdit = computed(() => {
+            return (
+                resource.value || reactive(props.instancedResource.newResource)
+            );
+        });
+
+        onBeforeMount(() => {
+            if (
+                props.instancedResource.route.params[
+                    props.instancedResource.idAttr
+                ]
+            ) {
+                props.instancedResource.getResource(
+                    props.instancedResource.route.params[
+                        props.instancedResource.idAttr
+                    ],
+                    {
+                        resource,
+                        initialized,
+                        instancedResource: props.instancedResource,
+                    },
+                    "form"
+                );
+            } else {
+                initialized.value = true;
+            }
+        });
         return {
-            initialized: false,
-            resource: null,
+            initialized,
+            resource,
+            resourceToAddOrEdit,
         };
     },
     props: {
         instancedResource: Object,
-    },
-    created() {
-        if (this.$route.params[this.instancedResource.idAttr]) {
-            this.instancedResource.getResource(
-                this.$route.params[this.instancedResource.idAttr],
-                this,
-                "form"
-            );
-        } else {
-            this.initialized = true;
-        }
-    },
-    computed: {
-        resourceToAddOrEdit() {
-            return (
-                this.resource || reactive(this.instancedResource.newResource)
-            );
-        },
     },
     components: {
         ButtonSubmit,

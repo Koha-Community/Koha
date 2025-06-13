@@ -67,118 +67,122 @@
 <script>
 import ButtonSubmit from "../ButtonSubmit.vue";
 import { APIClient } from "../../fetch/api-client.js";
-import { ref, inject } from "vue";
+import { ref, inject, useTemplateRef, onBeforeMount } from "vue";
+import { $__ } from "../../i18n";
 
 export default {
     setup() {
         const { setMessage, setWarning } = inject("mainStore");
-        return {
-            setMessage,
-            setWarning,
-        };
-    },
-    data() {
-        const fileLoader = ref();
-        return {
-            file: {
-                filename: null,
-                file_content: null,
-            },
-            packages: [],
-            package_id: null,
-            create_linked_biblio: false,
-            fileLoader,
-        };
-    },
-    beforeCreate() {
-        const client = APIClient.erm;
-        client.localPackages.getAll().then(
-            packages => {
-                this.packages = packages;
-                this.initialized = true;
-            },
-            error => {}
-        );
-    },
-    methods: {
-        selectFile(e) {
+
+        const fileLoader = useTemplateRef("fileLoader");
+
+        const file = ref({
+            filename: null,
+            file_content: null,
+        });
+        const packages = ref([]);
+        const package_id = ref(null);
+        const create_linked_biblio = ref(false);
+
+        const selectFile = e => {
             let files = e.target.files;
             if (!files) return;
-            let file = files[0];
+            let newFile = files[0];
             const reader = new FileReader();
-            reader.onload = e => this.loadFile(file.name, e.target.result);
-            reader.readAsBinaryString(file);
-        },
-        loadFile(filename, content) {
-            this.file.filename = filename;
-            this.file.file_content = btoa(content);
-        },
-        addDocument(e) {
+            reader.onload = e => loadFile(newFile.name, e.target.result);
+            reader.readAsBinaryString(newFile);
+        };
+        const loadFile = (filename, content) => {
+            file.value.filename = filename;
+            file.value.file_content = btoa(content);
+        };
+        const addDocument = e => {
             e.preventDefault();
 
             const client = APIClient.erm;
             const importData = {
-                file: this.file,
-                package_id: this.package_id,
-                create_linked_biblio: this.create_linked_biblio,
+                file: file.value,
+                package_id: package_id.value,
+                create_linked_biblio: create_linked_biblio.value,
             };
             client.localTitles.import_kbart(importData).then(
                 success => {
                     let message = "";
                     if (success.job_ids) {
                         if (success.job_ids.length > 1) {
-                            message += `<p style='font-weight: normal; font-size: medium; margin-top: 1em;'>${this.$__(
+                            message += `<p style='font-weight: normal; font-size: medium; margin-top: 1em;'>${$__(
                                 "Your file was too large to process in one job, the file has been split into %s jobs to meet the maximum size limits."
                             ).format(success.job_ids.length)}</p>`;
                         }
                         success.job_ids.forEach((job, i) => {
-                            message += `<li>${this.$__(
+                            message += `<li>${$__(
                                 "Job %s for uploaded file has been queued"
                             ).format(
                                 i + 1
-                            )}, <a href="/cgi-bin/koha/admin/background_jobs.pl?op=view&id=${job}" target="_blank">${this.$__(
+                            )}, <a href="/cgi-bin/koha/admin/background_jobs.pl?op=view&id=${job}" target="_blank">${$__(
                                 "see progress"
                             )}</a></li>`;
                         });
-                        this.setMessage(message, true);
+                        setMessage(message, true);
                     }
                     if (success.warnings.invalid_columns) {
-                        message += `<p style='font-weight: normal; font-size: medium; margin-top: 1em;'>${this.$__(
+                        message += `<p style='font-weight: normal; font-size: medium; margin-top: 1em;'>${$__(
                             "Information:"
                         )}</p>`;
-                        message += `<p>${this.$__(
+                        message += `<p>${$__(
                             "Additional columns were detected in your report, please see the list below:"
                         )}</p>`;
                         success.warnings.invalid_columns.forEach(column => {
                             message += `<li>${column}</li>`;
                         });
-                        message += `<p style='margin-top: 0.1em;'>${this.$__(
+                        message += `<p style='margin-top: 0.1em;'>${$__(
                             "The data in these columns will not be imported."
                         )}</p>`;
-                        this.setMessage(message, true);
+                        setMessage(message, true);
                     }
                     if (success.warnings.invalid_filetype) {
                         message += `<p>${this.$__(
                             "Could not detect whether the file is TSV or CSV, please check the file."
                         )}</p>`;
-                        this.setWarning(message);
+                        setWarning(message);
                     }
                 },
                 error => {}
             );
             this.clearForm();
-        },
-        clearForm() {
-            this.file = {
+        };
+        const clearForm = () => {
+            file.value = {
                 filename: null,
-                file_type: null,
                 file_content: null,
             };
-            this.package_id = null;
-            this.create_linked_biblio = false;
-            this.$refs.fileLoader.files = null;
-            this.$refs.fileLoader.value = null;
-        },
+            package_id.value = null;
+            create_linked_biblio.value = false;
+            fileLoader.files = null;
+            fileLoader.value = null;
+        };
+
+        onBeforeMount(() => {
+            const client = APIClient.erm;
+            client.localPackages.getAll().then(
+                result => {
+                    packages.value = result;
+                },
+                error => {}
+            );
+        });
+        return {
+            setMessage,
+            setWarning,
+            fileLoader,
+            packages,
+            package_id,
+            create_linked_biblio,
+            file,
+            selectFile,
+            addDocument,
+            clearForm,
+        };
     },
     components: {
         ButtonSubmit,

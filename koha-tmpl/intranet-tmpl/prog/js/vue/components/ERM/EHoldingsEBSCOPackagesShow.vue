@@ -3,12 +3,12 @@
     <div v-else-if="erm_package" id="packages_show">
         <h2>
             {{ $__("Package #%s").format(erm_package.package_id) }}
-            <span v-if="!updating_is_selected">
+            <span v-if="!updatingIsSelected">
                 <a
                     v-if="!erm_package.is_selected"
                     class="btn btn-default btn-xs"
                     role="button"
-                    @click="add_to_holdings"
+                    @click="addToHoldings"
                     ><font-awesome-icon icon="plus" />
                     {{ $__("Add package to holdings") }}</a
                 >
@@ -17,7 +17,7 @@
                     class="btn btn-default btn-xs"
                     role="button"
                     id="remove-from-holdings"
-                    @click="remove_from_holdings"
+                    @click="removeFromHoldings"
                     ><font-awesome-icon icon="minus" />
                     {{ $__("Remove package from holdings") }}</a
                 > </span
@@ -113,85 +113,88 @@
 </template>
 
 <script>
-import { inject } from "vue";
+import { inject, onBeforeMount, ref } from "vue";
 import EHoldingsPackageAgreements from "./EHoldingsEBSCOPackageAgreements.vue";
 import EHoldingsPackageTitlesList from "./EHoldingsEBSCOPackageTitlesList.vue";
 import { APIClient } from "../../fetch/api-client.js";
+import { onBeforeRouteUpdate, useRoute } from "vue-router";
 
 export default {
     setup() {
+        const route = useRoute();
         const format_date = $date;
 
         const ERMStore = inject("ERMStore");
         const { get_lib_from_av } = ERMStore;
 
-        return {
-            format_date,
-            get_lib_from_av,
-        };
-    },
-    data() {
-        return {
-            erm_package: {
-                package_id: null,
-                vendor_id: null,
-                name: "",
-                external_id: "",
-                provider: "",
-                package_type: "",
-                content_type: "",
-                created_on: null,
-                resources: null,
-                package_agreements: [],
-            },
-            initialized: false,
-            updating_is_selected: false,
-        };
-    },
-    beforeRouteEnter(to, from, next) {
-        next(vm => {
-            vm.getPackage(to.params.package_id);
+        const ermPackage = ref({
+            package_id: null,
+            vendor_id: null,
+            name: "",
+            external_id: "",
+            provider: "",
+            package_type: "",
+            content_type: "",
+            created_on: null,
+            resources: null,
+            package_agreements: [],
         });
-    },
-    beforeRouteUpdate(to, from) {
-        this.erm_package = this.getPackage(to.params.package_id);
-    },
-    methods: {
-        getPackage(package_id) {
+        const initialized = ref(false);
+        const updatingIsSelected = ref(false);
+
+        const getPackage = package_id => {
             const client = APIClient.erm;
             client.EBSCOPackages.get(package_id).then(
-                erm_package => {
-                    this.erm_package = erm_package;
-                    this.initialized = true;
-                    this.updating_is_selected = false;
+                result => {
+                    ermPackage.value = result;
+                    initialized.value = true;
+                    updatingIsSelected.value = false;
                 },
                 error => {}
             );
-        },
-        edit_selected(is_selected) {
-            this.updating_is_selected = true;
+        };
+        const editSelected = is_selected => {
+            updatingIsSelected.value = true;
             const client = APIClient.erm;
-            client.EBSCOPackages.patch(this.erm_package.package_id, {
+            client.EBSCOPackages.patch(ermPackage.value.package_id, {
                 is_selected,
             }).then(
                 result => {
                     // Refresh the page. We should not need that actually.
-                    this.getPackage(this.erm_package.package_id);
+                    getPackage(ermPackage.value.package_id);
                 },
                 error => {}
             );
-        },
-        add_to_holdings() {
-            this.edit_selected(true);
-        },
-        remove_from_holdings() {
-            this.edit_selected(false);
-        },
-        refreshAgreements() {
+        };
+        const addToHoldings = () => {
+            editSelected(true);
+        };
+        const removeFromHoldings = () => {
+            editSelected(false);
+        };
+        const refreshAgreements = () => {
             // FIXME We could GET /erm/eholdings/packages/$package_id/agreements instead
-            this.initialized = false;
-            this.getPackage(this.erm_package.package_id);
-        },
+            initialized.value = false;
+            getPackage(ermPackage.value.package_id);
+        };
+
+        onBeforeMount(() => {
+            getPackage(route.params.package_id);
+            s;
+        });
+        onBeforeRouteUpdate((to, from) => {
+            ermPackage.value = getPackage(to.params.package_id);
+        });
+        return {
+            format_date,
+            get_lib_from_av,
+            ermPackage,
+            initialized,
+            updatingIsSelected,
+            addToHoldings,
+            removeFromHoldings,
+            refreshAgreements,
+        };
     },
     components: {
         EHoldingsPackageAgreements,

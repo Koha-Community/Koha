@@ -22,7 +22,7 @@
 
 <script>
 import Toolbar from "./Toolbar.vue";
-import { ref, inject } from "vue";
+import { ref, inject, onBeforeMount, computed } from "vue";
 import { APIClient } from "../fetch/api-client.js";
 import KohaTable from "./KohaTable.vue";
 
@@ -30,73 +30,41 @@ export default {
     inheritAttrs: false,
     setup(props) {
         const table = ref();
+        const resourceCount = ref(0);
+        const initialized = ref(false);
+        const searchable_additional_fields = ref([]);
+        const searchable_av_options = ref([]);
+        const tableEvents = ref({
+            show: props.instancedResource.goToResourceShow,
+            edit: props.instancedResource.goToResourceEdit,
+            delete: props.instancedResource.doResourceDelete,
+            select: props.instancedResource.doResourceSelect,
+        });
 
-        return {
-            table,
-        };
-    },
-    props: {
-        instancedResource: Object,
-    },
-    data() {
-        return {
-            resourceCount: 0,
-            initialized: false,
-            searchable_additional_fields: [],
-            searchable_av_options: [],
-            tableEvents: {
-                show: this.instancedResource.goToResourceShow,
-                edit: this.instancedResource.goToResourceEdit,
-                delete: this.instancedResource.doResourceDelete,
-                select: this.instancedResource.doResourceSelect,
-            },
-        };
-    },
-    created() {
-        if (this.instancedResource.embedded) {
-            this.getResourceCount().then(
-                () => (this.instancedResource.initialized = true)
-            );
-        } else {
-            this.getResourceCount().then(() => {
-                if (this.instancedResource.hasAdditionalFields) {
-                    this.getSearchableAdditionalFields().then(() =>
-                        this.getSearchableAVOptions().then(
-                            () => (this.initialized = true)
-                        )
-                    );
-                } else {
-                    this.initialized = true;
-                }
-            });
-        }
-    },
-    methods: {
-        async getResourceCount() {
-            await this.instancedResource.apiClient.count().then(
+        const getResourceCount = async () => {
+            await props.instancedResource.apiClient.count().then(
                 count => {
-                    this.resourceCount = count;
+                    resourceCount.value = count;
                 },
                 error => {}
             );
-        },
-        async getSearchableAdditionalFields() {
+        };
+        const getSearchableAdditionalFields = async () => {
             const client = APIClient.additional_fields;
             await client.additional_fields
-                .getAll(this.instancedResource.extendedAttributesResourceType)
+                .getAll(props.instancedResource.extendedAttributesResourceType)
                 .then(
-                    searchable_additional_fields => {
-                        this.searchable_additional_fields =
-                            searchable_additional_fields.filter(
-                                field => field.searchable
-                            );
+                    response => {
+                        searchable_additional_fields.value = response.filter(
+                            field => field.searchable
+                        );
                     },
                     error => {}
                 );
-        },
-        async getSearchableAVOptions() {
+        };
+        const getSearchableAVOptions = async () => {
             const client_av = APIClient.authorised_values;
-            let av_cat_array = this.searchable_additional_fields
+            let av_cat_array = searchable_additional_fields.value
                 .filter(field => field.authorised_value_category_name)
                 .map(field => field.authorised_value_category_name);
 
@@ -109,17 +77,17 @@ export default {
                         let av_match = av_categories.find(
                             element => element.category_name == av_cat
                         );
-                        this.searchable_av_options[av_cat] =
+                        searchable_av_options.value[av_cat] =
                             av_match.authorised_values.map(av => ({
                                 value: av.value,
                                 label: av.description,
                             }));
                     });
                 });
-        },
-        getTableColumns(resourceAttrs) {
-            let get_lib_from_av = this.instancedResource.get_lib_from_av;
-            let thisResource = this.instancedResource;
+        };
+        const getTableColumns = resourceAttrs => {
+            let get_lib_from_av = props.instancedResource.get_lib_from_av;
+            let thisResource = props.instancedResource;
 
             const columns = resourceAttrs.reduce((acc, attr, i) => {
                 if (
@@ -134,7 +102,7 @@ export default {
                     acc.push(attr.tableColumnDefinition);
                     return acc;
                 }
-                if (attr.name === this.instancedResource.idAttr) {
+                if (attr.name === thisResource.idAttr) {
                     acc.push({
                         title: attr.label,
                         data: attr.name,
@@ -154,7 +122,7 @@ export default {
                     });
                     return acc;
                 }
-                if (attr.name === this.instancedResource.nameAttr) {
+                if (attr.name === thisResource.nameAttr) {
                     acc.push({
                         title: attr.label,
                         data: attr.name,
@@ -243,17 +211,16 @@ export default {
                 return acc;
             }, []);
             return columns;
-        },
-    },
-    computed: {
-        tableOptionsWithColumns() {
-            this.instancedResource.tableOptions.columns = this.getTableColumns(
-                this.instancedResource.resourceAttrs
+        };
+
+        const tableOptionsWithColumns = computed(() => {
+            props.instancedResource.tableOptions.columns = getTableColumns(
+                props.instancedResource.resourceAttrs
             );
-            return this.instancedResource.tableOptions;
-        },
-        tableEventList() {
-            const actionButtons = this.instancedResource.tableOptions.actions[
+            return props.instancedResource.tableOptions;
+        });
+        const tableEventList = computed(() => {
+            const actionButtons = props.instancedResource.tableOptions.actions[
                 "-1"
             ].reduce((acc, curr) => {
                 if (typeof curr === "object") {
@@ -262,8 +229,40 @@ export default {
                 }
                 return acc;
             }, {});
-            return { ...this.tableEvents, ...actionButtons };
-        },
+            return { ...tableEvents.value, ...actionButtons };
+        });
+        onBeforeMount(() => {
+            if (props.instancedResource.embedded) {
+                getResourceCount().then(
+                    () => (props.instancedResource.initialized = true)
+                );
+            } else {
+                getResourceCount().then(() => {
+                    if (props.instancedResource.hasAdditionalFields) {
+                        getSearchableAdditionalFields().then(() =>
+                            getSearchableAVOptions().then(
+                                () => (initialized.value = true)
+                            )
+                        );
+                    } else {
+                        initialized.value = true;
+                    }
+                });
+            }
+        });
+        return {
+            table,
+            resourceCount,
+            initialized,
+            searchable_additional_fields,
+            searchable_av_options,
+            tableEventList,
+            getTableColumns,
+            tableOptionsWithColumns,
+        };
+    },
+    props: {
+        instancedResource: Object,
     },
     components: { Toolbar, KohaTable },
     name: "ResourcesList",

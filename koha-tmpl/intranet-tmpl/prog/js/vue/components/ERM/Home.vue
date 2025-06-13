@@ -1,11 +1,5 @@
 <template></template>
 
 <script>
-export default {
-    data() {
-        return {};
-    },
-    methods: {},
-    components: {},
-};
+export default {};
 </script>

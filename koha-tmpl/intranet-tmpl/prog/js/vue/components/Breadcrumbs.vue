@@ -27,7 +27,7 @@ import { storeToRefs } from "pinia";
 import NavigationItem from "./NavigationItem.vue";
 export default {
     name: "Breadcrumbs",
-    setup: () => {
+    setup() {
         const navigationStore = inject("navigationStore");
         const { breadcrumbs } = storeToRefs(navigationStore);
         const { params } = navigationStore;

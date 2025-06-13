@@ -101,52 +101,50 @@
 </template>
 
 <script>
-import { inject } from "vue";
 import { APIClient } from "../../fetch/api-client.js";
-import { storeToRefs } from "pinia";
+import { ref, onBeforeMount } from "vue";
+import { onBeforeRouteUpdate, useRoute } from "vue-router";
+
 export default {
     setup() {
+        const route = useRoute();
         const format_date = $date;
 
-        return {
-            format_date,
-        };
-    },
-    data() {
-        return {
-            resource: {
-                resource_id: null,
-                title_id: null,
-                package_id: null,
-                started_on: "",
-                ended_on: "",
-                proxy: "",
-                title: {},
-                package: {},
-            },
-            initialized: false,
-        };
-    },
-
-    beforeRouteEnter(to, from, next) {
-        next(vm => {
-            vm.getResource(to.params.resource_id);
+        const resource = ref({
+            resource_id: null,
+            title_id: null,
+            package_id: null,
+            started_on: "",
+            ended_on: "",
+            proxy: "",
+            title: {},
+            package: {},
         });
-    },
-    beforeRouteUpdate(to, from) {
-        this.resource = this.getResource(to.params.resource_id);
-    },
-    methods: {
-        getResource(resource_id) {
+        const initialized = ref(false);
+
+        const getResource = resource_id => {
             const client = APIClient.erm;
             client.localResources.get(resource_id).then(
-                resource => {
-                    this.resource = resource;
-                    this.initialized = true;
+                result => {
+                    resource.value = result;
+                    initialized.value = true;
                 },
                 error => {}
             );
-        },
+        };
+
+        onBeforeMount(() => {
+            getResource(route.params.resource_id);
+        });
+        onBeforeRouteUpdate((to, from) => {
+            resource.value = getResource(to.params.resource_id);
+        });
+
+        return {
+            format_date,
+            resource,
+            initialized,
+        };
     },
     name: "EHoldingsLocalResourcesShow",
 };

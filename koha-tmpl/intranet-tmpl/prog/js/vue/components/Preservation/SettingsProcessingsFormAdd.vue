@@ -198,16 +198,101 @@
 </template>
 
 <script>
-import { inject } from "vue";
+import { inject, onMounted, ref } from "vue";
 import { APIClient } from "../../fetch/api-client.js";
-import { storeToRefs } from "pinia";
+import { $__ } from "../../i18n";
+import { useRoute, useRouter } from "vue-router";
 
 export default {
     setup() {
+        const route = useRoute();
+        const router = useRouter();
         const { setMessage, setWarning } = inject("mainStore");
 
         const db_column_options = Object.keys(db_columns).map(function (c) {
             return { label: "%s (%s)".format(db_columns[c], c), code: c };
+        });
+
+        const processing = ref({
+            processing_id: null,
+            name: "",
+            attributes: [],
+        });
+        const attribute_types = ref([
+            {
+                label: $__("Authorized value"),
+                code: "authorised_value",
+            },
+            {
+                label: $__("Free text"),
+                code: "free_text",
+            },
+            {
+                label: $__("Database column"),
+                code: "db_column",
+            },
+        ]);
+        const initialized = ref(false);
+
+        const onSubmit = e => {
+            e.preventDefault();
+
+            let processingClone = JSON.parse(JSON.stringify(processing.value)); // copy
+            let processing_id = processingClone.processing_id;
+            delete processingClone.processing_id;
+
+            processingClone.attributes = processingClone.attributes.map(
+                ({ processing_id, ...keepAttrs }) => keepAttrs
+            );
+
+            const client = APIClient.preservation;
+            if (processing_id) {
+                client.processings.update(processingClone, processing_id).then(
+                    success => {
+                        setMessage($__("Processing updated"));
+                        router.push({ name: "Settings" });
+                    },
+                    error => {}
+                );
+            } else {
+                client.processings.create(processingClone).then(
+                    success => {
+                        setMessage($__("Processing created"));
+                        router.push({ name: "Settings" });
+                    },
+                    error => {}
+                );
+            }
+        };
+        const addAttribute = () => {
+            processing.value.attributes.push({
+                name: "",
+                type: null,
+                option_source: null,
+            });
+        };
+        const deleteAttribute = counter => {
+            processing.value.attributes.splice(counter, 1);
+        };
+        const getProcessing = async processing_id => {
+            const client = APIClient.preservation;
+            await client.processings.get(processing_id).then(
+                result => {
+                    processing.value = result;
+                    initialized.value = true;
+                },
+                error => {}
+            );
+        };
+
+        onMounted(async () => {
+            if (route.params.processing_id) {
+                processing.value = await getProcessing(
+                    route.params.processing_id
+                );
+            } else {
+                initialized.value = true;
+            }
         });
         return {
             setMessage,
@@ -215,107 +300,13 @@ export default {
             authorised_value_categories,
             db_column_options,
             notice_templates,
+            processing,
+            attribute_types,
+            initialized,
+            onSubmit,
+            addAttribute,
+            deleteAttribute,
         };
-    },
-    data() {
-        return {
-            processing: {
-                processing_id: null,
-                name: "",
-                attributes: [],
-            },
-            attribute_types: [
-                {
-                    label: this.$__("Authorized value"),
-                    code: "authorised_value",
-                },
-                {
-                    label: this.$__("Free text"),
-                    code: "free_text",
-                },
-                {
-                    label: this.$__("Database column"),
-                    code: "db_column",
-                },
-            ],
-            initialized: false,
-        };
-    },
-    beforeRouteEnter(to, from, next) {
-        next(vm => {
-            if (to.params.processing_id) {
-                vm.processing = vm.getProcessing(to.params.processing_id);
-            } else {
-                vm.initialized = true;
-            }
-        });
-    },
-    methods: {
-        async getProcessing(processing_id) {
-            const client = APIClient.preservation;
-            await client.processings.get(processing_id).then(
-                processing => {
-                    this.processing = processing;
-                    this.initialized = true;
-                },
-                error => {}
-            );
-        },
-        checkForm(processing) {
-            let errors = [];
-
-            let attributes = processing.attributes;
-
-            errors.forEach(function (e) {
-                setWarning(e);
-            });
-
-            return !errors.length;
-        },
-        onSubmit(e) {
-            e.preventDefault();
-
-            let processing = JSON.parse(JSON.stringify(this.processing)); // copy
-            let processing_id = processing.processing_id;
-            delete processing.processing_id;
-
-            if (!this.checkForm(processing)) {
-                return false;
-            }
-
-            processing.attributes = processing.attributes.map(
-                ({ processing_id, ...keepAttrs }) => keepAttrs
-            );
-
-            const client = APIClient.preservation;
-            if (processing_id) {
-                client.processings.update(processing, processing_id).then(
-                    success => {
-                        this.setMessage(this.$__("Processing updated"));
-                        this.$router.push({ name: "Settings" });
-                    },
-                    error => {}
-                );
-            } else {
-                client.processings.create(processing).then(
-                    success => {
-                        this.setMessage(this.$__("Processing created"));
-                        this.$router.push({ name: "Settings" });
-                    },
-                    error => {}
-                );
-            }
-        },
-        addAttribute() {
-            this.processing.attributes.push({
-                name: "",
-                type: null,
-                option_source: null,
-            });
-        },
-        deleteAttribute(counter) {
-            this.processing.attributes.splice(counter, 1);
-        },
     },
     components: {},
     name: "SettingsProcessingsFormAdd",

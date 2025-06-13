@@ -12,6 +12,7 @@ export const useNavigationStore = defineStore("navigation", () => {
         },
         current: null,
         params: {},
+        from: null,
         query: {},
     });
     const actions = {

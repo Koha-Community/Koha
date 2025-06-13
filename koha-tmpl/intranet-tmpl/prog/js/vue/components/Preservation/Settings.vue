@@ -1,6 +1,5 @@
 <template>
-    <div v-if="!initialized">{{ $__("Loading") }}</div>
-    <div v-else id="settings">
+    <div id="settings">
         <h2>
             {{ $__("Edit preservation settings") }}
         </h2>
@@ -117,10 +116,11 @@
 </template>
 
 <script>
-import { inject } from "vue";
+import { inject, ref } from "vue";
 import { APIClient } from "../../fetch/api-client.js";
 import { storeToRefs } from "pinia";
 import SettingsProcessings from "./SettingsProcessings.vue";
+import { $__ } from "../../i18n";
 
 export default {
     setup() {
@@ -130,49 +130,36 @@ export default {
 
         const { setMessage, setWarning } = inject("mainStore");
 
-        return {
-            authorisedValues,
-            get_lib_from_av,
-            setMessage,
-            setWarning,
-            config,
-        };
-    },
-    data() {
-        return {
-            initialized: true,
-        };
-    },
-    methods: {
-        checkForm(train) {
-            let errors = [];
-
-            errors.forEach(function (e) {
-                setWarning(e);
-            });
-            return !errors.length;
-        },
-        onSubmit(e) {
+        const onSubmit = e => {
             e.preventDefault();
             const client = APIClient.sysprefs;
             client.sysprefs
                 .update(
                     "PreservationNotForLoanWaitingListIn",
-                    this.config.settings.not_for_loan_waiting_list_in
+                    config.settings.not_for_loan_waiting_list_in
                 )
                 .then(
                     client.sysprefs.update(
                         "PreservationNotForLoanDefaultTrainIn",
-                        this.config.settings.not_for_loan_default_train_in || 0
+                        config.settings.not_for_loan_default_train_in || 0
                     )
                 )
                 .then(
                     success => {
-                        this.setMessage(this.$__("Settings updated"), true);
+                        setMessage($__("Settings updated"), true);
                     },
                     error => {}
                 );
-        },
+        };
+
+        return {
+            authorisedValues,
+            get_lib_from_av,
+            setMessage,
+            setWarning,
+            onSubmit,
+            config,
+        };
     },
     components: { SettingsProcessings },
     name: "Settings",

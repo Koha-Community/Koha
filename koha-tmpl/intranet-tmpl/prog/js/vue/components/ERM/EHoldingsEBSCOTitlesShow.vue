@@ -243,72 +243,70 @@
 </template>
 
 <script>
-import { inject } from "vue";
+import { ref, inject, onBeforeMount } from "vue";
 import EHoldingsTitlePackagesList from "./EHoldingsEBSCOTitlePackagesList.vue";
 import { APIClient } from "../../fetch/api-client.js";
+import { onBeforeRouteUpdate, useRoute } from "vue-router";
 
 export default {
     setup() {
+        const route = useRoute();
         const ERMStore = inject("ERMStore");
         const { get_lib_from_av } = ERMStore;
 
-        return {
-            get_lib_from_av,
-        };
-    },
-    data() {
-        return {
-            title: {
-                title_id: null,
-                publication_title: "",
-                external_id: "",
-                print_identifier: "",
-                online_identifier: "",
-                date_first_issue_online: "",
-                num_first_vol_online: "",
-                num_first_issue_online: "",
-                date_last_issue_online: "",
-                num_last_vol_online: "",
-                num_last_issue_online: "",
-                title_url: "",
-                first_author: "",
-                embargo_info: "",
-                coverage_depth: "",
-                notes: "",
-                publisher_name: "",
-                publication_type: "",
-                date_monograph_published_print: "",
-                date_monograph_published_online: "",
-                monograph_volume: "",
-                monograph_edition: "",
-                first_editor: "",
-                parent_publication_title_id: "",
-                preceding_publication_title_id: "",
-                access_type: "",
-                resources: [],
-            },
-            initialized: false,
-        };
-    },
-    beforeRouteEnter(to, from, next) {
-        next(vm => {
-            vm.getTitle(to.params.title_id);
+        const title = ref({
+            title_id: null,
+            publication_title: "",
+            external_id: "",
+            print_identifier: "",
+            online_identifier: "",
+            date_first_issue_online: "",
+            num_first_vol_online: "",
+            num_first_issue_online: "",
+            date_last_issue_online: "",
+            num_last_vol_online: "",
+            num_last_issue_online: "",
+            title_url: "",
+            first_author: "",
+            embargo_info: "",
+            coverage_depth: "",
+            notes: "",
+            publisher_name: "",
+            publication_type: "",
+            date_monograph_published_print: "",
+            date_monograph_published_online: "",
+            monograph_volume: "",
+            monograph_edition: "",
+            first_editor: "",
+            parent_publication_title_id: "",
+            preceding_publication_title_id: "",
+            access_type: "",
+            resources: [],
         });
-    },
-    beforeRouteUpdate(to, from) {
-        this.title = this.getTitle(to.params.title_id);
-    },
-    methods: {
-        getTitle(title_id) {
+        const initialized = ref(false);
+
+        const getTitle = title_id => {
             const client = APIClient.erm;
             client.EBSCOTitles.get(title_id).then(
-                title => {
-                    this.title = title;
-                    this.initialized = true;
+                result => {
+                    title.value = result;
+                    initialized.value = true;
                 },
                 error => {}
             );
-        },
+        };
+
+        onBeforeMount(() => {
+            getTitle(route.params.title_id);
+        });
+        onBeforeRouteUpdate((to, from) => {
+            title.value = getTitle(to.params.title_id);
+        });
+        return {
+            get_lib_from_av,
+            title,
+            initialized,
+        };
     },
     components: {
         EHoldingsTitlePackagesList,

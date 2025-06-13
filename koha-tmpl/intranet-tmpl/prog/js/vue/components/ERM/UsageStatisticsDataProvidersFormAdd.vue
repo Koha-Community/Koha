@@ -387,172 +387,82 @@
 import ButtonSubmit from "../ButtonSubmit.vue";
 import { setMessage, setWarning } from "../../messages";
 import { APIClient } from "../../fetch/api-client.js";
-import { inject } from "vue";
+import { inject, onBeforeMount, ref } from "vue";
 import { storeToRefs } from "pinia";
+import { $__ } from "../../i18n";
+import { useRouter, useRoute } from "vue-router";
 
 export default {
     setup() {
+        const router = useRouter();
         const ERMStore = inject("ERMStore");
         const { authorisedValues } = storeToRefs(ERMStore);
 
-        return {
-            authorisedValues,
-        };
-    },
-    data() {
-        return {
-            usage_data_provider: {
-                erm_usage_data_provider_id: null,
-                name: "",
-                description: "",
-                active: 1,
-                method: "",
-                aggregator: "",
-                service_type: "",
-                service_url: "",
-                report_release: "",
-                customer_id: "",
-                requestor_id: "",
-                api_key: "",
-                requestor_name: "",
-                requestor_email: "",
-                report_types: [],
-            },
-            initialized: false,
-            previous_route: "",
-            statuses: [
-                { description: this.$__("Active"), value: 1 },
-                { description: this.$__("Inactive"), value: 0 },
-            ],
-            registry_data: [],
-            valid_report_types: [...this.authorisedValues.av_report_types],
-            selected_provider: null,
-            manual_form: false,
-            required_fields: [],
-            sushi_service: null,
-            searching: false,
-        };
-    },
-    beforeRouteEnter(to, from, next) {
-        next(vm => {
-            if (to.params.erm_usage_data_provider_id) {
-                vm.getDataProvider(to.params.erm_usage_data_provider_id);
-            } else {
-                vm.initialized = true;
-            }
-            if (from.params.erm_usage_data_provider_id) {
-                vm.previous_route = "data_provider_show";
-            } else {
-                vm.previous_route = "data_provider_list";
-            }
-        });
-    },
-    methods: {
-        async getDataProvider(erm_usage_data_provider_id) {
-            const client = APIClient.erm;
-            client.usage_data_providers.get(erm_usage_data_provider_id).then(
-                usage_data_provider => {
-                    this.usage_data_provider = usage_data_provider;
-                    this.usage_data_provider.report_types =
-                        this.formatReportTypes(
-                            usage_data_provider.report_types
-                        );
-                    this.getCounterRegistry(usage_data_provider.name, "edit");
-                },
-                error => {}
-            );
-        },
-        async getCounterRegistry(query, caller) {
-            const client = APIClient.erm;
-            client.counter_registry.getAll({ name: query }).then(
-                registry_data => {
-                    this.registry_data = registry_data;
-                    if (caller === "edit" && registry_data.length > 0) {
-                        this.selected_provider = registry_data.find(
-                            platform =>
-                                platform.name === this.usage_data_provider.name
-                        );
-                        this.valid_report_types =
-                            this.valid_report_types.filter(report =>
-                                this.selected_provider.reports.some(
-                                    r => r.report_id === report.value
-                                )
-                            );
-                    }
-                    if (caller === "edit" && registry_data.length === 0) {
-                        this.manual_form = true;
-                    }
-                    this.searching = false;
-                    this.initialized = true;
-                },
-                error => {}
-            );
-        },
-        async getSushiService(url) {
-            const client = APIClient.erm;
-            client.sushi_service.getAll({ url }).then(
-                sushi_service => {
-                    const { url, api_key_required, requestor_id_required } =
-                        sushi_service;
-                    this.usage_data_provider.service_url = url;
-                    this.required_fields = ["URL", "Release", "Customer"];
-                    api_key_required && this.required_fields.push("API");
-                    requestor_id_required &&
-                        this.required_fields.push("Requestor");
-                    this.sushi_service = sushi_service || {};
-                },
-                error => {}
-            );
-        },
-        getPlatformData(e) {
-            if (e.target.value.length > 1) {
-                this.searching = true;
-                this.getCounterRegistry(e.target.value, "search");
-            }
-        },
-        async setPlatformData(e) {
-            const { sushi_services, reports, name } = e;
-            this.valid_report_types = this.valid_report_types.filter(report =>
-                reports.some(r => r.report_id === report.value)
-            );
-            if (this.valid_report_types.length === 0) {
-                setWarning(
-                    this.$__(
-                        "This provider does not currently support any COUNTER 5 reports via SUSHI."
-                    )
-                );
-            }
+        const navigationStore = inject("navigationStore");
+        const { from } = storeToRefs(navigationStore);
 
-            this.selected_provider = e;
-            this.usage_data_provider.name = name;
-            await this.getSushiService(sushi_services[0].url);
-            this.usage_data_provider.report_release =
-                sushi_services[0].counter_release;
-        },
-        createManualProvider() {
-            this.manual_form = true;
-            this.selected_provider = null;
-            this.sushi_service = null;
-            this.required_fields = [];
-        },
-        createFromRegistry() {
-            this.manual_form = false;
-            this.selected_provider = null;
-            this.sushi_service = null;
-            this.required_fields = [];
-            this.usage_data_provider.report_types = [];
-        },
-        selectAll() {
-            this.usage_data_provider.report_types = this.valid_report_types.map(
-                report => {
+        const usage_data_provider = ref({
+            erm_usage_data_provider_id: null,
+            name: "",
+            description: "",
+            active: 1,
+            method: "",
+            aggregator: "",
+            service_type: "",
+            service_url: "",
+            report_release: "",
+            customer_id: "",
+            requestor_id: "",
+            api_key: "",
+            requestor_name: "",
+            requestor_email: "",
+            report_types: [],
+        });
+        const initialized = ref(false);
+        const previous_route = ref("");
+        const statuses = ref([
+            { description: $__("Active"), value: 1 },
+            { description: $__("Inactive"), value: 0 },
+        ]);
+        const registry_data = ref([]);
+        const valid_report_types = ref([
+            ...authorisedValues.value.av_report_types,
+        ]);
+        const selected_provider = ref(null);
+        const manual_form = ref(false);
+        const required_fields = ref([]);
+        const sushi_service = ref(null);
+        const searching = ref(false);
+
+        const getPlatformData = e => {
+            if (e.target.value.length > 1) {
+                searching.value = true;
+                getCounterRegistry(e.target.value, "search");
+            }
+        };
+        const createManualProvider = () => {
+            manual_form.value = true;
+            selected_provider.value = null;
+            sushi_service.value = null;
+            required_fields.value = [];
+        };
+        const createFromRegistry = () => {
+            manual_form.value = false;
+            selected_provider.value = null;
+            sushi_service.value = null;
+            required_fields.value = [];
+            usage_data_provider.value.report_types = [];
+        };
+        const selectAll = () => {
+            usage_data_provider.value.report_types =
+                valid_report_types.value.map(report => {
                     return report.value;
-                }
-            );
-        },
-        unselectAll() {
-            this.usage_data_provider.report_types = [];
-        },
-        formatReportTypes(reportTypes) {
+                });
+        };
+        const unselectAll = () => {
+            usage_data_provider.value.report_types = [];
+        };
+        const formatReportTypes = reportTypes => {
             const dataType =
                 typeof reportTypes === "string" ? "string" : "array";
 
@@ -569,29 +479,29 @@ export default {
                 single_report_types.pop(); // remove trailing "" from array
                 return single_report_types;
             }
-        },
-        onSubmit(e) {
+        };
+        const onSubmit = e => {
             e.preventDefault();
 
-            let usage_data_provider = JSON.parse(
-                JSON.stringify(this.usage_data_provider)
+            let usageDataProvider = JSON.parse(
+                JSON.stringify(usage_data_provider.value)
             );
             let erm_usage_data_provider_id =
-                usage_data_provider.erm_usage_data_provider_id;
-            usage_data_provider.report_types = this.formatReportTypes(
-                usage_data_provider.report_types
+                usageDataProvider.erm_usage_data_provider_id;
+            usageDataProvider.report_types = formatReportTypes(
+                usageDataProvider.report_types
             );
 
-            delete usage_data_provider.erm_usage_data_provider_id;
+            delete usageDataProvider.erm_usage_data_provider_id;
 
             const client = APIClient.erm;
             if (erm_usage_data_provider_id) {
                 client.usage_data_providers
-                    .update(usage_data_provider, erm_usage_data_provider_id)
+                    .update(usageDataProvider, erm_usage_data_provider_id)
                     .then(
                         success => {
-                            setMessage(this.$__("Data provider updated"));
-                            this.$router.push({
+                            setMessage($__("Data provider updated"));
+                            router.push({
                                 name: "UsageStatisticsDataProvidersShow",
                                 params: {
                                     erm_usage_data_provider_id:
@@ -602,12 +512,12 @@ export default {
                         error => {}
                     );
             } else {
-                client.usage_data_providers.create(usage_data_provider).then(
+                client.usage_data_providers.create(usageDataProvider).then(
                     success => {
                         erm_usage_data_provider_id =
                             success.erm_usage_data_provider_id;
-                        setMessage(this.$__("Data provider created"));
-                        this.$router.push({
+                        setMessage($__("Data provider created"));
+                        router.push({
                             name: "UsageStatisticsDataProvidersShow",
                             params: {
                                 erm_usage_data_provider_id:
@@ -618,7 +528,116 @@ export default {
                     error => {}
                 );
             }
-        },
+        };
+
+        const getDataProvider = erm_usage_data_provider_id => {
+            const client = APIClient.erm;
+            client.usage_data_providers.get(erm_usage_data_provider_id).then(
+                result => {
+                    usage_data_provider.value = result;
+                    usage_data_provider.value.report_types = formatReportTypes(
+                        result.report_types
+                    );
+                    getCounterRegistry(result.name, "edit");
+                },
+                error => {}
+            );
+        };
+        const getCounterRegistry = async (query, caller) => {
+            const client = APIClient.erm;
+            client.counter_registry.getAll({ name: query }).then(
+                result => {
+                    registry_data.value = result;
+                    if (caller === "edit" && result.length > 0) {
+                        selected_provider.value = result.find(
+                            platform =>
+                                platform.name === usage_data_provider.value.name
+                        );
+                        valid_report_types.value =
+                            valid_report_types.value.filter(report =>
+                                selected_provider.value.reports.some(
+                                    r => r.report_id === report.value
+                                )
+                            );
+                    }
+                    if (caller === "edit" && result.length === 0) {
+                        manual_form.value = true;
+                    }
+                    searching.value = false;
+                    initialized.value = true;
+                },
+                error => {}
+            );
+        };
+        const getSushiService = async url => {
+            const client = APIClient.erm;
+            client.sushi_service.getAll({ url }).then(
+                result => {
+                    const { url, api_key_required, requestor_id_required } =
+                        result;
+                    usage_data_provider.value.service_url = url;
+                    required_fields.value = ["URL", "Release", "Customer"];
+                    api_key_required && required_fields.value.push("API");
+                    requestor_id_required &&
+                        required_fields.value.push("Requestor");
+                    sushi_service.value = result || {};
+                },
+                error => {}
+            );
+        };
+        const setPlatformData = async e => {
+            const { sushi_services, reports, name } = e;
+            valid_report_types.value = valid_report_types.value.filter(report =>
+                reports.some(r => r.report_id === report.value)
+            );
+            if (valid_report_types.value.length === 0) {
+                setWarning(
+                    $__(
+                        "This provider does not currently support any COUNTER 5 reports via SUSHI."
+                    )
+                );
+            }
+
+            selected_provider.value = e;
+            usage_data_provider.value.name = name;
+            await getSushiService(sushi_services[0].url);
+            usage_data_provider.value.report_release =
+                sushi_services[0].counter_release;
+        };
+
+        const route = useRoute();
+        onBeforeMount(() => {
+            if (route.params.erm_usage_data_provider_id) {
+                getDataProvider(route.params.erm_usage_data_provider_id);
+            } else {
+                initialized.value = true;
+            }
+            if (from.value.params.erm_usage_data_provider_id) {
+                previous_route.value = "data_provider_show";
+            } else {
+                previous_route.value = "data_provider_list";
+            }
+        });
+        return {
+            usage_data_provider,
+            initialized,
+            previous_route,
+            statuses,
+            registry_data,
+            valid_report_types,
+            selected_provider,
+            manual_form,
+            required_fields,
+            sushi_service,
+            searching,
+            createFromRegistry,
+            createManualProvider,
+            onSubmit,
+            setPlatformData,
+            getPlatformData,
+            selectAll,
+            unselectAll,
+        };
     },
     components: {
         ButtonSubmit,

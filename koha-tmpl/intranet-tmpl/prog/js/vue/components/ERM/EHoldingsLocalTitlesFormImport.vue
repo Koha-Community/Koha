@@ -21,67 +21,47 @@
         </v-select>
     </fieldset>
     <div id="import_list_result" class="page-section">
-        <table :id="table_id"></table>
+        <table :id="tableId"></table>
     </div>
 </template>
 
 <script>
 import { setError } from "../../messages";
-import { createVNode, render } from "vue";
+import { createVNode, onBeforeMount, onMounted, ref, render } from "vue";
 import { APIClient } from "../../fetch/api-client.js";
 import { useDataTable } from "../../composables/datatables";
+import { $__ } from "../../i18n";
 
 export default {
     setup() {
-        const table_id = "list_list";
-        useDataTable(table_id);
+        const tableId = "list_list";
+        useDataTable(tableId);
 
-        return {
-            table_id,
-            logged_in_user_lists,
-        };
-    },
-    data() {
-        return {
-            job_id: null,
-            package_id: null,
-            packages: [],
-        };
-    },
-    beforeCreate() {
-        const client = APIClient.erm;
-        client.localPackages.getAll().then(
-            packages => {
-                this.packages = packages;
-                if (this.packages.length) {
-                    this.package_id = packages[0].package_id;
-                }
-                this.initialized = true;
-            },
-            error => {}
-        );
-    },
-    methods: {
-        import_from_list: async function (list_id) {
-            if (!this.package_id) {
-                setError(this.$__("Cannot import, no package selected"));
+        const job_id = ref(null);
+        const package_id = ref(null);
+        const packages = ref([]);
+        const initialized = ref(false);
+
+        const importTitleFromList = async list_id => {
+            if (!package_id.value) {
+                setError($__("Cannot import, no package selected"));
                 return;
             }
             if (!list_id) return;
             const client = APIClient.erm;
             client.localTitles
-                .import({ list_id, package_id: this.package_id })
+                .import({ list_id, package_id: package_id.value })
                 .then(
                     result => {
-                        this.job_id = result.job_id;
+                        job_id.value = result.job_id;
                     },
                     error => {}
                 );
-        },
-        build_datatable: function () {
-            let lists = this.logged_in_user_lists;
-            let table_id = this.table_id;
-            let import_from_list = this.import_from_list;
+        };
+        const buildDatatable = () => {
+            let lists = logged_in_user_lists;
+            let table_id = tableId;
+            let importFromList = importTitleFromList;
             $("#" + table_id).kohaTable({
                 data: lists,
                 order: [[0, "asc"]],
@@ -121,7 +101,7 @@ export default {
                                 class: "btn btn-default btn-xs",
                                 role: "button",
                                 onClick: () => {
-                                    import_from_list(list_id);
+                                    importFromList(list_id);
                                 },
                             },
                             [
@@ -138,10 +118,34 @@ export default {
                     });
                 },
             });
-        },
-    },
-    mounted() {
-        this.build_datatable();
+        };
+
+        onBeforeMount(() => {
+            const client = APIClient.erm;
+            client.localPackages.getAll().then(
+                result => {
+                    packages.value = result;
+                    if (packages.value.length) {
+                        package_id.value = result[0].package_id;
+                    }
+                    initialized.value = true;
+                },
+                error => {}
+            );
+        });
+        onMounted(() => {
+            buildDatatable();
+        });
+        return {
+            tableId,
+            logged_in_user_lists,
+            job_id,
+            package_id,
+            packages,
+            initialized,
+            importTitleFromList,
+            buildDatatable,
+        };
     },
     name: "EHoldingsLocalTitlesFormImport",
 };

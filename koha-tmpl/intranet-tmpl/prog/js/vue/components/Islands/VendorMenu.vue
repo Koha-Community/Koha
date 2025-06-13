@@ -8,7 +8,7 @@
                 "
             >
                 <a
-                    ref="booksellers"
+                    :ref="el => templateRefs.push(el)"
                     :href="`/cgi-bin/koha/acqui/booksellers.pl?booksellerid=${vendorId}`"
                     >{{ $__("Baskets") }}</a
                 >
@@ -20,7 +20,7 @@
                 "
             >
                 <a
-                    ref="basketgroup"
+                    :ref="el => templateRefs.push(el)"
                     :href="`/cgi-bin/koha/acqui/basketgroup.pl?booksellerid=${vendorId}`"
                     >{{ $__("Basket groups") }}</a
                 >
@@ -32,7 +32,7 @@
                 "
             >
                 <a
-                    ref="aqcontract"
+                    :ref="el => templateRefs.push(el)"
                     :href="`/cgi-bin/koha/admin/aqcontract.pl?booksellerid=${vendorId}`"
                     >{{ $__("Contracts") }}</a
                 >
@@ -44,14 +44,14 @@
                 "
             >
                 <a
-                    ref="vendor_issues"
+                    :ref="el => templateRefs.push(el)"
                     :href="`/cgi-bin/koha/acqui/vendor_issues.pl?booksellerid=${vendorId}`"
                     >{{ $__("Vendor issues") }}</a
                 >
             </li>
             <li>
                 <a
-                    ref="invoices"
+                    :ref="el => templateRefs.push(el)"
                     :href="`/cgi-bin/koha/acqui/invoices.pl?supplierid=${vendorId}`"
                     >{{ $__("Invoices") }}</a
                 >
@@ -64,13 +64,13 @@
             >
                 <a
                     v-if="basketno"
-                    ref="uncertainprice"
+                    :ref="el => templateRefs.push(el)"
                     :href="`/cgi-bin/koha/acqui/uncertainprice.pl?booksellerid=${vendorId}&amp;basketno=${basketno}&amp;owner=1`"
                     >{{ $__("Uncertain prices") }}</a
                 >
                 <a
                     v-else
-                    ref="uncertainprice"
+                    :ref="el => templateRefs.push(el)"
                     :href="`/cgi-bin/koha/acqui/uncertainprice.pl?booksellerid=${vendorId}&amp;owner=1`"
                     >{{ $__("Uncertain prices") }}</a
                 >
@@ -80,7 +80,7 @@
 </template>
 
 <script>
-import { inject } from "vue";
+import { inject, onMounted, ref } from "vue";
 import { storeToRefs } from "pinia";
 
 export default {
@@ -104,29 +104,28 @@ export default {
             type: String,
         },
     },
-    setup() {
+    setup(props) {
         const permissionsStore = inject("permissionsStore");
         const { isUserPermitted } = permissionsStore;
         const navigationStore = inject("navigationStore");
         const { params } = storeToRefs(navigationStore);
 
+        const vendorId = ref(props.vendorid || params.value.id);
+        const templateRefs = ref([]);
+
+        onMounted(() => {
+            const path = location.pathname.substring(1);
+
+            templateRefs.value
+                .find(a => a.href.includes(path))
+                ?.classList.add("current");
+        });
         return {
             isUserPermitted,
             params,
-        };
-    },
-    data() {
-        const vendorId = this.vendorid || this.params.id;
-        return {
             vendorId,
+            templateRefs,
         };
-    },
-    mounted() {
-        const path = location.pathname.substring(1);
-
-        Object.values(this.$refs)
-            .find(a => a.href.includes(path))
-            ?.classList.add("current");
     },
 };
 </script>

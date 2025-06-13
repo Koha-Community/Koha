@@ -125,41 +125,88 @@
 </template>
 
 <script>
+import { onBeforeMount, watch, ref } from "vue";
 import { APIClient } from "../fetch/api-client.js";
 
 export default {
-    data() {
-        return {
-            available_fields: [],
-            av_options: [],
-            current_additional_fields_values: {},
-        };
-    },
-    beforeCreate() {
-        const client = APIClient.additional_fields;
-        client.additional_fields
-            .getAll(this.extended_attributes_resource_type)
-            .then(
-                available_fields => {
-                    this.available_fields = available_fields;
-                    this.initialized = true;
-                },
-                error => {}
-            );
-    },
-    watch: {
-        current_additional_fields_values: {
-            deep: true,
-            handler(current_additional_fields_values) {
-                this.updateParentAdditionalFieldValues(
-                    current_additional_fields_values
+    setup(props, { emit }) {
+        const initialized = ref(false);
+        const available_fields = ref([]);
+        const av_options = ref([]);
+        const current_additional_fields_values = ref({});
+
+        onBeforeMount(() => {
+            const client = APIClient.additional_fields;
+            client.additional_fields
+                .getAll(props.extended_attributes_resource_type)
+                .then(
+                    response => {
+                        available_fields.value = response;
+                        initialized.value = true;
+                    },
+                    error => {}
                 );
-            },
-        },
-        available_fields: function (available_fields) {
-            if (available_fields) {
+        });
+
+        const clearField = (current_field, event) => {
+            event.preventDefault();
+            current_field.value = "";
+        };
+        const cloneField = (available_field, current, event) => {
+            event.preventDefault();
+            current_additional_fields_values.value[
+                available_field.extended_attribute_type_id
+            ].push({
+                value: current.value,
+                label: available_field.name,
+            });
+        };
+
+        const updateParentAdditionalFieldValues =
+            current_additional_fields_values => {
+                let updatedAdditionalFields = [];
+                Object.keys(current_additional_fields_values).forEach(
+                    field_id => {
+                        if (
+                            !Array.isArray(
+                                current_additional_fields_values[field_id]
+                            ) &&
+                            current_additional_fields_values[field_id]
+                        ) {
+                            current_additional_fields_values[field_id] = [
+                                current_additional_fields_values[field_id],
+                            ];
+                        }
+                        if (current_additional_fields_values[field_id]) {
+                            let new_extended_attributes =
+                                current_additional_fields_values[field_id].map(
+                                    value => ({
+                                        field_id: field_id,
+                                        value: value.value,
+                                    })
+                                );
+                            updatedAdditionalFields =
+                                updatedAdditionalFields.concat(
+                                    new_extended_attributes
+                                );
+                        }
+                    }
+                );
+
+                emit(
+                    "additional-fields-changed",
+                    updatedAdditionalFields,
+                    props.resource
+                );
+            };
+
+        watch(current_additional_fields_values, (newValue, oldValue) => {
+            updateParentAdditionalFieldValues(newValue);
+        });
+        watch(available_fields, (newValue, oldValue) => {
+            if (newValue) {
                 const client_av = APIClient.authorised_values;
-                let av_cat_array = available_fields
+                let av_cat_array = newValue
                     .map(field => field.authorised_value_category_name)
                     .filter(field => field);
 
@@ -174,23 +221,24 @@ export default {
                             let av_match = av_categories.find(
                                 element => element.category_name == av_cat
                             );
-                            this.av_options[av_cat] =
-                                av_match.authorised_values.map(av => ({
+                            av_options[av_cat] = av_match.authorised_values.map(
+                                av => ({
                                     value: av.value,
                                     label: av.description,
-                                }));
+                                })
+                            );
                         });
 
                         // Iterate on available fields
-                        available_fields.forEach(available_field => {
+                        newValue.forEach(available_field => {
                             // Initialize current field as empty array
-                            this.current_additional_fields_values[
+                            current_additional_fields_values.value[
                                 available_field.extended_attribute_type_id
                             ] = [];
 
                             // Grab all existing field values of this field
                             let existing_field_values =
-                                this.additional_field_values.filter(
+                                props.additional_field_values.filter(
                                     afv =>
                                         afv.field_id ==
                                             available_field.extended_attribute_type_id &&
@@ -217,7 +265,7 @@ export default {
                                                 ? av_value[0].label
                                                 : "";
                                         }
-                                        this.current_additional_fields_values[
+                                        current_additional_fields_values.value[
                                             existing_field_value.field_id
                                         ].push({
                                             value: existing_field_value.value,
@@ -231,7 +279,7 @@ export default {
                                 if (
                                     !available_field.authorised_value_category_name
                                 ) {
-                                    this.current_additional_fields_values[
+                                    current_additional_fields_values.value[
                                         available_field.extended_attribute_type_id
                                     ] = [
                                         {
@@ -244,57 +292,16 @@ export default {
                         });
                     });
             }
-        },
-    },
-    methods: {
-        clearField: function (current_field, event) {
-            event.preventDefault();
-            current_field.value = "";
-        },
-        cloneField: function (available_field, current, event) {
-            event.preventDefault();
-            this.current_additional_fields_values[
-                available_field.extended_attribute_type_id
-            ].push({
-                value: current.value,
-                label: available_field.name,
-            });
-        },
-        updateParentAdditionalFieldValues: function (
-            current_additional_fields_values
-        ) {
-            let updatedAdditionalFields = [];
-            Object.keys(current_additional_fields_values).forEach(field_id => {
-                if (
-                    !Array.isArray(
-                        current_additional_fields_values[field_id]
-                    ) &&
-                    current_additional_fields_values[field_id]
-                ) {
-                    current_additional_fields_values[field_id] = [
-                        current_additional_fields_values[field_id],
-                    ];
-                }
-                if (current_additional_fields_values[field_id]) {
-                    let new_extended_attributes =
-                        current_additional_fields_values[field_id].map(
-                            value => ({
-                                field_id: field_id,
-                                value: value.value,
-                            })
-                        );
-                    updatedAdditionalFields = updatedAdditionalFields.concat(
-                        new_extended_attributes
-                    );
-                }
-            });
+        });
 
-            this.$emit(
-                "additional-fields-changed",
-                updatedAdditionalFields,
-                this.resource
-            );
-        },
+        return {
+            available_fields,
+            av_options,
+            current_additional_fields_values,
+            clearField,
+            cloneField,
+            initialized,
+        };
     },
     name: "AdditionalFieldsEntry",
     props: {
@@ -302,5 +309,6 @@ export default {
         additional_field_values: Array,
         resource: Object,
     },
+    emits: ["additional-fields-changed"],
 };
 </script>

@@ -17,86 +17,38 @@
 
 <script>
 import { APIClient } from "../../fetch/api-client.js";
-import { inject, ref } from "vue";
+import { inject, onMounted, ref, useTemplateRef } from "vue";
 import KohaTable from "../KohaTable.vue";
+import { $__ } from "../../i18n";
+import { useRoute } from "vue-router";
 
 export default {
     setup() {
+        const route = useRoute();
         const { setConfirmationDialog, setMessage } = inject("mainStore");
 
-        const table = ref();
+        const table = useTemplateRef("table");
+        const counter_files_count = ref(0);
+        const initialized = ref(false);
+        const building_table = ref(false);
 
-        return {
-            table,
-            setConfirmationDialog,
-            setMessage,
-        };
-    },
-    data: function () {
-        return {
-            counter_files_count: 0,
-            initialized: false,
-            before_route_entered: false,
-            building_table: false,
-            tableOptions: {
-                columns: this.getTableColumns(),
-                options: {
-                    embed: "patron",
-                },
-                url: () => this.table_url(),
-                table_settings: this.counter_log_table_settings,
-                add_filters: true,
-                filters_options: {},
-                actions: {
-                    0: ["show"],
-                    "-1": [
-                        {
-                            download: {
-                                text: this.$__("Download"),
-                                icon: "fa fa-download",
-                            },
-                        },
-                        "delete",
-                    ],
-                },
-            },
-        };
-    },
-    methods: {
-        async getCounterFiles() {
-            const client = APIClient.erm;
-            await client.counter_files
-                .count({
-                    usage_data_provider_id:
-                        this.$route.params.erm_usage_data_provider_id,
-                })
-                .then(
-                    count => {
-                        this.counter_files_count = count;
-                        this.initialized = true;
-                    },
-                    error => {}
-                );
-        },
-        table_url() {
-            let url = `/api/v1/erm/counter_logs?usage_data_provider_id=${this.$route.params.erm_usage_data_provider_id}`;
+        const table_url = () => {
+            let url = `/api/v1/erm/counter_logs?usage_data_provider_id=${route.params.erm_usage_data_provider_id}`;
             return url;
-        },
-        download_counter_file(counter_log, dt, event) {
+        };
+        const download_counter_file = (counter_log, dt, event) => {
             window.location.href =
                 "/api/v1/erm/counter_files/" +
                 counter_log.counter_files_id +
                 "/file/content";
-        },
-        delete_counter_file(counter_log, dt, event) {
-            this.setConfirmationDialog(
+        };
+        const delete_counter_file = (counter_log, dt, event) => {
+            setConfirmationDialog(
                 {
-                    title: this.$__(
-                        "Are you sure you want to remove this file?"
-                    ),
+                    title: $__("Are you sure you want to remove this file?"),
                     message: counter_log.filename,
-                    accept_label: this.$__("Yes, delete"),
-                    cancel_label: this.$__("No, do not delete"),
+                    accept_label: $__("Yes, delete"),
+                    cancel_label: $__("No, do not delete"),
                 },
                 () => {
                     const client = APIClient.erm;
@@ -104,8 +56,8 @@ export default {
                         .delete(counter_log.counter_files_id)
                         .then(
                             success => {
-                                this.setMessage(
-                                    this.$__("File %s deleted").format(
+                                setMessage(
+                                    $__("File %s deleted").format(
                                         counter_log.filename
                                     ),
                                     true
@@ -116,8 +68,8 @@ export default {
                         );
                 }
             );
-        },
-        getTableColumns() {
+        };
+        const getTableColumns = () => {
             return [
                 {
                     title: __("Filename"),
@@ -146,20 +98,71 @@ export default {
                               '">' +
                               $patron_to_html(patron) +
                               "</a>"
-                            : this.$__("Cronjob");
+                            : $__("Cronjob");
                         return importer;
                     },
                     searchable: true,
                     orderable: true,
                 },
             ];
-        },
-    },
-    mounted() {
-        if (!this.building_table) {
-            this.building_table = true;
-            this.getCounterFiles();
-        }
+        };
+
+        const getCounterFiles = async () => {
+            const client = APIClient.erm;
+            await client.counter_files
+                .count({
+                    usage_data_provider_id:
+                        route.params.erm_usage_data_provider_id,
+                })
+                .then(
+                    count => {
+                        counter_files_count.value = count;
+                        initialized.value = true;
+                    },
+                    error => {}
+                );
+        };
+
+        const tableOptions = ref({
+            columns: getTableColumns(),
+            options: {
+                embed: "patron",
+            },
+            url: () => table_url(),
+            table_settings: counter_log_table_settings,
+            add_filters: true,
+            filters_options: {},
+            actions: {
+                0: ["show"],
+                "-1": [
+                    {
+                        download: {
+                            text: $__("Download"),
+                            icon: "fa fa-download",
+                        },
+                    },
+                    "delete",
+                ],
+            },
+        });
+
+        onMounted(() => {
+            if (!building_table.value) {
+                building_table.value = true;
+                getCounterFiles();
+            }
+        });
+        return {
+            table,
+            setConfirmationDialog,
+            setMessage,
+            counter_files_count,
+            initialized,
+            building_table,
+            tableOptions,
+            download_counter_file,
+            delete_counter_file,
+        };
     },
     components: { KohaTable },
     name: "UsageStatisticsTitlesList",

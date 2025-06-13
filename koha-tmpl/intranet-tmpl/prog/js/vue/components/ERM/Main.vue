@@ -28,7 +28,7 @@
 </template>
 
 <script>
-import { inject } from "vue";
+import { inject, onBeforeMount, ref } from "vue";
 import Breadcrumbs from "../Breadcrumbs.vue";
 import Help from "../Help.vue";
 import LeftMenu from "../LeftMenu.vue";
@@ -36,6 +36,7 @@ import Dialog from "../Dialog.vue";
 import { APIClient } from "../../fetch/api-client.js";
 import "vue-select/dist/vue-select.css";
 import { storeToRefs } from "pinia";
+import { $__ } from "../../i18n";
 
 export default {
     setup() {
@@ -50,6 +51,55 @@ export default {
         const { config, authorisedValues } = storeToRefs(ERMStore);
         const { loadAuthorisedValues } = ERMStore;
 
+        const initialized = ref(false);
+
+        const filterProviders = async navigationTree => {
+            const eHoldings = navigationTree.find(
+                element => element.path === "/cgi-bin/koha/erm/eholdings"
+            );
+            const providers = config.value.settings.ERMProviders;
+            eHoldings.children = eHoldings.children.filter(element =>
+                providers
+                    .map(provider => `${eHoldings.path}/${provider}`)
+                    .includes(element.path)
+            );
+            return navigationTree;
+        };
+
+        onBeforeMount(() => {
+            loading();
+
+            const fetch_config = () => {
+                const acq_client = APIClient.acquisition;
+                acq_client.vendors.getAll().then(
+                    vendors => {
+                        vendorStore.vendors = vendors;
+                    },
+                    error => {}
+                );
+                loadAuthorisedValues(authorisedValues.value, ERMStore).then(
+                    () => {
+                        loaded();
+                        initialized.value = true;
+                    }
+                );
+            };
+
+            const client = APIClient.erm;
+            client.config.get().then(result => {
+                config.value = result;
+                if (config.value.settings.ERMModule != 1) {
+                    return setError(
+                        $__(
+                            "The e-resource management module is disabled, turn on <a href='/cgi-bin/koha/admin/preferences.pl?tab=&op=search&searchfield=ERMModule'>ERMModule</a> to use it"
+                        ),
+                        false
+                    );
+                }
+                return fetch_config();
+            });
+        });
+
         return {
             vendorStore,
             ERMStore,
@@ -57,65 +107,9 @@ export default {
             setError,
             loading,
             loaded,
-            loadAuthorisedValues,
-            authorisedValues,
+            initialized,
+            filterProviders,
         };
-    },
-    data() {
-        return {
-            component: "agreement",
-            initialized: false,
-        };
-    },
-    beforeCreate() {
-        this.loading();
-
-        const fetch_config = () => {
-            const acq_client = APIClient.acquisition;
-            acq_client.vendors.getAll().then(
-                vendors => {
-                    this.vendorStore.vendors = vendors;
-                },
-                error => {}
-            );
-            this.loadAuthorisedValues(
-                this.authorisedValues,
-                this.ERMStore
-            ).then(() => {
-                this.loaded();
-                this.initialized = true;
-            });
-        };
-
-            const client = APIClient.erm;
-            client.config
-                .get()
-                .then(result => {
-                    config.value = result;
-                    if (config.value.settings.ERMModule != 1) {
-                        return setError(
-                            $__(
-                                "The e-resource management module is disabled, turn on <a href='/cgi-bin/koha/admin/preferences.pl?tab=&op=search&searchfield=ERMModule'>ERMModule</a> to use it"
-                            ),
-                            false
-                        );
-                    }
-                    return fetch_config();
-                })
-    },
-    methods: {
-        async filterProviders(navigationTree) {
-            const eHoldings = navigationTree.find(
-                element => element.path === "/cgi-bin/koha/erm/eholdings"
-            );
-            const providers = this.config.settings.ERMProviders;
-            eHoldings.children = eHoldings.children.filter(element =>
-                providers
-                    .map(provider => `${eHoldings.path}/${provider}`)
-                    .includes(element.path)
-            );
-            return navigationTree;
-        },
     },
     components: {
         Breadcrumbs,

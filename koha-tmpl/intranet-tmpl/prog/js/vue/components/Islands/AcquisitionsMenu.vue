@@ -3,14 +3,18 @@
         <h5>{{ $__("Acquisitions") }}</h5>
         <ul>
             <li>
-                <a ref="acquihome" href="/cgi-bin/koha/acqui/acqui-home.pl">{{
-                    $__("Acquisitions home")
-                }}</a>
+                <a
+                    :ref="el => templateRefs.push(el)"
+                    href="/cgi-bin/koha/acqui/acqui-home.pl"
+                    >{{ $__("Acquisitions home") }}</a
+                >
             </li>
             <li>
-                <a ref="histsearch" href="/cgi-bin/koha/acqui/histsearch.pl">{{
-                    $__("Advanced search")
-                }}</a>
+                <a
+                    :ref="el => templateRefs.push(el)"
+                    href="/cgi-bin/koha/acqui/histsearch.pl"
+                    >{{ $__("Advanced search") }}</a
+                >
             </li>
             <li
                 v-if="
@@ -18,9 +22,11 @@
                     isUserPermitted('CAN_user_acquisition_order_receive')
                 "
             >
-                <a ref="lateorders" href="/cgi-bin/koha/acqui/lateorders.pl">{{
-                    $__("Late orders")
-                }}</a>
+                <a
+                    :ref="el => templateRefs.push(el)"
+                    href="/cgi-bin/koha/acqui/lateorders.pl"
+                    >{{ $__("Late orders") }}</a
+                >
             </li>
             <li
                 v-if="
@@ -37,15 +43,17 @@
                 "
             >
                 <a
-                    ref="suggestion"
+                    :ref="el => templateRefs.push(el)"
                     href="/cgi-bin/koha/suggestion/suggestion.pl"
                     >{{ $__("Suggestions") }}</a
                 >
             </li>
             <li>
-                <a ref="invoices" href="/cgi-bin/koha/acqui/invoices.pl">{{
-                    $__("Invoices")
-                }}</a>
+                <a
+                    :ref="el => templateRefs.push(el)"
+                    href="/cgi-bin/koha/acqui/invoices.pl"
+                    >{{ $__("Invoices") }}</a
+                >
             </li>
             <li
                 v-if="
@@ -55,7 +63,7 @@
                 "
             >
                 <a
-                    ref="edifactmsgs"
+                    :ref="el => templateRefs.push(el)"
                     href="/cgi-bin/koha/acqui/edifactmsgs.pl"
                     >{{ $__("EDIFACT messages") }}</a
                 >
@@ -76,14 +84,14 @@
                 <template v-if="reports || isUserPermitted('CAN_user_reports')">
                     <li>
                         <a
-                            ref="acquisitions_stats"
+                            :ref="el => templateRefs.push(el)"
                             href="/cgi-bin/koha/reports/acquisitions_stats.pl"
                             >{{ $__("Acquisitions statistics wizard") }}</a
                         >
                     </li>
                     <li>
                         <a
-                            ref="orders_by_fund"
+                            :ref="el => templateRefs.push(el)"
                             href="/cgi-bin/koha/reports/orders_by_fund.pl"
                             >{{ $__("Orders by fund") }}</a
                         >
@@ -98,7 +106,7 @@
                     "
                 >
                     <a
-                        ref="reserveratios"
+                        :ref="el => templateRefs.push(el)"
                         href="/cgi-bin/koha/circ/reserveratios.pl"
                         >{{ $__("Hold ratios") }}</a
                     >
@@ -134,7 +142,7 @@
                     "
                 >
                     <a
-                        ref="aqbudgetperiods"
+                        :ref="el => templateRefs.push(el)"
                         href="/cgi-bin/koha/admin/aqbudgetperiods.pl"
                         >{{ $__("Budgets") }}</a
                     >
@@ -146,7 +154,7 @@
                     "
                 >
                     <a
-                        ref="aqbudgets"
+                        :ref="el => templateRefs.push(el)"
                         href="/cgi-bin/koha/admin/aqbudgets.pl"
                         >{{ $__("Funds") }}</a
                     >
@@ -159,9 +167,11 @@
                         )
                     "
                 >
-                    <a ref="currency" href="/cgi-bin/koha/admin/currency.pl">{{
-                        $__("Currencies")
-                    }}</a>
+                    <a
+                        :ref="el => templateRefs.push(el)"
+                        href="/cgi-bin/koha/admin/currency.pl"
+                        >{{ $__("Currencies") }}</a
+                    >
                 </li>
                 <template
                     v-if="
@@ -172,14 +182,14 @@
                 >
                     <li>
                         <a
-                            ref="edi_accounts"
+                            :ref="el => templateRefs.push(el)"
                             href="/cgi-bin/koha/admin/edi_accounts.pl"
                             >{{ $__("EDI accounts") }}</a
                         >
                     </li>
                     <li>
                         <a
-                            ref="edi_ean_accounts"
+                            :ref="el => templateRefs.push(el)"
                             href="/cgi-bin/koha/admin/edi_ean_accounts.pl"
                             >{{ $__("Library EANs") }}</a
                         >
@@ -196,7 +206,7 @@
                 >
                     <li>
                         <a
-                            ref="marc_order_accounts"
+                            :ref="el => templateRefs.push(el)"
                             href="/cgi-bin/koha/admin/marc_order_accounts.pl"
                             >{{ $__("MARC order accounts") }}</a
                         >
@@ -213,7 +223,7 @@
                     "
                 >
                     <a
-                        ref="additionalfieldsinvoices"
+                        :ref="el => templateRefs.push(el)"
                         href="/cgi-bin/koha/admin/additional-fields.pl?tablename=aqinvoices"
                         >{{ $__("Manage invoice fields") }}</a
                     >
@@ -232,14 +242,14 @@
                 >
                     <li>
                         <a
-                            ref="additionalfieldsbaskets"
+                            :ref="el => templateRefs.push(el)"
                             href="/cgi-bin/koha/admin/additional-fields.pl?tablename=aqbasket"
                             >{{ $__("Manage order basket fields") }}</a
                         >
                     </li>
                     <li>
                         <a
-                            ref="additionalfieldsorders"
+                            :ref="el => templateRefs.push(el)"
                             href="/cgi-bin/koha/admin/additional-fields.pl?tablename=aqorders"
                             >{{ $__("Manage order line fields") }}</a
                         >
@@ -251,7 +261,7 @@
 </template>
 
 <script>
-import { inject } from "vue";
+import { inject, onMounted, ref } from "vue";
 import { storeToRefs } from "pinia";
 
 export default {
@@ -305,7 +315,7 @@ export default {
             type: Number,
         },
     },
-    setup() {
+    setup(props) {
         const permissionsStore = inject("permissionsStore");
         const { isUserPermitted } = permissionsStore;
         const navigationStore = inject("navigationStore");
@@ -313,31 +323,32 @@ export default {
         const vendorStore = inject("vendorStore");
         const { config } = storeToRefs(vendorStore);
 
+        const edifactEnabled = ref(false);
+        const marcOrdersEnabled = ref(false);
+        edifactEnabled.value = config.value?.settings.edifact
+            ? config.value.settings.edifact
+            : props.edifact;
+        marcOrdersEnabled.value = config.value?.settings.marcorderautomation
+            ? config.value.settings.marcorderautomation
+            : props.marcorderautomation;
+
+        const templateRefs = ref([]);
+
+        onMounted(() => {
+            const path = location.pathname.substring(1);
+
+            templateRefs.value
+                .find(a => a.href.includes(path))
+                ?.classList.add("current");
+        });
         return {
             isUserPermitted,
             params,
             config,
-        };
-    },
-    data() {
-        const edifactEnabled = this.config?.settings.edifact
-            ? this.config.settings.edifact
-            : this.edifact;
-        const marcOrdersEnabled = this.config?.settings.marcorderautomation
-            ? this.config.settings.marcorderautomation
-            : this.marcorderautomation;
-
-        return {
             edifactEnabled,
             marcOrdersEnabled,
+            templateRefs,
         };
-    },
-    mounted() {
-        const path = location.pathname.substring(1);
-
-        Object.values(this.$refs)
-            .find(a => a.href.includes(path))
-            ?.classList.add("current");
     },
 };
 </script>

@@ -100,14 +100,17 @@
 </template>
 
 <script>
-import { inject, createVNode, render } from "vue";
+import { inject, createVNode, render, ref, onMounted } from "vue";
 import { APIClient } from "../../fetch/api-client";
 import { useDataTable } from "../../composables/datatables";
 import Toolbar from "../Toolbar.vue";
 import ToolbarButton from "../ToolbarButton.vue";
+import { useRouter } from "vue-router";
+import { $__ } from "../../i18n";
 
 export default {
-    setup() {
+    setup(props) {
+        const router = useRouter();
         const format_date = $date;
 
         const PreservationStore = inject("PreservationStore");
@@ -119,86 +122,59 @@ export default {
         const table_id = "item_list";
         useDataTable(table_id);
 
-        return {
-            format_date,
-            get_lib_from_av,
-            table_id,
-            setConfirmationDialog,
-            setMessage,
-            setWarning,
-        };
-    },
-    props: {
-        train: {
-            type: Object,
-            required: true,
-        },
-        item_table: Object,
-    },
-    data() {
-        return {
-            initialized: false,
-            train_list: [],
-            train_id_selected_for_copy: null,
-            train_item_id_to_copy: null,
-            selected_items: [],
-        };
-    },
-    mounted() {
-        this.build_datatable();
-    },
-    methods: {
-        editItem(train_item_id) {
-            this.$router.push({
+        const initialized = ref(false);
+        const train_id_selected_for_copy = ref(null);
+        const train_item_id_to_copy = ref(null);
+        const selected_items = ref([]);
+
+        const editItem = train_item_id => {
+            router.push({
                 name: "TrainsFormEditItem",
-                params: { train_id: this.train.train_id, train_item_id },
+                params: { train_id: props.train.train_id, train_item_id },
             });
-        },
-        removeItem(train_item_id) {
-            this.setConfirmationDialog(
+        };
+        const removeItem = train_item_id => {
+            setConfirmationDialog(
                 {
-                    title: this.$__(
-                        "Are you sure you want to remove this item?"
-                    ),
-                    accept_label: this.$__("Yes, remove"),
-                    cancel_label: this.$__("No, do not remove"),
+                    title: $__("Are you sure you want to remove this item?"),
+                    accept_label: $__("Yes, remove"),
+                    cancel_label: $__("No, do not remove"),
                 },
                 () => {
                     const client = APIClient.preservation;
                     client.train_items
-                        .delete(this.train.train_id, train_item_id)
+                        .delete(props.train.train_id, train_item_id)
                         .then(
                             success => {
-                                this.setMessage(this.$__("Item removed"), true);
-                                this.getTrain(this.train.train_id).then(() => {
-                                    $("#" + this.table_id)
+                                setMessage($__("Item removed"), true);
+                                getTrain(props.train.train_id).then(() => {
+                                    $("#" + table_id)
                                         .DataTable()
                                         .destroy();
-                                    this.build_datatable();
+                                    build_datatable();
                                 });
                             },
                             error => {}
                         );
                 }
             );
-        },
-        printSlip(train_item_id) {
+        };
+        const printSlip = train_item_id => {
             window.open(
                 "/cgi-bin/koha/preservation/print_slip.pl?train_item_id=" +
                     train_item_id,
                 "_blank"
             );
-        },
-        selectTrainForCopy(train_item_id) {
-            this.train_item_id_to_copy = train_item_id;
-            let copyItem = this.copyItem;
+        };
+        const selectTrainForCopy = train_item_id => {
+            train_item_id_to_copy.value = train_item_id;
 
-            this.setConfirmationDialog(
+            setConfirmationDialog(
                 {
-                    title: this.$__("Copy item to the following train"),
+                    title: $__("Copy item to the following train"),
                     message: null,
-                    accept_label: this.$__("Save"),
-                    cancel_label: this.$__("Cancel"),
+                    accept_label: $__("Save"),
+                    cancel_label: $__("Cancel"),
                     inputs: [
                         {
                             name: "train_id",
@@ -217,86 +193,85 @@ export default {
                 },
                 copyItem
             );
-        },
-        clearAll() {
-            this.selected_items = [];
-            if (this.item_table.display) {
-                $("#" + this.table_id)
+        };
+        const clearAll = () => {
+            selected_items.value = [];
+            if (props.item_table.display) {
+                $("#" + table_id)
                     .find("input[name='user_train_item_id'][type='checkbox']")
                     .prop("checked", false);
             }
-        },
-        selectAll() {
-            if (this.item_table.display) {
-                $("#" + this.table_id)
+        };
+        const selectAll = () => {
+            if (props.item_table.display) {
+                $("#" + table_id)
                     .find(
                         "input[name='user_train_item_id'][type='checkbox']:not(:disabled)"
                     )
                     .each((i, input) => {
-                        this.selected_items.push($(input).val());
+                        selected_items.value.push($(input).val());
                         $(input).prop("checked", true);
                     });
             } else {
-                this.selected_items = this.train.items
+                selected_items.value = props.train.items
                     .filter(i => i.processing.letter_code)
                     .map(item => item.train_item_id);
             }
-        },
-        printSelected() {
+        };
+        const printSelected = () => {
             window.open(
                 "/cgi-bin/koha/preservation/print_slip.pl?%s_blank".format(
-                    this.selected_items
+                    selected_items.value
                         .map(id => "train_item_id=" + id)
                         .join("&")
                 )
             );
-        },
-        updateSelectedItems(checked, train_item_id) {
+        };
+        const updateSelectedItems = (checked, train_item_id) => {
             if (checked) {
-                this.selected_items.push(train_item_id);
+                selected_items.value.push(train_item_id);
             } else {
-                this.selected_items = this.selected_items.filter(
+                selected_items.value = selected_items.value.filter(
                     id => id != train_item_id
                 );
             }
-        },
-        copyItem(result, trainToCopy) {
+        };
+        const copyItem = (result, trainToCopy) => {
             const client = APIClient.preservation;
             client.train_items
                 .copy(
                     trainToCopy.train_id,
-                    this.train.train_id,
-                    this.train_item_id_to_copy
+                    props.train.train_id,
+                    train_item_id_to_copy.value
                 )
                 .then(
                     success => {
-                        this.setMessage(this.$__("Item copied successfully."));
+                        setMessage($__("Item copied successfully."));
                     },
                     error => {
-                        this.setWarning(
-                            this.$__(
+                        setWarning(
+                            $__(
                                 "Item cannot be copied to a train, it is already in a non-received train."
                             )
                         );
                     }
                 );
-        },
-        build_datatable() {
-            let table_id = this.table_id;
-            let item_table = this.item_table;
-            let removeItem = this.removeItem;
-            let editItem = this.editItem;
-            let printSlip = this.printSlip;
-            let selectTrainForCopy = this.selectTrainForCopy;
-            let train = this.train;
-            let updateSelectedItems = this.updateSelectedItems;
-            let copyItem = this.copyItem;
+        };
+        const build_datatable = () => {
+            let tableId = table_id;
+            let itemTable = props.item_table;
+            let remove_item = removeItem;
+            let edit_item = editItem;
+            let print_slip = printSlip;
+            let select_train_for_copy = selectTrainForCopy;
+            let train = props.train;
+            let update_selected_items = updateSelectedItems;
 
-            let table = $("#" + table_id).kohaTable({
-                data: item_table.data,
+            let table = $("#" + tableId).kohaTable({
+                data: itemTable.data,
                 ordering: false,
                 autoWidth: false,
-                columns: item_table.columns,
+                columns: itemTable.columns,
                 drawCallback: function (settings) {
                     var api = new $.fn.dataTable.Api(settings);
                     $.each($(this).find("td.checkboxes"), function (index, e) {
@@ -315,7 +290,7 @@ export default {
                             name: "user_train_item_id",
                             value: train_item_id,
                             onChange: e => {
-                                updateSelectedItems(
+                                update_selected_items(
                                     e.target.checked,
                                     train_item_id
                                 );
@@ -335,7 +310,7 @@ export default {
                                 class: "btn btn-default btn-xs",
                                 role: "button",
                                 onClick: () => {
-                                    editItem(train_item_id);
+                                    edit_item(train_item_id);
                                 },
                             },
                             [
@@ -354,7 +329,7 @@ export default {
                                 class: "btn btn-default btn-xs",
                                 role: "button",
                                 onClick: () => {
-                                    removeItem(train_item_id);
+                                    remove_item(train_item_id);
                                 },
                             },
                             [
@@ -377,7 +352,9 @@ export default {
                                         class: "btn btn-default btn-xs",
                                         role: "button",
                                         onClick: () => {
-                                            selectTrainForCopy(train_item_id);
+                                            select_train_for_copy(
+                                                train_item_id
+                                            );
                                         },
                                     },
                                     [
@@ -399,7 +376,7 @@ export default {
                                     class: "btn btn-default btn-xs",
                                     role: "button",
                                     onClick: () => {
-                                        printSlip(train_item_id);
+                                        print_slip(train_item_id);
                                     },
                                 },
                                 [
@@ -419,7 +396,34 @@ export default {
                     });
                 },
             });
+        };
+
+        onMounted(() => {
+            build_datatable();
+        });
+
+        return {
+            format_date,
+            get_lib_from_av,
+            table_id,
+            setConfirmationDialog,
+            setMessage,
+            setWarning,
+            initialized,
+            train_id_selected_for_copy,
+            train_item_id_to_copy,
+            selected_items,
+            selectAll,
+            clearAll,
+            printSelected,
+        };
+    },
+    props: {
+        train: {
+            type: Object,
+            required: true,
         },
+        item_table: Object,
     },
     components: { Toolbar, ToolbarButton },
     name: "TrainItemsTable",

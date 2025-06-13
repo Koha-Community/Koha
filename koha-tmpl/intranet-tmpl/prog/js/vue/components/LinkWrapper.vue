@@ -19,26 +19,28 @@
 </template>
 
 <script>
+import { ref } from "vue";
 export default {
     props: {
         linkData: Object,
         resource: Object,
     },
-    data() {
-        const formattedParams = {};
+    setup(props) {
+        const formattedParams = ref({});
 
-        if (this.linkData && this.linkData.params) {
-            Object.keys(this.linkData.params).forEach(key => {
-                formattedParams[key] = this.resource[this.linkData.params[key]];
+        if (props.linkData && props.linkData.params) {
+            Object.keys(props.linkData.params).forEach(key => {
+                formattedParams.value[key] =
+                    props.resource[props.linkData.params[key]];
             });
         }
 
-        if (this.linkData?.href && this.linkData.params) {
-            this.linkData.href += "?";
-            Object.keys(this.linkData.params).forEach(key => {
-                this.linkData.href += `${key}=${formattedParams[key]}&`;
+        if (props.linkData?.href && props.linkData.params) {
+            props.linkData.href += "?";
+            Object.keys(props.linkData.params).forEach(key => {
+                props.linkData.href += `${key}=${formattedParams.value[key]}&`;
             });
-            this.linkData.href = this.linkData.href.slice(0, -1);
+            props.linkData.href = props.linkData.href.slice(0, -1);
         }
         if (props.linkData?.href && props.linkData.slug) {
             props.linkData.href += `/${props.resource[props.linkData.slug]}`;

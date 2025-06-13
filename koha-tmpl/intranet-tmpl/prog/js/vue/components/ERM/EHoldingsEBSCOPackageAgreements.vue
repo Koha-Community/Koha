@@ -72,13 +72,12 @@
 import AgreementResource from "./AgreementResource.vue";
 import { APIClient } from "../../fetch/api-client.js";
 import { setWarning, removeMessages } from "../../messages";
+import { $__ } from "../../i18n";
 
 export default {
-    data() {},
-    beforeCreate() {},
-    methods: {
-        serializeAgreement() {
-            let erm_package = JSON.parse(JSON.stringify(this.erm_package)); // copy
+    setup(props, { emit }) {
+        const serializeAgreement = () => {
+            let erm_package = JSON.parse(JSON.stringify(props.erm_package)); // copy
             delete erm_package.vendor_id; // This is the EBSCO's vendor_id
 
             // Remove remote data, we don't need to store them (don't we?)
@@ -98,14 +97,14 @@ export default {
                 ({ package_id, agreement, ...keepAttrs }) => keepAttrs
             );
             return erm_package;
-        },
-        showAddAgreementModal() {
+        };
+        const showAddAgreementModal = () => {
             $("#add_agreement").modal("show");
-        },
-        addAgreement(agreement_id) {
+        };
+        const addAgreement = agreement_id => {
             removeMessages();
             $("#add_agreement").modal("hide");
-            let erm_package = this.serializeAgreement();
+            let erm_package = serializeAgreement();
             // Only add if it does not exist
             if (
                 !erm_package.package_agreements.find(
@@ -115,44 +114,48 @@ export default {
                 erm_package.package_agreements.push({ agreement_id });
                 const client = APIClient.erm;
 
-                if (this.erm_package.koha_internal_id) {
+                if (props.erm_package.koha_internal_id) {
                     let package_id = erm_package.package_id;
                     delete erm_package.package_id;
                     client.localPackages.update(erm_package, package_id).then(
                         success => {
-                            this.$emit("refresh-agreements");
+                            emit("refresh-agreements");
                         },
                         error => {}
                     );
                 } else {
                     client.localPackages.create(erm_package).then(
                         success => {
-                            this.$emit("refresh-agreements");
+                            emit("refresh-agreements");
                         },
                         error => {}
                     );
                 }
             } else {
                 setWarning(
-                    this.$__(
-                        "This agreement is already linked with this package"
-                    )
+                    $__("This agreement is already linked with this package")
                 );
             }
-        },
-        deleteAgreement(counter) {
-            let erm_package = this.serializeAgreement();
+        };
+        const deleteAgreement = counter => {
+            let erm_package = serializeAgreement();
             erm_package.package_agreements.splice(counter, 1);
             let package_id = erm_package.package_id;
             delete erm_package.package_id;
             const client = APIClient.erm;
             client.localPackages.update(erm_package, package_id).then(
                 success => {
-                    this.$emit("refresh-agreements");
+                    emit("refresh-agreements");
                 },
                 error => {}
             );
-        },
+        };
+        return {
+            serializeAgreement,
+            showAddAgreementModal,
+            addAgreement,
+            deleteAgreement,
+        };
     },
     props: {
         erm_package: Object,

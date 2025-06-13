@@ -148,142 +148,90 @@
 </template>
 
 <script>
-import { inject } from "vue";
+import { inject, onBeforeMount, ref } from "vue";
 import { APIClient } from "../../fetch/api-client";
+import { $__ } from "../../i18n";
+import { useRoute, useRouter } from "vue-router";
 
 export default {
     setup() {
+        const router = useRouter();
+        const route = useRoute();
         const { setMessage, setWarning, loading, loaded } = inject("mainStore");
-        return {
-            setMessage,
-            setWarning,
-            loading,
-            loaded,
-            api_mappings,
-        };
-    },
-    data() {
-        return {
-            train: {
-                train_id: null,
-                name: "",
-                description: "",
-            },
-            item: { item_id: null },
-            train_item: null,
-            barcode: "",
-            processings: [],
-            processing: null,
-            initialized: false,
-            av_options: {},
-            default_values: {},
-            attributes: [],
-        };
-    },
-    beforeCreate() {
-        const client = APIClient.preservation;
-        client.processings
-            .getAll()
-            .then(processings => (this.processings = processings));
-    },
-    beforeRouteEnter(to, from, next) {
-        next(vm => {
-            if (to.params.train_item_id) {
-                vm.train = vm
-                    .getTrain(to.params.train_id)
-                    .then(() =>
-                        vm
-                            .getTrainItem(
-                                to.params.train_id,
-                                to.params.train_item_id
-                            )
-                            .then(() =>
-                                vm
-                                    .refreshAttributes()
-                                    .then(() => (vm.initialized = true))
-                            )
-                    );
-            } else {
-                vm.train = vm
-                    .getTrain(to.params.train_id)
-                    .then(() => (vm.initialized = true));
-            }
+
+        const train = ref({
+            train_id: null,
+            name: "",
+            description: "",
         });
-    },
-    methods: {
-        async getTrain(train_id) {
+        const item = ref({
+            item_id: null,
+        });
+        const train_item = ref(null);
+        const barcode = ref("");
+        const processings = ref([]);
+        const processing = ref(null);
+        const initialized = ref(false);
+        const av_options = ref({});
+        const default_values = ref({});
+        const attributes = ref([]);
+
+        const getTrain = async train_id => {
             const client = APIClient.preservation;
             await client.trains.get(train_id).then(
-                train => {
-                    this.train = train;
+                result => {
+                    train.value = result;
                 },
                 error => {}
             );
-        },
-        async getTrainItem(train_id, train_item_id) {
+        };
+        const getTrainItem = async (train_id, train_item_id) => {
             const client = APIClient.preservation;
             await client.train_items.get(train_id, train_item_id).then(
-                train_item => {
-                    this.train_item = train_item;
-                    this.item = train_item.catalogue_item;
+                result => {
+                    train_item.value = result;
+                    item.value = result.catalogue_item;
                 },
                 error => {}
             );
-        },
-        async getItemFromWaitingList(e) {
+        };
+        const getItemFromWaitingList = async e => {
             e.preventDefault();
             const client = APIClient.preservation;
-            client.waiting_list_items.get_from_barcode(this.barcode).then(
-                item => {
-                    if (!item) {
-                        this.setWarning(
-                            this.$__(
+            client.waiting_list_items.get_from_barcode(barcode.value).then(
+                result => {
+                    if (!result) {
+                        setWarning(
+                            $__(
                                 "Cannot find item with this barcode. It must be in the waiting list."
                             )
                         );
                         return;
                     }
-                    this.item = item;
-                    this.train_item = {
-                        item_id: item.item_id,
-                        processing_id: this.train.default_processing_id,
+                    item.value = result;
+                    train_item.value = {
+                        item_id: result.item_id,
+                        processing_id: train.value.default_processing_id,
                     };
-                    this.refreshAttributes(1);
+                    refreshAttributes(1);
                 },
                 error => {}
             );
-        },
-        columnApiMapping(db_column) {
-            let table_col = db_column.split(".");
-            let table = table_col[0];
-            let col = table_col[1];
-            let api_attribute = this.api_mappings[table][col] || col;
-            return table == "biblio" || table == "biblioitems"
-                ? this.item.biblio[api_attribute]
-                : this.item[api_attribute];
-        },
-        updateDefaultValues() {
-            this.processing.attributes
-                .filter(attribute => attribute.type == "db_column")
-                .forEach(attribute => {
-                    this.default_values[attribute.processing_attribute_id] =
-                        this.columnApiMapping(attribute.option_source);
-                });
-        },
-        async refreshAttributes(apply_default_value) {
-            this.loading();
+        };
+        const refreshAttributes = async apply_default_value => {
+            loading();
 
             const client = APIClient.preservation;
-            await client.processings.get(this.train_item.processing_id).then(
-                processing => (this.processing = processing),
+            await client.processings.get(train_item.value.processing_id).then(
+                result => (processing.value = result),
                 error => {}
             );
-            this.updateDefaultValues();
-            this.attributes = [];
-            this.processing.attributes.forEach(attribute => {
+            updateDefaultValues();
+            attributes.value = [];
+            processing.value.attributes.forEach(attribute => {
                 let values = [];
                 if (!apply_default_value) {
-                    this.train_item.attributes
+                    train_item.value.attributes
                         .filter(
                             a =>
                                 a.processing_attribute_id ==
@@ -292,13 +240,13 @@ export default {
                         .forEach(a => values.push(a.value));
                 } else if (attribute.type == "db_column") {
                     values.push(
-                        this.default_values[attribute.processing_attribute_id]
+                        default_values.value[attribute.processing_attribute_id]
                     );
                 } else {
                     values.push("");
                 }
                 values.forEach(value =>
-                    this.attributes.push({
+                    attributes.value.push({
                         processing_attribute_id:
                             attribute.processing_attribute_id,
                         name: attribute.name,
@@ -309,7 +257,7 @@ export default {
                 );
             });
             const client_av = APIClient.authorised_values;
-            let av_cat_array = this.processing.attributes
+            let av_cat_array = processing.value.attributes
                 .filter(attribute => attribute.type == "authorised_value")
                 .map(attribute => attribute.option_source);
 
@@ -322,34 +270,51 @@ export default {
                         let av_match = av_categories.find(
                             element => element.category_name == av_cat
                         );
-                        this.av_options[av_cat] = av_match
+                        av_options.value[av_cat] = av_match
                             ? av_match.authorised_values
                             : [];
                     });
                 })
-                .then(() => this.loaded());
-        },
-        addAttribute(processing_attribute_id) {
-            let last_index = this.attributes.findLastIndex(
+                .then(() => loaded());
+        };
+        const columnApiMapping = db_column => {
+            let table_col = db_column.split(".");
+            let table = table_col[0];
+            let col = table_col[1];
+            let api_attribute = this.api_mappings[table][col] || col;
+            return table == "biblio" || table == "biblioitems"
+                ? item.value.biblio[api_attribute]
+                : item.value[api_attribute];
+        };
+        const updateDefaultValues = () => {
+            processing.value.attributes
+                .filter(attribute => attribute.type == "db_column")
+                .forEach(attribute => {
+                    default_values.value[attribute.processing_attribute_id] =
+                        columnApiMapping(attribute.option_source);
+                });
+        };
+        const addAttribute = processing_attribute_id => {
+            let last_index = attributes.value.findLastIndex(
                 attribute =>
                     attribute.processing_attribute_id == processing_attribute_id
             );
             let new_attribute = (({ value, ...keepAttrs }) => keepAttrs)(
-                this.attributes[last_index]
+                attributes.value[last_index]
             );
-            this.attributes.splice(last_index + 1, 0, new_attribute);
-        },
-        removeAttribute(counter) {
-            this.attributes.splice(counter, 1);
-        },
-        onSubmit(e) {
+            attributes.value.splice(last_index + 1, 0, new_attribute);
+        };
+        const removeAttribute = counter => {
+            attributes.value.splice(counter, 1);
+        };
+        const onSubmit = e => {
             e.preventDefault();
 
-            let train_item_id = this.train_item.train_item_id;
-            let train_item = {
-                item_id: this.train_item.item_id,
-                processing_id: this.train_item.processing_id,
-                attributes: this.attributes.map(a => ({
+            let train_item_id = train_item.value.train_item_id;
+            let trainItem = {
+                item_id: train_item.value.item_id,
+                processing_id: train_item.value.processing_id,
+                attributes: attributes.value.map(a => ({
                     processing_attribute_id: a.processing_attribute_id,
                     value: a.value,
                 })),
@@ -358,30 +323,75 @@ export default {
             const client = APIClient.preservation;
             if (train_item_id) {
                 client.train_items
-                    .update(train_item, this.train.train_id, train_item_id)
+                    .update(trainItem, train.value.train_id, train_item_id)
                     .then(
                         success => {
-                            this.setMessage(this.$__("Item updated"));
-                            this.$router.push({
+                            setMessage($__("Item updated"));
+                            router.push({
                                 name: "TrainsShow",
-                                params: { train_id: this.train.train_id },
+                                params: { train_id: train.value.train_id },
                             });
                         },
                         error => {}
                     );
             } else {
-                client.train_items.create(train_item, this.train.train_id).then(
+                client.train_items.create(trainItem, train.value.train_id).then(
                     success => {
-                        this.setMessage(this.$__("Item added to train"));
-                        this.$router.push({
+                        setMessage($__("Item added to train"));
+                        router.push({
                             name: "TrainsShow",
-                            params: { train_id: this.train.train_id },
+                            params: { train_id: train.value.train_id },
                         });
                     },
                     error => {}
                 );
             }
-        },
+        };
+
+        onBeforeMount(() => {
+            const client = APIClient.preservation;
+            client.processings
+                .getAll()
+                .then(result => (processings.value = result));
+
+            if (route.params.train_item_id) {
+                train.value = getTrain(route.params.train_id).then(() =>
+                    getTrainItem(
+                        route.params.train_id,
+                        route.params.train_item_id
+                    ).then(() =>
+                        refreshAttributes().then(
+                            () => (initialized.value = true)
+                        )
+                    )
+                );
+            } else {
+                train.value = getTrain(route.params.train_id).then(
+                    () => (initialized.value = true)
+                );
+            }
+        });
+        return {
+            setMessage,
+            setWarning,
+            loading,
+            loaded,
+            api_mappings,
+            train,
+            item,
+            train_item,
+            barcode,
+            processings,
+            processing,
+            initialized,
+            av_options,
+            default_values,
+            attributes,
+            addAttribute,
+            removeAttribute,
+            onSubmit,
+            getItemFromWaitingList,
+        };
     },
     components: {},
     name: "TrainsFormAdd",

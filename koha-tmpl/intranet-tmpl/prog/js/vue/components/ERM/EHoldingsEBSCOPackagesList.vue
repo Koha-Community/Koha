@@ -65,125 +65,37 @@
 </template>
 
 <script>
-import { inject, ref, reactive } from "vue";
+import { inject, ref, reactive, computed, useTemplateRef } from "vue";
 import { storeToRefs } from "pinia";
 import { APIClient } from "../../fetch/api-client.js";
 import { build_url_params, build_url } from "../../composables/datatables";
 import KohaTable from "../KohaTable.vue";
+import { useRoute, useRouter } from "vue-router";
 
 export default {
     setup() {
+        const route = useRoute();
+        const router = useRouter();
         const ERMStore = inject("ERMStore");
         const { config, get_lib_from_av, map_av_dt_filter } = ERMStore;
         const { authorisedValues } = storeToRefs(ERMStore);
 
-        const table = ref();
+        const table = useTemplateRef("table");
         const filters = reactive({
-            package_name: "",
-            content_type: "",
-            selection_type: "",
+            package_name: route.query.package_name || "",
+            content_type: route.query.content_type || "",
+            selection_type: route.query.selection_type || "",
         });
+        const packages = ref([]);
+        const initialized = ref(false);
+        const local_count_packages = ref(null);
+        const show_table = ref(
+            build_url_params(filters.value).length ? true : false
+        );
 
-        return {
-            get_lib_from_av,
-            escape_str,
-            map_av_dt_filter,
-            config,
-            table,
-            authorisedValues,
-        };
-    },
-    data: function () {
-        this.filters = {
-            package_name: this.$route.query.package_name || "",
-            content_type: this.$route.query.content_type || "",
-            selection_type: this.$route.query.selection_type || "",
-        };
-        let filters = this.filters;
-
-        return {
-            packages: [],
-            initialized: true,
-            tableOptions: {
-                columns: this.getTableColumns(),
-                url: "/api/v1/erm/eholdings/ebsco/packages",
-                options: {
-                    embed: "resources+count,vendor.name",
-                    ordering: false,
-                    dom: '<"top pager"<"table_entries"ilp>>tr<"bottom pager"ip>',
-                    lengthMenu: [
-                        [10, 20, 50, 100],
-                        [10, 20, 50, 100],
-                    ],
-                },
-                table_settings: this.eholdings_titles_table_settings,
-                actions: { 0: ["show"] },
-                default_filters: {
-                    name: function () {
-                        return filters.package_name || "";
-                    },
-                    content_type: function () {
-                        return filters.content_type || "";
-                    },
-                    selection_type: function () {
-                        return filters.selection_type || "";
-                    },
-                },
-            },
-            show_table: build_url_params(filters).length ? true : false,
-            local_count_packages: null,
-        };
-    },
-    computed: {
-        local_packages_url() {
-            let { href } = this.$router.resolve({
-                name: "EHoldingsLocalPackagesList",
-            });
-            return build_url(href, this.filters);
-        },
-    },
-    methods: {
-        doShow: function ({ package_id }, dt, event) {
-            event.preventDefault();
-            this.$router.push({
-                name: "EHoldingsEBSCOPackagesShow",
-                params: { package_id },
-            });
-        },
-        filter_table: async function () {
-            let { href } = this.$router.resolve({
-                name: "EHoldingsEBSCOPackagesList",
-            });
-            let new_route = build_url(href, this.filters);
-            this.$router.push(new_route);
-            this.show_table = true;
-            this.local_count_packages = null;
-
-            if (this.config.settings.ERMProviders.includes("local")) {
-                const client = APIClient.erm;
-                const query = this.filters
-                    ? {
-                          "me.name": {
-                              like: "%" + this.filters.package_name + "%",
-                          },
-                          ...(this.filters.content_type
-                              ? { "me.content_type": this.filters.content_type }
-                              : {}),
-                      }
-                    : {};
-                client.localPackages.count(query).then(
-                    count => (this.local_count_packages = count),
-                    error => {}
-                );
-            }
-
-            if (this.$refs.table) {
-                this.$refs.table.redraw("/api/v1/erm/eholdings/ebsco/packages");
-            }
-        },
-        getTableColumns: function () {
-            let get_lib_from_av = this.get_lib_from_av;
-            let escape_str = this.escape_str;
+        const getTableColumns = () => {
+            let get_lib_from_av = get_lib_from_av;
+            let escape_str = escape_str;
 
             return [
                 {
@@ -245,7 +157,100 @@ export default {
                     },
                 },
             ];
-        },
+        };
+        const tableOptions = ref({
+            columns: getTableColumns(),
+            url: "/api/v1/erm/eholdings/ebsco/packages",
+            options: {
+                embed: "resources+count,vendor.name",
+                ordering: false,
+                dom: '<"top pager"<"table_entries"ilp>>tr<"bottom pager"ip>',
+                lengthMenu: [
+                    [10, 20, 50, 100],
+                    [10, 20, 50, 100],
+                ],
+            },
+            table_settings: eholdings_titles_table_settings,
+            actions: { 0: ["show"] },
+            default_filters: {
+                name: function () {
+                    return filters.value.package_name || "";
+                },
+                content_type: function () {
+                    return filters.value.content_type || "";
+                },
+                selection_type: function () {
+                    return filters.value.selection_type || "";
+                },
+            },
+        });
+        const local_packages_url = computed(() => {
+            let { href } = router.resolve({
+                name: "EHoldingsLocalPackagesList",
+            });
+            return build_url(href, filters.value);
+        });
+
+        const filter_table = async () => {
+            let { href } = router.resolve({
+                name: "EHoldingsEBSCOPackagesList",
+            });
+            let new_route = build_url(href, filters.value);
+            router.push(new_route);
+            show_table.value = true;
+            local_count_packages.value = null;
+
+            if (config.settings.ERMProviders.includes("local")) {
+                const client = APIClient.erm;
+                const query = filters.value
+                    ? {
+                          "me.name": {
+                              like: "%" + filters.value.package_name + "%",
+                          },
+                          ...(filters.value.content_type
+                              ? {
+                                    "me.content_type":
+                                        filters.value.content_type,
+                                }
+                              : {}),
+                      }
+                    : {};
+                client.localPackages.count(query).then(
+                    count => (local_count_packages.value = count),
+                    error => {}
+                );
+            }
+
+            if (table.value) {
+                table.value.redraw("/api/v1/erm/eholdings/ebsco/packages");
+            }
+        };
+
+        const doShow = ({ package_id }, dt, event) => {
+            event.preventDefault();
+            router.push({
+                name: "EHoldingsEBSCOPackagesShow",
+                params: { package_id },
+            });
+        };
+
+        return {
+            get_lib_from_av,
+            escape_str,
+            map_av_dt_filter,
+            config,
+            table,
+            authorisedValues,
+            filters,
+            packages,
+            initialized,
+            local_count_packages,
+            show_table,
+            tableOptions,
+            local_packages_url,
+            filter_table,
+            doShow,
+        };
     },
     components: { KohaTable },
     name: "EHoldingsEBSCOPackagesList",

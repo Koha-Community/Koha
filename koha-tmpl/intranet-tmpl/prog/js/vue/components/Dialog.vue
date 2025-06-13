@@ -102,37 +102,11 @@
 </template>
 
 <script>
-import { inject, watch, nextTick } from "vue";
+import { inject, watch, nextTick, ref, computed, useTemplateRef } from "vue";
 import { storeToRefs } from "pinia";
 import FormElement from "./FormElement.vue";
 
 export default {
-    data() {
-        return {
-            fp_config: flatpickr_defaults,
-        };
-    },
-    methods: {
-        submit(e) {
-            if (
-                this.confirmation.inputs &&
-                this.confirmation.inputs.filter(
-                    input =>
-                        input.required &&
-                        (this.inputFields[input.name] == null ||
-                            this.inputFields[input.name] == "")
-                ).length
-            ) {
-                this.$refs.confirmationform.reportValidity();
-            } else {
-                this.accept_callback(this.inputFields).then(() => {
-                    nextTick(() => {
-                        $("#confirmation.modal").modal("hide");
-                    });
-                });
-            }
-        },
-    },
     setup() {
         const mainStore = inject("mainStore");
         const {
@@ -145,6 +119,37 @@ export default {
             is_loading,
         } = storeToRefs(mainStore);
         const { removeMessages, removeConfirmationMessages } = mainStore;
+
+        const fp_config = ref(flatpickr_defaults);
+
+        const inputFields = computed(() => {
+            if (!confirmation.value.inputs) return null;
+            return confirmation.value.inputs.reduce((acc, curr) => {
+                acc[curr.name] = curr.value || null;
+                return acc;
+            }, {});
+        });
+
+        const confirmationForm = useTemplateRef("confirmationform");
+        const submit = e => {
+            if (
+                confirmation.value.inputs &&
+                confirmation.value.inputs.filter(
+                    input =>
+                        input.required &&
+                        (inputFields.value[input.name] == null ||
+                            inputFields.value[input.name] == "")
+                ).length
+            ) {
+                confirmationForm.value.reportValidity();
+            } else {
+                accept_callback.value(inputFields.value).then(() => {
+                    nextTick(() => {
+                        $("#confirmation.modal").modal("hide");
+                    });
+                });
+            }
+        };
 
         watch(warning, newWarning => {
             if (!newWarning) {
@@ -176,16 +181,10 @@ export default {
             is_loading,
             removeMessages,
             removeConfirmationMessages,
+            fp_config,
+            submit,
+            inputFields,
         };
-    },
-    computed: {
-        inputFields() {
-            if (!this.confirmation.inputs) return null;
-            return this.confirmation.inputs.reduce((acc, curr) => {
-                acc[curr.name] = curr.value || null;
-                return acc;
-            }, {});
-        },
     },
     components: {
         FormElement,

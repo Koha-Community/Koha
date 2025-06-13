@@ -1,13 +1,11 @@
 <template>
     <div id="title_list_result">
         <div id="filters">
-            <a href="#" @click.prevent="toggle_filters($event)"
+            <a href="#" @click.prevent="toggleFilters($event)"
                 ><i class="fa fa-search"></i>
-                {{
-                    display_filters ? $__("Hide filters") : $__("Show filters")
-                }}
+                {{ displayFilters ? $__("Hide filters") : $__("Show filters") }}
             </a>
-            <fieldset v-if="display_filters">
+            <fieldset v-if="displayFilters">
                 <ol>
                     <li>
                         <label>{{ $__("Title") }}:</label>
@@ -15,7 +13,7 @@
                             type="text"
                             id="publication_title_filter"
                             v-model="filters.publication_title"
-                            @keyup.enter="filter_table"
+                            @keyup.enter="filterTable"
                         />
                     </li>
                     <li>
@@ -48,8 +46,8 @@
                 </ol>
 
                 <input
-                    @click="filter_table"
-                    id="filter_table"
+                    @click="filterTable"
+                    id="filterTable"
                     type="button"
                     :value="$__('Filter')"
                 />
@@ -60,95 +58,46 @@
 </template>
 
 <script>
-import { inject, ref, reactive } from "vue";
+import { inject, ref, reactive, useTemplateRef } from "vue";
 import { storeToRefs } from "pinia";
 import KohaTable from "../KohaTable.vue";
+import { useRoute, useRouter } from "vue-router";
 
 export default {
-    setup() {
+    setup(props) {
+        const route = useRoute();
+        const router = useRouter();
         const ERMStore = inject("ERMStore");
         const { authorisedValues } = storeToRefs(ERMStore);
         const { get_lib_from_av, map_av_dt_filter } = ERMStore;
 
-        const table = ref();
+        const table = useTemplateRef("table");
         const filters = reactive({
-            publication_title: "",
-            publication_type: "",
-            selection_type: "",
+            publication_title: route.query.publication_title || "",
+            publication_type: route.query.publication_type || "",
+            selection_type: route.query.selection_type || "",
         });
 
-        return {
-            get_lib_from_av,
-            escape_str,
-            map_av_dt_filter,
-            table,
-            authorisedValues,
-        };
-    },
-    data() {
-        this.filters = {
-            publication_title: this.$route.query.publication_title || "",
-            publication_type: this.$route.query.publication_type || "",
-            selection_type: this.$route.query.selection_type || "",
-        };
-        let filters = this.filters;
-        return {
-            tableOptions: {
-                columns: this.getTableColumns(),
-                url:
-                    "/api/v1/erm/eholdings/ebsco/packages/" +
-                    this.package_id +
-                    "/resources",
-                options: {
-                    embed: "title",
-                    ordering: false,
-                    dom: '<"top pager"<"table_entries"ilp>>tr<"bottom pager"ip>',
-                    lengthMenu: [
-                        [10, 20, 50, 100],
-                        [10, 20, 50, 100],
-                    ],
-                },
-                filters_options: {
-                    1: () =>
-                        this.map_av_dt_filter("av_title_publication_types"),
-                },
-                actions: { 0: ["show"] },
-                default_filters: {
-                    publication_title: function () {
-                        return filters.publication_title || "";
-                    },
-                    publication_type: function () {
-                        return filters.publication_type || "";
-                    },
-                    selection_type: function () {
-                        return filters.selection_type || "";
-                    },
-                },
-            },
-            display_filters: false,
-        };
-    },
-    methods: {
-        doShow: function ({ resource_id }, dt, event) {
+        const doShow = ({ resource_id }, dt, event) => {
             event.preventDefault();
-            this.$router.push({
+            router.push({
                 name: "EHoldingsEBSCOResourcesShow",
                 params: { resource_id },
             });
-        },
-        filter_table: function () {
-            this.$refs.table.redraw(
+        };
+        const filterTable = () => {
+            table.redraw(
                 "/api/v1/erm/eholdings/ebsco/packages/" +
-                    this.package_id +
+                    props.package_id +
                     "/resources"
             );
-        },
-        toggle_filters: function (e) {
-            this.display_filters = !this.display_filters;
-        },
-        getTableColumns: function () {
-            let get_lib_from_av = this.get_lib_from_av;
-            let map_av_dt_filter = this.map_av_dt_filter;
+        };
+        const toggleFilters = e => {
+            displayFilters.value = !displayFilters.value;
+        };
+        const getTableColumns = () => {
+            let get_lib_from_av = get_lib_from_av;
+            let map_av_dt_filter = map_av_dt_filter;
 
             return [
                 {
@@ -188,7 +137,55 @@ export default {
                     },
                 },
             ];
-        },
+        };
+
+        const tableOptions = ref({
+            columns: getTableColumns(),
+            url:
+                "/api/v1/erm/eholdings/ebsco/packages/" +
+                props.package_id +
+                "/resources",
+            options: {
+                embed: "title",
+                ordering: false,
+                dom: '<"top pager"<"table_entries"ilp>>tr<"bottom pager"ip>',
+                lengthMenu: [
+                    [10, 20, 50, 100],
+                    [10, 20, 50, 100],
+                ],
+            },
+            filters_options: {
+                1: () => map_av_dt_filter("av_title_publication_types"),
+            },
+            actions: { 0: ["show"] },
+            default_filters: {
+                publication_title: function () {
+                    return filters.publication_title.value || "";
+                },
+                publication_type: function () {
+                    return filters.publication_type.value || "";
+                },
+                selection_type: function () {
+                    return filters.selection_type.value || "";
+                },
+            },
+        });
+        const displayFilters = ref(false);
+
+        return {
+            av_title_publication_types,
+            get_lib_from_av,
+            escape_str,
+            map_av_dt_filter,
+            table,
+            tableOptions,
+            displayFilters,
+            filters,
+            doShow,
+            filterTable,
+            toggleFilters,
+            authorisedValues,
+        };
     },
     props: {
         package_id: String,

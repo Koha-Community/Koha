@@ -341,7 +341,7 @@ export function useBaseResource(instancedResource) {
             resource => {
                 //TODO: Rename this 'resource' to 'fetchedResource'. Needs to also be renamed in ResourceFormAdd and ResourceShow
                 // This is to make it clear that this is the fetchedResource (data), not the resource component class
-                componentData.resource = resource;
+                componentData.resource.value = resource;
                 if (componentData.instancedResource.afterResourceFetch) {
                     componentData.instancedResource.afterResourceFetch(
                         componentData,
@@ -349,7 +349,7 @@ export function useBaseResource(instancedResource) {
                         caller
                     );
                 }
-                componentData.initialized = true;
+                componentData.initialized.value = true;
             },
             error => {}
         );

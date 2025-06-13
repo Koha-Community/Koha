@@ -14,17 +14,23 @@
 </template>
 
 <script>
-import { inject } from "vue";
+import { computed, inject } from "vue";
 import { storeToRefs } from "pinia";
 export default {
     setup() {
         const vendorStore = inject("vendorStore");
         const { vendors } = storeToRefs(vendorStore);
-        return { vendors };
-    },
-    computed: {
-        vendorOptions() {
-            return this.vendors.map(v => ({
+
+        const filterVendors = (vendor, label, search) => {
+            return (
+                (vendor.full_search || "")
+                    .toLocaleLowerCase()
+                    .indexOf(search.toLocaleLowerCase()) > -1
+            );
+        };
+
+        const vendorOptions = computed(() => {
+            return vendors.value.map(v => ({
                 ...v,
                 full_search:
                     v.name +
@@ -32,16 +38,8 @@ export default {
                         ? " (" + v.aliases.map(a => a.alias).join(", ") + ")"
                         : ""),
             }));
-        },
-    },
-    methods: {
-        filterVendors(vendor, label, search) {
-            return (
-                (vendor.full_search || "")
-                    .toLocaleLowerCase()
-                    .indexOf(search.toLocaleLowerCase()) > -1
-            );
-        },
+        });
+        return { vendors, vendorOptions, filterVendors };
     },
 };
 </script>

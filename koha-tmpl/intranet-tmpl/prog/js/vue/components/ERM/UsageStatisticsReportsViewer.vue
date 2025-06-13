@@ -24,94 +24,77 @@
 </template>
 
 <script>
-import { inject, ref } from "vue";
+import { inject, onMounted, ref, useTemplateRef, watch } from "vue";
 import KohaTable from "../KohaTable.vue";
+import { useRoute } from "vue-router";
 
 export default {
     setup() {
-        const table = ref();
+        const route = useRoute();
+        const table = useTemplateRef("table");
+        const tableWrapper = useTemplateRef("table_div");
 
         const { getMonthsData, getColumnOptions, checkReportColumns } =
             inject("reportsStore");
 
-        return {
-            getMonthsData,
-            getColumnOptions,
-            checkReportColumns,
-            table,
-        };
-    },
-    beforeCreate() {
-        const urlParams = JSON.parse(this.$route.query.data);
-        this.params = urlParams;
-        this.report_type = this.params.type;
-        let data_type;
-        switch (this.params.queryObject.report_type.substring(0, 1)) {
+        const building_table = ref(false);
+        const initialized = ref(false);
+        const yearly_filter = ref(null);
+        const params = ref(null);
+        const report_type = ref(null);
+        const data_type = ref(null);
+        const embed = ref(null);
+        const year = ref(null);
+        const years = ref(null);
+
+        const urlParams = JSON.parse(route.query.data);
+        params.value = urlParams;
+        report_type.value = params.value.type;
+        switch (params.value.queryObject.report_type.substring(0, 1)) {
             case "P":
-                data_type = "platform";
+                data_type.value = "platform";
                 break;
             case "T":
-                data_type = "title";
+                data_type.value = "title";
                 break;
             case "I":
-                data_type = "item";
+                data_type.value = "item";
                 break;
             case "D":
-                data_type = "database";
+                data_type.value = "database";
                 break;
         }
-        this.data_type = data_type;
-        this.embed =
-            this.report_type === "yearly"
+        embed.value =
+            report_type.value === "yearly"
                 ? ["erm_usage_yuses"]
                 : ["erm_usage_muses"];
-        switch (this.report_type) {
+        switch (report_type.value) {
             case "monthly":
             case "monthly_with_totals":
-                this.embed = "erm_usage_muses";
+                embed.value = "erm_usage_muses";
                 break;
             case "yearly":
-                this.embed = "erm_usage_yuses";
+                embed.value = "erm_usage_yuses";
                 break;
             case "metric_type":
-                this.embed = "erm_usage_muses";
+                embed.value = "erm_usage_muses";
                 break;
             case "usage_data_provider":
-                this.embed = `erm_usage_${data_type}s.erm_usage_muses`;
+                embed.value = `erm_usage_${data_type}s.erm_usage_muses`;
                 break;
         }
 
-        this.years = Object.keys(this.params.tp_columns);
-        this.year = this.years[this.years.length - 1];
-    },
-    data() {
-        return {
-            building_table: false,
-            initialized: false,
-            tableOptions: {
-                columns: this.buildColumnArray(
-                    this.report_type,
-                    this.params,
-                    this.data_type
-                ),
-                options: { embed: this.embed },
-                url: () => this.tableURL(this.year, this.params),
-                table_settings: this.report_type.includes("monthly")
-                    ? this.monthly_usage_table_settings
-                    : this.yearly_usage_table_settings,
-                add_filters: true,
-            },
-            yearly_filter: null,
-            params: this.params,
-            year: this.year,
-            years: this.years,
+        years.value = Object.keys(params.value.tp_columns);
+        year.value = years.value[years.value.length - 1];
+
+        const update_table = async () => {
+            table.value.redraw(tableURL(year.value, params.value));
         };
-    },
-    methods: {
-        buildColumnArray(report_display, params, data_type) {
+
+        const buildColumnArray = (report_display, params, data_type) => {
             const columns = params.columns;
-            const months_data = this.getMonthsData();
-            const column_options = this.getColumnOptions();
+            const months_data = getMonthsData();
+            const column_options = getColumnOptions();
             const time_period_columns = params.tp_columns;
             const yearly_filter = params.yearly_filter;
             const query = params.queryObject;
@@ -137,7 +120,7 @@ export default {
             // Add metric type to each row
             if (report_display !== "metric_type") {
                 // Add yop if it is required
-                if (this.checkReportColumns(report_type, "YOP")) {
+                if (checkReportColumns(report_type, "YOP")) {
                     column_set.push({
                         title: __("YOP"),
                         data: "yop",
@@ -146,7 +129,7 @@ export default {
                     });
                 }
                 // Add access type if it is required
-                if (this.checkReportColumns(report_type, "Access_Type")) {
+                if (checkReportColumns(report_type, "Access_Type")) {
                     column_set.push({
                         title: __("Access type"),
                         data: "access_type",
@@ -264,7 +247,7 @@ export default {
                     const metric_types = query.metric_types;
                     const access_types = query.access_types;
                     // Add yop if it is required
-                    if (this.checkReportColumns(report_type, "YOP")) {
+                    if (checkReportColumns(report_type, "YOP")) {
                         column_set.push({
                             title: __("YOP"),
                             data: "yop",
@@ -336,11 +319,8 @@ export default {
                 });
             }
             return column_set;
-        },
-        async update_table() {
-            this.$refs.table.redraw(this.tableURL(this.year, this.params));
-        },
-        buildFilteredQuery(query, time_period_columns, year) {
+        };
+        const buildFilteredQuery = (query, time_period_columns, year) => {
             const queryObject = {};
             const {
                 metric_types,
@@ -398,14 +378,14 @@ export default {
             url += `?q=[${JSON.stringify(queryObject)}]`;
 
             return url;
-        },
-        tableURL(year, params) {
+        };
+        const tableURL = (year, params) => {
             const filter_required = params.yearly_filter;
             if (filter_required) {
                 const query = params.queryObject;
                 const time_period_columns = params.tp_columns;
 
-                const url = this.buildFilteredQuery(
+                const url = buildFilteredQuery(
                     query,
                     time_period_columns,
                     year
@@ -417,9 +397,12 @@ export default {
 
                 return url;
             }
-        },
-        mergeTitleDataIntoOneLine(numberOfMetricTypes, numberOfAccessTypes) {
-            let dt = this.$refs.table.useTableObject();
+        };
+        const mergeTitleDataIntoOneLine = (
+            numberOfMetricTypes,
+            numberOfAccessTypes
+        ) => {
+            let dt = table.value.useTableObject();
             dt.on("draw", () => {
                 const rows = dt.rows().nodes().to$();
                 const numberOfRows = numberOfAccessTypes
@@ -447,17 +430,18 @@ export default {
                         });
                     });
             });
-            this.$refs.table_div.classList.remove("hide-table");
-        },
-        createMetricReportTableHeader(metric_types, access_types) {
-            const table = this.$refs.table.$el.getElementsByTagName("table")[0];
-            const numberOfColumns = table.rows[0].cells.length;
+            tableWrapper.value.classList.remove("hide-table");
+        };
+        const createMetricReportTableHeader = (metric_types, access_types) => {
+            const tableElement =
+                table.value.$el.getElementsByTagName("table")[0];
+            const numberOfColumns = tableElement.rows[0].cells.length;
             const dataColumns = metric_types.length * access_types;
             const numberOfNonStatisticColumns = numberOfColumns - dataColumns;
             const numberOfCellsToCreate =
                 numberOfNonStatisticColumns + metric_types.length;
 
-            const row = table.insertRow(0);
+            const row = tableElement.insertRow(0);
             const cellsToInsert = Array.from("1".repeat(numberOfCellsToCreate));
             const cells = cellsToInsert.map(item => {
                 const cell = document.createElement("th");
@@ -471,37 +455,68 @@ export default {
                 cell.colSpan = access_types;
                 cell.innerHTML = metric;
             });
-            this.$refs.table_div.classList.remove("hide-table");
-        },
-    },
-    watch: {
-        table() {
-            const number_of_access_types = this.params.queryObject.access_types
-                ? this.params.queryObject.access_types.length
+            tableWrapper.value.classList.remove("hide-table");
+        };
+
+        const tableOptions = ref({
+            columns: buildColumnArray(
+                report_type.value,
+                params.value,
+                data_type.value
+            ),
+            options: { embed: embed.value },
+            url: () => tableURL(year.value, params.value),
+            table_settings: report_type.value.includes("monthly")
+                ? monthly_usage_table_settings
+                : yearly_usage_table_settings,
+            add_filters: true,
+        });
+
+        onMounted(() => {
+            if (!building_table.value) {
+                yearly_filter.value = params.value.yearly_filter;
+                building_table.value = true;
+                initialized.value = true;
+            }
+        });
+
+        watch(table, () => {
+            const number_of_access_types = params.value.queryObject.access_types
+                ? params.value.queryObject.access_types.length
                 : 0;
-            if (this.report_type === "metric_type") {
+            if (report_type.value === "metric_type") {
                 if (number_of_access_types) {
-                    this.createMetricReportTableHeader(
-                        this.params.queryObject.metric_types,
+                    createMetricReportTableHeader(
+                        params.value.queryObject.metric_types,
                         number_of_access_types
                     );
                 } else {
-                    this.$refs.table_div.classList.remove("hide-table");
+                    tableWrapper.value.classList.remove("hide-table");
                 }
             } else {
-                this.mergeTitleDataIntoOneLine(
-                    this.params.queryObject.metric_types.length,
+                mergeTitleDataIntoOneLine(
+                    params.value.queryObject.metric_types.length,
                     number_of_access_types
                 );
             }
-        },
-    },
-    mounted() {
-        if (!this.building_table) {
-            this.yearly_filter = this.params.yearly_filter;
-            this.building_table = true;
-            this.initialized = true;
-        }
+        });
+        return {
+            getMonthsData,
+            getColumnOptions,
+            checkReportColumns,
+            table,
+            building_table,
+            initialized,
+            yearly_filter,
+            year,
+            params,
+            report_type,
+            embed,
+            years,
+            data_type,
+            tableOptions,
+            update_table,
+        };
     },
     components: {
         KohaTable,

@@ -25,7 +25,7 @@
 </template>
 
 <script>
-import { inject } from "vue";
+import { inject, onBeforeMount, ref } from "vue";
 import Breadcrumbs from "../Breadcrumbs.vue";
 import Help from "../Help.vue";
 import LeftMenu from "../LeftMenu.vue";
@@ -45,6 +45,33 @@ export default {
         const { config, authorisedValues } = storeToRefs(PreservationStore);
         const { loadAuthorisedValues } = PreservationStore;
 
+        const initialized = ref(false);
+
+        onBeforeMount(() => {
+            loading();
+
+            const client = APIClient.preservation;
+            client.config.get().then(result => {
+                config.value = result;
+                if (config.value.settings.enabled != 1) {
+                    loaded();
+                    return setError(
+                        $__(
+                            'The preservation module is disabled, turn on <a href="/cgi-bin/koha/admin/preferences.pl?tab=&op=search&searchfield=PreservationModule">PreservationModule</a> to use it'
+                        ),
+                        false
+                    );
+                }
+                loadAuthorisedValues(
+                    authorisedValues.value,
+                    PreservationStore
+                ).then(() => {
+                    loaded();
+                    initialized.value = true;
+                });
+            });
+        });
+
         return {
             loading,
             loaded,
@@ -53,38 +80,9 @@ export default {
             authorisedValues,
             loadAuthorisedValues,
             PreservationStore,
+            initialized,
         };
     },
-    data() {
-        return {
-            initialized: false,
-        };
-    },
-    beforeCreate() {
-        this.loading();
-
-        const client = APIClient.preservation;
-        client.config.get().then(config => {
-            this.config = config;
-            if (this.config.settings.enabled != 1) {
-                this.loaded();
-                return this.setError(
-                    this.$__(
-                        'The preservation module is disabled, turn on <a href="/cgi-bin/koha/admin/preferences.pl?tab=&op=search&searchfield=PreservationModule">PreservationModule</a> to use it'
-                    ),
-                    false
-                );
-            }
-            this.loadAuthorisedValues(
-                this.authorisedValues,
-                this.PreservationStore
-            ).then(() => {
-                this.loaded();
-                this.initialized = true;
-            });
-        });
-    },
-
     components: {
         Breadcrumbs,
         Dialog,

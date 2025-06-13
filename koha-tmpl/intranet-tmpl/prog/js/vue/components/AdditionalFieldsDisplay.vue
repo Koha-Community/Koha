@@ -22,10 +22,13 @@
 </template>
 
 <script>
+import { ref } from "vue";
 export default {
-    data() {
+    setup() {
+        const fields_to_display = ref([]);
+
         return {
-            fields_to_display: [],
+            fields_to_display,
         };
     },
     name: "AdditionalFieldsDisplay",

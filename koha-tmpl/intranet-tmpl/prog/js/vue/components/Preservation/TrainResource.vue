@@ -10,6 +10,7 @@ import BaseResource from "../BaseResource.vue";
 import { useBaseResource } from "../../composables/base-resource.js";
 import { storeToRefs } from "pinia";
 import { APIClient } from "../../fetch/api-client.js";
+import { $__ } from "../../i18n";
 
 export default {
     props: {
@@ -334,21 +335,21 @@ export default {
         };
         const afterResourceFetch = (componentData, resource, caller) => {
             if (caller === "show") {
-                let display_table = componentData.resource.items.every(
+                let display_table = componentData.resource.value.items.every(
                     item =>
                         item.processing_id ==
-                        componentData.resource.default_processing_id
+                        componentData.resource.value.default_processing_id
                 );
-                componentData.item_table = {
+                componentData.additionalProps.value.item_table = {
                     display: false,
                     data: [],
                     columns: [],
                 };
                 if (display_table) {
-                    componentData.item_table.data = [];
-                    componentData.resource.items.forEach(item => {
+                    componentData.additionalProps.value.item_table.data = [];
+                    componentData.resource.value.items.forEach(item => {
                         let item_row = {};
-                        componentData.resource.default_processing.attributes.forEach(
+                        componentData.resource.value.default_processing.attributes.forEach(
                             attribute => {
                                 item_row[attribute.processing_attribute_id] =
                                     item.attributes
@@ -361,10 +362,12 @@ export default {
                             }
                         );
                         item_row.item = item;
-                        componentData.item_table.data.push(item_row);
+                        componentData.additionalProps.value.item_table.data.push(
+                            item_row
+                        );
                     });
-                    componentData.item_table.columns = [];
-                    componentData.item_table.columns.push(
+                    componentData.additionalProps.value.item_table.columns = [];
+                    componentData.additionalProps.value.item_table.columns.push(
                         {
                             name: "checkboxes",
                             className: "checkboxes",
@@ -375,32 +378,37 @@ export default {
                         },
                         {
                             name: "",
-                            title: componentData.$__("ID"),
+                            title: $__("ID"),
                             data: "item.user_train_item_id",
                         }
                     );
                     resource.default_processing.attributes.forEach(a =>
-                        componentData.item_table.columns.push({
-                            name: a.name,
-                            title: a.name,
-                            data: a.processing_attribute_id,
-                            render: (data, type, row) => {
-                                return data.join("<br/>");
-                            },
-                        })
+                        componentData.additionalProps.value.item_table.columns.push(
+                            {
+                                name: a.name,
+                                title: a.name,
+                                data: a.processing_attribute_id,
+                                render: (data, type, row) => {
+                                    return data.join("<br/>");
+                                },
+                            }
+                        )
                     );
-                    componentData.item_table.columns.push({
-                        name: "actions",
-                        className: "actions noExport",
-                        title: componentData.$__("Actions"),
-                        searchable: false,
-                        orderable: false,
-                        render: (data, type, row) => {
-                            return "";
-                        },
-                    });
+                    componentData.additionalProps.value.item_table.columns.push(
+                        {
+                            name: "actions",
+                            className: "actions noExport",
+                            title: $__("Actions"),
+                            searchable: false,
+                            orderable: false,
+                            render: (data, type, row) => {
+                                return "";
+                            },
+                        }
+                    );
                 }
-                componentData.item_table.display = display_table;
+                componentData.additionalProps.value.item_table.display =
+                    display_table;
             }
         };
         const appendToShow = componentData => {
@@ -416,7 +424,7 @@ export default {
                         },
                         item_table: {
                             type: "object",
-                            value: componentData.item_table,
+                            value: componentData.additionalProps.item_table,
                         },
                     },
                 },

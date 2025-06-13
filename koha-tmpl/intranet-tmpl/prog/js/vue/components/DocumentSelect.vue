@@ -54,21 +54,20 @@ export default {
     },
     setup() {
         const format_date = $date;
-        return { format_date };
-    },
-    methods: {
-        selectFile(e, i) {
+        const loadFile = (filename, content, i) => {
+            props.document.file_name = filename;
+            props.document.file_content = btoa(content);
+        };
+        const selectFile = (e, i) => {
             let files = e.target.files;
             if (!files) return;
             let file = files[0];
             const reader = new FileReader();
-            reader.onload = e => this.loadFile(file.name, e.target.result, i);
+            reader.onload = e => loadFile(file.name, e.target.result, i);
             reader.readAsBinaryString(file);
-        },
-        loadFile(filename, content, i) {
-            this.document.file_name = filename;
-            this.document.file_content = btoa(content);
-        },
+        };
+
+        return { format_date, loadFile, selectFile };
     },
 };
 </script>

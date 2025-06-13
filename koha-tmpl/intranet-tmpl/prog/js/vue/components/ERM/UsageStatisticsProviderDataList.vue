@@ -16,64 +16,31 @@
 
 <script>
 import { APIClient } from "../../fetch/api-client.js";
-import { ref } from "vue";
+import { onMounted, ref } from "vue";
 import KohaTable from "../KohaTable.vue";
+import { useRoute } from "vue-router";
 
 export default {
-    setup() {
+    setup(props) {
+        const route = useRoute();
         const table = ref();
 
-        return {
-            table,
-        };
-    },
-    data() {
-        return {
-            data_count: 0,
-            initialized: false,
-            before_route_entered: false,
-            building_table: false,
-            tableOptions: {
-                columns: this.getTableColumns(),
-                options: {},
-                url: () => this.table_url(),
-                table_settings: this.title_table_settings,
-                add_filters: true,
-            },
-        };
-    },
-    methods: {
-        async getData() {
-            const client = APIClient.erm;
-            await client[`usage_${this.data_type}s`]
-                .count({
-                    usage_data_provider_id:
-                        this.$route.params.erm_usage_data_provider_id,
-                })
-                .then(
-                    count => {
-                        this.data_count = count;
-                        this.initialized = true;
-                    },
-                    error => {}
-                );
-        },
-        table_url() {
+        const tableUrl = () => {
             let url = "/api/v1/erm/usage_%ss?usage_data_provider_id=%s".format(
-                this.data_type,
-                this.$route.params.erm_usage_data_provider_id
+                props.data_type,
+                route.params.erm_usage_data_provider_id
             );
             return url;
-        },
-        getTableColumns() {
+        };
+        const getTableColumns = () => {
             const column_options = [
                 {
                     used_by: ["title", "platform", "item", "database"],
                     column: {
                         title:
-                            this.data_type.charAt(0).toUpperCase() +
-                            this.data_type.slice(1),
-                        data: this.data_type,
+                            props.data_type.charAt(0).toUpperCase() +
+                            props.data_type.slice(1),
+                        data: props.data_type,
                         searchable: true,
                         orderable: true,
                     },
@@ -143,16 +110,51 @@ export default {
                 },
             ];
             const columns = column_options
-                .filter(column => column.used_by.includes(this.data_type))
+                .filter(column => column.used_by.includes(props.data_type))
                 .map(result => result.column);
             return columns;
-        },
-    },
-    mounted() {
-        if (!this.building_table) {
-            this.building_table = true;
-            this.getData();
-        }
+        };
+
+        const getData = async () => {
+            const client = APIClient.erm;
+            await client[`usage_${props.data_type}s`]
+                .count({
+                    usage_data_provider_id:
+                        route.params.erm_usage_data_provider_id,
+                })
+                .then(
+                    count => {
+                        data_count.value = count;
+                        initialized.value = true;
+                    },
+                    error => {}
+                );
+        };
+
+        const data_count = ref(0);
+        const initialized = ref(false);
+        const building_table = ref(false);
+        const tableOptions = ref({
+            columns: getTableColumns(),
+            options: {},
+            url: () => tableUrl(),
+            table_settings: title_table_settings,
+            add_filters: true,
+        });
+
+        onMounted(() => {
+            if (!building_table.value) {
+                building_table.value = true;
+                getData();
+            }
+        });
+        return {
+            table,
+            data_count,
+            initialized,
+            building_table,
+            tableOptions,
+        };
     },
     props: ["data_type"],
     components: { KohaTable },

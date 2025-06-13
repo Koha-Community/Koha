@@ -3,27 +3,26 @@
 </template>
 
 <script>
-import { defineAsyncComponent } from "vue";
+import { computed, defineAsyncComponent } from "vue";
+import { useRoute } from "vue-router";
 
 export default {
-    methods: {
-        getComponent() {
-            const routeResource = this.locateRouteParentWithResource(
-                this.$route
-            );
-            return defineAsyncComponent(() => import(`./${routeResource}`));
-        },
-        locateRouteParentWithResource(route) {
+    setup() {
+        const route = useRoute();
+        const locateRouteParentWithResource = route => {
             const parent = route.meta.self.parent;
             if (parent.hasOwnProperty("resource") && parent.resource) {
                 return parent.resource;
             }
-            return this.locateRouteParentWithResource(parent);
-        },
-    },
-    computed: {
-        componentProps() {
-            const routeName = this.$route.meta.self.name;
+            return locateRouteParentWithResource(parent);
+        };
+        const getComponent = () => {
+            const routeResource = locateRouteParentWithResource(route);
+            return defineAsyncComponent(() => import(`./${routeResource}`));
+        };
+
+        const componentProps = computed(() => {
+            const routeName = route.meta.self.name;
             if (routeName.includes("Show")) {
                 return { routeAction: "show" };
             } else if (routeName.includes("Edit")) {
@@ -33,7 +32,11 @@ export default {
             } else {
                 return { routeAction: "list" };
             }
-        },
+        });
+        return {
+            getComponent,
+            componentProps,
+        };
     },
 };
 </script>

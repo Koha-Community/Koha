@@ -26,6 +26,7 @@
 </template>
 
 <script>
+import { ref } from "vue";
 import FormElement from "./FormElement.vue";
 export default {
     components: { FormElement },
@@ -33,11 +34,16 @@ export default {
         instancedResource: Object,
         table: Object,
     },
-    data() {
+    setup(props) {
+        const filters = ref(
+            props.instancedResource.getFilterValues
+                ? props.instancedResource.getFilterValues(
+                      props.instancedResource.route.query
+                  )
+                : {}
+        );
         return {
-            filters: this.instancedResource.getFilterValues
-                ? this.instancedResource.getFilterValues(this.$route.query)
-                : {},
+            filters,
         };
     },
 };

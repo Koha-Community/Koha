@@ -24,9 +24,10 @@
 </template>
 
 <script>
-import { inject, ref } from "vue";
+import { inject, onMounted, ref, useTemplateRef, watch } from "vue";
 import { APIClient } from "../../fetch/api-client.js";
 import KohaTable from "../KohaTable.vue";
+import { $__ } from "../../i18n";
 
 export default {
     setup() {
@@ -35,47 +36,17 @@ export default {
 
         const { setConfirmationDialog, setMessage } = inject("mainStore");
 
-        const table = ref();
+        const table = useTemplateRef("table");
 
-        return {
-            get_lib_from_av,
-            map_av_dt_filter,
-            setConfirmationDialog,
-            setMessage,
-            table,
-        };
-    },
-    data: function () {
-        return {
-            usage_data_providers: [],
-            initialized: false,
-            building_table: false,
-            tableOptions: {
-                columns: this.getTableColumns(),
-                options: { embed: "counter_files" },
-                url: () => this.table_url(),
-                table_settings: this.usage_data_provider_table_settings,
-                // add_filters: true,
-                actions: {},
-            },
-        };
-    },
-    methods: {
-        async getUsageDataProviders() {
-            const client = APIClient.erm;
-            await client.usage_data_providers.getAll().then(
-                usage_data_providers => {
-                    this.usage_data_providers = usage_data_providers;
-                    this.initialized = true;
-                },
-                error => {}
-            );
-        },
-        table_url() {
+        const usage_data_providers = ref([]);
+        const initialized = ref(false);
+        const building_table = ref(false);
+
+        const table_url = () => {
             let url = "/api/v1/erm/usage_data_providers";
             return url;
-        },
-        getTableColumns() {
+        };
+        const getTableColumns = () => {
             const columns = [
                 {
                     title: __("Provider"),
@@ -119,11 +90,11 @@ export default {
             });
 
             return columns;
-        },
-        createTableHeader() {
-            const table = this.$refs.table.$el.getElementsByTagName("table")[0];
+        };
+        const createTableHeader = () => {
+            const tableEl = table.$el.getElementsByTagName("table")[0];
 
-            const row = table.insertRow(0);
+            const row = tableEl.insertRow(0);
             const [cellOne, cellTwo, cellThree, cellFour, cellFive] =
                 Array.from("1".repeat(5)).map(item => {
                     const cell = document.createElement("th");
@@ -131,29 +102,60 @@ export default {
                     return cell;
                 });
             cellTwo.colSpan = 2;
-            cellTwo.innerHTML = this.$__("Title reports");
+            cellTwo.innerHTML = $__("Title reports");
             cellThree.colSpan = 2;
-            cellThree.innerHTML = this.$__("Platform reports");
+            cellThree.innerHTML = $__("Platform reports");
             cellFour.colSpan = 2;
-            cellFour.innerHTML = this.$__("Database reports");
+            cellFour.innerHTML = $__("Database reports");
             cellFive.colSpan = 2;
-            cellFive.innerHTML = this.$__("Item reports");
+            cellFive.innerHTML = $__("Item reports");
 
-            this.$refs.table_div.classList.remove("hide-table");
-        },
-    },
-    watch: {
-        table() {
-            // table needs to be rendered before header can be created and
-            // table is hidden by .hide-table until table header is created
-            this.createTableHeader();
-        },
-    },
-    mounted() {
-        if (!this.building_table) {
-            this.building_table = true;
-            this.getUsageDataProviders();
-        }
+            table_div.classList.remove("hide-table");
+        };
+
+        const tableOptions = ref({
+            columns: getTableColumns(),
+            options: { embed: "counter_files" },
+            url: () => table_url(),
+            table_settings: usage_data_provider_table_settings,
+            // add_filters: true,
+            actions: {},
+        });
+
+        const getUsageDataProviders = async () => {
+            const client = APIClient.erm;
+            await client.usage_data_providers.getAll().then(
+                result => {
+                    usage_data_providers.value = result;
+                    initialized.value = true;
+                },
+                error => {}
+            );
+        };
+
+        watch(table, () => {
+            createTableHeader();
+        });
+
+        onMounted(() => {
+            if (!building_table.value) {
+                building_table.value = true;
+                getUsageDataProviders();
+            }
+        });
+
+        return {
+            get_lib_from_av,
+            map_av_dt_filter,
+            setConfirmationDialog,
+            setMessage,
+            table,
+            usage_data_providers,
+            initialized,
+            building_table,
+            tableOptions,
+            createTableHeader,
+        };
     },
     components: { KohaTable },
     name: "UsageStatisticsDataProvidersSummary",

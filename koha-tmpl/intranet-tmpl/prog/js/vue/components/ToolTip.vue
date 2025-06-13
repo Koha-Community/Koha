@@ -10,15 +10,19 @@
 
 <script>
 import Tooltip from "bootstrap/js/dist/tooltip";
+import { onMounted } from "vue";
 
 export default {
     props: {
         toolTip: String | null,
     },
-    mounted() {
-        new Tooltip(document.body, {
-            selector: "[data-bs-toggle='tooltip']",
+    setup() {
+        onMounted(() => {
+            new Tooltip(document.body, {
+                selector: "[data-bs-toggle='tooltip']",
+            });
         });
+        return {};
     },
     name: "ToolTip",
 };

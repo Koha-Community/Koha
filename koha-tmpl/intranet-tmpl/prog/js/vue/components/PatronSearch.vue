@@ -22,6 +22,7 @@
 </template>
 
 <script>
+import { computed, onBeforeMount, ref } from "vue";
 import { APIClient } from "../fetch/api-client.js";
 
 export default {
@@ -31,49 +32,53 @@ export default {
         label: String,
         required: Boolean,
     },
-    data() {
-        return {
-            loading: false,
-        };
-    },
-    beforeCreate() {
-        this.resource.patron_str = $patron_to_html(this.resource.patron);
-    },
-    computed: {
-        shouldRenderInput() {
+    setup(props) {
+        const loading = ref(false);
+
+        onBeforeMount(() => {
+            props.resource.patron_str = $patron_to_html(props.resource.patron);
+        });
+
+        const shouldRenderInput = computed(() => {
             return !document.getElementById("selected_patron_id");
-        },
-    },
-    methods: {
-        selectUser() {
-            this.modalEventListener = () => {
-                this.newUserSelected();
+        });
+
+        const selectUser = () => {
+            const modalEventListener = () => {
+                newUserSelected();
                 $(document).off(
                     "hidden.bs.modal",
                     "#patron_search_modal",
-                    this.modalEventListener
+                    modalEventListener
                 );
             };
             $(document).on(
                 "hidden.bs.modal",
                 "#patron_search_modal",
-                this.modalEventListener
+                modalEventListener
             );
-        },
-        newUserSelected(e) {
-            this.loading = true;
+        };
+        const newUserSelected = e => {
+            loading.value = true;
             let selected_patron_id =
                 document.getElementById("selected_patron_id").value;
             let patron;
             const client = APIClient.patron;
             client.patrons.get(selected_patron_id).then(p => {
                 patron = p;
-                this.resource.patron = patron;
-                this.resource.patron_str = $patron_to_html(patron);
-                this.resource.user_id = patron.patron_id;
-                this.loading = false;
+                props.resource.patron = patron;
+                props.resource.patron_str = $patron_to_html(patron);
+                props.resource.user_id = patron.patron_id;
+                loading.value = false;
             });
-        },
+        };
+
+        return {
+            loading,
+            shouldRenderInput,
+            selectUser,
+            newUserSelected,
+        };
     },
 };
 </script>

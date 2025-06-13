@@ -10,7 +10,7 @@
     >
     <a
         v-else-if="action === undefined && onClick"
-        @click="onclick"
+        @click="onClick"
         class="btn btn-default"
         ><font-awesome-icon v-if="icon" :icon="icon" /> {{ title }}</a
     >
@@ -56,35 +56,36 @@ export default {
         },
         onClick: { type: Function, required: false },
     },
-    methods: {
-        redirect(url) {
-            const redirectParams = url ? url : this.to;
-            window.location.href = this.formatUrl(
-                typeof redirectParams === "object"
-                    ? this.handleQuery(redirectParams)
-                    : redirectParams
-            );
-        },
-        formatUrl(url) {
+    setup(props) {
+        const formatUrl = url => {
             if (url.includes("http://") || url.includes("https://")) return url;
             if (url.includes("cgi-bin/koha"))
                 return `//${window.location.host}/${url}`;
             return `//${url}`;
-        },
-        handleQuery(query) {
-            let url = this.to.path;
-            if (this.to.hasOwnProperty("query")) {
+        };
+        const handleQuery = query => {
+            let url = props.to.path;
+            if (props.to.hasOwnProperty("query")) {
                 url +=
                     "?" +
-                    Object.keys(this.to.query)
+                    Object.keys(props.to.query)
                         .map(
                             queryParam =>
-                                `${queryParam}=${this.to.query[queryParam]}`
+                                `${queryParam}=${props.to.query[queryParam]}`
                         )
                         .join("&");
             }
             return url;
-        },
+        };
+        const redirect = url => {
+            const redirectParams = url ? url : props.to;
+            window.location.href = formatUrl(
+                typeof redirectParams === "object"
+                    ? handleQuery(redirectParams)
+                    : redirectParams
+            );
+        };
+        return { redirect };
     },
     emits: ["go-to-add-resource", "delete-resource", "go-to-edit-resource"],
     name: "Link",
