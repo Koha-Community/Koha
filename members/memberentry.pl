@@ -560,6 +560,9 @@ if ( ( !$nok ) and $nodouble and ( $op eq 'cud-insert' or $op eq 'cud-save' ) ) 
 
         delete $newdata{password2};
 
+        delete $newdata{guarantor_id};
+        delete $newdata{guarantor_relationship};
+
         try {
             $patron->set( \%newdata )->store( { guarantors => \@guarantors } ) if scalar( keys %newdata ) > 1;
 
