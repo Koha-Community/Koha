@@ -307,6 +307,31 @@ my $handlers = {
     },
 };
 
+my $param_to_cli = {
+    currency_type     => 'currency-type',
+    current_location  => 'location',
+    end_item          => 'end-item',
+    fee_acknowledged  => 'fee-acknowledged',
+    fee_amount        => 'fee-amount',
+    fee_identifier    => 'fee-identifier',
+    fee_type          => 'fee-type',
+    hold_mode         => 'hold-mode',
+    institution_id    => 'location',
+    item_identifier   => 'item',
+    location_code     => 'location',
+    login_password    => 'sip_pass',
+    login_user_id     => 'sip_user',
+    no_block          => 'no-block',
+    patron_identifier => 'patron',
+    patron_password   => 'password',
+    payment_type      => 'payment-type',
+    pickup_location   => 'pickup-location',
+    start_item        => 'start-item',
+    summary           => 'summary',
+    terminal_password => 'sip_pass',
+    transaction_id    => 'transaction-id',
+};
+
 my $data = run_command_message('login');
 
 if ( $data =~ '^941' ) {    ## we are logged in
@@ -337,7 +362,8 @@ sub build_command_message {
     foreach my $key ( keys %$parameters ) {
         unless ( $parameters->{$key} ) {
             unless ( $optional{$key} ) {
-                say "$key is required for $message";
+                my $param_name = $param_to_cli->{$key} // $key;
+                say "$param_name is required for $message";
                 return;
             }
         }
