@@ -53,8 +53,8 @@ my $fee_amount;
 my $fee_identifier;
 my $transaction_id;
 my $pickup_location;
-my $hold_mode;
-my $no_block = 'N';
+my $hold_mode = '+';
+my $no_block  = 'N';
 my $start_item;
 my $end_item;
 
@@ -384,7 +384,7 @@ sub run_command_message {
 
     my $data = <$socket>;
 
-    say "READ: $data";
+    say "READ: " . ( defined $data ? $data : 'undef' );
 
     return $data;
 }
