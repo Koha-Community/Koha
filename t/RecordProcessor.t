@@ -205,7 +205,7 @@ subtest 'options() tests' => sub {
 
 subtest "'TrimFields' filter tests" => sub {
 
-    plan tests => 2;
+    plan tests => 4;
 
     # Test default values with a MARC::Record record
     my $record = MARC::Record->new();
@@ -215,6 +215,8 @@ subtest "'TrimFields' filter tests" => sub {
         [ '150', ' ', ' ', a => 'Test' ],
         [ '520', ' ', ' ', a => "This is\na test!\t" ],
         [ '521', ' ', ' ', a => "This is a\t test!\t" ],
+        [ '522', ' ', ' ', a => "This is a test!", b => "   " ],
+        [ '523', ' ', ' ', a => "   " ],
     );
 
     my $p = Koha::RecordProcessor->new( { filters => ['TrimFields'] } );
@@ -225,6 +227,12 @@ subtest "'TrimFields' filter tests" => sub {
 
     my $get521a = $record->subfield( '521', 'a' );
     is( $get521a, "This is a\t test!", "Trailing tabs are stripped while inner tabs are kept" );
+
+    my $get522b = $record->subfield( '522', 'b' );
+    isnt( $get522b, "", "Subfield containing spaces only removed from the field" );
+
+    my $get523 = $record->field('523');
+    is( $get523, undef, "Field with only a subfield containing spaces removed from the record" );
 };
 
 done_testing();
