@@ -60,9 +60,15 @@ sub filter {
                 my $value = $subfield->[1];
                 $value =~ s/[\n\r]+/ /g;
                 $value =~ s/^\s+|\s+$//g;
-                $field->add_subfields( $key => $value );    # add subfield to the end of the subfield list
-                $field->delete_subfield( pos => 0 );        # delete the subfield at the top of the subfield list
+                $field->add_subfields( $key => $value )
+                    if $value ne q{}
+                    ; # add subfield to the end of the subfield list, but only if there is still a non empty value there
+                $field->delete_subfield( pos => 0 );    # delete the subfield at the top of the subfield list
             }
+
+            # if it happed that all existing subfields had whitespaces only,
+            # the field would be empty now and should be removed from the record
+            $record->delete_fields($field) unless scalar( $field->subfields );
         }
     }
     return $record;
