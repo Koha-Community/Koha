@@ -26,16 +26,13 @@ describe("ExtendedPatronAttributes", () => {
         });
     });
 
-    afterEach(
-        () =>
-            function () {
-                cleanup();
-                cy.set_syspref(
-                    "ExtendedPatronAttributes",
-                    this.syspref_ExtendedPatronAttributes
-                );
-            }
-    );
+    afterEach(function () {
+        cleanup();
+        cy.set_syspref(
+            "ExtendedPatronAttributes",
+            this.syspref_ExtendedPatronAttributes
+        );
+    });
 
     const table_id = "memberresultst";
 
