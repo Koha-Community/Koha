@@ -39,6 +39,17 @@
 [% END %]
 [% Asset.css("lib/Chocolat/css/chocolat.css") | $raw %]
 [% INCLUDE 'doc-head-close.inc' %]
+[% FILTER collapse %]
+    <style>
+        .component_part {
+            padding: 0.5rem 0.9rem;
+            border-bottom: 1px solid #bcbcbc;
+        }
+        .component_part:nth-child(2n + 1) {
+            background-color: #f3f4f4;
+        }
+    </style>
+[% END %]
 </head>
 [% BLOCK cssinclude %][% END %]
 [% INCLUDE 'bodytag.inc' bodyid='opac-detail' bodyclass='scrollto' %]
@@ -664,13 +675,9 @@
                         [% IF ComponentParts && ComponentParts.size %]
                             [% WRAPPER tab_panel tabname="components" %]
                                 <div class="content_set">
-                                    <table role="presentation">
-                                        [% FOR PART IN ComponentParts %]
-                                            <tr>
-                                                <td> [% PART | $raw %] </td>
-                                            </tr>
-                                        [% END %]
-                                    </table>
+                                    [% FOR PART IN ComponentParts %]
+                                        <div class="component_part"> [% PART | $raw %] </div>
+                                    [% END %]
                                     [% IF ComponentParts.size == Koha.Preference('MaxComponentRecords') %]
                                         <p>Only [% ComponentParts.size | html %] results are shown: <a href="/cgi-bin/koha/opac-search.pl?q=[% ComponentPartsQuery | url %]">show all component parts</a></p>
                                     [% END %]
