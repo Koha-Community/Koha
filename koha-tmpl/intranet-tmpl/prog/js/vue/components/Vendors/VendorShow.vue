@@ -9,7 +9,7 @@
                             path: '/cgi-bin/koha/acqui/basketheader.pl',
                             query: { booksellerid: vendor.id, op: 'add_form' },
                         },
-                        title: 'Basket',
+                        title: $__('Basket'),
                         callback: toolbarComponent => {
                             const url = toolbarComponent.handleQuery(
                                 toolbarComponent.to
@@ -22,7 +22,7 @@
                             path: '/cgi-bin/koha/admin/aqcontract.pl',
                             query: { booksellerid: vendor.id, op: 'add_form' },
                         },
-                        title: 'Contract',
+                        title: $__('Contract'),
                         callback: toolbarComponent => {
                             const url = toolbarComponent.handleQuery(
                                 toolbarComponent.to
@@ -32,7 +32,7 @@
                     },
                     {
                         to: { name: 'VendorFormAdd' },
-                        title: 'Vendor',
+                        title: $__('Vendor'),
                     },
                 ]"
                 :title="$__('New')"
