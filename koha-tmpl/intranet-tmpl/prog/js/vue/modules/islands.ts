@@ -107,6 +107,10 @@ export function hydrate(): void {
             }
 
             const component = await importFn();
+            if (customElements.get(name)) {
+                return;
+            }
+
             customElements.define(
                 name,
                 defineCustomElement(component as any, {
