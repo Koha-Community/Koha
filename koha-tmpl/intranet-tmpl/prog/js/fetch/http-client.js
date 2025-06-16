@@ -1,16 +1,31 @@
+function _ifDocumentAvailable(callback) {
+    if (typeof document !== "undefined" && document.getElementById) {
+        callback();
+    }
+}
+
 class Dialog {
     constructor(options = {}) {}
 
+    _appendMessage(type, message) {
+        _ifDocumentAvailable(() => {
+            const messagesContainer = document.getElementById("messages");
+            if (!messagesContainer) {
+                return;
+            }
+
+            const htmlString =
+                `<div class="alert alert-${type}">%s</div>`.format(message);
+            messagesContainer.insertAdjacentHTML("beforeend", htmlString);
+        });
+    }
+
     setMessage(message) {
-        $("#messages").append(
-            '<div class="alert alert-info">%s</div>'.format(message)
-        );
+        this._appendMessage("info", message);
     }
 
     setError(error) {
-        $("#messages").append(
-            '<div class="alert alert-warning">%s</div>'.format(error)
-        );
+        this._appendMessage("warning", error);
     }
 }
 
@@ -22,7 +37,18 @@ class HttpClient {
             "Content-Type": "application/json;charset=utf-8",
             "X-Requested-With": "XMLHttpRequest",
         };
-        this.csrf_token = $('meta[name="csrf-token"]').attr("content");
+        this.csrf_token = this._getCsrfToken(options);
+    }
+
+    _getCsrfToken(options) {
+        let token = null;
+        _ifDocumentAvailable(() => {
+            const metaTag = document.querySelector('meta[name="csrf-token"]');
+            if (metaTag) {
+                token = metaTag.getAttribute("content");
+            }
+        });
+        return token !== null ? token : options.csrfToken || null;
     }
 
     async _fetchJSON(
