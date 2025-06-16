@@ -68,6 +68,11 @@ class HttpClient {
                 const is_json = response.headers
                     .get("content-type")
                     ?.includes("application/json");
+
+                if (return_response || !is_json) {
+                    return response;
+                }
+
                 if (!response.ok) {
                     return response.text().then(text => {
                         let message;
@@ -82,9 +87,6 @@ class HttpClient {
                         }
                         throw new Error(message);
                     });
-                }
-                if (return_response || !is_json) {
-                    return response;
                 }
                 return response.json();
             })
