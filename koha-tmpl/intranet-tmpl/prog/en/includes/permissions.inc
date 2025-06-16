@@ -372,10 +372,8 @@
         <span class="sub_permission batch_extend_due_dates_subpermission"> Perform batch extend due dates </span>
         <span class="permissioncode">([% name | html %])</span>
     [%- CASE 'batch_modify_holds' -%]
-        <span class="sub_permission batch_modify_holds_subpermission">
-            Perform batch modification of holds
-        </span>
-        <span class="permissioncode">([% name | html %])</span
+        <span class="sub_permission batch_modify_holds_subpermission"> Perform batch modification of holds </span>
+        <span class="permissioncode">([% name | html %])</span>
     [%- CASE 'edit_calendar' -%]
         <span class="sub_permission edit_calendar_subpermission"> Define days when the library is closed </span>
         <span class="permissioncode">([% name | html %])</span>
