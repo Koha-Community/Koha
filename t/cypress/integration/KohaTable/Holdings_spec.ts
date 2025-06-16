@@ -109,16 +109,13 @@ describe("catalogue/detail/holdings_table with items", () => {
         });
     });
 
-    afterEach(
-        () =>
-            function () {
-                cleanup();
-                cy.set_syspref(
-                    "AlwaysShowHoldingsTableFilters",
-                    this.syspref_AlwaysShowHoldingsTableFilters
-                );
-            }
-    );
+    afterEach(function () {
+        cleanup();
+        cy.set_syspref(
+            "AlwaysShowHoldingsTableFilters",
+            this.syspref_AlwaysShowHoldingsTableFilters
+        );
+    });
 
     it("Correctly init the table", function () {
         // Do not use `() => {` or this.biblio_id won't be retrieved
@@ -502,16 +499,13 @@ describe("catalogue/detail/holdings_table without items", () => {
         });
     });
 
-    afterEach(
-        () =>
-            function () {
-                cleanup();
-                cy.set_syspref(
-                    "AlwaysShowHoldingsTableFilters",
-                    this.syspref_AlwaysShowHoldingsTableFilters
-                );
-            }
-    );
+    afterEach(function () {
+        cleanup();
+        cy.set_syspref(
+            "AlwaysShowHoldingsTableFilters",
+            this.syspref_AlwaysShowHoldingsTableFilters
+        );
+    });
 
     it("Do not display the table", function () {
         // Do not use `() => {` or this.biblio_id won't be retrieved
