@@ -74,7 +74,10 @@ const generateDataFromSchema = (properties, values = {}) => {
     });
 
     Object.keys(ids).forEach(k => {
-        if (mockData.hasOwnProperty(k + "_id")) {
+        if (
+            mockData.hasOwnProperty(k + "_id") &&
+            !values.hasOwnProperty(k + "_id")
+        ) {
             mockData[k + "_id"] = ids[k];
         }
     });
