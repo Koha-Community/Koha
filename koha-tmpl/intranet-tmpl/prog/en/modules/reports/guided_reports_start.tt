@@ -1071,6 +1071,16 @@
                                     >
                                 </form>
 
+                                <form method="post" action="/cgi-bin/koha/tools/batch_modify_holds.pl" id="batch_modify_holds" target="_blank">
+                                    [% INCLUDE 'csrf-token.inc' %]
+                                    <input type="hidden" name="op" value="cud-form" />
+                                    <textarea style="display:none" name="reserve_ids_list" id="reserve_ids_list">
+                                    [%# Preserve the whitespace of the following textarea in order to format the values correctly %]
+                                        [%- reserve_ids = PROCESS batch_list results=results batch_type='reserve_id' | trim | html %][% IF reserve_ids %][% SET batch_reserve_ids = 1 %][% reserve_ids | html %][% END -%]
+                                    </textarea
+                                    >
+                                </form>
+
                                 [% BLOCK batch_list %]
                                     [%- FOREACH result IN results %]
                                         [%- FOREACH cells IN result.cells %]
@@ -1095,9 +1105,9 @@
                                 </form>
                                 <!-- /#limitselect -->
 
-                                [% IF ( batch_biblionumbers || batch_itemnumbers || batch_cardnumbers || batch_borrowernumbers ) || ( unlimited_total > 10 && limit <= 1000 ) %]
+                                [% IF ( batch_biblionumbers || batch_itemnumbers || batch_cardnumbers || batch_borrowernumbers || batch_reserve_ids ) || ( unlimited_total > 10 && limit <= 1000 ) %]
                                     <div id="toolbar" class="btn-toolbar">
-                                        [% IF ( batch_biblionumbers || batch_itemnumbers || batch_cardnumbers || batch_borrowernumbers ) %]
+                                        [% IF ( batch_biblionumbers || batch_itemnumbers || batch_cardnumbers || batch_borrowernumbers || batch_reserve_ids ) %]
                                             <div class="btn-group">
                                                 <button class="btn btn-default btn-sm dropdown-toggle" type="button" id="batch_mod_menu" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
                                                     Batch operations with [% IF unlimited_total >= limit %][% results.size | html %][% ELSE %][% unlimited_total | html %][% END %] visible records
@@ -1205,12 +1215,26 @@
                                                                 >
                                                             </li>
                                                         [% END %]
+                                                        [% IF header_ro.cell == 'reserve_id' || header_types.item( header_ro.cell ) == 'reserve_id' %]
+                                                            <li class="dropdown-header">Hold records</li>
+                                                            <li>
+                                                                <a
+                                                                    href="#"
+                                                                    data-submit="batch_modify_holds"
+                                                                    data-toggle="tooltip"
+                                                                    data-placement="right"
+                                                                    title="Send visible results to batch hold modification"
+                                                                    class="batch_op send_to_hold_mod dropdown-item"
+                                                                    >Batch hold modification</a
+                                                                >
+                                                            </li>
+                                                        [% END %]
                                                     [% END # /FOREACH header_ro %]
                                                 </ul>
                                                 <!-- /.dropdown-menu -->
                                             </div>
                                             <!-- /.dropdown -->
-                                        [% END # /IF ( batch_biblionumbers || batch_itemnumbers || batch_cardnumbers ) %]
+                                        [% END # /IF ( batch_biblionumbers || batch_itemnumbers || batch_cardnumbers || batch_reserve_ids ) %]
 
                                         [% IF ( unlimited_total > 10 && limit <= 1000 ) %]
                                             <div class="btn-group">
@@ -1238,7 +1262,7 @@
                                             </div>
                                         [% END # /IF ( unlimited_total > 10 && limit <= 1000 ) %]
 
-                                        [% IF ( batch_biblionumbers || batch_itemnumbers || batch_cardnumbers ) %]
+                                        [% IF ( batch_biblionumbers || batch_itemnumbers || batch_cardnumbers || batch_reserve_ids ) %]
                                             <a href="#" class="btn btn-link" id="toggle_auto_links">
                                                 <i class="fa-solid fa-eye autolink" aria-hidden="true" style="display:none"></i>
                                                 <i class="fa-solid fa-eye-slash autolink" aria-hidden="true"></i>
