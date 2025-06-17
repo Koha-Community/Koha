@@ -58,9 +58,11 @@ define( [ 'marc-record' ], function( MARC ) {
                 tagNumber = tagNumber[1];
 
                 if ( tagNumber < '010' ) {
-                    var field = new MARC.Field( tagNumber, ' ', ' ', [ [ '@', line.substring( 4 ) ] ] );
-                    field.sourceLine = i;
-                    record.addField( field );
+                    if (line.length > 4) {
+                        var field = new MARC.Field(tagNumber, ' ', ' ', [['@', line.substring(4)]]);
+                        field.sourceLine = i;
+                        record.addField(field);
+                    }
                 } else {
                     var indicators = line.match( /^... ([0-9A-Za-z_ ]) ([0-9A-Za-z_ ])/ );
                     if ( !indicators ) {
@@ -86,12 +88,17 @@ define( [ 'marc-record' ], function( MARC ) {
 
                     $.each( subfields, function( i, subfield ) {
                         var next = subfields[ i + 1 ];
-
-                        field.addSubfield( [ subfield.code, line.substring( subfield.ch + 2, next ? next.ch : line.length ) ] );
+                        var subfield_start = subfield.ch + 2;
+                        var subfield_end = (next ? next.ch : line.length);
+                        if (subfield_end > subfield_start) {
+                            field.addSubfield( [ subfield.code, line.substring( subfield_start, subfield_end ) ] );
+                        }
                     } );
 
                     field.sourceLine = i;
-                    record.addField( field );
+                    if (field.subfields().length) {
+                        record.addField( field );
+                    }
                 }
             } );
 
