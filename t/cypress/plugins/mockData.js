@@ -6,6 +6,11 @@ const fs = require("fs");
 const generatedDataCache = new Set();
 
 const generateMockData = (type, properties) => {
+    if (properties.hasOwnProperty("enum")) {
+        let values = properties.enum;
+        return values[Math.floor(Math.random() * values.length)];
+    }
+
     switch (type) {
         case "string":
             if (properties?.maxLength) {
