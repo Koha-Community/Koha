@@ -24,7 +24,7 @@ describe("catalogue/detail/holdings_table with items", () => {
     });
 
     afterEach(function () {
-        cy.task("deleteSampleObjects", this.objects);
+        cy.task("deleteSampleObjects", [this.objects]);
         cy.set_syspref(
             "AlwaysShowHoldingsTableFilters",
             this.syspref_AlwaysShowHoldingsTableFilters
@@ -279,7 +279,7 @@ describe("catalogue/detail/holdings_table without items", () => {
     });
 
     afterEach(function () {
-        cy.task("deleteSampleObjects", this.objects);
+        cy.task("deleteSampleObjects", [this.objects]);
         cy.set_syspref(
             "AlwaysShowHoldingsTableFilters",
             this.syspref_AlwaysShowHoldingsTableFilters

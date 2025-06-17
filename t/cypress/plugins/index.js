@@ -4,6 +4,7 @@ const { buildSampleObject, buildSampleObjects } = require("./mockData.js");
 
 const {
     insertSampleBiblio,
+    insertSampleHold,
     insertObject,
     deleteSampleObjects,
 } = require("./insertData.js");
@@ -36,11 +37,14 @@ module.exports = (on, config) => {
         },
         buildSampleObject,
         buildSampleObjects,
-        insertSampleBiblio({ item_count }) {
-            return insertSampleBiblio(item_count, baseUrl, authHeader);
+        insertSampleBiblio(args) {
+            return insertSampleBiblio({ ...args, baseUrl, authHeader });
         },
-        insertObject({ type, object }) {
-            return insertObject(type, object, baseUrl, authHeader);
+        insertSampleHold(args) {
+            return insertSampleHold({ ...args, baseUrl, authHeader });
+        },
+        insertObject(args) {
+            return insertObject({ ...args, baseUrl, authHeader });
         },
         deleteSampleObjects,
         query,

@@ -1,11 +1,13 @@
 const { query } = require("./../../plugins/db.js");
 
 describe("insertSampleBiblio", () => {
-    it("should generate library and item type", () => {
+    it("insertSampleBiblio - should generate library and item type", () => {
         cy.task("insertSampleBiblio", { item_count: 3 }).then(objects => {
-            const biblio_id = objects.biblio.biblio_id;
+            expect(typeof objects.biblio.biblio_id).to.be.equal("number");
+            expect(typeof objects.biblio.title).to.be.equal("string");
+            expect(typeof objects.biblio.author).to.be.equal("string");
 
-            expect(typeof biblio_id).to.be.equal("number");
+            const biblio_id = objects.biblio.biblio_id;
 
             cy.task("query", {
                 sql: "SELECT COUNT(*) as count FROM biblio WHERE biblionumber=?",
@@ -30,7 +32,7 @@ describe("insertSampleBiblio", () => {
 
             cy.task("query", {
                 sql: "SELECT COUNT(*) as count FROM branches WHERE branchcode=?",
-                values: [objects.library.library_id],
+                values: [objects.libraries[0].library_id],
             }).then(result => {
                 expect(result[0].count).to.be.equal(1);
             });
@@ -60,7 +62,7 @@ describe("insertSampleBiblio", () => {
 
             cy.task("query", {
                 sql: "SELECT COUNT(*) as count FROM branches WHERE branchcode=?",
-                values: [objects.library.library_id],
+                values: [objects.libraries[0].library_id],
             }).then(result => {
                 expect(result[0].count).to.be.equal(0);
             });
