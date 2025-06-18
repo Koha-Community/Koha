@@ -13,7 +13,7 @@
 # GNU General Public License for more details.
 #
 # You should have received a copy of the GNU General Public License
-# along with Koha; if not, see <http://www.gnu.org/licenses>.
+# along with Koha; if not, see <https://www.gnu.org/licenses>.
 
 # This script is used to maintain the OAI servers table.
 # Parameter $op is operation: list, new, edit, add_validated, delete_confirmed.

@@ -17,7 +17,7 @@
 # GNU General Public License for more details.
 #
 # You should have received a copy of the GNU General Public License
-# along with Koha; if not, see <http://www.gnu.org/licenses>.
+# along with Koha; if not, see <https://www.gnu.org/licenses>.
 #
 
 # Bugs/ToDo:
@@ -5747,7 +5747,7 @@ if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
         "INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES('CatalogModuleRelink',0,'If OFF the linker will never replace the authids that are set in the cataloging module.',NULL,'YesNo');"
     );
     print
-        "Upgrade to $DBversion done (Enhancement 7284, improved authority matching, see http://wiki.koha-community.org/wiki/Bug7284_authority_matching_improvement wiki page for configuration update needed)\n";
+        "Upgrade to $DBversion done (Enhancement 7284, improved authority matching, see https://wiki.koha-community.org/wiki/Bug7284_authority_matching_improvement wiki page for configuration update needed)\n";
     SetVersion($DBversion);
 }
 
@@ -6906,7 +6906,7 @@ if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
 
     # preferences changes
     $dbh->do(
-        "INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES('AgeRestrictionMarker','','Markers for age restriction indication, e.g. FSK|PEGI|Age|. See: http://wiki.koha-community.org/wiki/Age_restriction',NULL,'free')"
+        "INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES('AgeRestrictionMarker','','Markers for age restriction indication, e.g. FSK|PEGI|Age|. See: https://wiki.koha-community.org/wiki/Age_restriction',NULL,'free')"
     );
     $dbh->do(
         "INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES('AgeRestrictionOverride',0,'Allow staff to check out an item with age restriction.',NULL,'YesNo')"
@@ -22392,7 +22392,7 @@ if ( CheckVersion($DBversion) ) {
 $DBversion = '18.12.00.056';
 if ( CheckVersion($DBversion) ) {
     $dbh->do(
-        "UPDATE systempreferences SET explanation = 'This syspref allows to define custom rules for hiding specific items at the OPAC. See http://wiki.koha-community.org/wiki/OpacHiddenItems for more information.' WHERE variable = 'OpacHiddenItems'"
+        "UPDATE systempreferences SET explanation = 'This syspref allows to define custom rules for hiding specific items at the OPAC. See https://wiki.koha-community.org/wiki/OpacHiddenItems for more information.' WHERE variable = 'OpacHiddenItems'"
     );
     SetVersion($DBversion);
     print "Upgrade to $DBversion done (Bug 8701 - Update OpacHiddenItems system preference description)\n";

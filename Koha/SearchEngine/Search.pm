@@ -15,7 +15,7 @@ package Koha::SearchEngine::Search;
 # GNU General Public License for more details.
 #
 # You should have received a copy of the GNU General Public License
-# along with Koha; if not, see <http://www.gnu.org/licenses>.
+# along with Koha; if not, see <https://www.gnu.org/licenses>.
 
 # This is a shim that gives you the appropriate search object for your
 # system preference.

@@ -15,7 +15,7 @@ package C4::Installer::UpgradeBackup;
 # GNU General Public License for more details.
 #
 # You should have received a copy of the GNU General Public License
-# along with Koha; if not, see <http://www.gnu.org/licenses>.
+# along with Koha; if not, see <https://www.gnu.org/licenses>.
 
 use Modern::Perl;
 use File::Compare qw( compare );
@@ -93,7 +93,7 @@ Code based on parts of ExtUtils::Install in order to
 approximately track how it identifies files to
 install.
 
-Koha Development Team <http://koha-community.org/>
+Koha Development Team <https://koha-community.org/>
 
 Galen Charlton <galen.charlton@liblime.com>
 

@@ -15,7 +15,7 @@
 # GNU General Public License for more details.
 #
 # You should have received a copy of the GNU General Public License
-# along with Koha; if not, see <http://www.gnu.org/licenses>.
+# along with Koha; if not, see <https://www.gnu.org/licenses>.
 #-----------------------------------
 
 =head1 NAME
@@ -142,7 +142,7 @@ WARNING:  Flippant use of this script could set all or most of the items in your
           patrons for them!
 
 WARNING:  This script is known to be faulty.  It is NOT recommended to use multiple --lost options.
-          See http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=2883
+          See https://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=2883
 
 =cut
 

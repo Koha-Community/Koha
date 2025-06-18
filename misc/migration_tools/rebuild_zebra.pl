@@ -13,7 +13,7 @@
 # GNU General Public License for more details.
 #
 # You should have received a copy of the GNU General Public License
-# along with Koha; if not, see <http://www.gnu.org/licenses>.
+# along with Koha; if not, see <https://www.gnu.org/licenses>.
 
 use Modern::Perl;
 
@@ -252,7 +252,7 @@ my $dbh;
 # We have chosen to exit immediately by default if we cannot obtain the lock
 # to prevent the potential for a infinite backlog from cron invocations, but an
 # option (wait-for-lock) is provided to let the program wait for the lock.
-# See http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=11078 for details.
+# See https://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=11078 for details.
 if ($daemon_mode) {
     while (1) {
 
