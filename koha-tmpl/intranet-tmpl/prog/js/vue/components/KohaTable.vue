@@ -2,7 +2,6 @@
     <DataTable
         :columns="tableColumns"
         :options="{ ...dataTablesDefaults, ...allOptions }"
-        :data="data"
         ref="table"
     >
         <slot></slot>
@@ -65,22 +64,27 @@ export default {
         }
 
         const table = useTemplateRef("table");
-        const data = ref([]);
         const tableColumns = ref(props.columns);
         const allOptions = ref({
             paging: true,
-            serverSide: true,
             searching: true,
-            pagingType: "full_numbers",
-            processing: true,
             autoWidth: false,
-            ajax: {
-                url: typeof props.url === "function" ? props.url() : props.url,
-                ..._dt_default_ajax({
-                    options: { ...props.options, columns: props.columns },
-                    default_filters: props.default_filters,
-                }),
-            },
+            ...(props.url && {
+                ajax: {
+                    url:
+                        typeof props.url === "function"
+                            ? props.url()
+                            : props.url,
+                    ..._dt_default_ajax({
+                        options: { ...props.options, columns: props.columns },
+                        default_filters: props.default_filters,
+                    }),
+                },
+                serverSide: true,
+                pagingType: "full_numbers",
+                processing: true,
+            }),
+            ...(props.data && { data: props.data }),
             buttons,
             search: { search: route.query.q },
             columnDefs: [
@@ -278,7 +282,6 @@ export default {
         });
         return {
             dataTablesDefaults,
-            data,
             tableColumns,
             allOptions,
             redraw,
@@ -327,6 +330,11 @@ export default {
             default: [],
         },
         searchable_av_options: {
+            type: Array,
+            required: false,
+            default: [],
+        },
+        data: {
             type: Array,
             required: false,
             default: [],

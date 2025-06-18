@@ -22,7 +22,7 @@ import KohaTable from "./KohaTable.vue";
 export default {
     setup(props) {
         const table = ref();
-        const resourceCount = ref(0);
+        const resourceCount = ref(props.tableOptions.data?.length || 0);
         const initialized = ref(false);
         const searchable_additional_fields = ref([]);
         const searchable_av_options = ref([]);
@@ -71,23 +71,27 @@ export default {
         };
 
         const formattedTableOptions = computed(() => {
-            if (props.filters) {
+            if (Object.keys(props.filters).length > 0) {
                 props.tableOptions.url += "?q=" + JSON.stringify(props.filters);
             }
             return props.tableOptions;
         });
         onBeforeMount(() => {
-            getResourceCount().then(() => {
-                if (props.hasAdditionalFields) {
-                    getSearchableAdditionalFields().then(() =>
-                        getSearchableAVOptions().then(
-                            () => (initialized.value = true)
-                        )
-                    );
-                } else {
-                    initialized.value = true;
-                }
-            });
+            if (props.apiClient) {
+                getResourceCount().then(() => {
+                    if (props.hasAdditionalFields) {
+                        getSearchableAdditionalFields().then(() =>
+                            getSearchableAVOptions().then(
+                                () => (initialized.value = true)
+                            )
+                        );
+                    } else {
+                        initialized.value = true;
+                    }
+                });
+            } else {
+                initialized.value = true;
+            }
         });
 
         return {
