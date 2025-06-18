@@ -597,10 +597,9 @@ export default {
                             should_display: row =>
                                 row.active &&
                                 row.baskets_count > 0 &&
-                                // baseResource.isUserPermitted(
-                                //     "CAN_user_acquisition_order_receive"
-                                // ),
-                                true,
+                                baseResource.isUserPermitted(
+                                    "CAN_user_acquisition_order_receive"
+                                ),
                         },
                     },
                 ],

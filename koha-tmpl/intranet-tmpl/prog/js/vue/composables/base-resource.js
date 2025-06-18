@@ -10,6 +10,10 @@ export function useBaseResource(instancedResource) {
     const { setConfirmationDialog, setMessage, setError, setWarning } =
         inject("mainStore");
 
+    const permissionsStore = inject("permissionsStore");
+    const { isUserPermitted } = permissionsStore;
+    const { userPermissions } = storeToRefs(permissionsStore);
+
     const authorisedValuesData = {};
     if (instancedResource.moduleStore) {
         const moduleStore = inject(instancedResource.moduleStore);
@@ -623,5 +627,7 @@ export function useBaseResource(instancedResource) {
         route,
         router,
         $__,
+        isUserPermitted,
+        userPermissions,
     };
 }
