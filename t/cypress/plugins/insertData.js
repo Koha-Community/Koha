@@ -167,7 +167,14 @@ const insertSampleHold = async ({
     baseUrl,
     authHeader,
 }) => {
-    library_id ||= item.home_library_id;
+    library_id ||= item?.home_library_id;
+
+    if (!library_id) {
+        throw new Error(
+            "Could not generate sample hold without library_id or item"
+        );
+    }
+
     const generatedPatron = await buildSampleObject({
         object: "patron",
         values: { library_id, incorrect_address: null, patron_card_lost: null },
