@@ -16,4 +16,8 @@ export default defineConfig({
         specPattern: "t/cypress/integration/**/*.*",
         supportFile: "t/cypress/support/e2e.js",
     },
+    env: {
+        apiUsername: "koha",
+        apiPassword: "koha",
+    },
 });

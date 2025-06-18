@@ -2,9 +2,8 @@ const { buildSampleObject, buildSampleObjects } = require("./mockData.js");
 const { query } = require("./db.js");
 
 const { APIClient } = require("./dist/api-client.cjs.js");
-const { Buffer } = require("buffer");
 
-const insertSampleBiblio = async (item_count, baseUrl) => {
+const insertSampleBiblio = async (item_count, baseUrl, authHeader) => {
     let client = APIClient.default;
     let generated_objects = {};
     const objects = [{ object: "library" }, { object: "item_type" }];
@@ -53,13 +52,12 @@ const insertSampleBiblio = async (item_count, baseUrl) => {
             },
         ],
     };
-    const credentials = Buffer.from("koha:koha").toString("base64");
     let result = await client.koha.post({
         endpoint: `${baseUrl}/api/v1/biblios`,
         headers: {
             "Content-Type": "application/marc-in-json",
             "x-confirm-not-duplicate": 1,
-            Authorization: "Basic " + credentials,
+            Authorization: authHeader,
         },
         body: biblio,
     });
@@ -132,7 +130,7 @@ const insertSampleBiblio = async (item_count, baseUrl) => {
                 body: item,
                 headers: {
                     "Content-Type": "application/json",
-                    Authorization: "Basic " + credentials,
+                    Authorization: authHeader,
                 },
             })
             .then(i => createdItems.push(i));
