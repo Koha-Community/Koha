@@ -110,7 +110,6 @@ describe("catalogue/detail/holdings_table with items", () => {
     });
 
     afterEach(function () {
-        cleanup();
         cy.set_syspref(
             "AlwaysShowHoldingsTableFilters",
             this.syspref_AlwaysShowHoldingsTableFilters
@@ -500,7 +499,6 @@ describe("catalogue/detail/holdings_table without items", () => {
     });
 
     afterEach(function () {
-        cleanup();
         cy.set_syspref(
             "AlwaysShowHoldingsTableFilters",
             this.syspref_AlwaysShowHoldingsTableFilters
