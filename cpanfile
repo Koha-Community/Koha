@@ -107,6 +107,7 @@ requires 'Storable', '2.20';
 requires 'String::Random', '0.22';
 requires 'Template', '>= 2.27, != 3.008';
 requires 'Template::Plugin::HtmlToText', '0.03';
+requires 'Template::Plugin::JSON', '0.08',
 requires 'Template::Plugin::JSON::Escape', '0.02';
 requires 'Term::ANSIColor', '1.1';
 requires 'Test', '1.25';
