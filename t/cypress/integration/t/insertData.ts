@@ -2,6 +2,31 @@ const { query } = require("./../../plugins/db.js");
 const { getBasicAuthHeader } = require("./../../plugins/auth.js");
 
 describe("insertData", () => {
+    let tablesToCheck = [
+        "borrowers",
+        "branches",
+        "items",
+        "biblio",
+        "reserves",
+    ];
+    beforeEach(() => {
+        const counts = {};
+
+        const queries = tablesToCheck.map(table => {
+            return cy
+                .task("query", {
+                    sql: `SELECT COUNT(*) as count FROM ${table}`,
+                })
+                .then(result => {
+                    counts[table] = result[0].count;
+                });
+        });
+
+        cy.wrap(Promise.all(queries)).then(() => {
+            cy.wrap(counts).as("initialCounts");
+        });
+    });
+
     describe("deleteSampleObjects", () => {
         it("should delete everything from Object", () => {
             cy.task("insertSampleBiblio", { item_count: 2 }).then(objects => {
@@ -187,6 +212,26 @@ describe("insertData", () => {
                     );
                 }
             );
+        });
+    });
+
+    afterEach(function () {
+        cy.get("@initialCounts").then(initialCounts => {
+            const queries = tablesToCheck.map(table => {
+                return cy
+                    .task("query", {
+                        sql: `SELECT COUNT(*) as count FROM ${table}`,
+                    })
+                    .then(result => {
+                        const finalCount = result[0].count;
+                        expect(
+                            finalCount,
+                            `Row count for ${table} should match`
+                        ).to.eq(initialCounts[table]);
+                    });
+            });
+
+            return Promise.all(queries);
         });
     });
 });
