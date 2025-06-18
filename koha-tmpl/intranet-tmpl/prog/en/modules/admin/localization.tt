@@ -198,11 +198,12 @@
         $(document).ready(function() {
             $(".dialog").hide();
 
-            var table = $("#localization").kohaTable({
+            let table = $("#localization").kohaTable({
                 dom: "t",
                 paging: false,
                 autoWidth: false,
             });
+            let table_dt = table.DataTable();
 
             var languages_select = $('<select name="lang" id="lang"></select>');
             [% FOR language IN languages %]
@@ -275,7 +276,7 @@
                         if ( success.error ) {
                             show_message({ type: 'error_on_insert', data: success });
                         } else {
-                            var new_row = table.row.add( [ success.id, success.entity, success.code, success.lang, success.translation, "<a href=\"#\" class=\"delete\"><i class=\"fa fa-trash-can\"></i> Delete</a>" ] ).draw().node();
+                            var new_row = table_dt.row.add( [ success.id, success.entity, success.code, success.lang, success.translation, "<a href=\"#\" class=\"delete\"><i class=\"fa fa-trash-can\"></i> Delete</a>" ] ).draw().node();
                             $( new_row ).attr("id", "row_id_" + success.id ).data("id", success.id );
                             show_message({ type: 'success_on_insert', data: success });
                         }
