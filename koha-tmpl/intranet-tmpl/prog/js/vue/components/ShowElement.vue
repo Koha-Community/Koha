@@ -21,6 +21,10 @@
             </span>
         </LinkWrapper>
     </template>
+    <template v-else-if="attribute.type == 'radio'">
+        <label>{{ attribute.label }}:</label>
+        <span>{{ radioOptionText }}</span>
+    </template>
     <template
         v-else-if="
             attribute.type == 'av' ||
@@ -179,12 +183,20 @@ export default {
             }
             return displayValue || "";
         };
+        const radioOptionText = computed(() => {
+            if (!props.attr.value || !props.attr.options.length) return "";
+            const option = props.attr.options.find(
+                option => option.value == props.resource[props.attr.name]
+            );
+            return option.description;
+        });
 
         return {
             ...baseElement,
             requiredComponent,
             attribute,
             formatValue,
+            radioOptionText,
         };
     },
     props: {
