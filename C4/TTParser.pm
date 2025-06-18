@@ -13,7 +13,7 @@
 # GNU General Public License for more details.
 #
 # You should have received a copy of the GNU General Public License
-# along with Koha; if not, see <http://www.gnu.org/licenses>.
+# along with Koha; if not, see <https://www.gnu.org/licenses>.
 
 #simple parser for HTML with Template Toolkit directives. Tokens are put into @tokens and are accessible via next_token and peep_token
 package C4::TTParser;

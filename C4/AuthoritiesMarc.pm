@@ -16,7 +16,7 @@ package C4::AuthoritiesMarc;
 # GNU General Public License for more details.
 #
 # You should have received a copy of the GNU General Public License
-# along with Koha; if not, see <http://www.gnu.org/licenses>.
+# along with Koha; if not, see <https://www.gnu.org/licenses>.
 
 use strict;
 use warnings;
@@ -1903,7 +1903,7 @@ __END__
 
 =head1 AUTHOR
 
-Koha Development Team <http://koha-community.org/>
+Koha Development Team <https://koha-community.org/>
 
 Paul POULAIN paul.poulain@free.fr
 Ere Maijala ere.maijala@helsinki.fi

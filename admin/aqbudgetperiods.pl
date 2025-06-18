@@ -16,12 +16,12 @@
 # GNU General Public License for more details.
 #
 # You should have received a copy of the GNU General Public License
-# along with Koha; if not, see <http://www.gnu.org/licenses>.
+# along with Koha; if not, see <https://www.gnu.org/licenses>.
 
 =head1 admin/aqbudgetperiods.pl
 
 script to administer the budget periods table
- This software is placed under the gnu General Public License, v2 (http://www.gnu.org/licenses/gpl.html)
+ This software is placed under the gnu General Public License, v2 (https://www.gnu.org/licenses/gpl.html)
 
  ALGO :
  this script use an $op to know what to do.

@@ -7,7 +7,7 @@
  * http://alexking.org/blog/2003/06/02/inserting-at-the-cursor-using-javascript
  * http://www.mail-archive.com/jquery-en@googlegroups.com/msg08708.html
  * Licensed under the GPL license:
- * http://www.gnu.org/licenses/gpl.html
+ * https://www.gnu.org/licenses/gpl.html
  */
 ;(function($) {
 

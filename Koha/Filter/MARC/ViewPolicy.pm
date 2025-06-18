@@ -15,7 +15,7 @@ package Koha::Filter::MARC::ViewPolicy;
 # GNU General Public License for more details.
 #
 # You should have received a copy of the GNU General Public License
-# along with Koha; if not, see <http://www.gnu.org/licenses>.
+# along with Koha; if not, see <https://www.gnu.org/licenses>.
 
 =head1 NAME
 
@@ -284,7 +284,7 @@ These should all be installed if the koha-common package is installed or Koha is
 =head1 BUGS AND LIMITATIONS
 
 This is the initial version. Please feel free to report bugs
-at http://bugs.koha-community.org/.
+at https://bugs.koha-community.org/.
 
 =head1 AUTHOR
 
@@ -307,7 +307,7 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
-along with Koha; if not, see <http://www.gnu.org/licenses>.
+along with Koha; if not, see <https://www.gnu.org/licenses>.
 
 =cut
 

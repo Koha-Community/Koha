@@ -14,11 +14,11 @@
 # GNU General Public License for more details.
 #
 # You should have received a copy of the GNU General Public License
-# along with Koha; if not, see <http://www.gnu.org/licenses>.
+# along with Koha; if not, see <https://www.gnu.org/licenses>.
 
 #script to administer the aqbudgets0 table
 #written 20/02/2002 by paul.poulain@free.fr
-# This software is placed under the gnu General Public License, v2 (http://www.gnu.org/licenses/gpl.html)
+# This software is placed under the gnu General Public License, v2 (https://www.gnu.org/licenses/gpl.html)
 
 use Modern::Perl;
 use CGI         qw ( -utf8 );

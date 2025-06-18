@@ -15,7 +15,7 @@
 # GNU General Public License for more details.
 #
 # You should have received a copy of the GNU General Public License
-# along with Koha; if not, see <http://www.gnu.org/licenses>.
+# along with Koha; if not, see <https://www.gnu.org/licenses>.
 #
 
 use Modern::Perl;
@@ -109,7 +109,7 @@ output_html_with_http_headers $query, $cookie, $template->output;
 parses the header line from a .koc file. This is the line that
 specifies things such as the file version, and the name and version of
 the offline circulation tool that generated the file. See
-L<http://wiki.koha-community.org/wiki/Koha_offline_circulation_file_format>
+L<https://wiki.koha-community.org/wiki/Koha_offline_circulation_file_format>
 for more information.
 
 pass in a string containing the header line (the first line from th

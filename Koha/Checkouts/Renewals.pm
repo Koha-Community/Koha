@@ -15,7 +15,7 @@ package Koha::Checkouts::Renewals;
 # GNU General Public License for more details.
 #
 # You should have received a copy of the GNU General Public License
-# along with oha; if not, see <http://www.gnu.org/licenses>.
+# along with oha; if not, see <https://www.gnu.org/licenses>.
 
 use Modern::Perl;
 

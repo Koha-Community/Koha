@@ -15,7 +15,7 @@ package C4::Auth_with_shibboleth;
 # GNU General Public License for more details.
 #
 # You should have received a copy of the GNU General Public License
-# along with Koha; if not, see <http://www.gnu.org/licenses>.
+# along with Koha; if not, see <https://www.gnu.org/licenses>.
 
 use Modern::Perl;
 
@@ -368,7 +368,7 @@ Note: The minimum you need here is a <matchpoint> block, containing a valid colu
 
 It should be as simple as that; you should now be able to login via shibboleth in the opac.
 
-If you need more help configuring your B<S>ervice B<P>rovider to authenticate against a chosen B<Id>entity B<P>rovider then it might be worth taking a look at the community wiki L<page|http://wiki.koha-community.org/wiki/Shibboleth_Configuration>
+If you need more help configuring your B<S>ervice B<P>rovider to authenticate against a chosen B<Id>entity B<P>rovider then it might be worth taking a look at the community wiki L<page|https://wiki.koha-community.org/wiki/Shibboleth_Configuration>
 
 =head1 FUNCTIONS
 
