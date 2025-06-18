@@ -174,10 +174,7 @@ export default {
             if (valueKey?.includes(".")) {
                 return baseElement.accessNestedProperty(valueKey, resource);
             }
-            const displayValue = attr.format(
-                resource[valueKey] ? resource[valueKey] : valueKey,
-                resource
-            );
+            const displayValue = attr.format(resource[valueKey], resource);
             if (displayValue == "Invalid Date") {
                 return "";
             }

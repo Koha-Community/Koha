@@ -25,7 +25,7 @@
 </template>
 
 <script>
-import { inject } from "vue";
+import { inject, onBeforeMount, ref } from "vue";
 import Breadcrumbs from "../Breadcrumbs.vue";
 import Help from "../Help.vue";
 import LeftMenu from "../LeftMenu.vue";
@@ -43,8 +43,32 @@ export default {
         const mainStore = inject("mainStore");
         const { loading, loaded, setError } = mainStore;
 
-        const permissionsStore = inject("permissionsStore");
-        const { userPermissions } = storeToRefs(permissionsStore);
+        const initialized = ref(false);
+
+        onBeforeMount(() => {
+            loading();
+
+            loadAuthorisedValues(authorisedValues.value, vendorStore).then(
+                () => {
+                    const client = APIClient.acquisition;
+                    client.config.get("vendors").then(result => {
+                        userPermissions.value = result.permissions;
+                        config.value.settings.edifact = result.edifact;
+                        config.value.settings.marcOrderAutomation =
+                            result.marcOrderAutomation;
+                        vendorStore.currencies = result.currencies;
+                        vendorStore.gstValues = result.gst_values.map(gv => {
+                            return {
+                                label: `${Number(gv.option * 100).format_price()}%`,
+                                value: gv.option,
+                            };
+                        });
+                        loaded();
+                        initialized.value = true;
+                    });
+                }
+            );
+        });
 
         return {
             vendorStore,
@@ -55,38 +79,9 @@ export default {
             config,
             loadAuthorisedValues,
             authorisedValues,
+            initialized,
         };
     },
-    beforeCreate() {
-        this.loading();
-
-        this.loadAuthorisedValues(this.authorisedValues, this.vendorStore).then(
-            () => {
-                const client = APIClient.acquisition;
-                client.config.get("vendors").then(config => {
-                    this.userPermissions = config.permissions;
-                    this.config.settings.edifact = config.edifact;
-                    this.config.settings.marcOrderAutomation =
-                        config.marcOrderAutomation;
-                    this.vendorStore.currencies = config.currencies;
-                    this.vendorStore.gstValues = config.gst_values.map(gv => {
-                        return {
-                            label: `${Number(gv.option * 100).format_price()}%`,
-                            value: gv.option,
-                        };
-                    });
-                    this.loaded();
-                    this.initialized = true;
-                });
-            }
-        );
-    },
-    data() {
-        return {
-            initialized: false,
-        };
-    },
-    methods: {},
     components: {
         Breadcrumbs,
         Dialog,

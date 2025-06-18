@@ -12,6 +12,7 @@
             v-model="resource[attr.name]"
             :placeholder="attr.placeholder || attr.label"
             :required="attr.required ? true : false"
+            :size="attr.size"
         />
     </template>
     <template v-else-if="attr.type == 'text'">

@@ -48,7 +48,7 @@
 </template>
 
 <script>
-import { onBeforeMount, ref } from "vue";
+import { onBeforeMount, provide, ref } from "vue";
 import FormElement from "./FormElement.vue";
 
 export default {
@@ -58,6 +58,8 @@ export default {
         const noCountRequired = ref(false);
         const resourceRelationshipCount = ref(null);
         const options = ref(null);
+
+        provide("resourceRelationships", props.resourceRelationships);
 
         const addResourceRelationship = () => {
             props.resourceRelationships.push({

@@ -122,6 +122,9 @@ export function useBaseElement(instancedElement) {
                     }
                 });
             }
+            if (instancedElement.attr.indexRequired) {
+                acc.index = instancedElement.index;
+            }
             return acc;
         }, {});
         const attr = show

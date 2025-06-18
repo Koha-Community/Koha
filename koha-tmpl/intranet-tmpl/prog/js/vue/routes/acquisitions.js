@@ -4,6 +4,7 @@ import Home from "../components/Vendors/Home.vue";
 import VendorList from "../components/Vendors/VendorList.vue";
 import VendorShow from "../components/Vendors/VendorShow.vue";
 import VendorFormAdd from "../components/Vendors/VendorFormAdd.vue";
+import ResourceWrapper from "../components/ResourceWrapper.vue";
 
 import { $__ } from "../i18n";
 
@@ -33,31 +34,32 @@ export const routes = [
                 icon: "fa fa-shopping-cart",
                 is_end_node: true,
                 breadcrumbFormat: vendorSearchBreadcrumb,
+                resource: "Vendors/VendorResource.vue",
                 children: [
                     {
                         path: "",
                         name: "VendorList",
-                        component: markRaw(VendorList),
+                        component: markRaw(ResourceWrapper),
                         alternateLeftMenu: "AcquisitionsMenu",
                     },
                     {
                         path: ":id",
                         name: "VendorShow",
-                        component: markRaw(VendorShow),
+                        component: markRaw(ResourceWrapper),
                         title: $__("Show vendor"),
                         alternateLeftMenu: "VendorMenu",
                     },
                     {
                         path: "add",
                         name: "VendorFormAdd",
-                        component: markRaw(VendorFormAdd),
+                        component: markRaw(ResourceWrapper),
                         title: $__("Add vendor"),
                         alternateLeftMenu: "none",
                     },
                     {
                         path: "edit/:id",
                         name: "VendorFormAddEdit",
-                        component: markRaw(VendorFormAdd),
+                        component: markRaw(ResourceWrapper),
                         title: $__("Edit vendor"),
                         alternateLeftMenu: "VendorMenu",
                     },
