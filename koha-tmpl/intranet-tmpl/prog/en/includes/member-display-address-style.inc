@@ -31,9 +31,7 @@
         <li class="patroncity">
             <span class="city">[%~ patron.city |html ~%]</span>
             [%~ IF ( patron.state ) %]
-                [%~ IF ( patron.city ) ~%]
-                    ,
-                [% END ~%]
+                [%~ IF ( patron.city ) ~%][% ", " | $raw %][% END ~%]
                 <span class="state">[% patron.state |html ~%]</span>
             [%~ END ~%]
             [%~ IF ( patron.zipcode ) %]<span class="zipcode">[%~ " " _ patron.zipcode |html ~%]</span>[% END %]
