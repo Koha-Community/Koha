@@ -8,12 +8,19 @@ const {
     deleteSampleObjects,
 } = require("./insertData.js");
 
+const { getBasicAuthHeader } = require("./auth.js");
+
 const { query } = require("./db.js");
 
 const { apiGet, apiPost, apiPut, apiDelete } = require("./api-client.js");
 
 module.exports = (on, config) => {
     const baseUrl = config.baseUrl;
+    const authHeader = getBasicAuthHeader(
+        config.env.apiUsername,
+        config.env.apiPassword
+    );
+
     on("dev-server:start", options =>
         startDevServer({
             options,
@@ -21,10 +28,16 @@ module.exports = (on, config) => {
     );
 
     on("task", {
+        getBasicAuthHeader() {
+            return getBasicAuthHeader(
+                config.env.apiUsername,
+                config.env.apiPassword
+            );
+        },
         buildSampleObject,
         buildSampleObjects,
         insertSampleBiblio({ item_count }) {
-            return insertSampleBiblio(item_count, baseUrl);
+            return insertSampleBiblio(item_count, baseUrl, authHeader);
         },
         insertObject({ type, object }) {
             return insertObject(type, object, baseUrl, authHeader);
