@@ -49,7 +49,7 @@
                     </div>
                     [% IF OpacKohaUrl %]
                         <div class="navbar-nav">
-                            <a id="koha_url" class="nav-link koha_url" href="http://koha-community.org">
+                            <a id="koha_url" class="nav-link koha_url" href="https://koha-community.org">
                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16">
                                     <path
                                         fill="currentColor"
