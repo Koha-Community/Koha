@@ -22,7 +22,7 @@
         [% END #/ opaccredits %]
     </div> <!-- / #wrapper in masthead.inc -->
 
-    [% IF ( Koha.Preference('OPACReportProblem') && Koha.Preference('KohaAdminEmailAddress') ) || Koha.Preference( 'CookieConsent' ) || OpacKohaUrl || ( ( OpacLangSelectorMode == 'both' || OpacLangSelectorMode == 'footer') ) %]
+    [% IF ( Koha.Preference('OPACReportProblem') && Koha.Preference('KohaAdminEmailAddress') ) || Koha.Preference( 'CookieConsent' ) || OpacKohaUrl || ( ( opaclanguagesdisplay ) && ( ! one_language_enabled ) && ( languages_loop ) && ( OpacLangSelectorMode == 'both' || OpacLangSelectorMode == 'footer') ) %]
         <footer id="changelanguage" class="navbar navbar-expand navbar-light bg-light noprint">
             <div class="container-fluid">
                 <div class="collapse navbar-collapse">
