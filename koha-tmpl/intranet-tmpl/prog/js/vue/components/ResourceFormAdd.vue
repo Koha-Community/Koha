@@ -34,57 +34,27 @@
                     </fieldset>
                 </template>
             </TabsWrapper>
-            <div
+            <AccordionWrapper
                 v-else-if="
                     instancedResource.formGroupsDisplayMode == 'accordion'
                 "
+                :accordionList="instancedResource.getFieldGroupings('Form')"
             >
-                <div
-                    v-for="(
-                        group, counter
-                    ) in instancedResource.getFieldGroupings('Form')"
-                    v-bind:key="counter"
-                    class="accordion"
-                >
-                    <fieldset class="accordion-item">
-                        <legend
-                            v-if="group.name"
-                            type="button"
-                            data-bs-toggle="collapse"
-                            :data-bs-target="`#collapse-${counter}`"
-                            aria-expanded="true"
-                            :aria-controls="`collapse-${counter}`"
+                <template #accordionContent="{ accordionGroup }">
+                    <ol>
+                        <li
+                            v-for="(attr, index) in accordionGroup.fields"
+                            v-bind:key="index"
                         >
-                            <i
-                                class="fa fa-caret-down"
-                                title="Collapse this section"
-                            ></i>
-                            {{ group.name }}
-                        </legend>
-                        <div
-                            :id="`collapse-${counter}`"
-                            class="accordion-collapse collapse show"
-                            :aria-labelledby="`heading-${counter}`"
-                            data-bs-parent="#formAccordion"
-                        >
-                            <fieldset class="accordion-body rows">
-                                <ol>
-                                    <li
-                                        v-for="(attr, index) in group.fields"
-                                        v-bind:key="index"
-                                    >
-                                        <FormElement
-                                            :resource="resourceToAddOrEdit"
-                                            :attr="attr"
-                                            :index="index"
-                                        />
-                                    </li>
-                                </ol>
-                            </fieldset>
-                        </div>
-                    </fieldset>
-                </div>
-            </div>
+                            <FormElement
+                                :resource="resourceToAddOrEdit"
+                                :attr="attr"
+                                :index="index"
+                            />
+                        </li>
+                    </ol>
+                </template>
+            </AccordionWrapper>
             <div v-else>
                 <fieldset
                     v-for="(
@@ -126,6 +96,7 @@ import { computed, onBeforeMount, reactive, ref } from "vue";
 import FormElement from "./FormElement.vue";
 import ButtonSubmit from "./ButtonSubmit.vue";
 import TabsWrapper from "./TabsWrapper.vue";
+import AccordionWrapper from "./AccordionWrapper.vue";
 
 export default {
     inheritAttrs: false,
@@ -173,6 +144,7 @@ export default {
         ButtonSubmit,
         FormElement,
         TabsWrapper,
+        AccordionWrapper,
     },
     name: "ResourceFormAdd",
 };

@@ -35,6 +35,27 @@
                 </fieldset>
             </template>
         </TabsWrapper>
+        <AccordionWrapper
+            v-else-if="instancedResource.formGroupsDisplayMode == 'accordion'"
+            :accordionList="
+                instancedResource.getFieldGroupings('Show', resource)
+            "
+        >
+            <template #accordionContent="{ accordionGroup }">
+                <ol>
+                    <li
+                        v-for="(attr, index) in accordionGroup.fields"
+                        v-bind:key="index"
+                    >
+                        <ShowElement
+                            :resource="resource"
+                            :attr="attr"
+                            :instancedResource="instancedResource"
+                        />
+                    </li>
+                </ol>
+            </template>
+        </AccordionWrapper>
         <div v-else>
             <fieldset
                 class="rows"
@@ -87,6 +108,7 @@ import Toolbar from "./Toolbar.vue";
 import ShowElement from "./ShowElement.vue";
 import { onBeforeMount, ref } from "vue";
 import TabsWrapper from "./TabsWrapper.vue";
+import AccordionWrapper from "./AccordionWrapper.vue";
 
 export default {
     inheritAttrs: false,
@@ -119,7 +141,7 @@ export default {
     props: {
         instancedResource: Object,
     },
-    components: { Toolbar, ShowElement, TabsWrapper },
+    components: { Toolbar, ShowElement, TabsWrapper, AccordionWrapper },
     name: "ResourceShow",
 };
 </script>
