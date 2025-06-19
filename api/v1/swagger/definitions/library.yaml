@@ -29,6 +29,7 @@ properties:
       - string
       - "null"
     description: the postal code of the library
+    maxLength: 25
   city:
     type:
       - string
@@ -84,6 +85,7 @@ properties:
       - string
       - "null"
     description: the IP address for your library or branch
+    maxLength: 15
   notes:
     type:
       - string
@@ -101,6 +103,7 @@ properties:
     description: MARC Organization Code, see
       http://www.loc.gov/marc/organizations/orgshome.html, when empty defaults
       to syspref MARCOrgCode
+    maxLength: 16
   pickup_location:
     type: boolean
     description: If the library can act as a pickup location
