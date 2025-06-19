@@ -178,9 +178,11 @@ properties:
   library_id:
     type: string
     description: Internal identifier for the patron's home library
+    maxLength: 10
   category_id:
     type: string
     description: Internal identifier for the patron's category
+    maxLength: 10
   date_enrolled:
     type:
       - string
@@ -227,11 +229,13 @@ properties:
       - string
       - "null"
     description: used for children to include the relationship to their guarantor
+    maxLength: 100
   gender:
     type:
       - string
       - "null"
     description: patron's gender
+    maxLength: 1
   userid:
     type:
       - string
@@ -247,16 +251,19 @@ properties:
       - string
       - "null"
     description: a note related to patron's alternate address
+    maxLength: 255
   statistics_1:
     type:
       - string
       - "null"
     description: a field that can be used for any information unique to the library
+    maxLength: 80
   statistics_2:
     type:
       - string
       - "null"
     description: a field that can be used for any information unique to the library
+    maxLength: 80
   autorenew_checkouts:
     type: boolean
     description: indicate whether auto-renewal is allowed for patron
@@ -311,6 +318,7 @@ properties:
       - "null"
     description: the mobile phone number where the patron would like to receive notices (if
       SMS turned on)
+    maxLength: 50
   sms_provider_id:
     type:
       - integer
@@ -327,6 +335,10 @@ properties:
     description: controls if relatives can see this patron's fines
   check_previous_checkout:
     type: string
+    enum:
+      - yes
+      - no
+      - inherit
     description: produce a warning for this patron if this item has previously been checked
       out to this patron if 'yes', not if 'no', defer to category setting if
       'inherit'
