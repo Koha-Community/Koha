@@ -220,7 +220,7 @@
             </div>
         </div>
     [% END %]
-    </header>
+</header>
 <!-- / header-region -->
 
 [% IF ( OpacPublic ) %]
