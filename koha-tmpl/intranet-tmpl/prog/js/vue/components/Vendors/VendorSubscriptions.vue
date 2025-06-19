@@ -1,8 +1,5 @@
 <template>
     <fieldset class="rows">
-        <h2>
-            {{ $__("Subscription details") }}
-        </h2>
         <p>
             <strong>{{ $__("Number of subscriptions") }}: </strong>
             <a
@@ -22,10 +19,10 @@ export default {
     props: {
         vendor: Object,
     },
-    setup() {
-        const permissionsStore = inject("permissionsStore");
+    setup(props) {
+        const vendorStore = inject("vendorStore");
 
-        const { isUserPermitted } = permissionsStore;
+        const { isUserPermitted } = vendorStore;
 
         return {
             isUserPermitted,

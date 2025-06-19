@@ -1,9 +1,6 @@
 import { markRaw } from "vue";
 
 import Home from "../components/Vendors/Home.vue";
-import VendorList from "../components/Vendors/VendorList.vue";
-import VendorShow from "../components/Vendors/VendorShow.vue";
-import VendorFormAdd from "../components/Vendors/VendorFormAdd.vue";
 import ResourceWrapper from "../components/ResourceWrapper.vue";
 
 import { $__ } from "../i18n";

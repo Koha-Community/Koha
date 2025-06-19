@@ -296,7 +296,6 @@ export default {
                         },
                         {
                             type: "component",
-                            // label: __("User"),
                             componentPath: "./Vendors/VendorContacts.vue",
                             indexRequired: true,
                             componentProps: {
@@ -701,6 +700,7 @@ export default {
 
         const appendToShow = componentData => {
             let format_date = componentData.instancedResource.format_date;
+            const fields = [];
             const contracts = {
                 type: "component",
                 name: $__("Contracts"),
@@ -793,7 +793,23 @@ export default {
                     },
                 },
             };
-            return componentData.resource.contracts.length ? [contracts] : [];
+            const subscriptions = {
+                type: "component",
+                name: $__("Subscription details"),
+                hidden: vendor => vendor.subscriptions_count,
+                componentPath: "./Vendors/VendorSubscriptions.vue",
+                componentProps: {
+                    vendor: {
+                        type: "resource",
+                    },
+                },
+            };
+
+            if (componentData.resource.contracts.length > 0)
+                fields.push(contracts);
+            if (componentData.resource.subscriptions_count > 0)
+                fields.push(subscriptions);
+            return fields;
         };
 
         baseResource.created();
