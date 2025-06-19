@@ -204,6 +204,7 @@ subtest 'maxlength + enum' => sub {
         # api def => schema
         item    => 'Item',
         library => 'Branch',
+        patron  => 'Borrower',
     };
     plan tests => scalar keys %$def_map;
     my $schema = Koha::Database->new->schema;
