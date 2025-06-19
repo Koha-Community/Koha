@@ -4,6 +4,7 @@ properties:
   patron_category_id:
     type: string
     description: Internal patron category identifier
+    maxLength: 10
   name:
     type:
       - string
@@ -56,9 +57,11 @@ properties:
   category_type:
     type: string
     description: Type of Koha patron (Adult, Child, Professional, Organizational, Statistical, Staff)
+    maxLength: 1
   block_expired_patron_opac_actions:
     type: string
     description: Specific actions expired patrons of this category are blocked from performing. OPAC actions blocked based on the patron category take priority over this preference
+    maxLength: 128
   default_privacy:
     type: string
     enum:
@@ -68,6 +71,10 @@ properties:
     description: Default privacy setting for this patron category
   check_prev_checkout:
     type: string
+    enum:
+      - yes
+      - no
+      - inherit
     description: Produce a warning for this patron category if this item has previously been checked out to this patron if ''yes'', not if ''no'', defer to syspref setting if ''inherit''.'
   can_place_ill_in_opac:
     type: boolean
