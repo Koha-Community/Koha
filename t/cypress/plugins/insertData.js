@@ -1,10 +1,9 @@
 const { buildSampleObject, buildSampleObjects } = require("./mockData.js");
 const { query } = require("./db.js");
 
-const { APIClient } = require("./dist/api-client.cjs.js");
+const { apiGet, apiPost } = require("./api-client.js");
 
 const insertSampleBiblio = async (item_count, baseUrl, authHeader) => {
-    let client = APIClient.default;
     let generated_objects = {};
     const objects = [{ object: "library" }, { object: "item_type" }];
     for (const { object } of objects) {
@@ -52,14 +51,15 @@ const insertSampleBiblio = async (item_count, baseUrl, authHeader) => {
             },
         ],
     };
-    let result = await client.koha.post({
-        endpoint: `${baseUrl}/api/v1/biblios`,
+    let result = await apiPost({
+        endpoint: "/api/v1/biblios",
         headers: {
             "Content-Type": "application/marc-in-json",
             "x-confirm-not-duplicate": 1,
-            Authorization: authHeader,
         },
         body: biblio,
+        baseUrl,
+        authHeader,
     });
     const biblio_id = result.id;
     // We do not have a route to get a biblio as it is stored in DB
@@ -124,16 +124,12 @@ const insertSampleBiblio = async (item_count, baseUrl, authHeader) => {
     );
     let createdItems = [];
     for (const item of items) {
-        await client.koha
-            .post({
-                endpoint: `${baseUrl}/api/v1/biblios/${biblio_id}/items`,
-                body: item,
-                headers: {
-                    "Content-Type": "application/json",
-                    Authorization: authHeader,
-                },
-            })
-            .then(i => createdItems.push(i));
+        await apiPost({
+            endpoint: `/api/v1/biblios/${biblio_id}/items`,
+            body: item,
+            baseUrl,
+            authHeader,
+        }).then(i => createdItems.push(i));
     }
     return { biblio, items: createdItems, library, item_type };
 };
@@ -195,19 +191,15 @@ const insertLibrary = async (library, baseUrl, authHeader) => {
         needs_override,
         ...new_library
     } = library;
-    let client = APIClient.default;
-    return client.koha.post({
-        endpoint: `${baseUrl}/api/v1/libraries`,
+    return apiPost({
+        endpoint: "/api/v1/libraries",
         body: new_library,
-        headers: {
-            "Content-Type": "application/json",
-            Authorization: authHeader,
-        },
+        baseUrl,
+        authHeader,
     });
 };
 
 const insertObject = async (type, object, baseUrl, authHeader) => {
-    let client = APIClient.default;
     if (type == "patron") {
         await query({
             sql: "SELECT COUNT(*) AS count FROM branches WHERE branchcode = ?",
@@ -247,26 +239,22 @@ const insertObject = async (type, object, baseUrl, authHeader) => {
             ...patron
         } = object;
 
-        return client.koha.post({
-            endpoint: `${baseUrl}/api/v1/patrons`,
+        return apiPost({
+            endpoint: `/api/v1/patrons`,
             body: patron,
-            headers: {
-                "Content-Type": "application/json",
-                Authorization: authHeader,
-            },
+            baseUrl,
+            authHeader,
         });
     } else if (type == "library") {
         const keysToKeep = ["library_id", "name"];
         const library = Object.fromEntries(
             Object.entries(object).filter(([key]) => keysToKeep.includes(key))
         );
-        return client.koha.post({
-            endpoint: `${baseUrl}/api/v1/libraries`,
-            headers: {
-                "Content-Type": "application/json",
-                Authorization: authHeader,
-            },
+        return apiPost({
+            endpoint: "/api/v1/libraries",
             body: library,
+            baseUrl,
+            authHeader,
         });
     } else if (type == "item_type") {
         const keysToKeep = ["item_type_id", "description"];
@@ -279,12 +267,10 @@ const insertObject = async (type, object, baseUrl, authHeader) => {
         })
             .then(result => {
                 // FIXME We need /item_types/:item_type_id
-                return client.koha.get({
-                    endpoint: `${baseUrl}/api/v1/item_types?q={"item_type_id":"${item_type.item_type_id}"}`,
-                    headers: {
-                        "Content-Type": "application/json",
-                        Authorization: authHeader,
-                    },
+                return apiGet({
+                    endpoint: `/api/v1/item_types?q={"item_type_id":"${item_type.item_type_id}"}`,
+                    baseUrl,
+                    authHeader,
                 });
             })
             .then(item_types => item_types[0]);
