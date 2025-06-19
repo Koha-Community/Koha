@@ -14,15 +14,18 @@
 
 use Modern::Perl;
 
-use Test::More tests => 6;
+use Test::More tests => 8;
+use Test::NoWarnings;
 
 use Test::Mojo;
 use Data::Dumper;
+use Koha::Database;
 
 use FindBin();
 use IPC::Cmd        qw(can_run);
 use List::MoreUtils qw(any);
 use File::Slurp     qw(read_file);
+use YAML::XS        qw(LoadFile);
 
 my $t    = Test::Mojo->new('Koha::REST::V1');
 my $spec = $t->get_ok( '/api/v1/', 'Correctly fetched the spec' )->tx->res->json;
@@ -192,5 +195,44 @@ subtest 'POST (201) have location header' => sub {
         } else {
             fail("$file does not contain the location header");
         }
+    }
+};
+
+subtest 'maxlength + enum' => sub {
+    my $def_map = {
+
+        # api def => schema
+        item => 'Item',
+    };
+    plan tests => scalar keys %$def_map;
+    my $schema = Koha::Database->new->schema;
+    while ( my ( $def, $dbic_src ) = each %$def_map ) {
+        my @failures;
+        my $definition   = LoadFile("api/v1/swagger/definitions/$def.yaml");
+        my $source       = $schema->source($dbic_src);
+        my $object_class = Koha::Object::_get_object_class( $source->result_class );
+        eval "require $object_class";
+        my $koha_object = $object_class->new;
+        my $api_mapping = $koha_object->to_api_mapping;
+        my $reversed_api_mapping =
+            { reverse map { defined $api_mapping->{$_} ? ( $_ => $api_mapping->{$_} ) : () } keys %$api_mapping };
+
+        while ( my ( $attr, $properties ) = each %{ $definition->{properties} } ) {
+            my $db_col = $reversed_api_mapping->{$attr};
+            next unless $db_col;
+            my $column_info = $koha_object->_result->column_info($db_col);
+            next unless $column_info->{size};
+
+            next if ref( $column_info->{size} ) eq 'ARRAY';    # decimal # FIXME Could have a test for this as well
+
+            next
+                if $properties->{enum}
+                ; # FIXME This is not fully correct, we might want to make sure enum is set for both DB and spec. eg. now checkprevcheckout is enum only for the api spec
+
+            if ( !exists $properties->{maxLength} || $column_info->{size} != $properties->{maxLength} ) {
+                push @failures, sprintf "%s.%s should have maxLength=%s in api spec", $def, $attr, $column_info->{size};
+            }
+        }
+        is( scalar(@failures), 0, "maxLength tests for $def" ) or diag Dumper @failures;
     }
 };
