@@ -13,7 +13,29 @@
                 resource[instancedResource.idAttr]
             }}
         </h2>
-        <div>
+        <TabsWrapper
+            v-if="instancedResource.formGroupsDisplayMode == 'tabs'"
+            :tabList="instancedResource.getFieldGroupings('Show', resource)"
+        >
+            <template #tabContent="{ tabGroup }">
+                <fieldset class="rows">
+                    <legend v-if="tabGroup.name">{{ tabGroup.name }}</legend>
+                    <ol>
+                        <li
+                            v-for="(attr, index) in tabGroup.fields"
+                            v-bind:key="index"
+                        >
+                            <ShowElement
+                                :resource="resource"
+                                :attr="attr"
+                                :instancedResource="instancedResource"
+                            />
+                        </li>
+                    </ol>
+                </fieldset>
+            </template>
+        </TabsWrapper>
+        <div v-else>
             <fieldset
                 class="rows"
                 v-for="(group, counter) in instancedResource.getFieldGroupings(
@@ -64,6 +86,7 @@
 import Toolbar from "./Toolbar.vue";
 import ShowElement from "./ShowElement.vue";
 import { onBeforeMount, ref } from "vue";
+import TabsWrapper from "./TabsWrapper.vue";
 
 export default {
     inheritAttrs: false,
@@ -96,7 +119,7 @@ export default {
     props: {
         instancedResource: Object,
     },
-    components: { Toolbar, ShowElement },
+    components: { Toolbar, ShowElement, TabsWrapper },
     name: "ResourceShow",
 };
 </script>

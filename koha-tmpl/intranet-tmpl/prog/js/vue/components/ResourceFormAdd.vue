@@ -9,55 +9,19 @@
             }}
         </h2>
         <h2 v-else>{{ instancedResource.i18n.newLabel }}</h2>
-        <ul
-            v-if="instancedResource.formGroupsDisplayMode == 'tabs'"
-            class="nav nav-tabs"
-            role="tablist"
-        >
-            <li
-                v-for="(tab, counter) in instancedResource.getFieldGroupings(
-                    'Form'
-                )"
-                class="nav-item"
-                :key="`tab${counter}`"
-            >
-                <a
-                    href="#"
-                    :class="['nav-link', { active: counter == 0 }]"
-                    data-bs-toggle="tab"
-                    :data-bs-target="'#' + tab.name?.replace(/\s/g, '_')"
-                    role="tab"
-                    :aria-controls="tab.name?.replace(/\s/g, '_')"
-                    :data-content="tab.name"
-                    >{{ tab.name }}</a
-                >
-            </li>
-        </ul>
         <form @submit="instancedResource.onSubmit($event, resourceToAddOrEdit)">
-            <div
+            <TabsWrapper
                 v-if="instancedResource.formGroupsDisplayMode == 'tabs'"
-                class="tab-content"
+                :tabList="instancedResource.getFieldGroupings('Form')"
             >
-                <div
-                    v-for="(
-                        group, counter
-                    ) in instancedResource.getFieldGroupings('Form')"
-                    v-bind:key="counter"
-                    :id="group.name?.replace(/\s/g, '_')"
-                    role="tabpanel"
-                    :aria-labelledby="group.name?.replace(/\s/g, '_') + '-tab'"
-                    :class="[
-                        'tab-pane',
-                        'rows',
-                        { show: counter == 0 },
-                        { active: counter == 0 },
-                    ]"
-                >
+                <template #tabContent="{ tabGroup }">
                     <fieldset class="rows">
-                        <legend v-if="group.name">{{ group.name }}</legend>
+                        <legend v-if="tabGroup.name">
+                            {{ tabGroup.name }}
+                        </legend>
                         <ol>
                             <li
-                                v-for="(attr, index) in group.fields"
+                                v-for="(attr, index) in tabGroup.fields"
                                 v-bind:key="index"
                             >
                                 <FormElement
@@ -68,8 +32,8 @@
                             </li>
                         </ol>
                     </fieldset>
-                </div>
-            </div>
+                </template>
+            </TabsWrapper>
             <div
                 v-else-if="
                     instancedResource.formGroupsDisplayMode == 'accordion'
@@ -161,6 +125,7 @@
 import { computed, onBeforeMount, reactive, ref } from "vue";
 import FormElement from "./FormElement.vue";
 import ButtonSubmit from "./ButtonSubmit.vue";
+import TabsWrapper from "./TabsWrapper.vue";
 
 export default {
     inheritAttrs: false,
@@ -207,6 +172,7 @@ export default {
     components: {
         ButtonSubmit,
         FormElement,
+        TabsWrapper,
     },
     name: "ResourceFormAdd",
 };
