@@ -112,6 +112,7 @@ export default {
                     type: "select",
                     label: $__("Vendor type"),
                     avCat: "av_vendor_types",
+                    fallbackType: "text",
                 },
                 {
                     name: "aliases",

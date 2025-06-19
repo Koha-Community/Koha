@@ -320,9 +320,13 @@ export function useBaseResource(instancedResource) {
             if (attr.type === "select" && typeof attr.avCat === "string") {
                 const avKey = attr.avCat;
                 const avArray = authorisedValues[avKey];
-                attr.options = avArray;
-                attr.requiredKey = "value";
-                attr.selectLabel = "description";
+                if ((!avArray || !avArray.length) && attr.fallbackType) {
+                    attr.type = attr.fallbackType;
+                } else {
+                    attr.options = avArray;
+                    attr.requiredKey = "value";
+                    attr.selectLabel = "description";
+                }
             }
             if (attr.type == "relationship" && attr.componentProps) {
                 Object.keys(attr.componentProps).forEach(key => {
