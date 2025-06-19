@@ -105,8 +105,8 @@ export default {
         },
     },
     setup(props) {
-        const permissionsStore = inject("permissionsStore");
-        const { isUserPermitted } = permissionsStore;
+        const vendorStore = inject("vendorStore");
+        const { isUserPermitted } = vendorStore;
         const navigationStore = inject("navigationStore");
         const { params } = storeToRefs(navigationStore);
 

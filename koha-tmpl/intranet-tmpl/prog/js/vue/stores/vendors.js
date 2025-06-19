@@ -1,6 +1,7 @@
 import { defineStore } from "pinia";
 import { reactive, toRefs } from "vue";
 import { withAuthorisedValueActions } from "../composables/authorisedValues";
+import { permissionsActions } from "../composables/permissions";
 
 export const useVendorStore = defineStore("vendors", () => {
     const store = reactive({
@@ -17,8 +18,12 @@ export const useVendorStore = defineStore("vendors", () => {
             av_vendor_types: "VENDOR_TYPE",
             av_vendor_interface_types: "VENDOR_INTERFACE_TYPE",
         },
+        userPermissions: null,
     });
-    const sharedActions = withAuthorisedValueActions(store);
+    const sharedActions = {
+        ...withAuthorisedValueActions(store),
+        ...permissionsActions(store),
+    };
 
     return {
         ...toRefs(store),

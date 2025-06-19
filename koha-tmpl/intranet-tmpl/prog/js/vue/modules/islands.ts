@@ -3,7 +3,6 @@ import { createPinia } from "pinia";
 import { $__ } from "../i18n";
 import { useMainStore } from "../stores/main";
 import { useNavigationStore } from "../stores/navigation";
-import { usePermissionsStore } from "../stores/permissions";
 import { useVendorStore } from "../stores/vendors";
 
 /**
@@ -54,11 +53,7 @@ export const componentRegistry: Map<string, WebComponentDynamicImport> =
                     return module.default;
                 },
                 config: {
-                    stores: [
-                        "vendorStore",
-                        "navigationStore",
-                        "permissionsStore",
-                    ],
+                    stores: ["vendorStore", "navigationStore"],
                 },
             },
         ],
@@ -73,7 +68,7 @@ export const componentRegistry: Map<string, WebComponentDynamicImport> =
                     return module.default;
                 },
                 config: {
-                    stores: ["navigationStore", "permissionsStore"],
+                    stores: ["vendorStore", "navigationStore"],
                 },
             },
         ],
@@ -89,7 +84,6 @@ export function hydrate(): void {
         const storesMatrix = {
             mainStore: useMainStore(pinia),
             navigationStore: useNavigationStore(pinia),
-            permissionsStore: usePermissionsStore(pinia),
             vendorStore: useVendorStore(pinia),
         };
 

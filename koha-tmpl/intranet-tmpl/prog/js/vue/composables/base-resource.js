@@ -10,18 +10,23 @@ export function useBaseResource(instancedResource) {
     const { setConfirmationDialog, setMessage, setError, setWarning } =
         inject("mainStore");
 
-    const permissionsStore = inject("permissionsStore");
-    const { isUserPermitted } = permissionsStore;
-    const { userPermissions } = storeToRefs(permissionsStore);
-
-    const authorisedValuesData = {};
+    const moduleStoreUtils = {};
     if (instancedResource.moduleStore) {
         const moduleStore = inject(instancedResource.moduleStore);
-        const { get_lib_from_av, map_av_dt_filter } = moduleStore;
-        const { authorisedValues } = storeToRefs(moduleStore);
-        authorisedValuesData.get_lib_from_av = get_lib_from_av;
-        authorisedValuesData.map_av_dt_filter = map_av_dt_filter;
-        authorisedValuesData.authorisedValues = authorisedValues.value;
+        const { get_lib_from_av, map_av_dt_filter, isUserPermitted } =
+            moduleStore;
+        const { authorisedValues, userPermissions } = storeToRefs(moduleStore);
+
+        if (authorisedValues) {
+            moduleStoreUtils.get_lib_from_av = get_lib_from_av;
+            moduleStoreUtils.map_av_dt_filter = map_av_dt_filter;
+            moduleStoreUtils.authorisedValues = authorisedValues.value;
+        }
+
+        if (userPermissions) {
+            moduleStoreUtils.userPermissions = userPermissions.value;
+            moduleStoreUtils.isUserPermitted = isUserPermitted;
+        }
     }
 
     const format_date = $date;
@@ -309,7 +314,7 @@ export function useBaseResource(instancedResource) {
      * @param {Array} attrs - The array of attributes to be populated with authorised values.
      */
     const populateAttributesWithAuthorisedValues = attrs => {
-        const { authorisedValues } = authorisedValuesData;
+        const { authorisedValues } = moduleStoreUtils;
         if (!attrs) return;
         attrs.forEach(attr => {
             if (attr.type === "select" && typeof attr.avCat === "string") {
@@ -591,7 +596,7 @@ export function useBaseResource(instancedResource) {
 
     return {
         ...instancedResource,
-        ...authorisedValuesData,
+        ...moduleStoreUtils,
         getFilterValues,
         getFilters,
         toolbarButtons,
@@ -627,7 +632,5 @@ export function useBaseResource(instancedResource) {
         route,
         router,
         $__,
-        isUserPermitted,
-        userPermissions,
     };
 }

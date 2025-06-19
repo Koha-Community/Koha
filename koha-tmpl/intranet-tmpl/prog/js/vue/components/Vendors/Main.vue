@@ -37,7 +37,8 @@ import { APIClient } from "../../fetch/api-client.js";
 export default {
     setup() {
         const vendorStore = inject("vendorStore");
-        const { config, authorisedValues } = storeToRefs(vendorStore);
+        const { config, authorisedValues, userPermissions } =
+            storeToRefs(vendorStore);
         const { loadAuthorisedValues } = vendorStore;
 
         const mainStore = inject("mainStore");
