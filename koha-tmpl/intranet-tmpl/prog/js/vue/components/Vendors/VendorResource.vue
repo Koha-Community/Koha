@@ -24,6 +24,10 @@ export default {
             return value ? "Yes" : "No";
         };
 
+        const verifyDiscountValue = discount => {
+            return /^[\-]?\d{0,2}(\.\d{0,3})*$/.test(discount);
+        };
+
         const baseResource = useBaseResource({
             resourceName: "vendor",
             nameAttr: "name",
@@ -495,6 +499,10 @@ export default {
                     label: __("Discount"),
                     defaultValue: null,
                     size: 6,
+                    formErrorHandler: verifyDiscountValue,
+                    formErrorMessage: $__(
+                        "Please enter a decimal number in the format: 0.0"
+                    ),
                     hideIn: ["List"],
                 },
                 {
@@ -617,9 +625,6 @@ export default {
                 }
                 return acc;
             }, []);
-        };
-        const verifyDiscountValue = discount => {
-            return /^[\-]?\d{0,2}(\.\d{0,3})*$/.test(discount);
         };
 
         const onSubmit = (e, vendorToSave) => {

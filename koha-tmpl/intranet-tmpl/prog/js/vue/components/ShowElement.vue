@@ -4,7 +4,8 @@
             (attribute.type == 'text' ||
                 attribute.type == 'textarea' ||
                 (attribute.type == 'select' && !attribute.avCat) ||
-                attribute?.type == 'date') &&
+                attribute?.type == 'date' ||
+                attribute.type == 'number') &&
             (!attribute.hidden ||
                 (attribute.hidden && attribute.hidden(resource)))
         "

@@ -14,7 +14,7 @@ import { computed } from "vue";
 export default {
     props: {
         id: String,
-        modelValue: Number,
+        modelValue: String,
         placeholder: String,
         required: Boolean,
         size: Number | null,

@@ -13,6 +13,7 @@
             :placeholder="attr.placeholder || attr.label"
             :required="attr.required ? true : false"
             :size="attr.size"
+            @update:modelValue="checkForInputError()"
         />
     </template>
     <template v-else-if="attr.type == 'text'">
@@ -21,6 +22,7 @@
             v-model="resource[attr.name]"
             :placeholder="attr.placeholder || attr.label"
             :required="attr.required ? true : false"
+            @update:modelValue="checkForInputError()"
         />
     </template>
     <template v-else-if="attr.type == 'textarea'">
@@ -31,6 +33,7 @@
             :cols="attr.textAreaCols"
             :placeholder="attr.placeholder || attr.label"
             :required="attr.required ? true : false"
+            @update:modelValue="checkForInputError()"
         />
     </template>
     <template v-else-if="attr.type == 'checkbox'">
@@ -180,6 +183,9 @@
     </template>
     <ToolTip v-if="attr.toolTip" :toolTip="attr.toolTip"></ToolTip>
     <span v-if="attr.required" class="required">{{ $__("Required") }}</span>
+    <span style="margin-left: 5px" class="error" v-if="fieldInputError">
+        {{ attr.formErrorMessage }}
+    </span>
 </template>
 
 <script>
@@ -192,7 +198,7 @@ import FormRelationshipSelect from "./FormRelationshipSelect.vue";
 import ToolTip from "./ToolTip.vue";
 import InputRadioElement from "./Elements/InputRadioElement.vue";
 import { useBaseElement } from "../composables/base-element.js";
-import { computed, defineAsyncComponent } from "vue";
+import { computed, defineAsyncComponent, ref } from "vue";
 
 export default {
     props: {
@@ -255,6 +261,16 @@ export default {
                 return props.disabled || false;
             }
         });
+
+        const fieldInputError = ref(false);
+        const checkForInputError = () => {
+            if (props.attr.formErrorHandler) {
+                fieldInputError.value = !props.attr.formErrorHandler(
+                    props.resource[props.attr.name]
+                );
+            }
+        };
+
         return {
             ...baseElement,
             selectRequiredKey,
@@ -264,6 +280,8 @@ export default {
             requiredComponent,
             selectOptions,
             disabled,
+            fieldInputError,
+            checkForInputError,
         };
     },
     name: "FormElement",
