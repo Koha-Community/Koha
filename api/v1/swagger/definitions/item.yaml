@@ -12,6 +12,7 @@ properties:
       - string
       - "null"
     description: The item's barcode
+    maxLength: 20
   acquisition_date:
     type:
       - string
@@ -36,6 +37,7 @@ properties:
       - string
       - "null"
     description: Internal library id for the library the item belongs to
+    maxLength: 10
   purchase_price:
     type:
       - number
@@ -103,11 +105,13 @@ properties:
       - string
       - "null"
     description: Call number for this item
+    maxLength: 255
   coded_location_qualifier:
     type:
       - string
       - "null"
     description: Coded location qualifier
+    maxLength: 10
   checkouts_count:
     type:
       - integer
@@ -148,6 +152,7 @@ properties:
       - string
       - "null"
     description: Library that is currently in possession item
+    maxLength: 10
   timestamp:
     type: string
     format: date-time
@@ -164,6 +169,7 @@ properties:
     description:
       Linked to the CART and PROC temporary locations feature, stores the
       permanent shelving location
+    maxLength: 80
   checked_out_date:
     type:
       - string
@@ -177,16 +183,19 @@ properties:
       - string
       - "null"
     description: Classification source used on this item
+    maxLength: 10
   call_number_sort:
     type:
       - string
       - "null"
     description: "?"
+    maxLength: 255
   collection_code:
     type:
       - string
       - "null"
     description: Authorized value for the collection code associated with this item
+    maxLength: 80
   materials_notes:
     type:
       - string
@@ -207,6 +216,7 @@ properties:
       - string
       - "null"
     description: Itemtype defining the type for this item
+    maxLength: 10
   effective_item_type_id:
     type:
       - string
@@ -227,16 +237,19 @@ properties:
       - string
       - "null"
     description: Copy number
+    maxLength: 32
   inventory_number:
     type:
       - string
       - "null"
     description: Inventory number
+    maxLength: 80
   new_status:
     type:
       - string
       - "null"
     description: "'new' value, whatever free-text information."
+    maxLength: 32
   exclude_from_local_holds_priority:
     type: boolean
     description: Exclude this item from local holds priority.
