@@ -114,10 +114,8 @@ if ( $backends_available ) {
         $template->param(
             notices    => $notices,
             request    => $request,
-            ( $params->{tran_error} ?
-                ( tran_error => $params->{tran_error} ) : () ),
-            ( $params->{tran_success} ?
-                ( tran_success => $params->{tran_success} ) : () ),
+            ( $params->{tran_fail}    ? ( tran_fail    => $params->{tran_fail} )    : () ),
+            ( $params->{tran_success} ? ( tran_success => $params->{tran_success} ) : () ),
         );
 
         output_and_exit( $cgi, $cookie, $template, 'unknown_ill_request' ) if !$request;
