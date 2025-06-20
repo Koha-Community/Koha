@@ -1776,6 +1776,8 @@ sub send_patron_notice {
     );
     my @transports = keys %{ $borrower_preferences->{transports} };
 
+    return { result => { fail => [ 'email', 'sms' ], success => [] } } unless @transports;
+
     # Notice should come from the library where the request was placed,
     # not the patrons home library
     my $branch        = Koha::Libraries->find( $self->branchcode );
