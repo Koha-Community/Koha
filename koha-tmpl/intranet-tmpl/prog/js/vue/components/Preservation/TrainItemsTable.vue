@@ -88,14 +88,6 @@
                 </li>
             </ol>
         </fieldset>
-        <fieldset class="action">
-            <router-link
-                :to="{ name: 'TrainsList' }"
-                role="button"
-                class="cancel"
-                >{{ $__("Close") }}</router-link
-            >
-        </fieldset>
     </div>
 </template>
 
