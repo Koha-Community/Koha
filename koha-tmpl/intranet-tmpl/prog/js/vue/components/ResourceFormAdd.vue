@@ -9,7 +9,14 @@
             }}
         </h2>
         <h2 v-else>{{ instancedResource.i18n.newLabel }}</h2>
-        <form @submit="instancedResource.onSubmit($event, resourceToAddOrEdit)">
+        <slot
+            name="toolbar"
+            :componentPropData="{ ...$props, ...$data, resourceForm }"
+        />
+        <form
+            @submit="instancedResource.onSubmit($event, resourceToAddOrEdit)"
+            ref="resourceForm"
+        >
             <TabsWrapper
                 v-if="instancedResource.formGroupsDisplayMode == 'tabs'"
                 :tabList="instancedResource.getFieldGroupings('Form')"
@@ -78,7 +85,14 @@
                     </ol>
                 </fieldset>
             </div>
-            <fieldset class="action">
+            <fieldset
+                class="action"
+                v-if="
+                    !instancedResource.stickyToolbar ||
+                    (instancedResource.stickyToolbar &&
+                        !instancedResource.stickyToolbar.includes('Form'))
+                "
+            >
                 <ButtonSubmit />
                 <router-link
                     :to="{ name: instancedResource.listComponent }"
@@ -92,7 +106,7 @@
 </template>
 
 <script>
-import { computed, onBeforeMount, reactive, ref } from "vue";
+import { computed, onBeforeMount, reactive, ref, useTemplateRef } from "vue";
 import FormElement from "./FormElement.vue";
 import ButtonSubmit from "./ButtonSubmit.vue";
 import TabsWrapper from "./TabsWrapper.vue";
@@ -108,6 +122,10 @@ export default {
             return (
                 resource.value || reactive(props.instancedResource.newResource)
             );
+        });
+
+        const resourceForm = computed(() => {
+            return useTemplateRef("resourceForm");
         });
 
         onBeforeMount(() => {
@@ -135,6 +153,7 @@ export default {
             initialized,
             resource,
             resourceToAddOrEdit,
+            resourceForm,
         };
     },
     props: {

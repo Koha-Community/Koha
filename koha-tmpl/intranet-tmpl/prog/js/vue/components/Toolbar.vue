@@ -14,13 +14,7 @@
                     componentPropData
                 )"
             >
-                <ToolbarButton
-                    :action="button.action"
-                    @click="button.onClick"
-                    :title="button.title"
-                    :to="button.to"
-                    :icon="button.icon"
-                />
+                <ToolbarButton v-bind="{ ...button }" />
             </template>
         </template>
         <slot></slot>
@@ -28,6 +22,7 @@
 </template>
 
 <script>
+import { computed, useTemplateRef, watch } from "vue";
 import ToolbarButton from "./ToolbarButton.vue";
 export default {
     props: {
@@ -36,25 +31,22 @@ export default {
         resource: Object,
         i18n: Object,
         componentPropData: Object,
-    },
-    components: { ToolbarButton },
-    name: "Toolbar",
-    props: {
         sticky: {
             type: Boolean,
             default: false,
         },
     },
-    data() {
-        return {
-            observer: null,
-        };
-    },
-    methods: {},
-    mounted() {
-        if (this.sticky) {
-            apply_sticky(this.$refs.toolbar);
-        }
+    components: { ToolbarButton },
+    name: "Toolbar",
+    setup(props) {
+        const toolbar = computed(() => {
+            return useTemplateRef("toolbar");
+        });
+        watch(toolbar.value, newValue => {
+            if (newValue && props.sticky) {
+                apply_sticky(newValue);
+            }
+        });
     },
 };
 </script>

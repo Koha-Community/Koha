@@ -1,13 +1,14 @@
 <template>
-    <Link
-        v-bind="$props"
-    />
+    <ButtonSubmit v-if="form" v-bind="$props" />
+    <Link v-else v-bind="$props" />
 </template>
 
 <script>
+import ButtonSubmit from "./ButtonSubmit.vue";
 import Link from "./Link.vue";
 export default {
-    components: { Link },
+    inheritAttrs: false,
+    components: { Link, ButtonSubmit },
     props: {
         action: {
             type: String,
@@ -33,6 +34,9 @@ export default {
             type: String,
             default: "btn btn-default",
             required: false,
+        },
+        form: {
+            type: Object,
         },
     },
     name: "Toolbar",

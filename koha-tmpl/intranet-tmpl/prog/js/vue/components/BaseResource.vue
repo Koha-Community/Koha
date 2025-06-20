@@ -42,7 +42,21 @@
         v-if="['add', 'edit'].includes(routeAction)"
         :instancedResource="instancedResource"
         :key="instancedResource.refreshTemplate"
-    />
+    >
+        <template #toolbar="{ resource, componentPropData }">
+            <Toolbar
+                :toolbarButtons="instancedResource.toolbarButtons"
+                component="form"
+                :resource="resource"
+                :i18n="instancedResource.i18n"
+                :componentPropData="componentPropData"
+                :sticky="
+                    instancedResource.stickyToolbar &&
+                    instancedResource.stickyToolbar.includes('Form')
+                "
+            />
+        </template>
+    </ResourceFormAdd>
 </template>
 
 <script>

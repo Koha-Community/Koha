@@ -1,11 +1,15 @@
 <template>
-    <button v-if="form" @click="form.requestSubmit()" class="btn btn-primary">
+    <button
+        v-if="form"
+        @click="form.value.requestSubmit()"
+        class="btn btn-primary"
+    >
         <font-awesome-icon v-if="icon" :icon="icon" />
-        {{ text }}
+        {{ title }}
     </button>
     <button v-else type="submit" class="btn btn-primary">
         <font-awesome-icon v-if="icon" :icon="icon" />
-        {{ text }}
+        {{ title }}
     </button>
 </template>
 
@@ -13,7 +17,7 @@
 export default {
     name: "ButtonSubmit",
     props: {
-        text: {
+        title: {
             type: String,
             default: __("Submit"),
             required: false,

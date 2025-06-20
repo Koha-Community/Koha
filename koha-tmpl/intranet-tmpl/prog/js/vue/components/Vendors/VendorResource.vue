@@ -28,6 +28,27 @@ export default {
             return /^[\-]?\d{0,2}(\.\d{0,3})*$/.test(discount);
         };
 
+        const additionalToolbarButtons = (resource, componentData) => {
+            const { instancedResource } = componentData;
+            return {
+                form: [
+                    {
+                        title: instancedResource.$__("Save"),
+                        icon: "save",
+                        form: componentData.resourceForm,
+                    },
+                    {
+                        to: {
+                            name: "VendorList",
+                        },
+                        title: instancedResource.$__("Cancel"),
+                        icon: "times",
+                        cssClass: "btn btn-link",
+                    },
+                ],
+            };
+        };
+
         const baseResource = useBaseResource({
             resourceName: "vendor",
             nameAttr: "name",
@@ -52,6 +73,8 @@ export default {
             props,
             moduleStore: "vendorStore",
             formGroupsDisplayMode: "accordion",
+            additionalToolbarButtons,
+            stickyToolbar: ["Form"],
             resourceAttrs: [
                 {
                     name: "id",
