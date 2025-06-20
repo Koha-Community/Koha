@@ -36,7 +36,7 @@ export default {
                         description: __("Received"),
                     },
                 ],
-                value: "",
+                default: "",
             },
         ];
         const additionalToolbarButtons = (resource, componentData) => {
