@@ -82,6 +82,7 @@ export default {
                         item_ids: item_ids.join(","),
                     },
                 });
+                instancedResource.itemsRecentlyAddedToWaitingList = [];
             };
             return {
                 list: [
