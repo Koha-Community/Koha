@@ -105,6 +105,7 @@ export default {
                                             required: true,
                                         },
                                     ],
+                                    size: "modal-lg",
                                 },
                                 addItemsToWaitingList
                             ),

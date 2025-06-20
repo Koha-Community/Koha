@@ -28,7 +28,12 @@
         v-if="confirmation"
         id="confirmation"
     >
-        <div class="modal-dialog">
+        <div
+            :class="
+                'modal-dialog' +
+                (confirmation.size ? ' ' + confirmation.size : '')
+            "
+        >
             <div class="modal-content modal-lg">
                 <div class="modal-header alert-warning confirmation">
                     <h1 v-html="confirmation.title"></h1>
