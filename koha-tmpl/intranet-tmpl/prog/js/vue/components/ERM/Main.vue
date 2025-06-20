@@ -53,7 +53,7 @@ export default {
 
         const initialized = ref(false);
 
-        const filterProviders = async navigationTree => {
+        const filterProviders = navigationTree => {
             const eHoldings = navigationTree.find(
                 element => element.path === "/cgi-bin/koha/erm/eholdings"
             );

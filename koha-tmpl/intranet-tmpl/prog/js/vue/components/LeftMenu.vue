@@ -1,12 +1,12 @@
 <template>
-    <aside v-if="leftNavigation !== 'none'">
-        <VendorMenu v-if="leftNavigation === 'VendorMenu'" />
-        <AcquisitionsMenu v-else-if="leftNavigation === 'AcquisitionsMenu'" />
+    <aside v-if="navigationTree !== 'none'">
+        <VendorMenu v-if="navigationTree === 'VendorMenu'" />
+        <AcquisitionsMenu v-else-if="navigationTree === 'AcquisitionsMenu'" />
         <div v-else class="sidebar_menu">
             <h5>{{ $__(title) }}</h5>
             <ul>
                 <NavigationItem
-                    v-for="(item, key) in leftNavigation"
+                    v-for="(item, key) in navigationTree"
                     v-bind:key="key"
                     :item="item"
                 ></NavigationItem>
@@ -17,7 +17,7 @@
 </template>
 
 <script>
-import { inject, onBeforeMount } from "vue";
+import { computed, inject, onBeforeMount } from "vue";
 import NavigationItem from "./NavigationItem.vue";
 import VendorMenu from "./Islands/VendorMenu.vue";
 import AcquisitionsMenu from "./Islands/AcquisitionsMenu.vue";
@@ -29,14 +29,14 @@ export default {
         const navigationStore = inject("navigationStore");
         const { leftNavigation } = storeToRefs(navigationStore);
 
-        onBeforeMount(async () => {
-            if (props.condition)
-                leftNavigation.value = await props.condition(
-                    leftNavigation.value
-                );
+        const navigationTree = computed(() => {
+            if (props.condition) return props.condition(leftNavigation.value);
+            return leftNavigation.value;
         });
+
         return {
             leftNavigation,
+            navigationTree,
         };
     },
     props: {
