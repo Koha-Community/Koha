@@ -49,26 +49,32 @@ my $inheritCatCode = $builder->build(
     }
 );
 
-my $yesItypeCode = $builder->build_object({
-    class => 'Koha::ItemTypes',
-    value => {
-        checkprevcheckout => 'yes',
+my $yesItypeCode = $builder->build_object(
+    {
+        class => 'Koha::ItemTypes',
+        value => {
+            checkprevcheckout => 'yes',
+        }
     }
-});
+);
 
-my $noItypeCode = $builder->build_object({
-    class => 'Koha::ItemTypes',
-    value  => {
-        checkprevcheckout => 'no',
+my $noItypeCode = $builder->build_object(
+    {
+        class => 'Koha::ItemTypes',
+        value => {
+            checkprevcheckout => 'no',
+        }
     }
-});
+);
 
-my $inheritItypeCode = $builder->build_object({
-    class => 'Koha::ItemTypes',
-    value  => {
-        checkprevcheckout => 'inherit',
+my $inheritItypeCode = $builder->build_object(
+    {
+        class => 'Koha::ItemTypes',
+        value => {
+            checkprevcheckout => 'inherit',
+        }
     }
-});
+);
 
 # Create context for some tests late on in the file.
 my $library = $builder->build( { source => 'Branch' } );
@@ -235,7 +241,6 @@ map {
     } @{ $_->{categories} };
 } @{$mappings};
 
-
 # wants_check_for_previous_checkout
 
 # We want to test the subroutine by passing the $item parameter
@@ -288,29 +293,29 @@ map {
 # | Expected Result   | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 
 my $itypeCode = {
-    'yes' => $yesItypeCode->itemtype,
-    'no' => $noItypeCode->itemtype,
+    'yes'     => $yesItypeCode->itemtype,
+    'no'      => $noItypeCode->itemtype,
     'inherit' => $inheritItypeCode->itemtype,
 };
 
-foreach my $syspref ('hardyes','softyes','softno','hardno'){
+foreach my $syspref ( 'hardyes', 'softyes', 'softno', 'hardno' ) {
     t::lib::Mocks::mock_preference( 'checkprevcheckout', $syspref );
-    foreach my $itemtype_setting ('yes','no','inherit'){ #itemtype Setting
-        my $item      = $builder->build_sample_item( { itype => $itypeCode->{$itemtype_setting} } );
-        foreach my $categorie_settings('yes','no','inherit'){
+    foreach my $itemtype_setting ( 'yes', 'no', 'inherit' ) {    #itemtype Setting
+        my $item = $builder->build_sample_item( { itype => $itypeCode->{$itemtype_setting} } );
+        foreach my $categorie_settings ( 'yes', 'no', 'inherit' ) {
             my $catCode = $categorie_settings . 'Cat';
-            foreach my $patron_setting('yes','no','inherit'){
+            foreach my $patron_setting ( 'yes', 'no', 'inherit' ) {
                 my $result = undef;
-                $result = 1 if($syspref eq 'hardyes');
-                $result = 0 if($syspref eq 'hardno');
-                $result = 1 if(!defined $result && $itemtype_setting eq 'yes');
-                $result = 0 if(!defined $result && $itemtype_setting eq 'no');
-                $result = 1 if(!defined $result && $patron_setting eq 'yes');
-                $result = 0 if(!defined $result && $patron_setting eq 'no');
-                $result = 1 if(!defined $result && $categorie_settings eq 'yes');
-                $result = 0 if(!defined $result && $categorie_settings eq 'no');
-                $result = 1 if(!defined $result && $syspref eq 'softyes');
-                $result = 0 if(!defined $result && $syspref eq 'softno');
+                $result = 1 if ( $syspref eq 'hardyes' );
+                $result = 0 if ( $syspref eq 'hardno' );
+                $result = 1 if ( !defined $result && $itemtype_setting eq 'yes' );
+                $result = 0 if ( !defined $result && $itemtype_setting eq 'no' );
+                $result = 1 if ( !defined $result && $patron_setting eq 'yes' );
+                $result = 0 if ( !defined $result && $patron_setting eq 'no' );
+                $result = 1 if ( !defined $result && $categorie_settings eq 'yes' );
+                $result = 0 if ( !defined $result && $categorie_settings eq 'no' );
+                $result = 1 if ( !defined $result && $syspref eq 'softyes' );
+                $result = 0 if ( !defined $result && $syspref eq 'softno' );
                 my $kpatron = $builder->build(
                     {
                         source => 'Borrower',

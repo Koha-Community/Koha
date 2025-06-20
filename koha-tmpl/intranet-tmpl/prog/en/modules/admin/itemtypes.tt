@@ -362,17 +362,17 @@
                             <label for="checkprevcheckout">Check for previous checkouts: </label>
                             <select name="checkprevcheckout" id="checkprevcheckout">
                                 [% IF itemtype.checkprevcheckout == 'yes' %]
-                                <option value="yes" selected="selected">Yes and override system preferences</option>
-                                <option value="no">No and override system preferences</option>
-                                <option value="inherit">Inherit from system preferences</option>
+                                    <option value="yes" selected="selected">Yes and override system preferences</option>
+                                    <option value="no">No and override system preferences</option>
+                                    <option value="inherit">Inherit from system preferences</option>
                                 [% ELSIF itemtype.checkprevcheckout == 'no' %]
-                                <option value="yes">Yes and override system preferences</option>
-                                <option value="no" selected="selected">No and override system preferences</option>
-                                <option value="inherit">Inherit from system preferences</option>
+                                    <option value="yes">Yes and override system preferences</option>
+                                    <option value="no" selected="selected">No and override system preferences</option>
+                                    <option value="inherit">Inherit from system preferences</option>
                                 [% ELSE %]
-                                <option value="yes">Yes and override system preferences</option>
-                                <option value="no">No and override system preferences</option>
-                                <option value="inherit" selected="selected">Inherit from system preferences</option>
+                                    <option value="yes">Yes and override system preferences</option>
+                                    <option value="no">No and override system preferences</option>
+                                    <option value="inherit" selected="selected">Inherit from system preferences</option>
                                 [% END %]
                             </select>
                         </li>

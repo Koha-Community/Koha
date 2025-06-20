@@ -838,7 +838,7 @@ Return 1 if Koha needs to perform PrevIssue checking, else 0.
 =cut
 
 sub wants_check_for_previous_checkout {
-    my ($self, $item) = @_;
+    my ( $self, $item ) = @_;
     my $syspref = C4::Context->preference("checkPrevCheckout");
 
     # Simple cases

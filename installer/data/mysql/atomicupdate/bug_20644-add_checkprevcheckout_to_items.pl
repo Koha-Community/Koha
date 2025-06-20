@@ -7,7 +7,7 @@ return {
         my ($args) = @_;
         my ( $dbh, $out ) = @$args{qw(dbh out)};
 
-        if( !column_exists( 'itemtypes', 'checkprevcheckout' ) ) {
+        if ( !column_exists( 'itemtypes', 'checkprevcheckout' ) ) {
             $dbh->do(
                 q{
                 ALTER TABLE itemtypes

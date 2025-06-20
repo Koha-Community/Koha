@@ -99,7 +99,6 @@ if ( $op eq 'add_form' ) {
     my $rentalcharge_hourly_calendar = $input->param('rentalcharge_hourly_calendar') // 0;
     my $automatic_checkin            = $input->param('automatic_checkin')            // 0;
     my $bookable                     = $input->param('bookable')                     // 0;
-    my $automatic_checkin = $input->param('automatic_checkin') // 0;
     my $checkprevcheckout            = $input->param('checkprevcheckout');
 
     if ( $itemtype and $is_a_modif ) {    # it's a modification
