@@ -700,116 +700,129 @@ export default {
 
         const appendToShow = componentData => {
             let format_date = componentData.instancedResource.format_date;
-            const fields = [];
-            const contracts = {
-                type: "component",
-                name: $__("Contracts"),
-                componentPath: "./RelationshipTableDisplay.vue",
-                componentProps: {
-                    tableOptions: {
-                        type: "object",
-                        value: {
-                            columns: [
-                                {
-                                    title: __("Name"),
-                                    data: "contractname",
-                                    render: function (data, type, row, meta) {
-                                        return (
-                                            `<a href="/cgi-bin/koha/admin/aqcontract.pl?op=add_form&booksellerid=${row.booksellerid}&contractnumber=${row.contractnumber}">` +
-                                            escape_str(row.contractname) +
-                                            "</a>"
-                                        );
+            return [
+                {
+                    type: "component",
+                    name: $__("Contracts"),
+                    hidden: vendor => vendor.contracts.length,
+                    componentPath: "./RelationshipTableDisplay.vue",
+                    componentProps: {
+                        tableOptions: {
+                            type: "object",
+                            value: {
+                                columns: [
+                                    {
+                                        title: __("Name"),
+                                        data: "contractname",
+                                        render: function (
+                                            data,
+                                            type,
+                                            row,
+                                            meta
+                                        ) {
+                                            return (
+                                                `<a href="/cgi-bin/koha/admin/aqcontract.pl?op=add_form&booksellerid=${row.booksellerid}&contractnumber=${row.contractnumber}">` +
+                                                escape_str(row.contractname) +
+                                                "</a>"
+                                            );
+                                        },
                                     },
-                                },
-                                {
-                                    title: __("Description"),
-                                    data: "contractdescription",
-                                },
-                                {
-                                    title: __("Start date"),
-                                    data: "contractstartdate",
-                                    render: function (data, type, row, meta) {
-                                        return type == "sort"
-                                            ? row.contractstartdate
-                                            : format_date(
-                                                  row.contractstartdate
-                                              );
+                                    {
+                                        title: __("Description"),
+                                        data: "contractdescription",
                                     },
-                                },
-                                {
-                                    title: __("End date"),
-                                    data: "contractenddate",
-                                    render: function (data, type, row, meta) {
-                                        return type == "sort"
-                                            ? row.contractenddate
-                                            : format_date(row.contractenddate);
-                                    },
-                                },
-                                ...(componentData.instancedResource.isUserPermitted(
-                                    "CAN_user_acquisition_contracts_manage"
-                                )
-                                    ? [
-                                          {
-                                              title: __("Actions"),
-                                              data: "contractnumber",
-                                              searchable: false,
-                                              orderable: false,
-                                              render: function (
-                                                  data,
-                                                  type,
-                                                  row,
-                                                  meta
-                                              ) {
-                                                  return (
-                                                      `<a class="btn btn-default btn-xs" href="/cgi-bin/koha/admin/aqcontract.pl?op=add_form&contractnumber=${row.contractnumber}&booksellerid=${row.booksellerid}"><i class="fa-solid fa-pencil" aria-hidden="true"></i>` +
-                                                      " " +
-                                                      __("Edit") +
-                                                      "</a>" +
-                                                      `<a style="margin-left: 5px;" class="btn btn-default btn-xs" href="/cgi-bin/koha/admin/aqcontract.pl?op=delete_confirm&contractnumber=${row.contractnumber}&booksellerid=${row.booksellerid}"><i class="fa-solid fa-trash-can" aria-hidden="true"></i>` +
-                                                      " " +
-                                                      __("Delete") +
-                                                      "</a>"
+                                    {
+                                        title: __("Start date"),
+                                        data: "contractstartdate",
+                                        render: function (
+                                            data,
+                                            type,
+                                            row,
+                                            meta
+                                        ) {
+                                            return type == "sort"
+                                                ? row.contractstartdate
+                                                : format_date(
+                                                      row.contractstartdate
                                                   );
+                                        },
+                                    },
+                                    {
+                                        title: __("End date"),
+                                        data: "contractenddate",
+                                        render: function (
+                                            data,
+                                            type,
+                                            row,
+                                            meta
+                                        ) {
+                                            return type == "sort"
+                                                ? row.contractenddate
+                                                : format_date(
+                                                      row.contractenddate
+                                                  );
+                                        },
+                                    },
+                                    ...(componentData.instancedResource.isUserPermitted(
+                                        "CAN_user_acquisition_contracts_manage"
+                                    )
+                                        ? [
+                                              {
+                                                  title: __("Actions"),
+                                                  data: "contractnumber",
+                                                  searchable: false,
+                                                  orderable: false,
+                                                  render: function (
+                                                      data,
+                                                      type,
+                                                      row,
+                                                      meta
+                                                  ) {
+                                                      return (
+                                                          `<a class="btn btn-default btn-xs" href="/cgi-bin/koha/admin/aqcontract.pl?op=add_form&contractnumber=${row.contractnumber}&booksellerid=${row.booksellerid}"><i class="fa-solid fa-pencil" aria-hidden="true"></i>` +
+                                                          " " +
+                                                          __("Edit") +
+                                                          "</a>" +
+                                                          `<a style="margin-left: 5px;" class="btn btn-default btn-xs" href="/cgi-bin/koha/admin/aqcontract.pl?op=delete_confirm&contractnumber=${row.contractnumber}&booksellerid=${row.booksellerid}"><i class="fa-solid fa-trash-can" aria-hidden="true"></i>` +
+                                                          " " +
+                                                          __("Delete") +
+                                                          "</a>"
+                                                      );
+                                                  },
                                               },
-                                          },
-                                      ]
-                                    : []),
-                            ],
-                            dom: '<<"table_entries">>',
-                            autoWidth: false,
-                            data: componentData.resource.contracts,
+                                          ]
+                                        : []),
+                                ],
+                                dom: '<<"table_entries">>',
+                                autoWidth: false,
+                                data: componentData.resource.contracts,
+                            },
+                        },
+                        resource: {
+                            type: "resource",
+                        },
+                        resourceName: {
+                            type: "string",
+                            value: $__("contract"),
+                        },
+                        resourceNamePlural: {
+                            type: "string",
+                            value: $__("contracts"),
                         },
                     },
-                    resource: {
-                        type: "resource",
-                    },
-                    resourceName: {
-                        type: "string",
-                        value: $__("contract"),
-                    },
-                    resourceNamePlural: {
-                        type: "string",
-                        value: $__("contracts"),
+                },
+                {
+                    type: "component",
+                    name: $__("Subscription details"),
+                    hidden: vendor => vendor.subscriptions_count,
+                    componentPath: "./Vendors/VendorSubscriptions.vue",
+                    componentProps: {
+                        vendor: {
+                            type: "resource",
+                        },
                     },
                 },
-            };
-            const subscriptions = {
-                type: "component",
-                name: $__("Subscription details"),
-                hidden: vendor => vendor.subscriptions_count,
-                componentPath: "./Vendors/VendorSubscriptions.vue",
-                componentProps: {
-                    vendor: {
-                        type: "resource",
-                    },
-                },
-            };
-
-            if (componentData.resource.contracts.length > 0)
-                fields.push(contracts);
-            if (componentData.resource.subscriptions_count > 0)
-                fields.push(subscriptions);
-            return fields;
+            ];
         };
 
         baseResource.created();

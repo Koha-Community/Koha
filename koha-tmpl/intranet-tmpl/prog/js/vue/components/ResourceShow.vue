@@ -15,7 +15,7 @@
         </h2>
         <TabsWrapper
             v-if="instancedResource.formGroupsDisplayMode == 'tabs'"
-            :tabList="instancedResource.getFieldGroupings('Show', resource)"
+            :tabList="fieldList"
         >
             <template #tabContent="{ tabGroup }">
                 <fieldset class="rows">
@@ -37,9 +37,7 @@
         </TabsWrapper>
         <AccordionWrapper
             v-else-if="instancedResource.formGroupsDisplayMode == 'accordion'"
-            :accordionList="
-                instancedResource.getFieldGroupings('Show', resource)
-            "
+            :accordionList="fieldList"
         >
             <template #accordionContent="{ accordionGroup }">
                 <ol>
@@ -59,10 +57,7 @@
         <div v-else>
             <fieldset
                 class="rows"
-                v-for="(group, counter) in instancedResource.getFieldGroupings(
-                    'Show',
-                    resource
-                )"
+                v-for="(group, counter) in fieldList"
                 v-bind:key="counter"
             >
                 <legend v-if="group.name">{{ group.name }}</legend>
@@ -79,18 +74,6 @@
                     </li>
                 </ol>
             </fieldset>
-            <fieldset
-                class="rows"
-                v-for="(item, counter) in instancedResource.appendToShow(this)"
-                v-bind:key="counter"
-            >
-                <legend v-if="item.name">{{ item.name }}</legend>
-                <ShowElement
-                    :resource="resource"
-                    :attr="item"
-                    :instancedResource="instancedResource"
-                />
-            </fieldset>
             <fieldset class="action">
                 <router-link
                     :to="{ name: instancedResource.listComponent }"
@@ -106,7 +89,7 @@
 <script>
 import Toolbar from "./Toolbar.vue";
 import ShowElement from "./ShowElement.vue";
-import { onBeforeMount, ref } from "vue";
+import { computed, onBeforeMount, ref } from "vue";
 import TabsWrapper from "./TabsWrapper.vue";
 import AccordionWrapper from "./AccordionWrapper.vue";
 
@@ -132,10 +115,36 @@ export default {
             );
         });
 
+        const fieldList = computed(() => {
+            const fieldGroupings = props.instancedResource.getFieldGroupings(
+                "Show",
+                resource.value
+            );
+            const fieldsToAppend = props.instancedResource
+                .appendToShow({
+                    ...props,
+                    resource: resource.value,
+                    additionalProps: additionalProps.value,
+                })
+                ?.filter(field => field.hidden(resource.value))
+                .map(field => {
+                    return {
+                        name: field.name,
+                        fields: [field],
+                    };
+                });
+
+            return [
+                ...fieldGroupings,
+                ...(fieldsToAppend ? fieldsToAppend : []),
+            ];
+        });
+
         return {
             initialized,
             resource,
             additionalProps,
+            fieldList,
         };
     },
     props: {
