@@ -719,6 +719,15 @@ export default {
                         componentData.resource.value.discount.toFixed(1);
                 }
             }
+            if (caller === "show") {
+                let physicalAddress = "";
+                [1, 2, 3, 4].forEach(i => {
+                    if (resource[`address${i}`]) {
+                        physicalAddress += `${resource[`address${i}`]}`;
+                    }
+                });
+                resource.physical = physicalAddress;
+            }
         };
 
         const appendToShow = componentData => {
