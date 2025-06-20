@@ -147,12 +147,19 @@ export default {
                         .then(
                             success => {
                                 setMessage($__("Item removed"), true);
-                                getTrain(props.train.train_id).then(() => {
-                                    $("#" + table_id)
-                                        .DataTable()
-                                        .destroy();
-                                    build_datatable();
-                                });
+                                props.train.items = props.train.items.filter(
+                                    i => i.train_item_id !== train_item_id
+                                );
+                                props.item_table.data =
+                                    props.item_table.data.filter(
+                                        i =>
+                                            i.item.train_item_id !==
+                                            train_item_id
+                                    );
+                                $("#" + table_id)
+                                    .DataTable()
+                                    .destroy();
+                                build_datatable();
                             },
                             error => {}
                         );
