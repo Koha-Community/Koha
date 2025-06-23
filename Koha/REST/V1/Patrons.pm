@@ -122,6 +122,9 @@ sub add {
 
                 my $patron = Koha::Patron->new_from_api($body)->store;
 
+                $patron->extended_attributes(
+                    [ map { { code => $_->{type}, attribute => $_->{value} } } @$extended_attributes ] );
+
                 my $overrides = $c->stash('koha.overrides');
                 if ( $overrides->{welcome_yes}
                     || ( C4::Context->preference("AutoEmailNewUser") && !$overrides->{welcome_no} ) )
@@ -157,8 +160,6 @@ sub add {
                     }
                 }
 
-                $patron->extended_attributes(
-                    [ map { { code => $_->{type}, attribute => $_->{value} } } @$extended_attributes ] );
                 if ( C4::Context->preference('EnhancedMessagingPreferences') ) {
                     C4::Members::Messaging::SetMessagingPreferencesFromDefaults(
                         {
