@@ -124,8 +124,13 @@ export default {
             );
         });
 
-        const resourceForm = computed(() => {
-            return useTemplateRef("resourceForm");
+        const resourceForm = computed({
+            get() {
+                return useTemplateRef("resourceForm");
+            },
+            set(value) {
+                return value;
+            },
         });
 
         onBeforeMount(() => {
