@@ -348,20 +348,6 @@ export function useBaseResource(instancedResource) {
     };
 
     /**
-     * Initializes the component by populating resource attributes
-     * with their respective authorised values. This ensures that
-     * any select or relationship attributes have the correct options
-     * or authorised values assigned before the component is used.
-     */
-    const created = () => {
-        if (instancedResource.resourceAttrs) {
-            populateAttributesWithAuthorisedValues(
-                instancedResource.resourceAttrs
-            );
-        }
-    };
-
-    /**
      * Retrieves a resource by id and assigns it to the component data.
      * If the resource component has an 'afterResourceFetch' method, it is called
      * with the component data, the fetched resource and the caller as arguments.
@@ -619,6 +605,22 @@ export function useBaseResource(instancedResource) {
     const refreshTemplateState = () => {
         refreshTemplate.value++;
     };
+
+    /**
+     * Initializes the component by populating resource attributes
+     * with their respective authorised values. This ensures that
+     * any select or relationship attributes have the correct options
+     * or authorised values assigned before the component is used.
+     */
+    const created = () => {
+        if (instancedResource.resourceAttrs) {
+            populateAttributesWithAuthorisedValues(
+                instancedResource.resourceAttrs
+            );
+        }
+    };
+
+    created();
 
     return {
         ...instancedResource,

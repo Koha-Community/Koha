@@ -276,8 +276,6 @@ export default {
             },
         };
 
-        baseResource.created();
-
         return {
             ...baseResource,
             tableOptions,

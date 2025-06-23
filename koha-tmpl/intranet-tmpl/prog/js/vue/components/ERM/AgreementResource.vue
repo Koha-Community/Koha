@@ -853,8 +853,6 @@ export default {
             table.redraw(tableUrl(filters));
         };
 
-        baseResource.created();
-
         return {
             ...baseResource,
             tableOptions,
