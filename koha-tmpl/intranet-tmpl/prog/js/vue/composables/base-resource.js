@@ -207,8 +207,14 @@ export function useBaseResource(instancedResource) {
         };
     };
 
+    /**
+     * A function that can be used to add additional content to the show view
+     * of a resource. The function should return an array of attributes such as those in 'resourceAttrs' in the module specific resources
+     *
+     * @returns {Array}
+     */
     const appendToShow = () => {
-        return null;
+        return [];
     };
 
     /**
@@ -341,6 +347,12 @@ export function useBaseResource(instancedResource) {
         });
     };
 
+    /**
+     * Initializes the component by populating resource attributes
+     * with their respective authorised values. This ensures that
+     * any select or relationship attributes have the correct options
+     * or authorised values assigned before the component is used.
+     */
     const created = () => {
         if (instancedResource.resourceAttrs) {
             populateAttributesWithAuthorisedValues(
@@ -349,6 +361,16 @@ export function useBaseResource(instancedResource) {
         }
     };
 
+    /**
+     * Retrieves a resource by id and assigns it to the component data.
+     * If the resource component has an 'afterResourceFetch' method, it is called
+     * with the component data, the fetched resource and the caller as arguments.
+     * When the resource is retrieved, the 'initialized' flag is set to true.
+     * @param {String} resourceId - The id of the resource to retrieve.
+     * @param {Object} componentData - The component data to assign the resource to.
+     * @param {String} caller - The name of the caller that requested the resource
+     *                         (e.g. 'form', 'list', 'show').
+     */
     const getResource = async (resourceId, componentData, caller) => {
         instancedResource.apiClient.get(resourceId).then(
             resource => {
@@ -460,7 +482,7 @@ export function useBaseResource(instancedResource) {
     };
 
     /**
-     * Gets the label to display before the filters
+     * Gets the label to display before the filters in the List component
      *
      * @return {String} The label
      */
