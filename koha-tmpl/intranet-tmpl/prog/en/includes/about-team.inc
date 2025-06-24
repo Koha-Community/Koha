@@ -62,6 +62,8 @@
         <span>Developer tooling</span>
     [%- CASE 'website' -%]
         <span>Website administrator</span>
+    [%- CASE 'social_media' -%]
+        <span>Social media manager</span>
     [%- CASE 'security_manager' -%]
         <span>Security release manager</span>
     [%- CASE -%]
@@ -326,6 +328,13 @@
             <li
                 ><strong>Website maintainer:</strong>
                 [% INCLUDE person p=t.website %]
+            </li>
+        [% END %]
+
+        [% IF t.social_media %]
+            <li
+                ><strong>Social media manager:</strong>
+                [% INCLUDE person p=t.social_media %]
             </li>
         [% END %]
 
