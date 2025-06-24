@@ -43,12 +43,22 @@
 [%- END -%]
 
 [%- BLOCK contributions -%]
-[%- IF p.roles || p.notes -%]
-<ul>
-    [% FOREACH r IN p.roles %]<li>[% INCLUDE role role=r %] ([% r.value.join(', ') | html %])</li>[% END %]
-    [% IF p.notes %]<li>[% p.notes | html %]</li>[% END %]
-</ul>
-[%- END -%]
+    [%- IF p.roles || p.notes -%]
+        <ul>
+            [% FOREACH r IN p.roles %]
+                [% SET sorted_versions = r.value.nsort.reverse %]
+                <li>
+                    [% INCLUDE role role=r %]
+                    ([% IF sorted_versions.size <= 2 %]
+                        [% sorted_versions.join(', ') | html %]
+                    [% ELSE %]
+                        [% sorted_versions.slice(0,1).join(', ') | html %]<span class="version-ellipsis" data-bs-toggle="tooltip" title="[% sorted_versions.slice(2, -1).join(', ') | html %]">, ...</span>
+                    [% END %])
+                </li>
+            [% END %]
+            [% IF p.notes %]<li>[% p.notes | html %]</li>[% END %]
+        </ul>
+    [%- END -%]
 [%- END -%]
 
 [%- BLOCK team -%]
@@ -268,6 +278,13 @@
         </li>
         [% END %]
 
+        [% IF t.social_media %]
+            <li
+                ><strong>Social media manager:</strong>
+                [% INCLUDE person p=t.social_media %]
+            </li>
+        [% END %]
+
         [% IF t.wiki %]
             [% IF t.wiki.size == 1 %]
             <li><strong>Wiki manager:</strong>
@@ -284,7 +301,53 @@
             [% END %]
         [% END %]
 
-      [% IF v != 'release' %]
+        [% IF t.meeting_facilitator %]
+            <li
+                ><strong>Meeting facilitator:</strong>
+                [% INCLUDE person p=t.meeting_facilitator %]
+            </li>
+        [% END %]
+
+        [% IF t.chairperson %]
+            <li
+                ><strong>Meetings chairperson:</strong>
+                [% INCLUDE person p=t.chairperson %]
+            </li>
+        [% END %]
+
+        [% IF t.database %]
+            <li
+                ><strong>Documentation specialist:</strong>
+                [% INCLUDE person p=t.database %]
+            </li>
+        [% END %]
+
+        [% IF t.live_cd %]
+            <li
+                ><strong>Live CD maintainer:</strong>
+                [% INCLUDE person p=t.live_cd %]
+            </li>
+        [% END %]
+
+        [% IF t.vm %]
+            <li
+                ><strong>Virtual machine maintainer:</strong>
+                [% INCLUDE person p=t.vm %]
+            </li>
+        [% END %]
+
+        [% IF t.translation_assistant %]
+            <li
+                ><strong>Translation manager assistant:</strong>
+                [% INCLUDE person p=t.translation_assistant %]
+            </li>
+        [% END %]
+
+        [% IF v != 'release' %]
+            <li
+                ><strong>Release manager:</strong>
+                [% INCLUDE person p=t.manager %]
+            </li>
 
         <li><strong>Release manager:</strong>
             [% INCLUDE person p=t.manager %]
