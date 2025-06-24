@@ -318,9 +318,9 @@ sub get_url {
     my ( $url, $preferred_language ) = @_;
     my $file;
     if (   $url =~ /koha\/(.*)\.pl/
-        || $url =~ '/koha/(erm.*)'
-        || $url =~ '/koha/(preservation.*)'
-        || $url =~ '/koha/(acquisition/vendors.*)' )
+        || $url =~ '/koha/(erm[^?]*)'
+        || $url =~ '/koha/(preservation[^?]*)'
+        || $url =~ '/koha/(acquisition/vendors[^?]*)' )
     {
         $file = $1;
     } else {
