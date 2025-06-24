@@ -8,6 +8,8 @@
         <span>Release manager</span>
     [%- CASE 'manager_assistant' -%]
         <span>Release manager assistant</span>
+    [%- CASE 'manager_assistants' -%]
+        <span>Release manager assistants</span>
     [%- CASE 'manager_mentor' -%]
         <span>Release manager mentor</span>
     [%- CASE 'qa_manager' -%]
@@ -32,8 +34,12 @@
         <span>Release maintainer</span>
     [%- CASE 'maintainer_assistant' -%]
         <span>Release maintainer assistant</span>
+    [%- CASE 'maintainer_assistants' -%]
+        <span>Release maintainer assistants</span>
     [%- CASE 'maintainer_mentor' -%]
         <span>Release maintainer mentor</span>
+    [%- CASE 'maintainer_mentors' -%]
+        <span>Release maintainer mentors</span>
     [%- CASE 'wiki' -%]
         <span>Wiki curator</span>
     [%- CASE 'ci' -%]
@@ -56,6 +62,8 @@
         <span>Live CD maintainer</span>
     [%- CASE 'accessibility_advocate' -%]
         <span>Accessibility advocate</span>
+    [%- CASE 'accessibility_advocates' -%]
+        <span>Accessibility advocates</span>
     [%- CASE 'meeting_facilitator' -%]
         <span>Meeting facilitator</span>
     [%- CASE 'ktd' -%]
@@ -354,6 +362,48 @@
                     </ul>
                 </li>
             [% END %]
+        [% END %]
+
+        [% IF t.meeting_facilitator %]
+            <li
+                ><strong>Meeting facilitator:</strong>
+                [% INCLUDE person p=t.meeting_facilitator %]
+            </li>
+        [% END %]
+
+        [% IF t.chairperson %]
+            <li
+                ><strong>Meetings chairperson:</strong>
+                [% INCLUDE person p=t.chairperson %]
+            </li>
+        [% END %]
+
+        [% IF t.database %]
+            <li
+                ><strong>Documentation specialist:</strong>
+                [% INCLUDE person p=t.database %]
+            </li>
+        [% END %]
+
+        [% IF t.live_cd %]
+            <li
+                ><strong>Live CD maintainer:</strong>
+                [% INCLUDE person p=t.live_cd %]
+            </li>
+        [% END %]
+
+        [% IF t.vm %]
+            <li
+                ><strong>Virtual machine maintainer:</strong>
+                [% INCLUDE person p=t.vm %]
+            </li>
+        [% END %]
+
+        [% IF t.translation_assistant %]
+            <li
+                ><strong>Translation manager assistant:</strong>
+                [% INCLUDE person p=t.translation_assistant %]
+            </li>
         [% END %]
 
         [% IF v != 'release' %]
