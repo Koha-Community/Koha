@@ -573,6 +573,15 @@
                 }
             ]
         }, null, 1);
+
+        $(document).ready(function() {
+            [% IF cashup_id %]
+            let $button = $('[data-cashup="[% cashup_id | html %]"]');
+            if ($button.length) {
+                $button[0].click();
+            }
+            [% END %]
+        });
     </script>
 [% END %]
 

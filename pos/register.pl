@@ -104,7 +104,7 @@ if ( !$registers->count ) {
     my $op = $input->param('op') // '';
     if ( $op eq 'cud-cashup' ) {
         if ( $logged_in_user->has_permission( { cash_management => 'cashup' } ) ) {
-            $cash_register->add_cashup(
+            my $cashup = $cash_register->add_cashup(
                 {
                     manager_id => $logged_in_user->id,
                     amount     => $cash_register->outstanding_accountlines->total
@@ -112,7 +112,7 @@ if ( !$registers->count ) {
             );
 
             # Redirect to prevent duplicate submissions (POST/REDIRECT/GET pattern)
-            print $input->redirect( "/cgi-bin/koha/pos/register.pl?registerid=" . $registerid );
+            print $input->redirect( "/cgi-bin/koha/pos/register.pl?registerid=" . $registerid  . "&cashup_id=" . $cashup->id );
             exit;
         } else {
             $template->param( error_cashup_permission => 1 );
