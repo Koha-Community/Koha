@@ -59,12 +59,13 @@ if ( $op eq 'cud-cashup' ) {
         my $registerid = $input->param('registerid');
         if ($registerid) {
             my $register = Koha::Cash::Registers->find( { id => $registerid } );
-            $register->add_cashup(
+            my $cashup = $register->add_cashup(
                 {
                     manager_id => $logged_in_user->id,
                     amount     => $register->outstanding_accountlines->total
                 }
             );
+            $template->param( cashup_id => $cashup->id );
         } else {
             for my $register ( $registers->as_list ) {
                 $register->add_cashup(

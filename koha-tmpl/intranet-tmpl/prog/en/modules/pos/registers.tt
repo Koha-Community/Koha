@@ -240,6 +240,13 @@
                var rid = button.data('registerid');
                $('#cashup_registerid').val(rid);
             });
+
+            [% IF cashup_id %]
+            let $button = $('[data-cashup="[% cashup_id | html %]"]');
+            if ($button.length) {
+                $button[0].click();
+            }
+            [% END %]
         });
     </script>
 [% END %]
