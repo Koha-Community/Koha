@@ -310,7 +310,10 @@ our $mapping = {
 sub get_url {
     my ( $url, $preferred_language ) = @_;
     my $file;
-    if ( $url =~ /koha\/(.*)\.pl/ || $url =~ '/koha/(erm.*)' || $url =~ '/koha/(preservation.*)' ) {
+    if (   $url =~ /koha\/(.*)\.pl/
+        || $url =~ '/koha/(erm[^?]*)'
+        || $url =~ '/koha/(preservation[^?]*)' )
+    {
         $file = $1;
     } else {
         $file = 'mainpage';
