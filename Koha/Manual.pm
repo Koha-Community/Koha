@@ -1,8 +1,38 @@
 package Koha::Manual;
 
+# This file is part of Koha.
+#
+# Koha is free software; you can redistribute it and/or modify it
+# under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 3 of the License, or
+# (at your option) any later version.
+#
+# Koha is distributed in the hope that it will be useful, but
+# WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with Koha; if not, see <http://www.gnu.org/licenses>.
+
 use Modern::Perl;
 
 use C4::Context;
+
+=head1 NAME
+
+Koha::Manual - Build links to the documentation
+
+=head1 API
+
+=head2 Class Methods
+
+=head3 _get_help_version
+
+Return the version to use.
+Either the system preference "Version", or the last version.major value if using unstable.
+
+=cut
 
 sub _get_help_version {
     my $help_version = C4::Context->preference("Version");
@@ -15,6 +45,14 @@ sub _get_help_version {
     }
     return $help_version;
 }
+
+=head3 _get_base_url
+
+Return the base URL to use.
+
+Use system preferences 'KohaManualLanguage' and 'KohaManualBaseURL' to properly build the URL.
+
+=cut
 
 sub _get_base_url {
     my ( $preferred_language ) = @_;
@@ -310,6 +348,14 @@ our $mapping = {
     'tools/viewlog'                            => '/tools.html#log-viewer',
     'virtualshelves/shelves'                   => '/lists.html#lists',
 };
+
+=head3 get_url
+
+    my $koha_manual_url = Koha::Manual::get_url($referer, $lang);
+
+Return the external URL to the manual for the I<$url> passed in parameter
+
+=cut
 
 sub get_url {
     my ( $url, $preferred_language ) = @_;
