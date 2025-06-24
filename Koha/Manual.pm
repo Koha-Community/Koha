@@ -340,9 +340,9 @@ sub get_url {
     my $base_url = _get_base_url($preferred_language);
     return $base_url
         . (
-          exists $mapping->{$view} ? $mapping->{$view}
-        : exists $mapping->{$file} ? $mapping->{$file}
-        :                            $mapping->{mainpage}
+          ( defined $view && exists $mapping->{$view} ) ? $mapping->{$view}
+        : ( exists $mapping->{$file} )                  ? $mapping->{$file}
+        :                                                 $mapping->{mainpage}
         );
 }
 
