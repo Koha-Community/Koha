@@ -32,7 +32,11 @@ sub _get_base_url {
     if ( $KohaManualBaseURL =~ m|^/| ) {
         $KohaManualBaseURL = C4::Context->preference('staffClientBaseURL') . $KohaManualBaseURL;
     }
-    return $KohaManualBaseURL . '/' . _get_help_version . '/' . $KohaManualLanguage . '/html'; # TODO html could be a KohaManualFormat with pdf, html, epub
+    return
+          ( $KohaManualBaseURL =~ s#/$##r ) . '/'
+        . _get_help_version . '/'
+        . $KohaManualLanguage
+        . '/html';    # TODO html could be a KohaManualFormat with pdf, html, epub
 }
 
 our $mapping = {
