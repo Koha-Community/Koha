@@ -77,7 +77,7 @@
     [%- CASE -%]
         <span>MISSING MAP FOR ROLE: [% role.key | html %]</span>
     [%- END -%]
-    [%- IF ex %]- [% ex | html %][% END -%]
+    [%- IF ex %] - [% ex | html %][% END -%]
 [%- END -%]
 
 [%- BLOCK person -%]
@@ -87,7 +87,17 @@
 [%- BLOCK contributions -%]
     [%- IF p.roles || p.notes -%]
         <ul>
-            [% FOREACH r IN p.roles %]<li>[% INCLUDE role role=r %] ([% r.value.join(', ') | html %])</li>[% END %]
+            [% FOREACH r IN p.roles %]
+                [% SET sorted_versions = r.value.sort.reverse %]
+                <li>
+                    [% INCLUDE role role=r %]
+                    ([% IF sorted_versions.size <= 2 %]
+                        [% sorted_versions.join(', ') | html %]
+                    [% ELSE %]
+                        [% sorted_versions.slice(0,1).join(', ') | html %]<span class="version-ellipsis" data-bs-toggle="tooltip" title="[% sorted_versions.slice(2, -1).join(', ') | html %]">, ...</span>
+                    [% END %])
+                </li>
+            [% END %]
             [% IF p.notes %]<li>[% p.notes | html %]</li>[% END %]
         </ul>
     [%- END -%]
