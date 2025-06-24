@@ -14,6 +14,7 @@ export const useNavigationStore = defineStore("navigation", () => {
         params: {},
         from: null,
         query: {},
+        breadcrumbMetadata: null,
     });
     const actions = {
         setRoutes(routesDef) {
@@ -79,7 +80,8 @@ export const useNavigationStore = defineStore("navigation", () => {
                 return _buildFromCurrentMatches(
                     store.current,
                     store.routeState,
-                    store.params
+                    store.params,
+                    store.breadcrumbMetadata
                 );
 
             return _getBaseElements(store.routeState);
@@ -111,7 +113,8 @@ export const useNavigationStore = defineStore("navigation", () => {
             function _buildFromCurrentMatches(
                 currentMatches,
                 routeState,
-                params
+                params,
+                breadcrumbMetadata
             ) {
                 return [
                     {
@@ -119,7 +122,7 @@ export const useNavigationStore = defineStore("navigation", () => {
                         icon: null,
                         children: null,
                     },
-                    ..._mapMatches(currentMatches, params),
+                    ..._mapMatches(currentMatches, params, breadcrumbMetadata),
                 ];
             }
 
@@ -140,7 +143,7 @@ export const useNavigationStore = defineStore("navigation", () => {
                 return match.path;
             }
 
-            function _mapMatches(currentMatches, params) {
+            function _mapMatches(currentMatches, params, breadcrumbMetadata) {
                 const matches = currentMatches
                     .filter(match => _isBaseOrNotStub(match.meta.self))
                     .filter(match => _isEmptyNode(match.meta.self))
@@ -158,13 +161,24 @@ export const useNavigationStore = defineStore("navigation", () => {
                             });
                         }
                         const breadcrumbInfo = {
-                            ...match.meta.self,
+                            ...self,
                             icon: null,
                             ...(externalPath
                                 ? { href: path, path: null }
                                 : { path }),
                             children: null,
                         };
+                        if (
+                            breadcrumbMetadata &&
+                            /(?:{([^}]+)})/.test(self.title)
+                        ) {
+                            breadcrumbInfo.title = self.title.replaceAll(
+                                /(?:{([^}]+)})/g,
+                                (match, paramName) => {
+                                    return breadcrumbMetadata[paramName];
+                                }
+                            );
+                        }
                         return breadcrumbInfo;
                     });
                 return matches;

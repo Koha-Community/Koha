@@ -49,7 +49,7 @@ export const routes = [
                         path: ":agreement_id",
                         name: "AgreementsShow",
                         component: markRaw(ResourceWrapper),
-                        title: $__("Show agreement"),
+                        title: $__("Show {name}"),
                     },
                     {
                         path: "add",

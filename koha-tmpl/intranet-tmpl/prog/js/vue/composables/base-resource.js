@@ -9,6 +9,8 @@ export function useBaseResource(instancedResource) {
     const route = useRoute();
     const { setConfirmationDialog, setMessage, setError, setWarning } =
         inject("mainStore");
+    const navigationStore = inject("navigationStore");
+    const { breadcrumbMetadata } = storeToRefs(navigationStore);
 
     const moduleStoreUtils = {};
     if (instancedResource.moduleStore) {
@@ -363,6 +365,7 @@ export function useBaseResource(instancedResource) {
                 //TODO: Rename this 'resource' to 'fetchedResource'. Needs to also be renamed in ResourceFormAdd and ResourceShow
                 // This is to make it clear that this is the fetchedResource (data), not the resource component class
                 componentData.resource.value = resource;
+                breadcrumbMetadata.value = resource;
                 if (componentData.instancedResource.afterResourceFetch) {
                     componentData.instancedResource.afterResourceFetch(
                         componentData,
