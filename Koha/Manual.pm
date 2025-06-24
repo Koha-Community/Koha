@@ -33,7 +33,7 @@ sub _get_base_url {
         $KohaManualBaseURL = C4::Context->preference('staffClientBaseURL') . $KohaManualBaseURL;
     }
     return
-          $KohaManualBaseURL . '/'
+          ( $KohaManualBaseURL =~ s#/$##r ) . '/'
         . _get_help_version . '/'
         . $KohaManualLanguage
         . '/html';    # TODO html could be a KohaManualFormat with pdf, html, epub
