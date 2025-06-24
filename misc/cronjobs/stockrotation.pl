@@ -318,7 +318,7 @@ sub report_by_branch {
 
     if ($branch) {    # Branch limited report
         push @{$out}, _report_per_branch( $branched->{ $branch->branchcode } );
-    } elsif ( $data->{actionable} ) {    # Full email report
+    } elsif ( $data->{actionable} || $data->{stationary} ) {    # Full email report
         while ( my ( $branchcode_id, $details ) = each %{$branched} ) {
             push @{$out}, _report_per_branch($details)
                 if ( @{ $details->{items} } );
