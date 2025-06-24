@@ -351,7 +351,8 @@
                         [% IF Koha.Preference('BlockReturnOfLostItems') %]
                             <p class="problem ret_blocked">Item is lost, cannot be checked in.</p>
                         [% ELSE %]
-                            <p class="problem ret_checkedin">Item was lost, now found.</p>
+                            [% itemlost_description = AuthorisedValues.GetDescriptionByKohaField({ kohafield => 'items.itemlost', authorised_value => item.itemlost }) %]
+                            <p class="problem ret_checkedin">Item was [% itemlost_description | html %], now found.</p>
                         [% END %]
                         [% IF LostItemFeeRefunded and not Koha.Preference('BlockReturnOfLostItems') %]
                             <p class="problem ret_refund">A refund for the lost item charge has been applied to the borrowing patron's account.</p>
