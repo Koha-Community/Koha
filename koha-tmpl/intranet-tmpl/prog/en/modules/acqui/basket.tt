@@ -150,6 +150,8 @@
                                                             class="btn btn-default btn-xs submit-form-link"
                                                             href="#"
                                                             data-ean="[% eanacct.ean | html %]"
+                                                            data-ean_description="[% eanacct.description | html %]"
+                                                            data-ean_branch="[% eanacct.branch.branchname | html %]"
                                                             data-basketno="[% basketno | html %]"
                                                             data-action="basket.pl"
                                                             data-method="post"
@@ -1028,7 +1030,11 @@
             <div id="closebasket_needsconfirmation" class="alert alert-warning">
                 <form action="/cgi-bin/koha/acqui/basket.pl" method="post">
                     [% INCLUDE 'csrf-token.inc' %]
-                    <h1>Are you sure you want to generate an EDIFACT order and close basket [% basketname | html %]?</h1>
+                    <h1>Are you sure you want to generate this EDIFACT order?</h1>
+                    <ul>
+                        <li> An EDIFACT order will be generated for <b> [% ean_branch | html %] ([% ean | html %]) [% IF ean_description %][% ean_description | html %][% END %]</b></li>
+                        <li> The basket <b>[% basketname | html %]</b> will be closed </li>
+                    </ul>
                     [% IF CAN_user_acquisition_group_manage %]
                         <p>
                             <label for="createbasketgroup">Attach this basket to a new basket group with the same name</label>
@@ -1041,11 +1047,11 @@
                     <input type="hidden" name="booksellerid" value="[% booksellerid | html %]" />
                     <input type="hidden" name="confirm" value="1" />
                     <input type="hidden" name="basketgroupname" value="[% basketgroupname | html %]" />
-                    <button type="submit" class="btn btn-default approve" accesskey="Y"><i class="fa fa-fw fa-check"></i> Yes, close (Y)</button>
+                    <button type="submit" class="btn btn-default approve" accesskey="Y"><i class="fa fa-fw fa-check"></i> Yes, generate order and close basket (Y)</button>
                 </form>
                 <form action="/cgi-bin/koha/acqui/basket.pl" method="get">
                     <input type="hidden" name="basketno" value="[% basketno | html %]" />
-                    <button type="submit" class="btn btn-default deny" accesskey="N"><i class="fa fa-fw fa-times"></i> No, don't close (N)</button>
+                    <button type="submit" class="btn btn-default deny" accesskey="N"><i class="fa fa-fw fa-times"></i> Cancel (C)</button>
                 </form>
             </div>
             <!-- /#closebasket_needsconfirmation -->
