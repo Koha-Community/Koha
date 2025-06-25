@@ -128,24 +128,24 @@
             </div>
             <!-- /.row -->
 
-            [% SET StaffReportsHomeHTML = AdditionalContents.get( location => "StaffReportsHomeHTML", lang => lang, library => Branches.GetLoggedInBranchcode || default_branch ) %]
+            [% SET StaffReportsHome = AdditionalContents.get( location => "StaffReportsHome", lang => lang, library => Branches.GetLoggedInBranchcode || default_branch ) %]
 
-            [% IF ( StaffReportsHomeHTML.content && StaffReportsHomeHTML.content.count > 0 ) %]
+            [% IF ( StaffReportsHome.content && StaffReportsHome.content.count > 0 ) %]
                 <div class="row">
                     <div class="col-sm-12">
-                        <div id="[% StaffReportsHomeHTML.location | html %]">
-                            [% FOREACH n IN StaffReportsHomeHTML.content %]
+                        <div id="[% StaffReportsHome.location | html %]">
+                            [% FOREACH n IN StaffReportsHome.content %]
                                 <div class="[% n.lang | html %]_item">
                                     <div class="[% n.lang | html %]_body">[% n.content | $raw %]</div>
                                 </div>
                             [% END %]
                         </div>
-                        <!-- /#StaffReportsHomeHTML -->
+                        <!-- /#StaffReportsHome -->
                     </div>
                     <!-- /.col-sm-12 -->
                 </div>
                 <!-- /.row -->
-            [% END # /IF StaffReportsHomeHTML %]
+            [% END # /IF StaffReportsHome %]
         </div>
     </div>
 </div>
