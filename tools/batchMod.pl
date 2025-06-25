@@ -137,7 +137,13 @@ if ( $op eq "cud-action" ) {
                 if ( grep { $cgi_var_name eq $_ } @subfields_to_blank ) {
 
                     # Empty this column
-                    $new_item_data->{$attr} = undef;
+                    if ( $attr eq 'withdrawn' || $attr eq 'itemlost' || $attr eq 'damaged' || $attr eq 'notforloan' ) {
+
+                        # these fields are not nullable; they must be set to 0 instead
+                        $new_item_data->{$attr} = 0;
+                    } else {
+                        $new_item_data->{$attr} = undef;
+                    }
                 } elsif ( my $regex_search = $input->param( $cgi_var_name . '_regex_search' ) ) {
                     $columns_with_regex->{$attr} = {
                         search    => $regex_search,
