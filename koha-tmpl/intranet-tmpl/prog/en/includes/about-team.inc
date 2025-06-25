@@ -77,7 +77,7 @@
     [%- CASE -%]
         <span>MISSING MAP FOR ROLE: [% role.key | html %]</span>
     [%- END -%]
-    [%- IF ex %] - [% ex | html %][% END -%]
+    [%- IF ex %]- [% ex | html %][% END -%]
 [%- END -%]
 
 [%- BLOCK person -%]
