@@ -72,7 +72,7 @@ sub get_daily_quote {
         my $dt = $dtf->format_date(dt_from_string);
         $quote = $self->search(
             {
-                timestamp => { -between => => [ "$dt 00:00:00", "$dt 23:59:59" ] },
+                timestamp => { -between => [ "$dt 00:00:00", "$dt 23:59:59" ] },
             },
             {
                 order_by => { -desc => 'timestamp' },
