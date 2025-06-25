@@ -613,16 +613,20 @@ sub edi_close_and_order {
         }
         exit;
     } else {
+
+        my $ean_description = $query->param('ean_description');
+        my $ean_branch      = $query->param('ean_branch');
+
         $template->param(
             edi_confirm     => 1,
             booksellerid    => $booksellerid,
             basketno        => $basket->{basketno},
             basketname      => $basket->{basketname},
             basketgroupname => $basket->{basketname},
+            ean             => $ean             ? $ean             : '',
+            ean_description => $ean_description ? $ean_description : '',
+            ean_branch      => $ean_branch      ? $ean_branch      : '',
         );
-        if ($ean) {
-            $template->param( ean => $ean );
-        }
 
     }
     return;
