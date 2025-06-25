@@ -17,5 +17,5 @@
 "[% AuthorisedValues.GetDescriptionByKohaField(frameworkcode => biblio.frameworkcode, kohafield => 'items.notforloan', authorised_value => item.notforloan) | replace('"', '""') | $raw %]" [%- delimiter | $raw -%]
 "[% AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.itemlost', authorised_value => item.itemlost ) || "" | replace('"', '""') | $raw %]" [%- delimiter | $raw -%]
 "[% AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.withdrawn', authorised_value => item.withdrawn ) || "" | replace('"', '""') | $raw %]" [%- delimiter | $raw -%]
-"[% AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.damaged', authorised_value => item.damaged ) || "" | replace('"', '""') | $raw %]" [%- delimiter | $raw -%] "[% item.dateaccessioned | $KohaDates | $raw %]" [%- delimiter | $raw -%] "[% (item.issues || 0) | $raw %]" [%- delimiter | $raw -%]
-"[% item.datelastborrowed | $KohaDates | $raw %]" [%- delimiter | $raw -%] "[% IF item.checkout %][% item.checkout.date_due | $KohaDates | $raw %][% END %]"
+"[% AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.damaged', authorised_value => item.damaged ) || "" | replace('"', '""') | $raw %]" [%- delimiter | $raw -%] "[% item.dateaccessioned | $KohaDates | $raw %]"
+[%- delimiter | $raw -%] "[% (item.issues || 0) | $raw %]" [%- delimiter | $raw -%] "[% item.datelastborrowed | $KohaDates | $raw %]" [%- delimiter | $raw -%] "[% IF item.checkout %][% item.checkout.date_due | $KohaDates | $raw %][% END %]"
