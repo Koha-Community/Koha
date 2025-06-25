@@ -23,7 +23,7 @@
             <a href="/cgi-bin/koha/circ/circulation-home.pl">Circulation</a>
         [% END %]
         [% WRAPPER breadcrumb_item bc_active= 1 %]
-            [% tx('Overdues at with fines {library}', { library = Branches.GetLoggedInBranchname }) %]
+            [% tx('Overdues with fines at {library}', { library = Branches.GetLoggedInBranchname }) %]
         [% END %]
     [% END #/ WRAPPER breadcrumbs %]
 [% END #/ WRAPPER sub-header.inc %]
