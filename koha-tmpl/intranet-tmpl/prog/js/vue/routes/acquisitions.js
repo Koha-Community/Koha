@@ -3,7 +3,7 @@ import { markRaw } from "vue";
 import Home from "../components/Vendors/Home.vue";
 import ResourceWrapper from "../components/ResourceWrapper.vue";
 
-import { $__ } from "@k/i18n";
+import { $__ } from "@koha-vue/i18n";
 
 const vendorSearchBreadcrumb = ({ match, query }) => {
     if (!query || !query.supplier) return match.meta.self;

@@ -11,7 +11,7 @@ module.exports = [
                     __dirname,
                     "koha-tmpl/intranet-tmpl/prog/js/fetch"
                 ),
-                "@k": path.resolve(
+                "@koha-vue": path.resolve(
                     __dirname,
                     "koha-tmpl/intranet-tmpl/prog/js/vue"
                 ),

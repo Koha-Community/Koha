@@ -126,7 +126,7 @@ import UsageStatisticsDataProvidersCounterLogs from "./UsageStatisticsDataProvid
 import UsageStatisticsDataProviderDetails from "./UsageStatisticsDataProviderDetails.vue";
 import UsageStatisticsProviderDataList from "./UsageStatisticsProviderDataList.vue";
 import { useRoute, useRouter } from "vue-router";
-import { $__ } from "@k/i18n/";
+import { $__ } from "@koha-vue/i18n/";
 
 export default {
     setup() {

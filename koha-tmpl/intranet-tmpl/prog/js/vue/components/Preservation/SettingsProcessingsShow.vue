@@ -92,7 +92,7 @@ import { APIClient } from "../../fetch/api-client.js";
 import Toolbar from "../Toolbar.vue";
 import ToolbarButton from "../ToolbarButton.vue";
 import { onBeforeRouteUpdate, useRoute, useRouter } from "vue-router";
-import { $__ } from "@k/i18n";
+import { $__ } from "@koha-vue/i18n";
 
 export default {
     setup() {

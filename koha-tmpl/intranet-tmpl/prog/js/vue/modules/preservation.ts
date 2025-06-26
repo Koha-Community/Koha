@@ -34,7 +34,7 @@ import { routes as routesDef } from "../routes/preservation";
 import { useMainStore } from "../stores/main";
 import { usePreservationStore } from "../stores/preservation";
 import { useNavigationStore } from "../stores/navigation";
-import i18n from "@k/i18n";
+import i18n from "@koha-vue/i18n";
 
 const pinia = createPinia();
 

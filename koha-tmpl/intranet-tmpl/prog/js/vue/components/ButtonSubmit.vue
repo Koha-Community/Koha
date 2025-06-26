@@ -14,7 +14,7 @@
 </template>
 
 <script>
-import { $__ } from "@k/i18n";
+import { $__ } from "@koha-vue/i18n";
 export default {
     name: "ButtonSubmit",
     props: {

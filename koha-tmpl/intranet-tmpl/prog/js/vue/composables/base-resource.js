@@ -2,7 +2,16 @@ import { computed, inject, ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { build_url } from "../composables/datatables";
 import { storeToRefs } from "pinia";
-import { $__, $__x, $__n, $__nx, $__p, $__px, $__np, $__npx } from "@k/i18n";
+import {
+    $__,
+    $__x,
+    $__n,
+    $__nx,
+    $__p,
+    $__px,
+    $__np,
+    $__npx,
+} from "@koha-vue/i18n";
 
 export function useBaseResource(instancedResource) {
     const router = useRouter();

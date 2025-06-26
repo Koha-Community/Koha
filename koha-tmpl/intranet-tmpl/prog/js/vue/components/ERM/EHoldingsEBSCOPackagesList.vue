@@ -71,7 +71,7 @@ import { APIClient } from "../../fetch/api-client.js";
 import { build_url_params, build_url } from "../../composables/datatables";
 import KohaTable from "../KohaTable.vue";
 import { useRoute, useRouter } from "vue-router";
-import { $__ } from "@k/i18n";
+import { $__ } from "@koha-vue/i18n";
 
 export default {
     setup() {

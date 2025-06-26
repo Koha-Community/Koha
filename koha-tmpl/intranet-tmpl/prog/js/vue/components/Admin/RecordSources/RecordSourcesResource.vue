@@ -8,7 +8,7 @@
 import BaseResource from "../../BaseResource.vue";
 import { useBaseResource } from "../../../composables/base-resource.js";
 import { APIClient } from "../../../fetch/api-client.js";
-import { $__ } from "@k/i18n";
+import { $__ } from "@koha-vue/i18n";
 
 export default {
     props: {

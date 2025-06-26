@@ -120,7 +120,7 @@ import { inject, ref } from "vue";
 import { APIClient } from "../../fetch/api-client.js";
 import { storeToRefs } from "pinia";
 import SettingsProcessings from "./SettingsProcessings.vue";
-import { $__ } from "@k/i18n";
+import { $__ } from "@koha-vue/i18n";
 
 export default {
     setup() {

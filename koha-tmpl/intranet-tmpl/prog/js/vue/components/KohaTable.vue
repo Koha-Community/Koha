@@ -23,7 +23,7 @@ import {
     useTemplateRef,
 } from "vue";
 import { useRoute } from "vue-router";
-import { $__ } from "@k/i18n";
+import { $__ } from "@koha-vue/i18n";
 
 DataTable.use(DataTablesLib);
 

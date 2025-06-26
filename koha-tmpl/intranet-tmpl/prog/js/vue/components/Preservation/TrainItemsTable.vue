@@ -98,7 +98,7 @@ import { useDataTable } from "../../composables/datatables";
 import Toolbar from "../Toolbar.vue";
 import ToolbarButton from "../ToolbarButton.vue";
 import { useRouter } from "vue-router";
-import { $__ } from "@k/i18n";
+import { $__ } from "@koha-vue/i18n";
 
 export default {
     setup(props) {

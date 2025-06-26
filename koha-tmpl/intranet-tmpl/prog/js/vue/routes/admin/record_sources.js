@@ -2,7 +2,7 @@ import { markRaw } from "vue";
 
 import ResourceWrapper from "../../components/ResourceWrapper.vue";
 
-import { $__ } from "@k/i18n";
+import { $__ } from "@koha-vue/i18n";
 
 export default {
     title: $__("Administration"),

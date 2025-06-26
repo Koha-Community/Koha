@@ -30,7 +30,7 @@ import { setError } from "../../messages";
 import { createVNode, onBeforeMount, onMounted, ref, render } from "vue";
 import { APIClient } from "../../fetch/api-client.js";
 import { useDataTable } from "../../composables/datatables";
-import { $__ } from "@k/i18n";
+import { $__ } from "@koha-vue/i18n";
 
 export default {
     setup() {

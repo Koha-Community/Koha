@@ -1,6 +1,6 @@
 import { defineStore } from "pinia";
 import { reactive, toRefs } from "vue";
-import { $__ } from "@k/i18n";
+import { $__ } from "@koha-vue/i18n";
 
 export const useReportsStore = defineStore("reports", () => {
     const store = reactive({

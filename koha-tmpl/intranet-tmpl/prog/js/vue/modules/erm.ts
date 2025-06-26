@@ -25,7 +25,7 @@ import { useVendorStore } from "../stores/vendors";
 import { useERMStore } from "../stores/erm";
 import { useNavigationStore } from "../stores/navigation";
 import { useReportsStore } from "../stores/usage-reports";
-import i18n from "@k/i18n";
+import i18n from "@koha-vue/i18n";
 
 const pinia = createPinia();
 

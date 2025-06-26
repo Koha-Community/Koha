@@ -44,7 +44,7 @@
 import { createVNode, onMounted, ref, render } from "vue";
 import { useDataTable } from "../../composables/datatables";
 import { useRouter } from "vue-router";
-import { $__ } from "@k/i18n";
+import { $__ } from "@koha-vue/i18n";
 
 export default {
     setup(props) {

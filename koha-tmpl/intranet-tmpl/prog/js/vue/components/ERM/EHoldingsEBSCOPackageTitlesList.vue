@@ -63,7 +63,7 @@ import { inject, ref, reactive, useTemplateRef } from "vue";
 import { storeToRefs } from "pinia";
 import KohaTable from "../KohaTable.vue";
 import { useRoute, useRouter } from "vue-router";
-import { $__ } from "@k/i18n";
+import { $__ } from "@koha-vue/i18n";
 
 export default {
     setup(props) {

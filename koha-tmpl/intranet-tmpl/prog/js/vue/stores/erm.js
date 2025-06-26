@@ -1,7 +1,7 @@
 import { defineStore } from "pinia";
 import { reactive, toRefs } from "vue";
 import { withAuthorisedValueActions } from "../composables/authorisedValues";
-import { $__ } from "@k/i18n";
+import { $__ } from "@koha-vue/i18n";
 
 export const useERMStore = defineStore("erm", () => {
     const store = reactive({

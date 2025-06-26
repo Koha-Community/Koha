@@ -27,7 +27,7 @@
 import { inject, onMounted, ref, useTemplateRef, watch } from "vue";
 import { APIClient } from "../../fetch/api-client.js";
 import KohaTable from "../KohaTable.vue";
-import { $__ } from "@k/i18n/";
+import { $__ } from "@koha-vue/i18n/";
 
 export default {
     setup() {

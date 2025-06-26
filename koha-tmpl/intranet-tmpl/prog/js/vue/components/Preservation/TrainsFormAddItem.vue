@@ -151,7 +151,7 @@
 import { inject, onBeforeMount, ref } from "vue";
 import { APIClient } from "../../fetch/api-client";
 import { useRoute, useRouter } from "vue-router";
-import { $__ } from "@k/i18n";
+import { $__ } from "@koha-vue/i18n";
 
 export default {
     setup() {
