@@ -38,8 +38,8 @@
 import { inject, onBeforeMount, ref } from "vue";
 import ButtonSubmit from "../ButtonSubmit.vue";
 import { APIClient } from "../../fetch/api-client.js";
-import { $__ } from "../../i18n";
 import { useRoute } from "vue-router";
+import { $__ } from "@k/i18n";
 
 export default {
     setup() {

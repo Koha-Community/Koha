@@ -1,8 +1,8 @@
 import { computed, inject, ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
-import { $__ } from "../i18n";
 import { build_url } from "../composables/datatables";
 import { storeToRefs } from "pinia";
+import { $__, $__x, $__n, $__nx, $__p, $__px, $__np, $__npx } from "@k/i18n";
 
 export function useBaseResource(instancedResource) {
     const router = useRouter();
@@ -30,6 +30,8 @@ export function useBaseResource(instancedResource) {
             moduleStoreUtils.isUserPermitted = isUserPermitted;
         }
     }
+
+    let i18n = instancedResource.i18n;
 
     const format_date = $date;
     const patron_to_html = $patron_to_html;
@@ -169,7 +171,7 @@ export function useBaseResource(instancedResource) {
      *
      * @return {Object} keys must be "list", "show" or "edit", values are functions.
      */
-    const defaultToolbarButtons = (resource, i18n) => {
+    const defaultToolbarButtons = resource => {
         return {
             list: [
                 {
@@ -411,7 +413,7 @@ export function useBaseResource(instancedResource) {
 
         setConfirmationDialog(
             {
-                title: instancedResource.i18n.deleteConfirmationMessage,
+                title: i18n.deleteConfirmationMessage,
                 message: resourceName,
                 accept_label: $__("Yes, delete"),
                 cancel_label: $__("No, do not delete"),
@@ -420,9 +422,7 @@ export function useBaseResource(instancedResource) {
                 instancedResource.apiClient.delete(resourceId).then(
                     success => {
                         setMessage(
-                            instancedResource.i18n.deleteSuccessMessage.format(
-                                resourceName
-                            ),
+                            i18n.deleteSuccessMessage.format(resourceName),
                             true
                         );
                         if (typeof callback === "function") {
@@ -491,23 +491,22 @@ export function useBaseResource(instancedResource) {
 
     /**
      * A function that returns a set of buttons to display in the toolbar, based on the current resource and component.
-     * The function takes three arguments: the resource, the component and the i18n object.
+     * The function takes two arguments: the resource and the component.
      * It returns an array of buttons. The buttons are a combination of the default buttons and the additional buttons.
      * The default buttons are defined in the defaultToolbarButtons function and the additional buttons are defined in the
      * additionalToolbarButtons function at the resource level.
      *
      * @param {Object} resource The current resource
      * @param {String} component The current component
-     * @param {Object} i18n The i18n object
      * @return {Array<Object>} An array of buttons
      */
     const toolbarButtons = computed(() => {
-        return (resource, component, i18n, componentData) => {
+        return (resource, component, componentData) => {
             const defaultButtons = instancedResource.hasOwnProperty(
                 "defaultToolbarButtons"
             )
-                ? instancedResource.defaultToolbarButtons(resource, i18n)
-                : defaultToolbarButtons(resource, i18n);
+                ? instancedResource.defaultToolbarButtons(resource)
+                : defaultToolbarButtons(resource);
             const additionalButtons = instancedResource.hasOwnProperty(
                 "additionalToolbarButtons"
             )
@@ -662,6 +661,6 @@ export function useBaseResource(instancedResource) {
         build_url,
         route,
         router,
-        $__,
+        i18n,
     };
 }

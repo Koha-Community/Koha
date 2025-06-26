@@ -10,6 +10,7 @@ import BaseResource from "../BaseResource.vue";
 import { useBaseResource } from "../../composables/base-resource.js";
 import { storeToRefs } from "pinia";
 import { APIClient } from "../../fetch/api-client.js";
+import { $__ } from "@k/i18n";
 
 export default {
     props: {
@@ -34,14 +35,14 @@ export default {
             resourceTableUrl:
                 APIClient.erm.httpClient._baseURL + "eholdings/local/packages",
             i18n: {
-                deleteConfirmationMessage: __(
+                deleteConfirmationMessage: $__(
                     "Are you sure you want to remove this local package?"
                 ),
-                deleteSuccessMessage: __("Local package %s deleted"),
-                displayName: __("Local package"),
-                editLabel: __("Edit package #%s"),
-                emptyListMessage: __("There are no packages defined"),
-                newLabel: __("New package"),
+                deleteSuccessMessage: $__("Local package %s deleted"),
+                displayName: $__("Local package"),
+                editLabel: $__("Edit package #%s"),
+                emptyListMessage: $__("There are no packages defined"),
+                newLabel: $__("New package"),
             },
             extendedAttributesResourceType: "package",
             eholdings_packages_table_settings,
@@ -53,9 +54,9 @@ export default {
                     name: "name",
                     required: true,
                     type: "text",
-                    label: __("Package name"),
+                    label: $__("Package name"),
                     tableColumnDefinition: {
-                        title: __("Package name"),
+                        title: $__("Package name"),
                         data: "name:package_id",
                         searchable: true,
                         orderable: true,
@@ -73,7 +74,7 @@ export default {
                 {
                     name: "vendor_id",
                     type: "vendor",
-                    label: __("Vendor"),
+                    label: $__("Vendor"),
                     showElement: {
                         type: "text",
                         value: "vendor.name",
@@ -86,19 +87,19 @@ export default {
                 {
                     name: "package_type",
                     type: "select",
-                    label: __("Type"),
+                    label: $__("Type"),
                     avCat: "av_package_types",
                 },
                 {
                     name: "content_type",
                     type: "select",
-                    label: __("Content type"),
+                    label: $__("Content type"),
                     avCat: "av_package_content_types",
                 },
                 {
                     name: "created_on",
                     type: "date",
-                    label: __("Created on"),
+                    label: $__("Created on"),
                     showElement: {
                         type: "text",
                         value: "created_on",
@@ -110,12 +111,12 @@ export default {
                     name: "notes",
                     required: false,
                     type: "text",
-                    label: __("Notes"),
+                    label: $__("Notes"),
                 },
                 {
                     name: "package_agreements",
                     type: "relationshipWidget",
-                    group: __("Agreements"),
+                    group: $__("Agreements"),
                     showElement: {
                         type: "table",
                         columnData: "package_agreements",
@@ -123,7 +124,7 @@ export default {
                             !!erm_package.package_agreements?.length,
                         columns: [
                             {
-                                name: __("Agreement name"),
+                                name: $__("Agreement name"),
                                 value: "agreement.name",
                                 link: {
                                     name: "AgreementsShow",
@@ -146,9 +147,9 @@ export default {
                             resourceProperty: "package_agreements",
                         },
                         relationshipStrings: {
-                            nameLowerCase: __("agreement"),
-                            nameUpperCase: __("Agreement"),
-                            namePlural: __("agreements"),
+                            nameLowerCase: $__("agreement"),
+                            nameUpperCase: $__("Agreement"),
+                            namePlural: $__("agreements"),
                         },
                         fetchOptions: {
                             type: "boolean",
@@ -159,7 +160,7 @@ export default {
                         {
                             name: "agreement_id",
                             type: "select",
-                            label: __("Agreement"),
+                            label: $__("Agreement"),
                             requiredKey: "agreement_id",
                             selectLabel: "name",
                             required: true,
@@ -214,9 +215,7 @@ export default {
             );
 
             if (duplicate_agreement_ids.length) {
-                errors.push(
-                    baseResource.$__("An agreement is used several times")
-                );
+                errors.push($__("An agreement is used several times"));
             }
 
             baseResource.setWarning(errors.join("<br>"));
@@ -247,9 +246,7 @@ export default {
             if (package_id) {
                 baseResource.apiClient.update(erm_package, package_id).then(
                     success => {
-                        baseResource.setMessage(
-                            baseResource.$__("Package updated")
-                        );
+                        baseResource.setMessage($__("Package updated"));
                         baseResource.router.push({
                             name: "EHoldingsLocalPackagesList",
                         });
@@ -259,9 +256,7 @@ export default {
             } else {
                 baseResource.apiClient.create(erm_package).then(
                     success => {
-                        baseResource.setMessage(
-                            baseResource.$__("Package created")
-                        );
+                        baseResource.setMessage($__("Package created"));
                         baseResource.router.push({
                             name: "EHoldingsLocalPackagesList",
                         });
@@ -275,7 +270,7 @@ export default {
             return [
                 {
                     type: "component",
-                    name: baseResource.$__("Titles"),
+                    name: $__("Titles"),
                     hidden: erm_package => erm_package,
                     componentPath: "./RelationshipTableDisplay.vue",
                     componentProps: {
@@ -284,7 +279,7 @@ export default {
                             value: {
                                 columns: [
                                     {
-                                        title: baseResource.$__("Name"),
+                                        title: $__("Name"),
                                         data: "title.publication_title",
                                         searchable: true,
                                         orderable: true,
@@ -306,9 +301,7 @@ export default {
                                         },
                                     },
                                     {
-                                        title: baseResource.$__(
-                                            "Publication type"
-                                        ),
+                                        title: $__("Publication type"),
                                         data: "title.publication_type",
                                         searchable: true,
                                         orderable: true,

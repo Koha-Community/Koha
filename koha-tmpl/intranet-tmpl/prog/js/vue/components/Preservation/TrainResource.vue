@@ -10,7 +10,7 @@ import BaseResource from "../BaseResource.vue";
 import { useBaseResource } from "../../composables/base-resource.js";
 import { storeToRefs } from "pinia";
 import { APIClient } from "../../fetch/api-client.js";
-import { $__ } from "../../i18n";
+import { $__ } from "@k/i18n";
 
 export default {
     props: {
@@ -28,12 +28,12 @@ export default {
                 name: "status_filter",
                 type: "radio",
                 options: [
-                    { value: "", description: __("All") },
-                    { value: "closed", description: __("Closed") },
-                    { value: "sent", description: __("Sent") },
+                    { value: "", description: $__("All") },
+                    { value: "closed", description: $__("Closed") },
+                    { value: "sent", description: $__("Sent") },
                     {
                         value: "received",
-                        description: __("Received"),
+                        description: $__("Received"),
                     },
                 ],
                 default: "",
@@ -72,7 +72,7 @@ export default {
                                   params: { train_id: resource?.train_id },
                               },
                               icon: "plus",
-                              title: instancedResource.$__("Add items"),
+                              title: $__("Add items"),
                               index: -1,
                           }
                         : {},
@@ -82,7 +82,7 @@ export default {
                         ? {
                               onClick: () => closeTrain(resource),
                               icon: "remove",
-                              title: instancedResource.$__("Close"),
+                              title: $__("Close"),
                           }
                         : {},
                     resource?.closed_on &&
@@ -91,7 +91,7 @@ export default {
                         ? {
                               onClick: () => sendTrain(resource),
                               icon: "paper-plane",
-                              title: instancedResource.$__("Send"),
+                              title: $__("Send"),
                           }
                         : {},
                     resource?.closed_on &&
@@ -100,7 +100,7 @@ export default {
                         ? {
                               onClick: () => receiveTrain(resource),
                               icon: "inbox",
-                              title: instancedResource.$__("Receive"),
+                              title: $__("Receive"),
                           }
                         : {},
                 ],
@@ -120,16 +120,16 @@ export default {
                 APIClient.preservation.httpClient._baseURL + "trains",
             addFiltersToList: true,
             i18n: {
-                deleteConfirmationMessage: __(
+                deleteConfirmationMessage: $__(
                     "Are you sure you want to remove this train?"
                 ),
-                deleteSuccessMessage: __("Train %s deleted"),
-                displayName: __("Train"),
-                displayNameLowerCase: __("train"),
-                displayNamePlural: __("Train"),
-                editLabel: __("Edit train #%s"),
-                emptyListMessage: __("There are no trains defined"),
-                newLabel: __("New train"),
+                deleteSuccessMessage: $__("Train %s deleted"),
+                displayName: $__("Train"),
+                displayNameLowerCase: $__("train"),
+                displayNamePlural: $__("Train"),
+                editLabel: $__("Edit train #%s"),
+                emptyListMessage: $__("There are no trains defined"),
+                newLabel: $__("New train"),
             },
             config,
             props,
@@ -139,13 +139,13 @@ export default {
             resourceAttrs: [
                 {
                     name: "train_id",
-                    label: __("ID"),
+                    label: $__("ID"),
                     type: "text",
                     hideIn: ["Form", "Show"],
                 },
                 {
                     name: "name",
-                    label: __("Name"),
+                    label: $__("Name"),
                     required: true,
                     type: "text",
                 },
@@ -153,13 +153,13 @@ export default {
                     name: "description",
                     required: true,
                     type: "textarea",
-                    label: __("Description"),
+                    label: $__("Description"),
                     hideIn: ["List"],
                 },
                 {
                     name: "not_for_loan",
                     type: "select",
-                    label: __("Status for item added to this train"),
+                    label: $__("Status for item added to this train"),
                     avCat: "av_notforloan",
                     disabled: train => (train.train_id ? true : false),
                     defaultValue:
@@ -169,7 +169,7 @@ export default {
                 {
                     name: "default_processing_id",
                     type: "relationshipSelect",
-                    label: __("Default processing"),
+                    label: $__("Default processing"),
                     required: true,
                     relationshipAPIClient: APIClient.preservation.processings,
                     relationshipOptionLabelAttr: "name",
@@ -183,14 +183,14 @@ export default {
                 {
                     name: "created_on",
                     type: "date",
-                    label: __("Created on"),
+                    label: $__("Created on"),
                     required: false,
                     hideIn: ["Form", "Show"],
                 },
                 {
                     name: "closed_on",
                     type: "date",
-                    label: __("Closed on"),
+                    label: $__("Closed on"),
                     required: false,
                     format: format_date,
                     hidden: resource => resource.closed_on,
@@ -199,7 +199,7 @@ export default {
                 {
                     name: "sent_on",
                     type: "date",
-                    label: __("Sent on"),
+                    label: $__("Sent on"),
                     required: false,
                     format: format_date,
                     hidden: resource => resource.sent_on,
@@ -208,7 +208,7 @@ export default {
                 {
                     name: "received_on",
                     type: "date",
-                    label: __("Received on"),
+                    label: $__("Received on"),
                     required: false,
                     format: format_date,
                     hidden: resource => resource.received_on,
@@ -220,7 +220,7 @@ export default {
         const doAddItems = (train, dt, event) => {
             if (train.closed_on != null) {
                 baseResource.setWarning(
-                    baseResource.$__("Cannot add items to a closed train")
+                    $__("Cannot add items to a closed train")
                 );
             } else {
                 baseResource.router.push({
@@ -253,7 +253,7 @@ export default {
                     "delete",
                     {
                         addItems: {
-                            text: baseResource.$__("Add items"),
+                            text: $__("Add items"),
                             icon: "fa fa-plus",
                             callback: doAddItems,
                         },
@@ -276,9 +276,7 @@ export default {
             if (train_id) {
                 client.trains.update(train, train_id).then(
                     success => {
-                        baseResource.setMessage(
-                            baseResource.$__("Train updated")
-                        );
+                        baseResource.setMessage($__("Train updated"));
                         baseResource.router.push({ name: "TrainsList" });
                     },
                     error => {}
@@ -286,9 +284,7 @@ export default {
             } else {
                 client.trains.create(train).then(
                     success => {
-                        baseResource.setMessage(
-                            baseResource.$__("Train created")
-                        );
+                        baseResource.setMessage($__("Train created"));
                         baseResource.router.push({ name: "TrainsList" });
                     },
                     error => {}
@@ -296,7 +292,7 @@ export default {
             }
         };
         const getTableFilterFormElementsLabel = () => {
-            return baseResource.$__("Filter by:");
+            return $__("Filter by:");
         };
         const tableUrl = filters => {
             let url = baseResource.getResourceTableUrl();
@@ -415,7 +411,7 @@ export default {
             return [
                 {
                     type: "component",
-                    name: baseResource.$__("Items"),
+                    name: $__("Items"),
                     hidden: train => train.items.length,
                     componentPath: "./Preservation/TrainItemsTable.vue",
                     componentProps: {

@@ -75,6 +75,7 @@ import { APIClient } from "../../fetch/api-client.js";
 import { build_url_params, build_url } from "../../composables/datatables";
 import KohaTable from "../KohaTable.vue";
 import { useRoute, useRouter } from "vue-router";
+import { $__ } from "@k/i18n";
 
 export default {
     setup() {
@@ -103,7 +104,7 @@ export default {
             let escape_str = escape_str;
             return [
                 {
-                    title: __("Title"),
+                    title: $__("Title"),
                     data: "me.publication_title",
                     searchable: false,
                     orderable: false,
@@ -120,14 +121,14 @@ export default {
                             node +=
                                 " " +
                                 '<i class="fa fa-check-square" style="color: green; float: right;" title="' +
-                                __("Is selected") +
+                                $__("Is selected") +
                                 '" />';
                         }
                         return node;
                     },
                 },
                 {
-                    title: __("Publisher name"),
+                    title: $__("Publisher name"),
                     data: "me.publisher_name",
                     searchable: false,
                     orderable: false,
@@ -136,7 +137,7 @@ export default {
                     },
                 },
                 {
-                    title: __("Publication type"),
+                    title: $__("Publication type"),
                     data: "publication_type",
                     searchable: false,
                     orderable: false,
@@ -150,7 +151,7 @@ export default {
                     },
                 },
                 {
-                    title: __("Identifier"),
+                    title: $__("Identifier"),
                     data: "print_identifier:online_identifier",
                     searchable: false,
                     orderable: false,
@@ -160,14 +161,14 @@ export default {
                         return (
                             (print_identifier
                                 ? escape_str(
-                                      __("ISBN (Print): %s").format(
+                                      $__("ISBN (Print): %s").format(
                                           print_identifier
                                       )
                                   )
                                 : "") +
                             (online_identifier
                                 ? escape_str(
-                                      __("ISBN (Online): %s").format(
+                                      $__("ISBN (Online): %s").format(
                                           online_identifier
                                       )
                                   )

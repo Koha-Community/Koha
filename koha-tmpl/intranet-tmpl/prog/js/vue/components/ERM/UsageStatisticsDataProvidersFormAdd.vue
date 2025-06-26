@@ -389,8 +389,8 @@ import { setMessage, setWarning } from "../../messages";
 import { APIClient } from "../../fetch/api-client.js";
 import { inject, onBeforeMount, ref } from "vue";
 import { storeToRefs } from "pinia";
-import { $__ } from "../../i18n";
 import { useRouter, useRoute } from "vue-router";
+import { $__ } from "@k/i18n";
 
 export default {
     setup() {

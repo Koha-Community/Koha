@@ -27,7 +27,7 @@
 import { inject, onMounted, ref, useTemplateRef, watch } from "vue";
 import { APIClient } from "../../fetch/api-client.js";
 import KohaTable from "../KohaTable.vue";
-import { $__ } from "../../i18n";
+import { $__ } from "@k/i18n/";
 
 export default {
     setup() {
@@ -49,7 +49,7 @@ export default {
         const getTableColumns = () => {
             const columns = [
                 {
-                    title: __("Provider"),
+                    title: $__("Provider"),
                     data: "me.erm_usage_data_provider_id:me.name",
                     searchable: true,
                     orderable: true,
@@ -63,26 +63,26 @@ export default {
             data_types.forEach(data_type => {
                 columns.push(
                     {
-                        title: __("Start"),
+                        title: $__("Start"),
                         data: "description",
                         searchable: true,
                         orderable: true,
                         render: function (data, type, row, meta) {
                             const date = row[`earliest_${data_type}`]
                                 ? row[`earliest_${data_type}`]
-                                : __("N/A");
+                                : $__("N/A");
                             return date;
                         },
                     },
                     {
-                        title: __("End"),
+                        title: $__("End"),
                         data: "description",
                         searchable: true,
                         orderable: true,
                         render: function (data, type, row, meta) {
                             const date = row[`latest_${data_type}`]
                                 ? row[`latest_${data_type}`]
-                                : __("N/A");
+                                : $__("N/A");
                             return date;
                         },
                     }

@@ -47,7 +47,7 @@
 <script>
 import { inject, onMounted, ref } from "vue";
 import { APIClient } from "../../fetch/api-client.js";
-import { $__ } from "../../i18n";
+import { $__ } from "@k/i18n";
 
 export default {
     setup() {

@@ -356,7 +356,7 @@ import { inject, ref } from "vue";
 import { storeToRefs } from "pinia";
 import { APIClient } from "../../fetch/api-client.js";
 import { useRouter } from "vue-router";
-import { $__ } from "../../i18n";
+import { $__ } from "@k/i18n/";
 
 export default {
     setup(props) {

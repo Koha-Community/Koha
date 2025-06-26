@@ -44,6 +44,7 @@
 import { createVNode, onMounted, ref, render } from "vue";
 import { useDataTable } from "../../composables/datatables";
 import { useRouter } from "vue-router";
+import { $__ } from "@k/i18n";
 
 export default {
     setup(props) {
@@ -92,7 +93,7 @@ export default {
                 ],
                 columns: [
                     {
-                        title: __("Name"),
+                        title: $__("Name"),
                         data: "package.name",
                         searchable: false,
                         orderable: false,
@@ -140,7 +141,7 @@ export default {
                                             color: "green",
                                             float: "right",
                                         },
-                                        title: __("Is selected"),
+                                        title: $__("Is selected"),
                                     }),
                                 ]);
                             }

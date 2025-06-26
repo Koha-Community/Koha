@@ -19,8 +19,8 @@
 import { APIClient } from "../../fetch/api-client.js";
 import { inject, onMounted, ref, useTemplateRef } from "vue";
 import KohaTable from "../KohaTable.vue";
-import { $__ } from "../../i18n";
 import { useRoute } from "vue-router";
+import { $__ } from "@k/i18n";
 
 export default {
     setup() {
@@ -72,14 +72,14 @@ export default {
         const getTableColumns = () => {
             return [
                 {
-                    title: __("Filename"),
+                    title: $__("Filename"),
                     data: "filename",
                     searchable: true,
                     orderable: true,
                 },
                 {
                     data: "importdate",
-                    title: __("Import date"),
+                    title: $__("Import date"),
                     render: function (data, type, row, meta) {
                         const date = row.importdate.substr(0, 10);
                         const time = row.importdate.substr(11, 8);
@@ -89,7 +89,7 @@ export default {
                     orderable: true,
                 },
                 {
-                    title: __("Imported by"),
+                    title: $__("Imported by"),
                     render: function (data, type, row, meta) {
                         const { patron } = row;
                         const importer = patron

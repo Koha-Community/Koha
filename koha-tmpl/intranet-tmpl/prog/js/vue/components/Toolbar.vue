@@ -10,7 +10,6 @@
                 v-for="(button, i) in toolbarButtons(
                     resource,
                     component,
-                    i18n,
                     componentPropData
                 )"
             >
@@ -29,7 +28,6 @@ export default {
         toolbarButtons: Function,
         component: String,
         resource: Object,
-        i18n: Object,
         componentPropData: Object,
         sticky: {
             type: Boolean,

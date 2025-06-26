@@ -10,6 +10,7 @@ import BaseResource from "../BaseResource.vue";
 import { useBaseResource } from "../../composables/base-resource.js";
 import { storeToRefs } from "pinia";
 import { APIClient } from "../../fetch/api-client.js";
+import { $__ } from "@k/i18n";
 
 export default {
     props: {
@@ -33,21 +34,19 @@ export default {
                         if (result.length) {
                             if (result.length != items.length) {
                                 instancedResource.setWarning(
-                                    instancedResource
-                                        .$__(
-                                            "%s new items added. %s items not found."
-                                        )
-                                        .format(
-                                            result.length,
-                                            items.length - result.length
-                                        ),
+                                    $__(
+                                        "%s new items added. %s items not found."
+                                    ).format(
+                                        result.length,
+                                        items.length - result.length
+                                    ),
                                     true
                                 );
                             } else {
                                 instancedResource.setMessage(
-                                    instancedResource
-                                        .$__("%s new items added.")
-                                        .format(result.length),
+                                    $__("%s new items added.").format(
+                                        result.length
+                                    ),
                                     true
                                 );
                             }
@@ -61,9 +60,7 @@ export default {
                                 instancedResource.refreshTemplateState();
                             }
                         } else {
-                            instancedResource.setWarning(
-                                instancedResource.$__("No items added")
-                            );
+                            instancedResource.setWarning($__("No items added"));
                         }
                     },
                     error => {}
@@ -90,19 +87,14 @@ export default {
                         onClick: () =>
                             instancedResource.setConfirmationDialog(
                                 {
-                                    title: instancedResource.$__(
-                                        "Add items to waiting list"
-                                    ),
-                                    accept_label: instancedResource.$__("Save"),
-                                    cancel_label:
-                                        instancedResource.$__("Cancel"),
+                                    title: $__("Add items to waiting list"),
+                                    accept_label: $__("Save"),
+                                    cancel_label: $__("Cancel"),
                                     inputs: [
                                         {
                                             name: "barcode_list",
                                             type: "textarea",
-                                            label: instancedResource.$__(
-                                                "Barcode list"
-                                            ),
+                                            label: $__("Barcode list"),
                                             required: true,
                                         },
                                     ],
@@ -111,27 +103,21 @@ export default {
                                 addItemsToWaitingList
                             ),
                         icon: "plus",
-                        title: instancedResource.$__("Add to waiting list"),
+                        title: $__("Add to waiting list"),
                     },
                     instancedResource.itemsRecentlyAddedToWaitingList.length > 0
                         ? {
                               onClick: () =>
                                   instancedResource.setConfirmationDialog(
                                       {
-                                          title: instancedResource.$__(
-                                              "Add items to a train"
-                                          ),
-                                          accept_label:
-                                              instancedResource.$__("Save"),
-                                          cancel_label:
-                                              instancedResource.$__("Cancel"),
+                                          title: $__("Add items to a train"),
+                                          accept_label: $__("Save"),
+                                          cancel_label: $__("Cancel"),
                                           inputs: [
                                               {
                                                   name: "train_id_selected_for_add",
                                                   type: "relationshipSelect",
-                                                  label: instancedResource.$__(
-                                                      "Select a train"
-                                                  ),
+                                                  label: $__("Select a train"),
                                                   required: true,
                                                   relationshipAPIClient:
                                                       APIClient.preservation
@@ -147,7 +133,7 @@ export default {
                                       addItemsToTrain
                                   ),
                               icon: "plus",
-                              title: instancedResource.$__(
+                              title: $__(
                                   "Add last %s items to a train".format(
                                       instancedResource
                                           .itemsRecentlyAddedToWaitingList
@@ -175,16 +161,16 @@ export default {
                 APIClient.preservation.httpClient._baseURL +
                 "/waiting-list/items",
             i18n: {
-                deleteConfirmationMessage: __(
+                deleteConfirmationMessage: $__(
                     "Are you sure you want to remove this item from the waiting list?"
                 ),
-                deleteSuccessMessage: __("Item removed from the waiting list"),
-                displayName: __("Item"),
-                displayNameLowerCase: __("item"),
-                displayNamePlural: __("Items"),
+                deleteSuccessMessage: $__("Item removed from the waiting list"),
+                displayName: $__("Item"),
+                displayNameLowerCase: $__("item"),
+                displayNamePlural: $__("Items"),
                 editLabel: null,
-                emptyListMessage: __("There are no items in the waiting list"),
-                newLabel: __("Add to waiting list"),
+                emptyListMessage: $__("There are no items in the waiting list"),
+                newLabel: $__("Add to waiting list"),
             },
             config,
             itemsRecentlyAddedToWaitingList,
@@ -194,17 +180,17 @@ export default {
             resourceAttrs: [
                 {
                     name: "itemnumber",
-                    label: __("ID"),
+                    label: $__("ID"),
                     type: "text",
                     hideIn: ["List"],
                 },
                 {
                     name: "biblio.title",
-                    label: __("Title"),
+                    label: $__("Title"),
                     type: "text",
                     tableColumnDefinition: {
                         data: "biblio.title",
-                        title: __("Title"),
+                        title: $__("Title"),
                         searchable: true,
                         orderable: true,
                         render: function (data, type, row, meta) {
@@ -214,17 +200,17 @@ export default {
                 },
                 {
                     name: "biblio.author",
-                    label: __("Author"),
+                    label: $__("Author"),
                     type: "text",
                 },
                 {
                     name: "callnumber",
-                    label: __("Call number"),
+                    label: $__("Call number"),
                     type: "text",
                 },
                 {
                     name: "external_id",
-                    label: __("Barcode"),
+                    label: $__("Barcode"),
                     type: "text",
                 },
             ],
@@ -233,21 +219,19 @@ export default {
         const doRemoveItem = (item, dt, event) => {
             baseResource.setConfirmationDialog(
                 {
-                    title: baseResource.$__(
+                    title: $__(
                         "Are you sure you want to remove this item from the waiting list?"
                     ),
                     message: item.barcode,
-                    accept_label: baseResource.$__("Yes, remove"),
-                    cancel_label: baseResource.$__("No, do not remove"),
+                    accept_label: $__("Yes, remove"),
+                    cancel_label: $__("No, do not remove"),
                 },
                 () => {
                     const client = APIClient.preservation;
                     client.waiting_list_items.delete(item.item_id).then(
                         success => {
                             baseResource.setMessage(
-                                baseResource.$__(
-                                    "Item removed from the waiting list"
-                                ),
+                                $__("Item removed from the waiting list"),
                                 true
                             );
                             dt.draw();
@@ -268,7 +252,7 @@ export default {
                 "-1": [
                     {
                         removeItem: {
-                            text: baseResource.$__("Remove"),
+                            text: $__("Remove"),
                             icon: "fa fa-close",
                             callback: doRemoveItem,
                         },

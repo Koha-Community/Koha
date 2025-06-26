@@ -8,6 +8,7 @@
 import { createVNode, onMounted, render } from "vue";
 import { useDataTable } from "../../composables/datatables";
 import { useRouter } from "vue-router";
+import { $__ } from "@k/i18n";
 
 export default {
     setup(props) {
@@ -33,7 +34,7 @@ export default {
                 order: [[0, "asc"]],
                 columns: [
                     {
-                        title: __("Name"),
+                        title: $__("Name"),
                         data: "package.name",
                         searchable: true,
                         orderable: true,

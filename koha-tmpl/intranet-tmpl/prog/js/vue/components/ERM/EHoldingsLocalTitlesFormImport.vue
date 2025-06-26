@@ -30,7 +30,7 @@ import { setError } from "../../messages";
 import { createVNode, onBeforeMount, onMounted, ref, render } from "vue";
 import { APIClient } from "../../fetch/api-client.js";
 import { useDataTable } from "../../composables/datatables";
-import { $__ } from "../../i18n";
+import { $__ } from "@k/i18n";
 
 export default {
     setup() {
@@ -67,7 +67,7 @@ export default {
                 order: [[0, "asc"]],
                 columns: [
                     {
-                        title: __("Name"),
+                        title: $__("Name"),
                         data: "shelfname",
                         searchable: true,
                         orderable: true,
@@ -79,7 +79,7 @@ export default {
                         },
                     },
                     {
-                        title: __("Actions"),
+                        title: $__("Actions"),
                         data: function (row, type, val, meta) {
                             return '<div class="actions"></div>';
                         },
@@ -108,7 +108,7 @@ export default {
                                     class: "fa fa-download",
                                     "aria-hidden": "true",
                                 }),
-                                __("Import"),
+                                $__("Import"),
                             ]
                         );
 

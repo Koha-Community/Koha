@@ -14,12 +14,13 @@
 </template>
 
 <script>
+import { $__ } from "@k/i18n";
 export default {
     name: "ButtonSubmit",
     props: {
         title: {
             type: String,
-            default: __("Submit"),
+            default: $__("Submit"),
             required: false,
         },
         icon: {

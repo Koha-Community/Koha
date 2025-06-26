@@ -11,7 +11,6 @@
                 :toolbarButtons="instancedResource.toolbarButtons"
                 component="list"
                 :resource="resource"
-                :i18n="instancedResource.i18n"
                 :componentPropData="componentPropData"
             />
         </template>
@@ -33,7 +32,6 @@
                 :toolbarButtons="instancedResource.toolbarButtons"
                 component="show"
                 :resource="resource"
-                :i18n="instancedResource.i18n"
                 :componentPropData="componentPropData"
             />
         </template>
@@ -48,7 +46,6 @@
                 :toolbarButtons="instancedResource.toolbarButtons"
                 component="form"
                 :resource="resource"
-                :i18n="instancedResource.i18n"
                 :componentPropData="componentPropData"
                 :sticky="
                     instancedResource.stickyToolbar &&

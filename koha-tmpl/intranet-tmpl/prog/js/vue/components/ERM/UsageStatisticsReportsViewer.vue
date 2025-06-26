@@ -27,6 +27,7 @@
 import { inject, onMounted, ref, useTemplateRef, watch } from "vue";
 import KohaTable from "../KohaTable.vue";
 import { useRoute } from "vue-router";
+import { $__ } from "@k/i18n";
 
 export default {
     setup() {
@@ -109,7 +110,7 @@ export default {
 
             report_display !== "usage_data_provider" &&
                 column_set.unshift({
-                    title: __(
+                    title: $__(
                         data_type.charAt(0).toUpperCase() + data_type.slice(1)
                     ),
                     data: data_type,
@@ -122,7 +123,7 @@ export default {
                 // Add yop if it is required
                 if (checkReportColumns(report_type, "YOP")) {
                     column_set.push({
-                        title: __("YOP"),
+                        title: $__("YOP"),
                         data: "yop",
                         searchable: true,
                         orderable: true,
@@ -131,14 +132,14 @@ export default {
                 // Add access type if it is required
                 if (checkReportColumns(report_type, "Access_Type")) {
                     column_set.push({
-                        title: __("Access type"),
+                        title: $__("Access type"),
                         data: "access_type",
                         searchable: true,
                         orderable: true,
                     });
                 }
                 column_set.push({
-                    title: __("Metric"),
+                    title: $__("Metric"),
                     render: function (data, type, row, meta) {
                         return row.metric_type;
                     },
@@ -149,13 +150,13 @@ export default {
 
             if (report_display === "usage_data_provider") {
                 column_set.unshift({
-                    title: __("Data provider"),
+                    title: $__("Data provider"),
                     data: "name",
                     searchable: true,
                     orderable: true,
                 });
                 column_set.push({
-                    title: __("Period total"),
+                    title: $__("Period total"),
                     data: "provider_rollup_total",
                     searchable: true,
                     orderable: true,
@@ -167,7 +168,7 @@ export default {
             if (yearly_filter) {
                 months_data.forEach(month => {
                     column_set.push({
-                        title: __(month.short),
+                        title: $__(month.short),
                         render: function (data, type, row, meta) {
                             const find_correct_month =
                                 row.erm_usage_muses.filter(
@@ -195,7 +196,7 @@ export default {
                             if (month.active) {
                                 const column_title = `${month.short}${abbreviated_year}`;
                                 column_set.push({
-                                    title: __(column_title),
+                                    title: $__(column_title),
                                     render: function (data, type, row, meta) {
                                         const filtered_by_year =
                                             row.erm_usage_muses.filter(
@@ -228,7 +229,7 @@ export default {
                     years.forEach(year => {
                         const title = String(year);
                         column_set.push({
-                            title: __(title),
+                            title: $__(title),
                             render: function (data, type, row, meta) {
                                 const find_usage = row.erm_usage_yuses.find(
                                     item => item.year === year
@@ -249,7 +250,7 @@ export default {
                     // Add yop if it is required
                     if (checkReportColumns(report_type, "YOP")) {
                         column_set.push({
-                            title: __("YOP"),
+                            title: $__("YOP"),
                             data: "yop",
                             searchable: true,
                             orderable: true,
@@ -259,7 +260,7 @@ export default {
                         if (access_types && access_types.length > 0) {
                             access_types.forEach(access => {
                                 column_set.push({
-                                    title: __(access),
+                                    title: $__(access),
                                     render: function (data, type, row, meta) {
                                         const filterByType =
                                             row.erm_usage_muses.filter(
@@ -288,7 +289,7 @@ export default {
                             });
                         } else {
                             column_set.push({
-                                title: __(metric),
+                                title: $__(metric),
                                 render: function (data, type, row, meta) {
                                     const filterByMetric =
                                         row.erm_usage_muses.filter(
@@ -312,7 +313,7 @@ export default {
             // Add totals column if required
             if (report_display === "monthly_with_totals") {
                 column_set.push({
-                    title: __("Period total"),
+                    title: $__("Period total"),
                     data: "usage_total",
                     searchable: true,
                     orderable: true,

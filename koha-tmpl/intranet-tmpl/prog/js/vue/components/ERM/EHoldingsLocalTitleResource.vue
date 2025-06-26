@@ -10,6 +10,7 @@ import BaseResource from "../BaseResource.vue";
 import { useBaseResource } from "../../composables/base-resource.js";
 import { storeToRefs } from "pinia";
 import { APIClient } from "../../fetch/api-client.js";
+import { $__ } from "@k/i18n";
 
 export default {
     props: {
@@ -26,12 +27,12 @@ export default {
                     {
                         to: { name: "EHoldingsLocalTitlesFormImport" },
                         icon: "plus",
-                        title: baseResource.$__("Import from list"),
+                        title: $__("Import from list"),
                     },
                     {
                         to: { name: "EHoldingsLocalTitlesKBARTImport" },
                         icon: "plus",
-                        title: baseResource.$__("Import from KBART file"),
+                        title: $__("Import from KBART file"),
                     },
                 ],
             };
@@ -49,14 +50,14 @@ export default {
             resourceTableUrl:
                 APIClient.erm.httpClient._baseURL + "eholdings/local/titles",
             i18n: {
-                deleteConfirmationMessage: __(
+                deleteConfirmationMessage: $__(
                     "Are you sure you want to remove this title?"
                 ),
-                deleteSuccessMessage: __("Title %s deleted"),
-                displayName: __("Title"),
-                editLabel: __("Edit title #%s"),
-                emptyListMessage: __("There are no titles defined"),
-                newLabel: __("New title"),
+                deleteSuccessMessage: $__("Title %s deleted"),
+                displayName: $__("Title"),
+                editLabel: $__("Edit title #%s"),
+                emptyListMessage: $__("There are no titles defined"),
+                newLabel: $__("New title"),
             },
             eholdings_titles_table_settings,
             vendors,
@@ -68,9 +69,9 @@ export default {
                     name: "publication_title",
                     required: true,
                     type: "text",
-                    label: __("Publication title"),
+                    label: $__("Publication title"),
                     tableColumnDefinition: {
-                        title: __("Publication title"),
+                        title: $__("Publication title"),
                         data: "publication_title:title_id",
                         searchable: true,
                         orderable: true,
@@ -88,9 +89,9 @@ export default {
                 {
                     name: "print_identifier",
                     type: "text",
-                    label: __("Print-format identifier"),
+                    label: $__("Print-format identifier"),
                     tableColumnDefinition: {
-                        title: __("Identifier"),
+                        title: $__("Identifier"),
                         data: "print_identifier:online_identifier",
                         searchable: true,
                         orderable: true,
@@ -100,14 +101,14 @@ export default {
                             return [
                                 print_identifier
                                     ? escape_str(
-                                          __("ISBN (Print): %s").format(
+                                          $__("ISBN (Print): %s").format(
                                               print_identifier
                                           )
                                       )
                                     : "",
                                 online_identifier
                                     ? escape_str(
-                                          __("ISBN (Online): %s").format(
+                                          $__("ISBN (Online): %s").format(
                                               online_identifier
                                           )
                                       )
@@ -119,57 +120,57 @@ export default {
                 {
                     name: "online_identifier",
                     type: "text",
-                    label: __("Online-format identifier"),
+                    label: $__("Online-format identifier"),
                     hideIn: ["List"],
                 },
                 {
                     name: "date_first_issue_online",
                     type: "text",
-                    label: __("Date of first serial issue available online"),
+                    label: $__("Date of first serial issue available online"),
                     hideIn: ["List"],
                 },
                 {
                     name: "num_first_vol_online",
                     type: "text",
-                    label: __("Number of first volume available online"),
+                    label: $__("Number of first volume available online"),
                     hideIn: ["List"],
                 },
                 {
                     name: "num_first_issue_online",
                     type: "text",
-                    label: __("Number of first issue available online"),
+                    label: $__("Number of first issue available online"),
                     hideIn: ["List"],
                 },
                 {
                     name: "date_last_issue_online",
                     type: "text",
-                    label: __("Date of last issue available online"),
+                    label: $__("Date of last issue available online"),
                     hideIn: ["List"],
                 },
                 {
                     name: "num_last_vol_online",
                     type: "text",
-                    label: __("Number of last volume available online"),
+                    label: $__("Number of last volume available online"),
                     hideIn: ["List"],
                 },
                 {
                     name: "num_last_issue_online",
                     type: "text",
-                    label: __("Number of last issue available online"),
+                    label: $__("Number of last issue available online"),
                     hideIn: ["List"],
                 },
                 {
                     name: "title_url",
                     type: "text",
-                    label: __("Title-level URL"),
+                    label: $__("Title-level URL"),
                     hideIn: ["List"],
                 },
                 {
                     name: "first_author",
                     type: "text",
-                    label: __("First author"),
+                    label: $__("First author"),
                     tableColumnDefinition: {
-                        title: __("Contributors"),
+                        title: $__("Contributors"),
                         data: "first_author:first_editor",
                         searchable: true,
                         orderable: true,
@@ -187,73 +188,75 @@ export default {
                 {
                     name: "embargo_info",
                     type: "text",
-                    label: __("Embargo information"),
+                    label: $__("Embargo information"),
                     hideIn: ["List"],
                 },
                 {
                     name: "coverage_depth",
                     type: "text",
-                    label: __("Coverage depth"),
+                    label: $__("Coverage depth"),
                     hideIn: ["List"],
                 },
                 {
                     name: "notes",
                     type: "text",
-                    label: __("Notes"),
+                    label: $__("Notes"),
                     hideIn: ["List"],
                 },
                 {
                     name: "publisher_name",
                     type: "text",
-                    label: __("Publisher name"),
+                    label: $__("Publisher name"),
                     hideIn: ["List"],
                 },
                 {
                     name: "publication_type",
                     type: "select",
-                    label: __("Publication type"),
+                    label: $__("Publication type"),
                     avCat: "av_title_publication_types",
                 },
                 {
                     name: "date_monograph_published_print",
                     type: "text",
-                    label: __("Date the monograph is first published in print"),
+                    label: $__(
+                        "Date the monograph is first published in print"
+                    ),
                     hideIn: ["List"],
                 },
                 {
                     name: "date_monograph_published_online",
                     type: "text",
-                    label: __("Date the monograph is first published online"),
+                    label: $__("Date the monograph is first published online"),
                     hideIn: ["List"],
                 },
                 {
                     name: "monograph_volume",
                     type: "text",
-                    label: __("Number of volume for monograph"),
+                    label: $__("Number of volume for monograph"),
                     hideIn: ["List"],
                 },
                 {
                     name: "monograph_edition",
                     type: "text",
-                    label: __("Edition of the monograph"),
+                    label: $__("Edition of the monograph"),
                     hideIn: ["List"],
                 },
                 {
                     name: "first_editor",
                     type: "text",
-                    label: __("First editor"),
+                    label: $__("First editor"),
                     hideIn: ["List"],
                 },
                 {
                     name: "parent_publication_title_id",
                     type: "text",
-                    label: __("Title identifier of the parent publication"),
+                    label: $__("Title identifier of the parent publication"),
                     hideIn: ["List"],
                 },
                 {
                     name: "preceding_publication_title_id",
                     type: "text",
-                    label: __(
+                    label: $__(
                         "Title identifier of any preceding publication title"
                     ),
                     hideIn: ["List"],
@@ -261,7 +264,7 @@ export default {
                 {
                     name: "access_type",
                     type: "text",
-                    label: __("Access type"),
+                    label: $__("Access type"),
                     hideIn: ["List"],
                 },
                 {
@@ -269,19 +272,19 @@ export default {
                     type: "checkbox",
                     group:
                         props.routeAction === "add"
-                            ? __("Create linked bibliographic record")
-                            : __("Update linked bibliographic record"),
+                            ? $__("Create linked bibliographic record")
+                            : $__("Update linked bibliographic record"),
                     label:
                         props.routeAction === "add"
-                            ? __("Create bibliographic record")
-                            : __("Update bibliographic record"),
+                            ? $__("Create bibliographic record")
+                            : $__("Update bibliographic record"),
                     value: false,
                     hideIn: ["List"],
                 },
                 {
                     name: "resources",
                     type: "relationshipWidget",
-                    group: __("Packages"),
+                    group: $__("Packages"),
                     apiClient: APIClient.erm.localPackages,
                     showElement: {
                         type: "component",
@@ -293,7 +296,7 @@ export default {
                                 value: {
                                     columns: [
                                         {
-                                            title: __("Name"),
+                                            title: $__("Name"),
                                             data: "package.name",
                                             searchable: true,
                                             orderable: true,
@@ -365,9 +368,9 @@ export default {
                             resourceProperty: "resources",
                         },
                         relationshipStrings: {
-                            nameLowerCase: __("package"),
-                            nameUpperCase: __("Package"),
-                            namePlural: __("packages"),
+                            nameLowerCase: $__("package"),
+                            nameUpperCase: $__("Package"),
+                            namePlural: $__("packages"),
                         },
                         fetchOptions: {
                             type: "boolean",
@@ -378,7 +381,7 @@ export default {
                         {
                             name: "package_id",
                             type: "select",
-                            label: __("Package"),
+                            label: $__("Package"),
                             requiredKey: "package_id",
                             selectLabel: "name",
                             required: true,
@@ -387,7 +390,7 @@ export default {
                         {
                             name: "vendor_id",
                             type: "vendor",
-                            label: __("Vendor"),
+                            label: $__("Vendor"),
                             indexRequired: true,
                             showElement: {
                                 type: "text",
@@ -403,7 +406,7 @@ export default {
                         {
                             name: "started_on",
                             type: "date",
-                            label: __("Start date"),
+                            label: $__("Start date"),
                             componentProps: {
                                 date_to: {
                                     type: "string",
@@ -415,12 +418,12 @@ export default {
                         {
                             name: "ended_on",
                             type: "date",
-                            label: __("End date"),
+                            label: $__("End date"),
                         },
                         {
                             name: "proxy",
                             type: "text",
-                            label: __("Proxy"),
+                            label: $__("Proxy"),
                         },
                     ],
                     hideIn: ["List"],
@@ -462,9 +465,7 @@ export default {
             );
 
             if (duplicate_package_ids.length) {
-                errors.push(
-                    baseResource.$__("A package is used several times")
-                );
+                errors.push($__("A package is used several times"));
             }
 
             baseResource.setWarning(errors.join("<br>"));
@@ -492,9 +493,7 @@ export default {
             if (title_id) {
                 baseResource.apiClient.update(title, title_id).then(
                     success => {
-                        baseResource.setMessage(
-                            baseResource.$__("Title updated")
-                        );
+                        baseResource.setMessage($__("Title updated"));
                         baseResource.router.push({
                             name: "EHoldingsLocalTitlesList",
                         });
@@ -504,9 +503,7 @@ export default {
             } else {
                 baseResource.apiClient.create(title).then(
                     success => {
-                        baseResource.setMessage(
-                            baseResource.$__("Title created")
-                        );
+                        baseResource.setMessage($__("Title created"));
                         baseResource.router.push({
                             name: "EHoldingsLocalTitlesList",
                         });

@@ -25,6 +25,7 @@ import Toolbar from "./Toolbar.vue";
 import { ref, inject, onBeforeMount, computed } from "vue";
 import { APIClient } from "../fetch/api-client.js";
 import KohaTable from "./KohaTable.vue";
+import { $__ } from "@k/i18n";
 
 export default {
     inheritAttrs: false,
@@ -196,7 +197,7 @@ export default {
                         orderable: true,
                         render: function (data, type, row, meta) {
                             return escape_str(
-                                row[`${attr.name}`] ? __("Yes") : __("No")
+                                row[`${attr.name}`] ? $__("Yes") : $__("No")
                             );
                         },
                     });

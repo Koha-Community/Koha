@@ -10,6 +10,7 @@ import BaseResource from "../BaseResource.vue";
 import { useBaseResource } from "../../composables/base-resource.js";
 import { storeToRefs } from "pinia";
 import { APIClient } from "../../fetch/api-client.js";
+import { $__ } from "@k/i18n";
 
 export default {
     props: {
@@ -35,14 +36,14 @@ export default {
             apiClient: APIClient.erm.licenses,
             resourceTableUrl: APIClient.erm.httpClient._baseURL + "licenses",
             i18n: {
-                deleteConfirmationMessage: __(
+                deleteConfirmationMessage: $__(
                     "Are you sure you want to remove this license?"
                 ),
-                deleteSuccessMessage: __("License %s deleted"),
-                displayName: __("License"),
-                editLabel: __("Edit license #%s"),
-                emptyListMessage: __("There are no licenses defined"),
-                newLabel: __("New license"),
+                deleteSuccessMessage: $__("License %s deleted"),
+                displayName: $__("License"),
+                editLabel: $__("Edit license #%s"),
+                emptyListMessage: $__("There are no licenses defined"),
+                newLabel: $__("New license"),
             },
             extendedAttributesResourceType,
             license_table_settings,
@@ -52,7 +53,7 @@ export default {
             resourceAttrs: [
                 {
                     name: "license_id",
-                    label: __("ID"),
+                    label: $__("ID"),
                     type: "text",
                     hideIn: ["Form", "Show"],
                 },
@@ -60,12 +61,12 @@ export default {
                     name: "name",
                     required: true,
                     type: "text",
-                    label: __("License name"),
+                    label: $__("License name"),
                 },
                 {
                     name: "vendor_id",
                     type: "vendor",
-                    label: __("Vendor"),
+                    label: $__("Vendor"),
                     showElement: {
                         type: "text",
                         value: "vendor.name",
@@ -78,27 +79,27 @@ export default {
                 {
                     name: "description",
                     type: "textarea",
-                    label: __("Description"),
+                    label: $__("Description"),
                     required: true,
                 },
                 {
                     name: "type",
                     required: true,
                     type: "select",
-                    label: __("Type"),
+                    label: $__("Type"),
                     avCat: "av_license_types",
                 },
                 {
                     name: "status",
                     required: true,
                     type: "select",
-                    label: __("Status"),
+                    label: $__("Status"),
                     avCat: "av_license_statuses",
                 },
                 {
                     name: "started_on",
                     type: "date",
-                    label: __("Start date"),
+                    label: $__("Start date"),
                     showElement: {
                         type: "text",
                         value: "started_on",
@@ -114,7 +115,7 @@ export default {
                 {
                     name: "ended_on",
                     type: "date",
-                    label: __("End date"),
+                    label: $__("End date"),
                     showElement: {
                         type: "text",
                         value: "ended_on",
@@ -124,20 +125,20 @@ export default {
                 {
                     name: "user_roles",
                     type: "relationshipWidget",
-                    group: __("Users"),
+                    group: $__("Users"),
                     showElement: {
                         type: "table",
                         columnData: "user_roles",
                         hidden: license => !!license.user_roles?.length,
-                        label: __("License users"),
+                        label: $__("License users"),
                         columns: [
                             {
-                                name: __("Name"),
+                                name: $__("Name"),
                                 value: "patron",
                                 format: patron_to_html,
                             },
                             {
-                                name: __("Role"),
+                                name: $__("Role"),
                                 value: "role",
                                 av: "av_user_roles",
                             },
@@ -148,9 +149,9 @@ export default {
                             resourceProperty: "user_roles",
                         },
                         relationshipStrings: {
-                            nameLowerCase: __("user"),
-                            nameUpperCase: __("License user"),
-                            namePlural: __("users"),
+                            nameLowerCase: $__("user"),
+                            nameUpperCase: $__("License user"),
+                            namePlural: $__("users"),
                         },
                         newRelationshipDefaultAttrs: {
                             type: "object",
@@ -165,7 +166,7 @@ export default {
                         {
                             name: "user_id",
                             type: "component",
-                            label: __("User"),
+                            label: $__("User"),
                             componentPath: "./PatronSearch.vue",
                             required: true,
                             indexRequired: true,
@@ -184,14 +185,14 @@ export default {
                                 },
                                 label: {
                                     type: "string",
-                                    value: __("User"),
+                                    value: $__("User"),
                                 },
                             },
                         },
                         {
                             name: "role",
                             type: "select",
-                            label: __("Role"),
+                            label: $__("Role"),
                             avCat: "av_user_roles",
                             required: true,
                             indexRequired: true,
@@ -202,7 +203,7 @@ export default {
                 {
                     name: "documents",
                     type: "relationshipWidget",
-                    group: __("Documents"),
+                    group: $__("Documents"),
                     showElement: {
                         type: "component",
                         hidden: license => !!license.documents?.length,
@@ -219,9 +220,9 @@ export default {
                             resourceProperty: "documents",
                         },
                         relationshipStrings: {
-                            nameLowerCase: __("document"),
-                            nameUpperCase: __("Document"),
-                            namePlural: __("documents"),
+                            nameLowerCase: $__("document"),
+                            nameUpperCase: $__("Document"),
+                            namePlural: $__("documents"),
                         },
                         newRelationshipDefaultAttrs: {
                             type: "object",
@@ -241,7 +242,7 @@ export default {
                             name: "document",
                             type: "component",
                             componentPath: "./DocumentSelect.vue",
-                            label: __("File"),
+                            label: $__("File"),
                             componentProps: {
                                 counter: {
                                     type: "string",
@@ -258,21 +259,21 @@ export default {
                             name: "physical_location",
                             required: false,
                             type: "text",
-                            label: __("Physical location"),
+                            label: $__("Physical location"),
                             indexRequired: true,
                         },
                         {
                             name: "uri",
                             required: false,
                             type: "text",
-                            label: __("URI"),
+                            label: $__("URI"),
                             indexRequired: true,
                         },
                         {
                             name: "notes",
                             required: false,
                             type: "text",
-                            label: __("Notes"),
+                            label: $__("Notes"),
                             indexRequired: true,
                         },
                     ],
@@ -316,17 +317,15 @@ export default {
                 ).length >= 1
             ) {
                 errors.push(
-                    baseResource
-                        .$__("File size exceeds maximum allowed: %s MB")
-                        .format((max_allowed_packet / (1024 * 1024)).toFixed(2))
+                    $__("File size exceeds maximum allowed: %s MB").format(
+                        (max_allowed_packet / (1024 * 1024)).toFixed(2)
+                    )
                 );
             }
             license.user_roles.forEach((user, i) => {
                 if (user.patron_str === "") {
                     errors.push(
-                        baseResource
-                            .$__("License user %s is missing a user")
-                            .format(i + 1)
+                        $__("License user %s is missing a user").format(i + 1)
                     );
                 }
             });
@@ -362,9 +361,7 @@ export default {
             if (license_id) {
                 baseResource.apiClient.update(license, license_id).then(
                     success => {
-                        baseResource.setMessage(
-                            baseResource.$__("License updated")
-                        );
+                        baseResource.setMessage($__("License updated"));
                         baseResource.router.push({ name: "LicensesList" });
                     },
                     error => {}
@@ -372,9 +369,7 @@ export default {
             } else {
                 baseResource.apiClient.create(license).then(
                     success => {
-                        baseResource.setMessage(
-                            baseResource.$__("License created")
-                        );
+                        baseResource.setMessage($__("License created"));
                         baseResource.router.push({ name: "LicensesList" });
                     },
                     error => {}

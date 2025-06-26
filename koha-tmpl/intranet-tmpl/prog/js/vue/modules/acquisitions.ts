@@ -38,7 +38,7 @@ import { routes as routesDef } from "../routes/acquisitions";
 import { useMainStore } from "../stores/main";
 import { useVendorStore } from "../stores/vendors";
 import { useNavigationStore } from "../stores/navigation";
-import i18n from "../i18n";
+import i18n from "@k/i18n";
 
 const pinia = createPinia();
 

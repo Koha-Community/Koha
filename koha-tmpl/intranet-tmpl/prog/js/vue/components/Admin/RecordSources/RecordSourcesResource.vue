@@ -8,6 +8,7 @@
 import BaseResource from "../../BaseResource.vue";
 import { useBaseResource } from "../../../composables/base-resource.js";
 import { APIClient } from "../../../fetch/api-client.js";
+import { $__ } from "@k/i18n";
 
 export default {
     props: {
@@ -25,14 +26,14 @@ export default {
             apiClient: APIClient.record_sources.record_sources,
             resourceTableUrl: APIClient.record_sources.httpClient._baseURL,
             i18n: {
-                deleteConfirmationMessage: __(
+                deleteConfirmationMessage: $__(
                     "Are you sure you want to remove this record source?"
                 ),
-                deleteSuccessMessage: __("Record source %s deleted"),
-                displayName: __("Record source"),
-                editLabel: __("Edit record source #%s"),
-                emptyListMessage: __("There are no record sources defined"),
-                newLabel: __("New record source"),
+                deleteSuccessMessage: $__("Record source %s deleted"),
+                displayName: $__("Record source"),
+                editLabel: $__("Edit record source #%s"),
+                emptyListMessage: $__("There are no record sources defined"),
+                newLabel: $__("New record source"),
             },
             props,
             resourceAttrs: [
@@ -40,9 +41,9 @@ export default {
                     name: "record_source_id",
                     required: true,
                     type: "text",
-                    label: __("Id"),
+                    label: $__("Id"),
                     tableColumnDefinition: {
-                        title: __("ID"),
+                        title: $__("ID"),
                         data: "record_source_id",
                         searchable: true,
                     },
@@ -52,12 +53,12 @@ export default {
                     name: "name",
                     required: true,
                     type: "text",
-                    label: __("Name"),
+                    label: $__("Name"),
                 },
                 {
                     name: "can_be_edited",
                     type: "checkbox",
-                    label: __("Can be edited"),
+                    label: $__("Can be edited"),
                     value: false,
                 },
             ],
@@ -71,7 +72,7 @@ export default {
                     "edit",
                     {
                         delete: {
-                            text: __("Delete"),
+                            text: $__("Delete"),
                             icon: "fa fa-trash",
                             should_display: row => row.usage_count == 0,
                             callback: baseResource.doResourceDelete,
@@ -96,7 +97,7 @@ export default {
                     .then(
                         success => {
                             baseResource.setMessage(
-                                baseResource.$__("Record source updated!")
+                                $__("Record source updated!")
                             );
                             baseResource.router.push({
                                 name: "RecordSourcesList",
@@ -107,9 +108,7 @@ export default {
             } else {
                 response = baseResource.apiClient.create(recordSource).then(
                     success => {
-                        baseResource.setMessage(
-                            baseResource.$__("Record source created!")
-                        );
+                        baseResource.setMessage($__("Record source created!"));
                         baseResource.router.push({ name: "RecordSourcesList" });
                     },
                     error => {}

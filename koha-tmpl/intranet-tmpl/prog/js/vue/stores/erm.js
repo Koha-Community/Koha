@@ -1,6 +1,7 @@
 import { defineStore } from "pinia";
 import { reactive, toRefs } from "vue";
 import { withAuthorisedValueActions } from "../composables/authorisedValues";
+import { $__ } from "@k/i18n";
 
 export const useERMStore = defineStore("erm", () => {
     const store = reactive({
@@ -28,36 +29,36 @@ export const useERMStore = defineStore("erm", () => {
             av_title_reports_metrics: "ERM_TITLE_REPORTS_METRICS",
             av_item_reports_metrics: "ERM_ITEM_REPORTS_METRICS",
             av_agreement_relationships: [
-                { value: "supersedes", description: __("supersedes") },
+                { value: "supersedes", description: $__("supersedes") },
                 {
                     value: "is-superseded-by",
-                    description: __("is superseded by"),
+                    description: $__("is superseded by"),
                 },
                 {
                     value: "provides_post-cancellation_access_for",
-                    description: __("provides post-cancellation access for"),
+                    description: $__("provides post-cancellation access for"),
                 },
                 {
                     value: "has-post-cancellation-access-in",
-                    description: __("has post-cancellation access in"),
+                    description: $__("has post-cancellation access in"),
                 },
                 {
                     value: "tracks_demand-driven_acquisitions_for",
-                    description: __("tracks demand-driven acquisitions for"),
+                    description: $__("tracks demand-driven acquisitions for"),
                 },
                 {
                     value: "has-demand-driven-acquisitions-in",
-                    description: __("has demand-driven acquisitions in"),
+                    description: $__("has demand-driven acquisitions in"),
                 },
                 {
                     value: "has_backfile_in",
-                    description: __("has backfile in"),
+                    description: $__("has backfile in"),
                 },
                 {
                     value: "has_frontfile_in",
-                    description: __("has frontfile in"),
+                    description: $__("has frontfile in"),
                 },
-                { value: "related_to", description: __("related to") },
+                { value: "related_to", description: $__("related to") },
             ],
         },
     });

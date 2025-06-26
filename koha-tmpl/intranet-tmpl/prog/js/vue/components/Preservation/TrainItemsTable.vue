@@ -98,7 +98,7 @@ import { useDataTable } from "../../composables/datatables";
 import Toolbar from "../Toolbar.vue";
 import ToolbarButton from "../ToolbarButton.vue";
 import { useRouter } from "vue-router";
-import { $__ } from "../../i18n";
+import { $__ } from "@k/i18n";
 
 export default {
     setup(props) {
@@ -178,7 +178,7 @@ export default {
                         {
                             name: "train_id",
                             type: "relationshipSelect",
-                            label: __("Select a train"),
+                            label: $__("Select a train"),
                             required: true,
                             relationshipAPIClient:
                                 APIClient.preservation.trains,
@@ -281,7 +281,7 @@ export default {
                         let checkbox = createVNode("input", {
                             ...(!train_item.processing.letter_code && {
                                 disabled: "disabled",
-                                title: __(
+                                title: $__(
                                     "Cannot print slip, this item does not have a processing with a letter template defined."
                                 ),
                             }),
@@ -318,7 +318,7 @@ export default {
                                     "aria-hidden": "true",
                                 }),
                                 " ",
-                                __("Edit"),
+                                $__("Edit"),
                             ]
                         );
 
@@ -337,7 +337,7 @@ export default {
                                     "aria-hidden": "true",
                                 }),
                                 " ",
-                                __("Remove"),
+                                $__("Remove"),
                             ]
                         );
                         let buttons = [editButton, " ", removeButton];
@@ -362,7 +362,7 @@ export default {
                                             "aria-hidden": "true",
                                         }),
                                         " ",
-                                        __("Copy"),
+                                        $__("Copy"),
                                     ]
                                 )
                             );
@@ -383,7 +383,7 @@ export default {
                                         class: "fa fa-print",
                                         "aria-hidden": "true",
                                     }),
-                                    __("Print slip"),
+                                    $__("Print slip"),
                                 ]
                             );
                             buttons.push(" ");

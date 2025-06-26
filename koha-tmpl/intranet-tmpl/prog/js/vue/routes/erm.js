@@ -18,7 +18,7 @@ import UsageStatisticsReportsViewer from "../components/ERM/UsageStatisticsRepor
 
 import ResourceWrapper from "../components/ResourceWrapper.vue";
 
-import { $__ } from "../i18n";
+import { $__ } from "@k/i18n";
 
 export const routes = [
     {

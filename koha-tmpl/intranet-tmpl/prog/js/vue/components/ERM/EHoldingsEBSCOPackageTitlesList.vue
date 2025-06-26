@@ -3,6 +3,7 @@
         <div id="filters">
             <a href="#" @click.prevent="toggleFilters($event)"
                 ><i class="fa fa-search"></i>
+
                 {{ displayFilters ? $__("Hide filters") : $__("Show filters") }}
             </a>
             <fieldset v-if="displayFilters">
@@ -62,6 +63,7 @@ import { inject, ref, reactive, useTemplateRef } from "vue";
 import { storeToRefs } from "pinia";
 import KohaTable from "../KohaTable.vue";
 import { useRoute, useRouter } from "vue-router";
+import { $__ } from "@k/i18n";
 
 export default {
     setup(props) {
@@ -101,7 +103,7 @@ export default {
 
             return [
                 {
-                    title: __("Name"),
+                    title: $__("Name"),
                     data: "title.publication_title",
                     searchable: false,
                     orderable: false,
@@ -116,14 +118,14 @@ export default {
                             node +=
                                 " " +
                                 '<i class="fa fa-check-square" style="color: green; float: right;" title="' +
-                                __("Is selected") +
+                                $__("Is selected") +
                                 '" />';
                         }
                         return node;
                     },
                 },
                 {
-                    title: __("Publication type"),
+                    title: $__("Publication type"),
                     data: "title.publication_type",
                     searchable: false,
                     orderable: false,

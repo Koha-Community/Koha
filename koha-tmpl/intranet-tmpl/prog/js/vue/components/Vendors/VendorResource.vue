@@ -10,7 +10,7 @@ import BaseResource from "../BaseResource.vue";
 import { useBaseResource } from "../../composables/base-resource.js";
 import { storeToRefs } from "pinia";
 import { APIClient } from "../../fetch/api-client.js";
-import { $__ } from "../../i18n";
+import { $__ } from "@k/i18n";
 
 export default {
     props: {
@@ -33,7 +33,7 @@ export default {
             return {
                 form: [
                     {
-                        title: instancedResource.$__("Save"),
+                        title: $__("Save"),
                         icon: "save",
                         form: componentData.resourceForm,
                     },
@@ -41,7 +41,7 @@ export default {
                         to: {
                             name: "VendorList",
                         },
-                        title: instancedResource.$__("Cancel"),
+                        title: $__("Cancel"),
                         icon: "times",
                         cssClass: "btn btn-link",
                     },
@@ -61,14 +61,14 @@ export default {
             resourceTableUrl:
                 APIClient.acquisition.httpClient._baseURL + "vendors",
             i18n: {
-                deleteConfirmationMessage: __(
+                deleteConfirmationMessage: $__(
                     "Are you sure you want to remove this vendor?"
                 ),
-                deleteSuccessMessage: __("Vendor %s deleted"),
-                displayName: __("Vendor"),
-                editLabel: __("Edit vendor #%s"),
-                emptyListMessage: __("There are no vendors defined"),
-                newLabel: __("New vendor"),
+                deleteSuccessMessage: $__("Vendor %s deleted"),
+                displayName: $__("Vendor"),
+                editLabel: $__("Edit vendor #%s"),
+                emptyListMessage: $__("There are no vendors defined"),
+                newLabel: $__("New vendor"),
             },
             props,
             moduleStore: "vendorStore",
@@ -79,7 +79,7 @@ export default {
                 {
                     name: "id",
                     group: $__("Details"),
-                    label: __("ID"),
+                    label: $__("ID"),
                     type: "text",
                     hideIn: ["Form", "Show"],
                 },
@@ -88,13 +88,13 @@ export default {
                     group: $__("Details"),
                     required: true,
                     type: "text",
-                    label: __("Vendor name"),
+                    label: $__("Vendor name"),
                 },
                 {
                     name: "postal",
                     group: $__("Details"),
                     type: "textarea",
-                    label: __("Postal address"),
+                    label: $__("Postal address"),
                     textAreaRows: 3,
                     hideIn: ["List"],
                 },
@@ -102,7 +102,7 @@ export default {
                     name: "physical",
                     group: $__("Details"),
                     type: "textarea",
-                    label: __("Physical address"),
+                    label: $__("Physical address"),
                     textAreaRows: 3,
                     hideIn: ["List"],
                 },
@@ -110,28 +110,28 @@ export default {
                     name: "phone",
                     group: $__("Details"),
                     type: "text",
-                    label: __("Phone"),
+                    label: $__("Phone"),
                     hideIn: ["List"],
                 },
                 {
                     name: "fax",
                     group: $__("Details"),
                     type: "text",
-                    label: __("Fax"),
+                    label: $__("Fax"),
                     hideIn: ["List"],
                 },
                 {
                     name: "url",
                     group: $__("Details"),
                     type: "text",
-                    label: __("Website"),
+                    label: $__("Website"),
                     hideIn: ["List"],
                 },
                 {
                     name: "accountnumber",
                     group: $__("Details"),
                     type: "text",
-                    label: __("Account number"),
+                    label: $__("Account number"),
                     hideIn: ["List"],
                 },
                 {
@@ -162,9 +162,9 @@ export default {
                             resourceProperty: "aliases",
                         },
                         relationshipStrings: {
-                            nameLowerCase: __("alias"),
-                            nameUpperCase: __("Alias"),
-                            namePlural: __("aliases"),
+                            nameLowerCase: $__("alias"),
+                            nameUpperCase: $__("Alias"),
+                            namePlural: $__("aliases"),
                         },
                         newRelationshipDefaultAttrs: {
                             type: "object",
@@ -177,7 +177,7 @@ export default {
                         {
                             name: "alias",
                             type: "text",
-                            label: __("Alias"),
+                            label: $__("Alias"),
                             indexRequired: true,
                         },
                     ],
@@ -252,9 +252,9 @@ export default {
                             resourceProperty: "contacts",
                         },
                         relationshipStrings: {
-                            nameLowerCase: __("contact"),
-                            nameUpperCase: __("Contact"),
-                            namePlural: __("contacts"),
+                            nameLowerCase: $__("contact"),
+                            nameUpperCase: $__("Contact"),
+                            namePlural: $__("contacts"),
                         },
                         newRelationshipDefaultAttrs: {
                             type: "object",
@@ -278,43 +278,43 @@ export default {
                         {
                             name: "name",
                             type: "text",
-                            label: __("Name"),
+                            label: $__("Name"),
                             indexRequired: true,
                         },
                         {
                             name: "position",
                             type: "text",
-                            label: __("Position"),
+                            label: $__("Position"),
                             indexRequired: true,
                         },
                         {
                             name: "phone",
                             type: "text",
-                            label: __("Phone"),
+                            label: $__("Phone"),
                             indexRequired: true,
                         },
                         {
                             name: "altphone",
                             type: "text",
-                            label: __("Alternative phone"),
+                            label: $__("Alternative phone"),
                             indexRequired: true,
                         },
                         {
                             name: "fax",
                             type: "text",
-                            label: __("Fax"),
+                            label: $__("Fax"),
                             indexRequired: true,
                         },
                         {
                             name: "email",
                             type: "text",
-                            label: __("Email"),
+                            label: $__("Email"),
                             indexRequired: true,
                         },
                         {
                             name: "notes",
                             type: "text",
-                            label: __("Notes"),
+                            label: $__("Notes"),
                             indexRequired: true,
                         },
                         {
@@ -335,7 +335,7 @@ export default {
                 {
                     name: "interfaces",
                     type: "relationshipWidget",
-                    group: __("Interfaces"),
+                    group: $__("Interfaces"),
                     showElement: {
                         type: "component",
                         hidden: vendor => !!vendor.interfaces?.length,
@@ -352,9 +352,9 @@ export default {
                             resourceProperty: "interfaces",
                         },
                         relationshipStrings: {
-                            nameLowerCase: __("interface"),
-                            nameUpperCase: __("Interface"),
-                            namePlural: __("interfaces"),
+                            nameLowerCase: $__("interface"),
+                            nameUpperCase: $__("Interface"),
+                            namePlural: $__("interfaces"),
                         },
                         newRelationshipDefaultAttrs: {
                             type: "object",
@@ -373,7 +373,7 @@ export default {
                         {
                             name: "name",
                             type: "text",
-                            label: __("Name"),
+                            label: $__("Name"),
                             indexRequired: true,
                         },
                         {
@@ -386,31 +386,31 @@ export default {
                         {
                             name: "uri",
                             type: "text",
-                            label: __("URI"),
+                            label: $__("URI"),
                             indexRequired: true,
                         },
                         {
                             name: "login",
                             type: "text",
-                            label: __("Login"),
+                            label: $__("Login"),
                             indexRequired: true,
                         },
                         {
                             name: "password",
                             type: "text",
-                            label: __("Password"),
+                            label: $__("Password"),
                             indexRequired: true,
                         },
                         {
                             name: "account_email",
                             type: "text",
-                            label: __("Account email"),
+                            label: $__("Account email"),
                             indexRequired: true,
                         },
                         {
                             name: "notes",
                             type: "text",
-                            label: __("Notes"),
+                            label: $__("Notes"),
                             indexRequired: true,
                         },
                     ],
@@ -432,7 +432,7 @@ export default {
                     name: "list_currency",
                     group: $__("Ordering information"),
                     type: "select",
-                    label: __("List prices are"),
+                    label: $__("List prices are"),
                     selectLabel: "currency",
                     requiredKey: "currency",
                     options: currencies.value,
@@ -445,7 +445,7 @@ export default {
                     type: "select",
                     selectLabel: "currency",
                     requiredKey: "currency",
-                    label: __("Invoice prices are"),
+                    label: $__("Invoice prices are"),
                     options: currencies.value,
                     defaultValue: null,
                 },
@@ -489,7 +489,7 @@ export default {
                     name: "tax_rate",
                     group: $__("Ordering information"),
                     type: "select",
-                    label: __("Tax rate"),
+                    label: $__("Tax rate"),
                     options: gstValues.value,
                     defaultValue: null,
                     hideIn: ["List"],
@@ -498,7 +498,7 @@ export default {
                     name: "discount",
                     group: $__("Ordering information"),
                     type: "number",
-                    label: __("Discount"),
+                    label: $__("Discount"),
                     defaultValue: null,
                     size: 6,
                     formErrorHandler: verifyDiscountValue,
@@ -511,14 +511,14 @@ export default {
                     name: "deliverytime",
                     group: $__("Ordering information"),
                     type: "number",
-                    label: __("Delivery time (days)"),
+                    label: $__("Delivery time (days)"),
                     hideIn: ["List"],
                 },
                 {
                     name: "notes",
                     group: $__("Ordering information"),
                     type: "textarea",
-                    label: __("Notes"),
+                    label: $__("Notes"),
                     hideIn: ["List"],
                 },
                 {
@@ -534,7 +534,7 @@ export default {
                                       row.id +
                                       '" class="show">' +
                                       escape_str(
-                                          __("%s basket(s)").format(
+                                          $__("%s basket(s)").format(
                                               row.baskets_count
                                           )
                                       ) +
@@ -558,7 +558,7 @@ export default {
                                       "&searched=1" +
                                       '" class="show">' +
                                       escape_str(
-                                          __("%s subscription(s)").format(
+                                          $__("%s subscription(s)").format(
                                               row.subscriptions_count
                                           )
                                       ) +
@@ -580,8 +580,8 @@ export default {
             add_filters: true,
             filters_options: {
                 1: [
-                    { _id: 0, _str: baseResource.$__("Inactive") },
-                    { _id: 1, _str: baseResource.$__("Active") },
+                    { _id: 0, _str: $__("Inactive") },
+                    { _id: 1, _str: $__("Active") },
                 ],
                 ...(baseResource.map_av_dt_filter("av_vendor_types").length && {
                     2: () => baseResource.map_av_dt_filter("av_vendor_types"),
@@ -593,7 +593,7 @@ export default {
                     "edit",
                     {
                         delete: {
-                            text: baseResource.$__("Delete"),
+                            text: $__("Delete"),
                             icon: "fa fa-trash",
                             should_display: row =>
                                 row.baskets_count === 0 &&
@@ -603,7 +603,7 @@ export default {
                     },
                     {
                         receive: {
-                            text: baseResource.$__("Receive shipments"),
+                            text: $__("Receive shipments"),
                             icon: "fa fa-inbox",
                             should_display: row =>
                                 row.active &&
@@ -655,7 +655,7 @@ export default {
             delete vendor.invoices_count;
 
             if (vendor.discount && !verifyDiscountValue(vendor.discount))
-                errors.push(baseResource.$__("Invalid discount value"));
+                errors.push($__("Invalid discount value"));
 
             vendor.contacts = checkContactOrInterface(
                 vendor.contacts.map(
@@ -679,9 +679,7 @@ export default {
             if (vendorId) {
                 baseResource.apiClient.update(vendor, vendorId).then(
                     success => {
-                        baseResource.setMessage(
-                            baseResource.$__("Vendor updated")
-                        );
+                        baseResource.setMessage($__("Vendor updated"));
                         baseResource.router.push({ name: "VendorList" });
                     },
                     error => {}
@@ -689,9 +687,7 @@ export default {
             } else {
                 baseResource.apiClient.create(vendor).then(
                     success => {
-                        baseResource.setMessage(
-                            baseResource.$__("Vendor created")
-                        );
+                        baseResource.setMessage($__("Vendor created"));
                         baseResource.router.push({ name: "VendorList" });
                     },
                     error => {}
@@ -744,7 +740,7 @@ export default {
                             value: {
                                 columns: [
                                     {
-                                        title: __("Name"),
+                                        title: $__("Name"),
                                         data: "contractname",
                                         render: function (
                                             data,
@@ -760,11 +756,11 @@ export default {
                                         },
                                     },
                                     {
-                                        title: __("Description"),
+                                        title: $__("Description"),
                                         data: "contractdescription",
                                     },
                                     {
-                                        title: __("Start date"),
+                                        title: $__("Start date"),
                                         data: "contractstartdate",
                                         render: function (
                                             data,
@@ -780,7 +776,7 @@ export default {
                                         },
                                     },
                                     {
-                                        title: __("End date"),
+                                        title: $__("End date"),
                                         data: "contractenddate",
                                         render: function (
                                             data,
@@ -800,7 +796,7 @@ export default {
                                     )
                                         ? [
                                               {
-                                                  title: __("Actions"),
+                                                  title: $__("Actions"),
                                                   data: "contractnumber",
                                                   searchable: false,
                                                   orderable: false,
@@ -813,11 +809,11 @@ export default {
                                                       return (
                                                           `<a class="btn btn-default btn-xs" href="/cgi-bin/koha/admin/aqcontract.pl?op=add_form&contractnumber=${row.contractnumber}&booksellerid=${row.booksellerid}"><i class="fa-solid fa-pencil" aria-hidden="true"></i>` +
                                                           " " +
-                                                          __("Edit") +
+                                                          $__("Edit") +
                                                           "</a>" +
                                                           `<a style="margin-left: 5px;" class="btn btn-default btn-xs" href="/cgi-bin/koha/admin/aqcontract.pl?op=delete_confirm&contractnumber=${row.contractnumber}&booksellerid=${row.booksellerid}"><i class="fa-solid fa-trash-can" aria-hidden="true"></i>` +
                                                           " " +
-                                                          __("Delete") +
+                                                          $__("Delete") +
                                                           "</a>"
                                                       );
                                                   },

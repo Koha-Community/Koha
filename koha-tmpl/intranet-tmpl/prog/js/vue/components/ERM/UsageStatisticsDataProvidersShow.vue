@@ -125,8 +125,8 @@ import UsageStatisticsDataProvidersFileImport from "./UsageStatisticsDataProvide
 import UsageStatisticsDataProvidersCounterLogs from "./UsageStatisticsDataProvidersCounterLogs.vue";
 import UsageStatisticsDataProviderDetails from "./UsageStatisticsDataProviderDetails.vue";
 import UsageStatisticsProviderDataList from "./UsageStatisticsProviderDataList.vue";
-import { $__ } from "../../i18n";
 import { useRoute, useRouter } from "vue-router";
+import { $__ } from "@k/i18n/";
 
 export default {
     setup() {

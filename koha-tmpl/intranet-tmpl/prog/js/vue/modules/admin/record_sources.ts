@@ -32,7 +32,7 @@ const router = createRouter({
 });
 
 import App from "../../components/Admin/RecordSources/Main.vue";
-import i18n from "../../i18n";
+import i18n from "@k/i18n";
 
 const app = createApp(App);
 

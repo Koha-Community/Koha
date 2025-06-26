@@ -1,5 +1,6 @@
 import { defineStore } from "pinia";
 import { reactive, toRefs } from "vue";
+import { $__ } from "@k/i18n";
 
 export const useReportsStore = defineStore("reports", () => {
     const store = reactive({
@@ -25,7 +26,7 @@ export const useReportsStore = defineStore("reports", () => {
                 active: true,
                 used_by: ["title", "item", "database", "platform"],
                 column: {
-                    title: __("Data provider"),
+                    title: $__("Data provider"),
                     data: "provider_name",
                     searchable: true,
                     orderable: true,
@@ -37,7 +38,7 @@ export const useReportsStore = defineStore("reports", () => {
                 active: false,
                 used_by: ["title", "item", "database"],
                 column: {
-                    title: __("Publisher"),
+                    title: $__("Publisher"),
                     data: "publisher",
                     searchable: true,
                     orderable: true,
@@ -49,7 +50,7 @@ export const useReportsStore = defineStore("reports", () => {
                 active: false,
                 used_by: ["item", "database", "platform"],
                 column: {
-                    title: __("Platform"),
+                    title: $__("Platform"),
                     data: "platform",
                     searchable: true,
                     orderable: true,
@@ -61,7 +62,7 @@ export const useReportsStore = defineStore("reports", () => {
                 active: false,
                 used_by: ["title", "database"],
                 column: {
-                    title: __("Publisher ID"),
+                    title: $__("Publisher ID"),
                     data: "publisher_id",
                     searchable: true,
                     orderable: true,
@@ -73,7 +74,7 @@ export const useReportsStore = defineStore("reports", () => {
                 active: false,
                 used_by: ["title"],
                 column: {
-                    title: __("Online ISSN"),
+                    title: $__("Online ISSN"),
                     data: "online_issn",
                     searchable: true,
                     orderable: true,
@@ -85,7 +86,7 @@ export const useReportsStore = defineStore("reports", () => {
                 active: false,
                 used_by: ["title"],
                 column: {
-                    title: __("Print ISSN"),
+                    title: $__("Print ISSN"),
                     data: "print_issn",
                     searchable: true,
                     orderable: true,
@@ -97,7 +98,7 @@ export const useReportsStore = defineStore("reports", () => {
                 active: false,
                 used_by: ["title"],
                 column: {
-                    title: __("DOI"),
+                    title: $__("DOI"),
                     data: "title_doi",
                     searchable: true,
                     orderable: true,
@@ -109,7 +110,7 @@ export const useReportsStore = defineStore("reports", () => {
                 active: false,
                 used_by: ["title"],
                 column: {
-                    title: __("URI"),
+                    title: $__("URI"),
                     data: "title_uri",
                     searchable: true,
                     orderable: true,

@@ -36,7 +36,7 @@ import Dialog from "../Dialog.vue";
 import { APIClient } from "../../fetch/api-client.js";
 import "vue-select/dist/vue-select.css";
 import { storeToRefs } from "pinia";
-import { $__ } from "../../i18n";
+import { $__ } from "@k/i18n";
 
 export default {
     setup() {

@@ -11,6 +11,10 @@ module.exports = [
                     __dirname,
                     "koha-tmpl/intranet-tmpl/prog/js/fetch"
                 ),
+                "@k": path.resolve(
+                    __dirname,
+                    "koha-tmpl/intranet-tmpl/prog/js/vue"
+                ),
             },
         },
         entry: {
