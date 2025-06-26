@@ -36,6 +36,7 @@ my %scrubbertypes = (
 sub new {
     shift; # ignore our class we are wrapper
     my $type = (@_) ? shift : 'default';
+    $type = 'default' if !defined $type;
     if ( !exists $scrubbertypes{$type} ) {
         croak "New called with unrecognized type '$type'";
     }
