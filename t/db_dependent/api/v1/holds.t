@@ -37,6 +37,7 @@ use Koha::Biblios;
 use Koha::Biblioitems;
 use Koha::Items;
 use Koha::CirculationRules;
+use Koha::Patron::Debarments qw(AddDebarment);
 
 my $schema  = Koha::Database->new->schema;
 my $builder = t::lib::TestBuilder->new();
@@ -723,62 +724,244 @@ subtest 'add() tests (maxreserves behaviour)' => sub {
 
 subtest 'add() + can_place_holds() tests' => sub {
 
-    plan tests => 30;
+    plan tests => 7;
 
     $schema->storage->txn_begin;
 
     my $password = 'AbcdEFG123';
 
     my $library = $builder->build_object( { class => 'Koha::Libraries', value => { pickup_location => 1 } } );
-    my $patron =
-        $builder->build_object( { class => 'Koha::Patrons', value => { branchcode => $library->id, flags => 1 } } );
-    $patron->set_password( { password => $password, skip_validation => 1 } );
-    my $userid = $patron->userid;
+    my $staff   = $builder->build_object( { class => 'Koha::Patrons',   value => { flags           => 1 } } );
+    $staff->set_password( { password => $password, skip_validation => 1 } );
+    my $userid = $staff->userid;
 
-    my $current_message;
-    my $patron_mock = Test::MockModule->new('Koha::Patron');
+    subtest "'expired' tests" => sub {
 
-    $patron_mock->mock(
-        'can_place_holds',
-        sub {
-            return Koha::Result::Boolean->new(0)->add_message( { type => 'error', message => $current_message } );
-        }
-    );
+        plan tests => 5;
 
-    my $item = $builder->build_sample_item( { library => $library->id } );
+        t::lib::Mocks::mock_preference( 'BlockExpiredPatronOpacActions', 'hold' );
 
-    my @messages = qw(
-        expired
-        debt_limit
-        bad_address
-        card_lost
-        restricted
-        hold_limit);
+        my $patron = $builder->build_object(
+            {
+                class => 'Koha::Patrons',
+                value => { dateexpiry => \'DATE_ADD(NOW(), INTERVAL -1 DAY)' }
+            }
+        );
 
-    foreach my $message (@messages) {
-
-        $current_message = $message;
+        my $item = $builder->build_sample_item( { library => $library->id } );
 
         my $post_data = {
             patron_id         => $patron->id,
-            biblio_id         => $item->biblio->id,
             pickup_library_id => $item->holdingbranch,
             item_id           => $item->id
         };
 
         $t->post_ok( "//$userid:$password@/api/v1/holds" => json => $post_data )
-            ->status_is( 409, "Expected error related to '$message'" )
-            ->json_is( { error => "Hold cannot be placed. Reason: $message", error_code => $message } );
+            ->status_is( 409, "Expected error related to 'expired'" )
+            ->json_is( { error => "Hold cannot be placed. Reason: expired", error_code => 'expired' } );
+
+        $t->post_ok( "//$userid:$password@/api/v1/holds" => { 'x-koha-override' => 'expired' } => json => $post_data )
+            ->status_is( 201, "Override works for 'expired'" );
+    };
+
+    subtest "'debt_limit' tests" => sub {
+
+        plan tests => 7;
+
+        # Add a patron, making sure it is not (yet) expired
+        my $patron = $builder->build_object( { class => 'Koha::Patrons', } );
+        $patron->account->add_debit( { amount => 10, interface => 'opac', type => 'ACCOUNT' } );
+
+        my $item = $builder->build_sample_item( { library => $library->id } );
+
+        my $post_data = {
+            patron_id         => $patron->id,
+            pickup_library_id => $item->holdingbranch,
+            item_id           => $item->id
+        };
+
+        t::lib::Mocks::mock_preference( 'maxoutstanding', '5' );
+
+        $t->post_ok( "//$userid:$password@/api/v1/holds" => json => $post_data )
+            ->status_is( 409, "Expected error related to 'debt_limit'" )
+            ->json_is( { error => "Hold cannot be placed. Reason: debt_limit", error_code => 'debt_limit' } );
 
         my $hold_id =
             $t->post_ok(
-            "//$userid:$password@/api/v1/holds" => { 'x-koha-override' => $message } => json => $post_data )
-            ->status_is( 201, "Override works for '$message'" )->tx->res->json->{hold_id};
+            "//$userid:$password@/api/v1/holds" => { 'x-koha-override' => 'debt_limit' } => json => $post_data )
+            ->status_is( 201, "Override works for 'debt_limit'" )->tx->res->json->{hold_id};
 
         Koha::Holds->find($hold_id)->delete();
-    }
 
-    $schema->storage->txn_rollback;
+        t::lib::Mocks::mock_preference( 'maxoutstanding', undef );
+
+        $t->post_ok( "//$userid:$password@/api/v1/holds" => json => $post_data )
+            ->status_is( 201, "No 'maxoutstanding', can place holds" );
+    };
+
+    subtest "'bad_address' tests" => sub {
+
+        plan tests => 5;
+
+        # Add a patron, making sure it is not (yet) expired
+        my $patron = $builder->build_object(
+            {
+                class => 'Koha::Patrons',
+                value => {
+                    gonenoaddress => 1,
+                }
+            }
+        );
+
+        my $item = $builder->build_sample_item( { library => $library->id } );
+
+        my $post_data = {
+            patron_id         => $patron->id,
+            pickup_library_id => $item->holdingbranch,
+            item_id           => $item->id
+        };
+
+        $t->post_ok( "//$userid:$password@/api/v1/holds" => json => $post_data )
+            ->status_is( 409, "Expected error related to 'bad_address'" )
+            ->json_is( { error => "Hold cannot be placed. Reason: bad_address", error_code => 'bad_address' } );
+
+        $t->post_ok(
+            "//$userid:$password@/api/v1/holds" => { 'x-koha-override' => 'bad_address' } => json => $post_data )
+            ->status_is( 201, "Override works for 'bad_address'" );
+    };
+
+    subtest "'card_lost' tests" => sub {
+
+        plan tests => 5;
+
+        # Add a patron, making sure it is not (yet) expired
+        my $patron = $builder->build_object(
+            {
+                class => 'Koha::Patrons',
+                value => {
+                    lost => 1,
+                }
+            }
+        );
+
+        my $item = $builder->build_sample_item( { library => $library->id } );
+
+        my $post_data = {
+            patron_id         => $patron->id,
+            pickup_library_id => $item->holdingbranch,
+            item_id           => $item->id
+        };
+
+        $t->post_ok( "//$userid:$password@/api/v1/holds" => json => $post_data )
+            ->status_is( 409, "Expected error related to 'card_lost'" )
+            ->json_is( { error => "Hold cannot be placed. Reason: card_lost", error_code => 'card_lost' } );
+
+        $t->post_ok( "//$userid:$password@/api/v1/holds" => { 'x-koha-override' => 'card_lost' } => json => $post_data )
+            ->status_is( 201, "Override works for 'card_lost'" );
+    };
+
+    subtest "'restricted' tests" => sub {
+
+        plan tests => 5;
+
+        # Add a patron, making sure it is not (yet) expired
+        my $patron = $builder->build_object( { class => 'Koha::Patrons' } );
+        AddDebarment( { borrowernumber => $patron->borrowernumber } );
+        $patron->discard_changes();
+
+        my $item = $builder->build_sample_item( { library => $library->id } );
+
+        my $post_data = {
+            patron_id         => $patron->id,
+            pickup_library_id => $item->holdingbranch,
+            item_id           => $item->id
+        };
+
+        $t->post_ok( "//$userid:$password@/api/v1/holds" => json => $post_data )
+            ->status_is( 409, "Expected error related to 'restricted'" )
+            ->json_is( { error => "Hold cannot be placed. Reason: restricted", error_code => 'restricted' } );
+
+        $t->post_ok(
+            "//$userid:$password@/api/v1/holds" => { 'x-koha-override' => 'restricted' } => json => $post_data )
+            ->status_is( 201, "Override works for 'restricted'" );
+    };
+
+    subtest "'hold_limit' tests" => sub {
+
+        plan tests => 7;
+
+        # Add a patron, making sure it is not (yet) expired
+        my $patron = $builder->build_object( { class => 'Koha::Patrons' } );
+
+        # Add a hold
+        $builder->build_object( { class => 'Koha::Holds', value => { borrowernumber => $patron->borrowernumber } } );
+
+        t::lib::Mocks::mock_preference( 'maxreserves', 1 );
+
+        my $item = $builder->build_sample_item( { library => $library->id } );
+
+        my $post_data = {
+            patron_id         => $patron->id,
+            pickup_library_id => $item->holdingbranch,
+            item_id           => $item->id
+        };
+
+        $t->post_ok( "//$userid:$password@/api/v1/holds" => json => $post_data )
+            ->status_is( 409, "Expected error related to 'hold_limit'" )
+            ->json_is( { error => "Hold cannot be placed. Reason: hold_limit", error_code => 'hold_limit' } );
+
+        my $hold_id = $t->post_ok(
+            "//$userid:$password@/api/v1/holds" => { 'x-koha-override' => 'hold_limit' } => json => $post_data )
+            ->status_is( 201, "Override works for 'hold_limit'" )->tx->res->json->{hold_id};
+
+        Koha::Holds->find($hold_id)->delete();
+
+        t::lib::Mocks::mock_preference( 'maxreserves', undef );
+
+        $t->post_ok( "//$userid:$password@/api/v1/holds" => json => $post_data )
+            ->status_is( 201, "No 'max_reserves', can place holds" );
+    };
+
+    subtest "Multiple blocking conditions tests" => sub {
+
+        plan tests => 8;
+
+        t::lib::Mocks::mock_preference( 'BlockExpiredPatronOpacActions', 'hold' );
+
+        my $patron = $builder->build_object(
+            {
+                class => 'Koha::Patrons',
+                value => { dateexpiry => \'DATE_ADD(NOW(), INTERVAL -1 DAY)' }
+            }
+        );
+
+        t::lib::Mocks::mock_preference( 'maxoutstanding', '5' );
+        $patron->account->add_debit( { amount => 10, interface => 'opac', type => 'ACCOUNT' } );
+
+        my $item = $builder->build_sample_item( { library => $library->id } );
+
+        my $post_data = {
+            patron_id         => $patron->id,
+            pickup_library_id => $item->holdingbranch,
+            item_id           => $item->id
+        };
+
+        ## NOTICE: this tests rely on 'expired' being checked before 'debt_limit' in Koha::Patron->can_place_holds
+
+        # patron meets 'expired' and 'debt_limit'
+        $t->post_ok( "//$userid:$password@/api/v1/holds" => json => $post_data )
+            ->status_is( 409, "Expected error related to 'expired'" )
+            ->json_is( { error => "Hold cannot be placed. Reason: expired", error_code => 'expired' } );
+
+        # patron meets 'expired' AND 'debt_limit'
+        $t->post_ok( "//$userid:$password@/api/v1/holds" => { 'x-koha-override' => 'expired' } => json => $post_data )
+            ->status_is( 409, "Expected error related to 'debt_limit'" )
+            ->json_is( { error => "Hold cannot be placed. Reason: debt_limit", error_code => 'debt_limit' } );
+
+        $t->post_ok(
+            "//$userid:$password@/api/v1/holds" => { 'x-koha-override' => 'expired,debt_limit' } => json => $post_data )
+            ->status_is( 201, "Override works for both 'expired' and 'debt_limit'" );
+    };
 };
 
 subtest 'pickup_locations() tests' => sub {
