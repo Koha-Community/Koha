@@ -29,7 +29,7 @@ use C4::Context;
 my %scrubbertypes = (
     default => {},    # place holder, default settings are below as fallbacks in call to constructor
     comment => { allow => [qw( br b i em big small strong )], },
-    note    => { allow => [qw[ br b i em big small strong u hr span div p ol ul li ]] },
+    note    => { allow => [qw[ br b i em big small strong u hr span div p ol ul li dl dt dd ]] },
 );
 
 
