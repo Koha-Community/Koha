@@ -168,15 +168,13 @@ export const useNavigationStore = defineStore("navigation", () => {
                                 : { path }),
                             children: null,
                         };
-                        if (
-                            breadcrumbMetadata &&
-                            /(?:{([^}]+)})/.test(self.title)
-                        ) {
-                            breadcrumbInfo.title = self.title.replaceAll(
-                                /(?:{([^}]+)})/g,
-                                (match, paramName) => {
-                                    return breadcrumbMetadata[paramName];
-                                }
+                        if (breadcrumbMetadata) {
+                            breadcrumbInfo.title = self.title.replace(
+                                /{([^}]+)}/g,
+                                (match, paramName) =>
+                                    paramName in breadcrumbMetadata
+                                        ? breadcrumbMetadata[paramName]
+                                        : match
                             );
                         }
                         return breadcrumbInfo;
