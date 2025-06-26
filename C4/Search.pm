@@ -40,6 +40,8 @@ use URI::Escape;
 use Business::ISBN;
 use MARC::Record;
 use MARC::Field;
+use POSIX qw(setlocale LC_COLLATE);
+use Unicode::Collate::Locale;
 
 our ( @ISA, @EXPORT_OK );
 
@@ -290,6 +292,40 @@ searching, record nabbing, facet-building
 See verbose embedded documentation.
 
 =cut
+
+=head2 _sort_facets_zebra
+
+    my $sorted_facets = _sort_facets_zebra($facets, $locale);
+
+Sorts facets using a configurable locale for Zebra search engine.
+
+=cut
+
+sub _sort_facets_zebra {
+    my ( $facets, $locale ) = @_;
+
+    if ( !$locale ) {
+
+        # Get locale from system preference, falling back to system LC_COLLATE
+        $locale = C4::Context->preference('FacetSortingLocale') || 'default';
+        if ( $locale eq 'default' || !$locale ) {
+
+            #NOTE: When setlocale is run with only the 1st parameter, it is a "get" not a "set" function.
+            $locale = setlocale(LC_COLLATE) || 'default';
+        }
+    }
+
+    my $collator = Unicode::Collate::Locale->new( locale => $locale );
+    if ( $collator && $facets ) {
+        my @sorted_facets = sort { $collator->cmp( $a->{facet_label_value}, $b->{facet_label_value} ) } @{$facets};
+        if (@sorted_facets) {
+            return \@sorted_facets;
+        }
+    }
+
+    #NOTE: If there was a problem, at least return the not sorted facets
+    return $facets;
+}
 
 sub getRecords {
     my (
@@ -554,8 +590,10 @@ sub getRecords {
     if (@facets_loop) {
         foreach my $f (@facets_loop) {
             if ( C4::Context->preference('FacetOrder') eq 'Alphabetical' ) {
-                $f->{facets} =
-                    [ sort { uc( $a->{facet_label_value} ) cmp uc( $b->{facet_label_value} ) } @{ $f->{facets} } ];
+                my $sorted_facets = _sort_facets_zebra( $f->{facets} );
+                if ($sorted_facets) {
+                    $f->{facets} = $sorted_facets;
+                }
             }
         }
     }

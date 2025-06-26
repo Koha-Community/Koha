@@ -64,6 +64,11 @@ I18N/L10N:
               fr: French style ([Street number] [Address] - [ZIP/Postal Code] [City] - [Country])
         - .
     -
+        - Sort facet names using
+        - pref: FacetSortingLocale
+          type: locale-list
+        - locale when FacetOrder is set to Alphabetical. This enables proper Unicode-aware sorting of accented characters and locale-specific alphabetical ordering.
+    -
         - pref: TranslateNotices
           choices:
               1: Allow

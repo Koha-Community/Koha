@@ -456,7 +456,6 @@ sub max_result_window {
     return $max_result_window;
 }
 
-
 =head2 _sort_facets
 
     my $facets = _sort_facets($facets);
@@ -469,11 +468,18 @@ sub _sort_facets {
     my ( $self, $args ) = @_;
     my $facets = $args->{facets};
     my $locale = $args->{locale};
+
     if ( !$locale ) {
 
-        #NOTE: When setlocale is run with only the 1st parameter, it is a "get" not a "set" function.
-        $locale = setlocale(LC_COLLATE);
+        # Get locale from system preference, falling back to system LC_COLLATE
+        $locale = C4::Context->preference('FacetSortingLocale') || 'default';
+        if ( $locale eq 'default' || !$locale ) {
+
+            #NOTE: When setlocale is run with only the 1st parameter, it is a "get" not a "set" function.
+            $locale = setlocale(LC_COLLATE) || 'default';
+        }
     }
+
     my $collator = Unicode::Collate::Locale->new( locale => $locale );
     if ( $collator && $facets ) {
         my @sorted_facets = sort { $collator->cmp( $a->{facet_label_value}, $b->{facet_label_value} ) } @{$facets};
@@ -485,7 +491,6 @@ sub _sort_facets {
     #NOTE: If there was a problem, at least return the not sorted facets
     return $facets;
 }
-
 
 =head2 _convert_facets
 

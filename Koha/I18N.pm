@@ -53,6 +53,10 @@ our @EXPORT = qw(
     N__np
 );
 
+our @EXPORT_OK = qw(
+    available_locales
+);
+
 our $textdomain = 'Koha';
 
 sub init {
@@ -222,6 +226,101 @@ sub _expand {
     $text =~ s/\{($re)\}/defined $vars{$1} ? $vars{$1} : "{$1}"/ge;
 
     return $text;
+}
+
+=head2 available_locales
+
+    my $locales = Koha::I18N::available_locales();
+
+Returns an arrayref of available system locales for use in system preferences.
+
+Each locale is a hashref with:
+  - C<value>: The locale identifier (e.g., 'en_US.utf8', 'default')
+  - C<text>: Human-readable description (e.g., 'English (United States) - en_US.utf8')
+
+Always includes 'default' as the first option. Additional locales are detected
+from the system using C<locale -a> and filtered for UTF-8 locales.
+
+=cut
+
+sub available_locales {
+    my @available_locales = ();
+
+    # Always include default option
+    push @available_locales, {
+        value => 'default',
+        text  => 'Default Unicode collation'
+    };
+
+    # Get system locales using the same approach as init()
+    my @system_locales = grep { chomp; not( /^C/ || $_ eq 'POSIX' ) } qx/locale -a/;
+
+    my @filtered_locales = ();
+    for my $locale (@system_locales) {
+
+        # Filter for useful locales (UTF-8 ones and common patterns)
+        if ( $locale =~ /^[a-z]{2}_[A-Z]{2}\.utf8?$/i || $locale =~ /^[a-z]{2}_[A-Z]{2}$/i ) {
+
+            # Create friendly display names
+            my $display_name = $locale;
+            if ( $locale =~ /^([a-z]{2})_([A-Z]{2})/ ) {
+                my %lang_names = (
+                    'en' => 'English',
+                    'fr' => 'French',
+                    'de' => 'German',
+                    'es' => 'Spanish',
+                    'it' => 'Italian',
+                    'pt' => 'Portuguese',
+                    'nl' => 'Dutch',
+                    'pl' => 'Polish',
+                    'fi' => 'Finnish',
+                    'sv' => 'Swedish',
+                    'da' => 'Danish',
+                    'no' => 'Norwegian',
+                    'ru' => 'Russian',
+                    'ja' => 'Japanese',
+                    'zh' => 'Chinese',
+                    'ar' => 'Arabic',
+                    'hi' => 'Hindi'
+                );
+                my %country_names = (
+                    'US' => 'United States',
+                    'GB' => 'United Kingdom',
+                    'FR' => 'France',
+                    'DE' => 'Germany',
+                    'ES' => 'Spain',
+                    'IT' => 'Italy',
+                    'PT' => 'Portugal',
+                    'BR' => 'Brazil',
+                    'NL' => 'Netherlands',
+                    'PL' => 'Poland',
+                    'FI' => 'Finland',
+                    'SE' => 'Sweden',
+                    'DK' => 'Denmark',
+                    'NO' => 'Norway',
+                    'RU' => 'Russia',
+                    'JP' => 'Japan',
+                    'CN' => 'China',
+                    'TW' => 'Taiwan',
+                    'SA' => 'Saudi Arabia',
+                    'IN' => 'India'
+                );
+                my $lang    = $lang_names{$1}    || uc($1);
+                my $country = $country_names{$2} || $2;
+                $display_name = "$lang ($country) - $locale";
+            }
+            push @filtered_locales, {
+                value => $locale,
+                text  => $display_name
+            };
+        }
+    }
+
+    # Sort locales by display name and add to available list
+    @filtered_locales = sort { $a->{text} cmp $b->{text} } @filtered_locales;
+    push @available_locales, @filtered_locales;
+
+    return \@available_locales;
 }
 
 1;
