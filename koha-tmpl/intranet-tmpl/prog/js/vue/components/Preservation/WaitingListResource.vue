@@ -142,6 +142,7 @@ export default {
                                                       "train_id",
                                               },
                                           ],
+                                          size: "modal-lg",
                                       },
                                       addItemsToTrain
                                   ),

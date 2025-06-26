@@ -107,7 +107,15 @@
 </template>
 
 <script>
-import { inject, watch, nextTick, ref, computed, useTemplateRef } from "vue";
+import {
+    inject,
+    watch,
+    nextTick,
+    ref,
+    reactive,
+    computed,
+    useTemplateRef,
+} from "vue";
 import { storeToRefs } from "pinia";
 import FormElement from "./FormElement.vue";
 
@@ -129,10 +137,12 @@ export default {
 
         const inputFields = computed(() => {
             if (!confirmation.value.inputs) return null;
-            return confirmation.value.inputs.reduce((acc, curr) => {
-                acc[curr.name] = curr.value || null;
-                return acc;
-            }, {});
+            return reactive(
+                confirmation.value.inputs.reduce((acc, curr) => {
+                    acc[curr.name] = curr.value || null;
+                    return acc;
+                }, {})
+            );
         });
 
         const confirmationForm = useTemplateRef("confirmationform");

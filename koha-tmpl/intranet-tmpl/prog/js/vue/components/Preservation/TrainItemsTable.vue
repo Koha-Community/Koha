@@ -189,6 +189,7 @@ export default {
                             },
                         },
                     ],
+                    size: "modal-lg",
                 },
                 copyItem
             );
