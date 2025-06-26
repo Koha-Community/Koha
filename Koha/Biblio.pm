@@ -1972,7 +1972,8 @@ sub generate_marc_host_field {
             my $t = $f245c->as_string;
             $t =~ s/[\s\/\\.]+$//;
             my $nonfiling = $f245c->indicator('2') // 0;
-            $t = ucfirst substr( $t, $nonfiling );
+            $nonfiling = 0 unless $nonfiling =~ /^\d+$/;
+            $t         = ucfirst substr( $t, $nonfiling );
             push @sfd, ( 't' => $t );
         }
 
@@ -1982,6 +1983,14 @@ sub generate_marc_host_field {
             $b =~ s/\.$//;
             if ($b) {
                 push @sfd, ( 'b' => $b );
+            }
+        }
+
+        # Subfield s - uniform title from 240
+        if ( my $f240 = $marc_host->field('240') ) {
+            my $s = $f240->as_string('a');
+            if ($s) {
+                push @sfd, ( 's' => $s );
             }
         }
 

@@ -1016,7 +1016,7 @@ subtest 'get_volumes_query' => sub {
 };
 
 subtest 'generate_marc_host_field' => sub {
-    plan tests => 35;
+    plan tests => 36;
 
     $schema->storage->txn_begin;
 
@@ -1100,6 +1100,13 @@ subtest 'generate_marc_host_field' => sub {
     $biblio = Koha::Biblios->find($biblio_id);
     $link   = $biblio->generate_marc_host_field();
     is( $link->subfield('t'), 'The capital test', "Title is capitalized after indicator offset" );
+
+    # 240 uniform title tests
+    $record->append_fields( MARC::Field->new( '240', '1', '0', 'a' => 'Bible. English', 'l' => 'English' ) );
+    ($biblio_id) = AddBiblio( $record, qw{} );
+    $biblio = Koha::Biblios->find($biblio_id);
+    $link   = $biblio->generate_marc_host_field();
+    is( $link->subfield('s'), 'Bible. English', "Subfield s contains uniform title from 240a" );
 
     # 260/264 handling tests
     $record->append_fields(
