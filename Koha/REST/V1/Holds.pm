@@ -163,7 +163,7 @@ sub add {
                 openapi => { error => 'The supplied pickup location is not valid' }
             ) unless $valid_pickup_location;
 
-            my $can_place_holds = $patron->can_place_holds();
+            my $can_place_holds = $patron->can_place_holds( { overrides => $overrides } );
 
             if ( !$can_place_holds ) {
                 my $error_code = $can_place_holds->messages->[0]->message;
@@ -173,7 +173,7 @@ sub add {
                         error      => 'Hold cannot be placed. Reason: ' . $error_code,
                         error_code => $error_code,
                     }
-                ) unless $overrides->{$error_code};
+                );
             }
 
             my $can_hold_be_placed =
