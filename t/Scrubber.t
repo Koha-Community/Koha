@@ -83,9 +83,9 @@ if ($@) {
 }
 
 my $scrub_text =
-    '<div><span><p><b>bold</b><i>ital</i><em>emphatic</em><big>embiggen</big><small>shrink</small><strong>strongbad</strong><br><u>under</u><hr></p></span></div>';
+    '<div><span><p><b>bold</b><i>ital</i><em>emphatic</em><big>embiggen</big><small>shrink</small><strong>strongbad</strong><br><u>under</u><hr><ol><li>ordered item</li></ol><ul><li>unordered item</li></ul><dl><dt>term</dt><dd>definition</dd></dl></p></span></div>';
 my $scrub_comment =
-    '<b>bold</b><i>ital</i><em>emphatic</em><big>embiggen</big><small>shrink</small><strong>strongbad</strong><br>under';
+    '<b>bold</b><i>ital</i><em>emphatic</em><big>embiggen</big><small>shrink</small><strong>strongbad</strong><br>underordered itemunordered itemtermdefinition';
 is( C4::Scrubber->new('comment')->scrub($scrub_text), $scrub_comment, "Comment scrubber removes expected elements" );
 is(
     C4::Scrubber->new('note')->scrub($scrub_text), $scrub_text,
