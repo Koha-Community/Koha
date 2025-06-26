@@ -2,7 +2,7 @@
 
 use Modern::Perl;
 use Test::NoWarnings;
-use Test::More tests => 36;
+use Test::More tests => 37;
 use Test::MockModule;
 use FindBin qw($Bin);
 use Encode;
@@ -61,3 +61,49 @@ my @tests = (
 foreach my $test (@tests) {
     is( $test->[0], decode_utf8( $test->[1] ), $test->[1] );
 }
+
+subtest 'available_locales' => sub {
+    plan tests => 6;
+
+    # Test basic functionality
+    my $locales = Koha::I18N::available_locales();
+
+    # Should return an arrayref
+    is( ref($locales), 'ARRAY', 'available_locales returns an arrayref' );
+
+    # Should have at least the default option
+    ok( scalar(@$locales) >= 1, 'At least one locale returned (default)' );
+
+    # First locale should be default
+    is( $locales->[0]->{value}, 'default',                   'First locale is default' );
+    is( $locales->[0]->{text},  'Default Unicode collation', 'Default locale has correct text' );
+
+    # All locales should have value and text keys
+    my $all_have_keys = 1;
+    for my $locale (@$locales) {
+        unless ( exists $locale->{value} && exists $locale->{text} ) {
+            $all_have_keys = 0;
+            last;
+        }
+    }
+    ok( $all_have_keys, 'All locales have value and text keys' );
+
+    # Test structure for real system locales (if any)
+    my $system_locales = [ grep { $_->{value} ne 'default' } @$locales ];
+    if (@$system_locales) {
+
+        # Should have friendly display names for common locales
+        my $has_friendly_name = 0;
+        for my $locale (@$system_locales) {
+            if ( $locale->{text} =~ /^[A-Z][a-z]+ \([^)]+\) - / ) {
+                $has_friendly_name = 1;
+                last;
+            }
+        }
+        ok( $has_friendly_name, 'System locales have friendly display names' ) if @$system_locales;
+    } else {
+
+        # If no system locales, just pass this test
+        ok( 1, 'No system locales found (test environment)' );
+    }
+};

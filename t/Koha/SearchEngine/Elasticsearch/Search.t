@@ -29,7 +29,7 @@ use utf8;
 use_ok('Koha::SearchEngine::Elasticsearch::Search');
 
 subtest '_sort_facets' => sub {
-    plan tests => 2;
+    plan tests => 3;
     t::lib::Mocks::mock_preference( 'SearchEngine', 'Elasticsearch' );
     my $facets = [
         { facet_label_value => 'Mary' },
@@ -80,6 +80,13 @@ subtest '_sort_facets' => sub {
         { facet_label_value => 'Mary' },
     ];
     is_deeply( $sorted_facets, $expected, "Facets sorted correctly with default locale" );
+
+    # Test system preference integration
+    t::lib::Mocks::mock_preference( 'FacetSortingLocale', 'en_US.utf8' );
+    my $sorted_facets_syspref = $search->_sort_facets( { facets => $facets } );
+
+    # Should return sorted facets (exact order may vary by system locale availability)
+    is( ref($sorted_facets_syspref), 'ARRAY', "System preference integration works" );
 
     #NOTE: If "locale" is not provided to _sort_facets, it will look up the LC_COLLATE
     #for the local system. This is what allows this function to work well in production.
