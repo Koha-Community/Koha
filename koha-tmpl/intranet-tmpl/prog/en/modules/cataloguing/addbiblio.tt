@@ -805,6 +805,10 @@
         </div>
     [% END %]
 
+    [% IF marc21_fixlen %]
+        <div class="alert alert-warning"><h1>WARNING</h1><p>The following fixed-length control field(s) have an invalid length: [% marc21_fixlen.failed.join(',') | html %]. Please fix.</p></div>
+    [% END %]
+
     [% IF ( Koha.Preference('EnableAdvancedCatalogingEditor') && CAN_user_editcatalogue_advanced_editor ) %]
         <div id="toggle-editor">
             <label for="toggle-editor">Advanced editor: </label>

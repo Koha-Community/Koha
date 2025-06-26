@@ -96,6 +96,60 @@ sub get_normalized_oclc {
     }
 }
 
+=head2 check_fixed_length
+
+    my $info = $extractor->check_fixed_length;
+
+Returns a hash containing passed and failed fixed-length control fields.
+
+=cut
+
+sub check_fixed_length {
+    my $self   = shift;
+    my $len_ok = {
+        '005' => 16,
+        '006' => 18,
+        '007' => {
+            a => 8,
+            c => [ 6, 14 ],
+            d => 6,
+            f => 10,
+            g => 9,
+            h => 13,
+            k => 6,
+            m => [ 8, 23 ],
+            o => 2,
+            q => 2,
+            r => 11,
+            s => 14,
+            t => 2,
+            v => 9,
+            z => 2,
+        },
+        '008' => 40,
+    };
+    my $record = $self->metadata;
+    my $result = { passed => [], failed => [] };
+    foreach my $field ( $record->field( '005', '006', '007', '008' ) ) {
+        my ( $length, $pass );
+        if ( $field->tag ne '007' ) {
+            $length = $len_ok->{ $field->tag };
+            $pass   = length( $field->data ) eq $length;
+        } else {
+            my $pos_0 = substr( $field->data, 0, 1 );
+            $length = $len_ok->{ $field->tag }->{$pos_0};
+            if ( ref($length) eq 'ARRAY' ) {
+                $pass = grep { $_ eq length( $field->data ) } @$length;
+            } else {
+                $pass = length( $field->data ) eq $length;
+            }
+        }
+        push @{ $result->{passed} }, $field->tag if $pass;
+        push @{ $result->{failed} }, $field->tag unless $pass;
+    }
+    return $result;
+}
+
 =head1 AUTHOR
 
 Tomas Cohen Arazi, E<lt>tomascohen@theke.ioE<gt>

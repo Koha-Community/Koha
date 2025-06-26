@@ -20,13 +20,15 @@
 use Modern::Perl;
 
 use Test::NoWarnings;
-use Test::More tests => 4;
+use Test::More tests => 5;
 use Test::Exception;
 
 use t::lib::TestBuilder;
 use t::lib::Mocks;
 
+use C4::Biblio qw(ModBiblio);
 use Koha::Biblio::Metadata::Extractor;
+use Koha::Biblio::Metadata::Extractor::MARC::MARC21;
 
 my $schema  = Koha::Database->schema;
 my $builder = t::lib::TestBuilder->new;
@@ -86,4 +88,40 @@ subtest 'get_normalized_oclc() tests' => sub {
 
     is( $extractor->get_normalized_oclc, "" );
 
+};
+
+subtest 'check_fixed_length' => sub {
+
+    plan tests => 6;
+    $schema->storage->txn_begin;
+
+    my $record = MARC::Record->new;
+    $record->append_fields(
+        MARC::Field->new( '005', '0123456789012345' ),
+    );
+    my $biblio = $builder->build_sample_biblio;
+    ModBiblio( $record, $biblio->biblionumber );
+
+    my $extractor;
+    $extractor = Koha::Biblio::Metadata::Extractor::MARC::MARC21->new( { biblio => $biblio } );
+    my $result = $extractor->check_fixed_length;
+    is( $result->{passed}->[0],        '005', 'Check first passed field' );
+    is( scalar @{ $result->{failed} }, 0,     'Check failed count' );
+
+    $record->append_fields(
+        MARC::Field->new( '006', '01234567890123456789' ),      # too long
+        MARC::Field->new( '007', 'a1234567' ),
+        MARC::Field->new( '007', 'm12345678' ),                 # should be 8 or 23
+        MARC::Field->new( '007', 'm1234567890123456789012' ),
+    );
+
+    # Passing latest record changes via metadata now
+    $extractor = Koha::Biblio::Metadata::Extractor::MARC::MARC21->new( { metadata => $record } );
+    $result    = $extractor->check_fixed_length;
+    is( $result->{passed}->[1], '007', 'Check second passed field' );
+    is( $result->{passed}->[2], '007', 'Check third passed field' );
+    is( $result->{failed}->[0], '006', 'Check first failed field' );
+    is( $result->{failed}->[1], '007', 'Check second failed field' );
+
+    $schema->storage->txn_rollback;
 };

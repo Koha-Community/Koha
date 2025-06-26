@@ -1,4 +1,4 @@
-#!/usr/bin/perl 
+#!/usr/bin/perl
 
 # Copyright 2000-2002 Katipo Communications
 # Copyright 2004-2010 BibLibre
@@ -52,7 +52,7 @@ use Koha::Biblios;
 use Koha::ItemTypes;
 use Koha::Libraries;
 
-use Koha::BiblioFrameworks;
+use Koha::Biblio::Metadata::Extractor::MARC::MARC21;
 use Koha::Patrons;
 use Koha::UI::Form::Builder::Biblio;
 
@@ -834,6 +834,13 @@ if ( $op eq "cud-addbiblio" ) {
     #----------------------------------------------------------------------------
     # If we're in a duplication case, we have to set to "" the biblionumber
     # as we'll save the biblio as a new one.
+
+    if ( C4::Context->preference('marcflavour') eq 'MARC21' ) {
+        my $fixed_length_info =
+            Koha::Biblio::Metadata::Extractor::MARC::MARC21->new( { biblio => $biblio } )->check_fixed_length;
+        $template->param( marc21_fixlen => $fixed_length_info ) if @{ $fixed_length_info->{failed} };
+    }
+
     $template->param(
         biblionumberdata => $biblionumber,
         op               => $op,
