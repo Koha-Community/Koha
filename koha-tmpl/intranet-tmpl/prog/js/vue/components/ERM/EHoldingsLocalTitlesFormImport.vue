@@ -65,7 +65,6 @@ export default {
             $("#" + table_id).kohaTable({
                 data: lists,
                 order: [[0, "asc"]],
-                autoWidth: false,
                 columns: [
                     {
                         title: __("Name"),

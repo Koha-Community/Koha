@@ -269,7 +269,6 @@ export default {
             let table = $("#" + tableId).kohaTable({
                 data: itemTable.data,
                 ordering: false,
-                autoWidth: false,
                 columns: itemTable.columns,
                 drawCallback: function (settings) {
                     var api = new $.fn.dataTable.Api(settings);

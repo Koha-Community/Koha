@@ -826,7 +826,6 @@ export default {
                                         : []),
                                 ],
                                 dom: '<<"table_entries">>',
-                                autoWidth: false,
                                 data: componentData.resource.contracts,
                             },
                         },

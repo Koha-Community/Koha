@@ -161,9 +161,3 @@ export default {
     name: "UsageStatisticsProviderDataList",
 };
 </script>
-
-<style scoped>
-#title_list {
-    display: table;
-}
-</style>

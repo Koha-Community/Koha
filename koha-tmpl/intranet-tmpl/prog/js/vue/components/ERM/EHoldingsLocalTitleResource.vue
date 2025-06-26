@@ -532,9 +532,6 @@ export default {
 </script>
 
 <style scoped>
-:deep(fieldset.rows ol table) {
-    display: table;
-}
 :deep(fieldset.rows label) {
     width: 25rem;
 }

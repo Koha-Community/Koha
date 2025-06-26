@@ -90,7 +90,6 @@ export default {
                     [10, 20, 50, 100],
                     [10, 20, 50, 100],
                 ],
-                autoWidth: false,
                 columns: [
                     {
                         title: __("Name"),
@@ -187,9 +186,6 @@ export default {
 </script>
 
 <style scoped>
-#package_list {
-    display: table;
-}
 #filters fieldset {
     margin: 0;
 }

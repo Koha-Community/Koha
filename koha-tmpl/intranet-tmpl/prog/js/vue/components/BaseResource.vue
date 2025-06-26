@@ -86,3 +86,10 @@ export default {
     name: "BaseResource",
 };
 </script>
+
+<style>
+fieldset.rows ol table {
+    display: table;
+    font-size: 100%;
+}
+</style>

@@ -163,9 +163,6 @@ export default {
 </script>
 
 <style scoped>
-#usage_data_provider_summary {
-    display: table;
-}
 .hide-table {
     display: none;
 }

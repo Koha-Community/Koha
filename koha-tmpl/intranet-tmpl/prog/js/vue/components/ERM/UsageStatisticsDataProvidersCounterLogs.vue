@@ -168,9 +168,3 @@ export default {
     name: "UsageStatisticsTitlesList",
 };
 </script>
-
-<style scoped>
-#title_list {
-    display: table;
-}
-</style>

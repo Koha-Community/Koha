@@ -31,7 +31,6 @@ export default {
                 data: resources,
                 embed: ["package.name"],
                 order: [[0, "asc"]],
-                autoWidth: false,
                 columns: [
                     {
                         title: __("Name"),
@@ -90,9 +89,3 @@ export default {
     name: "EHoldingsLocalTitlePackagesList",
 };
 </script>
-
-<style scoped>
-#package_list {
-    display: table;
-}
-</style>

@@ -168,9 +168,6 @@ export default {
 };
 </script>
 <style>
-#add_agreement #agreements_list table {
-    display: table;
-}
 #add_agreement .filters label {
     float: none !important;
 }

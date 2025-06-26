@@ -368,9 +368,6 @@ export default {
 </script>
 
 <style scoped>
-#usage_data_provider_list {
-    display: table;
-}
 .toolbar_options {
     display: flex;
 }

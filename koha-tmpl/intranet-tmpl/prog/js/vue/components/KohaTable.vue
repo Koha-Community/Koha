@@ -68,7 +68,6 @@ export default {
         const allOptions = ref({
             paging: true,
             searching: true,
-            autoWidth: false,
             ...(props.url && {
                 ajax: {
                     url:

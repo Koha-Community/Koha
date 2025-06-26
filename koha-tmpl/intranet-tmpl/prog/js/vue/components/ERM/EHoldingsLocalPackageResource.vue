@@ -376,9 +376,3 @@ export default {
     },
 };
 </script>
-
-<style scoped>
-:deep(fieldset.rows ol table) {
-    display: table;
-}
-</style>
