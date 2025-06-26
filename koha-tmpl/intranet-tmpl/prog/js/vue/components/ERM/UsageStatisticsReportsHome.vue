@@ -49,6 +49,7 @@ import ButtonSubmit from "../ButtonSubmit.vue";
 import { APIClient } from "../../fetch/api-client.js";
 import UsageStatisticsReportBuilder from "./UsageStatisticsReportBuilder.vue";
 import UsageStatisticsSavedReports from "./UsageStatisticsSavedReports.vue";
+import { $__ } from "../../i18n";
 
 export default {
     setup(props) {
@@ -66,8 +67,8 @@ export default {
             await client.usage_data_providers.getAll().then(
                 result => {
                     if (result.length === 0) {
-                        this.setError(
-                            this.$__(
+                        setError(
+                            $__(
                                 "No data providers have been created -  no report data will be available"
                             )
                         );

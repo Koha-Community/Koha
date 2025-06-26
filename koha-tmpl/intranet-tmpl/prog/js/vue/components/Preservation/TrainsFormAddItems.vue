@@ -193,7 +193,7 @@ export default {
             let table_col = db_column.split(".");
             let table = table_col[0];
             let col = table_col[1];
-            let api_attribute = this.api_mappings[table][col] || col;
+            let api_attribute = api_mappings[table][col] || col;
             return table == "biblio" || table == "biblioitems"
                 ? item.biblio[api_attribute]
                 : item[api_attribute];
@@ -273,7 +273,6 @@ export default {
             setWarning,
             loading,
             loaded,
-            api_mappings,
             train,
             items,
             train_items,

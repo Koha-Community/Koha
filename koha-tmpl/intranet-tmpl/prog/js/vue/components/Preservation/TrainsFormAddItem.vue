@@ -281,7 +281,7 @@ export default {
             let table_col = db_column.split(".");
             let table = table_col[0];
             let col = table_col[1];
-            let api_attribute = this.api_mappings[table][col] || col;
+            let api_attribute = api_mappings[table][col] || col;
             return table == "biblio" || table == "biblioitems"
                 ? item.value.biblio[api_attribute]
                 : item.value[api_attribute];

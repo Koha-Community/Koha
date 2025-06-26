@@ -23,7 +23,7 @@
             {{ selectedOptionLabel }}
         </template>
         <template #list-footer>
-            <li v-show="hasNextPage && !this.search" ref="load">
+            <li v-show="hasNextPage && !search" ref="load">
                 {{ $__("Loading more options...") }}
             </li>
         </template>

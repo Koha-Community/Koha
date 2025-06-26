@@ -221,12 +221,11 @@ export default {
                             let av_match = av_categories.find(
                                 element => element.category_name == av_cat
                             );
-                            av_options[av_cat] = av_match.authorised_values.map(
-                                av => ({
+                            av_options.value[av_cat] =
+                                av_match.authorised_values.map(av => ({
                                     value: av.value,
                                     label: av.description,
-                                })
-                            );
+                                }));
                         });
 
                         // Iterate on available fields
@@ -253,7 +252,7 @@ export default {
                                         if (
                                             available_field.authorised_value_category_name
                                         ) {
-                                            let av_value = this.av_options[
+                                            let av_value = av_options.value[
                                                 available_field
                                                     .authorised_value_category_name
                                             ].filter(
