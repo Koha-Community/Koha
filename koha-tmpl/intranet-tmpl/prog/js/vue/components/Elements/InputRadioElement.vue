@@ -15,7 +15,7 @@ import { computed } from "vue";
 export default {
     props: {
         id: String,
-        modelValue: Boolean,
+        modelValue: Boolean | String,
         name: String,
         value: Boolean | String,
         checked: Boolean,
