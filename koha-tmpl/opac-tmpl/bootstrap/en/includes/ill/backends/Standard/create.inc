@@ -124,6 +124,9 @@
             <input id="ill-submit" class="btn btn-primary" type="submit" value="Create" />
             <a class="cancel" href="/cgi-bin/koha/opac-illrequests.pl">Cancel</a>
         </fieldset>
+        [% IF (whole.value.other.copyrightclearance_confirmed) %]
+            <input type="hidden" name="copyrightclearance_confirmed" value="1" />
+        [% END %]
         <input type="hidden" name="op" value="cud-create" />
         <input type="hidden" name="stage" value="form" />
         <input type="hidden" name="backend" value="Standard" />

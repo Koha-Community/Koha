@@ -1106,7 +1106,8 @@ sub backend_create {
         } elsif ( defined $params->{stage}
             && $params->{stage} eq 'copyrightclearance' )
         {
-            $params->{stage} = 'init';
+            $params->{copyrightclearance_confirmed} = 1;
+            $params->{stage}                        = 'init';
         }
     }
 
