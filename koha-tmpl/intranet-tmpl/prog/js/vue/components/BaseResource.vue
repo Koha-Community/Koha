@@ -1,59 +1,61 @@
 <template>
-    <ResourceList
-        v-if="routeAction === 'list'"
-        :instancedResource="instancedResource"
-        :key="instancedResource.refreshTemplate"
-        @select-resource="$emit('select-resource', $event)"
-    >
-        <template #toolbar="{ resource, componentPropData }">
-            <Toolbar
-                v-if="!instancedResource.embedded"
-                :toolbarButtons="instancedResource.toolbarButtons"
-                component="list"
-                :resource="resource"
-                :componentPropData="componentPropData"
-            />
-        </template>
-        <template #filters="{ table }">
-            <ResourceListFilters
-                v-if="instancedResource.addFiltersToList"
-                :instancedResource="instancedResource"
-                :table="table"
-            />
-        </template>
-    </ResourceList>
-    <ResourceShow
-        v-if="routeAction === 'show'"
-        :instancedResource="instancedResource"
-        :key="instancedResource.refreshTemplate"
-    >
-        <template #toolbar="{ resource, componentPropData }">
-            <Toolbar
-                :toolbarButtons="instancedResource.toolbarButtons"
-                component="show"
-                :resource="resource"
-                :componentPropData="componentPropData"
-            />
-        </template>
-    </ResourceShow>
-    <ResourceFormAdd
-        v-if="['add', 'edit'].includes(routeAction)"
-        :instancedResource="instancedResource"
-        :key="instancedResource.refreshTemplate"
-    >
-        <template #toolbar="{ resource, componentPropData }">
-            <Toolbar
-                :toolbarButtons="instancedResource.toolbarButtons"
-                component="form"
-                :resource="resource"
-                :componentPropData="componentPropData"
-                :sticky="
-                    instancedResource.stickyToolbar &&
-                    instancedResource.stickyToolbar.includes('Form')
-                "
-            />
-        </template>
-    </ResourceFormAdd>
+    <div>
+        <ResourceList
+            v-if="routeAction === 'list'"
+            :instancedResource="instancedResource"
+            :key="instancedResource.refreshTemplate"
+            @select-resource="$emit('select-resource', $event)"
+        >
+            <template #toolbar="{ resource, componentPropData }">
+                <Toolbar
+                    v-if="!instancedResource.embedded"
+                    :toolbarButtons="instancedResource.toolbarButtons"
+                    component="list"
+                    :resource="resource"
+                    :componentPropData="componentPropData"
+                />
+            </template>
+            <template #filters="{ table }">
+                <ResourceListFilters
+                    v-if="instancedResource.addFiltersToList"
+                    :instancedResource="instancedResource"
+                    :table="table"
+                />
+            </template>
+        </ResourceList>
+        <ResourceShow
+            v-if="routeAction === 'show'"
+            :instancedResource="instancedResource"
+            :key="instancedResource.refreshTemplate"
+        >
+            <template #toolbar="{ resource, componentPropData }">
+                <Toolbar
+                    :toolbarButtons="instancedResource.toolbarButtons"
+                    component="show"
+                    :resource="resource"
+                    :componentPropData="componentPropData"
+                />
+            </template>
+        </ResourceShow>
+        <ResourceFormAdd
+            v-if="['add', 'edit'].includes(routeAction)"
+            :instancedResource="instancedResource"
+            :key="instancedResource.refreshTemplate"
+        >
+            <template #toolbar="{ resource, componentPropData }">
+                <Toolbar
+                    :toolbarButtons="instancedResource.toolbarButtons"
+                    component="form"
+                    :resource="resource"
+                    :componentPropData="componentPropData"
+                    :sticky="
+                        instancedResource.stickyToolbar &&
+                        instancedResource.stickyToolbar.includes('Form')
+                    "
+                />
+            </template>
+        </ResourceFormAdd>
+    </div>
 </template>
 
 <script>
