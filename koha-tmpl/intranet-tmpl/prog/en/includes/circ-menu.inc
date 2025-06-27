@@ -3,6 +3,8 @@
 [% PROCESS 'member-display-address-style.inc' %]
 [% IF ( patron.borrowernumber ) %]
     [% SET patron_is_staff = patron.has_permission({ 'catalogue' => 1 }) %]
+    [% SET patron_is_sco = patron.has_permission({ 'self_check' => 'self_checkout_module'}) %]
+    [% SET patron_is_sci = patron.has_permission({ 'self_check' => 'self_checkin_module'}) %]
     [% SET patron_is_superlibrarian = patron.is_superlibrarian %]
     [% SET patron_type_class = 'is-not-staff' %]
     [% IF ( patron_is_superlibrarian ) %]
@@ -21,6 +23,12 @@
             [% END %]
             [% IF ( patron.protected ) %]
                 <i class="fa fa-lock fa-fw" title="Protected patron"></i>
+            [% END %]
+            [% IF ( patron_is_sco ) %]
+                <i class="fa-solid fa-upload fa-fw" title="Self checkout patron"></i>
+            [% END %]
+            [% IF ( patron_is_sci ) %]
+                <i class="fa-solid fa-download fa-fw" title="Self check-in patron"></i>
             [% END %]
             [% INCLUDE 'patron-title.inc' %]
         </h5>
