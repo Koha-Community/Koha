@@ -33,6 +33,7 @@ use Koha::Database;
 use Koha::Exception;
 use Koha::Biblios;
 use Koha::Items;
+use Koha::Object;
 use Koha::Patrons;
 use Koha::Item::Attributes;
 use Koha::BackgroundJob::BatchDeleteItem;
@@ -112,13 +113,13 @@ if ( $op eq "cud-action" ) {
 
     } else {    # modification
 
-        my @item_columns = Koha::Items->columns;
+        my $items_info = Koha::Items->_resultset->result_source->columns_info;
 
         my $new_item_data;
         my ($columns_with_regex);
         my @subfields_to_blank = $input->multi_param('disable_input');
         my @more_subfields     = $input->multi_param("items.more_subfields_xml");
-        for my $item_column (@item_columns) {
+        for my $item_column ( keys %$items_info ) {
             my @attributes       = ($item_column);
             my $cgi_param_prefix = 'items.';
             if ( $item_column eq 'more_subfields_xml' ) {
@@ -136,13 +137,19 @@ if ( $op eq "cud-action" ) {
 
                 if ( grep { $cgi_var_name eq $_ } @subfields_to_blank ) {
 
-                    # Empty this column
-                    if ( $attr eq 'withdrawn' || $attr eq 'itemlost' || $attr eq 'damaged' || $attr eq 'notforloan' ) {
-
-                        # these fields are not nullable; they must be set to 0 instead
-                        $new_item_data->{$attr} = 0;
-                    } else {
+                    # Empty this column, check nullable and data_type
+                    next if !$items_info->{$attr};           # skip this weird case
+                    if ( $items_info->{$attr}->{is_nullable} ) {
                         $new_item_data->{$attr} = undef;
+                    } elsif ( Koha::Object::_numeric_column_type( $items_info->{$attr}->{data_type} ) ) {
+                        $new_item_data->{$attr} = 0;
+                    } elsif ( Koha::Object::_date_or_datetime_column_type( $items_info->{$attr}->{data_type} ) ) {
+
+                        # TODO Currently, we do not have NOT NULL date(time) columns in items
+                        warn "batchMod: $attr must be blanked, but does not accept NULL values";
+                        next;
+                    } else {
+                        $new_item_data->{$attr} = q{};
                     }
                 } elsif ( my $regex_search = $input->param( $cgi_var_name . '_regex_search' ) ) {
                     $columns_with_regex->{$attr} = {
