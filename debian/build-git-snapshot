@@ -24,46 +24,45 @@
 use Modern::Perl;
 
 use Getopt::Long qw(:config no_ignore_case);
-use POSIX qw/strftime/;
+use POSIX        qw/strftime/;
 
 my $basetgz;
 my $buildresult;
-my $distribution='testing';
-my $git_checks='all';
-my $version='16.06~git';
-my $auto_version=1;
-my $auto_changelog=1;
+my $distribution   = 'testing';
+my $git_checks     = 'all';
+my $version        = '16.06~git';
+my $auto_version   = 1;
+my $auto_changelog = 1;
 my $need_help;
 my $incr;
-my $urgency='medium';
+my $urgency = 'medium';
 my $debug;
 
 my $release_str;
 
 GetOptions(
-    'basetgz|b=s'       => \$basetgz,
-    'buildresult|r=s'   => \$buildresult,
-    'distribution|D=s'  => \$distribution,
-    'git-checks|g=s'    => \$git_checks,
-    'version|v=s'       => \$version,
-    'incr|i=s'          => \$incr,
-    'urgency|u=s'       => \$urgency,
-    'autoversion!'      => \$auto_version,
-    'autochangelog!'    => \$auto_changelog,
-    'help|h'            => \$need_help,
-    'debug|d'           => \$debug,
+    'basetgz|b=s'      => \$basetgz,
+    'buildresult|r=s'  => \$buildresult,
+    'distribution|D=s' => \$distribution,
+    'git-checks|g=s'   => \$git_checks,
+    'version|v=s'      => \$version,
+    'incr|i=s'         => \$incr,
+    'urgency|u=s'      => \$urgency,
+    'autoversion!'     => \$auto_version,
+    'autochangelog!'   => \$auto_changelog,
+    'help|h'           => \$need_help,
+    'debug|d'          => \$debug,
 );
 
 help_and_exit() if $need_help;
-
 
 sub sys_command_output {
     my ($command) = @_;
 
     print "$command\n" if $debug;
     my $command_output;
-    open($command_output, "-|", "$command ")
-      or die qq{Cannot execute "$command": $!"};
+    open( $command_output, "-|", "$command " )
+        or die qq{Cannot execute "$command": $!"};
     return map { chomp; $_ } <$command_output>;
 }
 
@@ -78,17 +77,17 @@ sub everything_is_committed {
     my $filter;
     for ($git_checks) {
         $_ eq "none"
-          and return 1;
+            and return 1;
 
         $_ eq "modified"
-          and $filter = "no",
-              last;
+            and $filter = "no",
+            last;
 
         $_ eq "all"
-          and $filter = "normal",
-              last;
+            and $filter = "normal",
+            last;
 
-	    help_and_exit("$0: --git-checks/-g must be one of 'all', 'modified', or 'none'");
+        help_and_exit("$0: --git-checks/-g must be one of 'all', 'modified', or 'none'");
     }
     my $has_changes = grep /^xxx/, sys_command_output("git status --porcelain -u${filter}");
 
@@ -96,9 +95,9 @@ sub everything_is_committed {
 }
 
 sub help_and_exit {
-	my $msg = shift;
-	if ($msg) {
-    	print "$msg\n\n";
+    my $msg = shift;
+    if ($msg) {
+        print "$msg\n\n";
     }
     print <<EOH;
 This builds Koha deb packages, from a git snapshot. It's not suitable for
@@ -139,36 +138,39 @@ sub latest_sha1 {
 
 sub adjust_debian_changelog {
     my ($newversion) = @_;
-    $newversion  .=  $incr ? "-$incr" : "-1";
+    $newversion .= $incr ? "-$incr" : "-1";
 
     $release_str = "New upstream ";
     $release_str .= 'SECURITY ' if $urgency eq 'high';
     $release_str .= "release ($version)";
 
-    sys_command_output( qq{dch --urgency $urgency -b --force-distribution -D "$distribution" -v "$newversion" "$release_str"} );
-    sys_command_output( qq{dch -r "$release_str"} );
+    sys_command_output(
+        qq{dch --urgency $urgency -b --force-distribution -D "$distribution" -v "$newversion" "$release_str"});
+    sys_command_output(qq{dch -r "$release_str"});
 }
 
 sub reset_debian_changelog {
-    sys_command_output( qq{git checkout -- debian/changelog} );
+    sys_command_output(qq{git checkout -- debian/changelog});
 }
 
 sub build_package {
     my ($newversion) = @_;
-    sys_command_output( qq{git archive --format=tar --prefix="koha-$newversion/" HEAD | gzip -9 > "../koha_$newversion.orig.tar.gz"} );
+    sys_command_output(
+        qq{git archive --format=tar --prefix="koha-$newversion/" HEAD | gzip -9 > "../koha_$newversion.orig.tar.gz"});
 
-    my $pdebuildopts = $buildresult ? "--buildresult $buildresult" : "";
-    my $pdebuildbasetgz = $basetgz ? "-- --use-network yes --basetgz /var/cache/pbuilder/" . $basetgz . ".tgz" : "";
-    sys_command_output_screen( "pdebuild --debbuildopts -sa $pdebuildbasetgz $pdebuildopts" );
+    my $pdebuildopts    = $buildresult ? "--buildresult $buildresult"                                              : "";
+    my $pdebuildbasetgz = $basetgz     ? "-- --use-network yes --basetgz /var/cache/pbuilder/" . $basetgz . ".tgz" : "";
+    sys_command_output_screen("pdebuild --debbuildopts -sa $pdebuildbasetgz $pdebuildopts");
 }
 
 everything_is_committed() or die "cannot build: uncommited changes";
 
-my $newversion = $auto_version
-  ? sprintf ('%s%s.%s', $version, strftime("+%Y%m%d%H%M%S", localtime), latest_sha1())
-  : $version;
+my $newversion =
+    $auto_version
+    ? sprintf( '%s%s.%s', $version, strftime( "+%Y%m%d%H%M%S", localtime ), latest_sha1() )
+    : $version;
 
-adjust_debian_changelog( $newversion ) if $auto_changelog;
-build_package( $newversion );
+adjust_debian_changelog($newversion) if $auto_changelog;
+build_package($newversion);
 reset_debian_changelog();
 
