@@ -323,8 +323,8 @@ sub raw_transport {
 
     siplog(
         "LOG_DEBUG", "raw_transport: uname/inst: '%s/%s'",
-        $self->{account}->{id},
-        $self->{account}->{institution}
+        $self->{account}->{id}          // 'undef',
+        $self->{account}->{institution} // 'undef'
     );
     if ( !$self->{account}->{id} ) {
         siplog( "LOG_ERR", "Login failed shutting down" );
