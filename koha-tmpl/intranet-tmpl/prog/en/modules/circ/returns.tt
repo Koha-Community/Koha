@@ -697,9 +697,12 @@
                                     [% IF ( patron.phone ) %]
                                         <li> [% patron.phone | html %]</li>
                                     [% END %]
-
                                     [% IF ( patron.email ) %]
                                         <li><a id="boremail" href="mailto:[% patron.email | html %]">[% patron.email | html %]</a></li>
+                                    [% END %]
+
+                                    [% IF ( patron.smsalertnumber ) %]
+                                        <li><a id="borsmsalertnumber" href="tel:[% patron.smsalertnumber | html %]">[% patron.smsalertnumber | html %]</a></li>
                                     [% END %]
 
                                     [% IF ( patron.is_debarred ) %]
@@ -911,6 +914,10 @@
                                 <a id="boremail" href="mailto:[% patron.email | html %]">[% patron.email | html %]</a>
                             [% END %]
                         </li>
+                    [% END %]
+
+                    [% IF ( patron.smsalertnumber ) %]
+                        <li><a id="borsmsalertnumber" href="tel:[% patron.smsalertnumber | html %]">[% patron.smsalertnumber | html %]</a></li>
                     [% END %]
 
                     [% UNLESS ( transfertodo) %]
