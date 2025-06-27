@@ -26,6 +26,7 @@ import { computed, onBeforeMount, ref } from "vue";
 import { APIClient } from "../fetch/api-client.js";
 
 export default {
+    inheritAttrs: false,
     props: {
         name: String,
         resource: Object,
