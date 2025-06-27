@@ -126,7 +126,13 @@ sub _get_chunk {
 
         # Dynamic locale detection for facet sorting using Koha::I18N
         require Koha::I18N;
-        $chunk->{'CHOICES'} = Koha::I18N::available_locales();
+        my $locales = Koha::I18N::available_locales();
+        foreach my $locale (@$locales) {
+            if ( $locale->{value} && $value && $locale->{value} eq $value ) {
+                $locale->{selected} = 1;
+            }
+        }
+        $chunk->{'CHOICES'} = $locales;
         $chunk->{'type'}    = 'select';
     } elsif ( $options{'choices'} ) {
         my $add_blank;
