@@ -25,7 +25,7 @@ use Data::Dumper;
 use Koha::Devel::Files;
 
 my $dev_files = Koha::Devel::Files->new;
-my @files     = $dev_files->ls_perl_files;
+my @files     = $dev_files->ls_tt_files;
 ok( @files > 0, 'We should test something' );
 
 my @errors;
