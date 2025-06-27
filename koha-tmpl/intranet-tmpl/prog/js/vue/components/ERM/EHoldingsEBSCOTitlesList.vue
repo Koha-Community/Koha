@@ -94,14 +94,10 @@ export default {
         const packages = ref([]);
         const initialized = ref(false);
         const local_title_count = ref(null);
-        const show_table = ref(
-            build_url_params(filters.value).length ? true : false
-        );
+        const show_table = ref(build_url_params(filters).length ? true : false);
         const cannot_search = ref(false);
 
         const getTableColumns = () => {
-            let get_lib_from_av = get_lib_from_av;
-            let escape_str = escape_str;
             return [
                 {
                     title: $__("Title"),
@@ -198,13 +194,13 @@ export default {
             actions: { 0: ["show"] },
             default_filters: {
                 publication_title: function () {
-                    return filters.value.publication_title || "";
+                    return filters.publication_title || "";
                 },
                 publication_type: function () {
-                    return filters.value.publication_type || "";
+                    return filters.publication_type || "";
                 },
                 selection_type: function () {
-                    return filters.value.selection_type || "";
+                    return filters.selection_type || "";
                 },
             },
         });
@@ -213,7 +209,7 @@ export default {
             let { href } = router.resolve({
                 name: "EHoldingsLocalTitlesList",
             });
-            return build_url(href, filters.value);
+            return build_url(href, filters);
         });
         const doShow = ({ title_id }, dt, event) => {
             event.preventDefault();
@@ -224,12 +220,12 @@ export default {
         };
 
         const filter_table = async () => {
-            if (filters.value.publication_title.length) {
+            if (filters.publication_title.length) {
                 cannot_search.value = false;
                 let { href } = router.resolve({
                     name: "EHoldingsEBSCOTitlesList",
                 });
-                let new_route = build_url(href, filters.value);
+                let new_route = build_url(href, filters);
                 router.push(new_route);
                 show_table.value = true;
                 local_title_count.value = null;
@@ -240,23 +236,22 @@ export default {
                 if (config.settings.ERMProviders.includes("local")) {
                     const client = APIClient.erm;
 
-                    const q = filters.value
+                    const q = filters
                         ? {
-                              ...(filters.value.publication_title
+                              ...(filters.publication_title
                                   ? {
                                         "me.publication_title": {
                                             like:
                                                 "%" +
-                                                filters.value
-                                                    .publication_title +
+                                                filters.publication_title +
                                                 "%",
                                         },
                                     }
                                   : {}),
-                              ...(filters.value.publication_type
+                              ...(filters.publication_type
                                   ? {
                                         "me.publication_type":
-                                            filters.value.publication_type,
+                                            filters.publication_type,
                                     }
                                   : {}),
                           }

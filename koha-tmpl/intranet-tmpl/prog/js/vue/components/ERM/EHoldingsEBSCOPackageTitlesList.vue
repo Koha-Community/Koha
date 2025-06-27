@@ -98,9 +98,6 @@ export default {
             displayFilters.value = !displayFilters.value;
         };
         const getTableColumns = () => {
-            let get_lib_from_av = get_lib_from_av;
-            let map_av_dt_filter = map_av_dt_filter;
-
             return [
                 {
                     title: $__("Name"),
@@ -175,7 +172,6 @@ export default {
         const displayFilters = ref(false);
 
         return {
-            av_title_publication_types,
             get_lib_from_av,
             escape_str,
             map_av_dt_filter,

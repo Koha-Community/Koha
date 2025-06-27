@@ -1,11 +1,11 @@
 <template>
     <div v-if="!initialized">{{ $__("Loading") }}</div>
-    <div v-else-if="erm_package" id="packages_show">
+    <div v-else-if="ermPackage" id="packages_show">
         <h2>
-            {{ $__("Package #%s").format(erm_package.package_id) }}
+            {{ $__("Package #%s").format(ermPackage.package_id) }}
             <span v-if="!updatingIsSelected">
                 <a
-                    v-if="!erm_package.is_selected"
+                    v-if="!ermPackage.is_selected"
                     class="btn btn-default btn-xs"
                     role="button"
                     @click="addToHoldings"
@@ -29,12 +29,12 @@
                     <li>
                         <label>{{ $__("Package name") }}:</label>
                         <span>
-                            {{ erm_package.name }}
+                            {{ ermPackage.name }}
                         </span>
                     </li>
-                    <li v-if="erm_package.vendor">
+                    <li v-if="ermPackage.vendor">
                         <label>{{ $__("Vendor") }}:</label>
-                        <span>{{ erm_package.vendor.name }}</span>
+                        <span>{{ ermPackage.vendor.name }}</span>
                     </li>
                     <li v-if="false">
                         <label>{{ $__("External ID") }}:</label>
@@ -47,10 +47,10 @@
                                 >FIXME - Create a syspref to store the URL</span
                             >
                             <a
-                                :href="`https://replace_with_syspref_value_here.folio.ebsco.com/eholdings/packages/${erm_package.vendor.external_id}-${erm_package.external_id}`"
+                                :href="`https://replace_with_syspref_value_here.folio.ebsco.com/eholdings/packages/${ermPackage.vendor.external_id}-${ermPackage.external_id}`"
                             >
-                                {{ erm_package.vendor.external_id }}-{{
-                                    erm_package.external_id
+                                {{ ermPackage.vendor.external_id }}-{{
+                                    ermPackage.external_id
                                 }}
                             </a>
                         </span>
@@ -60,7 +60,7 @@
                         <span>{{
                             get_lib_from_av(
                                 "av_package_types",
-                                erm_package.package_type
+                                ermPackage.package_type
                             )
                         }}</span>
                     </li>
@@ -69,19 +69,19 @@
                         <span>{{
                             get_lib_from_av(
                                 "av_package_content_types",
-                                erm_package.content_type
+                                ermPackage.content_type
                             )
                         }}</span>
                     </li>
-                    <li v-if="erm_package.created_on">
+                    <li v-if="ermPackage.created_on">
                         <label>{{ $__("Created on") }}:</label>
-                        <span>{{ format_date(erm_package.created_on) }}</span>
+                        <span>{{ format_date(ermPackage.created_on) }}</span>
                     </li>
 
                     <li>
                         <label>Agreements</label>
                         <EHoldingsPackageAgreements
-                            :erm_package="erm_package"
+                            :erm_package="ermPackage"
                             @refresh-agreements="refreshAgreements"
                         />
                     </li>
@@ -89,14 +89,14 @@
                     <li>
                         <label>{{
                             $__("Titles (%s)").format(
-                                erm_package.resources_count
+                                ermPackage.resources_count
                             )
                         }}</label>
                     </li>
                 </ol>
-                <div v-if="erm_package.resources_count">
+                <div v-if="ermPackage.resources_count">
                     <EHoldingsPackageTitlesList
-                        :package_id="erm_package.package_id.toString()"
+                        :package_id="ermPackage.package_id.toString()"
                     />
                 </div>
             </fieldset>
@@ -180,7 +180,6 @@ export default {
 
         onBeforeMount(() => {
             getPackage(route.params.package_id);
-            s;
         });
         onBeforeRouteUpdate((to, from) => {
             ermPackage.value = getPackage(to.params.package_id);

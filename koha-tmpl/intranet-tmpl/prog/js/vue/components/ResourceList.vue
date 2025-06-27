@@ -234,9 +234,7 @@ export default {
         });
         onBeforeMount(() => {
             if (props.instancedResource.embedded) {
-                getResourceCount().then(
-                    () => (props.instancedResource.initialized = true)
-                );
+                getResourceCount().then(() => (initialized.value = true));
             } else {
                 getResourceCount().then(() => {
                     if (props.instancedResource.hasAdditionalFields) {

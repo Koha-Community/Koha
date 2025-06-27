@@ -16,6 +16,7 @@ export default {
     props: {
         routeAction: String,
         embedded: { type: Boolean, default: false },
+        embedEvent: Function,
     },
 
     setup(props) {
@@ -677,6 +678,7 @@ export default {
                               select: {
                                   text: $__("Select"),
                                   icon: "fa fa-check",
+                                  callback: props.embedEvent,
                               },
                           },
                       ]

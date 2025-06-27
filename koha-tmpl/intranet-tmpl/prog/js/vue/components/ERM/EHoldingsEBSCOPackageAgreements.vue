@@ -21,9 +21,9 @@
                 </div>
                 <div class="modal-body position-relative overflow-visible">
                     <AgreementResource
-                        action="list"
+                        routeAction="list"
                         :embedded="true"
-                        @select-resource="addAgreement"
+                        :embedEvent="addAgreement"
                     />
                 </div>
                 <div class="modal-footer">
@@ -101,7 +101,8 @@ export default {
         const showAddAgreementModal = () => {
             $("#add_agreement").modal("show");
         };
-        const addAgreement = agreement_id => {
+        const addAgreement = agreement => {
+            const { agreement_id } = agreement;
             removeMessages();
             $("#add_agreement").modal("hide");
             let erm_package = serializeAgreement();

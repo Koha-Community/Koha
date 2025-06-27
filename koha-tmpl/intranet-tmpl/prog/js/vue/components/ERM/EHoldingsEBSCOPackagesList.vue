@@ -90,14 +90,9 @@ export default {
         const packages = ref([]);
         const initialized = ref(false);
         const local_count_packages = ref(null);
-        const show_table = ref(
-            build_url_params(filters.value).length ? true : false
-        );
+        const show_table = ref(build_url_params(filters).length ? true : false);
 
         const getTableColumns = () => {
-            let get_lib_from_av = get_lib_from_av;
-            let escape_str = escape_str;
-
             return [
                 {
                     title: $__("Name"),
@@ -175,13 +170,13 @@ export default {
             actions: { 0: ["show"] },
             default_filters: {
                 name: function () {
-                    return filters.value.package_name || "";
+                    return filters.package_name || "";
                 },
                 content_type: function () {
-                    return filters.value.content_type || "";
+                    return filters.content_type || "";
                 },
                 selection_type: function () {
-                    return filters.value.selection_type || "";
+                    return filters.selection_type || "";
                 },
             },
         });
@@ -189,29 +184,28 @@ export default {
             let { href } = router.resolve({
                 name: "EHoldingsLocalPackagesList",
             });
-            return build_url(href, filters.value);
+            return build_url(href, filters);
         });
 
         const filter_table = async () => {
             let { href } = router.resolve({
                 name: "EHoldingsEBSCOPackagesList",
             });
-            let new_route = build_url(href, filters.value);
+            let new_route = build_url(href, filters);
             router.push(new_route);
             show_table.value = true;
             local_count_packages.value = null;
 
             if (config.settings.ERMProviders.includes("local")) {
                 const client = APIClient.erm;
-                const query = filters.value
+                const query = filters
                     ? {
                           "me.name": {
-                              like: "%" + filters.value.package_name + "%",
+                              like: "%" + filters.package_name + "%",
                           },
-                          ...(filters.value.content_type
+                          ...(filters.content_type
                               ? {
-                                    "me.content_type":
-                                        filters.value.content_type,
+                                    "me.content_type": filters.content_type,
                                 }
                               : {}),
                       }

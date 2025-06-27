@@ -122,9 +122,11 @@
 <script>
 import { ref, onBeforeMount } from "vue";
 import { APIClient } from "../../fetch/api-client.js";
+import { onBeforeRouteUpdate, useRoute } from "vue-router";
 
 export default {
     setup() {
+        const route = useRoute();
         const format_date = $date;
 
         const resource = ref({
@@ -143,8 +145,8 @@ export default {
         const getResource = resource_id => {
             const client = APIClient.erm;
             client.EBSCOResources.get(resource_id).then(
-                resource => {
-                    resource.value = resource;
+                result => {
+                    resource.value = result;
                     initialized.value = true;
                     updatingIsSelected.value = false;
                 },
@@ -175,7 +177,7 @@ export default {
             getResource(route.params.resource_id);
         });
         onBeforeRouteUpdate((to, from) => {
-            resource.value = getResource(to.params.resource_id);
+            getResource(to.params.resource_id);
         });
 
         return {
