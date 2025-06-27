@@ -1,6 +1,9 @@
 [% USE raw %]
 [% USE Koha %]
 [% USE Branches %]
+[% USE Categories %]
+[% USE ItemTypes %]
+[% USE AuthorisedValues %]
 [% PROCESS 'i18n.inc' %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
@@ -67,37 +70,66 @@
                             [% END %]
                             [% SWITCH loopfilte.crit %]
                             [% CASE 0 %]
-                                <span>Period from [% loopfilte.filter | html %]</span>
+                                <strong>Period from:</strong> [% loopfilte.filter | html %]
                             [% CASE 1 %]
-                                <span>Period to [% loopfilte.filter | html %]</span>
+                                <strong>Period to:</strong> [% loopfilte.filter | html %]
                             [% CASE 2 %]
-                                <span>Patron category = [% loopfilte.filter | html %]</span>
+                                <strong>Patron category:</strong> [% Categories.GetName( loopfilte.filter ) | html %]
                             [% CASE 3 %]
-                                <span>Item type = [% loopfilte.filter | html %]</span>
+                                <strong>Item type:</strong> [% ItemTypes.GetDescription( loopfilte.filter ) | html %]
                             [% CASE 4 %]
-                                <span>Issuing library = [% loopfilte.filter | html %]</span>
+                                <strong>Issuing library:</strong> [% Branches.GetName( loopfilte.filter ) | html %]
                             [% CASE 5 %]
-                                <span>Collection = [% loopfilte.filter | html %]</span>
+                                <strong>Collection:</strong> [% AuthorisedValues.GetByCode( 'CCODE', loopfilte.filter ) | html %]
                             [% CASE 6 %]
-                                <span>Location = [% loopfilte.filter | html %]</span>
+                                <strong>Location:</strong> [% AuthorisedValues.GetByCode( 'LOC', loopfilte.filter ) | html %]
                             [% CASE 7 %]
-                                <span>Item call number &gt;= [% loopfilte.filter | html %]</span>
+                                <strong>Item call number &gt; [% loopfilte.filter | html %] </strong>
                             [% CASE 8 %]
-                                <span>Item call number &lt; [% loopfilte.filter | html %]</span>
+                                <strong>Item call number &lt; [% loopfilte.filter | html %] </strong>
                             [% CASE 9 %]
-                                <span>Patron sort1 = [% loopfilte.filter | html %]</span>
+                                <strong>Patron sort1:</strong> [% AuthorisedValues.GetByCode('Bsort1', loopfilte.filter ) | html %]
                             [% CASE 10 %]
-                                <span>Patron sort2 = [% loopfilte.filter | html %]</span>
+                                <strong>Patron sort2:</strong> [% AuthorisedValues.GetByCode('Bsort2', loopfilte.filter ) | html %]
                             [% CASE 11 %]
-                                <span>Home library = [% loopfilte.filter | html %]</span>
+                                <strong>Home library:</strong> [% Branches.GetName( loopfilte.filter ) | html %]
                             [% CASE 12 %]
-                                <span>Holding library = [% loopfilte.filter | html %]</span>
+                                <strong>Holding library:</strong> [% Branches.GetName( loopfilte.filter ) | html %]
                             [% CASE 13 %]
-                                <span>Patron library = [% loopfilte.filter | html %]</span>
+                                <strong>Patron library:</strong> [% Branches.GetName( loopfilte.filter ) | html %]
                             [% CASE 14 %]
-                                <span>Issuing library = [% loopfilte.filter | html %]</span>
+                                <strong>Issuing library:</strong> [% Branches.GetName( loopfilte.filter ) | html %]
+                            [% CASE "Event" %]
+                                <strong>Event:</strong>
+                                [% SWITCH ( loopfilte.filter ) %]
+                                [% CASE "issue" %]
+                                    <span>Checkout</span>
+                                [% CASE "return" %]
+                                    <span>Check-in</span>
+                                [% CASE "renew" %]
+                                    <span>Renewal</span>
+                                [% CASE %]
+                                    [% loopfilte.filter | html %]
+                                [% END %]
+                            [% CASE "Select Day" %]
+                                <strong>Select day:</strong> [% loopfilte.filter | html %]
+                            [% CASE "Select Month" %]
+                                <strong>Select month:</strong> [% loopfilte.filter | html %]
+                            [% CASE "Display by" %]
+                                <strong>Group by:</strong>
+                                [% SWITCH ( loopfilte.filter ) %]
+                                [% CASE "1" %]
+                                    <span>Day of week</span>
+                                [% CASE "2" %]
+                                    <span>Month</span>
+                                [% CASE "3" %]
+                                    <span>Year</span>
+                                [% CASE "4" %]
+                                    <span>Hour</span>
+                                [% END %]
                             [% CASE %]
-                                <span>[% loopfilte.crit | html %] = [% loopfilte.filter | html %]</span>
+                                [% loopfilte.crit | html %]:
+                                [% loopfilte.filter | html %]
                             [% END %]
                         </li>
                     [% END %]
@@ -336,11 +368,9 @@
                             <td><input type="radio" name="Line" value="borrowers.branchcode" /></td>
                             <td><input type="radio" name="Column" value="borrowers.branchcode" /></td>
                             <td>
-                                <select name="Filter" id="patronbranch">
-                                    <option value="">&nbsp;</option>
-                                    [% FOREACH branch IN branchloop %]
-                                        <option value="[% branch.value | html %]"> [% branch.branchname | html %] </option>
-                                    [% END %]
+                                <select name="Filter" id="patron_library">
+                                    <option value=""> </option>
+                                    [% PROCESS options_for_libraries libraries => Branches.all() %]
                                 </select>
                             </td>
                         </tr>
