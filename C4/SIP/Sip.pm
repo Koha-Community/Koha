@@ -311,7 +311,15 @@ sub siplog {
         : $level eq 'LOG_WARNING' ? 'warn'
         :                           'error';
 
-    my $message = @args ? sprintf( $mask, @args ) : $mask;
+    my $message;
+    if (@args) {
+
+        # Replace undefined values with 'undef' to prevent sprintf warnings
+        my @safe_args = map { defined($_) ? $_ : 'undef' } @args;
+        $message = sprintf( $mask, @safe_args );
+    } else {
+        $message = $mask;
+    }
 
     $message = remove_password_from_message($message);
 
