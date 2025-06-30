@@ -20,7 +20,7 @@
 use Modern::Perl;
 
 use Test::NoWarnings;
-use Test::More tests => 46;
+use Test::More tests => 47;
 use Test::Warn;
 use Test::Exception;
 use Test::MockModule;
@@ -500,7 +500,8 @@ subtest 'renew_account' => sub {
             dt_from_string($retrieved_expiry_date), $a_year_later_minus_a_month,
             "$a_month_ago + 12 months must be $a_year_later_minus_a_month"
         );
-        my $number_of_logs = $schema->resultset('ActionLog')
+        my $number_of_logs =
+            $schema->resultset('ActionLog')
             ->search( { module => 'MEMBERS', action => 'RENEW', object => $retrieved_patron->borrowernumber } )->count;
         is( $number_of_logs, 1, 'With BorrowerLogs, Koha::Patron->renew_account should have logged' );
 
@@ -515,7 +516,8 @@ subtest 'renew_account' => sub {
         );
         $retrieved_expiry_date = $retrieved_patron->dateexpiry;
         is( dt_from_string($retrieved_expiry_date), $a_year_later, "today + 12 months must be $a_year_later" );
-        $number_of_logs = $schema->resultset('ActionLog')
+        $number_of_logs =
+            $schema->resultset('ActionLog')
             ->search( { module => 'MEMBERS', action => 'RENEW', object => $retrieved_patron->borrowernumber } )->count;
         is( $number_of_logs, 1, 'Without BorrowerLogs, Koha::Patron->renew_account should not have logged' );
 
@@ -650,7 +652,8 @@ subtest "delete" => sub {
         q|Koha::Patron->delete should have deleted patron's modifications|
     );
 
-    my $number_of_logs = $schema->resultset('ActionLog')
+    my $number_of_logs =
+        $schema->resultset('ActionLog')
         ->search( { module => 'MEMBERS', action => 'DELETE', object => $patron->borrowernumber } )->count;
     is( $number_of_logs, 1, 'With BorrowerLogs, Koha::Patron->delete should have logged' );
 
@@ -2468,7 +2471,8 @@ subtest '->set_password' => sub {
     ok( checkpw_hash( 'abcd   a', $patron->password ), 'Password hash is correct' );
     is( $patron->login_attempts, 0, 'Login attempts have been reset' );
 
-    my $number_of_logs = $schema->resultset('ActionLog')
+    my $number_of_logs =
+        $schema->resultset('ActionLog')
         ->search( { module => 'MEMBERS', action => 'CHANGE PASS', object => $patron->borrowernumber } )->count;
     is( $number_of_logs, 0, 'Without BorrowerLogs, Koha::Patron->set_password doesn\'t log password changes' );
 
@@ -3570,6 +3574,51 @@ subtest 'filter_by_expired_opac_registrations' => sub {
         Koha::Patrons->filter_by_expired_opac_registrations->filter_by_safe_to_delete->count, 1,
         "filter_by_safe_to_delete does delete borrower with no fines and no checkouts"
     );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'find_by_identifier() tests' => sub {
+
+    plan tests => 7;
+
+    $schema->storage->txn_begin;
+
+    # Create test patrons with specific userid and cardnumber
+    my $patron_1 = $builder->build_object( { class => 'Koha::Patrons' } );
+    my $patron_2 = $builder->build_object( { class => 'Koha::Patrons' } );
+
+    # Create a patron to delete to
+    my $to_delete     = $builder->build_object( { class => 'Koha::Patrons' } );
+    my $ne_userid     = $to_delete->userid;
+    my $ne_cardnumber = $to_delete->cardnumber;
+    $to_delete->delete();
+
+    # Test finding by userid
+    my $found_patron = Koha::Patrons->find_by_identifier( $patron_1->userid );
+    is( $found_patron->id, $patron_1->id, 'Found patron by userid' );
+
+    # Test finding by cardnumber
+    $found_patron = Koha::Patrons->find_by_identifier( $patron_1->cardnumber );
+    is( $found_patron->id, $patron_1->id, 'Found patron by cardnumber' );
+
+    # Test finding by cardnumber when userid doesn't match
+    $found_patron = Koha::Patrons->find_by_identifier( $patron_2->cardnumber );
+    is( $found_patron->id, $patron_2->id, 'Found patron by cardnumber when userid differs' );
+
+    # Test with non-existent identifiers
+    $found_patron = Koha::Patrons->find_by_identifier($ne_cardnumber);
+    is( $found_patron, undef, 'Returns undef for non-existent identifier' );
+    $found_patron = Koha::Patrons->find_by_identifier($ne_userid);
+    is( $found_patron, undef, 'Returns undef for non-existent identifier' );
+
+    # Test with empty identifier
+    $found_patron = Koha::Patrons->find_by_identifier('');
+    is( $found_patron, undef, 'Returns undef for empty identifier' );
+
+    # Test with undef identifier
+    $found_patron = Koha::Patrons->find_by_identifier(undef);
+    is( $found_patron, undef, 'Returns undef for undef identifier' );
 
     $schema->storage->txn_rollback;
 };
