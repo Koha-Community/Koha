@@ -53,8 +53,7 @@ for (@$operations) {
 
     my $patron =
         $_->{cardnumber}
-        ? Koha::Patrons->find( { cardnumber => $_->{cardnumber} } )
-        || Koha::Patrons->find( { userid => $_->{cardnumber} } )
+        ? Koha::Patrons->find_by_identifier( $_->{cardnumber} )
         : undef;
 
     if ($patron) {

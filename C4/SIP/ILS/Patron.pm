@@ -59,8 +59,7 @@ sub new {
             $patron = Koha::Patrons->find( { userid => $patron_id->{userid} } );
         }
     } else {
-        $patron = Koha::Patrons->find( { cardnumber => $patron_id } )
-            || Koha::Patrons->find( { userid => $patron_id } );
+        $patron = Koha::Patrons->find_by_identifier($patron_id);
     }
 
     unless ($patron) {

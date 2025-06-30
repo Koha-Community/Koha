@@ -160,11 +160,7 @@ sub checkpw_cas {
 
             # Does it match one of our users ?
             my $dbh    = C4::Context->dbh;
-            my $patron = Koha::Patrons->find( { userid => $userid } );
-            if ($patron) {
-                return ( 1, $patron->cardnumber, $patron->userid, $ticket, $patron );
-            }
-            $patron = Koha::Patrons->find( { cardnumber => $userid } );
+            my $patron = Koha::Patrons->find_by_identifier($userid);
             if ($patron) {
                 return ( 1, $patron->cardnumber, $patron->userid, $ticket, $patron );
             }
