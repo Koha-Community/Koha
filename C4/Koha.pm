@@ -513,7 +513,7 @@ sub GetAuthorisedValues {
     my $opac     = shift ? 1 : 0;    # normalise to be safe
 
     # Is this cached already?
-    my $branch_limit = C4::Context->userenv ? C4::Context->userenv->{"branch"} : "";
+    my $branch_limit = C4::Context::mybranch();
     my $cache_key    = "AuthorisedValues-$category-$opac-$branch_limit";
     my $cache        = Koha::Caches->get_instance();
     my $result       = $cache->get_from_cache($cache_key);
