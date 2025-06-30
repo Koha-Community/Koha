@@ -75,7 +75,6 @@ export default {
                             text: $__("Delete"),
                             icon: "fa fa-trash",
                             should_display: row => row.usage_count == 0,
-                            callback: baseResource.doResourceDelete,
                         },
                     },
                 ],

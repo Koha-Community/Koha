@@ -226,6 +226,7 @@ export default {
             ].reduce((acc, curr) => {
                 if (typeof curr === "object") {
                     const actionName = Object.keys(curr)[0];
+                    if (!curr[actionName].callback) return acc;
                     acc[actionName] = curr[actionName].callback;
                 }
                 return acc;

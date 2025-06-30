@@ -611,6 +611,10 @@ export default {
                                 baseResource.isUserPermitted(
                                     "CAN_user_acquisition_order_receive"
                                 ),
+                            callback: ({ id }, dt, event) => {
+                                event.preventDefault();
+                                window.location.href = `/cgi-bin/koha/acqui/parcels.pl?booksellerid=${id}`;
+                            },
                         },
                     },
                 ],
