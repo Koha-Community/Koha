@@ -249,6 +249,11 @@ export function useBaseResource(instancedResource) {
     const getFieldGroupings = (component, resource) => {
         const attributesToConsider = instancedResource.resourceAttrs.reduce(
             (acc, ra) => {
+                if (ra.type === "relationshipWidget") {
+                    ra.relationshipFields.forEach(relationshipField => {
+                        relationshipField.relationshipName = ra.name;
+                    });
+                }
                 if (ra.hideIn && !ra.hideIn.includes(component)) {
                     return [...acc, ra];
                 }

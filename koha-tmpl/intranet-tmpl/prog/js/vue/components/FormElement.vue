@@ -236,11 +236,14 @@ export default {
             }, {});
         };
         const getElementId = computed(() => {
-            return props.attr.id
-                ? props.attr.id
-                : props.attr.indexRequired
-                  ? `${props.attr.name}_${props.index}`
-                  : props.attr.name;
+            const { attr } = props;
+            return attr.id
+                ? attr.id
+                : attr.relationshipName && attr.indexRequired
+                  ? `${attr.relationshipName}_${attr.name}_${props.index}`
+                  : attr.indexRequired
+                    ? `${attr.name}_${props.index}`
+                    : attr.name;
         });
         const requiredComponent = computed(() => {
             const importPath = baseElement.identifyAndImportComponent(
