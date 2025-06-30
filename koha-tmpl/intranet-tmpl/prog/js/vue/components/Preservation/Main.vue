@@ -63,6 +63,13 @@ export default {
                         false
                     );
                 }
+                if (!config.value.settings.not_for_loan_waiting_list_in) {
+                    loaded();
+                    return setError(
+                        $__("You need to configure this module first."),
+                        false
+                    );
+                }
                 loadAuthorisedValues(
                     authorisedValues.value,
                     PreservationStore

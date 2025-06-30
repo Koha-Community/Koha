@@ -121,11 +121,11 @@ describe("License CRUD operations", () => {
         cy.get("#documents_0 input[id=file_description__0]").type(
             "file description"
         );
-        cy.get("#documents_0 input[id=physical_location_0]").type(
+        cy.get("#documents_0 input[id=documents_physical_location_0]").type(
             "file physical location"
         );
-        cy.get("#documents_0 input[id=uri_0]").type("file URI");
-        cy.get("#documents_0 input[id=notes_0]").type("file notes");
+        cy.get("#documents_0 input[id=documents_uri_0]").type("file URI");
+        cy.get("#documents_0 input[id=documents_notes_0]").type("file notes");
 
         // Submit the form, get 500
         cy.intercept("POST", "/api/v1/erm/licenses", {

@@ -52,7 +52,7 @@ export default {
         counter: String,
         document: Object,
     },
-    setup() {
+    setup(props) {
         const format_date = $date;
         const loadFile = (filename, content, i) => {
             props.document.file_name = filename;

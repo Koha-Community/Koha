@@ -219,7 +219,7 @@ export default {
                                 },
                                 date_to: {
                                     type: "string",
-                                    value: "ended_on",
+                                    value: "periods_ended_on",
                                     indexRequired: true,
                                 },
                             },
@@ -398,7 +398,7 @@ export default {
                             componentProps: {
                                 id: {
                                     type: "string",
-                                    value: "license_id",
+                                    value: "agreement_licenses_license_id",
                                     indexRequired: true,
                                 },
                                 selectedData: {

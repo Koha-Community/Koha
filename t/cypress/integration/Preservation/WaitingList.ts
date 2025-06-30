@@ -49,8 +49,7 @@ describe("WaitingList", () => {
         );
         cy.visit("/cgi-bin/koha/preservation/home.pl");
         cy.intercept("GET", "/api/v1/preservation/waiting-list/items*", []);
-        cy.get(".sidebar_menu").contains("Waiting list").click();
-        cy.get("#waiting-list").contains(
+        cy.get("#preservation_home").contains(
             "You need to configure this module first."
         );
 
@@ -63,7 +62,7 @@ describe("WaitingList", () => {
         cy.visit("/cgi-bin/koha/preservation/home.pl");
         cy.intercept("GET", "/api/v1/preservation/waiting-list/items*", []);
         cy.get(".sidebar_menu").contains("Waiting list").click();
-        cy.get("#waiting-list").contains(
+        cy.get("#items_list").contains(
             "There are no items in the waiting list"
         );
     });
@@ -74,9 +73,9 @@ describe("WaitingList", () => {
         cy.intercept("POST", "/api/v1/preservation/waiting-list/items", {
             statusCode: 500,
         });
-        cy.get("#waiting-list").contains("Add to waiting list").click();
+        cy.get("#items_list").contains("Add to waiting list").click();
         cy.get("#barcode_list").type("bc_1\nbc_2\nbc_3");
-        cy.get("#add_to_waiting_list .approve").click();
+        cy.get("#confirmation").contains("Save").click();
         cy.get("main div[class='alert alert-warning']").contains(
             "Something went wrong: Error: Internal Server Error"
         );
@@ -93,9 +92,9 @@ describe("WaitingList", () => {
             { item_id: 1 },
             { item_id: 3 },
         ]);
-        cy.get("#waiting-list").contains("Add to waiting list").click();
+        cy.get("#items_list").contains("Add to waiting list").click();
         cy.get("#barcode_list").type("bc_1\nbc_2\nbc_3");
-        cy.get("#add_to_waiting_list .approve").click();
+        cy.get("#confirmation").contains("Save").click();
         cy.wait("@get-items");
         cy.get("#warning.modal").contains(
             "2 new items added. 1 items not found."
@@ -117,7 +116,7 @@ describe("WaitingList", () => {
         cy.intercept("DELETE", "/api/v1/preservation/waiting-list/items/*", {
             statusCode: 500,
         });
-        cy.get("#waiting-list table tbody tr:first").contains("Remove").click();
+        cy.get("#items_list table tbody tr:first").contains("Remove").click();
         cy.contains("Yes, remove").click();
         cy.get("main div[class='alert alert-warning']").contains(
             "Something went wrong: Error: Internal Server Error"
@@ -128,7 +127,7 @@ describe("WaitingList", () => {
             statusCode: 204,
             body: null,
         });
-        cy.get("#waiting-list table tbody tr:first").contains("Remove").click();
+        cy.get("#items_list table tbody tr:first").contains("Remove").click();
         cy.contains("Yes, remove").click();
         cy.get("main div[class='alert alert-info']").contains(
             `Item removed from the waiting list`

@@ -1885,6 +1885,7 @@ cy.getVendor = () => {
                 claimissues: false,
             },
         ],
+        contracts: [],
         deliverytime: 3,
         discount: 10,
         external_id: "test1234",

@@ -287,9 +287,7 @@ export default {
 
         onMounted(async () => {
             if (route.params.processing_id) {
-                processing.value = await getProcessing(
-                    route.params.processing_id
-                );
+                await getProcessing(route.params.processing_id);
             } else {
                 initialized.value = true;
             }

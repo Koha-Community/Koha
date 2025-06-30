@@ -118,10 +118,10 @@ describe("Package CRUD operations", () => {
             .contains("Add new agreement")
             .click();
         cy.get("#package_agreements_0").contains("Agreement 1");
-        cy.get("#agreement_id_0 .vs__search").type(
+        cy.get("#package_agreements_agreement_id_0 .vs__search").type(
             related_agreement.agreement.name
         );
-        cy.get("#agreement_id_0 .vs__dropdown-menu li")
+        cy.get("#package_agreements_agreement_id_0 .vs__dropdown-menu li")
             .eq(0)
             .click({ force: true }); //click first agreement suggestion
     });
@@ -161,9 +161,9 @@ describe("Package CRUD operations", () => {
         cy.get("#content_type .vs__selected").contains("Print");
 
         //Test related content
-        cy.get("#package_agreements_0 #agreement_id_0 .vs__selected").contains(
-            "second agreement name"
-        );
+        cy.get(
+            "#package_agreements_0 #package_agreements_agreement_id_0 .vs__selected"
+        ).contains("second agreement name");
 
         // Submit the form, get 500
         cy.intercept("PUT", "/api/v1/erm/eholdings/local/packages/*", {

@@ -39,7 +39,7 @@
             ><font-awesome-icon icon="plus" />
             {{ $__("Add new %s").format(relationshipStrings.nameLowerCase) }}</a
         >
-        <span v-else-if="resourceRelationshipCount === 0">{{
+        <span v-else-if="resourceRelationshipCount == 0">{{
             $__("There are no %s created yet").format(
                 relationshipStrings.namePlural
             )

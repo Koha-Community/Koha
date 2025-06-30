@@ -75,8 +75,8 @@ describe("Infinite scroll", () => {
         cy.get("#agreement_licenses_relationship")
             .contains("Add new license")
             .click();
-        cy.get("#license_id_0 .vs__open-indicator").click();
-        cy.get("#license_id_0").find("li").as("options");
+        cy.get("#agreement_licenses_license_id_0 .vs__open-indicator").click();
+        cy.get("#agreement_licenses_license_id_0").find("li").as("options");
         cy.get("@options").should("have.length", 20);
 
         cy.intercept("GET", "/api/v1/erm/licenses*", {
@@ -141,9 +141,11 @@ describe("Infinite scroll", () => {
         cy.get("#agreement_licenses_relationship")
             .contains("Add new license")
             .click();
-        cy.get("#license_id_0 .vs__open-indicator").click();
+        cy.get("#agreement_licenses_license_id_0 .vs__open-indicator").click();
 
-        cy.get("#agreement_licenses_0 #license_id_0 .vs__dropdown-menu li")
+        cy.get(
+            "#agreement_licenses_0 #agreement_licenses_license_id_0 .vs__dropdown-menu li"
+        )
             .eq(0)
             .click({ force: true }); //click first license suggestion
 
@@ -152,10 +154,11 @@ describe("Infinite scroll", () => {
         cy.get("#status .vs__search").type(agreement.status + "{enter}", {
             force: true,
         });
-        cy.get("#agreement_licenses_0 #status_0 .vs__search").type(
-            agreement.agreement_licenses[0].status + "{enter}",
-            { force: true }
-        );
+        cy.get(
+            "#agreement_licenses_0 #agreement_licenses_status_0 .vs__search"
+        ).type(agreement.agreement_licenses[0].status + "{enter}", {
+            force: true,
+        });
 
         cy.intercept("POST", "/api/v1/erm/agreements", {
             statusCode: 201,
@@ -205,9 +208,9 @@ describe("Infinite scroll", () => {
         cy.get("#agreement_licenses_relationship")
             .contains("Add new license")
             .click();
-        cy.get("#license_id_0 .vs__open-indicator").click();
+        cy.get("#agreement_licenses_license_id_0 .vs__open-indicator").click();
         cy.wait("@getPageOne");
-        cy.get("#license_id_0").find("li").as("options");
+        cy.get("#agreement_licenses_license_id_0").find("li").as("options");
         cy.get("@options").should("have.length", 20);
         cy.intercept("GET", "/api/v1/erm/licenses*", {
             statusCode: 200,
@@ -219,7 +222,7 @@ describe("Infinite scroll", () => {
         }).as("getPageTwo");
         // Scroll the dropdown
         cy.get(
-            "#agreement_licenses_0 #license_id_0 .vs__dropdown-menu"
+            "#agreement_licenses_0 #agreement_licenses_license_id_0 .vs__dropdown-menu"
         ).scrollTo("bottom");
         cy.wait("@getPageTwo");
         cy.intercept("GET", "/api/v1/erm/licenses*", {
@@ -232,7 +235,7 @@ describe("Infinite scroll", () => {
         }).as("finalPage");
         // Scroll the dropdown again
         cy.get(
-            "#agreement_licenses_0 #license_id_0 .vs__dropdown-menu"
+            "#agreement_licenses_0 #agreement_licenses_license_id_0 .vs__dropdown-menu"
         ).scrollTo("bottom");
         cy.wait("@finalPage");
         cy.intercept("GET", "/api/v1/erm/licenses*", {
@@ -255,10 +258,9 @@ describe("Infinite scroll", () => {
             },
         }).as("searchFilter");
         // Select a  license that is not in the first page of results
-        cy.get("#agreement_licenses_0 #license_id_0 .vs__search").type(
-            "License 50",
-            { force: true }
-        );
+        cy.get(
+            "#agreement_licenses_0 #agreement_licenses_license_id_0 .vs__search"
+        ).type("License 50", { force: true });
         cy.wait([
             "@searchFilter",
             "@searchFilter",
@@ -271,15 +273,14 @@ describe("Infinite scroll", () => {
             "@searchFilter",
             "@searchFilter",
         ]);
-        cy.get("#agreement_licenses_0 #license_id_0 .vs__search").type(
-            "{enter}",
-            { force: true }
-        );
+        cy.get(
+            "#agreement_licenses_0 #agreement_licenses_license_id_0 .vs__search"
+        ).type("{enter}", { force: true });
         cy.get("#agreement_licenses_0").contains("License 50");
 
         // Re-open the dropdown, License 50 will no longer be in the dataset but the label should still show
         // First we will click into the notes field to ensure the dropdown is closed
-        cy.get("#notes_0").click();
+        cy.get("#agreement_licenses_notes_0").click();
         cy.intercept("GET", "/api/v1/erm/licenses*", {
             statusCode: 200,
             body: pageOne,
@@ -288,11 +289,11 @@ describe("Infinite scroll", () => {
                 "X-Total-Count": "60",
             },
         }).as("resetDropdown");
-        cy.get("#license_id_0 .vs__open-indicator").click();
+        cy.get("#agreement_licenses_license_id_0 .vs__open-indicator").click();
         cy.wait("@resetDropdown");
         // Close the dropdown
-        cy.get("#license_id_0 .vs__open-indicator").click();
-        cy.get("#notes_0").click();
+        cy.get("#agreement_licenses_license_id_0 .vs__open-indicator").click();
+        cy.get("#agreement_licenses_notes_0").click();
         cy.get("#agreement_licenses_0").contains("License 50");
 
         // Select a different license
@@ -315,11 +316,10 @@ describe("Infinite scroll", () => {
                 "X-Total-Count": "60",
             },
         }).as("secondSearchFilter");
-        cy.get("#license_id_0 .vs__open-indicator").click();
-        cy.get("#agreement_licenses_0 #license_id_0 .vs__search").type(
-            "License 10",
-            { force: true }
-        );
+        cy.get("#agreement_licenses_license_id_0 .vs__open-indicator").click();
+        cy.get(
+            "#agreement_licenses_0 #agreement_licenses_license_id_0 .vs__search"
+        ).type("License 10", { force: true });
         cy.wait([
             "@secondSearchFilter",
             "@secondSearchFilter",
@@ -332,10 +332,9 @@ describe("Infinite scroll", () => {
             "@secondSearchFilter",
             "@secondSearchFilter",
         ]);
-        cy.get("#agreement_licenses_0 #license_id_0 .vs__search").type(
-            "{enter}",
-            { force: true }
-        );
+        cy.get(
+            "#agreement_licenses_0 #agreement_licenses_license_id_0 .vs__search"
+        ).type("{enter}", { force: true });
         cy.get("#agreement_licenses_0").contains("License 10");
     });
 
@@ -403,11 +402,11 @@ describe("Infinite scroll", () => {
         cy.wait("@get-agreement");
 
         // Licenses should be labelled correctly
-        cy.get("#agreement_licenses_0 #license_id_0 .vs__selected").contains(
-            "first license name"
-        );
-        cy.get("#agreement_licenses_1 #license_id_1 .vs__selected").contains(
-            "second license name"
-        );
+        cy.get(
+            "#agreement_licenses_0 #agreement_licenses_license_id_0 .vs__selected"
+        ).contains("first license name");
+        cy.get(
+            "#agreement_licenses_1 #agreement_licenses_license_id_1 .vs__selected"
+        ).contains("second license name");
     });
 });

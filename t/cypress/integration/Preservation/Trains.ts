@@ -302,8 +302,8 @@ describe("Trains", () => {
         cy.visit("/cgi-bin/koha/preservation/trains");
         let train = get_train();
         cy.contains("New train").click();
-        cy.get("#train_name").type(train.name);
-        cy.get("#train_description").type(train.description);
+        cy.get("#name").type(train.name);
+        cy.get("#description").type(train.description);
         // Confirm that the default not_for_loan is selected
         cy.get("#not_for_loan .vs__selected").contains(
             "In preservation external"
@@ -312,7 +312,7 @@ describe("Trains", () => {
         cy.get("#not_for_loan .vs__search").type(
             "In preservation other{enter}"
         );
-        cy.get("#train_default_processing .vs__search").type(
+        cy.get("#default_processing_id .vs__search").type(
             "new processing{enter}"
         );
 
@@ -351,12 +351,12 @@ describe("Trains", () => {
         cy.intercept("GET", "/api/v1/preservation/processings*", processings);
         cy.visit("/cgi-bin/koha/preservation/trains");
         cy.get("#trains_list table tbody tr:first").contains("Edit").click();
-        cy.get("#train_name").should("have.value", train.name);
-        cy.get("#train_description").should("have.value", train.description);
+        cy.get("#name").should("have.value", train.name);
+        cy.get("#description").should("have.value", train.description);
         cy.get("#not_for_loan .vs__selected").contains(
             "In preservation external"
         );
-        cy.get("#train_default_processing .vs__selected").contains(
+        cy.get("#default_processing_id .vs__selected").contains(
             train.default_processing.name
         );
 
@@ -397,10 +397,7 @@ describe("Trains", () => {
         cy.intercept("GET", "/api/v1/preservation/trains/*", train);
         cy.visit("/cgi-bin/koha/preservation/trains");
         let name_link = cy.get("#trains_list table tbody tr:first td:first a");
-        name_link.should(
-            "have.text",
-            train.name + " (#" + train.train_id + ")"
-        );
+        name_link.should("have.text", train.train_id);
         name_link.click();
         cy.get("#trains_show h2").contains("Train #" + train.train_id);
 
@@ -633,7 +630,7 @@ describe("Trains", () => {
             { item_id: 2 },
         ]);
 
-        cy.get("#waiting-list").contains("Add to waiting list").click();
+        cy.get("#items_list").contains("Add to waiting list").click();
         cy.get("#barcode_list").type("bc_1\nbc_2");
         cy.contains("Save").click();
         cy.wait("@get-items");
@@ -641,7 +638,7 @@ describe("Trains", () => {
             "2 new items added."
         );
 
-        cy.get("#waiting-list").contains("Add to waiting list").click();
+        cy.get("#items_list").contains("Add to waiting list").click();
         cy.get("#barcode_list").type("bc_1\nbc_2\nbc_3");
         cy.contains("Save").click();
         cy.wait("@get-items");
@@ -650,7 +647,9 @@ describe("Trains", () => {
         );
         cy.get("#close_modal").click();
         cy.contains("Add last 2 items to a train").click();
-        cy.get("#train_id .vs__search").type(train.name + "{enter}");
+        cy.get("#train_id_selected_for_add .vs__search").type(
+            train.name + "{enter}"
+        );
         cy.intercept("GET", "/api/v1/items*", {
             statusCode: 200,
             body: get_items().filter(
@@ -679,7 +678,7 @@ describe("Trains", () => {
                 is_system: false,
             },
         ]);
-        cy.get("#add_to_train .approve").click();
+        cy.get("#confirmation").contains("Save").click();
         train.items = get_train_items().filter(
             train_item => train_item.item_id == 1 || train_item.item_id == 2
         );

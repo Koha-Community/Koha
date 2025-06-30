@@ -23,7 +23,7 @@
             {{ selectedOptionLabel }}
         </template>
         <template #list-footer>
-            <li v-show="hasNextPage && !search" ref="load">
+            <li v-show="hasNextPage && !searchString" ref="load">
                 {{ $__("Loading more options...") }}
             </li>
         </template>
@@ -31,7 +31,7 @@
 </template>
 
 <script>
-import { computed, onMounted, ref, useTemplateRef } from "vue";
+import { computed, nextTick, onMounted, ref, useTemplateRef } from "vue";
 import { APIClient } from "../fetch/api-client.js";
 
 export default {
@@ -48,7 +48,7 @@ export default {
     setup(props, { emit }) {
         const observer = ref(null);
         const limit = ref(null);
-        const search = ref("");
+        const searchString = ref("");
         const scrollPage = ref(null);
         const data = ref([props.selectedData]);
         const paginationRequired = ref(false);
@@ -65,7 +65,7 @@ export default {
 
         const filtered = computed(() => {
             return data.value.filter(item =>
-                item[props.label].includes(search.value)
+                item[props.label].includes(searchString.value)
             );
         });
         const paginated = computed(() => {
@@ -92,7 +92,7 @@ export default {
                 .then(
                     items => {
                         data.value = items;
-                        search.value = "";
+                        searchString.value = "";
                         limit.value = 19;
                         scrollPage.value = 1;
                     },
@@ -104,7 +104,7 @@ export default {
                 paginationRequired.value = false;
                 observer.value.disconnect();
                 data.value = [];
-                search.value = e;
+                searchString.value = e;
                 const client = APIClient.erm;
                 const attribute = "me." + props.label;
                 const q = {};
@@ -185,7 +185,7 @@ export default {
         return {
             observer,
             limit,
-            search,
+            searchString,
             scrollPage,
             data,
             paginationRequired,

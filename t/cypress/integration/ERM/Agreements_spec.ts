@@ -140,6 +140,10 @@ describe("Agreement CRUD operations", () => {
         cy.intercept("GET", "/api/v1/erm/licenses*", {
             statusCode: 200,
             body: [],
+            headers: {
+                "X-Base-Total-Count": "0",
+                "X-Total-Count": "0",
+            },
         });
         //Intercept vendors request
         cy.intercept("GET", "/api/v1/acquisitions/vendors*", {
@@ -224,25 +228,25 @@ describe("Agreement CRUD operations", () => {
 
         // Selecting the flatpickr values is a bit tedious here...
         // We have 3 date inputs per period
-        cy.get("#ended_on_0+input").click();
+        cy.get("#periods_ended_on_0+input").click();
         // Second flatpickr => ended_on for the first period
         cy.get(".flatpickr-calendar")
             .eq(1)
             .find("span.today")
             .click({ force: true }); // select today. No idea why we should force, but there is a random failure otherwise
 
-        cy.get("#started_on_0+input").click();
+        cy.get("#periods_started_on_0+input").click();
         cy.get(".flatpickr-calendar")
             .eq(0)
             .find("span.today")
             .next("span")
             .click(); // select tomorrow
 
-        cy.get("#ended_on_0").should("have.value", ""); // Has been reset correctly
+        cy.get("#periods_ended_on_0").should("have.value", ""); // Has been reset correctly
 
-        cy.get("#started_on_0+input").click();
+        cy.get("#periods_started_on_0+input").click();
         cy.get(".flatpickr-calendar").eq(0).find("span.today").click(); // select today
-        cy.get("#ended_on_0+input").click({ force: true }); // No idea why we should force, but there is a random failure otherwise
+        cy.get("#periods_ended_on_0+input").click({ force: true }); // No idea why we should force, but there is a random failure otherwise
         cy.get(".flatpickr-calendar")
             .eq(1)
             .find("span.today")
@@ -250,15 +254,15 @@ describe("Agreement CRUD operations", () => {
             .click(); // select tomorrow
 
         // Second period
-        cy.get("#started_on_1+input").click({ force: true });
+        cy.get("#periods_started_on_1+input").click({ force: true });
         cy.get(".flatpickr-calendar").eq(3).find("span.today").click(); // select today
-        cy.get("#cancellation_deadline_1+input").click();
+        cy.get("#periods_cancellation_deadline_1+input").click();
         cy.get(".flatpickr-calendar")
             .eq(5)
             .find("span.today")
             .next("span")
             .click(); // select tomorrow
-        cy.get("#notes_1").type("this is a note");
+        cy.get("#periods_notes_1").type("this is a note");
 
         // TODO Add a new user
         // How to test a new window with cypresS?
@@ -282,11 +286,11 @@ describe("Agreement CRUD operations", () => {
         cy.get("#documents_0 input[id=file_description__0]").type(
             "file description"
         );
-        cy.get("#documents_0 input[id=physical_location_0]").type(
+        cy.get("#documents_0 input[id=documents_physical_location_0]").type(
             "file physical location"
         );
-        cy.get("#documents_0 input[id=uri_0]").type("file URI");
-        cy.get("#documents_0 input[id=notes_0]").type("file notes");
+        cy.get("#documents_0 input[id=documents_uri_0]").type("file URI");
+        cy.get("#documents_0 input[id=documents_notes_0]").type("file notes");
 
         // Submit the form, get 500
         cy.intercept("POST", "/api/v1/erm/agreements", {
@@ -329,22 +333,26 @@ describe("Agreement CRUD operations", () => {
             .contains("Add new license")
             .click();
         cy.get("#agreement_licenses_0").contains("License 1");
-        cy.get("#agreement_licenses_0 #license_id_0 .vs__search").type(
-            related_license.license.name
-        );
-        cy.get("#agreement_licenses_0 #license_id_0 .vs__dropdown-menu li")
+        cy.get(
+            "#agreement_licenses_0 #agreement_licenses_license_id_0 .vs__search"
+        ).type(related_license.license.name);
+        cy.get(
+            "#agreement_licenses_0 #agreement_licenses_license_id_0 .vs__dropdown-menu li"
+        )
             .eq(0)
             .click({ force: true }); //click first license suggestion
-        cy.get("#agreement_licenses_0 #status_0 .vs__search").type(
-            related_license.status + "{enter}",
-            { force: true }
+        cy.get(
+            "#agreement_licenses_0 #agreement_licenses_status_0 .vs__search"
+        ).type(related_license.status + "{enter}", { force: true });
+        cy.get(
+            "#agreement_licenses_0 #agreement_licenses_physical_location_0 .vs__search"
+        ).type(related_license.physical_location + "{enter}", { force: true });
+        cy.get("#agreement_licenses_0 #agreement_licenses_notes_0").type(
+            related_license.notes
         );
-        cy.get("#agreement_licenses_0 #physical_location_0 .vs__search").type(
-            related_license.physical_location + "{enter}",
-            { force: true }
+        cy.get("#agreement_licenses_0 #agreement_licenses_uri_0").type(
+            related_license.uri
         );
-        cy.get("#agreement_licenses_0 #notes_0").type(related_license.notes);
-        cy.get("#agreement_licenses_0 #uri_0").type(related_license.uri);
 
         // Add new related agreement
         let related_agreement = agreement.agreement_relationships[0];
@@ -358,20 +366,19 @@ describe("Agreement CRUD operations", () => {
             .click();
         cy.get("#agreement_relationships_0").contains("Related agreement 1");
         cy.get(
-            "#agreement_relationships_0 #related_agreement_id_0 .vs__search"
+            "#agreement_relationships_0 #agreement_relationships_related_agreement_id_0 .vs__search"
         ).type(related_agreement.related_agreement.name);
         cy.get(
-            "#agreement_relationships_0 #related_agreement_id_0 .vs__dropdown-menu li"
+            "#agreement_relationships_0 #agreement_relationships_related_agreement_id_0 .vs__dropdown-menu li"
         )
             .eq(0)
             .click({ force: true }); //click first agreement suggestion
-        cy.get("#agreement_relationships_0 #notes_0").type(
-            related_agreement.notes
-        );
-        cy.get("#agreement_relationships_0 #relationship_0 .vs__search").type(
-            related_agreement.relationship + "{enter}",
-            { force: true }
-        );
+        cy.get(
+            "#agreement_relationships_0 #agreement_relationships_notes_0"
+        ).type(related_agreement.notes);
+        cy.get(
+            "#agreement_relationships_0 #agreement_relationships_relationship_0 .vs__search"
+        ).type(related_agreement.relationship + "{enter}", { force: true });
     });
 
     it("Edit agreement", () => {
@@ -459,27 +466,35 @@ describe("Agreement CRUD operations", () => {
         );
 
         cy.get("#is_perpetual_no").should("be.checked");
-        cy.get("#started_on_0").invoke("val").should("eq", dates["today_iso"]);
-        cy.get("#ended_on_0").invoke("val").should("eq", dates["tomorrow_iso"]);
-        cy.get("#cancellation_deadline_0").invoke("val").should("eq", "");
-        cy.get("#notes_0").should("have.value", "");
-        cy.get("#started_on_1").invoke("val").should("eq", dates["today_iso"]);
-        cy.get("#ended_on_1").invoke("val").should("eq", "");
-        cy.get("#cancellation_deadline_1")
+        cy.get("#periods_started_on_0")
+            .invoke("val")
+            .should("eq", dates["today_iso"]);
+        cy.get("#periods_ended_on_0")
             .invoke("val")
             .should("eq", dates["tomorrow_iso"]);
-        cy.get("#notes_1").should("have.value", "this is a note");
+        cy.get("#periods_cancellation_deadline_0")
+            .invoke("val")
+            .should("eq", "");
+        cy.get("#periods_notes_0").should("have.value", "");
+        cy.get("#periods_started_on_1")
+            .invoke("val")
+            .should("eq", dates["today_iso"]);
+        cy.get("#periods_ended_on_1").invoke("val").should("eq", "");
+        cy.get("#periods_cancellation_deadline_1")
+            .invoke("val")
+            .should("eq", dates["tomorrow_iso"]);
+        cy.get("#periods_notes_1").should("have.value", "this is a note");
 
         //Test related content
-        cy.get("#agreement_licenses_0 #license_id_0 .vs__selected").contains(
-            "first license name"
-        );
-        cy.get("#agreement_licenses_1 #license_id_1 .vs__selected").contains(
-            "second license name"
-        );
+        cy.get(
+            "#agreement_licenses_0 #agreement_licenses_license_id_0 .vs__selected"
+        ).contains("first license name");
+        cy.get(
+            "#agreement_licenses_1 #agreement_licenses_license_id_1 .vs__selected"
+        ).contains("second license name");
         cy.get("#documents_0 .file_information span").contains("file.json");
         cy.get(
-            "#agreement_relationships_0 #related_agreement_id_0 .vs__selected"
+            "#agreement_relationships_0 #agreement_relationships_related_agreement_id_0 .vs__selected"
         ).contains("agreement name");
 
         // Submit the form, get 500

@@ -52,21 +52,23 @@
             <label
                 v-if="option.description"
                 :for="attr.name + '_' + option.value"
-                >{{ option.description }}:</label
-            >
-            <InputRadioElement
-                :name="option.description"
-                :id="attr.name + '_' + option.value"
-                :value="option.value"
-                :checked="
-                    (!Object.keys(resource).includes(attr.name) &&
-                        attr.default == option.value) ||
-                    (Object.keys(resource).includes(attr.name) &&
-                        option.value == resource[attr.name])
-                "
-                v-model="resource[attr.name]"
-                @change="attr.onChange && attr.onChange.bind(this, resource)"
-            />
+                >{{ option.description }}:
+                <InputRadioElement
+                    :name="option.description"
+                    :id="attr.name + '_' + option.value"
+                    :value="option.value"
+                    :checked="
+                        (!Object.keys(resource).includes(attr.name) &&
+                            attr.default == option.value) ||
+                        (Object.keys(resource).includes(attr.name) &&
+                            option.value == resource[attr.name])
+                    "
+                    v-model="resource[attr.name]"
+                    @change="
+                        attr.onChange && attr.onChange.bind(this, resource)
+                    "
+                />
+            </label>
         </template>
     </template>
     <template v-else-if="attr.type == 'boolean'">

@@ -125,6 +125,14 @@ describe("Title CRUD operations", () => {
 
         // Click the button in the toolbar
         cy.visit("/cgi-bin/koha/erm/eholdings/local/titles");
+        cy.intercept("GET", "/api/v1/erm/eholdings/local/resources*", {
+            statusCode: 200,
+            body: [],
+            headers: {
+                "X-Base-Total-Count": "0",
+                "X-Total-Count": "0",
+            },
+        }).as("get-related-packages");
         cy.contains("New title").click();
         cy.get("#titles_add h2").contains("New title");
         cy.left_menu_active_item_is("Titles");
@@ -206,14 +214,20 @@ describe("Title CRUD operations", () => {
         cy.intercept("GET", "/api/v1/erm/eholdings/local/packages*", {
             statusCode: 200,
             body: get_packages_to_relate(),
+            headers: {
+                "X-Base-Total-Count": "0",
+                "X-Total-Count": "0",
+            },
         }).as("get-related-packages");
         cy.visit("/cgi-bin/koha/erm/eholdings/local/titles/add");
         cy.get("#resources_relationship").contains("Add new package").click();
         cy.get("#resources_relationship").contains("Package 1");
-        cy.get("#resources_relationship #package_id_0 .vs__search").type(
-            related_package.package.name
-        );
-        cy.get("#resources_relationship #package_id_0 .vs__dropdown-menu li")
+        cy.get(
+            "#resources_relationship #resources_package_id_0 .vs__search"
+        ).type(related_package.package.name);
+        cy.get(
+            "#resources_relationship #resources_package_id_0 .vs__dropdown-menu li"
+        )
             .eq(0)
             .click({ force: true }); //click first package suggestion
     });
@@ -326,9 +340,9 @@ describe("Title CRUD operations", () => {
         cy.get("#access_type").should("have.value", erm_title.access_type);
 
         //Test related content
-        cy.get("#resources_relationship #package_id_0 .vs__selected").contains(
-            "package name"
-        );
+        cy.get(
+            "#resources_relationship #resources_package_id_0 .vs__selected"
+        ).contains("package name");
 
         // Submit the form, get 500
         cy.intercept("PUT", "/api/v1/erm/eholdings/local/titles/*", {
@@ -435,7 +449,7 @@ describe("Title CRUD operations", () => {
         cy.contains(related_package.package.name);
     });
 
-    it.only("Delete title", () => {
+    it("Delete title", () => {
         let erm_title = cy.get_title();
         let titles = [erm_title];
 

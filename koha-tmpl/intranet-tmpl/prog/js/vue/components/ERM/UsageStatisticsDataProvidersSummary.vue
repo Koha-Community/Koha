@@ -37,6 +37,7 @@ export default {
         const { setConfirmationDialog, setMessage } = inject("mainStore");
 
         const table = useTemplateRef("table");
+        const table_div = useTemplateRef("table_div");
 
         const usage_data_providers = ref([]);
         const initialized = ref(false);
@@ -92,7 +93,7 @@ export default {
             return columns;
         };
         const createTableHeader = () => {
-            const tableEl = table.$el.getElementsByTagName("table")[0];
+            const tableEl = table.value.$el.getElementsByTagName("table")[0];
 
             const row = tableEl.insertRow(0);
             const [cellOne, cellTwo, cellThree, cellFour, cellFive] =
@@ -110,7 +111,7 @@ export default {
             cellFive.colSpan = 2;
             cellFive.innerHTML = $__("Item reports");
 
-            table_div.classList.remove("hide-table");
+            table_div.value.classList.remove("hide-table");
         };
 
         const tableOptions = ref({
