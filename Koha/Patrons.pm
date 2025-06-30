@@ -37,9 +37,34 @@ Koha::Patron - Koha Patron Object class
 
 =head1 API
 
-=head2 Class Methods
+=head2 Class methods
 
 =cut
+
+=head3 find_by_identifier
+
+    my $patron = Koha::Patrons->find_by_identifier($identifier);
+
+Find a patron by either userid or cardnumber. Returns the first patron found
+or undef if no patron matches the identifier.
+
+This method searches first by userid, then by cardnumber if no match is found.
+
+=cut
+
+sub find_by_identifier {
+    my ( $self, $identifier ) = @_;
+
+    return unless defined $identifier && $identifier ne '';
+
+    # First try to find by userid
+    my $patron = $self->search( { userid => $identifier } )->next;
+
+    # If not found by userid, try cardnumber
+    $patron = $self->search( { cardnumber => $identifier } )->next unless $patron;
+
+    return $patron;
+}
 
 =head3 search_limited
 
