@@ -2142,8 +2142,7 @@ sub checkpw {
     }
 
     if ( defined $userid && !$patron ) {
-        $patron = Koha::Patrons->find( { userid     => $userid } );
-        $patron = Koha::Patrons->find( { cardnumber => $userid } ) unless $patron;
+        $patron = Koha::Patrons->find_by_identifier($userid);
         push @return, $patron if $check_internal_as_fallback;    # We pass back the patron if authentication fails
     }
 

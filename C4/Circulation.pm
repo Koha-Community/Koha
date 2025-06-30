@@ -4657,8 +4657,7 @@ Missing POD for ProcessOfflineIssue.
 sub ProcessOfflineIssue {
     my $operation = shift;
 
-    my $patron = Koha::Patrons->find( { cardnumber => $operation->{cardnumber} } );
-    $patron ||= Koha::Patrons->find( { userid => $operation->{cardnumber} } );
+    my $patron = Koha::Patrons->find_by_identifier( $operation->{cardnumber} );
 
     if ($patron) {
         my $item = Koha::Items->find( { barcode => $operation->{barcode} } );
@@ -4699,8 +4698,7 @@ Missing POD for ProcessOfflinePayment.
 sub ProcessOfflinePayment {
     my $operation = shift;
 
-    my $patron = Koha::Patrons->find( { cardnumber => $operation->{cardnumber} } );
-    $patron ||= Koha::Patrons->find( { userid => $operation->{cardnumber} } );
+    my $patron = Koha::Patrons->find_by_identifier( $operation->{cardnumber} );
 
     $patron->account->pay(
         {
