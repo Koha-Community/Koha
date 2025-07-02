@@ -292,8 +292,8 @@
         [% END %]
 
         $(document).on("shown.bs.modal", function(){
-            $('select[name="sort1_filter"]').select2({allowClear:true});
-            $('select[name="sort2_filter"]').select2({allowClear:true});
+            $('select[name="sort1_filter"]').select2({allowClear:true,dropdownParent:$('#patron_search_modal')});
+            $('select[name="sort2_filter"]').select2({allowClear:true,dropdownParent:$('#patron_search_modal')});
         }).on("hidden.bs.modal", function(){
             ["sort1_filter", "sort2_filter"].forEach(function(item){
                 if( $('select[name=' +  item + ']').data("select2") ){
