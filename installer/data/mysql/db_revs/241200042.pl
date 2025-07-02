@@ -12,7 +12,7 @@ return {
             if ( column_exists( 'aqbookseller_aliases', 'alias_id' ) ) {
                 $dbh->do(
                     q{
-                        ALTER TABLE aqbookseller_aliases RENAME COLUMN alias_id TO vendor_alias_id;
+                        ALTER TABLE aqbookseller_aliases CHANGE COLUMN alias_id vendor_alias_id INT(11);
                     }
                 );
                 say_success(
