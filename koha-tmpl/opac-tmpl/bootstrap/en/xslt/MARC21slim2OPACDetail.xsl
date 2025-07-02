@@ -717,7 +717,7 @@
                                         </xsl:when>
                                         <xsl:otherwise>
                                             <xsl:attribute name="href">
-                                                <xsl:text>/cgi-bin/koha/opac-search.pl?q=au:"</xsl:text>
+                                                <xsl:text>/cgi-bin/koha/opac-search.pl?q=ti,phr:"</xsl:text>
                                                 <xsl:value-of select="str:encode-uri(marc:subfield[@code='a'], true())"/>
                                                 <xsl:text>"</xsl:text>
                                                 <xsl:if test="$AuthorLinkSortBy!='default'">
