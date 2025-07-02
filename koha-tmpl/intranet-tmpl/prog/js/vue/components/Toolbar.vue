@@ -13,7 +13,11 @@
                     componentPropData
                 )"
             >
-                <ToolbarButton v-bind="{ ...button }" />
+                <DropdownButtons
+                    v-if="button.dropdownButtons"
+                    v-bind="{ ...button }"
+                />
+                <ToolbarButton v-else v-bind="{ ...button }" />
             </template>
         </template>
         <slot></slot>
@@ -23,6 +27,7 @@
 <script>
 import { computed, useTemplateRef, watch } from "vue";
 import ToolbarButton from "./ToolbarButton.vue";
+import DropdownButtons from "./DropdownButtons.vue";
 export default {
     props: {
         toolbarButtons: Function,
@@ -34,7 +39,7 @@ export default {
             default: false,
         },
     },
-    components: { ToolbarButton },
+    components: { ToolbarButton, DropdownButtons },
     name: "Toolbar",
     setup(props) {
         const toolbar = computed(() => {

@@ -30,7 +30,7 @@ export default {
 
         const additionalToolbarButtons = (resource, componentData) => {
             const { instancedResource } = componentData;
-            return {
+            const buttons = {
                 form: [
                     {
                         title: $__("Save"),
@@ -46,6 +46,86 @@ export default {
                         cssClass: "btn btn-link",
                     },
                 ],
+                show: [
+                    {
+                        dropdownButtons: [
+                            {
+                                to: {
+                                    path: "/cgi-bin/koha/acqui/basketheader.pl",
+                                    query: {
+                                        booksellerid: resource.id,
+                                        op: "add_form",
+                                    },
+                                },
+                                title: "Basket",
+                                callback: toolbarComponent => {
+                                    const url = toolbarComponent.handleQuery(
+                                        toolbarComponent.to
+                                    );
+                                    toolbarComponent.redirect(url);
+                                },
+                            },
+                            {
+                                to: {
+                                    path: "/cgi-bin/koha/admin/aqcontract.pl",
+                                    query: {
+                                        booksellerid: resource.id,
+                                        op: "add_form",
+                                    },
+                                },
+                                title: "Contract",
+                                callback: toolbarComponent => {
+                                    const url = toolbarComponent.handleQuery(
+                                        toolbarComponent.to
+                                    );
+                                    toolbarComponent.redirect(url);
+                                },
+                            },
+                            {
+                                to: { name: "VendorFormAdd" },
+                                title: "Vendor",
+                            },
+                        ],
+                        title: $__("New"),
+                        index: -1,
+                    },
+                ],
+            };
+            if (
+                resource.active &&
+                resource.baskets_count > 0 &&
+                instancedResource.isUserPermitted(
+                    "CAN_user_acquisition_order_receive"
+                )
+            ) {
+                buttons.show.push({
+                    to: {
+                        path: "/cgi-bin/koha/acqui/parcels.pl",
+                        query: { booksellerid: resource.id },
+                    },
+                    title: $__("Receive shipments"),
+                    callback: toolbarComponent => {
+                        const url = toolbarComponent.handleQuery(
+                            toolbarComponent.to
+                        );
+                        toolbarComponent.redirect(url);
+                    },
+                    icon: "inbox",
+                });
+            }
+            return buttons;
+        };
+        const defaultToolbarButtons = (defaultButtons, resource) => {
+            return {
+                list: defaultButtons.list,
+                show: defaultButtons.show.filter(
+                    button =>
+                        button.action === "edit" ||
+                        (resource.baskets_count === 0 &&
+                            resource.subscriptions_count === 0 &&
+                            resource.invoices_count === 0 &&
+                            button.action === "delete")
+                ),
             };
         };
 
@@ -74,6 +154,7 @@ export default {
             moduleStore: "vendorStore",
             formGroupsDisplayMode: "accordion",
             additionalToolbarButtons,
+            defaultToolbarButtons,
             stickyToolbar: ["Form"],
             resourceAttrs: [
                 {

@@ -7,11 +7,11 @@
             ><i class="fa fa-plus"></i> {{ title }}</a
         >
         <ul class="dropdown-menu">
-            <li v-for="(item, index) in items" :key="index">
+            <li v-for="(button, index) in dropdownButtons" :key="index">
                 <ToolbarButton
-                    :to="item.to"
-                    :title="$__(item.title)"
-                    :callback="item.callback"
+                    :to="button.to"
+                    :title="$__(button.title)"
+                    :callback="button.callback"
                     :cssClass="'dropdown-item'"
                 />
             </li>
@@ -24,7 +24,7 @@ import ToolbarButton from "./ToolbarButton.vue";
 
 export default {
     components: { ToolbarButton },
-    props: ["items", "title"],
+    props: ["dropdownButtons", "title"],
 };
 </script>
 

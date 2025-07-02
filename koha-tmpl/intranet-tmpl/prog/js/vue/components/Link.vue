@@ -85,7 +85,7 @@ export default {
                     : redirectParams
             );
         };
-        return { redirect };
+        return { redirect, handleQuery, formatUrl };
     },
     emits: ["go-to-add-resource", "delete-resource", "go-to-edit-resource"],
     name: "Link",

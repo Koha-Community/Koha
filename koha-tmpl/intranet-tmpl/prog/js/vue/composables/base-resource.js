@@ -516,16 +516,20 @@ export function useBaseResource(instancedResource) {
      */
     const toolbarButtons = computed(() => {
         return (resource, component, componentData) => {
-            const defaultButtons = instancedResource.hasOwnProperty(
+            let defaultButtons = defaultToolbarButtons(resource);
+            defaultButtons = instancedResource.hasOwnProperty(
                 "defaultToolbarButtons"
             )
-                ? instancedResource.defaultToolbarButtons(resource)
-                : defaultToolbarButtons(resource);
+                ? instancedResource.defaultToolbarButtons(
+                      defaultButtons,
+                      resource || {}
+                  )
+                : defaultButtons;
             const additionalButtons = instancedResource.hasOwnProperty(
                 "additionalToolbarButtons"
             )
                 ? instancedResource.additionalToolbarButtons(
-                      resource,
+                      resource || {},
                       componentData
                   )
                 : additionalToolbarButtons(resource, componentData);
