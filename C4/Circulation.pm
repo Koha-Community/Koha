@@ -1719,6 +1719,17 @@ sub AddIssue {
             # In the case that the borrower has an on-site checkout
             # and SwitchOnSiteCheckouts is enabled this converts it to a regular checkout
             $issue = Koha::Checkouts->find( { itemnumber => $item_object->itemnumber } );
+
+            #if this checkout is a booking mark it as completed
+            if (
+                my $booking = $item_object->find_booking(
+                    { checkout_date => $issuedate, due_date => $datedue, patron_id => $patron->borrowernumber }
+                )
+                )
+            {
+                $booking->status('completed')->store;
+            }
+
             if ($issue) {
                 $issue->set($issue_attributes)->store;
             }
