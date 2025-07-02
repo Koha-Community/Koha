@@ -68,7 +68,7 @@
                 </div>
                 <!-- /.patronimage-container -->
             [% END # /IF patronimages %]
-            <div>
+            <div class="patronbriefinfo-container">
                 <ul class="patronbriefinfo">
                     [% IF patron.pronouns %]
                         <li class="patronpronouns">([% patron.pronouns | html %])</li>
