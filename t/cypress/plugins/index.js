@@ -5,6 +5,7 @@ const { buildSampleObject, buildSampleObjects } = require("./mockData.js");
 const {
     insertSampleBiblio,
     insertSampleHold,
+    insertSampleCheckout,
     insertObject,
     deleteSampleObjects,
 } = require("./insertData.js");
@@ -42,6 +43,9 @@ module.exports = (on, config) => {
         },
         insertSampleHold(args) {
             return insertSampleHold({ ...args, baseUrl, authHeader });
+        },
+        insertSampleCheckout(args) {
+            return insertSampleCheckout({ ...args, baseUrl, authHeader });
         },
         insertObject(args) {
             return insertObject({ ...args, baseUrl, authHeader });

@@ -8,6 +8,7 @@ describe("insertData", () => {
         "items",
         "biblio",
         "reserves",
+        "issues",
     ];
     beforeEach(() => {
         const counts = {};
@@ -212,6 +213,22 @@ describe("insertData", () => {
                     );
                 }
             );
+        });
+    });
+
+    describe("insertSampleCheckout", () => {
+        it("insertSampleCheckout - without parameter", () => {
+            cy.task("insertSampleCheckout").then(objects_checkout => {
+                cy.task("apiGet", {
+                    endpoint: `/api/v1/checkouts/${objects_checkout.checkout.checkout_id}`,
+                }).then(checkout => {
+                    expect(checkout.item_id).to.be.equal(
+                        objects_checkout.items[0].item_id
+                    );
+                });
+
+                cy.task("deleteSampleObjects", objects_checkout);
+            });
         });
     });
 
