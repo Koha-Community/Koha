@@ -1254,6 +1254,95 @@ subtest 'generate_marc_host_field' => sub {
     t::lib::Mocks::mock_preference( 'marcflavour', 'MARC21' );
 };
 
+subtest 'generate_marc_host_field with item parameter' => sub {
+    plan tests => 16;
+
+    $schema->storage->txn_begin;
+
+    # Create a host biblio with a basic record
+    my $host_biblio = $builder->build_sample_biblio();
+    my $host_record = MARC::Record->new();
+    $host_record->leader('00000nam a22000007a 4500');
+    $host_record->append_fields(
+        MARC::Field->new( '001', '12345' ),
+        MARC::Field->new( '100', '1', ' ', a => 'Test Author' ),
+        MARC::Field->new( '245', '1', '0', a => 'Test Title' ),
+    );
+    C4::Biblio::ModBiblio( $host_record, $host_biblio->biblionumber );
+    $host_biblio = Koha::Biblios->find( $host_biblio->biblionumber );
+
+    # Create an item for the host biblio
+    my $item = $builder->build_sample_item(
+        {
+            biblionumber => $host_biblio->biblionumber,
+            barcode      => '123456789'
+        }
+    );
+
+    # Test 1: MARC21 with item parameter when EasyAnalyticalRecords is enabled
+    t::lib::Mocks::mock_preference( 'marcflavour',           'MARC21' );
+    t::lib::Mocks::mock_preference( 'EasyAnalyticalRecords', 1 );
+
+    my $link = $host_biblio->generate_marc_host_field( { item => $item } );
+    is( $link->tag,           '773',                      'MARC21 link field is 773' );
+    is( $link->subfield('0'), $host_biblio->biblionumber, 'Subfield 0 contains host biblionumber when item provided' );
+    is( $link->subfield('9'), $item->itemnumber,          'Subfield 9 contains host itemnumber when item provided' );
+    is( $link->subfield('o'), $item->barcode,             'Subfield o contains barcode when item provided' );
+    is( $link->subfield('a'), 'Test Author',              'Subfield a still contains author' );
+    is( $link->subfield('t'), 'Test Title',               'Subfield t still contains title' );
+
+    # Test 2: MARC21 with item parameter when EasyAnalyticalRecords is disabled
+    t::lib::Mocks::mock_preference( 'EasyAnalyticalRecords', 0 );
+
+    $link = $host_biblio->generate_marc_host_field( { item => $item } );
+    is( $link->tag,           '773',         'MARC21 link field is 773' );
+    is( $link->subfield('0'), undef,         'Subfield 0 is not present when EasyAnalyticalRecords disabled' );
+    is( $link->subfield('9'), undef,         'Subfield 9 is not present when EasyAnalyticalRecords disabled' );
+    is( $link->subfield('o'), undef,         'Subfield o is not present when EasyAnalyticalRecords disabled' );
+    is( $link->subfield('a'), 'Test Author', 'Subfield a still contains author' );
+    is( $link->subfield('t'), 'Test Title',  'Subfield t still contains title' );
+
+    # Test 3: UNIMARC with item parameter when EasyAnalyticalRecords is enabled
+    t::lib::Mocks::mock_preference( 'marcflavour',           'UNIMARC' );
+    t::lib::Mocks::mock_preference( 'EasyAnalyticalRecords', 1 );
+
+    # Create a fresh UNIMARC biblio to avoid metadata conflicts
+    my $unimarc_biblio = $builder->build_sample_biblio();
+    my $unimarc_record = MARC::Record->new();
+    $unimarc_record->leader('00000nam a22000007a 4500');
+    $unimarc_record->append_fields(
+        MARC::Field->new( '001', '12345' ),
+        MARC::Field->new( '200', '1', ' ', a => 'Test UNIMARC Title' ),
+        MARC::Field->new( '700', '1', ' ', a => 'Test UNIMARC Author' ),
+    );
+    C4::Biblio::ModBiblio( $unimarc_record, $unimarc_biblio->biblionumber );
+    $unimarc_biblio = Koha::Biblios->find( $unimarc_biblio->biblionumber );
+
+    # Create item for the UNIMARC biblio
+    my $unimarc_item = $builder->build_sample_item(
+        {
+            biblionumber => $unimarc_biblio->biblionumber,
+            barcode      => '987654321'
+        }
+    );
+
+    $link = $unimarc_biblio->generate_marc_host_field( { item => $unimarc_item } );
+    is( $link->tag, '461', 'UNIMARC link field is 461' );
+    is(
+        $link->subfield('0'), $unimarc_biblio->biblionumber,
+        'UNIMARC subfield 0 contains host biblionumber when item provided'
+    );
+    is(
+        $link->subfield('9'), $unimarc_item->itemnumber,
+        'UNIMARC subfield 9 contains host itemnumber when item provided'
+    );
+    is( $link->subfield('t'), 'Test UNIMARC Title', 'UNIMARC subfield t still contains title' );
+
+    $schema->storage->txn_rollback;
+    t::lib::Mocks::mock_preference( 'marcflavour',           'MARC21' );
+    t::lib::Mocks::mock_preference( 'EasyAnalyticalRecords', 0 );
+};
+
 subtest 'link_marc_host' => sub {
     plan tests => 6;
     $schema->storage->txn_begin;
