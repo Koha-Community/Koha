@@ -2013,7 +2013,7 @@ sub generate_marc_host_field {
                 $w = '(' . $host_field->data() . ')' . $w;
             }
 
-            push @sfd, ( w => $w );
+            push @sfd, ( w => $w ) if $w;
         }
         $link_field = MARC::Field->new( 773, '0', ' ', @sfd );
     } elsif ( $marcflavour eq 'UNIMARC' ) {
