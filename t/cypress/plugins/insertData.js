@@ -205,6 +205,47 @@ const insertSampleHold = async ({
     return { hold, patron };
 };
 
+const insertSampleCheckout = async ({ baseUrl, authHeader }) => {
+    const { biblio, items, libraries, item_type } = await insertSampleBiblio({
+        item_count: 1,
+        baseUrl,
+        authHeader,
+    });
+    const generatedPatron = await buildSampleObject({
+        object: "patron",
+        values: {
+            library_id: libraries[0].library_id,
+            incorrect_address: null,
+            patron_card_lost: null,
+        },
+        baseUrl,
+        authHeader,
+    });
+
+    const patron = await insertObject({
+        type: "patron",
+        object: generatedPatron,
+        baseUrl,
+        authHeader,
+    });
+
+    const generatedCheckout = buildSampleObject({
+        object: "checkout",
+        values: {
+            patron_id: patron.patron_id,
+            item_id: items[0].item_id,
+        },
+    });
+    delete generatedCheckout.external_id;
+    const checkout = await insertObject({
+        type: "checkout",
+        object: generatedCheckout,
+        baseUrl,
+        authHeader,
+    });
+    return { biblio, items, libraries, item_type, patron, checkout };
+};
+
 const deleteSampleObjects = async allObjects => {
     if (!Array.isArray(allObjects)) {
         allObjects = [allObjects];
@@ -212,6 +253,7 @@ const deleteSampleObjects = async allObjects => {
 
     const pluralMap = {
         hold: "holds",
+        checkout: "checkouts",
         patron: "patrons",
         item: "items",
         biblio: "biblios",
@@ -237,6 +279,7 @@ const deleteSampleObjects = async allObjects => {
 
     const deletionOrder = [
         "holds",
+        "checkouts",
         "patrons",
         "items",
         "biblios",
@@ -277,6 +320,13 @@ const deleteSampleObjects = async allObjects => {
                 ids = objects.map(i => i.hold_id);
                 await query({
                     sql: `DELETE FROM reserves WHERE reserve_id IN (${ids.map(() => "?").join(",")})`,
+                    values: ids,
+                });
+                break;
+            case "checkouts":
+                ids = objects.map(i => i.checkout_id);
+                await query({
+                    sql: `DELETE FROM issues WHERE issue_id IN (${ids.map(() => "?").join(",")})`,
                     values: ids,
                 });
                 break;
@@ -431,6 +481,15 @@ const insertObject = async ({ type, object, baseUrl, authHeader }) => {
             baseUrl,
             authHeader,
         });
+    } else if (type == "checkout") {
+        const { issuer, patron, ...checkout } = object;
+
+        return apiPost({
+            endpoint: "/api/v1/checkouts",
+            body: checkout,
+            baseUrl,
+            authHeader,
+        });
     } else {
         throw Error(`Unsupported object type '${type}' to insert`);
     }
@@ -441,6 +500,7 @@ const insertObject = async ({ type, object, baseUrl, authHeader }) => {
 module.exports = {
     insertSampleBiblio,
     insertSampleHold,
+    insertSampleCheckout,
     insertObject,
     deleteSampleObjects,
 };
