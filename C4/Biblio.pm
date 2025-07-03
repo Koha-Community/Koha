@@ -2804,6 +2804,26 @@ sub _koha_delete_biblio_metadata {
                 undef, $biblionumber );
         }
     );
+    my $deleted_biblio_metadata =
+      $schema->resultset('DeletedbiblioMetadata')
+      ->find( { biblionumber => $biblionumber } );
+    my $deleted_biblio_record =
+      MARC::Record::new_from_xml( $deleted_biblio_metadata->metadata,
+        'UTF-8', 'MARC21' );
+    my $leader = $deleted_biblio_record->leader;
+    substr( $leader, 5, 1, 'd' );
+    $deleted_biblio_record->leader($leader);
+    my $sth = $dbh->prepare(
+'SELECT branchcode FROM koha_plugin_pl_edu_nukat_symbole_nukat_symbols WHERE biblionumber = ?'
+    );
+    $sth->execute($biblionumber);
+    my @new_850;
+    while ( my ($branchcode) = $sth->fetchrow_array ) {
+        unshift @new_850, MARC::Field->new( '950', ' ', ' ', a => $branchcode );
+    }
+    $deleted_biblio_record->insert_fields_ordered(@new_850);
+    $deleted_biblio_metadata->update(
+        { metadata => $deleted_biblio_record->as_xml_record('MARC21') } );
 }
 
 =head1 UNEXPORTED FUNCTIONS
