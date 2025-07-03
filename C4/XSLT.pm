@@ -277,7 +277,7 @@ sub XSLTParse4Display {
     }
 
     if ($extracontent) {
-        my $scrubber               = C4::Scrubber->new('staff');
+        my $scrubber               = C4::Scrubber->new('record_display');
         my $extracontentproccessed = process_tt( $extracontent, { record => $record } );
         $extracontent = $scrubber->scrub($extracontentproccessed);
     }

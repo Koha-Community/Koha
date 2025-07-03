@@ -27,13 +27,86 @@ use HTML::Scrubber;
 use C4::Context;
 
 my %scrubbertypes = (
-    default => {},    # place holder, default settings are below as fallbacks in call to constructor
-    comment => { allow => [qw( br b i em big small strong )], },
-    note    => { allow => [qw[ br b i em big small strong u hr span div p ol ul li dl dt dd ]] },
+    default        => {},    # place holder, default settings are below as fallbacks in call to constructor
+    comment        => { allow => [qw( br b i em big small strong )], },
+    note           => { allow => [qw[ br b i em big small strong u hr span div p ol ul li dl dt dd ]] },
+    record_display => {
+        allow => [
+            qw(
+                div span h1 h2 h3 h4 h5 h6 p br
+                ul ol li dl dt dd
+                a img
+                strong b em i u s strike del ins sup sub
+                blockquote cite q abbr acronym dfn
+                table thead tbody tfoot tr td th caption
+                pre code kbd samp var
+                hr
+                address
+            )
+        ],
+        rules => [
+            div => {
+                class    => qr/^[\w\s\-_]+$/,
+                id       => qr/^[\w\-_]+$/,
+                vocab    => qr/^https?:\/\/[\w\.\-\/]+$/,
+                typeof   => qr/^[\w\s]+$/,
+                resource => qr/^[#\w\-_]+$/,
+            },
+
+            span => {
+                class    => qr/^[\w\s\-_]+$/,
+                id       => qr/^[\w\-_]+$/,
+                property => qr/^[\w\s]+$/,
+                typeof   => qr/^[\w\s]+$/,
+                resource => qr/^[#\w\-_]+$/,
+            },
+
+            'h1|h2|h3|h4|h5|h6' => {
+                class    => qr/^[\w\s\-_]+$/,
+                property => qr/^[\w\s]+$/,
+            },
+
+            p => {
+                class    => qr/^[\w\s\-_]+$/,
+                property => qr/^[\w\s]+$/,
+            },
+
+            a => {
+                href   => qr{^(?:https?://|/cgi-bin/|mailto:|#)}i,
+                class  => qr/^[\w\s\-_]+$/,
+                title  => 1,
+                target => qr/^_(?:blank|self|parent|top)$/,
+                rel    =>
+                    qr/^(?:nofollow|noopener|noreferrer|noindex|bookmark|tag|prev|next|up|alternate|author|help|license|search)$/,
+                property => qr/^[\w\s]+$/,
+                typeof   => qr/^[\w\s]+$/,
+                resource => qr/^[#\w\-_]+$/,
+            },
+
+            'ul|ol' => {
+                class => qr/^[\w\s\-_]+$/,
+                type  => qr/^(?:disc|circle|square|decimal|lower-roman|upper-roman|lower-alpha|upper-alpha|1|a|A|i|I)$/,
+            },
+
+            li => {
+                class => qr/^[\w\s\-_]+$/,
+                value => qr/^\d+$/,
+            },
+
+            'strong|b|em|i|u|s|strike|del|ins|sup|sub' => {
+                class => qr/^[\w\s\-_]+$/,
+            },
+
+            i => {
+                class        => qr/^[\w\s\-_]+$/,
+                'aria-label' => 1,
+            },
+        ],
+    },
 );
 
 sub new {
-    shift;            # ignore our class we are wrapper
+    shift;    # ignore our class we are wrapper
     my $type = (@_) ? shift : 'default';
     $type = 'default' if !defined $type;
     if ( !exists $scrubbertypes{$type} ) {
