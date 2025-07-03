@@ -6438,6 +6438,131 @@ subtest 'AddIssue records staff who checked out item if appropriate' => sub  {
     is( $issue_2->issuer->borrowernumber, $issuer->borrowernumber, "Staff who checked out the item recorded when RecordStaffUserOnCheckout turned on" );
 };
 
+subtest 'AddIssue | booking status handling' => sub {
+    plan tests => 5;
+
+    my $schema = Koha::Database->schema;
+    $schema->storage->txn_begin;
+
+    my $patron1        = $builder->build_object( { class => 'Koha::Patrons' } );
+    my $patron2        = $builder->build_object( { class => 'Koha::Patrons' } );
+    my $pickup_library = $builder->build_object( { class => 'Koha::Libraries' } );
+    my $item           = $builder->build_sample_item( { bookable => 1 } );
+
+    # Test 1: Patron checks out item with their own booking - should mark as completed
+    my $booking1 = Koha::Booking->new(
+        {
+            patron_id         => $patron1->borrowernumber,
+            pickup_library_id => $pickup_library->branchcode,
+            item_id           => $item->itemnumber,
+            biblio_id         => $item->biblio->biblionumber,
+            start_date        => dt_from_string(),
+            end_date          => dt_from_string()->add( days => 7 ),
+        }
+    )->store();
+
+    my $issue1 = AddIssue( $patron1, $item->barcode, dt_from_string()->add( days => 7 ) );
+    $booking1->discard_changes();
+
+    is( $booking1->status, 'completed', "Patron's own booking marked as completed when item checked out" );
+
+    # Clean up for next test
+    AddReturn( $item->barcode, $pickup_library->branchcode );
+    $booking1->delete();
+
+    # Test 2: Another patron checks out item with different patron's booking overlapping actual booking period - should cancel booking
+    my $booking2 = Koha::Booking->new(
+        {
+            patron_id         => $patron1->borrowernumber,
+            pickup_library_id => $pickup_library->branchcode,
+            item_id           => $item->itemnumber,
+            biblio_id         => $item->biblio->biblionumber,
+            start_date        => dt_from_string()->add( days => 1 ),
+            end_date          => dt_from_string()->add( days => 5 ),
+        }
+    )->store();
+
+    my $issue2 = AddIssue( $patron2, $item->barcode, dt_from_string()->add( days => 3 ) );
+    $booking2->discard_changes();
+
+    is(
+        $booking2->status, 'cancelled',
+        "Another patron's booking cancelled when checkout overlaps actual booking period"
+    );
+
+    # Clean up for next test
+    AddReturn( $item->barcode, $pickup_library->branchcode );
+    $booking2->delete();
+
+    # Test 3: Another patron checks out item - checkout period only in lead period - should NOT cancel booking
+    # First set up a lead period rule
+    Koha::CirculationRules->set_rules(
+        {
+            branchcode => '*',
+            itemtype   => $item->effective_itemtype,
+            rules      => {
+                bookings_lead_period => 3,
+            },
+        }
+    );
+
+    my $booking3 = Koha::Booking->new(
+        {
+            patron_id         => $patron1->borrowernumber,
+            pickup_library_id => $pickup_library->branchcode,
+            item_id           => $item->itemnumber,
+            biblio_id         => $item->biblio->biblionumber,
+            start_date        => dt_from_string()->add( days => 5 ),
+            end_date          => dt_from_string()->add( days => 10 ),
+        }
+    )->store();
+
+    # Issue that would return before booking starts (only conflicts due to lead period)
+    my $issue3 = AddIssue( $patron2, $item->barcode, dt_from_string()->add( days => 4 ) );
+    $booking3->discard_changes();
+
+    is(
+        $booking3->status, 'new',
+        "Another patron's booking NOT cancelled when checkout only conflicts with lead period"
+    );
+
+    # Clean up for next test
+    AddReturn( $item->barcode, $pickup_library->branchcode );
+    $booking3->delete();
+
+    # Test 4: Edge case - checkout period starts before booking and ends after booking (encompasses booking)
+    my $booking4 = Koha::Booking->new(
+        {
+            patron_id         => $patron1->borrowernumber,
+            pickup_library_id => $pickup_library->branchcode,
+            item_id           => $item->itemnumber,
+            biblio_id         => $item->biblio->biblionumber,
+            start_date        => dt_from_string()->add( days => 2 ),
+            end_date          => dt_from_string()->add( days => 4 ),
+        }
+    )->store();
+
+    # Issue that encompasses the entire booking period
+    my $issue4 = AddIssue( $patron2, $item->barcode, dt_from_string()->add( days => 6 ) );
+    $booking4->discard_changes();
+
+    is(
+        $booking4->status, 'cancelled',
+        "Another patron's booking cancelled when checkout encompasses entire booking period"
+    );
+
+    # Clean up for next test
+    AddReturn( $item->barcode, $pickup_library->branchcode );
+    $booking4->delete();
+
+    # Test 5: No booking found - should not cause errors
+    my $issue5 = AddIssue( $patron1, $item->barcode, dt_from_string()->add( days => 7 ) );
+
+    ok( $issue5, "AddIssue works normally when no booking is found" );
+
+    $schema->storage->txn_rollback;
+};
+
 subtest "Item's onloan value should be set if checked out item is checked out to a different patron" => sub {
     plan tests => 2;
 
