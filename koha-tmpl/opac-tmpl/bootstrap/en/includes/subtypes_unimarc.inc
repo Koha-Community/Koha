@@ -1,8 +1,8 @@
 <fieldset>
     <legend>Coded fields</legend>
     <p>
-        <label>Audience</label>
-        <select name="limit" class="subtype">
+        <label for="audience">Audience</label>
+        <select id="audience" name="limit" class="subtype">
             <option value="" selected="selected">Any</option>
             <option value="aud:a">juvenile, general</option>
             <option value="aud:b">pre-primary (0-5)</option>
@@ -15,8 +15,8 @@
         </select>
     </p>
     <p>
-        <label>Physical presentation</label>
-        <select name="limit" class="subtype">
+        <label for="physical_presentation">Physical presentation</label>
+        <select id="physical_presentation" name="limit" class="subtype">
             <option value="" selected="selected">Any</option>
             <option value="Material-type:r">regular print</option>
             <option value="Material-type:d">large print</option>
@@ -32,8 +32,8 @@
         </select>
     </p>
     <p>
-        <label>Literary genre</label>
-        <select name="limit" class="subtype">
+        <label for="literary_genre">Literary genre</label>
+        <select id="literary_genre" name="limit" class="subtype">
             <option value="" selected="selected">Any</option>
             <option value="Literature-Code:a">fiction</option>
             <option value="Literature-Code:b">drama</option>
@@ -49,8 +49,8 @@
         </select>
     </p>
     <p>
-        <label>Biography</label>
-        <select name="limit" class="subtype">
+        <label for="biography">Biography </label>
+        <select id="biography" name="limit" class="subtype">
             <option value="">Any</option>
             <option value="Biography-code:y">not a biography</option>
             <option value="Biography-code:a">autobiography</option>
@@ -60,8 +60,8 @@
         </select>
     </p>
     <p>
-        <label>Illustration</label>
-        <select name="limit" class="subtype">
+        <label for="illustration">Illustration</label>
+        <select id="illustration" name="limit" class="subtype">
             <option value="">Any</option>
             <option value="Illustration-Code:a">illustrations</option>
             <option value="Illustration-Code:b">maps</option>
@@ -82,8 +82,8 @@
         </select>
     </p>
     <p>
-        <label>Content</label>
-        <select name="limit" class="subtype">
+        <label for="content">Content</label>
+        <select id="content" name="limit" class="subtype">
             <option value="">Any</option>
             <option value="ctype:a">bibliography</option>
             <option value="ctype:b">catalogue</option>
@@ -111,8 +111,8 @@
         </select>
     </p>
     <p>
-        <label>Video types</label>
-        <select name="limit" class="subtype">
+        <label for="video_types">Video types </label>
+        <select id="video_types" name="limit" class="subtype">
             <option value="">Any</option>
             <option value="Video-mt:a">motion picture</option>
             <option value="Video-mt:b">visual projection</option>
@@ -124,8 +124,8 @@
 <fieldset>
     <legend>Serials</legend>
     <p>
-        <label>Serial type</label>
-        <select name="limit" class="subtype">
+        <label for="serial_type">Serial type </label>
+        <select id="serial_type" name="limit" class="subtype">
             <option value="">Any type</option>
             <option value="Type-Of-Serial:a">Periodical</option>
             <option value="Type-Of-Serial:b">Monographic series</option>
@@ -137,8 +137,8 @@
         </select>
     </p>
     <p>
-        <label>Periodicity</label>
-        <select name="limit" class="subtype">
+        <label for="periodicity">Periodicity</label>
+        <select id="periodicity" name="limit" class="subtype">
             <option value="">Any</option>
             <option value="Frequency-code:a">Daily</option>
             <option value="Frequency-code:b">Semiweekly</option>
@@ -161,8 +161,8 @@
         </select>
     </p>
     <p>
-        <label>Regularity</label>
-        <select name="limit" class="subtype">
+        <label for="regularity">Regularity </label>
+        <select id="regularity" name="limit" class="subtype">
             <option value="">Any regularity</option>
             <option value="Regularity-code:a">regular</option>
             <option value="Regularity-code:b">normalised irregular</option>
@@ -174,7 +174,8 @@
 
 <fieldset>
     <legend>Picture</legend>
-    <select name="limit" class="subtype">
+    <label for="graphics-type" class="sr-only">Graphics type</label>
+    <select id="graphics-type" name="limit" class="subtype">
         <option value="">Any</option>
         <option value="Graphics-type:a">collage</option>
         <option value="Graphics-type:b">drawing</option>
@@ -187,7 +188,8 @@
         <option value="Graphics-type:k">technical drawing</option>
         <option value="Graphics-type:z">other non-projected graphic type</option>
     </select>
-    <select name="limit" class="subtype">
+    <label for="graphics-support" class="sr-only">Graphics support</label>
+    <select id="graphics-support" name="limit" class="subtype">
         <option value="">Any</option>
         <option value="Graphics-support:a">canvas</option>
         <option value="Graphics-support:b">bristol board</option>

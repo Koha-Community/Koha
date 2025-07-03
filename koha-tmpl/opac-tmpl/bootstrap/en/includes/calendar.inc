@@ -96,7 +96,7 @@
                             instance.clear();
                         })
                         .addClass("fa fa-fw fa-times")
-                        .attr("aria-hidden", true)
+                        .attr("aria-hidden", false)
                         .attr("aria-label", _("Clear date"))
                 )
                 .keydown(function (e) {
