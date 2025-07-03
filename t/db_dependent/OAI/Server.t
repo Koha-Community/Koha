@@ -677,7 +677,7 @@ subtest 'Tests for timestamp handling' => sub {
 
     my $utc_datetime  = dt_from_string( undef, undef, 'UTC' );
     my $utc_timestamp = $utc_datetime->ymd . 'T' . $utc_datetime->hms . 'Z';
-    my $timestamp     = dt_from_string( undef, 'sql' );
+    my $timestamp     = $utc_datetime;
 
     # Test a bib with one item
     my $biblio1 = $builder->build_sample_biblio;
@@ -774,7 +774,7 @@ subtest 'Tests for timestamp handling' => sub {
 
     $utc_datetime  = dt_from_string( undef, undef, 'UTC' );
     $utc_timestamp = $utc_datetime->ymd . 'T' . $utc_datetime->hms . 'Z';
-    $timestamp     = dt_from_string( undef, 'sql' );
+    $timestamp     = $utc_datetime;
 
     my $item2 = $builder->build_sample_item( { biblionumber => $biblio1->biblionumber } );
     $sth_item->execute( $timestamp, $item2->itemnumber );
@@ -808,7 +808,7 @@ subtest 'Tests for timestamp handling' => sub {
     set_relative_time(10);
     $utc_datetime  = dt_from_string( undef, undef, 'UTC' );
     $utc_timestamp = $utc_datetime->ymd . 'T' . $utc_datetime->hms . 'Z';
-    $timestamp     = dt_from_string( undef, 'sql' );
+    $timestamp     = $utc_datetime;
 
     $sth_metadata->execute( $timestamp, $biblio1->biblionumber );
 
