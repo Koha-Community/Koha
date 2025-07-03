@@ -109,7 +109,7 @@
 
                     <form method="get" action="opac-tags.pl" class="row">
                         <div class="col-auto gx-2 ms-2 my-1">
-                            <label>
+                            <label for="limit-tag">
                                 [% IF Koha.Preference( 'opacuserlogin' ) == 1 %]
                                     <span>Tags to show from other users:</span>
                                 [% ELSE %]
@@ -118,7 +118,7 @@
                             </label>
                         </div>
                         <div class="col-auto gx-2 my-1">
-                            <input type="text" name="limit" class="form-control form-control-sm" maxlength="4" size="4" value="[% limit or '100' | html %]" />
+                            <input id="limit-tag" type="text" name="limit" class="form-control form-control-sm" maxlength="4" size="4" value="[% limit or '100' | html %]" />
                         </div>
                         <div class="col-auto gx-2 my-1">
                             <input type="submit" value="OK" class="btn btn-sm btn-primary" />
@@ -185,7 +185,7 @@
                                                         data-title="[% MY_TAG.title | html %]"
                                                         data-tagname="[% MY_TAG.term | html %]"
                                                         data-tagid="[% MY_TAG.tag_id | html %]"
-                                                        aria-label="[% check_title | html %]"
+                                                        aria-label="[% MY_TAG.term | html %]"
                                                     />
                                                 </td>
                                                 <td class="tagterm">

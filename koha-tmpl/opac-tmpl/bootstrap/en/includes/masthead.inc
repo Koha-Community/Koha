@@ -312,6 +312,7 @@
 
                                     [% IF ( Koha.Preference( 'OpacAddMastheadLibraryPulldown' ) == 1 && AllPublicBranches.size > 1 ) %]
                                         <div class="col-sm col-md-3 col-lg-2 order-3 order-sm-4">
+                                            <label for="select_library" class="visually-hidden">Search the catalog in:</label>
                                             <select name="limit" id="select_library" class="form-select">
                                                 <option value="">All libraries</option>
 

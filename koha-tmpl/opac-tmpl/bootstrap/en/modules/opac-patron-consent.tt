@@ -57,14 +57,14 @@
                             [% END %]
                             <fieldset>
                                 [% IF consent.given_on %]
-                                    <input type="radio" name="check_[% consent_type | html %]" value="1" checked="checked" /> Yes<br />
-                                    <input type="radio" name="check_[% consent_type | html %]" value="0" /> No
+                                    <label><input type="radio" name="check_[% consent_type | html %]" value="1" checked="checked" /> Yes</label><br />
+                                    <label><input type="radio" name="check_[% consent_type | html %]" value="0" /> No</label>
                                 [% ELSIF consent.refused_on %]
-                                    <input type="radio" name="check_[% consent_type | html %]" value="1" /> Yes<br />
-                                    <input type="radio" name="check_[% consent_type | html %]" value="0" checked="checked" /> No
+                                    <label> <input type="radio" name="check_[% consent_type | html %]" value="1" /> Yes</label><br />
+                                    <label><input type="radio" name="check_[% consent_type | html %]" value="0" checked="checked" /> No </label>
                                 [% ELSE %]
-                                    <input type="radio" name="check_[% consent_type | html %]" value="1" /> Yes<br />
-                                    <input type="radio" name="check_[% consent_type | html %]" value="0" /> No
+                                    <label><input type="radio" name="check_[% consent_type | html %]" value="1" /> Yes</label><br />
+                                    <label><input type="radio" name="check_[% consent_type | html %]" value="0" /> No</label>
                                 [% END %]
                                 [% IF consent.given_on %]
                                     <p class="consent_info"><strong>Your consent was registered on [% consent.given_on | html %].</strong></p>
