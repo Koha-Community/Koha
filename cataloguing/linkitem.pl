@@ -24,7 +24,7 @@ use Modern::Perl;
 use CGI        qw ( -utf8 );
 use C4::Auth   qw( get_template_and_user );
 use C4::Output qw( output_html_with_http_headers );
-use C4::Biblio qw( ModBiblio PrepHostMarcField );
+use C4::Biblio qw( ModBiblio );
 use C4::Context;
 use Koha::Biblios;
 
@@ -59,7 +59,7 @@ if ( $op eq 'cud-linkitem' && $barcode && $biblionumber ) {
     my $item = Koha::Items->find( { barcode => $barcode } );
 
     if ($item) {
-        my $field = PrepHostMarcField( $item->biblio->biblionumber, $item->itemnumber, $marcflavour );
+        my $field = $item->biblio->generate_marc_host_field( { item => $item } );
         $record->append_fields($field);
 
         my $modresult = ModBiblio( $record, $biblionumber, '' );

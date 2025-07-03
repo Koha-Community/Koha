@@ -1967,19 +1967,26 @@ sub get_marc_hostinfo_only {
 =head3 generate_marc_host_field
 
   my $link_field = $biblio->generate_marc_host_field;
+  my $link_field = $biblio->generate_marc_host_field( { item => $item } );
   $child->link_marc_host( $link_field );
 
 This method generates a MARC link field from the host record that can be added to child
 records to link them to the host record.
 
-NOTE: This replicates and partially enhances C4::Biblio::prepare_marc_host(). We should merge
-functionality from C4::Biblio::PrepareMarcHost() too and then replace all calls to those methods
-with this one and remove those alternatives from the codebase.
+When an item is passed and EasyAnalyticalRecords is enabled, item-specific data (barcode and
+itemnumber) will be included in the host field. This is non-standard MARC and should only be
+used when the easy analytics workflow is specifically enabled.
+
+NOTE: This replaces C4::Biblio::PrepHostMarcField() which has been removed to eliminate
+code duplication.
 
 =cut
 
 sub generate_marc_host_field {
-    my ($self) = @_;
+    my ( $self, $params ) = @_;
+    $params //= {};
+
+    my $item = $params->{item};
 
     my $marcflavour = C4::Context->preference('marcflavour');
     my $marc_host   = $self->metadata->record;
@@ -2112,6 +2119,19 @@ sub generate_marc_host_field {
             }
         }
 
+        # Item-specific subfields (only when EasyAnalyticalRecords is enabled)
+        if ( $item && C4::Context->preference('EasyAnalyticalRecords') ) {
+
+            # Subfield 0 - host biblionumber
+            push @sfd, ( '0' => $self->biblionumber );
+
+            # Subfield 9 - host itemnumber
+            push @sfd, ( '9' => $item->itemnumber );
+
+            # Subfield o - barcode
+            push @sfd, ( 'o' => $item->barcode ) if $item->barcode;
+        }
+
         # Construct 773 link field
         $link_field = MARC::Field->new( 773, '0', ' ', @sfd );
 
@@ -2165,9 +2185,20 @@ sub generate_marc_host_field {
             push @sfd, ( y => $s ) if ($s);
         }
 
-        # Control number (001)
-        if ( $host_field = $marc_host->field('001') ) {
-            push @sfd, ( 0 => $host_field->data() );
+        # Item-specific subfields (only when EasyAnalyticalRecords is enabled)
+        if ( $item && C4::Context->preference('EasyAnalyticalRecords') ) {
+
+            # Subfield 0 - host biblionumber (takes precedence over control number)
+            push @sfd, ( 0 => $self->biblionumber );
+
+            # Subfield 9 - host itemnumber
+            push @sfd, ( 9 => $item->itemnumber );
+        } else {
+
+            # Control number (001) - only when not using item-specific data
+            if ( $host_field = $marc_host->field('001') ) {
+                push @sfd, ( 0 => $host_field->data() );
+            }
         }
 
         # Construct 461 link field

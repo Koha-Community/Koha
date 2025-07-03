@@ -33,7 +33,6 @@ use C4::Biblio qw(
     GetMarcStructure
     GetUsedMarcStructure
     ModBiblio
-    PrepHostMarcField
     TransformHtmlToMarc
     ApplyMarcOverlayRules
 );
@@ -53,6 +52,7 @@ use Koha::DateUtils qw( dt_from_string );
 use Koha::Acquisition::Orders;
 use Koha::AdditionalContents;
 use Koha::Biblios;
+use Koha::Items;
 use Koha::ItemTypes;
 use Koha::Libraries;
 
@@ -649,11 +649,14 @@ if ( $record && $op eq 'duplicate' ) {
 
 #populate hostfield if hostbiblionumber is available
 if ($hostbiblionumber) {
-    my $marcflavour = C4::Context->preference("marcflavour");
     $record = MARC::Record->new();
     $record->leader('');
-    my $field = PrepHostMarcField( $hostbiblionumber, $hostitemnumber, $marcflavour );
-    $record->append_fields($field);
+    my $host_biblio = Koha::Biblios->find($hostbiblionumber);
+    if ($host_biblio) {
+        my $item  = $hostitemnumber ? Koha::Items->find($hostitemnumber) : undef;
+        my $field = $host_biblio->generate_marc_host_field( { item => $item } );
+        $record->append_fields($field) if $field;
+    }
 }
 
 # This is  a child record
