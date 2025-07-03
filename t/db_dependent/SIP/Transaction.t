@@ -711,7 +711,7 @@ subtest do_checkin => sub {
 };
 
 subtest 'cancel_waiting_holds_with_cancellation_requests at checkin' => sub {
-    plan tests => 5;
+    plan tests => 6;
 
     my $library = $builder->build_object( { class => 'Koha::Libraries' } );
     my $patron1 = $builder->build_object(
@@ -758,6 +758,19 @@ subtest 'cancel_waiting_holds_with_cancellation_requests at checkin' => sub {
         'Hold has a cancellation request'
     );
 
+    #Create a HOLD_CANCELLATION notice
+    my $template = Koha::Notice::Template->new(
+        {
+            module                 => 'reserves',
+            code                   => 'HOLD_CANCELLATION',
+            branchcode             => '',
+            message_transport_type => 'email',
+            title                  => 'Hold Cancellation',
+            content                => 'Your hold has been cancelled.',
+            is_html                => 0,
+        }
+    )->store;
+
     my $sip_item    = C4::SIP::ILS::Item->new( $item->barcode );
     my $transaction = C4::SIP::ILS::Transaction::Checkin->new();
 
@@ -766,17 +779,15 @@ subtest 'cancel_waiting_holds_with_cancellation_requests at checkin' => sub {
 
     # Check if the hold still exists
     $hold_obj = Koha::Holds->find($hold);
-    ok( !defined( $hold_obj ), 'Hold has been cancelled and deleted' );
+    ok( !defined($hold_obj), 'Hold has been cancelled and deleted' );
 
     my $old_hold = Koha::Old::Holds->find($hold);
-    ok( $old_hold, 'Hold was moved to old reserves');
-    # QUESTION: Should the cancellation reason be set to "Cancelled by SIP"?
-    is( $old_hold->cancellation_reason, undef, 'No cancellation reason was set' );
+    ok( $old_hold, 'Hold was moved to old reserves' );
+    is( $old_hold->cancellation_reason, "Cancelled by SIP", 'Cancellation reason set to Cancelled by SIP' );
 
-    # FIXME: What should happen to the cancellation request?
-    # Check that the cancellation request is deleted
-    # my $existing_cancellation_requests = Koha::Hold::CancellationRequests->search( { hold_id => $hold } );
-    # is( $existing_cancellation_requests->count, 0, 'Cancellation request is deleted after processing' );
+    #Check that the cancellation request is deleted
+    my $existing_cancellation_requests = Koha::Hold::CancellationRequests->search( { hold_id => $hold } );
+    is( $existing_cancellation_requests->count, 0, 'Cancellation request is deleted after processing' );
 
     # Verify the item's hold count
     is( $item->holds->count, 0, 'No holds remain on the item after cancellation' );

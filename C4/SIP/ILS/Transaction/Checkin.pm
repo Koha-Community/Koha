@@ -94,7 +94,10 @@ sub do_checkin {
     if ($item) {
         my $waiting_holds_to_be_cancelled = $item->holds->waiting->filter_by_has_cancellation_requests;
         while ( my $hold = $waiting_holds_to_be_cancelled->next ) {
-            $hold->cancel;
+            my $cancellation_request = $hold->cancellation_requests;
+            $cancellation_request->delete;
+            my $cancel_params->{cancellation_reason} = "Cancelled by SIP";
+            $hold->cancel($cancel_params);
         }
     }
 
