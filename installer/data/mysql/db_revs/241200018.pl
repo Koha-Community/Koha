@@ -22,7 +22,9 @@ return {
             );
             $dbh->do(q{ UPDATE additional_field_values SET new_record_id = CAST(record_id AS CHAR(11)); });
             $dbh->do(q{ ALTER TABLE additional_field_values DROP COLUMN record_id; });
-            $dbh->do(q{ ALTER TABLE additional_field_values CHANGE COLUMN new_record_id record_id VARCHAR(11); });
+            $dbh->do(
+                q{ ALTER TABLE additional_field_values CHANGE COLUMN new_record_id record_id VARCHAR(11) NOT NULL DEFAULT '' COMMENT 'record_id'; }
+            );
 
             say_success( $out, "Converted record_id to VARCHAR" );
         } else {

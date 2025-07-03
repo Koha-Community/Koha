@@ -12,7 +12,7 @@ return {
             if ( column_exists( 'aqbookseller_aliases', 'alias_id' ) ) {
                 $dbh->do(
                     q{
-                        ALTER TABLE aqbookseller_aliases CHANGE COLUMN alias_id vendor_alias_id INT(11);
+                        ALTER TABLE aqbookseller_aliases CHANGE COLUMN alias_id vendor_alias_id INT(11) NOT NULL AUTO_INCREMENT COMMENT 'primary key and unique identifier assigned by Koha';
                     }
                 );
                 say_success(
