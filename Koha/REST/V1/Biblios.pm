@@ -256,6 +256,9 @@ sub get_items {
     # Deletion of parameter to avoid filtering on the items table in the case of bookings on 'itemtype'
     $c->req->params->remove('bookable');
 
+    my $group_by_status = $c->param('group_by_status');
+    $c->req->params->remove('group_by_status');
+
     return $c->render_resource_not_found("Bibliographic record")
         unless $biblio;
 
@@ -266,6 +269,22 @@ sub get_items {
         # FIXME Should we prefetch => ['issue','branchtransfer']?
         my $items_rs = $biblio->items( { host_items => 1 } )->search_ordered( {}, { join => 'biblioitem' } );
         $items_rs = $items_rs->filter_by_bookable if $bookable_only;
+
+        if ($group_by_status) {
+            my @item_ids;
+            for my $status (
+                qw( available checked_out local_use in_transit lost withdrawn damaged not_for_loan on_hold recalled in_bundle restricted )
+                )
+            {
+                push @item_ids, $items_rs->search( { _status => $status } )->get_column('itemnumber');
+            }
+            $items_rs = $items_rs->search(
+                {},
+                {
+                    order_by => [ \[ sprintf( "field(me.itemnumber, %s)", join( ', ', map { qq{'$_'} } @item_ids ) ) ] ]
+                }
+            );
+        }
 
         # FIXME We need to order_by serial.publisheddate if we have _order_by=+me.serial_issue_number
         my $items = $c->objects->search($items_rs);

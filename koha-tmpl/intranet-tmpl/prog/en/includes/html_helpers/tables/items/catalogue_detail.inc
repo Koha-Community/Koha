@@ -61,6 +61,7 @@
         </span>
         <button class="btn btn-link SelectAll" data-tab="[% tab | html %]"><i class="fa fa-check"></i> Select all</button>
         <button class="btn btn-link ClearAll" data-tab="[% tab | html %]"><i class="fa fa-times"></i> Clear all</button>
+        <button class="btn btn-link GroupByStatus" data-tab="[% tab | html %]"><i class="fa fa-object-group"></i> Group by status</button>
         <span class="itemselection_actions">
             | Actions:
             [% IF CAN_user_tools_items_batchdel %]
@@ -303,7 +304,6 @@
         // FIXME The X-Base-Total-Count will be the number of items of the biblios
         // In case or SeparateHoldings we may need to display the number of biblios in each tab
         // Do we need separate/new endpoints or do we hack the somewhere client-side?
-        let item_table_url = `/api/v1/biblios/${biblionumber}/items?`;
         let embed = ["+strings,_status,home_library,holding_library,checkout,checkout.patron,transfer,transfer+strings,first_hold,first_hold+strings,first_hold.patron,first_hold.desk"];
         if (Koha.prefs.LocalCoverImages) {
             embed.push("cover_image_ids");
@@ -334,7 +334,26 @@
             embed.push("analytics_count");
         }
 
-        let user_colvis = { holdings: {}, otherholdings: {} };
+        let group_by_status_values = {
+            holdings: false,
+            otherholdings: false,
+        };
+        $(".GroupByStatus").on("click",function(e){
+            e.preventDefault();
+            let tab_id = $(this).data("tab");
+            let was_grouped = group_by_status_values[tab_id];
+            group_by_status_values[tab_id] = !was_grouped;
+
+            build_items_table(tab_id, true, { destroy: true }, build_items_table_drawncallback );
+
+            if ( was_grouped ) {
+                $(this).html('<i class="fa fa-object-group"></i>' + _("Group by status") + '</button>');
+            } else {
+                $(this).html('<i class="fa fa-object-ungroup"></i>' + _("Ungroup by status") + '</button>');
+            }
+        });
+
+        let user_colvis = {holdings: {}, otherholdings: {}};
         function build_items_table(tab_id, add_filters, dt_options, drawcallback) {
             let table_dt;
             if (dt_options && dt_options.hasOwnProperty("destroy")) {
@@ -368,6 +387,13 @@
             default_filters._status = function () {
                 return $("#" + tab_id + "_status select").val();
             };
+
+            let group_by_status = function(){
+                if ( group_by_status_values[tab_id] ) {
+                    return 'group_by_status=1';
+                }
+                return '';
+            }
 
             var columns = [
                 {
@@ -921,7 +947,7 @@
             ];
             var items_table = $("#" + tab_id + "_table").kohaTable(
                 {
-                    ajax: { url: item_table_url },
+                    ajax: { url: "/api/v1/biblios/[% biblio.biblionumber | uri %]/items?" + group_by_status() },
                     order: [],
                     embed,
                     autoWidth: false,
