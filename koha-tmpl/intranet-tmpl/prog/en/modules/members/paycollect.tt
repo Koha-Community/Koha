@@ -183,8 +183,8 @@
                                         <input name="paid" id="paid" type="text" step="0.01" min="0" value="[% amountoutstanding | $Price on_editing => 1 %]" />
                                     </li>
                                     <li>
-                                        <label for="collected">Amount tendered: </label>
-                                        <input name="collected" id="collected" type="text" step="0.01" min="0" value="[% amountoutstanding | $Price on_editing => 1 %]" />
+                                        <label for="tendered">Amount tendered: </label>
+                                        <input name="tendered" id="tendered" type="text" step="0.01" min="0" value="[% amountoutstanding | $Price on_editing => 1 %]" />
                                     </li>
                                     <li>
                                         <label>Change to give: </label>
@@ -364,8 +364,8 @@
                                     </li>
                                     [% IF type != 'WRITEOFF' %]
                                         <li>
-                                            <label for="collected">Amount tendered: </label>
-                                            <input name="collected" id="collected" type="text" step="0.01" min="0" value="[% total | $Price on_editing => 1 %]" />
+                                            <label for="tendered">Amount tendered: </label>
+                                            <input name="tendered" id="tendered" type="text" step="0.01" min="0" value="[% total | $Price on_editing => 1 %]" />
                                         </li>
                                         <li>
                                             <label>Change to give: </label>
@@ -453,7 +453,7 @@
             var change = $('#change')[0];
 
             $('#payindivfine, #payfine').preventDoubleFormSubmit();
-            $("#paid, #collected").on("change",function() {
+            $("#paid, #tendered").on("change",function() {
                 moneyFormat( this );
                 if (change != undefined) {
                     updateChangeValues();
@@ -483,7 +483,7 @@
             $( "#payindivfine, #payfine" ).validate({
                 rules: {
                     paid: { required: true },
-                    collected: {
+                    tendered: {
                         required: true
                     },
                     [% IF Koha.Preference('UseCashRegisters') %]
@@ -577,11 +577,11 @@
 
         function updateChangeValues() {
             var change = $('#change')[0];
-            change.innerHTML = Math.round(($('#collected')[0].value - $('#paid')[0].value) * 100) / 100;
+            change.innerHTML = Math.round(($('#tendered')[0].value - $('#paid')[0].value) * 100) / 100;
             if (change.innerHTML <= 0) {
                 var paid = $('#paid')[0];
                 moneyFormat(paid);
-                $('#collected').rules( "add", { min: Number(paid.value) });
+                $('#tendered').rules( "add", { min: Number(paid.value) });
                 $( "#payindivfine, #payfine" ).valid();
                 change.innerHTML = "0.00";
                 $('input[name="change_given"]').val('0.00');

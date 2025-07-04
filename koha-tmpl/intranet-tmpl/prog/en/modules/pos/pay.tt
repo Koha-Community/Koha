@@ -51,7 +51,7 @@
             <div class="alert alert-info audio-alert-action">
                 <p>Payment received</p>
                 <p>
-                    <a target="_blank" href="/cgi-bin/koha/pos/printreceipt.pl?action=print&accountlines_id=[% payment_id | uri %]&collected=[% collected | uri %]&change=[% change | uri %]" class="btn btn-default"
+                    <a target="_blank" href="/cgi-bin/koha/pos/printreceipt.pl?action=print&accountlines_id=[% payment_id | uri %]&tendered=[% tendered | uri %]&change=[% change | uri %]" class="btn btn-default"
                         ><i class="fa fa-print"></i> Print receipt</a
                     >
                     <a href="#" data-bs-toggle="modal" data-bs-target="#emailReceiptModal" class="btn btn-default"><i class="fa-solid fa-envelope"></i> Email receipt</a>
@@ -138,8 +138,8 @@
                                 <input type="text" inputmode="none" pattern="[0-9]*" name="paid" id="paid" value="" readonly />
                             </li>
                             <li>
-                                <label for="collected" class="required">Amount tendered: </label>
-                                <input type="text" inputmode="numeric" pattern="[0-9]*" name="collected" id="collected" value="" class="required" required="required" />
+                                <label for="tendered" class="required">Amount tendered: </label>
+                                <input type="text" inputmode="numeric" pattern="[0-9]*" name="tendered" id="tendered" value="" class="required" required="required" />
                                 <span class="required">Required</span>
                             </li>
                             <li>
@@ -181,7 +181,7 @@
     <form id="email_form" action="/cgi-bin/koha/pos/pay.pl" method="post" enctype="multipart/form-data" class="validated">
         [% INCLUDE 'csrf-token.inc' %]
         <input type="hidden" name="payment_id" value="[% payment_id | uri %]" />
-        <input type="hidden" name="collected" value="[% collected | uri %]" />
+        <input type="hidden" name="tendered" value="[% tendered | uri %]" />
         <input type="hidden" name="change" value="[% change | uri %]" />"
         <div class="modal-dialog">
             <div class="modal-content">
@@ -316,11 +316,11 @@
         function updateChangeValues() {
             var change = $('#change')[0];
             var zero_formatted = "[% 0 | $Price %]";
-            change.innerHTML = Math.round(($('#collected')[0].value - $('#paid')[0].value) * 100) / 100;
+            change.innerHTML = Math.round(($('#tendered')[0].value - $('#paid')[0].value) * 100) / 100;
             if (change.innerHTML <= 0) {
                 var paid = $('#paid')[0];
                 moneyFormat(paid);
-                $('#collected').rules( "add", { min: Number(paid.value) });
+                $('#tendered').rules( "add", { min: Number(paid.value) });
                 change.innerHTML = zero_formatted;
                 $(':input[name="change"]').val(zero_formatted);
             } else {
@@ -456,7 +456,7 @@
 
             // Change calculation and modal
             var change = $('#change')[0];
-            $("#paid, #collected").on("change",function() {
+            $("#paid, #tendered").on("change",function() {
                 moneyFormat( this );
                 if (change != undefined) {
                     updateChangeValues();
@@ -474,7 +474,7 @@
                     paid: {
                         required: true
                     },
-                    collected: {
+                    tendered: {
                         required: true
                     },
                     payment_type: {
@@ -518,7 +518,7 @@
 
             [% IF payment_id && Koha.Preference('FinePaymentAutoPopup') %]
                 $("#printReceipt").click(function() {
-                    var win = window.open('/cgi-bin/koha/pos/printreceipt.pl?action=print&accountlines_id=[% payment_id | uri %]&collected=[% collected | uri %]&change=[% change | uri %]', '_blank');
+                    var win = window.open('/cgi-bin/koha/pos/printreceipt.pl?action=print&accountlines_id=[% payment_id | uri %]&tendered=[% tendered | uri %]&change=[% change | uri %]', '_blank');
                     win.focus();
                 });
                 $("#printReceipt").click();
