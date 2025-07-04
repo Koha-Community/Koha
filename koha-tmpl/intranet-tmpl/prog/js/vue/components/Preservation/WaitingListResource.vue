@@ -1,11 +1,12 @@
 <template>
     <BaseResource
+        v-if="config.settings.not_for_loan_waiting_list_in"
         :routeAction="routeAction"
         :instancedResource="this"
     ></BaseResource>
 </template>
 <script>
-import { inject } from "vue";
+import { inject, onBeforeMount } from "vue";
 import BaseResource from "../BaseResource.vue";
 import { useBaseResource } from "../../composables/base-resource.js";
 import { storeToRefs } from "pinia";
@@ -20,6 +21,7 @@ export default {
         const PreservationStore = inject("PreservationStore");
         const { config, itemsRecentlyAddedToWaitingList } =
             storeToRefs(PreservationStore);
+        const { setError } = inject("mainStore");
 
         const additionalToolbarButtons = (resource, componentData) => {
             const { instancedResource } = componentData;
@@ -260,6 +262,14 @@ export default {
                 ],
             },
         };
+
+        onBeforeMount(() => {
+            if (!config.value.settings.not_for_loan_waiting_list_in) {
+                return setError(
+                    $__("You need to configure this module first.")
+                );
+            }
+        });
 
         return {
             ...baseResource,
