@@ -53,14 +53,15 @@ SKIP: {
                 'Correctly in search results page'
             );
 
+            # Get the second li, the first one is "Make a purchase suggestion"
             is(
-                $driver->find_element('//div[@class="suggestion"]/ul/li')->get_text,
+                $driver->find_element('//div[@class="suggestion"]/ul/li[2]')->get_text,
                 'Make an interlibrary loan request',
                 'Placing an ILL request through the OPAC is allowed',
             );
 
             # Clicking on the search results page link works
-            $driver->find_element('//div[@class="suggestion"]/ul/li/a')->click;
+            $driver->find_element('//div[@class="suggestion"]/ul/li[2]/a')->click;
             is(
                 $driver->find_element('(//nav[@id="breadcrumbs"]/ol/li)[last()]')->get_text,
                 'New interlibrary loan request',
@@ -94,8 +95,8 @@ SKIP: {
 
             is(
                 scalar @{$link_exists},
-                0,
-                'Search page - Place ILL request link should be absent. '
+                2,
+                'Search page - Place ILL request link should be present. '
             );
 
             # Visiting the create request page directly does not work
