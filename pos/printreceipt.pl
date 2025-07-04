@@ -62,8 +62,8 @@ my $letter = C4::Letters::GetPreparedLetter(
         borrowers => $patron ? $patron->borrowernumber : undef
     },
     substitute => {
-        collected => scalar $input->param('collected'),
-        change    => scalar $input->param('change')
+        tendered => scalar $input->param('tendered'),
+        change   => scalar $input->param('change')
     }
 );
 
