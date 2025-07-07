@@ -17,11 +17,13 @@
 
 use Modern::Perl;
 use utf8;
+use Encode qw(encode_utf8);
 
 use C4::Context;
 
 use Test::More;
 use Test::MockModule;
+use Test::NoWarnings;
 
 use C4::Context;
 use C4::Biblio      qw( AddBiblio );
@@ -36,7 +38,7 @@ eval { require Selenium::Remote::Driver; };
 if ($@) {
     plan skip_all => "Selenium::Remote::Driver is needed for selenium tests.";
 } else {
-    plan tests => 9;
+    plan tests => 10;
 }
 
 my $s = t::lib::Selenium->new;
@@ -354,7 +356,10 @@ subtest 'Encoding in session variables' => sub {
             is(
                 $driver->find_element('//span[@class="logged-in-branch-name"]')->get_text(),
                 $branchname,
-                sprintf( "logged-in-branch-name set - SessionStorage=%s, branchname=%s", $SessionStorage, $branchname )
+                sprintf(
+                    "logged-in-branch-name set - SessionStorage=%s, branchname=%s", $SessionStorage,
+                    encode_utf8($branchname)
+                )
             );
 
             $driver->find_element('//input[@id="barcode"]')->send_keys( $item->barcode );
@@ -372,7 +377,7 @@ subtest 'Encoding in session variables' => sub {
                 $branchname,
                 sprintf(
                     "'Checked out from' column should contain the branchname - SessionStorage=%s, branchname=%s",
-                    $SessionStorage, $branchname
+                    $SessionStorage, encode_utf8($branchname)
                 )
             );
 
