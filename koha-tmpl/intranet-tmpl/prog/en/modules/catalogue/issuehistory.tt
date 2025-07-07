@@ -41,7 +41,7 @@
     <h1>Checkout history for [% INCLUDE 'biblio-title.inc' %]</h1>
     [% IF biblio.author %]<h3>by [% biblio.author | html %]</h3>[% END %]
 
-    [% SET show_patron_column = Koha.Preference('intranetreadinghistory') AND CAN_user_circulate_circulate_remaining_permissions %]
+    [% SET show_patron_column = (CAN_user_borrowers_view_checkout_history && Koha.Preference('intranetreadinghistory')) AND CAN_user_circulate_remaining_permissions %]
 
     <div class="searchresults page-section">
         [% IF checkouts %]

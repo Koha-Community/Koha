@@ -151,7 +151,7 @@
                         </li>
                     [% END %]
                 [% END %]
-                [% IF Koha.Preference('intranetreadinghistory') %]
+                [% IF CAN_user_borrowers_view_checkout_history && Koha.Preference('intranetreadinghistory') %]
                     [% IF ( patron.privacy == 2 ) %]
                         <li data-bs-toggle="tooltip" data-bs-placement="left" title="Not allowed by patron's privacy settings">
                             <a class="dropdown-item disabled" aria-disabled="true" id="exportbarcodes" href="#">Export today's checked in barcodes</a>

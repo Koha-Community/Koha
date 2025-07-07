@@ -201,12 +201,10 @@
                     </li>
                 [% END %]
             [% END %]
-            [% IF CAN_user_borrowers_edit_borrowers %]
-                [% IF ( intranetreadinghistory ) %]
-                    <li [% IF readingrecordview %]class="active"[% END %]>
-                        <a href="/cgi-bin/koha/members/readingrec.pl?borrowernumber=[% patron.borrowernumber | uri %]">Circulation history</a>
-                    </li>
-                [% END %]
+            [% IF (CAN_user_borrowers_view_checkout_history && Koha.Preference('intranetreadinghistory')) %]
+                <li [% IF readingrecordview %]class="active"[% END %]>
+                    <a href="/cgi-bin/koha/members/readingrec.pl?borrowernumber=[% patron.borrowernumber | uri %]">Circulation history</a>
+                </li>
             [% END %]
             [% IF CAN_user_borrowers_edit_borrowers %]
                 [% IF ( IntranetReadingHistoryHolds ) %]

@@ -46,7 +46,7 @@
     [% UNLESS checkouts %][% checkouts = [] %][% END %]
     [% UNLESS old_checkouts %][% old_checkouts = [] %][% END %]
     [% SET all_checkouts = checkouts.merge(old_checkouts) %]
-    [% UNLESS Koha.Preference('intranetreadinghistory') %]
+    [% UNLESS (CAN_user_borrowers_view_checkout_history && Koha.Preference('intranetreadinghistory')) %]
         <div class="alert alert-warning">Staff members are not allowed to access patron's checkout history</div>
     [% ELSIF is_anonymous %]
         <div class="alert alert-warning">This is the anonymous patron, so no circulation history is displayed. To get a list of anonymized loans, please run a report.</div>
