@@ -10,6 +10,7 @@ use Test::Warn;
 use Test::Deep;
 
 use t::lib::TestBuilder;
+use t::lib::Mocks;
 
 use C4::Context;
 use Koha::Database;
@@ -32,7 +33,7 @@ my $dbh = C4::Context->dbh;
 our $itype_1 = $builder->build({ source => 'Itemtype' });
 
 subtest 'Authorized Values Tests' => sub {
-    plan tests => 4;
+    plan tests => 5;
 
     my $data = {
         category            => 'CATEGORY',
@@ -156,6 +157,9 @@ subtest 'Authorized Values Tests' => sub {
     );
 
     warning_is { GetAuthorisedValues() } [], 'No warning when no parameter passed to GetAuthorisedValues';
+
+    C4::Context->set_userenv();
+    warning_is { GetAuthorisedValues("BUG10656") } [], 'No warning when userenv is anonymous';
 
 };
 
