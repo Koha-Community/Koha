@@ -36,7 +36,7 @@
                 />
             </fieldset>
         </div>
-        <table :id="table_id"></table>
+        <table :id="tableId"></table>
     </div>
 </template>
 
@@ -76,13 +76,12 @@ export default {
             let show_resource = showResource;
             let resources = props.resources;
             let tableFilters = filters.value;
-            let table_id = tableId;
             let appRouter = router;
 
             $.fn.dataTable.ext.search = $.fn.dataTable.ext.search.filter(
                 search => search.name != "apply_filter"
             );
-            $("#" + table_id).kohaTable({
+            $("#" + tableId).kohaTable({
                 data: resources,
                 embed: ["package.name"],
                 ordering: false,
