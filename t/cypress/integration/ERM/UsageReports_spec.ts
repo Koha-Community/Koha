@@ -105,7 +105,9 @@ describe("Saved reports", () => {
             { force: true }
         );
 
-        cy.get("#report_builder .default-report .action input").click();
+        cy.get("#report_builder .default-report .action button")
+            .contains("Submit")
+            .click();
 
         cy.url({ decode: true }).then(url => {
             const urlParams = url.split("viewer?")[1].split("data=")[1];

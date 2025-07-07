@@ -636,7 +636,7 @@ describe("Data provider tab options", () => {
             }
         );
 
-        cy.get("#files > form > fieldset > input[type=submit]").click();
+        cy.get("#files > form > fieldset > button").click();
 
         cy.get("main div[class='alert alert-info']").should(
             "have.text",
