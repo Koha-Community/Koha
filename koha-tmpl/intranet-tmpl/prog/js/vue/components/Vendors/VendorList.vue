@@ -142,7 +142,7 @@ export default {
         },
         doReceive({ id }, dt, event) {
             event.preventDefault();
-            window.open(`/cgi-bin/koha/acqui/parcels.pl?booksellerid=${id}`);
+            window.location.href = `/cgi-bin/koha/acqui/parcels.pl?booksellerid=${id}`;
         },
         doEdit({ id }, dt, event) {
             this.$router.push({
