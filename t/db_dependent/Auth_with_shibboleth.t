@@ -20,9 +20,10 @@
 use Modern::Perl;
 use utf8;
 
-use Test::More tests => 6;
+use Test::More tests => 7;
 use Test::MockModule;
 use Test::Warn;
+use Test::NoWarnings;
 use CGI        qw(-utf8 );
 use File::Temp qw(tempdir);
 
@@ -67,17 +68,18 @@ $context->mock( 'interface', sub { return $interface; } );
 # Mock Letters: GetPreparedLetter, EnqueueLetter and SendQueuedMessages
 # We want to test the params
 my $mocked_letters = Test::MockModule->new('C4::Letters');
+my $sub_called     = {};
 $mocked_letters->mock(
     'GetPreparedLetter',
     sub {
-        warn "GetPreparedLetter called";
+        $sub_called->{GetPreparedLetter}++;
         return 1;
     }
 );
 $mocked_letters->mock(
     'EnqueueLetter',
     sub {
-        warn "EnqueueLetter called";
+        $sub_called->{EnqueueLetter}++;
 
         # return a 'message_id'
         return 42;
@@ -87,7 +89,7 @@ $mocked_letters->mock(
     'SendQueuedMessages',
     sub {
         my $params = shift;
-        warn "SendQueuedMessages called with message_id: $params->{message_id}";
+        $sub_called->{SendQueuedMessages}->{ $params->{message_id} }++;
         return 1;
     }
 );
@@ -172,7 +174,7 @@ subtest "get_login_shib tests" => sub {
 
 subtest "checkpw_shib tests" => sub {
 
-    plan tests => 54;
+    plan tests => 56;
 
     # Test borrower data
     my $test_borrowers = [
@@ -251,18 +253,13 @@ subtest "checkpw_shib tests" => sub {
     $ENV{'emailpro'} = 'me@myemail.com';
     $ENV{branchcode} = $library->branchcode;      # needed since T::D::C does no longer hides the FK constraint
 
-    warnings_are {
-        ( $retval, $retcard, $retuserid, $retpatron ) = checkpw_shib($shib_login);
-    }
-    [
-        'GetPreparedLetter called',
-        'EnqueueLetter called',
-        'SendQueuedMessages called with message_id: 42'
-    ],
-        "WELCOME notice Prepared, Enqueued and Send";
-    is( $retval,         "1",            "user authenticated" );
-    is( $retuserid,      "test4321",     "expected userid returned" );
-    is( ref($retpatron), 'Koha::Patron', "expected Koha::Patron object returned" );
+    ( $retval, $retcard, $retuserid, $retpatron ) = checkpw_shib($shib_login);
+    is( $sub_called->{GetPreparedLetter},        1,              'GetPreparedLetter called' );
+    is( $sub_called->{EnqueueLetter},            1,              'EnqueueLetter called' );
+    is( $sub_called->{SendQueuedMessages}->{42}, 1,              'SendQueuedMessages called with message_id: 42' );
+    is( $retval,                                 "1",            "user authenticated" );
+    is( $retuserid,                              "test4321",     "expected userid returned" );
+    is( ref($retpatron),                         'Koha::Patron', "expected Koha::Patron object returned" );
     $logger->debug_is( "koha borrower field to match: userid", "borrower match field debug info" )
         ->debug_is( "shibboleth attribute to match: uid", "shib match attribute debug info" )->clear();
 
