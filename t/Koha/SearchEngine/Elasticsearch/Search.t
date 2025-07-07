@@ -18,7 +18,7 @@
 use Modern::Perl;
 
 use Test::NoWarnings;
-use Test::More tests => 4;
+use Test::More tests => 5;
 use Test::MockModule;
 use t::lib::Mocks;
 use Encode       qw( encode );
@@ -31,18 +31,8 @@ use_ok('Koha::SearchEngine::Elasticsearch::Search');
 subtest '_sort_facets' => sub {
     plan tests => 3;
     t::lib::Mocks::mock_preference( 'SearchEngine', 'Elasticsearch' );
-    my $facets = [
-        { facet_label_value => 'Mary' },
-        { facet_label_value => 'Harry' },
-        { facet_label_value => 'Fairy' },
-        { facet_label_value => 'Ari' },
-        { facet_label_value => 'mary' },
-        { facet_label_value => 'harry' },
-        { facet_label_value => 'fairy' },
-        { facet_label_value => 'ari' },
-        { facet_label_value => 'étienne' },
-        { facet_label_value => 'Åuthor' },
-    ];
+
+    my $facets = _get_facets();
 
     my @normal_sort_facets     = sort { $a->{facet_label_value} cmp $b->{facet_label_value} } @$facets;
     my @normal_expected_facets = (
@@ -50,12 +40,15 @@ subtest '_sort_facets' => sub {
         { facet_label_value => 'Fairy' },
         { facet_label_value => 'Harry' },
         { facet_label_value => 'Mary' },
+        { facet_label_value => 'Zambidis' },
         { facet_label_value => 'ari' },
         { facet_label_value => 'fairy' },
         { facet_label_value => 'harry' },
         { facet_label_value => 'mary' },
+        { facet_label_value => 'Åberg, Erik' },
         { facet_label_value => 'Åuthor' },
         { facet_label_value => 'étienne' },
+        { facet_label_value => 'Šostakovitš, Dmitri' },
     );
 
     #NOTE: stringwise/bytewise is not UTF-8 friendly
@@ -68,6 +61,7 @@ subtest '_sort_facets' => sub {
     #is used for the locales of English (en) and French (fr).
     my $sorted_facets = $search->_sort_facets( { facets => $facets, locale => 'default' } );
     my $expected      = [
+        { facet_label_value => 'Åberg, Erik' },
         { facet_label_value => 'ari' },
         { facet_label_value => 'Ari' },
         { facet_label_value => 'Åuthor' },
@@ -78,6 +72,8 @@ subtest '_sort_facets' => sub {
         { facet_label_value => 'Harry' },
         { facet_label_value => 'mary' },
         { facet_label_value => 'Mary' },
+        { facet_label_value => 'Šostakovitš, Dmitri' },
+        { facet_label_value => 'Zambidis' },
     ];
     is_deeply( $sorted_facets, $expected, "Facets sorted correctly with default locale" );
 
@@ -91,13 +87,39 @@ subtest '_sort_facets' => sub {
     #NOTE: If "locale" is not provided to _sort_facets, it will look up the LC_COLLATE
     #for the local system. This is what allows this function to work well in production.
     #However, since LC_COLLATE could vary from system to system running these unit tests,
-    #we can't test arbitrary locales here.
+    #we can't test it reliably here.
+};
 
-    #TODO: It would be great to explicitly use a fi_FI locale for another test, but we cannot guarantee
-    #that every system has that locale. That said, perhaps we could do some conditional unit
-    #testing if certain locales are available when running tests. This could allow for the Koha community
-    #to thoroughly test this functionality, while letting anyone run the unit tests regardless of their
-    #installed locales.
+subtest '_sort_facets_zebra with fi_FI locale' => sub {
+    plan tests => 1;
+    my $locale_map = _get_locale_map();
+SKIP: {
+        skip( "fi_FI.utf8 locale not available on this system", 1 ) unless $locale_map->{"fi_FI.utf8"};
+
+        my $facets = _get_facets();
+
+        my $search = Koha::SearchEngine::Elasticsearch::Search->new(
+            { index => $Koha::SearchEngine::Elasticsearch::AUTHORITIES_INDEX } );
+
+        # Test with explicit locale parameter
+        my $sorted_facets_explicit = $search->_sort_facets( { facets => $facets, locale => 'fi_FI' } );
+        my $expected               = [
+            { facet_label_value => 'ari' },
+            { facet_label_value => 'Ari' },
+            { facet_label_value => 'étienne' },
+            { facet_label_value => 'fairy' },
+            { facet_label_value => 'Fairy' },
+            { facet_label_value => 'harry' },
+            { facet_label_value => 'Harry' },
+            { facet_label_value => 'mary' },
+            { facet_label_value => 'Mary' },
+            { facet_label_value => 'Šostakovitš, Dmitri' },
+            { facet_label_value => 'Zambidis' },
+            { facet_label_value => 'Åberg, Erik' },
+            { facet_label_value => 'Åuthor' },
+        ];
+        is_deeply( $sorted_facets_explicit, $expected, "Zebra facets sorted correctly with explicit locale" );
+    }
 };
 
 subtest 'search_auth_compat' => sub {
@@ -175,5 +197,34 @@ subtest 'search_auth_compat' => sub {
     );
     is( @$results[0]->{series}, 1, 'Valid main heading with ShowHeadingUse' );
 };
+
+sub _get_facets {
+    my $facets = [
+        { facet_label_value => 'Mary' },
+        { facet_label_value => 'Harry' },
+        { facet_label_value => 'Fairy' },
+        { facet_label_value => 'Ari' },
+        { facet_label_value => 'mary' },
+        { facet_label_value => 'harry' },
+        { facet_label_value => 'Åberg, Erik' },
+        { facet_label_value => 'Åuthor' },
+        { facet_label_value => 'fairy' },
+        { facet_label_value => 'ari' },
+        { facet_label_value => 'étienne' },
+        { facet_label_value => 'Šostakovitš, Dmitri' },
+        { facet_label_value => 'Zambidis' },
+    ];
+    return $facets;
+}
+
+sub _get_locale_map {
+    my $map     = {};
+    my @locales = `locale -a`;
+    foreach my $locale (@locales) {
+        chomp($locale);
+        $map->{$locale} = 1;
+    }
+    return $map;
+}
 
 1;
