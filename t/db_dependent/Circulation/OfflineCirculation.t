@@ -18,7 +18,7 @@
 use Modern::Perl;
 
 use Test::NoWarnings;
-use Test::More tests => 3;
+use Test::More tests => 4;
 use Test::MockModule;
 use Test::Warn;
 
@@ -85,18 +85,21 @@ subtest "Bug 34529: Offline circulation should be able to accept userid as well 
         }
     );
 
+    my ( $message, $checkout ) = ProcessOfflineIssue(
+        {
+            cardnumber => $borrower1->{cardnumber},
+            barcode    => $item1->barcode
+        }
+    );
+
     is(
-        ProcessOfflineIssue(
-            {
-                cardnumber => $borrower1->{cardnumber},
-                barcode    => $item1->barcode
-            }
-        ),
-        "Success.",
+        $message, "Success.",
         "ProcessOfflineIssue succeeds with cardnumber"
     );
+
+    ( $message, $checkout ) = ProcessOfflineIssue( { cardnumber => $borrower1->{userid}, barcode => $item2->barcode } );
     is(
-        ProcessOfflineIssue( { cardnumber => $borrower1->{userid}, barcode => $item2->barcode } ),
+        $message,
         "Success.",
         "ProcessOfflineIssue succeeds with user id"
     );
@@ -192,9 +195,48 @@ subtest "Bug 30114 - Koha offline circulation will always cancel the next hold w
 
     my $op = GetOfflineOperation( $offline_rs->next->id );
 
-    my $ret = ProcessOfflineOperation($op);
+    my ($ret) = ProcessOfflineOperation($op);
 
     is( Koha::Holds->search( { biblionumber => $biblionumber } )->count, 2, "Still found two holds for the record" );
+};
+
+subtest "Bug 32934: ProcessOfflineIssue returns checkout object for SIP no block due date" => sub {
+    plan tests => 4;
+
+    $branch     = $builder->build( { source => 'Branch' } )->{branchcode};
+    $manager_id = $builder->build( { source => 'Borrower' } )->{borrowernumber};
+
+    my $borrower = $builder->build(
+        {
+            source => 'Borrower',
+            value  => { branchcode => $branch }
+        }
+    );
+
+    my $biblio = $builder->build_sample_biblio;
+    my $item   = $builder->build_sample_item(
+        {
+            biblionumber => $biblio->id,
+            library      => $branch,
+        }
+    );
+
+    my $due_date = dt_from_string->add( days => 7 )->ymd;
+
+    # Test ProcessOfflineIssue returns both message and checkout object
+    my ( $message, $checkout ) = ProcessOfflineIssue(
+        {
+            cardnumber => $borrower->{cardnumber},
+            barcode    => $item->barcode,
+            due_date   => $due_date,
+            timestamp  => dt_from_string
+        }
+    );
+
+    is( $message, "Success.", "ProcessOfflineIssue returns success message" );
+    isa_ok( $checkout, 'Koha::Checkout', "ProcessOfflineIssue returns checkout object" );
+    is( $checkout->borrowernumber,                  $borrower->{borrowernumber}, "Checkout has correct borrower" );
+    is( dt_from_string( $checkout->date_due )->ymd, $due_date, "Checkout respects specified due_date" );
 };
 
 $schema->storage->txn_rollback;
