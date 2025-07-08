@@ -93,6 +93,7 @@ if ( $op eq 'acct_form' ) {
             auto_orders       => $input->param('auto_orders')       ? 1 : 0,
             id_code_qualifier => scalar $input->param('id_code_qualifier'),
             plugin            => scalar $input->param('plugin'),
+            po_is_basketname  => $input->param('po_is_basketname') ? 1 : 0,
         };
 
         if ($id) {

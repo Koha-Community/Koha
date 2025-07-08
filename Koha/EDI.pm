@@ -649,11 +649,29 @@ sub process_quote {
     my $split_message;
     my @added_baskets;    # if auto & multiple baskets need to order all
 
+    # Get vendor EDI account configuration
+    my $v = $schema->resultset('VendorEdiAccount')->search(
+        {
+            vendor_id => $quote_message->vendor_id,
+        }
+    )->single;
+
     if ( @{$messages} && $quote_message->vendor_id ) {
+
         foreach my $msg ( @{$messages} ) {
             ++$message_count;
+
+            # Determine basket name based on vendor configuration
+            my $basket_name = $quote_message->filename;
+            if ( $v && $v->po_is_basketname ) {
+                my $purchase_order_number = $msg->purchase_order_number;
+                if ($purchase_order_number) {
+                    $basket_name = $purchase_order_number;
+                }
+            }
+
             my $basketno = NewBasket(
-                $quote_message->vendor_id, 0, $quote_message->filename, q{},
+                $quote_message->vendor_id, 0, $basket_name, q{},
                 q{} . q{}
             );
             push @added_baskets, $basketno;
@@ -695,12 +713,7 @@ sub process_quote {
     $quote_message->status($status);
     $quote_message->update;    # status and basketno link
                                # Do we automatically generate orders for this vendor
-    my $v = $schema->resultset('VendorEdiAccount')->search(
-        {
-            vendor_id => $quote_message->vendor_id,
-        }
-    )->single;
-    if ( $v->auto_orders ) {
+    if ( $v && $v->auto_orders ) {
         for my $i ( 0 .. $#added_baskets ) {
             my $basketno = $added_baskets[$i];
 

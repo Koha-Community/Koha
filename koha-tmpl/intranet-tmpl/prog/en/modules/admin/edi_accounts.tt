@@ -96,9 +96,10 @@
                     <span>New account</span>
                 [% END %]
             </h1>
-            <fieldset class="rows">
-                <legend class="sr-only">Account details</legend>
 
+            <!-- Basic Information -->
+            <fieldset class="rows">
+                <legend>Basic Information</legend>
                 <ol>
                     <li>
                         <label for="vendor_id">Vendor: </label>
@@ -111,6 +112,10 @@
                                 [% END %]
                             [% END %]
                         </select>
+                    </li>
+                    <li>
+                        <label for="description">Description: </label>
+                        <input type="text" name="description" id="description" size="20" value="[% account.description | html %]" />
                     </li>
                     [% IF plugins %]
                         <li>
@@ -129,24 +134,6 @@
                     [% ELSE %]
                         <input type="hidden" name="plugin" value="" />
                     [% END %]
-                    <li>
-                        <label for="description">Description: </label>
-                        <input type="text" name="description" id="description" size="20" value="[% account.description | html %]" />
-                    </li>
-                    <li>
-                        <label for="file_transport_id">File transport: </label>
-                        <select name="file_transport_id" id="file_transport_id">
-                            <option value="">Select a file transport configuration</option>
-                            [% FOREACH transport IN file_transports %]
-                                [% IF transport.file_transport_id == account.file_transport_id %]
-                                    <option value="[% transport.file_transport_id | html %]" selected="selected">[% transport.name | html %] ([% transport.transport | upper | html %] - [% transport.host | html %])</option>
-                                [% ELSE %]
-                                    <option value="[% transport.file_transport_id | html %]">[% transport.name | html %] ([% transport.transport | upper | html %] - [% transport.host | html %])</option>
-                                [% END %]
-                            [% END %]
-                        </select>
-                        <div class="hint"> Select a file transport configuration for this EDI account. File transports can be managed in <a href="/cgi-bin/koha/admin/file_transports.pl">Administration &rsaquo; File transports</a>. </div>
-                    </li>
                     <li>
                         <label for="id_code_qualifier">Qualifier:</label>
                         <select name="id_code_qualifier" id="id_code_qualifier">
@@ -180,6 +167,34 @@
                             [% END %]
                         </select>
                     </li>
+                </ol>
+            </fieldset>
+
+            <!-- Transport Settings -->
+            <fieldset class="rows">
+                <legend>Transport Settings</legend>
+                <ol>
+                    <li>
+                        <label for="file_transport_id">File transport: </label>
+                        <select name="file_transport_id" id="file_transport_id">
+                            <option value="">Select a file transport configuration</option>
+                            [% FOREACH transport IN file_transports %]
+                                [% IF transport.file_transport_id == account.file_transport_id %]
+                                    <option value="[% transport.file_transport_id | html %]" selected="selected">[% transport.name | html %] ([% transport.transport | upper | html %] - [% transport.host | html %])</option>
+                                [% ELSE %]
+                                    <option value="[% transport.file_transport_id | html %]">[% transport.name | html %] ([% transport.transport | upper | html %] - [% transport.host | html %])</option>
+                                [% END %]
+                            [% END %]
+                        </select>
+                        <div class="hint"> Select a file transport configuration for this EDI account. File transports can be managed in <a href="/cgi-bin/koha/admin/file_transports.pl">Administration &rsaquo; File transports</a>. </div>
+                    </li>
+                </ol>
+            </fieldset>
+
+            <!-- Message Types -->
+            <fieldset class="rows">
+                <legend>Message Types</legend>
+                <ol>
                     <li>
                         <label for="quotes_enabled">Quotes enabled: </label>
                         [% IF account.quotes_enabled %]
@@ -212,6 +227,13 @@
                             <input type="checkbox" name="responses_enabled" id="responses_enabled" value="1" />
                         [% END %]
                     </li>
+                </ol>
+            </fieldset>
+
+            <!-- Functional Switches -->
+            <fieldset class="rows">
+                <legend>Functional Switches</legend>
+                <ol>
                     <li>
                         <label for="auto_orders">Automatic ordering: </label>
                         [% IF account.auto_orders %]
@@ -220,6 +242,18 @@
                             <input type="checkbox" name="auto_orders" id="auto_orders" value="1" />
                         [% END %]
                         <div class="hint"> With automatic ordering quotes generate orders without staff intervention. </div>
+                    </li>
+                    <li>
+                        <label for="po_is_basketname">Use purchase order numbers: </label>
+                        [% IF account.po_is_basketname %]
+                            <input type="checkbox" name="po_is_basketname" id="po_is_basketname" value="1" checked="checked" />
+                        [% ELSE %]
+                            <input type="checkbox" name="po_is_basketname" id="po_is_basketname" value="1" />
+                        [% END %]
+                        <div class="hint">
+                            When enabled, basket names are used as purchase order numbers. <br />For received QUOTE messages, we will use the RFF+ON field to populate the basket name. <br />For generated ORDER messages, we will use the
+                            basket name to populate the BGM segment.</div
+                        >
                     </li>
                 </ol>
             </fieldset>

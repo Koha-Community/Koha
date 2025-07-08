@@ -183,6 +183,22 @@ sub supplier_ean {
 
 }
 
+sub purchase_order_number {
+    my $self = shift;
+    foreach my $s ( @{ $self->{datasegs} } ) {
+        if ( $s->tag eq 'LIN' ) {
+            last;
+        }
+        if ( $s->tag eq 'RFF' ) {
+            my $qualifier = $s->elem( 0, 0 );
+            if ( $qualifier eq 'ON' ) {
+                return $s->elem( 0, 1 );
+            }
+        }
+    }
+    return;
+}
+
 sub lineitems {
     my $self = shift;
     if ( $self->{quotation_lines} ) {
@@ -279,6 +295,10 @@ Missing POD for buyer_ean.
 =head2 supplier_ean
 
 Missing POD for supplier_ean.
+
+=head2 purchase_order_number
+
+Missing POD for purchase_order_number.
 
 =head2 lineitems
 
