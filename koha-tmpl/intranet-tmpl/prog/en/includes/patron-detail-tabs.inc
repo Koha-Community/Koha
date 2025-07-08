@@ -5,71 +5,91 @@
 [% WRAPPER tabs id= "finesholdsissues" %]
     [% WRAPPER tabs_nav %]
         [% WRAPPER tab_item tabname= "checkouts" bt_active= 1 %]
-            <span>Checkouts</span> (<span class="checkout_count">[% issuecount || 0 | html %]</span>)
+            <span>Checkouts</span>
+            [% IF ( issuecount ) %]
+                <span class="checkout_count badge text-bg-info">[% issuecount || 0 | html %]</span>
+            [% END %]
         [% END %]
 
         [% IF relatives_issues_count %]
             [% WRAPPER tab_item tabname= "relatives-issues" %]
-                <span>Relatives' checkouts</span> ([% relatives_issues_count | html %])
+                <span>Relatives' checkouts</span>
+                [% IF ( relatives_issues_count ) %]
+                    <span class="badge text-bg-info">[% relatives_issues_count | html %]</span>
+                [% END %]
             [% END %]
         [% END %]
 
         [% IF ( guarantees_fines ) %]
             [% WRAPPER tab_item tabname= "guarantees_finesandcharges" %]
-                <span>Guarantees' charges</span> ([% guarantees_fines | $Price %])
+                <span>Guarantees' charges</span>
+                [% IF ( guarantees_fines ) %]
+                    <span class="badge text-bg-info">[% guarantees_fines | $Price %]</span>
+                [% END %]
             [% END %]
         [% END %]
 
         [% IF ( CAN_user_circulate_circulate_remaining_permissions ) %]
             [% WRAPPER tab_item tabname= "holds" %]
-                <span>Holds</span> ([% holds_count || 0 | html %])
+                <span>Holds</span>
+                [% IF ( holds_count ) %]
+                    <span class="badge text-bg-info">[% holds_count | html %]</span>
+                [% END %]
             [% END %]
             [% IF Koha.Preference('EnableBooking') %]
                 [% WRAPPER tab_item tabname="bookings" %]
                     [% SET bookings_count = patron.bookings.filter_by_active.count %]
                     [% SET expired_bookings_count = patron.bookings.count - bookings_count %]
-                    <span class="bookings_count">Bookings ([% bookings_count || 0 | html %])</span>
+                    <span>Bookings</span>
+                    [% IF ( bookings_count ) %]
+                        <span class="badge text-bg-info">[% bookings_count || 0 | html %]</span>
+                    [% END %]
                 [% END %]
             [% END %]
         [% END %]
 
         [% IF Koha.Preference('UseRecalls') %]
             [% WRAPPER tab_item tabname= "recalls" %]
-                <span>Recalls</span> ([% recalls.count || 0 | html %])
+                <span>Recalls</span>
+                [% IF ( recalls.count ) %]
+                    <span class="badge text-bg-info">[% recalls.count | html %]</span>
+                [% END %]
             [% END %]
         [% END %]
 
         [% IF Koha.Preference('ArticleRequests') %]
             [% SET article_requests = patron.article_requests.filter_by_current %]
             [% WRAPPER tab_item tabname= "article-requests" %]
-                <span>Article requests</span> ([% article_requests.count || 0 | html %])
+                <span>Article requests</span>
+                [% IF ( article_requests.count ) %]
+                    <span class="badge text-bg-info">[% article_requests.count | html %]</span>
+                [% END %]
             [% END %]
         [% END %]
 
         [% IF Koha.Preference('ClaimReturnedLostValue') || Koha.Preference('BundleLostValue') %]
             [% WRAPPER tab_item tabname= "return-claims" %]
                 <span>Claims</span>
-                [% IF ( patron.return_claims.count ) %]
-                    ([% IF patron.return_claims.resolved.count == 0 %]
-                        <span title="Resolved claims" class="badge text-bg-info" id="return-claims-count-resolved">[% patron.return_claims.resolved.count | html %]</span>
-                    [% ELSE %]
-                        <span title="Resolved claims" class="badge text-bg-info" id="return-claims-count-resolved">[% patron.return_claims.resolved.count | html %]</span>
-                    [% END %]
-                    [% IF patron.return_claims.unresolved.count == 0 %]
-                        <span title="Unresolved claims" class="badge text-bg-info" id="return-claims-count-unresolved">[% patron.return_claims.unresolved.count | html %]</span>
-                    [% ELSE %]
-                        <span title="Unresolved claims" class="badge text-bg-warning" id="return-claims-count-unresolved">[% patron.return_claims.unresolved.count | html %]</span>
-                    [% END %])
+                [% SET warning_threshold = Koha.Preference('ClaimReturnedWarningThreshold') %]
+                [% IF warning_threshold != '' && ( patron.return_claims.count > warning_threshold ) %]
+                    <span id="return-claims-count" title="Unresolved claims / Resolved claims" class="badge text-bg-warning">
+                        <span id="return-claims-count-unresolved" class="count-active" data-warning="[% warning_threshold | html %]">[% patron.return_claims.unresolved.count | html %]</span>
+                        <span id="return-claims-count-resolved" class="count-inactive">[% patron.return_claims.resolved.count | html %]</span>
+                    </span>
                 [% ELSE %]
-                    [% no_claims = 0 %]
-                    (<span title="Resolved claims" class="badge text-bg-info" id="return-claims-count-resolved">[% no_claims | html %]</span>
-                    <span title="Unresolved claims" class="badge text-bg-info" id="return-claims-count-unresolved">[% no_claims | html %]</span>)
-                [% END # /IF patron.return_claims.count %]
+                    <span id="return-claims-count" title="Unresolved claims" class="badge text-bg-info">
+                        <span id="return-claims-count-unresolved" class="count-active" data-warning="[% warning_threshold | html %]">[% patron.return_claims.unresolved.count || "" | html %]</span>
+                        <span id="return-claims-count-resolved" class="count-inactive">[% patron.return_claims.resolved.count || "" | html %]</span>
+                    </span>
+                [% END %]
             [% END # /WRAPPER tab_item return-claims %]
         [% END %]
 
         [% WRAPPER tab_item tabname= "reldebarments" %]
-            <span>Restrictions ([% patron.restrictions.count || 0 | html %])</span>
+            <span>Restrictions</span>
+            [% IF ( patron.restrictions.count ) %]
+                <span class="badge text-bg-danger">[% patron.restrictions.count | html %]</span>
+            [% END %]
         [% END %]
 
         [% SET enrollments = patron.get_club_enrollments %]
@@ -77,13 +97,19 @@
         <!-- 0 => not OPAC -->
         [% IF CAN_user_clubs && ( enrollable.count || enrollments.count ) %]
             [% WRAPPER tab_item tabname= "clubs" %]
-                <span>Clubs ([% enrollments.count | html %]/[% enrollable.count | html %])</span>
+                <span>Clubs</span>
+                <span id="clubs-count" title="Club enrollments" class="badge text-bg-info">
+                    <span id="clubs-count-enrolled" class="count-active">[% enrollments.count || "" | html %]</span>
+                </span>
             [% END %]
         [% END %]
 
         [% IF CAN_user_tools_manage_patron_lists || patron_lists_count %]
             [% WRAPPER tab_item tabname="pat_lists" %]
-                <span>Patron lists ([% patron_lists_count | html %])</span>
+                <span>Patron lists</span>
+                <span id="patron-lists" title="Lists containing this patron" class="badge text-bg-info">
+                    <span id="patron-lists-count">[%~ patron_lists_count || "" | html ~%]</span>
+                </span>
             [% END %]
         [% END %]
     [% END # /WRAPPER tabs_nav %]

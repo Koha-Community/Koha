@@ -1567,22 +1567,6 @@ $(document).ready(function () {
                     url: "/cgi-bin/koha/svc/return_claims?borrowernumber=%s".format(
                         borrowernumber
                     ),
-                    complete: function (json) {
-                        let resolved = json.resolved;
-                        let unresolved = json.unresolved;
-
-                        if (unresolved > 0) {
-                            $("#return-claims-count-unresolved")
-                                .text(unresolved)
-                                .removeClass("text-bg-info")
-                                .addClass("text-bg-warning");
-                        } else {
-                            $("#return-claims-count-unresolved")
-                                .text(unresolved)
-                                .removeClass("text-bg-warning")
-                                .addClass("text-bg-info");
-                        }
-                    },
                 },
                 bKohaAjaxSVC: true,
                 search: { search: "is_unresolved" },

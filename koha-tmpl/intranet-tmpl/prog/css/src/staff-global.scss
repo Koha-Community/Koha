@@ -4385,6 +4385,48 @@ div .suggestion_note {
     }
 }
 
+.nav.nav-tabs > li > a {
+    align-items: center;
+    display: flex;
+    gap: 5px;
+
+    span[class*="badge"] {
+        color: #000;
+        font-size: 85%;
+        font-weight: bold;
+
+        &.text-bg-info {
+            background-color: #9BD6E8;
+        }
+
+        &.text-bg-danger {
+            background-color: #FF7873;
+        }
+
+        &:has( span:empty + span:empty ), /* If the element contains two empty spans */
+        &:has( span:only-child:empty ) { /* If the element contains only one span and it is empty */
+            background-color: transparent;
+            padding: 0;
+        }
+
+        &:has( span + span:empty ) { /* If the element has a non-empty span followed by an empty one, reset style */
+            background-color: #9BD6E8;
+        }
+    }
+}
+
+.count-active { /* Add separator between two counts in a tab */
+    & + .count-inactive {
+        &:empty::before {
+            content: "";
+        }
+
+        &::before {
+            content: " / ";
+        }
+    }
+}
+
 .ac-library {
     background-color: #EEE !important;
     font-weight: normal;
