@@ -983,7 +983,7 @@ subtest do_checkout_with_patron_blocked => sub {
 };
 
 subtest do_checkout_with_noblock => sub {
-    plan tests => 1;
+    plan tests => 3;
 
     my $mockILS = Test::MockObject->new;
     my $server  = { ils => $mockILS };
@@ -1032,6 +1032,25 @@ subtest do_checkout_with_noblock => sub {
     is(
         $patron->checkouts->count,
         1, 'No Block checkout was performed for debarred patron'
+    );
+
+    # Test Bug 32934: SIP checkout with no_block_due_date should honor the specified due date
+    $sip_patron = C4::SIP::ILS::Patron->new( $patron->cardnumber );
+    my $sip_item_2  = C4::SIP::ILS::Item->new( $item->barcode );
+    my $transaction = C4::SIP::ILS::Transaction::Checkout->new();
+
+    $transaction->patron($sip_patron);
+    $transaction->item($sip_item_2);
+
+    # Set no_block_due_date to test the fix (YYYYMMDDZZZZHHMMSS)
+    my $expected_due_date = '20250115    000000';
+    my $checkout_result   = $transaction->do_checkout( undef, $expected_due_date );
+
+    my $checkout_obj = $patron->checkouts->find( { itemnumber => $item->itemnumber } );
+    isnt( $checkout_obj, undef, 'Checkout object exists after no block checkout' );
+    like(
+        dt_from_string( $checkout_obj->date_due )->ymd(''), qr/^20250115/,
+        'No block due date is honored in SIP checkout'
     );
 };
 
