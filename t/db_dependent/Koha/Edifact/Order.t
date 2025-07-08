@@ -20,7 +20,7 @@
 use Modern::Perl;
 
 use Test::NoWarnings;
-use Test::More tests => 4;
+use Test::More tests => 5;
 
 use Koha::Edifact::Order;
 
@@ -32,7 +32,7 @@ my $schema = Koha::Database->new->schema;
 my $builder = t::lib::TestBuilder->new;
 
 subtest 'beggining_of_message tests' => sub {
-    plan tests => 2;
+    plan tests => 3;
 
     $schema->storage->txn_begin;
 
@@ -53,6 +53,15 @@ subtest 'beggining_of_message tests' => sub {
     $dbic_edi_vendor->update( { standard => 'BIC' } );
     $bgm = Koha::Edifact::Order::beginning_of_message( $basketno, $dbic_edi_vendor->standard, 1 );
     is( $bgm, qq{BGM+22V+$basketno+9'}, "When vendor is set to BiC standard we use 22V in BGM segment" );
+
+    # Test BGM with purchase order number
+    my $purchase_order_number = 'PO123456789';
+    $bgm =
+        Koha::Edifact::Order::beginning_of_message( $basketno, $dbic_edi_vendor->standard, 1, $purchase_order_number );
+    is(
+        $bgm, qq{BGM+22V+$purchase_order_number+9'},
+        "When purchase order number provided, it's used in BGM segment instead of basketno"
+    );
 
     $schema->storage->txn_rollback;
 };
@@ -264,10 +273,12 @@ subtest 'filename() tests' => sub {
 
     my @orders = $schema->resultset('Aqorder')->search( { basketno => $order->basket->basketno } )->all;
 
+    my $dbic_vendor = $schema->resultset('VendorEdiAccount')->find( $vendor->{id} );
+
     my $edi_order = Koha::Edifact::Order->new(
         {
             orderlines => \@orders,
-            vendor     => $vendor,
+            vendor     => $dbic_vendor,
             ean        => $ean
         }
     );
@@ -276,6 +287,142 @@ subtest 'filename() tests' => sub {
     is(
         $edi_order->filename, $expected_filename,
         'Filename is formed from the basket number'
+    );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'RFF+ON purchase order number generation' => sub {
+    plan tests => 3;
+
+    $schema->storage->txn_begin;
+
+    # Create vendor with po_is_basketname set to true
+    my $vendor_po = $builder->build(
+        {
+            source => 'VendorEdiAccount',
+            value  => {
+                description      => 'Test vendor PO mode',
+                po_is_basketname => 1,
+                standard         => 'EUR',
+            }
+        }
+    );
+
+    # Create vendor with po_is_basketname set to false (default)
+    my $vendor_filename = $builder->build(
+        {
+            source => 'VendorEdiAccount',
+            value  => {
+                description      => 'Test vendor filename mode',
+                po_is_basketname => 0,
+                standard         => 'EUR',
+            }
+        }
+    );
+
+    # Create baskets with different naming schemes
+    my $basket_po = $builder->build(
+        {
+            source => 'Aqbasket',
+            value  => {
+                basketname   => 'PO123456789',             # Purchase order number
+                booksellerid => $vendor_po->{vendor_id},
+            }
+        }
+    );
+
+    my $basket_filename = $builder->build(
+        {
+            source => 'Aqbasket',
+            value  => {
+                basketname   => 'quote_file.ceq',                # Filename
+                booksellerid => $vendor_filename->{vendor_id},
+            }
+        }
+    );
+
+    # Create biblio records for the orders
+    my $biblio_po       = $builder->build_sample_biblio();
+    my $biblio_filename = $builder->build_sample_biblio();
+
+    # Create orders for the baskets
+    my $order_po = $builder->build(
+        {
+            source => 'Aqorder',
+            value  => {
+                basketno     => $basket_po->{basketno},
+                biblionumber => $biblio_po->biblionumber,
+                orderstatus  => 'new',
+                quantity     => 1,
+                listprice    => '10.00',
+            }
+        }
+    );
+
+    my $order_filename = $builder->build(
+        {
+            source => 'Aqorder',
+            value  => {
+                basketno     => $basket_filename->{basketno},
+                biblionumber => $biblio_filename->biblionumber,
+                orderstatus  => 'new',
+                quantity     => 1,
+                listprice    => '10.00',
+            }
+        }
+    );
+
+    # Create EAN object
+    my $ean = $builder->build(
+        {
+            source => 'EdifactEan',
+            value  => { ean => '1234567890123' }
+        }
+    );
+
+    # Get database objects
+    my $dbic_vendor_po       = $schema->resultset('VendorEdiAccount')->find( $vendor_po->{id} );
+    my $dbic_vendor_filename = $schema->resultset('VendorEdiAccount')->find( $vendor_filename->{id} );
+    my $dbic_ean             = $schema->resultset('EdifactEan')->find( $ean->{ee_id} );
+    my @orderlines_po        = $schema->resultset('Aqorder')->search( { basketno => $basket_po->{basketno} } );
+    my @orderlines_filename  = $schema->resultset('Aqorder')->search( { basketno => $basket_filename->{basketno} } );
+
+    # Test order generation with purchase order number
+    my $order_obj_po = Koha::Edifact::Order->new(
+        {
+            orderlines => \@orderlines_po,
+            vendor     => $dbic_vendor_po,
+            ean        => $dbic_ean,
+        }
+    );
+
+    # Test order generation with filename
+    my $order_obj_filename = Koha::Edifact::Order->new(
+        {
+            orderlines => \@orderlines_filename,
+            vendor     => $dbic_vendor_filename,
+            ean        => $dbic_ean,
+        }
+    );
+
+    # Test that purchase order number is extracted correctly
+    is(
+        $order_obj_po->purchase_order_number, 'PO123456789',
+        'Purchase order number extracted from basket name when vendor configured for PO mode'
+    );
+
+    # Test that no purchase order number is extracted when vendor uses filename mode
+    is(
+        $order_obj_filename->purchase_order_number, undef,
+        'No purchase order number when vendor configured for filename mode'
+    );
+
+    # Test that purchase order number is included in BGM segment when purchase order number present
+    my $transmission = $order_obj_po->encode();
+    like(
+        $transmission, qr/BGM\+220\+PO123456789\+9'/,
+        'Purchase order number included in BGM segment when purchase order number present'
     );
 
     $schema->storage->txn_rollback;

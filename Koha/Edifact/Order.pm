@@ -263,7 +263,8 @@ sub order_msg_header {
         beginning_of_message(
         $self->{basket}->basketno,
         $self->{recipient}->standard,
-        $self->{is_response}
+        $self->{is_response},
+        $self->purchase_order_number
         );
 
     # DTM
@@ -295,10 +296,13 @@ sub order_msg_header {
 }
 
 sub beginning_of_message {
-    my $basketno            = shift;
-    my $standard            = shift;
-    my $response            = shift;
-    my $document_message_no = sprintf '%011d', $basketno;
+    my $basketno              = shift;
+    my $standard              = shift;
+    my $response              = shift;
+    my $purchase_order_number = shift;
+
+    # Use purchase order number if available, otherwise use basketno
+    my $document_message_no = $purchase_order_number ? $purchase_order_number : sprintf '%011d', $basketno;
 
     #    my $message_function = 9;    # original 7 = retransmission
     # message_code values
@@ -330,6 +334,19 @@ sub name_and_address {
     }
 
     return "NAD+$qualifier_code{$party}+${id_code}::$id_agency$seg_terminator";
+}
+
+sub purchase_order_number {
+    my $self = shift;
+
+    # If the vendor EDI account is configured to use purchase order numbers for basket names,
+    # then the basket name IS the purchase order number
+    my $vendor_config = $self->{recipient};
+    if ( $vendor_config && $vendor_config->po_is_basketname ) {
+        return $self->{basket}->basketname;
+    }
+
+    return;
 }
 
 sub order_line {
@@ -804,6 +821,10 @@ Make handling of GIR segments more customizable
     Returns a NAD segment containing the id and agency for for the Function
     value. Handles the fact that NAD segments encode the value for 'EAN' differently
     to elsewhere.
+
+=head2 purchase_order_number
+
+    Returns the purchase_order_number given the edi vendor configuration
 
 =head2 order_line
 
