@@ -288,7 +288,7 @@ describe("kohaTable (using REST API)", () => {
             });
         });
 
-        it.only("Jump to the configuration page", () => {
+        it("Jump to the configuration page", () => {
             cy.visit("/cgi-bin/koha/admin/branches.pl");
             cy.get(`#${table_id}_wrapper .dt_button_configure_table`).click();
             cy.url().should("contain", "module=admin");
