@@ -4,10 +4,13 @@ use warnings;
 use FindBin qw( $Bin );
 
 use Test::NoWarnings;
-use Test::More tests => 42;
+use Test::More tests => 46;
 use Koha::EDI;
 
-BEGIN { use_ok('Koha::Edifact') }
+BEGIN {
+    use_ok('Koha::Edifact');
+    use_ok('Koha::Edifact::Message');
+}
 
 my $filename = "$Bin/edi_testfiles/prquotes_73050_20140430.CEQ";
 
@@ -139,3 +142,70 @@ is( $dp, 9.0, 'Discount calculated with discount = 0' );
 
 $dp = Koha::EDI::_discounted_price( 0.0, 9, 8.0 );
 is( $dp, 8.0, 'Discount overridden by incoming calculated value' );
+
+# Test RFF+ON (Purchase Order Number) segment handling in EDIFACT messages
+# Bug 20253: Optionally use buyer's purchase order number from EDIFACT quote in basket name
+
+# Mock segment class for testing RFF+ON functionality
+{
+
+    package MockSegment;
+
+    sub new {
+        my ( $class, $tag, $elements ) = @_;
+        return bless { tag => $tag, elements => $elements }, $class;
+    }
+
+    sub tag {
+        my $self = shift;
+        return $self->{tag};
+    }
+
+    sub elem {
+        my ( $self, $comp_pos, $elem_pos ) = @_;
+        return $self->{elements}->[$comp_pos]->[ $elem_pos // 0 ];
+    }
+}
+
+# Test that message-level purchase order number is extracted correctly
+my @datasegs = (
+    MockSegment->new( 'NAD', [ ['BY'], [ '5030670137480', '', '', 'Buyer Name' ] ] ),
+    MockSegment->new( 'RFF', [ [ 'ON', 'MSG_PO_12345' ] ] ),    # Message-level purchase order number
+    MockSegment->new( 'NAD', [ ['SU'], [ '5013546027856', '', '', 'Supplier Name' ] ] ),
+    MockSegment->new( 'LIN', [ ['1'], [ '', '' ], [ '9780123456789', 'EN' ] ] ),           # First line item
+    MockSegment->new( 'QTY', [ [ '47', '1' ] ] ),
+);
+
+my $header = MockSegment->new( 'UNH', [ ['MQ09791'], [ 'QUOTES', 'D', '03B', 'UN', 'EAN008' ] ] );
+my $bgm    = MockSegment->new( 'BGM', [ [ '310', 'Q741588', '9' ] ] );
+
+my $message = Koha::Edifact::Message->new( [ $header, $bgm, @datasegs ] );
+is(
+    $message->purchase_order_number, 'MSG_PO_12345',
+    'Message-level purchase order number extracted from RFF+ON segment'
+);
+
+# Test that RFF+ON processing stops at first LIN segment (message-level only)
+@datasegs = (
+    MockSegment->new( 'NAD', [ ['BY'], [ '5030670137480', '', '', 'Buyer Name' ] ] ),
+    MockSegment->new( 'LIN', [ ['1'], [ '', '' ], [ '9780123456789', 'EN' ] ] ),        # First LIN
+    MockSegment->new( 'RFF', [ [ 'ON', 'AFTER_LIN_PO' ] ] ),    # This should be ignored (line-level)
+    MockSegment->new( 'QTY', [ [ '47', '1' ] ] ),
+);
+
+$message = Koha::Edifact::Message->new( [ $header, $bgm, @datasegs ] );
+is( $message->purchase_order_number, undef, 'RFF+ON after LIN segment is ignored (message-level only)' );
+
+# Test that correct RFF+ON is extracted when multiple RFF segments are present
+@datasegs = (
+    MockSegment->new( 'NAD', [ ['BY'], [ '5030670137480', '', '', 'Buyer Name' ] ] ),
+    MockSegment->new( 'RFF', [ [ 'QLI', 'QUOTE_REF_123' ] ] ),     # Different RFF qualifier
+    MockSegment->new( 'RFF', [ [ 'ON',  'CORRECT_PO_NUM' ] ] ),    # Purchase order number
+    MockSegment->new( 'RFF', [ [ 'CT',  'CONTRACT_456' ] ] ),      # Another different RFF qualifier
+    MockSegment->new( 'NAD', [ ['SU'], [ '5013546027856', '', '', 'Supplier Name' ] ] ),
+    MockSegment->new( 'LIN', [ ['1'], [ '', '' ], [ '9780123456789', 'EN' ] ] ),
+    MockSegment->new( 'QTY', [ [ '47', '1' ] ] ),
+);
+
+$message = Koha::Edifact::Message->new( [ $header, $bgm, @datasegs ] );
+is( $message->purchase_order_number, 'CORRECT_PO_NUM', 'Correct RFF+ON extracted when multiple RFF segments present' );

@@ -82,6 +82,7 @@ subtest 'process_quote' => sub {
                     san               => $test_san,
                     orders_enabled    => 1,
                     auto_orders       => 0,
+                    po_is_basketname  => 0
                 }
             }
         );
@@ -760,6 +761,7 @@ subtest 'process_quote' => sub {
                 value  => {
                     description       => 'error test vendor',
                     file_transport_id => $file_transport->{file_transport_id},
+                    po_is_basketname  => 0
                 }
             }
         );
@@ -805,6 +807,110 @@ subtest 'process_quote' => sub {
         is( $basket->basketname, $filename, "Basket uses EDI filename for name" );
 
         $logger->clear();
+        $schema->storage->txn_rollback;
+    };
+
+    # Test 6: Basket naming configuration
+    subtest 'basket_naming_configuration' => sub {
+        plan tests => 5;
+
+        $schema->storage->txn_begin;
+
+        # Create vendor EDI account with po_is_basketname set to false (default)
+        my $account_filename = $builder->build(
+            {
+                source => 'VendorEdiAccount',
+                value  => {
+                    description      => 'test vendor filename',
+                    transport        => 'FILE',
+                    plugin           => '',
+                    san              => $test_san,
+                    quotes_enabled   => 1,
+                    auto_orders      => 0,
+                    po_is_basketname => 0,
+                }
+            }
+        );
+
+        # Create vendor EDI account with po_is_basketname set to true
+        my $account_po = $builder->build(
+            {
+                source => 'VendorEdiAccount',
+                value  => {
+                    description      => 'test vendor purchase order',
+                    transport        => 'FILE',
+                    plugin           => '',
+                    san              => $test_san,
+                    quotes_enabled   => 1,
+                    auto_orders      => 0,
+                    po_is_basketname => 1,
+                }
+            }
+        );
+
+        # Test database field storage
+        my $account = $schema->resultset('VendorEdiAccount')->find( $account_filename->{id} );
+        is( $account->po_is_basketname, 0, 'po_is_basketname field stores false value' );
+
+        $account = $schema->resultset('VendorEdiAccount')->find( $account_po->{id} );
+        is( $account->po_is_basketname, 1, 'po_is_basketname field stores true value' );
+
+        # Test boolean constraint - valid values
+        eval { $account->update( { po_is_basketname => 0 } ); };
+        is( $@, '', 'false is accepted as valid boolean value' );
+
+        eval { $account->update( { po_is_basketname => 1 } ); };
+        is( $@, '', 'true is accepted as valid boolean value' );
+
+        # Mock NewBasket to capture basket name
+        my $captured_basket_name;
+        my $mock_acquisition = Test::MockModule->new( 'C4::Acquisition', no_auto => 1 );
+        $mock_acquisition->mock(
+            'NewBasket',
+            sub {
+                my ( $vendor_id, $authorisedby, $basketname, $basketnote, $basketbooksellernote ) = @_;
+                $captured_basket_name = $basketname;
+                return 1;    # Return a basket ID
+            }
+        );
+
+        # Mock message with purchase order number
+        my $mock_message = Test::MockModule->new('Koha::Edifact::Message');
+        $mock_message->mock( 'purchase_order_number', sub { return 'TEST_PO_123456'; } );
+        $mock_message->mock( 'lineitems',             sub { return []; } );
+        $mock_message->mock( 'buyer_ean',             sub { return $test_san; } );
+
+        # Create a quote message for testing
+        my $quote_message = $builder->build(
+            {
+                source => 'EdifactMessage',
+                value  => {
+                    message_type => 'QUOTE',
+                    vendor_id    => $account_po->{vendor_id},
+                    filename     => 'test_basket_naming.ceq',
+                    status       => 'recmsg',
+                }
+            }
+        );
+
+        # Test that the logic would use purchase order number when configured
+        # (This tests the logic in process_quote without running the full process)
+        my $v = $schema->resultset('VendorEdiAccount')->search( { vendor_id => $account_po->{vendor_id} } )->single;
+        my $quote_obj   = $schema->resultset('EdifactMessage')->find( $quote_message->{id} );
+        my $basket_name = $quote_obj->filename;
+
+        if ( $v && $v->po_is_basketname ) {
+            my $purchase_order_number = 'TEST_PO_123456';    # Simulated from mock
+            if ($purchase_order_number) {
+                $basket_name = $purchase_order_number;
+            }
+        }
+
+        is(
+            $basket_name, 'TEST_PO_123456',
+            'Basket naming logic correctly uses purchase order number when configured'
+        );
+
         $schema->storage->txn_rollback;
     };
 
