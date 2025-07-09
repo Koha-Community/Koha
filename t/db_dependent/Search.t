@@ -170,6 +170,8 @@ $contextmodule->mock(
             return q{};
         } elsif ( $pref eq 'COinSinOPACResults' ) {
             return q{};
+        } elsif ( $pref eq 'FacetSortingLocale' ) {
+            return 'default';
         } else {
             warn
                 "The syspref $pref was requested but I don't know what to say; this indicates that the test requires updating"
