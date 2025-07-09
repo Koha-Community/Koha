@@ -2046,31 +2046,7 @@ modules:
               columnname: suspend
             -
               columnname: print_slip
-      holds_to_modify:
-        default_display_length: 20
-        columns:
-            -
-              columnname: checkbox
-              cannot_be_toggled: 1
-              cannot_be_modified: 1
-            -
-              columnname: expiration_date
-            -
-              columnname: title
-            -
-              columnname: barcode
-            -
-              columnname: patron
-            -
-              columnname: status
-            -
-              columnname: pickup_library
-            -
-              columnname: suspended
-            -
-              columnname: suspended_until
-            -
-              columnname: notes
+
       modified_holds:
         default_display_length: 20
         columns:
@@ -2522,6 +2498,35 @@ modules:
               columnname: batch_patron_edit_debarred
             -
               columnname: batch_patron_edit_debarredcomment
+
+    batch_hold_modification:
+      holds_to_modify:
+        default_display_length: 20
+        columns:
+            -
+              columnname: batch_hold_edit_selections
+              cannot_be_toggled: 1
+              cannot_be_modified: 1
+            -
+              columnname: batch_hold_edit_hold_date
+            -
+              columnname: batch_hold_edit_expiration_date
+            -
+              columnname: batch_hold_edit_title
+            -
+              columnname: batch_hold_edit_barcode
+            -
+              columnname: batch_hold_edit_patron
+            -
+              columnname: batch_hold_edit_status
+            -
+              columnname: batch_hold_edit_hold_pickup_library
+            -
+              columnname: batch_hold_edit_suspended
+            -
+              columnname: batch_hold_edit_suspended_until
+            -
+              columnname: batch_hold_edit_note
 
     logviewer:
       logst:
