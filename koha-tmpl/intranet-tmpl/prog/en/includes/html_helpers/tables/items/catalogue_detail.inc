@@ -296,6 +296,17 @@
             holdings: "[% PROCESS 'build_table' tab="holdings" | collapse | $tojson %]",
             otherholdings: "[% PROCESS 'build_table' tab="otherholdings" | collapse | $tojson %]",
         };
+
+        const branchcodes = {
+          [% FOREACH key IN branchcodes.keys %]
+            "[% key | html %]": [
+              [% FOREACH code IN branchcodes.$key %]
+                "[% code | html %]"[% UNLESS loop.last %], [% END %]
+              [% END %]
+            ][% UNLESS loop.last %], [% END %]
+          [% END %]
+        };
+
         function build_items_table (tab_id, add_filters, dt_options, drawcallback) {
 
             let table_dt;
@@ -318,6 +329,19 @@
                     default_filters[branch] = '[% Branches.GetLoggedInBranchcode() | html %]';
                 } else {
                     default_filters[branch] = { '!=': '[% Branches.GetLoggedInBranchcode() | html  %]' };
+                }
+            [% END %]
+
+            [% IF Koha.Preference('SeparateHoldingsByGroup') %]
+                if ( tab_id.includes('group_holdings') ) {
+                    user_colvis[tab_id] = {};
+                    items_table_settings[tab_id] = [% TablesSettings.GetTableSettings('catalogue', 'detail','otherholdings_table','json')  | $raw %];
+
+                    const id = tab_id.replace("group_holdings_", "");
+
+                    let branch = '[% IF SeparateHoldingsBranch == 'homebranch' %]me.home_library_id[% ELSE %]me.holding_library_id[% END %]';
+                    default_filters[branch] = branchcodes[id];
+
                 }
             [% END %]
 

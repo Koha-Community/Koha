@@ -337,6 +337,16 @@
                     <span>Holdings ([% items_to_display_count || 0 | html %])</span>
                 [% END %]
             [% END %]
+            [% IF Koha.Preference('SeparateHoldingsByGroup') && lib_groups %]
+                [% FOREACH group IN lib_groups %]
+                    [% IF ( holdings_count.${group.id} > 0 ) %]
+                        [% WRAPPER tab_item tabname="group_holdings_" _ group.id %]
+                            <span>[% group.title | html %] - Group ([% holdings_count.${group.id} | html %])</span>
+                        [% END %]
+                    [% END %]
+                [% END %]
+            [% END %]
+
             [% IF Koha.Preference('EnableItemGroups') %]
                 [% WRAPPER tab_item tabname= "item_groups" %]
                     <span>Item groups</span>
@@ -475,6 +485,16 @@
                 [% WRAPPER tab_panel tabname="otherholdings" %]
                     [% PROCESS items_table tab="otherholdings" %]
                 [% END # /tab_panel %]
+            [% END %]
+            [% IF Koha.Preference('SeparateHoldingsByGroup') && lib_groups %]
+                [% FOREACH group IN lib_groups %]
+                    [% IF ( holdings_count.${group.id} > 0 ) %]
+                        [% SET group_tab = "group_holdings_" _ group.id %]
+                        [% WRAPPER tab_panel tabname=group_tab %]
+                            [% PROCESS items_table tab=group_tab %]
+                        [% END # /tab_panel %]
+                    [% END %]
+                [% END %]
             [% END %]
 
             [% IF ( MARCNOTES ) %]
@@ -1734,7 +1754,15 @@
             var bundle_lost_value = [% Koha.Preference('BundleLostValue') | html %];
         [% END %]
 
-        let items_tab_ids = [ 'holdings', 'otherholdings' ];
+        let items_tab_ids = [
+            'holdings',
+            'otherholdings'
+            [% IF Koha.Preference('SeparateHoldingsByGroup') && lib_groups %]
+                [% FOREACH group IN lib_groups %]
+                , 'group_holdings_[% group.id | html %]'
+                [% END %]
+            [% END %]
+        ];
         items_tab_ids.forEach( function( tab_id, index ) {
 
             // Early return if the tab is not shown (ie. no table)

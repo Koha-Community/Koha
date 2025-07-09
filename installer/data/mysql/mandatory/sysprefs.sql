@@ -737,6 +737,7 @@ INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `
 ('SendAllEmailsTo','',NULL,'All emails will be redirected to this email if it is not empty','free'),
 ('SeparateHoldings','0',NULL,'Separate current branch holdings from other holdings','YesNo'),
 ('SeparateHoldingsBranch','homebranch','homebranch|holdingbranch','Branch used to separate holdings','Choice'),
+('SeparateHoldingsByGroup','0',NULL,'Separate current branch holdings and holdings from libraries in the same library groups','YesNo'),
 ('SerialsDefaultEmailAddress', '', NULL, 'Default email address used as reply-to for notices sent by the serials module.', 'Free'),
 ('SerialsDefaultReplyTo', '', NULL, 'Default email address that serials notices are sent from.', 'Free'),
 ('SerialsSearchResultsLimit', '', NULL, 'Serials search results limit', 'integer'),

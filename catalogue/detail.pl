@@ -60,6 +60,8 @@ use Koha::Reviews;
 use Koha::SearchEngine::Search;
 use Koha::SearchEngine::QueryBuilder;
 use Koha::Serial::Items;
+use Koha::Library::Group;
+use Koha::Library::Groups;
 
 my $query = CGI->new();
 
@@ -336,6 +338,51 @@ if ( C4::Context->preference('SeparateHoldings') ) {
         $items_to_display->search( { $SeparateHoldingsBranch => { '!=' => C4::Context->userenv->{branch} } } )->count;
     $template->param( other_holdings_count => $other_holdings_count );
 }
+
+if ( C4::Context->preference('SeparateHoldingsByGroup') ) {
+    my $branchcode        = C4::Context->userenv->{branch};
+    my @all_search_groups = Koha::Library::Groups->get_search_groups( { interface => 'staff' } );
+    my @lib_groups;
+    my %branchcode_hash;
+    my %holdings_count;
+
+    foreach my $search_group (@all_search_groups) {
+        while ( my $group = $search_group->next ) {
+            my @all_libs = $group->all_libraries;
+
+            # Check if library is in group
+            if ( grep { $_->branchcode eq $branchcode } @all_libs ) {
+
+                # Get other libraries in group
+                my @other_libs = grep { $_->branchcode ne $branchcode } @all_libs;
+                my @libs_branchcodes;
+
+                foreach my $lib (@other_libs) {
+                    push @libs_branchcodes, $lib->branchcode;
+                }
+
+                # Push logged in branchcode
+                push @libs_branchcodes, $branchcode;
+
+                # Build group branchcode hash
+                $branchcode_hash{ $group->id } = \@libs_branchcodes;
+
+                my $group_holdings_count =
+                    $items_to_display->search( { homebranch => { '-in' => \@libs_branchcodes } } )->count;
+                $holdings_count{ $group->id } = $group_holdings_count;
+
+                push @lib_groups, $group;
+            }
+        }
+    }
+
+    $template->param(
+        lib_groups     => \@lib_groups,
+        branchcodes    => \%branchcode_hash,
+        holdings_count => \%holdings_count,
+    );
+}
+
 $template->param(
     count                  => $all_items->count,         # FIXME 'count' is used in catalog-strings.inc
                                                          # But it's not a meaningful variable, we should rename it there
