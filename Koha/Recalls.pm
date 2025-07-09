@@ -152,8 +152,13 @@ sub add_recall {
                 second => $checkout_due_date->second
             }
         )->add( days => $due_interval );
-        $checkout->update( { date_due => $recall_due_date } )
-            if DateTime->compare( $recall_due_date, $checkout_due_date ) == -1;
+
+        # update checkout due date if recall due date is sooner
+        if ( DateTime->compare( $recall_due_date, $checkout_due_date ) == -1 ) {
+            $checkout->update( { date_due => $recall_due_date } );
+            $checkout->item->onloan( $recall_due_date->ymd() );
+            $checkout->item->store( { log_action => 0, skip_holds_queue => 1 } );
+        }
 
         # get itemnumber of most relevant checkout if a biblio-level recall
         unless ( $recall->item_level ) { $itemnumber = $checkout->itemnumber; }
