@@ -39,28 +39,31 @@ my ( $template, $loggedinuser, $cookie, $flags ) = get_template_and_user(
     }
 );
 
-my $params         = $query->Vars;
-my $run_report     = $params->{'run_report'};
-my $branchlimit    = $params->{'branchlimit'};
-my $itemtypeslimit = $params->{'itemtypeslimit'};
-my $ccodeslimit    = $params->{'ccodeslimit'};
-my $locationslimit = $params->{'locationslimit'};
+my $params          = $query->Vars;
+my $run_report      = $params->{'run_report'};
+my $branchlimit     = $params->{'branchlimit'};
+my $itemtypeslimit  = $params->{'itemtypeslimit'};
+my @locationslimits = $query->multi_param('locationslimit');
+my @ccodeslimits    = $query->multi_param('ccodeslimit');
+
+my $locationslimit = @locationslimits ? \@locationslimits : undef;
+my $ccodeslimit    = @ccodeslimits    ? \@ccodeslimits    : undef;
 
 if ($run_report) {
     my $items = GetHoldsQueueItems(
         {
             branchlimit    => $branchlimit,
             itemtypeslimit => $itemtypeslimit,
-            ccodeslimit    => $ccodeslimit,
-            locationslimit => $locationslimit
+            ccodeslimit    => $locationslimit,
+            locationslimit => $ccodeslimit,
         }
     );
 
     $template->param(
         branchlimit    => $branchlimit,
         itemtypeslimit => $itemtypeslimit,
-        ccodeslimit    => $ccodeslimit,
-        locationslimit => $locationslimit,
+        ccodeslimit    => $locationslimit,
+        locationslimit => $ccodeslimit,
         total          => $items->count,
         itemsloop      => $items,
         run_report     => $run_report,

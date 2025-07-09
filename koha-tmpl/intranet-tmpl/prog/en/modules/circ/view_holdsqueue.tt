@@ -20,6 +20,14 @@
     p {
         margin-top: 0;
     }
+    #locationslimit + .select2-container,
+    #itemtypeslimit + .select2-container {
+        max-width: 300px !important;
+    }
+    .main .col-md-10 #branchlimit,
+    .main .col-md-10 #itemtypeslimit {
+        width: 300px;
+    }
 </style>
 </head>
 
@@ -69,8 +77,25 @@
                                     >[% total | html %] <span>items found for</span>
                                     [% IF ( branchlimit ) %][% Branches.GetName( branchlimit ) | html %][% ELSE %]<span>All libraries</span>[% END %]
                                     [% IF ( itemtypeslimit ) %]<span>and item type: [% ItemTypes.GetDescription( itemtypeslimit ) | html %]</span>[% END %]
-                                    [% IF ( ccodeslimit ) %]<span>and collection: [% AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.ccode' authorised_value = ccodeslimit ) | html %]</span>[% END %]
-                                    [% IF ( locationslimit ) %]<span>and shelving location: [% AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.location' authorised_value = locationslimit ) | html %]</span>[% END %]
+                                    [% IF ( ccodeslimit ) %]
+                                        <span
+                                            >and collection:
+                                            [% FOREACH ccode IN ccodeslimit %]
+                                                [% AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.ccode' authorised_value = ccode ) | html %]
+                                                [% UNLESS loop.last %],[% END %]
+                                            [% END %]
+                                        </span>
+                                    [% END %]
+
+                                    [% IF ( locationslimit ) %]
+                                        <span
+                                            >and shelving location:
+                                            [% FOREACH loc IN locationslimit %]
+                                                [% AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.location' authorised_value = loc ) | html %]
+                                                [% UNLESS loop.last %],[% END %]
+                                            [% END %]
+                                        </span>
+                                    [% END %]
                                 </div>
                             [% ELSE %]
                                 <div class="alert alert-info">No items found.</div>
@@ -328,16 +353,16 @@
                 </li>
                 <li>
                     <label for="ccodeslimit">Collection: </label>
-                    <select name="ccodeslimit" id="ccodeslimit">
+                    <select name="ccodeslimit" id="ccodeslimit" multiple="multiple">
                         <option value="">All</option>
-                        [% PROCESS options_for_authorised_values authorised_values => AuthorisedValues.GetAuthValueDropbox( 'CCODE' ), selected_av => ccodeslimit %]
+                        [% PROCESS options_for_authorised_values_multiselect authorised_values => AuthorisedValues.GetAuthValueDropbox( 'CCODE' ), selected_av => ccodeslimit %]
                     </select>
                 </li>
                 <li>
                     <label for="locationslimit">Shelving location: </label>
-                    <select name="locationslimit" id="locationslimit">
+                    <select name="locationslimit" id="locationslimit" multiple="multiple">
                         <option value="">All</option>
-                        [% PROCESS options_for_authorised_values authorised_values => AuthorisedValues.GetAuthValueDropbox( 'LOC' ), selected_av => locationslimit %]
+                        [% PROCESS options_for_authorised_values_multiselect authorised_values => AuthorisedValues.GetAuthValueDropbox( 'LOC' ), selected_av => locationslimit %]
                     </select>
                 </li>
             </ol>
@@ -352,10 +377,19 @@
 [% INCLUDE 'hold-group-modal.inc' %]
 
 [% MACRO jsinclude BLOCK %]
+    [% INCLUDE 'select2.inc' %]
     [% INCLUDE 'datatables.inc' %]
     [% Asset.js("js/hold-group.js") | $raw %]
     <script>
         $(document).ready(function() {
+            // Apply select2 to all select fields having a "multiple" attribute
+            let selectFields = document.querySelectorAll('select[multiple]');
+            selectFields.forEach((selectField) => {
+                $(selectField).select2({
+                    width: "100%",
+                    allowClear: true,
+                });
+            });
             var holdst;
 
             // Setup filters before DataTables initialisation, in case some columns are
