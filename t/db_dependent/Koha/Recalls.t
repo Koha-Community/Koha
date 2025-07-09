@@ -18,7 +18,7 @@
 use Modern::Perl;
 
 use Test::NoWarnings;
-use Test::More tests => 24;
+use Test::More tests => 25;
 use t::lib::Dates;
 use t::lib::TestBuilder;
 use t::lib::Mocks;
@@ -140,6 +140,12 @@ is( $due_interval,              5,        "Recall due date interval defaults to 
 ok(
     $checkout_due_date_after_recall lt $initial_checkout_due_date,
     "Checkout due date has been moved backwards"
+);
+$item2                          = Koha::Items->find( $item2->itemnumber );
+$checkout_due_date_after_recall = dt_from_string($checkout_due_date_after_recall);
+is(
+    t::lib::Dates::compare( $checkout_due_date_after_recall->ymd(), $item2->onloan ), 0,
+    "items.onloan is updated with adjusted due date"
 );
 
 Koha::CirculationRules->set_rule(
