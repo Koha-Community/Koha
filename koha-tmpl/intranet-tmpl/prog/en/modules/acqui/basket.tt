@@ -123,6 +123,51 @@
 
                             [% PROCESS csv_export %]
 
+                            [% IF edifact_enabled && edifact_messages.size > 0 %]
+                                [% SET quote_messages = [] %]
+                                [% SET order_messages = [] %]
+                                [% FOR message IN edifact_messages %]
+                                    [% IF message.message_type == 'QUOTE' %]
+                                        [% quote_messages.push(message) %]
+                                    [% ELSIF message.message_type == 'ORDERS' %]
+                                        [% order_messages.push(message) %]
+                                    [% END %]
+                                [% END %]
+
+                                [% IF quote_messages.size > 0 && order_messages.size > 0 %]
+                                    <!-- Both quote and order messages exist -->
+                                    <div class="btn-group">
+                                        <button class="btn btn-default dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"> <i class="fa fa-file-text"></i> View EDIFACT messages </button>
+                                        <ul class="dropdown-menu">
+                                            [% FOR message IN quote_messages %]
+                                                <li>
+                                                    <a class="dropdown-item view_edifact_message" href="#" data-message-id="[% message.id | html %]">
+                                                        <i class="fa fa-quote-left"></i> View quote ([% message.transfer_date | $KohaDates %])
+                                                    </a>
+                                                </li>
+                                            [% END %]
+                                            [% FOR message IN order_messages %]
+                                                <li>
+                                                    <a class="dropdown-item view_edifact_message" href="#" data-message-id="[% message.id | html %]">
+                                                        <i class="fa fa-shopping-cart"></i> View order ([% message.transfer_date | $KohaDates %])
+                                                    </a>
+                                                </li>
+                                            [% END %]
+                                        </ul>
+                                    </div>
+                                [% ELSIF quote_messages.size > 0 %]
+                                    <!-- Only quote messages exist -->
+                                    <div class="btn-group">
+                                        <button type="button" class="btn btn-default view_edifact_message" data-message-id="[% quote_messages.0.id | html %]"> <i class="fa fa-quote-left"></i> View EDIFACT quote </button>
+                                    </div>
+                                [% ELSIF order_messages.size > 0 %]
+                                    <!-- Only order messages exist -->
+                                    <div class="btn-group">
+                                        <button type="button" class="btn btn-default view_edifact_message" data-message-id="[% order_messages.0.id | html %]"> <i class="fa fa-shopping-cart"></i> View EDIFACT order </button>
+                                    </div>
+                                [% END %]
+                            [% END %]
+
                             [% IF Koha.Preference('EDIFACT') && ediaccount %]
                                 [% UNLESS eans.size %]
                                     <div class="btn-group" title="You must define an EAN in Administration -> Library EANs">
@@ -283,8 +328,54 @@
                                     <button type="submit" class="btn btn-default"><i class="fa-solid fa-rotate"></i> Reopen basket</button>
                                 </form>
                             </div>
+
+                            [% PROCESS csv_export %]
+
+                            [% IF edifact_enabled && edifact_messages.size > 0 %]
+                                [% SET quote_messages = [] %]
+                                [% SET order_messages = [] %]
+                                [% FOR message IN edifact_messages %]
+                                    [% IF message.message_type == 'QUOTE' %]
+                                        [% quote_messages.push(message) %]
+                                    [% ELSIF message.message_type == 'ORDERS' %]
+                                        [% order_messages.push(message) %]
+                                    [% END %]
+                                [% END %]
+
+                                [% IF quote_messages.size > 0 && order_messages.size > 0 %]
+                                    <!-- Both quote and order messages exist -->
+                                    <div class="btn-group">
+                                        <button class="btn btn-default dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"> <i class="fa fa-file-text"></i> View EDIFACT messages </button>
+                                        <ul class="dropdown-menu">
+                                            [% FOR message IN quote_messages %]
+                                                <li>
+                                                    <a class="dropdown-item view_edifact_message" href="#" data-message-id="[% message.id | html %]">
+                                                        <i class="fa fa-quote-left"></i> View quote ([% message.transfer_date | $KohaDates %])
+                                                    </a>
+                                                </li>
+                                            [% END %]
+                                            [% FOR message IN order_messages %]
+                                                <li>
+                                                    <a class="dropdown-item view_edifact_message" href="#" data-message-id="[% message.id | html %]">
+                                                        <i class="fa fa-shopping-cart"></i> View order ([% message.transfer_date | $KohaDates %])
+                                                    </a>
+                                                </li>
+                                            [% END %]
+                                        </ul>
+                                    </div>
+                                [% ELSIF quote_messages.size > 0 %]
+                                    <!-- Only quote messages exist -->
+                                    <div class="btn-group">
+                                        <button type="button" class="btn btn-default view_edifact_message" data-message-id="[% quote_messages.0.id | html %]"> <i class="fa fa-quote-left"></i> View EDIFACT quote </button>
+                                    </div>
+                                [% ELSIF order_messages.size > 0 %]
+                                    <!-- Only order messages exist -->
+                                    <div class="btn-group">
+                                        <button type="button" class="btn btn-default view_edifact_message" data-message-id="[% order_messages.0.id | html %]"> <i class="fa fa-shopping-cart"></i> View EDIFACT order </button>
+                                    </div>
+                                [% END %]
+                            [% END %]
                         [% END %]
-                        [% PROCESS csv_export %]
                     </div>
                 [% END # /UNLESS ( closedate ) %]
             [% END # /UNLESS ( selectbasketg ) %]
@@ -342,6 +433,47 @@
 
                     [% IF ( basketno ) %]
                         <div id="acqui_basket_summary" class="row">
+                            [% IF edifact_enabled && edifact_errors.size > 0 %]
+                                <div class="col-md-12 col-sm-12">
+                                    <div class="page-section">
+                                        <h2>EDIFACT parsing errors</h2>
+
+                                        [% SET errors_by_message = {} %]
+                                        [% FOR error IN edifact_errors %]
+                                            [% SET msg_id = error.message_id %]
+                                            [% IF !errors_by_message.$msg_id %]
+                                                [% errors_by_message.$msg_id = [] %]
+                                            [% END %]
+                                            [% errors_by_message.$msg_id.push(error) %]
+                                        [% END %]
+
+                                        [% FOR message IN edifact_messages %]
+                                            [% SET msg_id = message.id %]
+                                            [% IF errors_by_message.$msg_id %]
+                                                <div class="alert alert-warning">
+                                                    <h4><i class="fa fa-exclamation-triangle"></i> [% message.message_type | html %] message ([% message.transfer_date | $KohaDates %])</h4>
+                                                    [% IF message.filename %]
+                                                        <p><strong>Filename:</strong> [% message.filename | html %]</p>
+                                                    [% END %]
+                                                    <ul>
+                                                        [% FOR error IN errors_by_message.$msg_id %]
+                                                            <li>
+                                                                <strong>[% error.details | html %]</strong>
+                                                                [% IF error.section %]
+                                                                    <br /><pre class="mt-1 mb-0 small text-muted">[% error.section | html %] section</pre>
+                                                                [% END %]
+                                                            </li>
+                                                        [% END %]
+                                                    </ul>
+                                                </div>
+                                            [% END %]
+                                        [% END %]
+                                    </div>
+                                    <!-- /.page-section -->
+                                </div>
+                                <!-- /.col-md-12 col-sm-12 -->
+                            [% END %]
+
                             <div class="col-md-6 col-sm-12">
                                 <div class="page-section rows">
                                     <h2>General information</h2>
@@ -1130,6 +1262,10 @@
 </div>
 <!-- /.modal#dateEditor -->
 
+[% IF edifact_enabled && edifact_messages.size > 0 %]
+    [% INCLUDE 'modals/edifact-modal.inc' %]
+[% END %]
+
 [% MACRO jsinclude BLOCK %]
     [% Asset.js("js/acquisitions-menu.js") | $raw %]
     [% INCLUDE 'datatables.inc' %]
@@ -1378,6 +1514,10 @@
     [% SET filter = 'baskets_managers' %]
     [% PROCESS patron_search_modal columns => columns, modal_title => t("Add user") %]
     [% PROCESS patron_search_js columns => columns, actions => ["add"], preview_on_name_click => 1 %]
+
+    [% IF edifact_enabled && edifact_messages.size > 0 %]
+        [% Asset.js("js/modals/edifact-modal.js") | $raw %]
+    [% END %]
 [% END %]
 
 [% INCLUDE 'intranet-bottom.inc' %]

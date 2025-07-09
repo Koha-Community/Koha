@@ -40,6 +40,7 @@ use Koha::Database;
 use Koha::EDI qw( create_edi_order );
 use Koha::CsvProfiles;
 use Koha::Patrons;
+use Koha::Edifact::Files;
 
 use Koha::AdditionalFields;
 use Koha::Old::Biblios;
@@ -179,6 +180,45 @@ if ($ediaccount) {
         quote_ean => $quote_ean
     );
 }
+
+# Check for EDIFACT messages associated with this basket
+my $edifact_enabled  = C4::Context->preference('EDIFACT');
+my @edifact_messages = ();
+my @edifact_errors   = ();
+
+if ( $edifact_enabled && $basketno ) {
+    my $edifact_messages_rs = Koha::Edifact::Files->search(
+        { basketno => $basketno },
+        { order_by => 'message_type' }
+    );
+
+    while ( my $message = $edifact_messages_rs->next ) {
+        push @edifact_messages, {
+            id            => $message->id,
+            message_type  => $message->message_type,
+            transfer_date => $message->transfer_date,
+            status        => $message->status,
+            filename      => $message->filename,
+        };
+
+        # Get errors for this message
+        my $errors = $message->errors;
+        while ( my $error = $errors->next ) {
+            push @edifact_errors, {
+                message_id   => $message->id,
+                message_type => $message->message_type,
+                section      => $error->section,
+                details      => $error->details,
+            };
+        }
+    }
+}
+
+$template->param(
+    edifact_enabled  => $edifact_enabled,
+    edifact_messages => \@edifact_messages,
+    edifact_errors   => \@edifact_errors,
+);
 
 unless ( CanUserManageBasket( $loggedinuser, $basket, $userflags ) ) {
     $template->param(
