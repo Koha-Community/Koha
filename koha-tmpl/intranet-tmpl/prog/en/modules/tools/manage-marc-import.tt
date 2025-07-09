@@ -388,7 +388,7 @@
                                         [% INCLUDE 'csrf-token.inc' %]
                                         <input type="hidden" name="import_batch_id" value="[% batch_lis.import_batch_id | html %]" />
                                         <input type="hidden" name="op" value="cud-clean-batch" />
-                                        <input type="hidden" id="import_status" value="[% batch_lis.import_status | html %]" />
+                                        <input type="hidden" name="import_status" value="[% batch_lis.import_status | html %]" />
                                         <button type="submit" class="btn btn-default btn-xs"><i class="fa fa-eraser"></i> Clean</button>
                                     </form>
                                 [% ELSIF ( batch_lis.import_status == 'cleaned' ) %]
@@ -635,12 +635,12 @@
                 if ($(this).hasClass("batch_delete")) {
                     return confirm(_("Are you sure you want to permanently delete this batch?"));
                 } else {
-                    if ($(this).closest('form').find('input#import_status').val() === "imported" ) {
+                    if ($(this).find("input[name='import_status']").val() === "imported" ) {
                        return confirm(_("This batch contains imported records. Are you sure you wish to clear all the reservoir records?  This cannot be undone."));
                     } else {
-                    return confirm(_("Clear all reservoir records staged in this batch?  This cannot be undone."));
+                        return confirm(_("Clear all reservoir records staged in this batch?  This cannot be undone."));
+                    }
                 }
-               }
             });
             [% IF job_enqueued %]
                 setTimeout(
