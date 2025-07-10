@@ -328,7 +328,9 @@
                 if ( tab_id == 'holdings' ) {
                     default_filters[branch] = '[% Branches.GetLoggedInBranchcode() | html %]';
                 } else {
-                    default_filters[branch] = { '!=': '[% Branches.GetLoggedInBranchcode() | html  %]' };
+                    let all_branchcodes = Object.values(branchcodes).flat();
+                    all_branchcodes.push('[% Branches.GetLoggedInBranchcode() | html %]');
+                    default_filters[branch] = { '-not_in' : all_branchcodes };
                 }
             [% END %]
 

@@ -332,13 +332,7 @@ if ( defined $dat->{'itemtype'} ) {
     $dat->{imageurl} = getitemtypeimagelocation( 'intranet', $itemtypes->{ $dat->{itemtype} }->imageurl );
 }
 
-if ( C4::Context->preference('SeparateHoldings') ) {
-    my $SeparateHoldingsBranch = C4::Context->preference('SeparateHoldingsBranch') || 'homebranch';
-    my $other_holdings_count =
-        $items_to_display->search( { $SeparateHoldingsBranch => { '!=' => C4::Context->userenv->{branch} } } )->count;
-    $template->param( other_holdings_count => $other_holdings_count );
-}
-
+my $total_group_holdings_count = 0;
 if ( C4::Context->preference('SeparateHoldingsByGroup') ) {
     my $branchcode        = C4::Context->userenv->{branch};
     my @all_search_groups = Koha::Library::Groups->get_search_groups( { interface => 'staff' } );
@@ -361,15 +355,13 @@ if ( C4::Context->preference('SeparateHoldingsByGroup') ) {
                     push @libs_branchcodes, $lib->branchcode;
                 }
 
-                # Push logged in branchcode
-                push @libs_branchcodes, $branchcode;
-
                 # Build group branchcode hash
                 $branchcode_hash{ $group->id } = \@libs_branchcodes;
 
                 my $group_holdings_count =
                     $items_to_display->search( { homebranch => { '-in' => \@libs_branchcodes } } )->count;
                 $holdings_count{ $group->id } = $group_holdings_count;
+                $total_group_holdings_count += $group_holdings_count;
 
                 push @lib_groups, $group;
             }
@@ -383,6 +375,13 @@ if ( C4::Context->preference('SeparateHoldingsByGroup') ) {
     );
 }
 
+if ( C4::Context->preference('SeparateHoldings') ) {
+    my $SeparateHoldingsBranch = C4::Context->preference('SeparateHoldingsBranch') || 'homebranch';
+    my $other_holdings_count =
+        $items_to_display->search( { $SeparateHoldingsBranch => { '!=' => C4::Context->userenv->{branch} } } )->count;
+    $other_holdings_count -= $total_group_holdings_count;
+    $template->param( other_holdings_count => $other_holdings_count );
+}
 $template->param(
     count                  => $all_items->count,         # FIXME 'count' is used in catalog-strings.inc
                                                          # But it's not a meaningful variable, we should rename it there
