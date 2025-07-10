@@ -2688,6 +2688,11 @@ aws-sign2@~0.7.0:
   resolved "https://registry.yarnpkg.com/aws-sign2/-/aws-sign2-0.7.0.tgz#b46e890934a9591f2d2f6f86d7e6a9f1b3fe76a8"
   integrity sha1-tG6JCTSpWR8tL2+G1+ap8bP+dqg=
 
+aws-ssl-profiles@^1.1.1:
+  version "1.1.2"
+  resolved "https://registry.yarnpkg.com/aws-ssl-profiles/-/aws-ssl-profiles-1.1.2.tgz#157dd77e9f19b1d123678e93f120e6f193022641"
+  integrity sha512-NZKeq9AfyQvEeNlN0zSYAaWrmBffJh3IELMZfRpJVWgrpEbtEpnjvzqBPf+mxoI287JohRDoa+/nsfqqiZmF6g==
+
 aws4@^1.8.0:
   version "1.11.0"
   resolved "https://registry.yarnpkg.com/aws4/-/aws4-1.11.0.tgz#d61f46d83b2519250e2784daf5b09479a8b41c59"
@@ -3975,13 +3980,6 @@ csstype@^3.1.3:
   resolved "https://registry.yarnpkg.com/csstype/-/csstype-3.1.3.tgz#d80ff294d114fb0e6ac500fbf85b60137d7eff81"
   integrity sha512-M1uQkMl8rQK/szD0LNhtqxIPLpimGm8sOBwU7lLnCpSbTyY3yeU1Vc7l4KT5zT4s/yOxHH5O7tIuuLOCnLADRw==
 
-cypress-mysql@^1.0.0:
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/cypress-mysql/-/cypress-mysql-1.0.0.tgz#987dd693aa4ad6b3968c0ff24834b0ad1af00876"
-  integrity sha512-UEy/jwzKEtctyWSQbgGBPsNJH0yCGaKN/xFZsNHAdjeBGOvI1prnhrsTVnOxclPwRmESnlTmap5P52u2Vl4TjA==
-  dependencies:
-    mysql2 "^2.3.3"
-
 cypress@^12.17.2:
   version "12.17.4"
   resolved "https://registry.yarnpkg.com/cypress/-/cypress-12.17.4.tgz#b4dadf41673058493fa0d2362faa3da1f6ae2e6c"
@@ -4308,7 +4306,7 @@ delayed-stream@~1.0.0:
   resolved "https://registry.yarnpkg.com/delayed-stream/-/delayed-stream-1.0.0.tgz#df3ae199acadfb7d440aaae0b29e2272b24ec619"
   integrity sha1-3zrhmayt+31ECqrgsp4icrJOxhk=
 
-denque@^2.0.1:
+denque@^2.1.0:
   version "2.1.0"
   resolved "https://registry.yarnpkg.com/denque/-/denque-2.1.0.tgz#e93e1a6569fb5e66f16a3c2a2964617d349d6ab1"
   integrity sha512-HVQE3AAb/pxF8fQAoiqpvg9i3evqug3hoiwakOyZAwJm+6vZehbkYXZ0l4JxS+I3QxM97v5aaRNhj8v5oBhekw==
@@ -8020,10 +8018,10 @@ log-update@^4.0.0:
     slice-ansi "^4.0.0"
     wrap-ansi "^6.2.0"
 
-long@^4.0.0:
-  version "4.0.0"
-  resolved "https://registry.yarnpkg.com/long/-/long-4.0.0.tgz#9a7b71cfb7d361a194ea555241c92f7468d5bf28"
-  integrity sha512-XsP+KhQif4bjX1kbuSiySJFNAehNxgLb6hPRGJ9QsUr8ajHkuXGdrHmFUTUUXhDwVX2R5bY4JNZEwbUiMhV+MA==
+long@^5.2.1:
+  version "5.3.2"
+  resolved "https://registry.yarnpkg.com/long/-/long-5.3.2.tgz#1d84463095999262d7d7b7f8bfd4a8cc55167f83"
+  integrity sha512-mNAgZ1GmyNhD7AuqnTG3/VQ26o760+ZYBPKjPvugO8+nLbYfX6TVpJPseBvopbdY+qpZ/lKUnmEc1LeZYS3QAA==
 
 loose-envify@^1.1.0, loose-envify@^1.4.0:
   version "1.4.0"
@@ -8069,6 +8067,11 @@ lru-queue@^0.1.0:
   integrity sha1-Jzi9nw089PhEkMVzbEhpmsYyzaM=
   dependencies:
     es5-ext "~0.10.2"
+
+lru.min@^1.0.0:
+  version "1.1.2"
+  resolved "https://registry.yarnpkg.com/lru.min/-/lru.min-1.1.2.tgz#01ce1d72cc50c7faf8bd1f809ebf05d4331021eb"
+  integrity sha512-Nv9KddBcQSlQopmBHXSsZVY5xsdlZkdH/Iey0BlcBYggMd4two7cZnKOK9vmy3nY0O5RGH99z1PCeTpPqszUYg==
 
 lunr@^2.3.9:
   version "2.3.9"
@@ -8474,17 +8477,18 @@ mute-stdout@^1.0.0:
   resolved "https://registry.yarnpkg.com/mute-stdout/-/mute-stdout-1.0.1.tgz#acb0300eb4de23a7ddeec014e3e96044b3472331"
   integrity sha512-kDcwXR4PS7caBpuRYYBUz9iVixUk3anO3f5OYFiIPwK/20vCzKCHyKoulbiDY1S53zD2bxUpxN/IJ+TnXjfvxg==
 
-mysql2@^2.3.3:
-  version "2.3.3"
-  resolved "https://registry.yarnpkg.com/mysql2/-/mysql2-2.3.3.tgz#944f3deca4b16629052ff8614fbf89d5552545a0"
-  integrity sha512-wxJUev6LgMSgACDkb/InIFxDprRa6T95+VEoR+xPvtngtccNH2dGjEB/fVZ8yg1gWv1510c9CvXuJHi5zUm0ZA==
+mysql2@^3.14.1:
+  version "3.14.1"
+  resolved "https://registry.yarnpkg.com/mysql2/-/mysql2-3.14.1.tgz#7786160abf086fd279e0253e16e34c05b4ab3b3e"
+  integrity sha512-7ytuPQJjQB8TNAYX/H2yhL+iQOnIBjAMam361R7UAL0lOVXWjtdrmoL9HYKqKoLp/8UUTRcvo1QPvK9KL7wA8w==
   dependencies:
-    denque "^2.0.1"
+    aws-ssl-profiles "^1.1.1"
+    denque "^2.1.0"
     generate-function "^2.3.1"
     iconv-lite "^0.6.3"
-    long "^4.0.0"
-    lru-cache "^6.0.0"
-    named-placeholders "^1.1.2"
+    long "^5.2.1"
+    lru.min "^1.0.0"
+    named-placeholders "^1.1.3"
     seq-queue "^0.0.5"
     sqlstring "^2.3.2"
 
@@ -8498,7 +8502,7 @@ mysql@^2.18.1:
     safe-buffer "5.1.2"
     sqlstring "2.3.1"
 
-named-placeholders@^1.1.2:
+named-placeholders@^1.1.3:
   version "1.1.3"
   resolved "https://registry.yarnpkg.com/named-placeholders/-/named-placeholders-1.1.3.tgz#df595799a36654da55dda6152ba7a137ad1d9351"
   integrity sha512-eLoBxg6wE/rZkJPhU/xRX1WTpkFEwDJEN96oxFrTsqBdbT5ec295Q+CoHrL9IT0DipqKhmGcaZmwOt8OON5x1w==
