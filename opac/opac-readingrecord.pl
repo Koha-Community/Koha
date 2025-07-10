@@ -72,23 +72,23 @@ $limit //= '';
 $limit = ( $limit eq 'full' ) ? 0 : 50;
 
 my $checkouts = [
-    $patron->checkouts(
+    $patron->checkouts->search(
         {},
         {
             order_by => $order,
             prefetch => { item => { biblio => 'biblioitems' } },
-            ( $limit ? ( limit => $limit ) : () ),
+            ( $limit ? ( rows => $limit ) : () ),
         }
     )->as_list
 ];
 $limit -= scalar(@$checkouts) if $limit;
 my $old_checkouts = [
-    $patron->old_checkouts(
+    $patron->old_checkouts->search(
         {},
         {
             order_by => $order,
             prefetch => { item => { biblio => 'biblioitems' } },
-            ( $limit ? ( limit => $limit ) : () ),
+            ( $limit ? ( rows => $limit ) : () ),
         }
     )->as_list
 ];
