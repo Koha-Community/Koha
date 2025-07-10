@@ -57,7 +57,7 @@ if ( $order eq 'title' ) {
 } elsif ( $order eq 'author' ) {
     $template->param( orderbyauthor => 1 );
 } else {
-    $order = "date_due desc";
+    $order = { -desc => "date_due" };
     $template->param( orderbydate => 1 );
 }
 
