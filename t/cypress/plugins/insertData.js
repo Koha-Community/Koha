@@ -205,29 +205,31 @@ const insertSampleHold = async ({
     return { hold, patron };
 };
 
-const insertSampleCheckout = async ({ baseUrl, authHeader }) => {
+const insertSampleCheckout = async ({ patron, baseUrl, authHeader }) => {
     const { biblio, items, libraries, item_type } = await insertSampleBiblio({
         item_count: 1,
         baseUrl,
         authHeader,
     });
-    const generatedPatron = await buildSampleObject({
-        object: "patron",
-        values: {
-            library_id: libraries[0].library_id,
-            incorrect_address: null,
-            patron_card_lost: null,
-        },
-        baseUrl,
-        authHeader,
-    });
 
-    const patron = await insertObject({
-        type: "patron",
-        object: generatedPatron,
-        baseUrl,
-        authHeader,
-    });
+    let generatedPatron;
+    if (!patron) {
+        generatedPatron = await buildSampleObject({
+            object: "patron",
+            values: {
+                library_id: libraries[0].library_id,
+                incorrect_address: null,
+                patron_card_lost: null,
+            },
+        });
+
+        patron = await insertObject({
+            type: "patron",
+            object: generatedPatron,
+            baseUrl,
+            authHeader,
+        });
+    }
 
     const generatedCheckout = buildSampleObject({
         object: "checkout",
@@ -243,7 +245,15 @@ const insertSampleCheckout = async ({ baseUrl, authHeader }) => {
         baseUrl,
         authHeader,
     });
-    return { biblio, items, libraries, item_type, patron, checkout };
+    return {
+        biblio,
+        items,
+        libraries,
+        item_type,
+        patron,
+        checkout,
+        ...(generatedPatron ? { patron: generatedPatron } : {}),
+    };
 };
 
 const deleteSampleObjects = async allObjects => {

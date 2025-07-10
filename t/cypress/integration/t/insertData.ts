@@ -230,6 +230,41 @@ describe("insertData", () => {
                 cy.task("deleteSampleObjects", objects_checkout);
             });
         });
+
+        it("insertSampleCheckout - pass an already generated patron", () => {
+            cy.task("buildSampleObject", {
+                object: "patron",
+                values: {
+                    incorrect_address: null,
+                    patron_card_lost: null,
+                },
+            }).then(generatedPatron => {
+                cy.task("insertObject", {
+                    type: "patron",
+                    object: generatedPatron,
+                }).then(patron => {
+                    cy.task("insertSampleCheckout", { patron }).then(
+                        objects_checkout => {
+                            expect(objects_checkout.patron).to.not.exists;
+                            cy.task("apiGet", {
+                                endpoint: `/api/v1/checkouts/${objects_checkout.checkout.checkout_id}`,
+                            }).then(checkout => {
+                                expect(checkout.item_id).to.be.equal(
+                                    objects_checkout.items[0].item_id
+                                );
+                                expect(checkout.patron_id).to.be.equal(
+                                    generatedPatron.patron_id
+                                );
+                            });
+                            cy.task("deleteSampleObjects", [
+                                objects_checkout,
+                                { patron },
+                            ]);
+                        }
+                    );
+                });
+            });
+        });
     });
 
     afterEach(function () {
