@@ -517,8 +517,20 @@ const insertObject = async ({ type, object, baseUrl, authHeader }) => {
     } else if (type == "checkout") {
         const { issuer, patron, ...checkout } = object;
 
+        let endpoint = "/api/v1/checkouts";
+        // Force the checkout - we might need a parameter to control this behaviour later
+        await apiGet({
+            endpoint: `/api/v1/checkouts/availability?item_id=${object.item_id}&patron_id=${object.patron_id}`,
+            baseUrl,
+            authHeader,
+        }).then(result => {
+            if (result.confirmation_token) {
+                endpoint += `?confirmation=${result.confirmation_token}`;
+            }
+        });
+
         return apiPost({
-            endpoint: "/api/v1/checkouts",
+            endpoint,
             body: checkout,
             baseUrl,
             authHeader,
