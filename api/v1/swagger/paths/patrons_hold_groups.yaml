@@ -1,0 +1,155 @@
+---
+"/patrons/{patron_id}/hold_groups":
+  get:
+    x-mojo-to: Patrons::HoldGroups#list
+    operationId: getPatronHoldGroups
+    tags:
+      - hold_groups
+    summary: List hold groups for a patron
+    parameters:
+      - $ref: "../swagger.yaml#/parameters/patron_id_pp"
+      - $ref: "../swagger.yaml#/parameters/match"
+      - $ref: "../swagger.yaml#/parameters/order_by"
+      - $ref: "../swagger.yaml#/parameters/page"
+      - $ref: "../swagger.yaml#/parameters/per_page"
+      - $ref: "../swagger.yaml#/parameters/q_param"
+      - $ref: "../swagger.yaml#/parameters/q_body"
+      - $ref: "../swagger.yaml#/parameters/request_id_header"
+      - name: x-koha-embed
+        in: header
+        required: false
+        description: Embed list sent as a request header
+        type: array
+        items:
+          type: string
+          enum:
+            - holds
+        collectionFormat: csv
+    produces:
+      - application/json
+    responses:
+      "200":
+        description: The patron hold groups
+        schema:
+          type: array
+          items:
+            $ref: "../swagger.yaml#/definitions/hold_group"
+      "400":
+        description: |
+          Bad request. Possible `error_code` attribute values:
+
+            * `invalid_query`
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "401":
+        description: Authentication required
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "403":
+        description: Access forbidden
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "404":
+        description: Patron not found
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "500":
+        description: |
+          Internal server error. Possible `error_code` attribute values:
+
+          * `internal_server_error`
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "503":
+        description: Under maintenance
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+    x-koha-authorization:
+      permissions:
+        borrowers: edit_borrowers
+  post:
+    x-mojo-to: Patrons::HoldGroups#add
+    operationId: addPatronHoldGroups
+    tags:
+      - hold_groups
+    summary: Add hold group. May contain hold ids of existing holds
+    parameters:
+      - name: body
+        in: body
+        description: A JSON object containing informations about the new hold group
+        required: true
+        schema:
+          type: object
+          properties:
+            hold_ids:
+              description: List of holds to add to hold group
+              type:
+                - array
+                - "null"
+            force_grouped:
+              description: Whether to force creation of a new hold group
+              type:
+                - boolean
+                - "null"
+          additionalProperties: false
+      - name: x-koha-embed
+        in: header
+        required: false
+        description: Embed list sent as a request header
+        type: array
+        items:
+          type: string
+          enum:
+            - holds
+        collectionFormat: csv
+    consumes:
+      - application/json
+    produces:
+      - application/json
+    responses:
+      "201":
+        description: Created hold group
+        schema:
+          $ref: "../swagger.yaml#/definitions/hold_group"
+      "400":
+        description: Bad request
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "401":
+        description: Authentication required
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "403":
+        description: Hold not allowed
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "404":
+        description: Borrower not found
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "409":
+        description: |
+          Conflict. Possible `error_code` attribute values:
+
+            * `bad_address`
+            * `card_lost`
+            * `debt_limit`
+            * `expired`
+            * `hold_limit`
+            * `restricted`
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "500":
+        description: |
+          Internal server error. Possible `error_code` attribute values:
+
+          * `internal_server_error`
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "503":
+        description: Under maintenance
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+    x-koha-authorization:
+      permissions:
+        reserveforothers: "1"

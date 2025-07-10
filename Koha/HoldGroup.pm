@@ -31,6 +31,38 @@ Koha::HoldGroup - Koha Hold Group object class
 
 =cut
 
+=head3 to_api
+
+    my $json = $hold_group->to_api;
+
+Overloaded method that returns a JSON representation of the Koha::HoldGroup object,
+suitable for API output. The related Koha::Holds objects are merged as expected
+on the API.
+
+=cut
+
+sub to_api {
+    my ( $self, $args ) = @_;
+
+    my $json_hold_group = $self->SUPER::to_api($args);
+    return unless $json_hold_group;
+
+    $args = defined $args ? {%$args} : {};
+    delete $args->{embed};
+
+    my $holds = $self->holds;
+
+    Koha::Exceptions::RelatedObjectNotFound->throw( accessor => 'holds', class => 'Koha::HoldGroup' )
+        unless $holds;
+
+    my @json_holds;
+    for my $hold ($holds) {
+        push @json_holds, $hold->to_api($args);
+    }
+
+    return { %$json_hold_group, holds => @json_holds };
+}
+
 =head3 holds
 
     $holds = $hold_group->holds

@@ -100,6 +100,8 @@ definitions:
     $ref: ./definitions/hold.yaml
   holds:
     $ref: ./definitions/holds.yaml
+  hold_group:
+    $ref: ./definitions/hold_group.yaml
   ill_backend:
     $ref: ./definitions/ill_backend.yaml
   ill_backends:
@@ -495,6 +497,8 @@ paths:
     $ref: "./paths/patrons_extended_attributes.yaml#/~1patrons~1{patron_id}~1extended_attributes~1{extended_attribute_id}"
   "/patrons/{patron_id}/holds":
     $ref: "./paths/patrons_holds.yaml#/~1patrons~1{patron_id}~1holds"
+  "/patrons/{patron_id}/hold_groups":
+    $ref: "./paths/patrons_hold_groups.yaml#/~1patrons~1{patron_id}~1hold_groups"
   "/patrons/{patron_id}/checkouts":
     $ref: "./paths/patrons_checkouts.yaml#/~1patrons~1{patron_id}~1checkouts"
   "/patrons/{patron_id}/password":
