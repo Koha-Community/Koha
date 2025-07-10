@@ -369,9 +369,10 @@ if ( C4::Context->preference('SeparateHoldingsByGroup') ) {
     }
 
     $template->param(
-        lib_groups     => \@lib_groups,
-        branchcodes    => \%branchcode_hash,
-        holdings_count => \%holdings_count,
+        lib_groups                 => \@lib_groups,
+        branchcodes                => \%branchcode_hash,
+        holdings_count_hash        => \%holdings_count,
+        total_group_holdings_count => $total_group_holdings_count,
     );
 }
 

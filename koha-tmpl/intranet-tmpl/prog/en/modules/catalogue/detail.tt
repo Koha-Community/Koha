@@ -322,9 +322,9 @@
     [% WRAPPER tabs id= "bibliodetails" %]
         [% WRAPPER tabs_nav %]
             [% IF Koha.Preference('SeparateHoldings') %]
-                [% IF items_to_display_count - ( other_holdings_count || 0 ) %]
+                [% IF items_to_display_count - ( other_holdings_count || 0 ) - ( total_group_holdings_count || 0 ) %]
                     [% WRAPPER tab_item tabname= "holdings" %]
-                        <span>[% Branches.GetLoggedInBranchname | html %] holdings ([% items_to_display_count - ( other_holdings_count || 0 ) - ( hidden_count || 0 ) || 0 | html %])</span>
+                        <span>[% Branches.GetLoggedInBranchname | html %] holdings ([% items_to_display_count - ( other_holdings_count || 0 ) - ( total_group_holdings_count || 0 ) - ( hidden_count || 0 ) || 0 | html %])</span>
                     [% END %]
                 [% END %]
             [% ELSE %]
