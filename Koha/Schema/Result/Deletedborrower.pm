@@ -579,10 +579,10 @@ controls if relatives can see this patron's checkouts
 
 =head2 checkprevcheckout
 
-  data_type: 'varchar'
+  data_type: 'enum'
   default_value: 'inherit'
+  extra: {list => ["yes","no","inherit"]}
   is_nullable: 0
-  size: 7
 
 produce a warning for this patron if this item has previously been checked out to this patron if 'yes', not if 'no', defer to category setting if 'inherit'.
 
@@ -817,10 +817,10 @@ __PACKAGE__->add_columns(
   { data_type => "tinyint", default_value => 0, is_nullable => 0 },
   "checkprevcheckout",
   {
-    data_type => "varchar",
+    data_type => "enum",
     default_value => "inherit",
+    extra => { list => ["yes", "no", "inherit"] },
     is_nullable => 0,
-    size => 7,
   },
   "updated_on",
   {
@@ -857,8 +857,8 @@ __PACKAGE__->add_columns(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07051 @ 2025-04-28 16:41:47
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:5QA+/eORyEKhkG++0f3Hvw
+# Created by DBIx::Class::Schema::Loader v0.07051 @ 2025-07-10 07:11:31
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:vAkNNQagJcYfZ0/6mDOw8g
 
 __PACKAGE__->add_columns(
     '+anonymized'                  => { is_boolean => 1 },
