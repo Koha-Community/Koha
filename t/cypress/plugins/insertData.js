@@ -175,14 +175,8 @@ const insertSampleHold = async ({
         );
     }
 
-    const generatedPatron = await buildSampleObject({
-        object: "patron",
-        values: { library_id, incorrect_address: null, patron_card_lost: null },
-    });
-
-    const patron = await insertObject({
-        type: "patron",
-        object: generatedPatron,
+    const { patron, patron_category } = await insertSamplePatron({
+        library: { library_id },
         baseUrl,
         authHeader,
     });
@@ -202,7 +196,7 @@ const insertSampleHold = async ({
         baseUrl,
         authHeader,
     });
-    return { hold, patron };
+    return { hold, patron, patron_category };
 };
 
 const insertSampleCheckout = async ({ patron, baseUrl, authHeader }) => {
@@ -213,22 +207,16 @@ const insertSampleCheckout = async ({ patron, baseUrl, authHeader }) => {
     });
 
     let generatedPatron;
+    let patronCategory;
     if (!patron) {
-        generatedPatron = await buildSampleObject({
-            object: "patron",
-            values: {
-                library_id: libraries[0].library_id,
-                incorrect_address: null,
-                patron_card_lost: null,
-            },
-        });
-
-        patron = await insertObject({
-            type: "patron",
-            object: generatedPatron,
+        generatedPatron = true;
+        const patron_objects = await insertSamplePatron({
+            library: { library_id: libraries[0].library_id },
             baseUrl,
             authHeader,
         });
+        generatedCategory = patron_objects.category;
+        patron = patron_objects.patron;
     }
 
     const generatedCheckout = buildSampleObject({
@@ -250,9 +238,89 @@ const insertSampleCheckout = async ({ patron, baseUrl, authHeader }) => {
         items,
         libraries,
         item_type,
-        patron,
         checkout,
-        ...(generatedPatron ? { patron: generatedPatron } : {}),
+        ...(generatedPatron
+            ? {
+                  patron,
+                  patron_category: generatedCategory,
+              }
+            : {}),
+    };
+};
+
+const insertSamplePatron = async ({
+    library,
+    patron_category,
+    baseUrl,
+    authHeader,
+}) => {
+    let generatedLibrary;
+    let generatedCategory;
+    if (!library) {
+        generatedLibrary = await buildSampleObject({ object: "library" });
+        library = await insertLibrary({
+            library: generatedLibrary,
+            baseUrl,
+            authHeader,
+        });
+    }
+    if (!patron_category) {
+        generatedCategory = await buildSampleObject({
+            object: "patron_category",
+        });
+        query({
+            sql: "INSERT INTO categories(categorycode, description) VALUES (?, ?)",
+            values: [
+                generatedCategory.patron_category_id,
+                `description for ${generatedCategory.patron_category_id}`,
+            ],
+        });
+        // FIXME We need /patron_categories/:patron_category_id
+        await apiGet({
+            endpoint: `/api/v1/patron_categories?q={"me.patron_category_id":"${generatedCategory.patron_category_id}"}`,
+            baseUrl,
+            authHeader,
+        }).then(categories => (patron_category = categories[0]));
+    }
+
+    let generatedPatron = await buildSampleObject({
+        object: "patron",
+        values: {
+            library_id: library.library_id,
+            category_id: patron_category.patron_category_id,
+            incorrect_address: null,
+            patron_card_lost: null,
+        },
+    });
+
+    let {
+        patron_id,
+        _strings,
+        anonymized,
+        restricted,
+        expired,
+        extended_attributes,
+        checkouts_count,
+        overdues_count,
+        account_balance,
+        lang,
+        login_attempts,
+        sms_provider_id,
+        ...patron
+    } = generatedPatron;
+    delete patron.library;
+
+    patron = await apiPost({
+        endpoint: `/api/v1/patrons`,
+        body: patron,
+        baseUrl,
+        authHeader,
+    });
+
+    return {
+        patron,
+        ...(generatedLibrary ? { library } : {}),
+        ...(generatedCategory ? { patron_category } : {}),
     };
 };
 
@@ -363,7 +431,7 @@ const deleteSampleObjects = async allObjects => {
     return true;
 };
 
-const insertLibrary = async (library, baseUrl, authHeader) => {
+const insertLibrary = async ({ library, baseUrl, authHeader }) => {
     const {
         pickup_items,
         smtp_server,
@@ -382,52 +450,7 @@ const insertLibrary = async (library, baseUrl, authHeader) => {
 };
 
 const insertObject = async ({ type, object, baseUrl, authHeader }) => {
-    if (type == "patron") {
-        await query({
-            sql: "SELECT COUNT(*) AS count FROM branches WHERE branchcode = ?",
-            values: [object.library_id],
-        }).then(result => {
-            if (!result[0].count) {
-                insertLibrary(object.library, baseUrl, authHeader);
-            }
-        });
-        await query({
-            sql: "SELECT COUNT(*) AS count FROM categories WHERE categorycode= ?",
-            values: [object.category_id],
-        }).then(result => {
-            if (!result[0].count) {
-                query({
-                    sql: "INSERT INTO categories(categorycode, description) VALUES (?, ?)",
-                    values: [
-                        object.category_id,
-                        `description for ${object.category_id}`,
-                    ],
-                });
-            }
-        });
-        const {
-            _strings,
-            anonymized,
-            restricted,
-            expired,
-            extended_attributes,
-            library,
-            checkouts_count,
-            overdues_count,
-            account_balance,
-            lang,
-            login_attempts,
-            sms_provider_id,
-            ...patron
-        } = object;
-
-        return apiPost({
-            endpoint: `/api/v1/patrons`,
-            body: patron,
-            baseUrl,
-            authHeader,
-        });
-    } else if (type == "library") {
+    if (type == "library") {
         const keysToKeep = ["library_id", "name"];
         const library = Object.fromEntries(
             Object.entries(object).filter(([key]) => keysToKeep.includes(key))
@@ -511,6 +534,7 @@ module.exports = {
     insertSampleBiblio,
     insertSampleHold,
     insertSampleCheckout,
+    insertSamplePatron,
     insertObject,
     deleteSampleObjects,
 };

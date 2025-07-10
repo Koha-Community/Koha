@@ -6,6 +6,7 @@ const {
     insertSampleBiblio,
     insertSampleHold,
     insertSampleCheckout,
+    insertSamplePatron,
     insertObject,
     deleteSampleObjects,
 } = require("./insertData.js");
@@ -46,6 +47,9 @@ module.exports = (on, config) => {
         },
         insertSampleCheckout(args) {
             return insertSampleCheckout({ ...args, baseUrl, authHeader });
+        },
+        insertSamplePatron(args) {
+            return insertSamplePatron({ ...args, baseUrl, authHeader });
         },
         insertObject(args) {
             return insertObject({ ...args, baseUrl, authHeader });
