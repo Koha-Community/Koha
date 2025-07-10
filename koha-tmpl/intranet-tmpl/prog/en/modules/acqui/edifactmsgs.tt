@@ -37,44 +37,13 @@
     </div>
     <!-- /#acqui_edifactmsgs -->
 
-    <!-- Modal to display EDIFACT messages -->
-    <div class="modal" id="EDI_modal" tabindex="-1" role="dialog" aria-labelledby="EDI_modal_label" aria-hidden="true">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h1 class="modal-title" id="EDI_modal_label">EDIFACT message</h1>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body"> </div>
-                <div class="modal-footer">
-                    <button class="btn btn-default" data-bs-dismiss="modal">Close</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Modal to display EDIFACT errors -->
-    <div class="modal" id="EDI_errors_modal" tabindex="-1" role="dialog" aria-labelledby="EDI_errors_modal_label" aria-hidden="true">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h1 class="modal-title" id="EDI_errors_modal_label">EDIFACT processing errors for <span id="EDI_errors_filename"></span></h1>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <div id="loading"> <img src="[% interface | html %]/[% theme | html %]/img/spinner-small.gif" alt="" /> Loading </div>
-                </div>
-                <div class="modal-footer">
-                    <button class="btn btn-default" data-bs-dismiss="modal">Close</button>
-                </div>
-            </div>
-        </div>
-    </div>
+    [% INCLUDE 'modals/edifact-modal.inc' %]
 [% END %]
 
 [% MACRO jsinclude BLOCK %]
     [% Asset.js("js/acquisitions-menu.js") | $raw %]
     [% INCLUDE 'datatables.inc' %]
+    [% Asset.js("js/modals/edifact-modal.js") | $raw %]
     <script>
         $(document).ready(function() {
             let edi_msgs_table_url = '/api/v1/acquisitions/edifiles?';
@@ -188,43 +157,6 @@
                     }
                 ]
             }, 0, 0);
-
-            var EDIModal = $("#EDI_modal");
-            var EDIModalBody = $("#EDI_modal .modal-body");
-
-            $("body").on("click", ".view_message", function(e){
-                e.preventDefault();
-                var page = $(this).attr("href");
-                EDIModalBody.load(page + " #edimsg");
-                EDIModal.modal("show");
-            });
-            EDIModal.on("click",".btn-close",function(e){
-                e.preventDefault();
-                EDIModal.modal("hide");
-            });
-            EDIModal.on("hidden.bs.modal", function(){
-                EDIModalBody.html("<div id=\"loading\"><img src=\"[% interface | html %]/[% theme | html %]/img/spinner-small.gif\" alt=\"\" /> "+_("Loading")+"</div>");
-            });
-
-            const errorsModal = document.getElementById('EDI_errors_modal')
-            if (errorsModal) {
-              errorsModal.addEventListener('show.bs.modal', event => {
-                // Link that triggered the modal
-                const link = event.relatedTarget
-
-                // Extract info from data-bs-* attributes
-                const filename = link.getAttribute('data-bs-filename')
-                const errors = link.getAttribute('data-bs-errors')
-
-                // Update the modal's title.
-                const modalTitleSpan = errorsModal.querySelector('.modal-title #EDI_errors_filename')
-                modalTitleSpan.textContent = filename;
-
-                // Update the modal's content.
-                const modalBody = errorsModal.querySelector('.modal-body')
-                modalBody.innerHTML = errors;
-              })
-            }
 
             $("body").on("click", ".delete_msg" ,function(){
                 return confirm(_("Are you sure you want to delete this message?"));

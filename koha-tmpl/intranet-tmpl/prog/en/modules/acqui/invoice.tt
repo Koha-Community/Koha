@@ -57,6 +57,37 @@
 
     <p>Vendor: <a href="/cgi-bin/koha/acquisition/vendors/[% booksellerid | uri %]">[% suppliername | html %]</a></p>
 
+    [% IF edifact_enabled && edifact_message %]
+        <div class="page-section">
+            <h3>EDIFACT Message</h3>
+            <p>
+                <strong>Message type:</strong> [% edifact_message.message_type | html %] <strong>Transfer date:</strong> [% edifact_message.transfer_date | $KohaDates %] <strong>Status:</strong> [% edifact_message.status | html %]
+                [% IF edifact_message.filename %]
+                    <strong>Filename:</strong> [% edifact_message.filename | html %]
+                [% END %]
+            </p>
+            <p>
+                <a href="#" class="btn btn-default btn-sm view_edifact_message" data-message-id="[% edifact_message.id | html %]"> <i class="fa fa-search"></i> View EDIFACT message </a>
+            </p>
+
+            [% IF edifact_errors.size > 0 %]
+                <div class="alert alert-warning">
+                    <h4><i class="fa fa-exclamation-triangle"></i> EDIFACT Processing Errors</h4>
+                    <ul>
+                        [% FOREACH error IN edifact_errors %]
+                            <li>
+                                <strong>[% error.details | html %]</strong>
+                                [% IF error.section %]
+                                    <br /><pre class="mt-1 mb-0 small text-muted">[% error.section | html %]</pre>
+                                [% END %]
+                            </li>
+                        [% END %]
+                    </ul>
+                </div>
+            [% END %]
+        </div>
+    [% END %]
+
     <form action="/cgi-bin/koha/acqui/invoice.pl" method="post" class="validated">
         [% INCLUDE 'csrf-token.inc' %]
         <fieldset class="rows">
@@ -521,6 +552,8 @@
 </div>
 <!-- /#updateFund.modal -->
 
+[% INCLUDE 'modals/edifact-modal.inc' %]
+
 <div style="display:none;">
     <select id="all_fund_dropdown">
         <option value="">No fund</option>
@@ -542,6 +575,7 @@
     [% Asset.js("js/additional-fields-entry.js") | $raw %]
     [% INCLUDE 'calendar.inc' %]
     [% INCLUDE 'datatables.inc' %]
+    [% Asset.js("js/modals/edifact-modal.js") | $raw %]
     <script>
         function updateColumnsVisibility(visible) {
             if ( visible ) {
@@ -675,6 +709,7 @@
                     $('.ab_inactive').remove();
                 }
             });
+
         });
     </script>
 [% END %]
