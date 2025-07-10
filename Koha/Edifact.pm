@@ -36,7 +36,7 @@ my $separator = {
 sub new {
     my ( $class, $param_hashref ) = @_;
     my $transmission;
-    my $self = ();
+    my $self = {};
 
     if ( $param_hashref->{filename} ) {
         if ( $param_hashref->{transmission} ) {

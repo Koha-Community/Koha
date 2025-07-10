@@ -86,6 +86,10 @@ sub as_string {
 # parse a string into fields
 sub _parse_seg {
     my $s = shift;
+
+    # Handle undefined or empty segments
+    return { tag => '', elem_arr => [] } unless defined $s && length $s >= 3;
+
     my $e = {
         tag      => substr( $s, 0, 3 ),
         elem_arr => _get_elements( substr( $s, 3 ) ),
@@ -99,6 +103,9 @@ sub _parse_seg {
 
 sub _get_elements {
     my $seg = shift;
+
+    # Handle undefined or empty segments
+    return [] unless defined $seg;
 
     $seg =~ s/^[+]//;    # dont start with a dummy element`
     my @elem_array = map { _components($_) } split /(?<![?])[+]/, $seg;

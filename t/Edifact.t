@@ -3,7 +3,8 @@ use strict;
 use warnings;
 use FindBin qw( $Bin );
 
-use Test::More tests => 41;
+use Test::NoWarnings;
+use Test::More tests => 42;
 use Koha::EDI;
 
 BEGIN { use_ok('Koha::Edifact') }
