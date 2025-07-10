@@ -32,6 +32,10 @@ function get_fallback_login_value(param) {
         : Cypress.env(env_var);
 }
 
+Cypress.Commands.add("visitOpac", path => {
+    cy.visit(Cypress.env("opacBaseUrl") + path);
+});
+
 Cypress.Commands.add("login", (username, password) => {
     var user =
         typeof username === "undefined"
@@ -45,6 +49,21 @@ Cypress.Commands.add("login", (username, password) => {
     cy.get("#userid").type(user);
     cy.get("#password").type(pass);
     cy.get("#submit-button").click();
+});
+
+Cypress.Commands.add("loginOpac", (username, password) => {
+    var user =
+        typeof username === "undefined"
+            ? get_fallback_login_value("username")
+            : username;
+    var pass =
+        typeof password === "undefined"
+            ? get_fallback_login_value("password")
+            : password;
+    cy.visitOpac("/cgi-bin/koha/opac-main.pl?logout.x=1");
+    cy.get("#userid").type(user);
+    cy.get("#password").type(pass);
+    cy.get("#auth .action").contains("Log in").click();
 });
 
 Cypress.Commands.add("left_menu_active_item_is", label => {

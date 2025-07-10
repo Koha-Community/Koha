@@ -15,9 +15,10 @@ export default defineConfig({
         baseUrl: "http://localhost:8081",
         specPattern: "t/cypress/integration/**/*.*",
         supportFile: "t/cypress/support/e2e.js",
-    },
-    env: {
-        apiUsername: "koha",
-        apiPassword: "koha",
+        env: {
+            opacBaseUrl: process.env.KOHA_OPAC_URL || "http://localhost:8080",
+            apiUsername: "koha",
+            apiPassword: "koha",
+        },
     },
 });
