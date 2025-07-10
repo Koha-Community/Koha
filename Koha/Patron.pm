@@ -2677,6 +2677,8 @@ sub _anonymize_column {
         $val = $nullable ? undef : 0;
     } elsif ( $type =~ /date|time/ ) {
         $val = $nullable ? undef : dt_from_string;
+    } elsif ( $type eq 'enum' ) {
+        $val = $nullable ? undef : $col_info->{default_value};
     }
     $self->$col($val);
 }

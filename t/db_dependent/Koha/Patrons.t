@@ -2675,10 +2675,10 @@ subtest 'lock' => sub {
 };
 
 subtest 'anonymize' => sub {
-    plan tests => 10;
+    plan tests => 11;
 
-    my $patron1 = $builder->build_object( { class => 'Koha::Patrons' } );
-    my $patron2 = $builder->build_object( { class => 'Koha::Patrons' } );
+    my $patron1 = $builder->build_object( { class => 'Koha::Patrons' } )->store;
+    my $patron2 = $builder->build_object( { class => 'Koha::Patrons' } )->store;
 
     # First try patron with issues
     my $issue = $builder->build_object(
@@ -2696,16 +2696,17 @@ subtest 'anonymize' => sub {
     is( $patron1->firstname,   undef, 'First name cleared' );
     isnt( $patron1->surname, $surname, 'Surname changed' );
     ok( $patron1->surname =~ /^\w{10}$/, 'Mandatory surname randomized' );
-    is( $patron1->branchcode, $branchcode, 'Branch code skipped' );
-    is( $patron1->email,      undef,       'Email was mandatory, must be cleared' );
+    is( $patron1->branchcode,        $branchcode, 'Branch code skipped' );
+    is( $patron1->email,             undef,       'Email was mandatory, must be cleared' );
+    is( $patron1->checkprevcheckout, 'inherit',   'Enum checkprevcheckout is reset to the default value' );
 
     # Test wrapper in Koha::Patrons
-    $patron1->surname($surname)->store;       # restore
+    $patron1->surname($surname)->store;    # restore
     my $rs = Koha::Patrons->search( { borrowernumber => [ $patron1->borrowernumber, $patron2->borrowernumber ] } )
         ->anonymize;
-    $patron1->discard_changes;                # refresh
+    $patron1->discard_changes;             # refresh
     isnt( $patron1->surname, $surname, 'Surname patron1 changed again' );
-    $patron2->discard_changes;                # refresh
+    $patron2->discard_changes;             # refresh
     is( $patron2->firstname, undef, 'First name patron2 cleared' );
 };
 
