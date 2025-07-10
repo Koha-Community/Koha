@@ -243,7 +243,8 @@
                                                             >
                                                             <em>or any available</em>
                                                         [% END %]
-                                                        [% IF itemsloo.hold_group_id %]
+                                                        [% # NOTE: This will never work as hold_group_id doesn't appear in the tmp_holdsqueue table %]
+                                                        [% IF itemsloo.can('hold_group_id') && ( itemsloo.hold_group_id ) %]
                                                             <div>(part of a <a href="/cgi-bin/koha/reserve/hold-group.pl?hold_group_id=[% itemsloo.hold_group_id | uri %]" class="hold-group">hold group</a>)</div>
                                                         [% END %]
                                                     </td>

@@ -389,7 +389,7 @@ sub CanBookBeReserved {
 
         $reservesallowed = ( $reservesallowed eq '' ) ? undef : $reservesallowed;
 
-        my $count = $patron->holds->search(
+        my $count = $patron->holds->count_holds(
             {
                 '-or' => [
                     { 'me.itemtype' => $params->{itemtype} },
