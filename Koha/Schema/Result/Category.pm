@@ -136,10 +136,10 @@ Default privacy setting for this patron category
 
 =head2 checkprevcheckout
 
-  data_type: 'varchar'
+  data_type: 'enum'
   default_value: 'inherit'
+  extra: {list => ["yes","no","inherit"]}
   is_nullable: 0
-  size: 7
 
 produce a warning for this patron category if this item has previously been checked out to this patron if 'yes', not if 'no', defer to syspref setting if 'inherit'.
 
@@ -274,10 +274,10 @@ __PACKAGE__->add_columns(
   },
   "checkprevcheckout",
   {
-    data_type => "varchar",
+    data_type => "enum",
     default_value => "inherit",
+    extra => { list => ["yes", "no", "inherit"] },
     is_nullable => 0,
-    size => 7,
   },
   "can_place_ill_in_opac",
   { data_type => "tinyint", default_value => 1, is_nullable => 0 },
@@ -410,8 +410,8 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07051 @ 2024-12-03 15:46:23
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:jiQq3bW+ZfdYpUpfZq1Rzw
+# Created by DBIx::Class::Schema::Loader v0.07051 @ 2025-07-10 07:11:31
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:ADt+iDjteg9Jb81L2FMIvg
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration
 
