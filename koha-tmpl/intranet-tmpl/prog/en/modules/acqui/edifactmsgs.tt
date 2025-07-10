@@ -45,120 +45,122 @@
     [% INCLUDE 'datatables.inc' %]
     [% Asset.js("js/modals/edifact-modal.js") | $raw %]
     <script>
-        $(document).ready(function() {
-            let edi_msgs_table_url = '/api/v1/acquisitions/edifiles?';
+        $(document).ready(function () {
+            let edi_msgs_table_url = "/api/v1/acquisitions/edifiles?";
 
-            var edi_msgs_table = $("#edi_msgs").kohaTable({
-                "ajax": {
-                    "url": edi_msgs_table_url
-                },
-                "embed": [
-                    "vendor",
-                    "basket",
-                    "errors"
-                ],
-                "order": [[ 1, "desc" ]],
-                "columns": [
-                    {
-                        "data": "type",
-                        "title": _("Type"),
-                        "searchable": true,
-                        "orderable": true
+            var edi_msgs_table = $("#edi_msgs").kohaTable(
+                {
+                    ajax: {
+                        url: edi_msgs_table_url,
                     },
-                    {
-                        "data": "transfer_date",
-                        "title": _("Transferred"),
-                        "searchable": true,
-                        "orderable": true,
-                        "render": function(data, type, row, meta) {
-                            return $date(row.transfer_date);
-                        }
-                    },
-                    {
-                        "data": "status",
-                        "title": _("Status"),
-                        "searchable": true,
-                        "orderable": true,
-                        "render": function(daya, type, row, meta) {
-                            let rendered = '';
-                            if ( row.errors.length > 0 ) {
-                                let errorsList = '<ul>';
-                                row.errors.forEach(error => {
-                                    if (error.details) {
-                                        errorsList += '<li>'
-                                        errorsList += error.details
-                                        if (error.section) {
-                                            errorsList += '</br><pre>' + error.section + '</pre>';
+                    embed: ["vendor", "basket", "errors"],
+                    order: [[1, "desc"]],
+                    columns: [
+                        {
+                            data: "type",
+                            title: _("Type"),
+                            searchable: true,
+                            orderable: true,
+                        },
+                        {
+                            data: "transfer_date",
+                            title: _("Transferred"),
+                            searchable: true,
+                            orderable: true,
+                            render: function (data, type, row, meta) {
+                                return $date(row.transfer_date);
+                            },
+                        },
+                        {
+                            data: "status",
+                            title: _("Status"),
+                            searchable: true,
+                            orderable: true,
+                            render: function (daya, type, row, meta) {
+                                let rendered = "";
+                                if (row.errors.length > 0) {
+                                    let errorsList = "<ul>";
+                                    row.errors.forEach(error => {
+                                        if (error.details) {
+                                            errorsList += "<li>";
+                                            errorsList += "<strong>" + error.details + "</strong>";
+                                            if (error.section) {
+                                                errorsList += "<br/><pre>" + error.section + "</pre>";
+                                            }
+                                            errorsList += "</li>";
                                         }
-                                        errorsList += '</li>';
-                                    }
-                                });
-                                errorsList += '</ul>';
-                                rendered = row.status + ' (<a href="#" data-bs-toggle="modal" data-bs-target="#EDI_errors_modal" data-bs-errors="'+ errorsList + '" data-bs-filename="' + row.filename + '">' + _("with errors") + '</a>)';
-                            } else {
-                                rendered = row.status;
-                            }
-                            return rendered;
-                        }
-                    },
-                    {
-                        "data": "vendor.name",
-                        "title": _("Vendor"),
-                        "searchable": true,
-                        "orderable": true,
-                        "render": function(data, type, row, meta) {
-                            let link;
-                            if ( row.vendor ) {
-                               link = '<a href="/cgi-bin/koha/acquisition/vendors/'+row.vendor_id+'">'+row.vendor.name+'</a>';
-                            } else {
-                               link = '<a href="/cgi-bin/koha/acquisition/vendors/'+row.vendor_id+'">'+row.vendor_id+'</a>';
-                            }
-                            return link;
-                        }
-                    },
-                    {
-                        "data": "basket_id:type",
-                        "title": _("Details"),
-                        "searchable": false,
-                        "orderable": true,
-                        "render": function(data, type, row, meta) {
-                            let rendered = '';
-                            if ( row.type == 'QUOTE' || row.type == 'ORDERS' ) {
-                                if ( row.basket_id ) {
-                                    rendered = '<a href="/cgi-bin/koha/acqui/basket.pl?basketno='+row.basket_id+'">'+_("Basket")+': '+row.basket_id+'</a>';
+                                    });
+                                    errorsList += "</ul>";
+                                    rendered = row.status + ' (<a href="#" data-bs-toggle="modal" data-bs-target="#EDI_errors_modal" data-bs-errors="' + errorsList + '" data-bs-filename="' + row.filename + '">' + _("with errors") + "</a>)";
+                                } else {
+                                    rendered = row.status;
                                 }
-                            } else {
-                                rendered = '<a href="/cgi-bin/koha/acqui/invoices.pl?message_id='+row.id+'&op=do_search">'+_("Invoices")+'</a>';
-                            }
-                            return rendered;
-                        }
-                    },
-                    {
-                        "data": "filename",
-                        "title": _("Filename"),
-                        "searchable": true,
-                        "orderable": true
-                    },
-                    {
-                        "title": _("Actions"),
-                        "className": "actions",
-                        "searchable": false,
-                        "orderable": false,
-                        "render": function(data, type, row, meta) {
-                            var result = '<a class="btn btn-default btn-xs view_message" target="_blank" href="/cgi-bin/koha/acqui/edimsg.pl?id='+encodeURIComponent(row.id)+'"><i class="fa fa-search"></i> '+_("View message")+'</a> ';
-                            result += '<form action="/cgi-bin/koha/acqui/edifactmsgs.pl" method="post"><input type="hidden" name="message_id" value="'+encodeURIComponent(row.id)+'" />';
-                            result += '<input type="hidden" name="csrf_token" value="' + $('meta[name="csrf-token"]').attr('content').trim() + '" />';
-                            result += '<input type="hidden" name="op" value="cud-delete" /><button type="submit" class="btn btn-default btn-xs delete_msg"><i class="fa fa-trash-can"></i> '+_("Delete")+'</button> ';
-                            if ( row.status == 'new' ) {
-                                result += '<a class="btn btn-default btn-xs import_msg" href="/cgi-bin/koha/acqui/edifactmsgs.pl?op=import&amp;message_id='+encodeURIComponent(row.id)+'"><i class="fa fa-cog"></i> '+_("Import")+'</a> ';
-                            }
-                            return result;
-                        }
-                    }
-                ]
-            }, 0, 0);
+                                return rendered;
+                            },
+                        },
+                        {
+                            data: "vendor.name",
+                            title: _("Vendor"),
+                            searchable: true,
+                            orderable: true,
+                            render: function (data, type, row, meta) {
+                                let link;
+                                if (row.vendor) {
+                                    link = '<a href="/cgi-bin/koha/acquisition/vendors/' + row.vendor_id + '">' + row.vendor.name + "</a>";
+                                } else {
+                                    link = '<a href="/cgi-bin/koha/acquisition/vendors/' + row.vendor_id + '">' + row.vendor_id + "</a>";
+                                }
+                                return link;
+                            },
+                        },
+                        {
+                            data: "basket_id:type",
+                            title: _("Details"),
+                            searchable: false,
+                            orderable: true,
+                            render: function (data, type, row, meta) {
+                                let rendered = "";
+                                if (row.type == "QUOTE" || row.type == "ORDERS") {
+                                    if (row.basket_id) {
+                                        rendered = '<a href="/cgi-bin/koha/acqui/basket.pl?basketno=' + row.basket_id + '">' + _("Basket") + ": " + row.basket_id + "</a>";
+                                    }
+                                } else {
+                                    rendered = '<a href="/cgi-bin/koha/acqui/invoices.pl?message_id=' + row.id + '&op=do_search">' + _("Invoices") + "</a>";
+                                }
+                                return rendered;
+                            },
+                        },
+                        {
+                            data: "filename",
+                            title: _("Filename"),
+                            searchable: true,
+                            orderable: true,
+                        },
+                        {
+                            title: _("Actions"),
+                            className: "actions",
+                            searchable: false,
+                            orderable: false,
+                            render: function (data, type, row, meta) {
+                                var result =
+                                    '<a class="btn btn-default btn-xs view_message" target="_blank" href="/cgi-bin/koha/acqui/edimsg.pl?id=' + encodeURIComponent(row.id) + '"><i class="fa fa-search"></i> ' + _("View message") + "</a> ";
+                                result += '<form action="/cgi-bin/koha/acqui/edifactmsgs.pl" method="post"><input type="hidden" name="message_id" value="' + encodeURIComponent(row.id) + '" />';
+                                result += '<input type="hidden" name="csrf_token" value="' + $('meta[name="csrf-token"]').attr("content").trim() + '" />';
+                                result += '<input type="hidden" name="op" value="cud-delete" /><button type="submit" class="btn btn-default btn-xs delete_msg"><i class="fa fa-trash-can"></i> ' + _("Delete") + "</button> ";
+                                if (row.status == "new") {
+                                    result +=
+                                        '<a class="btn btn-default btn-xs import_msg" href="/cgi-bin/koha/acqui/edifactmsgs.pl?op=import&amp;message_id=' + encodeURIComponent(row.id) + '"><i class="fa fa-cog"></i> ' + _("Import") + "</a> ";
+                                }
+                                return result;
+                            },
+                        },
+                    ],
+                },
+                0,
+                0
+            );
 
-            $("body").on("click", ".delete_msg" ,function(){
+            $("body").on("click", ".delete_msg", function () {
                 return confirm(_("Are you sure you want to delete this message?"));
             });
         });
