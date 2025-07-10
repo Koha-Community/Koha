@@ -54,16 +54,16 @@ if ($run_report) {
         {
             branchlimit    => $branchlimit,
             itemtypeslimit => $itemtypeslimit,
-            ccodeslimit    => $locationslimit,
-            locationslimit => $ccodeslimit,
+            ccodeslimit    => $ccodeslimit,
+            locationslimit => $locationslimit,
         }
     );
 
     $template->param(
         branchlimit    => $branchlimit,
         itemtypeslimit => $itemtypeslimit,
-        ccodeslimit    => $locationslimit,
-        locationslimit => $ccodeslimit,
+        ccodeslimit    => $ccodeslimit,
+        locationslimit => $locationslimit,
         total          => $items->count,
         itemsloop      => $items,
         run_report     => $run_report,
