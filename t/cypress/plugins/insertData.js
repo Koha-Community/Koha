@@ -210,82 +210,94 @@ const deleteSampleObjects = async allObjects => {
         allObjects = [allObjects];
     }
 
+    const pluralMap = {
+        hold: "holds",
+        patron: "patrons",
+        item: "items",
+        biblio: "biblios",
+        library: "libraries",
+        item_type: "item_types",
+    };
+    // Merge by type
+    const mergedObjects = {};
+    for (const objects of allObjects) {
+        for (const [type, value] of Object.entries(objects)) {
+            let plural = pluralMap?.[type] || type;
+            if (!mergedObjects[plural]) {
+                mergedObjects[plural] = [];
+            }
+
+            if (Array.isArray(value)) {
+                mergedObjects[plural].push(...value);
+            } else {
+                mergedObjects[plural].push(value);
+            }
+        }
+    }
+
     const deletionOrder = [
-        "hold",
-        "patron",
-        "item",
+        "holds",
+        "patrons",
         "items",
-        "biblio",
-        "library",
+        "biblios",
         "libraries",
-        "item_type",
+        "item_types",
     ];
 
     for (const type of deletionOrder) {
-        for (const objects of allObjects) {
-            if (!objects.hasOwnProperty(type)) {
-                continue;
-            }
-            if (Array.isArray(objects[type]) && objects[type].length == 0) {
-                // Empty array
-                continue;
-            }
-            switch (type) {
-                case "biblio":
-                    await query({
-                        sql: "DELETE FROM biblio WHERE biblionumber=?",
-                        values: [objects[type].biblio_id],
-                    });
-                    break;
-                case "items":
-                    let item_ids = objects[type].map(i => i.item_id);
-                    await query({
-                        sql: `DELETE FROM items WHERE itemnumber IN (${item_ids.map(() => "?").join(",")})`,
-                        values: item_ids,
-                    });
-                    break;
-                case "item":
-                    await query({
-                        sql: "DELETE FROM items WHERE itemnumber = ?",
-                        values: [objects[type].item_id],
-                    });
-                    break;
-                case "library":
-                    await query({
-                        sql: "DELETE FROM branches WHERE branchcode = ?",
-                        values: [objects[type].library_id],
-                    });
-                    break;
-                case "libraries":
-                    let library_ids = objects[type].map(i => i.library_id);
-                    await query({
-                        sql: `DELETE FROM branches WHERE branchcode IN (${library_ids.map(() => "?").join(",")})`,
-                        values: library_ids,
-                    });
-                    break;
-                case "hold":
-                    await query({
-                        sql: "DELETE FROM reserves WHERE reserve_id = ?",
-                        values: [objects[type].hold_id],
-                    });
-                    break;
-                case "item_type":
-                    await query({
-                        sql: "DELETE FROM itemtypes WHERE itemtype = ?",
-                        values: [objects[type].item_type_id],
-                    });
-                    break;
-                case "patron":
-                    await query({
-                        sql: "DELETE FROM borrowers WHERE borrowernumber = ?",
-                        values: [objects[type].patron_id],
-                    });
-                    break;
-                default:
-                    console.log(
-                        `Not implemented yet: cannot deleted object '${type}'`
-                    );
-            }
+        if (!mergedObjects[type] || mergedObjects[type].length === 0) {
+            continue;
+        }
+
+        const objects = mergedObjects[type];
+        let ids = [];
+        switch (type) {
+            case "biblios":
+                ids = objects.map(i => i.biblio_id);
+                await query({
+                    sql: `DELETE FROM biblio WHERE biblionumber IN (${ids.map(() => "?").join(",")})`,
+                    values: ids,
+                });
+                break;
+            case "items":
+                ids = objects.map(i => i.item_id);
+                await query({
+                    sql: `DELETE FROM items WHERE itemnumber IN (${ids.map(() => "?").join(",")})`,
+                    values: ids,
+                });
+                break;
+            case "libraries":
+                ids = objects.map(i => i.library_id);
+                await query({
+                    sql: `DELETE FROM branches WHERE branchcode IN (${ids.map(() => "?").join(",")})`,
+                    values: ids,
+                });
+                break;
+            case "holds":
+                ids = objects.map(i => i.hold_id);
+                await query({
+                    sql: `DELETE FROM reserves WHERE reserve_id IN (${ids.map(() => "?").join(",")})`,
+                    values: ids,
+                });
+                break;
+            case "item_types":
+                ids = objects.map(i => i.item_type_id);
+                await query({
+                    sql: `DELETE FROM itemtypes WHERE itemtype IN (${ids.map(() => "?").join(",")})`,
+                    values: ids,
+                });
+                break;
+            case "patrons":
+                ids = objects.map(i => i.patron_id);
+                await query({
+                    sql: `DELETE FROM borrowers WHERE borrowernumber IN (${ids.map(() => "?").join(",")})`,
+                    values: ids,
+                });
+                break;
+            default:
+                throw Error(
+                    `Not implemented yet: cannot deleted object '${type}'`
+                );
         }
     }
     return true;
@@ -420,7 +432,7 @@ const insertObject = async ({ type, object, baseUrl, authHeader }) => {
             authHeader,
         });
     } else {
-        return false;
+        throw Error(`Unsupported object type '${type}' to insert`);
     }
 
     return true;

@@ -2,6 +2,25 @@ const { query } = require("./../../plugins/db.js");
 const { getBasicAuthHeader } = require("./../../plugins/auth.js");
 
 describe("insertData", () => {
+    describe("deleteSampleObjects", () => {
+        it("should delete everything from Object", () => {
+            cy.task("insertSampleBiblio", { item_count: 2 }).then(objects => {
+                cy.task("deleteSampleObjects", objects);
+            });
+        });
+        it("should delete everything from Array", () => {
+            cy.task("insertSampleBiblio", { item_count: 2 }).then(objects => {
+                cy.task("deleteSampleObjects", [
+                    { biblio: objects.biblio },
+                    { item_type: objects.item_type },
+                    { item: objects.items[0] },
+                    { item: objects.items[1] },
+                    { library: objects.libraries[0] },
+                ]);
+            });
+        });
+    });
+
     describe("insertSampleBiblio", () => {
         it("should generate library and item type", () => {
             cy.task("insertSampleBiblio", { item_count: 3 }).then(objects => {
