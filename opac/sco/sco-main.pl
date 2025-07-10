@@ -74,6 +74,13 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     }
 );
 
+# Get the self checkout timeout preference, or use 120 seconds as a default
+my $selfchecktimeout = 120000;
+if ( C4::Context->preference('SelfCheckTimeout') ) {
+    $selfchecktimeout = C4::Context->preference('SelfCheckTimeout') * 1000;
+}
+$template->param( SelfCheckTimeout => $selfchecktimeout );
+
 # Checks policy laid out by SCOAllowCheckin, defaults to 'on' if preference is undefined
 my $allowselfcheckreturns = 1;
 if ( defined C4::Context->preference('SCOAllowCheckin') ) {

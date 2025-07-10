@@ -102,4 +102,8 @@ if ( $op eq 'cud-check_in' ) {
     $template->param( success => \@success, errors => \@errors, checkins => 1 );
 }
 
+# Make sure timeout has a reasonable value
+my $timeout = C4::Context->preference('SelfCheckInTimeout') || 120;
+$template->param( refresh_timeout => $timeout );
+
 output_html_with_http_headers $cgi, $cookie, $template->output, undef, { force_no_caching => 1 };

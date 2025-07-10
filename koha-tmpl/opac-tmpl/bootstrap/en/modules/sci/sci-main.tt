@@ -189,7 +189,7 @@
 </main>
 <!-- / .main -->
 
-[% # Help modal %]
+[%# Help modal %]
 <div id="helpModal" class="modal" tabindex="-1" role="dialog" aria-labelledby="helpModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -222,7 +222,6 @@
 
 [% INCLUDE 'opac-bottom.inc' %]
 [% BLOCK jsinclude %]
-    [% Asset.js('js/timeout.js') | $raw %]
     <script>
         function mungeHistory() {
                     // prevent back button from allowing form resubmission
@@ -273,7 +272,6 @@
                     $("#sci_barcodes_table").show();
                     $('#sci_checkin_button').show();
                     $('#sci_refresh_button').show();
-                    login_timeout();
 
                     // Add barcode to the array
                     barcodes.push(barcode);
@@ -293,24 +291,31 @@
             dofocus();
         });
 
-            document.addEventListener("DOMContentLoaded",function(){
-                if ( document.querySelector('#sci_finish_button,#sci_append_button') ){
-                    login_timeout();
-                }
-            });
-            function login_timeout(){
-                //NOTE: There can only be 1 sci_login_timer at a time
-                if ( ! window.sci_login_timer ){
-                    const idleTimeout = "[% Koha.Preference('SelfCheckInTimeOut') || 120 | html %]";
-                    const home_href = "/cgi-bin/koha/sci/sci-main.pl";
-                    const sci_timer = new sc_timer({
-                        "idle_timeout": idleTimeout,
-                        "redirect_url": home_href
+
+                var idleTime = 0;
+                $(document).ready(function () {
+                    //Increment the idle time counter every second
+                    var idleInterval = setInterval(timerIncrement, 1000);
+
+                    //Zero the idle timer on mouse movement.
+                    $(this).mousemove(function (e) {
+                        idleTime = 0;
                     });
-                    window.sci_login_timer = sci_timer;
-                    sci_timer.start_timer();
+                    $(this).keypress(function (e) {
+                        idleTime = 0;
+                    });
+                });
+
+                function timerIncrement() {
+                    if ( $("#sci_finish_button").is(":visible") || $("#sci_refresh_button").is(":visible") ) {
+                        idleTime = idleTime + 1;
+                        idleTimeout = [% refresh_timeout | html %];
+                        if (idleTime >= idleTimeout ) {
+                            location.href = '/cgi-bin/koha/sci/sci-main.pl';
+                        }
+                    }
                 }
-            }
+
 
                 function checkBarcodeInput() {
                     var inputField = document.getElementById("barcode_input");
