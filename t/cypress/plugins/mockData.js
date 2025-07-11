@@ -14,9 +14,24 @@ const generateMockData = (type, properties) => {
     switch (type) {
         case "string":
             if (properties?.maxLength) {
+                // The propability to have a string with length=1 is the same as length=10
+                // We have very limited pool of possible values for length=1 which will result in a "Duplicate ID" error from the server
+                // Setting minLength to 3 to prevent this kind of failures
+                let minLength =
+                    properties.minLength === 1 ||
+                    properties.minLength === undefined
+                        ? 3
+                        : properties.minLength;
+
+                if (
+                    properties.maxLength !== undefined &&
+                    properties.maxLength < minLength
+                ) {
+                    minLength = properties.maxLength;
+                }
                 return (value = faker.string.alpha({
                     length: {
-                        min: properties.minLength || 1,
+                        min: minLength,
                         max: properties.maxLength,
                     },
                 }));
