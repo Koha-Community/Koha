@@ -8,7 +8,6 @@ describe("opac-readingrecord", () => {
                 cy.task("insertSampleCheckout", {
                     patron: patron,
                 }).then(objects_checkout => {
-                    objects_to_cleanup.push(objects_checkout);
                     cy.task("query", {
                         sql: "INSERT INTO old_issues SELECT * FROM issues WHERE issue_id=?",
                         values: [objects_checkout.checkout.checkout_id],
@@ -17,6 +16,9 @@ describe("opac-readingrecord", () => {
                         sql: "DELETE FROM issues WHERE issue_id=?",
                         values: [objects_checkout.checkout.checkout_id],
                     });
+                    objects_checkout.old_checkout = objects_checkout.checkout;
+                    delete objects_checkout.checkout;
+                    objects_to_cleanup.push(objects_checkout);
                 });
             });
 

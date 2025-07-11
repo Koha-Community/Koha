@@ -332,6 +332,7 @@ const deleteSampleObjects = async allObjects => {
     const pluralMap = {
         hold: "holds",
         checkout: "checkouts",
+        old_checkout: "old_checkouts",
         patron: "patrons",
         item: "items",
         biblio: "biblios",
@@ -358,6 +359,7 @@ const deleteSampleObjects = async allObjects => {
     const deletionOrder = [
         "holds",
         "checkouts",
+        "old_checkouts",
         "patrons",
         "items",
         "biblios",
@@ -405,6 +407,13 @@ const deleteSampleObjects = async allObjects => {
                 ids = objects.map(i => i.checkout_id);
                 await query({
                     sql: `DELETE FROM issues WHERE issue_id IN (${ids.map(() => "?").join(",")})`,
+                    values: ids,
+                });
+                break;
+            case "old_checkouts":
+                ids = objects.map(i => i.checkout_id);
+                await query({
+                    sql: `DELETE FROM old_issues WHERE issue_id IN (${ids.map(() => "?").join(",")})`,
                     values: ids,
                 });
                 break;
