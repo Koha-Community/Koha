@@ -391,6 +391,7 @@ if (   ( $findborrower && $borrowernumber_hold || $findclub && $club_hold )
             my $num_override        = 0;
             my $hiddencount         = 0;
             my $num_alreadyheld     = 0;
+            my $valid_items         = 0;
 
             # iterating through all items first to check if any of them available
             # to pass this value further inside down to IsAvailableForItemLevelRequest to
@@ -515,6 +516,11 @@ if (   ( $findborrower && $borrowernumber_hold || $findclub && $club_hold )
                         && IsAvailableForItemLevelRequest( $item_object, $patron, undef )
                         )
                     {
+                        $valid_items = 1;
+                    }
+
+                    if ($valid_items) {
+
                         # Send the pickup locations count to the UI, the pickup locations will be pulled using the API
                         my $pickup_locations = $item_object->pickup_locations( { patron => $patron } );
                         $item->{pickup_locations_count} = $pickup_locations->count;
@@ -546,6 +552,7 @@ if (   ( $findborrower && $borrowernumber_hold || $findclub && $club_hold )
                             if ( @pickup_locations || C4::Context->preference('AllowHoldPolicyOverride') ) {
                                 $num_items_available++;
                                 $item->{override} = 1;
+                                $num_override++;
 
                                 my $default_pickup_location;
 
@@ -590,6 +597,9 @@ if (   ( $findborrower && $borrowernumber_hold || $findclub && $club_hold )
             {
                 # That is, if all items require an override
                 $template->param( override_required => 1 );
+                if ( $valid_items == 0 ) {
+                    $template->param( none_available_override => 1 );
+                }
             } elsif ( $num_items_available == 0 ) {
                 $template->param( none_available => 1 );
                 $biblioloopiter{warn}       = 1;
