@@ -667,6 +667,32 @@ sub process_quote {
                 my $purchase_order_number = $msg->purchase_order_number;
                 if ($purchase_order_number) {
                     $basket_name = $purchase_order_number;
+
+                    # Check for duplicate purchase order numbers for this vendor (including closed baskets)
+                    my $existing_basket = $schema->resultset('Aqbasket')->search(
+                        {
+                            basketname   => $basket_name,
+                            booksellerid => $quote_message->vendor_id,
+                        }
+                    )->first;
+
+                    if ($existing_basket) {
+
+                        # Log error for duplicate purchase order number but continue processing
+                        my $rff_segment = "RFF+ON:$purchase_order_number";
+                        $quote_message->add_to_edifact_errors(
+                            {
+                                section => $rff_segment,
+                                details => "Duplicate purchase order number '$purchase_order_number' found for vendor "
+                                    . $quote_message->vendor_id . "."
+                            }
+                        );
+                        $logger->warn( "Duplicate purchase order number '$purchase_order_number' for vendor "
+                                . $quote_message->vendor_id
+                                . " (existing basket: "
+                                . $existing_basket->basketno
+                                . ")" );
+                    }
                 }
             }
 

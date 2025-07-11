@@ -38,7 +38,7 @@ my $builder = t::lib::TestBuilder->new;
 my $logger  = t::lib::Mocks::Logger->new();
 
 subtest 'process_quote' => sub {
-    plan tests => 6;
+    plan tests => 7;
 
     $schema->storage->txn_begin;
 
@@ -909,6 +909,67 @@ subtest 'process_quote' => sub {
         is(
             $basket_name, 'TEST_PO_123456',
             'Basket naming logic correctly uses purchase order number when configured'
+        );
+
+        $schema->storage->txn_rollback;
+    };
+
+    # Test 7: Duplicate purchase order number validation
+    subtest 'duplicate_purchase_order_validation' => sub {
+        plan tests => 5;
+
+        $schema->storage->txn_begin;
+
+        # Create vendor EDI account with po_is_basketname set to true
+        my $account = $builder->build(
+            {
+                source => 'VendorEdiAccount',
+                value  => {
+                    description      => 'test vendor duplicate po',
+                    transport        => 'FILE',
+                    po_is_basketname => 1,
+                },
+            }
+        );
+
+        # Create first basket with purchase order number "orders 23/1" (same as in QUOTES_SMALL.CEQ)
+        my $first_basket = $builder->build(
+            {
+                source => 'Aqbasket',
+                value  => {
+                    basketname   => 'orders 23/1',
+                    booksellerid => $account->{vendor_id},
+                    closedate    => undef,                   # Open basket
+                },
+            }
+        );
+
+        # Use existing test file that contains RFF+ON:orders 23/1
+        my $filename = 'QUOTES_SMALL.CEQ';
+        my $trans    = Koha::Edifact::Transport->new( $account->{id} );
+        $trans->working_directory($dirname);
+
+        my $mhash = $trans->message_hash();
+        $mhash->{message_type} = 'QUOTE';
+        $trans->ingest( $mhash, $filename );
+
+        my $quote = $schema->resultset('EdifactMessage')->find( { filename => $filename } );
+        ok( $quote, 'Quote message created successfully' );
+
+        # Process the quote (this should trigger duplicate detection)
+        process_quote($quote);
+
+        # Check that duplicate purchase order error was logged
+        my $errors = $quote->edifact_errors;
+        ok( $errors->count >= 1, 'At least one error logged during quote processing' );
+
+        # Find the specific duplicate purchase order error
+        my $duplicate_error = $errors->search( { section => 'RFF+ON:orders 23/1' } )->first;
+        ok( $duplicate_error, 'Duplicate purchase order error found' );
+        is( $duplicate_error->section, 'RFF+ON:orders 23/1', 'Error section contains the RFF+ON segment' );
+        like(
+            $duplicate_error->details, qr/Duplicate purchase order number 'orders 23\/1' found for vendor/,
+            'Error details describe the duplicate issue'
         );
 
         $schema->storage->txn_rollback;
