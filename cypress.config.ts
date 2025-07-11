@@ -12,7 +12,7 @@ export default defineConfig({
             return require("./t/cypress/plugins/index.js")(on, config);
         },
         experimentalStudio: true,
-        baseUrl: "http://localhost:8081",
+        baseUrl: process.env.KOHA_INTRANET_URL || "http://localhost:8081",
         specPattern: "t/cypress/integration/**/*.*",
         supportFile: "t/cypress/support/e2e.js",
         env: {
