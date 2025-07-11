@@ -518,7 +518,7 @@ sub _convert_facets {
                 facet_count       => $c,
                 facet_link_value  => $t,
                 facet_title_value => $t,
-                facet_label_value => $label,        # TODO either truncate this,
+                facet_label_value => $label || q{},    # TODO either truncate this,
                      # or make the template do it like it should anyway
                 type_link_value => $type,
             };
