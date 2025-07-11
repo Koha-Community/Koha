@@ -449,7 +449,7 @@
             </div>
         [% END %]
 
-        [% IF ( no_reserves_allowed || exceeded_maxreserves || exceeded_holds_per_record || alreadyreserved || none_available || alreadypossession || ageRestricted || recall ) %]
+        [% IF ( no_reserves_allowed || exceeded_maxreserves || exceeded_holds_per_record || alreadyreserved || none_available || none_available_override || alreadypossession || ageRestricted || recall ) %]
             <div class="alert alert-warning">
                 [% UNLESS ( multi_hold ) %]
                     <h3>Cannot place hold</h3>
@@ -472,7 +472,7 @@
                             <li>[% INCLUDE 'patron-title.inc' patron => patron no_title => 1 no_cardnumber => 1 hide_patron_infos_if_needed => 1 %] <strong>already has a hold</strong> on this item.</li>
                         [% ELSIF ( ageRestricted ) %]
                             <li><strong>Age restricted</strong></li>
-                        [% ELSIF ( none_available ) %]
+                        [% ELSIF ( none_available || none_available_override ) %]
                             <li> <strong>No items are available</strong> to be placed on hold.</li>
                         [% ELSIF ( maxreserves ) %]
                             <li
@@ -672,7 +672,7 @@
                         <fieldset class="action">
                             [% IF ( patron.borrowernumber ) %]
                                 [% IF ( override_required ) %]
-                                    <button type="submit" id="hold_grp_btn" class="btn btn-primary warning"><i class="fa fa-exclamation-triangle "></i> Place hold</button>
+                                    <button type="submit" id="hold_grp_btn" class="btn btn-primary"><i class="fa fa-exclamation-triangle "></i> Place hold</button>
                                 [% ELSIF ( none_available ) %]
                                     <button type="submit" id="hold_grp_btn" disabled="disabled" class="btn btn-primary btn-disabled">Place hold</button>
                                 [% ELSE %]
@@ -767,7 +767,7 @@
                             <fieldset class="action">
                                 [% IF ( patron.borrowernumber ) %]
                                     [% IF ( override_required ) %]
-                                        <button type="submit" id="hold_any_btn" class="btn btn-primary warning"><i class="fa fa-exclamation-triangle "></i> Place hold</button>
+                                        <button type="submit" id="hold_any_btn" class="btn btn-primary"><i class="fa fa-exclamation-triangle "></i> Place hold</button>
                                     [% ELSIF ( none_available ) %]
                                         <button type="submit" id="hold_any_btn" disabled="disabled" class="btn btn-primary btn-disabled">Place hold</button>
                                     [% ELSE %]
@@ -1017,7 +1017,7 @@
                         <fieldset class="action">
                             [% IF ( patron.borrowernumber ) %]
                                 [% IF ( override_required ) %]
-                                    <button type="submit" id="hold_item_btn" class="btn btn-primary warning"><i class="fa fa-exclamation-triangle "></i> Place hold</button>
+                                    <button type="submit" id="hold_item_btn" class="btn btn-primary"><i class="fa fa-exclamation-triangle "></i> Place hold</button>
                                 [% ELSIF ( none_available ) %]
                                     <button type="submit" id="hold_item_btn" disabled="disabled" class="btn btn-primary btn-disabled">Place hold</button>
                                 [% ELSE %]
@@ -1167,7 +1167,7 @@
                 <fieldset class="action">
                     [% IF ( patron AND patron.borrowernumber ) %]
                         [% IF ( override_required ) %]
-                            <button type="submit" id="hold_multi_btn" class="btn btn-primary warning"><i class="fa fa-exclamation-triangle "></i> Place holds</button>
+                            <button type="submit" id="hold_multi_btn" class="btn btn-primary "><i class="fa fa-exclamation-triangle "></i> Place holds</button>
                         [% ELSIF ( no_bibs_available ) %]
                             <button type="submit" id="hold_multi_btn" class="btn btn-primary btn-disabled" disabled="disabled">Place holds</button>
                         [% ELSIF ( none_available ) %]
