@@ -739,6 +739,8 @@ subtest 'to_api() tests' => sub {
         }
     );
 
+    t::lib::Mocks::mock_userenv( { patron => $consumer } );
+
     my $restricted = $patron->to_api( { user => $consumer } )->{restricted};
     ok( defined $restricted, 'restricted is defined' );
     ok( !$restricted,        'debarred is undef, restricted evaluates to false' );
