@@ -333,7 +333,7 @@ describe("kohaTable (using REST API)", () => {
 
                 cy.window().then(win => {
                     win.categories_map = patrons.reduce((map, p) => {
-                        map[p.category_id] = p.category_id;
+                        map[p.category_id.toLowerCase()] = p.category_id;
                         return map;
                     }, {});
                 });
@@ -399,7 +399,7 @@ describe("kohaTable (using REST API)", () => {
 
                 cy.window().then(win => {
                     win.categories_map = patrons.reduce((map, p) => {
-                        map[p.category_id] = p.category_id;
+                        map[p.category_id.toLowerCase()] = p.category_id;
                         return map;
                     }, {});
                 });
