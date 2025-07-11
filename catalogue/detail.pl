@@ -358,8 +358,9 @@ if ( C4::Context->preference('SeparateHoldingsByGroup') ) {
                 # Build group branchcode hash
                 $branchcode_hash{ $group->id } = \@libs_branchcodes;
 
+                my $SeparateHoldingsBranch = C4::Context->preference('SeparateHoldingsBranch') || 'homebranch';
                 my $group_holdings_count =
-                    $items_to_display->search( { homebranch => { '-in' => \@libs_branchcodes } } )->count;
+                    $items_to_display->search( { $SeparateHoldingsBranch => { '-in' => \@libs_branchcodes } } )->count;
                 $holdings_count{ $group->id } = $group_holdings_count;
                 $total_group_holdings_count += $group_holdings_count;
 
