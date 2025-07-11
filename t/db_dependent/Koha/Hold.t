@@ -367,7 +367,7 @@ subtest 'fill() tests' => sub {
 
         t::lib::Mocks::mock_preference( 'RealTimeHoldsQueue', 1 );
 
-        diag("Filling a hold when pref enabled should trigger a test");
+        # Filling a hold when pref enabled should trigger a test
         $builder->build_object(
             {
                 class => 'Koha::Holds',
@@ -379,7 +379,7 @@ subtest 'fill() tests' => sub {
 
         t::lib::Mocks::mock_preference( 'RealTimeHoldsQueue', 0 );
 
-        diag("Filling a hold when pref disabled should not trigger a test");
+        # Filling a hold when pref disabled should not trigger a test
         $builder->build_object(
             {
                 class => 'Koha::Holds',
@@ -411,16 +411,17 @@ subtest 'fill() tests' => sub {
         )->store;
 
         # Pref is off, no test triggered
-        diag("Updating a hold location when pref disabled should not trigger a test");
+        # Updating a hold location when pref disabled should not trigger a test
         $hold->branchcode( $library_2->branchcode )->store;
 
         t::lib::Mocks::mock_preference( 'RealTimeHoldsQueue', 1 );
-        diag("Updating a hold location when pref enabled should trigger a test");
+
+        # Updating a hold location when pref enabled should trigger a test
 
         # Pref is on, test triggered
         $hold->branchcode( $library_1->branchcode )->store;
 
-        diag("Update with no change to pickup location should not trigger a test");
+        # Update with no change to pickup location should not trigger a test
         $hold->branchcode( $library_1->branchcode )->store;
 
     };
