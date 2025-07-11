@@ -7,7 +7,8 @@ use t::lib::TestBuilder;
 
 use C4::Context;
 
-use Test::More tests => 72;
+use Test::More tests => 73;
+use Test::NoWarnings;
 use Test::Exception;
 
 use MARC::Record;
@@ -1653,7 +1654,7 @@ subtest 'non priority holds' => sub {
             itemnumber     => $item->itemnumber,
             branchcode     => $item->homebranch
         }
-    )->store;
+    )->store->get_from_storage;
 
     my $hid = AddReserve(
         {
