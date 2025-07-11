@@ -1916,3 +1916,15 @@ Cypress.Commands.add("mock_table_settings", (settings, table_settings_var) => {
         cy.wrap(table_settings.columns).as("columns");
     });
 });
+
+before(() => {
+    cy.task("query", {
+        sql: "SELECT value FROM systempreferences WHERE variable='RESTBasicAuth'",
+    }).then(value => {
+        if (value[0].value !== "1") {
+            throw new Error(
+                "Cypress tests tests require 'RESTBasicAuth'. Skipping suite."
+            );
+        }
+    });
+});
