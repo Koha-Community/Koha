@@ -68,8 +68,14 @@
                     [% END %]
                     <li>
                         <label for="basketname" class="required">Basket name: </label>
-                        <input type="text" name="basketname" id="basketname" size="40" maxlength="80" value="[% basketname | html %]" required="required" class="focus required" />
-                        <span class="required">Required</span>
+                        [% IF basket_name_readonly %]
+                            <input type="text" name="basketname" id="basketname" size="40" maxlength="80" value="[% basketname | html %]" required="required" class="focus required" readonly="readonly" />
+                            <span class="required">Required</span>
+                            <div class="hint">This basket name is derived from the purchase order number and cannot be changed.</div>
+                        [% ELSE %]
+                            <input type="text" name="basketname" id="basketname" size="40" maxlength="80" value="[% basketname | html %]" required="required" class="focus required" />
+                            <span class="required">Required</span>
+                        [% END %]
                     </li>
                     <li>
                         <label for="billingplace">Billing place: </label>

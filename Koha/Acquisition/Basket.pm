@@ -135,6 +135,30 @@ sub edi_order {
     return $order_rs->single;
 }
 
+=head3 edi_quote
+
+  my $edi_order = $basket->edi_quote;
+
+Returns the EDI quote object if one was used to generate this basket.
+
+NOTE: This currently returns a bare DBIx::Class result or undefined. This is consistent with the rest of EDI;
+However it would be beneficial to convert these to full fledge Koha::Objects in the future.
+
+=cut
+
+sub edi_quote {
+    my ($self) = @_;
+
+    my $order_rs = $self->_result->edifact_messages(
+        {
+            message_type => 'QUOTE',
+            deleted      => 0
+        },
+        { order_by => { '-desc' => 'transfer_date' }, rows => 1 }
+    );
+    return $order_rs->single;
+}
+
 =head3 effective_create_items
 
 Returns C<create_items> for this basket, falling back to C<AcqCreateItem> if unset.

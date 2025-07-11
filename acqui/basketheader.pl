@@ -56,6 +56,7 @@ use C4::Contract    qw( GetContracts GetContract );
 use Koha::Acquisition::Booksellers;
 use Koha::Acquisition::Baskets;
 use Koha::AdditionalFields;
+use Koha::Database;
 
 my $input = CGI->new;
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
@@ -122,6 +123,24 @@ if ( $op eq 'add_form' ) {
         );
     }
 
+    # Check if basket name should be read-only (EDI-generated with PO number setting)
+    my $basket_name_readonly = 0;
+    if ( $basketno && $basket ) {
+        my $basket_obj = Koha::Acquisition::Baskets->find($basketno);
+        if ($basket_obj) {
+            my $edi_quote = $basket_obj->edi_quote;
+            if ($edi_quote) {
+
+                # This basket was created from an EDI quote
+                # Check if the vendor EDI account is configured to use purchase order numbers
+                my $vendor_edi_account = $edi_quote->edi_acct;
+                if ( $vendor_edi_account && $vendor_edi_account->po_is_basketname ) {
+                    $basket_name_readonly = 1;
+                }
+            }
+        }
+    }
+
     $template->param(
         add_form             => 1,
         basketname           => $basket->{'basketname'},
@@ -132,6 +151,7 @@ if ( $op eq 'add_form' ) {
         basketno             => $basketno,
         is_standing          => $basket->{is_standing},
         create_items         => $basket->{create_items},
+        basket_name_readonly => $basket_name_readonly,
     );
 
     my $billingplace  = $basket->{'billingplace'}  || C4::Context->userenv->{"branch"};
@@ -145,9 +165,34 @@ if ( $op eq 'add_form' ) {
 
     #we are confirming the changes, save the basket
     if ($is_an_edit) {
+
+        # Check if basket name should be protected from changes
+        my $basket_name    = scalar $input->param('basketname');
+        my $current_basket = GetBasket($basketno);
+
+        # If this basket was created from EDI with PO number setting, prevent name changes
+        my $basket_obj = Koha::Acquisition::Baskets->find($basketno);
+        if ($basket_obj) {
+            my $edi_order = $basket_obj->edi_order;
+            if ($edi_order) {
+
+                # This basket was created from an EDI order/quote
+                # Check if the vendor EDI account is configured to use purchase order numbers
+                my $schema             = Koha::Database->new()->schema();
+                my $vendor_edi_account = $schema->resultset('VendorEdiAccount')
+                    ->search( { vendor_id => scalar $input->param('basketbooksellerid') } )->first;
+
+                if ( $vendor_edi_account && $vendor_edi_account->po_is_basketname ) {
+
+                    # Preserve the original basket name
+                    $basket_name = $current_basket->{'basketname'};
+                }
+            }
+        }
+
         ModBasketHeader(
             $basketno,
-            scalar $input->param('basketname'),
+            $basket_name,
             scalar $input->param('basketnote'),
             scalar $input->param('basketbooksellernote'),
             scalar $input->param('basketcontractnumber') || undef,
