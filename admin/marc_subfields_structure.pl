@@ -131,12 +131,6 @@ if ( $op eq 'add_form' ) {
         require Koha::Plugins;
         my $plugins = Koha::Plugins->new();
 
-        # Get all plugins first to debug
-        my @all_plugins = $plugins->GetPlugins();
-        foreach my $plugin (@all_plugins) {
-            ( $plugin->can('get_valuebuilders') ? "yes" : "no" );
-        }
-
         # Use the dedicated get_valuebuilders_installed method
         my @plugin_valuebuilders = $plugins->get_valuebuilders_installed();
 
