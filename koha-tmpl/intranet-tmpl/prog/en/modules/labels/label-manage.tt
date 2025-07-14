@@ -180,7 +180,7 @@
                 alert(_("Please select at least one batch to export."));
                 return;     // no batch selected
             }
-            return GB_showCenter(_("Export labels"), "/cgi-bin/koha/labels/label-print.pl?" + getstr, 400, 800);
+            location.href = "/cgi-bin/koha/labels/label-print.pl?" + getstr;
         }
         function selected_layout(op) {
             var selected = new Array;
@@ -216,6 +216,7 @@
                 return confirmDelete( _("Are you sure you want to delete this?") );
             });
             $("#labels-table").kohaTable({
+                dom: '<"dt-info"i><"top pager"<"table_entries"lp><"table_controls"f>>tr<"bottom pager"ip>',
                 pagingType: "full",
                 order: [[1, "asc"]],
             });

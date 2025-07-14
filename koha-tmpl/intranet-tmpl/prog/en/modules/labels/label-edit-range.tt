@@ -61,7 +61,7 @@
             var str = "";
             str += "from=" + document.getElementById("from-input").value + "&";
             str += "to=" + document.getElementById("to-input").value;
-            return GB_showCenter("Export labels", "/cgi-bin/koha/labels/label-print.pl?" + str, 400, 800);
+            location.href = "/cgi-bin/koha/labels/label-print.pl?" + str;
         }
 
         function checkTwoValue(_from, _to, _id) {

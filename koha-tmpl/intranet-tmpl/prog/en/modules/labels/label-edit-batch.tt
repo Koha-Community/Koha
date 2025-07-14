@@ -315,9 +315,9 @@
                     alert(_("Please select at least one label to export."));
                     return;     // no batch selected
                 }
-                return GB_showCenter(_("Export labels"), "/cgi-bin/koha/labels/label-print.pl?batch_id=[% batch_id | html %]&" + getstr, 400, 800);
+                location.href = "/cgi-bin/koha/labels/label-print.pl?batch_id=[% batch_id | html %]&" + getstr;
             } else if (mode == 'batch') {
-                return GB_showCenter(_("Export labels"), "/cgi-bin/koha/labels/label-print.pl?batch_id=[% batch_id | html %]", 400, 800);
+                location.href = "/cgi-bin/koha/labels/label-print.pl?batch_id=[% batch_id | html %]";
             } else {
                 // some pass-through error trapping just in case...
             }
@@ -347,6 +347,7 @@
                 $("#description").hide();
             [% END %]
             $("#batcht").kohaTable({
+                dom: '<"dt-info"i><"top pager"<"table_entries"lp><"table_controls"f>>tr<"bottom pager"ip>',
                 autoWidth: false,
                 order: [[0, "asc"]],
                 pagingType: "full",
@@ -379,7 +380,7 @@
                 e.preventDefault();
                 var label_id = $(this).data("label-id");
                 var batch_id = $(this).data("batch-id");
-                GB_showCenter(_("Export labels"),"/cgi-bin/koha/labels/label-print.pl?batch_id=" + batch_id + "&label_id=" + label_id, 400, 800);
+                location.href = "/cgi-bin/koha/labels/label-print.pl?batch_id=" + batch_id + "&label_id=" + label_id;
             });
             $("#savedesc").click(function(event){
                 event.preventDefault(); // prevent form submission
