@@ -110,7 +110,7 @@
                     [% INCLUDE 'csrf-token.inc' %]
                     <legend class="sr-only">Hold requests</legend>
                     <input type="hidden" name="op" value="cud-place_reserve" />
-                    [% IF ( Koha.Preference('DisplayAddHoldGroups') && ( multi_hold ) ) %]
+                    [% IF ( Koha.Preference('DisplayAddHoldGroups') && ( multi_hold || Koha.Preference('DisplayMultiItemHolds') ) ) %]
                         <div id="hold_group">
                             <fieldset class="rows">
                                 <ul>

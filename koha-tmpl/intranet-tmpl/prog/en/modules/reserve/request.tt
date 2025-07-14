@@ -816,6 +816,14 @@
                                     [% biblio_info.biblioitem.publicationyear | html %]
                                 </li>
                             [% END %]
+
+                            [% IF ( Koha.Preference('DisplayAddHoldGroups') && Koha.Preference('DisplayMultiItemHolds') ) %]
+                                <li id="hold_group_list_item">
+                                    <label for="hold_group">Treat as hold group: </label>
+                                    <input name="hold_group" id="hold_group" type="checkbox" />
+                                    <span class="hint">Place a hold on the next available title from this group</span>
+                                </li>
+                            [% END %]
                         </ol>
 
                         <table id="requestspecific">
