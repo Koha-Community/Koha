@@ -171,6 +171,7 @@
                     </form>
 
                     [% PROCESS 'cancel-hold-modal' form_action = '/cgi-bin/koha/reserve/modrequest.pl' from_param = patronpage %]
+                    [% PROCESS 'suspend-hold-modal' %]
 
                     [% IF Koha.Preference('SuspendHoldsIntranet') %]
                         <fieldset class="action">
