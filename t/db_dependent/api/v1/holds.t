@@ -17,7 +17,8 @@
 
 use Modern::Perl;
 
-use Test::More tests => 14;
+use Test::More tests => 15;
+use Test::NoWarnings;
 use Test::MockModule;
 use Test::Mojo;
 use t::lib::TestBuilder;
@@ -201,6 +202,10 @@ subtest "Test endpoints without permission" => sub {
 subtest "Test endpoints with permission" => sub {
 
     plan tests => 45;
+
+    # Prevent warning 'No reserves HOLD_CANCELLATION letter transported by email'
+    my $mock_letters = Test::MockModule->new('C4::Letters');
+    $mock_letters->mock( 'GetPreparedLetter', sub { return } );
 
     $t->get_ok( "//$userid_1:$password@/api/v1/holds" )
       ->status_is(200)
