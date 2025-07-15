@@ -815,7 +815,6 @@
         </div>
         [% IF db_audit.diff_found %]
             <div>
-                <p>Run the following SQL to fix the database:</p>
                 <pre>
                     <code>[% db_audit.diff | $raw %]</code>
                 </pre>
