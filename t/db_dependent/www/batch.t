@@ -20,8 +20,8 @@ use Modern::Perl;
 
 use utf8;
 use Test::More;    #See plan tests => \d+ below
+use Test::NoWarnings;
 use Test::WWW::Mechanize;
-use XML::Simple;
 use JSON;
 use File::Basename;
 use File::Spec;
@@ -31,9 +31,6 @@ use Koha::BackgroundJobs;
 
 my $testdir = File::Spec->rel2abs( dirname(__FILE__) );
 
-my $koha_conf = $ENV{KOHA_CONF};
-my $xml       = XMLin($koha_conf);
-
 use C4::Context;
 my $marcflavour = C4::Context->preference('marcflavour') || 'MARC21';
 
@@ -42,8 +39,8 @@ my $file =
     ? "$testdir/data/unimarcrecord.mrc"
     : "$testdir/data/marc21record.mrc";
 
-my $user     = $ENV{KOHA_USER} || $xml->{config}->{user};
-my $password = $ENV{KOHA_PASS} || $xml->{config}->{pass};
+my $user     = $ENV{KOHA_USER} || 'koha';
+my $password = $ENV{KOHA_PASS} || 'koha';
 my $intranet = $ENV{KOHA_INTRANET_URL};
 
 if ( not defined $intranet ) {
@@ -52,7 +49,7 @@ if ( not defined $intranet ) {
         . "KOHA_CONF set, you must also set KOHA_USER and KOHA_PASS for "
         . "your username and password";
 } else {
-    plan tests => 24;
+    plan tests => 25;
 }
 
 $intranet =~ s#/$##;

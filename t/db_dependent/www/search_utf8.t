@@ -19,9 +19,9 @@ use Modern::Perl;
 
 use utf8;
 use Test::More;    #See plan tests => \d+ below
+use Test::NoWarnings;
 use Test::WWW::Mechanize;
 use Data::Dumper;
-use XML::Simple;
 use File::Basename qw(dirname );
 use POSIX;
 use Encode;
@@ -64,7 +64,7 @@ if ( not $intranet ) {
 elsif ( not $opac ) {
     plan skip_all => "Tests skip. You must set env. variable KOHA_OPAC_URL to do tests\n";
 } else {
-    plan tests => 80;
+    plan tests => 81;
 }
 
 $intranet =~ s#/$##;
@@ -94,8 +94,8 @@ if ( not defined $mock_zebra->{indexer_pid} ) {
 our $agent = Test::WWW::Mechanize->new( autocheck => 1 );
 $agent->get_ok( "$intranet/cgi-bin/koha/mainpage.pl", 'connect to intranet' );
 $agent->form_name('loginform');
-$agent->field( 'login_userid',   $ENV{KOHA_PASS} );
-$agent->field( 'login_password', $ENV{KOHA_USER} );
+$agent->field( 'login_userid',   $ENV{KOHA_PASS} || 'koha' );
+$agent->field( 'login_password', $ENV{KOHA_USER} || 'koha' );
 $agent->field( 'branch',         '' );
 $agent->click_ok( '', 'login to staff interface' );
 
