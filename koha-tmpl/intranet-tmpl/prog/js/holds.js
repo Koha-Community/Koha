@@ -700,6 +700,25 @@ $(document).ready(function () {
         ];
         return toggle_suspend(this, inputs);
     });
+
+    var MSG_SUSPEND_SELECTED = _("Suspend selected (%s)");
+    var MSG_SUSPEND_SELECTED_HOLDS = _("Suspend selected holds");
+    $(".suspend_selected_holds").html(
+        MSG_SUSPEND_SELECTED.format(
+            $(".holds_table .select_hold:checked").length
+        )
+    );
+
+    $(".suspend_selected_holds").click(function (e) {
+        e.preventDefault();
+        if (!$(".holds_table .select_hold:checked").length) {
+            return false;
+        }
+        $(".modal-title").html(MSG_SUSPEND_SELECTED_HOLDS);
+        $("#suspend-modal").modal("show");
+        return false;
+    });
+
     $(".unsuspend-hold").on("click", function (e) {
         e.preventDefault();
         let inputs = [
@@ -711,4 +730,206 @@ $(document).ready(function () {
         ];
         return toggle_suspend(this, inputs);
     });
+
+    var MSG_CANCEL_SELECTED = _("Cancel selected (%s)");
+    var MSG_CANCEL_ALERT = _(
+        "This action will cancel <span class='badge bg-danger'>%s</span> hold(s)."
+    );
+
+    // Confirm cancellation of hold
+    let cancel_link;
+    $(document).on("click", ".cancel-hold", function (e) {
+        e.preventDefault;
+        cancel_link = $(this);
+        $("#cancel_modal_form #inputs").empty();
+        let reserve_id = cancel_link.data("id");
+        let biblionumber = cancel_link.data("biblionumber");
+        if (!patron_page) {
+            $("#cancel_modal_form #inputs").append(
+                '<input type="hidden" name="reserve_id" value="' +
+                    reserve_id +
+                    '">'
+            );
+            $("#cancel_modal_form #inputs").append(
+                '<input type="hidden" name="biblionumber" value="' +
+                    biblionumber +
+                    '">'
+            );
+            $("#cancel_modal_form #inputs").append(
+                '<input type="hidden" name="op" value="cud-cancel">'
+            );
+        } else {
+            _append_patron_page_cancel_hold_modal_data({
+                hold: reserve_id,
+                biblionumber: biblionumber,
+                borrowernumber: cancel_link.data("borrowernumber"),
+            });
+        }
+        $("#cancelModal").modal("show");
+        return false;
+    });
+
+    if (
+        !localStorage.selectedHolds ||
+        document.referrer.replace(/\?.*/, "") !==
+            document.location.origin + document.location.pathname
+    ) {
+        localStorage.selectedHolds = [];
+    }
+
+    $(".holds_table .select_hold").each(function () {
+        if (localStorage.selectedHolds.includes($(this).data("id"))) {
+            $(this).prop("checked", true);
+        }
+    });
+
+    if (!patron_page) {
+        $(".holds_table .select_hold_all").each(function () {
+            var table = $(this).parents(".holds_table");
+            var count = $(".select_hold:not(:checked)", table).length;
+            $(".select_hold_all", table).prop("checked", !count);
+        });
+    }
+
+    function updateSelectedHoldsButtonCounters() {
+        $(".cancel_selected_holds").html(
+            MSG_CANCEL_SELECTED.format(
+                $(".holds_table .select_hold:checked").length
+            )
+        );
+        $(".suspend_selected_holds").html(
+            MSG_SUSPEND_SELECTED.format(
+                $(".holds_table .select_hold:checked").length
+            )
+        );
+    }
+
+    updateSelectedHoldsButtonCounters();
+
+    $(".holds_table .select_hold_all").click(function () {
+        var table;
+        if (!patron_page) {
+            table = $(this).parents(".holds_table");
+        } else {
+            table = $(".holds_table:not(.fixedHeader-floating)");
+        }
+        var count = $(".select_hold:checked", table).length;
+        $(".select_hold", table).prop("checked", !count);
+        $(this).prop("checked", !count);
+        updateSelectedHoldsButtonCounters();
+        $("#cancel_hold_alert").html(
+            MSG_CANCEL_ALERT.format(
+                $(".holds_table .select_hold:checked").length
+            )
+        );
+        $("#cancel_hold_alert").show();
+        localStorage.selectedHolds =
+            "[" +
+            $(".holds_table .select_hold:checked")
+                .toArray()
+                .map(el =>
+                    JSON.stringify({
+                        hold: $(el).data("id"),
+                        borrowernumber: $(el).data("borrowernumber"),
+                        biblionumber: $(el).data("biblionumber"),
+                    })
+                )
+                .join(",") +
+            "]";
+    });
+
+    $(".holds_table").on("click", ".select_hold", function () {
+        var table = $(this).parents(".holds_table");
+        var count = $(".select_hold:not(:checked)", table).length;
+        $(".select_hold_all", table).prop("checked", !count);
+        updateSelectedHoldsButtonCounters();
+        $("#cancel_hold_alert").html(
+            MSG_CANCEL_ALERT.format(
+                $(".holds_table .select_hold:checked").length
+            )
+        );
+        $("#cancel_hold_alert").show();
+        localStorage.selectedHolds =
+            "[" +
+            $(".holds_table .select_hold:checked")
+                .toArray()
+                .map(el =>
+                    JSON.stringify({
+                        hold: $(el).data("id"),
+                        borrowernumber: $(el).data("borrowernumber"),
+                        biblionumber: $(el).data("biblionumber"),
+                    })
+                )
+                .join(",") +
+            "]";
+    });
+
+    $(".cancel_selected_holds").click(function (e) {
+        e.preventDefault();
+        if ($(".holds_table .select_hold:checked").length) {
+            $("#cancel_modal_form #inputs").empty();
+            if (!patron_page) {
+                biblionumbers.forEach(function (biblionumber) {
+                    $("#cancel_modal_form #inputs").append(
+                        '<input type="hidden" name="biblionumber" value="' +
+                            biblionumber +
+                            '">'
+                    );
+                });
+                $("#cancel_modal_form #inputs").append(
+                    '<input type="hidden" name="op" value="cud-cancel_bulk">'
+                );
+                let hold_ids = $(".holds_table .select_hold:checked")
+                    .toArray()
+                    .map(el => $(el).data("id"))
+                    .join(",");
+                $("#cancel_modal_form #inputs").append(
+                    '<input type="hidden" name="ids" value="' + hold_ids + '">'
+                );
+            } else {
+                $("#cancel_modal_form #inputs").append(
+                    '<input type="hidden" name="op" value="cud-cancelall">'
+                );
+                let hold_data =
+                    "[" +
+                    $(".holds_table .select_hold:checked")
+                        .toArray()
+                        .map(el =>
+                            JSON.stringify({
+                                hold: $(el).data("id"),
+                                borrowernumber: $(el).data("borrowernumber"),
+                                biblionumber: $(el).data("biblionumber"),
+                            })
+                        )
+                        .join(",") +
+                    "]";
+                JSON.parse(hold_data).forEach(function (hold) {
+                    _append_patron_page_cancel_hold_modal_data(hold);
+                });
+            }
+
+            delete localStorage.selectedHolds;
+            $("#cancelModal").modal("show");
+        }
+        return false;
+    });
+
+    function _append_patron_page_cancel_hold_modal_data(hold) {
+        $("#cancel_modal_form #inputs").append(
+            '<input type="hidden" name="rank-request" value="del">'
+        );
+        $("#cancel_modal_form #inputs").append(
+            '<input type="hidden" name="biblionumber" value="' +
+                hold.biblionumber +
+                '">'
+        );
+        $("#cancel_modal_form #inputs").append(
+            '<input type="hidden" name="borrowernumber" value="' +
+                hold.borrowernumber +
+                '">'
+        );
+        $("#cancel_modal_form #inputs").append(
+            '<input type="hidden" name="reserve_id" value="' + hold.hold + '">'
+        );
+    }
 });
