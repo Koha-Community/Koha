@@ -159,6 +159,20 @@ $(document).ready(function () {
                     dom: '<"table_controls"B>rt',
                     columns: [
                         {
+                            orderable: false,
+                            data: function (oObj) {
+                                return (
+                                    '<input type="checkbox" class="select_hold" data-id="' +
+                                    oObj.reserve_id +
+                                    '" data-borrowernumber="' +
+                                    borrowernumber +
+                                    '" data-biblionumber="' +
+                                    oObj.biblionumber +
+                                    '">'
+                                );
+                            },
+                        },
+                        {
                             data: {
                                 _: "reservedate_formatted",
                                 sort: "reservedate",

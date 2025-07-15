@@ -146,9 +146,10 @@
                     <form action="/cgi-bin/koha/reserve/modrequest.pl" method="post">
                         [% INCLUDE 'csrf-token.inc' %]
                         <input type="hidden" name="from" value="circ" />
-                        <table id="holds-table" style="width: 100% !Important;">
+                        <table id="holds-table" class="holds_table" style="width: 100% !Important;">
                             <thead>
                                 <tr>
+                                    <th id="checkbox" data-colname="checkbox"><input type="checkbox" class="select_hold_all" /></th>
                                     <th>Hold date</th>
                                     <th class="anti-the">Title</th>
                                     <th>Call number</th>
