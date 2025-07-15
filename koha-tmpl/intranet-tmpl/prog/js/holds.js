@@ -584,48 +584,6 @@ $(document).ready(function () {
         }
     }
 
-    $("body").append(
-        "\
-        <div id='suspend-modal' class='modal' role='dialog' aria-hidden='true'>\
-            <div class='modal-dialog'>\
-            <div class='modal-content'>\
-            <form id='suspend-modal-form' class='form-inline'>\
-                <div class='modal-header'>\
-                    <h1 class='modal-title' id='suspend-modal-label'>" +
-            __("Suspend hold on") +
-            " <i><span id='suspend-modal-title'></span></i></h1>\
-                    <button type='button' class='btn-close' data-bs-dismiss='modal' aria-label='Close'></button>\
-                </div>\
-\
-                <div class='modal-body'>\
-\
-                    <label for='suspend-modal-until'>" +
-            __("Suspend until:") +
-            "</label>\
-                    <input name='suspend_until' id='suspend-modal-until' class='suspend-until flatpickr' data-flatpickr-futuredate='true' size='10' />\
-\
-                    <p><a class='btn btn-link' id='suspend-modal-clear-date' >" +
-            __("Clear date to suspend indefinitely") +
-            "</a></p>\
-\
-                </div>\
-\
-                <div class='modal-footer'>\
-                    <button id='suspend-modal-submit' class='btn btn-primary' type='submit' name='submit'>" +
-            __("Suspend") +
-            "</button>\
-                    <button type='button' class='btn btn-default' data-bs-dismiss='modal'>" +
-            __("Cancel") +
-            "</button>\
-                </div>\
-                <div id='suspend-selected-container'></div>\
-            </form>\
-            </div>\
-            </div>\
-        </div>\
-    "
-    );
-
     $("#suspend-modal-clear-date").on("click", function () {
         $("#suspend-modal-until").flatpickr().clear();
     });
