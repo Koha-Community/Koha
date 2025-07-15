@@ -17,7 +17,8 @@
 
 use Modern::Perl;
 
-use Test::More tests => 19;
+use Test::More tests => 20;
+use Test::NoWarnings;
 
 use Koha::Database;
 use Koha::SearchFields;
@@ -58,7 +59,8 @@ $search_field->add_to_search_marc_maps($marc_field,
     {
         facet => 0,
         suggestible => 0,
-        sort => 0
+        sort        => 0,
+        filter      => '',
     } );
 
 $marc_field = Koha::SearchMarcMaps->find_or_create(
@@ -72,7 +74,8 @@ $search_field->add_to_search_marc_maps($marc_field,
     {
         facet => 0,
         suggestible => 0,
-        sort => 0
+        sort        => 0,
+        filter      => '',
     } );
 
 $marc_field = Koha::SearchMarcMaps->find_or_create(
@@ -86,7 +89,8 @@ $search_field->add_to_search_marc_maps($marc_field,
     {
         facet => 0,
         suggestible => 1,
-        sort => 0
+        sort        => 0,
+        filter      => '',
     } );
 
 my $mappings = Koha::SearchEngine::Elasticsearch::raw_elasticsearch_mappings();
