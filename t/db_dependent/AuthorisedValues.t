@@ -194,8 +194,8 @@ subtest 'search_by_*_field + find_by_koha_field + get_description + authorised_v
             kohafield => 'items.restricted'
         }
     )->store;
-    Koha::MarcSubfieldStructure->new( { tagfield => '003', frameworkcode => '', authorised_value => 'CONTROL_TEST', } )
-        ->store;
+    Koha::MarcSubfieldStructure->new(
+        { tagfield => '003', tagsubfield => '@', frameworkcode => '', authorised_value => 'CONTROL_TEST', } )->store;
     Koha::AuthorisedValue->new( { category => 'TEST', authorised_value => 'location_1', lib => 'location_1' } )->store;
     Koha::AuthorisedValue->new( { category => 'TEST', authorised_value => 'location_2', lib => 'location_2' } )->store;
     Koha::AuthorisedValue->new( { category => 'TEST', authorised_value => 'location_3', lib => 'location_3' } )->store;
