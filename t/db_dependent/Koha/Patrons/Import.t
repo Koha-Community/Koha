@@ -18,7 +18,8 @@
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
-use Test::More tests => 180;
+use Test::More tests => 181;
+use Test::NoWarnings;
 use Test::Warn;
 use Test::Exception;
 use Encode qw( encode_utf8 );
