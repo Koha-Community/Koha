@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 17;
+use Test::More tests => 18;
 use Test::NoWarnings;
 use Test::MockModule;
 use Test::Mojo;
@@ -519,6 +519,90 @@ subtest 'suspend and resume tests' => sub {
     $t->post_ok( "//$userid:$password@/api/v1/holds/" . $hold->id . "/suspension" )
         ->status_is( 400, 'Cannot suspend hold on transfer' )
         ->json_is( '/error', 'Found hold cannot be suspended. Status=T' );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'suspend bulk tests' => sub {
+
+    plan tests => 16;
+
+    $schema->storage->txn_begin;
+
+    my $password = 'AbcdEFG123';
+
+    my $patron = $builder->build_object( { class => 'Koha::Patrons', value => { userid => 'tomasito', flags => 0 } } );
+    $builder->build(
+        {
+            source => 'UserPermission',
+            value  => {
+                borrowernumber => $patron->borrowernumber,
+                module_bit     => 6,
+                code           => 'place_holds',
+            },
+        }
+    );
+
+    $patron->set_password( { password => $password, skip_validation => 1 } );
+    my $userid = $patron->userid;
+
+    # Disable logging
+    t::lib::Mocks::mock_preference( 'HoldsLog',      0 );
+    t::lib::Mocks::mock_preference( 'RESTBasicAuth', 1 );
+
+    my $hold = $builder->build_object(
+        {
+            class => 'Koha::Holds',
+            value => { suspend => 0, suspend_until => undef, waitingdate => undef, found => undef }
+        }
+    );
+
+    my $hold_2 = $builder->build_object(
+        {
+            class => 'Koha::Holds',
+            value => { suspend => 0, suspend_until => undef, waitingdate => undef, found => undef }
+        }
+    );
+
+    ok( !$hold->is_suspended,   'Hold is not suspended' );
+    ok( !$hold_2->is_suspended, 'Hold is not suspended' );
+
+    $t->post_ok(
+        "//$userid:$password@/api/v1/holds/suspension_bulk" => json => { hold_ids => [ $hold->id, $hold_2->id ] } )
+        ->status_is( 201, 'Hold bulk suspension created' );
+
+    $hold->discard_changes;
+    $hold_2->discard_changes;
+
+    ok( $hold->is_suspended,   'Hold is suspended' );
+    ok( $hold_2->is_suspended, 'Hold is suspended' );
+
+    $hold->resume;
+    $hold_2->resume;
+
+    ok( !$hold->is_suspended,   'Hold is not suspended' );
+    ok( !$hold_2->is_suspended, 'Hold is not suspended' );
+
+    $t->post_ok( "//$userid:$password@/api/v1/holds/suspension_bulk" => json =>
+            { end_date => "2024-07-30", hold_ids => [ $hold->id, $hold_2->id ] } )
+        ->status_is( 201, 'Hold bulk suspension created' )
+        ->json_is( { end_date => "2024-07-30", hold_ids => [ $hold->id, $hold_2->id ] } );
+
+    $hold->discard_changes;
+    $hold_2->discard_changes;
+
+    $hold_2->delete;
+
+    $hold->resume;
+    ok( !$hold->is_suspended, 'Hold is not suspended' );
+
+    $t->post_ok( "//$userid:$password@/api/v1/holds/suspension_bulk" => json => { hold_ids => [ $hold_2->id ] } )
+        ->status_is( 404, 'Hold bulk suspension failed. Hold not found' );
+    ok( !$hold->is_suspended, 'Hold is not suspended. Bulk suspension failed' );
+
+    $hold->discard_changes;
+
+    ok( !$hold->is_suspended, 'Hold is not suspended. Bulk suspension failed' );
 
     $schema->storage->txn_rollback;
 };
