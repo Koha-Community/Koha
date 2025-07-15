@@ -1732,6 +1732,7 @@ sub searchResults {
 
     my $userenv        = C4::Context->userenv;
     my $userenv_branch = $userenv->{'branch'};
+
     my $logged_in_user =
         ( defined $userenv and $userenv->{number} )
         ? Koha::Patrons->find( $userenv->{number} )
@@ -1905,7 +1906,8 @@ sub searchResults {
                 and !( $patron_category_hide_lost_items and $item->{itemlost} ) )
             {
                 $onloan_count++;
-                $branch_onloan_count++ if $item->{'branchcode'} eq $userenv_branch;
+                $branch_onloan_count++
+                    if $userenv_branch && defined $item->{'branchcode'} && $item->{'branchcode'} eq $userenv_branch;
                 my $key = $prefix . $item->{onloan} . $item->{barcode};
                 $onloan_items->{$key}->{branchonloancount} = $branch_onloan_count;
                 $onloan_items->{$key}->{due_date}          = $item->{onloan};
@@ -2015,7 +2017,8 @@ sub searchResults {
                         . ( $item->{notforloan} // q{} );
 
                     $other_count++;
-                    $branch_other_count++ if $item->{branchcode} eq $userenv_branch;
+                    $branch_other_count++
+                        if $userenv_branch && defined $item->{'branchcode'} && $item->{'branchcode'} eq $userenv_branch;
                     my $key = $prefix . $item->{status};
                     foreach (qw(withdrawn itemlost damaged branchname itemcallnumber)) {
                         $other_items->{$key}->{$_} = $item->{$_};
@@ -2042,7 +2045,8 @@ sub searchResults {
                 # item is available
                 else {
                     $available_count++;
-                    $branch_available_count++              if $item->{branchcode} eq $userenv_branch;
+                    $branch_available_count++
+                        if $userenv_branch && defined $item->{'branchcode'} && $item->{'branchcode'} eq $userenv_branch;
                     $available_items->{$prefix}->{count}++ if $item->{$hbranch};
                     foreach (qw(branchname itemcallnumber description)) {
                         $available_items->{$prefix}->{$_} = $item->{$_};
