@@ -280,6 +280,67 @@
     x-koha-authorization:
       permissions:
         reserveforothers: "1"
+"/holds/suspension_bulk":
+  post:
+    x-mojo-to: Holds#suspend_bulk
+    operationId: suspendHoldBulk
+    tags:
+      - holds
+    summary: Suspend the holds
+    parameters:
+      - name: body
+        in: body
+        description: Hold ids
+        required: true
+        schema:
+          type: object
+          properties:
+            end_date:
+              description: Date the hold suspension expires
+              type: string
+              format: date
+            hold_ids:
+              type: array
+              items:
+                type: integer
+          additionalProperties: false
+    consumes:
+      - application/json
+    produces:
+      - application/json
+    responses:
+      "201":
+        description: Holds suspended
+      "400":
+        description: Bad request
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "401":
+        description: Authentication required
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "403":
+        description: Hold not allowed
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "404":
+        description: Hold not found
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "500":
+        description: |
+          Internal server error. Possible `error_code` attribute values:
+
+          * `internal_server_error`
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "503":
+        description: Under maintenance
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+    x-koha-authorization:
+      permissions:
+        reserveforothers: place_holds
 "/holds/{hold_id}":
   patch:
     x-mojo-to: Holds#edit

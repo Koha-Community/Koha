@@ -378,6 +378,53 @@ sub suspend {
     };
 }
 
+=head3 suspend_bulk
+
+Method that handles suspending multiple holds
+
+=cut
+
+sub suspend_bulk {
+    my $c = shift->openapi->valid_input or return;
+
+    my $body     = $c->req->json;
+    my $end_date = ($body) ? $body->{end_date} : undef;
+    my $hold_ids = ($body) ? $body->{hold_ids} : undef;
+
+    return $c->render_resource_not_found("Hold")
+        unless $hold_ids;
+
+    return try {
+        Koha::Database->new->schema->txn_do(
+            sub {
+                foreach my $hold_id (@$hold_ids) {
+                    my $hold = Koha::Holds->find($hold_id);
+
+                    return $c->render_resource_not_found( "Hold", "id", $hold_id )
+                        unless $hold;
+
+                    $hold->suspend_hold($end_date);
+                    $hold->discard_changes;
+                }
+                $c->res->headers->location( $c->req->url->to_string );
+                return $c->render(
+                    status  => 201,
+                    openapi => {
+                        hold_ids => $hold_ids,
+                        end_date => $end_date,
+                    }
+                );
+            }
+        );
+    } catch {
+        if ( blessed $_ and $_->isa('Koha::Exceptions::Hold::CannotSuspendFound') ) {
+            return $c->render( status => 400, openapi => { error => "$_" } );
+        }
+
+        $c->unhandled_exception($_);
+    };
+}
+
 =head3 resume
 
 Method that handles resuming a hold
