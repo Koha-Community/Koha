@@ -1,29 +1,30 @@
 <!DOCTYPE html>
+<!-- prettier-ignore-start -->
 <html>
-<head>
-    <title>[% plugin_name | html %] - Valuebuilder</title>
-    <meta charset="UTF-8">
-</head>
-<body>
-    <h1>[% plugin_name | html %]</h1>
-    <p>This is a test valuebuilder popup for field: [% field_id | html %]</p>
+    <head>
+        <title>[% plugin_name | html %] - Valuebuilder</title>
+        <meta charset="UTF-8" />
+    </head>
+    <body>
+        <h1>[% plugin_name | html %]</h1>
+        <p>This is a test valuebuilder popup for field: [% field_id | html %]</p>
 
-    <form>
-        <label for="test_value">Enter a value:</label>
-        <input type="text" id="test_value" value="Test Value from Plugin">
-        <br><br>
-        <button type="button" onclick="setValueAndClose()">Set Value</button>
-        <button type="button" onclick="window.close()">Cancel</button>
-    </form>
-
-    <script>
-    function setValueAndClose() {
-        var value = document.getElementById('test_value').value;
-        if (window.opener && window.opener.document.getElementById('[% field_id | html %]')) {
-            window.opener.document.getElementById('[% field_id | html %]').value = value;
-        }
-        window.close();
-    }
-    </script>
-</body>
+        <form>
+            <label for="test_value">Enter a value:</label>
+            <input type="text" id="test_value" value="Test Value from Plugin" />
+            <br /><br />
+            <button type="button" onclick="setValueAndClose()">Set Value</button>
+            <button type="button" onclick="window.close()">Cancel</button>
+        </form>
+        <script>
+            function setValueAndClose() {
+                var value = document.getElementById('test_value').value;
+                if (window.opener && window.opener.document.getElementById('[% field_id | html %]')) {
+                    window.opener.document.getElementById('[% field_id | html %]').value = value;
+                }
+                window.close();
+            }
+        </script>
+    </body>
 </html>
+<!-- prettier-ignore-end -->
