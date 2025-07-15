@@ -107,16 +107,22 @@ function display_pickup_location(state) {
 
 /* global __ borrowernumber SuspendHoldsIntranet */
 $(document).ready(function () {
-    function suspend_hold(hold_id, end_date) {
-        var params;
-        if (end_date !== null && end_date !== "")
-            params = JSON.stringify({ end_date: end_date });
+    var url = window.location.href;
+    let patron_page;
+    if (url.indexOf("/circ/circulation.pl?borrowernumber=") !== -1)
+        patron_page = "circ";
+    else if (url.indexOf("/members/moremember.pl?borrowernumber=") !== -1)
+        patron_page = "borrower";
+
+    function suspend_hold(hold_ids, end_date) {
+        var params = { hold_ids: hold_ids };
+        if (end_date !== null && end_date !== "") params.end_date = end_date;
 
         return $.ajax({
             method: "POST",
-            url: "/api/v1/holds/" + encodeURIComponent(hold_id) + "/suspension",
+            url: "/api/v1/holds/suspension_bulk",
             contentType: "application/json",
-            data: params,
+            data: JSON.stringify(params),
         });
     }
 
@@ -124,6 +130,10 @@ $(document).ready(function () {
         return $.ajax({
             method: "DELETE",
             url: "/api/v1/holds/" + encodeURIComponent(hold_id) + "/suspension",
+        }).done(function () {
+            if ($(".select_hold_all").prop("checked")) {
+                $(".select_hold_all").click();
+            }
         });
     }
 
@@ -491,7 +501,7 @@ $(document).ready(function () {
                 $(".hold-suspend").on("click", function () {
                     var hold_id = $(this).data("hold-id");
                     var hold_title = $(this).data("hold-title");
-                    $("#suspend-modal-title").html(hold_title);
+                    $("#suspend-modal-title").html("<i>" + hold_title + "</i>");
                     $("#suspend-modal-submit").data("hold-id", hold_id);
                     $("#suspend-modal").modal("show");
                 });
@@ -585,7 +595,6 @@ $(document).ready(function () {
                 </div>\
 \
                 <div class='modal-body'>\
-                    <input type='hidden' id='suspend-modal-reserve_id' name='reserve_id' />\
 \
                     <label for='suspend-modal-until'>" +
             __("Suspend until:") +
@@ -606,6 +615,7 @@ $(document).ready(function () {
             __("Cancel") +
             "</button>\
                 </div>\
+                <div id='suspend-selected-container'></div>\
             </form>\
             </div>\
             </div>\
@@ -619,31 +629,59 @@ $(document).ready(function () {
 
     $("#suspend-modal-submit").on("click", function (e) {
         e.preventDefault();
+        let selected_holds;
+        if (!$(this).data("hold-id")) {
+            selected_holds =
+                "[" +
+                $(".holds_table .select_hold:checked")
+                    .toArray()
+                    .map(el =>
+                        JSON.stringify({
+                            hold: $(el).data("id"),
+                            borrowernumber: $(el).data("borrowernumber"),
+                            biblionumber: $(el).data("biblionumber"),
+                        })
+                    )
+                    .join(",") +
+                "]";
+        } else {
+            selected_holds =
+                "[" + JSON.stringify({ hold: $(this).data("hold-id") }) + "]";
+            $(this).removeData("hold-id");
+        }
+
         var suspend_until_date = $("#suspend-modal-until").val();
         if (suspend_until_date !== null)
             suspend_until_date = $date(suspend_until_date, {
                 dateformat: "rfc3339",
             });
-        suspend_hold($(this).data("hold-id"), suspend_until_date)
-            .success(function () {
-                holdsTable.api().ajax.reload();
-            })
-            .error(function (jqXHR, textStatus, errorThrown) {
-                if (jqXHR.status === 404) {
-                    alert(__("Unable to suspend, hold not found."));
-                } else {
-                    alert(
-                        __(
-                            "Your request could not be processed. Check the logs for details."
-                        )
-                    );
-                }
-                holdsTable.api().ajax.reload();
-            })
-            .done(function () {
-                $("#suspend-modal-until").flatpickr().clear(); // clean the input
-                $("#suspend-modal").modal("hide");
-            });
+
+        const hold_ids = JSON.parse(selected_holds).map(hold => hold.hold);
+        try {
+            suspend_hold(hold_ids, suspend_until_date)
+                .success(function () {
+                    holdsTable.api().ajax.reload();
+                })
+                .done(function () {
+                    if ($("#suspend-modal-until").length) {
+                        $("#suspend-modal-until").flatpickr().clear(); // clean the input
+                    }
+                    $("#suspend-modal").modal("hide");
+                    if ($(".select_hold_all").prop("checked")) {
+                        $(".select_hold_all").click();
+                    }
+                });
+        } catch (error) {
+            if (error.status === 404) {
+                alert(__("Unable to suspend, hold not found."));
+            } else {
+                alert(
+                    __(
+                        "Your request could not be processed. Check the logs for details."
+                    )
+                );
+            }
+        }
     });
 
     function toggle_suspend(node, inputs) {
@@ -688,7 +726,7 @@ $(document).ready(function () {
     });
 
     var MSG_SUSPEND_SELECTED = _("Suspend selected (%s)");
-    var MSG_SUSPEND_SELECTED_HOLDS = _("Suspend selected holds");
+    var MSG_SUSPEND_SELECTED_HOLDS = _("selected holds");
     $(".suspend_selected_holds").html(
         MSG_SUSPEND_SELECTED.format(
             $(".holds_table .select_hold:checked").length
@@ -700,7 +738,7 @@ $(document).ready(function () {
         if (!$(".holds_table .select_hold:checked").length) {
             return false;
         }
-        $(".modal-title").html(MSG_SUSPEND_SELECTED_HOLDS);
+        $("#suspend-modal-title").html(MSG_SUSPEND_SELECTED_HOLDS);
         $("#suspend-modal").modal("show");
         return false;
     });
