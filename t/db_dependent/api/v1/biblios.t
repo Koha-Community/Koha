@@ -20,7 +20,8 @@ use Modern::Perl;
 use utf8;
 use Encode;
 
-use Test::More tests => 15;
+use Test::More tests => 16;
+use Test::NoWarnings;
 use Test::MockModule;
 use Test::Mojo;
 use Test::Warn;
@@ -1889,7 +1890,7 @@ subtest 'list() tests' => sub {
 
 subtest 'add_item() tests' => sub {
 
-    plan tests => 8;
+    plan tests => 10;
 
     $schema->storage->txn_begin;
 
@@ -1939,17 +1940,20 @@ subtest 'add_item() tests' => sub {
 
     my $item = $builder->build_sample_item();
 
-    $t->post_ok(
-        "//$userid:$password@/api/v1/biblios/$biblio_id/items" => json => {
-            external_id => $item->barcode,
-        }
-    )->status_is( 409, 'Duplicate barcode' );
+    warnings_like {
+        $t->post_ok(
+            "//$userid:$password@/api/v1/biblios/$biblio_id/items" => json => {
+                external_id => $item->barcode,
+            }
+        )->status_is( 409, 'Duplicate barcode' )->json_is( "/error" => "Duplicate barcode." );
+    }
+    qr{DBD::mysql::st execute failed: Duplicate entry '(.*?)' for key '(.*\.?)itembarcodeidx'};
 
     $schema->storage->txn_rollback;
 };
 
 subtest 'update_item() tests' => sub {
-    plan tests => 7;
+    plan tests => 9;
 
     $schema->storage->txn_begin;
 
@@ -1993,11 +1997,14 @@ subtest 'update_item() tests' => sub {
 
     my $other_item = $builder->build_sample_item();
 
-    $t->put_ok(
-        "//$userid:$password@/api/v1/biblios/$biblio_id/items/$item_id" => json => {
-            external_id => $other_item->barcode,
-        }
-    )->status_is( 409, 'Barcode not unique' );
+    warnings_like {
+        $t->put_ok(
+            "//$userid:$password@/api/v1/biblios/$biblio_id/items/$item_id" => json => {
+                external_id => $other_item->barcode,
+            }
+        )->status_is( 409, 'Barcode not unique' )->json_is( "/error" => "Duplicate barcode." );
+    }
+    qr{DBD::mysql::st execute failed: Duplicate entry '(.*?)' for key '(.*\.?)itembarcodeidx'};
 
     $t->put_ok(
         "//$userid:$password@/api/v1/biblios/$biblio_id/items/$item_id" => json => {
