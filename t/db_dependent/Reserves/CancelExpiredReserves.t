@@ -1,7 +1,9 @@
 #!/usr/bin/perl
 
 use Modern::Perl;
-use Test::More tests => 4;
+use Test::More tests => 5;
+use Test::NoWarnings;
+use Test::MockModule;
 
 use t::lib::Mocks;
 use t::lib::TestBuilder;
@@ -240,7 +242,13 @@ subtest 'Test handling of cancellation reason if passed' => sub {
     );
     my $reserve_id = $reserve->{reserve_id};
     my $count      = Koha::Holds->search->count;
-    CancelExpiredReserves("EXPIRED");
+    {
+        # Prevent warning 'No reserves HOLD_CANCELLATION letter transported by email'
+        my $mock_letters = Test::MockModule->new('C4::Letters');
+        $mock_letters->mock( 'GetPreparedLetter', sub { return } );
+
+        CancelExpiredReserves("EXPIRED");
+    }
     is( Koha::Holds->search->count, $count - 1, "Hold is cancelled when reason is passed" );
     my $old_reserve = Koha::Old::Holds->find($reserve_id);
     is( $old_reserve->cancellation_reason, 'EXPIRED', "Hold cancellation_reason was set correctly" );
