@@ -17,7 +17,8 @@
 
 use Modern::Perl;
 
-use Test::More tests => 19;
+use Test::More tests => 20;
+use Test::NoWarnings;
 
 use Koha::Database;
 use Koha::SearchFields;
@@ -59,7 +60,8 @@ $search_field->add_to_search_marc_maps(
     {
         facet       => 0,
         suggestible => 0,
-        sort        => 0
+        sort        => 0,
+        filter      => '',
     }
 );
 
@@ -76,7 +78,8 @@ $search_field->add_to_search_marc_maps(
     {
         facet       => 0,
         suggestible => 0,
-        sort        => 0
+        sort        => 0,
+        filter      => '',
     }
 );
 
@@ -93,7 +96,8 @@ $search_field->add_to_search_marc_maps(
     {
         facet       => 0,
         suggestible => 1,
-        sort        => 0
+        sort        => 0,
+        filter      => '',
     }
 );
 
