@@ -1,6 +1,7 @@
 <!-- patron-detail-tabs.inc -->
 [% USE raw %]
 [% PROCESS 'html_helpers.inc' %]
+[% PROCESS 'modals/holds_table_modals.inc' %]
 [% WRAPPER tabs id= "finesholdsissues" %]
     [% WRAPPER tabs_nav %]
         [% WRAPPER tab_item tabname= "checkouts" bt_active= 1 %]
@@ -165,21 +166,11 @@
                         </table>
 
                         <fieldset class="action">
-                            <input type="submit" class="btn btn-primary cancel" name="submit" value="Cancel marked holds" />
-
-                            [% SET hold_cancellation = AuthorisedValues.GetAuthValueDropbox('HOLD_CANCELLATION') %]
-                            [% IF hold_cancellation.count %]
-                                <label for="cancellation-reason">Cancellation reason:</label>
-                                <input type="hidden" name="op" value="cud-cancelall" />
-                                <select name="cancellation-reason" id="cancellation-reason">
-                                    <option value="">No reason given</option>
-                                    [% FOREACH reason IN hold_cancellation %]
-                                        <option value="[% reason.authorised_value | html %]">[% reason.lib | html %]</option>
-                                    [% END %]
-                                </select>
-                            [% END %]
+                            <button class="btn btn-primary cancel_selected_holds" data-bulk="true"></button>
                         </fieldset>
                     </form>
+
+                    [% PROCESS 'cancel-hold-modal' form_action = '/cgi-bin/koha/reserve/modrequest.pl' from_param = patronpage %]
 
                     [% IF Koha.Preference('SuspendHoldsIntranet') %]
                         <fieldset class="action">

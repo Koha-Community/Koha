@@ -342,26 +342,15 @@ $(document).ready(function () {
                             },
                         },
                         {
-                            orderable: false,
                             data: function (oObj) {
                                 return (
-                                    "<select name='rank-request'>" +
-                                    "<option value='n'>" +
-                                    __("No") +
-                                    "</option>" +
-                                    "<option value='del'>" +
-                                    __("Yes") +
-                                    "</option>" +
-                                    "</select>" +
-                                    "<input type='hidden' name='biblionumber' value='" +
-                                    oObj.biblionumber +
-                                    "'>" +
-                                    "<input type='hidden' name='borrowernumber' value='" +
+                                    '<a class="cancel-hold deny" title="Cancel hold" data-borrowernumber="' +
                                     borrowernumber +
-                                    "'>" +
-                                    "<input type='hidden' name='reserve_id' value='" +
+                                    '" data-biblionumber="' +
+                                    oObj.biblionumber +
+                                    '" data-id="' +
                                     oObj.reserve_id +
-                                    "'>"
+                                    '" href="#">  <i class="fa fa-trash" aria-label="Cancel hold"></i></a>'
                                 );
                             },
                         },
