@@ -182,21 +182,9 @@
                     </form>
 
                     [% IF Koha.Preference('SuspendHoldsIntranet') %]
-                        <form action="/cgi-bin/koha/reserve/modrequest_suspendall.pl" method="post">
-                            [% INCLUDE 'csrf-token.inc' %]
-                            <fieldset class="action">
-                                <input type="hidden" name="op" value="cud-suspendall" />
-                                <input type="hidden" name="from" value="[% patronpage | html %]" />
-                                <input type="hidden" name="borrowernumber" value="[% patron.borrowernumber | html %]" />
-                                <input type="submit" class="btn btn-primary" value="Suspend all holds" />
-
-                                [% IF Koha.Preference('AutoResumeSuspendedHolds') %]
-                                    <label for="suspend_until">until</label>
-                                    <input type="text" size="10" id="suspend_until" name="suspend_until" class="flatpickr" data-flatpickr-futuredate="true" />
-                                    <span class="hint">Specify date on which to resume [% INCLUDE 'date-format.inc' %]: </span>
-                                [% END %]
-                            </fieldset>
-                        </form>
+                        <fieldset class="action">
+                            <button class="btn btn-primary suspend_selected_holds" data-bulk="true"></button>
+                        </fieldset>
 
                         <form action="/cgi-bin/koha/reserve/modrequest_suspendall.pl" method="post">
                             [% INCLUDE 'csrf-token.inc' %]
