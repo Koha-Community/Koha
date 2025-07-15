@@ -19,6 +19,7 @@ return {
         unless ( column_exists( 'reserves', 'hold_group_id' ) ) {
             $dbh->do(
                 q{ALTER TABLE reserves ADD COLUMN hold_group_id int unsigned NULL DEFAULT NULL AFTER non_priority});
+            $dbh->do(q{ALTER TABLE reserves ADD KEY reserves_ibfk_hg (hold_group_id)});
             $dbh->do(
                 q{ALTER TABLE reserves ADD CONSTRAINT reserves_ibfk_hg FOREIGN KEY (hold_group_id) REFERENCES hold_groups (hold_group_id) ON DELETE SET NULL ON UPDATE CASCADE}
             );
@@ -27,8 +28,9 @@ return {
         unless ( column_exists( 'old_reserves', 'hold_group_id' ) ) {
             $dbh->do(
                 q{ALTER TABLE old_reserves ADD COLUMN hold_group_id int unsigned NULL DEFAULT NULL AFTER non_priority});
+            $dbh->do(q{ALTER TABLE old_reserves ADD KEY old_reserves_ibfk_hg (hold_group_id)});
             $dbh->do(
-                q{ALTER TABLE old_reserves ADD CONSTRAINT old_reserves_ibfk_hg FOREIGN KEY (hold_group_id) REFERENCES hold_groups (hold_group_id) ON DELETE SET NULL ON UPDATE CASCADE}
+                q{ALTER TABLE old_reserves ADD CONSTRAINT old_reserves_ibfk_hg FOREIGN KEY (hold_group_id) REFERENCES hold_groups (hold_group_id) ON DELETE SET NULL ON UPDATE SET NULL}
             );
         }
     },
