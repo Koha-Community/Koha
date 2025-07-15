@@ -17,7 +17,8 @@
 
 use Modern::Perl;
 
-use Test::More tests => 25;
+use Test::More tests => 26;
+use Test::NoWarnings;
 use Test::MockModule;
 use Test::Warn;
 use List::MoreUtils qw( uniq );
@@ -293,11 +294,12 @@ subtest "Test caching of authority types in LinkBibHeadingsToAuthorities" => sub
         }
     );
     my $authorities_type = Test::MockModule->new('Koha::Authority::Types');
+    my $found_auth_type  = {};
     $authorities_type->mock(
         'find',
         sub {
             my ( $self, $params ) = @_;
-            warn "Finding auth type $params";
+            $found_auth_type->{$params}++;
             return $authorities_type->original("find")->( $self, $params );
         }
     );
@@ -305,17 +307,13 @@ subtest "Test caching of authority types in LinkBibHeadingsToAuthorities" => sub
     my $field1      = MARC::Field->new( 655, ' ', ' ', 'a' => 'Magical realism' );
     my $field2      = MARC::Field->new( 655, ' ', ' ', 'a' => 'Magical falsism' );
     $marc_record->append_fields( ( $field1, $field2 ) );
-    my ( $num_changed, $results );
-    warning_like { ( $num_changed, $results ) = LinkBibHeadingsToAuthorities( $linker, $marc_record, "", undef ) }
-    qr/Finding auth type GENRE\/FORM/,
-        "Type fetched only once";
+    my ( $num_changed, $results ) = LinkBibHeadingsToAuthorities( $linker, $marc_record, "", undef );
+    is_deeply( $found_auth_type, { "GENRE/FORM" => 1 }, "Type fetched only once" );
     my $gf_type = $cache->get_from_cache("LinkBibHeadingsToAuthorities:AuthorityType:GENRE/FORM");
     ok( $gf_type, "GENRE/FORM type is found in cache" );
 
-    warning_like { ( $num_changed, $results ) = LinkBibHeadingsToAuthorities( $linker, $marc_record, "", undef ) }
-    undef,
-        "Type not fetched a second time";
-
+    ( $num_changed, $results ) = LinkBibHeadingsToAuthorities( $linker, $marc_record, "", undef );
+    is_deeply( $found_auth_type, { "GENRE/FORM" => 1 }, "Type not fetched a second time" );
 };
 
 # Mocking variables
