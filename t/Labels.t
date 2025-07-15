@@ -17,11 +17,11 @@
 #
 # for context, see http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=2691
 
-use strict;
-use warnings;
+use Modern::Perl;
 
 use C4::ClassSplitRoutine::LCC qw( split_callnumber );
-use Test::More tests => 11;
+use Test::More tests => 12;
+use Test::NoWarnings;
 
 BEGIN {
     use_ok( 'C4::Labels::Label', qw( _get_text_fields _check_params _guide_box ) );
