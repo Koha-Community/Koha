@@ -292,7 +292,8 @@ sub import_patrons {
                 next if $col eq 'password'   && !$overwrite_passwords;
                 next if $col eq 'dateexpiry' && $update_dateexpiry;
 
-                $borrower{$col} = $member->{$col} if $col eq 'dateexpiry' && !$columns[ $csvkeycol{$col} ];
+                $borrower{$col} = $member->{$col}
+                    if $col eq 'dateexpiry' && ( !$csvkeycol{$col} || !$columns[ $csvkeycol{$col} ] );
 
                 unless ( exists( $csvkeycol{$col} ) || $defaults->{$col} ) {
                     $borrower{$col} = $member->{$col} if ( $member->{$col} );
