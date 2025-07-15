@@ -250,6 +250,27 @@ sub move_hold {
     return { success => 1, hold => $self };
 }
 
+=head3 cleanup_hold_group
+
+$self->cleanup_hold_group;
+
+Check if a hold group is left with a single or zero holds. Delete hold_group if so.
+Accepts an optional $hold_group_id that, if defined, uses that instead of self->hold_group_id
+
+=cut
+
+sub cleanup_hold_group {
+    my ( $self, $hold_group_id ) = @_;
+
+    my $hold_group_id_to_check = $hold_group_id // $self->hold_group_id;
+    my $hold_group             = Koha::HoldGroups->find($hold_group_id_to_check);
+    return unless $hold_group;
+
+    if ( $hold_group->holds->count <= 1 ) {
+        $hold_group->delete();
+    }
+}
+
 =head3 set_transfer
 
 =cut
@@ -744,9 +765,10 @@ sub cancellation_requested {
 
 my $cancel_hold = $hold->cancel(
     {
-        [ charge_cancel_fee   => 1||0, ]
-        [ cancellation_reason => $cancellation_reason, ]
-        [ skip_holds_queue    => 1||0 ]
+        [ charge_cancel_fee       => 1||0, ]
+        [ cancellation_reason     => $cancellation_reason, ]
+        [ skip_holds_queue        => 1||0 ]
+        [ skip_hold_group_cleanup => 1||0 ]
     }
 );
 
@@ -870,6 +892,8 @@ sub cancel {
         }
     );
 
+    $self->cleanup_hold_group() unless $params->{skip_hold_group_cleanup};
+
     if ($autofill_next) {
         my ( undef, $next_hold ) = C4::Reserves::CheckReserves( $self->item );
         if ($next_hold) {
@@ -957,9 +981,10 @@ sub fill {
             if ( $self->hold_group_id ) {
                 my @holds = $self->hold_group->holds->as_list;
                 foreach my $h (@holds) {
-                    $h->cancel unless $h->reserve_id == $self->id;
+                    $h->cancel( { skip_hold_group_cleanup => 1 } ) unless $h->reserve_id == $self->id;
                 }
             }
+            $self->cleanup_hold_group();
 
             Koha::BackgroundJob::BatchUpdateBiblioHoldsQueue->new->enqueue(
                 { biblio_ids => [ $old_me->biblionumber ] } )

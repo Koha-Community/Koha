@@ -150,6 +150,9 @@
                             <tr>
                                 <th id="checkbox" data-colname="checkbox"><input type="checkbox" class="select_hold_all" /></th>
                                 <th>Hold date</th>
+                                [% IF Koha.Preference('DisplayAddHoldGroups') %]
+                                    <th>Hold group</th>
+                                [% END %]
                                 <th class="anti-the">Title</th>
                                 <th>Call number</th>
                                 <th>Item type</th>
@@ -171,6 +174,12 @@
 
                     [% PROCESS 'cancel-hold-modal' form_action = '/cgi-bin/koha/reserve/modrequest.pl' from_param = patronpage %]
                     [% PROCESS 'suspend-hold-modal' %]
+                    [% PROCESS 'group-hold-modal' %]
+                    [% IF Koha.Preference('DisplayAddHoldGroups') %]
+                        <fieldset class="action">
+                            <button class="btn btn-primary group_selected_holds" data-bulk="true"></button>
+                        </fieldset>
+                    [% END # IF DisplayAddHoldGroups %]
 
                     [% IF Koha.Preference('SuspendHoldsIntranet') %]
                         <fieldset class="action">

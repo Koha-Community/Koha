@@ -74,3 +74,24 @@
         </div>
     </div>
 [% END %]
+
+[% BLOCK 'group-hold-modal' %]
+    <div id="group-modal" class="modal" role="dialog" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title" id="suspend-modal-label"> Group selected holds </h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p>Are you sure you want to group the selected holds?</p>
+                </div>
+                <div class="modal-footer">
+                    <button id="group-modal-submit" class="btn btn-primary" type="submit" name="submit">Group</button>
+                    <button type="button" class="btn btn-default" data-bs-dismiss="modal">Cancel </button>
+                </div>
+                <div id="inputs"></div>
+            </div>
+        </div>
+    </div>
+[% END %]

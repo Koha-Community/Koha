@@ -785,6 +785,7 @@
             relatives_borrowernumbers.push("[% b | html %]");
         [% END %]
         var SuspendHoldsIntranet = [% ( Koha.Preference('SuspendHoldsIntranet') ) ? 1 : 0 | html %];
+        var DisplayAddHoldGroups = [% ( Koha.Preference('DisplayAddHoldGroups') ) ? 1 : 0 | html %];
     </script>
     [% Asset.js("js/pages/circulation.js") | $raw %]
     [% IF Koha.Preference('ClaimReturnedLostValue') || Koha.Preference('BundleLostValue') %]

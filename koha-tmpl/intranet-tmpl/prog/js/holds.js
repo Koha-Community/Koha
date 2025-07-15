@@ -164,6 +164,11 @@ $(document).ready(function () {
                                 return (
                                     '<input type="checkbox" class="select_hold" data-id="' +
                                     oObj.reserve_id +
+                                    (oObj.hold_group_id
+                                        ? '" data-hold-group-id="' +
+                                          oObj.hold_group_id +
+                                          '"'
+                                        : '"') +
                                     '" data-borrowernumber="' +
                                     borrowernumber +
                                     '" data-biblionumber="' +
@@ -178,6 +183,28 @@ $(document).ready(function () {
                                 sort: "reservedate",
                             },
                         },
+                        ...(DisplayAddHoldGroups
+                            ? [
+                                  {
+                                      data: function (oObj) {
+                                          title = "";
+                                          if (oObj.visual_hold_group_id) {
+                                              var link =
+                                                  '<a class="hold-group" href="/cgi-bin/koha/reserve/hold-group.pl?hold_group_id=' +
+                                                  oObj.hold_group_id +
+                                                  '">' +
+                                                  oObj.visual_hold_group_id +
+                                                  "</a>";
+
+                                              title =
+                                                  "<span>" + link + "</span>";
+                                          }
+
+                                          return title;
+                                      },
+                                  },
+                              ]
+                            : []),
                         {
                             data: function (oObj) {
                                 title =
@@ -230,17 +257,6 @@ $(document).ready(function () {
                                         "'>" +
                                         oObj.itemnotes.escapeHtml() +
                                         "</span>";
-                                }
-
-                                if (oObj.hold_group_id) {
-                                    title += "<br>";
-                                    var link =
-                                        '<a class="hold-group" href="/cgi-bin/koha/reserve/hold-group.pl?hold_group_id=' +
-                                        oObj.hold_group_id +
-                                        '">' +
-                                        __("part of a hold group") +
-                                        "</a>";
-                                    title += "<span>(" + link + ")</span>";
                                 }
 
                                 return title;
@@ -617,19 +633,7 @@ $(document).ready(function () {
         e.preventDefault();
         let selected_holds;
         if (!$(this).data("hold-id")) {
-            selected_holds =
-                "[" +
-                $(".holds_table .select_hold:checked")
-                    .toArray()
-                    .map(el =>
-                        JSON.stringify({
-                            hold: $(el).data("id"),
-                            borrowernumber: $(el).data("borrowernumber"),
-                            biblionumber: $(el).data("biblionumber"),
-                        })
-                    )
-                    .join(",") +
-                "]";
+            selected_holds = get_selected_holds_data();
         } else {
             selected_holds =
                 "[" + JSON.stringify({ hold: $(this).data("hold-id") }) + "]";
@@ -800,6 +804,8 @@ $(document).ready(function () {
         });
     }
 
+    var MSG_GROUP_SELECTED = _("Group selected (%s)");
+
     function updateSelectedHoldsButtonCounters() {
         $(".cancel_selected_holds").html(
             MSG_CANCEL_SELECTED.format(
@@ -813,6 +819,11 @@ $(document).ready(function () {
         );
         $(".suspend_selected_holds").html(
             MSG_SUSPEND_SELECTED.format(
+                $(".holds_table .select_hold:checked").length
+            )
+        );
+        $(".group_selected_holds").html(
+            MSG_GROUP_SELECTED.format(
                 $(".holds_table .select_hold:checked").length
             )
         );
@@ -1146,6 +1157,102 @@ $(document).ready(function () {
         );
         $("#cancel_modal_form #inputs").append(
             '<input type="hidden" name="reserve_id" value="' + hold.hold + '">'
+        );
+    }
+
+    $(".group_selected_holds").html(
+        MSG_GROUP_SELECTED.format($(".holds_table .select_hold:checked").length)
+    );
+
+    $(".group_selected_holds").click(function (e) {
+        if ($(".holds_table .select_hold:checked").length > 1) {
+            let selected_holds = get_selected_holds_data();
+            const group_ids = JSON.parse(selected_holds)
+                .filter(hold => hold.hold_group_id)
+                .map(hold => hold.hold_group_id);
+
+            if (group_ids.length > 0) {
+                $("#group-modal .modal-body").prepend(
+                    '<div class="alert alert-warning">' +
+                        __(
+                            "Already grouped holds will be moved to the new group"
+                        ) +
+                        "</div>"
+                );
+            }
+
+            $("#group-modal").modal("show");
+        }
+        return false;
+    });
+
+    $("#group-modal-submit").click(function (e) {
+        e.preventDefault();
+        let selected_holds = get_selected_holds_data();
+
+        const hold_ids = JSON.parse(selected_holds).map(hold => hold.hold);
+
+        try {
+            group_holds(hold_ids)
+                .success(function () {
+                    holdsTable.api().ajax.reload();
+                })
+                .fail(function (jqXHR) {
+                    $("#group-modal .modal-body").prepend(
+                        '<div class="alert alert-danger">' +
+                            jqXHR.responseJSON.error +
+                            "</div>"
+                    );
+                    $("#group-modal-submit").prop("disabled", true);
+                })
+                .done(function () {
+                    $("#group-modal").modal("hide");
+                    $(".select_hold_all").click();
+                });
+        } catch (error) {
+            if (error.status === 404) {
+                alert(__("Unable to group, hold not found."));
+            } else {
+                alert(
+                    __(
+                        "Your request could not be processed. Check the logs for details."
+                    )
+                );
+            }
+        }
+        return false;
+    });
+
+    function group_holds(hold_ids) {
+        return $.ajax({
+            method: "POST",
+            url: "/api/v1/patrons/" + borrowernumber + "/hold_groups",
+            contentType: "application/json",
+            data: JSON.stringify({ hold_ids: hold_ids, force_grouped: true }),
+        });
+    }
+
+    $("#group-modal").on("hidden.bs.modal", function () {
+        $("#group-modal .modal-body .alert-warning").remove();
+        $("#group-modal .modal-body .alert-danger").remove();
+        $("#group-modal-submit").prop("disabled", false);
+    });
+
+    function get_selected_holds_data() {
+        return (
+            "[" +
+            $(".holds_table .select_hold:checked")
+                .toArray()
+                .map(el =>
+                    JSON.stringify({
+                        hold: $(el).data("id"),
+                        borrowernumber: $(el).data("borrowernumber"),
+                        biblionumber: $(el).data("biblionumber"),
+                        hold_group_id: $(el).data("hold-group-id"),
+                    })
+                )
+                .join(",") +
+            "]"
         );
     }
 });

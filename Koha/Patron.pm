@@ -1912,6 +1912,8 @@ Creates and returns a hold group given a list of hold ids
 
 If force_grouped is supplied, the hold group will be created even if the holds are already grouped
 
+Checks if the hold is moving from another group, and if so, removes the old group if empty
+
 =cut
 
 sub create_hold_group {
@@ -1968,9 +1970,13 @@ sub create_hold_group {
         { visual_hold_group_id => $next_available_visual_hold_group_id }
     );
     foreach my $hold_id (@$hold_ids) {
-        my $hold = Koha::Holds->find($hold_id);
+        my $hold                   = Koha::Holds->find($hold_id);
+        my $previous_hold_group_id = $hold->hold_group_id;
 
         $hold->hold_group_id( $hold_group_rs->hold_group_id )->store;
+        if ( $previous_hold_group_id && $previous_hold_group_id != $hold_group_rs->hold_group_id ) {
+            $hold->cleanup_hold_group($previous_hold_group_id);
+        }
     }
 
     return Koha::HoldGroup->_new_from_dbic($hold_group_rs);
