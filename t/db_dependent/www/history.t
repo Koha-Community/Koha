@@ -18,17 +18,14 @@
 use Modern::Perl;
 
 use utf8;
-use XML::Simple;
 use Encode;
 
 use Test::More;    #See plan tests => \d+ below
+use Test::NoWarnings;
 use Test::WWW::Mechanize;
 
-my $koha_conf = $ENV{KOHA_CONF};
-my $xml       = XMLin($koha_conf);
-
-my $user     = $ENV{KOHA_USER} || $xml->{config}->{user};
-my $password = $ENV{KOHA_PASS} || $xml->{config}->{pass};
+my $user     = $ENV{KOHA_USER} || 'koha';
+my $password = $ENV{KOHA_PASS} || 'koha';
 my $intranet = $ENV{KOHA_INTRANET_URL};
 
 eval { use C4::Context; };
@@ -37,7 +34,7 @@ if ($@) {
 } elsif ( not defined $intranet ) {
     plan skip_all => "Tests skip. You must set env. variable KOHA_INTRANET_URL to do tests\n";
 } else {
-    plan tests => 4;
+    plan tests => 5;
 }
 
 $intranet =~ s#/$##;
