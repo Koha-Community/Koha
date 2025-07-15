@@ -46,7 +46,7 @@ sub split_callnumber {
     # lccn examples: 'HE8700.7 .P6T44 1983', 'BS2545.E8 H39 1996';
     my @lines = Library::CallNumber::LC->new($cn_item)->components();
     unless ( scalar @lines && defined $lines[0] ) {
-        Koha::Logger->get->debug( sprintf( 'regexp failed to match string: %s', $cn_item ) );
+        Koha::Logger->get->debug( sprintf( 'regexp failed to match string: %s', $cn_item // q{} ) );
         @lines = $cn_item;    # if no match, just use the whole string.
     }
     my $LastPiece = pop @lines;
