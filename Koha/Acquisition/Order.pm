@@ -503,12 +503,13 @@ sub populate_with_prices_for_ordering {
 
     my $discount = $self->discount || 0;
     $discount /= 100 if $discount > 1;
+    my $unitprice = $self->unitprice // 0;
 
     if ( $bookseller->listincgst ) {
 
         # The user entered the prices tax included
-        $self->unitprice( $self->unitprice + 0 );
-        $self->unitprice_tax_included( $self->unitprice );
+        $self->unitprice($unitprice);
+        $self->unitprice_tax_included($unitprice);
         $self->rrp_tax_included( $self->rrp );
 
         # price tax excluded = price tax included / ( 1 + tax rate )
@@ -536,7 +537,7 @@ sub populate_with_prices_for_ordering {
     } else {
 
         # The user entered the prices tax excluded
-        $self->unitprice_tax_excluded( $self->unitprice );
+        $self->unitprice_tax_excluded($unitprice);
         $self->rrp_tax_excluded( $self->rrp );
 
         # price tax included = price tax excluded * ( 1 - tax rate )
