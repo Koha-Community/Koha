@@ -1429,8 +1429,6 @@
             pickupNotInHoldGroup: _("Only pickup locations within the same hold group are allowed")
         }
 
-        var MSG_CANCEL_SELECTED = _("Cancel selected (%s)");
-        var MSG_CANCEL_ALERT    = _("This action will cancel <span class='badge bg-danger'>%s</span> hold(s).");
         $.fn.select2.defaults.set("width", "100%" );
         $.fn.select2.defaults.set("dropdownAutoWidth", true );
 
@@ -1749,21 +1747,6 @@
                 $("#" + fieldID).val("");
             });
 
-            // Confirm cancellation of hold
-            let cancel_link;
-            $(".cancel-hold").on("click",function(e) {
-                e.preventDefault;
-                cancel_link = $(this);
-                $("#cancel_modal_form #inputs").empty();
-                    let reserve_id = cancel_link.data('id');
-                    let biblionumber = cancel_link.data('biblionumber');
-                    $("#cancel_modal_form #inputs").append('<input type="hidden" name="reserve_id" value="' + reserve_id + '">');
-                    $("#cancel_modal_form #inputs").append('<input type="hidden" name="biblionumber" value="' + biblionumber + '">');
-                    $("#cancel_modal_form #inputs").append('<input type="hidden" name="op" value="cud-cancel">');
-                $('#cancelModal').modal('show');
-                return false;
-            });
-
             [% UNLESS ( patron || patron.borrowernumber || borrowers || noitems || nobiblio ) %]
                 [% IF ( PatronAutoComplete ) %]
                     patron_autocomplete($(".search_patron_filter"), { 'link-to': 'reserve', 'url-params': '[% url_biblio_params | url %]' });
@@ -1779,62 +1762,6 @@
                     $(':radio[name="item_group_id"]').prop('checked', false);
                 });
             [% END %]
-
-            if(!localStorage.selectedHolds  || document.referrer.replace(/\?.*/, '') !== document.location.origin+document.location.pathname) {
-                localStorage.selectedHolds = [];
-            }
-
-            $('.holds_table .select_hold').each(function() {
-                if(localStorage.selectedHolds.includes($(this).data('id'))) {
-                    $(this).prop('checked', true);
-                }
-            });
-
-            $('.holds_table .select_hold_all').each(function() {
-                var table = $(this).parents('.holds_table');
-                var count = $('.select_hold:not(:checked)', table).length;
-                $('.select_hold_all', table).prop('checked', !count);
-            });
-
-            $('.cancel_selected_holds').html(MSG_CANCEL_SELECTED.format($('.holds_table .select_hold:checked').length));
-
-            $('.holds_table .select_hold_all').click(function() {
-                var table = $(this).parents('.holds_table');
-                var count = $('.select_hold:checked', table).length;
-                $('.select_hold', table).prop('checked', !count);
-                $(this).prop('checked', !count);
-                $('.cancel_selected_holds').html(MSG_CANCEL_SELECTED.format($('.holds_table .select_hold:checked').length));
-                $('#cancel_hold_alert').html( MSG_CANCEL_ALERT.format($('.holds_table .select_hold:checked').length));
-                $('#cancel_hold_alert').show();
-                localStorage.selectedHolds = $('.holds_table .select_hold:checked').toArray().map(el => $(el).data('id'));
-            });
-
-            $('.holds_table .select_hold').click(function() {
-                var table = $(this).parents('.holds_table');
-                var count = $('.select_hold:not(:checked)', table).length;
-                $('.select_hold_all', table).prop('checked', !count);
-                $('.cancel_selected_holds').html(MSG_CANCEL_SELECTED.format($('.holds_table .select_hold:checked').length));
-                $('#cancel_hold_alert').html( MSG_CANCEL_ALERT.format($('.holds_table .select_hold:checked').length));
-                $('#cancel_hold_alert').show();
-                localStorage.selectedHolds = $('.holds_table .select_hold:checked').toArray().map(el => $(el).data('id'));
-            });
-
-            $('.cancel_selected_holds').click(function(e) {
-                e.preventDefault();
-                if($('.holds_table .select_hold:checked').length) {
-                    cancel_link = $(this);
-                    $("#cancel_modal_form #inputs").empty();
-                    biblionumbers.forEach( function(biblionumber){
-                        $("#cancel_modal_form #inputs").append('<input type="hidden" name="biblionumber" value="'+biblionumber+'">');
-                    });
-                    $("#cancel_modal_form #inputs").append('<input type="hidden" name="op" value="cud-cancel_bulk">');
-                    let hold_ids= $('.holds_table .select_hold:checked').toArray().map(el => $(el).data('id')).join(',');
-                    $("#cancel_modal_form #inputs").append('<input type="hidden" name="ids" value="' + hold_ids + '">');
-                    delete localStorage.selectedHolds;
-                    $('#cancelModal').modal('show');
-                }
-                return false;
-            });
 
             $(".hold-arrow").click(function(e) {
                 e.preventDefault();
