@@ -254,7 +254,7 @@ sub import_patrons {
         # Remove warning for int datatype that cannot be null
         # Argument "" isn't numeric in numeric eq (==) at /usr/share/perl5/DBIx/Class/Row.pm line 1018
         for my $field (
-            qw( privacy privacy_guarantor_fines privacy_guarantor_checkouts anonymized login_attempts ))
+            qw( privacy privacy_guarantor_fines privacy_guarantor_checkouts anonymized login_attempts autorenew_checkouts ))
         {
             delete $borrower{$field}
               if exists $borrower{$field} and $borrower{$field} eq "";

@@ -18,7 +18,8 @@
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
-use Test::More tests => 180;
+use Test::More tests => 181;
+use Test::NoWarnings;
 use Test::Warn;
 use Test::Exception;
 use Encode qw( encode_utf8 );
@@ -275,7 +276,7 @@ is( $patron_3->dateexpiry, '2015-07-01', "Expiration date is correct with update
 my $filename_3c = make_csv( $temp_dir, $csv_headers, $csv_one_line_b );
 open( my $handle_3c, "<", $filename_3c ) or die "cannot open < $filename_3: $!";
 my $params_3c = {
-    file => $handle_3c, matchpoint => 'cardnumber', overwrite_cardnumber => 1, preserve_fields => ['firstname'],
+    file => $handle_3c,     matchpoint => 'cardnumber', overwrite_cardnumber => 1, preserve_fields => ['firstname'],
     update_dateexpiry => 1, update_dateexpiry_from_today => 1
 };
 
@@ -330,7 +331,7 @@ my $filename_3d = make_csv( $temp_dir, $csv_headers, $csv_one_line_b );
 open( my $handle_3d, "<", $filename_3d ) or die "cannot open < $filename_3: $!";
 $patron_3c->dateexpiry('1980-01-01')->store();
 my $params_3d = {
-    file => $handle_3d, matchpoint => 'cardnumber', overwrite_cardnumber => 1, preserve_fields => ['firstname'],
+    file => $handle_3d,     matchpoint => 'cardnumber', overwrite_cardnumber => 1, preserve_fields => ['firstname'],
     update_dateexpiry => 1, update_dateexpiry_from_existing => 1
 };
 warning_is { $patrons_import->import_patrons($params_3d) }
@@ -819,8 +820,8 @@ subtest 'Import patron with guarantor' => sub {
     plan tests => 4;
     t::lib::Mocks::mock_preference( 'borrowerRelationship', 'guarantor' );
 
-    my $category = $builder->build( { source => 'Category' } )->{categorycode};
-    my $branch   = $builder->build( { source => 'Branch' } )->{branchcode};
+    my $category  = $builder->build( { source => 'Category' } )->{categorycode};
+    my $branch    = $builder->build( { source => 'Branch' } )->{branchcode};
     my $guarantor = Koha::Patron->new(
         {
             surname      => 'Guarantor',
@@ -861,11 +862,11 @@ subtest 'test_import_with_password_overwrite' => sub {
     my $categorycode = $builder->build( { source => "Category", value => { category_type => 'A' } } )->{categorycode};
     my $staff_categorycode =
         $builder->build( { source => "Category", value => { category_type => 'S' } } )->{categorycode};
-    my $csv_headers         = 'surname,userid,branchcode,categorycode,password';
-    my $csv_password        = "Worrell,ErnestP,$branchcode,$categorycode,Ernest11";
-    my $csv_password_change = "Worrell,ErnestP,$branchcode,$categorycode,Vern1234";
-    my $csv_blank_password  = "Worel,ErnestP,$branchcode,$categorycode,";
-    my $defaults = { cardnumber => "" };    #currently all the defaults come as "" if not filled
+    my $csv_headers               = 'surname,userid,branchcode,categorycode,password';
+    my $csv_password              = "Worrell,ErnestP,$branchcode,$categorycode,Ernest11";
+    my $csv_password_change       = "Worrell,ErnestP,$branchcode,$categorycode,Vern1234";
+    my $csv_blank_password        = "Worel,ErnestP,$branchcode,$categorycode,";
+    my $defaults                  = { cardnumber => "" };    #currently all the defaults come as "" if not filled
     my $csv_staff_password_change = "Worrell,ErnestP,$branchcode,$staff_categorycode,Vern1234";
 
     #Make the test files for importing
@@ -1650,7 +1651,7 @@ subtest 'welcome_email' => sub {
         $builder->build( { source => "Category", value => { category_type => 'S' } } )->{categorycode};
     my $csv_headers = 'surname,userid,branchcode,categorycode,password,email';
     my $csv_new     = "Spagobi,EldridgeS,$branchcode,$categorycode,H4ckR" . ',me@myemail.com';
-    my $defaults = { cardnumber => "" };    #currently all the defaults come as "" if not filled
+    my $defaults    = { cardnumber => "" };    #currently all the defaults come as "" if not filled
 
     #Make the test files for importing
     my $filename_1 = make_csv( $temp_dir, $csv_headers, $csv_new );
@@ -1739,7 +1740,7 @@ subtest 'prevent regression in update of dateexpiry with no date related flags' 
     $patron->dateexpiry('2099-12-31');
     $patron->dateenrolled( dt_from_string->add( months => '-24', end_of_month => 'limit' ) )->store;
     my $csv_values = join(
-        ',',                   $patron->cardnumber, $patron->surname, $patron->branchcode, $patron->categorycode,
+        ',', $patron->cardnumber, $patron->surname, $patron->branchcode, $patron->categorycode,
         $patron->dateenrolled, ''
     );
 
@@ -1755,7 +1756,7 @@ subtest 'prevent regression in update of dateexpiry with no date related flags' 
     );
 
     $csv_values = join(
-        ',',                   $patron->cardnumber, $patron->surname, $patron->branchcode, $patron->categorycode,
+        ',', $patron->cardnumber, $patron->surname, $patron->branchcode, $patron->categorycode,
         $patron->dateenrolled, '2098-01-01'
     );
 
