@@ -9,7 +9,9 @@
 
 use Modern::Perl;
 
-use Test::More tests => 117;
+use Test::More tests => 120;
+use Test::NoWarnings;
+use Test::Warn;
 use Data::Dumper;
 
 use C4::Context;
@@ -214,23 +216,32 @@ sub test_allocation {
 
     $schema->txn_rollback;
 }
-
-test_allocation(
-    "trivial case",
-    [],
-    [],
-    [],
-    [],
-    0
+warning_like(
+    sub {
+        test_allocation(
+            "trivial case",
+            [],
+            [],
+            [],
+            [],
+            0
+        );
+    },
+    qr{UseTransportCostMatrix set to yes, but matrix not populated}
 );
 
-test_allocation(
-    "unit case",
-    [ [0] ],
-    [1],
-    [1],
-    [ [ 0, 0 ] ],
-    0
+warning_like(
+    sub {
+        test_allocation(
+            "unit case",
+            [ [0] ],
+            [1],
+            [1],
+            [ [ 0, 0 ] ],
+            0
+        );
+    },
+    qr{UseTransportCostMatrix set to yes, but matrix not populated}
 );
 
 test_allocation(
