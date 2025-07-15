@@ -13,6 +13,40 @@ import {
     $__npx,
 } from "@koha-vue/i18n";
 
+/**
+ * A composable that provides utilities for the resource component.
+ *
+ * The utilities provided by this composable are documented individually below.
+ *
+ * @param {Object} instancedResource - The resource component instance.
+ * This can take in the following parameters
+ * REQUIRED:
+ * @param {String} instancedResource.resourceName - The name of the resource.
+ * @param {String} instancedResource.idAttr - The name of the id attribute of the resource.
+ * @param {String} instancedResource.nameAttr - The name attribute of the resource.
+ * @param {String} instancedResource.showComponent - The name of the show component.
+ * @param {String} instancedResource.addComponent - The name of the add component.
+ * @param {String} instancedResource.editComponent - The name of the edit component.
+ * @param {String} instancedResource.listComponent - The name of the list component.
+ * @param {Object} instancedResource.i18n - The i18n object.
+ * @param {Object} instancedResource.apiClient - The API client for the resource.
+ * @param {String} instancedResource.resourceTableUrl - The URL to the resource table.
+ * @param {Array} instancedResource.resourceAttrs - An array of attributes that relate to the resource's properties and how they should appear in the form/show/list components.
+ * @param {Object} instancedResource.props - The props passed to the resource component.
+ * OPTIONAL:
+ * @param {String} instancedResource.moduleStore - The name of the module store that holds resource related data (authorised values, permissions etc)
+ * @param {Boolean} instancedResource.addFiltersToList - A flag to indicate whether to add filters to the list component for the datatable.
+ * @param {Object} instancedResource.tableFilters - The table filters for the resource. Follows the format for the resourceAttrs parameter.
+ * @param {Function} instancedResource.afterResourceFetch - A function to call after the resource is fetched. This can be used to edit resource data or fetch additional data
+ * @param {Boolean} instancedResource.embedded - A flag to indicate whether the resource has been embedded.
+ * @param {String} instancedResource.extendedAttributesResourceType - The resource type for extended attributes, if applicable.
+ * @param {Function} instancedResource.defaultToolbarButtons - A function to amend default buttons in the toolbar.
+ * @param {Function} instancedResource.additionalToolbarButtons - A function to add additional buttons to the toolbar.
+ * @param {String} instancedResource.formGroupsDisplayMode - The display mode for the form groups if not the default. Can be one of the following: "accordion", "tabs".
+ * @param {Array} instancedResource.stickyToolbar - The names of the components with a toolbar that should be sticky.
+ *
+ * @return {Object} An object containing the utilities provided by this composable.
+ */
 export function useBaseResource(instancedResource) {
     const router = useRouter();
     const route = useRoute();

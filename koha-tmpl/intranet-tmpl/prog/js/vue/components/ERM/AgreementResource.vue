@@ -87,6 +87,7 @@ export default {
             embedded: props.embedded,
             addFiltersToList: true,
             extendedAttributesResourceType,
+            agreement_table_settings,
             resourceAttrs: [
                 {
                     name: "agreement_id",
