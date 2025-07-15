@@ -806,7 +806,7 @@
         </div>
         [% IF db_audit.diff_found %]
             <div>
-                <pre><code>[% db_audit.diff | $raw %]</code></pre>
+                <pre><code>[% db_audit.diff | html %]</code></pre>
             </div>
         [% END %]
     [% END # tab=database %]
