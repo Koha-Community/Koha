@@ -17,7 +17,8 @@
 
 use Modern::Perl;
 
-use Test::More tests => 70;
+use Test::More tests => 71;
+use Test::NoWarnings;
 use Test::MockModule;
 use Test::Warn;
 
@@ -413,7 +414,14 @@ is(
     $which_highest->{reserve_id}, $reserve_id,
     'CheckReserves returns higher priority future reserve with sufficient lookahead'
 );
-ModReserve( { reserve_id => $now_reserve_id, rank => 'del', cancellation_reason => 'test reserve' } );
+
+{
+    # Prevent warning 'No reserves HOLD_CANCELLATION letter transported by email'
+    my $mock_letters = Test::MockModule->new('C4::Letters');
+    $mock_letters->mock( 'GetPreparedLetter', sub { return } );
+
+    ModReserve( { reserve_id => $now_reserve_id, rank => 'del', cancellation_reason => 'test reserve' } );
+}
 
 # End of tests for bug 9761 (ConfirmFutureHolds)
 
