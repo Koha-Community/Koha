@@ -46,133 +46,53 @@ export function useBaseResource(instancedResource) {
     const patron_to_html = $patron_to_html;
 
     /**
-     * Navigates to the creation page of the given resource.
-     *
-     * @return {void}
+     **********************************************************************
+     * TOOLBAR RELATED METHODS
+     **********************************************************************
      */
-    const goToResourceAdd = () => {
-        router.push({
-            name: instancedResource.addComponent,
-        });
-    };
 
     /**
-     * Navigates to the edit page of the given resource.
+     * A function that returns a set of buttons to display in the toolbar, based on the current resource and component.
+     * The function takes two arguments: the resource and the component.
+     * It returns an array of buttons. The buttons are a combination of the default buttons and the additional buttons.
+     * The default buttons are defined in the defaultToolbarButtons function and the additional buttons are defined in the
+     * additionalToolbarButtons function at the resource level.
      *
-     * @param {Object} resource - The resource to navigate to (optional)
-     * @return {void}
+     * @param {Object} resource The current resource
+     * @param {String} component The current component
+     * @return {Array<Object>} An array of buttons
      */
-    const goToResourceEdit = resource => {
-        router.push({
-            name: instancedResource.editComponent,
-            params: {
-                [instancedResource.idAttr]: resource
-                    ? resource[instancedResource.idAttr]
-                    : instancedResource.newResource[instancedResource.idAttr],
-            },
-        });
-    };
+    const toolbarButtons = computed(() => {
+        return (resource, component, componentData) => {
+            let defaultButtons = defaultToolbarButtons(resource);
+            defaultButtons = instancedResource.hasOwnProperty(
+                "defaultToolbarButtons"
+            )
+                ? instancedResource.defaultToolbarButtons(
+                      defaultButtons,
+                      resource || {}
+                  )
+                : defaultButtons;
+            const additionalButtons = instancedResource.hasOwnProperty(
+                "additionalToolbarButtons"
+            )
+                ? instancedResource.additionalToolbarButtons(
+                      resource || {},
+                      componentData
+                  )
+                : additionalToolbarButtons(resource, componentData);
 
-    /**
-     * Return the URL for the resource table.
-     *
-     * @return {string}
-     */
-    const getResourceTableUrl = () => {
-        return instancedResource.resourceTableUrl;
-    };
+            //FIXME: we need to check that no indexes match between the default buttons and additional buttons
+            // If we add to the default buttons in future it could mess up indexing
 
-    /**
-     * Generates the URL for the show page of the given resource.
-     *
-     * @param {Object} resource - The resource to generate the URL for
-     * @return {string} The URL for the show page of the given resource
-     */
-    const getResourceShowURL = id => {
-        return router.resolve({
-            name: instancedResource.showComponent,
-            params: { [instancedResource.idAttr]: id },
-        }).href;
-    };
-
-    /**
-     * Navigates to the show page of the given resource.
-     *
-     * @param {Object} [resource] - The resource to navigate to
-     * @param {DataTable} [dt] - The DataTable (optional)
-     * @param {Event} [event] - The event to prevent default handling of (optional)
-     * @return {void}
-     */
-    const goToResourceShow = (resource, dt, event) => {
-        event?.preventDefault();
-        router.push({
-            name: instancedResource.showComponent,
-            params: {
-                [instancedResource.idAttr]: resource[instancedResource.idAttr],
-            },
-        });
-    };
-
-    /**
-     * Builds an object of filter name-value pairs based on the provided
-     * query object and filterData (tableFilters by default).
-     *
-     * Iterates over the query object keys and updates the filterOptions
-     * object with the new values. If a filter name is not found in
-     * filterOptions, it is added.
-     *
-     * @param {Object} query - The query object (taken from the URL params)containing the filter values.
-     * @param {Array} filterData - The array of filter objects (optional).
-     * @return {Object}
-     */
-    const getFilterValues = (query, filterData = []) => {
-        const filters = filterData
-            ? filterData
-            : instancedResource.tableFilters
-              ? instancedResource.tableFilters
-              : [];
-        const filterOptions = filters.reduce((acc, filter) => {
-            acc[filter.name] = filter.value;
-            return acc;
-        }, {});
-
-        Object.keys(query).forEach(key => {
-            if (
-                filterOptions.hasOwnProperty(key) &&
-                query[key] !== filterOptions[key]
-            ) {
-                filterOptions[key] = query[key];
-            }
-            if (!filterOptions.hasOwnProperty(key)) {
-                filterOptions[key] = query[key];
-            }
-        });
-        return filterOptions;
-    };
-
-    /**
-     * Builds an object of filter name-value pairs based on the provided
-     * query object and filterData (tableFilters by default).
-     *
-     * Iterates over the query object keys and updates the filterOptions
-     * object with the new values. If a filter name is not found in
-     * filterOptions, it is added.
-     *
-     * @param {Object} query - The query object (taken from the URL params)containing the filter values.
-     * @param {Array} filterData - The array of filter objects (optional).
-     * @return {Object}
-     */
-    const getFilters = (query, filterData) => {
-        const filters = filterData
-            ? filterData
-            : instancedResource.tableFilters
-              ? instancedResource.tableFilters
-              : [];
-        const filterOptions = filters.reduce((acc, filter) => {
-            acc[filter.name] = filter.value;
-            return acc;
-        }, {});
-    };
+            return [
+                ...(defaultButtons[component] || []),
+                ...(additionalButtons[component] || []).filter(
+                    button => Object.keys(button).length > 0
+                ),
+            ].sort((a, b) => a.index - b.index);
+        };
+    });
 
     /**
      * Gets the list of default buttons to add to the toolbar, for each view: list, show, edit
@@ -219,6 +139,220 @@ export function useBaseResource(instancedResource) {
             show: [],
         };
     };
+
+    /**
+     * Navigates to the creation page of the given resource.
+     *
+     * @return {void}
+     */
+    const goToResourceAdd = () => {
+        router.push({
+            name: instancedResource.addComponent,
+        });
+    };
+
+    /**
+     * Navigates to the edit page of the given resource.
+     *
+     * @param {Object} resource - The resource to navigate to (optional)
+     * @return {void}
+     */
+    const goToResourceEdit = resource => {
+        router.push({
+            name: instancedResource.editComponent,
+            params: {
+                [instancedResource.idAttr]: resource
+                    ? resource[instancedResource.idAttr]
+                    : instancedResource.newResource[instancedResource.idAttr],
+            },
+        });
+    };
+
+    /**
+     * Navigates to the show page of the given resource.
+     *
+     * @param {Object} [resource] - The resource to navigate to
+     * @param {DataTable} [dt] - The DataTable (optional)
+     * @param {Event} [event] - The event to prevent default handling of (optional)
+     * @return {void}
+     */
+    const goToResourceShow = (resource, dt, event) => {
+        event?.preventDefault();
+        router.push({
+            name: instancedResource.showComponent,
+            params: {
+                [instancedResource.idAttr]: resource[instancedResource.idAttr],
+            },
+        });
+    };
+
+    /**
+     * Navigates to the list page of the given resource.
+     *
+     * @return {void}
+     */
+    const goToResourceList = () => {
+        router.push({
+            name: instancedResource.listComponent,
+        });
+    };
+
+    /**
+     * Resource deletion handler.
+     * Accepts an optional callback function to run after deletion.
+     * If no callback is provided, does the following:
+     * - If deleting from show component, navigates to resource list component.
+     * - If deleting from resource list component, redraws the table.
+     *
+     * @param {Object} resource - The resource to delete (optional)
+     * @param {Object} callback - Callback to call after deletion (optional)
+     * @return {void}
+     */
+    const doResourceDelete = (resource, callback) => {
+        let resourceId = resource
+            ? resource[instancedResource.idAttr]
+            : instancedResource.newResource[instancedResource.idAttr];
+        let resourceName = resource
+            ? resource[instancedResource.nameAttr]
+            : instancedResource.newResource[instancedResource.nameAttr];
+
+        setConfirmationDialog(
+            {
+                title: i18n.deleteConfirmationMessage,
+                message: resourceName,
+                accept_label: $__("Yes, delete"),
+                cancel_label: $__("No, do not delete"),
+            },
+            () => {
+                instancedResource.apiClient.delete(resourceId).then(
+                    success => {
+                        setMessage(
+                            i18n.deleteSuccessMessage.format(resourceName),
+                            true
+                        );
+                        if (typeof callback === "function") {
+                            callback();
+                        } else {
+                            if (
+                                instancedResource.props.routeAction === "list"
+                            ) {
+                                callback.ajax.reload();
+                            } else {
+                                goToResourceList();
+                            }
+                        }
+                    },
+                    error => {}
+                );
+            }
+        );
+    };
+
+    /**
+     * Emits the 'select-resource' event with the id of the provided resource.
+     *
+     * @param {Object} resource - The resource object containing the id attribute.
+     * @param {Object} dt - DataTables instance (not used in this function).
+     * @param {Event} event - The event object (not used in this function).
+     */
+
+    const doResourceSelect = (resource, dt, event) => {
+        instancedResource.$emit(
+            "select-resource",
+            resource[instancedResource.idAttr]
+        );
+    };
+
+    /*
+     **********************************************************************
+     * DATATABLES RELATED METHODS
+     **********************************************************************
+     */
+
+    /**
+     * Return the URL for the resource table.
+     *
+     * @return {string}
+     */
+    const getResourceTableUrl = () => {
+        return instancedResource.resourceTableUrl;
+    };
+
+    /**
+     * Generates the URL for the show page of the given resource.
+     *
+     * @param {Object} resource - The resource to generate the URL for
+     * @return {string} The URL for the show page of the given resource
+     */
+    const getResourceShowURL = id => {
+        return router.resolve({
+            name: instancedResource.showComponent,
+            params: { [instancedResource.idAttr]: id },
+        }).href;
+    };
+
+    /**
+     * Builds an object of filter name-value pairs based on the provided
+     * query object and filterData (tableFilters by default).
+     *
+     * Iterates over the query object keys and updates the filterOptions
+     * object with the new values. If a filter name is not found in
+     * filterOptions, it is added.
+     *
+     * @param {Object} query - The query object (taken from the URL params)containing the filter values.
+     * @param {Array} filterData - The array of filter objects (optional).
+     * @return {Object}
+     */
+    const getFilterValues = (query, filterData = []) => {
+        const filters = filterData
+            ? filterData
+            : instancedResource.tableFilters
+              ? instancedResource.tableFilters
+              : [];
+        const filterOptions = filters.reduce((acc, filter) => {
+            acc[filter.name] = filter.value;
+            return acc;
+        }, {});
+
+        Object.keys(query).forEach(key => {
+            if (
+                filterOptions.hasOwnProperty(key) &&
+                query[key] !== filterOptions[key]
+            ) {
+                filterOptions[key] = query[key];
+            }
+            if (!filterOptions.hasOwnProperty(key)) {
+                filterOptions[key] = query[key];
+            }
+        });
+        return filterOptions;
+    };
+
+    /**
+     * Gets the label to display before the filters in the List component
+     *
+     * @return {String} The label
+     */
+    const getTableFilterFormElementsLabel = () => {
+        return "";
+    };
+
+    /**
+     * Gets the array of filters for the table, if required.
+     * This is a default method that returns an empty array.
+     * It can be overridden at the resource level if filters are required
+     *
+     * @return {Array} The array of filters for the table.
+     */
+    const getTableFilterFormElements = () => {
+        return [];
+    };
+
+    /*
+     **********************************************************************
+     * RESOURCE DISPLAY RELATED METHODS
+     **********************************************************************
+     */
 
     /**
      * A function that can be used to add additional content to the show view
@@ -325,47 +459,6 @@ export function useBaseResource(instancedResource) {
     };
 
     /**
-     * Populates the resource attributes with authorised values based on their types.
-     *
-     * For each attribute:
-     * - If the attribute type is "select" and it has an authorised value category (avCat),
-     *   it sets the options from the component's corresponding property.
-     * - If the attribute type is "relationship" and it has component properties,
-     *   it assigns authorised values to any marked as type 'av'.
-     * - If the attribute has relationship fields, the function is recursively called
-     *   to populate them as well.
-     *
-     * @param {Array} attrs - The array of attributes to be populated with authorised values.
-     */
-    const populateAttributesWithAuthorisedValues = attrs => {
-        const { authorisedValues } = moduleStoreUtils;
-        if (!attrs) return;
-        attrs.forEach(attr => {
-            if (attr.type === "select" && typeof attr.avCat === "string") {
-                const avKey = attr.avCat;
-                const avArray = authorisedValues[avKey];
-                if ((!avArray || !avArray.length) && attr.fallbackType) {
-                    attr.type = attr.fallbackType;
-                } else {
-                    attr.options = avArray;
-                    attr.requiredKey = "value";
-                    attr.selectLabel = "description";
-                }
-            }
-            if (attr.type == "relationship" && attr.componentProps) {
-                Object.keys(attr.componentProps).forEach(key => {
-                    if (attr.componentProps[key].type == "av") {
-                        attr.componentProps[key].av = authorisedValues[key];
-                    }
-                });
-            }
-            if (attr.relationshipFields?.length) {
-                populateAttributesWithAuthorisedValues(attr.relationshipFields);
-            }
-        });
-    };
-
-    /**
      * Retrieves a resource by id and assigns it to the component data.
      * If the resource component has an 'afterResourceFetch' method, it is called
      * with the component data, the fetched resource and the caller as arguments.
@@ -396,81 +489,24 @@ export function useBaseResource(instancedResource) {
     };
 
     /**
-     * Navigates to the list page of the given resource.
+     * Returns the plural form of the resource name.
      *
-     * @return {void}
-     */
-    const goToResourceList = () => {
-        router.push({
-            name: instancedResource.listComponent,
-        });
-    };
-
-    /**
-     * Resource deletion handler.
-     * Accepts an optional callback function to run after deletion.
-     * If no callback is provided, does the following:
-     * - If deleting from show component, navigates to resource list component.
-     * - If deleting from resource list component, redraws the table.
+     * This method checks if the `resourceName` ends with 's'. If it does not,
+     * it appends 's' to create the plural form. Otherwise returns `resourceName`.
      *
-     * @param {Object} resource - The resource to delete (optional)
-     * @param {Object} callback - Callback to call after deletion (optional)
-     * @return {void}
+     * @return {String} The plural form of the resource name.
      */
-    const doResourceDelete = (resource, callback) => {
-        let resourceId = resource
-            ? resource[instancedResource.idAttr]
-            : instancedResource.newResource[instancedResource.idAttr];
-        let resourceName = resource
-            ? resource[instancedResource.nameAttr]
-            : instancedResource.newResource[instancedResource.nameAttr];
+    const resourceNamePlural = computed(() => {
+        if (!instancedResource.resourceName.endsWith("s"))
+            return instancedResource.resourceName + "s";
+        return instancedResource.resourceName;
+    });
 
-        setConfirmationDialog(
-            {
-                title: i18n.deleteConfirmationMessage,
-                message: resourceName,
-                accept_label: $__("Yes, delete"),
-                cancel_label: $__("No, do not delete"),
-            },
-            () => {
-                instancedResource.apiClient.delete(resourceId).then(
-                    success => {
-                        setMessage(
-                            i18n.deleteSuccessMessage.format(resourceName),
-                            true
-                        );
-                        if (typeof callback === "function") {
-                            callback();
-                        } else {
-                            if (
-                                instancedResource.props.routeAction === "list"
-                            ) {
-                                callback.ajax.reload();
-                            } else {
-                                goToResourceList();
-                            }
-                        }
-                    },
-                    error => {}
-                );
-            }
-        );
-    };
-
-    /**
-     * Emits the 'select-resource' event with the id of the provided resource.
-     *
-     * @param {Object} resource - The resource object containing the id attribute.
-     * @param {Object} dt - DataTables instance (not used in this function).
-     * @param {Event} event - The event object (not used in this function).
+    /*
+     **********************************************************************
+     * RESOURCE CREATION RELATED METHODS
+     **********************************************************************
      */
-
-    const doResourceSelect = (resource, dt, event) => {
-        instancedResource.$emit(
-            "select-resource",
-            resource[instancedResource.idAttr]
-        );
-    };
 
     /**
      * Updates the extended_attributes property of the provided resource
@@ -483,68 +519,6 @@ export function useBaseResource(instancedResource) {
     const additionalFieldsChanged = (additionalFieldValues, resource) => {
         resource.extended_attributes = additionalFieldValues;
     };
-
-    /**
-     * Gets the label to display before the filters in the List component
-     *
-     * @return {String} The label
-     */
-    const getTableFilterFormElementsLabel = () => {
-        return "";
-    };
-    /**
-     * Gets the array of filters for the table, if required.
-     * This is a default method that returns an empty array.
-     * It can be overridden at the resource level if filters are required
-     *
-     * @return {Array} The array of filters for the table.
-     */
-    const getTableFilterFormElements = () => {
-        return [];
-    };
-
-    /**
-     * A function that returns a set of buttons to display in the toolbar, based on the current resource and component.
-     * The function takes two arguments: the resource and the component.
-     * It returns an array of buttons. The buttons are a combination of the default buttons and the additional buttons.
-     * The default buttons are defined in the defaultToolbarButtons function and the additional buttons are defined in the
-     * additionalToolbarButtons function at the resource level.
-     *
-     * @param {Object} resource The current resource
-     * @param {String} component The current component
-     * @return {Array<Object>} An array of buttons
-     */
-    const toolbarButtons = computed(() => {
-        return (resource, component, componentData) => {
-            let defaultButtons = defaultToolbarButtons(resource);
-            defaultButtons = instancedResource.hasOwnProperty(
-                "defaultToolbarButtons"
-            )
-                ? instancedResource.defaultToolbarButtons(
-                      defaultButtons,
-                      resource || {}
-                  )
-                : defaultButtons;
-            const additionalButtons = instancedResource.hasOwnProperty(
-                "additionalToolbarButtons"
-            )
-                ? instancedResource.additionalToolbarButtons(
-                      resource || {},
-                      componentData
-                  )
-                : additionalToolbarButtons(resource, componentData);
-
-            //FIXME: we need to check that no indexes match between the default buttons and additional buttons
-            // If we add to the default buttons in future it could mess up indexing
-
-            return [
-                ...(defaultButtons[component] || []),
-                ...(additionalButtons[component] || []).filter(
-                    button => Object.keys(button).length > 0
-                ),
-            ].sort((a, b) => a.index - b.index);
-        };
-    });
 
     /**
      * Generates a new resource object with default values.
@@ -591,19 +565,11 @@ export function useBaseResource(instancedResource) {
         return instancedResource.resourceToBeGenerated;
     });
 
-    /**
-     * Returns the plural form of the resource name.
-     *
-     * This method checks if the `resourceName` ends with 's'. If it does not,
-     * it appends 's' to create the plural form. Otherwise returns `resourceName`.
-     *
-     * @return {String} The plural form of the resource name.
+    /*
+     **********************************************************************
+     * RESOURCE UTILITY METHODS
+     **********************************************************************
      */
-    const resourceNamePlural = computed(() => {
-        if (!instancedResource.resourceName.endsWith("s"))
-            return instancedResource.resourceName + "s";
-        return instancedResource.resourceName;
-    });
 
     /**
      * Determines if the resource has additional fields.
@@ -624,6 +590,47 @@ export function useBaseResource(instancedResource) {
      */
     const refreshTemplateState = () => {
         refreshTemplate.value++;
+    };
+
+    /**
+     * Populates the resource attributes with authorised values based on their types.
+     *
+     * For each attribute:
+     * - If the attribute type is "select" and it has an authorised value category (avCat),
+     *   it sets the options from the component's corresponding property.
+     * - If the attribute type is "relationship" and it has component properties,
+     *   it assigns authorised values to any marked as type 'av'.
+     * - If the attribute has relationship fields, the function is recursively called
+     *   to populate them as well.
+     *
+     * @param {Array} attrs - The array of attributes to be populated with authorised values.
+     */
+    const populateAttributesWithAuthorisedValues = attrs => {
+        const { authorisedValues } = moduleStoreUtils;
+        if (!attrs) return;
+        attrs.forEach(attr => {
+            if (attr.type === "select" && typeof attr.avCat === "string") {
+                const avKey = attr.avCat;
+                const avArray = authorisedValues[avKey];
+                if ((!avArray || !avArray.length) && attr.fallbackType) {
+                    attr.type = attr.fallbackType;
+                } else {
+                    attr.options = avArray;
+                    attr.requiredKey = "value";
+                    attr.selectLabel = "description";
+                }
+            }
+            if (attr.type == "relationship" && attr.componentProps) {
+                Object.keys(attr.componentProps).forEach(key => {
+                    if (attr.componentProps[key].type == "av") {
+                        attr.componentProps[key].av = authorisedValues[key];
+                    }
+                });
+            }
+            if (attr.relationshipFields?.length) {
+                populateAttributesWithAuthorisedValues(attr.relationshipFields);
+            }
+        });
     };
 
     /**
