@@ -1457,7 +1457,7 @@ sub checkHighHolds {
         $return_data->{outstanding} = $holds->count();
 
         my $decreaseLoanHighHoldsControl        = C4::Context->preference('decreaseLoanHighHoldsControl');
-        my $decreaseLoanHighHoldsValue          = C4::Context->preference('decreaseLoanHighHoldsValue');
+        my $decreaseLoanHighHoldsValue          = C4::Context->preference('decreaseLoanHighHoldsValue') || 0;
         my $decreaseLoanHighHoldsIgnoreStatuses = C4::Context->preference('decreaseLoanHighHoldsIgnoreStatuses');
 
         my @decreaseLoanHighHoldsIgnoreStatuses = split( /,/, $decreaseLoanHighHoldsIgnoreStatuses );
@@ -1529,7 +1529,7 @@ sub checkHighHolds {
             # overrides decreaseLoanHighHoldsDuration syspref
             $duration = $rule;
         } else {
-            $duration = C4::Context->preference('decreaseLoanHighHoldsDuration');
+            $duration = C4::Context->preference('decreaseLoanHighHoldsDuration') || 0;
         }
         my $reduced_datedue = $calendar->addDuration( $issuedate, $duration );
         $reduced_datedue->set_hour( $orig_due->hour );
