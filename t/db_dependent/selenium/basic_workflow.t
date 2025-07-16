@@ -34,6 +34,9 @@
 
 use Modern::Perl;
 
+use Test::More tests => 23;
+use Test::NoWarnings;
+
 use Time::HiRes qw(gettimeofday);
 use POSIX qw(strftime);
 use C4::Context;
@@ -41,7 +44,6 @@ use C4::Biblio qw( AddBiblio );
 
 use Koha::CirculationRules;
 
-use Test::More tests => 22;
 use MARC::Record;
 use MARC::Field;
 
@@ -308,6 +310,6 @@ sub cleanup {
 sub time_diff {
     my $lib = shift;
     my $now = gettimeofday;
-    warn "CP $lib = " . sprintf("%.2f", $now - $prev_time ) . "\n";
+    #warn "CP $lib = " . sprintf( "%.2f", $now - $prev_time ) . "\n";
     $prev_time = $now;
 }
