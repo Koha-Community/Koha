@@ -173,7 +173,6 @@
 [% END %]
 
 [% MACRO jsinclude BLOCK %]
-    [% INCLUDE 'greybox.inc' %]
     [% INCLUDE 'datatables.inc' %]
     [% Asset.js("js/tools-menu.js") | $raw %]
     <script>
@@ -265,9 +264,9 @@
                     alert(_("Please select at least one card to export."));
                     return;     // no batch selected
                 }
-                return GB_showCenter(_("Export patron cards"), "/cgi-bin/koha/patroncards/print.pl?batch_id=[% batch_id | html %]&" + getstr, 400, 800);
+                location.href = "/cgi-bin/koha/patroncards/print.pl?batch_id=[% batch_id | html %]&" + getstr;
             } else if (mode == 'batch') {
-                return GB_showCenter(_("Export patron cards"), "/cgi-bin/koha/patroncards/print.pl?batch_id=[% batch_id | html %]", 400, 800);
+                location.href = "/cgi-bin/koha/patroncards/print.pl?batch_id=[% batch_id | html %]";
             } else {
                 // some pass-through error trapping just in case...
             }
@@ -310,6 +309,7 @@
                 $("#description").hide();
             [% END %]
             $("#batcht").kohaTable({
+                dom: '<"dt-info"i><"top pager"<"table_entries"lp><"table_controls"f>>tr<"bottom pager"ip>',
                 order: [[0, "asc"]],
                 pagingType: "full",
                 lengthMenu: [aLengthMenu, aLengthMenuLabel],
@@ -351,7 +351,7 @@
                 e.preventDefault();
                 var label_id = $(this).data("label-id");
                 var batch_id = $(this).data("batch-id");
-                GB_showCenter( _("Export single card"),'/cgi-bin/koha/patroncards/print.pl?batch_id=' + batch_id + '&label_id=' + label_id, 400, 800);
+                location.href = "/cgi-bin/koha/patroncards/print.pl?batch_id=" + batch_id + "&label_id=" + label_id;
             });
 
             $("#savedesc").click(function(event){

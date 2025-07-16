@@ -3,22 +3,43 @@
 [% PROCESS 'i18n.inc' %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title
-    >[% FILTER collapse %]
-        [% t("Patron card printing/exporting") | html %]
+<title>
+    [% FILTER collapse %]
+        [% t("Export") | html %]
         &rsaquo; [% t("Patron cards") | html %] &rsaquo; [% t("Tools") | html %] &rsaquo; [% t("Koha") | html %]
-    [% END %]</title
->
-[% INCLUDE 'doc-head-close.inc' popup => 1 %]
+    [% END %]
+</title>
+[% INCLUDE 'doc-head-close.inc' %]
 </head>
 
-<body id="pcard_print" class="tools pcard">
-<div class="container-fluid">
-    <h1>Patron card printing/exporting</h1>
+<body id="pcard_edit-batch" class="tools pcard">
+[% WRAPPER 'header.inc' %]
+    [% INCLUDE 'cat-search.inc' %]
+[% END %]
+
+[% WRAPPER 'sub-header.inc' %]
+    [% WRAPPER breadcrumbs %]
+        [% WRAPPER breadcrumb_item %]
+            <a href="/cgi-bin/koha/tools/tools-home.pl">Tools</a>
+        [% END %]
+        [% WRAPPER breadcrumb_item %]
+            <a href="/cgi-bin/koha/patroncards/home.pl">Patron card creator</a>
+        [% END %]
+        [% WRAPPER breadcrumb_item %]
+            <a href="/cgi-bin/koha/patroncards/manage.pl?card_element=batch">Batches</a>
+        [% END %]
+        [% WRAPPER breadcrumb_item bc_active= 1 %]
+            <span>Export</span>
+        [% END %]
+    [% END #/ WRAPPER breadcrumbs %]
+[% END #/ WRAPPER sub-header.inc %]
+
+[% WRAPPER 'main-container.inc' %]
+    <h1>Patron card export</h1>
     [% IF ( batches ) %]
         <form method="get">
-            <h3>Click on the following link(s) to download the exported batch(es).</h3>
-            <fieldset>
+            <h3>Click any of the following links to download the exported batch</h3>
+            <div class="page-section">
                 [% FOREACH batche IN batches %]
                     [% IF ( batche.label_ids ) %]
                         <legend>[% batche.card_count | html %] Single patron cards</legend>
@@ -49,22 +70,25 @@
                         </p>
                     [% END %]
                 [% END %]
-            </fieldset>
+            </div>
 
             <fieldset class="action">
-                <input type="button" class="gb-close" value="Done" />
+                <a href="/cgi-bin/koha/patroncards/manage.pl?card_element=batch" class="btn btn-default">Return to patron card batches</a>
             </fieldset>
         </form>
     [% ELSIF ( patronlist_id && template_id && layout_id ) %]
         <div id="export_patron_list">
-            <h3>Click on the link to download the patron cards from the patron list.</h3>
-            <p>
-                <a
-                    class="document pdf"
-                    href="/cgi-bin/koha/patroncards/create-pdf.pl?patronlist_id=[% patronlist_id | html %]&amp;template_id=[% template_id | html %]&amp;layout_id=[% layout_id | html %]&amp;layout_back_id=[% layout_back_id | html %]&amp;start_card=[% start_card | html %]&amp;order_by=[% order_by | html %]"
-                    >label_patronlist_[% patronlist_id | html %].pdf</a
-                >
-            </p>
+            <h3>Click any of the following links to download the exported batch</h3>
+            <div class="page-section">
+                <p>
+                    <a
+                        class="document pdf"
+                        href="/cgi-bin/koha/patroncards/create-pdf.pl?patronlist_id=[% patronlist_id | html %]&amp;template_id=[% template_id | html %]&amp;layout_id=[% layout_id | html %]&amp;layout_back_id=[% layout_back_id | html %]&amp;start_card=[% start_card | html %]&amp;order_by=[% order_by | html %]"
+                    >
+                        label_patronlist_[% patronlist_id | html %].pdf
+                    </a>
+                </p>
+            </div>
         </div>
     [% ELSE %]
         <h3>
@@ -143,21 +167,9 @@
             </fieldset>
         </form>
     [% END %]
-</div>
-<!-- /.container-fluid -->
-
-[% MACRO jsinclude BLOCK %]
-    [% INCLUDE 'greybox.inc' %]
-    <script>
-        function Done() {
-            window.location = "[% referer | html %]";
-        };
-        $(document).ready(function(){
-            $(".gb-close").on("click",function(){
-                parent.parent.GB_hide();
-            });
-        });
-    </script>
 [% END %]
 
-[% INCLUDE 'popup-bottom.inc' %]
+[% MACRO jsinclude BLOCK %]
+[% END %]
+
+[% INCLUDE 'intranet-bottom.inc' %]

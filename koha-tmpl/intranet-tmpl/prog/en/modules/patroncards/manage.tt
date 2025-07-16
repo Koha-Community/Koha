@@ -249,7 +249,7 @@
                 alert(_("Please select at least one batch to export."));
                 return;     // no batch selected
             }
-            return GB_showCenter(_("Export patron cards"), "/cgi-bin/koha/patroncards/print.pl?" + getstr, 400, 800);
+            location.href = "/cgi-bin/koha/patroncards/print.pl?" + getstr;
         };
 
         function XportPatronlist() {
@@ -258,7 +258,7 @@
                 return;     // no patron list selected
             }
             getstr = 'patronlist_id='+patron_list_id.value;
-            return GB_showCenter(_("Export patron cards from list"), "/cgi-bin/koha/patroncards/print.pl?" + getstr, 700, 800);
+            location.href = "/cgi-bin/koha/patroncards/print.pl?" + getstr;
         };
 
         function selected_layout(op) {
@@ -328,7 +328,7 @@
             $(".export").on("click", function(e){
                 e.preventDefault();
                 var batch_id = $(this).data("batch-id");
-                GB_showCenter( _("Export single batch"),'/cgi-bin/koha/patroncards/print.pl?batch_id='+batch_id, 400, 800);
+                location.href = "/cgi-bin/koha/patroncards/print.pl?batch_id=" + batch_id;
             });
         });
     </script>
