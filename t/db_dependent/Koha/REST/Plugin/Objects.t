@@ -53,6 +53,16 @@ get '/cities/rs' => sub {
     $c->render( status => 200, json => { count => $cities->count } );
 };
 
+get '/cities/rs_regression' => sub {
+    my $c = shift;
+    $c->validation->output( $c->req->params->to_hash );
+    $c->stash_embed;
+    $c->req->params->remove('q');
+    my $cities = $c->objects->search_rs( Koha::Cities->new );
+
+    $c->render( status => 200, json => { count => $cities->count } );
+};
+
 get '/cities/:city_id' => sub {
     my $c  = shift;
     my $id = $c->stash("city_id");
@@ -135,7 +145,7 @@ get '/cities/:city_id/rs' => sub {
 
 # The tests
 use Test::NoWarnings;
-use Test::More tests => 19;
+use Test::More tests => 20;
 use Test::Mojo;
 
 use t::lib::Mocks;
@@ -988,6 +998,39 @@ subtest 'date handling' => sub {
         ->json_is( '/1/job_id' => $job_3->id );
     $response_count = scalar @{ $t->tx->res->json };
     is( $response_count, 2 );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'Regression test - search_rs should not reinstate removed query parameters' => sub {
+    plan tests => 3;
+
+    $schema->storage->txn_begin;
+
+    # Remove existing cities to have more control on the search results
+    Koha::Cities->delete;
+
+    # Create three sample cities that match the query. We want to get all three returned when the city_name query parameter is removed
+    $builder->build_object(
+        {
+            class => 'Koha::Cities',
+            value => { city_name => 'city1' }
+        }
+    );
+    $builder->build_object(
+        {
+            class => 'Koha::Cities',
+            value => { city_name => 'city2' }
+        }
+    );
+    $builder->build_object(
+        {
+            class => 'Koha::Cities',
+            value => { city_name => 'city3' }
+        }
+    );
+    my $t = Test::Mojo->new;
+    $t->get_ok('/cities/rs_regression?q={"city_name":"city1"}')->status_is(200)->json_is( '/count' => 3 );
 
     $schema->storage->txn_rollback;
 };
