@@ -11,7 +11,6 @@
     [% END %]</title
 >
 [% INCLUDE 'doc-head-close.inc' %]
-[% INCLUDE 'greybox.inc' %]
 </head>
 
 <body id="patlist_lists" class="pat patlist">
@@ -224,7 +223,7 @@
                 $("#patronExportModal .modal-body").load( target_url + "?" + params + " #export_patron_list");
             });
 
-            patronExportModal.on("click",".btn-close,.gb-close",function(e){
+            patronExportModal.on("click",".btn-close",function(e){
                 e.preventDefault();
                 patronExportModal.modal("hide");
             });
