@@ -367,22 +367,57 @@ is_elasticsearch_enabled()
 
 adjust_paths_dev_install()
 {
-# Adjust KOHA_HOME, PERL5LIB for dev installs, as indicated by
-# corresponding tag in koha-conf.xml
+# Adjust KOHA_HOME, PERL5LIB, KOHA_BINDIR for git installs
 
     local instancename=$1
-    local dev_install=""
 
-    if [ "$instancename" != "" ] && is_instance $instancename; then
-        dev_install=$(run_safe_xmlstarlet $instancename dev_install)
-    fi
-
-    if [ "$dev_install" != "" ] && [ "$dev_install" != "0" ]; then
-        DEV_INSTALL=1
+    if is_git_install $instancename; then
         KOHA_HOME=$(run_safe_xmlstarlet $instancename intranetdir)
         PERL5LIB="$KOHA_HOME:$KOHA_HOME/lib"
+        KOHA_BINDIR=misc
     else
-        DEV_INSTALL=""
+        KOHA_BINDIR=bin
+    fi
+}
+
+is_git_install()
+{
+    local instancename=$1 git_install
+
+    # env var GIT_INSTALL overrules koha-conf entry
+    if [ -n "$GIT_INSTALL" ]; then
+        if [ "$GIT_INSTALL" != "0" ]; then return 0; else return 1; fi
+    fi
+
+    # now check koha-conf; looking at dev_install as historical fallback
+    if [ "$instancename" != "" ] && is_instance $instancename; then
+        git_install=$(run_safe_xmlstarlet $instancename git_install)
+        if [ -z "$git_install" ]; then git_install=$(run_safe_xmlstarlet $instancename dev_install); fi
+    fi
+    if [ -n "$git_install" ] && [ "$git_install" != "0" ]; then
+        return 0; # true
+    else
+        return 1
+    fi
+}
+
+is_test_system()
+{
+    local instancename=$1 test_system
+
+    # env var TEST_SYSTEM overrules koha-conf entry
+    if [ -n "$TEST_SYSTEM" ]; then
+        if [ "$TEST_SYSTEM" != "0" ]; then return 0; else return 1; fi
+    fi
+
+    # now check koha-conf
+    if [ "$instancename" != "" ] && is_instance $instancename; then
+        test_system=$(run_safe_xmlstarlet $instancename test_system)
+    fi
+    if [ -n "$test_system" ] && [ "test_system" != "0" ]; then
+        return 0; # true
+    else
+        return 1
     fi
 }
 
