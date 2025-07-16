@@ -17,11 +17,12 @@
 
 use Modern::Perl;
 
+use Test::More tests => 4;
+use Test::NoWarnings;
 use File::Temp qw|tempfile|;
 use MARC::Field;
 use MARC::File::XML;
 use MARC::Record;
-use Test::More tests => 3;
 use t::lib::Mocks;
 
 BEGIN {
@@ -55,11 +56,28 @@ subtest 'RecordsFromMARCXMLFile' => sub {
 
     my ( $errors, $recs );
     my $file = create_file( { whitespace => 1, format => 'marcxml' } );
-    ( $errors, $recs ) = C4::ImportBatch::RecordsFromMARCXMLFile( $file, 'UTF-8' );
+    {
+        # Ignore the following warning
+        # Use of uninitialized value in concatenation (.) or string at /usr/share/perl5/MARC/File/XML.pm line 399, <__ANONIO__> chunk 1.
+        # We do not want to expect it (using Test::Warn): it is a bug from MARC::File::XML
+        local $SIG{__WARN__} = sub { };
+        my $dup_err;
+        local *STDERR;
+        open STDERR, ">>", \$dup_err;
+        ( $errors, $recs ) = C4::ImportBatch::RecordsFromMARCXMLFile( $file, 'UTF-8' );
+        close STDERR;
+    }
     is( @$recs, 0, 'No records from empty marcxml file' );
 
     $file = create_file( { garbage => 1, format => 'marcxml' } );
-    ( $errors, $recs ) = C4::ImportBatch::RecordsFromMARCXMLFile( $file, 'UTF-8' );
+    {
+        local $SIG{__WARN__} = sub { };
+        my $dup_err;
+        local *STDERR;
+        open STDERR, ">>", \$dup_err;
+        ( $errors, $recs ) = C4::ImportBatch::RecordsFromMARCXMLFile( $file, 'UTF-8' );
+        close STDERR;
+    }
     is( @$recs, 0, 'Garbage returns no records' );
 
     $file = create_file( { two => 1, format => 'marcxml' } );
