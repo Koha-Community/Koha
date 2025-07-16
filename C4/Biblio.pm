@@ -3046,7 +3046,7 @@ sub UpdateTotalIssues {
     if ( defined $value ) {
         $totalissues = $value;
     } else {
-        $totalissues = $biblioitem->totalissues + $increase;
+        $totalissues = $current_issues + $increase;
     }
     return 0 if $current_issues == $totalissues;    # No need to update if no changes
 

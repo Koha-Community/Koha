@@ -17,7 +17,8 @@
 
 use Modern::Perl;
 
-use Test::More tests => 1;
+use Test::More tests => 2;
+use Test::NoWarnings;
 use Test::MockModule;
 
 use C4::Circulation qw( AddIssue AddReturn );
