@@ -45,6 +45,7 @@ use Koha::DateUtils qw( dt_from_string );
 use Koha::Encryption;
 use Koha::Exceptions;
 use Koha::Exceptions::Password;
+use Koha::Exceptions::HoldGroup;
 use Koha::Holds;
 use Koha::HoldGroups;
 use Koha::ILL::Requests;
@@ -1901,6 +1902,72 @@ sub hold_groups {
     my ($self) = @_;
     my $hold_group_rs = $self->_result->hold_groups->search( {}, { order_by => 'hold_group_id' } );
     return Koha::HoldGroups->_new_from_dbic($hold_group_rs);
+}
+
+=head3 create_hold_group
+
+my $hold_group = $patron->create_hold_group
+
+Creates and returns a hold group given a list of hold ids
+
+If force_grouped is supplied, the hold group will be created even if the holds are already grouped
+
+=cut
+
+sub create_hold_group {
+    my ( $self, $hold_ids, $force_grouped ) = @_;
+
+    my @undef_holds;
+    foreach my $hold_id (@$hold_ids) {
+        my $hold = Koha::Holds->find($hold_id);
+        push @undef_holds, $hold_id unless $hold;
+    }
+
+    Koha::Exceptions::HoldGroup::HoldDoesNotExist->throw(
+        hold_ids => \@undef_holds,
+    ) if (@undef_holds);
+
+    my @not_own_holds;
+    foreach my $hold_id (@$hold_ids) {
+        my $hold = Koha::Holds->find($hold_id);
+        push @not_own_holds, $hold_id unless $hold->borrowernumber eq $self->borrowernumber;
+    }
+
+    Koha::Exceptions::HoldGroup::HoldDoesNotBelongToPatron->throw(
+        hold_ids => \@not_own_holds,
+    ) if (@not_own_holds);
+
+    my @already_found_holds;
+    foreach my $hold_id (@$hold_ids) {
+        my $hold = Koha::Holds->find($hold_id);
+        push @already_found_holds, $hold->item->barcode if $hold->found;
+    }
+
+    Koha::Exceptions::HoldGroup::HoldHasAlreadyBeenFound->throw(
+        barcodes => \@already_found_holds,
+    ) if (@already_found_holds);
+
+    my @already_in_group_holds;
+    foreach my $hold_id (@$hold_ids) {
+        my $hold = Koha::Holds->find($hold_id);
+        push @already_in_group_holds, $hold_id if $hold->hold_group_id;
+    }
+
+    Koha::Exceptions::HoldGroup::HoldAlreadyBelongsToHoldGroup->throw(
+        hold_ids => \@already_in_group_holds,
+    ) if @already_in_group_holds && !$force_grouped;
+
+    my $hold_group_rs = $self->_result->create_related(
+        'hold_groups',
+        {}
+    );
+    foreach my $hold_id (@$hold_ids) {
+        my $hold = Koha::Holds->find($hold_id);
+
+        $hold->hold_group_id( $hold_group_rs->hold_group_id )->store;
+    }
+
+    return Koha::HoldGroup->_new_from_dbic($hold_group_rs);
 }
 
 =head3 curbside_pickups

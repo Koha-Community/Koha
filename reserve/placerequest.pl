@@ -69,9 +69,7 @@ foreach my $bibnum (@holdable_bibs) {
 
 if ( $op eq 'cud-placerequest' && $patron ) {
     my %failed_holds;
-    if ($hold_group_param) {
-        $hold_group = Koha::HoldGroup->new->store;
-    }
+    my @successful_hold_ids;
 
     foreach my $biblionumber ( keys %bibinfos ) {
 
@@ -95,7 +93,7 @@ if ( $op eq 'cud-placerequest' && $patron ) {
                     if ( $can_item_be_reserved eq 'OK'
                         || ( $can_item_be_reserved ne 'itemAlreadyOnHold' && $can_override ) )
                     {
-                        AddReserve(
+                        my $reserve_id = AddReserve(
                             {
                                 branchcode       => $item_pickup_location,
                                 borrowernumber   => $patron->borrowernumber,
@@ -113,6 +111,7 @@ if ( $op eq 'cud-placerequest' && $patron ) {
                             }
                         );
 
+                        push @successful_hold_ids, $reserve_id;
                         $hold_priority++;
 
                     } else {
@@ -124,7 +123,7 @@ if ( $op eq 'cud-placerequest' && $patron ) {
         } elsif ( @biblionumbers > 1 || $multi_holds ) {
             my $bibinfo = $bibinfos{$biblionumber};
             if ( $can_override || CanBookBeReserved( $patron->borrowernumber, $biblionumber )->{status} eq 'OK' ) {
-                AddReserve(
+                my $reserve_id = AddReserve(
                     {
                         branchcode       => $bibinfo->{pickup},
                         borrowernumber   => $patron->borrowernumber,
@@ -141,13 +140,14 @@ if ( $op eq 'cud-placerequest' && $patron ) {
                         hold_group_id    => $hold_group ? $hold_group->id : undef,
                     }
                 );
+                push @successful_hold_ids, $reserve_id;
             }
         } else {
 
             # place a request on 1st available
             for ( my $i = 0 ; $i < $holds_to_place_count ; $i++ ) {
                 if ( $can_override || CanBookBeReserved( $patron->borrowernumber, $biblionumber )->{status} eq 'OK' ) {
-                    AddReserve(
+                    my $reserve_id = AddReserve(
                         {
                             branchcode       => $branch,
                             borrowernumber   => $patron->borrowernumber,
@@ -165,10 +165,13 @@ if ( $op eq 'cud-placerequest' && $patron ) {
                             hold_group_id    => $hold_group ? $hold_group->id : undef,
                         }
                     );
+                    push @successful_hold_ids, $reserve_id;
                 }
             }
         }
     }
+
+    $patron->create_hold_group( \@successful_hold_ids ) if $hold_group_param;
 
     my $redirect_url     = URI->new("request.pl");
     my @failed_hold_msgs = ();
