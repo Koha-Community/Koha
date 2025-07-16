@@ -156,7 +156,7 @@ controller, and thus shouldn't be called twice in it.
         'objects.search_rs' => sub {
             my ( $c, $result_set, $query_fixers ) = @_;
 
-            my $args       = $c->validation->output;
+            my $args       = $c->req->params->to_hash;
             my $attributes = {};
 
             $query_fixers //= [];
