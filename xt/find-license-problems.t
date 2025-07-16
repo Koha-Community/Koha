@@ -33,6 +33,7 @@ my @files = map {
     !(     $name =~ m{^koha-tmpl/}
         || $name =~ m{\.(gif|jpg|odt|ogg|pdf|png|po|psd|svg|swf|zip)$}
         || $name =~ m{xt/find-license-problems|xt/fix-old-fsf-address|misc/translator/po2json}
+        || $name =~ m[t/mock_templates/intranet-tmpl/prog]
         || !-f $name )
         ? $_
         : ()
@@ -43,14 +44,13 @@ plan tests => scalar(@files) + 1;
 foreach my $name (@files) {
     open( my $fh, '<', $name ) || die "cannot open file $name $!";
     my (
-        $hascopyright,  $hasgpl, $hasv3, $hasorlater, $haslinktolicense,
+        $hasgpl,        $hasv3, $hasorlater, $haslinktolicense,
         $hasfranklinst, $is_not_us
     ) = (0) x 7;
     while ( my $line = <$fh> ) {
-        $hascopyright = 1 if ( $line =~ /^(#|--)?\s*Copyright.*\d\d/ );
-        $hasgpl       = 1 if ( $line =~ /GNU General Public License/ );
-        $hasv3        = 1 if ( $line =~ /either version 3/ );
-        $hasorlater   = 1
+        $hasgpl     = 1 if ( $line =~ /GNU General Public License/ );
+        $hasv3      = 1 if ( $line =~ /either version 3/ );
+        $hasorlater = 1
             if ( $line =~ /any later version/
             || $line =~ /at your option/ );
         $haslinktolicense = 1 if $line =~ m|http://www\.gnu\.org/licenses|;
@@ -59,12 +59,12 @@ foreach my $name (@files) {
     }
     close $fh;
 
-    if ( !$hascopyright || $is_not_us ) {
+    if ( $is_not_us || !$hasgpl ) {
         pass();
         next;
     }
 
-    is( $hasgpl && $hasv3 && $hasorlater && $haslinktolicense && !$hasfranklinst, 1 )
+    ok( $hasgpl && $hasv3 && $hasorlater && $haslinktolicense && !$hasfranklinst )
         or diag(
         sprintf
             "File %s has wrong copyright: hasgpl=%s, hasv3=%s, hasorlater=%s, haslinktolicense=%s, hasfranklinst=%s",
