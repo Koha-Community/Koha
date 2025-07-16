@@ -626,7 +626,7 @@ if ($patron) {
         $template->param( is_debarred => 1 );
         $noissues = 1;
     }
-    if ( $patron->borrowernumber eq C4::Context->preference("AnonymousPatron") ) {
+    if ( $patron->is_anonymous ) {
         $template->param( is_anonymous => 1 );
         $noissues = 1;
     }

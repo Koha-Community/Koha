@@ -45,7 +45,7 @@
 
     [% UNLESS Koha.Preference('IntranetReadingHistoryHolds') %]
         <div class="alert alert-warning">Staff members are not allowed to access patron's holds history</div>
-    [% ELSIF is_anonymous %]
+    [% ELSIF patron.is_anonymous %]
         <div class="alert alert-warning">This is the anonymous patron, so no holds history is displayed.</div>
     [% ELSE %]
 

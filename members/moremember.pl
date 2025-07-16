@@ -78,10 +78,6 @@ output_and_exit_if_error(
 
 my $category_type = $patron->category->category_type;
 
-if ( $patron->borrowernumber eq C4::Context->preference("AnonymousPatron") ) {
-    $template->param( is_anonymous => 1 );
-}
-
 for (qw(gonenoaddress lost borrowernotes is_debarred)) {
     $patron->$_ and $template->param( flagged => 1 ) and last;
 }

@@ -1492,10 +1492,6 @@ sub checkauth {
     my $auth_template_name = ( $type eq 'opac' ) ? 'opac-auth.tt' : 'auth.tt';
     my $template           = C4::Templates::gettemplate( $auth_template_name, $type, $query );
 
-    my $borrowernumber      = $patron and $patron->borrowernumber;
-    my $anonymous_patron    = C4::Context->preference('AnonymousPatron');
-    my $is_anonymous_patron = $patron && ( $patron->borrowernumber eq $anonymous_patron );
-
     $template->param(
         login                                 => 1,
         INPUTS                                => \@inputs,
@@ -1530,7 +1526,7 @@ sub checkauth {
         opac_css_override                     => $ENV{'OPAC_CSS_OVERRIDE'},
         too_many_login_attempts               => ( $patron and $patron->account_locked ),
         password_has_expired                  => ( $patron and $patron->password_expired ),
-        is_anonymous_patron                   => ($is_anonymous_patron),
+        is_anonymous_patron                   => ( $patron and $patron->is_anonymous ),
         password_expiration_date              => ( $patron and $patron->password_expiration_date ),
         date_enrolled                         => ( $patron and $patron->dateenrolled ),
         auth_error                            => $auth_error,

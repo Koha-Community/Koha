@@ -473,9 +473,8 @@ ListOwnershipUponPatronDeletion pref, but entries from the borrower to other lis
 sub delete {
     my ($self) = @_;
 
-    my $anonymous_patron = C4::Context->preference("AnonymousPatron");
     Koha::Exceptions::Patron::FailedDeleteAnonymousPatron->throw()
-        if $anonymous_patron && $self->id eq $anonymous_patron;
+        if $self->is_anonymous;
 
     # Check if patron is protected
     Koha::Exceptions::Patron::FailedDeleteProtectedPatron->throw() if defined $self->protected && $self->protected == 1;
@@ -736,8 +735,7 @@ sub siblings {
 sub merge_with {
     my ( $self, $patron_ids ) = @_;
 
-    my $anonymous_patron = C4::Context->preference("AnonymousPatron");
-    return if $anonymous_patron && $self->id eq $anonymous_patron;
+    return if $self->is_anonymous;
 
     # Do not merge other patrons into a protected patron
     return if $self->protected;
@@ -755,11 +753,11 @@ sub merge_with {
         sub {
             foreach my $patron_id (@patron_ids) {
 
-                next if $anonymous_patron && $patron_id eq $anonymous_patron;
-
                 my $patron = Koha::Patrons->find($patron_id);
 
                 next unless $patron;
+
+                next if $patron->is_anonymous;
 
                 # Do not merge protected patrons into other patrons
                 next if $patron->protected;
@@ -3048,11 +3046,9 @@ This method tells if the Koha:Patron object can be deleted. Possible return valu
 sub safe_to_delete {
     my ($self) = @_;
 
-    my $anonymous_patron = C4::Context->preference('AnonymousPatron');
-
     my $error;
 
-    if ( $anonymous_patron && $self->id eq $anonymous_patron ) {
+    if ( $self->is_anonymous ) {
         $error = 'is_anonymous_patron';
     } elsif ( $self->checkouts->count ) {
         $error = 'has_checkouts';
@@ -3403,6 +3399,20 @@ sub is_patron_inside_charge_limits {
         && $guarantors_non_issues_charges > $no_issues_charge_guarantors_with_guarantees;
 
     return $patron_charge_limits;
+}
+
+=head3 is_anonymous
+
+my $is_anonymous_patron= $patron->is_anonymous();
+
+Returns true if the patron the anonymous patron (AnonymousPatron)
+
+=cut
+
+sub is_anonymous {
+    my ($self) = @_;
+    my $anonymous_patron = C4::Context->preference('AnonymousPatron');
+    return ( $anonymous_patron && $self->borrowernumber eq $anonymous_patron ) ? 1 : 0;
 }
 
 =head2 Internal methods
