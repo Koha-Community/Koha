@@ -507,7 +507,8 @@ subtest 'UpdateFine tests' => sub {
         { order_by       => { '-asc' => 'accountlines_id' } }
     );
     is( $fines->count,        4,    "New amount should be 0 so no fine added" );
-    ok( C4::Circulation::AddReturn( $item_1->barcode, $item_1->homebranch, 1), "Returning the item and forgiving fines succeeds");
+    my @r = C4::Circulation::AddReturn( $item_1->barcode, $item_1->homebranch, 1 );
+    is( $r[1]->{WasReturned}, 1, "Returning the item and forgiving fines succeeds" );
 
     t::lib::Mocks::mock_preference( 'MaxFine', 0 );
 
