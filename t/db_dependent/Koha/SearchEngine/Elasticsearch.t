@@ -18,7 +18,9 @@
 use Modern::Perl;
 use Encode;
 
-use Test::More tests => 8;
+use Test::More tests => 9;
+use Test::NoWarnings;
+use Test::Warn;
 use Test::Exception;
 
 use t::lib::Mocks;
@@ -187,7 +189,7 @@ subtest 'get_elasticsearch_mappings() tests' => sub {
 
 subtest 'Koha::SearchEngine::Elasticsearch::marc_records_to_documents () tests' => sub {
 
-    plan tests => 70;
+    plan tests => 71;
 
     t::lib::Mocks::mock_preference('marcflavour', 'MARC21');
     t::lib::Mocks::mock_preference('ElasticsearchMARCFormat', 'ISO2709');
@@ -778,7 +780,10 @@ subtest 'Koha::SearchEngine::Elasticsearch::marc_records_to_documents () tests' 
         MARC::Field->new( '999', '', '', c => '1234567' ),
     );
 
-    $docs = $see->marc_records_to_documents( [$marc_record_with_large_field] );
+    warning_is {
+        $docs = $see->marc_records_to_documents( [$marc_record_with_large_field] );
+    }
+    "Warnings encountered while roundtripping a MARC record to/from USMARC. Failing over to MARCXML.";
 
     subtest '_process_mappings() split tests' => sub {
 
@@ -1076,19 +1081,18 @@ subtest 'marc_records_to_documents should set the "available" field' => sub {
     # sort_fields will call this and use the actual db values unless we call it first
     $see->get_elasticsearch_mappings();
 
-    my $marc_record_1 = MARC::Record->new();
-    $marc_record_1->leader('     cam  22      a 4500');
-    $marc_record_1->append_fields(
-        MARC::Field->new('245', '', '', a => 'Title'),
-    );
-    my ($biblionumber) = C4::Biblio::AddBiblio( $marc_record_1, '' );
+    my $builder       = t::lib::TestBuilder->new;
+    my $biblio        = $builder->build_sample_biblio;
+    my $marc_record_1 = $biblio->metadata->record;
 
     my $docs = $see->marc_records_to_documents([$marc_record_1]);
     is_deeply($docs->[0]->{available}, \0, 'a biblio without items is not available');
 
-    my $item = Koha::Item->new({
-        biblionumber => $biblionumber,
-    })->store();
+    my $item = $builder->build_sample_item(
+        {
+            biblionumber => $biblio->biblionumber,
+        }
+    );
 
     $docs = $see->marc_records_to_documents([$marc_record_1]);
     is_deeply($docs->[0]->{available}, \1, 'a biblio with one item that has no particular status is available');
@@ -1113,9 +1117,11 @@ subtest 'marc_records_to_documents should set the "available" field' => sub {
     $docs = $see->marc_records_to_documents([$marc_record_1]);
     is_deeply($docs->[0]->{available}, \1, 'a biblio with one item that is damaged is available');
 
-    my $item2 = Koha::Item->new({
-        biblionumber => $biblionumber,
-    })->store();
+    my $item2 = $builder->build_sample_item(
+        {
+            biblionumber => $biblio->biblionumber,
+        }
+    );
     $docs = $see->marc_records_to_documents([$marc_record_1]);
     is_deeply($docs->[0]->{available}, \1, 'a biblio with at least one item that has no particular status is available');
 };
