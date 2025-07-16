@@ -186,9 +186,10 @@ my $patron_messages = Koha::Patron::Messages->search(
         'me.borrowernumber' => $patron->borrowernumber,
     },
     {
-        join      => 'manager',
-        '+select' => [ 'manager.surname', 'manager.firstname' ],
-        '+as'     => [ 'manager_surname', 'manager_firstname' ],
+        join       => 'manager',
+        '+select'  => [ 'manager.surname', 'manager.firstname' ],
+        '+as'      => [ 'manager_surname', 'manager_firstname' ],
+        'order_by' => { -desc => 'me.message_type' },
     }
 );
 
