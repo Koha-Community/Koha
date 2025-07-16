@@ -25,22 +25,20 @@
 
 use Modern::Perl;
 use Test::More;
+use Test::NoWarnings;
 
-use File::Spec;
-use File::Find;
+my @files = map {
+    chomp;
+    my $name = $_;
+    !(     $name =~ m{^koha-tmpl/}
+        || $name =~ m{\.(gif|jpg|odt|ogg|pdf|png|po|psd|svg|swf|zip)$}
+        || $name =~ m{xt/find-license-problems|xt/fix-old-fsf-address|misc/translator/po2json}
+        || !-f $name )
+        ? $_
+        : ()
+} `git ls-tree -r HEAD --name-only`;    # only files part of git
 
-my @files;
-
-sub wanted {
-    my $name = $File::Find::name;
-    push @files, $name
-        unless $name =~ /\/(\.git|koha-tmpl|node_modules|swagger-ui)(\/.*)?$/
-        || $name     =~ /\.(gif|jpg|odt|ogg|pdf|png|po|psd|svg|swf|zip|patch)$/
-        || $name     =~ m[(xt/find-license-problems|xt/fix-old-fsf-address|misc/translator/po2json)]
-        || !-f $name;
-}
-
-find( { wanted => \&wanted, no_chdir => 1 }, File::Spec->curdir() );
+plan tests => scalar(@files) + 1;
 
 foreach my $name (@files) {
     open( my $fh, '<', $name ) || die "cannot open file $name $!";
@@ -60,8 +58,12 @@ foreach my $name (@files) {
         $is_not_us        = 1 if $line =~ m|This file is part of the Zebra server|;
     }
     close $fh;
-    next unless $hascopyright;
-    next if $is_not_us;
+
+    if ( !$hascopyright || $is_not_us ) {
+        pass();
+        next;
+    }
+
     is( $hasgpl && $hasv3 && $hasorlater && $haslinktolicense && !$hasfranklinst, 1 )
         or diag(
         sprintf
@@ -69,4 +71,3 @@ foreach my $name (@files) {
         $name, $hasgpl, $hasv3, $hasorlater, $haslinktolicense, $hasfranklinst
         );
 }
-done_testing;
