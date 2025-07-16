@@ -19,7 +19,8 @@
 
 use Modern::Perl;
 
-use Test::More tests => 40;
+use Test::More tests => 42;
+use Test::NoWarnings;
 use Test::Exception;
 use Test::Warn;
 use Time::Fake;
@@ -3094,3 +3095,26 @@ subtest 'can_place_holds() tests' => sub {
         $schema->storage->txn_rollback;
     };
 };
+
+subtest 'is_anonymous' => sub {
+    plan tests => 3;
+
+    $schema->storage->txn_begin;
+
+    t::lib::Mocks::mock_preference( 'AnonymousPatron', '' );
+
+    my $patron = $builder->build_object( { class => 'Koha::Patrons' } );
+
+    is( $patron->is_anonymous, 0, 'is_anonymous returns 0 if pref is empty' );
+
+    t::lib::Mocks::mock_preference( 'AnonymousPatron', $patron->borrowernumber );
+
+    is( $patron->is_anonymous, 1, q{is_anonymous returns 1 if pref is equal to patron's id} );
+
+    t::lib::Mocks::mock_preference( 'AnonymousPatron', $patron->borrowernumber + 1 );
+
+    is( $patron->is_anonymous, 0, q{is_anonymous returns 0 if pref is not equal to patron's id} );
+
+    $schema->storage->txn_begin;
+
+    }

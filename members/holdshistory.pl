@@ -44,13 +44,6 @@ unless ($patron) {
     exit;
 }
 
-if ( $borrowernumber eq C4::Context->preference('AnonymousPatron') ) {
-
-    # use of 'eq' in the above comparison is intentional -- the
-    # system preference value could be blank
-    $template->param( is_anonymous => 1 );
-}
-
 $template->param(
     holdshistoryview => 1,
     patron           => $patron,
