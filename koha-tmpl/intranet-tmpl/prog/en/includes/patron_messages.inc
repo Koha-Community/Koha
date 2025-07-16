@@ -327,12 +327,15 @@
             [% FOREACH patron_message IN patron_messages %]
                 <li>
                     [% SET span_class = '' %]
+                    [% SET msg_type = 'OPAC' %]
                     [% IF(patron_message.message_type == "L") %]
                         [% span_class = 'circ-hlt' %]
+                        [% msg_type = 'Staff note' %]
                     [% END %]
                     <span class="[% span_class | html %]">
                         [% patron_message.message_date | $KohaDates %]
                         [% Branches.GetName( patron_message.branchcode ) | html %]
+                        - [% t(msg_type) | html %]
                         [% IF patron_message.manager_id %]
                             (
                             <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% patron_message.manager_id | uri %]"

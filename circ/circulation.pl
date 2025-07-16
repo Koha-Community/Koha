@@ -695,9 +695,10 @@ if ($patron) {
     my $patron_messages = $patron->messages->search(
         {},
         {
-            join      => 'manager',
-            '+select' => [ 'manager.surname', 'manager.firstname' ],
-            '+as'     => [ 'manager_surname', 'manager_firstname' ],
+            join       => 'manager',
+            '+select'  => [ 'manager.surname', 'manager.firstname' ],
+            '+as'      => [ 'manager_surname', 'manager_firstname' ],
+            'order_by' => { -desc => 'me.message_type' },
         }
     );
     $template->param( patron_messages => $patron_messages );
