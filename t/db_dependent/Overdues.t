@@ -1,7 +1,8 @@
 #!/usr/bin/perl;
 
 use Modern::Perl;
-use Test::More tests => 18;
+use Test::More tests => 19;
+use Test::NoWarnings;
 use Test::Warn;
 
 use C4::Context;
@@ -507,6 +508,7 @@ subtest 'UpdateFine tests' => sub {
         { order_by       => { '-asc' => 'accountlines_id' } }
     );
     is( $fines->count,        4,    "New amount should be 0 so no fine added" );
+    t::lib::Mocks::mock_userenv( { patron => $patron_1 } );
     my @r = C4::Circulation::AddReturn( $item_1->barcode, $item_1->homebranch, 1 );
     is( $r[1]->{WasReturned}, 1, "Returning the item and forgiving fines succeeds" );
 
