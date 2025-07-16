@@ -388,7 +388,7 @@ sub store {
 
                 if (    C4::Context->preference('ChildNeedsGuarantor')
                     and ( $self->is_child or $self->category->can_be_guarantee )
-                    and $self->contactname eq ""
+                    and ( !defined $self->contactname || $self->contactname eq "" )
                     and !@$guarantors )
                 {
                     Koha::Exceptions::Patron::Relationship::NoGuarantor->throw();
