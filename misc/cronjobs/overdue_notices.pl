@@ -1034,9 +1034,6 @@ sub _get_html_start {
 <style type='text/css'>
 pre {page-break-after: always;}
 pre {white-space: pre-wrap;}
-pre {white-space: -moz-pre-wrap;}
-pre {white-space: -o-pre-wrap;}
-pre {word-wrap: break-work;}
 </style>
 </head>
 <body>";
