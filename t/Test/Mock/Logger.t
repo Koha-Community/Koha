@@ -1,5 +1,6 @@
 use Modern::Perl;
-use Test::More tests => 10;
+use Test::More tests => 11;
+use Test::NoWarnings;
 use Test::Warn;
 
 # Module under test
@@ -132,16 +133,25 @@ subtest 'Method chaining tests' => sub {
     isa_ok( $result, 't::lib::Mocks::Logger', 'Method chaining returns the logger object' );
 };
 
-# Test diag method (output capture is complex, just verify it runs)
 subtest 'Diag method test' => sub {
     plan tests => 1;
 
     $logger->clear();
     $mocked_logger->debug('Debug message');
 
-    # Just make sure it doesn't throw an exception
-    eval { $logger->diag(); };
-    is( $@, '', 'diag() method executed without errors' );
+    # Capture Test::Builder diag output
+    my $diag_output = '';
+    open my $fake_fh, '>', \$diag_output or die "Can't open: $!";
+
+    my $tb          = Test::More->builder;
+    my $original_fh = $tb->failure_output;
+    $tb->failure_output($fake_fh);    # Redirect diag output
+
+    $logger->diag();
+
+    $tb->failure_output($original_fh);
+
+    like( $diag_output, qr/debug:\n#\s*"Debug message"/xms, 'Captured diag output' );
 };
 
 # Test handling of empty log buffers
