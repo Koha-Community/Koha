@@ -3,12 +3,18 @@
 [% PROCESS 'i18n.inc' %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title
-    >[% FILTER collapse %]
-        [% t("Localization") | html %]
+<title>
+    [% FILTER collapse %]
+        [% SWITCH entity %]
+        [% CASE "itemtypes" %]
+            [% tx("Add translations for item type '{code}'", { code = code }) | html %]
+            &rsaquo; [% t("Item types") | html %] &rsaquo; [% t("Administration") | html %]
+        [% CASE %]
+            [% tx("Add translations for '{code}'", { code = code }) | html %]
+        [% END %]
         &rsaquo; [% t("Koha") | html %]
-    [% END %]</title
->
+    [% END %]
+</title>
 [% INCLUDE 'doc-head-close.inc' popup => 1 %]
 <style>
     #localization {
@@ -18,93 +24,120 @@
 </head>
 
 <body id="admin_localization" class="admin">
-<div class="main container-fluid">
-    <div class="row">
-        <div class="col-sm-12">
-            <h1>Localization</h1>
-            <form id="add_translation" method="get">
-                [% INCLUDE 'csrf-token.inc' %]
-                <input type="hidden" name="entity" value="[% entity | html %]" />
-                <input type="hidden" name="code" value="[% code | html %]" />
-                <input type="hidden" name="interface" value="[% interface_side | html %]" />
-                <fieldset class="rows clearfix">
-                    <ol>
-                        <li>
-                            <span class="label">Authorized value:</span>
-                            [% code | html %]
-                        </li>
-                        <li>
-                            <label for="lang">Language:</label>
-                            <select name="lang" id="lang">
-                                [% FOR language IN languages %]
-                                    [% FOR sublanguage IN language.sublanguages_loop %]
-                                        [% IF language.plural %]
-                                            <option value="[% sublanguage.rfc4646_subtag | html %]">[% sublanguage.native_description | html %] [% sublanguage.region_description | html %] ([% sublanguage.rfc4646_subtag | html %])</option>
-                                        [% ELSE %]
-                                            <option value="[% sublanguage.rfc4646_subtag | html %]">[% sublanguage.native_description | html %] ([% sublanguage.rfc4646_subtag | html %])</option>
-                                        [% END %]
-                                    [% END %]
+[% WRAPPER 'header.inc' %]
+    [% INCLUDE 'cat-search.inc' %]
+[% END %]
+[% WRAPPER 'sub-header.inc' %]
+    [% WRAPPER breadcrumbs %]
+        [% SWITCH entity %]
+        [% CASE "itemtypes" %]
+            [% WRAPPER breadcrumb_item %]
+                <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a>
+            [% END %]
+            [% WRAPPER breadcrumb_item %]
+                <a href="/cgi-bin/koha/admin/itemtypes.pl">Item types</a>
+            [% END %]
+            [% WRAPPER breadcrumb_item %]
+                <a href="/cgi-bin/koha/admin/itemtypes.pl?op=add_form&itemtype=[% code | uri %]"> [% tx("Modify item type '{code}'", { code = code }) | html %] </a>
+            [% END %]
+            [% WRAPPER breadcrumb_item bc_active= 1 %]
+                <span>Add translations</span>
+            [% END %]
+        [% CASE %]
+            [% WRAPPER breadcrumb_item bc_active= 1 %]
+                [% tx("Add translations for '{code}'", { code = code }) | html %]
+            [% END %]
+        [% END %]
+    [% END #/ WRAPPER breadcrumbs %]
+[% END #/ WRAPPER sub-header.inc %]
+
+[% WRAPPER 'main-container.inc' %]
+    [% SWITCH entity %]
+    [% CASE "itemtypes" %]
+        <h1>[% tx("Add translations for item type '{code}'", { code = code }) | html %]</h1>
+    [% CASE %]
+        <h1>[% tx("Add translations for '{code}'", { code = code }) | html %]</h1>
+    [% END %]
+
+    <form id="add_translation" method="get">
+        [% INCLUDE 'csrf-token.inc' %]
+        <input type="hidden" name="entity" value="[% entity | html %]" />
+        <input type="hidden" name="code" value="[% code | html %]" />
+        <input type="hidden" name="interface" value="[% interface_side | html %]" />
+        <fieldset class="rows clearfix">
+            <ol>
+                <li>
+                    <span class="label">Authorized value:</span>
+                    [% code | html %]
+                </li>
+                <li>
+                    <label for="lang">Language:</label>
+                    <select name="lang" id="lang">
+                        [% FOR language IN languages %]
+                            [% FOR sublanguage IN language.sublanguages_loop %]
+                                [% IF language.plural %]
+                                    <option value="[% sublanguage.rfc4646_subtag | html %]">[% sublanguage.native_description | html %] [% sublanguage.region_description | html %] ([% sublanguage.rfc4646_subtag | html %])</option>
+                                [% ELSE %]
+                                    <option value="[% sublanguage.rfc4646_subtag | html %]">[% sublanguage.native_description | html %] ([% sublanguage.rfc4646_subtag | html %])</option>
                                 [% END %]
-                            </select>
-                        </li>
-                        <li>
-                            <label for="translation">Translation:</label>
-                            <input type="text" size="40" name="translation" id="translation" />
-                        </li>
-                        <li>
-                            <span class="label">&nbsp;</span>
-                            <input type="submit" class="btn btn-primary" value="Add" />
-                        </li>
-                    </ol>
-                </fieldset>
-            </form>
-        </div>
-        <!-- /.col-sm-12 -->
-    </div>
-    <!-- /.row -->
-
-    <div class="row">
-        <div class="col-sm-12">
-            <div id="messages"></div>
-        </div>
-        <!-- /.col-sm-12 -->
-    </div>
-    <!-- /.row -->
-
-    <div class="row">
-        <div class="col-sm-12">
-            <table id="localization">
-                <thead>
-                    <tr>
-                        <th>Id</th>
-                        <th>Entity</th>
-                        <th>Code</th>
-                        <th>Language</th>
-                        <th>Translation</th>
-                        <th class="no-sort">&nbsp;</th>
+                            [% END %]
+                        [% END %]
+                    </select>
+                </li>
+                <li>
+                    <label for="translation">Translation:</label>
+                    <input type="text" size="40" name="translation" id="translation" />
+                </li>
+                <li>
+                    <span class="label">&nbsp;</span>
+                    <input type="submit" class="btn btn-primary" value="Add" />
+                </li>
+            </ol>
+        </fieldset>
+    </form>
+    <div id="messages"></div>
+    <div class="page-section">
+        <table id="localization">
+            <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Entity</th>
+                    <th>Code</th>
+                    <th>Language</th>
+                    <th>Translation</th>
+                    <th class="no-sort">&nbsp;</th>
+                </tr>
+            </thead>
+            <tbody>
+                [% FOR t IN translations %]
+                    <tr id="row_id_[% t.id | html %]" data-id="[% t.id | html %]">
+                        <td>[% t.id | html %]</td>
+                        <td>
+                            [% SWITCH entity %]
+                            [% CASE "itemtypes" %]
+                                Item type
+                            [% CASE %]
+                                [% t.entity | html %]
+                            [% END %]
+                        </td>
+                        <td>[% t.code | html %]</td>
+                        <td class="lang">[% t.lang | html %]</td>
+                        <td class="translation" contenteditable="true">[% t.translation | html %]</td>
+                        <td class="actions"
+                            ><a href="#" class="btn btn-xs btn-default delete"><i class="fa fa-trash-can"></i> Delete</a></td
+                        >
                     </tr>
-                </thead>
-                <tbody>
-                    [% FOR t IN translations %]
-                        <tr id="row_id_[% t.id | html %]" data-id="[% t.id | html %]">
-                            <td>[% t.id | html %]</td>
-                            <td>[% t.entity | html %]</td>
-                            <td>[% t.code | html %]</td>
-                            <td class="lang">[% t.lang | html %]</td>
-                            <td class="translation" contenteditable="true">[% t.translation | html %]</td>
-                            <td class="actions"
-                                ><a href="#" class="delete"><i class="fa fa-trash-can"></i> Delete</a></td
-                            >
-                        </tr>
-                    [% END %]
-                </tbody>
-            </table>
-        </div>
-        <!-- /.col-sm-12 -->
+                [% END %]
+            </tbody>
+        </table>
     </div>
-    <!-- /.row -->
-</div>
-<!-- /.main.container-fluid -->
+    [% SWITCH entity %]
+    [% CASE "itemtypes" %]
+        <fieldset class="action">
+            <a class="btn btn-default" href="/cgi-bin/koha/admin/itemtypes.pl?op=add_form&itemtype=[% code | uri %]"> [% tx("Return to item type '{code}'", { code = code }) | html %] </a>
+        </fieldset>
+    [% END %]
+[% END %]
 
 [% MACRO jsinclude BLOCK %]
     [% INCLUDE 'datatables.inc' %]
@@ -276,7 +309,7 @@
                         if ( success.error ) {
                             show_message({ type: 'error_on_insert', data: success });
                         } else {
-                            var new_row = table_dt.row.add( [ success.id, success.entity, success.code, success.lang, success.translation, "<a href=\"#\" class=\"delete\"><i class=\"fa fa-trash-can\"></i> Delete</a>" ] ).draw().node();
+                            var new_row = table_dt.row.add( [ success.id, success.entity, success.code, success.lang, success.translation, "<a href=\"#\" class=\"btn btn-default btn-xs delete\"><i class=\"fa fa-trash-can\"></i> Delete</a>" ] ).draw().node();
                             $( new_row ).attr("id", "row_id_" + success.id ).data("id", success.id );
                             show_message({ type: 'success_on_insert', data: success });
                         }
@@ -291,4 +324,4 @@
          });
     </script>
 [% END %]
-[% INCLUDE 'popup-bottom.inc' %]
+[% INCLUDE 'intranet-bottom.inc' %]
