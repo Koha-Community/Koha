@@ -19,7 +19,8 @@
 
 use Modern::Perl;
 use File::Basename qw(dirname);
-use Test::More tests => 104;
+use Test::More tests => 105;
+use Test::NoWarnings;
 
 use Test::MockModule;
 use Test::Warn;
