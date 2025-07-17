@@ -18,8 +18,9 @@
 
 use Modern::Perl;
 
-use C4::Output qw( output_html_with_http_headers );
-use C4::Auth   qw( get_template_and_user );
+use C4::Output      qw( output_html_with_http_headers );
+use C4::Auth        qw( get_template_and_user );
+use C4::Circulation qw( barcodedecode );
 use C4::Context;
 use C4::RotatingCollections;
 
@@ -42,8 +43,9 @@ if ( defined $op
     and $op eq 'cud-add' )
 {
     ## Add the given item to the collection
-    my $colId      = $query->param('colId');
-    my $barcode    = $query->param('barcode');
+    my $colId   = $query->param('colId');
+    my $barcode = $query->param('barcode');
+    $barcode = barcodedecode($barcode);
     my $removeItem = $query->param('removeItem');
     my $item       = Koha::Items->find( { barcode => $barcode } );
     my $itemnumber = $item ? $item->itemnumber : undef;
