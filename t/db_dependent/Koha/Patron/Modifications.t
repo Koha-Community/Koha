@@ -19,7 +19,8 @@ use Modern::Perl;
 
 use utf8;
 
-use Test::More tests => 7;
+use Test::More tests => 8;
+use Test::NoWarnings;
 use Test::Exception;
 
 use t::lib::TestBuilder;
@@ -49,9 +50,12 @@ subtest 'new() tests' => sub {
 
     Koha::Patron::Modifications->search->delete;
 
+    my $patron = $builder->build_object( { class => 'Koha::Patrons' } );
+
     # Create new pending modification
     Koha::Patron::Modification->new(
         {
+            borrowernumber     => $patron->borrowernumber,
             verification_token => '1234567890',
             changed_fields     => 'surname,firstname',
             surname            => 'Hall',
@@ -443,9 +447,10 @@ subtest 'dateofbirth tests' => sub {
         { class => 'Koha::Patrons', value => { dateofbirth => '1980-01-01', surname => 'a_surname' } } );
     my $patron_modification = Koha::Patron::Modification->new(
         {
-            changed_fields => 'borrowernumber,dateofbirth',
-            borrowernumber => $patron->borrowernumber,
-            dateofbirth    => undef
+            verification_token => '1234567890',
+            changed_fields     => 'borrowernumber,dateofbirth',
+            borrowernumber     => $patron->borrowernumber,
+            dateofbirth        => undef
         }
     )->store;
     $patron_modification->approve;
@@ -459,9 +464,10 @@ subtest 'dateofbirth tests' => sub {
     # Adding a dateofbirth
     $patron_modification = Koha::Patron::Modification->new(
         {
-            changed_fields => 'borrowernumber,dateofbirth',
-            borrowernumber => $patron->borrowernumber,
-            dateofbirth    => '1980-02-02'
+            verification_token => '1234567890',
+            changed_fields     => 'borrowernumber,dateofbirth',
+            borrowernumber     => $patron->borrowernumber,
+            dateofbirth        => '1980-02-02'
         }
     )->store;
     $patron_modification->approve;
@@ -476,10 +482,11 @@ subtest 'dateofbirth tests' => sub {
     # Modifying a dateofbirth
     $patron_modification = Koha::Patron::Modification->new(
         {
-            changed_fields => 'borrowernumber,dateofbirth',
-            borrowernumber => $patron->borrowernumber,
-            dateofbirth    => '1980-03-03',
-            surname        => undef
+            verification_token => '1234567890',
+            changed_fields     => 'borrowernumber,dateofbirth',
+            borrowernumber     => $patron->borrowernumber,
+            dateofbirth        => '1980-03-03',
+            surname            => undef
         }
     )->store;
     $patron_modification->approve;
@@ -494,10 +501,11 @@ subtest 'dateofbirth tests' => sub {
     # Modifying something else
     $patron_modification = Koha::Patron::Modification->new(
         {
-            changed_fields => 'borrowernumber,surname',
-            borrowernumber => $patron->borrowernumber,
-            surname        => 'another_surname',
-            dateofbirth    => undef
+            verification_token => '1234567890',
+            changed_fields     => 'borrowernumber,surname',
+            borrowernumber     => $patron->borrowernumber,
+            surname            => 'another_surname',
+            dateofbirth        => undef
         }
     )->store;
     $patron_modification->approve;
