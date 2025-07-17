@@ -348,7 +348,7 @@ This helper method parses the 'x-koha-request-id' header and stashes the value.
 
 sub _reserved_words {
 
-    my @reserved_words = qw( _match _order_by _order_by[] _page _per_page q query);
+    my @reserved_words = qw( _match _order_by _order_by[] _page _per_page q );
     return \@reserved_words;
 }
 
