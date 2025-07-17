@@ -31,6 +31,7 @@ use C4::Items;
 use Koha::Biblios;
 use Koha::DateUtils qw( dt_from_string );
 use Koha::Holds;
+use Koha::HoldGroup;
 use DateTime::Duration;
 
 my $input          = CGI->new;
@@ -182,6 +183,9 @@ if ( C4::Context->only_my_library() ) {
     $where{'me.branchcode'} = C4::Context->userenv->{'branch'};
 }
 
+my $skip_non_target_holds_query = Koha::HoldGroup::skip_non_target_holds_query('dbix');
+$where{'me.hold_group_id'} = $skip_non_target_holds_query if $skip_non_target_holds_query;
+
 # get all distinct unfulfilled reserves
 my $holds = Koha::Holds->search(
     {%where},
@@ -200,7 +204,11 @@ if ( $holds->count ) {
 # patrons count per biblio
 my $patrons_count = {
     map { $_->{biblionumber} => $_->{patrons_count} } @{ Koha::Holds->search(
-            { 'suspend' => 0, 'found' => undef },
+            {
+                'suspend' => 0,
+                'found'   => undef,
+                $skip_non_target_holds_query ? ( 'hold_group_id' => $skip_non_target_holds_query ) : ()
+            },
             {
                 select   => [ 'biblionumber', { count => { distinct => 'borrowernumber' } } ],
                 as       => [qw( biblionumber patrons_count )],

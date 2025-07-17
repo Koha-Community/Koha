@@ -26,6 +26,7 @@ use C4::Context;
 use C4::Circulation qw( GetBranchItemRule );
 use Koha::DateUtils qw( dt_from_string );
 use Koha::Hold::HoldsQueueItems;
+use Koha::HoldGroup;
 use Koha::Items;
 use Koha::Libraries;
 use Koha::Logger;
@@ -250,6 +251,9 @@ that have one or more unfilled hold requests.
 sub GetBibsWithPendingHoldRequests {
     my $dbh = C4::Context->dbh;
 
+    my $skip_non_target_holds_query     = Koha::HoldGroup::skip_non_target_holds_query('sql');
+    my $skip_non_target_holds_query_sql = $skip_non_target_holds_query ? " $skip_non_target_holds_query" : '';
+
     my $bib_query = "SELECT DISTINCT biblionumber
                      FROM reserves
                      WHERE found IS NULL
@@ -257,6 +261,7 @@ sub GetBibsWithPendingHoldRequests {
                      AND reservedate <= CURRENT_DATE()
                      AND suspend = 0
                      AND reserve_id NOT IN (SELECT reserve_id FROM hold_fill_targets)
+                     $skip_non_target_holds_query_sql
                      ";
     my $sth = $dbh->prepare($bib_query);
 

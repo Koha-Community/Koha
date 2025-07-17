@@ -94,6 +94,41 @@ sub target_hold_id {
     return $self->_result->hold_group_target_hold->reserve_id;
 }
 
+=head3 skip_non_target_holds_query
+
+    $where{'me.hold_group_id'} = Koha::HoldGroup::skip_non_target_holds_query('dbix')
+
+Static method, returns the query part be added if DisplayAddHoldGroups
+Accepts a $query_type of 'dbix' or 'sql' and returns the respective query
+The query is designed to skip non target holds that are part of a hold group which already has a hold target
+
+=cut
+
+sub skip_non_target_holds_query {
+    my ($query_type) = @_;
+
+    return unless C4::Context->preference('DisplayAddHoldGroups');
+
+    my $query_types = {
+        'dbix' => [
+            -or => { '=' => undef },
+            [
+                -and => { '!=' => undef },
+                {
+                    -not_in => \
+                        'SELECT hold_group_id FROM hold_group_target_holds WHERE reserve_id IS NOT NULL AND hold_group_id IS NOT NULL'
+                }
+            ]
+        ],
+        'sql' =>
+            'AND (hold_group_id IS NULL OR hold_group_id IS NOT NULL AND reserves.hold_group_id NOT IN (SELECT hold_group_id FROM hold_group_target_holds WHERE reserve_id IS NOT NULL AND hold_group_id IS NOT NULL))'
+    };
+
+    return unless $query_type && exists $query_types->{$query_type};
+
+    return $query_types->{$query_type};
+}
+
 =head3 _type
 
 =cut

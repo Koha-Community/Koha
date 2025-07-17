@@ -271,6 +271,25 @@ sub cleanup_hold_group {
     }
 }
 
+=head3 set_as_hold_group_target
+
+$self->set_as_hold_group_target;
+
+Sets this hold and its' hold group's target
+
+=cut
+
+sub set_as_hold_group_target {
+    my ($self) = @_;
+
+    if ( $self->hold_group && !$self->hold_group->target_hold_id && C4::Context->preference("DisplayAddHoldGroups") ) {
+        $self->_result->create_related(
+            'hold_group_target_hold',
+            { hold_group_id => $self->hold_group->hold_group_id }
+        );
+    }
+}
+
 =head3 is_hold_group_target
 
 $self->is_hold_group_target;

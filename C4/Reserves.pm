@@ -42,6 +42,7 @@ use Koha::CirculationRules;
 use Koha::Database;
 use Koha::DateUtils qw( dt_from_string output_pref );
 use Koha::Holds;
+use Koha::HoldGroup;
 use Koha::ItemTypes;
 use Koha::Items;
 use Koha::Libraries;
@@ -1373,6 +1374,7 @@ sub ModReserveAffect {
 
     if ($transferToDo) {
         $hold->set_transfer();
+        $hold->set_as_hold_group_target();
     } elsif ( C4::Context->preference('HoldsNeedProcessingSIP')
         && C4::Context->interface eq 'sip'
         && !$already_on_shelf )
@@ -1386,14 +1388,7 @@ sub ModReserveAffect {
         my $transfer = $hold->item->get_transfer;
         $transfer->receive if $transfer;
 
-        # if this hold was part of a group, cancel other holds in the group
-        if ( $hold->hold_group_id ) {
-            my @holds = $hold->hold_group->holds->as_list;
-            foreach my $h (@holds) {
-                push @reserve_ids, $h->reserve_id;
-                $h->cancel unless $h->reserve_id == $hold->reserve_id;
-            }
-        }
+        $hold->set_as_hold_group_target();
     }
 
     _koha_notify_hold_changed($hold) if $notify_library;
@@ -1882,6 +1877,9 @@ sub _Findgroupreserve {
     my ( $biblionumber, $itemnumber, $lookahead, $ignore_borrowers ) = @_;
     my $dbh = C4::Context->dbh;
 
+    my $skip_non_target_holds_query     = Koha::HoldGroup::skip_non_target_holds_query('sql');
+    my $skip_non_target_holds_query_sql = $skip_non_target_holds_query ? " $skip_non_target_holds_query" : '';
+
     # check for targeted match form the holds queue
     my $hold_target_query = qq{
         SELECT reserves.biblionumber        AS biblionumber,
@@ -1898,7 +1896,8 @@ sub _Findgroupreserve {
                reserves.reserve_id          AS reserve_id,
                reserves.itemtype            AS itemtype,
                reserves.non_priority        AS non_priority,
-               reserves.item_group_id           AS item_group_id
+               reserves.item_group_id       AS item_group_id,
+               reserves.hold_group_id       AS hold_group_id
         FROM reserves
         JOIN biblioitems USING (biblionumber)
         JOIN hold_fill_targets USING (reserve_id)
@@ -1907,6 +1906,7 @@ sub _Findgroupreserve {
         AND hold_fill_targets.itemnumber = ?
         AND reservedate <= DATE_ADD(NOW(),INTERVAL ? DAY)
         AND suspend = 0
+        $skip_non_target_holds_query_sql
         ORDER BY priority
     };
     my $sth = $dbh->prepare($hold_target_query);
@@ -1933,12 +1933,14 @@ sub _Findgroupreserve {
                reserves.reserve_id                 AS reserve_id,
                reserves.itemtype                   AS itemtype,
                reserves.non_priority               AS non_priority,
-               reserves.item_group_id              AS item_group_id
+               reserves.item_group_id              AS item_group_id,
+               reserves.hold_group_id              AS hold_group_id
         FROM reserves
         WHERE reserves.biblionumber = ?
           AND (reserves.itemnumber IS NULL OR reserves.itemnumber = ?)
           AND reserves.reservedate <= DATE_ADD(NOW(),INTERVAL ? DAY)
           AND suspend = 0
+          $skip_non_target_holds_query_sql
           ORDER BY priority
     };
     $sth = $dbh->prepare($query);
