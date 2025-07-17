@@ -263,8 +263,8 @@ controller, and thus shouldn't be called twice in it.
             }
 
             # request sequence id (i.e. 'draw' Datatables parameter)
-            $c->res->headers->add( 'x-koha-request-id' => $reserved_params->{'x-koha-request-id'} )
-                if $reserved_params->{'x-koha-request-id'};
+            $c->res->headers->add( 'x-koha-request-id' => $c->stash('koha.request_id') )
+                if $c->stash('koha.request_id');
 
             # If search_limited exists, use it
             $result_set = $result_set->search_limited,
