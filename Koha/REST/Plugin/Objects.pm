@@ -214,7 +214,10 @@ controller, and thus shouldn't be called twice in it.
             );
 
             my $query_params;
-            if (   defined $reserved_params->{q}
+
+            my $q_param = $reserved_params->{q};
+
+            if ( $q_param
                 || defined $reserved_params->{query} )
             {
 
@@ -231,23 +234,12 @@ controller, and thus shouldn't be called twice in it.
                     push @query_params_array, $json->decode($query);
                 }
 
-                if ( ref( $reserved_params->{q} ) eq 'ARRAY' ) {
+                # The q parameter can be an array if multiple passed
+                $q_param = [$q_param]
+                    unless ref($q_param) eq 'ARRAY';
 
-                    # q is defined as multi => JSON::Validator generates an array
-                    foreach my $q ( @{ $reserved_params->{q} } ) {
-                        if ($q) {    # skip if exists but is empty
-                            foreach my $qf ( @{$query_fixers} ) {
-                                $q = $qf->($q);
-                            }
-                            push @query_params_array, $json->decode($q);
-                        }
-                    }
-                } else {
-
-                    # objects.search called outside OpenAPI context
-                    # might be a hashref
-                    if ( $reserved_params->{q} ) {
-                        my $q = $reserved_params->{q};
+                foreach my $q ( @{$q_param} ) {
+                    if ($q) {    # skip if exists but is empty
                         foreach my $qf ( @{$query_fixers} ) {
                             $q = $qf->($q);
                         }
