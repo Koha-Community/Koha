@@ -29,7 +29,7 @@ sub needs_update {
     my $koha_version = Koha->version;
     my $code_version = TransformToNum($koha_version);
 
-    if ( $db_version == $code_version ) {
+    if ( $db_version && $db_version == $code_version ) {
         $needs_update = 0;
     }
 

@@ -18,7 +18,8 @@
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
-use Test::More tests => 4;
+use Test::More tests => 5;
+use Test::NoWarnings;
 
 use Test::MockModule;
 use File::Temp qw/tempdir/;
