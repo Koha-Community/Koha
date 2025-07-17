@@ -334,7 +334,7 @@ INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `
 ('ILLModuleDisclaimerByType','','','YAML defining disclaimer settings for each ILL request type','Textarea'),
 ('ILLModuleUnmediated','0','','If enabled, try to immediately progress newly placed ILL requests.','YesNo'),
 ('ILLOpacbackends','',NULL,'ILL backends to enabled for OPAC initiated requests','multiple'),
-('ILLOpacUnauthenticatedRequest',NULL,NULL,'Can OPAC users place ILL requests without having to be logged in','YesNo'),
+('ILLOpacUnauthenticatedRequest','',NULL,'Can OPAC users place ILL requests without having to be logged in','YesNo'),
 ('ILLPartnerCode','IL','','Patrons from this patron category will be used as partners to place ILL requests with','free'),
 ('ILLRequestsTabs','','','Add customizable tabs to interlibrary loan requests list','Textarea'),
 ('ILLSendStaffNotices', '', NULL, 'Send these ILL notices to staff', 'multiple'),
