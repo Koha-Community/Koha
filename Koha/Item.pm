@@ -1174,11 +1174,13 @@ Respects the lookahead days in ConfirmFutureHolds pref.
 =cut
 
 sub current_holds {
-    my ($self)     = @_;
+    my ( $self, $params ) = @_;
+
     my $attributes = { order_by => 'priority' };
     my $dtf        = Koha::Database->new->schema->storage->datetime_parser;
-    my $dt         = dt_from_string()->add( days => C4::Context->preference('ConfirmFutureHolds') || 0 );
-    my $params     = {
+    my $days       = $params->{skip_future_holds} ? 0 : C4::Context->preference('ConfirmFutureHolds') || 0;
+    my $dt         = dt_from_string()->add( days => $days );
+    my $s_params   = {
         itemnumber => $self->itemnumber,
         suspend    => 0,
         -or        => [
@@ -1186,7 +1188,7 @@ sub current_holds {
             waitingdate => { '!=' => undef },
         ],
     };
-    my $hold_rs = $self->_result->reserves->search( $params, $attributes );
+    my $hold_rs = $self->_result->reserves->search( $s_params, $attributes );
     return Koha::Holds->_new_from_dbic($hold_rs);
 }
 

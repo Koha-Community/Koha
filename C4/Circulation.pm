@@ -3234,8 +3234,9 @@ sub CanBookBeRenewed {
     }
 
     # There is an item level hold on this item, no other item can fill the hold
+    # The flag skip_future_holds may be removed in the future. See bug 40435.
     return ( 0, "on_reserve" )
-        if ( $item->current_holds->search( { non_priority => 0 } )->count );
+        if ( $item->current_holds( { skip_future_holds => 1 } )->search( { non_priority => 0 } )->count );
 
     my ( $status, $matched_reserve, $possible_holds ) = C4::Reserves::CheckReserves($item);
     my @fillable_holds = ();

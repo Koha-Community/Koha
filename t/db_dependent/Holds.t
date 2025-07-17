@@ -2111,7 +2111,7 @@ subtest 'EmailPatronWhenHoldIsPlaced tests' => sub {
 };
 
 subtest 'current_holds with future holds' => sub {
-    plan tests => 2;
+    plan tests => 5;
     $schema->storage->txn_begin;
 
     t::lib::Mocks::mock_preference( 'ConfirmFutureHolds', 2 );
@@ -2129,6 +2129,19 @@ subtest 'current_holds with future holds' => sub {
     is( $item->biblio->current_holds->count, 1, 'Future hold was counted' );
     t::lib::Mocks::mock_preference( 'ConfirmFutureHolds', 0 );
     is( $item->biblio->current_holds->count, 0, 'No future hold was counted when ConfirmFutureHolds is zero' );
+
+    # Test if renewal ignores future holds (until we decide otherwise; see bug 40435)
+    my $patron2 = $builder->build_object( { class => 'Koha::Patrons' } );
+    t::lib::Mocks::mock_userenv( { branchcode => $patron2->branchcode } );
+    my $issue = C4::Circulation::AddIssue( $patron2, $item->barcode, dt_from_string() );
+    my ( $ok, $err ) = CanBookBeRenewed( $patron2, $issue );
+    is( $ok, 1, 'Hold does not block renewal' );
+
+    # Changing the reservedate should block the renewal
+    Koha::Holds->find($hold_id)->reservedate( dt_from_string() )->store;
+    ( $ok, $err ) = CanBookBeRenewed( $patron2, $issue );
+    is( $ok,  0,            'Hold now blocks renewal' );
+    is( $err, 'on_reserve', 'Code for blocking renewal' );
 
     $schema->storage->txn_rollback;
 };
