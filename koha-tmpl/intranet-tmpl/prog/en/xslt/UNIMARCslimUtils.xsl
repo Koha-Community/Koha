@@ -158,7 +158,7 @@
   <xsl:template name="tag_214_s">
     <xsl:if test="marc:datafield[@tag=214]/marc:subfield[@code='s']">
       <span class="results_summary tag_214_s">
-        <span class="label">Printing and/or Publishing Information Transcribed as Found in the Colophon: </span>
+        <span class="label">Printing and/or publishing information transcribed as found in the colophon: </span>
         <xsl:for-each select="marc:datafield[@tag=214]/marc:subfield[@code='s']">
           <xsl:value-of select="."/>
           <xsl:choose>
@@ -177,7 +177,7 @@
   <xsl:template name="tag_214_r">
     <xsl:if test="marc:datafield[@tag=214]/marc:subfield[@code='r']">
       <span class="results_summary tag_214_r">
-        <span class="label">Printing and/or Publishing Information Transcribed as Found in the Main Source of Information: </span>
+        <span class="label">Printing and/or publishing information transcribed as found in the main source of information: </span>
         <xsl:for-each select="marc:datafield[@tag=214]/marc:subfield[@code='r']">
           <xsl:value-of select="."/>
           <xsl:choose>
