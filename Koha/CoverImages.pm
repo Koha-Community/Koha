@@ -25,7 +25,7 @@ use base qw(Koha::Objects);
 
 =head1 NAME
 
-Koha::Cities - Koha CoverImage Object set class
+Koha::CoverImages - Koha CoverImage Object set class
 
 =head1 API
 
