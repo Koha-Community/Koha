@@ -38,7 +38,8 @@ const generateMockData = (type, properties) => {
             }
             return (value = faker.lorem.words(3));
         case "integer":
-            return faker.number.int();
+            // Do not return more than int(11);
+            return faker.number.int(2 ** 31 - 1);
         case "boolean":
             return faker.datatype.boolean();
         case "array":
