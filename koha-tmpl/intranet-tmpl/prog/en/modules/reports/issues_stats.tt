@@ -3,7 +3,9 @@
 [% USE Branches %]
 [% USE Categories %]
 [% USE ItemTypes %]
+[% USE KohaDates %]
 [% USE AuthorisedValues %]
+[% USE ExtendedAttributeTypes %]
 [% PROCESS 'i18n.inc' %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
@@ -55,7 +57,7 @@
     [% IF ( do_it ) %]
         [% FOREACH mainloo IN mainloop %]
             [% IF ( mainloo.loopfilter ) %]
-                <p>Filtered on:</p>
+                <h2>Filtered on:</h2>
                 <ul>
                     [% FOREACH loopfilte IN mainloo.loopfilter %]
                         [% SET li_class = '' %]
@@ -127,8 +129,11 @@
                                 [% CASE "4" %]
                                     <span>Hour</span>
                                 [% END %]
+                            [% CASE "PA_CLASS" %]
+                                <strong>[% loopfilte.label | html %]:</strong>
+                                [% loopfilte.filter | html %]
                             [% CASE %]
-                                [% loopfilte.crit | html %]:
+                                <strong>[% loopfilte.crit | html %]:</strong>
                                 [% loopfilte.filter | html %]
                             [% END %]
                         </li>
