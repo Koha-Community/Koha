@@ -80,27 +80,33 @@
                                         </select>
                                     </li>
                                     <li>
-                                        <label for="page_side">Page side: </label>
+                                        <label for="page_side_front">Page side: </label>
                                         [% IF ( page_side ) %]
-                                            <input type="radio" name="page_side" id="page_side" value="F" />Front <input type="radio" name="page_side" id="page_side" value="B" checked="checked" />Back
+                                            <label for="page_side_front">Front: <input type="radio" name="page_side" id="page_side_front" value="F" /></label>
+                                            <label for="page_side_back">Back: <input type="radio" name="page_side" id="page_side_back" value="B" checked="checked" /></label>
                                         [% ELSE %]
-                                            <input type="radio" name="page_side" id="page_side" value="F" checked="checked" />Front <input type="radio" name="page_side" id="page_side" value="B" />Back
+                                            <label for="page_side_front">Front: <input type="radio" name="page_side" id="page_side_front" value="F" checked="checked" /></label>
+                                            <label for="page_side_back">Back: <input type="radio" name="page_side" id="page_side_back" /></label>
                                         [% END %]
                                     </li>
                                     <li>
-                                        <label for="guide_box">Guide box:</label>
+                                        <label for="guide_box_on">Guide box:</label>
                                         [% IF ( guide_box ) %]
-                                            <input type="radio" name="guide_box" id="guide_box" value="1" checked="checked" />On <input type="radio" name="guide_box" id="guide_box" value="0" />Off
+                                            <label for="guide_box_on">On: <input type="radio" name="guide_box" id="guide_box_on" value="0" /></label>
+                                            <label for="guide_box_off">Off: <input type="radio" name="guide_box" id="guide_box_off" value="1" checked="checked" /></label>
                                         [% ELSE %]
-                                            <input type="radio" name="guide_box" id="guide_box" value="1" />On <input type="radio" name="guide_box" id="guide_box" value="0" checked="checked" />Off
+                                            <label for="guide_box_on">On: <input type="radio" name="guide_box" id="guide_box_on" value="0" checked="checked" /></label>
+                                            <label for="guide_box_off">Off: <input type="radio" name="guide_box" id="guide_box_off" value="1" /></label>
                                         [% END %]
                                     </li>
                                     <li>
-                                        <label for="guide_grid">Guide grid:</label>
+                                        <label for="guide_grid_off">Guide grid:</label>
                                         [% IF ( guide_grid ) %]
-                                            <input type="radio" name="guide_grid" id="guide_grid" value="1" checked="checked" />On <input type="radio" name="guide_grid" id="guide_grid" value="0" />Off
+                                            <label for="guide_grid_on">On: <input type="radio" name="guide_grid" id="guide_grid_on" value="1" checked="checked" /></label>
+                                            <label for="guide_grid_off">Off: <input type="radio" name="guide_grid" id="guide_grid_off" value="0" /></label>
                                         [% ELSE %]
-                                            <input type="radio" name="guide_grid" id="guide_grid" value="1" />On <input type="radio" name="guide_grid" id="guide_grid" value="0" checked="checked" />Off
+                                            <label for="guide_grid_on">On: <input type="radio" name="guide_grid" id="guide_grid_on" value="1" /></label>
+                                            <label for="guide_grid_off">Off: <input type="radio" name="guide_grid" id="guide_grid_off" value="0" checked="checked" /></label>
                                         [% END %]
                                     </li>
                                 </ol>
