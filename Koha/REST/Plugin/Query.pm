@@ -284,12 +284,12 @@ Unwraps and stashes the x-koha-embed headers for use later query construction
 
     # Stash the overrides
     $c->stash_overrides();
-    #Use it
+    # Use it
     my $overrides = $c->stash('koha.overrides');
     if ( $overrides->{pickup_location} ) { ... }
 
-This helper method parses 'x-koha-override' headers and stashes the passed overriders
-in the for of a I<hashref> for easy use in controller methods.
+This helper method parses the 'x-koha-override' headers and stashes the passed overrides
+in the form of a I<hashref> for easy use in controller methods.
 
 FIXME: With the currently used JSON::Validator version we use, it is not possible to
 use the validated and coerced data (it doesn't validate array-type headers) so this
@@ -312,6 +312,30 @@ reference: https://metacpan.org/changes/distribution/JSON-Validator#L14
             return $c;
         }
     );
+
+=head3 stash_request_id
+
+    # Stash the request ID
+    $c->stash_request_id();
+    # Use it
+    my $request_id = $c->stash('koha.request_id');
+
+This helper method parses the 'x-koha-request-id' header and stashes the value.
+
+=cut
+
+    $app->helper(
+        'stash_request_id' => sub {
+
+            my ($c) = @_;
+
+            my $request_id = $c->req->headers->header('x-koha-request-id') || q{};
+
+            $c->stash( 'koha.request_id' => $request_id );
+
+            return $c;
+        }
+    );
 }
 
 =head2 Internal methods
@@ -324,7 +348,7 @@ reference: https://metacpan.org/changes/distribution/JSON-Validator#L14
 
 sub _reserved_words {
 
-    my @reserved_words = qw( _match _order_by _order_by[] _page _per_page q query x-koha-request-id x-koha-embed);
+    my @reserved_words = qw( _match _order_by _order_by[] _page _per_page q query);
     return \@reserved_words;
 }
 

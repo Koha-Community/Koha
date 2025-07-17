@@ -149,6 +149,7 @@ sub authenticate_api_request {
 
     $c->stash_embed( { spec => $spec } );
     $c->stash_overrides();
+    $c->stash_request_id();
 
     my $cookie_auth = 0;
 
