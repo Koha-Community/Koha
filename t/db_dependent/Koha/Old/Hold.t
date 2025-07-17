@@ -17,7 +17,8 @@
 
 use Modern::Perl;
 
-use Test::More tests => 3;
+use Test::More tests => 4;
+use Test::NoWarnings;
 use Test::Exception;
 
 use Koha::Database;
@@ -103,7 +104,7 @@ subtest 'biblio() tests' => sub {
     my $hold_2 = $builder->build_object(
         {
             class => 'Koha::Old::Holds',
-            value => { biblionumber => '' }
+            value => { biblionumber => undef }
         }
     );
 
