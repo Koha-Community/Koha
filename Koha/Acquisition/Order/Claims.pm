@@ -26,7 +26,7 @@ use base qw(Koha::Objects);
 
 =head1 NAME
 
-Koha::Cities - Koha Claim Object set class
+Koha::Acquisition::Order::Claims - Koha Claims Object set class
 
 =head1 API
 
