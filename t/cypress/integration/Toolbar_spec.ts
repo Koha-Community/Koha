@@ -1,37 +1,7 @@
-describe("Sticky toolbar", () => {
+describe("Sticky toolbar - basic behavior", () => {
     beforeEach(() => {
         cy.login();
         cy.title().should("eq", "Koha staff interface");
-    });
-
-    it("Should open non-Vue links correctly in the same tab", () => {
-        const vendor = cy.getVendor();
-        vendor.baskets_count = 1;
-        // Click the "name" link from the list
-        cy.intercept("GET", "/api/v1/acquisitions/vendors\?*", {
-            statusCode: 200,
-            body: [vendor],
-            headers: {
-                "X-Base-Total-Count": "1",
-                "X-Total-Count": "1",
-            },
-        }).as("get-vendors");
-        cy.intercept(
-            "GET",
-            new RegExp("/api/v1/acquisitions/vendors/(?!config$).+"),
-            vendor
-        ).as("get-vendor");
-
-        cy.visit("/cgi-bin/koha/acquisition/vendors");
-        cy.wait("@get-vendors");
-
-        const name_link = cy.get(
-            "#vendors_list table tbody tr:first td:first a"
-        );
-        name_link.click();
-        cy.wait("@get-vendor");
-        cy.get("#toolbar a").contains("Receive shipments").click();
-        cy.get("h1").contains("Receive shipment from vendor " + vendor.name);
     });
 
     it("Should stick on scroll", () => {
@@ -44,5 +14,54 @@ describe("Sticky toolbar", () => {
 
         cy.scrollTo("top");
         cy.get("#toolbar").should("not.have.class", "floating");
+    });
+});
+
+describe("Sticky toolbar - vendors", () => {
+    beforeEach(() => {
+        cy.login();
+        cy.title().should("eq", "Koha staff interface");
+
+        cy.task("buildSampleObject", {
+            object: "vendor",
+            values: { active: 1 },
+        })
+            .then(generatedVendor => {
+                delete generatedVendor.list_currency;
+                delete generatedVendor.invoice_currency;
+                return cy.task("insertObject", {
+                    type: "vendor",
+                    object: generatedVendor,
+                });
+            })
+            .then(vendor => {
+                cy.wrap(vendor).as("vendor");
+                return cy.task("buildSampleObject", {
+                    object: "basket",
+                    values: { vendor_id: vendor.id },
+                });
+            })
+            .then(generatedBasket => {
+                return cy.task("insertObject", {
+                    type: "basket",
+                    object: generatedBasket,
+                });
+            })
+            .then(basket => {
+                cy.wrap(basket).as("basket");
+            });
+    });
+    afterEach(function () {
+        cy.task("deleteSampleObjects", [
+            { vendor: this.vendor, basket: this.basket },
+        ]);
+    });
+    it("Should open non-Vue links correctly in the same tab", function () {
+        cy.visit(`/cgi-bin/koha/acquisition/vendors/${this.vendor.id}`);
+
+        cy.get("#toolbar a").contains("Receive shipments").click();
+        cy.get("h1").contains(
+            `Receive shipment from vendor ${this.vendor.name}`
+        );
     });
 });

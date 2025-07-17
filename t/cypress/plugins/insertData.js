@@ -333,6 +333,8 @@ const deleteSampleObjects = async allObjects => {
         hold: "holds",
         checkout: "checkouts",
         old_checkout: "old_checkouts",
+        basket: "baskets",
+        vendor: "vendors",
         patron: "patrons",
         item: "items",
         biblio: "biblios",
@@ -360,6 +362,8 @@ const deleteSampleObjects = async allObjects => {
         "holds",
         "checkouts",
         "old_checkouts",
+        "baskets",
+        "vendors",
         "patrons",
         "items",
         "biblios",
@@ -428,6 +432,20 @@ const deleteSampleObjects = async allObjects => {
                 ids = objects.map(i => i.patron_id);
                 await query({
                     sql: `DELETE FROM borrowers WHERE borrowernumber IN (${ids.map(() => "?").join(",")})`,
+                    values: ids,
+                });
+                break;
+            case "baskets":
+                ids = objects.map(i => i.basket_id);
+                await query({
+                    sql: `DELETE FROM aqbasket WHERE basketno IN (${ids.map(() => "?").join(",")})`,
+                    values: ids,
+                });
+                break;
+            case "vendors":
+                ids = objects.map(i => i.id);
+                await query({
+                    sql: `DELETE FROM aqbooksellers WHERE id IN (${ids.map(() => "?").join(",")})`,
                     values: ids,
                 });
                 break;
@@ -544,6 +562,49 @@ const insertObject = async ({ type, object, baseUrl, authHeader }) => {
             baseUrl,
             authHeader,
         });
+    } else if (type == "vendor") {
+        const {
+            id,
+            baskets_count,
+            invoices_count,
+            subscriptions_count,
+            external_id,
+            aliases,
+            baskets,
+            contacts,
+            contracts,
+            interfaces,
+            invoices,
+            ...vendor
+        } = object;
+
+        let endpoint = "/api/v1/acquisitions/vendors";
+
+        return apiPost({
+            endpoint,
+            body: vendor,
+            baseUrl,
+            authHeader,
+        });
+    } else if (type == "basket") {
+        const keysToKeep = ["name", "vendor_id", "close_date"];
+        const basket = Object.fromEntries(
+            Object.entries(object).filter(([key]) => keysToKeep.includes(key))
+        );
+        return query({
+            sql: "INSERT INTO aqbasket(basketname, booksellerid, closedate) VALUES (?, ?, ?)",
+            values: [basket.name, basket.vendor_id, basket.close_date],
+        })
+            .then(result => {
+                const basket_id = result.insertId;
+                // FIXME We need /acquisitions/baskets/:basket_id
+                return apiGet({
+                    endpoint: `/api/v1/acquisitions/baskets?q={"basket_id":"${basket_id}"}`,
+                    baseUrl,
+                    authHeader,
+                });
+            })
+            .then(baskets => baskets[0]);
     } else {
         throw Error(`Unsupported object type '${type}' to insert`);
     }
