@@ -18,7 +18,7 @@
 use Modern::Perl;
 
 use Test::NoWarnings;
-use Test::More tests => 4;
+use Test::More tests => 5;
 use Test::Mojo;
 
 use t::lib::TestBuilder;
@@ -26,6 +26,8 @@ use t::lib::Mocks;
 
 use Koha::Cities;
 use Koha::Database;
+
+use JSON qw(encode_json);
 
 my $schema  = Koha::Database->new->schema;
 my $builder = t::lib::TestBuilder->new;
@@ -97,6 +99,69 @@ subtest 'q handling tests' => sub {
     $schema->storage->txn_rollback;
 };
 
+subtest 'q in body handling tests' => sub {
+
+    plan tests => 15;
+
+    $schema->storage->txn_begin;
+
+    my $librarian = $builder->build_object(
+        {
+            class => 'Koha::Patrons',
+            value => { flags => 2**2 }    # catalogue flag = 2
+        }
+    );
+    my $password = 'thePassword123';
+    $librarian->set_password( { password => $password, skip_validation => 1 } );
+    my $userid = $librarian->userid;
+
+    # delete all cities
+    Koha::Cities->new->delete;
+
+    # No cities, so empty array should be returned
+    $t->get_ok("//$userid:$password@/api/v1/cities")->status_is(200)->json_is( [] );
+
+    my $names = [ 'AA', 'BA', 'BA', 'CA', 'DA', 'EB', 'FB', 'GB', 'HB', 'IB', ];
+
+    # Add 10 cities
+    foreach my $i ( 0 .. 9 ) {
+        $builder->build_object( { class => 'Koha::Cities', value => { city_name => $names->[$i] } } );
+    }
+
+    t::lib::Mocks::mock_preference( 'RESTdefaultPageSize', 20 );
+
+    my $q_ends_with_a     = { "name" => { "-like" => '%A' } };
+    my $q_ends_with_a_str = encode_json($q_ends_with_a);
+
+    my $cities =
+        $t->get_ok( "//$userid:$password@/api/v1/cities" => json => $q_ends_with_a )->status_is(200)->tx->res->json;
+
+    is( scalar @{$cities}, 5, '5 cities retrieved' );
+
+    my $q_starts_with_a     = { "name" => { "-like" => 'A%' } };
+    my $q_starts_with_a_str = encode_json($q_starts_with_a);
+
+    $cities =
+        $t->get_ok( "//$userid:$password@/api/v1/cities?q=$q_starts_with_a_str" => json => $q_ends_with_a )
+        ->status_is(200)->tx->res->json;
+
+    is( scalar @{$cities}, 1, 'Mixing query parameter and body, 1 city retrieved' );
+
+    $cities =
+        $t->get_ok( "//$userid:$password@/api/v1/cities?q=$q_ends_with_a_str" => json => $q_starts_with_a )
+        ->status_is(200)->tx->res->json;
+
+    is( scalar @{$cities}, 1, 'Mixing query parameter and body (flipped), 1 city retrieved' );
+
+    $cities =
+        $t->get_ok( "//$userid:$password@/api/v1/cities" => json => { "-and" => [ $q_ends_with_a, $q_starts_with_a ] } )
+        ->status_is(200)->tx->res->json;
+
+    is( scalar @{$cities}, 1, 'Body query is passed through, 1 city retrieved' );
+
+    $schema->storage->txn_rollback;
+};
+
 subtest 'x-koha-embed tests' => sub {
 
     plan tests => 8;
@@ -123,7 +188,8 @@ subtest 'x-koha-embed tests' => sub {
     $res = $t->get_ok( "//$userid:$password@/api/v1/patrons?q={\"me.patron_id\":$patron_id}" =>
             { 'x-koha-embed' => 'extended_attributes,custom_bad_embed,another_bad_embed' } )->status_is(400);
 
-    $res = $t->get_ok( "//$userid:$password@/api/v1/cities" => { 'x-koha-embed' => 'any_embed' } )->status_is(400)
+    $res =
+        $t->get_ok( "//$userid:$password@/api/v1/cities" => { 'x-koha-embed' => 'any_embed' } )->status_is(400)
         ->tx->res->json;
 
     is( $res, 'Embedding objects is not allowed on this endpoint.', 'Correct error message is returned' );
