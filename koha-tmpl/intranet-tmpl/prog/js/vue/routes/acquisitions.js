@@ -7,9 +7,9 @@ import { $__ } from "@koha-vue/i18n";
 
 const vendorSearchBreadcrumb = ({ match, query }) => {
     if (!query || !query.supplier) return match.meta.self;
-    match.meta.self.title = $__("Search for vendor: %s").format(query.supplier);
-    match.meta.self.disabled = true;
-    return match.meta.self;
+    match.title = $__("Search for vendor: %s").format(query.supplier);
+    match.disabled = true;
+    return match;
 };
 
 export const routes = [

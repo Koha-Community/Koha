@@ -153,14 +153,7 @@ export const useNavigationStore = defineStore("navigation", () => {
                         let {
                             meta: { self },
                         } = match;
-                        if (self.breadcrumbFormat) {
-                            self = self.breadcrumbFormat({
-                                match: self,
-                                params: store.params,
-                                query: store.query,
-                            });
-                        }
-                        const breadcrumbInfo = {
+                        let breadcrumbInfo = {
                             ...self,
                             icon: null,
                             ...(externalPath
@@ -168,6 +161,13 @@ export const useNavigationStore = defineStore("navigation", () => {
                                 : { path }),
                             children: null,
                         };
+                        if (self.breadcrumbFormat) {
+                            breadcrumbInfo = self.breadcrumbFormat({
+                                match: breadcrumbInfo,
+                                params: store.params,
+                                query: store.query,
+                            });
+                        }
                         if (breadcrumbMetadata) {
                             breadcrumbInfo.title = self.title.replace(
                                 /{([^}]+)}/g,

@@ -31,13 +31,16 @@
                 </template>
                 <span v-if="item.title">{{ $__(item.title) }}</span>
             </a>
-            <a v-else href="#" aria-current="page">
+            <a
+                v-else
+                href="#"
+                aria-current="page"
+                :class="{ disabled: item.disabled }"
+            >
                 <template v-if="item.icon">
                     <i :class="`${item.icon}`"></i>&nbsp;
                 </template>
-                <span class="item-last" v-if="item.title">{{
-                    $__(item.title)
-                }}</span>
+                <span class="" v-if="item.title">{{ $__(item.title) }}</span>
             </a>
         </span>
         <ul v-if="item.children && item.children.length">
@@ -59,8 +62,4 @@ export default {
 };
 </script>
 
-<style>
-span.item-last {
-    padding: 7px 3px;
-}
-</style>
+<style></style>

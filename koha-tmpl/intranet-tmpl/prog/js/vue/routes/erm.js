@@ -62,8 +62,12 @@ export const routes = [
                         name: "AgreementsFormAddEdit",
                         component: markRaw(ResourceWrapper),
                         title: "{name}",
+                        breadcrumbFormat: ({ match, params, query }) => {
+                            match.name = "AgreementsShow";
+                            return match;
+                        },
                         additionalBreadcrumbs: [
-                            { title: $__("Modify agreement") },
+                            { title: $__("Modify agreement"), disabled: true },
                         ],
                     },
                 ],
