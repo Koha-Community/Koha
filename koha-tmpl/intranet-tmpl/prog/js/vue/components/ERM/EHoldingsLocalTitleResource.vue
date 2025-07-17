@@ -471,7 +471,7 @@ export default {
             baseResource.setWarning(errors.join("<br>"));
             return !errors.length;
         };
-        const onSubmit = (e, titleToSave) => {
+        const onFormSave = (e, titleToSave) => {
             e.preventDefault();
 
             let title = JSON.parse(JSON.stringify(titleToSave)); // copy
@@ -517,7 +517,7 @@ export default {
             ...baseResource,
             tableOptions,
             checkForm,
-            onSubmit,
+            onFormSave,
         };
     },
     emits: ["select-resource"],

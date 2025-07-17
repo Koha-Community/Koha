@@ -714,7 +714,7 @@ export default {
             }, []);
         };
 
-        const onSubmit = (e, vendorToSave) => {
+        const onFormSave = (e, vendorToSave) => {
             e.preventDefault();
             const errors = [];
             const vendor = JSON.parse(JSON.stringify(vendorToSave));
@@ -940,7 +940,7 @@ export default {
         return {
             ...baseResource,
             tableOptions,
-            onSubmit,
+            onFormSave,
             afterResourceFetch,
             currencies,
             appendToShow,

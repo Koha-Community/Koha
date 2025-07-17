@@ -754,7 +754,7 @@ export default {
             baseResource.setWarning(errors.join("<br>"));
             return !errors.length;
         };
-        const onSubmit = (e, agreementToSave) => {
+        const onFormSave = (e, agreementToSave) => {
             e.preventDefault();
 
             let agreement = JSON.parse(JSON.stringify(agreementToSave)); // copy
@@ -849,7 +849,7 @@ export default {
             ...baseResource,
             tableOptions,
             checkForm,
-            onSubmit,
+            onFormSave,
             tableUrl,
             filterTable,
         };

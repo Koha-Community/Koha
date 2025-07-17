@@ -221,7 +221,7 @@ export default {
             baseResource.setWarning(errors.join("<br>"));
             return !errors.length;
         };
-        const onSubmit = (e, packageToSave) => {
+        const onFormSave = (e, packageToSave) => {
             e.preventDefault();
 
             let erm_package = JSON.parse(JSON.stringify(packageToSave)); // copy
@@ -358,7 +358,7 @@ export default {
             ...baseResource,
             tableOptions,
             checkForm,
-            onSubmit,
+            onFormSave,
             appendToShow,
         };
     },

@@ -37,7 +37,7 @@
                 />
             </template>
         </ResourceShow>
-        <ResourceFormAdd
+        <ResourceFormSave
             v-if="['add', 'edit'].includes(routeAction)"
             :instancedResource="instancedResource"
             :key="instancedResource.refreshTemplate"
@@ -54,14 +54,14 @@
                     "
                 />
             </template>
-        </ResourceFormAdd>
+        </ResourceFormSave>
     </div>
 </template>
 
 <script>
 import ResourceListFilters from "./ResourceListFilters.vue";
 import ResourceShow from "./ResourceShow.vue";
-import ResourceFormAdd from "./ResourceFormAdd.vue";
+import ResourceFormSave from "./ResourceFormSave.vue";
 import ResourceList from "./ResourceList.vue";
 import Toolbar from "./Toolbar.vue";
 
@@ -73,7 +73,7 @@ export default {
     components: {
         ResourceListFilters,
         ResourceShow,
-        ResourceFormAdd,
+        ResourceFormSave,
         ResourceList,
         Toolbar,
     },

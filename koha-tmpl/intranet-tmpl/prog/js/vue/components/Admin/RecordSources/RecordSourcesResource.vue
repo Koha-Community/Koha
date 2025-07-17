@@ -81,7 +81,7 @@ export default {
             },
         };
 
-        const onSubmit = (e, recordSourceToSave) => {
+        const onFormSave = (e, recordSourceToSave) => {
             e.preventDefault();
             let response;
             const recordSource = JSON.parse(JSON.stringify(recordSourceToSave)); // copy
@@ -118,7 +118,7 @@ export default {
         return {
             ...baseResource,
             tableOptions,
-            onSubmit,
+            onFormSave,
         };
     },
     name: "RecordSourcesResource",

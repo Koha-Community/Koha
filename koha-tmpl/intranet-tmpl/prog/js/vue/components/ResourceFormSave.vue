@@ -14,7 +14,7 @@
             :componentPropData="{ ...$props, ...$data, resourceForm }"
         />
         <form
-            @submit="instancedResource.onSubmit($event, resourceToAddOrEdit)"
+            @submit="instancedResource.onFormSave($event, resourceToAddOrEdit)"
             ref="resourceForm"
         >
             <TabsWrapper
@@ -170,7 +170,7 @@ export default {
         TabsWrapper,
         AccordionWrapper,
     },
-    name: "ResourceFormAdd",
+    name: "ResourceFormSave",
 };
 </script>
 

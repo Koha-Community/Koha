@@ -505,7 +505,7 @@ export function useBaseResource(instancedResource) {
     const getResource = async (resourceId, componentData, caller) => {
         instancedResource.apiClient.get(resourceId).then(
             resource => {
-                //TODO: Rename this 'resource' to 'fetchedResource'. Needs to also be renamed in ResourceFormAdd and ResourceShow
+                //TODO: Rename this 'resource' to 'fetchedResource'. Needs to also be renamed in ResourceFormSave and ResourceShow
                 // This is to make it clear that this is the fetchedResource (data), not the resource component class
                 componentData.resource.value = resource;
                 breadcrumbMetadata.value = resource;

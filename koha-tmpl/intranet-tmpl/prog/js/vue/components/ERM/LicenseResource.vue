@@ -332,7 +332,7 @@ export default {
             baseResource.setWarning(errors.join("<br>"));
             return !errors.length;
         };
-        const onSubmit = (e, licenseToSave) => {
+        const onFormSave = (e, licenseToSave) => {
             e.preventDefault();
 
             let license = JSON.parse(JSON.stringify(licenseToSave)); // copy
@@ -381,7 +381,7 @@ export default {
             ...baseResource,
             tableOptions,
             checkForm,
-            onSubmit,
+            onFormSave,
         };
     },
     name: "LicenseResource",

@@ -262,7 +262,7 @@ export default {
             },
         };
 
-        const onSubmit = (e, trainToSave) => {
+        const onFormSave = (e, trainToSave) => {
             e.preventDefault();
 
             let train = JSON.parse(JSON.stringify(trainToSave)); // copy
@@ -430,7 +430,7 @@ export default {
         return {
             ...baseResource,
             tableOptions,
-            onSubmit,
+            onFormSave,
             filterTable,
             afterResourceFetch,
             appendToShow,
