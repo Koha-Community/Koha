@@ -49,7 +49,7 @@ export const routes = [
                         path: ":agreement_id",
                         name: "AgreementsShow",
                         component: markRaw(ResourceWrapper),
-                        title: $__("Show {name}"),
+                        title: "{name}",
                     },
                     {
                         path: "add",
@@ -61,7 +61,10 @@ export const routes = [
                         path: "edit/:agreement_id",
                         name: "AgreementsFormAddEdit",
                         component: markRaw(ResourceWrapper),
-                        title: $__("Edit agreement"),
+                        title: "{name}",
+                        additionalBreadcrumbs: [
+                            { title: $__("Modify agreement") },
+                        ],
                     },
                 ],
             },

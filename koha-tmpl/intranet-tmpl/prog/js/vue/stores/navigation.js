@@ -147,7 +147,7 @@ export const useNavigationStore = defineStore("navigation", () => {
                 const matches = currentMatches
                     .filter(match => _isBaseOrNotStub(match.meta.self))
                     .filter(match => _isEmptyNode(match.meta.self))
-                    .map(match => {
+                    .reduce((acc, match) => {
                         let path = _getPath(match, params);
                         const externalPath = path.includes(".pl");
                         let {
@@ -177,8 +177,15 @@ export const useNavigationStore = defineStore("navigation", () => {
                                         : match
                             );
                         }
-                        return breadcrumbInfo;
-                    });
+                        if (self.additionalBreadcrumbs) {
+                            return [
+                                ...acc,
+                                breadcrumbInfo,
+                                ...self.additionalBreadcrumbs,
+                            ];
+                        }
+                        return [...acc, breadcrumbInfo];
+                    }, []);
                 return matches;
             }
         }),
