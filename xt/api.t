@@ -15,6 +15,7 @@
 use Modern::Perl;
 
 use Test::More tests => 8;
+
 use Test::NoWarnings;
 
 use Test::Mojo;
@@ -223,6 +224,7 @@ subtest 'maxlength + enum' => sub {
         library         => 'Branch',
         patron          => 'Borrower',
         patron_category => 'Category',
+        vendor          => 'Aqbookseller',
     };
     plan tests => scalar keys %$def_map;
     my $schema = Koha::Database->new->schema;
