@@ -233,3 +233,69 @@ describe("Vendor CRUD operations", () => {
             .contains("deleted");
     });
 });
+
+describe("Vendor module", () => {
+    beforeEach(() => {
+        cy.login();
+        cy.title().should("eq", "Koha staff interface");
+
+        cy.task("buildSampleObject", {
+            object: "vendor",
+            values: { active: 1 },
+        })
+            .then(generatedVendor => {
+                delete generatedVendor.list_currency;
+                delete generatedVendor.invoice_currency;
+                return cy.task("insertObject", {
+                    type: "vendor",
+                    object: generatedVendor,
+                });
+            })
+            .then(vendor => {
+                cy.wrap(vendor).as("vendor");
+                return cy.task("buildSampleObject", {
+                    object: "basket",
+                    values: { vendor_id: vendor.id },
+                });
+            })
+            .then(generatedBasket => {
+                return cy.task("insertObject", {
+                    type: "basket",
+                    object: generatedBasket,
+                });
+            })
+            .then(basket => {
+                cy.wrap(basket).as("basket");
+            });
+    });
+
+    afterEach(function () {
+        cy.task("deleteSampleObjects", [
+            { vendor: this.vendor, basket: this.basket },
+        ]);
+    });
+
+    it("receive should open in the same tab", function () {
+        cy.visit("/cgi-bin/koha/acquisition/vendors");
+
+        // table_id is currently 'DataTables_Table_0', and it should be fixed
+        cy.get("#vendors_list table.dataTable")
+            .invoke("attr", "id")
+            .then(table_id => {
+                cy.intercept("GET", "/api/v1/acquisitions/vendors*").as(
+                    "get-vendors"
+                );
+                cy.get(`#${table_id}_wrapper input.dt-input`).type(
+                    this.vendor.name
+                );
+                cy.wait("@get-vendors");
+                cy.get(`#${table_id} tbody tr:first`)
+                    .contains("Receive shipments")
+                    .click();
+                cy.url().should(
+                    "contain",
+                    `/cgi-bin/koha/acqui/parcels.pl?booksellerid=${this.vendor.id}`
+                );
+            });
+    });
+});
