@@ -220,10 +220,13 @@ subtest 'maxlength + enum' => sub {
         my $reversed_api_mapping =
             { reverse map { defined $api_mapping->{$_} ? ( $_ => $api_mapping->{$_} ) : () } keys %$api_mapping };
 
-        while ( my ( $attr, $properties ) = each %{ $definition->{properties} } ) {
-            my $db_col = $reversed_api_mapping->{$attr};
-            next unless $db_col;
-            my $column_info = $koha_object->_result->column_info($db_col);
+        my $db_columns = $koha_object->_result->columns_info;
+        while ( my ( $db_col, $column_info ) = each %{$db_columns} ) {
+            my $api_attr   = $api_mapping->{$db_col} || $db_col;
+            my $properties = $definition->{properties}->{$api_attr};
+
+            next unless $properties;
+
             next unless $column_info->{size};
 
             next if ref( $column_info->{size} ) eq 'ARRAY';    # decimal # FIXME Could have a test for this as well
@@ -233,7 +236,8 @@ subtest 'maxlength + enum' => sub {
                 ; # FIXME This is not fully correct, we might want to make sure enum is set for both DB and spec. eg. now checkprevcheckout is enum only for the api spec
 
             if ( !exists $properties->{maxLength} || $column_info->{size} != $properties->{maxLength} ) {
-                push @failures, sprintf "%s.%s should have maxLength=%s in api spec", $def, $attr, $column_info->{size};
+                push @failures, sprintf "%s.%s should have maxLength=%s in api spec", $def, $api_attr,
+                    $column_info->{size};
             }
         }
         is( scalar(@failures), 0, "maxLength tests for $def" ) or diag Dumper @failures;
