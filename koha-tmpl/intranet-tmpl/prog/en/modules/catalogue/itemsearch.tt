@@ -215,14 +215,14 @@
                     <a href="/cgi-bin/koha/catalogue/search.pl" class="btn btn-default"><i class="fa fa-search"></i> Go to advanced search</a>
                 </div>
           </div>
-          <fieldset>
+          <fieldset id="librarylocation">
             [% INCLUDE form_field_select name="homebranch" options = branches %]
             [% INCLUDE form_field_select name="holdingbranch" options = branches %]
             [% IF locations.size %]
                 [% INCLUDE form_field_select name="location" options = locations %]
             [% END %]
           </fieldset>
-          <fieldset>
+          <fieldset id="access_and_condition">
             [% INCLUDE form_field_select name="itype" options = itemtypes style="min-width:300px" %]
             [% IF ccodes.size %]
                 [% INCLUDE form_field_select name="ccode" options = ccodes %]
@@ -261,7 +261,7 @@
                 <label for="onloan_no">Not checked out</label>
             </div>
           </fieldset>
-          <fieldset>
+          <fieldset id="barcodesearch">
             [% IF !query.param('f') %]
                 [% INCLUDE form_field_select_text %]
             [% ELSE %]
@@ -276,7 +276,7 @@
                 <p><a href="/cgi-bin/koha/admin/items_search_fields.pl">Manage custom fields for item search</a></p>
             [% END %]
           </fieldset>
-          <fieldset>
+          <fieldset id="callnumber_checkouts">
             <div class="form-field">
               <label class="form-field-label" for="itemcallnumber_from">From call number:</label>
               <input type="text" id="itemcallnumber_from" name="itemcallnumber_from" value="[% query.param('itemcallnumber_from') | html %]" />
