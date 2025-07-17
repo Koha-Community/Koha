@@ -1117,7 +1117,7 @@ subtest 'Backend core methods' => sub {
 
 subtest 'Helpers' => sub {
 
-    plan tests => 26;
+    plan tests => 27;
 
     $schema->storage->txn_begin;
 
@@ -1414,6 +1414,14 @@ Attribute: Pages=[% illrequestattributes.pages %]
         $get_notice_without_patron->{lang},
         "default",
         'Koha::ILL::Request->get_notice lang correctly defaults to "default" for a request without a patron'
+    );
+
+    Koha::Patron::MessagePreference::Attributes->delete();
+    my $no_message_preferences_return = $illrq_obj->send_patron_notice('ILL_PICKUP_READY');
+    is_deeply(
+        $no_message_preferences_return,
+        { result => { fail => [ 'email', 'sms' ], success => [] } },
+        "Correct error when patron has no message preferences"
     );
 
     $schema->storage->txn_rollback;
