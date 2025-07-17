@@ -34,11 +34,13 @@ properties:
       - string
       - "null"
     description: Vendor phone number
+    maxLength: 30
   fax:
     type:
       - string
       - "null"
     description: Vendor fax number
+    maxLength: 50
   accountnumber:
     type:
       - string
@@ -49,6 +51,7 @@ properties:
       - string
       - "null"
     description: Type of vendor
+    maxLength: 255
   notes:
     type:
       - string
@@ -64,6 +67,7 @@ properties:
       - string
       - "null"
     description: Vendor web address
+    maxLength: 255
   active:
     type:
       - boolean
@@ -74,11 +78,13 @@ properties:
       - string
       - "null"
     description: List prices currency
+    maxLength: 10
   invoice_currency:
     type:
       - string
       - "null"
     description: Invoice prices currency
+    maxLength: 10
   gst:
     type:
       - boolean
@@ -114,6 +120,7 @@ properties:
       - string
       - "null"
     description: External id
+    maxLength: 255
   aliases:
     type: array
     description: List of aliases
