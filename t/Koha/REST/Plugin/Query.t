@@ -294,6 +294,18 @@ get '/stash_overrides' => sub {
     );
 };
 
+get '/stash_request_id' => sub {
+    my $c = shift;
+
+    $c->stash_request_id();
+    my $request_id = $c->stash('koha.request_id');
+
+    $c->render(
+        status => 200,
+        json   => $request_id
+    );
+};
+
 get '/dbic_extended_attributes_join' => sub {
     my ( $c, $args ) = @_;
 
@@ -370,7 +382,7 @@ sub to_model {
 # The tests
 
 use Test::NoWarnings;
-use Test::More tests => 11;
+use Test::More tests => 12;
 use Test::Mojo;
 
 subtest 'extract_reserved_params() tests' => sub {
@@ -586,6 +598,20 @@ subtest 'stash_overrides() tests' => sub {
     $t->get_ok( '/stash_overrides' => { 'x-koha-override' => '' } )->json_is( {} );    # empty string is skipped
 
     $t->get_ok( '/stash_overrides' => {} )->json_is( {} );    # x-koha-ovverride not passed is skipped
+
+};
+
+subtest 'stash_request_id() tests' => sub {
+
+    plan tests => 6;
+
+    my $t = Test::Mojo->new;
+
+    $t->get_ok( '/stash_request_id' => { 'x-koha-request-id' => '123456789' } )->json_is('123456789');
+
+    $t->get_ok( '/stash_request_id' => { 'x-koha-request-id' => '' } )->json_is(q{});
+
+    $t->get_ok( '/stash_request_id' => {} )->json_is(q{});
 
 };
 
