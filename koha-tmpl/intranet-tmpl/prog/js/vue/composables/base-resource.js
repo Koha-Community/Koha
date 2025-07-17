@@ -687,7 +687,6 @@ export function useBaseResource(instancedResource) {
         ...instancedResource,
         ...moduleStoreUtils,
         getFilterValues,
-        getFilters,
         toolbarButtons,
         defaultToolbarButtons,
         additionalToolbarButtons,
