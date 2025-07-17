@@ -1957,9 +1957,15 @@ sub create_hold_group {
         hold_ids => \@already_in_group_holds,
     ) if @already_in_group_holds && !$force_grouped;
 
+    my @existing_ids                        = $self->_result->hold_groups->get_column('visual_hold_group_id')->all;
+    my $next_available_visual_hold_group_id = 1;
+    while ( grep { $_ == $next_available_visual_hold_group_id } @existing_ids ) {
+        $next_available_visual_hold_group_id++;
+    }
+
     my $hold_group_rs = $self->_result->create_related(
         'hold_groups',
-        {}
+        { visual_hold_group_id => $next_available_visual_hold_group_id }
     );
     foreach my $hold_id (@$hold_ids) {
         my $hold = Koha::Holds->find($hold_id);
