@@ -193,22 +193,25 @@ sub calculate {
     foreach my $i ( 0 .. scalar @$filters ) {
         my %cell;
         if ( @$filters[$i] ) {
-            if    ( $i == 0 )            { $cell{crit} = "Cat code";        $cell{filter} = @$filters[$i]; }
-            elsif ( $i == 1 )            { $cell{crit} = "ZIP/Postal code"; $cell{filter} = @$filters[$i]; }
-            elsif ( $i == 2 )            { $cell{crit} = "Branch code";     $cell{filter} = @$filters[$i]; }
-            elsif ( $i == 3 || $i == 4 ) { $cell{crit} = "Date of birth";   $cell{filter} = @$filters[$i]; }
-            elsif ( $i == 5 )            { $cell{crit} = "Sex";             $cell{filter} = @$filters[$i]; }
-            elsif ( $i == 6 )            { $cell{crit} = "Sort1";           $cell{filter} = @$filters[$i]; }
-            elsif ( $i == 7 )            { $cell{crit} = "Sort2";           $cell{filter} = @$filters[$i]; }
-            else                         { $cell{crit} = "Unknown"; }
+            if    ( $i == 0 ) { $cell{crit} = "Cat code";        $cell{filter} = @$filters[$i]; }
+            elsif ( $i == 1 ) { $cell{crit} = "ZIP/Postal code"; $cell{filter} = @$filters[$i]; }
+            elsif ( $i == 2 ) { $cell{crit} = "Branch code";     $cell{filter} = @$filters[$i]; }
+            elsif ( $i == 3 ) { $cell{crit} = "Date of birth1";  $cell{filter} = @$filters[$i]; }
+            elsif ( $i == 4 ) { $cell{crit} = "Date of birth2";  $cell{filter} = @$filters[$i]; }
+            elsif ( $i == 5 ) { $cell{crit} = "Sex";             $cell{filter} = @$filters[$i]; }
+            elsif ( $i == 6 ) { $cell{crit} = "Sort1";           $cell{filter} = @$filters[$i]; }
+            elsif ( $i == 7 ) { $cell{crit} = "Sort2";           $cell{filter} = @$filters[$i]; }
+            else              { $cell{crit} = "Unknown"; }
 
             push @loopfilter, \%cell;
         }
     }
     foreach my $type ( keys %$attr_filters ) {
         if ( $attr_filters->{$type} ) {
+            my $patron_attribute_type = Koha::Patron::Attribute::Types->find($type);
             push @loopfilter, {
-                crit   => "Attribute $type",
+                crit   => "PA_CLASS",
+                label  => $patron_attribute_type->description,
                 filter => $attr_filters->{$type}
             };
         }

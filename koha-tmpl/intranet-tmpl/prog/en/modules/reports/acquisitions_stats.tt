@@ -1,5 +1,9 @@
 [% USE raw %]
 [% USE Koha %]
+[% USE Branches %]
+[% USE ItemTypes %]
+[% USE KohaDates %]
+[% USE AuthorisedValues %]
 [% PROCESS 'i18n.inc' %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
@@ -46,38 +50,51 @@
     [% IF ( do_it ) %]
         [% FOREACH mainloo IN mainloop %]
             [% IF ( mainloo.loopfilter.size ) %]
-                <p><strong>Filtered on:</strong></p>
-                [% FOREACH loopfilte IN mainloo.loopfilter %]
-                    <p>
-                        [% SWITCH loopfilte.crit %]
-                        [% CASE '0' %]
-                            <span>Placed on (from)</span>
-                        [% CASE '1' %]
-                            <span>Placed on (to)</span>
-                        [% CASE '2' %]
-                            <span>Received on (from)</span>
-                        [% CASE '3' %]
-                            <span>Received on (to)</span>
-                        [% CASE '4' %]
-                            <span>Vendor</span>
-                        [% CASE '5' %]
-                            <span>Home library</span>
-                        [% CASE '6' %]
-                            <span>Collection</span>
-                        [% CASE '7' %]
-                            <span>Item type</span>
-                        [% CASE '8' %]
-                            <span>Fund</span>
-                        [% CASE '9' %]
-                            <span>Sort1</span>
-                        [% CASE '10' %]
-                            <span>Sort2</span>
-                        [% CASE %]
-                            <span>Unknown filter</span>
-                        [% END %]
-                        : [% loopfilte.filter | html %]
-                    </p>
-                [% END %]
+                <h2>Filtered on:</h2>
+                <ul>
+                    [% FOREACH loopfilte IN mainloo.loopfilter %]
+                        <li>
+                            [% SWITCH loopfilte.crit %]
+                            [% CASE '0' %]
+                                <strong>Placed on (from): </strong>
+                                [% loopfilte.filter | $KohaDates %]
+                            [% CASE '1' %]
+                                <strong>Placed on (to): </strong>
+                                [% loopfilte.filter | $KohaDates %]
+                            [% CASE '2' %]
+                                <strong>Received on (from): </strong>
+                                [% loopfilte.filter | html %]
+                            [% CASE '3' %]
+                                <strong>Received on (to): </strong>
+                                [% loopfilte.filter | html %]
+                            [% CASE '4' %]
+                                <strong>Vendor: </strong>
+                                [% loopfilte.filter | html %]
+                            [% CASE '5' %]
+                                <strong>Home library: </strong>
+                                [% Branches.GetName( loopfilte.filter ) | html %]
+                            [% CASE '6' %]
+                                <strong>Collection: </strong>
+                                [% AuthorisedValues.GetByCode( 'CCODE', loopfilte.filter ) | html %]
+                            [% CASE '7' %]
+                                <strong>Item type: </strong>
+                                [% ItemTypes.GetDescription( loopfilte.filter ) | html %]
+                            [% CASE '8' %]
+                                <strong>Fund: </strong>
+                                [% loopfilte.filter | html %]
+                            [% CASE '9' %]
+                                <strong>Sort1: </strong>
+                                [% loopfilte.filter | html %]
+                            [% CASE '10' %]
+                                <strong>Sort2: </strong>
+                                [% loopfilte.filter | html %]
+                            [% CASE %]
+                                <strong>Unknown filter: </strong>
+                                [% loopfilte.filter | html %]
+                            [% END %]
+                        </li>
+                    [% END %]
+                </ul>
             [% END %]
             <div class="page-section">
                 <table>

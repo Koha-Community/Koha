@@ -1,6 +1,8 @@
 [% USE raw %]
 [% USE Koha %]
 [% USE Branches %]
+[% USE ItemTypes %]
+[% USE AuthorisedValues %]
 [% PROCESS 'i18n.inc' %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
@@ -46,12 +48,52 @@
     <h1>Catalog statistics</h1>
     [% IF ( do_it ) %]
         [% FOREACH mainloo IN mainloop %]
-            [% IF ( mainloo.loopfilter ) %]
-                <p>Filtered on:</p>
+            <h2>Filtered on:</h2>
+            <ul>
                 [% FOREACH loopfilte IN mainloo.loopfilter %]
-                    <p>[% loopfilte.crit | html %] =[% loopfilte.filter | html %]</p>
+                    <li>
+                        [% SWITCH loopfilte.crit %]
+                        [% CASE "Item CallNumber From" %]
+                            <strong>Item call number from:</strong> [% loopfilte.filter | html %]
+                        [% CASE "Item CallNumber To" %]
+                            <strong>Item call number to:</strong> [% loopfilte.filter | html %]
+                        [% CASE "Item type" %]
+                            <strong>Item type:</strong> [% ItemTypes.GetDescription( loopfilte.filter ) | html %]
+                        [% CASE "Publisher" %]
+                            <strong>Publisher:</strong> [% loopfilte.filter | html %]
+                        [% CASE "Publication year From" %]
+                            <strong>Publication year from:</strong> [% loopfilte.filter | html %]
+                        [% CASE "Publication year To" %]
+                            <strong>Publication year to:</strong> [% loopfilte.filter | html %]
+                        [% CASE "Library" %]
+                            <strong>Library:</strong> [% Branches.GetName( loopfilte.filter ) | html %]
+                        [% CASE "Shelving Location" %]
+                            <strong>Location:</strong> [% AuthorisedValues.GetByCode( 'LOC', loopfilte.filter ) | html %]
+                        [% CASE "Collection Code" %]
+                            <strong>Collection:</strong> [% AuthorisedValues.GetByCode( 'CCODE', loopfilte.filter ) | html %]
+                        [% CASE "Status" %]
+                            <strong>Not for loan:</strong> [% AuthorisedValues.GetByCode( 'NOT_LOAN', loopfilte.filter ) | html %]
+                        [% CASE "Materials" %]
+                            <strong>Materials specified:</strong> [% loopfilte.filter | html %]
+                        [% CASE "Barcode (not like)" %]
+                            <strong>Barcode (not like):</strong> [% loopfilte.filter | html %]
+                        [% CASE "Barcode (like)" %]
+                            <strong>Barcode (like):</strong> [% loopfilte.filter | html %]
+                        [% CASE "Date acquired (item) from" %]
+                            <strong>Date acquired (item) from:</strong> [% loopfilte.filter | html %]
+                        [% CASE "Date acquired (item) to" %]
+                            <strong>Date acquired (item) to:</strong> [% loopfilte.filter | html %]
+                        [% CASE "Date deleted (item) from" %]
+                            <strong>Date deleted (item) from:</strong> [% loopfilte.filter | html %]
+                        [% CASE "Date deleted (item) to" %]
+                            <strong>Date deleted (item) to:</strong> [% loopfilte.filter | html %]
+                        [% CASE %]
+                            <strong>[% loopfilte.crit | html %]:</strong>
+                            [% loopfilte.filter | html %]
+                        [% END %]
+                    </li>
                 [% END %]
-            [% END %]
+            </ul>
 
             <div class="page-section">
                 <table id="catalogue_stats">

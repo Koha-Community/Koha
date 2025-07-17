@@ -230,10 +230,18 @@ sub calculate {
 
         push @loopfilter, \%cell;
     }
-    foreach ( keys %$attribute_filters ) {
-        next unless $attribute_filters->{$_};
-        push @loopfilter, { crit => "$_ =", filter => $attribute_filters->{$_} };
+
+    foreach my $type ( keys %$attribute_filters ) {
+        if ( $attribute_filters->{$type} ) {
+            my $patron_attribute_type = Koha::Patron::Attribute::Types->find($type);
+            push @loopfilter, {
+                crit   => "PA_CLASS",
+                label  => $patron_attribute_type->description,
+                filter => $attribute_filters->{$type}
+            };
+        }
     }
+
     push @loopfilter, { crit => "Event",        filter => $type };
     push @loopfilter, { crit => "Display by",   filter => $dsp }      if ($dsp);
     push @loopfilter, { crit => "Select Day",   filter => $daysel }   if ($daysel);

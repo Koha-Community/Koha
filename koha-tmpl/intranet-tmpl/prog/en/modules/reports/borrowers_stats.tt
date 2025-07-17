@@ -2,6 +2,10 @@
 [% USE Branches %]
 [% USE Koha %]
 [% USE Asset %]
+[% USE Categories %]
+[% USE KohaDates %]
+[% USE AuthorisedValues %]
+[% USE ExtendedAttributeTypes %]
 [% PROCESS 'i18n.inc' %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
@@ -56,11 +60,75 @@
     <h1>Patrons statistics</h1>
     [% IF ( do_it ) %]
         [% FOREACH mainloo IN mainloop %]
-            [% IF ( mainloo.loopfilter.size>0 ) %]
-                <p>Filtered on:</p>
-                [% FOREACH loopfilte IN mainloo.loopfilter %]
-                    <p> [% loopfilte.crit | html %] = [% loopfilte.filter | html %] </p>
-                [% END %]
+            [% IF ( mainloo.loopfilter.size > 0 ) %]
+                <h2>Filtered on:</h2>
+                <ul>
+                    [% FOREACH loopfilte IN mainloo.loopfilter %]
+                        <li>
+                            [% SWITCH loopfilte.crit %]
+                            [% CASE 'Cat code' %]
+                                <strong>Patron category:</strong>
+                                [% Categories.GetName( loopfilte.filter ) | html %]
+                            [% CASE 'ZIP/Postal code' %]
+                                <strong>ZIP/Postal code: </strong>
+                                [% loopfilte.filter | html %]
+                            [% CASE 'Branch code' %]
+                                <strong>Library: </strong>
+                                [% Branches.GetName( loopfilte.filter ) | html %]
+                            [% CASE 'Date of birth1' %]
+                                <strong>Date of birth > </strong>
+                                [% loopfilte.filter | html %]
+                            [% CASE 'Date of birth2' %]
+                                <strong>Date of birth < </strong>
+                                [% loopfilte.filter | html %]
+                            [% CASE 'Sex' %]
+                                <strong>Gender: </strong>
+                                [% SWITCH ( loopfilte.filter ) %]
+                                [% CASE 'F' %]
+                                    <span>Female</span>
+                                [% CASE 'M' %]
+                                    <span>Male</span>
+                                [% CASE 'O' %]
+                                    <span>Other</span>
+                                [% CASE %]
+                                    <span>None specified</span>
+                                [% END %]
+                            [% CASE 'Sort1' %]
+                                <strong>Patron sort1:</strong> [% AuthorisedValues.GetByCode('Bsort1', loopfilte.filter ) | html %]
+                            [% CASE 'Sort2' %]
+                                <strong>Patron sort2:</strong> [% AuthorisedValues.GetByCode('Bsort2', loopfilte.filter ) | html %]
+                            [% CASE 'Status' %]
+                                <strong>Status: </strong>
+                                [% SWITCH loopfilte.filter %]
+                                [% CASE 'debarred' %]
+                                    <span>Restricted</span>
+                                [% CASE 'gonenoaddress' %]
+                                    <span>Gone no address</span>
+                                [% CASE 'lost' %]
+                                    <span>Lost card</span>
+                                [% CASE %]
+                                    [% loopfilte.filter | html %]
+                                [% END %]
+                            [% CASE 'Activity' %]
+                                <strong>Activity: </strong>
+                                [% SWITCH loopfilte.filter %]
+                                [% CASE 'active' %]
+                                    <span>Active</span>
+                                [% CASE 'nonactive' %]
+                                    <span>Inactive</span>
+                                [% CASE %]
+                                    [% loopfilte.filter | html %]
+                                [% END %]
+                            [% CASE "PA_CLASS" %]
+                                <strong>[% loopfilte.label | html %]:</strong>
+                                [% loopfilte.filter | html %]
+                            [% CASE %]
+                                <strong>[% loopfilte.crit | html %]: </strong>
+                                [% loopfilte.filter | html %]
+                            [% END %]
+                        </li>
+                    [% END %]
+                </ul>
             [% END %]
             <div class="page-section">
                 <table>
@@ -227,7 +295,7 @@
                                     <select id="sort1" name="Filter">
                                         <option value="" />
                                         [% FOREACH SORT1_LOO IN SORT1_LOOP %]
-                                            <option value="[% SORT1_LOO.authorized_value | html %]">[% SORT1_LOO.lib | html %]</option>
+                                            <option value="[% SORT1_LOO.authorised_value | html %]">[% SORT1_LOO.lib | html %]</option>
                                         [% END %]
                                     </select>
                                 </td>
@@ -244,7 +312,7 @@
                                     <select id="sort2" name="Filter">
                                         <option value="" />
                                         [% FOREACH SORT2_LOO IN SORT2_LOOP %]
-                                            <option value="[% SORT2_LOO.value | html %]">[% SORT2_LOO.value | html %]</option>
+                                            <option value="[% SORT2_LOO.value | html %]">[% AuthorisedValues.GetByCode('Bsort2', SORT2_LOO.value ) | html %]</option>
                                         [% END %]
                                     </select>
                                 </td>
