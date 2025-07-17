@@ -216,27 +216,21 @@ controller, and thus shouldn't be called twice in it.
             my $query_params;
 
             my $q_param = $reserved_params->{q};
+            my $q_body  = $c->req->json;
 
-            if ( $q_param
-                || defined $reserved_params->{query} )
-            {
+            if ( $q_param || $q_body ) {
 
                 my @query_params_array;
 
                 my $json = JSON->new;
 
-                # query in request body, JSON::Validator already decoded it
-                if ( $reserved_params->{query} ) {
-                    my $query = $json->encode( $reserved_params->{query} );
-                    foreach my $qf ( @{$query_fixers} ) {
-                        $query = $qf->($query);
-                    }
-                    push @query_params_array, $json->decode($query);
-                }
-
                 # The q parameter can be an array if multiple passed
                 $q_param = [$q_param]
                     unless ref($q_param) eq 'ARRAY';
+
+                # Encode the already decoded request body and add it for processing
+                push @{$q_param}, $json->encode($q_body)
+                    if $q_body;
 
                 foreach my $q ( @{$q_param} ) {
                     if ($q) {    # skip if exists but is empty
