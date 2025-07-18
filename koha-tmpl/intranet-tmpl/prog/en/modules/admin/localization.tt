@@ -149,7 +149,7 @@
             var message;
             if ( type == 'success_on_update' ) {
                 message = $('<div class="alert alert-info"></div>');
-                message.text(_("Entity %s (code %s) for lang %s has correctly been updated with '%s'").format(data.entity, data.code, data.lang, data.translation));
+                message.text(_("Entity %s (code %s) for lang %s has been updated with '%s'").format(data.entity, data.code, data.lang, data.translation));
             } else if ( type == 'error_on_update' ) {
                 message = $('<div class="alert alert-warning"></div>');
                 if ( data.error_code == 'already_exists' ) {
@@ -252,32 +252,33 @@
                 [% END %]
             [% END %]
 
-            $("td.translation").on('focus', function(){
+            $("body").on('focus', "td.translation", function(){
                 $(this).css('background-color', '');
             });
-            $("td.lang").on('click', function(){
-                var td = this;
-                var lang = $(td).text();
-                $(td).css('background-color', '');
-                var my_select = $(languages_select).clone();
-                $(my_select).find('option[value="' + lang + '"]').attr('selected', 'selected');
-                $(my_select).on('click', function(e){
+            $("body").on('click', "td.lang", function(){
+                var td = $(this);
+                var tr = td.parent();
+                var id = tr.data('id');
+                var lang = td.text();
+                td.css('background-color', '');
+                var my_select = languages_select.clone();
+                my_select.find('option[value="' + lang + '"]').attr('selected', 'selected');
+                my_select.on('click', function(e){
                     e.stopPropagation();
                 });
-                $(my_select).on('change', function(){
-                    var tr = $(this).parent().parent();
-                    var id = $(tr).data('id');
-                    var lang = $(this).find('option:selected').val();
-                    var translation = $(this).text();
-                    send_update_request( {id, lang, translation}, td );
+                var lang;
+                my_select.on('change', function(){
+                    lang = td.find('option:selected').val();
+                    var translation = tr.find("td.translation").text();
+                    send_update_request( {id, lang, translation}, td[0] );
                 });
-                $(my_select).on('blur', function(){
-                    $(td).html(lang);
+                my_select.on('blur', function(){
+                    td.html(lang);
                 });
-                $(this).html(my_select);
+                td.html(my_select);
             });
 
-            $("td.translation").on('blur', function(){
+            $("body").on('blur', "td.translation", function(){
                 var tr = $(this).parent();
                 var id = $(tr).data('id');
                 var lang = $(tr).find('td.lang').text();
@@ -311,6 +312,9 @@
                         } else {
                             var new_row = table_dt.row.add( [ success.id, success.entity, success.code, success.lang, success.translation, "<a href=\"#\" class=\"btn btn-default btn-xs delete\"><i class=\"fa fa-trash-can\"></i> Delete</a>" ] ).draw().node();
                             $( new_row ).attr("id", "row_id_" + success.id ).data("id", success.id );
+                            /* Is there a better way to target contenteditable cells than by index? */
+                            $( new_row.children[3] ).prop("contenteditable", true).addClass("lang")
+                            $( new_row.children[4] ).prop("contenteditable", true).addClass("translation")
                             show_message({ type: 'success_on_insert', data: success });
                         }
                     },
@@ -320,7 +324,6 @@
                     }
                 );
             });
-
          });
     </script>
 [% END %]
