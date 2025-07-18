@@ -840,7 +840,7 @@ export default {
                     name: "AgreementsList",
                 });
                 let new_route = baseResource.build_url(href, filters);
-                baseResource.router.push(new_route);
+                window.history.pushState({}, "", new_route);
             }
             table.redraw(tableUrl(filters));
         };
