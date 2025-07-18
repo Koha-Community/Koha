@@ -713,13 +713,7 @@ $(document).ready(function () {
         return toggle_suspend(this, inputs);
     });
 
-    var MSG_SUSPEND_SELECTED = __("Suspend selected (%s)");
     var MSG_SUSPEND_SELECTED_HOLDS = __("selected holds");
-    $(".suspend_selected_holds").html(
-        MSG_SUSPEND_SELECTED.format(
-            $(".holds_table .select_hold:checked").length
-        )
-    );
 
     $(".suspend_selected_holds").click(function (e) {
         e.preventDefault();
@@ -743,7 +737,6 @@ $(document).ready(function () {
         return toggle_suspend(this, inputs);
     });
 
-    var MSG_CANCEL_SELECTED = __("Cancel selected (%s)");
     var MSG_MOVE_SELECTED = __("Move selected (%s)");
     var MSG_CANCEL_ALERT = __(
         "This action will cancel <span class='badge bg-danger'>%s</span> hold(s)."
@@ -804,29 +797,28 @@ $(document).ready(function () {
         });
     }
 
-    var MSG_GROUP_SELECTED = _("Group selected (%s)");
-
     function updateSelectedHoldsButtonCounters() {
-        $(".cancel_selected_holds").html(
-            MSG_CANCEL_SELECTED.format(
-                $(".holds_table .select_hold:checked").length
-            )
-        );
         $(".move_selected_holds").html(
             MSG_MOVE_SELECTED.format(
                 $(".holds_table .select_hold:checked").length
             )
         );
-        $(".suspend_selected_holds").html(
-            MSG_SUSPEND_SELECTED.format(
-                $(".holds_table .select_hold:checked").length
-            )
+        $(".selected_holds_count").html(
+            $(".holds_table .select_hold:checked").length
         );
-        $(".group_selected_holds").html(
-            MSG_GROUP_SELECTED.format(
-                $(".holds_table .select_hold:checked").length
-            )
-        );
+        if (patron_page) {
+            if ($(".holds_table .select_hold:checked").length == 0) {
+                $(".cancel_selected_holds").prop("disabled", true);
+                $(".suspend_selected_holds").prop("disabled", true);
+                $(".group_selected_holds").prop("disabled", true);
+            } else {
+                if ($(".holds_table .select_hold:checked").length >= 2) {
+                    $(".group_selected_holds").prop("disabled", false);
+                }
+                $(".suspend_selected_holds").prop("disabled", false);
+                $(".cancel_selected_holds").prop("disabled", false);
+            }
+        }
     }
 
     function updateMoveButtons(table) {
@@ -1159,10 +1151,6 @@ $(document).ready(function () {
             '<input type="hidden" name="reserve_id" value="' + hold.hold + '">'
         );
     }
-
-    $(".group_selected_holds").html(
-        MSG_GROUP_SELECTED.format($(".holds_table .select_hold:checked").length)
-    );
 
     $(".group_selected_holds").click(function (e) {
         if ($(".holds_table .select_hold:checked").length > 1) {

@@ -168,34 +168,30 @@
                         </thead>
                     </table>
 
-                    <fieldset class="action">
-                        <button class="btn btn-primary cancel_selected_holds" data-bulk="true"></button>
-                    </fieldset>
-
                     [% PROCESS 'cancel-hold-modal' form_action = '/cgi-bin/koha/reserve/modrequest.pl' from_param = patronpage %]
                     [% PROCESS 'suspend-hold-modal' %]
                     [% PROCESS 'group-hold-modal' %]
-                    [% IF Koha.Preference('DisplayAddHoldGroups') %]
-                        <fieldset class="action">
-                            <button class="btn btn-primary group_selected_holds" data-bulk="true"></button>
-                        </fieldset>
-                    [% END # IF DisplayAddHoldGroups %]
-
+                    <fieldset class="action">
+                        <span class="me-2"><span class="badge text-bg-info selected_holds_count"></span> holds selected</span>
+                        <button class="btn btn-default cancel_selected_holds" data-bulk="true"><i class="fa fa-trash"></i> Cancel selected</button>
+                        [% IF Koha.Preference('SuspendHoldsIntranet') %]
+                            <button class="btn btn-default suspend_selected_holds" data-bulk="true"><i class="fa fa-pause"></i> Suspend selected</button>
+                        [% END # IF SuspendHoldsIntranet %]
+                        [% IF Koha.Preference('DisplayAddHoldGroups') %]
+                            <button class="btn btn-default group_selected_holds" data-bulk="true"><i class="fa fa-layer-group"></i> Group selected</button>
+                        [% END # IF DisplayAddHoldGroups %]
+                    </fieldset>
                     [% IF Koha.Preference('SuspendHoldsIntranet') %]
                         <fieldset class="action">
-                            <button class="btn btn-primary suspend_selected_holds" data-bulk="true"></button>
-                        </fieldset>
-
-                        <form action="/cgi-bin/koha/reserve/modrequest_suspendall.pl" method="post">
-                            [% INCLUDE 'csrf-token.inc' %]
-                            <fieldset class="action">
+                            <form action="/cgi-bin/koha/reserve/modrequest_suspendall.pl" method="post">
+                                [% INCLUDE 'csrf-token.inc' %]
                                 <input type="hidden" name="op" value="cud-unsuspendall" />
                                 <input type="hidden" name="from" value="borrower" />
                                 <input type="hidden" name="borrowernumber" value="[% patron.borrowernumber | html %]" />
                                 <input type="hidden" name="suspend" value="0" />
-                                <input type="submit" class="btn btn-primary" value="Resume all suspended holds" />
-                            </fieldset>
-                        </form>
+                                <button type="submit" class="btn btn-default"><i class="fa fa-play"></i> Resume all suspended holds</button>
+                            </form>
+                        </fieldset>
                     [% END # IF SuspendHoldsIntranet %]
                 [% ELSE %]
                     <p>Patron has nothing on hold.</p>

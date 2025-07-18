@@ -1301,7 +1301,7 @@
                         <input type="submit" class="btn btn-primary" name="submit" value="Update hold(s)" />
                     </div>
                     <div class="btn-group">
-                        <button class="btn cancel_selected_holds" data-bulk="true"></button>
+                        <button class="btn cancel_selected_holds" data-bulk="true"> Cancel selected (<span class="selected_holds_count"></span>)</button>
                     </div>
                     <div id="cancellation-reason-div" style="display:none">
                         [% SET hold_cancellation = AuthorisedValues.GetAuthValueDropbox('HOLD_CANCELLATION') %]
