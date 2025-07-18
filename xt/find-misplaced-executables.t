@@ -23,7 +23,8 @@
 use Modern::Perl;
 use File::Find;
 use Data::Dumper;
-use Test::More tests => 1;
+use Test::More tests => 2;
+use Test::NoWarnings;
 
 my @files;
 

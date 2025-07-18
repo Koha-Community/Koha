@@ -18,10 +18,11 @@
 use Modern::Perl;
 use File::Slurp qw( read_file );
 use Test::More;
+use Test::NoWarnings;
 
 my @vue_files = `git ls-files 'koha-tmpl/intranet-tmpl/prog/js/vue/*.vue'`;
 
-plan tests => scalar @vue_files;
+plan tests => scalar(@vue_files) + 1;
 
 foreach my $filepath (@vue_files) {
     chomp $filepath;

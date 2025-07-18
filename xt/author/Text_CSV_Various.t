@@ -24,7 +24,8 @@ use Modern::Perl;
 use open OUT => ':encoding(UTF-8)', ':std';
 use utf8;
 
-use Test::More tests => 21;
+use Test::More tests => 22;
+use Test::NoWarnings;
 use Text::CSV;
 use Text::CSV_XS;
 

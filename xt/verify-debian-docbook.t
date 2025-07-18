@@ -21,11 +21,14 @@
 # generates the koha-common man pages and ensures they're correct.
 
 use Modern::Perl;
-use Test::More qw(no_plan);
+use Test::More;
+use Test::NoWarnings;
 
 my $doc_dir   = 'debian/docs';
 my @doc_files = glob( $doc_dir . '/*.xml' );
 my @command   = qw(xmllint --noout);
+
+plan tests => scalar(@doc_files) + 1;
 
 foreach my $file (@doc_files) {
     ok( system( @command, $file ) == 0, "XML validation for $file" );

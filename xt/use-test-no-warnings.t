@@ -21,7 +21,7 @@ use Test::NoWarnings;
 
 use Array::Utils qw( array_minus );
 
-my @t_files = qx{git grep --files-without-match "Test::NoWarnings" 't/*.t'};
+my @t_files = qx{git grep --files-without-match "Test::NoWarnings" 't/*.t' 'xt/*.t'};
 chomp for @t_files;
 
 my @exceptions = (
@@ -46,6 +46,15 @@ my @exceptions = (
 
     # bug 40443
     "t/db_dependent/cronjobs/advance_notices_digest.t",
+
+    # Cannot be removed
+    "xt/author/podcorrectness.t",
+
+    # bug 40449
+    "xt/author/valid-templates.t",
+
+    # bug 40315
+    "xt/tt_tidy.t",
 );
 
 @t_files = array_minus( @t_files, @exceptions );

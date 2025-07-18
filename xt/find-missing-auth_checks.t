@@ -16,7 +16,8 @@
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
-use Test::More;
+use Test::More tests => 2;
+use Test::NoWarnings;
 
 use File::Slurp qw(read_file);
 
@@ -39,4 +40,3 @@ FILE: foreach my $file (@files) {
     push @missing_auth_check, $file;
 }
 is( scalar @missing_auth_check, 0 ) or diag "No auth check in the following files:\n" . join "\n", @missing_auth_check;
-done_testing;
