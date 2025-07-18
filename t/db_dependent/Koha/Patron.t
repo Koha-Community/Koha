@@ -3115,6 +3115,6 @@ subtest 'is_anonymous' => sub {
 
     is( $patron->is_anonymous, 0, q{is_anonymous returns 0 if pref is not equal to patron's id} );
 
-    $schema->storage->txn_begin;
+    $schema->storage->txn_rollback;
 
-    }
+};
