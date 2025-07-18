@@ -18,7 +18,8 @@
 use Modern::Perl;
 
 use utf8;
-use Test::More tests => 8;
+use Test::More tests => 9;
+use Test::NoWarnings;
 
 use t::lib::TestBuilder;
 

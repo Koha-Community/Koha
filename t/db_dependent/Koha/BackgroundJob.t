@@ -19,7 +19,8 @@ use Modern::Perl;
 use utf8;
 use Encode;
 
-use Test::More tests => 6;
+use Test::More tests => 7;
+use Test::NoWarnings;
 use Test::MockModule;
 use Test::Exception;
 use Test::Warn;
