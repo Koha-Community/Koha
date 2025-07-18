@@ -1,10 +1,42 @@
+/**
+ * Mock Data Generation for Cypress Testing
+ *
+ * This module provides functions to generate realistic test data for Koha objects
+ * based on OpenAPI schema definitions. It uses Faker.js to generate random data
+ * that conforms to the API specifications.
+ *
+ * @module mockData
+ */
+
 const { faker } = require("@faker-js/faker");
 const { readYamlFile } = require("./../plugins/readYamlFile.js");
 const { query } = require("./db.js");
 const fs = require("fs");
 
+/**
+ * Cache to store generated ID values to prevent duplicates
+ * @type {Set<string>}
+ */
 const generatedDataCache = new Set();
 
+/**
+ * Generates mock data for a specific data type based on OpenAPI schema properties.
+ *
+ * @function generateMockData
+ * @param {string} type - The data type (string, integer, boolean, array, number, date, date-time)
+ * @param {Object} properties - OpenAPI schema properties for the field
+ * @param {Array} [properties.enum] - Enumerated values to choose from
+ * @param {number} [properties.maxLength] - Maximum length for strings
+ * @param {number} [properties.minLength] - Minimum length for strings
+ * @returns {*} Generated mock data appropriate for the type
+ * @private
+ * @example
+ * // Generate a string with max length 50
+ * const name = generateMockData('string', { maxLength: 50 });
+ *
+ * // Generate from enum values
+ * const status = generateMockData('string', { enum: ['active', 'inactive'] });
+ */
 const generateMockData = (type, properties) => {
     if (properties.hasOwnProperty("enum")) {
         let values = properties.enum;
@@ -55,6 +87,26 @@ const generateMockData = (type, properties) => {
     }
 };
 
+/**
+ * Generates mock data for an entire object based on OpenAPI schema properties.
+ *
+ * @function generateDataFromSchema
+ * @param {Object} properties - OpenAPI schema properties object
+ * @param {Object} [values={}] - Override values for specific fields
+ * @returns {Object} Generated mock object with all required fields
+ * @private
+ * @description This function:
+ * - Iterates through all properties in the schema
+ * - Generates appropriate mock data for each field
+ * - Handles object relationships (libraries, items, etc.)
+ * - Ensures unique values for ID fields
+ * - Applies any override values provided
+ *
+ * Special handling for object relationships:
+ * - home_library/holding_library -> generates library object
+ * - item_type -> generates item_type object
+ * - Automatically sets corresponding _id fields
+ */
 const generateDataFromSchema = (properties, values = {}) => {
     const mockData = {};
     const ids = {};
@@ -149,6 +201,37 @@ const generateDataFromSchema = (properties, values = {}) => {
     return mockData;
 };
 
+/**
+ * Builds an array of sample objects based on OpenAPI schema definitions.
+ *
+ * @function buildSampleObjects
+ * @param {Object} params - Configuration parameters
+ * @param {string} params.object - Object type to generate (must match YAML file name)
+ * @param {Object} [params.values] - Override values for specific fields
+ * @param {number} [params.count=1] - Number of objects to generate
+ * @returns {Array<Object>} Array of generated objects
+ * @throws {Error} When object type is not supported or generation fails
+ * @description This function:
+ * - Reads the OpenAPI schema from api/v1/swagger/definitions/{object}.yaml
+ * - Generates the specified number of objects
+ * - Applies any override values to all generated objects
+ * - Ensures all objects conform to the API schema
+ *
+ * @example
+ * // Generate 3 patron objects
+ * const patrons = buildSampleObjects({
+ *   object: 'patron',
+ *   count: 3
+ * });
+ *
+ * @example
+ * // Generate 2 items with specific library
+ * const items = buildSampleObjects({
+ *   object: 'item',
+ *   values: { library_id: 'CPL' },
+ *   count: 2
+ * });
+ */
 const buildSampleObjects = ({ object, values, count = 1 }) => {
     const yamlPath = `api/v1/swagger/definitions/${object}.yaml`;
     if (!fs.existsSync(yamlPath)) {
@@ -168,6 +251,43 @@ const buildSampleObjects = ({ object, values, count = 1 }) => {
     return generatedObject;
 };
 
+/**
+ * Builds a single sample object based on OpenAPI schema definitions.
+ *
+ * @function buildSampleObject
+ * @param {Object} params - Configuration parameters
+ * @param {string} params.object - Object type to generate (must match YAML file name)
+ * @param {Object} [params.values={}] - Override values for specific fields
+ * @returns {Object} Generated object conforming to API schema
+ * @throws {Error} When object type is not supported or generation fails
+ * @description This is a convenience function that generates a single object
+ * by calling buildSampleObjects with count=1 and returning the first result.
+ *
+ * Supported object types include:
+ * - patron: Library patron/borrower
+ * - item: Bibliographic item
+ * - biblio: Bibliographic record
+ * - library: Library/branch
+ * - hold: Hold/reservation request
+ * - checkout: Circulation checkout
+ * - vendor: Acquisitions vendor
+ * - basket: Acquisitions basket
+ * - And others as defined in api/v1/swagger/definitions/
+ *
+ * @example
+ * // Generate a single patron
+ * const patron = buildSampleObject({ object: 'patron' });
+ *
+ * @example
+ * // Generate an item with specific values
+ * const item = buildSampleObject({
+ *   object: 'item',
+ *   values: {
+ *     barcode: '12345678',
+ *     home_library_id: 'CPL'
+ *   }
+ * });
+ */
 const buildSampleObject = ({ object, values = {} }) => {
     return buildSampleObjects({ object, values })[0];
 };

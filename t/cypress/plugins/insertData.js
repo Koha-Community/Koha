@@ -1,8 +1,51 @@
+/**
+ * Koha Cypress Testing Data Insertion Utilities
+ *
+ * This module provides functions to create and manage test data for Cypress tests.
+ * It handles creating complete bibliographic records, patrons, holds, checkouts,
+ * and other Koha objects with proper relationships and dependencies.
+ *
+ * @module insertData
+ */
+
 const { buildSampleObject, buildSampleObjects } = require("./mockData.js");
 const { query } = require("./db.js");
 
 const { apiGet, apiPost } = require("./api-client.js");
 
+/**
+ * Creates a complete bibliographic record with associated items and libraries.
+ *
+ * @async
+ * @function insertSampleBiblio
+ * @param {Object} params - Configuration parameters
+ * @param {number} params.item_count - Number of items to create for this biblio
+ * @param {Object} [params.options] - Additional options
+ * @param {boolean} [params.options.different_libraries] - If true, creates different libraries for each item
+ * @param {string} params.baseUrl - Base URL for API calls
+ * @param {string} params.authHeader - Authorization header for API calls
+ * @returns {Promise<Object>} Created biblio with items, libraries, and item_type
+ * @returns {Object} returns.biblio - The created bibliographic record
+ * @returns {Array<Object>} returns.items - Array of created item records
+ * @returns {Array<Object>} returns.libraries - Array of created library records
+ * @returns {Object} returns.item_type - The created item type record
+ * @example
+ * // Create a biblio with 3 items using the same library
+ * const result = await insertSampleBiblio({
+ *   item_count: 3,
+ *   baseUrl: 'http://localhost:8081',
+ *   authHeader: 'Basic dGVzdDp0ZXN0'
+ * });
+ *
+ * @example
+ * // Create a biblio with 2 items using different libraries
+ * const result = await insertSampleBiblio({
+ *   item_count: 2,
+ *   options: { different_libraries: true },
+ *   baseUrl: 'http://localhost:8081',
+ *   authHeader: 'Basic dGVzdDp0ZXN0'
+ * });
+ */
 const insertSampleBiblio = async ({
     item_count,
     options,
@@ -160,6 +203,39 @@ const insertSampleBiblio = async ({
     return { biblio, items: createdItems, libraries, item_type };
 };
 
+/**
+ * Creates a hold request for a bibliographic record or item.
+ *
+ * @async
+ * @function insertSampleHold
+ * @param {Object} params - Configuration parameters
+ * @param {Object} [params.item] - Item to place hold on (optional if biblio provided)
+ * @param {Object} [params.biblio] - Biblio to place hold on (optional if item provided)
+ * @param {string} [params.library_id] - Library ID for pickup location (defaults to item's home library)
+ * @param {string} params.baseUrl - Base URL for API calls
+ * @param {string} params.authHeader - Authorization header for API calls
+ * @returns {Promise<Object>} Created hold with associated patron and patron_category
+ * @returns {Object} returns.hold - The created hold record
+ * @returns {Object} returns.patron - The patron who placed the hold
+ * @returns {Object} returns.patron_category - The patron's category
+ * @throws {Error} When neither library_id nor item is provided
+ * @example
+ * // Create a hold on a specific item
+ * const holdResult = await insertSampleHold({
+ *   item: { item_id: 123, home_library_id: 'CPL' },
+ *   baseUrl: 'http://localhost:8081',
+ *   authHeader: 'Basic dGVzdDp0ZXN0'
+ * });
+ *
+ * @example
+ * // Create a biblio-level hold
+ * const holdResult = await insertSampleHold({
+ *   biblio: { biblio_id: 456 },
+ *   library_id: 'CPL',
+ *   baseUrl: 'http://localhost:8081',
+ *   authHeader: 'Basic dGVzdDp0ZXN0'
+ * });
+ */
 const insertSampleHold = async ({
     item,
     biblio,
@@ -199,6 +275,38 @@ const insertSampleHold = async ({
     return { hold, patron, patron_category };
 };
 
+/**
+ * Creates a checkout record with associated biblio, item, and optional patron.
+ *
+ * @async
+ * @function insertSampleCheckout
+ * @param {Object} params - Configuration parameters
+ * @param {Object} [params.patron] - Existing patron to check out to (creates new if not provided)
+ * @param {string} params.baseUrl - Base URL for API calls
+ * @param {string} params.authHeader - Authorization header for API calls
+ * @returns {Promise<Object>} Created checkout with all associated records
+ * @returns {Object} returns.biblio - The bibliographic record
+ * @returns {Array<Object>} returns.items - Array of item records
+ * @returns {Array<Object>} returns.libraries - Array of library records
+ * @returns {Object} returns.item_type - The item type record
+ * @returns {Object} returns.checkout - The checkout record
+ * @returns {Object} [returns.patron] - The patron record (if generated)
+ * @returns {Object} [returns.patron_category] - The patron category (if generated)
+ * @example
+ * // Create a checkout with a new patron
+ * const checkoutResult = await insertSampleCheckout({
+ *   baseUrl: 'http://localhost:8081',
+ *   authHeader: 'Basic dGVzdDp0ZXN0'
+ * });
+ *
+ * @example
+ * // Create a checkout for an existing patron
+ * const checkoutResult = await insertSampleCheckout({
+ *   patron: { patron_id: 123 },
+ *   baseUrl: 'http://localhost:8081',
+ *   authHeader: 'Basic dGVzdDp0ZXN0'
+ * });
+ */
 const insertSampleCheckout = async ({ patron, baseUrl, authHeader }) => {
     const { biblio, items, libraries, item_type } = await insertSampleBiblio({
         item_count: 1,
@@ -248,6 +356,35 @@ const insertSampleCheckout = async ({ patron, baseUrl, authHeader }) => {
     };
 };
 
+/**
+ * Creates a patron record with associated library and category.
+ *
+ * @async
+ * @function insertSamplePatron
+ * @param {Object} params - Configuration parameters
+ * @param {Object} [params.library] - Library to assign patron to (creates new if not provided)
+ * @param {Object} [params.patron_category] - Patron category to assign (creates new if not provided)
+ * @param {string} params.baseUrl - Base URL for API calls
+ * @param {string} params.authHeader - Authorization header for API calls
+ * @returns {Promise<Object>} Created patron with associated records
+ * @returns {Object} returns.patron - The created patron record
+ * @returns {Object} [returns.library] - The library record (if generated)
+ * @returns {Object} [returns.patron_category] - The patron category record (if generated)
+ * @example
+ * // Create a patron with new library and category
+ * const patronResult = await insertSamplePatron({
+ *   baseUrl: 'http://localhost:8081',
+ *   authHeader: 'Basic dGVzdDp0ZXN0'
+ * });
+ *
+ * @example
+ * // Create a patron for an existing library
+ * const patronResult = await insertSamplePatron({
+ *   library: { library_id: 'CPL' },
+ *   baseUrl: 'http://localhost:8081',
+ *   authHeader: 'Basic dGVzdDp0ZXN0'
+ * });
+ */
 const insertSamplePatron = async ({
     library,
     patron_category,
@@ -324,6 +461,33 @@ const insertSamplePatron = async ({
     };
 };
 
+/**
+ * Deletes test objects from the database in the correct order to respect foreign key constraints.
+ *
+ * @async
+ * @function deleteSampleObjects
+ * @param {Object|Array<Object>} allObjects - Object(s) to delete, can be single object or array
+ * @returns {Promise<boolean>} True if deletion was successful
+ * @description This function handles cleanup of test data by:
+ * - Accepting single objects or arrays of objects
+ * - Grouping objects by type (holds, checkouts, patrons, items, etc.)
+ * - Deleting in dependency order to avoid foreign key violations
+ * - Supporting all major Koha object types
+ * @example
+ * // Delete a single test result
+ * await deleteSampleObjects(checkoutResult);
+ *
+ * @example
+ * // Delete multiple test results
+ * await deleteSampleObjects([biblioResult, holdResult, checkoutResult]);
+ *
+ * @example
+ * // Delete after creating test data
+ * const biblio = await insertSampleBiblio({ item_count: 2, baseUrl, authHeader });
+ * const hold = await insertSampleHold({ item: biblio.items[0], baseUrl, authHeader });
+ * // ... run tests ...
+ * await deleteSampleObjects([biblio, hold]);
+ */
 const deleteSampleObjects = async allObjects => {
     if (!Array.isArray(allObjects)) {
         allObjects = [allObjects];
@@ -458,6 +622,20 @@ const deleteSampleObjects = async allObjects => {
     return true;
 };
 
+/**
+ * Creates a library record via API, filtering out unsupported fields.
+ *
+ * @async
+ * @function insertLibrary
+ * @param {Object} params - Configuration parameters
+ * @param {Object} params.library - Library object to insert
+ * @param {string} params.baseUrl - Base URL for API calls
+ * @param {string} params.authHeader - Authorization header for API calls
+ * @returns {Promise<Object>} Created library record
+ * @private
+ * @description This is a helper function that removes fields not supported by the API
+ * before creating the library record.
+ */
 const insertLibrary = async ({ library, baseUrl, authHeader }) => {
     const {
         pickup_items,
@@ -476,6 +654,31 @@ const insertLibrary = async ({ library, baseUrl, authHeader }) => {
     });
 };
 
+/**
+ * Generic function to insert various types of Koha objects.
+ *
+ * @async
+ * @function insertObject
+ * @param {Object} params - Configuration parameters
+ * @param {string} params.type - Type of object to insert ('library', 'item_type', 'hold', 'checkout', 'vendor', 'basket')
+ * @param {Object} params.object - Object data to insert
+ * @param {string} params.baseUrl - Base URL for API calls
+ * @param {string} params.authHeader - Authorization header for API calls
+ * @returns {Promise<Object|boolean>} Created object or true if successful
+ * @throws {Error} When object type is not supported
+ * @private
+ * @description This is a generic helper function that handles the specifics of creating
+ * different types of Koha objects. Each object type may require different field filtering,
+ * API endpoints, or database operations.
+ *
+ * Supported object types:
+ * - library: Creates library via API
+ * - item_type: Creates item type via database query
+ * - hold: Creates hold via API
+ * - checkout: Creates checkout via API with confirmation token support
+ * - vendor: Creates vendor via API
+ * - basket: Creates basket via database query
+ */
 const insertObject = async ({ type, object, baseUrl, authHeader }) => {
     if (type == "library") {
         const keysToKeep = ["library_id", "name"];
