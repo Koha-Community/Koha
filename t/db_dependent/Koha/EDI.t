@@ -21,14 +21,14 @@ use Modern::Perl;
 use FindBin qw( $Bin );
 
 use Test::NoWarnings;
-use Test::More tests => 4;
+use Test::More tests => 5;
 use Test::MockModule;
 
 use t::lib::Mocks;
 use t::lib::Mocks::Logger;
 use t::lib::TestBuilder;
 
-use Koha::EDI qw(process_quote process_invoice);
+use Koha::EDI qw(process_quote process_invoice create_edi_order);
 use Koha::Edifact::Transport;
 use Koha::Edifact::File::Errors;
 use Koha::DateUtils qw(dt_from_string);
@@ -894,6 +894,83 @@ subtest 'process_invoice_without_tax_rate' => sub {
     # Check that tax values were set correctly (should be 0 for no tax)
     my $order_with_tax = $orders->first;
     is( $order_with_tax->tax_rate_on_receiving + 0, 0, 'Tax rate set to 0 when no tax rate in EDI message' );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'create_edi_order_logging' => sub {
+    plan tests => 8;
+
+    $schema->storage->txn_begin;
+
+    # Test 1: Error when called without basketno
+    $logger->clear();
+    my $result = create_edi_order( { ean => '1234567890' } );
+    ok( !defined $result, 'create_edi_order returns undef when called without basketno' );
+    $logger->error_is(
+        'create_edi_order called with no basketno or ean',
+        'Error logged when create_edi_order called without basketno'
+    );
+
+    # Test 2: Error when called without ean
+    $logger->clear();
+    $result = create_edi_order( { basketno => 123 } );
+    ok( !defined $result, 'create_edi_order returns undef when called without ean' );
+    $logger->error_is(
+        'create_edi_order called with no basketno or ean',
+        'Error logged when create_edi_order called without ean'
+    );
+
+    # Test 3: Warning when no orderlines for basket
+    $logger->clear();
+    my $empty_basket = $builder->build_object( { class => 'Koha::Acquisition::Baskets' } );
+    my $ean          = $builder->build(
+        {
+            source => 'EdifactEan',
+            value  => {
+                description => 'test ean',
+                branchcode  => undef,
+                ean         => '1234567890'
+            }
+        }
+    );
+
+    $result = create_edi_order(
+        {
+            basketno => $empty_basket->basketno,
+            ean      => $ean->{ean}
+        }
+    );
+    ok( !defined $result, 'create_edi_order returns undef when no orderlines for basket' );
+    $logger->warn_is(
+        "No orderlines for basket " . $empty_basket->basketno,
+        'Warning logged when no orderlines for basket'
+    );
+
+    # Test 4: Warning when no matching EAN found
+    $logger->clear();
+    my $basket_with_orders = $builder->build_object( { class => 'Koha::Acquisition::Baskets' } );
+    my $order              = $builder->build_object(
+        {
+            class => 'Koha::Acquisition::Orders',
+            value => {
+                basketno    => $basket_with_orders->basketno,
+                orderstatus => 'new'
+            }
+        }
+    );
+
+    $result = create_edi_order(
+        {
+            basketno => $basket_with_orders->basketno,
+            ean      => 'nonexistent_ean'
+        }
+    );
+    ok( !defined $result, 'create_edi_order returns undef when no matching EAN found' );
+    $logger->warn_is(
+        'No matching EAN found for nonexistent_ean',
+        'Warning logged when no matching EAN found'
+    );
 
     $schema->storage->txn_rollback;
 };
