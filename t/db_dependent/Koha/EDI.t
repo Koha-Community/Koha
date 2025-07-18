@@ -20,7 +20,7 @@
 use Modern::Perl;
 use FindBin qw( $Bin );
 
-use Test::More tests => 2;
+use Test::More tests => 3;
 use Test::Warn;
 use Test::MockModule;
 
@@ -812,6 +812,97 @@ subtest 'process_invoice' => sub {
     my $invoice3 = Koha::Acquisition::Invoices->search( { invoicenumber => 'INV00003' }, { rows => 1 } )->single;
     ok( $invoice3, "Invoice added to database" );
     is( $invoice3->booksellerid, $account->{vendor_id}, 'Invoice has test booksellerid' );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'process_invoice_without_tax_rate' => sub {
+    plan tests => 4;
+
+    $schema->storage->txn_begin;
+
+    # Add test EDI account and vendor
+    my $account = $builder->build(
+        {
+            source => 'VendorEdiAccount',
+            value  => {
+                description => 'Test account for tax rate handling',
+                plugin      => q{},
+            }
+        }
+    );
+
+    # Add test order to match with invoice
+    my $order = $builder->build(
+        {
+            source => 'Aqorder',
+            value  => {
+                quantity         => 1,
+                listprice        => 10.00,
+                unitprice        => 10.00,
+                quantityreceived => 0,
+                orderstatus      => 'ordered',
+                biblionumber     => $builder->build_sample_biblio->biblionumber,
+                basketno         =>
+                    $builder->build( { source => 'Aqbasket', value => { booksellerid => $account->{vendor_id} } } )
+                    ->{basketno},
+            }
+        }
+    );
+
+    # Create a minimal EDI invoice without TAX segments
+    my $edi_invoice =
+        qq{UNA:+.? 'UNB+UNOC:3+TEST+KOHA+200101:0000+1'UNH+1+INVOIC:D:96A:UN'BGM+380+TEST001+9'DTM+137:20200101:102'NAD+BY+12345::9'NAD+SU+$account->{san}::9'LIN+1++123456789:EN'QTY+47:1'GIR+001+TEST:LLO+12345678901234:LAC+TEST001:LCO+TESTATB:LFN'PRI+AAA:10.00'PRI+AAB:10.00'MOA+203:10.00'RFF+LI:$order->{ordernumber}'UNS+S'CNT+1:1'MOA+79:10.00'MOA+129:10.00'MOA+122:10.00'UNT+15+1'UNZ+1+1'};
+
+    # Create EDI message in database
+    my $edi_message = $builder->build(
+        {
+            source => 'EdifactMessage',
+            value  => {
+                message_type => 'INVOICE',
+                filename     => 'TEST_NO_TAX.CEI',
+                raw_msg      => $edi_invoice,
+                status       => 'new',
+                vendor_id    => $account->{vendor_id},
+                edi_acct     => $account->{id},
+            }
+        }
+    );
+
+    my $invoice_message = $schema->resultset('EdifactMessage')->find( $edi_message->{id} );
+
+    # Process the invoice - this should not generate warnings about undefined tax rates
+    my $error;
+    my $warnings = [];
+    {
+        local $SIG{__WARN__} = sub { push @$warnings, $_[0] };
+        eval {
+            process_invoice($invoice_message);
+            1;
+        } or do {
+            $error = $@;
+        };
+    }
+
+    ok( !$error, 'process_invoice completed without dying when no tax rate present' );
+
+    # Check that no warnings about uninitialized values in multiplication were generated
+    my $tax_warnings = grep { /Use of uninitialized value.*multiplication/ } @$warnings;
+    is( $tax_warnings, 0, 'No warnings about uninitialized values in multiplication' );
+
+    # Verify that orders with tax data exist (means processing completed)
+    my $orders = $schema->resultset('Aqorder')->search(
+        {
+            basketno              => $order->{basketno},
+            tax_rate_on_receiving => { '>=', 0 }
+        }
+    );
+
+    ok( $orders->count > 0, 'Order processing completed successfully' );
+
+    # Check that tax values were set correctly (should be 0 for no tax)
+    my $order_with_tax = $orders->first;
+    is( $order_with_tax->tax_rate_on_receiving + 0, 0, 'Tax rate set to 0 when no tax rate in EDI message' );
 
     $schema->storage->txn_rollback;
 };
