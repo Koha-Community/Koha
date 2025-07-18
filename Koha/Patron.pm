@@ -3405,7 +3405,7 @@ sub is_patron_inside_charge_limits {
 
 my $is_anonymous_patron= $patron->is_anonymous();
 
-Returns true if the patron the anonymous patron (AnonymousPatron)
+Returns true if the patron is the anonymous patron (AnonymousPatron)
 
 =cut
 
