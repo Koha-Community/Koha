@@ -137,7 +137,7 @@
                                 [% IF quote_messages.size > 0 && order_messages.size > 0 %]
                                     <!-- Both quote and order messages exist -->
                                     <div class="btn-group">
-                                        <button class="btn btn-default dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"> <i class="fa fa-file-text"></i> View EDIFACT messages </button>
+                                        <button class="btn btn-default dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"> <i class="fa fa-file-text"></i> View EDIFACT interchanges </button>
                                         <ul class="dropdown-menu">
                                             [% FOR message IN quote_messages %]
                                                 <li>
@@ -343,9 +343,9 @@
                                 [% END %]
 
                                 [% IF quote_messages.size > 0 && order_messages.size > 0 %]
-                                    <!-- Both quote and order messages exist -->
+                                    <!-- Both quote and order interchanges exist -->
                                     <div class="btn-group">
-                                        <button class="btn btn-default dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"> <i class="fa fa-file-text"></i> View EDIFACT messages </button>
+                                        <button class="btn btn-default dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"> <i class="fa fa-file-text"></i> View EDIFACT interchanges </button>
                                         <ul class="dropdown-menu">
                                             [% FOR message IN quote_messages %]
                                                 <li>
@@ -364,7 +364,7 @@
                                         </ul>
                                     </div>
                                 [% ELSIF quote_messages.size > 0 %]
-                                    <!-- Only quote messages exist -->
+                                    <!-- Only quote interchanges exist -->
                                     <div class="btn-group">
                                         <button type="button" class="btn btn-default view_edifact_message" data-message-id="[% quote_messages.0.id | html %]"> <i class="fa fa-quote-left"></i> View EDIFACT quote </button>
                                     </div>
