@@ -20,8 +20,8 @@
 use Modern::Perl;
 use FindBin qw( $Bin );
 
-use Test::More tests => 3;
-use Test::Warn;
+use Test::NoWarnings;
+use Test::More tests => 4;
 use Test::MockModule;
 
 use t::lib::Mocks;
@@ -817,7 +817,7 @@ subtest 'process_invoice' => sub {
 };
 
 subtest 'process_invoice_without_tax_rate' => sub {
-    plan tests => 4;
+    plan tests => 3;
 
     $schema->storage->txn_begin;
 
@@ -873,22 +873,13 @@ subtest 'process_invoice_without_tax_rate' => sub {
 
     # Process the invoice - this should not generate warnings about undefined tax rates
     my $error;
-    my $warnings = [];
-    {
-        local $SIG{__WARN__} = sub { push @$warnings, $_[0] };
-        eval {
-            process_invoice($invoice_message);
-            1;
-        } or do {
-            $error = $@;
-        };
-    }
-
+    eval {
+        process_invoice($invoice_message);
+        1;
+    } or do {
+        $error = $@;
+    };
     ok( !$error, 'process_invoice completed without dying when no tax rate present' );
-
-    # Check that no warnings about uninitialized values in multiplication were generated
-    my $tax_warnings = grep { /Use of uninitialized value.*multiplication/ } @$warnings;
-    is( $tax_warnings, 0, 'No warnings about uninitialized values in multiplication' );
 
     # Verify that orders with tax data exist (means processing completed)
     my $orders = $schema->resultset('Aqorder')->search(

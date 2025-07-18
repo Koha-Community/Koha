@@ -21,7 +21,6 @@ use strict;
 use warnings;
 use base qw(Exporter);
 use utf8;
-use Carp    qw( carp );
 use English qw{ -no_match_vars };
 use Business::ISBN;
 use DateTime;
@@ -69,8 +68,10 @@ sub create_edi_order {
     my $ean        = $parameters->{ean};
     my $branchcode = $parameters->{branchcode};
     my $noingest   = $parameters->{noingest};
+    my $logger     = Koha::Logger->get( { interface => 'edi' } );
+
     if ( !$basketno || !$ean ) {
-        carp 'create_edi_order called with no basketno or ean';
+        $logger->error('create_edi_order called with no basketno or ean');
         return;
     }
 
@@ -84,7 +85,7 @@ sub create_edi_order {
     )->all;
 
     if ( !@orderlines ) {
-        carp "No orderlines for basket $basketno";
+        $logger->warn("No orderlines for basket $basketno");
         return;
     }
 
@@ -111,7 +112,7 @@ sub create_edi_order {
     }
 
     unless ($ean_obj) {
-        carp "No matching EAN found for $ean";
+        $logger->warn("No matching EAN found for $ean");
         return;
     }
 
