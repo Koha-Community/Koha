@@ -59,20 +59,20 @@
 
     [% IF edifact_enabled && edifact_message %]
         <div class="page-section">
-            <h3>EDIFACT Message</h3>
+            <h3>EDIFACT Interchange</h3>
             <p>
-                <strong>Message type:</strong> [% edifact_message.message_type | html %] <strong>Transfer date:</strong> [% edifact_message.transfer_date | $KohaDates %] <strong>Status:</strong> [% edifact_message.status | html %]
+                <strong>Interchange type:</strong> [% edifact_message.message_type | html %] <strong>Transfer date:</strong> [% edifact_message.transfer_date | $KohaDates %] <strong>Status:</strong> [% edifact_message.status | html %]
                 [% IF edifact_message.filename %]
                     <strong>Filename:</strong> [% edifact_message.filename | html %]
                 [% END %]
             </p>
             <p>
-                <a href="#" class="btn btn-default btn-sm view_edifact_message" data-message-id="[% edifact_message.id | html %]"> <i class="fa fa-search"></i> View EDIFACT message </a>
+                <a href="#" class="btn btn-default btn-sm view_edifact_message" data-message-id="[% edifact_message.id | html %]"> <i class="fa fa-search"></i> View interchange</a>
             </p>
 
             [% IF edifact_errors.size > 0 %]
                 <div class="alert alert-warning">
-                    <h4><i class="fa fa-exclamation-triangle"></i> EDIFACT Processing Errors</h4>
+                    <h4><i class="fa fa-exclamation-triangle"></i> Processing Errors</h4>
                     <ul>
                         [% FOREACH error IN edifact_errors %]
                             <li>

@@ -1,12 +1,12 @@
-[%# EDIFACT message modal include %]
-[%# This modal can be used on any page that needs to display EDIFACT messages %]
+[%# EDIFACT interchange modal include %]
+[%# This modal can be used on any page that needs to display EDIFACT interchanges %]
 
-<!-- Modal to display EDIFACT messages -->
+<!-- Modal to display EDIFACT interchanges -->
 <div class="modal" id="EDI_modal" tabindex="-1" role="dialog" aria-labelledby="EDI_modal_label" aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
-                <h1 class="modal-title" id="EDI_modal_label">EDIFACT message</h1>
+                <h1 class="modal-title" id="EDI_modal_label">EDIFACT Interchange</h1>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
