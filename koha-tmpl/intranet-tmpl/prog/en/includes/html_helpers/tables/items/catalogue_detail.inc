@@ -399,7 +399,7 @@
                     [% UNLESS noItemTypeImages %]
                         let image_location = item_type_image_locations[row.item_type_id];
                         node += image_location
-                                ? '<img class="itemtype-image" src="%s" alt="" title="%s" /> '.format(escape_str(image_location), escape_str(item_type_description), escape_str(item_type_description))
+                                ? '<img class="itemtype-image" src="%s" alt="" /> '.format(escape_str(image_location), escape_str(item_type_description), escape_str(item_type_description))
                             : '';
                     [% END %]
                     node += '<span class="itypedesc itypetext">%s</span>'.format(escape_str(item_type_description));

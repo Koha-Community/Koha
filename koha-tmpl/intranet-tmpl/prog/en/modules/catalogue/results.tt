@@ -634,7 +634,7 @@
                                                                     [% FOREACH items_loo IN SEARCH_RESULT.${items_loop} %]
                                                                         [% IF item_level_itypes && !noItemTypeImages && items_loo.imageurl %]
                                                                             <li class="result_itype_image [% items_loo.branchcode | html %]">
-                                                                                <img class="itemtype-image" src="[% items_loo.imageurl | html %]" title="[% items_loo.description | html %]" alt="[% items_loo.description | html %]" />
+                                                                                <img class="itemtype-image" src="[% items_loo.imageurl | html %]" alt="" />
                                                                         [% ELSE %]
                                                                             <li class="[% items_loo.branchcode | html %]">
                                                                         [% END %]
