@@ -19,6 +19,7 @@ use Modern::Perl;
 use threads;    # used for parallel
 use File::Slurp qw( read_file );
 use Test::More;
+use Test::NoWarnings;
 use Test::Strict;
 use Parallel::ForkManager;
 use Sys::CPU;
@@ -39,16 +40,22 @@ if ( $ENV{KOHA_PROVE_CPUS} ) {
 
 my $pm = Parallel::ForkManager->new($ncpu);
 
+plan tests => scalar(@tt_files) + 1;
+
 foreach my $filepath (@tt_files) {
     $pm->start and next;
 
-    my $tidy    = qx{perl misc/devel/tidy.pl --silent --no-write $filepath};
-    my $content = read_file $filepath;
-    ok( $content eq $tidy, "$filepath should be kept tidy" );
+    if ( !-s $filepath ) {
+
+        # Do not tidy empty files
+        ok(1);
+    } else {
+        my $tidy    = qx{perl misc/devel/tidy.pl --silent --no-write $filepath};
+        my $content = read_file $filepath;
+        ok( $content eq $tidy, "$filepath should be kept tidy" );
+    }
 
     $pm->finish;
 }
 
 $pm->wait_all_children;
-
-done_testing;

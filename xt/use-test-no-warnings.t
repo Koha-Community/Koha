@@ -46,9 +46,6 @@ my @exceptions = (
 
     # bug 40449
     "xt/author/valid-templates.t",
-
-    # bug 40315
-    "xt/tt_tidy.t",
 );
 
 @t_files = array_minus( @t_files, @exceptions );
