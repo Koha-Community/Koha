@@ -34,7 +34,8 @@ use lib qw( .. );
 
 use Data::Dumper;
 use File::Find;
-use Test::More tests => 3;
+use Test::More tests => 4;
+use Test::NoWarnings;
 
 # hardcoded OPAC & STAFF dirs
 my $opac_dir  = 'koha-tmpl/opac-tmpl';

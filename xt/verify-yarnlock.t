@@ -23,7 +23,8 @@
 # 'git commit ./yarn.lock'.
 
 use Modern::Perl;
-use Test::More tests => 1;
+use Test::More tests => 2;
+use Test::NoWarnings;
 
 my $rc;
 

@@ -2,6 +2,7 @@
 use Modern::Perl;
 use Test::PerlTidy;
 use Test::More;
+use Test::NoWarnings;
 
 use Koha::Devel::Files;
 
@@ -17,7 +18,7 @@ push @files, $dev_files->ls_perl_files;
 push @files, $dev_files->ls_tt_files;
 push @files, $dev_files->ls_js_files;
 
-plan tests => scalar @files;
+plan tests => scalar(@files) + 1;
 
 for my $file (@files) {
     my $output = qx{codespell -d --ignore-words .codespell-ignore $file};

@@ -18,10 +18,11 @@
 use Modern::Perl;
 use File::Slurp qw( read_file );
 use Test::More;
+use Test::NoWarnings;
 
 my @js_files = qx{git ls-files '*.js' '*.ts'};
 
-plan tests => scalar @js_files;
+plan tests => scalar(@js_files) + 1;
 
 foreach my $filepath (@js_files) {
     chomp $filepath;

@@ -23,6 +23,7 @@ use File::Find;
 use FindBin ();
 
 use Test::More;
+use Test::NoWarnings;
 
 my $filebase = "$FindBin::Bin/../koha-tmpl/intranet-tmpl/prog/en/modules/admin/preferences";
 
@@ -35,7 +36,7 @@ sub wanted {
 }
 find( { wanted => \&wanted, no_chdir => 1 }, $filebase );
 
-plan tests => scalar @files;
+plan tests => scalar(@files) + 1;
 
 foreach my $f (@files) {
     chomp $f;
