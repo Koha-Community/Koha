@@ -71,7 +71,8 @@ post '/public_guarantor' => sub {
     }
 };
 
-use Test::More tests => 2;
+use Test::More tests => 3;
+use Test::NoWarnings;
 use Test::Mojo;
 
 use t::lib::Mocks;

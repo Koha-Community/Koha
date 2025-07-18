@@ -16,7 +16,8 @@
 
 use Modern::Perl;
 
-use Test::More tests => 32;
+use Test::More tests => 33;
+use Test::NoWarnings;
 
 use Test::MockModule;
 use Test::Warn;

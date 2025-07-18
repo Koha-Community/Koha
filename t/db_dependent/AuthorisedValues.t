@@ -1,7 +1,8 @@
 #!/usr/bin/perl
 
 use Modern::Perl;
-use Test::More tests => 17;
+use Test::More tests => 18;
+use Test::NoWarnings;
 use Test::Exception;
 use Try::Tiny;
 

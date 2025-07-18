@@ -16,7 +16,8 @@
 
 use Modern::Perl;
 use File::Basename;
-use Test::More tests => 4;
+use Test::More tests => 5;
+use Test::NoWarnings;
 
 use t::lib::Mocks;
 use t::lib::TestBuilder;
