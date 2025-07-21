@@ -82,9 +82,9 @@
                             [% CASE 4 %]
                                 <strong>Issuing library:</strong> [% Branches.GetName( loopfilte.filter ) | html %]
                             [% CASE 5 %]
-                                <strong>Collection:</strong> [% AuthorisedValues.GetByCode( 'CCODE', loopfilte.filter ) | html %]
+                                <strong>Collection:</strong> [% AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.ccode', authorised_value => loopfilte.filter ) %]
                             [% CASE 6 %]
-                                <strong>Location:</strong> [% AuthorisedValues.GetByCode( 'LOC', loopfilte.filter ) | html %]
+                                <strong>Location:</strong> [% AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.location', authorised_value => loopfilte.filter ) %]
                             [% CASE 7 %]
                                 <strong>Item call number &gt; [% loopfilte.filter | html %] </strong>
                             [% CASE 8 %]
