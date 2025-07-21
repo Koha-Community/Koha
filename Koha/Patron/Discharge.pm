@@ -14,6 +14,24 @@ use Koha::DateUtils qw( dt_from_string output_pref );
 use Koha::Patrons;
 use Koha::Patron::Debarments qw( AddDebarment );
 
+=head1 NAME
+
+Koha::Patron::Discharge - Koha Discharge object class
+
+=head1 API
+
+=head2 Class Methods
+
+=cut
+
+=head3 count
+
+    Koha::Patron:Discharge->count;
+
+Return the number of discharges corresponding to the asked criteria
+
+=cut
+
 sub count {
     my ($params) = @_;
     my $values = {};
@@ -30,6 +48,14 @@ sub count {
 
     return search_limited($values)->count;
 }
+
+=head3 can_be_discharged
+
+    my $can_be_discharged = Koha::Patron:Discharge->can_be_discharged({borrowernumber => $borrowernumber});
+
+Return true if the borrower can be discharged
+
+=cut
 
 sub can_be_discharged {
     my ($params) = @_;
@@ -56,6 +82,14 @@ sub can_be_discharged {
     return ( $can_be_discharged, $problems );
 }
 
+=head3 is_discharged
+
+    my $is_discharged = Koha::Patron:Discharge->is_discharged({borrowernumber => $borrowernumber});
+
+Return true if the borrower is discharged
+
+=cut
+
 sub is_discharged {
     my ($params) = @_;
     return unless $params->{borrowernumber};
@@ -70,6 +104,14 @@ sub is_discharged {
         return 0;
     }
 }
+
+=head3 request
+
+    my $request = Koha::Patron:Discharge->request({borrowernumber => $borrowernumber});
+
+Place a discharge request on a given borrower after checking the borrower has the right to be discharged.
+
+=cut
 
 sub request {
     my ($params) = @_;
@@ -86,6 +128,14 @@ sub request {
         }
     );
 }
+
+=head3 discharge
+
+    my $request = Koha::Patron:Discharge->discharge({borrowernumber => $borrowernumber});
+
+Place a discharge request on a given borrower, if a discharge was requested, update the status to discharged and place a suspension on the user.
+
+=cut
 
 sub discharge {
     my ($params) = @_;
@@ -123,6 +173,14 @@ sub discharge {
         );
     }
 }
+
+=head3 generate_as_pdf
+
+    my $request = Koha::Patron:Discharge->generate_as_pdf({borrowernumber => $borrowernumber});
+
+Create a pdf from an existing discharge associated to the borrowernumber.
+
+=cut
 
 sub generate_as_pdf {
     my ($params) = @_;
@@ -175,6 +233,17 @@ sub generate_as_pdf {
     return $pdf_path;
 }
 
+=head3 get_pendings
+
+    my $rs = Koha::Patron:Discharge->get_pendings({
+        borrowernumber => $borrowernumber
+        branchcode => $branchcode
+    });
+
+Get all pending discharges associated to a borrowernumber and/or a given branch
+
+=cut
+
 sub get_pendings {
     my ($params)       = @_;
     my $branchcode     = $params->{branchcode};
@@ -189,6 +258,17 @@ sub get_pendings {
 
     return search_limited($cond);
 }
+
+=head3 get_validated
+
+    my $rs = Koha::Patron:Discharge->get_validated({
+        borrowernumber => $borrowernumber
+        branchcode => $branchcode
+    });
+
+Get all validated discharges associated to a borrowernumber and/or a given branch
+
+=cut
 
 sub get_validated {
     my ($params)       = @_;
@@ -205,6 +285,18 @@ sub get_validated {
 }
 
 # TODO This module should be based on Koha::Object[s]
+
+=head3 search_limited
+
+    my $rs = Koha::Patron:Discharge->search_limited({
+        borrower.branchcode => $branchcode
+    },
+    $attributes);
+
+Search all discharges that can be seen by the user and fitting the given conditions
+
+=cut
+
 sub search_limited {
     my ( $params, $attributes ) = @_;
     my $userenv = C4::Context->userenv;
