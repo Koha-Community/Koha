@@ -1650,14 +1650,14 @@ subtest 'checkpw for users with shared cardnumber / userid ' => sub {
     my $patron_2 = $builder->build_object( { class => 'Koha::Patrons', value => { userid => $patron_1->cardnumber } } );
     $patron_2->set_password( { password => "PasswordTwo" } );
 
-    my ( $checkpw, $cardnumber, $userid, $patron ) = checkpw( $patron_1->cardnumber, "OnePassword", undef, undef, 1 );
-    ok( $checkpw, 'checkpw returns true for right password when logging in via cardnumber' );
+    my ( $checkpw, $cardnumber, $userid, $patron ) = checkpw( $patron_1->userid, "OnePassword", undef, undef, 1 );
+    ok( $checkpw, 'checkpw returns true for right password when logging in via usrid' );
     is( $cardnumber, $patron_1->cardnumber, 'checkpw returns correct cardnumber' );
     is( $userid,     $patron_1->userid,     'checkpw returns correct userid' );
     is( $patron->id, $patron_1->id,         'checkpw returns correct patron' );
 
-    ( $checkpw, $cardnumber, $userid, $patron ) = checkpw( $patron_2->userid, "PasswordTwo", undef, undef, 1 );
-    ok( $checkpw, 'checkpw returns true for right password when logging in via userid' );
+    ( $checkpw, $cardnumber, $userid, $patron ) = checkpw( $patron_2->cardnumber, "PasswordTwo", undef, undef, 1 );
+    ok( $checkpw, 'checkpw returns true for right password when logging in via carndumber' );
     is( $cardnumber, $patron_2->cardnumber, 'checkpw returns correct cardnumber' );
     is( $userid,     $patron_2->userid,     'checkpw returns correct userid' );
     is( $patron->id, $patron_2->id,         'checkpw returns correct patron' );
