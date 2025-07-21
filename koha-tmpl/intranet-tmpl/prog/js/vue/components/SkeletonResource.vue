@@ -222,6 +222,9 @@ export default {
             afterResourceFetch,
         };
     },
+    /*
+     * Emits the select-resource event in case this resource is embedded into another component
+     */
     emits: ["select-resource"],
     name: "SkeletonResource",
     components: {

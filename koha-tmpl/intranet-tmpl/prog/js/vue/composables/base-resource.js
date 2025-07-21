@@ -38,7 +38,7 @@ import {
  * @param {Boolean} instancedResource.addFiltersToList - A flag to indicate whether to add filters to the list component for the datatable.
  * @param {Object} instancedResource.tableFilters - The table filters for the resource. Follows the format for the resourceAttrs parameter.
  * @param {Function} instancedResource.afterResourceFetch - A function to call after the resource is fetched. This can be used to edit resource data or fetch additional data
- * @param {Boolean} instancedResource.embedded - A flag to indicate whether the resource has been embedded.
+ * @param {Boolean} instancedResource.embedded - A flag to indicate whether the resource is actually being used as a child component of another resource e.g. embedding a list of agreeements into EBSCO package agreements
  * @param {String} instancedResource.extendedAttributesResourceType - The resource type for extended attributes, if applicable.
  * @param {Function} instancedResource.defaultToolbarButtons - A function to amend default buttons in the toolbar.
  * @param {Function} instancedResource.additionalToolbarButtons - A function to add additional buttons to the toolbar.
