@@ -74,8 +74,8 @@
                                 <strong>Home library: </strong>
                                 [% Branches.GetName( loopfilte.filter ) | html %]
                             [% CASE '6' %]
-                                <strong>Collection: </strong>
-                                [% AuthorisedValues.GetByCode( 'CCODE', loopfilte.filter ) | html %]
+                                <strong>Collection:</strong>
+                                [% AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.ccode', authorised_value => loopfilte.filter ) %]
                             [% CASE '7' %]
                                 <strong>Item type: </strong>
                                 [% ItemTypes.GetDescription( loopfilte.filter ) | html %]
