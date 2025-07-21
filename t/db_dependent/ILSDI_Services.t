@@ -20,7 +20,7 @@ use Modern::Perl;
 use CGI qw ( -utf8 );
 
 use Test::NoWarnings;
-use Test::More tests => 15;
+use Test::More tests => 16;
 use Test::MockModule;
 use t::lib::Mocks;
 use t::lib::TestBuilder;
@@ -1144,6 +1144,51 @@ subtest 'GetAvailability itemcallnumber' => sub {
         "As expected, GetAvailability biblio has no itemcallnumber tag"
     );
 
+    $schema->storage->txn_rollback;
+};
+
+subtest 'GetAvailability availabilitystatus' => sub {
+    plan tests => 4;
+
+    $schema->storage->txn_begin;
+    my $item = $builder->build_sample_item;
+
+    my ( $cgi, $reply, $xml, $status, $message );
+    $cgi = CGI->new;
+    $cgi->param( service => 'GetAvailability' );
+    $cgi->param( id      => $item->biblionumber );
+    $cgi->param( id_type => 'biblio' );
+    $reply  = C4::ILSDI::Services::GetAvailability($cgi);
+    $xml    = XML::LibXML->load_xml( string => $reply );
+    $status = $xml->findnodes('//dlf:availabilitystatus')->to_literal();
+    is( $status, 'available', 'GetAvailability returns available' );
+
+    my $patron = $builder->build_object( { class => 'Koha::Patrons' } );
+    $patron->branchcode( $item->holdingbranch )->store;
+    AddReserve(
+        {
+            reservation_date => dt_from_string()->add( days => 1 ),
+            branchcode       => $item->holdingbranch,
+            borrowernumber   => $patron->id,
+            biblionumber     => $item->biblionumber,
+            itemnumber       => $item->itemnumber,
+        }
+    );
+    t::lib::Mocks::mock_preference( 'ConfirmFutureHolds', 0 );
+    $reply  = C4::ILSDI::Services::GetAvailability($cgi);
+    $xml    = XML::LibXML->load_xml( string => $reply );
+    $status = $xml->findnodes('//dlf:availabilitystatus')->to_literal();
+    is( $status, 'available', 'GetAvailability returns available, ignoring future hold' );
+
+    t::lib::Mocks::mock_preference( 'ConfirmFutureHolds', 2 );
+    $reply   = C4::ILSDI::Services::GetAvailability($cgi);
+    $xml     = XML::LibXML->load_xml( string => $reply );
+    $status  = $xml->findnodes('//dlf:availabilitystatus')->to_literal();
+    $message = $xml->findnodes('//dlf:availabilitymsg')->to_literal();
+    is( $status,  'not available', 'GetAvailability returns not available status for future hold' );
+    is( $message, 'On hold',       'GetAvailability returns on hold message for future hold' );
+
+    t::lib::Mocks::mock_preference( 'ConfirmFutureHolds', 0 );
     $schema->storage->txn_rollback;
 };
 
