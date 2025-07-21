@@ -642,9 +642,7 @@ $(document).ready(function () {
                         $("#suspend-modal-until").flatpickr().clear(); // clean the input
                     }
                     $("#suspend-modal").modal("hide");
-                    if ($(".select_hold_all").prop("checked")) {
-                        $(".select_hold_all").click();
-                    }
+                    $(".select_hold_all").click();
                 });
         } catch (error) {
             if (error.status === 404) {
