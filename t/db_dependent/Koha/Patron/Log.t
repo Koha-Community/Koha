@@ -16,7 +16,7 @@
 use Modern::Perl;
 use Test::More tests => 1;
 
-use C4::Log;
+use Koha::ActionLogs;
 
 use t::lib::Mocks;
 use t::lib::TestBuilder;
@@ -29,48 +29,86 @@ subtest 'Test Koha::Patrons::merge' => sub {
     plan tests => 4;
     my $builder = t::lib::TestBuilder->new;
 
-    my $keeper  = $builder->build_object({ class => 'Koha::Patrons' });
+    my $keeper = $builder->build_object( { class => 'Koha::Patrons' } );
 
-    my $borrower1 = $builder->build({source => 'Borrower'});
-    my $borrower2 = $builder->build({source => 'Borrower'});
-    my $borrower3 = $builder->build({source => 'Borrower'});
-    my $borrower4 = $builder->build({source => 'Borrower'});
+    my $borrower1 = $builder->build( { source => 'Borrower' } );
+    my $borrower2 = $builder->build( { source => 'Borrower' } );
+    my $borrower3 = $builder->build( { source => 'Borrower' } );
+    my $borrower4 = $builder->build( { source => 'Borrower' } );
 
     #test with BorrowersLog on
-    t::lib::Mocks::mock_preference('BorrowersLog', 1);
+    t::lib::Mocks::mock_preference( 'BorrowersLog', 1 );
 
-    my $results = $keeper->merge_with([ $borrower1->{borrowernumber}, $borrower2->{borrowernumber} ]);
+    my $results = $keeper->merge_with( [ $borrower1->{borrowernumber}, $borrower2->{borrowernumber} ] );
 
-    my $log=GetLogs("","","",["MEMBERS"],["PATRON_MERGE"],$keeper->id,"");
+    my $log = Koha::ActionLogs->search(
+        {
+            module => 'MEMBERS',
+            action => 'PATRON_MERGE',
+            object => $keeper->id
+        },
+        { order_by => { -desc => "timestamp" } }
+    )->unblessed;
 
-    my $info_borrower1 = $borrower1->{firstname} . " " . $borrower1->{surname} . " (" . $borrower1->{cardnumber} . ") has been merged into " .
-    $keeper->firstname . " " . $keeper->surname . " (" . $keeper->cardnumber . ")";
+    my $info_borrower1 =
+          $borrower1->{firstname} . " "
+        . $borrower1->{surname} . " ("
+        . $borrower1->{cardnumber}
+        . ") has been merged into "
+        . $keeper->firstname . " "
+        . $keeper->surname . " ("
+        . $keeper->cardnumber . ")";
     my $info_log = $log->[0]{info};
 
-    is($info_log,$info_borrower1,"GetLogs returns results in the log viewer for the merge of " . $borrower1->{borrowernumber});
+    is(
+        $info_log, $info_borrower1,
+        "GetLogs returns results in the log viewer for the merge of " . $borrower1->{borrowernumber}
+    );
 
-    my $info_borrower2 = $borrower2->{firstname} . " " . $borrower2->{surname} . " (" . $borrower2->{cardnumber} . ") has been merged into " .
-    $keeper->firstname . " " . $keeper->surname . " (" . $keeper->cardnumber . ")";
+    my $info_borrower2 =
+          $borrower2->{firstname} . " "
+        . $borrower2->{surname} . " ("
+        . $borrower2->{cardnumber}
+        . ") has been merged into "
+        . $keeper->firstname . " "
+        . $keeper->surname . " ("
+        . $keeper->cardnumber . ")";
     $info_log = $log->[1]{info};
 
-    is($info_log,$info_borrower2,"GetLogs returns results in the log viewer for the merge of " . $borrower2->{borrowernumber});
-
+    is(
+        $info_log, $info_borrower2,
+        "GetLogs returns results in the log viewer for the merge of " . $borrower2->{borrowernumber}
+    );
 
     #test with BorrowersLog off
-    t::lib::Mocks::mock_preference('BorrowersLog', 0);
+    t::lib::Mocks::mock_preference( 'BorrowersLog', 0 );
 
-    $keeper  = $builder->build_object({ class => 'Koha::Patrons' });
+    $keeper = $builder->build_object( { class => 'Koha::Patrons' } );
 
-    $results = $keeper->merge_with([ $borrower3->{borrowernumber}, $borrower4->{borrowernumber} ]);
+    $results = $keeper->merge_with( [ $borrower3->{borrowernumber}, $borrower4->{borrowernumber} ] );
 
-    $log=GetLogs("","","",["MEMBERS"],["PATRON_MERGE"],$keeper->id,"");
+    $log = Koha::ActionLogs->search(
+        {
+            module => 'MEMBERS',
+            action => 'PATRON_MERGE',
+            object => $keeper->id
+        },
+        { order_by => { -desc => "timestamp" } }
+    )->unblessed;
+
     $info_log = $log->[0]{info};
 
-    is($info_log,undef,"GetLogs didn't returns results in the log viewer for the merge of " . $borrower3->{borrowernumber});
+    is(
+        $info_log, undef,
+        "GetLogs didn't returns results in the log viewer for the merge of " . $borrower3->{borrowernumber}
+    );
 
     $info_log = $log->[1]{info};
 
-    is($info_log,undef,"GetLogs didn't returns results in the log viewer for the merge of " . $borrower4->{borrowernumber});
+    is(
+        $info_log, undef,
+        "GetLogs didn't returns results in the log viewer for the merge of " . $borrower4->{borrowernumber}
+    );
 };
 
 $schema->storage->txn_rollback;
