@@ -1,5 +1,4 @@
-[% USE Context %]
-[% SET current_article_requests = Context.Scalar( Context.Scalar( patron, 'article_requests' ), 'filter_by_current' ) %]
+[% SET current_article_requests = patron.article_requests.filter_by_current %]
 [% IF current_article_requests.count > 0 %]
     <table id="article-requests-table" class="table table-bordered table-striped">
         <thead>

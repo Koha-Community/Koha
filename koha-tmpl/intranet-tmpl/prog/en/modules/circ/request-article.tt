@@ -1,6 +1,5 @@
 [% USE raw %]
 [% USE Asset %]
-[% USE Context %]
 [% USE KohaDates %]
 [% USE Branches %]
 [% USE Categories %]
@@ -252,7 +251,7 @@
         [% END %]
     [% END %]
 
-    [% SET biblio_current_article_requests = Context.Scalar( Context.Scalar( biblio, 'article_requests' ), 'filter_by_current' ) %]
+    [% SET biblio_current_article_requests = biblio.article_requests.filter_by_current %]
     [% IF biblio_current_article_requests.count > 0 && !patron %]
         <fieldset class="rows left" id="current-article-requests-fieldset">
             <legend>Current article requests</legend>

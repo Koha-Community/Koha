@@ -40,7 +40,7 @@
         [% END %]
 
         [% IF Koha.Preference('ArticleRequests') %]
-            [% SET article_requests = Context.Scalar( Context.Scalar( patron, 'article_requests' ), 'filter_by_current') %]
+            [% SET article_requests = patron.article_requests.filter_by_current %]
             [% WRAPPER tab_item tabname= "article-requests" %]
                 <span>Article requests</span> ([% article_requests.count || 0 | html %])
             [% END %]

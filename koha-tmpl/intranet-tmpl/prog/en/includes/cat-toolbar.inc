@@ -1,4 +1,3 @@
-[% USE Context %]
 [% USE Biblio %]
 
 [%# Parameters: %]
@@ -259,8 +258,7 @@
     >
 
     [% IF ( CAN_user_reserveforothers ) %]
-        [% SET items = biblio.items %]
-        [% IF Context.Scalar(Context.Scalar(items, "filter_by_for_hold"), "count") %]
+        [% IF biblio.items.filter_by_for_hold.count %]
             [% IF ( holdfor ) %]
                 <div class="btn-group">
                     <button class="btn btn-default dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
