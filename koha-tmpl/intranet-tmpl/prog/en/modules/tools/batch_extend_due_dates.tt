@@ -193,7 +193,7 @@
                                     <td>[% checkout.item.home_branch.branchname | html %]</td>
                                     <td data-order="[% checkout.issuedate | html %]">[% checkout.issuedate | $KohaDates %]</td>
                                     <td>[% Branches.GetName( checkout.branchcode ) | html %]</td>
-                                    <td data-order="[% new_due_dates.shift | html %]"> [% new_due_dates.shift | $KohaDates as_due_date => 1 %] </td>
+                                    <td data-order="[% new_due_dates.0 | html %]"> [% new_due_dates.shift | $KohaDates as_due_date => 1 %] </td>
                                 </tr>
                             [% END %]
                         </tbody>
