@@ -1024,7 +1024,7 @@ sub get_volumes_query {
             }
 
             # exclude monograph and serial component part records
-            $searchstr .= " NOT (bib-level:a OR bib-level:b)";
+            $searchstr .= " NOT (bib-level:a OR bib-level:b OR bib-level:c OR bib-level:d)";
             $searchstr .= ")";
         }
     } else {
