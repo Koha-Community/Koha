@@ -51,7 +51,7 @@ Koha::Devel::CI::IncrementalRuns is a module designed to manage incremental CI r
     my $ci = Koha::Devel::CI::IncrementalRuns->new({
         incremental_run => 1,
         git_repo_dir    => '/path/to/repo',
-        repo_url        => 'gitlab.com/koha-community/koha-ci-results.git',
+        repo_url        => 'https://gitlab.com/koha-community/koha-ci-results.git',
         report          => 1,
         token           => 'your_token',
         test_name       => 'test_name',
@@ -76,13 +76,12 @@ sub new {
         incremental_run => $ENV{KOHA_CI_INCREMENTAL_RUNS} // 0,
         git_repo_dir    => $args->{git_repo_dir}          // q{/tmp/koha-ci-results},
         repo_url        => $args->{repo_url}              // $ENV{KOHA_CI_INCREMENTAL_RUN_REPO_URL}
-            // q{gitlab.com/koha-community/koha-ci-results.git},
+            // q{https://gitlab.com/koha-community/koha-ci-results.git},
         report    => $args->{report} // $ENV{KOHA_CI_INCREMENTAL_RUNS_REPORT},
         token     => $args->{token}  // $ENV{KOHA_CI_INCREMENTAL_RUNS_TOKEN},
         test_name => $args->{test_name},
         context   => $args->{context},
     };
-    bless $self, $class;
 
     unless ( $self->{test_name} ) {
         my @caller_info     = caller();
@@ -100,6 +99,8 @@ sub new {
 
         make_path("$self->{git_repo_dir}/$self->{test_name}");
     }
+
+    bless $self, $class;
     return $self;
 }
 
@@ -173,7 +174,9 @@ sub report_results {
 
     qx{git -C $self->{git_repo_dir} add $failure_file};
     qx{git -C $self->{git_repo_dir} commit -m "$commit_id - $self->{test_name}"};
-    qx{git -C $self->{git_repo_dir} push https://gitlab-ci-token:$self->{token}\@$self->{repo_url} main};
+    ( my $push_domain = $self->{repo_url} ) =~ s{^https://}{};
+    my $push_url = "https://gitlab-ci-token:$self->{token}\@$push_domain";
+    qx{git -C $self->{git_repo_dir} push $push_url main};
 }
 
 1;
