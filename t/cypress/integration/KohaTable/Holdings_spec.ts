@@ -32,7 +32,7 @@ describe("catalogue/detail/holdings_table with items", () => {
     });
 
     it("Correctly init the table", function () {
-        // Do not use `() => {` or this.objets won't be retrieved
+        // Do not use `() => {` or this.objects won't be retrieved
         const biblio_id = this.objects.biblio.biblio_id;
         cy.set_syspref("AlwaysShowHoldingsTableFilters", 1).then(() => {
             cy.visit(
