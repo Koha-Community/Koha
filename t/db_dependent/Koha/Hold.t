@@ -20,7 +20,7 @@
 use Modern::Perl;
 
 use Test::NoWarnings;
-use Test::More tests => 18;
+use Test::More tests => 20;
 
 use Test::Exception;
 use Test::MockModule;
@@ -36,6 +36,8 @@ use Koha::DateUtils qw(dt_from_string);
 use Koha::Holds;
 use Koha::Libraries;
 use Koha::Old::Holds;
+use C4::Reserves    qw( AddReserve ModReserveAffect );
+use C4::Circulation qw( AddReturn );
 
 my $schema  = Koha::Database->new->schema;
 my $builder = t::lib::TestBuilder->new;
@@ -1847,3 +1849,272 @@ subtest 'move_hold() tests' => sub {
 
     $schema->storage->txn_rollback;
 };
+subtest 'is_hold_group_target, cleanup_hold_group and set_as_hold_group_target tests' => sub {
+
+    plan tests => 16;
+
+    $schema->storage->txn_begin;
+
+    t::lib::Mocks::mock_preference( 'DisplayAddHoldGroups', 1 );
+
+    my $patron_category = $builder->build(
+        {
+            source => 'Category',
+            value  => {
+                category_type                 => 'P',
+                enrolmentfee                  => 0,
+                BlockExpiredPatronOpacActions => 'follow_syspref_BlockExpiredPatronOpacActions',
+            }
+        }
+    );
+
+    my $library_1 = $builder->build( { source => 'Branch' } );
+    my $patron_1  = $builder->build(
+        {
+            source => 'Borrower',
+            value  => { branchcode => $library_1->{branchcode}, categorycode => $patron_category->{categorycode} }
+        }
+    );
+    my $library_2 = $builder->build( { source => 'Branch' } );
+    my $patron_2  = $builder->build_object(
+        {
+            class => 'Koha::Patrons',
+            value => { branchcode => $library_2->{branchcode}, categorycode => $patron_category->{categorycode} }
+        }
+    );
+
+    my $item = $builder->build_sample_item(
+        {
+            library => $library_1->{branchcode},
+        }
+    );
+
+    my $item_2 = $builder->build_sample_item(
+        {
+            library => $library_1->{branchcode},
+        }
+    );
+
+    set_userenv($library_2);
+    my $reserve_id = AddReserve(
+        {
+            branchcode     => $library_2->{branchcode},
+            borrowernumber => $patron_2->borrowernumber,
+            biblionumber   => $item->biblionumber,
+            priority       => 1,
+        }
+    );
+
+    my $reserve_2_id = AddReserve(
+        {
+            branchcode     => $library_2->{branchcode},
+            borrowernumber => $patron_2->borrowernumber,
+            biblionumber   => $item_2->biblionumber,
+            priority       => 1,
+        }
+    );
+
+    my $reserve_3_id = AddReserve(
+        {
+            branchcode     => $library_2->{branchcode},
+            borrowernumber => $patron_2->borrowernumber,
+            biblionumber   => $item_2->biblionumber,
+            priority       => 1,
+        }
+    );
+
+    my $new_hold_group = $patron_2->create_hold_group( [ $reserve_id, $reserve_2_id, $reserve_3_id ] );
+
+    set_userenv($library_1);
+    my $do_transfer = 1;
+    my ( $returned, $messages, $issue, $borrower ) = AddReturn( $item->barcode, $library_1->{branchcode} );
+
+    ok( exists $messages->{ResFound}, 'ResFound key exists' );
+
+    ModReserveAffect( $item->itemnumber, undef, $do_transfer, $reserve_id );
+
+    my $hold = Koha::Holds->find($reserve_id);
+    is( $hold->hold_group->hold_group_id, $new_hold_group->hold_group_id, 'First hold belongs to hold group' );
+    is( $hold->found,                     'T',                            'Hold is in transit' );
+
+    is( $hold->is_hold_group_target, 1, 'First hold is the hold group target' );
+    my $hold_2 = Koha::Holds->find($reserve_2_id);
+    is( $hold_2->hold_group->hold_group_id, $new_hold_group->hold_group_id, 'Second hold belongs to hold group' );
+    is( $hold_2->is_hold_group_target,      0, 'Second hold is not the hold group target' );
+
+    set_userenv($library_2);
+    $do_transfer = 0;
+    AddReturn( $item->barcode, $library_2->{branchcode} );
+    ModReserveAffect( $item->itemnumber, undef, $do_transfer, $reserve_id );
+    $hold = Koha::Holds->find($reserve_id);
+    is( $hold->found, 'W', 'Hold is waiting' );
+
+    is( $hold->is_hold_group_target,   1, 'First hold is still the hold group target' );
+    is( $hold_2->is_hold_group_target, 0, 'Second hold is still not the hold group target' );
+
+    $hold->cancel();
+    is( $hold->is_hold_group_target,   0, 'First hold is no longer the hold group target' );
+    is( $hold_2->is_hold_group_target, 0, 'Second hold is still not the hold group target' );
+
+    # Return item for second hold
+    AddReturn( $item_2->barcode, $library_2->{branchcode} );
+    ModReserveAffect( $item_2->itemnumber, undef, $do_transfer, $reserve_2_id );
+    $new_hold_group->discard_changes;
+    is( $hold_2->get_from_storage->found, 'W', 'Hold is waiting' );
+    is( $hold_2->is_hold_group_target,    1,   'Second hold is now the hold group target' );
+
+    my $hold_3 = Koha::Holds->find($reserve_3_id);
+    is( $hold_3->hold_group->hold_group_id, $new_hold_group->hold_group_id, 'Third hold belongs to hold group' );
+    is( $hold_3->is_hold_group_target,      0,                              'Third hold is not the hold group target' );
+
+    $hold_2->cancel();
+    is(
+        $hold_3->hold_group, undef,
+        'Third hold was left as the only member of its group. Group was deleted and the hold is no longer part of a hold group'
+    );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest '_Findgroupreserve in the context of hold groups' => sub {
+    plan tests => 13;
+
+    $schema->storage->txn_begin;
+
+    t::lib::Mocks::mock_preference( 'DisplayAddHoldGroups', 1 );
+
+    my $patron_category = $builder->build(
+        {
+            source => 'Category',
+            value  => {
+                category_type                 => 'P',
+                enrolmentfee                  => 0,
+                BlockExpiredPatronOpacActions => 'follow_syspref_BlockExpiredPatronOpacActions',
+            }
+        }
+    );
+
+    my $library_1 = $builder->build( { source => 'Branch' } );
+    my $patron_1  = $builder->build_object(
+        {
+            class => 'Koha::Patrons',
+            value => { branchcode => $library_1->{branchcode}, categorycode => $patron_category->{categorycode} }
+        }
+    );
+    my $library_2 = $builder->build( { source => 'Branch' } );
+    my $patron_2  = $builder->build_object(
+        {
+            class => 'Koha::Patrons',
+            value => { branchcode => $library_2->{branchcode}, categorycode => $patron_category->{categorycode} }
+        }
+    );
+
+    my $item = $builder->build_sample_item(
+        {
+            library => $library_1->{branchcode},
+        }
+    );
+
+    my $item_2 = $builder->build_sample_item(
+        {
+            library => $library_1->{branchcode},
+        }
+    );
+
+    set_userenv($library_2);
+    my $reserve_id = AddReserve(
+        {
+            branchcode     => $library_2->{branchcode},
+            borrowernumber => $patron_2->borrowernumber,
+            biblionumber   => $item->biblionumber,
+            priority       => 1,
+        }
+    );
+
+    my $reserve_2_id = AddReserve(
+        {
+            branchcode     => $library_2->{branchcode},
+            borrowernumber => $patron_2->borrowernumber,
+            biblionumber   => $item_2->biblionumber,
+            priority       => 1,
+        }
+    );
+
+    my $reserve_3_id = AddReserve(
+        {
+            branchcode     => $library_2->{branchcode},
+            borrowernumber => $patron_1->borrowernumber,
+            biblionumber   => $item_2->biblionumber,
+            priority       => 2,
+        }
+    );
+
+    my @reserves = C4::Reserves::_Findgroupreserve( $item_2->biblionumber, $item_2->id, 0, [] );
+    is( scalar @reserves,           2,             "No hold group created yet. We should get both holds" );
+    is( $reserves[0]->{reserve_id}, $reserve_2_id, "We got the expected reserve" );
+
+    my $new_hold_group = $patron_2->create_hold_group( [ $reserve_id, $reserve_2_id ] );
+
+    set_userenv($library_1);
+    my $do_transfer = 1;
+    my ( $returned, $messages, $issue, $borrower ) = AddReturn( $item->barcode, $library_1->{branchcode} );
+
+    ok( exists $messages->{ResFound}, 'ResFound key exists' );
+
+    ModReserveAffect( $item->itemnumber, undef, $do_transfer, $reserve_id );
+
+    my $hold = Koha::Holds->find($reserve_id);
+    is( $hold->hold_group->hold_group_id, $new_hold_group->hold_group_id, 'First hold belongs to hold group' );
+    is( $hold->found,                     'T',                            'Hold is in transit' );
+
+    is( $hold->is_hold_group_target, 1, 'First hold is the hold group target' );
+
+    my @new_reserves = C4::Reserves::_Findgroupreserve( $item_2->biblionumber, $item_2->id, 0, [] );
+    is( scalar @new_reserves, 1, "reserve_2_id is now part of a group that has a target. Should not be here." );
+    is(
+        $new_reserves[0]->{reserve_id}, $reserve_3_id,
+        "reserve_2_id is now part of a group that has a target. Should not be here."
+    );
+
+    $hold->cancel();
+
+    my @reserves_after_cancel = C4::Reserves::_Findgroupreserve( $item_2->biblionumber, $item_2->id, 0, [] );
+    is(
+        scalar @reserves_after_cancel, 2,
+        "reserve_2_id should be back in the pool as it's no longer part of a group."
+    );
+    is( $reserves_after_cancel[0]->{reserve_id}, $reserve_2_id, "We got the expected reserve" );
+    is( $reserves_after_cancel[1]->{reserve_id}, $reserve_3_id, "We got the expected reserve" );
+
+    my $first_reserve_id_again = AddReserve(
+        {
+            branchcode     => $library_2->{branchcode},
+            borrowernumber => $patron_2->borrowernumber,
+            biblionumber   => $item->biblionumber,
+            priority       => 1,
+        }
+    );
+
+    # Fake the holds queue
+    my $dbh = C4::Context->dbh;
+    $dbh->do(
+        q{INSERT INTO hold_fill_targets VALUES (?, ?, ?, ?, ?,?)}, undef,
+        (
+            $patron_1->borrowernumber, $item->biblionumber, $item->itemnumber, $item->homebranch, 0,
+            $first_reserve_id_again
+        )
+    );
+
+    my @reserves_after_holds_queue = C4::Reserves::_Findgroupreserve( $item_2->biblionumber, $item_2->id, 0, [] );
+    is( scalar @new_reserves, 1, "Only reserve_3_id should exist." );
+    is(
+        $new_reserves[0]->{reserve_id}, $reserve_3_id,
+        "reserve_3_id should not be here."
+    );
+};
+
+sub set_userenv {
+    my ($library) = @_;
+    my $staff = $builder->build_object( { class => "Koha::Patrons" } );
+    t::lib::Mocks::mock_userenv( { patron => $staff, branchcode => $library->{branchcode} } );
+}
