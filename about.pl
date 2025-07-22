@@ -149,6 +149,8 @@ if ( $tab eq 'about' ) {
 
     my $zebraVersion = `zebraidx -V`;
 
+    my $errZebraConnection = C4::Context->Zconn( "biblioserver", 0 )->errcode();
+
     # Check running PSGI env
     if ( C4::Context->psgi_env ) {
         $template->param(
@@ -189,6 +191,7 @@ if ( $tab eq 'about' ) {
         where_is_memcached_config => $where_is_memcached_config,
         perlPath      => $perl_path,
         zebraVersion  => $zebraVersion,
+        errZebraConnection        => $errZebraConnection,
         kohaVersion   => $versions{'kohaVersion'},
         osVersion     => $versions{'osVersion'},
         perlVersion   => $versions{'perlVersion'},
@@ -247,8 +250,6 @@ if($tab eq 'sysinfo') {
         }
     );
     $template->param( invalid_yesno => $invalid_yesno );
-
-    my $errZebraConnection = C4::Context->Zconn("biblioserver",0)->errcode();
 
     my $warnIsRootUser   = (! $loggedinuser);
 
@@ -624,7 +625,6 @@ if($tab eq 'sysinfo') {
         warnPrefAnonymousPatronAnonSuggestions_PatronDoesNotExist => $warnPrefAnonymousPatronAnonSuggestions_PatronDoesNotExist,
         warnPrefKohaAdminEmailAddress => $warnPrefKohaAdminEmailAddress,
         warnPrefOpacHiddenItems => $warnPrefOpacHiddenItems,
-        errZebraConnection => $errZebraConnection,
         warnIsRootUser => $warnIsRootUser,
         warnNoActiveCurrency => $warnNoActiveCurrency,
         warnNoTemplateCaching => ( C4::Context->config('template_cache_dir') ? 0 : 1 ),
