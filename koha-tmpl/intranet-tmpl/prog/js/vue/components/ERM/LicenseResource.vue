@@ -29,10 +29,12 @@ export default {
             resourceName: "license",
             nameAttr: "name",
             idAttr: "license_id",
-            showComponent: "LicensesShow",
-            listComponent: "LicensesList",
-            addComponent: "LicensesFormAdd",
-            editComponent: "LicensesFormAddEdit",
+            components: {
+                show: "LicensesShow",
+                list: "LicensesList",
+                add: "LicensesFormAdd",
+                edit: "LicensesFormAddEdit",
+            },
             apiClient: APIClient.erm.licenses,
             resourceTableUrl: APIClient.erm.httpClient._baseURL + "licenses",
             i18n: {

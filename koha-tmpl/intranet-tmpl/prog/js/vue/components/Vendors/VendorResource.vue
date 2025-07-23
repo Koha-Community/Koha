@@ -133,10 +133,12 @@ export default {
             resourceName: "vendor",
             nameAttr: "name",
             idAttr: "id",
-            showComponent: "VendorShow",
-            listComponent: "VendorList",
-            addComponent: "VendorFormAdd",
-            editComponent: "VendorFormAddEdit",
+            components: {
+                show: "VendorShow",
+                list: "VendorList",
+                add: "VendorFormAdd",
+                edit: "VendorFormAddEdit",
+            },
             apiClient: APIClient.acquisition.vendors,
             resourceTableUrl:
                 APIClient.acquisition.httpClient._baseURL + "vendors",

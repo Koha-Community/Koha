@@ -157,7 +157,9 @@ export default {
             resourceName: "item",
             nameAttr: "biblio.title",
             idAttr: "itemnumber",
-            listComponent: "WaitingList",
+            components: {
+                list: "WaitingList",
+            },
             apiClient: APIClient.preservation.waiting_list_items,
             resourceTableUrl:
                 APIClient.preservation.httpClient._baseURL +

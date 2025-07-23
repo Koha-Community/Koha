@@ -42,10 +42,12 @@ export default {
             resourceName: "title",
             nameAttr: "publication_title",
             idAttr: "title_id",
-            showComponent: "EHoldingsLocalTitlesShow",
-            listComponent: "EHoldingsLocalTitlesList",
-            addComponent: "EHoldingsLocalTitlesFormAdd",
-            editComponent: "EHoldingsLocalTitlesFormAddEdit",
+            components: {
+                show: "EHoldingsLocalTitlesShow",
+                list: "EHoldingsLocalTitlesList",
+                add: "EHoldingsLocalTitlesFormAdd",
+                edit: "EHoldingsLocalTitlesFormAddEdit",
+            },
             apiClient: APIClient.erm.localTitles,
             resourceTableUrl:
                 APIClient.erm.httpClient._baseURL + "eholdings/local/titles",

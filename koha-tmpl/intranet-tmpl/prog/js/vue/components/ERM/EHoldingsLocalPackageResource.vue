@@ -27,10 +27,12 @@ export default {
             resourceName: "package",
             nameAttr: "name",
             idAttr: "package_id",
-            showComponent: "EHoldingsLocalPackagesShow",
-            listComponent: "EHoldingsLocalPackagesList",
-            addComponent: "EHoldingsLocalPackagesFormAdd",
-            editComponent: "EHoldingsLocalPackagesFormAddEdit",
+            components: {
+                show: "EHoldingsLocalPackagesShow",
+                list: "EHoldingsLocalPackagesList",
+                add: "EHoldingsLocalPackagesFormAdd",
+                edit: "EHoldingsLocalPackagesFormAddEdit",
+            },
             apiClient: APIClient.erm.localPackages,
             resourceTableUrl:
                 APIClient.erm.httpClient._baseURL + "eholdings/local/packages",

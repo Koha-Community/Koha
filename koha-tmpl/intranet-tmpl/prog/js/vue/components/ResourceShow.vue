@@ -76,7 +76,7 @@
             </fieldset>
             <fieldset class="action">
                 <router-link
-                    :to="{ name: instancedResource.listComponent }"
+                    :to="{ name: instancedResource.components.list }"
                     role="button"
                     class="cancel"
                     >{{ $__("Close") }}</router-link

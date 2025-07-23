@@ -19,10 +19,12 @@ export default {
             resourceName: "record_source",
             nameAttr: "name",
             idAttr: "record_source_id",
-            showComponent: null,
-            listComponent: "RecordSourcesList",
-            addComponent: "RecordSourcesFormAdd",
-            editComponent: "RecordSourcesFormAddEdit",
+            components: {
+                show: null,
+                list: "RecordSourcesList",
+                add: "RecordSourcesFormAdd",
+                edit: "RecordSourcesFormAddEdit",
+            },
             apiClient: APIClient.record_sources.record_sources,
             resourceTableUrl: APIClient.record_sources.httpClient._baseURL,
             i18n: {

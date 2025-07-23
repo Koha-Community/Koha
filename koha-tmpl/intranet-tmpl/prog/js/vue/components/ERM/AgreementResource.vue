@@ -68,10 +68,12 @@ export default {
             resourceName: "agreement",
             nameAttr: "name",
             idAttr: "agreement_id",
-            showComponent: "AgreementsShow",
-            listComponent: "AgreementsList",
-            addComponent: "AgreementsFormAdd",
-            editComponent: "AgreementsFormAddEdit",
+            components: {
+                show: "AgreementsShow",
+                list: "AgreementsList",
+                add: "AgreementsFormAdd",
+                edit: "AgreementsFormAddEdit",
+            },
             apiClient: APIClient.erm.agreements,
             resourceTableUrl: APIClient.erm.httpClient._baseURL + "agreements",
             i18n: {

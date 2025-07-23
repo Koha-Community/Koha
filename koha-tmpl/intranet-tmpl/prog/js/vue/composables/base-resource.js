@@ -24,10 +24,10 @@ import {
  * @param {String} resourceConfig.resourceName - The name of the resource.
  * @param {String} resourceConfig.idAttr - The name of the id attribute of the resource.
  * @param {String} resourceConfig.nameAttr - The name attribute of the resource.
- * @param {String} resourceConfig.showComponent - The name of the show component.
- * @param {String} resourceConfig.addComponent - The name of the add component.
- * @param {String} resourceConfig.editComponent - The name of the edit component.
- * @param {String} resourceConfig.listComponent - The name of the list component.
+ * @param {String} resourceConfig.components.show - The name of the show component.
+ * @param {String} resourceConfig.components.add - The name of the add component.
+ * @param {String} resourceConfig.components.edit - The name of the edit component.
+ * @param {String} resourceConfig.components.list - The name of the list component.
  * @param {Object} resourceConfig.i18n - The i18n object.
  * @param {Object} resourceConfig.apiClient - The API client for the resource.
  * @param {String} resourceConfig.resourceTableUrl - The URL to the resource table.
@@ -181,7 +181,7 @@ export function useBaseResource(resourceConfig) {
      */
     const goToResourceAdd = () => {
         router.push({
-            name: resourceConfig.addComponent,
+            name: resourceConfig.components.add,
         });
     };
 
@@ -193,7 +193,7 @@ export function useBaseResource(resourceConfig) {
      */
     const goToResourceEdit = resource => {
         router.push({
-            name: resourceConfig.editComponent,
+            name: resourceConfig.components.edit,
             params: {
                 [resourceConfig.idAttr]: resource
                     ? resource[resourceConfig.idAttr]
@@ -213,7 +213,7 @@ export function useBaseResource(resourceConfig) {
     const goToResourceShow = (resource, dt, event) => {
         event?.preventDefault();
         router.push({
-            name: resourceConfig.showComponent,
+            name: resourceConfig.components.show,
             params: {
                 [resourceConfig.idAttr]: resource[resourceConfig.idAttr],
             },
@@ -227,7 +227,7 @@ export function useBaseResource(resourceConfig) {
      */
     const goToResourceList = () => {
         router.push({
-            name: resourceConfig.listComponent,
+            name: resourceConfig.components.list,
         });
     };
 
@@ -318,7 +318,7 @@ export function useBaseResource(resourceConfig) {
      */
     const getResourceShowURL = id => {
         return router.resolve({
-            name: resourceConfig.showComponent,
+            name: resourceConfig.components.show,
             params: { [resourceConfig.idAttr]: id },
         }).href;
     };
@@ -507,8 +507,8 @@ export function useBaseResource(resourceConfig) {
                 // This is to make it clear that this is the fetchedResource (data), not the resource component class
                 componentData.resource.value = resource;
                 breadcrumbMetadata.value = resource;
-                if (componentData.resourceConfig.afterResourceFetch) {
-                    componentData.resourceConfig.afterResourceFetch(
+                if (componentData.instancedResource.afterResourceFetch) {
+                    componentData.instancedResource.afterResourceFetch(
                         componentData,
                         resource,
                         caller

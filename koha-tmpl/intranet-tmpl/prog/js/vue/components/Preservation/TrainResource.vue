@@ -111,10 +111,12 @@ export default {
             resourceName: "train",
             nameAttr: "name",
             idAttr: "train_id",
-            showComponent: "TrainsShow",
-            listComponent: "TrainsList",
-            addComponent: "TrainsFormAdd",
-            editComponent: "TrainsFormAddEdit",
+            components: {
+                show: "TrainsShow",
+                list: "TrainsList",
+                add: "TrainsFormAdd",
+                edit: "TrainsFormAddEdit",
+            },
             apiClient: APIClient.preservation.trains,
             resourceTableUrl:
                 APIClient.preservation.httpClient._baseURL + "trains",

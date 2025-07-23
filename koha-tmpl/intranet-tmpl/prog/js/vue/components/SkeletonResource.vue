@@ -77,10 +77,12 @@ export default {
             resourceName: "skeleton",
             nameAttr: "name",
             idAttr: "skeleton_id",
-            showComponent: "SkeletonsShow",
-            listComponent: "SkeletonsList",
-            addComponent: "SkeletonsFormAdd",
-            editComponent: "SkeletonsFormAddEdit",
+            components: {
+                show: "SkeletonsShow",
+                list: "SkeletonsList",
+                add: "SkeletonsFormAdd",
+                edit: "SkeletonsFormAddEdit",
+            },
             apiClient: APIClient.skel.skeletons,
             resourceTableUrl: APIClient.skel.httpClient._baseURL + "skeletons",
             i18n: {
