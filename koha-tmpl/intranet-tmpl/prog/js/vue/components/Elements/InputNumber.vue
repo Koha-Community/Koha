@@ -1,10 +1,11 @@
 <template>
     <input
         :id="id"
-        type="text"
+        inputmode="numeric"
         v-model="model"
         :placeholder="placeholder"
         :required="required"
+        :size="size"
     />
 </template>
 
@@ -16,6 +17,7 @@ export default {
         modelValue: String,
         placeholder: String,
         required: Boolean,
+        size: Number | null,
     },
     emits: ["update:modelValue"],
     setup(props, { emit }) {
@@ -29,7 +31,7 @@ export default {
         });
         return { model };
     },
-    name: "InputTextElement",
+    name: "InputNumber",
 };
 </script>
 

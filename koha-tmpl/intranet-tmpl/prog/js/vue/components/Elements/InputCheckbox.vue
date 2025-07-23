@@ -1,11 +1,11 @@
 <template>
     <input
         :id="id"
-        inputmode="numeric"
+        type="checkbox"
         v-model="model"
         :placeholder="placeholder"
         :required="required"
-        :size="size"
+        @change="changeMethod()"
     />
 </template>
 
@@ -14,12 +14,14 @@ import { computed } from "vue";
 export default {
     props: {
         id: String,
-        modelValue: String,
+        modelValue: String | Boolean,
         placeholder: String,
         required: Boolean,
-        size: Number | null,
+        changeMethod: {
+            type: Function,
+            default: () => {},
+        },
     },
-    emits: ["update:modelValue"],
     setup(props, { emit }) {
         const model = computed({
             get() {
@@ -31,7 +33,8 @@ export default {
         });
         return { model };
     },
-    name: "InputNumberElement",
+    emits: ["update:modelValue"],
+    name: "InputCheckbox",
 };
 </script>
 

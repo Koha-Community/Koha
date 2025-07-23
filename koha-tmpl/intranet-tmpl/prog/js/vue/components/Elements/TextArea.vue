@@ -38,7 +38,7 @@ export default {
         });
         return { model };
     },
-    name: "TextareaElement",
+    name: "TextArea",
 };
 </script>
 

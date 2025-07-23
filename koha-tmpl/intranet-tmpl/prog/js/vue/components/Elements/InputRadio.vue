@@ -1,10 +1,11 @@
 <template>
     <input
+        type="radio"
+        :name="name"
         :id="id"
-        type="checkbox"
+        :value="value"
+        :checked="checked"
         v-model="model"
-        :placeholder="placeholder"
-        :required="required"
         @change="changeMethod()"
     />
 </template>
@@ -14,14 +15,16 @@ import { computed } from "vue";
 export default {
     props: {
         id: String,
-        modelValue: String | Boolean,
-        placeholder: String,
-        required: Boolean,
+        modelValue: Boolean | String,
+        name: String,
+        value: Boolean | String,
+        checked: Boolean,
         changeMethod: {
             type: Function,
             default: () => {},
         },
     },
+    emits: ["update:modelValue"],
     setup(props, { emit }) {
         const model = computed({
             get() {
@@ -33,8 +36,7 @@ export default {
         });
         return { model };
     },
-    emits: ["update:modelValue"],
-    name: "InputCheckboxElement",
+    name: "InputRadio",
 };
 </script>
 

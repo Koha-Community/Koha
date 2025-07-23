@@ -1,12 +1,10 @@
 <template>
     <input
-        type="radio"
-        :name="name"
         :id="id"
-        :value="value"
-        :checked="checked"
+        type="text"
         v-model="model"
-        @change="changeMethod()"
+        :placeholder="placeholder"
+        :required="required"
     />
 </template>
 
@@ -15,14 +13,9 @@ import { computed } from "vue";
 export default {
     props: {
         id: String,
-        modelValue: Boolean | String,
-        name: String,
-        value: Boolean | String,
-        checked: Boolean,
-        changeMethod: {
-            type: Function,
-            default: () => {},
-        },
+        modelValue: String,
+        placeholder: String,
+        required: Boolean,
     },
     emits: ["update:modelValue"],
     setup(props, { emit }) {
@@ -36,7 +29,7 @@ export default {
         });
         return { model };
     },
-    name: "InputRadioElement",
+    name: "InputText",
 };
 </script>
 

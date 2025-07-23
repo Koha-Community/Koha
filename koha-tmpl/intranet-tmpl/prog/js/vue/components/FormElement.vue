@@ -7,7 +7,7 @@
         >{{ attr.label }}:</label
     >
     <template v-if="attr.type == 'number'">
-        <InputNumberElement
+        <InputNumber
             :id="getElementId"
             v-model="resource[attr.name]"
             :placeholder="attr.placeholder || attr.label"
@@ -17,7 +17,7 @@
         />
     </template>
     <template v-else-if="attr.type == 'text'">
-        <InputTextElement
+        <InputText
             :id="getElementId"
             v-model="resource[attr.name]"
             :placeholder="attr.placeholder || attr.label"
@@ -26,7 +26,7 @@
         />
     </template>
     <template v-else-if="attr.type == 'textarea'">
-        <TextareaElement
+        <TextArea
             :id="getElementId"
             v-model="resource[attr.name]"
             :rows="attr.textAreaRows"
@@ -37,7 +37,7 @@
         />
     </template>
     <template v-else-if="attr.type == 'checkbox'">
-        <InputCheckboxElement
+        <InputCheckbox
             :id="getElementId"
             type="checkbox"
             v-model="resource[attr.name]"
@@ -53,7 +53,7 @@
                 v-if="option.description"
                 :for="attr.name + '_' + option.value"
                 >{{ option.description }}:
-                <InputRadioElement
+                <InputRadio
                     :name="option.description"
                     :id="attr.name + '_' + option.value"
                     :value="option.value"
@@ -74,7 +74,7 @@
     <template v-else-if="attr.type == 'boolean'">
         <label class="radio" :for="getElementId + '_yes'"
             >{{ $__("Yes") }}:
-            <InputRadioElement
+            <InputRadio
                 type="radio"
                 :name="attr.name"
                 :id="attr.name + '_yes'"
@@ -85,7 +85,7 @@
         </label>
         <label class="radio" :for="getElementId + '_no'"
             >{{ $__("No") }}:
-            <InputRadioElement
+            <InputRadio
                 type="radio"
                 :name="attr.name"
                 :id="attr.name + '_no'"
@@ -192,13 +192,13 @@
 
 <script>
 import AdditionalFieldsEntry from "./AdditionalFieldsEntry.vue";
-import InputTextElement from "./Elements/InputTextElement.vue";
-import InputNumberElement from "./Elements/InputNumberElement.vue";
-import InputCheckboxElement from "./Elements/InputCheckboxElement.vue";
-import TextareaElement from "./Elements/TextareaElement.vue";
+import InputText from "./Elements/InputText.vue";
+import InputNumber from "./Elements/InputNumber.vue";
+import InputCheckbox from "./Elements/InputCheckbox.vue";
+import TextArea from "./Elements/TextArea.vue";
 import FormRelationshipSelect from "./FormRelationshipSelect.vue";
 import ToolTip from "./ToolTip.vue";
-import InputRadioElement from "./Elements/InputRadioElement.vue";
+import InputRadio from "./Elements/InputRadio.vue";
 import { useBaseElement } from "../composables/base-element.js";
 import { computed, defineAsyncComponent, ref } from "vue";
 
@@ -294,11 +294,11 @@ export default {
         FormRelationshipSelect,
         ToolTip,
         AdditionalFieldsEntry,
-        InputTextElement,
-        InputNumberElement,
-        InputCheckboxElement,
-        TextareaElement,
-        InputRadioElement,
+        InputText,
+        InputNumber,
+        InputCheckbox,
+        TextArea,
+        InputRadio,
     },
 };
 </script>
