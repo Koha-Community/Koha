@@ -896,7 +896,7 @@
         <span class="permissioncode">([% name | html %])</span>
     [%- CASE 'anonymous_refund' -%]
         <span class="sub_permission anonymous_refund_subpermission">
-            Perform anonymous refund actions
+            Perform refunds of point of sale transactions
         </span>
         <span class="permissioncode">([% name | html %])</span>
   [%# problem_reports %]
