@@ -7,6 +7,7 @@ use Text::Wrap qw( wrap );
 use Algorithm::CheckDigits qw( CheckDigits );
 use Text::CSV_XS;
 use Text::Bidi qw( log2vis );
+use GD::Barcode::Code39;
 
 use C4::Context;
 use C4::Biblio qw( GetMarcFromKohaField );
@@ -501,9 +502,6 @@ sub barcode {
     my $guard_length = 10;
     my $hide_text = 'yes';
     if ($params{'barcode_type'} =~ m/CODE39/) {
-        $bar_length = '17.5';
-        $tot_bar_length = ($bar_length * $num_of_bars) + ($guard_length * 2);
-        $x_scale_factor = ($params{'width'} / $tot_bar_length);
         if ($params{'barcode_type'} eq 'CODE39MOD') {
             my $c39 = CheckDigits('code_39');   # get modulo43 checksum
             $params{'barcode_data'} = $c39->complete($params{'barcode_data'});
@@ -514,6 +512,11 @@ sub barcode {
             $hide_text = '';
         }
         eval {
+            #NOTE: Barcode length algorithm comes from PDF::Reuse::Barcode
+            #NOTE: 20 is arbitrary padding added to the barcode background by PDF::Reuse::Barcode
+            my $oGdB                 = GD::Barcode::Code39->new("*$params{'barcode_data'}*");
+            my $whole_barcode_length = ( length( $oGdB->barcode() ) * 0.9 ) + 20;
+            $x_scale_factor = ( $params{'width'} / $whole_barcode_length );
             PDF::Reuse::Barcode::Code39(
                 x                   => $params{'llx'},
                 y                   => $params{'lly'},
