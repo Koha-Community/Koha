@@ -5,6 +5,7 @@
 [% USE Biblio %]
 [% USE KohaDates %]
 [% USE KohaPlugins %]
+[% USE ItemTypes %]
 [% PROCESS 'i18n.inc' %]
 [% SET footerjs = 1 %]
 [% SET CoverImagePlugins = KohaPlugins.get_plugins_intranet_cover_images %]
@@ -584,7 +585,16 @@
                             [% FOREACH SEARCH_RESULT IN SEARCH_RESULTS %]
                                 <tr id="row[% SEARCH_RESULT.biblionumber | html %]">
                                     [% IF ( CoverImagePlugins || AmazonCoverImages  || LocalCoverImages || IntranetCoce || ( SyndeticsCovers ) || (Koha.Preference('CustomCoverImages') && Koha.Preference('CustomCoverImagesURL')) ) %]
-                                        <td class="bookcoverimg">
+                                        <td
+                                            class="bookcoverimg"
+                                            data-biblionumber="[% SEARCH_RESULT.biblionumber | html %]"
+                                            data-itemtype="[% SEARCH_RESULT.itemtype | html %]"
+                                            data-itemtype_description="[% ItemTypes.GetDescription(SEARCH_RESULT.itemtype) | html %]"
+                                            data-title="[% SEARCH_RESULT.itemtype | html %]"
+                                            data-subtitle="[% SEARCH_RESULT.itemtype | html %]"
+                                            data-author="[% SEARCH_RESULT.itemtype | html %]"
+                                            data-isbn="[% SEARCH_RESULT.normalized_isbn | $raw %]"
+                                        >
                                             <div
                                                 id="cover-slides-[% SEARCH_RESULT.biblionumber | html %]"
                                                 class="cover-slides"
