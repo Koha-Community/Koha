@@ -38,7 +38,7 @@ export default {
          * If you need to include filters in your List component, add them as an array here.
          * The filters follow the format of resourceAttrs and are passed into the useBaseResource method
          */
-        const filters = [];
+        const additionalFilters = [];
 
         /*
          * If you want to amend the default buttons in the toolbar, include this method and pass it into the useBaseResource method
@@ -97,8 +97,8 @@ export default {
             table: {
                 resourceTableUrl:
                     APIClient.skel.httpClient._baseURL + "skeletons",
-                addFilters: true,
-                filters,
+                addAdditionalFilters: true,
+                additionalFilters,
             },
             embedded: props.embedded,
             extendedAttributesResourceType,
@@ -118,7 +118,7 @@ export default {
          */
         const defaults = baseResource.getFilterValues(
             baseResource.route.query,
-            filters
+            additionalFilters
         );
 
         /*

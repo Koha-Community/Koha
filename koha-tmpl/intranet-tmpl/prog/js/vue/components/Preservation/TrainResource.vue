@@ -22,7 +22,7 @@ export default {
         const PreservationStore = inject("PreservationStore");
         const { config } = storeToRefs(PreservationStore);
 
-        const filters = [
+        const additionalFilters = [
             {
                 id: "status_filter",
                 name: "status_filter",
@@ -121,8 +121,8 @@ export default {
             table: {
                 resourceTableUrl:
                     APIClient.preservation.httpClient._baseURL + "trains",
-                addFilters: true,
-                filters,
+                addAdditionalFilters: true,
+                additionalFilters,
             },
             i18n: {
                 deleteConfirmationMessage: $__(
@@ -236,7 +236,7 @@ export default {
 
         const defaults = baseResource.getFilterValues(
             baseResource.route.query,
-            filters
+            additionalFilters
         );
         const tableOptions = {
             options: {

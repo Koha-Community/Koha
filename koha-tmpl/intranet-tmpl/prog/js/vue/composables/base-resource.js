@@ -33,7 +33,7 @@ import {
  * @param {Object} resourceConfig.props - The props passed to the resource component.
  * OPTIONAL:
  * @param {String} resourceConfig.moduleStore - The name of the module store that holds resource related data (authorised values, permissions etc)
- * @param {Boolean} resourceConfig.table.addFilters - A flag to indicate whether to add filters to the list component for the datatable.
+ * @param {Boolean} resourceConfig.table.addAdditionalFilters - A flag to indicate whether to add filters to the list component for the datatable.
  * @param {Object} resourceConfig.table.filters - The table filters for the resource. Follows the format for the resourceAttrs parameter.
  * @param {Function} resourceConfig.afterResourceFetch - A function to call after the resource is fetched. This can be used to edit resource data or fetch additional data
  * @param {Boolean} resourceConfig.embedded - A flag to indicate whether the resource is actually being used as a child component of another resource e.g. embedding a list of agreeements into EBSCO package agreements

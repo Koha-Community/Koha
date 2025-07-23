@@ -27,7 +27,7 @@ export default {
         const { vendors } = storeToRefs(vendorStore);
 
         const extendedAttributesResourceType = "agreement";
-        const filters = [
+        const additionalFilters = [
             {
                 name: "by_expired",
                 type: "checkbox",
@@ -86,10 +86,10 @@ export default {
                 newLabel: $__("New agreement"),
             },
             table: {
-                addFilters: true,
+                addAdditionalFilters: true,
                 resourceTableUrl:
                     APIClient.erm.httpClient._baseURL + "agreements",
-                filters,
+                additionalFilters,
             },
             embedded: props.embedded,
             extendedAttributesResourceType,
@@ -642,7 +642,7 @@ export default {
 
         const defaults = baseResource.getFilterValues(
             baseResource.route.query,
-            filters
+            additionalFilters
         );
 
         const tableOptions = {
