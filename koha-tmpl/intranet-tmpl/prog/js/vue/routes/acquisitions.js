@@ -6,7 +6,7 @@ import ResourceWrapper from "../components/ResourceWrapper.vue";
 import { $__ } from "@koha-vue/i18n";
 
 const vendorSearchBreadcrumb = ({ match, query }) => {
-    if (!query || !query.supplier) return match.meta.self;
+    if (!query || !query.supplier) return match;
     match.title = $__("Search for vendor: %s").format(query.supplier);
     match.disabled = true;
     return match;

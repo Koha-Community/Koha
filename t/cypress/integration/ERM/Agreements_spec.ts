@@ -95,7 +95,6 @@ describe("Agreement CRUD operations", () => {
             .next("span")
             .click(); // select tomorrow
         cy.get("#filterTable").click();
-        cy.wait("@getActiveAgreements");
         cy.wait("@getActiveAgreements")
             .its("request.url")
             .should("include", "max_expiration_date=" + dates["tomorrow_iso"]);
