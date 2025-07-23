@@ -40,9 +40,22 @@ $schema->storage->txn_begin;
 my $librarian = $builder->build_object(
     {
         class => 'Koha::Patrons',
-        value => { flags => 2**4 }    # borrowers flag = 4
+        value => { flags => 0 }     # No top-level permissions
     }
 );
+
+# Ensure our librarian can see users from all branches (once list_borrowers is added)
+$builder->build(
+    {
+        source => 'UserPermission',
+        value  => {
+            borrowernumber => $librarian->borrowernumber,
+            module_bit     => 4,
+            code           => 'api_validate_password',
+        },
+    }
+);
+
 my $password = 'thePassword123';
 $librarian->set_password( { password => $password, skip_validation => 1 } );
 my $userid = $librarian->userid;
