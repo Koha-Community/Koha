@@ -1,5 +1,15 @@
 [% USE raw %]
-<div class="bookcover">
+[% USE ItemTypes %]
+<div
+    class="bookcover"
+    data-itemtype="[% SEARCH_RESULT.itemtype | html %]"
+    data-itemtype_description="[% ItemTypes.GetDescription(SEARCH_RESULT.itemtype) | html %]"
+    data-biblionumber="[% SEARCH_RESULT.biblionumber | html %]"
+    data-title="[% SEARCH_RESULT.title | html %]"
+    data-subtitle="[% SEARCH_RESULT.subtitle | html %]"
+    data-author="[% SEARCH_RESULT.author | html %]"
+    data-isbn="[% SEARCH_RESULT.normalized_isbn | html %]"
+>
     <div
         class="cover-slider cover-slides itemtype_[% SEARCH_RESULT.itemtype | html %]"
         data-biblionumber="[% SEARCH_RESULT.biblionumber | html %]"
