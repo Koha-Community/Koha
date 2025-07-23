@@ -236,6 +236,9 @@
             View patron infos from any libraries. If not set the logged in user could only access patron infos from its own library or group of libraries.
         </span>
         <span class="permissioncode">([% name | html %])</span>
+    [%- CASE 'api_validate_password' -%]
+        <span class="sub_permission api_validate_password_subpermission">Validate patron passwords using the API</span>
+        <span class="permissioncode">([% name | html %])</span>
     [%- CASE 'send_messages_to_borrowers' -%]
         <span class="sub_permission send_messages_to_borrowers_subpermission"> Send messages to patrons </span>
         <span class="permissioncode">([% name | html %])</span>
