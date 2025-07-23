@@ -51,7 +51,7 @@ describe("circ/pendingreserves/holdst", () => {
             "/cgi-bin/koha/circ/pendingreserves.pl?from=2000-01-01&to=2999-12-31&run_report=Submit"
         );
 
-        cy.get(`#${table_id} thead tr:eq(1) th:eq(5)`).should(
+        cy.get(`#${table_id} thead tr:eq(0) th:eq(5)`).should(
             "have.text",
             "Libraries"
         );
