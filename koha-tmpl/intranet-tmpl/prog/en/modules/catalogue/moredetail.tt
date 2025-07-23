@@ -396,37 +396,39 @@
                                         <input type="submit" name="submit" class="btn btn-primary btn-xs" value="Update" />
                                     </form>
                                 </li>
-                                <li class="bookable">
-                                    <span class="label"> Bookable: </span>
-                                    [% IF ( CAN_user_circulate ) %]
-                                        <form action="updateitem.pl" method="post">
-                                            [% INCLUDE 'csrf-token.inc' %]
-                                            <input type="hidden" name="biblionumber" value="[% ITEM_DAT.biblionumber | html %]" />
-                                            <input type="hidden" name="biblioitemnumber" value="[% ITEM_DAT.biblioitemnumber | html %]" />
-                                            <input type="hidden" name="itemnumber" value="[% ITEM_DAT.itemnumber | html %]" />
-                                            <select name="bookable">
-                                                [% IF ITEM_DAT.bookable == 1 %]
-                                                    <option value="">Follow item type</option>
-                                                    <option value="1" selected="selected">Yes</option>
-                                                    <option value="0">No</option>
-                                                [% ELSIF ITEM_DAT.bookable == 0 %]
-                                                    <option value="">Follow item type</option>
-                                                    <option value="1">Yes</option>
-                                                    <option value="0" selected="selected">No</option>
-                                                [% ELSE %]
-                                                    <option value="" selected="selected">Follow item type</option>
-                                                    <option value="1">Yes</option>
-                                                    <option value="0">No</option>
-                                                [% END %]
-                                            </select>
-                                            <input type="hidden" name="op" value="cud-set_bookable" />
-                                            <input type="submit" name="submit" class="btn btn-primary btn-xs" value="Update" />
-                                        </form>
-                                    [% ELSE %]
-                                        [% IF ITEM_DAT.bookable == 1 %]Yes[% ELSIF ITEM_DAT.bookable == 0 %]No[% ELSE %]Follow item type[% END %]
-                                    [% END %]
-                                    <span class="hint"> Item type bookable: [% IF ITEM_DAT.effective_itemtype.bookable == 1 %]Yes[% ELSE %]No[% END %]</span>
-                                </li>
+                                [% IF Koha.Preference('EnableBooking') %]
+                                    <li class="bookable">
+                                        <span class="label"> Bookable: </span>
+                                        [% IF ( CAN_user_circulate ) %]
+                                            <form action="updateitem.pl" method="post">
+                                                [% INCLUDE 'csrf-token.inc' %]
+                                                <input type="hidden" name="biblionumber" value="[% ITEM_DAT.biblionumber | html %]" />
+                                                <input type="hidden" name="biblioitemnumber" value="[% ITEM_DAT.biblioitemnumber | html %]" />
+                                                <input type="hidden" name="itemnumber" value="[% ITEM_DAT.itemnumber | html %]" />
+                                                <select name="bookable">
+                                                    [% IF ITEM_DAT.bookable == 1 %]
+                                                        <option value="">Follow item type</option>
+                                                        <option value="1" selected="selected">Yes</option>
+                                                        <option value="0">No</option>
+                                                    [% ELSIF ITEM_DAT.bookable == 0 %]
+                                                        <option value="">Follow item type</option>
+                                                        <option value="1">Yes</option>
+                                                        <option value="0" selected="selected">No</option>
+                                                    [% ELSE %]
+                                                        <option value="" selected="selected">Follow item type</option>
+                                                        <option value="1">Yes</option>
+                                                        <option value="0">No</option>
+                                                    [% END %]
+                                                </select>
+                                                <input type="hidden" name="op" value="cud-set_bookable" />
+                                                <input type="submit" name="submit" class="btn btn-primary btn-xs" value="Update" />
+                                            </form>
+                                        [% ELSE %]
+                                            [% IF ITEM_DAT.bookable == 1 %]Yes[% ELSIF ITEM_DAT.bookable == 0 %]No[% ELSE %]Follow item type[% END %]
+                                        [% END %]
+                                        <span class="hint"> Item type bookable: [% IF ITEM_DAT.effective_itemtype.bookable == 1 %]Yes[% ELSE %]No[% END %]</span>
+                                    </li>
+                                [% END %]
                             </ol>
                             <!-- /.bibliodetails -->
                         </div>
@@ -584,12 +586,16 @@
         dayjs.extend(window.dayjs_plugin_isSameOrBefore);
     </script>
     [% INCLUDE 'js-patron-format.inc' %]
-    [% INCLUDE 'calendar.inc' %]
-    [% INCLUDE 'select2.inc' %]
     [% Asset.js("js/catalog.js") | $raw %]
-    [% Asset.js("js/modals/place_booking.js") | $raw %]
     [% Asset.js("js/browser.js") | $raw %]
     [% Asset.js("js/checkout_renewals_modal.js") | $raw %]
+
+    [% IF Koha.Preference('EnableBooking') %]
+        [% INCLUDE 'calendar.inc' %]
+        [% INCLUDE 'select2.inc' %]
+        [% Asset.js("js/modals/place_booking.js") | $raw %]
+    [% END %]
+
     [% IF ( Koha.Preference('CatalogConcerns') ) %]
         <script>
             /* Set a variable needed by add_catalog_concern.js */

@@ -76,7 +76,7 @@
 
         <div class="col-12 col-sm-4">
             <div class="holds-bookings">
-                <h3>Holds and bookings</h3>
+                <h3>Holds [% IF Koha.Preference('EnableBooking') %]and bookings[% END %]</h3>
 
                 <ul class="buttons-list">
                     <li>
@@ -96,9 +96,11 @@
                     <li>
                         <a class="circ-button holds-ratio" href="/cgi-bin/koha/circ/reserveratios.pl"><i class="fa-solid fa-chart-line"></i> Hold ratios</a>
                     </li>
-                    <li>
-                        <a class="circ-button bookings-to-collect" href="/cgi-bin/koha/circ/pendingbookings.pl"><i class="fa-solid fa-calendar-days"></i> Bookings to collect</a>
-                    </li>
+                    [% IF Koha.Preference('EnableBooking') %]
+                        <li>
+                            <a class="circ-button bookings-to-collect" href="/cgi-bin/koha/circ/pendingbookings.pl"><i class="fa-solid fa-calendar-days"></i> Bookings to collect</a>
+                        </li>
+                    [% END %]
                 </ul>
             </div>
 

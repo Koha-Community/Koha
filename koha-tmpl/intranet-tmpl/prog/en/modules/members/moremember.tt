@@ -756,8 +756,10 @@
     [% INCLUDE 'modals/resolve_return_claim.inc' %]
 [% END %]
 
-[% INCLUDE modals/cancel_booking.inc %]
 [% INCLUDE 'hold-group-modal.inc' %]
+[% IF Koha.Preference('EnableBooking') %]
+    [% INCLUDE modals/cancel_booking.inc %]
+[% END %]
 
 [% MACRO jsinclude BLOCK %]
     [% INCLUDE 'datatables.inc' %]
@@ -791,7 +793,10 @@
     [% END %]
     [% Asset.js("js/holds.js") | $raw %]
     [% INCLUDE 'calendar.inc' %]
-    [% Asset.js("js/cancel_booking_modal.js") | $raw %]
+    [% IF Koha.Preference('EnableBooking') %]
+        [% Asset.js("js/cancel_booking_modal.js") | $raw %]
+        [% Asset.js("js/tables/bookings.js") | $raw %]
+    [% END %]
     [% Asset.js("js/combobox.js") | $raw %]
     [% INCLUDE 'js-biblio-format.inc' %]
     [% INCLUDE 'str/members-menu.inc' %]
@@ -861,7 +866,6 @@
         });
     </script>
     [% Asset.js("js/checkouts.js") | $raw %]
-    [% Asset.js("js/tables/bookings.js") | $raw %]
 [% END %]
 
 [% INCLUDE 'intranet-bottom.inc' %]

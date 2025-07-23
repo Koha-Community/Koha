@@ -1254,10 +1254,12 @@
 [% END %]
 
 [% MACRO jsinclude BLOCK %]
-    [% INCLUDE 'calendar.inc' %]
     [% INCLUDE 'catalog-strings.inc' %]
-    [% INCLUDE 'select2.inc' %]
-    [% INCLUDE 'js-date-format.inc' %]
+    [% IF Koha.Preference('EnableBooking') %]
+        [% INCLUDE 'calendar.inc' %]
+        [% INCLUDE 'select2.inc' %]
+        [% INCLUDE 'js-date-format.inc' %]
+    [% END %]
     [% Asset.js("js/catalog.js") | $raw %]
     [% Asset.js("js/recalls.js") | $raw %]
     [% Asset.js("js/coce.js") | $raw %]
@@ -1719,7 +1721,10 @@
     [% INCLUDE 'js-patron-format.inc' %]
     [% INCLUDE 'js-biblio-format.inc' %]
     [% Asset.js("js/browser.js") | $raw %]
-    [% Asset.js("js/modals/place_booking.js") | $raw %]
+
+    [% IF Koha.Preference('EnableBooking') %]
+        [% Asset.js("js/modals/place_booking.js") | $raw %]
+    [% END %]
     <script>
         var browser;
         browser = KOHA.browser("[% searchid | html %]", parseInt(biblionumber, 10));

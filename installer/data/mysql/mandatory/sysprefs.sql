@@ -253,6 +253,7 @@ INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `
 ('EmailPurchaseSuggestions','0','0|EmailAddressForSuggestions|BranchEmailAddress|KohaAdminEmailAddress','Choose email address that new purchase suggestions will be sent to: ','Choice'),
 ('EmailSMSSendDriverFromAddress', '', '', 'Email SMS send driver from address override', 'Free'),
 ('EnableAdvancedCatalogingEditor','0','','Enable the Rancor advanced cataloging editor','YesNo'),
+('EnableBooking','1',NULL,'If enabled, activate every functionnalities related with Bookings module','YesNo'),
 ('EnableBorrowerFiles','0',NULL,'If enabled, allows librarians to upload and attach arbitrary files to a borrower record.','YesNo'),
 ('EnableExpiredPasswordReset', '0', NULL, 'Enable ability for patrons with expired password to reset their password directly', 'YesNo'),
 ('EnableItemGroupHolds','0','','Enable item groups holds feature','YesNo'),

@@ -24,10 +24,12 @@
             [% WRAPPER tab_item tabname= "holds" %]
                 <span>Holds</span> ([% holds_count || 0 | html %])
             [% END %]
-            [% WRAPPER tab_item tabname="bookings" %]
-                [% SET bookings_count = patron.bookings.filter_by_active.count %]
-                [% SET expired_bookings_count = patron.bookings.count - bookings_count %]
-                <span class="bookings_count">Bookings ([% bookings_count || 0 | html %])</span>
+            [% IF Koha.Preference('EnableBooking') %]
+                [% WRAPPER tab_item tabname="bookings" %]
+                    [% SET bookings_count = patron.bookings.filter_by_active.count %]
+                    [% SET expired_bookings_count = patron.bookings.count - bookings_count %]
+                    <span class="bookings_count">Bookings ([% bookings_count || 0 | html %])</span>
+                [% END %]
             [% END %]
         [% END %]
 
@@ -191,19 +193,21 @@
                 [% END %]
             [% END # /tab_panel#holds %]
 
-            [% WRAPPER tab_panel tabname="bookings" %]
-                [% IF ( bookings_count ) %]
-                    <fieldset class="action filters" style="cursor:pointer;">
-                        <a id="expired_filter" class="filtered"><i class="fa fa-bars"></i> Show expired</a>
-                    </fieldset>
-                    <table id="bookings_table" style="width: 100% !Important;"></table>
-                [% ELSIF ( expired_bookings_count ) %]
-                    <fieldset class="action filters" style="cursor:pointer;">
-                        <a id="expired_filter"><i class="fa fa-filter"></i> Hide expired</a>
-                    </fieldset>
-                    <table id="bookings_table" style="width: 100% !Important;"></table>
-                [% ELSE %]
-                    <p>Patron has nothing booked.</p>
+            [% IF Koha.Preference('EnableBooking') %]
+                [% WRAPPER tab_panel tabname="bookings" %]
+                    [% IF ( bookings_count ) %]
+                        <fieldset class="action filters" style="cursor:pointer;">
+                            <a id="expired_filter" class="filtered"><i class="fa fa-bars"></i> Show expired</a>
+                        </fieldset>
+                        <table id="bookings_table" style="width: 100% !Important;"></table>
+                    [% ELSIF ( expired_bookings_count ) %]
+                        <fieldset class="action filters" style="cursor:pointer;">
+                            <a id="expired_filter"><i class="fa fa-filter"></i> Hide expired</a>
+                        </fieldset>
+                        <table id="bookings_table" style="width: 100% !Important;"></table>
+                    [% ELSE %]
+                        <p>Patron has nothing booked.</p>
+                    [% END %]
                 [% END %]
             [% END %]
         [% END %]
