@@ -115,25 +115,22 @@
                             </div>
                         </li>
                         <li>
-                            <span class="label">Enrolment period: </span>
-                            <fieldset class="rows">
-                                <ol>
-                                    <li> <span class="label"></span><strong>Choose one</strong> </li>
-                                    <li>
-                                        <label for="enrolmentperiod">In months: </label>
-                                        [% IF category.enrolmentperiod %]
-                                            <input type="text" inputmode="numeric" pattern="[0-9]*" class="enrolmentperiod" name="enrolmentperiod" id="enrolmentperiod" size="3" value="[% category.enrolmentperiod | html %]" />
-                                        [% ELSE %]
-                                            <input type="text" inputmode="numeric" pattern="[0-9]*" class="enrolmentperiod" name="enrolmentperiod" id="enrolmentperiod" size="3" value="" />
-                                        [% END %]
-                                    </li>
-                                    <li>
-                                        <label for="enrolmentperioddate">Until date: </label>
-                                        <input type="text" class="enrolmentperioddate" name="enrolmentperioddate" id="enrolmentperioddate" value="[% category.enrolmentperioddate | html %]" />
-                                        <div class="hint">[% INCLUDE 'date-format.inc' dateformat = Koha.Preference('dateformat') %]</div>
-                                    </li>
-                                </ol>
-                            </fieldset>
+                            <span class="label">Enrolment period (choose one): </span>
+                            <div style="margin-left: 9rem;">
+                                <div class="mb-3">
+                                    <label class="form-label" for="enrolmentperiod">In months</label>
+                                    [% IF category.enrolmentperiod %]
+                                        <input type="text" inputmode="numeric" pattern="[0-9]*" class="enrolmentperiod" name="enrolmentperiod" id="enrolmentperiod" size="3" value="[% category.enrolmentperiod | html %]" />
+                                    [% ELSE %]
+                                        <input type="text" inputmode="numeric" pattern="[0-9]*" class="enrolmentperiod" name="enrolmentperiod" id="enrolmentperiod" size="3" value="" />
+                                    [% END %]
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label" for="enrolmentperioddate">Until date</label>
+                                    <input type="text" class="enrolmentperioddate" name="enrolmentperioddate" id="enrolmentperioddate" value="[% category.enrolmentperioddate | html %]" />
+                                    <div class="hint"> [% INCLUDE 'date-format.inc' dateformat = Koha.Preference('dateformat') %] </div>
+                                </div>
+                            </div>
                         </li>
                     </ol>
 
