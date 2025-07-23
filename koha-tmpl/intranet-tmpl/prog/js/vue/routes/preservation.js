@@ -46,7 +46,7 @@ export const routes = [
                     },
                     {
                         path: ":train_id",
-                        title: $__("Show train"),
+                        title: "{name}",
                         is_end_node: true,
                         children: [
                             {
@@ -90,7 +90,14 @@ export const routes = [
                         path: "edit/:train_id",
                         name: "TrainsFormAddEdit",
                         component: markRaw(ResourceWrapper),
-                        title: $__("Edit train"),
+                        title: "{name}",
+                        breadcrumbFormat: ({ match, params, query }) => {
+                            match.name = "TrainsShow";
+                            return match;
+                        },
+                        additionalBreadcrumbs: [
+                            { title: $__("Modify train"), disabled: true },
+                        ],
                     },
                 ],
             },

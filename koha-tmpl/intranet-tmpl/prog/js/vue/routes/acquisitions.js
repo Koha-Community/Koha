@@ -43,7 +43,7 @@ export const routes = [
                         path: ":id",
                         name: "VendorShow",
                         component: markRaw(ResourceWrapper),
-                        title: $__("Show vendor"),
+                        title: "{name}",
                         alternateLeftMenu: "VendorMenu",
                     },
                     {
@@ -57,7 +57,14 @@ export const routes = [
                         path: "edit/:id",
                         name: "VendorFormAddEdit",
                         component: markRaw(ResourceWrapper),
-                        title: $__("Edit vendor"),
+                        title: "{name}",
+                        breadcrumbFormat: ({ match, params, query }) => {
+                            match.name = "VendorShow";
+                            return match;
+                        },
+                        additionalBreadcrumbs: [
+                            { title: $__("Modify vendor"), disabled: true },
+                        ],
                         alternateLeftMenu: "VendorMenu",
                     },
                 ],

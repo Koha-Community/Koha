@@ -88,7 +88,7 @@ export const routes = [
                         path: ":license_id",
                         name: "LicensesShow",
                         component: markRaw(ResourceWrapper),
-                        title: $__("Show license"),
+                        title: "{name}",
                     },
                     {
                         path: "add",
@@ -100,7 +100,14 @@ export const routes = [
                         path: "edit/:license_id",
                         name: "LicensesFormAddEdit",
                         component: markRaw(ResourceWrapper),
-                        title: $__("Edit license"),
+                        title: "{name}",
+                        breadcrumbFormat: ({ match, params, query }) => {
+                            match.name = "LicensesShow";
+                            return match;
+                        },
+                        additionalBreadcrumbs: [
+                            { title: $__("Modify license"), disabled: true },
+                        ],
                     },
                 ],
             },
@@ -133,7 +140,7 @@ export const routes = [
                                         path: ":package_id",
                                         name: "EHoldingsLocalPackagesShow",
                                         component: markRaw(ResourceWrapper),
-                                        title: $__("Show package"),
+                                        title: "{name}",
                                     },
                                     {
                                         path: "add",
@@ -145,7 +152,22 @@ export const routes = [
                                         path: "edit/:package_id",
                                         name: "EHoldingsLocalPackagesFormAddEdit",
                                         component: markRaw(ResourceWrapper),
-                                        title: $__("Edit package"),
+                                        title: "{name}",
+                                        breadcrumbFormat: ({
+                                            match,
+                                            params,
+                                            query,
+                                        }) => {
+                                            match.name =
+                                                "EHoldingsLocalPackagesShow";
+                                            return match;
+                                        },
+                                        additionalBreadcrumbs: [
+                                            {
+                                                title: $__("Modify package"),
+                                                disabled: true,
+                                            },
+                                        ],
                                     },
                                 ],
                             },
@@ -165,7 +187,7 @@ export const routes = [
                                         path: ":title_id",
                                         name: "EHoldingsLocalTitlesShow",
                                         component: markRaw(ResourceWrapper),
-                                        title: $__("Show title"),
+                                        title: "{publication_title}",
                                     },
                                     {
                                         path: "add",
@@ -177,7 +199,22 @@ export const routes = [
                                         path: "edit/:title_id",
                                         name: "EHoldingsLocalTitlesFormAddEdit",
                                         component: markRaw(ResourceWrapper),
-                                        title: $__("Edit title"),
+                                        title: "{publication_title}",
+                                        breadcrumbFormat: ({
+                                            match,
+                                            params,
+                                            query,
+                                        }) => {
+                                            match.name =
+                                                "EHoldingsLocalTitlesShow";
+                                            return match;
+                                        },
+                                        additionalBreadcrumbs: [
+                                            {
+                                                title: $__("Modify title"),
+                                                disabled: true,
+                                            },
+                                        ],
                                     },
                                     {
                                         path: "import",
