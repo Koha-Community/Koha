@@ -38,7 +38,7 @@ export default {
          * If you need to include filters in your List component, add them as an array here.
          * The filters follow the format of resourceAttrs and are passed into the useBaseResource method
          */
-        const tableFilters = [];
+        const filters = [];
 
         /*
          * If you want to amend the default buttons in the toolbar, include this method and pass it into the useBaseResource method
@@ -84,7 +84,6 @@ export default {
                 edit: "SkeletonsFormAddEdit",
             },
             apiClient: APIClient.skel.skeletons,
-            resourceTableUrl: APIClient.skel.httpClient._baseURL + "skeletons",
             i18n: {
                 deleteConfirmationMessage: $__(
                     "Are you sure you want to remove this skeleton?"
@@ -95,14 +94,17 @@ export default {
                 emptyListMessage: $__("There are no skeletons defined"),
                 newLabel: $__("New skeleton"),
             },
+            table: {
+                resourceTableUrl:
+                    APIClient.skel.httpClient._baseURL + "skeletons",
+                addFilters: true,
+                filters,
+            },
             embedded: props.embedded,
-            addFiltersToList: true,
             extendedAttributesResourceType,
-            skeleton_table_settings,
             resourceAttrs: [],
             moduleStore: "examplesStore",
             examples,
-            tableFilters,
             props: props,
             additionalToolbarButtons,
             defaultToolbarButtons,
@@ -116,7 +118,7 @@ export default {
          */
         const defaults = baseResource.getFilterValues(
             baseResource.route.query,
-            tableFilters
+            filters
         );
 
         /*

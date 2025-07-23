@@ -140,8 +140,10 @@ export default {
                 edit: "VendorFormAddEdit",
             },
             apiClient: APIClient.acquisition.vendors,
-            resourceTableUrl:
-                APIClient.acquisition.httpClient._baseURL + "vendors",
+            table: {
+                resourceTableUrl:
+                    APIClient.acquisition.httpClient._baseURL + "vendors",
+            },
             i18n: {
                 deleteConfirmationMessage: $__(
                     "Are you sure you want to remove this vendor?"

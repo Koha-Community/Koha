@@ -17,7 +17,7 @@
             </template>
             <template #filters="{ table }">
                 <ResourceListFilters
-                    v-if="instancedResource.addFiltersToList"
+                    v-if="instancedResource.table.addFilters"
                     :instancedResource="instancedResource"
                     :table="table"
                 />

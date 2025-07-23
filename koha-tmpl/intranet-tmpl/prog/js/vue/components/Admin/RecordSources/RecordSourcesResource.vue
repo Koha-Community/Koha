@@ -26,7 +26,9 @@ export default {
                 edit: "RecordSourcesFormAddEdit",
             },
             apiClient: APIClient.record_sources.record_sources,
-            resourceTableUrl: APIClient.record_sources.httpClient._baseURL,
+            table: {
+                resourceTableUrl: APIClient.record_sources.httpClient._baseURL,
+            },
             i18n: {
                 deleteConfirmationMessage: $__(
                     "Are you sure you want to remove this record source?"

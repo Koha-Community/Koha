@@ -27,7 +27,7 @@ export default {
         const { vendors } = storeToRefs(vendorStore);
 
         const extendedAttributesResourceType = "agreement";
-        const tableFilters = [
+        const filters = [
             {
                 name: "by_expired",
                 type: "checkbox",
@@ -75,7 +75,6 @@ export default {
                 edit: "AgreementsFormAddEdit",
             },
             apiClient: APIClient.erm.agreements,
-            resourceTableUrl: APIClient.erm.httpClient._baseURL + "agreements",
             i18n: {
                 deleteConfirmationMessage: $__(
                     "Are you sure you want to remove this agreement?"
@@ -86,10 +85,14 @@ export default {
                 emptyListMessage: $__("There are no agreements defined"),
                 newLabel: $__("New agreement"),
             },
+            table: {
+                addFilters: true,
+                resourceTableUrl:
+                    APIClient.erm.httpClient._baseURL + "agreements",
+                filters,
+            },
             embedded: props.embedded,
-            addFiltersToList: true,
             extendedAttributesResourceType,
-            agreement_table_settings,
             resourceAttrs: [
                 {
                     name: "agreement_id",
@@ -634,13 +637,12 @@ export default {
             ],
             moduleStore: "ERMStore",
             vendors,
-            tableFilters,
             props: props,
         });
 
         const defaults = baseResource.getFilterValues(
             baseResource.route.query,
-            tableFilters
+            filters
         );
 
         const tableOptions = {
@@ -648,7 +650,7 @@ export default {
                 embed: "user_roles,vendor,extended_attributes,+strings",
             },
             url: () => tableUrl(defaults),
-            table_settings: baseResource.agreement_table_settings,
+            table_settings: agreement_table_settings,
             add_filters: true,
             filters_options: {
                 2: [

@@ -49,8 +49,11 @@ export default {
                 edit: "EHoldingsLocalTitlesFormAddEdit",
             },
             apiClient: APIClient.erm.localTitles,
-            resourceTableUrl:
-                APIClient.erm.httpClient._baseURL + "eholdings/local/titles",
+            table: {
+                resourceTableUrl:
+                    APIClient.erm.httpClient._baseURL +
+                    "eholdings/local/titles",
+            },
             i18n: {
                 deleteConfirmationMessage: $__(
                     "Are you sure you want to remove this title?"
@@ -61,7 +64,6 @@ export default {
                 emptyListMessage: $__("There are no titles defined"),
                 newLabel: $__("New title"),
             },
-            eholdings_titles_table_settings,
             vendors,
             props,
             additionalToolbarButtons,
@@ -445,7 +447,7 @@ export default {
                     null,
                 ],
             },
-            table_settings: baseResource.eholdings_titles_table_settings,
+            table_settings: eholdings_titles_table_settings,
             add_filters: true,
             filters_options: {
                 3: () =>

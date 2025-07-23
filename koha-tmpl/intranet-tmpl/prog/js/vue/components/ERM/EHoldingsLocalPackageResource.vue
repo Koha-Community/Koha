@@ -34,8 +34,11 @@ export default {
                 edit: "EHoldingsLocalPackagesFormAddEdit",
             },
             apiClient: APIClient.erm.localPackages,
-            resourceTableUrl:
-                APIClient.erm.httpClient._baseURL + "eholdings/local/packages",
+            table: {
+                resourceTableUrl:
+                    APIClient.erm.httpClient._baseURL +
+                    "eholdings/local/packages",
+            },
             i18n: {
                 deleteConfirmationMessage: $__(
                     "Are you sure you want to remove this local package?"
@@ -47,7 +50,6 @@ export default {
                 newLabel: $__("New package"),
             },
             extendedAttributesResourceType: "package",
-            eholdings_packages_table_settings,
             vendors,
             props,
             moduleStore: "ERMStore",
@@ -188,7 +190,7 @@ export default {
                     null,
                 ],
             },
-            table_settings: baseResource.eholdings_packages_table_settings,
+            table_settings: eholdings_packages_table_settings,
             add_filters: true,
             filters_options: {
                 1: [

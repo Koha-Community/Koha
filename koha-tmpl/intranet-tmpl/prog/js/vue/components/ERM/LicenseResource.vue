@@ -36,7 +36,10 @@ export default {
                 edit: "LicensesFormAddEdit",
             },
             apiClient: APIClient.erm.licenses,
-            resourceTableUrl: APIClient.erm.httpClient._baseURL + "licenses",
+            table: {
+                resourceTableUrl:
+                    APIClient.erm.httpClient._baseURL + "licenses",
+            },
             i18n: {
                 deleteConfirmationMessage: $__(
                     "Are you sure you want to remove this license?"
@@ -48,7 +51,6 @@ export default {
                 newLabel: $__("New license"),
             },
             extendedAttributesResourceType,
-            license_table_settings,
             vendors,
             props,
             moduleStore: "ERMStore",
@@ -287,7 +289,7 @@ export default {
         const tableOptions = {
             url: baseResource.getResourceTableUrl(),
             options: { embed: "vendor,extended_attributes,+strings" },
-            table_settings: baseResource.license_table_settings,
+            table_settings: license_table_settings,
             add_filters: true,
             filters_options: {
                 2: [

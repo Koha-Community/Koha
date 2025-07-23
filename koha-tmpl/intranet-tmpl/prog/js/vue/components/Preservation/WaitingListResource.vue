@@ -161,9 +161,11 @@ export default {
                 list: "WaitingList",
             },
             apiClient: APIClient.preservation.waiting_list_items,
-            resourceTableUrl:
-                APIClient.preservation.httpClient._baseURL +
-                "/waiting-list/items",
+            table: {
+                resourceTableUrl:
+                    APIClient.preservation.httpClient._baseURL +
+                    "/waiting-list/items",
+            },
             i18n: {
                 deleteConfirmationMessage: $__(
                     "Are you sure you want to remove this item from the waiting list?"

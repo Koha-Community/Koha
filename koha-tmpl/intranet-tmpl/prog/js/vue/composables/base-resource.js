@@ -24,19 +24,17 @@ import {
  * @param {String} resourceConfig.resourceName - The name of the resource.
  * @param {String} resourceConfig.idAttr - The name of the id attribute of the resource.
  * @param {String} resourceConfig.nameAttr - The name attribute of the resource.
- * @param {String} resourceConfig.components.show - The name of the show component.
- * @param {String} resourceConfig.components.add - The name of the add component.
- * @param {String} resourceConfig.components.edit - The name of the edit component.
- * @param {String} resourceConfig.components.list - The name of the list component.
+ * @param {String} resourceConfig.components - An object containing the names of the components ("show", "add", "list", "edit")
  * @param {Object} resourceConfig.i18n - The i18n object.
  * @param {Object} resourceConfig.apiClient - The API client for the resource.
- * @param {String} resourceConfig.resourceTableUrl - The URL to the resource table.
+ * @param {Object} resourceConfig.table - Contains the table configuration.
+ * @param {String} resourceConfig.table.resourceTableUrl - The URL to the resource table.
  * @param {Array} resourceConfig.resourceAttrs - An array of attributes that relate to the resource's properties and how they should appear in the form/show/list components.
  * @param {Object} resourceConfig.props - The props passed to the resource component.
  * OPTIONAL:
  * @param {String} resourceConfig.moduleStore - The name of the module store that holds resource related data (authorised values, permissions etc)
- * @param {Boolean} resourceConfig.addFiltersToList - A flag to indicate whether to add filters to the list component for the datatable.
- * @param {Object} resourceConfig.tableFilters - The table filters for the resource. Follows the format for the resourceAttrs parameter.
+ * @param {Boolean} resourceConfig.table.addFilters - A flag to indicate whether to add filters to the list component for the datatable.
+ * @param {Object} resourceConfig.table.filters - The table filters for the resource. Follows the format for the resourceAttrs parameter.
  * @param {Function} resourceConfig.afterResourceFetch - A function to call after the resource is fetched. This can be used to edit resource data or fetch additional data
  * @param {Boolean} resourceConfig.embedded - A flag to indicate whether the resource is actually being used as a child component of another resource e.g. embedding a list of agreeements into EBSCO package agreements
  * @param {String} resourceConfig.extendedAttributesResourceType - The resource type for extended attributes, if applicable.
@@ -307,7 +305,7 @@ export function useBaseResource(resourceConfig) {
      * @return {string}
      */
     const getResourceTableUrl = () => {
-        return resourceConfig.resourceTableUrl;
+        return resourceConfig.table.resourceTableUrl;
     };
 
     /**
@@ -325,7 +323,7 @@ export function useBaseResource(resourceConfig) {
 
     /**
      * Builds an object of filter name-value pairs based on the provided
-     * query object and filterData (tableFilters by default).
+     * query object and filterData ('filters' by default).
      *
      * Iterates over the query object keys and updates the filterOptions
      * object with the new values. If a filter name is not found in
@@ -338,8 +336,8 @@ export function useBaseResource(resourceConfig) {
     const getFilterValues = (query, filterData = []) => {
         const filters = filterData
             ? filterData
-            : resourceConfig.tableFilters
-              ? resourceConfig.tableFilters
+            : resourceConfig.table.filters
+              ? resourceConfig.table.filters
               : [];
         const filterOptions = filters.reduce((acc, filter) => {
             acc[filter.name] = filter.value;

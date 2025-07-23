@@ -22,7 +22,7 @@ export default {
         const PreservationStore = inject("PreservationStore");
         const { config } = storeToRefs(PreservationStore);
 
-        const tableFilters = [
+        const filters = [
             {
                 id: "status_filter",
                 name: "status_filter",
@@ -118,9 +118,12 @@ export default {
                 edit: "TrainsFormAddEdit",
             },
             apiClient: APIClient.preservation.trains,
-            resourceTableUrl:
-                APIClient.preservation.httpClient._baseURL + "trains",
-            addFiltersToList: true,
+            table: {
+                resourceTableUrl:
+                    APIClient.preservation.httpClient._baseURL + "trains",
+                addFilters: true,
+                filters,
+            },
             i18n: {
                 deleteConfirmationMessage: $__(
                     "Are you sure you want to remove this train?"
@@ -136,7 +139,6 @@ export default {
             config,
             props,
             additionalToolbarButtons,
-            tableFilters,
             moduleStore: "PreservationStore",
             resourceAttrs: [
                 {
@@ -234,7 +236,7 @@ export default {
 
         const defaults = baseResource.getFilterValues(
             baseResource.route.query,
-            tableFilters
+            filters
         );
         const tableOptions = {
             options: {

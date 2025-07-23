@@ -1,11 +1,14 @@
 <template>
-    <fieldset v-if="instancedResource.tableFilters?.length > 0" class="filters">
+    <fieldset
+        v-if="instancedResource.table.filters?.length > 0"
+        class="filters"
+    >
         <template v-if="instancedResource.getTableFilterFormElementsLabel()"
             >{{ instancedResource.getTableFilterFormElementsLabel()
             }}{{ " " }}</template
         >
         <template
-            v-for="(filter, index) in instancedResource.tableFilters"
+            v-for="(filter, index) in instancedResource.table.filters"
             v-bind:key="index"
         >
             <FormElement :resource="filters" :attr="filter" :index="index" />
