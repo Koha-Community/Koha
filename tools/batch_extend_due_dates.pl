@@ -22,11 +22,14 @@ use Modern::Perl;
 
 use CGI;
 
-use C4::Auth   qw( get_template_and_user );
-use C4::Output qw( output_html_with_http_headers );
+use C4::Auth        qw( get_template_and_user );
+use C4::Output      qw( output_html_with_http_headers );
+use C4::Circulation qw( barcodedecode );
+use C4::Context;
 use Koha::Checkouts;
 use Koha::DateUtils qw( dt_from_string );
 use Koha::Items;
+use List::MoreUtils qw( uniq );
 
 my $input           = CGI->new;
 my $op              = $input->param('op') // q|form|;
@@ -50,6 +53,7 @@ if ( $op eq 'form' ) {
     my @categorycodes     = $input->multi_param('categorycodes');
     my @itemtypecodes     = $input->multi_param('itemtypecodes');
     my @branchcodes       = $input->multi_param('branchcodes');
+    my $list              = $input->param('barcodelist');
     my $from_due_date     = $input->param('from_due_date');
     my $to_due_date       = $input->param('to_due_date');
     my $new_hard_due_date = $input->param('new_hard_due_date');
@@ -70,6 +74,25 @@ if ( $op eq 'form' ) {
     }
     if (@branchcodes) {
         $search_params->{'me.branchcode'} = { -in => \@branchcodes };
+    }
+    if ($list) {
+        my $split_chars = C4::Context->preference('BarcodeSeparators');
+        my @barcodelist = grep /\S/, ( split /[$split_chars]/, $list );
+        @barcodelist = uniq @barcodelist;
+
+        @barcodelist = map { barcodedecode($_) } @barcodelist;
+
+        # Note: adding lc for case insensitivity
+        my %itemdata =
+            map { lc( $_->{barcode} ) => $_->{itemnumber} } @{ Koha::Items->search(
+                { barcode => { -in => \@barcodelist } },
+                { columns => [ 'itemnumber', 'barcode' ] }
+            )->unblessed
+            };
+        my @itemnumbers      = map  { exists $itemdata{ lc $_ } ? $itemdata{ lc $_ } : () } @barcodelist;
+        my @notfoundbarcodes = grep { !exists $itemdata{ lc $_ } } @barcodelist;
+
+        $search_params->{'itemnumber'} = { -in => \@itemnumbers };
     }
 
     if ( $from_due_date and $to_due_date ) {
