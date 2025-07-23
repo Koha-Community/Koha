@@ -2346,7 +2346,7 @@
                 g_id = '';
             }
 
-            if (g_id && g_id.length > 0) {
+            if (g_id !== null && g_id !== undefined && g_id.toString().length > 0) {
                 col4.search(g_id, {exact:true}).visible(false);
                 if( group_subgroups[g_id] && group_subgroups[g_id].length > 0 ){
                     for(var i in group_subgroups[g_id]) {
