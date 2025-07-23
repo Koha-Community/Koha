@@ -397,7 +397,8 @@ subtest 'process_quote' => sub {
         my $orderline = 0;
         while ( my $order = $orders->next ) {
             $orderline++;
-            diag( "Looking at order: " . $orderline );
+
+            #diag( "Looking at order: " . $orderline );
             if ( $orderline == 1 ) {
 
                 # Fund allocation
@@ -442,7 +443,8 @@ subtest 'process_quote' => sub {
                 is( $rotas{'FAST'}, 1, "One item added to 'FAST' rota" );
                 is( $rotas{'SLOW'}, 1, "One item added to 'SLOW' rota" );
             } elsif ( $orderline == 3 ) {
-                diag("Second LIN split into 2 Orderlines, one for each Fund");
+
+                #diag("Second LIN split into 2 Orderlines, one for each Fund");
 
                 # Fund allocation
                 my $fund = $order->fund;
