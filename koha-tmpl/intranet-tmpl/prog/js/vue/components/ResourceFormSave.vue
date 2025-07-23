@@ -1,10 +1,10 @@
 <template>
     <div v-if="!initialized">{{ $__("Loading") }}</div>
     <div v-else :id="`${instancedResource.resourceNamePlural}_add`">
-        <h2 v-if="resourceToAddOrEdit[instancedResource.idAttr]">
+        <h2 v-if="resourceToSave[instancedResource.idAttr]">
             {{
                 instancedResource.i18n.editLabel.format(
-                    resourceToAddOrEdit[instancedResource.idAttr]
+                    resourceToSave[instancedResource.idAttr]
                 )
             }}
         </h2>
@@ -14,7 +14,7 @@
             :componentPropData="{ ...$props, ...$data, resourceForm }"
         />
         <form
-            @submit="instancedResource.onFormSave($event, resourceToAddOrEdit)"
+            @submit="instancedResource.onFormSave($event, resourceToSave)"
             ref="resourceForm"
         >
             <TabsWrapper
@@ -32,7 +32,7 @@
                                 v-bind:key="index"
                             >
                                 <FormElement
-                                    :resource="resourceToAddOrEdit"
+                                    :resource="resourceToSave"
                                     :attr="attr"
                                     :index="index"
                                 />
@@ -54,7 +54,7 @@
                             v-bind:key="index"
                         >
                             <FormElement
-                                :resource="resourceToAddOrEdit"
+                                :resource="resourceToSave"
                                 :attr="attr"
                                 :index="index"
                             />
@@ -77,7 +77,7 @@
                             v-bind:key="index"
                         >
                             <FormElement
-                                :resource="resourceToAddOrEdit"
+                                :resource="resourceToSave"
                                 :attr="attr"
                                 :index="index"
                             />
@@ -118,7 +118,7 @@ export default {
         const initialized = ref(false);
         const resource = ref(null);
 
-        const resourceToAddOrEdit = computed(() => {
+        const resourceToSave = computed(() => {
             return (
                 resource.value || reactive(props.instancedResource.newResource)
             );
@@ -157,7 +157,7 @@ export default {
         return {
             initialized,
             resource,
-            resourceToAddOrEdit,
+            resourceToSave,
             resourceForm,
         };
     },
