@@ -18,36 +18,36 @@ import {
  *
  * The utilities provided by this composable are documented individually below.
  *
- * @param {Object} instancedResource - The resource component instance.
+ * @param {Object} resourceConfig - The resource component instance.
  * This can take in the following parameters
  * REQUIRED:
- * @param {String} instancedResource.resourceName - The name of the resource.
- * @param {String} instancedResource.idAttr - The name of the id attribute of the resource.
- * @param {String} instancedResource.nameAttr - The name attribute of the resource.
- * @param {String} instancedResource.showComponent - The name of the show component.
- * @param {String} instancedResource.addComponent - The name of the add component.
- * @param {String} instancedResource.editComponent - The name of the edit component.
- * @param {String} instancedResource.listComponent - The name of the list component.
- * @param {Object} instancedResource.i18n - The i18n object.
- * @param {Object} instancedResource.apiClient - The API client for the resource.
- * @param {String} instancedResource.resourceTableUrl - The URL to the resource table.
- * @param {Array} instancedResource.resourceAttrs - An array of attributes that relate to the resource's properties and how they should appear in the form/show/list components.
- * @param {Object} instancedResource.props - The props passed to the resource component.
+ * @param {String} resourceConfig.resourceName - The name of the resource.
+ * @param {String} resourceConfig.idAttr - The name of the id attribute of the resource.
+ * @param {String} resourceConfig.nameAttr - The name attribute of the resource.
+ * @param {String} resourceConfig.showComponent - The name of the show component.
+ * @param {String} resourceConfig.addComponent - The name of the add component.
+ * @param {String} resourceConfig.editComponent - The name of the edit component.
+ * @param {String} resourceConfig.listComponent - The name of the list component.
+ * @param {Object} resourceConfig.i18n - The i18n object.
+ * @param {Object} resourceConfig.apiClient - The API client for the resource.
+ * @param {String} resourceConfig.resourceTableUrl - The URL to the resource table.
+ * @param {Array} resourceConfig.resourceAttrs - An array of attributes that relate to the resource's properties and how they should appear in the form/show/list components.
+ * @param {Object} resourceConfig.props - The props passed to the resource component.
  * OPTIONAL:
- * @param {String} instancedResource.moduleStore - The name of the module store that holds resource related data (authorised values, permissions etc)
- * @param {Boolean} instancedResource.addFiltersToList - A flag to indicate whether to add filters to the list component for the datatable.
- * @param {Object} instancedResource.tableFilters - The table filters for the resource. Follows the format for the resourceAttrs parameter.
- * @param {Function} instancedResource.afterResourceFetch - A function to call after the resource is fetched. This can be used to edit resource data or fetch additional data
- * @param {Boolean} instancedResource.embedded - A flag to indicate whether the resource is actually being used as a child component of another resource e.g. embedding a list of agreeements into EBSCO package agreements
- * @param {String} instancedResource.extendedAttributesResourceType - The resource type for extended attributes, if applicable.
- * @param {Function} instancedResource.defaultToolbarButtons - A function to amend default buttons in the toolbar.
- * @param {Function} instancedResource.additionalToolbarButtons - A function to add additional buttons to the toolbar.
- * @param {String} instancedResource.formGroupsDisplayMode - The display mode for the form groups if not the default. Can be one of the following: "accordion", "tabs".
- * @param {Array} instancedResource.stickyToolbar - The names of the components with a toolbar that should be sticky.
+ * @param {String} resourceConfig.moduleStore - The name of the module store that holds resource related data (authorised values, permissions etc)
+ * @param {Boolean} resourceConfig.addFiltersToList - A flag to indicate whether to add filters to the list component for the datatable.
+ * @param {Object} resourceConfig.tableFilters - The table filters for the resource. Follows the format for the resourceAttrs parameter.
+ * @param {Function} resourceConfig.afterResourceFetch - A function to call after the resource is fetched. This can be used to edit resource data or fetch additional data
+ * @param {Boolean} resourceConfig.embedded - A flag to indicate whether the resource is actually being used as a child component of another resource e.g. embedding a list of agreeements into EBSCO package agreements
+ * @param {String} resourceConfig.extendedAttributesResourceType - The resource type for extended attributes, if applicable.
+ * @param {Function} resourceConfig.defaultToolbarButtons - A function to amend default buttons in the toolbar.
+ * @param {Function} resourceConfig.additionalToolbarButtons - A function to add additional buttons to the toolbar.
+ * @param {String} resourceConfig.formGroupsDisplayMode - The display mode for the form groups if not the default. Can be one of the following: "accordion", "tabs".
+ * @param {Array} resourceConfig.stickyToolbar - The names of the components with a toolbar that should be sticky.
  *
  * @return {Object} An object containing the utilities provided by this composable.
  */
-export function useBaseResource(instancedResource) {
+export function useBaseResource(resourceConfig) {
     const router = useRouter();
     const route = useRoute();
     const { setConfirmationDialog, setMessage, setError, setWarning } =
@@ -56,8 +56,8 @@ export function useBaseResource(instancedResource) {
     const { breadcrumbMetadata } = storeToRefs(navigationStore);
 
     const moduleStoreUtils = {};
-    if (instancedResource.moduleStore) {
-        const moduleStore = inject(instancedResource.moduleStore);
+    if (resourceConfig.moduleStore) {
+        const moduleStore = inject(resourceConfig.moduleStore);
         const { get_lib_from_av, map_av_dt_filter, isUserPermitted } =
             moduleStore;
         const { authorisedValues, userPermissions } = storeToRefs(moduleStore);
@@ -74,7 +74,7 @@ export function useBaseResource(instancedResource) {
         }
     }
 
-    let i18n = instancedResource.i18n;
+    let i18n = resourceConfig.i18n;
 
     const format_date = $date;
     const patron_to_html = $patron_to_html;
@@ -99,18 +99,18 @@ export function useBaseResource(instancedResource) {
     const toolbarButtons = computed(() => {
         return (resource, component, componentData) => {
             let defaultButtons = defaultToolbarButtons(resource);
-            defaultButtons = instancedResource.hasOwnProperty(
+            defaultButtons = resourceConfig.hasOwnProperty(
                 "defaultToolbarButtons"
             )
-                ? instancedResource.defaultToolbarButtons(
+                ? resourceConfig.defaultToolbarButtons(
                       defaultButtons,
                       resource || {}
                   )
                 : defaultButtons;
-            const additionalButtons = instancedResource.hasOwnProperty(
+            const additionalButtons = resourceConfig.hasOwnProperty(
                 "additionalToolbarButtons"
             )
-                ? instancedResource.additionalToolbarButtons(
+                ? resourceConfig.additionalToolbarButtons(
                       resource || {},
                       componentData
                   )
@@ -181,7 +181,7 @@ export function useBaseResource(instancedResource) {
      */
     const goToResourceAdd = () => {
         router.push({
-            name: instancedResource.addComponent,
+            name: resourceConfig.addComponent,
         });
     };
 
@@ -193,11 +193,11 @@ export function useBaseResource(instancedResource) {
      */
     const goToResourceEdit = resource => {
         router.push({
-            name: instancedResource.editComponent,
+            name: resourceConfig.editComponent,
             params: {
-                [instancedResource.idAttr]: resource
-                    ? resource[instancedResource.idAttr]
-                    : instancedResource.newResource[instancedResource.idAttr],
+                [resourceConfig.idAttr]: resource
+                    ? resource[resourceConfig.idAttr]
+                    : resourceConfig.newResource[resourceConfig.idAttr],
             },
         });
     };
@@ -213,9 +213,9 @@ export function useBaseResource(instancedResource) {
     const goToResourceShow = (resource, dt, event) => {
         event?.preventDefault();
         router.push({
-            name: instancedResource.showComponent,
+            name: resourceConfig.showComponent,
             params: {
-                [instancedResource.idAttr]: resource[instancedResource.idAttr],
+                [resourceConfig.idAttr]: resource[resourceConfig.idAttr],
             },
         });
     };
@@ -227,7 +227,7 @@ export function useBaseResource(instancedResource) {
      */
     const goToResourceList = () => {
         router.push({
-            name: instancedResource.listComponent,
+            name: resourceConfig.listComponent,
         });
     };
 
@@ -244,11 +244,11 @@ export function useBaseResource(instancedResource) {
      */
     const doResourceDelete = (resource, callback) => {
         let resourceId = resource
-            ? resource[instancedResource.idAttr]
-            : instancedResource.newResource[instancedResource.idAttr];
+            ? resource[resourceConfig.idAttr]
+            : resourceConfig.newResource[resourceConfig.idAttr];
         let resourceName = resource
-            ? resource[instancedResource.nameAttr]
-            : instancedResource.newResource[instancedResource.nameAttr];
+            ? resource[resourceConfig.nameAttr]
+            : resourceConfig.newResource[resourceConfig.nameAttr];
 
         setConfirmationDialog(
             {
@@ -258,7 +258,7 @@ export function useBaseResource(instancedResource) {
                 cancel_label: $__("No, do not delete"),
             },
             () => {
-                instancedResource.apiClient.delete(resourceId).then(
+                resourceConfig.apiClient.delete(resourceId).then(
                     success => {
                         setMessage(
                             i18n.deleteSuccessMessage.format(resourceName),
@@ -267,9 +267,7 @@ export function useBaseResource(instancedResource) {
                         if (typeof callback === "function") {
                             callback();
                         } else {
-                            if (
-                                instancedResource.props.routeAction === "list"
-                            ) {
+                            if (resourceConfig.props.routeAction === "list") {
                                 callback.ajax.reload();
                             } else {
                                 goToResourceList();
@@ -291,9 +289,9 @@ export function useBaseResource(instancedResource) {
      */
 
     const doResourceSelect = (resource, dt, event) => {
-        instancedResource.$emit(
+        resourceConfig.$emit(
             "select-resource",
-            resource[instancedResource.idAttr]
+            resource[resourceConfig.idAttr]
         );
     };
 
@@ -309,7 +307,7 @@ export function useBaseResource(instancedResource) {
      * @return {string}
      */
     const getResourceTableUrl = () => {
-        return instancedResource.resourceTableUrl;
+        return resourceConfig.resourceTableUrl;
     };
 
     /**
@@ -320,8 +318,8 @@ export function useBaseResource(instancedResource) {
      */
     const getResourceShowURL = id => {
         return router.resolve({
-            name: instancedResource.showComponent,
-            params: { [instancedResource.idAttr]: id },
+            name: resourceConfig.showComponent,
+            params: { [resourceConfig.idAttr]: id },
         }).href;
     };
 
@@ -340,8 +338,8 @@ export function useBaseResource(instancedResource) {
     const getFilterValues = (query, filterData = []) => {
         const filters = filterData
             ? filterData
-            : instancedResource.tableFilters
-              ? instancedResource.tableFilters
+            : resourceConfig.tableFilters
+              ? resourceConfig.tableFilters
               : [];
         const filterOptions = filters.reduce((acc, filter) => {
             acc[filter.name] = filter.value;
@@ -415,7 +413,7 @@ export function useBaseResource(instancedResource) {
      * @return {Array} The array of group objects.
      */
     const getFieldGroupings = (component, resource) => {
-        const attributesToConsider = instancedResource.resourceAttrs.reduce(
+        const attributesToConsider = resourceConfig.resourceAttrs.reduce(
             (acc, ra) => {
                 if (ra.type === "relationshipWidget") {
                     ra.relationshipFields.forEach(relationshipField => {
@@ -432,12 +430,12 @@ export function useBaseResource(instancedResource) {
             },
             []
         );
-        if (instancedResource.extendedAttributesResourceType) {
+        if (resourceConfig.extendedAttributesResourceType) {
             attributesToConsider.push({
                 name: "additional_fields",
                 type: "additional_fields",
                 extended_attributes_resource_type:
-                    instancedResource.extendedAttributesResourceType,
+                    resourceConfig.extendedAttributesResourceType,
             });
         }
         const groupings = attributesToConsider.reduce((acc, attr) => {
@@ -503,14 +501,14 @@ export function useBaseResource(instancedResource) {
      *                         (e.g. 'form', 'list', 'show').
      */
     const getResource = async (resourceId, componentData, caller) => {
-        instancedResource.apiClient.get(resourceId).then(
+        resourceConfig.apiClient.get(resourceId).then(
             resource => {
                 //TODO: Rename this 'resource' to 'fetchedResource'. Needs to also be renamed in ResourceFormSave and ResourceShow
                 // This is to make it clear that this is the fetchedResource (data), not the resource component class
                 componentData.resource.value = resource;
                 breadcrumbMetadata.value = resource;
-                if (componentData.instancedResource.afterResourceFetch) {
-                    componentData.instancedResource.afterResourceFetch(
+                if (componentData.resourceConfig.afterResourceFetch) {
+                    componentData.resourceConfig.afterResourceFetch(
                         componentData,
                         resource,
                         caller
@@ -531,9 +529,9 @@ export function useBaseResource(instancedResource) {
      * @return {String} The plural form of the resource name.
      */
     const resourceNamePlural = computed(() => {
-        if (!instancedResource.resourceName.endsWith("s"))
-            return instancedResource.resourceName + "s";
-        return instancedResource.resourceName;
+        if (!resourceConfig.resourceName.endsWith("s"))
+            return resourceConfig.resourceName + "s";
+        return resourceConfig.resourceName;
     });
 
     /*
@@ -570,8 +568,8 @@ export function useBaseResource(instancedResource) {
      * @return {Object} The newly generated resource object with default values.
      */
     const newResource = computed(() => {
-        instancedResource.resourceToBeGenerated =
-            instancedResource.resourceAttrs.reduce((acc, attr) => {
+        resourceConfig.resourceToBeGenerated =
+            resourceConfig.resourceAttrs.reduce((acc, attr) => {
                 if (attr.hasOwnProperty("defaultValue")) {
                     acc[attr.name] = attr.defaultValue;
                     return acc;
@@ -591,12 +589,11 @@ export function useBaseResource(instancedResource) {
                 acc[attr.name] = null;
                 return acc;
             }, {});
-        if (instancedResource.extendedAttributesResourceType) {
-            instancedResource.resourceToBeGenerated.extended_attributes = [];
+        if (resourceConfig.extendedAttributesResourceType) {
+            resourceConfig.resourceToBeGenerated.extended_attributes = [];
         }
-        instancedResource.resourceToBeGenerated[instancedResource.idAttr] =
-            null;
-        return instancedResource.resourceToBeGenerated;
+        resourceConfig.resourceToBeGenerated[resourceConfig.idAttr] = null;
+        return resourceConfig.resourceToBeGenerated;
     });
 
     /*
@@ -611,7 +608,7 @@ export function useBaseResource(instancedResource) {
      * @return {Boolean} true if the resource has additional fields, false otherwise.
      */
     const hasAdditionalFields = computed(() => {
-        return !!instancedResource.extendedAttributesResourceType;
+        return !!resourceConfig.extendedAttributesResourceType;
     });
 
     const refreshTemplate = ref(0);
@@ -674,9 +671,9 @@ export function useBaseResource(instancedResource) {
      * or authorised values assigned before the component is used.
      */
     const created = () => {
-        if (instancedResource.resourceAttrs) {
+        if (resourceConfig.resourceAttrs) {
             populateAttributesWithAuthorisedValues(
-                instancedResource.resourceAttrs
+                resourceConfig.resourceAttrs
             );
         }
     };
@@ -684,7 +681,7 @@ export function useBaseResource(instancedResource) {
     created();
 
     return {
-        ...instancedResource,
+        ...resourceConfig,
         ...moduleStoreUtils,
         getFilterValues,
         toolbarButtons,
