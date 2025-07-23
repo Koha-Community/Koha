@@ -29,12 +29,6 @@ my @exceptions = (
     # Cannot be removed
     "t/00-testcritic.t",
 
-    # bug 40386
-    "t/Edifact.t",
-
-    # bug 40387
-    "t/db_dependent/Koha/EDI.t",
-
     # bug 40382
     "t/db_dependent/Koha/CoverImages.t",
 
