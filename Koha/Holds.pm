@@ -217,13 +217,15 @@ Return the number of holds, where a hold group is counted as one hold.
 =cut
 
 sub count_holds {
-    my ( $self, $search_params ) = @_;
-    $search_params = {} if !$search_params;
+    my ( $self, $search_params, $search_attrs ) = @_;
+    $search_params                  = {} if !$search_params;
+    $search_attrs                   = {} if !$search_attrs;
     $search_params->{hold_group_id} = undef;
-    my $holds_without_group_count = $self->search($search_params)->count();
+    my $holds_without_group_count = $self->search( $search_params, $search_attrs )->count();
 
     $search_params->{hold_group_id} = { '!=', undef };
-    my $hold_groups_count = $self->search( $search_params, { group_by => 'me.hold_group_id' } )->count();
+    $search_attrs->{group_by}       = 'me.hold_group_id';
+    my $hold_groups_count = $self->search( $search_params, $search_attrs )->count();
     return $holds_without_group_count + $hold_groups_count;
 }
 
