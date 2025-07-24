@@ -28,11 +28,13 @@
     [% END %]</title
 >
 [% INCLUDE 'doc-head-close.inc' %]
-<style nonce="[% Koha.CSPNonce | $raw %]">
-    textarea {
-        width: 100%;
-    }
-</style>
+[% FILTER collapse %]
+    <style nonce="[% Koha.CSPNonce | $raw %]">
+        textarea {
+            width: 100%;
+        }
+    </style>
+[% END %]
 
 [% BLOCK list_permissions %]
     <div class="fg-row">
@@ -214,27 +216,26 @@
 
         <form action="/cgi-bin/koha/virtualshelves/shelves.pl" id="transferform" method="post">
             [% INCLUDE 'csrf-token.inc' %]
-            <fieldset>
+            <fieldset class="rows">
+                <legend class="visually-hidden">Transfer ownership</legend>
                 <input type="hidden" name="op" value="cud-transfer" />
                 <input type="hidden" name="public" value="1" />
                 <input type="hidden" name="shelfnumber" value="[% shelf.shelfnumber | html %]" />
-
-                <div>
-                    <label for="find_patron">Search for new owner: </label>
-                    <input autocomplete="off" id="find_patron" type="text" style="width:150px" class="noEnterSubmit" />
-                </div>
-
-                <br />
-                <div>
-                    <label for="find_patron">New owner: </label>
-                    <span id="new_owner_name"></span>
-                </div>
-
-                <br />
-                <fieldset class="action">
-                    <input type="submit" class="btn btn-primary" value="Transfer" />
-                    <a href="/cgi-bin/koha/virtualshelves/shelves.pl?op=list&amp;public=1" class="cancel">Cancel</a>
-                </fieldset>
+                <ol>
+                    <li>
+                        <label for="find_patron">Search for new owner: </label>
+                        <input autocomplete="off" id="find_patron" type="text" size="40" class="patron_autocomplete noEnterSubmit" placeholder="Enter patron card number or partial name" />
+                    </li>
+                    <li style="display:none">
+                        <label for="find_patron">New owner: </label>
+                        <span id="new_owner_name"></span>
+                        <input type="hidden" id="new_owner" name="new_owner" value="" />
+                    </li>
+                </ol>
+            </fieldset>
+            <fieldset class="action">
+                <input type="submit" class="btn btn-primary" value="Transfer" />
+                <a href="/cgi-bin/koha/virtualshelves/shelves.pl?op=list&amp;public=1" class="cancel">Cancel</a>
             </fieldset>
         </form>
     [% END # /IF op == transfer %]
