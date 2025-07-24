@@ -27,6 +27,8 @@ use C4::Context;
 use C4::Circulation qw( GetOfflineOperations GetOfflineOperation );
 use C4::Members;
 use Koha::Patrons;
+use Koha::DateUtils qw( dt_from_string );
+use DateTime;
 
 use Koha::Items;
 
@@ -49,6 +51,12 @@ for (@$operations) {
         my $biblio = $item->biblio;
         $_->{'bibliotitle'}  = $biblio->title;
         $_->{'biblionumber'} = $biblio->biblionumber;
+        $_->{'itemnumber'}   = $item->itemnumber;
+        $_->{'datelastseen'} = $item->datelastseen;
+        $_->{'outdated'} =
+            DateTime->compare( dt_from_string( $item->datelastseen ), dt_from_string( $_->{'timestamp'} ) ) == 1
+            ? 1
+            : 0;
     }
 
     my $patron =
