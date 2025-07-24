@@ -329,7 +329,9 @@ export default {
                     title: __("Status"),
                     data: "active",
                     render: function (data, type, row, meta) {
-                        const status = row.active ? "Active" : "Inactive";
+                        const status = row.active
+                            ? __("Active")
+                            : __("Inactive");
                         return status;
                     },
                     searchable: false,
