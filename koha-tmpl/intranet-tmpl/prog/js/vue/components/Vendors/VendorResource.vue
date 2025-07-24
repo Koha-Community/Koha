@@ -170,6 +170,7 @@ export default {
                 },
                 {
                     name: "name",
+                    tableDataSearchFields: "me.name:aliases.alias:me.id",
                     group: $__("Details"),
                     required: true,
                     type: "text",
@@ -511,7 +512,6 @@ export default {
                         { value: false, description: $__("Inactive") },
                     ],
                     value: true,
-                    hideIn: ["List"],
                 },
                 {
                     name: "list_currency",
@@ -664,13 +664,13 @@ export default {
             table_settings: baseResource.vendorTableSettings,
             add_filters: true,
             filters_options: {
-                1: [
-                    { _id: 0, _str: $__("Inactive") },
-                    { _id: 1, _str: $__("Active") },
-                ],
                 ...(baseResource.map_av_dt_filter("av_vendor_types").length && {
                     2: () => baseResource.map_av_dt_filter("av_vendor_types"),
                 }),
+                3: [
+                    { _id: 0, _str: $__("Inactive") },
+                    { _id: 1, _str: $__("Active") },
+                ],
             },
             actions: {
                 0: ["show"],
@@ -703,6 +703,22 @@ export default {
                         },
                     },
                 ],
+            },
+            default_filters: {
+                ...(baseResource.route.query.supplier && {
+                    "-and": [
+                        {
+                            "me.name": {
+                                like: `%${baseResource.route.query.supplier}%`,
+                            },
+                        },
+                        {
+                            "aliases.alias": {
+                                like: `%${baseResource.route.query.supplier}%`,
+                            },
+                        },
+                    ],
+                }),
             },
         };
 

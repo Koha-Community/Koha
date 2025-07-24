@@ -126,7 +126,9 @@ export default {
                 if (attr.name === thisResource.nameAttr) {
                     acc.push({
                         title: attr.label,
-                        data: attr.name,
+                        data: attr.tableDataSearchFields
+                            ? attr.tableDataSearchFields
+                            : attr.name,
                         searchable: true,
                         orderable: true,
                         render: function (data, type, row, meta) {
