@@ -8,7 +8,7 @@ return {
         my ($args) = @_;
         my ( $dbh, $out ) = @$args{qw(dbh out)};
 
-        say $dbh->do(
+        $dbh->do(
             q{
             UPDATE columns_settings
             SET columnname = SUBSTRING(columnname,LOCATE("_",columnname)+1)
