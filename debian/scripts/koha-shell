@@ -84,9 +84,8 @@ sub read_perl5lib {
     my $result = `grep "^PERL5LIB=" /etc/default/koha-common`;
     chomp $result;
     $result =~ s/^PERL5LIB=\s*//;
-    my $dev_install = `xmlstarlet sel -t -v 'yazgfs/config/dev_install' /etc/koha/sites/$instance/koha-conf.xml`;
-    chomp $dev_install;
-    if ( $dev_install ) {
+    my $git_install = `. /usr/share/koha/bin/koha-functions.sh; if is_git_install $instance; then echo 1; fi`;
+    if ( $git_install ) {
         # pick PERL5LIB from the intranetdir entry
         $result = `xmlstarlet sel -t -v "yazgfs/config/intranetdir" /etc/koha/sites/$instance/koha-conf.xml`;
         $result = "$result:$result/lib";
