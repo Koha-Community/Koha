@@ -325,18 +325,19 @@ export default {
                 },
                 {
                     title: __("Status"),
+                    data: "active",
                     render: function (data, type, row, meta) {
                         const status = row.active ? "Active" : "Inactive"
                         return status
                     },
-                    searchable: true,
+                    searchable: false,
                     orderable: true,
                 },
                 {
                     title: __("Last run"),
                     data: "last_run",
-                    searchable: true,
-                    orderable: true,
+                    searchable: false,
+                    orderable: false,
                 },
             ]
         },
