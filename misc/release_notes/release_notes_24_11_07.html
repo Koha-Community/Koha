@@ -1,0 +1,342 @@
+<h1 id="releasenotesforkoha24.11.07">RELEASE NOTES FOR KOHA 24.11.07</h1>
+
+<p>24 Jul 2025</p>
+
+<p>Koha is the first free and open source software library automation
+package (ILS). Development is sponsored by libraries of varying types
+and sizes, volunteers, and support companies from around the world. The
+website for the Koha project is:</p>
+
+<ul>
+<li><a href="https://koha-community.org">Koha Community</a></li>
+</ul>
+
+<p>Koha 24.11.07 can be downloaded from:</p>
+
+<ul>
+<li><a href="https://download.koha-community.org/koha-24.11.07.tar.gz">Download</a></li>
+</ul>
+
+<p>Installation instructions can be found at:</p>
+
+<ul>
+<li><a href="https://wiki.koha-community.org/wiki/Installation_Documentation">Koha Wiki</a></li>
+<li>OR in the INSTALL files that come in the tarball</li>
+</ul>
+
+<p>Koha 24.11.07 is a bugfix/maintenance release.</p>
+
+<p>It includes 7 bugfixes.</p>
+
+<p><strong>System requirements</strong></p>
+
+<p>You can learn about the system components (like OS and database) needed for running Koha on the <a href="https://wiki.koha-community.org/wiki/System_requirements_and_recommendations">community wiki</a>.</p>
+
+<h2 id="bugfixes">Bugfixes</h2>
+
+<h3 id="architectureinternalsandplumbing">Architecture, internals, and plumbing</h3>
+
+<h4 id="otherbugsfixed">Other bugs fixed</h4>
+
+<ul>
+<li><a href="https://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=40034">40034</a> CheckReserves dies if itype doesn't exist</li>
+</ul>
+
+<h3 id="circulation">Circulation</h3>
+
+<h4 id="otherbugsfixed">Other bugs fixed</h4>
+
+<ul>
+<li><a href="https://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=39307">39307</a> console.error on circ/circulation.pl page</li>
+</ul>
+
+<h3 id="ill">ILL</h3>
+
+<h4 id="criticalbugsfixed">Critical bugs fixed</h4>
+
+<p><ul>
+<li><a href="https://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=40057">40057</a> Database update 24.12.00.017 fails if old ILL data points to non-existent borrowernumber</p>
+
+<blockquote>
+  <p>This fixes a database update related to ILL requests, for bug 32630 - Don't delete ILL requests when patron is deleted, added in Koha 25.05.</p>
+  
+  <p>Background: Some databases have very old ILL requests where 'borrowernumber' has a value of a borrowernumber that doesn't exist. We're not exactly how the data ended up this way, but it's happened at least twice now for one provider.</li>
+  </ul></p>
+  
+  <h4 id="otherbugsfixed">Other bugs fixed</h4>
+</blockquote>
+
+<ul>
+<li><p><a href="https://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=32630">32630</a> Don't delete ILL requests when patron is deleted</p>
+
+<p><strong>Sponsored by</strong> <em>UK Health Security Agency</em></p></li>
+</ul>
+
+<h3 id="labelpatroncardprinting">Label/patron card printing</h3>
+
+<h4 id="otherbugsfixed">Other bugs fixed</h4>
+
+<ul>
+<li><p><a href="https://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=40061">40061</a> Cannot delete image from patron card creator</p>
+
+<blockquote>
+  <p>This fixes deleting patron images in the patron card creator (Tools > Patrons and circulation > Patron card creator > +New Image). </p>
+  
+  <p>Deleting images now works:</p>
+  
+  <ul>
+  <li>using the delete button beside each image</li>
+  <li>using the checkbox to select and delete the last image, if there is only one image</li>
+  </ul>
+  
+  <p>(This is partly related to the CSRF changes added in Koha 24.05 to improve form security.)</p>
+</blockquote>
+
+<p><strong>Sponsored by</strong> <em>Athens County Public Libraries</em></p></li>
+</ul>
+
+<h3 id="templates">Templates</h3>
+
+<h4 id="otherbugsfixed">Other bugs fixed</h4>
+
+<ul>
+<li><a href="https://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=39626">39626</a> Display patron name in 'Holds to pull' report using standard template</li>
+<li><a href="https://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=40042">40042</a> search_indexes.inc may have undefined index var</li>
+</ul>
+
+<h2 id="documentation">Documentation</h2>
+
+<p>The Koha manual is maintained in Sphinx. The home page for Koha
+documentation is</p>
+
+<ul>
+<li><p><a href="https://koha-community.org/documentation/">Koha Documentation</a>
+As of the date of these release notes, the Koha manual is available in the following languages:</p></li>
+<li><p><a href="https://koha-community.org/manual/24.11/en/html/">English (USA)</a></p></li>
+<li><a href="https://koha-community.org/manual/24.11/fr/html/">French</a> (73%)</li>
+<li><a href="https://koha-community.org/manual/24.11/de/html/">German</a> (97%)</li>
+<li><a href="https://koha-community.org/manual/24.11/el/html/">Greek</a> (99%)</li>
+<li><a href="https://koha-community.org/manual/24.11/hi/html/">Hindi</a> (70%)</li>
+</ul>
+
+<p>The Git repository for the Koha manual can be found at</p>
+
+<ul>
+<li><a href="https://gitlab.com/koha-community/koha-manual">Koha Git Repository</a></li>
+</ul>
+
+<h2 id="translations">Translations</h2>
+
+<p>Complete or near-complete translations of the OPAC and staff
+interface are available in this release for the following languages:
+<div style="column-count: 2;"></p>
+
+<ul>
+<li>Arabic (ar_ARAB) (95%)</li>
+<li>Armenian (hy_ARMN) (100%)</li>
+<li>Bulgarian (bg_CYRL) (100%)</li>
+<li>Chinese (Simplified Han script) (86%)</li>
+<li>Chinese (Traditional Han script) (99%)</li>
+<li>Czech (67%)</li>
+<li>Dutch (89%)</li>
+<li>English (100%)</li>
+<li>English (New Zealand) (63%)</li>
+<li>English (USA)</li>
+<li>Finnish (99%)</li>
+<li>French (99%)</li>
+<li>French (Canada) (99%)</li>
+<li>German (100%)</li>
+<li>Greek (67%)</li>
+<li>Hindi (97%)</li>
+<li>Italian (81%)</li>
+<li>Norwegian Bokmål (74%)</li>
+<li>Persian (fa_ARAB) (97%)</li>
+<li>Polish (100%)</li>
+<li>Portuguese (Brazil) (98%)</li>
+<li>Portuguese (Portugal) (87%)</li>
+<li>Russian (94%)</li>
+<li>Slovak (61%)</li>
+<li>Spanish (99%)</li>
+<li>Swedish (87%)</li>
+<li>Telugu (68%)</li>
+<li>Tetum (52%)</li>
+<li>Turkish (83%)</li>
+<li>Ukrainian (73%)</li>
+<li>Western Armenian (hyw_ARMN) (62%)
+</div></li>
+</ul>
+
+<p>Partial translations are available for various other languages.</p>
+
+<p>The Koha team welcomes additional translations; please see</p>
+
+<ul>
+<li><a href="https://wiki.koha-community.org/wiki/Translating_Koha">Koha Translation Info</a></li>
+</ul>
+
+<p>For information about translating Koha, and join the koha-translate 
+list to volunteer:</p>
+
+<ul>
+<li><a href="https://lists.koha-community.org/cgi-bin/mailman/listinfo/koha-translate">Koha Translate List</a></li>
+</ul>
+
+<p>The most up-to-date translations can be found at:</p>
+
+<ul>
+<li><a href="https://translate.koha-community.org/">Koha Translation</a></li>
+</ul>
+
+<h2 id="releaseteam">Release Team</h2>
+
+<p>The release team for Koha 24.11.07 is</p>
+
+<ul>
+<li><p>Release Manager: Lucas Gass</p></li>
+<li><p>QA Manager: Martin Renvoize</p></li>
+<li><p>QA Team:</p>
+
+<ul>
+<li>Andrew Fuerste-Henry</li>
+<li>Andrii Nugged</li>
+<li>Baptiste Wojtkowski</li>
+<li>Brendan Lawlor</li>
+<li>David Cook</li>
+<li>Emily Lamancusa</li>
+<li>Jonathan Druart</li>
+<li>Julian Maurice</li>
+<li>Kyle Hall</li>
+<li>Laura Escamilla</li>
+<li>Lisette Scheer</li>
+<li>Marcel de Rooy</li>
+<li>Nick Clemens</li>
+<li>Paul Derscheid</li>
+<li>Petro V</li>
+<li>Tomás Cohen Arazi</li>
+<li>Victor Grousset</li>
+</ul></li>
+<li><p>Documentation Manager: David Nind</p></li>
+<li><p>Documentation Team:</p>
+
+<ul>
+<li>Aude Charillon</li>
+<li>Caroline Cyr La Rose</li>
+<li>Donna Bachowski</li>
+<li>Heather Hernandez</li>
+<li>Kristi Krueger</li>
+<li>Philip Orr</li>
+</ul></li>
+<li><p>Translation Manager: Jonathan Druart</p></li>
+<li><p>Wiki curators: </p>
+
+<ul>
+<li>George Williams</li>
+<li>Thomas Dukleth</li>
+</ul></li>
+<li><p>Release Maintainers:</p>
+
+<ul>
+<li>25.05 -- Paul Derscheid</li>
+<li>24.11 -- Fridolin Somers</li>
+<li>24.05 -- Jesse Maseto</li>
+<li>22.11 -- Catalyst IT (Wainui, Alex, Aleisha)</li>
+</ul></li>
+<li><p>Release Maintainer assistants:</p>
+
+<ul>
+<li>25.05 -- Martin Renvoize</li>
+<li>24.11 -- Baptiste Wojtkowski</li>
+<li>24.05 -- Laura Escamilla</li>
+</ul></li>
+</ul>
+
+<h2 id="credits">Credits</h2>
+
+<p>We thank the following libraries, companies, and other institutions who are known to have sponsored
+new features in Koha 24.11.07
+<div style="column-count: 2;"></p>
+
+<ul>
+<li>Athens County Public Libraries</li>
+<li>UK Health Security Agency
+</div></li>
+</ul>
+
+<p>We thank the following individuals who contributed patches to Koha 24.11.07
+<div style="column-count: 2;"></p>
+
+<ul>
+<li>Pedro Amorim (7)</li>
+<li>Tomás Cohen Arazi (2)</li>
+<li>Paul Derscheid (1)</li>
+<li>Katrin Fischer (2)</li>
+<li>Lucas Gass (1)</li>
+<li>Owen Leonard (2)</li>
+<li>Fridolin Somers (2)
+</div></li>
+</ul>
+
+<p>We thank the following libraries, companies, and other institutions who contributed
+patches to Koha 24.11.07
+<div style="column-count: 2;"></p>
+
+<ul>
+<li>Athens County Public Libraries (2)</li>
+<li><a href="https://www.biblibre.com">BibLibre</a> (2)</li>
+<li><a href="https://bsz-bw.de">Bibliotheksservice-Zentrum Baden-Württemberg (BSZ)</a> (2)</li>
+<li><a href="https://bywatersolutions.com">ByWater Solutions</a> (1)</li>
+<li><a href="https://www.lmscloud.de">LMSCloud</a> (1)</li>
+<li><a href="https://openfifth.co.uk/">Open Fifth</a> (7)</li>
+<li><a href="https://theke.io">Theke Solutions</a> (2)
+</div></li>
+</ul>
+
+<p>We also especially thank the following individuals who tested patches
+for Koha
+<div style="column-count: 2;"></p>
+
+<ul>
+<li>Emmanuel Bétemps (1)</li>
+<li>Paul Derscheid (6)</li>
+<li>Magnus Enger (1)</li>
+<li>Jeremy Evans (6)</li>
+<li>Katrin Fischer (8)</li>
+<li>Lucas Gass (7)</li>
+<li>Brendan Lawlor (1)</li>
+<li>David Nind (3)</li>
+<li>Marcel de Rooy (6)</li>
+<li>Caroline Cyr La Rose (2)</li>
+<li>Lisette Scheer (6)</li>
+<li>Fridolin Somers (1)</li>
+<li>Baptiste Wojtkowski (14)
+</div></li>
+</ul>
+
+<p>We regret any omissions.  If a contributor has been inadvertently missed,
+please send a patch against these release notes to koha-devel@lists.koha-community.org.</p>
+
+<h2 id="revisioncontrolnotes">Revision control notes</h2>
+
+<p>The Koha project uses Git for version control.  The current development
+version of Koha can be retrieved by checking out the main branch of:</p>
+
+<ul>
+<li><a href="https://git.koha-community.org/koha-community/koha">Koha Git Repository</a></li>
+</ul>
+
+<p>The branch for this version of Koha and future bugfixes in this release
+line is 24.11.x.</p>
+
+<h2 id="bugsandfeaturerequests">Bugs and feature requests</h2>
+
+<p>Bug reports and feature requests can be filed at the Koha bug
+tracker at:</p>
+
+<ul>
+<li><a href="https://bugs.koha-community.org">Koha Bugzilla</a></li>
+</ul>
+
+<p>He rau ringa e oti ai.
+(Many hands finish the work)</p>
+
+<p>Autogenerated release notes updated last on 24 Jul 2025 20:15:36.</p>
