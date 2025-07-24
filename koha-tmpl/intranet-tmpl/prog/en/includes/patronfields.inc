@@ -88,7 +88,7 @@
     [%- CASE 'dateexpiry' -%]
         [% t("Expiry date") | html %]
     [%- CASE 'gonenoaddress' -%]
-        [% t("Gone no address") | html %]
+        [% t("Address correction needed") | html %]
     [%- CASE 'lost' -%]
         [% t("Lost card") | html %]
     [%- CASE 'debarred' -%]
