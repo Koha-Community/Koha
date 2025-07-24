@@ -46,6 +46,7 @@
                         <tr>
                             <th>&nbsp;</th>
                             <th>Date</th>
+                            <th>Item last seen date</th>
                             <th>Action</th>
                             <th>Barcode</th>
                             <th>Card number or username</th>
@@ -60,6 +61,23 @@
                                     <label for="operationid[% operation.operationid | html %]">[% operation.timestamp | $KohaDates with_hours=1 %]</label>
                                 </td>
                                 <td>
+                                    [% UNLESS operation.outdated %]
+                                        [% operation.datelastseen | $KohaDates with_hours=1 %]
+                                    [% ELSE %]
+                                        <span class="error"
+                                            ><i
+                                                data-bs-toggle="tooltip"
+                                                title="This item has been updated since the offline circulation action was taken. Use caution when processing this action."
+                                                data-bs-placement="right"
+                                                class="fa fa-exclamation-triangle"
+                                                style="color:gold"
+                                                tabindex="0"
+                                            ></i>
+                                            [% operation.datelastseen | $KohaDates with_hours=1 %]</span
+                                        >
+                                    [% END %]
+                                </td>
+                                <td>
                                     [% SWITCH ( operation.action ) -%]
                                     [% CASE "issue" -%]
                                         <span>Check out</span>
@@ -72,8 +90,13 @@
                                     [% END -%]
                                 </td>
                                 <td>
-                                    [% IF ( operation.biblionumber ) %]
-                                        <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% operation.biblionumber | uri %]" title="[% operation.bibliotitle | html %]">[% operation.barcode | html %]</a>
+                                    [% IF ( operation.itemnumber ) %]
+                                        <a
+                                            href="/cgi-bin/koha/catalogue/moredetail.pl?biblionumber=[% operation.biblionumber | uri %]&itemnumber=[% operation.itemnumber | uri %]#item[% operation.itemnumber | uri %]"
+                                            target="_blank"
+                                            title="[% operation.bibliotitle | html %]"
+                                            >[% operation.barcode | html %]</a
+                                        >
                                     [% ELSE %]
                                         <span class="error">[% operation.barcode | html %]</span>
                                     [% END %]
