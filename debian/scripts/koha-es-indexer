@@ -201,7 +201,7 @@ done
 # Optionally use alternative paths for a dev install
 adjust_paths_git_install $1
 
-if [ "$DEV_INSTALL" = "" ]; then
+if [ "$GIT_INSTALL" = "" ]; then
     worker_DAEMON="${KOHA_HOME}/bin/workers/es_indexer_daemon.pl"
 else
     worker_DAEMON="${KOHA_HOME}/misc/workers/es_indexer_daemon.pl"

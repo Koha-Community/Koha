@@ -53,15 +53,15 @@ use CGI qw(-utf8 ); # we will loose -utf8 under plack, otherwise
 
 my $home = $ENV{KOHA_HOME};
 my $intranet = Plack::App::CGIBin->new(
-    root => $ENV{DEV_INSTALL}? $home: "$home/intranet/cgi-bin"
+    root => $ENV{GIT_INSTALL}? $home: "$home/intranet/cgi-bin"
 )->to_app;
 
 my $intranet_svc = Plack::App::CGIBin->new(
-    root => $ENV{DEV_INSTALL}? "$home/svc": "$home/intranet/cgi-bin/svc"
+    root => $ENV{GIT_INSTALL}? "$home/svc": "$home/intranet/cgi-bin/svc"
 )->to_app;
 
 my $opac = Plack::App::CGIBin->new(
-    root => $ENV{DEV_INSTALL}? "$home/opac": "$home/opac/cgi-bin/opac"
+    root => $ENV{GIT_INSTALL}? "$home/opac": "$home/opac/cgi-bin/opac"
 )->to_app;
 
 my $apiv1  = builder {

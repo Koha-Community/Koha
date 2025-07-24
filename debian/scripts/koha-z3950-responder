@@ -85,7 +85,7 @@ start_z3950()
     daemonize="-D -d ${instancename}-koha-z3950"
     logging="-l /var/log/koha/${instancename}/z3950.log"
 
-    if [ "$DEV_INSTALL" = "1" ]; then
+    if [ "$GIT_INSTALL" = "1" ]; then
         MISCDIR=$KOHA_HOME/misc
     else
         MISCDIR=/usr/share/koha/bin
@@ -93,7 +93,7 @@ start_z3950()
 
     Z3950RESPONDER="/usr/bin/perl $MISCDIR/z3950_responder.pl"
     if [ "$debug_mode" = "yes" ]; then
-        if [ "$DEV_INSTALL" = "1" ]; then
+        if [ "$GIT_INSTALL" = "1" ]; then
             warn "Not a dev install, disabling debug mode"
         else
             environment="development"
@@ -303,7 +303,7 @@ if [ $# -gt 0 ]; then
         if is_instance $name; then
 
             adjust_paths_git_install $name
-            export DEV_INSTALL
+            export GIT_INSTALL
             export KOHA_HOME
             PERL5LIB=$PERL5LIB:$KOHA_HOME/installer:$KOHA_HOME/lib/installer
             # If debug mode is enabled, add the debugger lib path

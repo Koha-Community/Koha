@@ -84,7 +84,7 @@ run_rebuild_elasticsearch()
     # read instance name and eliminate instance name from params
     local name=$1; shift
 
-    if [ "$DEV_INSTALL" = "" ]; then
+    if [ "$GIT_INSTALL" = "" ]; then
         KOHA_BINDIR=${KOHA_HOME}/bin
     else
         KOHA_BINDIR=${KOHA_HOME}/misc

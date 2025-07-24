@@ -48,7 +48,7 @@ set_password()
     # Optionally use alternative paths for a dev install
     adjust_paths_git_install $1
 
-    if [ "$DEV_INSTALL" = "" ]; then
+    if [ "$GIT_INSTALL" = "" ]; then
         KOHA_BINDIR=$KOHA_HOME/bin
     else
         KOHA_BINDIR=$KOHA_HOME/misc

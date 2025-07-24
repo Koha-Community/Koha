@@ -99,7 +99,7 @@ start_plack()
     max_requests_and_workers="--max-requests ${PLACK_MAX_REQUESTS} --workers ${PLACK_WORKERS}"
 
     if [ "$debug_mode" = "yes" ]; then
-        # Maybe we should switch off debug_mode if DEV_INSTALL is not set?
+        # Maybe we should switch off debug_mode if GIT_INSTALL is not set?
         daemonize=""
         logging="" # remote debugger takes care
         max_requests_and_workers="--workers 1"
@@ -365,7 +365,7 @@ _do_instance() {
     local name=$1
     local PERL5LIB=$PERL5LIB
     local KOHA_HOME=$KOHA_HOME
-    local DEV_INSTALL=$DEV_INSTALL
+    local GIT_INSTALL=$GIT_INSTALL
 
     adjust_paths_git_install $name
     PERL5LIB=$PERL5LIB:$KOHA_HOME/installer:$KOHA_HOME/lib/installer
@@ -476,7 +476,7 @@ done
 [ "${quiet}" != "yes" ] && check_env_and_warn
 
 export PERL5LIB
-export DEV_INSTALL
+export GIT_INSTALL
 export KOHA_HOME
 
 if [ $# -gt 0 ]; then

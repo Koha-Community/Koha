@@ -202,7 +202,7 @@ if [ ! -z "$ALTERNATE_INDEXER_DAEMON" ]; then
     INDEXER_DAEMON="$ALTERNATE_INDEXER_DAEMON"
 else
     # We default to rebuild_zebra.pl if no alternate indexer set
-    if [ "$DEV_INSTALL" = "" ]; then
+    if [ "$GIT_INSTALL" = "" ]; then
         INDEXER_DAEMON="${KOHA_HOME}/bin/migration_tools/rebuild_zebra.pl"
     else
         INDEXER_DAEMON="${KOHA_HOME}/misc/migration_tools/rebuild_zebra.pl"
