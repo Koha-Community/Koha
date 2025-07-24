@@ -627,7 +627,7 @@ describe("Agreement CRUD operations", () => {
         name_link.should("have.text", agreement.name);
         name_link.click();
         cy.wait("@get-agreement");
-        cy.get("#agreement_show h2").contains(
+        cy.get("#agreements_show h2").contains(
             "Agreement #" + agreement.agreement_id
         );
 
