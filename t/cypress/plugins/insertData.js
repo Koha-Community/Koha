@@ -493,23 +493,72 @@ const deleteSampleObjects = async allObjects => {
         allObjects = [allObjects];
     }
 
-    const pluralMap = {
-        hold: "holds",
-        checkout: "checkouts",
-        old_checkout: "old_checkouts",
-        basket: "baskets",
-        vendor: "vendors",
-        patron: "patrons",
-        item: "items",
-        biblio: "biblios",
-        library: "libraries",
-        item_type: "item_types",
+    const objectsMap = {
+        hold: {
+            plural: "holds",
+            table: "reserves",
+            whereColumn: "reserve_id",
+            idField: "hold_id",
+        },
+        checkout: {
+            plural: "checkouts",
+            table: "issues",
+            whereColumn: "issue_id",
+            idField: "checkout_id",
+        },
+        old_checkout: {
+            plural: "old_checkouts",
+            table: "old_issues",
+            whereColumn: "issue_id",
+            idField: "checkout_id",
+        },
+        basket: {
+            plural: "baskets",
+            table: "aqbasket",
+            whereColumn: "basketno",
+            idField: "basket_id",
+        },
+        vendor: {
+            plural: "vendors",
+            table: "aqbooksellers",
+            whereColumn: "id",
+        },
+        patron: {
+            plural: "patrons",
+            table: "borrowers",
+            whereColumn: "borrowernumber",
+            idField: "patron_id",
+        },
+        item: {
+            plural: "items",
+            table: "items",
+            whereColumn: "itemnumber",
+            idField: "item_id",
+        },
+        biblio: {
+            plural: "biblios",
+            table: "biblio",
+            whereColumn: "biblionumber",
+            idField: "biblio_id",
+        },
+        library: {
+            plural: "libraries",
+            table: "branches",
+            whereColumn: "branchcode",
+            idField: "library_id",
+        },
+        item_type: {
+            plural: "item_types",
+            table: "itemtypes",
+            whereColumn: "itemtype",
+            idField: "item_type_id",
+        },
     };
     // Merge by type
     const mergedObjects = {};
     for (const objects of allObjects) {
         for (const [type, value] of Object.entries(objects)) {
-            let plural = pluralMap?.[type] || type;
+            let plural = objectsMap[type]?.plural || type;
             if (!mergedObjects[plural]) {
                 mergedObjects[plural] = [];
             }
@@ -534,90 +583,35 @@ const deleteSampleObjects = async allObjects => {
         "libraries",
         "item_types",
     ];
+    const matchTypeToObjectMap = type => {
+        const matchingKey = Object.keys(objectsMap).find(
+            key => objectsMap[key].plural === type
+        );
+        return objectsMap[matchingKey];
+    };
 
     for (const type of deletionOrder) {
         if (!mergedObjects[type] || mergedObjects[type].length === 0) {
             continue;
         }
 
-        const objects = mergedObjects[type];
-        let ids = [];
-        switch (type) {
-            case "biblios":
-                ids = objects.map(i => i.biblio_id);
-                await query({
-                    sql: `DELETE FROM biblio WHERE biblionumber IN (${ids.map(() => "?").join(",")})`,
-                    values: ids,
-                });
-                break;
-            case "items":
-                ids = objects.map(i => i.item_id);
-                await query({
-                    sql: `DELETE FROM items WHERE itemnumber IN (${ids.map(() => "?").join(",")})`,
-                    values: ids,
-                });
-                break;
-            case "libraries":
-                ids = objects.map(i => i.library_id);
-                await query({
-                    sql: `DELETE FROM branches WHERE branchcode IN (${ids.map(() => "?").join(",")})`,
-                    values: ids,
-                });
-                break;
-            case "holds":
-                ids = objects.map(i => i.hold_id);
-                await query({
-                    sql: `DELETE FROM reserves WHERE reserve_id IN (${ids.map(() => "?").join(",")})`,
-                    values: ids,
-                });
-                break;
-            case "checkouts":
-                ids = objects.map(i => i.checkout_id);
-                await query({
-                    sql: `DELETE FROM issues WHERE issue_id IN (${ids.map(() => "?").join(",")})`,
-                    values: ids,
-                });
-                break;
-            case "old_checkouts":
-                ids = objects.map(i => i.checkout_id);
-                await query({
-                    sql: `DELETE FROM old_issues WHERE issue_id IN (${ids.map(() => "?").join(",")})`,
-                    values: ids,
-                });
-                break;
-            case "item_types":
-                ids = objects.map(i => i.item_type_id);
-                await query({
-                    sql: `DELETE FROM itemtypes WHERE itemtype IN (${ids.map(() => "?").join(",")})`,
-                    values: ids,
-                });
-                break;
-            case "patrons":
-                ids = objects.map(i => i.patron_id);
-                await query({
-                    sql: `DELETE FROM borrowers WHERE borrowernumber IN (${ids.map(() => "?").join(",")})`,
-                    values: ids,
-                });
-                break;
-            case "baskets":
-                ids = objects.map(i => i.basket_id);
-                await query({
-                    sql: `DELETE FROM aqbasket WHERE basketno IN (${ids.map(() => "?").join(",")})`,
-                    values: ids,
-                });
-                break;
-            case "vendors":
-                ids = objects.map(i => i.id);
-                await query({
-                    sql: `DELETE FROM aqbooksellers WHERE id IN (${ids.map(() => "?").join(",")})`,
-                    values: ids,
-                });
-                break;
-            default:
-                throw Error(
-                    `Not implemented yet: cannot deleted object '${type}'`
-                );
+        const objectMap = matchTypeToObjectMap(type);
+        if (!objectMap) {
+            throw Error(`Not implemented yet: cannot delete object '${type}'`);
         }
+        const objects = mergedObjects[type];
+        let ids = objects.map(
+            i =>
+                i[
+                    objectMap.hasOwnProperty("idField")
+                        ? objectMap.idField
+                        : objectMap.whereColumn
+                ]
+        );
+        await query({
+            sql: `DELETE FROM ${objectMap.table} WHERE ${objectMap.whereColumn} IN (${ids.map(() => "?").join(",")})`,
+            values: ids,
+        });
     }
     return true;
 };
