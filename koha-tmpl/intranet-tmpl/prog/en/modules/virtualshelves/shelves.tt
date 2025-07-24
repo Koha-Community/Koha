@@ -95,14 +95,8 @@
             [% END %]
 
         [% ELSIF shelf AND shelf.is_public %]
-            [% IF op == 'view' %]
-                [% WRAPPER breadcrumb_item %]
-                    <a href="/cgi-bin/koha/virtualshelves/shelves.pl?op=list&amp;public=1">Public lists</a>
-                [% END %]
-            [% ELSE %]
-                [% WRAPPER breadcrumb_item bc_active= 1 %]
-                    <span>Public lists</span>
-                [% END %]
+            [% WRAPPER breadcrumb_item %]
+                <a href="/cgi-bin/koha/virtualshelves/shelves.pl?op=list&amp;public=1">Public lists</a>
             [% END %]
         [% END %]
 
