@@ -205,6 +205,22 @@ export default {
                     });
                     return acc;
                 }
+                if (attr.type === "radio") {
+                    acc.push({
+                        title: attr.label,
+                        data: attr.name,
+                        searchable: true,
+                        orderable: true,
+                        render: function (data, type, row, meta) {
+                            return escape_str(
+                                attr.options.find(
+                                    o => o.value == row[attr.name]
+                                ).description
+                            );
+                        },
+                    });
+                    return acc;
+                }
                 acc.push({
                     title: attr.label,
                     data: attr.name,
