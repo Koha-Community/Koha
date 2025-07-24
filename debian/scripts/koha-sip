@@ -67,7 +67,7 @@ start_sip()
         if [ ! -f "/etc/koha/sites/${name}/SIPconfig.xml" ] || [ ! -f "/var/lib/koha/${name}/sip.enabled" ] ; then
             echo "SIP is disabled, or you do not have a SIPconfig.xml file."
         else
-            adjust_paths_dev_install $name
+            adjust_paths_git_install $name
             export KOHA_HOME PERL5LIB
 
             if [ "$DEV_INSTALL" = "" ]; then

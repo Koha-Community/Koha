@@ -367,7 +367,7 @@ _do_instance() {
     local KOHA_HOME=$KOHA_HOME
     local DEV_INSTALL=$DEV_INSTALL
 
-    adjust_paths_dev_install $name
+    adjust_paths_git_install $name
     PERL5LIB=$PERL5LIB:$KOHA_HOME/installer:$KOHA_HOME/lib/installer
     # If debug mode is enabled, add the debugger lib path
     # to PERL5LIB if appropriate

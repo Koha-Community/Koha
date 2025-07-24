@@ -365,7 +365,7 @@ is_elasticsearch_enabled()
     fi
 }
 
-adjust_paths_dev_install()
+adjust_paths_git_install()
 {
 # Adjust KOHA_HOME, PERL5LIB, KOHA_BINDIR for git installs
 

@@ -172,7 +172,7 @@ while [ $# -gt 0 ]; do
 done
 
 # Optionally use alternative paths for a dev install
-adjust_paths_dev_install $1
+adjust_paths_git_install $1
 if [ "$DEV_INSTALL" = "" ]; then
     KOHA_BINDIR=$KOHA_HOME/bin
 else

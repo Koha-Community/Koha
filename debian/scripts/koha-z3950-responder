@@ -302,7 +302,7 @@ if [ $# -gt 0 ]; then
 
         if is_instance $name; then
 
-            adjust_paths_dev_install $name
+            adjust_paths_git_install $name
             export DEV_INSTALL
             export KOHA_HOME
             PERL5LIB=$PERL5LIB:$KOHA_HOME/installer:$KOHA_HOME/lib/installer

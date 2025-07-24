@@ -294,7 +294,7 @@ while [ $# -gt 0 ]; do
 
 done
 
-if [ "$dev" != "" ]; then adjust_paths_dev_install $dev; fi
+if [ "$dev" != "" ]; then adjust_paths_git_install $dev; fi
 check_koha_conf
 init_template_paths
 PERL_CMD=`which perl`
