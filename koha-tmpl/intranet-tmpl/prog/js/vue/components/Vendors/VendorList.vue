@@ -64,7 +64,6 @@ export default {
             fp_config: flatpickr_defaults,
             vendor_count: 0,
             initialized: false,
-            searchTerm: null,
             tableOptions: {
                 columns: this.getTableColumns(),
                 options: {
@@ -73,6 +72,7 @@ export default {
                 url: () => this.tableURL(),
                 table_settings: this.vendorTableSettings,
                 add_filters: true,
+                default_filters: {},
                 filters_options: {
                     1: [
                         { _id: 0, _str: this.$__("Inactive") },
@@ -118,8 +118,14 @@ export default {
     beforeRouteEnter(to, from, next) {
         next(vm => {
             vm.getVendorCount().then(() => (vm.initialized = true));
-            if (to.query.supplier) {
-                vm.searchTerm = to.query.supplier;
+            const searchTerm = to.query.supplier;
+            if (searchTerm) {
+                vm.tableOptions.default_filters = {
+                    "-and": [
+                        { "me.name": { like: `%${searchTerm}%` } },
+                        { "aliases.alias": { like: `%${searchTerm}%` } },
+                    ],
+                };
             }
         });
     },
@@ -183,9 +189,6 @@ export default {
         },
         tableURL() {
             let url = "/api/v1/acquisitions/vendors";
-            if (this.searchTerm) {
-                url += "?name=" + this.searchTerm;
-            }
             return url;
         },
         getTableColumns() {
