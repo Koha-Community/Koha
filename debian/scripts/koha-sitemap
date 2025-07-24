@@ -110,7 +110,7 @@ generate_sitemap()
         if sudo -u "$instance-koha" -H \
             env PERL5LIB=$PERL5LIB \
             KOHA_CONF="/etc/koha/sites/$instance/koha-conf.xml" \
-            $KOHA_BINDIR/cronjobs/sitemap.pl \
+            $KOHA_HOME/$KOHA_BINDIR/cronjobs/sitemap.pl \
                 --dir $sitemapdir ; then
             return 0
         else
@@ -171,19 +171,13 @@ while [ $# -gt 0 ]; do
 
 done
 
-# Optionally use alternative paths for a dev install
-adjust_paths_git_install $1
-if [ "$GIT_INSTALL" = "" ]; then
-    KOHA_BINDIR=$KOHA_HOME/bin
-else
-    KOHA_BINDIR=$KOHA_HOME/misc
-fi
-
 if [ $# -gt 0 ]; then
     # We have at least one instance name
     for name in "$@"; do
 
         if is_instance $name; then
+
+            adjust_paths_git_install $name
 
             case $op in
                 "generate")

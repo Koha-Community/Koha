@@ -84,12 +84,6 @@ run_rebuild_elasticsearch()
     # read instance name and eliminate instance name from params
     local name=$1; shift
 
-    if [ "$GIT_INSTALL" = "" ]; then
-        KOHA_BINDIR=${KOHA_HOME}/bin
-    else
-        KOHA_BINDIR=${KOHA_HOME}/misc
-    fi
-
     if [ "${clo_commit_size}" -gt 0 ] 2>/dev/null; then
         commit_size=${clo_commit_size}
     fi
@@ -120,8 +114,9 @@ run_rebuild_elasticsearch()
         rebuild_opts="${rebuild_opts} -v"
     fi
 
+    # KOHA_HOME and KOHA_BINDIR may have been adjusted/set by adjust_paths_git_install
     if koha-shell \
-          -c "${KOHA_BINDIR}/search_tools/rebuild_elasticsearch.pl ${rebuild_opts}" \
+          -c "${KOHA_HOME}/${KOHA_BINDIR}/search_tools/rebuild_elasticsearch.pl ${rebuild_opts}" \
           ${name}; then
         return 0
     else
@@ -177,9 +172,6 @@ while [ -n "$*" ]; do
     shift
 done
 
-# Optionally use alternative paths for a dev install
-adjust_paths_git_install $1
-
 # Parse command line.
 if [ $# -lt 1 ]; then
     usage
@@ -190,6 +182,7 @@ fi
 for name in "$@"
 do
     if is_instance $name; then
+        adjust_paths_git_install $name
         if [ "${op}" = "rebuild" ]; then
             if ! run_rebuild_elasticsearch $name; then
                 warn "Something went wrong rebuilding indexes for ${name}"

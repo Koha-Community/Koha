@@ -211,23 +211,15 @@ while [ $# -gt 0 ]; do
 
 done
 
-# Optionally use alternative paths for a dev install
-adjust_paths_git_install $1
-
-if [ "$GIT_INSTALL" = "" ]; then
-    worker_DAEMON="${KOHA_HOME}/bin/workers/background_jobs_worker.pl"
-else
-    worker_DAEMON="${KOHA_HOME}/misc/workers/background_jobs_worker.pl"
-fi
-
-# PERL5LIB has been read from etc/default
-export PERL5LIB
-
 if [ $# -gt 0 ]; then
     # We have at least one instance name
     for name in "$@"; do
 
         if is_instance $name; then
+
+            adjust_paths_git_install $name
+            worker_DAEMON="${KOHA_HOME}/${KOHA_BINDIR}/workers/background_jobs_worker.pl"
+            export PERL5LIB
 
             case $op in
                 "start")

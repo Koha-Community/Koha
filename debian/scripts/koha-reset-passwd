@@ -45,19 +45,10 @@ set_password()
     local instancename=$1
     local userid=$2
 
-    # Optionally use alternative paths for a dev install
-    adjust_paths_git_install $1
-
-    if [ "$GIT_INSTALL" = "" ]; then
-        KOHA_BINDIR=$KOHA_HOME/bin
-    else
-        KOHA_BINDIR=$KOHA_HOME/misc
-    fi
-
     if sudo -u "$instancename-koha" -H \
         env PERL5LIB=$PERL5LIB \
         KOHA_CONF="/etc/koha/sites/$instancename/koha-conf.xml" \
-        $KOHA_BINDIR/admin/set_password.pl --userid $userid ; then
+        $KOHA_HOME/$KOHA_BINDIR/admin/set_password.pl --userid $userid ; then
 
         return 0
     else
@@ -72,6 +63,8 @@ fi
 
 instance="$1"
 shift
+# Adjust KOHA_HOME, KOHA_BINDIR if needed
+adjust_paths_git_install $instance
 
 for userid in "$@"
 do

@@ -70,7 +70,7 @@ start_sip()
             adjust_paths_git_install $name
             export KOHA_HOME PERL5LIB
 
-            if [ "$GIT_INSTALL" = "" ]; then
+            if ! is_git_install $name; then
                 LIBDIR=$KOHA_HOME/lib
             else
                 LIBDIR=$KOHA_HOME
