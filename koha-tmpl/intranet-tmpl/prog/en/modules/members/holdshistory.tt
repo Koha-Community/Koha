@@ -181,7 +181,7 @@
             let old_holds_table = build_holds_table("#table_oldholdshistory", 1);
             function build_holds_table(table_id, old){
                 let additional_filters = {
-                    "-or": function(){
+                    "-and": function(){
                         let statuses = [];
                         let include_cancelled = false;
                         if ( table_id == '#table_holdshistory' ) {
