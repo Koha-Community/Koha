@@ -1,4 +1,4 @@
-describe("Breadcrumbs", () => {
+describe("Vue breadcrumbs", () => {
     beforeEach(() => {
         cy.login();
         cy.title().should("eq", "Koha staff interface");
@@ -17,19 +17,6 @@ describe("Breadcrumbs", () => {
             })
             .then(vendor => {
                 cy.wrap(vendor).as("vendor");
-                return cy.task("buildSampleObject", {
-                    object: "basket",
-                    values: { vendor_id: vendor.id },
-                });
-            })
-            .then(generatedBasket => {
-                return cy.task("insertObject", {
-                    type: "basket",
-                    object: generatedBasket,
-                });
-            })
-            .then(basket => {
-                cy.wrap(basket).as("basket");
             });
     });
     afterEach(function () {

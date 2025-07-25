@@ -553,6 +553,16 @@ const deleteSampleObjects = async allObjects => {
             whereColumn: "itemtype",
             idField: "item_type_id",
         },
+        erm_agreement: {
+            plural: "erm_agreements",
+            table: "erm_agreements",
+            whereColumn: "agreement_id",
+        },
+        erm_eholdings_title: {
+            plural: "erm_eholdings_titles",
+            table: "erm_eholdings_titles",
+            whereColumn: "title_id",
+        },
     };
     // Merge by type
     const mergedObjects = {};
@@ -582,6 +592,8 @@ const deleteSampleObjects = async allObjects => {
         "biblios",
         "libraries",
         "item_types",
+        "erm_agreements",
+        "erm_eholdings_titles",
     ];
     const matchTypeToObjectMap = type => {
         const matchingKey = Object.keys(objectsMap).find(
@@ -804,6 +816,43 @@ const insertObject = async ({ type, object, baseUrl, authHeader }) => {
                 });
             })
             .then(baskets => baskets[0]);
+    } else if (type === "erm_agreement") {
+        const {
+            agreement_id,
+            _strings,
+            periods,
+            user_roles,
+            agreement_relationships,
+            agreement_licenses,
+            documents,
+            extended_attributes,
+            vendor,
+            ...erm_agreement
+        } = object;
+        if (typeof periods[0] !== "string") {
+            erm_agreement.periods = periods;
+        }
+        return apiPost({
+            endpoint: "/api/v1/erm/agreements",
+            body: erm_agreement,
+            baseUrl,
+            authHeader,
+        });
+    } else if (type === "erm_eholdings_title") {
+        const {
+            title_id,
+            biblio_id,
+            create_linked_biblio,
+            is_selected,
+            resources,
+            ...erm_eholdings_title
+        } = object;
+        return apiPost({
+            endpoint: "/api/v1/erm/eholdings/local/titles",
+            body: erm_eholdings_title,
+            baseUrl,
+            authHeader,
+        });
     } else {
         throw Error(`Unsupported object type '${type}' to insert`);
     }
