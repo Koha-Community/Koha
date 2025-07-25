@@ -814,6 +814,18 @@ sub request_transfer {
         }
     }
 
+    my $matching_transfers = Koha::Item::Transfers->search(
+        {
+            tobranch      => $params->{to}->branchcode,
+            frombranch    => $self->holdingbranch,
+            itemnumber    => $self->itemnumber,
+            reason        => $params->{reason},
+            datearrived   => undef,
+            datecancelled => undef
+        }
+    );
+    return $matching_transfers->next if $matching_transfers->count;
+
     Koha::Exceptions::Item::Transfer::Limit->throw()
         unless ( $params->{ignore_limits}
         || $self->can_be_transferred( { to => $params->{to} } ) );
