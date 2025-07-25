@@ -1119,7 +1119,7 @@ subtest 'pickup_locations() tests' => sub {
 
 subtest 'request_transfer() tests' => sub {
 
-    plan tests => 18;
+    plan tests => 20;
 
     $schema->storage->txn_begin;
 
@@ -1173,6 +1173,17 @@ subtest 'request_transfer() tests' => sub {
     );
 
     my $original_transfer = $transfer->get_from_storage;
+
+    # Duplicated request
+    $transfer = $item->request_transfer( { to => $library1, reason => 'Manual' } );
+    is(
+        ref($transfer), 'Koha::Item::Transfer',
+        'Koha::Item->request_transfer should return a Koha::Item::Transfer object'
+    );
+    is(
+        $transfer->branchtransfer_id, $original_transfer->branchtransfer_id,
+        "When a matching transfer is requested we update the existing one"
+    );
 
     # Transfer already in progress
     throws_ok { $item->request_transfer( { to => $library2, reason => 'Manual' } ) }
