@@ -1784,11 +1784,11 @@ sub AddIssue {
                 );
             }
             $issue->discard_changes;
+
             #Update borrowers.lastseen
-            try{
+            try {
                 $patron->update_lastseen('check_out');
-            }
-            catch {
+            } catch {
                 my $exception = $_;
                 warn "Problem updating lastseen date for borrowernumber " . $patron->borrowernumber . ": $exception";
             };
@@ -2589,10 +2589,9 @@ sub AddReturn {
             if C4::Context->preference("ReturnLog");
 
         #Update borrowers.lastseen
-        try{
+        try {
             $patron->update_lastseen('check_in');
-        }
-        catch {
+        } catch {
             my $exception = $_;
             warn "Problem updating lastseen date for borrowernumber " . $patron->borrowernumber . ": $exception";
             $messages->{UpdateLastSeenError} = "$exception";
@@ -3544,10 +3543,9 @@ sub AddRenewal {
             );
 
             #Update borrowers.lastseen
-            try{
+            try {
                 $patron->update_lastseen('renewal');
-            }
-            catch {
+            } catch {
                 my $exception = $_;
                 warn "Problem updating lastseen date for borrowernumber " . $patron->borrowernumber . ": $exception";
             };
