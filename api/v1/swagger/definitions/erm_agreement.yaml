@@ -13,6 +13,7 @@ properties:
   name:
     description: name of the agreement
     type: string
+    maxLength: 255
   description:
     description: description of the agreement
     type:
@@ -21,11 +22,13 @@ properties:
   status:
     description: current status of the agreement
     type: string
+    maxLength: 80
   closure_reason:
     description: reason of the closure
     type:
       - string
       - "null"
+    maxLength: 80
   is_perpetual:
     description: is the agreement perpetual
     type: boolean
@@ -34,6 +37,7 @@ properties:
     type:
       - string
       - "null"
+    maxLength: 80
   license_info:
     description: info about the license
     type:
