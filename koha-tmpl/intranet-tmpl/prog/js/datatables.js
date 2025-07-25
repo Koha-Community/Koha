@@ -1059,7 +1059,7 @@ function _dt_add_filters(table_node, table_dt, filters_options = {}) {
                 }
                 $(filters_options[i])
                     .filter(function () {
-                        return this._id && this._str;
+                        return this._id !== "" && this._str !== "";
                     })
                     .each(function () {
                         let optionValue =
