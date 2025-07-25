@@ -19,7 +19,12 @@
                 [% FOREACH hold IN holds %]
                     [% biblio = hold.biblio %]
                     <tr>
-                        <td><a href="/cgi-bin/koha/reserve/request.pl?biblionumber=[% biblio.biblionumber | uri %]">[% biblio.title | html %]</a></td>
+                        <td>
+                            <a href="/cgi-bin/koha/reserve/request.pl?biblionumber=[% biblio.biblionumber | uri %]"> [% biblio.title | html %] </a>
+                            [% IF (hold.is_hold_group_target) %]
+                                <br /><span class="fw-bold fst-italic">(target of hold group)</span>
+                            [% END %]
+                        </td>
                         <td>[% hold.priority | html %]</td>
                         <td>[% hold.reservenotes | html %]</td>
                     </tr>
