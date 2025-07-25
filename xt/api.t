@@ -225,7 +225,8 @@ subtest 'maxlength + enum' => sub {
         patron              => 'Borrower',
         patron_category     => 'Category',
         vendor              => 'Aqbookseller',
-        erm_eholdings_title => 'ErmEholdingsTitle'
+        erm_eholdings_title => 'ErmEholdingsTitle',
+        erm_agreement       => 'ErmAgreement'
     };
     plan tests => scalar keys %$def_map;
     my $schema = Koha::Database->new->schema;
