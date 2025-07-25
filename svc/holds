@@ -115,6 +115,7 @@ while ( my $h = $holds_rs->next() ) {
         itemtype_limit        => $itemtype_limit,
         hold_group_id         => $h->hold_group_id,
         visual_hold_group_id  => $h->hold_group ? $h->hold_group->visual_hold_group_id : q{},
+        is_hold_group_target  => $h->is_hold_group_target,
         reservedate_formatted => $h->reservedate()
         ? output_pref( { dt => dt_from_string( $h->reservedate() ), dateonly => 1 } )
         : q{},

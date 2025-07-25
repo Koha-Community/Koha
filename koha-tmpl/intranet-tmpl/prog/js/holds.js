@@ -259,6 +259,14 @@ $(document).ready(function () {
                                         "</span>";
                                 }
 
+                                if (oObj.is_hold_group_target) {
+                                    var link = __("target of hold group");
+                                    title +=
+                                        '<br><span class="fw-bold fst-italic">(' +
+                                        link +
+                                        ")</span>";
+                                }
+
                                 return title;
                             },
                         },

@@ -78,6 +78,22 @@ sub holds {
     return Koha::Holds->_new_from_dbic($holds_rs);
 }
 
+=head3 target_hold_id
+
+    $holds = $hold_group->target_hold_id
+
+Return the target_hold_id
+
+=cut
+
+sub target_hold_id {
+    my ($self) = @_;
+
+    return unless $self->_result->hold_group_target_hold;
+
+    return $self->_result->hold_group_target_hold->reserve_id;
+}
+
 =head3 _type
 
 =cut

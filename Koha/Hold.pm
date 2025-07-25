@@ -271,6 +271,24 @@ sub cleanup_hold_group {
     }
 }
 
+=head3 is_hold_group_target
+
+$self->is_hold_group_target;
+
+Returns whether this hold is its hold group target
+
+=cut
+
+sub is_hold_group_target {
+    my ($self) = @_;
+
+    return 1
+        if $self->hold_group
+        && $self->hold_group->target_hold_id
+        && $self->hold_group->target_hold_id eq $self->reserve_id;
+    return 0;
+}
+
 =head3 set_transfer
 
 =cut
