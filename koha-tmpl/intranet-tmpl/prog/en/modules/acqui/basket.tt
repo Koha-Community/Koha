@@ -563,35 +563,29 @@
                             <table id="orders">
                                 <thead>
                                     <tr>
-                                        <th>No.</th>
-                                        <th>[% tp('noun', 'Order') | html %]</th>
-                                        <th>RRP tax exc.</th>
-                                        <th>Actual cost tax exc.</th>
-                                        <th>Budgeted cost tax exc.</th>
-                                        <th>RRP tax inc.</th>
-                                        <th>Actual cost tax inc.</th>
-                                        <th>Budgeted cost tax inc.</th>
-                                        <th>Replacement price</th>
-                                        <th>Qty.</th>
-                                        <th>Total tax exc. ([% currency | html %])</th>
-                                        <th>Total tax inc. ([% currency | html %])</th>
-                                        <th>GST %</th>
-                                        <th>GST</th>
-                                        <th>Fund</th>
-                                        <th>Estimated delivery date</th>
-                                        <th>Statistic 1</th>
-                                        <th>Statistic 2</th>
-                                        <th>Invoice</th>
-                                        [% IF Koha.Preference('EDIFACT') && ediaccount %]
-                                            <th>Supplier report</th>
-                                        [% END %]
-                                        <th class="no-sort no-export">Place hold</th>
-                                        [% IF ( active && !closedate ) %]
-                                            <th class="no-sort no-export">Modify</th>
-                                        [% END %]
-                                        [% IF !closedate || Koha.Preference('CancelOrdersInClosedBaskets') %]
-                                            <th class="no-sort no-export">Cancel order</th>
-                                        [% END %]
+                                        <th data-colname="order_line">No.</th>
+                                        <th data-colname="order_information">[% tp('noun', 'Order') | html %]</th>
+                                        <th data-colname="recommended_retail_price_tax_excluded">RRP tax exc.</th>
+                                        <th data-colname="actual_cost_tax_excluded">Actual cost tax exc.</th>
+                                        <th data-colname="budgeted_cost_price_tax_included">Budgeted cost tax exc.</th>
+                                        <th data-colname="recommended_retail_price_tax_included">RRP tax inc.</th>
+                                        <th data-colname="actual_cost_tax_included">Actual cost tax inc.</th>
+                                        <th data-colname="budgeted_cost_tax_included">Budgeted cost tax inc.</th>
+                                        <th data-colname="replacement_price">Replacement price</th>
+                                        <th data-colname="quantity">Qty.</th>
+                                        <th data-colname="total_tax_excluded">Total tax exc. ([% currency | html %])</th>
+                                        <th data-colname="total_tax_included">Total tax inc. ([% currency | html %])</th>
+                                        <th data-colname="goods_and_services_tax_percentage">GST %</th>
+                                        <th data-colname="goods_and_services_tax">GST</th>
+                                        <th data-colname="fund">Fund</th>
+                                        <th data-colname="estimated_delivery_date">Estimated delivery date</th>
+                                        <th data-colname="statistic1">Statistic 1</th>
+                                        <th data-colname="statistic2">Statistic 2</th>
+                                        <th data-colname="invoice">Invoice</th>
+                                        <th data-colname="supplier_report">Supplier report</th>
+                                        <th data-colname="place_hold" class="no-sort no-export">Place hold</th>
+                                        <th data-colname="modify" class="no-sort no-export">Modify</th>
+                                        <th data-colname="cancel" class="no-sort no-export">Cancel order</th>
                                     </tr>
                                 </thead>
                                 <tfoot>
@@ -616,16 +610,10 @@
                                             <th>&nbsp;</th>
                                             <th>&nbsp;</th>
                                             <th>&nbsp;</th>
-                                            [% IF Koha.Preference('EDIFACT') && ediaccount %]
-                                                <th>&nbsp;</th>
-                                            [% END %]
                                             <th>&nbsp;</th>
-                                            [% IF ( active && !closedate ) %]
-                                                <th>&nbsp;</th>
-                                            [% END %]
-                                            [% IF !closedate || Koha.Preference('CancelOrdersInClosedBaskets') %]
-                                                <th>&nbsp;</th>
-                                            [% END %]
+                                            <th>&nbsp;</th>
+                                            <th>&nbsp;</th>
+                                            <th>&nbsp;</th>
                                         </tr>
                                     [% END %]
                                     <tr>
@@ -648,16 +636,10 @@
                                         <th>&nbsp;</th>
                                         <th>&nbsp;</th>
                                         <th>&nbsp;</th>
-                                        [% IF Koha.Preference('EDIFACT') && ediaccount %]
-                                            <th>&nbsp;</th>
-                                        [% END %]
                                         <th>&nbsp;</th>
-                                        [% IF ( active && !closedate ) %]
-                                            <th>&nbsp;</th>
-                                        [% END %]
-                                        [% IF !closedate || Koha.Preference('CancelOrdersInClosedBaskets') %]
-                                            <th>&nbsp;</th>
-                                        [% END %]
+                                        <th>&nbsp;</th>
+                                        <th>&nbsp;</th>
+                                        <th>&nbsp;</th>
                                     </tr>
                                 </tfoot>
                                 <tbody>
@@ -801,6 +783,8 @@
 
                                             [% IF Koha.Preference('EDIFACT') && ediaccount %]
                                                 <td>[% books_loo.suppliers_report | html %]</td>
+                                            [% ELSE %]
+                                                <td></td>
                                             [% END %]
                                             <td>
                                                 [% IF ( books_loo.biblionumber && CAN_user_reserveforothers_place_holds ) %]
@@ -828,6 +812,8 @@
                                                         >
                                                     [% END %]
                                                 </td>
+                                            [% ELSE %]
+                                                <td></td>
                                             [% END %]
                                             [% IF ( !closedate || Koha.Preference('CancelOrdersInClosedBaskets') ) %]
                                                 <td>
@@ -864,6 +850,8 @@
                                                         [% END %]
                                                     [% END %]
                                                 </td>
+                                            [% ELSE %]
+                                                <td></td>
                                             [% END %]
                                         </tr>
                                     [% END %]
@@ -1254,10 +1242,26 @@
         $(document).ready(function() {
             var table_settings = [% TablesSettings.GetTableSettings( 'acqui', 'basket', 'orders', 'json' ) | $raw %];
             [% IF !(Koha.Preference('EDIFACT') && ediaccount) %]
-                // FIXME This cannot work correctly without bKohaColumnsUseNames
-                table_settings['columns'].splice(18, 1);
+                table_settings.columns.find(c => c.columnname == 'supplier_report').is_hidden = 1;
+                table_settings.columns.find(c => c.columnname == 'supplier_report').cannot_be_toggled = 1;
+            [% ELSE %]
+                table_settings.columns.find(c => c.columnname == 'supplier_report').is_hidden = 0;
             [% END %]
+            [% IF ( active && !closedate ) %]
+                table_settings.columns.find(c => c.columnname == 'modify').is_hidden = 1;
+                table_settings.columns.find(c => c.columnname == 'modify').cannot_be_toggled = 1;
+            [% ELSE %]
+                table_settings.columns.find(c => c.columnname == 'modify').is_hidden = 0;
+            [% END %]
+            [% IF !closedate || Koha.Preference('CancelOrdersInClosedBaskets') %]
+                table_settings.columns.find(c => c.columnname == 'cancel').is_hidden = 1;
+                table_settings.columns.find(c => c.columnname == 'modify').cannot_be_toggled = 1;
+            [% ELSE %]
+                table_settings.columns.find(c => c.columnname == 'cancel').is_hidden = 0;
+            [% END %]
+
             $("#orders").kohaTable({
+                bKohaColumnsUseNames: true,
                 pagingType: "full",
                 autoWidth: false,
             }, table_settings);
