@@ -58,7 +58,7 @@ if ( $op eq 'cud-cancel_reserve' and $reserve_id ) {
         $hold->cancel( { cancellation_reason => $cancellation_reason } );
         push @messages, { type => 'message', code => 'hold_cancelled' };
     }
-} elsif ( $op =~ m|^mark_as_lost| ) {
+} elsif ( $op eq 'cud-mark_as_lost' or $op eq 'cud-mark_as_lost_and_notify' ) {
     my $hold = Koha::Holds->find($reserve_id);
     die "wrong reserve_id" unless $hold;    # This is a bit rude, but we are not supposed to get a wrong reserve_id
     my $item = $hold->item;
