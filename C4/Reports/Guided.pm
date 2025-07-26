@@ -881,7 +881,54 @@ sub get_saved_reports {
 
     my $result = $dbh->selectall_arrayref( $query, { Slice => {} }, @args );
 
-    return $result;
+    my $limit_pref_enabled = C4::Context->preference('LimitReportsByLibrary');
+
+    return $result unless $limit_pref_enabled;
+
+    # Preference enabled AND showing all: attach library limits metadata, but do not filter
+    if ( $filter->{show_all_reports} ) {
+        foreach my $report (@$result) {
+            my $report_obj = Koha::Reports->find( $report->{id} );
+            if ($report_obj) {
+                my $limits_rs = $report_obj->get_library_limits;
+                if ($limits_rs) {
+                    my @branches =
+                        map { { branchcode => $_->branchcode, branchname => $_->branchname } } $limits_rs->as_list;
+                    $report->{library_limits} = \@branches;
+                } else {
+                    $report->{library_limits} = [];
+                }
+            } else {
+                $report->{library_limits} = [];
+            }
+        }
+        return $result;
+    }
+
+    # Preference enabled AND not showing all: apply library limits filtering
+    my $limited_reports = Koha::Reports->search_with_library_limits( {}, {}, C4::Context::mybranch() );
+    my %allowed         = map  { $_->{id} => 1 } @{ $limited_reports->unblessed };
+    my @limited         = grep { $allowed{ $_->{id} } } @$result;
+
+    # Attach library limits data for the filtered list
+    foreach my $report (@limited) {
+        my $report_obj = Koha::Reports->find( $report->{id} );
+        if ($report_obj) {
+            my $limits_rs = $report_obj->get_library_limits;
+            if ($limits_rs) {
+                my @branches =
+                    map { { branchcode => $_->branchcode, branchname => $_->branchname } } $limits_rs->as_list;
+                $report->{library_limits} = \@branches;
+            } else {
+                $report->{library_limits} = [];
+            }
+        } else {
+            $report->{library_limits} = [];
+        }
+    }
+
+    return \@limited;
+
 }
 
 =head2 get_column_type($column)

@@ -27,6 +27,8 @@ use C4::Output          qw( output_html_with_http_headers );
 use Koha::DateUtils     qw( dt_from_string );
 use Koha::Reports;
 use Koha::Email;
+use Koha::Patrons;
+use Koha::Report;
 
 my $input = CGI->new;
 my $base;
@@ -48,8 +50,20 @@ my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
     }
 );
 
-my $op = $input->param('op') // q{};
-my $id = $input->param('id');
+my $op                 = $input->param('op') // q{};
+my $id                 = $input->param('id');
+my $selected_report_id = $input->param('report');
+my $selected_report    = $selected_report_id ? Koha::Reports->find($selected_report_id) : undef;
+if ( $op eq 'cud-add' && $selected_report_id ) {
+    my $logged_in_user = Koha::Patrons->find($borrowernumber);
+    if ( !$selected_report ) {
+        $template->param( no_sql_for_id => $selected_report_id, access_denied => 1 );
+        $op = '';
+    } elsif ( !$selected_report->can_access($logged_in_user) ) {
+        $template->param( access_denied => 1, id => $selected_report_id );
+        $op = '';
+    }
+}
 
 if ( $op eq 'cud-add' ) {
 
@@ -111,14 +125,31 @@ foreach my $job ( values %$jobs ) {
 
 @jobloop = sort { $a->{TIME} cmp $b->{TIME} } @jobloop;
 
-my $reports = get_saved_reports();
+my $logged_in_user    = Koha::Patrons->find($borrowernumber);
+my $can_manage_limits = Koha::Report->can_manage_limits($logged_in_user);
+
+my $reports =
+    $can_manage_limits
+    ? get_saved_reports( { show_all_reports => 1 } )
+    : get_saved_reports();
+
+my @final_reports;
+if ($can_manage_limits) {
+    @final_reports = @$reports;
+} else {
+    @final_reports = grep {
+        my $r_obj = Koha::Reports->find( $_->{id} );
+        $r_obj && $r_obj->can_access($logged_in_user);
+    } @$reports;
+}
+
 if ( defined $id ) {
-    foreach my $report (@$reports) {
+    foreach my $report (@final_reports) {
         $report->{'selected'} = 1 if $report->{'id'} eq $id;
     }
 }
 
-$template->param( 'savedreports' => $reports );
+$template->param( 'savedreports' => \@final_reports );
 $template->param( JOBS           => \@jobloop );
 my $time = localtime(time);
 $template->param( 'time' => $time );

@@ -22,7 +22,7 @@ use Modern::Perl;
 
 use Test::NoWarnings;
 use Test::MockModule qw(strict);
-use Test::More tests => 14;
+use Test::More tests => 15;
 use Test::Warn;
 
 use t::lib::TestBuilder;
@@ -331,6 +331,91 @@ subtest 'get_saved_reports' => sub {
         get_report_areas(), [ 'CIRC', 'CAT', 'PAT', 'ACQ', 'ACC', 'SER' ],
         "get_report_areas returns the correct array of report areas"
     );
+};
+
+subtest 'get_saved_reports branch limits' => sub {
+    my $schema = Koha::Database->new->schema;
+    my $dbh    = C4::Context->dbh;
+
+    # Skip gracefully if the feature table is not present (e.g. older schema)
+    my $sth = $dbh->prepare(q{SHOW TABLES LIKE 'reports_library_limits'});
+    $sth->execute;
+    my ($exists) = $sth->fetchrow_array;
+    unless ($exists) {
+        plan skip_all => 'reports_library_limits table not present; skipping branch limits tests';
+        return;
+    }
+
+    plan tests => 13;
+
+    # Clean related tables
+    $dbh->do(q|DELETE FROM saved_sql|);
+    $dbh->do(q|DELETE FROM saved_reports|);
+    $dbh->do(q|DELETE FROM reports_library_limits|);
+
+    # Build two libraries (branches)
+    my $lib_a = $builder->build( { source => 'Branch', value => 'Library A' } );
+    my $lib_b = $builder->build( { source => 'Branch', value => 'Library B' } );
+
+    # Mock userenv to lib_a
+    t::lib::Mocks::mock_userenv( { branchcode => $lib_a->{branchcode} } );
+
+    # Build three reports
+    my @ids;
+    foreach my $n ( 1 .. 3 ) {
+        push @ids, save_report(
+            {
+                borrowernumber => $builder->build( { source => 'Borrower' } )->{borrowernumber},
+                sql            => "SELECT $n",
+                name           => "Report $n",
+                area           => 'CIRC',
+                group          => 'G',
+                subgroup       => 'SG',
+                type           => 'T',
+                notes          => undef,
+                cache_expiry   => undef,
+                public         => 0,
+            }
+        );
+    }
+
+    my ( $r1, $r2, $r3 ) = map { Koha::Reports->find($_) } @ids;
+
+    # Apply library limits to first two reports (r1 => lib_a only, r2 => lib_b only)
+    $r1->replace_library_limits( [ $lib_a->{branchcode} ] );
+    $r2->replace_library_limits( [ $lib_b->{branchcode} ] );
+
+    # r3 has no limits
+
+    # Preference OFF: should ignore limits, return all three, no library_limits metadata
+    t::lib::Mocks::mock_preference( 'LimitReportsByLibrary', 0 );
+    my $all_pref_off = get_saved_reports();
+    is( scalar(@$all_pref_off), 3, 'Pref OFF returns all reports' );
+    ok( !defined $all_pref_off->[0]{library_limits}, 'Pref OFF does not attach metadata' );
+
+    # Preference ON, filtering applied (userenv branch is lib_a)
+    t::lib::Mocks::mock_preference( 'LimitReportsByLibrary', 1 );
+    my $filtered = get_saved_reports();
+    is( scalar(@$filtered), 2, 'Pref ON filters reports by user branch and unrestricted reports' );
+    my @filtered_ids = sort map { $_->{id} } @$filtered;
+    my @expected_ids = sort ( $r1->id, $r3->id );          # r1 limited to lib_a + r3 unrestricted
+    is_deeply( \@filtered_ids, \@expected_ids, 'Filtered list contains branch-limited and unrestricted reports' );
+    foreach my $r (@$filtered) {
+        ok( defined $r->{library_limits}, 'Metadata attached on pref ON filtered path' );
+    }
+    my ($meta_r1) = grep { $_->{id} == $r1->id } @$filtered;
+    is_deeply( $meta_r1->{library_limits}, [ $lib_a->{branchcode} ], 'r1 metadata lists its single limit' );
+    my ($meta_r3) = grep { $_->{id} == $r3->id } @$filtered;
+    is_deeply( $meta_r3->{library_limits}, [], 'Unrestricted r3 has empty limits array' );
+
+    # Preference ON + show_all_reports flag: should return all, with metadata for all
+    my $show_all = get_saved_reports( { show_all_reports => 1 } );
+    is( scalar(@$show_all), 3, 'show_all_reports returns all reports when pref ON' );
+    foreach my $r (@$show_all) {
+        ok( defined $r->{library_limits}, 'Metadata attached for each report in show_all path' );
+    }
+    my ($show_r2) = grep { $_->{id} == $r2->id } @$show_all;
+    is_deeply( $show_r2->{library_limits}, [ $lib_b->{branchcode} ], 'r2 metadata lists its limit under show_all' );
 };
 
 subtest 'Ensure last_run is populated' => sub {

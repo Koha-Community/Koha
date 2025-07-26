@@ -155,6 +155,7 @@ our $mapping = {
     'admin/preferences#logs'                   => '/logspreferences.html',
     'admin/preferences#opac'                   => '/opacpreferences.html',
     'admin/preferences#patrons'                => '/patronspreferences.html',
+    'admin/preferences#reports'                => '/reportspreferences.html',
     'admin/preferences#searching'              => '/searchingpreferences.html',
     'admin/preferences#serials'                => '/serialspreferences.html',
     'admin/preferences#staff_interface'        => '/staffclientpreferences.html',

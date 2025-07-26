@@ -165,6 +165,17 @@
             </li>
         [% END %]
 
+        [% IF ( reports ) %]
+            <li class="active">
+                <a title="Reports" href="/cgi-bin/koha/admin/preferences.pl?tab=reports">Reports</a>
+                [% PROCESS subtabs %]
+            </li>
+        [% ELSE %]
+            <li>
+                <a title="Reports" href="/cgi-bin/koha/admin/preferences.pl?tab=reports">Reports</a>
+            </li>
+        [% END %]
+
         [% IF ( searching ) %]
             <li class="active">
                 <a title="Searching" href="/cgi-bin/koha/admin/preferences.pl?tab=searching">Searching</a>

@@ -287,6 +287,160 @@ subtest 'apply_execution_time_limit' => sub {
         Koha::Report->apply_execution_time_limit($sql),
         qr!^(?i:select) /\*\+ MAX_EXECUTION_TIME\(1500\) \*/ \* FROM biblio$!,
         'MySQL max execution time hint applied'
+subtest 'reports_branches are added and removed from report_branches table' => sub {
+    plan tests => 4;
+
+    my $updated_nb_of_reports = Koha::Reports->search->count;
+    my $report                = Koha::Report->new(
+        {
+            report_name => 'report_name_for_test_1',
+            savedsql    => 'SELECT * FROM items WHERE itemnumber IN <<Test|list>>',
+        }
+    )->store;
+
+    my $id       = $report->id;
+    my $library1 = $builder->build_object( { class => 'Koha::Libraries' } );
+    my $library2 = $builder->build_object( { class => 'Koha::Libraries' } );
+    my $library3 = $builder->build_object( { class => 'Koha::Libraries' } );
+    my @branches = ( $library1->branchcode, $library2->branchcode, $library3->branchcode );
+
+    $report->replace_library_limits( \@branches );
+
+    my @branches_loop = $report->get_library_limits->as_list;
+    is( scalar @branches_loop, 3, '3 branches added to report_branches table' );
+
+    $report->replace_library_limits( [ $library1->branchcode, $library2->branchcode ] );
+
+    @branches_loop = $report->get_library_limits->as_list;
+    is( scalar @branches_loop, 2, '1 branch removed from report_branches table' );
+
+    $report->delete;
+    is( Koha::Reports->search->count, $updated_nb_of_reports, 'Report deleted, count is back to original' );
+    is(
+        $schema->resultset('ReportsBranch')->search( { report_id => $id } )->count,
+        0,
+        'No branches left in reports_branches table after report deletion'
+    );
+};
+
+subtest 'can_manage_limits and can_access' => sub {
+    plan tests => 21;
+
+    my $libraryA = $builder->build_object( { class => 'Koha::Libraries' } );
+    my $libraryB = $builder->build_object( { class => 'Koha::Libraries' } );
+    my $branchA  = $libraryA->branchcode;
+    my $branchB  = $libraryB->branchcode;
+
+    my $super_patron =
+        $builder->build_object( { class => 'Koha::Patrons', value => { flags => 1, branchcode => $branchA } } );
+    my $mgr_patron   = $builder->build_object( { class => 'Koha::Patrons', value => { branchcode => $branchA } } );
+    my $basic_patron = $builder->build_object( { class => 'Koha::Patrons', value => { branchcode => $branchA } } );
+
+    # Grant reports => manage_report_limits to manager patron (create permission if missing)
+    my $perm = $schema->resultset('Permission')->find( { module_bit => 16, code => 'manage_report_limits' } )
+        // $schema->resultset('Permission')
+        ->create( { module_bit => 16, code => 'manage_report_limits', description => 'Manage report limits' } );
+    $schema->resultset('UserPermission')
+        ->create( { borrowernumber => $mgr_patron->borrowernumber, module_bit => 16, code => 'manage_report_limits' } );
+
+    # Helper to create reports
+    my $r_no = Koha::Report->new( { report_name => 'No limits', savedsql => 'SELECT 1' } )->store;
+    my $r_A  = Koha::Report->new( { report_name => 'Limit A',   savedsql => 'SELECT 1' } )->store;
+    my $r_B  = Koha::Report->new( { report_name => 'Limit B',   savedsql => 'SELECT 1' } )->store;
+    my $r_AB = Koha::Report->new( { report_name => 'Limit AB',  savedsql => 'SELECT 1' } )->store;
+
+    $r_A->replace_library_limits( [$branchA] );
+    $r_B->replace_library_limits( [$branchB] );
+    $r_AB->replace_library_limits( [ $branchA, $branchB ] );
+
+    # Preference ON, branch A
+    t::lib::Mocks::mock_preference( 'LimitReportsByLibrary', 1 );
+    t::lib::Mocks::mock_userenv( { branchcode => $branchA } );
+
+    ok( Koha::Report->can_manage_limits($super_patron),  'pref ON: super manages limits' );
+    ok( Koha::Report->can_manage_limits($mgr_patron),    'pref ON: manager manages limits' );
+    ok( !Koha::Report->can_manage_limits($basic_patron), 'pref ON: basic cannot manage limits' );
+
+    # Basic patron (branch A)
+    ok( $r_no->can_access($basic_patron), 'pref ON: no limits accessible' );
+    ok( $r_A->can_access($basic_patron),  'pref ON: limited includes branch accessible' );
+    ok( !$r_B->can_access($basic_patron), 'pref ON: limited excludes branch denied' );
+    ok( $r_AB->can_access($basic_patron), 'pref ON: multi includes branch accessible' );
+
+    # Manager bypass (branch A)
+    ok( $r_A->can_access($mgr_patron),  'pref ON: manager sees limited A' );
+    ok( $r_B->can_access($mgr_patron),  'pref ON: manager sees limited B' );
+    ok( $r_AB->can_access($mgr_patron), 'pref ON: manager sees multi AB' );
+    ok( $r_no->can_access($mgr_patron), 'pref ON: manager sees no limits' );
+
+    # Superlibrarian bypass (branch A)
+    ok( $r_A->can_access($super_patron),  'pref ON: super sees limited A' );
+    ok( $r_B->can_access($super_patron),  'pref ON: super sees limited B' );
+    ok( $r_AB->can_access($super_patron), 'pref ON: super sees multi AB' );
+
+    # Preference OFF (everything accessible, manage disabled)
+    t::lib::Mocks::mock_preference( 'LimitReportsByLibrary', 0 );
+    ok( !Koha::Report->can_manage_limits($super_patron), 'pref OFF: super cannot manage limits' );
+    ok( !Koha::Report->can_manage_limits($mgr_patron),   'pref OFF: manager cannot manage limits' );
+    ok( !Koha::Report->can_manage_limits($basic_patron), 'pref OFF: basic cannot manage limits' );
+    ok( $r_B->can_access($basic_patron),                 'pref OFF: limited excludes branch still accessible' );
+    ok( $r_A->can_access($basic_patron),                 'pref OFF: limited includes branch accessible' );
+    ok( $r_AB->can_access($basic_patron),                'pref OFF: multi-limit accessible' );
+    ok( $r_no->can_access($basic_patron),                'pref OFF: no limits accessible' );
+};
+
+subtest 'library limits enforcement on save and update' => sub {
+    plan tests => 5;
+
+    my $libraryA = $builder->build_object( { class => 'Koha::Libraries' } );
+    my $branchA  = $libraryA->branchcode;
+
+    my $basic_patron = $builder->build_object( { class => 'Koha::Patrons', value => { branchcode => $branchA } } );
+
+    # Ensure manage_report_limits permission exists and is NOT granted to basic_patron
+    my $perm = $schema->resultset('Permission')->find( { module_bit => 16, code => 'manage_report_limits' } )
+        // $schema->resultset('Permission')
+        ->create( { module_bit => 16, code => 'manage_report_limits', description => 'Manage report limits' } );
+
+    # Create report path
+
+    # pref ON, no permission: creator branch auto-assigned
+    t::lib::Mocks::mock_preference( 'LimitReportsByLibrary', 1 );
+    my $report_create = Koha::Report->new( { report_name => 'limit test create', savedsql => 'SELECT 1' } )->store;
+    my $can_manage    = Koha::Report->can_manage_limits($basic_patron);
+    my @branches      = $can_manage ? () : ( $basic_patron->branchcode );
+    $report_create->replace_library_limits( \@branches );
+    my @limits = $report_create->get_library_limits->as_list;
+    is( scalar @limits,         1,        'pref ON, no perm: create assigns exactly one branch limit' );
+    is( $limits[0]->branchcode, $branchA, 'pref ON, no perm: create limit is the creator branchcode' );
+
+    # pref OFF: no branches from form, no limits stored
+    t::lib::Mocks::mock_preference( 'LimitReportsByLibrary', 0 );
+    my $report_off = Koha::Report->new( { report_name => 'limit test pref off', savedsql => 'SELECT 1' } )->store;
+    $report_off->replace_library_limits( [] );
+    is( $report_off->get_library_limits, undef, 'pref OFF: no limits stored on create' );
+
+    # Update report path
+    t::lib::Mocks::mock_preference( 'LimitReportsByLibrary', 1 );
+
+    # pref ON, no permission, report has existing limits: limits preserved unchanged
+    my $report_update = Koha::Report->new( { report_name => 'limit test update', savedsql => 'SELECT 1' } )->store;
+    $report_update->replace_library_limits( [$branchA] );
+    my $existing_limits = $report_update->get_library_limits;
+    my @preserved       = $existing_limits ? map { $_->branchcode } $existing_limits->as_list : ();
+    $report_update->replace_library_limits( \@preserved );
+    my @updated_limits = $report_update->get_library_limits->as_list;
+    is( scalar @updated_limits, 1, 'pref ON, no perm: update preserves existing limits unchanged' );
+
+    # pref ON, no permission, report has no existing limits: stays limit-free
+    my $report_no_limits =
+        Koha::Report->new( { report_name => 'limit test no limits', savedsql => 'SELECT 1' } )->store;
+    my $existing_limits2 = $report_no_limits->get_library_limits;
+    my @branches2        = $existing_limits2 ? map { $_->branchcode } $existing_limits2->as_list : ();
+    $report_no_limits->replace_library_limits( \@branches2 );
+    is(
+        $report_no_limits->get_library_limits, undef,
+        'pref ON, no perm: update with no existing limits stays limit-free'
     );
 };
 

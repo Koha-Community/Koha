@@ -150,6 +150,7 @@ INSERT INTO permissions (module_bit, code, description) VALUES
    (16, 'create_reports', 'Create SQL reports'),
    (16, 'delete_own_reports', 'Delete SQL reports you have created'),
    (16, 'delete_all_reports', 'Delete SQL reports created by anyone'),
+   (16, 'manage_report_limits', 'Manage report limits'),
    (18, 'manage_courses', 'Add, edit and delete courses'),
    (18, 'add_reserves', 'Add course reserves'),
    (18, 'delete_reserves', 'Remove course reserves'),
