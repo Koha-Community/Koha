@@ -52,7 +52,6 @@ my $non_priority     = $input->param('non_priority');
 my $op               = $input->param('op') || q{};
 my $multi_holds      = $input->param('multi_holds');
 my $hold_group_param = $input->param('hold_group') || undef;
-my $hold_group;
 
 my $patron = Koha::Patrons->find($borrowernumber);
 
@@ -107,7 +106,6 @@ if ( $op eq 'cud-placerequest' && $patron ) {
                                 found            => undef,
                                 itemtype         => $itemtype,
                                 non_priority     => $non_priority,
-                                hold_group_id    => $hold_group ? $hold_group->id : undef,
                             }
                         );
 
@@ -137,7 +135,6 @@ if ( $op eq 'cud-placerequest' && $patron ) {
                         found            => undef,
                         itemtype         => $itemtype,
                         non_priority     => $non_priority,
-                        hold_group_id    => $hold_group ? $hold_group->id : undef,
                     }
                 );
                 push @successful_hold_ids, $reserve_id;
@@ -162,7 +159,6 @@ if ( $op eq 'cud-placerequest' && $patron ) {
                             itemtype         => $itemtype,
                             non_priority     => $non_priority,
                             item_group_id    => $item_group_id,
-                            hold_group_id    => $hold_group ? $hold_group->id : undef,
                         }
                     );
                     push @successful_hold_ids, $reserve_id;

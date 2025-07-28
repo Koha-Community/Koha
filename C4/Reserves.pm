@@ -194,7 +194,6 @@ sub AddReserve {
     my $itemtype               = $params->{itemtype};
     my $non_priority           = $params->{non_priority};
     my $item_group_id          = $params->{item_group_id};
-    my $hold_group_id          = $params->{hold_group_id};
     my $confirmations          = $params->{confirmations};
     my $forced                 = $params->{forced};
 
@@ -259,7 +258,6 @@ sub AddReserve {
             itemtype               => $itemtype,
             item_level_hold        => $checkitem    ? 1 : 0,
             non_priority           => $non_priority ? 1 : 0,
-            hold_group_id          => $hold_group_id,
         }
     )->store();
     $hold->set_waiting() if $found && $found eq 'W';
