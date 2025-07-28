@@ -653,6 +653,19 @@ function _dt_visibility(table_settings, table_dt) {
             { targets: ["string-sort"], type: "string" },
             { targets: ["anti-the"], type: "anti-the" },
             { targets: ["no-sort"], orderable: false, searchable: false },
+            {
+                targets: ["dtr-control-col"],
+                className: "dtr-control",
+                orderable: false,
+                createdCell: function (td) {
+                    $(td)
+                        .attr(
+                            "aria-label",
+                            __("Expand or collapse row details")
+                        )
+                        .attr("title", __("Expand or collapse row details"));
+                },
+            },
         ];
         if (settings["columnDefs"] === undefined) {
             settings["columnDefs"] = default_column_defs;

@@ -810,7 +810,7 @@
                                                         <th id="serial_planneddate" data-colname="serial_planneddate">Received date</th>
                                                         <th id="serial_status" data-colname="serial_status">Status</th>
                                                         <th id="serial_notes" data-colname="serial_notes">Note</th>
-                                                        <th></th>
+                                                        <th class="dtr-control-col"></th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
@@ -1331,7 +1331,7 @@
                 [% IF ( ShowCourseReservesHeader ) %]
                     <th id="item_coursereserves" data-colname="item_coursereserves">Course reserves</th>
                 [% END %]
-                <th></th>
+                <th class="dtr-control-col"></th>
             </tr>
         </thead>
         <tbody>
@@ -1871,9 +1871,6 @@
             $("#holdingst").kohaTable(
                 {
                     dom: '<"clearfix">t',
-                    columnDefs: [
-                        { className: "dtr-control", orderable: false, targets: -1 },
-                    ],
                     bKohaColumnsUseNames: true,
                     responsive: {
                         details: { type: "column", target: -1 },
@@ -1884,9 +1881,6 @@
             $("#otherholdingst").kohaTable(
                 {
                     dom: '<"clearfix">t',
-                    columnDefs: [
-                        { className: "dtr-control", orderable: false, targets: -1 },
-                    ],
                     bKohaColumnsUseNames: true,
                     responsive: {
                         details: { type: "column", target: -1 },
@@ -1905,9 +1899,6 @@
                     responsive: {
                         details: { type: "column", target: -1 },
                     },
-                    columnDefs: [
-                        { className: "dtr-control", orderable: false, targets: -1 },
-                    ],
                 },
                 serial_table_settings
             );
