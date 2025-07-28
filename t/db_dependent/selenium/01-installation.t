@@ -60,6 +60,9 @@ SKIP: {
     skip "Tests won't run if the database does not exist", 3 if $@;
 
     {
+        # Ignore expected warnings
+        # DBD::mysql::db do failed: Table 'koha_kohadev.systempreferences' doesn't exist
+        local $SIG{__WARN__} = sub { };
         my $dup_err;
         local *STDERR;
         open STDERR, ">>", \$dup_err;
@@ -68,6 +71,7 @@ SKIP: {
             SELECT * FROM systempreferences WHERE 1 = 0 |
         );
         close STDERR;
+
         if ($dup_err) {
             skip "Tests won't run if the database is not empty", 2 if $@;
         }
