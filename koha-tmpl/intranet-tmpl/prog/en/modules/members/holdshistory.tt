@@ -165,8 +165,19 @@
               //Remove item type column settings
               table_settings['columns'] = table_settings['columns'].filter(function(c){return c['columnname'] != 'itemtype';});
             [% END %]
-            let current_holds_table = build_holds_table("#table_holdshistory");
-            let old_holds_table = build_holds_table("#table_oldholdshistory", 1);
+            const hold_cancellation_reasons = {};
+            $.getJSON("/api/v1/authorised_value_categories/HOLD_CANCELLATION/authorised_values?_per_page=-1")
+              .done(function(data) {
+                // Convert the array into an associative array for ease of lookup
+                data.forEach(function(item) {
+                  if (item.value !== undefined) {
+                    hold_cancellation_reasons[item.value] = item.description;
+                  }
+                });
+
+                let current_holds_table = build_holds_table("#table_holdshistory");
+                let old_holds_table = build_holds_table("#table_oldholdshistory", 1);
+            });
             function build_holds_table(table_id, old){
                 let additional_filters = {
                     "-and": function(){
@@ -320,7 +331,7 @@
                                 } else if (row.cancellation_date) {
                                     let r = _("Cancelled");
                                     if (row.cancellation_reason){
-                                        r += "(%s)".format("FIXME"); //FIXME Add HOLD_CANCELLATION description
+                                        r += " ( %s )".format(hold_cancellation_reasons[row.cancellation_reason]);
                                     }
                                     return r;
                                 } else if (row.status == 'W') {
