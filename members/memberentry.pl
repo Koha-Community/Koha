@@ -842,13 +842,13 @@ if ( C4::Context->preference('ExtendedPatronAttributes') ) {
 
 if (C4::Context->preference('EnhancedMessagingPreferences')) {
     unless ( $nok && $input->param('setting_messaging_prefs') ) {
-    if ($op eq 'add_form') {
-        C4::Form::MessagingPreferences::set_form_values({ categorycode => $categorycode }, $template);
+        if ( $op eq 'add_form' ) {
+            C4::Form::MessagingPreferences::set_form_values( { categorycode => $categorycode }, $template );
+        } else {
+            C4::Form::MessagingPreferences::set_form_values( { borrowernumber => $borrowernumber }, $template );
+        }
     } else {
-        C4::Form::MessagingPreferences::set_form_values({ borrowernumber => $borrowernumber }, $template);
-    }
-    } else {
-            C4::Form::MessagingPreferences::restore_form_values( $input, $template );
+        C4::Form::MessagingPreferences::restore_form_values( $input, $template );
     }
     $template->param(SMSSendDriver => C4::Context->preference("SMSSendDriver"));
     $template->param(SMSnumber     => $data{'smsalertnumber'} );
