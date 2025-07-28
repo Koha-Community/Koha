@@ -85,10 +85,7 @@ export default {
                 data: resources,
                 embed: ["package.name"],
                 ordering: false,
-                lengthMenu: [
-                    [10, 20, 50, 100],
-                    [10, 20, 50, 100],
-                ],
+                lengthMenu: [10, 20, 50, 100],
                 columns: [
                     {
                         title: $__("Name"),

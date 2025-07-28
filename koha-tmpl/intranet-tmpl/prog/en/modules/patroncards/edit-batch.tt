@@ -295,19 +295,11 @@
         }
 
         $(document).ready(function () {
-            // Prepare DataTables settings
-            var aLengthMenu = [10, 20, 50, 100, -1];
-            var aLengthMenuLabel = [10, 20, 50, 100, _("All")];
-            for (var i = 0; i < aLengthMenu.length; i++) {
-                if (aLengthMenu[i] == Koha.prefs.PatronsPerPage) {
-                    break;
-                }
-                if (aLengthMenu[i] > Koha.prefs.PatronsPerPage || aLengthMenu[i] == -1) {
-                    aLengthMenu.splice(i, 0, Koha.prefs.PatronsPerPage);
-                    aLengthMenuLabel.splice(i, 0, Koha.prefs.PatronsPerPage);
-                    break;
-                }
-            }
+            // Build the lengthMenu
+            let lengthMenu = dataTablesDefaults.lengthMenu;
+            let patronsPerPage = [% Koha.Preference('PatronsPerPage') || '20' | html %]
+            // Merge, remove -1, sort, add -1
+            lengthMenu = [...new Set(lengthMenu.concat(patronsPerPage).filter(v => v !== -1))].sort((a, b) => a - b).concat(-1);
 
             if (has_entries) {
                 $("#description").show();
@@ -316,7 +308,7 @@
             }
             $("#batcht").kohaTable({
                 order: [[0, "asc"]],
-                lengthMenu: [aLengthMenu, aLengthMenuLabel],
+                lengthMenu,
                 pageLength: Koha.prefs.PatronsPerPage,
                 autoWidth: false,
             });

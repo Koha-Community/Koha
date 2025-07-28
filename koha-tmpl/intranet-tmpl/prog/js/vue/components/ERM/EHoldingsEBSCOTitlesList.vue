@@ -179,10 +179,7 @@ export default {
             url: "/api/v1/erm/eholdings/ebsco/titles",
             options: {
                 ordering: false,
-                lengthMenu: [
-                    [10, 20, 50, 100],
-                    [10, 20, 50, 100],
-                ],
+                lengthMenu: [10, 20, 50, 100],
             },
             filters_options: {
                 publication_type: () =>

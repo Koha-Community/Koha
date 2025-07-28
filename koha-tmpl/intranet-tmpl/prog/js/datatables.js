@@ -100,6 +100,9 @@ function get_DT_defaults(tableFeatures = ["full"]) {
             infoEmpty: __("No entries to show"),
             infoFiltered: __("(filtered from _MAX_ total entries)"),
             lengthMenu: __("Show _MENU_ entries"),
+            lengthLabels: {
+                "-1": __("All"),
+            },
             loadingRecords: __("Loading..."),
             processing: __("Processing..."),
             search: __("Search:"),
@@ -124,10 +127,7 @@ function get_DT_defaults(tableFeatures = ["full"]) {
 
         paging: hasPaging,
         buttons: [],
-        lengthMenu: [
-            [10, 20, 50, 100, -1],
-            [10, 20, 50, 100, __("All")],
-        ],
+        lengthMenu: [10, 20, 50, 100, -1],
         pageLength: 20,
         fixedHeader: true,
         initComplete: function (settings) {

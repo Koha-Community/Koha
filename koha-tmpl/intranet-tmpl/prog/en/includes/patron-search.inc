@@ -437,26 +437,11 @@
                 parent_block.find(".info").hide();
                 parent_block.find(".error").hide();
 
-                // Build the aLengthMenu
-                let aLengthMenu = parseInt(Koha.prefs.PatronsPerPage) ? [...new Set([parseInt(Koha.prefs.PatronsPerPage), 10, 20, 50, 100, -1])] : [10, 20, 50, 100, -1];
-                aLengthMenu.sort(function (a, b) {
-                    // Put "All" at the end
-                    if (a == -1) {
-                        return 1;
-                    } else if (b == -1) {
-                        return -1;
-                    }
-                    return parseInt(a) < parseInt(b) ? -1 : 1;
-                });
-                let aLengthMenuLabel = [];
-                $(aLengthMenu).each(function () {
-                    if (this == -1) {
-                        // Label for -1 is "All"
-                        aLengthMenuLabel.push(_("All"));
-                    } else {
-                        aLengthMenuLabel.push(this);
-                    }
-                });
+                // Build the lengthMenu
+                let lengthMenu = dataTablesDefaults.lengthMenu;
+                let patronsPerPage = parseInt(Koha.prefs.PatronsPerPage) || 20;
+                // Merge, remove -1, sort, add -1
+                lengthMenu = [...new Set(lengthMenu.concat(patronsPerPage).filter(v => v !== -1))].sort((a, b) => a - b).concat(-1);
 
                 let additional_filters = {
                     surname: function () {
@@ -907,7 +892,7 @@
                         embed,
                         order: [[order_column_index, "asc"]],
                         autoWidth: false,
-                        lengthMenu: [aLengthMenu, aLengthMenuLabel],
+                        lengthMenu,
                         pageLength: Koha.prefs.PatronsPerPage,
                         ...(sticky_header
                             ? {

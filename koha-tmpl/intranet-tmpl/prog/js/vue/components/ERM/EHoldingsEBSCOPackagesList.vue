@@ -160,10 +160,7 @@ export default {
             options: {
                 embed: "resources+count,vendor.name",
                 ordering: false,
-                lengthMenu: [
-                    [10, 20, 50, 100],
-                    [10, 20, 50, 100],
-                ],
+                lengthMenu: [10, 20, 50, 100],
             },
             table_settings: eholdings_titles_table_settings,
             actions: { 0: ["show"] },
