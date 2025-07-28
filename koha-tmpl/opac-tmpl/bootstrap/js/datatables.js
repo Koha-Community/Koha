@@ -428,37 +428,6 @@ function _dt_buttons(params) {
         },
     };
 
-    var export_buttons = [
-        {
-            extend: "excelHtml5",
-            exportOptions: {
-                columns: exportColumns,
-                format: export_format,
-            },
-        },
-        {
-            extend: "csvHtml5",
-            exportOptions: {
-                columns: exportColumns,
-                format: export_format,
-            },
-        },
-        {
-            extend: "copyHtml5",
-            exportOptions: {
-                columns: exportColumns,
-                format: export_format,
-            },
-        },
-        {
-            extend: "print",
-            exportOptions: {
-                columns: exportColumns,
-                format: export_format,
-            },
-        },
-    ];
-
     let buttons = [
         {
             fade: 100,
