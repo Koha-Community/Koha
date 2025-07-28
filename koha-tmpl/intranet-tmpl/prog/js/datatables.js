@@ -702,6 +702,26 @@ function _dt_buttons(params){
         }
     }
 
+    const export_format_print = {
+        body: function (data, row, column, node) {
+            const newnode = node.cloneNode(true);
+            const no_export_nodes = newnode.querySelectorAll(".no-export");
+            no_export_nodes.forEach(child => {
+                child.parentNode.removeChild(child);
+            });
+            //Note: innerHTML is the same thing as the data variable,
+            //minus the ".no-export" nodes that we've removed
+            //Note: See dataTables.buttons.js for original function usage
+            const str = DataTable.Buttons.stripData(newnode.innerHTML, {
+                decodeEntities: false,
+                stripHtml: true,
+                stripNewlines: true,
+                trim: true,
+            });
+            return str;
+        },
+    };
+
     var export_format = {
         body: function ( data, row, column, node ) {
             var newnode = $(node);
@@ -741,7 +761,7 @@ function _dt_buttons(params){
             extend: 'print',
             exportOptions: {
                 columns: exportColumns,
-                format:  export_format
+                format:  export_format_print,
             },
         }
     ];
