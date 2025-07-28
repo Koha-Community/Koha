@@ -428,6 +428,33 @@ function _dt_buttons(params) {
         },
     };
 
+    const export_format_spreadsheet = {
+        body: function (data, row, column, node) {
+            const newnode = node.cloneNode(true);
+            const no_export_nodes = newnode.querySelectorAll(".no-export");
+            no_export_nodes.forEach(child => {
+                child.parentNode.removeChild(child);
+            });
+            //Note: innerHTML is the same thing as the data variable,
+            //minus the ".no-export" nodes that we've removed
+            //Note: See dataTables.buttons.js for original function usage
+            let str = DataTable.Buttons.stripData(newnode.innerHTML, {
+                decodeEntities: false,
+                stripHtml: true,
+                stripNewlines: true,
+                trim: true,
+                escapeExcelFormula: true,
+            });
+            //Note: escapeExcelFormula only works from Buttons 3.2.0+, so
+            //we add a workaround for now
+            const unsafeCharacters = /^[=+\-@\t\r]/;
+            if (unsafeCharacters.test(str)) {
+                str = "'" + str;
+            }
+            return str;
+        },
+    };
+
     let buttons = [
         {
             fade: 100,
@@ -448,7 +475,7 @@ function _dt_buttons(params) {
             text: __("CSV"),
             exportOptions: {
                 columns: exportColumns,
-                format: export_format,
+                format: export_format_spreadsheet,
             },
         },
         {
