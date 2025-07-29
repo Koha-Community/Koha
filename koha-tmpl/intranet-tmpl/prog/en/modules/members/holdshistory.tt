@@ -343,7 +343,7 @@
                                 } else if (row.cancellation_date) {
                                     let r = _("Cancelled");
                                     if (row.cancellation_reason){
-                                        r += " ( %s )".format(hold_cancellation_reasons[row.cancellation_reason]);
+                                        r += " (%s)".format(hold_cancellation_reasons[row.cancellation_reason]);
                                     }
                                     return r;
                                 } else if (row.status == 'W') {
