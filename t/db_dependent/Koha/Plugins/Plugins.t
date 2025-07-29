@@ -22,6 +22,7 @@ use File::Basename;
 use File::Spec;
 use File::Temp                qw( tempdir tempfile );
 use FindBin                   qw($Bin);
+use List::MoreUtils           qw(none);
 use Module::Load::Conditional qw(can_load);
 use Test::MockModule;
 use Test::NoWarnings;
@@ -194,7 +195,7 @@ subtest 'GetPlugins() tests' => sub {
 
 subtest 'InstallPlugins() tests' => sub {
 
-    plan tests => 6;
+    plan tests => 8;
 
     $schema->storage->txn_begin;
 
@@ -204,21 +205,25 @@ subtest 'InstallPlugins() tests' => sub {
 
     # Tests for the exclude parameter
     # Test the returned plugins of the InstallPlugins subroutine
+    my $excluded_plugins  = [ "Koha::Plugin::Test", "Koha::Plugin::MarcFieldValues" ];
     my $plugins           = Koha::Plugins->new( { enable_plugins => 1 } );
-    my @installed_plugins = $plugins->InstallPlugins( { exclude => [ "Koha::Plugin::Test", "Koha::Plugin::MarcFieldValues" ] } );
-    my $plugin_classes    = join( " ", map { $_->{class} } @installed_plugins );
+    my @installed_plugins = $plugins->InstallPlugins( { exclude => $excluded_plugins } );
 
-    my $result = grep { $plugin_classes !~ $_ } [ ":Test |:Test\$", ":MarcFieldValues |:MarcFieldValues\$" ]
-        && $plugin_classes =~ ":TestItemBarcodeTransform |:TestItemBarcodeTransform\$";
-    ok( $result, "Excluded plugins are not returned" );
+    foreach my $excluded_plugin ( @{$excluded_plugins} ) {
+        ok(
+            none { $_ eq $excluded_plugin } ( map { $_->{class} } @installed_plugins ),
+            "Excluded plugin not returned ($excluded_plugin)"
+        );
+    }
 
     # Test the plugins in the database
     my @plugins = $plugins->GetPlugins( { all => 1, error => 1 } );
-    $plugin_classes = join( " ", map { $_->{class} } @plugins );
-
-    $result = grep { $plugin_classes !~ $_ } [ ":Test |:Test\$", ":MarcFieldValues |:MarcFieldValues\$" ]
-        && $plugin_classes =~ ":TestItemBarcodeTransform |:TestItemBarcodeTransform\$";
-    ok( $result, "Excluded plugins are not installed" );
+    foreach my $excluded_plugin ( @{$excluded_plugins} ) {
+        ok(
+            none { $_ eq $excluded_plugin } ( map { $_->{class} } @plugins ),
+            "Excluded plugin not installed ($excluded_plugin)"
+        );
+    }
 
     # Remove installed plugins data
     Koha::Plugins::Methods->delete;
@@ -226,9 +231,10 @@ subtest 'InstallPlugins() tests' => sub {
 
     # Tests for the include parameter
     # Test the returned plugins of the InstallPlugins subroutine
-    @installed_plugins = $plugins->InstallPlugins( { include => [ "Koha::Plugin::Test", "Koha::Plugin::MarcFieldValues" ] } );
+    @installed_plugins =
+        $plugins->InstallPlugins( { include => [ "Koha::Plugin::Test", "Koha::Plugin::MarcFieldValues" ] } );
 
-    $result = 1;
+    my $result = 1;
     foreach my $plugin_class ( map { $_->{class} } @installed_plugins ) {
         $result = 0 unless ( "$plugin_class" =~ ":Test\$" || "$plugin_class" =~ ":MarcFieldValues\$" );
     }
@@ -244,17 +250,16 @@ subtest 'InstallPlugins() tests' => sub {
     ok( $result, "Only included plugins are installed" );
 
     # Tests when both include and exclude parameter are used simultaneously
-    throws_ok
-        {
-            $plugins->InstallPlugins( { exclude => [ "Koha::Plugin::Test" ], include => [ "Koha::Plugin::Test" ] } );
-        }
-        'Koha::Exceptions::BadParameter';
+    throws_ok {
+        $plugins->InstallPlugins( { exclude => ["Koha::Plugin::Test"], include => ["Koha::Plugin::Test"] } );
+    }
+    'Koha::Exceptions::BadParameter';
+
     # Tests when the plugin to be installled is not found
-    throws_ok
-        {
-            $plugins->InstallPlugins( { include => [ "Koha::Plugin::NotfoundPlugin" ] } );
-        }
-        'Koha::Exceptions::BadParameter';
+    throws_ok {
+        $plugins->InstallPlugins( { include => ["Koha::Plugin::NotfoundPlugin"] } );
+    }
+    'Koha::Exceptions::BadParameter';
 
     $schema->storage->txn_rollback;
 };
