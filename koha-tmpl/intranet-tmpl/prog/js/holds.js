@@ -373,12 +373,13 @@ $(document).ready(function () {
                                         "</a>"
                                     );
                                 } else {
-                                    const link = document.createElement("a");
-                                    link.classList.add(
-                                        "hold-suspend",
-                                        "btn",
-                                        "btn-default",
-                                        "btn-xs"
+                                    const link = Object.assign(
+                                        document.createElement("a"),
+                                        {
+                                            className:
+                                                "hold-suspend btn btn-default btn-xs",
+                                            textContent: " " + __("Suspend"),
+                                        }
                                     );
                                     link.setAttribute(
                                         "data-hold-id",
@@ -388,13 +389,13 @@ $(document).ready(function () {
                                         "data-hold-title",
                                         oObj.title
                                     );
-                                    link.textContent = " " + __("Suspend");
-                                    const icon = document.createElement("i");
-                                    icon.classList.add("fa", "fa-pause");
-                                    link.insertAdjacentElement(
-                                        "afterbegin",
-                                        icon
+                                    const icon = Object.assign(
+                                        document.createElement("i"),
+                                        {
+                                            className: "fa fa-pause",
+                                        }
                                     );
+                                    link.prepend(icon);
                                     return link.outerHTML;
                                 }
                             },
