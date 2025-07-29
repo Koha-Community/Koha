@@ -1067,10 +1067,34 @@ Returns a map of column name to string representations including the string.
 =cut
 
 sub strings_map {
-    my ($self) = @_;
-    return {
-        pickup_library_id => { str => $self->branch->branchname, type => 'library' },
+    my ( $self, $params ) = @_;
+
+    my $strings = {
+        pickup_library_id => { str => $self->pickup_library->branchname, type => 'library' },
     };
+
+    if ( defined $self->cancellation_reason ) {
+        my $av = Koha::AuthorisedValues->search(
+            {
+                category         => 'HOLD_CANCELLATION',
+                authorised_value => $self->cancellation_reason,
+            }
+        );
+        my $cancellation_reason_str =
+              $av->count
+            ? $params->{public}
+                ? $av->next->opac_description
+                : $av->next->lib
+            : $self->cancellation_reason;
+
+        $strings->{cancellation_reason} = {
+            category => 'HOLD_CANCELLATION',
+            str      => $cancellation_reason_str,
+            type     => 'av',
+        };
+    }
+
+    return $strings;
 }
 
 =head2 Internal methods
