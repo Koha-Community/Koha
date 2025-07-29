@@ -19,7 +19,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 14;
+use Test::More tests => 15;
 
 use Test::Exception;
 use Test::MockModule;
@@ -1133,4 +1133,63 @@ subtest 'change_type() tests' => sub {
         'Exception thrown because more than one hold per record';
 
     $schema->storage->txn_rollback;
+};
+
+subtest 'strings_map() tests' => sub {
+
+    plan tests => 3;
+
+    $schema->txn_begin;
+
+    my $av = Koha::AuthorisedValue->new(
+        {
+            category         => 'HOLD_CANCELLATION',
+            authorised_value => 'JUST_BECAUSE',
+            lib              => 'Just because',
+            lib_opac         => 'Serious reasons',
+        }
+    )->store;
+
+    my $library = $builder->build_object( { class => 'Koha::Libraries' } );
+
+    my $hold = $builder->build_object(
+        {
+            class => 'Koha::Holds',
+            value => { cancellation_reason => $av->authorised_value, branchcode => $library->id }
+        }
+    );
+
+    my $strings_map = $hold->strings_map( { public => 0 } );
+    is_deeply(
+        $strings_map,
+        {
+            pickup_library_id   => { str => $library->branchname, type => 'library' },
+            cancellation_reason => { str => $av->lib, type => 'av', category => 'HOLD_CANCELLATION' },
+        },
+        'Strings map is correct'
+    );
+
+    $strings_map = $hold->strings_map( { public => 1 } );
+    is_deeply(
+        $strings_map,
+        {
+            pickup_library_id   => { str => $library->branchname, type => 'library' },
+            cancellation_reason => { str => $av->lib_opac, type => 'av', category => 'HOLD_CANCELLATION' },
+        },
+        'Strings map is correct (OPAC)'
+    );
+
+    $av->delete();
+
+    $strings_map = $hold->strings_map( { public => 1 } );
+    is_deeply(
+        $strings_map,
+        {
+            pickup_library_id   => { str => $library->branchname, type => 'library' },
+            cancellation_reason => { str => $hold->cancellation_reason, type => 'av', category => 'HOLD_CANCELLATION' },
+        },
+        'Strings map shows the cancellation_value when AV not present'
+    );
+
+    $schema->txn_rollback;
 };
