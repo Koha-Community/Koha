@@ -215,7 +215,7 @@
                 };
 
                 let table_url = '/api/v1/patrons/[% patron.borrowernumber | uri %]/holds';
-                let table_embeds = ['+strings', 'biblio', 'item', 'pickup_library', 'pickup_library.branchname'];
+                let table_embeds = ['+strings', 'biblio', 'item', 'pickup_library'];
                 if (old){
                     table_url += '?old=1';
                     table_embeds.push('deleted_biblio');
@@ -265,7 +265,7 @@
                             }
                         },
                         {
-                            data: "pickup_library_id:pickup_library.branchname",
+                            data: "pickup_library_id:pickup_library.name",
                             searchable: true,
                             orderable: true,
                             render: function (data, type, row, meta) {
