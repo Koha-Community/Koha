@@ -163,26 +163,6 @@
                     <div class="required">Required</div>
                 </div>
             </fieldset>
-            [% IF categories %]
-                <fieldset class="fg"
-                    ><legend>Group(s):</legend>
-                    [% FOREACH category IN categories %]
-                        <div class="fg-row">
-                            <div class="fg-label">
-                                <label for="[% category.categorycode | html %]">[% category.categoryname | html %]: </label>
-                            </div>
-                            <div class="fg-input">
-                                [% IF category and selected_categorycodes.grep(category.categorycode).size %]
-                                    <input type="checkbox" id="[% category.categorycode | html %]" name="selected_categorycode_[% category.categorycode | html %]" checked="checked" />
-                                [% ELSE %]
-                                    <input type="checkbox" id="[% category.categorycode | html %]" name="selected_categorycode_[% category.categorycode | html %]" />
-                                [% END %]
-                            </div>
-                            <div class="hint">[% category.codedescription | html %]</div>
-                        </div>
-                    [% END %]
-                </fieldset>
-            [% END %]
             <fieldset class="fg">
                 <div class="fg-row">
                     <div class="fg-label">
