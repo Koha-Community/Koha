@@ -251,20 +251,48 @@ $(document).ready(function() {
                         "mDataProp": function( oObj ) {
                             holds[oObj.reserve_id] = oObj; //Store holds for later use
 
-                            if ( oObj.found ) {
-                                return "";
-                            } else if ( oObj.suspend == 1 ) {
-                                return "<a class='hold-resume btn btn-default btn-xs' data-hold-id='" + oObj.reserve_id + "'>"
-                                     +"<i class='fa fa-play'></i> " + __("Resume") + "</a>";
-                            } else {
-                                return "<a class='hold-suspend btn btn-default btn-xs' data-hold-id='" + oObj.reserve_id + "' data-hold-title='"+ oObj.title +"'>"
-                                     +"<i class='fa fa-pause'></i> " + __("Suspend") + "</a>";
-                            }
-                        }
-                    },
-                    {
-                        "mDataProp": function( oObj ) {
-                            var data = "";
+                                if (oObj.found) {
+                                    return "";
+                                } else if (oObj.suspend == 1) {
+                                    return (
+                                        "<a class='hold-resume btn btn-default btn-xs' data-hold-id='" +
+                                        oObj.reserve_id +
+                                        "'>" +
+                                        "<i class='fa fa-play'></i> " +
+                                        __("Resume") +
+                                        "</a>"
+                                    );
+                                } else {
+                                    const link = Object.assign(
+                                        document.createElement("a"),
+                                        {
+                                            className:
+                                                "hold-suspend btn btn-default btn-xs",
+                                            textContent: " " + __("Suspend"),
+                                        }
+                                    );
+                                    link.setAttribute(
+                                        "data-hold-id",
+                                        oObj.reserve_id
+                                    );
+                                    link.setAttribute(
+                                        "data-hold-title",
+                                        oObj.title
+                                    );
+                                    const icon = Object.assign(
+                                        document.createElement("i"),
+                                        {
+                                            className: "fa fa-pause",
+                                        }
+                                    );
+                                    link.prepend(icon);
+                                    return link.outerHTML;
+                                }
+                            },
+                        },
+                        {
+                            data: function (oObj) {
+                                var data = "";
 
                             if ( oObj.suspend == 1 ) {
                                 data += "<p>" + __("Hold is <strong>suspended</strong>");
@@ -322,13 +350,13 @@ $(document).ready(function() {
                 },
             }));
 
-            $('#holds-table').on( 'draw.dt', function () {
-                $(".hold-suspend").on( "click", function() {
-                    var hold_id    = $(this).data('hold-id');
-                    var hold_title = $(this).data('hold-title');
-                    $("#suspend-modal-title").html( hold_title );
-                    $("#suspend-modal-submit").data( 'hold-id', hold_id );
-                    $('#suspend-modal').modal('show');
+            $("#holds-table").on("draw.dt", function () {
+                $(".hold-suspend").on("click", function () {
+                    var hold_id = $(this).data("hold-id");
+                    var hold_title = $(this).data("hold-title");
+                    $("#suspend-modal-title").text(hold_title);
+                    $("#suspend-modal-submit").data("hold-id", hold_id);
+                    $("#suspend-modal").modal("show");
                 });
 
                 $(".hold-resume").on("click", function () {
