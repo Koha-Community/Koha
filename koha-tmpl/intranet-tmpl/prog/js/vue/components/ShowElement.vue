@@ -149,6 +149,7 @@ import LinkWrapper from "./LinkWrapper.vue";
 import AdditionalFieldsDisplay from "./AdditionalFieldsDisplay.vue";
 import { useBaseElement } from "../composables/base-element.js";
 import { computed, defineAsyncComponent } from "vue";
+import { $__ } from "@koha-vue/i18n";
 
 export default {
     components: { LinkWrapper, AdditionalFieldsDisplay },
@@ -182,9 +183,10 @@ export default {
             return displayValue || "";
         };
         const radioOptionText = computed(() => {
-            if (!props.attr.value || !props.attr.options.length) return "";
-            const option = props.attr.options.find(
-                option => option.value == props.resource[props.attr.name]
+            if (!attribute.value.value || !attribute.value.options.length)
+                return "";
+            const option = attribute.value.options.find(
+                option => option.value == props.resource[attribute.value.name]
             );
             return option.description;
         });
@@ -195,6 +197,7 @@ export default {
             attribute,
             formatValue,
             radioOptionText,
+            $__,
         };
     },
     props: {
