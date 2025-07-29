@@ -21,7 +21,7 @@ use File::Path  qw(make_path);
 use File::Slurp qw(read_file write_file);
 use File::Basename;
 use JSON            qw(from_json to_json);
-use List::MoreUtils qw(firstval);
+use List::MoreUtils qw(firstval uniq);
 
 use Koha::Devel::Files;
 
@@ -143,7 +143,7 @@ sub get_files_to_test {
     }
     @files = $dev_files->ls_files($filetype) if !$self->{incremental_run} || $no_history;
 
-    return @files;
+    return uniq @files;
 }
 
 =head2 report_results
