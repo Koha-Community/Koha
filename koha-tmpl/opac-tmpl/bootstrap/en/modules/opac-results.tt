@@ -73,7 +73,7 @@
             [% WRAPPER breadcrumb_item bc_active= 1 %]
                 [% IF ( ms_value ) %]
                     <span title="You searched [% IF ( query_desc ) %]for '[% query_desc | html %]'[% END %][% IF ( limit_desc ) %]with limit(s): '[% limit_desc | html %]'[% END %]"
-                        >Results of search for '[% ms_value | html %]'[% IF ( pages > 1) %], page [% current_page_number | html %] of [% pages | html %][% END %]</span
+                        >Results of search for '[% ms_value | html %]'[% IF ( pages && pages > 1) %], page [% current_page_number | html %] of [% pages | html %][% END %]</span
                     >
                 [% ELSE %]
                     <span title="You searched [% IF ( query_desc ) %]for '[% query_desc | html %]'[% END %][% IF ( limit_desc ) %]with limit(s): '[% limit_desc | html %]'[% END %]">Search results</span>
