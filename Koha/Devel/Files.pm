@@ -53,6 +53,7 @@ my $exceptions = {
                 misc/cronjobs/build_browser_and_cloud.pl
             )
         ],
+        all => [],
     },
     js => {
         tidy => [
@@ -71,6 +72,12 @@ my $exceptions = {
                 koha-tmpl/opac-tmpl/bootstrap/js/Gettext.js
             )
         ],
+        all => [
+            qw(
+                koha-tmpl/intranet-tmpl/lib
+                koha-tmpl/opac-tmpl/lib
+            )
+        ],
     },
     tt => {
         tidy => [
@@ -81,7 +88,20 @@ my $exceptions = {
             )
         ],
         codespell => [],
+        all       => [],
     },
+    yml => {
+        all => [],
+    },
+    css => {
+        all => [
+            qw(
+                koha-tmpl/intranet-tmpl/lib
+                koha-tmpl/opac-tmpl/lib
+            )
+        ],
+    },
+
 };
 
 =head1 METHODS
@@ -162,6 +182,38 @@ Lists Template Toolkit files (with extensions .tt, .inc) in the repository, excl
 sub ls_tt_files {
     my ($self) = @_;
     my $cmd    = sprintf q{git ls-files '*.tt' '*.inc' %s}, $self->build_git_exclude('tt');
+    my @files  = qx{$cmd};
+    chomp for @files;
+    return @files;
+}
+
+=head2 ls_yml_files
+
+    my @yml_files = $file_manager->ls_yml_files();
+
+Lists YAML files (with extensions .yml, .yaml) in the repository, excluding those specified in the exceptions.
+
+=cut
+
+sub ls_yml_files {
+    my ($self) = @_;
+    my $cmd    = sprintf q{git ls-files '*.yml' '*.yaml' %s}, $self->build_git_exclude('yml');
+    my @files  = qx{$cmd};
+    chomp for @files;
+    return @files;
+}
+
+=head2 ls_css_files
+
+    my @css_files = $file_manager->ls_css_files();
+
+Lists CSS files (with extensions .css) in the repository, excluding those specified in the exceptions.
+
+=cut
+
+sub ls_css_files {
+    my ($self) = @_;
+    my $cmd    = sprintf q{git ls-files '*.css' %s}, $self->build_git_exclude('css');
     my @files  = qx{$cmd};
     chomp for @files;
     return @files;
