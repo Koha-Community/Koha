@@ -373,16 +373,29 @@ $(document).ready(function () {
                                         "</a>"
                                     );
                                 } else {
-                                    return (
-                                        "<a class='hold-suspend btn btn-default btn-xs' data-hold-id='" +
-                                        oObj.reserve_id +
-                                        "' data-hold-title='" +
-                                        oObj.title +
-                                        "'>" +
-                                        "<i class='fa fa-pause'></i> " +
-                                        __("Suspend") +
-                                        "</a>"
+                                    const link = document.createElement("a");
+                                    link.classList.add(
+                                        "hold-suspend",
+                                        "btn",
+                                        "btn-default",
+                                        "btn-xs"
                                     );
+                                    link.setAttribute(
+                                        "data-hold-id",
+                                        oObj.reserve_id
+                                    );
+                                    link.setAttribute(
+                                        "data-hold-title",
+                                        oObj.title
+                                    );
+                                    link.textContent = " " + __("Suspend");
+                                    const icon = document.createElement("i");
+                                    icon.classList.add("fa", "fa-pause");
+                                    link.insertAdjacentElement(
+                                        "afterbegin",
+                                        icon
+                                    );
+                                    return link.outerHTML;
                                 }
                             },
                         },
@@ -491,7 +504,7 @@ $(document).ready(function () {
                 $(".hold-suspend").on("click", function () {
                     var hold_id = $(this).data("hold-id");
                     var hold_title = $(this).data("hold-title");
-                    $("#suspend-modal-title").html(hold_title);
+                    $("#suspend-modal-title").text(hold_title);
                     $("#suspend-modal-submit").data("hold-id", hold_id);
                     $("#suspend-modal").modal("show");
                 });
