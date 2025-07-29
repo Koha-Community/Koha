@@ -165,19 +165,8 @@
               //Remove item type column settings
               table_settings['columns'] = table_settings['columns'].filter(function(c){return c['columnname'] != 'itemtype';});
             [% END %]
-            const hold_cancellation_reasons = {};
-            $.getJSON("/api/v1/authorised_value_categories/HOLD_CANCELLATION/authorised_values?_per_page=-1")
-              .done(function(data) {
-                // Convert the array into an associative array for ease of lookup
-                data.forEach(function(item) {
-                  if (item.value !== undefined) {
-                    hold_cancellation_reasons[item.value] = item.description;
-                  }
-                });
-
-                let current_holds_table = build_holds_table("#table_holdshistory");
-                let old_holds_table = build_holds_table("#table_oldholdshistory", 1);
-            });
+            let current_holds_table = build_holds_table("#table_holdshistory");
+            let old_holds_table = build_holds_table("#table_oldholdshistory", 1);
             function build_holds_table(table_id, old){
                 let additional_filters = {
                     "-and": function(){
@@ -214,7 +203,7 @@
                 };
 
                 let table_url = '/api/v1/patrons/[% patron.borrowernumber | uri %]/holds';
-                let table_embeds = ['biblio', 'item', 'pickup_library', 'pickup_library.branchname'];
+                let table_embeds = ['+strings', 'biblio', 'item', 'pickup_library', 'pickup_library.branchname'];
                 if (old){
                     table_url += '?old=1';
                     table_embeds.push('deleted_biblio');
@@ -331,7 +320,7 @@
                                 } else if (row.cancellation_date) {
                                     let r = _("Cancelled");
                                     if (row.cancellation_reason){
-                                        r += " (%s)".format(hold_cancellation_reasons[row.cancellation_reason]);
+                                        r += " (%s)".format(row._strings.cancellation_reason.str);
                                     }
                                     return r;
                                 } else if (row.status == 'W') {
