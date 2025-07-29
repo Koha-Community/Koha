@@ -1158,6 +1158,47 @@ sub set_password {
     return $self;
 }
 
+=head3 has_2fa_enabled
+
+my $has_2fa = $patron->has_2fa_enabled;
+
+Returns 1 if the patron has two-factor authentication enabled, 0 otherwise.
+
+=cut
+
+sub has_2fa_enabled {
+    my ($self) = @_;
+
+    return ( defined $self->secret && $self->secret ne '' ) ? 1 : 0;
+}
+
+=head3 reset_2fa
+
+$patron->reset_2fa;
+
+Resets the patron's two-factor authentication settings by clearing the secret
+and setting the auth_method back to 'password'.
+
+Returns the patron object for method chaining.
+
+=cut
+
+sub reset_2fa {
+    my ($self) = @_;
+
+    $self->set(
+        {
+            secret      => undef,
+            auth_method => 'password',
+        }
+    )->store;
+
+    logaction( "MEMBERS", "RESET 2FA", $self->borrowernumber, "" )
+        if C4::Context->preference("BorrowersLog");
+
+    return $self;
+}
+
 =head3 renew_account
 
 my $new_expiry_date = $patron->renew_account

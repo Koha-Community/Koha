@@ -19,7 +19,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 42;
+use Test::More tests => 44;
 use Test::NoWarnings;
 use Test::Exception;
 use Test::Warn;
@@ -3308,4 +3308,59 @@ subtest 'is_anonymous' => sub {
 
     $schema->storage->txn_rollback;
 
+};
+
+subtest 'has_2fa_enabled() tests' => sub {
+    plan tests => 3;
+
+    $schema->storage->txn_begin;
+
+    my $patron = $builder->build_object( { class => 'Koha::Patrons' } );
+
+    # Test patron without 2FA
+    is( $patron->has_2fa_enabled, 0, 'has_2fa_enabled returns 0 when no secret is set' );
+
+    # Test patron with empty secret
+    $patron->secret('')->store;
+    is( $patron->has_2fa_enabled, 0, 'has_2fa_enabled returns 0 when secret is empty string' );
+
+    # Test patron with 2FA enabled
+    $patron->secret('some_secret_value')->store;
+    is( $patron->has_2fa_enabled, 1, 'has_2fa_enabled returns 1 when secret is set' );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'reset_2fa() tests' => sub {
+    plan tests => 6;
+
+    $schema->storage->txn_begin;
+
+    my $patron = $builder->build_object( { class => 'Koha::Patrons' } );
+
+    # Set up patron with 2FA enabled
+    $patron->set(
+        {
+            secret      => 'test_secret_123',
+            auth_method => 'two-factor',
+        }
+    )->store;
+
+    # Verify 2FA is enabled
+    is( $patron->has_2fa_enabled, 1,            '2FA is enabled before reset' );
+    is( $patron->auth_method,     'two-factor', 'auth_method is two-factor before reset' );
+
+    # Test reset_2fa method
+    my $result = $patron->reset_2fa;
+
+    # Verify method returns patron object for chaining
+    isa_ok( $result, 'Koha::Patron', 'reset_2fa returns Koha::Patron object' );
+    is( $result->borrowernumber, $patron->borrowernumber, 'returned object is the same patron' );
+
+    # Verify 2FA has been reset
+    $patron->discard_changes;
+    is( $patron->has_2fa_enabled, 0,          '2FA is disabled after reset' );
+    is( $patron->auth_method,     'password', 'auth_method is password after reset' );
+
+    $schema->storage->txn_rollback;
 };
