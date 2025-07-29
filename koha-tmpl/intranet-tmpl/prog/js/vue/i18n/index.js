@@ -1,5 +1,11 @@
 const methods = ["__", "__x", "__n", "__nx", "__p", "__px", "__np", "__npx"];
 
+if (window.Cypress.testingType === "component") {
+    methods.forEach(method => {
+        window[method] = string => string;
+    });
+}
+
 const translators = Object.fromEntries(
     methods.map(method => [method, (...args) => window[method](...args)])
 );

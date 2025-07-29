@@ -1,4 +1,5 @@
 import { defineConfig } from "cypress";
+import { devServer } from "cypress-rspack-dev-server";
 
 export default defineConfig({
     fixturesFolder: "t/cypress/fixtures",
@@ -20,5 +21,17 @@ export default defineConfig({
             apiUsername: "koha",
             apiPassword: "koha",
         },
+    },
+
+    component: {
+        devServer(devServerConfig) {
+            return devServer({
+                ...devServerConfig,
+                rspackConfig: require("./rspack.config.js")[0],
+            });
+        },
+        indexHtmlFile: "t/cypress/support/component-index.html",
+        specPattern: "t/cypress/component/**/*.*",
+        supportFile: "t/cypress/support/component.ts",
     },
 });
