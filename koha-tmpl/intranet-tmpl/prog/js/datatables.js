@@ -36,7 +36,25 @@ var dataTablesDefaults = {
             excel: __("Excel"),
         },
     },
-    dom: '<"dt-info"i><"top pager"<"table_entries"lp><"table_controls"fB>>tr<"bottom pager"ip>',
+    //    dom: '<"dt-info"i><"top pager"<"table_entries"lp><"table_controls"fB>>tr<"bottom pager"ip>',
+    layout: {
+        //top3Start: ["info"],
+        //top3End: null,
+        //top2Start: ["pageLength", "paging"],
+        //top2End: null,
+        //top: ["search", "buttons"],
+        //topStart: null,
+        //topEnd: null,
+
+        top2Start: ["info"],
+        top2End: null,
+        top: ["pageLength", "paging", "search", "buttons"],
+        topStart: null,
+        topEnd: null,
+
+        bottomStart: ["info", "paging"],
+        bottomEnd: null,
+    },
     buttons: [],
     lengthMenu: [
         [10, 20, 50, 100, -1],
