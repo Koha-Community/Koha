@@ -107,13 +107,7 @@ function display_pickup_location(state) {
 
 /* global __ borrowernumber SuspendHoldsIntranet */
 $(document).ready(function () {
-    var url = window.location.href;
-    let patron_page;
-    if (url.indexOf("/circ/circulation.pl?borrowernumber=") !== -1)
-        patron_page = "circ";
-    else if (url.indexOf("/members/moremember.pl?borrowernumber=") !== -1)
-        patron_page = "borrower";
-
+    let patron_page = holds_table_patron_page();
     function suspend_hold(hold_ids, end_date) {
         var params = { hold_ids: hold_ids };
         if (end_date !== null && end_date !== "") params.end_date = end_date;

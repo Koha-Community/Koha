@@ -1015,6 +1015,21 @@ function toggleBtnIcon(element, start, replacement) {
 }
 
 /**
+ * Determines which patron page we are on based on the URL
+ * @return {string} The patron page we are on, "circ" or "borrower", or null
+ *                  if neither page is matched
+ */
+function holds_table_patron_page() {
+    var url = window.location.href;
+    if (url.indexOf("/circ/circulation.pl?borrowernumber=") !== -1)
+        return "circ";
+    else if (url.indexOf("/members/moremember.pl?borrowernumber=") !== -1)
+        return "borrower";
+
+    return null;
+}
+
+/**
  * Returns a roughly ideal position to scroll an element into view
  * @param {string} target - The HTML id of the element to scroll into view
  * @param {string} elemid - The HTML id of the element which might obscure
