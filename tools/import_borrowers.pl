@@ -101,14 +101,14 @@ if ($matchpoint) {
 my $createpatronlist = $input->param('createpatronlist') || 0;
 my $dt = dt_from_string();
 my $timestamp = $dt->ymd('-').' '.$dt->hms(':');
-my $patronlistname = $uploadborrowers . ' (' . $timestamp .')';
 
 if ( $op eq 'cud-import' && $uploadborrowers && length($uploadborrowers) > 0 ) {
 
+    my $patronlistname = $uploadborrowers . ' (' . $timestamp . ')';
     my $handle   = $input->upload('uploadborrowers');
     my %defaults = $input->Vars;
     my $overwrite_passwords = defined $input->param('overwrite_passwords') ? 1 : 0;
-    my $update_dateexpiry = $input->param('update_dateexpiry');
+    my $update_dateexpiry = $input->param('update_dateexpiry') // "";
     my $return = $Import->import_patrons(
         {
             file                            => $handle,
