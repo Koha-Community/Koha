@@ -73,7 +73,7 @@
 
     [% IF CAN_user_borrowers_edit_borrowers %]
         <div class="btn-group">
-            <button class="btn btn-default dropdown-toggle" data-bs-toggle="dropdown">More <span class="caret"></span></button>
+            <button class="btn btn-default dropdown-toggle" data-bs-toggle="dropdown">[% tp("More menu options", "More") | html %] <span class="caret"></span></button>
             <ul class="dropdown-menu dropdown-menu-end">
                 [% IF CAN_user_borrowers_edit_borrowers %]
                     <li>

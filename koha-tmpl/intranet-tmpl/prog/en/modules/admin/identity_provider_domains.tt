@@ -98,7 +98,7 @@
                         <label for="domain">Domain: </label>
                         <input type="text" name="domain" id="domain" size="60" />
                         <div class="hint"
-                            >Email domain to match this rule. <button class="more btn btn-ligth" data-bs-target="domain"><i class="fa fa-caret-down"></i> More</button></div
+                            >Email domain to match this rule. <button class="more btn btn-ligth" data-bs-target="domain"><i class="fa fa-caret-down"></i> [% tp("Show more information", "More") | html %]</button></div
                         >
                         <div class="hint more-domain" style="display: none">
                             <p>If this field is empty, or '*' any email domain will match this rule.</p>
@@ -182,7 +182,7 @@
                         <label for="domain">Domain: </label>
                         <input type="text" name="domain" id="domain" size="60" value="[%- identity_provider_domain.domain | html -%]" />
                         <div class="hint"
-                            >Email domain to match this rule. <button class="more btn btn-ligth" data-bs-target="domain"><i class="fa fa-caret-down"></i> More</button></div
+                            >Email domain to match this rule. <button class="more btn btn-ligth" data-bs-target="domain"><i class="fa fa-caret-down"></i> [% tp("Show more information", "More") | html %]</button></div
                         >
                         <div class="hint more-domain" style="display: none">
                             <p>If this field is empty, or '*' any email domain will match this rule.</p>

@@ -44,7 +44,7 @@
                 [% Koha.Preference('IntranetNav') | $raw %]
                 <li class="nav-item dropdown">
                     <a href="/cgi-bin/koha/mainpage.pl" class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown" aria-expanded="false"
-                        ><span class="nav-link-icon"><i class="fa fa-fw fa-bars" title="More"></i></span> <span class="nav-link-text">More</span></a
+                        ><span class="nav-link-icon"><i class="fa fa-fw fa-bars" title="[% tp('More menu options', 'More') | html %]"></i></span> <span class="nav-link-text">[% tp("More menu options", "More") | html %]</span></a
                     >
                     <ul class="dropdown-menu dropdown-menu-dark dropdown-menu-end">
                         <li><a class="dropdown-item" href="/cgi-bin/koha/virtualshelves/shelves.pl">Lists</a></li>
