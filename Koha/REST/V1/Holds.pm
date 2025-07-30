@@ -347,6 +347,50 @@ sub delete {
     };
 }
 
+=head3 delete_bulk
+
+Method that handles deleting multiple Koha::Hold objects
+
+=cut
+
+sub delete_bulk {
+    my $c = shift->openapi->valid_input or return;
+
+    my $body                = $c->req->json;
+    my $hold_ids            = ($body) ? $body->{hold_ids}            : undef;
+    my $cancellation_reason = ($body) ? $body->{cancellation_reason} : undef;
+
+    return $c->render_resource_not_found("Hold")
+        unless $hold_ids;
+
+    foreach my $hold_id (@$hold_ids) {
+        my $hold = Koha::Holds->find($hold_id);
+        return $c->render_resource_not_found( "Hold", "id", $hold_id )
+            unless $hold;
+    }
+
+    return try {
+        Koha::Database->new->schema->txn_do(
+            sub {
+                foreach my $hold_id (@$hold_ids) {
+                    my $hold = Koha::Holds->find($hold_id);
+                    $hold->cancel( { cancellation_reason => $cancellation_reason } );
+                }
+                $c->res->headers->location( $c->req->url->to_string );
+                return $c->render(
+                    status  => 204,
+                    openapi => {
+                        hold_ids            => $hold_ids,
+                        cancellation_reason => $cancellation_reason,
+                    }
+                );
+            }
+        );
+    } catch {
+        $c->unhandled_exception($_);
+    };
+}
+
 =head3 suspend
 
 Method that handles suspending a hold
