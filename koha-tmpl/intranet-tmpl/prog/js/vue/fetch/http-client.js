@@ -1,14 +1,29 @@
 import { setError, submitting, submitted } from "../messages";
 
+function _ifDocumentAvailable(callback) {
+    if (typeof document !== "undefined" && document.getElementById) {
+        callback();
+    }
+}
+
 class HttpClient {
     constructor(options = {}) {
         this._baseURL = options.baseURL || "";
         this._headers = options.headers || {
             "Content-Type": "application/json;charset=utf-8",
         };
-        this.csrf_token = document
-            .querySelector('meta[name="csrf-token"]')
-            .getAttribute("content");
+        this.csrf_token = this._getCsrfToken(options);
+    }
+
+    _getCsrfToken(options) {
+        let token = null;
+        _ifDocumentAvailable(() => {
+            const metaTag = document.querySelector('meta[name="csrf-token"]');
+            if (metaTag) {
+                token = metaTag.getAttribute("content");
+            }
+        });
+        return token !== null ? token : options.csrfToken || null;
     }
 
     async _fetchJSON(

@@ -1,6 +1,6 @@
 const methods = ["__", "__x", "__n", "__nx", "__p", "__px", "__np", "__npx"];
 
-if (window.Cypress.testingType === "component") {
+if (window?.Cypress?.testingType === "component") {
     methods.forEach(method => {
         window[method] = string => string;
     });

@@ -22,6 +22,7 @@
 import { mount } from "cypress/vue";
 import i18n from "@koha-vue/i18n";
 import { createWebHistory, createRouter } from "vue-router";
+import vSelect from "vue-select";
 
 // Augment the Cypress namespace to include type definitions for
 // your custom command.
@@ -55,7 +56,7 @@ Cypress.Commands.add("mount", (component, options = {}) => {
         });
         options.global.plugins.push({
             install(app) {
-                app.use(options.router);
+                app.use(options.router).component("v-select", vSelect);
             },
         });
     }
