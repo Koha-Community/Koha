@@ -21,6 +21,7 @@
 
 import { mount } from "cypress/vue";
 import i18n from "@koha-vue/i18n";
+import { createWebHistory, createRouter } from "vue-router";
 
 // Augment the Cypress namespace to include type definitions for
 // your custom command.
@@ -35,13 +36,31 @@ import i18n from "@koha-vue/i18n";
 // };
 
 Cypress.Commands.add("mount", (component, options = {}) => {
-    return mount(component, {
-        global: {
-            plugins: [i18n, ...(options.global?.plugins || [])],
-            ...options.global,
-        },
-        ...options,
-    });
+    options.global = options.global || {};
+    options.global.plugins = options.global.plugins || [];
+
+    if (!options.router) {
+        options.router = createRouter({
+            routes: [
+                {
+                    path: "/:pathMatch(.*)*",
+                    name: "home",
+                    children: [],
+                },
+            ],
+            history: createWebHistory(),
+        });
+        options.router.beforeEach((to, from, next) => {
+            if (!to.matched.length) next();
+        });
+        options.global.plugins.push({
+            install(app) {
+                app.use(options.router);
+            },
+        });
+    }
+    options.global.plugins.push(i18n);
+    return mount(component, options);
 });
 
 // Example use:
