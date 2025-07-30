@@ -172,7 +172,7 @@ table {
 
             tr.dtrg-group {
                 td {
-                    background: #e0e0e0;
+                    background: #E0E0E0;
                 }
             }
         }
@@ -463,42 +463,17 @@ div {
             }
         }
 
-        .dt-info {
-            float: none;
-            line-height: 1.9em;
-            padding-right: 1em;
-            padding-top: 0;
-        }
-
-        .dt-length {
-            display: none;
-            float: none;
-            line-height: 1.5em;
-            padding-right: 1em;
-        }
-
-        .dt-input {
-            float: none;
-            padding-right: 1em;
-            white-space: nowrap;
-
-            input {
-                border-radius: 0;
-                padding: 1px 2px;
-            }
-        }
-
         .dt-buttons {
             display: flex;
             flex-grow: 1;
-            justify-content: flex-end;
-        }
 
         .dt-button {
             background: transparent none;
             border: 1px solid transparent;
+            display: unset;
             font-size: .9rem;
             padding: .3rem .5rem;
+            position: unset;
 
             &:hover:not( .disabled ) {
                 background: #EEE none;
@@ -507,23 +482,11 @@ div {
         }
 
         .dt-paging {
-            float: none;
-            line-height: 1.5em;
-            padding: 0;
-            padding-right: 1em;
-
-            span {
-                .dt-paging-button,
-                .ellipsis {
-                    display: none;
-                }
-            }
-
             .dt-paging-button {
                 border: 1px solid transparent;
                 border-radius: 0;
                 color: $green-text-color;
-                padding: .2em 1em .5em 1em;
+                padding: .2em .7em .5em .7em;
 
                 &:hover,
                 &:active {
@@ -629,6 +592,25 @@ div {
                 }
             }
         }
+
+        div.dt-layout-end {
+            &.dt-search-buttons {
+                .dt-buttons {
+                    /* Override left margin to keep "Clear" button next to search field */
+                    margin-left: 0;
+                }
+            }
+        }
+    }
+
+    .dt-info-row {
+        border-bottom: 1px solid $table-border-color;
+        flex-grow: 1;
+        padding: .5rem 0;
+    }
+
+    .dt-search-buttons {
+        flex-grow: 1;
     }
 
     .dt-button-collection {
@@ -712,7 +694,6 @@ div {
             top: unset;
         }
     }
-
 }
 
 .dt-button-down-arrow {
@@ -721,31 +702,15 @@ div {
     padding-left: .3rem;
 }
 
-.dt-info {
-    margin-top: .5em;
-
-    & + .pager {
-        border-top: 1px solid $table-border-color;
-        margin-top: .3em;
-    }
-}
-
-.dt-length, .dt-paging, .dt-search {
-    display: flex;
+.dt-paging-row {
     flex-wrap: wrap;
     font-size: 90%;
+    gap: 1rem;
+}
 
-    &.top {
-        padding-top: 1em;
-    }
-
-    &.bottom {
-        border-bottom: 1px solid $table-border-color;
-        padding-bottom: 1em;
-    }
-
-
-
+.dt-length,
+.dt-paging,
+.dt-search {
     input {
         &[type="search"] {
             border: 1px solid #CCC;
@@ -810,87 +775,27 @@ div {
     }
 }
 
-.table_entries {
-    clear: both;
-    display: flex;
-}
-
-.table_controls {
-    border-top: 1px solid #EEE;
-    display: flex;
-    flex-grow: 1;
-    justify-content: flex-end;
-    margin-top: .5em;
-    padding-top: .5em;
-}
-
-@media ( min-width: 1275px ) {
-    .dt-button-text {
-        display: inline;
-    }
-
-    div {
-        .dt-container {
-            .dt-paging {
-                .dt-paging-button {
-                    &.first,
-                    &.last {
-                        display: inline-block;
-                    }
-                }
-            }
-        }
-    }
-}
-
-@media only screen and ( min-width: 500px ) {
-    div {
-        .dt-container {
-            .dt-length {
-                display: block;
-            }
-        }
-    }
-}
-
-@media only screen and ( max-width: 767px ) {
-    div {
-        .dt-container {
-            .dt-info,
-            .dt-paging {
-                float: none;
-                text-align: left;
-            }
-        }
-    }
-}
-
-@media only screen and ( min-width: 950px ) and ( max-width: 1125px ) {
+@media only screen and ( min-width: 950px ) and ( max-width: 1525px ) {
     .dt-button-text {
         display: none;
     }
 }
 
-@media only screen and ( min-width: 950px ) {
-    .table_entries,
-    .table_controls {
-        border-top: 0;
-        clear: none;
-        margin: 0;
-        padding: 0;
+@media ( min-width: 1390 ) {
+    .dt-layout-row {
+        flex-wrap: wrap;
+    }
+
+    .dt-button-text {
+        display: inline;
     }
 }
 
-@media only screen and ( min-width: 1500px ) {
-    div {
-        .dt-container {
-            .dt-paging {
-                span {
-                    .dt-paging-button,
-                    .ellipsis {
-                        display: inline-block;
-                    }
-                }
+@media screen and ( max-width: 767px ) {
+    div.dt-container {
+        div.dt-layout-row:not( .dt-layout-table ) {
+            div.dt-layout-cell {
+                text-align: left;
             }
         }
     }

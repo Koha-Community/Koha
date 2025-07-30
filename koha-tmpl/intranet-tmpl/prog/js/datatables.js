@@ -36,23 +36,31 @@ var dataTablesDefaults = {
             excel: __("Excel"),
         },
     },
-    //    dom: '<"dt-info"i><"top pager"<"table_entries"lp><"table_controls"fB>>tr<"bottom pager"ip>',
-    layout: {
-        //top3Start: ["info"],
-        //top3End: null,
-        //top2Start: ["pageLength", "paging"],
-        //top2End: null,
-        //top: ["search", "buttons"],
-        //topStart: null,
-        //topEnd: null,
 
-        top2Start: ["info"],
+    layout: {
+        top2Start: {
+            features: ["info"],
+            rowClass: "dt-layout-row dt-info-row",
+        },
         top2End: null,
-        top: ["pageLength", "paging", "search", "buttons"],
+        top1Start: {
+            className: "dt-layout-cell dt-layout-start dt-paging",
+            features: ["pageLength", "paging"],
+            rowClass: "dt-layout-row dt-paging-row",
+        },
+        top1End: {
+            className: "dt-layout-cell dt-layout-end dt-search-buttons",
+            features: ["search", "buttons"],
+        },
+        top: null,
         topStart: null,
         topEnd: null,
 
-        bottomStart: ["info", "paging"],
+        bottomStart: {
+            className: "dt-layout-cell dt-layout-start dt-paging",
+            features: ["info", "paging"],
+            rowClass: "dt-layout-row dt-info-row dt-paging-row",
+        },
         bottomEnd: null,
     },
     buttons: [],
