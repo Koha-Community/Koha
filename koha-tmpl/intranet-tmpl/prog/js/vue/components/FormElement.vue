@@ -13,6 +13,7 @@
             :placeholder="attr.placeholder || attr.label"
             :required="attr.required ? true : false"
             :size="attr.size"
+            :disabled="disabled"
             @update:modelValue="checkForInputError()"
         />
     </template>
@@ -22,6 +23,7 @@
             v-model="resource[attr.name]"
             :placeholder="attr.placeholder || attr.label"
             :required="attr.required ? true : false"
+            :disabled="disabled"
             @update:modelValue="checkForInputError()"
         />
     </template>
@@ -33,6 +35,7 @@
             :cols="attr.textAreaCols"
             :placeholder="attr.placeholder || attr.label"
             :required="attr.required ? true : false"
+            :disabled="disabled"
             @update:modelValue="checkForInputError()"
         />
     </template>
@@ -42,6 +45,7 @@
             type="checkbox"
             v-model="resource[attr.name]"
             :changeMethod="attr.onChange && attr.onChange.bind(this, resource)"
+            :disabled="disabled"
         />
     </template>
     <template v-else-if="attr.type == 'radio'">
@@ -260,10 +264,11 @@ export default {
             return props.options;
         });
         const disabled = computed(() => {
-            if (typeof props.disabled === "function") {
-                return props.disabled(props.resource);
+            const disabledAttr = props.disabled || props.attr.disabled;
+            if (typeof disabledAttr === "function") {
+                return disabledAttr(props.resource);
             } else {
-                return props.disabled || false;
+                return disabledAttr || false;
             }
         });
 
