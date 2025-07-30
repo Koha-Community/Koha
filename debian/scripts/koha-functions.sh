@@ -401,20 +401,20 @@ is_git_install()
     fi
 }
 
-is_test_system()
+is_debug_mode()
 {
-    local instancename=$1 test_system
+    local instancename=$1 debug_mode
 
-    # env var TEST_SYSTEM overrules koha-conf entry
-    if [ -n "$TEST_SYSTEM" ]; then
-        if [ "$TEST_SYSTEM" != "0" ]; then return 0; else return 1; fi
+    # env var DEBUG_MODE overrules koha-conf entry
+    if [ -n "$DEBUG_MODE" ]; then
+        if [ "$DEBUG_MODE" != "0" ]; then return 0; else return 1; fi
     fi
 
     # now check koha-conf
     if [ "$instancename" != "" ] && is_instance $instancename; then
-        test_system=$(run_safe_xmlstarlet $instancename test_system)
+        debug_mode=$(run_safe_xmlstarlet $instancename debug_mode)
     fi
-    if [ -n "$test_system" ] && [ "test_system" != "0" ]; then
+    if [ -n "$debug_mode" ] && [ "debug_mode" != "0" ]; then
         return 0; # true
     else
         return 1

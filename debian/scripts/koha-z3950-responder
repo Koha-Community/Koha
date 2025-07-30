@@ -86,7 +86,7 @@ start_z3950()
     logging="-l /var/log/koha/${instancename}/z3950.log"
 
     Z3950RESPONDER="/usr/bin/perl $KOHA_HOME/$KOHA_BINDIR/z3950_responder.pl"
-    if [ "$debug_mode" = "yes" ] && is_test_system $instancename; then
+    if [ "$debug_mode" = "yes" ] && is_debug_mode $instancename; then
         environment="development"
         daemonize=""
         logging="" # remote debugger takes care
@@ -298,7 +298,7 @@ if [ $# -gt 0 ]; then
             PERL5LIB=$PERL5LIB:$KOHA_HOME/installer:$KOHA_HOME/lib/installer
             # If debug mode is enabled, add the debugger lib path
             # to PERL5LIB if appropriate
-            if [ "$debug_mode" = "yes" ] && is_test_system $name; then
+            if [ "$debug_mode" = "yes" ] && is_debug_mode $name; then
                 if [ "$debugger_path" != "" ]; then
                     PERL5LIB="${debugger_path}":$PERL5LIB
                 fi

@@ -92,7 +92,7 @@ start_plack()
 
     instance_user="${instancename}-koha"
 
-    if is_test_system ${instancename} || [ -n "$development_environment" ]; then
+    if is_debug_mode ${instancename} || [ -n "$development_environment" ]; then
         environment="development"
     else
         environment="deployment"
