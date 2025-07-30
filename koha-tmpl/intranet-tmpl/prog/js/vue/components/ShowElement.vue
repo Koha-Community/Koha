@@ -149,7 +149,6 @@ import LinkWrapper from "./LinkWrapper.vue";
 import AdditionalFieldsDisplay from "./AdditionalFieldsDisplay.vue";
 import { useBaseElement } from "../composables/base-element.js";
 import { computed, defineAsyncComponent } from "vue";
-import { $__ } from "@koha-vue/i18n";
 
 export default {
     components: { LinkWrapper, AdditionalFieldsDisplay },
@@ -197,7 +196,6 @@ export default {
             attribute,
             formatValue,
             radioOptionText,
-            $__,
         };
     },
     props: {

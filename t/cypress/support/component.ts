@@ -20,6 +20,7 @@
 // require('./commands')
 
 import { mount } from "cypress/vue";
+import i18n from "@koha-vue/i18n";
 
 // Augment the Cypress namespace to include type definitions for
 // your custom command.
@@ -33,7 +34,15 @@ import { mount } from "cypress/vue";
 //   }
 // };
 
-Cypress.Commands.add("mount", mount);
+Cypress.Commands.add("mount", (component, options = {}) => {
+    return mount(component, {
+        global: {
+            plugins: [i18n, ...(options.global?.plugins || [])],
+            ...options.global,
+        },
+        ...options,
+    });
+});
 
 // Example use:
 // cy.mount(MyComponent)
