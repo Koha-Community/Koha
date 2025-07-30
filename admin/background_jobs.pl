@@ -79,11 +79,15 @@ $template->param(
     op       => $op,
 );
 
-my @plugins = Koha::Plugins->new()->GetPlugins(
-    {
-        method => 'background_tasks',
-    }
-);
+my @plugins        = ();
+my $plugin_manager = Koha::Plugins->new();
+if ($plugin_manager) {
+    @plugins = $plugin_manager->GetPlugins(
+        {
+            method => 'background_tasks',
+        }
+    );
+}
 my @plugin_job_types;
 for my $plugin (@plugins) {
     my $tasks = $plugin->background_tasks;
