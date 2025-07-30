@@ -1,4 +1,4 @@
-import ShowElement from "../../../koha-tmpl/intranet-tmpl/prog/js/vue/components/ShowElement.vue";
+import ShowElement from "@koha-vue/components/ShowElement.vue";
 
 const resource = {
     id: 1,
