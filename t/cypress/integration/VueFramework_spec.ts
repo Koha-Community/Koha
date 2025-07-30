@@ -72,6 +72,11 @@ describe("List view features", () => {
     beforeEach(() => {
         cy.login();
         cy.title().should("eq", "Koha staff interface");
+        cy.intercept(
+            "GET",
+            "/api/v1/erm/config",
+            '{"settings":{"ERMModule":"1","ERMProviders":["local"]}}'
+        );
     });
     it("Should render additional toolbar buttons", function () {
         cy.visit("/cgi-bin/koha/erm/eholdings/local/titles");
@@ -280,12 +285,32 @@ describe("Show view features", () => {
                 cy.get("#contracts_relationship_list").contains(
                     "Test contract"
                 );
-
-                cy.task("query", {
-                    sql: "DELETE FROM aqcontract where booksellerid=?",
-                    values: [vendor.id],
-                });
             });
         });
+    });
+});
+
+describe("Form features", () => {
+    beforeEach(() => {
+        cy.login();
+        cy.title().should("eq", "Koha staff interface");
+    });
+    it("Should allow accordion view", function () {
+        cy.visit("/cgi-bin/koha/acquisition/vendors/add");
+        cy.get("div.accordion").should("have.length", 5);
+    });
+    it("Should group fields according to the attribute group", function () {
+        cy.visit("/cgi-bin/koha/acquisition/vendors/add");
+        cy.get("div.accordion").should("have.length", 5);
+        cy.get("div.accordion:first legend").contains("Details");
+        cy.get("div.accordion").eq(1).contains("Aliases");
+        cy.get("div.accordion").eq(2).contains("Contacts");
+        cy.get("div.accordion").eq(3).contains("Interfaces");
+        cy.get("div.accordion").eq(4).contains("Ordering information");
+    });
+    it("Should allow editing of an existing resource", function () {
+        cy.visit("/cgi-bin/koha/acquisition/vendors/edit/1");
+        cy.get("h2").contains("Edit vendor #1");
+        cy.get("#name").should("have.value", "My Vendor");
     });
 });
