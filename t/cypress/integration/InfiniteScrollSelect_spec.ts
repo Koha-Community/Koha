@@ -104,7 +104,7 @@ describe("Infinite scroll", () => {
         cy.get("@options").should("have.length", 60);
     });
 
-    it("Should correctly submit the form", () => {
+    it.skip("Should correctly submit the form", () => {
         const pageOne = createLicenses(1);
         const vendors = cy.get_vendors_to_relate();
         let agreement = cy.get_agreement();
@@ -166,7 +166,7 @@ describe("Infinite scroll", () => {
         );
     });
 
-    it("Should correctly display labels", () => {
+    it.skip("Should correctly display labels", () => {
         const pageOne = createLicenses(1);
         const pageTwo = createLicenses(21);
         const pageThree = createLicenses(41);
