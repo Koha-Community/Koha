@@ -40,6 +40,7 @@ use Koha::Biblios;
 use Koha::Biblioitems;
 use Koha::Items;
 use Koha::CirculationRules;
+use Koha::Old::Holds;
 use Koha::Patron::Debarments qw(AddDebarment);
 
 my $schema  = Koha::Database->new->schema;
@@ -1832,6 +1833,104 @@ subtest 'delete() tests' => sub {
         ->status_is( 202, 'Cancellation request accepted' );
 
     is( $hold->cancellation_requests->count, 1 );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'delete_bulk) tests' => sub {
+
+    plan tests => 12;
+
+    $schema->storage->txn_begin;
+
+    my $password = 'AbcdEFG123';
+    my $patron   = $builder->build_object( { class => 'Koha::Patrons', value => { flags => 0 } } );
+    $patron->set_password( { password => $password, skip_validation => 1 } );
+    my $userid = $patron->userid;
+
+    # Only have 'place_holds' subpermission
+    $builder->build(
+        {
+            source => 'UserPermission',
+            value  => {
+                borrowernumber => $patron->borrowernumber,
+                module_bit     => 6,
+                code           => 'place_holds',
+            },
+        }
+    );
+
+    # Disable logging
+    t::lib::Mocks::mock_preference( 'HoldsLog',      0 );
+    t::lib::Mocks::mock_preference( 'RESTBasicAuth', 1 );
+
+    my $biblio = $builder->build_sample_biblio;
+    my $item   = $builder->build_sample_item(
+        {
+            biblionumber => $biblio->biblionumber,
+            library      => $patron->branchcode
+        }
+    );
+
+    # Add a hold
+    my $hold = Koha::Holds->find(
+        AddReserve(
+            {
+                branchcode     => $patron->branchcode,
+                borrowernumber => $patron->borrowernumber,
+                biblionumber   => $biblio->biblionumber,
+                priority       => 1,
+                itemnumber     => undef,
+            }
+        )
+    );
+
+    $t->delete_ok( "//$userid:$password@/api/v1/holds/cancellation_bulk" => json => { hold_ids => [ $hold->id ] } )
+        ->status_is( 204, 'REST3.2.4' )->content_is( '', 'REST3.3.4' );
+
+    is( $hold->get_from_storage, undef, "Hold has been successfully deleted" );
+
+    my $hold_2 = Koha::Holds->find(
+        AddReserve(
+            {
+                branchcode     => $patron->branchcode,
+                borrowernumber => $patron->borrowernumber,
+                biblionumber   => $biblio->biblionumber,
+                priority       => 1,
+                itemnumber     => undef,
+            }
+        )
+    );
+
+    # Prevent warning 'No reserves HOLD_CANCELLATION letter transported by email'
+    my $mock_letters = Test::MockModule->new('C4::Letters');
+    $mock_letters->mock( 'GetPreparedLetter', sub { return } );
+
+    $t->delete_ok( "//$userid:$password@/api/v1/holds/cancellation_bulk" => json =>
+            { hold_ids => [ $hold_2->id ], cancellation_reason => 'DAMAGED' } )->status_is( 204, 'REST3.2.4' )
+        ->content_is( '', 'REST3.3.4' );
+
+    my $old_hold_2 = Koha::Old::Holds->find( $hold_2->id );
+    is( $old_hold_2->cancellation_reason, 'DAMAGED', "Hold successfully deleted with provided cancellation reason" );
+
+    my $hold_3 = Koha::Holds->find(
+        AddReserve(
+            {
+                branchcode     => $patron->branchcode,
+                borrowernumber => $patron->borrowernumber,
+                biblionumber   => $biblio->biblionumber,
+                priority       => 1,
+                itemnumber     => undef,
+            }
+        )
+    );
+
+    $t->delete_ok( "//$userid:$password@/api/v1/holds/cancellation_bulk" => json =>
+            { hold_ids => [ $hold_2->id, $hold_3->id ], cancellation_reason => 'DAMAGED' } )
+        ->status_is( 404, 'REST3.2.4' )
+        ->content_is( '{"error":"Hold not found","error_code":"not_found"}', 'REST3.3.4' );
+
+    isnt( $hold_3->get_from_storage, undef, "Hold 3 has not been deleted because cancellation_bulk failed." );
 
     $schema->storage->txn_rollback;
 };
