@@ -102,8 +102,8 @@ start_plack()
              --error-log /var/log/koha/${instancename}/plack-error.log"
     max_requests_and_workers="--max-requests ${PLACK_MAX_REQUESTS} --workers ${PLACK_WORKERS}"
 
-    # Enable debug mode in development
-    if [ "$debug_mode" = "yes" ] && [ "$environment" = "development" ]; then
+    # Enable debugger?
+    if [ "$debugger" = "yes" ] && [ "$environment" = "development" ]; then
         daemonize=""
         logging="" # remote debugger takes care
         max_requests_and_workers="--workers 1"
@@ -373,10 +373,9 @@ _do_instance() {
     if [ "$KOHA_BINDIR" = "misc" ]; then GIT_INSTALL=1; else GIT_INSTALL=""; fi
     export PERL5LIB KOHA_HOME GIT_INSTALL
 
-    # If debug mode is enabled, add the debugger lib path
-    # to PERL5LIB if appropriate
-    #FIXME: many of these variables should be set in a higher scope
-    if [ "$debug_mode" = "yes" ]; then
+    # If debugger is enabled, add the debugger lib path to PERL5LIB if appropriate
+    # FIXME: many of these variables should be set in a higher scope
+    if [ "$debugger" = "yes" ]; then
         if [ "$debugger_path" != "" ]; then
             PERL5LIB="${debugger_path}":$PERL5LIB
         fi
@@ -418,7 +417,7 @@ _do_instance() {
 STARMAN=$(which starman)
 op=""
 quiet="no"
-debug_mode="no"
+debugger="no"
 debugger_key=""
 debugger_location="localhost:9000"
 debugger_path=""
@@ -454,7 +453,7 @@ while [ $# -gt 0 ]; do
             set_action "status"
             shift ;;
         --debugger)
-            debug_mode="yes"
+            debugger="yes"
             shift ;;
         --debugger-key)
             debugger_key="$2"

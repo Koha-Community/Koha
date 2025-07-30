@@ -86,13 +86,12 @@ start_z3950()
     logging="-l /var/log/koha/${instancename}/z3950.log"
 
     Z3950RESPONDER="/usr/bin/perl $KOHA_HOME/$KOHA_BINDIR/z3950_responder.pl"
-    if [ "$debug_mode" = "yes" ] && is_debug_mode $instancename; then
-        environment="development"
+    if [ "$debugger" = "yes" ] && is_debug_mode $instancename; then
         daemonize=""
         logging="" # remote debugger takes care
         Z3950RESPONDER="/usr/bin/perl -d $KOHA_HOME/$KOHA_BINDIR/z3950_responder.pl"
-    elif [ "$debug_mode" = "yes" ]; then
-        warn "Not a test system, disabling debug mode"
+    elif [ "$debugger" = "yes" ]; then
+        warn "Not a test system, disabling debugger"
     fi
 
     Z3950OPTS="-c ${CONFIGDIR} \
@@ -238,7 +237,7 @@ set_action()
 
 op=""
 quiet="no"
-debug_mode="no"
+debugger="no"
 debugger_key=""
 debugger_location="localhost:9000"
 debugger_path=""
@@ -268,7 +267,7 @@ while [ $# -gt 0 ]; do
             set_action "disable"
             shift ;;
         --debugger)
-            debug_mode="yes"
+            debugger="yes"
             shift ;;
         --debugger-key)
             debugger_key="$2"
@@ -296,9 +295,8 @@ if [ $# -gt 0 ]; then
 
             adjust_paths_git_install $name
             PERL5LIB=$PERL5LIB:$KOHA_HOME/installer:$KOHA_HOME/lib/installer
-            # If debug mode is enabled, add the debugger lib path
-            # to PERL5LIB if appropriate
-            if [ "$debug_mode" = "yes" ] && is_debug_mode $name; then
+            # If debugger is enabled, add the debugger lib path to PERL5LIB if appropriate
+            if [ "$debugger" = "yes" ]; then
                 if [ "$debugger_path" != "" ]; then
                     PERL5LIB="${debugger_path}":$PERL5LIB
                 fi
