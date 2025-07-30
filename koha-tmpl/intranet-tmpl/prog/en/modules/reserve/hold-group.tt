@@ -20,7 +20,7 @@
                     [% biblio = hold.biblio %]
                     <tr>
                         <td>
-                            <a href="/cgi-bin/koha/reserve/request.pl?biblionumber=[% biblio.biblionumber | uri %]"> [% biblio.title | html %] </a>
+                            <a href="/cgi-bin/koha/reserve/request.pl?biblionumber=[% biblio.biblionumber | uri %]" data-hold-id="[% hold.reserve_id | uri %]" class="hold-group-entry"> [% biblio.title | html %] </a>
                             [% IF (hold.is_hold_group_target) %]
                                 <br /><span class="fw-bold fst-italic">(target of hold group)</span>
                             [% END %]
