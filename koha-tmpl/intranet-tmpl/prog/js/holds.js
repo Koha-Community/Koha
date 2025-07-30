@@ -1177,6 +1177,62 @@ $(document).ready(function () {
         return false;
     });
 
+    if (holds_table_patron_page()) {
+        $("#cancelModalConfirmBtn").click(function (e) {
+            e.preventDefault();
+            let formInputs = {};
+            formInputs["reserve_id"] = $(
+                "#cancel_modal_form :input[name='reserve_id']"
+            )
+                .map(function () {
+                    return $(this).val();
+                })
+                .get();
+            formInputs["cancellation-reason"] = $(
+                "#cancel_modal_form :input[name='cancellation-reason']"
+            ).val();
+            cancel_holds(
+                formInputs["reserve_id"],
+                formInputs["cancellation-reason"]
+            )
+                .success(function () {
+                    holdsTable.api().ajax.reload();
+                })
+                .fail(function (jqXHR) {
+                    $("#cancelModal .modal-body").prepend(
+                        '<div class="alert alert-danger">' +
+                            jqXHR.responseJSON.error +
+                            "</div>"
+                    );
+                    $("#cancelModalConfirmBtn").prop("disabled", true);
+                })
+                .done(function () {
+                    $("#cancelModal").modal("hide");
+                    if ($(".select_hold_all").prop("checked")) {
+                        $(".select_hold_all").click();
+                    }
+                });
+        });
+    }
+
+    function cancel_holds(hold_ids, cancellation_reason) {
+        return $.ajax({
+            method: "DELETE",
+            url: "/api/v1/holds/cancellation_bulk",
+            contentType: "application/json",
+            data: JSON.stringify({
+                hold_ids: hold_ids,
+                cancellation_reason: cancellation_reason,
+            }),
+        });
+    }
+
+    $("#cancelModal").on("hidden.bs.modal", function () {
+        $("#cancelModal .modal-body .alert-danger").remove();
+        $("#cancelModalConfirmBtn").prop("disabled", false);
+        holdsTable.api().ajax.reload();
+    });
+
     $("#group-modal-submit").click(function (e) {
         e.preventDefault();
         let selected_holds = get_selected_holds_data();
