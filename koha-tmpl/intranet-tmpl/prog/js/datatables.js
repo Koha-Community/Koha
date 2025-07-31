@@ -222,34 +222,6 @@ $.fn.dataTableExt.oSort["num-html-desc"] = function (a, b) {
     });
 })();
 
-/* Plugin to allow sorting on data stored in a span's title attribute
- *
- * Ex: <td><span title="[% ISO_date %]">[% formatted_date %]</span></td>
- *
- * In DataTables config:
- *     "data": [
- *        { "type": "title-string" },
- *      ]
- * http://datatables.net/plug-ins/sorting#hidden_title_string
- */
-jQuery.extend(jQuery.fn.dataTableExt.oSort, {
-    "title-string-pre": function (a) {
-        var m = a.match(/title="(.*?)"/);
-        if (null !== m && m.length) {
-            return m[1].toLowerCase();
-        }
-        return "";
-    },
-
-    "title-string-asc": function (a, b) {
-        return a < b ? -1 : a > b ? 1 : 0;
-    },
-
-    "title-string-desc": function (a, b) {
-        return a < b ? 1 : a > b ? -1 : 0;
-    },
-});
-
 (function () {
     /* Plugin to allow text sorting to ignore articles
      *

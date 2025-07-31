@@ -53,7 +53,7 @@
                             <th class="recall-enumeration">Available enumeration</th>
                             <th class="recall-itemtypes">Available item types</th>
                             <th class="recall-locations">Available locations</th>
-                            <th class="recall-date title-string">Earliest recall date</th>
+                            <th class="recall-date">Earliest recall date</th>
                             <th class="recall-action no-sort">&nbsp;</th>
                         </tr>
                     </thead>
@@ -117,7 +117,7 @@
                                     </ul>
                                 </td>
                                 <td class="recall-date">
-                                    <span title="[% recall.first_recall.created_date | html %]">[% recall.first_recall.created_date | $KohaDates %] in [% recall.first_recall.library.branchname | html %]</span>
+                                    <span data-order="[% recall.first_recall.created_date | html %]">[% recall.first_recall.created_date | $KohaDates %] in [% recall.first_recall.library.branchname | html %]</span>
                                 </td>
                                 <td class="recall-action">
                                     <form action="/cgi-bin/koha/recalls/recalls_to_pull.pl" method="post">
@@ -152,7 +152,6 @@
     <script>
         $(document).ready(function () {
             $("#recalls-table").kohaTable({
-                columnDefs: [{ type: "title-string", targets: ["title-string"] }],
                 pagingType: "full_numbers",
             });
 

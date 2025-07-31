@@ -47,7 +47,7 @@
                         <table id="recallswaiting-table">
                             <thead
                                 ><tr>
-                                    <th class="recall-waitingdate title-string">Available since</th>
+                                    <th class="recall-waitingdate">Available since</th>
                                     <th class="recall-title anti-the">Title</th>
                                     <th class="recall-patron">Requested by</th>
                                     <th class="recall-library">Pickup location</th>
@@ -57,7 +57,7 @@
                             <tbody>
                                 [% FOREACH recall IN recalls %]
                                     <tr>
-                                        <td class="recall-waitingdate">[% recall.waiting_date | $KohaDates %]</td>
+                                        <td data-order="[% recall.waiting_date | html %]" class="recall-waitingdate">[% recall.waiting_date | $KohaDates %]</td>
                                         <td class="recall-title">
                                             <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% recall.biblio_id | uri %]">
                                                 [% recall.biblio.title | html %]
@@ -100,7 +100,7 @@
                             <table id="recallsover-table">
                                 <thead
                                     ><tr>
-                                        <th class="recall-waitingdate title-string">Available since</th>
+                                        <th class="recall-waitingdate">Available since</th>
                                         <th class="recall-title anti-the">Title</th>
                                         <th class="recall-patron">Requested by</th>
                                         <th class="recall-library">Pickup location</th>
@@ -110,7 +110,7 @@
                                 <tbody>
                                     [% FOREACH recall IN over %]
                                         <tr>
-                                            <td class="recall-waitingdate">[% recall.waiting_date | $KohaDates %]</td>
+                                            <td data-order="[% recall.waiting_date | html %]" class="recall-waitingdate">[% recall.waiting_date | $KohaDates %]</td>
                                             <td class="recall-title">
                                                 [% INCLUDE 'biblio-title.inc' biblio=recall.biblio link = 1 %]
                                                 [% IF recall.biblio.author %]by [% recall.biblio.author | html %][% END %]
