@@ -19,7 +19,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 20;
+use Test::More tests => 27;
 
 use Test::MockModule;
 use Test::Exception;
@@ -34,6 +34,7 @@ use Koha::Items;
 use Koha::Database;
 use Koha::DateUtils qw( dt_from_string );
 use Koha::Statistics;
+use Koha::Recalls;
 
 use t::lib::TestBuilder;
 use t::lib::Mocks;
@@ -67,6 +68,163 @@ is( Koha::Items->search->count, $nb_of_items + 2, 'The 2 items should have been 
 
 my $retrieved_item_1 = Koha::Items->find( $new_item_1->itemnumber );
 is( $retrieved_item_1->barcode, $new_item_1->barcode, 'Find a item by id should return the correct item' );
+
+subtest 'search' => sub {
+
+    plan tests => 9;
+    $schema->storage->txn_begin;
+
+    my $patron   = $builder->build_object( { class => 'Koha::Patrons' } );
+    my $patron_2 = $builder->build_object( { class => 'Koha::Patrons' } );
+    t::lib::Mocks::mock_userenv( { branchcode => $patron->branchcode } );
+
+    my $library_1 = $builder->build( { source => 'Branch' } );
+    my $library_2 = $builder->build( { source => 'Branch' } );
+
+    my $biblio = $builder->build_sample_biblio();
+
+    my $item_1 = $builder->build_sample_item( { biblionumber => $biblio->biblionumber, } );
+    my $item_2 = $builder->build_sample_item( { biblionumber => $biblio->biblionumber, } );
+
+    my $available_items = Koha::Items->search(
+        {
+            _status      => 'available',
+            biblionumber => $biblio->biblionumber,
+        }
+    );
+
+    ok( $available_items->count == 2, "Filtered to 2 available items" );
+
+    my $item_3 = $builder->build_sample_item(
+        {
+            biblionumber => $biblio->biblionumber,
+            itemlost     => 1,
+        }
+    );
+
+    my $item_4 = $builder->build_sample_item(
+        {
+            biblionumber => $biblio->biblionumber,
+            damaged      => 1,
+        }
+    );
+
+    my $item_5 = $builder->build_sample_item(
+        {
+            biblionumber => $biblio->biblionumber,
+            withdrawn    => 1,
+        }
+    );
+
+    my $item_6 = $builder->build_sample_item(
+        {
+            biblionumber => $biblio->biblionumber,
+            notforloan   => 1,
+        }
+    );
+
+    my $lost_items = Koha::Items->search(
+        {
+            _status      => 'lost',
+            biblionumber => $biblio->biblionumber,
+        }
+    );
+
+    my $damaged_items = Koha::Items->search(
+        {
+            _status      => 'damaged',
+            biblionumber => $biblio->biblionumber,
+        }
+    );
+
+    my $withdrawn_items = Koha::Items->search(
+        {
+            _status      => 'withdrawn',
+            biblionumber => $biblio->biblionumber,
+        }
+    );
+
+    my $notforloan_items = Koha::Items->search(
+        {
+            _status      => 'not_for_loan',
+            biblionumber => $biblio->biblionumber,
+        }
+    );
+
+    ok( $lost_items->count == 1,       "Filtered to 1 lost item" );
+    ok( $damaged_items->count == 1,    "Filtered to 1 damaged item" );
+    ok( $withdrawn_items->count == 1,  "Filtered to 1 withdrawn item" );
+    ok( $notforloan_items->count == 1, "Filtered to 1 notforloan item" );
+
+    C4::Circulation::AddIssue( $patron, $item_1->barcode );
+
+    my $checked_out_items = Koha::Items->search(
+        {
+            _status      => 'checked_out',
+            biblionumber => $biblio->biblionumber,
+        }
+    );
+
+    ok( $checked_out_items->count == 1, "Filtered to 1 checked out item" );
+
+    my $transfer_1 = $builder->build_object(
+        {
+            class => 'Koha::Item::Transfers',
+            value => {
+                itemnumber => $item_2->itemnumber,
+                frombranch => $library_1->{branchcode},
+                tobranch   => $library_2->{branchcode},
+            }
+        }
+    );
+
+    my $in_transit_items = Koha::Items->search(
+        {
+            _status      => 'in_transit',
+            biblionumber => $biblio->biblionumber,
+        }
+    );
+
+    ok( $in_transit_items->count == 1, "Filtered to 1 in transit item" );
+
+    my $item_7 = $builder->build_sample_item( { biblionumber => $biblio->biblionumber, } );
+
+    my $hold_1 = $builder->build(
+        {
+            source => 'Reserve',
+            value  => {
+                itemnumber => $item_7->itemnumber, reservedate => dt_from_string,
+            }
+        }
+    );
+
+    my $on_hold_items = Koha::Items->search(
+        {
+            _status      => 'on_hold',
+            biblionumber => $biblio->biblionumber,
+        }
+    );
+
+    ok( $on_hold_items->count == 1, "Filtered to 1 on hold item" );
+
+    my $item_8 = $builder->build_sample_item(
+        {
+            biblionumber => $biblio->biblionumber,
+            restricted   => 1,
+        }
+    );
+
+    my $restricted_items = Koha::Items->search(
+        {
+            _status      => 'restricted',
+            biblionumber => $biblio->biblionumber,
+        }
+    );
+
+    ok( $restricted_items->count == 1, "Filtered to 1 restricted item" );
+
+    $schema->storage->txn_rollback;
+};
 
 subtest 'store' => sub {
     plan tests => 8;
@@ -2218,6 +2376,315 @@ subtest 'filter_by_bookable' => sub {
     is(
         $biblio->items->filter_by_bookable->count, 1,
         "filter_by_bookable returns the correct number of items when not set at item level and using item level itemtypes"
+    );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'filter_by_checked_out' => sub {
+    plan tests => 4;
+
+    $schema->storage->txn_begin;
+
+    my $patron = $builder->build_object( { class => 'Koha::Patrons' } );
+    t::lib::Mocks::mock_userenv( { branchcode => $patron->branchcode } );
+
+    my $biblio = $builder->build_sample_biblio();
+    my $item_1 = $builder->build_sample_item( { biblionumber => $biblio->biblionumber, } );
+    my $item_2 = $builder->build_sample_item( { biblionumber => $biblio->biblionumber, } );
+
+    is( $biblio->items->filter_by_checked_out->count, 0, "Filtered 0 checked out items" );
+
+    C4::Circulation::AddIssue( $patron, $item_1->barcode );
+
+    is( $biblio->items->filter_by_checked_out->count, 1, "Filtered 1 checked out items" );
+
+    C4::Circulation::AddIssue( $patron, $item_2->barcode );
+
+    is( $biblio->items->filter_by_checked_out->count, 2, "Filtered 2 checked out items" );
+
+    # Do the returns
+    C4::Circulation::AddReturn( $item_1->barcode );
+    C4::Circulation::AddReturn( $item_2->barcode );
+
+    is( $biblio->items->filter_by_checked_out->count, 0, "Filtered 0 checked out items" );
+
+    $schema->storage->txn_rollback;
+
+};
+
+subtest 'filter_by_in_transit' => sub {
+    plan tests => 3;
+
+    $schema->storage->txn_begin;
+
+    my $patron = $builder->build_object( { class => 'Koha::Patrons' } );
+    t::lib::Mocks::mock_userenv( { branchcode => $patron->branchcode } );
+
+    my $library_1 = $builder->build( { source => 'Branch' } );
+    my $library_2 = $builder->build( { source => 'Branch' } );
+
+    my $biblio = $builder->build_sample_biblio();
+    my $item_1 = $builder->build_sample_item( { biblionumber => $biblio->biblionumber, } );
+    my $item_2 = $builder->build_sample_item( { biblionumber => $biblio->biblionumber, } );
+
+    is( $biblio->items->filter_by_in_transit->count, 0, "Filtered 0 in transit items" );
+
+    my $transfer_1 = $builder->build_object(
+        {
+            class => 'Koha::Item::Transfers',
+            value => {
+                itemnumber => $item_1->itemnumber,
+                frombranch => $library_1->{branchcode},
+                tobranch   => $library_2->{branchcode},
+            }
+        }
+    );
+
+    is( $biblio->items->filter_by_in_transit->count, 1, "Filtered 1 in transit items" );
+
+    my $transfer_2 = $builder->build_object(
+        {
+            class => 'Koha::Item::Transfers',
+            value => {
+                itemnumber => $item_2->itemnumber,
+                frombranch => $library_2->{branchcode},
+                tobranch   => $library_1->{branchcode},
+            }
+        }
+    );
+
+    is( $biblio->items->filter_by_in_transit->count, 2, "Filtered 2 in transit items" );
+
+    $schema->storage->txn_rollback;
+
+};
+
+subtest 'filter_by_has_holds' => sub {
+    plan tests => 3;
+
+    $schema->storage->txn_begin;
+
+    my $patron = $builder->build_object( { class => 'Koha::Patrons' } );
+    t::lib::Mocks::mock_userenv( { branchcode => $patron->branchcode } );
+
+    my $library_1 = $builder->build( { source => 'Branch' } );
+    my $library_2 = $builder->build( { source => 'Branch' } );
+
+    my $biblio = $builder->build_sample_biblio();
+    my $item_1 = $builder->build_sample_item( { biblionumber => $biblio->biblionumber, } );
+    my $item_2 = $builder->build_sample_item( { biblionumber => $biblio->biblionumber, } );
+
+    is( $biblio->items->filter_by_has_holds->count, 0, "Filtered to 0 holds" );
+
+    my $hold_1 = $builder->build(
+        {
+            source => 'Reserve',
+            value  => {
+                itemnumber => $item_1->itemnumber, reservedate => dt_from_string,
+            }
+        }
+    );
+
+    is( $biblio->items->filter_by_has_holds->count, 1, "Filtered to 1 hold" );
+
+    my $hold_2 = $builder->build(
+        {
+            source => 'Reserve',
+            value  => {
+                itemnumber => $item_2->itemnumber, reservedate => dt_from_string,
+            }
+        }
+    );
+
+    is( $biblio->items->filter_by_has_holds->count, 2, "Filtered to 2 holds" );
+
+    $schema->storage->txn_rollback;
+
+};
+
+subtest 'filter_by_in_bundle' => sub {
+    plan tests => 3;
+
+    $schema->storage->txn_begin;
+
+    my $library = $builder->build( { source => 'Branch' } );
+    my $biblio  = $builder->build_sample_biblio();
+
+    my $item_1 = $builder->build_sample_item( { biblionumber => $biblio->biblionumber, } );
+    my $item_2 = $builder->build_sample_item( { biblionumber => $biblio->biblionumber, } );
+    my $item_3 = $builder->build_sample_item( { biblionumber => $biblio->biblionumber, } );
+
+    is( $biblio->items->filter_by_in_bundle->count, 0, "0 items in a bundle for this record" );
+
+    my $in_bundle = $item_1->in_bundle;
+
+    my $host_item = $builder->build_sample_item();
+    $schema->resultset('ItemBundle')->create( { host => $host_item->itemnumber, item => $item_1->itemnumber } );
+
+    $in_bundle = $item_1->in_bundle;
+
+    is( $biblio->items->filter_by_in_bundle->count, 1, "1 item in a bundle for this record" );
+    $schema->resultset('ItemBundle')->create( { host => $host_item->itemnumber, item => $item_2->itemnumber } );
+
+    $in_bundle = $item_2->in_bundle;
+
+    is( $biblio->items->filter_by_in_bundle->count, 2, "2 items in a bundle for this record" );
+
+    $schema->storage->txn_rollback;
+
+};
+
+subtest 'filter_by_has_recalls' => sub {
+    plan tests => 2;
+
+    $schema->storage->txn_begin;
+
+    my $library = $builder->build_object( { class => 'Koha::Libraries' } );
+
+    $biblio = $builder->build_sample_biblio( { author => 'Hall, Daria' } );
+    my $patron = $builder->build_object( { class => 'Koha::Patrons' } );
+    t::lib::Mocks::mock_userenv( { branchcode => $patron->branchcode } );
+
+    my $item = $builder->build_sample_item(
+        {
+            biblionumber => $biblio->biblionumber,
+            library      => $library->branchcode,
+        }
+    );
+
+    C4::Circulation::AddIssue( $patron, $item->barcode );
+
+    is( $biblio->items->filter_by_has_recalls->count, 0, "0 items with recalls on this record" );
+
+    Koha::Recalls->add_recall( { biblio => $item->biblio, item => $item, patron => $patron } );
+
+    is( $biblio->items->filter_by_has_recalls->count, 1, "1 item with recalls on this record" );
+
+    $schema->storage->txn_rollback;
+
+};
+
+subtest 'filter_by_available' => sub {
+    plan tests => 6;
+
+    $schema->storage->txn_begin;
+
+    my $library = $builder->build_object( { class => 'Koha::Libraries' } );
+    my $biblio  = $builder->build_sample_biblio();
+    my $patron  = $builder->build_object( { class => 'Koha::Patrons' } );
+    t::lib::Mocks::mock_userenv( { branchcode => $patron->branchcode } );
+
+    my $item_1 = $builder->build_sample_item(
+        {
+            biblionumber => $biblio->biblionumber,
+            library      => $library->branchcode,
+            itemlost     => 0,
+            withdrawn    => 0,
+            damaged      => 0,
+            notforloan   => 0,
+            onloan       => undef,
+        }
+    );
+
+    my $item_2 = $builder->build_sample_item(
+        {
+            biblionumber => $biblio->biblionumber,
+            library      => $library->branchcode,
+            itemlost     => 0,
+            withdrawn    => 0,
+            damaged      => 0,
+            notforloan   => 0,
+            onloan       => undef,
+        }
+    );
+
+    my $item_3 = $builder->build_sample_item(
+        {
+            biblionumber => $biblio->biblionumber,
+            library      => $library->branchcode,
+            itemlost     => 0,
+            withdrawn    => 0,
+            damaged      => 0,
+            notforloan   => 0,
+            onloan       => undef,
+        }
+    );
+
+    my $item_4 = $builder->build_sample_item(
+        {
+            biblionumber => $biblio->biblionumber,
+            library      => $library->branchcode,
+            itemlost     => 0,
+            withdrawn    => 0,
+            damaged      => 0,
+            notforloan   => 0,
+            onloan       => undef,
+        }
+    );
+
+    my $item_5 = $builder->build_sample_item(
+        {
+            biblionumber => $biblio->biblionumber,
+            library      => $library->branchcode,
+            itemlost     => 0,
+            withdrawn    => 0,
+            damaged      => 0,
+            notforloan   => 0,
+            onloan       => undef,
+        }
+    );
+
+    # Create items with varying states
+    # Test: Initial available items
+    is(
+        $biblio->items->filter_by_available->count,
+        5,
+        "Filtered to 4 available items"
+    );
+
+    # Mark item_1 as lost
+    $item_1->itemlost(3)->store;
+    C4::Circulation::LostItem( $item_1->itemnumber, 1 );
+
+    is(
+        $biblio->items->filter_by_available->count,
+        4,
+        "Filtered to 4 available items, 1 is lost"
+    );
+
+    #Mark item_2 as damaged
+    $item_2->damaged(1)->store;
+
+    is(
+        $biblio->items->filter_by_available->count,
+        3,
+        "Filtered to 3 available items, 1 is lost, 1 is damaged"
+    );
+
+    #Mark item_3 as withdrawn
+    $item_3->withdrawn(1)->store;
+
+    is(
+        $biblio->items->filter_by_available->count,
+        2,
+        "Filtered to 2 available items, 1 is lost, 1 is damaged, 1 is withdrawn"
+    );
+
+    #Checkout item_4
+    C4::Circulation::AddIssue( $patron, $item_4->barcode );
+    is(
+        $biblio->items->filter_by_available->count,
+        1,
+        "Filtered to 1 available items, 1 is lost, 1 is damaged, 1 is withdrawn, 1 is checked out"
+    );
+
+    #Mark item_5 as notforloan
+    $item_5->notforloan(1)->store;
+    is(
+        $biblio->items->filter_by_available->count,
+        0,
+        "Filtered to 0 available items, 1 is lost, 1 is damaged, 1 is withdrawn, 1 is checked out, 1 is notforloan"
     );
 
     $schema->storage->txn_rollback;

@@ -606,7 +606,9 @@ function _dt_default_ajax (params){
                     } else if ( f == '-and' ) {
                         if (v) and_query_parameters.push(v)
                     } else if ( v ) {
-                        additional_filters[k] = v;
+                        additional_filters[k] = v
+                            .replace(/^\^/, "")
+                            .replace(/\$$/, "");
                     }
                 }
                 if ( Object.keys(additional_filters).length ) {
@@ -883,9 +885,10 @@ function _dt_add_filters(table_node, table_dt, filters_options = {}) {
         let i = column.index();
         var visible_i = table_dt.column.index('fromData', i);
         let th = $(table_node).find('thead tr:eq(1) th:eq(%s)'.format(visible_i));
-        var is_searchable = columns[i].bSearchable;
+        var is_searchable = table_dt.settings()[0].aoColumns[i].bSearchable;
         $(th).removeClass('sorting').removeClass("sorting_asc").removeClass("sorting_desc");
-        if ( is_searchable ) {
+        $(this).data("th-id", i);
+        if (is_searchable || $(this).data("filter") || filters_options[i]) {
             let input_type = 'input';
             let existing_search = column.search();
             if ( $(th).data('filter') || filters_options.hasOwnProperty(i)) {
