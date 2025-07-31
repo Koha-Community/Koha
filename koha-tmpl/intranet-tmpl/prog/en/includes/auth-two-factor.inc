@@ -26,7 +26,7 @@
         </fieldset>
         <fieldset class="action">
             <input id="register-2FA" class="btn btn-primary" type="submit" value="Register with two-factor app" />
-            <a class="cancel" href="/cgi-bin/koha/members/two_factor_auth.pl">Cancel</a>
+            <a class="cancel" href="/cgi-bin/koha/members/two_factor_auth.pl?borrowernumber=[% patron.borrowernumber | uri %]">Cancel</a>
         </fieldset>
     </div>
 [% END %]

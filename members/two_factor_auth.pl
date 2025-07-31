@@ -42,33 +42,47 @@ if ( $TwoFactorAuthentication ne 'enabled' && $TwoFactorAuthentication ne 'enfor
     exit;
 }
 
+my $op        = $cgi->param('op')             // '';
+my $patron_id = $cgi->param('borrowernumber') // '';
+
+my $another_user = $patron_id ne $loggedinuser;
+
 my $logged_in_user = Koha::Patrons->find($loggedinuser);
-my $op             = $cgi->param('op') // '';
+
+unless ( !$another_user || $logged_in_user->is_superlibrarian() ) {
+    print $cgi->redirect("/cgi-bin/koha/errors/403.pl");
+    exit;
+}
+
+my $patron =
+    $another_user
+    ? Koha::Patrons->find($patron_id)
+    : $logged_in_user;
+
+if ( !$patron ) {
+    print $cgi->redirect("/cgi-bin/koha/errors/404.pl");
+    exit;
+}
 
 if ( !C4::Context->config('encryption_key') ) {
     $template->param( missing_key => 1 );
 } else {
 
-    my $csrf_pars = {
-        session_id => scalar $cgi->cookie('CGISESSID'),
-        token      => scalar $cgi->param('csrf_token'),
-    };
-
     if ( $op eq 'cud-disable-2FA' ) {
-        my $auth = Koha::Auth::TwoFactorAuth->new( { patron => $logged_in_user } );
-        $logged_in_user->secret(undef);
-        $logged_in_user->auth_method('password')->store;
-        if ( $logged_in_user->notice_email_address ) {
-            $logged_in_user->queue_notice(
+
+        $patron->reset_2fa();
+
+        if ( $patron->notice_email_address ) {
+            $patron->queue_notice(
                 {
                     letter_params => {
                         module      => 'members',
                         letter_code => '2FA_DISABLE',
-                        branchcode  => $logged_in_user->branchcode,
-                        lang        => $logged_in_user->lang,
+                        branchcode  => $patron->branchcode,
+                        lang        => $patron->lang,
                         tables      => {
-                            branches  => $logged_in_user->branchcode,
-                            borrowers => $logged_in_user->id
+                            branches  => $patron->branchcode,
+                            borrowers => $patron->id
                         },
                     },
                     message_transports => ['email'],
@@ -79,8 +93,9 @@ if ( !C4::Context->config('encryption_key') ) {
 }
 
 $template->param(
-    patron => $logged_in_user,
-    op     => $op,
+    another_user => $another_user,
+    op           => $op,
+    patron       => $patron,
 );
 
 output_html_with_http_headers $cgi, $cookie, $template->output;

@@ -93,8 +93,8 @@
                         <a class="dropdown-item disabled" aria-disabled="true" id="patronflags" href="#">Set permissions</a>
                     </li>
                 [% END %]
-                [% IF ( Koha.Preference('TwoFactorAuthentication') == 'enforced' || Koha.Preference('TwoFactorAuthentication') == 'enabled' ) && logged_in_user.borrowernumber == patron.borrowernumber %]
-                    <li><a class="dropdown-item" id="twofa" href="/cgi-bin/koha/members/two_factor_auth.pl">Manage two-factor authentication</a></li>
+                [% IF ( Koha.Preference('TwoFactorAuthentication') == 'enforced' || Koha.Preference('TwoFactorAuthentication') == 'enabled' ) && ( logged_in_user.borrowernumber == patron.borrowernumber || logged_in_user.is_superlibrarian ) %]
+                    <li><a class="dropdown-item" id="twofa" href="/cgi-bin/koha/members/two_factor_auth.pl?borrowernumber=[% patron.borrowernumber | uri %]">Manage two-factor authentication</a></li>
                 [% END %]
 
                 [% IF CAN_user_borrowers_edit_borrowers && useDischarge %]

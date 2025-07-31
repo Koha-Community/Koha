@@ -46,7 +46,7 @@
         [% PROCESS registration_form %]
 
         <div id="registration-status">
-            <div id="registration-status-enabled" [% IF patron.auth_method != "two-factor" %]style="display: none;"[% END %]>
+            <div id="registration-status-enabled" [% IF !patron.has_2fa_enabled %]style="display: none;"[% END %]>
                 <div class="alert alert-info two-factor-status">Status: Enabled</div>
 
                 <form id="two-factor-auth" action="/cgi-bin/koha/members/two_factor_auth.pl" method="post">
@@ -56,13 +56,17 @@
                 </form>
             </div>
 
-            <div id="registration-status-disabled" [% IF patron.auth_method != "password" %]style="display: none;"[% END %]>
+            <div id="registration-status-disabled" [% IF patron.has_2fa_enabled %]style="display: none;"[% END %]>
                 <div class="alert alert-info two-factor-status">Status: Disabled</div>
-                [% IF Koha.Preference('TwoFactorAuthentication') == 'enforced' %]
-                    <div>Two-factor authentication is mandatory to login. If you do not enable now it will be asked at your next login.</div>
-                [% END %]
+                [% IF another_user %]
+                    <div>You cannot enable two-factor authentication for a user. They need to do it themselves.</div>
+                [% ELSE %]
+                    [% IF Koha.Preference('TwoFactorAuthentication') == 'enforced' %]
+                        <div>Two-factor authentication is mandatory to login. If you do not enable now it will be asked at your next login.</div>
+                    [% END %]
 
-                <input id="enable-2FA" class="btn btn-primary" type="submit" value="Enable two-factor authentication" />
+                    <input id="enable-2FA" class="btn btn-primary" type="submit" value="Enable two-factor authentication" />
+                [% END %]
             </div>
         </div>
     [% END %]
