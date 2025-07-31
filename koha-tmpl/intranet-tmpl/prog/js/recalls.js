@@ -1,10 +1,12 @@
+/* global APIClient __ confirmDelete */
 $(document).ready(function () {
     const client = APIClient.recall;
 
-    $(".cancel_recall").click(function (e) {
+    $(".cancel_recall").click(function () {
         if (confirmDelete(__("Are you sure you want to remove this recall?"))) {
             let td_node = $(this).parents("td");
             let recall_id = $(this).data("id");
+            let message;
             client.recalls.cancel(recall_id).then(
                 success => {
                     if (success.success == 0) {
@@ -23,10 +25,11 @@ $(document).ready(function () {
         }
     });
 
-    $(".expire_recall").click(function (e) {
+    $(".expire_recall").click(function () {
         if (confirmDelete(__("Are you sure you want to expire this recall?"))) {
             let td_node = $(this).parents("td");
             let recall_id = $(this).data("id");
+            let message;
             client.recalls.expire(recall_id).then(
                 success => {
                     if (success.success == 0) {
@@ -45,7 +48,7 @@ $(document).ready(function () {
         }
     });
 
-    $(".revert_recall").click(function (e) {
+    $(".revert_recall").click(function () {
         if (
             confirmDelete(
                 __(
@@ -55,6 +58,7 @@ $(document).ready(function () {
         ) {
             let td_node = $(this).parents("td");
             let recall_id = $(this).data("id");
+            let message;
             client.recalls.revert(recall_id).then(
                 success => {
                     if (success.success == 0) {
@@ -73,7 +77,7 @@ $(document).ready(function () {
         }
     });
 
-    $(".overdue_recall").click(function (e) {
+    $(".overdue_recall").click(function () {
         if (
             confirmDelete(
                 __("Are you sure you want to mark this recall as overdue?")
@@ -81,6 +85,7 @@ $(document).ready(function () {
         ) {
             let td_node = $(this).parents("td");
             let recall_id = $(this).data("id");
+            let message;
             client.recalls.overdue(recall_id).then(
                 success => {
                     if (success.success == 0) {
@@ -99,7 +104,7 @@ $(document).ready(function () {
         }
     });
 
-    $(".transit_recall").click(function (e) {
+    $(".transit_recall").click(function () {
         if (
             confirmDelete(
                 __(
@@ -109,6 +114,7 @@ $(document).ready(function () {
         ) {
             let td_node = $(this).parents("td");
             let recall_id = $(this).data("id");
+            let message;
             client.recalls.transit(recall_id).then(
                 success => {
                     if (success.success == 0) {
@@ -132,7 +138,7 @@ $(document).ready(function () {
         pagingType: "full_numbers",
     });
 
-    $("#cancel_selected").click(function (e) {
+    $("#cancel_selected").click(function () {
         if ($("input[name='recall_ids']:checked").length > 0) {
             return confirmDelete(
                 __("Are you sure you want to remove the selected recall(s)?")
