@@ -6,7 +6,13 @@
 [% INCLUDE 'doc-head-open.inc' %]
 <title
     >[% FILTER collapse %]
-        [% t("Two-factor authentication") | html %]
+        [% IF another_user %]
+            [% t("Two-factor authentication for") | html %]
+            [% patron.firstname | html %]
+            [% patron.surname | html %]
+        [% ELSE %]
+            [% t("Two-factor authentication") | html %]
+        [% END %]
         &rsaquo; [% t("Patrons") | html %] &rsaquo; [% t("Koha") | html %]
     [% END %]</title
 >
@@ -47,7 +53,17 @@
 
         <div id="registration-status">
             <div id="registration-status-enabled" [% IF !patron.has_2fa_enabled %]style="display: none;"[% END %]>
-                <div class="alert alert-info two-factor-status">Status: Enabled</div>
+                [% IF another_user %]
+                    <div class="alert alert-success two-factor-status">
+                        <strong>Two-factor authentication: Enabled</strong>
+                        <p>[% patron.firstname | html %] [% patron.surname | html %] has two-factor authentication enabled for enhanced account security.</p>
+                    </div>
+                [% ELSE %]
+                    <div class="alert alert-success two-factor-status">
+                        <strong>Two-factor authentication: Enabled</strong>
+                        <p>Your account is protected with two-factor authentication.</p>
+                    </div>
+                [% END %]
 
                 <form id="two-factor-auth" action="/cgi-bin/koha/members/two_factor_auth.pl" method="post">
                     [% INCLUDE 'csrf-token.inc' %]
@@ -57,9 +73,27 @@
             </div>
 
             <div id="registration-status-disabled" [% IF patron.has_2fa_enabled %]style="display: none;"[% END %]>
-                <div class="alert alert-info two-factor-status">Status: Disabled</div>
                 [% IF another_user %]
-                    <div>You cannot enable two-factor authentication for a user. They need to do it themselves.</div>
+                    <div class="alert alert-info two-factor-status">
+                        <strong>Two-factor authentication: Disabled</strong>
+                        <p>[% patron.firstname | html %] [% patron.surname | html %] does not have two-factor authentication enabled.</p>
+                    </div>
+                [% ELSE %]
+                    <div class="alert alert-info two-factor-status">
+                        <strong>Two-factor authentication: Disabled</strong>
+                        <p>Your account is not protected with two-factor authentication.</p>
+                    </div>
+                [% END %]
+                [% IF another_user %]
+                    <div class="alert alert-warning">
+                        <strong>Two-factor authentication setup restricted</strong>
+                        <p>Two-factor authentication can only be enabled by <strong>[% patron.firstname | html %] [% patron.surname | html %]</strong> themselves, as it requires their personal authenticator device.</p>
+                        <p>As a superlibrarian, you can:</p>
+                        <ul>
+                            <li>Disable their 2FA if they lose access to their device</li>
+                            <li>Instruct them to visit <em>Your account → Two-factor authentication</em> to set it up</li>
+                        </ul>
+                    </div>
                 [% ELSE %]
                     [% IF Koha.Preference('TwoFactorAuthentication') == 'enforced' %]
                         <div>Two-factor authentication is mandatory to login. If you do not enable now it will be asked at your next login.</div>
