@@ -466,7 +466,7 @@
             let item_search_selections = JSON.parse( localStorage.getItem("item_search_selections") ) || [];
             if( item_search_selections.length > 0 ){
                 showItemSelections( item_search_selections.length );
-                $("#results input[type='checkbox']").each(function(){
+                $("#item_search input[type='checkbox']").each(function(){
                     var itemnumber = $(this).val();
                     if( item_search_selections.indexOf( itemnumber ) >= 0 ){
                         $(this).prop("checked", true );
@@ -554,7 +554,7 @@
                 + '            <a href="#" id="clear-row-selection"><i class="fa fa-times"></i> ' + _("Clear") + '</a>'
                 + '        </div>'
                 + '    </div>'
-                + '    <table id="results">'
+                + '    <table id="item_search">'
                 + '      <thead>' + tr + '</thead>'
                 + '      <tbody></tbody>'
                 + '    </table>'
@@ -664,7 +664,7 @@
             };
 
             var table_settings = [% TablesSettings.GetTableSettings( 'catalogue', 'itemsearch', 'results', 'json' ) | $raw %];
-            $('#results').kohaTable( {
+            $('#item_search').kohaTable( {
                 "bKohaColumnsUseNames": true,
                 "destroy": true,
                 "serverSide": true,
@@ -719,7 +719,7 @@
                 fixedHeader: false // There is a bug on this view
             }, table_settings, true, null, filters_options );
 
-            $('#results').on('draw.dt', function (e, settings) {
+            $('#item_search').on('draw.dt', function (e, settings) {
                 prepSelections();
                 $('[data-bs-toggle="tooltip"]').tooltip();
             });
@@ -767,7 +767,7 @@
 
             $("body").on("click", "#select_all", function(e) {
                 e.preventDefault();
-                $("#results input[type='checkbox']").each(function(){
+                $("#item_search input[type='checkbox']").each(function(){
                     if( $(this).prop("checked") == false ){
                         $(this).prop( "checked", true ).change();
                     }
@@ -776,7 +776,7 @@
 
             $("body").on("click", "#clear_all", function(e) {
                 e.preventDefault();
-                $("#results input[type='checkbox']").each(function(){
+                $("#item_search input[type='checkbox']").each(function(){
                     if( $(this).prop("checked") == true ){
                         $(this).prop( "checked", false ).change();
                     }
@@ -785,12 +785,12 @@
 
             $("body").on("click", "#clear-row-selection", function(e){
                 e.preventDefault();
-                $("#results input[type='checkbox']").prop("checked" ,false ).change();
+                $("#item_search input[type='checkbox']").prop("checked" ,false ).change();
                 localStorage.removeItem("item_search_selections");
                 showItemSelections( 0 );
             });
 
-            $("body").on('change', '#results input[type="checkbox"]', function() {
+            $("body").on('change', '#item_search input[type="checkbox"]', function() {
                 let item_search_selections = JSON.parse( localStorage.getItem("item_search_selections") ) || [];
                 var itemnumber = $(this).val();
                 if( $(this).prop("checked") ){
@@ -860,7 +860,7 @@
                 batch_mod_form.submit();
             });
 
-            $("body").on('click','#results tbody td',function(e){
+            $("body").on('click','#item_search tbody td',function(e){
                 var checkbox = $(this).find("input[type=checkbox]");
                 if (e.target.type != "checkbox") {
                     checkbox.prop('checked', !checkbox.prop("checked"));

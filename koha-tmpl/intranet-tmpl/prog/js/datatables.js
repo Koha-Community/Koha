@@ -1034,10 +1034,15 @@ function _dt_add_filters(table_node, table_dt, filters_options = {}) {
                         return this._id !== "" && this._str !== "";
                     })
                     .each(function () {
-                        let optionValue =
-                            table_dt.settings()[0].ajax !== null
-                                ? `^${this._id}$`
-                                : this._id;
+                        let optionValue = this._id;
+
+                        if (
+                            table_dt.settings()[0].ajax !== null &&
+                            table_node.attr("id") !== "item_search"
+                        ) {
+                            optionValue = `^${this._id}$`;
+                        }
+
                         let o = $(
                             `<option value="${optionValue}">${this._str}</option>`
                         );
