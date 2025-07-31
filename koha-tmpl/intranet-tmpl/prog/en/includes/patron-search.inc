@@ -175,9 +175,9 @@
                         [% CASE 'address-library' %]
                             <th>Address</th>
                         [% CASE 'branch' %]
-                            <th data-filter="libraries">Library</th>
+                            <th>Library</th>
                         [% CASE 'category' %]
-                            <th data-filter="categories">Category</th>
+                            <th>Category</th>
                         [% CASE 'dateexpiry' %]
                             <th>Expires on</th>
                         [% CASE 'borrowernotes' %]
@@ -189,17 +189,9 @@
                         [% CASE 'account_balance' %]
                             <th>Fines</th>
                         [% CASE 'sort1' %]
-                            [% IF av_bsort1.size %]
-                                <th data-filter="av_bsort1">Sort 1</th>
-                            [% ELSE %]
-                                <th>Sort 1</th>
-                            [% END %]
+                            <th>Sort 1</th>
                         [% CASE 'sort2' %]
-                            [% IF av_bsort2.size %]
-                                <th data-filter="av_bsort2">Sort 2</th>
-                            [% ELSE %]
-                                <th>Sort 2</th>
-                            [% END %]
+                            <th>Sort 2</th>
                         [% CASE 'action' %]
                             <th class="no-export">&nbsp;</th>
                         [% END %]
@@ -244,9 +236,7 @@
         </script>
     [% END %]
     <script>
-        [% SET libraries = Branches.all %]
-        [% SET categories = Categories.all.unblessed %]
-        var categories = [% To.json(categories) | $raw %].map(e => {
+        var categories = [% To.json(Categories.all.unblessed) | $raw %].map(e => {
             e['_id'] = e.categorycode.toLowerCase();
             e['_str'] = e.description;
             return e;
@@ -255,7 +245,7 @@
             map[e._id] = e;
             return map;
         }, {});
-        var libraries  = [% To.json(libraries) | $raw %].map(e => {
+        var libraries = [% To.json(Branches.all) | $raw %].map(e => {
             e['_id'] = e.branchcode;
             e['_str'] = e.branchname;
             return e;
@@ -284,6 +274,13 @@
             map[e._id] = e;
             return map;
         }, {});
+
+        let filters_options = {
+            libraries,
+            categories,
+            av_bsort1,
+            av_bsort2,
+        };
 
         [% IF Koha.Preference('ExtendedPatronAttributes') %]
             [% SET extended_attribute_types = ExtendedAttributeTypes.codes( staff_searchable => 1, searched_by_default => 1 ) %]
@@ -627,10 +624,11 @@
                                 }
                                 [% CASE 'branch' %]
                                 {
-                                    "data": "library.name:me.library_id",
-                                    "searchable": true,
-                                    "orderable": true,
-                                    "render": function( data, type, row, meta ) {
+                                    data: "library.name:me.library_id",
+                                    dataFilter: "libraries",
+                                    searchable: true,
+                                    orderable: true,
+                                    render: function( data, type, row, meta ) {
                                         if( !singleBranchMode && row.library.library_id == logged_in_library_id ) {
                                             return "<span class=\"currentlibrary\">" + escape_str(row.library.name) + "</span>";
                                         } else {
@@ -640,10 +638,11 @@
                                 }
                                 [% CASE 'category' %]
                                 {
-                                    "data": "category_id",
-                                    "searchable": true,
-                                    "orderable": true,
-                                    "render": function( data, type, row, meta ) {
+                                    data: "category_id",
+                                    dataFilter: "categories",
+                                    searchable: true,
+                                    orderable: true,
+                                    render: function( data, type, row, meta ) {
                                         return escape_str(categories_map[data.toLowerCase()].description);
                                     }
                                 }
@@ -711,10 +710,13 @@
 
                                 [% CASE 'sort1' %]
                                 {
-                                    "data": "statistics_1",
-                                    "searchable": true,
-                                    "orderable": true,
-                                    "render": function( data, type, row, meta ) {
+                                    data: "statistics_1",
+                                    [% IF av_bsort1.size %]
+                                        dataFilter: "av_bsort1",
+                                    [% END %]
+                                    searchable: true,
+                                    orderable: true,
+                                    render: function( data, type, row, meta ) {
                                         if (data === null) return '';
                                         let bsort1 = av_bsort1_map[data.toString()];
                                         return escape_str(bsort1 ? bsort1.lib : data);
@@ -723,10 +725,13 @@
 
                                 [% CASE 'sort2' %]
                                 {
-                                    "data": "statistics_2",
-                                    "searchable": true,
-                                    "orderable": true,
-                                    "render": function( data, type, row, meta ) {
+                                    data: "statistics_2",
+                                    [% IF av_bsort2.size %]
+                                        dataFilter: "av_bsort2",
+                                    [% END %]
+                                    searchable: true,
+                                    orderable: true,
+                                    render: function( data, type, row, meta ) {
                                         if (data === null) return '';
                                         let bsort2 = av_bsort2_map[data.toString()];
                                         return escape_str(bsort2 ? bsort2.lib : data);
@@ -783,7 +788,7 @@
                         },
                     [% END %]
                     fixedHeader: false,
-                }, typeof table_settings !== 'undefined' ? table_settings : null, 1, additional_filters, undefined, external_filter_nodes, parent_block.find(".search_description"), additional_search_descriptions );
+                }, typeof table_settings !== 'undefined' ? table_settings : null, 1, additional_filters, filters_options, external_filter_nodes, parent_block.find(".search_description"), additional_search_descriptions );
 
                 patron_search_form.on('submit', filter);
                 patron_search_form.on('submit', update_search_type);

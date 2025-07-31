@@ -316,10 +316,10 @@
 
         $(document).ready(function() {
             let filters_options = {
-                [5] : (table_dt) => get_options(table_dt.column(5)),
-                [10] : (table_dt) => get_options(table_dt.column(10)),
-                [11] : (table_dt) => get_options(table_dt.column(11)),
-                [15] : (table_dt) => get_options(table_dt.column(15)),
+                libraries: (table_dt) => get_options(table_dt.column(5)),
+                item_types: (table_dt) => get_options(table_dt.column(10)),
+                locations: (table_dt) => get_options(table_dt.column(11)),
+                pickup_locations : (table_dt) => get_options(table_dt.column(15)),
             };
 
 
@@ -327,6 +327,25 @@
             var holdst = $("#holdst").kohaTable(
                 {
                     pagingType: "full_numbers",
+                    columns: [
+                        {name: "pull_items" },
+                        {name: "available_items" },
+                        {name: "patrons" },
+                        {name: "patron" },
+                        {name: "title" },
+                        {name: "libraries", dataFilter: "libraries" },
+                        {name: "barcodes" },
+                        {name: "call_numbers" },
+                        {name: "copy_numbers" },
+                        {name: "enumeration" },
+                        {name: "itemtypes", dataFilter: "item_types" },
+                        {name: "locations", dataFilter: "locations" },
+                        {name: "collection" },
+                        {name: "hold_date" },
+                        {name: "reserve_nodes" },
+                        {name: "pickup_location", dataFilter: "pickup_locations" },
+                        {name: "action" },
+                    ],
                 },
                 table_settings,
                 true,

@@ -205,15 +205,13 @@
             });
         });
 
-        const all_libraries = [% To.json(Branches.all) | $raw %];
-        const libraries_filters = all_libraries.map(e => {
+        const all_libraries = [% To.json(Branches.all) | $raw %].map(e => {
                     e["_id"] = e["branchcode"];
                     e["_str"] = e["branchname"];
                     return e;
                 });
         const libraries_names = new Map(all_libraries.map( l => [l.branchcode, l.branchname] ));
-        const all_item_types = [% To.json(ItemTypes.Get) | $raw %];
-        const item_types_filters = all_item_types.map(e => {
+        const all_item_types = [% To.json(ItemTypes.Get) | $raw %].map(e => {
                     e["_id"] = e["itemtype"];
                     e["_str"] = e["translated_description"];
                     return e;
@@ -240,6 +238,13 @@
             item_type: new Map(all_item_types.map( i => [i.translated_description, i.itemtype] )),
             collection_code: new Map([% To.json(AuthorisedValues.GetDescriptionsByKohaField({ kohafield => 'items.ccode' })) | $raw %].map( av => [av.lib, av.authorised_value])),
             location: new Map([% To.json(AuthorisedValues.GetDescriptionsByKohaField({ kohafield => 'items.location' })) | $raw %].map( av => [av.lib, av.authorised_value])),
+        };
+
+        let filters_options = {
+            item_types: all_item_types,
+            libraries: all_libraries,
+            libraries: all_libraries,
+            statuses: all_statuses,
         };
 
         [% IF Koha.Preference('URLLinkText') %]
@@ -327,18 +332,6 @@
                 return $("#" + tab_id + "_status select").val();
             };
 
-            let filters_options = {};
-
-            let itype_col = $("#" + tab_id + "_table thead th[data-colname='itype']").index();
-            let holdingbranch_col = $("#" + tab_id + "_table thead th[data-colname='holdingbranch']").index();
-            let homebranch_col = $("#" + tab_id + "_table thead th[data-colname='homebranch']").index();
-            let status_col = $("#" + tab_id + "_table thead th[data-colname='status']").index();
-
-            if ( itype_col >= 0 ) filters_options[itype_col] = () => all_item_types;
-            if ( holdingbranch_col >= 0 ) filters_options[holdingbranch_col] = () => all_libraries;
-            if ( homebranch_col >= 0 ) filters_options[homebranch_col] = () => all_libraries;
-            if ( status_col >= 0 ) filters_options[status_col] = () => all_statuses;
-
             var items_table = $("#" + tab_id + '_table').kohaTable({
                 ajax: { url: item_table_url },
                 order: [],
@@ -391,6 +384,7 @@
                 {
                     data: "me.item_type_id", // FIXME Cannot filter by biblioitem.itemtype
                     datatype: "coded_value:item_type",
+                    dataFilter: "item_types",
                     className: "itype",
                     searchable: true,
                     orderable: true,
@@ -411,6 +405,7 @@
                 {
                     data: "me.holding_library_id",
                     datatype: "coded_value:library",
+                    dataFilter: "libraries",
                     className: "location",
                     searchable: true,
                     orderable: true,
@@ -421,6 +416,7 @@
                 {
                     data: "me.home_library_id",
                     datatype: "coded_value:library",
+                    dataFilter: "libraries",
                     className: "homebranch",
                     searchable: true,
                     orderable: true,
@@ -514,6 +510,7 @@
                 {
                     data: "",
                     className: "status",
+                    dataFilter: "statuses",
                     searchable: false,
                     orderable: false,
                     render: function (data, type, row, meta) {

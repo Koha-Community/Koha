@@ -1049,29 +1049,28 @@ function _dt_add_filters(table_node, table_dt, filters_options = {}) {
         let th = $(table_node).find(
             "thead tr:eq(1) th:eq(%s)".format(visible_i)
         );
-        var is_searchable = table_dt.settings()[0].aoColumns[i].bSearchable;
+        let col = table_dt.settings()[0].aoColumns[i];
+        var is_searchable = col.bSearchable;
         $(this)
             .removeClass("sorting")
             .removeClass("sorting_asc")
             .removeClass("sorting_desc");
         $(this).data("th-id", i);
-        if (is_searchable || $(this).data("filter") || filters_options[i]) {
+        if (is_searchable || col.dataFilter) {
             let input_type = "input";
             let existing_search = column.search();
-            if ($(th).data("filter") || filters_options.hasOwnProperty(i)) {
+            if (col.dataFilter) {
                 input_type = "select";
                 let filter_type = $(th).data("filter");
                 let select = $(
                     '<select class="dt-select-filter"><option value=""></option></select'
                 );
 
-                // FIXME eval here is bad and dangerous, how do we workaround that?
-                if (!filters_options.hasOwnProperty(i)) {
-                    filters_options[i] = eval(filter_type);
-                } else if (typeof filters_options[i] === "function") {
-                    filters_options[i] = filters_options[i](table_dt);
+                if (typeof filters_options[col.dataFilter] === "function") {
+                    filters_options[col.dataFilter] =
+                        filters_options[col.dataFilter](table_dt);
                 }
-                $(filters_options[i])
+                $(filters_options[col.dataFilter])
                     .filter(function () {
                         return this._id !== "" && this._str !== "";
                     })

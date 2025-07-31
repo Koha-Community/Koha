@@ -153,14 +153,13 @@
                 }
             };
 
-            [% SET libraries = Branches.all %]
-            let all_libraries  = [% To.json(libraries) | $raw %].map(e => {
+            let all_libraries  = [% To.json(Branches.all) | $raw %].map(e => {
                 e['_id'] = e.branchcode;
                 e['_str'] = e.branchname;
                 return e;
             });
             let filters_options = {
-                [1] : () => all_libraries,
+                libraries: all_libraries,
             };
 
             var bookings_table_url = '/api/v1/bookings?';
