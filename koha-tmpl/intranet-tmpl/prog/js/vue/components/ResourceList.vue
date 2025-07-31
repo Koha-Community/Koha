@@ -287,9 +287,20 @@ export default {
         const tableOptionsWithColumns = computed(() => {
             props.instancedResource.tableOptions.columns = getTableColumns(
                 props.instancedResource.resourceAttrs
-            );
+            ).map(col => {
+                const filterOptions =
+                    props.instancedResource.tableOptions.filters_options;
+                const filterRequired = Object.keys(filterOptions).includes(
+                    col.data
+                );
+                if (filterRequired) {
+                    col.dataFilter = col.data;
+                }
+                return col;
+            });
             return props.instancedResource.tableOptions;
         });
+
         const tableEventList = computed(() => {
             const actionButtons = props.instancedResource.tableOptions.actions[
                 "-1"

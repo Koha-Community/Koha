@@ -627,9 +627,10 @@ export default {
             add_filters: true,
             filters_options: {
                 ...(baseResource.map_av_dt_filter("av_vendor_types").length && {
-                    2: () => baseResource.map_av_dt_filter("av_vendor_types"),
+                    type: () =>
+                        baseResource.map_av_dt_filter("av_vendor_types"),
                 }),
-                3: [
+                active: [
                     { _id: 0, _str: $__("Inactive") },
                     { _id: 1, _str: $__("Active") },
                 ],

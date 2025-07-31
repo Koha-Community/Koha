@@ -454,7 +454,7 @@ export default {
             table_settings: eholdings_titles_table_settings,
             add_filters: true,
             filters_options: {
-                3: () =>
+                publication_type: () =>
                     baseResource.map_av_dt_filter("av_title_publication_types"),
             },
             actions: {

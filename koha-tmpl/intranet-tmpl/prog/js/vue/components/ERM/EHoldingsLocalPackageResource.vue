@@ -196,15 +196,16 @@ export default {
             table_settings: eholdings_packages_table_settings,
             add_filters: true,
             filters_options: {
-                1: [
+                vendor_id: [
                     ...vendors.value.map(e => {
                         e["_id"] = e["id"];
                         e["_str"] = e["name"];
                         return e;
                     }),
                 ],
-                2: () => baseResource.map_av_dt_filter("av_package_types"),
-                3: () =>
+                package_type: () =>
+                    baseResource.map_av_dt_filter("av_package_types"),
+                content_type: () =>
                     baseResource.map_av_dt_filter("av_package_content_types"),
             },
             actions: {

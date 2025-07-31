@@ -675,23 +675,22 @@ export default {
             table_settings: agreement_table_settings,
             add_filters: true,
             filters_options: {
-                2: [
+                vendor_id: [
                     ...vendors.value.map(e => {
                         e["_id"] = e["id"];
                         e["_str"] = e["name"];
                         return e;
                     }),
                 ],
-                4: () => baseResource.map_av_dt_filter("av_agreement_statuses"),
-                5: () =>
-                    baseResource.map_av_dt_filter(
-                        "av_agreement_closure_reasons"
-                    ),
-                6: [
+                status: baseResource.map_av_dt_filter("av_agreement_statuses"),
+                closure_reason: baseResource.map_av_dt_filter(
+                    "av_agreement_closure_reasons"
+                ),
+                is_perpetual: [
                     { _id: 0, _str: $__("No") },
                     { _id: 1, _str: $__("Yes") },
                 ],
-                7: () =>
+                renewal_priority: () =>
                     baseResource.map_av_dt_filter(
                         "av_agreement_renewal_priorities"
                     ),

@@ -310,15 +310,16 @@ export default {
             table_settings: license_table_settings,
             add_filters: true,
             filters_options: {
-                2: [
+                vendor_id: [
                     ...vendors.value.map(e => {
                         e["_id"] = e["id"];
                         e["_str"] = e["name"];
                         return e;
                     }),
                 ],
-                4: () => baseResource.map_av_dt_filter("av_license_types"),
-                5: () => baseResource.map_av_dt_filter("av_license_statuses"),
+                type: () => baseResource.map_av_dt_filter("av_license_types"),
+                status: () =>
+                    baseResource.map_av_dt_filter("av_license_statuses"),
             },
             actions: {
                 "-1": ["edit", "delete"],
