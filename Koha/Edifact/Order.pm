@@ -388,6 +388,7 @@ sub order_line {
     #     we dont currently support this in koha
     # GIR copy-related data
     my $lsq_field = C4::Context->preference('EdifactLSQ');
+    my $lsl_field = C4::Context->preference('EdifactLSL');
     my @items;
     if ( $basket->effective_create_items eq 'ordering' ) {
 
@@ -395,12 +396,23 @@ sub order_line {
         foreach my $item (@linked_itemnumbers) {
             my $i_obj = $schema->resultset('Item')->find( $item->itemnumber );
             if ( defined $i_obj ) {
-                push @items, {
+                my $item_data = {
                     branchcode     => $i_obj->get_column('homebranch'),
                     itype          => $i_obj->effective_itemtype,
-                    $lsq_field     => $i_obj->$lsq_field,
                     itemcallnumber => $i_obj->itemcallnumber,
                 };
+
+                # Handle LSQ mapping
+                if ($lsq_field) {
+                    $item_data->{$lsq_field} = $i_obj->$lsq_field;
+                }
+
+                # Handle LSL mapping
+                if ($lsl_field) {
+                    $item_data->{$lsl_field} = $i_obj->$lsl_field;
+                }
+
+                push @items, $item_data;
             }
         }
     } else {
@@ -421,13 +433,23 @@ sub order_line {
 
     my $item_fields = [];
     for my $item (@items) {
-        push @{$item_fields},
-            {
+        my $item_field_data = {
             branchcode     => $item->{branchcode},
             itype          => $item->{itype},
-            $lsq_field     => $item->{$lsq_field},
             itemcallnumber => $item->{itemcallnumber},
-            };
+        };
+
+        # Handle LSQ mapping
+        if ( $lsq_field && $item->{$lsq_field} ) {
+            $item_field_data->{$lsq_field} = $item->{$lsq_field};
+        }
+
+        # Handle LSL mapping
+        if ( $lsl_field && $item->{$lsl_field} ) {
+            $item_field_data->{$lsl_field} = $item->{$lsl_field};
+        }
+
+        push @{$item_fields}, $item_field_data;
     }
     $self->add_seg(
         gir_segments(
@@ -558,6 +580,7 @@ sub gir_segments {
     my @segments;
     my $sequence_no = 1;
     my $lsq_field   = C4::Context->preference('EdifactLSQ');
+    my $lsl_field   = C4::Context->preference('EdifactLSL');
     foreach my $item (@onorderitems) {
         my $elements_added = 0;
         my @gir_elements;
@@ -573,9 +596,17 @@ sub gir_segments {
             push @gir_elements,
                 { identity_number => 'LST', data => $item->{itype} };
         }
-        if ( $item->{$lsq_field} ) {
+
+        # Handle LSQ mapping
+        if ( $lsq_field && $item->{$lsq_field} ) {
             push @gir_elements,
                 { identity_number => 'LSQ', data => $item->{$lsq_field} };
+        }
+
+        # Handle LSL mapping
+        if ( $lsl_field && $item->{$lsl_field} ) {
+            push @gir_elements,
+                { identity_number => 'LSL', data => $item->{$lsl_field} };
         }
         if ( $item->{itemcallnumber} ) {
             push @gir_elements,

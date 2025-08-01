@@ -54,6 +54,7 @@ use Koha::Plugins;    # Adds plugin dirs to @INC
 use Koha::Plugins::Handler;
 use Koha::Acquisition::Baskets;
 use Koha::Acquisition::Booksellers;
+use Koha::AuthorisedValues;
 use Koha::Util::FrameworkPlugin qw( biblio_008 );
 
 our $VERSION = 1.1;
@@ -1083,13 +1084,38 @@ sub quote_item {
                     };
 
                     my $lsq_field = C4::Context->preference('EdifactLSQ');
-                    $new_item->{$lsq_field} = $item->girfield( 'sequence_code', $occurrence );
+                    my $lsl_field = C4::Context->preference('EdifactLSL');
+
+                    # Handle LSQ field
+                    if ( $lsq_field && $item->girfield( 'sequence_code', $occurrence ) ) {
+                        my $lsq_value = $item->girfield( 'sequence_code', $occurrence );
+                        my $valid =
+                            ( $lsq_field eq 'location' )
+                            ? _validate_location_code( $lsq_value, $quote_message )
+                            : _validate_collection_code( $lsq_value, $quote_message );
+
+                        $new_item->{$lsq_field} = $lsq_value if $valid;
+                    }
+
+                    # Handle LSL field
+                    if ( $lsl_field && $item->girfield( 'sub_location_code', $occurrence ) ) {
+                        my $lsl_value = $item->girfield( 'sub_location_code', $occurrence );
+                        my $valid =
+                            ( $lsl_field eq 'location' )
+                            ? _validate_location_code( $lsl_value, $quote_message )
+                            : _validate_collection_code( $lsl_value, $quote_message );
+
+                        $new_item->{$lsl_field} = $lsl_value if $valid;
+                    }
 
                     if ( $new_item->{itype} ) {
                         $item_hash->{itype} = $new_item->{itype};
                     }
                     if ( $new_item->{$lsq_field} ) {
                         $item_hash->{$lsq_field} = $new_item->{$lsq_field};
+                    }
+                    if ( $new_item->{$lsl_field} ) {
+                        $item_hash->{$lsl_field} = $new_item->{$lsl_field};
                     }
                     if ( $new_item->{itemcallnumber} ) {
                         $item_hash->{itemcallnumber} = $new_item->{itemcallnumber};
@@ -1167,7 +1193,29 @@ sub quote_item {
                         homebranch    => $item->girfield( 'branch', $occurrence ),
                     };
                     my $lsq_field = C4::Context->preference('EdifactLSQ');
-                    $new_item->{$lsq_field}       = $item->girfield( 'sequence_code', $occurrence );
+                    my $lsl_field = C4::Context->preference('EdifactLSL');
+
+                    # Handle LSQ mapping with validation
+                    if ( $lsq_field && $item->girfield( 'sequence_code', $occurrence ) ) {
+                        my $lsq_value = $item->girfield( 'sequence_code', $occurrence );
+                        my $valid =
+                            ( $lsq_field eq 'location' )
+                            ? _validate_location_code( $lsq_value, $quote_message )
+                            : _validate_collection_code( $lsq_value, $quote_message );
+
+                        $new_item->{$lsq_field} = $lsq_value if $valid;
+                    }
+
+                    # Handle LSL mapping with validation
+                    if ( $lsl_field && $item->girfield( 'sub_location_code', $occurrence ) ) {
+                        my $lsl_value = $item->girfield( 'sub_location_code', $occurrence );
+                        my $valid =
+                            ( $lsl_field eq 'location' )
+                            ? _validate_location_code( $lsl_value, $quote_message )
+                            : _validate_collection_code( $lsl_value, $quote_message );
+
+                        $new_item->{$lsl_field} = $lsl_value if $valid;
+                    }
                     $new_item->{biblionumber}     = $bib->{biblionumber};
                     $new_item->{biblioitemnumber} = $bib->{biblioitemnumber};
                     my $kitem      = Koha::Item->new($new_item)->store;
@@ -1215,6 +1263,54 @@ sub get_edifact_ean {
     my $eans = $dbh->selectcol_arrayref('select ean from edifact_ean');
 
     return $eans->[0];
+}
+
+sub _validate_location_code {
+    my ( $location_code, $quote_message ) = @_;
+
+    return 1 unless $location_code;    # Skip if empty
+
+    my $av = Koha::AuthorisedValues->find(
+        {
+            category         => 'LOC',
+            authorised_value => $location_code
+        }
+    );
+
+    unless ($av) {
+        $quote_message->add_to_edifact_errors(
+            {
+                section => "GIR+LSQ/LSL validation",
+                details => "Invalid location code '$location_code' - not found in LOC authorized values"
+            }
+        );
+        return 0;
+    }
+    return 1;
+}
+
+sub _validate_collection_code {
+    my ( $ccode, $quote_message ) = @_;
+
+    return 1 unless $ccode;    # Skip if empty
+
+    my $av = Koha::AuthorisedValues->find(
+        {
+            category         => 'CCODE',
+            authorised_value => $ccode
+        }
+    );
+
+    unless ($av) {
+        $quote_message->add_to_edifact_errors(
+            {
+                section => "GIR+LSQ/LSL validation",
+                details => "Invalid collection code '$ccode' - not found in CCODE authorized values"
+            }
+        );
+        return 0;
+    }
+    return 1;
 }
 
 # We should not need to have a routine to do this here
@@ -1370,8 +1466,19 @@ sub _create_item_from_quote {
     $item_hash->{booksellerid} = $quote->vendor_id;
     $item_hash->{price}        = $item_hash->{replacementprice} = $item->price;
     $item_hash->{itype}        = $item->girfield('stock_category');
+
     my $lsq_field = C4::Context->preference('EdifactLSQ');
-    $item_hash->{$lsq_field} = $item->girfield('sequence_code');
+    my $lsl_field = C4::Context->preference('EdifactLSL');
+
+    # Handle LSQ mapping
+    if ( $lsq_field && $item->girfield('sequence_code') ) {
+        $item_hash->{$lsq_field} = $item->girfield('sequence_code');
+    }
+
+    # Handle LSL mapping
+    if ( $lsl_field && $item->girfield('sub_location_code') ) {
+        $item_hash->{$lsl_field} = $item->girfield('sub_location_code');
+    }
 
     my $note = {};
 

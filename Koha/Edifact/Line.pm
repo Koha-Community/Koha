@@ -658,6 +658,7 @@ sub extract_gir {
         LRS => 'record_sublocation',
         LSM => 'shelfmark',
         LSQ => 'sequence_code',
+        LSL => 'sub_location_code',
         LST => 'stock_category',
         LSZ => 'size_code',
         LVC => 'coded_servicing_instruction',
