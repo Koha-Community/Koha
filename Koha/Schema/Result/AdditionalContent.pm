@@ -235,5 +235,11 @@ __PACKAGE__->belongs_to(
 # DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:0w/fOUAy+4V4aVls/i7Wig
 
 
-# You can replace this text with custom code or comments, and it will be preserved on regeneration
+__PACKAGE__->has_many(
+    "translated_contents",
+    "Koha::Schema::Result::AdditionalContentsLocalization",
+    { "foreign.additional_content_id" => "self.id" },
+    { cascade_copy                    => 0, cascade_delete => 0 },
+);
+
 1;
