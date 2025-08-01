@@ -21,7 +21,7 @@ use Modern::Perl;
 use FindBin qw( $Bin );
 
 use Test::NoWarnings;
-use Test::More tests => 6;
+use Test::More tests => 8;
 use Test::MockModule;
 
 use t::lib::Mocks;
@@ -1613,6 +1613,297 @@ subtest 'create_edi_order_logging' => sub {
         'No matching EAN found for nonexistent_ean',
         'Warning logged when no matching EAN found'
     );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'LSL and LSQ validation functions' => sub {
+    plan tests => 16;
+
+    $schema->storage->txn_begin;
+
+    # Mock quote message object for testing
+    {
+
+        package MockQuoteMessage;
+
+        sub new {
+            my $class = shift;
+            return bless { errors => [] }, $class;
+        }
+
+        sub add_to_edifact_errors {
+            my ( $self, $error ) = @_;
+            push @{ $self->{errors} }, $error;
+        }
+    }
+
+    # Create test authorised values
+    my $loc_av = $builder->build(
+        {
+            source => 'AuthorisedValue',
+            value  => {
+                category         => 'LOC',
+                authorised_value => 'FICTION',
+                lib              => 'Fiction Section'
+            }
+        }
+    );
+
+    my $ccode_av = $builder->build(
+        {
+            source => 'AuthorisedValue',
+            value  => {
+                category         => 'CCODE',
+                authorised_value => 'ADULT',
+                lib              => 'Adult Collection'
+            }
+        }
+    );
+
+    my $quote_message = MockQuoteMessage->new();
+
+    # Test valid location code validation
+    ok(
+        Koha::EDI::_validate_location_code( 'FICTION', $quote_message ),
+        'Valid location code passes validation'
+    );
+    is( scalar @{ $quote_message->{errors} }, 0, 'No errors for valid location code' );
+
+    # Test invalid location code validation
+    ok(
+        !Koha::EDI::_validate_location_code( 'INVALID_LOC', $quote_message ),
+        'Invalid location code fails validation'
+    );
+    is( scalar @{ $quote_message->{errors} }, 1, 'One error logged for invalid location code' );
+    like(
+        $quote_message->{errors}->[0]->{details}, qr/Invalid location code 'INVALID_LOC'/,
+        'Error details contain correct location code'
+    );
+
+    # Reset errors for collection code tests
+    $quote_message = MockQuoteMessage->new();
+
+    # Test valid collection code validation
+    ok(
+        Koha::EDI::_validate_collection_code( 'ADULT', $quote_message ),
+        'Valid collection code passes validation'
+    );
+    is( scalar @{ $quote_message->{errors} }, 0, 'No errors for valid collection code' );
+
+    # Test invalid collection code validation
+    ok(
+        !Koha::EDI::_validate_collection_code( 'INVALID_CCODE', $quote_message ),
+        'Invalid collection code fails validation'
+    );
+    is( scalar @{ $quote_message->{errors} }, 1, 'One error logged for invalid collection code' );
+    like(
+        $quote_message->{errors}->[0]->{details}, qr/Invalid collection code 'INVALID_CCODE'/,
+        'Error details contain correct collection code'
+    );
+
+    # Test empty/null handling
+    $quote_message = MockQuoteMessage->new();
+    ok(
+        Koha::EDI::_validate_location_code( '', $quote_message ),
+        'Empty location code passes validation'
+    );
+    ok(
+        Koha::EDI::_validate_location_code( undef, $quote_message ),
+        'Undefined location code passes validation'
+    );
+    ok(
+        Koha::EDI::_validate_collection_code( '', $quote_message ),
+        'Empty collection code passes validation'
+    );
+    ok(
+        Koha::EDI::_validate_collection_code( undef, $quote_message ),
+        'Undefined collection code passes validation'
+    );
+    is( scalar @{ $quote_message->{errors} }, 0, 'No errors for empty/undefined values' );
+
+    # Test error message format
+    $quote_message = MockQuoteMessage->new();
+    Koha::EDI::_validate_location_code( 'TEST_ERROR', $quote_message );
+    my $error = $quote_message->{errors}->[0];
+    is( $error->{section}, 'GIR+LSQ/LSL validation', 'Error has correct section identifier' );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'LSL and LSQ field copy to item_hash' => sub {
+    plan tests => 11;
+
+    $schema->storage->txn_begin;
+
+    # Setup test data
+    my $test_san = '5013546098818';
+    my $dirname  = ( $Bin =~ /^(.*\/t\/)/ ? $1 . 'edi_testfiles/' : q{} );
+
+    my $active_period = $builder->build(
+        {
+            source => 'Aqbudgetperiod',
+            value  => { budget_period_active => 1 }
+        }
+    );
+
+    my $budget = $builder->build(
+        {
+            source => 'Aqbudget',
+            value  => {
+                budget_amount     => 1000,
+                budget_encumb     => 0,
+                budget_expend     => 0,
+                budget_period_id  => $active_period->{budget_period_id},
+                budget_code       => 'TESTBUDGET',
+                budget_name       => 'Test Budget',
+                budget_branchcode => undef,
+            }
+        }
+    );
+
+    my $branch = $builder->build(
+        {
+            source => 'Branch',
+        }
+    );
+
+    my $vendor = $builder->build(
+        {
+            source => 'Aqbookseller',
+            value  => { name => 'Test Vendor', }
+        }
+    );
+
+    my $edi_account = $builder->build(
+        {
+            source => 'VendorEdiAccount',
+            value  => {
+                vendor_id => $vendor->{id},
+                san       => $test_san,
+            }
+        }
+    );
+
+    # Create test authorised values for LSL and LSQ
+    my $loc_av = $builder->build(
+        {
+            source => 'AuthorisedValue',
+            value  => {
+                category         => 'LOC',
+                authorised_value => 'TESTLOC',
+                lib              => 'Test Location'
+            }
+        }
+    );
+
+    my $ccode_av = $builder->build(
+        {
+            source => 'AuthorisedValue',
+            value  => {
+                category         => 'CCODE',
+                authorised_value => 'TESTCCODE',
+                lib              => 'Test Collection'
+            }
+        }
+    );
+
+    # Test Case 1: LSL maps to location, LSQ maps to ccode
+    t::lib::Mocks::mock_preference( 'EdifactLSL',    'location' );
+    t::lib::Mocks::mock_preference( 'EdifactLSQ',    'ccode' );
+    t::lib::Mocks::mock_preference( 'AcqCreateItem', 'ordering' );
+
+    # Create a biblio for testing
+    my $biblio = $builder->build_sample_biblio();
+
+    # Create test item with LSL and LSQ data
+    my $item = $builder->build_sample_item(
+        {
+            biblionumber => $biblio->biblionumber,
+            homebranch   => $branch->{branchcode},
+            location     => 'TESTLOC',
+            ccode        => 'TESTCCODE',
+        }
+    );
+
+    # Verify item has both fields set
+    is( $item->location, 'TESTLOC',   'Item location set to TESTLOC' );
+    is( $item->ccode,    'TESTCCODE', 'Item ccode set to TESTCCODE' );
+
+    # Test Case 2: LSL maps to ccode, LSQ maps to location (swapped)
+    t::lib::Mocks::mock_preference( 'EdifactLSL', 'ccode' );
+    t::lib::Mocks::mock_preference( 'EdifactLSQ', 'location' );
+
+    # Create another item for swapped test
+    my $item2 = $builder->build_sample_item(
+        {
+            biblionumber => $biblio->biblionumber,
+            homebranch   => $branch->{branchcode},
+            location     => 'TESTLOC',
+            ccode        => 'TESTCCODE',
+        }
+    );
+
+    is( $item2->location, 'TESTLOC',   'Item location set with swapped config' );
+    is( $item2->ccode,    'TESTCCODE', 'Item ccode set with swapped config' );
+
+    # Test Case 3: Only LSL field present (LSQ empty)
+    t::lib::Mocks::mock_preference( 'EdifactLSL', 'location' );
+    t::lib::Mocks::mock_preference( 'EdifactLSQ', '' );
+
+    my $item3 = $builder->build_sample_item(
+        {
+            biblionumber => $biblio->biblionumber,
+            homebranch   => $branch->{branchcode},
+            location     => 'TESTLOC',
+        }
+    );
+
+    isnt( $item3->location, undef, 'Item location set when only LSL configured' );
+    is( $item3->location, 'TESTLOC', 'Item location value correct when only LSL configured' );
+
+    # Test Case 4: Only LSQ field present (LSL empty)
+    t::lib::Mocks::mock_preference( 'EdifactLSL', '' );
+    t::lib::Mocks::mock_preference( 'EdifactLSQ', 'ccode' );
+
+    my $item4 = $builder->build_sample_item(
+        {
+            biblionumber => $biblio->biblionumber,
+            homebranch   => $branch->{branchcode},
+            ccode        => 'TESTCCODE',
+        }
+    );
+
+    isnt( $item4->ccode, undef, 'Item ccode set when only LSQ configured' );
+    is( $item4->ccode, 'TESTCCODE', 'Item ccode value correct when only LSQ configured' );
+
+    # Test Case 5: Both LSL and LSQ map to location (edge case)
+    t::lib::Mocks::mock_preference( 'EdifactLSL', 'location' );
+    t::lib::Mocks::mock_preference( 'EdifactLSQ', 'location' );
+
+    my $item5 = $builder->build_sample_item(
+        {
+            biblionumber => $biblio->biblionumber,
+            homebranch   => $branch->{branchcode},
+            location     => 'TESTLOC',
+        }
+    );
+
+    is( $item5->location, 'TESTLOC', 'Item location set when both map to location' );
+
+    # Test Case 6: Both disabled
+    t::lib::Mocks::mock_preference( 'EdifactLSL', '' );
+    t::lib::Mocks::mock_preference( 'EdifactLSQ', '' );
+
+    my $item6 = $builder->build_sample_item(
+        {
+            biblionumber => $biblio->biblionumber,
+            homebranch   => $branch->{branchcode},
+        }
+    );
+
+    ok( defined $item6, 'Item created successfully when both LSL and LSQ disabled' );
+    is( $item6->location, undef, 'Item location is undef when both LSL and LSQ disabled' );
 
     $schema->storage->txn_rollback;
 };

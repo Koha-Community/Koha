@@ -20,7 +20,7 @@
 use Modern::Perl;
 
 use Test::NoWarnings;
-use Test::More tests => 5;
+use Test::More tests => 6;
 
 use Koha::Edifact::Order;
 
@@ -147,6 +147,9 @@ subtest 'order_line() tests' => sub {
     # Set EdifactLSQ field to default
     t::lib::Mocks::mock_preference( 'EdifactLSQ', 'location' );
 
+    # Ensure EdifactLSL is empty to maintain backwards compatibility
+    t::lib::Mocks::mock_preference( 'EdifactLSL', '' );
+
     $order->basket->create_items('ordering')->store;
     is(
         $edi_order->order_line( 1, $orders[0] ),
@@ -225,6 +228,9 @@ subtest 'order_line() tests' => sub {
 
     # Set EdifactLSQ field to ccode
     t::lib::Mocks::mock_preference( 'EdifactLSQ', 'ccode' );
+
+    # Ensure EdifactLSL is empty to maintain backwards compatibility
+    t::lib::Mocks::mock_preference( 'EdifactLSL', '' );
 
     $order->basket->create_items('ordering')->store;
     is(
@@ -424,6 +430,133 @@ subtest 'RFF+ON purchase order number generation' => sub {
         $transmission, qr/BGM\+220\+PO123456789\+9'/,
         'Purchase order number included in BGM segment when purchase order number present'
     );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'gir_segments() with LSL and LSQ preferences' => sub {
+    plan tests => 20;
+
+    $schema->storage->txn_begin;
+
+    # Test LSL and LSQ preferences
+    t::lib::Mocks::mock_preference( 'EdifactLSQ', 'location' );
+    t::lib::Mocks::mock_preference( 'EdifactLSL', 'ccode' );
+
+    # Create test items with both location and ccode
+    my @test_items = (
+        {
+            branchcode     => 'BRANCH1',
+            itype          => 'BOOK',
+            itemcallnumber => 'CALL1',
+            location       => 'FICTION',    # Will be used for LSQ
+            ccode          => 'ADULT',      # Will be used for LSL
+        },
+        {
+            branchcode     => 'BRANCH2',
+            itype          => 'DVD',
+            itemcallnumber => 'CALL2',
+            location       => 'MEDIA',      # Will be used for LSQ
+            ccode          => 'CHILD',      # Will be used for LSL
+        }
+    );
+
+    my $params = {
+        ol_fields => { budget_code => 'FUND123' },
+        items     => \@test_items
+    };
+
+    my @segments = Koha::Edifact::Order::gir_segments($params);
+
+    ok( scalar @segments >= 2, 'At least two segments created for two items' );
+
+    # Check first item's GIR segment (segments are strings in EDI format)
+    my $first_gir = $segments[0];
+    ok( $first_gir, 'First segment exists' );
+
+    # Check that the segment contains expected data
+    like( $first_gir, qr/GIR/,         'Segment contains GIR tag' );
+    like( $first_gir, qr/FUND123:LFN/, 'Budget code included in first segment' );
+    like( $first_gir, qr/BRANCH1:LLO/, 'Branch code included in first segment' );
+    like( $first_gir, qr/BOOK:LST/,    'Item type included in first segment' );
+    like( $first_gir, qr/FICTION:LSQ/, 'LSQ field contains location value' );
+    like( $first_gir, qr/ADULT:LSL/,   'LSL field contains collection code value' );
+
+    # Test reversed preferences
+    t::lib::Mocks::mock_preference( 'EdifactLSQ', 'ccode' );       # LSQ -> collection
+    t::lib::Mocks::mock_preference( 'EdifactLSL', 'location' );    # LSL -> location
+
+    my @test_items_rev = (
+        {
+            branchcode     => 'BRANCH3',
+            itype          => 'BOOK',
+            itemcallnumber => 'CALL3',
+            location       => 'REFERENCE',    # Will be used for LSL
+            ccode          => 'RARE',         # Will be used for LSQ
+        }
+    );
+
+    my $params_rev = {
+        ol_fields => { budget_code => 'FUND456' },
+        items     => \@test_items_rev
+    };
+
+    @segments = Koha::Edifact::Order::gir_segments($params_rev);
+    my $gir_rev = $segments[0];
+
+    # Check that the segment contains expected reversed mappings
+    like( $gir_rev, qr/RARE:LSQ/,      'LSQ field contains collection code when preference is ccode' );
+    like( $gir_rev, qr/REFERENCE:LSL/, 'LSL field contains location when preference is location' );
+
+    # Test with one preference empty
+    t::lib::Mocks::mock_preference( 'EdifactLSQ', 'location' );
+    t::lib::Mocks::mock_preference( 'EdifactLSL', '' );           # Empty = ignore
+
+    @segments = Koha::Edifact::Order::gir_segments($params);
+    my $gir_partial = $segments[0];
+
+    like( $gir_partial, qr/FICTION:LSQ/, 'LSQ field included when preference is set' );
+    unlike( $gir_partial, qr/:LSL/, 'LSL field not included when preference is empty' );
+
+    # Test with both preferences empty
+    t::lib::Mocks::mock_preference( 'EdifactLSQ', '' );
+    t::lib::Mocks::mock_preference( 'EdifactLSL', '' );
+
+    @segments = Koha::Edifact::Order::gir_segments($params);
+    my $gir_empty = $segments[0];
+
+    unlike( $gir_empty, qr/:LSQ/, 'LSQ field not included when preference is empty' );
+    unlike( $gir_empty, qr/:LSL/, 'LSL field not included when preference is empty' );
+
+    # Test with LSQ empty but LSL set
+    t::lib::Mocks::mock_preference( 'EdifactLSQ', '' );         # Empty = ignore
+    t::lib::Mocks::mock_preference( 'EdifactLSL', 'ccode' );    # LSL -> collection
+
+    @segments = Koha::Edifact::Order::gir_segments($params);
+    my $gir_lsl_only = $segments[0];
+
+    unlike( $gir_lsl_only, qr/:LSQ/, 'LSQ field not included when preference is empty' );
+    like( $gir_lsl_only, qr/ADULT:LSL/, 'LSL field included when preference is set' );
+
+    # Test with both preferences set to same field (location)
+    t::lib::Mocks::mock_preference( 'EdifactLSQ', 'location' );    # LSQ -> location
+    t::lib::Mocks::mock_preference( 'EdifactLSL', 'location' );    # LSL -> location
+
+    @segments = Koha::Edifact::Order::gir_segments($params);
+    my $gir_both_location = $segments[0];
+
+    like( $gir_both_location, qr/FICTION:LSQ/, 'LSQ field contains location value when both map to location' );
+    like( $gir_both_location, qr/FICTION:LSL/, 'LSL field contains location value when both map to location' );
+
+    # Test with both preferences set to same field (ccode)
+    t::lib::Mocks::mock_preference( 'EdifactLSQ', 'ccode' );       # LSQ -> collection
+    t::lib::Mocks::mock_preference( 'EdifactLSL', 'ccode' );       # LSL -> collection
+
+    @segments = Koha::Edifact::Order::gir_segments($params);
+    my $gir_both_ccode = $segments[0];
+
+    like( $gir_both_ccode, qr/ADULT:LSQ/, 'LSQ field contains collection code value when both map to ccode' );
+    like( $gir_both_ccode, qr/ADULT:LSL/, 'LSL field contains collection code value when both map to ccode' );
 
     $schema->storage->txn_rollback;
 };
