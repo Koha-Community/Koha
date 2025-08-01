@@ -194,7 +194,7 @@ subtest 'Basic object tests' => sub {
 
     isnt(
         $illrq_obj->status, 'COMP',
-        "ILL_STATUS_ALIAS is not empty. ILL is not immediatelly complete."
+        "ILL_STATUS_ALIAS is not empty. ILL is not immediately complete."
     );
 
     is(
