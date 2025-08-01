@@ -61,7 +61,8 @@ has 'today_iso' => ( is => 'ro', lazy => 1,
     default => sub { output_pref( { dt => dt_from_string(), dateonly => 1, dateformat => 'iso' } ); }, );
 
 has 'text_csv' => ( is => 'rw', lazy => 1,
-    default => sub { Text::CSV->new( { binary => 1, } ); },  );
+    default => sub { Text::CSV->new( { binary => 1, formula => 'empty' } ); },
+);
 
 sub import_patrons {
     my ($self, $params) = @_;
