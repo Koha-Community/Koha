@@ -65,7 +65,7 @@ has 'today_iso' => (
 
 has 'text_csv' => (
     is      => 'rw', lazy => 1,
-    default => sub { Text::CSV->new( { binary => 1, } ); },
+    default => sub { Text::CSV->new( { binary => 1, formula => 'empty' } ); },
 );
 
 sub import_patrons {

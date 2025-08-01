@@ -304,7 +304,7 @@ sub validate {
     my ($self) = @_;
 
     open my $fh, "<", \$self->file_content or die;
-    my $csv = Text::CSV_XS->new( { binary => 1, always_quote => 1, eol => $/, decode_utf8 => 1 } );
+    my $csv = Text::CSV_XS->new( { binary => 1, always_quote => 1, eol => $/, decode_utf8 => 1, formula => 'empty' } );
 
     $csv->column_names(qw( header_key header_value ));
     my @header_rows = $csv->getline_hr_all( $fh, 0, 12 );
@@ -331,7 +331,7 @@ sub _set_report_type_from_file {
     my ($self) = @_;
 
     open my $fh, "<", \$self->file_content or die;
-    my $csv = Text::CSV_XS->new( { binary => 1, always_quote => 1, eol => $/, decode_utf8 => 1 } );
+    my $csv = Text::CSV_XS->new( { binary => 1, always_quote => 1, eol => $/, decode_utf8 => 1, formula => 'empty' } );
 
     $csv->column_names(qw( header_key header_value ));
     my @header_rows = $csv->getline_hr_all( $fh, 0, 12 );
@@ -354,7 +354,7 @@ sub _get_rows_from_COUNTER_file {
     my ($self) = @_;
 
     open my $fh, "<", \$self->file_content or die;
-    my $csv = Text::CSV_XS->new( { binary => 1, always_quote => 1, eol => $/, decode_utf8 => 1 } );
+    my $csv = Text::CSV_XS->new( { binary => 1, always_quote => 1, eol => $/, decode_utf8 => 1, formula => 'empty' } );
 
     my $header_columns = $csv->getline_all( $fh, 13, 1 );
     $csv->column_names( @{$header_columns}[0] );
