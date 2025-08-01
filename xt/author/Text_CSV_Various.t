@@ -24,9 +24,11 @@ use Modern::Perl;
 use open OUT=>':encoding(UTF-8)', ':std';
 use utf8;
 
-use Test::More tests => 21;
+use Test::More tests => 23;
+use Test::NoWarnings;
 use Text::CSV;
 use Text::CSV_XS;
+use File::Find;
 
 sub pretty_line {
 	my $max = 54;
@@ -82,3 +84,67 @@ foreach my $line (@$lines) {
         }
     }
 }
+
+# Test for CSV formula injection protection
+subtest 'CSV formula injection protection' => sub {
+    my @csv_files;
+    my @violations;
+
+    # Find all Perl files that might use Text::CSV
+    find(
+        sub {
+            return unless -f $_ && /\.pm$/;
+            my $file = $File::Find::name;
+
+            # Skip test files and this test file itself
+            return if $file =~ m{/t/} || $file =~ m{/xt/};
+
+            open my $fh, '<', $_ or return;
+            my $content = do { local $/; <$fh> };
+            close $fh;
+
+            # Look for actual Text::CSV usage (not just dependency declarations)
+            my @csv_usages = $content =~ /(?:use\s+Text::CSV|Text::CSV(?:_XS|::Encoded)?(?:\s*->|\s*\.\s*)new)/g;
+            return unless @csv_usages;
+
+            # Skip if it's just dependency metadata (like in PerlModules.pm)
+            return if $content =~ /'Text::CSV[^']*'\s*=>\s*{[^}]*(?:required|min_ver|cur_ver)/;
+
+            push @csv_files, $file;
+
+            # Find all Text::CSV->new() calls and check each one
+            my @new_calls       = $content =~ /(Text::CSV(?:_XS|::Encoded)?(?:\s*->|\s*\.\s*)new\s*\([^)]*\))/g;
+            my $has_unprotected = 0;
+
+            for my $call (@new_calls) {
+
+                # Check if this specific call has formula protection
+                unless ( $call =~ /formula\s*=>\s*['"](?:empty|die|croak|diag)['"]/
+                    || $call =~ /formula\s*=>\s*[1-5]/ )
+                {
+                    $has_unprotected = 1;
+                    last;
+                }
+            }
+
+            if ($has_unprotected) {
+                push @violations, $file;
+            }
+        },
+        'C4', 'Koha',
+        'misc'
+    );
+
+    ok( scalar(@csv_files) > 0, "Found CSV usage in Koha modules" );
+
+    if (@violations) {
+        diag("Files using Text::CSV without formula protection:");
+        diag("  $_") for @violations;
+        diag("");
+        diag("CSV formula injection protection is required for security.");
+        diag("Add 'formula => \"empty\"' to Text::CSV constructor options.");
+        diag("Valid formula modes: 'empty' (recommended), 'die', 'croak', 'diag', or numeric 1-5");
+    }
+
+    is( scalar(@violations), 0, "All Text::CSV usage includes formula injection protection" );
+};
