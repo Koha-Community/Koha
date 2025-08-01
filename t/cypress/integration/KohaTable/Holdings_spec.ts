@@ -110,10 +110,10 @@ describe("catalogue/detail/holdings_table with items", () => {
     });
 
     afterEach(function () {
-                cy.set_syspref(
-                    "AlwaysShowHoldingsTableFilters",
-                    this.syspref_AlwaysShowHoldingsTableFilters
-                );
+        cy.set_syspref(
+            "AlwaysShowHoldingsTableFilters",
+            this.syspref_AlwaysShowHoldingsTableFilters
+        );
     });
 
     it("Correctly init the table", function () {
@@ -455,10 +455,10 @@ describe("catalogue/detail/holdings_table without items", () => {
     });
 
     afterEach(function () {
-                cy.set_syspref(
-                    "AlwaysShowHoldingsTableFilters",
-                    this.syspref_AlwaysShowHoldingsTableFilters
-                );
+        cy.set_syspref(
+            "AlwaysShowHoldingsTableFilters",
+            this.syspref_AlwaysShowHoldingsTableFilters
+        );
     });
 
     it("Do not display the table", function () {
