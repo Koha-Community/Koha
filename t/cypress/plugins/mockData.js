@@ -148,6 +148,8 @@ const generateDataFromSchema = (properties, values = {}) => {
                         data = buildSampleObject({ object: "item" });
                         fk_name = "item_id";
                         break;
+                    case "_strings":
+                        break;
                     default:
                         try {
                             data = generateMockData(type, value);
