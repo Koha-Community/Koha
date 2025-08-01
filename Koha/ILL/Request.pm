@@ -1161,8 +1161,10 @@ sub expand_template {
     my ( $self, $params ) = @_;
     my $backend = $self->_backend->name;
 
-    if ( $backend eq 'Standard'
-        || ( $params->{method} eq 'edititem' && C4::Context->preference("AutoILLBackendPriority") ) )
+    if (
+        $backend eq 'Standard'
+        || ( $params->{method} && $params->{method} eq 'edititem' && C4::Context->preference("AutoILLBackendPriority") )
+        )
     {
 
         my $template_name = 'ill/backends/Standard/' . ( $params->{method} // q{} ) . '.inc';
