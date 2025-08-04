@@ -128,7 +128,7 @@
                             orderable: true,
                             render: function (data, type, row, meta) {
                                 let rendered = "";
-                                if (row.type == "QUOTE" || row.type == "ORDERS") {
+                                if (row.type == "QUOTE" || row.type == "ORDERS" || row.type == "ORDRSP") {
                                     if (row.basket_id) {
                                         rendered = '<a href="/cgi-bin/koha/acqui/basket.pl?basketno=' + row.basket_id + '">' + _("Basket") + ": " + row.basket_id + "</a>";
                                     }
