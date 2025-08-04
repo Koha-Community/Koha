@@ -620,6 +620,10 @@
                 <div class="page-section">
                     <h3>Request details</h3>
                     <h4>Details from library</h4>
+                    [% copyrightclearance_confirmed = request.extended_attributes.find({'type'=>'copyrightclearance_confirmed'}).value %]
+                    [% IF copyrightclearance_confirmed %]
+                        <h5> <i class="fa fa-fw fa-check text-success" aria-hidden="true"></i> <span class="tab-title">Patron has confirmed copyright clearance for this request</span> </h5>
+                    [% END %]
                     <div class="rows">
                         <ol>
                             [% IF request.orderid %]
@@ -633,10 +637,6 @@
                                     <span class="label borrowernumber">Patron:</span>
                                     [% borrowerlink = "/cgi-bin/koha/members/moremember.pl" _ "?borrowernumber=" _ request.patron.borrowernumber %]
                                     <a href="[% borrowerlink | url %]" title="View borrower details"> [% request.patron.firstname _ " " _ request.patron.surname _ " [" _ request.patron.cardnumber _ "]" | html %] </a>
-                                    [% copyrightclearance_confirmed = request.extended_attributes.find({'type'=>'copyrightclearance_confirmed'}).value %]
-                                    [% IF copyrightclearance_confirmed %]
-                                        <i class="fa fa-fw fa-check text-success" aria-hidden="true"></i> <span class="tab-title">Patron has confirmed copyright clearance for this request</span>
-                                    [% END %]
                                 </li>
                             [% END %]
                             [% IF request.biblio_id %]
