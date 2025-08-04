@@ -82,7 +82,7 @@
                     [% FOREACH checkout IN all_checkouts %]
                         [% SET item = checkout.item %]
                         [% SET biblio = item.biblio %]
-                        <tr [% IF checkout.returndate %]class="onissue"[% END %]>
+                        <tr>
                             <td>
                                 [% IF checkout.onsite_checkout %]
                                     [% issuetype = 'onsite_checkout' | html %]
