@@ -701,22 +701,27 @@ sub process_quote {
         }
     )->single;
     if ( $v->auto_orders ) {
-        for my $b (@added_baskets) {
+        for my $i ( 0 .. $#added_baskets ) {
+            my $basketno = $added_baskets[$i];
+
+            # Use the correct buyer_ean for each message/basket
+            my $buyer_ean = $messages->[$i] ? $messages->[$i]->buyer_ean : $messages->[0]->buyer_ean;
+
             create_edi_order(
                 {
-                    ean      => $messages->[0]->buyer_ean,
-                    basketno => $b,
+                    ean      => $buyer_ean,
+                    basketno => $basketno,
                 }
             );
-            Koha::Acquisition::Baskets->find($b)->close;
+            Koha::Acquisition::Baskets->find($basketno)->close;
 
             # Log the approval
             if ( C4::Context->preference("AcquisitionLog") ) {
-                my $approved = Koha::Acquisition::Baskets->find($b);
+                my $approved = Koha::Acquisition::Baskets->find($basketno);
                 logaction(
                     'ACQUISITIONS',
                     'APPROVE_BASKET',
-                    $b,
+                    $basketno,
                     to_json( $approved->unblessed )
                 );
             }
