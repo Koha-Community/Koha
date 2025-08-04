@@ -129,8 +129,34 @@
                                         <button class="btn btn-default btn-xs disabled" disabled="disabled" href="#"><i class="fa fa-download"></i> Create EDIFACT order</button>
                                     </div>
                                 [% ELSE %]
+                                    [%# Check if we have a quote EAN that matches one of the available EANs %]
+                                    [% quote_ean_match = 0 %]
+                                    [% quote_ean_account = {} %]
+                                    [% IF quote_ean %]
+                                        [% FOREACH eanacct IN eans %]
+                                            [% IF eanacct.ean == quote_ean %]
+                                                [% quote_ean_match = 1 %]
+                                                [% quote_ean_account = eanacct %]
+                                                [% LAST %]
+                                            [% END %]
+                                        [% END %]
+                                    [% END %]
+
                                     <div class="btn-group">
-                                        [% IF eans.size == 1 %]
+                                        [%# If we have a quote EAN match, use it directly, otherwise use original logic %]
+                                        [% IF quote_ean_match %]
+                                            <a
+                                                class="btn btn-default btn-xs submit-form-link"
+                                                href="#"
+                                                data-ean="[% quote_ean_account.ean | html %]"
+                                                data-basketno="[% basketno | html %]"
+                                                data-action="basket.pl"
+                                                data-method="post"
+                                                data-op="cud-ediorder"
+                                                title="Using EAN from original QUOTE message"
+                                                ><i class="fa fa-download"></i> Create EDIFACT order</a
+                                            >
+                                        [% ELSIF eans.size == 1 %]
                                             <a
                                                 class="btn btn-default btn-xs submit-form-link"
                                                 href="#"

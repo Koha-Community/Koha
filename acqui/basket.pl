@@ -103,7 +103,81 @@ if ($ediaccount) {
             join => 'branch',
         }
     );
-    $template->param( eans => \@eans );
+
+    # Check if this basket was created from a QUOTE message and get the buyer EAN
+    my $quote_ean     = undef;
+    my $quote_message = $schema->resultset('EdifactMessage')->search(
+        {
+            basketno     => $basketno,
+            message_type => 'QUOTE'
+        }
+    )->first;
+
+    if ($quote_message) {
+
+        # For the first message in a QUOTE transport, the raw_msg contains the full message
+        # For subsequent messages, we need to get it from the original message
+        my $raw_msg = $quote_message->raw_msg;
+
+        # If this is a split message (empty raw_msg), find the original message
+        if ( !$raw_msg ) {
+
+            # Look for the original message with the same filename but without suffix
+            my $original_filename = $quote_message->filename;
+            $original_filename =~ s/_\d+$//;    # Remove _2, _3, etc. suffix
+
+            my $original_message = $schema->resultset('EdifactMessage')->search(
+                {
+                    filename     => $original_filename,
+                    message_type => 'QUOTE',
+                    vendor_id    => $quote_message->vendor_id
+                }
+            )->first;
+
+            $raw_msg = $original_message->raw_msg if $original_message;
+        }
+
+        if ($raw_msg) {
+
+            # Parse the EDI message to find the buyer EAN for THIS specific basket
+            eval {
+                require Koha::Edifact;
+                my $edi      = Koha::Edifact->new( { transmission => $raw_msg } );
+                my $messages = $edi->message_array();
+
+                # For multiple messages, we need to find which message corresponds to this basket
+                # The current process_quote creates baskets in order, so we need to determine the index
+                if ( @{$messages} ) {
+                    if ( @{$messages} == 1 ) {
+
+                        # Single message case
+                        $quote_ean = $messages->[0]->buyer_ean;
+                    } else {
+
+                        # Multiple message case - determine which message this basket belongs to
+                        # Check if this is a split message by looking at the filename suffix
+                        my $filename = $quote_message->filename;
+                        if ( $filename =~ /_(\d+)$/ ) {
+                            my $message_index = $1 - 1;    # Convert to 0-based index
+                            $quote_ean = $messages->[$message_index]->buyer_ean if $messages->[$message_index];
+                        } else {
+
+                            # This is the first message (no suffix)
+                            $quote_ean = $messages->[0]->buyer_ean;
+                        }
+                    }
+                }
+            };
+
+            # If there's an error parsing, we'll just fall back to normal behavior
+            # Error is logged but doesn't prevent normal EAN selection
+        }
+    }
+
+    $template->param(
+        eans      => \@eans,
+        quote_ean => $quote_ean
+    );
 }
 
 unless ( CanUserManageBasket( $loggedinuser, $basket, $userflags ) ) {
