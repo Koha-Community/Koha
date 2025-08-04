@@ -192,7 +192,7 @@ if ( $op && $op !~ /^cud-/ ) {
 
 my @biblios;
 for my $biblionumber (@biblionumbers) {
-    my $biblio = Koha::Biblios->find($biblionumber);
+    my $biblio = Koha::Biblios->find($biblionumber) or next;
     push(
         @biblios,
         {

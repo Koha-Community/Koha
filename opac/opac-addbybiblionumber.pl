@@ -201,7 +201,7 @@ if ( $op && $op !~ /^cud-/ ) {
 
 if ($authorized) {
     for my $biblionumber (@biblionumbers) {
-        my $biblio = Koha::Biblios->find($biblionumber);
+        my $biblio = Koha::Biblios->find($biblionumber) or next;
         push(
             @biblios,
             {
