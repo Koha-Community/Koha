@@ -38,7 +38,7 @@ my $builder = t::lib::TestBuilder->new;
 my $logger  = t::lib::Mocks::Logger->new();
 
 subtest 'process_quote' => sub {
-    plan tests => 5;
+    plan tests => 6;
 
     $schema->storage->txn_begin;
 
@@ -223,7 +223,100 @@ subtest 'process_quote' => sub {
         $schema->storage->txn_rollback;
     };
 
-    # Test 2: Auto Orders Processing
+    # Test 2: Multiple Message EAN Handling
+    subtest 'multiple_message_ean_handling' => sub {
+        plan tests => 4;
+
+        $schema->storage->txn_begin;
+
+        my $account = $builder->build(
+            {
+                source => 'VendorEdiAccount',
+                value  => {
+                    description    => 'multi-message test vendor',
+                    transport      => 'FILE',
+                    plugin         => '',
+                    san            => $test_san,
+                    orders_enabled => 1,
+                    auto_orders    => 1,
+                }
+            }
+        );
+
+        # Create EANs that match the QUOTES_BIG.CEQ file
+        my $ean1 = $builder->build(
+            {
+                source => 'EdifactEan',
+                value  => {
+                    description => 'library 1 ean',
+                    branchcode  => undef,
+                    ean         => '5013546098818'    # First EAN from QUOTES_BIG.CEQ
+                }
+            }
+        );
+        my $ean2 = $builder->build(
+            {
+                source => 'EdifactEan',
+                value  => {
+                    description => 'library 2 ean',
+                    branchcode  => undef,
+                    ean         => '5412345000013'    # Second EAN from QUOTES_BIG.CEQ
+                }
+            }
+        );
+
+        # Setup fund
+        my $fund = $builder->build(
+            {
+                source => 'Aqbudget',
+                value  => {
+                    budget_code      => 'REF',
+                    budget_period_id => $active_period->{budget_period_id}
+                }
+            }
+        );
+
+        # Use the existing multi-message test file
+        my $filename = 'QUOTES_BIG.CEQ';
+        ok( -e $dirname . $filename, 'File QUOTES_BIG.CEQ found' );
+
+        my $trans = Koha::Edifact::Transport->new( $account->{id} );
+        $trans->working_directory($dirname);
+
+        my $mhash = $trans->message_hash();
+        $mhash->{message_type} = 'QUOTE';
+        $trans->ingest( $mhash, $filename );
+
+        my $quote = $schema->resultset('EdifactMessage')->find( { filename => $filename } );
+
+        # Process quote and check results
+        process_quote($quote);
+
+        # QUOTES_BIG.CEQ contains 2 separate transport messages with different buyer EANs
+        # Our fix should create 2 baskets and use the correct EAN for each auto-order
+        my $baskets = Koha::Acquisition::Baskets->search(
+            { booksellerid => $account->{vendor_id} },
+            { order_by     => 'basketno' }
+        );
+        is( $baskets->count, 2, "Two baskets created for multi-transport quote file" );
+
+        # Check that EDI orders were created (since auto_orders = 1)
+        my $edi_orders = $schema->resultset('EdifactMessage')->search(
+            {
+                message_type => 'ORDERS',
+                vendor_id    => $account->{vendor_id}
+            }
+        );
+        is( $edi_orders->count, 2, 'Two EDI orders created with auto_orders enabled' );
+
+        # Verify that both baskets were closed
+        my $closed_baskets = $baskets->search( { closedate => { '!=' => undef } } );
+        is( $closed_baskets->count, 2, 'Both baskets closed by auto_orders' );
+
+        $schema->storage->txn_rollback;
+    };
+
+    # Test 3: Auto Orders Processing
     subtest 'auto_orders_processing' => sub {
         plan tests => 7;
 
