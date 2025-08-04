@@ -1,3 +1,4 @@
+[% USE AuthorisedValues %]
 [% USE Branches %]
 [% USE ItemTypes %]
 [% USE KohaDates %]
@@ -155,6 +156,8 @@
                         [% ELSE %]
                             [% IF HOLD.itemtype %]
                                 <span>Pending for next available item of item type '[% ItemTypes.GetDescription( HOLD.itemtype ) | html %]'</span>
+                            [% ELSIF HOLD.item && HOLD.item.notforloan < 0 %]
+                                <span>Pending ([% AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.notforloan', authorised_value => HOLD.item.notforloan ) %])</span>
                             [% ELSE %]
                                 <span>Pending</span>
                             [% END %]
