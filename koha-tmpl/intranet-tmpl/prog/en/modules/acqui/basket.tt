@@ -126,16 +126,20 @@
                             [% IF edifact_enabled && edifact_messages.size > 0 %]
                                 [% SET quote_messages = [] %]
                                 [% SET order_messages = [] %]
+                                [% SET ordrsp_messages = [] %]
                                 [% FOR message IN edifact_messages %]
                                     [% IF message.message_type == 'QUOTE' %]
                                         [% quote_messages.push(message) %]
                                     [% ELSIF message.message_type == 'ORDERS' %]
                                         [% order_messages.push(message) %]
+                                    [% ELSIF message.message_type == 'ORDRSP' %]
+                                        [% ordrsp_messages.push(message) %]
                                     [% END %]
                                 [% END %]
 
-                                [% IF quote_messages.size > 0 && order_messages.size > 0 %]
-                                    <!-- Both quote and order messages exist -->
+                                [% SET total_messages = quote_messages.size + order_messages.size + ordrsp_messages.size %]
+                                [% IF total_messages > 1 %]
+                                    <!-- Multiple messages exist - show dropdown -->
                                     <div class="btn-group">
                                         <button class="btn btn-default dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"> <i class="fa fa-file-text"></i> View EDIFACT interchanges </button>
                                         <ul class="dropdown-menu">
@@ -153,6 +157,13 @@
                                                     </a>
                                                 </li>
                                             [% END %]
+                                            [% FOR message IN ordrsp_messages %]
+                                                <li>
+                                                    <a class="dropdown-item view_edifact_message" href="#" data-message-id="[% message.id | html %]" data-basketno="[% basketno | html %]" data-basketname="[% basketname | html %]">
+                                                        <i class="fa fa-reply"></i> View order response ([% message.transfer_date | $KohaDates %])
+                                                    </a>
+                                                </li>
+                                            [% END %]
                                         </ul>
                                     </div>
                                 [% ELSIF quote_messages.size > 0 %]
@@ -167,6 +178,13 @@
                                     <div class="btn-group">
                                         <button type="button" class="btn btn-default view_edifact_message" data-message-id="[% order_messages.0.id | html %]" data-basketno="[% basketno | html %]" data-basketname="[% basketname | html %]">
                                             <i class="fa fa-shopping-cart"></i> View EDIFACT order
+                                        </button>
+                                    </div>
+                                [% ELSIF ordrsp_messages.size > 0 %]
+                                    <!-- Only order response messages exist -->
+                                    <div class="btn-group">
+                                        <button type="button" class="btn btn-default view_edifact_message" data-message-id="[% ordrsp_messages.0.id | html %]" data-basketno="[% basketno | html %]" data-basketname="[% basketname | html %]">
+                                            <i class="fa fa-reply"></i> View EDIFACT order response
                                         </button>
                                     </div>
                                 [% END %]
@@ -338,16 +356,20 @@
                             [% IF edifact_enabled && edifact_messages.size > 0 %]
                                 [% SET quote_messages = [] %]
                                 [% SET order_messages = [] %]
+                                [% SET ordrsp_messages = [] %]
                                 [% FOR message IN edifact_messages %]
                                     [% IF message.message_type == 'QUOTE' %]
                                         [% quote_messages.push(message) %]
                                     [% ELSIF message.message_type == 'ORDERS' %]
                                         [% order_messages.push(message) %]
+                                    [% ELSIF message.message_type == 'ORDRSP' %]
+                                        [% ordrsp_messages.push(message) %]
                                     [% END %]
                                 [% END %]
 
-                                [% IF quote_messages.size > 0 && order_messages.size > 0 %]
-                                    <!-- Both quote and order interchanges exist -->
+                                [% SET total_messages = quote_messages.size + order_messages.size + ordrsp_messages.size %]
+                                [% IF total_messages > 1 %]
+                                    <!-- Multiple messages exist - show dropdown -->
                                     <div class="btn-group">
                                         <button class="btn btn-default dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"> <i class="fa fa-file-text"></i> View EDIFACT interchanges </button>
                                         <ul class="dropdown-menu">
@@ -365,10 +387,17 @@
                                                     </a>
                                                 </li>
                                             [% END %]
+                                            [% FOR message IN ordrsp_messages %]
+                                                <li>
+                                                    <a class="dropdown-item view_edifact_message" href="#" data-message-id="[% message.id | html %]" data-basketno="[% basketno | html %]" data-basketname="[% basketname | html %]">
+                                                        <i class="fa fa-reply"></i> View order response ([% message.transfer_date | $KohaDates %])
+                                                    </a>
+                                                </li>
+                                            [% END %]
                                         </ul>
                                     </div>
                                 [% ELSIF quote_messages.size > 0 %]
-                                    <!-- Only quote interchanges exist -->
+                                    <!-- Only quote messages exist -->
                                     <div class="btn-group">
                                         <button type="button" class="btn btn-default view_edifact_message" data-message-id="[% quote_messages.0.id | html %]" data-basketno="[% basketno | html %]" data-basketname="[% basketname | html %]">
                                             <i class="fa fa-quote-left"></i> View EDIFACT quote
@@ -379,6 +408,13 @@
                                     <div class="btn-group">
                                         <button type="button" class="btn btn-default view_edifact_message" data-message-id="[% order_messages.0.id | html %]" data-basketno="[% basketno | html %]" data-basketname="[% basketname | html %]">
                                             <i class="fa fa-shopping-cart"></i> View EDIFACT order
+                                        </button>
+                                    </div>
+                                [% ELSIF ordrsp_messages.size > 0 %]
+                                    <!-- Only order response messages exist -->
+                                    <div class="btn-group">
+                                        <button type="button" class="btn btn-default view_edifact_message" data-message-id="[% ordrsp_messages.0.id | html %]" data-basketno="[% basketno | html %]" data-basketname="[% basketname | html %]">
+                                            <i class="fa fa-reply"></i> View EDIFACT order response
                                         </button>
                                     </div>
                                 [% END %]
