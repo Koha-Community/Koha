@@ -35,7 +35,7 @@
     [% CASE 'NOTICES' %]
         <span>Notices</span>[% UNLESS Koha.Preference('NoticesLog') %]<i class="log-disabled fa-solid fa-triangle-exclamation" title="Log not enabled" data-log="NoticesLog"></i>[% END %]
     [% CASE 'NEWS' %]
-        <span>News</span>[% UNLESS Koha.Preference('NewsLog') %]<i class="log-disabled fa-solid fa-triangle-exclamation" title="Log not enabled" data-log="NewsLog"></i>[% END %]
+        <span>Additional content</span>[% UNLESS Koha.Preference('AdditionalContentLog') %]<i class="log-disabled fa-solid fa-triangle-exclamation" title="Log not enabled" data-log="AdditionalContentLog"></i>[% END %]
     [% CASE 'RECALLS' %]
         <span>Recalls</span>[% UNLESS Koha.Preference('RecallsLog') %]<i class="log-disabled fa-solid fa-triangle-exclamation" title="Log not enabled" data-log="RecallsLog"></i>[% END %]
     [% CASE 'SUGGESTION' %]
