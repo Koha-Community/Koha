@@ -1,31 +1,43 @@
 [% FOREACH info IN information %]
     [% SWITCH info_type %]
     [% CASE 'identifiers' %]
-        <li class="identifier_[% info.source.lower | html %]">
         [% SWITCH info.source.lower %]
             [% CASE 'orcid' %]
+            <li class="identifier_[% info.source.lower | html %]">
                 <span>ORCID: </span>
                 <a href="https://orcid.org/[% info.number | url %]">[% info.number | html %]</a>
+            </li>
             [% CASE 'scopus' %]
+            <li class="identifier_[% info.source.lower | html %]">
                 <span>ScopusID: </span>
                 <a href="https://www.scopus.com/authid/detail.uri?authorId=[% info.number | url %]">[% info.number | html %]</a>
+            </li>
             [% CASE 'loop' %]
+            <li class="identifier_[% info.source.lower | html %]">
                 <span>Loop ID: </span>
                 <a href="https://loop.frontiersin.org/people/[% info.number | url %]">[% info.number | html %]</a>
+            </li>
             [% CASE 'rid' %]
+            <li class="identifier_[% info.source.lower | html %]">
                 <span>Publons ID: </span>
                 <a href="https://publons.com/researcher/[% info.number | url %]">[% info.number | html %]</a>
+            </li>
             [% CASE 'viaf' %]
+            <li class="identifier_[% info.source.lower | html %]">
                 <span>VIAF ID: </span>
                 <a href="https://viaf.org/viaf/[% info.number | url %]">[% info.number | html %]</a>
+            </li>
             [% CASE 'isni' %]
+            <li class="identifier_[% info.source.lower | html %]">
                 <span>ISNI ID: </span>
                 <a href="https://isni.org/isni/[% info.number | url %]">[% info.number | html %]</a>
+            </li>
             [% CASE 'wikidata' %]
+            <li class="identifier_[% info.source.lower | html %]">
                 <span>WIKIDATA ID: </span>
                 <a href="http://www.wikidata.org/entity/[% info.number | url %]">[% info.number | html %]</a>
-            [% END %]
-        </li>
+            </li>
+        [% END %]
     [% CASE 'activity' %]
         [% IF info.field_of_activity %]
             <li>
