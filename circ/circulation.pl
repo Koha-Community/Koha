@@ -444,7 +444,8 @@ if ( @$barcodes && $op eq 'cud-checkout' ) {
             }
         }
 
-        delete $needsconfirmation->{'DEBT'} if ($debt_confirmed);
+        my $needsconfirmationDEBT;
+        $needsconfirmationDEBT = delete $needsconfirmation->{'DEBT'} if ($debt_confirmed);
 
         if ( $item && C4::Context->preference('ClaimReturnedLostValue') ) {
             my $autoClaimReturnCheckout = C4::Context->preference('AutoClaimReturnStatusOnCheckout');
@@ -547,6 +548,7 @@ if ( @$barcodes && $op eq 'cud-checkout' ) {
                 if ( my $booked = $needsconfirmation->{BOOKED_EARLY} // $alerts->{BOOKED} ) {
                     $datedue = $booked->end_date;
                 }
+                $needsconfirmation->{'DEBT'} = $needsconfirmationDEBT if ($debt_confirmed);
                 my $issue = AddIssue(
                     $patron, $barcode, $datedue,
                     $cancelreserve,

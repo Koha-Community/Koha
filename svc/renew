@@ -67,6 +67,7 @@ $data->{branchcode}     = $branchcode;
 my $patron = Koha::Patrons->find($borrowernumber);
 my $item   = Koha::Items->find($itemnumber);
 
+my $confirmations;
 ( $data->{renew_okay}, $data->{error} ) =
     CanBookBeRenewed( $patron, $item->checkout, $override_limit );
 
@@ -75,6 +76,7 @@ if ( $data->{error} && $data->{error} eq 'on_reserve' && C4::Context->preference
     $data->{renew_okay} = 1;
     $data->{error}      = undef;
 
+    push @{$confirmations}, 'ON_RESERVE' if $override_limit;
     $message = "Override Renew hold for another";
     @message = ("Override Renew hold for another");
 
@@ -133,7 +135,8 @@ if ( $data->{renew_okay} || ( $seen && $data->{error} eq 'too_unseen' ) ) {
                 itemnumber     => $itemnumber,
                 branch         => $branchcode,
                 datedue        => $date_due,
-                seen           => $seen
+                seen           => $seen,
+                confirmations  => $confirmations
             }
         );
         $data->{date_due}   = output_pref( { dt => $date_due, as_due_date => 1 } );
