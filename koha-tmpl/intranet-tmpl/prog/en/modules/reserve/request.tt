@@ -1860,18 +1860,18 @@
                 $('#move_hold_biblio_confirm').prop('disabled' , true );
 
                 let biblioID = $("#biblio_id").val();
-                let apiUrl = `/api/v1/items?q={"biblio_id":"${encodeURIComponent(biblioID)}"}`;
+                let apiUrl = `/api/v1/biblios?q={"biblio_id":"${encodeURIComponent(biblioID)}"}`;
                 $.ajax({
                     url: apiUrl,
                     method: "GET",
                     dataType: "json",
+                    headers: {
+                        'Accept': 'application/json'
+                    },
                     success: function (data) {
                         if (data.length > 0) {
-                            const unique_data = data.filter((item, index, self) =>
-                                index === self.findIndex(t => t.biblio_id === item.biblio_id)
-                            );
                             let resultHtml = "";
-                            $.each(unique_data, function (index, item) {
+                            $.each(data, function (index, item) {
                                 resultHtml += `
                                     <div class="alert alert-success">
                                         <strong>Biblionumber:</strong> ${item.biblio_id} <br>
