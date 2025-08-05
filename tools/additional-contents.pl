@@ -143,7 +143,7 @@ if ( $op eq 'add_form' ) {
                     my $existing_content = $existing_contents->find($id);
                     if ($existing_content) {
                         if ( $existing_content->title ne $title || $existing_content->content ne $content ) {
-                            if ( C4::Context->preference("NewsLog") ) {
+                            if ( C4::Context->preference("AdditionalContentLog") ) {
                                 logaction(
                                     'NEWS', 'MODIFY', undef,
                                     sprintf( "%s|%s|%s|%s", $code, $title, $lang, $content )
@@ -152,14 +152,14 @@ if ( $op eq 'add_form' ) {
                         } else {
                             $translated_content->{updated_on} = $existing_content->updated_on;
                         }
-                    } elsif ( C4::Context->preference("NewsLog") ) {
+                    } elsif ( C4::Context->preference("AdditionalContentLog") ) {
                         logaction( 'NEWS', 'ADD', undef, sprintf( "%s|%s|%s|%s", $code, $title, $lang, $content ) );
                     }
 
                     push @translated_contents, $translated_content;
                 }
 
-                if ( C4::Context->preference("NewsLog") ) {
+                if ( C4::Context->preference("AdditionalContentLog") ) {
                     my @existing_ids = $existing_contents->get_column('id');
                     my @deleted_ids  = array_minus( @existing_ids, @seen_ids );
                     for my $id (@deleted_ids) {
@@ -197,7 +197,7 @@ if ( $op eq 'add_form' ) {
             sub {
                 my $contents = Koha::AdditionalContents->search( { id => \@ids } );
 
-                if ( C4::Context->preference("NewsLog") ) {
+                if ( C4::Context->preference("AdditionalContentLog") ) {
                     while ( my $c = $contents->next ) {
                         my $translated_contents = $c->translated_contents;
                         while ( my $translated_content = $translated_contents->next ) {
