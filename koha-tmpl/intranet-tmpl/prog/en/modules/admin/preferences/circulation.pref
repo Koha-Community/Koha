@@ -1245,6 +1245,15 @@ Circulation:
             - pref: ProcessingFeeNote
               type: textarea
               class: code
+        -
+            - Use the lost charge rules of
+            - pref: LostChargesControl
+              type: choice
+              choices:
+                  PickupLibrary: the library you are logged in at
+                  PatronLibrary: the library the patron is from
+                  ItemHomeLibrary: the library the item is from
+            - .
     Self check-in module:
         -
             - pref: SelfCheckInModule
