@@ -198,7 +198,7 @@
     [% CASE 'PATRON_CANT' %]
         <span>Max renewals reached</span>
     [% CASE 'TOO_MANY' %]
-        <span>Max renewals reached</span>
+        <span>Too many checkout</span>
     [% CASE 'PREVISSUE' %]
         <span>Patron was notified of previous issues</span>
     [% CASE 'NOT_FOR_LOAN' %]
@@ -226,11 +226,27 @@
     [% CASE 'BOOKED_TO_ANOTHER' %]
         <span>Item was booked to another patron</span>
     [% CASE 'AGE_RESTRICTION' %]
-        <span>Item has an eage restriction</span>
+        <span>Item has an age restriction</span>
     [% CASE 'HIGHHOLDS' %]
         <span>Item had high holds</span>
     [% CASE 'BIBLIO_ALREADY_ISSUED' %]
         <span>Biblio was already issued</span>
+    [% CASE 'DEBARRED' %]
+        <span>Patron is restricted</span>
+    [% CASE 'RENEWAL_LIMIT' %]
+        <span>Renewal limit override</span>
+    [% CASE 'UNSEEN_LIMIT' %]
+        <span>Override unseen item restriction</span>
+    [% CASE 'AUTO_TOO_SOON' %]
+        <span>Override auto-renew too soon restriction</span>
+    [% CASE 'AUTO_TOO_LATE' %]
+        <span>Override auto-renew too late restriction</span>
+    [% CASE 'ACCOUNT_EXPIRED' %]
+        <span>Account expired override</span>
+    [% CASE 'ON_RESERVE' %]
+        <span>Override Renew hold for another</span>
+    [% CASE 'TOO_MUCH' %]
+        <span>Override auto-renew too much owing restriction</span>
     [% CASE %]
         <span>[% override | html %]</span>
     [% END %]

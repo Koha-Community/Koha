@@ -2021,6 +2021,7 @@ sub AddIssue {
                     $info = to_json(
                         {
                             issue         => $issue->issue_id,
+                            branchcode    => $issue->branchcode,
                             itemnumber    => $item_object->itemnumber,
                             confirmations => $confirmations,
                             forced        => $forced
@@ -3693,7 +3694,7 @@ sub AddRenewal {
                         },
                         {
                             pretty    => 1,
-                            cononical => 1
+                            canonical => 1
                         }
                     );
                 }

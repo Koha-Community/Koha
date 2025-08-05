@@ -339,11 +339,11 @@
                                                 <a
                                                     href="/cgi-bin/koha/catalogue/moredetail.pl?itemnumber=[% loopro.json.itemnumber | uri %]&amp;biblionumber=[% loopro.json.biblionumber | uri %]&amp;bi=[% loopro.json.biblioitemnumber | uri %]#item[% loopro.json.itemnumber | uri %]"
                                                     title="Display detail for this item"
-                                                    >Item [% loopro.json.barcode | html %]</a
+                                                    >Item [% loopro.json.barcode | html %] [% loopro.json.branchcode | html %]</a
                                                 >
                                             </div>
-                                            [% FOREACH force IN loopro.json.forces %]
-                                                <div class="forced"> [% PROCESS translare_log_override override=force %] </div>
+                                            [% FOREACH force IN loopro.json.forced %]
+                                                <div class="forced"> [% PROCESS translate_log_override override=force %] </div>
                                             [% END %]
                                             [% FOREACH confirmation IN loopro.json.confirmations %]
                                                 <div class="confirmed"> [% PROCESS translate_log_override override=confirmation %] </div>

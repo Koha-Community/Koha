@@ -181,6 +181,7 @@ if ($do_it) {
                     $decoded->{biblionumber}     = $item->biblionumber;
                     $decoded->{biblioitemnumber} = $item->biblionumber;
                     $decoded->{barcode}          = $item->barcode;
+                    $decoded->{branchcode}       = C4::Context->userenv ? C4::Context->userenv->{'branch'} : undef;
                 }
                 $result->{'json'} = $decoded;
             } else {
