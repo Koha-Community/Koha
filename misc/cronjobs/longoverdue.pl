@@ -106,6 +106,21 @@ if ( scalar @branches && scalar @skip_branches ) {
     );
 }
 
+my $lost_control_pref = C4::Context->preference('LostChargesControl');
+my $home_holding_pref = C4::Context->preference('HomeOrHoldingBranch');
+if (   ( scalar @branches || scalar @skip_branches )
+    && $lost_control_pref eq 'PickupLibrary'
+    && !( C4::Context->userenv->{branch} ) )
+{
+    pod2usage(
+        -verbose => 0,
+        -message =>
+            "There is no branch set for the cron user, LostCharge Control is set to 'library you are logged in at'.\n"
+            . "No branches will satisfy this requirement - exiting.",
+        -exitval => 1
+    );
+}
+
 if ( scalar @$itemtype && scalar @$skip_itemtype ) {
     pod2usage(
         -verbose => 1,
@@ -359,9 +374,7 @@ sub longoverdue_sth {
     return C4::Context->dbh->prepare($query);
 }
 
-my $dbh               = C4::Context->dbh;
-my $lost_control_pref = C4::Context->preference('LostChargesControl');
-my $home_holding_pref = C4::Context->preference('HomeOrHoldingBranch');
+my $dbh = C4::Context->dbh;
 
 my @available_categories = Koha::Patron::Categories->search()->get_column('categorycode');
 $borrower_category      = [ map { uc $_ } @$borrower_category ];
