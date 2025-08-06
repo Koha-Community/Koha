@@ -1977,7 +1977,7 @@ subtest 'is_hold_group_target, cleanup_hold_group and set_as_hold_group_target t
 };
 
 subtest '_Findgroupreserve in the context of hold groups' => sub {
-    plan tests => 13;
+    plan tests => 17;
 
     $schema->storage->txn_begin;
 
@@ -2049,6 +2049,15 @@ subtest '_Findgroupreserve in the context of hold groups' => sub {
         }
     );
 
+    my $reserve_4_id = AddReserve(
+        {
+            branchcode     => $library_2->{branchcode},
+            borrowernumber => $patron_2->borrowernumber,
+            biblionumber   => $item->biblionumber,
+            priority       => 2,
+        }
+    );
+
     my @reserves = C4::Reserves::_Findgroupreserve( $item_2->biblionumber, $item_2->id, 0, [] );
     is( scalar @reserves,           2,             "No hold group created yet. We should get both holds" );
     is( $reserves[0]->{reserve_id}, $reserve_2_id, "We got the expected reserve" );
@@ -2068,6 +2077,30 @@ subtest '_Findgroupreserve in the context of hold groups' => sub {
     is( $hold->found,                     'T',                            'Hold is in transit' );
 
     is( $hold->is_hold_group_target, 1, 'First hold is the hold group target' );
+
+    my @reserves_with_target_hold = C4::Reserves::_Findgroupreserve( $item->biblionumber, $item->id, 0, [] );
+
+    is(
+        $reserves_with_target_hold[0]->{hold_group_id}, $new_hold_group->hold_group_id,
+        'First eligible hold is part of a hold group'
+    );
+
+    my $target_hold = Koha::Holds->find( $reserves_with_target_hold[0]->{reserve_id} );
+
+    is(
+        $target_hold->is_hold_group_target, 1,
+        'First eligible hold is the hold group target'
+    );
+
+    is(
+        $reserves_with_target_hold[1]->{hold_group_id}, undef,
+        'Second eligible hold is not part of a hold group'
+    );
+
+    is(
+        $reserves_with_target_hold[1]->{reserve_id}, $reserve_4_id,
+        'Second eligible hold is reserve_4'
+    );
 
     my @new_reserves = C4::Reserves::_Findgroupreserve( $item_2->biblionumber, $item_2->id, 0, [] );
     is( scalar @new_reserves, 1, "reserve_2_id is now part of a group that has a target. Should not be here." );

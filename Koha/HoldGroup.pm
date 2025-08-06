@@ -116,12 +116,12 @@ sub skip_non_target_holds_query {
                 -and => { '!=' => undef },
                 {
                     -not_in => \
-                        'SELECT hold_group_id FROM hold_group_target_holds WHERE reserve_id IS NOT NULL AND hold_group_id IS NOT NULL'
+                        'SELECT hold_group_id FROM hold_group_target_holds WHERE reserve_id IS NOT NULL AND reserve_id != me.reserve_id'
                 }
             ]
         ],
         'sql' =>
-            'AND (hold_group_id IS NULL OR hold_group_id IS NOT NULL AND reserves.hold_group_id NOT IN (SELECT hold_group_id FROM hold_group_target_holds WHERE reserve_id IS NOT NULL AND hold_group_id IS NOT NULL))'
+            'AND (hold_group_id IS NULL OR reserves.hold_group_id NOT IN (SELECT hold_group_id FROM hold_group_target_holds WHERE reserve_id IS NOT NULL AND reserve_id != reserves.reserve_id))'
     };
 
     return unless $query_type && exists $query_types->{$query_type};
