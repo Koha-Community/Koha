@@ -25,14 +25,18 @@ use Test::Exception;
 use Test::Warn;
 use Time::Fake;
 
+use Koha::ArticleRequests;
+use Koha::AuthUtils;
 use Koha::CirculationRules;
 use Koha::Database;
-use Koha::DateUtils qw(dt_from_string);
-use Koha::ArticleRequests;
-use Koha::Patrons;
-use Koha::List::Patron       qw(AddPatronList AddPatronsToList);
+use Koha::DateUtils    qw(dt_from_string);
+use Koha::List::Patron qw(AddPatronList AddPatronsToList);
+use Koha::Notice::Templates;
 use Koha::Patron::Debarments qw(AddDebarment);
 use Koha::Patron::Relationships;
+use Koha::Patrons;
+
+use C4::Auth;
 use C4::Circulation qw( AddIssue AddReturn );
 
 use t::lib::TestBuilder;
@@ -1533,9 +1537,9 @@ subtest 'password expiration tests' => sub {
         $schema->storage->txn_rollback;
     };
 
-    subtest 'set_password' => sub {
+    subtest 'set_password() tests' => sub {
 
-        plan tests => 4;
+        plan tests => 7;
 
         $schema->storage->txn_begin;
 
@@ -1567,6 +1571,174 @@ subtest 'password expiration tests' => sub {
             $patron->password_expiration_date(), undef,
             "Password expiration date is unset if category does not have expiry days"
         );
+
+        # Test password change notification - missing letter template should not prevent password change
+        subtest 'Password change works even when PASSWORD_CHANGE letter is missing' => sub {
+
+            plan tests => 4;
+
+            # Enable NotifyPasswordChange preference
+            t::lib::Mocks::mock_preference( 'NotifyPasswordChange', 1 );
+
+            # Create a patron with a valid email address
+            my $patron = $builder->build_object(
+                {
+                    class => 'Koha::Patrons',
+                    value => {
+                        email    => 'patron@example.com',
+                        password => Koha::AuthUtils::hash_password('OldPassword123!')
+                    }
+                }
+            );
+
+            # Store the original password hash for comparison
+            my $original_password_hash = $patron->password;
+
+            # Ensure there is NO PASSWORD_CHANGE letter template
+            # (This was the bug condition - should not prevent password change)
+            Koha::Notice::Templates->search(
+                {
+                    code   => 'PASSWORD_CHANGE',
+                    module => 'members'
+                }
+            )->delete;
+
+            # Attempt to set a new password
+            my $result;
+
+            warning_like { $result = $patron->set_password( { password => 'NewPassword123!', skip_validation => 1 } ); }
+            qr/No members PASSWORD_CHANGE letter transported by email/,
+                'No letter warning correctly printed';
+
+            # FIXED: The method should return the patron object even when letter is missing
+            isa_ok(
+                $result, 'Koha::Patron',
+                'set_password returns patron object even when PASSWORD_CHANGE letter is missing'
+            );
+
+            # Reload patron from database to check if password was actually changed
+            $patron->discard_changes;
+
+            # FIXED: Password should be changed even when letter template is missing
+            isnt(
+                $patron->password, $original_password_hash,
+                'Password was changed even though letter template is missing'
+            );
+
+            # Verify the new password works
+            my $new_auth_result = C4::Auth::checkpw_hash( 'NewPassword123!', $patron->password );
+            is( $new_auth_result, 1, 'New password authenticates correctly' );
+        };
+
+        subtest 'Password change works when NotifyPasswordChange is disabled' => sub {
+
+            plan tests => 3;
+
+            # Disable NotifyPasswordChange preference
+            t::lib::Mocks::mock_preference( 'NotifyPasswordChange', 0 );
+
+            # Create a patron with a valid email address
+            my $patron = $builder->build_object(
+                {
+                    class => 'Koha::Patrons',
+                    value => {
+                        email    => 'patron@example.com',
+                        password => Koha::AuthUtils::hash_password('OldPassword123!')
+                    }
+                }
+            );
+
+            # Store the original password hash for comparison
+            my $original_password_hash = $patron->password;
+
+            # Ensure there is NO PASSWORD_CHANGE letter template
+            Koha::Notice::Templates->search(
+                {
+                    code   => 'PASSWORD_CHANGE',
+                    module => 'members'
+                }
+            )->delete;
+
+            # Attempt to set a new password
+            my $result = $patron->set_password( { password => 'NewPassword123!', skip_validation => 1 } );
+
+            # Should work fine when NotifyPasswordChange is disabled
+            isa_ok( $result, 'Koha::Patron', 'set_password returns patron object when notification disabled' );
+
+            # Reload patron from database to check if password was actually changed
+            $patron->discard_changes;
+
+            # Password should be changed
+            isnt( $patron->password, $original_password_hash, 'Password was changed when notification disabled' );
+
+            # Verify the new password works
+            my $auth_result = C4::Auth::checkpw_hash( 'NewPassword123!', $patron->password );
+            is( $auth_result, 1, 'New password authenticates correctly' );
+        };
+
+        subtest 'Password change works when PASSWORD_CHANGE letter exists' => sub {
+
+            plan tests => 3;
+
+            # Enable NotifyPasswordChange preference
+            t::lib::Mocks::mock_preference( 'NotifyPasswordChange', 1 );
+
+            # Create a patron with a valid email address
+            my $patron = $builder->build_object(
+                {
+                    class => 'Koha::Patrons',
+                    value => {
+                        email    => 'patron@example.com',
+                        password => Koha::AuthUtils::hash_password('OldPassword123!')
+                    }
+                }
+            );
+
+            # Store the original password hash for comparison
+            my $original_password_hash = $patron->password;
+
+            # Delete any existing PASSWORD_CHANGE letters to avoid constraint violations
+            Koha::Notice::Templates->search(
+                {
+                    code   => 'PASSWORD_CHANGE',
+                    module => 'members'
+                }
+            )->delete;
+
+            # Create a PASSWORD_CHANGE letter template
+            $builder->build_object(
+                {
+                    class => 'Koha::Notice::Templates',
+                    value => {
+                        module                 => 'members',
+                        code                   => 'PASSWORD_CHANGE',
+                        branchcode             => '',
+                        name                   => 'Password Change Notification',
+                        is_html                => 0,
+                        title                  => 'Your password has been changed',
+                        content                => 'Dear [% borrower.firstname %], your password has been changed.',
+                        message_transport_type => 'email',
+                        lang                   => 'default'
+                    }
+                }
+            );
+
+            # Attempt to set a new password
+            my $result = $patron->set_password( { password => 'NewPassword123!', skip_validation => 1 } );
+
+            # Should work fine when PASSWORD_CHANGE letter exists
+            isa_ok( $result, 'Koha::Patron', 'set_password returns patron object when letter template exists' );
+
+            # Reload patron from database to check if password was actually changed
+            $patron->discard_changes;
+
+            # Password should be changed
+            isnt( $patron->password, $original_password_hash, 'Password was changed when letter template exists' );
+
+            # Verify the new password works
+            my $auth_result = C4::Auth::checkpw_hash( 'NewPassword123!', $patron->password );
+            is( $auth_result, 1, 'New password authenticates correctly' );
+        };
 
         $schema->storage->txn_rollback;
     };
