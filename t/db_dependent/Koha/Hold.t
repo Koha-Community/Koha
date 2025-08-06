@@ -36,7 +36,7 @@ use Koha::DateUtils qw(dt_from_string);
 use Koha::Holds;
 use Koha::Libraries;
 use Koha::Old::Holds;
-use C4::Reserves    qw( AddReserve ModReserveAffect );
+use C4::Reserves    qw( AddReserve ModReserveAffect RevertWaitingStatus);
 use C4::Circulation qw( AddReturn );
 
 my $schema  = Koha::Database->new->schema;
@@ -1977,7 +1977,7 @@ subtest 'is_hold_group_target, cleanup_hold_group and set_as_hold_group_target t
 };
 
 subtest '_Findgroupreserve in the context of hold groups' => sub {
-    plan tests => 17;
+    plan tests => 19;
 
     $schema->storage->txn_begin;
 
@@ -2077,6 +2077,13 @@ subtest '_Findgroupreserve in the context of hold groups' => sub {
     is( $hold->found,                     'T',                            'Hold is in transit' );
 
     is( $hold->is_hold_group_target, 1, 'First hold is the hold group target' );
+
+    C4::Reserves::RevertWaitingStatus( { itemnumber => $item->itemnumber } );
+    is( $hold->is_hold_group_target,       0,     'First hold is no longer the hold group target' );
+    is( $hold->hold_group->target_hold_id, undef, 'Hold group no longer has a target' );
+
+    AddReturn( $item->barcode, $library_1->{branchcode} );
+    ModReserveAffect( $item->itemnumber, undef, $do_transfer, $reserve_id );
 
     my @reserves_with_target_hold = C4::Reserves::_Findgroupreserve( $item->biblionumber, $item->id, 0, [] );
 

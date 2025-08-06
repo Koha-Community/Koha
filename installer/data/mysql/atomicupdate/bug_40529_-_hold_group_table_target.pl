@@ -14,6 +14,7 @@ return {
                     CREATE TABLE hold_group_target_holds (
                         `hold_group_id` int unsigned NOT NULL UNIQUE COMMENT 'foreign key, linking this to the hold_groups table',
                         `reserve_id` int(11) DEFAULT NULL UNIQUE COMMENT 'foreign key, linking this to the reserves table',
+                        PRIMARY KEY (`hold_group_id`, `reserve_id`),
                         CONSTRAINT `hold_group_target_holds_ibfk_1` FOREIGN KEY (`hold_group_id`) REFERENCES `hold_groups` (`hold_group_id`) ON DELETE CASCADE,
                         CONSTRAINT `hold_group_target_holds_ibfk_2` FOREIGN KEY (`reserve_id`) REFERENCES `reserves` (`reserve_id`) ON DELETE CASCADE
                     ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;

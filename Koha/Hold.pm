@@ -290,6 +290,29 @@ sub set_as_hold_group_target {
     }
 }
 
+=head3 remove_as_hold_group_target
+
+$self->remove_as_hold_group_target;
+
+Removes this hold as the target of its hold group if it is currently set as such,
+and if the DisplayAddHoldGroups system preference is enabled.
+
+=cut
+
+sub remove_as_hold_group_target {
+    my ($self) = @_;
+
+    if (   $self->hold_group
+        && $self->hold_group->target_hold_id eq $self->reserve_id
+        && C4::Context->preference("DisplayAddHoldGroups") )
+    {
+        $self->_result->find_related(
+            'hold_group_target_hold',
+            { hold_group_id => $self->hold_group->hold_group_id, reserve_id => $self->reserve_id }
+        )->delete();
+    }
+}
+
 =head3 is_hold_group_target
 
 $self->is_hold_group_target;
@@ -1082,6 +1105,8 @@ sub revert_found {
                 if C4::Context->preference('HoldsLog');
 
             C4::Reserves::_FixPriority( { biblionumber => $self->biblionumber } );
+
+            $self->remove_as_hold_group_target();
 
             Koha::BackgroundJob::BatchUpdateBiblioHoldsQueue->new->enqueue( { biblio_ids => [ $self->biblionumber ] } )
                 if C4::Context->preference('RealTimeHoldsQueue');
