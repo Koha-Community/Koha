@@ -37,6 +37,11 @@
                 <span>WIKIDATA ID: </span>
                 <a href="http://www.wikidata.org/entity/[% info.number | url %]">[% info.number | html %]</a>
             </li>
+        [% CASE 'uri' %]
+            <li class="identifier_[% info.source.lower | html %]">
+                <span>URI: </span>
+                <a href="[% info.number | url %]">[% info.number | html %]</a>
+            </li>
         [% END %]
     [% CASE 'activity' %]
         [% IF info.field_of_activity %]
