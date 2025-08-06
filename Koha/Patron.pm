@@ -1121,17 +1121,19 @@ sub set_password {
                         'borrowers' => $self_from_storage->borrowernumber,
                     },
                     want_librarian => 1,
-                ) or return;
-
-                my $message_id = C4::Letters::EnqueueLetter(
-                    {
-                        letter                 => $letter,
-                        borrowernumber         => $self_from_storage->id,
-                        to_address             => $emailaddr,
-                        message_transport_type => 'email'
-                    }
                 );
-                C4::Letters::SendQueuedMessages( { message_id => $message_id } ) if $message_id;
+
+                if ($letter) {
+                    my $message_id = C4::Letters::EnqueueLetter(
+                        {
+                            letter                 => $letter,
+                            borrowernumber         => $self_from_storage->id,
+                            to_address             => $emailaddr,
+                            message_transport_type => 'email'
+                        }
+                    );
+                    C4::Letters::SendQueuedMessages( { message_id => $message_id } ) if $message_id;
+                }
             }
         }
     }
