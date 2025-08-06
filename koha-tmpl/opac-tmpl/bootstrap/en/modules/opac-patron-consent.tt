@@ -51,7 +51,7 @@
                                     <p>In order to keep you logged in, we need your consent to process personal data as specified in the privacy policy linked below.</p>
                                     <p>If you choose to withdraw your consent we will <strong>remove your account</strong> within a reasonable time and you should log out now.</p>
                                 </div>
-                                <p>I have read the <a target="_blank" href="[% Koha.Preference('PrivacyPolicyURL') | url %]">privacy policy</a> and agree with your processing of my personal data as outlined therein.</p>
+                                <p>I agree with your processing of my personal data as outlined in the <a target="_blank" href="[% Koha.Preference('PrivacyPolicyURL') | url %]">privacy policy</a>.</p>
                             [% ELSIF consent_types.$consent_type %]
                                 [% SET consent_title = ( consent_types.$consent_type.title.$lang || consent_types.$consent_type.title.en ) %]
                                 [% SET consent_desc  = ( consent_types.$consent_type.description.$lang || consent_types.$consent_type.description.en ) %]
