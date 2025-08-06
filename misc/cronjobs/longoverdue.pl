@@ -360,7 +360,7 @@ sub longoverdue_sth {
 }
 
 my $dbh               = C4::Context->dbh;
-my $circ_control_pref = C4::Context->preference('CircControl');
+my $lost_control_pref = C4::Context->preference('LostChargesControl');
 my $home_holding_pref = C4::Context->preference('HomeOrHoldingBranch');
 
 my @available_categories = Koha::Patron::Categories->search()->get_column('categorycode');
@@ -482,7 +482,7 @@ foreach my $startrange ( sort keys %$lost ) {
             }
             if ($filter_branches) {
                 my $lib;
-                for ($circ_control_pref) {
+                for ($lost_control_pref) {
                     if ( $_ eq 'PatronLibrary' ) {
                         $patron ||= Koha::Patrons->find( $row->{borrowernumber} );
                         $lib = $patron->branchcode();
