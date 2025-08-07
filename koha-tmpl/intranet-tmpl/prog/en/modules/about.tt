@@ -328,7 +328,7 @@
         [% SET warnMissingCompiledFiles = 1 %]
     [% END %]
     [% WRAPPER tab_panel tabname= "sysinfo" bt_active = 1 %]
-        [% IF weasyprint_missing || warnPrefRequireChoosingExistingAuthority || warnPrefEasyAnalyticalRecords || warnPrefAnonymousPatronOPACPrivacy || warnPrefAnonymousPatronAnonSuggestions || warnPrefAnonymousPatronOPACPrivacy_PatronDoesNotExist || warnPrefAnonymousPatronAnonSuggestions_PatronDoesNotExist || warnPrefKohaAdminEmailAddress || warnPrefOpacHiddenItems || warnPrefPatronSelfRegistrationDefaultCategory || invalid_yesno.count || warnNoActiveCurrency || warnIsRootUser || xml_config_warnings.size || warnI18nMissing || AutoSelfCheckPatronDoesNotHaveSelfCheckPerm || AutoSelfCheckPatronHasTooManyPerm || warnStatisticsFieldsError || warnNoTemplateCaching || warnILLConfiguration || has_ai_issues || oauth2_missing_deps || bad_yaml_prefs || warnRelationships || log4perl_errors || config_bcrypt_settings_no_set || warnHiddenBiblionumbers.size || warnConnectBroker || elasticsearch_has_missing || warnMissingCompiledFiles || warnDbRowFormat %]
+        [% IF weasyprint_missing || warnPrefRequireChoosingExistingAuthority || warnPrefEasyAnalyticalRecords || warnPrefAnonymousPatronOPACPrivacy || warnPrefAnonymousPatronAnonSuggestions || warnPrefAnonymousPatronOPACPrivacy_PatronDoesNotExist || warnPrefAnonymousPatronAnonSuggestions_PatronDoesNotExist || warnPrefKohaAdminEmailAddress || warnPrefOpacHiddenItems || warnPrefPatronSelfRegistrationDefaultCategory || invalid_yesno.count || warnNoActiveCurrency || warnIsRootUser || xml_config_warnings.size || warnI18nMissing || AutoSelfCheckPatronDoesNotHaveSelfCheckPerm || AutoSelfCheckPatronHasTooManyPerm || warnStatisticsFieldsError || warnNoTemplateCaching || warnILLConfiguration || has_ai_issues || oauth2_missing_deps || bad_yaml_prefs || warnRelationships || log4perl_errors || config_bcrypt_settings_no_set || warnHiddenBiblionumbers.size || warnConnectBroker || elasticsearch_has_missing || warnMissingCompiledFiles || warnDbRowFormat || warnPassChangeNoticeMissing %]
             [% IF ( warnDbRowFormat ) %]
                 <h2>Database row format incorrect</h2>
                 <p>Database tables with a row format other than 'DYNAMIC': [% warnDbRowFormat | html %]</p>
@@ -473,7 +473,7 @@
                 Contact your system administrator.
             [% END # /IF warnConnectBroker %]
 
-            [% IF weasyprint_missing || warnPrefRequireChoosingExistingAuthority || warnPrefEasyAnalyticalRecords || warnPrefAnonymousPatronOPACPrivacy || warnPrefAnonymousPatronAnonSuggestions || warnPrefAnonymousPatronOPACPrivacy_PatronDoesNotExist || warnPrefAnonymousPatronAnonSuggestions_PatronDoesNotExist || warnPrefKohaAdminEmailAddress || warnPrefOpacHiddenItems || warnPrefPatronSelfRegistrationDefaultCategory || invalid_yesno.count || warnNoActiveCurrency || AutoSelfCheckPatronDoesNotHaveSelfCheckPerm || AutoSelfCheckPatronHasTooManyPerm || warnStatisticsFieldsError || warnNoTemplateCaching || warnILLConfiguration || warnXSLT || oauth2_missing_deps || bad_yaml_prefs || warnIssuingRules || config_bcrypt_settings_no_set || warnHiddenBiblionumbers.size || warnFastCataloging %]
+            [% IF weasyprint_missing || warnPrefRequireChoosingExistingAuthority || warnPrefEasyAnalyticalRecords || warnPrefAnonymousPatronOPACPrivacy || warnPrefAnonymousPatronAnonSuggestions || warnPrefAnonymousPatronOPACPrivacy_PatronDoesNotExist || warnPrefAnonymousPatronAnonSuggestions_PatronDoesNotExist || warnPrefKohaAdminEmailAddress || warnPrefOpacHiddenItems || warnPrefPatronSelfRegistrationDefaultCategory || invalid_yesno.count || warnNoActiveCurrency || AutoSelfCheckPatronDoesNotHaveSelfCheckPerm || AutoSelfCheckPatronHasTooManyPerm || warnStatisticsFieldsError || warnNoTemplateCaching || warnILLConfiguration || warnXSLT || oauth2_missing_deps || bad_yaml_prefs || warnIssuingRules || config_bcrypt_settings_no_set || warnHiddenBiblionumbers.size || warnFastCataloging || warnPassChangeNoticeMissing %]
                 <h2>Warnings regarding the system configuration</h2>
                 <table>
                     <caption>Preferences and parameters</caption>
@@ -590,6 +590,15 @@
                         <tr>
                             <th scope="row"><strong>Warning</strong> </th>
                             <td> The PO directory has not been found. See <a href="https://wiki.koha-community.org/wiki/Translation_files">the dedicated wiki page</a> for more information. </td>
+                        </tr>
+                    [% END %]
+                    [% IF warnPassChangeNoticeMissing %]
+                        <tr>
+                            <th scope="row"><strong>Warning</strong> </th>
+                            <td
+                                >System preference 'NotifyPasswordChange' is enabled, but the PASSWORD_CHANGE notice template is missing. Password changes will fail. Please create the PASSWORD_CHANGE notice template in
+                                <a href="/cgi-bin/koha/tools/letter.pl">Tools &gt; Notices and slips</a>.</td
+                            >
                         </tr>
                     [% END %]
                     [% IF warnILLConfiguration %]
