@@ -1555,6 +1555,24 @@ subtest 'password expiration tests' => sub {
                 }
             }
         );
+
+        # Create a PASSWORD_CHANGE letter template
+        $builder->build_object(
+            {
+                class => 'Koha::Notice::Templates',
+                value => {
+                    module                 => 'members',
+                    code                   => 'PASSWORD_CHANGE',
+                    branchcode             => '',
+                    name                   => 'Password Change Notification',
+                    is_html                => 0,
+                    title                  => 'Your password has been changed',
+                    content                => 'Dear [% borrower.firstname %], your password has been changed.',
+                    message_transport_type => 'email',
+                    lang                   => 'default'
+                }
+            }
+        );
         is( $patron->password_expired, 1, "Patron password is expired" );
 
         $date = dt_from_string();
