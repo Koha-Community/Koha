@@ -5,6 +5,7 @@ $(document).ready(function () {
         $("#hold-group-modal").modal("show");
         if (holds_table_patron_page()) {
             append_select_group_holds_button();
+            append_ungroup_holds_button();
         }
         return false;
     });
@@ -26,6 +27,20 @@ $(document).ready(function () {
         });
     });
 
+    $("body").on("click", "button#ungroup-hold-group", function () {
+        let hold_group_id = $("#hold-group-modal #main").data("hold-group-id");
+        $.ajax({
+            method: "DELETE",
+            url:
+                "/api/v1/patrons/" +
+                borrowernumber +
+                "/hold_groups/" +
+                hold_group_id,
+        }).done(function () {
+            $("#holds-table").DataTable().ajax.reload();
+        });
+    });
+
     function append_select_group_holds_button() {
         var button = document.createElement("button");
         button.type = "button";
@@ -34,6 +49,18 @@ $(document).ready(function () {
         button.dataset.bsDismiss = "modal";
         button.innerHTML = __("Select group holds");
         if (!$("#select-group-holds").length) {
+            $("#hold-group-modal .modal-footer").prepend(button);
+        }
+    }
+
+    function append_ungroup_holds_button() {
+        var button = document.createElement("button");
+        button.type = "button";
+        button.className = "btn btn-danger";
+        button.id = "ungroup-hold-group";
+        button.dataset.bsDismiss = "modal";
+        button.innerHTML = __("Ungroup holds");
+        if (!$("#ungroup-hold-group").length) {
             $("#hold-group-modal .modal-footer").prepend(button);
         }
     }

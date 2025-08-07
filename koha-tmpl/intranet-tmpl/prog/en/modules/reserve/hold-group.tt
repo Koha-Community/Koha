@@ -4,7 +4,7 @@
 </head>
 <body id="hold-group">
 <h1>Holds group ([% hold_group.id | html %])</h1>
-<div id="main">
+<div id="main" data-hold-group-id="[% hold_group.id | uri %]">
     [% holds = hold_group.holds %]
     [% IF holds.count %]
         <table>
