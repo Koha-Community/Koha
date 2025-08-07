@@ -586,7 +586,7 @@
                             <button type="button" class="btn btn-primary consentAcceptAll">Accept all cookies</button>
                             <button type="button" class="btn btn-warning" id="consentAcceptSelected">Accept selected non-essential cookies</button>
                         [% END %]
-                        <a type="button" href="#" class="btn btn-secondary consentCloseModal">Cancel</a>
+                        <a href="#" class="btn btn-secondary consentCloseModal">Cancel</a>
                     </div>
                 </div>
             </div>
