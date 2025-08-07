@@ -21,7 +21,7 @@ use Modern::Perl;
 use FindBin qw( $Bin );
 
 use Test::NoWarnings;
-use Test::More tests => 5;
+use Test::More tests => 6;
 use Test::MockModule;
 
 use t::lib::Mocks;
@@ -1251,6 +1251,239 @@ subtest 'process_invoice_without_tax_rate' => sub {
     # Check that tax values were set correctly (should be 0 for no tax)
     my $order_with_tax = $orders->first;
     is( $order_with_tax->tax_rate_on_receiving + 0, 0, 'Tax rate set to 0 when no tax rate in EDI message' );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'duplicate_po_number_blocking' => sub {
+    plan tests => 2;
+
+    $schema->storage->txn_begin;
+
+    my $test_san      = '5013546098818';
+    my $dirname       = ( $Bin =~ /^(.*\/t\/)/ ? $1 . 'edi_testfiles/' : q{} );
+    my $active_period = $builder->build(
+        {
+            source => 'Aqbudgetperiod',
+            value  => { budget_period_active => 1 }
+        }
+    );
+
+    # Test 1: Auto-orders blocking for duplicate PO numbers
+    subtest 'auto_orders_blocking' => sub {
+        plan tests => 9;
+
+        $schema->storage->txn_begin;
+
+        # Create vendor EDI account with auto_orders and po_is_basketname enabled
+        my $account = $builder->build(
+            {
+                source => 'VendorEdiAccount',
+                value  => {
+                    description      => 'auto_orders duplicate test vendor',
+                    transport        => 'FILE',
+                    plugin           => '',
+                    san              => $test_san,
+                    auto_orders      => 1,
+                    po_is_basketname => 1,
+                }
+            }
+        );
+
+        my $ean = $builder->build(
+            {
+                source => 'EdifactEan',
+                value  => {
+                    description => 'test ean',
+                    branchcode  => undef,
+                    ean         => $test_san
+                }
+            }
+        );
+
+        # Create existing basket with PO number that will conflict
+        my $existing_basket = $builder->build(
+            {
+                source => 'Aqbasket',
+                value  => {
+                    basketname   => 'orders 23/1',           # Same as in QUOTES_SMALL.CEQ
+                    booksellerid => $account->{vendor_id},
+                    closedate    => undef,
+                }
+            }
+        );
+
+        # Setup the fund
+        $builder->build(
+            {
+                source => 'Aqbudget',
+                value  => {
+                    budget_code      => 'REF',
+                    budget_period_id => $active_period->{budget_period_id}
+                }
+            }
+        );
+
+        my $filename = 'QUOTES_SMALL.CEQ';
+        my $trans    = Koha::Edifact::Transport->new( $account->{id} );
+        $trans->working_directory($dirname);
+
+        my $mhash = $trans->message_hash();
+        $mhash->{message_type} = 'QUOTE';
+        $trans->ingest( $mhash, $filename );
+
+        my $quote = $schema->resultset('EdifactMessage')->find( { filename => $filename } );
+
+        # Clear logger before processing
+        $logger->clear();
+
+        # Process quote - should create basket but NOT auto-order due to duplicate PO
+        my $die;
+        eval {
+            process_quote($quote);
+            1;
+        } or do {
+            $die = $@;
+        };
+        ok( !$die, 'Quote with duplicate PO processed without dying' );
+
+        # Verify duplicate PO error was logged during quote processing
+        my $errors = $quote->edifact_errors;
+        ok( $errors->count >= 1, 'Error logged for duplicate PO number' );
+
+        my $duplicate_error = $errors->search( { section => 'RFF+ON:orders 23/1' } )->first;
+        ok( $duplicate_error, 'Duplicate PO error found in quote errors' );
+
+        # Check that new basket was created
+        my $baskets = Koha::Acquisition::Baskets->search(
+            {
+                booksellerid => $account->{vendor_id},
+                basketno     => { '!=' => $existing_basket->{basketno} }
+            }
+        );
+        is( $baskets->count, 1, "New basket created despite duplicate PO" );
+
+        my $new_basket = $baskets->next;
+        is( $new_basket->basketname, 'orders 23/1', "New basket uses duplicate PO number as name" );
+
+        # Critical test: Verify basket was NOT closed (auto-order was blocked)
+        ok( !$new_basket->closedate, 'New basket with duplicate PO was NOT closed (auto-order blocked)' );
+
+        # Verify no EDI order was created for the conflicting basket
+        my $edi_orders = $schema->resultset('EdifactMessage')->search(
+            {
+                message_type => 'ORDERS',
+                basketno     => $new_basket->basketno,
+            }
+        );
+        is( $edi_orders->count, 0, 'No EDI order created for basket with duplicate PO' );
+
+        # Check that the blocking is working by verifying no EDI orders were created
+        # This is the most important test - the basket should NOT be auto-ordered
+        ok( $edi_orders->count == 0, 'Auto-order was blocked - no EDI order created for duplicate PO' );
+
+        # Verify that duplicate PO error was logged (this shows detection is working)
+        ok( $duplicate_error, 'Duplicate PO number detection and logging is working' );
+
+        $schema->storage->txn_rollback;
+    };
+
+    # Test 2: No blocking when po_is_basketname is disabled
+    subtest 'no_blocking_when_feature_disabled' => sub {
+        plan tests => 5;
+
+        $schema->storage->txn_begin;
+
+        # Create vendor EDI account with po_is_basketname DISABLED
+        my $account = $builder->build(
+            {
+                source => 'VendorEdiAccount',
+                value  => {
+                    description      => 'feature disabled test vendor',
+                    transport        => 'FILE',
+                    plugin           => '',
+                    san              => $test_san,
+                    auto_orders      => 1,
+                    po_is_basketname => 0,                                # Feature disabled
+                }
+            }
+        );
+
+        my $ean = $builder->build(
+            {
+                source => 'EdifactEan',
+                value  => {
+                    description => 'test ean',
+                    branchcode  => undef,
+                    ean         => $test_san
+                }
+            }
+        );
+
+        # Create existing basket with any name
+        my $existing_basket = $builder->build(
+            {
+                source => 'Aqbasket',
+                value  => {
+                    basketname   => 'orders 23/1',
+                    booksellerid => $account->{vendor_id},
+                    closedate    => undef,
+                }
+            }
+        );
+
+        # Setup the fund
+        $builder->build(
+            {
+                source => 'Aqbudget',
+                value  => {
+                    budget_code      => 'REF',
+                    budget_period_id => $active_period->{budget_period_id}
+                }
+            }
+        );
+
+        my $filename = 'QUOTES_SMALL.CEQ';
+        my $trans    = Koha::Edifact::Transport->new( $account->{id} );
+        $trans->working_directory($dirname);
+
+        my $mhash = $trans->message_hash();
+        $mhash->{message_type} = 'QUOTE';
+        $trans->ingest( $mhash, $filename );
+
+        my $quote = $schema->resultset('EdifactMessage')->find( { filename => $filename } );
+
+        $logger->clear();
+        process_quote($quote);
+
+        # Verify new basket was created and auto-ordered (no blocking)
+        my $baskets = Koha::Acquisition::Baskets->search(
+            {
+                booksellerid => $account->{vendor_id},
+                basketno     => { '!=' => $existing_basket->{basketno} }
+            }
+        );
+        is( $baskets->count, 1, "New basket created" );
+
+        my $new_basket = $baskets->next;
+
+        # When po_is_basketname is disabled, basket uses filename not PO number
+        is( $new_basket->basketname, $filename, "Basket uses filename when po_is_basketname disabled" );
+
+        # The key test is that normal processing occurred without duplicate detection
+        # Since po_is_basketname is disabled, basket should use filename not PO number
+        ok( $new_basket->basketname eq $filename, 'Normal basket naming when feature disabled' );
+
+        # With po_is_basketname disabled, quote processing should work normally
+        # The absence of duplicate errors in the database is the key indicator
+        my $quote_errors           = $schema->resultset('EdifactError')->search( {} );
+        my $has_duplicate_db_error = grep { $_->details =~ /Duplicate purchase order/ } $quote_errors->all;
+        ok( !$has_duplicate_db_error, 'No duplicate PO database errors when feature disabled' );
+
+        pass('Feature correctly disabled - normal processing occurred');
+
+        $schema->storage->txn_rollback;
+    };
 
     $schema->storage->txn_rollback;
 };

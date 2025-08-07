@@ -423,6 +423,11 @@
                                 <span>There is no notice template with code ACQORDER defined.</span>
                             [% CASE 'email_sent' %]
                                 <span>Order e-mail was sent to the vendor.</span>
+                            [% CASE 'edi_duplicate_po_number' %]
+                                <span
+                                    >EDI order blocked: Duplicate purchase order number '[% m.po_number | html %]' found. This purchase order number is already used by basket [% m.existing_basket | html %]. Please check with your vendor or
+                                    use a different purchase order number.</span
+                                >
                             [% CASE %]
                                 <span>ERROR! - [% m.code | html %]</span>
                             [% END %]

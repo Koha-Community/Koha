@@ -692,7 +692,19 @@ sub edi_close_and_order {
         if ( $basket->{branch} ) {
             $edi_params->{branchcode} = $basket->{branch};
         }
-        if ( create_edi_order($edi_params) ) {
+        my $edi_result = create_edi_order($edi_params);
+        if ( ref $edi_result eq 'HASH' && $edi_result->{error} ) {
+            if ( $edi_result->{error} eq 'duplicate_po_number' ) {
+                push @messages, {
+                    type            => 'error',
+                    code            => 'edi_duplicate_po_number',
+                    po_number       => $edi_result->{po_number},
+                    existing_basket => $edi_result->{existing_basket}
+                };
+                $op = 'list';    # Stay on basket page to show error
+                return;
+            }
+        } elsif ($edi_result) {
 
             #$template->param( edifile => 1 );
         }
