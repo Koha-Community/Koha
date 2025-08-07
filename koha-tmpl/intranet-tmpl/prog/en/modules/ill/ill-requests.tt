@@ -46,7 +46,7 @@
             [% ELSIF op == 'confirm' %]
                 <span>Confirm request [% request.id_prefix _ request.illrequest_id | html %]</span>
             [% ELSIF op == 'mark_completed' %]
-                <span>Complete request request [% request.id_prefix _ request.illrequest_id | html %]</span>
+                <span>Complete request [% request.id_prefix _ request.illrequest_id | html %]</span>
             [% ELSIF op == 'delete_confirm' %]
                 <span>Delete request [% request.id_prefix _ request.illrequest_id | html %]</span>
             [% ELSIF op == 'generic_confirm' %]
