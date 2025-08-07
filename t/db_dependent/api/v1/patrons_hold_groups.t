@@ -18,7 +18,7 @@
 use Modern::Perl;
 
 use Test::NoWarnings;
-use Test::More tests => 3;
+use Test::More tests => 4;
 use Test::MockModule;
 use Test::Mojo;
 
@@ -168,6 +168,83 @@ subtest 'add() tests' => sub {
             hold_ids   => [ $hold_1->reserve_id, $hold_2->reserve_id ]
         }
         );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'delete() tests' => sub {
+    plan tests => 8;
+
+    $schema->storage->txn_begin;
+
+    my $authorized_patron = $builder->build_object(
+        {
+            class => 'Koha::Patrons',
+            value => { flags => 1 }
+        }
+    );
+    my $password = 'thePassword123';
+    $authorized_patron->set_password( { password => $password, skip_validation => 1 } );
+    my $auth_userid = $authorized_patron->userid;
+
+    my $unauthorized_patron = $builder->build_object(
+        {
+            class => 'Koha::Patrons',
+            value => { flags => 4 }
+        }
+    );
+    $unauthorized_patron->set_password( { password => $password, skip_validation => 1 } );
+    my $unauth_userid = $unauthorized_patron->userid;
+
+    my $hold_1 = $builder->build_object(
+        {
+            class => 'Koha::Holds',
+            value => { borrowernumber => $authorized_patron->id, hold_group_id => undef, found => undef }
+        }
+    );
+    my $hold_2 = $builder->build_object(
+        {
+            class => 'Koha::Holds',
+            value => { borrowernumber => $authorized_patron->id, hold_group_id => undef, found => undef }
+        }
+    );
+
+    my $hold_3 = $builder->build_object(
+        {
+            class => 'Koha::Holds',
+            value => { borrowernumber => $unauthorized_patron->borrowernumber, hold_group_id => undef, found => undef }
+        }
+    );
+    my $hold_4 = $builder->build_object(
+        {
+            class => 'Koha::Holds',
+            value => { borrowernumber => $unauthorized_patron->borrowernumber, hold_group_id => undef, found => undef }
+        }
+    );
+
+    my $unauth_hold_group = $unauthorized_patron->create_hold_group( [ $hold_3->reserve_id, $hold_4->reserve_id ] );
+    my $hold_group        = $authorized_patron->create_hold_group( [ $hold_1->reserve_id, $hold_2->reserve_id ] );
+
+    # Unauthorized attempt to delete
+    $t->delete_ok( "//$unauth_userid:$password@/api/v1/patrons/"
+            . $unauthorized_patron->borrowernumber
+            . "/hold_groups/"
+            . $unauth_hold_group->hold_group_id )->status_is(403);
+
+    # Attempt to delete a hold group of another patron
+    $t->delete_ok( "//$auth_userid:$password@/api/v1/patrons/"
+            . $authorized_patron->borrowernumber
+            . "/hold_groups/"
+            . $unauth_hold_group->hold_group_id )->status_is(404);
+
+    # Successful deletion
+    $t->delete_ok( "//$auth_userid:$password@/api/v1/patrons/"
+            . $authorized_patron->borrowernumber
+            . "/hold_groups/"
+            . $hold_group->hold_group_id )->status_is( 204, 'REST3.2.4' )->content_is( '', 'REST3.3.4' );
+
+    my $nonexistent_hold = Koha::HoldGroups->find( $hold_group->hold_group_id );
+    is( $nonexistent_hold, undef, 'The hold group does not exist after deletion' );
 
     $schema->storage->txn_rollback;
 };

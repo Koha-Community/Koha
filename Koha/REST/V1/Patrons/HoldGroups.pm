@@ -126,4 +126,32 @@ sub add {
     };
 }
 
+=head3 delete
+
+Controller method that handles removing a hold group.
+
+=cut
+
+sub delete {
+    my $c = shift->openapi->valid_input or return;
+
+    my $patron = Koha::Patrons->find( $c->param('patron_id') );
+
+    return $c->render_resource_not_found("Patron")
+        unless $patron;
+
+    return try {
+
+        my $hold_group = $patron->hold_groups->find( $c->param('hold_group_id') );
+
+        return $c->render_resource_not_found("Hold group")
+            unless $hold_group;
+
+        $hold_group->delete;
+        return $c->render_resource_deleted;
+    } catch {
+        $c->unhandled_exception($_);
+    };
+}
+
 1;
