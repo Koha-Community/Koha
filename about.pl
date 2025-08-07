@@ -49,6 +49,7 @@ use Koha::BiblioFrameworks;
 use Koha::Biblios;
 use Koha::Email;
 use Koha::I18N;
+use Koha::Notice::Templates;
 use Koha::Patron::Categories;
 use Koha::Patrons;
 use Koha::Caches;
@@ -612,6 +613,19 @@ if($tab eq 'sysinfo') {
     #BZ 28267: Warn administrators if there are database rows with a format other than 'DYNAMIC'
     {
         $template->param( warnDbRowFormat => C4::Installer->has_non_dynamic_row_format );
+    }
+
+    # NotifyPasswordChange
+    if ( C4::Context->preference('NotifyPasswordChange') ) {
+
+        $template->param( warnPassChangeNoticeMissing => 1 )
+            unless Koha::Notice::Templates->find_effective_template(
+            {
+                module                 => 'members',
+                code                   => 'PASSWORD_CHANGE',
+                message_transport_type => 'email',
+            }
+            );
     }
 
     $template->param(
