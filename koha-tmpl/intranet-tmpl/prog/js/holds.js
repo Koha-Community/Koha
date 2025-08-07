@@ -807,17 +807,18 @@ $(document).ready(function () {
             $(".holds_table .select_hold:checked").length
         );
         if (patron_page) {
-            if ($(".holds_table .select_hold:checked").length == 0) {
-                $(".cancel_selected_holds").prop("disabled", true);
-                $(".suspend_selected_holds").prop("disabled", true);
-                $(".group_selected_holds").prop("disabled", true);
-            } else {
-                if ($(".holds_table .select_hold:checked").length >= 2) {
-                    $(".group_selected_holds").prop("disabled", false);
-                }
-                $(".suspend_selected_holds").prop("disabled", false);
-                $(".cancel_selected_holds").prop("disabled", false);
-            }
+            var selectedHolds = $(".holds_table .select_hold:checked");
+            var hasSelectedHolds = selectedHolds.length > 0;
+            var hasMultipleSelectedHolds = selectedHolds.length >= 2;
+
+            $(".cancel_selected_holds, .suspend_selected_holds").prop(
+                "disabled",
+                !hasSelectedHolds
+            );
+            $(".group_selected_holds").prop(
+                "disabled",
+                !hasMultipleSelectedHolds
+            );
         }
     }
 
