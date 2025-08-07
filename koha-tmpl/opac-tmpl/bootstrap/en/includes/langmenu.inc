@@ -1,10 +1,12 @@
-<div id="header_langmenu">
+[% IF ( context == "footer" ) -%]
+    [% SET li_class = 'nav-item dropup' %]
+    [% SET menu_id = 'footer_langmenu' %]
+[% ELSE %]
+    [% SET li_class = 'nav-item dropdown' %]
+    [% SET menu_id = 'header_langmenu' %]
+[% END %]
+<div id="[% menu_id | html %]" class="langmenu">
     <ul class="navbar-nav">
-        [% IF ( context == "footer" ) -%]
-            [% SET li_class = 'nav-item dropup' %]
-        [% ELSE %]
-            [% SET li_class = 'nav-item dropdown' %]
-        [% END %]
         <li class="[% li_class | html %]">
             <a href="#" title="Switch languages" class="nav-link dropdown-toggle" id="langmenu" data-bs-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"
                 ><i class="fa fa-flag fa-fw fa-icon-[% context | html %]" aria-hidden="true"></i> <span class="langlabel">Languages</span> <b class="caret"></b
@@ -64,4 +66,4 @@
     </ul>
     <!-- /.navbar-nav -->
 </div>
-<!-- /#header_langmenu -->
+<!-- /#[menu_id] -->
