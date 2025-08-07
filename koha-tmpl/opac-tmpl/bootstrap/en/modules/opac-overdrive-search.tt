@@ -155,27 +155,6 @@
                     if ( prod.primaryCreator ) results.push( '<p>' + _("by") + ' ', prod.primaryCreator.name, '</p>' );
                     results.push( '<span class="results_summary mediatype"><span class="label">' + _("Type:") + ' </span>', prod.mediaType, '</span>' );
 
-                    if ( prod.starRating ) {
-                        var rating_value = Math.round( prod.starRating );
-                        results.push( '<div class="results_summary ratings">' );
-                        results.push( '<div class="br-wrapper br-theme-fontawesome-stars">');
-                        results.push( '<div class="br-widget br-readonly">');
-                        for ( var rating = 1; rating <= 5; rating++ ) {
-
-                            results.push( '<a href="#"' );
-                            if( rating == rating_value ){
-                                results.push( ' class="br-selected br-current"></a>' );
-                            } else if( rating_value > rating ){
-                                results.push( ' class="br-selected"></a>' );
-                            } else {
-                                results.push( '></a>');
-                            }
-                        }
-                        results.push( '</div>' );
-                        results.push( '</div>' );
-                        results.push( '</div>' );
-                    }
-
                     results.push( '</td>' );
 
                     results.push( '<td>' );
