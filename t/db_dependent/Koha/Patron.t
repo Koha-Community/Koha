@@ -1532,6 +1532,7 @@ subtest 'password expiration tests' => sub {
         my $date = dt_from_string();
         my $category =
             $builder->build_object( { class => 'Koha::Patron::Categories', value => { password_expiry_days => 10 } } );
+        Koha::Notice::Templates->search( { code => 'PASSWORD_CHANGE', module => 'members' } )->delete;
         my $patron = $builder->build_object(
             {
                 class => 'Koha::Patrons',
