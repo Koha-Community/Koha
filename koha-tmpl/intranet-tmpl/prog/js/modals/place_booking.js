@@ -437,178 +437,178 @@ $("#placeBookingModal").on("show.bs.modal", function (e) {
                 if (disableExists.length === 0) {
                     periodPicker.config.disable.push(
                         function dateDisable(date) {
-                        // set local copy of selectedDates
-                        let selectedDates = periodPicker.selectedDates;
+                            // set local copy of selectedDates
+                            let selectedDates = periodPicker.selectedDates;
 
-                        // set booked counter
-                        let booked = 0;
+                            // set booked counter
+                            let booked = 0;
 
-                        // reset the unavailable items array
-                        let unavailable_items = [];
+                            // reset the unavailable items array
+                            let unavailable_items = [];
 
-                        // reset the biblio level bookings array
-                        let biblio_bookings = [];
+                            // reset the biblio level bookings array
+                            let biblio_bookings = [];
 
-                        // disable dates before selected date
-                        if (
-                            !selectedDates[1] &&
-                            selectedDates[0] &&
-                            selectedDates[0] > date
-                        ) {
-                            return true;
-                        }
-
-                        // iterate existing bookings
-                        for (booking of bookings) {
-                            // Skip if we're editing this booking
+                            // disable dates before selected date
                             if (
-                                booking_id &&
-                                booking_id == booking.booking_id
+                                !selectedDates[1] &&
+                                selectedDates[0] &&
+                                selectedDates[0] > date
                             ) {
-                                continue;
+                                return true;
                             }
 
-                            let start_date = flatpickr.parseDate(
-                                booking.start_date
-                            );
-                            let end_date = flatpickr.parseDate(
-                                booking.end_date
-                            );
-
-                            // patron has selected a start date (end date checks)
-                            if (selectedDates[0]) {
-                                // new booking start date is between existing booking start and end dates
+                            // iterate existing bookings
+                            for (booking of bookings) {
+                                // Skip if we're editing this booking
                                 if (
-                                    selectedDates[0] >= start_date &&
-                                    selectedDates[0] <= end_date
+                                    booking_id &&
+                                    booking_id == booking.booking_id
                                 ) {
-                                    if (booking.item_id) {
-                                        if (
-                                            unavailable_items.indexOf(
-                                                booking.item_id
-                                            ) === -1
-                                        ) {
-                                            unavailable_items.push(
-                                                booking.item_id
-                                            );
-                                        }
-                                    } else {
-                                        if (
-                                            biblio_bookings.indexOf(
-                                                booking.booking_id
-                                            ) === -1
-                                        ) {
-                                            biblio_bookings.push(
-                                                booking.booking_id
-                                            );
-                                        }
-                                    }
-                                }
-
-                                // new booking end date would be between existing booking start and end dates
-                                else if (
-                                    date >= start_date &&
-                                    date <= end_date
-                                ) {
-                                    if (booking.item_id) {
-                                        if (
-                                            unavailable_items.indexOf(
-                                                booking.item_id
-                                            ) === -1
-                                        ) {
-                                            unavailable_items.push(
-                                                booking.item_id
-                                            );
-                                        }
-                                    } else {
-                                        if (
-                                            biblio_bookings.indexOf(
-                                                booking.booking_id
-                                            ) === -1
-                                        ) {
-                                            biblio_bookings.push(
-                                                booking.booking_id
-                                            );
-                                        }
-                                    }
-                                }
-
-                                // new booking would span existing booking
-                                else if (
-                                    selectedDates[0] <= start_date &&
-                                    date >= end_date
-                                ) {
-                                    if (booking.item_id) {
-                                        if (
-                                            unavailable_items.indexOf(
-                                                booking.item_id
-                                            ) === -1
-                                        ) {
-                                            unavailable_items.push(
-                                                booking.item_id
-                                            );
-                                        }
-                                    } else {
-                                        if (
-                                            biblio_bookings.indexOf(
-                                                booking.booking_id
-                                            ) === -1
-                                        ) {
-                                            biblio_bookings.push(
-                                                booking.booking_id
-                                            );
-                                        }
-                                    }
-                                }
-
-                                // new booking would not conflict
-                                else {
                                     continue;
                                 }
 
-                                // check that there are available items
-                                // available = all bookable items - booked items - booked biblios
-                                let total_available =
-                                    bookable_items.length -
-                                    unavailable_items.length -
-                                    biblio_bookings.length;
-                                if (total_available === 0) {
-                                    return true;
-                                }
-                            }
+                                let start_date = flatpickr.parseDate(
+                                    booking.start_date
+                                );
+                                let end_date = flatpickr.parseDate(
+                                    booking.end_date
+                                );
 
-                            // patron has not yet selected a start date (start date checks)
+                                // patron has selected a start date (end date checks)
+                                if (selectedDates[0]) {
+                                    // new booking start date is between existing booking start and end dates
+                                    if (
+                                        selectedDates[0] >= start_date &&
+                                        selectedDates[0] <= end_date
+                                    ) {
+                                        if (booking.item_id) {
+                                            if (
+                                                unavailable_items.indexOf(
+                                                    booking.item_id
+                                                ) === -1
+                                            ) {
+                                                unavailable_items.push(
+                                                    booking.item_id
+                                                );
+                                            }
+                                        } else {
+                                            if (
+                                                biblio_bookings.indexOf(
+                                                    booking.booking_id
+                                                ) === -1
+                                            ) {
+                                                biblio_bookings.push(
+                                                    booking.booking_id
+                                                );
+                                            }
+                                        }
+                                    }
+
+                                    // new booking end date would be between existing booking start and end dates
+                                    else if (
+                                        date >= start_date &&
+                                        date <= end_date
+                                    ) {
+                                        if (booking.item_id) {
+                                            if (
+                                                unavailable_items.indexOf(
+                                                    booking.item_id
+                                                ) === -1
+                                            ) {
+                                                unavailable_items.push(
+                                                    booking.item_id
+                                                );
+                                            }
+                                        } else {
+                                            if (
+                                                biblio_bookings.indexOf(
+                                                    booking.booking_id
+                                                ) === -1
+                                            ) {
+                                                biblio_bookings.push(
+                                                    booking.booking_id
+                                                );
+                                            }
+                                        }
+                                    }
+
+                                    // new booking would span existing booking
+                                    else if (
+                                        selectedDates[0] <= start_date &&
+                                        date >= end_date
+                                    ) {
+                                        if (booking.item_id) {
+                                            if (
+                                                unavailable_items.indexOf(
+                                                    booking.item_id
+                                                ) === -1
+                                            ) {
+                                                unavailable_items.push(
+                                                    booking.item_id
+                                                );
+                                            }
+                                        } else {
+                                            if (
+                                                biblio_bookings.indexOf(
+                                                    booking.booking_id
+                                                ) === -1
+                                            ) {
+                                                biblio_bookings.push(
+                                                    booking.booking_id
+                                                );
+                                            }
+                                        }
+                                    }
+
+                                    // new booking would not conflict
+                                    else {
+                                        continue;
+                                    }
+
+                                    // check that there are available items
+                                    // available = all bookable items - booked items - booked biblios
+                                    let total_available =
+                                        bookable_items.length -
+                                        unavailable_items.length -
+                                        biblio_bookings.length;
+                                    if (total_available === 0) {
+                                        return true;
+                                    }
+                                }
+
+                                // patron has not yet selected a start date (start date checks)
                                 else if (
                                     date <= end_date &&
                                     date >= start_date
                                 ) {
-                                // same item, disable date
-                                if (
-                                    booking.item_id &&
-                                    booking.item_id == booking_item_id
-                                ) {
-                                    return true;
-                                }
+                                    // same item, disable date
+                                    if (
+                                        booking.item_id &&
+                                        booking.item_id == booking_item_id
+                                    ) {
+                                        return true;
+                                    }
 
-                                // count all clashes, both item and biblio level
-                                booked++;
-                                if (booked == bookable) {
-                                    return true;
-                                }
+                                    // count all clashes, both item and biblio level
+                                    booked++;
+                                    if (booked == bookable) {
+                                        return true;
+                                    }
 
-                                // FIXME: The above is not intelligent enough to spot
-                                // cases where an item must be used for a biblio level booking
-                                // due to all other items being booking within the biblio level
-                                // booking period... we end up with a clash
-                                // To reproduce:
-                                // * One bib with two bookable items.
-                                // * Add item level booking
-                                // * Add biblio level booking that extends one day beyond the item level booking
-                                // * Try to book the item without an item level booking from the day before the biblio level
-                                //   booking is to be returned. Note this is a clash, the only item available for the biblio
-                                //   level booking is the item you just booked out overlapping the end date.
+                                    // FIXME: The above is not intelligent enough to spot
+                                    // cases where an item must be used for a biblio level booking
+                                    // due to all other items being booking within the biblio level
+                                    // booking period... we end up with a clash
+                                    // To reproduce:
+                                    // * One bib with two bookable items.
+                                    // * Add item level booking
+                                    // * Add biblio level booking that extends one day beyond the item level booking
+                                    // * Try to book the item without an item level booking from the day before the biblio level
+                                    //   booking is to be returned. Note this is a clash, the only item available for the biblio
+                                    //   level booking is the item you just booked out overlapping the end date.
+                                }
                             }
-                        }
                         }
                     );
                 }
@@ -732,130 +732,130 @@ $("#placeBookingModal").on("show.bs.modal", function (e) {
                 if (changeExists.length === 0) {
                     periodPicker.config.onChange.push(
                         function periodChange(
-                        selectedDates,
-                        dateStr,
-                        instance
-                    ) {
-                        // Start date selected
-                        if (selectedDates[0] && !selectedDates[1]) {
-                            const startDate = new Date(selectedDates[0]);
+                            selectedDates,
+                            dateStr,
+                            instance
+                        ) {
+                            // Start date selected
+                            if (selectedDates[0] && !selectedDates[1]) {
+                                const startDate = new Date(selectedDates[0]);
 
-                            // Custom format function to make specific dates bold
-                            boldDates = [new Date(startDate)];
-                            // Add issueLength days after the startDate
-                            const nextDate = new Date(startDate);
-                            nextDate.setDate(
-                                nextDate.getDate() + parseInt(issueLength)
-                            );
-                            boldDates.push(new Date(nextDate));
-
-                            // Add subsequent dates based on renewalsAllowed and renewalLength
-                            for (let i = 0; i < renewalsAllowed; i++) {
+                                // Custom format function to make specific dates bold
+                                boldDates = [new Date(startDate)];
+                                // Add issueLength days after the startDate
+                                const nextDate = new Date(startDate);
                                 nextDate.setDate(
-                                        nextDate.getDate() +
-                                            parseInt(renewalLength)
+                                    nextDate.getDate() + parseInt(issueLength)
                                 );
                                 boldDates.push(new Date(nextDate));
+
+                                // Add subsequent dates based on renewalsAllowed and renewalLength
+                                for (let i = 0; i < renewalsAllowed; i++) {
+                                    nextDate.setDate(
+                                        nextDate.getDate() +
+                                            parseInt(renewalLength)
+                                    );
+                                    boldDates.push(new Date(nextDate));
+                                }
+
+                                // Calculate the maximum date based on the selected start date
+                                let totalRenewalLength =
+                                    parseInt(renewalsAllowed) *
+                                    parseInt(renewalLength);
+                                let totalIssueLength =
+                                    parseInt(issueLength) +
+                                    parseInt(totalRenewalLength);
+
+                                const maxDate = new Date(startDate.getTime());
+                                maxDate.setDate(
+                                    maxDate.getDate() + totalIssueLength
+                                );
+
+                                // Update the maxDate option of the flatpickr instance
+                                instance.set("maxDate", maxDate);
                             }
+                            // Range set, update hidden fields and set available items
+                            else if (selectedDates[0] && selectedDates[1]) {
+                                // set form fields from picker
+                                let picker_start = dayjs(selectedDates[0]);
+                                let picker_end = dayjs(selectedDates[1]).endOf(
+                                    "day"
+                                );
+                                $("#booking_start_date").val(
+                                    picker_start.toISOString()
+                                );
+                                $("#booking_end_date").val(
+                                    picker_end.toISOString()
+                                );
 
-                            // Calculate the maximum date based on the selected start date
-                            let totalRenewalLength =
-                                parseInt(renewalsAllowed) *
-                                parseInt(renewalLength);
-                            let totalIssueLength =
-                                parseInt(issueLength) +
-                                parseInt(totalRenewalLength);
-
-                            const maxDate = new Date(startDate.getTime());
-                            maxDate.setDate(
-                                maxDate.getDate() + totalIssueLength
-                            );
-
-                            // Update the maxDate option of the flatpickr instance
-                            instance.set("maxDate", maxDate);
-                        }
-                        // Range set, update hidden fields and set available items
-                        else if (selectedDates[0] && selectedDates[1]) {
-                            // set form fields from picker
-                            let picker_start = dayjs(selectedDates[0]);
-                            let picker_end = dayjs(selectedDates[1]).endOf(
-                                "day"
-                            );
-                            $("#booking_start_date").val(
-                                picker_start.toISOString()
-                            );
-                            $("#booking_end_date").val(
-                                picker_end.toISOString()
-                            );
-
-                            // set available items in select2
+                                // set available items in select2
                                 let booked_items = bookings.filter(
                                     function (booking) {
-                                let start_date = flatpickr.parseDate(
-                                    booking.start_date
-                                );
-                                let end_date = flatpickr.parseDate(
-                                    booking.end_date
-                                );
-                                // This booking ends before the start of the new booking
-                                if (end_date <= selectedDates[0]) {
-                                    return false;
-                                }
-                                // This booking starts after then end of the new booking
-                                if (start_date >= selectedDates[1]) {
-                                    return false;
-                                }
-                                // This booking overlaps
-                                return true;
+                                        let start_date = flatpickr.parseDate(
+                                            booking.start_date
+                                        );
+                                        let end_date = flatpickr.parseDate(
+                                            booking.end_date
+                                        );
+                                        // This booking ends before the start of the new booking
+                                        if (end_date <= selectedDates[0]) {
+                                            return false;
+                                        }
+                                        // This booking starts after then end of the new booking
+                                        if (start_date >= selectedDates[1]) {
+                                            return false;
+                                        }
+                                        // This booking overlaps
+                                        return true;
                                     }
                                 );
                                 $("#booking_item_id > option").each(
                                     function () {
-                                let option = $(this);
-                                if (
-                                    booking_item_id &&
-                                    booking_item_id == option.val()
-                                ) {
-                                    option.prop("disabled", false);
-                                } else if (
+                                        let option = $(this);
+                                        if (
+                                            booking_item_id &&
+                                            booking_item_id == option.val()
+                                        ) {
+                                            option.prop("disabled", false);
+                                        } else if (
                                             booked_items.some(
                                                 function (booked_item) {
-                                        return (
+                                                    return (
                                                         option.val() ==
                                                         booked_item.item_id
-                                        );
+                                                    );
                                                 }
                                             )
-                                ) {
+                                        ) {
                                             option.attr(
                                                 "data-available",
                                                 false
                                             );
-                                    option.prop("disabled", true);
-                                } else {
-                                    option.attr("data-available", true);
-                                    if (option.data("pickup")) {
-                                        option.prop("disabled", false);
-                                    }
-                                }
+                                            option.prop("disabled", true);
+                                        } else {
+                                            option.attr("data-available", true);
+                                            if (option.data("pickup")) {
+                                                option.prop("disabled", false);
+                                            }
+                                        }
                                     }
                                 );
-                            $("#booking_item_id").trigger("change.select2");
-                        }
-                        // Range not set, reset field options and flatPickr state
-                        else {
-                            boldDates = [];
-                            instance.set("maxDate", null);
+                                $("#booking_item_id").trigger("change.select2");
+                            }
+                            // Range not set, reset field options and flatPickr state
+                            else {
+                                boldDates = [];
+                                instance.set("maxDate", null);
                                 $("#booking_item_id > option").each(
                                     function () {
-                                let option = $(this);
-                                if (option.data("pickup")) {
-                                    option.prop("disabled", false);
-                                }
+                                        let option = $(this);
+                                        if (option.data("pickup")) {
+                                            option.prop("disabled", false);
+                                        }
                                     }
                                 );
-                            $("#booking_item_id").trigger("change.select2");
-                        }
+                                $("#booking_item_id").trigger("change.select2");
+                            }
                         }
                     );
                 }
@@ -895,29 +895,29 @@ $("#placeBookingModal").on("show.bs.modal", function (e) {
                 if (dayCreateExists.length === 0) {
                     periodPicker.config.onDayCreate.push(
                         function dayCreate(dObj, dStr, instance, dayElem) {
-                        const currentDate = dayElem.dateObj;
-                        const dateString = currentDate
-                            .toISOString()
-                            .split("T")[0];
+                            const currentDate = dayElem.dateObj;
+                            const dateString = currentDate
+                                .toISOString()
+                                .split("T")[0];
 
-                        const isBold = boldDates.some(
-                            boldDate =>
-                                boldDate.getTime() === currentDate.getTime()
-                        );
-                        if (isBold) {
-                            dayElem.classList.add("title");
-                        }
+                            const isBold = boldDates.some(
+                                boldDate =>
+                                    boldDate.getTime() === currentDate.getTime()
+                            );
+                            if (isBold) {
+                                dayElem.classList.add("title");
+                            }
 
-                        if (bookingsByDate[dateString]) {
-                            const dots = document.createElement("span");
-                            dots.className = "event-dots";
-                            dayElem.appendChild(dots);
-                            bookingsByDate[dateString].forEach(item => {
-                                const dot = document.createElement("span");
-                                dot.className = "event item_" + item;
-                                dots.appendChild(dot);
-                            });
-                        }
+                            if (bookingsByDate[dateString]) {
+                                const dots = document.createElement("span");
+                                dots.className = "event-dots";
+                                dayElem.appendChild(dots);
+                                bookingsByDate[dateString].forEach(item => {
+                                    const dot = document.createElement("span");
+                                    dot.className = "event item_" + item;
+                                    dots.appendChild(dot);
+                                });
+                            }
                         }
                     );
                 }

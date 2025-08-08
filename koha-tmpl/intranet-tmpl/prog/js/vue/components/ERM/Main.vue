@@ -104,7 +104,7 @@ export default {
 
             let av_cat_array = Object.keys(authorised_values).map(
                 function (av_cat) {
-                return '"' + authorised_values[av_cat] + '"'
+                    return '"' + authorised_values[av_cat] + '"'
                 }
             )
 
