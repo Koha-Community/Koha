@@ -36,7 +36,11 @@
 [% INCLUDE 'masthead.inc' %]
 
 [% BLOCK library_description %]
-    <div property="description"> [% IF OpacLibraryInfo %][% OpacLibraryInfo.content | $raw %][% END %] </div>
+    <div property="description">
+        [% FOREACH info IN OpacLibraryInfo %]
+            <div id="library_description_[% info.additional_content_id | $raw %]" class="library-description">[% info.content | $raw %]</div>
+        [% END %]
+    </div>
 [% END %]
 
 [% BLOCK library_info %]
