@@ -170,6 +170,21 @@ sub manager {
     return Koha::Patron->_new_from_dbic($manager_rs);
 }
 
+=head3 accepter
+
+my $accepter = $suggestion->accepter;
+
+Returns the accepter of the suggestion (Koha::Patron for acceptedby field)
+
+=cut
+
+sub accepter {
+    my ($self) = @_;
+    my $manager_rs = $self->_result->acceptedby;
+    return unless $manager_rs;
+    return Koha::Patron->_new_from_dbic($manager_rs);
+}
+
 =head3 rejecter
 
 my $rejecter = $suggestion->rejecter;

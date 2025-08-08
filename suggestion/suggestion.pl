@@ -37,24 +37,6 @@ use Koha::Token;
 
 use URI::Escape qw( uri_escape );
 
-sub Init {
-    my $suggestion = shift @_;
-
-    # "Managed by" is used only when a suggestion is being edited (not when created)
-    if ( $suggestion->{'suggesteddate'} eq "" ) {
-
-        # new suggestion
-        $suggestion->{suggesteddate} = dt_from_string;
-        $suggestion->{'suggestedby'} = C4::Context->userenv->{"number"} unless ( $suggestion->{'suggestedby'} );
-    } else {
-
-        # editing of an existing suggestion
-        $suggestion->{manageddate} = dt_from_string;
-        $suggestion->{'managedby'} = C4::Context->userenv->{"number"} unless ( $suggestion->{'managedby'} );
-    }
-    $suggestion->{'branchcode'} = C4::Context->userenv->{"branch"} unless ( $suggestion->{'branchcode'} );
-}
-
 sub GetCriteriumDesc {
     my ( $criteriumvalue, $displayby ) = @_;
     if ( $displayby =~ /status/i ) {
@@ -118,6 +100,11 @@ if ( !$valid_displayby{$displayby} ) {
 my $reasonsloop = GetAuthorisedValues("SUGGEST");
 
 my $suggestion_ref = { $input->Vars };
+my $stored_suggestion;
+unless ( $op eq "cud-update_status" ) {
+    $stored_suggestion = Koha::Suggestions->find( $input->param('suggestionid') ) if $input->param('suggestionid');
+}
+
 delete $suggestion_ref->{$_} for qw(csrf_token suggestion_itemtype suggestion_managedby table_1_length);
 
 # get only the columns of Suggestion
@@ -134,6 +121,7 @@ foreach my $key ( keys %$suggestion_ref ) {
     delete $suggestion_ref->{$key} if ( !$suggestion_ref->{$key} && ( $op eq 'else' ) );
     delete $suggestion_ref->{$key} if $key =~ m{^DataTables_acqui_suggestions_suggestions};
 }
+
 delete $suggestion_only->{branchcode} if $suggestion_only->{branchcode} eq '__ANY__';
 delete $suggestion_only->{budgetid}   if $suggestion_only->{budgetid} eq '__ANY__';
 
@@ -183,10 +171,6 @@ if ( $op =~ /cud-save/ ) {
         $template->param(
             messages => \@messages,
         );
-        delete $suggestion_ref->{suggesteddate};
-        delete $suggestion_ref->{manageddate};
-        delete $suggestion_ref->{managedby};
-        Init($suggestion_ref);
     } elsif ( !$suggestion_only->{suggestionid}
         && ( my ( $duplicatebiblionumber, $duplicatetitle ) = FindDuplicate($biblio) )
         && !$save_confirmed )
@@ -197,9 +181,6 @@ if ( $op =~ /cud-save/ ) {
             messages     => \@messages,
             need_confirm => 1
         );
-        delete $suggestion_ref->{suggesteddate};
-        delete $suggestion_ref->{manageddate};
-        Init($suggestion_ref);
         $op = 'save';
     } else {
 
@@ -296,23 +277,27 @@ if ( $op =~ /cud-save/ ) {
     }
 } elsif ( $op eq 'add_form' ) {
 
-    #Adds suggestion
-    Init($suggestion_ref);
+    $template->param(
+        default_suggester     => $librarian,
+        default_suggesteddate => dt_from_string,
+        default_branch        => C4::Context->userenv->{"branch"},
+    );
     $op = 'save';
 } elsif ( $op eq 'edit_form' ) {
 
     #Edit suggestion
-    $suggestion_ref = Koha::Suggestions->find( $suggestion_ref->{suggestionid} )->unblessed();
-    $suggestion_ref->{reasonsloop} = $reasonsloop;
     my $other_reason = 1;
     foreach my $reason ( @{$reasonsloop} ) {
-        if ( $suggestion_ref->{reason} eq $reason->{lib} ) {
+        if ( $stored_suggestion->reason eq $reason->{lib} ) {
             $other_reason = 0;
         }
     }
-    $other_reason = 0 unless $suggestion_ref->{reason};
-    $template->param( other_reason => $other_reason );
-    Init($suggestion_ref);
+    $other_reason = 0 unless $stored_suggestion->reason;
+    $template->param(
+        other_reason        => $other_reason,
+        default_manageddate => dt_from_string,
+        default_branch      => C4::Context->userenv->{"branch"},
+    );
     $op = 'save';
 } elsif ( $op eq "cud-update_status" ) {
     my $suggestion;
@@ -394,11 +379,6 @@ if ( $op =~ /cud-save/ ) {
         push @messages, { type => 'error', code => 'no_manage_permission' };
         $template->param( messages => \@messages, );
     }
-} elsif ( $op eq 'show' ) {
-    $suggestion_ref = Koha::Suggestions->find( $suggestion_ref->{suggestionid} )->unblessed();
-    my $budget = GetBudget $$suggestion_ref{budgetid};
-    $$suggestion_ref{budgetname} = $$budget{budget_name};
-    Init($suggestion_ref);
 }
 
 if ( $op eq 'else' ) {
@@ -518,7 +498,6 @@ if ( $op eq 'else' ) {
             {
             "suggestiontype"      => $criteriumvalue                                 || "suggest",
             "suggestiontypelabel" => GetCriteriumDesc( $criteriumvalue, $displayby ) || "",
-            'reasonsloop'         => $reasonsloop,
             'search_params'       => $criterium_search_params,
             'tab_count'           => $tab_counts->{$criteriumvalue},
             }
@@ -534,13 +513,11 @@ if ( $op eq 'else' ) {
     );
 }
 
-$template->param( "${_}_patron" => scalar Koha::Patrons->find( $suggestion_ref->{$_} ) )
-    for qw(managedby suggestedby acceptedby lastmodificationby);
-
 $template->param(
-    %$suggestion_ref,
+    suggestion      => $stored_suggestion,
     filter_archived => $filter_archived,
     "op"            => $op,
+    reasonsloop     => $reasonsloop,
 );
 
 if ( defined($returnsuggested) and $returnsuggested ne "no_one" ) {
@@ -584,7 +561,7 @@ if ( $suggestion_ref->{STATUS} ) {
 my $currencies = Koha::Acquisition::Currencies->search;
 $template->param(
     currencies => $currencies,
-    suggestion => $suggestion_ref,
+    suggestion => $stored_suggestion,
     price      => sprintf( "%.2f", $$suggestion_ref{'price'} || 0 ),
     total      => sprintf( "%.2f", $$suggestion_ref{'total'} || 0 ),
 );
