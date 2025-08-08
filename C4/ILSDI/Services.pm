@@ -218,7 +218,7 @@ sub GetRecords {
 
         my $biblioitem = $biblio->biblioitem->unblessed;
 
-        my $record = $biblio->metadata_record( { embed_items => 1 } );
+        my $record = $biblio->metadata_record( { embed_items => 1, interface => 'opac' } );
         if ($record) {
             $biblioitem->{marcxml} = $record->as_xml_record( C4::Context->preference('marcflavour') );
         }
