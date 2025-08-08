@@ -54,7 +54,7 @@ if ( !$registers->count ) {
 }
 
 my $op = $input->param('op') // '';
-if ( $op eq 'cashup' ) {
+if ( $op eq 'cud-cashup' ) {
     if ( $logged_in_user->has_permission( { cash_management => 'cashup' } ) ) {
         my $registerid = $input->param('registerid');
         if ($registerid) {
@@ -75,6 +75,10 @@ if ( $op eq 'cashup' ) {
                 );
             }
         }
+
+        # Redirect to prevent duplicate submissions (POST/REDIRECT/GET pattern)
+        print $input->redirect("/cgi-bin/koha/pos/registers.pl");
+        exit;
     } else {
         $template->param( error_cashup_permission => 1 );
     }

@@ -366,23 +366,30 @@
 
 <!-- Confirm cashup modal -->
 <div class="modal" id="confirmCashupModal" tabindex="-1" role="dialog" aria-labelledby="confirmCashupLabel">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h1 class="modal-title" id="confirmCashupLabel">Confirm cashup of <em>[% register.description | html %]</em></h1>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+    <form id="cashup_form" method="post" enctype="multipart/form-data">
+        [% INCLUDE 'csrf-token.inc' %]
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title" id="confirmCashupLabel">Confirm cashup of <em>[% register.description | html %]</em></h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    Please confirm that you have removed [% accountlines.total( payment_type => [ 'CASH', 'SIP00' ]) * -1 | $Price %] from the cash register and left a float of [% register.starting_float | $Price %].
+                </div>
+                <!-- /.modal-body -->
+                <div class="modal-footer">
+                    <input type="hidden" name="registerid" value="[% register.id | html %]" />
+                    <input type="hidden" name="op" value="cud-cashup" />
+                    <button type="submit" class="btn btn-primary" id="pos_cashup_confirm">Confirm</button>
+                    <button type="button" class="btn btn-default" data-bs-dismiss="modal">Cancel</button>
+                </div>
+                <!-- /.modal-footer -->
             </div>
-            <div class="modal-body"> Please confirm that you have removed [% accountlines.total( payment_type => [ 'CASH', 'SIP00' ]) * -1 | $Price %] from the cash register and left a float of [% register.starting_float | $Price %]. </div>
-            <!-- /.modal-body -->
-            <div class="modal-footer">
-                <a href="/cgi-bin/koha/pos/register.pl?op=cashup" class="btn btn-primary" id="pos_cashup_confirm">Confirm</a>
-                <button type="button" class="btn btn-default" data-bs-dismiss="modal">Cancel</button>
-            </div>
-            <!-- /.modal-footer -->
+            <!-- /.modal-content -->
         </div>
-        <!-- /.modal-content -->
-    </div>
-    <!-- /.modal-dialog -->
+        <!-- /.modal-dialog -->
+    </form>
 </div>
 <!-- /#confirmCashupModal -->
 
