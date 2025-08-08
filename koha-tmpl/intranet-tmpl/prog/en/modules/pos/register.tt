@@ -286,8 +286,10 @@
         </div>
     </div><!-- /.row -->
 
-    <!-- Confirm cashup modal -->
-    <div class="modal" id="confirmCashupModal" tabindex="-1" role="dialog" aria-labelledby="confirmCashupLabel">
+<!-- Confirm cashup modal -->
+<div class="modal" id="confirmCashupModal" tabindex="-1" role="dialog" aria-labelledby="confirmCashupLabel">
+    <form id="cashup_form" method="post" enctype="multipart/form-data">
+        [% INCLUDE 'csrf-token.inc' %]
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -296,14 +298,22 @@
                 </div>
                 <div class="modal-body">
                     Please confirm that you have removed [% accountlines.total( payment_type => [ 'CASH', 'SIP00' ]) * -1 | $Price %] from the cash register and left a float of [% register.starting_float | $Price %].
-                </div> <!-- /.modal-body -->
+                </div>
+                <!-- /.modal-body -->
                 <div class="modal-footer">
-                    <a href="/cgi-bin/koha/pos/register.pl?op=cashup" class="btn btn-primary" id="pos_cashup_confirm">Confirm</a>
+                    <input type="hidden" name="registerid" value="[% register.id | html %]" />
+                    <input type="hidden" name="op" value="cud-cashup" />
+                    <button type="submit" class="btn btn-primary" id="pos_cashup_confirm">Confirm</button>
                     <button type="button" class="btn btn-default" data-bs-dismiss="modal">Cancel</button>
-                </div> <!-- /.modal-footer -->
-            </div> <!-- /.modal-content -->
-        </div> <!-- /.modal-dialog -->
-    </div> <!-- /#confirmCashupModal -->
+                </div>
+                <!-- /.modal-footer -->
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </form>
+</div>
+<!-- /#confirmCashupModal -->
 
     <!-- Issue refund modal -->
     <div class="modal" id="issueRefundModal" tabindex="-1" role="dialog" aria-labelledby="issueRefundLabel">
