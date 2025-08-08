@@ -149,53 +149,62 @@
 
 <!-- Confirm cashup modal -->
 <div class="modal" id="confirmCashupModal" tabindex="-1" role="dialog" aria-labelledby="confirmCashupLabel">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h1 class="modal-title" id="confirmCashupLabel"
-                    >Confirm cashup of <em><span id="registerc"></span></em
-                ></h1>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+    <form id="cashup_individual_form" method="post" enctype="multipart/form-data">
+        [% INCLUDE 'csrf-token.inc' %]
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title" id="confirmCashupLabel"
+                        >Confirm cashup of <em><span id="registerc"></span></em
+                    ></h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body"> Please confirm that you have removed <span id="cashc"></span> from the cash register and left a float of <span id="floatc"></span>. </div>
+                <!-- /.modal-body -->
+                <div class="modal-footer">
+                    <input type="hidden" name="registerid" id="cashup_registerid" value="" />
+                    <input type="hidden" name="op" value="cud-cashup" />
+                    <button type="submit" class="btn btn-primary" id="cashup_confirm">Confirm</button>
+                    <button type="button" class="btn btn-default" data-bs-dismiss="modal">Cancel</button>
+                </div>
+                <!-- /.modal-footer -->
             </div>
-            <div class="modal-body"> Please confirm that you have removed <span id="cashc"></span> from the cash register and left a float of <span id="floatc"></span>. </div>
-            <!-- /.modal-body -->
-            <div class="modal-footer">
-                <a id="cashup_confirm" href="" class="btn btn-primary">Confirm</a>
-                <button type="button" class="btn btn-default" data-bs-dismiss="modal">Cancel</button>
-            </div>
-            <!-- /.modal-footer -->
+            <!-- /.modal-content -->
         </div>
-        <!-- /.modal-content -->
-    </div>
-    <!-- /.modal-dialog -->
+        <!-- /.modal-dialog -->
+    </form>
 </div>
 <!-- /#confirmCashupModal -->
 
 <!-- Confirm cashupall modal -->
 <div class="modal" id="confirmCashupAllModal" tabindex="-1" role="dialog" aria-labelledby="confirmCashupAllLabel">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h1 class="modal-title" id="confirmCashupAllLabel">Confirm cashup of <em>all</em> cash registers</h1>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+    <form id="cashup_all_form" method="post" enctype="multipart/form-data">
+        [% INCLUDE 'csrf-token.inc' %]
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title" id="confirmCashupAllLabel">Confirm cashup of <em>all</em> cash registers</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p>Please confirm that you have received [% bankable | $Price %] to cashup.</p>
+                    <ul>
+                        <li>Total income (cash): [% ctotal | $Price %] ([% cctotal | $Price %])</li>
+                        <li>Total outgoing (cash): [% dtotal | $Price %] ([% cdtotal | $Price %])</li>
+                    </ul>
+                </div>
+                <!-- /.modal-body -->
+                <div class="modal-footer">
+                    <input type="hidden" name="op" value="cud-cashup" />
+                    <button type="submit" class="btn btn-primary" id="cashup_all_confirm">Confirm</button>
+                    <button type="button" class="btn btn-default" data-bs-dismiss="modal">Cancel</button>
+                </div>
+                <!-- /.modal-footer -->
             </div>
-            <div class="modal-body">
-                <p>Please confirm that you have received [% bankable | $Price %] to cashup.</p>
-                <ul>
-                    <li>Total income (cash): [% ctotal | $Price %] ([% cctotal | $Price %])</li>
-                    <li>Total outgoing (cash): [% dtotal | $Price %] ([% cdtotal | $Price %])</li>
-                </ul>
-            </div>
-            <!-- /.modal-body -->
-            <div class="modal-footer">
-                <a id="cashup_all_confirm" href="/cgi-bin/koha/pos/registers.pl?op=cashup" class="btn btn-primary">Confirm</a>
-                <button type="button" class="btn btn-default" data-bs-dismiss="modal">Cancel</button>
-            </div>
-            <!-- /.modal-footer -->
+            <!-- /.modal-content -->
         </div>
-        <!-- /.modal-content -->
-    </div>
-    <!-- /.modal-dialog -->
+        <!-- /.modal-dialog -->
+    </form>
 </div>
 <!-- /#confirmCashupAllModal -->
 
@@ -229,7 +238,7 @@
                var rfloat = button.data('float');
                $('#floatc').text(rfloat);
                var rid = button.data('registerid');
-               $('#cashup_confirm').attr("href", '/cgi-bin/koha/pos/registers.pl?op=cashup&registerid='+rid);
+               $('#cashup_registerid').val(rid);
             });
         });
     </script>
