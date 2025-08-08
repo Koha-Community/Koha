@@ -377,7 +377,7 @@ sub to_api_mapping {
 
     $library->opac_info({ lang => $lang });
 
-Returns additional contents block OpacLibraryInfo for $lang or 'default'.
+Returns all additional contents blocks OpacLibraryInfo by library and $lang (or 'default').
 
 Note: This replaces the former branches.opac_info column.
 
@@ -385,7 +385,7 @@ Note: This replaces the former branches.opac_info column.
 
 sub opac_info {
     my ( $self, $params ) = @_;
-    return Koha::AdditionalContents->find_best_match(
+    return Koha::AdditionalContents->search_for_display(
         {
             category   => 'html_customizations',
             location   => 'OpacLibraryInfo',
