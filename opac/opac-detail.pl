@@ -718,8 +718,8 @@ if ( not $viewallitems and $items->count > $max_items_to_display ) {
         $library_info->{ $item->holdingbranch } = $opac_info_holding;
         $opac_info_home = $library_info->{ $item->homebranch } // $item->home_branch->opac_info( { lang => $lang } );
         $library_info->{ $item->homebranch } = $opac_info_home;
-        $item_info->{holding_library_info}   = $opac_info_holding->content if $opac_info_holding;
-        $item_info->{home_library_info}      = $opac_info_home->content    if $opac_info_home;
+        $item_info->{holding_library_info}   = $opac_info_holding if $opac_info_holding;
+        $item_info->{home_library_info}      = $opac_info_home    if $opac_info_home;
 
         # We only need to check if we haven't determined holds can be placed
         # and if we don't have patron, we have already decided

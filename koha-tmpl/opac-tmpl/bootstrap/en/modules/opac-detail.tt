@@ -1360,10 +1360,9 @@
                         <td class="location" property="seller" data-order="[% holding_library_name | html %]">
                             <link property="itemOffered" href="#record" />
                             <link property="businessFunction" href="http://purl.org/goodrelations/v1#LeaseOut" />
-
                             [% IF ( ITEM_RESULT.holding_library_info ) %]
-                                <a href="[% holding_library_url | url %]" class="library_info" data-info="[% ITEM_RESULT.holding_library_info | html %]" data-name="[% holding_library_name | html %]">
-                                    <i class="fa fa-info-circle" aria-hidden="true"></i> [% holding_library_name | html %]
+                                <a href="[% holding_library_url | url %]" class="library_info" data-index="[% loop.index | html %]" data-name="[% holding_library_name | html %]">
+                                    <i class="fa fa-info-circle" aria-hidden="true"></i> [% holding_library_name | html %][% my_library_info | html %]
                                 </a>
                             [% ELSIF holding_library_url %]
                                 <a href="[% holding_library_url | url %]"> [% holding_library_name | html %] </a>
@@ -1389,7 +1388,7 @@
                             <link property="businessFunction" href="http://purl.org/goodrelations/v1#LeaseOut" />
 
                             [% IF ( ITEM_RESULT.home_library_info ) %]
-                                <a href="[% home_library_url | url %]" class="library_info" data-info="[% ITEM_RESULT.home_library_info | html %]" data-name="[% home_library_name | html %]">
+                                <a href="[% home_library_url | url %]" class="library_info" data-index="[% loop.index | html %]" data-name="[% home_library_name | html %]">
                                     <i class="fa fa-info-circle" aria-hidden="true"></i> [% home_library_name | html %]
                                 </a>
                             [% ELSIF home_library_url %]
@@ -1604,6 +1603,16 @@
             [% END %]
         </tbody>
     </table>
+
+    [% FOREACH ITEM_RESULT IN items %]
+        [% IF ( ITEM_RESULT.holding_library_info ) %]
+            <div style="display:none" id="library_info_[% loop.index | html %]">
+                [% FOREACH info IN ITEM_RESULT.holding_library_info %]
+                    <div id="library_description_[% info.additional_content_id | $raw %]" class="library-description">[% info.content | $raw %]</div>
+                [% END %]
+            </div>
+        [% END %]
+    [% END %]
 [% END %][%# end of items_table block %]
 
 [% IF Koha.Preference('OpacCatalogConcerns') %]
@@ -2189,41 +2198,18 @@
             $(".library_info").on("click", function(e){
                 e.preventDefault();
                 var library_name = $(this).data("name");
-                var opac_info = $(this).data("info");
+                var index = $(this).data("index");
                 var url = $(this).attr("href");
-                if( 1 ) {
-                    $("#libraryInfoModalLabel").html( library_name );
-                    $("#libraryInfo").html( opac_info );
-                    if( url ){
-                        $("#libraryInfoLink").attr("href", url );
-                        $("#libraryInfoLink").show();
-                    } else {
-                        $("#libraryInfoLink").hide();
-                    }
-                    $("#libraryInfoModal").modal("show");
-                } else { // FIXME Temporary disabled: see BZ 29144
-                    $.ajax({
-                        url: "/api/v1/public/libraries/" + branchcode,
-                        type: 'GET',
-                        dataType: 'json',
-                        success: function(result) {
-                            $("#libraryInfoModalLabel").html( result.name );
-                            $("#libraryInfo").html( opac_info );
-                            if( result.url ){
-                                $("#libraryInfoLink").attr("href", result.url );
-                                $("#libraryInfoLink").show();
-                            } else {
-                                $("#libraryInfoLink").hide();
-                            }
-                            $("#libraryInfoModal").modal("show");
-                        },
-                        error: function(xhr, status, error) {
-                            if( url ){
-                                location.href = url;
-                            }
-                        }
-                    });
+                let library_info = $("#library_info_" + index).html();
+                $("#libraryInfoModalLabel").html( library_name );
+                $("#libraryInfo").html( library_info );
+                if( url ){
+                    $("#libraryInfoLink").attr("href", url );
+                    $("#libraryInfoLink").show();
+                } else {
+                    $("#libraryInfoLink").hide();
                 }
+                $("#libraryInfoModal").modal("show");
             });
             $("#libraryInfoModal").on("hide.bs.modal", function(){
                 $("#libraryInfoModalLabel, #libraryInfo").html("");

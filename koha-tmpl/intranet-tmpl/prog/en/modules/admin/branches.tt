@@ -29,6 +29,18 @@
 [% INCLUDE 'doc-head-close.inc' %]
 [% Asset.css("lib/codemirror/codemirror.min.css") | $raw %]
 [% Asset.css("lib/codemirror/lint.min.css") | $raw %]
+[% FILTER collapse %]
+    <style>
+        .opac-library-info {
+            border: 1px solid #dedede;
+            border-radius: 2px;
+            padding: 0.375rem 0.75rem;
+        }
+        .opac-library-info + .opac-library-info {
+            margin-top: 0.5rem;
+        }
+    </style>
+[% END %]
 </head>
 
 <body id="admin_branches" class="admin">
@@ -330,10 +342,20 @@
                     <div class="fg-input">
                         [% IF OpacLibraryInfo %]
                             <!-- opac_info -->
-                            <div>[% OpacLibraryInfo.content | $raw %]</div>
-                            <a class="btn btn-link" href="/cgi-bin/koha/tools/additional-contents.pl?category=html_customizations&op=add_form&id=[% OpacLibraryInfo.id | $raw %]&editmode=wysiwyg" target="_blank">Edit HTML content</a>
+                            [% FOREACH info IN OpacLibraryInfo %]
+                                [% IF library.branchcode == info.branchcode %]
+                                    <div id="opac_library_info_[% info.additional_content_id | $raw %]" class="opac-library-info">[% info.content | $raw %]</div>
+                                    [% IF ( CAN_user_tools_edit_additional_contents ) %]
+                                        <a class="btn btn-link" href="/cgi-bin/koha/tools/additional-contents.pl?category=html_customizations&op=add_form&id=[% info.additional_content_id | $raw %]&editmode=wysiwyg" target="_blank">
+                                            <i class="fa fa-pencil"></i> Edit HTML content
+                                        </a>
+                                    [% END %]
+                                [% END %]
+                            [% END %]
                         [% ELSE %]
-                            <a class="btn btn-link" href="/cgi-bin/koha/tools/additional-contents.pl?category=html_customizations&op=add_form&editmode=wysiwyg" target="_blank">Add HTML content</a>
+                            [% IF ( CAN_user_tools_edit_additional_contents ) %]
+                                <a class="btn btn-link" href="/cgi-bin/koha/tools/additional-contents.pl?category=html_customizations&op=add_form&editmode=wysiwyg" target="_blank"> <i class="fa fa-plus"></i> Add HTML content </a>
+                            [% END %]
                         [% END %]
                     </div>
                 </div>
@@ -741,7 +763,23 @@
             <div class="row page-section">
                 <div class="col-sm-12">
                     <h2>OPAC information</h2>
-                    <div>[% OpacLibraryInfo.content | $raw %]</div>
+                    [% IF OpacLibraryInfo %]
+                        <!-- opac_info -->
+                        [% FOREACH info IN OpacLibraryInfo %]
+                            [% IF library.branchcode == info.branchcode %]
+                                <div id="opac_library_info_[% info.additional_content_id | $raw %]" class="opac-library-info">[% info.content | $raw %]</div>
+                                [% IF ( CAN_user_tools_edit_additional_contents ) %]
+                                    <a class="btn btn-link" href="/cgi-bin/koha/tools/additional-contents.pl?category=html_customizations&op=add_form&id=[% info.additional_content_id | $raw %]&editmode=wysiwyg" target="_blank">
+                                        <i class="fa fa-pencil"></i> Edit HTML content
+                                    </a>
+                                [% END %]
+                            [% END %]
+                        [% END %]
+                    [% ELSE %]
+                        [% IF ( CAN_user_tools_edit_additional_contents ) %]
+                            <a class="btn btn-link" href="/cgi-bin/koha/tools/additional-contents.pl?category=html_customizations&op=add_form&editmode=wysiwyg" target="_blank"> <i class="fa fa-plus"></i> Add HTML content </a>
+                        [% END %]
+                    [% END %]
                 </div>
             </div>
         [% END %]
