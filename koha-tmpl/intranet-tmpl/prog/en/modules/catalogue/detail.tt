@@ -335,9 +335,9 @@
 
             [% IF Koha.Preference('SeparateHoldingsByGroup') && lib_groups %]
                 [% FOREACH group IN lib_groups %]
-                    [% IF ( holdings_count.${group.id} > 0 ) %]
+                    [% IF ( holdings_count_hash.${group.id} > 0 ) %]
                         [% WRAPPER tab_item tabname="group_holdings_" _ group.id %]
-                            <span>[% group.title | html %] holdings ([% holdings_count.${group.id} | html %])</span>
+                            <span>[% group.title | html %] holdings ([% holdings_count_hash.${group.id} | html %])</span>
                         [% END %]
                     [% END %]
                 [% END %]
@@ -492,7 +492,7 @@
             [% END %]
             [% IF Koha.Preference('SeparateHoldingsByGroup') && lib_groups %]
                 [% FOREACH group IN lib_groups %]
-                    [% IF ( holdings_count.${group.id} > 0 ) %]
+                    [% IF ( holdings_count_hash.${group.id} > 0 ) %]
                         [% SET group_tab = "group_holdings_" _ group.id %]
                         [% WRAPPER tab_panel tabname=group_tab %]
                             [% PROCESS items_table tab=group_tab %]
