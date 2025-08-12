@@ -442,8 +442,9 @@ sub _allocateWithTransportCostMatrix {
 
     my @allocated;
 
-    my @remaining_items = grep { !exists $allocated_items->{ $_->{itemnumber} } && $_->{holdallowed} ne 'not_allowed'; }
-        @$available_items;
+    my @remaining_items =
+        shuffle( grep { !exists $allocated_items->{ $_->{itemnumber} } && $_->{holdallowed} ne 'not_allowed'; }
+            @$available_items );
 
     my @requests  = grep { !defined $_->{itemnumber} && !defined $_->{allocated} } @$hold_requests;
     my @remaining = ();
