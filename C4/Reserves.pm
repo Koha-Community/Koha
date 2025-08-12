@@ -983,9 +983,69 @@ sub CheckReserves {
 
 =head2 CancelExpiredReserves
 
-  CancelExpiredReserves();
+    CancelExpiredReserves();
+    CancelExpiredReserves($cancellation_reason);
 
 Cancels all reserves with an expiration date from before today.
+
+When the ExpireReservesOnHolidays system preference is disabled (0), implements
+sophisticated holiday logic to handle various edge cases:
+
+=head3 Use Cases and Logic
+
+=over 4
+
+=item B<Case 1: Hold expires today on a holiday>
+
+If a hold expires today and today is a holiday, the hold is NOT cancelled.
+This respects the library's policy of not processing cancellations on holidays.
+
+Example: Hold expires on Christmas Day, script runs on Christmas Day => Hold preserved
+
+=item B<Case 2: Hold expired in the past, script runs on business day>
+
+If a hold expired in the past (regardless of whether the expiration date was a holiday),
+and today is a business day, the hold IS cancelled.
+
+Example: Hold expired on Christmas 2023, script runs in August 2024 => Hold cancelled
+
+=item B<Case 3: Hold expired in the past, script runs on holiday, no business days missed>
+
+If a hold expired recently and today is a holiday, but no business days have passed
+since expiration, the hold is NOT cancelled.
+
+Example: Hold expires Friday, script runs Saturday (holiday) => Hold preserved
+
+=item B<Case 4: Hold expired in the past, script runs on holiday, business days were missed>
+
+If a hold expired in the past and today is a holiday, but business days have passed
+since expiration (due to server downtime, cron failures, etc.), the hold IS cancelled
+retrospectively to prevent holds from remaining active indefinitely.
+
+Example: Hold expires Monday, server down Tue-Wed (business days), script runs Thursday (holiday) => Hold cancelled
+
+=item B<Case 5: ExpireReservesOnHolidays enabled>
+
+When ExpireReservesOnHolidays is enabled (1), all expired holds are cancelled
+regardless of holidays, maintaining the original simple behavior.
+
+=back
+
+=head3 Parameters
+
+=over 4
+
+=item $cancellation_reason (optional)
+
+Optional cancellation reason to be recorded in the hold's cancellation_reason field.
+
+=back
+
+This logic ensures that:
+- Library holiday policies are respected
+- Holds don't remain active indefinitely due to technical issues
+- The system is robust against server downtime and cron failures
+- Behavior is predictable and well-defined for all scenarios
 
 =cut
 
@@ -1011,7 +1071,51 @@ sub CancelExpiredReserves {
     while ( my $hold = $holds->next ) {
         my $calendar = Koha::Calendar->new( branchcode => $hold->branchcode );
 
-        next if !$cancel_on_holidays && $calendar->is_holiday($today);
+        # Get the actual expiration date for this hold
+        my $expiration_date = $hold->expirationdate || $hold->patron_expiration_date;
+
+        # When ExpireReservesOnHolidays is disabled, implement proper holiday logic:
+        if ( !$cancel_on_holidays && $expiration_date ) {
+            my $expiration_dt = dt_from_string($expiration_date);
+
+            # Check if hold expired today
+            my $expired_today = $expiration_dt->ymd eq $today->ymd;
+
+            if ($expired_today) {
+
+                # Rule 1: Don't cancel holds that expired TODAY if today is a holiday
+                next if $calendar->is_holiday($today);
+            } else {
+
+                # Rule 2: For holds that expired in the past, check for missed business days
+                if ( $calendar->is_holiday($today) ) {
+
+                    # If today is a holiday, check if business days were missed since expiration
+                    my $days_since_expiration = $today->delta_days($expiration_dt)->in_units('days');
+
+                    if ( $days_since_expiration > 0 ) {
+
+                        # Use Calendar's has_business_days_between for cleaner logic
+                        my $business_days_missed = $calendar->has_business_days_between( $expiration_dt, $today );
+
+                        # Rule 3: If business days were missed, cancel retrospectively even on holidays
+                        if ( !$business_days_missed ) {
+
+                            # No business days were missed, skip cancellation
+                            next;
+                        }
+
+                        # If business days were missed, continue with cancellation
+                    } else {
+
+                        # This shouldn't happen (expired_today would be true), but skip to be safe
+                        next;
+                    }
+                }
+
+                # If today is a business day, cancel expired holds from the past
+            }
+        }
 
         my $cancel_params = {};
         $cancel_params->{cancellation_reason} = $cancellation_reason if defined($cancellation_reason);
