@@ -383,6 +383,28 @@ sub hours_between {
     return $duration;
 }
 
+sub has_business_days_between {
+    my ( $self, $start_dt, $end_dt ) = @_;
+
+    # Clone dates to avoid modifying originals
+    my $current_date = $start_dt->clone->set_time_zone('floating');
+    my $end_date     = $end_dt->clone->set_time_zone('floating');
+
+    # Ensure start is before end
+    if ( $current_date->compare($end_date) >= 0 ) {
+        return 0;    # Same date or start after end
+    }
+
+    # Check each day between start and end (exclusive)
+    $current_date->add( days => 1 );
+    while ( $current_date->compare($end_date) < 0 ) {
+        return 1 unless $self->is_holiday($current_date);
+        $current_date->add( days => 1 );
+    }
+
+    return 0;    # No business days found
+}
+
 sub set_daysmode {
     my ( $self, $mode ) = @_;
 
@@ -505,6 +527,22 @@ ignoring closed days. Always returns a positive number irrespective of the
 relative order of the parameters.
 
 Note: This routine assumes neither the passed start_dt nor end_dt can be a closed day
+
+=head2 has_business_days_between
+
+$boolean = $calendar->has_business_days_between($start_dt, $end_dt);
+
+Passed two DateTime objects, returns 1 if there are any business days (non-holidays)
+between the start and end dates (exclusive), 0 otherwise.
+
+This method is useful for determining if business days were missed between two dates,
+such as when checking if server downtime caused business days to be skipped.
+
+Examples:
+- Monday to Wednesday with Tuesday as business day: returns 1
+- Monday to Tuesday (consecutive days): returns 0
+- Friday to Sunday with Saturday as holiday: returns 0
+- Same date: returns 0
 
 =head2 next_open_days
 
