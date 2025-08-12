@@ -1068,8 +1068,15 @@ sub CancelExpiredReserves {
     # FIXME To move to Koha::Holds->search_expired (?)
     my $holds = Koha::Holds->search($params);
 
+    my $cache = Koha::Cache::Memory::Lite->get_instance();
+
     while ( my $hold = $holds->next ) {
-        my $calendar = Koha::Calendar->new( branchcode => $hold->branchcode );
+        my $cache_key = sprintf "Calendar_CancelExpiredReserves:%s", $hold->branchcode;
+        my $calendar  = $cache->get_from_cache($cache_key);
+        if ( !$calendar ) {
+            $calendar = Koha::Calendar->new( branchcode => $hold->branchcode );
+            $cache->set_in_cache( $cache_key, $calendar );
+        }
 
         # Get the actual expiration date for this hold
         my $expiration_date = $hold->expirationdate || $hold->patron_expiration_date;
