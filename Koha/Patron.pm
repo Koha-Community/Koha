@@ -795,13 +795,13 @@ sub merge_with {
 
                 if ( C4::Context->preference("BorrowersLog") ) {
                     my $info =
-                          $patron->firstname . " "
-                        . $patron->surname . " ("
-                        . $patron->cardnumber . ")"
+                          ( $patron->firstname  // "" ) . " "
+                        . ( $patron->surname    // "" ) . " ("
+                        . ( $patron->cardnumber // "" ) . ")"
                         . " has been merged into "
-                        . $self->firstname . " "
-                        . $self->surname . " ("
-                        . $self->cardnumber . ")";
+                        . ( $self->firstname  // "" ) . " "
+                        . ( $self->surname    // "" ) . " ("
+                        . ( $self->cardnumber // "" ) . ")";
                     logaction( "MEMBERS", "PATRON_MERGE", $self->id, $info );
                 }
             }
