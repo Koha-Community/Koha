@@ -195,71 +195,66 @@
                                 <div id="floating" class="sticky">
                                     <div id="toolbar" class="toolbar row align-items-center">
                                         <div id="top-pages" class="col"> [% INCLUDE 'page-numbers.inc' %] </div>
-                                        [% UNLESS tag %]
-                                            <div class="sort_by col-sm-auto">
-                                                <label for="sort_by">Sort results by:</label>
-                                                <label for="sort_by" class="visually-hidden">Sort by:</label>
-                                                <select id="sort_by" class="resort form-select form-select-sm" name="sort_by">
-                                                    [% INCLUDE 'resort_form.inc' %]
-                                                </select>
-
-                                                [% IF Koha.Preference('OPACnumSearchResultsDropdown') %]
-                                                    <label for="results_per_page">Results per page: </label>
-                                                    <select id="results_per_page" class="form-select" name="count">
-                                                        [% IF Koha.Preference('OPACnumSearchResults') %]
-                                                            [% IF results_per_page == Koha.Preference('OPACnumSearchResults') %]
-                                                                <option value="[% Koha.Preference('OPACnumSearchResults') | html %]" selected="selected">[% Koha.Preference('OPACnumSearchResults') | html %] (default)</option>
-                                                            [% ELSE %]
-                                                                <option value="[% Koha.Preference('OPACnumSearchResults') | html %]">[% Koha.Preference('OPACnumSearchResults') | html %] (default)</option>
-                                                            [% END %]
-                                                        [% END %]
-                                                        [% IF results_per_page == '20' %]<option value="20" selected="selected">20</option>[% ELSE %]<option value="20">20</option>[% END %]
-                                                        [% IF results_per_page == '40' %]<option value="40" selected="selected">40</option>[% ELSE %]<option value="40">40</option>[% END %]
-                                                        [% IF results_per_page == '60' %]<option value="60" selected="selected">60</option>[% ELSE %]<option value="60">60</option>[% END %]
-                                                        [% IF results_per_page == '80' %]<option value="80" selected="selected">80</option>[% ELSE %]<option value="80">80</option>[% END %]
-                                                        [% IF results_per_page == '100' %]<option value="100" selected="selected">100</option>[% ELSE %]<option value="100">100</option>[% END %]
+                                        [% UNLESS no_result %]
+                                            [% UNLESS tag %]
+                                                <div class="sort_by col-sm-auto">
+                                                    <label for="sort_by">Sort results by:</label>
+                                                    <label for="sort_by" class="visually-hidden">Sort by:</label>
+                                                    <select id="sort_by" class="resort form-select form-select-sm" name="sort_by">
+                                                        [% INCLUDE 'resort_form.inc' %]
                                                     </select>
-                                                [% END # IF Koha.Preference('OPACnumSearchResultsDropdown') %]
-                                            </div>
-                                            <!-- /.sort_by -->
-                                            <div id="sortsubmit" class="sort_by col-auto">
-                                                <input type="submit" class="btn btn-primary btn-sm clearfix" value="Go" />
-                                            </div>
-                                            <!-- /.sort_by -->
-                                        [% END # /UNLESS tag %]
+
+                                                    [% IF Koha.Preference('OPACnumSearchResultsDropdown') %]
+                                                        <label for="results_per_page">Results per page: </label>
+                                                        <select id="results_per_page" class="form-select" name="count">
+                                                            [% IF Koha.Preference('OPACnumSearchResults') %]
+                                                                [% IF results_per_page == Koha.Preference('OPACnumSearchResults') %]
+                                                                    <option value="[% Koha.Preference('OPACnumSearchResults') | html %]" selected="selected">[% Koha.Preference('OPACnumSearchResults') | html %] (default)</option>
+                                                                [% ELSE %]
+                                                                    <option value="[% Koha.Preference('OPACnumSearchResults') | html %]">[% Koha.Preference('OPACnumSearchResults') | html %] (default)</option>
+                                                                [% END %]
+                                                            [% END %]
+                                                            [% IF results_per_page == '20' %]<option value="20" selected="selected">20</option>[% ELSE %]<option value="20">20</option>[% END %]
+                                                            [% IF results_per_page == '40' %]<option value="40" selected="selected">40</option>[% ELSE %]<option value="40">40</option>[% END %]
+                                                            [% IF results_per_page == '60' %]<option value="60" selected="selected">60</option>[% ELSE %]<option value="60">60</option>[% END %]
+                                                            [% IF results_per_page == '80' %]<option value="80" selected="selected">80</option>[% ELSE %]<option value="80">80</option>[% END %]
+                                                            [% IF results_per_page == '100' %]<option value="100" selected="selected">100</option>[% ELSE %]<option value="100">100</option>[% END %]
+                                                        </select>
+                                                    [% END # IF Koha.Preference('OPACnumSearchResultsDropdown') %]
+                                                </div>
+                                                <!-- /.sort_by -->
+                                                <div id="sortsubmit" class="sort_by col-auto">
+                                                    <input type="submit" class="btn btn-primary btn-sm clearfix" value="Go" />
+                                                </div>
+                                                <!-- /.sort_by -->
+                                            [% END # /UNLESS tag %]
+                                        [% END %]
                                     </div>
                                     <!-- / #toolbar -->
 
                                     [% INCLUDE 'result-batch-controls.inc' results=1 %]
+                                    [% IF no_result %]
+                                        <p>Search results on this page are not available.</p>
+                                    [% END %]
                                 </div>
                                 <!-- /#floating -->
 
-                                <!-- TABLE RESULTS START -->
-                                <table class="table table-striped" role="presentation">
-                                    <span class="visually-hidden">Results</span>
+                                [% UNLESS no_result %]
+                                    <!-- TABLE RESULTS START -->
+                                    <table class="table table-striped" role="presentation">
+                                        <span class="visually-hidden">Results</span>
 
-                                    <!-- Actual Search Results -->
-                                    [% FOREACH SEARCH_RESULT IN SEARCH_RESULTS %]
-                                        <tr>
-                                            [%# Cell 1: Checkbox %]
-                                            [% IF ( SEARCH_RESULT.title ) %]
-                                                [% check_title = SEARCH_RESULT.title %]
-                                            [% ELSE %]
-                                                [% check_title = SEARCH_RESULT.biblionumber %]
-                                            [% END %]
-                                            <td class="selectcol">
-                                                [% IF Koha.Preference( 'opacbookbag' ) == 1 %]
-                                                    <input
-                                                        type="checkbox"
-                                                        class="cb"
-                                                        id="bib[% SEARCH_RESULT.biblionumber | html %]"
-                                                        name="biblionumber"
-                                                        value="[% SEARCH_RESULT.biblionumber | html %]"
-                                                        aria-label="Select search result: [% check_title | html %]"
-                                                    />
-                                                    <label for="bib[% SEARCH_RESULT.biblionumber | html %]"></label>
+                                        <!-- Actual Search Results -->
+                                        [% FOREACH SEARCH_RESULT IN SEARCH_RESULTS %]
+                                            <tr>
+                                                [%# Cell 1: Checkbox %]
+                                                [% IF ( SEARCH_RESULT.title ) %]
+                                                    [% check_title = SEARCH_RESULT.title %]
                                                 [% ELSE %]
-                                                    [% IF Koha.Preference( 'virtualshelves' ) == 1 %]
+                                                    [% check_title = SEARCH_RESULT.biblionumber %]
+                                                [% END %]
+                                                <td class="selectcol">
+                                                    [% IF Koha.Preference( 'opacbookbag' ) == 1 %]
                                                         <input
                                                             type="checkbox"
                                                             class="cb"
@@ -270,141 +265,153 @@
                                                         />
                                                         <label for="bib[% SEARCH_RESULT.biblionumber | html %]"></label>
                                                     [% ELSE %]
-                                                        [% IF Koha.Preference( 'OPACHoldRequests' ) == 1 %]
-                                                            [% UNLESS ( SEARCH_RESULT.norequests ) %]
-                                                                [% IF Koha.Preference( 'opacuserlogin' ) == 1 %]
-                                                                    <input
-                                                                        type="checkbox"
-                                                                        class="cb"
-                                                                        id="bib[% SEARCH_RESULT.biblionumber | html %]"
-                                                                        name="biblionumber"
-                                                                        value="[% SEARCH_RESULT.biblionumber | html %]"
-                                                                        aria-label="Select search result: [% check_title | html %]"
-                                                                    />
-                                                                    <label for="bib[% SEARCH_RESULT.biblionumber | html %]"></label>
+                                                        [% IF Koha.Preference( 'virtualshelves' ) == 1 %]
+                                                            <input
+                                                                type="checkbox"
+                                                                class="cb"
+                                                                id="bib[% SEARCH_RESULT.biblionumber | html %]"
+                                                                name="biblionumber"
+                                                                value="[% SEARCH_RESULT.biblionumber | html %]"
+                                                                aria-label="Select search result: [% check_title | html %]"
+                                                            />
+                                                            <label for="bib[% SEARCH_RESULT.biblionumber | html %]"></label>
+                                                        [% ELSE %]
+                                                            [% IF Koha.Preference( 'OPACHoldRequests' ) == 1 %]
+                                                                [% UNLESS ( SEARCH_RESULT.norequests ) %]
+                                                                    [% IF Koha.Preference( 'opacuserlogin' ) == 1 %]
+                                                                        <input
+                                                                            type="checkbox"
+                                                                            class="cb"
+                                                                            id="bib[% SEARCH_RESULT.biblionumber | html %]"
+                                                                            name="biblionumber"
+                                                                            value="[% SEARCH_RESULT.biblionumber | html %]"
+                                                                            aria-label="Select search result: [% check_title | html %]"
+                                                                        />
+                                                                        <label for="bib[% SEARCH_RESULT.biblionumber | html %]"></label>
+                                                                    [% END %]
                                                                 [% END %]
-                                                            [% END %]
-                                                        [% END # IF OPACHoldRequests %]
-                                                    [% END # IF virtualshelves %]
-                                                [% END # IF opacbookbag %]
-                                            </td>
+                                                            [% END # IF OPACHoldRequests %]
+                                                        [% END # IF virtualshelves %]
+                                                    [% END # IF opacbookbag %]
+                                                </td>
 
-                                            [%# Cell 2: Show result number if OpacHiddenItems is empty %]
-                                            <td class="numcol[%- IF suppress_result_number -%]hidden[%- END -%]">
-                                                [% UNLESS suppress_result_number %]
-                                                    [% SEARCH_RESULT.result_number | html %].
-                                                [% END %]
-                                            </td>
-
-                                            [% IF ( !item_level_itypes || Koha.Preference('BiblioItemtypeInfo') ) && !Koha.Preference('OpacNoItemTypeImages') %]
-                                                [%# Cell 3: Show item type image %]
-                                                <td class="itypecol">
-                                                    [% IF ( SEARCH_RESULT.imageurl ) %]
-                                                        <img class="itemtype-image" src="[% SEARCH_RESULT.imageurl | html %]" title="[% SEARCH_RESULT.description | html %]" alt="[% SEARCH_RESULT.description | html %]" />
-                                                    [% END %]
-                                                    [% IF ( SEARCH_RESULT.score_avg ) %]
-                                                        <img src="[% themelang | html %]/../images/bonus.png" title="bonus" style="max-height: 35px;" />
+                                                [%# Cell 2: Show result number if OpacHiddenItems is empty %]
+                                                <td class="numcol[%- IF suppress_result_number -%]hidden[%- END -%]">
+                                                    [% UNLESS suppress_result_number %]
+                                                        [% SEARCH_RESULT.result_number | html %].
                                                     [% END %]
                                                 </td>
-                                            [% END %]
-                                            [% IF ( CoverImages) %]
-                                                <td class="covercol"> [% INCLUDE 'cover-images.inc' %] </td>
-                                            [% END %]
-                                            [%# Cell 4: Search result details and controls %]
-                                            <td class="bibliocol">
-                                                [% IF ( COinSinOPACResults && SEARCH_RESULT.coins ) %]
-                                                    <!-- COinS / Openurl -->
-                                                    <span class="Z3988" title="[% SEARCH_RESULT.coins | html %]"></span>
+
+                                                [% IF ( !item_level_itypes || Koha.Preference('BiblioItemtypeInfo') ) && !Koha.Preference('OpacNoItemTypeImages') %]
+                                                    [%# Cell 3: Show item type image %]
+                                                    <td class="itypecol">
+                                                        [% IF ( SEARCH_RESULT.imageurl ) %]
+                                                            <img class="itemtype-image" src="[% SEARCH_RESULT.imageurl | html %]" title="[% SEARCH_RESULT.description | html %]" alt="[% SEARCH_RESULT.description | html %]" />
+                                                        [% END %]
+                                                        [% IF ( SEARCH_RESULT.score_avg ) %]
+                                                            <img src="[% themelang | html %]/../images/bonus.png" title="bonus" style="max-height: 35px;" />
+                                                        [% END %]
+                                                    </td>
                                                 [% END %]
-                                                <div id="title_summary_[% SEARCH_RESULT.biblionumber | html %]" class="title_summary">
-                                                    [% SEARCH_RESULT.XSLTResultsRecord | $raw %]
-
-                                                    [% IF ( SEARCH_RESULT.score_avg ) %]
-                                                        <div class="results_summary">
-                                                            [% FOREACH i  IN [ 1 2 3 4 5  ] %]
-                                                                [% IF ( SEARCH_RESULT.score_int >= i ) %]
-                                                                    <div class="star-rating rater-[% i | html %] star star-rating-applied star-rating-readonly star-rating-on"><a title="[% i | html %]">[% i | html %]</a></div>
-                                                                [% ELSE %]
-                                                                    <div class="star-rating rater-[% i | html %] star star-rating-applied star-rating-readonly"><a title="[% i | html %]">[% i | html %]</a></div>
-                                                                [% END %]
-                                                            [% END %]
-                                                            <span id="babeltheque-rating_total_[% SEARCH_RESULT.biblionumber | html %]"
-                                                                >&nbsp;&nbsp; [% SEARCH_RESULT.score_avg | html %] / 5 (on [% SEARCH_RESULT.num_scores | html %] rates)</span
-                                                            >
-
-                                                            [% IF ( SEARCH_RESULT.num_critics ) %]
-                                                                <span class="social_data">[% SEARCH_RESULT.num_critics | html %] Internet user critics</span>
-                                                            [% END %]
-                                                            [% IF ( SEARCH_RESULT.num_critics_pro ) %]
-                                                                <span class="social_data">[% SEARCH_RESULT.num_critics_pro | html %] Professional critics</span>
-                                                            [% END %]
-                                                            [% IF ( SEARCH_RESULT.num_videos ) %]
-                                                                <span class="social_data">[% SEARCH_RESULT.num_videos | html %] Video extracts</span>
-                                                            [% END %]
-                                                            [% IF ( SEARCH_RESULT.num_quotations ) %]
-                                                                <span class="social_data">[% SEARCH_RESULT.num_quotations | html %] Quotations</span>
-                                                            [% END %]
-                                                        </div>
-                                                        <!-- / .results_summary -->
-                                                    [% END # / IF SEARCH_RESULT.score_avg %]
-
-                                                    [% IF ( LibraryThingForLibrariesID ) %]
-                                                        <div class="ltfl_reviews"></div>
+                                                [% IF ( CoverImages) %]
+                                                    <td class="covercol"> [% INCLUDE 'cover-images.inc' %] </td>
+                                                [% END %]
+                                                [%# Cell 4: Search result details and controls %]
+                                                <td class="bibliocol">
+                                                    [% IF ( COinSinOPACResults && SEARCH_RESULT.coins ) %]
+                                                        <!-- COinS / Openurl -->
+                                                        <span class="Z3988" title="[% SEARCH_RESULT.coins | html %]"></span>
                                                     [% END %]
+                                                    <div id="title_summary_[% SEARCH_RESULT.biblionumber | html %]" class="title_summary">
+                                                        [% SEARCH_RESULT.XSLTResultsRecord | $raw %]
 
-                                                    [% IF ( TagsShowEnabled && SEARCH_RESULT.TagLoop.size ) %]
-                                                        <div class="results_summary tags">
-                                                            <span class="label">Tags:</span>
-                                                            <ul>
-                                                                [% FOREACH TagLoo IN SEARCH_RESULT.TagLoop %]
-                                                                    <li>
-                                                                        <a href="/cgi-bin/koha/opac-search.pl?tag=[% TagLoo.term | uri %]&amp;q=[% TagLoo.term | uri %]">[% TagLoo.term | html %]</a>
-                                                                        <span class="weight">([% TagLoo.weight_total | html %])</span>
-                                                                    </li>
-                                                                [% END %]
-                                                            </ul>
-                                                        </div>
-                                                    [% END %]
-
-                                                    [% IF Koha.Preference('virtualshelves') AND SEARCH_RESULT.shelves.count %]
-                                                        <div class="results_summary shelves">
-                                                            <span class="label">Lists:</span>
-                                                            <ul>
-                                                                [% FOREACH shelf IN SEARCH_RESULT.shelves %]
-                                                                    <li>
-                                                                        <a href="/cgi-bin/koha/opac-shelves.pl?op=view&amp;shelfnumber=[% shelf.shelfnumber | uri %]">[% shelf.shelfname | html %]</a>
-                                                                        [%~ UNLESS loop.last %],[% ELSE %].[% END ~%]
-                                                                    </li>
-                                                                [% END %]
-                                                            </ul>
-                                                        </div>
-                                                    [% END %]
-
-                                                    [% IF ( SEARCH_RESULT.searchhighlightblob ) %]
-                                                        <span class="results_summary">
-                                                            <span class="label">Match:</span>
-                                                            [% SEARCH_RESULT.searchhighlightblob | html %]
-                                                        </span>
-                                                    [% END %]
-
-                                                    [% INCLUDE "openlibrary-readapi.inc" bib = SEARCH_RESULT %]
-
-                                                    [% IF ( OpacStarRatings == 'all' ) %]
-                                                        <span class="visually-hidden"> star rating </span>
-                                                        <div class="results_summary ratings">
-                                                            [% SET rating_avg = SEARCH_RESULT.ratings.get_avg_rating() %]
-                                                            [% rating_avg_int = BLOCK %][% rating_avg | format("%.0f") %][% END %]
-                                                            <div class="br-wrapper br-theme-fontawesome-stars">
-                                                                <div class="br-widget br-readonly">
-                                                                    [% FOREACH i IN [ 1 2 3 4 5  ] %]
-                                                                        [% IF rating_avg_int == i %]
-                                                                            <span class="br-selected br-current"></span>
-                                                                        [% ELSIF rating_avg_int > i %]
-                                                                            <span class="br-selected"></span>
-                                                                        [% ELSE %]
-                                                                            <span></span>
-                                                                        [% END %]
+                                                        [% IF ( SEARCH_RESULT.score_avg ) %]
+                                                            <div class="results_summary">
+                                                                [% FOREACH i  IN [ 1 2 3 4 5  ] %]
+                                                                    [% IF ( SEARCH_RESULT.score_int >= i ) %]
+                                                                        <div class="star-rating rater-[% i | html %] star star-rating-applied star-rating-readonly star-rating-on"><a title="[% i | html %]">[% i | html %]</a></div>
+                                                                    [% ELSE %]
+                                                                        <div class="star-rating rater-[% i | html %] star star-rating-applied star-rating-readonly"><a title="[% i | html %]">[% i | html %]</a></div>
                                                                     [% END %]
+                                                                [% END %]
+                                                                <span id="babeltheque-rating_total_[% SEARCH_RESULT.biblionumber | html %]"
+                                                                    >&nbsp;&nbsp; [% SEARCH_RESULT.score_avg | html %] / 5 (on [% SEARCH_RESULT.num_scores | html %] rates)</span
+                                                                >
+
+                                                                [% IF ( SEARCH_RESULT.num_critics ) %]
+                                                                    <span class="social_data">[% SEARCH_RESULT.num_critics | html %] Internet user critics</span>
+                                                                [% END %]
+                                                                [% IF ( SEARCH_RESULT.num_critics_pro ) %]
+                                                                    <span class="social_data">[% SEARCH_RESULT.num_critics_pro | html %] Professional critics</span>
+                                                                [% END %]
+                                                                [% IF ( SEARCH_RESULT.num_videos ) %]
+                                                                    <span class="social_data">[% SEARCH_RESULT.num_videos | html %] Video extracts</span>
+                                                                [% END %]
+                                                                [% IF ( SEARCH_RESULT.num_quotations ) %]
+                                                                    <span class="social_data">[% SEARCH_RESULT.num_quotations | html %] Quotations</span>
+                                                                [% END %]
+                                                            </div>
+                                                            <!-- / .results_summary -->
+                                                        [% END # / IF SEARCH_RESULT.score_avg %]
+
+                                                        [% IF ( LibraryThingForLibrariesID ) %]
+                                                            <div class="ltfl_reviews"></div>
+                                                        [% END %]
+
+                                                        [% IF ( TagsShowEnabled && SEARCH_RESULT.TagLoop.size ) %]
+                                                            <div class="results_summary tags">
+                                                                <span class="label">Tags:</span>
+                                                                <ul>
+                                                                    [% FOREACH TagLoo IN SEARCH_RESULT.TagLoop %]
+                                                                        <li>
+                                                                            <a href="/cgi-bin/koha/opac-search.pl?tag=[% TagLoo.term | uri %]&amp;q=[% TagLoo.term | uri %]">[% TagLoo.term | html %]</a>
+                                                                            <span class="weight">([% TagLoo.weight_total | html %])</span>
+                                                                        </li>
+                                                                    [% END %]
+                                                                </ul>
+                                                            </div>
+                                                        [% END %]
+
+                                                        [% IF Koha.Preference('virtualshelves') AND SEARCH_RESULT.shelves.count %]
+                                                            <div class="results_summary shelves">
+                                                                <span class="label">Lists:</span>
+                                                                <ul>
+                                                                    [% FOREACH shelf IN SEARCH_RESULT.shelves %]
+                                                                        <li>
+                                                                            <a href="/cgi-bin/koha/opac-shelves.pl?op=view&amp;shelfnumber=[% shelf.shelfnumber | uri %]">[% shelf.shelfname | html %]</a>
+                                                                            [%~ UNLESS loop.last %],[% ELSE %].[% END ~%]
+                                                                        </li>
+                                                                    [% END %]
+                                                                </ul>
+                                                            </div>
+                                                        [% END %]
+
+                                                        [% IF ( SEARCH_RESULT.searchhighlightblob ) %]
+                                                            <span class="results_summary">
+                                                                <span class="label">Match:</span>
+                                                                [% SEARCH_RESULT.searchhighlightblob | html %]
+                                                            </span>
+                                                        [% END %]
+
+                                                        [% INCLUDE "openlibrary-readapi.inc" bib = SEARCH_RESULT %]
+
+                                                        [% IF ( OpacStarRatings == 'all' ) %]
+                                                            <span class="visually-hidden"> star rating </span>
+                                                            <div class="results_summary ratings">
+                                                                [% SET rating_avg = SEARCH_RESULT.ratings.get_avg_rating() %]
+                                                                [% rating_avg_int = BLOCK %][% rating_avg | format("%.0f") %][% END %]
+                                                                <div class="br-wrapper br-theme-fontawesome-stars">
+                                                                    <div class="br-widget br-readonly">
+                                                                        [% FOREACH i IN [ 1 2 3 4 5  ] %]
+                                                                            [% IF rating_avg_int == i %]
+                                                                                <a href="#" class="br-selected br-current"></a>
+                                                                            [% ELSIF rating_avg_int > i %]
+                                                                                <a href="#" class="br-selected"></a>
+                                                                            [% ELSE %]
+                                                                                <a href="#"></a>
+                                                                            [% END %]
+                                                                        [% END %]
+                                                                    </div>
                                                                 </div>
                                                             </div>
                                                             <span class="visually-hidden"> Average : [% rating_avg | html %] out of 5 stars</span>
@@ -417,12 +424,13 @@
                                                         <!-- / .results_summary -->
                                                     [% END # / IF OpacStarRatings %]
 
-                                                    [% INCLUDE 'title-actions-menu.inc' items=SEARCH_RESULT %]
-                                                </div>
-                                            </td>
-                                        </tr>
-                                    [% END # / FOREACH SEARCH_RESULT %]
-                                </table>
+                                                        [% INCLUDE 'title-actions-menu.inc' items=SEARCH_RESULT %]
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        [% END # / FOREACH SEARCH_RESULT %]
+                                    </table>
+                                [% END %]
                             </form>
                             <!-- / #bookbag_form -->
 

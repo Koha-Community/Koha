@@ -663,7 +663,9 @@ for ( my $i = 0 ; $i < @servers ; $i++ ) {
             $search_context, $query_desc, $hits, $results_per_page, $offset, $scan,
             $results_hashref->{$server}->{"RECORDS"}, $variables
         );
-        $hits = 0 unless @newresults;
+        unless (@newresults) {
+            $template->param( no_result => 1 );
+        }
 
         my $art_req_itypes;
         if ( C4::Context->preference('ArticleRequests') ) {
