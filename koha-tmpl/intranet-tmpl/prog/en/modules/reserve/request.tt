@@ -1831,9 +1831,11 @@
                     method: "GET",
                     dataType: "json",
                     success: function (data) {
-                        if (data.length > 0) {
+                        // Filter for exact matches only
+                        let exactMatches = data.filter(item => item.external_id === externalID);
+                        if (exactMatches.length > 0) {
                             let resultHtml = "";
-                            $.each(data, function (index, item) {
+                            $.each(exactMatches, function (index, item) {
                                 resultHtml += `
                                     <div class="alert alert-success">
                                         <strong>Biblionumber:</strong> ${item.biblio_id} <br>
@@ -1859,7 +1861,7 @@
                 event.preventDefault();
                 $('#move_hold_biblio_confirm').prop('disabled' , true );
 
-                let biblioID = $("#biblio_id").val();
+                let biblioID = parseInt( $("#biblio_id").val() );
                 let apiUrl = `/api/v1/biblios?q={"biblio_id":"${encodeURIComponent(biblioID)}"}`;
                 $.ajax({
                     url: apiUrl,
@@ -1869,9 +1871,13 @@
                         'Accept': 'application/json'
                     },
                     success: function (data) {
-                        if (data.length > 0) {
+                        // Filter for exact matches only
+                        let exactMatches = data.filter(item => item.biblio_id === biblioID);
+
+
+                        if (exactMatches.length > 0) {
                             let resultHtml = "";
-                            $.each(data, function (index, item) {
+                            $.each(exactMatches, function (index, item) {
                                 resultHtml += `
                                     <div class="alert alert-success">
                                         <strong>Biblionumber:</strong> ${item.biblio_id} <br>
@@ -1884,10 +1890,10 @@
                             $("#biblioResultMessage").html(resultHtml);
                         } else {
                             $("#biblioResultMessage").html(`
-                                <div class="alert alert-warning">No item found with barcode: ${biblioID}.</div>
+                                <div class="alert alert-warning">No record found with biblionumber: ${biblioID}.</div>
                             `);
                         }
-                    },
+                    }
                 });
             });
 
