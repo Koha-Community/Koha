@@ -394,7 +394,12 @@ sub check_booking {
         ? $existing_bookings->search( { booking_id => { '!=' => $booking_id } } )->count
         : $existing_bookings->count;
 
-    my $checkouts = $self->current_checkouts->search( { date_due => { '>=' => $dtf->format_datetime($start_date) } } );
+    my $checkouts = $self->current_checkouts->search(
+        {
+            date_due        => { '>='      => $dtf->format_datetime($start_date) },
+            "me.itemnumber" => { '-not_in' => $existing_bookings->_resultset->get_column('item_id')->as_query }
+        }
+    );
     $booked_count += $checkouts->count;
 
     return ( ( $total_bookable - $booked_count ) > 0 ) ? 1 : 0;
