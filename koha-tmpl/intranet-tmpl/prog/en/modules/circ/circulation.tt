@@ -1152,6 +1152,18 @@
             var newin = window.open(link, 'popup', 'width=600,height=400,resizable=1,toolbar=0,scrollbars=1,top');
         }
         $(document).ready(function() {
+            let barcodeSubmitInFlight = false;
+            $('#barcode').off('keypress.preventDouble').on('keypress.preventDouble', function(e) {
+                if (barcodeSubmitInFlight) {
+                    $('#barcodeSubmittedModal').modal('show');
+                    e.preventDefault();
+                }
+            });
+            window.addEventListener('pageshow', function(event) {
+                if (event.persisted) {
+                    barcodeSubmitInFlight = false;
+                }
+            });
             [% IF waiting_holds.count > 0 %]
                 $('#circ-warnwaitingholds-modal .btn-primary').on('click',function() {
                     $('#mainform').submit();
@@ -1178,11 +1190,8 @@
             [% END %]
 
             $('#mainform').on('submit',function() {
-                if ($("#barcode") && $("#barcode").val()) {
-                    $('#barcode').on('keypress',function(event) {
-                        $('#barcodeSubmittedModal').modal('show');
-                        event.preventDefault(); }
-                    );
+                if ($("#barcode").length && $("#barcode").val()) {
+                    barcodeSubmitInFlight = true;
                 }
             });
 
