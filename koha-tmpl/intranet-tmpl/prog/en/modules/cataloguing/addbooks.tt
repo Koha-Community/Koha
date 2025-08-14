@@ -4,6 +4,7 @@
 [% USE TablesSettings %]
 [% PROCESS 'i18n.inc' %]
 [% SET footerjs = 1 %]
+[% USE AuthorisedValues %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title
     >[% FILTER collapse %]
@@ -137,8 +138,9 @@
                                     </p>
                                 [% END %]
                             </td>
-                            <td>
-                                [% IF ( resultsloo.available_items_loop ) %]
+                            <td class="availability">
+                                [% IF resultsloo.availablecount > 0 %]
+                                    <div class="results_available_count">Available:</div>
                                     <span class="available">
                                         [% FOREACH items_loo IN resultsloo.available_items_loop %]
                                             [% items_loo.count | html %]
@@ -152,20 +154,57 @@
                                         [% END %]
                                     </span>
                                 [% END %]
-                                <span class="unavailable">
-                                    [% IF ( resultsloo.onloancount ) %]<span>Checked out ([% resultsloo.onloancount | html %])</span>,<br />[% END %]
-                                    [% IF ( resultsloo.withdrawncount ) %]<span>Withdrawn ([% resultsloo.withdrawncount | html %])</span>,<br />[% END %]
-                                    [% IF ( resultsloo.itemlostcount ) %]<span>Lost ([% resultsloo.itemlostcount | html %])</span><br />[% END %]
-                                    [% IF ( resultsloo.recalledcount ) %]<span>Waiting to fill recall ([% resultsloo.recalled | html %])</span>[% END %]
-                                    [% IF ( resultsloo.onholdcount ) %]<span>Waiting on hold ([% resultsloo.onholdcount | html %])</span>[% END %]
-                                </span>
-                                <span class="notforloan">
-                                    [% IF ( resultsloo.other_items_loop ) %]
-                                        [% FOREACH items_loo IN resultsloo.other_items_loop %]
-                                            [% IF ( items_loo.notforloan ) %][% items_loo.notforloan | html %] ([% items_loo.count | html %])<br />[% END %]
+                                <!--unavailable-->
+                                [% IF resultsloo.onloancount > 0 || resultsloo.othercount > 0  && !( resultsloo.notforloancount || resultsloo.orderedcount) %]
+                                    <div class="results_unavailable">Unavailable:</div>
+                                    <span class="unavailable">
+                                        <!-- Checked out -->
+                                        [% IF ( resultsloo.onloancount ) %]
+                                            <span
+                                                >Checked out (
+                                                [% FOREACH items_loo IN resultsloo.onloan_items_loop %]
+                                                    [% IF (!items_loo.notforloan ) %]
+                                                        [% items_loo.count | html %]
+                                                        [% IF ( items_loo.branchname ) %][% items_loo.branchname | html %][% END %]
+                                                        [% IF ( items_loo.location ) %]<span class="shelvingloc">[% items_loo.location | html %]</span>[% END %]
+                                                        [% IF ( items_loo.itemcallnumber ) %][% items_loo.itemcallnumber | html %][% END %]
+                                                        <br />
+                                                    [% END %]
+                                                [% END %])</span
+                                            >,<br />
                                         [% END %]
-                                    [% END %]
-                                </span>
+                                        [% FOREACH items_loo IN resultsloo.other_items_loop %]
+                                            [% IF (!items_loo.notforloan ) %]
+                                                [% items_loo.count | html %]
+                                                [% IF ( items_loo.branchname ) %][% items_loo.branchname | html %][% END %]
+                                                [% IF ( items_loo.location ) %]<span class="shelvingloc">[% items_loo.location | html %]</span>[% END %]
+                                                [% IF ( items_loo.itemcallnumber ) %][% items_loo.itemcallnumber | html %][% END %]
+                                                [% IF ( items_loo.withdrawn ) %]([% AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.withdrawn', authorised_value => items_loo.withdrawn ) | html %])[% END %]
+                                                [% IF ( items_loo.itemlost ) %]([% AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.itemlost', authorised_value => items_loo.itemlost ) | html %])[% END %]
+                                                [% IF ( items_loo.damaged ) %]([% AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.damaged', authorised_value => items_loo.damaged ) | html %])[% END %]
+                                                [% IF ( items_loo.intransit ) %](<span>In transit</span>)<br />[% END %]
+                                                [% IF ( items_loo.onhold ) %](<span>On hold</span>)<br />[% END %]
+                                                <br />
+                                            [% END %]
+                                        [% END %]
+                                    </span>
+                                [% END %]
+                                <!--Not for loan-->
+                                [% IF ( resultsloo.notforloancount || resultsloo.orderedcount) %]
+                                    <div class="results_not_for_loan">Not for loan:</div>
+                                    <span class="notforloan">
+                                        [% FOREACH items_loo IN resultsloo.other_items_loop %]
+                                            [% IF ( items_loo.notforloan ) %]
+                                                [% items_loo.count | html %]
+                                                [% items_loo.branchname | html %]
+                                                [% IF ( items_loo.location ) %]<span class="shelvingloc">[% items_loo.location | html %]</span>[% END %]
+                                                [% IF ( items_loo.itemcallnumber ) %][% items_loo.itemcallnumber | html %][% END %]
+                                                ([% items_loo.notforloan | html %])
+                                                <br />
+                                            [% END %]
+                                        [% END %]
+                                    </span>
+                                [% END %]
                             </td>
                             <td>
                                 <div class="btn-group dropup">
