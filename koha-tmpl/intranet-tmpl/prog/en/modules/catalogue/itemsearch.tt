@@ -56,7 +56,7 @@
         </option>
       [% END %]
       [% FOREACH option IN options %]
-        [% IF query.param(name).grep(option.value).size %]
+        [% IF query.param(name).grep('^' _ option.value _ '$').size %]
             <option value="[% option.value | html %]" selected="selected">[% option.label | html %]</option>
         [% ELSE %]
         <option value="[% option.value | html %]">[% option.label | html %]</option>
