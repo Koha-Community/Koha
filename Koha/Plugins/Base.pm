@@ -267,8 +267,8 @@ Note: this is a wrapper function for C4::Output::output_with_http_headers
 =cut
 
 sub output_html {
-    my ( $self, $data, $status, $extra_options ) = @_;
-    output_with_http_headers( $self->{cgi}, undef, $data, 'html', $status, $extra_options );
+    my ( $self, $data, $status, $extra_options, $cookie ) = @_;
+    output_with_http_headers( $self->{cgi}, $cookie, $data, 'html', $status, $extra_options );
 }
 
 =head2 bundle_path
