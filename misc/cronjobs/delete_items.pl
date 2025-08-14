@@ -135,7 +135,7 @@ Deletes the bibliographic record if the last item is deleted.
 
   The following is an example of this script:
 
- delete_items.pl --where "items.withdrawn ! 0"  --where "items.withdrawn_on < $(date --date="13 month ago" --rfc-3339=date)" --commit
+ delete_items.pl --where "withdrawn ! 0"  --where "withdrawn_on < $(date --date="13 month ago" --rfc-3339=date)" --commit
 
  delete_items.pl --where "itemlost >= '1'" --where "itemlost <='4'" --where "itemlost_on < '2014-04-28'" --commit
 
