@@ -293,6 +293,9 @@
                 <p class="hint">You can use the following wildcard characters: % _</p>
                 <p class="hint">% matches any number of characters</p>
                 <p class="hint">_ matches only a single character</p>
+                [% IF ( CAN_user_parameters_manage_item_search_fields ) %]
+                    <p><a href="/cgi-bin/koha/admin/items_search_fields.pl">Manage custom fields for item search</a></p>
+                [% END %]
             </fieldset>
             <fieldset>
                 <div class="form-field">
