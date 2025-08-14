@@ -19,7 +19,7 @@ use Modern::Perl;
 use utf8;
 
 use Test::NoWarnings;
-use Test::More tests => 77;
+use Test::More tests => 78;
 use Test::Exception;
 use Test::MockModule;
 use Test::Deep qw( cmp_deeply );
