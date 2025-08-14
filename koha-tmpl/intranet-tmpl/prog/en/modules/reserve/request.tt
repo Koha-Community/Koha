@@ -1756,27 +1756,57 @@
             });
             var prev_rank_request;
             $("select[name=rank-request]").on("focus", function() {
-                prev_rank_request = $(this).val();
-                var row = $(this).parents("tr:first");
+                prev_rank_request = parseInt($(this).val());
             }).change(function() {
-                var row = $(this).parents("tr:first");
-                var value = parseInt($(this).val());
-                var found_holds = $("select[name='rank-request'][disabled='disabled']").length ; //Count how many are found
-                if( !isNaN(value) ) {  //If moved to 'del'
-                    var after = row.parent().find(`tr:nth-child(${value+found_holds})`); //Go to the row 1 after the new value (and skip found holds)
-                    if (prev_rank_request > value) {
-                        row.insertBefore(after);
-                    } else {
-                        row.insertAfter(after);
-                    }
+                var this_rank = $(this);
+                var new_rank = parseInt(this_rank.val());
+                var old_rank = prev_rank_request;
+
+                if ( isNaN( old_rank ) ) {
+                    $("select[name=rank-request]").not('[disabled]').not(this_rank).each(function() {
+                        var current_rank = parseInt($(this).val());
+                        if ( !isNaN(current_rank) && current_rank >= new_rank ) {
+                            $(this).val(current_rank + 1);
+                        }
+                    });
+                    prev_rank_request = new_rank;
+                    return;
                 }
 
-                var next_priority = 1;
-                $("select[name=rank-request]").each(function () {
-                    if( isNaN( $(this).val() ) ){ return true; } //Don't reset found or del holds
-                    $(this).val(next_priority);
-                    next_priority++;
+                if ( isNaN( new_rank ) ) {
+                    if ( !isNaN( old_rank ) ) {
+                        $("select[name=rank-request]").not('[disabled]').not(this).each(function() {
+                            var current_rank = parseInt($(this).val());
+                            if ( !isNaN(current_rank) && current_rank > old_rank ) {
+                                $(this).val(current_rank - 1);
+                            }
+                        });
+                    }
+                    prev_rank_request = NaN;
+                    return;
+                }
+
+                //if new rank is old rank, don't continue
+                if ( new_rank === old_rank ) return;
+
+                // Adjust ranks
+                $("select[name=rank-request]").not('[disabled]').not(this).each(function() {
+                    var current_rank = parseInt($(this).val());
+                    //if current_rank is NaN, bail
+                    if ( isNaN( current_rank ) ) return;
+
+                    if ( old_rank > new_rank ) {
+                        if ( current_rank >= new_rank && current_rank < old_rank ) {
+                            $(this).val(current_rank + 1);
+                        }
+                    } else {
+                        if ( current_rank > old_rank && current_rank <= new_rank ) {
+                            $(this).val(current_rank - 1);
+                        }
+                    }
                 });
+
+                prev_rank_request = new_rank;
             });
 
             $(".clear-date").on("click",function(e){
