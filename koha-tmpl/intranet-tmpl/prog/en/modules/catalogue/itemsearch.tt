@@ -110,9 +110,13 @@
           [% FOREACH field IN items_search_fields %]
             [% marcfield = field.tagfield %]
             [% IF field.tagsubfield.defined AND field.tagsubfield != "" %]
-              [% marcfield = marcfield _ '$' _ field.tagsubfield %]
+                [% marcfield = "marc:" _ marcfield _ '$' _ field.tagsubfield %]
             [% END %]
-            <option value="marc:[% marcfield | html %]" data-authorised-values-category="[% field.authorised_values_category | html %]">[% field.label | html %] ([% marcfield | html %])</option>
+            [% IF query.param('f').$i == marcfield || query.param('f') == marcfield %]
+                <option value="[% marcfield | html %]" data-authorised-values-category="[% field.authorised_values_category | html %]" selected="selected">[% field.label | html %] ([% marcfield | html %])</option>
+            [% ELSE %]
+                <option value="[% marcfield | html %]" data-authorised-values-category="[% field.authorised_values_category | html %]">[% field.label | html %] ([% marcfield | html %])</option>
+            [% END %]
           [% END %]
         </optgroup>
       [% END %]
