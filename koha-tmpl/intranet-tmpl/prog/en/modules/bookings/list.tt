@@ -211,12 +211,12 @@
             );
 
             const additional_filters = AdditionalFilters.init(["filter-expired", "filter-cancelled"])
-                .onChange((filters, { anyFiltersApplied }) => {
+                .onChange((filters, { anyFiltersNotApplied }) => {
                     bookings_table.DataTable().ajax.reload(() => {
                         bookings_table
                             .DataTable()
                             .column("status:name")
-                            .visible(anyFiltersApplied, false);
+                            .visible(anyFiltersNotApplied, false);
                     });
                 })
                 .build({

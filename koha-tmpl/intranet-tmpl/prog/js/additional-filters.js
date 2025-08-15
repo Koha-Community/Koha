@@ -16,8 +16,9 @@
  * JavaScript Usage:
  * @example
  * const additional_filters = AdditionalFilters.init(['filter-expired', 'filter-cancelled'])
- *   .onChange((filters, { anyFiltersApplied }) => {
- *     table.column('status').visible(anyFiltersApplied);
+ *   .onChange((filters, { anyFiltersNotApplied }) => {
+ *     // Show status column when any filters are showing additional items
+ *     table.column('status').visible(anyFiltersNotApplied);
  *   })
  *   .build({
  *     status: ({ filters, isNotApplied }) =>
