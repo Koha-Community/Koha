@@ -1,7 +1,8 @@
+[% PROCESS 'i18n.inc' %]
 [% IF ( biblio.title ) %]
     [% biblio.title | html %]
 [% ELSE %]
-    No title
+    [% t("No title") | html %]
 [% END %]
 [%~ SET subtitles = biblio.subtitle.split(' \| ') ~%]
 [%~ FOREACH subtitle IN subtitles ~%]
