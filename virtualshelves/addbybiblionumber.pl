@@ -202,13 +202,16 @@ for my $biblionumber (@biblionumbers) {
         }
     );
 }
-$template->param(
-    multiple => ( scalar(@biblios) > 1 ),
-    total    => scalar @biblios,
-    biblios  => \@biblios,
-);
+
+if ( scalar(@biblios) < 1 ) {
+    $errcode    = 3;
+    $authorized = 0;    # trigger error screen
+}
 
 $template->param(
+    multiple   => ( scalar(@biblios) > 1 ),
+    total      => scalar @biblios,
+    biblios    => \@biblios,
     newshelf   => $newshelf || 0,
     authorized => $authorized,
     errcode    => $errcode,
