@@ -4894,3 +4894,17 @@ div .suggestion_note {
         }
     }
 }
+
+[class*="filters-"] {
+    [data-filtered] span:nth-child(2) {
+        display: none;
+    }
+
+    a:not([data-filtered]) span:nth-child(1) {
+        display: none;
+    }
+
+    a {
+        cursor: pointer;
+    }
+}

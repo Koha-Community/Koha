@@ -12,13 +12,7 @@
     [% END %]</title
 >
 [% INCLUDE 'doc-head-close.inc' %]
-<style>
-    #bookings-timeline .vis-item.vis-range {
-        &.cancelled {
-            background: rgba(128, 128, 128, 0.3);
-        }
-    }
-</style>
+[% Asset.css("css/bookings.css") | $raw %]
 </head>
 
 <body id="circ_request" class="catalog">
@@ -47,10 +41,14 @@
         <h1>Bookings for [% INCLUDE 'biblio-title-head.inc' %]</h1>
         <div class="page-section" id="bookings-timeline"></div>
         <div class="page-section">
-            <fieldset class="action filters d-flex gap-2" style="cursor: pointer;">
-                <a id="expired_filter" data-filter="expired"><i class="fa fa-bars"></i> Show expired</a>
-                <a id="cancelled_filter" data-filter="cancelled"><i class="fa fa-bars"></i> Show cancelled</a>
-            </fieldset>
+            [%
+                INCLUDE 'table-filters.inc'
+                filters = [
+                    { id = 'expired', label_show = t('Include expired'), label_hide = t('Exclude expired') },
+                    { id = 'cancelled', label_show = t('Include cancelled'), label_hide = t('Exclude cancelled') },
+                ]
+                filter_class = 'bookings'
+            %]
 
             <table id="bookings_table"></table>
         </div>
@@ -124,6 +122,7 @@
                             start: dayjs(booking.start_date).toDate(),
                             end: dayjs(booking.end_date).toDate(),
                             content: !isActive ? `<s>${patronContent}</s>` : patronContent,
+                            className: booking.status === "cancelled" ? "cancelled" : "",
                             [% IF CAN_user_circulate_manage_bookings %]
                             editable: booking.status !== "cancelled" ? { remove: true, updateTime: true } : false,
                             [% ELSE %]
@@ -133,17 +132,6 @@
                             group: booking.item_id ?? 0,
                         });
                     }
-
-                    const cancelledItems = document.querySelectorAll('#bookings-timeline .vis-item.vis-range.cancelled');
-                    cancelledItems.forEach(item => {
-                        item.style.background = 'repeating-linear-gradient(' +
-                            '135deg,' +
-                            'rgba(211, 211, 211, 0.5) 0,' +
-                            'rgba(211, 211, 211, 0.5) 10px,' +
-                            'transparent 10px,' +
-                            'transparent 20px' +
-                        ');';
-                    });
 
                     var container = document.getElementById('bookings-timeline');
                     var options = {
@@ -201,7 +189,9 @@
                             });
                         },
                         onRemove: function (item, callback) {
-                            $('#cancelBookingModal').modal('show', $('<button data-booking="'+item.id+'">'));
+                            const button = document.createElement('button');
+                            button.dataset.booking = item.booking || item.id;
+                            $('#cancelBookingModal').modal('show', button);
                             $('#cancelBookingModal').on('hide.bs.modal', function(e) {
                                 if (cancel_success) {
                                     cancel_success = 0;
@@ -219,24 +209,52 @@
                 }
             );
 
-            const filterStates = { expired: true, cancelled: false };
+            const filters = ["expired", "cancelled"].reduce((acc, filter) => {
+                acc[filter] = document.getElementById(`filter-${filter}`);
+                return acc;
+            }, {});
+
+            Object.values(filters).forEach(filter => {
+                filter.addEventListener("click", handleFilter);
+            });
+
+            const isFilterActive = (filter) => "filtered" in filter.dataset;
+            const isShowingItems = (filter) => !isFilterActive(filter);
             const additional_filters = {
                 end_date: () => {
-                    if (filterStates.expired) {
+                    if (isShowingItems(filters.expired)) {
                         let today = new Date();
                         return { ">=": today.toISOString() };
                     }
                 },
                 status: () => {
                     const defaults = ["new", "pending", "active"];
-                    if (filterStates.cancelled) {
-                        const filtered = [...defaults, "cancelled"];
-                        return { "-in": filtered };
+                    const filtered = [...defaults];
+                    if (isShowingItems(filters.cancelled)) {
+                        filtered.push("cancelled");
                     }
-
-                    return { "-in": defaults };
+                    return { "-in": filtered };
                 },
             };
+
+            function handleFilter(e) {
+                const target = e.target;
+                const anchor = target.closest("a");
+
+                if (isFilterActive(anchor)) {
+                    delete anchor.dataset.filtered;
+                } else {
+                    anchor.dataset.filtered = "";
+                }
+
+                bookings_table.DataTable().ajax.reload(() => {
+                    const anyFiltersActive = Object.values(filters).some(isShowingItems);
+                    bookings_table
+                        .DataTable()
+                        .column("status:name")
+                        .visible(anyFiltersActive, false);
+                });
+            }
 
             var bookings_table_url = "/api/v1/biblios/%s/bookings".format(biblionumber);
             bookings_table = $('#bookings_table').kohaTable({
@@ -374,11 +392,47 @@
                     "orderable": false,
                     "render": function(data, type, row, meta) {
                         let result = "";
-                        let is_cancelled = row.status === "cancelled";
+                        const is_readonly = row.status === "cancelled";
                         [% IF CAN_user_circulate_manage_bookings %]
-                        if (!is_cancelled) {
-                            result += '<button type="button" class="btn btn-default btn-xs edit-action" data-bs-toggle="modal" data-bs-target="#placeBookingModal" data-booking="%s" data-biblionumber="%s" data-itemnumber="%s" data-patron="%s" data-pickup_library="%s" data-start_date="%s" data-end_date="%s" data-item_type_id="%s"><i class="fa fa-pencil" aria-hidden="true"></i> %s</button>'.format(row.booking_id, biblionumber, row.item_id,  row.patron_id, row.pickup_library_id, row.start_date, row.end_date, row.item.item_type_id, _("Edit"));
-                            result += '<button type="button" class="btn btn-default btn-xs cancel-action" data-bs-toggle="modal" data-bs-target="#cancelBookingModal" data-booking="%s"><i class="fa fa-trash" aria-hidden="true"></i> %s</button>'.format(row.booking_id, _("Cancel"));
+                        if (!is_readonly) {
+                            result += `
+                                <button type="button" class="btn btn-default btn-xs edit-action"
+                                    data-bs-toggle="modal"
+                                    data-bs-target="#placeBookingModal"
+                                    data-booking="%s"
+                                    data-biblionumber="%s"
+                                    data-itemnumber="%s"
+                                    data-patron="%s"
+                                    data-pickup_library="%s"
+                                    data-start_date="%s"
+                                    data-end_date="%s"
+                                    data-item_type_id="%s"
+                                >
+                                    <i class="fa fa-pencil" aria-hidden="true"></i> %s
+                                </button>
+                            `.format(
+                                escape_str(row.booking_id),
+                                escape_str(biblionumber),
+                                escape_str(row.item_id),
+                                escape_str(row.patron_id),
+                                escape_str(row.pickup_library_id),
+                                escape_str(row.start_date),
+                                escape_str(row.end_date),
+                                escape_str(row.item.item_type_id),
+                                _("Edit")
+                            );
+                            result += `
+                                <button type="button" class="btn btn-default btn-xs cancel-action"
+                                    data-bs-toggle="modal"
+                                    data-bs-target="#cancelBookingModal"
+                                    data-booking="%s"
+                                >
+                                    <i class="fa fa-trash" aria-hidden="true"></i> %s
+                                </button>
+                            `.format(
+                                escape_str(row.booking_id),
+                                _("Cancel")
+                            );
                         }
                         [% END %]
                         return result;
@@ -386,51 +440,11 @@
                 }]
             }, undefined, 0, additional_filters);
 
-            document
-                .getElementById("expired_filter")
-                .addEventListener("click", (e) =>
-                    handleFilter(
-                        e,
-                        { active: _("Hide expired"), inactive: _("Show expired") },
-                        filterStates,
-                    ),
-                );
-
-            document
-                .getElementById("cancelled_filter")
-                .addEventListener("click", (e) =>
-                    handleFilter(
-                        e,
-                        { active: _("Hide cancelled"), inactive: _("Show cancelled") },
-                        filterStates,
-                    ),
-                );
-
             $("#cancellation-reason").comboBox({
                 displayProperty: 'name',
                 placeholder: _("Select or type a reason"),
             });
 
-            function handleFilter(e, text, filterStates) {
-                const target = e.target;
-                const { filter } = target.dataset;
-                if (target.classList.contains("filtered")) {
-                    filterStates[filter] = false;
-                    target.innerHTML = `<i class="fa fa-bars"></i> ${text.inactive}`;
-                } else {
-                    filterStates[filter] = true;
-                    target.innerHTML = `<i class="fa fa-filter"></i> ${text.active}`;
-                }
-
-                bookings_table.DataTable().ajax.reload(() => {
-                    bookings_table
-                        .DataTable()
-                        .column("status:name")
-                        .visible(filterStates[filter], false);
-                });
-
-                target.classList.toggle("filtered");
-            }
         });
     </script>
 [% END %]
