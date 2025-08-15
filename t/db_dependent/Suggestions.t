@@ -612,7 +612,7 @@ subtest 'EmailPurchaseSuggestions' => sub {
     # EmailPurchaseSuggestions set to disabled
     t::lib::Mocks::mock_preference( "EmailPurchaseSuggestions", "0" );
     Koha::Suggestion->new($my_suggestion)->store;
-    my $newsuggestions_messages = C4::Letters::GetQueuedMessages( { borrowernumber => $borrowernumber } );
+    my $newsuggestions_messages = C4::Letters::GetQueuedMessages( { letter_code => 'NEW_SUGGESTION' } );
     is(
         @$newsuggestions_messages, 0,
         'New suggestion does not send an email when EmailPurchaseSuggestions disabled'
@@ -634,7 +634,7 @@ subtest 'EmailPurchaseSuggestions' => sub {
     Koha::Libraries->find('CPL')->update( { branchreplyto => 'branchemail@b.c' } );
     Koha::Suggestion->new($my_suggestion)->store;
 
-    $newsuggestions_messages = C4::Letters::GetQueuedMessages( { borrowernumber => $borrowernumber } );
+    $newsuggestions_messages = C4::Letters::GetQueuedMessages( { letter_code => 'NEW_SUGGESTION' } );
     isnt( @$newsuggestions_messages, 0, 'New suggestions sends an email wne EmailPurchaseSuggestions enabled' );
     my $message1 =
         C4::Letters::GetMessage( $newsuggestions_messages->[0]->{message_id} );
@@ -673,7 +673,7 @@ subtest 'EmailPurchaseSuggestions' => sub {
     t::lib::Mocks::mock_preference( "ReplytoDefault", 'library@b.c' );
     Koha::Suggestion->new($my_suggestion)->store;
 
-    $newsuggestions_messages = C4::Letters::GetQueuedMessages( { borrowernumber => $borrowernumber } );
+    $newsuggestions_messages = C4::Letters::GetQueuedMessages( { letter_code => 'NEW_SUGGESTION' } );
     my $message5 =
         C4::Letters::GetMessage( $newsuggestions_messages->[4]->{message_id} );
     is(
@@ -705,7 +705,7 @@ subtest 'EmailPurchaseSuggestions' => sub {
     );
     Koha::Suggestion->new($my_suggestion)->store;
 
-    $newsuggestions_messages = C4::Letters::GetQueuedMessages( { borrowernumber => $borrowernumber } );
+    $newsuggestions_messages = C4::Letters::GetQueuedMessages( { letter_code => 'NEW_SUGGESTION' } );
     my $message7 =
         C4::Letters::GetMessage( $newsuggestions_messages->[6]->{message_id} );
     is(
