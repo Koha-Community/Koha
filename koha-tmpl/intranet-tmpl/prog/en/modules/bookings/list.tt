@@ -42,10 +42,10 @@
         <div class="page-section" id="bookings-timeline"></div>
         <div class="page-section">
             [%
-                INCLUDE 'table-filters.inc'
+                INCLUDE 'additional-filters.inc'
                 filters = [
-                    { id = 'expired', label_show = t('Include expired'), label_hide = t('Exclude expired') },
-                    { id = 'cancelled', label_show = t('Include cancelled'), label_hide = t('Exclude cancelled') },
+                    { id = 'filter-expired', label_show = t('Include expired'), label_hide = t('Exclude expired') },
+                    { id = 'filter-cancelled', label_show = t('Include cancelled'), label_hide = t('Exclude cancelled') },
                 ]
                 filter_class = 'bookings'
             %]
@@ -74,6 +74,7 @@
     [% Asset.js("js/modals/place_booking.js") | $raw %]
     [% Asset.js("js/cancel_booking_modal.js") | $raw %]
     [% Asset.js("js/combobox.js") | $raw %]
+    [% Asset.js("js/additional-filters.js") | $raw %]
     <script>
         var cancel_success = 0;
         var update_success = 0;
@@ -209,52 +210,32 @@
                 }
             );
 
-            const filters = ["expired", "cancelled"].reduce((acc, filter) => {
-                acc[filter] = document.getElementById(`filter-${filter}`);
-                return acc;
-            }, {});
-
-            Object.values(filters).forEach(filter => {
-                filter.addEventListener("click", handleFilter);
-            });
-
-            const isFilterActive = (filter) => "filtered" in filter.dataset;
-            const isShowingItems = (filter) => !isFilterActive(filter);
-            const additional_filters = {
-                end_date: () => {
-                    if (isShowingItems(filters.expired)) {
-                        let today = new Date();
-                        return { ">=": today.toISOString() };
+            const additional_filters = AdditionalFilters.init(["filter-expired", "filter-cancelled"])
+                .onChange((filters, { anyFiltersApplied }) => {
+                    bookings_table.DataTable().ajax.reload(() => {
+                        bookings_table
+                            .DataTable()
+                            .column("status:name")
+                            .visible(anyFiltersApplied, false);
+                    });
+                })
+                .build({
+                    end_date: ({ filters, isNotApplied }) => {
+                        if (isNotApplied(filters['filter-expired'])) {
+                            let today = new Date();
+                            return { ">=": today.toISOString() };
+                        }
+                    },
+                    status: ({ filters, isNotApplied }) => {
+                        const defaults = ["new", "pending", "active"];
+                        const filtered = [...defaults];
+                        if (isNotApplied(filters['filter-cancelled'])) {
+                            filtered.push("cancelled");
+                        }
+                        return { "-in": filtered };
                     }
-                },
-                status: () => {
-                    const defaults = ["new", "pending", "active"];
-                    const filtered = [...defaults];
-                    if (isShowingItems(filters.cancelled)) {
-                        filtered.push("cancelled");
-                    }
-                    return { "-in": filtered };
-                },
-            };
-
-            function handleFilter(e) {
-                const target = e.target;
-                const anchor = target.closest("a");
-
-                if (isFilterActive(anchor)) {
-                    delete anchor.dataset.filtered;
-                } else {
-                    anchor.dataset.filtered = "";
-                }
-
-                bookings_table.DataTable().ajax.reload(() => {
-                    const anyFiltersActive = Object.values(filters).some(isShowingItems);
-                    bookings_table
-                        .DataTable()
-                        .column("status:name")
-                        .visible(anyFiltersActive, false);
                 });
-            }
+
 
             var bookings_table_url = "/api/v1/biblios/%s/bookings".format(biblionumber);
             bookings_table = $('#bookings_table').kohaTable({
