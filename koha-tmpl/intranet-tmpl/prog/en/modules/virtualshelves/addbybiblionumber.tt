@@ -13,10 +13,11 @@
     <div class="container-fluid">
 
 [% UNLESS (authorized) %]
+    <h1>Error adding to list</h1>
     <div class="alert alert-warning">
-        <h1>Error adding to list</h1>
         [% IF (errcode==1) %]<p>Could not create a new list. Please check the name.</p>[% END %]
         [% IF (errcode==2) %]<p>Sorry, you do not have permission to add items to this list.</p>[% END %]
+        [% IF (errcode==3) %]<p>The titles selected were not found</p>[% END %]
         <button class="btn btn-default close_window focus">Close window</button>
     </div>
 [% ELSE %]
