@@ -236,6 +236,10 @@
                     <a href="/cgi-bin/koha/catalogue/search.pl" class="btn btn-default"><i class="fa fa-search"></i> Go to advanced search</a>
                 </div>
             </div>
+            <fieldset id="itemselection">
+                <label class="form-field-label">Forget item selections from previous search</label>
+                <input type="checkbox" name="forget_item_selections" id="forget_item_selections" value="forget_item_selections" checked="checked" />
+            </fieldset>
             <fieldset id="librarylocation">
                 [% INCLUDE form_field_select name="homebranch" options = branches %]
                 [% INCLUDE form_field_select name="holdingbranch" options = branches %]
@@ -757,6 +761,9 @@
 
             $('#itemsearchform').submit(function() {
                 var searchform = $(this);
+                if( $("#forget_item_selections").is(':checked') ){
+                  localStorage.removeItem("item_search_selections");
+                }
                 var format = searchform.find('input[name="format"]:checked').val();
                 if (format == 'html') {
                     submitForm(searchform);
