@@ -4239,7 +4239,7 @@ CREATE TABLE `itemtypes` (
   `searchcategory` varchar(80) DEFAULT NULL COMMENT 'Group this item type with others with the same value on OPAC search options',
   `automatic_checkin` tinyint(1) NOT NULL DEFAULT 0 COMMENT 'If automatic checkin is enabled for items of this type',
   `bookable` tinyint(1) NOT NULL DEFAULT 0 COMMENT 'Activate bookable feature for items related to this item type',
-  `checkprevcheckout` varchar(7) NOT NULL DEFAULT 'inherit' COMMENT 'produce a warning for a patron if a item of this type has previously been checked out to the same patron if ''yes'', not if ''no'', defer to category setting if ''inherit''.',
+  `checkprevcheckout` enum('yes','no','inherit') NOT NULL DEFAULT 'inherit' COMMENT 'produce a warning for a patron if a item of this type has previously been checked out to the same patron if ''yes'', not if ''no'', defer to category setting if ''inherit''.',
   PRIMARY KEY (`itemtype`),
   UNIQUE KEY `itemtype` (`itemtype`),
   KEY `itemtypes_ibfk_1` (`parent_type`),
