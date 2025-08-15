@@ -269,7 +269,7 @@ subtest 'build_query tests' => sub {
 
     is_deeply(
         $query->{sort},
-        [ { 'title__sort' => { 'order' => 'asc' } }, { 'local-number' => { 'order' => 'desc' } } ],
+        [ { 'title__sort' => { 'order' => 'asc' } }, { 'local-number__sort' => { 'order' => 'desc' } } ],
         "sort parameter properly formed"
     );
 
@@ -296,8 +296,8 @@ subtest 'build_query tests' => sub {
     is_deeply(
         $query->{sort},
         [
-            { '_score'       => { 'order' => 'desc' } },
-            { 'local-number' => { 'order' => 'desc' } }
+            { '_score'             => { 'order' => 'desc' } },
+            { 'local-number__sort' => { 'order' => 'desc' } }
         ],
         "sort parameter properly formed if no sort passed"
     );

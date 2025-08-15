@@ -46,6 +46,7 @@ $se->mock(
                 sortablenumber       => { type => 'integer' },
                 sortablenumber__sort => { type => 'integer' },
                 'local-number'       => { type => 'integer' },
+                'local-number__sort' => { type => 'integer' },
             }
         };
         $all_mappings{ $self->index } = $mappings;
