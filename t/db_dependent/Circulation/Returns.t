@@ -146,6 +146,7 @@ subtest "AddReturn logging on statistics table (item-level_itypes=1)" => sub {
     [
         qr/^item-level_itypes set but no itemtype set for item/,
         qr/^item-level_itypes set but no itemtype set for item/,
+        qr/^item-level_itypes set but no itemtype set for item/,
         qr/^item-level_itypes set but no itemtype set for item/
     ],
         'Item without itemtype set raises warning on AddIssue';
