@@ -97,7 +97,7 @@
                         [% IF ( HOLD.expirationdate ) %]
                             [% HOLD.expirationdate | $KohaDates %]
                         [% ELSE %]
-                            Never expires
+                            <span>Never expires</span>
                         [% END %]
                     [% ELSE %]
                         -
@@ -152,17 +152,19 @@
                     [% IF ( HOLD.is_waiting ) %]
                         <i class="fa fa-exclamation-circle text-warning" aria-hidden="true"></i>
                         [% IF ( HOLD.is_at_destination ) %]
-                            Item waiting at <strong> [% HOLD.branch.branchname | html %]</strong>
+                            <span>Item waiting at <strong> [% HOLD.branch.branchname | html %]</strong></span>
                             [% IF ( HOLD.desk_id ) %], [% HOLD.desk.desk_name | html %],[% END %]
                             [% IF ( HOLD.waitingdate ) %]
-                                since [% HOLD.waitingdate | $KohaDates %]
+                                [% tp("On hold since [waiting date]", "since") | html %]
+                                [% HOLD.waitingdate | $KohaDates %]
                                 [% IF HOLD.expirationdate %]
-                                    until [% HOLD.expirationdate | $KohaDates %]
+                                    [% tp("On hold until [expiration date]", "until") | html %]
+                                    [% HOLD.expirationdate | $KohaDates %]
                                 [% END %]
                             [% END %]
                             <input type="hidden" name="pickup" value="[% HOLD.branchcode | html %]" />
                         [% ELSE %]
-                            Item in transit to <strong> [% Branches.GetName( HOLD.branchcode ) | html %]</strong> <input type="hidden" name="pickup" value="[% HOLD.branchcode | html %]" />
+                            <span>Item in transit to</span> <strong> [% Branches.GetName( HOLD.branchcode ) | html %]</strong> <input type="hidden" name="pickup" value="[% HOLD.branchcode | html %]" />
                         [% END %]
                     [% ELSE %]
                         [% IF ( HOLD.is_in_transit ) %]

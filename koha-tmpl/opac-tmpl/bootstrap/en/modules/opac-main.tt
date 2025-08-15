@@ -189,7 +189,7 @@
                                                             [% ELSE %]
                                                                 <i class="fa fa-user" aria-hidden="true"></i>
                                                             [% END %]
-                                                            Log in with [% provider.description | html %]
+                                                            [% tx("Log in with {identity_provider}", { identity_provider = provider.description } ) | html %]
                                                         </a>
                                                     </p>
                                                 [% END %]
