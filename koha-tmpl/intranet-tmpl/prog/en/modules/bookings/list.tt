@@ -41,7 +41,7 @@
         <h1>Bookings for [% INCLUDE 'biblio-title-head.inc' %]</h1>
         <div class="page-section" id="bookings-timeline"></div>
         <div class="page-section">
-            [% INCLUDE 'additional-filters.inc' filters = [ { id = 'filter-expired', label_show = t('Include expired'), label_hide = t('Exclude expired') }, { id = 'filter-cancelled', label_show = t('Include cancelled'), label_hide = t('Exclude cancelled') }, ] filter_class = 'bookings' %]
+            [% INCLUDE 'additional-filters.inc' filters = [ { id = 'filter-expired', label_show = t('Include expired'), label_hide = t('Exclude expired') }, { id = 'filter-cancelled', label_show = t('Include cancelled'), label_hide = t('Exclude cancelled') }, { id = 'filter-completed', label_show = t('Include completed'), label_hide = t('Exclude completed') },] filter_class = 'bookings' %]
             <table id="bookings_table"></table>
         </div>
     </div>
@@ -117,7 +117,7 @@
                             content: !isActive ? `<s>${patronContent}</s>` : patronContent,
                             className: booking.status === "cancelled" ? "cancelled" : "",
                             [% IF CAN_user_circulate_manage_bookings %]
-                            editable: booking.status !== "cancelled" ? { remove: true, updateTime: true } : false,
+                            editable: !["cancelled", "completed"].includes(booking.status) ? { remove: true, updateTime: true } : false,
                             [% ELSE %]
                             editable: false,
                             [% END %]
@@ -202,7 +202,7 @@
                 }
             );
 
-            const additional_filters = AdditionalFilters.init(["filter-expired", "filter-cancelled"])
+            const additional_filters = AdditionalFilters.init(["filter-expired", "filter-cancelled", "filter-completed"])
                 .onChange((filters, { anyFiltersNotApplied }) => {
                     bookings_table.DataTable().ajax.reload();
                 })
@@ -218,6 +218,9 @@
                         const filtered = [...defaults];
                         if (isNotApplied(filters['filter-cancelled'])) {
                             filtered.push("cancelled");
+                        }
+                        if (isNotApplied(filters['filter-completed'])) {
+                            filtered.push("completed");
                         }
                         return { "-in": filtered };
                     }
@@ -360,7 +363,7 @@
                     "orderable": false,
                     "render": function(data, type, row, meta) {
                         let result = "";
-                        const is_readonly = row.status === "cancelled";
+                        const is_readonly = ["cancelled", "completed"].includes(row.status);
                         [% IF CAN_user_circulate_manage_bookings %]
                         if (!is_readonly) {
                             result += `
@@ -408,9 +411,8 @@
                                     <input type="hidden" name="borrowernumber" value="%s"/>
                                     <input type="hidden" name="barcode" value="%s"/>
                                     <input type="hidden" name="duedatespec" value="%s"/>
-                                    <input type="hidden" name="booking_id" value="%s"/>
                                     <button id="checkout_action" class="btn btn-default btn-xs" type="submit">
-                                        %s
+                                       <i class="fa fa-check-circle" aria-hidden="true"></i> %s
                                     </button>
                                 </form>
                             `.format(
@@ -418,7 +420,6 @@
                                 escape_str(row.patron_id),
                                 escape_str(row.item.external_id),
                                 escape_str(row.end_date),
-                                escape_str(row.booking_id),
                                 _("Transform to checkout")
                             );
                         }
