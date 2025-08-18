@@ -349,7 +349,9 @@ if ( C4::Context->preference('SeparateHoldingsByGroup') ) {
 
                 # Get other libraries in group
                 my @other_libs = grep { $_->branchcode ne $branchcode } @all_libs;
+
                 my @libs_branchcodes;
+                push @libs_branchcodes, $branchcode;
 
                 foreach my $lib (@other_libs) {
                     push @libs_branchcodes, $lib->branchcode;
