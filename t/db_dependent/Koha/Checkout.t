@@ -20,7 +20,7 @@
 use Modern::Perl;
 
 use Test::NoWarnings;
-use Test::More tests => 5;
+use Test::More tests => 6;
 use t::lib::TestBuilder;
 
 use Koha::Database;
@@ -184,6 +184,37 @@ subtest 'public_read_list() tests' => sub {
             );
         }
     }
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'booking() tests' => sub {
+    plan tests => 4;
+
+    $schema->storage->txn_begin;
+
+    my $booking  = $builder->build_object( { class => 'Koha::Bookings' } );
+    my $checkout = $builder->build_object(
+        {
+            class => 'Koha::Checkouts',
+            value => { booking_id => $booking->booking_id }
+        }
+    );
+
+    my $linked_booking = $checkout->booking;
+    is( ref($linked_booking),        'Koha::Booking',      'booking() returns a Koha::Booking object' );
+    is( $linked_booking->booking_id, $booking->booking_id, 'booking() returns the correct booking' );
+
+    my $checkout_no_booking = $builder->build_object(
+        {
+            class => 'Koha::Checkouts',
+            value => { booking_id => undef }
+        }
+    );
+
+    my $no_booking = $checkout_no_booking->booking;
+    is( $no_booking,      undef, 'booking() returns undef when no booking_id is set' );
+    is( ref($no_booking), '',    'booking() returns empty ref when no booking_id is set' );
 
     $schema->storage->txn_rollback;
 };

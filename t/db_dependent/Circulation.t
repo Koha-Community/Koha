@@ -7122,6 +7122,104 @@ subtest "SendCirculationAlert" => sub {
 
 };
 
+subtest 'AddIssue | booking_id field linkage' => sub {
+    plan tests => 6;
+
+    my $library = $builder->build_object( { class => 'Koha::Libraries' } );
+    my $patron1 = $builder->build_object( { class => 'Koha::Patrons' } );
+    my $patron2 = $builder->build_object( { class => 'Koha::Patrons' } );
+    my $item    = $builder->build_sample_item( { bookable => 1 } );
+
+    # Patron checks out item with their own booking - booking_id should be set
+    my $booking1 = Koha::Booking->new(
+        {
+            patron_id         => $patron1->borrowernumber,
+            pickup_library_id => $library->branchcode,
+            item_id           => $item->itemnumber,
+            biblio_id         => $item->biblio->biblionumber,
+            start_date        => dt_from_string(),
+            end_date          => dt_from_string()->add( days => 5 ),
+        }
+    )->store();
+
+    my $issue1 = AddIssue( $patron1, $item->barcode, dt_from_string()->add( days => 7 ) );
+    is( $issue1->booking_id, $booking1->booking_id, "Checkout linked to patron's own booking via booking_id" );
+
+    # Verify the relationship accessor works
+    my $linked_booking = $issue1->booking;
+    is( $linked_booking->booking_id, $booking1->booking_id, "Booking relationship accessor returns correct booking" );
+
+    # Verify booking_id is preserved when moved to old_issues on return
+    my ( $returned, undef, undef, undef ) = AddReturn( $item->barcode, $library->branchcode );
+    is( $returned, 1, "Item returned successfully" );
+
+    my $old_checkout = Koha::Old::Checkouts->find( { issue_id => $issue1->issue_id } );
+    is( $old_checkout->booking_id, $booking1->booking_id, "booking_id preserved in old_issues after return" );
+
+    # Verify old_checkout booking relationship works
+    my $old_linked_booking = $old_checkout->booking;
+    is( $old_linked_booking->booking_id, $booking1->booking_id, "Old checkout booking relationship accessor works" );
+
+    # Another patron checks out - no booking_id should be set
+    $booking1->delete();
+    my $issue2 = AddIssue( $patron2, $item->barcode, dt_from_string()->add( days => 7 ) );
+    is( $issue2->booking_id, undef, "No booking_id set when checkout is not from a patron's own booking" );
+};
+
+subtest 'AddRenewal | booking_id preservation' => sub {
+    plan tests => 3;
+
+    my $library = $builder->build_object( { class => 'Koha::Libraries' } );
+    my $patron  = $builder->build_object( { class => 'Koha::Patrons' } );
+    my $item    = $builder->build_sample_item( { library => $library->branchcode } );
+
+    # Set up renewal rules
+    Koha::CirculationRules->set_rules(
+        {
+            branchcode   => $library->branchcode,
+            categorycode => $patron->categorycode,
+            itemtype     => $item->effective_itemtype,
+            rules        => {
+                renewalsallowed => 10,
+                renewalperiod   => 7,
+                issuelength     => 7,
+            }
+        }
+    );
+
+    # Create a simple booking using the builder
+    my $booking = $builder->build_object(
+        {
+            class => 'Koha::Bookings',
+            value => {
+                patron_id         => $patron->borrowernumber,
+                item_id           => $item->itemnumber,
+                pickup_library_id => $library->branchcode,
+                status            => 'completed'
+            }
+        }
+    );
+
+    # Create a checkout and manually set booking_id to simulate a booking-linked checkout
+    my $issue = AddIssue( $patron, $item->barcode );
+    $issue->booking_id( $booking->booking_id )->store;
+
+    # Renew the checkout
+    AddRenewal(
+        {
+            borrowernumber => $patron->borrowernumber,
+            itemnumber     => $item->itemnumber,
+            branch         => $library->branchcode,
+        }
+    );
+
+    # Refresh the issue object and test that booking_id is preserved
+    $issue = $issue->get_from_storage;
+    is( $issue->booking_id,     $booking->booking_id, "booking_id preserved after renewal" );
+    is( $issue->renewals_count, 1,                    "Renewal count incremented" );
+    ok( defined $issue->booking_id, "booking_id field is not null after renewal" );
+};
+
 subtest "GetSoonestRenewDate tests" => sub {
     plan tests => 6;
     Koha::CirculationRules->set_rule(

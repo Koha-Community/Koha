@@ -38,7 +38,7 @@ my $schema  = Koha::Database->new->schema;
 my $builder = t::lib::TestBuilder->new;
 
 subtest 'Relation accessor tests' => sub {
-    plan tests => 4;
+    plan tests => 6;
 
     subtest 'biblio relation tests' => sub {
         plan tests => 3;
@@ -122,6 +122,90 @@ subtest 'Relation accessor tests' => sub {
         $THE_item->delete;
         $booking = Koha::Bookings->find( $booking->booking_id );
         is( $booking, undef, "The booking is deleted when the item it's attached to is deleted" );
+
+        $schema->storage->txn_rollback;
+    };
+
+    subtest 'checkout relation tests' => sub {
+        plan tests => 4;
+        $schema->storage->txn_begin;
+
+        my $patron  = $builder->build_object( { class => "Koha::Patrons" } );
+        my $item    = $builder->build_sample_item( { bookable => 1 } );
+        my $booking = $builder->build_object(
+            {
+                class => 'Koha::Bookings',
+                value => {
+                    patron_id => $patron->borrowernumber,
+                    item_id   => $item->itemnumber,
+                    status    => 'completed'
+                }
+            }
+        );
+
+        my $checkout = $booking->checkout;
+        is( $checkout, undef, "Koha::Booking->checkout returns undef when no checkout exists" );
+
+        my $issue = $builder->build_object(
+            {
+                class => 'Koha::Checkouts',
+                value => {
+                    borrowernumber => $patron->borrowernumber,
+                    itemnumber     => $item->itemnumber,
+                    booking_id     => $booking->booking_id
+                }
+            }
+        );
+
+        $checkout = $booking->checkout;
+        is( ref($checkout),        'Koha::Checkout',     "Koha::Booking->checkout returns a Koha::Checkout object" );
+        is( $checkout->issue_id,   $issue->issue_id,     "Koha::Booking->checkout returns the linked checkout" );
+        is( $checkout->booking_id, $booking->booking_id, "The checkout is properly linked to the booking" );
+
+        $schema->storage->txn_rollback;
+    };
+
+    subtest 'old_checkout relation tests' => sub {
+        plan tests => 4;
+        $schema->storage->txn_begin;
+
+        my $patron  = $builder->build_object( { class => "Koha::Patrons" } );
+        my $item    = $builder->build_sample_item( { bookable => 1 } );
+        my $booking = $builder->build_object(
+            {
+                class => 'Koha::Bookings',
+                value => {
+                    patron_id => $patron->borrowernumber,
+                    item_id   => $item->itemnumber,
+                    status    => 'completed'
+                }
+            }
+        );
+
+        my $old_checkout = $booking->old_checkout;
+        is( $old_checkout, undef, "Koha::Booking->old_checkout returns undef when no old_checkout exists" );
+
+        my $old_issue = $builder->build_object(
+            {
+                class => 'Koha::Old::Checkouts',
+                value => {
+                    borrowernumber => $patron->borrowernumber,
+                    itemnumber     => $item->itemnumber,
+                    booking_id     => $booking->booking_id
+                }
+            }
+        );
+
+        $old_checkout = $booking->old_checkout;
+        is(
+            ref($old_checkout), 'Koha::Old::Checkout',
+            "Koha::Booking->old_checkout returns a Koha::Old::Checkout object"
+        );
+        is(
+            $old_checkout->issue_id, $old_issue->issue_id,
+            "Koha::Booking->old_checkout returns the linked old_checkout"
+        );
+        is( $old_checkout->booking_id, $booking->booking_id, "The old_checkout is properly linked to the booking" );
 
         $schema->storage->txn_rollback;
     };
