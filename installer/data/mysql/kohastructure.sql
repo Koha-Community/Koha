@@ -3976,6 +3976,7 @@ CREATE TABLE `issues` (
   `borrowernumber` int(11) NOT NULL COMMENT 'foreign key, linking this to the borrowers table for the patron this item was checked out to',
   `issuer_id` int(11) DEFAULT NULL COMMENT 'foreign key, linking this to the borrowers table for the user who checked out this item',
   `itemnumber` int(11) NOT NULL COMMENT 'foreign key, linking this to the items table for the item that was checked out',
+  `booking_id` int(11) DEFAULT NULL COMMENT 'foreign key linking this checkout to the booking it fulfills',
   `date_due` datetime DEFAULT NULL COMMENT 'datetime the item is due (yyyy-mm-dd hh:mm::ss)',
   `branchcode` varchar(10) DEFAULT NULL COMMENT 'foreign key, linking to the branches table for the location the item was checked out',
   `returndate` datetime DEFAULT NULL COMMENT 'date the item was returned, will be NULL until moved to old_issues',
@@ -4000,7 +4001,8 @@ CREATE TABLE `issues` (
   KEY `issues_ibfk_borrowers_borrowernumber` (`issuer_id`),
   CONSTRAINT `issues_ibfk_1` FOREIGN KEY (`borrowernumber`) REFERENCES `borrowers` (`borrowernumber`) ON UPDATE CASCADE,
   CONSTRAINT `issues_ibfk_2` FOREIGN KEY (`itemnumber`) REFERENCES `items` (`itemnumber`) ON UPDATE CASCADE,
-  CONSTRAINT `issues_ibfk_borrowers_borrowernumber` FOREIGN KEY (`issuer_id`) REFERENCES `borrowers` (`borrowernumber`) ON DELETE SET NULL ON UPDATE CASCADE
+  CONSTRAINT `issues_ibfk_borrowers_borrowernumber` FOREIGN KEY (`issuer_id`) REFERENCES `borrowers` (`borrowernumber`) ON DELETE SET NULL ON UPDATE CASCADE,
+  CONSTRAINT `issues_booking_id_fk` FOREIGN KEY (`booking_id`) REFERENCES `bookings` (`booking_id`) ON DELETE SET NULL ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -5032,6 +5034,7 @@ CREATE TABLE `old_issues` (
   `borrowernumber` int(11) DEFAULT NULL COMMENT 'foreign key, linking this to the borrowers table for the patron this item was checked out to',
   `issuer_id` int(11) DEFAULT NULL COMMENT 'foreign key, linking this to the borrowers table for the user who checked out this item',
   `itemnumber` int(11) DEFAULT NULL COMMENT 'foreign key, linking this to the items table for the item that was checked out',
+  `booking_id` int(11) DEFAULT NULL COMMENT 'foreign key linking this checkout to the booking it fulfills',
   `date_due` datetime DEFAULT NULL COMMENT 'date the item is due (yyyy-mm-dd)',
   `branchcode` varchar(10) DEFAULT NULL COMMENT 'foreign key, linking to the branches table for the location the item was checked out',
   `returndate` datetime DEFAULT NULL COMMENT 'date the item was returned',
@@ -5055,7 +5058,8 @@ CREATE TABLE `old_issues` (
   KEY `old_issues_ibfk_borrowers_borrowernumber` (`issuer_id`),
   CONSTRAINT `old_issues_ibfk_1` FOREIGN KEY (`borrowernumber`) REFERENCES `borrowers` (`borrowernumber`) ON DELETE SET NULL ON UPDATE SET NULL,
   CONSTRAINT `old_issues_ibfk_2` FOREIGN KEY (`itemnumber`) REFERENCES `items` (`itemnumber`) ON DELETE SET NULL ON UPDATE SET NULL,
-  CONSTRAINT `old_issues_ibfk_borrowers_borrowernumber` FOREIGN KEY (`issuer_id`) REFERENCES `borrowers` (`borrowernumber`) ON DELETE SET NULL ON UPDATE CASCADE
+  CONSTRAINT `old_issues_ibfk_borrowers_borrowernumber` FOREIGN KEY (`issuer_id`) REFERENCES `borrowers` (`borrowernumber`) ON DELETE SET NULL ON UPDATE CASCADE,
+  CONSTRAINT `old_issues_booking_id_fk` FOREIGN KEY (`booking_id`) REFERENCES `bookings` (`booking_id`) ON DELETE SET NULL ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
