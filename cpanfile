@@ -45,6 +45,7 @@ requires 'Exception::Class', '1.38';
 requires 'File::Slurp', '9999.13';
 requires 'Font::TTF', '0.45';
 requires 'GD', '2.39';
+requires 'GD::Barcode::QRcode', '2.01';
 requires 'GD::Barcode::UPCE', '1.1';
 requires 'Getopt::Long', '2.35';
 requires 'Getopt::Std', '1.05';
