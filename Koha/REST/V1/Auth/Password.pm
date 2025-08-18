@@ -80,6 +80,9 @@ sub validate {
             );
         }
 
+        #record patron activity
+        $patron->update_lastseen('api_verify');
+
         return $c->render(
             status  => 201,
             openapi => {
