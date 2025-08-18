@@ -11,6 +11,11 @@ properties:
     type:
       - integer
       - "null"
+  booking_id:
+    type:
+      - integer
+      - "null"
+    description: Internal booking identifier that this checkout fulfills
   external_id:
     type:
       - string
@@ -111,4 +116,9 @@ properties:
       - object
       - "null"
     description: The object representing the checkout patron
+  booking:
+    type:
+      - object
+      - "null"
+    description: The object representing the linked booking
 additionalProperties: false
