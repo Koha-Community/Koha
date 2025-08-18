@@ -92,6 +92,34 @@ sub item {
     return Koha::Item->_new_from_dbic($item_rs);
 }
 
+=head3 checkout
+
+Returns the related Koha::Checkout object for this booking, if any
+
+=cut
+
+sub checkout {
+    my ($self) = @_;
+
+    my $checkout_rs = $self->_result->issues->first;
+    return unless $checkout_rs;
+    return Koha::Checkout->_new_from_dbic($checkout_rs);
+}
+
+=head3 old_checkout
+
+Returns the related Koha::Old::Checkout object for this booking, if any
+
+=cut
+
+sub old_checkout {
+    my ($self) = @_;
+
+    my $old_checkout_rs = $self->_result->old_issues->first;
+    return unless $old_checkout_rs;
+    return Koha::Old::Checkout->_new_from_dbic($old_checkout_rs);
+}
+
 =head3 store
 
 Booking specific store method to catch booking clashes and ensure we have an item assigned

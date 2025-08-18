@@ -17,6 +17,7 @@ package Koha::Old::Checkout;
 
 use Modern::Perl;
 
+use Koha::Booking;
 use Koha::Database;
 use Koha::Exceptions::SysPref;
 use Koha::Libraries;
@@ -120,6 +121,21 @@ sub renewals {
     return Koha::Checkouts::Renewals->_new_from_dbic($renewals_rs);
 }
 
+=head3 booking
+
+my $booking = $checkout->booking;
+
+Return the linked booking
+
+=cut
+
+sub booking {
+    my ($self) = @_;
+    my $booking_rs = $self->_result->booking;
+    return unless $booking_rs;
+    return Koha::Booking->_new_from_dbic($booking_rs);
+}
+
 =head3 anonymize
 
     $checkout->anonymize();
@@ -155,6 +171,7 @@ sub to_api_mapping {
         issue_id        => 'checkout_id',
         borrowernumber  => 'patron_id',
         itemnumber      => 'item_id',
+        booking_id      => 'booking_id',
         date_due        => 'due_date',
         branchcode      => 'library_id',
         returndate      => 'checkin_date',

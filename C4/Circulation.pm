@@ -1848,47 +1848,55 @@ sub AddIssue {
             # and SwitchOnSiteCheckouts is enabled this converts it to a regular checkout
             $issue = Koha::Checkouts->find( { itemnumber => $item_object->itemnumber } );
 
-            # If this checkout relates to a booking, handle booking status appropriately
-            if ( my $booking = $item_object->find_booking( { checkout_date => $issuedate, due_date => $datedue } ) ) {
-                if ( $booking->patron_id == $patron->borrowernumber ) {
-
-                    # Patron's own booking - mark as completed
-                    $booking->status('completed')->store;
-                } else {
-
-                    # Another patron's booking - only cancel if checkout period overlaps with actual booking period
-                    my $booking_start = dt_from_string( $booking->start_date );
-                    my $booking_end   = dt_from_string( $booking->end_date );
-
-                    # Check if checkout period overlaps with actual booking period (not just lead/trail)
-                    if (   ( $issuedate >= $booking_start && $issuedate <= $booking_end )
-                        || ( $datedue >= $booking_start   && $datedue <= $booking_end )
-                        || ( $issuedate <= $booking_start && $datedue >= $booking_end ) )
+            my $schema = Koha::Database->schema;
+            $schema->txn_do(
+                sub {
+                    # If this checkout relates to a booking, handle booking status appropriately
+                    if ( my $booking =
+                        $item_object->find_booking( { checkout_date => $issuedate, due_date => $datedue } ) )
                     {
-                        # Checkout overlaps with actual booking period - cancel the booking
-                        $booking->status('cancelled')->store;
+                        if ( $booking->patron_id == $patron->borrowernumber ) {
+
+                            # Patron's own booking - mark as completed and link checkout to booking
+                            $booking->status('completed')->store;
+                            $issue_attributes->{'booking_id'} = $booking->booking_id;
+                        } else {
+
+                            # Another patron's booking - only cancel if checkout period overlaps with actual booking period
+                            my $booking_start = dt_from_string( $booking->start_date );
+                            my $booking_end   = dt_from_string( $booking->end_date );
+
+                            # Check if checkout period overlaps with actual booking period (not just lead/trail)
+                            if (   ( $issuedate >= $booking_start && $issuedate <= $booking_end )
+                                || ( $datedue >= $booking_start   && $datedue <= $booking_end )
+                                || ( $issuedate <= $booking_start && $datedue >= $booking_end ) )
+                            {
+                                # Checkout overlaps with actual booking period - cancel the booking
+                                $booking->status('cancelled')->store;
+                            }
+
+                            # If only in lead/trail period, do nothing - librarian has made informed decision
+                        }
                     }
 
-                    # If only in lead/trail period, do nothing - librarian has made informed decision
+                    if ($issue) {
+                        $issue->set($issue_attributes)->store;
+                    } else {
+                        $issue = Koha::Checkout->new(
+                            {
+                                itemnumber => $item_object->itemnumber,
+                                %$issue_attributes,
+                            }
+                        )->store;
+
+                        # Ensure item is no longer listed in the holds queue
+                        $dbh->do(
+                            q{DELETE tmp_holdsqueue, hold_fill_targets FROM tmp_holdsqueue LEFT JOIN hold_fill_targets USING ( itemnumber ) WHERE itemnumber = ?},
+                            undef, $item_object->id
+                        );
+                    }
                 }
-            }
-
-            if ($issue) {
-                $issue->set($issue_attributes)->store;
-            } else {
-                $issue = Koha::Checkout->new(
-                    {
-                        itemnumber => $item_object->itemnumber,
-                        %$issue_attributes,
-                    }
-                )->store;
-
-                # Ensure item is no longer listed in the holds queue
-                $dbh->do(
-                    q{DELETE tmp_holdsqueue, hold_fill_targets FROM tmp_holdsqueue LEFT JOIN hold_fill_targets USING ( itemnumber ) WHERE itemnumber = ?},
-                    undef, $item_object->id
-                );
-            }
+            );
             $issue->discard_changes;
 
             #Update borrowers.lastseen
@@ -3577,13 +3585,13 @@ sub AddRenewal {
             # of how many times it has been renewed.
             my $renews = ( $issue->renewals_count || 0 ) + 1;
             my $sth    = $dbh->prepare(
-                "UPDATE issues SET date_due = ?, renewals_count = ?, unseen_renewals = ?, lastreneweddate = ? WHERE issue_id = ?"
+                "UPDATE issues SET date_due = ?, renewals_count = ?, unseen_renewals = ?, lastreneweddate = ?, booking_id = ? WHERE issue_id = ?"
             );
 
             eval {
                 $sth->execute(
                     $datedue->strftime('%Y-%m-%d %H:%M'), $renews, $unseen_renewals, $lastreneweddate,
-                    $issue->issue_id
+                    $issue->booking_id, $issue->issue_id
                 );
             };
             if ( $sth->err ) {
