@@ -26,7 +26,8 @@ use Exception::Class (
     },
     'Koha::Exceptions::ERM::EUsage::CounterFile::UnsupportedRelease' => {
         isa         => 'Koha::Exceptions::ERM::EUsage::CounterFile',
-        description => 'This COUNTER release is not supported'
+        description => 'This COUNTER release is not supported',
+        fields      => ['counter_release'],
     }
 );
 

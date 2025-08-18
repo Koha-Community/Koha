@@ -90,7 +90,15 @@ sub list {
     my @counter_5_supporting_platforms;
     foreach my $platform (@$result) {
         my $name_check = index( lc $platform->{name}, lc $search_string );
-        my @services   = grep { $_->{counter_release} eq '5' } @{ $platform->{sushi_services} };
+
+        # TODO:
+        # We should also consider COUNTER 5.1 here, but the COUNTER registry response is not great.
+        # Visit the following URL:
+        # <staff_url>/api/v1/erm/counter_registry?_per_page=-1&q={"name":"wiley"}
+        # Notice the response comes back as the only sushi service being counter release 5,
+        # but for all supported reports, both '5' and '5.1' are returned.
+
+        my @services = grep { $_->{counter_release} eq '5' } @{ $platform->{sushi_services} };
         if (   scalar(@services) > 0
             && $name_check != -1
             && scalar( @{ $platform->{reports} } ) > 0 )

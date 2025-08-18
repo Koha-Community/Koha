@@ -85,6 +85,12 @@ Receive background_job_callbacks to be able to update job progress
 sub store {
     my ( $self, $background_job_callbacks ) = @_;
 
+    # DOCS:
+    # COUNTER 5 CSV examples:
+    # https://cop5.countermetrics.org/en/5.0.3/appendices/h-sample-counter-master-reports-and-standard-views.html
+    # COUNTER 5.1 CSV examples:
+    # https://cop5.projectcounter.org/en/5.1/appendices/g-sample-counter-reports-and-standard-views.html
+
     $self->_set_report_type_from_file;
 
     my $result = $self->SUPER::store;
@@ -227,7 +233,10 @@ sub _add_monthly_usage_entries {
 
     my $usage_data_provider = $self->get_usage_data_provider;
     my $usage_object_info   = $self->_get_usage_object_id_hash($usage_object);
-    my $specific_fields     = Koha::ERM::EUsage::SushiCounter->get_report_type_specific_fields( $self->type );
+    my $specific_fields     = Koha::ERM::EUsage::SushiCounter->get_report_type_specific_fields_by_release(
+        $self->type,
+        $self->get_COUNTER_report_release->{header_value}
+    );
 
     $usage_object->monthly_usages(
         [
@@ -262,7 +271,10 @@ sub _add_yearly_usage_entries {
 
     my $usage_data_provider = $self->get_usage_data_provider;
     my $usage_object_info   = $self->_get_usage_object_id_hash($usage_object);
-    my $specific_fields     = Koha::ERM::EUsage::SushiCounter->get_report_type_specific_fields( $self->type );
+    my $specific_fields     = Koha::ERM::EUsage::SushiCounter->get_report_type_specific_fields_by_release(
+        $self->type,
+        $self->get_COUNTER_report_release->{header_value}
+    );
 
     while ( my ( $year, $usage ) = each( %{$yearly_usages} ) ) {
 
@@ -303,21 +315,12 @@ A I <Koha::Exceptions::ERM::EUsage::CounterFile> exception is thrown
 sub validate {
     my ($self) = @_;
 
-    open my $fh, "<", \$self->file_content or die;
-    my $csv = Text::CSV_XS->new( { binary => 1, always_quote => 1, eol => $/, decode_utf8 => 1, formula => 'empty' } );
-
-    $csv->column_names(qw( header_key header_value ));
-    my @header_rows = $csv->getline_hr_all( $fh, 0, 12 );
-    my @header      = $header_rows[0];
-
-    my @release_row =
-        map( $_->{header_key} eq 'Release' ? $_ : (), @{ $header[0] } );
-    my $release = $release_row[0];
+    my $release = $self->get_COUNTER_report_release;
 
     # TODO: Validate that there is an empty row between header and body
 
     Koha::Exceptions::ERM::EUsage::CounterFile::UnsupportedRelease->throw
-        if $release && $release->{header_value} != 5;
+        if $release && ( $release->{header_value} != 5 && $release->{header_value} ne '5.1' );
 
 }
 
@@ -344,6 +347,27 @@ sub _set_report_type_from_file {
     $self->type( $report->{header_value} );
 }
 
+=head3 get_COUNTER_report_release
+
+Retrieves the COUNTER report release for the given file_content
+
+=cut
+
+sub get_COUNTER_report_release {
+    my ($self) = @_;
+
+    open my $fh, "<", \$self->file_content or die;
+    my $csv = Text::CSV_XS->new( { binary => 1, always_quote => 1, eol => $/, decode_utf8 => 1, formula => 'empty' } );
+
+    $csv->column_names(qw( header_key header_value ));
+    my @header_rows = $csv->getline_hr_all( $fh, 0, 12 );
+    my @header      = $header_rows[0];
+
+    my @release_row =
+        map( $_->{header_key} eq 'Release' ? $_ : (), @{ $header[0] } );
+    return $release_row[0];
+}
+
 =head3 _get_rows_from_COUNTER_file
 
 Returns array of rows from COUNTER file
@@ -356,7 +380,12 @@ sub _get_rows_from_COUNTER_file {
     open my $fh, "<", \$self->file_content or die;
     my $csv = Text::CSV_XS->new( { binary => 1, always_quote => 1, eol => $/, decode_utf8 => 1, formula => 'empty' } );
 
-    my $header_columns = $csv->getline_all( $fh, 13, 1 );
+    my $release = $self->get_COUNTER_report_release;
+    $release = $release->{header_value};
+
+    my $header_rows = $release eq '5.1' ? 14 : 13;
+
+    my $header_columns = $csv->getline_all( $fh, $header_rows, 1 );
     $csv->column_names( @{$header_columns}[0] );
 
     # Get all rows from 14th onward
@@ -588,7 +617,10 @@ sub _add_usage_object_entry {
     my ( $self, $row ) = @_;
 
     my $usage_data_provider = $self->get_usage_data_provider;
-    my $specific_fields     = Koha::ERM::EUsage::SushiCounter->get_report_type_specific_fields( $self->type );
+    my $specific_fields     = Koha::ERM::EUsage::SushiCounter->get_report_type_specific_fields_by_release(
+        $self->type,
+        $self->get_COUNTER_report_release->{header_value}
+    );
 
     if ( $self->type =~ /PR/i ) {
         my $new_usage_platform = Koha::ERM::EUsage::UsagePlatform->new(

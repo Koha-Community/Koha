@@ -30,7 +30,8 @@ use t::lib::TestBuilder;
 my $schema  = Koha::Database->new->schema;
 my $builder = t::lib::TestBuilder->new;
 
-my $sushi_response_file_TR_J1      = dirname(__FILE__) . "/../../../data/erm/eusage/TR_J1.json";
+my $test_data_base_dir             = "/../../../../data/erm/eusage/COUNTER_5";
+my $sushi_response_file_TR_J1      = dirname(__FILE__) . $test_data_base_dir . "/TR_J1.json";
 my $sushi_counter_5_response_TR_J1 = decode_json( read_file($sushi_response_file_TR_J1) );
 my $sushi_counter_TR_J1 = Koha::ERM::EUsage::SushiCounter->new( { response => $sushi_counter_5_response_TR_J1 } );
 
@@ -176,7 +177,7 @@ subtest 'TR_J1 _COUNTER_report_body' => sub {
     );
 };
 
-my $sushi_response_file_TR_J2      = dirname(__FILE__) . "/../../../data/erm/eusage/TR_J2.json";
+my $sushi_response_file_TR_J2      = dirname(__FILE__) . $test_data_base_dir . "/TR_J2.json";
 my $sushi_counter_5_response_TR_J2 = decode_json( read_file($sushi_response_file_TR_J2) );
 my $sushi_counter_TR_J2 = Koha::ERM::EUsage::SushiCounter->new( { response => $sushi_counter_5_response_TR_J2 } );
 
@@ -315,7 +316,7 @@ subtest 'TR_J2 _COUNTER_report_body' => sub {
     );
 };
 
-my $sushi_response_file_TR_J3      = dirname(__FILE__) . "/../../../data/erm/eusage/TR_J3.json";
+my $sushi_response_file_TR_J3      = dirname(__FILE__) . $test_data_base_dir . "/TR_J3.json";
 my $sushi_counter_5_response_TR_J3 = decode_json( read_file($sushi_response_file_TR_J3) );
 my $sushi_counter_TR_J3 = Koha::ERM::EUsage::SushiCounter->new( { response => $sushi_counter_5_response_TR_J3 } );
 
@@ -468,7 +469,7 @@ subtest 'TR_J3 _COUNTER_report_body' => sub {
     );
 };
 
-my $sushi_response_file_TR_J4      = dirname(__FILE__) . "/../../../data/erm/eusage/TR_J4.json";
+my $sushi_response_file_TR_J4      = dirname(__FILE__) . $test_data_base_dir . "/TR_J4.json";
 my $sushi_counter_5_response_TR_J4 = decode_json( read_file($sushi_response_file_TR_J4) );
 my $sushi_counter_TR_J4 = Koha::ERM::EUsage::SushiCounter->new( { response => $sushi_counter_5_response_TR_J4 } );
 
@@ -621,7 +622,7 @@ subtest 'TR_J4 _COUNTER_report_body' => sub {
     );
 };
 
-my $sushi_response_file_TR_B3      = dirname(__FILE__) . "/../../../data/erm/eusage/TR_B3.json";
+my $sushi_response_file_TR_B3      = dirname(__FILE__) . $test_data_base_dir . "/TR_B3.json";
 my $sushi_counter_5_response_TR_B3 = decode_json( read_file($sushi_response_file_TR_B3) );
 my $sushi_counter_TR_B3 = Koha::ERM::EUsage::SushiCounter->new( { response => $sushi_counter_5_response_TR_B3 } );
 
@@ -829,7 +830,7 @@ subtest 'TR_B3 _COUNTER_report_body' => sub {
     );
 };
 
-my $sushi_response_file_TR_B2      = dirname(__FILE__) . "/../../../data/erm/eusage/TR_B2.json";
+my $sushi_response_file_TR_B2      = dirname(__FILE__) . $test_data_base_dir . "/TR_B2.json";
 my $sushi_counter_5_response_TR_B2 = decode_json( read_file($sushi_response_file_TR_B2) );
 my $sushi_counter_TR_B2 = Koha::ERM::EUsage::SushiCounter->new( { response => $sushi_counter_5_response_TR_B2 } );
 

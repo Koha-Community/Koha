@@ -35,7 +35,7 @@ my $builder = t::lib::TestBuilder->new;
 
 my $patron = $builder->build_object( { class => 'Koha::Patrons' } );
 
-my $sushi_response_file_TR_J1      = dirname(__FILE__) . "/../../../data/erm/eusage/TR_J1.json";
+my $sushi_response_file_TR_J1      = dirname(__FILE__) . "/../../../../data/erm/eusage/COUNTER_5/TR_J1.json";
 my $sushi_counter_5_response_TR_J1 = read_file($sushi_response_file_TR_J1);
 my $sushi_counter_report_TR_J1 =
     Koha::ERM::EUsage::SushiCounter->new( { response => decode_json($sushi_counter_5_response_TR_J1) } );

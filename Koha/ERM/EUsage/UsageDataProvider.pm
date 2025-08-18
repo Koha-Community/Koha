@@ -25,6 +25,8 @@ use LWP::UserAgent;
 
 use Koha::Exceptions;
 
+use Try::Tiny qw( catch try );
+
 use base qw(Koha::Object);
 
 use Koha;
@@ -218,24 +220,34 @@ sub harvest_sushi {
     return if $self->_sushi_errors($result);
 
     # Parse the SUSHI response
-    my $sushi_counter = Koha::ERM::EUsage::SushiCounter->new( { response => $result } );
-    my $counter_file  = $sushi_counter->get_COUNTER_from_SUSHI;
+    try {
+        my $sushi_counter = Koha::ERM::EUsage::SushiCounter->new( { response => $result } );
+        my $counter_file  = $sushi_counter->get_COUNTER_from_SUSHI;
 
-    return if $self->_counter_file_size_too_large($counter_file);
+        return if $self->_counter_file_size_too_large($counter_file);
 
-    $self->counter_files(
-        [
-            {
-                usage_data_provider_id => $self->erm_usage_data_provider_id,
-                file_content           => $counter_file,
-                date_uploaded          => POSIX::strftime( "%Y%m%d%H%M%S", localtime ),
+        $self->counter_files(
+            [
+                {
+                    usage_data_provider_id => $self->erm_usage_data_provider_id,
+                    file_content           => $counter_file,
+                    date_uploaded          => POSIX::strftime( "%Y%m%d%H%M%S", localtime ),
 
-                #TODO: add ".csv" to end of filename here
-                filename => $self->name . "_" . $self->{report_type},
-            }
-        ]
-    );
-
+                    #TODO: add ".csv" to end of filename here
+                    filename => $self->name . "_" . $self->{report_type},
+                }
+            ]
+        );
+    } catch {
+        if ( $_->isa('Koha::Exceptions::ERM::EUsage::CounterFile::UnsupportedRelease') ) {
+            $self->{job_callbacks}->{add_message_callback}->(
+                {
+                    type    => 'error',
+                    message => 'COUNTER release ' . $_->{message}->{counter_release} . ' not supported',
+                }
+            ) if $self->{job_callbacks};
+        }
+    };
 }
 
 =head3 set_background_job_callbacks
@@ -269,7 +281,7 @@ Tests the connection of the harvester to the SUSHI service and returns any alert
 sub test_connection {
     my ($self) = @_;
 
-    my $url = _validate_url( $self->service_url, 'status' );
+    my $url = $self->_validate_url( $self->service_url, 'status' );
     $url .= 'status';
     $url .= '?customer_id=' . $self->customer_id;
     $url .= '&requestor_id=' . $self->requestor_id if $self->requestor_id;
@@ -384,7 +396,7 @@ sub _build_url_query {
             $self->erm_usage_data_provider_id;
     }
 
-    my $url = _validate_url( $self->service_url, 'harvest' );
+    my $url = $self->_validate_url( $self->service_url, 'harvest' );
 
     $url .= lc $self->{report_type};
     $url .= '?customer_id=' . $self->customer_id;
@@ -401,22 +413,27 @@ sub _build_url_query {
 
 Checks whether the url ends in a trailing "/" and adds one if not
 
-my $url = _validate_url($url, 'harvest')
+my $url = $self->_validate_url($url, 'harvest')
 
 $caller is either the harvest_sushi function ("harvest") or the test_connection function ("status")
 
 =cut
 
 sub _validate_url {
-    my ( $url, $caller ) = @_;
+    my ( $self, $url, $caller ) = @_;
 
     if ( $caller eq 'harvest' ) {
 
-        # Not all urls will end in "/" - add one so they are standardised
         $url = _check_trailing_character($url);
 
-        # All SUSHI report requests should be to the "/reports" endpoint
-        # Not all providers in the counter registry include this in their data so we need to check and add it
+        # Default to 5.1 if anything other than '5'
+        my $report_release = $self->report_release eq '5' ? $self->report_release : '5.1';
+
+        if ( $report_release eq '5.1' ) {
+            my $reports_param = substr $url, -4;
+            $url .= 'r51/' if $reports_param ne 'r51/';
+        }
+
         my $reports_param = substr $url, -8;
         $url .= 'reports/' if $reports_param ne 'reports/';
     } else {

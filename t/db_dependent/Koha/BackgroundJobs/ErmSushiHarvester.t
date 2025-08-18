@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 3;
+use Test::More tests => 5;
 
 use Koha::Database;
 use Koha::BackgroundJobs;
@@ -36,7 +36,7 @@ my $builder = t::lib::TestBuilder->new;
 
 my $patron = $builder->build_object( { class => 'Koha::Patrons' } );
 
-my $sushi_response_file_TR_J1      = dirname(__FILE__) . "/../../data/erm/eusage/TR_J1.json";
+my $sushi_response_file_TR_J1      = dirname(__FILE__) . "/../../data/erm/eusage/COUNTER_5/TR_J1.json";
 my $sushi_counter_5_response_TR_J1 = read_file($sushi_response_file_TR_J1);
 my $sushi_counter_report_TR_J1 =
     Koha::ERM::EUsage::SushiCounter->new( { response => decode_json($sushi_counter_5_response_TR_J1) } );
@@ -305,3 +305,19 @@ subtest 'enqueue_sushi_harvest_jobs_error_handling' => sub {
     $schema->storage->txn_rollback;
 
 };
+
+my $unsupported_sushi_response_file =
+    dirname(__FILE__) . "/../../data/erm/eusage/UnsupportedCOUNTER/UnsupportedCOUNTER.json";
+my $unsupported_sushi_counter_5_response_TR_J1 = read_file($unsupported_sushi_response_file);
+
+eval {
+    Koha::ERM::EUsage::SushiCounter->new( { response => decode_json($unsupported_sushi_counter_5_response_TR_J1) } );
+};
+if ($@) {
+    isa_ok(
+        $@, 'Koha::Exceptions::ERM::EUsage::CounterFile::UnsupportedRelease',
+        'Unsupported release throws UnsupportedRelease exception'
+    );
+
+    is( $@->{message}->{counter_release}, 99, 'exception message has counter_release set to 99' );
+}
