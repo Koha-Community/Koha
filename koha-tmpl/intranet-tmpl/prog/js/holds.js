@@ -698,8 +698,8 @@ $(document).ready(function () {
         return toggle_suspend(this, inputs);
     });
 
-    var MSG_SUSPEND_SELECTED = _("Suspend selected (%s)");
-    var MSG_SUSPEND_SELECTED_HOLDS = _("selected holds");
+    var MSG_SUSPEND_SELECTED = __("Suspend selected (%s)");
+    var MSG_SUSPEND_SELECTED_HOLDS = __("selected holds");
     $(".suspend_selected_holds").html(
         MSG_SUSPEND_SELECTED.format(
             $(".holds_table .select_hold:checked").length
@@ -728,8 +728,8 @@ $(document).ready(function () {
         return toggle_suspend(this, inputs);
     });
 
-    var MSG_CANCEL_SELECTED = _("Cancel selected (%s)");
-    var MSG_CANCEL_ALERT = _(
+    var MSG_CANCEL_SELECTED = __("Cancel selected (%s)");
+    var MSG_CANCEL_ALERT = __(
         "This action will cancel <span class='badge bg-danger'>%s</span> hold(s)."
     );
 
