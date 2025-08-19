@@ -103,7 +103,7 @@ if ( $op eq 'cud-move' ) {
     my $hold_itemnumber = $input->param('itemnumber');
     if ( $prev_priority == 0 && $next_priority == 1 ) {
         my $hold = Koha::Holds->find($reserve_id);
-        $hold->revert_waiting();
+        $hold->revert_found();
     } else {
         AlterPriority(
             $where,         $reserve_id,     $prev_priority,

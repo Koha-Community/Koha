@@ -2568,7 +2568,7 @@ sub AddReturn {
 
     # if a hold is found and is waiting at another branch, change the priority back to 1 and trigger the hold (this will trigger a transfer and update the hold status properly)
     if ( $resfound and $resfound eq "Waiting" and $branch ne $resrec->{branchcode} ) {
-        $hold->revert_waiting();
+        $hold->revert_found();
         $resfound = 'Reserved';
         $resrec   = $hold->unblessed;
     }

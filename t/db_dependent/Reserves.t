@@ -1105,7 +1105,7 @@ subtest 'MoveReserve additional test' => sub {
 };
 
 # FIXME: Should be in Circulation.t
-subtest 'AddIssue calls $hold->revert_waiting()' => sub {
+subtest 'AddIssue calls $hold->revert_found()' => sub {
 
     plan tests => 2;
 
