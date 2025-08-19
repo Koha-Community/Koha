@@ -1119,7 +1119,7 @@ subtest do_checkout_with_holds => sub {
 
     # Test non-attached holds
     $hold->set_waiting();
-    $hold->revert_waiting();
+    $hold->revert_found();
     t::lib::Mocks::mock_preference( 'AllowItemsOnHoldCheckoutSIP', '0' );
     $co_transaction->do_checkout();
     is( $patron->checkouts->count, 0, 'Checkout refused due to hold and AllowItemsOnHoldCheckoutSIP' );
