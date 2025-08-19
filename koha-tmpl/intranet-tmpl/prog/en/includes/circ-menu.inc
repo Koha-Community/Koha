@@ -151,11 +151,15 @@
                     <li class="patronlibrary"> Home library: [% Branches.GetName( patron.branchcode ) | html %] </li>
                     <li class="patronborrowernumber"> Borrowernumber: [% patron.borrowernumber | html %] </li>
                     <li>
-                        <span class="patronupdatedon">Updated on [% patron.updated_on | $KohaDates with_hours => 1 %]</span>
+                        <span class="patronupdatedon">Updated on: [% patron.updated_on | $KohaDates with_hours => 1 %]</span>
                     </li>
                     [% IF ( patron.lastseen ) %]
                         <li>
-                            <span class="patronlastseenon">Last seen on [% patron.lastseen | $KohaDates with_hours => 1 %]</span>
+                            <span class="patronlastseenon">Last seen on: [% patron.lastseen | $KohaDates with_hours => 1 %]</span>
+                        </li>
+                    [% ELSE %]
+                        <li>
+                            <span class="patronlastseenon">Last seen on: Never</span>
                         </li>
                     [% END %]
                     [% IF patron.account_locked %]
