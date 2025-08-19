@@ -1262,9 +1262,9 @@ subtest 'strings_map() tests' => sub {
     $schema->txn_rollback;
 };
 
-subtest 'revert_waiting() tests' => sub {
+subtest 'revert_found() tests' => sub {
 
-    plan tests => 3;
+    plan tests => 5;
 
     subtest 'item-level holds tests' => sub {
 
@@ -1318,8 +1318,8 @@ subtest 'revert_waiting() tests' => sub {
         is( $hold->priority, 0, "'priority' set to 0" );
         ok( $hold->is_waiting, 'Hold set to waiting' );
 
-        # Revert the waiting status
-        $hold->revert_waiting();
+        # Revert the found status
+        $hold->revert_found();
 
         is( $hold->waitingdate, undef, "'waitingdate' reset" );
         ok( !$hold->is_waiting, 'Hold no longer set to waiting' );
@@ -1342,20 +1342,20 @@ subtest 'revert_waiting() tests' => sub {
 
         $hold->set_waiting();
 
-        # Revert the waiting status, RealTimeHoldsQueue => shouldn't add a test
-        $hold->revert_waiting();
+        # Revert the found status, RealTimeHoldsQueue => shouldn't add a test
+        $hold->revert_found();
 
         my $log_count_after =
             Koha::ActionLogs->search( { module => 'HOLDS', action => 'MODIFY', object => $hold->reserve_id } )->count;
-        is( $log_count, $log_count_after, "No logging is added for ->revert_waiting() when HoldsLog is disabled" );
+        is( $log_count, $log_count_after, "No logging is added for ->revert_found() when HoldsLog is disabled" );
 
-        # Set as 'processing' to test the exception behavior
-        $hold->found('P');
-        throws_ok { $hold->revert_waiting() }
+        # Set as regular hold (not found) to test the exception behavior
+        $hold->found(undef);
+        throws_ok { $hold->revert_found() }
         'Koha::Exceptions::InvalidStatus',
-            "Hold is not in 'waiting' status, exception thrown";
+            "Hold is not in 'found' status, exception thrown";
 
-        is( $@->invalid_status, 'hold_not_waiting', "'invalid_status' set the right value" );
+        is( $@->invalid_status, 'hold_not_found', "'invalid_status' set the right value" );
 
         $schema->storage->txn_rollback;
     };
@@ -1399,8 +1399,8 @@ subtest 'revert_waiting() tests' => sub {
         is( $hold->priority, 0, "'priority' set to 0" );
         ok( $hold->is_waiting, 'Hold set to waiting' );
 
-        # Revert the waiting status
-        $hold->revert_waiting();
+        # Revert the found status
+        $hold->revert_found();
 
         is( $hold->waitingdate, undef, "'waitingdate' reset" );
         ok( !$hold->is_waiting, 'Hold no longer set to waiting' );
@@ -1478,7 +1478,7 @@ subtest 'revert_waiting() tests' => sub {
         $hold->set_waiting()->discard_changes();
         is( $hold->priority, 0, "'priority' set to 0" );
 
-        $hold->revert_waiting()->discard_changes();
+        $hold->revert_found()->discard_changes();
         is( $hold->priority, 1, "'priority' set to 1" );
 
         my $holds = $item->biblio->holds;
@@ -1489,6 +1489,104 @@ subtest 'revert_waiting() tests' => sub {
             ],
             [ 1, 2, 3, 4 ],
             'priorities have been reordered'
+        );
+
+        $schema->storage->txn_rollback;
+    };
+
+    subtest 'in transit holds tests' => sub {
+
+        plan tests => 8;
+
+        $schema->storage->txn_begin;
+
+        my $item   = $builder->build_sample_item;
+        my $patron = $builder->build_object(
+            {
+                class => 'Koha::Patrons',
+                value => { branchcode => $item->homebranch }
+            }
+        );
+
+        # Create item-level hold
+        my $hold = Koha::Holds->find(
+            AddReserve(
+                {
+                    branchcode     => $item->homebranch,
+                    borrowernumber => $patron->borrowernumber,
+                    biblionumber   => $item->biblionumber,
+                    priority       => 1,
+                    itemnumber     => $item->itemnumber,
+                }
+            )
+        );
+
+        # Mark it in transit
+        $hold->set_transfer();
+
+        is( $hold->priority, 0, "'priority' set to 0" );
+        ok( $hold->is_in_transit, 'Hold set to in transit' );
+        is( $hold->found, 'T', "'found' set to 'T'" );
+
+        # Revert the found status
+        $hold->revert_found();
+
+        ok( !$hold->is_in_transit, 'Hold no longer set to in transit' );
+        ok( !$hold->is_found,      'Hold no longer has found status' );
+        is( $hold->found,    undef, "'found' reset to undef" );
+        is( $hold->priority, 1,     "'priority' set to 1" );
+        is(
+            $hold->itemnumber, $item->itemnumber,
+            'Itemnumber should not be removed when the found status is reverted'
+        );
+
+        $schema->storage->txn_rollback;
+    };
+
+    subtest 'in processing holds tests' => sub {
+
+        plan tests => 8;
+
+        $schema->storage->txn_begin;
+
+        my $item   = $builder->build_sample_item;
+        my $patron = $builder->build_object(
+            {
+                class => 'Koha::Patrons',
+                value => { branchcode => $item->homebranch }
+            }
+        );
+
+        # Create item-level hold
+        my $hold = Koha::Holds->find(
+            AddReserve(
+                {
+                    branchcode     => $item->homebranch,
+                    borrowernumber => $patron->borrowernumber,
+                    biblionumber   => $item->biblionumber,
+                    priority       => 1,
+                    itemnumber     => $item->itemnumber,
+                }
+            )
+        );
+
+        # Mark it in processing
+        $hold->set_processing();
+
+        is( $hold->priority, 0, "'priority' set to 0" );
+        ok( $hold->is_in_processing, 'Hold set to in processing' );
+        is( $hold->found, 'P', "'found' set to 'P'" );
+
+        # Revert the found status
+        $hold->revert_found();
+
+        ok( !$hold->is_in_processing, 'Hold no longer set to in processing' );
+        ok( !$hold->is_found,         'Hold no longer has found status' );
+        is( $hold->found,    undef, "'found' reset to undef" );
+        is( $hold->priority, 1,     "'priority' set to 1" );
+        is(
+            $hold->itemnumber, $item->itemnumber,
+            'Itemnumber should not be removed when the found status is reverted'
         );
 
         $schema->storage->txn_rollback;

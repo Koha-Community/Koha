@@ -889,19 +889,20 @@ sub fill {
     return $self;
 }
 
-=head3 revert_waiting
+=head3 revert_found
 
-    $hold->revert_waiting();
+    $hold->revert_found();
 
-Reverts a 'waiting' hold back to a regular hold with a priority of 1.
+Reverts any 'found' hold back to a regular hold with a priority of 1.
+This method can revert holds in 'waiting' (W), 'in transit' (T), or 'in processing' (P) status.
 
 =cut
 
-sub revert_waiting {
+sub revert_found {
     my ( $self, $params ) = @_;
 
-    Koha::Exceptions::InvalidStatus->throw( invalid_status => 'hold_not_waiting' )
-        unless $self->is_waiting;
+    Koha::Exceptions::InvalidStatus->throw( invalid_status => 'hold_not_found' )
+        unless $self->is_found;
 
     $self->_result->result_source->schema->txn_do(
         sub {
@@ -919,7 +920,7 @@ sub revert_waiting {
                 { no_triggers => 1 }
             );
 
-            ## Fix up the currently waiting reserve
+            ## Fix up the currently found reserve
             $self->set(
                 {
                     priority       => 1,
