@@ -1264,7 +1264,7 @@ subtest 'strings_map() tests' => sub {
 
 subtest 'revert_found() tests' => sub {
 
-    plan tests => 5;
+    plan tests => 6;
 
     subtest 'item-level holds tests' => sub {
 
@@ -1588,6 +1588,87 @@ subtest 'revert_found() tests' => sub {
             $hold->itemnumber, $item->itemnumber,
             'Itemnumber should not be removed when the found status is reverted'
         );
+
+        $schema->storage->txn_rollback;
+    };
+
+    subtest 'desk_id handling tests' => sub {
+
+        plan tests => 12;
+
+        $schema->storage->txn_begin;
+
+        my $library = $builder->build_object( { class => 'Koha::Libraries' } );
+        my $desk    = $builder->build_object(
+            {
+                class => 'Koha::Desks',
+                value => { branchcode => $library->branchcode }
+            }
+        );
+        my $patron = $builder->build_object(
+            {
+                class => 'Koha::Patrons',
+                value => { branchcode => $library->branchcode }
+            }
+        );
+        my $item = $builder->build_sample_item( { library => $library->branchcode } );
+
+        my $hold = $builder->build_object(
+            {
+                class => 'Koha::Holds',
+                value => {
+                    borrowernumber => $patron->borrowernumber,
+                    biblionumber   => $item->biblionumber,
+                    itemnumber     => $item->itemnumber,
+                    branchcode     => $library->branchcode,
+                    priority       => 1,
+                    found          => undef,
+                }
+            }
+        );
+
+        # Test 1: Waiting hold - desk_id should be cleared
+        $hold->set_waiting( $desk->desk_id );
+        $hold->discard_changes;
+        is( $hold->desk_id, $desk->desk_id, 'desk_id set for waiting hold' );
+        ok( $hold->is_waiting, 'Hold is in waiting status' );
+
+        $hold->revert_found();
+        $hold->discard_changes;
+        is( $hold->desk_id, undef, 'desk_id cleared when reverting waiting hold' );
+        ok( !$hold->is_found, 'Hold is no longer in found status' );
+
+        # Test 2: In transit hold with desk_id - desk_id should be preserved
+        $hold->set_transfer();
+        $hold->desk_id( $desk->desk_id )->store();    # Manually set desk_id
+        $hold->discard_changes;
+        is( $hold->desk_id, $desk->desk_id, 'desk_id manually set for transit hold' );
+        ok( $hold->is_in_transit, 'Hold is in transit status' );
+
+        $hold->revert_found();
+        $hold->discard_changes;
+        is( $hold->desk_id, $desk->desk_id, 'desk_id preserved when reverting transit hold' );
+
+        # Test 3: In processing hold with desk_id - desk_id should be preserved
+        $hold->set_processing();
+        $hold->desk_id( $desk->desk_id )->store();    # Manually set desk_id
+        $hold->discard_changes;
+        is( $hold->desk_id, $desk->desk_id, 'desk_id manually set for processing hold' );
+        ok( $hold->is_in_processing, 'Hold is in processing status' );
+
+        $hold->revert_found();
+        $hold->discard_changes;
+        is( $hold->desk_id, $desk->desk_id, 'desk_id preserved when reverting processing hold' );
+
+        # Test 4: In transit hold without desk_id - desk_id should remain NULL
+        $hold->set_transfer();
+        $hold->desk_id(undef)->store();               # Ensure desk_id is NULL
+        $hold->discard_changes;
+        is( $hold->desk_id, undef, 'desk_id is NULL for transit hold without desk_id' );
+
+        $hold->revert_found();
+        $hold->discard_changes;
+        is( $hold->desk_id, undef, 'desk_id remains NULL after reverting transit hold without desk_id' );
 
         $schema->storage->txn_rollback;
     };
