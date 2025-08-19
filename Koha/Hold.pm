@@ -896,6 +896,10 @@ sub fill {
 Reverts any 'found' hold back to a regular hold with a priority of 1.
 This method can revert holds in 'waiting' (W), 'in transit' (T), or 'in processing' (P) status.
 
+For waiting holds, the desk_id is also cleared since the hold is no longer waiting
+at a specific desk. For in transit and in processing holds, desk_id remains unchanged
+(typically NULL as these statuses don't set desk_id).
+
 =cut
 
 sub revert_found {
@@ -928,6 +932,7 @@ sub revert_found {
                     waitingdate    => undef,
                     expirationdate => $self->patron_expiration_date,
                     itemnumber     => $self->item_level_hold ? $self->itemnumber : undef,
+                    ( $self->is_waiting ? ( desk_id => undef ) : () ),
                 }
             )->store( { hold_reverted => 1 } );
 
