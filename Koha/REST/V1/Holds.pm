@@ -76,16 +76,17 @@ sub add {
         my $biblio;
         my $item;
 
-        my $biblio_id         = $body->{biblio_id};
-        my $item_group_id     = $body->{item_group_id};
-        my $pickup_library_id = $body->{pickup_library_id};
-        my $item_id           = $body->{item_id};
-        my $patron_id         = $body->{patron_id};
-        my $item_type_id      = $body->{item_type_id};
-        my $expiration_date   = $body->{expiration_date};
-        my $notes             = $body->{notes};
-        my $hold_date         = $body->{hold_date};
-        my $non_priority      = $body->{non_priority};
+        my $biblio_id              = $body->{biblio_id};
+        my $item_group_id          = $body->{item_group_id};
+        my $pickup_library_id      = $body->{pickup_library_id};
+        my $item_id                = $body->{item_id};
+        my $patron_id              = $body->{patron_id};
+        my $item_type_id           = $body->{item_type_id};
+        my $expiration_date        = $body->{expiration_date};
+        my $patron_expiration_date = $body->{patron_expiration_date};
+        my $notes                  = $body->{notes};
+        my $hold_date              = $body->{hold_date};
+        my $non_priority           = $body->{non_priority};
 
         my $overrides    = $c->stash('koha.overrides');
         my $can_override = C4::Context->preference('AllowHoldPolicyOverride') // 0;
@@ -199,20 +200,21 @@ sub add {
 
         my $hold_id = C4::Reserves::AddReserve(
             {
-                branchcode       => $pickup_library_id,
-                borrowernumber   => $patron_id,
-                biblionumber     => $biblio->id,
-                priority         => $priority,
-                reservation_date => $hold_date,
-                expiration_date  => $expiration_date,
-                notes            => $notes,
-                title            => $biblio->title,
-                itemnumber       => $item_id,
-                found            => undef,                # TODO: Why not?
-                itemtype         => $item_type_id,
-                non_priority     => $non_priority,
-                item_group_id    => $item_group_id,
-                confirmations    => $confirmations,
+                branchcode             => $pickup_library_id,
+                borrowernumber         => $patron_id,
+                biblionumber           => $biblio->id,
+                priority               => $priority,
+                reservation_date       => $hold_date,
+                expiration_date        => $expiration_date,
+                patron_expiration_date => $patron_expiration_date,
+                notes                  => $notes,
+                title                  => $biblio->title,
+                itemnumber             => $item_id,
+                found                  => undef,                     # TODO: Why not?
+                itemtype               => $item_type_id,
+                non_priority           => $non_priority,
+                item_group_id          => $item_group_id,
+                confirmations          => $confirmations,
             }
         );
 
@@ -281,10 +283,11 @@ sub edit {
         }
 
         $pickup_library_id //= $hold->branchcode;
-        my $priority        = $body->{priority} // $hold->priority;
-        my $hold_date       = exists $body->{hold_date}       ? $body->{hold_date}       : $hold->reservedate;
-        my $expiration_date = exists $body->{expiration_date} ? $body->{expiration_date} : $hold->expirationdate;
-        my $item_id         = exists $body->{item_id}         ? $body->{item_id}         : $hold->itemnumber;
+        my $priority               = $body->{priority} // $hold->priority;
+        my $hold_date              = exists $body->{hold_date}       ? $body->{hold_date}       : $hold->reservedate;
+        my $expiration_date        = exists $body->{expiration_date} ? $body->{expiration_date} : $hold->expirationdate;
+        my $patron_expiration_date = $body->{patron_expiration_date} // $hold->patron_expiration_date;
+        my $item_id                = exists $body->{item_id} ? $body->{item_id} : $hold->itemnumber;
         my $item_level =
             exists $body->{item_level}
             ? ( $body->{item_level} ? 1 : 0 )
@@ -294,14 +297,15 @@ sub edit {
         my $suspended_until = $body->{suspended_until} || $hold->suspend_until;
 
         my $params = {
-            reserve_id      => $hold->id,
-            branchcode      => $pickup_library_id,
-            rank            => $priority,
-            suspend_until   => $suspended_until,
-            itemnumber      => $item_id,
-            reservedate     => $hold_date,
-            expirationdate  => $expiration_date,
-            item_level_hold => $item_level
+            reserve_id             => $hold->id,
+            branchcode             => $pickup_library_id,
+            rank                   => $priority,
+            suspend_until          => $suspended_until,
+            itemnumber             => $item_id,
+            reservedate            => $hold_date,
+            expirationdate         => $expiration_date,
+            patron_expiration_date => $patron_expiration_date,
+            item_level_hold        => $item_level
         };
 
         C4::Reserves::ModReserve($params);
