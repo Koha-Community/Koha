@@ -613,6 +613,7 @@
                             <input type="hidden" name="return_date_override_remember" value="[% return_date_override_remember | html %]" />
                             <input type="hidden" name="itemnumber" value="[% itemnumber | html %]" />
                             <input type="hidden" name="transit" value="[% NewTransfer | html %]" />
+                            <input type="hidden" name="dropboxmode" value="[% dropboxmode | html %]" />
                             [% FOREACH checkin IN checkins %]
                                 <input type="hidden" name="checkin_counter" value="[% loop.count | html %]" />
                                 <input type="hidden" name="checkin_barcode_[% loop.count | html %]" value="[% checkin.barcode | html %]" />
