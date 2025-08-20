@@ -598,6 +598,7 @@
                                                 <input type="hidden" name="return_date_override_remember" value="[% return_date_override_remember | html %]" />
                                                 <input type="hidden" name="itemnumber" value="[% itemnumber | html %]" />
                                                 <input type="hidden" name="transit" value="[% NewTransfer | html %]" />
+                                                <input type="hidden" name="dropboxmode" value="[% dropboxmode | html %]" />
                                                 [% FOREACH inputloo IN inputloop %]
                                                     <input type="hidden" name="ri-[% inputloo.counter | html %]" value="[% inputloo.barcode | html %]" />
                                                     <input type="hidden" name="dd-[% inputloo.counter | html %]" value="[% inputloo.duedate | html %]" />
