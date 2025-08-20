@@ -113,6 +113,10 @@
         .rank-request {
             width: 50px;
         }
+        #cancellation-reason-div {
+            display: flex;
+            align-items: center;
+        }
     </style>
 [% END %]
 </head>
@@ -1231,7 +1235,7 @@
                     <div class="btn-group">
                         <button class="btn cancel_selected_holds" data-bulk="true"></button>
                     </div>
-                    <fieldset id="cancellation-reason-fieldset" class="action" style="display:none">
+                    <div id="cancellation-reason-div" style="display:none">
                         [% SET hold_cancellation = AuthorisedValues.GetAuthValueDropbox('HOLD_CANCELLATION') %]
                         [% IF hold_cancellation.count %]
                             <label for="cancellation-reason">Cancellation reason: </label>
@@ -1242,7 +1246,7 @@
                                 [% END %]
                             </select>
                         [% END %]
-                    </fieldset>
+                    </div>
                 </div>
                 <div class="page-section">
                     [% FOREACH biblioloo IN biblioloop %]
@@ -1440,12 +1444,12 @@
         $.fn.select2.defaults.set("dropdownAutoWidth", true );
 
         $(document).ready(function() {
-            $('#cancellation-reason-fieldset').hide();
+            $('#cancellation-reason-div').hide();
             $('.rank-request').on('change', function() {
                 if ( $(".rank-request option:selected[value='del']").length ) {
-                    $('#cancellation-reason-fieldset').show();
+                    $('#cancellation-reason-div').show();
                 } else {
-                    $('#cancellation-reason-fieldset').hide();
+                    $('#cancellation-reason-div').hide();
                 }
             });
 
