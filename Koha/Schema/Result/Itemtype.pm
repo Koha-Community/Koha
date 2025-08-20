@@ -184,6 +184,15 @@ If automatic checkin is enabled for items of this type
 
 Activate bookable feature for items related to this item type
 
+=head2 checkprevcheckout
+
+  data_type: 'enum'
+  default_value: 'inherit'
+  extra: {list => ["yes","no","inherit"]}
+  is_nullable: 0
+
+produce a warning for a patron if a item of this type has previously been checked out to the same patron if 'yes', not if 'no', defer to category setting if 'inherit'.
+
 =cut
 
 __PACKAGE__->add_columns(
@@ -232,6 +241,13 @@ __PACKAGE__->add_columns(
   { data_type => "tinyint", default_value => 0, is_nullable => 0 },
   "bookable",
   { data_type => "tinyint", default_value => 0, is_nullable => 0 },
+  "checkprevcheckout",
+  {
+    data_type => "enum",
+    default_value => "inherit",
+    extra => { list => ["yes", "no", "inherit"] },
+    is_nullable => 0,
+  },
 );
 
 =head1 PRIMARY KEY
@@ -344,8 +360,8 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07051 @ 2024-10-25 13:25:14
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:jd0dYE700dpg1IiRnfbcEg
+# Created by DBIx::Class::Schema::Loader v0.07051 @ 2025-08-20 19:06:37
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:T/3QdCb353e+qBkN4as7Bg
 
 __PACKAGE__->add_columns(
     '+automatic_checkin'            => { is_boolean => 1 },
