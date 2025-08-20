@@ -62,6 +62,13 @@ transaction type (localuse, issue, return, renew, writeoff, payment)
 
 used by SIP
 
+=head2 illrequest_id
+
+  data_type: 'integer'
+  is_nullable: 1
+
+foreign key from the illrequests table, links transaction to a specific illrequest
+
 =head2 itemnumber
 
   data_type: 'integer'
@@ -133,6 +140,8 @@ __PACKAGE__->add_columns(
   { data_type => "varchar", is_nullable => 1, size => 16 },
   "other",
   { data_type => "longtext", is_nullable => 1 },
+  "illrequest_id",
+  { data_type => "integer", is_nullable => 1 },
   "itemnumber",
   { data_type => "integer", is_nullable => 1 },
   "itemtype",
@@ -150,8 +159,8 @@ __PACKAGE__->add_columns(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07049 @ 2023-05-10 17:08:44
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:3mznfs//6bH21hFpyZl7lw
+# Created by DBIx::Class::Schema::Loader v0.07051 @ 2025-08-20 19:38:05
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:RthuhgFIXWLLDyprEtdx3g
 
 
 # You can replace this text with custom content, and it will be preserved on regeneration

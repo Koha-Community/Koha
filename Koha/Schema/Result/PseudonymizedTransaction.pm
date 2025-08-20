@@ -235,24 +235,24 @@ __PACKAGE__->set_primary_key("id");
 
 =head1 RELATIONS
 
-=head2 pseudonymized_borrower_attributes
+=head2 pseudonymized_metadata_values
 
 Type: has_many
 
-Related object: L<Koha::Schema::Result::PseudonymizedBorrowerAttribute>
+Related object: L<Koha::Schema::Result::PseudonymizedMetadataValue>
 
 =cut
 
 __PACKAGE__->has_many(
-  "pseudonymized_borrower_attributes",
-  "Koha::Schema::Result::PseudonymizedBorrowerAttribute",
+  "pseudonymized_metadata_values",
+  "Koha::Schema::Result::PseudonymizedMetadataValue",
   { "foreign.transaction_id" => "self.id" },
   { cascade_copy => 0, cascade_delete => 0 },
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07049 @ 2021-11-19 14:20:11
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:GVTIlyIi8Vquhf662tDmsQ
+# Created by DBIx::Class::Schema::Loader v0.07051 @ 2025-08-20 19:38:05
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:HrD03ouw6Q3AwsVO9QZqGA
 
 __PACKAGE__->add_columns(
     '+has_cardnumber' => { is_boolean => 1 },

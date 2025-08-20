@@ -254,24 +254,9 @@ __PACKAGE__->belongs_to(
   },
 );
 
-=head2 pseudonymized_borrower_attributes
 
-Type: has_many
-
-Related object: L<Koha::Schema::Result::PseudonymizedBorrowerAttribute>
-
-=cut
-
-__PACKAGE__->has_many(
-  "pseudonymized_borrower_attributes",
-  "Koha::Schema::Result::PseudonymizedBorrowerAttribute",
-  { "foreign.code" => "self.code" },
-  { cascade_copy => 0, cascade_delete => 0 },
-);
-
-
-# Created by DBIx::Class::Schema::Loader v0.07051 @ 2025-02-20 15:56:54
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:Os1rn9zKu7/rVLVjZM3Mbg
+# Created by DBIx::Class::Schema::Loader v0.07051 @ 2025-08-20 19:38:04
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:H/UZDZR19JQd/N/Tzb1+2A
 
 __PACKAGE__->add_columns(
     '+display_checkout'          => { is_boolean => 1 },
