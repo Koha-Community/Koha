@@ -143,33 +143,29 @@
         [% IF ( CAN_user_circulate_circulate_remaining_permissions ) %]
             [% WRAPPER tab_panel tabname="holds" %]
                 [% IF ( holds_count ) %]
-                    <form action="/cgi-bin/koha/reserve/modrequest.pl" method="post">
-                        [% INCLUDE 'csrf-token.inc' %]
-                        <input type="hidden" name="from" value="circ" />
-                        <table id="holds-table" class="holds_table" style="width: 100% !Important;">
-                            <thead>
-                                <tr>
-                                    <th id="checkbox" data-colname="checkbox"><input type="checkbox" class="select_hold_all" /></th>
-                                    <th>Hold date</th>
-                                    <th class="anti-the">Title</th>
-                                    <th>Call number</th>
-                                    <th>Item type</th>
-                                    <th>Barcode</th>
-                                    <th>Pickup at</th>
-                                    <th>Expiration</th>
-                                    <th>Priority</th>
-                                    <th>Notes</th>
-                                    <th>Delete?</th>
-                                    <th>Suspend?</th>
-                                    <th>Status</th>
-                                </tr>
-                            </thead>
-                        </table>
+                    <table id="holds-table" class="holds_table" style="width: 100% !Important;">
+                        <thead>
+                            <tr>
+                                <th id="checkbox" data-colname="checkbox"><input type="checkbox" class="select_hold_all" /></th>
+                                <th>Hold date</th>
+                                <th class="anti-the">Title</th>
+                                <th>Call number</th>
+                                <th>Item type</th>
+                                <th>Barcode</th>
+                                <th>Pickup at</th>
+                                <th>Expiration</th>
+                                <th>Priority</th>
+                                <th>Notes</th>
+                                <th>Delete?</th>
+                                <th>Suspend?</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                    </table>
 
-                        <fieldset class="action">
-                            <button class="btn btn-primary cancel_selected_holds" data-bulk="true"></button>
-                        </fieldset>
-                    </form>
+                    <fieldset class="action">
+                        <button class="btn btn-primary cancel_selected_holds" data-bulk="true"></button>
+                    </fieldset>
 
                     [% PROCESS 'cancel-hold-modal' form_action = '/cgi-bin/koha/reserve/modrequest.pl' from_param = patronpage %]
                     [% PROCESS 'suspend-hold-modal' %]
