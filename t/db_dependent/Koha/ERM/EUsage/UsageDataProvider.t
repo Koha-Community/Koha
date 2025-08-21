@@ -32,7 +32,7 @@ my $builder = t::lib::TestBuilder->new;
 
 subtest '_build_url_query' => sub {
 
-    plan tests => 2;
+    plan tests => 3;
 
     $schema->storage->txn_begin;
 
@@ -47,7 +47,7 @@ subtest '_build_url_query' => sub {
             class => 'Koha::ERM::EUsage::UsageDataProviders',
             value => {
                 service_url => $service_url, api_key => $api_key, requestor_id     => $requestor_id,
-                customer_id => $customer_id, name    => $name,    service_platform => undef
+                customer_id => $customer_id, name    => $name,    service_platform => undef, report_release => 5
             }
         }
     );
@@ -79,8 +79,8 @@ subtest '_build_url_query' => sub {
         {
             class => 'Koha::ERM::EUsage::UsageDataProviders',
             value => {
-                service_url => $service_url, api_key => $api_key, requestor_id     => $requestor_id,
-                customer_id => $customer_id, name    => $name,    service_platform => $test_platform
+                service_url => $service_url, api_key => $api_key, requestor_id  => $requestor_id,
+                customer_id => $customer_id, name    => $name, service_platform => $test_platform, report_release => 5
             }
         }
     );
@@ -93,6 +93,39 @@ subtest '_build_url_query' => sub {
         $usage_data_provider_with_platform->_build_url_query,
         $service_url
             . '/reports/'
+            . lc( $usage_data_provider->{report_type} )
+            . '?customer_id='
+            . $customer_id
+            . '&requestor_id='
+            . $requestor_id
+            . '&api_key='
+            . $api_key
+            . '&begin_date='
+            . substr( $usage_data_provider->{begin_date}, 0, 7 )
+            . '&end_date='
+            . substr( $usage_data_provider->{end_date}, 0, 7 )
+            . '&platform='
+            . $test_platform
+    );
+
+    my $usage_data_provider_51 = $builder->build_object(
+        {
+            class => 'Koha::ERM::EUsage::UsageDataProviders',
+            value => {
+                service_url => $service_url, api_key => $api_key, requestor_id => $requestor_id,
+                customer_id => $customer_id, name => $name, service_platform => $test_platform, report_release => '5.1'
+            }
+        }
+    );
+
+    $usage_data_provider_51->{report_type} = 'TR_J1';
+    $usage_data_provider_51->{begin_date}  = '2023-08-01';
+    $usage_data_provider_51->{end_date}    = '2023-09-30';
+
+    is(
+        $usage_data_provider_51->_build_url_query,
+        $service_url
+            . '/r51/reports/'
             . lc( $usage_data_provider->{report_type} )
             . '?customer_id='
             . $customer_id
