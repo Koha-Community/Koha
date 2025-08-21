@@ -49,8 +49,8 @@ sub new {
         require Koha::ERM::EUsage::COUNTER::5_1;
         $counter_release = Koha::ERM::EUsage::COUNTER::5_1->new;
     } else {
-
-        #TODO: Throw an exception stating release not found / not supported!
+        Koha::Exceptions::ERM::EUsage::CounterFile::UnsupportedRelease->throw(
+            { counter_release => $params->{response}->{Report_Header}->{Release} } );
     }
 
     $counter_release->{sushi} = {
