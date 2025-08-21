@@ -121,7 +121,10 @@ if ( $op eq 'add_form' ) {
         $itemtype->rentalcharge_hourly_calendar($rentalcharge_hourly_calendar);
         $itemtype->automatic_checkin($automatic_checkin);
         $itemtype->bookable($bookable);
-        $itemtype->checkprevcheckout($checkprevcheckout);
+
+        if ( defined $checkprevcheckout ) {
+            $itemtype->checkprevcheckout($checkprevcheckout);
+        }
 
         eval {
             $itemtype->store;
