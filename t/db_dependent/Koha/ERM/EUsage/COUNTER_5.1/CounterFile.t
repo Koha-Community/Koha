@@ -17,8 +17,8 @@
 
 use Modern::Perl;
 
-# use Test::NoWarnings;
-use Test::More tests => 2;
+use Test::NoWarnings;
+use Test::More tests => 3;
 
 use Koha::Database;
 use Koha::ERM::EUsage::CounterFile;

@@ -104,7 +104,7 @@ sub get_counter51_value {
     }
 }
 
-=head3 _get_SUSHI_Name_Value
+=head3 get_mapped_SUSHI_values
 
     Given a SUSHI response, get the value for the given key in the correct format for the COUNTER report
     https://counter5.cambridge.org/r51/sushi-docs/
