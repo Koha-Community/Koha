@@ -25,6 +25,8 @@ use LWP::UserAgent;
 
 use Koha::Exceptions;
 
+use Try::Tiny qw( catch try );
+
 use base qw(Koha::Object);
 
 use Koha;
@@ -218,24 +220,34 @@ sub harvest_sushi {
     return if $self->_sushi_errors($result);
 
     # Parse the SUSHI response
-    my $sushi_counter = Koha::ERM::EUsage::SushiCounter->new( { response => $result } );
-    my $counter_file  = $sushi_counter->get_COUNTER_from_SUSHI;
+    try {
+        my $sushi_counter = Koha::ERM::EUsage::SushiCounter->new( { response => $result } );
+        my $counter_file  = $sushi_counter->get_COUNTER_from_SUSHI;
 
-    return if $self->_counter_file_size_too_large($counter_file);
+        return if $self->_counter_file_size_too_large($counter_file);
 
-    $self->counter_files(
-        [
-            {
-                usage_data_provider_id => $self->erm_usage_data_provider_id,
-                file_content           => $counter_file,
-                date_uploaded          => POSIX::strftime( "%Y%m%d%H%M%S", localtime ),
+        $self->counter_files(
+            [
+                {
+                    usage_data_provider_id => $self->erm_usage_data_provider_id,
+                    file_content           => $counter_file,
+                    date_uploaded          => POSIX::strftime( "%Y%m%d%H%M%S", localtime ),
 
-                #TODO: add ".csv" to end of filename here
-                filename => $self->name . "_" . $self->{report_type},
-            }
-        ]
-    );
-
+                    #TODO: add ".csv" to end of filename here
+                    filename => $self->name . "_" . $self->{report_type},
+                }
+            ]
+        );
+    } catch {
+        if ( $_->isa('Koha::Exceptions::ERM::EUsage::CounterFile::UnsupportedRelease') ) {
+            $self->{job_callbacks}->{add_message_callback}->(
+                {
+                    type    => 'error',
+                    message => 'COUNTER release ' . $_->{message}->{counter_release} . ' not supported',
+                }
+            ) if $self->{job_callbacks};
+        }
+    };
 }
 
 =head3 set_background_job_callbacks
