@@ -33,6 +33,8 @@ use C4::Reserves qw (AddReserve ModReserve ModReserveAffect ModReserveStatus);
 use Koha::AuthUtils;
 use Koha::DateUtils qw( dt_from_string );
 
+use Koha::MarcSubfieldStructures;
+
 BEGIN {
     use_ok('C4::ILSDI::Services', qw( AuthenticatePatron GetPatronInfo LookupPatron HoldTitle HoldItem GetRecords RenewLoan GetAvailability ));
 }
@@ -760,7 +762,7 @@ subtest 'Holds test with start_date and end_date' => sub {
 
 subtest 'GetRecords' => sub {
 
-    plan tests => 10;
+    plan tests => 11;
 
     $schema->storage->txn_begin;
 
@@ -773,11 +775,23 @@ subtest 'GetRecords' => sub {
         source => 'Branch',
     });
 
-    my $item = $builder->build_sample_item(
+    my $biblio = $builder->build_sample_biblio(
         {
-            library => $branch1->{branchcode},
+            title => 'This is an awesome title',
         }
     );
+
+    my $item = $builder->build_sample_item(
+        {
+            biblionumber => $biblio->biblionumber,
+            library      => $branch1->{branchcode},
+        }
+    );
+
+    my $framework_f245a = Koha::MarcSubfieldStructures->find(
+        { frameworkcode => $biblio->frameworkcode, tagfield => "245", tagsubfield => "a" } );
+    $framework_f245a->hidden('8');
+    $framework_f245a->store();
 
     my $patron = $builder->build({
         source => 'Borrower',
@@ -804,6 +818,10 @@ subtest 'GetRecords' => sub {
     $cgi->param(id => $item->biblionumber);
 
     my $reply = C4::ILSDI::Services::GetRecords($cgi);
+
+    my $opac_marcxml  = $reply->{record}->[0]->{marcxml};
+    my @title_matches = ( $opac_marcxml =~ m/This is an awesome title/g );
+    is( scalar @title_matches, 0, 'Title hidden in output as expected' );
 
     my $transfer = $item->get_transfer;
     my $expected = {
