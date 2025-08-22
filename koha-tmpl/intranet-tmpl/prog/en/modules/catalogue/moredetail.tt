@@ -285,7 +285,7 @@
                                             </form>
                                         [% ELSE %]
                                             [% FOREACH itemlostloo IN itemlostloop %]
-                                                [% IF ( itemlostloo.selected ) %]
+                                                [% IF ( itemlostloo.authorised_value == ITEM_DAT.itemlost ) %]
                                                     [% itemlostloo.lib | html %]
                                                 [% END %]
                                             [% END %]
@@ -320,7 +320,7 @@
                                             </form>
                                         [% ELSE %]
                                             [% FOREACH itemdamagedloo IN itemdamagedloop %]
-                                                [% IF ( itemdamagedloo.selected ) %]
+                                                [% IF ( itemdamagedloo.authorised_value == ITEM_DAT.damaged ) %]
                                                     [% itemdamagedloo.lib | html %]
                                                 [% END %]
                                             [% END %]
