@@ -448,7 +448,7 @@ sub additemtoresults {
     my $fc = $item->{'frameworkcode'} || '';
 
     # Populating with authorised values description
-    foreach my $field (qw/ location notforloan itemlost damaged withdrawn /) {
+    foreach my $field (qw/ location notforloan itemlost damaged withdrawn ccode /) {
         my $av = Koha::AuthorisedValues->get_description_by_koha_field(
             { frameworkcode => $fc, kohafield => "items.$field", authorised_value => $item->{$field} } );
         if ( $av and defined $item->{$field} and defined $av->{lib} ) {
