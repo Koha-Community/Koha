@@ -286,6 +286,7 @@
                             [% SET th_font_weight = "normal" %]
                         [% END %]
                         [% IF ( ro.current ) %]
+                            [% SET th_background_color = "" %]
                             [% SET th_title = t("Module current") %]
                         [% ELSIF ( ro.upgrade ) %]
                             [% SET th_background_color = "#FFCB2F" %]
