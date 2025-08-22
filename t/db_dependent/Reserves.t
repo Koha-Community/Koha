@@ -448,8 +448,7 @@ is(
 my $letter = ReserveSlip( { branchcode => $branch_1, reserve_id => $reserve_id } );
 ok( defined($letter), 'can successfully generate hold slip (bug 10949)' );
 
-# Tests for bug 9788: Does Koha::Item->current_holds return a future wait?
-# 9788a: current_holds does not return future next available hold
+# Does Koha::Biblio->current_holds respect ConfirmFutureHolds for a next available hold?
 $dbh->do( "DELETE FROM reserves WHERE biblionumber=?", undef, ($bibnum) );
 t::lib::Mocks::mock_preference( 'ConfirmFutureHolds',    2 );
 t::lib::Mocks::mock_preference( 'AllowHoldDateInFuture', 1 );
@@ -465,12 +464,10 @@ AddReserve(
     }
 );
 
-$holds = $item->current_holds;
-my $dtf          = Koha::Database->new->schema->storage->datetime_parser;
-my $future_holds = $holds->search( { reservedate => { '>' => $dtf->format_date(dt_from_string) } } );
-is( $future_holds->count, 0, 'current_holds does not return a future next available hold' );
+$holds = Koha::Biblios->find($bibnum)->current_holds;
+is( $holds->count, 1, 'current_holds returns a future next available hold' );
 
-# 9788b: current_holds does not return future item level hold
+# Does Koha::Item->current_holds respect ConfirmFutureHolds for a item level hold?
 $dbh->do( "DELETE FROM reserves WHERE biblionumber=?", undef, ($bibnum) );
 AddReserve(
     {
@@ -482,16 +479,14 @@ AddReserve(
         itemnumber       => $item->itemnumber,
     }
 );    #item level hold
-$future_holds = $holds->search( { reservedate => { '>' => $dtf->format_date(dt_from_string) } } );
-is( $future_holds->count, 0, 'current_holds does not return a future item level hold' );
+$holds = $item->current_holds;
+is( $holds->count, 1, 'current_holds returns a future item level hold' );
 
-# 9788c: current_holds returns future wait (confirmed future hold)
+# Does $item->current_holds return a future wait (confirmed future hold)?
+t::lib::Mocks::mock_preference( 'ConfirmFutureHolds', 1 );
 ModReserveAffect( $item->itemnumber, $requesters{$branch_1}->borrowernumber, 0 );    #confirm hold
-$future_holds = $holds->search( { reservedate => { '>' => $dtf->format_date(dt_from_string) } } );
-is( $future_holds->count, 1, 'current_holds returns a future wait (confirmed future hold)' );
-
-# End of tests for bug 9788
-
+$holds = $item->current_holds;
+is( $holds->count, 1, 'current_holds returns a future wait (confirmed future hold)' );
 $dbh->do( "DELETE FROM reserves WHERE biblionumber=?", undef, ($bibnum) );
 
 # Tests for CalculatePriority (bug 8918)
