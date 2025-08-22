@@ -424,11 +424,23 @@
         }
 
         function exportItems(format) {
-            let item_search_selections = JSON.parse( localStorage.getItem("item_search_selections") ) || [];
+            let item_search_selections = JSON.parse(localStorage.getItem("item_search_selections")) || [];
             if (item_search_selections.length > 0) {
-            var href = '/cgi-bin/koha/catalogue/item-export.pl?format=' + format;
-                href += '&itemnumber=' + Array.from( item_search_selections ).join('&itemnumber=');
-                location = href;
+                let inputs = item_search_selections.map(itemnumber =>
+                    `<input type="hidden" name="itemnumber" value="${itemnumber}">`
+                ).join('');
+
+                let form = $(`
+                    <form method="POST" action="/cgi-bin/koha/catalogue/item-export.pl">
+                        [% INCLUDE 'csrf-token.inc' %]
+                        <input type="hidden" name="format" value="${format}">
+                        ${inputs}
+                    </form>
+                `);
+
+                $('body').append(form);
+                form.submit();
+                form.remove();
             } else {
                 $('#format-' + format).prop('checked', true);
                 $('#itemsearchform').submit();
