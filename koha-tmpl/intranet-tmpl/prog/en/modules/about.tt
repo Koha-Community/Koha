@@ -17,6 +17,12 @@
     .version-ellipsis {
         text-decoration: underline;
     }
+    #dt-info {
+        display: flex;
+    }
+    .filter_controls {
+        margin-top: 0.25em;
+    }
 </style>
 </head>
 <body id="about_about" class="about">
@@ -84,6 +90,39 @@
     <!-- /.row -->
 </div>
 <!-- /.main.container-fluid -->
+
+[% MACRO jsinclude BLOCK %]
+    [% INCLUDE 'datatables.inc' %]
+    <script>
+        $(document).ready(function () {
+            let perl_table = $("#perl_table").kohaTable({
+                autoWidth: false,
+                paging: false,
+                columns: [null, { width: "10%" }, { width: "10%" }, { width: "10%" }, null],
+                dom: '<"#dt-info"i><"top pager"<"table_entries"lp><"table_controls"fB>>tr<"bottom pager"i>',
+                initComplete: function (settings, json) {
+                    $("#dt-info").append(
+                        '<div class="filter_controls"><a id="show_all" class="btn btn-link filter_table" href="#">Show all</a> | <a id="show_required_modules" class="btn btn-link filter_table" href="#"><i class="fa fa-asterisk"></i> Show required</a> | <a id="show_missing_modules" class="btn btn-link filter_table" href="#"><i class="fa fa-question"></i> Show missing</a></div>'
+                    );
+                },
+            });
+
+            $("body").on("click", ".filter_table", function (e) {
+                e.preventDefault();
+                perl_table.DataTable().column(1).search("").draw();
+                perl_table.DataTable().column(4).search("").draw();
+                if ($(this)[0].id == "show_required_modules") {
+                    perl_table.DataTable().column(1).search(1).draw();
+                } else if ($(this)[0].id == "show_missing_modules") {
+                    perl_table.DataTable().column(4).search(1).draw();
+                } else {
+                    perl_table.DataTable().column(1).search("").draw();
+                    perl_table.DataTable().column(4).search("").draw();
+                }
+            });
+        });
+    </script>
+[% END %]
 
 [% INCLUDE 'intranet-bottom.inc' %]
 
@@ -275,51 +314,70 @@
 
 [% BLOCK perl_panel %]
     [% WRAPPER tab_panel tabname= "perl" bt_active = 1 %]
-        <table style="cursor:pointer">
-            <caption>Perl modules</caption>
-            [% FOREACH line IN table %]
+        <h2>Perl modules</h2>
+        <table id="perl_table" style="cursor:pointer">
+            <caption class="visually-hidden">Perl modules</caption>
+            <thead>
                 <tr>
-                    [% FOREACH ro IN line.row %]
-                        [% IF ( ro.require ) %]
-                            [% SET th_font_weight = "bold" %]
+                    <th>Module</th>
+                    <th>Required</th>
+                    <th>Current version</th>
+                    <th>Minimum version</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                [% FOREACH line IN table %]
+                    <tr>
+                        <td>
+                            [% IF ( line.require ) %]
+                                <strong>[% line.name | html %]</strong>
+                            [% ELSE %]
+                                [% line.name | html %]
+                            [% END %]
+                        </td>
+                        [% IF ( line.require ) %]
+                            <td data-search="1" data-sort="1">
+                                <i class="fa fa-check"></i>
+                            </td>
                         [% ELSE %]
-                            [% SET th_font_weight = "normal" %]
+                            <td data-search="0" data-sort="0"></td>
                         [% END %]
-                        [% IF ( ro.current ) %]
-                            [% SET th_background_color = "" %]
-                            [% SET th_title = t("Module current") %]
-                        [% ELSIF ( ro.upgrade ) %]
-                            [% SET th_background_color = "#FFCB2F" %]
-                            [% SET th_title = t("Module upgrade needed") %]
-                        [% ELSE %]
-                            [% IF ( ro.require ) %]
-                                [% SET th_background_color = "#FF8A8A" %]
-                                [% SET th_title = t("Required module missing") %]
-                            [% ELSIF ( ro.name != '' ) %]
-                                [% SET th_background_color = "#FF8A8A" %]
-                                [% SET th_title = t("Optional module missing") %]
-                            [% END %]
-                        [% END # /IF ro.current %]
-                        <th scope="row" style="background-color:[% th_background_color | html %];font-weight:[% th_font_weight | html %];" title="[% th_title | html %]">
-                            [% IF ( ro.name ) %]
-                                [% ro.name | html %]
-                                <span style="font-weight:normal; font-size:smaller">
-                                    ([% ro.reqversion | html %]
-                                    [% IF ro.maxversion %]- [% ro.maxversion | html %][% END %]
-                                    [% IF ro.excversion %][% FOR v IN ro.excversion %], ![% v | html %][% END %][% END %])
-                                </span>
-                            [% END %]
-                        </th>
-                        [% IF ( ro.name == '' ) %]
+
+                        [% IF ( line.name == '' ) %]
                             <td></td>
-                        [% ELSIF ( ro.version ) %]
-                            <td>[% ro.version | html %]</td>
+                        [% ELSIF ( line.version ) %]
+                            <td>[% line.version | html %]</td>
                         [% ELSE %]
                             <td style="font-weight:bold">Not Installed</td>
                         [% END %]
-                    [% END # /FOREACH ro %]
-                </tr>
-            [% END # /FOREACH line %]
+                        <td>
+                            <span>
+                                [% line.reqversion | html %]
+                                [% IF line.maxversion %]- [% line.maxversion | html %][% END %]
+                                [% IF line.excversion %]
+                                    [% FOR v IN line.excversion %]
+                                        , ![% v | html %]
+                                    [% END %]
+                                [% END %]
+                            </span>
+                        </td>
+                        <td [% IF ( !line.current && !line.upgrade ) %]data-search="1"[% ELSE %]data-search="0"[% END %]>
+                            [% IF ( line.current ) %]
+                                <span class="badge text-bg-info">Module current</span>
+                            [% ELSIF ( line.upgrade ) %]
+                                <span class="badge text-bg-info">Module upgrade needed</span>
+                            [% ELSE %]
+                                [% IF ( line.require ) %]
+                                    <span class="badge text-bg-danger">Required module missing</span>
+                                [% ELSIF ( line.name != '' ) %]
+                                    <span class="badge text-bg-warning">Optional module missing</span>
+                                [% END %]
+                            [% END # /IF line.current %]
+                        </td>
+                    </tr>
+                [% END %]
+            </tbody>
         </table>
     [% END # tab=perl %]
 [% END %]
