@@ -178,7 +178,59 @@
             [% END %]
         </div>
     [% END %]
-
+    [% IF ( hold_move_successes ) %]
+        <div class="alert alert-success">
+            <p>Moved the following holds:</p>
+            <ul>
+                [% FOREACH hold IN hold_move_successes %]
+                    <li>
+                        <label>Hold ID: </label>
+                        <span>[% hold.hold_id | html %]</span>
+                        <span> - Moved from [%- INCLUDE 'biblio-title.inc' biblio=hold.original_biblio link = 1 -%] to [%- INCLUDE 'biblio-title.inc' biblio=hold.target_biblio link = 1 -%]</span>
+                    </li>
+                [% END %]
+            </ul>
+        </div>
+    [% END %]
+    [% IF ( hold_move_failures ) %]
+        <div class="alert alert-warning">
+            <strong>One or more holds were not moved due to following errors:</strong>
+            <ul>
+                [% FOREACH fail IN hold_move_failures %]
+                    <li>
+                        <label>Hold ID: </label>
+                        <span>[% fail.hold_id | html %]</span>
+                        [% SWITCH fail.error %]
+                        [% CASE 'cannotReserveFromOtherBranches' %]
+                            <span>Target item cannot be reserved from other branches</span>
+                        [% CASE 'ageRestricted' %]
+                            <span>The target record and/or items are age restricted</span>
+                        [% CASE 'alreadypossession' %]
+                            <span>Target item is already checked out to patron</span>
+                        [% CASE 'noReservesAllowed' %]
+                            <span>No holds are allowed on the target item(s)</span>
+                        [% CASE 'tooManyReservesToday' %]
+                            <span>Target item has too many holds placed on it today</span>
+                        [% CASE 'tooManyReserves' %]
+                            <span>Target item has too many holds placed on it</span>
+                        [% CASE 'notReservable' %]
+                            <span>Target item is not reservable</span>
+                        [% CASE 'cannotReserveFromOtherBranches' %]
+                            <span>Target item cannot be placed on reserve for this branch</span>
+                        [% CASE 'branchNotInHoldGroup' %]
+                            <span>Tagret item is not in the local hold group</span>
+                        [% CASE 'notforloan' %]
+                            <span>Target item is not for loan</span>
+                        [% CASE 'damaged' %]
+                            <span>Target item is damaged</span>
+                        [% CASE %]
+                            <span>Error: [% fail.error | html %]</span>
+                        [% END %]
+                    </li>
+                [% END %]
+            </ul>
+        </div>
+    [% END %]
     [% IF ( failed_holds ) %]
         <div class="alert alert-warning">
             <strong>One or more holds were not placed due to following errors:</strong>
@@ -1434,6 +1486,7 @@
                     [% INCLUDE 'csrf-token.inc' %]
                     <input type="hidden" name="op" value="cud-move_hold_item" />
                     <input type="hidden" name="original_biblionumber" value="[% biblio.biblionumber | html %]" />
+                    <input type="hidden" name="biblionumber" value="[% biblio.biblionumber | html %]" />
                     <div id="itemResultMessage" class="mt-3"> </div>
                     <div id="move_hold_item_selection">
                         <h3>Review holds to move</h3>
@@ -1480,6 +1533,7 @@
                     [% INCLUDE 'csrf-token.inc' %]
                     <input type="hidden" name="op" value="cud-move_hold_biblio" />
                     <input type="hidden" name="original_biblionumber" value="[% biblio.biblionumber | html %]" />
+                    <input type="hidden" name="biblionumber" value="[% biblio.biblionumber | html %]" />
                     <div id="biblioResultMessage" class="mt-3"> </div>
                     <div id="move_hold_biblio_selection">
                         <h3>Review holds to move</h3>
