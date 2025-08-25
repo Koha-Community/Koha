@@ -2,7 +2,11 @@
     [% patron.surname | html %][% IF patron.othernames %]([% patron.othernames | html %])[%- END -%]
 [%- ELSE -%]
     [%- IF patron.title -%]
-        <span class="patron-title">[% patron.title | html %]</span>
+        [%- IF no_html -%]
+            [% patron.title | html %]
+        [%- ELSE -%]
+            <span class="patron-title"></span>
+        [%- END -%]
     [%- END -%]
     [% patron.preferred_name | html %]
     [% patron.middle_name | html %]
