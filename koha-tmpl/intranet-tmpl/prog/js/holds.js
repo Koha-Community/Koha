@@ -740,6 +740,7 @@ $(document).ready(function () {
     });
 
     var MSG_CANCEL_SELECTED = __("Cancel selected (%s)");
+    var MSG_MOVE_SELECTED = __("Move selected (%s)");
     var MSG_CANCEL_ALERT = __(
         "This action will cancel <span class='badge bg-danger'>%s</span> hold(s)."
     );
@@ -805,6 +806,11 @@ $(document).ready(function () {
                 $(".holds_table .select_hold:checked").length
             )
         );
+        $(".move_selected_holds").html(
+            MSG_MOVE_SELECTED.format(
+                $(".holds_table .select_hold:checked").length
+            )
+        );
         $(".suspend_selected_holds").html(
             MSG_SUSPEND_SELECTED.format(
                 $(".holds_table .select_hold:checked").length
@@ -844,11 +850,13 @@ $(document).ready(function () {
                 )
                 .join(",") +
             "]";
+        $(".move_selected_holds").prop("disabled", count);
     });
 
     $(".holds_table").on("click", ".select_hold", function () {
         var table = $(this).parents(".holds_table");
         var count = $(".select_hold:not(:checked)", table).length;
+        var checked_count = $(".select_hold:checked", table).length;
         $(".select_hold_all", table).prop("checked", !count);
         updateSelectedHoldsButtonCounters();
         $("#cancel_hold_alert").html(
@@ -870,6 +878,7 @@ $(document).ready(function () {
                 )
                 .join(",") +
             "]";
+        $(".move_selected_holds").prop("disabled", !checked_count);
     });
 
     $(".cancel_selected_holds").click(function (e) {
@@ -920,6 +929,105 @@ $(document).ready(function () {
             $("#cancelModal").modal("show");
         }
         return false;
+    });
+
+    $("#itemSearchForm").on("submit", function (event) {
+        event.preventDefault();
+        $("#move_hold_item_confirm").prop("disabled", true);
+
+        let externalID = $("#external_id").val();
+        let apiUrl = `/api/v1/items?external_id=${encodeURIComponent(externalID)}`;
+
+        $.ajax({
+            url: apiUrl,
+            method: "GET",
+            dataType: "json",
+            success: function (data) {
+                // Filter for exact matches only
+                let exactMatches = data.filter(
+                    item => item.external_id === externalID
+                );
+                if (exactMatches.length > 0) {
+                    let resultHtml = "";
+                    $.each(exactMatches, function (index, item) {
+                        resultHtml += `
+                            <div class="alert alert-success">
+                                <strong>Biblionumber:</strong> ${item.biblio_id} <br>
+                                <strong>Item:</strong> ${item.external_id} <br>
+                                <input id="new_itemnumber_${item.item_id}" name="new_itemnumber" type="checkbox" value="${item.item_id}">
+                                <label for="new_itemnumber_${item.item_id}">Move all selected item level holds to this item</label>
+                                <input id="new_biblionumber_${item.item_id}" name="new_biblionumber" type="hidden" value="${item.biblio_id}">
+                            </div>
+                            <hr />
+                        `;
+                    });
+                    $("#itemResultMessage").html(resultHtml);
+                } else {
+                    $("#itemResultMessage").html(`
+                        <div class="alert alert-warning">No item found with barcode: ${externalID}.</div>
+                    `);
+                }
+            },
+        });
+    });
+
+    $("#biblioSearchForm").on("submit", function (event) {
+        event.preventDefault();
+        $("#move_hold_biblio_confirm").prop("disabled", true);
+
+        let biblioID = parseInt($("#biblio_id").val());
+        let apiUrl = `/api/v1/biblios?q={"biblio_id":"${encodeURIComponent(biblioID)}"}`;
+        $.ajax({
+            url: apiUrl,
+            method: "GET",
+            dataType: "json",
+            headers: {
+                Accept: "application/json",
+            },
+            success: function (data) {
+                // Filter for exact matches only
+                let exactMatches = data.filter(
+                    item => item.biblio_id === biblioID
+                );
+
+                if (exactMatches.length > 0) {
+                    let resultHtml = "";
+                    $.each(exactMatches, function (index, item) {
+                        resultHtml += `
+                            <div class="alert alert-success">
+                                <strong>Biblionumber:</strong> ${item.biblio_id} <br>
+                                <input id="new_biblionumber_${item.biblio_id}" name="new_biblionumber" type="checkbox" value="${item.biblio_id}">
+                                <label for="new_biblionumber_${item.biblio_id}">Move all selected record level holds to this record</label>
+                            </div>
+                            <hr />
+                        `;
+                    });
+                    $("#biblioResultMessage").html(resultHtml);
+                } else {
+                    $("#biblioResultMessage").html(`
+                        <div class="alert alert-warning">No record found with biblionumber: ${biblioID}.</div>
+                    `);
+                }
+            },
+        });
+    });
+
+    $(document).on("change", 'input[name="new_itemnumber"]', function () {
+        $('input[name="new_itemnumber"]').not(this).prop("checked", false);
+        if ($('input[name="new_itemnumber"]:checked').length) {
+            $("#move_hold_item_confirm").prop("disabled", false);
+        } else {
+            $("#move_hold_item_confirm").prop("disabled", true);
+        }
+    });
+
+    $(document).on("change", 'input[name="new_biblionumber"]', function () {
+        $('input[name="new_biblionumber"]').not(this).prop("checked", false);
+        if ($('input[name="new_biblionumber"]:checked').length) {
+            $("#move_hold_biblio_confirm").prop("disabled", false);
+        } else {
+            $("#move_hold_biblio_confirm").prop("disabled", true);
+        }
     });
 
     function _append_patron_page_cancel_hold_modal_data(hold) {
