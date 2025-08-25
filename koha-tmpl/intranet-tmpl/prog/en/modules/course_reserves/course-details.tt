@@ -114,7 +114,7 @@
                         <div id="instructors">
                             [% FOREACH i IN course.instructors %]
                                 <div class="instructor_line">
-                                    <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% i.borrowernumber | uri %]">[% i.firstname | html %] [% i.surname | html %]</a>
+                                    <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% i.borrowernumber | uri %]">[% INCLUDE 'patron-title.inc' patron=i no_cardnumber=1 %]</a>
                                 </div>
                             [% END %]
                         </div>
