@@ -434,7 +434,7 @@ if ( defined $input->param('CSVexport') && $input->param('CSVexport') eq 'on' ) 
     my $columns = Koha::Database::Columns->columns;
     my @translated_keys;
     for my $key (
-        qw / biblioitems.title    biblio.author
+        qw / biblio.title    biblio.author
         items.barcode        items.itemnumber
         items.homebranch     items.location   items.ccode
         items.itemcallnumber items.notforloan
