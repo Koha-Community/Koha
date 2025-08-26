@@ -326,14 +326,17 @@
                 return $("#" + tab_id + "_status select").val();
             };
 
-            let offset = 2;
-            [% UNLESS Koha.Preference('LocalCoverImages') %]offset--;[% END %]
-            let filters_options = {
-                [offset]   : () => all_item_types,
-                [offset+1] : () => all_libraries,
-                [offset+2] : () => all_libraries,
-                [offset+7] : () => all_statuses,
-            };
+            let filters_options = {};
+
+            let itype_col = $("#" + tab_id + "_table thead th[data-colname='itype']").index();
+            let holdingbranch_col = $("#" + tab_id + "_table thead th[data-colname='holdingbranch']").index();
+            let homebranch_col = $("#" + tab_id + "_table thead th[data-colname='homebranch']").index();
+            let status_col = $("#" + tab_id + "_table thead th[data-colname='status']").index();
+
+            if ( itype_col >= 0 ) filters_options[itype_col] = () => all_item_types;
+            if ( holdingbranch_col >= 0 ) filters_options[holdingbranch_col] = () => all_libraries;
+            if ( homebranch_col >= 0 ) filters_options[homebranch_col] = () => all_libraries;
+            if ( status_col >= 0 ) filters_options[status_col] = () => all_statuses;
 
             var items_table = $("#" + tab_id + '_table').kohaTable({
                 ajax: { url: item_table_url },
