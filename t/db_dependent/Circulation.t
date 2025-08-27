@@ -19,7 +19,7 @@ use Modern::Perl;
 use utf8;
 
 use Test::NoWarnings;
-use Test::More tests => 78;
+use Test::More tests => 80;
 use Test::Exception;
 use Test::MockModule;
 use Test::Deep qw( cmp_deeply );
@@ -28,6 +28,7 @@ use Test::Warn;
 use Data::Dumper;
 use DateTime;
 use Time::Fake;
+use JSON  qw( from_json );
 use POSIX qw( floor );
 use t::lib::Mocks;
 use t::lib::TestBuilder;
@@ -7767,6 +7768,143 @@ subtest 'ChildNeedsGuarantor' => sub {
     }
     undef,
         "AddReturn generates no warning when can_be_guarantee type patron has a guarantor and not ChildNeedsGuarantor";
+};
+
+subtest 'Bug 9762: AddIssue override JSON logging' => sub {
+    plan tests => 8;
+
+    my $library = $builder->build_object( { class => 'Koha::Libraries' } );
+    my $patron  = $builder->build_object( { class => 'Koha::Patrons' } );
+    my $item    = $builder->build_sample_item( { library => $library->branchcode } );
+
+    t::lib::Mocks::mock_userenv( { patron => $patron, branchcode => $library->branchcode } );
+    t::lib::Mocks::mock_preference( 'IssueLog', 1 );
+
+    # Clear any existing logs
+    Koha::ActionLogs->search( { module => 'CIRCULATION', action => 'ISSUE' } )->delete;
+
+    # Test 1: Normal checkout without overrides - should log item number only
+    my $issue = C4::Circulation::AddIssue( $patron, $item->barcode );
+    ok( $issue, 'Item checked out successfully' );
+
+    my $logs = Koha::ActionLogs->search(
+        {
+            module => 'CIRCULATION',
+            action => 'ISSUE',
+            object => $patron->borrowernumber
+        },
+        { order_by => { -desc => 'timestamp' } }
+    );
+    is( $logs->count, 1, 'One log entry created for normal checkout' );
+    my $log = $logs->next;
+    is( $log->info, $item->itemnumber, 'Normal checkout logs item number only' );
+
+    # Return the item for next test
+    C4::Circulation::AddReturn( $item->barcode, $library->branchcode );
+
+    # Test 2: Checkout with confirmations - should log JSON with confirmations
+    my $item2 = $builder->build_sample_item( { library => $library->branchcode } );
+
+    my $issue2 = C4::Circulation::AddIssue(
+        $patron,
+        $item2->barcode,
+        undef, undef, undef, undef,
+        {
+            confirmations => [ 'DEBT', 'AGE_RESTRICTION' ],
+            forced        => []
+        }
+    );
+    ok( $issue2, 'Item with confirmations checked out successfully' );
+
+    $logs = Koha::ActionLogs->search(
+        {
+            module => 'CIRCULATION',
+            action => 'ISSUE',
+            object => $patron->borrowernumber,
+            info   => { '!=', $item->itemnumber }    # Exclude the first test log
+        },
+        { order_by => { -desc => 'timestamp' } }
+    );
+    is( $logs->count, 1, 'One log entry created for override checkout' );
+    $log = $logs->next;
+
+    my $log_data = eval { from_json( $log->info ) };
+    ok( !$@,                               'Log info is valid JSON' );
+    ok( exists $log_data->{confirmations}, 'JSON contains confirmations array' );
+    is_deeply( $log_data->{confirmations}, [ 'DEBT', 'AGE_RESTRICTION' ], 'Confirmations logged correctly' );
+};
+
+subtest 'Bug 9762: AddRenewal override JSON logging' => sub {
+    plan tests => 11;
+
+    my $library = $builder->build_object( { class => 'Koha::Libraries' } );
+    my $patron  = $builder->build_object( { class => 'Koha::Patrons' } );
+    my $item    = $builder->build_sample_item( { library => $library->branchcode } );
+
+    t::lib::Mocks::mock_userenv( { patron => $patron, branchcode => $library->branchcode } );
+    t::lib::Mocks::mock_preference( 'RenewalLog', 1 );
+
+    # Issue the item first
+    my $issue = C4::Circulation::AddIssue( $patron, $item->barcode );
+
+    # Clear any existing renewal logs
+    Koha::ActionLogs->search( { module => 'CIRCULATION', action => 'RENEWAL' } )->delete;
+
+    # Test 1: Normal renewal without overrides - should log item number only
+    C4::Circulation::AddRenewal(
+        {
+            borrowernumber => $patron->borrowernumber,
+            itemnumber     => $item->itemnumber,
+            branch         => $library->branchcode
+        }
+    );
+
+    my $logs = Koha::ActionLogs->search(
+        {
+            module => 'CIRCULATION',
+            action => 'RENEWAL',
+            object => $patron->borrowernumber
+        },
+        { order_by => { -desc => 'timestamp' } }
+    );
+    is( $logs->count, 1, 'One log entry created for normal renewal' );
+    my $log = $logs->next;
+
+    my $log_data = eval { from_json( $log->info ) };
+    ok( !$@, 'Normal renewal log info is valid JSON' );
+    is( $log_data->{itemnumber}, $item->itemnumber, 'Normal renewal JSON contains itemnumber' );
+    is_deeply( $log_data->{confirmations}, [], 'Normal renewal has empty confirmations array' );
+    is_deeply( $log_data->{forced},        [], 'Normal renewal has empty forced array' );
+
+    # Test 2: Renewal with overrides - should log JSON with confirmations
+    C4::Circulation::AddRenewal(
+        {
+            borrowernumber => $patron->borrowernumber,
+            itemnumber     => $item->itemnumber,
+            branch         => $library->branchcode,
+            confirmations  => [ 'ON_RESERVE', 'RENEWAL_LIMIT' ],
+            forced         => ['TOO_MUCH']
+        }
+    );
+
+    # Get only the most recent renewal log (the one with overrides)
+    my $override_log = Koha::ActionLogs->search(
+        {
+            module => 'CIRCULATION',
+            action => 'RENEWAL',
+            object => $patron->borrowernumber,
+            info   => { 'like' => '%ON_RESERVE%' }    # Only get the log with our test overrides
+        },
+        { order_by => { -desc => 'timestamp' }, rows => 1 }
+    )->next;
+
+    ok( $override_log, 'Found override renewal log entry' );
+    $log_data = eval { from_json( $override_log->info ) };
+    ok( !$@,                               'Override renewal log info is valid JSON' );
+    ok( exists $log_data->{confirmations}, 'JSON contains confirmations array' );
+    ok( exists $log_data->{forced},        'JSON contains forced array' );
+    is_deeply( $log_data->{confirmations}, [ 'ON_RESERVE', 'RENEWAL_LIMIT' ], 'Confirmations logged correctly' );
+    is_deeply( $log_data->{forced},        ['TOO_MUCH'],                      'Forced overrides logged correctly' );
 };
 
 $schema->storage->txn_rollback;
