@@ -63,7 +63,8 @@ my $patron_category = $builder->build(
     {
         source => 'Category',
         value  => {
-            category_type => 'P',
+            category_type  => 'P',
+            noissuescharge => undef,
         }
     }
 );
@@ -176,6 +177,7 @@ is( $message_log->[0], 'too many checkout', 'Checkout limit reached message disp
 t::lib::Mocks::mock_preference( 'AllFinesNeedOverride', 0 );
 t::lib::Mocks::mock_preference( 'AllowFineOverride',    1 );
 t::lib::Mocks::mock_preference( 'noissuescharge',       5 );
+t::lib::Mocks::mock_preference( 'IssuingInProcess',     0 );
 
 $dbh->do(q|DELETE FROM circulation_rules|);
 
