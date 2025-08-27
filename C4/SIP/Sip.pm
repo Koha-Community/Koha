@@ -72,8 +72,8 @@ sub add_field {
            $field_id);
         $value = '';
     }
-    $value=~s/\r/ /g; # CR terminates a sip message
-                      # Protect against them in sip text fields
+    $value =~ s/\r\n|\r|\n/ /g;    # CR or LF terminates a sip message
+                                   # Protect against them in sip text fields
 
     # Replace any occurrences of the field delimiter in the
     # field value with the HTML character entity
