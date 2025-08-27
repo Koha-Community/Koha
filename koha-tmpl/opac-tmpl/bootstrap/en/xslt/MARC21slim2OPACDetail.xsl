@@ -825,10 +825,20 @@
                                         </xsl:when>
                                         <xsl:otherwise>
                                             <xsl:attribute name="href">
-                                                <xsl:text>/cgi-bin/koha/opac-search.pl?q=au:"</xsl:text>
-                                                <xsl:value-of
-                                                    select="str:encode-uri(marc:subfield[@code='a'], true())" />
-                                                <xsl:text>"</xsl:text>
+                                                <xsl:choose>
+                                                    <!-- If there's a $t subfield, treat as a title search -->
+                                                    <xsl:when test="marc:subfield[@code='t']">
+                                                        <xsl:text>/cgi-bin/koha/opac-search.pl?q=ti,phr:"</xsl:text>
+                                                        <xsl:value-of select="str:encode-uri(marc:subfield[@code='t'], true())" />
+                                                        <xsl:text>"</xsl:text>
+                                                    </xsl:when>
+                                                    <!-- Otherwise treat as an author search -->
+                                                    <xsl:otherwise>
+                                                        <xsl:text>/cgi-bin/koha/opac-search.pl?q=au:"</xsl:text>
+                                                        <xsl:value-of select="str:encode-uri(marc:subfield[@code='a'], true())" />
+                                                        <xsl:text>"</xsl:text>
+                                                    </xsl:otherwise>
+                                                </xsl:choose>
                                                 <xsl:if test="$AuthorLinkSortBy!='default'">
                                                     <xsl:text>&amp;sort_by=</xsl:text>
                                                     <xsl:value-of select="$AuthorLinkSortBy" />
