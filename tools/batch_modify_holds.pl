@@ -37,7 +37,7 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
         template_name => 'tools/batch_modify_holds.tt',
         query         => $input,
         type          => "intranet",
-        flagsrequired => { tools => 'batch_modify_holds' },
+        flagsrequired => { tools => 'batch_modify_holds', reserveforothers => 'place_holds' },
     }
 );
 
