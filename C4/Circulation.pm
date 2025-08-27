@@ -3683,21 +3683,18 @@ sub AddRenewal {
 
             #Log the renewal
             if ( C4::Context->preference("RenewalLog") ) {
-                my $info = $itemnumber;
-                if ( defined($confirmations) || defined($forced) ) {
-                    $info = to_json(
-                        {
-                            issue         => $issue->issue_id,
-                            itemnumber    => $itemnumber,
-                            confirmations => $confirmations,
-                            forced        => $forced
-                        },
-                        {
-                            pretty    => 1,
-                            canonical => 1
-                        }
-                    );
-                }
+                my $info = to_json(
+                    {
+                        issue         => $issue->issue_id,
+                        itemnumber    => $itemnumber,
+                        confirmations => $confirmations || [],
+                        forced        => $forced        || []
+                    },
+                    {
+                        pretty    => 1,
+                        canonical => 1
+                    }
+                );
                 logaction( "CIRCULATION", "RENEWAL", $borrowernumber, $info );
             }
 
