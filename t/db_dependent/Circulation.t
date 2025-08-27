@@ -4111,6 +4111,7 @@ subtest 'AddReturn | is_overdue' => sub {
             'NoRefundOnLostReturnedItemsAge',
             undef
         );
+        t::lib::Mocks::mock_preference( 'UseCashRegisters', 0 );
 
         subtest 'lostreturn | refund_unpaid' => sub {
             plan tests => 21;
