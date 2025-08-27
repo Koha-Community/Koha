@@ -1974,58 +1974,6 @@
                 });
             [% END %]
 
-            $('.move_hold_item').click(function(e) {
-                e.preventDefault();
-                $('#move_hold_item_confirm').prop('disabled' , true );
-                if($('.holds_table .select_hold:checked').length) {
-                    $('#itemResultMessage').empty();
-                    $('#move_hold_item_selection table tbody').empty();
-                    $('#moveHoldItemModal').modal('show');
-                    $('.select_hold:checked').each( function() {
-                        let reserve_id = $(this).data('id');
-                        let reserve_biblionumber = $(this).data('biblionumber');
-                        let reserve_itemnumber = $(this).data('itemnumber');
-                        let item_level_hold = $(this).data('item_level_hold');
-                        let item_waiting = $(this).data('waiting');
-                        let item_intransit = $(this).data('intransit');
-                        let error_message = $(this).data('item_level_hold') ? "" : _("Cannot move a waiting, in transit, or record level hold");
-                        let found_status = $(this).data('found');
-                        if ( item_level_hold &&  ( !item_waiting || !item_intransit ) ) {
-                            $('#move_hold_item_selection table').append(`<tr><td><input type="checkbox" name="move_hold_id" value="${reserve_id}" checked /></td><td>${reserve_id}</td><td>Biblionumber: <a target="_blank" href="/cgi-bin/koha/reserve/request.pl?biblionumber=${reserve_biblionumber}">${reserve_biblionumber}</a> Itemnumber: <a target="_blank" href="/cgi-bin/koha/catalogue/moredetail.pl?biblionumber=${reserve_biblionumber}#item${reserve_itemnumber}">${reserve_itemnumber}</a></td><td>${error_message}</td></tr>`)
-                        } else {
-                            $('#move_hold_item_selection table').append(`<tr><td><input type="checkbox" name="move_hold_id" value="${reserve_id}" disabled /></td><td>${reserve_id}</td><td>Biblionumber: <a target="_blank" href="/cgi-bin/koha/reserve/request.pl?biblionumber=${reserve_biblionumber}">${reserve_biblionumber}</a> Itemnumber: <a target="_blank" href="/cgi-bin/koha/catalogue/moredetail.pl?biblionumber=${reserve_biblionumber}#item${reserve_itemnumber}">${reserve_itemnumber}</a></td><td>${error_message}</td></tr>`)
-                        }
-                    });
-                }
-            });
-
-            $('.move_hold_biblio').click(function(e) {
-                e.preventDefault();
-                $('#move_hold_biblio_confirm').prop('disabled' , true );
-                if($('.holds_table .select_hold:checked').length) {
-                    $('#biblioResultMessage').empty();
-                    $('#move_hold_biblio_selection table tbody').empty();
-                    $('#moveHoldBiblioModal').modal('show');
-                    $('.select_hold:checked').each( function() {
-                        let reserve_id = $(this).data('id');
-                        let reserve_biblionumber = $(this).data('biblionumber');
-                        let reserve_itemnumber = $(this).data('itemnumber');
-                        let item_level_hold = $(this).data('item_level_hold');
-                        let item_status = $(this).data('status');
-                        let item_waiting = $(this).data('waiting');
-                        let item_intransit = $(this).data('intransit');
-                        let error_message = $(this).data('item_level_hold') ? _("Cannot move a waiting, in transit, or item level hold") : "";
-                        let found_status = $(this).data('found');
-                        if ( !item_level_hold &&  ( !item_waiting || !item_intransit ) ) {
-                            $('#move_hold_biblio_selection table').append(`<tr><td><input type="checkbox" name="move_hold_id" value="${reserve_id}" checked /><td>${reserve_id}</td><td>Biblionumber: <a target="_blank" href="/cgi-bin/koha/reserve/request.pl?biblionumber=${reserve_biblionumber}">${reserve_biblionumber}</a></td><td>${error_message}</td></tr>`)
-                        } else {
-                            $('#move_hold_biblio_selection table').append(`<tr><td><input type="checkbox" name="move_hold_id" value="${reserve_id}" disabled /><td>${reserve_id}</td><td>Biblionumber: <a target="_blank" href="/cgi-bin/koha/reserve/request.pl?biblionumber=${reserve_biblionumber}">${reserve_biblionumber}</a></td><td>${error_message}</td></tr>`)
-
-                        }
-                    });
-                }
-            });
-
             $(".hold-arrow").click(function(e) {
                 e.preventDefault();
                 let arrowForm = $("#hold-actions-form").attr({

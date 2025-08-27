@@ -818,6 +818,23 @@ $(document).ready(function () {
         );
     }
 
+    function updateMoveButtons(table) {
+        var checked_holds = $(".select_hold:checked", table);
+        var checked_count = checked_holds.length;
+
+        var item_level_count = checked_holds.filter(function () {
+            return $(this).attr("data-item_level_hold") !== "";
+        }).length;
+
+        var record_level_count = checked_holds.filter(function () {
+            return $(this).attr("data-item_level_hold") === "";
+        }).length;
+
+        $(".move_hold_item").toggleClass("disabled", item_level_count <= 0);
+        $(".move_hold_biblio").toggleClass("disabled", record_level_count <= 0);
+        $(".move_selected_holds").prop("disabled", !checked_count);
+    }
+
     updateSelectedHoldsButtonCounters();
 
     $(".holds_table .select_hold_all").click(function () {
@@ -827,9 +844,13 @@ $(document).ready(function () {
         } else {
             table = $(".holds_table:not(.fixedHeader-floating)");
         }
-        var count = $(".select_hold:checked", table).length;
-        $(".select_hold", table).prop("checked", !count);
-        $(this).prop("checked", !count);
+
+        var checked_count = $(".select_hold:checked", table).length;
+        $(".select_hold", table).prop("checked", !checked_count);
+        $(this).prop("checked", !checked_count);
+
+        updateMoveButtons(table);
+
         updateSelectedHoldsButtonCounters();
         $("#cancel_hold_alert").html(
             MSG_CANCEL_ALERT.format(
@@ -850,14 +871,15 @@ $(document).ready(function () {
                 )
                 .join(",") +
             "]";
-        $(".move_selected_holds").prop("disabled", count);
     });
 
     $(".holds_table").on("click", ".select_hold", function () {
         var table = $(this).parents(".holds_table");
         var count = $(".select_hold:not(:checked)", table).length;
-        var checked_count = $(".select_hold:checked", table).length;
         $(".select_hold_all", table).prop("checked", !count);
+
+        updateMoveButtons(table);
+
         updateSelectedHoldsButtonCounters();
         $("#cancel_hold_alert").html(
             MSG_CANCEL_ALERT.format(
@@ -878,7 +900,6 @@ $(document).ready(function () {
                 )
                 .join(",") +
             "]";
-        $(".move_selected_holds").prop("disabled", !checked_count);
     });
 
     $(".cancel_selected_holds").click(function (e) {
@@ -1027,6 +1048,73 @@ $(document).ready(function () {
             $("#move_hold_biblio_confirm").prop("disabled", false);
         } else {
             $("#move_hold_biblio_confirm").prop("disabled", true);
+        }
+    });
+
+    $(".move_hold_item").click(function (e) {
+        e.preventDefault();
+        $("#move_hold_item_confirm").prop("disabled", true);
+        if ($(".holds_table .select_hold:checked").length) {
+            $("#itemResultMessage").empty();
+            $("#move_hold_item_selection table tbody").empty();
+            $("#moveHoldItemModal").modal("show");
+            $(".select_hold:checked").each(function () {
+                let reserve_id = $(this).data("id");
+                let reserve_biblionumber = $(this).data("biblionumber");
+                let reserve_itemnumber = $(this).data("itemnumber");
+                let item_level_hold = $(this).data("item_level_hold");
+                let item_waiting = $(this).data("waiting");
+                let item_intransit = $(this).data("intransit");
+                let error_message = $(this).data("item_level_hold")
+                    ? ""
+                    : __(
+                          "Cannot move a waiting, in transit, or record level hold"
+                      );
+                let found_status = $(this).data("found");
+                if (item_level_hold && (!item_waiting || !item_intransit)) {
+                    $("#move_hold_item_selection table").append(
+                        `<tr><td><input type="checkbox" name="move_hold_id" value="${reserve_id}" checked /></td><td>${reserve_id}</td><td>Biblionumber: <a target="_blank" href="/cgi-bin/koha/reserve/request.pl?biblionumber=${reserve_biblionumber}">${reserve_biblionumber}</a> Itemnumber: <a target="_blank" href="/cgi-bin/koha/catalogue/moredetail.pl?biblionumber=${reserve_biblionumber}#item${reserve_itemnumber}">${reserve_itemnumber}</a></td><td>${error_message}</td></tr>`
+                    );
+                } else {
+                    $("#move_hold_item_selection table").append(
+                        `<tr><td><input type="checkbox" name="move_hold_id" value="${reserve_id}" disabled /></td><td>${reserve_id}</td><td>Biblionumber: <a target="_blank" href="/cgi-bin/koha/reserve/request.pl?biblionumber=${reserve_biblionumber}">${reserve_biblionumber}</a> Itemnumber: <a target="_blank" href="/cgi-bin/koha/catalogue/moredetail.pl?biblionumber=${reserve_biblionumber}#item${reserve_itemnumber}">${reserve_itemnumber}</a></td><td>${error_message}</td></tr>`
+                    );
+                }
+            });
+        }
+    });
+
+    $(".move_hold_biblio").click(function (e) {
+        e.preventDefault();
+        $("#move_hold_biblio_confirm").prop("disabled", true);
+        if ($(".holds_table .select_hold:checked").length) {
+            $("#biblioResultMessage").empty();
+            $("#move_hold_biblio_selection table tbody").empty();
+            $("#moveHoldBiblioModal").modal("show");
+            $(".select_hold:checked").each(function () {
+                let reserve_id = $(this).data("id");
+                let reserve_biblionumber = $(this).data("biblionumber");
+                let reserve_itemnumber = $(this).data("itemnumber");
+                let item_level_hold = $(this).data("item_level_hold");
+                let item_status = $(this).data("status");
+                let item_waiting = $(this).data("waiting");
+                let item_intransit = $(this).data("intransit");
+                let error_message = $(this).data("item_level_hold")
+                    ? __(
+                          "Cannot move a waiting, in transit, or item level hold"
+                      )
+                    : "";
+                let found_status = $(this).data("found");
+                if (!item_level_hold && (!item_waiting || !item_intransit)) {
+                    $("#move_hold_biblio_selection table").append(
+                        `<tr><td><input type="checkbox" name="move_hold_id" value="${reserve_id}" checked /><td>${reserve_id}</td><td>Biblionumber: <a target="_blank" href="/cgi-bin/koha/reserve/request.pl?biblionumber=${reserve_biblionumber}">${reserve_biblionumber}</a></td><td>${error_message}</td></tr>`
+                    );
+                } else {
+                    $("#move_hold_biblio_selection table").append(
+                        `<tr><td><input type="checkbox" name="move_hold_id" value="${reserve_id}" disabled /><td>${reserve_id}</td><td>Biblionumber: <a target="_blank" href="/cgi-bin/koha/reserve/request.pl?biblionumber=${reserve_biblionumber}">${reserve_biblionumber}</a></td><td>${error_message}</td></tr>`
+                    );
+                }
+            });
         }
     });
 
