@@ -46,29 +46,18 @@ my %scrubbertypes = (
         ],
         rules => [
             div => {
-                class    => qr/^[\w\s\-_]+$/,
-                id       => qr/^[\w\-_]+$/,
-                vocab    => qr/^https?:\/\/[\w\.\-\/]+$/,
-                typeof   => qr/^[\w\s]+$/,
-                resource => qr/^[#\w\-_]+$/,
+                class => qr/^[\w\s\-_]+$/,
+                id    => qr/^[\w\-_]+$/,
             },
 
             span => {
-                class    => qr/^[\w\s\-_]+$/,
-                id       => qr/^[\w\-_]+$/,
-                property => qr/^[\w\s]+$/,
-                typeof   => qr/^[\w\s]+$/,
-                resource => qr/^[#\w\-_]+$/,
-            },
-
-            'h1|h2|h3|h4|h5|h6' => {
-                class    => qr/^[\w\s\-_]+$/,
-                property => qr/^[\w\s]+$/,
+                class => qr/^[\w\s\-_]+$/,
+                id    => qr/^[\w\-_]+$/,
             },
 
             p => {
-                class    => qr/^[\w\s\-_]+$/,
-                property => qr/^[\w\s]+$/,
+                class => qr/^[\w\s\-_]+$/,
+                id    => qr/^[\w\-_]+$/,
             },
 
             a => {
@@ -76,25 +65,21 @@ my %scrubbertypes = (
                 class  => qr/^[\w\s\-_]+$/,
                 title  => 1,
                 target => qr/^_(?:blank|self|parent|top)$/,
-                rel    =>
-                    qr/^(?:nofollow|noopener|noreferrer|noindex|bookmark|tag|prev|next|up|alternate|author|help|license|search)$/,
-                property => qr/^[\w\s]+$/,
-                typeof   => qr/^[\w\s]+$/,
-                resource => qr/^[#\w\-_]+$/,
             },
 
-            'ul|ol' => {
+            ul => {
                 class => qr/^[\w\s\-_]+$/,
-                type  => qr/^(?:disc|circle|square|decimal|lower-roman|upper-roman|lower-alpha|upper-alpha|1|a|A|i|I)$/,
+                id    => qr/^[\w\-_]+$/,
+            },
+
+            ol => {
+                class => qr/^[\w\s\-_]+$/,
+                id    => qr/^[\w\-_]+$/,
             },
 
             li => {
                 class => qr/^[\w\s\-_]+$/,
-                value => qr/^\d+$/,
-            },
-
-            'strong|b|em|i|u|s|strike|del|ins|sup|sub' => {
-                class => qr/^[\w\s\-_]+$/,
+                id    => qr/^[\w\-_]+$/,
             },
 
             i => {

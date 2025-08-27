@@ -19,7 +19,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 7;
+use Test::More tests => 8;
 use Test::NoWarnings;
 use Test::Exception;
 use Test::Warn;
@@ -155,4 +155,167 @@ subtest 'note scrubber functionality' => sub {
     like( $safe_result, qr/<p>Safe content<\/p>/, 'Safe content is preserved' );
     unlike( $safe_result, qr/<script>/, 'Script tags are removed from notes' );
     unlike( $safe_result, qr/<iframe>/, 'Iframe tags are removed from notes' );
+};
+
+subtest 'record_display profile tests' => sub {
+    plan tests => 26;
+
+    my $scrubber = C4::Scrubber->new('record_display');
+
+    # Test basic allowed elements
+    is(
+        $scrubber->scrub('<div>Koha is awesome!</div>'),
+        '<div>Koha is awesome!</div>',
+        'div element allowed'
+    );
+
+    is(
+        $scrubber->scrub('<span class="highlight">Perl is awesome!</span>'),
+        '<span class="highlight">Perl is awesome!</span>',
+        'span with class allowed'
+    );
+
+    is(
+        $scrubber->scrub('<p id="lukeG">lukeG</p>'),
+        '<p id="lukeG">lukeG</p>',
+        'p with id allowed'
+    );
+
+    is(
+        $scrubber->scrub('<h1>Title</h1><h2>Subtitle</h2>'),
+        '<h1>Title</h1><h2>Subtitle</h2>',
+        'heading elements allowed'
+    );
+
+    is(
+        $scrubber->scrub('<ul class="list-style" id="mylist"><li>Item</li></ul>'),
+        '<ul class="list-style" id="mylist"><li>Item</li></ul>',
+        'ul with class and id attributes allowed'
+    );
+
+    is(
+        $scrubber->scrub('<ol class="numbered" id="ordered-list"><li class="item">Item</li></ol>'),
+        '<ol class="numbered" id="ordered-list"><li class="item">Item</li></ol>',
+        'ol with class and id, li with class allowed'
+    );
+
+    is(
+        $scrubber->scrub('<a href="https://example.com" target="_blank" title="External">Link</a>'),
+        '<a href="https://example.com" target="_blank" title="External">Link</a>',
+        'https links with attributes allowed'
+    );
+
+    is(
+        $scrubber->scrub('<a href="/cgi-bin/koha/script.pl">Internal</a>'),
+        '<a href="/cgi-bin/koha/script.pl">Internal</a>',
+        'internal cgi-bin links allowed'
+    );
+
+    is(
+        $scrubber->scrub('<a href="mailto:test@example.com">Email</a>'),
+        '<a href="mailto:test@example.com">Email</a>',
+        'mailto links allowed'
+    );
+
+    is(
+        $scrubber->scrub('<a href="#anchor">Anchor</a>'),
+        '<a href="#anchor">Anchor</a>',
+        'anchor links allowed'
+    );
+
+    is(
+        $scrubber->scrub('<strong>Bold</strong> <em>Italic</em> <u>Underline</u>'),
+        '<strong>Bold</strong> <em>Italic</em> <u>Underline</u>',
+        'text formatting elements allowed'
+    );
+
+    is(
+        $scrubber->scrub('<table><thead><tr><th>Header</th></tr></thead><tbody><tr><td>Data</td></tr></tbody></table>'),
+        '<table><thead><tr><th>Header</th></tr></thead><tbody><tr><td>Data</td></tr></tbody></table>',
+        'table elements allowed'
+    );
+
+    is(
+        $scrubber->scrub('<pre><code>var x = 1;</code></pre>'),
+        '<pre><code>var x = 1;</code></pre>',
+        'code formatting elements allowed'
+    );
+
+    is(
+        $scrubber->scrub('<i class="fa fa-book" aria-label="Book icon"></i>'),
+        '<i class="fa fa-book" aria-label="Book icon"></i>',
+        'Font awesome is allowed'
+    );
+
+    is(
+        $scrubber->scrub('<script>alert("xss")</script><div>Safe content</div>'),
+        '<div>Safe content</div>',
+        'script tags removed while safe content preserved'
+    );
+
+    is(
+        $scrubber->scrub('<div onclick="evil()" class="safe">Content</div>'),
+        '<div class="safe">Content</div>',
+        'onclick handler is removed, class is preserved'
+    );
+
+    is(
+        $scrubber->scrub('<div class="valid-class_name">Test</div>'),
+        '<div class="valid-class_name">Test</div>',
+        'valid class with hyphens and underscores allowed'
+    );
+
+    is(
+        $scrubber->scrub('<span class="multiple valid classes">Test</span>'),
+        '<span class="multiple valid classes">Test</span>',
+        'multiple valid classes allowed'
+    );
+
+    is(
+        $scrubber->scrub('<div class="freak@rico">Test</div>'),
+        '<div>Test</div>',
+        'invalid class with special characters removed'
+    );
+
+    is(
+        $scrubber->scrub('<span class="koha.is.cool">Koha is cool</span>'),
+        '<span>Koha is cool</span>',
+        'class with dots removed'
+    );
+
+    is(
+        $scrubber->scrub('<p id="valid_id-123">Test</p>'),
+        '<p id="valid_id-123">Test</p>',
+        'valid id with underscores, hyphens, and numbers allowed'
+    );
+
+    is(
+        $scrubber->scrub('<p id="invalid id with spaces">Test</p>'),
+        '<p>Test</p>',
+        'id with spaces removed'
+    );
+
+    is(
+        $scrubber->scrub('<div id="rico@freak">Test</div>'),
+        '<div>Test</div>',
+        'id with special characters removed'
+    );
+
+    is(
+        $scrubber->scrub('<a href="javascript:alert(1)">Bad actor link</a>'),
+        '<a>Bad actor link</a>',
+        'javascript href removed'
+    );
+
+    is(
+        $scrubber->scrub('<ol class="roman-numerals" id="list1"><li>Roman numeral list</li></ol>'),
+        '<ol class="roman-numerals" id="list1"><li>Roman numeral list</li></ol>',
+        'ordered list with class and id attributes'
+    );
+
+    is(
+        $scrubber->scrub('<ul class="invalid@class"><li>Bad class</li></ul>'),
+        '<ul><li>Bad class</li></ul>',
+        'invalid list class attribute removed'
+    );
 };
