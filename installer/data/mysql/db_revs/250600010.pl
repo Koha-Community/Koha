@@ -12,7 +12,7 @@ return {
                 q{
                 ALTER TABLE itemtypes
                 ADD COLUMN checkprevcheckout enum('yes', 'no', 'inherit') NOT NULL DEFAULT 'inherit' COMMENT 'produce a warning for a patron if a item of this type has previously been checked out to the same patron if ''yes'', not if ''no'', defer to category setting if ''inherit''.'
-                AFTER automatic_checkin;
+                AFTER bookable;
             }
             );
         }
