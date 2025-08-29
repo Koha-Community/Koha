@@ -58,6 +58,7 @@ $dbh->do(q|DELETE FROM branchtransfers|);
 # Add branches
 my $branchcode_1 = $builder->build( { source => 'Branch', } )->{branchcode};
 my $branchcode_2 = $builder->build( { source => 'Branch', } )->{branchcode};
+my $branchcode_3 = $builder->build( { source => 'Branch', } )->{branchcode};
 # Add itemtype
 my $itemtype = $builder->build( { source => 'Itemtype' } )->{itemtype};
 
@@ -229,7 +230,7 @@ my $transfer = Koha::Item::Transfers->search()->next();
 ModItemTransfer(
     $item_id1,
     $branchcode_1,
-    $branchcode_2,
+    $branchcode_3,
     $trigger
 );
 $transfer->{_result}->discard_changes;
