@@ -212,12 +212,7 @@
 
             const additional_filters = AdditionalFilters.init(["filter-expired", "filter-cancelled"])
                 .onChange((filters, { anyFiltersNotApplied }) => {
-                    bookings_table.DataTable().ajax.reload(() => {
-                        bookings_table
-                            .DataTable()
-                            .column("status:name")
-                            .visible(anyFiltersNotApplied, false);
-                    });
+                    bookings_table.DataTable().ajax.reload();
                 })
                 .build({
                     end_date: ({ filters, isNotApplied }) => {
@@ -258,7 +253,7 @@
                     name: "status",
                     searchable: false,
                     orderable: false,
-                    visible: false,
+                    visible: true,
                     render: function (data, type, row, meta) {
                         const isExpired = date => dayjs(date).isBefore(new Date());
                         const isActive = (startDate, endDate) => {
