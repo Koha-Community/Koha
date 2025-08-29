@@ -265,6 +265,22 @@ function setPlaceholder() {
     $("#translControl1").attr("placeholder", search_placeholder);
 }
 
+function setAdvancedPlaceholder(selectEl) {
+    var $select = $(selectEl);
+    var $row = $select.closest(".search-term-row");
+    var $input = $row.find("input[name='q']");
+    var ph = $select.find("option:selected").data("placeholder");
+    $input.attr("placeholder", ph || _("Enter search terms"));
+}
+
+$(".advanced-search-terms select[name='idx']").each(function () {
+    setAdvancedPlaceholder(this);
+});
+
+$(".advanced-search-terms").on("change", "select[name='idx']", function () {
+    setAdvancedPlaceholder(this);
+});
+
 $(document).ready(function () {
     //check if sticky element is stuck, if so add floating class
     if ($(".sticky").length) {
