@@ -129,7 +129,7 @@ subtest 'password validation - unauthenticated user' => sub {
 
 subtest 'Password validation - authorized requests tests' => sub {
 
-    plan tests => 24;
+    plan tests => 25;
 
     $schema->storage->txn_begin;
 
@@ -215,6 +215,55 @@ subtest 'Password validation - authorized requests tests' => sub {
     $t->post_ok( "//$userid:$password@/api/v1/auth/password/validation" => json => $json )
         ->status_is( 400, 'Passing both parameters forbidden' )
         ->json_is( { error => 'Bad request. Only one identifier attribute can be passed.' } );
+
+    subtest 'TrackLastPatronActivityTriggers tests' => sub {
+
+        plan tests => 9;
+
+        my $patron          = $builder->build_object( { class => 'Koha::Patrons', value => { lastseen => undef } } );
+        my $patron_password = 'thePassword123';
+        $patron->set_password( { password => $patron_password, skip_validation => 1 } );
+
+        # to avoid interference
+        t::lib::Mocks::mock_preference( 'FailedLoginAttempts', 99 );
+
+        # api_verify disabled
+        t::lib::Mocks::mock_preference( 'TrackLastPatronActivityTriggers', 'login' );
+
+        $patron->lastseen(undef)->store();
+        $t->post_ok( "//$userid:$password@/api/v1/auth/password/validation" => json =>
+                { identifier => $patron->userid, password => $patron_password } )->status_is( 201, 'Validation works' );
+
+        # read patron from the DB
+        $patron->discard_changes();
+        is(
+            $patron->lastseen, undef,
+            "'lastseen' flag untouched if no 'api_verify' in TrackLastPatronActivityTriggers"
+        );
+
+        # good scenario
+        t::lib::Mocks::mock_preference( 'TrackLastPatronActivityTriggers', 'api_verify' );
+
+        $patron->lastseen(undef)->store();
+        $t->post_ok( "//$userid:$password@/api/v1/auth/password/validation" => json =>
+                { identifier => $patron->userid, password => 'wrong password :-D' } )
+            ->status_is( 400, 'Validation failed due to bad password' );
+
+        # read patron from the DB
+        $patron->discard_changes();
+        is( $patron->lastseen, undef, "'lastseen' flag not updated as validation failed" );
+
+        $patron->lastseen(undef)->store();
+        $t->post_ok( "//$userid:$password@/api/v1/auth/password/validation" => json =>
+                { identifier => $patron->userid, password => $patron_password } )->status_is( 201, 'Validation works' );
+
+        # read patron from the DB
+        $patron->discard_changes();
+        ok(
+            $patron->lastseen,
+            "'lastseen' flag updated TrackLastPatronActivityTriggers includes 'api_verify'"
+        );
+    };
 
     $schema->storage->txn_rollback;
 };
