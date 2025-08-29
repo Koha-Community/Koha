@@ -33,5 +33,11 @@ return {
                 q{ALTER TABLE old_reserves ADD CONSTRAINT old_reserves_ibfk_hg FOREIGN KEY (hold_group_id) REFERENCES hold_groups (hold_group_id) ON DELETE SET NULL ON UPDATE SET NULL}
             );
         }
+        $dbh->do(
+            q{
+            INSERT IGNORE INTO systempreferences (`variable`,`value`,`options`,`explanation`,`type`)
+            VALUES ('DisplayAddHoldGroups','0','','Display the ability to create hold groups which are fulfilled by one item','YesNo')
+        }
+        );
     },
 };
