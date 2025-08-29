@@ -2,7 +2,7 @@ use Modern::Perl;
 
 return {
     bug_number  => "35761",
-    description => "Add new table and permission for generalised SFTP",
+    description => "Add new table and permission for generalised file transports",
     up          => sub {
         my ($args) = @_;
         my ( $dbh, $out ) = @$args{qw(dbh out)};
@@ -10,15 +10,15 @@ return {
         $dbh->do(
             q{
                 INSERT IGNORE INTO permissions (module_bit, code, description)
-                VALUES (3, 'manage_sftp_servers', 'Manage FTP/SFTP servers configuration');
+                VALUES (3, 'manage_file_transports', 'Manage file transports configuration');
             }
         );
-        say $out "Added new manage_sftp_servers permission";
+        say $out "Added new permission 'manage_file_transports'";
 
-        unless ( TableExists('sftp_servers') ) {
+        unless ( TableExists('file_transports') ) {
             $dbh->do(
                 q {
-                    CREATE TABLE `sftp_servers` (
+                    CREATE TABLE `file_transports` (
                     `id` int(11) NOT NULL AUTO_INCREMENT,
                     `name` varchar(80) NOT NULL,
                     `host` varchar(80) NOT NULL DEFAULT 'localhost',
@@ -38,7 +38,7 @@ return {
                     ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
                 }
             );
-            say $out "Added new sftp_servers table";
+            say $out "Added new table 'file_transports";
         }
     },
 };

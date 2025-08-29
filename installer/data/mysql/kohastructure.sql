@@ -5989,13 +5989,13 @@ CREATE TABLE `sessions` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Table structure for table `sftp_servers`
+-- Table structure for table `file_transports`
 --
 
-DROP TABLE IF EXISTS `sftp_servers`;
+DROP TABLE IF EXISTS `file_transports`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `sftp_servers` (
+CREATE TABLE `file_transports` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(80) NOT NULL,
   `host` varchar(80) NOT NULL DEFAULT 'localhost',
