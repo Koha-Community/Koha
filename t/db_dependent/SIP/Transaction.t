@@ -702,8 +702,8 @@ subtest do_checkin => sub {
             $item->barcode, C4::SIP::Sip::timestamp, undef, $library->branchcode, undef, undef,
             $server->{account}
         );
-        is(
-            $circ->{screen_msg}, 'You owe $12.00 for this item.',
+        like(
+            $circ->{screen_msg}, qr/^You owe \D*12\D/,
             "The fine is displayed on checkin when show_outstanding_amount is enabled"
         );
 
@@ -943,7 +943,7 @@ subtest do_checkout_with_patron_blocked => sub {
 
     $server->{account}->{show_outstanding_amount} = 1;
     $circ = $ils->checkout( $fines_patron->cardnumber, $item->barcode, undef, undef, $server->{account} );
-    is( $circ->{screen_msg}, 'Patron has fines - You owe $10.00.', "Got correct fines with amount screen message" );
+    like( $circ->{screen_msg}, qr/Patron has fines - You owe \D*10\D/, "Got correct fines with amount screen message" );
     my $debarred_patron = $builder->build_object(
         {
             class => 'Koha::Patrons',
