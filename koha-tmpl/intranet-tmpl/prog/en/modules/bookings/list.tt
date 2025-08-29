@@ -41,15 +41,7 @@
         <h1>Bookings for [% INCLUDE 'biblio-title-head.inc' %]</h1>
         <div class="page-section" id="bookings-timeline"></div>
         <div class="page-section">
-            [%
-                INCLUDE 'additional-filters.inc'
-                filters = [
-                    { id = 'filter-expired', label_show = t('Include expired'), label_hide = t('Exclude expired') },
-                    { id = 'filter-cancelled', label_show = t('Include cancelled'), label_hide = t('Exclude cancelled') },
-                ]
-                filter_class = 'bookings'
-            %]
-
+            [% INCLUDE 'additional-filters.inc' filters = [ { id = 'filter-expired', label_show = t('Include expired'), label_hide = t('Exclude expired') }, { id = 'filter-cancelled', label_show = t('Include cancelled'), label_hide = t('Exclude cancelled') }, ] filter_class = 'bookings' %]
             <table id="bookings_table"></table>
         </div>
     </div>
