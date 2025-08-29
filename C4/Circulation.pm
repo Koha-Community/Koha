@@ -2477,14 +2477,18 @@ sub AddReturn {
                     );
                 }
             } else {
+                my $error = "$@";
                 carp
-                    "The checkin for the following issue failed, Please go to the about page and check all messages on the 'System information' to see if there are configuration / data issues ($@)"
+                    "The checkin for the following issue failed, Please go to the about page and check all messages on the 'System information' to see if there are configuration / data issues, or see the specific message in parentheses ($@)"
                     . Dumper( $issue->unblessed );
 
                 my $indexer = Koha::SearchEngine::Indexer->new( { index => $Koha::SearchEngine::BIBLIOS_INDEX } );
                 $indexer->index_records( $item->biblionumber, "specialUpdate", "biblioserver" );
 
-                return ( 0, { WasReturned => 0, DataCorrupted => 1 }, $issue, $patron_unblessed );
+                return (
+                    0, { WasReturned => 0, DataCorrupted => $error }, $issue,
+                    $patron_unblessed
+                );
             }
 
             # FIXME is the "= 1" right?  This could be the borrower hash.
