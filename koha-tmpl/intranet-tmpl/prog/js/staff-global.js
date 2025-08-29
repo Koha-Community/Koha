@@ -442,6 +442,19 @@ $(document).ready(function () {
         }
     });
 
+    (function () {
+        const trigger = document.getElementById("logged-in-menu");
+        if (trigger) {
+            bootstrap.Dropdown.getOrCreateInstance(trigger, {
+                autoClose: "outside",
+            });
+        }
+    })();
+
+    $("#setlibrary_panel").on("click", function (e) {
+        e.stopPropagation();
+    });
+
     $("#logged-in-dropdown").on("hidden.bs.dropdown", function () {
         $("#setlibrary_panel")
             .removeClass("setlibrary_panel_open")
