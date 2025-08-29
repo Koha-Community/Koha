@@ -25,7 +25,6 @@ use constant {
 use JSON            qw( decode_json encode_json );
 use List::MoreUtils qw( any );
 
-use Koha::BackgroundJob::TestTransport;
 use Koha::Database;
 use Koha::Exceptions::Object;
 use Koha::Encryption;
@@ -80,6 +79,7 @@ sub store {
 
     # Enqueue a connection test
     if ($changed_config) {
+        require Koha::BackgroundJob::TestTransport;
         Koha::BackgroundJob::TestTransport->new->enqueue( { transport_id => $self->id } );
     }
 
