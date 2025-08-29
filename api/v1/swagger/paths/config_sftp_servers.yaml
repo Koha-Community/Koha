@@ -47,7 +47,7 @@
           $ref: "../swagger.yaml#/definitions/error"
     x-koha-authorization:
       permissions:
-        parameters: manage_sftp_servers
+        parameters: manage_file_transports
   post:
     x-mojo-to: Config::SFTP::Servers#add
     operationId: addSFTPServer
@@ -97,7 +97,7 @@
           $ref: "../swagger.yaml#/definitions/error"
     x-koha-authorization:
       permissions:
-        parameters: manage_sftp_servers
+        parameters: manage_file_transports
 "/config/sftp_servers/{sftp_server_id}":
   get:
     x-mojo-to: Config::SFTP::Servers#get
@@ -139,7 +139,7 @@
           $ref: "../swagger.yaml#/definitions/error"
     x-koha-authorization:
       permissions:
-        parameters: manage_sftp_servers
+        parameters: manage_file_transports
   put:
     x-mojo-to: Config::SFTP::Servers#update
     operationId: updateSFTPServer
@@ -190,7 +190,7 @@
           $ref: "../swagger.yaml#/definitions/error"
     x-koha-authorization:
       permissions:
-        parameters: manage_sftp_servers
+        parameters: manage_file_transports
   delete:
     x-mojo-to: Config::SFTP::Servers#delete
     operationId: deleteSFTPServer
@@ -233,4 +233,4 @@
           $ref: "../swagger.yaml#/definitions/error"
     x-koha-authorization:
       permissions:
-        parameters: manage_sftp_servers
+        parameters: manage_file_transports

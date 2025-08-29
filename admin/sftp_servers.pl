@@ -36,7 +36,7 @@ my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
         template_name => "admin/sftp_servers.tt",
         query         => $input,
         type          => "intranet",
-        flagsrequired => { parameters => 'manage_sftp_servers' },
+        flagsrequired => { parameters => 'manage_file_transports' },
     }
 );
 
