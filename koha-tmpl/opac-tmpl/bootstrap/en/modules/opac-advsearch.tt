@@ -76,62 +76,62 @@
 
                                         <div class="search-term-input">
                                             <select class="form-select" name="idx" aria-label="Choose search type for field [% loop.index + 1 | html %]" id="search-field_[% loop.index | html %]">
-                                                <option value="kw">Keyword</option>
+                                                <option value="kw" data-placeholder="Search by keyword">Keyword</option>
                                                 [% IF ( expanded_options ) %]
-                                                    <option value="kw,phr">&nbsp;&nbsp;&nbsp;&nbsp; Keyword phrase</option>
+                                                    <option value="kw,phr" data-placeholder="Search by keyword phrase">&nbsp;&nbsp;&nbsp;&nbsp; Keyword phrase</option>
                                                 [% END %]
-                                                <option value="su,wrdl">Subject</option>
+                                                <option value="su,wrdl" data-placeholder="Search by subject">Subject</option>
                                                 [% IF ( expanded_options ) %]
-                                                    <option value="su,phr">&nbsp;&nbsp;&nbsp;&nbsp; Subject phrase</option>
-                                                    <option value="su-br">&nbsp;&nbsp;&nbsp;&nbsp; Subject and broader terms</option>
-                                                    <option value="su-na">&nbsp;&nbsp;&nbsp;&nbsp; Subject and narrower terms</option>
-                                                    <option value="su-rl">&nbsp;&nbsp;&nbsp;&nbsp; Subject and related terms</option>
+                                                    <option value="su,phr" data-placeholder="Search by subject phrase">&nbsp;&nbsp;&nbsp;&nbsp; Subject phrase</option>
+                                                    <option value="su-br" data-placeholder="Search by subject (broader terms)">&nbsp;&nbsp;&nbsp;&nbsp; Subject and broader terms</option>
+                                                    <option value="su-na" data-placeholder="Search by subject (narrower terms)">&nbsp;&nbsp;&nbsp;&nbsp; Subject and narrower terms</option>
+                                                    <option value="su-rl" data-placeholder="Search by subject (related terms)">&nbsp;&nbsp;&nbsp;&nbsp; Subject and related terms</option>
                                                 [% END %]
-                                                <option value="ti">Title</option>
+                                                <option value="ti" data-placeholder="Search by title">Title</option>
                                                 [% IF ( expanded_options ) %]
-                                                    <option value="ti,phr">&nbsp;&nbsp;&nbsp;&nbsp; Title phrase</option>
-                                                    <option value="se,wrdl">Series title</option>
+                                                    <option value="ti,phr" data-placeholder="Search by title phrase">&nbsp;&nbsp;&nbsp;&nbsp; Title phrase</option>
+                                                    <option value="se,wrdl" data-placeholder="Search by series title">Series title</option>
                                                     [% IF ( Koha.Preference('OPACNumbersPreferPhrase') ) %]
-                                                        <option value="callnum,phr">Call number</option>
+                                                        <option value="callnum,phr" data-placeholder="Search by call number">Call number</option>
                                                     [% ELSE %]
-                                                        <option value="callnum">Call number</option>
+                                                        <option value="callnum" data-placeholder="Search by call number">Call number</option>
                                                     [% END %]
                                                 [% END %]
-                                                <option value="au,wrdl">Author</option>
+                                                <option value="au,wrdl" data-placeholder="Search by author">Author</option>
                                                 [% IF ( expanded_options ) %]
-                                                    <option value="au,phr">&nbsp;&nbsp;&nbsp;&nbsp; Author phrase</option>
-                                                    <option value="cpn,wrdl">&nbsp;&nbsp;&nbsp;&nbsp; Corporate name</option>
-                                                    <option value="cfn,wrdl">&nbsp;&nbsp;&nbsp;&nbsp; Conference name</option>
-                                                    <option value="cfn,phr">&nbsp;&nbsp;&nbsp;&nbsp; Conference name phrase</option>
-                                                    <option value="pn,wrdl">&nbsp;&nbsp;&nbsp;&nbsp; Personal name</option>
-                                                    <option value="pn,phr">&nbsp;&nbsp;&nbsp;&nbsp; Personal name phrase</option>
+                                                    <option value="au,phr" data-placeholder="Search by author phrase">&nbsp;&nbsp;&nbsp;&nbsp; Author phrase</option>
+                                                    <option value="cpn,wrdl" data-placeholder="Search by corporate name">&nbsp;&nbsp;&nbsp;&nbsp; Corporate name</option>
+                                                    <option value="cfn,wrdl" data-placeholder="Search by conference name">&nbsp;&nbsp;&nbsp;&nbsp; Conference name</option>
+                                                    <option value="cfn,phr" data-placeholder="Search by conference name phrase">&nbsp;&nbsp;&nbsp;&nbsp; Conference name phrase</option>
+                                                    <option value="pn,wrdl" data-placeholder="Search by personal name">&nbsp;&nbsp;&nbsp;&nbsp; Personal name</option>
+                                                    <option value="pn,phr" data-placeholder="Search by personal name phrase">&nbsp;&nbsp;&nbsp;&nbsp; Personal name phrase</option>
                                                 [% END %]
                                                 [% IF ( expanded_options ) %]
-                                                    <option value="nt">Notes/Comments</option>
+                                                    <option value="nt" data-placeholder="Search notes or comments">Notes/Comments</option>
                                                     [% IF (marcflavour != 'UNIMARC') %]
-                                                        <option value="curriculum">Curriculum</option>
+                                                        <option value="curriculum" data-placeholder="Search curriculum">Curriculum</option>
                                                     [% END %]
                                                 [% END %]
-                                                <option value="pb,wrdl">Publisher</option>
-                                                <option value="pl,wrdl">Publisher location</option>
+                                                <option value="pb,wrdl" data-placeholder="Search by publisher">Publisher</option>
+                                                <option value="pl,wrdl" data-placeholder="Search by publisher location">Publisher location</option>
                                                 [% IF ( expanded_options ) %]
                                                     [% IF ( Koha.Preference('OPACNumbersPreferPhrase') ) %]
-                                                        <option value="ident,phr">Standard number</option>
+                                                        <option value="ident,phr" data-placeholder="Search by standard number">Standard number</option>
                                                     [% ELSE %]
-                                                        <option value="ident">Standard number</option>
+                                                        <option value="ident" data-placeholder="Search by standard number">Standard number</option>
                                                     [% END %]
-                                                    <option value="nb">&nbsp;&nbsp;&nbsp;&nbsp; ISBN</option>
-                                                    <option value="ns">&nbsp;&nbsp;&nbsp;&nbsp; ISSN</option>
+                                                    <option value="nb" data-placeholder="Search by ISBN">&nbsp;&nbsp;&nbsp;&nbsp; ISBN</option>
+                                                    <option value="ns" data-placeholder="Search by ISSN">&nbsp;&nbsp;&nbsp;&nbsp; ISSN</option>
                                                 [% ELSE %]
-                                                    <option value="nb">ISBN</option>
+                                                    <option value="nb" data-placeholder="Search by ISBN">ISBN</option>
                                                 [% END %]
-                                                <option value="bc">Barcode</option>
+                                                <option value="bc" data-placeholder="Search by barcode">Barcode</option>
                                             </select>
                                             <!-- /#search-field_[% loop.index | html %] -->
                                         </div>
                                         <!-- .search-term-input -->
                                         <div class="search-term-input">
-                                            <input class="form-control" type="text" name="q" aria-label="Enter field [% loop.index + 1 | html %] search terms" value="" />
+                                            <input class="form-control" type="text" name="q" aria-label="Enter field [% loop.index + 1 | html %] search terms" value="" placeholder="" />
                                         </div>
                                         <!-- .search-term-input -->
                                         [% IF ( expanded_options ) %]
