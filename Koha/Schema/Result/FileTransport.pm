@@ -1,12 +1,12 @@
 use utf8;
-package Koha::Schema::Result::SftpServer;
+package Koha::Schema::Result::FileTransport;
 
 # Created by DBIx::Class::Schema::Loader
 # DO NOT MODIFY THE FIRST PART OF THIS FILE
 
 =head1 NAME
 
-Koha::Schema::Result::SftpServer
+Koha::Schema::Result::FileTransport
 
 =cut
 
@@ -15,11 +15,11 @@ use warnings;
 
 use base 'DBIx::Class::Core';
 
-=head1 TABLE: C<sftp_servers>
+=head1 TABLE: C<file_transports>
 
 =cut
 
-__PACKAGE__->table("sftp_servers");
+__PACKAGE__->table("file_transports");
 
 =head1 ACCESSORS
 
@@ -96,9 +96,8 @@ __PACKAGE__->table("sftp_servers");
 
 =head2 status
 
-  data_type: 'varchar'
+  data_type: 'longtext'
   is_nullable: 1
-  size: 32
 
 =head2 debug
 
@@ -149,7 +148,7 @@ __PACKAGE__->add_columns(
   "upload_directory",
   { data_type => "mediumtext", is_nullable => 1 },
   "status",
-  { data_type => "varchar", is_nullable => 1, size => 32 },
+  { data_type => "longtext", is_nullable => 1 },
   "debug",
   { data_type => "tinyint", default_value => 0, is_nullable => 0 },
 );
@@ -167,8 +166,8 @@ __PACKAGE__->add_columns(
 __PACKAGE__->set_primary_key("id");
 
 
-# Created by DBIx::Class::Schema::Loader v0.07051 @ 2025-08-29 14:29:49
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:Mr3SRG6aRllMJvaltvwgOw
+# Created by DBIx::Class::Schema::Loader v0.07051 @ 2025-08-29 20:23:47
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:eeoKreXE9wfz12s4ENo5Tg
 
 __PACKAGE__->add_columns(
     '+passive' => { is_boolean => 1 },

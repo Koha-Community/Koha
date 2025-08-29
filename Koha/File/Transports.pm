@@ -40,7 +40,7 @@ Return type of object, relating to Schema ResultSet
 =cut
 
 sub _type {
-    return 'SftpServer';
+    return 'FileTransport';
 }
 
 =head3 _polymorphic_field

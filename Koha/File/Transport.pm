@@ -304,7 +304,7 @@ Return type of Object relating to Schema Result
 =cut
 
 sub _type {
-    return 'SftpServer';
+    return 'FileTransport';
 }
 
 1;
