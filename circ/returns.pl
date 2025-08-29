@@ -758,7 +758,7 @@ foreach my $code ( keys %$messages ) {
     } elsif ( $code eq 'NotForLoanStatusUpdated' ) {
         $err{NotForLoanStatusUpdated} = $messages->{NotForLoanStatusUpdated};
     } elsif ( $code eq 'DataCorrupted' ) {
-        $err{data_corrupted} = 1;
+        $err{data_corrupted} = $messages->{'DataCorrupted'};
     } elsif ( $code eq 'ReturnClaims' ) {
         $template->param( ReturnClaims => $messages->{ReturnClaims} );
     } elsif ( $code eq 'ClaimAutoResolved' ) {
