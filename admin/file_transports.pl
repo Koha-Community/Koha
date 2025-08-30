@@ -33,7 +33,7 @@ my $op    = $input->param('op') || 'list';
 
 my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
     {
-        template_name => "admin/sftp_servers.tt",
+        template_name => "admin/file_transports.tt",
         query         => $input,
         type          => "intranet",
         flagsrequired => { parameters => 'manage_file_transports' },

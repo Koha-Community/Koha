@@ -6,20 +6,20 @@
 <title
     >[% FILTER collapse %]
         [% IF op == 'add_form' %]
-            [% t("New FTP/SFTP server") | html %]
+            [% t("New file transport") | html %]
             &rsaquo;
         [% ELSIF op == 'edit_form' %]
-            [% tx("Modify FTP/SFTP server '{sftp_server}'", { sftp_server = sftp_server.name }) | html %]
+            [% tx("Modify file transport '{sftp_server}'", { sftp_server = sftp_server.name }) | html %]
             &rsaquo;
         [% END %]
-        [% t("FTP/SFTP Servers") | html %]
+        [% t("File transports") | html %]
         &rsaquo; [% t("Administration") | html %] &rsaquo; [% t("Koha") | html %]
     [% END %]</title
 >
 [% INCLUDE 'doc-head-close.inc' %]
 </head>
 
-<body id="admin_sftp_servers" class="admin">
+<body id="admin_file_transports" class="admin">
 [% WRAPPER 'header.inc' %]
     [% INCLUDE 'prefs-admin-search.inc' %]
 [% END %]
@@ -32,21 +32,21 @@
 
         [% IF op == 'add_form' || op == 'edit_form' %]
             [% WRAPPER breadcrumb_item %]
-                <a href="/cgi-bin/koha/admin/sftp_servers.pl">FTP/SFTP servers</a>
+                <a href="/cgi-bin/koha/admin/file_transports.pl">File transports</a>
             [% END %]
         [% END %]
 
         [% IF op == 'add_form' %]
             [% WRAPPER breadcrumb_item bc_active= 1 %]
-                <span>New FTP/SFTP server</span>
+                <span>New file transport</span>
             [% END %]
         [% ELSIF op == 'edit_form' %]
             [% WRAPPER breadcrumb_item bc_active= 1 %]
-                [% tx("Modify FTP/SFTP server '{sftp_server}'", { sftp_server = sftp_server.name }) | html %]
+                [% tx("Modify file transport '{sftp_server}'", { sftp_server = sftp_server.name }) | html %]
             [% END %]
         [% ELSE %]
             [% WRAPPER breadcrumb_item bc_active= 1 %]
-                <span>FTP/SFTP servers</span>
+                <span>File transports</span>
             [% END %]
         [% END %]
     [% END #/ WRAPPER breadcrumbs %]
@@ -128,9 +128,9 @@
                     </div>
                     <!-- END Modal -->
 
-                    <h1>New FTP/SFTP server</h1>
+                    <h1>New file transport</h1>
 
-                    <form action="/cgi-bin/koha/admin/sftp_servers.pl" id="add" name="add" class="validated" method="post">
+                    <form action="/cgi-bin/koha/admin/file_transports.pl" id="add" name="add" class="validated" method="post">
                         [% INCLUDE 'csrf-token.inc' %]
                         <input type="hidden" name="op" value="cud-add" />
                         <fieldset class="rows">
@@ -216,7 +216,7 @@
                         </fieldset>
                         <fieldset class="action">
                             <a id="confirm_key_accept_submit" data-bs-target="#confirm_key_accept" class="btn btn-primary" data-bs-toggle="modal">Submit</a>
-                            <a class="cancel" href="/cgi-bin/koha/admin/sftp_servers.pl">Cancel</a>
+                            <a class="cancel" href="/cgi-bin/koha/admin/file_transports.pl">Cancel</a>
                         </fieldset>
                     </form>
                 [% END %]
@@ -269,9 +269,9 @@
                     </div>
                     <!-- END Modal -->
 
-                    <h1>[% tx("Modify FTP/SFTP server '{sftp_server}'", { sftp_server = sftp_server.name }) | html %]</h1>
+                    <h1>[% tx("Modify file transport '{sftp_server}'", { sftp_server = sftp_server.name }) | html %]</h1>
 
-                    <form action="/cgi-bin/koha/admin/sftp_servers.pl" id="edit_save" name="edit_save" class="validated" method="post">
+                    <form action="/cgi-bin/koha/admin/file_transports.pl" id="edit_save" name="edit_save" class="validated" method="post">
                         [% INCLUDE 'csrf-token.inc' %]
                         <input type="hidden" name="op" value="cud-edit_save" />
                         <input type="hidden" name="sftp_server_id" value="[%- sftp_server.id | html -%]" />
@@ -394,23 +394,23 @@
                         </fieldset>
                         <fieldset class="action">
                             <a id="confirm_key_accept_submit" data-bs-target="#confirm_key_accept" class="btn btn-primary" data-bs-toggle="modal">Submit</a>
-                            <a class="cancel" href="/cgi-bin/koha/admin/sftp_servers.pl">Cancel</a>
+                            <a class="cancel" href="/cgi-bin/koha/admin/file_transports.pl">Cancel</a>
                         </fieldset>
                     </form>
                 [% END %]
 
                 [% IF op == 'list' %]
                     <div id="toolbar" class="btn-toolbar">
-                        <a class="btn btn-default" id="new_sftp_server" href="/cgi-bin/koha/admin/sftp_servers.pl?op=add_form"><i class="fa fa-plus"></i> New FTP/SFTP server</a>
+                        <a class="btn btn-default" id="new_sftp_server" href="/cgi-bin/koha/admin/file_transports.pl?op=add_form"><i class="fa fa-plus"></i> New file transport</a>
                     </div>
 
-                    <h1>FTP/SFTP servers</h1>
+                    <h1>File transports</h1>
 
                     [% IF servers_count < 1 %]
                         <div class="alert alert-info" id="dno_servers_message">
                             <p>
-                                <em>There are no FTP/SFTP servers defined.</em><br />
-                                To create one, use the <strong>new FTP/SFTP server</strong> button above.
+                                <em>There are no file transports defined.</em><br />
+                                To create one, use the <strong>new file transport</strong> button above.
                             </p>
                         </div>
                     [% ELSE %]
@@ -481,7 +481,7 @@
                         "url": sftp_servers_url
                     },
                     "language": {
-                        "emptyTable": "<div class=\"alert alert-info\">"+_("There are no FTP/SFTP servers defined.")+"</div>"
+                        "emptyTable": "<div class=\"alert alert-info\">"+_("There are no file transports defined.")+"</div>"
                     },
                     "columnDefs": [ {
                         "targets": [0,1],
@@ -617,7 +617,7 @@
                         },
                         {
                             "data": function(row, type, val, meta) {
-                                let result = '<a class="btn btn-default btn-xs" role="button" href="/cgi-bin/koha/admin/sftp_servers.pl?op=edit_form&amp;sftp_server_id='+ encodeURIComponent(row.sftp_server_id) +'"><i class="fa-solid fa-pencil" aria-hidden="true"></i> '+_("Edit")+'</a>'+"\n";
+                                let result = '<a class="btn btn-default btn-xs" role="button" href="/cgi-bin/koha/admin/file_transports.pl?op=edit_form&amp;sftp_server_id='+ encodeURIComponent(row.sftp_server_id) +'"><i class="fa-solid fa-pencil" aria-hidden="true"></i> '+_("Edit")+'</a>'+"\n";
                                 result += '<a class="btn btn-default btn-xs delete_server" role="button" href="#" data-bs-toggle="modal" data-bs-target="#delete_confirm_modal" data-sftp-server-id="'+ encodeURIComponent(row.sftp_server_id) +'" data-sftp-server-name="'+ encodeURIComponent(row.name.escapeHtml()) +'"><i class="fa fa-trash-can" aria-hidden="true"></i> '+_("Delete")+'</a>';
                                 return result;
                             },
@@ -640,7 +640,7 @@
                     var sftp_server_name = decodeURIComponent($(this).data('sftp-server-name'));
 
                     $("#delete_confirm_dialog").html(
-                        _("You are about to delete the '%s' FTP/SFTP server.").format(sftp_server_name)
+                        _("You are about to delete the '%s' file transport.").format(sftp_server_name)
                     );
                     $("#delete_confirm_modal_button").data('sftp-server-id', sftp_server_id);
                     $("#delete_confirm_modal_button").data('sftp-server-name', sftp_server_name);

@@ -159,7 +159,7 @@
                 <li><a href="/cgi-bin/koha/admin/smtp_servers.pl">SMTP servers</a></li>
             [% END %]
             [% IF ( CAN_user_parameters_manage_file_transports ) %]
-                <li><a href="/cgi-bin/koha/admin/sftp_servers.pl">FTP/SFTP servers</a></li>
+                <li><a href="/cgi-bin/koha/admin/file_transports.pl">File transports</a></li>
             [% END %]
             [% IF ( CAN_user_parameters_manage_didyoumean ) %]
                 <li><a href="/cgi-bin/koha/admin/didyoumean.pl">Did you mean?</a></li>
