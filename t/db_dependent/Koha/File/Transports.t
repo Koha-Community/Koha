@@ -94,7 +94,8 @@ subtest 'search() tests' => sub {
     );
 
     # Search for both transports
-    my $transports = Koha::File::Transports->search( { id => { -in => [ $sftp_transport->id, $ftp_transport->id ] } } );
+    my $transports = Koha::File::Transports->search(
+        { file_transport_id => { -in => [ $sftp_transport->id, $ftp_transport->id ] } } );
 
     is(
         ref($transports), 'Koha::File::Transports',

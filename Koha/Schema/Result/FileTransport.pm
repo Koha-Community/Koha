@@ -23,7 +23,7 @@ __PACKAGE__->table("file_transports");
 
 =head1 ACCESSORS
 
-=head2 id
+=head2 file_transport_id
 
   data_type: 'integer'
   is_auto_increment: 1
@@ -108,7 +108,7 @@ __PACKAGE__->table("file_transports");
 =cut
 
 __PACKAGE__->add_columns(
-  "id",
+  "file_transport_id",
   { data_type => "integer", is_auto_increment => 1, is_nullable => 0 },
   "name",
   { data_type => "varchar", is_nullable => 0, size => 80 },
@@ -157,17 +157,17 @@ __PACKAGE__->add_columns(
 
 =over 4
 
-=item * L</id>
+=item * L</file_transport_id>
 
 =back
 
 =cut
 
-__PACKAGE__->set_primary_key("id");
+__PACKAGE__->set_primary_key("file_transport_id");
 
 
-# Created by DBIx::Class::Schema::Loader v0.07051 @ 2025-08-29 20:23:47
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:eeoKreXE9wfz12s4ENo5Tg
+# Created by DBIx::Class::Schema::Loader v0.07051 @ 2025-09-15 14:28:35
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:Mpw0xCAH2Jmoxv3V9fHJRw
 
 __PACKAGE__->add_columns(
     '+passive' => { is_boolean => 1 },
