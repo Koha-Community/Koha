@@ -274,7 +274,7 @@
                     <form action="/cgi-bin/koha/admin/file_transports.pl" id="edit_save" name="edit_save" class="validated" method="post">
                         [% INCLUDE 'csrf-token.inc' %]
                         <input type="hidden" name="op" value="cud-edit_save" />
-                        <input type="hidden" name="sftp_server_id" value="[%- sftp_server.id | html -%]" />
+                        <input type="hidden" name="file_transport_id" value="[%- sftp_server.id | html -%]" />
                         <fieldset class="rows">
                             <ol>
                                 <li>
@@ -415,7 +415,7 @@
                         </div>
                     [% ELSE %]
                         <div class="page-section">
-                            <table id="sftp_servers">
+                            <table id="file_transports">
                                 <thead>
                                     <tr>
                                         <th>Name</th>
@@ -475,10 +475,10 @@
         <script>
             $(document).ready(function() {
 
-                var sftp_servers_url = '/api/v1/config/sftp_servers';
-                window.sftp_servers = $("#sftp_servers").kohaTable({
+                var file_transports_url = '/api/v1/config/file_transports';
+                window.file_transports = $("#file_transports").kohaTable({
                     "ajax": {
-                        "url": sftp_servers_url
+                        "url": file_transports_url
                     },
                     "language": {
                         "emptyTable": "<div class=\"alert alert-info\">"+_("There are no file transports defined.")+"</div>"
@@ -617,8 +617,8 @@
                         },
                         {
                             "data": function(row, type, val, meta) {
-                                let result = '<a class="btn btn-default btn-xs" role="button" href="/cgi-bin/koha/admin/file_transports.pl?op=edit_form&amp;sftp_server_id='+ encodeURIComponent(row.sftp_server_id) +'"><i class="fa-solid fa-pencil" aria-hidden="true"></i> '+_("Edit")+'</a>'+"\n";
-                                result += '<a class="btn btn-default btn-xs delete_server" role="button" href="#" data-bs-toggle="modal" data-bs-target="#delete_confirm_modal" data-sftp-server-id="'+ encodeURIComponent(row.sftp_server_id) +'" data-sftp-server-name="'+ encodeURIComponent(row.name.escapeHtml()) +'"><i class="fa fa-trash-can" aria-hidden="true"></i> '+_("Delete")+'</a>';
+                                let result = '<a class="btn btn-default btn-xs" role="button" href="/cgi-bin/koha/admin/file_transports.pl?op=edit_form&amp;file_transport_id='+ encodeURIComponent(row.file_transport_id) +'"><i class="fa-solid fa-pencil" aria-hidden="true"></i> '+_("Edit")+'</a>'+"\n";
+                                result += '<a class="btn btn-default btn-xs delete_server" role="button" href="#" data-bs-toggle="modal" data-bs-target="#delete_confirm_modal" data-sftp-server-id="'+ encodeURIComponent(row.file_transport_id) +'" data-sftp-server-name="'+ encodeURIComponent(row.name.escapeHtml()) +'"><i class="fa fa-trash-can" aria-hidden="true"></i> '+_("Delete")+'</a>';
                                 return result;
                             },
                             "searchable": false,
@@ -635,27 +635,27 @@
                     },
                 });
 
-                $('#sftp_servers').on("click", '.delete_server', function() {
-                    var sftp_server_id   = $(this).data('sftp-server-id');
+                $('#file_transports').on("click", '.delete_server', function() {
+                    var file_transport_id   = $(this).data('sftp-server-id');
                     var sftp_server_name = decodeURIComponent($(this).data('sftp-server-name'));
 
                     $("#delete_confirm_dialog").html(
                         _("You are about to delete the '%s' file transport.").format(sftp_server_name)
                     );
-                    $("#delete_confirm_modal_button").data('sftp-server-id', sftp_server_id);
+                    $("#delete_confirm_modal_button").data('sftp-server-id', file_transport_id);
                     $("#delete_confirm_modal_button").data('sftp-server-name', sftp_server_name);
                 });
 
                 $("#delete_confirm_modal_button").on("click", function() {
 
-                    var sftp_server_id   = $(this).data('sftp-server-id');
+                    var file_transport_id   = $(this).data('sftp-server-id');
                     var sftp_server_name = $(this).data('sftp-server-name');
 
                     $.ajax({
                         method: "DELETE",
-                        url: "/api/v1/config/sftp_servers/"+sftp_server_id
+                        url: "/api/v1/config/file_transports/"+file_transport_id
                     }).success(function() {
-                        window.sftp_servers.api().ajax.reload(function(data) {
+                        window.file_transports.api().ajax.reload(function(data) {
                             $("#sftp_action_result_dialog").hide();
                             $("#sftp_delete_success").html(_("Server '%s' deleted successfully.").format(sftp_server_name)).show();
                         });

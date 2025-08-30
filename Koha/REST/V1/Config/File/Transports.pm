@@ -1,4 +1,4 @@
-package Koha::REST::V1::Config::SFTP::Servers;
+package Koha::REST::V1::Config::File::Transports;
 
 # This file is part of Koha.
 #
@@ -37,11 +37,11 @@ sub list {
     my $c = shift->openapi->valid_input or return;
 
     return try {
-        my $sftp_servers_set = Koha::File::Transports->new;
-        my $sftp_servers     = $c->objects->search($sftp_servers_set);
+        my $file_transports_set = Koha::File::Transports->new;
+        my $file_transports     = $c->objects->search($file_transports_set);
         return $c->render(
             status  => 200,
-            openapi => $sftp_servers
+            openapi => $file_transports
         );
     } catch {
         $c->unhandled_exception($_);
@@ -58,14 +58,14 @@ sub get {
     my $c = shift->openapi->valid_input or return;
 
     return try {
-        my $sftp_server = Koha::File::Transports->find( $c->param('sftp_server_id') );
+        my $file_transport = Koha::File::Transports->find( $c->param('file_transport_id') );
 
-        return $c->render_resource_not_found("FTP/SFTP server")
-            unless $sftp_server;
+        return $c->render_resource_not_found("File transport")
+            unless $file_transport;
 
         return $c->render(
             status  => 200,
-            openapi => $c->objects->to_api($sftp_server),
+            openapi => $c->objects->to_api($file_transport),
         );
     } catch {
         $c->unhandled_exception($_);
@@ -83,14 +83,14 @@ sub add {
 
     return try {
 
-        my $sftp_server = Koha::File::Transport->new_from_api( $c->req->json );
-        $sftp_server->store->discard_changes;
+        my $file_transport = Koha::File::Transport->new_from_api( $c->req->json );
+        $file_transport->store->discard_changes;
 
-        $c->res->headers->location( $c->req->url->to_string . '/' . $sftp_server->id );
+        $c->res->headers->location( $c->req->url->to_string . '/' . $file_transport->id );
 
         return $c->render(
             status  => 201,
-            openapi => $c->objects->to_api($sftp_server),
+            openapi => $c->objects->to_api($file_transport),
         );
     } catch {
         if ( blessed $_ and $_->isa('Koha::Exceptions::Object::DuplicateID') ) {
@@ -116,18 +116,18 @@ Controller method that handles updating a Koha::File::Transport object
 sub update {
     my $c = shift->openapi->valid_input or return;
 
-    my $sftp_server = Koha::File::Transports->find( $c->param('sftp_server_id') );
+    my $file_transport = Koha::File::Transports->find( $c->param('file_transport_id') );
 
-    return $c->render_resource_not_found("FTP/SFTP server")
-        unless $sftp_server;
+    return $c->render_resource_not_found("File transport")
+        unless $file_transport;
 
     return try {
-        $sftp_server->set_from_api( $c->req->json );
-        $sftp_server->store->discard_changes;
+        $file_transport->set_from_api( $c->req->json );
+        $file_transport->store->discard_changes;
 
         return $c->render(
             status  => 200,
-            openapi => $c->objects->to_api($sftp_server),
+            openapi => $c->objects->to_api($file_transport),
         );
     } catch {
         if ( blessed $_ and $_->isa('Koha::Exceptions::Object::DuplicateID') ) {
@@ -153,13 +153,13 @@ Controller method that handles deleting a Koha::File::Transport object
 sub delete {
     my $c = shift->openapi->valid_input or return;
 
-    my $sftp_server = Koha::File::Transports->find( $c->param('sftp_server_id') );
+    my $file_transport = Koha::File::Transports->find( $c->param('file_transport_id') );
 
-    return $c->render_resource_not_found("FTP/SFTP server")
-        unless $sftp_server;
+    return $c->render_resource_not_found("File transport")
+        unless $file_transport;
 
     return try {
-        $sftp_server->delete;
+        $file_transport->delete;
         return $c->render_resource_deleted;
     } catch {
         $c->unhandled_exception($_);

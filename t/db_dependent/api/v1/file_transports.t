@@ -61,10 +61,10 @@ subtest 'list() tests' => sub {
     my $unauth_userid = $patron->userid;
 
     ## Authorized user tests
-    # No FTP/SFTP servers, so empty array should be returned
-    $t->get_ok("//$userid:$password@/api/v1/config/sftp_servers")->status_is(200)->json_is( [] );
+    # No File transports, so empty array should be returned
+    $t->get_ok("//$userid:$password@/api/v1/config/file_transports")->status_is(200)->json_is( [] );
 
-    my $sftp_server = $builder->build_object(
+    my $file_transport = $builder->build_object(
         {
             class => 'Koha::File::Transports',
             value => {
@@ -76,10 +76,11 @@ subtest 'list() tests' => sub {
         }
     );
 
-    # One sftp server created, should get returned
-    $t->get_ok("//$userid:$password@/api/v1/config/sftp_servers")->status_is(200)->json_is( [ $sftp_server->to_api ] );
+    # One file transport created, should get returned
+    $t->get_ok("//$userid:$password@/api/v1/config/file_transports")->status_is(200)
+        ->json_is( [ $file_transport->to_api ] );
 
-    my $another_sftp_server = $builder->build_object(
+    my $another_file_transport = $builder->build_object(
         {
             class => 'Koha::File::Transports',
             value => {
@@ -91,12 +92,12 @@ subtest 'list() tests' => sub {
         }
     );
 
-    # Two FTP/SFTP servers created, they should both be returned
-    $t->get_ok("//$userid:$password@/api/v1/config/sftp_servers")->status_is(200)
-        ->json_is( [ $sftp_server->to_api, $another_sftp_server->to_api, ] );
+    # Two File transports created, they should both be returned
+    $t->get_ok("//$userid:$password@/api/v1/config/file_transports")->status_is(200)
+        ->json_is( [ $file_transport->to_api, $another_file_transport->to_api, ] );
 
     # Unauthorized access
-    $t->get_ok("//$unauth_userid:$password@/api/v1/config/sftp_servers")->status_is(403);
+    $t->get_ok("//$unauth_userid:$password@/api/v1/config/file_transports")->status_is(403);
 
     $schema->storage->txn_rollback;
 };
@@ -107,7 +108,7 @@ subtest 'get() tests' => sub {
 
     $schema->storage->txn_begin;
 
-    my $sftp_server = $builder->build_object(
+    my $file_transport = $builder->build_object(
         {
             class => 'Koha::File::Transports',
             value => {
@@ -138,12 +139,12 @@ subtest 'get() tests' => sub {
     $patron->set_password( { password => $password, skip_validation => 1 } );
     my $unauth_userid = $patron->userid;
 
-    $t->get_ok( "//$userid:$password@/api/v1/config/sftp_servers/" . $sftp_server->id )->status_is(200)
-        ->json_is( $sftp_server->to_api );
+    $t->get_ok( "//$userid:$password@/api/v1/config/file_transports/" . $file_transport->id )->status_is(200)
+        ->json_is( $file_transport->to_api );
 
-    $t->get_ok( "//$unauth_userid:$password@/api/v1/config/sftp_servers/" . $sftp_server->id )->status_is(403);
+    $t->get_ok( "//$unauth_userid:$password@/api/v1/config/file_transports/" . $file_transport->id )->status_is(403);
 
-    my $sftp_server_to_delete = $builder->build_object(
+    my $file_transport_to_delete = $builder->build_object(
         {
             class => 'Koha::File::Transports',
             value => {
@@ -154,11 +155,11 @@ subtest 'get() tests' => sub {
             },
         }
     );
-    my $non_existent_id = $sftp_server_to_delete->id;
-    $sftp_server_to_delete->delete;
+    my $non_existent_id = $file_transport_to_delete->id;
+    $file_transport_to_delete->delete;
 
-    $t->get_ok("//$userid:$password@/api/v1/config/sftp_servers/$non_existent_id")->status_is(404)
-        ->json_is( '/error' => 'FTP/SFTP server not found' );
+    $t->get_ok("//$userid:$password@/api/v1/config/file_transports/$non_existent_id")->status_is(404)
+        ->json_is( '/error' => 'File transport not found' );
 
     $schema->storage->txn_rollback;
 };
@@ -191,7 +192,7 @@ subtest 'add() tests' => sub {
     $patron->set_password( { password => $password, skip_validation => 1 } );
     my $unauth_userid = $patron->userid;
 
-    my $sftp_server = $builder->build_object(
+    my $file_transport = $builder->build_object(
         {
             class => 'Koha::File::Transports',
             value => {
@@ -202,21 +203,21 @@ subtest 'add() tests' => sub {
             },
         }
     );
-    my $sftp_server_data = $sftp_server->to_api;
-    delete $sftp_server_data->{sftp_server_id};
-    $sftp_server->delete;
+    my $file_transport_data = $file_transport->to_api;
+    delete $file_transport_data->{file_transport_id};
+    $file_transport->delete;
 
     # Unauthorized attempt to write
-    $t->post_ok( "//$unauth_userid:$password@/api/v1/config/sftp_servers" => json => $sftp_server_data )
+    $t->post_ok( "//$unauth_userid:$password@/api/v1/config/file_transports" => json => $file_transport_data )
         ->status_is(403);
 
     # Authorized attempt to write invalid data
-    my $sftp_server_with_invalid_field = {
+    my $file_transport_with_invalid_field = {
         name => 'Some other server',
         blah => 'blah'
     };
 
-    $t->post_ok( "//$userid:$password@/api/v1/config/sftp_servers" => json => $sftp_server_with_invalid_field )
+    $t->post_ok( "//$userid:$password@/api/v1/config/file_transports" => json => $file_transport_with_invalid_field )
         ->status_is(400)->json_is(
         "/errors" => [
             {
@@ -227,25 +228,25 @@ subtest 'add() tests' => sub {
         );
 
     # Authorized attempt to write
-    my $sftp_server_id =
-        $t->post_ok( "//$userid:$password@/api/v1/config/sftp_servers" => json => $sftp_server_data )
+    my $file_transport_id =
+        $t->post_ok( "//$userid:$password@/api/v1/config/file_transports" => json => $file_transport_data )
         ->status_is( 201, 'SWAGGER3.2.1' )
-        ->header_like( Location => qr|^\/api\/v1\/config\/sftp_servers\/\d*|, 'SWAGGER3.4.1' )
-        ->json_is( '/name' => $sftp_server_data->{name} )->tx->res->json->{sftp_server_id};
+        ->header_like( Location => qr|^\/api\/v1\/config\/file_transports\/\d*|, 'SWAGGER3.4.1' )
+        ->json_is( '/name' => $file_transport_data->{name} )->tx->res->json->{file_transport_id};
 
     # Authorized attempt to create with null id
-    $sftp_server_data->{sftp_server_id} = undef;
-    $t->post_ok( "//$userid:$password@/api/v1/config/sftp_servers" => json => $sftp_server_data )->status_is(400)
+    $file_transport_data->{file_transport_id} = undef;
+    $t->post_ok( "//$userid:$password@/api/v1/config/file_transports" => json => $file_transport_data )->status_is(400)
         ->json_has('/errors');
 
     # Authorized attempt to create with existing id
-    $sftp_server_data->{sftp_server_id} = $sftp_server_id;
-    $t->post_ok( "//$userid:$password@/api/v1/config/sftp_servers" => json => $sftp_server_data )->status_is(400)
+    $file_transport_data->{file_transport_id} = $file_transport_id;
+    $t->post_ok( "//$userid:$password@/api/v1/config/file_transports" => json => $file_transport_data )->status_is(400)
         ->json_is(
         "/errors" => [
             {
                 message => "Read-only.",
-                path    => "/body/sftp_server_id"
+                path    => "/body/file_transport_id"
             }
         ]
         );
@@ -279,7 +280,7 @@ subtest 'update() tests' => sub {
     $patron->set_password( { password => $password, skip_validation => 1 } );
     my $unauth_userid = $patron->userid;
 
-    my $sftp_server_id = $builder->build_object(
+    my $file_transport_id = $builder->build_object(
         {
             class => 'Koha::File::Transports',
             value => {
@@ -292,47 +293,45 @@ subtest 'update() tests' => sub {
     )->id;
 
     # Unauthorized attempt to update
-    $t->put_ok( "//$unauth_userid:$password@/api/v1/config/sftp_servers/$sftp_server_id" => json =>
+    $t->put_ok( "//$unauth_userid:$password@/api/v1/config/file_transports/$file_transport_id" => json =>
             { name => 'New unauthorized name change' } )->status_is(403);
 
     # Attempt partial update on a PUT
-    my $sftp_server_with_missing_field = {
+    my $file_transport_with_missing_field = {
         host    => 'localhost',
         passive => '1'
     };
 
-    $t->put_ok(
-        "//$userid:$password@/api/v1/config/sftp_servers/$sftp_server_id" => json => $sftp_server_with_missing_field )
-        ->status_is(400)->json_is( "/errors" => [ { message => "Missing property.", path => "/body/name" } ] );
+    $t->put_ok( "//$userid:$password@/api/v1/config/file_transports/$file_transport_id" => json =>
+            $file_transport_with_missing_field )->status_is(400)
+        ->json_is( "/errors" => [ { message => "Missing property.", path => "/body/name" } ] );
 
     # Full object update on PUT
-    my $sftp_server_with_updated_field = {
+    my $file_transport_with_updated_field = {
         name     => "Some name",
         password => "some_pass",
     };
 
-    $t->put_ok(
-        "//$userid:$password@/api/v1/config/sftp_servers/$sftp_server_id" => json => $sftp_server_with_updated_field )
-        ->status_is(200)->json_is( '/name' => 'Some name' );
+    $t->put_ok( "//$userid:$password@/api/v1/config/file_transports/$file_transport_id" => json =>
+            $file_transport_with_updated_field )->status_is(200)->json_is( '/name' => 'Some name' );
 
     # Authorized attempt to write invalid data
-    my $sftp_server_with_invalid_field = {
+    my $file_transport_with_invalid_field = {
         blah => "Blah",
         name => 'Some name'
     };
 
-    $t->put_ok(
-        "//$userid:$password@/api/v1/config/sftp_servers/$sftp_server_id" => json => $sftp_server_with_invalid_field )
-        ->status_is(400)->json_is(
+    $t->put_ok( "//$userid:$password@/api/v1/config/file_transports/$file_transport_id" => json =>
+            $file_transport_with_invalid_field )->status_is(400)->json_is(
         "/errors" => [
             {
                 message => "Properties not allowed: blah.",
                 path    => "/body"
             }
         ]
-        );
+            );
 
-    my $sftp_server_to_delete = $builder->build_object(
+    my $file_transport_to_delete = $builder->build_object(
         {
             class => 'Koha::File::Transports',
             value => {
@@ -343,19 +342,17 @@ subtest 'update() tests' => sub {
             },
         }
     );
-    my $non_existent_id = $sftp_server_to_delete->id;
-    $sftp_server_to_delete->delete;
+    my $non_existent_id = $file_transport_to_delete->id;
+    $file_transport_to_delete->delete;
 
-    $t->put_ok(
-        "//$userid:$password@/api/v1/config/sftp_servers/$non_existent_id" => json => $sftp_server_with_updated_field )
-        ->status_is(404);
+    $t->put_ok( "//$userid:$password@/api/v1/config/file_transports/$non_existent_id" => json =>
+            $file_transport_with_updated_field )->status_is(404);
 
     # Wrong method (POST)
-    $sftp_server_with_updated_field->{sftp_server_id} = 2;
+    $file_transport_with_updated_field->{file_transport_id} = 2;
 
-    $t->post_ok(
-        "//$userid:$password@/api/v1/config/sftp_servers/$sftp_server_id" => json => $sftp_server_with_updated_field )
-        ->status_is(404);
+    $t->post_ok( "//$userid:$password@/api/v1/config/file_transports/$file_transport_id" => json =>
+            $file_transport_with_updated_field )->status_is(404);
 
     $schema->storage->txn_rollback;
 };
@@ -386,7 +383,7 @@ subtest 'delete() tests' => sub {
     $patron->set_password( { password => $password, skip_validation => 1 } );
     my $unauth_userid = $patron->userid;
 
-    my $sftp_server_id = $builder->build_object(
+    my $file_transport_id = $builder->build_object(
         {
             class => 'Koha::File::Transports',
             value => {
@@ -399,12 +396,12 @@ subtest 'delete() tests' => sub {
     )->id;
 
     # Unauthorized attempt to delete
-    $t->delete_ok("//$unauth_userid:$password@/api/v1/config/sftp_servers/$sftp_server_id")->status_is(403);
+    $t->delete_ok("//$unauth_userid:$password@/api/v1/config/file_transports/$file_transport_id")->status_is(403);
 
-    $t->delete_ok("//$userid:$password@/api/v1/config/sftp_servers/$sftp_server_id")->status_is( 204, 'SWAGGER3.2.4' )
-        ->content_is( '', 'SWAGGER3.3.4' );
+    $t->delete_ok("//$userid:$password@/api/v1/config/file_transports/$file_transport_id")
+        ->status_is( 204, 'SWAGGER3.2.4' )->content_is( '', 'SWAGGER3.3.4' );
 
-    $t->delete_ok("//$userid:$password@/api/v1/config/sftp_servers/$sftp_server_id")->status_is(404);
+    $t->delete_ok("//$userid:$password@/api/v1/config/file_transports/$file_transport_id")->status_is(404);
 
     $schema->storage->txn_rollback;
 };

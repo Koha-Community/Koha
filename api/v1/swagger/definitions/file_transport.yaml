@@ -1,13 +1,13 @@
 ---
 type: object
 properties:
-  sftp_server_id:
+  file_transport_id:
     type: integer
-    description: Internal FTP/SFTP server identifier
+    description: Internal File transport identifier
     readOnly: true
   name:
     type: string
-    description: Name of the FTP/SFTP server
+    description: Name of the File transport
   host:
     type: string
     description: FTP/SFTP host name (optional)
@@ -20,7 +20,7 @@ properties:
       - ftp
       - sftp
       - file
-    description: Transport of FTP/SFTP server (optional)
+    description: Transport of File transport (optional)
   auth_mode:
     type: string
     enum:
@@ -60,7 +60,7 @@ properties:
     type:
       - object
       - "null"
-    description: Most recent status of the FTP/SFTP server (optional)
+    description: Most recent status of the File transport (optional)
   debug:
     type: boolean
     description: If the SMTP connection is set to debug mode (optional)

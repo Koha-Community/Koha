@@ -142,7 +142,7 @@ on the API.
 =cut
 
 sub to_api_mapping {
-    return { id => 'sftp_server_id' };
+    return { id => 'file_transport_id' };
 }
 
 =head3 test_connection
