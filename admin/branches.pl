@@ -52,17 +52,15 @@ my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
 );
 
 my $library;
-if ($branchcode) {
-    $library = Koha::Libraries->find($branchcode);
-    my @additional_fields = Koha::AdditionalFields->search( { tablename => 'branches' } )->as_list;
-    my @additional_field_values;
-    @additional_field_values = $library ? $library->get_additional_field_values_for_template : ();
+$library = Koha::Libraries->find($branchcode);
+my @additional_fields = Koha::AdditionalFields->search( { tablename => 'branches' } )->as_list;
+my @additional_field_values;
+@additional_field_values = $library ? $library->get_additional_field_values_for_template : ();
 
-    $template->param(
-        additional_fields       => \@additional_fields,
-        additional_field_values => @additional_field_values,
-    );
-}
+$template->param(
+    additional_fields       => \@additional_fields,
+    additional_field_values => @additional_field_values,
+);
 
 if ( $op eq 'add_form' ) {
     $template->param(
