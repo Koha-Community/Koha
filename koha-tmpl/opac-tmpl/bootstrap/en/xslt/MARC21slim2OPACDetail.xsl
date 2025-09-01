@@ -412,6 +412,33 @@
         </span>
         </xsl:if>
 
+        <!-- Cartographic data Statement: Alternate Graphic Representation (MARC 880) -->
+        <xsl:if test="$display880">
+            <xsl:call-template name="m880Select">
+                <xsl:with-param name="basetags">255</xsl:with-param>
+                <xsl:with-param name="codes">abcdefg</xsl:with-param>
+                <xsl:with-param name="class">results_summary cartographic_data</xsl:with-param>
+                <xsl:with-param name="label">Cartographic data: </xsl:with-param>
+            </xsl:call-template>
+        </xsl:if>
+
+        <xsl:if test="marc:datafield[@tag=255]">
+        <span class="results_summary cartographic_data"><span class="label">Cartographic data: </span>
+            <xsl:for-each select="marc:datafield[@tag=255]">
+                <span property="cartographicData">
+                <xsl:call-template name="chopPunctuation">
+                  <xsl:with-param name="chopString">
+                    <xsl:call-template name="subfieldSelect">
+                        <xsl:with-param name="codes">abcdefg</xsl:with-param>
+                    </xsl:call-template>
+                  </xsl:with-param>
+                </xsl:call-template>
+                </span>
+                <xsl:choose><xsl:when test="position()=last()"><xsl:text></xsl:text></xsl:when><xsl:otherwise><xsl:text>; </xsl:text></xsl:otherwise></xsl:choose>
+            </xsl:for-each>
+        </span>
+        </xsl:if>
+
         <!-- Description: Alternate Graphic Representation (MARC 880) -->
         <xsl:if test="$display880">
             <xsl:call-template name="m880Select">
