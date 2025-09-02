@@ -136,29 +136,6 @@ sub safe_exit {
     exit;
 }
 
-BEGIN {
-    C4::Context->set_remote_address;
-
-    require Exporter;
-    @ISA = qw(Exporter);
-
-    @EXPORT_OK = qw(
-        checkauth check_api_auth get_session check_cookie_auth checkpw checkpw_internal checkpw_hash
-        get_all_subpermissions get_cataloguing_page_permissions get_user_subpermissions in_iprange
-        get_template_and_user haspermission create_basic_session
-    );
-
-    $cas       = C4::Context->preference('casAuthentication');
-    $caslogout = C4::Context->preference('casLogout');
-
-    if ($cas) {
-        require C4::Auth_with_cas;    # no import
-        import C4::Auth_with_cas
-            qw(check_api_auth_cas checkpw_cas login_cas logout_cas login_cas_url logout_if_required multipleAuth getMultipleAuth);
-    }
-
-}
-
 =head2 get_template_and_user
 
  my ($template, $borrowernumber, $cookie)
