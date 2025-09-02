@@ -781,7 +781,7 @@
             [% ELSE %]
                 [% SET div_class='noblock' %]
             [% END %]
-            <div id="item-transfer-modal" class="modal modal-lg block audio-alert-action" [% IF Koha.Preference('TransfersBlockCirc') %]data-bs-backdrop="static" data-bs-keyboard="false"[% END %]>
+            <div id="item-transfer-modal" class="modal modal-lg [% div_class | html %] audio-alert-action" [% IF Koha.Preference('TransfersBlockCirc') %]data-bs-backdrop="static" data-bs-keyboard="false"[% END %]>
                 <div class="modal-dialog">
                     <div class="modal-content">
                         <form method="post" action="returns.pl" name="mainform" id="mainform">
