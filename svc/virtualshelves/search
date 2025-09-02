@@ -3,9 +3,9 @@
 use Modern::Perl;
 use CGI;
 
-use C4::Auth                              qw( get_template_and_user );
-use C4::Output                            qw( output_with_http_headers );
-use C4::Utils::DataTables::VirtualShelves qw( search );
+use C4::Auth   qw( get_template_and_user );
+use C4::Output qw( output_with_http_headers );
+use C4::Utils::DataTables::VirtualShelves;
 
 my $input = CGI->new;
 
