@@ -131,7 +131,7 @@ use C4::Output      qw( output_html_with_http_headers );
 use C4::Search      qw( FindDuplicate );
 use C4::Suggestions qw( ModSuggestion );
 use Koha::Acquisition::Baskets;
-use Koha::Acquisition::Currencies qw( get_active );
+use Koha::Acquisition::Currencies;
 use Koha::Acquisition::Orders;
 use Koha::AdditionalFields;
 use Koha::DateUtils qw( dt_from_string );

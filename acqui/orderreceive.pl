@@ -70,7 +70,7 @@ use C4::Biblio      qw( GetMarcStructure );
 use C4::Suggestions qw( GetSuggestion GetSuggestionInfoFromBiblionumber GetSuggestionInfo );
 
 use Koha::Acquisition::Booksellers;
-use Koha::Acquisition::Currencies qw( get_active );
+use Koha::Acquisition::Currencies;
 use Koha::Acquisition::Orders;
 use Koha::DateUtils qw( dt_from_string );
 use Koha::ItemTypes;

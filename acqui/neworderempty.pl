@@ -89,7 +89,7 @@ use C4::Search qw( FindDuplicate );
 use C4::ImportBatch qw( SetImportRecordStatus SetMatchedBiblionumber GetImportRecordMarc );
 
 use Koha::Acquisition::Booksellers;
-use Koha::Acquisition::Currencies qw( get_active );
+use Koha::Acquisition::Currencies;
 use Koha::Biblios;
 use Koha::BiblioFrameworks;
 use Koha::DateUtils qw( dt_from_string );

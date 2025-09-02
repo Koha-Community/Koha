@@ -38,7 +38,7 @@ use JSON        qw( encode_json );
 use C4::Log     qw(logaction);
 
 use Koha::Acquisition::Booksellers;
-use Koha::Acquisition::Currencies qw( get_active );
+use Koha::Acquisition::Currencies;
 use Koha::AdditionalFields;
 use Koha::DateUtils qw( output_pref );
 use Koha::Misc::Files;
