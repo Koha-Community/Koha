@@ -19,7 +19,7 @@
 
 use Modern::Perl;
 
-use C4::ClassSplitRoutine::LCC qw( split_callnumber );
+use C4::ClassSplitRoutine::LCC;
 use Test::NoWarnings;
 use Test::More;
 
