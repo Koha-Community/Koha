@@ -23,8 +23,8 @@ use Modern::Perl;
 use CGI      qw ( -utf8 );
 use C4::Auth qw( get_template_and_user );
 use C4::Context;
-use C4::Output  qw( output_html_with_http_headers );
-use C4::Matcher qw/valid_normalization_routines/;
+use C4::Output qw( output_html_with_http_headers );
+use C4::Matcher;
 
 our $input = CGI->new;
 my $op = $input->param('op') || '';
