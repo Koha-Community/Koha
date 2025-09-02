@@ -18,38 +18,11 @@ package C4::AuthoritiesMarc;
 # You should have received a copy of the GNU General Public License
 # along with Koha; if not, see <https://www.gnu.org/licenses>.
 
-use strict;
-use warnings;
-use MARC::Field;
-use Scalar::Util qw(blessed);
-use Try::Tiny    qw( try catch );
-
-use C4::Context;
-use C4::Biblio qw( ModBiblio );
-use C4::Search qw( FindDuplicate new_record_from_zebra );
-use C4::AuthoritiesMarc::MARC21;
-use C4::AuthoritiesMarc::UNIMARC;
-use C4::Charset qw( SetUTF8Flag );
-use C4::Log     qw( logaction );
-use Koha::MetadataRecord::Authority;
-use Koha::Authorities;
-use Koha::Authority::MergeRequests;
-use Koha::Authority::Types;
-use Koha::Authority;
-use Koha::Database;
-use Koha::Libraries;
-use Koha::RecordProcessor;
-use Koha::SearchEngine;
-use Koha::SearchEngine::Indexer;
-use Koha::SearchEngine::Search;
-
-our ( @ISA, @EXPORT_OK );
+use Modern::Perl;
+use base 'Exporter';
 
 BEGIN {
-
-    require Exporter;
-    @ISA       = qw(Exporter);
-    @EXPORT_OK = qw(
+    our @EXPORT_OK = qw(
         GetTagsLabels
         GetAuthMARCFromKohaField
 
@@ -78,6 +51,29 @@ BEGIN {
         compare_fields
     );
 }
+
+use MARC::Field;
+use Scalar::Util qw(blessed);
+use Try::Tiny    qw( try catch );
+
+use C4::Context;
+use C4::Biblio qw( ModBiblio );
+use C4::Search qw( FindDuplicate new_record_from_zebra );
+use C4::AuthoritiesMarc::MARC21;
+use C4::AuthoritiesMarc::UNIMARC;
+use C4::Charset qw( SetUTF8Flag );
+use C4::Log     qw( logaction );
+use Koha::MetadataRecord::Authority;
+use Koha::Authorities;
+use Koha::Authority::MergeRequests;
+use Koha::Authority::Types;
+use Koha::Authority;
+use Koha::Database;
+use Koha::Libraries;
+use Koha::RecordProcessor;
+use Koha::SearchEngine;
+use Koha::SearchEngine::Indexer;
+use Koha::SearchEngine::Search;
 
 =head1 NAME
 
@@ -532,7 +528,7 @@ ORDER BY tagfield, display_order, tagsubfield"
 
     while (
         (
-            $tag,           $subfield,     $liblibrarian,,    $libopac, $tab,
+            $tag,           $subfield,     $liblibrarian,     $libopac, $tab,
             $mandatory,     $repeatable,   $authorised_value, $authtypecode,
             $value_builder, $kohafield,    $seealso,          $hidden,
             $isurl,         $defaultvalue, $display_order

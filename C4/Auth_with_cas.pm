@@ -17,8 +17,13 @@ package C4::Auth_with_cas;
 # You should have received a copy of the GNU General Public License
 # along with Koha; if not, see <https://www.gnu.org/licenses>.
 
-use strict;
-use warnings;
+use Modern::Perl;
+use base 'Exporter';
+
+BEGIN {
+    our @EXPORT_OK =
+        qw(check_api_auth_cas checkpw_cas login_cas logout_cas login_cas_url logout_if_required multipleAuth getMultipleAuth);
+}
 
 use C4::Context;
 use Koha::AuthUtils qw( get_script_name );
@@ -29,14 +34,6 @@ use URI::Escape;
 
 use Koha::Logger;
 
-our ( @ISA, @EXPORT_OK );
-
-BEGIN {
-    require Exporter;
-    @ISA = qw(Exporter);
-    @EXPORT_OK =
-        qw(check_api_auth_cas checkpw_cas login_cas logout_cas login_cas_url logout_if_required multipleAuth getMultipleAuth);
-}
 my $defaultcasserver;
 my $casservers;
 my $yamlauthfile = C4::Context->config('intranetdir') . "/C4/Auth_cas_servers.yaml";

@@ -23,22 +23,18 @@ C4::Members::Statistics - Get statistics for patron checkouts
 =cut
 
 use Modern::Perl;
-
-use C4::Context;
-
-our ( @ISA, @EXPORT_OK );
+use base 'Exporter';
 
 BEGIN {
-    require Exporter;
-    @ISA = qw(Exporter);
-
-    @EXPORT_OK = qw(
+    our @EXPORT_OK = qw(
         get_fields
         GetTotalIssuesTodayByBorrower
         GetTotalIssuesReturnedTodayByBorrower
         GetPrecedentStateByBorrower
     );
 }
+
+use C4::Context;
 
 =head2 get_fields
   Get fields form syspref 'StatisticsFields'

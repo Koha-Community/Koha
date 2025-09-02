@@ -18,18 +18,15 @@ package C4::Stats;
 # along with Koha; if not, see <https://www.gnu.org/licenses>.
 
 use Modern::Perl;
-
-use Koha::Statistics;
-
-our ( @ISA, @EXPORT_OK );
+use base 'Exporter';
 
 BEGIN {
-    require Exporter;
-    @ISA       = qw(Exporter);
-    @EXPORT_OK = qw(
+    our @EXPORT_OK = qw(
         UpdateStats
     );
 }
+
+use Koha::Statistics;
 
 =head1 NAME
 

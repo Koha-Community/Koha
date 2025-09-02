@@ -18,19 +18,17 @@ package C4::Reports;
 # along with Koha; if not, see <https://www.gnu.org/licenses>.
 
 use Modern::Perl;
-use CGI qw ( -utf8 );
-
-use C4::Context;
-
-our ( @ISA, @EXPORT_OK );
+use base 'Exporter';
 
 BEGIN {
-    require Exporter;
-    @ISA       = qw(Exporter);
-    @EXPORT_OK = qw(
+    our @EXPORT_OK = qw(
         GetDelimiterChoices
     );
 }
+
+use CGI qw ( -utf8 );
+
+use C4::Context;
 
 =head1 NAME
 

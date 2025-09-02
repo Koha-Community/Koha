@@ -26,17 +26,10 @@ Koha::List::Patron - Management of lists of patrons
 =cut
 
 use Modern::Perl;
-
-use Carp qw( carp croak );
-
-use Koha::Database;
-
-our ( @ISA, @EXPORT_OK );
+use base 'Exporter';
 
 BEGIN {
-    require Exporter;
-    @ISA       = qw(Exporter);
-    @EXPORT_OK = qw(
+    our @EXPORT_OK = qw(
         GetPatronLists
 
         DelPatronList
@@ -47,6 +40,10 @@ BEGIN {
         DelPatronsFromList
     );
 }
+
+use Carp qw( carp croak );
+
+use Koha::Database;
 
 =head2 GetPatronLists
 

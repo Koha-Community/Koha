@@ -16,6 +16,23 @@ package C4::Search;
 # along with Koha; if not, see <https://www.gnu.org/licenses>.
 
 use Modern::Perl;
+use base 'Exporter';
+
+BEGIN {
+    our @EXPORT_OK = qw(
+        FindDuplicate
+        SimpleSearch
+        searchResults
+        getRecords
+        buildQuery
+        GetDistinctValues
+        enabled_staff_search_views
+        new_record_from_zebra
+        z3950_search_args
+        getIndexes
+    );
+}
+
 use C4::Context;
 use C4::Biblio qw( TransformMarcToKoha GetMarcFromKohaField GetFrameworkCode GetAuthorisedValueDesc GetBiblioData );
 use C4::Koha
@@ -42,25 +59,6 @@ use MARC::Record;
 use MARC::Field;
 use POSIX qw(setlocale LC_COLLATE);
 use Unicode::Collate::Locale;
-
-our ( @ISA, @EXPORT_OK );
-
-BEGIN {
-    require Exporter;
-    @ISA       = qw(Exporter);
-    @EXPORT_OK = qw(
-        FindDuplicate
-        SimpleSearch
-        searchResults
-        getRecords
-        buildQuery
-        GetDistinctValues
-        enabled_staff_search_views
-        new_record_from_zebra
-        z3950_search_args
-        getIndexes
-    );
-}
 
 =head1 NAME
 

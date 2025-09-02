@@ -17,24 +17,21 @@ package C4::ClassSource;
 # along with Koha; if not, see <https://www.gnu.org/licenses>.
 
 use Modern::Perl;
-
-use C4::Context;
-use C4::ClassSortRoutine qw( GetClassSortKey );
-
-use Koha::Cache::Memory::Lite;
-
-our ( @ISA, @EXPORT_OK );
+use base 'Exporter';
 
 BEGIN {
-    require Exporter;
-    @ISA       = qw(Exporter);
-    @EXPORT_OK = qw(
+    our @EXPORT_OK = qw(
         GetClassSources
         GetClassSource
         GetClassSortRule
         GetClassSort
     );
 }
+
+use C4::Context;
+use C4::ClassSortRoutine qw( GetClassSortKey );
+
+use Koha::Cache::Memory::Lite;
 
 =head1 NAME
 

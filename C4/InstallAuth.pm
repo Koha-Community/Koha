@@ -18,26 +18,23 @@ package C4::InstallAuth;
 # along with Koha; if not, see <https://www.gnu.org/licenses>.
 
 use Modern::Perl;
+use base 'Exporter';
+
+BEGIN {
+    our @EXPORT_OK = qw(
+        checkauth
+        get_template_and_user
+    );
+}
+
 use CGI::Session;
 use File::Spec;
-
-require Exporter;
 
 use C4::Context;
 use C4::Output qw( output_html_with_http_headers );
 use C4::Templates;
 
 use Koha::Session;
-
-our ( @ISA, @EXPORT_OK );
-
-BEGIN {
-    @ISA       = qw(Exporter);
-    @EXPORT_OK = qw(
-        checkauth
-        get_template_and_user
-    );
-}
 
 =head1 NAME
 

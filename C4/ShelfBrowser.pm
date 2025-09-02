@@ -17,24 +17,20 @@ package C4::ShelfBrowser;
 # You should have received a copy of the GNU General Public License
 # along with Koha; if not, see <https://www.gnu.org/licenses>.
 
-use strict;
-use warnings;
+use Modern::Perl;
+use base 'Exporter';
+
+BEGIN {
+    our @EXPORT_OK = qw(
+        GetNearbyItems
+    );
+}
 
 use C4::Biblio qw( GetAuthorisedValueDesc );
 use C4::Context;
 use C4::Koha qw( GetNormalizedUPC GetNormalizedOCLCNumber GetNormalizedISBN GetNormalizedEAN );
 use Koha::Biblios;
 use Koha::Libraries;
-
-our ( @ISA, @EXPORT_OK );
-
-BEGIN {
-    require Exporter;
-    @ISA       = qw(Exporter);
-    @EXPORT_OK = qw(
-        GetNearbyItems
-    );
-}
 
 =head1 NAME
 

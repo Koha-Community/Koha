@@ -18,6 +18,12 @@ package C4::Auth_with_ldap;
 # along with Koha; if not, see <https://www.gnu.org/licenses>.
 
 use Modern::Perl;
+use base 'Exporter';
+
+BEGIN {
+    our @EXPORT_OK = qw( checkpw_ldap );
+}
+
 use Carp qw( croak );
 
 use C4::Context;
@@ -28,14 +34,6 @@ use Koha::Patrons;
 use Koha::AuthUtils qw( hash_password );
 use Net::LDAP;
 use Net::LDAP::Filter;
-
-our ( @ISA, @EXPORT_OK );
-
-BEGIN {
-    require Exporter;
-    @ISA       = qw(Exporter);
-    @EXPORT_OK = qw( checkpw_ldap );
-}
 
 # Redefine checkpw_ldap:
 # connect to LDAP (named or anonymous)

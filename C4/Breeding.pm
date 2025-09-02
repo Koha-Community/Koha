@@ -18,8 +18,12 @@ package C4::Breeding;
 # You should have received a copy of the GNU General Public License
 # along with Koha; if not, see <https://www.gnu.org/licenses>.
 
-use strict;
-use warnings;
+use Modern::Perl;
+use base 'Exporter';
+
+BEGIN {
+    our @EXPORT_OK = qw(BreedingSearch ImportBreedingAuth Z3950Search Z3950SearchAuth);
+}
 
 use C4::Biblio  qw(TransformMarcToKoha);
 use C4::Koha    qw( GetVariationsOfISBN );
@@ -31,14 +35,6 @@ use C4::AuthoritiesMarc qw( GuessAuthTypeCode GetAuthorizedHeading );
 use C4::Languages;
 use Koha::Database;
 use Koha::XSLT::Base;
-
-our ( @ISA, @EXPORT_OK );
-
-BEGIN {
-    require Exporter;
-    @ISA       = qw(Exporter);
-    @EXPORT_OK = qw(BreedingSearch ImportBreedingAuth Z3950Search Z3950SearchAuth);
-}
 
 =head1 NAME
 

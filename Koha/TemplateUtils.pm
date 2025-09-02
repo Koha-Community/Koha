@@ -18,20 +18,17 @@ package Koha::TemplateUtils;
 # along with Koha; if not, see <https://www.gnu.org/licenses>.
 
 use Modern::Perl;
+use base 'Exporter';
+
+BEGIN {
+    our @EXPORT_OK = qw( process_tt );
+}
 
 use Carp qw( croak );
 use Try::Tiny;
 use Template;
 
 use C4::Context;
-
-use vars qw(@ISA @EXPORT_OK);
-
-BEGIN {
-    require Exporter;
-    @ISA       = qw(Exporter);
-    @EXPORT_OK = qw( process_tt );
-}
 
 =head1 NAME
 

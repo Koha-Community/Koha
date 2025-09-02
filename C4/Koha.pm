@@ -20,21 +20,10 @@ package C4::Koha;
 # along with Koha; if not, see <https://www.gnu.org/licenses>.
 
 use Modern::Perl;
-
-use C4::Context;
-use Koha::Caches;
-use Koha::AuthorisedValues;
-use Koha::Libraries;
-use Koha::MarcSubfieldStructures;
-use Business::ISBN;
-use Business::ISSN;
-
-our ( @ISA, @EXPORT_OK );
+use base 'Exporter';
 
 BEGIN {
-    require Exporter;
-    @ISA       = qw(Exporter);
-    @EXPORT_OK = qw(
+    our @EXPORT_OK = qw(
         GetItemTypesCategorized
         getallthemes
         getFacets
@@ -59,6 +48,14 @@ BEGIN {
 
     );
 }
+
+use C4::Context;
+use Koha::Caches;
+use Koha::AuthorisedValues;
+use Koha::Libraries;
+use Koha::MarcSubfieldStructures;
+use Business::ISBN;
+use Business::ISSN;
 
 =head1 NAME
 

@@ -17,24 +17,21 @@ package Koha::DateUtils;
 # along with Koha; if not, see <https://www.gnu.org/licenses>.
 
 use Modern::Perl;
-use DateTime;
-use C4::Context;
-use Koha::Exceptions;
-use Koha::DateTime::Format::RFC3339;
-
-use vars qw(@ISA @EXPORT_OK);
+use base 'Exporter';
 
 BEGIN {
-    require Exporter;
-    @ISA = qw(Exporter);
-
-    @EXPORT_OK = qw(
+    our @EXPORT_OK = qw(
         dt_from_string
         output_pref
         format_sqldatetime
         flatpickr_date_format
     );
 }
+
+use DateTime;
+use C4::Context;
+use Koha::Exceptions;
+use Koha::DateTime::Format::RFC3339;
 
 =head1 DateUtils
 

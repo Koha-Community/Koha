@@ -20,6 +20,16 @@ package C4::Members;
 # along with Koha; if not, see <https://www.gnu.org/licenses>.
 
 use Modern::Perl;
+use base 'Exporter';
+
+BEGIN {
+    our @EXPORT_OK = qw(
+        GetBorrowersToExpunge
+
+        IssueSlip
+    );
+}
+
 use C4::Context;
 use Scalar::Util qw( looks_like_number );
 use Date::Calc   qw( check_date Date_to_Days );
@@ -35,18 +45,6 @@ use Koha::Holds;
 use Koha::AdditionalContents;
 use Koha::Patrons;
 use Koha::Patron::Categories;
-
-our ( @ISA, @EXPORT_OK );
-
-BEGIN {
-    require Exporter;
-    @ISA       = qw(Exporter);
-    @EXPORT_OK = qw(
-        GetBorrowersToExpunge
-
-        IssueSlip
-    );
-}
 
 =head1 NAME
 

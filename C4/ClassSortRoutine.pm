@@ -18,19 +18,16 @@ package C4::ClassSortRoutine;
 # along with Koha; if not, see <https://www.gnu.org/licenses>.
 
 use Modern::Perl;
-
-use Class::Factory::Util;
-
-our ( @ISA, @EXPORT_OK );
+use base 'Exporter';
 
 BEGIN {
-    require Exporter;
-    @ISA       = qw(Exporter);
-    @EXPORT_OK = qw(
+    our @EXPORT_OK = qw(
         GetSortRoutineNames
         GetClassSortKey
     );
 }
+
+use Class::Factory::Util;
 
 =head1 NAME 
 

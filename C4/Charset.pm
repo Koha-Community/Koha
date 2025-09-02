@@ -18,20 +18,10 @@ package C4::Charset;
 # along with Koha; if not, see <https://www.gnu.org/licenses>.
 
 use Modern::Perl;
-
-use MARC::Charset;
-use Text::Iconv;
-use Unicode::Normalize qw( NFC NFD );
-use Encode;
-
-use Koha::Logger;
-
-our ( @ISA, @EXPORT_OK );
+use base 'Exporter';
 
 BEGIN {
-    require Exporter;
-    @ISA       = qw(Exporter);
-    @EXPORT_OK = qw(
+    our @EXPORT_OK = qw(
         NormalizeString
         IsStringUTF8ish
         MarcToUTF8Record
@@ -42,6 +32,13 @@ BEGIN {
         SanitizeRecord
     );
 }
+
+use MARC::Charset;
+use Text::Iconv;
+use Unicode::Normalize qw( NFC NFD );
+use Encode;
+
+use Koha::Logger;
 
 =encoding UTF-8
 

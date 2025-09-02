@@ -17,8 +17,19 @@ package C4::Members::Messaging;
 # You should have received a copy of the GNU General Public License
 # along with Koha; if not, see <https://www.gnu.org/licenses>.
 
-use strict;
-use warnings;
+use Modern::Perl;
+
+use base 'Exporter';
+
+BEGIN {
+    our @EXPORT_OK = qw(
+        GetMessagingPreferences
+        SetMessagingPreference
+        GetMessagingOptions
+        SetMessagingPreferencesFromDefaults
+    );
+}
+
 use C4::Context;
 
 =head1 NAME

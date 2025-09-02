@@ -17,9 +17,19 @@ package Koha::EDI;
 # You should have received a copy of the GNU General Public License
 # along with Koha; if not, see <https://www.gnu.org/licenses>.
 
-use strict;
-use warnings;
+use Modern::Perl;
 use base qw(Exporter);
+
+BEGIN {
+    our @EXPORT_OK = qw(
+        process_quote
+        process_invoice
+        process_ordrsp
+        create_edi_order
+        get_edifact_ean
+    );
+}
+
 use utf8;
 use English qw{ -no_match_vars };
 use Business::ISBN;
@@ -47,20 +57,6 @@ use Koha::Acquisition::Booksellers;
 use Koha::Util::FrameworkPlugin qw( biblio_008 );
 
 our $VERSION = 1.1;
-
-our ( @ISA, @EXPORT_OK );
-
-BEGIN {
-    require Exporter;
-    @ISA       = qw(Exporter);
-    @EXPORT_OK = qw(
-        process_quote
-        process_invoice
-        process_ordrsp
-        create_edi_order
-        get_edifact_ean
-    );
-}
 
 sub create_edi_order {
     my $parameters = shift;

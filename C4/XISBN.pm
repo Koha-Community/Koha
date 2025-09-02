@@ -19,6 +19,14 @@ package C4::XISBN;
 # along with Koha; if not, see <https://www.gnu.org/licenses>.
 
 use Modern::Perl;
+use base 'Exporter';
+
+BEGIN {
+    our @EXPORT_OK = qw(
+        get_xisbns
+    );
+}
+
 use XML::Simple;
 
 use C4::Biblio              qw(TransformMarcToKoha);
@@ -30,16 +38,6 @@ use LWP::UserAgent;
 use Koha::Biblios;
 use Koha::SearchEngine;
 use Koha::SearchEngine::Search;
-
-our ( @ISA, @EXPORT_OK );
-
-BEGIN {
-    require Exporter;
-    @ISA       = qw(Exporter);
-    @EXPORT_OK = qw(
-        get_xisbns
-    );
-}
 
 =head1 NAME
 

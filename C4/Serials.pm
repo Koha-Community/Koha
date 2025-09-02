@@ -19,6 +19,41 @@ package C4::Serials;
 # along with Koha; if not, see <https://www.gnu.org/licenses>.
 
 use Modern::Perl;
+use base 'Exporter';
+
+BEGIN {
+    our @EXPORT_OK = qw(
+        NewSubscription    ModSubscription    DelSubscription
+        GetSubscription    CountSubscriptionFromBiblionumber      GetSubscriptionsFromBiblionumber
+        SearchSubscriptions
+        GetFullSubscriptionsFromBiblionumber   GetFullSubscription ModSubscriptionHistory
+        HasSubscriptionStrictlyExpired HasSubscriptionExpired GetExpirationDate abouttoexpire
+        GetFictiveIssueNumber
+        GetSubscriptionHistoryFromSubscriptionId
+
+        GetNextSeq GetSeq NewIssue           GetSerials
+        GetLatestSerials   ModSerialStatus    GetNextDate
+        CloseSubscription ReopenSubscription
+        subscriptionCurrentlyOnOrder
+        can_claim_subscription can_edit_subscription can_show_subscription
+        GetSerials2
+        GetSubscriptionLength ReNewSubscription  GetLateOrMissingIssues
+        GetSerialInformation                   AddItem2Serial
+        PrepareSerialsData GetNextExpected    ModNextExpected
+        GetSubscriptionIrregularities
+        GetPreviousSerialid
+
+        GetSuppliersWithLateIssues
+        getroutinglist     delroutingmember   addroutingmember
+        reorder_members
+        check_routing updateClaim
+        CountIssues
+        HasItems
+
+        findSerialsByStatus
+
+    );
+}
 
 use Carp       qw( croak );
 use Date::Calc qw(
@@ -72,44 +107,6 @@ use constant MISSING_STATUSES => (
     MISSING_SOLD_OUT, MISSING_DAMAGED,
     MISSING_LOST
 );
-
-our ( @ISA, @EXPORT_OK );
-
-BEGIN {
-    require Exporter;
-    @ISA       = qw(Exporter);
-    @EXPORT_OK = qw(
-        NewSubscription    ModSubscription    DelSubscription
-        GetSubscription    CountSubscriptionFromBiblionumber      GetSubscriptionsFromBiblionumber
-        SearchSubscriptions
-        GetFullSubscriptionsFromBiblionumber   GetFullSubscription ModSubscriptionHistory
-        HasSubscriptionStrictlyExpired HasSubscriptionExpired GetExpirationDate abouttoexpire
-        GetFictiveIssueNumber
-        GetSubscriptionHistoryFromSubscriptionId
-
-        GetNextSeq GetSeq NewIssue           GetSerials
-        GetLatestSerials   ModSerialStatus    GetNextDate
-        CloseSubscription ReopenSubscription
-        subscriptionCurrentlyOnOrder
-        can_claim_subscription can_edit_subscription can_show_subscription
-        GetSerials2
-        GetSubscriptionLength ReNewSubscription  GetLateOrMissingIssues
-        GetSerialInformation                   AddItem2Serial
-        PrepareSerialsData GetNextExpected    ModNextExpected
-        GetSubscriptionIrregularities
-        GetPreviousSerialid
-
-        GetSuppliersWithLateIssues
-        getroutinglist     delroutingmember   addroutingmember
-        reorder_members
-        check_routing updateClaim
-        CountIssues
-        HasItems
-
-        findSerialsByStatus
-
-    );
-}
 
 =head1 NAME
 

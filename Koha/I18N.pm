@@ -18,25 +18,7 @@ package Koha::I18N;
 # along with Koha; if not, see <https://www.gnu.org/licenses>.
 
 use Modern::Perl;
-
-use C4::Languages;
-use C4::Context;
-
-use Encode;
-use List::Util       qw( first );
-use Locale::Messages qw(
-    bindtextdomain
-    gettext
-    LC_MESSAGES
-    ngettext
-    npgettext
-    pgettext
-    textdomain
-);
-use POSIX qw();
-use Koha::Cache::Memory::Lite;
-
-use parent 'Exporter';
+use base 'Exporter';
 our @EXPORT = qw(
     __
     __x
@@ -56,6 +38,23 @@ our @EXPORT = qw(
 our @EXPORT_OK = qw(
     available_locales
 );
+
+use C4::Languages;
+use C4::Context;
+
+use Encode;
+use List::Util       qw( first );
+use Locale::Messages qw(
+    bindtextdomain
+    gettext
+    LC_MESSAGES
+    ngettext
+    npgettext
+    pgettext
+    textdomain
+);
+use POSIX qw();
+use Koha::Cache::Memory::Lite;
 
 our $textdomain = 'Koha';
 

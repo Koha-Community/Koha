@@ -19,6 +19,63 @@ package C4::Circulation;
 # along with Koha; if not, see <https://www.gnu.org/licenses>.
 
 use Modern::Perl;
+
+use base 'Exporter';
+
+BEGIN {
+
+    # FIXME subs that should probably be elsewhere
+    our @EXPORT_OK = qw(
+        barcodedecode
+        LostItem
+        ReturnLostItem
+        GetPendingOnSiteCheckouts
+
+        CanBookBeIssued
+        checkHighHolds
+        CanBookBeRenewed
+        AddIssue
+        GetLoanLength
+        GetHardDueDate
+        AddRenewal
+        GetRenewCount
+        GetSoonestRenewDate
+        GetLatestAutoRenewDate
+        GetIssuingCharges
+        AddIssuingCharge
+        GetBranchBorrowerCircRule
+        GetBranchItemRule
+        GetBiblioIssues
+        GetUpcomingDueIssues
+        CheckIfIssuedToPatron
+        IsItemIssued
+        GetAgeRestriction
+        GetTopIssues
+
+        AddReturn
+        MarkIssueReturned
+
+        transferbook
+        TooMany
+        GetTransfersFromTo
+        CalcDateDue
+        CheckValidBarcode
+        IsBranchTransferAllowed
+        CreateBranchTransferLimit
+        DeleteBranchTransferLimits
+        TransferSlip
+
+        GetOfflineOperations
+        GetOfflineOperation
+        AddOfflineOperation
+        DeleteOfflineOperation
+        ProcessOfflineOperation
+        ProcessOfflinePayment
+        ProcessOfflineIssue
+    );
+    push @EXPORT_OK, '_GetCircControlBranch';    # This is wrong!
+}
+
 use DateTime;
 use POSIX qw( floor );
 use Encode;
@@ -70,64 +127,6 @@ use Carp            qw( carp );
 use List::MoreUtils qw( any );
 use Scalar::Util    qw( looks_like_number blessed );
 use Date::Calc      qw( Date_to_Days );
-our ( @ISA, @EXPORT_OK );
-
-BEGIN {
-
-    require Exporter;
-    @ISA = qw(Exporter);
-
-    # FIXME subs that should probably be elsewhere
-    push @EXPORT_OK, qw(
-        barcodedecode
-        LostItem
-        ReturnLostItem
-        GetPendingOnSiteCheckouts
-
-        CanBookBeIssued
-        checkHighHolds
-        CanBookBeRenewed
-        AddIssue
-        GetLoanLength
-        GetHardDueDate
-        AddRenewal
-        GetRenewCount
-        GetSoonestRenewDate
-        GetLatestAutoRenewDate
-        GetIssuingCharges
-        AddIssuingCharge
-        GetBranchBorrowerCircRule
-        GetBranchItemRule
-        GetBiblioIssues
-        GetUpcomingDueIssues
-        CheckIfIssuedToPatron
-        IsItemIssued
-        GetAgeRestriction
-        GetTopIssues
-
-        AddReturn
-        MarkIssueReturned
-
-        transferbook
-        TooMany
-        GetTransfersFromTo
-        CalcDateDue
-        CheckValidBarcode
-        IsBranchTransferAllowed
-        CreateBranchTransferLimit
-        DeleteBranchTransferLimits
-        TransferSlip
-
-        GetOfflineOperations
-        GetOfflineOperation
-        AddOfflineOperation
-        DeleteOfflineOperation
-        ProcessOfflineOperation
-        ProcessOfflinePayment
-        ProcessOfflineIssue
-    );
-    push @EXPORT_OK, '_GetCircControlBranch';    # This is wrong!
-}
 
 =head1 NAME
 

@@ -18,7 +18,7 @@ package C4::TmplTokenType;
 # along with Koha; if not, see <https://www.gnu.org/licenses>.
 
 use Modern::Perl;
-require Exporter;
+use base 'Exporter';
 
 ###############################################################################
 
@@ -40,13 +40,8 @@ The predefined constants are
 use vars qw( $_text $_text_parametrized $_cdata
     $_tag $_decl $_pi $_directive $_comment $_null $_unknown );
 
-our ( @ISA, @EXPORT_OK );
-
 BEGIN {
-
-    require Exporter;
-    @ISA       = qw(Exporter);
-    @EXPORT_OK = qw(
+    our @EXPORT_OK = qw(
         TEXT
         TEXT_PARAMETRIZED
         CDATA

@@ -21,6 +21,47 @@ package C4::Reserves;
 # along with Koha; if not, see <https://www.gnu.org/licenses>.
 
 use Modern::Perl;
+use base 'Exporter';
+
+BEGIN {
+    our @EXPORT_OK = qw(
+        AddReserve
+
+        GetReserveStatus
+
+        ChargeReserveFee
+        GetReserveFee
+
+        ModReserveAffect
+        ModReserve
+        ModReserveStatus
+        ModReserveCancelAll
+        ModReserveMinusPriority
+        MoveReserve
+
+        CheckReserves
+        CanBookBeReserved
+        CanItemBeReserved
+        CancelExpiredReserves
+
+        AutoUnsuspendReserves
+
+        IsAvailableForItemLevelRequest
+        ItemsAnyAvailableAndNotRestricted
+
+        AlterPriority
+        ToggleLowestPriority
+
+        ReserveSlip
+        SuspendAll
+
+        CalculatePriority
+
+        GetMaxPatronHoldsForRecord
+
+        MergeHolds
+    );
+}
 
 use JSON qw( to_json );
 
@@ -98,50 +139,6 @@ This modules provides some functions to deal with reservations.
 =head1 FUNCTIONS
 
 =cut
-
-our ( @ISA, @EXPORT_OK );
-
-BEGIN {
-    require Exporter;
-    @ISA       = qw(Exporter);
-    @EXPORT_OK = qw(
-        AddReserve
-
-        GetReserveStatus
-
-        ChargeReserveFee
-        GetReserveFee
-
-        ModReserveAffect
-        ModReserve
-        ModReserveStatus
-        ModReserveCancelAll
-        ModReserveMinusPriority
-        MoveReserve
-
-        CheckReserves
-        CanBookBeReserved
-        CanItemBeReserved
-        CancelExpiredReserves
-
-        AutoUnsuspendReserves
-
-        IsAvailableForItemLevelRequest
-        ItemsAnyAvailableAndNotRestricted
-
-        AlterPriority
-        ToggleLowestPriority
-
-        ReserveSlip
-        SuspendAll
-
-        CalculatePriority
-
-        GetMaxPatronHoldsForRecord
-
-        MergeHolds
-    );
-}
 
 =head2 AddReserve
 

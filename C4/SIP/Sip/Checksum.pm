@@ -1,11 +1,11 @@
 package C4::SIP::Sip::Checksum;
 
-use Exporter;
-use strict;
-use warnings;
+use Modern::Perl;
+use base 'Exporter';
 
-our @ISA       = qw(Exporter);
-our @EXPORT_OK = qw(checksum verify_cksum);
+BEGIN {
+    our @EXPORT_OK = qw(checksum verify_cksum);
+}
 
 sub checksum {
     my $pkt = shift;

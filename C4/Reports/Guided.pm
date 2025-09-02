@@ -18,6 +18,25 @@ package C4::Reports::Guided;
 # along with Koha; if not, see <https://www.gnu.org/licenses>.
 
 use Modern::Perl;
+use base 'Exporter';
+
+BEGIN {
+    our @EXPORT_OK = qw(
+        get_report_types get_report_areas get_report_groups get_columns build_query get_criteria
+        save_report get_saved_reports execute_query
+        get_column_type get_distinct_values save_dictionary get_from_dictionary
+        delete_definition delete_report store_results format_results get_sql get_results
+        nb_rows update_sql
+        strip_limit
+        convert_sql
+        GetReservedAuthorisedValues
+        GetParametersFromSQL
+        IsAuthorisedValueValid
+        ValidateSQLParameters
+        nb_rows update_sql
+        EmailReport
+    );
+}
 
 use CGI  qw ( -utf8 );
 use Carp qw( carp croak );
@@ -38,28 +57,6 @@ use Koha::Patrons;
 use Koha::Reports;
 use Koha::SharedContent;
 use Koha::TemplateUtils qw( process_tt );
-
-our ( @ISA, @EXPORT_OK );
-
-BEGIN {
-    require Exporter;
-    @ISA       = qw(Exporter);
-    @EXPORT_OK = qw(
-        get_report_types get_report_areas get_report_groups get_columns build_query get_criteria
-        save_report get_saved_reports execute_query
-        get_column_type get_distinct_values save_dictionary get_from_dictionary
-        delete_definition delete_report store_results format_results get_sql get_results
-        nb_rows update_sql
-        strip_limit
-        convert_sql
-        GetReservedAuthorisedValues
-        GetParametersFromSQL
-        IsAuthorisedValueValid
-        ValidateSQLParameters
-        nb_rows update_sql
-        EmailReport
-    );
-}
 
 =head1 NAME
 

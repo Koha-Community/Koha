@@ -18,6 +18,18 @@ package Koha::Patron::Password::Recovery;
 # along with Koha; if not, see <https://www.gnu.org/licenses>.
 
 use Modern::Perl;
+use base 'Exporter';
+
+BEGIN {
+    our @EXPORT_OK = qw(
+        ValidateBorrowernumber
+        SendPasswordRecoveryEmail
+        GetValidLinkInfo
+        CompletePasswordRecovery
+        DeleteExpiredPasswordRecovery
+    );
+}
+
 use C4::Context;
 use C4::Letters;
 use Crypt::Eksblowfish::Bcrypt qw( en_base64 );
@@ -25,20 +37,6 @@ use Koha::DateUtils            qw( dt_from_string );
 
 use constant PATRON => 2;
 use constant STAFF  => 5;
-
-our ( @ISA, @EXPORT_OK );
-
-BEGIN {
-    require Exporter;
-    @ISA       = qw(Exporter);
-    @EXPORT_OK = qw(
-        &ValidateBorrowernumber
-        &SendPasswordRecoveryEmail
-        &GetValidLinkInfo
-        &CompletePasswordRecovery
-        &DeleteExpiredPasswordRecovery
-    );
-}
 
 =head1 NAME
 

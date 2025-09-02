@@ -16,24 +16,11 @@ package C4::CourseReserves;
 # along with Koha; if not, see <https://www.gnu.org/licenses>.
 
 use Modern::Perl;
-
-use List::MoreUtils qw( any );
-
-use C4::Context;
-
-use Koha::Courses;
-use Koha::Course::Instructors;
-use Koha::Course::Items;
-use Koha::Course::Reserves;
-use Koha::Checkouts;
-
+use base 'Exporter';
 use vars qw(@FIELDS);
-our ( @ISA, @EXPORT_OK );
 
 BEGIN {
-    require Exporter;
-    @ISA       = qw(Exporter);
-    @EXPORT_OK = qw(
+    our @EXPORT_OK = qw(
         GetCourse
         ModCourse
         GetCourses
@@ -57,6 +44,16 @@ BEGIN {
 
     @FIELDS = ( 'itype', 'ccode', 'homebranch', 'holdingbranch', 'location' );
 }
+
+use List::MoreUtils qw( any );
+
+use C4::Context;
+
+use Koha::Courses;
+use Koha::Course::Instructors;
+use Koha::Course::Items;
+use Koha::Course::Reserves;
+use Koha::Checkouts;
 
 =head1 NAME
 

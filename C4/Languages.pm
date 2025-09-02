@@ -18,23 +18,11 @@ package C4::Languages;
 # You should have received a copy of the GNU General Public License
 # along with Koha; if not, see <https://www.gnu.org/licenses>.
 
-use strict;
-use warnings;
-
-use Carp qw( carp );
-use CGI;
-use List::MoreUtils qw( any );
-use C4::Context;
-use Koha::Caches;
-use Koha::Cache::Memory::Lite;
-use Koha::Language;
-
-our ( @ISA, @EXPORT_OK );
+use Modern::Perl;
+use base 'Exporter';
 
 BEGIN {
-    require Exporter;
-    @ISA       = qw(Exporter);
-    @EXPORT_OK = qw(
+    our @EXPORT_OK = qw(
         getFrameworkLanguages
         getTranslatedLanguages
         getLanguages
@@ -43,6 +31,14 @@ BEGIN {
     push @EXPORT_OK,
         qw(getFrameworkLanguages getTranslatedLanguages getAllLanguages getLanguages get_bidi regex_lang_subtags language_get_description accept_language getlanguage get_rfc4646_from_iso639);
 }
+
+use Carp qw( carp );
+use CGI;
+use List::MoreUtils qw( any );
+use C4::Context;
+use Koha::Caches;
+use Koha::Cache::Memory::Lite;
+use Koha::Language;
 
 =head1 NAME
 

@@ -16,16 +16,10 @@ package Koha::SimpleMARC;
 # along with Koha; if not, see <https://www.gnu.org/licenses>.
 
 use Modern::Perl;
-
-use constant LAST_TRANSACTION_FIELD => q/005/;    # MARC21/UNIMARC
-
-our ( @ISA, @EXPORT_OK );
+use base 'Exporter';
 
 BEGIN {
-    require Exporter;
-    our @ISA = qw(Exporter);
-
-    @EXPORT_OK = qw(
+    our @EXPORT_OK = qw(
         read_field
         add_field
         update_field
@@ -38,6 +32,8 @@ BEGIN {
         update_last_transaction_time
     );
 }
+
+use constant LAST_TRANSACTION_FIELD => q/005/;    # MARC21/UNIMARC
 
 =head1 NAME
 

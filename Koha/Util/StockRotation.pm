@@ -20,18 +20,10 @@ package Koha::Util::StockRotation;
 # along with Koha; if not, see <https://www.gnu.org/licenses>.
 
 use Modern::Perl;
-
-use Koha::Items;
-use Koha::StockRotationItems;
-use Koha::Database;
-
-our ( @ISA, @EXPORT, @EXPORT_OK, %EXPORT_TAGS );
+use base 'Exporter';
 
 BEGIN {
-    require Exporter;
-    @ISA       = qw( Exporter );
-    @EXPORT    = qw( );
-    @EXPORT_OK = qw(
+    our @EXPORT_OK = qw(
         get_branches
         get_stages
         toggle_indemand
@@ -40,8 +32,12 @@ BEGIN {
         add_items_to_rota
         move_to_next_stage
     );
-    %EXPORT_TAGS = ( ALL => [ @EXPORT_OK, @EXPORT ] );
+    our %EXPORT_TAGS = ( ALL => [@EXPORT_OK] );
 }
+
+use Koha::Items;
+use Koha::StockRotationItems;
+use Koha::Database;
 
 =head1 NAME
 

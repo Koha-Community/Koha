@@ -18,6 +18,11 @@ package C4::Auth_with_shibboleth;
 # along with Koha; if not, see <https://www.gnu.org/licenses>.
 
 use Modern::Perl;
+use base 'Exporter';
+
+BEGIN {
+    our @EXPORT_OK = qw(shib_ok logout_shib login_shib_url checkpw_shib get_login_shib);
+}
 
 use C4::Context;
 use Koha::AuthUtils qw( get_script_name );
@@ -29,14 +34,6 @@ use Carp            qw( carp );
 use List::MoreUtils qw( any );
 
 use Koha::Logger;
-
-our ( @ISA, @EXPORT_OK );
-
-BEGIN {
-    require Exporter;
-    @ISA       = qw(Exporter);
-    @EXPORT_OK = qw(shib_ok logout_shib login_shib_url checkpw_shib get_login_shib);
-}
 
 # Check that shib config is not malformed
 
@@ -158,7 +155,7 @@ sub _autocreate {
                 module      => 'members',
                 letter_code => 'WELCOME',
                 branchcode  => $patron->branchcode,
-                ,
+
                 lang   => $patron->lang || 'default',
                 tables => {
                     'branches'  => $patron->branchcode,

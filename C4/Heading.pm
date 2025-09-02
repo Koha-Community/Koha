@@ -18,6 +18,13 @@ package C4::Heading;
 # along with Koha; if not, see <https://www.gnu.org/licenses>.
 
 use Modern::Perl;
+use base 'Exporter';
+
+BEGIN {
+    our @EXPORT_OK = qw(
+        new_from_field
+    );
+}
 
 use MARC::Field;
 use C4::Context;

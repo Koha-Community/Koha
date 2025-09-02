@@ -18,17 +18,14 @@ package C4::Scheduler;
 # along with Koha; if not, see <https://www.gnu.org/licenses>.
 
 use Modern::Perl;
+use base 'Exporter';
+
+BEGIN {
+    our @EXPORT_OK = qw(get_jobs get_at_jobs get_at_job add_at_job remove_at_job);
+}
 
 use C4::Context;
 use Schedule::At;
-
-our ( @ISA, @EXPORT_OK );
-
-BEGIN {
-    require Exporter;
-    @ISA       = qw(Exporter);
-    @EXPORT_OK = qw(get_jobs get_at_jobs get_at_job add_at_job remove_at_job);
-}
 
 =head1 NAME
 

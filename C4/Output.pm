@@ -25,22 +25,10 @@ package C4::Output;
 # templates.
 
 use Modern::Perl;
-
-use HTML::Entities;
-use Scalar::Util qw( looks_like_number );
-use URI::Escape;
-
-use C4::Auth qw( get_template_and_user );
-use C4::Context;
-use C4::Templates;
-
-our ( @ISA, @EXPORT_OK );
+use base 'Exporter';
 
 BEGIN {
-    require Exporter;
-
-    @ISA       = qw(Exporter);
-    @EXPORT_OK = qw(
+    our @EXPORT_OK = qw(
         is_ajax
         ajax_fail
         setlanguagecookie getlanguagecookie pagination_bar parametrized_url
@@ -49,6 +37,14 @@ BEGIN {
         redirect_if_opac_suppressed
     );
 }
+
+use HTML::Entities;
+use Scalar::Util qw( looks_like_number );
+use URI::Escape;
+
+use C4::Auth qw( get_template_and_user );
+use C4::Context;
+use C4::Templates;
 
 =head1 NAME
 

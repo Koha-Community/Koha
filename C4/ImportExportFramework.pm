@@ -17,8 +17,17 @@ package C4::ImportExportFramework;
 # You should have received a copy of the GNU General Public License
 # along with Koha; if not, see <https://www.gnu.org/licenses>.
 
-use strict;
-use warnings;
+use Modern::Perl;
+use base 'Exporter';
+
+BEGIN {
+    our @EXPORT_OK = qw(
+        ExportFramework
+        ImportFramework
+        createODS
+    );
+}
+
 use XML::LibXML;
 use XML::LibXML::XPathContext;
 use Digest::MD5;
@@ -28,18 +37,6 @@ use List::MoreUtils qw( indexes );
 
 use C4::Context;
 use Koha::Logger;
-
-our ( @ISA, @EXPORT_OK );
-
-BEGIN {
-    require Exporter;
-    @ISA       = qw(Exporter);
-    @EXPORT_OK = qw(
-        ExportFramework
-        ImportFramework
-        createODS
-    );
-}
 
 use constant XMLSTR => '<?xml version="1.0" encoding="UTF-8"?>
 <?mso-application progid="Excel.Sheet"?>

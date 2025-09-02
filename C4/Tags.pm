@@ -18,24 +18,12 @@ package C4::Tags;
 # You should have received a copy of the GNU General Public License
 # along with Koha; if not, see <https://www.gnu.org/licenses>.
 
-use strict;
-use warnings;
-use Carp qw( carp );
-use Exporter;
-
+use Modern::Perl;
+use base 'Exporter';
 use C4::Context;
-use Module::Load::Conditional qw( check_install );
-use Koha::Tags;
-use Koha::Tags::Approvals;
-use Koha::Tags::Indexes;
-use constant TAG_FIELDS => qw(tag_id borrowernumber biblionumber term language date_created);
-use constant TAG_SELECT => "SELECT " . join( ',', TAG_FIELDS ) . "\n FROM   tags_all\n";
-
-our ( @ISA, @EXPORT_OK );
 
 BEGIN {
-    @ISA       = qw(Exporter);
-    @EXPORT_OK = qw(
+    our @EXPORT_OK = qw(
         get_tags get_tag_rows
         add_tags
         add_tag
@@ -63,6 +51,15 @@ BEGIN {
         $Lingua::Ispell::path = $ext_dict;
     }
 }
+
+use Carp qw( carp );
+
+use Module::Load::Conditional qw( check_install );
+use Koha::Tags;
+use Koha::Tags::Approvals;
+use Koha::Tags::Indexes;
+use constant TAG_FIELDS => qw(tag_id borrowernumber biblionumber term language date_created);
+use constant TAG_SELECT => "SELECT " . join( ',', TAG_FIELDS ) . "\n FROM   tags_all\n";
 
 =head1 C4::Tags.pm - Support for user tagging of biblios.
 

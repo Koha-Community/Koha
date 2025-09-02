@@ -19,6 +19,25 @@ package C4::Suggestions;
 # along with Koha; if not, see <https://www.gnu.org/licenses>.
 
 use Modern::Perl;
+use base 'Exporter';
+
+BEGIN {
+    our @EXPORT = qw(
+        ConnectSuggestionAndBiblio
+        DelSuggestion
+        GetSuggestion
+        GetSuggestionByStatus
+        GetSuggestionFromBiblionumber
+        GetSuggestionInfoFromBiblionumber
+        GetSuggestionInfo
+        ModStatus
+        ModSuggestion
+        DelSuggestionsOlderThan
+        GetUnprocessedSuggestions
+        MarcRecordFromNewSuggestion
+    );
+}
+
 use CGI qw ( -utf8 );
 
 use C4::Context;
@@ -28,23 +47,6 @@ use C4::Biblio      qw( GetMarcFromKohaField );
 use Koha::DateUtils qw( dt_from_string );
 use Koha::Suggestions;
 use C4::Log qw(logaction);
-
-use base qw(Exporter);
-
-our @EXPORT = qw(
-    ConnectSuggestionAndBiblio
-    DelSuggestion
-    GetSuggestion
-    GetSuggestionByStatus
-    GetSuggestionFromBiblionumber
-    GetSuggestionInfoFromBiblionumber
-    GetSuggestionInfo
-    ModStatus
-    ModSuggestion
-    DelSuggestionsOlderThan
-    GetUnprocessedSuggestions
-    MarcRecordFromNewSuggestion
-);
 
 =head1 NAME
 

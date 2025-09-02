@@ -22,19 +22,17 @@ package Koha::pdfformat::layout2pagesde;
 
 #you can use any PDF::API2 module, all you need to do is return the stringifyed pdf object from the printpdf sub.
 use Modern::Perl;
+use base 'Exporter';
+
+BEGIN {
+    our @EXPORT_OK = qw(printpdf);
+}
+
 use utf8;
 
 use Koha::Number::Price;
 use Koha::DateUtils qw( dt_from_string output_pref );
 use Koha::Libraries;
-
-our ( @ISA, @EXPORT_OK );
-
-BEGIN {
-    require Exporter;
-    @ISA       = qw(Exporter);
-    @EXPORT_OK = qw(printpdf);
-}
 
 #be careful, all the sizes (height, width, etc...) are in mm, not PostScript points (the default measurement of PDF::API2).
 #The constants exported transform that into PostScript points (/mm for millimeter, /in for inch, pt is postscript point, and as so is there only to show what is happening.

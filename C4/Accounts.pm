@@ -18,6 +18,15 @@ package C4::Accounts;
 # along with Koha; if not, see <https://www.gnu.org/licenses>.
 
 use Modern::Perl;
+use base 'Exporter';
+
+BEGIN {
+    our @EXPORT = qw(
+        chargelostitem
+        purge_zero_balance_fees
+    );
+}
+
 use C4::Context;
 use C4::Stats;
 use C4::Members;
@@ -25,17 +34,6 @@ use Koha::Account;
 use Koha::Account::Lines;
 use Koha::Account::Offsets;
 use Koha::Items;
-
-use vars qw(@ISA @EXPORT);
-
-BEGIN {
-    require Exporter;
-    @ISA    = qw(Exporter);
-    @EXPORT = qw(
-        chargelostitem
-        purge_zero_balance_fees
-    );
-}
 
 =head1 NAME
 

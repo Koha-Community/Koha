@@ -19,6 +19,25 @@ package C4::Overdues;
 # along with Koha; if not, see <https://www.gnu.org/licenses>.
 
 use Modern::Perl;
+use base 'Exporter';
+
+BEGIN {
+    # subs to rename (and maybe merge some...)
+    our @EXPORT_OK = qw(
+        CalcFine
+        Getoverdues
+        checkoverdues
+        UpdateFine
+        GetFine
+        GetBranchcodesWithOverdueRules
+        get_chargeable_units
+        GetOverduesForBranch
+        GetOverdueMessageTransportTypes
+        parse_overdues_letter
+        GetIssuesIteminfo
+    );
+}
+
 use Date::Calc                    qw( Today );
 use Date::Manip                   qw( UnixDate );
 use List::MoreUtils               qw( uniq );
@@ -35,28 +54,6 @@ use Koha::Libraries;
 use Koha::Recalls;
 use Koha::Logger;
 use Koha::Patrons;
-
-our ( @ISA, @EXPORT_OK );
-
-BEGIN {
-    require Exporter;
-    @ISA = qw(Exporter);
-
-    # subs to rename (and maybe merge some...)
-    @EXPORT_OK = qw(
-        CalcFine
-        Getoverdues
-        checkoverdues
-        UpdateFine
-        GetFine
-        GetBranchcodesWithOverdueRules
-        get_chargeable_units
-        GetOverduesForBranch
-        GetOverdueMessageTransportTypes
-        parse_overdues_letter
-        GetIssuesIteminfo
-    );
-}
 
 =head1 NAME
 

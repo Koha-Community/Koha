@@ -18,6 +18,27 @@ package C4::Letters;
 # along with Koha; if not, see <https://www.gnu.org/licenses>.
 
 use Modern::Perl;
+use base 'Exporter';
+
+BEGIN {
+    our @EXPORT_OK = qw(
+        GetLetters
+        GetLettersAvailableForALibrary
+        GetLetterTemplates
+        DelLetter
+        GetPreparedLetter
+        GetWrappedLetter
+        SendAlerts
+        GetPrintMessages
+        GetQueuedMessages
+        GetMessage
+        GetMessageTransportTypes
+
+        EnqueueLetter
+        SendQueuedMessages
+        ResendMessage
+    );
+}
 
 use Carp qw( carp croak );
 use Template;
@@ -43,30 +64,6 @@ use Koha::Subscriptions;
 use Koha::Template::Plugin::KohaDates;
 
 use constant SERIALIZED_EMAIL_CONTENT_TYPE => 'message/rfc822';
-
-our ( @ISA, @EXPORT_OK );
-
-BEGIN {
-    require Exporter;
-    @ISA       = qw(Exporter);
-    @EXPORT_OK = qw(
-        GetLetters
-        GetLettersAvailableForALibrary
-        GetLetterTemplates
-        DelLetter
-        GetPreparedLetter
-        GetWrappedLetter
-        SendAlerts
-        GetPrintMessages
-        GetQueuedMessages
-        GetMessage
-        GetMessageTransportTypes
-
-        EnqueueLetter
-        SendQueuedMessages
-        ResendMessage
-    );
-}
 
 our $domain_limits = {};
 

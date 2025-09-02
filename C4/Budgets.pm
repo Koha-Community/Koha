@@ -18,20 +18,10 @@ package C4::Budgets;
 # along with Koha; if not, see <https://www.gnu.org/licenses>.
 
 use Modern::Perl;
-use JSON;
-use C4::Context;
-use Koha::Database;
-use Koha::Patrons;
-use Koha::Acquisition::Invoice::Adjustments;
-use C4::Acquisition;
-use C4::Log qw(logaction);
-
-our ( @ISA, @EXPORT_OK );
+use base 'Exporter';
 
 BEGIN {
-    require Exporter;
-    @ISA       = qw(Exporter);
-    @EXPORT_OK = qw(
+    our @EXPORT_OK = qw(
 
         GetBudget
         GetBudgetByOrderNumber
@@ -83,6 +73,14 @@ BEGIN {
         FieldsForCalculatingFundValues
     );
 }
+
+use JSON;
+use C4::Context;
+use Koha::Database;
+use Koha::Patrons;
+use Koha::Acquisition::Invoice::Adjustments;
+use C4::Acquisition;
+use C4::Log qw(logaction);
 
 # ----------------------------BUDGETS.PM-----------------------------";
 

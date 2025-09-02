@@ -18,21 +18,22 @@ package C4::External::BakerTaylor;
 # You should have received a copy of the GNU General Public License
 # along with Koha; if not, see <https://www.gnu.org/licenses>.
 
+use Modern::Perl;
+use base 'Exporter';
+
+BEGIN {
+    our @EXPORT_OK = qw(availability content_cafe_url image_url link_url http_jacket_link);
+}
+
 use XML::Simple;
 use LWP::Simple qw( get );
 
 use C4::Context;
 
-use Modern::Perl;
-
 use vars qw(%EXPORT_TAGS $VERSION);
-our ( @ISA, @EXPORT_OK );
 
 BEGIN {
-    require Exporter;
-    @ISA       = qw(Exporter);
-    $VERSION   = 3.07.00.049;
-    @EXPORT_OK = qw(availability content_cafe_url image_url link_url http_jacket_link);
+    $VERSION = 3.07.00.049;
 }
 
 # These variables are plack safe: they are initialized each time

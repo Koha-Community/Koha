@@ -22,6 +22,17 @@ package C4::XSLT;
 # along with Koha; if not, see <https://www.gnu.org/licenses>.
 
 use Modern::Perl;
+use base 'Exporter';
+use Koha::XSLT::Base;
+my $engine;    #XSLT Handler object
+
+BEGIN {
+    our @EXPORT_OK = qw(
+        buildKohaItemsNamespace
+        XSLTParse4Display
+    );
+    $engine = Koha::XSLT::Base->new( { do_not_return_source => 1 } );
+}
 
 use C4::Context;
 use C4::Koha   qw( xml_escape );
@@ -29,27 +40,12 @@ use C4::Biblio qw( GetAuthorisedValueDesc GetFrameworkCode GetMarcStructure );
 use Koha::AuthorisedValues;
 use Koha::ItemTypes;
 use Koha::RecordProcessor;
-use Koha::XSLT::Base;
 use Koha::Libraries;
 use Koha::Recalls;
 use Koha::TemplateUtils qw( process_tt );
 use Koha::AdditionalContents;
 use C4::Scrubber;
 use C4::Languages;
-
-my $engine;    #XSLT Handler object
-
-our ( @ISA, @EXPORT_OK );
-
-BEGIN {
-    require Exporter;
-    @ISA       = qw(Exporter);
-    @EXPORT_OK = qw(
-        buildKohaItemsNamespace
-        XSLTParse4Display
-    );
-    $engine = Koha::XSLT::Base->new( { do_not_return_source => 1 } );
-}
 
 =head1 NAME
 

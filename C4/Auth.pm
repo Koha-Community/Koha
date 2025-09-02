@@ -17,8 +17,17 @@ package C4::Auth;
 # You should have received a copy of the GNU General Public License
 # along with Koha; if not, see <https://www.gnu.org/licenses>.
 
-use strict;
-use warnings;
+use Modern::Perl;
+use base 'Exporter';
+
+BEGIN {
+    our @EXPORT_OK = qw(
+        checkauth check_api_auth get_session check_cookie_auth checkpw checkpw_internal checkpw_hash
+        get_all_subpermissions get_cataloguing_page_permissions get_user_subpermissions in_iprange
+        get_template_and_user haspermission create_basic_session
+    );
+}
+
 use Carp qw( croak );
 
 use Digest::MD5 qw( md5_base64 );
@@ -60,19 +69,9 @@ use Koha::Session;
 # use utf8;
 
 use vars qw($ldap $cas $caslogout);
-our ( @ISA, @EXPORT_OK );
 
 BEGIN {
     C4::Context->set_remote_address;
-
-    require Exporter;
-    @ISA = qw(Exporter);
-
-    @EXPORT_OK = qw(
-        checkauth check_api_auth get_session check_cookie_auth checkpw checkpw_internal checkpw_hash
-        get_all_subpermissions get_cataloguing_page_permissions get_user_subpermissions in_iprange
-        get_template_and_user haspermission create_basic_session
-    );
 
     $cas       = C4::Context->preference('casAuthentication');
     $caslogout = C4::Context->preference('casLogout');
@@ -1446,7 +1445,7 @@ sub checkauth {
     # get the inputs from the incoming query
     my @inputs          = ();
     my @inputs_to_clean = qw( login_userid login_password ticket logout.x otp_token );
-    foreach my $name ( param $query) {
+    foreach my $name ( param $query ) {
         next if grep { $name eq $_ } @inputs_to_clean;
         my @value = $query->multi_param($name);
         push @inputs, { name => $name, value => $_ } for @value;

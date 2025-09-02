@@ -19,8 +19,21 @@ package C4::HoldsQueue;
 
 # FIXME: expand perldoc, explain intended logic
 
-use strict;
-use warnings;
+use Modern::Perl;
+use base 'Exporter';
+
+BEGIN {
+    our @EXPORT_OK = qw(
+        CreateQueue
+        GetHoldsQueueItems
+
+        TransportCostMatrix
+        UpdateTransportCostMatrix
+        GetPendingHoldRequestsForBib
+        load_branches_to_pull_from
+        update_queue_for_biblio
+    );
+}
 
 use C4::Context;
 use C4::Circulation qw( GetBranchItemRule );
@@ -35,23 +48,6 @@ use Koha::Patrons;
 use List::Util         qw( shuffle );
 use List::MoreUtils    qw( any );
 use Algorithm::Munkres qw();
-
-our ( @ISA, @EXPORT_OK );
-
-BEGIN {
-    require Exporter;
-    @ISA       = qw(Exporter);
-    @EXPORT_OK = qw(
-        CreateQueue
-        GetHoldsQueueItems
-
-        TransportCostMatrix
-        UpdateTransportCostMatrix
-        GetPendingHoldRequestsForBib
-        load_branches_to_pull_from
-        update_queue_for_biblio
-    );
-}
 
 =head1 FUNCTIONS
 

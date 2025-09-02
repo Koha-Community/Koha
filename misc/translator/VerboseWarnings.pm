@@ -1,8 +1,18 @@
 package VerboseWarnings;
 
 use Modern::Perl;
+use base 'Exporter';
 
-###############################################################################
+BEGIN {
+    our @EXPORT_OK = qw(
+        pedantic_p
+        warn_additional
+        warn_normal
+        warn_pedantic
+        error_additional
+        error_normal
+    );
+}
 
 =head1 NAME
 
@@ -14,25 +24,6 @@ Contains convenience functions to construct Unix-style informational,
 verbose warnings.
 
 =cut
-
-###############################################################################
-
-our ( @ISA, @EXPORT_OK );
-
-BEGIN {
-    require Exporter;
-    @ISA       = qw(Exporter);
-    @EXPORT_OK = qw(
-        pedantic_p
-        warn_additional
-        warn_normal
-        warn_pedantic
-        error_additional
-        error_normal
-    );
-}
-
-###############################################################################
 
 use vars qw( $appName $input $input_abbr $pedantic_p $pedantic_tag $quiet);
 use vars qw( $warned $erred );
@@ -123,5 +114,3 @@ sub warned {
 }
 
 1;
-
-###############################################################################

@@ -18,39 +18,10 @@ package C4::Acquisition;
 # along with Koha; if not, see <https://www.gnu.org/licenses>.
 
 use Modern::Perl;
-use Carp qw( carp croak );
-use Text::CSV_XS;
-use C4::Context;
-use C4::Suggestions qw( GetSuggestion GetSuggestionFromBiblionumber ModSuggestion );
-use C4::Biblio      qw( GetMarcFromKohaField GetMarcStructure IsMarcStructureInternal );
-use C4::Contract    qw( GetContract );
-use C4::Log         qw( logaction );
-use C4::Templates   qw(gettemplate);
-use Koha::DateUtils qw( dt_from_string );
-use Koha::Acquisition::Baskets;
-use Koha::Acquisition::Booksellers;
-use Koha::Acquisition::Invoices;
-use Koha::Acquisition::Orders;
-use Koha::AdditionalFieldValue;
-use Koha::Biblios;
-use Koha::Exceptions;
-use Koha::Items;
-use Koha::Number::Price;
-use Koha::Libraries;
-use Koha::CsvProfiles;
-use Koha::Patrons;
-
-use C4::Koha;
-
-use MARC::Field;
-use JSON qw( to_json );
-
-our ( @ISA, @EXPORT_OK );
+use base 'Exporter';
 
 BEGIN {
-    require Exporter;
-    @ISA       = qw(Exporter);
-    @EXPORT_OK = qw(
+    our @EXPORT_OK = qw(
         GetBasket NewBasket ReopenBasket ModBasket
         GetBasketAsCSV GetBasketGroupAsCSV
         GetBasketsByBookseller GetBasketsByBasketgroup
@@ -94,6 +65,33 @@ BEGIN {
         get_rounding_sql
     );
 }
+
+use Carp qw( carp croak );
+use Text::CSV_XS;
+use C4::Context;
+use C4::Suggestions qw( GetSuggestion GetSuggestionFromBiblionumber ModSuggestion );
+use C4::Biblio      qw( GetMarcFromKohaField GetMarcStructure IsMarcStructureInternal );
+use C4::Contract    qw( GetContract );
+use C4::Log         qw( logaction );
+use C4::Templates   qw(gettemplate);
+use Koha::DateUtils qw( dt_from_string );
+use Koha::Acquisition::Baskets;
+use Koha::Acquisition::Booksellers;
+use Koha::Acquisition::Invoices;
+use Koha::Acquisition::Orders;
+use Koha::AdditionalFieldValue;
+use Koha::Biblios;
+use Koha::Exceptions;
+use Koha::Items;
+use Koha::Number::Price;
+use Koha::Libraries;
+use Koha::CsvProfiles;
+use Koha::Patrons;
+
+use C4::Koha;
+
+use MARC::Field;
+use JSON qw( to_json );
 
 =head1 NAME
 
