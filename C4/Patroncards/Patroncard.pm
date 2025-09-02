@@ -24,8 +24,8 @@ use autouse 'Data::Dumper' => qw(Dumper);
 
 #use Font::TTFMetrics;
 
-use C4::Creators::Lib    qw( get_unit_values );
-use C4::Creators::PDF    qw(StrWidth);
+use C4::Creators::Lib qw( get_unit_values );
+use C4::Creators::PDF;
 use C4::Patroncards::Lib qw(
     box
     get_borrower_attributes
