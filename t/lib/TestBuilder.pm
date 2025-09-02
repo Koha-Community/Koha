@@ -2,10 +2,10 @@ package t::lib::TestBuilder;
 
 use Modern::Perl;
 
-use Koha::Database  qw( schema );
-use C4::Biblio      qw( AddBiblio );
-use Koha::Biblios   qw( _type );
-use Koha::Items     qw( _type );
+use Koha::Database;
+use C4::Biblio qw( AddBiblio );
+use Koha::Biblios;
+use Koha::Items;
 use Koha::DateUtils qw( dt_from_string );
 
 use Bytes::Random::Secure;
