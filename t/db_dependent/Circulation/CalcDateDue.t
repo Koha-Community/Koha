@@ -9,7 +9,7 @@ use DBI;
 use DateTime;
 use t::lib::Mocks;
 use t::lib::TestBuilder;
-use C4::Calendar    qw( new insert_single_holiday delete_holiday insert_week_day_holiday );
+use C4::Calendar;
 use Koha::DateUtils qw( dt_from_string );
 use Koha::Library::Hours;
 use Koha::CirculationRules;

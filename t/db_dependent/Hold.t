@@ -22,7 +22,7 @@ use C4::Context;
 use C4::Biblio qw( AddBiblio );
 use Koha::Database;
 use Koha::Libraries;
-use C4::Calendar qw( new insert_single_holiday );
+use C4::Calendar;
 use Koha::Patrons;
 use Koha::Holds;
 use Koha::Item;
@@ -356,7 +356,8 @@ subtest "delete() tests" => sub {
         "Koha::Hold->delete should have deleted the hold"
     );
 
-    my $number_of_logs = $schema->resultset('ActionLog')
+    my $number_of_logs =
+        $schema->resultset('ActionLog')
         ->search( { module => 'HOLDS', action => 'DELETE', object => $hold->{reserve_id} } )->count;
     is( $number_of_logs, 0, 'With HoldsLogs, Koha::Hold->delete shouldn\'t have been logged' );
 
@@ -376,7 +377,8 @@ subtest "delete() tests" => sub {
         "Koha::Hold->delete should have deleted the hold"
     );
 
-    $number_of_logs = $schema->resultset('ActionLog')
+    $number_of_logs =
+        $schema->resultset('ActionLog')
         ->search( { module => 'HOLDS', action => 'DELETE', object => $hold->{reserve_id} } )->count;
     is( $number_of_logs, 1, 'With HoldsLogs, Koha::Hold->delete should have been logged' );
 

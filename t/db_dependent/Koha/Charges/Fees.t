@@ -29,7 +29,7 @@ use t::lib::TestBuilder;
 use t::lib::Dates;
 
 use Time::Fake;
-use C4::Calendar    qw( new insert_week_day_holiday delete_holiday );
+use C4::Calendar;
 use Koha::DateUtils qw(dt_from_string);
 
 BEGIN {

@@ -25,7 +25,7 @@ use Test::More tests => 19;
 use t::lib::Mocks;
 use t::lib::TestBuilder;
 
-use C4::Calendar qw( new );
+use C4::Calendar;
 use Koha::Biblioitems;
 use Koha::Libraries;
 use Koha::Database;

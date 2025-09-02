@@ -12,7 +12,7 @@ use Test::NoWarnings;
 use Test::More tests => 65;
 use Data::Dumper;
 
-use C4::Calendar qw( new insert_single_holiday );
+use C4::Calendar;
 use C4::Context;
 use C4::Members;
 use C4::Circulation qw( AddIssue AddReturn );

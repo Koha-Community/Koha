@@ -34,7 +34,7 @@ use t::lib::Mocks;
 use t::lib::TestBuilder;
 
 use C4::Accounts;
-use C4::Calendar qw( new insert_single_holiday insert_week_day_holiday delete_holiday );
+use C4::Calendar;
 use C4::Circulation
     qw( AddIssue AddReturn CanBookBeRenewed GetIssuingCharges AddRenewal GetSoonestRenewDate GetLatestAutoRenewDate LostItem GetUpcomingDueIssues CanBookBeIssued AddIssuingCharge MarkIssueReturned ProcessOfflinePayment transferbook );
 use C4::Biblio;
