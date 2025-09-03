@@ -292,7 +292,8 @@ sub buildKohaItemsNamespace {
         $items_rs = Koha::Items->new;
     }
 
-    my $items = $items_rs->search( $query, { prefetch => [ 'branchtransfers', 'reserves' ] } );
+    my $items =
+        $items_rs->search( $query, { prefetch => [ 'current_branchtransfers', 'reserves', 'tmp_holdsqueue' ] } );
 
     my $shelflocations = {
         map { $_->{authorised_value} => $_->{opac_description} }
@@ -333,10 +334,10 @@ sub buildKohaItemsNamespace {
         } elsif ( $item->has_pending_hold ) {
             $status    = 'other';
             $substatus = 'Pending hold';
-        } elsif ( $item->holds->waiting->count ) {
+        } elsif ( $item->holds->count && $item->holds->waiting->count ) {
             $status    = 'other';
             $substatus = 'Hold waiting';
-        } elsif ( $item->get_transfer ) {
+        } elsif ( $item->_result->current_branchtransfers->count ) {
             $status    = 'other';
             $substatus = 'In transit';
         } elsif ( $item->damaged && !C4::Context->preference('AllowHoldsOnDamagedItems') ) {
