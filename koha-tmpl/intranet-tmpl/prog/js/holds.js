@@ -976,7 +976,7 @@ $(document).ready(function () {
                                 <strong>Biblionumber:</strong> ${item.biblio_id} <br>
                                 <strong>Item:</strong> ${item.external_id} <br>
                                 <input id="new_itemnumber_${item.item_id}" name="new_itemnumber" type="checkbox" value="${item.item_id}">
-                                <label for="new_itemnumber_${item.item_id}">Move all selected item level holds to this item</label>
+                                <label for="new_itemnumber_${item.item_id}">${__("Move all selected item level holds to this item")}</label>
                                 <input id="new_biblionumber_${item.item_id}" name="new_biblionumber" type="hidden" value="${item.biblio_id}">
                             </div>
                             <hr />
@@ -985,7 +985,7 @@ $(document).ready(function () {
                     $("#itemResultMessage").html(resultHtml);
                 } else {
                     $("#itemResultMessage").html(`
-                        <div class="alert alert-warning">No item found with barcode: ${externalID}.</div>
+                        <div class="alert alert-warning">${__("No item found with barcode: %s").format(externalID)}.</div>
                     `);
                 }
             },
@@ -1030,7 +1030,7 @@ $(document).ready(function () {
                             <div class="alert alert-success">
                                 <strong>Biblionumber:</strong> ${item.biblio_id} <br>
                                 <input id="new_biblionumber_${item.biblio_id}" name="new_biblionumber" type="checkbox" value="${item.biblio_id}">
-                                <label for="new_biblionumber_${item.biblio_id}">Move all selected record level holds to this record</label>
+                                <label for="new_biblionumber_${item.biblio_id}">${__("Move all selected record level holds to this record")}</label>
                             </div>
                             <hr />
                         `;
@@ -1038,7 +1038,7 @@ $(document).ready(function () {
                     $("#biblioResultMessage").html(resultHtml);
                 } else {
                     $("#biblioResultMessage").html(`
-                        <div class="alert alert-warning">No record found with biblionumber: ${biblioID}.</div>
+                        <div class="alert alert-warning">${__("No record found with biblionumber: %s").format(externalID)}.</div>
                     `);
                 }
             },
@@ -1085,11 +1085,11 @@ $(document).ready(function () {
                 let found_status = $(this).data("found");
                 if (item_level_hold && (!item_waiting || !item_intransit)) {
                     $("#move_hold_item_selection table").append(
-                        `<tr><td><input type="checkbox" name="move_hold_id" value="${reserve_id}" checked /></td><td>${reserve_id}</td><td>Biblionumber: <a target="_blank" href="/cgi-bin/koha/reserve/request.pl?biblionumber=${reserve_biblionumber}">${reserve_biblionumber}</a> Itemnumber: <a target="_blank" href="/cgi-bin/koha/catalogue/moredetail.pl?biblionumber=${reserve_biblionumber}#item${reserve_itemnumber}">${reserve_itemnumber}</a></td><td>${error_message}</td></tr>`
+                        `<tr><td><input type="checkbox" name="move_hold_id" value="${reserve_id}" checked /></td><td>${reserve_id}</td><td>${__("Biblionumber:")} <a target="_blank" href="/cgi-bin/koha/reserve/request.pl?biblionumber=${reserve_biblionumber}">${reserve_biblionumber}</a> ${__("Itemnumber:")} <a target="_blank" href="/cgi-bin/koha/catalogue/moredetail.pl?biblionumber=${reserve_biblionumber}#item${reserve_itemnumber}">${reserve_itemnumber}</a></td><td>${error_message}</td></tr>`
                     );
                 } else {
                     $("#move_hold_item_selection table").append(
-                        `<tr><td><input type="checkbox" name="move_hold_id" value="${reserve_id}" disabled /></td><td>${reserve_id}</td><td>Biblionumber: <a target="_blank" href="/cgi-bin/koha/reserve/request.pl?biblionumber=${reserve_biblionumber}">${reserve_biblionumber}</a> Itemnumber: <a target="_blank" href="/cgi-bin/koha/catalogue/moredetail.pl?biblionumber=${reserve_biblionumber}#item${reserve_itemnumber}">${reserve_itemnumber}</a></td><td>${error_message}</td></tr>`
+                        `<tr><td><input type="checkbox" name="move_hold_id" value="${reserve_id}" disabled /></td><td>${reserve_id}</td><td>Biblionumber: <a target="_blank" href="/cgi-bin/koha/reserve/request.pl?biblionumber=${reserve_biblionumber}">${reserve_biblionumber}</a> ${__("Itemnumber:")} <a target="_blank" href="/cgi-bin/koha/catalogue/moredetail.pl?biblionumber=${reserve_biblionumber}#item${reserve_itemnumber}">${reserve_itemnumber}</a></td><td>${error_message}</td></tr>`
                     );
                 }
             });
@@ -1119,11 +1119,11 @@ $(document).ready(function () {
                 let found_status = $(this).data("found");
                 if (!item_level_hold && (!item_waiting || !item_intransit)) {
                     $("#move_hold_biblio_selection table").append(
-                        `<tr><td><input type="checkbox" name="move_hold_id" value="${reserve_id}" checked /><td>${reserve_id}</td><td>Biblionumber: <a target="_blank" href="/cgi-bin/koha/reserve/request.pl?biblionumber=${reserve_biblionumber}">${reserve_biblionumber}</a></td><td>${error_message}</td></tr>`
+                        `<tr><td><input type="checkbox" name="move_hold_id" value="${reserve_id}" checked /><td>${reserve_id}</td><td>${__("Biblionumber:")} <a target="_blank" href="/cgi-bin/koha/reserve/request.pl?biblionumber=${reserve_biblionumber}">${reserve_biblionumber}</a></td><td>${error_message}</td></tr>`
                     );
                 } else {
                     $("#move_hold_biblio_selection table").append(
-                        `<tr><td><input type="checkbox" name="move_hold_id" value="${reserve_id}" disabled /><td>${reserve_id}</td><td>Biblionumber: <a target="_blank" href="/cgi-bin/koha/reserve/request.pl?biblionumber=${reserve_biblionumber}">${reserve_biblionumber}</a></td><td>${error_message}</td></tr>`
+                        `<tr><td><input type="checkbox" name="move_hold_id" value="${reserve_id}" disabled /><td>${reserve_id}</td><td>${__("Biblionumber:")} <a target="_blank" href="/cgi-bin/koha/reserve/request.pl?biblionumber=${reserve_biblionumber}">${reserve_biblionumber}</a></td><td>${error_message}</td></tr>`
                     );
                 }
             });
