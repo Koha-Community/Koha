@@ -229,6 +229,15 @@ Is the hold placed at item level
 
 Is this a non priority hold
 
+=head2 hold_group_id
+
+  data_type: 'integer'
+  extra: {unsigned => 1}
+  is_foreign_key: 1
+  is_nullable: 1
+
+The id of a group of titles reservations fulfilled when one title is picked
+
 =cut
 
 __PACKAGE__->add_columns(
@@ -308,6 +317,13 @@ __PACKAGE__->add_columns(
   { data_type => "tinyint", default_value => 0, is_nullable => 0 },
   "non_priority",
   { data_type => "tinyint", default_value => 0, is_nullable => 0 },
+  "hold_group_id",
+  {
+    data_type => "integer",
+    extra => { unsigned => 1 },
+    is_foreign_key => 1,
+    is_nullable => 1,
+  },
 );
 
 =head1 PRIMARY KEY
@@ -404,6 +420,26 @@ __PACKAGE__->belongs_to(
   },
 );
 
+=head2 hold_group
+
+Type: belongs_to
+
+Related object: L<Koha::Schema::Result::HoldGroup>
+
+=cut
+
+__PACKAGE__->belongs_to(
+  "hold_group",
+  "Koha::Schema::Result::HoldGroup",
+  { hold_group_id => "hold_group_id" },
+  {
+    is_deferrable => 1,
+    join_type     => "LEFT",
+    on_delete     => "SET NULL",
+    on_update     => "CASCADE",
+  },
+);
+
 =head2 item_group
 
 Type: belongs_to
@@ -465,8 +501,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07051 @ 2024-10-30 17:21:09
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:bmt1FkgXdJSOMQFdAHO3cQ
+# Created by DBIx::Class::Schema::Loader v0.07051 @ 2025-09-03 17:08:22
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:57Fw53HngTXhDU7kVEjqYw
 
 __PACKAGE__->belongs_to(
   "item",
