@@ -997,6 +997,18 @@ $(document).ready(function () {
         $("#move_hold_biblio_confirm").prop("disabled", true);
 
         let biblioID = parseInt($("#biblio_id").val());
+
+        if (Number.isNaN(biblioID)) {
+            $("#biblioResultMessage").html(
+                '<div class="alert alert-warning">' +
+                    __("%s is not a valid biblionumber").format(
+                        $("#biblio_id").val()
+                    ) +
+                    "</div>"
+            );
+            return;
+        }
+
         let apiUrl = `/api/v1/biblios?q={"biblio_id":"${encodeURIComponent(biblioID)}"}`;
         $.ajax({
             url: apiUrl,
