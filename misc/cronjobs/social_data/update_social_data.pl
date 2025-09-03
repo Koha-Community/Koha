@@ -6,7 +6,7 @@ use Koha::Script -cron;
 use C4::Context;
 use C4::SocialData;
 
-my $url = C4::Context->preference( "Babeltheque_url_update" );
+my $url = quotemeta( C4::Context->preference("Babeltheque_url_update") );
 my $output_dir = qq{/tmp};
 my $output_filepath = qq{$output_dir/social_data.csv};
 system( qq{/bin/rm -f $output_filepath} );
