@@ -45,6 +45,12 @@ subtest 'Tests for CalcDateDue related to dateexpiry' => sub {
 };
 
 sub can_book_be_issued {
+    my $library = $builder->build_object( { class => 'Koha::Libraries' } );
+    t::lib::Mocks::mock_userenv(
+        {
+            branchcode => $library->branchcode,
+        }
+    );
     my $item   = $builder->build_sample_item;
     my $patron = $builder->build_object(
         {
