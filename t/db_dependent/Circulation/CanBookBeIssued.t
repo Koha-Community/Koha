@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 9;
+use Test::More tests => 10;
 
 use DateTime;
 use C4::Circulation qw( CanBookBeIssued AddIssue CheckValidBarcode AddReturn );
