@@ -398,6 +398,11 @@ caption {
     background-color: #FFD000;
 }
 
+.selected-row,
+.selected-row td {
+    background-color: #D0FF00;
+}
+
 .warned-row,
 .warned-row td {
     background-color: #FF9000;
@@ -410,7 +415,7 @@ caption {
 
 tbody {
     tr {
-        &:nth-child( odd ):not( .dtrg-group, .active, .ok, .highlighted-row ) {
+        &:nth-child( odd ):not( .dtrg-group, .active, .ok, .highlighted-row, .selected-row ) {
             td {
                 &:not( .bg-danger, .bg-warning, .bg-info, .bg-success, .bg-primary, .highlighted-row ) {
                     background-color: $table-odd-row;

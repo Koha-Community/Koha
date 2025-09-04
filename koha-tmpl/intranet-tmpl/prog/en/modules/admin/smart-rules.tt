@@ -1462,7 +1462,7 @@
         function clear_edit() {
             var cancel = confirm(_("Are you sure you want to cancel your changes?"));
             if (!cancel) return;
-            $("#default-circulation-rules td").removeClass("highlighted-row");
+            $("#default-circulation-rules tr").removeClass("highlighted-row");
             var edit_row = $("#edit_row");
             $(edit_row)
                 .find("input")
@@ -1506,6 +1506,17 @@
             $("#branch").change(function () {
                 $("#selectlibrary").submit();
             });
+            $("#default-circulation-rules tbody tr")
+                .not("#edit_row")
+                .click(function () {
+                    if ($(this).hasClass("highlighted-row")) {
+                        return;
+                    } else if ($(this).hasClass("selected-row")) {
+                        $(this).removeClass("selected-row");
+                    } else {
+                        $(this).addClass("selected-row");
+                    }
+                });
             $(".editrule").click(function () {
                 if (
                     $("#edit_row")
@@ -1517,13 +1528,13 @@
                     var edit = confirm(_("Are you sure you want to edit another rule?"));
                     if (!edit) return false;
                 }
-                $("#default-circulation-rules td").removeClass("highlighted-row");
+                $("#default-circulation-rules tr").removeClass("highlighted-row");
+                $(this).closest("tr").addClass("highlighted-row").removeClass("selected-row");
                 $(this)
                     .parent()
                     .parent()
                     .find("td")
                     .each(function (i) {
-                        $(this).addClass("highlighted-row");
                         itm_code = $(this).data("code");
                         itm_text = $(this).text();
                         itm_text = itm_text.replace(/^\s*|\s*$/g, "");
