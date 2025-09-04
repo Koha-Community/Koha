@@ -2283,6 +2283,12 @@ sub merge_with {
                     my $from_biblio = Koha::Biblios->find($bn_merge);
                     $from_biblio->items->move_to_biblio($self);
 
+                    # Move item groups
+                    $from_biblio->item_groups->update(
+                        { biblio_id   => $ref_biblionumber },
+                        { no_triggers => 1 }
+                    );
+
                     # Move article requests
                     $from_biblio->article_requests->update(
                         { biblionumber => $ref_biblionumber },
