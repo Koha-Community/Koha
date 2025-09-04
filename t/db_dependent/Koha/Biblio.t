@@ -1987,7 +1987,7 @@ sub host_record {
 }
 
 subtest 'check_booking tests' => sub {
-    plan tests => 5;
+    plan tests => 6;
 
     $schema->storage->txn_begin;
 
@@ -2101,6 +2101,73 @@ subtest 'check_booking tests' => sub {
         1,
         "Koha::Item->check_booking takes account of cancelled status in bookings check"
     );
+
+    my $patron_1 = $builder->build_object( { class => 'Koha::Patrons' } );
+    my $library  = $builder->build_object( { class => 'Koha::Libraries' } );
+    t::lib::Mocks::mock_userenv( { branchcode => $library->id } );
+
+    # Create a a test biblio with 8 items
+    my $new_biblio = $builder->build_object(
+        {
+            class => 'Koha::Biblios',
+            value => { title => 'Test biblio with items' }
+        }
+    );
+    my @new_items;
+    for ( 1 .. 8 ) {
+        my $item = $builder->build_object(
+            {
+                class => 'Koha::Items',
+                value => {
+                    homebranch    => $library->branchcode,
+                    holdingbranch => $library->branchcode,
+                    biblionumber  => $new_biblio->biblionumber,
+                    bookable      => 1
+                }
+            }
+        );
+        push @new_items, $item;
+    }
+
+    my @item_numbers  = map { $_->itemnumber } @new_items;
+    my @item_barcodes = map { $_->barcode } @new_items;
+
+    # Check-out all of those 6 items
+    @item_barcodes = splice @item_barcodes, 0, 6;
+    for my $item_barcode (@item_barcodes) {
+        AddIssue( $patron_1, $item_barcode );
+    }
+
+    @item_numbers = splice @item_numbers, 0, 6;
+    my @new_bookings;
+    for my $itemnumber (@item_numbers) {
+        my $booking = $builder->build_object(
+            {
+                class => 'Koha::Bookings',
+                value => {
+                    biblio_id  => $new_biblio->biblionumber,
+                    item_id    => $itemnumber,
+                    start_date => $start_2,
+                    end_date   => $end_2,
+                    status     => 'new'
+                }
+            }
+        );
+        push @new_bookings, $booking;
+    }
+
+    # Place a booking on one of the 2 remaining items
+    my $item = ( grep { $_->itemnumber ne $new_bookings[0]->item_id } @new_items )[0];
+
+    my $check_booking = $new_biblio->get_from_storage->check_booking(
+        {
+            start_date => $start_2,
+            end_date   => $end_2,
+            item_id    => $item->itemnumber
+        }
+    );
+
+    is( $check_booking, 1, "Koha::Biblio->check_booking returns true when we can book on an item" );
 
     $schema->storage->txn_rollback;
 };
