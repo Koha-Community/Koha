@@ -649,7 +649,7 @@ subtest 'bookings() tests' => sub {
 };
 
 subtest 'merge of records' => sub {
-    plan tests => 8;
+    plan tests => 9;
 
     subtest 'move items' => sub {
         plan tests => 9;
@@ -698,6 +698,26 @@ subtest 'merge of records' => sub {
 
         is( $hold1->get_from_storage->biblionumber, $biblio1->biblionumber );
         is( $hold2->get_from_storage->biblionumber, $biblio1->biblionumber );
+
+        $schema->storage->txn_rollback;
+    };
+
+    subtest 'move item groups' => sub {
+        plan tests => 3;
+        $schema->storage->txn_begin;
+
+        my $biblio1 = $builder->build_sample_biblio;
+        my $biblio2 = $builder->build_sample_biblio;
+
+        my $ig1 = $builder->build_object(
+            { class => 'Koha::Biblio::ItemGroups', value => { biblio_id => $biblio1->biblionumber } } );
+        my $ig2 = $builder->build_object(
+            { class => 'Koha::Biblio::ItemGroups', value => { biblio_id => $biblio2->biblionumber } } );
+
+        warning_like { $biblio1->merge_with( [ $biblio2->biblionumber ] ) } q{};
+
+        is( $ig1->get_from_storage->biblio_id, $biblio1->biblionumber );
+        is( $ig2->get_from_storage->biblio_id, $biblio1->biblionumber );
 
         $schema->storage->txn_rollback;
     };
