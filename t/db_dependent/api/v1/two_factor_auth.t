@@ -90,19 +90,7 @@ subtest 'registration and verification' => sub {
     $tx = $t->ua->build_tx( POST => "/api/v1/auth/two-factor/registration" );
     $tx->req->cookies( { name => 'CGISESSID', value => $session->id } );
     $tx->req->env( { REMOTE_ADDR => $remote_address } );
-    {
-        # Ignore the following warning
-        # Use of uninitialized value $aMask[1383] in bitwise xor (^) at /usr/local/share/perl/5.36.0/GD/Barcode/QRcode.pm line 217.
-        # We do not want to expect it (using Test::Warn): it is a bug from GD::Barcode
-        local $SIG{__WARN__} = sub { };
-        my $dup_err;
-        local *STDERR;
-        open STDERR, ">>", \$dup_err;
-
-        $t->request_ok($tx)->status_is(201);
-
-        close STDERR;
-    }
+    $t->request_ok($tx)->status_is(201);
     my $secret32 = $t->tx->res->json->{secret32};
 
     $tx = $t->ua->build_tx( POST => "/api/v1/auth/two-factor/registration/verification" );
@@ -132,19 +120,7 @@ subtest 'registration and verification' => sub {
     $tx = $t->ua->build_tx( POST => "/api/v1/auth/two-factor/registration" );
     $tx->req->cookies( { name => 'CGISESSID', value => $session->id } );
     $tx->req->env( { REMOTE_ADDR => $remote_address } );
-    {
-        # Ignore the following warning
-        # Use of uninitialized value $aMask[1383] in bitwise xor (^) at /usr/local/share/perl/5.36.0/GD/Barcode/QRcode.pm line 217.
-        # We do not want to expect it (using Test::Warn): it is a bug from GD::Barcode
-        local $SIG{__WARN__} = sub { };
-        my $dup_err;
-        local *STDERR;
-        open STDERR, ">>", \$dup_err;
-
-        $t->request_ok($tx)->status_is(201);
-
-        close STDERR;
-    }
+    $t->request_ok($tx)->status_is(201);
     $secret32 = $t->tx->res->json->{secret32};
 
     $auth     = Koha::Auth::TwoFactorAuth->new( { patron => $patron, secret32 => $secret32 } );
