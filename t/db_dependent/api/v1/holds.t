@@ -1239,7 +1239,7 @@ subtest 'pickup_locations() tests' => sub {
 
 subtest 'edit() tests' => sub {
 
-    plan tests => 63;
+    plan tests => 77;
 
     $schema->storage->txn_begin;
 
@@ -1358,6 +1358,28 @@ subtest 'edit() tests' => sub {
     is( $biblio_hold->reservedate,    '2022-01-02', 'Hold date changed correctly' );
     is( $biblio_hold->expirationdate, '2022-03-02', 'Expiration date changed correctly' );
 
+    $biblio_hold_data = {
+        patron_expiration_date => '2022-05-02',
+    };
+
+    $t->patch_ok( "//$userid:$password@/api/v1/holds/" . $biblio_hold->id => json => $biblio_hold_data )
+        ->status_is(200);
+
+    $biblio_hold->discard_changes;
+    is( $biblio_hold->patron_expiration_date, '2022-05-02', 'Patron expiration date changed correctly' );
+
+    $biblio_hold_data = {
+        expiration_date        => '2022-07-02',
+        patron_expiration_date => '2022-09-02',
+    };
+
+    $t->patch_ok( "//$userid:$password@/api/v1/holds/" . $biblio_hold->id => json => $biblio_hold_data )
+        ->status_is(200);
+
+    $biblio_hold->discard_changes;
+    is( $biblio_hold->expirationdate,         '2022-07-02', 'Expiration date changed correctly' );
+    is( $biblio_hold->patron_expiration_date, '2022-09-02', 'Patron expiration date changed correctly' );
+
     # Test item-level holds
     my $item_hold = $builder->build_object(
         {
@@ -1424,6 +1446,24 @@ subtest 'edit() tests' => sub {
     $item_hold->discard_changes;
     is( $item_hold->reservedate,    '2022-01-02', 'Hold date changed correctly' );
     is( $item_hold->expirationdate, '2022-03-02', 'Expiration date changed correctly' );
+
+    $item_hold_data = { patron_expiration_date => '2022-05-02' };
+
+    $t->patch_ok( "//$userid:$password@/api/v1/holds/" . $item_hold->id => json => $item_hold_data )->status_is(200);
+
+    $item_hold->discard_changes;
+    is( $item_hold->patron_expiration_date, '2022-05-02', 'Patron expiration date changed correctly' );
+
+    $item_hold_data = {
+        expiration_date        => '2022-07-02',
+        patron_expiration_date => '2022-09-02',
+    };
+
+    $t->patch_ok( "//$userid:$password@/api/v1/holds/" . $item_hold->id => json => $item_hold_data )->status_is(200);
+
+    $item_hold->discard_changes;
+    is( $item_hold->expirationdate,         '2022-07-02', 'Expiration date changed correctly' );
+    is( $item_hold->patron_expiration_date, '2022-09-02', 'Patron expiration date changed correctly' );
 
     # Test item_level and item_id parameters
     my $item_2 = $builder->build_sample_item( { biblionumber => $biblio->biblionumber } );
@@ -1573,6 +1613,7 @@ subtest 'add() tests' => sub {
         biblio_id         => $biblio_hold_api_data->{biblio_id},
         patron_id         => $biblio_hold_api_data->{patron_id},
         pickup_library_id => $library_1->branchcode,
+        expiration_date   => '2022-11-02',
     };
 
     $t->post_ok( "//$userid:$password@/api/v1/holds" => json => $biblio_hold_data )
@@ -1600,9 +1641,10 @@ subtest 'add() tests' => sub {
     $biblio_hold_api_data = $biblio_hold->to_api;
     $biblio_hold->delete;
     $biblio_hold_data = {
-        biblio_id         => $biblio_hold_api_data->{biblio_id},
-        patron_id         => $biblio_hold_api_data->{patron_id},
-        pickup_library_id => $library_1->branchcode,
+        biblio_id              => $biblio_hold_api_data->{biblio_id},
+        patron_id              => $biblio_hold_api_data->{patron_id},
+        pickup_library_id      => $library_1->branchcode,
+        patron_expiration_date => '2022-11-02',
     };
 
     $t->post_ok( "//$userid:$password@/api/v1/holds" => json => $biblio_hold_data )
@@ -1628,10 +1670,12 @@ subtest 'add() tests' => sub {
     my $item_hold_api_data = $item_hold->to_api;
     $item_hold->delete;
     my $item_hold_data = {
-        biblio_id         => $item_hold_api_data->{biblio_id},
-        item_id           => $item_hold_api_data->{item_id},
-        patron_id         => $item_hold_api_data->{patron_id},
-        pickup_library_id => $library_1->branchcode,
+        biblio_id              => $item_hold_api_data->{biblio_id},
+        item_id                => $item_hold_api_data->{item_id},
+        patron_id              => $item_hold_api_data->{patron_id},
+        pickup_library_id      => $library_1->branchcode,
+        expiration_date        => '2022-11-02',
+        patron_expiration_date => '2022-11-02',
     };
 
     $t->post_ok( "//$userid:$password@/api/v1/holds" => json => $item_hold_data )

@@ -1591,7 +1591,7 @@ subtest 'IsAvailableForItemLevelRequest() tests' => sub {
 
 subtest 'AddReserve() tests' => sub {
 
-    plan tests => 2;
+    plan tests => 4;
 
     $schema->storage->txn_begin;
 
@@ -1636,6 +1636,79 @@ subtest 'AddReserve() tests' => sub {
 
     $patron->discard_changes;
     isnt( $patron->lastseen, undef, "Patron activity tracked when hold is a valid trigger" );
+
+    my $reserve_id = AddReserve(
+        {
+            branchcode      => $library->branchcode,
+            borrowernumber  => $patron->id,
+            biblionumber    => $biblio->id,
+            expiration_date => '2040-04-02'
+        }
+    );
+
+    my $hold = Koha::Holds->find($reserve_id);
+
+    is( $hold->expirationdate, '2040-04-02', 'Successfully set expiration date' );
+
+    $reserve_id = AddReserve(
+        {
+            branchcode             => $library->branchcode,
+            borrowernumber         => $patron->id,
+            biblionumber           => $biblio->id,
+            patron_expiration_date => '2040-04-02'
+        }
+    );
+
+    $hold = Koha::Holds->find($reserve_id);
+    is( $hold->patron_expiration_date, '2040-04-02', 'Successfully set patron expiration date' );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'ModReserve() tests' => sub {
+
+    plan tests => 2;
+
+    $schema->storage->txn_begin;
+
+    my $library = $builder->build_object( { class => 'Koha::Libraries' } );
+    my $patron  = $builder->build_object( { class => 'Koha::Patrons', value => { lastseen => undef } } );
+    my $biblio  = $builder->build_sample_biblio;
+
+    my $reserve_id = AddReserve(
+        {
+            branchcode     => $library->branchcode,
+            borrowernumber => $patron->id,
+            biblionumber   => $biblio->id,
+        }
+    );
+
+    my $hold = Koha::Holds->find($reserve_id);
+
+    ModReserve(
+        {
+            reserve_id     => $hold->id,
+            branchcode     => $hold->branchcode,
+            expirationdate => '2040-04-02',
+            rank           => $hold->priority,
+            reservedate    => $hold->reservedate,
+        }
+    );
+
+    $hold = Koha::Holds->find($reserve_id);
+    is( $hold->expirationdate, '2040-04-02', 'Successfully updated expiration date' );
+
+    ModReserve(
+        {
+            reserve_id             => $reserve_id,
+            rank                   => $hold->priority,
+            patron_expiration_date => '2040-04-02',
+            branchcode             => $hold->branchcode,
+        }
+    );
+
+    $hold = Koha::Holds->find($reserve_id);
+    is( $hold->patron_expiration_date, '2040-04-02', 'Successfully updated patron expiration date' );
 
     $schema->storage->txn_rollback;
 };
