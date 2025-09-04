@@ -1270,6 +1270,7 @@ function _dt_save_restore_state(table_settings, external_filter_nodes = {}) {
 
     return {
         stateSave: true,
+        stateDuration: 0,
         stateSaveCallback,
         stateLoadCallback,
         stateSaveParams,
