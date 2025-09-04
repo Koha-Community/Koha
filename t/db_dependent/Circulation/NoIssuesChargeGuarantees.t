@@ -34,6 +34,13 @@ $schema->storage->txn_begin;
 
 my $builder = t::lib::TestBuilder->new();
 
+my $library = $builder->build_object( { class => 'Koha::Libraries' } );
+t::lib::Mocks::mock_userenv(
+    {
+        branchcode => $library->branchcode,
+    }
+);
+
 my $item = $builder->build_sample_item;
 
 my $patron_category = $builder->build(
