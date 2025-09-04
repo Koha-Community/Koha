@@ -103,8 +103,8 @@
                     <th>Id</th>
                     <th>Entity</th>
                     <th>Code</th>
-                    <th>Language</th>
-                    <th>Translation</th>
+                    <th class="lang">Language</th>
+                    <th class="translation">Translation</th>
                     <th class="no-sort">&nbsp;</th>
                 </tr>
             </thead>
@@ -296,6 +296,9 @@
                 }
             });
 
+            const th_lang_index = document.querySelector('th.lang').cellIndex;
+            const th_translation_index = document.querySelector('th.translation').cellIndex;
+
             $("#add_translation").on('submit', function(e){
                 e.preventDefault();
                 let localization = {
@@ -312,9 +315,8 @@
                         } else {
                             var new_row = table_dt.row.add( [ success.id, success.entity, success.code, success.lang, success.translation, "<a href=\"#\" class=\"btn btn-default btn-xs delete\"><i class=\"fa fa-trash-can\"></i> Delete</a>" ] ).draw().node();
                             $( new_row ).attr("id", "row_id_" + success.id ).data("id", success.id );
-                            /* Is there a better way to target contenteditable cells than by index? */
-                            $( new_row.children[3] ).prop("contenteditable", true).addClass("lang")
-                            $( new_row.children[4] ).prop("contenteditable", true).addClass("translation")
+                            $( new_row.children[th_lang_index] ).prop("contenteditable", true).addClass("lang")
+                            $( new_row.children[th_translation_index] ).prop("contenteditable", true).addClass("translation")
                             show_message({ type: 'success_on_insert', data: success });
                         }
                     },
