@@ -29,6 +29,7 @@ use Koha::CirculationRules;
 use Koha::DateUtils qw( dt_from_string );
 use t::lib::TestBuilder;
 use t::lib::Mocks;
+use Test::NoWarnings;
 
 my $builder = t::lib::TestBuilder->new;
 
