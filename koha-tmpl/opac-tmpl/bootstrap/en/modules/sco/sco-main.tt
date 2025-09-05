@@ -307,7 +307,7 @@
                             [% PROCESS display_errors %]
 
                             [% IF patronid && nouser %]
-                                <div class="alert alert-info">
+                                <div class="alert alert-warning">
                                     <p
                                         >You entered an incorrect username or password. Please try again! But note that passwords are case sensitive.
                                         [% IF Koha.Preference('FailedLoginAttempts') %]
