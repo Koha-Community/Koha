@@ -46,8 +46,17 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
 
 my @issue_ids;
 
-if ( $op eq 'form' ) {
+if ( $op eq 'form' || $op eq 'cud-form' ) {
     $template->param( view => 'form', );
+
+    my @list = $input->multi_param('itemnumber');
+    if (@list) {
+        my $items_rs = Koha::Items->search( { itemnumber => { -in => \@list } } );
+
+        my @items = $items_rs->as_list;
+        $template->param( items => \@items, );
+    }
+
 } elsif ( $op eq 'cud-list' ) {
 
     my @categorycodes     = $input->multi_param('categorycodes');

@@ -126,7 +126,12 @@
                 <ol>
                     <li>
                         <label for="barcodelist">Barcode list (one barcode per line): </label>
-                        <textarea rows="10" cols="30" id="barcodelist" name="barcodelist"></textarea>
+                        <textarea rows="10" cols="30" id="barcodelist" name="barcodelist">
+                            [%- FOREACH item IN items %]
+                                [%- item.barcode -%]
+                            [% END -%]
+                        </textarea
+                        >
                     </li>
                 </ol>
             </fieldset>
