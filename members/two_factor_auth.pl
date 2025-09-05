@@ -49,7 +49,7 @@ my $another_user = $patron_id ne $loggedinuser;
 
 my $logged_in_user = Koha::Patrons->find($loggedinuser);
 
-unless ( !$another_user || $logged_in_user->is_superlibrarian() ) {
+if ( $another_user && !$logged_in_user->is_superlibrarian() ) {
     print $cgi->redirect("/cgi-bin/koha/errors/403.pl");
     exit;
 }

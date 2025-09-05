@@ -68,6 +68,7 @@
                 <form id="two-factor-auth" action="/cgi-bin/koha/members/two_factor_auth.pl" method="post">
                     [% INCLUDE 'csrf-token.inc' %]
                     <input type="hidden" name="op" value="cud-disable-2FA" />
+                    <input type="hidden" name="borrowernumber" value="[% patron.id | html %]" />
                     <input type="submit" value="Disable two-factor authentication" />
                 </form>
             </div>
@@ -145,7 +146,7 @@
                     type: "POST",
                     url: "/api/v1/auth/two-factor/registration/verification",
                     success: function (data) {
-                        window.location = "/cgi-bin/koha/members/two_factor_auth.pl";
+                        window.location = "/cgi-bin/koha/members/two_factor_auth.pl?borrowernumber=[% patron.borrowernumber | url %]";
                     },
                     error: function (data) {
                         const error = data.responseJSON.error;
