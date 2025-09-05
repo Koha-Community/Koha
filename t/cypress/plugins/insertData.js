@@ -728,6 +728,7 @@ const insertObject = async ({ type, object, baseUrl, authHeader }) => {
             suspended_until,
             non_priority,
             item_type,
+            hold_group_id,
             item_level,
             cancellation_requested,
             biblio,
