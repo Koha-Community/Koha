@@ -231,6 +231,7 @@ subtest 'superlibrarian tests' => sub {
         'CAN_user_reports'                                          => 1,
         'CAN_user_reserveforothers_modify_holds_priority'           => 1,
         'CAN_user_reserveforothers_place_holds'                     => 1,
+        'CAN_user_reserveforothers_alter_hold_targets'              => 1,
         'CAN_user_reserveforothers'                                 => 1,
         'CAN_user_self_check_self_checkin_module'                   => 1,
         'CAN_user_self_check_self_checkout_module'                  => 1,
