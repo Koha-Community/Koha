@@ -206,6 +206,21 @@ __PACKAGE__->belongs_to(
   { is_deferrable => 1, on_delete => "CASCADE", on_update => "CASCADE" },
 );
 
+=head2 issues
+
+Type: has_many
+
+Related object: L<Koha::Schema::Result::Issue>
+
+=cut
+
+__PACKAGE__->has_many(
+  "issues",
+  "Koha::Schema::Result::Issue",
+  { "foreign.booking_id" => "self.booking_id" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+
 =head2 item
 
 Type: belongs_to
@@ -224,6 +239,21 @@ __PACKAGE__->belongs_to(
     on_delete     => "CASCADE",
     on_update     => "CASCADE",
   },
+);
+
+=head2 old_issues
+
+Type: has_many
+
+Related object: L<Koha::Schema::Result::OldIssue>
+
+=cut
+
+__PACKAGE__->has_many(
+  "old_issues",
+  "Koha::Schema::Result::OldIssue",
+  { "foreign.booking_id" => "self.booking_id" },
+  { cascade_copy => 0, cascade_delete => 0 },
 );
 
 =head2 patron
@@ -257,8 +287,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07051 @ 2024-10-24 16:23:05
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:kTR2kwiwY2PnjU1E0P+CMQ
+# Created by DBIx::Class::Schema::Loader v0.07051 @ 2025-09-05 20:52:03
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:MzP+qYbMutu0qNgndBHHFQ
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration

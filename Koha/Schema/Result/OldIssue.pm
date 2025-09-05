@@ -54,6 +54,14 @@ foreign key, linking this to the borrowers table for the user who checked out th
 
 foreign key, linking this to the items table for the item that was checked out
 
+=head2 booking_id
+
+  data_type: 'integer'
+  is_foreign_key: 1
+  is_nullable: 1
+
+foreign key linking this checkout to the booking it fulfills
+
 =head2 date_due
 
   data_type: 'datetime'
@@ -184,6 +192,8 @@ __PACKAGE__->add_columns(
   { data_type => "integer", is_foreign_key => 1, is_nullable => 1 },
   "itemnumber",
   { data_type => "integer", is_foreign_key => 1, is_nullable => 1 },
+  "booking_id",
+  { data_type => "integer", is_foreign_key => 1, is_nullable => 1 },
   "date_due",
   {
     data_type => "datetime",
@@ -270,6 +280,26 @@ __PACKAGE__->has_many(
   { cascade_copy => 0, cascade_delete => 0 },
 );
 
+=head2 booking
+
+Type: belongs_to
+
+Related object: L<Koha::Schema::Result::Booking>
+
+=cut
+
+__PACKAGE__->belongs_to(
+  "booking",
+  "Koha::Schema::Result::Booking",
+  { booking_id => "booking_id" },
+  {
+    is_deferrable => 1,
+    join_type     => "LEFT",
+    on_delete     => "SET NULL",
+    on_update     => "CASCADE",
+  },
+);
+
 =head2 borrowernumber
 
 Type: belongs_to
@@ -331,8 +361,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07051 @ 2025-05-06 16:22:12
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:bO+nRkR4QDXrb5wmEOz9mw
+# Created by DBIx::Class::Schema::Loader v0.07051 @ 2025-09-05 20:52:04
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:0g+Bdh4Fs1JdmeDEsAS0BA
 
 __PACKAGE__->add_columns(
     '+auto_renew'      => { is_boolean => 1 },
