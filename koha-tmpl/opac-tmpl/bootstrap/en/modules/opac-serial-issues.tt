@@ -1,5 +1,6 @@
 [% USE raw %]
 [% USE Koha %]
+[% USE KohaDates %]
 [% USE AdditionalContents %]
 [% USE AuthorisedValues %]
 [% SET OpacNav = AdditionalContents.get( location => "OpacNav", lang => lang, library => logged_in_user.branchcode || default_branch, blocktitle => 0 ) %]
@@ -55,7 +56,7 @@
                                 <div id="subscriptionline[% subscription_LOO.subscriptionid | html %]" class="subscriptionline">
                                     <caption><h2>Subscription information for [% subscription_LOO.bibliotitle | html %]</h2><caption>
                                     <p>
-                                        <span>The current subscription began on [% subscription_LOO.startdate | html %] and is issued</span>
+                                        <span>The current subscription began on [% subscription_LOO.startdate | $KohaDates %] and is issued</span>
                                         [% IF ( subscription_LOO.periodicity1 ) %]
                                                 <span>twice per day</span>
                                         [% END %]
@@ -121,9 +122,9 @@
                                             [% IF ( subscription_LOO.weeklength ) %]<span>for [% subscription_LOO.weeklength | html %] weeks</span>[% END %]
                                             [% IF ( subscription_LOO.monthlength ) %]<span>for [% subscription_LOO.monthlength | html %] months</span>[% END %]
                                     </p>
-                                    <p>The first subscription was started on  [% subscription_LOO.histstartdate | html %]</p>
+                                    <p>The first subscription was started on [% subscription_LOO.histstartdate | $KohaDates %]</p>
                                     [% IF ( subscription_LOO.histenddate ) %]
-                                        <p>The subscription expired on [% subscription_LOO.histenddate | html %]</p>
+                                        <p>The subscription expired on [% subscription_LOO.histenddate | $KohaDates %]</p>
                                     [% END %]
 
                                     <h3>[% subscription_LOO.branchname | html %]</h3>
