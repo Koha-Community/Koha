@@ -124,13 +124,13 @@ Updated:<ul>
 
 <fieldset class="action">
     <input type="submit" class="btn btn-primary" value="Submit" />
-    <a class="cancel" id="cancel_set_library" href="[% referer or '/cgi-bin/koha/circ/circulation.pl' %]">Cancel</a>
+    <a class="cancel" id="cancel_set_library" href="[% referer or '/cgi-bin/koha/circ/circulation.pl' | url %]">Cancel</a>
 </fieldset>
 <div class="noshow">
     [% FOREACH recycle_loo IN recycle_loop %]
     <input type="text" name="[% recycle_loo.param | html %]" value="[% recycle_loo.value | html %]" />
     [% END %]
-    <input type="hidden" name="oldreferer" value="[% referer or "/cgi-bin/koha/circ/circulation.pl" %]" />
+    <input type="hidden" name="oldreferer" value="[% referer or "/cgi-bin/koha/circ/circulation.pl" | url %]" />
 </div>
 </form>
 <!-- /updated -->
