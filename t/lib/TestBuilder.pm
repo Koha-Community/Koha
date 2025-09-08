@@ -696,6 +696,9 @@ sub _gen_default_values {
             sort1_authcat => undef,
             sort2_authcat => undef,
         },
+        Aqorder => {
+            quantity => 1,
+        },
         AuthHeader => {
             marcxml => '',
         },
