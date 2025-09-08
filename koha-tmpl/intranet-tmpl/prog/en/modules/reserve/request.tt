@@ -285,6 +285,17 @@
 
     [% UNLESS ( multi_hold ) %]
         <h2>Place hold on [% INCLUDE 'biblio-title.inc' link = 1 %] [% IF biblio.author %]by [% biblio.author | html %][% END %]</h2>
+
+        [% IF ( patron && reserve_charge ) %]
+            <div class="alert alert-warning" id="reserve_fee">
+                [% IF Koha.Preference('HoldFeeMode') == 'any_time_is_collected' %]
+                    <strong>Note:</strong> [% INCLUDE 'patron-title.inc' patron = patron no_title = 1 no_cardnumber = 1 hide_patron_infos_if_needed = 1 %] will be charged a hold fee of [% reserve_charge | $Price %] when they collect this
+                    item
+                [% ELSE %]
+                    <strong>Note:</strong> [% INCLUDE 'patron-title.inc' patron = patron no_title = 1 no_cardnumber = 1 hide_patron_infos_if_needed = 1 %] will be charged a hold fee of [% reserve_charge | $Price %] for placing this hold
+                [% END %]
+            </div>
+        [% END %]
     [% ELSE %]
         <h2>
             [% IF ( patron ) %]
@@ -462,6 +473,18 @@
                                         </li>
                                         [% IF ( biblioloo.publicationyear ) %]
                                             <li> <span class="label">Publication year:</span> [% biblioloo.publicationyear | html %] </li>
+                                        [% END %]
+                                        [% IF ( patron && biblioloo.reserve_charge ) %]
+                                            <li>
+                                                <span class="label">Hold fee:</span>
+                                                [% IF Koha.Preference('HoldFeeMode') == 'any_time_is_collected' %]
+                                                    [% biblioloo.reserve_charge | $Price %]
+                                                    (charged when collected)
+                                                [% ELSE %]
+                                                    [% biblioloo.reserve_charge | $Price %]
+                                                    (charged when placed)
+                                                [% END %]
+                                            </li>
                                         [% END %]
                                     </ul>
                                     [% IF ( biblioloo.warn ) %]
@@ -1210,6 +1233,18 @@
                                         </li>
                                         [% IF ( biblioloo.publicationyear ) %]
                                             <li> <span class="label">Publication year:</span> [% biblioloo.publicationyear | html %] </li>
+                                        [% END %]
+                                        [% IF ( patron && biblioloo.reserve_charge ) %]
+                                            <li>
+                                                <span class="label">Hold fee:</span>
+                                                [% IF Koha.Preference('HoldFeeMode') == 'any_time_is_collected' %]
+                                                    [% biblioloo.reserve_charge | $Price %]
+                                                    (charged when collected)
+                                                [% ELSE %]
+                                                    [% biblioloo.reserve_charge | $Price %]
+                                                    (charged when placed)
+                                                [% END %]
+                                            </li>
                                         [% END %]
                                     </ul>
                                     [% IF ( biblioloo.warn ) %]
