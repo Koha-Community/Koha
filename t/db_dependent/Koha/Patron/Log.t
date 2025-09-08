@@ -27,7 +27,7 @@ $schema->storage->txn_begin;
 
 subtest 'Test Koha::Patrons::merge' => sub {
 
-    plan tests => 4;
+    plan tests => 3;
     my $builder = t::lib::TestBuilder->new;
 
     my $keeper = $builder->build_object( { class => 'Koha::Patrons' } );
@@ -49,7 +49,7 @@ subtest 'Test Koha::Patrons::merge' => sub {
             object => $keeper->id
         },
         { order_by => { -desc => "timestamp" } }
-    )->unblessed;
+    );
 
     my $info_borrower1 =
           $borrower1->{firstname} . " "
@@ -59,10 +59,9 @@ subtest 'Test Koha::Patrons::merge' => sub {
         . $keeper->firstname . " "
         . $keeper->surname . " ("
         . $keeper->cardnumber . ")";
-    my $info_log = $log->[0]{info};
 
     is(
-        $info_log, $info_borrower1,
+        $log->search( { info => $info_borrower1 } )->count, 1,
         "GetLogs returns results in the log viewer for the merge of " . $borrower1->{borrowernumber}
     );
 
@@ -74,10 +73,9 @@ subtest 'Test Koha::Patrons::merge' => sub {
         . $keeper->firstname . " "
         . $keeper->surname . " ("
         . $keeper->cardnumber . ")";
-    $info_log = $log->[1]{info};
 
     is(
-        $info_log, $info_borrower2,
+        $log->search( { info => $info_borrower2 } )->count, 1,
         "GetLogs returns results in the log viewer for the merge of " . $borrower2->{borrowernumber}
     );
 
@@ -95,20 +93,11 @@ subtest 'Test Koha::Patrons::merge' => sub {
             object => $keeper->id
         },
         { order_by => { -desc => "timestamp" } }
-    )->unblessed;
-
-    $info_log = $log->[0]{info};
-
-    is(
-        $info_log, undef,
-        "GetLogs didn't returns results in the log viewer for the merge of " . $borrower3->{borrowernumber}
     );
 
-    $info_log = $log->[1]{info};
-
     is(
-        $info_log, undef,
-        "GetLogs didn't returns results in the log viewer for the merge of " . $borrower4->{borrowernumber}
+        $log->count, 0,
+        "GetLogs didn't log anything"
     );
 };
 
