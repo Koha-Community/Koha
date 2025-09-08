@@ -95,10 +95,10 @@
                     [% END %]
                         <fieldset class="action">
                             <input type="submit" class="btn btn-primary" value="Submit" />
-                            <a class="cancel" id="cancel_set_library" href="[% referer or '/cgi-bin/koha/mainpage.pl' %]">Cancel</a>
+                            <a class="cancel" id="cancel_set_library" href="[% referer or '/cgi-bin/koha/mainpage.pl' | url %]">Cancel</a>
                         </fieldset>
                         <div class="noshow">
-                            <input type="hidden" name="oldreferer" value="[% referer or "/cgi-bin/koha/mainpage.pl" %]" />
+                            <input type="hidden" name="oldreferer" value="[% referer or "/cgi-bin/koha/mainpage.pl" | url %]" />
                         </div>
                     </form>
                 <!-- /updated -->
