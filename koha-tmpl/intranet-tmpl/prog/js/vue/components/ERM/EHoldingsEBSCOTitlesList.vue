@@ -120,9 +120,7 @@ export default {
                 },
                 filters_options: {
                     1: () =>
-                        this.map_av_dt_filter(
-                            "authorisedValues.av_title_publication_types"
-                        ),
+                        this.map_av_dt_filter("av_title_publication_types"),
                 },
                 actions: { 0: ["show"] },
                 default_filters: {
@@ -252,7 +250,7 @@ export default {
                     render: function (data, type, row, meta) {
                         return escape_str(
                             get_lib_from_av(
-                                "authorisedValues.av_title_publication_types",
+                                "av_title_publication_types",
                                 row.publication_type
                             )
                         );
