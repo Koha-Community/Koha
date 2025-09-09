@@ -34,9 +34,11 @@ function enableCheckboxActions() {
     if ($(checkedBoxes).size()) {
         $(".selections").html(__("With selected titles: "));
         $(controls).removeClass("disabled");
+        $(controls).removeAttr("tabindex");
     } else {
         $(".selections").html(__("Select titles to: "));
         $(controls).addClass("disabled");
+        $(controls).attr("tabindex", "-1");
     }
 }
 
