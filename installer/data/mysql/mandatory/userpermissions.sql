@@ -44,6 +44,7 @@ INSERT INTO permissions (module_bit, code, description) VALUES
    ( 3, 'manage_identity_providers', 'Manage identity providers'),
    ( 4, 'delete_borrowers', 'Delete patrons'),
    ( 4, 'edit_borrowers', 'Add, modify and view patron information'),
+   ( 4, 'merge_borrowers', 'Merge patrons'),
    ( 4, 'view_borrower_infos_from_any_libraries', 'View patron infos from any libraries'),
    ( 6, 'place_holds', 'Place holds for patrons'),
    ( 6, 'modify_holds_priority', 'Modify holds priority'),

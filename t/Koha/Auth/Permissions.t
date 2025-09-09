@@ -123,6 +123,7 @@ subtest 'superlibrarian tests' => sub {
         'CAN_user_acquisition_vendors_manage'                       => 1,
         'CAN_user_acquisition'                                      => 1,
         'CAN_user_borrowers_delete_borrowers'                       => 1,
+        'CAN_user_borrowers_merge_borrowers'                        => 1,
         'CAN_user_borrowers_edit_borrowers'                         => 1,
         'CAN_user_borrowers_view_borrower_infos_from_any_libraries' => 1,
         'CAN_user_borrowers'                                        => 1,
