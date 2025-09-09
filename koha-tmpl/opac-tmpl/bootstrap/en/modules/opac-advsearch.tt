@@ -614,13 +614,30 @@
                 thisLine.after(newLine);
             });
 
-            $(document).on("click", '.ButtonLess', function(e) {
+            $(document).on('click', '.ButtonLess', function (e) {
                 e.preventDefault();
-                if( $("a.ButtonLess").length <= 2 ) {
-                   $('.ButtonLess').hide();
+                if ($('a.ButtonLess').length <= 2) {
+                    $('.ButtonLess').hide();
                 }
+
+                let first = $(this).parent().parent().first();
+                let next = $(this).parent().parent().next();
+                let prev = $(this).parent().parent().prev();
+
                 $(this).parent().parent().remove();
-                $('.search-term-row .search-term-input select[name="op"]').first().prop("disabled",true).hide();
+                $('.search-term-row .search-term-input select[name="op"]').first().prop('disabled', true).hide();
+
+                let firstInput = first.find(':input:not(:disabled)').first();
+                let nextInput = next.find(':input:not(:disabled)').first();
+                let prevInput = prev.find(':input:not(:disabled)').first();
+
+                if (nextInput.length > 0) {
+                    nextInput.focus();
+                } else if (prevInput.length > 0) {
+                    prevInput.focus();
+                } else {
+                    firstInput.focus();
+                }
             });
     </script>
 [% END %]
