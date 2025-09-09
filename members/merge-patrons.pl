@@ -33,7 +33,7 @@ my ( $template, $loggedinuser, $cookie, $flags ) = get_template_and_user(
         template_name => "members/merge-patrons.tt",
         query         => $cgi,
         type          => "intranet",
-        flagsrequired => { borrowers => 'edit_borrowers' },
+        flagsrequired => { borrowers => 'merge_borrowers' },
     }
 );
 
