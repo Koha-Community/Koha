@@ -127,6 +127,7 @@ subtest 'superlibrarian tests' => sub {
         'CAN_user_acquisition'                                      => 1,
         'CAN_user_borrowers_send_messages_to_borrowers'             => 1,
         'CAN_user_borrowers_delete_borrowers'                       => 1,
+        'CAN_user_borrowers_merge_borrowers'                        => 1,
         'CAN_user_borrowers_edit_borrowers'                         => 1,
         'CAN_user_borrowers_list_borrowers'                         => 1,
         'CAN_user_borrowers_api_validate_password'                  => 1,
