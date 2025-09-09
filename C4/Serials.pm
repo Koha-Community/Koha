@@ -1399,7 +1399,7 @@ sub ModSubscription {
             mana_id                               => $mana_id,
             ccode                                 => $ccode,
             published_on_template                 => $published_on_template,
-            preselect_issues_in_collections_table => $preselect_issues_in_collections_table,
+            preselect_issues_in_collections_table => $preselect_issues_in_collections_table || 0,
         }
     )->store;
 
@@ -1484,7 +1484,7 @@ sub NewSubscription {
             mana_id                               => $mana_id,
             ccode                                 => $ccode,
             published_on_template                 => $published_on_template,
-            preselect_issues_in_collections_table => $preselect_issues_in_collections_table,
+            preselect_issues_in_collections_table => $preselect_issues_in_collections_table || 0,
         }
     )->store;
     $subscription->discard_changes;
