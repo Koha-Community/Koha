@@ -11,7 +11,11 @@
             {{ $__("Content type") }}:
             <select id="content_type_filter" v-model="filters.content_type">
                 <option value="">{{ $__("All") }}</option>
-                <option :key="type.authorised_values" :value="type.value">
+                <option
+                    v-for="type in authorisedValues.av_package_content_types"
+                    :key="type.value"
+                    :value="type.value"
+                >
                     {{ type.description }}
                 </option>
             </select>
