@@ -339,6 +339,7 @@ subtest 'process_invoice' => sub {
             value => {
                 basketno    => $basket->id,
                 orderstatus => 'new',
+                quantity    => 3,
             }
         }
     );
