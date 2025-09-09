@@ -236,7 +236,12 @@ export default {
                     searchable: false,
                     orderable: false,
                     render: function (data, type, row, meta) {
-                        return escape_str(get_lib_from_av(row.content_type));
+                        return escape_str(
+                            get_lib_from_av(
+                                "av_package_content_types",
+                                row.content_type
+                            )
+                        );
                     },
                 },
             ];
