@@ -47,6 +47,7 @@ INSERT INTO permissions (module_bit, code, description) VALUES
    ( 4, 'delete_borrowers', 'Delete patrons'),
    ( 4, 'edit_borrowers', 'Add, modify and view patron information'),
    ( 4, 'list_borrowers', 'Search, list and view patrons'),
+   ( 4, 'merge_borrowers', 'Merge patrons'),
    ( 4, 'send_messages_to_borrowers', 'Send messages to patrons'),
    ( 4, 'view_borrower_infos_from_any_libraries', 'View patron infos from any libraries'),
    ( 6, 'place_holds', 'Place holds for patrons'),
