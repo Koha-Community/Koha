@@ -410,7 +410,7 @@
 
             backends[ parts[0] ].get( parts[1], function( record ) {
                 if ( !record.error ) {
-                    var remove_control_num = [% IF Koha.Preference('autoControlNumber') == 'OFF' %] false [% ELSE %] true [% END %];
+                    var remove_control_num = ([% IF Koha.Preference('autoControlNumber') == 'OFF' %] false [% ELSE %] true [% END %]) && (parts[0] === 'duplicate');
                     if( remove_control_num ){ record.removeField("001"); }
                     if( parts[0] === 'duplicate' ) {
                         let today = new Date();
