@@ -83,21 +83,23 @@ sub new {
         context   => $args->{context},
     };
 
-    unless ( $self->{test_name} ) {
-        my @caller_info     = caller();
-        my $script_filename = $caller_info[1];
-        $self->{test_name} = basename($script_filename);
-        $self->{test_name} =~ s|/|_|g;
-        $self->{test_name} =~ s|\..*$||g;
-    }
-
-    if ( $self->{git_repo_dir} && $self->{repo_url} ) {
-        unless ( -d $self->{git_repo_dir} ) {
-            qx{git clone $self->{repo_url} $self->{git_repo_dir}};
+    if ( $self->{incremental_run} ) {
+        unless ( $self->{test_name} ) {
+            my @caller_info     = caller();
+            my $script_filename = $caller_info[1];
+            $self->{test_name} = basename($script_filename);
+            $self->{test_name} =~ s|/|_|g;
+            $self->{test_name} =~ s|\..*$||g;
         }
-        qx{git -C $self->{git_repo_dir} fetch origin};
 
-        make_path("$self->{git_repo_dir}/$self->{test_name}");
+        if ( $self->{git_repo_dir} && $self->{repo_url} ) {
+            unless ( -d $self->{git_repo_dir} ) {
+                qx{git clone $self->{repo_url} $self->{git_repo_dir}};
+            }
+            qx{git -C $self->{git_repo_dir} fetch origin};
+
+            make_path("$self->{git_repo_dir}/$self->{test_name}");
+        }
     }
 
     bless $self, $class;
