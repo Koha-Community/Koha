@@ -747,7 +747,7 @@ const insertObject = async ({ type, object, baseUrl, authHeader }) => {
             authHeader,
         });
     } else if (type == "checkout") {
-        const { issuer, patron, ...checkout } = object;
+        const { issuer, patron, booking, ...checkout } = object;
 
         let endpoint = "/api/v1/checkouts";
         // Force the checkout - we might need a parameter to control this behaviour later
