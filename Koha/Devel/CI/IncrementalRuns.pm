@@ -84,6 +84,12 @@ sub new {
     };
 
     if ( $self->{incremental_run} ) {
+
+        my $codename = qx{lsb_release -s -c 2> /dev/null};
+        die "Cannot use increment runs if codename is not set (lsb_release not available?)" unless $codename;
+
+        chomp $codename;
+
         unless ( $self->{test_name} ) {
             my @caller_info     = caller();
             my $script_filename = $caller_info[1];
@@ -92,13 +98,15 @@ sub new {
             $self->{test_name} =~ s|\..*$||g;
         }
 
+        $self->{test_dir} = sprintf "%s/%s", $self->{test_name}, $codename;
+
         if ( $self->{git_repo_dir} && $self->{repo_url} ) {
             unless ( -d $self->{git_repo_dir} ) {
                 qx{git clone $self->{repo_url} $self->{git_repo_dir}};
             }
             qx{git -C $self->{git_repo_dir} fetch origin};
 
-            make_path("$self->{git_repo_dir}/$self->{test_name}");
+            make_path("$self->{git_repo_dir}/$self->{test_dir}");
         }
     }
 
@@ -122,7 +130,7 @@ sub get_files_to_test {
     my $no_history;
     if ( $self->{incremental_run} ) {
         my @koha_commit_history   = qx{git log --pretty=format:"%h"};
-        my @tested_commit_history = qx{ls $self->{git_repo_dir}/$self->{test_name}};
+        my @tested_commit_history = qx{ls $self->{git_repo_dir}/$self->{test_dir}};
         chomp for @koha_commit_history, @tested_commit_history;
         if (@tested_commit_history) {
             my $last_build_commit = firstval {
@@ -131,7 +139,7 @@ sub get_files_to_test {
             }
             @koha_commit_history;
             if ($last_build_commit) {
-                @files = @{ from_json( read_file("$self->{git_repo_dir}/$self->{test_name}/$last_build_commit") ) };
+                @files = @{ from_json( read_file("$self->{git_repo_dir}/$self->{test_dir}/$last_build_commit") ) };
                 push @files, $dev_files->ls_files( $filetype, "$last_build_commit HEAD" );
             } else {
 
@@ -164,7 +172,7 @@ sub report_results {
     my $commit_id = qx{git rev-parse --short HEAD};
     chomp $commit_id;
 
-    my $failure_file = "$self->{git_repo_dir}/$self->{test_name}/$commit_id";
+    my $failure_file = "$self->{git_repo_dir}/$self->{test_dir}/$commit_id";
     my $failures     = [
         sort map {
             my ( $file, $exit_code ) = ( $_, $results->{$_} );
@@ -175,7 +183,7 @@ sub report_results {
     write_file( $failure_file, to_json($failures) );
 
     qx{git -C $self->{git_repo_dir} add $failure_file};
-    qx{git -C $self->{git_repo_dir} commit -m "$commit_id - $self->{test_name}"};
+    qx{git -C $self->{git_repo_dir} commit -m "$commit_id - $self->{test_dir}"};
     ( my $push_domain = $self->{repo_url} ) =~ s{^https://}{};
     my $push_url = "https://gitlab-ci-token:$self->{token}\@$push_domain";
     qx{git -C $self->{git_repo_dir} push $push_url main};
