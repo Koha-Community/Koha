@@ -811,7 +811,7 @@ subtest 'Desks' => sub {
 };
 
 subtest 'get_items_that_can_fill' => sub {
-    plan tests => 6;
+    plan tests => 7;
 
     Koha::CirculationRules->search(
         {
@@ -915,6 +915,16 @@ subtest 'get_items_that_can_fill' => sub {
         [ map { $_->itemnumber } $items->as_list ],
         [ $item_2->itemnumber, $item_5->itemnumber ], 'Only item 2 and 5 are available for filling the hold'
     );
+
+    my $waiting_recall = $builder->build_object(
+        { class => 'Koha::Recalls', value => { item_id => $item_5->itemnumber, status => 'waiting' } } );
+    $items = $holds->get_items_that_can_fill;
+    is_deeply(
+        [ map { $_->itemnumber } $items->as_list ],
+        [ $item_2->itemnumber ],
+        'Only item 2 is available for filling the hold as item 5 is allocated to a pending recall'
+    );
+    $waiting_recall->delete;
 
     # Marking item_5 is no hold allowed
     Koha::CirculationRule->new(

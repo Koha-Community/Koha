@@ -161,11 +161,18 @@ sub get_items_that_can_fill {
             collapse => 1,
         }
     )->get_column('itemnumber');
+    my @pending_recalls = Koha::Recalls->search(
+        { 'status' => [ 'waiting', 'in_transit' ] },
+        {
+            columns  => ['item_id'],
+            collapse => 1,
+        }
+    )->get_column('item_id');
 
     return Koha::Items->search(
         {
             -or        => \@bibs_or_items,
-            itemnumber => { -not_in => [ @branchtransfers, @waiting_holds ] },
+            itemnumber => { -not_in => [ @branchtransfers, @waiting_holds, @pending_recalls ] },
             onloan     => undef,
             notforloan => 0,
         }
