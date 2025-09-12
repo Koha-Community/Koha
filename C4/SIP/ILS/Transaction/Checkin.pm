@@ -124,6 +124,7 @@ sub do_checkin {
         unless $human_required || $checkin_blocked_by_holds;
 
     if ($checked_in_ok) {
+        delete $messages->{TransferArrived};
         delete $messages->{ItemLocationUpdated};
         delete $messages->{NotIssued};
         delete $messages->{LocalUse};
