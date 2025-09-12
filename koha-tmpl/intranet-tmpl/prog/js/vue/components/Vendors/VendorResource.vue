@@ -17,6 +17,8 @@ export default {
         routeAction: String,
     },
     setup(props, { emit }) {
+        const format_date = $date;
+
         const vendorStore = inject("vendorStore");
         const { currencies, gstValues } = storeToRefs(vendorStore);
 
@@ -832,7 +834,7 @@ export default {
         };
 
         const appendToShow = componentData => {
-            let format_date = componentData.instancedResource.format_date;
+            let formatDate = format_date;
             return [
                 {
                     type: "component",
@@ -875,7 +877,7 @@ export default {
                                         ) {
                                             return type == "sort"
                                                 ? row.contractstartdate
-                                                : format_date(
+                                                : formatDate(
                                                       row.contractstartdate
                                                   );
                                         },
@@ -891,7 +893,7 @@ export default {
                                         ) {
                                             return type == "sort"
                                                 ? row.contractenddate
-                                                : format_date(
+                                                : formatDate(
                                                       row.contractenddate
                                                   );
                                         },
