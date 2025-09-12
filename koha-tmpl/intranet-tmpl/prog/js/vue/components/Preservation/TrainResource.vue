@@ -448,3 +448,12 @@ export default {
     },
 };
 </script>
+
+<style scoped>
+:deep(.filters input[type="radio"]) {
+    min-width: 0 !important;
+}
+:deep(.filters input[type="button"]) {
+    margin-left: 1rem;
+}
+</style>
