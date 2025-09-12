@@ -74,9 +74,6 @@ export function useBaseResource(resourceConfig) {
 
     let i18n = resourceConfig.i18n;
 
-    const format_date = $date;
-    const patron_to_html = $patron_to_html;
-
     /**
      **********************************************************************
      * TOOLBAR RELATED METHODS
@@ -334,10 +331,10 @@ export function useBaseResource(resourceConfig) {
      * @return {Object}
      */
     const getFilterValues = (query, filterData = []) => {
-        const filters = filterData
+        const filters = filterData.length
             ? filterData
-            : resourceConfig.table.filters
-              ? resourceConfig.table.filters
+            : resourceConfig.table.additionalFilters
+              ? resourceConfig.table.additionalFilters
               : [];
         const filterOptions = filters.reduce((acc, filter) => {
             acc[filter.name] = filter.value;
@@ -360,6 +357,8 @@ export function useBaseResource(resourceConfig) {
 
     /**
      * Gets the label to display before the filters in the List component
+     * This is a default method that returns an empty string.
+     * It can be overridden at the resource level if filters are required
      *
      * @return {String} The label
      */
@@ -649,13 +648,6 @@ export function useBaseResource(resourceConfig) {
                     attr.selectLabel = "description";
                 }
             }
-            if (attr.type == "relationship" && attr.componentProps) {
-                Object.keys(attr.componentProps).forEach(key => {
-                    if (attr.componentProps[key].type == "av") {
-                        attr.componentProps[key].av = authorisedValues[key];
-                    }
-                });
-            }
             if (attr.relationshipFields?.length) {
                 populateAttributesWithAuthorisedValues(attr.relationshipFields);
             }
@@ -709,8 +701,6 @@ export function useBaseResource(resourceConfig) {
         setMessage,
         setError,
         setWarning,
-        format_date,
-        patron_to_html,
         build_url,
         route,
         router,
