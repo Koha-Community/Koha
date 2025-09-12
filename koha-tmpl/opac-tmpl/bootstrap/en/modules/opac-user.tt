@@ -795,7 +795,17 @@
                                                                 Account frozen
                                                             [% ELSIF ( OVERDUE.status ) %]
                                                                 [% IF ( canrenew ) %]
-                                                                    <a href="/cgi-bin/koha/opac-renew.pl?from=opac_user&amp;item=[% OVERDUE.itemnumber | uri %]&amp;bornum=[% OVERDUE.borrowernumber | uri %]">Renew</a>
+                                                                    <input type="checkbox" name="issue" value="[% ISSUE.issue_id | uri %]" />
+                                                                    <a
+                                                                        class="submit-form-link"
+                                                                        href="#"
+                                                                        data-method="post"
+                                                                        data-action="/cgi-bin/koha/opac-renew.pl?from=opac_user"
+                                                                        data-issue="[% ISSUE.issue_id | html %]"
+                                                                        data-borrowernumber="[% ISSUE.borrowernumber | html %]"
+                                                                        data-op="cud-renew"
+                                                                        >Renew</a
+                                                                    >
                                                                 [% END %]
                                                                     <span class="renewals">(
                                                                         [% I18N.tx("{renewals_left} of {renewals_allowed} renewals remaining", { renewals_left = OVERDUE.renewsleft, renewals_allowed = OVERDUE.renewsallowed }) %]
