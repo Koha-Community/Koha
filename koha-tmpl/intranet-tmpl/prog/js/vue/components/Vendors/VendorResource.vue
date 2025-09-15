@@ -823,6 +823,8 @@ export default {
                     componentData.resource.value.discount =
                         componentData.resource.value.discount.toFixed(1);
                 }
+                componentData.resource.value.deliverytime =
+                    resource.deliverytime.toString();
             }
             if (caller === "show") {
                 let physicalAddress = "";
