@@ -19,13 +19,14 @@ use Test::NoWarnings;
 
 use Test::Mojo;
 use Data::Dumper;
-use Koha::Database;
-
+use PPI;
 use FindBin();
 use IPC::Cmd        qw(can_run);
 use List::MoreUtils qw(any);
 use File::Slurp     qw(read_file);
 use YAML::XS        qw(LoadFile);
+
+use Koha::Database;
 
 my $t    = Test::Mojo->new('Koha::REST::V1');
 my $spec = $t->get_ok( '/api/v1/', 'Correctly fetched the spec' )->tx->res->json;
@@ -176,24 +177,40 @@ subtest '400 response tests' => sub {
 };
 
 subtest 'POST (201) have location header' => sub {
-    my @files = `git ls-files 'Koha/REST/V1/**/*.pm'`;
-    plan tests => scalar @files;
-    my @exceptions = qw(
-        Koha/REST/V1/Auth/Password.pm
-        Koha/REST/V1/Preservation/WaitingList.pm
-    );
+    my @files      = `git ls-files 'Koha/REST/V1/**/*.pm'`;
+    my $exceptions = {
+        'Koha/REST/V1/Auth/Password.pm'              => [qw(validate)],
+        'Koha/REST/V1/ERM/EHoldings/Titles/Local.pm' => [qw(import_from_list import_from_kbart_file)],
+        'Koha/REST/V1/Preservation/Trains.pm'        => [qw(add_item add_items copy_item)],
+        'Koha/REST/V1/Preservation/WaitingList.pm'   => [qw(add_items)],
+    };
     foreach my $file (@files) {
         chomp $file;
-        my $content = read_file($file);
-        if ( grep { $file eq $_ } @exceptions ) {
-            pass("$file is skipped - exception");
-        } elsif ( $content !~ /status\s*=>\s*201/s ) {
-            pass("$file does not seem to have a POST endpoint");
-        } elsif ( $content =~ /\$c->res->headers->location\(.*?\);\s*return\s+\$c->render\s*\(\s*status\s*=>\s*201,/s )
-        {
-            pass("$file contains the location header");
-        } else {
-            fail("$file does not contain the location header");
+        my $doc  = PPI::Document->new($file);
+        my $subs = $doc->find( sub { $_[1]->isa('PPI::Statement::Sub') } );
+
+        foreach my $sub (@$subs) {
+            my $name = $sub->name;
+            if ( exists $exceptions->{$file} && grep { $name eq $_ } @{ $exceptions->{$file} } ) {
+                pass("$file:$name is skipped - exception");
+                next;
+            }
+
+            my $content = $sub->content;
+
+            if ( $content =~ /\$c->res->headers->location\(.*?\);\s*return\s+\$c->render\s*\(\s*status\s*=>\s*201,/s ) {
+                pass("$file:$name contains the location header");
+            } elsif ( $content =~ /\$c->res->headers->location\(.*?\);/ ) {
+                if ( $content !~ /return\s+\$c->render\s*\(\s*status\s*=>\s*201,/ ) {
+                    fail("$file:$name has the location header without 201");
+                } else {
+                    fail("$file:$name has the location header and 201, but other statements should be between them");
+                }
+            } elsif ( $content !~ /status\s*=>\s*201/s ) {
+                pass("$file:$name does not seem to have a POST endpoint");
+            } else {
+                fail("$file:$name does not contain the location header");
+            }
         }
     }
 };
