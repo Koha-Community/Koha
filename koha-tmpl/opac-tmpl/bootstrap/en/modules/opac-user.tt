@@ -423,16 +423,7 @@
                                                                 [% IF ( ISSUE.status ) %]
                                                                     [% IF ( canrenew ) %]
                                                                         <input type="checkbox" name="issue" value="[% ISSUE.issue_id | uri %]" />
-                                                                        <a
-                                                                            class="submit-form-link"
-                                                                            href="#"
-                                                                            data-method="post"
-                                                                            data-action="/cgi-bin/koha/opac-renew.pl?from=opac_user"
-                                                                            data-issue="[% ISSUE.issue_id | html %]"
-                                                                            data-borrowernumber="[% ISSUE.borrowernumber | html %]"
-                                                                            data-op="cud-renew"
-                                                                            >Renew</a
-                                                                        >
+                                                                        <a class="submit-form-link" href="#" data-method="post" data-action="/cgi-bin/koha/opac-renew.pl" data-issue="[% ISSUE.issue_id | html %]" data-op="cud-renew">Renew</a>
                                                                     [% END %]
                                                                     [% IF ISSUE.renewalfee > 0 %]
                                                                         <span class="renewalfee badge text-bg-warning">Fee for item type '[% ItemTypes.GetDescription( ISSUE.renewalitemtype) | html %]': [% ISSUE.renewalfee | $Price %]</span>
