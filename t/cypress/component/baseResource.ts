@@ -1,4 +1,4 @@
-import UseBaseResource from "@koha-vue/components/Cypress/UseBaseResource.vue";
+import UseBaseResource from "@cypress/component/UseBaseResource.vue";
 
 const globalConfig = {
     global: {

@@ -15,6 +15,7 @@ module.exports = [
                     __dirname,
                     "koha-tmpl/intranet-tmpl/prog/js/vue"
                 ),
+                "@cypress": path.resolve(__dirname, "t/cypress"),
             },
         },
         entry: {
@@ -44,7 +45,7 @@ module.exports = [
                     options: {
                         experimentalInlineMatchResource: true,
                     },
-                    exclude: [path.resolve(__dirname, "t/cypress/")],
+                    //exclude: [path.resolve(__dirname, "t/cypress/")],
                 },
                 {
                     test: /\.ts$/,

@@ -1,7 +1,7 @@
 <template></template>
 
 <script>
-import { useBaseResource } from "../../composables/base-resource.js";
+import { useBaseResource } from "@koha-vue/composables/base-resource.js";
 export default {
     props: {
         resourceConfig: Object,

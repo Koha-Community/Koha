@@ -31,7 +31,7 @@ export default defineConfig({
             });
         },
         indexHtmlFile: "t/cypress/support/component-index.html",
-        specPattern: "t/cypress/component/**/*.*",
+        specPattern: "t/cypress/component/**/*.ts",
         supportFile: "t/cypress/support/component.ts",
     },
 });
