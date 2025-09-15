@@ -220,9 +220,9 @@ sub add_debit {
 
         my $debit = $patron->account->add_debit($data);
         $debit = Koha::Account::Debit->_new_from_dbic( $debit->{_result} );
+        $debit->discard_changes;
 
         $c->res->headers->location( $c->req->url->to_string . '/' . $debit->id );
-        $debit->discard_changes;
 
         return $c->render(
             status  => 201,
