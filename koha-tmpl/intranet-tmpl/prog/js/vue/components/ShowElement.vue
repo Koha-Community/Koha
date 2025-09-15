@@ -111,7 +111,12 @@
         </template>
     </template>
     <template v-else-if="attribute?.type === 'component'">
-        <template v-if="attribute.hidden && attribute.hidden(resource)">
+        <template
+            v-if="
+                !attribute.hidden ||
+                (attribute.hidden && attribute.hidden(resource))
+            "
+        >
             <label v-if="attribute.label">{{ attribute.label }}:</label>
             <component
                 :is="requiredComponent"

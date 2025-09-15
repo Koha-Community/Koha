@@ -1,5 +1,5 @@
 <template>
-    <div class="row">
+    <div class="row" style="margin-bottom: 0.9em">
         <div class="col-sm-6">
             <slot
                 name="splitPane"
@@ -13,6 +13,12 @@
             ></slot>
         </div>
     </div>
+    <template v-if="determineGroupsForPane(null).length > 0">
+        <slot
+            name="splitPane"
+            :paneFieldList="determineGroupsForPane(null)"
+        ></slot>
+    </template>
 </template>
 
 <script>

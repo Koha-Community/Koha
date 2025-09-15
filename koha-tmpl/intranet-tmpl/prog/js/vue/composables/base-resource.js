@@ -480,6 +480,9 @@ export function useBaseResource(resourceConfig) {
                     );
                 if (splitScreenGrouping) {
                     groupInfo.splitPane = splitScreenGrouping.pane;
+                } else {
+                    // Default to left
+                    groupInfo.splitPane = "left";
                 }
             }
             if (component === "Show" && resource) {

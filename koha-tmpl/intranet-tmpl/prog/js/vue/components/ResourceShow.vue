@@ -150,11 +150,19 @@ export default {
                     resource: resource.value,
                     additionalProps: additionalProps.value,
                 })
-                ?.filter(field => field.hidden(resource.value))
+                ?.filter(
+                    field =>
+                        !field.hidden ||
+                        (field.hidden && field.hidden(resource.value))
+                )
                 .map(field => {
                     return {
                         name: field.name,
                         fields: [field],
+                        ...(props.instancedResource.showGroupsDisplayMode ===
+                        "splitScreen"
+                            ? { splitPane: field.splitPane }
+                            : {}),
                     };
                 });
 

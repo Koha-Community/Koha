@@ -957,11 +957,11 @@ export default {
                             value: $__("contracts"),
                         },
                     },
+                    splitPane: null,
                 },
                 {
                     type: "component",
                     name: $__("Subscription details"),
-                    hidden: vendor => vendor.subscriptions_count,
                     componentPath:
                         "@koha-vue/components/Vendors/VendorSubscriptions.vue",
                     componentProps: {
@@ -969,6 +969,7 @@ export default {
                             type: "resource",
                         },
                     },
+                    splitPane: "right",
                 },
             ];
         };
