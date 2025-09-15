@@ -138,19 +138,12 @@ sub add_holiday {
     } elsif ( $newoperation eq 'holidayrangerepeat' ) {
         if (@holiday_list) {
             foreach my $date (@holiday_list) {
-                unless (
-                    $calendar->isHoliday(
-                        $date->{local_c}->{day}, $date->{local_c}->{month}, $date->{local_c}->{year}
-                    )
-                    )
-                {
-                    $calendar->insert_day_month_holiday(
-                        day         => $date->{local_c}->{day},
-                        month       => $date->{local_c}->{month},
-                        title       => $title,
-                        description => $description
-                    );
-                }
+                $calendar->insert_day_month_holiday(
+                    day         => $date->{local_c}->{day},
+                    month       => $date->{local_c}->{month},
+                    title       => $title,
+                    description => $description
+                );
             }
         }
     }
