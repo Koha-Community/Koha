@@ -24,6 +24,15 @@
 // -- This will overwrite an existing command --
 // Cypress.Commands.overwrite('visit', (originalFn, url, options) => { ... })
 
+// Error on JS warnings
+Cypress.on("window:before:load", win => {
+    win.console.warn = (...args) => {
+        if (args[0] && typeof args[0] === "string") {
+            throw new Error(`JS Warning detected: ${args[0]}`);
+        }
+    };
+});
+
 function get_fallback_login_value(param) {
     var env_var = param == "username" ? "KOHA_USER" : "KOHA_PASS";
 
