@@ -151,7 +151,6 @@ sub update {
 
                 $train->set_from_api($body)->store;
 
-                $c->res->headers->location( $c->req->url->to_string . '/' . $train->train_id );
                 return $c->render(
                     status  => 200,
                     openapi => $c->objects->to_api($train),

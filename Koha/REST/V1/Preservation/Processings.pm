@@ -154,7 +154,6 @@ sub update {
                 $processing->set_from_api($body)->store;
                 $processing->attributes($attributes);
 
-                $c->res->headers->location( $c->req->url->to_string . '/' . $processing->processing_id );
                 return $c->render(
                     status  => 200,
                     openapi => $c->objects->to_api($processing),
