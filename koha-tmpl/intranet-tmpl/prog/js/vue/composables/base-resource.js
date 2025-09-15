@@ -469,6 +469,19 @@ export function useBaseResource(resourceConfig) {
                 fields: groupFields,
                 hasDataToDisplay: false,
             };
+            if (
+                component === "Show" &&
+                resourceConfig.showGroupsDisplayMode === "splitScreen" &&
+                resourceConfig.splitScreenGroupings.length > 0
+            ) {
+                const splitScreenGrouping =
+                    resourceConfig.splitScreenGroupings.find(
+                        g => g.name === group
+                    );
+                if (splitScreenGrouping) {
+                    groupInfo.splitPane = splitScreenGrouping.pane;
+                }
+            }
             if (component === "Show" && resource) {
                 groupFields.forEach(field => {
                     if (

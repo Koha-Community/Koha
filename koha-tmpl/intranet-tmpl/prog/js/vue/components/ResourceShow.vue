@@ -13,10 +13,7 @@
                 resource[instancedResource.idAttr]
             }}
         </h2>
-        <TabsWrapper
-            v-if="instancedResource.formGroupsDisplayMode == 'tabs'"
-            :tabList="fieldList"
-        >
+        <TabsWrapper v-if="displayMode == 'tabs'" :tabList="fieldList">
             <template #tabContent="{ tabGroup }">
                 <fieldset class="rows">
                     <legend v-if="tabGroup.name">{{ tabGroup.name }}</legend>
@@ -36,7 +33,7 @@
             </template>
         </TabsWrapper>
         <AccordionWrapper
-            v-else-if="instancedResource.formGroupsDisplayMode == 'accordion'"
+            v-else-if="displayMode == 'accordion'"
             :accordionList="fieldList"
         >
             <template #accordionContent="{ accordionGroup }">
@@ -54,6 +51,32 @@
                 </ol>
             </template>
         </AccordionWrapper>
+        <SplitScreenWrapper
+            v-else-if="displayMode == 'splitScreen'"
+            :fieldList="fieldList"
+        >
+            <template #splitPane="{ paneFieldList }">
+                <fieldset
+                    class="rows"
+                    v-for="(group, counter) in paneFieldList"
+                    v-bind:key="counter"
+                >
+                    <legend v-if="group.name">{{ group.name }}</legend>
+                    <ol>
+                        <li
+                            v-for="(attr, index) in group.fields"
+                            v-bind:key="index"
+                        >
+                            <ShowElement
+                                :resource="resource"
+                                :attr="attr"
+                                :instancedResource="instancedResource"
+                            />
+                        </li>
+                    </ol>
+                </fieldset>
+            </template>
+        </SplitScreenWrapper>
         <div v-else>
             <fieldset
                 class="rows"
@@ -92,6 +115,7 @@ import ShowElement from "./ShowElement.vue";
 import { computed, onBeforeMount, ref } from "vue";
 import TabsWrapper from "./TabsWrapper.vue";
 import AccordionWrapper from "./AccordionWrapper.vue";
+import SplitScreenWrapper from "./SplitScreenWrapper.vue";
 
 export default {
     inheritAttrs: false,
@@ -140,17 +164,30 @@ export default {
             ];
         });
 
+        const displayMode = computed(() => {
+            return props.instancedResource.showGroupsDisplayMode
+                ? props.instancedResource.showGroupsDisplayMode
+                : props.instancedResource.formGroupsDisplayMode || "";
+        });
+
         return {
             initialized,
             resource,
             additionalProps,
             fieldList,
+            displayMode,
         };
     },
     props: {
         instancedResource: Object,
     },
-    components: { Toolbar, ShowElement, TabsWrapper, AccordionWrapper },
+    components: {
+        Toolbar,
+        ShowElement,
+        TabsWrapper,
+        AccordionWrapper,
+        SplitScreenWrapper,
+    },
     name: "ResourceShow",
 };
 </script>
