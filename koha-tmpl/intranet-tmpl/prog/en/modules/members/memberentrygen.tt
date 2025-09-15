@@ -1162,6 +1162,9 @@
                                             <li>
                                                 <label for="userid" [% IF mandatoryuserid %]class="required"[% END %]> Username: </label>
 
+                                                [%# Dummy input to avoid Firefox from using userid/password saved for authentication %]
+                                                <input type="text" disabled="disabled" style="display:none" />
+
                                                 [% IF ( NoUpdateLogin ) %]
                                                     [% IF ( op == 'duplicate' ) %]
                                                         <input type="text" id="userid" name="userid" size="20" disabled="disabled" />
@@ -1175,9 +1178,6 @@
                                                         <input type="text" id="userid" name="userid" size="20" value="[% borrower_data.userid | html %]" />
                                                     [% END %]
                                                 [% END # /IF ( NoUpdateLogin ) %]
-
-                                                [%# Dummy input to avoid Firefox from using userid/password saved for authentication %]
-                                                <input type="text" disabled="disabled" style="display:none" />
 
                                                 [% IF ( mandatoryuserid ) %]
                                                     <span class="required">Required</span>
