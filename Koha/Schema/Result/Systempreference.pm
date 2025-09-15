@@ -35,7 +35,8 @@ system preference name
 =head2 value
 
   data_type: 'mediumtext'
-  is_nullable: 1
+  default_value: ''''
+  is_nullable: 0
 
 system preference values
 
@@ -67,7 +68,7 @@ __PACKAGE__->add_columns(
   "variable",
   { data_type => "varchar", default_value => "", is_nullable => 0, size => 50 },
   "value",
-  { data_type => "mediumtext", is_nullable => 1 },
+  { data_type => "mediumtext", default_value => "''", is_nullable => 0 },
   "options",
   { data_type => "longtext", is_nullable => 1 },
   "explanation",
@@ -89,8 +90,8 @@ __PACKAGE__->add_columns(
 __PACKAGE__->set_primary_key("variable");
 
 
-# Created by DBIx::Class::Schema::Loader v0.07049 @ 2021-01-21 13:39:29
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:d9V4/gPRw1ucbd/TzEzNUQ
+# Created by DBIx::Class::Schema::Loader v0.07051 @ 2025-09-15 07:54:04
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:hW5VGYqwfwE16KK5eGoXUw
 
 =head2 koha_object_class
 
