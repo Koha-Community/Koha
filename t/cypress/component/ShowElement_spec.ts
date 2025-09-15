@@ -227,7 +227,7 @@ describe("ShowElement", () => {
                         type: "component",
                         hidden: () => true,
                         componentPath:
-                            "t/cypress/component/ShowElementComponentType.vue",
+                            "@cypress/component/ShowElementComponentType.vue",
                         componentProps: {
                             testString: {
                                 type: "string",

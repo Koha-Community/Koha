@@ -276,7 +276,8 @@ export default {
                     type: "component",
                     name: $__("Titles"),
                     hidden: erm_package => erm_package,
-                    componentPath: "./RelationshipTableDisplay.vue",
+                    componentPath:
+                        "@koha-vue/components/RelationshipTableDisplay.vue",
                     componentProps: {
                         tableOptions: {
                             type: "object",

@@ -205,6 +205,7 @@ import ToolTip from "./ToolTip.vue";
 import InputRadio from "./Elements/InputRadio.vue";
 import { useBaseElement } from "../composables/base-element.js";
 import { computed, defineAsyncComponent, ref } from "vue";
+import { loadComponent } from "@koha-vue/loaders/componentResolver";
 
 export default {
     props: {
@@ -255,7 +256,7 @@ export default {
             const importPath = baseElement.identifyAndImportComponent(
                 props.attr
             );
-            return defineAsyncComponent(() => import(`${importPath}`));
+            return defineAsyncComponent(loadComponent(importPath));
         });
         const selectOptions = computed(() => {
             if (props.attr.options) {

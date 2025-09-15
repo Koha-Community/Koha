@@ -171,7 +171,8 @@ export default {
                             name: "user_id",
                             type: "component",
                             label: $__("User"),
-                            componentPath: "./PatronSearch.vue",
+                            componentPath:
+                                "@koha-vue/components/PatronSearch.vue",
                             required: true,
                             indexRequired: true,
                             componentProps: {
@@ -211,7 +212,8 @@ export default {
                     showElement: {
                         type: "component",
                         hidden: license => !!license.documents?.length,
-                        componentPath: "./DocumentDisplay.vue",
+                        componentPath:
+                            "@koha-vue/components/DocumentDisplay.vue",
                         componentProps: {
                             resource: {
                                 type: "resource",
@@ -245,7 +247,8 @@ export default {
                         {
                             name: "document",
                             type: "component",
-                            componentPath: "./DocumentSelect.vue",
+                            componentPath:
+                                "@koha-vue/components/DocumentSelect.vue",
                             label: $__("File"),
                             componentProps: {
                                 counter: {

@@ -150,6 +150,8 @@ import AdditionalFieldsDisplay from "./AdditionalFieldsDisplay.vue";
 import { useBaseElement } from "../composables/base-element.js";
 import { computed, defineAsyncComponent } from "vue";
 
+import { loadComponent } from "@koha-vue/loaders/componentResolver";
+
 export default {
     components: { LinkWrapper, AdditionalFieldsDisplay },
     setup(props) {
@@ -160,7 +162,7 @@ export default {
                 props.attr,
                 true
             );
-            return defineAsyncComponent(() => import(`${importPath}`));
+            return defineAsyncComponent(loadComponent(importPath));
         });
         const attribute = computed(() => {
             if (props.attr.showElement) {

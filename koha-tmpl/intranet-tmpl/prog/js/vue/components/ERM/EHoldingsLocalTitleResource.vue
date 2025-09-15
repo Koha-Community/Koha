@@ -293,7 +293,8 @@ export default {
                     showElement: {
                         type: "component",
                         hidden: title => title.resources.length > 0,
-                        componentPath: "./RelationshipTableDisplay.vue",
+                        componentPath:
+                            "@koha-vue/components/RelationshipTableDisplay.vue",
                         componentProps: {
                             tableOptions: {
                                 type: "object",

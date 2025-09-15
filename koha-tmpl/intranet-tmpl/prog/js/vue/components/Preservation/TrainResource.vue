@@ -417,7 +417,8 @@ export default {
                     type: "component",
                     name: $__("Items"),
                     hidden: train => train.items.length,
-                    componentPath: "./Preservation/TrainItemsTable.vue",
+                    componentPath:
+                        "@koha-vue/components/Preservation/TrainItemsTable.vue",
                     componentProps: {
                         train: {
                             type: "resource",

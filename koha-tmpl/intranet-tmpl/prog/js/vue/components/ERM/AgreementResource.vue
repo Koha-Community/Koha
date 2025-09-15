@@ -298,7 +298,8 @@ export default {
                             name: "user_id",
                             type: "component",
                             label: $__("User"),
-                            componentPath: "./PatronSearch.vue",
+                            componentPath:
+                                "@koha-vue/components/PatronSearch.vue",
                             required: true,
                             indexRequired: true,
                             componentProps: {
@@ -398,7 +399,8 @@ export default {
                             name: "license_id",
                             type: "component",
                             label: $__("License"),
-                            componentPath: "./InfiniteScrollSelect.vue",
+                            componentPath:
+                                "@koha-vue/components/InfiniteScrollSelect.vue",
                             required: true,
                             indexRequired: true,
                             componentProps: {
@@ -468,7 +470,7 @@ export default {
                         hidden: agreement =>
                             !!agreement.agreement_relationships?.length,
                         componentPath:
-                            "./ERM/AgreementRelationshipsDisplay.vue",
+                            "@koha-vue/components/ERM/AgreementRelationshipsDisplay.vue",
                         componentProps: {
                             agreement: {
                                 type: "resource",
@@ -544,7 +546,8 @@ export default {
                         type: "component",
                         hidden: agreement =>
                             !!agreement.agreement_packages?.length,
-                        componentPath: "./ERM/AgreementPackagesDisplay.vue",
+                        componentPath:
+                            "@koha-vue/components/ERM/AgreementPackagesDisplay.vue",
                         componentProps: {
                             agreement: {
                                 type: "resource",
@@ -562,7 +565,8 @@ export default {
                         type: "component",
                         label: $__("Agreement users"),
                         hidden: agreement => !!agreement.documents?.length,
-                        componentPath: "./DocumentDisplay.vue",
+                        componentPath:
+                            "@koha-vue/components/DocumentDisplay.vue",
                         componentProps: {
                             resource: {
                                 type: "resource",
@@ -596,7 +600,8 @@ export default {
                         {
                             name: "document",
                             type: "component",
-                            componentPath: "./DocumentSelect.vue",
+                            componentPath:
+                                "@koha-vue/components/DocumentSelect.vue",
                             label: $__("File"),
                             componentProps: {
                                 counter: {

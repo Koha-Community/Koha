@@ -407,7 +407,8 @@ export default {
                         },
                         {
                             type: "component",
-                            componentPath: "./Vendors/VendorContacts.vue",
+                            componentPath:
+                                "@koha-vue/components/Vendors/VendorContacts.vue",
                             indexRequired: true,
                             componentProps: {
                                 contact: {
@@ -427,7 +428,8 @@ export default {
                     showElement: {
                         type: "component",
                         hidden: vendor => !!vendor.interfaces?.length,
-                        componentPath: "./Vendors/VendorInterfaces.vue",
+                        componentPath:
+                            "@koha-vue/components/Vendors/VendorInterfaces.vue",
                         componentProps: {
                             vendor: {
                                 type: "resource",
@@ -840,7 +842,8 @@ export default {
                     type: "component",
                     name: $__("Contracts"),
                     hidden: vendor => vendor.contracts.length,
-                    componentPath: "./RelationshipTableDisplay.vue",
+                    componentPath:
+                        "@koha-vue/components/RelationshipTableDisplay.vue",
                     componentProps: {
                         tableOptions: {
                             type: "object",
@@ -949,7 +952,8 @@ export default {
                     type: "component",
                     name: $__("Subscription details"),
                     hidden: vendor => vendor.subscriptions_count,
-                    componentPath: "./Vendors/VendorSubscriptions.vue",
+                    componentPath:
+                        "@koha-vue/components/Vendors/VendorSubscriptions.vue",
                     componentProps: {
                         vendor: {
                             type: "resource",

@@ -8,13 +8,13 @@ export function useBaseElement(instancedElement) {
      */
     const identifyAndImportComponent = (attr, show = false) => {
         if (attr.type === "date") {
-            attr.componentPath = "./FlatPickrWrapper.vue";
+            attr.componentPath = "@koha-vue/components/FlatPickrWrapper.vue";
         }
         if (attr.type === "vendor") {
-            attr.componentPath = "./FormSelectVendors.vue";
+            attr.componentPath = "@koha-vue/components/FormSelectVendors.vue";
         }
         if (attr.type === "relationshipWidget") {
-            attr.componentPath = "./RelationshipWidget.vue";
+            attr.componentPath = "@koha-vue/components/RelationshipWidget.vue";
         }
         const importPath = show
             ? attr.showElement?.componentPath
