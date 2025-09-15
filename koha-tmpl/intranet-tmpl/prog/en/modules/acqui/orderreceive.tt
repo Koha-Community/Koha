@@ -290,7 +290,7 @@
                                                         [% SET optgroup_label = budget_period.description %]
                                                         [% IF !budget_period.active %]
                                                             [% SET optgroup_class = "inactive_budget" %]
-                                                            [% SET optgroup_label = t("{budget_description} (Inactive)", {budget_description = budget_period.description}) %]
+                                                            [% SET optgroup_label = tx("{budget_description} (Inactive)", {budget_description = budget_period.description}) %]
                                                         [% END %]
 
                                                         <optgroup class="[% optgroup_class | html %]" label="[% optgroup_label | html %]">
