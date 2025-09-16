@@ -90,14 +90,18 @@ unless (@queues) {
     push @queues, 'default';
 }
 
+my $notification_method = C4::Context->preference('JobsNotificationMethod') // 'STOMP';
+
 my ( $conn, $error );
-try {
-    $conn = Koha::BackgroundJob->connect;
-} catch {
-    $error = sprintf "Cannot connect to the message broker, the jobs will be processed anyway (%s)", $_;
-};
-$error ||= "Cannot connect to the message broker, the jobs will be processed anyway" unless $conn;
-warn $error if $error;
+if ( $notification_method eq 'STOMP' ) {
+    try {
+        $conn = Koha::BackgroundJob->connect;
+    } catch {
+        $error = sprintf "Cannot connect to the message broker, the jobs will be processed anyway (%s)", $_;
+    };
+    $error ||= "Cannot connect to the message broker, the jobs will be processed anyway" unless $conn;
+    warn $error if $error;
+}
 
 my $pm = Parallel::ForkManager->new($max_processes);
 
