@@ -8,11 +8,9 @@ return {
         my ($args) = @_;
         my ( $dbh, $out ) = @$args{qw(dbh out)};
 
-        # Do you stuffs here
         $dbh->do(
-            q{update systempreferences set variable = REGEXP_REPLACE(variable, '^ES', 'Elasticsearch') where variable like 'ES%'}
-        );
-
-        say $out "Renamed system preference 'ES..' to 'Elasticsearch..'";
+            q{UPDATE systempreferences SET variable = 'ElasticsearchPreventAutoTruncate' WHERE variable = 'ESPreventAutoTruncate'}
+            ) == 1
+            && say $out "Renamed system preference 'ESPreventAutoTruncate' to 'ElasticsearchPreventAutoTruncate'";
     },
 };
