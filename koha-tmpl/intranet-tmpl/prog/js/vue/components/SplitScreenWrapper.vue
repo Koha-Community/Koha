@@ -1,16 +1,11 @@
 <template>
     <div class="row" style="margin-bottom: 0.9em">
-        <div class="col-sm-6">
-            <slot
-                name="splitPane"
-                :paneFieldList="determineGroupsForPane('left')"
-            ></slot>
-        </div>
-        <div class="col-sm-6">
-            <slot
-                name="splitPane"
-                :paneFieldList="determineGroupsForPane('right')"
-            ></slot>
+        <div
+            v-for="pane in panesToDisplay"
+            :key="pane.pane"
+            :class="columnSizeClass"
+        >
+            <slot name="splitPane" :paneFieldList="pane.fields"></slot>
         </div>
     </div>
     <template v-if="determineGroupsForPane(null).length > 0">
@@ -22,16 +17,42 @@
 </template>
 
 <script>
+import { computed } from "vue";
 export default {
     props: {
         fieldList: Array,
+        splitScreenGroupings: Array,
     },
     setup(props) {
         const determineGroupsForPane = pane => {
             return props.fieldList.filter(group => group.splitPane == pane);
         };
+        const panesToDisplay = computed(() => {
+            return props.splitScreenGroupings
+                .reduce((acc, group) => {
+                    const isPaneAssigned = acc.find(
+                        pane => pane.pane == group.pane
+                    );
+                    if (isPaneAssigned) return acc;
+                    acc.push({
+                        pane: group.pane,
+                        fields: determineGroupsForPane(group.pane),
+                    });
+                    return acc;
+                }, [])
+                .sort((a, b) => a.pane - b.pane);
+        });
+        const numberOfPanes = computed(() => {
+            return panesToDisplay.value.length;
+        });
+        const columnSizeClass = computed(() => {
+            return `col-sm-${Math.floor(12 / numberOfPanes.value)}`;
+        });
         return {
             determineGroupsForPane,
+            panesToDisplay,
+            numberOfPanes,
+            columnSizeClass,
         };
     },
 };
