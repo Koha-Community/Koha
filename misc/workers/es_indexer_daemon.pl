@@ -80,12 +80,16 @@ warn "Not using Elasticsearch" unless C4::Context->preference('SearchEngine') eq
 
 my $logger = Koha::Logger->get({ interface =>  'worker' });
 
+my $notification_method = C4::Context->preference('JobsNotificationMethod') // 'STOMP';
+
 my $conn;
+if ( $notification_method eq 'STOMP' ) {
 try {
     $conn = Koha::BackgroundJob->connect;
 } catch {
     warn sprintf "Cannot connect to the message broker, the jobs will be processed anyway (%s)", $_;
 };
+}
 
 if ( $conn ) {
     # FIXME cf note in Koha::BackgroundJob about $namespace
