@@ -342,6 +342,31 @@ describe("useBaseResource - resource display methods", () => {
             expect(thirdGroup.fields[0].name).to.equal("showField");
         });
     });
+    it("getFieldGroupings - show with field groups and splitScreen mode enabled", () => {
+        globalConfig.props.resourceConfig.resourceAttrs =
+            cy.getResourceAttrsWithGroups();
+        globalConfig.props.resourceConfig.showGroupsDisplayMode = "splitScreen";
+        globalConfig.props.resourceConfig.splitScreenGroupings = [
+            { name: "Group 1", pane: 1 },
+            { name: "Group 2", pane: 2 },
+            { name: "Group 3", pane: 2 },
+        ];
+        cy.mount(UseBaseResource, globalConfig).then(({ component }) => {
+            const baseResource = component.result;
+            const getFieldGroupings = baseResource.getFieldGroupings;
+            const fieldGroupings = getFieldGroupings("Show", {
+                name: "A name value",
+                showField: "test",
+                displayName: "test",
+            });
+            const firstGroup = fieldGroupings[0];
+            expect(firstGroup.splitPane).to.equal(2);
+            const secondGroup = fieldGroupings[1];
+            expect(secondGroup.splitPane).to.equal(2);
+            const thirdGroup = fieldGroupings[2];
+            expect(thirdGroup.splitPane).to.equal(1);
+        });
+    });
     it("getResource", () => {
         cy.mount(UseBaseResource, globalConfig).then(({ component }) => {
             const baseResource = component.result;

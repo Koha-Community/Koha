@@ -265,12 +265,14 @@ describe("Show view features", () => {
             { vendor: this.vendor, basket: this.basket },
         ]);
     });
-    it("Should allow accordion view", function () {
+    it("Should allow split screen view", function () {
         cy.get("@vendor").then(vendor => {
             cy.visit(`/cgi-bin/koha/acquisition/vendors/${vendor.id}`);
-            cy.get("div.accordion").should("have.length", 2);
-            cy.get("div.accordion:first legend").contains("Details");
-            cy.get("div.accordion").eq(1).contains("Ordering information");
+            cy.get("div.row").should("exist");
+            cy.get("div.col-sm-6:first fieldset.rows:first legend").contains(
+                "Details"
+            );
+            cy.get("div.col-sm-6").eq(1).should("exist");
         });
     });
     it("Should append to show when the method is included in the resource", function () {
@@ -280,8 +282,7 @@ describe("Show view features", () => {
                 values: [vendor.id, "Test contract"],
             }).then(() => {
                 cy.visit(`/cgi-bin/koha/acquisition/vendors/${vendor.id}`);
-                cy.get("div.accordion").should("have.length", 3);
-                cy.get("div.accordion").eq(2).contains("Contracts");
+                cy.get("fieldset.rows").eq(2).contains("Contracts");
                 cy.get("#contracts_relationship_list").contains(
                     "Test contract"
                 );
