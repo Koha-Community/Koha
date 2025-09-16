@@ -1,10 +1,29 @@
 package Koha::App::Controller::CGI;
 
+# Koha is free software; you can redistribute it and/or modify it
+# under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 3 of the License, or
+# (at your option) any later version.
+#
+# Koha is distributed in the hope that it will be useful, but
+# WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with Koha; if not, see <http://www.gnu.org/licenses>.
+
 use Mojo::Base 'Mojolicious::Controller';
 
 use CGI::Compile;
 use CGI::Emulate::PSGI;
 use CGI;
+
+=head1 NAME
+
+Koha::App::Controller::CGI - Mojolicious controller for all CGI scripts
+
+=cut
 
 # CGI::Compile calls CGI::initialize_globals before each request, which resets PARAM_UTF8 to 0
 # We need to set it back to the correct value
@@ -17,6 +36,14 @@ use CGI;
     };
 }
 
+=head1 METHODS
+
+=head2 intranet
+
+Controller action that routes the request to the corresponding intranet CGI script
+
+=cut
+
 sub intranet {
     my ($c) = @_;
 
@@ -27,6 +54,12 @@ sub intranet {
 
     $c->_render_script($script);
 }
+
+=head2 opac
+
+Controller action that routes the request to the corresponding OPAC CGI script
+
+=cut
 
 sub opac {
     my ($c) = @_;
