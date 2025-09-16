@@ -18,11 +18,11 @@
 use Modern::Perl;
 
 use Test::NoWarnings;
-use Test::More tests => 11;
+use Test::More tests => 12;
 use Test::Warn;
 
 BEGIN {
-    use_ok( 'C4::SIP::Sip', qw( timestamp ) );
+    use_ok( 'C4::SIP::Sip', qw( timestamp add_field ) );
 }
 
 my $date_time = C4::SIP::Sip::timestamp();
@@ -113,4 +113,32 @@ subtest 'remove_password_from_message' => sub {
         '11YN20240903    134450                  AOCPL|AA23529000035676|AB39999000003697|AC***|AD***|BON',
         "11 Checkout - empty AC and AND"
     );
+};
+
+subtest 'add_field line ending normalization' => sub {
+    plan tests => 6;
+
+    # Test Unix line endings (\n)
+    my $field_unix = C4::SIP::Sip::add_field( "AF", "Line one\nLine two\nLine three" );
+    is( $field_unix, "AFLine one Line two Line three|", "Unix line endings (\\n) converted to spaces" );
+
+    # Test Windows line endings (\r\n)
+    my $field_windows = C4::SIP::Sip::add_field( "AF", "Line one\r\nLine two\r\nLine three" );
+    is( $field_windows, "AFLine one Line two Line three|", "Windows line endings (\\r\\n) converted to spaces" );
+
+    # Test Mac line endings (\r)
+    my $field_mac = C4::SIP::Sip::add_field( "AF", "Line one\rLine two\rLine three" );
+    is( $field_mac, "AFLine one Line two Line three|", "Mac line endings (\\r) converted to spaces" );
+
+    # Test mixed line endings
+    my $field_mixed = C4::SIP::Sip::add_field( "AF", "Line one\r\nLine two\nLine three\rLine four" );
+    is( $field_mixed, "AFLine one Line two Line three Line four|", "Mixed line endings converted to spaces" );
+
+    # Test no line endings (should remain unchanged)
+    my $field_normal = C4::SIP::Sip::add_field( "AF", "Single line message" );
+    is( $field_normal, "AFSingle line message|", "Normal text without line endings unchanged" );
+
+    # Test empty and undefined values
+    my $field_empty = C4::SIP::Sip::add_field( "AF", "" );
+    is( $field_empty, "AF|", "Empty value handled correctly" );
 };
