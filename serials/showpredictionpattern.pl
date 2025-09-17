@@ -174,7 +174,7 @@ while ( $i < 1000 ) {
     (
         $calculated, $subscription{'lastvalue1'}, $subscription{'lastvalue2'}, $subscription{'lastvalue3'},
         $subscription{'innerloop1'}, $subscription{'innerloop2'}, $subscription{'innerloop3'}
-    ) = GetNextSeq( \%subscription, \%pattern, $frequency, $date );
+    ) = GetNextSeq( \%subscription, \%pattern, $frequency, $date, $date );
     $issuenumber++;
     $line{'number'}      = $calculated;
     $line{'issuenumber'} = $issuenumber;
