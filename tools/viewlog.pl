@@ -203,8 +203,12 @@ if ($do_it) {
             }
         }
 
-        #add firstname and surname for borrower, when using the CIRCULATION, MEMBERS, FINES
-        if ( $log->module eq "CIRCULATION" || $log->module eq "MEMBERS" || $log->module eq "FINES" ) {
+        #add firstname and surname for borrower, when using the CIRCULATION, MEMBERS, FINES, APIKEYS
+        if (   $log->module eq "CIRCULATION"
+            || $log->module eq "MEMBERS"
+            || $log->module eq "FINES"
+            || $log->module eq "APIKEYS" )
+        {
             if ( $log->object ) {
                 my $patron = Koha::Patrons->find( $log->object );
                 if ( $patron && $output eq 'screen' ) {

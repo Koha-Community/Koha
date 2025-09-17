@@ -123,7 +123,7 @@
                             [% ELSE %]
                                 <label for="moduleALL" class="viewlog"><input type="checkbox" id="moduleALL" name="modules" value="" /> All</label>
                             [% END %]
-                            [% FOREACH modx IN [ 'AUTH' 'CATALOGUING' 'AUTHORITIES' 'MEMBERS' 'ACQUISITIONS' 'SERIAL' 'HOLDS' 'ILL' 'CIRCULATION' 'CLAIMS' 'FINES' 'SYSTEMPREFERENCE' 'CRONJOBS', 'REPORTS', 'SEARCHENGINE', 'NOTICES', 'NEWS', 'RECALLS', 'SUGGESTION', 'TRANSFERS' ] %]
+                            [% FOREACH modx IN [ 'APIKEYS' 'AUTH' 'CATALOGUING' 'AUTHORITIES' 'MEMBERS' 'ACQUISITIONS' 'SERIAL' 'HOLDS' 'ILL' 'CIRCULATION' 'CLAIMS' 'FINES' 'SYSTEMPREFERENCE' 'CRONJOBS', 'REPORTS', 'SEARCHENGINE', 'NOTICES', 'NEWS', 'RECALLS', 'SUGGESTION', 'TRANSFERS' ] %]
                                 [% IF modules.grep(modx).size %]
                                     <label for="module[% modx | html %]" class="viewlog"
                                         ><input type="checkbox" id="module[% modx | html %]" name="modules" value="[% modx | html %]" checked="checked" /> [% PROCESS translate_log_module module=modx %]</label
@@ -147,7 +147,7 @@
                             <label for="actionALL" class="viewlog"><input type="checkbox" id="actionALL" name="actions" value="" /> All</label>
                         [% END %]
 
-                        [% FOREACH actx IN [ 'ADD' 'DELETE' 'MODIFY' 'ISSUE' 'RETURN' 'RENEW' 'CREATE' 'CANCEL' 'FILL' 'SUSPEND' 'RESUME' 'ADDCIRCMESSAGE' 'MODCIRCMESSAGE' 'DELCIRCMESSAGE' 'STATUS_CHANGE' 'PATRON_NOTICE' 'CHANGE PASS' 'RESET PASS' 'Run' 'End' 'PATRON_MERGE' 'EDIT_MAPPINGS' 'RESET_MAPPINGS' 'ADD_BASKET' 'MODIFY_BASKET' 'MODIFY_BASKET_HEADER' 'MODIFY_BASKET_USERS' 'CLOSE_BASKET' 'APPROVE_BASKET' 'REOPEN_BASKET' 'CANCEL_ORDER' 'CREATE_ORDER' 'MODIFY_ORDER' 'CREATE_INVOICE_ADJUSTMENT' 'UPDATE_INVOICE_ADJUSTMENT' 'DELETE_INVOICE_ADJUSTMENT' 'RECEIVE_ORDER' 'MODIFY_BUDGET' 'MODIFY_FUND' 'CREATE_FUND' 'DELETE_FUND' 'ACQUISITION CLAIM' 'ACQUISITION ORDER' 'OVERDUE' 'EXPIRE' 'CREATE_RESTRICTION' 'MODIFY_RESTRICTION' 'DELETE_RESTRICTION' 'MODIFY_CARDNUMBER' 'RESET 2FA' ] %]
+                        [% FOREACH actx IN [ 'ACTIVATE' 'ADD' 'DELETE' 'MODIFY' 'REVOKE' 'ISSUE' 'RETURN' 'RENEW' 'CREATE' 'CANCEL' 'FILL' 'SUSPEND' 'RESUME' 'ADDCIRCMESSAGE' 'MODCIRCMESSAGE' 'DELCIRCMESSAGE' 'STATUS_CHANGE' 'PATRON_NOTICE' 'CHANGE PASS' 'RESET PASS' 'Run' 'End' 'PATRON_MERGE' 'EDIT_MAPPINGS' 'RESET_MAPPINGS' 'ADD_BASKET' 'MODIFY_BASKET' 'MODIFY_BASKET_HEADER' 'MODIFY_BASKET_USERS' 'CLOSE_BASKET' 'APPROVE_BASKET' 'REOPEN_BASKET' 'CANCEL_ORDER' 'CREATE_ORDER' 'MODIFY_ORDER' 'CREATE_INVOICE_ADJUSTMENT' 'UPDATE_INVOICE_ADJUSTMENT' 'DELETE_INVOICE_ADJUSTMENT' 'RECEIVE_ORDER' 'MODIFY_BUDGET' 'MODIFY_FUND' 'CREATE_FUND' 'DELETE_FUND' 'ACQUISITION CLAIM' 'ACQUISITION ORDER' 'OVERDUE' 'EXPIRE' 'CREATE_RESTRICTION' 'MODIFY_RESTRICTION' 'DELETE_RESTRICTION' 'MODIFY_CARDNUMBER' 'RESET 2FA' ] %]
                             [% IF actions.grep(actx).size %]
                                 <label for="action[% actx| replace('\s+', '_') | html %]" class="viewlog"
                                     ><input type="checkbox" id="action[% actx | replace('\s+', '_') | html %]" name="actions" value="[% actx | html %]" checked="checked" /> [% PROCESS translate_log_action action=actx %]</label
@@ -263,19 +263,29 @@
                                 <td>[% PROCESS translate_log_module module=loopro.module %]</td>
                                 <td>[% PROCESS translate_log_action action=loopro.action %]</td>
                                 <td>
-                                    [% IF ( loopro.module == 'MEMBERS' ) || ( loopro.module == 'CIRCULATION' ) || ( loopro.module == 'FINES' ) %]
+                                    [% IF ( loopro.module == 'MEMBERS' ) || ( loopro.module == 'CIRCULATION' ) || ( loopro.module == 'FINES' ) || ( loopro.module == 'APIKEYS' ) %]
                                         [% IF loopro.patron %]
-                                            <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% loopro.object | uri %]" title="Display member details.">
-                                                [% IF ( loopro.object ) %][% IF ( loopro.patron.firstname ) || ( loopro.patron.surname ) %]
-                                                    [% loopro.patron.firstname | html %]
-                                                    [% loopro.patron.surname | html %]
-                                                    ([% loopro.object | html %])
-                                                [% ELSE %]
-                                                    <span>Member</span> [% loopro.object | html %]
-                                                [% END %][% END %]
-                                            </a>
+                                            [% IF ( loopro.module == 'APIKEYS' ) %]
+                                                <a href="/cgi-bin/koha/members/apikeys.pl?patron_id=[% loopro.object | uri %]" title="View API keys for this patron">
+                                                    API keys for [% loopro.patron.firstname | html %] [% loopro.patron.surname | html %] ([% loopro.object | html %])
+                                                </a>
+                                            [% ELSE %]
+                                                <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% loopro.object | uri %]" title="Display member details.">
+                                                    [% IF ( loopro.object ) %][% IF ( loopro.patron.firstname ) || ( loopro.patron.surname ) %]
+                                                        [% loopro.patron.firstname | html %]
+                                                        [% loopro.patron.surname | html %]
+                                                        ([% loopro.object | html %])
+                                                    [% ELSE %]
+                                                        <span>Member</span> [% loopro.object | html %]
+                                                    [% END %][% END %]
+                                                </a>
+                                            [% END %]
                                         [% ELSE %]
-                                            [% loopro.object | html %]
+                                            [% IF ( loopro.module == 'APIKEYS' ) %]
+                                                API keys for patron [% loopro.object | html %]
+                                            [% ELSE %]
+                                                [% loopro.object | html %]
+                                            [% END %]
                                         [% END %]
                                     [% ELSIF ( loopro.module == 'CATALOGUING' ) %]
                                         [% IF ( loopro.info.substr(0, 4) == 'item' ) %]

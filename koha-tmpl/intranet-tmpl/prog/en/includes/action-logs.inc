@@ -1,5 +1,7 @@
 [% BLOCK translate_log_module %]
     [% SWITCH module %]
+    [% CASE 'APIKEYS' %]
+        <span>API keys</span>[% UNLESS Koha.Preference('ApiKeyLog') %]<i class="log-disabled fa-solid fa-triangle-exclamation" title="Log not enabled" data-log="ApiKeyLog"></i>[% END %]
     [% CASE 'AUTH' %]
         <span>Authentication</span>[% UNLESS Koha.Preference('AuthFailureLog') && Koha.Preference('AuthSuccessLog') %]
             <i class="log-disabled fa-solid fa-triangle-exclamation" title="Log not enabled" data-log="AuthFailureLog|AuthSuccessLog"></i>
@@ -49,12 +51,16 @@
 
 [% BLOCK translate_log_action %]
     [% SWITCH action %]
+    [% CASE 'ACTIVATE' %]
+        <span>Activate</span>
     [% CASE 'ADD' %]
         <span>Add</span>
     [% CASE 'DELETE' %]
         <span>Delete</span>
     [% CASE 'MODIFY' %]
         <span>Modify</span>
+    [% CASE 'REVOKE' %]
+        <span>Revoke</span>
     [% CASE 'ISSUE' %]
         <span>Checkout</span>
     [% CASE 'RETURN' %]
