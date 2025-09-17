@@ -21,3 +21,5 @@ export const APIClient = {
     preservation: new PreservationAPIClient(HttpClient),
     record_sources: new RecordSourcesAPIClient(HttpClient),
 };
+
+export default APIClient;
