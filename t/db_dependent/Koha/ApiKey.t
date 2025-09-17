@@ -18,12 +18,13 @@
 use Modern::Perl;
 
 use Test::NoWarnings;
-use Test::More tests => 5;
+use Test::More tests => 7;
 use Test::MockModule;
 use Test::Exception;
 use Test::Warn;
 
 use t::lib::TestBuilder;
+use t::lib::Mocks;
 
 BEGIN {
     use_ok('Koha::ApiKeys');
@@ -121,7 +122,7 @@ subtest 'store() tests' => sub {
 
 subtest 'validate_secret() tests' => sub {
 
-    plan tests => 2;
+    plan tests => 12;
 
     $schema->storage->txn_begin;
 
@@ -137,6 +138,57 @@ subtest 'validate_secret() tests' => sub {
 
     is( $api_key->validate_secret($secret),        1, 'Valid secret returns true' );
     is( $api_key->validate_secret('Wrong secret'), 0, 'Invalid secret returns false' );
+
+    # Test CREATE logging when ApiKeyLog is enabled
+    t::lib::Mocks::mock_preference( 'ApiKeyLog', 1 );
+    my $test_patron = $builder->build_object( { class => 'Koha::Patrons' } );
+    my $logs_before = $schema->resultset('ActionLog')->search( { module => 'APIKEYS', action => 'CREATE' } )->count;
+    my $logged_key  = Koha::ApiKey->new( { description => 'logged', patron_id => $test_patron->id } )->store;
+    my $logs_after  = $schema->resultset('ActionLog')->search( { module => 'APIKEYS', action => 'CREATE' } )->count;
+    is( $logs_after, $logs_before + 1, 'CREATE action logged when ApiKeyLog enabled' );
+
+    # Verify log entry parameters
+    my $log_entry = $schema->resultset('ActionLog')->search(
+        { module   => 'APIKEYS', action => 'CREATE', object => $test_patron->id },
+        { order_by => { -desc => 'action_id' } }
+    )->first;
+    ok( $log_entry, 'CREATE log entry found' );
+    is( $log_entry->object, $test_patron->id, 'Log object is patron_id' );
+    like( $log_entry->info, qr/Client ID: .+, Description: logged/, 'Log info contains client_id and description' );
+
+    # Test no CREATE logging when ApiKeyLog is disabled
+    t::lib::Mocks::mock_preference( 'ApiKeyLog', 0 );
+    $logs_before = $schema->resultset('ActionLog')->search( { module => 'APIKEYS', action => 'CREATE' } )->count;
+    my $unlogged_key = Koha::ApiKey->new( { description => 'unlogged', patron_id => $test_patron->id } )->store;
+    $logs_after = $schema->resultset('ActionLog')->search( { module => 'APIKEYS', action => 'CREATE' } )->count;
+    is( $logs_after, $logs_before, 'CREATE action not logged when ApiKeyLog disabled' );
+
+    # Test DELETE logging when ApiKeyLog is enabled
+    t::lib::Mocks::mock_preference( 'ApiKeyLog', 1 );
+    $logs_before = $schema->resultset('ActionLog')->search( { module => 'APIKEYS', action => 'DELETE' } )->count;
+    my $client_id_to_delete = $logged_key->client_id;
+    $logged_key->delete;
+    $logs_after = $schema->resultset('ActionLog')->search( { module => 'APIKEYS', action => 'DELETE' } )->count;
+    is( $logs_after, $logs_before + 1, 'DELETE action logged when ApiKeyLog enabled' );
+
+    # Verify DELETE log entry parameters
+    my $delete_log = $schema->resultset('ActionLog')->search(
+        { module   => 'APIKEYS', action => 'DELETE', object => $test_patron->id },
+        { order_by => { -desc => 'action_id' } }
+    )->first;
+    ok( $delete_log, 'DELETE log entry found' );
+    is( $delete_log->object, $test_patron->id, 'DELETE log object is patron_id' );
+    like(
+        $delete_log->info, qr/Client ID: $client_id_to_delete, Description: logged/,
+        'DELETE log info contains client_id and description'
+    );
+
+    # Test no DELETE logging when ApiKeyLog is disabled
+    t::lib::Mocks::mock_preference( 'ApiKeyLog', 0 );
+    $logs_before = $schema->resultset('ActionLog')->search( { module => 'APIKEYS', action => 'DELETE' } )->count;
+    $unlogged_key->delete;
+    $logs_after = $schema->resultset('ActionLog')->search( { module => 'APIKEYS', action => 'DELETE' } )->count;
+    is( $logs_after, $logs_before, 'DELETE action not logged when ApiKeyLog disabled' );
 
     $schema->storage->txn_rollback;
 };
@@ -155,6 +207,113 @@ subtest 'plain_text_secret() tests' => sub {
 
     ok( defined $plain_text_secret, 'A fresh API key carries its plain text secret' );
     ok( $plain_text_secret ne q{},  'Plain text secret is not an empty string' );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'revoke() tests' => sub {
+
+    plan tests => 8;
+
+    $schema->storage->txn_begin;
+
+    my $patron  = $builder->build_object( { class => 'Koha::Patrons' } );
+    my $api_key = Koha::ApiKey->new( { description => 'test', patron_id => $patron->id } )->store;
+
+    # Test successful revoke
+    is( $api_key->active, 1, 'API key starts as active' );
+    $api_key->revoke;
+    is( $api_key->active, 0, 'API key is revoked' );
+
+    # Test exception when already revoked
+    throws_ok { $api_key->revoke } 'Koha::Exceptions::ApiKey::AlreadyRevoked',
+        'Exception thrown when trying to revoke already revoked key';
+
+    # Test logging when ApiKeyLog is enabled
+    t::lib::Mocks::mock_preference( 'ApiKeyLog', 1 );
+    my $api_key2 = Koha::ApiKey->new( { description => 'test2', patron_id => $patron->id } )->store;
+
+    my $logs_before = $schema->resultset('ActionLog')->search( { module => 'APIKEYS', action => 'REVOKE' } )->count;
+    my $client_id_to_revoke = $api_key2->client_id;
+    $api_key2->revoke;
+    my $logs_after = $schema->resultset('ActionLog')->search( { module => 'APIKEYS', action => 'REVOKE' } )->count;
+    is( $logs_after, $logs_before + 1, 'REVOKE action logged when ApiKeyLog enabled' );
+
+    # Verify REVOKE log entry parameters
+    my $revoke_log = $schema->resultset('ActionLog')->search(
+        { module   => 'APIKEYS', action => 'REVOKE', object => $patron->id },
+        { order_by => { -desc => 'action_id' } }
+    )->first;
+    ok( $revoke_log, 'REVOKE log entry found' );
+    is( $revoke_log->object, $patron->id, 'REVOKE log object is patron_id' );
+    like(
+        $revoke_log->info, qr/Client ID: $client_id_to_revoke, Description: test2/,
+        'REVOKE log info contains client_id and description'
+    );
+
+    # Test no logging when ApiKeyLog is disabled
+    t::lib::Mocks::mock_preference( 'ApiKeyLog', 0 );
+    my $api_key3 = Koha::ApiKey->new( { description => 'test3', patron_id => $patron->id } )->store;
+
+    $logs_before = $schema->resultset('ActionLog')->search( { module => 'APIKEYS', action => 'REVOKE' } )->count;
+    $api_key3->revoke;
+    $logs_after = $schema->resultset('ActionLog')->search( { module => 'APIKEYS', action => 'REVOKE' } )->count;
+    is( $logs_after, $logs_before, 'REVOKE action not logged when ApiKeyLog disabled' );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'activate() tests' => sub {
+
+    plan tests => 8;
+
+    $schema->storage->txn_begin;
+
+    my $patron  = $builder->build_object( { class => 'Koha::Patrons' } );
+    my $api_key = Koha::ApiKey->new( { description => 'test', patron_id => $patron->id } )->store;
+    $api_key->active(0)->store;    # Start as revoked
+
+    # Test successful activate
+    is( $api_key->active, 0, 'API key starts as revoked' );
+    $api_key->activate;
+    is( $api_key->active, 1, 'API key is activated' );
+
+    # Test exception when already active
+    throws_ok { $api_key->activate } 'Koha::Exceptions::ApiKey::AlreadyActive',
+        'Exception thrown when trying to activate already active key';
+
+    # Test logging when ApiKeyLog is enabled
+    t::lib::Mocks::mock_preference( 'ApiKeyLog', 1 );
+    my $api_key2 = Koha::ApiKey->new( { description => 'test2', patron_id => $patron->id } )->store;
+    $api_key2->active(0)->store( { skip_log => 1 } );    # Start as revoked
+
+    my $logs_before = $schema->resultset('ActionLog')->search( { module => 'APIKEYS', action => 'ACTIVATE' } )->count;
+    my $client_id_to_activate = $api_key2->client_id;
+    $api_key2->activate;
+    my $logs_after = $schema->resultset('ActionLog')->search( { module => 'APIKEYS', action => 'ACTIVATE' } )->count;
+    is( $logs_after, $logs_before + 1, 'ACTIVATE action logged when ApiKeyLog enabled' );
+
+    # Verify ACTIVATE log entry parameters
+    my $activate_log = $schema->resultset('ActionLog')->search(
+        { module   => 'APIKEYS', action => 'ACTIVATE', object => $patron->id },
+        { order_by => { -desc => 'action_id' } }
+    )->first;
+    ok( $activate_log, 'ACTIVATE log entry found' );
+    is( $activate_log->object, $patron->id, 'ACTIVATE log object is patron_id' );
+    like(
+        $activate_log->info, qr/Client ID: $client_id_to_activate, Description: test2/,
+        'ACTIVATE log info contains client_id and description'
+    );
+
+    # Test no logging when ApiKeyLog is disabled
+    t::lib::Mocks::mock_preference( 'ApiKeyLog', 0 );
+    my $api_key3 = Koha::ApiKey->new( { description => 'test3', patron_id => $patron->id } )->store;
+    $api_key3->active(0)->store( { skip_log => 1 } );    # Start as revoked
+
+    $logs_before = $schema->resultset('ActionLog')->search( { module => 'APIKEYS', action => 'ACTIVATE' } )->count;
+    $api_key3->activate;
+    $logs_after = $schema->resultset('ActionLog')->search( { module => 'APIKEYS', action => 'ACTIVATE' } )->count;
+    is( $logs_after, $logs_before, 'ACTIVATE action not logged when ApiKeyLog disabled' );
 
     $schema->storage->txn_rollback;
 };

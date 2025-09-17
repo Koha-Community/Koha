@@ -19,7 +19,9 @@ package Koha::ApiKey;
 
 use Modern::Perl;
 
+use C4::Log         qw( logaction );
 use Koha::AuthUtils qw(hash_password);
+use Koha::Exceptions::ApiKey;
 use Koha::Exceptions::Object;
 
 use List::MoreUtils qw(any);
@@ -44,7 +46,10 @@ Overloaded I<store> method.
 =cut
 
 sub store {
-    my ($self) = @_;
+    my ( $self, $params ) = @_;
+    $params //= {};
+
+    my $is_new = !$self->in_storage;
 
     if ( $self->in_storage ) {
         my %dirty_columns = $self->_result->get_dirty_columns;
@@ -60,11 +65,24 @@ sub store {
             {
                 secret    => Koha::AuthUtils::hash_password( $self->{_plain_text_secret} ),
                 client_id => $self->_generate_unused_uuid('client_id'),
+                active    => 1,
             }
         );
     }
 
-    return $self->SUPER::store();
+    my $result = $self->SUPER::store();
+
+    # Log the action unless explicitly skipped
+    if ( !$params->{skip_log} && C4::Context->preference('ApiKeyLog') ) {
+        if ($is_new) {
+            logaction(
+                'APIKEYS', 'CREATE', $self->patron_id,
+                sprintf( "Client ID: %s, Description: %s", $self->client_id, $self->description )
+            );
+        }
+    }
+
+    return $result;
 }
 
 =head3 validate_secret
@@ -101,6 +119,87 @@ sub plain_text_secret {
         if $self->{_plain_text_secret};
 
     return;
+}
+
+=head3 delete
+
+    $api_key->delete;
+
+Overloaded delete method to add logging.
+
+=cut
+
+sub delete {
+    my ($self) = @_;
+
+    my $client_id   = $self->client_id;
+    my $description = $self->description;
+    my $patron_id   = $self->patron_id;
+
+    my $result = $self->SUPER::delete();
+
+    if ( C4::Context->preference('ApiKeyLog') ) {
+        logaction(
+            'APIKEYS', 'DELETE', $patron_id,
+            sprintf( "Client ID: %s, Description: %s", $client_id, $description )
+        );
+    }
+
+    return $result;
+}
+
+=head3 revoke
+
+    $api_key->revoke;
+
+Revokes the API key by setting active to 0.
+Throws an exception if the key is already revoked.
+
+=cut
+
+sub revoke {
+    my ($self) = @_;
+
+    Koha::Exceptions::ApiKey::AlreadyRevoked->throw
+        if !$self->active;
+
+    $self->active(0)->store( { skip_log => 1 } );
+
+    if ( C4::Context->preference('ApiKeyLog') ) {
+        logaction(
+            'APIKEYS', 'REVOKE', $self->patron_id,
+            sprintf( "Client ID: %s, Description: %s", $self->client_id, $self->description )
+        );
+    }
+
+    return $self;
+}
+
+=head3 activate
+
+    $api_key->activate;
+
+Activates the API key by setting active to 1.
+Throws an exception if the key is already active.
+
+=cut
+
+sub activate {
+    my ($self) = @_;
+
+    Koha::Exceptions::ApiKey::AlreadyActive->throw
+        if $self->active;
+
+    $self->active(1)->store( { skip_log => 1 } );
+
+    if ( C4::Context->preference('ApiKeyLog') ) {
+        logaction(
+            'APIKEYS', 'ACTIVATE', $self->patron_id,
+            sprintf( "Client ID: %s, Description: %s", $self->client_id, $self->description )
+        );
+    }
+
+    return $self;
 }
 
 =head2 Internal methods
