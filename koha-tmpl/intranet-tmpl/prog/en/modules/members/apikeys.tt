@@ -36,6 +36,26 @@
 
     <h1>API keys for [% INCLUDE 'patron-title.inc' %]</h1>
 
+    [% FOREACH m IN messages %]
+        <div class="alert alert-[% m.type | html %]">
+            [% SWITCH m.code %]
+            [% CASE 'already_revoked' %]
+                <span>This API key is already revoked.</span>
+            [% CASE 'already_active' %]
+                <span>This API key is already active.</span>
+            [% CASE 'key_not_found' %]
+                <span>The specified API key was not found.</span>
+            [% CASE 'unhandled_exception' %]
+                <span>An unexpected error occurred while processing your request.</span>
+                [% IF m.error_string %]
+                    <p><strong>Error details:</strong> [% m.error_string | html %]</p>
+                [% END %]
+            [% CASE %]
+                <span>[% m.code | html %]</span>
+            [% END %]
+        </div>
+    [% END %]
+
     [% IF fresh_api_key %]
         [%# A fresh api key was generated, display the secret, only once %]
         <div class="alert alert-info">Make sure to copy your API secret now. You won’t be able to see it again!</div>

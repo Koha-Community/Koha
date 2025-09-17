@@ -20,6 +20,8 @@
 use Modern::Perl;
 
 use CGI;
+use Try::Tiny    qw( catch try );
+use Scalar::Util qw( blessed );
 
 use C4::Auth   qw( get_template_and_user );
 use C4::Output qw( output_and_exit output_html_with_http_headers );
@@ -28,6 +30,7 @@ use Koha::ApiKeys;
 use Koha::Patrons;
 
 my $cgi = CGI->new;
+my @messages;
 
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     {
@@ -73,48 +76,62 @@ if ($op) {
         );
         $api_key->store;
 
-        $template->param(
-            fresh_api_key => $api_key,
-            api_keys      => Koha::ApiKeys->search( { patron_id => $patron_id } ),
-        );
-    }
-
-    if ( $op eq 'cud-delete' ) {
+        $template->param( fresh_api_key => $api_key, );
+    } elsif ( $op eq 'cud-delete' ) {
         my $api_key_id = $cgi->param('key');
-        my $key        = Koha::ApiKeys->find( { patron_id => $patron_id, client_id => $api_key_id } );
+
+        my $key = Koha::ApiKeys->find( { patron_id => $patron_id, client_id => $api_key_id } );
+
         if ($key) {
             $key->delete;
+        } else {
+            push @messages, { type => 'alert', code => 'key_not_found' };
         }
-        print $cgi->redirect( '/cgi-bin/koha/members/apikeys.pl?patron_id=' . $patron_id );
-        exit;
-    }
-
-    if ( $op eq 'cud-revoke' ) {
+        $template->param(
+            key_deleted => 1,
+        );
+    } elsif ( $op eq 'cud-revoke' ) {
         my $api_key_id = $cgi->param('key');
-        my $key        = Koha::ApiKeys->find( { patron_id => $patron_id, client_id => $api_key_id } );
-        if ($key) {
-            $key->active(0);
-            $key->store;
-        }
-        print $cgi->redirect( '/cgi-bin/koha/members/apikeys.pl?patron_id=' . $patron_id );
-        exit;
-    }
 
-    if ( $op eq 'cud-activate' ) {
-        my $api_key_id = $cgi->param('key');
-        my $key        = Koha::ApiKeys->find( { patron_id => $patron_id, client_id => $api_key_id } );
+        my $key = Koha::ApiKeys->find( { patron_id => $patron_id, client_id => $api_key_id } );
+
         if ($key) {
-            $key->active(1);
-            $key->store;
+            try {
+                $key->revoke();
+            } catch {
+                if ( blessed $_ && $_->isa('Koha::Exceptions::ApiKey::AlreadyRevoked') ) {
+                    push @messages, { type => 'alert', code => 'already_revoked' };
+                } else {
+                    push @messages, { type => 'alert', code => 'unhandled_exception', error_string => $_ };
+                }
+            };
+        } else {
+            push @messages, { type => 'alert', code => 'key_not_found' };
         }
-        print $cgi->redirect( '/cgi-bin/koha/members/apikeys.pl?patron_id=' . $patron_id );
-        exit;
+    } elsif ( $op eq 'cud-activate' ) {
+        my $api_key_id = $cgi->param('key');
+
+        my $key = Koha::ApiKeys->find( { patron_id => $patron_id, client_id => $api_key_id } );
+        if ($key) {
+            try {
+                $key->activate();
+            } catch {
+                if ( blessed $_ && $_->isa('Koha::Exceptions::ApiKey::AlreadyActive') ) {
+                    push @messages, { type => 'alert', code => 'already_active' };
+                } else {
+                    push @messages, { type => 'alert', code => 'unhandled_exception', error_string => $_ };
+                }
+            };
+        } else {
+            push @messages, { type => 'alert', code => 'key_not_found' };
+        }
     }
 }
 
 $template->param(
     api_keys => Koha::ApiKeys->search( { patron_id => $patron_id } ),
-    patron   => $patron
+    patron   => $patron,
+    messages => \@messages
 );
 
 output_html_with_http_headers $cgi, $cookie, $template->output;
