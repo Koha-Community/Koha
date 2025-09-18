@@ -415,7 +415,9 @@ sub transferbook {
         $messages->{'WasTransfered'} = $tbr;
 
     }
-    ModDateLastSeen($itemnumber);
+
+    # Only build the holds queue if we have transferred above
+    ModDateLastSeen( $itemnumber, undef, { skip_holds_queue => 1 } );
     return ( $dotransfer, $messages );
 }
 
