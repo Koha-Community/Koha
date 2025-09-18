@@ -124,12 +124,12 @@ if ( $deleted_barcodes and $record_type ne 'bibs' ) {
     pod2usage(q|--deleted_barcodes can only be used with biblios|);
 }
 
-my $sftp_server;
+my $file_transport;
 if ($destination_server_id) {
-    $sftp_server = Koha::File::Transports->find($destination_server_id);
+    $file_transport = Koha::File::Transports->find($destination_server_id);
 
-    pod2usage( sprintf( "No FTP/SFTP Server (%s) found", $destination_server_id ) )
-        unless $sftp_server;
+    pod2usage( sprintf( "No file transport server (%s) found", $destination_server_id ) )
+        unless $file_transport;
 }
 
 if ($report_id) {
@@ -137,7 +137,7 @@ if ($report_id) {
     # Check report exists
     $report = Koha::Reports->find($report_id);
     unless ($report) {
-        pod2usage( sprintf( "No FTP/SFTP Server (%s) found", $report_id ) );
+        pod2usage( sprintf( "No saved report (%s) found", $report_id ) );
     }
     $sql = $report->savedsql;
 
@@ -354,17 +354,18 @@ if ($deleted_barcodes) {
     );
 }
 
-if ($sftp_server) {
-    $sftp_server->connect
+if ($file_transport) {
+    $file_transport->connect
         or die pod2usage( sprintf( "Unable to connect server (%s)", $destination_server_id ) );
 
-    my $upload_dir = $sftp_server->upload_directory;
+    my $upload_dir = $file_transport->upload_directory;
     if ($upload_dir) {
-        $sftp_server->change_directory( $upload_dir )
-            or die pod2usage( sprintf( "Unable to change directory on server (%s) to path (%s)", $destination_server_id, $upload_dir ) );
+        $file_transport->change_directory($upload_dir)
+            or die pod2usage(
+            sprintf( "Unable to change directory on server (%s) to path (%s)", $destination_server_id, $upload_dir ) );
     }
 
-    $sftp_server->upload_file ( $filename, $filename )
+    $file_transport->upload_file( $filename, $filename )
         or die pod2usage( sprintf( "Unable to upload file (%s) to server (%s)", $filename, $destination_server_id ) );
 }
 
@@ -519,15 +520,15 @@ Print a brief help message.
 =item B<--destination_server_id>
 
 --destination_server_id=ID      Provide this option, along with the destination server ID, to
-                                upload the resultant mrc file to the selected FTP/SFTP Server.
-                                You can create FTP/SFTP Servers via the Koha Staff client, under
+                                upload the resultant mrc file to the selected file transport server.
+                                You can create file transport servers via the Koha Staff client, under
                                 Koha Administration.
 
 =item B<--delete_local_after_run>
 
 --delete_local_after_run       Deletes the local file at the end of the script run. Can be
-                                useful if, for example, you are uploading the file to an
-                                FTP/SFTP server.
+                                useful if, for example, you are uploading the file to a
+                                file transport server.
 
 =back
 
