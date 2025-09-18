@@ -1973,6 +1973,7 @@ sub AddIssue {
                 }
             );
 
+            # Rebuilding holds queue here to ensure the item is removed from current queue
             Koha::BackgroundJob::BatchUpdateBiblioHoldsQueue->new->enqueue(
                 { biblio_ids => [ $item_object->biblionumber ] } )
                 if C4::Context->preference('RealTimeHoldsQueue');

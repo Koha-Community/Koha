@@ -14,6 +14,7 @@ use C4::SIP::ILS::Transaction;
 use C4::Circulation qw( AddReturn LostItem );
 use C4::Items       qw( ModItemTransfer );
 use C4::Reserves    qw( ModReserve ModReserveAffect CheckReserves );
+use Koha::BackgroundJob::BatchUpdateBiblioHoldsQueue;
 use Koha::DateUtils qw( dt_from_string );
 use Koha::Items;
 
@@ -205,6 +206,10 @@ sub do_checkin {
     } else {
         $self->alert( !$return || defined $self->alert_type );
     }
+
+    # If item has been returned let's update the queue after transfers/holds handled above
+    Koha::BackgroundJob::BatchUpdateBiblioHoldsQueue->new->enqueue( { biblio_ids => [ $item->biblionumber ] } )
+        if $return && C4::Context->preference('RealTimeHoldsQueue');
 
     # Set sort bin based on info in the item associated with the issue, and the
     # mapping from SIP2SortBinMapping

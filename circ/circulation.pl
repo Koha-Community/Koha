@@ -43,6 +43,7 @@ use Koha::Holds;
 use C4::Context;
 use CGI::Session;
 use Koha::AuthorisedValues;
+use Koha::BackgroundJob::BatchUpdateBiblioHoldsQueue;
 use Koha::Checkouts::ReturnClaims;
 use Koha::CsvProfiles;
 use Koha::Patrons;
@@ -374,6 +375,8 @@ if ( @$barcodes && $op eq 'cud-checkout' ) {
 
             my ( $stats_return, $stats_messages, $stats_iteminformation, $stats_borrower ) =
                 AddReturn( $item->barcode, C4::Context->userenv->{'branch'}, undef, undef, 1 );
+
+            # No rebuild of holds queue here as the item hasn't really moved, just a stat checkout
 
             $template->param(
                 STATS     => 1,

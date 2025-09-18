@@ -36,6 +36,7 @@ use C4::Reports::Guided qw( );
 use C4::Charset         qw( NormalizeString );
 
 use Koha::I18N qw(__);
+use Koha::BackgroundJob::BatchUpdateBiblioHoldsQueue;
 use Koha::Biblios;
 use Koha::DateUtils qw( dt_from_string );
 use Koha::Database::Columns;
@@ -269,6 +270,11 @@ if ( $op eq 'cud-inventory'
                     if ($doreturn) {
                         $item_unblessed->{onloan}       = undef;
                         $item_unblessed->{datelastseen} = dt_from_string;
+
+                        # Rebuild the holds queue when item found on shelf
+                        Koha::BackgroundJob::BatchUpdateBiblioHoldsQueue->new->enqueue(
+                            { biblio_ids => [ $item->biblionumber ] } )
+                            if C4::Context->preference('RealTimeHoldsQueue');
                     } else {
                         push @errorloop, { barcode => $barcode, ERR_ONLOAN_NOT_RET => 1 };
                     }

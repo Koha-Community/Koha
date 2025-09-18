@@ -2307,7 +2307,14 @@ sub add_to_bundle {
 
                     my $branchcode = C4::Context->userenv->{'branch'};
                     my ($success) = C4::Circulation::AddReturn( $bundle_item->barcode, $branchcode );
-                    unless ($success) {
+
+                    if ($success) {
+
+                        # HoldsQueue doesn't seem to mind bundles, not sure if this is correct, but rebuild for now
+                        Koha::BackgroundJob::BatchUpdateBiblioHoldsQueue->new->enqueue(
+                            { biblio_ids => [ $self->biblionumber ] } )
+                            if C4::Context->preference('RealTimeHoldsQueue');
+                    } else {
                         Koha::Exceptions::Checkin::FailedCheckin->throw();
                     }
                 }
