@@ -44,6 +44,7 @@ use C4::Reserves qw( ModReserve ModReserveAffect CheckReserves );
 use C4::RotatingCollections;
 use C4::Log qw( logaction );
 use Koha::AuthorisedValues;
+use Koha::BackgroundJob::BatchUpdateBiblioHoldsQueue;
 use Koha::BiblioFrameworks;
 use Koha::Calendar;
 use Koha::Checkouts;
@@ -387,8 +388,13 @@ if ( $barcode && ( $op eq 'cud-checkin' || $op eq 'cud-affect_reserve' ) ) {
     }
 
     # do the return
-    ( $returned, $messages, $issue, $borrower ) = AddReturn( $barcode, $userenv_branch, $exemptfine, $return_date )
-        unless ( $needs_confirm || $bundle_confirm );
+    unless ( $needs_confirm || $bundle_confirm ) {
+        ( $returned, $messages, $issue, $borrower ) = AddReturn( $barcode, $userenv_branch, $exemptfine, $return_date );
+
+        # Rebuild the queue only after handling confirmations
+        Koha::BackgroundJob::BatchUpdateBiblioHoldsQueue->new->enqueue( { biblio_ids => [ $item->biblionumber ] } )
+            if $returned && C4::Context->preference('RealTimeHoldsQueue');
+    }
 
     if ($returned) {
         my $date_due_dt = dt_from_string( $issue->date_due, 'sql' );
