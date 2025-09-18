@@ -318,7 +318,12 @@ sub sftp_upload {
         port     => $port,
         timeout  => 10,
     );
-    $sftp->die_on_error( "Cannot ssh to " . $self->{account}->host );
+    if ( $sftp->error ) {
+        return $self->_abort_download(
+            $sftp,
+            "Cannot ssh to " . $self->{account}->host . " : " . $sftp->error
+        );
+    }
     $sftp->setcwd( $self->{account}->upload_directory )
         or return $self->_abort_download(
         $sftp,
