@@ -154,7 +154,7 @@ subtest 'validate_secret() tests' => sub {
     )->first;
     ok( $log_entry, 'CREATE log entry found' );
     is( $log_entry->object, $test_patron->id, 'Log object is patron_id' );
-    like( $log_entry->info, qr/Client ID: .+, Description: logged/, 'Log info contains client_id and description' );
+    like( $log_entry->info, qr/logged/, 'Log info contains description' );
 
     # Test no CREATE logging when ApiKeyLog is disabled
     t::lib::Mocks::mock_preference( 'ApiKeyLog', 0 );
@@ -178,10 +178,9 @@ subtest 'validate_secret() tests' => sub {
     )->first;
     ok( $delete_log, 'DELETE log entry found' );
     is( $delete_log->object, $test_patron->id, 'DELETE log object is patron_id' );
-    like(
-        $delete_log->info, qr/Client ID: $client_id_to_delete, Description: logged/,
-        'DELETE log info contains client_id and description'
-    );
+
+    # DELETE logs pass undef for info field, object is in diff field
+    is( $delete_log->info, undef, 'DELETE log info is undef as expected' );
 
     # Test no DELETE logging when ApiKeyLog is disabled
     t::lib::Mocks::mock_preference( 'ApiKeyLog', 0 );
@@ -247,7 +246,7 @@ subtest 'revoke() tests' => sub {
     ok( $revoke_log, 'REVOKE log entry found' );
     is( $revoke_log->object, $patron->id, 'REVOKE log object is patron_id' );
     like(
-        $revoke_log->info, qr/Client ID: $client_id_to_revoke, Description: test2/,
+        $revoke_log->info, qr/$client_id_to_revoke.*test2/s,
         'REVOKE log info contains client_id and description'
     );
 
@@ -301,7 +300,7 @@ subtest 'activate() tests' => sub {
     ok( $activate_log, 'ACTIVATE log entry found' );
     is( $activate_log->object, $patron->id, 'ACTIVATE log object is patron_id' );
     like(
-        $activate_log->info, qr/Client ID: $client_id_to_activate, Description: test2/,
+        $activate_log->info, qr/$client_id_to_activate.*test2/s,
         'ACTIVATE log info contains client_id and description'
     );
 

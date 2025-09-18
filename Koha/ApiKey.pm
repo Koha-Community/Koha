@@ -19,6 +19,7 @@ package Koha::ApiKey;
 
 use Modern::Perl;
 
+use Clone           qw( clone );
 use C4::Log         qw( logaction );
 use Koha::AuthUtils qw(hash_password);
 use Koha::Exceptions::ApiKey;
@@ -51,7 +52,7 @@ sub store {
 
     my $is_new = !$self->in_storage;
 
-    if ( $self->in_storage ) {
+    if ( !$is_new ) {
         my %dirty_columns = $self->_result->get_dirty_columns;
 
         # only allow 'description' and 'active' to be updated
@@ -70,19 +71,22 @@ sub store {
         );
     }
 
-    my $result = $self->SUPER::store();
+    my $log = !$params->{skip_log} && C4::Context->preference('ApiKeyLog');
+    my $original;
 
     # Log the action unless explicitly skipped
-    if ( !$params->{skip_log} && C4::Context->preference('ApiKeyLog') ) {
-        if ($is_new) {
-            logaction(
-                'APIKEYS', 'CREATE', $self->patron_id,
-                sprintf( "Client ID: %s, Description: %s", $self->client_id, $self->description )
-            );
-        }
+    $original = $is_new ? undef : $self->get_from_storage()
+        if $log;
+
+    $self->SUPER::store();
+
+    if ( $log && $is_new ) {
+        logaction( 'APIKEYS', 'CREATE', $self->patron_id, $self, undef );
+    } elsif ($log) {
+        logaction( 'APIKEYS', 'MODIFY', $self->patron_id, $self, undef, $original );
     }
 
-    return $result;
+    return $self;
 }
 
 =head3 validate_secret
@@ -132,18 +136,11 @@ Overloaded delete method to add logging.
 sub delete {
     my ($self) = @_;
 
-    my $client_id   = $self->client_id;
-    my $description = $self->description;
-    my $patron_id   = $self->patron_id;
+    my $patron_id = $self->patron_id;
+    my $result    = $self->SUPER::delete();
 
-    my $result = $self->SUPER::delete();
-
-    if ( C4::Context->preference('ApiKeyLog') ) {
-        logaction(
-            'APIKEYS', 'DELETE', $patron_id,
-            sprintf( "Client ID: %s, Description: %s", $client_id, $description )
-        );
-    }
+    logaction( 'APIKEYS', 'DELETE', $patron_id )
+        if C4::Context->preference('ApiKeyLog');
 
     return $result;
 }
@@ -163,14 +160,14 @@ sub revoke {
     Koha::Exceptions::ApiKey::AlreadyRevoked->throw
         if !$self->active;
 
-    $self->active(0)->store( { skip_log => 1 } );
+    my $log      = C4::Context->preference('ApiKeyLog');
+    my $original = $log ? clone( $self->unblessed ) : undef;
 
-    if ( C4::Context->preference('ApiKeyLog') ) {
-        logaction(
-            'APIKEYS', 'REVOKE', $self->patron_id,
-            sprintf( "Client ID: %s, Description: %s", $self->client_id, $self->description )
-        );
-    }
+    $self->active(0);
+    $self->store( { skip_log => 1 } );
+
+    logaction( 'APIKEYS', 'REVOKE', $self->patron_id, $self, undef, $original )
+        if $log;
 
     return $self;
 }
@@ -190,14 +187,14 @@ sub activate {
     Koha::Exceptions::ApiKey::AlreadyActive->throw
         if $self->active;
 
-    $self->active(1)->store( { skip_log => 1 } );
+    my $log      = C4::Context->preference('ApiKeyLog');
+    my $original = $log ? clone( $self->unblessed ) : undef;
 
-    if ( C4::Context->preference('ApiKeyLog') ) {
-        logaction(
-            'APIKEYS', 'ACTIVATE', $self->patron_id,
-            sprintf( "Client ID: %s, Description: %s", $self->client_id, $self->description )
-        );
-    }
+    $self->active(1);
+    $self->store( { skip_log => 1 } );
+
+    logaction( 'APIKEYS', 'ACTIVATE', $self->patron_id, $self, undef, $original )
+        if $log;
 
     return $self;
 }
