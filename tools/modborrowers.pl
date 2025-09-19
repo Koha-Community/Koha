@@ -175,6 +175,7 @@ if ( $op eq 'cud-show' || $op eq 'show' ) {
             category_lib   => $category_lib,
             type           => $attr_type->authorised_value_category ? 'select' : 'text',
             };
+        @patron_attributes_codes = sort { $a->{attribute_lib} cmp $b->{attribute_lib} } @patron_attributes_codes;
     }
 
     my @attributes_header = ();
