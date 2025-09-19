@@ -90,8 +90,6 @@ sub upload_file {
     my ( $self, $local_file, $remote_file ) = @_;
     my $operation = "upload";
 
-    my $logger = Koha::Logger->get_logger();
-
     $self->{connection}->put( $local_file, $remote_file ) or return $self->_abort_operation($operation);
 
     $self->add_message(
