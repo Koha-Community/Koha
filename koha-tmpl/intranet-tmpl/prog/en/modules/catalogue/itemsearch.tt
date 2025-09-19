@@ -434,6 +434,7 @@
                     <form method="POST" action="/cgi-bin/koha/catalogue/item-export.pl">
                         [% INCLUDE 'csrf-token.inc' %]
                         <input type="hidden" name="format" value="${format}">
+                        <input type="hidden" name="op" value="cud-export">
                         ${inputs}
                     </form>
                 `);
