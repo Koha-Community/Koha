@@ -133,7 +133,7 @@ SKIP: {
             # 'Place hold' button exists by default
             $driver->get( $s->opac_base_url . "opac-detail.pl?biblionumber=" . $biblionumber );
             like(
-                $driver->get_title, qr(Details for: $biblio_title),
+                $driver->get_title, qr(Details for $biblio_title),
                 'Correctly in detail page'
             );
 
@@ -267,7 +267,7 @@ SKIP: {
             # 'Place hold' button exists by default
             $driver->get( $s->opac_base_url . "opac-detail.pl?biblionumber=" . $biblionumber );
             like(
-                $driver->get_title, qr(Details for: $biblio_title),
+                $driver->get_title, qr(Details for $biblio_title),
                 'Correctly in detail page'
             );
 
