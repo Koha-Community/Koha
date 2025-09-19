@@ -124,7 +124,8 @@ sub read_file {
             sep_char           => $delimiter,
             quote_char         => $quote_char,
             binary             => 1,
-            allow_loose_quotes => 1
+            allow_loose_quotes => 1,
+            formula            => 'empty',
         }
     );
 
