@@ -20,7 +20,7 @@
 use Modern::Perl;
 
 use Test::NoWarnings;
-use Test::More tests => 6;
+use Test::More tests => 7;
 use Test::MockModule;
 
 use Koha::ILL::Requests;
@@ -194,6 +194,42 @@ subtest 'get_backend_plugin() tests' => sub {
         $request->get_backend_plugin, undef,
         'get_backend_plugin returns undef if plugins are disabled'
     );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'copyright clearance methods tests' => sub {
+
+    plan tests => 8;
+
+    $schema->storage->txn_begin;
+
+    # Test set_copyright_clearance_confirmed with truthy value
+    my $request = $builder->build_object( { class => 'Koha::ILL::Requests' } );
+
+    $request->set_copyright_clearance_confirmed(1);
+
+    my $attr = $request->extended_attributes->find( { type => 'copyrightclearance_confirmed' } );
+    ok( $attr, 'Copyright clearance attribute created' );
+    is( $attr->value, 1, 'Copyright clearance value set to 1' );
+
+    # Test setting to false creates attribute with value 0
+    my $request2 = $builder->build_object( { class => 'Koha::ILL::Requests' } );
+    $request2->set_copyright_clearance_confirmed(0);
+
+    my $attr2 = $request2->extended_attributes->find( { type => 'copyrightclearance_confirmed' } );
+    ok( $attr2, 'Attribute created for false value' );
+    is( $attr2->value, 0, 'False value normalized to 0' );
+
+    # Test setting to false when already true updates the value
+    $request->set_copyright_clearance_confirmed(0);
+    my $attr_after_false = $request->extended_attributes->find( { type => 'copyrightclearance_confirmed' } );
+    ok( $attr_after_false, 'Attribute still exists after setting to false' );
+    is( $attr_after_false->value, 0, 'Attribute value updated to 0 when set to false' );
+
+    # Test get_copyright_clearance_confirmed returns boolean values
+    is( $request->get_copyright_clearance_confirmed,  0, 'Returns 0 when set to false' );
+    is( $request2->get_copyright_clearance_confirmed, 0, 'Returns 0 when set to false value' );
 
     $schema->storage->txn_rollback;
 };

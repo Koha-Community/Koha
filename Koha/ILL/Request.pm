@@ -1305,6 +1305,55 @@ sub get_type_disclaimer_value {
     return $attr->value;
 }
 
+=head3 set_copyright_clearance_confirmed
+
+    $request->set_copyright_clearance_confirmed(1);
+
+Sets the copyright clearance confirmation status for the request.
+
+=cut
+
+sub set_copyright_clearance_confirmed {
+    my ( $self, $confirmed ) = @_;
+
+    # Normalize to boolean: 0 or 1
+    my $value = $confirmed ? 1 : 0;
+
+    # Check if attribute already exists
+    my $existing_attr = $self->extended_attributes->find( { type => 'copyrightclearance_confirmed' } );
+
+    if ($existing_attr) {
+
+        # Update existing attribute
+        $existing_attr->value($value)->store;
+    } else {
+
+        # Create new attribute
+        $self->extended_attributes(
+            [
+                {
+                    type  => 'copyrightclearance_confirmed',
+                    value => $value,
+                }
+            ]
+        );
+    }
+}
+
+=head3 get_copyright_clearance_confirmed
+
+    my $confirmed = $request->get_copyright_clearance_confirmed;
+
+Returns 1 if copyright clearance has been confirmed, 0 otherwise.
+
+=cut
+
+sub get_copyright_clearance_confirmed {
+    my ($self) = @_;
+    my $attr = $self->extended_attributes->find( { type => 'copyrightclearance_confirmed' } );
+    return $attr ? ( $attr->value ? 1 : 0 ) : 0;
+}
+
 =head3 get_type_disclaimer_date
 
     my $type = $abstract->type_disclaimer_date();

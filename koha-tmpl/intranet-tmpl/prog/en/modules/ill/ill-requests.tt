@@ -620,8 +620,7 @@
                 <div class="page-section">
                     <h3>Request details</h3>
                     <h4>Details from library</h4>
-                    [% copyrightclearance_confirmed = request.extended_attributes.find({'type'=>'copyrightclearance_confirmed'}).value %]
-                    [% IF copyrightclearance_confirmed %]
+                    [% IF request.get_copyright_clearance_confirmed %]
                         <h5> <i class="fa fa-fw fa-check text-success" aria-hidden="true"></i> <span class="tab-title">Patron has confirmed copyright clearance for this request</span> </h5>
                     [% END %]
                     <div class="rows">
