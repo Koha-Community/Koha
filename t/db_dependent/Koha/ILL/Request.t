@@ -20,7 +20,7 @@
 use Modern::Perl;
 
 use Test::NoWarnings;
-use Test::More tests => 7;
+use Test::More tests => 8;
 use Test::MockModule;
 
 use Koha::ILL::Requests;
@@ -230,6 +230,72 @@ subtest 'copyright clearance methods tests' => sub {
     # Test get_copyright_clearance_confirmed returns boolean values
     is( $request->get_copyright_clearance_confirmed,  0, 'Returns 0 when set to false' );
     is( $request2->get_copyright_clearance_confirmed, 0, 'Returns 0 when set to false value' );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'add_or_update_attributes() tests' => sub {
+
+    plan tests => 13;
+
+    $schema->storage->txn_begin;
+
+    my $request = $builder->build_object( { class => 'Koha::ILL::Requests' } );
+
+    # Test adding new attributes
+    $request->add_or_update_attributes(
+        {
+            title  => 'Test Title',
+            author => 'Test Author',
+            isbn   => '1234567890'
+        }
+    );
+
+    my $title_attr  = $request->extended_attributes->find( { type => 'title' } );
+    my $author_attr = $request->extended_attributes->find( { type => 'author' } );
+    my $isbn_attr   = $request->extended_attributes->find( { type => 'isbn' } );
+
+    ok( $title_attr, 'Title attribute created' );
+    is( $title_attr->value, 'Test Title', 'Title value set correctly' );
+    ok( $author_attr, 'Author attribute created' );
+    is( $author_attr->value, 'Test Author', 'Author value set correctly' );
+    ok( $isbn_attr, 'ISBN attribute created' );
+    is( $isbn_attr->value, '1234567890', 'ISBN value set correctly' );
+
+    # Test updating existing attributes
+    $request->add_or_update_attributes(
+        {
+            title  => 'Updated Title',
+            author => 'Test Author',     # Same value, should not update
+            year   => '2023'             # New attribute
+        }
+    );
+
+    $title_attr->discard_changes;
+    $author_attr->discard_changes;
+    my $year_attr = $request->extended_attributes->find( { type => 'year' } );
+
+    is( $title_attr->value,  'Updated Title', 'Title attribute updated' );
+    is( $author_attr->value, 'Test Author',   'Author attribute unchanged when same value' );
+    ok( $year_attr, 'Year attribute created' );
+    is( $year_attr->value, '2023', 'Year value set correctly' );
+
+    # Test with empty/undefined values (should be skipped)
+    $request->add_or_update_attributes(
+        {
+            empty_field => '',
+            undef_field => undef,
+            valid_field => 'valid'
+        }
+    );
+
+    my $empty_attr = $request->extended_attributes->find( { type => 'empty_field' } );
+    my $undef_attr = $request->extended_attributes->find( { type => 'undef_field' } );
+    my $valid_attr = $request->extended_attributes->find( { type => 'valid_field' } );
+
+    is( $empty_attr, undef, 'Empty value skipped' );
+    is( $undef_attr, undef, 'Undefined value skipped' );
+    ok( $valid_attr, 'Valid value processed' );
 
     $schema->storage->txn_rollback;
 };

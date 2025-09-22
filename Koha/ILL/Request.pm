@@ -1340,6 +1340,57 @@ sub set_copyright_clearance_confirmed {
     }
 }
 
+=head3 add_or_update_attributes
+
+    $request->add_or_update_attributes({
+        title => 'Book Title',
+        author => 'Author Name',
+        isbn => '1234567890'
+    });
+
+Adds new attributes or updates existing ones. More efficient than extended_attributes()
+for updating existing attributes as it avoids duplicate key errors.
+
+=cut
+
+sub add_or_update_attributes {
+    my ( $self, $attributes ) = @_;
+
+    return unless $attributes && ref($attributes) eq 'HASH';
+
+    my $schema = $self->_result->result_source->schema;
+    $schema->txn_do(
+        sub {
+            while ( my ( $type, $value ) = each %{$attributes} ) {
+
+                # Skip undefined or empty values
+                next unless defined $value && $value ne '';
+
+                my $attr = $self->extended_attributes->find( { type => $type } );
+
+                if ($attr) {
+
+                    # Update existing attribute only if value changed
+                    $attr->update( { value => $value } ) if $attr->value ne $value;
+                } else {
+
+                    # Create new attribute
+                    Koha::ILL::Request::Attribute->new(
+                        {
+                            illrequest_id => $self->id,
+                            type          => $type,
+                            value         => $value,
+                            backend       => $self->backend,
+                        }
+                    )->store;
+                }
+            }
+        }
+    );
+
+    return $self;
+}
+
 =head3 get_copyright_clearance_confirmed
 
     my $confirmed = $request->get_copyright_clearance_confirmed;
