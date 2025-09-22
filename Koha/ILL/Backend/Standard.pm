@@ -716,19 +716,11 @@ sub migrate {
         my $original_attributes =
             $original_request->extended_attributes->search( { type => { '-in' => \@default_attributes } } );
 
-        my @request_details_array = map {
-            {
-                'type'  => $_->type,
-                'value' => $_->value,
-            }
-        } $original_attributes->as_list;
+        # Build attributes hash directly
+        my %attributes = map { $_->type => $_->value } $original_attributes->as_list;
+        $attributes{migrated_from} = $original_request->illrequest_id;
 
-        push @request_details_array, {
-            'type'  => 'migrated_from',
-            'value' => $original_request->illrequest_id,
-        };
-
-        $new_request->extended_attributes( \@request_details_array );
+        $new_request->add_or_update_attributes( \%attributes );
 
         return {
             error   => 0,
@@ -809,19 +801,8 @@ sub _set_requested_partners {
     # the time we get to this stage, any previous request
     # from partners would have had to be cancelled
     my ($args) = @_;
-    my $where = {
-        illrequest_id => $args->{request}->id,
-        type          => 'requested_partners'
-    };
-    Koha::ILL::Request::Attributes->search($where)->delete();
-    Koha::ILL::Request::Attribute->new(
-        {
-            illrequest_id => $args->{request}->id,
-            column_exists( 'illrequestattributes', 'backend' ) ? ( backend => "Standard" ) : (),
-            type  => 'requested_partners',
-            value => $args->{to}
-        }
-    )->store;
+
+    $args->{request}->add_or_update_attributes( { requested_partners => $args->{to} } );
 }
 
 =head3 _validate_borrower
@@ -1008,13 +989,7 @@ sub add_request {
         if column_exists( 'illrequests', 'batch_id' );
     $request->store;
 
-    my @request_details_array = map {
-        {
-            'type'  => $_,
-            'value' => $request_details->{$_},
-        }
-    } keys %{$request_details};
-    $request->extended_attributes( \@request_details_array );
+    $request->add_or_update_attributes($request_details);
     $request->add_unauthenticated_data( $params->{other} ) if $unauthenticated_request;
 
     $request->after_created;
