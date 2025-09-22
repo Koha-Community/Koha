@@ -19,7 +19,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 2;
+use Test::More tests => 3;
 use Test::MockModule;
 use Test::NoWarnings;
 
@@ -110,6 +110,52 @@ subtest 'edititem() tests' => sub {
     is( $year_attr->value,    '2023',   'Year attribute has correct value' );
     is( $custom1_attr->value, 'value1', 'Custom1 attribute created correctly' );
     is( $custom2_attr->value, 'value2', 'Custom2 attribute created correctly' );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'metadata() tests' => sub {
+
+    plan tests => 8;
+
+    $schema->storage->txn_begin;
+
+    # Create a test ILL request
+    my $request = $builder->build_object( { class => 'Koha::ILL::Requests' } );
+
+    # Add various attributes including some that should be ignored
+    $request->add_or_update_attributes(
+        {
+            title        => 'Test Title',
+            author       => 'Test Author',
+            isbn         => '1234567890',
+            year         => '2023',
+            custom_field => 'custom_value',
+
+            # These should be ignored by metadata()
+            requested_partners           => 'partner@example.com',
+            type                         => 'book',
+            copyrightclearance_confirmed => '1',
+            unauthenticated_email        => 'user@example.com'
+        }
+    );
+
+    my $backend  = Koha::ILL::Backend::Standard->new;
+    my $metadata = $backend->metadata($request);
+
+    # Check that metadata is a hashref
+    is( ref($metadata), 'HASH', 'metadata returns a hashref' );
+
+    # Check that included attributes are present (metadata uses display names)
+    is( $metadata->{Title},        'Test Title',   'Title included in metadata' );
+    is( $metadata->{Author},       'Test Author',  'Author included in metadata' );
+    is( $metadata->{ISBN},         '1234567890',   'ISBN included in metadata' );
+    is( $metadata->{Year},         '2023',         'Year included in metadata' );
+    is( $metadata->{Custom_field}, 'custom_value', 'Custom field included in metadata' );
+
+    # Check that ignored attributes are excluded
+    ok( !exists $metadata->{Requested_partners},           'requested_partners excluded from metadata' );
+    ok( !exists $metadata->{Copyrightclearance_confirmed}, 'copyrightclearance_confirmed excluded from metadata' );
 
     $schema->storage->txn_rollback;
 };
