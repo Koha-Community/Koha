@@ -479,46 +479,8 @@ sub edititem {
         # generate $request_details
         my $request_details = _get_request_details( $params, $other );
 
-        # We do this with a 'dump all and repopulate approach' inside
-        # a transaction, easier than catering for create, update & delete
-        my $dbh    = C4::Context->dbh;
-        my $schema = Koha::Database->new->schema;
-        $schema->txn_do(
-            sub {
-                # Delete all existing attributes for this request
-                $dbh->do(
-                    q|
-                    DELETE FROM illrequestattributes WHERE illrequest_id=?
-                |, undef, $request->id
-                );
-
-                # Insert all current attributes for this request
-                foreach my $attr ( keys %{$request_details} ) {
-                    my $value = $request_details->{$attr};
-                    if ( $value && length $value > 0 ) {
-                        if ( column_exists( 'illrequestattributes', 'backend' ) ) {
-                            my @bind = ( $request->id, 'Standard', $attr, $value, 0 );
-                            $dbh->do(
-                                q|
-                                INSERT INTO illrequestattributes
-                                (illrequest_id, backend, type, value, readonly) VALUES
-                                (?, ?, ?, ?, ?)
-                            |, undef, @bind
-                            );
-                        } else {
-                            my @bind = ( $request->id, $attr, $value, 0 );
-                            $dbh->do(
-                                q|
-                                INSERT INTO illrequestattributes
-                                (illrequest_id, type, value, readonly) VALUES
-                                (?, ?, ?, ?)
-                            |, undef, @bind
-                            );
-                        }
-                    }
-                }
-            }
-        );
+        # Update request attributes using modern ORM method
+        $request->add_or_update_attributes($request_details);
 
         ## -> create response.
         return {
