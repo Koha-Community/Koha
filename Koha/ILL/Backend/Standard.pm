@@ -145,21 +145,24 @@ that we do not consider to be metadata
 
 sub metadata {
     my ( $self, $request ) = @_;
-    my $attrs    = $request->extended_attributes;
-    my $metadata = {};
-    my @ignore   = (
+
+    my @ignore = (
         'requested_partners', 'type', 'type_disclaimer_value', 'type_disclaimer_date', 'unauthenticated_first_name',
         'unauthenticated_last_name', 'unauthenticated_email', 'historycheck_requests', 'copyrightclearance_confirmed'
     );
+
+    # Use database-level filtering instead of manual iteration
+    my $attrs = $request->extended_attributes->search( { type => { '-not_in' => \@ignore } } );
+
     my $core_fields = _get_core_fields();
+    my $metadata    = {};
+
     while ( my $attr = $attrs->next ) {
         my $type = $attr->type;
-        if ( !grep { $_ eq $type } @ignore ) {
-            my $name;
-            $name = $core_fields->{$type} || ucfirst($type);
-            $metadata->{$name} = $attr->value;
-        }
+        my $name = $core_fields->{$type} || ucfirst($type);
+        $metadata->{$name} = $attr->value;
     }
+
     return $metadata;
 }
 
