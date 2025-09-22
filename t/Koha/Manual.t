@@ -24,16 +24,17 @@ use Koha::Manual;
 
 subtest 'VueJS components' => sub {
 
-    my $tests = {
+    my $version = Koha::Manual::_get_help_version();
+    my $tests   = {
         q{http://localhost:8081/cgi-bin/koha/erm/agreements} =>
-            q{https://koha-community.org/manual/25.05/en/html/erm.html#agreements},
-        q{/koha/erm/agreements}     => q{https://koha-community.org/manual/25.05/en/html/erm.html#agreements},
+            qq{https://koha-community.org/manual/$version/en/html/erm.html#agreements},
+        q{/koha/erm/agreements}     => qq{https://koha-community.org/manual/$version/en/html/erm.html#agreements},
         q{/koha/erm/agreements/add} =>
-            q{https://koha-community.org/manual/25.05/en/html/erm.html#create-an-agreement-record},
+            qq{https://koha-community.org/manual/$version/en/html/erm.html#create-an-agreement-record},
         q{/koha/erm/agreements/edit/1} =>
-            q{https://koha-community.org/manual/25.05/en/html/erm.html#create-an-agreement-record},
+            qq{https://koha-community.org/manual/$version/en/html/erm.html#create-an-agreement-record},
         q{/koha/erm/agreements?by_expired=true&max_expiration_date=2025-06-24} =>
-            q{https://koha-community.org/manual/25.05/en/html/erm.html#agreements},
+            qq{https://koha-community.org/manual/$version/en/html/erm.html#agreements},
     };
 
     plan tests => scalar keys %$tests;
