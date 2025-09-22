@@ -833,7 +833,7 @@ Related object: L<Koha::Schema::Result::ItemsLastBorrower>
 
 =cut
 
-__PACKAGE__->might_have(
+__PACKAGE__->has_many(
   "items_last_borrower",
   "Koha::Schema::Result::ItemsLastBorrower",
   { "foreign.itemnumber" => "self.itemnumber" },
@@ -1068,7 +1068,7 @@ __PACKAGE__->has_many(
 # Relationship with bundled items
 __PACKAGE__->many_to_many( bundle_items => 'item_bundles_hosts', 'item' );
 
-__PACKAGE__->might_have(
+__PACKAGE__->has_many(
   "last_returned_by",
   "Koha::Schema::Result::ItemsLastBorrower",
   { "foreign.itemnumber" => "self.itemnumber" },
