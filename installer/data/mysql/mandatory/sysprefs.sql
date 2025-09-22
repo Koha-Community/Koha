@@ -785,7 +785,7 @@ INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `
 ('StaticHoldsQueueWeight','0',NULL,'Specify a list of library location codes separated by commas -- the list of codes will be traversed and weighted with first values given higher weight for holds fulfillment -- alternatively, if RandomizeHoldsQueueWeight is set, the list will be randomly selective','Integer'),
 ('StatisticsFields','location|itype|ccode', NULL, 'Define Fields (from the items table) used for statistics members','Free'),
 ('StockRotation','0',NULL,'If ON, enables the stock rotation module','YesNo'),
-('StoreLastBorrower','0','','If ON, the last borrower to return an item will be stored in items.last_returned_by','YesNo'),
+('StoreLastBorrower','0','','Defines the number of borrowers stored per item in the items_last_borrower table','Integer'),
 ('StripWhitespaceChars','0',NULL,'Strip leading and trailing whitespace characters and inner newlines from input fields when cataloguing bibliographic and authority records.','YesNo'),
 ('SubfieldsToAllowForRestrictedBatchmod','','Define a list of subfields for which edition is authorized when items_batchmod_restricted permission is enabled, separated by spaces. Example: 995\$f 995\$h 995\$j',NULL,'Free'),
 ('SubfieldsToAllowForRestrictedEditing','','Define a list of subfields for which edition is authorized when edit_items_restricted permission is enabled, separated by spaces. Example: 995\$f 995\$h 995\$j',NULL,'Free'),
