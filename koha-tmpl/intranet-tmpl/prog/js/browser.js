@@ -165,7 +165,7 @@ KOHA.browser = function (searchid, biblionumber) {
                             __("Next") +
                             '"><i class="fa fa-arrow-right"></i></a>';
                     }
-                    $("#menu").before(
+                    $("#biblio-view-menu").before(
                         '<div class="browse-controls"><div class="browse-controls-inner"><div class="browse-label"><a href="' +
                             searchURL +
                             '" id="browse-return-to-results" class="searchwithcontext"><i class="fa fa-list"></i> ' +
