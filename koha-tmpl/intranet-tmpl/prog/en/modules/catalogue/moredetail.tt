@@ -493,13 +493,20 @@
                                     <span class="label">Last borrowed:</span>
                                     [% IF (ITEM_DAT.datelastborrowed ) %][% ITEM_DAT.datelastborrowed | $KohaDates %][% END %]
                                 </li>
-                                [% IF Koha.Preference('StoreLastBorrower') && ITEM_DAT.object.last_returned_by %]
-                                    [% SET last_returned_by = ITEM_DAT.object.last_returned_by.cardnumber || ITEM_DAT.object.last_returned_by.borrowernumber %]
-                                    <li>
-                                        <span class="label">Last returned by:</span>
-                                        <a href="/cgi-bin/koha/circ/circulation.pl?borrowernumber=[% ITEM_DAT.object.last_returned_by.borrowernumber | uri %]">[% last_returned_by | html %]</a>
-                                    </li>
+
+                                [% IF Koha.Preference('StoreLastBorrower') && Koha.Preference('StoreLastBorrower') > 0 %]
+                                    [% SET all_borrowers = ITEM_DAT.object.last_returned_by_all %]
+                                    [% IF all_borrowers.size > 0 %]
+                                        <li>
+                                            <span class="label">Last returned by:</span>
+                                            [% FOREACH patron IN all_borrowers %]
+                                                [% SET returned_by = patron.cardnumber || patron.borrowernumber %]
+                                                <a href="/cgi-bin/koha/circ/circulation.pl?borrowernumber=[% patron.borrowernumber | uri %]">[% returned_by | html %]</a>[% UNLESS loop.last %],[% END %]
+                                            [% END %]
+                                        </li>
+                                    [% END %]
                                 [% END %]
+
                                 [% FOR i IN ITEM_DAT.old_issues %]
                                     [% SET b = i.patron %]
                                     <li class="previous_borrowers">

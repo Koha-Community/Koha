@@ -2844,10 +2844,8 @@ sub MarkIssueReturned {
                 }
             );
 
-            if ( C4::Context->preference('StoreLastBorrower') ) {
-                my $item = Koha::Items->find($itemnumber);
-                $item->last_returned_by( $patron->borrowernumber )->store;
-            }
+            my $item = Koha::Items->find($itemnumber);
+            $item->last_returned_by( $patron->borrowernumber )->store;
 
             # Possibly remove any OVERDUES related debarment
             my $overdue_restrictions = $patron->restrictions->search( { type => 'OVERDUES' } );

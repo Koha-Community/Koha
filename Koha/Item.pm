@@ -927,6 +927,28 @@ sub get_transfers {
     return Koha::Item::Transfers->_new_from_dbic($transfers_rs);
 }
 
+=head3 last_returned_by_all
+
+Returns all patrons who have returned this item, ordered by most recent first.
+
+=cut
+
+sub last_returned_by_all {
+    my ($self) = @_;
+
+    my $max_stored_borrowers = C4::Context->preference('StoreLastBorrower') || 0;
+
+    my @borrowers = $self->_result->last_returned_by(
+        {},
+        {
+            order_by => [ { '-desc' => 'created_on' }, { '-desc' => 'id' } ],
+            ( $max_stored_borrowers > 0 ? ( rows => $max_stored_borrowers ) : () ),
+        }
+    );
+
+    return map { Koha::Patron->_new_from_dbic( $_->borrowernumber ) } @borrowers;
+}
+
 =head3 last_returned_by
 
 Gets and sets the last patron to return an item.
@@ -941,13 +963,47 @@ my $patron = $item->last_returned_by();
 
 sub last_returned_by {
     my ( $self, $borrowernumber ) = @_;
+
     if ($borrowernumber) {
-        $self->_result->update_or_create_related(
+
+        # Clean up the table by deleting older entries, depending on what StoreLastBorrower is set to
+        my $max_stored_borrowers = C4::Context->preference('StoreLastBorrower') || 0;
+
+        # If StoreLastBorrower is 0 or disabled, bail without storing anything. Also delete any remaining rows from the table.
+        if ( $max_stored_borrowers == 0 ) {
+            $self->_result->last_returned_by->delete_all;
+            return $self;
+        }
+
+        #Create an entry for last_returned_by
+        my $new_record = $self->_result->create_related(
             'last_returned_by',
             { borrowernumber => $borrowernumber, itemnumber => $self->itemnumber }
         );
+
+        # Get all entries, ordered by newest first
+        my @all_entries =
+            $self->_result->last_returned_by( {}, { order_by => [ { '-desc' => 'created_on' }, { '-desc' => 'id' } ] } )
+            ->all;
+
+        # If we have more than the limit, delete the excess oldest ones
+        if ( scalar(@all_entries) > $max_stored_borrowers ) {
+            my @entries_to_delete = splice( @all_entries, $max_stored_borrowers );
+            $_->delete for @entries_to_delete;
+        }
+
+        return $self;
     }
-    my $rs = $self->_result->last_returned_by;
+
+    # Return the most recent borrower
+    my $rs = $self->_result->last_returned_by(
+        {},
+        {
+            order_by => [ { '-desc' => 'created_on' }, { '-desc' => 'id' } ],
+            rows     => 1
+        }
+    )->first;
+
     return unless $rs;
     return Koha::Patron->_new_from_dbic( $rs->borrowernumber );
 }
