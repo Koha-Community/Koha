@@ -1319,25 +1319,9 @@ sub set_copyright_clearance_confirmed {
     # Normalize to boolean: 0 or 1
     my $value = $confirmed ? 1 : 0;
 
-    # Check if attribute already exists
-    my $existing_attr = $self->extended_attributes->find( { type => 'copyrightclearance_confirmed' } );
+    $self->add_or_update_attributes( { copyrightclearance_confirmed => $value } );
 
-    if ($existing_attr) {
-
-        # Update existing attribute
-        $existing_attr->value($value)->store;
-    } else {
-
-        # Create new attribute
-        $self->extended_attributes(
-            [
-                {
-                    type  => 'copyrightclearance_confirmed',
-                    value => $value,
-                }
-            ]
-        );
-    }
+    return $self;
 }
 
 =head3 add_or_update_attributes
