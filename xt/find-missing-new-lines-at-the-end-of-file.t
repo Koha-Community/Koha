@@ -6,7 +6,7 @@ use Test::NoWarnings;
 
 use Koha::Devel::Files;
 
-my $dev_files = Koha::Devel::Files->new( { context => 'all' } );
+my $dev_files = Koha::Devel::Files->new( { context => 'core' } );
 my @files;
 push @files, $dev_files->ls_perl_files;
 push @files, $dev_files->ls_tt_files;

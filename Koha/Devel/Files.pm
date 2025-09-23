@@ -53,7 +53,7 @@ my $exceptions = {
                 misc/cronjobs/build_browser_and_cloud.pl
             )
         ],
-        all => [],
+        core => [],
     },
     js => {
         tidy => [
@@ -72,7 +72,7 @@ my $exceptions = {
                 koha-tmpl/opac-tmpl/bootstrap/js/Gettext.js
             )
         ],
-        all => [
+        core => [
             qw(
                 koha-tmpl/intranet-tmpl/lib
                 koha-tmpl/opac-tmpl/lib
@@ -88,13 +88,13 @@ my $exceptions = {
             )
         ],
         codespell => [],
-        all       => [],
+        core      => [],
     },
     yml => {
-        all => [],
+        core => [],
     },
     css => {
-        all => [
+        core => [
             qw(
                 koha-tmpl/intranet-tmpl/lib
                 koha-tmpl/opac-tmpl/lib
