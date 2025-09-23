@@ -59,16 +59,29 @@ subtest 'process_quote' => sub {
 
         $schema->storage->txn_begin;
 
+        # Create file transport for local testing
+        my $file_transport = $builder->build(
+            {
+                source => 'FileTransport',
+                value  => {
+                    name               => 'Test Local Transport',
+                    transport          => 'local',
+                    download_directory => $dirname,
+                    upload_directory   => $dirname,
+                }
+            }
+        );
+
         my $account = $builder->build(
             {
                 source => 'VendorEdiAccount',
                 value  => {
-                    description    => 'test vendor',
-                    transport      => 'FILE',
-                    plugin         => '',
-                    san            => $test_san,
-                    orders_enabled => 1,
-                    auto_orders    => 0,
+                    description       => 'test vendor',
+                    file_transport_id => $file_transport->{file_transport_id},
+                    plugin            => '',
+                    san               => $test_san,
+                    orders_enabled    => 1,
+                    auto_orders       => 0,
                 }
             }
         );
@@ -321,16 +334,30 @@ subtest 'process_quote' => sub {
         plan tests => 7;
 
         $schema->storage->txn_begin;
+
+        # Create file transport for local testing
+        my $file_transport = $builder->build(
+            {
+                source => 'FileTransport',
+                value  => {
+                    name               => 'Test Auto Order Transport',
+                    transport          => 'local',
+                    download_directory => $dirname,
+                    upload_directory   => $dirname,
+                }
+            }
+        );
+
         my $account = $builder->build(
             {
                 source => 'VendorEdiAccount',
                 value  => {
-                    description    => 'auto order vendor',
-                    transport      => 'FILE',
-                    plugin         => '',
-                    san            => $test_san,
-                    orders_enabled => 1,
-                    auto_orders    => 1,
+                    description       => 'auto order vendor',
+                    file_transport_id => $file_transport->{file_transport_id},
+                    plugin            => '',
+                    san               => $test_san,
+                    orders_enabled    => 1,
+                    auto_orders       => 1,
                 }
             }
         );
@@ -408,14 +435,27 @@ subtest 'process_quote' => sub {
 
         $schema->storage->txn_begin;
 
+        # Create file transport for local testing
+        my $file_transport = $builder->build(
+            {
+                source => 'FileTransport',
+                value  => {
+                    name               => 'Test Multi-item Transport',
+                    transport          => 'local',
+                    download_directory => $dirname,
+                    upload_directory   => $dirname,
+                }
+            }
+        );
+
         # Create vendor EDI account
         my $account = $builder->build(
             {
                 source => 'VendorEdiAccount',
                 value  => {
-                    description => 'multi-item vendor',
-                    transport   => 'FILE',
-                    plugin      => '',
+                    description       => 'multi-item vendor',
+                    file_transport_id => $file_transport->{file_transport_id},
+                    plugin            => '',
                 }
             }
         );
@@ -568,12 +608,25 @@ subtest 'process_quote' => sub {
 
         $schema->storage->txn_begin;
 
+        # Create file transport for local testing
+        my $file_transport = $builder->build(
+            {
+                source => 'FileTransport',
+                value  => {
+                    name               => 'Test Error Transport',
+                    transport          => 'local',
+                    download_directory => $dirname,
+                    upload_directory   => $dirname,
+                }
+            }
+        );
+
         my $account = $builder->build(
             {
                 source => 'VendorEdiAccount',
                 value  => {
-                    description => 'error test vendor',
-                    transport   => 'FILE',
+                    description       => 'error test vendor',
+                    file_transport_id => $file_transport->{file_transport_id},
                 }
             }
         );
@@ -675,12 +728,25 @@ subtest 'process_quote' => sub {
 
         $schema->storage->txn_begin;
 
+        # Create file transport for local testing
+        my $file_transport = $builder->build(
+            {
+                source => 'FileTransport',
+                value  => {
+                    name               => 'Test Multiple Message Transport',
+                    transport          => 'local',
+                    download_directory => $dirname,
+                    upload_directory   => $dirname,
+                }
+            }
+        );
+
         my $account = $builder->build(
             {
                 source => 'VendorEdiAccount',
                 value  => {
-                    description => 'error test vendor',
-                    transport   => 'FILE',
+                    description       => 'error test vendor',
+                    file_transport_id => $file_transport->{file_transport_id},
                 }
             }
         );
@@ -739,15 +805,31 @@ subtest 'process_invoice' => sub {
 
     $schema->storage->txn_begin;
 
+    # Get dirname for transport
+    my $dirname = ( $Bin =~ /^(.*\/t\/)/ ? $1 . 'edi_testfiles/' : q{} );
+
+    # Create file transport for local testing
+    my $file_transport = $builder->build(
+        {
+            source => 'FileTransport',
+            value  => {
+                name               => 'Test Invoice Transport',
+                transport          => 'local',
+                download_directory => $dirname,
+                upload_directory   => $dirname,
+            }
+        }
+    );
+
     # Add test EDI matching ean of test invoice file and ensure no plugins so we trigger core functions
     my $account = $builder->build(
         {
             source => 'VendorEdiAccount',
             value  => {
-                description => 'test vendor',
-                transport   => 'FILE',
-                plugin      => '',
-                san         => '5013546027173'
+                description       => 'test vendor',
+                file_transport_id => $file_transport->{file_transport_id},
+                plugin            => '',
+                san               => '5013546027173'
             }
         }
     );
@@ -787,7 +869,6 @@ subtest 'process_invoice' => sub {
     my $ordernumber2 = $order2->ordernumber;
 
     # Add test invoice file to the database for testing
-    my $dirname  = ( $Bin =~ /^(.*\/t\/)/ ? $1 . 'edi_testfiles/' : q{} );
     my $filename = 'INVOICE.CEI';
     ok( -e $dirname . $filename, 'File INVOICE.CEI found' );
 

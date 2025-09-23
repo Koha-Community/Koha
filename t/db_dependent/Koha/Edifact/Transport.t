@@ -21,7 +21,7 @@ my $account = $builder->build(
     {
         source => 'VendorEdiAccount',
         value  => {
-            description => 'test vendor', transport => 'FILE',
+            description => 'test vendor',
         }
     }
 );
