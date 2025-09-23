@@ -11,6 +11,7 @@
      * @param {boolean} [config.useKeyAsValue=false] - Whether to use the option's key (either HTML data-* or JavaScript `valueProperty`) as the value of the input (default: false).
      * @param {string} [config.placeholder='Select or type a value'] - Placeholder text for the input element.
      * @param {string} [config.labelId=''] - Optional ID of the associated label element.
+     * @param {string} [config.context='default'] - Positioning context ('default' or 'modal').
      *
      * @example
      * ```html
@@ -35,9 +36,10 @@
      *     displayProperty: 'name',
      *     valueProperty: 'id',
      *     useKeyAsValue: true,
+     *     context: 'modal',
      * });
      * // or using jQuery
-     * $("#generic-combobox").comboBox({ ... });
+     * $("#generic-combobox").comboBox({ displayProperty: 'name', context: 'modal' });
      * </script>
      * ```
      */
@@ -51,6 +53,7 @@
             placeholder = "Select or type a value",
             labelId = "",
             useKeyAsValue = false,
+            context = "default",
         } = config;
 
         const input = document.getElementById(inputId);
@@ -60,9 +63,16 @@
             return;
         }
 
-        const bootstrapDropdown = new bootstrap.Dropdown(input, {
+        const dropdownOptions = {
             autoClose: false,
-        });
+            popperConfig: {
+                strategy: { default: "absolute", modal: "fixed" }[context],
+            },
+        };
+        const bootstrapDropdown = new bootstrap.Dropdown(
+            input,
+            dropdownOptions
+        );
 
         // Existing options from HTML
         const existingOptions = Array.from(dropdownMenu.querySelectorAll("li"))
