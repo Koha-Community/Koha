@@ -132,6 +132,11 @@ if ($destination_server_id) {
         unless $file_transport;
 }
 
+# Validate flag combinations
+if ( $delete_local_after_run && !$destination_server_id ) {
+    pod2usage("--delete_local_after_run requires --destination_server_id to be specified");
+}
+
 if ($report_id) {
 
     # Check report exists
@@ -355,23 +360,48 @@ if ($deleted_barcodes) {
 }
 
 if ($file_transport) {
-    $file_transport->connect
-        or die pod2usage( sprintf( "Unable to connect server (%s)", $destination_server_id ) );
 
-    my $upload_dir = $file_transport->upload_directory;
-    if ($upload_dir) {
-        $file_transport->change_directory($upload_dir)
-            or die pod2usage(
-            sprintf( "Unable to change directory on server (%s) to path (%s)", $destination_server_id, $upload_dir ) );
+    # Verify the file was created successfully before attempting upload
+    unless ( -f $filename ) {
+        die "Error: Output file '$filename' was not created successfully\n";
     }
 
-    $file_transport->upload_file( $filename, $filename )
-        or die pod2usage( sprintf( "Unable to upload file (%s) to server (%s)", $filename, $destination_server_id ) );
+    # Connect to the transport
+    unless ( $file_transport->connect ) {
+        die sprintf( "Error: Unable to connect to file transport server (ID: %s)\n", $destination_server_id );
+    }
+
+    # Change to upload directory if specified
+    my $upload_dir = $file_transport->upload_directory;
+    if ($upload_dir) {
+        unless ( $file_transport->change_directory($upload_dir) ) {
+            $file_transport->disconnect;
+            die sprintf(
+                "Error: Unable to change to upload directory '%s' on server (ID: %s)\n", $upload_dir,
+                $destination_server_id
+            );
+        }
+    }
+
+    # Upload the file
+    unless ( $file_transport->upload_file( $filename, $filename ) ) {
+        $file_transport->disconnect;
+        die sprintf( "Error: Unable to upload file '%s' to server (ID: %s)\n", $filename, $destination_server_id );
+    }
+
+    # Always disconnect when done
+    $file_transport->disconnect;
+
+    print STDERR "Successfully uploaded '$filename' to file transport server (ID: $destination_server_id)\n";
 }
 
 if ($delete_local_after_run) {
-    unlink $filename
-        or die pod2usage( sprintf( "Unable to delete local file (%s)", $filename ) );
+    if ( -f $filename ) {
+        unless ( unlink $filename ) {
+            die sprintf( "Error: Unable to delete local file '%s': %s\n", $filename, $! );
+        }
+        print STDERR "Successfully deleted local file '$filename'\n";
+    }
 }
 
 exit;
