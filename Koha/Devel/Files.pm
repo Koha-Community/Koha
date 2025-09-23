@@ -132,10 +132,18 @@ Builds a Git exclude pattern for a given file type based on the context provided
 =cut
 
 sub build_git_exclude {
-    my ( $self, $filetype ) = @_;
-    return $self->{context} && exists $exceptions->{$filetype}->{ $self->{context} }
-        ? join( " ", map( "':(exclude)$_'", @{ $exceptions->{$filetype}->{ $self->{context} } } ) )
-        : q{};
+    my ( $self, $filetype, $extensions ) = @_;
+    my $exclude_list = q{};
+    if ($filetype) {
+        $exclude_list .=
+            $self->{context} && exists $exceptions->{$filetype}->{ $self->{context} }
+            ? join( " ", map( "':(exclude)$_'", @{ $exceptions->{$filetype}->{ $self->{context} } } ) )
+            : q{};
+    }
+    if ($extensions) {
+        $exclude_list .= join( " ", map( "':(exclude)*.$_'", @$extensions ) );
+    }
+    return $exclude_list;
 }
 
 =head2 ls_perl_files
@@ -215,6 +223,22 @@ sub ls_css_files {
     my ($self) = @_;
     my $cmd    = sprintf q{git ls-files '*.css' %s}, $self->build_git_exclude('css');
     my @files  = qx{$cmd};
+    chomp for @files;
+    return @files;
+}
+
+=head2 ls_all_files
+
+    my @files = $file_manager->ls_all_files([$extension_list_to_exclude]);
+
+Lists all files in the repository. Accept a list of extension to exclude.
+
+=cut
+
+sub ls_all_files {
+    my ( $self, $extensions ) = @_;
+    my $cmd   = sprintf q{git ls-files %s}, $self->build_git_exclude( undef, $extensions );
+    my @files = qx{$cmd};
     chomp for @files;
     return @files;
 }
