@@ -154,11 +154,6 @@ describe("Infinite scroll", () => {
         cy.get("#status .vs__search").type(agreement.status + "{enter}", {
             force: true,
         });
-        cy.get(
-            "#agreement_licenses_0 #agreement_licenses_status_0 .vs__search"
-        ).type(agreement.agreement_licenses[0].status + "{enter}", {
-            force: true,
-        });
 
         cy.intercept("POST", "/api/v1/erm/agreements", {
             statusCode: 201,

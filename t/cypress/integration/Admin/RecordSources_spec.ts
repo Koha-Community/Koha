@@ -12,7 +12,7 @@ describe("Breadcrumbs tests", () => {
         cy.visit("/cgi-bin/koha/admin/admin-home.pl");
         cy.contains("Record sources").click();
         cy.get("#breadcrumbs").contains("Administration");
-        cy.get(".item-last").contains("Record sources");
+        cy.get(".breadcrumb-item").eq(2).contains("Record sources");
         // use the 'New' button
         cy.contains("New record source").click();
         cy.get(".current").contains("Add record source");
