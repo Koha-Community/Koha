@@ -171,9 +171,10 @@ sub change_directory {
 
 =head3 list_files
 
-    my @files = $server->list_files;
+    my $files = $server->list_files;
 
-Returns an array of filenames found in the current directory of the server connection.
+Returns an array reference of hashrefs with file information found in the current directory of the server connection.
+Each hashref contains: filename, longname, a (attributes).
 
 =cut
 

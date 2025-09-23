@@ -259,9 +259,10 @@ sub change_directory {
 
 =head3 list_files
 
-    my @files = $server->list_files;
+    my $files = $server->list_files;
 
-Returns an array of filenames found in the current directory.
+Returns an array reference of hashrefs with file information found in the current directory.
+Each hashref contains: filename, longname, size, perms, mtime.
 
 =cut
 
@@ -302,9 +303,26 @@ sub list_files {
 
     my @files;
     while ( defined( my $file = $dir_handle->read ) ) {
-        next if $file =~ /^\.\.?$/;                                 # Skip . and ..
-        next unless -f File::Spec->catfile( $directory, $file );    # Only files
-        push @files, $file;
+        next if $file =~ /^\.\.?$/;    # Skip . and ..
+        my $full_path = File::Spec->catfile( $directory, $file );
+        next unless -f $full_path;     # Only files
+
+        # Get file stats for consistency with SFTP format
+        my @stat  = stat($full_path);
+        my $size  = $stat[7] || 0;
+        my $mtime = $stat[9] || 0;
+        my $mode  = $stat[2] || 0;
+
+        # Create permissions string (simplified)
+        my $perms = sprintf( "%04o", $mode & oct('07777') );
+
+        push @files, {
+            filename => $file,
+            longname => sprintf( "%s %8d %s %s", $perms, $size, scalar( localtime($mtime) ), $file ),
+            size     => $size,
+            perms    => $perms,
+            mtime    => $mtime
+        };
     }
     $dir_handle->close;
 

@@ -141,15 +141,39 @@ sub change_directory {
 
 =head3 list_files
 
-    my @files = $server->list_files;
+    my $files = $server->list_files;
 
-Returns an array of filenames found in the current directory of the server connection.
+Returns an array reference of hashrefs with file information found in the current directory of the server connection.
+Each hashref contains: filename, longname, size, perms.
 
 =cut
 
 sub list_files {
     my ($self) = @_;
-    my $file_list = $self->{connection}->ls or return $self->_abort_operation();
+
+    # Get detailed listing using dir() for consistency with SFTP format
+    my $detailed_list = $self->{connection}->dir or return $self->_abort_operation();
+
+    # Convert to hash format consistent with SFTP
+    my @file_list;
+    foreach my $line ( @{$detailed_list} ) {
+
+        # Parse FTP dir output (similar to ls -l format)
+        # Example: "-rw-r--r-- 1 user group 1234 Jan 01 12:00 filename.txt"
+        if ( $line =~ /^([d\-rwx]+)\s+\S+\s+\S+\s+\S+\s+(\d+)\s+(.+?)\s+(.+)$/ ) {
+            my ( $perms, $size, $date_part, $filename ) = ( $1, $2, $3, $4 );
+
+            # Skip directories (start with 'd')
+            next if $perms =~ /^d/;
+
+            push @file_list, {
+                filename => $filename,
+                longname => $line,
+                size     => $size,
+                perms    => $perms
+            };
+        }
+    }
 
     $self->add_message(
         {
@@ -159,7 +183,7 @@ sub list_files {
         }
     );
 
-    return $file_list;
+    return \@file_list;
 }
 
 =head3 rename_file
