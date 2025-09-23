@@ -37,22 +37,27 @@ Start the FTP transport connect, returns true on success or undefined on failure
 
 sub connect {
     my ($self) = @_;
+    my $operation = "connection";
 
     $self->{connection} = Net::FTP->new(
         $self->host,
         Port    => $self->port,
         Timeout => $self->DEFAULT_TIMEOUT,
         Passive => $self->passive ? 1 : 0,
-    ) or return $self->_abort_operation();
+    ) or return $self->_abort_operation($operation);
 
     $self->{connection}->login( $self->user_name, $self->plain_text_password )
-        or return $self->_abort_operation();
+        or return $self->_abort_operation($operation);
 
     $self->add_message(
         {
-            message => "Connect succeeded",
+            message => $operation,
             type    => 'success',
-            payload => { detail => '' }
+            payload => {
+                status => 'connected',
+                host   => $self->host,
+                port   => $self->port
+            }
         }
     );
 
@@ -71,15 +76,19 @@ Returns true on success or undefined on failure.
 
 sub upload_file {
     my ( $self, $local_file, $remote_file ) = @_;
+    my $operation = "upload";
 
     $self->{connection}->put( $local_file, $remote_file )
-        or return $self->_abort_operation();
+        or return $self->_abort_operation($operation);
 
     $self->add_message(
         {
-            message => "Upload succeeded",
+            message => $operation,
             type    => 'success',
-            payload => { detail => '' }
+            payload => {
+                local_file  => $local_file,
+                remote_file => $remote_file
+            }
         }
     );
 
@@ -98,15 +107,19 @@ Returns true on success or undefined on failure.
 
 sub download_file {
     my ( $self, $remote_file, $local_file ) = @_;
+    my $operation = "download";
 
     $self->{connection}->get( $remote_file, $local_file )
-        or return $self->_abort_operation();
+        or return $self->_abort_operation($operation);
 
     $self->add_message(
         {
-            message => "Download succeeded",
+            message => $operation,
             type    => 'success',
-            payload => { detail => '' }
+            payload => {
+                remote_file => $remote_file,
+                local_file  => $local_file
+            }
         }
     );
 
@@ -125,14 +138,18 @@ Returns true on success or undefined on failure.
 
 sub change_directory {
     my ( $self, $remote_directory ) = @_;
+    my $operation = "change_directory";
 
-    $self->{connection}->cwd($remote_directory) or $self->_abort_operation();
+    $self->{connection}->cwd($remote_directory) or return $self->_abort_operation($operation);
 
     $self->add_message(
         {
-            message => "Changed directory succeeded",
+            message => $operation,
             type    => 'success',
-            payload => { detail => '' }
+            payload => {
+                directory => $remote_directory,
+                pwd       => $self->{connection}->pwd
+            }
         }
     );
 
@@ -150,9 +167,10 @@ Each hashref contains: filename, longname, size, perms.
 
 sub list_files {
     my ($self) = @_;
+    my $operation = "list";
 
     # Get detailed listing using dir() for consistency with SFTP format
-    my $detailed_list = $self->{connection}->dir or return $self->_abort_operation();
+    my $detailed_list = $self->{connection}->dir or return $self->_abort_operation($operation);
 
     # Convert to hash format consistent with SFTP
     my @file_list;
@@ -177,9 +195,12 @@ sub list_files {
 
     $self->add_message(
         {
-            message => "Listing files succeeded",
+            message => $operation,
             type    => 'success',
-            payload => { detail => '' }
+            payload => {
+                count => scalar @file_list,
+                pwd   => $self->{connection}->pwd
+            }
         }
     );
 
@@ -198,12 +219,13 @@ Returns true on success or undefined on failure.
 
 sub rename_file {
     my ( $self, $old_name, $new_name ) = @_;
+    my $operation = "rename";
 
-    $self->{connection}->rename( $old_name, $new_name ) or return $self->_abort_operation();
+    $self->{connection}->rename( $old_name, $new_name ) or return $self->_abort_operation($operation);
 
     $self->add_message(
         {
-            message => "File rename succeeded",
+            message => $operation,
             type    => 'success',
             payload => { detail => "$old_name -> $new_name" }
         }
@@ -232,13 +254,16 @@ sub disconnect {
 }
 
 sub _abort_operation {
-    my ( $self, $message ) = @_;
+    my ( $self, $operation ) = @_;
 
     $self->add_message(
         {
-            message => $self->{connection} ? $self->{connection}->message : $@,
+            message => $operation || 'operation',
             type    => 'error',
-            payload => { detail => $self->{connection} ? $self->{connection}->status : '' }
+            payload => {
+                detail => $self->{connection} ? $self->{connection}->status  : '',
+                error  => $self->{connection} ? $self->{connection}->message : $@
+            }
         }
     );
 
