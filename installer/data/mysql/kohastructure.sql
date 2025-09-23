@@ -3487,7 +3487,7 @@ CREATE TABLE `file_transports` (
   `name` varchar(80) NOT NULL,
   `host` varchar(80) NOT NULL DEFAULT 'localhost',
   `port` int(11) NOT NULL DEFAULT 22,
-  `transport` enum('ftp','sftp') NOT NULL DEFAULT 'sftp',
+  `transport` enum('ftp','sftp','local') NOT NULL DEFAULT 'sftp',
   `passive` tinyint(1) NOT NULL DEFAULT 1,
   `user_name` varchar(80) DEFAULT NULL,
   `password` mediumtext DEFAULT NULL,
@@ -6702,19 +6702,11 @@ DROP TABLE IF EXISTS `vendor_edi_accounts`;
 CREATE TABLE `vendor_edi_accounts` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `description` mediumtext NOT NULL,
-  `host` varchar(40) DEFAULT NULL,
-  `username` varchar(40) DEFAULT NULL,
-  `password` mediumtext DEFAULT NULL,
-  `upload_port` int(11) DEFAULT NULL,
-  `download_port` int(11) DEFAULT NULL,
   `last_activity` date DEFAULT NULL,
   `vendor_id` int(11) DEFAULT NULL,
-  `download_directory` mediumtext DEFAULT NULL,
-  `upload_directory` mediumtext DEFAULT NULL,
   `san` varchar(20) DEFAULT NULL,
   `standard` varchar(3) DEFAULT 'EUR',
   `id_code_qualifier` varchar(3) DEFAULT '14',
-  `transport` varchar(6) DEFAULT 'FTP',
   `quotes_enabled` tinyint(1) NOT NULL DEFAULT 0,
   `invoices_enabled` tinyint(1) NOT NULL DEFAULT 0,
   `orders_enabled` tinyint(1) NOT NULL DEFAULT 0,
@@ -6722,11 +6714,14 @@ CREATE TABLE `vendor_edi_accounts` (
   `auto_orders` tinyint(1) NOT NULL DEFAULT 0,
   `shipment_budget` int(11) DEFAULT NULL,
   `plugin` varchar(256) NOT NULL DEFAULT '',
+  `file_transport_id` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `vendorid` (`vendor_id`),
   KEY `shipmentbudget` (`shipment_budget`),
+  KEY `vendor_edi_accounts_file_transport_id` (`file_transport_id`),
   CONSTRAINT `vfk_shipment_budget` FOREIGN KEY (`shipment_budget`) REFERENCES `aqbudgets` (`budget_id`),
-  CONSTRAINT `vfk_vendor_id` FOREIGN KEY (`vendor_id`) REFERENCES `aqbooksellers` (`id`)
+  CONSTRAINT `vfk_vendor_id` FOREIGN KEY (`vendor_id`) REFERENCES `aqbooksellers` (`id`),
+  CONSTRAINT `vendor_edi_accounts_ibfk_file_transport` FOREIGN KEY (`file_transport_id`) REFERENCES `file_transports` (`file_transport_id`) ON DELETE SET NULL ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
