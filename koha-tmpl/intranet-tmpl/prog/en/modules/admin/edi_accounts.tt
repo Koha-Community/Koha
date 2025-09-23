@@ -134,49 +134,18 @@
                         <input type="text" name="description" id="description" size="20" value="[% account.description | html %]" />
                     </li>
                     <li>
-                        [% transport_types = [ 'FTP', 'SFTP', 'FILE' ] %]
-                        <label for="transport">Transport: </label>
-                        <select name="transport" title="valid types of transport are FTP and SFTP" id="transport">
-                            [% FOREACH transport_type IN transport_types %]
-                                [% IF transport_type == account.transport %]
-                                    <option value="[% transport_type | html %]" selected="selected">[% transport_type | html %]</option>
+                        <label for="file_transport_id">File transport: </label>
+                        <select name="file_transport_id" id="file_transport_id">
+                            <option value="">Select a file transport configuration</option>
+                            [% FOREACH transport IN file_transports %]
+                                [% IF transport.file_transport_id == account.file_transport_id %]
+                                    <option value="[% transport.file_transport_id | html %]" selected="selected">[% transport.name | html %] ([% transport.transport | upper | html %] - [% transport.host | html %])</option>
                                 [% ELSE %]
-                                    <option value="[% transport_type | html %]">[% transport_type | html %]</option>
+                                    <option value="[% transport.file_transport_id | html %]">[% transport.name | html %] ([% transport.transport | upper | html %] - [% transport.host | html %])</option>
                                 [% END %]
                             [% END %]
                         </select>
-                    </li>
-                    <li>
-                        <label for="host">Remote host: </label>
-                        <input type="text" name="host" id="host" size="20" maxlength="40" value="[% account.host | html %]" />
-                    </li>
-                    <li>
-                        <label for="username">Username: </label>
-                        <input type="text" name="username" id="username" size="20" maxlength="40" value="[% account.username | html %]" />
-                    </li>
-                    <li>
-                        <label for="password">Password: </label>
-                        <input type="text" name="password" id="password" size="20" maxlength="40" value="[% account.password | html %]" />
-                    </li>
-                    <li>
-                        <label for="upload_port">Upload port: </label>
-                        <input type="text" name="upload_port" id="upload_port" size="20" maxlength="40" value="[% account.upload_port | html %]" />
-                        <div class="hint">The upload port will default to 22 (for SFTP) or 21 (for FTP) if not set.</div>
-                    </li>
-                    <li>
-                        <label for="download_port">Download port: </label>
-                        <input type="text" name="download_port" id="download_port" size="20" maxlength="40" value="[% account.download_port | html %]" />
-                        <div class="hint">The download port will default to 22 (for SFTP) or 21 (for FTP) if not set.</div>
-                    </li>
-                    <li>
-                        <label for="download_directory">Download directory: </label>
-                        <input type="text" name="download_directory" id="download_directory" size="20" value="[% account.download_directory | html %]" />
-                        <div class="hint">The download directory specifies the directory on the ftp site from which quotes and invoices are downloaded.</div>
-                    </li>
-                    <li>
-                        <label for="upload_directory">Upload directory: </label>
-                        <input type="text" name="upload_directory" id="upload_directory" size="20" value="[% account.upload_directory | html %]" />
-                        <div class="hint">The upload directory specifies the directory on the ftp site to which orders are uploaded.</div>
+                        <div class="hint"> Select a file transport configuration for this EDI account. File transports can be managed in <a href="/cgi-bin/koha/admin/file_transports.pl">Administration &rsaquo; File transports</a>. </div>
                     </li>
                     <li>
                         <label for="id_code_qualifier">Qualifier:</label>

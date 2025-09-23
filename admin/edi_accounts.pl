@@ -56,6 +56,13 @@ if ( $op eq 'acct_form' ) {
     );
     $template->param( vendors => \@vendors );
 
+    # Get available file transports for selection
+    my @file_transports = $schema->resultset('FileTransport')->search(
+        {},
+        { order_by => { -asc => 'name' } }
+    );
+    $template->param( file_transports => \@file_transports );
+
     if ( C4::Context->config("enable_plugins") ) {
         my @plugins = Koha::Plugins->new()->GetPlugins(
             {
@@ -71,29 +78,20 @@ if ( $op eq 'acct_form' ) {
     if ( $op eq 'cud-save' ) {
 
         # validate & display
-        my $id       = $input->param('id');
-        my $password = scalar $input->param('password');
-        $password = $crypt->encrypt_hex($password);
+        my $id     = $input->param('id');
         my $fields = {
-            description   => scalar $input->param('description'),
-            host          => scalar $input->param('host'),
-            username      => scalar $input->param('username'),
-            password      => $password,
-            upload_port   => scalar $input->param('upload_port')   || $input->param('transport') eq 'FTP' ? 21 : 22,
-            download_port => scalar $input->param('download_port') || $input->param('transport') eq 'FTP' ? 21 : 22,
-            vendor_id          => scalar $input->param('vendor_id'),
-            upload_directory   => scalar $input->param('upload_directory'),
-            download_directory => scalar $input->param('download_directory'),
-            san                => scalar $input->param('san'),
-            standard           => scalar $input->param('standard'),
-            transport          => scalar $input->param('transport'),
-            quotes_enabled     => $input->param('quotes_enabled')    ? 1 : 0,
-            invoices_enabled   => $input->param('invoices_enabled')  ? 1 : 0,
-            orders_enabled     => $input->param('orders_enabled')    ? 1 : 0,
-            responses_enabled  => $input->param('responses_enabled') ? 1 : 0,
-            auto_orders        => $input->param('auto_orders')       ? 1 : 0,
-            id_code_qualifier  => scalar $input->param('id_code_qualifier'),
-            plugin             => scalar $input->param('plugin'),
+            description       => scalar $input->param('description'),
+            vendor_id         => scalar $input->param('vendor_id'),
+            file_transport_id => scalar $input->param('file_transport_id') || undef,
+            san               => scalar $input->param('san'),
+            standard          => scalar $input->param('standard'),
+            quotes_enabled    => $input->param('quotes_enabled')    ? 1 : 0,
+            invoices_enabled  => $input->param('invoices_enabled')  ? 1 : 0,
+            orders_enabled    => $input->param('orders_enabled')    ? 1 : 0,
+            responses_enabled => $input->param('responses_enabled') ? 1 : 0,
+            auto_orders       => $input->param('auto_orders')       ? 1 : 0,
+            id_code_qualifier => scalar $input->param('id_code_qualifier'),
+            plugin            => scalar $input->param('plugin'),
         };
 
         if ($id) {
@@ -163,7 +161,6 @@ sub show_account {
     my $acct_id = $input->param('id');
     if ($acct_id) {
         my $acct = $schema->resultset('VendorEdiAccount')->find($acct_id);
-        $acct->password( $crypt->decrypt_hex( $acct->password ) );
         if ($acct) {
             $template->param( account => $acct );
         }
