@@ -648,7 +648,32 @@ sub _copy_move_subfield {
     }
     _modify_values({ values => \@values, regex => $regex });
     my $dont_erase = $action eq 'copy' ? 1 : 0;
-    _update_subfield({ record => $record, field => $toFieldName, subfield => $toSubfieldName, values => \@values, dont_erase => $dont_erase });
+
+    # Find which source fields actually have the subfield to determine target field numbers
+    my @target_field_numbers;
+    if ( $fromFieldName eq $toFieldName && @values ) {
+
+        # For same-field operations, find fields that have the source subfield
+        @target_field_numbers =
+            @{ field_exists( { record => $record, field => $fromFieldName, subfield => $fromSubfieldName } ) };
+        if (@$field_numbers) {
+
+            # If specific field numbers were requested, intersect them with fields that have the subfield
+            my %requested = map { $_ => 1 } @$field_numbers;
+            @target_field_numbers = grep { $requested{$_} } @target_field_numbers;
+        }
+    }
+
+    _update_subfield(
+        {
+            record        => $record,
+            field         => $toFieldName,
+            subfield      => $toSubfieldName,
+            values        => \@values,
+            dont_erase    => $dont_erase,
+            field_numbers => @target_field_numbers ? \@target_field_numbers : $field_numbers
+        }
+    );
 
     # And delete if it's a move
     if ( $action eq 'move' ) {
