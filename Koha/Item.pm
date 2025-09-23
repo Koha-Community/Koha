@@ -946,7 +946,9 @@ sub last_returned_by_all {
         }
     );
 
-    return map { Koha::Patron->_new_from_dbic( $_->borrowernumber ) } @borrowers;
+    my @stored_borrowers = map { Koha::Patron->_new_from_dbic( $_->borrowernumber ) } @borrowers;
+
+    return \@stored_borrowers;
 }
 
 =head3 last_returned_by
