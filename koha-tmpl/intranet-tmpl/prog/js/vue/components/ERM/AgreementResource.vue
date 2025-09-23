@@ -680,8 +680,6 @@ export default {
                     ),
             },
             actions: {
-                0: ["show"],
-                1: ["show"],
                 "-1": baseResource.embedded
                     ? [
                           {

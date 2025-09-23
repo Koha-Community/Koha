@@ -250,8 +250,6 @@ export default {
             url: () => tableUrl(defaults),
             add_filters: true,
             actions: {
-                0: ["show"],
-                1: ["show"],
                 "-1": [
                     "edit",
                     "delete",

@@ -134,8 +134,6 @@ export default {
             add_filters: true,
             filters_options: {},
             actions: {
-                0: ["show"],
-                1: ["show"],
                 "-1": ["edit", "delete"],
             },
             default_filters: {

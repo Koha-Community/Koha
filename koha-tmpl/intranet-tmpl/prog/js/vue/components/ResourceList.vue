@@ -86,9 +86,18 @@ export default {
                     });
                 });
         };
+        const assignShowEvent = (columnActions, i) => {
+            if (!columnActions[i]) {
+                columnActions[i] = ["show"];
+            }
+            if (columnActions[i] && !columnActions[i].includes("show")) {
+                columnActions[i].push("show");
+            }
+        };
         const getTableColumns = resourceAttrs => {
             let get_lib_from_av = props.instancedResource.get_lib_from_av;
             let thisResource = props.instancedResource;
+            let columnActions = thisResource.tableOptions.actions;
 
             const columns = resourceAttrs.reduce((acc, attr, i) => {
                 if (
@@ -104,6 +113,7 @@ export default {
                     return acc;
                 }
                 if (attr.name === thisResource.idAttr) {
+                    assignShowEvent(columnActions, i);
                     acc.push({
                         title: attr.label,
                         data: attr.name,
@@ -124,6 +134,7 @@ export default {
                     return acc;
                 }
                 if (attr.name === thisResource.nameAttr) {
+                    assignShowEvent(columnActions, i);
                     acc.push({
                         title: attr.label,
                         data: attr.tableDataSearchFields

@@ -685,7 +685,6 @@ export default {
                 ],
             },
             actions: {
-                0: ["show"],
                 "-1": [
                     "edit",
                     {

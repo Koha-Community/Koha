@@ -253,8 +253,6 @@ export default {
             options: { embed: "biblio" },
             add_filters: true,
             actions: {
-                0: ["show"],
-                1: ["show"],
                 "-1": [
                     {
                         removeItem: {

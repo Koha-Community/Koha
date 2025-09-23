@@ -306,8 +306,6 @@ export default {
                 5: () => baseResource.map_av_dt_filter("av_license_statuses"),
             },
             actions: {
-                0: ["show"],
-                1: ["show"],
                 "-1": ["edit", "delete"],
             },
         };
