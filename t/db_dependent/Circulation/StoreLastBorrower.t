@@ -18,7 +18,7 @@
 use Modern::Perl;
 
 use Test::NoWarnings;
-use Test::More tests => 2;
+use Test::More tests => 3;
 
 use C4::Circulation qw( AddReturn );
 use C4::Context;
@@ -141,6 +141,178 @@ subtest 'Test StoreLastBorrower' => sub {
 
     $item = $item->get_from_storage;
     is( $item->last_returned_by, undef, 'Last patron to return item should not be stored if StoreLastBorrower if off' );
+};
+
+subtest 'Test StoreLastBorrower with multiple borrowers' => sub {
+    plan tests => 12;
+
+    my $library = $builder->build_object( { class => 'Koha::Libraries' } );
+    my $item    = $builder->build_sample_item;
+    t::lib::Mocks::mock_userenv( { branchcode => $library->branchcode } );
+
+    # Test last_returned_by_all with no borrowers
+    t::lib::Mocks::mock_preference( 'StoreLastBorrower', '3' );
+    my @borrowers = $item->last_returned_by_all();
+    is( scalar(@borrowers), 0, 'last_returned_by_all returns empty array when no borrowers stored' );
+
+    # Add 3 borrowers for testing, checkout/check in
+    my @patrons;
+    for my $i ( 1 .. 3 ) {
+        my $patron = $builder->build(
+            {
+                source => 'Borrower',
+                value  => { privacy => 1, branchcode => $library->branchcode }
+            }
+        );
+        push @patrons, $patron;
+
+        my $issue = $builder->build(
+            {
+                source => 'Issue',
+                value  => {
+                    borrowernumber => $patron->{borrowernumber},
+                    itemnumber     => $item->itemnumber,
+                },
+            }
+        );
+
+        my ( $returned, undef, undef ) =
+            C4::Circulation::AddReturn( $item->barcode, $patron->{branchcode}, undef, dt_from_string("2010-10-1$i") );
+    }
+
+    $item = $item->get_from_storage;
+
+    # Test last_returned_by_all returns all borrowers
+    @borrowers = $item->last_returned_by_all();
+    is( scalar(@borrowers), 3, 'Correctly returns 3 borrowers' );
+
+    # Test ordering
+    is( $borrowers[0]->borrowernumber, $patrons[2]->{borrowernumber}, 'Most recent borrower first' );
+    is( $borrowers[1]->borrowernumber, $patrons[1]->{borrowernumber}, 'Second most recent borrower second' );
+    is( $borrowers[2]->borrowernumber, $patrons[0]->{borrowernumber}, 'Oldest borrower last' );
+
+    # Add 2 more borrowers/check out/check in
+    for my $i ( 4 .. 5 ) {
+        my $patron = $builder->build(
+            {
+                source => 'Borrower',
+                value  => { privacy => 1, branchcode => $library->branchcode }
+            }
+        );
+        push @patrons, $patron;
+
+        my $issue = $builder->build(
+            {
+                source => 'Issue',
+                value  => {
+                    borrowernumber => $patron->{borrowernumber},
+                    itemnumber     => $item->itemnumber,
+                },
+            }
+        );
+
+        my ( $returned, undef, undef ) =
+            C4::Circulation::AddReturn( $item->barcode, $patron->{branchcode}, undef, dt_from_string("2010-10-1$i") );
+    }
+
+    $item      = $item->get_from_storage;
+    @borrowers = $item->last_returned_by_all();
+    is(
+        scalar(@borrowers), 3,
+        'We only retain 3 borrowers when the sys pref is set to 3, even though there are 5 checkouts/checkins'
+    );
+    is( $borrowers[0]->borrowernumber, $patrons[4]->{borrowernumber}, 'Most recent borrower after cleanup' );
+
+    # Reduce StoreLastBorrower to 2
+    t::lib::Mocks::mock_preference( 'StoreLastBorrower', '2' );
+
+    my $yet_another_patron = $builder->build(
+        {
+            source => 'Borrower',
+            value  => { privacy => 1, branchcode => $library->branchcode }
+        }
+    );
+
+    my $issue = $builder->build(
+        {
+            source => 'Issue',
+            value  => {
+                borrowernumber => $yet_another_patron->{borrowernumber},
+                itemnumber     => $item->itemnumber,
+            },
+        }
+    );
+
+    my ( $returned, undef, undef ) = C4::Circulation::AddReturn(
+        $item->barcode, $yet_another_patron->{branchcode}, undef,
+        dt_from_string('2010-10-16')
+    );
+
+    $item      = $item->get_from_storage;
+    @borrowers = $item->last_returned_by_all();
+    is( scalar(@borrowers), 2, 'StoreLastBorrower was reduced to 2, we should now only keep 2 in the table' );
+    is(
+        $borrowers[0]->borrowernumber, $yet_another_patron->{borrowernumber},
+        'Most recent borrower after limit reduction'
+    );
+
+    # Disabled pref
+    t::lib::Mocks::mock_preference( 'StoreLastBorrower', '0' );
+
+    # If pref has become disabled, nothing should be stored in the table
+    my $one_more_patron = $builder->build(
+        {
+            source => 'Borrower',
+            value  => { privacy => 1, branchcode => $library->branchcode }
+        }
+    );
+
+    my $another_issue = $builder->build(
+        {
+            source => 'Issue',
+            value  => {
+                borrowernumber => $one_more_patron->{borrowernumber},
+                itemnumber     => $item->itemnumber,
+            },
+        }
+    );
+
+    ( $returned, undef, undef ) = C4::Circulation::AddReturn(
+        $item->barcode, $one_more_patron->{branchcode}, undef,
+        dt_from_string('2010-10-18')
+    );
+
+    $item      = $item->get_from_storage;
+    @borrowers = $item->last_returned_by_all();
+    is( scalar(@borrowers), 0, 'last_returned_by_all respects preference value 0' );
+
+    my $cleanup_patron = $builder->build(
+        {
+            source => 'Borrower',
+            value  => { privacy => 1, branchcode => $library->branchcode }
+        }
+    );
+
+    $issue = $builder->build(
+        {
+            source => 'Issue',
+            value  => {
+                borrowernumber => $cleanup_patron->{borrowernumber},
+                itemnumber     => $item->itemnumber,
+            },
+        }
+    );
+
+    ( $returned, undef, undef ) = C4::Circulation::AddReturn(
+        $item->barcode, $cleanup_patron->{branchcode}, undef,
+        dt_from_string('2010-10-17')
+    );
+
+    $item      = $item->get_from_storage;
+    @borrowers = $item->last_returned_by_all();
+    is( scalar(@borrowers),      0,     'All entries cleared when preference is 0' );
+    is( $item->last_returned_by, undef, 'last_returned_by returns undef when no records' );
+
 };
 
 $schema->storage->txn_rollback;
