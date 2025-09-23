@@ -16,45 +16,26 @@
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
-
+use Test::More;
 use Test::NoWarnings;
-use Test::More tests => 2;
-use File::Spec;
-use File::Find;
-use IO::File;
 
-my @failures;
-find(
-    {
-        bydepth  => 1,
-        no_chdir => 1,
-        wanted   => sub {
-            my $file = $_;
+use Koha::Devel::Files;
 
-            return if $file =~ /\.(ico|jpg|gif|ogg|pdf|png|psd|swf|zip|.*\~)$/;
-            return unless -f $file;
+my $dev_files = Koha::Devel::Files->new( { context => 'full' } );
+my @files     = $dev_files->ls_all_files( [qw(ico jpg gif ogg pdf png psd)] );
 
-            my @name_parts = File::Spec->splitpath($file);
-            my %dirs       = map { $_ => 1 } File::Spec->splitdir( $name_parts[1] );
-            return if exists $dirs{'.git'};
+plan tests => scalar @files + 1;
 
-            my $fh           = IO::File->new( $file, 'r' );
-            my $marker_found = 0;
-            while ( my $line = <$fh> ) {
+for my $file (@files) {
+    my $has_conflicts;
+    open my $fh, '<', $file or die "Cannot open $file: $!";
+    while ( my $line = <$fh> ) {
 
-                # could check for ^=====, but that's often used in text files
-                $marker_found++ if $line =~ m|^<<<<<<|;
-                $marker_found++ if $line =~ m|^>>>>>>|;
-                last            if $marker_found;
-            }
-            close $fh;
-            push @failures, $file if $marker_found;
-        },
-    },
-    File::Spec->curdir()
-);
-
-is(
-    @failures, 0,
-    'Files should not contain merge markers' . ( @failures ? ( ' (' . join( ', ', @failures ) . ' )' ) : '' )
-);
+        # Could check for ^=====, but that's often used in text files
+        if ( $line =~ /^<<<<<<<|^>>>>>>>/ ) {
+            $has_conflicts = 1;
+        }
+    }
+    ok( !$has_conflicts, "$file should not contain merge conflict markers" );
+    close $fh;
+}
