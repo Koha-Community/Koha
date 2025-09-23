@@ -73,7 +73,12 @@ sub store {
     $self->SUPER::store;
 
     # Subclass triggers
-    my $subclass = $self->transport eq 'sftp' ? 'Koha::File::Transport::SFTP' : 'Koha::File::Transport::FTP';
+    my $subclass_map = {
+        'sftp'  => 'Koha::File::Transport::SFTP',
+        'ftp'   => 'Koha::File::Transport::FTP',
+        'local' => 'Koha::File::Transport::Local',
+    };
+    my $subclass = $subclass_map->{ $self->transport } || 'Koha::File::Transport';
     $self = $subclass->_new_from_dbic( $self->_result );
     $self->_post_store_trigger;
 
@@ -244,6 +249,19 @@ Method for listing files in the current directory of the connected file server
 sub list_files {
     my ( $self, $path ) = @_;
     die "Subclass must implement list_files";
+}
+
+=head3 rename_file
+
+    my $success = $transport->rename_file($old_name, $new_name);
+
+Method for renaming a file on the current file server
+
+=cut
+
+sub rename_file {
+    my ( $self, $old_name, $new_name ) = @_;
+    die "Subclass must implement rename_file";
 }
 
 =head3 _post_store_trigger

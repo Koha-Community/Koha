@@ -29,7 +29,7 @@ my $schema  = Koha::Database->new->schema;
 my $builder = t::lib::TestBuilder->new;
 
 subtest 'Polymorphic object creation' => sub {
-    plan tests => 4;
+    plan tests => 6;
 
     $schema->storage->txn_begin;
 
@@ -70,6 +70,25 @@ subtest 'Polymorphic object creation' => sub {
     );
 
     can_ok( $ftp_transport, 'connect' );
+
+    # Test Local transport polymorphism
+    my $local_transport = $builder->build_object(
+        {
+            class => 'Koha::File::Transports',
+            value => {
+                transport => 'local',
+                name      => 'Test Local',
+                host      => 'localhost',
+            }
+        }
+    );
+
+    is(
+        ref($local_transport), 'Koha::File::Transport::Local',
+        'Local transport should be polymorphic Koha::File::Transport::Local object'
+    );
+
+    can_ok( $local_transport, 'rename_file' );
 
     $schema->storage->txn_rollback;
 };

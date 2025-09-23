@@ -22,6 +22,7 @@ use Koha::Exceptions;
 
 use Koha::File::Transport::SFTP;
 use Koha::File::Transport::FTP;
+use Koha::File::Transport::Local;
 
 use base qw(Koha::Objects);
 
@@ -61,8 +62,9 @@ Return the mapping for field value to class name for the polymorphic class
 
 sub _polymorphic_map {
     return {
-        sftp => 'Koha::File::Transport::SFTP',
-        ftp  => 'Koha::File::Transport::FTP',
+        sftp  => 'Koha::File::Transport::SFTP',
+        ftp   => 'Koha::File::Transport::FTP',
+        local => 'Koha::File::Transport::Local',
     };
 }
 

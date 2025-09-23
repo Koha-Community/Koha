@@ -198,6 +198,39 @@ sub list_files {
     return $file_list;
 }
 
+=head3 rename_file
+
+    my $success = $server->rename_file($old_name, $new_name);
+
+Renames a file on the server connection.
+
+Returns true on success or undefined on failure.
+
+=cut
+
+sub rename_file {
+    my ( $self, $old_name, $new_name ) = @_;
+    my $operation = "rename";
+
+    $self->{connection}->rename( $old_name, $new_name )
+        or return $self->_abort_operation( $operation, "$old_name -> $new_name" );
+
+    $self->add_message(
+        {
+            message => $operation,
+            type    => 'success',
+            payload => {
+                status => $self->{connection}->status,
+                error  => $self->{connection}->error,
+                path   => $self->{connection}->cwd,
+                detail => "$old_name -> $new_name"
+            }
+        }
+    );
+
+    return 1;
+}
+
 =head2 Internal methods
 
 =head3 _post_store_trigger
