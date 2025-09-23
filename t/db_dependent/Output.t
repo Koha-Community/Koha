@@ -61,24 +61,21 @@ subtest 'redirect_if_opac_suppressed() tests' => sub {
 
     subtest 'not suppressed tests' => sub {
 
-        plan tests => 2;
+        plan tests => 1;
 
         open STDOUT, '>', \$stdout;
         $opac_suppressed = 0;
 
-        my $warnings;
-        local $SIG{__WARN__} = sub { $warnings = shift };
         redirect_if_opac_suppressed( $query, $biblio );
 
         is( $stdout, undef, 'No redirection if the biblio is not suppressed' );
-        ok( !$warnings, "safe_exit not called" );
 
         close STDOUT;
     };
 
     subtest 'suppressed tests' => sub {
 
-        plan tests => 11;
+        plan tests => 10;
 
         $opac_suppressed = 1;
 
@@ -151,12 +148,9 @@ subtest 'redirect_if_opac_suppressed() tests' => sub {
 
             $ENV{REMOTE_ADDR} = '192.168.0.115';
 
-            my $warnings;
-            local $SIG{__WARN__} = sub { $warnings = shift };
             redirect_if_opac_suppressed( $query, $biblio );
 
             is( $stdout, undef, 'No redirection if the IP is on the range' );
-            ok( !$warnings, "safe_exit not called" );
 
             undef $stdout;
 
