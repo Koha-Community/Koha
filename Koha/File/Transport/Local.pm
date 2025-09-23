@@ -379,4 +379,19 @@ sub rename_file {
     return 1;
 }
 
+=head3 disconnect
+
+    $server->disconnect();
+
+For local transport, this is a no-op as there are no connections to close.
+
+=cut
+
+sub disconnect {
+    my ($self) = @_;
+
+    # No-op for local transport
+    return 1;
+}
+
 1;

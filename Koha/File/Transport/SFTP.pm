@@ -231,6 +231,25 @@ sub rename_file {
     return 1;
 }
 
+=head3 disconnect
+
+    $server->disconnect();
+
+Disconnects from the SFTP server.
+
+=cut
+
+sub disconnect {
+    my ($self) = @_;
+
+    if ( $self->{connection} ) {
+        $self->{connection}->disconnect;
+        $self->{connection} = undef;
+    }
+
+    return 1;
+}
+
 =head2 Internal methods
 
 =head3 _post_store_trigger
@@ -354,6 +373,11 @@ Ensure proper cleanup of open filehandles
 
 sub DESTROY {
     my ($self) = @_;
+
+    # Clean up the SFTP connection
+    if ( $self->{connection} ) {
+        $self->{connection}->disconnect;
+    }
 
     # Ensure the filehandle is closed properly
     if ( $self->{stderr_fh} ) {

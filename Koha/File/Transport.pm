@@ -264,6 +264,19 @@ sub rename_file {
     die "Subclass must implement rename_file";
 }
 
+=head3 disconnect
+
+    $transport->disconnect();
+
+Method for disconnecting from the current file server
+
+=cut
+
+sub disconnect {
+    my ($self) = @_;
+    die "Subclass must implement disconnect";
+}
+
 =head3 _post_store_trigger
 
     $server->_post_store_trigger;

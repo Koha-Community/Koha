@@ -188,6 +188,25 @@ sub rename_file {
     return 1;
 }
 
+=head3 disconnect
+
+    $server->disconnect();
+
+Disconnects from the FTP server.
+
+=cut
+
+sub disconnect {
+    my ($self) = @_;
+
+    if ( $self->{connection} ) {
+        $self->{connection}->quit;
+        $self->{connection} = undef;
+    }
+
+    return 1;
+}
+
 sub _abort_operation {
     my ( $self, $message ) = @_;
 
@@ -204,6 +223,21 @@ sub _abort_operation {
     }
 
     return;
+}
+
+=head3 DESTROY
+
+Ensure proper cleanup of FTP connections
+
+=cut
+
+sub DESTROY {
+    my ($self) = @_;
+
+    # Clean up the FTP connection
+    if ( $self->{connection} ) {
+        $self->{connection}->quit;
+    }
 }
 
 1;
