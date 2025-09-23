@@ -3,7 +3,7 @@
 use Modern::Perl;
 
 use Test::NoWarnings;
-use Test::More tests => 130;
+use Test::More tests => 131;
 
 use Koha::Database;
 use Koha::SimpleMARC;
@@ -1018,3 +1018,61 @@ is_deeply(
     $record, $expected_record_0,
     '100$0 has been deleted, added back, updated, moved to 600$0, and copied back to 100$0; finally, 245$0 has been copied and replaced to 700$0'
 );
+
+# Test for Bug 32950: Moving subfield can lose values for repeatable fields
+subtest "Bug 32950: Moving subfield preserves values in repeatable fields" => sub {
+    plan tests => 14;
+    $dbh->do(q|DELETE FROM marc_modification_templates|);
+    my $template_id = AddModificationTemplate("test_bug_32950");
+
+    # Create template action to move 020$z to 020$a
+    AddModificationTemplateAction(
+        $template_id, 'move_field', 0,
+        '020',        'z',          '', '020', 'a',
+        '',           '',           '',
+        '',           '',           '', '', '', '',
+        'Move field 020$z to 020$a'
+    );
+
+    # Create test record with multiple 020 fields, some with $a, some with $z
+    my $record = MARC::Record->new;
+    $record->leader('03174nam a2200445 a 4500');
+    my @fields = (
+        MARC::Field->new( '020', ' ', ' ', 'a' => '9781003182870', 'q' => '(ebk)' ),
+        MARC::Field->new( '020', ' ', ' ', 'a' => '1003182879' ),
+        MARC::Field->new( '020', ' ', ' ', 'a' => '9781000407204', 'q' => '(electronic bk. : EPUB)' ),
+        MARC::Field->new( '020', ' ', ' ', 'z' => '9781032023175', 'q' => '(hbk.)' ),
+        MARC::Field->new( '020', ' ', ' ', 'z' => '9780367760380', 'q' => '(pbk.)' ),
+    );
+    $record->append_fields(@fields);
+
+    # Apply the template
+    ModifyRecordWithTemplate( $template_id, $record );
+
+    # Get all 020 fields after modification
+    my @fields_020 = $record->field('020');
+    is( scalar @fields_020, 5, "Should still have 5 020 fields" );
+
+    # Check that existing $a values are preserved
+    is( $fields_020[0]->subfield('a'), '9781003182870', 'First field $a value preserved' );
+    is( $fields_020[0]->subfield('q'), '(ebk)',         'First field $q value preserved' );
+
+    is( $fields_020[1]->subfield('a'), '1003182879', 'Second field $a value preserved' );
+
+    is( $fields_020[2]->subfield('a'), '9781000407204',           'Third field $a value preserved' );
+    is( $fields_020[2]->subfield('q'), '(electronic bk. : EPUB)', 'Third field $q value preserved' );
+
+    # Check that $z values were moved to $a in fields that had $z
+    is( $fields_020[3]->subfield('a'), '9781032023175', 'Fourth field $z moved to $a' );
+    is( $fields_020[3]->subfield('q'), '(hbk.)',        'Fourth field $q value preserved' );
+
+    is( $fields_020[4]->subfield('a'), '9780367760380', 'Fifth field $z moved to $a' );
+
+    # Verify $z subfields were removed (move operation)
+    for my $field (@fields_020) {
+        my @z_subfields = $field->subfield('z');
+        is( scalar @z_subfields, 0, 'No $z subfields should remain' );
+    }
+
+    DelModificationTemplate($template_id);
+};
