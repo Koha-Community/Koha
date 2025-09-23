@@ -267,7 +267,6 @@ sub GetBibsWithPendingHoldRequests {
 
     $sth->execute();
     my $biblionumbers = $sth->fetchall_arrayref();
-
     return [ map { $_->[0] } @$biblionumbers ];
 }
 
@@ -299,6 +298,9 @@ sub GetPendingHoldRequestsForBib {
 
     my $dbh = C4::Context->dbh;
 
+    my $skip_non_target_holds_query     = Koha::HoldGroup::skip_non_target_holds_query('sql');
+    my $skip_non_target_holds_query_sql = $skip_non_target_holds_query ? " $skip_non_target_holds_query" : '';
+
     my $request_query = "SELECT biblionumber, borrowernumber, itemnumber, priority, reserve_id, reserves.branchcode,
                                 reservedate, reservenotes, borrowers.branchcode AS borrowerbranch, itemtype, item_level_hold, item_group_id
                          FROM reserves
@@ -309,6 +311,7 @@ sub GetPendingHoldRequestsForBib {
                          AND reservedate <= CURRENT_DATE()
                          AND suspend = 0 ";
     $request_query .= "AND reserve_id NOT IN (SELECT reserve_id FROM hold_fill_targets) " if $unallocated;
+    $request_query .= $skip_non_target_holds_query_sql;
     $request_query .= "ORDER BY priority";
     my $sth = $dbh->prepare($request_query);
     $sth->execute($biblionumber);
