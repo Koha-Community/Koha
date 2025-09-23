@@ -303,6 +303,7 @@ sub remove_as_hold_group_target {
     my ($self) = @_;
 
     if (   $self->hold_group
+        && $self->hold_group->target_hold_id
         && $self->hold_group->target_hold_id eq $self->reserve_id
         && C4::Context->preference("DisplayAddHoldGroups") )
     {

@@ -36,7 +36,7 @@ use Koha::DateUtils qw(dt_from_string);
 use Koha::Holds;
 use Koha::Libraries;
 use Koha::Old::Holds;
-use C4::Reserves    qw( AddReserve ModReserveAffect RevertWaitingStatus);
+use C4::Reserves    qw( AddReserve ModReserveAffect );
 use C4::Circulation qw( AddReturn );
 
 my $schema  = Koha::Database->new->schema;
@@ -2078,7 +2078,7 @@ subtest '_Findgroupreserve in the context of hold groups' => sub {
 
     is( $hold->is_hold_group_target, 1, 'First hold is the hold group target' );
 
-    C4::Reserves::RevertWaitingStatus( { itemnumber => $item->itemnumber } );
+    $hold->revert_found( { itemnumber => $item->itemnumber } );
     is( $hold->is_hold_group_target,       0,     'First hold is no longer the hold group target' );
     is( $hold->hold_group->target_hold_id, undef, 'Hold group no longer has a target' );
 
