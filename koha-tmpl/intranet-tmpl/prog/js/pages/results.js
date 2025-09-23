@@ -130,9 +130,35 @@ function verify_cover_images() {
     });
 }
 
-$(window).load(function () {
-    verify_cover_images();
-});
+if (PREF_IntranetCoce && PREF_CoceProviders) {
+    let counter_wait = 0;
+    function wait_for_images(cb){
+
+        var loaded = 1;
+        counter_wait++;
+
+        if ( loaded ) {
+            loaded = KOHA.coce.done;
+        }
+
+        if (!loaded && counter_wait < 50) {// Do not wait more than 5 seconds
+            window.setTimeout(function(){wait_for_images(cb);}, 100);
+        } else {
+            if (counter_wait >= 50 ) {
+                console.log("Could not retrieve the images")
+            }
+            cb();
+        }
+    }
+
+    $(window).load(function() {
+        wait_for_images(verify_cover_images);
+    });
+} else {
+    $(window).load(function() {
+        verify_cover_images();
+    });
+}
 
 var toHighlight = {};
 var q_array;
