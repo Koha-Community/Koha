@@ -74,10 +74,9 @@ for my $s (@suppliers) {
     for my $ord ( @{$orders} ) {
         push @{$loop_basket}, {
             basketno     => $ord->{'basketno'},
-            total        => $ord->{'count(*)'},
             authorisedby => $ord->{'authorisedby'},
-            creationdate => output_pref( { str => $ord->{'creationdate'} } ),
-            closedate    => output_pref( { str => $ord->{'closedate'} } ),
+            creationdate => scalar output_pref( { str => $ord->{'creationdate'} } ),
+            closedate    => scalar output_pref( { str => $ord->{'closedate'} } ),
         };
     }
     push @{$loop_suppliers}, {
