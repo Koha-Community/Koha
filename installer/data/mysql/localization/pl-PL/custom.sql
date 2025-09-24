@@ -14,7 +14,7 @@
 -- GNU General Public License for more details.
 --
 -- You should have received a copy of the GNU General Public License
--- along with Koha; if not, see <http://www.gnu.org/licenses>.
+-- along with Koha; if not, see <https://www.gnu.org/licenses>.
 
 UPDATE `currency` SET `active` = 0;
 INSERT INTO `currency` (`currency`, `rate`, `symbol`, `active`) VALUES ('PLN', 1.0, 'zł', '1');

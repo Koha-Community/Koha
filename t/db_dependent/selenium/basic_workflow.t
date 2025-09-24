@@ -13,7 +13,7 @@
 # GNU General Public License for more details.
 #
 # You should have received a copy of the GNU General Public License
-# along with Koha; if not, see <http://www.gnu.org/licenses>.
+# along with Koha; if not, see <https://www.gnu.org/licenses>.
 
 # wget https://selenium-release.storage.googleapis.com/2.53/selenium-server-standalone-2.53.1.jar # Does not work with 3.4, did not test the ones between
 # sudo apt-get install xvfb firefox-esr
