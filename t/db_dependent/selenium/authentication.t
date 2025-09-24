@@ -16,7 +16,7 @@
 # GNU General Public License for more details.
 #
 # You should have received a copy of the GNU General Public License
-# along with Koha; if not, see <http://www.gnu.org/licenses>.
+# along with Koha; if not, see <https://www.gnu.org/licenses>.
 
 #This selenium test is to test authentication, by performing the following: create a category and patron (same as basic_workflow.t). Then the superlibrarian logs out and the created patron must log into the staff intranet and OPAC
 

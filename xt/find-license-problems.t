@@ -21,7 +21,7 @@
 # GNU General Public License for more details.
 #
 # You should have received a copy of the GNU General Public License
-# along with Koha; if not, see <http://www.gnu.org/licenses>.
+# along with Koha; if not, see <https://www.gnu.org/licenses>.
 
 use Modern::Perl;
 use Test::More;
@@ -53,7 +53,7 @@ foreach my $name (@files) {
         $hasorlater = 1
             if ( $line =~ /any later version/
             || $line =~ /at your option/ );
-        $haslinktolicense = 1 if $line =~ m|http://www\.gnu\.org/licenses|;
+        $haslinktolicense = 1 if $line =~ m|https://www\.gnu\.org/licenses|;
         $hasfranklinst    = 1 if ( $line =~ /51 Franklin Street/ );
         $is_not_us        = 1 if $line =~ m|This file is part of the Zebra server|;
     }
