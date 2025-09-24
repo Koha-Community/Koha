@@ -17,8 +17,10 @@
 
 use Modern::Perl;
 
-use Test::More tests => 4;
+use Test::More tests => 5;
 use Test::NoWarnings;
+use File::Temp qw(tempdir);
+use File::Spec;
 
 use Koha::Database;
 use Koha::File::Transports;
@@ -167,6 +169,92 @@ subtest 'find() tests' => sub {
     is(
         ref($found_ftp), 'Koha::File::Transport::FTP',
         'find() should return polymorphic FTP object'
+    );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'Dual API functionality (_user_set_directory flag)' => sub {
+    plan tests => 8;
+
+    $schema->storage->txn_begin;
+
+    # Create temporary directories for testing
+    my $tempdir      = tempdir( CLEANUP => 1 );
+    my $download_dir = File::Spec->catdir( $tempdir, 'download' );
+    my $upload_dir   = File::Spec->catdir( $tempdir, 'upload' );
+    my $custom_dir   = File::Spec->catdir( $tempdir, 'custom' );
+
+    mkdir $download_dir or die "Cannot create download_dir: $!";
+    mkdir $upload_dir   or die "Cannot create upload_dir: $!";
+    mkdir $custom_dir   or die "Cannot create custom_dir: $!";
+
+    # Create test files
+    my $test_file = File::Spec->catfile( $download_dir, 'test.txt' );
+    open my $fh, '>', $test_file or die "Cannot create test file: $!";
+    print $fh "Test content\n";
+    close $fh;
+
+    # Create local transport with default directories
+    my $local_transport = $builder->build_object(
+        {
+            class => 'Koha::File::Transports',
+            value => {
+                transport          => 'local',
+                name               => 'Dual API Test',
+                host               => 'localhost',
+                download_directory => $download_dir,
+                upload_directory   => $upload_dir,
+            }
+        }
+    );
+
+    # TEST 1: Traditional API with explicit change_directory should set flag
+    $local_transport->connect();
+    ok(
+        !$local_transport->{_user_set_directory},
+        'Flag should be false after connect'
+    );
+
+    $local_transport->change_directory($custom_dir);
+    ok(
+        $local_transport->{_user_set_directory},
+        'Flag should be true after explicit change_directory'
+    );
+
+    # TEST 2: Verify flag prevents auto-directory management
+    # After setting directory explicitly, list_files should NOT auto-change to download_directory
+    my $custom_test_file = File::Spec->catfile( $custom_dir, 'custom.txt' );
+    open my $fh2, '>', $custom_test_file or die "Cannot create custom test file: $!";
+    print $fh2 "Custom content\n";
+    close $fh2;
+
+    my $files = $local_transport->list_files();
+    ok( $files, 'list_files() works after explicit change_directory' );
+    is( scalar(@$files),       1,            'Should find 1 file in custom directory' );
+    is( $files->[0]{filename}, 'custom.txt', 'Should find custom.txt, not test.txt' );
+
+    # TEST 3: Simplified API with options should work
+    $local_transport = $builder->build_object(
+        {
+            class => 'Koha::File::Transports',
+            value => {
+                transport          => 'local',
+                name               => 'Simplified API Test',
+                host               => 'localhost',
+                download_directory => $download_dir,
+                upload_directory   => $upload_dir,
+            }
+        }
+    );
+
+    # Simplified API - no explicit connect or change_directory
+    my $files_simplified = $local_transport->list_files( { path => $custom_dir } );
+    ok( $files_simplified, 'Simplified API list_files() with custom path works' );
+    is( scalar(@$files_simplified), 1, 'Should find 1 file via simplified API' );
+    is(
+        $files_simplified->[0]{filename}, 'custom.txt',
+        'Simplified API should find custom.txt'
     );
 
     $schema->storage->txn_rollback;

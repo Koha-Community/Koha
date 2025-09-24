@@ -32,15 +32,15 @@ Koha::File::Transport::SFTP - SFTP implementation of file transport
 
 =head2 Class methods
 
-=head3 connect
+=head3 _connect
 
-    my $success = $self->connect;
+    my $success = $self->_connect;
 
 Start the SFTP transport connect, returns true on success or undefined on failure.
 
 =cut
 
-sub connect {
+sub _connect {
     my ($self) = @_;
     my $operation = "connection";
 
@@ -76,17 +76,15 @@ sub connect {
     return 1;
 }
 
-=head3 upload_file
+=head3 _upload_file
 
-    my $success =  $transport->upload_file($fh);
-
-Passed a filehandle, this will upload the file to the current directory of the server connection.
+Internal method that performs the SFTP-specific upload operation.
 
 Returns true on success or undefined on failure.
 
 =cut
 
-sub upload_file {
+sub _upload_file {
     my ( $self, $local_file, $remote_file ) = @_;
     my $operation = "upload";
 
@@ -107,17 +105,15 @@ sub upload_file {
     return 1;
 }
 
-=head3 download_file
+=head3 _download_file
 
-    my $success =  $transport->download_file($filename);
-
-Passed a filename, this will download the file from the current directory of the server connection.
+Internal method that performs the SFTP-specific download operation.
 
 Returns true on success or undefined on failure.
 
 =cut
 
-sub download_file {
+sub _download_file {
     my ( $self, $remote_file, $local_file ) = @_;
     my $operation = 'download';
 
@@ -138,9 +134,9 @@ sub download_file {
     return 1;
 }
 
-=head3 change_directory
+=head3 _change_directory
 
-    my $success = $server->change_directory($directory);
+    my $success = $server->_change_directory($directory);
 
 Passed a directory name, this will change the current directory of the server connection.
 
@@ -148,7 +144,7 @@ Returns true on success or undefined on failure.
 
 =cut
 
-sub change_directory {
+sub _change_directory {
     my ( $self, $remote_directory ) = @_;
     my $operation = 'change_directory';
 
@@ -169,16 +165,15 @@ sub change_directory {
     return 1;
 }
 
-=head3 list_files
+=head3 _list_files
 
-    my $files = $server->list_files;
-
-Returns an array reference of hashrefs with file information found in the current directory of the server connection.
+Internal method that performs the SFTP-specific file listing operation.
+Returns an array reference of hashrefs with file information.
 Each hashref contains: filename, longname, a (attributes).
 
 =cut
 
-sub list_files {
+sub _list_files {
     my ($self) = @_;
     my $operation = "list";
 
@@ -199,17 +194,15 @@ sub list_files {
     return $file_list;
 }
 
-=head3 rename_file
+=head3 _rename_file
 
-    my $success = $server->rename_file($old_name, $new_name);
-
-Renames a file on the server connection.
+Internal method that performs the SFTP-specific file rename operation.
 
 Returns true on success or undefined on failure.
 
 =cut
 
-sub rename_file {
+sub _rename_file {
     my ( $self, $old_name, $new_name ) = @_;
     my $operation = "rename";
 
@@ -232,15 +225,27 @@ sub rename_file {
     return 1;
 }
 
-=head3 disconnect
+=head3 _is_connected
 
-    $server->disconnect();
+Internal method to check if transport is currently connected.
+
+=cut
+
+sub _is_connected {
+    my ($self) = @_;
+
+    return $self->{connection} && !$self->{connection}->error;
+}
+
+=head3 _disconnect
+
+    $server->_disconnect();
 
 Disconnects from the SFTP server.
 
 =cut
 
-sub disconnect {
+sub _disconnect {
     my ($self) = @_;
 
     if ( $self->{connection} ) {
