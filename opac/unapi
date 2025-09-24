@@ -42,7 +42,7 @@ use C4::Biblio qw( GetXmlBiblio );
 use Koha::XSLT::Base;
 
 my $cgi = CGI->new();
-binmode(STDOUT, ":encoding(UTF-8)"); #output as utf8
+binmode( STDOUT, ":encoding(UTF-8)" );    #output as utf8
 
 =head1 VARIABLES
 
@@ -52,7 +52,7 @@ This hashref of hashrefs maps from a MARC flavour and unAPI format
 to the stylesheet that should be used to transform the bib MARCXML
 to the desired output format.  As new MARC XSLT stylesheets are added,
 (particularly for UNIMARC), this map should be updated.  Of course,
-if/when we add support for emitting a format that is not genreated
+if/when we add support for emitting a format that is not generated
 by a stylesheet, the structure of this variable will have to be changed.
 At present, this doubles as the list of output formats supported by
 this unAPI implementation.
@@ -90,105 +90,117 @@ used to describe them in an unAPI format request.
 =cut
 
 my $format_info = {
-    'marcxml' => q(<format name="marcxml" type="application/xml" namespace_uri="http://www.loc.gov/MARC21/slim" docs="http://www.loc.gov/marcxml/" schema_location="http://www.loc.gov/standards/marcxml/schema/MARC21slim.xsd"/>),
-    'marcxml-full' => q(<format name="marcxml-full" type="application/xml" namespace_uri="http://www.loc.gov/MARC21/slim" docs="http://www.loc.gov/marcxml/" schema_location="http://www.loc.gov/standards/marcxml/schema/MARC21slim.xsd"/>),
-    'mods' => q(<format name="mods" type="application/xml" namespace_uri="http://www.loc.gov/mods/" docs="http://www.loc.gov/mods/" schema_location="http://www.loc.gov/standards/mods/mods.xsd"/>),
-    'mods-full' => q(<format name="mods-full" type="application/xml" namespace_uri="http://www.loc.gov/mods/" docs="http://www.loc.gov/mods/" schema_location="http://www.loc.gov/standards/mods/mods.xsd"/>),
-    'mods3' => q(<format name="mods3" type="application/xml" namespace_uri="http://www.loc.gov/mods/v3" docs="http://www.loc.gov/mods/" schema_location="http://www.loc.gov/standards/mods/v3/mods-3-1.xsd"/>),
-    'mods3-full' => q(<format name="mods3-full" type="application/xml" namespace_uri="http://www.loc.gov/mods/v3" docs="http://www.loc.gov/mods/" schema_location="http://www.loc.gov/standards/mods/v3/mods-3-1.xsd"/>),
-    'oai_dc' => q(<format name="oai_dc" type="application/xml" namespace_uri="http://www.openarchives.org/OAI/2.0/oai_dc/" schema_location="http://www.openarchives.org/OAI/2.0/oai_dc.xsd"/>),
-    'rdfdc' => q(<format name="rdfdc" type="application/xml" namespace_uri="http://purl.org/dc/elements/1.1/" schema_location="http://purl.org/dc/elements/1.1/"/>),
-    'rss2' => q(<format name="rss2" type="application/xml"/>),
+    'marcxml' =>
+        q(<format name="marcxml" type="application/xml" namespace_uri="http://www.loc.gov/MARC21/slim" docs="http://www.loc.gov/marcxml/" schema_location="http://www.loc.gov/standards/marcxml/schema/MARC21slim.xsd"/>),
+    'marcxml-full' =>
+        q(<format name="marcxml-full" type="application/xml" namespace_uri="http://www.loc.gov/MARC21/slim" docs="http://www.loc.gov/marcxml/" schema_location="http://www.loc.gov/standards/marcxml/schema/MARC21slim.xsd"/>),
+    'mods' =>
+        q(<format name="mods" type="application/xml" namespace_uri="http://www.loc.gov/mods/" docs="http://www.loc.gov/mods/" schema_location="http://www.loc.gov/standards/mods/mods.xsd"/>),
+    'mods-full' =>
+        q(<format name="mods-full" type="application/xml" namespace_uri="http://www.loc.gov/mods/" docs="http://www.loc.gov/mods/" schema_location="http://www.loc.gov/standards/mods/mods.xsd"/>),
+    'mods3' =>
+        q(<format name="mods3" type="application/xml" namespace_uri="http://www.loc.gov/mods/v3" docs="http://www.loc.gov/mods/" schema_location="http://www.loc.gov/standards/mods/v3/mods-3-1.xsd"/>),
+    'mods3-full' =>
+        q(<format name="mods3-full" type="application/xml" namespace_uri="http://www.loc.gov/mods/v3" docs="http://www.loc.gov/mods/" schema_location="http://www.loc.gov/standards/mods/v3/mods-3-1.xsd"/>),
+    'oai_dc' =>
+        q(<format name="oai_dc" type="application/xml" namespace_uri="http://www.openarchives.org/OAI/2.0/oai_dc/" schema_location="http://www.openarchives.org/OAI/2.0/oai_dc.xsd"/>),
+    'rdfdc' =>
+        q(<format name="rdfdc" type="application/xml" namespace_uri="http://purl.org/dc/elements/1.1/" schema_location="http://purl.org/dc/elements/1.1/"/>),
+    'rss2'      => q(<format name="rss2" type="application/xml"/>),
     'rss2-full' => q(<format name="rss2-full" type="application/xml"/>),
-    'srw_dc' => q(<format name="srw_dc" type="application/xml" namespace_uri="info:srw/schema/1/dc-schema" schema_location="http://www.loc.gov/z3950/agency/zing/srw/dc-schema.xsd"/>),
+    'srw_dc'    =>
+        q(<format name="srw_dc" type="application/xml" namespace_uri="info:srw/schema/1/dc-schema" schema_location="http://www.loc.gov/z3950/agency/zing/srw/dc-schema.xsd"/>),
 };
 
 my $id     = $cgi->param('id');
 my $format = $cgi->param('format');
 
-if (not defined $format) {
-    emit_formats($id, $format_to_stylesheet_map, $format_info, $cgi);
+if ( not defined $format ) {
+    emit_formats( $id, $format_to_stylesheet_map, $format_info, $cgi );
 } elsif ($id) {
 
     # koha:biblionumber:0152018484
-    if ($id =~ /koha:biblionumber:(\d+)/) {
+    if ( $id =~ /koha:biblionumber:(\d+)/ ) {
         my $biblionumber = $1;
 
         my $content;
 
         my $marcxml = GetXmlBiblio($biblionumber);
-        unless (defined $marcxml) {
+        unless ( defined $marcxml ) {
+
             # no bib, so 404
-            print $cgi->header( -status => '404 record not found');
+            print $cgi->header( -status => '404 record not found' );
             exit 0;
         }
 
         my $xslt_file = get_xslt_file( $format, $format_to_stylesheet_map, $format_info );
-        unless( defined $xslt_file ) {
+        unless ( defined $xslt_file ) {
             print $cgi->header( -status => '406 invalid format requested' );
             exit 0;
         }
         my $xslt_engine = Koha::XSLT::Base->new;
-        $content = $xslt_engine->transform({
-            xml => $marcxml,
-            file => $xslt_file,
-        });
+        $content = $xslt_engine->transform(
+            {
+                xml  => $marcxml,
+                file => $xslt_file,
+            }
+        );
 
-        if( !defined $content || $xslt_engine->err ) {
+        if ( !defined $content || $xslt_engine->err ) {
             print $cgi->header( -status => '500 internal error' );
             exit 0;
         }
 
-        print $cgi->header( -type =>'application/xml', -charset => 'UTF-8' );
+        print $cgi->header( -type => 'application/xml', -charset => 'UTF-8' );
         print $content;
     } else {
+
         # ID is obviously wrong, so 404
-        print $cgi->header( -status => '404 record not found');
+        print $cgi->header( -status => '404 record not found' );
         exit 0;
     }
 } else {
+
     # supplied a format but no id - caller is doing it wrong
-    print $cgi->header( -status => '400 bad request - if you specify format, must specify id');
+    print $cgi->header( -status => '400 bad request - if you specify format, must specify id' );
     exit 0;
 }
 
 exit 0;
 
 sub emit_formats {
-    my ($id, $format_to_stylesheet_map, $format_info, $cgi) = @_;
+    my ( $id, $format_to_stylesheet_map, $format_info, $cgi ) = @_;
 
-    if (defined $id) {
-        print $cgi->header( -type =>'application/xml', -status => '300 multiple choices' );
+    if ( defined $id ) {
+        print $cgi->header( -type => 'application/xml', -status => '300 multiple choices' );
     } else {
-        print $cgi->header( -type =>'application/xml', -status => '200 Ok' );
+        print $cgi->header( -type => 'application/xml', -status => '200 Ok' );
     }
 
     print "<?xml version='1.0' encoding='utf-8'  ?>\n";
-    if (defined $id) {
+    if ( defined $id ) {
         print qq(<formats id="$id">\n);
     } else {
         print "<formats>\n";
     }
 
-    my $marcflavour = uc(C4::Context->preference('marcflavour'));
-    foreach my $format (sort keys %{ $format_to_stylesheet_map->{$marcflavour} }) {
+    my $marcflavour = uc( C4::Context->preference('marcflavour') );
+    foreach my $format ( sort keys %{ $format_to_stylesheet_map->{$marcflavour} } ) {
         print $format_info->{$format}, "\n";
     }
     print "</formats>\n";
     return;
 }
 
-
 sub get_xslt_file {
-    my ($format, $format_to_stylesheet_map, $format_info) = @_;
+    my ( $format, $format_to_stylesheet_map, $format_info ) = @_;
     $format = lc $format;
 
-    my $marcflavour = uc(C4::Context->preference('marcflavour'));
+    my $marcflavour = uc( C4::Context->preference('marcflavour') );
     return unless $format_to_stylesheet_map->{$marcflavour}->{$format};
 
-    my $xslt_file = C4::Context->config('intrahtdocs') .
-                    "/prog/en/xslt/" .
-                    $format_to_stylesheet_map->{$marcflavour}->{$format};
+    my $xslt_file =
+        C4::Context->config('intrahtdocs') . "/prog/en/xslt/" . $format_to_stylesheet_map->{$marcflavour}->{$format};
 
     return $xslt_file;
 }
