@@ -19,11 +19,7 @@
     <option value="">None</option>
   [% END %]
   [% FOR av IN avs %]
-    [% IF av.authorised_value == default %]
-      <option value="[% av.authorised_value | html %]" selected="selected">[% av.lib | html_entity %]</option>
-    [% ELSE %]
-      <option value="[% av.authorised_value | html %]">[% av.lib | html_entity %]</option>
-    [% END %]
+    <option value="[% av.authorised_value | html %]" [% IF av.authorised_value == default %]selected="selected"[% END %]>[% IF av.lib_opac %][% av.lib_opac | html_entity %][% ELSE %][% av.lib | html_entity %][% END %]</option>
   [% END %]
   </select>
 [% ELSE %]
