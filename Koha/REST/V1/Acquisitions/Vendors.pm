@@ -203,7 +203,7 @@ sub config {
     my $c = shift->openapi->valid_input or return;
 
     my $patron      = $c->stash('koha.user');
-    my $userflags   = C4::Auth::getuserflags( $patron->flags, $patron->id );
+    my $userflags   = C4::Auth::haspermission( $patron->userid );
     my $permissions = Koha::Auth::Permissions->get_authz_from_flags( { flags => $userflags } );
 
     my @gst_values = map { option => $_ + 0.0 }, split( '\|', C4::Context->preference("TaxRates") );
