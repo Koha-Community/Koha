@@ -609,9 +609,21 @@
                                 [% bdgclass=budget_loo.b_active? "": "b_inactive" | html %]
                             [% END %]
 
-                            <option value="[% budget_loo.b_id | html %]" class="[% bdgclass | html %]" data-sort1-authcat="[% budget_loo.b_sort1_authcat | html %]" data-sort2-authcat="[% budget_loo.b_sort2_authcat | html %]">
-                                [% level_indent | html %][% budget_loo.b_txt | html %][% IF !budget_loo.b_active %](inactive)[% END %]
-                            </option>
+                            [% IF ( budget_loo.b_sel ) %]
+                                <option
+                                    value="[% budget_loo.b_id | html %]"
+                                    class="[% bdgclass | html %]"
+                                    data-sort1-authcat="[% budget_loo.b_sort1_authcat | html %]"
+                                    data-sort2-authcat="[% budget_loo.b_sort2_authcat | html %]"
+                                    selected="selected"
+                                >
+                                    [% level_indent | html %][% budget_loo.b_txt | html %][% IF !budget_loo.b_active %](inactive)[% END %]
+                                </option>
+                            [% ELSE %]
+                                <option value="[% budget_loo.b_id | html %]" class="[% bdgclass | html %]" data-sort1-authcat="[% budget_loo.b_sort1_authcat | html %]" data-sort2-authcat="[% budget_loo.b_sort2_authcat | html %]">
+                                    [% level_indent | html %][% budget_loo.b_txt | html %][% IF !budget_loo.b_active %](inactive)[% END %]
+                                </option>
+                            [% END %]
                         [% END %]
                     </select>
                     <span class="required">Required</span>
