@@ -256,7 +256,6 @@ subtest 'superlibrarian tests' => sub {
         'CAN_user_superlibrarian'                                   => 1,
         'CAN_user_tools_access_files'                               => 1,
         'CAN_user_tools_batch_extend_due_dates'                     => 1,
-        'CAN_user_tools_batch_modify_holds'                         => 1,
         'CAN_user_tools_batch_upload_patron_images'                 => 1,
         'CAN_user_tools_delete_anonymize_patrons'                   => 1,
         'CAN_user_tools_edit_additional_contents'                   => 1,
