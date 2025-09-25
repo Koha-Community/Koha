@@ -736,7 +736,6 @@ const insertObject = async ({ type, object, baseUrl, authHeader }) => {
             item,
             pickup_library,
             hold_date,
-            patron,
             ...hold
         } = object;
 
