@@ -917,7 +917,7 @@ function _dt_add_filters(table_node, table_dt, filters_options = {}) {
 
                         if (
                             table_dt.settings()[0].ajax !== null &&
-                            table_node.attr("id") !== "item_search"
+                            $(table_node)?.attr("id") !== "item_search"
                         ) {
                             optionValue = `^${this._id}$`;
                         }
