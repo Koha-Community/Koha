@@ -103,53 +103,7 @@
                 [% ELSIF view == "report" %]
                     <div id="modified_holds_results-wrapper">
                         <div id="modified_holds_results" class="page-section">
-                            <table id="modified_holds">
-                                <thead>
-                                    <tr>
-                                        <th>Title</th>
-                                        <th>Patron</th>
-                                        <th>Pickup Location</th>
-                                        <th>Priority</th>
-                                        <th>Expiration Date</th>
-                                        <th>Status</th>
-                                        <th>Suspended</th>
-                                        <th>Suspended Until</th>
-                                        <th>Notes</th>
-                                        <!-- Add other columns as needed -->
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    [% FOREACH hold IN updated_holds_obj %]
-                                        <tr>
-                                            <td>[% hold.biblio.title | html %]</td>
-                                            <td>[% hold.borrower.firstname | html %] [% hold.borrower.surname | html %]</td>
-                                            <td>[% hold.branch.branchname | html %]</td>
-                                            <td>[% hold.priority | html %]</td>
-                                            <td>[% hold.expirationdate | $KohaDates %]</td>
-                                            <td>
-                                                [% IF hold.found == 'F' %]
-                                                    <span>Fulfilled</span>
-                                                [% ELSIF hold.cancellationdate %]
-                                                    <span>Cancelled</span>
-                                                [% ELSIF hold.found == 'W' %]
-                                                    [% IF hold.cancellation_requests.count == 0 %]
-                                                        <span>Waiting</span>
-                                                    [% ELSE %]
-                                                        <span>Cancelled</span>
-                                                    [% END %]
-                                                [% ELSIF hold.found == 'T' %]
-                                                    <span>In transit</span>
-                                                [% ELSE %]
-                                                    <span>Pending</span>
-                                                [% END %]
-                                            </td>
-                                            <td>[% IF hold.suspend %]Yes[% ELSE %]No[% END %]</td>
-                                            <td>[% IF hold.suspend_until %][% hold.suspend_until | $KohaDates %][% ELSE %]-[% END %]</td>
-                                            <td>[% hold.reservenotes | html %]</td>
-                                        </tr>
-                                    [% END %]
-                                </tbody>
-                            </table>
+                            <table id="modified_holds"></table>
                         </div>
                         <!-- /#modified_holds_results -->
                         <fieldset class="action">
@@ -628,10 +582,131 @@
 
                 //Modified holds table
                 var table_settings = [% TablesSettings.GetTableSettings( 'circ', 'holds', 'modified_holds', 'json' ) | $raw %];
-                $("#modified_holds").kohaTable({
-                    pagingType: "full",
-                    autoWidth: false
-                }, table_settings);
+                var filters = {
+                    "me.hold_id": function(){
+                        return {"-in": hold_ids};
+                    }
+                }
+
+                var holds_modified_table = $("#modified_holds").kohaTable({
+                    "ajax": {
+                        "url": "/api/v1/holds"
+                    },
+                    "embed": [
+                        "biblio",
+                        "item",
+                        "pickup_library",
+                        "patron"
+                    ],
+                    "destroy": true,
+                    "autoWidth": false,
+                    "processing": true,
+                    "columns": [
+                        {
+                            "data": "expiration_date",
+                            "name": "expiration_date",
+                            "type": "date",
+                            "title": _("Expiration date"),
+                            "orderable": true,
+                            "render": function( data, type, row, meta ) {
+                                return $date(data);
+                            }
+                        },
+                        {
+                            "data": "biblio.title",
+                            "name": "title",
+                            "title": _("Title"),
+                            "orderable": true,
+                            "render": function( data, type, row, meta ) {
+                                return '<a href="/cgi-bin/koha/catalogue/detail.pl?' +
+                                'biblionumber=' + encodeURIComponent( row.biblio_id ) + '">' + escape_str( data ) + '</a>';
+                            }
+                        },
+                        {
+                            "data": "item.external_id",
+                            "name": "barcode",
+                            "title": _("Barcode"),
+                            "defaultContent": _(""),
+                            "orderable": true,
+                            "render": function( data, type, row, meta ) {
+                                if( row.item ){
+                                    let item_id = encodeURIComponent( row.item_id );
+                                    let biblio_id = encodeURIComponent( row.biblio_id );
+                                    return '<a href="/cgi-bin/koha/catalogue/moredetail.pl?' +
+                                    'itemnumber='+ item_id +'&biblionumber='+ biblio_id +'&' +
+                                    'bi='+ biblio_id +'#item'+ item_id +'">' + escape_str( data ) + '</a>'
+                                }
+                            }
+                        },
+                        {
+                            "data": "patron_id",
+                            "name": "patron",
+                            "title": _("Patron"),
+                            "orderable": true,
+                            "render": function( data, type, row, meta ) {
+                                let patron_to_html = $patron_to_html(row.patron, { url: true, display_cardnumber: true, hide_patron_name });
+                                return patron_to_html;
+                            }
+                        },
+                        {
+                            "data": "status",
+                            "name": "status",
+                            "className": "found_status",
+                            "title": _("Status"),
+                            "orderable": true,
+                            "render": function( data, type, row, meta ) {
+                                let status = _("No status");
+                                if ( data == "T" ) {
+                                    status = _("In transit");
+                                } else if( data == "P" ) {
+                                    status = _("In processing");
+                                } else if( data == "W" ) {
+                                    status = _("Waiting");
+                                }
+                                return status;
+                            }
+                        },
+                        {
+                            "data": "pickup_library_id",
+                            "name": "pickup_library",
+                            "title": _("Hold pickup library"),
+                            "orderable": true,
+                            "render": function( data, type, row, meta ) {
+                                return escape_str( row.pickup_library.name );
+                            }
+                        },
+                        {
+                            "data": "suspended",
+                            "name": "suspended",
+                            "title": _("Suspended"),
+                            "orderable": true,
+                            "render": function( data, type, row, meta ) {
+                                return data == 0 ? _("No") : _("Yes");
+                            }
+                        },
+                        {
+                            "data": "suspended_until",
+                            "name": "suspended_until",
+                            "title": _("Suspended until"),
+                            "orderable": true,
+                            "render": function( data, type, row, meta ) {
+                                return $date( data );
+                            }
+                        },
+                        {
+                            "data": "notes",
+                            "name": "notes",
+                            "title": _("Notes"),
+                            "orderable": true,
+                            "render": function( data, type, row, meta ) {
+                                return escape_str( data );
+                            }
+                        }
+                    ]
+                }, table_settings, 0, filters);
+
+                var modified_message = '<div class="alert alert-info">'+hold_ids.length+' hold(s) have been modified!</div>';
+                $("#modified_holds_results-wrapper").prepend(modified_message);
 
             });
         </script>

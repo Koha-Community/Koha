@@ -59,7 +59,6 @@ if ( $op eq 'cud-form' ) {
     my $clear_hold_notes    = $input->param('clear_hold_notes');
 
     @hold_ids = $input->multi_param('hold_id');
-    my @holds_data = ();
 
     my $holds_to_update =
         Koha::Holds->search( { reserve_id => { -in => \@hold_ids } }, { join => [ "item", "biblio" ] } );
@@ -96,14 +95,11 @@ if ( $op eq 'cud-form' ) {
         if ($clear_hold_notes) {
             $hold->reservenotes(undef)->store;
         }
-        push @holds_data, $hold;
     }
 
     $template->param(
-        updated_holds     => to_json( \@hold_ids ),
-        updated_holds_obj => \@holds_data,
-        total_updated     => scalar @holds_data,
-        view              => 'report',
+        updated_holds => to_json( \@hold_ids ),
+        view          => 'report',
     );
 
 }
