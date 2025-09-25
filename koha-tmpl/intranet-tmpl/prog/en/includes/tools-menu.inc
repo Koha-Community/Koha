@@ -39,9 +39,6 @@
             [% IF ( CAN_user_tools_batch_extend_due_dates ) %]
                 <li><a href="/cgi-bin/koha/tools/batch_extend_due_dates.pl">Batch extend due dates</a></li>
             [% END %]
-            [% IF ( CAN_user_tools_batch_modify_holds ) %]
-                <li><a href="/cgi-bin/koha/tools/batch_modify_holds.pl">Batch modify holds</a></li>
-            [% END %]
             [% IF ( CAN_user_tools_moderate_tags ) %]
                 <li><a href="/cgi-bin/koha/tags/review.pl">Tags</a></li>
             [% END %]
