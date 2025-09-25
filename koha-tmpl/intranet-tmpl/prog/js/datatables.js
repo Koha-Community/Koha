@@ -493,18 +493,20 @@ function _dt_default_ajax(params) {
             function build_query(col, value) {
                 var parts = [];
                 var attributes = col.data.split(":");
+
+                let criteria = options.criteria;
+                if (value.match(/^\^(.*)\$$/)) {
+                    value = value.replace(/^\^/, "").replace(/\$$/, "");
+                    criteria = "exact";
+                } else {
+                    // escape SQL LIKE special characters %
+                    value = value.replace(/(\%|\\)/g, "\\$1");
+                }
+
                 for (var i = 0; i < attributes.length; i++) {
                     var part = {};
                     var attr = attributes[i];
                     let default_build = true;
-                    let criteria = options.criteria;
-                    if (value.match(/^\^(.*)\$$/)) {
-                        value = value.replace(/^\^/, "").replace(/\$$/, "");
-                        criteria = "exact";
-                    } else {
-                        // escape SQL LIKE special characters %
-                        value = value.replace(/(\%|\\)/g, "\\$1");
-                    }
 
                     let built_value;
                     if (col.type == "date") {
