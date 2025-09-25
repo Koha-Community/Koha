@@ -180,4 +180,94 @@ describe("Filters", () => {
             ).should("have.value", null);
         });
     });
+
+    describe("Exact search for all attributes", () => {
+        // In this case the library column is bind to library.name and library.library_id
+        it("From the form", () => {
+            cy.task("buildSampleObjects", {
+                object: "patron",
+                count: RESTdefaultPageSize,
+                values: {},
+            }).then(patrons => {
+                // Needs more properties to not explode
+                // account_balace: balance_str.escapeHtml(...).format_price is not a function
+                patrons = patrons.map(p => ({ ...p, account_balance: 0 }));
+
+                cy.intercept("GET", "/api/v1/patrons*", {
+                    statusCode: 200,
+                    body: patrons,
+                    headers: {
+                        "X-Base-Total-Count": baseTotalCount,
+                        "X-Total-Count": baseTotalCount,
+                    },
+                }).as("searchPatrons");
+
+                cy.visit("/cgi-bin/koha/members/members-home.pl");
+
+                cy.window().then(win => {
+                    win.categories_map = patrons.reduce((map, p) => {
+                        map[p.category_id.toLowerCase()] = p.category_id;
+                        return map;
+                    }, {});
+                });
+
+                cy.get("form.patron_search_form .branchcode_filter").select(
+                    "CPL"
+                );
+                cy.get("form.patron_search_form input[type='submit']").click();
+
+                cy.wait("@searchPatrons").then(interception => {
+                    const q = interception.request.query.q;
+                    expect(q).to.equal(
+                        '[{"library.name":"CPL"},{"me.library_id":"CPL"}]'
+                    );
+                });
+            });
+        });
+
+        it("From the column filter", () => {
+            cy.task("buildSampleObjects", {
+                object: "patron",
+                count: RESTdefaultPageSize,
+                values: {},
+            }).then(patrons => {
+                // Needs more properties to not explode
+                // account_balace: balance_str.escapeHtml(...).format_price is not a function
+                patrons = patrons.map(p => ({ ...p, account_balance: 0 }));
+
+                cy.intercept("GET", "/api/v1/patrons*", {
+                    statusCode: 200,
+                    body: patrons,
+                    headers: {
+                        "X-Base-Total-Count": baseTotalCount,
+                        "X-Total-Count": baseTotalCount,
+                    },
+                }).as("searchPatrons");
+
+                cy.visit("/cgi-bin/koha/members/members-home.pl");
+
+                cy.window().then(win => {
+                    win.categories_map = patrons.reduce((map, p) => {
+                        map[p.category_id.toLowerCase()] = p.category_id;
+                        return map;
+                    }, {});
+                });
+
+                cy.get("form.patron_search_form input[type='submit']").click();
+
+                cy.wait("@searchPatrons");
+
+                cy.get(
+                    `#${table_id} thead tr th[data-filter='libraries'] select`
+                ).select("^CPL$");
+
+                cy.wait("@searchPatrons").then(interception => {
+                    const q = interception.request.query.q;
+                    expect(q).to.equal(
+                        '[{"library.name":"CPL"},{"me.library_id":"CPL"}]'
+                    );
+                });
+            });
+        });
+    });
 });
