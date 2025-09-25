@@ -14,7 +14,7 @@ import { computed } from "vue";
 export default {
     props: {
         id: String,
-        modelValue: String,
+        modelValue: String | Number,
         placeholder: String,
         required: Boolean,
         size: Number | null,
@@ -23,7 +23,7 @@ export default {
     setup(props, { emit }) {
         const model = computed({
             get() {
-                return props.modelValue;
+                return props.modelValue.toString();
             },
             set(value) {
                 emit("update:modelValue", value);

@@ -597,7 +597,7 @@ export default {
                     name: "discount",
                     group: $__("Ordering information"),
                     type: "number",
-                    label: $__("Discount"),
+                    label: $__("Discount (%)"),
                     defaultValue: null,
                     size: 6,
                     formErrorHandler: verifyDiscountValue,
