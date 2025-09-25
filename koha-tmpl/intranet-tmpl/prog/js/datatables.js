@@ -1037,14 +1037,12 @@ function _dt_add_filters(table_node, table_dt, filters_options = {}) {
                     })
                     .each(function () {
                         let optionValue = this._id;
-                        if (table_dt.settings()[0].ajax !== null) {
-                            let tableId =
-                                table_node && table_node.id
-                                    ? table_node.id
-                                    : null;
-                            if (tableId && tableId !== "item_search") {
-                                optionValue = `^${this._id}$`;
-                            }
+
+                        if (
+                            table_dt.settings()[0].ajax !== null &&
+                            table_node.attr("id") !== "item_search"
+                        ) {
+                            optionValue = `^${this._id}$`;
                         }
 
                         let o = $(
