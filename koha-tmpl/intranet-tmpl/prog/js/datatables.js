@@ -1373,8 +1373,8 @@ function update_search_description(
             if (options.ajax && !options.bKohaAjaxSVC) {
                 options.ajax = Object.assign(
                     {},
-                    options.ajax,
-                    _dt_default_ajax({ default_filters, options })
+                    _dt_default_ajax({ default_filters, options }),
+                    options.ajax
                 );
                 options.serverSide = true;
                 options.processing = true;
