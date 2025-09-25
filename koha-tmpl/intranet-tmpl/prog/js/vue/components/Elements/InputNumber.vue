@@ -23,7 +23,10 @@ export default {
     setup(props, { emit }) {
         const model = computed({
             get() {
-                return parseFloat(props.modelValue);
+                return props.modelValue !== null &&
+                    props.modelValue !== undefined
+                    ? parseFloat(props.modelValue)
+                    : props.modelValue;
             },
             set(value) {
                 emit("update:modelValue", value);

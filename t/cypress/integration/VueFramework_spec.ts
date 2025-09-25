@@ -8,8 +8,6 @@ describe("Navigation handling", () => {
             values: { active: 1, name: "This should be in the breadcrumb" },
         })
             .then(generatedVendor => {
-                delete generatedVendor.list_currency;
-                delete generatedVendor.invoice_currency;
                 return cy.task("insertObject", {
                     type: "vendor",
                     object: generatedVendor,
@@ -185,8 +183,6 @@ describe("List view features", () => {
             values: { active: 1 },
         })
             .then(generatedVendor => {
-                delete generatedVendor.list_currency;
-                delete generatedVendor.invoice_currency;
                 return cy.task("insertObject", {
                     type: "vendor",
                     object: generatedVendor,
@@ -236,8 +232,6 @@ describe("Show view features", () => {
             values: { active: 1, name: "This should be in the breadcrumb" },
         })
             .then(generatedVendor => {
-                delete generatedVendor.list_currency;
-                delete generatedVendor.invoice_currency;
                 return cy.task("insertObject", {
                     type: "vendor",
                     object: generatedVendor,
@@ -301,8 +295,6 @@ describe("Form features", () => {
             values: { active: 1, name: "This should be in the breadcrumb" },
         })
             .then(generatedVendor => {
-                delete generatedVendor.list_currency;
-                delete generatedVendor.invoice_currency;
                 return cy.task("insertObject", {
                     type: "vendor",
                     object: generatedVendor,
