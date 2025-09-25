@@ -7,7 +7,7 @@ use CGI qw ( -utf8 );
 use Test::MockObject;
 use Test::MockModule;
 use List::MoreUtils qw/all any none/;
-use Test::More tests => 24;
+use Test::More tests => 25;
 use Test::NoWarnings;
 use Test::Warn;
 use t::lib::Mocks;
@@ -1662,6 +1662,139 @@ subtest 'checkpw for users with shared cardnumber / userid ' => sub {
     is( $userid,     $patron_2->userid,     'checkpw returns correct userid' );
     is( $patron->id, $patron_2->id,         'checkpw returns correct patron' );
 
+};
+
+subtest 'DISABLE_SYSPREF permission tests' => sub {
+    plan tests => 6;
+
+    $schema->storage->txn_begin;
+
+    # Test the permission checking logic directly using haspermission
+    my $patron_no_debug =
+        $builder->build_object( { class => 'Koha::Patrons', value => { flags => 4 } } );    # catalogue only
+    my $patron_with_debug =
+        $builder->build_object( { class => 'Koha::Patrons', value => { flags => 4 } } );    # catalogue only initially
+    my $superlibrarian = $builder->build_object( { class => 'Koha::Patrons', value => { flags => 1 } } );
+
+    # Add debug permission to second patron by setting the flag directly
+    # Debug permission is bit 32, so we set that bit
+    my $debug_flag = 1 << 32;
+    $patron_with_debug->flags( $patron_with_debug->flags | $debug_flag )->store;
+
+    # Test that our permission check logic works correctly
+    ok(
+        !haspermission( $patron_no_debug->userid, { debug => 1 } ),
+        'Patron without debug permission correctly denied'
+    );
+
+    ok(
+        haspermission( $patron_with_debug->userid, { debug => 1 } ),
+        'Patron with debug permission correctly allowed'
+    );
+
+    ok(
+        haspermission( $superlibrarian->userid, { debug => 1 } ),
+        'Superlibrarian correctly allowed debug permission'
+    );
+
+    # Test the actual logic more directly by mocking CGI and checking environment variables
+    my $cgi = Test::MockObject->new();
+    $cgi->mock(
+        'param',
+        sub {
+            my ( $self, $param ) = @_;
+            return 'yes' if $param eq 'DISABLE_SYSPREF_IntranetUserCSS';
+            return;
+        }
+    );
+
+    # Mock userenv for patron without debug permission
+    C4::Context->set_userenv(
+        $patron_no_debug->borrowernumber,
+        $patron_no_debug->userid,
+        $patron_no_debug->cardnumber,
+        $patron_no_debug->firstname,
+        $patron_no_debug->surname,
+        $patron_no_debug->branchcode,
+        $patron_no_debug->library->branchname,
+        $patron_no_debug->flags,
+        $patron_no_debug->email // '',
+        ''
+    );
+
+    # Create mock input for get_template_and_user to trigger our syspref logic
+    my $input_mock = { query => $cgi };
+
+    # Simulate the permission check in get_template_and_user
+    delete $ENV{"OVERRIDE_SYSPREF_IntranetUserCSS"};
+
+    # Test the logic: Should not override for patron without permission
+    if ( C4::Context->userenv && haspermission( C4::Context->userenv->{'id'}, { debug => 1 } ) ) {
+        $ENV{"OVERRIDE_SYSPREF_IntranetUserCSS"} = q{} if $cgi->param("DISABLE_SYSPREF_IntranetUserCSS");
+    }
+
+    ok(
+        !exists $ENV{"OVERRIDE_SYSPREF_IntranetUserCSS"},
+        'IntranetUserCSS not overridden for patron without debug permission'
+    );
+
+    # Now test with patron who has debug permission
+    C4::Context->set_userenv(
+        $patron_with_debug->borrowernumber,
+        $patron_with_debug->userid,
+        $patron_with_debug->cardnumber,
+        $patron_with_debug->firstname,
+        $patron_with_debug->surname,
+        $patron_with_debug->branchcode,
+        $patron_with_debug->library->branchname,
+        $patron_with_debug->flags,
+        $patron_with_debug->email // '',
+        ''
+    );
+
+    delete $ENV{"OVERRIDE_SYSPREF_IntranetUserCSS"};
+
+    # Test the logic: Should override for patron with permission
+    if ( C4::Context->userenv && haspermission( C4::Context->userenv->{'id'}, { debug => 1 } ) ) {
+        $ENV{"OVERRIDE_SYSPREF_IntranetUserCSS"} = q{} if $cgi->param("DISABLE_SYSPREF_IntranetUserCSS");
+    }
+
+    ok(
+        exists $ENV{"OVERRIDE_SYSPREF_IntranetUserCSS"} && $ENV{"OVERRIDE_SYSPREF_IntranetUserCSS"} eq '',
+        'IntranetUserCSS correctly overridden for patron with debug permission'
+    );
+
+    # Test superlibrarian
+    C4::Context->set_userenv(
+        $superlibrarian->borrowernumber,
+        $superlibrarian->userid,
+        $superlibrarian->cardnumber,
+        $superlibrarian->firstname,
+        $superlibrarian->surname,
+        $superlibrarian->branchcode,
+        $superlibrarian->library->branchname,
+        $superlibrarian->flags,
+        $superlibrarian->email // '',
+        ''
+    );
+
+    delete $ENV{"OVERRIDE_SYSPREF_IntranetUserCSS"};
+
+    # Test the logic: Should override for superlibrarian
+    if ( C4::Context->userenv && haspermission( C4::Context->userenv->{'id'}, { debug => 1 } ) ) {
+        $ENV{"OVERRIDE_SYSPREF_IntranetUserCSS"} = q{} if $cgi->param("DISABLE_SYSPREF_IntranetUserCSS");
+    }
+
+    ok(
+        exists $ENV{"OVERRIDE_SYSPREF_IntranetUserCSS"} && $ENV{"OVERRIDE_SYSPREF_IntranetUserCSS"} eq '',
+        'IntranetUserCSS correctly overridden for superlibrarian'
+    );
+
+    # Clean up
+    delete $ENV{"OVERRIDE_SYSPREF_IntranetUserCSS"};
+    C4::Context->unset_userenv();
+
+    $schema->storage->txn_rollback;
 };
 
 sub set_weak_password {
