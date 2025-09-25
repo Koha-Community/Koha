@@ -8,11 +8,9 @@
 [% USE TablesSettings %]
 [% USE To %]
 [% PROCESS 'html_helpers.inc' %]
-[% PROCESS 'i18n.inc' %]
+
 [% INCLUDE 'doc-head-open.inc' %]
-[% FILTER collapse %]
-    <title> [% t("Batch modify holds") | html %] &rsaquo; [% t("Tools") | html %] &rsaquo; [% t("Koha") | html %] </title>
-[% END %]
+<title>Batch modify holds &rsaquo; Tools &rsaquo; Koha</title>
 [% INCLUDE 'doc-head-close.inc' %]
 [% Asset.css("css/humanmsg.css") | $raw %]
 </head>
@@ -27,15 +25,12 @@
         [% WRAPPER breadcrumb_item %]
             <a href="/cgi-bin/koha/tools/tools-home.pl">Tools</a>
         [% END %]
-        [% IF ( view == 'report' ) %]
+        [% IF ( view == 'form' || view == 'report' ) %]
             [% WRAPPER breadcrumb_item %]
                 <a href="/cgi-bin/koha/tools/batch_modify_holds.pl">Batch modify holds</a>
             [% END %]
-            [% WRAPPER breadcrumb_item bc_active= 1 %]
-                <span>Modified holds</span>
-            [% END %]
         [% ELSE %]
-            [% WRAPPER breadcrumb_item %]
+            [% WRAPPER breadcrumb_item bc_active= 1 %]
                 <span>Batch modify holds</span>
             [% END %]
         [% END %]
@@ -46,8 +41,8 @@
     <div class="row">
         <div class="col-sm-10 col-sm-push-2 order-sm-1">
             <main>
+                <h1>Batch modify holds</h1>
                 [% IF view == "cud-form" %]
-                    <h1>Batch modify holds</h1>
                     <div id="modify_holds_search">
                         <form method="get" action="/cgi-bin/koha/tools/batch_modify_holds.pl" id="modify_holds_form">
                             <fieldset class="rows">
@@ -106,7 +101,6 @@
                     </div>
                     <!-- /#modify_holds_search -->
                 [% ELSIF view == "report" %]
-                    <h1>Modified holds</h1>
                     <div id="modified_holds_results-wrapper">
                         <div id="modified_holds_results" class="page-section">
                             <table id="modified_holds">
@@ -114,12 +108,12 @@
                                     <tr>
                                         <th>Title</th>
                                         <th>Patron</th>
-                                        <th>Pickup location</th>
+                                        <th>Pickup Location</th>
                                         <th>Priority</th>
-                                        <th>Expiration date</th>
+                                        <th>Expiration Date</th>
                                         <th>Status</th>
                                         <th>Suspended</th>
-                                        <th>Suspended until</th>
+                                        <th>Suspended Until</th>
                                         <th>Notes</th>
                                         <!-- Add other columns as needed -->
                                     </tr>
@@ -127,8 +121,8 @@
                                 <tbody>
                                     [% FOREACH hold IN updated_holds_obj %]
                                         <tr>
-                                            <td>[% INCLUDE 'biblio-title.inc' biblio=hold.biblio link = 1 %]</td>
-                                            <td>[% INCLUDE 'patron-title.inc' invert_name=1 patron=hold.borrower hide_patron_infos_if_needed=1 link_to="circulation_reserves" %]</td>
+                                            <td>[% hold.biblio.title | html %]</td>
+                                            <td>[% hold.borrower.firstname | html %] [% hold.borrower.surname | html %]</td>
                                             <td>[% hold.branch.branchname | html %]</td>
                                             <td>[% hold.priority | html %]</td>
                                             <td>[% hold.expirationdate | $KohaDates %]</td>
@@ -253,7 +247,6 @@
         [% INCLUDE 'calendar.inc' %]
         [% INCLUDE 'datatables.inc' %]
         [% INCLUDE 'select2.inc' %]
-        [% INCLUDE 'js-biblio-format.inc' %]
         [% INCLUDE 'js-patron-format.inc' %]
         [% Asset.js("lib/jquery/plugins/humanmsg.js") | $raw %]
         <script>
@@ -354,7 +347,7 @@
                 }
 
                 function search_holds(modify_holds_form){
-                    var table_settings = [% TablesSettings.GetTableSettings( 'tools', 'batch_hold_modification', 'holds_to_modify', 'json' ) | $raw %];
+                    var table_settings = [% TablesSettings.GetTableSettings( 'circ', 'holds', 'holds_to_modify', 'json' ) | $raw %];
                     var searchpattern = "";
                     var filters = {
                         "me.expirationdate": function(){
@@ -417,20 +410,12 @@
                             }
                         },
                         "me.suspend_until": function(){
-                            var suspend_until_from = modify_holds_form.find("#suspend_until_from").val();
-                            var suspend_until_to   = modify_holds_form.find("#suspend_until_to").val();
+                            var suspend_until_from  = modify_holds_form.find("#suspend_until_from").val();
+                            var suspend_until_to    = modify_holds_form.find("#suspend_until_to").val();
 
-                            if (suspend_until_from && suspend_until_to){
-                                searchpattern += _("suspend date between ") + suspend_until_from + " and " + suspend_until_to + " ";
-                                return {"-between": [suspend_until_from, suspend_until_to]};
-                            }
-                            else if (suspend_until_from && !suspend_until_to){
-                                searchpattern += _("suspend date from ") + suspend_until_from + " ";
-                                return {">=": suspend_until_from };
-                            } else if (!suspend_until_from && suspend_until_to){
-                                searchpattern += _("suspend date to ") + suspend_until_to + " ";
-                                return {"<=": suspend_until_to };
-                            }
+                            searchpattern += suspend_until_from && suspend_until_to ? _("suspend date between ")+ suspend_until_from +" and "+suspend_until_to : "";
+
+                            return suspend_until_from && suspend_until_to ? {"-between": [suspend_until_from, suspend_until_to]} : "";
                         },
                         "me.notes": function(){
                             var holdnotes = modify_holds_form.find("#holdnotes").val();
@@ -445,38 +430,25 @@
                     }
 
                     var holds_modify_table = $("#holds_to_modify").kohaTable({
-                        ajax: {
+                        "ajax": {
                             "url": "/api/v1/holds"
                         },
-                        embed: [
+                        "embed": [
                             "biblio",
                             "item",
                             "pickup_library",
                             "patron"
                         ],
-                        destroy: true,
-                        autoWidth: false,
-                        processing: true,
-                        order: [
-                            [1, 'asc']
-                        ],
-                        columns: [
+                        "destroy": true,
+                        "autoWidth": false,
+                        "processing": true,
+                        "columns": [
                             {
                                 "data": "hold_id",
                                 "name": "checkbox",
                                 "orderable": false,
                                 "render": function(data, type, row, meta) {
                                     return '<input class="selection" type="checkbox" value="'+ encodeURIComponent(data) +'"/>'
-                                }
-                            },
-                            {
-                                "data": "hold_date",
-                                "name": "hold_date",
-                                "type": "date",
-                                "title": _("Hold date"),
-                                "orderable": true,
-                                "render": function( data, type, row, meta ) {
-                                    return $date(data);
                                 }
                             },
                             {
@@ -490,12 +462,13 @@
                                 }
                             },
                             {
-                                "data": "biblio.title:biblio.subtitle:biblio.medium",
+                                "data": "biblio.title",
+                                "name": "title",
                                 "title": _("Title"),
-                                "searchable": true,
                                 "orderable": true,
-                                "render": function(data, type, row, meta) {
-                                    return $biblio_to_html(row.biblio, { link: 1 });
+                                "render": function( data, type, row, meta ) {
+                                    return '<a href="/cgi-bin/koha/catalogue/detail.pl?' +
+                                    'biblionumber=' + encodeURIComponent( row.biblio_id ) + '">' + escape_str( data ) + '</a>';
                                 }
                             },
                             {
