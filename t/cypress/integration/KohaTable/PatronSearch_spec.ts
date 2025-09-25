@@ -271,3 +271,55 @@ describe("Filters", () => {
         });
     });
 });
+
+describe("On single result", () => {
+    const table_id = "memberresultst";
+
+    beforeEach(() => {
+        cleanup();
+        cy.login();
+        cy.title().should("eq", "Koha staff interface");
+        cy.window().then(win => {
+            win.localStorage.clear();
+        });
+    });
+
+    it("should redirect", () => {
+        cy.task("insertSamplePatron").then(patron_objects => {
+            let patron = patron_objects.patron;
+            patron.library = patron_objects.library;
+            cy.intercept("GET", "/api/v1/patrons*", {
+                statusCode: 200,
+                body: [patron],
+                headers: {
+                    "X-Base-Total-Count": baseTotalCount,
+                    "X-Total-Count": "1",
+                },
+            }).as("searchPatrons");
+
+            cy.visit("/cgi-bin/koha/mainpage.pl");
+
+            cy.get("#findborrower").type(
+                `${patron.surname} ${patron.firstname}`
+            );
+            // Wait for auto complete
+            cy.wait("@searchPatrons");
+
+            cy.get("#findborrower").type(`{enter}`);
+
+            cy.title().should(
+                "to.match",
+                new RegExp(`^Checking out to.* ${patron.surname}`)
+            );
+
+            cy.location("pathname").should(
+                "include",
+                "/cgi-bin/koha/circ/circulation.pl"
+            );
+            cy.location("search").should(
+                "include",
+                `?borrowernumber=${patron.patron_id}`
+            );
+        });
+    });
+});
