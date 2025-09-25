@@ -589,6 +589,8 @@ export default {
                     label: $__("Tax rate"),
                     options: gstValues.value,
                     defaultValue: null,
+                    requiredKey: "value",
+                    selectLabel: "label",
                     hideIn: ["List"],
                 },
                 {
