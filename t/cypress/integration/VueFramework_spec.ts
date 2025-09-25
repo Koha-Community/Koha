@@ -295,6 +295,27 @@ describe("Form features", () => {
     beforeEach(() => {
         cy.login();
         cy.title().should("eq", "Koha staff interface");
+
+        cy.task("buildSampleObject", {
+            object: "vendor",
+            values: { active: 1, name: "This should be in the breadcrumb" },
+        })
+            .then(generatedVendor => {
+                delete generatedVendor.list_currency;
+                delete generatedVendor.invoice_currency;
+                return cy.task("insertObject", {
+                    type: "vendor",
+                    object: generatedVendor,
+                });
+            })
+            .then(vendor => {
+                cy.wrap(vendor).as("vendor");
+            });
+    });
+    afterEach(function () {
+        cy.task("deleteSampleObjects", [
+            { vendor: this.vendor, basket: this.basket },
+        ]);
     });
     it("Should allow accordion view", function () {
         cy.visit("/cgi-bin/koha/acquisition/vendors/add");
@@ -310,8 +331,10 @@ describe("Form features", () => {
         cy.get("div.accordion").eq(4).contains("Ordering information");
     });
     it("Should allow editing of an existing resource", function () {
-        cy.visit("/cgi-bin/koha/acquisition/vendors/edit/1");
-        cy.get("h2").contains("Edit vendor #1");
-        cy.get("#name").should("have.value", "My Vendor");
+        cy.get("@vendor").then(vendor => {
+            cy.visit("/cgi-bin/koha/acquisition/vendors/edit/" + vendor.id);
+            cy.get("h2").contains("Edit vendor #" + vendor.id);
+            cy.get("#name").should("have.value", vendor.name);
+        });
     });
 });
