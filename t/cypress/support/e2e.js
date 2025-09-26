@@ -25,20 +25,26 @@
 // Cypress.Commands.overwrite('visit', (originalFn, url, options) => { ... })
 
 // Error on JS warnings
+function safeToString(arg) {
+    try {
+        return JSON.stringify(arg);
+    } catch (e) {
+        return `[object ${arg.constructor?.name || typeof arg}]`;
+    }
+}
+
+function stringifyArgs(args) {
+    return args.map(safeToString).join(" ");
+}
 Cypress.on("window:before:load", win => {
     win.console.warn = (...args) => {
-        if (args[0] && typeof args[0] === "string") {
-            throw new Error(`JS Warning detected: ${args[0]}`);
-        }
+        const message = stringifyArgs(args);
+        throw new Error(`JS Warning detected: ${message}`);
     };
     win.console.log = (...args) => {
-        if (args[0] && typeof args[0] === "string") {
-            if (args[0].match(/DataTables warning: /)) {
-                throw new Error(
-                    `DataTables warning detected in log: ${args[0]}`
-                );
-            }
-            console.log(args[0]);
+        const message = stringifyArgs(args);
+        if (message.match(/DataTables warning: /)) {
+            throw new Error(`DataTables warning detected in log: ${message}`);
         }
     };
 });
