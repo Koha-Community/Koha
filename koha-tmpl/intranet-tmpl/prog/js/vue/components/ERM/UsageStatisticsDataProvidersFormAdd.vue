@@ -365,7 +365,13 @@
                     <ButtonSubmit />
                     <router-link
                         v-if="previous_route === 'data_provider_show'"
-                        :to="{ name: 'UsageStatisticsDataProvidersShow' }"
+                        :to="{
+                            name: 'UsageStatisticsDataProvidersShow',
+                            params: {
+                                erm_usage_data_provider_id:
+                                    usage_data_provider.erm_usage_data_provider_id,
+                            },
+                        }"
                         role="button"
                         class="cancel"
                         >{{ $__("Cancel") }}</router-link

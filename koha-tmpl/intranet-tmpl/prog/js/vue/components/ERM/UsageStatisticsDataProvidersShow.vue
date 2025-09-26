@@ -6,7 +6,7 @@
                 :to="{
                     name: 'UsageStatisticsDataProvidersFormAddEdit',
                     params: {
-                        usage_data_provider_id:
+                        erm_usage_data_provider_id:
                             usage_data_provider.erm_usage_data_provider_id,
                     },
                 }"
