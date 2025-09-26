@@ -68,25 +68,31 @@ function get_items() {
             biblio: {
                 biblio_id: 1,
                 title: "a biblio title",
+                author: "an author",
             },
             external_id: "bc_1",
             item_id: 1,
+            callnumber: "cn_1",
         },
         {
             biblio: {
                 biblio_id: 2,
                 title: "an other biblio title",
+                author: "another author",
             },
             external_id: "bc_2",
             item_id: 2,
+            callnumber: "cn_2",
         },
         {
             biblio: {
                 biblio_id: 3,
                 title: "yet an other biblio title",
+                author: "yet another author",
             },
             external_id: "bc_3",
             item_id: 3,
+            callnumber: "cn_3",
         },
     ];
 }
@@ -128,6 +134,8 @@ function get_train_items() {
     train_item_1.processing_id = 1;
     train_item_1.processing = get_processings()[0];
     train_item_1.item_id = 1;
+    train_item_1.train_item_id = 1;
+    train_item_1.user_train_item_id = 1;
 
     let train_item_2 = get_items()[1];
     let processing_attributes = get_attributes();
@@ -158,6 +166,8 @@ function get_train_items() {
     train_item_2.processing_id = 1;
     train_item_2.processing = get_processings()[0];
     train_item_2.item_id = 2;
+    train_item_2.train_item_id = 2;
+    train_item_2.user_train_item_id = 2;
 
     let train_item_3 = get_items()[0];
     let processing_attributes = get_other_attributes();
@@ -181,6 +191,8 @@ function get_train_items() {
     train_item_3.processing_id = 2;
     train_item_3.processing = get_processings()[1];
     train_item_3.item_id = 3;
+    train_item_3.train_item_id = 3;
+    train_item_3.user_train_item_id = 3;
 
     return [train_item_1, train_item_2, train_item_3];
 }
@@ -568,8 +580,9 @@ describe("Trains", () => {
             "GET",
             "/api/v1/preservation/trains/" + train.train_id,
             train_with_one_item
-        );
+        ).as("get-train");
         cy.contains("Submit").click();
+        cy.wait("@get-train");
         cy.get("#trains_show").contains("Showing 1 to 1 of 1 entries");
 
         let train_with_2_items = Object.assign({}, train);

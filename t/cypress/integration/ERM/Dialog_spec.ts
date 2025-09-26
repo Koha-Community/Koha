@@ -17,6 +17,7 @@ function get_package() {
                 package_id: 1,
             },
         ],
+        notes: "",
         resources_count: 0,
     };
 }
@@ -100,12 +101,13 @@ describe("Dialog operations", () => {
                 "X-Base-Total-Count": "1",
                 "X-Total-Count": "1",
             },
-        });
+        }).as("get-packages");
         cy.get("#packages_add").contains("Submit").click();
+        cy.wait("@get-packages");
+        cy.get("#packages_list").should("exist");
         cy.get("main div[class='alert alert-info']").contains(
             "Package created"
         );
-        cy.get("#packages_list").should("exist");
         cy.get("main div[class='alert alert-info']").should("have.length", 1);
 
         cy.intercept("GET", "/api/v1/erm/eholdings/local/titles*", {
@@ -115,7 +117,7 @@ describe("Dialog operations", () => {
                 "X-Base-Total-Count": "1",
                 "X-Total-Count": "1",
             },
-        });
+        }).as("get-titles");
         cy.get(".sidebar_menu").contains("Titles").click();
         // Info messages should be cleared when view is changed
         cy.get("main div[class='alert alert-info']").should("not.exist");

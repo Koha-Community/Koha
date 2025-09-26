@@ -32,8 +32,9 @@ describe("Package CRUD operations", () => {
                 "X-Base-Total-Count": "0",
                 "X-Total-Count": "0",
             },
-        });
+        }).as("get-packages");
         cy.visit("/cgi-bin/koha/erm/eholdings/local/packages");
+        cy.wait("@get-packages");
         cy.get("#packages_list").contains("There are no packages defined");
 
         // GET packages returns something
@@ -47,13 +48,9 @@ describe("Package CRUD operations", () => {
                 "X-Base-Total-Count": "1",
                 "X-Total-Count": "1",
             },
-        });
-        cy.intercept(
-            "GET",
-            "/api/v1/erm/eholdings/local/packages/*",
-            erm_package
-        );
+        }).as("get-packages");
         cy.visit("/cgi-bin/koha/erm/eholdings/local/packages");
+        cy.wait("@get-packages");
         cy.get("#packages_list").contains("Showing 1 to 1 of 1 entries");
     });
 

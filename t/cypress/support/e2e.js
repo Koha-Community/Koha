@@ -337,6 +337,7 @@ cy.get_package = () => {
         name: "package 1",
         package_type: "complete",
         content_type: "Print",
+        notes: "",
         package_agreements: [
             {
                 agreement: {

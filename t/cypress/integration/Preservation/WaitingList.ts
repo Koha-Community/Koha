@@ -7,20 +7,35 @@ function get_items() {
             biblio: {
                 biblio_id: 1,
                 title: "a biblio title",
+                author: "an author",
             },
             external_id: "bc_1",
             item_id: 1,
+            callnumber: "cn_1",
         },
         {
             biblio: {
                 biblio_id: 2,
-                title: "yet another biblio title",
+                title: "an other biblio title",
+                author: "another author",
+            },
+            external_id: "bc_2",
+            item_id: 2,
+            callnumber: "cn_2",
+        },
+        {
+            biblio: {
+                biblio_id: 3,
+                title: "yet an other biblio title",
+                author: "yet another author",
             },
             external_id: "bc_3",
             item_id: 3,
+            callnumber: "cn_3",
         },
     ];
 }
+
 let config = {
     permissions: { manage_sysprefs: "1" },
     settings: {
