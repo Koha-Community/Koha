@@ -33,6 +33,8 @@ library.add(
 
 import App from "../components/Vendors/Main.vue";
 
+import "../../../css/vue.css";
+
 import { routes as routesDef } from "../routes/acquisitions";
 
 import { useMainStore } from "../stores/main";

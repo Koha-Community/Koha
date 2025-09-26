@@ -18,6 +18,8 @@ library.add(faList, faPlus, faMinus, faPencil, faTrash, faSpinner);
 
 import App from "../components/ERM/Main.vue";
 
+import "../../../css/vue.css";
+
 import { routes as routesDef } from "../routes/erm";
 
 import { useMainStore } from "../stores/main";

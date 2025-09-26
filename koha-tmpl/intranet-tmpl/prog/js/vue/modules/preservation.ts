@@ -29,6 +29,8 @@ library.add(
 
 import App from "../components/Preservation/Main.vue";
 
+import "../../../css/vue.css";
+
 import { routes as routesDef } from "../routes/preservation";
 
 import { useMainStore } from "../stores/main";

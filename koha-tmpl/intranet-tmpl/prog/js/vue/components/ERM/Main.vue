@@ -121,41 +121,4 @@ export default {
 };
 </script>
 
-<style>
-#menu ul ul,
-.sidebar_menu ul ul {
-    background-color: transparent;
-    padding-left: 2em;
-    font-size: 100%;
-}
-
-form .v-select {
-    display: inline-block;
-    background-color: white;
-    width: 30%;
-}
-
-.v-select,
-input:not([type="submit"]):not([type="search"]):not([type="button"]):not(
-        [type="checkbox"]
-    ):not([type="radio"]),
-textarea {
-    border-color: rgba(60, 60, 60, 0.26);
-    border-width: 1px;
-    border-radius: 4px;
-    min-width: 30%;
-}
-.flatpickr-input {
-    width: 30%;
-}
-.sidebar_menu ul li a.current.disabled {
-    background-color: inherit;
-    border-left: 5px solid transparent;
-    color: #000;
-}
-.sidebar_menu ul li a.disabled {
-    color: #666;
-    pointer-events: none;
-    font-weight: 700;
-}
-</style>
+<style></style>
