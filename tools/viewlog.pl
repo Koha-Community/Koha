@@ -153,7 +153,7 @@ if ($do_it) {
         $result->{'biblioitemnumber'} = q{};
         $result->{'barcode'}          = q{};
 
-        if ( substr( $log->info, 0, 4 ) eq 'item' ) {
+        if ( defined $log->info && substr( $log->info, 0, 4 ) eq 'item' ) {
 
             # get item information so we can create a working link
             my $itemnumber = $log->object;
