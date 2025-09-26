@@ -434,7 +434,6 @@ describe("Title CRUD operations", () => {
         cy.visit("/cgi-bin/koha/erm/eholdings/local/titles/1");
         cy.wait("@get-related-package");
         cy.contains("Packages");
-        cy.wait(500);
 
         cy.intercept(
             "GET",

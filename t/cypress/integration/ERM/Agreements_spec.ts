@@ -441,7 +441,6 @@ describe("Agreement CRUD operations", () => {
             .contains("Edit")
             .click();
         cy.wait("@get-agreement");
-        cy.wait(500); // Cypress is too fast! Vue hasn't populated the form yet!
         cy.get("#agreements_add h2").contains("Edit agreement");
         cy.left_menu_active_item_is("Agreements");
 
