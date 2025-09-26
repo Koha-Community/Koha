@@ -501,3 +501,14 @@ run_safe_xmlstarlet()
     echo $(xmlstarlet sel -t -v "yazgfs/config/$myexpr" /etc/koha/sites/$instancename/koha-conf.xml)
     return 0
 }
+
+get_es_indexer_batch_size()
+{
+    local instancename=$1
+    local retval=$(xmlstarlet sel -t -v 'yazgfs/config/es_indexer_batch_size' /etc/koha/sites/$instancename/koha-conf.xml)
+    if [ "$retval" != "" ]; then
+        echo "$retval"
+    else
+        echo "10"
+    fi
+}

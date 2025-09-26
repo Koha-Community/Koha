@@ -372,6 +372,9 @@ __END_SRU_PUBLICSERVER__
       Resetting mappings will override any changes made in the Search engine configuration UI.
  -->
  <!-- <elasticsearch_index_mappings>__KOHA_CONF_DIR__/searchengine/elasticsearch/mappings.yaml</elasticsearch_index_mappings> -->
+ <!-- How many indexing tasks the ES indexer will pick at a time
+      If the site is so busy the queue keeps growing, raise it -->
+ <es_indexer_batch_size>10</es_indexer_batch_size>
 
  <interlibrary_loans>
      <!-- Path to where Illbackends are located on the system
