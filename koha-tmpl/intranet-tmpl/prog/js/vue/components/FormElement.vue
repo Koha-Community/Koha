@@ -58,7 +58,7 @@
                 :for="attr.name + '_' + option.value"
                 >{{ option.description }}:
                 <InputRadio
-                    :name="option.description"
+                    :name="attr.name"
                     :id="attr.name + '_' + option.value"
                     :value="option.value"
                     :checked="
