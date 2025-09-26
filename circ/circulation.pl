@@ -739,7 +739,7 @@ if ($patron) {
             join       => 'manager',
             '+select'  => [ 'manager.surname', 'manager.firstname' ],
             '+as'      => [ 'manager_surname', 'manager_firstname' ],
-            'order_by' => { -desc => 'me.message_type' },
+            'order_by' => [ 'me.message_type', { -desc => 'me.message_date' }, { -desc => 'me.message_id' } ],
         }
     );
     $template->param( patron_messages => $patron_messages );
