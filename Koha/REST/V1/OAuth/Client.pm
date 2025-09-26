@@ -25,6 +25,8 @@ use Scalar::Util qw(blessed);
 use Try::Tiny;
 use Koha::Token;
 use URI::Escape qw(uri_escape_utf8);
+use Koha::Session;
+use Koha::Auth::Identity::Referer;
 
 =head1 NAME
 
@@ -63,6 +65,13 @@ sub login {
         $uri = '/cgi-bin/koha/mainpage.pl';
     }
 
+    my $current_session;
+    my $current_session_cookie = $c->req->cookie('CGISESSID');
+    if ($current_session_cookie) {
+        my $current_session_id = $current_session_cookie->value;
+        $current_session = Koha::Session->get_session( { sessionID => $current_session_id } );
+    }
+
     unless ( $provider_config && $provider_config->{authorize_url} ) {
         my $error = "No configuration found for your provider";
         return $c->redirect_to($uri."?auth_error=$error");
@@ -97,6 +106,14 @@ sub login {
     else {
         # initial request, generate CSRF token
         $state = Koha::Token->new->generate_csrf( { session_id => $c->req->cookie('CGISESSID')->value } );
+
+        Koha::Auth::Identity::Referer->store_referer(
+            {
+                referer   => $c->req->headers->referer,
+                interface => $interface,
+                session   => $current_session,
+            }
+        );
     }
 
     return $c->oauth2->get_token_p( $provider => { ( !$is_callback ? ( state => $state ) : () ), redirect_uri => $redirect_url . $provider . "/" . $interface } )->then(
@@ -126,6 +143,14 @@ sub login {
 
                 $c->cookie( CGISESSID => $session_id, { path => "/" } );
 
+                my $target_uri = Koha::Auth::Identity::Referer->get_referer(
+                    {
+                        session => $current_session,
+                    }
+                );
+                if ($target_uri) {
+                    $uri = $target_uri;
+                }
                 $c->redirect_to($uri);
             } catch {
                 my $error = $_;
