@@ -38,6 +38,7 @@ function stringifyArgs(args) {
 }
 Cypress.on("window:before:load", win => {
     win.console.warn = (...args) => {
+        console.log(args);
         const message = stringifyArgs(args);
         throw new Error(`JS Warning detected: ${message}`);
     };
