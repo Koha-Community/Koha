@@ -93,7 +93,7 @@
     [% INCLUDE 'members-toolbar.inc' borrowernumber=patron.borrowernumber %]
 
     <!-- The manual invoice and credit buttons -->
-    <div class="toptabs">
+    <div id="account-tabs" class="toptabs">
         <ul class="nav nav-tabs">
             <li class="nav-item transactions">
                 <a href="/cgi-bin/koha/members/boraccount.pl?borrowernumber=[% patron.borrowernumber | uri %]" class="nav-link">Transactions</a>

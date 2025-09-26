@@ -56,7 +56,7 @@
     <form action="/cgi-bin/koha/members/boraccount.pl" method="get">[% INCLUDE 'csrf-token.inc' %]<input type="hidden" name="borrowernumber" id="borrowernumber" value="[% patron.borrowernumber | html %]" /></form>
 
     <!-- The manual invoice and credit buttons -->
-    <div class="toptabs">
+    <div id="account-tabs" class="toptabs">
         <ul class="nav nav-tabs" role="tablist">
             <li role="presentation" class="nav-item transactions">
                 <a class="nav-link active" href="/cgi-bin/koha/members/boraccount.pl?borrowernumber=[% patron.borrowernumber | uri %]" role="tab">Transactions</a>
