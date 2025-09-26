@@ -31,6 +31,16 @@ Cypress.on("window:before:load", win => {
             throw new Error(`JS Warning detected: ${args[0]}`);
         }
     };
+    win.console.log = (...args) => {
+        if (args[0] && typeof args[0] === "string") {
+            if (args[0].match(/DataTables warning: /)) {
+                throw new Error(
+                    `DataTables warning detected in log: ${args[0]}`
+                );
+            }
+            console.log(args[0]);
+        }
+    };
 });
 
 function get_fallback_login_value(param) {
