@@ -23,8 +23,9 @@ export default {
     setup(props, { emit }) {
         const model = computed({
             get() {
-                return props.modelValue !== null &&
-                    props.modelValue !== undefined
+                return typeof props.modelValue !== "undefined" &&
+                    props.modelValue !== null &&
+                    props.modelValue !== ""
                     ? parseFloat(props.modelValue)
                     : props.modelValue;
             },
