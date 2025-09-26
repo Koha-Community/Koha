@@ -117,7 +117,7 @@
 
                     <div class="[% div_class | html %]" style="[% div_style | html %]">
                         [% IF ( expanded_options ) %]
-                            [% IF loop.first %]
+                            [% IF !loop.first %]
                                 [% SET opindex = loop.index - 1 %]
                                 <select name="op">
                                     [% IF operators.$opindex == 'OR' %]
