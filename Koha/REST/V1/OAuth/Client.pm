@@ -77,6 +77,11 @@ sub login {
         return $c->redirect_to( $uri . "?auth_error=$error" );
     }
 
+    if ( !$c->req->cookie('CGISESSID') ) {
+        my $error = "No user session found";
+        return $c->redirect_to( $uri . "?auth_error=$error" );
+    }
+
     unless ( $provider_config->{authorize_url} =~ /response_type=code/ ) {
         my $authorize_url = Mojo::URL->new( $provider_config->{authorize_url} );
         $authorize_url->query->append( response_type => 'code' );
