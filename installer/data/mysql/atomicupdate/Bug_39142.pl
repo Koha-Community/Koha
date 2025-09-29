@@ -11,7 +11,7 @@ return {
         $dbh->do(
             q{
             INSERT IGNORE INTO userflags (bit, flag, flagdesc, defaulton)
-            VALUES (32, 'debug', 'Show Debug Interface', 0)
+            VALUES (32, 'debug', 'Show debug interface', 0)
         }
         );
 

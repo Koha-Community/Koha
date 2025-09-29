@@ -29,5 +29,5 @@ INSERT INTO userflags (bit, flag, flagdesc, defaulton) VALUES
 (29, 'loggedinlibrary', 'Change logged in library', 0),
 (30, 'preservation', 'Preservation module', 0),
 (31, 'sip2', 'SIP2 module', 0)
-(32, 'debug', 'Show Debug Interface', 0)
+(32, 'debug', 'Show debug interface', 0)
 ;
