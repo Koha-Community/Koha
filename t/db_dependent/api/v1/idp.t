@@ -286,7 +286,7 @@ subtest 'domain endpoint tests' => sub {
 };
 
 subtest 'oauth login tests' => sub {
-    plan tests => 4;
+    plan tests => 6;
 
     $schema->storage->txn_begin;
 
@@ -321,6 +321,15 @@ subtest 'oauth login tests' => sub {
     $t = Test::Mojo->new('Koha::REST::V1');
 
     $t->get_ok("/api/v1/public/oauth/login/oauth_test/opac")->status_is(302);
+
+    $tx = $t->ua->build_tx( GET => "/api/v1/public/oauth/login/oauth_test/opac" );
+    $tx->req->cookies( { name => 'NOTCGISESSID', value => $session_id } );
+    $tx->req->env( { REMOTE_ADDR => $remote_address } );
+    $t->request_ok($tx)->header_like(
+        Location => qr/\?auth_error=No%20user%20session%20found/,
+        "Redirect to error when no CGISESSID provided"
+    );
+
     $schema->storage->txn_rollback;
 };
 
