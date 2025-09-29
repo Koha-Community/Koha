@@ -20,7 +20,7 @@
 use Modern::Perl;
 
 use Test::NoWarnings;
-use Test::More tests => 3;
+use Test::More tests => 4;
 use Test::Mojo;
 use Test::Warn;
 use Mojo::JWT;
@@ -285,43 +285,44 @@ subtest 'domain endpoint tests' => sub {
     $schema->storage->txn_rollback;
 };
 
-# subtest 'oauth login tests' => sub {
-#   plan tests => 4;
+subtest 'oauth login tests' => sub {
+    plan tests => 4;
 
-#   $schema->storage->txn_begin;
+    $schema->storage->txn_begin;
 
-#   Koha::Auth::Identity::Provider::Domains->delete;
-#   Koha::Auth::Identity::Providers->delete;
+    Koha::Auth::Identity::Provider::Domains->delete;
+    Koha::Auth::Identity::Providers->delete;
 
-#   my ( $borrowernumber, $session_id ) = create_user_and_session({ authorized => 1 });
+    my ( $borrowernumber, $session_id ) = create_user_and_session( { authorized => 1 } );
 
-#   my $t = Test::Mojo->new('Koha::REST::V1');
+    my $t = Test::Mojo->new('Koha::REST::V1');
 
-#   # Build provider
-#   my $tx = $t->ua->build_tx( POST => "/api/v1/auth/identity_providers", json => $oauth_provider_data );
-#   $tx->req->cookies( { name => 'CGISESSID', value => $session_id } );
-#   $tx->req->env( { REMOTE_ADDR => $remote_address } );
+    # Build provider
+    my $tx = $t->ua->build_tx( POST => "/api/v1/auth/identity_providers", json => $oauth_provider_data );
+    $tx->req->cookies( { name => 'CGISESSID', value => $session_id } );
+    $tx->req->env( { REMOTE_ADDR => $remote_address } );
 
-#   $t->request_ok($tx);
-#   my $provider_id = $t->tx->res->json->{identity_provider_id};
+    $t->request_ok($tx);
+    my $provider_id = $t->tx->res->json->{identity_provider_id};
 
-#   # Build domain
-#   $tx = $t->ua->build_tx( POST => "/api/v1/auth/identity_providers/$provider_id/domains", json => $domain_not_matching );
-#   $tx->req->cookies( { name => 'CGISESSID', value => $session_id } );
-#   $tx->req->env( { REMOTE_ADDR => $remote_address } );
+    # Build domain
+    $tx = $t->ua->build_tx(
+        POST => "/api/v1/auth/identity_providers/$provider_id/domains",
+        json => $domain_not_matching
+    );
+    $tx->req->cookies( { name => 'CGISESSID', value => $session_id } );
+    $tx->req->env( { REMOTE_ADDR => $remote_address } );
 
-#   $t->request_ok($tx);
+    $t->request_ok($tx);
 
-#   t::lib::Mocks::mock_preference( 'RESTPublicAPI', 1 );
+    t::lib::Mocks::mock_preference( 'RESTPublicAPI', 1 );
 
-#   # Simulate server restart
-#   $t = Test::Mojo->new('Koha::REST::V1');
+    # Simulate server restart
+    $t = Test::Mojo->new('Koha::REST::V1');
 
-#   #$t->ua->max_redirects(10);
-#   $t->get_ok("/api/v1/public/oauth/login/oauth_test/opac")
-#     ->status_is(302);
-#   $schema->storage->txn_rollback;
-# };
+    $t->get_ok("/api/v1/public/oauth/login/oauth_test/opac")->status_is(302);
+    $schema->storage->txn_rollback;
+};
 
 sub create_user_and_session {
 
