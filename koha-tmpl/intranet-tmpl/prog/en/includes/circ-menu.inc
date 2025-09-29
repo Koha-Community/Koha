@@ -206,12 +206,10 @@
                     <a href="/cgi-bin/koha/members/readingrec.pl?borrowernumber=[% patron.borrowernumber | uri %]">Circulation history</a>
                 </li>
             [% END %]
-            [% IF CAN_user_borrowers_edit_borrowers %]
-                [% IF ( IntranetReadingHistoryHolds ) %]
-                    <li [% IF holdshistoryview %]class="active"[% END %]>
-                        <a href="/cgi-bin/koha/members/holdshistory.pl?borrowernumber=[% patron.borrowernumber | uri %]">Holds history</a>
-                    </li>
-                [% END %]
+            [% IF (CAN_user_borrowers_view_holds_history && Koha.Preference('IntranetReadingHistoryHolds')) %]
+                <li [% IF holdshistoryview %]class="active"[% END %]>
+                    <a href="/cgi-bin/koha/members/holdshistory.pl?borrowernumber=[% patron.borrowernumber | uri %]">Holds history</a>
+                </li>
             [% END %]
             [% IF ( CAN_user_tools_view_system_logs ) %]
                 <li [% IF logview %]class="active"[% END %]>

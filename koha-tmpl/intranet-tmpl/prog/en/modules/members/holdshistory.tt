@@ -44,7 +44,7 @@
     [% INCLUDE 'members-toolbar.inc' %]
     <h1>Holds history</h1>
 
-    [% UNLESS Koha.Preference('IntranetReadingHistoryHolds') %]
+    [% UNLESS (Koha.Preference('IntranetReadingHistoryHolds') && CAN_user_borrowers_view_holds_history) %]
         <div class="alert alert-warning">Staff members are not allowed to access patron's holds history</div>
     [% ELSIF patron.is_anonymous %]
         <div class="alert alert-warning">This is the anonymous patron, so no holds history is displayed.</div>

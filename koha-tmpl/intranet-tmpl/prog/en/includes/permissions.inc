@@ -332,6 +332,9 @@
     [%- CASE 'view_checkout_history' -%]
         <span class="sub_permission view_checkout_history"> Viewing checkout history </span>
         <span class="permissioncode">([% name | html %])</span>
+    [%- CASE 'view_holds_history' -%]
+        <span class="sub_permission view_holds_history"> Viewing holds history </span>
+        <span class="permissioncode">([% name | html %])</span>
     [%- CASE 'suggestions_manage' -%]
         <span class="sub_permission suggestions_manage_subpermission"> Edit purchase suggestions </span>
         <span class="permissioncode">([% name | html %])</span>
