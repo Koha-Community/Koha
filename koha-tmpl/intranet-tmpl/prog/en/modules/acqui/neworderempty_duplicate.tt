@@ -33,10 +33,12 @@
 [% WRAPPER 'main-container.inc' aside='acquisitions-menu' %]
     <div class="alert alert-warning">
         <h1>Duplicate warning</h1>
-        <p
-            >You selected a record from an external source that matches an existing record in your catalog:
-            <a target="_blank" title="Open in new window" href="[% PROCESS biblio_a_href biblionumber => biblionumber %]"><i class="fa-solid fa-window-restore"></i> [% duplicatetitle | html %]</a></p
-        >
+        [% IF breedingid %]
+            <p>You selected a record from an external source that matches an existing record in your catalog:</p>
+        [% ELSE %]
+            <p>The details you entered match an existing record in your catalog:</p>
+        [% END %]
+        <a target="_blank" title="Open in new window" href="[% PROCESS biblio_a_href biblionumber => biblionumber %]"><i class="fa-solid fa-window-restore"></i> [% duplicatetitle | html %]</a>
     </div>
 
     <div class="row">
@@ -66,16 +68,34 @@
 
         <div class="col-sm-4">
             <div style="border: 1px solid #DDD; padding:1em;">
-                <form method="post" action="/cgi-bin/koha/acqui/neworderempty.pl">
-                    [% INCLUDE 'csrf-token.inc' %]
-                    <h4>Create new record</h4>
-                    <p>Create a new record by importing the external (duplicate) record.</p>
-                    <input type="hidden" name="booksellerid" value="[% booksellerid | html %]" />
-                    <input type="hidden" name="basketno" value="[% basketno | html %]" />
-                    <input type="hidden" name="breedingid" value="[% breedingid | html %]" />
-                    <input type="hidden" name="op" value="cud-use_external_source" />
-                    <input type="submit" class="btn btn-primary" value="Create new" />
-                </form>
+                [% IF breedingid %]
+                    <form method="post" action="/cgi-bin/koha/acqui/neworderempty.pl">
+                        [% INCLUDE 'csrf-token.inc' %]
+                        <h4>Create new record</h4>
+                        <p>Create a new record by importing the external (duplicate) record.</p>
+                        <input type="hidden" name="booksellerid" value="[% booksellerid | html %]" />
+                        <input type="hidden" name="basketno" value="[% basketno | html %]" />
+                        <input type="hidden" name="breedingid" value="[% breedingid | html %]" />
+                        <input type="hidden" name="op" value="cud-use_external_source" />
+                        <input type="submit" class="btn btn-primary" value="Create new" />
+                    </form>
+                [% ELSE %]
+                    <form method="post" action="/cgi-bin/koha/acqui/addorder.pl">
+                        [% INCLUDE 'csrf-token.inc' %]
+                        <h4>Create new record</h4>
+                        <p>Create a new record with the details you entered.</p>
+                        <input type="hidden" name="op" value="cud-order" />
+                        <input type="hidden" name="confirm_not_duplicate" value="1" />
+                        [% FOREACH var IN vars_loop %]
+                            [% FOREACH val IN var.values %]
+                                [% IF var.name != 'confirm_not_duplicate' %]
+                                    <input type="hidden" name="[% var.name | html %]" value="[% val | html %]" />
+                                [% END %]
+                            [% END %]
+                        [% END %]
+                        <button type="submit" class="btn btn-primary">Create new</button>
+                    </form>
+                [% END %]
             </div>
         </div>
     </div>

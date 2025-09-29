@@ -128,6 +128,7 @@ use C4::Budgets     qw( GetBudget GetBudgetSpent GetBudgetOrdered FieldsForCalcu
 use C4::Items       qw( AddItemFromMarc );
 use C4::Log         qw( logaction );
 use C4::Output      qw( output_html_with_http_headers );
+use C4::Search      qw( FindDuplicate );
 use C4::Suggestions qw( ModSuggestion );
 use Koha::Acquisition::Baskets;
 use Koha::Acquisition::Currencies qw( get_active );
@@ -146,6 +147,8 @@ my $op = $input->param('op') // q{};
 
 if ( $op eq 'cud-order' ) {
     my $use_ACQ_framework = $input->param('use_ACQ_framework');
+
+    my $confirm_not_duplicate = $input->param('confirm_not_duplicate') || 0;
 
     # Check if order total amount exceed allowed budget
     my $confirm_budget_exceeding = $input->param('confirm_budget_exceeding');
@@ -327,6 +330,41 @@ if ( $op eq 'cud-order' ) {
                 );
             }
             C4::Acquisition::FillWithDefaultValues($record);
+
+            if ( !$confirm_not_duplicate ) {
+                my ( $dupe_biblionumber, $dupe_title ) = FindDuplicate($record);
+
+                if ($dupe_biblionumber) {
+                    my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
+                        {
+                            template_name => "acqui/neworderempty_duplicate.tt",
+                            query         => $input,
+                            type          => "intranet",
+                            flagsrequired => { acquisition => 'order_manage' },
+                        }
+                    );
+
+                    my $vars = $input->Vars;
+                    my @vars_loop;
+                    foreach ( keys %$vars ) {
+                        push @vars_loop, { name => $_, values => [ $input->multi_param($_) ] };
+                    }
+
+                    my $booksellerid = $input->param('booksellerid') // '';
+                    my $basketno     = $input->param('basketno')     // '';
+
+                    $template->param(
+                        biblionumber   => $dupe_biblionumber,
+                        duplicatetitle => $dupe_title,
+                        booksellerid   => $booksellerid,
+                        basketno       => $basketno,
+                        vars_loop      => \@vars_loop,
+                    );
+
+                    output_html_with_http_headers $input, $cookie, $template->output;
+                    exit;
+                }
+            }
 
             # create the record in catalogue, with framework ''
             my ( $biblionumber, $bibitemnum ) = AddBiblio( $record, '' );
