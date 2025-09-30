@@ -172,6 +172,9 @@ export default {
                 return;
             }
             nextTick(() => {
+                $("#warning.modal").on("hidden.bs.modal", function () {
+                    removeMessages();
+                });
                 $("#warning.modal").modal("show");
             });
         });
@@ -182,6 +185,9 @@ export default {
                 return;
             }
             nextTick(() => {
+                $("#confirmation.modal").on("hidden.bs.modal", function () {
+                    removeConfirmationMessages();
+                });
                 $("#confirmation.modal").modal("show");
             });
         });
