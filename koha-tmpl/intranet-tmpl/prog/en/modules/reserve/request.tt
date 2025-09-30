@@ -1143,7 +1143,8 @@
                                                                 class="multi_pickup_select"
                                                                 data-biblio-id="[% biblioloo.biblionumber | html %]"
                                                                 data-patron-id="[% patron.borrowernumber | html %]"
-                                                                data-pickup-locations='[% biblioloo.pickup_locations_codes.json | $raw %]'>
+                                                                data-pickup-locations="[% biblioloo.pickup_locations_codes.json | html %]"
+                                                            >
                                                             <option value=""></option>
                                                             [% FOREACH pickup_location IN biblioloo.pickup_locations %]
                                                                 <option value="[% pickup_location.branchcode | html %]">[% pickup_location.branchname | html %]</option>
