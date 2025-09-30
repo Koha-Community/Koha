@@ -23,7 +23,7 @@
             </div>
             <div class="modal-footer">
                 <button id="delete-item-modal-btn-submit" type="button" class="btn btn-primary"><i class="fa fa-exclamation-circle"></i> Delete item</button>
-                <button class="btn btn-default deny cancel" href="#" data-dismiss="modal" aria-hidden="true"><i class="fa fa-times"></i> Cancel</button>
+                <button class="btn btn-default deny cancel" href="#" data-bs-dismiss="modal" aria-hidden="true"><i class="fa fa-times"></i> Cancel</button>
             </div>
         </div>
     </div>
