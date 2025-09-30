@@ -324,7 +324,23 @@ sub _initialize {
         } elsif ( defined( $self->{fields}->{$fn} ) ) {
             siplog( "LOG_WARNING", "Duplicate field '%s' (previous value '%s') in %s message '%s'", $fn, $self->{fields}->{$fn}, $self->{name}, $msg );
         } else {
-            $self->{fields}->{$fn} = substr( $field, 2 );
+            my $field_value = substr( $field, 2 );
+            $self->{fields}->{$fn} = $field_value;
+
+            # Enhanced debug logging for empty critical fields that could cause constraint errors
+            if ( defined $field_value && $field_value eq '' ) {
+                if ( $fn eq FID_PATRON_ID ) {
+                    siplog(
+                        "LOG_DEBUG", "Empty patron_id detected in %s message - could cause constraint errors",
+                        $self->{name}
+                    );
+                } elsif ( $fn eq FID_ITEM_ID ) {
+                    siplog(
+                        "LOG_DEBUG", "Empty item_id detected in %s message - could cause constraint errors",
+                        $self->{name}
+                    );
+                }
+            }
         }
     }
 
