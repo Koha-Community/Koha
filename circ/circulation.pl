@@ -39,7 +39,6 @@ use C4::Members;
 use C4::Biblio   qw( TransformMarcToKoha );
 use C4::Search   qw( new_record_from_zebra );
 use C4::Reserves qw( ModReserveAffect );
-use C4::Log      qw( logaction );
 use Koha::Holds;
 use C4::Context;
 use CGI::Session;
@@ -327,7 +326,6 @@ if ($patron) {
 #
 #
 my $message;
-my @message;
 
 if ( @$barcodes && $op eq 'cud-checkout' ) {
     my $checkout_infos;
@@ -548,7 +546,8 @@ if ( @$barcodes && $op eq 'cud-checkout' ) {
                 if ( my $booked = $needsconfirmation->{BOOKED_EARLY} // $alerts->{BOOKED} ) {
                     $datedue = $booked->end_date;
                 }
-                $needsconfirmation->{'DEBT'} = $needsconfirmationDEBT if ($debt_confirmed);
+                $needsconfirmation->{'DEBT'}       = $needsconfirmationDEBT if ($debt_confirmed);
+                $needsconfirmation->{'OVERRIDDEN'} = $issueconfirmed        if ($issueconfirmed);
                 my $issue = AddIssue(
                     $patron, $barcode, $datedue,
                     $cancelreserve,
@@ -564,34 +563,6 @@ if ( @$barcodes && $op eq 'cud-checkout' ) {
                     }
                 );
                 $template_params->{issue} = $issue;
-
-                my $borrower       = $patron;
-                my $borrowernumber = $patron->borrowernumber;
-                my $user           = C4::Context->userenv->{number};
-                my $branchcode     = C4::Context->userenv->{branch};
-                $message = "Restriction overridden temporarily";
-                @message = ("Restriction overridden temporarily");
-
-                if ($issueconfirmed) {
-                    my $infos = (
-                        {
-                            message        => \@message,
-                            borrowernumber => $borrowernumber,
-                            barcode        => $barcode,
-                            manager_id     => $user,
-                            branchcode     => $branchcode,
-                        }
-                    );
-
-                    my $json_infos = JSON->new->utf8->pretty->encode($infos);
-                    $json_infos =~ s/"/'/g;
-
-                    logaction(
-                        "CIRCULATION", "ISSUE",
-                        $borrower->{'borrowernumber'},
-                        $json_infos,
-                    ) if C4::Context->preference("IssueLog");
-                }
                 $session->clear('auto_renew');
                 $inprocess = 1;
             }
