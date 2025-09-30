@@ -394,7 +394,7 @@ INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `
 ('LinkerModule','Default','Default|FirstMatch|LastMatch','Chooses which linker module to use (see documentation).','Choice'),
 ('LinkerOptions','','','A pipe-separated list of options for the linker.','free'),
 ('LinkerRelink','1',NULL,'If ON the authority linker will relink headings that have previously been linked every time it runs.','YesNo'),
-('ListOwnerDesignated', NULL, NULL, 'Designated list owner at patron deletion', 'Free'),
+('ListOwnerDesignated', '', NULL, 'Designated list owner at patron deletion', 'Free'),
 ('ListOwnershipUponPatronDeletion', 'delete', 'delete|transfer|transfer_public', 'Defines the action on their public or shared lists when patron is deleted', 'Choice'),
 ('LoadCheckoutsTableDelay','0','','Delay before auto-loading checkouts table on checkouts screen','Integer'),
 ('LoadSearchHistoryToTheFirstLoggedUser', '1', NULL, 'If ON, the next user will automatically get the last searches in their history', 'YesNo'),
