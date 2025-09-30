@@ -175,7 +175,7 @@ sub receive {
     # Update the arrived date
     $self->set( { datearrived => dt_from_string } )->store;
 
-    ModDateLastSeen( $self->item->itemnumber );
+    ModDateLastSeen( $self->itemnumber );
     return $self;
 }
 
