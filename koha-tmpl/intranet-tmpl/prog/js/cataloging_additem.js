@@ -35,7 +35,7 @@ $(document).ready(function () {
                 );
                 $(edit_link).text(LABEL_EDIT_ITEM);
                 var delete_link = $(
-                    '<a class="delete" data-item="' +
+                    '<a class="delete" data-itemnumber="' +
                         num_rowid +
                         '" href="#"></a>'
                 );
@@ -153,18 +153,16 @@ $(document).ready(function () {
 
     $(document).on("click", ".delete", function (e) {
         e.preventDefault();
-        if (confirmDelete(MSG_CONFIRM_DELETE_ITEM)) {
-            var itemnumber = $(this).data("itemnumber");
-            var hasSerialItem = $(this).data("has-serial-item");
+        var itemnumber = $(this).data("itemnumber");
+        var hasSerialItem = $(this).data("has-serial-item");
 
-            $("#delete-item-itemnumber").val(itemnumber);
-            $("#delete_associated_serial_issues").attr("checked", false);
-            $("#delete-item-modal-btn-submit").data("item", itemnumber);
-            if (!hasSerialItem) {
-                $(".form-group").hide();
-            }
-            $("#delete-item-modal").modal("show");
+        $("#delete-item-itemnumber").val(itemnumber);
+        $("#delete_associated_serial_issues").attr("checked", false);
+        $("#delete-item-modal-btn-submit").data("item", itemnumber);
+        if (!hasSerialItem) {
+            $(".form-group").hide();
         }
+        $("#delete-item-modal").modal("show");
     });
     $(document).on("click", "#delete-item-modal-btn-submit", function (e) {
         e.preventDefault();
