@@ -2653,7 +2653,7 @@ sub _koha_modify_biblio {
                seriestitle = ?,
                copyrightdate = ?,
                abstract = ?,
-               timestamp = current_timestamp()
+               timestamp = current_timestamp(),
                opac_suppressed = ?
         WHERE  biblionumber = ?
         "
