@@ -125,7 +125,7 @@ if ( $op eq 'add_form' ) {
         my $sortfield = $query->param('sortfield');
         $sortfield = 'title'
             unless grep { $_ eq $sortfield } qw( title author copyrightdate publicationyear itemcallnumber dateadded );
-        if ( $sortfield == 'copyrightdate' and C4::Context->preference('marcflavour') == 'UNIMARC' ) {
+        if ( $sortfield eq 'copyrightdate' and C4::Context->preference('marcflavour') eq 'UNIMARC' ) {
             $sortfield = 'publicationyear';
         }
         if ( $shelf->can_be_managed($loggedinuser) ) {
