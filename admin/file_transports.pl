@@ -42,25 +42,25 @@ my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
 
 my @messages;
 
-my $sftp_servers = Koha::File::Transports->search;
+my $file_transports = Koha::File::Transports->search;
 
 if ( $op eq 'cud-add' ) {
-    my $name               = $input->param('sftp_name');
-    my $host               = $input->param('sftp_host')      || 'localhost';
-    my $port               = $input->param('sftp_port')      || 22;
-    my $transport          = $input->param('sftp_transport') || 'sftp';
-    my $passive            = ( scalar $input->param('sftp_passiv') ) ? 1 : 0;
-    my $auth_mode          = $input->param('sftp_auth_mode')          || 'password';
-    my $user_name          = $input->param('sftp_user_name')          || undef;
-    my $password           = $input->param('sftp_password')           || undef;
-    my $key_file           = $input->param('sftp_key_file')           || undef;
-    my $download_directory = $input->param('sftp_download_directory') || undef;
-    my $upload_directory   = $input->param('sftp_upload_directory')   || undef;
-    my $status             = $input->param('sftp_status')             || '';
-    my $debug              = ( scalar $input->param('sftp_debug_mode') ) ? 1 : 0;
+    my $name               = $input->param('name');
+    my $host               = $input->param('host')      || 'localhost';
+    my $port               = $input->param('port')      || 22;
+    my $transport          = $input->param('transport') || 'sftp';
+    my $passive            = ( scalar $input->param('passiv') ) ? 1 : 0;
+    my $auth_mode          = $input->param('auth_mode')          || 'password';
+    my $user_name          = $input->param('user_name')          || undef;
+    my $password           = $input->param('password')           || undef;
+    my $key_file           = $input->param('key_file')           || undef;
+    my $download_directory = $input->param('download_directory') || undef;
+    my $upload_directory   = $input->param('upload_directory')   || undef;
+    my $status             = $input->param('status')             || '';
+    my $debug              = ( scalar $input->param('debug_mode') ) ? 1 : 0;
 
     try {
-        my $sftp_server = Koha::File::Transport->new(
+        my $file_transport = Koha::File::Transport->new(
             {
                 name               => $name,
                 host               => $host,
@@ -96,24 +96,24 @@ if ( $op eq 'cud-add' ) {
     $op = 'list';
 
 } elsif ( $op eq 'edit_form' ) {
-    my $sftp_server_id = $input->param('sftp_server_id');
-    my $sftp_server;
-    my $sftp_server_plain_text_password;
-    my $sftp_server_plain_text_key;
+    my $file_transport_id = $input->param('file_transport_id');
+    my $file_transport;
+    my $file_transport_plain_text_password;
+    my $file_transport_plain_text_key;
 
-    $sftp_server = Koha::File::Transports->find($sftp_server_id)
-        unless !$sftp_server_id;
+    $file_transport = Koha::File::Transports->find($file_transport_id)
+        unless !$file_transport_id;
 
-    unless ( !$sftp_server ) {
-        $sftp_server_plain_text_password = $sftp_server->plain_text_password || '';
-        $sftp_server_plain_text_key      = $sftp_server->plain_text_key      || '';
+    unless ( !$file_transport ) {
+        $file_transport_plain_text_password = $file_transport->plain_text_password || '';
+        $file_transport_plain_text_key      = $file_transport->plain_text_key      || '';
     }
 
-    if ($sftp_server) {
+    if ($file_transport) {
         $template->param(
-            sftp_server                     => $sftp_server,
-            sftp_server_plain_text_password => $sftp_server_plain_text_password,
-            sftp_server_plain_text_key      => $sftp_server_plain_text_key,
+            file_transport                     => $file_transport,
+            file_transport_plain_text_password => $file_transport_plain_text_password,
+            file_transport_plain_text_key      => $file_transport_plain_text_key,
         );
     } else {
         push @messages, {
@@ -124,33 +124,33 @@ if ( $op eq 'cud-add' ) {
     }
 
 } elsif ( $op eq 'cud-edit_save' ) {
-    my $sftp_server_id = $input->param('sftp_server_id');
-    my $sftp_server_plain_text_password;
-    my $sftp_server;
+    my $file_transport_id = $input->param('file_transport_id');
+    my $file_transport_plain_text_password;
+    my $file_transport;
 
-    $sftp_server = Koha::File::Transports->find($sftp_server_id)
-        unless !$sftp_server_id;
+    $file_transport = Koha::File::Transports->find($file_transport_id)
+        unless !$file_transport_id;
 
-    $sftp_server_plain_text_password = $sftp_server->plain_text_password
-        unless !$sftp_server_id;
+    $file_transport_plain_text_password = $file_transport->plain_text_password
+        unless !$file_transport_id;
 
-    if ($sftp_server) {
-        my $name               = $input->param('sftp_name');
-        my $host               = $input->param('sftp_host')      || 'localhost';
-        my $port               = $input->param('sftp_port')      || 22;
-        my $transport          = $input->param('sftp_transport') || 'sftp';
-        my $passive            = ( scalar $input->param('sftp_passiv') ) ? 1 : 0;
-        my $auth_mode          = $input->param('sftp_auth_mode')          || 'password';
-        my $user_name          = $input->param('sftp_user_name')          || undef;
-        my $password           = $input->param('sftp_password')           || undef;
-        my $key_file           = $input->param('sftp_key_file')           || undef;
-        my $download_directory = $input->param('sftp_download_directory') || undef;
-        my $upload_directory   = $input->param('sftp_upload_directory')   || undef;
-        my $status             = $input->param('sftp_status')             || '';
-        my $debug              = ( scalar $input->param('sftp_debug_mode') ) ? 1 : 0;
+    if ($file_transport) {
+        my $name               = $input->param('name');
+        my $host               = $input->param('host')      || 'localhost';
+        my $port               = $input->param('port')      || 22;
+        my $transport          = $input->param('transport') || 'sftp';
+        my $passive            = ( scalar $input->param('passiv') ) ? 1 : 0;
+        my $auth_mode          = $input->param('auth_mode')          || 'password';
+        my $user_name          = $input->param('user_name')          || undef;
+        my $password           = $input->param('password')           || undef;
+        my $key_file           = $input->param('key_file')           || undef;
+        my $download_directory = $input->param('download_directory') || undef;
+        my $upload_directory   = $input->param('upload_directory')   || undef;
+        my $status             = $input->param('status')             || '';
+        my $debug              = ( scalar $input->param('debug_mode') ) ? 1 : 0;
 
         try {
-            $sftp_server->set(
+            $file_transport->set(
                 {
                     name               => $name,
                     host               => $host,
@@ -195,7 +195,7 @@ if ( $op eq 'cud-add' ) {
 
 if ( $op eq 'list' ) {
     $template->param(
-        servers_count => $sftp_servers->count,
+        servers_count => $file_transports->count,
     );
 }
 
