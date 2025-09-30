@@ -297,7 +297,7 @@ if ( $op eq 'view' ) {
             $sortfield = 'title'
                 unless grep { $_ eq $sortfield }
                 qw( title author copyrightdate publicationyear itemcallnumber dateadded );
-            if ( $sortfield == 'copyrightdate' and C4::Context->preference('marcflavour') == 'UNIMARC' ) {
+            if ( $sortfield eq 'copyrightdate' and C4::Context->preference('marcflavour') eq 'UNIMARC' ) {
                 $sortfield = 'publicationyear';
             }
             my $direction = $query->param('direction') || 'asc';
