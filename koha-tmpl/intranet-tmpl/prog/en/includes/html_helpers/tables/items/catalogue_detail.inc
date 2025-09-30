@@ -239,6 +239,7 @@
             library: new Map(all_libraries.map( l => [l.branchname, l.branchcode] )),
             item_type: new Map(all_item_types.map( i => [i.translated_description, i.itemtype] )),
             collection_code: new Map([% To.json(AuthorisedValues.GetDescriptionsByKohaField({ kohafield => 'items.ccode' })) | $raw %].map( av => [av.lib, av.authorised_value])),
+            location: new Map([% To.json(AuthorisedValues.GetDescriptionsByKohaField({ kohafield => 'items.location' })) | $raw %].map( av => [av.lib, av.authorised_value])),
         };
 
         [% IF Koha.Preference('URLLinkText') %]
@@ -429,6 +430,7 @@
                 },
                 {
                     data: "me.location",
+                    datatype: "coded_value:location",
                     searchable: true,
                     orderable: true,
                     render: function (data, type, row, meta) {
