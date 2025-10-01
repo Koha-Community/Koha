@@ -46,7 +46,7 @@ if ( $reserve_id && $borrowernumber ) {
 
     my $hold = Koha::Holds->find($reserve_id);
 
-    unless ( $hold->borrowernumber == $borrowernumber ) {
+    unless ( $hold && $hold->borrowernumber == $borrowernumber ) {
 
         # whatcha tryin to do?
         print $query->redirect('/cgi-bin/koha/errors/403.pl');
