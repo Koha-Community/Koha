@@ -61,7 +61,7 @@ return {
 
         $dbh->do(
             q{
-                UPDATE marc_subfield_structure SET kohafield='biblio.opac_suppressed' WHERE tagfield=942 AND tagsubfield='n';
+                UPDATE marc_subfield_structure SET kohafield='biblio.opac_suppressed' WHERE tagfield='942' AND tagsubfield='n';
             }
         );
 
