@@ -153,14 +153,16 @@
                     <li>
                         <span class="patronupdatedon">Updated on: [% patron.updated_on | $KohaDates with_hours => 1 %]</span>
                     </li>
-                    [% IF ( patron.lastseen ) %]
-                        <li>
-                            <span class="patronlastseenon">Last seen on: [% patron.lastseen | $KohaDates with_hours => 1 %]</span>
-                        </li>
-                    [% ELSE %]
-                        <li>
-                            <span class="patronlastseenon">Last seen on: Never</span>
-                        </li>
+                    [% IF Koha.Preference('TrackLastPatronActivityTriggers') %]
+                        [% IF ( patron.lastseen ) %]
+                            <li>
+                                <span class="patronlastseenon">Last seen on: [% patron.lastseen | $KohaDates with_hours => 1 %]</span>
+                            </li>
+                        [% ELSE %]
+                            <li>
+                                <span class="patronlastseenon">Last seen on: not recorded</span>
+                            </li>
+                        [% END %]
                     [% END %]
                     [% IF patron.account_locked %]
                         [% IF patron.login_attempts < 0 %]
