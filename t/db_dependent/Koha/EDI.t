@@ -816,18 +816,31 @@ subtest 'process_quote' => sub {
 
         $schema->storage->txn_begin;
 
+        # Create file transport for local testing
+        my $file_transport = $builder->build(
+            {
+                source => 'FileTransport',
+                value  => {
+                    name               => 'Test Multiple Message Transport',
+                    transport          => 'local',
+                    download_directory => $dirname,
+                    upload_directory   => $dirname,
+                }
+            }
+        );
+
         # Create vendor EDI account with po_is_basketname set to false (default)
         my $account_filename = $builder->build(
             {
                 source => 'VendorEdiAccount',
                 value  => {
-                    description      => 'test vendor filename',
-                    transport        => 'FILE',
-                    plugin           => '',
-                    san              => $test_san,
-                    quotes_enabled   => 1,
-                    auto_orders      => 0,
-                    po_is_basketname => 0,
+                    description       => 'test vendor filename',
+                    file_transport_id => $file_transport->{file_transport_id},
+                    plugin            => '',
+                    san               => $test_san,
+                    quotes_enabled    => 1,
+                    auto_orders       => 0,
+                    po_is_basketname  => 0,
                 }
             }
         );
@@ -837,13 +850,13 @@ subtest 'process_quote' => sub {
             {
                 source => 'VendorEdiAccount',
                 value  => {
-                    description      => 'test vendor purchase order',
-                    transport        => 'FILE',
-                    plugin           => '',
-                    san              => $test_san,
-                    quotes_enabled   => 1,
-                    auto_orders      => 0,
-                    po_is_basketname => 1,
+                    description       => 'test vendor purchase order',
+                    file_transport_id => $file_transport->{file_transport_id},
+                    plugin            => '',
+                    san               => $test_san,
+                    quotes_enabled    => 1,
+                    auto_orders       => 0,
+                    po_is_basketname  => 1,
                 }
             }
         );
@@ -920,14 +933,27 @@ subtest 'process_quote' => sub {
 
         $schema->storage->txn_begin;
 
+        # Create file transport for local testing
+        my $file_transport = $builder->build(
+            {
+                source => 'FileTransport',
+                value  => {
+                    name               => 'Test Multiple Message Transport',
+                    transport          => 'local',
+                    download_directory => $dirname,
+                    upload_directory   => $dirname,
+                }
+            }
+        );
+
         # Create vendor EDI account with po_is_basketname set to true
         my $account = $builder->build(
             {
                 source => 'VendorEdiAccount',
                 value  => {
-                    description      => 'test vendor duplicate po',
-                    transport        => 'FILE',
-                    po_is_basketname => 1,
+                    description       => 'test vendor duplicate po',
+                    file_transport_id => $file_transport->{file_transport_id},
+                    po_is_basketname  => 1,
                 },
             }
         );
@@ -1275,17 +1301,30 @@ subtest 'duplicate_po_number_blocking' => sub {
 
         $schema->storage->txn_begin;
 
+        # Create file transport for local testing
+        my $file_transport = $builder->build(
+            {
+                source => 'FileTransport',
+                value  => {
+                    name               => 'Test Multiple Message Transport',
+                    transport          => 'local',
+                    download_directory => $dirname,
+                    upload_directory   => $dirname,
+                }
+            }
+        );
+
         # Create vendor EDI account with auto_orders and po_is_basketname enabled
         my $account = $builder->build(
             {
                 source => 'VendorEdiAccount',
                 value  => {
-                    description      => 'auto_orders duplicate test vendor',
-                    transport        => 'FILE',
-                    plugin           => '',
-                    san              => $test_san,
-                    auto_orders      => 1,
-                    po_is_basketname => 1,
+                    description       => 'auto_orders duplicate test vendor',
+                    file_transport_id => $file_transport->{file_transport_id},
+                    plugin            => '',
+                    san               => $test_san,
+                    auto_orders       => 1,
+                    po_is_basketname  => 1,
                 }
             }
         );
@@ -1394,17 +1433,30 @@ subtest 'duplicate_po_number_blocking' => sub {
 
         $schema->storage->txn_begin;
 
+        # Create file transport for local testing
+        my $file_transport = $builder->build(
+            {
+                source => 'FileTransport',
+                value  => {
+                    name               => 'Test Multiple Message Transport',
+                    transport          => 'local',
+                    download_directory => $dirname,
+                    upload_directory   => $dirname,
+                }
+            }
+        );
+
         # Create vendor EDI account with po_is_basketname DISABLED
         my $account = $builder->build(
             {
                 source => 'VendorEdiAccount',
                 value  => {
-                    description      => 'feature disabled test vendor',
-                    transport        => 'FILE',
-                    plugin           => '',
-                    san              => $test_san,
-                    auto_orders      => 1,
-                    po_is_basketname => 0,                                # Feature disabled
+                    description       => 'feature disabled test vendor',
+                    file_transport_id => $file_transport->{file_transport_id},
+                    plugin            => '',
+                    san               => $test_san,
+                    auto_orders       => 1,
+                    po_is_basketname  => 0,                                      # Feature disabled
                 }
             }
         );
