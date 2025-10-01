@@ -188,6 +188,9 @@
                                     <option value="B">OPAC - [% patron.firstname | html %] [% patron.surname | html %]</option>
                                     [% IF CAN_user_borrowers_send_messages_to_borrowers %]
                                         <option value="E">Email - email addresses of patron</option>
+                                        [% IF Koha.Preference("SMSSendDriver") %]
+                                            <option value="SMS">SMS - sms number of patron</option>
+                                        [% END %]
                                     [% END %]
                                 </select>
                             </li>

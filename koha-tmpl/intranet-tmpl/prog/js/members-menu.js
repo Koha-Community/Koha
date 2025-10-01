@@ -94,7 +94,7 @@ $(document).ready(function () {
     });
 
     $("#message_type").on("change", function () {
-        if ($(this).val() == "E") {
+        if ($(this).val() == "E" || $(this).val() == "SMS") {
             $("label[for='borrower_message']").show();
             $("#subject_form").show();
             $("label[for='select_patron_notice']").show();
@@ -113,6 +113,16 @@ $(document).ready(function () {
             $("#borrower_subject").prop("disabled", false);
             $("#borrower_message").prop("disabled", false);
             $("#select_patron_messages").val("");
+        }
+        if ($(this).val() == "SMS") {
+            $("#borrower_subject").val(__("SMS added by a librarian"));
+            $("#subject_form").hide();
+        } else {
+            if (
+                $("#borrower_subject").val() == __("SMS added by a librarian")
+            ) {
+                $("#borrower_subject").val("");
+            }
         }
     });
 
