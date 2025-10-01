@@ -269,14 +269,7 @@
                             <th>ID</th>
                             <th>Vendor</th>
                             <th>Description</th>
-                            <th>Transport</th>
-                            <th>Remote host</th>
-                            <th>Username</th>
-                            <th>Password</th>
-                            <th>Upload port</th>
-                            <th>Download port</th>
-                            <th>Download directory</th>
-                            <th>Upload directory</th>
+                            <th>File transport</th>
                             <th>Qualifier</th>
                             <th>SAN</th>
                             <th>Standard</th>
@@ -294,14 +287,24 @@
                                 <td>[% account.id | html %]</td>
                                 <td><a href="/cgi-bin/koha/acquisition/vendors/[% account.vendor_id | uri %]">[% account.vendor.name | html %]</a></td>
                                 <td>[% account.description | html %]</td>
-                                <td>[% account.transport | html %]</td>
-                                <td>[% account.host | html %]</td>
-                                <td>[% account.username | html %]</td>
-                                <td>[% IF account.password %]*****[% END %]</td>
-                                <td>[% account.upload_port | html %]</td>
-                                <td>[% account.download_port | html %]</td>
-                                <td>[% account.download_directory | html %]</td>
-                                <td>[% account.upload_directory | html %]</td>
+                                <td>
+                                    [% IF account.file_transport %]
+                                        [% account.file_transport.name | html %]
+                                        [% IF account.file_transport.status %]
+                                            [% IF account.file_transport.status.status == "ok" %]
+                                                (<i class="text-success fa-solid fa-circle-check"></i> <span class="text-success">Tests passing</span>)
+                                            [% ELSIF account.file_transport.status.status == "errors" %]
+                                                (<i class="text-danger fa-solid fa-circle-xmark"></i> <span class="text-danger">Errors detected</span>)
+                                            [% ELSE %]
+                                                (<em>Never used</em>)
+                                            [% END %]
+                                        [% ELSE %]
+                                            (<em>Never used</em>)
+                                        [% END %]
+                                    [% ELSE %]
+                                        <span class="text-danger">No transport configured</span>
+                                    [% END %]
+                                </td>
                                 <td>
                                     [% FOREACH qualifier IN code_qualifiers %]
                                         [% IF qualifier.code == account.id_code_qualifier %]

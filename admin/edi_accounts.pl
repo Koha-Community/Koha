@@ -20,6 +20,7 @@
 use Modern::Perl;
 
 use CGI;
+use JSON qw( decode_json );
 
 use C4::Auth   qw( get_template_and_user );
 use C4::Output qw( output_html_with_http_headers );
@@ -111,12 +112,24 @@ if ( $op eq 'acct_form' ) {
     # we do a default display after deletes and saves
     # as well as when that's all you want
     $template->param( display => 1 );
-    my @ediaccounts = $schema->resultset('VendorEdiAccount')->search(
+    my $ediaccounts = $schema->resultset('VendorEdiAccount')->search(
         {},
-        {
-            join => 'vendor',
-        }
+        { prefetch => [ 'vendor', 'file_transport' ] }
     );
+
+    # Decode file_transport status for each account
+    my @ediaccounts;
+    while ( my $ediaccount = $ediaccounts->next ) {
+        my $unblessed = { $ediaccount->get_inflated_columns };
+        $unblessed->{vendor} = { $ediaccount->vendor->get_inflated_columns };
+        if ( $ediaccount->file_transport ) {
+            $unblessed->{file_transport} = { $ediaccount->file_transport->get_inflated_columns };
+            $unblessed->{file_transport}->{status} =
+                $ediaccount->file_transport->status ? decode_json( $ediaccount->file_transport->status ) : undef;
+        }
+        push @ediaccounts, $unblessed;
+    }
+
     $template->param( ediaccounts => \@ediaccounts );
 }
 
