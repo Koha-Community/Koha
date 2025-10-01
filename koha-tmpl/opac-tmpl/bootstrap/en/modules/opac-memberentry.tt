@@ -168,6 +168,12 @@
                         <div class="alert alert-warning">You typed in the wrong characters in the box before submitting. Please try again.</div>
                     [% END %]
 
+                    [% IF patron_pending_modification %]
+                        <div class="alert alert-success">
+                            <p>You have recently submitted updates to your personal details. A librarian will review your updates before applying them.</p>
+                        </div>
+                    [% END %]
+
                     [% IF has_guarantor_flag && !Koha.Preference('OPACPrivacy') && ( Koha.Preference('AllowPatronToSetCheckoutsVisibilityForGuarantor') || Koha.Preference('AllowPatronToSetFinesVisibilityForGuarantor') ) %]
                         <div class="row">
                             <div class="col">

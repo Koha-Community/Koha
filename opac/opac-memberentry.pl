@@ -395,6 +395,12 @@ if ( $op eq 'cud-create' ) {
     }
 
     $template->param( patron_attribute_classes => GeneratePatronAttributesForm($borrowernumber) );
+
+    my $patron_pending_modification =
+        Koha::Patron::Modifications->search( { borrowernumber => $patron->borrowernumber } )->next;
+    if ($patron_pending_modification) {
+        $template->param( patron_pending_modification => $patron_pending_modification );
+    }
 } else {
 
     # Render self-registration page
