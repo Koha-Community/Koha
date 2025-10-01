@@ -1490,19 +1490,17 @@ cy.get_usage_data_provider = () => {
 };
 
 cy.get_usage_title = () => {
-    return [
-        {
-            online_issn: "2472-5390",
-            print_issn: "2472-5390",
-            publisher: "Wiley",
-            publisher_id: "0000000403801313",
-            title: "AEM Education and Training",
-            title_doi: "10.1002/(ISSN)2472-5390",
-            title_id: 1338,
-            title_uri: "",
-            usage_data_provider_id: 5,
-        },
-    ];
+    return {
+        online_issn: "2472-5390",
+        print_issn: "2472-5390",
+        publisher: "Wiley",
+        publisher_id: "0000000403801313",
+        title: "AEM Education and Training",
+        title_doi: "10.1002/(ISSN)2472-5390",
+        title_id: 1338,
+        title_uri: "",
+        usage_data_provider_id: 5,
+    };
 };
 
 cy.get_default_report = () => {

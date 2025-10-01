@@ -586,10 +586,11 @@ describe("Data provider tab options", () => {
                 "X-Base-Total-Count": "0",
                 "X-Total-Count": "0",
             },
-        });
+        }).as("no-titles");
 
         // We'll test using titles but the component is the same for all four data types
         cy.get("#usage_data_providerstabs").contains("Titles").click();
+        cy.wait("@no-titles");
         cy.get("main div[class='alert alert-info']").should(
             "have.text",
             "No title data has been harvested for this provider"
@@ -599,16 +600,17 @@ describe("Data provider tab options", () => {
 
         const title = cy.get_usage_title();
         const titles = [title];
-        cy.intercept("GET", "/api/v1/erm/usage_titles*", {
+        cy.intercept("GET", "/api/v1/erm/usage_titles?*", {
             statusCode: 200,
             body: titles,
             headers: {
                 "X-Base-Total-Count": "1",
                 "X-Total-Count": "1",
             },
-        });
+        }).as("provider-titles");
 
         cy.get("#usage_data_providerstabs").contains("Titles").click();
+        cy.wait(["@provider-titles", "@provider-titles"]);
         cy.get("#data_list").contains("Showing 1 to 1 of 1 entries");
     });
 
