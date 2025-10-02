@@ -169,7 +169,7 @@
                                                 id="single_[% bibitemloo.biblionumber | html %]"
                                                 value="any"
                                             />
-                                            <label class="confirm_label" for="single_[% bibitemloo.biblionumber | html %]">Place a hold on </label>
+                                            <label class="confirm_label" for="single_[% bibitemloo.biblionumber | html %]">Place hold on </label>
                                         </span>
                                     [% END # / bibitemloo.holdable %]
 
@@ -598,13 +598,13 @@
             $(".confirmjs_hold").each(function(){
                 var bib = $(this).attr("title");
                 var html = "<label><input type =\"checkbox\" class=\"confirmjs\" checked=\"checked\"";
-                html += "value=\"" + bib + "\" id=\"" + bib + "\" /> " + _("Place a hold on") + " </label> ";
+                html += "value=\"" + bib + "\" id=\"" + bib + "\" /> " + _("Place hold on") + " </label> ";
                 $(this).html(html);
             });
             $(".confirmjs_nohold").each(function(){
                 var bib = $(this).attr("title");
                 var html = "<label><input type =\"checkbox\" class=\"confirmjs\" disabled=\"disabled\"";
-                html += "value=\"" + bib + "\" id=\"" + bib + "\" />" + _("Place a hold on: ") + "</label>";
+                html += "value=\"" + bib + "\" id=\"" + bib + "\" />" + _("Place hold on: ") + "</label>";
                 $(this).html(html);
             });
 
