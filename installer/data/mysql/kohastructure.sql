@@ -1621,6 +1621,7 @@ CREATE TABLE `borrowers` (
   KEY `userid_idx` (`userid`),
   KEY `middle_name_idx` (`middle_name`(768)),
   KEY `preferred_name_idx` (`preferred_name`(768)),
+  KEY `idx_borrowers_sort_order` (`surname`(100),`preferred_name`(80),`firstname`(80),`middle_name`(50),`othernames`(50),`streetnumber`(20),`address`(100),`address2`(75),`city`(75),`state`(40),`zipcode`(20),`country`(40)),
   CONSTRAINT `borrowers_ibfk_1` FOREIGN KEY (`categorycode`) REFERENCES `categories` (`categorycode`),
   CONSTRAINT `borrowers_ibfk_2` FOREIGN KEY (`branchcode`) REFERENCES `branches` (`branchcode`),
   CONSTRAINT `borrowers_ibfk_3` FOREIGN KEY (`sms_provider_id`) REFERENCES `sms_providers` (`id`) ON DELETE SET NULL ON UPDATE CASCADE
