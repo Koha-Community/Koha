@@ -2178,12 +2178,23 @@ Missing POD for checkpw_internal.
 =cut
 
 sub checkpw_internal {
-    my ( $identifier, $password, $no_set_userenv ) = @_;
+    my ( $userid, $password, $no_set_userenv ) = @_;
 
     $password = Encode::encode( 'UTF-8', $password )
         if Encode::is_utf8($password);
 
-    my $patron = Koha::Patrons->find_by_identifier($identifier);
+    my $patron = Koha::Patrons->find( { userid => $userid } );
+    if ($patron) {
+        if ( checkpw_hash( $password, $patron->password ) ) {
+            my $borrowernumber = $patron->borrowernumber;
+            C4::Context->set_userenv(
+                "$borrowernumber",  $patron->userid,  $patron->cardnumber,
+                $patron->firstname, $patron->surname, $patron->branchcode, $patron->library->branchname, $patron->flags
+            ) unless $no_set_userenv;
+            return 1, $patron->cardnumber, $patron->userid, $patron;
+        }
+    }
+    $patron = Koha::Patrons->find( { cardnumber => $userid } );
     if ($patron) {
         if ( checkpw_hash( $password, $patron->password ) ) {
             my $borrowernumber = $patron->borrowernumber;
