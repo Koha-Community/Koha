@@ -489,7 +489,7 @@ export default {
             delete title.title_id;
             delete title.biblio_id;
 
-            // Cannot use the map/keepAttrs because of the reserved keywork 'package'
+            // Cannot use the map/keepAttrs because of the reserved keyword 'package'
             title.resources.forEach(function (e) {
                 delete e.package;
                 delete e.resource_id;
