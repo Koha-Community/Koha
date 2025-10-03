@@ -11,7 +11,7 @@ Koha::Devel::Files - A utility module for managing and filtering file lists in t
 
     use Koha::Devel::Files;
 
-    my $file_manager = Koha::Devel::Files->new({ context => 'tidy' });
+    my $file_manager = Koha::Devel::Files->new( { context => 'tidy' } );
 
     my @perl_files = $file_manager->ls_perl_files($git_range);
     my @js_files   = $file_manager->ls_js_files();
@@ -110,7 +110,7 @@ my $exceptions = {
 
 =head2 new
 
-    my $file_manager = Koha::Devel::Files->new({ context => 'tidy' });
+    my $file_manager = Koha::Devel::Files->new( { context => 'tidy' } );
 
 Creates a new instance of Koha::Devel::Files. The constructor accepts a hash reference with a 'context' key, which specifies the context for file exclusions.
 
@@ -148,7 +148,7 @@ sub build_git_exclude {
 
 =head2 ls_files
 
-    my @files = $file_manager->ls_files($filetype, $git_range);
+    my @files = $file_manager->ls_files( $filetype, $git_range );
 
 Lists files that have been modified within a specified Git range. If no range is provided, it lists all Perl files, excluding those specified in the exceptions.
 
@@ -204,7 +204,8 @@ sub ls_perl_files {
         my @exception_files = $exceptions->{pl}->{ $self->{context} };
         @files = array_minus( @files, @exception_files );
     } else {
-        my $cmd = sprintf q{git ls-files '*.pl' '*.PL' '*.pm' '*.t' svc opac/svc opac/unapi debian/build-git-snapshot %s},
+        my $cmd =
+            sprintf q{git ls-files '*.pl' '*.PL' '*.pm' '*.t' svc opac/svc opac/unapi debian/build-git-snapshot %s},
             $self->build_git_exclude('pl');
         @files = qx{$cmd};
         chomp for @files;
