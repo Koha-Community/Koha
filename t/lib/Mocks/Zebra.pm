@@ -274,8 +274,8 @@ Missing POD for cleanup.
 
 sub cleanup {
     my ($self) = @_;
-    kill 9, $self->{zebra_pid}   if defined $self->{zebra_pid};
-    kill 9, $self->{indexer_pid} if defined $self->{indexer_pid};
+    kill 15, $self->{zebra_pid}   if defined $self->{zebra_pid};
+    kill 15, $self->{indexer_pid} if defined $self->{indexer_pid};
 
     # Clean up the Zebra files since the child process was just shot
     rmtree $self->{datadir};

@@ -254,6 +254,17 @@ my $dbh;
 # option (wait-for-lock) is provided to let the program wait for the lock.
 # See https://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=11078 for details.
 if ($daemon_mode) {
+
+    $SIG{TERM} = sub {
+        $dbh->disconnect if $dbh;
+        exit 0;
+    };
+
+    $SIG{INT} = sub {
+        $dbh->disconnect if $dbh;
+        exit 0;
+    };
+
     while (1) {
 
         # For incremental updates, skip the update if the updates are locked
