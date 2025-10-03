@@ -638,7 +638,7 @@ export default {
                                           )
                                       ) +
                                       "</a>"
-                                : escape_str(__("No baskets"));
+                                : escape_str($__("No baskets"));
                         },
                     },
                     hideIn: ["Show", "Form"],
@@ -662,7 +662,7 @@ export default {
                                           )
                                       ) +
                                       "</a>"
-                                : escape_str(__("No subscriptions"));
+                                : escape_str($__("No subscriptions"));
                         },
                     },
                     hideIn: ["Show", "Form"],

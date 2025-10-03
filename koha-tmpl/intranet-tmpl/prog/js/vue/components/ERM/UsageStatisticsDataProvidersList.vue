@@ -80,8 +80,8 @@ export default {
                     data: "active",
                     render: function (data, type, row, meta) {
                         const status = row.active
-                            ? __("Active")
-                            : __("Inactive");
+                            ? $__("Active")
+                            : $__("Inactive");
                         return status;
                     },
                     searchable: false,
