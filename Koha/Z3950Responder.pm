@@ -132,6 +132,8 @@ fatal error occurs.
 sub start {
     my ($self) = @_;
 
+    # start_server from Net::Z3950::SimpleServer is going to fork
+    C4::Context->dbh->disconnect;
     $self->{server}->launch_server( 'Koha::Z3950Responder', @{ $self->{yaz_options} } );
 }
 
