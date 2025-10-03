@@ -186,10 +186,7 @@ export default {
                 ],
             },
             filters_options: {
-                1: () =>
-                    map_av_dt_filter(
-                        "av_title_publication_types"
-                    ),
+                1: () => map_av_dt_filter("av_title_publication_types"),
             },
             actions: { 0: ["show"] },
             default_filters: {
