@@ -36,7 +36,7 @@ describe("ShowElement", () => {
         cy.get("label").contains("Name");
         cy.get("span").contains(resource.name);
     });
-    it("should hide that property if the hidden attribute is set and false", () => {
+    it("should hide that property if the hidden attribute is set and falsy", () => {
         cy.mount(ShowElement, {
             props: {
                 resource,
