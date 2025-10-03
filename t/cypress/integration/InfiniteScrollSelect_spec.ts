@@ -346,27 +346,19 @@ describe("Infinite scroll", () => {
         }).as("get-vendor-options");
 
         // Intercept initial /agreements request once
-        cy.intercept(
-            {
-                method: "GET",
-                url: "/api/v1/erm/agreements*",
-                times: 1,
-            },
-            {
-                body: agreements,
-            }
-        );
+        // and
         // Intercept follow-up 'search' request after entering /agreements
-        cy.intercept("GET", "/api/v1/erm/agreements?_page*", {
+        cy.intercept("GET", "/api/v1/erm/agreements*", {
             statusCode: 200,
             body: agreements,
             headers: {
                 "X-Base-Total-Count": "1",
                 "X-Total-Count": "1",
             },
-        }).as("get-single-agreement-search-result");
+        }).as("get-agreements");
         cy.visit("/cgi-bin/koha/erm/agreements");
-        cy.wait("@get-single-agreement-search-result");
+        cy.wait("@get-agreements");
+        cy.wait("@get-agreements");
 
         // Intercept request after edit click
         cy.intercept("GET", "/api/v1/erm/agreements/*", agreement).as(
