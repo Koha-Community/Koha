@@ -24,7 +24,7 @@ use Test::More tests => 3;
 use t::lib::TestBuilder;
 
 use Koha::Database;
-use C4::SocialData qw( get_data get_report );
+use C4::SocialData;
 
 my $schema  = Koha::Database->new->schema;
 my $builder = t::lib::TestBuilder->new;

@@ -26,7 +26,7 @@ use Koha::DateUtils qw( dt_from_string output_pref );
 use Koha::Database;
 
 use t::lib::TestBuilder;
-use t::lib::Mocks qw( mock_preference );
+use t::lib::Mocks;
 
 my $schema = Koha::Database->new->schema;
 $schema->storage->txn_begin;

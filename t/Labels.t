@@ -24,7 +24,7 @@ use Test::More tests => 12;
 use Test::NoWarnings;
 
 BEGIN {
-    use_ok( 'C4::Labels::Label', qw( _get_text_fields _check_params _guide_box ) );
+    use_ok('C4::Labels::Label');
 }
 
 my $format_string   = "title, callnumber";

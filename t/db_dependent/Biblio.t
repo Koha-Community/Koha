@@ -24,7 +24,7 @@ use Test::Warn;
 use List::MoreUtils qw( uniq );
 use MARC::Record;
 
-use t::lib::Mocks qw( mock_preference );
+use t::lib::Mocks;
 use t::lib::TestBuilder;
 
 use Koha::ActionLogs;

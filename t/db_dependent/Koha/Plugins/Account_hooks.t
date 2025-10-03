@@ -23,7 +23,7 @@ use Test::Warn;
 
 use File::Basename;
 
-use Koha::Account qw( add_credit );
+use Koha::Account;
 
 use t::lib::Mocks;
 use t::lib::TestBuilder;

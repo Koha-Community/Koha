@@ -32,7 +32,7 @@ use utf8;
 use C4::AuthoritiesMarc qw/ AddAuthority /;
 
 BEGIN {
-    use_ok( 'C4::Heading', qw( field valid_heading_subfield ) );
+    use_ok('C4::Heading');
 }
 
 subtest "MARC21 tests" => sub {

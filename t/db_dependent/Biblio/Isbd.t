@@ -21,7 +21,7 @@ use Test::NoWarnings;
 use Test::More tests => 4;
 use Test::MockModule;
 use MARC::Record;
-use t::lib::Mocks qw( mock_preference );
+use t::lib::Mocks;
 
 use Koha::Database;
 

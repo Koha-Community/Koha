@@ -48,7 +48,7 @@ $mock_plugin->mock(
     }
 );
 
-use_ok( 'Koha::Template::Plugin::KohaPlugins', 'Can use Koha::Template::Plugin::KohaPlugins' );
+use_ok('Koha::Template::Plugin::KohaPlugins');
 
 ok( my $plugin = Koha::Template::Plugin::KohaPlugins->new(), 'Able to instantiate template plugin' );
 

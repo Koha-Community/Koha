@@ -23,7 +23,7 @@ use Test::NoWarnings;
 use Test::More tests => 9;
 
 BEGIN {
-    use_ok( 'C4::SMS', qw( driver send_sms ) );
+    use_ok('C4::SMS');
 }
 
 my $driver = 'my mock driver';

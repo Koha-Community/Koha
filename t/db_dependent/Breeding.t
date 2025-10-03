@@ -28,7 +28,7 @@ use Test::NoWarnings;
 use Test::More tests => 6;
 use Test::Warn;
 
-use t::lib::Mocks qw( mock_preference );
+use t::lib::Mocks;
 use t::lib::TestBuilder;
 
 use C4::Context;

@@ -25,10 +25,10 @@ use Test::More tests => 4;
 use MARC::Record;
 use MARC::Field;
 use MARC::File::XML;
-use C4::Heading qw( authorities field new_from_field );
+use C4::Heading;
 use C4::Linker::FirstMatch;
 use Test::MockModule;
-use t::lib::Mocks qw( mock_preference );
+use t::lib::Mocks;
 use t::lib::TestBuilder;
 
 BEGIN {

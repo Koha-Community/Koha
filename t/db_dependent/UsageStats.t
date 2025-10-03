@@ -19,7 +19,7 @@ use Modern::Perl;
 use Test::NoWarnings;
 use Test::More tests => 4;
 
-use t::lib::Mocks qw(mock_preference);
+use t::lib::Mocks;
 use t::lib::TestBuilder;
 
 use POSIX qw(strftime);
@@ -34,7 +34,7 @@ use Koha::Old::Holds;
 use Koha::Patrons;
 
 BEGIN {
-    use_ok( 'C4::UsageStats', qw( BuildReport ReportToCommunity _count ) );
+    use_ok('C4::UsageStats');
 }
 
 can_ok(

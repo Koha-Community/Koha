@@ -17,15 +17,12 @@
 use Modern::Perl;
 
 use Test::NoWarnings;
-use Test::More tests => 10;
+use Test::More tests => 9;
 use Test::MockModule;
 use t::lib::TestBuilder;
 
 use Koha::Database;
-
-BEGIN {
-    use_ok( 'C4::Barcodes::ValueBuilder', qw( get_barcode ) );
-}
+use C4::Barcodes::ValueBuilder;
 
 my $schema = Koha::Database->new->schema;
 $schema->storage->txn_begin;

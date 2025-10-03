@@ -37,10 +37,7 @@ use Koha::DateUtils qw( dt_from_string );
 use Koha::MarcSubfieldStructures;
 
 BEGIN {
-    use_ok(
-        'C4::ILSDI::Services',
-        qw( AuthenticatePatron GetPatronInfo LookupPatron HoldTitle HoldItem GetRecords RenewLoan GetAvailability )
-    );
+    use_ok('C4::ILSDI::Services');
 }
 
 my $schema  = Koha::Database->schema;

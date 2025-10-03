@@ -7,10 +7,13 @@ use C4::Context;
 use Test::MockModule;
 use Test::NoWarnings;
 use Test::More tests => 4;
+
 use t::lib::Mocks;
 
+use Koha::Template::Plugin::TablesSettings;
+
 BEGIN {
-    use_ok( 'Koha::Template::Plugin::TablesSettings', "Can use Koha::Template::Plugin::TablesSettings" );
+    use_ok('Koha::Template::Plugin::TablesSettings');
 }
 
 ok( my $settings = Koha::Template::Plugin::TablesSettings->new(), 'Able to instantiate template plugin' );

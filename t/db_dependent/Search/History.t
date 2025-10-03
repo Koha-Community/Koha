@@ -18,6 +18,7 @@ use URI::Escape;
 use List::Util qw( shuffle );
 
 use C4::Context;
+use C4::Search::History;
 use Koha::DateUtils qw( dt_from_string output_pref );
 
 my $schema = Koha::Database->new->schema;
@@ -29,7 +30,7 @@ my $dbh = C4::Context->dbh;
 t::lib::Mocks::mock_preference( 'SessionStorage', 'tmp' );
 
 use_ok('Koha::DateUtils');
-use_ok( 'C4::Search::History', qw( add get delete get_from_session ) );
+use_ok('C4::Search::History');
 
 my $userid             = 123;
 my $previous_sessionid = "PREVIOUS_SESSIONID";

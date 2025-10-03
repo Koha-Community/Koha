@@ -25,7 +25,7 @@ use C4::Auth qw( checkpw );
 use Koha::Database;
 use Koha::ActionLogs;
 
-use t::lib::Mocks qw/mock_preference/;    # to mock CronjobLog
+use t::lib::Mocks;
 use t::lib::TestBuilder;
 
 use JSON qw( decode_json );

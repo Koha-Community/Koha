@@ -21,7 +21,7 @@
 use Modern::Perl;
 
 use Test::NoWarnings;
-use Test::More tests => 26;
+use Test::More tests => 25;
 use MARC::Record;
 use MARC::Field;
 
@@ -30,12 +30,9 @@ use t::lib::TestBuilder;
 use C4::Context;
 use C4::Items  qw( AddItemBatchFromMarc );
 use C4::Biblio qw( GetMarcFromKohaField AddBiblio );
+use C4::Labels::Batch;
 use Koha::Database;
 use Koha::Libraries;
-
-BEGIN {
-    use_ok( 'C4::Labels::Batch', qw( save retrieve delete ) );
-}
 
 my $schema = Koha::Database->new->schema;
 $schema->storage->txn_begin;

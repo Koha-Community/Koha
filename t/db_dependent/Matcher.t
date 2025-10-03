@@ -25,7 +25,7 @@ use t::lib::TestBuilder;
 use t::lib::Mocks;
 
 use Koha::Database;
-use C4::Matcher qw( GetMatcherList GetMatcherId );
+use C4::Matcher;
 
 my $schema  = Koha::Database->new->schema;
 my $builder = t::lib::TestBuilder->new;

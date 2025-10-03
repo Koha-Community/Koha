@@ -24,14 +24,13 @@ use Koha::Biblios;
 use Koha::CirculationRules;
 use Koha::Database;
 use Koha::DateUtils qw( dt_from_string output_pref );
-use Koha::Holds     qw( search );
+use Koha::Holds;
 use Koha::Checkout;
 use Koha::Item::Transfer::Limits;
 use Koha::Items;
 use Koha::Libraries;
 use Koha::Library::Groups;
 use Koha::Patrons;
-use Koha::Hold qw( get_items_that_can_fill );
 use Koha::Item::Transfers;
 
 BEGIN {

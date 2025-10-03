@@ -23,7 +23,7 @@ use Test::MockModule;
 
 use C4::Circulation qw( AddIssue AddReturn transferbook );
 use C4::SIP::ILS;
-use C4::SIP::ILS::Transaction::Checkin qw( do_checkin );
+use C4::SIP::ILS::Transaction::Checkin;
 
 use Koha::Checkouts;
 use Koha::Database;

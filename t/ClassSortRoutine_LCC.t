@@ -10,7 +10,7 @@ use Test::NoWarnings;
 use Test::More tests => 11;
 
 BEGIN {
-    use_ok( 'C4::ClassSortRoutine::LCC', qw( get_class_sort_key ) );
+    use_ok('C4::ClassSortRoutine::LCC');
 }
 
 #Obvious cases
