@@ -32,44 +32,213 @@ GetOptions(
 
 if ( $help || !$config ) {
     print <<EOF
-$0 --config=my.conf
-Parameters :
-  --daemon | -d  - go to background; prints pid to stdout
-  --config | -c  - config file
-  --help   | -?  - this message
+OCLC Import Daemon
+
+This script hosts a server which listens for connections from an OCLC Connexion
+client or WorldShare Record Manager.
+
+The records are forwarded to Koha by sending a request to the handler at
+`/cgi-bin/koha/svc/import_bib` on the staff interface of the configured Koha
+instance. The request is authenticated using the credentials of a Koha staff
+user.
+
+See the documentation for the `import_bib` endpoint at
+https://wiki.koha-community.org/wiki/Koha_/svc/_HTTP_API#POST_.2Fsvc.2Fimport_bib .
+The `import_bib` endpoint is being phased out. This script should be rewritten
+to use the newer REST API instead.
+
+If you have multiple Koha instances, run a separate instance of this script for
+each one, using a different port and different credentials for each one.
+
+Usage:
+  $0 --config=my.conf
+
+Command line options:
+  --daemon | -d  - Run in the background. Prints the process ID to stdout.
+  --config | -c  - Specify the config file to use. Required.
+  --help   | -?  - Print this message.
 
 Config file format:
-  Lines of the form:
-  name: value
+  Each line has the form:
+    NAME: VALUE
+  For example:
+    port: 5500
 
-  # comments are supported
-  No quotes
+  Empty parameters look like this:
+    NAME:
+  For example:
+    overlay_framework:
 
-  Parameter Names:
-  host     - ip address or hostname to bind to, defaults all available
-  port     - port to bind to, mandatory
-  log      - log file path, stderr if omitted
-  debug    - dumps requests to the log file, passwords inclusive
-  koha     - koha intranet base url, eg http://librarian.koha
-  user     - koha user, authentication
-  password - koha user password, authentication
-  match          - marc_matchers.code: ISBN or ISSN
-  overlay_action - import_batches.overlay_action: replace, create_new or ignore
-  overlay_framework - if overlaying records - move to a new framework, if blank will use default
-                      if not included it will use the framework of the existing record
-  nomatch_action - import_batches.nomatch_action: create_new or ignore
-  item_action    - import_batches.item_action:    always_add,
-                      add_only_for_matches, add_only_for_new or ignore
-  import_mode    - stage or direct
-  framework      - to be used if import_mode is direct, if blank, will use default
-  connexion_user      - User sent from connexion client
-  connexion_password  - Password sent from connexion client
+  Values should not be quoted.
 
-  Note: If connexion parameters are not defined request authentication will not be checked
-  You should specify a different user for connexion to protect the Koha credentials
+  Lines starting with # are treated as comments.
 
-  All process related parameters (all but ip and port) have default values as
-  per Koha import process.
+  Parameters:
+    host
+      The IP address or host name to bind to (that is, listen on).
+      Defaults to 0.0.0.0, that is, listen on all interfaces.
+
+    port
+      The port to bind to (that is, listen on).  Typically 5500.
+      This must be different from the port used by any other service on the
+      same machine.
+      Required.
+
+    log
+      The path to the log file.
+      Logs are written to stderr if omitted.
+
+    debug
+      Dumps all incoming requests to the log file.
+      WARNING: This includes the connexion user's password, if it is  part of
+      the request.
+      Use 1 for on and 0 for off.
+      Defaults to 0 (off).
+
+    koha
+      The base URL of the staff interface for your Koha instance, for example,
+      http://librarian.koha
+      When this script is running on the same machine as the Koha instance, and
+      you have dedicated port for the Koha staff interface, you can use
+      http://localhost:port here. Otherwise, use the URL you would use when
+      accessing the Koha staff interface through a browser.
+      Required.
+
+    user
+      The Koha user used for logging in to the staff interface for the Koha
+      instance.
+      Required.
+
+    password
+      The password of the Koha user.
+      Required.
+
+    connexion_user
+      The user name expected to be sent by the connexion client with every
+      request.
+      If set, also set `connexion_password`. In this case, request
+      authentication will be checked.
+      If omitted, also omit `connexion_password`. In this case, request
+      authentication will not be checked, and anyone with access to the port
+      opened by this script will be able to send records into the
+      Koha instance.
+
+    connexion_password
+      The password expected to be sent by the connexion client with every
+      request.
+      WARNING: Do NOT use the same password as the Koha user password.
+
+    import_mode
+      Where the imported records should go. See the explanation below.
+      Available values:
+        stage
+          The records will be imported into the staging area (reservoir)
+          at /cgi-bin/koha/tools/manage-marc-import.pl into a batch called
+          `(webservice)`.
+          The records will also show up below the catalog results in the staff
+          interface when doing a "cataloging search" at
+          /cgi-bin/koha/cataloguing/addbooks.pl?q=...
+        direct
+          The records will be imported directly into the catalog. They will
+          show up in all catalog searches as soon as the indexing catches up.
+      Defaults to `stage`.
+
+    match
+      Which code to use for matching MARC records when deciding whether to add
+      or replace a record.
+      Corresponds to the "Matching rule applied" field at
+      /cgi-bin/koha/tools/manage-marc-import.pl?import_batch_id=...
+      Available options:
+        ISBN
+          Use the International Standard Book Number (MARC 020\$a)
+        ISSN
+          Use the International Standard Serial Number (MARC 022\$a)
+        KohaBiblio
+          Use the Koha biblio number (MARC 999\$c)
+      See `C4::Matcher`.
+
+    overlay_action
+      What to do when the incoming record matches a record already in the
+      catalog.
+      Corresponds to the "Action if matching record found" field at
+      /cgi-bin/koha/tools/manage-marc-import.pl?import_batch_id=...
+      Available values:
+        replace
+          Replace the existing record with the incoming record.
+        create_new
+          Create a new record alongside the existing record.
+        ignore
+          Discard the incoming record.
+
+    nomatch_action
+      What to do when the incoming record does not match any record in the
+      catalog.
+      Corresponds to the "Action if no match found" field at
+      /cgi-bin/koha/tools/manage-marc-import.pl?import_batch_id=...
+      Available values:
+        create_new
+          Create a new record.
+        ignore
+          Discard the incoming record.
+
+    item_action
+      What to do when the incoming MARC record contains one or more items
+      embedded in field 952.
+      Corresponds to the "Item processing" field at
+      /cgi-bin/koha/tools/manage-marc-import.pl?import_batch_id=...
+      Available values:
+        always_add
+        add_only_for_matches
+        add_only_for_new
+        replace
+        ignore
+
+    framework
+      The cataloging framework to use when no match was found in the catalog
+      (that is, when adding a new record).
+      Defaults to the default framework configured at
+      /cgi-bin/koha/admin/biblio_framework.pl
+
+    overlay_framework
+      The cataloging framework to use when a match was found in the catalog
+      (that is, when replacing an existing record).
+      Corresponds to the "Replacement record framework" field at
+      /cgi-bin/koha/tools/manage-marc-import.pl?import_batch_id=...
+      You have three options here:
+        Do not specify this parameter.
+          The default framework configured at
+          /cgi-bin/koha/admin/biblio_framework.pl is used.
+        Specify this parameter without a value, that is, `overlay_framework:`.
+          The new record will use the same framework as the record being
+          replaced.
+        Specify this parameter with a value, for example,
+          `overlay_framework: my_framework`.
+          The new record will use the specified framework.
+
+Explanation of `import_mode`:
+- When using `direct`, each request will create a new batch and import the
+  batch immediately.
+- When using `stage`, each request will cause records to be added to an
+  existing batch.
+- The batch name is always `(webservice)`.
+- If you change `import_mode` from `stage` to `direct` after some records
+  have already been staged, the next request will cause all records in that
+  batch to be imported into the catalog, not just the records from the latest
+  request.
+- These config parameters define the settings of the batch that is created,
+  whether or not it is imported immediately:
+  - `match`
+  - `overlay_action`
+  - `nomatch_action`
+  - `item_action`
+  - `framework`
+  - `overlay_framework`
+- If one or more of these parameters are changed, a new batch is created with
+  the new settings, and any new records are added to that batch instead of to
+  the old one.
+- If you stage a record that cannot be imported then all future imports will
+  be stuck until that batch is cleaned and deleted.
+
 EOF
         ;
     exit;
@@ -294,7 +463,7 @@ exit;
         $in =~ m/(.)$/;
         my $lastchar = $1;
         my ( $xml, $user, $password, $local_user );
-        my $data = $in;    # copy for diagmostic purposes
+        my $data = $in;    # copy for diagnostic purposes
         while () {
             my $first = substr( $data, 0, 1 );
             if ( !defined $first ) {
