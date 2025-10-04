@@ -22,6 +22,7 @@ use Modern::Perl;
 use Test::More;
 use File::Find;
 use File::Slurp;
+use Test::NoWarnings;
 
 # Test for Bug 40292: Prevent SQL syntax error when upgrading to 25.05 on MariaDB 10.3
 # This test ensures that database revision files don't use SQL syntax that is incompatible
@@ -48,7 +49,7 @@ if ( !@db_rev_files ) {
     plan skip_all => "No database revision files found in $db_revs_dir";
 }
 
-plan tests => scalar @db_rev_files;
+plan tests => scalar @db_rev_files + 1;
 
 foreach my $file (@db_rev_files) {
     my $content = read_file($file);
