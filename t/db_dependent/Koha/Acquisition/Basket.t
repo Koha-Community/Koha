@@ -239,7 +239,8 @@ subtest 'estimated_delivery_date' => sub {
     $schema->storage->txn_rollback;
 };
 
-subtest 'late_since_days' => sub {
+subtest 'days_late() tests' => sub {
+
     plan tests => 3;
 
     $schema->storage->txn_begin;
@@ -251,13 +252,13 @@ subtest 'late_since_days' => sub {
 
     my $now = dt_from_string;
     $basket->closedate(undef)->store;    # Basket is open
-    is( $basket->late_since_days, undef, 'return undef if basket is still open' );
+    is( $basket->days_late, undef, 'return undef if basket is still open' );
 
     $basket->closedate($now)->store;     #Closing the basket today
-    is( $basket->late_since_days, 0, 'return 0 if basket has been closed on today' );
+    is( $basket->days_late, 0, 'return 0 if basket has been closed on today' );
 
     $basket->closedate( $now->clone->subtract( days => 2 ) )->store;
-    is( $basket->late_since_days, 2, 'return 2 if basket has been closed 2 days ago' );
+    is( $basket->days_late, 2, 'return 2 if basket has been closed 2 days ago' );
 
     $schema->storage->txn_rollback;
 };

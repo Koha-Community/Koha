@@ -165,17 +165,16 @@ sub estimated_delivery_date {
     return dt_from_string( $self->closedate )->add( days => $self->bookseller->deliverytime );
 }
 
-=head3 late_since_days
+=head3 days_late
 
-my $number_of_days_late = $basket->late_since_days;
+    my $number_of_days_late = $basket->days_late;
 
-Return the number of days the basket is late.
-
-Return implicit undef if the basket is not closed.
+Returns the number of days the basket is late. I<undef> is returned if
+the basket is not closed.
 
 =cut
 
-sub late_since_days {
+sub days_late {
     my ($self) = @_;
     return unless $self->closedate;
     return dt_from_string->delta_days( dt_from_string( $self->closedate ) )->delta_days();

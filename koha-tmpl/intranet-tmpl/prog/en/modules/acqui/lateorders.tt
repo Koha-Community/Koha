@@ -107,7 +107,7 @@
                                                 <input type="checkbox" value="[% lateorder.ordernumber | html %]" data-booksellerid="[% lateorder.basket.booksellerid | html %]" name="ordernumber" />
                                             </td>
                                             <td> [% lateorder.ordernumber | $raw %] </td>
-                                            <td data-order="[% lateorder.basket.closedate | html %]"> [% lateorder.basket.closedate | $KohaDates %] ([% lateorder.basket.late_since_days | html %] days) </td>
+                                            <td data-order="[% lateorder.basket.closedate | html %]"> [% lateorder.basket.closedate | $KohaDates %] ([% lateorder.basket.days_late | html %] days) </td>
                                             [% IF lateorder.get_column('estimated_delivery_date') %]
                                                 [% SET estimated_delivery_date = lateorder.get_column('estimated_delivery_date') %]
                                             [% ELSIF lateorder.get_column('calculated_estimated_delivery_date') %]
