@@ -1,5 +1,6 @@
 [% USE raw %]
 [% USE Koha %]
+[% SET admin = Koha.Preference('ReplytoDefault') || Koha.Preference('KohaAdminEmailAddress') %]
 [% PROCESS 'i18n.inc' %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title

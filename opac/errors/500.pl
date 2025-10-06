@@ -23,7 +23,6 @@ use C4::Context;
 use List::MoreUtils qw( any );
 
 my $query = CGI->new;
-my $admin = C4::Context->preference('KohaAdminEmailAddress');
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     {
         template_name   => "errors/errorpage.tt",
@@ -33,7 +32,6 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     }
 );
 $template->param(
-    admin => $admin,
     errno => 500,
 );
 my $status = '500 Internal Server Error';
