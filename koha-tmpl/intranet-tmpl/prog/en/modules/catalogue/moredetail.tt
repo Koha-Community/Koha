@@ -495,7 +495,7 @@
                                 </li>
 
                                 [% IF Koha.Preference('StoreLastBorrower') && Koha.Preference('StoreLastBorrower') > 0 %]
-                                    [% SET all_borrowers = ITEM_DAT.object.last_returned_by_all %]
+                                    [% SET all_borrowers = ITEM_DAT.object.last_borrowers %]
                                     [% IF all_borrowers.count > 0 %]
                                         <li>
                                             <span class="label">Last returned by:</span>

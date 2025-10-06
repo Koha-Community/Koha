@@ -927,13 +927,13 @@ sub get_transfers {
     return Koha::Item::Transfers->_new_from_dbic($transfers_rs);
 }
 
-=head3 last_returned_by_all
+=head3 last_borrowers
 
 Returns all patrons who have returned this item, ordered by most recent first.
 
 =cut
 
-sub last_returned_by_all {
+sub last_borrowers {
     my ($self) = @_;
 
     my $max_stored_borrowers = C4::Context->preference('StoreLastBorrower') || 0;
@@ -977,7 +977,7 @@ sub last_returned_by {
 
                 # If StoreLastBorrower is 0 or disabled, bail without storing anything. Also delete any remaining rows from the table.
                 if ( $max_stored_borrowers == 0 ) {
-                    $self->last_returned_by_all->delete;
+                    $self->last_borrowers->delete;
                     return $self;
                 }
 

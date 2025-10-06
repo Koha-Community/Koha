@@ -150,10 +150,10 @@ subtest 'Test StoreLastBorrower with multiple borrowers' => sub {
     my $item    = $builder->build_sample_item;
     t::lib::Mocks::mock_userenv( { branchcode => $library->branchcode } );
 
-    # Test last_returned_by_all with no borrowers
+    # Test last_borrowers with no borrowers
     t::lib::Mocks::mock_preference( 'StoreLastBorrower', '3' );
-    my $borrowers = $item->last_returned_by_all();
-    is( $borrowers->count, 0, 'last_returned_by_all returns empty set when no borrowers stored' );
+    my $borrowers = $item->last_borrowers();
+    is( $borrowers->count, 0, 'last_borrowers returns empty set when no borrowers stored' );
 
     # Add 3 borrowers for testing, checkout/check in
     my @patrons;
@@ -182,8 +182,8 @@ subtest 'Test StoreLastBorrower with multiple borrowers' => sub {
 
     $item = $item->get_from_storage;
 
-    # Test last_returned_by_all returns all borrowers
-    $borrowers = $item->last_returned_by_all();
+    # Test last_borrowers returns all borrowers
+    $borrowers = $item->last_borrowers();
     is( $borrowers->count, 3, 'Correctly returns 3 borrowers' );
 
     # Test ordering
@@ -217,7 +217,7 @@ subtest 'Test StoreLastBorrower with multiple borrowers' => sub {
     }
 
     $item      = $item->get_from_storage;
-    $borrowers = $item->last_returned_by_all();
+    $borrowers = $item->last_borrowers();
     is(
         $borrowers->count, 3,
         'We only retain 3 borrowers when the sys pref is set to 3, even though there are 5 checkouts/checkins'
@@ -251,7 +251,7 @@ subtest 'Test StoreLastBorrower with multiple borrowers' => sub {
     );
 
     $item      = $item->get_from_storage;
-    $borrowers = $item->last_returned_by_all();
+    $borrowers = $item->last_borrowers();
     is( $borrowers->count, 2, 'StoreLastBorrower was reduced to 2, we should now only keep 2 in the table' );
     @borrowers_array = $borrowers->as_list;
     is(
@@ -286,8 +286,8 @@ subtest 'Test StoreLastBorrower with multiple borrowers' => sub {
     );
 
     $item      = $item->get_from_storage;
-    $borrowers = $item->last_returned_by_all();
-    is( $borrowers->count, 0, 'last_returned_by_all respects preference value 0' );
+    $borrowers = $item->last_borrowers();
+    is( $borrowers->count, 0, 'last_borrowers respects preference value 0' );
 
     my $cleanup_patron = $builder->build(
         {
@@ -312,7 +312,7 @@ subtest 'Test StoreLastBorrower with multiple borrowers' => sub {
     );
 
     $item      = $item->get_from_storage;
-    $borrowers = $item->last_returned_by_all();
+    $borrowers = $item->last_borrowers();
     is( $borrowers->count,       0,     'All entries cleared when preference is 0' );
     is( $item->last_returned_by, undef, 'last_returned_by returns undef when no records' );
 
