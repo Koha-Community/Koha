@@ -8,14 +8,8 @@ return {
         my ($args) = @_;
         my ( $dbh, $out ) = @$args{qw(dbh out)};
 
-        # Drop the foreign key constraint temporarily
         if ( index_exists( 'items_last_borrower', 'itemnumber' ) ) {
-            $dbh->do(
-                q{
-                ALTER TABLE items_last_borrower
-                DROP FOREIGN KEY items_last_borrower_ibfk_1
-            }
-            );
+            $dbh->do('SET FOREIGN_KEY_CHECKS=0');
 
             # Drop the unique index
             $dbh->do(
@@ -23,16 +17,7 @@ return {
                 ALTER TABLE items_last_borrower DROP INDEX itemnumber
             }
             );
-
-            # Put the FK constraint back, without itemnumber having to be unique
-            $dbh->do(
-                q{
-                ALTER TABLE items_last_borrower
-                ADD CONSTRAINT items_last_borrower_ibfk_1
-                FOREIGN KEY (itemnumber) REFERENCES items (itemnumber)
-                ON DELETE CASCADE ON UPDATE CASCADE
-        }
-            );
+            $dbh->do('SET FOREIGN_KEY_CHECKS=1');
 
             say_success( $out, "Adjusted foreign key constraints on items_last_borrower table" );
         }
