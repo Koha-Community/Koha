@@ -938,7 +938,7 @@ sub last_returned_by_all {
 
     my $max_stored_borrowers = C4::Context->preference('StoreLastBorrower') || 0;
 
-    my @borrowers = $self->_result->last_returned_by(
+    my $last_returned_rs = $self->_result->last_returned_by(
         {},
         {
             order_by => [ { '-desc' => 'created_on' }, { '-desc' => 'id' } ],
@@ -946,9 +946,9 @@ sub last_returned_by_all {
         }
     );
 
-    my @stored_borrowers = map { Koha::Patron->_new_from_dbic( $_->borrowernumber ) } @borrowers;
+    my $borrowers_rs = $last_returned_rs->search_related('borrowernumber');
 
-    return \@stored_borrowers;
+    return Koha::Patrons->_new_from_dbic($borrowers_rs);
 }
 
 =head3 last_returned_by
@@ -977,7 +977,7 @@ sub last_returned_by {
 
                 # If StoreLastBorrower is 0 or disabled, bail without storing anything. Also delete any remaining rows from the table.
                 if ( $max_stored_borrowers == 0 ) {
-                    $self->_result->last_returned_by->delete_all;
+                    $self->last_returned_by_all->delete;
                     return $self;
                 }
 

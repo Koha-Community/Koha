@@ -153,7 +153,7 @@ subtest 'Test StoreLastBorrower with multiple borrowers' => sub {
     # Test last_returned_by_all with no borrowers
     t::lib::Mocks::mock_preference( 'StoreLastBorrower', '3' );
     my $borrowers = $item->last_returned_by_all();
-    is( scalar(@$borrowers), 0, 'last_returned_by_all returns empty array when no borrowers stored' );
+    is( $borrowers->count, 0, 'last_returned_by_all returns empty set when no borrowers stored' );
 
     # Add 3 borrowers for testing, checkout/check in
     my @patrons;
@@ -184,12 +184,13 @@ subtest 'Test StoreLastBorrower with multiple borrowers' => sub {
 
     # Test last_returned_by_all returns all borrowers
     $borrowers = $item->last_returned_by_all();
-    is( scalar(@$borrowers), 3, 'Correctly returns 3 borrowers' );
+    is( $borrowers->count, 3, 'Correctly returns 3 borrowers' );
 
     # Test ordering
-    is( $borrowers->[0]->borrowernumber, $patrons[2]->{borrowernumber}, 'Most recent borrower first' );
-    is( $borrowers->[1]->borrowernumber, $patrons[1]->{borrowernumber}, 'Second most recent borrower second' );
-    is( $borrowers->[2]->borrowernumber, $patrons[0]->{borrowernumber}, 'Oldest borrower last' );
+    my @borrowers_array = $borrowers->as_list;
+    is( $borrowers_array[0]->borrowernumber, $patrons[2]->{borrowernumber}, 'Most recent borrower first' );
+    is( $borrowers_array[1]->borrowernumber, $patrons[1]->{borrowernumber}, 'Second most recent borrower second' );
+    is( $borrowers_array[2]->borrowernumber, $patrons[0]->{borrowernumber}, 'Oldest borrower last' );
 
     # Add 2 more borrowers/check out/check in
     for my $i ( 4 .. 5 ) {
@@ -218,10 +219,11 @@ subtest 'Test StoreLastBorrower with multiple borrowers' => sub {
     $item      = $item->get_from_storage;
     $borrowers = $item->last_returned_by_all();
     is(
-        scalar(@$borrowers), 3,
+        $borrowers->count, 3,
         'We only retain 3 borrowers when the sys pref is set to 3, even though there are 5 checkouts/checkins'
     );
-    is( $borrowers->[0]->borrowernumber, $patrons[4]->{borrowernumber}, 'Most recent borrower after cleanup' );
+    @borrowers_array = $borrowers->as_list;
+    is( $borrowers_array[0]->borrowernumber, $patrons[4]->{borrowernumber}, 'Most recent borrower after cleanup' );
 
     # Reduce StoreLastBorrower to 2
     t::lib::Mocks::mock_preference( 'StoreLastBorrower', '2' );
@@ -250,9 +252,10 @@ subtest 'Test StoreLastBorrower with multiple borrowers' => sub {
 
     $item      = $item->get_from_storage;
     $borrowers = $item->last_returned_by_all();
-    is( scalar(@$borrowers), 2, 'StoreLastBorrower was reduced to 2, we should now only keep 2 in the table' );
+    is( $borrowers->count, 2, 'StoreLastBorrower was reduced to 2, we should now only keep 2 in the table' );
+    @borrowers_array = $borrowers->as_list;
     is(
-        $borrowers->[0]->borrowernumber, $yet_another_patron->{borrowernumber},
+        $borrowers_array[0]->borrowernumber, $yet_another_patron->{borrowernumber},
         'Most recent borrower after limit reduction'
     );
 
@@ -284,7 +287,7 @@ subtest 'Test StoreLastBorrower with multiple borrowers' => sub {
 
     $item      = $item->get_from_storage;
     $borrowers = $item->last_returned_by_all();
-    is( scalar(@$borrowers), 0, 'last_returned_by_all respects preference value 0' );
+    is( $borrowers->count, 0, 'last_returned_by_all respects preference value 0' );
 
     my $cleanup_patron = $builder->build(
         {
@@ -310,7 +313,7 @@ subtest 'Test StoreLastBorrower with multiple borrowers' => sub {
 
     $item      = $item->get_from_storage;
     $borrowers = $item->last_returned_by_all();
-    is( scalar(@$borrowers),     0,     'All entries cleared when preference is 0' );
+    is( $borrowers->count,       0,     'All entries cleared when preference is 0' );
     is( $item->last_returned_by, undef, 'last_returned_by returns undef when no records' );
 
 };

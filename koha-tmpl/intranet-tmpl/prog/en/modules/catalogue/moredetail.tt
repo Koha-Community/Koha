@@ -496,7 +496,7 @@
 
                                 [% IF Koha.Preference('StoreLastBorrower') && Koha.Preference('StoreLastBorrower') > 0 %]
                                     [% SET all_borrowers = ITEM_DAT.object.last_returned_by_all %]
-                                    [% IF all_borrowers.size > 0 %]
+                                    [% IF all_borrowers.count > 0 %]
                                         <li>
                                             <span class="label">Last returned by:</span>
                                             [% FOREACH patron IN all_borrowers %]
