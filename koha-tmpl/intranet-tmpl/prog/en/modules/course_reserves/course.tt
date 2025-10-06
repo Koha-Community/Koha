@@ -131,8 +131,8 @@
                         <div id="course_instructors">
                             <div id="instructors">
                                 [% FOREACH i IN instructors %]
-                                    <div class="instructor_line" id="borrower_[% i.borrowernumber | html %]"
-                                        >[% i.surname | html %], [% i.firstname | html %] ( <a href="#" class="removeInstructor"><i class="fa fa-trash-can"></i> Remove </a> )
+                                    <div class="instructor_line" id="borrower_[% i.borrowernumber | html %]">
+                                        [% INCLUDE 'patron-title.inc' patron=i no_cardnumber=1 %] (<a href="#" class="removeInstructor"><i class="fa fa-trash-can"></i> Remove </a>)
                                         <input type="hidden" name="instructors" value="[% i.borrowernumber | html %]" />
                                     </div>
                                 [% END %]
@@ -195,11 +195,12 @@
 
 [% IF ( departments ) %]
     [% MACRO jsinclude BLOCK %]
+        [% INCLUDE 'js-patron-format.inc' %]
         <script>
             $(document).ready(function () {
                 patron_autocomplete($("#find_instructor"), {
                     "on-select-callback": function (event, ui) {
-                        AddInstructor(ui.item.surname + ", " + ui.item.firstname, ui.item.patron_id);
+                        AddInstructor($patron_to_html(ui.item, { display_cardnumber: false }), ui.item.patron_id);
                         return false;
                     },
                 });

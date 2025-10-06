@@ -71,7 +71,7 @@
                         <td>[% AuthorisedValues.GetByCode( 'TERM' c.term ) | html %]</td>
                         <td>
                             [% FOREACH i IN c.instructors %]
-                                <div class="instructor"><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% i.borrowernumber | uri %]">[% i.firstname | html %] [% i.surname | html %]</a></div>
+                                <div class="instructor"><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% i.borrowernumber | uri %]">[% INCLUDE 'patron-title.inc' patron=i no_cardnumber=1 %]</a></div>
                             [% END %]
                         </td>
                         <td>[% c.staff_note | html %]</td>
