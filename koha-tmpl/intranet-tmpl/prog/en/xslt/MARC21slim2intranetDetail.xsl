@@ -963,9 +963,10 @@
     <xsl:if test="marc:datafield[@tag=856]">
         <xsl:if test="marc:datafield[@tag=856]/marc:subfield[@code='u']">
         <span class="results_summary online_resources"><span class="label">Online resources: </span>
+        <ul class="resource_list">
         <xsl:for-each select="marc:datafield[@tag=856 and marc:subfield[@code='u']]">
             <xsl:variable name="SubqText"><xsl:value-of select="marc:subfield[@code='q']"/></xsl:variable>
-            <a>
+            <li><a>
                 <xsl:attribute name="href">
                     <xsl:call-template name="AddMissingProtocol">
                         <xsl:with-param name="resourceLocation" select="marc:subfield[@code='u']"/>
@@ -994,13 +995,10 @@
                         </xsl:choose>
                     </xsl:when>
                 </xsl:choose>
-            </a>
-            <xsl:choose>
-                <xsl:when test="position()=last()"><xsl:text>  </xsl:text></xsl:when>
-                <xsl:otherwise> | </xsl:otherwise>
-            </xsl:choose>
+            </a></li>
 
         </xsl:for-each>
+        </ul>
         </span>
         </xsl:if>
     </xsl:if>
