@@ -12,8 +12,9 @@ return {
         $sth->execute();
         my $column_info = $sth->fetchrow_hashref();
 
-        if ( column_exists('additional_field_values', 'new_record_id') ) {
-            die "The database is an inconsistent state, a previous upgrade went wrong. Please try a new upgrade from a previous backup and using a newest version of Koha";
+        if ( column_exists( 'additional_field_values', 'new_record_id' ) ) {
+            die
+                "The database is an inconsistent state, a previous upgrade went wrong. Please try a new upgrade from a previous backup and using a newest version of Koha";
         } elsif ( $column_info && $column_info->{Type} eq 'int(11)' ) {
 
             # Only run the migration if record_id is still an integer type
