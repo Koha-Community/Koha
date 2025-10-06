@@ -971,28 +971,37 @@ sub last_returned_by {
         # Clean up the table by deleting older entries, depending on what StoreLastBorrower is set to
         my $max_stored_borrowers = C4::Context->preference('StoreLastBorrower') || 0;
 
-        # If StoreLastBorrower is 0 or disabled, bail without storing anything. Also delete any remaining rows from the table.
-        if ( $max_stored_borrowers == 0 ) {
-            $self->_result->last_returned_by->delete_all;
-            return $self;
-        }
+        my $schema = Koha::Database->new->schema;
+        $schema->txn_do(
+            sub {
 
-        #Create an entry for last_returned_by
-        my $new_record = $self->_result->create_related(
-            'last_returned_by',
-            { borrowernumber => $borrowernumber, itemnumber => $self->itemnumber }
+                # If StoreLastBorrower is 0 or disabled, bail without storing anything. Also delete any remaining rows from the table.
+                if ( $max_stored_borrowers == 0 ) {
+                    $self->_result->last_returned_by->delete_all;
+                    return $self;
+                }
+
+                # Create an entry for last_returned_by
+                my $new_record = $self->_result->create_related(
+                    'last_returned_by',
+                    { borrowernumber => $borrowernumber, itemnumber => $self->itemnumber }
+                );
+
+                # Get all entries, ordered by newest first
+                my @all_entries = $self->_result->last_returned_by(
+                    {},
+                    {
+                        order_by => [ { '-desc' => 'created_on' }, { '-desc' => 'id' } ],
+                    }
+                )->all;
+
+                # If we have more than the limit, delete the excess oldest ones
+                if ( scalar(@all_entries) > $max_stored_borrowers ) {
+                    my @entries_to_delete = splice( @all_entries, $max_stored_borrowers );
+                    $_->delete for @entries_to_delete;
+                }
+            }
         );
-
-        # Get all entries, ordered by newest first
-        my @all_entries =
-            $self->_result->last_returned_by( {}, { order_by => [ { '-desc' => 'created_on' }, { '-desc' => 'id' } ] } )
-            ->all;
-
-        # If we have more than the limit, delete the excess oldest ones
-        if ( scalar(@all_entries) > $max_stored_borrowers ) {
-            my @entries_to_delete = splice( @all_entries, $max_stored_borrowers );
-            $_->delete for @entries_to_delete;
-        }
 
         return $self;
     }
