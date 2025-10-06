@@ -168,7 +168,6 @@
     [% INCLUDE 'calendar.inc' %]
     [% INCLUDE 'datatables.inc' %]
     <script>
-        var MSG_REMOVE_PATRON = _("Remove");
         $(document).ready(function() {
             var table_settings = [% TablesSettings.GetTableSettings( 'acqui', 'histsearch', 'histsearcht', 'json' ) | $raw %];
             $("#histsearcht").kohaTable(
@@ -178,32 +177,12 @@
                 table_settings
             );
 
-            function AddPatron( patron_name, value, container, input_name ) {
-                div = "<div id='borrower_" + value + "'>" + patron_name + " ( <a href='#' class='removePatron'><i class='fa fa-trash-can' aria-hidden='true'></i> " + MSG_REMOVE_PATRON + " </a> ) <input type='hidden' name='" + input_name + "' value='" + value + "' /></div>";
-                $(container).append( div );
-
-                $(container).parent().show( 800 );
-            }
-            function RemovePatron( cardnumber, container ) {
-                $( '#borrower_' + cardnumber ).remove();
-
-                if ( ! $(container).html() ) {
-                    $(container).parent("fieldset").hide( 800 );
-                }
-            }
             patron_autocomplete($("#find_patron"), {
+                'on-select-add-to': {container: $("#basket_creators"), input_name: 'created_by' },
                 'on-select-callback': function( event, ui ) {
-                    var field = ui.item.patron_id;
-                    AddPatron( ui.item.firstname + " " + ( ui.item.middle_name || "" ) + " " + ui.item.surname, field, $("#basket_creators"), 'created_by' );
                     $("#find_patron").val('').focus();
                     return false;
                 }
-            });
-            $("body").on("click",".removePatron",function(e){
-                e.preventDefault();
-                var divid = $(this).parent().attr("id");
-                var cardnumber = divid.replace("borrower_","");
-                RemovePatron(cardnumber, $("#basket_creators"));
             });
 
         });

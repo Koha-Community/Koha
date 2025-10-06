@@ -235,7 +235,6 @@
     [% Asset.js("js/tools-menu.js") | $raw %]
     [% INCLUDE 'datatables.inc' %]
     <script>
-        var MSG_REMOVE_PATRON = _("Remove");
         $(document).ready(function() {
             $('#patrons_to_add_fieldset').hide();
 
@@ -247,12 +246,6 @@
                     table_settings
                 );
 
-            function AddPatron( patron_name, value, container, input_name ) {
-                div = "<div id='borrower_" + value + "'>" + patron_name + " ( <a href='#' class='removePatron'><i class='fa fa-trash-can' aria-hidden='true'></i> " + MSG_REMOVE_PATRON + " </a> ) <input type='hidden' name='" + input_name + "' value='" + value + "' /></div>";
-                $(container).append( div );
-
-                $(container).parent().show( 800 );
-            }
             function RemovePatron( cardnumber, container ) {
                 $( '#borrower_' + cardnumber ).remove();
 
@@ -261,18 +254,14 @@
                 }
             }
             patron_autocomplete($("#find_patron"), {
-                'on-select-callback': function( event, ui ) {
-                    var field = ui.item.cardnumber;
-                    AddPatron( ( ui.item.firstname || "" ) + " " + ( ui.item.middle_name || "" ) + " " + ( ui.item.surname || "" ), field, $("#patrons_to_add"), 'patrons_to_add' );
+                "on-select-add-to": {
+                    container: $("#patrons_to_add"),
+                    input_name: 'patrons_to_add',
+                },
+                "on-select-callback": function( event, ui ) {
                     $("#find_patron").val('').focus();
                     return false;
                 }
-            });
-            $("body").on("click",".removePatron",function(e){
-                e.preventDefault();
-                var divid = $(this).parent().attr("id");
-                var cardnumber = divid.replace("borrower_","");
-                RemovePatron(cardnumber, $("#patrons_to_add"));
             });
 
             $("body").on("click", "#CheckAll", function(e){

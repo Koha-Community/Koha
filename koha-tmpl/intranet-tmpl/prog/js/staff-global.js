@@ -691,6 +691,7 @@ function patron_autocomplete(node, options) {
     let link_to;
     let url_params;
     let on_select_callback;
+    let on_select_add_to;
 
     if (options) {
         if (options["link-to"]) {
@@ -701,6 +702,9 @@ function patron_autocomplete(node, options) {
         }
         if (options["on-select-callback"]) {
             on_select_callback = options["on-select-callback"];
+        }
+        if (options["on-select-add-to"]) {
+            on_select_add_to = options["on-select-add-to"];
         }
     }
     return (node
@@ -738,9 +742,31 @@ function patron_autocomplete(node, options) {
             },
             minLength: 3,
             select: function (event, ui) {
-                if (ui.item.link) {
+                if (on_select_add_to) {
+                    let container = on_select_add_to.container;
+
+                    const patron_name =
+                        `${ui.item.firstname} ${ui.item.middle_name || ""} ${ui.item.surname}`.trim();
+                    const node = `
+                      <div id='patron-detail-${ui.item.patron_id}' class='patron-detail-autocomplete-selection'>
+                        ${patron_name}
+                        (<a href='#' class='removePatron'>
+                          <i class='fa fa-trash-can' aria-hidden='true'></i> ${__("Remove")}
+                        </a>)
+                        <input type='hidden' name='${on_select_add_to.input_name}' value='${ui.item.patron_id}' />
+                      </div>
+                    `;
+
+                    $(container).append(node).parent().show(800);
+
+                    $(container).on("click", ".removePatron", function (e) {
+                        e.preventDefault();
+                        $(this).closest('div[id^="patron-detail-"]').remove();
+                    });
+                } else if (ui.item.link) {
                     window.location.href = ui.item.link;
-                } else if (on_select_callback) {
+                }
+                if (on_select_callback) {
                     return on_select_callback(event, ui);
                 }
             },

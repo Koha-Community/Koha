@@ -19,9 +19,6 @@
     #course_instructors {
         float: left;
     }
-    .instructor_line {
-        padding: 0.3em;
-    }
     fieldset.rows label[for="find_instructor"] {
         text-align: left;
         margin: 0;
@@ -131,13 +128,13 @@
                         <div id="course_instructors">
                             <div id="instructors">
                                 [% FOREACH i IN instructors %]
-                                    <div class="instructor_line" id="borrower_[% i.borrowernumber | html %]">
-                                        [% INCLUDE 'patron-title.inc' patron=i no_cardnumber=1 %] (<a href="#" class="removeInstructor"><i class="fa fa-trash-can"></i> Remove </a>)
+                                    <div class="patron-detail-autocomplete-selection" id="patron-detail-[% i.borrowernumber | html %]">
+                                        [% INCLUDE 'patron-title.inc' patron=i no_cardnumber=1 %] (<a href="#" class="removePatron"><i class="fa fa-trash-can"></i> Remove </a>)
                                         <input type="hidden" name="instructors" value="[% i.borrowernumber | html %]" />
                                     </div>
                                 [% END %]
                             </div>
-                            <div id="instructor_search" class="instructor_line">
+                            <div id="instructor_search" class="patron-detail-autocomplete-selection">
                                 <label for="find_instructor">Instructor search:</label>
                                 <input autocomplete="off" id="find_instructor" type="text" style="width:150px" class="noEnterSubmit" />
                             </div>
@@ -198,48 +195,16 @@
         <script>
             $(document).ready(function () {
                 patron_autocomplete($("#find_instructor"), {
+                    "on-select-add-to": { container: $("#instructors"), input_name: "instructors" },
                     "on-select-callback": function (event, ui) {
-                        AddInstructor($patron_to_html(ui.item, { display_cardnumber: false }), ui.item.patron_id);
-                        return false;
+                        $("#find_instructor").val("").focus();
                     },
                 });
-
-                if (!$("#instructors").html()) {
-                    $("#course_instructors").hide();
-                }
-
-                $("body").on("click", ".removeInstructor", function (e) {
+                $(".removePatron").on("click", function (e) {
                     e.preventDefault();
-                    var divid = $(this).parent().attr("id");
-                    var borrowernumber = divid.replace("borrower_", "");
-                    RemoveInstructor(borrowernumber);
+                    $(this).closest('div[id^="patron-detail-"]').remove();
                 });
             });
-
-            function AddInstructor(name, borrowernumber) {
-                div =
-                    "<div class='instructor_line' id='borrower_" +
-                    borrowernumber +
-                    "'>" +
-                    (name ? name.escapeHtml() : "") +
-                    " ( <a href='#' class='removeInstructor'><i class='fa fa-trash-can'></i> " +
-                    _("Remove") +
-                    " </a> ) <input type='hidden' name='instructors' value='" +
-                    borrowernumber +
-                    "' /></div>";
-                $("#instructors").append(div);
-
-                $("#find_instructor").val("").focus();
-                $("#course_instructors").show();
-            }
-
-            function RemoveInstructor(borrowernumber) {
-                $("#borrower_" + borrowernumber).remove();
-
-                if (!$("#instructors").html()) {
-                    $("#course_instructors").hide(800);
-                }
-            }
         </script>
     [% END %]
 [% END %]

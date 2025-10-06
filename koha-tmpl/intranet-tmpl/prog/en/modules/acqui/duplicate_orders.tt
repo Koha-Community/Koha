@@ -323,7 +323,6 @@
             $("input[name='ordernumbers']").val(ordernumbers.join(','));
         }
 
-        var MSG_REMOVE_PATRON = _("Remove");
         var MSG_NO_ITEM_SELECTED = _("Nothing is selected.");
         var MSG_NO_FUND_SELECTED = _("No fund selected.");
         $(document).ready(function() {
@@ -333,34 +332,16 @@
             });
 
             [% IF op == 'search' OR op == 'select' %]
-                function AddPatron( patron_name, value, container, input_name ) {
-                    div = "<div id='borrower_" + value + "'>" + patron_name + " ( <a href='#' class='removePatron'><i class='fa fa-trash-can' aria-hidden='true'></i> " + MSG_REMOVE_PATRON + " </a> ) <input type='hidden' name='" + input_name + "' value='" + value + "' /></div>";
-                    $(container).append( div );
-
-                    $(container).parent().show( 800 );
-                }
-                function RemovePatron( cardnumber, container ) {
-                    $( '#borrower_' + cardnumber ).remove();
-
-                    if ( ! $(container).html() ) {
-                        $(container).parent("fieldset").hide( 800 );
-                    }
-                }
                 patron_autocomplete($("#find_patron"), {
-                    'on-select-callback': function( event, ui ) {
-                        var field = ui.item.patron_id;
-                        AddPatron( ui.item.firstname + " " + ( ui.item.middle_name || "" ) + " " + ui.item.surname, field, $("#basket_creators"), 'created_by' );
+                    "on-select-add-to": {
+                        container: $("#basket_creators"),
+                        input_name: 'created_by'
+                    },
+                    "on-select-callback": function( event, ui ) {
                         $("#find_patron").val('').focus();
                         return false;
                     }
                 });
-                $("body").on("click",".removePatron",function(e){
-                    e.preventDefault();
-                    var divid = $(this).parent().attr("id");
-                    var cardnumber = divid.replace("borrower_","");
-                    RemovePatron(cardnumber, $("#basket_creators"));
-                });
-
             [% END %]
 
             $("#show_orders_filters, #hide_orders_filters").on('click', function(e) {

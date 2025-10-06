@@ -74,7 +74,7 @@ if ( $op eq 'cud-add' && $patrons_by_id ) {
 
 my @patrons_to_add = $cgi->multi_param('patrons_to_add');
 if ( $op eq 'cud-add' && @patrons_to_add ) {
-    AddPatronsToList( { list => $list, cardnumbers => \@patrons_to_add } );
+    AddPatronsToList( { list => $list, borrowernumbers => \@patrons_to_add } );
 }
 
 my @patrons_to_remove = $cgi->multi_param('patrons_to_remove');
