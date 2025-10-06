@@ -254,7 +254,6 @@
         [% INCLUDE 'datatables.inc' %]
         [% INCLUDE 'select2.inc' %]
         [% INCLUDE 'js-biblio-format.inc' %]
-        [% INCLUDE 'js-patron-format.inc' %]
         [% Asset.js("lib/jquery/plugins/humanmsg.js") | $raw %]
         <script>
             let hide_patron_name = [% IF Koha.Preference('HidePatronName') %]true[% ELSE %]false[% END %];

@@ -304,7 +304,6 @@
     </script>
     [% INCLUDE 'datatables.inc' %]
     [% INCLUDE 'js-patron-get-age.inc' %]
-    [% INCLUDE 'js-patron-format.inc' %]
     [% INCLUDE 'js-patron-format-address.inc' %]
     <script>
         {

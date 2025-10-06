@@ -468,7 +468,6 @@
         dayjs.extend(window.dayjs_plugin_customParseFormat);
     </script>
     [% INCLUDE 'calendar.inc' %]
-    [% INCLUDE 'js-patron-format.inc' %]
     [% INCLUDE 'datatables.inc' %]
     <script>
         let pickups = [% To.json(curbside_pickups.unblessed) | $raw %];
