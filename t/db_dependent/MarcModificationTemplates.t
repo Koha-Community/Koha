@@ -1022,7 +1022,7 @@ is_deeply(
 # Test for Bug 32950: Moving subfield can lose values for repeatable fields
 subtest "Bug 32950: Moving subfield preserves values in repeatable fields" => sub {
     plan tests => 14;
-    $dbh->do(q|DELETE FROM marc_modification_templates|);
+
     my $template_id = AddModificationTemplate("test_bug_32950");
 
     # Create template action to move 020$z to 020$a
