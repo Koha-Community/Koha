@@ -12,7 +12,9 @@ return {
         $sth->execute();
         my $column_info = $sth->fetchrow_hashref();
 
-        if ( $column_info && $column_info->{Type} eq 'int(11)' ) {
+        if ( column_exists('additional_field_values', 'new_record_id') ) {
+            die "The database is an inconsistent state, a previous upgrade went wrong. Please try a new upgrade from a previous backup and using a newest version of Koha";
+        } elsif ( $column_info && $column_info->{Type} eq 'int(11)' ) {
 
             # Only run the migration if record_id is still an integer type
             say_info( $out, "Converting record_id from int(11) to VARCHAR(11)...\n" );
