@@ -190,10 +190,7 @@
                                         <select id="reason_[% adjustment.adjustment_id | html %]" name="reason">
                                             <option value="">No reason</option>
                                             [% FOREACH reason IN reasons %]
-                                                [% IF ( adjustment.reason == reason.authorised_value ) %]
-                                                    [% SET selected_attr = 'selected="selected"' %]
-                                                [% END %]
-                                                <option [% IF foo %]selected="selected"[% END %] value="[% reason.authorised_value | html %]"> [% reason.lib | html %] </option>
+                                                <option [% IF adjustment.reason == reason.authorised_value %]selected="selected"[% END %] value="[% reason.authorised_value | html %]"> [% reason.lib | html %] </option>
                                             [% END %]
                                         </select>
                                     [% ELSE %]
