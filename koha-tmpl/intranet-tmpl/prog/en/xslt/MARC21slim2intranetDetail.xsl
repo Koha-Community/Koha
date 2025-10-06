@@ -414,37 +414,46 @@
             <span class="results_summary" id="content_type">
                 <xsl:if test="marc:datafield[@tag=336]">
                     <span class="label">Content type: </span>
-                    <xsl:for-each select="marc:datafield[@tag=336]">
-                        <xsl:call-template name="subfieldSelect">
-                            <xsl:with-param name="codes">a</xsl:with-param>
-                            <xsl:with-param name="delimeter">, </xsl:with-param>
-                        </xsl:call-template>
-                        <xsl:if test="position() != last()"><span class="separator"><xsl:text> | </xsl:text></span></xsl:if>
-                    </xsl:for-each>
+                    <ul class="resource_list">
+                        <xsl:for-each select="marc:datafield[@tag=336]">
+                            <li>
+                                <xsl:call-template name="subfieldSelect">
+                                    <xsl:with-param name="codes">a</xsl:with-param>
+                                    <xsl:with-param name="delimeter">, </xsl:with-param>
+                                </xsl:call-template>
+                            </li>
+                        </xsl:for-each>
+                    </ul>
                 </xsl:if>
                 <xsl:text> </xsl:text>
                 <!-- Media Type -->
                 <xsl:if test="marc:datafield[@tag=337]">
                     <span class="label">Media type: </span>
-                    <xsl:for-each select="marc:datafield[@tag=337]">
-                        <xsl:call-template name="subfieldSelect">
-                            <xsl:with-param name="codes">a</xsl:with-param>
-                            <xsl:with-param name="delimeter">, </xsl:with-param>
-                        </xsl:call-template>
-                        <xsl:if test="position() != last()"><span class="separator"><xsl:text> | </xsl:text></span></xsl:if>
-                    </xsl:for-each>
+                    <ul class="resource_list">
+                        <xsl:for-each select="marc:datafield[@tag=337]">
+                            <li>
+                                <xsl:call-template name="subfieldSelect">
+                                    <xsl:with-param name="codes">a</xsl:with-param>
+                                    <xsl:with-param name="delimeter">, </xsl:with-param>
+                                </xsl:call-template>
+                            </li>
+                        </xsl:for-each>
+                    </ul>
                 </xsl:if>
                 <xsl:text> </xsl:text>
                 <!-- Media Type -->
                 <xsl:if test="marc:datafield[@tag=338]">
                     <span class="label">Carrier type: </span>
-                    <xsl:for-each select="marc:datafield[@tag=338]">
-                        <xsl:call-template name="subfieldSelect">
-                            <xsl:with-param name="codes">a</xsl:with-param>
-                            <xsl:with-param name="delimeter">, </xsl:with-param>
-                        </xsl:call-template>
-                        <xsl:if test="position() != last()"><span class="separator"><xsl:text> | </xsl:text></span></xsl:if>
-                    </xsl:for-each>
+                    <ul class="resource_list">
+                        <xsl:for-each select="marc:datafield[@tag=338]">
+                            <li>
+                                <xsl:call-template name="subfieldSelect">
+                                    <xsl:with-param name="codes">a</xsl:with-param>
+                                    <xsl:with-param name="delimeter">, </xsl:with-param>
+                                </xsl:call-template>
+                            </li>
+                        </xsl:for-each>
+                    </ul>
                 </xsl:if>
             </span>
         </xsl:if>
@@ -1037,10 +1046,13 @@
                 <xsl:if test="marc:datafield[@tag=586]/@ind1=' '">
                     <span class="label">Awards: </span>
                 </xsl:if>
-                <xsl:for-each select="marc:datafield[@tag=586]">
-                    <xsl:value-of select="marc:subfield[@code='a']"/>
-                    <xsl:if test="position()!=last()"><span class="separator"><xsl:text> | </xsl:text></span></xsl:if>
-                </xsl:for-each>
+                <ul class="resource_list">
+                    <xsl:for-each select="marc:datafield[@tag=586]">
+                        <li>
+                            <xsl:value-of select="marc:subfield[@code='a']"/>
+                        </li>
+                    </xsl:for-each>
+                </ul>
             </span>
         </xsl:if>
 
@@ -1048,12 +1060,15 @@
         <xsl:if test="marc:datafield[@tag=508]">
             <span class="results_summary prod_credits">
                 <span class="label">Production credits: </span>
-                <xsl:for-each select="marc:datafield[@tag=508]">
-                    <xsl:call-template name="subfieldSelectSpan">
-                        <xsl:with-param name="codes">a</xsl:with-param>
-                    </xsl:call-template>
-                    <xsl:if test="position()!=last()"><span class="separator"><xsl:text> | </xsl:text></span></xsl:if>
-                </xsl:for-each>
+                <ul class="resource_list">
+                    <xsl:for-each select="marc:datafield[@tag=508]">
+                        <li>
+                            <xsl:call-template name="subfieldSelectSpan">
+                                <xsl:with-param name="codes">a</xsl:with-param>
+                            </xsl:call-template>
+                        </li>
+                    </xsl:for-each>
+                </ul>
             </span>
         </xsl:if>
 
