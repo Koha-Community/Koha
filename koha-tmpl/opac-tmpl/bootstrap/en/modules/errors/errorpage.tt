@@ -1,9 +1,11 @@
 [% USE raw %]
 [% USE AdditionalContents %]
+[% USE Koha %]
 [% PROCESS 'i18n.inc' %]
 [% PROCESS 'html_helpers.inc' %]
 [% SET OpacNav = AdditionalContents.get( location => "OpacNav", lang => lang, library => logged_in_user.branchcode || default_branch, blocktitle => 0 ) %]
 [% SET OpacNavBottom = AdditionalContents.get( location => "OpacNavBottom", lang => lang, library => logged_in_user.branchcode || default_branch, blocktitle => 0 ) %]
+[% SET admin = Koha.Preference('ReplytoDefault') || Koha.Preference('KohaAdminEmailAddress') %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title
     >[% FILTER collapse %]
