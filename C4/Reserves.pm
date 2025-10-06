@@ -2057,25 +2057,24 @@ sub _koha_notify_reserve {
     };
 
     while ( my ( $mtt, $letter_code ) = each %{ $messagingprefs->{transports} } ) {
-        next
-            if (
+        if (
             ( $mtt eq 'email'  and not $to_address )                # No email address
             or ( $mtt eq 'sms' and not $patron->smsalertnumber )    # No SMS number
             or ( $mtt eq 'itiva'
                 and C4::Context->preference('TalkingTechItivaPhoneNotification')
             )                                                       # Notice is handled by TalkingTech_itiva_outbound.pl
             or ( $mtt eq 'phone' and not $patron->phone )           # No phone number to call
-            );
+            )
+        {
+            unless ($notification_sent) {
+                $notification_sent++;
+                &$send_notification( 'print', 'HOLD' );
+            }
+            next;
+        }
 
         &$send_notification( $mtt, $letter_code, $messagingprefs->{wants_digest} );
-        $notification_sent++;
     }
-
-    #Making sure that a print notification is sent if no other transport types can be utilized.
-    if ( !$notification_sent ) {
-        &$send_notification( 'print', 'HOLD' );
-    }
-
 }
 
 =head2 _koha_notify_hold_changed
