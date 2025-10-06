@@ -745,8 +745,7 @@ function patron_autocomplete(node, options) {
                 if (on_select_add_to) {
                     let container = on_select_add_to.container;
 
-                    const patron_name =
-                        `${ui.item.firstname} ${ui.item.middle_name || ""} ${ui.item.surname}`.trim();
+                    const patron_name = $patron_to_html(ui.item);
                     const node = `
                       <div id='patron-detail-${ui.item.patron_id}' class='patron-detail-autocomplete-selection'>
                         ${patron_name}
