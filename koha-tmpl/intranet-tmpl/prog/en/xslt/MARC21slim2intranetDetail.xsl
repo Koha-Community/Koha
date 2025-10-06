@@ -908,8 +908,8 @@
             <xsl:for-each select="marc:datafield[@tag=050]">
                 <xsl:call-template name="subfieldSelect">
                     <xsl:with-param name="codes">ab</xsl:with-param>
-                    <xsl:with-param name="delimeter"><xsl:text> | </xsl:text></xsl:with-param>
                 </xsl:call-template>
+                <xsl:if test="not(position()=last())"><xsl:text> | </xsl:text></xsl:if>
             </xsl:for-each>
         </span>
     </xsl:if>
