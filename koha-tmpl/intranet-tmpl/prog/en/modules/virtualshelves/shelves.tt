@@ -219,7 +219,6 @@
                 <div>
                     <label for="find_patron">New owner: </label>
                     <span id="new_owner_name"></span>
-                    <input type="hidden" id="new_owner" name="new_owner" value="" />
                 </div>
 
                 <br />
@@ -958,25 +957,30 @@
              });
 
         [% END %]
+    </script>
+    [% IF op == 'transfer' %]
+        <script>
+            $(document).ready(function () {
+                patron_autocomplete($("#find_patron"), {
+                    "on-select-add-to": {
+                        container: $("#new_owner_name"),
+                        input_name: "new_owner",
+                    },
+                    "on-select-callback": function (event, ui) {
+                        $("#find_patron").val("").focus();
+                        return false;
+                    },
+                });
 
-        [% IF op == 'transfer' %]
-            $(document).ready(function() {
-                patron_autocomplete( $("#find_patron"), { 'on-select-callback': function( event, ui ) {
-                    $('#new_owner_name').html( ui.item.firstname + " " + ui.item.surname );
-                    $('#new_owner').val( ui.item.patron_id );
-                    $('#find_patron').val('').focus();
-                    return false;
-                }});
-
-                $('#transferform').submit(function() {
-                    if( $('#new_owner').val() == '' ) {
-                        alert( _("Please select a new owner first") );
+                $("#transferform").submit(function () {
+                    if (!$('input[name="new_owner"]').val()) {
+                        alert(_("Please select a new owner first"));
                         return false;
                     }
                     return true;
                 });
-             });
-        [% END %]
-    </script>
+            });
+        </script>
+    [% END %]
 [% END %]
 [% INCLUDE 'intranet-bottom.inc' %]
