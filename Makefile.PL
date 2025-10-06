@@ -394,6 +394,7 @@ my $target_map = {
     # ignore files and directories created by the install itself
     './pm_to_blib'      => 'NONE',
     './blib'            => 'NONE',
+    './.github'         => 'NONE',
     '.prettierrc.js'    => 'NONE',
     '.sass-lint.yml'    => 'NONE',
     '.scss-lint.yml'    => 'NONE',
