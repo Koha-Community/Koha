@@ -4969,3 +4969,24 @@ div .suggestion_note {
     text-align: left;
 }
 */
+// Repeatable fields display (Bug 30148)
+.resource_list {
+    display: inline-block;
+    margin: 0;
+    padding-left: 0;
+
+    li {
+        display: inline-block;
+        white-space: nowrap;
+
+        &::after {
+            content: " | ";
+        }
+
+        &:last-child {
+            &::after {
+                content: "";
+            }
+        }
+    }
+}
