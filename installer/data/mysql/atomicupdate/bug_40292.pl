@@ -8,7 +8,7 @@ return {
         my ($args) = @_;
         my ( $dbh, $out ) = @$args{qw(dbh out)};
 
-        if ( column_exists('additional_field_values', 'new_record_id') ) {
+        if ( column_exists( 'additional_field_values', 'new_record_id' ) ) {
             $dbh->do(
                 q{ ALTER TABLE additional_field_values CHANGE COLUMN new_record_id record_id VARCHAR(11) NOT NULL DEFAULT '' COMMENT 'record_id'; }
             );
