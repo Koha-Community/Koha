@@ -252,7 +252,7 @@ subtest 'build_authorities_query_compat() tests' => sub {
 };
 
 subtest 'build_query tests' => sub {
-    plan tests => 69;
+    plan tests => 72;
 
     my $qb;
 
@@ -341,6 +341,31 @@ subtest 'build_query tests' => sub {
         $qb->build_query_compat( undef, [ '"donald duck"', 'walt disney' ], [ 'ti', 'au' ] );
     is( $query_cgi,  'idx=ti&q=%22donald%20duck%22&idx=au&q=walt%20disney', 'query cgi ok for multiterm query' );
     is( $query_desc, '(title:("donald duck")) (author:(walt disney))',      'query desc ok for multiterm query' );
+
+    # Test whole_record and weighted_fields parameters in query_cgi
+    ( undef, $query, $simple_query, $query_cgi, $query_desc ) = $qb->build_query_compat(
+        undef, ['test'], ['kw'], undef, undef, undef, undef,
+        { whole_record => 1, weighted_fields => 1, weight_search_submitted => 1 }
+    );
+    is(
+        $query_cgi, 'idx=kw&q=test&weight_search=1&weight_search_submitted=1&whole_record=1',
+        'query_cgi includes whole_record, weight_search and weight_search_submitted parameters'
+    );
+
+    ( undef, $query, $simple_query, $query_cgi, $query_desc ) = $qb->build_query_compat(
+        undef, ['test'], ['kw'], undef, undef, undef, undef,
+        { whole_record => 1 }
+    );
+    is( $query_cgi, 'idx=kw&q=test&whole_record=1', 'query_cgi includes whole_record parameter only' );
+
+    ( undef, $query, $simple_query, $query_cgi, $query_desc ) = $qb->build_query_compat(
+        undef, ['test'], ['kw'], undef, undef, undef, undef,
+        { weighted_fields => 1, weight_search_submitted => 1 }
+    );
+    is(
+        $query_cgi, 'idx=kw&q=test&weight_search=1&weight_search_submitted=1',
+        'query_cgi includes weight_search and weight_search_submitted parameters only'
+    );
 
     ( undef, $query ) = $qb->build_query_compat( undef, ['2019'], ['yr,st-year'] );
     is(
