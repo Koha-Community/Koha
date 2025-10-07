@@ -531,9 +531,9 @@
                                                                         id="subfield[% iteminformatio.serialid | html %][% iteminformatio.countitems | html %][% iteminformatio.subfield | html %][% iteminformatio.random | html %]"
                                                                     >
                                                                         [% IF (iteminformatio.mandatory) %]
-                                                                            <label class="required">[% iteminformatio.subfield | html %] - [% iteminformatio.marc_lib | $raw %]</label>
+                                                                            <label class="required">[% iteminformatio.subfield | html %] - [% iteminformatio.marc_lib | html %]</label>
                                                                         [% ELSE %]
-                                                                            <label>[% iteminformatio.subfield | html %] - [% iteminformatio.marc_lib | $raw %]</label>
+                                                                            <label>[% iteminformatio.subfield | html %] - [% iteminformatio.marc_lib | html %]</label>
                                                                         [% END %]
 
                                                                         [% IF ( iteminformatio.marc_value.type == 'select' ) %]
