@@ -350,14 +350,14 @@ Circulation:
               choices:
                   date_due: the old due date of the checkout
                   now: the current date
-            - .
+            - . For automatic renewals see <a href="/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=AutomaticRenewalPeriodBase">AutomaticRenewalPeriodBase.</a>
         -
             - When renewing checkouts automaticaly, base the new due date on
             - pref: AutomaticRenewalPeriodBase
               choices:
                   date_due: the old due date of the checkout
                   now: the current date
-            - .
+            - . For manual renewals see <a href="/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=ManualRenewalPeriodBase">ManualRenewalPeriodBase</a>.
         -
             - pref: RenewalSendNotice
               choices:
@@ -515,14 +515,14 @@ Circulation:
               choices:
                   1: renew
                   0: "don't renew"
-            - the item automatically. If the system preference <a href="/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=RenewalPeriodBase">RenewalPeriodBase</a> is set to "due date", renewed items may still be overdue.
+            - the item automatically. If the system preferences <a href="/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=ManualRenewalPeriodBase">ManualRenewalPeriodBase</a> or <a href="/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=AutomaticRenewalPeriodBase">AutomaticRenewalPeriodBase</a> are set to "due date", renewed items may still be overdue.
         -
             - If a patron pays off all fines on an overdue item that is accruing fines in the OPAC via a payment plugin,
             - pref: RenewAccruingItemInOpac
               choices:
                   1: renew
                   0: "don't renew"
-            - the item automatically. If the system preference <a href="/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=RenewalPeriodBase">RenewalPeriodBase</a> is set to "due date", renewed items may still be overdue.
+            - the item automatically. If the system preferences <a href="/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=ManualRenewalPeriodBase">ManualRenewalPeriodBase</a> or <a href="/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=AutomaticRenewalPeriodBase">AutomaticRenewalPeriodBase</a> are set to "due date", renewed items may still be overdue.
         -
             - pref: ItemsDeniedRenewal
               type: textarea
