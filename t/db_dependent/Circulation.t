@@ -19,7 +19,7 @@ use Modern::Perl;
 use utf8;
 
 use Test::NoWarnings;
-use Test::More tests => 84;
+use Test::More tests => 85;
 use Test::Exception;
 use Test::MockModule;
 use Test::Deep qw( cmp_deeply );
@@ -339,7 +339,7 @@ subtest 'AddIssue | renewal when adding issue to same borrower' => sub {
     my $staff         = $builder->build_object( { class => "Koha::Patrons" } );
     t::lib::Mocks::mock_userenv( { patron => $staff } );
 
-    t::lib::Mocks::mock_preference( 'RenewalPeriodBase', 'date_due' );
+    t::lib::Mocks::mock_preference( 'ManualRenewalPeriodBase', 'date_due' );
 
     my $issue = AddIssue( $patron, $item->barcode );
     is( dt_from_string( $issue->date_due )->truncate( to => 'day' ), $seven_days, "Item issued for correct term" );
@@ -866,7 +866,7 @@ subtest "CanBookBeRenewed tests" => sub {
 
     # Calculate new due-date based on the present date not to incur
     # multiple fees
-    t::lib::Mocks::mock_preference( 'RenewalPeriodBase', 'now' );
+    t::lib::Mocks::mock_preference( 'ManualRenewalPeriodBase', 'now' );
 
     my $staff = $builder->build_object( { class => "Koha::Patrons" } );
     t::lib::Mocks::mock_userenv( { patron => $staff } );
@@ -1185,7 +1185,7 @@ subtest "CanBookBeRenewed tests" => sub {
         );
 
         my $ten_days_before = dt_from_string->add( days => -10 );
-        my $ten_days_ahead  = dt_from_string->add( days => 10 );
+        my $ten_days_ahead  = dt_from_string->add( days =>  10 );
         my $issue           = AddIssue(
             $renewing_borrower_obj, $item_to_auto_renew->barcode, $ten_days_ahead, undef, $ten_days_before,
             undef, { auto_renew => 1 }
@@ -1335,7 +1335,7 @@ subtest "CanBookBeRenewed tests" => sub {
         );
 
         my $ten_days_before = dt_from_string->add( days => -10 );
-        my $ten_days_ahead  = dt_from_string->add( days => 10 );
+        my $ten_days_ahead  = dt_from_string->add( days =>  10 );
         my $issue           = AddIssue(
             $renewing_borrower_obj, $item_to_auto_renew->barcode, $ten_days_ahead, undef, $ten_days_before,
             undef, { auto_renew => 1 }
@@ -1445,7 +1445,7 @@ subtest "CanBookBeRenewed tests" => sub {
         );
 
         my $ten_days_before = dt_from_string->add( days => -10 );
-        my $ten_days_ahead  = dt_from_string->add( days => 10 );
+        my $ten_days_ahead  = dt_from_string->add( days =>  10 );
 
         # Patron is expired and BlockExpiredPatronOpacActions=''
         # => auto renew is allowed
@@ -1497,7 +1497,7 @@ subtest "CanBookBeRenewed tests" => sub {
         );
 
         my $ten_days_before = dt_from_string->add( days => -10 );
-        my $ten_days_ahead  = dt_from_string->add( days => 10 );
+        my $ten_days_ahead  = dt_from_string->add( days =>  10 );
         my $issue           = AddIssue(
             $renewing_borrower_obj, $item_to_auto_renew->barcode, $ten_days_ahead, undef, $ten_days_before,
             undef, { auto_renew => 1 }
@@ -1618,7 +1618,7 @@ subtest "CanBookBeRenewed tests" => sub {
         );
 
         my $ten_days_before = dt_from_string->add( days => -10 );
-        my $ten_days_ahead  = dt_from_string->add( days => 10 );
+        my $ten_days_ahead  = dt_from_string->add( days =>  10 );
         my $issue           = AddIssue(
             $renewing_borrower_obj, $item_to_auto_renew->barcode, $ten_days_ahead, undef, $ten_days_before,
             undef, { auto_renew => 1 }
@@ -1905,8 +1905,8 @@ subtest "CanBookBeRenewed | bookings" => sub {
     my $schema = Koha::Database->schema;
     $schema->storage->txn_begin;
 
-    t::lib::Mocks::mock_preference( 'RenewalPeriodBase',   'date_due' );
-    t::lib::Mocks::mock_preference( 'ChildNeedsGuarantor', 0 );
+    t::lib::Mocks::mock_preference( 'ManualRenewalPeriodBase', 'date_due' );
+    t::lib::Mocks::mock_preference( 'ChildNeedsGuarantor',     0 );
 
     my $renewing_patron = $builder->build_object( { class => 'Koha::Patrons' } );
     my $booked_patron   = $builder->build_object( { class => 'Koha::Patrons' } );
@@ -2020,7 +2020,7 @@ subtest "GetUpcomingDueIssues" => sub {
     my $a_borrower                = Koha::Patrons->find($a_borrower_borrowernumber);
 
     my $yesterday      = DateTime->today( time_zone => C4::Context->tz() )->add( days => -1 );
-    my $two_days_ahead = DateTime->today( time_zone => C4::Context->tz() )->add( days => 2 );
+    my $two_days_ahead = DateTime->today( time_zone => C4::Context->tz() )->add( days =>  2 );
     my $today          = DateTime->today( time_zone => C4::Context->tz() );
 
     my $issue    = AddIssue( $a_borrower, $item_1->barcode, $yesterday );
@@ -3932,7 +3932,7 @@ subtest 'AddReturn | is_overdue' => sub {
         is( $line->status,                'RETURNED', "Overdue fine is fixed" );
         $line = $lines->next;
         is( $line->amount + 0,            -2, "Original payment amount remains as 2" );
-        is( $line->amountoutstanding + 0, 0,  "Original payment remains applied" );
+        is( $line->amountoutstanding + 0,  0, "Original payment remains applied" );
         $line = $lines->next;
         is( $line->amount + 0,            -1, "Refund amount correctly set to 1" );
         is( $line->amountoutstanding + 0, -1, "Refund amount outstanding unspent" );
@@ -4886,7 +4886,7 @@ subtest '_FixOverduesOnReturn' => sub {
     my $credit = $offset->credit;
     is( ref $credit,                    "Koha::Account::Line", "Found matching credit for fine forgiveness" );
     is( $credit->amount + 0,            -99,                   "Credit amount is set correctly" );
-    is( $credit->amountoutstanding + 0, 0,                     "Credit amountoutstanding is correctly set to 0" );
+    is( $credit->amountoutstanding + 0,  0,                    "Credit amountoutstanding is correctly set to 0" );
 
     # Bug 25417 - Only forgive fines where there is an amount outstanding to forgive
     $accountline->set(
@@ -7566,6 +7566,122 @@ subtest 'Test CanBookBeIssued param ignore_reserves (Bug 35322)' => sub {
 
 };
 
+subtest "Check AutomaticRenewalPeriodBase vs ManualRenewalPeriodBase ( Bug 30331 )" => sub {
+    plan tests => 4;
+
+    my $library = $builder->build_object( { class => 'Koha::Libraries' } );
+    my $patron =
+        $builder->build_object( { class => 'Koha::Patrons', value => { branchcode => $library->branchcode } } );
+    my $item  = $builder->build_sample_item( { library => $library->branchcode } );
+    my $staff = $builder->build_object( { class => "Koha::Patrons" } );
+    t::lib::Mocks::mock_userenv( { patron => $staff, branchcode => $library->branchcode } );
+
+    Koha::CirculationRules->set_rules(
+        {
+            categorycode => undef,
+            branchcode   => undef,
+            itemtype     => $item->effective_itemtype,
+            rules        => {
+                issuelength     => 14,
+                lengthunit      => 'days',
+                renewalperiod   => 7,
+                renewalsallowed => 5,
+            }
+        }
+    );
+
+    #Manual renewal with ManualRenewalPeriodBase === 'date_due'
+    t::lib::Mocks::mock_preference( 'ManualRenewalPeriodBase',    'date_due' );
+    t::lib::Mocks::mock_preference( 'AutomaticRenewalPeriodBase', 'now' );
+
+    my $issue        = AddIssue( $patron, $item->barcode );
+    my $original_due = dt_from_string( $issue->date_due );
+    my $expected_due = $original_due->clone()->add( days => 7 );
+
+    my $manual_due = AddRenewal(
+        {
+            borrowernumber => $patron->borrowernumber,
+            itemnumber     => $item->itemnumber,
+            branch         => $library->branchcode,
+            automatic      => 0,
+        }
+    );
+
+    is(
+        $manual_due->truncate( to => 'day' )->ymd,
+        $expected_due->truncate( to => 'day' )->ymd,
+        'Manual renewal based off of old due date'
+    );
+
+    #Manual renewal with ManualRenewalPeriodBase === 'now'
+    t::lib::Mocks::mock_preference( 'ManualRenewalPeriodBase', 'now' );
+
+    $issue = Koha::Checkouts->find( { itemnumber => $item->itemnumber } );
+    my $now = dt_from_string();
+    $expected_due = $now->clone()->add( days => 7 );
+
+    $manual_due = AddRenewal(
+        {
+            borrowernumber => $patron->borrowernumber,
+            itemnumber     => $item->itemnumber,
+            branch         => $library->branchcode,
+            automatic      => 0,
+        }
+    );
+
+    is(
+        $manual_due->truncate( to => 'day' )->ymd,
+        $expected_due->truncate( to => 'day' )->ymd,
+        'Manual renewal based off of current date'
+    );
+
+    #Automatic renewal with AutomaticRenewalPeriodBase === 'date_due'
+    t::lib::Mocks::mock_preference( 'ManualRenewalPeriodBase',    'now' );
+    t::lib::Mocks::mock_preference( 'AutomaticRenewalPeriodBase', 'date_due' );
+
+    $issue        = Koha::Checkouts->find( { itemnumber => $item->itemnumber } );
+    $original_due = dt_from_string( $issue->date_due );
+    $expected_due = $original_due->clone()->add( days => 7 );
+
+    my $auto_due = AddRenewal(
+        {
+            borrowernumber => $patron->borrowernumber,
+            itemnumber     => $item->itemnumber,
+            branch         => $library->branchcode,
+            automatic      => 1,
+        }
+    );
+
+    is(
+        $auto_due->truncate( to => 'day' )->ymd,
+        $expected_due->truncate( to => 'day' )->ymd,
+        'Automatic renewal uses old checkout date'
+    );
+
+    #Automatic renewal with AutomaticRenewalPeriodBase === 'now'
+    t::lib::Mocks::mock_preference( 'ManualRenewalPeriodBase',    'date_due' );
+    t::lib::Mocks::mock_preference( 'AutomaticRenewalPeriodBase', 'now' );
+
+    $issue        = Koha::Checkouts->find( { itemnumber => $item->itemnumber } );
+    $now          = dt_from_string();
+    $expected_due = $now->clone()->add( days => 7 );
+
+    $auto_due = AddRenewal(
+        {
+            borrowernumber => $patron->borrowernumber,
+            itemnumber     => $item->itemnumber,
+            branch         => $library->branchcode,
+            automatic      => 1,
+        }
+    );
+
+    is(
+        $auto_due->truncate( to => 'day' )->ymd,
+        $expected_due->truncate( to => 'day' )->ymd,
+        'Automatic renewal uses current date'
+    );
+};
+
 subtest 'NoRefundOnLostFinesPaidAge' => sub {
     plan tests => 2;
 
@@ -7637,7 +7753,7 @@ subtest 'NoRefundOnLostFinesPaidAge' => sub {
         {
             borrowernumber    => $patron->id,
             date              => '1970-01-01 14:00:01',
-            amountoutstanding => 0,
+            amountoutstanding =>  0,
             amount            => -5,
             interface         => 'commandline',
             credit_type_code  => 'PAYMENT'
@@ -7693,7 +7809,7 @@ subtest 'NoRefundOnLostFinesPaidAge' => sub {
             borrowernumber    => $patron2->id,
             date              => '1970-01-01 14:00:01',
             amount            => -5,
-            amountoutstanding => 0,
+            amountoutstanding =>  0,
             interface         => 'commandline',
             credit_type_code  => 'PAYMENT'
         }
