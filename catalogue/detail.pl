@@ -49,6 +49,7 @@ use Koha::Biblio::ItemGroup::Items;
 use Koha::Biblio::ItemGroups;
 use Koha::CoverImages;
 use Koha::DateUtils;
+use Koha::Database::DataInconsistency;
 use Koha::ILL::Requests;
 use Koha::Items;
 use Koha::ItemTypes;
@@ -590,5 +591,13 @@ $template->param( item_type_image_locations => \%item_type_image_locations );
 $template->param( found1 => scalar $query->param('found1') );
 
 $template->param( biblio => $biblio );
+
+if ( $query->param('audit') ) {
+    my @audit_errors = Koha::Database::DataInconsistency->for_biblio($biblio);
+    $template->param(
+        auditing     => 1,
+        audit_errors => \@audit_errors,
+    );
+}
 
 output_html_with_http_headers $query, $cookie, $template->output;

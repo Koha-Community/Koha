@@ -281,6 +281,11 @@
             [% END %]
         [% END %]
     [% END %]
+
+    <div class="btn-group">
+        <a id="audit_record" class="btn btn-default" href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% biblionumber | html %]&audit=1" role="button"> <i class="fa-solid fa-stethoscope"></i> Audit </a>
+    </div>
+
     [% IF ( Koha.Preference('EnableBooking') &&  CAN_user_circulate_manage_bookings && biblio.items.filter_by_bookable.count ) %]
         <div class="btn-group"
             ><button id="placbooking" class="btn btn-default" data-bs-toggle="modal" data-bs-target="#placeBookingModal" data-biblionumber="[% biblionumber | html %]"><i class="fa fa-calendar"></i> Place booking</button></div

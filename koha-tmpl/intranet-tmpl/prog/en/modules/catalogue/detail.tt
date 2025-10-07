@@ -117,6 +117,19 @@
                 </div>
             [% END %]
 
+            [% IF auditing %]
+                [% IF audit_errors %]
+                    <div class="alert alert-warning">
+                        <h1>Errors found</h1>
+                        [% FOR error IN audit_errors %]
+                            <div class="alert alert-warning">[% error | html %]</div>
+                        [% END %]
+                    </div>
+                [% ELSE %]
+                    <div class="alert alert-info">No data inconsistency found.</div>
+                [% END %]
+            [% END %]
+
             <div class="page-section">
                 [% XSLTBloc | $raw %]
 
