@@ -359,11 +359,8 @@
     [%# /.container %]
 [% END %]
 
+[% MACRO jsinclude BLOCK %]
+    [% INCLUDE 'datatables.inc' %]
+    [% Asset.js("js/cart.js") | $raw %]
+[% END %]
 [% INCLUDE 'intranet-bottom.inc' popup_window=1 %]
-[% INCLUDE 'datatables.inc' %]
-[% Asset.js("js/cart.js") | $raw %]
-
-</body>
-<!-- prettier-ignore-start -->
-</html>
-<!--prettier-ignore-end -->
