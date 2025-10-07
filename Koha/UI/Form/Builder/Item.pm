@@ -106,7 +106,7 @@ sub generate_subfield_form {
 
     $subfield_data{tag}           = $tag;
     $subfield_data{subfield}      = $subfieldtag;
-    $subfield_data{marc_lib}      = "<span title=\"" . $subfield->{lib} . "\">" . $subfield->{lib} . "</span>";
+    $subfield_data{marc_lib}      = $subfield->{lib};
     $subfield_data{mandatory}     = $subfield->{mandatory};
     $subfield_data{important}     = $subfield->{important};
     $subfield_data{repeatable}    = $subfield->{repeatable};
