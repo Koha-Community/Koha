@@ -27,23 +27,18 @@ use Koha::Items;
 use Koha::ItemTypes;
 use Koha::Patrons;
 use C4::Biblio qw( GetMarcFromKohaField );
+use Koha::Database::DataInconsistency;
 
 {
-    my $items = Koha::Items->search( { -or => { homebranch => undef, holdingbranch => undef } } );
-    if ( $items->count ) { new_section("Not defined items.homebranch and/or items.holdingbranch") }
-    while ( my $item = $items->next ) {
-        if ( not $item->homebranch and not $item->holdingbranch ) {
-            new_item(
-                sprintf "Item with itemnumber=%s does not have homebranch and holdingbranch defined",
-                $item->itemnumber
-            );
-        } elsif ( not $item->homebranch ) {
-            new_item( sprintf "Item with itemnumber=%s does not have homebranch defined", $item->itemnumber );
-        } else {
-            new_item( sprintf "Item with itemnumber=%s does not have holdingbranch defined", $item->itemnumber );
+    my $items  = Koha::Items->search;
+    my @errors = Koha::Database::DataInconsistency->item_library($items);
+    if (@errors) {
+        new_section("Not defined items.homebranch and/or items.holdingbranch");
+        for my $error (@errors) {
+            new_item($error);
         }
     }
-    if ( $items->count ) { new_hint("Edit these items and set valid homebranch and/or holdingbranch") }
+    if (@errors) { new_hint("Edit these items and set valid homebranch and/or holdingbranch") }
 }
 
 {
