@@ -153,13 +153,30 @@
                     [% IF ( expanded_options ) %]
                         <p>
                             [% IF Koha.Preference('ElasticsearchMARCFormat') == 'ARRAY' %]
-                                <label><input type="checkbox" name="whole_record" /> Search entire MARC record</label>
+                                <label>
+                                    [% IF whole_record %]
+                                        <input type="checkbox" name="whole_record" checked="checked" />
+                                    [% ELSE %]
+                                        <input type="checkbox" name="whole_record" />
+                                    [% END %]
+                                    Search entire MARC record</label
+                                >
                             [% END %]
                             <span id="weight_search">
-                                <label><input type="checkbox" name="weight_search" checked="checked" /> Apply field weights to search</label>
+                                <input type="hidden" name="weight_search_submitted" value="1" />
+                                <label>
+                                    [% IF weight_search_submitted && !weight_search %]
+                                        <input type="checkbox" name="weight_search" />
+                                    [% ELSE %]
+                                        [%# enabled by default or when weight_search==true %]
+                                        <input type="checkbox" name="weight_search" checked="checked" />
+                                    [% END %]
+                                    Apply field weights to search</label
+                                >
                             </span>
                         </p>
                     [% ELSE %]
+                        <input type="hidden" name="weight_search_submitted" value="1" />
                         <input type="hidden" name="weight_search" value="1" />
                     [% END %]
                 [% END %]

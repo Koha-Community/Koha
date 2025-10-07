@@ -277,6 +277,7 @@ if ( $template_type eq 'advsearch' ) {
         @operands  = $cgi->multi_param('q');
         @operators = @sanitized_operators;
         @indexes   = $cgi->multi_param('idx');
+        $expanded  = 1;                          # Force expanded options when editing search
         $template->param(
             sort => scalar $cgi->param('sort_by'),
         );
@@ -341,7 +342,15 @@ if ( $template_type eq 'advsearch' ) {
     {
         $expanded = C4::Context->preference("expandedSearchOption") || 0
             if !defined($expanded) || $expanded !~ /^0|1$/;
-        $template->param( expanded_options => $expanded );
+
+        # Force expanded options if weight_search_submitted or whole_record are present
+        $expanded = 1 if $cgi->param('weight_search_submitted') || $cgi->param('whole_record');
+
+        $template->param(
+            expanded_options        => $expanded,
+            weight_search_submitted => scalar $cgi->param('weight_search_submitted'),
+            whole_record            => scalar $cgi->param('whole_record'),
+        );
     }
 
     $template->param( virtualshelves => C4::Context->preference("virtualshelves") );
@@ -436,11 +445,13 @@ for ( my $ii = 0 ; $ii < @operands ; ++$ii ) {
 
 # Params that can only have one value
 my $scan             = $params->{'scan'};
-my $count            = C4::Context->preference('numSearchResults')         || 20;
-my $results_per_page = $params->{'count'}                                  || $count;
-my $offset           = $params->{'offset'}                                 || 0;
-my $whole_record     = $params->{'whole_record'}                           || 0;
-my $weight_search    = $params->{'advsearch'} ? $params->{'weight_search'} || 0 : 1;
+my $count            = C4::Context->preference('numSearchResults') || 20;
+my $results_per_page = $params->{'count'}                          || $count;
+my $offset           = $params->{'offset'}                         || 0;
+my $whole_record     = $params->{'whole_record'}                   || 0;
+my $weight_search    = $params->{'weight_search_submitted'}
+    ? ( $params->{'weight_search'} ? 1 : 0 )    # Form was submitted, use actual checkbox value
+    : 1;                                        # Form not submitted
 $offset = 0 if $offset < 0;
 
 # Define some global variables
@@ -462,7 +473,13 @@ for ( my $i = 0 ; $i < @operands ; $i++ ) {
     )
     = $builder->build_query_compat(
     \@operators, \@operands, \@indexes, \@limits,
-    \@sort_by,   $scan,      $lang, { weighted_fields => $weight_search, whole_record => $whole_record }
+    \@sort_by,
+    $scan, $lang,
+    {
+        weighted_fields         => $weight_search,
+        whole_record            => $whole_record,
+        weight_search_submitted => $params->{'weight_search_submitted'}
+    }
     );
 
 $template->param( search_query => $query ) if C4::Context->preference('DumpSearchQueryTemplate');
@@ -559,7 +576,13 @@ if ( $hits == 0 && $basic_search ) {
         )
         = $builder->build_query_compat(
         \@operators, \@operands, \@indexes, \@limits,
-        \@sort_by,   $scan,      $lang, { weighted_fields => $weight_search, whole_record => $whole_record }
+        \@sort_by,
+        $scan, $lang,
+        {
+            weighted_fields         => $weight_search,
+            whole_record            => $whole_record,
+            weight_search_submitted => $params->{'weight_search_submitted'}
+        }
         );
     my $quoted_results_hashref;
     eval {

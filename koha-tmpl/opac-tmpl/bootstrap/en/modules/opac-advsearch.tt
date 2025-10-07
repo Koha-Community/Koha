@@ -151,13 +151,20 @@
                                 [% IF ( expanded_options ) %]
                                     [% IF Koha.Preference('SearchEngine') == 'Elasticsearch' %]
                                         <div id="weight_search">
+                                            <input type="hidden" name="weight_search_submitted" value="1" />
                                             <label>
-                                                <input type="checkbox" name="weight_search" checked="checked" />
+                                                [% IF weight_search_submitted && !weight_search %]
+                                                    <input type="checkbox" name="weight_search" />
+                                                [% ELSE %]
+                                                    [%# enabled by default or when weight_search==true %]
+                                                    <input type="checkbox" name="weight_search" checked="checked" />
+                                                [% END %]
                                                 Apply field weights to search
                                             </label>
                                         </div>
                                     [% END %]
                                 [% ELSE %]
+                                    <input type="hidden" name="weight_search_submitted" value="1" />
                                     <input type="hidden" name="weight_search" value="1" />
                                 [% END %]
                                 [% IF Koha.Preference('IncludeSeeFromInSearches') %]

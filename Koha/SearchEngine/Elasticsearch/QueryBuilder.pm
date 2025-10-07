@@ -352,7 +352,10 @@ sub build_query_compat {
         $query_cgi .= 'idx=' . uri_escape_utf8( $index // '' ) . '&q=' . uri_escape_utf8($oand);
         $query_cgi .= '&op=' . uri_escape_utf8($otor) if $otor;
     }
-    $query_cgi .= '&scan=1' if ($scan);
+    $query_cgi .= '&scan=1'                    if ($scan);
+    $query_cgi .= '&weight_search=1'           if ( $params->{weighted_fields} );
+    $query_cgi .= '&weight_search_submitted=1' if ( $params->{weight_search_submitted} );
+    $query_cgi .= '&whole_record=1'            if ( $params->{whole_record} );
 
     my $simple_query;
     $simple_query = $operands->[0] if @$operands == 1;
