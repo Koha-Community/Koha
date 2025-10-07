@@ -651,9 +651,10 @@ sub _copy_move_subfield {
 
     # Find which source fields actually have the subfield to determine target field numbers
     my @target_field_numbers;
-    if ( $fromFieldName eq $toFieldName && @values ) {
+    if ( $fromFieldName eq $toFieldName && $fromSubfieldName ne $toSubfieldName && @values ) {
 
-        # For same-field operations, find fields that have the source subfield
+        # For same-field operations where subfields differ, find fields that have the source subfield
+        # This prevents overwriting target subfields in fields that don't have the source subfield
         @target_field_numbers =
             @{ field_exists( { record => $record, field => $fromFieldName, subfield => $fromSubfieldName } ) };
         if (@$field_numbers) {
@@ -671,7 +672,9 @@ sub _copy_move_subfield {
             subfield      => $toSubfieldName,
             values        => \@values,
             dont_erase    => $dont_erase,
-            field_numbers => @target_field_numbers ? \@target_field_numbers : $field_numbers
+            field_numbers => @target_field_numbers
+            ? \@target_field_numbers
+            : ( $fromFieldName eq $toFieldName ? $field_numbers : [] )
         }
     );
 
