@@ -326,6 +326,8 @@ subtest 'AddIssue | renewal when adding issue to same borrower' => sub {
     my $staff         = $builder->build_object( { class => "Koha::Patrons" } );
     t::lib::Mocks::mock_userenv( { patron => $staff } );
 
+    t::lib::Mocks::mock_preference( 'RenewalPeriodBase', 'date_due' );
+
     my $issue = AddIssue( $patron, $item->barcode );
     is( dt_from_string( $issue->date_due )->truncate( to => 'day' ), $seven_days, "Item issued for correct term" );
     $issue = AddIssue( $patron, $item->barcode );
