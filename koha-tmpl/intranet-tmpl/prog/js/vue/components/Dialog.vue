@@ -95,6 +95,40 @@
             </div>
         </div>
     </div>
+    <div
+        class="component modal"
+        role="dialog"
+        v-if="componentDialog"
+        id="component"
+    >
+        <div class="modal-dialog">
+            <div class="modal-content modal-lg">
+                <div class="modal-header alert-warning component">
+                    <h1 v-html="componentDialog.title"></h1>
+                </div>
+                <div class="modal-body">
+                    <component
+                        v-if="requiredComponent"
+                        :is="requiredComponent"
+                        v-bind="componentDialog.componentProps"
+                        v-on="componentDialog.componentListeners"
+                    />
+                </div>
+                <div class="modal-footer">
+                    <button
+                        id="close_modal"
+                        class="btn btn-default deny cancel"
+                        type="button"
+                        data-bs-dismiss="modal"
+                        @click="removeConfirmationMessages"
+                    >
+                        <i class="fa fa-fw fa-remove"></i>
+                        <span v-html="componentDialog.cancel_label"></span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <div class="modal_centered" v-if="is_submitting">
         <div class="spinner alert alert-warning">
@@ -115,9 +149,11 @@ import {
     reactive,
     computed,
     useTemplateRef,
+    defineAsyncComponent,
 } from "vue";
 import { storeToRefs } from "pinia";
 import FormElement from "./FormElement.vue";
+import { loadComponent } from "@koha-vue/loaders/componentResolver";
 
 export default {
     setup() {
@@ -127,6 +163,7 @@ export default {
             error,
             warning,
             confirmation,
+            componentDialog,
             accept_callback,
             is_submitting,
             is_loading,
@@ -192,11 +229,29 @@ export default {
             });
         });
 
+        watch(componentDialog, newComponentDialog => {
+            if (!newComponentDialog) {
+                $("#component.modal").modal("hide");
+                return;
+            }
+            nextTick(() => {
+                $("#component.modal").modal("show");
+            });
+        });
+
+        const requiredComponent = computed(() => {
+            if (!componentDialog.value?.componentPath) return null;
+            return defineAsyncComponent(
+                loadComponent(componentDialog.value.componentPath)
+            );
+        });
+
         return {
             message,
             error,
             warning,
             confirmation,
+            componentDialog,
             accept_callback,
             is_submitting,
             is_loading,
@@ -205,6 +260,7 @@ export default {
             fp_config,
             submit,
             inputFields,
+            requiredComponent,
         };
     },
     components: {

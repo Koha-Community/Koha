@@ -10,6 +10,7 @@ export const useMainStore = defineStore("main", () => {
         accept_callback: null,
         previousMessage: null,
         previousError: null,
+        componentDialog: null,
         displayed_already: false,
         is_submitting: false,
         is_loading: false,
@@ -63,6 +64,11 @@ export const useMainStore = defineStore("main", () => {
                 };
             }
             this.confirmation = confirmation;
+            this.displayed_already =
+                displayed; /* Is displayed on the current view */
+        },
+        setComponentDialog(componentDialog, displayed = true) {
+            this.componentDialog = componentDialog;
             this.displayed_already =
                 displayed; /* Is displayed on the current view */
         },
