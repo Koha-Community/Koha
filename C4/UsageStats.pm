@@ -180,7 +180,8 @@ sub _shared_preferences {
         IssueLostItem
         IssuingInProcess
         OverduesBlockCirc
-        RenewalPeriodBase
+        ManualRenewalPeriodBase
+        AutomaticRenewalPeriodBase
         RenewalSendNotice
         ReturnBeforeExpiry
         TransfersMaxDaysWarning

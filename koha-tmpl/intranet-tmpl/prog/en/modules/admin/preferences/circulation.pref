@@ -345,8 +345,15 @@ Circulation:
                   exact_time: exact time
             - . Only relevant for loans calculated in days, hourly loans are not affected.
         -
-            - When renewing checkouts, base the new due date on
-            - pref: RenewalPeriodBase
+            - When renewing checkouts manually, base the new due date on
+            - pref: ManualRenewalPeriodBase
+              choices:
+                  date_due: the old due date of the checkout
+                  now: the current date
+            - .
+        -
+            - When renewing checkouts automaticaly, base the new due date on
+            - pref: AutomaticRenewalPeriodBase
               choices:
                   date_due: the old due date of the checkout
                   now: the current date
