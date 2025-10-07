@@ -46,6 +46,9 @@ Options:
                       they're added to Elasticsearch (default: 5000).
     -p|--processes n  Specify the number of parallel processes to use
                       for indexing.
+    -w|--where SQL    Pass some additional SQL to limit the records to
+                      be indexed.
+
     --verbose|-v      Be verbose.
     --help|-h         Print this help.
 
@@ -114,6 +117,10 @@ run_rebuild_elasticsearch()
         rebuild_opts="${rebuild_opts} -v"
     fi
 
+    if [ "${where}" ]; then
+        rebuild_opts="${rebuild_opts} --where \"${where}\""
+    fi
+
     # KOHA_HOME and KOHA_BINDIR may have been adjusted/set by adjust_paths_git_install
     if koha-shell \
           -c "${KOHA_HOME}/${KOHA_BINDIR}/search_tools/rebuild_elasticsearch.pl ${rebuild_opts}" \
@@ -133,6 +140,7 @@ commit_size=5000
 processes=1
 verbose="no"
 op=""
+where=""
 
 # Read parameters
 while [ -n "$*" ]; do
@@ -157,6 +165,9 @@ while [ -n "$*" ]; do
             ;;
         -p|--processes)
             clo_processes="$2" ; shift
+            ;;
+        -w|--where)
+            where="$2" ; shift
             ;;
         --rebuild)
             set_action "rebuild"

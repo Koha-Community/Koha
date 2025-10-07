@@ -34,7 +34,7 @@
       <arg>-r|--reset</arg>
       <arg>-b|--biblios</arg>
       <arg>-a|--authorities</arg>
-      <arg>-v|--verbose</arg>
+      <arg>-w|--where</arg>
       <arg>-c n|--commit n</arg>
       <arg>-v|--verbose</arg>
       <arg choice="req" rep="repeat"><replaceable>instancename</replaceable></arg>
@@ -80,6 +80,12 @@
       <term><option>-b</option></term>
       <listitem>
         <para>In conjunction with <option>--rebuild</option> it triggers bibliographic record reindexing.</para>
+      </listitem>
+    </varlistentry>
+    <varlistentry>
+      <term><option>-w</option></term>
+      <listitem>
+        <para>In conjunction with <option>--rebuild</option>, pass some arbitrary SQL to limit the records to be indexed.</para>
       </listitem>
     </varlistentry>
     <varlistentry>
