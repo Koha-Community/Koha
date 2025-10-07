@@ -503,8 +503,14 @@ function _dt_default_ajax (params){
                                 const search_value = value.length
                                     ? value
                                     : global_search;
+
+                                // Escape all regex metachars . * + ? ^ $ { } ( ) | [ ] \
                                 const regex = new RegExp(
-                                    `^${search_value}`,
+                                    "^" +
+                                        search_value.replace(
+                                            /[.*+?^${}()|[\]\\]/g,
+                                            "\\$&"
+                                        ),
                                     "i"
                                 );
                                 if (
