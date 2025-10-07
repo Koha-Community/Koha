@@ -57,13 +57,15 @@ sub delete {
     return $self->SUPER::delete;
 }
 
-# sub _update_config_timestamp {
-#     my $timestamp = DateTime->now;
+sub _update_config_timestamp {
+    return 1;
 
-#     my $config_timestamp = Koha::SIP2::ServerParams->find( { key => 'config_timestamp' } )
-#         || Koha::SIP2::ServerParam->new( { key => 'config_timestamp' } );
-#     $config_timestamp->value( DateTime->now->epoch )->store;
-# }
+    # my $timestamp = DateTime->now;
+
+    # my $config_timestamp = Koha::SIP2::ServerParams->find( { key => 'config_timestamp' } )
+    #     || Koha::SIP2::ServerParam->new( { key => 'config_timestamp' } );
+    # $config_timestamp->value( DateTime->now->epoch )->store;
+}
 
 1;
 

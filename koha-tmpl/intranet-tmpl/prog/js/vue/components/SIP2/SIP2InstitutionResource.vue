@@ -1,34 +1,49 @@
+<template>
+    <BaseResource :routeAction="routeAction" :instancedResource="this" />
+</template>
+
 <script>
+import { inject } from "vue";
 import BaseResource from "./../BaseResource.vue";
+import { useBaseResource } from "../../composables/base-resource.js";
 import { APIClient } from "../../fetch/api-client.js";
+import { $__ } from "@koha-vue/i18n";
 
 export default {
-    extends: BaseResource,
+    name: "SIP2InstitutionResource",
+    components: {
+        BaseResource,
+    },
     props: {
         routeAction: String,
     },
+    emits: ["select-resource"],
     setup(props) {
-        return {
-            ...BaseResource.setup({
-                resourceName: "institution",
-                nameAttr: "name",
-                idAttr: "sip_institution_id",
-                showComponent: "SIP2InstitutionsShow",
-                listComponent: "SIP2InstitutionsList",
-                addComponent: "SIP2InstitutionsFormAdd",
-                editComponent: "SIP2InstitutionsFormAddEdit",
-                apiClient: APIClient.sip2.institutions,
-                resourceTableUrl: APIClient.sip2._baseURL + "institutions",
-                i18n: {
-                    displayName: __("Institution"),
-                    displayNameLowerCase: __("institution"),
-                    displayNamePlural: __("institutions"),
-                },
-            }),
-        };
-    },
-    data() {
-        return {
+        const baseResource = useBaseResource({
+            resourceName: "institution",
+            nameAttr: "name",
+            idAttr: "sip_institution_id",
+            components: {
+                show: "SIP2InstitutionsShow",
+                list: "SIP2InstitutionsList",
+                add: "SIP2InstitutionsFormAdd",
+                edit: "SIP2InstitutionsFormAddEdit",
+            },
+            apiClient: APIClient.sip2.institutions,
+            i18n: {
+                deleteConfirmationMessage: $__(
+                    "Are you sure you want to remove this institution?"
+                ),
+                deleteSuccessMessage: $__("Institution %s deleted"),
+                displayName: $__("Institution"),
+                editLabel: $__("Edit institution #%s"),
+                emptyListMessage: $__("There are no institutions defined"),
+                newLabel: $__("New institution"),
+            },
+            table: {
+                resourceTableUrl:
+                    APIClient.sip2.httpClient._baseURL + "institutions",
+            },
             resourceAttrs: [
                 {
                     name: "name",
@@ -97,7 +112,7 @@ export default {
                 {
                     name: "retries",
                     required: true,
-                    type: "text",
+                    type: "number",
                     label: __("Retries"),
                     show_in_table: true,
                     group: "Policy",
@@ -121,7 +136,7 @@ export default {
                 {
                     name: "timeout",
                     required: true,
-                    type: "text",
+                    type: "number",
                     label: __("Timeout"),
                     showInTable: true,
                     group: "Policy",
@@ -131,57 +146,47 @@ export default {
                     ),
                 },
             ],
-            tableOptions: {
-                columns: this.getTableColumns(),
-                url: () => this.resourceTableUrl,
-                table_settings: this.institutions_table_settings,
-                actions: {
-                    0: ["show"],
-                    "-1": this.embedded
-                        ? [
-                              {
-                                  select: {
-                                      text: this.$__("Select"),
-                                      icon: "fa fa-check",
-                                  },
-                              },
-                          ]
-                        : ["edit", "delete"],
-                },
+            props: props,
+        });
+
+        const tableOptions = {
+            url: () => baseResource.getResourceTableUrl(),
+            table_settings: institutions_table_settings,
+            actions: {
+                0: ["show"],
+                "-1": ["edit", "delete"],
             },
         };
-    },
-    methods: {
-        onSubmit(e, institutionToSave) {
+
+        const onFormSave = async (e, institutionToSave) => {
             e.preventDefault();
 
-            let institution = JSON.parse(JSON.stringify(institutionToSave)); // copy
-            let sip_institution_id = institution.sip_institution_id;
-
+            let institution = JSON.parse(JSON.stringify(institutionToSave));
+            const sip_institution_id = institution.sip_institution_id;
             delete institution.sip_institution_id;
 
-            const client = APIClient.sip2;
-            if (sip_institution_id) {
-                client.institutions
-                    .update(institution, sip_institution_id)
-                    .then(
-                        success => {
-                            this.setMessage(this.$__("Institution updated"));
-                            this.$router.push({ name: "SIP2InstitutionsList" });
-                        },
-                        error => {}
+            try {
+                if (sip_institution_id) {
+                    await baseResource.apiClient.update(
+                        institution,
+                        sip_institution_id
                     );
-            } else {
-                client.institutions.create(institution).then(
-                    success => {
-                        this.setMessage(this.$__("Institution created"));
-                        this.$router.push({ name: "SIP2InstitutionsList" });
-                    },
-                    error => {}
-                );
+                    baseResource.setMessage(__("Institution updated"));
+                } else {
+                    await baseResource.apiClient.create(institution);
+                    baseResource.setMessage(__("Institution created"));
+                }
+                baseResource.router.push({ name: "SIP2InstitutionsList" });
+            } catch (error) {
+                // Handle error here if needed
             }
-        },
+        };
+
+        return {
+            ...baseResource,
+            tableOptions,
+            onFormSave,
+        };
     },
-    name: "SIP2InstitutionResource",
 };
 </script>

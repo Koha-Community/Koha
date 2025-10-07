@@ -87,7 +87,7 @@ describe("Accounts", () => {
             error: "Something went wrong",
         });
         cy.visit("/cgi-bin/koha/sip2/sip2.pl");
-        cy.get("#navmenulist").contains("Accounts").click();
+        cy.get(".sidebar_menu").contains("Accounts").click();
         cy.get("main div[class='alert alert-warning']").contains(
             /Something went wrong/
         );
@@ -95,7 +95,7 @@ describe("Accounts", () => {
         // GET accounts returns empty list
         cy.intercept("GET", "/api/v1/sip2/accounts*", []);
         cy.visit("/cgi-bin/koha/sip2/accounts");
-        cy.get("#account_list").contains("There are no accounts defined");
+        cy.get("#accounts_list").contains("There are no accounts defined");
 
         // GET accounts returns something
         let account = get_account();
@@ -111,7 +111,7 @@ describe("Accounts", () => {
         });
         cy.intercept("GET", "/api/v1/sip2/accounts/*", account);
         cy.visit("/cgi-bin/koha/sip2/accounts/");
-        cy.get("#account_list").contains("Showing 1 to 1 of 1 entries");
+        cy.get("#accounts_list").contains("Showing 1 to 1 of 1 entries");
     });
 
     it("Add account", () => {
@@ -132,14 +132,14 @@ describe("Accounts", () => {
         // Click the button in the toolbar
         cy.visit("/cgi-bin/koha/sip2/accounts");
         cy.contains("New account").click();
-        cy.get("#account_add h2").contains("New account");
+        cy.get("#accounts_add h2").contains("New account");
         cy.left_menu_active_item_is("Accounts");
 
         // Fill in the form for normal attributes
-        cy.get("#account_add").contains("Submit").click();
+        cy.get("#accounts_add").contains("Submit").click();
         cy.get("input:invalid,textarea:invalid,select:invalid").should(
             "have.length",
-            2
+            3
         );
         cy.get("#login_id").type(account.login_id);
         cy.get("#login_password").type(account.login_password);
@@ -196,13 +196,13 @@ describe("Accounts", () => {
 
         // relationshipWidgets
         cy.contains("Add new custom patron field").click();
-        cy.get("#account_add").contains("Submit").click();
+        cy.get("#accounts_add").contains("Submit").click();
         cy.get("input:invalid,textarea:invalid,select:invalid").should(
             "have.length",
             2
         );
 
-        // Add new periods
+        // Add new custom patron fields
         cy.contains("Add new custom patron field").click();
         cy.get("#custom_patron_fields_relationship > fieldset").should(
             "have.length",
@@ -211,8 +211,12 @@ describe("Accounts", () => {
 
         cy.contains("a", "Remove this custom patron field").click();
 
-        cy.get("#custom_patron_fields_0 #field").type("test");
-        cy.get("#custom_patron_fields_0 #template").type("test");
+        cy.get("#custom_patron_fields_0 #custom_patron_fields_field_0").type(
+            "test"
+        );
+        cy.get("#custom_patron_fields_0 #custom_patron_fields_template_0").type(
+            "test"
+        );
 
         cy.get(".accordion-item").each($el => {
             cy.wrap($el).children(".collapse").should("have.class", "show");
@@ -234,7 +238,7 @@ describe("Accounts", () => {
         cy.intercept("POST", "/api/v1/sip2/accounts", {
             statusCode: 500,
         });
-        cy.get("#account_add").contains("Submit").click();
+        cy.get("#accounts_add").contains("Submit").click();
 
         cy.get("main div[class='alert alert-warning']").contains(
             "Something went wrong: Error: Internal Server Error"
@@ -245,7 +249,7 @@ describe("Accounts", () => {
             statusCode: 201,
             body: account,
         });
-        cy.get("#account_add").contains("Submit").click();
+        cy.get("#accounts_add").contains("Submit").click();
         cy.get("main div[class='alert alert-info']").contains(
             "Account created"
         );
@@ -273,10 +277,9 @@ describe("Accounts", () => {
         );
 
         // Click the 'Edit' button from the list
-        cy.get("#account_list table tbody tr:first").contains("Edit").click();
+        cy.get("#accounts_list table tbody tr:first").contains("Edit").click();
         cy.wait("@get-account");
-        cy.wait(500); // Cypress is too fast! Vue hasn't populated the form yet!
-        cy.get("#account_add h2").contains("Edit account");
+        cy.get("#accounts_add h2").contains("Edit account");
         cy.left_menu_active_item_is("Accounts");
 
         // Form has been correctly filled in
@@ -301,11 +304,10 @@ describe("Accounts", () => {
                 statusCode: 500,
                 delay: 1000,
             });
-        });
-        cy.get("#account_add").contains("Submit").click();
-
+        }).as("edit-account");
+        cy.get("#accounts_add").contains("Submit").click();
         cy.get("main div[class='modal_centered']").contains("Submitting...");
-        cy.wait(1000);
+        cy.wait("@edit-account");
         cy.get("main div[class='alert alert-warning']").contains(
             "Something went wrong: Error: Internal Server Error"
         );
@@ -315,7 +317,7 @@ describe("Accounts", () => {
             statusCode: 200,
             body: account,
         });
-        cy.get("#account_add").contains("Submit").click();
+        cy.get("#accounts_add").contains("Submit").click();
         cy.get("main div[class='alert alert-info']").contains(
             "Account updated"
         );
@@ -332,20 +334,19 @@ describe("Accounts", () => {
                 "X-Base-Total-Count": "1",
                 "X-Total-Count": "1",
             },
-        });
+        }).as("get-accounts");
         cy.intercept("GET", "/api/v1/sip2/accounts/*", account).as(
             "get-account"
         );
         cy.visit("/cgi-bin/koha/sip2/accounts");
-        let name_link = cy.get("#account_list table tbody tr:first td:first a");
-        name_link.should(
-            "have.text",
-            account.login_id + " (#" + account.sip_account_id + ")"
+        cy.wait("@get-accounts");
+        let name_link = cy.get(
+            "#accounts_list table tbody tr:first td:first a"
         );
+        name_link.should("have.text", account.login_id);
         name_link.click();
         cy.wait("@get-account");
-        cy.wait(500); // Cypress is too fast! Vue hasn't populated the form yet!
-        cy.get("#account_show h2").contains(
+        cy.get("#accounts_show h2").contains(
             "Account #" + account.sip_account_id
         );
         cy.left_menu_active_item_is("Accounts");
@@ -364,11 +365,13 @@ describe("Accounts", () => {
                 "X-Base-Total-Count": "1",
                 "X-Total-Count": "1",
             },
-        });
+        }).as("get-accounts");
         cy.intercept("GET", "/api/v1/sip2/accounts/*", account);
         cy.visit("/cgi-bin/koha/sip2/accounts");
 
-        cy.get("#account_list table tbody tr:first").contains("Delete").click();
+        cy.get("#accounts_list table tbody tr:first")
+            .contains("Delete")
+            .click();
         cy.get(".alert-warning.confirmation h1").contains(
             "remove this account"
         );
@@ -388,7 +391,9 @@ describe("Accounts", () => {
             statusCode: 204,
             body: null,
         });
-        cy.get("#account_list table tbody tr:first").contains("Delete").click();
+        cy.get("#accounts_list table tbody tr:first")
+            .contains("Delete")
+            .click();
         cy.get(".alert-warning.confirmation h1").contains(
             "remove this account"
         );
@@ -399,37 +404,28 @@ describe("Accounts", () => {
 
         // Delete from show
         // Click the "name" link from the list
-        cy.intercept("GET", "/api/v1/sip2/accounts*", {
-            statusCode: 200,
-            body: accounts,
-            headers: {
-                "X-Base-Total-Count": "1",
-                "X-Total-Count": "1",
-            },
-        });
+        cy.visit("/cgi-bin/koha/sip2/accounts");
+        cy.wait("@get-accounts");
         cy.intercept("GET", "/api/v1/sip2/accounts/*", account).as(
             "get-account"
         );
-        cy.visit("/cgi-bin/koha/sip2/accounts");
-        let name_link = cy.get("#account_list table tbody tr:first td:first a");
-        name_link.should(
-            "have.text",
-            account.login_id + " (#" + account.sip_account_id + ")"
+        let name_link = cy.get(
+            "#accounts_list table tbody tr:first td:first a"
         );
+        name_link.should("have.text", account.login_id);
         name_link.click();
         cy.wait("@get-account");
-        cy.wait(500); // Cypress is too fast! Vue hasn't populated the form yet!
-        cy.get("#account_show h2").contains(
+        cy.get("#accounts_show h2").contains(
             "Account #" + account.sip_account_id
         );
 
-        cy.get("#account_show #toolbar").contains("Delete").click();
+        cy.get("#accounts_show #toolbar").contains("Delete").click();
         cy.get(".alert-warning.confirmation h1").contains(
             "remove this account"
         );
         cy.contains("Yes, delete").click();
 
         //Make sure we return to list after deleting from show
-        cy.get("#account_list table tbody tr:first");
+        cy.get("#accounts_list table tbody tr:first");
     });
 });

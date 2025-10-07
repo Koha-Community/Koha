@@ -1,4 +1,4 @@
-export class CataloguingAPIClient {
+export class CashAPIClient {
     constructor(HttpClient) {
         this.httpClient = new HttpClient({
             baseURL: "/api/v1/",
@@ -8,7 +8,7 @@ export class CataloguingAPIClient {
     get cash_registers() {
         return {
             getAll: (query, params, headers) =>
-                this.getAll({
+                this.httpClient.getAll({
                     endpoint: "cash_registers",
                     query,
                     params,

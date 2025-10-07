@@ -1,7 +1,7 @@
 export class PatronAPIClient {
     constructor(HttpClient) {
         this.httpClient = new HttpClient({
-            baseURL: "/api/v1/patrons/",
+            baseURL: "/api/v1/",
         });
     }
 
@@ -9,15 +9,15 @@ export class PatronAPIClient {
         return {
             get: id =>
                 this.httpClient.get({
-                    endpoint: id,
+                    endpoint: "patrons/" + id,
                 }),
         };
     }
 
-    get patron_categories() {
+    get categories() {
         return {
             getAll: (query, params, headers) =>
-                this.getAll({
+                this.httpClient.getAll({
                     endpoint: "patron_categories",
                     query,
                     params,

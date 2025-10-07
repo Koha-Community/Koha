@@ -20,7 +20,7 @@ export class ItemAPIClient {
     get item_types() {
         return {
             getAll: (query, params, headers) =>
-                this.getAll({
+                this.httpClient.getAll({
                     endpoint: "item_types",
                     query,
                     params,

@@ -21,7 +21,7 @@ describe("SystemPreferenceOverrides", () => {
             error: "Something went wrong",
         });
         cy.visit("/cgi-bin/koha/sip2/sip2.pl");
-        cy.get("#navmenulist").contains("System preference overrides").click();
+        cy.get(".sidebar_menu").contains("System preference overrides").click();
         cy.get("main div[class='alert alert-warning']").contains(
             /Something went wrong/
         );
@@ -29,7 +29,7 @@ describe("SystemPreferenceOverrides", () => {
         // GET system_preference_overrides returns empty list
         cy.intercept("GET", "/api/v1/sip2/system_preference_overrides*", []);
         cy.visit("/cgi-bin/koha/sip2/system_preference_overrides");
-        cy.get("#system_preference_override_list").contains(
+        cy.get("#system_preference_overrides_list").contains(
             "There are no system preference overrides defined"
         );
 
@@ -51,7 +51,7 @@ describe("SystemPreferenceOverrides", () => {
             system_preference_overrides
         );
         cy.visit("/cgi-bin/koha/sip2/system_preference_overrides/");
-        cy.get("#system_preference_override_list").contains(
+        cy.get("#system_preference_overrides_list").contains(
             "Showing 1 to 1 of 1 entries"
         );
     });
@@ -67,13 +67,13 @@ describe("SystemPreferenceOverrides", () => {
         // Click the button in the toolbar
         cy.visit("/cgi-bin/koha/sip2/system_preference_overrides");
         cy.contains("New system preference override").click();
-        cy.get("#system_preference_override_add h2").contains(
+        cy.get("#system_preference_overrides_add h2").contains(
             "New system preference override"
         );
         cy.left_menu_active_item_is("System preference overrides");
 
         // Fill in the form for normal attributes
-        cy.get("#system_preference_override_add").contains("Submit").click();
+        cy.get("#system_preference_overrides_add").contains("Submit").click();
         cy.get("input:invalid,textarea:invalid,select:invalid").should(
             "have.length",
             2
@@ -85,7 +85,7 @@ describe("SystemPreferenceOverrides", () => {
         cy.intercept("POST", "/api/v1/sip2/system_preference_overrides", {
             statusCode: 500,
         });
-        cy.get("#system_preference_override_add").contains("Submit").click();
+        cy.get("#system_preference_overrides_add").contains("Submit").click();
 
         cy.get("main div[class='alert alert-warning']").contains(
             "Something went wrong: Error: Internal Server Error"
@@ -96,7 +96,7 @@ describe("SystemPreferenceOverrides", () => {
             statusCode: 201,
             body: system_preference_override,
         });
-        cy.get("#system_preference_override_add").contains("Submit").click();
+        cy.get("#system_preference_overrides_add").contains("Submit").click();
         cy.get("main div[class='alert alert-info']").contains(
             "System preference override created"
         );
@@ -126,12 +126,12 @@ describe("SystemPreferenceOverrides", () => {
         ).as("get-system_preference_overrides");
 
         // Click the 'Edit' button from the list
-        cy.get("#system_preference_override_list table tbody tr:first")
+        cy.get("#system_preference_overrides_list table tbody tr:first")
             .contains("Edit")
             .click();
         cy.wait("@get-system_preference_overrides");
         cy.wait(500); // Cypress is too fast! Vue hasn't populated the form yet!
-        cy.get("#system_preference_override_add h2").contains(
+        cy.get("#system_preference_overrides_add h2").contains(
             "Edit system preference override"
         );
         cy.left_menu_active_item_is("System preference overrides");
@@ -157,7 +157,7 @@ describe("SystemPreferenceOverrides", () => {
                 });
             }
         );
-        cy.get("#system_preference_override_add").contains("Submit").click();
+        cy.get("#system_preference_overrides_add").contains("Submit").click();
 
         cy.get("main div[class='modal_centered']").contains("Submitting...");
         cy.wait(1000);
@@ -170,7 +170,7 @@ describe("SystemPreferenceOverrides", () => {
             statusCode: 200,
             body: system_preference_overrides,
         });
-        cy.get("#system_preference_override_add").contains("Submit").click();
+        cy.get("#system_preference_overrides_add").contains("Submit").click();
         cy.get("main div[class='alert alert-info']").contains(
             "System preference override updated"
         );
@@ -197,7 +197,7 @@ describe("SystemPreferenceOverrides", () => {
         );
         cy.visit("/cgi-bin/koha/sip2/system_preference_overrides");
 
-        cy.get("#system_preference_override_list table tbody tr:first")
+        cy.get("#system_preference_overrides_list table tbody tr:first")
             .contains("Delete")
             .click();
         cy.get(".alert-warning.confirmation h1").contains(
@@ -219,7 +219,7 @@ describe("SystemPreferenceOverrides", () => {
             statusCode: 204,
             body: null,
         });
-        cy.get("#system_preference_override_list table tbody tr:first")
+        cy.get("#system_preference_overrides_list table tbody tr:first")
             .contains("Delete")
             .click();
         cy.get(".alert-warning.confirmation h1").contains(

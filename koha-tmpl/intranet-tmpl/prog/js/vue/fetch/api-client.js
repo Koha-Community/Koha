@@ -9,7 +9,7 @@ import CashAPIClient from "@fetch/cash-api-client";
 import ItemAPIClient from "@fetch/item-api-client";
 import RecordSourcesAPIClient from "@fetch/record-sources-api-client";
 import SysprefAPIClient from "@fetch/system-preferences-api-client";
-import SIP2APIClient from "@fetch/ssip2-api-client";
+import SIP2APIClient from "@fetch/sip2-api-client";
 import PreservationAPIClient from "@fetch/preservation-api-client";
 
 export const APIClient = {

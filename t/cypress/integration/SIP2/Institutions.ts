@@ -13,7 +13,7 @@ describe("Institutions", () => {
             error: "Something went wrong",
         });
         cy.visit("/cgi-bin/koha/sip2/sip2.pl");
-        cy.get("#navmenulist").contains("Institutions").click();
+        cy.get(".sidebar_menu").contains("Institutions").click();
         cy.get("main div[class='alert alert-warning']").contains(
             /Something went wrong/
         );
@@ -21,7 +21,7 @@ describe("Institutions", () => {
         // GET institutions returns empty list
         cy.intercept("GET", "/api/v1/sip2/institutions*", []);
         cy.visit("/cgi-bin/koha/sip2/institutions");
-        cy.get("#institution_list").contains(
+        cy.get("#institutions_list").contains(
             "There are no institutions defined"
         );
 
@@ -39,7 +39,7 @@ describe("Institutions", () => {
         });
         cy.intercept("GET", "/api/v1/sip2/institutions/*", institution);
         cy.visit("/cgi-bin/koha/sip2/institutions/");
-        cy.get("#institution_list").contains("Showing 1 to 1 of 1 entries");
+        cy.get("#institutions_list").contains("Showing 1 to 1 of 1 entries");
     });
 
     it("Add institution", () => {
@@ -53,14 +53,14 @@ describe("Institutions", () => {
         // Click the button in the toolbar
         cy.visit("/cgi-bin/koha/sip2/institutions");
         cy.contains("New institution").click();
-        cy.get("#institution_add h2").contains("New institution");
+        cy.get("#institutions_add h2").contains("New institution");
         cy.left_menu_active_item_is("Institutions");
 
         // Fill in the form for normal attributes
-        cy.get("#institution_add").contains("Submit").click();
+        cy.get("#institutions_add").contains("Submit").click();
         cy.get("input:invalid,textarea:invalid,select:invalid").should(
             "have.length",
-            2
+            1
         );
         cy.get("#name").type(institution.name);
         cy.get("#implementation").type(institution.implementation);
@@ -81,7 +81,7 @@ describe("Institutions", () => {
         cy.intercept("POST", "/api/v1/sip2/institutions", {
             statusCode: 500,
         });
-        cy.get("#institution_add").contains("Submit").click();
+        cy.get("#institutions_add").contains("Submit").click();
 
         cy.get("main div[class='alert alert-warning']").contains(
             "Something went wrong: Error: Internal Server Error"
@@ -92,7 +92,7 @@ describe("Institutions", () => {
             statusCode: 201,
             body: institution,
         });
-        cy.get("#institution_add").contains("Submit").click();
+        cy.get("#institutions_add").contains("Submit").click();
         cy.get("main div[class='alert alert-info']").contains(
             "Institution created"
         );
@@ -120,12 +120,11 @@ describe("Institutions", () => {
         );
 
         // Click the 'Edit' button from the list
-        cy.get("#institution_list table tbody tr:first")
+        cy.get("#institutions_list table tbody tr:first")
             .contains("Edit")
             .click();
         cy.wait("@get-institution");
-        cy.wait(500); // Cypress is too fast! Vue hasn't populated the form yet!
-        cy.get("#institution_add h2").contains("Edit institution");
+        cy.get("#institutions_add h2").contains("Edit institution");
         cy.left_menu_active_item_is("Institutions");
 
         // Form has been correctly filled in
@@ -151,7 +150,7 @@ describe("Institutions", () => {
                 delay: 1000,
             });
         });
-        cy.get("#institution_add").contains("Submit").click();
+        cy.get("#institutions_add").contains("Submit").click();
 
         cy.get("main div[class='modal_centered']").contains("Submitting...");
         cy.wait(1000);
@@ -164,7 +163,7 @@ describe("Institutions", () => {
             statusCode: 200,
             body: institution,
         });
-        cy.get("#institution_add").contains("Submit").click();
+        cy.get("#institutions_add").contains("Submit").click();
         cy.get("main div[class='alert alert-info']").contains(
             "Institution updated"
         );
@@ -187,16 +186,12 @@ describe("Institutions", () => {
         );
         cy.visit("/cgi-bin/koha/sip2/institutions");
         let name_link = cy.get(
-            "#institution_list table tbody tr:first td:first a"
+            "#institutions_list table tbody tr:first td:first a"
         );
-        name_link.should(
-            "have.text",
-            institution.name + " (#" + institution.sip_institution_id + ")"
-        );
+        name_link.should("have.text", institution.name);
         name_link.click();
         cy.wait("@get-institution");
-        cy.wait(500); // Cypress is too fast! Vue hasn't populated the form yet!
-        cy.get("#institution_show h2").contains(
+        cy.get("#institutions_show h2").contains(
             "Institution #" + institution.sip_institution_id
         );
         cy.left_menu_active_item_is("Institutions");
@@ -219,7 +214,7 @@ describe("Institutions", () => {
         cy.intercept("GET", "/api/v1/sip2/institutions/*", institution);
         cy.visit("/cgi-bin/koha/sip2/institutions");
 
-        cy.get("#institution_list table tbody tr:first")
+        cy.get("#institutions_list table tbody tr:first")
             .contains("Delete")
             .click();
         cy.get(".alert-warning.confirmation h1").contains(
@@ -241,7 +236,7 @@ describe("Institutions", () => {
             statusCode: 204,
             body: null,
         });
-        cy.get("#institution_list table tbody tr:first")
+        cy.get("#institutions_list table tbody tr:first")
             .contains("Delete")
             .click();
         cy.get(".alert-warning.confirmation h1").contains(
@@ -267,26 +262,22 @@ describe("Institutions", () => {
         );
         cy.visit("/cgi-bin/koha/sip2/institutions");
         let name_link = cy.get(
-            "#institution_list table tbody tr:first td:first a"
+            "#institutions_list table tbody tr:first td:first a"
         );
-        name_link.should(
-            "have.text",
-            institution.name + " (#" + institution.sip_institution_id + ")"
-        );
+        name_link.should("have.text", institution.name);
         name_link.click();
         cy.wait("@get-institution");
-        cy.wait(500); // Cypress is too fast! Vue hasn't populated the form yet!
-        cy.get("#institution_show h2").contains(
+        cy.get("#institutions_show h2").contains(
             "Institution #" + institution.sip_institution_id
         );
 
-        cy.get("#institution_show #toolbar").contains("Delete").click();
+        cy.get("#institutions_show #toolbar").contains("Delete").click();
         cy.get(".alert-warning.confirmation h1").contains(
             "remove this institution"
         );
         cy.contains("Yes, delete").click();
 
         //Make sure we return to list after deleting from show
-        cy.get("#institution_list table tbody tr:first");
+        cy.get("#institutions_list table tbody tr:first");
     });
 });

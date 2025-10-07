@@ -21,7 +21,6 @@ import { routes as routesDef } from "../routes/sip2";
 
 import { useMainStore } from "../stores/main";
 import { useVendorStore } from "../stores/vendors";
-import { useAVStore } from "../stores/authorised-values";
 import { useSIP2Store } from "../stores/sip2";
 import { useNavigationStore } from "../stores/navigation";
 import i18n from "../i18n";
@@ -29,7 +28,6 @@ import i18n from "../i18n";
 const pinia = createPinia();
 
 const mainStore = useMainStore(pinia);
-const AVStore = useAVStore(pinia);
 const navigationStore = useNavigationStore(pinia);
 const routes = navigationStore.setRoutes(routesDef);
 
@@ -51,7 +49,6 @@ const rootComponent = app
 app.config.unwrapInjectedRef = true;
 app.provide("vendorStore", useVendorStore(pinia));
 app.provide("mainStore", mainStore);
-app.provide("AVStore", AVStore);
 app.provide("navigationStore", navigationStore);
 const SIP2Store = useSIP2Store(pinia);
 app.provide("SIP2Store", SIP2Store);

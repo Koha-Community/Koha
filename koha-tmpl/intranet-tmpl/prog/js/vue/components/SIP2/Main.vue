@@ -21,9 +21,9 @@
 </template>
 
 <script>
-import { inject } from "vue";
-import { APIClient } from "../../fetch/api-client.js";
+import { inject, onBeforeMount, ref } from "vue";
 import Breadcrumbs from "../Breadcrumbs.vue";
+import { storeToRefs } from "pinia";
 import Help from "../Help.vue";
 import LeftMenu from "../LeftMenu.vue";
 import Dialog from "../Dialog.vue";
@@ -31,44 +31,27 @@ import "vue-select/dist/vue-select.css";
 
 export default {
     setup() {
-        const AVStore = inject("AVStore");
+        const SIP2Store = inject("SIP2Store");
+        const { authorisedValues } = storeToRefs(SIP2Store);
+        const { loadAuthorisedValues } = SIP2Store;
 
-        return {
-            AVStore,
-        };
-    },
-    data() {
-        return {
-            initialized: false,
-        };
-    },
-    beforeCreate() {
-        const av_client = APIClient.authorised_values;
-        const authorised_values = {
-            av_lost: "LOST",
-        };
+        const mainStore = inject("mainStore");
 
-        let av_cat_array = Object.keys(authorised_values).map(
-            function (av_cat) {
-                return '"' + authorised_values[av_cat] + '"';
-            }
-        );
+        const { loading, loaded, setError } = mainStore;
 
-        av_client.values
-            .getCategoriesWithValues(av_cat_array)
-            .then(av_categories => {
-                Object.entries(authorised_values).forEach(
-                    ([av_var, av_cat]) => {
-                        const av_match = av_categories.find(
-                            element => element.category_name == av_cat
-                        );
-                        this.AVStore[av_var] = av_match.authorised_values;
-                    }
-                );
-            })
-            .then(() => {
-                this.initialized = true;
+        const initialized = ref(false);
+
+        onBeforeMount(() => {
+            loading();
+            loadAuthorisedValues(authorisedValues.value, SIP2Store).then(() => {
+                loaded();
+                initialized.value = true;
             });
+        });
+
+        return {
+            initialized,
+        };
     },
     components: {
         Breadcrumbs,

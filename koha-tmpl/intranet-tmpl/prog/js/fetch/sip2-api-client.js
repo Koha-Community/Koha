@@ -8,29 +8,29 @@ export class SIP2APIClient {
     get institutions() {
         return {
             get: id =>
-                this.get({
+                this.httpClient.get({
                     endpoint: "institutions/" + id,
                 }),
             getAll: params =>
-                this.getAll({
+                this.httpClient.getAll({
                     endpoint: "institutions",
                 }),
             delete: id =>
-                this.delete({
+                this.httpClient.delete({
                     endpoint: "institutions/" + id,
                 }),
             create: institution =>
-                this.post({
+                this.httpClient.post({
                     endpoint: "institutions",
                     body: institution,
                 }),
             update: (institution, id) =>
-                this.put({
+                this.httpClient.put({
                     endpoint: "institutions/" + id,
                     body: institution,
                 }),
             count: (query = {}) =>
-                this.count({
+                this.httpClient.count({
                     endpoint:
                         "institutions?" +
                         new URLSearchParams({
@@ -45,33 +45,33 @@ export class SIP2APIClient {
     get accounts() {
         return {
             get: id =>
-                this.get({
+                this.httpClient.get({
                     endpoint: "accounts/" + id,
                     headers: {
                         "x-koha-embed":
-                            "custom_item_fields,item_fields,custom_patron_fields,patron_attributes,screen_msg_regexs,sort_bin_mappings,system_preference_overrides",
+                            "institution,custom_item_fields,item_fields,custom_patron_fields,patron_attributes,screen_msg_regexs,sort_bin_mappings,system_preference_overrides",
                     },
                 }),
             getAll: params =>
-                this.getAll({
+                this.httpClient.getAll({
                     endpoint: "accounts",
                 }),
             delete: id =>
-                this.delete({
+                this.httpClient.delete({
                     endpoint: "accounts/" + id,
                 }),
             create: account =>
-                this.post({
+                this.httpClient.post({
                     endpoint: "accounts",
                     body: account,
                 }),
             update: (account, id) =>
-                this.put({
+                this.httpClient.put({
                     endpoint: "accounts/" + id,
                     body: account,
                 }),
             count: (query = {}) =>
-                this.count({
+                this.httpClient.count({
                     endpoint:
                         "accounts?" +
                         new URLSearchParams({
@@ -86,29 +86,29 @@ export class SIP2APIClient {
     get listeners() {
         return {
             get: id =>
-                this.get({
+                this.httpClient.get({
                     endpoint: "listeners/" + id,
                 }),
             getAll: params =>
-                this.getAll({
+                this.httpClient.getAll({
                     endpoint: "listeners",
                 }),
             delete: id =>
-                this.delete({
+                this.httpClient.delete({
                     endpoint: "listeners/" + id,
                 }),
             create: listener =>
-                this.post({
+                this.httpClient.post({
                     endpoint: "listeners",
                     body: listener,
                 }),
             update: (listener, id) =>
-                this.put({
+                this.httpClient.put({
                     endpoint: "listeners/" + id,
                     body: listener,
                 }),
             count: (query = {}) =>
-                this.count({
+                this.httpClient.count({
                     endpoint:
                         "listeners?" +
                         new URLSearchParams({
@@ -123,11 +123,11 @@ export class SIP2APIClient {
     get serverparams() {
         return {
             getAll: params =>
-                this.getAll({
+                this.httpClient.getAll({
                     endpoint: "serverparams",
                 }),
             updateAll: body =>
-                this.patch({
+                this.httpClient.patch({
                     endpoint: "serverparams",
                     body: body,
                 }),
@@ -137,29 +137,29 @@ export class SIP2APIClient {
     get system_preference_overrides() {
         return {
             get: id =>
-                this.get({
+                this.httpClient.get({
                     endpoint: "system_preference_overrides/" + id,
                 }),
             getAll: params =>
-                this.getAll({
+                this.httpClient.getAll({
                     endpoint: "system_preference_overrides",
                 }),
             delete: id =>
-                this.delete({
+                this.httpClient.delete({
                     endpoint: "system_preference_overrides/" + id,
                 }),
             create: system_preference_override =>
-                this.post({
+                this.httpClient.post({
                     endpoint: "system_preference_overrides",
                     body: system_preference_override,
                 }),
             update: (system_preference_override, id) =>
-                this.put({
+                this.httpClient.put({
                     endpoint: "system_preference_overrides/" + id,
                     body: system_preference_override,
                 }),
             count: (query = {}) =>
-                this.count({
+                this.httpClient.count({
                     endpoint:
                         "system_preference_overrides?" +
                         new URLSearchParams({
