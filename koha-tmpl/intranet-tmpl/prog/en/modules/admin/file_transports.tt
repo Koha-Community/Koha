@@ -52,738 +52,724 @@
     [% END #/ WRAPPER breadcrumbs %]
 [% END #/ WRAPPER sub-header.inc %]
 
-<div class="main container-fluid">
-    <div class="row">
-        <div class="col-md-10 order-md-2 order-sm-1">
-            <main>
-                [% INCLUDE 'messages.inc' %]
+[% WRAPPER 'main-container.inc' aside='admin-menu' %]
+    [% INCLUDE 'messages.inc' %]
 
-                [% FOREACH m IN messages %]
-                    <div class="alert alert-[% m.type | html %]" id="action_result_dialog">
-                        [% SWITCH m.code %]
-                        [% CASE 'error_on_insert' %]
-                            <span>An error occurred when adding the server. The passed ID already exists.</span>
-                        [% CASE 'error_on_update' %]
-                            <span>An error occurred trying to open the server for editing. The passed ID is invalid.</span>
-                        [% CASE 'error_on_edit' %]
-                            <span>An error occurred trying to open the server for editing. The passed ID is invalid.</span>
-                        [% CASE 'success_on_update' %]
-                            <span>Server updated successfully.</span>
-                        [% CASE 'success_on_insert' %]
-                            <span>Server added successfully.</span>
-                        [% CASE %]
-                            <span>[% m.code | html %]</span>
-                        [% END %]
+    [% FOREACH m IN messages %]
+        <div class="alert alert-[% m.type | html %]" id="action_result_dialog">
+            [% SWITCH m.code %]
+            [% CASE 'error_on_insert' %]
+                <span>An error occurred when adding the server. The passed ID already exists.</span>
+            [% CASE 'error_on_update' %]
+                <span>An error occurred trying to open the server for editing. The passed ID is invalid.</span>
+            [% CASE 'error_on_edit' %]
+                <span>An error occurred trying to open the server for editing. The passed ID is invalid.</span>
+            [% CASE 'success_on_update' %]
+                <span>Server updated successfully.</span>
+            [% CASE 'success_on_insert' %]
+                <span>Server added successfully.</span>
+            [% CASE %]
+                <span>[% m.code | html %]</span>
+            [% END %]
+        </div>
+    [% END %]
+
+    <div class="alert alert-info" id="delete_success" style="display: none;"></div>
+    <div class="alert alert-warning" id="delete_error" style="display: none;"></div>
+
+    [% IF op == 'add_form' %]
+        <!-- Modal -->
+        <div id="confirm_key_accept" class="modal" tabindex="-1" role="dialog" aria-labelledby="confirm_key_accept_submit" aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content modal-lg">
+                    <div class="modal-header">
+                        <h1 class="modal-title">Are you sure?</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
-                [% END %]
-
-                <div class="alert alert-info" id="delete_success" style="display: none;"></div>
-                <div class="alert alert-warning" id="delete_error" style="display: none;"></div>
-
-                [% IF op == 'add_form' %]
-                    <!-- Modal -->
-                    <div id="confirm_key_accept" class="modal" tabindex="-1" role="dialog" aria-labelledby="confirm_key_accept_submit" aria-hidden="true">
-                        <div class="modal-dialog modal-lg">
-                            <div class="modal-content modal-lg">
-                                <div class="modal-header">
-                                    <h1 class="modal-title">Are you sure?</h1>
-                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                </div>
-                                <div class="modal-body">
-                                    <div id="modal_message" class="alert alert-warning">Saving these changes will trigger a connection test and this will automatically accept the remote servers host key</div>
-                                    <p>Before saving, please check the following details again to make sure you are certain they are correct. Sending or receiving data from an unknown source potentially puts your system at risk.</p>
-                                    <table class="mx-4 mb-3">
-                                        <thead></thead>
-                                        <tbody>
-                                            <tr>
-                                                <td><strong>Transport</strong></td>
-                                                <td id="modal_transport"></td>
-                                            </tr>
-                                            <tr>
-                                                <td><strong>Host</strong></td>
-                                                <td id="modal_host"></td>
-                                            </tr>
-                                            <tr>
-                                                <td><strong>Port</strong></td>
-                                                <td id="modal_port"></td>
-                                            </tr>
-                                            <tr>
-                                                <td><strong>Username</strong></td>
-                                                <td id="modal_user_name"></td>
-                                            </tr>
-                                            <tr>
-                                                <td><strong>Authentication mode</strong></td>
-                                                <td id="modal_auth_mode"></td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                    <p>If you are ready to progress with these details, please click Save.</p>
-                                </div>
-                                <div class="modal-footer">
-                                    <button class="btn btn-default approve" type="submit"><i class="fa fa-check"></i> Save</button>
-                                    <button class="btn btn-default deny cancel" type="button" data-bs-dismiss="modal"><i class="fa fa-times"></i> Cancel</button>
-                                </div>
-                            </div>
-                        </div>
+                    <div class="modal-body">
+                        <div id="modal_message" class="alert alert-warning">Saving these changes will trigger a connection test and this will automatically accept the remote servers host key</div>
+                        <p>Before saving, please check the following details again to make sure you are certain they are correct. Sending or receiving data from an unknown source potentially puts your system at risk.</p>
+                        <table class="mx-4 mb-3">
+                            <thead></thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>Transport</strong></td>
+                                    <td id="modal_transport"></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Host</strong></td>
+                                    <td id="modal_host"></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Port</strong></td>
+                                    <td id="modal_port"></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Username</strong></td>
+                                    <td id="modal_user_name"></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Authentication mode</strong></td>
+                                    <td id="modal_auth_mode"></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <p>If you are ready to progress with these details, please click Save.</p>
                     </div>
-                    <!-- END Modal -->
-
-                    <h1>New file transport</h1>
-
-                    <form action="/cgi-bin/koha/admin/file_transports.pl" id="add" name="add" class="validated" method="post">
-                        [% INCLUDE 'csrf-token.inc' %]
-                        <input type="hidden" name="op" value="cud-add" />
-                        <fieldset class="rows">
-                            <ol>
-                                <li>
-                                    <label for="name" class="required">Name: </label>
-                                    <input type="text" name="name" id="name" size="60" class="required focus" required="required" />
-                                    <span class="required">Required</span>
-                                </li>
-                            </ol>
-                        </fieldset>
-
-                        <fieldset class="rows">
-                            <ol>
-                                <li>
-                                    <label for="transport" class="required">Transport: </label>
-                                    <select name="transport" id="transport" class="required">
-                                        <option value="ftp">FTP</option>
-                                        <option value="sftp" selected="selected">SFTP</option>
-                                    </select>
-                                    <span class="required">Required</span>
-                                </li>
-                                <li>
-                                    <label for="host" class="required">Host: </label>
-                                    <input type="text" value="localhost" name="host" id="host" size="60" class="required" />
-                                    <span class="required">Required</span>
-                                </li>
-                                <li>
-                                    <label for="port" class="required">Port: </label>
-                                    <input type="text" inputmode="numeric" pattern="[0-9]*" value="22" name="port" id="port" size="20" class="required" />
-                                    <span class="required">Required</span>
-                                </li>
-                                <li>
-                                    <label for="passive">Passive mode: </label>
-                                    <select name="passive" id="passive" disabled="disabled">
-                                        <option value="1" selected="selected">On (Recommended)</option>
-                                        <option value="0">Off</option>
-                                    </select>
-                                    <span class="hint">Only applies to FTP connections</span>
-                                </li>
-                                <li>
-                                    <label for="auth_mode">Authentication mode: </label>
-                                    <select name="auth_mode" id="auth_mode">
-                                        <option value="password" selected="selected">Password-based</option>
-                                        <option value="key_file">Key file-based</option>
-                                        <option value="noauth">No authentication</option>
-                                    </select>
-                                </li>
-                                <li>
-                                    <label for="user_name" class="required">Username: </label>
-                                    <input type="text" name="user_name" id="user_name" size="60" autocomplete="off" class="required" />
-                                    <span class="required">Required</span>
-                                </li>
-                                <li>
-                                    <label for="password">Password: </label>
-                                    <input type="password" name="password" id="password" size="60" autocomplete="off" />
-                                </li>
-                                <li>
-                                    <label for="key_file">Key file: </label>
-                                    <textarea name="key_file" id="key_file" rows="10" cols="58"></textarea>
-                                    <span class="hint">Only applies to SFTP connections</span>
-                                </li>
-                                <li>
-                                    <label for="download_directory">Remote download directory: </label>
-                                    <input type="text" name="download_directory" id="download_directory" size="60" autocomplete="off" /><br />
-                                    <span class="hint">The path on the remote server where we will download from</span>
-                                </li>
-                                <li>
-                                    <label for="upload_directory">Remote upload directory: </label>
-                                    <input type="text" name="upload_directory" id="upload_directory" size="60" autocomplete="off" /><br />
-                                    <span class="hint">The path on the remote server where we will upload to</span>
-                                </li>
-                                <input type="hidden" value="" name="status" id="status" />
-                                <li>
-                                    <label for="debug_mode">Debug mode: </label>
-                                    <select name="debug_mode" id="debug_mode">
-                                        <option value="1">Enabled</option>
-                                        <option value="0" selected="selected">Disabled</option>
-                                    </select>
-                                    <span class="hint">Enables additional debug output in the logs</span>
-                                </li>
-                            </ol>
-                        </fieldset>
-                        <fieldset class="action">
-                            <a id="confirm_key_accept_submit" data-bs-target="#confirm_key_accept" class="btn btn-primary" data-bs-toggle="modal">Submit</a>
-                            <a class="cancel" href="/cgi-bin/koha/admin/file_transports.pl">Cancel</a>
-                        </fieldset>
-                    </form>
-                [% END %]
-
-                [% IF op == 'edit_form' && !messages %]
-                    <!-- Modal -->
-                    <div id="confirm_key_accept" class="modal" tabindex="-1" role="dialog" aria-labelledby="confirm_key_accept_submit" aria-hidden="true">
-                        <div class="modal-dialog modal-lg">
-                            <div class="modal-content modal-lg">
-                                <div class="modal-header">
-                                    <h1 class="modal-title">Are you sure?</h1>
-                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                </div>
-                                <div class="modal-body">
-                                    <div id="modal_message" class="alert alert-warning">Saving these changes will trigger a connection test and this will automatically accept the remote servers host key</div>
-                                    <p>Before saving, please check the following details again to make sure you are certain they are correct. Sending or receiving data from an unknown source potentially puts your system at risk.</p>
-                                    <table class="mx-4 mb-3">
-                                        <thead></thead>
-                                        <tbody>
-                                            <tr>
-                                                <td><strong>Transport</strong></td>
-                                                <td id="modal_transport"></td>
-                                            </tr>
-                                            <tr>
-                                                <td><strong>Host</strong></td>
-                                                <td id="modal_host"></td>
-                                            </tr>
-                                            <tr>
-                                                <td><strong>Port</strong></td>
-                                                <td id="modal_port"></td>
-                                            </tr>
-                                            <tr>
-                                                <td><strong>Username</strong></td>
-                                                <td id="modal_user_name"></td>
-                                            </tr>
-                                            <tr>
-                                                <td><strong>Authentication mode</strong></td>
-                                                <td id="modal_auth_mode"></td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                    <p>If you are ready to progress with these details, please click Save.</p>
-                                </div>
-                                <div class="modal-footer">
-                                    <button class="btn btn-default approve" type="submit"><i class="fa fa-check"></i> Save</button>
-                                    <button class="btn btn-default deny cancel" type="button" data-bs-dismiss="modal"><i class="fa fa-times"></i> Cancel</button>
-                                </div>
-                            </div>
-                        </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-default approve" type="submit"><i class="fa fa-check"></i> Save</button>
+                        <button class="btn btn-default deny cancel" type="button" data-bs-dismiss="modal"><i class="fa fa-times"></i> Cancel</button>
                     </div>
-                    <!-- END Modal -->
-
-                    <h1>[% tx("Modify file transport '{file_transport}'", { file_transport = file_transport.name }) | html %]</h1>
-
-                    <form action="/cgi-bin/koha/admin/file_transports.pl" id="edit_save" name="edit_save" class="validated" method="post">
-                        [% INCLUDE 'csrf-token.inc' %]
-                        <input type="hidden" name="op" value="cud-edit_save" />
-                        <input type="hidden" name="file_transport_id" value="[%- file_transport.id | html -%]" />
-                        <fieldset class="rows">
-                            <ol>
-                                <li>
-                                    <label for="name" class="required">Name: </label>
-                                    <input type="text" value="[% file_transport.name | html %]" name="name" id="name" size="60" class="required focus" required="required" />
-                                    <span class="required">Required</span>
-                                </li>
-                            </ol>
-                        </fieldset>
-
-                        <fieldset class="rows">
-                            <ol>
-                                <li>
-                                    <label for="transport" class="required">Transport: </label>
-                                    <select name="transport" id="transport" class="required">
-                                        [% IF file_transport.transport == 'ftp' %]
-                                            <option value="ftp" selected="selected">FTP</option>
-                                        [% ELSE %]
-                                            <option value="ftp">FTP</option>
-                                        [% END %]
-                                        [% IF file_transport.transport == 'sftp' %]
-                                            <option value="sftp" selected="selected">SFTP</option>
-                                        [% ELSE %]
-                                            <option value="sftp">SFTP</option>
-                                        [% END %]
-                                    </select>
-                                    <span class="required">Required</span>
-                                </li>
-                                <li>
-                                    <label for="host" class="required">Host: </label>
-                                    <input type="text" value="[% file_transport.host | html %]" name="host" id="host" size="60" class="required" />
-                                    <span class="required">Required</span>
-                                </li>
-                                <li>
-                                    <label for="port" class="required">Port: </label>
-                                    <input type="text" inputmode="numeric" pattern="[0-9]*" value="[% file_transport.port | html %]" name="port" id="port" size="20" class="required" />
-                                    <span class="required">Required</span>
-                                </li>
-                                <li>
-                                    <label for="passive">Passive mode: </label>
-                                    <select name="passive" id="passive" disabled="disabled">
-                                        [% IF file_transport.passive == 1 %]
-                                            <option value="1" selected="selected">Enabled (Recommended)</option>
-                                        [% ELSE %]
-                                            <option value="1">Enabled (Recommended)</option>
-                                        [% END %]
-                                        [% IF file_transport.passive == 0 %]
-                                            <option value="0" selected="selected">Disabled</option>
-                                        [% ELSE %]
-                                            <option value="0">Disabled</option>
-                                        [% END %]
-                                    </select>
-                                    <span class="hint">Only applies to FTP connections</span>
-                                </li>
-                                <li>
-                                    <label for="auth_mode">Authentication mode: </label>
-                                    <select name="auth_mode" id="auth_mode">
-                                        [% IF file_transport.auth_mode == 'password' %]
-                                            <option value="password" selected="selected">Password-based</option>
-                                        [% ELSE %]
-                                            <option value="password">Password-based</option>
-                                        [% END %]
-                                        [% IF file_transport.auth_mode == 'key_file' %]
-                                            <option value="key_file" selected="selected">Key file-based</option>
-                                        [% ELSE %]
-                                            <option value="key_file">Key file-based</option>
-                                        [% END %]
-                                        [% IF file_transport.auth_mode == 'noauth' %]
-                                            <option value="noauth" selected="selected">No authentication</option>
-                                        [% ELSE %]
-                                            <option value="noauth">No authentication</option>
-                                        [% END %]
-                                    </select>
-                                </li>
-                                <li>
-                                    <label for="user_name" class="required">Username: </label>
-                                    <input type="text" value="[% file_transport.user_name | html %]" name="user_name" id="user_name" size="60" autocomplete="off" class="required" />
-                                    <span class="required">Required</span>
-                                </li>
-                                <li>
-                                    <label for="password">Password: </label>
-                                    <input type="password" value="[% file_transport_plain_text_password | html %]" name="password" id="password" size="60" autocomplete="off" />
-                                </li>
-                                <li>
-                                    <label for="key_file">Key file path: </label>
-                                    <textarea name="key_file" id="key_file" rows="10" cols="58">[% file_transport_plain_text_key | html %]</textarea>
-                                    <span class="hint">Only applies to SFTP connections</span>
-                                </li>
-                                <li>
-                                    <label for="download_directory">Remote download directory: </label>
-                                    <input type="text" value="[% file_transport.download_directory | html %]" name="download_directory" id="download_directory" size="60" autocomplete="off" /><br />
-                                    <span class="hint">The path on the remote server where we will download from</span>
-                                </li>
-                                <li>
-                                    <label for="upload_directory">Remote upload directory: </label>
-                                    <input type="text" value="[% file_transport.upload_directory | html %]" name="upload_directory" id="upload_directory" size="60" autocomplete="off" /><br />
-                                    <span class="hint">The path on the remote server where we will upload to</span>
-                                </li>
-                                <input type="hidden" value="" name="status" id="status" />
-                                <li>
-                                    <label for="debug_mode">Debug mode: </label>
-                                    <select name="debug_mode" id="debug_mode">
-                                        [% IF file_transport.debug == 1 %]
-                                            <option value="1" selected="selected">Enabled</option>
-                                        [% ELSE %]
-                                            <option value="1">Enabled</option>
-                                        [% END %]
-                                        [% IF file_transport.debug == 0 %]
-                                            <option value="0" selected="selected">Disabled</option>
-                                        [% ELSE %]
-                                            <option value="0">Disabled</option>
-                                        [% END %]
-                                    </select>
-                                    <span class="hint">Enables additional debug output in the logs</span>
-                                </li>
-                            </ol>
-                        </fieldset>
-                        <fieldset class="action">
-                            <a id="confirm_key_accept_submit" data-bs-target="#confirm_key_accept" class="btn btn-primary" data-bs-toggle="modal">Submit</a>
-                            <a class="cancel" href="/cgi-bin/koha/admin/file_transports.pl">Cancel</a>
-                        </fieldset>
-                    </form>
-                [% END %]
-
-                [% IF op == 'list' %]
-                    <div id="toolbar" class="btn-toolbar">
-                        <a class="btn btn-default" id="new_file_transport" href="/cgi-bin/koha/admin/file_transports.pl?op=add_form"><i class="fa fa-plus"></i> New file transport</a>
-                    </div>
-
-                    <h1>File transports</h1>
-
-                    [% IF servers_count < 1 %]
-                        <div class="alert alert-info" id="dno_servers_message">
-                            <p>
-                                <em>There are no file transports defined.</em><br />
-                                To create one, use the <strong>new file transport</strong> button above.
-                            </p>
-                        </div>
-                    [% ELSE %]
-                        <div class="page-section">
-                            <table id="file_transports">
-                                <thead>
-                                    <tr>
-                                        <th>Name</th>
-                                        <th>Host</th>
-                                        <th>Port</th>
-                                        <th>Transport</th>
-                                        <th>Authentication mode</th>
-                                        <th>Username</th>
-                                        <th>Download directory</th>
-                                        <th>Upload directory</th>
-                                        <th>Status</th>
-                                        <th>Debug</th>
-                                        <th data-class-name="actions noExport">Actions</th>
-                                    </tr>
-                                </thead>
-                            </table>
-                        </div>
-                        <!-- /.page-section -->
-                    [% END %]
-                [% END %]
-
-                <div id="delete_confirm_modal" class="modal" tabindex="-1" role="dialog" aria-labelledby="delete_confirm_modal_label" aria-hidden="true">
-                    <div class="modal-dialog">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h1 class="modal-title" id="delete_confirm_modal_label">Delete server</h1>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                            </div>
-                            <div class="modal-body">
-                                <div id="delete_confirm_dialog"></div>
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-danger" id="delete_confirm_modal_button" data-bs-toggle="modal">Delete</button>
-                                <button type="button" class="btn btn-default" data-bs-dismiss="modal">Close</button>
-                            </div>
-                        </div>
-                        <!-- /.modal-content -->
-                    </div>
-                    <!-- /.modal-dialog -->
                 </div>
-                <!-- #delete_confirm_modal -->
-            </main>
+            </div>
         </div>
-        <!-- /.col-md-10.order-md-2 -->
+        <!-- END Modal -->
 
-        <div class="col-md-2 order-sm-2 order-md-1">
-            <aside> [% INCLUDE 'admin-menu.inc' %] </aside>
+        <h1>New file transport</h1>
+
+        <form action="/cgi-bin/koha/admin/file_transports.pl" id="add" name="add" class="validated" method="post">
+            [% INCLUDE 'csrf-token.inc' %]
+            <input type="hidden" name="op" value="cud-add" />
+            <fieldset class="rows">
+                <ol>
+                    <li>
+                        <label for="name" class="required">Name: </label>
+                        <input type="text" name="name" id="name" size="60" class="required focus" required="required" />
+                        <span class="required">Required</span>
+                    </li>
+                </ol>
+            </fieldset>
+
+            <fieldset class="rows">
+                <ol>
+                    <li>
+                        <label for="transport" class="required">Transport: </label>
+                        <select name="transport" id="transport" class="required">
+                            <option value="ftp">FTP</option>
+                            <option value="sftp" selected="selected">SFTP</option>
+                        </select>
+                        <span class="required">Required</span>
+                    </li>
+                    <li>
+                        <label for="host" class="required">Host: </label>
+                        <input type="text" value="localhost" name="host" id="host" size="60" class="required" />
+                        <span class="required">Required</span>
+                    </li>
+                    <li>
+                        <label for="port" class="required">Port: </label>
+                        <input type="text" inputmode="numeric" pattern="[0-9]*" value="22" name="port" id="port" size="20" class="required" />
+                        <span class="required">Required</span>
+                    </li>
+                    <li>
+                        <label for="passive">Passive mode: </label>
+                        <select name="passive" id="passive" disabled="disabled">
+                            <option value="1" selected="selected">On (Recommended)</option>
+                            <option value="0">Off</option>
+                        </select>
+                        <span class="hint">Only applies to FTP connections</span>
+                    </li>
+                    <li>
+                        <label for="auth_mode">Authentication mode: </label>
+                        <select name="auth_mode" id="auth_mode">
+                            <option value="password" selected="selected">Password-based</option>
+                            <option value="key_file">Key file-based</option>
+                            <option value="noauth">No authentication</option>
+                        </select>
+                    </li>
+                    <li>
+                        <label for="user_name" class="required">Username: </label>
+                        <input type="text" name="user_name" id="user_name" size="60" autocomplete="off" class="required" />
+                        <span class="required">Required</span>
+                    </li>
+                    <li>
+                        <label for="password">Password: </label>
+                        <input type="password" name="password" id="password" size="60" autocomplete="off" />
+                    </li>
+                    <li>
+                        <label for="key_file">Key file: </label>
+                        <textarea name="key_file" id="key_file" rows="10" cols="58"></textarea>
+                        <span class="hint">Only applies to SFTP connections</span>
+                    </li>
+                    <li>
+                        <label for="download_directory">Remote download directory: </label>
+                        <input type="text" name="download_directory" id="download_directory" size="60" autocomplete="off" /><br />
+                        <span class="hint">The path on the remote server where we will download from</span>
+                    </li>
+                    <li>
+                        <label for="upload_directory">Remote upload directory: </label>
+                        <input type="text" name="upload_directory" id="upload_directory" size="60" autocomplete="off" /><br />
+                        <span class="hint">The path on the remote server where we will upload to</span>
+                    </li>
+                    <input type="hidden" value="" name="status" id="status" />
+                    <li>
+                        <label for="debug_mode">Debug mode: </label>
+                        <select name="debug_mode" id="debug_mode">
+                            <option value="1">Enabled</option>
+                            <option value="0" selected="selected">Disabled</option>
+                        </select>
+                        <span class="hint">Enables additional debug output in the logs</span>
+                    </li>
+                </ol>
+            </fieldset>
+            <fieldset class="action">
+                <a id="confirm_key_accept_submit" data-bs-target="#confirm_key_accept" class="btn btn-primary" data-bs-toggle="modal">Submit</a>
+                <a class="cancel" href="/cgi-bin/koha/admin/file_transports.pl">Cancel</a>
+            </fieldset>
+        </form>
+    [% END %]
+
+    [% IF op == 'edit_form' && !messages %]
+        <!-- Modal -->
+        <div id="confirm_key_accept" class="modal" tabindex="-1" role="dialog" aria-labelledby="confirm_key_accept_submit" aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content modal-lg">
+                    <div class="modal-header">
+                        <h1 class="modal-title">Are you sure?</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div id="modal_message" class="alert alert-warning">Saving these changes will trigger a connection test and this will automatically accept the remote servers host key</div>
+                        <p>Before saving, please check the following details again to make sure you are certain they are correct. Sending or receiving data from an unknown source potentially puts your system at risk.</p>
+                        <table class="mx-4 mb-3">
+                            <thead></thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>Transport</strong></td>
+                                    <td id="modal_transport"></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Host</strong></td>
+                                    <td id="modal_host"></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Port</strong></td>
+                                    <td id="modal_port"></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Username</strong></td>
+                                    <td id="modal_user_name"></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Authentication mode</strong></td>
+                                    <td id="modal_auth_mode"></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <p>If you are ready to progress with these details, please click Save.</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-default approve" type="submit"><i class="fa fa-check"></i> Save</button>
+                        <button class="btn btn-default deny cancel" type="button" data-bs-dismiss="modal"><i class="fa fa-times"></i> Cancel</button>
+                    </div>
+                </div>
+            </div>
         </div>
-        <!-- /.col-md-2.order-md-1 -->
+        <!-- END Modal -->
+
+        <h1>[% tx("Modify file transport '{file_transport}'", { file_transport = file_transport.name }) | html %]</h1>
+
+        <form action="/cgi-bin/koha/admin/file_transports.pl" id="edit_save" name="edit_save" class="validated" method="post">
+            [% INCLUDE 'csrf-token.inc' %]
+            <input type="hidden" name="op" value="cud-edit_save" />
+            <input type="hidden" name="file_transport_id" value="[%- file_transport.id | html -%]" />
+            <fieldset class="rows">
+                <ol>
+                    <li>
+                        <label for="name" class="required">Name: </label>
+                        <input type="text" value="[% file_transport.name | html %]" name="name" id="name" size="60" class="required focus" required="required" />
+                        <span class="required">Required</span>
+                    </li>
+                </ol>
+            </fieldset>
+
+            <fieldset class="rows">
+                <ol>
+                    <li>
+                        <label for="transport" class="required">Transport: </label>
+                        <select name="transport" id="transport" class="required">
+                            [% IF file_transport.transport == 'ftp' %]
+                                <option value="ftp" selected="selected">FTP</option>
+                            [% ELSE %]
+                                <option value="ftp">FTP</option>
+                            [% END %]
+                            [% IF file_transport.transport == 'sftp' %]
+                                <option value="sftp" selected="selected">SFTP</option>
+                            [% ELSE %]
+                                <option value="sftp">SFTP</option>
+                            [% END %]
+                        </select>
+                        <span class="required">Required</span>
+                    </li>
+                    <li>
+                        <label for="host" class="required">Host: </label>
+                        <input type="text" value="[% file_transport.host | html %]" name="host" id="host" size="60" class="required" />
+                        <span class="required">Required</span>
+                    </li>
+                    <li>
+                        <label for="port" class="required">Port: </label>
+                        <input type="text" inputmode="numeric" pattern="[0-9]*" value="[% file_transport.port | html %]" name="port" id="port" size="20" class="required" />
+                        <span class="required">Required</span>
+                    </li>
+                    <li>
+                        <label for="passive">Passive mode: </label>
+                        <select name="passive" id="passive" disabled="disabled">
+                            [% IF file_transport.passive == 1 %]
+                                <option value="1" selected="selected">Enabled (Recommended)</option>
+                            [% ELSE %]
+                                <option value="1">Enabled (Recommended)</option>
+                            [% END %]
+                            [% IF file_transport.passive == 0 %]
+                                <option value="0" selected="selected">Disabled</option>
+                            [% ELSE %]
+                                <option value="0">Disabled</option>
+                            [% END %]
+                        </select>
+                        <span class="hint">Only applies to FTP connections</span>
+                    </li>
+                    <li>
+                        <label for="auth_mode">Authentication mode: </label>
+                        <select name="auth_mode" id="auth_mode">
+                            [% IF file_transport.auth_mode == 'password' %]
+                                <option value="password" selected="selected">Password-based</option>
+                            [% ELSE %]
+                                <option value="password">Password-based</option>
+                            [% END %]
+                            [% IF file_transport.auth_mode == 'key_file' %]
+                                <option value="key_file" selected="selected">Key file-based</option>
+                            [% ELSE %]
+                                <option value="key_file">Key file-based</option>
+                            [% END %]
+                            [% IF file_transport.auth_mode == 'noauth' %]
+                                <option value="noauth" selected="selected">No authentication</option>
+                            [% ELSE %]
+                                <option value="noauth">No authentication</option>
+                            [% END %]
+                        </select>
+                    </li>
+                    <li>
+                        <label for="user_name" class="required">Username: </label>
+                        <input type="text" value="[% file_transport.user_name | html %]" name="user_name" id="user_name" size="60" autocomplete="off" class="required" />
+                        <span class="required">Required</span>
+                    </li>
+                    <li>
+                        <label for="password">Password: </label>
+                        <input type="password" value="[% file_transport_plain_text_password | html %]" name="password" id="password" size="60" autocomplete="off" />
+                    </li>
+                    <li>
+                        <label for="key_file">Key file path: </label>
+                        <textarea name="key_file" id="key_file" rows="10" cols="58">[% file_transport_plain_text_key | html %]</textarea>
+                        <span class="hint">Only applies to SFTP connections</span>
+                    </li>
+                    <li>
+                        <label for="download_directory">Remote download directory: </label>
+                        <input type="text" value="[% file_transport.download_directory | html %]" name="download_directory" id="download_directory" size="60" autocomplete="off" /><br />
+                        <span class="hint">The path on the remote server where we will download from</span>
+                    </li>
+                    <li>
+                        <label for="upload_directory">Remote upload directory: </label>
+                        <input type="text" value="[% file_transport.upload_directory | html %]" name="upload_directory" id="upload_directory" size="60" autocomplete="off" /><br />
+                        <span class="hint">The path on the remote server where we will upload to</span>
+                    </li>
+                    <input type="hidden" value="" name="status" id="status" />
+                    <li>
+                        <label for="debug_mode">Debug mode: </label>
+                        <select name="debug_mode" id="debug_mode">
+                            [% IF file_transport.debug == 1 %]
+                                <option value="1" selected="selected">Enabled</option>
+                            [% ELSE %]
+                                <option value="1">Enabled</option>
+                            [% END %]
+                            [% IF file_transport.debug == 0 %]
+                                <option value="0" selected="selected">Disabled</option>
+                            [% ELSE %]
+                                <option value="0">Disabled</option>
+                            [% END %]
+                        </select>
+                        <span class="hint">Enables additional debug output in the logs</span>
+                    </li>
+                </ol>
+            </fieldset>
+            <fieldset class="action">
+                <a id="confirm_key_accept_submit" data-bs-target="#confirm_key_accept" class="btn btn-primary" data-bs-toggle="modal">Submit</a>
+                <a class="cancel" href="/cgi-bin/koha/admin/file_transports.pl">Cancel</a>
+            </fieldset>
+        </form>
+    [% END %]
+
+    [% IF op == 'list' %]
+        <div id="toolbar" class="btn-toolbar">
+            <a class="btn btn-default" id="new_file_transport" href="/cgi-bin/koha/admin/file_transports.pl?op=add_form"><i class="fa fa-plus"></i> New file transport</a>
+        </div>
+
+        <h1>File transports</h1>
+
+        [% IF servers_count < 1 %]
+            <div class="alert alert-info" id="dno_servers_message">
+                <p>
+                    <em>There are no file transports defined.</em><br />
+                    To create one, use the <strong>new file transport</strong> button above.
+                </p>
+            </div>
+        [% ELSE %]
+            <div class="page-section">
+                <table id="file_transports">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Host</th>
+                            <th>Port</th>
+                            <th>Transport</th>
+                            <th>Authentication mode</th>
+                            <th>Username</th>
+                            <th>Download directory</th>
+                            <th>Upload directory</th>
+                            <th>Status</th>
+                            <th>Debug</th>
+                            <th data-class-name="actions noExport">Actions</th>
+                        </tr>
+                    </thead>
+                </table>
+            </div>
+            <!-- /.page-section -->
+        [% END %]
+    [% END %]
+
+    <div id="delete_confirm_modal" class="modal" tabindex="-1" role="dialog" aria-labelledby="delete_confirm_modal_label" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title" id="delete_confirm_modal_label">Delete server</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div id="delete_confirm_dialog"></div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" id="delete_confirm_modal_button" data-bs-toggle="modal">Delete</button>
+                    <button type="button" class="btn btn-default" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
     </div>
-    <!-- /.row -->
+    <!-- #delete_confirm_modal -->
+[% END %]
 
-    [% MACRO jsinclude BLOCK %]
-        [% Asset.js("js/admin-menu.js") | $raw %]
-        [% Asset.js("js/transport_status.js") | $raw %]
-        [% INCLUDE 'datatables.inc' %]
-        <script>
-            $(document).ready(function() {
+[% MACRO jsinclude BLOCK %]
+    [% Asset.js("js/admin-menu.js") | $raw %]
+    [% Asset.js("js/transport_status.js") | $raw %]
+    [% INCLUDE 'datatables.inc' %]
+    <script>
+        $(document).ready(function() {
 
-                var file_transports_url = '/api/v1/config/file_transports';
-                window.file_transports = $("#file_transports").kohaTable({
-                    "ajax": {
-                        "url": file_transports_url
-                    },
-                    "language": {
-                        "emptyTable": "<div class=\"alert alert-info\">"+_("There are no file transports defined.")+"</div>"
-                    },
-                    "columnDefs": [ {
-                        "targets": [0,1],
-                        "render": function(data, type, row, meta) {
-                            if (type == "display") {
-                                if(data != null) {
-                                    return data.escapeHtml();
-                                } else {
-                                    return "Default";
-                                }
+            var file_transports_url = '/api/v1/config/file_transports';
+            window.file_transports = $("#file_transports").kohaTable({
+                "ajax": {
+                    "url": file_transports_url
+                },
+                "language": {
+                    "emptyTable": "<div class=\"alert alert-info\">"+_("There are no file transports defined.")+"</div>"
+                },
+                "columnDefs": [ {
+                    "targets": [0,1],
+                    "render": function(data, type, row, meta) {
+                        if (type == "display") {
+                            if(data != null) {
+                                return data.escapeHtml();
+                            } else {
+                                return "Default";
                             }
-                            return data;
                         }
-                    } ],
-                    "columns": [
-                        {
-                            "data": "name",
-                            "searchable": true,
-                            "orderable": true
+                        return data;
+                    }
+                } ],
+                "columns": [
+                    {
+                        "data": "name",
+                        "searchable": true,
+                        "orderable": true
+                    },
+                    {
+                        "data": "host",
+                        "searchable": true,
+                        "orderable": true
+                    },
+                    {
+                        "data": "port",
+                        "searchable": true,
+                        "orderable": false
+                    },
+                    {
+                        "data": "transport",
+                        "render": function(data, type, row, meta) {
+                            return data.toUpperCase();
                         },
-                        {
-                            "data": "host",
-                            "searchable": true,
-                            "orderable": true
+                        "searchable": true,
+                        "orderable": false
+                    },
+                    {
+                        "data": "auth_mode",
+                        "render": function(data, type, row, meta) {
+                            if(data == "password") {
+                                return _("Password-based");
+                            } else if(data == "key_file") {
+                                return _("Key file-based");
+                            } else {
+                                return _("No authentication");
+                            }
                         },
-                        {
-                            "data": "port",
-                            "searchable": true,
-                            "orderable": false
+                        "searchable": false,
+                        "orderable": false
+                    },
+                    {
+                        "data": "user_name",
+                        "searchable": false,
+                        "orderable": false
+                    },
+                    {
+                        "data": "download_directory",
+                        "render": function(data, type, row, meta) {
+                            if(data) {
+                                return data;
+                            } else {
+                                return "<em>" + _("Not specified") + "</em>";
+                            }
                         },
-                        {
-                            "data": "transport",
-                            "render": function(data, type, row, meta) {
-                                return data.toUpperCase();
-                            },
-                            "searchable": true,
-                            "orderable": false
+                        "searchable": false,
+                        "orderable": false
+                    },
+                    {
+                        "data": "upload_directory",
+                        "render": function(data, type, row, meta) {
+                            if(data) {
+                                return data;
+                            } else {
+                                return "<em>" + _("Not specified") + "</em>";
+                            }
                         },
-                        {
-                            "data": "auth_mode",
-                            "render": function(data, type, row, meta) {
-                                if(data == "password") {
-                                    return _("Password-based");
-                                } else if(data == "key_file") {
-                                    return _("Key file-based");
-                                } else {
-                                    return _("No authentication");
-                                }
-                            },
-                            "searchable": false,
-                            "orderable": false
-                        },
-                        {
-                            "data": "user_name",
-                            "searchable": false,
-                            "orderable": false
-                        },
-                        {
-                            "data": "download_directory",
-                            "render": function(data, type, row, meta) {
-                                if(data) {
-                                    return data;
-                                } else {
-                                    return "<em>" + _("Not specified") + "</em>";
-                                }
-                            },
-                            "searchable": false,
-                            "orderable": false
-                        },
-                        {
-                            "data": "upload_directory",
-                            "render": function(data, type, row, meta) {
-                                if(data) {
-                                    return data;
-                                } else {
-                                    return "<em>" + _("Not specified") + "</em>";
-                                }
-                            },
-                            "searchable": false,
-                            "orderable": false
-                        },
-                        {
-                            "data": "status",
-                            "render": function(data, type, row, meta) {
-                                let render = '';
-                                if (data) {
-                                    if (data.status == "ok") {
-                                        render += '<i class="text-success fa-solid fa-circle-check"></i> ';
-                                        render += '<span class="text-success">';
-                                        render += _("Tests passing");
-                                        render += '</span>'
-                                    } else if (data.status == "errors") {
-                                        data.operations.forEach(operation => {
-                                            render += "<div>";
-                                            if ( operation.status == "error" ) {
-                                                render += '<i class="text-danger fa-solid fa-circle-xmark"></i> ';
-                                                render += '<span class="text-danger">';
-                                                render += operationLabels[operation.code] || operation.code;
-                                                render += ' ' + _("failed");
-                                                render += '</span>';
-                                            } else {
-                                                render += '<i class="text-success fa-solid fa-circle-check"></i> ';
-                                                render += '<span class="text-success">';
-                                                render += operationLabels[operation.code] || operation.code;
-                                                render += ' ' + _("ok");
-                                                render += '</span>';
-                                            }
-                                            render += "</div>";
-                                        });
-                                    } else {
-                                        render += "<em>" + _("Never used") + "</em>";
-                                    }
+                        "searchable": false,
+                        "orderable": false
+                    },
+                    {
+                        "data": "status",
+                        "render": function(data, type, row, meta) {
+                            let render = '';
+                            if (data) {
+                                if (data.status == "ok") {
+                                    render += '<i class="text-success fa-solid fa-circle-check"></i> ';
+                                    render += '<span class="text-success">';
+                                    render += _("Tests passing");
+                                    render += '</span>'
+                                } else if (data.status == "errors") {
+                                    data.operations.forEach(operation => {
+                                        render += "<div>";
+                                        if ( operation.status == "error" ) {
+                                            render += '<i class="text-danger fa-solid fa-circle-xmark"></i> ';
+                                            render += '<span class="text-danger">';
+                                            render += operationLabels[operation.code] || operation.code;
+                                            render += ' ' + _("failed");
+                                            render += '</span>';
+                                        } else {
+                                            render += '<i class="text-success fa-solid fa-circle-check"></i> ';
+                                            render += '<span class="text-success">';
+                                            render += operationLabels[operation.code] || operation.code;
+                                            render += ' ' + _("ok");
+                                            render += '</span>';
+                                        }
+                                        render += "</div>";
+                                    });
                                 } else {
                                     render += "<em>" + _("Never used") + "</em>";
                                 }
-                                return render;
-                            },
-                            "searchable": false,
-                            "orderable": false
+                            } else {
+                                render += "<em>" + _("Never used") + "</em>";
+                            }
+                            return render;
                         },
-                        {
-                            "data": "debug",
-                            "render": function(data, type, row, meta) {
-                                if(data == true) {
-                                    return "[% tp("Active", "On") | html %]";
-                                }
-                                else {
-                                    return _("Off");
-                                }
-                            },
-                            "searchable": false,
-                            "orderable": false
-                        },
-                        {
-                            "data": function(row, type, val, meta) {
-                                let result = '<a class="btn btn-default btn-xs" role="button" href="/cgi-bin/koha/admin/file_transports.pl?op=edit_form&amp;file_transport_id='+ encodeURIComponent(row.file_transport_id) +'"><i class="fa-solid fa-pencil" aria-hidden="true"></i> '+_("Edit")+'</a>'+"\n";
-                                result += '<a class="btn btn-default btn-xs delete_server" role="button" href="#" data-bs-toggle="modal" data-bs-target="#delete_confirm_modal" data-file-transport-id="'+ encodeURIComponent(row.file_transport_id) +'" data-file-transport-name="'+ encodeURIComponent(row.name.escapeHtml()) +'"><i class="fa fa-trash-can" aria-hidden="true"></i> '+_("Delete")+'</a>';
-                                return result;
-                            },
-                            "searchable": false,
-                            "orderable": false
-                        }
-                    ],
-                    createdRow: function(row, data, dataIndex) {
-                        if(data.is_default) {
-                            $(row).addClass('default warn');
-                        }
-                        if(data.debug) {
-                            $(row).addClass('debug');
-                        }
+                        "searchable": false,
+                        "orderable": false
                     },
-                });
+                    {
+                        "data": "debug",
+                        "render": function(data, type, row, meta) {
+                            if(data == true) {
+                                return "[% tp("Active", "On") | html %]";
+                            }
+                            else {
+                                return _("Off");
+                            }
+                        },
+                        "searchable": false,
+                        "orderable": false
+                    },
+                    {
+                        "data": function(row, type, val, meta) {
+                            let result = '<a class="btn btn-default btn-xs" role="button" href="/cgi-bin/koha/admin/file_transports.pl?op=edit_form&amp;file_transport_id='+ encodeURIComponent(row.file_transport_id) +'"><i class="fa-solid fa-pencil" aria-hidden="true"></i> '+_("Edit")+'</a>'+"\n";
+                            result += '<a class="btn btn-default btn-xs delete_server" role="button" href="#" data-bs-toggle="modal" data-bs-target="#delete_confirm_modal" data-file-transport-id="'+ encodeURIComponent(row.file_transport_id) +'" data-file-transport-name="'+ encodeURIComponent(row.name.escapeHtml()) +'"><i class="fa fa-trash-can" aria-hidden="true"></i> '+_("Delete")+'</a>';
+                            return result;
+                        },
+                        "searchable": false,
+                        "orderable": false
+                    }
+                ],
+                createdRow: function(row, data, dataIndex) {
+                    if(data.is_default) {
+                        $(row).addClass('default warn');
+                    }
+                    if(data.debug) {
+                        $(row).addClass('debug');
+                    }
+                },
+            });
 
-                $('#file_transports').on("click", '.delete_server', function() {
-                    var file_transport_id   = $(this).data('file-transport-id');
-                    var file_transport_name = decodeURIComponent($(this).data('file-transport-name'));
+            $('#file_transports').on("click", '.delete_server', function() {
+                var file_transport_id   = $(this).data('file-transport-id');
+                var file_transport_name = decodeURIComponent($(this).data('file-transport-name'));
 
-                    $("#delete_confirm_dialog").html(
-                        _("You are about to delete the '%s' file transport.").format(file_transport_name)
-                    );
-                    $("#delete_confirm_modal_button").data('file-transport-id', file_transport_id);
-                    $("#delete_confirm_modal_button").data('file-transport-name', file_transport_name);
-                });
+                $("#delete_confirm_dialog").html(
+                    _("You are about to delete the '%s' file transport.").format(file_transport_name)
+                );
+                $("#delete_confirm_modal_button").data('file-transport-id', file_transport_id);
+                $("#delete_confirm_modal_button").data('file-transport-name', file_transport_name);
+            });
 
-                $("#delete_confirm_modal_button").on("click", function() {
+            $("#delete_confirm_modal_button").on("click", function() {
 
-                    var file_transport_id   = $(this).data('file-transport-id');
-                    var file_transport_name = $(this).data('file-transport-name');
+                var file_transport_id   = $(this).data('file-transport-id');
+                var file_transport_name = $(this).data('file-transport-name');
 
-                    $.ajax({
-                        method: "DELETE",
-                        url: "/api/v1/config/file_transports/"+file_transport_id
-                    }).success(function() {
-                        window.file_transports.api().ajax.reload(function(data) {
-                            $("#action_result_dialog").hide();
-                            $("#delete_success").html(_("Server '%s' deleted successfully.").format(file_transport_name)).show();
-                        });
-                    }).fail(function() {
-                        $("#delete_error").html(_("Error deleting server '%s'. Please ensure all linked EDI accounts are unlinked or deleted. Check the logs for details.").format(file_transport_name)).show();
-                    }).done(function() {
-                        $("#delete_confirm_modal").modal('hide');
+                $.ajax({
+                    method: "DELETE",
+                    url: "/api/v1/config/file_transports/"+file_transport_id
+                }).success(function() {
+                    window.file_transports.api().ajax.reload(function(data) {
+                        $("#action_result_dialog").hide();
+                        $("#delete_success").html(_("Server '%s' deleted successfully.").format(file_transport_name)).show();
                     });
+                }).fail(function() {
+                    $("#delete_error").html(_("Error deleting server '%s'. Please ensure all linked EDI accounts are unlinked or deleted. Check the logs for details.").format(file_transport_name)).show();
+                }).done(function() {
+                    $("#delete_confirm_modal").modal('hide');
                 });
+            });
 
+            transportChange();
+            $("#transport").on("change", function(event) {
                 transportChange();
-                $("#transport").on("change", function(event) {
-                    transportChange();
-                });
+            });
 
+            authModeChange();
+            $("#auth_mode").on("change", function(event) {
                 authModeChange();
-                $("#auth_mode").on("change", function(event) {
-                    authModeChange();
-                });
+            });
 
-                $('#confirm_key_accept_submit').on('click', function(event) {
-                    event.preventDefault();
+            $('#confirm_key_accept_submit').on('click', function(event) {
+                event.preventDefault();
 
-                    if ( $('#add').length > 0 ) {
-                        if( $('#add').valid() == true ) {
-                            modalChange();
-                            $('#confirm_key_accept').modal('show');
-                        } else {
-                            $('#confirm_key_accept').modal('hide');
-                        }
+                if ( $('#add').length > 0 ) {
+                    if( $('#add').valid() == true ) {
+                        modalChange();
+                        $('#confirm_key_accept').modal('show');
+                    } else {
+                        $('#confirm_key_accept').modal('hide');
                     }
+                }
 
-                    if ( $('#edit_save').length > 0 ) {
-                        if( $('#edit_save').valid() == true ) {
-                            modalChange();
-                            $('#confirm_key_accept').modal('show');
-                        } else {
-                            $('#confirm_key_accept').modal('hide');
-                        }
+                if ( $('#edit_save').length > 0 ) {
+                    if( $('#edit_save').valid() == true ) {
+                        modalChange();
+                        $('#confirm_key_accept').modal('show');
+                    } else {
+                        $('#confirm_key_accept').modal('hide');
                     }
-
-                });
-
-                $('#confirm_key_accept .approve').on('click', function() {
-                    $('#confirm_key_accept .deny').click();
-
-                    if ( $('#add').length > 0 ) {
-                        $('#add').submit();
-                    }
-
-                    if ( $('#edit_save').length > 0 ) {
-                        $('#edit_save').submit();
-                    }
-                });
+                }
 
             });
 
-            function transportChange() {
-                let transport = $("#transport");
+            $('#confirm_key_accept .approve').on('click', function() {
+                $('#confirm_key_accept .deny').click();
 
-                if(transport.val() == "ftp") {
-                    $("#host").removeAttr("disabled");
-                    $("#port").removeAttr("disabled");
-                    $("#passive").removeAttr("disabled");
-                    $("#auth_mode").removeAttr("disabled");
-                    $("#user_name").removeAttr("disabled");
-                    $("#password").removeAttr("disabled");
-                    $("#key_file").attr("disabled", "disabled");
-
-                    $("#auth_mode option[value='password']").removeAttr("disabled");
-                    $("#auth_mode option[value='key_file']").attr("disabled", "disabled");
-                    $("#auth_mode option[value='noauth']").removeAttr("disabled");
-                    if($("#auth_mode option:selected").val() == "key_file") {
-                        $("#auth_mode option[value='password']").prop("selected", true);
-                    }
-
-                    let port = $("#port").val();
-                    if(port == 22) $("#port").val("21");
-
-                    authModeChange();
-                } else if(transport.val() == "sftp") {
-                    $("#host").removeAttr("disabled");
-                    $("#port").removeAttr("disabled");
-                    $("#passive").attr("disabled", "disabled");
-                    $("#auth_mode").removeAttr("disabled");
-                    $("#user_name").removeAttr("disabled");
-                    $("#password").removeAttr("disabled");
-                    $("#key_file").removeAttr("disabled");
-
-                    $("#auth_mode option[value='password']").removeAttr("disabled");
-                    $("#auth_mode option[value='key_file']").removeAttr("disabled");
-                    $("#auth_mode option[value='noauth']").removeAttr("disabled");
-                    $("#passive option[value='1']").prop("selected", true);
-
-                    let port = $("#port").val();
-                    if(port == 21) $("#port").val("22");
-
-                    return authModeChange();
+                if ( $('#add').length > 0 ) {
+                    $('#add').submit();
                 }
-            }
 
-            function authModeChange() {
-                let auth_mode = $("#auth_mode").val();
-
-                if(auth_mode == "password") {
-                    $("#password").removeAttr("disabled");
-                    $("#key_file").attr("disabled", "disabled");
-                } else if(auth_mode == "key_file") {
-                    $("#password").attr("disabled", "disabled");
-                    $("#key_file").removeAttr("disabled");
-                } else {
-                    $("#password").attr("disabled", "disabled");
-                    $("#key_file").attr("disabled", "disabled");
+                if ( $('#edit_save').length > 0 ) {
+                    $('#edit_save').submit();
                 }
+            });
+
+        });
+
+        function transportChange() {
+            let transport = $("#transport");
+
+            if(transport.val() == "ftp") {
+                $("#host").removeAttr("disabled");
+                $("#port").removeAttr("disabled");
+                $("#passive").removeAttr("disabled");
+                $("#auth_mode").removeAttr("disabled");
+                $("#user_name").removeAttr("disabled");
+                $("#password").removeAttr("disabled");
+                $("#key_file").attr("disabled", "disabled");
+
+                $("#auth_mode option[value='password']").removeAttr("disabled");
+                $("#auth_mode option[value='key_file']").attr("disabled", "disabled");
+                $("#auth_mode option[value='noauth']").removeAttr("disabled");
+                if($("#auth_mode option:selected").val() == "key_file") {
+                    $("#auth_mode option[value='password']").prop("selected", true);
+                }
+
+                let port = $("#port").val();
+                if(port == 22) $("#port").val("21");
+
+                authModeChange();
+            } else if(transport.val() == "sftp") {
+                $("#host").removeAttr("disabled");
+                $("#port").removeAttr("disabled");
+                $("#passive").attr("disabled", "disabled");
+                $("#auth_mode").removeAttr("disabled");
+                $("#user_name").removeAttr("disabled");
+                $("#password").removeAttr("disabled");
+                $("#key_file").removeAttr("disabled");
+
+                $("#auth_mode option[value='password']").removeAttr("disabled");
+                $("#auth_mode option[value='key_file']").removeAttr("disabled");
+                $("#auth_mode option[value='noauth']").removeAttr("disabled");
+                $("#passive option[value='1']").prop("selected", true);
+
+                let port = $("#port").val();
+                if(port == 21) $("#port").val("22");
+
+                return authModeChange();
             }
+        }
 
-            function modalChange() {
-                $('#modal_message').hide();
-                if ( $('#transport').val() == 'sftp' ) $('#modal_message').show();
+        function authModeChange() {
+            let auth_mode = $("#auth_mode").val();
 
-                $('#modal_host').text( $('#host').val() );
-                $('#modal_port').text( $('#port').val() );
-                $('#modal_transport').text( $('#transport option:selected').text() );
-                $('#modal_user_name').text( $('#user_name').val() );
-                $('#modal_auth_mode').text( $('#auth_mode option:selected').text() );
+            if(auth_mode == "password") {
+                $("#password").removeAttr("disabled");
+                $("#key_file").attr("disabled", "disabled");
+            } else if(auth_mode == "key_file") {
+                $("#password").attr("disabled", "disabled");
+                $("#key_file").removeAttr("disabled");
+            } else {
+                $("#password").attr("disabled", "disabled");
+                $("#key_file").attr("disabled", "disabled");
             }
-        </script>
-    [% END %]
+        }
 
-    [% INCLUDE 'intranet-bottom.inc' %]
-</div>
+        function modalChange() {
+            $('#modal_message').hide();
+            if ( $('#transport').val() == 'sftp' ) $('#modal_message').show();
+
+            $('#modal_host').text( $('#host').val() );
+            $('#modal_port').text( $('#port').val() );
+            $('#modal_transport').text( $('#transport option:selected').text() );
+            $('#modal_user_name').text( $('#user_name').val() );
+            $('#modal_auth_mode').text( $('#auth_mode option:selected').text() );
+        }
+    </script>
+[% END %]
+[% INCLUDE 'intranet-bottom.inc' %]
