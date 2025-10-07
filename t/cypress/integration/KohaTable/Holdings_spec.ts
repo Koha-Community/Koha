@@ -189,6 +189,16 @@ describe("catalogue/detail/holdings_table with items", () => {
                         new RegExp(`"me.home_library_id":\\["${library_id}"\\]`)
                     );
                 });
+
+                cy.get(`#${table_id}_wrapper input.dt-input`).clear();
+                cy.wait("@searchItems");
+                cy.get(`#${table_id}_wrapper input.dt-input`).type("[");
+                cy.wait("@searchItems").then(interception => {
+                    const q = interception.request.query.q;
+                    expect(q).to.match(
+                        new RegExp(`"me.home_library_id":{"like":"%\\[%"}`)
+                    );
+                });
             });
         });
 
