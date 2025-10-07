@@ -72,7 +72,7 @@
                         <ul>
                             [% FOREACH subfiel IN Tag0X.subfield %]
                                 <li
-                                    ><strong>[% subfiel.marc_lib | $raw %]:</strong> [% IF subfiel.isurl %]
+                                    ><strong>[% subfiel.marc_lib | html %]:</strong> [% IF subfiel.isurl %]
                                         <a href="[% subfiel.marc_value | url %]">[% subfiel.marc_value | html %]</a>
                                     [% ELSE %]
                                         [% subfiel.marc_value | html %]

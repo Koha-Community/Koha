@@ -4,9 +4,9 @@
         <li style="[% iteminfo.hidden | html %];">
             <div class="subfield_line" id="subfield[% iteminfo.serialid | html %][% iteminfo.countitems | html %][% iteminfo.subfield | html %][% iteminfo.random | html %]">
                 [% IF (iteminfo.mandatory) %]
-                    <label class="required">[% iteminfo.subfield | html %] - [% iteminfo.marc_lib | $raw %]</label>
+                    <label class="required">[% iteminfo.subfield | html %] - [% iteminfo.marc_lib | html %]</label>
                 [% ELSE %]
-                    <label>[% iteminfo.subfield | html %] - [% iteminfo.marc_lib | $raw %]</label>
+                    <label>[% iteminfo.subfield | html %] - [% iteminfo.marc_lib | html %]</label>
                 [% END %]
                 [% IF ( iteminfo.marc_value.type == 'select' ) %]
                     <select name="field_value" class="input_marceditor">

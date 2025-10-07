@@ -342,9 +342,9 @@
                                                                                 id="subfield[% item.serialid | html %][% item.countitems | html %][% iteminformatio.subfield | html %][% iteminformatio.random | html %]"
                                                                             >
                                                                                 [% IF (iteminformatio.mandatory) %]
-                                                                                    <label class="required">[% iteminformatio.subfield | html %] - [% iteminformatio.marc_lib | $raw %]</label>
+                                                                                    <label class="required">[% iteminformatio.subfield | html %] - [% iteminformatio.marc_lib | html %]</label>
                                                                                 [% ELSE %]
-                                                                                    <label>[% iteminformatio.subfield | html %] - [% iteminformatio.marc_lib | $raw %]</label>
+                                                                                    <label>[% iteminformatio.subfield | html %] - [% iteminformatio.marc_lib | html %]</label>
                                                                                 [% END %]
                                                                                 [% IF ( iteminformatio.marc_value.type == 'select' ) %]
                                                                                     <select name="field_value" class="select2 input_marceditor">
@@ -538,9 +538,9 @@
                                                                             id="subfield[% newserialloo.serialid | html %][% newserialloo.countitems | html %][% iteminformatio.subfield | html %][% iteminformatio.random | html %]"
                                                                         >
                                                                             [% IF (iteminformatio.mandatory) %]
-                                                                                <label class="required">[% iteminformatio.subfield | html %] - [% iteminformatio.marc_lib | $raw %]</label>
+                                                                                <label class="required">[% iteminformatio.subfield | html %] - [% iteminformatio.marc_lib | html %]</label>
                                                                             [% ELSE %]
-                                                                                <label>[% iteminformatio.subfield | html %] - [% iteminformatio.marc_lib | $raw %]</label>
+                                                                                <label>[% iteminformatio.subfield | html %] - [% iteminformatio.marc_lib | html %]</label>
                                                                             [% END %]
                                                                             [% IF ( iteminformatio.marc_value.type == 'select' ) %]
                                                                                 <select name="field_value" class="select2 input_marceditor">

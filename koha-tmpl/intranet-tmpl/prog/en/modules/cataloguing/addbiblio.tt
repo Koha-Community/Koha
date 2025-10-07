@@ -537,11 +537,11 @@
                         [%- FOREACH subfield_loo IN innerloo.subfield_loop %]
                             [%- IF ( subfield_loo.mandatory ) %]subfields.push("[% subfield_loo.id | html %]");
                                 tab.push("[% BIG_LOO.number | html %]");
-                                label.push("[% subfield_loo.marc_lib | $raw %]");
-                            [%- END %]
-                        [%- END %]
-                    [%- END %]
-                [%- END %]
+                                label.push("[% subfield_loo.marc_lib | html %]");
+                            [% END %]
+                        [% END %]
+                    [% END %]
+                [% END %]
                 StrAlert += "<h4>" + _("The following mandatory subfields aren't filled:") + "</h4>";
             } else {
                 [%- FOREACH BIG_LOO IN BIG_LOOP %]
@@ -552,11 +552,11 @@
                         [%- FOREACH subfield_loo IN innerloo.subfield_loop %]
                             [%- IF ( subfield_loo.important ) %]subfields.push("[% subfield_loo.id | html %]");
                                 tab.push("[% BIG_LOO.number | html %]");
-                                label.push("[% subfield_loo.marc_lib | $raw %]");
-                            [%- END %]
-                        [%- END %]
-                    [%- END %]
-                [%- END %]
+                                label.push("[% subfield_loo.marc_lib | html %]");
+                            [% END %]
+                        [% END %]
+                    [% END %]
+                [% END %]
                 StrAlert += "<h4>" + _("The following important subfields aren’t filled:") + "</h4>";
                 notFilledClass = "important_subfield_not_filled";
             }
@@ -1136,7 +1136,7 @@
                                                     <div class="subfieldcode">
                                                         <span class="handle">&#xf58e;</span>
                                                         <input type="text"
-                                                                title="[% subfield_loo.marc_lib | $raw %]"
+                                                                title="[% subfield_loo.marc_lib | html %]"
                                                                 style=" [% IF ( innerloo.fixedfield ) %]display:none; [% END %]border:0;"
                                                                 name="tag_[% subfield_loo.tag | html %]_code_[% subfield_loo.subfield | html %]_[% subfield_loo.index | html %]_[% subfield_loo.index_subfield | html %]"
                                                                 value="[% subfield_loo.subfield | html %]"
@@ -1158,7 +1158,7 @@
                                                             [% ELSE %]
                                                                 <label for="tag_[% subfield_loo.tag | html %]_subfield_[% subfield_loo.subfield | html %]_[% subfield_loo.index | html %]_[% subfield_loo.index_subfield | html %]" class="labelsubfield">
                                                             [% END %]
-                                                            [% subfield_loo.marc_lib | $raw %]
+                                                            [% subfield_loo.marc_lib | html %]
                                                             </label>
                                                         </div>
                                                     [% END %]
