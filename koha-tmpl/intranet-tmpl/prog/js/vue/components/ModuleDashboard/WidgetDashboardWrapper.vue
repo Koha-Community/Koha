@@ -36,6 +36,16 @@
                                     {{ $__("Settings") }}
                                 </button>
                             </li>
+                            <li v-if="!dashboardTopRow">
+                                <button
+                                    class="dropdown-item move-up"
+                                    @mousedown="moveWidget('up')"
+                                    :title="$__('Move up')"
+                                >
+                                    <font-awesome-icon icon="arrow-up" />
+                                    {{ $__("Move up") }}
+                                </button>
+                            </li>
                             <li v-if="dashboardColumn === 'left'">
                                 <button
                                     class="dropdown-item move-right"
@@ -54,6 +64,16 @@
                                 >
                                     <font-awesome-icon icon="arrow-left" />
                                     {{ $__("Move to left") }}
+                                </button>
+                            </li>
+                            <li v-if="dashboardTopRow">
+                                <button
+                                    class="dropdown-item move-down"
+                                    @mousedown="moveWidget('down')"
+                                    :title="$__('Move down')"
+                                >
+                                    <font-awesome-icon icon="arrow-down" />
+                                    {{ $__("Move down") }}
                                 </button>
                             </li>
                             <li>
@@ -140,6 +160,10 @@ export default {
             type: String,
             required: false,
         },
+        dashboardTopRow: {
+            type: Boolean,
+            required: true,
+        },
     },
     setup(props, { emit }) {
         const showSettings = ref(false);
@@ -148,8 +172,8 @@ export default {
             emit("removed", props);
         };
 
-        const moveWidget = column => {
-            emit("moveWidget");
+        const moveWidget = direction => {
+            emit("moveWidget", direction);
         };
 
         function toggleSettings() {

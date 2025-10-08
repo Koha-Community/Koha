@@ -49,6 +49,7 @@ export default {
     components: { WidgetWrapper },
     props: {
         display: String,
+        dashboardColumn: String,
     },
     emits: ["removed", "added", "moveWidget"],
     setup(props, { emit }) {

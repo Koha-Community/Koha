@@ -15,6 +15,8 @@ import {
     faEllipsisVertical,
     faArrowRight,
     faArrowLeft,
+    faArrowUp,
+    faArrowDown,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import vSelect from "vue-select";
@@ -30,7 +32,9 @@ library.add(
     faEye,
     faEllipsisVertical,
     faArrowRight,
-    faArrowLeft
+    faArrowLeft,
+    faArrowUp,
+    faArrowDown
 );
 
 import App from "../components/ERM/Main.vue";

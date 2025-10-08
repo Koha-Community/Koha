@@ -20,10 +20,11 @@
             >
                 <component
                     v-for="(widget, index) in selectedWidgetsLeft"
-                    :key="widget.name"
+                    :key="widget.name + '-' + index"
                     :is="widget"
                     display="dashboard"
                     dashboardColumn="left"
+                    :dashboardTopRow="index === 0"
                     @moveWidget="moveWidget"
                     @removed="removeWidget(widget)"
                 ></component>
@@ -39,10 +40,11 @@
             >
                 <component
                     v-for="(widget, index) in selectedWidgetsRight"
-                    :key="widget.name"
+                    :key="widget.name + '-' + index"
                     :is="widget"
                     display="dashboard"
                     dashboardColumn="right"
+                    :dashboardTopRow="index === 0"
                     @moveWidget="moveWidget"
                     @removed="removeWidget(widget)"
                 ></component>
@@ -103,33 +105,62 @@ export default {
             }
         }
 
-        function moveWidget(widget) {
-            if (
-                selectedWidgetsLeft.value.some(
-                    element => element.name === widget.componentName
-                )
-            ) {
+        function moveWidget(params) {
+            if (params.direction === "right") {
                 selectedWidgetsRight.value.unshift(
                     selectedWidgetsLeft.value.find(
-                        element => element.name === widget.componentName
+                        element => element.name === params.widgetComponentName
                     )
                 );
                 selectedWidgetsLeft.value = selectedWidgetsLeft.value.filter(
-                    element => element.name !== widget.componentName
+                    element => element.name !== params.widgetComponentName
                 );
-            } else if (
-                selectedWidgetsRight.value.some(
-                    element => element.name === widget.componentName
-                )
-            ) {
+            } else if (params.direction === "left") {
                 selectedWidgetsLeft.value.unshift(
                     selectedWidgetsRight.value.find(
-                        element => element.name === widget.componentName
+                        element => element.name === params.widgetComponentName
                     )
                 );
                 selectedWidgetsRight.value = selectedWidgetsRight.value.filter(
-                    element => element.name !== widget.componentName
+                    element => element.name !== params.widgetComponentName
                 );
+            } else if (
+                params.direction === "up" ||
+                params.direction === "down"
+            ) {
+                const list =
+                    params.currentColumn === "left"
+                        ? selectedWidgetsLeft.value
+                        : selectedWidgetsRight.value;
+
+                const currentIndex = list.findIndex(
+                    element => element.name === params.widgetComponentName
+                );
+
+                if (currentIndex === -1) return;
+
+                const newIndex =
+                    params.direction === "up"
+                        ? currentIndex - 1
+                        : currentIndex + 1;
+
+                if (newIndex < 0 || newIndex >= list.length) return; // Out of bounds
+
+                if (params.currentColumn === "left") {
+                    selectedWidgetsLeft.value = (() => {
+                        const arr = [...selectedWidgetsLeft.value];
+                        const [item] = arr.splice(currentIndex, 1);
+                        arr.splice(newIndex, 0, item);
+                        return arr;
+                    })();
+                } else if (params.currentColumn === "right") {
+                    selectedWidgetsRight.value = (() => {
+                        const arr = [...selectedWidgetsRight.value];
+                        const [item] = arr.splice(currentIndex, 1);
+                        arr.splice(newIndex, 0, item);
+                        return arr;
+                    })();
+                }
             }
         }
 

@@ -10,10 +10,11 @@ export function useBaseWidget(widgetConfig, emit) {
     const settings_definitions = ref(widgetConfig.settings_definitions || []);
     const removeWidget = () => emit("removed", widgetConfig);
     const addWidget = () => emit("added", widgetConfig);
-    const moveWidget = () => {
+    const moveWidget = direction => {
         emit("moveWidget", {
-            componentName: widgetConfig.id,
+            widgetComponentName: widgetConfig.id,
             currentColumn: widgetConfig.dashboardColumn,
+            direction: direction,
         });
     };
 
@@ -26,6 +27,7 @@ export function useBaseWidget(widgetConfig, emit) {
         display: widgetConfig.display,
         alreadyAdded: widgetConfig.alreadyAdded,
         dashboardColumn: widgetConfig.dashboardColumn,
+        dashboardTopRow: widgetConfig.dashboardTopRow,
         name: widgetConfig.name,
         icon: widgetConfig.icon,
         loading: loading.value,

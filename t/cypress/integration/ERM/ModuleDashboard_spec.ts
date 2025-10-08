@@ -32,7 +32,7 @@ describe("ERM Module Dashboard", () => {
             "There are 1 agreement, 5 licenses, 0 documents, 0 local packages, 0 local titles, 1 usage data provider."
         );
 
-        //Move
+        //Move to the right
         cy.get(
             ".dashboard-left-col .widget#ERMCounts .widget-header #dropdownMenuButton"
         ).click();
@@ -40,6 +40,40 @@ describe("ERM Module Dashboard", () => {
             ".dashboard-left-col .widget#ERMCounts .widget-header .move-right"
         ).click();
         cy.get(".dashboard-left-col .widget#ERMCounts").should("not.exist");
+        cy.get(".dashboard-right-col .dragArea")
+            .children()
+            .first()
+            .should("have.id", "ERMCounts");
+
+        //Move down
+        cy.get(".dashboard-right-col .dragArea")
+            .children()
+            .first()
+            .should("have.id", "ERMCounts");
+        cy.get(
+            ".dashboard-right-col .widget#ERMCounts .widget-header #dropdownMenuButton"
+        ).click();
+        cy.get(
+            ".dashboard-right-col .widget#ERMCounts .widget-header .move-down"
+        ).click();
+        //ERMCounts is now index 1, position 2
+        cy.get(".dashboard-right-col .dragArea")
+            .children()
+            .eq(1)
+            .should("have.id", "ERMCounts");
+
+        //Move up
+        cy.get(".dashboard-right-col .dragArea")
+            .children()
+            .eq(1)
+            .should("have.id", "ERMCounts");
+        cy.get(
+            ".dashboard-right-col .widget#ERMCounts .widget-header #dropdownMenuButton"
+        ).click();
+        cy.get(
+            ".dashboard-right-col .widget#ERMCounts .widget-header .move-up"
+        ).click();
+        //ERMCounts is now index 1, position 2
         cy.get(".dashboard-right-col .dragArea")
             .children()
             .first()

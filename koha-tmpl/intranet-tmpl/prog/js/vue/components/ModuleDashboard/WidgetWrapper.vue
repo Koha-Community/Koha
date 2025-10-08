@@ -21,6 +21,7 @@
             :settings_definitions="settings_definitions"
             :loading="loading"
             :dashboardColumn="dashboardColumn"
+            :dashboardTopRow="dashboardTopRow"
             :name="name"
             :icon="icon"
         >
@@ -51,6 +52,9 @@ export default {
         },
         dashboardColumn: {
             type: String,
+        },
+        dashboardTopRow: {
+            type: Boolean,
         },
         id: {
             type: String,
@@ -83,6 +87,7 @@ export default {
             display,
             alreadyAdded,
             dashboardColumn,
+            dashboardTopRow,
             id,
             name,
             icon,
@@ -104,14 +109,15 @@ export default {
             if (removeWidget) removeWidget();
         };
 
-        const handleMoveWidget = () => {
-            if (moveWidget) moveWidget();
+        const handleMoveWidget = direction => {
+            if (moveWidget) moveWidget(direction);
         };
 
         return {
             display,
             alreadyAdded,
             dashboardColumn,
+            dashboardTopRow,
             id,
             name,
             icon,
