@@ -544,8 +544,7 @@ if ( @$barcodes && $op eq 'cud-checkout' ) {
                 if ( my $booked = $needsconfirmation->{BOOKED_EARLY} // $alerts->{BOOKED} ) {
                     $datedue = $booked->end_date;
                 }
-                $needsconfirmation->{'DEBT'}       = $needsconfirmationDEBT if ($debt_confirmed);
-                $needsconfirmation->{'OVERRIDDEN'} = $issueconfirmed        if ($issueconfirmed);
+                $needsconfirmation->{'DEBT'} = $needsconfirmationDEBT if ($debt_confirmed);
                 my $issue = AddIssue(
                     $patron, $barcode, $datedue,
                     $cancelreserve,
