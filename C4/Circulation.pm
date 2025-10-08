@@ -827,15 +827,11 @@ sub CanBookBeIssued {
     my $circ_library = Koha::Libraries->find( _GetCircControlBranch( $item_object, $patron ) );
 
     my $now = dt_from_string();
-    my @message_log;
 
     $duedate ||= CalcDateDue( $now, $effective_itemtype, $circ_library->branchcode, $patron );
 
     if ( DateTime->compare( $duedate, $now ) == -1 ) {    # duedate cannot be before now
         $needsconfirmation{INVALID_DATE} = $duedate;
-        if ($issueconfirmed) {
-            push( @message_log, "sticky due date is invalid or due date in the past" );
-        }
     }
 
     my $fees = Koha::Charges::Fees->new(
@@ -881,9 +877,6 @@ sub CanBookBeIssued {
     }
     if ( $patron->is_debarred ) {
         $issuingimpossible{DEBARRED} = 1;
-        if ($issueconfirmed) {
-            push( @message_log, "borrower is restricted" );
-        }
     }
 
     if ( $patron->is_expired ) {
@@ -956,16 +949,10 @@ sub CanBookBeIssued {
     } else {
         if ( $patron_borrowing_status->{noissuescharge}->{overlimit} && $allowfineoverride ) {
             $needsconfirmation{DEBT} = $patron_borrowing_status->{noissuescharge}->{charge};
-            if ($issueconfirmed) {
-                push( @message_log, "borrower had amend" );
-            }
         } elsif ( $patron_borrowing_status->{noissuescharge}->{overlimit} && !$allowfineoverride ) {
             $issuingimpossible{DEBT} = $patron_borrowing_status->{noissuescharge}->{charge};
         } elsif ( $patron_borrowing_status->{noissuescharge}->{charge} > 0 && $allfinesneedoverride ) {
             $needsconfirmation{DEBT} = $patron_borrowing_status->{noissuescharge}->{charge};
-            if ($issueconfirmed) {
-                push( @message_log, "borrower had amend" );
-            }
         }
     }
 
@@ -1046,9 +1033,6 @@ sub CanBookBeIssued {
                 $needsconfirmation{issued_surname}        = $patron->surname;
                 $needsconfirmation{issued_cardnumber}     = $patron->cardnumber;
                 $needsconfirmation{issued_borrowernumber} = $patron->borrowernumber;
-                if ($issueconfirmed) {
-                    push( @message_log, "item is checked out for someone else" );
-                }
             }
         }
     }
@@ -1076,9 +1060,6 @@ sub CanBookBeIssued {
             $needsconfirmation{current_loan_count}        = $toomany->{count};
             $needsconfirmation{max_loans_allowed}         = $toomany->{max_allowed};
             $needsconfirmation{circulation_rule_TOO_MANY} = $toomany->{circulation_rule};
-            if ($issueconfirmed) {
-                push( @message_log, "too many checkout" );
-            }
         } else {
             $issuingimpossible{TOO_MANY}                  = $toomany->{reason};
             $issuingimpossible{current_loan_count}        = $toomany->{count};
@@ -1111,9 +1092,6 @@ sub CanBookBeIssued {
         } else {
             $needsconfirmation{NOT_FOR_LOAN_FORCING} = 1;
             $needsconfirmation{item_notforloan}      = $item_object->notforloan;
-            if ($issueconfirmed) {
-                push( @message_log, "item not for loan" );
-            }
         }
     } else {
 
@@ -1159,9 +1137,6 @@ sub CanBookBeIssued {
         my $code = $av->count ? $av->next->lib : '';
         $needsconfirmation{ITEM_LOST} = $code if ( C4::Context->preference("IssueLostItem") eq 'confirm' );
         $alerts{ITEM_LOST}            = $code if ( C4::Context->preference("IssueLostItem") eq 'alert' );
-        if ($issueconfirmed) {
-            push( @message_log, "item lost" );
-        }
     }
     if ( C4::Context->preference("IndependentBranches") ) {
         my $userenv = C4::Context->userenv;
@@ -1262,13 +1237,6 @@ sub CanBookBeIssued {
                     $needsconfirmation{'resbranchcode'}     = $res->{branchcode};
                     $needsconfirmation{'reswaitingdate'}    = $res->{'waitingdate'};
                     $needsconfirmation{'reserve_id'}        = $res->{reserve_id};
-
-                    if ($issueconfirmed) {
-                        push(
-                            @message_log,
-                            "item is on reserve and waiting, but has been reserved by some other patron"
-                        );
-                    }
                 } elsif ( $restype eq "Reserved" ) {
 
                     # The item is on reserve for someone else.
@@ -1280,10 +1248,6 @@ sub CanBookBeIssued {
                     $needsconfirmation{'resbranchcode'}     = $res->{branchcode};
                     $needsconfirmation{'resreservedate'}    = $res->{reservedate};
                     $needsconfirmation{'reserve_id'}        = $res->{reserve_id};
-
-                    if ($issueconfirmed) {
-                        push( @message_log, "item is on reserve for someone else" );
-                    }
                 } elsif ( $restype eq "Transferred" ) {
 
                     # The item is determined hold being transferred for someone else.
@@ -1295,10 +1259,6 @@ sub CanBookBeIssued {
                     $needsconfirmation{'resbranchcode'}     = $res->{branchcode};
                     $needsconfirmation{'resreservedate'}    = $res->{reservedate};
                     $needsconfirmation{'reserve_id'}        = $res->{reserve_id};
-
-                    if ($issueconfirmed) {
-                        push( @message_log, "item is determined hold being transferred for someone else" );
-                    }
                 } elsif ( $restype eq "Processing" ) {
 
                     # The item is determined hold being processed for someone else.
@@ -1310,10 +1270,6 @@ sub CanBookBeIssued {
                     $needsconfirmation{'resbranchcode'}     = $res->{branchcode};
                     $needsconfirmation{'resreservedate'}    = $res->{reservedate};
                     $needsconfirmation{'reserve_id'}        = $res->{reserve_id};
-
-                    if ($issueconfirmed) {
-                        push( @message_log, "item is determined hold being processed for someone else" );
-                    }
                 }
             }
         }
@@ -1357,9 +1313,6 @@ sub CanBookBeIssued {
     if ( $restriction_age && $patron->dateofbirth && $restriction_age > $patron->get_age() ) {
         if ( C4::Context->preference('AgeRestrictionOverride') ) {
             $needsconfirmation{AGE_RESTRICTION} = "$agerestriction";
-            if ($issueconfirmed) {
-                push( @message_log, "age restriction" );
-            }
         } else {
             $issuingimpossible{AGE_RESTRICTION} = "$agerestriction";
         }
@@ -1418,34 +1371,7 @@ sub CanBookBeIssued {
         }
     }
 
-    my $borrower   = $patron;
-    my $user       = C4::Context->userenv->{number};
-    my $branchcode = C4::Context->userenv->{branch};
-
-    # action, cardnumber, barcode, date, heure, user, branche
-    if ($issueconfirmed) {
-
-        my $infos = (
-            {
-                message        => \@message_log,
-                borrowernumber => $borrower->borrowernumber,
-                barcode        => $barcode,
-                manager_id     => $user,
-                branchcode     => $branchcode,
-            }
-        );
-
-        my $json_infos = JSON->new->utf8->pretty->encode($infos);
-        $json_infos =~ s/"/'/g;
-
-        logaction(
-            "CIRCULATION", "ISSUE",
-            $borrower->{'borrowernumber'},
-            $json_infos,
-        ) if C4::Context->preference("IssueLog");
-    }
-
-    return ( \%issuingimpossible, \%needsconfirmation, \%alerts, \%messages, \@message_log );
+    return ( \%issuingimpossible, \%needsconfirmation, \%alerts, \%messages );
 }
 
 =head2 CanBookBeReturned
