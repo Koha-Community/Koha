@@ -61,6 +61,9 @@ import { $__ } from "@koha-vue/i18n";
 import { VueDraggableNext } from "vue-draggable-next";
 
 export default {
+    props: {
+        availableWidgets: Array
+    },
     setup(props) {
         const availableWidgets = props.availableWidgets;
         const selectedWidgetsLeft = ref([]);
