@@ -41,7 +41,8 @@ return {
             $dbh->do(
                 q{
                 ALTER TABLE statistics
-                ADD COLUMN `illrequest_id` int(11) DEFAULT NULL AFTER `other`
+                ADD COLUMN `illrequest_id` int(11) DEFAULT NULL COMMENT 'foreign key from the illrequests table, links transaction to a specific illrequest' AFTER `other`
+
             }
             );
         }
