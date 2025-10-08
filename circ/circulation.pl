@@ -326,8 +326,6 @@ if ($patron) {
 # STEP 3 : ISSUING
 #
 #
-my $message;
-
 if ( @$barcodes && $op eq 'cud-checkout' ) {
     my $checkout_infos;
     for my $barcode (@$barcodes) {
@@ -784,7 +782,6 @@ $template->param(
     stickyduedate             => $stickyduedate,
     duedatespec               => $duedatespec,
     restoreduedatespec        => $restoreduedatespec,
-    message                   => $message,
     totaldue                  => sprintf( '%.2f', $balance ),                         # FIXME not used in template?
     inprocess                 => $inprocess,
     $view                     => 1,
