@@ -35,7 +35,7 @@ return {
                 q{
                 ALTER TABLE old_issues
                 ADD COLUMN booking_id int(11) DEFAULT NULL
-                COMMENT 'foreign key linking this checkout to the booking it fulfilled'
+                COMMENT 'foreign key linking this checkout to the booking it fulfills'
                 AFTER itemnumber
             }
             );
