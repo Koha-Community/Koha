@@ -191,6 +191,8 @@
         <span>Patron had debt</span>
     [% CASE 'USERBLOCKEDOVERDUE' %]
         <span>Patron had overdues</span>
+    [% CASE 'USERBLOCKEDNOENDDATE' %]
+        <span>Patron had an indefinite restriction</span>
     [% CASE 'ADDITIONAL_MATERIALS' %]
         <span>Additional materials were confirmed</span>
     [% CASE 'RENEW_ISSUE' %]
@@ -251,6 +253,12 @@
         <span>Override auto-renew too much owing restriction</span>
     [% CASE 'OVERRIDDEN' %]
         <span>Restriction overridden temporarily</span>
+    [% CASE 'CURRENTISSUE' %]
+        <span>Item is currently checked out to this patron</span>
+    [% CASE 'UNSEEN' %]
+        <span>Unseen renewal</span>
+    [% CASE 'SEEN' %]
+        <span>Seen renewal</span>
     [% CASE %]
         <span>[% override | html %]</span>
     [% END %]
