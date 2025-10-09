@@ -34,10 +34,17 @@ describe("catalogue/detail/holdings_table with items", () => {
     it("Correctly init the table", function () {
         // Do not use `() => {` or this.objects won't be retrieved
         const biblio_id = this.objects.biblio.biblio_id;
+
+        cy.intercept("get", `/api/v1/biblios/${biblio_id}/items*`).as(
+            "searchItems"
+        );
+
         cy.set_syspref("AlwaysShowHoldingsTableFilters", 1).then(() => {
             cy.visit(
                 "/cgi-bin/koha/catalogue/detail.pl?biblionumber=" + biblio_id
             );
+
+            cy.wait("@searchItems");
 
             cy.get(`#${table_id}_wrapper tbody tr`).should(
                 "have.length",
@@ -54,6 +61,10 @@ describe("catalogue/detail/holdings_table with items", () => {
         // Do not use `() => {` or this.objects won't be retrieved
         const biblio_id = this.objects.biblio.biblio_id;
 
+        cy.intercept("get", `/api/v1/biblios/${biblio_id}/items*`).as(
+            "searchItems"
+        );
+
         cy.set_syspref("AlwaysShowHoldingsTableFilters", 0).then(() => {
             cy.visit(
                 "/cgi-bin/koha/catalogue/detail.pl?biblionumber=" + biblio_id
@@ -66,6 +77,8 @@ describe("catalogue/detail/holdings_table with items", () => {
                 },
                 "items_table_settings.holdings"
             );
+
+            cy.wait("@searchItems");
 
             cy.get("@columns").then(columns => {
                 cy.get(`#${table_id}_wrapper tbody tr`).should(
@@ -83,6 +96,7 @@ describe("catalogue/detail/holdings_table with items", () => {
                     .should("not.exist");
 
                 cy.get(`.${table_id}_table_controls .show_filters`).click();
+                cy.wait("@searchItems");
                 cy.get(`#${table_id}_wrapper .dt-info`).contains(
                     `Showing 1 to ${RESTdefaultPageSize} of ${baseTotalCount} entries`
                 );
@@ -110,6 +124,8 @@ describe("catalogue/detail/holdings_table with items", () => {
                 "items_table_settings.holdings"
             );
 
+            cy.wait("@searchItems");
+
             cy.get("@columns").then(columns => {
                 cy.get(`#${table_id}_wrapper tbody tr`).should(
                     "have.length",
@@ -120,6 +136,7 @@ describe("catalogue/detail/holdings_table with items", () => {
                 cy.get(`#${table_id} thead tr`).should("have.length", 2);
 
                 cy.get(`.${table_id}_table_controls .hide_filters`).click();
+                cy.wait("@searchItems");
 
                 // Filters are not displayed
                 cy.get(`#${table_id} thead tr`).should("have.length", 1);
@@ -290,7 +307,14 @@ describe("catalogue/detail/holdings_table without items", () => {
         // Do not use `() => {` or this.objects won't be retrieved
         const biblio_id = this.objects.biblio.biblio_id;
 
+        cy.intercept("get", `/api/v1/biblios/${biblio_id}/items*`).as(
+            "searchItems"
+        );
+
         cy.visit("/cgi-bin/koha/catalogue/detail.pl?biblionumber=" + biblio_id);
+
+        // No API request
+        cy.get("@searchItems.all").should("have.length", 0);
 
         cy.get(`#${table_id}_wrapper`).should("not.exist");
     });
