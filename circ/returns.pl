@@ -42,7 +42,6 @@ use C4::Members;
 use C4::Output   qw( output_html_with_http_headers );
 use C4::Reserves qw( ModReserve ModReserveAffect CheckReserves );
 use C4::RotatingCollections;
-use C4::Log qw( logaction );
 use Koha::AuthorisedValues;
 use Koha::BiblioFrameworks;
 use Koha::Calendar;
@@ -159,32 +158,6 @@ if ( $query->param('reserve_id') && $op eq 'cud-affect_reserve' ) {
             $transfer->transit;
         }
     }
-} else {
-    my $message    = "return an element that is reserved";
-    my @message    = ("return an element that is reserved");
-    my $user       = C4::Context->userenv->{number};
-    my $branchcode = C4::Context->userenv->{branch};
-    my $barcode    = $query->param('barcode');
-
-    my $infos = (
-        {
-            message => \@message,
-
-            #'card number' => $cardnumber,
-            barcode    => $barcode,
-            manager_id => $user,
-            branchcode => $branchcode,
-        }
-    );
-
-    my $json_infos = JSON->new->utf8->pretty->encode($infos);
-    $json_infos =~ s/"/'/g;
-
-    logaction(
-        "CIRCULATION", "RETURN",
-        $session,
-        $json_infos,
-    ) if C4::Context->preference("ReturnLog");
 }
 
 if ( $query->param('recall_id') && $op eq 'cud-affect_recall' ) {
