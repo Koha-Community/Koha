@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 18;
+use Test::More tests => 19;
 use Test::NoWarnings;
 use Test::MockModule;
 use Test::Mojo;
@@ -25,6 +25,7 @@ use t::lib::TestBuilder;
 use t::lib::Mocks;
 
 use DateTime;
+use JSON       qw( from_json );
 use Mojo::JSON qw(encode_json);
 
 use C4::Context;
@@ -32,6 +33,7 @@ use Koha::Patrons;
 use C4::Reserves qw( AddReserve CanItemBeReserved CanBookBeReserved );
 use C4::Items;
 
+use Koha::ActionLogs;
 use Koha::Database;
 use Koha::DateUtils qw( dt_from_string output_pref );
 use Koha::Biblios;
@@ -1882,6 +1884,74 @@ subtest 'PUT /holds/{hold_id}/lowest_priority tests' => sub {
     $t->put_ok( "//$userid:$password@/api/v1/holds/" . $hold->id . "/lowest_priority" )->status_is(200);
 
     is( $hold->discard_changes->lowestPriority, 1, 'Priority set to lowest' );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'Bug 40866: API hold creation with override logs confirmations' => sub {
+    plan tests => 6;
+
+    $schema->storage->txn_begin;
+
+    my $librarian = $builder->build_object(
+        {
+            class => 'Koha::Patrons',
+            value => { flags => 1 }
+        }
+    );
+    my $password = 'thePassword123';
+    $librarian->set_password( { password => $password, skip_validation => 1 } );
+    my $userid = $librarian->userid;
+
+    my $patron = $builder->build_object(
+        {
+            class => 'Koha::Patrons',
+            value => { flags => 0 }
+        }
+    );
+
+    my $library = $builder->build_object( { class => 'Koha::Libraries' } );
+    my $biblio  = $builder->build_sample_biblio;
+
+    t::lib::Mocks::mock_preference( 'AllowHoldPolicyOverride', 1 );
+    t::lib::Mocks::mock_preference( 'HoldsLog',                1 );
+
+    # Clear any existing logs
+    Koha::ActionLogs->search( { module => 'HOLDS', action => 'CREATE' } )->delete;
+
+    my $post_data = {
+        patron_id         => $patron->id,
+        biblio_id         => $biblio->id,
+        pickup_library_id => $library->branchcode,
+    };
+
+    # Create hold with override
+    my $hold_id =
+        $t->post_ok( "//$userid:$password@/api/v1/holds" => { 'x-koha-override' => 'any' } => json => $post_data )
+        ->status_is(201)->tx->res->json->{hold_id};
+
+    ok( $hold_id, 'Hold created via API with override' );
+
+    # Verify the hold was logged with override information
+    my $logs = Koha::ActionLogs->search(
+        {
+            module => 'HOLDS',
+            action => 'CREATE',
+            object => $hold_id
+        },
+        { order_by => { -desc => 'timestamp' } }
+    );
+
+    is( $logs->count, 1, 'One log entry created for API hold with override' );
+
+    my $log      = $logs->next;
+    my $log_data = eval { from_json( $log->info ) };
+    ok( !$@, 'Log info is valid JSON' );
+    is_deeply(
+        $log_data->{confirmations},
+        ['HOLD_POLICY_OVERRIDE'],
+        'HOLD_POLICY_OVERRIDE logged in confirmations array'
+    );
 
     $schema->storage->txn_rollback;
 };

@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 70;
+use Test::More tests => 71;
 use Test::NoWarnings;
 use Test::MockModule;
 use Test::Warn;
@@ -25,6 +25,7 @@ use Test::Warn;
 use t::lib::Mocks;
 use t::lib::TestBuilder;
 
+use JSON qw( from_json );
 use MARC::Record;
 use DateTime::Duration;
 
@@ -2001,6 +2002,95 @@ subtest 'CheckReserves() item type tests' => sub {
 
     my ($res) = CheckReserves($item);
     is( $res, '', 'No holds on new item' );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'Bug 40866: AddReserve override JSON logging' => sub {
+    plan tests => 8;
+
+    $schema->storage->txn_begin;
+
+    my $library = $builder->build_object( { class => 'Koha::Libraries' } );
+    my $patron  = $builder->build_object(
+        {
+            class => 'Koha::Patrons',
+            value => { branchcode => $library->branchcode }
+        }
+    );
+    my $biblio = $builder->build_sample_biblio();
+    my $item   = $builder->build_sample_item(
+        {
+            library      => $library->branchcode,
+            biblionumber => $biblio->biblionumber
+        }
+    );
+
+    t::lib::Mocks::mock_userenv( { patron => $patron, branchcode => $library->branchcode } );
+    t::lib::Mocks::mock_preference( 'HoldsLog', 1 );
+
+    # Clear any existing logs
+    Koha::ActionLogs->search( { module => 'HOLDS', action => 'CREATE' } )->delete;
+
+    # Test 1: Normal hold without overrides - should log hold ID only
+    my $hold_id = C4::Reserves::AddReserve(
+        {
+            branchcode     => $library->branchcode,
+            borrowernumber => $patron->borrowernumber,
+            biblionumber   => $biblio->biblionumber,
+            priority       => 1,
+        }
+    );
+    ok( $hold_id, 'Hold created successfully' );
+
+    my $logs = Koha::ActionLogs->search(
+        {
+            module => 'HOLDS',
+            action => 'CREATE',
+            object => $hold_id
+        },
+        { order_by => { -desc => 'timestamp' } }
+    );
+    is( $logs->count, 1, 'One log entry created for normal hold' );
+    my $log = $logs->next;
+    is( $log->info, $hold_id, 'Normal hold logs hold ID only' );
+
+    # Cancel the hold for next test
+    my $hold = Koha::Holds->find($hold_id);
+    $hold->cancel;
+
+    # Test 2: Hold with override confirmation - should log JSON with confirmations
+    my $hold_id2 = C4::Reserves::AddReserve(
+        {
+            branchcode     => $library->branchcode,
+            borrowernumber => $patron->borrowernumber,
+            biblionumber   => $biblio->biblionumber,
+            priority       => 1,
+            confirmations  => ['HOLD_POLICY_OVERRIDE'],
+            forced         => []
+        }
+    );
+    ok( $hold_id2, 'Hold with override created successfully' );
+
+    $logs = Koha::ActionLogs->search(
+        {
+            module => 'HOLDS',
+            action => 'CREATE',
+            object => $hold_id2
+        },
+        { order_by => { -desc => 'timestamp' } }
+    );
+    is( $logs->count, 1, 'One log entry created for override hold' );
+    $log = $logs->next;
+
+    my $log_data = eval { from_json( $log->info ) };
+    ok( !$@,                               'Log info is valid JSON' );
+    ok( exists $log_data->{confirmations}, 'JSON contains confirmations array' );
+    is_deeply(
+        $log_data->{confirmations},
+        ['HOLD_POLICY_OVERRIDE'],
+        'Confirmations logged correctly'
+    );
 
     $schema->storage->txn_rollback;
 };
