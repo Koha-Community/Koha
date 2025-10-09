@@ -179,6 +179,8 @@
 
 [% BLOCK translate_log_override %]
     [% SWITCH override %]
+    [% CASE 'HOLD_POLICY_OVERRIDE' %]
+        <span>Hold policy override</span>
     [% CASE 'INVALID_DATE' %]
         <span>Invalid date confirmed</span>
     [% CASE 'DEBT_GUARANTEES' %]

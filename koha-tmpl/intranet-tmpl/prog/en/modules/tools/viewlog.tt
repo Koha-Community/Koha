@@ -349,6 +349,28 @@
                                                 <div class="confirmed"> [% PROCESS translate_log_override override=confirmation %] </div>
                                             [% END %]
                                         </div>
+                                    [% ELSIF ( loopro.module == 'HOLDS' && loopro.json_found ) %]
+                                        <div class="loginfo" id="loginfo[% loopro.action_id | html %]">
+                                            <div>
+                                                <a href="/cgi-bin/koha/reserve/request.pl?biblionumber=[% loopro.json.biblionumber | uri %]" title="Display holds for this record"
+                                                    >Hold [% loopro.json.hold | html %] on biblio [% loopro.json.biblionumber | html %]</a
+                                                >
+                                                [% IF loopro.json.itemnumber %]
+                                                    -
+                                                    <a
+                                                        href="/cgi-bin/koha/catalogue/moredetail.pl?itemnumber=[% loopro.json.itemnumber | uri %]&amp;biblionumber=[% loopro.json.biblionumber | uri %]#item[% loopro.json.itemnumber | uri %]"
+                                                        title="Display detail for this item"
+                                                        >Item [% loopro.json.itemnumber | html %]</a
+                                                    >
+                                                [% END %]
+                                            </div>
+                                            [% FOREACH force IN loopro.json.forced %]
+                                                <div class="forced"> [% PROCESS translate_log_override override=force %] </div>
+                                            [% END %]
+                                            [% FOREACH confirmation IN loopro.json.confirmations %]
+                                                <div class="confirmed"> [% PROCESS translate_log_override override=confirmation %] </div>
+                                            [% END %]
+                                        </div>
                                     [% ELSIF loopro.module == "SYSTEMPREFERENCE" || loopro.module == "REPORTS" || loopro.module == "NEWS" %]
                                         <div class="loginfo" id="loginfo[% loopro.action_id | html %]">[% loopro.info | trim | html %]</div>
                                         <div class="compare_info" id="compare_info[% loopro.action_id | html %]">

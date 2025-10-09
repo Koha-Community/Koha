@@ -40,7 +40,6 @@ use C4::Serials     qw( CountSubscriptionFromBiblionumber );
 use C4::Circulation qw( _GetCircControlBranch GetBranchItemRule );
 use Koha::DateUtils qw( dt_from_string );
 use C4::Search      qw( enabled_staff_search_views );
-use C4::Log         qw( logaction );
 
 use Koha::Biblios;
 use Koha::Checkouts;
@@ -623,33 +622,6 @@ if (   ( $findborrower && $borrowernumber_hold || $findclub && $club_hold )
                         } else {
                             $num_alreadyheld++;
                         }
-
-                        my $borrower       = $patron;
-                        my $borrowernumber = $patron->borrowernumber;
-                        my $user           = C4::Context->userenv->{number};
-                        my $branchcode     = C4::Context->userenv->{branch};
-                        my $message        = "Override limitation of hold";
-                        my @message        = ("Override limitation of hold");
-                        my $barcode        = $item->{barcode};
-
-                        my $infos = (
-                            {
-                                message        => \@message,
-                                borrowernumber => $borrowernumber,
-                                barcode        => $barcode,
-                                manager_id     => $user,
-                                branchcode     => $branchcode,
-                            }
-                        );
-
-                        my $json_infos = JSON->new->utf8->pretty->encode($infos);
-                        $json_infos =~ s/"/'/g;
-
-                        logaction(
-                            "HOLD", "ISSUE",
-                            $borrower->{'borrowernumber'},
-                            $json_infos,
-                        ) if C4::Context->preference("IssueLog");
 
                         push( @available_itemtypes, $item->{itype} );
                     } else {
