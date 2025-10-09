@@ -17,7 +17,7 @@ package Koha::SIP2::Account;
 
 use Modern::Perl;
 
-use base qw(Koha::SIP2::Object Koha::Object);
+use base qw(Koha::SIP2::Object);
 
 use Koha::SIP2::Account::CustomItemFields;
 use Koha::SIP2::Account::ItemFields;

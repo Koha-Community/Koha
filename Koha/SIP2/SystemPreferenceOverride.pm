@@ -19,7 +19,7 @@ use Modern::Perl;
 
 use Koha::Database;
 
-use base qw(Koha::SIP2::Object Koha::Object);
+use base qw(Koha::SIP2::Object);
 
 =head1 NAME
 
