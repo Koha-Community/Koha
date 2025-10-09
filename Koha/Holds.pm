@@ -38,8 +38,8 @@ Koha::Holds - Koha Hold object set class
 
     my $found_holds = $holds->filter_by_found;
 
-Returns a filtered resultset without holds that are considered I<found>.
-i.e. 'P', 'T' and 'W'.
+Returns a set of holds that are considered I<found>.
+Having the code 'P', 'T' or 'W'.
 
 =cut
 
