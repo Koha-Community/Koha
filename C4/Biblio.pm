@@ -3194,10 +3194,6 @@ sub _after_biblio_action_hooks {
                 biblio    => $biblio,
                 biblio_id => $biblio_id,
             },
-
-            # NOTE: Deprecate these duplicate params for 24.11.00
-            biblio    => $biblio,
-            biblio_id => $biblio_id,
         }
     );
 }

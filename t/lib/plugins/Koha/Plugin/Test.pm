@@ -187,8 +187,9 @@ sub before_biblio_action {
 sub after_biblio_action {
     my ( $self, $params ) = @_;
     my $action    = $params->{action} // '';
-    my $biblio    = $params->{biblio};
-    my $biblio_id = $params->{biblio_id};
+    my $payload   = $params->{payload};
+    my $biblio    = $payload->{biblio};
+    my $biblio_id = $payload->{biblio_id};
 
     if ( $action ne 'delete' ) {
         Koha::Exception->throw( "after_biblio_action called with action: $action, ref: " . ref($biblio) );
