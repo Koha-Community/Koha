@@ -2,7 +2,7 @@
     [%- WRAPPER maybe_span field_name = 'surname' -%][%- patron.surname | html -%][%- END -%]
     [%- IF patron.othernames -%]([%- WRAPPER maybe_span field_name='othernames' -%][%- patron.othernames | html -%][%- END -%])[%- END -%]
 [%- ELSE -%]
-    [%- WRAPPER maybe_span field_name='patron-title' -%][%- patron.title _ ' ' | html %][% END -%]
+    [%- WRAPPER maybe_span field_name='patron_title' -%][%- patron.title _ ' ' | html %][% END -%]
     [%- WRAPPER maybe_span field_name='preferred_name' -%][%- patron.preferred_name | html %][% END -%]
     [%- WRAPPER maybe_span field_name='middle_name' -%][% ' ' _ patron.middle_name | html -%][%- END -%]
     [%- WRAPPER maybe_span field_name='surname' -%][% ' ' _ patron.surname | html -%][%- END -%]
