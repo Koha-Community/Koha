@@ -22,6 +22,8 @@ package C4::Reserves;
 
 use Modern::Perl;
 
+use JSON qw( to_json );
+
 use C4::Accounts;
 use C4::Biblio      qw( GetMarcFromKohaField );
 use C4::Circulation qw( CheckIfIssuedToPatron GetAgeRestriction GetBranchItemRule );
@@ -192,6 +194,8 @@ sub AddReserve {
     my $itemtype               = $params->{itemtype};
     my $non_priority           = $params->{non_priority};
     my $item_group_id          = $params->{item_group_id};
+    my $confirmations          = $params->{confirmations};
+    my $forced                 = $params->{forced};
 
     $resdate ||= dt_from_string;
 
@@ -261,8 +265,24 @@ sub AddReserve {
     # record patron activity
     $hold->patron->update_lastseen('hold');
 
-    logaction( 'HOLDS', 'CREATE', $hold->id, $hold )
-        if C4::Context->preference('HoldsLog');
+    # Log the hold creation
+    if ( C4::Context->preference('HoldsLog') ) {
+        my $info = $hold->id;
+        if ( defined($confirmations) || defined($forced) ) {
+            $info = to_json(
+                {
+                    hold          => $hold->id,
+                    branchcode    => $hold->branchcode,
+                    biblionumber  => $hold->biblionumber,
+                    itemnumber    => $hold->itemnumber,
+                    confirmations => $confirmations,
+                    forced        => $forced
+                },
+                { pretty => 1, canonical => 1 }
+            );
+        }
+        logaction( 'HOLDS', 'CREATE', $hold->id, $info );
+    }
 
     my $reserve_id = $hold->id();
 

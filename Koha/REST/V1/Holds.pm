@@ -191,6 +191,12 @@ sub add {
 
         my $priority = C4::Reserves::CalculatePriority($biblio_id);
 
+        # Build confirmations array for logging overrides
+        my $confirmations = [];
+        if ($override_all) {
+            push @{$confirmations}, 'HOLD_POLICY_OVERRIDE';
+        }
+
         my $hold_id = C4::Reserves::AddReserve(
             {
                 branchcode       => $pickup_library_id,
@@ -206,6 +212,7 @@ sub add {
                 itemtype         => $item_type,
                 non_priority     => $non_priority,
                 item_group_id    => $item_group_id,
+                confirmations    => $confirmations,
             }
         );
 
