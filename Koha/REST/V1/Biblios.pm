@@ -161,6 +161,11 @@ sub get_public {
         my $schema = $biblio->metadata->schema // C4::Context->preference("marcflavour");
         my $patron = $c->stash('koha.user');
 
+        # Check if the bibliographic record is suppressed in OPAC
+        if ( C4::Context->preference('OpacSuppression') && $biblio->opac_suppressed ) {
+            return $c->render_resource_not_found("Bibliographic record");
+        }
+
         # Check if the bibliographic record should be hidden for unprivileged access
         # unless there's a logged in user, and there's an exception for it's category
         my $opachiddenitems_rules = C4::Context->yaml_preference('OpacHiddenItems');

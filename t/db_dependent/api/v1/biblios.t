@@ -292,7 +292,7 @@ subtest 'delete() tests' => sub {
 
 subtest 'get_public() tests' => sub {
 
-    plan tests => 25;
+    plan tests => 26;
 
     $schema->storage->txn_begin;
 
@@ -423,6 +423,34 @@ subtest 'get_public() tests' => sub {
             ->status_is( 200, "hidden_in_opac + patron whose category that overrides => displayed" );
 
         t::lib::Mocks::mock_preference('OpacHiddenItems');
+    };
+
+    subtest 'OpacSuppression tests' => sub {
+
+        plan tests => 8;
+
+        # Test with OpacSuppression enabled and biblio suppressed
+        t::lib::Mocks::mock_preference( 'OpacSuppression', 1 );
+        $biblio->set( { opac_suppressed => 1 } )->store;
+
+        $t->get_ok( "/api/v1/public/biblios/" . $biblio->biblionumber => { Accept => 'text/plain' } )
+            ->status_is( 404, 'OpacSuppression enabled + opac_suppressed => hidden' );
+
+        # Test with OpacSuppression enabled but biblio not suppressed
+        $biblio->set( { opac_suppressed => 0 } )->store;
+        $t->get_ok( "/api/v1/public/biblios/" . $biblio->biblionumber => { Accept => 'text/plain' } )
+            ->status_is( 200, 'OpacSuppression enabled + not suppressed => displayed' );
+
+        # Test with OpacSuppression disabled but biblio suppressed
+        t::lib::Mocks::mock_preference( 'OpacSuppression', 0 );
+        $biblio->set( { opac_suppressed => 1 } )->store;
+        $t->get_ok( "/api/v1/public/biblios/" . $biblio->biblionumber => { Accept => 'text/plain' } )
+            ->status_is( 200, 'OpacSuppression disabled + opac_suppressed => displayed' );
+
+        # Test with both disabled
+        $biblio->set( { opac_suppressed => 0 } )->store;
+        $t->get_ok( "/api/v1/public/biblios/" . $biblio->biblionumber => { Accept => 'text/plain' } )
+            ->status_is( 200, 'OpacSuppression disabled + not suppressed => displayed' );
     };
 
     $biblio->delete;
