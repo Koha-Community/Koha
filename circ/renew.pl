@@ -24,7 +24,6 @@ use C4::Context;
 use C4::Auth        qw( get_template_and_user );
 use C4::Output      qw( output_html_with_http_headers );
 use C4::Circulation qw( barcodedecode CanBookBeRenewed GetLatestAutoRenewDate AddRenewal );
-use C4::Log         qw( logaction );
 use Koha::DateUtils qw( dt_from_string );
 use Koha::Database;
 use Koha::BiblioFrameworks;
@@ -66,42 +65,19 @@ if ( $op eq 'cud-renew' && $barcode ) {
 
             $patron = $checkout->patron;
             my $borrowernumber = $patron->borrowernumber;
-            my $user           = C4::Context->userenv->{number};
-            my $branchcode     = C4::Context->userenv->{branch};
-            my @message;
 
             if ( ( $patron->is_debarred || q{} ) lt dt_from_string()->ymd() ) {
                 my $confirmations;
                 my $can_renew;
                 my $info;
                 ( $can_renew, $error, $info ) = CanBookBeRenewed( $patron, $checkout, $override_limit );
-                push @{$confirmations}, $override_limit if $override_limit;
+                push @{$confirmations}, 'RENEWAL_LIMIT' if $override_limit;
 
                 if ( $error && ( $error eq 'on_reserve' ) ) {
                     if ($override_holds) {
                         $can_renew = 1;
                         $error     = undef;
-
-                        @message = ("Override Renew hold for another");
-
-                        my $infos = (
-                            {
-                                message        => \@message,
-                                borrowernumber => $borrowernumber,
-                                barcode        => $barcode,
-                                manager_id     => $user,
-                                branchcode     => $branchcode,
-                            }
-                        );
-
-                        my $json_infos = JSON->new->utf8->pretty->encode($infos);
-                        $json_infos =~ s/"/'/g;
-
-                        logaction(
-                            "CIRCULATION", "RENEWAL",
-                            $patron->borrowernumber,
-                            $json_infos,
-                        ) if C4::Context->preference("RenewalLog");
+                        push @{$confirmations}, 'ON_RESERVE';
                     } else {
                         $can_renew = 0;
                     }
@@ -133,27 +109,6 @@ if ( $op eq 'cud-renew' && $barcode ) {
                         }
                     );
                     $template->param( date_due => $date_due );
-
-                    @message = ("Override limit Renew");
-
-                    my $infos = (
-                        {
-                            message        => \@message,
-                            borrowernumber => $borrowernumber,
-                            barcode        => $barcode,
-                            manager_id     => $user,
-                            branchcode     => $branchcode,
-                        }
-                    );
-
-                    my $json_infos = JSON->new->utf8->pretty->encode($infos);
-                    $json_infos =~ s/"/'/g;
-
-                    logaction(
-                        "CIRCULATION", "RENEWAL",
-                        $patron->borrowernumber,
-                        $json_infos,
-                    ) if C4::Context->preference("RenewalLog");
                 }
             } else {
                 $error = "patron_restricted";
