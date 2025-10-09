@@ -26,6 +26,7 @@ import { ref, inject, onBeforeMount, computed } from "vue";
 import { APIClient } from "../fetch/api-client.js";
 import KohaTable from "./KohaTable.vue";
 import { $__ } from "@koha-vue/i18n";
+import { useBaseElement } from "../composables/base-element.js";
 
 export default {
     inheritAttrs: false,
@@ -41,6 +42,8 @@ export default {
             delete: props.instancedResource.doResourceDelete,
             select: props.instancedResource.doResourceSelect,
         });
+
+        const { accessNestedProperty } = useBaseElement();
 
         const getResourceCount = async () => {
             await props.instancedResource.apiClient.count().then(
@@ -170,6 +173,44 @@ export default {
                                       escape_str(row.vendor.name) +
                                       "</a>"
                                 : "";
+                        },
+                    });
+                    return acc;
+                }
+                if (attr.type === "relationshipSelect") {
+                    acc.push({
+                        title: attr.label,
+                        data: attr.name,
+                        searchable: true,
+                        orderable: true,
+                        render: function (data, type, row, meta) {
+                            if (attr.showElement) {
+                                const relationshipDisplayAttr =
+                                    accessNestedProperty(
+                                        attr.showElement.value,
+                                        row
+                                    );
+                                let href = "#";
+                                if (
+                                    attr.showElement.link?.href &&
+                                    attr.showElement.link.slug
+                                ) {
+                                    href =
+                                        attr.showElement.link.href +
+                                        `/${row[attr.showElement.link.slug]}`;
+                                }
+                                return (
+                                    '<a href="' +
+                                    href +
+                                    '">' +
+                                    relationshipDisplayAttr +
+                                    "</a>"
+                                );
+                            }
+                            return accessNestedProperty(
+                                attr.relationshipDisplayAttr,
+                                row
+                            );
                         },
                     });
                     return acc;
