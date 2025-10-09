@@ -19,7 +19,7 @@ use Modern::Perl;
 use utf8;
 
 use Test::NoWarnings;
-use Test::More tests => 80;
+use Test::More tests => 81;
 use Test::Exception;
 use Test::MockModule;
 use Test::Deep qw( cmp_deeply );
@@ -7905,6 +7905,25 @@ subtest 'Bug 9762: AddRenewal override JSON logging' => sub {
     ok( exists $log_data->{forced},        'JSON contains forced array' );
     is_deeply( $log_data->{confirmations}, [ 'ON_RESERVE', 'RENEWAL_LIMIT' ], 'Confirmations logged correctly' );
     is_deeply( $log_data->{forced},        ['TOO_MUCH'],                      'Forced overrides logged correctly' );
+};
+
+subtest 'Bug 40866: CanBookBeIssued returns correct number of values' => sub {
+    plan tests => 2;
+
+    my $library = $builder->build_object( { class => 'Koha::Libraries' } );
+    my $patron =
+        $builder->build_object( { class => 'Koha::Patrons', value => { branchcode => $library->branchcode } } );
+    my $item = $builder->build_sample_item( { library => $library->branchcode } );
+
+    t::lib::Mocks::mock_userenv( { patron => $patron, branchcode => $library->branchcode } );
+
+    # CanBookBeIssued should return exactly 4 values after Bug 40866 cleanup
+    # (issuingimpossible, needsconfirmation, alerts, messages)
+    # The 5th return value (@message_log) from the original Bug 9762 implementation was removed
+    my @result = C4::Circulation::CanBookBeIssued( $patron, $item->barcode );
+
+    is( scalar @result, 4, 'CanBookBeIssued returns exactly 4 values' );
+    ok( ref( $result[0] ) eq 'HASH', 'First return value is issuingimpossible hashref' );
 };
 
 $schema->storage->txn_rollback;
