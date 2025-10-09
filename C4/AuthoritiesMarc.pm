@@ -72,6 +72,7 @@ use Koha::Authority;
 use Koha::Database;
 use Koha::Libraries;
 use Koha::RecordProcessor;
+use Koha::Plugins;
 use Koha::SearchEngine;
 use Koha::SearchEngine::Indexer;
 use Koha::SearchEngine::Search;
@@ -696,6 +697,10 @@ sub AddAuthority {
     $record->delete_field( $record->field('001') );
     $record->insert_fields_ordered( MARC::Field->new( '001', $authid ) );
 
+    # Call before hook: the record is complete and its authid is known, and plugins
+    # may still change it before the heading is derived from it and it is saved
+    _before_authority_action_hooks( { action => 'save', authority_id => $authid, record => $record } );
+
     my $heading = $authority->heading_object( { record => $record } );
 
     # Update
@@ -712,7 +717,7 @@ sub AddAuthority {
         $indexer->index_records( $authid, "specialUpdate", "authorityserver", $record );
     }
 
-    _after_authority_action_hooks( { action => $action, authority_id => $authid } );
+    _after_authority_action_hooks( { action => $action, authority_id => $authid, authority => $authority } );
 
     if ( $action eq 'create' && C4::Context->preference("AuthoritiesLog") ) {
         $authority->discard_changes;
@@ -772,7 +777,7 @@ sub DelAuthority {
             my $indexer = Koha::SearchEngine::Indexer->new( { index => $Koha::SearchEngine::AUTHORITIES_INDEX } );
             $indexer->index_records( $authid, "recordDelete", "authorityserver", undef );
         }
-        _after_authority_action_hooks( { action => 'delete', authority_id => $authid } );
+        _after_authority_action_hooks( { action => 'delete', authority_id => $authid, authority => $authority } );
     } catch {
         if ( blessed $_ && $_->can('rethrow') ) {
             $_->rethrow();
@@ -1981,18 +1986,65 @@ sub compare_fields {
     return 1;
 }
 
+=head2 _before_authority_action_hooks
+
+Helper method that takes care of calling all plugin hooks before an authority action
+
+=cut
+
+sub _before_authority_action_hooks {
+    my ($args) = @_;
+
+    my $authority_id = $args->{authority_id};
+    my $record       = $args->{record};
+    my $action       = $args->{action} // q{};
+
+    Koha::Plugins->call(
+        'before_authority_action',
+        { action => $action, payload => { authority_id => $authority_id, record => $record } }
+    );
+}
+
 =head2 _after_authority_action_hooks
 
-Helper method that takes care of calling all plugin hooks
+Helper method that takes care of calling all plugin hooks after an authority action
+
+    _after_authority_action_hooks( { action => $action, authority_id => $authid, authority => $authority } );
+
+The C<authority> is the Koha::Authority object the action was done on. For a
+C<delete> it is the object of the authority that has just been deleted, so that
+plugins can still get its details, for example its C<authtypecode>.
 
 =cut
 
 sub _after_authority_action_hooks {
-    my ($args) = @_;    # hash keys: action, authority_id
-    return Koha::Plugins->call( 'after_authority_action', $args );
+    my ($args) = @_;
+
+    my $authority_id = $args->{authority_id};
+    my $authority    = $args->{authority};
+    my $action       = $args->{action} // q{};
+
+    # A record that cannot be built must not stop the hooks being called
+    my $record = $authority ? eval { $authority->record } : undef;
+
+    Koha::Plugins->call(
+        'after_authority_action',
+        {
+            action  => $action,
+            payload => {
+                authority    => $authority,
+                authority_id => $authority_id,
+                record       => $record,
+            },
+
+            # NOTE: Deprecated parameters, will be removed in a future release
+            authority    => $authority,
+            authority_id => $authority_id,
+        }
+    );
 }
 
-END { }                 # module clean-up code here (global destructor)
+END { }    # module clean-up code here (global destructor)
 
 1;
 __END__

@@ -18,7 +18,7 @@ use Modern::Perl;
 
 use MARC::Record;
 use Test::NoWarnings;
-use Test::More tests => 5;
+use Test::More tests => 6;
 use Test::Warn;
 
 use File::Basename;
@@ -44,6 +44,27 @@ my $builder = t::lib::TestBuilder->new;
 
 t::lib::Mocks::mock_config( 'enable_plugins', 1 );
 
+subtest 'before_authority_action hook' => sub {
+    plan tests => 1;
+
+    $schema->storage->txn_begin;
+
+    my $plugins = Koha::Plugins->new;
+    $plugins->InstallPlugins;
+    my $plugin = Koha::Plugin::Test->new->enable;
+
+    my $record = MARC::Record->new;
+    $record->append_fields( MARC::Field->new( '100', '1', '2', a => 'Name' ) );
+    my $type = $builder->build( { source => 'AuthType', value => { auth_tag_to_report => '100' } } );
+
+    warnings_exist { C4::AuthoritiesMarc::AddAuthority( $record, undef, $type->{authtypecode} ); }
+    qr/before_authority_action called with action: save, authority_id: (\d+), 001: \1/,
+        'AddAuthority calls the before hook with action=save, the authority_id and the 001 of the record already set';
+
+    Koha::Plugins->RemovePlugins;
+    $schema->storage->txn_rollback;
+};
+
 subtest 'after_authority_action hook' => sub {
     plan tests => 3;
 
@@ -62,16 +83,16 @@ subtest 'after_authority_action hook' => sub {
     my $type = $builder->build( { source => 'AuthType', value => { auth_tag_to_report => '100' } } );
 
     warnings_exist { ($id) = C4::AuthoritiesMarc::AddAuthority( $record, undef, $type->{authtypecode} ); }
-    qr/after_authority_action called with action: create, id: \d+/,
-        'AddAuthority calls the hook with action=create, id passed';
+    qr/after_authority_action called with action: create, id: \d+, type: $type->{authtypecode}/,
+        'AddAuthority calls the hook with action=create, id and type passed';
 
     warnings_exist { C4::AuthoritiesMarc::ModAuthority( $id, $record, $type->{authtypecode}, { skip_merge => 1 } ); }
-    qr/after_authority_action called with action: modify, id: $id/,
-        'ModAuthority calls the hook with action=modify, id passed';
+    qr/after_authority_action called with action: modify, id: $id, type: $type->{authtypecode}/,
+        'ModAuthority calls the hook with action=modify, id and type passed';
 
     warnings_exist { C4::AuthoritiesMarc::DelAuthority( { authid => $id, skip_merge => 1 } ); }
-    qr/after_authority_action called with action: delete, id: $id/,
-        'DelAuthority calls the hook with action=delete, id passed';
+    qr/after_authority_action called with action: delete, id: $id, type: $type->{authtypecode}/,
+        'DelAuthority calls the hook with action=delete, id and the type of the deleted authority passed';
 
     Koha::Plugins->RemovePlugins;
     $schema->storage->txn_rollback;

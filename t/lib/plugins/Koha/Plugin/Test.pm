@@ -227,11 +227,29 @@ sub after_item_action {
     }
 }
 
+sub before_authority_action {
+    my ( $self, $params ) = @_;
+
+    my $action       = $params->{action} // '';
+    my $payload      = $params->{payload};
+    my $authority_id = $payload->{authority_id} // '';
+    my $record       = $payload->{record};
+    my $f001         = $record && $record->field('001') ? $record->field('001')->data : '';
+
+    Koha::Exception->throw(
+        "before_authority_action called with action: $action, authority_id: $authority_id, 001: $f001");
+}
+
 sub after_authority_action {
     my ( $self, $params ) = @_;
-    my $action = $params->{action}       // q{};
-    my $id     = $params->{authority_id} // 0;
-    Koha::Exception->throw("after_authority_action called with action: $action, id: $id");
+    my $action    = $params->{action} // q{};
+    my $payload   = $params->{payload};
+    my $authority = $payload->{authority};
+    my $id        = $payload->{authority_id} // 0;
+    my $record    = $payload->{record};
+    my $type      = $authority ? $authority->authtypecode : q{};
+
+    Koha::Exception->throw("after_authority_action called with action: $action, id: $id, type: $type");
 }
 
 sub after_circ_action {
