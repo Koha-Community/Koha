@@ -6122,11 +6122,11 @@ CREATE TABLE `statistics` (
   KEY `timeidx` (`datetime`),
   KEY `branch_idx` (`branch`),
   KEY `type_idx` (`type`),
-  KEY `illrequest_idx` (`illrequest_id`),
   KEY `itemnumber_idx` (`itemnumber`),
   KEY `itemtype_idx` (`itemtype`),
   KEY `borrowernumber_idx` (`borrowernumber`),
-  KEY `ccode_idx` (`ccode`)
+  KEY `ccode_idx` (`ccode`),
+  KEY `illrequest_idx` (`illrequest_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 

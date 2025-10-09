@@ -47,6 +47,11 @@ return {
             );
         }
 
+        unless ( index_exists( 'statistics', 'illrequest_idx' ) ) {
+            $dbh->do(q{ALTER TABLE `statistics` ADD INDEX `illrequest_idx` (`illrequest_id`)});
+
+        }
+
         my $reports = join(
             "\n",
             map( "\tReport ID: "
