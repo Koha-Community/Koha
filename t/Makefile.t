@@ -36,6 +36,7 @@ my @ignored = qw(
     .stylelintrc.json
     LICENSE
     README.md
+    SECURITY.md
     README.robots
     debian
     install-CPAN.pl
