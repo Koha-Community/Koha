@@ -251,8 +251,6 @@
         <span>Override Renew hold for another</span>
     [% CASE 'TOO_MUCH' %]
         <span>Override auto-renew too much owing restriction</span>
-    [% CASE 'OVERRIDDEN' %]
-        <span>Restriction overridden temporarily</span>
     [% CASE 'CURRENTISSUE' %]
         <span>Item is currently checked out to this patron</span>
     [% CASE 'UNSEEN' %]
