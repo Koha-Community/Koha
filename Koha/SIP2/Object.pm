@@ -21,8 +21,6 @@ use base qw(Koha::Object);
 
 use DateTime;
 
-# use Koha::SIP2::ServerParams;
-
 =head1 NAME
 
 Koha::SIP2::Object - Base class for SIP2 objects
@@ -60,6 +58,7 @@ sub delete {
 sub _update_config_timestamp {
     return 1;
 
+    #TODO: Reimplement config_timestamp
     # my $timestamp = DateTime->now;
 
     # my $config_timestamp = Koha::SIP2::ServerParams->find( { key => 'config_timestamp' } )

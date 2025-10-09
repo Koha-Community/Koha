@@ -15,9 +15,6 @@ use C4::SIP::Sip qw(siplog);
 use Koha::Libraries;
 use Koha::SIP2::Institutions;
 use Koha::SIP2::Accounts;
-use Koha::SIP2::Listeners;
-use Koha::SIP2::ServerParam;
-use Koha::SIP2::ServerParams;
 use Koha::SIP2::SystemPreferenceOverrides;
 
 my $parser = XML::Simple->new(
@@ -56,10 +53,8 @@ sub get_configuration {
     }
     $cfg->{listeners} = \%listeners;
 
-    $cfg->{accounts}        = Koha::SIP2::Accounts->get_for_config()     if Koha::SIP2::Accounts->search()->count;
-    $cfg->{institutions}    = Koha::SIP2::Institutions->get_for_config() if Koha::SIP2::Institutions->search()->count;
-    $cfg->{listeners}       = Koha::SIP2::Listeners->get_for_config()    if Koha::SIP2::Listeners->search()->count;
-    $cfg->{'server-params'} = Koha::SIP2::ServerParams->get_for_config() if Koha::SIP2::ServerParams->search()->count;
+    $cfg->{accounts}     = Koha::SIP2::Accounts->get_for_config()     if Koha::SIP2::Accounts->search()->count;
+    $cfg->{institutions} = Koha::SIP2::Institutions->get_for_config() if Koha::SIP2::Institutions->search()->count;
     $cfg->{'syspref_overrides'} = Koha::SIP2::SystemPreferenceOverrides->get_for_config()
         if Koha::SIP2::SystemPreferenceOverrides->search()->count;
 

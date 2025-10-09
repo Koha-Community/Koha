@@ -6286,39 +6286,6 @@ CREATE TABLE `sip_institutions` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Table structure for table `sip_listeners`
---
-
-DROP TABLE IF EXISTS `sip_listeners`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `sip_listeners` (
-  `sip_listener_id` int(11) NOT NULL AUTO_INCREMENT,
-  `client_timeout` int(11) DEFAULT NULL,
-  `port` varchar(80) NOT NULL,
-  `protocol` varchar(80) NOT NULL,
-  `timeout` int(11) NOT NULL,
-  `transport` varchar(80) NOT NULL,
-  PRIMARY KEY (`sip_listener_id`),
-  UNIQUE KEY `listener_port` (`port`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
---
--- Table structure for table `sip_listeners`
---
-
-DROP TABLE IF EXISTS `sip_server_params`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `sip_server_params` (
-  `sip_server_param_id` int(11) NOT NULL AUTO_INCREMENT,
-  `key` varchar(80) DEFAULT NULL,
-  `value` varchar(255) NOT NULL,
-  PRIMARY KEY (`sip_server_param_id`),
-  UNIQUE KEY `server_param_key` (`key`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
---
 -- Table structure for table `sip_system_preference_overrides`
 --
 

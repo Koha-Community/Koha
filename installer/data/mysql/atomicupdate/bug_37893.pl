@@ -220,39 +220,6 @@ return {
             say_success( $out, "Added new table 'sip_account_system_preference_overrides'" );
         }
 
-        if ( !TableExists('sip_listeners') ) {
-            $dbh->do(
-                q{
-                CREATE TABLE IF NOT EXISTS `sip_listeners` (
-                    `sip_listener_id` int(11) NOT NULL AUTO_INCREMENT,
-                    `client_timeout` int(11) DEFAULT NULL,
-                    `port` varchar(80) NOT NULL,
-                    `protocol` varchar(80) NOT NULL,
-                    `timeout` int(11) NOT NULL,
-                    `transport` varchar(80) NOT NULL,
-                    PRIMARY KEY(`sip_listener_id`),
-                    UNIQUE KEY `listener_port` (`port`)
-                ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_unicode_ci;
-            }
-            );
-            say_success( $out, "Added new table 'sip_listeners'" );
-        }
-
-        if ( !TableExists('sip_server_params') ) {
-            $dbh->do(
-                q{
-                CREATE TABLE IF NOT EXISTS `sip_server_params` (
-                    `sip_server_param_id` int(11) NOT NULL AUTO_INCREMENT,
-                    `key` varchar(80) DEFAULT NULL,
-                    `value` varchar(255) NOT NULL,
-                    PRIMARY KEY(`sip_server_param_id`),
-                    UNIQUE KEY `server_param_key` (`key`)
-                ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_unicode_ci;
-            }
-            );
-            say_success( $out, "Added new table 'sip_server_params'" );
-        }
-
         if ( !TableExists('sip_system_preference_overrides') ) {
             $dbh->do(
                 q{
@@ -547,39 +514,6 @@ return {
             }
 
         }
-
-        # Listeners #
-        my @listener_keys = keys %{ $SIPconfig->{listeners} };
-        foreach my $listener_key (@listener_keys) {
-            my $insert_listeners = $dbh->prepare(
-                q{INSERT IGNORE INTO sip_listeners (client_timeout, port, protocol, timeout, transport) VALUES (?, ?, ?, ?, ?)}
-            );
-
-            my $test = $insert_listeners->execute(
-                $SIPconfig->{listeners}->{$listener_key}->{client_timeout},
-                $SIPconfig->{listeners}->{$listener_key}->{port},
-                $SIPconfig->{listeners}->{$listener_key}->{protocol},
-                $SIPconfig->{listeners}->{$listener_key}->{timeout},
-                $SIPconfig->{listeners}->{$listener_key}->{transport}
-            );
-        }
-
-        # Server params #
-        my @server_params_keys = keys %{ $SIPconfig->{'server-params'} };
-        foreach my $server_params_key (@server_params_keys) {
-            my $insert_listeners = $dbh->prepare(q{INSERT IGNORE INTO sip_server_params (`key`, value) VALUES (?, ?) });
-
-            $insert_listeners->execute(
-                $server_params_key,
-                $SIPconfig->{'server-params'}->{$server_params_key}
-            );
-        }
-
-        my $delete_config_timestamp = $dbh->prepare(q{DELETE FROM sip_server_params WHERE `key` = 'config_timestamp' });
-        $delete_config_timestamp->execute();
-        my $timestamp               = DateTime->now;
-        my $insert_config_timestamp = $dbh->prepare(q{INSERT INTO sip_server_params (`key`, value) VALUES (?, ?) });
-        $insert_config_timestamp->execute( 'config_timestamp', $timestamp->epoch );
 
         # System preference overrides
         my @system_preference_overrides =

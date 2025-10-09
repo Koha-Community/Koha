@@ -83,57 +83,6 @@ export class SIP2APIClient {
         };
     }
 
-    get listeners() {
-        return {
-            get: id =>
-                this.httpClient.get({
-                    endpoint: "listeners/" + id,
-                }),
-            getAll: params =>
-                this.httpClient.getAll({
-                    endpoint: "listeners",
-                }),
-            delete: id =>
-                this.httpClient.delete({
-                    endpoint: "listeners/" + id,
-                }),
-            create: listener =>
-                this.httpClient.post({
-                    endpoint: "listeners",
-                    body: listener,
-                }),
-            update: (listener, id) =>
-                this.httpClient.put({
-                    endpoint: "listeners/" + id,
-                    body: listener,
-                }),
-            count: (query = {}) =>
-                this.httpClient.count({
-                    endpoint:
-                        "listeners?" +
-                        new URLSearchParams({
-                            _page: 1,
-                            _per_page: 1,
-                            ...(query && { q: JSON.stringify(query) }),
-                        }),
-                }),
-        };
-    }
-
-    get serverparams() {
-        return {
-            getAll: params =>
-                this.httpClient.getAll({
-                    endpoint: "serverparams",
-                }),
-            updateAll: body =>
-                this.httpClient.patch({
-                    endpoint: "serverparams",
-                    body: body,
-                }),
-        };
-    }
-
     get system_preference_overrides() {
         return {
             get: id =>

@@ -24,7 +24,6 @@ use C4::SIP::Sip::Checksum qw(checksum verify_cksum);
 use C4::SIP::Sip::MsgType  qw( handle login_core );
 use C4::SIP::Logger        qw(set_logger);
 
-use Koha::SIP2::ServerParams;
 use Koha::Caches;
 use Koha::Logger;
 
@@ -223,6 +222,7 @@ sub post_accept_hook {
 sub _config_up_to_date {
     my ($self) = @_;
 
+    #TODO: Reimplement config_timestamp
     my $serverparam = Koha::SIP2::ServerParams->find( { key => 'config_timestamp' } );
 
     unless ($serverparam) {
