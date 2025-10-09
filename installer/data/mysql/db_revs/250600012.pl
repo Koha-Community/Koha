@@ -10,7 +10,7 @@ return {
         unless ( TableExists('hold_groups') ) {
             $dbh->do(
                 q{CREATE TABLE hold_groups (
-                hold_group_id int unsigned NOT NULL AUTO_INCREMENT,
+                hold_group_id int(10) unsigned NOT NULL AUTO_INCREMENT,
                 PRIMARY KEY (hold_group_id)
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci}
             );
@@ -18,7 +18,7 @@ return {
 
         unless ( column_exists( 'reserves', 'hold_group_id' ) ) {
             $dbh->do(
-                q{ALTER TABLE reserves ADD COLUMN hold_group_id int unsigned NULL DEFAULT NULL COMMENT 'The id of a group of titles reservations fulfilled when one title is picked' AFTER non_priority}
+                q{ALTER TABLE reserves ADD COLUMN hold_group_id int(10) unsigned NULL DEFAULT NULL COMMENT 'The id of a group of titles reservations fulfilled when one title is picked' AFTER non_priority}
             );
             $dbh->do(q{ALTER TABLE reserves ADD KEY reserves_ibfk_hg (hold_group_id)});
             $dbh->do(
@@ -28,7 +28,7 @@ return {
 
         unless ( column_exists( 'old_reserves', 'hold_group_id' ) ) {
             $dbh->do(
-                q{ALTER TABLE old_reserves ADD COLUMN hold_group_id int unsigned NULL DEFAULT NULL COMMENT 'The id of a group of titles reservations fulfilled when one title is picked' AFTER non_priority}
+                q{ALTER TABLE old_reserves ADD COLUMN hold_group_id int(10) unsigned NULL DEFAULT NULL COMMENT 'The id of a group of titles reservations fulfilled when one title is picked' AFTER non_priority}
             );
             $dbh->do(q{ALTER TABLE old_reserves ADD KEY old_reserves_ibfk_hg (hold_group_id)});
             $dbh->do(
