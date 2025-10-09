@@ -114,10 +114,7 @@
                                 </thead>
                                 <tbody>
                                     [% FOREACH basket IN supplier.loop_basket %]
-                                        [% IF ( basket.uncertainprices ) %]
-                                            [% SET tr_class="problem" %]
-                                        [% END %]
-                                        <tr class="[% tr_class | html %]">
+                                        <tr [% IF ( basket.uncertainprices ) %]class="problem"[% END %]>
                                             <td>[% basket.basketno | html %]</td>
                                             <td><a href="/cgi-bin/koha/acqui/basket.pl?basketno=[% basket.basketno | uri %]">[% basket.basketname | html %]</a></td>
                                             <td data-order="[% basket.total_items | html %]">
