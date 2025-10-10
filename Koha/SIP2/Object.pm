@@ -18,6 +18,7 @@ package Koha::SIP2::Object;
 use Modern::Perl;
 
 use base qw(Koha::Object);
+use Koha::Caches;
 
 use DateTime;
 
@@ -56,14 +57,8 @@ sub delete {
 }
 
 sub _update_config_timestamp {
-    return 1;
-
-    #TODO: Reimplement config_timestamp
-    # my $timestamp = DateTime->now;
-
-    # my $config_timestamp = Koha::SIP2::ServerParams->find( { key => 'config_timestamp' } )
-    #     || Koha::SIP2::ServerParam->new( { key => 'config_timestamp' } );
-    # $config_timestamp->value( DateTime->now->epoch )->store;
+    my $cache = Koha::Caches->get_instance();
+    $cache->set_in_cache( 'sip2_resource_last_modified', DateTime->now->epoch );
 }
 
 1;

@@ -79,7 +79,7 @@ subtest 'Config from XML matches config from database' => sub {
 
 subtest 'config_timestamp is updated when database configuration changes' => sub {
 
-    plan tests => 1;
+    plan tests => 3;
 
     my $schema = Koha::Database->new->schema;
     $schema->storage->txn_begin;
@@ -135,24 +135,24 @@ subtest 'config_timestamp is updated when database configuration changes' => sub
         '$cfg->{accounts}->{$sip_account->login_id}->{allow_fields} is empty'
     );
 
-    #TODO: Update these tests
-    # my $original_timestamp = Koha::SIP2::ServerParams->find( { key => 'config_timestamp' } );
+    my $cache              = Koha::Caches->get_instance();
+    my $original_timestamp = $cache->get_from_cache("sip2_resource_last_modified");
 
-    # sleep 1;
-    # $sip_account->allow_fields('AB')->store();
-    # my $new_cfg = C4::SIP::Sip::Configuration->get_configuration();
+    sleep 1;
+    $sip_account->allow_fields('AB')->store();
+    $cfg = C4::SIP::Sip::Configuration->get_configuration();
 
-    # my $last_timestamp = Koha::SIP2::ServerParams->find( { key => 'config_timestamp' } );
+    my $last_timestamp = $cache->get_from_cache("sip2_resource_last_modified");
 
-    # isnt(
-    #     $original_timestamp->value, $last_timestamp->value,
-    #     'config_timestamp should be updated when database configuration changes'
-    # );
+    isnt(
+        $original_timestamp, $last_timestamp,
+        'config_timestamp should be updated when database configuration changes'
+    );
 
-    # is(
-    #     $cfg->{accounts}->{ $sip_account->login_id }->{allow_fields}, $sip_account->allow_fields,
-    #     '$cfg->{accounts}->{$sip_account->login_id}->{allow_fields} should now return the new value'
-    # );
+    is(
+        $cfg->{accounts}->{ $sip_account->login_id }->{allow_fields}, $sip_account->allow_fields,
+        '$cfg->{accounts}->{$sip_account->login_id}->{allow_fields} should now return the new value'
+    );
 
     $schema->storage->txn_rollback;
 };

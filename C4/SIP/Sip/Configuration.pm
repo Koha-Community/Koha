@@ -12,6 +12,7 @@ use XML::Simple     qw(:strict);
 use List::MoreUtils qw(uniq);
 
 use C4::SIP::Sip qw(siplog);
+use Koha::Caches;
 use Koha::Libraries;
 use Koha::SIP2::Institutions;
 use Koha::SIP2::Accounts;
@@ -38,6 +39,15 @@ my $parser = XML::Simple->new(
 
 sub get_configuration {
     my ( $class, $config_file ) = @_;
+
+    my $cache                       = Koha::Caches->get_instance();
+    my $sip2_resource_last_modified = $cache->get_from_cache("sip2_resource_last_modified");
+
+    if ($sip2_resource_last_modified) {
+        $cache->set_in_cache( 'sip2_config_read_timestamp', $sip2_resource_last_modified );
+    } else {
+        $cache->set_in_cache( 'sip2_config_read_timestamp', DateTime->now->epoch );
+    }
 
     my $cfg = $parser->XMLin($config_file) if $config_file;
     my %listeners;

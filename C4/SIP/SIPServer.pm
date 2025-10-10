@@ -222,21 +222,15 @@ sub post_accept_hook {
 sub _config_up_to_date {
     my ($self) = @_;
 
-    #TODO: Reimplement config_timestamp
-    my $serverparam = Koha::SIP2::ServerParams->find( { key => 'config_timestamp' } );
+    my $cache                       = Koha::Caches->get_instance();
+    my $sip2_resource_last_modified = $cache->get_from_cache("sip2_resource_last_modified");
+    my $sip2_config_read_timestamp  = $cache->get_from_cache("sip2_config_read_timestamp");
 
-    unless ($serverparam) {
-
-        # This should never happen, config_timestamp server param should always exist, but handle it just in case
-        siplog( "LOG_WARNING", "Couldn't find config_timestamp server param, considering configuration up to date" );
-        return 1;
+    unless ($sip2_resource_last_modified) {
+        siplog( "LOG_WARNING", "Couldn't find sip2_resource_last_modified, considering configuration not up to date" );
+        return 0;
     }
-
-    return 1 if !$serverparam;
-    my $old_timestamp = $self->{config}->{'server-params'}->{config_timestamp};
-    my $new_timestamp = $serverparam->value;
-
-    return $old_timestamp eq $new_timestamp;
+    return $sip2_config_read_timestamp >= $sip2_resource_last_modified;
 }
 
 #
