@@ -468,7 +468,7 @@
                     item._checked = $(this).prop('checked');
                 });
             tr.append($('<td style="text-align:center"></td>').append(chb));
-            tr.append('<td><a style="cursor:pointer" onclick="PopupEditPage('+item.biblio_id+', '+item.item_id+');">'+EDIT[0].toUpperCase()+EDIT.substr(1).toLowerCase()+'</a></td>');
+            tr.append('<td><a style="cursor:pointer" href="#" onclick="PopupEditPage('+item.biblio_id+', '+item.item_id+');">'+EDIT[0].toUpperCase()+EDIT.substr(1).toLowerCase()+'</a></td>');
             tr.append('<td>'+(item.external_id||'')+'</td>');
             tr.append('<td>'+display_string( 'home_library_id', item._strings, item.home_library_id ) || ''+'</td>');
             tr.append('<td>'+display_string( 'holding_library_id', item._strings, item.holding_library_id )+'</td>');
