@@ -631,6 +631,7 @@ $(document).ready(function(){
 
             if(parseInt(arr[0]) >= 10){
                 elem = document.getElementById(divid);
+                if( !elem ){ continue; }
                 eleminputs = elem.getElementsByTagName('input');
 
                 for(var j=0,len2=eleminputs.length; j<len2; j++){
