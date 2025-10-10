@@ -1267,24 +1267,33 @@
     <script>
         $(document).ready(function() {
             var table_settings = [% TablesSettings.GetTableSettings( 'acqui', 'basket', 'orders', 'json' ) | $raw %];
+
+            let supplier_report_column = table_settings.columns.find(c => c.columnname == 'supplier_report');
             [% IF !(Koha.Preference('EDIFACT') && ediaccount) %]
-                table_settings.columns.find(c => c.columnname == 'supplier_report').is_hidden = 1;
-                table_settings.columns.find(c => c.columnname == 'supplier_report').cannot_be_toggled = 1;
+                supplier_report_column.is_hidden = 1;
+                supplier_report_column.cannot_be_toggled = 1;
             [% ELSE %]
-                table_settings.columns.find(c => c.columnname == 'supplier_report').is_hidden = 0;
+                supplier_report_column.is_hidden = 0;
             [% END %]
+            supplier_report_column.force_visibility = 1;
+
+            let modify_column = table_settings.columns.find(c => c.columnname == 'modify');
             [% IF ( active && !closedate ) %]
-                table_settings.columns.find(c => c.columnname == 'modify').is_hidden = 0;
+                modify_column.is_hidden = 0;
             [% ELSE %]
-                table_settings.columns.find(c => c.columnname == 'modify').is_hidden = 1;
-                table_settings.columns.find(c => c.columnname == 'modify').cannot_be_toggled = 1;
+                modify_column.is_hidden = 1;
+                modify_column.cannot_be_toggled = 1;
             [% END %]
+            modify_column.force_visibility = 1;
+
+            let cancel_column = table_settings.columns.find(c => c.columnname == 'cancel');
             [% IF !closedate || Koha.Preference('CancelOrdersInClosedBaskets') %]
-                table_settings.columns.find(c => c.columnname == 'cancel').is_hidden = 0;
+                cancel_column.is_hidden = 0;
             [% ELSE %]
-                table_settings.columns.find(c => c.columnname == 'cancel').is_hidden = 1;
-                table_settings.columns.find(c => c.columnname == 'cancel').cannot_be_toggled = 1;
+                cancel_column.is_hidden = 1;
+                cancel_column.cannot_be_toggled = 1;
             [% END %]
+            cancel_column.force_visibility = 1;
 
             $("#orders").kohaTable({
                 bKohaColumnsUseNames: true,
