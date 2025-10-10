@@ -551,34 +551,34 @@ $(document).ready(function(){
         var notFilledClass = "subfield_not_filled";
 
         if (mandatory) {
-            [% FOREACH BIG_LOO IN BIG_LOOP %]
-                [% FOREACH innerloo IN BIG_LOO.innerloop %]
-                    [% IF ( innerloo.mandatory ) %]
+            [%- FOREACH BIG_LOO IN BIG_LOOP %]
+                [%- FOREACH innerloo IN BIG_LOO.innerloop %]
+                    [%- IF ( innerloo.mandatory ) %]
                         fields.push(new Array("[% innerloo.tag | html %]","[% innerloo.index | html %][% innerloo.random | html %]","[% innerloo.index | html %]", "[% BIG_LOO.number | html %]"));
-                    [% END %]
-                    [% FOREACH subfield_loo IN innerloo.subfield_loop %]
-                        [% IF ( subfield_loo.mandatory ) %]subfields.push("[% subfield_loo.id | html %]");
+                    [%- END %]
+                    [%- FOREACH subfield_loo IN innerloo.subfield_loop %]
+                        [%- IF ( subfield_loo.mandatory ) %]subfields.push("[% subfield_loo.id | html %]");
                             tab.push("[% BIG_LOO.number | html %]");
                                 label.push("[% subfield_loo.marc_lib | html %]");
-                        [% END %]
-                    [% END %]
-                [% END %]
-            [% END %]
+                        [%- END %]
+                    [%- END %]
+                [%- END %]
+            [%- END %]
             StrAlert += "<h4>" + _("The following mandatory subfields aren't filled:") + "</h4>";
         } else {
-            [% FOREACH BIG_LOO IN BIG_LOOP %]
-                [% FOREACH innerloo IN BIG_LOO.innerloop %]
-                    [% IF ( innerloo.important ) %]
+            [%- FOREACH BIG_LOO IN BIG_LOOP %]
+                [%- FOREACH innerloo IN BIG_LOO.innerloop %]
+                    [%- IF ( innerloo.important ) %]
                         fields.push(new Array("[% innerloo.tag | html %]","[% innerloo.index | html %][% innerloo.random | html %]","[% innerloo.index | html %]", "[% BIG_LOO.number | html %]"));
-                    [% END %]
-                    [% FOREACH subfield_loo IN innerloo.subfield_loop %]
-                        [% IF ( subfield_loo.important ) %]subfields.push("[% subfield_loo.id | html %]");
+                    [%- END %]
+                    [%- FOREACH subfield_loo IN innerloo.subfield_loop %]
+                        [%- IF ( subfield_loo.important ) %]subfields.push("[% subfield_loo.id | html %]");
                             tab.push("[% BIG_LOO.number | html %]");
                                 label.push("[% subfield_loo.marc_lib | html %]");
-                        [% END %]
-                    [% END %]
-                [% END %]
-            [% END %]
+                        [%- END %]
+                    [%- END %]
+                [%- END %]
+            [%- END %]
             StrAlert += "<h4>" + _("The following important subfields aren’t filled:") + "</h4>";
             notFilledClass = "important_subfield_not_filled";
         }
