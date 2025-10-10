@@ -755,6 +755,7 @@ sub GetBudgetHierarchy {
             SELECT shipmentcost_budgetid as budget_id,
                 SUM(shipmentcost) as shipmentcost
             FROM aqinvoices
+            WHERE shipmentcost_budgetid IS NOT NULL
             GROUP BY shipmentcost_budgetid
             |, 'budget_id'
         );
