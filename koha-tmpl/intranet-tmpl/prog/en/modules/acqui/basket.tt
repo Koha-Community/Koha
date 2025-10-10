@@ -1274,16 +1274,16 @@
                 table_settings.columns.find(c => c.columnname == 'supplier_report').is_hidden = 0;
             [% END %]
             [% IF ( active && !closedate ) %]
+                table_settings.columns.find(c => c.columnname == 'modify').is_hidden = 0;
+            [% ELSE %]
                 table_settings.columns.find(c => c.columnname == 'modify').is_hidden = 1;
                 table_settings.columns.find(c => c.columnname == 'modify').cannot_be_toggled = 1;
-            [% ELSE %]
-                table_settings.columns.find(c => c.columnname == 'modify').is_hidden = 0;
             [% END %]
             [% IF !closedate || Koha.Preference('CancelOrdersInClosedBaskets') %]
-                table_settings.columns.find(c => c.columnname == 'cancel').is_hidden = 1;
-                table_settings.columns.find(c => c.columnname == 'modify').cannot_be_toggled = 1;
-            [% ELSE %]
                 table_settings.columns.find(c => c.columnname == 'cancel').is_hidden = 0;
+            [% ELSE %]
+                table_settings.columns.find(c => c.columnname == 'cancel').is_hidden = 1;
+                table_settings.columns.find(c => c.columnname == 'cancel').cannot_be_toggled = 1;
             [% END %]
 
             $("#orders").kohaTable({
