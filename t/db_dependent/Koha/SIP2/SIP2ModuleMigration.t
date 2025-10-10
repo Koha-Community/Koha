@@ -17,7 +17,8 @@
 
 use Modern::Perl;
 
-use Test::More tests => 2;
+use Test::More tests => 3;
+use Test::NoWarnings;
 
 use t::lib::TestBuilder;
 
@@ -81,6 +82,10 @@ subtest 'config_timestamp is updated when database configuration changes' => sub
 
     plan tests => 3;
 
+    my $koha_instance    = $ENV{KOHA_CONF} =~ m!^.+/sites/([^/]+)/koha-conf\.xml$! ? $1 : undef;
+    my $SIPconfigXMLFile = "/etc/koha/sites/$koha_instance/SIPconfig.xml";
+    my $fileSIPconfig    = C4::SIP::Sip::Configuration->new($SIPconfigXMLFile);
+
     my $schema = Koha::Database->new->schema;
     $schema->storage->txn_begin;
 
@@ -88,9 +93,8 @@ subtest 'config_timestamp is updated when database configuration changes' => sub
     Koha::SIP2::Accounts->delete;
     Koha::SIP2::SystemPreferenceOverrides->delete;
 
-    my $builder    = t::lib::TestBuilder->new();
-    my $branchcode = $builder->build( { source => 'Branch' } )->{branchcode};
-    my ( $response, $findpatron );
+    my $builder     = t::lib::TestBuilder->new();
+    my $branchcode  = $builder->build( { source => 'Branch' } )->{branchcode};
     my $seen_patron = $builder->build_object(
         {
             class => 'Koha::Patrons',
@@ -128,7 +132,7 @@ subtest 'config_timestamp is updated when database configuration changes' => sub
         }
     )->store();
 
-    my $cfg = C4::SIP::Sip::Configuration->get_configuration();
+    my $cfg = C4::SIP::Sip::Configuration->get_configuration( undef, $fileSIPconfig );
 
     is(
         $cfg->{accounts}->{ $sip_account->login_id }->{allow_fields}, '',
@@ -140,7 +144,7 @@ subtest 'config_timestamp is updated when database configuration changes' => sub
 
     sleep 1;
     $sip_account->allow_fields('AB')->store();
-    $cfg = C4::SIP::Sip::Configuration->get_configuration();
+    $cfg = C4::SIP::Sip::Configuration->get_configuration( undef, $fileSIPconfig );
 
     my $last_timestamp = $cache->get_from_cache("sip2_resource_last_modified");
 

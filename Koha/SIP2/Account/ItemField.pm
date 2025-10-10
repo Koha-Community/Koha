@@ -42,8 +42,8 @@ sub get_for_config {
 
     return {
         'field' => $self->field,
-        'code' => $self->code,
-    }
+        'code'  => $self->code,
+    };
 }
 
 =head2 Internal methods

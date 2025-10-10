@@ -36,8 +36,8 @@ sub list {
     my $c = shift->openapi->valid_input or return;
 
     return try {
-        my $insitutions = $c->objects->search( Koha::SIP2::Accounts->new );
-        return $c->render( status => 200, openapi => $insitutions );
+        my $accounts = $c->objects->search( Koha::SIP2::Accounts->new );
+        return $c->render( status => 200, openapi => $accounts );
     } catch {
         $c->unhandled_exception($_);
     };

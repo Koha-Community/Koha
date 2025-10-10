@@ -13,6 +13,7 @@ use List::MoreUtils qw(uniq);
 
 use C4::SIP::Sip qw(siplog);
 use Koha::Caches;
+use Koha::DateUtils qw( dt_from_string );
 use Koha::Libraries;
 use Koha::SIP2::Institutions;
 use Koha::SIP2::Accounts;
@@ -38,7 +39,7 @@ my $parser = XML::Simple->new(
 );
 
 sub get_configuration {
-    my ( $class, $config_file ) = @_;
+    my ( $class, $config_file, $current_config ) = @_;
 
     my $cache                       = Koha::Caches->get_instance();
     my $sip2_resource_last_modified = $cache->get_from_cache("sip2_resource_last_modified");
@@ -46,10 +47,15 @@ sub get_configuration {
     if ($sip2_resource_last_modified) {
         $cache->set_in_cache( 'sip2_config_read_timestamp', $sip2_resource_last_modified );
     } else {
-        $cache->set_in_cache( 'sip2_config_read_timestamp', DateTime->now->epoch );
+        $cache->set_in_cache( 'sip2_config_read_timestamp', dt_from_string()->epoch );
     }
 
-    my $cfg = $parser->XMLin($config_file) if $config_file;
+    my $cfg;
+    if ($config_file) {
+        $cfg = $parser->XMLin($config_file);
+    } else {
+        $cfg = $current_config;
+    }
     my %listeners;
 
     # The key to the listeners hash is the 'port' component of the

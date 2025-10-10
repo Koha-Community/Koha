@@ -43,9 +43,10 @@ sub get_for_config {
     my $institutions = $self->search();
     my $return_hash;
 
-    while (my $sip2_institution = $institutions->next()) {
-        $return_hash->{$sip2_institution->name} = $sip2_institution->get_for_config();
-    }    return $return_hash;
+    while ( my $sip2_institution = $institutions->next() ) {
+        $return_hash->{ $sip2_institution->name } = $sip2_institution->get_for_config();
+    }
+    return $return_hash;
 }
 
 =head3 type

@@ -19,6 +19,7 @@ use Modern::Perl;
 
 use base qw(Koha::Object);
 use Koha::Caches;
+use Koha::DateUtils qw( dt_from_string );
 
 use DateTime;
 
@@ -58,7 +59,7 @@ sub delete {
 
 sub _update_config_timestamp {
     my $cache = Koha::Caches->get_instance();
-    $cache->set_in_cache( 'sip2_resource_last_modified', DateTime->now->epoch );
+    $cache->set_in_cache( 'sip2_resource_last_modified', dt_from_string()->epoch );
 }
 
 1;

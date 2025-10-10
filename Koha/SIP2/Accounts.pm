@@ -43,9 +43,10 @@ sub get_for_config {
     my $accounts = $self->search();
     my $return_hash;
 
-    while (my $sip2_account = $accounts->next()) {
-        $return_hash->{$sip2_account->login_id} = $sip2_account->get_for_config();
-    }    return $return_hash;
+    while ( my $sip2_account = $accounts->next() ) {
+        $return_hash->{ $sip2_account->login_id } = $sip2_account->get_for_config();
+    }
+    return $return_hash;
 }
 
 =head3 type

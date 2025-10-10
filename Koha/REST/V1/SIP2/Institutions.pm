@@ -38,8 +38,7 @@ sub list {
     return try {
         my $institutions = $c->objects->search( Koha::SIP2::Institutions->new );
         return $c->render( status => 200, openapi => $institutions );
-    }
-    catch {
+    } catch {
         $c->unhandled_exception($_);
     };
 
@@ -64,8 +63,7 @@ sub get {
             status  => 200,
             openapi => $institution
         );
-    }
-    catch {
+    } catch {
         $c->unhandled_exception($_);
     };
 }
@@ -87,15 +85,14 @@ sub add {
 
                 my $institution = Koha::SIP2::Institution->new_from_api($body)->store;
 
-                $c->res->headers->location($c->req->url->to_string . '/' . $institution->sip_institution_id);
+                $c->res->headers->location( $c->req->url->to_string . '/' . $institution->sip_institution_id );
                 return $c->render(
                     status  => 201,
                     openapi => $c->objects->to_api($institution),
                 );
             }
         );
-    }
-    catch {
+    } catch {
 
         my $to_api_mapping = Koha::SIP2::Institution->new->to_api_mapping;
 
@@ -105,15 +102,10 @@ sub add {
                     status  => 409,
                     openapi => { error => $_->error, conflict => $_->duplicate_id }
                 );
-            }
-            elsif ( $_->isa('Koha::Exceptions::BadParameter') ) {
+            } elsif ( $_->isa('Koha::Exceptions::BadParameter') ) {
                 return $c->render(
                     status  => 400,
-                    openapi => {
-                            error => "Given "
-                            . $to_api_mapping->{ $_->parameter }
-                            . " does not exist"
-                    }
+                    openapi => { error => "Given " . $to_api_mapping->{ $_->parameter } . " does not exist" }
                 );
             }
         }
@@ -144,33 +136,28 @@ sub update {
 
                 $institution->set_from_api($body)->store;
 
-                $c->res->headers->location($c->req->url->to_string . '/' . $institution->sip_institution_id);
+                $c->res->headers->location( $c->req->url->to_string . '/' . $institution->sip_institution_id );
                 return $c->render(
                     status  => 200,
                     openapi => $c->objects->to_api($institution),
                 );
             }
         );
-    }
-    catch {
+    } catch {
         my $to_api_mapping = Koha::SIP2::Institution->new->to_api_mapping;
 
         if ( blessed $_ ) {
             if ( $_->isa('Koha::Exceptions::BadParameter') ) {
                 return $c->render(
                     status  => 400,
-                    openapi => {
-                            error => "Given "
-                            . $to_api_mapping->{ $_->parameter }
-                            . " does not exist"
-                    }
+                    openapi => { error => "Given " . $to_api_mapping->{ $_->parameter } . " does not exist" }
                 );
             }
         }
 
         $c->unhandled_exception($_);
     };
-};
+}
 
 =head3 delete
 
