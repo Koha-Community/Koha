@@ -950,6 +950,39 @@ function _dt_buttons(params) {
     return buttons;
 }
 
+function _dt_force_visibility(table_settings, table_dt, state) {
+    var columns_settings = table_settings.columns;
+    let i = 0;
+    let use_names = $(table_dt.table().node()).data("bKohaColumnsUseNames");
+    if (use_names) {
+        let force_vis_columns = table_settings.columns.filter(
+            c => c.force_visibility
+        );
+        if (!force_vis_columns.length) return state;
+        table_dt
+            .columns(
+                force_vis_columns
+                    .map(c => "[data-colname='%s']".format(c.columnname))
+                    .join(",")
+            )
+            .every(function () {
+                state.columns[this.index()].visible =
+                    table_settings.columns.find(
+                        c =>
+                            c.columnname ==
+                            this.header().getAttribute("data-colname")
+                    ).is_hidden
+                        ? false
+                        : true;
+            });
+    } else {
+        throw new Error(
+            "Cannot force column visibility without bKohaColumnsUseNames!"
+        );
+    }
+    return state;
+}
+
 function _dt_visibility(table_settings, table_dt) {
     let hidden_ids = [];
     if (table_settings) {
@@ -1183,6 +1216,9 @@ function _dt_save_restore_state(table_settings, external_filter_nodes = {}) {
             delete state.search;
             state.columns.forEach(c => delete c.search);
         }
+
+        state = _dt_force_visibility(table_settings, this.api(), state);
+
         return state;
     };
 
