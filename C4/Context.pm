@@ -666,6 +666,17 @@ sub userenv {
     return $context->{userenv};
 }
 
+=head2 set_userenv_from_session
+
+  C4::Context->set_userenv_from_session($session);
+
+A wrapper around set_userenv, filling userenv from $session.
+And adding the session id into userenv!
+
+Called by C4/Auth.pm.
+
+=cut
+
 sub set_userenv_from_session {
     my ( $class, $session ) = @_;
     return $class->set_userenv(
