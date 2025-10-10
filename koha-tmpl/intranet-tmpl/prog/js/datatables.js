@@ -953,12 +953,13 @@ function _dt_buttons(params) {
 function _dt_force_visibility(table_settings, table_dt, state) {
     var columns_settings = table_settings.columns;
     let i = 0;
+    let force_vis_columns = table_settings.columns.filter(
+        c => c.force_visibility
+    );
+    if (!force_vis_columns.length) return state;
+
     let use_names = $(table_dt.table().node()).data("bKohaColumnsUseNames");
     if (use_names) {
-        let force_vis_columns = table_settings.columns.filter(
-            c => c.force_visibility
-        );
-        if (!force_vis_columns.length) return state;
         table_dt
             .columns(
                 force_vis_columns
