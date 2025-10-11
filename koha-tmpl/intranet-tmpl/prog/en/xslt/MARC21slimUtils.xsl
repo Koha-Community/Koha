@@ -367,7 +367,7 @@
 	    </xsl:call-template>
 	    <xsl:call-template name="show-lang-node">
 	      <xsl:with-param name="langNode" select="marc:subfield[@code='d']"/>
-	      <xsl:with-param name="langLabel">Spoken language: </xsl:with-param>
+	      <xsl:with-param name="langLabel">Sung or spoken language: </xsl:with-param>
 	    </xsl:call-template>
 	    <xsl:call-template name="show-lang-node">
 	      <xsl:with-param name="langNode" select="marc:subfield[@code='h']"/>
