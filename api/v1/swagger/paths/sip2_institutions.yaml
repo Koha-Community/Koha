@@ -60,7 +60,7 @@
           $ref: "../swagger.yaml#/definitions/error"
     x-koha-authorization:
       permissions:
-        superlibrarian: 1 # TODO: Fix this, currently for superlibrarians only
+        sip2: 1
   post:
     x-mojo-to: SIP2::Institutions#add
     operationId: addSip2Institutions
@@ -120,7 +120,7 @@
           $ref: "../swagger.yaml#/definitions/error"
     x-koha-authorization:
       permissions:
-        superlibrarian: 1 # TODO: Fix this, currently for superlibrarians only
+        sip2: 1
 "/sip2/institutions/{sip_institution_id}":
   get:
     x-mojo-to: SIP2::Institutions#get
@@ -166,7 +166,7 @@
           $ref: "../swagger.yaml#/definitions/error"
     x-koha-authorization:
       permissions:
-        superlibrarian: 1 # TODO: Fix this, currently for superlibrarians only
+        sip2: 1
   put:
     x-mojo-to: SIP2::Institutions#update
     operationId: updateSip2Institutions
@@ -223,7 +223,7 @@
           $ref: "../swagger.yaml#/definitions/error"
     x-koha-authorization:
       permissions:
-        superlibrarian: 1 # TODO: Fix this, currently for superlibrarians only
+        sip2: 1
   delete:
     x-mojo-to: SIP2::Institutions#delete
     operationId: deleteSip2Institutions
@@ -269,4 +269,4 @@
           $ref: "../swagger.yaml#/definitions/error"
     x-koha-authorization:
       permissions:
-        superlibrarian: 1 # TODO: Fix this, currently for superlibrarians only
+        sip2: 1

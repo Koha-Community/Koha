@@ -29,8 +29,7 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
         template_name => "sip2/sip2.tt",
         query         => $input,
         type          => "intranet",
-
-        # flagsrequired => { 'plugins' => '*' },
+        flagsrequired => { 'sip2' => '1' },
     }
 );
 

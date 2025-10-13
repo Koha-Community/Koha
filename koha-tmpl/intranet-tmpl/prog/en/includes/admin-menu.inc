@@ -40,7 +40,7 @@
                 <li><a href="/cgi-bin/koha/admin/branch_transfer_limits.pl">Library transfer limits</a></li>
                 <li><a href="/cgi-bin/koha/admin/transport-cost-matrix.pl">Transport cost matrix</a></li>
             [% END %]
-            [% IF ( CAN_user_superlibrarian ) %]
+            [% IF ( CAN_user_sip2 ) %]
                 <li><a href="/cgi-bin/koha/sip2/sip2.pl">Self-service circulation (SIP2)</a></li>
             [% END %]
             [% IF ( CAN_user_parameters_manage_item_circ_alerts ) %]

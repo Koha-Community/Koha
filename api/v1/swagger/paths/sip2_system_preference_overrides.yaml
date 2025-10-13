@@ -51,7 +51,7 @@
           $ref: "../swagger.yaml#/definitions/error"
     x-koha-authorization:
       permissions:
-        superlibrarian: 1 # TODO: Fix this, currently for superlibrarians only
+        sip2: 1
   post:
     x-mojo-to: SIP2::SystemPreferenceOverrides#add
     operationId: addSip2SystemPreferenceOverrides
@@ -111,7 +111,7 @@
           $ref: "../swagger.yaml#/definitions/error"
     x-koha-authorization:
       permissions:
-        superlibrarian: 1 # TODO: Fix this, currently for superlibrarians only
+        sip2: 1
 "/sip2/system_preference_overrides/{sip_system_preference_override_id}":
   get:
     x-mojo-to: SIP2::SystemPreferenceOverrides#get
@@ -170,7 +170,7 @@
           $ref: "../swagger.yaml#/definitions/error"
     x-koha-authorization:
       permissions:
-        superlibrarian: 1 # TODO: Fix this, currently for superlibrarians only
+        sip2: 1
   put:
     x-mojo-to: SIP2::SystemPreferenceOverrides#update
     operationId: updateSip2SystemPreferenceOverrides
@@ -227,7 +227,7 @@
           $ref: "../swagger.yaml#/definitions/error"
     x-koha-authorization:
       permissions:
-        superlibrarian: 1 # TODO: Fix this, currently for superlibrarians only
+        sip2: 1
   delete:
     x-mojo-to: SIP2::SystemPreferenceOverrides#delete
     operationId: deleteSip2SystemPreferenceOverrides
@@ -273,4 +273,4 @@
           $ref: "../swagger.yaml#/definitions/error"
     x-koha-authorization:
       permissions:
-        superlibrarian: 1 # TODO: Fix this, currently for superlibrarians only
+        sip2: 1

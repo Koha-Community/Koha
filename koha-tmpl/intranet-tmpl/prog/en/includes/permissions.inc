@@ -87,6 +87,9 @@
     [%- CASE 'preservation' -%]
         <span class="main_permission preservation_permission">Manage the preservation module</span>
         <span class="permissioncode">([% name | html %])</span>
+    [%- CASE 'sip2' -%]
+        <span class="main_permission sip2_permission">Manage the SIP2 module</span>
+        <span class="permissioncode">([% name | html %])</span>
     [%- END -%]
 [%- END -%]
 

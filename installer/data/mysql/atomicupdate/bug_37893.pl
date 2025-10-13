@@ -540,5 +540,9 @@ return {
             }
         }
 
+        $dbh->do(
+            q{INSERT IGNORE INTO userflags (bit, flag, flagdesc, defaulton) VALUES (31, 'sip2', 'Manage SIP2 module', 0) }
+        );
+
     },
 };
