@@ -23,6 +23,29 @@
                 class="btn btn-default"
                 ><font-awesome-icon icon="trash" /> {{ $__("Delete") }}</a
             >
+            <button
+                @click="
+                    test_usage_data_provider(
+                        usage_data_provider.erm_usage_data_provider_id,
+                        usage_data_provider.name
+                    )
+                "
+                class="btn btn-default"
+                :disabled="!usage_data_provider.active"
+            >
+                <i class="fa fa-check"></i> {{ $__("Test") }}
+            </button>
+            <button
+                @click="
+                    run_harvester(
+                        usage_data_provider.erm_usage_data_provider_id
+                    )
+                "
+                class="btn btn-default"
+                :disabled="!usage_data_provider.active"
+            >
+                <i class="fa fa-play"></i> {{ $__("Run now") }}
+            </button>
         </Toolbar>
 
         <h2>
@@ -220,6 +243,103 @@ export default {
                 }
             );
         };
+
+        const test_usage_data_provider = (
+            usage_data_provider_id,
+            usage_data_provider_name
+        ) => {
+            const client = APIClient.erm;
+            client.usage_data_providers.test(usage_data_provider_id).then(
+                success => {
+                    if (success) {
+                        setMessage(
+                            $__(
+                                "Harvester connection was successful for usage data provider %s"
+                            ).format(usage_data_provider_name),
+                            true
+                        );
+                    } else {
+                        setMessage(
+                            $__(
+                                "No connection for usage data provider %s, please check your credentials and try again."
+                            ).format(usage_data_provider_name),
+                            true
+                        );
+                    }
+                },
+                error => {}
+            );
+        };
+
+        const run_harvester = usage_data_provider_id => {
+            let date = new Date();
+            setConfirmationDialog(
+                {
+                    title: $__(
+                        "Are you sure you want to run the harvester for this data provider?"
+                    ),
+                    message: name,
+                    accept_label: $__("Yes, run"),
+                    cancel_label: $__("No, do not run"),
+                    inputs: [
+                        {
+                            name: "begin_date",
+                            type: "date",
+                            value: null,
+                            label: $__("Begin date"),
+                            required: true,
+                            componentProps: {
+                                required: {
+                                    type: "boolean",
+                                    value: true,
+                                },
+                            },
+                        },
+                        {
+                            name: "end_date",
+                            type: "date",
+                            value: $date_to_rfc3339($date(date.toString())),
+                            label: $__("End date"),
+                            required: true,
+                            componentProps: {
+                                required: {
+                                    type: "boolean",
+                                    value: true,
+                                },
+                            },
+                        },
+                    ],
+                },
+                (callback_result, inputFields) => {
+                    const client = APIClient.erm;
+                    client.usage_data_providers
+                        .process_SUSHI_response(
+                            usage_data_provider_id,
+                            inputFields
+                        )
+                        .then(
+                            success => {
+                                let message = "";
+                                success.jobs.forEach((job, i) => {
+                                    message +=
+                                        "<li>" +
+                                        $__(
+                                            "Job for report type <strong>%s</strong> has been queued"
+                                        ).format(job.report_type) +
+                                        '. <a href="/cgi-bin/koha/admin/background_jobs.pl?op=view&id=' +
+                                        job.job_id +
+                                        '" target="_blank">' +
+                                        $__("Check job progress") +
+                                        ".</a></li>";
+                                });
+                                setMessage(message, true);
+                            },
+                            error => {}
+                        );
+                }
+            );
+        };
+
         const change_tab_content = e => {
             tab_content.value = e.target.getAttribute("data-content");
         };
@@ -235,6 +355,8 @@ export default {
             tab_content,
             available_data_types,
             delete_usage_data_provider,
+            test_usage_data_provider,
+            run_harvester,
             change_tab_content,
         };
     },
