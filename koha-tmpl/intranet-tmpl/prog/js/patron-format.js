@@ -3,7 +3,8 @@
      * Format the patron response from a Koha RESTful API request.
      * @param  {Object}  patron  The patron json object as returned from the Koha RESTful API
      * @param  {Object}  config  A configuration object
-     *                           Valid keys are: `invert_name`, `display_cardnumber` and `url`
+     *                           Valid keys are: `invert_name`, `display_cardnumber', `url`
+     *                           and `showDiffFirstname`
      * @return {string}          The formatted HTML string
      */
     window.$patron_to_html = function (patron, config) {
@@ -31,6 +32,15 @@
         if (patron.other_name != null && patron.other_name != "") {
             firstname += " (" + escape_str(patron.other_name) + ")";
             preferred_name += " (" + escape_str(patron.other_name) + ")";
+        }
+
+        if (
+            config &&
+            config.showDiffFirstname &&
+            patron.preferred_name != patron.firstname
+        ) {
+            preferred_name +=
+                " <em>[" + escape_str(patron.firstname) + "]</em>";
         }
 
         const nameParts = [];

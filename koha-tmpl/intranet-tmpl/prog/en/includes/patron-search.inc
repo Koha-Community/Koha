@@ -594,9 +594,10 @@
                                         let patron_id = encodeURIComponent(row.patron_id);
                                         let r = '';
                                         [% IF ! open_on_row_click %]
-                                        r += "<a href=\"/cgi-bin/koha/members/moremember.pl?borrowernumber=" + patron_id + "\" class=\"patron_name\" data-borrowernumber=\"" + patron_id + "\" style=\"white-space:nowrap\">" + $patron_to_html(row, { invert_name: 1 }) + "</a>";
+                                        r += "<a href=\"/cgi-bin/koha/members/moremember.pl?borrowernumber=" + patron_id + "\" class=\"patron_name\" data-borrowernumber=\"" + patron_id + "\" style=\"white-space:nowrap\">"
+                                            + $patron_to_html(row, { invert_name: 1, showDiffFirstname: [% Koha.Preference('ShowPatronFirstnameIfDifferentThanPreferredname') ? 1 : 0 | html %] }) + "</a>";
                                         [% ELSE %]
-                                        r += $patron_to_html(row, { invert_name: 1 });
+                                        r += $patron_to_html(row, { invert_name: 1, showDiffFirstname: [% Koha.Preference('ShowPatronFirstnameIfDifferentThanPreferredname') ? 1 : 0 | html %] });
                                         [% END %]
                                         r += '<br/>';
                                         r += '<div class="address"><ul>';

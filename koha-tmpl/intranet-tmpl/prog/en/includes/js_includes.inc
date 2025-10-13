@@ -75,6 +75,7 @@
     var extendedPatronAttributes = "[% Koha.Preference('ExtendedPatronAttributes') | html %]";
     var loggedInLibrary = '[% Branches.GetLoggedInBranchcode | html %]';
     var singleBranchMode = '[% singleBranchMode | html %]';
+    var showPatronFirstnameIfDifferentThanPreferredname = [% Koha.Preference('ShowPatronFirstnameIfDifferentThanPreferredname') ? 1 : 0 | html %];
 </script>
 [% IF ( PatronAutoComplete ) %]
     <script>

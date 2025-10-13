@@ -803,6 +803,8 @@ function patron_autocomplete(node, options) {
                     $patron_to_html(item, {
                         display_cardnumber: true,
                         invert_name: true,
+                        showDiffFirstname:
+                            showPatronFirstnameIfDifferentThanPreferredname,
                     }) +
                     " " +
                     (item.date_of_birth
