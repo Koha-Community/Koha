@@ -750,6 +750,7 @@ INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `
 ('ShowHeadingUse', '0', NULL, 'Show whether MARC21 authority record contains an established heading that conforms to descriptive cataloguing rules, and can therefore be used as a main/added entry, or subject, or series title', 'YesNo'),
 ('showLastPatron','0','','If ON, enables the last patron feature in the intranet','YesNo'),
 ('showLastPatronCount', '10', '', 'How many patrons should showLastPatron remember', 'Integer'),
+('ShowPatronFirstnameIfDifferentThanPreferredname','0','','If ON, a patrons firstname will also show in search results if different than their preferred name','YesNo'),
 ('ShowPatronImageInWebBasedSelfCheck','0','','If ON, displays patron image when a patron uses web-based self-checkout','YesNo'),
 ('ShowReviewer','full','none|full|first|surname|firstandinitial|username','Choose how a commenter\'s identity is presented alongside comments in the OPAC','Choice'),
 ('ShowReviewerPhoto','1','','If ON, photo of reviewer will be shown beside comments in OPAC','YesNo'),
