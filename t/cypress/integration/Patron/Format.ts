@@ -49,6 +49,50 @@ describe("Display patron - search", () => {
             });
         });
     });
+
+    it("should have correct punctuation when surname is missing", function () {
+        cy.task("buildSampleObjects", {
+            object: "patron",
+            count: 2,
+            values: { surname: null },
+        }).then(patrons => {
+            // Needs more properties to not explode
+            // account_balace: balance_str.escapeHtml(...).format_price is not a function
+            patrons = patrons.map(p => ({ ...p, account_balance: 0 }));
+
+            cy.intercept("GET", "/api/v1/patrons*", {
+                statusCode: 200,
+                body: patrons,
+                headers: {
+                    "X-Base-Total-Count": "2",
+                    "X-Total-Count": "2",
+                },
+            });
+
+            cy.visit("/cgi-bin/koha/members/members-home.pl");
+
+            cy.window().then(win => {
+                win.categories_map = patrons.reduce((map, p) => {
+                    map[p.category_id.toLowerCase()] = p.category_id;
+                    return map;
+                }, {});
+            });
+
+            cy.get("form.patron_search_form input[type='submit']").click();
+
+            const patron = patrons[0];
+            // invert_name is set
+            cy.get(`#${table_id} tbody tr:eq(0) td:eq(2)`).should($el => {
+                let re = new RegExp(
+                    `^${patron.preferred_name} ${patron.middle_name} \\(${patron.other_name}\\)`
+                );
+                const displayedText = $el.text().replace(/ /g, " ").trim();
+                expect(displayedText).to.match(re);
+                re = new RegExp(patron.cardnumber);
+                expect(displayedText).to.not.match(re);
+            });
+        });
+    });
 });
 
 describe("Display patron - autocomplete", () => {
