@@ -539,16 +539,16 @@
                 <table id="libraries">
                     <thead>
                         <tr>
-                            <th>Name</th>
-                            <th>Code</th>
-                            <th>Address</th>
-                            <th>MARC organization code</th>
-                            <th>IP</th>
-                            <th>Pickup location</th>
-                            <th>Public</th>
-                            <th>SMTP server</th>
-                            <th>Library hours</th>
-                            <th data-class-name="actions no-export">Actions</th>
+                            <th data-colname="library_name">Name</th>
+                            <th data-colname="library_code">Code</th>
+                            <th data-colname="library_address">Address</th>
+                            <th data-colname="marc_organization_code">MARC organization code</th>
+                            <th data-colname="library_ip">IP</th>
+                            <th data-colname="is_pickup_location">Pickup location</th>
+                            <th data-colname="public">Public</th>
+                            <th data-colname="smtp_server">SMTP server</th>
+                            <th data-colname="library_hours">Library hours</th>
+                            <th data-colname="actions" data-class-name="actions no-export">Actions</th>
                         </tr>
                     </thead>
                 </table>
@@ -941,7 +941,8 @@
                         "searchable": false,
                         "orderable": false
                     },
-                ]
+                ],
+                bKohaColumnsUseNames: true,
             }, table_settings);
 
             [% UNLESS library %]
