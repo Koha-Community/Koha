@@ -3552,6 +3552,9 @@ DROP TABLE IF EXISTS `hold_groups`;
 /*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `hold_groups` (
   `hold_group_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `borrowernumber` int(11) DEFAULT NULL COMMENT 'foreign key, linking this to the borrowers table',
+  KEY `hold_groups_borrowernumber` (`borrowernumber`),
+  CONSTRAINT `hold_groups_ibfk_1` FOREIGN KEY (`borrowernumber`) REFERENCES `borrowers` (`borrowernumber`) ON DELETE CASCADE,
   PRIMARY KEY (`hold_group_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
