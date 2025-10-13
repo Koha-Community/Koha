@@ -19,7 +19,6 @@
                 "</span>";
         }
 
-        var name;
         var firstname = escape_str(patron.firstname);
         var preferred_name = escape_str(patron.preferred_name);
         var surname = escape_str(patron.surname);
@@ -33,11 +32,23 @@
             firstname += " (" + escape_str(patron.other_name) + ")";
             preferred_name += " (" + escape_str(patron.other_name) + ")";
         }
-        if (config && config.invert_name) {
-            name = surname + (preferred_name ? ", " + preferred_name : "");
+
+        const nameParts = [];
+        if (config?.invert_name) {
+            // Invert: "Surname, Preferred"
+            if (surname) nameParts.push(surname);
+            if (preferred_name)
+                nameParts.push(
+                    surname ? ", " + preferred_name : preferred_name
+                );
+            name = nameParts.join("");
         } else {
-            name = preferred_name + " " + surname;
+            // Normal: "Preferred Surname"
+            if (preferred_name) nameParts.push(preferred_name);
+            if (surname) nameParts.push(surname);
+            name = nameParts.join(" ");
         }
+
         if (name.replace(" ", "").length == 0) {
             if (patron.library) {
                 return __("A patron from %s").format(patron.library.name);
@@ -46,11 +57,11 @@
             }
         }
 
-        if (config && config.hide_patron_name) {
+        if (config?.hide_patron_name) {
             name = "";
         }
 
-        if (config && config.display_cardnumber) {
+        if (config?.display_cardnumber) {
             if (name.length > 0) {
                 name = name + " (" + escape_str(patron.cardnumber) + ")";
             } else {
@@ -58,7 +69,7 @@
             }
         }
 
-        if (config && config.url) {
+        if (config?.url) {
             if (config.url === "circulation_reserves") {
                 name =
                     '<a href="/cgi-bin/koha/circ/circulation.pl?borrowernumber=' +
