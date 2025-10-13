@@ -131,6 +131,37 @@ describe("Display patron - autocomplete", () => {
             });
         });
     });
+
+    it("should have correct punctuation when surname is missing", function () {
+        cy.task("buildSampleObjects", {
+            object: "patron",
+            count: 1,
+            values: { surname: null },
+        }).then(patrons => {
+            cy.intercept("GET", "/api/v1/patrons*", {
+                statusCode: 200,
+                body: patrons,
+                headers: {
+                    "X-Base-Total-Count": "1",
+                    "X-Total-Count": "1",
+                },
+            });
+
+            cy.visit("/cgi-bin/koha/mainpage.pl");
+
+            const patron = patrons[0];
+            cy.get("#findborrower").type(patron.firstname);
+
+            // invert_name is set
+            cy.get(`ul.ui-autocomplete li a`).should($el => {
+                let re = new RegExp(
+                    `^${patron.preferred_name} ${patron.middle_name} \\(${patron.other_name}\\) \\(${patron.cardnumber}\\)`
+                );
+                const displayedText = $el.text().replace(/ /g, " ").trim();
+                expect(displayedText).to.match(re);
+            });
+        });
+    });
 });
 
 describe("Display patron - no search", () => {
