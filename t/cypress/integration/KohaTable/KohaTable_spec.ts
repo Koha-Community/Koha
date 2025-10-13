@@ -206,6 +206,83 @@ describe("kohaTable (using REST API)", () => {
             });
         });
 
+        it("Force visibility of one column", () => {
+            build_libraries().then(() => {
+                cy.visit("/cgi-bin/koha/admin/branches.pl");
+
+                // default settings: show "Code"
+                cy.mock_table_settings({
+                    default_save_state: 1,
+                    columns: { library_code: { is_hidden: 0 } },
+                });
+
+                cy.get("@columns").then(columns => {
+                    cy.get(`#${table_id} th`).should(
+                        "have.length",
+                        columns.length
+                    );
+                    cy.get(`#${table_id} th`).contains("Name");
+                    cy.get(`#${table_id} th`).contains("Code");
+
+                    // Hide "Code"
+                    cy.get(`#${table_id}_wrapper .buttons-colvis`).click();
+                    cy.get(`#${table_id}_wrapper .dt-button-collection`)
+                        .contains("Code")
+                        .click();
+                    cy.get(`#${table_id} th`).should(
+                        "have.length",
+                        columns.length - 1
+                    );
+                    cy.get(`#${table_id} th`).contains("Name");
+                    cy.get(`#${table_id} th`)
+                        .contains("Code")
+                        .should("not.exist");
+                });
+
+                // "Code" has been hidden by the user
+                cy.visit("/cgi-bin/koha/admin/branches.pl");
+
+                // But we want to display it
+                cy.mock_table_settings({
+                    default_save_state: 1,
+                    columns: {
+                        library_code: { is_hidden: 0, force_visibility: 1 },
+                    },
+                });
+
+                cy.get("@columns").then(columns => {
+                    cy.get(`#${table_id} th`).should(
+                        "have.length",
+                        columns.length
+                    );
+                    // Both are shown
+                    cy.get(`#${table_id} th`).contains("Name");
+                    cy.get(`#${table_id} th`).contains("Code");
+                });
+
+                // Now hide it
+                cy.visit("/cgi-bin/koha/admin/branches.pl");
+
+                cy.mock_table_settings({
+                    default_save_state: 1,
+                    columns: {
+                        library_code: { is_hidden: 1, force_visibility: 1 },
+                    },
+                });
+
+                cy.get("@columns").then(columns => {
+                    cy.get(`#${table_id} th`).should(
+                        "have.length",
+                        columns.length - 1
+                    );
+                    cy.get(`#${table_id} th`).contains("Name");
+                    cy.get(`#${table_id} th`)
+                        .contains("Code")
+                        .should("not.exist");
+                });
+            });
+        });
+
         it("Shareable link", { scrollBehavior: false }, () => {
             build_libraries().then(() => {
                 cy.visit("/cgi-bin/koha/admin/branches.pl");
