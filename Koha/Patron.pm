@@ -46,6 +46,7 @@ use Koha::Encryption;
 use Koha::Exceptions;
 use Koha::Exceptions::Password;
 use Koha::Holds;
+use Koha::HoldGroups;
 use Koha::ILL::Requests;
 use Koha::ItemTypes;
 use Koha::Old::Checkouts;
@@ -1886,6 +1887,20 @@ sub old_holds {
     my $old_holds_rs = $self->_result->old_reserves->search( {}, { order_by => 'reservedate' } );
     require Koha::Old::Holds;
     return Koha::Old::Holds->_new_from_dbic($old_holds_rs);
+}
+
+=head3 hold_groups
+
+my $hold_groups = $patron->hold_groups
+
+Return all of this patron's hold groups
+
+=cut
+
+sub hold_groups {
+    my ($self) = @_;
+    my $hold_group_rs = $self->_result->hold_groups->search( {}, { order_by => 'hold_group_id' } );
+    return Koha::HoldGroups->_new_from_dbic($hold_group_rs);
 }
 
 =head3 curbside_pickups
