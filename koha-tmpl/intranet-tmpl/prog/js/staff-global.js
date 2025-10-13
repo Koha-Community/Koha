@@ -800,7 +800,10 @@ function patron_autocomplete(node, options) {
             .append(
                 "" +
                     (item.link ? '<a href="' + item.link + '">' : "<a>") +
-                    $patron_to_html(item, { display_cardnumber: true }) +
+                    $patron_to_html(item, {
+                        display_cardnumber: true,
+                        invert_name: true,
+                    }) +
                     " " +
                     (item.date_of_birth
                         ? $date(item.date_of_birth) +
