@@ -52,6 +52,7 @@
 [% INCLUDE 'bodytag.inc' bodyid='opac-detail' bodyclass='scrollto' %]
 [% INCLUDE 'masthead.inc' %]
 
+[% SET hidden_columns_force = {} %]
 <main class="main">
     [% WRAPPER breadcrumbs %]
         [% WRAPPER breadcrumb_item bc_active= 1 %]
@@ -1284,6 +1285,7 @@
 [%# End of template %]
 
 [% BLOCK items_table %]
+    [% SET hidden_columns_force.$table_id = [] %]
     <table class="table table-bordered table-striped" id="[% table_id | html %]">
         <caption class="sr-only">Holdings</caption>
         <thead>
@@ -1327,6 +1329,7 @@
                             </div>
                         </td>
                     [% ELSE %]
+                        [% hidden_columns_force.$table_id.push('item_cover') %]
                         <td></td>
                     [% END %]
 
@@ -1340,6 +1343,7 @@
                             <span class="itypetext">[% ITEM_RESULT.description | html %]</span>
                         </td>
                     [% ELSE %]
+                        [% hidden_columns_force.$table_id.push('item_itemtype') %]
                         <td></td>
                     [% END %]
                     [% IF ( OpacLocationBranchToDisplay == 'holding' || OpacLocationBranchToDisplay == 'both' ) %]
@@ -1365,6 +1369,7 @@
                             [% END %]
                         </td>
                     [% ELSE %]
+                        [% hidden_columns_force.$table_id.push('item_current_location') %]
                         <td></td>
                     [% END %]
 
@@ -1391,18 +1396,21 @@
                             [% END %]
                         </td>
                     [% ELSE %]
+                        [% hidden_columns_force.$table_id.push('item_home_location') %]
                         <td></td>
                     [% END %]
 
                     [% IF ( itemdata_ccode ) %]
                         <td class="collection">[% ITEM_RESULT.ccode | html %]</td>
                     [% ELSE %]
+                        [% hidden_columns_force.$table_id.push('item_ccode') %]
                         <td></td>
                     [% END %]
 
                     [% IF ( Koha.Preference('OpacLocationOnDetail') == 'column' && itemdata_location ) %]
                         <td class="shelving_location"><span class="shelvingloc">[% ITEM_RESULT.location_description | html %]</span></td>
                     [% ELSE %]
+                        [% hidden_columns_force.$table_id.push('item_shelving_location') %]
                         <td></td>
                     [% END %]
 
@@ -1429,12 +1437,14 @@
                             [% END %]
                         </td>
                     [% ELSE %]
+                        [% hidden_columns_force.$table_id.push('item_callnumber') %]
                         <td></td>
                     [% END %]
 
                     [% IF ( itemdata_materials ) %]
                         <td class="materials">[% ITEM_RESULT.materials | html %]</td>
                     [% ELSE %]
+                        [% hidden_columns_force.$table_id.push('item_materials') %]
                         <td></td>
                     [% END %]
 
@@ -1457,6 +1467,7 @@
                             [% END %]
                         </td>
                     [% ELSE %]
+                        [% hidden_columns_force.$table_id.push('item_enumchron') %]
                         <td></td>
                     [% END %]
 
@@ -1502,12 +1513,14 @@
                             [% END %]
                         </td>
                     [% ELSE %]
+                        [% hidden_columns_force.$table_id.push('item_url') %]
                         <td></td>
                     [% END # /IF itemdata_uri %]
 
                     [% IF ( itemdata_copynumber ) %]
                         <td class="copynumber">[% ITEM_RESULT.copynumber | html %]</td>
                     [% ELSE %]
+                        [% hidden_columns_force.$table_id.push('item_copy') %]
                         <td></td>
                     [% END %]
 
@@ -1516,18 +1529,21 @@
                     [% IF ( itemdata_itemnotes ) %]
                         <td class="notes" property="description">[% ITEM_RESULT.itemnotes | $raw %]</td>
                     [% ELSE %]
+                        [% hidden_columns_force.$table_id.push('item_notes') %]
                         <td></td>
                     [% END %]
 
                     [% IF item_checkouts %]
                         <td class="date_due" data-order="[% ITEM_RESULT.checkout.date_due | html %]">[% ITEM_RESULT.checkout.date_due | $KohaDates as_due_date => 1 %]</td>
                     [% ELSE %]
+                        [% hidden_columns_force.$table_id.push('item_datedue') %]
                         <td></td>
                     [% END %]
 
                     [% IF ( itemdata_barcode ) %]
                         <td class="barcode" property="serialNumber">[% ITEM_RESULT.barcode | html %]</td>
                     [% ELSE %]
+                        [% hidden_columns_force.$table_id.push('item_barcode') %]
                         <td></td>
                     [% END %]
 
@@ -1542,12 +1558,16 @@
                                 [% END %]
                             [% END %]
                         </td>
+                        [% hidden_columns_force.$table_id.push('item_priority') %]
                         <td></td>
                     [% ELSIF show_priority %]
+                        [% hidden_columns_force.$table_id.push('item_holds') %]
                         <td></td>
                         <td class="holds_priority">[% priority | html %]</td>
                     [% ELSE %]
+                        [% hidden_columns_force.$table_id.push('item_holds') %]
                         <td></td>
+                        [% hidden_columns_force.$table_id.push('item_priority') %]
                         <td></td>
                     [% END %]
 
@@ -1569,6 +1589,7 @@
                             [% END %]
                         </td>
                     [% ELSE %]
+                        [% hidden_columns_force.$table_id.push('item_coursereserves') %]
                         <td></td>
                     [% END  # /IF ShowCourseReservesHeader %]
                     <td></td>
@@ -1885,7 +1906,23 @@
                 });
             [% END # /IF OpacBrowseResults %]
 
-            var table_settings = [% TablesSettings.GetTableSettings( 'opac', 'biblio-detail', 'holdingst', 'json' ) | $raw %];
+            var holdingst_table_settings = [% TablesSettings.GetTableSettings( 'opac', 'biblio-detail', 'holdingst', 'json' ) | $raw %];
+            var otherholdingst_table_settings = JSON.parse(JSON.stringify(holdingst_table_settings)); // Clone
+
+            let column;
+            [% FOR k IN hidden_columns_force.holdingst %]
+                column = holdingst_table_settings.columns.find(c => c.columnname == '[% k | html %]');
+                column.is_hidden = 1;
+                column.cannot_be_toggled = 1;
+                column.force_visibility = 1;
+            [% END %]
+
+            [% FOR k IN hidden_columns_force.otherholdingst %]
+                column = otherholdingst_table_settings.columns.find(c => c.columnname == '[% k | html %]');
+                column.is_hidden = 1;
+                column.cannot_be_toggled = 1;
+                column.force_visibility = 1;
+            [% END %]
 
             $("#holdingst").kohaTable(
                 {
@@ -1895,7 +1932,7 @@
                         details: { type: "column", target: -1 },
                     },
                 },
-                table_settings
+                holdingst_table_settings,
             );
             $("#otherholdingst").kohaTable(
                 {
@@ -1905,7 +1942,7 @@
                         details: { type: "column", target: -1 },
                     },
                 },
-                table_settings
+                otherholdingst_table_settings,
             );
 
             var serial_table_settings = [% TablesSettings.GetTableSettings( 'opac', 'biblio-detail', 'subscriptionst', 'json' ) | $raw %];
