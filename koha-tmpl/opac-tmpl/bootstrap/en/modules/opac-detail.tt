@@ -1527,7 +1527,7 @@
                         <td class="barcode" property="serialNumber">[% ITEM_RESULT.barcode | html %]</td>
                     [% END %]
 
-                    [% IF item_level_holds > 0 || show_priority %]
+                    [% IF item_level_holds > 0 %]
                         <td class="holds_count">
                             [% IF holds_count.defined %][% ITEM_RESULT.holds_count | html %][% END %]
                             [% IF ITEM_RESULT.priority %]
@@ -1539,7 +1539,7 @@
                             [% END %]
                         </td>
                     [% ELSIF show_priority %]
-                        <td class="holds_priority">[% priority | html %] </td>
+                        <td class="holds_priority">[% priority | html %]</td>
                     [% END %]
 
                     [% IF ShowCourseReservesHeader %]
