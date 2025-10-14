@@ -236,7 +236,7 @@ if ($delete) {
         $dbh->do("ALTER TABLE items AUTO_INCREMENT = 1");
     } else {
         print "Deleting authorities\n";
-        $dbh->do("truncate auth_header");
+        $dbh->do("DELETE FROM auth_header");
     }
     $dbh->do("truncate zebraqueue");
 }
