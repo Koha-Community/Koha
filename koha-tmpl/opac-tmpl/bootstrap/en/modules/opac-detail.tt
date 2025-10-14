@@ -1288,57 +1288,24 @@
         <caption class="sr-only">Holdings</caption>
         <thead>
             <tr>
-                [% IF Koha.Preference('OPACLocalCoverImages') && ( tab == 'holdings' && itemloop_has_images || tab == 'otherholdings' && otheritemloop_has_images ) %]
-                    <th id="item_cover" data-colname="item_cover">Cover image</th>
-                [% END %]
-                [% IF ( item_level_itypes ) %]
-                    <th id="item_itemtype" data-colname="item_itemtype" class="itype">Item type</th>
-                [% END %]
-                [% IF ( OpacLocationBranchToDisplay == 'holding' || OpacLocationBranchToDisplay == 'both' ) %]
-                    <th id="item_current_location" data-colname="item_current_location" class="item_location">Current library</th>
-                [% END %]
-                [% IF ( OpacLocationBranchToDisplay == 'home' || OpacLocationBranchToDisplay == 'both' ) %]
-                    <th id="item_home_location" data-colname="item_home_location" class="item_location">Home library</th>
-                [% END %]
-                [% IF ( itemdata_ccode ) %]
-                    <th id="item_ccode" data-colname="item_ccode" class="collection">Collection</th>
-                [% END %]
-                [% IF ( Koha.Preference('OpacLocationOnDetail') == 'column' && itemdata_location ) %]
-                    <th id="item_shelving_location" data-colname="item_shelving_location" class="shelving_location">Shelving location</th>
-                [% END %]
-                [% IF ( itemdata_itemcallnumber ) %]
-                    <th id="item_callnumber" data-colname="item_callnumber" class="call_no">Call number</th>
-                [% END %]
-                [% IF ( itemdata_materials ) %]
-                    <th id="item_materials" data-colname="item_materials" class="materials">Materials specified</th>
-                [% END %]
-                [% IF ( itemdata_enumchron ) %]
-                    <th id="item_enumchron" data-colname="item_enumchron" class="vol_info">Vol info</th>
-                [% END %]
-                [% IF ( itemdata_uri ) %]
-                    <th id="item_url" data-colname="item_url" class="url">URL</th>
-                [% END %]
-                [% IF ( itemdata_copynumber ) %]
-                    <th id="item_copy" data-colname="item_copy" class="copynumber">Copy number</th>
-                [% END %]
+                <th id="item_cover" data-colname="item_cover">Cover image</th>
+                <th id="item_itemtype" data-colname="item_itemtype" class="itype">Item type</th>
+                <th id="item_current_location" data-colname="item_current_location" class="item_location">Current library</th>
+                <th id="item_home_location" data-colname="item_home_location" class="item_location">Home library</th>
+                <th id="item_ccode" data-colname="item_ccode" class="collection">Collection</th>
+                <th id="item_shelving_location" data-colname="item_shelving_location" class="shelving_location">Shelving location</th>
+                <th id="item_callnumber" data-colname="item_callnumber" class="call_no">Call number</th>
+                <th id="item_materials" data-colname="item_materials" class="materials">Materials specified</th>
+                <th id="item_enumchron" data-colname="item_enumchron" class="vol_info">Vol info</th>
+                <th id="item_url" data-colname="item_url" class="url">URL</th>
+                <th id="item_copy" data-colname="item_copy" class="copynumber">Copy number</th>
                 <th id="item_status" data-colname="item_status" class="status">Status</th>
-                [% IF ( itemdata_itemnotes ) %]
-                    <th id="item_notes" data-colname="item_notes" class="notes">Notes</th>
-                [% END %]
-                [% IF ( item_checkouts ) %]
-                    <th id="item_datedue" data-colname="item_datedue" class="date_due">Date due</th>
-                [% END %]
-                [% IF ( itemdata_barcode ) %]
-                    <th id="item_barcode" data-colname="item_barcode" class="barcode">Barcode</th>
-                [% END %]
-                [% IF item_level_holds > 0 %]
-                    <th id="item_holds" data-colname="item_holds">Item holds</th>
-                [% ELSIF show_priority %]
-                    <th id="item_priority" data-colname="item_priority">Item hold queue priority</th>
-                [% END %]
-                [% IF ( ShowCourseReservesHeader ) %]
-                    <th id="item_coursereserves" data-colname="item_coursereserves">Course reserves</th>
-                [% END %]
+                <th id="item_notes" data-colname="item_notes" class="notes">Notes</th>
+                <th id="item_datedue" data-colname="item_datedue" class="date_due">Date due</th>
+                <th id="item_barcode" data-colname="item_barcode" class="barcode">Barcode</th>
+                <th id="item_holds" data-colname="item_holds">Item holds</th>
+                <th id="item_priority" data-colname="item_priority">Item hold queue priority</th>
+                <th id="item_coursereserves" data-colname="item_coursereserves">Course reserves</th>
                 <th class="dtr-control-col"></th>
             </tr>
         </thead>
@@ -1359,6 +1326,8 @@
                                 </div>
                             </div>
                         </td>
+                    [% ELSE %]
+                        <td></td>
                     [% END %]
 
                     [% IF ( item_level_itypes ) %]
@@ -1370,6 +1339,8 @@
                             [% END %]
                             <span class="itypetext">[% ITEM_RESULT.description | html %]</span>
                         </td>
+                    [% ELSE %]
+                        <td></td>
                     [% END %]
                     [% IF ( OpacLocationBranchToDisplay == 'holding' || OpacLocationBranchToDisplay == 'both' ) %]
                         [%# Show opac_info or branchurl from holding library %]
@@ -1393,6 +1364,8 @@
                                 <span class="shelvingloc">[% ITEM_RESULT.location_description | html %]</span>
                             [% END %]
                         </td>
+                    [% ELSE %]
+                        <td></td>
                     [% END %]
 
                     [% IF ( OpacLocationBranchToDisplay == 'home' || OpacLocationBranchToDisplay == 'both' ) %]
@@ -1417,14 +1390,20 @@
                                 <span class="shelvingloc">[% ITEM_RESULT.location_description | html %]</span>
                             [% END %]
                         </td>
+                    [% ELSE %]
+                        <td></td>
                     [% END %]
 
                     [% IF ( itemdata_ccode ) %]
                         <td class="collection">[% ITEM_RESULT.ccode | html %]</td>
+                    [% ELSE %]
+                        <td></td>
                     [% END %]
 
                     [% IF ( Koha.Preference('OpacLocationOnDetail') == 'column' && itemdata_location ) %]
                         <td class="shelving_location"><span class="shelvingloc">[% ITEM_RESULT.location_description | html %]</span></td>
+                    [% ELSE %]
+                        <td></td>
                     [% END %]
 
                     [% IF ( itemdata_itemcallnumber ) %]
@@ -1449,10 +1428,14 @@
                                 [% END %]
                             [% END %]
                         </td>
+                    [% ELSE %]
+                        <td></td>
                     [% END %]
 
                     [% IF ( itemdata_materials ) %]
                         <td class="materials">[% ITEM_RESULT.materials | html %]</td>
+                    [% ELSE %]
+                        <td></td>
                     [% END %]
 
                     [% IF ( itemdata_enumchron ) %]
@@ -1473,7 +1456,10 @@
                                 <span class="pubdate">([% serial.publisheddate | $KohaDates %])</span>
                             [% END %]
                         </td>
+                    [% ELSE %]
+                        <td></td>
                     [% END %]
+
                     [% IF ( itemdata_uri ) %]
                         <td class="url">
                             [% IF ITEM_RESULT.uri %]
@@ -1515,16 +1501,34 @@
                                 [% END %]
                             [% END %]
                         </td>
+                    [% ELSE %]
+                        <td></td>
                     [% END # /IF itemdata_uri %]
-                    [% IF ( itemdata_copynumber ) %]<td class="copynumber">[% ITEM_RESULT.copynumber | html %]</td>[% END %]
+
+                    [% IF ( itemdata_copynumber ) %]
+                        <td class="copynumber">[% ITEM_RESULT.copynumber | html %]</td>
+                    [% ELSE %]
+                        <td></td>
+                    [% END %]
+
                     <td class="status">[% INCLUDE 'item-status.inc' item = ITEM_RESULT.object include_schema_org = 1 %]</td>
-                    [% IF ( itemdata_itemnotes ) %]<td class="notes" property="description">[% ITEM_RESULT.itemnotes | $raw %]</td>[% END %]
+
+                    [% IF ( itemdata_itemnotes ) %]
+                        <td class="notes" property="description">[% ITEM_RESULT.itemnotes | $raw %]</td>
+                    [% ELSE %]
+                        <td></td>
+                    [% END %]
+
                     [% IF item_checkouts %]
                         <td class="date_due" data-order="[% ITEM_RESULT.checkout.date_due | html %]">[% ITEM_RESULT.checkout.date_due | $KohaDates as_due_date => 1 %]</td>
+                    [% ELSE %]
+                        <td></td>
                     [% END %]
 
                     [% IF ( itemdata_barcode ) %]
                         <td class="barcode" property="serialNumber">[% ITEM_RESULT.barcode | html %]</td>
+                    [% ELSE %]
+                        <td></td>
                     [% END %]
 
                     [% IF item_level_holds > 0 %]
@@ -1538,8 +1542,13 @@
                                 [% END %]
                             [% END %]
                         </td>
+                        <td></td>
                     [% ELSIF show_priority %]
+                        <td></td>
                         <td class="holds_priority">[% priority | html %]</td>
+                    [% ELSE %]
+                        <td></td>
+                        <td></td>
                     [% END %]
 
                     [% IF ShowCourseReservesHeader %]
@@ -1559,6 +1568,8 @@
                                 [% END %]
                             [% END %]
                         </td>
+                    [% ELSE %]
+                        <td></td>
                     [% END  # /IF ShowCourseReservesHeader %]
                     <td></td>
                 </tr>
