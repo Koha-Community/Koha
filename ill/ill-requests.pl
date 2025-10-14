@@ -312,7 +312,7 @@ if ($backends_available) {
                     message => '',
                     op      => 'edit_action',
                     stage   => 'commit',
-                    next    => 'illlist',
+                    next    => 'illview',
                     value   => {}
                 };
                 redirect_user( $backend_result, $request );
