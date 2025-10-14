@@ -512,7 +512,6 @@ INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `
 ('OpacHiddenItemsExceptions','',NULL,'List of borrower categories, separated by comma, that can see items otherwise hidden by OpacHiddenItems','Textarea'),
 ('OpacHiddenItemsHidesRecord','1','','Hide biblio record when all its items are hidden because of OpacHiddenItems','YesNo'),
 ('OpacHighlightedWords','1','','If Set, then queried words are higlighted in OPAC','YesNo'),
-('OPACHoldingsDefaultSortField','first_column','first_column|homebranch|holdingbranch','Default sort field for the holdings table at the OPAC','choice'),
 ('OpacHoldNotes','0','','Show hold notes on OPAC','YesNo'),
 ('OPACHoldRequests','1',NULL,'If ON, globally enables patron holds on OPAC','YesNo'),
 ('OPACHoldsHistory','0','','If ON, enables display of Patron Holds History in OPAC','YesNo'),

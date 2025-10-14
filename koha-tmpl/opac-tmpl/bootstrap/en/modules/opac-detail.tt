@@ -1995,15 +1995,6 @@
                     });
             [% END %]
 
-            [%# Note that there is no way atm to target a column with its class name to set it as the default sort order %]
-            [% IF Koha.Preference('OpacLocationBranchToDisplay') == 'home' AND Koha.Preference('OPACHoldingsDefaultSortField') == 'homebranch' AND item_level_itypes OR Koha.Preference('OpacLocationBranchToDisplay') == 'holding' AND Koha.Preference('OPACHoldingsDefaultSortField') == 'holdingbranch' AND item_level_itypes OR Koha.Preference('OpacLocationBranchToDisplay') == 'both' AND Koha.Preference('OPACHoldingsDefaultSortField') == 'homebranch' AND NOT item_level_itypes OR Koha.Preference('OpacLocationBranchToDisplay') == 'both' AND Koha.Preference('OPACHoldingsDefaultSortField') == 'holdingbranch' AND item_level_itypes %]
-                var default_order_index = 1;
-            [% ELSIF Koha.Preference('OpacLocationBranchToDisplay') == 'both' AND Koha.Preference('OPACHoldingsDefaultSortField') == 'homebranch' AND item_level_itypes %]
-                var default_order_index = 2;
-            [% ELSE %]
-                var default_order_index = 0;
-            [% END %]
-
             [% IF ( query_desc ) %]
                 [% IF ( OpacHighlightedWords ) %]
                     var query_desc = "[% query_desc |replace("'", "\'") |replace('\n', '\\n') |replace('\r', '\\r') | html %]";
