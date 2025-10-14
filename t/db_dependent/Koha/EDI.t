@@ -242,16 +242,29 @@ subtest 'process_quote' => sub {
 
         $schema->storage->txn_begin;
 
+        # Create file transport for local testing
+        my $file_transport = $builder->build(
+            {
+                source => 'FileTransport',
+                value  => {
+                    name               => 'Test Local Transport',
+                    transport          => 'local',
+                    download_directory => $dirname,
+                    upload_directory   => $dirname,
+                }
+            }
+        );
+
         my $account = $builder->build(
             {
                 source => 'VendorEdiAccount',
                 value  => {
-                    description    => 'multi-message test vendor',
-                    transport      => 'FILE',
-                    plugin         => '',
-                    san            => $test_san,
-                    orders_enabled => 1,
-                    auto_orders    => 1,
+                    description       => 'multi-message test vendor',
+                    file_transport_id => $file_transport->{file_transport_id},
+                    plugin            => '',
+                    san               => $test_san,
+                    orders_enabled    => 1,
+                    auto_orders       => 1,
                 }
             }
         );
