@@ -782,14 +782,14 @@ sub process_quote {
             my $basketno = $added_baskets[$i];
 
             # Check if this basket has a PO number conflict
-            if ( exists $baskets_with_po_conflicts{$b} ) {
-                my $conflict_info = $baskets_with_po_conflicts{$b};
-                $logger->warn( "Auto-order blocked for basket $b due to duplicate PO number '"
+            if ( exists $baskets_with_po_conflicts{$basketno} ) {
+                my $conflict_info = $baskets_with_po_conflicts{$basketno};
+                $logger->warn( "Auto-order blocked for basket $basketno due to duplicate PO number '"
                         . $conflict_info->{po_number}
                         . "' (existing basket: "
                         . $conflict_info->{existing_basket}
                         . ")" );
-                $logger->info("Basket $b remains open due to PO number conflict");
+                $logger->info("Basket $basketno remains open due to PO number conflict");
                 next;
             }
 

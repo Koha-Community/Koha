@@ -38,7 +38,7 @@ my $builder = t::lib::TestBuilder->new;
 my $logger  = t::lib::Mocks::Logger->new();
 
 subtest 'process_quote' => sub {
-    plan tests => 7;
+    plan tests => 8;
 
     $schema->storage->txn_begin;
 
