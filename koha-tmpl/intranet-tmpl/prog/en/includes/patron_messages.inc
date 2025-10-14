@@ -1,7 +1,7 @@
 [% USE raw %]
 [% USE Branches %]
 [% USE Categories %]
-[% SET ClaimReturnedWarningThreshold = Koha.Preference('ClaimReturnedWarningThreshold') %]
+[% SET ClaimReturnedWarningThreshold = Koha.Preference('ClaimReturnedWarningThreshold') || 0 %]
 [% SET return_claims = patron.return_claims %]
 [% SET logged_in_branchcode = Branches.GetLoggedInBranchcode() %]
 
