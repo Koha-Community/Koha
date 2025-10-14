@@ -52,7 +52,7 @@ __PACKAGE__->table("file_transports");
 
   data_type: 'enum'
   default_value: 'sftp'
-  extra: {list => ["ftp","sftp"]}
+  extra: {list => ["ftp","sftp","local"]}
   is_nullable: 0
 
 =head2 passive
@@ -125,7 +125,7 @@ __PACKAGE__->add_columns(
   {
     data_type => "enum",
     default_value => "sftp",
-    extra => { list => ["ftp", "sftp"] },
+    extra => { list => ["ftp", "sftp", "local"] },
     is_nullable => 0,
   },
   "passive",
@@ -165,9 +165,26 @@ __PACKAGE__->add_columns(
 
 __PACKAGE__->set_primary_key("file_transport_id");
 
+=head1 RELATIONS
 
-# Created by DBIx::Class::Schema::Loader v0.07051 @ 2025-09-15 14:28:35
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:Mpw0xCAH2Jmoxv3V9fHJRw
+=head2 vendor_edi_accounts
+
+Type: has_many
+
+Related object: L<Koha::Schema::Result::VendorEdiAccount>
+
+=cut
+
+__PACKAGE__->has_many(
+  "vendor_edi_accounts",
+  "Koha::Schema::Result::VendorEdiAccount",
+  { "foreign.file_transport_id" => "self.file_transport_id" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+
+
+# Created by DBIx::Class::Schema::Loader v0.07051 @ 2025-10-14 20:25:57
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:aepVBfAwINe8dLAE5xLi1A
 
 __PACKAGE__->add_columns(
     '+passive' => { is_boolean => 1 },

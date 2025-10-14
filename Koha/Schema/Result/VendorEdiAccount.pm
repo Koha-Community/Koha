@@ -34,33 +34,6 @@ __PACKAGE__->table("vendor_edi_accounts");
   data_type: 'mediumtext'
   is_nullable: 0
 
-=head2 host
-
-  data_type: 'varchar'
-  is_nullable: 1
-  size: 40
-
-=head2 username
-
-  data_type: 'varchar'
-  is_nullable: 1
-  size: 40
-
-=head2 password
-
-  data_type: 'mediumtext'
-  is_nullable: 1
-
-=head2 upload_port
-
-  data_type: 'integer'
-  is_nullable: 1
-
-=head2 download_port
-
-  data_type: 'integer'
-  is_nullable: 1
-
 =head2 last_activity
 
   data_type: 'date'
@@ -71,16 +44,6 @@ __PACKAGE__->table("vendor_edi_accounts");
 
   data_type: 'integer'
   is_foreign_key: 1
-  is_nullable: 1
-
-=head2 download_directory
-
-  data_type: 'mediumtext'
-  is_nullable: 1
-
-=head2 upload_directory
-
-  data_type: 'mediumtext'
   is_nullable: 1
 
 =head2 san
@@ -102,13 +65,6 @@ __PACKAGE__->table("vendor_edi_accounts");
   default_value: 14
   is_nullable: 1
   size: 3
-
-=head2 transport
-
-  data_type: 'varchar'
-  default_value: 'FTP'
-  is_nullable: 1
-  size: 6
 
 =head2 quotes_enabled
 
@@ -153,6 +109,12 @@ __PACKAGE__->table("vendor_edi_accounts");
   is_nullable: 0
   size: 256
 
+=head2 file_transport_id
+
+  data_type: 'integer'
+  is_foreign_key: 1
+  is_nullable: 1
+
 =cut
 
 __PACKAGE__->add_columns(
@@ -160,32 +122,16 @@ __PACKAGE__->add_columns(
   { data_type => "integer", is_auto_increment => 1, is_nullable => 0 },
   "description",
   { data_type => "mediumtext", is_nullable => 0 },
-  "host",
-  { data_type => "varchar", is_nullable => 1, size => 40 },
-  "username",
-  { data_type => "varchar", is_nullable => 1, size => 40 },
-  "password",
-  { data_type => "mediumtext", is_nullable => 1 },
-  "upload_port",
-  { data_type => "integer", is_nullable => 1 },
-  "download_port",
-  { data_type => "integer", is_nullable => 1 },
   "last_activity",
   { data_type => "date", datetime_undef_if_invalid => 1, is_nullable => 1 },
   "vendor_id",
   { data_type => "integer", is_foreign_key => 1, is_nullable => 1 },
-  "download_directory",
-  { data_type => "mediumtext", is_nullable => 1 },
-  "upload_directory",
-  { data_type => "mediumtext", is_nullable => 1 },
   "san",
   { data_type => "varchar", is_nullable => 1, size => 20 },
   "standard",
   { data_type => "varchar", default_value => "EUR", is_nullable => 1, size => 3 },
   "id_code_qualifier",
   { data_type => "varchar", default_value => 14, is_nullable => 1, size => 3 },
-  "transport",
-  { data_type => "varchar", default_value => "FTP", is_nullable => 1, size => 6 },
   "quotes_enabled",
   { data_type => "tinyint", default_value => 0, is_nullable => 0 },
   "invoices_enabled",
@@ -200,6 +146,8 @@ __PACKAGE__->add_columns(
   { data_type => "integer", is_foreign_key => 1, is_nullable => 1 },
   "plugin",
   { data_type => "varchar", default_value => "", is_nullable => 0, size => 256 },
+  "file_transport_id",
+  { data_type => "integer", is_foreign_key => 1, is_nullable => 1 },
 );
 
 =head1 PRIMARY KEY
@@ -229,6 +177,26 @@ __PACKAGE__->has_many(
   "Koha::Schema::Result::EdifactMessage",
   { "foreign.edi_acct" => "self.id" },
   { cascade_copy => 0, cascade_delete => 0 },
+);
+
+=head2 file_transport
+
+Type: belongs_to
+
+Related object: L<Koha::Schema::Result::FileTransport>
+
+=cut
+
+__PACKAGE__->belongs_to(
+  "file_transport",
+  "Koha::Schema::Result::FileTransport",
+  { file_transport_id => "file_transport_id" },
+  {
+    is_deferrable => 1,
+    join_type     => "LEFT",
+    on_delete     => "SET NULL",
+    on_update     => "CASCADE",
+  },
 );
 
 =head2 shipment_budget
@@ -272,8 +240,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07049 @ 2024-04-19 16:25:44
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:jenUF3Wx7J7F5270mLQMbw
+# Created by DBIx::Class::Schema::Loader v0.07051 @ 2025-10-14 20:25:57
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:kt6vdvzzxk3kOdgIwBMFrg
 
 __PACKAGE__->add_columns(
     '+auto_orders'       => { is_boolean => 1 },
