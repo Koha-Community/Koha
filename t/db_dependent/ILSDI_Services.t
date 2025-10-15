@@ -792,6 +792,7 @@ subtest 'GetRecords' => sub {
         { frameworkcode => $biblio->frameworkcode, tagfield => "245", tagsubfield => "a" } );
     $framework_f245a->hidden('8');
     $framework_f245a->store();
+    Koha::Caches->get_instance()->flush_all;
 
     my $patron = $builder->build({
         source => 'Borrower',
