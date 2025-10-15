@@ -1104,7 +1104,7 @@ have already been fixed in maintainance releases)
   **Sponsored by** *Goethe-Institut*
 
 - [[21939]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21939) Permission for holds history tab is too strict
-- [[22741]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=22741) Koha::Patron->store must not log updated_on changes (random failure of test BorrowerLogs and TrackLastPatronActivity)
+- [[22741]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=22741) Koha::Patron->store must not log updated_on changes (random failure of test BorrowersLog and TrackLastPatronActivity)
 - [[22910]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=22910) Unique attributes should not be copied when duplicating a patron
 - [[22944]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=22944) avoid AnonymousPatron in search_patrons_to_anonymise
 - [[23077]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=23077) Can't import patrons without cardnumber
