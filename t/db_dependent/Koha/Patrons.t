@@ -408,7 +408,7 @@ subtest 'renew_account' => sub {
         my $retrieved_expiry_date = Koha::Patrons->find( $patron->{borrowernumber} )->dateexpiry;
         is( dt_from_string($retrieved_expiry_date), $a_year_later_minus_a_month, "$a_month_ago + 12 months must be $a_year_later_minus_a_month" );
         my $number_of_logs = $schema->resultset('ActionLog')->search( { module => 'MEMBERS', action => 'RENEW', object => $retrieved_patron->borrowernumber } )->count;
-        is( $number_of_logs, 1, 'With BorrowerLogs, Koha::Patron->renew_account should have logged' );
+        is( $number_of_logs, 1, 'With BorrowersLog, Koha::Patron->renew_account should have logged' );
 
         t::lib::Mocks::mock_preference( 'BorrowerRenewalPeriodBase', 'now' );
         t::lib::Mocks::mock_preference( 'BorrowersLog',              0 );
@@ -419,7 +419,7 @@ subtest 'renew_account' => sub {
         $retrieved_expiry_date = $retrieved_patron->dateexpiry;
         is( dt_from_string($retrieved_expiry_date), $a_year_later, "today + 12 months must be $a_year_later" );
         $number_of_logs = $schema->resultset('ActionLog')->search( { module => 'MEMBERS', action => 'RENEW', object => $retrieved_patron->borrowernumber } )->count;
-        is( $number_of_logs, 1, 'Without BorrowerLogs, Koha::Patron->renew_account should not have logged' );
+        is( $number_of_logs, 1, 'Without BorrowersLog, Koha::Patron->renew_account should not have logged' );
 
         t::lib::Mocks::mock_preference( 'BorrowerRenewalPeriodBase', 'combination' );
         $expiry_date = $retrieved_patron_2->renew_account;
@@ -508,7 +508,7 @@ subtest "delete" => sub {
     is( Koha::Patron::Modifications->search( { borrowernumber => $patron->borrowernumber } )->count, 0, q|Koha::Patron->delete should have deleted patron's modifications| );
 
     my $number_of_logs = $schema->resultset('ActionLog')->search( { module => 'MEMBERS', action => 'DELETE', object => $patron->borrowernumber } )->count;
-    is( $number_of_logs, 1, 'With BorrowerLogs, Koha::Patron->delete should have logged' );
+    is( $number_of_logs, 1, 'With BorrowersLog, Koha::Patron->delete should have logged' );
 
     # Test deletion with designated fallback owner
     my $designated_owner = $builder->build_object({ class => 'Koha::Patrons' });
@@ -1771,12 +1771,12 @@ subtest 'BorrowersLog tests' => sub {
     my $log_info = from_json( $logs[0]->info );
     is( $log_info->{cardnumber}->{after}, 'TESTCARDNUMBER', 'Got correct new cardnumber' );
     is( $log_info->{cardnumber}->{before}, $cardnumber, 'Got correct old cardnumber' );
-    is( scalar @logs, 1, 'With BorrowerLogs, one detailed MODIFY action should be logged for the modification.' );
+    is( scalar @logs, 1, 'With BorrowersLog, one detailed MODIFY action should be logged for the modification.' );
 
     t::lib::Mocks::mock_preference( 'TrackLastPatronActivityTriggers', 'connection' );
     $patron->update_lastseen('connection');
     @logs = $schema->resultset('ActionLog')->search( { module => 'MEMBERS', action => 'MODIFY', object => $patron->borrowernumber } );
-    is( scalar @logs, 1, 'With BorrowerLogs and TrackLastPatronActivityTriggers we should not spam the logs');
+    is( scalar @logs, 1, 'With BorrowersLog and TrackLastPatronActivityTriggers we should not spam the logs');
 
     Koha::ActionLogs->search()->delete();
     $patron->get_from_storage();
@@ -2156,7 +2156,7 @@ subtest '->set_password' => sub {
     is( $patron->login_attempts, 0, 'Login attemps have been reset' );
 
     my $number_of_logs = $schema->resultset('ActionLog')->search( { module => 'MEMBERS', action => 'CHANGE PASS', object => $patron->borrowernumber } )->count;
-    is( $number_of_logs, 0, 'Without BorrowerLogs, Koha::Patron->set_password doesn\'t log password changes' );
+    is( $number_of_logs, 0, 'Without BorrowersLog, Koha::Patron->set_password doesn\'t log password changes' );
 
     # Enable logging password changes
     t::lib::Mocks::mock_preference( 'BorrowersLog', 1 );
@@ -2168,7 +2168,7 @@ subtest '->set_password' => sub {
             object => $patron->borrowernumber
         }
     )->count;
-    is( $number_of_logs, 1, 'With BorrowerLogs, Koha::Patron->set_password does log password changes' );
+    is( $number_of_logs, 1, 'With BorrowersLog, Koha::Patron->set_password does log password changes' );
     # add other action name
     $patron->set_password( { password => 'abcd   b2', action => 'RESET PASS' } );
     $number_of_logs = $schema->resultset('ActionLog')->search(
