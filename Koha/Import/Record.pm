@@ -132,7 +132,7 @@ sub replace {
     if ($biblio) {
         my $record = $biblio->metadata->record;
         $xmlrecord = $record->as_xml;
-        my $context = { source => 'batchimport' };
+        my $context = { source => 'add_to_basket' };
         if ($logged_in_patron) {
             $context->{categorycode} = $logged_in_patron->categorycode;
             $context->{userid}       = $logged_in_patron->userid;

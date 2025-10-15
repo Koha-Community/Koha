@@ -215,6 +215,8 @@
                                             <span>Staff interface MARC editor</span>
                                         [% CASE 'batchimport' %]
                                             <span>Staged MARC import</span>
+                                        [% CASE 'add_to_basket' %]
+                                            <span>Add to basket</span>
                                         [% CASE 'z3950' %]
                                             <span>Z39.50</span>
                                         [% CASE 'bulkmarcimport' %]
@@ -326,11 +328,12 @@
                 [% FOREACH record_source IN record_sources %]
                     [% SWITCH record_source %]
                       [% CASE 'batchmod' %]'[% record_source | html %]': _("Batch record modification"),
-                      [% CASE 'intranet' %]'[% record_source | html %]':_("Staff interface MARC editor"),
+                      [% CASE 'intranet' %]'[% record_source | html %]': _("Staff interface MARC editor"),
                       [% CASE 'batchimport' %]'[% record_source | html %]': _("Staged MARC import"),
+                      [% CASE 'add_to_basket' %]'[% record_source | html %]': _("Add to basket"),
                       [% CASE 'z3950' %]'[% record_source | html %]': _("Z39.50"),
                       [% CASE 'bulkmarcimport' %]'[% record_source | html %]': _("bulkmarcimport.pl"),
-                      [% CASE 'import_lexile' %]'[% record_source | html %]':  _("import_lexile.pl"),
+                      [% CASE 'import_lexile' %]'[% record_source | html %]': _("import_lexile.pl"),
                       [% CASE %] '[% record_source | html %]' : '[% record_source | html %]',
                     [% END %]
                 [% END %]
