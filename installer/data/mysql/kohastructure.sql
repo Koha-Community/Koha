@@ -6719,9 +6719,9 @@ CREATE TABLE `vendor_edi_accounts` (
   KEY `vendorid` (`vendor_id`),
   KEY `shipmentbudget` (`shipment_budget`),
   KEY `vendor_edi_accounts_file_transport_id` (`file_transport_id`),
+  CONSTRAINT `vendor_edi_accounts_ibfk_file_transport` FOREIGN KEY (`file_transport_id`) REFERENCES `file_transports` (`file_transport_id`) ON DELETE SET NULL ON UPDATE CASCADE,
   CONSTRAINT `vfk_shipment_budget` FOREIGN KEY (`shipment_budget`) REFERENCES `aqbudgets` (`budget_id`),
-  CONSTRAINT `vfk_vendor_id` FOREIGN KEY (`vendor_id`) REFERENCES `aqbooksellers` (`id`),
-  CONSTRAINT `vendor_edi_accounts_ibfk_file_transport` FOREIGN KEY (`file_transport_id`) REFERENCES `file_transports` (`file_transport_id`) ON DELETE SET NULL ON UPDATE CASCADE
+  CONSTRAINT `vfk_vendor_id` FOREIGN KEY (`vendor_id`) REFERENCES `aqbooksellers` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
