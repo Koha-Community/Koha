@@ -831,16 +831,14 @@ if ( $op eq "cud-addbiblio" ) {
 
 } else {
 
-    #----------------------------------------------------------------------------
-    # If we're in a duplication case, we have to set to "" the biblionumber
-    # as we'll save the biblio as a new one.
-
-    if ( C4::Context->preference('marcflavour') eq 'MARC21' ) {
+    if ( $biblio && C4::Context->preference('marcflavour') eq 'MARC21' ) {
         my $fixed_length_info =
-            Koha::Biblio::Metadata::Extractor::MARC::MARC21->new( { biblio => $biblio } )->check_fixed_length;
+            Koha::Biblio::Metadata::Extractor::MARC->new( { biblio => $biblio } )->check_fixed_length;
         $template->param( marc21_fixlen => $fixed_length_info ) if @{ $fixed_length_info->{failed} };
     }
 
+    # If we're in a duplication case, we have to set to "" the biblionumber
+    # as we'll save the biblio as a new one.
     $template->param(
         biblionumberdata => $biblionumber,
         op               => $op,
