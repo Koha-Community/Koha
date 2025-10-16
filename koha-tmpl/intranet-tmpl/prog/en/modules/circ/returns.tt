@@ -1735,7 +1735,7 @@
                 var component_itemnumber = $(this).data('itemnumber');
                 var host_itemnumber = $(this).data('hostnumber');
                 var alert = $(this).closest('div');
-                var unlink_item_url = "/api/v1/items/" + host_itemnumber + "/bundled_items/item/" + component_itemnumber;
+                var unlink_item_url = "/api/v1/items/" + host_itemnumber + "/bundled_items/" + component_itemnumber;
                 $.ajax({
                     type: "DELETE",
                     url: unlink_item_url,
