@@ -93,7 +93,7 @@ OPTION: foreach my $option (@$messaging_options) {
         }
 
         if ( $option->{'takes_days'} ) {
-            if ( defined $query->param( $option->{'message_attribute_id'} . '-DAYS' ) ) {
+            if ( $query->param( $option->{'message_attribute_id'} . '-DAYS' ) ) {
                 $updater->{'days_in_advance'} = $query->param( $option->{'message_attribute_id'} . '-DAYS' );
             }
         }
@@ -135,7 +135,7 @@ PREF: foreach my $option (@$messaging_options) {
             $option->{days_in_advance} = $days_in_advance;
             @{ $option->{'select_days'} } = map {
                 {
-                    day      => $_,
+                    day      => $_ || q{},
                     selected => $_ == $days_in_advance
                 }
             } ( 0 .. MAX_DAYS_IN_ADVANCE );
@@ -173,7 +173,7 @@ sub restore_form_values {
             $option->{days_in_advance} = $days_in_advance;
             @{ $option->{'select_days'} } = map {
                 {
-                    day      => $_,
+                    day      => $_ || q{},
                     selected => $_ == $days_in_advance
                 }
             } ( 0 .. MAX_DAYS_IN_ADVANCE );

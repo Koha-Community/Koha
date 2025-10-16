@@ -140,8 +140,8 @@ sub SetMessagingPreference {
             return;
         }
     }
-    $params->{'days_in_advance'} = undef unless exists( $params->{'days_in_advance'} );
-    $params->{'wants_digest'}    = 0     unless exists( $params->{'wants_digest'} );
+    $params->{'days_in_advance'} = undef if !exists $params->{'days_in_advance'} || $params->{'days_in_advance'} <= 0;
+    $params->{'wants_digest'}    = 0 unless exists( $params->{'wants_digest'} );
 
     my $dbh = C4::Context->dbh();
 
@@ -160,7 +160,9 @@ END_SQL
     my $sth     = $dbh->prepare($delete_sql);
     my $deleted = $sth->execute(@bind_params);
 
-    if ( $params->{'message_transport_types'} ) {
+    if ( $params->{'message_transport_types'}
+        && !( $params->{'message_attribute_id'} == 2 && !$params->{'days_in_advance'} ) )
+    {
         my $insert_bmp = <<'END_SQL';
 INSERT INTO borrower_message_preferences
 (borrower_message_preference_id, borrowernumber, categorycode, message_attribute_id, days_in_advance, wants_digest)
