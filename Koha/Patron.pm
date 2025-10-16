@@ -88,6 +88,7 @@ our $RESULTSET_PATRON_ID_MAPPING = {
     ClubEnrollment       => 'borrowernumber',
     Issue                => 'borrowernumber',
     ItemsLastBorrower    => 'borrowernumber',
+    Illrequest           => 'borrowernumber',
     Linktracker          => 'borrowernumber',
     Message              => 'borrowernumber',
     MessageQueue         => 'borrowernumber',
