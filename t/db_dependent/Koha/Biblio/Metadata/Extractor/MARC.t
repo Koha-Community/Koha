@@ -20,16 +20,41 @@
 use Modern::Perl;
 
 use Test::NoWarnings;
-use Test::More tests => 2;
+use Test::More tests => 3;
 use Test::Exception;
 
 use t::lib::TestBuilder;
 use t::lib::Mocks;
 
+use Koha::Biblios;
 use Koha::Biblio::Metadata::Extractor;
 
 my $schema  = Koha::Database->schema;
 my $builder = t::lib::TestBuilder->new;
+
+subtest 'new' => sub {
+    plan tests => 6;
+
+    my ( $extractor, $params, $record, $biblio );
+    throws_ok { $extractor = Koha::Biblio::Metadata::Extractor->new } 'Koha::Exceptions::MissingParameter',
+        'No parameters';
+    $params = { metadata => q{} };
+    throws_ok { $extractor = Koha::Biblio::Metadata::Extractor->new($params) } 'Koha::Exceptions::MissingParameter',
+        'metadata empty';
+    $params = { metadata => '123' };
+    throws_ok { $extractor = Koha::Biblio::Metadata::Extractor->new($params) } 'Koha::Exceptions::BadParameter',
+        'metadata no object';
+    $params = { metadata => q{}, biblio => 1 };
+    throws_ok { $extractor = Koha::Biblio::Metadata::Extractor->new($params) } 'Koha::Exceptions::BadParameter',
+        'biblio no object';
+
+    $record = MARC::Record->new;
+    $params = { metadata => $record };
+    lives_ok { $extractor = Koha::Biblio::Metadata::Extractor->new($params) } 'correct metadata';
+    $biblio = Koha::Biblio->new;
+    $params = { metadata => q{}, biblio => $biblio };
+    lives_ok { $extractor = Koha::Biblio::Metadata::Extractor->new($params) } 'correct biblio overrules metadata';
+};
 
 subtest 'get_control_number() tests' => sub {
 

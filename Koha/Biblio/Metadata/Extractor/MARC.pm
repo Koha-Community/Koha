@@ -42,11 +42,15 @@ Constructor for the I<Koha::Biblio::Metadata::Extractor::MARC> class.
 sub new {
     my ( $class, $params ) = @_;
 
+    # If metadata is missing, we should have a biblio parameter (Koha object).
+    # If we do not have biblio, metadata should be a MARC::Record object.
     Koha::Exceptions::MissingParameter->throw( parameter => 'metadata' )
         unless $params->{metadata} || $params->{biblio};
+    Koha::Exceptions::BadParameter->throw('biblio should be a Koha object')
+        if $params->{biblio} && ref( $params->{biblio} ) ne 'Koha::Biblio';
+    Koha::Exceptions::BadParameter->throw('metadata should be a MARC::Record')
+        if !$params->{biblio} && ref( $params->{metadata} ) ne 'MARC::Record';
 
-    #my $metadata = $biblio->metadata;
-    #my $schema   = $metadata->schema;
     # Get the schema from the pref so that we do not fetch the biblio_metadata
     my $schema = C4::Context->preference('marcflavour');
 
