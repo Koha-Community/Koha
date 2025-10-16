@@ -2624,7 +2624,7 @@ subtest 'get_lists_with_patron() tests' => sub {
     $schema->storage->txn_rollback;
 };
 
-subtest 'validate_guarantor() tests' => sub {
+subtest 'can_be_guaranteed_by() tests' => sub {
 
     plan tests => 5;
 
@@ -2659,6 +2659,12 @@ subtest 'validate_guarantor() tests' => sub {
             value => { categorycode => $guarantor_category->{categorycode} }
         }
     );
+    my $patron2 = $builder->build_object(
+        {
+            class => 'Koha::Patrons',
+            value => { categorycode => $guarantor_category->{categorycode} }
+        }
+    );
 
     my @guarantors;
     my $contactname = "";
@@ -2666,28 +2672,30 @@ subtest 'validate_guarantor() tests' => sub {
 
     t::lib::Mocks::mock_preference( 'ChildNeedsGuarantor', 0 );
 
-    lives_ok { $child->validate_guarantor( \@guarantors, $contactname, $category ); }
+    lives_ok { $child->can_be_guaranteed_by( \@guarantors ); }
     'Validation passes when ChildNeedsGuarantor syspref is disabled';
 
     t::lib::Mocks::mock_preference( 'ChildNeedsGuarantor', 1 );
 
-    throws_ok { $child->validate_guarantor( \@guarantors, $contactname, $category ); }
+    throws_ok { $child->can_be_guaranteed_by( \@guarantors ); }
     'Koha::Exceptions::Patron::Relationship::NoGuarantor',
         'Exception thrown when guarantor is required but not provided.';
 
     @guarantors = ( $patron, $child2 );
-    throws_ok { $child->validate_guarantor( \@guarantors, $contactname, $category ); }
+    throws_ok { $child->can_be_guaranteed_by( \@guarantors ); }
     'Koha::Exceptions::Patron::Relationship::InvalidRelationship',
         'Exception thrown when child patron is added as guarantor.';
 
-    @guarantors = ($patron);
-    lives_ok { $child->validate_guarantor( \@guarantors, undef, $category ); }
-    'Validation passes when valid guarantors are passed in array';
+    t::lib::Mocks::mock_preference( 'borrowerRelationship', 'parent' );
+    $child2->add_guarantor( { guarantor_id => $patron->id, relationship => 'parent' } );
+    @guarantors = ($patron2);
+    throws_ok { $patron->can_be_guaranteed_by( \@guarantors ); }
+    'Koha::Exceptions::Patron::Relationship::InvalidRelationship',
+        'Exception thrown when trying to add a guarantor to a guarantor.';
 
-    @guarantors  = ();
-    $contactname = "Guarantor";
-    lives_ok { $child->validate_guarantor( \@guarantors, $contactname, $category ); }
-    'Validation passes when guarantor contanct name is passed';
+    @guarantors = ($patron);
+    lives_ok { $child->can_be_guaranteed_by( \@guarantors ); }
+    'Validation passes when valid guarantors are passed in array';
 
     $schema->storage->txn_rollback;
 };
