@@ -28,7 +28,6 @@ use t::lib::Mocks;
 
 use C4::Biblio qw(ModBiblio);
 use Koha::Biblio::Metadata::Extractor;
-use Koha::Biblio::Metadata::Extractor::MARC::MARC21;
 
 my $schema  = Koha::Database->schema;
 my $builder = t::lib::TestBuilder->new;
@@ -92,19 +91,24 @@ subtest 'get_normalized_oclc() tests' => sub {
 
 subtest 'check_fixed_length' => sub {
 
-    plan tests => 6;
+    plan tests => 8;
     $schema->storage->txn_begin;
 
-    my $record = MARC::Record->new;
+    # Check empty object
+    my $record    = MARC::Record->new;
+    my $extractor = Koha::Biblio::Metadata::Extractor::MARC->new( { metadata => $record } );
+    my $result    = $extractor->check_fixed_length;
+    is( scalar @{ $result->{passed} }, 0, 'No passed fields' );
+    is( scalar @{ $result->{failed} }, 0, 'No failed fields' );
+
     $record->append_fields(
         MARC::Field->new( '005', '0123456789012345' ),
     );
     my $biblio = $builder->build_sample_biblio;
     ModBiblio( $record, $biblio->biblionumber );
 
-    my $extractor;
-    $extractor = Koha::Biblio::Metadata::Extractor::MARC::MARC21->new( { biblio => $biblio } );
-    my $result = $extractor->check_fixed_length;
+    $extractor = Koha::Biblio::Metadata::Extractor::MARC->new( { biblio => $biblio } );
+    $result    = $extractor->check_fixed_length;
     is( $result->{passed}->[0],        '005', 'Check first passed field' );
     is( scalar @{ $result->{failed} }, 0,     'Check failed count' );
 
@@ -116,7 +120,7 @@ subtest 'check_fixed_length' => sub {
     );
 
     # Passing latest record changes via metadata now
-    $extractor = Koha::Biblio::Metadata::Extractor::MARC::MARC21->new( { metadata => $record } );
+    $extractor = Koha::Biblio::Metadata::Extractor::MARC->new( { metadata => $record } );
     $result    = $extractor->check_fixed_length;
     is( $result->{passed}->[1], '007', 'Check second passed field' );
     is( $result->{passed}->[2], '007', 'Check third passed field' );
