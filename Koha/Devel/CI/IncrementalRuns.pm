@@ -129,7 +129,7 @@ sub get_files_to_test {
     my $dev_files = Koha::Devel::Files->new( { context => $self->{context} } );
     my $no_history;
     if ( $self->{incremental_run} ) {
-        my @koha_commit_history   = qx{git log --pretty=format:"%h"};
+        my @koha_commit_history   = qx{git log --abbrev=10 --pretty=format:"%h"};
         my @tested_commit_history = qx{ls $self->{git_repo_dir}/$self->{test_dir}};
         chomp for @koha_commit_history, @tested_commit_history;
         if (@tested_commit_history) {
@@ -169,7 +169,7 @@ sub report_results {
 
     return unless $self->{report};
 
-    my $commit_id = qx{git rev-parse --short HEAD};
+    my $commit_id = qx{git rev-parse --short=10 HEAD};
     chomp $commit_id;
 
     my $failure_file = "$self->{git_repo_dir}/$self->{test_dir}/$commit_id";
