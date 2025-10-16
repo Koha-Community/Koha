@@ -45,7 +45,7 @@ if ( $TwoFactorAuthentication ne 'enabled' && $TwoFactorAuthentication ne 'enfor
 my $op        = $cgi->param('op')             // '';
 my $patron_id = $cgi->param('borrowernumber') // '';
 
-my $another_user = $patron_id ne $loggedinuser;
+my $another_user = $patron_id && $patron_id ne $loggedinuser;
 
 my $logged_in_user = Koha::Patrons->find($loggedinuser);
 
