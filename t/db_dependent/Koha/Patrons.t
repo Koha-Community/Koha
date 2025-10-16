@@ -2118,7 +2118,7 @@ subtest 'BorrowersLog and CardnumberLog tests' => sub {
 $schema->storage->txn_rollback;
 
 subtest 'Test Koha::Patrons::merge' => sub {
-    plan tests => 113;
+    plan tests => 118;
 
     my $schema = Koha::Database->new()->schema();
 
@@ -2304,6 +2304,20 @@ subtest 'Test Koha::Patrons::merge' => sub {
             $attribute_type_repeatable->code
         );
 
+    };
+
+    subtest 'ILL requests' => sub {
+        plan tests => 3;
+
+        my $keep_patron  = $builder->build_object( { class => 'Koha::Patrons' } );
+        my $merge_patron = $builder->build_object( { class => 'Koha::Patrons' } );
+        my $ill_request  = $builder->build_sample_ill_request( { borrowernumber => $merge_patron->borrowernumber } );
+
+        is( $merge_patron->ill_requests->count, 1, 'Patron to be merged has 1 ILL request' );
+        is( $keep_patron->ill_requests->count,  0, 'Patron to be kept has 0 ILL requests' );
+
+        $keep_patron->merge_with( [ $merge_patron->borrowernumber ] );
+        is( $keep_patron->ill_requests->count, 1, 'Patron to be kept now has 1 ILL request' );
     };
 
     t::lib::Mocks::mock_preference( 'AnonymousPatron', '' );
