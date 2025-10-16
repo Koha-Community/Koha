@@ -3083,7 +3083,6 @@ sub to_api_mapping {
         altcontactstate     => 'altcontact_state',
         altcontactzipcode   => 'altcontact_postal_code',
         password_expiration_date => undef,
-        primary_contact_method   => undef,
         secret                   => undef,
         auth_method              => undef,
     };
