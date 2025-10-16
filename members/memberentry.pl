@@ -23,7 +23,8 @@ use Modern::Perl;
 use Try::Tiny;
 
 # external modules
-use CGI qw ( -utf8 );
+use CGI          qw ( -utf8 );
+use Scalar::Util qw( blessed );
 
 # internal modules
 use C4::Auth qw( get_template_and_user haspermission );
@@ -52,7 +53,8 @@ use Koha::SMS::Providers;
 my $input = CGI->new;
 my %data;
 
-my $dbh = C4::Context->dbh;
+my $dbh    = C4::Context->dbh;
+my $logger = Koha::Logger->get( { interface => 'intranet ' } );
 
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     {
@@ -273,33 +275,61 @@ if (@delete_guarantor) {
     if ( C4::Context->preference('ChildNeedsGuarantor') && $will_remove_last ) {
         push @errors, 'ERROR_cannot_delete_guarantor';
     } else {
+        my @deleted_guarantors;
         foreach my $id (@delete_guarantor) {
             my $r = Koha::Patron::Relationships->find($id);
-            $r->delete() if $r;
+            if ($r) {
+                $r->delete();
+                push @deleted_guarantors, $id;
+            }
+        }
+        foreach my $deleted_guarantor_id (@deleted_guarantors) {
+            @guarantors = grep { ref($_) eq 'Koha::Patron' && $_->id ne $deleted_guarantor_id } @guarantors;
         }
     }
 }
 
 #Check if guarantor requirements are met
-if ( ( $op eq 'cud-save' || $op eq 'cud-insert' ) ) {
-    unless ( $patron && $patron->is_guarantor ) {
-        try {
-            Koha::Patron->validate_guarantor( \@guarantors, $newdata{'contactname'}, $category );
-        } catch {
-            if ( ref($_) eq "Koha::Exceptions::Patron::Relationship::NoGuarantor" ) {
-                push @errors, "ERROR_child_no_guarantor";
-            } elsif ( ref($_) eq "Koha::Exceptions::Patron::Relationship::InvalidRelationship" ) {
-                if ( $_->full_message eq "Guarantee patron cannot be a guarantor." ) {
-                    push @errors, "ERROR_guarantor_is_guarantee";
-                } elsif ( $_->full_message eq "Child patron cannot be a guarantor." ) {
-                    push @errors, "ERROR_child_is_guarantor";
-                }
+my $guarantors_to_be_validated =
+    @guarantors ? \@guarantors : $newdata{'contactname'} ? [ $newdata{'contactname'} ] : [];
+if ( ( $op eq 'cud-save' || $op eq 'cud-insert' ) && $guarantors_to_be_validated ) {
+    try {
+        if ($patron) {
+            if ( $patron->categorycode eq $categorycode ) {
+                $patron->can_be_guaranteed_by($guarantors_to_be_validated);
+            } else {
+
+                # If $patron's categorycode is about to change, check guarantor requirements against
+                # the new category but keep the original $patron object intact
+                # (this clone()s the $patron)
+                ( bless {%$patron}, ref $patron )->categorycode($categorycode)
+                    ->can_be_guaranteed_by($guarantors_to_be_validated);
             }
-            return;
-        };
-    } else {
-        push @errors, "ERROR_guarantee_is_guarantor";
-    }
+        } else {
+            Koha::Patron->new( { categorycode => $categorycode } )->can_be_guaranteed_by($guarantors_to_be_validated);
+        }
+    } catch {
+        unless ( blessed($_) ) {
+            $logger->error($_);
+        } else {
+            if ( $_->isa("Koha::Exceptions::Patron::Relationship::NoGuarantor") ) {
+                push @errors, "ERROR_child_no_guarantor";
+            } elsif ( $_->isa("Koha::Exceptions::Patron::Relationship::InvalidRelationship") ) {
+                if ( $_->invalid_guarantor ) {
+                    push @errors, "ERROR_guarantor_is_guarantee";
+                    $template->param( guarantor_is_guarantee => $_->guarantor );
+                } elsif ( $_->child_guarantor ) {
+                    push @errors, "ERROR_child_is_guarantor";
+                } elsif ( $_->guarantor_cant_have_guarantors ) {
+                    push @errors, "ERROR_guarantor_cant_have_guarantors";
+                }
+            } else {
+                $logger->error( $_->error );
+                $_->rethrow;
+            }
+        }
+        return;
+    };
 }
 
 my @valid_relationships = split( /\|/, C4::Context->preference('borrowerRelationship'), -1 );

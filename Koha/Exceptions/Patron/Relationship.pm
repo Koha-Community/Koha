@@ -32,7 +32,10 @@ use Exception::Class (
     'Koha::Exceptions::Patron::Relationship::InvalidRelationship' => {
         isa         => 'Koha::Exceptions::Patron::Relationship',
         description => 'The specified relationship is invalid',
-        fields      => [ 'relationship', 'no_relationship', 'invalid_guarantor', 'child_guarantor' ]
+        fields      => [
+            'relationship', 'no_relationship', 'invalid_guarantor', 'child_guarantor',
+            'guarantor_cant_have_guarantors', 'guarantor'
+        ],
     },
     'Koha::Exceptions::Patron::Relationship::NoGuarantor' => {
         isa         => 'Koha::Exceptions::Patron::Relationship',

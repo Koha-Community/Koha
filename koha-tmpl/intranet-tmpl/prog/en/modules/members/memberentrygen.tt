@@ -195,10 +195,16 @@
                                     <li id="ERROR_child_is_guarantor">Child patron cannot be a guarantor.</li>
                                 [% END %]
                                 [% IF ( ERROR_guarantor_is_guarantee ) %]
-                                    <li id="ERROR_guarantor_is_guarantee">A guarantee cannot be a guarantor.</li>
+                                    <li id="ERROR_guarantor_is_guarantee">
+                                        Cannot add a guarantor. The proposed guarantor
+                                        <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% guarantor_is_guarantee.borrowernumber | uri %]" target="blank">
+                                            [% guarantor_is_guarantee.firstname | html %] [% guarantor_is_guarantee.surname | html %] ([% guarantor_is_guarantee.cardnumber | html %])
+                                        </a>
+                                        is a guarantee of someone else, and guarantees cannot be guarantors.</li
+                                    >
                                 [% END %]
-                                [% IF ( ERROR_guarantee_is_guarantor ) %]
-                                    <li id="ERROR_guarantee_is_guarantor">A guarantor cannot be a guarantee.</li>
+                                [% IF ( ERROR_guarantor_cant_have_guarantors ) %]
+                                    <li id="ERROR_guarantor_cant_have_guarantors">Cannot add a guarantor. This patron is already a guarantor, and guarantors cannot have guarantors.</li>
                                 [% END %]
                                 [% IF ( ERROR_cannot_delete_guarantor ) %]
                                     <li id="ERROR_cannot_delete_guarantor">Cannot delete guarantor(s). A child patron needs a guarantor.</li>

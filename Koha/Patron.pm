@@ -2802,34 +2802,59 @@ sub _anonymize_column {
     $self->$col($val);
 }
 
-=head3 validate_guarantor
+=head3 can_be_guaranteed_by
 
-    Koha::Patron->validate_guarantor(\@guarantors, $contactname, $category );
+    $patron->can_be_guaranteed_by( [
+        $guarantor1,
+        $guarantor2,
+        ...
+    ] );
 
-    Validates guarantor patron.
+    Given an array of guarantors, checks if they can be guarantors for this patron.
+
+    Throws Koha::Exceptions::Patron::Relationship::InvalidRelationship if a proposed
+        guarantor cannot be a guarantor for this patron.
+
+    $patron->can_be_guaranteed_by();
+
+    Given no guarantors, checks if this patron must be guaranteed by someone. Read
+    "can be guaranteed by nobody".
+
+    Throws Koha::Exceptions::Patron::Relationship::NoGuarantor if this patron must
+        have a guarantor.
 
 =cut
 
-sub validate_guarantor {
-    my ( $self, $guarantors, $contactname, $category ) = @_;
+sub can_be_guaranteed_by {
+    my ( $self, $guarantors ) = @_;
 
-    my $valid_guarantor = @$guarantors ? @$guarantors : $contactname;
+    my $category = $self->category;
 
     if (    C4::Context->preference('ChildNeedsGuarantor')
         and ( $category->category_type eq 'C' or $category->can_be_guarantee )
-        and !$valid_guarantor )
+        and scalar @$guarantors == 0 )
     {
         Koha::Exceptions::Patron::Relationship::NoGuarantor->throw();
     }
 
+    if ( $self->is_guarantor && scalar @$guarantors > 0 ) {
+        Koha::Exceptions::Patron::Relationship::InvalidRelationship->throw( guarantor_cant_have_guarantors => 1 );
+    }
+
     foreach my $guarantor (@$guarantors) {
+        next if ref($guarantor) ne 'Koha::Patron';
+
         if ( $guarantor->is_guarantee ) {
-            Koha::Exceptions::Patron::Relationship::InvalidRelationship->throw( invalid_guarantor => 1 );
+            Koha::Exceptions::Patron::Relationship::InvalidRelationship->throw(
+                invalid_guarantor => 1,
+                guarantor         => $guarantor,
+            );
         } elsif ( $guarantor->is_child ) {
             Koha::Exceptions::Patron::Relationship::InvalidRelationship->throw( child_guarantor => 1 );
         }
     }
 
+    return 1;
 }
 
 =head3 add_guarantor
