@@ -337,3 +337,21 @@
         [% END %]
     </tbody>
 </table>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const selectElement = document.querySelector('select[name="2-DAYS"]');
+
+        const smsCheckbox = document.getElementById("sms2");
+        const emailCheckbox = document.getElementById("email2");
+        const digestCheckbox = document.getElementById("digest2");
+
+        function updateCheckboxes() {
+            const isDisabled = !selectElement.value;
+            if (smsCheckbox) smsCheckbox.disabled = isDisabled;
+            if (emailCheckbox) emailCheckbox.disabled = isDisabled;
+            if (digestCheckbox) digestCheckbox.disabled = isDisabled;
+        }
+        updateCheckboxes();
+        selectElement.addEventListener("change", updateCheckboxes);
+    });
+</script>
