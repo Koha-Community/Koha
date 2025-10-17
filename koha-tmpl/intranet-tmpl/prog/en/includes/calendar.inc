@@ -38,18 +38,12 @@
     </script>
     <!-- / calendar.inc -->
     [% Asset.js("lib/dayjs/dayjs.min.js") | $raw %]
-    [% Asset.js("lib/dayjs/plugin/utc.js") | $raw %]
-    [% Asset.js("lib/dayjs/plugin/timezone.js") | $raw %]
-    [% Asset.js("lib/dayjs/plugin/customParseFormat.js") | $raw %]
     [% Asset.js("js/calendar.js") | $raw %]
     [% Asset.js("lib/flatpickr/flatpickr.min.js") | $raw %]
     [% Asset.js("lib/flatpickr/shortcut-buttons-flatpickr.min.js") | $raw %]
     [% Asset.js("lib/maskito/maskito.core.js") | $raw %]
     [% Asset.js("lib/maskito/maskito.kit.js") | $raw %]
     <script>
-        dayjs.extend(window.dayjs_plugin_utc);
-        dayjs.extend(window.dayjs_plugin_timezone);
-        dayjs.extend(window.dayjs_plugin_customParseFormat);
         flatpickr.l10ns.default.weekdays       = flatpickr_weekdays;
         flatpickr.l10ns.default.months         = flatpickr_months;
         flatpickr.l10ns.default.rangeSeparator = flatpickr_rangeSeparator;
