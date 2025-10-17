@@ -17,6 +17,7 @@
                 class="dragArea list-group w-full"
                 :list="selectedWidgetsLeft"
                 group="widgets"
+                handle=".widget-drag-handle"
             >
                 <component
                     v-for="(widget, index) in selectedWidgetsLeft"
@@ -37,6 +38,7 @@
                 class="dragArea list-group w-full"
                 :list="selectedWidgetsRight"
                 group="widgets"
+                handle=".widget-drag-handle"
             >
                 <component
                     v-for="(widget, index) in selectedWidgetsRight"

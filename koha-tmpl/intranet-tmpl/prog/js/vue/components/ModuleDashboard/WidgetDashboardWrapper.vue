@@ -4,8 +4,11 @@
             <div class="row align-items-center">
                 <div class="col-md-6">
                     <h1 class="widget-title m-0">
-                        <i v-if="icon" :icon="icon" :class="icon"></i>
+                        <i class="fas fa-grip-vertical widget-drag-handle"
+                            >&nbsp;</i
+                        >
                         {{ name }}
+                        <i v-if="icon" :icon="icon" :class="icon"></i>
                     </h1>
                 </div>
                 <div class="col-md-6 text-end">
@@ -232,5 +235,9 @@ export default {
 .widget-header {
     padding: 6px 12px;
     margin-bottom: 6px;
+}
+
+.widget-drag-handle:hover {
+    cursor: grab;
 }
 </style>
