@@ -10,7 +10,7 @@
                     <li><a href="/cgi-bin/koha/reports/guided_reports.pl?phase=Build%20new">Build new</a></li>
                 [% END %]
                 [% IF ( CAN_user_reports_execute_reports ) %]
-                    <li><a href="/cgi-bin/koha/reports/guided_reports.pl?phase=Use%20saved">Use saved</a></li>
+                    <li><a href="/cgi-bin/koha/reports/guided_reports.pl?phase=Use%20saved">View saved</a></li>
                 [% END %]
                 [% IF ( CAN_user_reports_create_reports ) %]
                     <li><a href="/cgi-bin/koha/reports/guided_reports.pl?phase=Create%20report%20from%20SQL">Create from SQL</a></li>

@@ -52,23 +52,27 @@ Script to control the guided report creation
 my $input = CGI->new;
 my $usecache = Koha::Caches->get_instance->memcached_cache;
 
-my $phase = $input->param('phase') // '';
+my $phase = $input->param('phase') // 'Use saved';
 my $flagsrequired;
 if ( ( $phase eq 'Build new' ) || ( $phase eq 'Create report from SQL' ) || ( $phase eq 'Edit SQL' )
-   || ( $phase eq 'Build new from existing' ) || ( $phase eq 'Create report from existing' ) ) {
+   || ( $phase eq 'Build new from existing' ) || ( $phase eq 'Create report from existing' )
+   || ( $phase eq 'Build report' ) || ( $phase eq 'Choose these columns' ) || ( $phase eq 'Choose these criteria')
+   || ( $phase eq 'Choose these operations' ) || ( $phase eq 'Choose this type' )
+   || ( $phase eq 'Update SQL' ) || ( $phase eq 'Save' ) || ( $phase eq 'Save Report' ) || ( $phase eq 'Report on this Area' )
+   ) {
     $flagsrequired = 'create_reports';
 }
-elsif ( $phase eq 'Use saved' ) {
-    $flagsrequired = 'execute_reports';
+elsif ( ( $phase eq 'Use saved' ) || ( $phase eq 'Show SQL' ) ) {
+    $flagsrequired = [ 'create_reports', 'execute_reports', 'delete_reports' ];    #NOTE: "or" permissions
 }
-elsif ( $phase eq 'Delete Saved' ) {
+elsif ( ( $phase eq 'Delete Saved' ) || ( $phase eq 'Delete Multiple' ) ) {
     $flagsrequired = 'delete_reports';
 }
-elsif ( $phase eq 'Run this Report') {
+elsif ( ( $phase =~ /^Run this Report$/i) || ( $phase eq 'Export' ) || ( $phase eq 'retrieve results' ) ) {
     $flagsrequired = 'execute_reports';
 }
 else {
-    $flagsrequired = '*';
+    $flagsrequired = 1;
 }
 
 my ( $template, $borrowernumber, $cookie ) = get_template_and_user(

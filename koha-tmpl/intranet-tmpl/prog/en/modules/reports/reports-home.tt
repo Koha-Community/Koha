@@ -24,7 +24,7 @@
             <div class="row">
                 <div class="col-xs-6">
 
-                    [% IF ( CAN_user_reports_execute_reports || CAN_user_reports_create_reports ) %]
+                    [% IF ( CAN_user_reports_execute_reports || CAN_user_reports_create_reports || CAN_user_reports_delete_reports ) %]
                         <form action="/cgi-bin/koha/reports/guided_reports.pl" method="get">
                             <fieldset class="brief">
                                 <h2>Guided reports</h2>
@@ -39,7 +39,7 @@
                                     </p>
                                 [% END %]
                                 <p>
-                                    <a href="/cgi-bin/koha/reports/guided_reports.pl?phase=Use%20saved"><i class="fa fa-list"></i> Use saved</a>
+                                    <a href="/cgi-bin/koha/reports/guided_reports.pl?phase=Use%20saved"><i class="fa fa-list"></i> View saved</a>
                                 </p>
                                 <label for="filter_keyword">Search by keyword:</label> <input id="filter_keyword" name="filter_keyword" value="" size="16" type="text" /> <input type="submit" class="btn btn-primary" value="Search" />
                             </fieldset>

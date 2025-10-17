@@ -170,7 +170,7 @@
                     [% IF ( CAN_user_reports_execute_reports ) %]
                         <form action="/cgi-bin/koha/reports/guided_reports.pl">
                             <input type="hidden" name="phase" value="Use saved"/>
-                            <input type="submit" name="submit" class="btn btn-primary" value="Use saved" />
+                            <input type="submit" name="submit" class="btn btn-primary" value="View saved" />
                         </form>
                     [% END %]
 
@@ -356,9 +356,12 @@
                                                         <td>
                                                             <div class="btn-group dropup">
                                                                 [%# There should be no space between these two buttons, it would render badly %]
+                                                                [%- IF ( CAN_user_reports_execute_reports ) -%]
                                                                 <a class="btn btn-default btn-xs" role="button"
                                                                 href="/cgi-bin/koha/reports/guided_reports.pl?reports=[% savedreport.id | html %]&amp;phase=Run%20this%20report"><i
-                                                                class="fa fa-play"></i> Run</a><a
+                                                                class="fa fa-play"></i> Run</a>
+                                                                [% END %]
+                                                                <a
                                                                 class="btn btn-default btn-xs dropdown-toggle" id="reportactions[% savedreport.id | html %]" role="button" data-toggle="dropdown"
                                                                 href="#"><b class="caret"></b></a>
                                                                 <ul class="dropdown-menu pull-right" role="menu" aria-labelledby="reportactions[% savedreport.id | html %]">
