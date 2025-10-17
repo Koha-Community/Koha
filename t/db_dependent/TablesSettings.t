@@ -2,7 +2,7 @@
 
 use Modern::Perl;
 use Test::NoWarnings;
-use Test::More tests => 2;
+use Test::More tests => 3;
 use Test::MockModule;
 
 use C4::Context;
@@ -236,4 +236,241 @@ subtest 'update_columns, get_modules, get_columns, get_table_settings' => sub {
         $table_settings,
         $new_table_settings,
     );
+};
+
+subtest 'test upgrade' => sub {
+
+    plan tests => 2;
+
+    subtest 'has default_* in yaml' => sub {
+
+        plan tests => 6;
+
+        $schema->storage->txn_begin;
+        my $dbh = C4::Context->dbh;
+
+        $dbh->do(q|DELETE FROM columns_settings|);
+        $dbh->do(q|DELETE FROM tables_settings|);
+
+        $yaml = {
+            modules => {
+                admin => {
+                    currency => {
+                        'currencies-table' => {
+                            default_display_length    => 20,
+                            default_sort_order        => 1,
+                            default_save_state        => 1,
+                            default_save_state_search => 0,
+                            columns                   => [
+                                {
+                                    columnname         => 'currency',
+                                    cannot_be_toggled  => '1',
+                                    cannot_be_modified => '1'
+                                },
+                            ]
+                        }
+                    }
+                },
+            }
+        };
+
+        my $modules_expected = {
+            'admin' => {
+                'currency' => {
+                    'currencies-table' => {
+
+                        # undef in DB we want the values from yaml
+                        default_display_length    => 20,
+                        default_sort_order        => 1,
+                        default_save_state        => 1,
+                        default_save_state_search => 0,
+                        columns                   => [
+                            {
+                                columnname         => 'currency',
+                                cannot_be_toggled  => 1,
+                                cannot_be_modified => 1,
+
+                                # TODO
+                                # hidden => 0 is missing because we don't add it in get_modules for all columns
+                                # It should not cause any problems for now
+                            },
+                        ]
+                    }
+                }
+            }
+        };
+
+        my $modules = C4::Utils::DataTables::TablesSettings::get_modules();
+
+        is_deeply( $modules, $modules_expected, 'get_modules returns all values' );
+
+        my $columns = C4::Utils::DataTables::TablesSettings::get_columns( 'admin', 'currency', 'currencies-table' );
+        is_deeply( $modules->{admin}, $modules_expected->{admin} );
+
+        my $table_settings =
+            C4::Utils::DataTables::TablesSettings::get_table_settings( 'admin', 'currency', 'currencies-table' );
+        is_deeply(
+            $table_settings,
+            {
+                default_display_length    => 20,
+                default_save_state        => 1,
+                default_save_state_search => 0,
+                default_sort_order        => 1
+            }
+        );
+
+        C4::Utils::DataTables::TablesSettings::update_columns(
+            {
+                columns => [
+                    {
+                        module             => 'admin',
+                        page               => 'currency',
+                        tablename          => 'currencies-table',
+                        columnname         => 'currency',
+                        cannot_be_toggled  => 1,
+                        cannot_be_modified => 1,
+                    },
+                ]
+            }
+        );
+
+        $table_settings =
+            C4::Utils::DataTables::TablesSettings::get_table_settings( 'admin', 'currency', 'currencies-table' );
+        is_deeply(
+            $table_settings,
+            {
+                default_display_length    => 20,
+                default_save_state        => 1,
+                default_save_state_search => 0,
+                default_sort_order        => 1
+            }
+        );
+
+        C4::Utils::DataTables::TablesSettings::update_table_settings(
+            {
+                module                    => 'admin',
+                page                      => 'currency',
+                tablename                 => 'currencies-table',
+                default_display_length    => undef,
+                default_sort_order        => undef,
+                default_save_state        => undef,
+                default_save_state_search => undef,
+            }
+        );
+
+        $table_settings =
+            C4::Utils::DataTables::TablesSettings::get_table_settings( 'admin', 'currency', 'currencies-table' );
+        is_deeply(
+            $table_settings,
+            {
+                default_display_length    => 20,
+                default_sort_order        => 1,
+                default_save_state        => 1,
+                default_save_state_search => 0,
+            }
+        );
+
+        C4::Utils::DataTables::TablesSettings::update_table_settings(
+            {
+                module                    => 'admin',
+                page                      => 'currency',
+                tablename                 => 'currencies-table',
+                default_display_length    => 42,
+                default_sort_order        => 2,
+                default_save_state        => 0,
+                default_save_state_search => 0,
+            }
+        );
+
+        $table_settings =
+            C4::Utils::DataTables::TablesSettings::get_table_settings( 'admin', 'currency', 'currencies-table' );
+        is_deeply(
+            $table_settings,
+            {
+                default_display_length    => 42,
+                default_sort_order        => 2,
+                default_save_state        => 0,
+                default_save_state_search => 0,
+            }
+        );
+
+    };
+
+    subtest 'does not have default_ in yaml' => sub {
+
+        plan tests => 3;
+
+        $schema->storage->txn_begin;
+        my $dbh = C4::Context->dbh;
+
+        $dbh->do(q|DELETE FROM columns_settings|);
+        $dbh->do(q|DELETE FROM tables_settings|);
+
+        $yaml = {
+            modules => {
+                admin => {
+                    currency => {
+                        'currencies-table' => {
+                            columns => [
+                                {
+                                    columnname         => 'currency',
+                                    cannot_be_toggled  => '1',
+                                    cannot_be_modified => '1'
+                                },
+                            ]
+                        }
+                    }
+                },
+            }
+        };
+
+        my $modules_expected = {
+            'admin' => {
+                'currency' => {
+                    'currencies-table' => {
+
+                        # FIXME we don't include table settings if they are not present in the yaml
+                        #default_display_length    => undef,
+                        #default_sort_order        => undef,
+                        #default_save_state        => undef,
+                        #default_save_state_search => undef,
+                        columns => [
+                            {
+                                columnname         => 'currency',
+                                cannot_be_toggled  => 1,
+                                cannot_be_modified => 1,
+
+                                # TODO
+                                # hidden => 0 is missing because we don't add it in get_modules for all columns
+                                # It should not cause any problems for now
+                            },
+                        ]
+                    }
+                }
+            }
+        };
+
+        my $modules = C4::Utils::DataTables::TablesSettings::get_modules();
+
+        is_deeply( $modules, $modules_expected, 'get_modules returns all values' );
+
+        my $columns = C4::Utils::DataTables::TablesSettings::get_columns( 'admin', 'currency', 'currencies-table' );
+        is_deeply( $modules->{admin}, $modules_expected->{admin} );
+
+        my $table_settings =
+            C4::Utils::DataTables::TablesSettings::get_table_settings( 'admin', 'currency', 'currencies-table' );
+        is_deeply(
+            $table_settings,
+            {
+                # default_display_length and default_sort_order default to undef
+                # => the feature is not available
+                default_display_length => undef,
+                default_sort_order     => undef,
+
+                # default_save_state is disabled by default but can be enabled.
+                default_save_state        => 0,
+                default_save_state_search => 0,
+            }
+        );
+    };
 };

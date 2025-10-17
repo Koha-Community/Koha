@@ -113,20 +113,24 @@ sub get_table_settings {
         }
     )->next;
 
-    my $table_settings = $list->{modules}->{$module}->{$page}->{$tablename};
+    my $table_settings         = $list->{modules}->{$module}->{$page}->{$tablename};
+    my $default_display_length = $rs && $rs->default_display_length;
+    $default_display_length //= $table_settings->{default_display_length};
+
+    my $default_sort_order = $rs && $rs->default_sort_order;
+    $default_sort_order //= $table_settings->{default_sort_order};
+
+    my $default_save_state = $rs && $rs->default_save_state;
+    $default_save_state //= $table_settings->{default_save_state} // 0;
+
+    my $default_save_state_search = $rs && $rs->default_save_state_search;
+    $default_save_state_search //= $table_settings->{default_save_state_search} // 0;
+
     return {
-        default_display_length => $rs
-        ? $rs->default_display_length
-        : $table_settings->{default_display_length},
-        default_sort_order => $rs
-        ? $rs->default_sort_order
-        : $table_settings->{default_sort_order},
-        default_save_state => $rs ? $rs->default_save_state
-        : exists $table_settings->{default_save_state} ? $table_settings->{default_save_state}
-        : 1,
-        default_save_state_search => $rs ? $rs->default_save_state_search
-        : exists $table_settings->{default_save_state_search} ? $table_settings->{default_save_state_search}
-        : 0,
+        default_display_length    => $default_display_length,
+        default_sort_order        => $default_sort_order,
+        default_save_state        => $default_save_state,
+        default_save_state_search => $default_save_state_search,
     };
 }
 
