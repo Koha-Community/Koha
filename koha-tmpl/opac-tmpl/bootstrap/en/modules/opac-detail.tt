@@ -1907,6 +1907,13 @@
             [% END # /IF OpacBrowseResults %]
 
             var holdingst_table_settings = [% TablesSettings.GetTableSettings( 'opac', 'biblio-detail', 'holdingst', 'json' ) | $raw %];
+            [% IF ( !item_level_itypes || Koha.Preference('BiblioItemtypeInfo') ) %]
+                // The default in the yaml file is 1 "Item type".
+                // If item-level_itypes is off the column will not appear, then select column 2 "Current library"
+                if (holdingst_table_settings.default_sort_order == 1) {
+                    holdingst_table_settings.default_sort_order = 2;
+                }
+            [% END %]
             var otherholdingst_table_settings = JSON.parse(JSON.stringify(holdingst_table_settings)); // Clone
 
             let column;
