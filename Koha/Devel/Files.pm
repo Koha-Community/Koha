@@ -213,6 +213,22 @@ sub ls_perl_files {
     return @files;
 }
 
+=head2 ls_dbrev_files
+
+    my @dbrev_files = $file_manager->ls_dbrev_files;
+
+Lists all dbrevs files.
+
+=cut
+
+sub ls_dbrev_files {
+    my ($self) = @_;
+    my $cmd    = q{git ls-files installer/data/mysql/db_revs/*.pl};
+    my @files  = qx{$cmd};
+    chomp for @files;
+    return @files;
+}
+
 =head2 ls_js_files
 
     my @js_files = $file_manager->ls_js_files();
