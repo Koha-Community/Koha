@@ -7,11 +7,11 @@
 [% PROCESS 'i18n.inc' %]
 
 <title>
-    [% IF op == 'edit' %]
+    [% IF op == 'edit_form' %]
         Modify OAI repository [% server.servername | html %] &rsaquo;
     [% END %]
 
-    [% IF op ==  'add' %]
+    [% IF op ==  'add_form' %]
         New OAI repository &rsaquo;
     [% END %]
     OAI repositories &rsaquo; Administration &rsaquo; Koha
@@ -30,17 +30,17 @@
             <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a>
         [% END %]
 
-        [% IF op == 'edit' || op == 'add' %]
+        [% IF op == 'edit_form' || op == 'add_form' %]
             [% WRAPPER breadcrumb_item %]
                 <a href="/cgi-bin/koha/admin/oai_servers.pl">OAI repositories</a>
             [% END %]
         [% END %]
 
-        [% IF op == 'edit' %]
+        [% IF op == 'edit_form' %]
             [% WRAPPER breadcrumb_item bc_active= 1 %]
                 <span>Modify OAI repository [% server.servername | html %]</span>
             [% END %]
-        [% ELSIF op == 'add' %]
+        [% ELSIF op == 'add_form' %]
             [% WRAPPER breadcrumb_item bc_active= 1 %]
                 <span>New OAI repository</span>
             [% END %]
@@ -64,10 +64,10 @@
         <div class="alert alert-warning">Error: Server with ID [% msg_add | html %] not found</div>
     [% END %]
 
-    [% IF ( add_form ) %]
+    [% IF op == 'edit_form' || op == 'add_form' %]
         <form action="/cgi-bin/koha/admin/oai_servers.pl" name="Aform" method="post" id="serverentry">
             [% INCLUDE 'csrf-token.inc' %]
-            [% IF op == 'edit' %]
+            [% IF op == 'edit_form' %]
                 <h1>Modify OAI repository</h1>
                 <input type="hidden" name="id" value="[% server.oai_server_id | html %]" />
             [% ELSE %]
@@ -121,7 +121,7 @@
 
     [% IF op == 'list' %]
         <div id="toolbar" class="btn-toolbar">
-            <a id="newserver" class="btn btn-default" href="/cgi-bin/koha/admin/oai_servers.pl?op=add"><i class="fa fa-plus"></i> New OAI repository</a>
+            <a id="newserver" class="btn btn-default" href="/cgi-bin/koha/admin/oai_servers.pl?op=add_form"><i class="fa fa-plus"></i> New OAI repository</a>
         </div>
         <h1>OAI repositories</h1>
         [% IF id %]
@@ -139,7 +139,7 @@
                     [% FOREACH loo IN loop %]
                         <tr>
                             <td>[% loo.oai_server_id | html %]</td>
-                            <td><a href="/cgi-bin/koha/admin/oai_servers.pl?op=edit&amp;id=[% loo.oai_server_id | uri %]">[% loo.servername | html %]</a></td
+                            <td><a href="/cgi-bin/koha/admin/oai_servers.pl?op=edit_form&amp;id=[% loo.oai_server_id | uri %]">[% loo.servername | html %]</a></td
                             ><td>[% loo.endpoint | html %]</td><td>[% loo.oai_set | html %]</td>
                             <td>[% loo.dataformat | html %]</td>
                             <td
@@ -154,10 +154,10 @@
                                     <a class="btn btn-default btn-xs dropdown-toggle" id="reportactions[% savedreport.id | html %]" role="button" data-bs-toggle="dropdown" href="#"> Actions </a>
                                     <ul class="dropdown-menu pull-right" role="menu" aria-labelledby="reportactions[% savedreport.id | html %]">
                                         <li
-                                            ><a class="dropdown-item" href="/cgi-bin/koha/admin/oai_servers.pl?op=edit&amp;id=[% loo.oai_server_id | uri %]"><i class="fa-solid fa-pencil" aria-hidden="true"></i> Edit</a></li
+                                            ><a class="dropdown-item" href="/cgi-bin/koha/admin/oai_servers.pl?op=edit_form&amp;id=[% loo.oai_server_id | uri %]"><i class="fa-solid fa-pencil" aria-hidden="true"></i> Edit</a></li
                                         >
                                         <li
-                                            ><a class="dropdown-item" href="/cgi-bin/koha/admin/oai_servers.pl?op=add&amp;id=[% loo.oai_server_id | uri %]"><i class="fa fa-copy"></i> Copy</a></li
+                                            ><a class="dropdown-item" href="/cgi-bin/koha/admin/oai_servers.pl?op=add_form&amp;id=[% loo.oai_server_id | uri %]"><i class="fa fa-copy"></i> Copy</a></li
                                         >
                                         <li>
                                             <a href="#" class="dropdown-item delete" data-formid="server_row_[% loo.oai_server_id | uri %]" data-servername="[% loo.servername | html %]"><i class="fa fa-trash-can"></i> Delete</a>
@@ -185,7 +185,7 @@
         [% INCLUDE 'datatables.inc' %]
     [% END %]
     <script>
-        [% IF ( add_form ) %]
+        [% IF op == 'edit_form' || op == 'add_form' %]
             $(document).ready(function(){
                 // Update selects for dataformat and recordtype
                 [% IF server %]
