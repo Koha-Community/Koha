@@ -115,7 +115,6 @@ export default {
                 type: "erm_sushi_harvester",
             },
             actions: {
-                0: ["show"],
                 "-1": [
                     {
                         view: {
