@@ -63,7 +63,7 @@ export default {
                     searchable: true,
                     orderable: true,
                     render(data, type, row) {
-                        return get_job_status(row.status).escapeHtml();
+                        return escape_str(get_job_status(row.status));
                     },
                 },
                 {
