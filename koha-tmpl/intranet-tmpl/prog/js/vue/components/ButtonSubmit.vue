@@ -1,8 +1,5 @@
 <template>
-    <button
-        @click="form && form.value.requestSubmit()"
-        class="btn btn-primary"
-    >
+    <button @click="callback && callback()" :class="cssClass">
         <font-awesome-icon v-if="icon" :icon="icon" />
         {{ title }}
     </button>
@@ -22,8 +19,13 @@ export default {
             type: String,
             required: false,
         },
-        form: {
-            type: Object,
+        cssClass: {
+            type: String,
+            default: "btn btn-primary",
+            required: false,
+        },
+        callback: {
+            type: Function,
         },
     },
 };

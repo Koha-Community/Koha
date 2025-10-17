@@ -1,5 +1,5 @@
 <template>
-    <ButtonSubmit v-if="form" v-bind="$props" />
+    <ButtonSubmit v-if="action === 'submit'" v-bind="$props" />
     <Link v-else v-bind="$props" />
 </template>
 
@@ -34,9 +34,6 @@ export default {
             type: String,
             default: "btn btn-default",
             required: false,
-        },
-        form: {
-            type: Object,
         },
     },
     name: "Toolbar",

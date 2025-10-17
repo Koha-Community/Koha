@@ -37,7 +37,10 @@ export default {
                     {
                         title: $__("Save"),
                         icon: "save",
-                        form: componentData.resourceForm,
+                        callback: () => {
+                            componentData.resourceForm.value.requestSubmit()
+                        },
+                        cssClass: "btn btn-primary"
                     },
                     {
                         to: {
