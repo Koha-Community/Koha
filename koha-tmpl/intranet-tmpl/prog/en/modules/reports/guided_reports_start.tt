@@ -191,7 +191,7 @@
                     [% END %]
 
                     [% IF ( CAN_user_reports_execute_reports ) %]
-                        <a href="/cgi-bin/koha/reports/guided_reports.pl?op=list" class="btn btn-primary"/>Use saved</a>
+                        <a href="/cgi-bin/koha/reports/guided_reports.pl?op=list" class="btn btn-primary"/>View saved</a>
                     [% END %]
 
                     [% IF ( CAN_user_reports_create_reports ) %]
@@ -371,15 +371,26 @@
                                                         <td>
                                                             <div class="btn-group dropup">
                                                                 [%# There should be no space between these two buttons, it would render badly %]
+                                                                [%- IF ( CAN_user_reports_execute_reports ) -%]
                                                                 <a class="btn btn-default btn-xs" role="button"
                                                                 href="/cgi-bin/koha/reports/guided_reports.pl?id=[% savedreport.id | html %]&amp;op=run"><i
                                                                 class="fa fa-play"></i> Run</a><a
                                                                 class="btn btn-default btn-xs dropdown-toggle" id="reportactions[% savedreport.id | html %]" role="button" data-bs-toggle="dropdown"
                                                                 href="#"></a>
+                                                                [% END -%]
                                                                 <ul class="dropdown-menu" role="menu" aria-labelledby="reportactions[% savedreport.id | html %]">
                                                                     <li><a class="dropdown-item" href="/cgi-bin/koha/reports/guided_reports.pl?id=[% savedreport.id | uri %]&amp;op=show"><i class="fa fa-search" aria-hidden="true"></i> View</a></li>
                                                                     <li>
-                                                                        <a href="/cgi-bin/koha/reports/guided_reports.pl?id=[% savedreport.id | uri %]&op=show" class="dropdown-item preview_sql" data-reportid="[% savedreport.id | html %]">
+                                                                        <a
+                                                                            [% # tags below to remove extra whitespace added for readability %]
+                                                                            [%- " "|$raw -%]href="/cgi-bin/koha/reports/guided_reports.pl?id=[% savedreport.id | uri %]&op=show"
+                                                                            [%- " "|$raw -%]class="dropdown-item preview_sql"
+                                                                            [%- " "|$raw -%]data-reportid="[% savedreport.id | html %]"
+                                                                            [%- " "|$raw -%]data-create="[% CAN_user_reports_create_reports || 0 | html %]"
+                                                                            [%- " "|$raw -%]data-delete="[% CAN_user_reports_delete_reports || 0 | html %]"
+                                                                            [%- " "|$raw -%]data-run="[% CAN_user_reports_execute_reports || 0 | html %]"
+                                                                            [%- ""|$raw -%]
+                                                                        >
                                                                             <i class="fa-solid fa-eye" aria-hidden="true"></i> Preview SQL
                                                                         </a>
                                                                     </li>
@@ -1422,7 +1433,9 @@
 
                         <fieldset class="action">
                             <button class="btn btn-primary" type="submit" name="op" value="cud-update_sql">Update SQL</button>
+                            [% IF ( CAN_user_reports_create_reports && CAN_user_reports_execute_reports ) %]
                             <button class="btn btn-default" type="submit" name="op" value="cud-update_and_run_sql">Update and run SQL</button>
+                            [% END %]
                             <a href="/cgi-bin/koha/reports/guided_reports.pl?op=list" class="cancel">Cancel</a>
                         </fieldset>
                     </form>
