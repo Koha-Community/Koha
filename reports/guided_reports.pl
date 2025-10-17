@@ -58,15 +58,18 @@ my $usecache = Koha::Caches->get_instance->memcached_cache;
 
 my $op = $input->param('op') // '';
 my $flagsrequired;
-if (   ( $op eq 'add_form' )
-    || ( $op eq 'add_form_sql' )
-    || ( $op eq 'edit_form' )
-    || ( $op eq 'duplicate' ) )
+if (   $op eq 'add_form'
+    || $op eq 'add_form_sql'
+    || $op eq 'edit_form'
+    || $op eq 'duplicate'
+    || $op eq 'cud-save'
+    || $op eq 'cud-update_sql'
+    || $op eq 'cud-update_and_run_sql' )
 {
     $flagsrequired = 'create_reports';
 } elsif ( $op eq 'list' ) {
     $flagsrequired = 'execute_reports';
-} elsif ( $op eq 'delete' ) {
+} elsif ( $op eq 'cud-delete' ) {
     $flagsrequired = 'delete_reports';
 } else {
     $flagsrequired = '*';
