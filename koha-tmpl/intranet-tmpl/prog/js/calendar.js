@@ -9,12 +9,29 @@ if (debug > 1) {
     );
 }
 
-function is_valid_date(dateText) {
-    return dayjs(
-        dateText,
-        get_dateformat_str(dateformat_pref).toUpperCase(),
-        true
-    ).isValid();
+function is_valid_date(date) {
+    // An empty string is considered as a valid date for convenient reasons.
+    if (date === "") return 1;
+    var dateformat = flatpickr_dateformat_string;
+    if (dateformat == "us") {
+        if (date.search(/^\d{2}\/\d{2}\/\d{4}($|\s)/) == -1) return 0;
+        dateformat = "m/d/Y";
+    } else if (dateformat == "metric") {
+        if (date.search(/^\d{2}\/\d{2}\/\d{4}($|\s)/) == -1) return 0;
+        dateformat = "d/m/Y";
+    } else if (dateformat == "iso") {
+        if (date.search(/^\d{4}-\d{2}-\d{2}($|\s)/) == -1) return 0;
+        dateformat = "Y-m-d";
+    } else if (dateformat == "dmydot") {
+        if (date.search(/^\d{2}\.\d{2}\.\d{4}($|\s)/) == -1) return 0;
+        dateformat = "d.m.Y";
+    }
+    try {
+        flatpickr.parseDate(date, dateformat);
+    } catch (e) {
+        return 0;
+    }
+    return 1;
 }
 
 function get_dateformat_str(dateformat) {
@@ -47,18 +64,20 @@ function Date_from_syspref(dstring) {
             "Date_from_syspref(" + dstring + ") splits to:\n" + dateX.join("\n")
         );
     }
-    let d = dayjs(
-        dstring,
-        get_dateformat_str(dateformat_pref).toUpperCase(),
-        true
-    );
-    if (!d.isValid()) {
+    if (dateformat_pref === "iso") {
+        return new Date(dateX[0], dateX[1] - 1, dateX[2]); // YYYY-MM-DD to (YYYY,m(0-11),d)
+    } else if (dateformat_pref === "us") {
+        return new Date(dateX[2], dateX[0] - 1, dateX[1]); // MM/DD/YYYY to (YYYY,m(0-11),d)
+    } else if (dateformat_pref === "metric") {
+        return new Date(dateX[2], dateX[1] - 1, dateX[0]); // DD/MM/YYYY to (YYYY,m(0-11),d)
+    } else if (dateformat_pref === "dmydot") {
+        return new Date(dateX[2], dateX[1] - 1, dateX[0]); // DD.MM.YYYY to (YYYY,m(0-11),d)
+    } else {
         if (debug > 0) {
             alert("KOHA ERROR - Unrecognized date format: " + dateformat_pref);
         }
         return 0;
     }
-    return d.toDate();
 }
 
 function DateTime_from_syspref(date_time) {
