@@ -21,6 +21,7 @@ use MARC::File::XML;
 use List::MoreUtils qw( uniq );
 use Getopt::Long    qw( GetOptions );
 use Pod::Usage      qw( pod2usage );
+use File::Basename  qw( fileparse );
 
 use Koha::Script;
 use C4::Auth;
@@ -384,7 +385,9 @@ if ($file_transport) {
     }
 
     # Upload the file
-    unless ( $file_transport->upload_file( $filename, $filename ) ) {
+    # Extract just the filename from the path for remote upload
+    my ($remote_filename) = fileparse($filename);
+    unless ( $file_transport->upload_file( $filename, $remote_filename ) ) {
         $file_transport->disconnect;
         die sprintf( "Error: Unable to upload file '%s' to server (ID: %s)\n", $filename, $destination_server_id );
     }
