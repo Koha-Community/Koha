@@ -89,12 +89,13 @@ if ( $op eq 'cud-delete_confirmed' && $id ) {
 # Now list multiple records, or edit one record
 
 my $data = [];
-if ( $op eq 'add' || $op eq 'edit' ) {
+if ( $op eq 'add_form' || $op eq 'edit_form' ) {
     $data = ServerSearch( $schema, $id, $searchfield ) if $searchfield || $id;
-    delete $data->[0]->{id}                            if @$data && $op eq 'add';    #cloning record
+    delete $data->[0]->{id}                            if @$data && $op eq 'add_form';    #cloning record
     $template->param(
-        add_form => 1, server => @$data ? $data->[0] : undef,
-        op => $op, type => $op eq 'add' ? lc $type : ''
+        server => @$data ? $data->[0] : undef,
+        op     => $op,
+        type   => ( $op eq 'add_form' ) ? lc $type : ''
     );
 } else {
     $data = ServerSearch( $schema, $id, $searchfield );

@@ -14,10 +14,10 @@
 
 <title
     >[% FILTER collapse %]
-        [% IF op == 'edit' %]
+        [% IF op == 'edit_form' %]
             [% tx("Modify {servertype} server '{servername}'", { servertype = servertype, servername = server.servername }) | html %]
             &rsaquo;
-        [% ELSIF op ==  'add' %]
+        [% ELSIF op == 'add_form' %]
             [% tx("New {servertype} server", { servertype = servertype }) | html %]
             &rsaquo;
         [% ELSIF searchfield %]
@@ -42,17 +42,17 @@
             <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a>
         [% END %]
 
-        [% IF op == 'edit' || op == 'add' || searchfield %]
+        [% IF op == 'edit_form' || op == 'add_form' || searchfield %]
             [% WRAPPER breadcrumb_item %]
                 <a href="/cgi-bin/koha/admin/z3950servers.pl">Z39.50/SRU servers</a>
             [% END %]
         [% END %]
 
-        [% IF op == 'edit' %]
+        [% IF op == 'edit_form' %]
             [% WRAPPER breadcrumb_item bc_active= 1 %]
                 [% tx("Modify {servertype} server '{servername}'", { servertype = servertype, servername = server.servername }) | html %]
             [% END %]
-        [% ELSIF op == 'add' %]
+        [% ELSIF op == 'add_form' %]
             [% WRAPPER breadcrumb_item bc_active= 1 %]
                 [% tx("New {servertype} server", { servertype = servertype }) | html %]
             [% END %]
@@ -80,10 +80,10 @@
         <div class="alert alert-warning">Error: Server with ID [% msg_add | html %] not found</div>
     [% END %]
 
-    [% IF ( add_form ) %]
+    [% IF op == 'edit_form' || op == 'add_form' %]
         <form action="/cgi-bin/koha/admin/z3950servers.pl" name="Aform" method="post" id="serverentry">
             [% INCLUDE 'csrf-token.inc' %]
-            [% IF op == 'edit' %]
+            [% IF op == 'edit_form' %]
                 <h1>[% tx("Modify {servertype} server '{servername}'", { servertype = servertype, servername = server.servername }) | html %]</h1>
                 <input type="hidden" name="id" value="[% server.id | html %]" />
             [% ELSE %]
@@ -207,8 +207,8 @@
 
     [% IF op == 'list' %]
         <div id="toolbar" class="btn-toolbar">
-            <a id="newserver" class="btn btn-default" href="/cgi-bin/koha/admin/z3950servers.pl?op=add&type=zed"><i class="fa fa-plus"></i> New Z39.50 server</a>
-            <a id="newserver" class="btn btn-default" href="/cgi-bin/koha/admin/z3950servers.pl?op=add&type=sru"><i class="fa fa-plus"></i> New SRU server</a>
+            <a id="newserver" class="btn btn-default" href="/cgi-bin/koha/admin/z3950servers.pl?op=add_form&type=zed"><i class="fa fa-plus"></i> New Z39.50 server</a>
+            <a id="newserver" class="btn btn-default" href="/cgi-bin/koha/admin/z3950servers.pl?op=add_form&type=sru"><i class="fa fa-plus"></i> New SRU server</a>
         </div>
         <h1>Z39.50/SRU servers</h1>
         [% IF searchfield %]
@@ -226,7 +226,7 @@
                 <tbody>
                     [% FOREACH loo IN loop %]
                         <tr>
-                            <td><a href="/cgi-bin/koha/admin/z3950servers.pl?op=edit&amp;id=[% loo.id | uri %]">[% loo.servername | html %]</a></td
+                            <td><a href="/cgi-bin/koha/admin/z3950servers.pl?op=edit_form&amp;id=[% loo.id | uri %]">[% loo.servername | html %]</a></td
                             ><td>[% loo.host | html %]:[% loo.port | html %]</td><td>[% loo.db | html %]</td><td>[% loo.userid | html %]</td><td>[% IF loo.password %]########[% END %]</td
                             ><td>[% IF ( loo.checked ) %]Yes[% ELSE %]No[% END %]</td><td>[% loo.rank | html %]</td> <td>[% loo.syntax | html %]</td><td>[% loo.encoding | html %]</td><td>[% loo.timeout | html %]</td>
                             <td
@@ -242,10 +242,10 @@
                                     <a class="btn btn-default btn-xs dropdown-toggle" id="reportactions[% savedreport.id | html %]" role="button" data-bs-toggle="dropdown" href="#"> Actions </a>
                                     <ul class="dropdown-menu" role="menu" aria-labelledby="reportactions[% savedreport.id | html %]">
                                         <li
-                                            ><a class="dropdown-item" href="/cgi-bin/koha/admin/z3950servers.pl?op=edit&amp;id=[% loo.id | uri %]"><i class="fa-solid fa-pencil" aria-hidden="true"></i> Edit</a></li
+                                            ><a class="dropdown-item" href="/cgi-bin/koha/admin/z3950servers.pl?op=edit_form&amp;id=[% loo.id | uri %]"><i class="fa-solid fa-pencil" aria-hidden="true"></i> Edit</a></li
                                         >
                                         <li
-                                            ><a class="dropdown-item" href="/cgi-bin/koha/admin/z3950servers.pl?op=add&amp;id=[% loo.id | uri %]"><i class="fa fa-copy"></i> Copy</a></li
+                                            ><a class="dropdown-item" href="/cgi-bin/koha/admin/z3950servers.pl?op=add_form&amp;id=[% loo.id | uri %]"><i class="fa fa-copy"></i> Copy</a></li
                                         >
                                         <li>
                                             <a href="#" class="dropdown-item delete" data-formid="server_row_[% loo.id | uri %]" data-servername="[% loo.servername | html %]"><i class="fa fa-trash-can"></i> Delete</a>
@@ -273,7 +273,7 @@
         [% INCLUDE 'datatables.inc' %]
     [% END %]
     <script>
-        [% IF ( add_form ) %]
+        [% IF op == 'edit_form' || op == 'add_form' %]
             $(document).ready(function(){
                 // Update selects for syntax, encoding and recordtype
                 [% IF server %]
