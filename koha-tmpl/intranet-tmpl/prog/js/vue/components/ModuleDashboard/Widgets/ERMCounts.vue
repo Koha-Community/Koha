@@ -8,23 +8,14 @@
                     :key="index"
                 >
                     <strong>
-                        <a
+                        <router-link
                             v-if="definition.page"
-                            href="#"
-                            @click.prevent="goToPage(definition.page)"
+                            :to="{ name: definition.page }"
                         >
-                            {{ definition.count }}
-                            <span v-if="definition.count === 1">{{
-                                definition.labelSingular
-                            }}</span>
-                            <span v-else>{{ definition.labelPlural }}</span>
-                        </a>
-                        <span v-else>
-                            {{ definition.count }}
-                            <span v-if="definition.count === 1">{{
-                                definition.labelSingular
-                            }}</span>
-                            <span v-else>{{ definition.labelPlural }}</span>
+                            {{ createCountText(definition) }}
+                        </router-link>
+                        <span v-else class="inactive-link">
+                            {{ createCountText(definition) }}
                         </span>
                     </strong>
                     <template v-if="index < countDefinitions.length - 1"
@@ -110,6 +101,14 @@ export default {
             },
         ]);
 
+        const createCountText = definition => {
+            if (definition.count === 1) {
+                return `${definition.count} ${definition.labelSingular}`;
+            } else {
+                return `${definition.count} ${definition.labelPlural}`;
+            }
+        };
+
         async function getCounts() {
             try {
                 const response = await APIClient.erm.counts.get();
@@ -137,6 +136,7 @@ export default {
 
         return {
             ...baseWidget,
+            createCountText,
             countDefinitions,
             goToPage,
         };
