@@ -56,13 +56,12 @@
 <script>
 import { onMounted, ref, watch, inject } from "vue";
 import WidgetPicker from "./WidgetPicker.vue";
-import VueCookies from "vue-cookies";
 import { $__ } from "@koha-vue/i18n";
 import { VueDraggableNext } from "vue-draggable-next";
 
 export default {
     props: {
-        availableWidgets: Array
+        availableWidgets: Array,
     },
     setup(props) {
         const availableWidgets = props.availableWidgets;
@@ -186,9 +185,9 @@ export default {
         };
 
         onMounted(() => {
-            const storedWidgets = VueCookies.get("dashboard-widgets");
+            const storedWidgets = localStorage.getItem("dashboard-widgets");
             if (storedWidgets) {
-                const { left, right } = storedWidgets;
+                const { left, right } = JSON.parse(storedWidgets);
                 left.forEach(widgetName => {
                     const widget = availableWidgets.find(
                         widget => widget.name === widgetName
@@ -215,13 +214,12 @@ export default {
             ([left, right]) => {
                 const leftWidgetNames = left.map(widget => widget.name);
                 const rightWidgetNames = right.map(widget => widget.name);
-                VueCookies.set(
+                localStorage.setItem(
                     "dashboard-widgets",
                     JSON.stringify({
                         left: leftWidgetNames,
                         right: rightWidgetNames,
-                    }),
-                    "30d"
+                    })
                 );
             },
             { deep: true }

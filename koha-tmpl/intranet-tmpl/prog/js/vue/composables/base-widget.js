@@ -1,6 +1,5 @@
 // composables/useBaseWidget.js
 import { ref, computed, watch, provide, onMounted, onBeforeMount } from "vue";
-import VueCookies from "vue-cookies";
 
 export function useBaseWidget(widgetConfig, emit) {
     const loading = ref(
@@ -37,17 +36,17 @@ export function useBaseWidget(widgetConfig, emit) {
     }));
 
     const getWidgetSavedSettings = () => {
-        const cookie = VueCookies.get(
+        const savedSettings = localStorage.getItem(
             "widget-" + widgetConfig.id + "-settings"
         );
-        return cookie || null;
+        return savedSettings || null;
     };
 
     onBeforeMount(() => {
         if (widgetConfig.display === "dashboard") {
-            const cookie = getWidgetSavedSettings();
-            if (cookie) {
-                settings.value = cookie;
+            const savedSettings = getWidgetSavedSettings();
+            if (savedSettings) {
+                settings.value = savedSettings;
             }
         }
     });
@@ -74,10 +73,9 @@ export function useBaseWidget(widgetConfig, emit) {
         settings,
         newSettings => {
             if (widgetConfig.display === "dashboard" && newSettings !== null) {
-                VueCookies.set(
+                localStorage.setItem(
                     "widget-" + widgetConfig.id + "-settings",
-                    JSON.stringify(newSettings),
-                    "30d"
+                    JSON.stringify(newSettings)
                 );
             }
         },
