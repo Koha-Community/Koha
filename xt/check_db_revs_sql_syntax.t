@@ -15,7 +15,7 @@
 # GNU General Public License for more details.
 #
 # You should have received a copy of the GNU General Public License
-# along with Koha; if not, see <http://www.gnu.org/licenses>.
+# along with Koha; if not, see <https://www.gnu.org/licenses>.
 
 use Modern::Perl;
 
@@ -23,35 +23,18 @@ use Test::More;
 use File::Find;
 use File::Slurp;
 use Test::NoWarnings;
+use Koha::Devel::Files;
 
 # Test for Bug 40292: Prevent SQL syntax error when upgrading to 25.05 on MariaDB 10.3
 # This test ensures that database revision files don't use SQL syntax that is incompatible
 # with older MariaDB versions (specifically MariaDB 10.3)
 
-my @db_rev_files;
-my $db_revs_dir = 'installer/data/mysql/db_revs';
+my $dev_files   = Koha::Devel::Files->new;
+my @dbrev_files = $dev_files->ls_dbrev_files;
 
-# Skip test if db_revs directory doesn't exist
-if ( !-d $db_revs_dir ) {
-    plan skip_all => "Database revisions directory ($db_revs_dir) not found";
-}
+plan tests => scalar @dbrev_files + 1;
 
-# Find all .pl files in the db_revs directory
-find(
-    sub {
-        push @db_rev_files, $File::Find::name if /\.pl$/;
-    },
-    $db_revs_dir
-);
-
-# Skip test if no database revision files found
-if ( !@db_rev_files ) {
-    plan skip_all => "No database revision files found in $db_revs_dir";
-}
-
-plan tests => scalar @db_rev_files + 1;
-
-foreach my $file (@db_rev_files) {
+foreach my $file (@dbrev_files) {
     my $content = read_file($file);
 
     # Check for incompatible RENAME COLUMN syntax
