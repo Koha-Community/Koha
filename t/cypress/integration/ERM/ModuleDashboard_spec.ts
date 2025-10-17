@@ -7,9 +7,6 @@ describe("ERM Module Dashboard", () => {
             "/api/v1/erm/config",
             '{"settings":{"ERMModule":"1","ERMProviders":["local"]}}'
         );
-    });
-
-    it("Counts", () => {
         cy.intercept("GET", "/api/v1/erm/counts", {
             counts: {
                 agreements_count: 1,
@@ -20,6 +17,84 @@ describe("ERM Module Dashboard", () => {
                 usage_data_providers_count: 1,
             },
         }).as("getCounts");
+
+        cy.intercept(
+            "GET",
+            "/api/v1/erm/default_usage_reports",
+            cy.get_eusage_reports()
+        ).as("getReports");
+
+        cy.intercept("GET", "/api/v1/erm/licenses*", [cy.get_license()]).as(
+            "getLicenses"
+        );
+
+        cy.intercept("GET", "/api/v1/jobs*", [
+            {
+                context: {
+                    branch: "CPL",
+                    branchname: "Centerville",
+                    cardnumber: "42",
+                    desk_id: null,
+                    desk_name: null,
+                    emailaddress: null,
+                    firstname: null,
+                    flags: "1",
+                    id: "koha",
+                    interface: "api",
+                    number: "51",
+                    register_id: null,
+                    register_name: null,
+                    shibboleth: "0",
+                    surname: "koha",
+                },
+                data: {
+                    begin_date: "2025-01-01",
+                    end_date: "2025-03-12",
+                    messages: [
+                        {
+                            code: 2010,
+                            message:
+                                "Error - Requestor is Not Authorized to Access Usage for Institution",
+                            type: "error",
+                        },
+                    ],
+                    report: {
+                        report_type: "PR",
+                        ud_provider_id: 1,
+                        ud_provider_name: "Wiley Online Library",
+                        us_report_info: {
+                            added_mus: 0,
+                            added_usage_objects: 0,
+                            added_yus: 0,
+                            skipped_mus: 0,
+                            skipped_yus: 0,
+                        },
+                    },
+                    report_type: "PR",
+                    ud_provider_id: 1,
+                    ud_provider_name: "Wiley Online Library",
+                },
+                ended_date: "2025-03-11T16:56:07+00:00",
+                enqueued_date: "2025-03-11T16:56:06+00:00",
+                job_id: 1,
+                patron_id: "51",
+                progress: "0",
+                queue: "long_tasks",
+                size: "1",
+                started_date: "2025-03-11T16:56:06+00:00",
+                status: "finished",
+                type: "erm_sushi_harvester",
+            },
+        ]).as("getJobs");
+
+        let av_cat_values = cy.get_ERM_av_cats_values();
+        cy.intercept("GET", "/api/v1/authorised_value_categories*", {
+            statusCode: 200,
+            body: av_cat_values,
+        }).as("get-ERM-av-cats-values");
+    });
+
+    it("Counts", () => {
         cy.visit("/cgi-bin/koha/erm/erm.pl");
 
         //Display
@@ -98,9 +173,9 @@ describe("ERM Module Dashboard", () => {
             .should("have.id", "ERMCounts");
     });
 
-    it("Run eUsage report", () => {
+    it("Run eUsage report empty", () => {
         cy.intercept("GET", "/api/v1/erm/default_usage_reports", []).as(
-            "getReports"
+            "emptyReports"
         );
         cy.visit("/cgi-bin/koha/erm/erm.pl");
 
@@ -109,7 +184,7 @@ describe("ERM Module Dashboard", () => {
             "contain",
             "Loading..."
         );
-        cy.wait("@getReports");
+        cy.wait("@emptyReports");
         cy.get(".widget#ERMRunUsageReport .widget-content").should(
             "contain",
             "No saved eUsage reports are available to run."
@@ -118,20 +193,11 @@ describe("ERM Module Dashboard", () => {
             .find("a")
             .should("have.attr", "href", "/cgi-bin/koha/erm/eusage/reports")
             .contains("Create a report");
+    });
 
-        let reports = [
-            {
-                erm_default_usage_report_id: 3,
-                report_name: "new",
-                report_url_params:
-                    '{"url":"/api/v1/erm/eUsage/monthly_report/database?q=[{\\"erm_usage_muses.year\\":2020,\\"erm_usage_muses.report_type\\":\\"DR\\",\\"erm_usage_muses.month\\":[1,2,3,4,5,6,7,8,9,10,11,12],\\"erm_usage_muses.metric_type\\":[\\"Searches_Automated\\",\\"Searches_Federated\\",\\"Searches_Regular\\",\\"Total_Item_Investigations\\",\\"Total_Item_Requests\\",\\"Unique_Item_Investigations\\",\\"Unique_Item_Requests\\",\\"Unique_Title_Investigations\\",\\"Unique_Title_Requests\\",\\"Limit_Exceeded\\",\\"No_License\\"]},{\\"erm_usage_muses.year\\":2021,\\"erm_usage_muses.report_type\\":\\"DR\\",\\"erm_usage_muses.month\\":[1,2,3,4,5,6,7,8,9,10,11,12],\\"erm_usage_muses.metric_type\\":[\\"Searches_Automated\\",\\"Searches_Federated\\",\\"Searches_Regular\\",\\"Total_Item_Investigations\\",\\"Total_Item_Requests\\",\\"Unique_Item_Investigations\\",\\"Unique_Item_Requests\\",\\"Unique_Title_Investigations\\",\\"Unique_Title_Requests\\",\\"Limit_Exceeded\\",\\"No_License\\"]},{\\"erm_usage_muses.year\\":2022,\\"erm_usage_muses.report_type\\":\\"DR\\",\\"erm_usage_muses.month\\":[1,2,3,4,5,6,7,8,9,10,11,12],\\"erm_usage_muses.metric_type\\":[\\"Searches_Automated\\",\\"Searches_Federated\\",\\"Searches_Regular\\",\\"Total_Item_Investigations\\",\\"Total_Item_Requests\\",\\"Unique_Item_Investigations\\",\\"Unique_Item_Requests\\",\\"Unique_Title_Investigations\\",\\"Unique_Title_Requests\\",\\"Limit_Exceeded\\",\\"No_License\\"]},{\\"erm_usage_muses.year\\":2023,\\"erm_usage_muses.report_type\\":\\"DR\\",\\"erm_usage_muses.month\\":[1,2,3,4,5,6,7,8,9,10,11,12],\\"erm_usage_muses.metric_type\\":[\\"Searches_Automated\\",\\"Searches_Federated\\",\\"Searches_Regular\\",\\"Total_Item_Investigations\\",\\"Total_Item_Requests\\",\\"Unique_Item_Investigations\\",\\"Unique_Item_Requests\\",\\"Unique_Title_Investigations\\",\\"Unique_Title_Requests\\",\\"Limit_Exceeded\\",\\"No_License\\"]}]","columns":[1],"queryObject":{"data_display":"monthly","report_type":"DR","metric_types":["Searches_Automated","Searches_Federated","Searches_Regular","Total_Item_Investigations","Total_Item_Requests","Unique_Item_Investigations","Unique_Item_Requests","Unique_Title_Investigations","Unique_Title_Requests","Limit_Exceeded","No_License"],"access_types":null,"usage_data_providers":null,"keywords":null,"start_month":null,"start_year":"2020","end_month":null,"end_year":"2023"},"yearly_filter":true,"type":"monthly","tp_columns":{"2020":[{"short":"Jan","description":"January","value":1,"active":true},{"short":"Feb","description":"February","value":2,"active":true},{"short":"Mar","description":"March","value":3,"active":true},{"short":"Apr","description":"April","value":4,"active":true},{"short":"May","description":"May","value":5,"active":true},{"short":"Jun","description":"June","value":6,"active":true},{"short":"Jul","description":"July","value":7,"active":true},{"short":"Aug","description":"August","value":8,"active":true},{"short":"Sep","description":"September","value":9,"active":true},{"short":"Oct","description":"October","value":10,"active":true},{"short":"Nov","description":"November","value":11,"active":true},{"short":"Dec","description":"December","value":12,"active":true}],"2021":[{"short":"Jan","description":"January","value":1,"active":true},{"short":"Feb","description":"February","value":2,"active":true},{"short":"Mar","description":"March","value":3,"active":true},{"short":"Apr","description":"April","value":4,"active":true},{"short":"May","description":"May","value":5,"active":true},{"short":"Jun","description":"June","value":6,"active":true},{"short":"Jul","description":"July","value":7,"active":true},{"short":"Aug","description":"August","value":8,"active":true},{"short":"Sep","description":"September","value":9,"active":true},{"short":"Oct","description":"October","value":10,"active":true},{"short":"Nov","description":"November","value":11,"active":true},{"short":"Dec","description":"December","value":12,"active":true}],"2022":[{"short":"Jan","description":"January","value":1,"active":true},{"short":"Feb","description":"February","value":2,"active":true},{"short":"Mar","description":"March","value":3,"active":true},{"short":"Apr","description":"April","value":4,"active":true},{"short":"May","description":"May","value":5,"active":true},{"short":"Jun","description":"June","value":6,"active":true},{"short":"Jul","description":"July","value":7,"active":true},{"short":"Aug","description":"August","value":8,"active":true},{"short":"Sep","description":"September","value":9,"active":true},{"short":"Oct","description":"October","value":10,"active":true},{"short":"Nov","description":"November","value":11,"active":true},{"short":"Dec","description":"December","value":12,"active":true}],"2023":[{"short":"Jan","description":"January","value":1,"active":true},{"short":"Feb","description":"February","value":2,"active":true},{"short":"Mar","description":"March","value":3,"active":true},{"short":"Apr","description":"April","value":4,"active":true},{"short":"May","description":"May","value":5,"active":true},{"short":"Jun","description":"June","value":6,"active":true},{"short":"Jul","description":"July","value":7,"active":true},{"short":"Aug","description":"August","value":8,"active":true},{"short":"Sep","description":"September","value":9,"active":true},{"short":"Oct","description":"October","value":10,"active":true},{"short":"Nov","description":"November","value":11,"active":true},{"short":"Dec","description":"December","value":12,"active":true}]}}',
-            },
-        ];
-
-        cy.intercept("GET", "/api/v1/erm/default_usage_reports", reports).as(
-            "getReports"
-        );
+    it("Run eUsage report: exists", () => {
         cy.visit("/cgi-bin/koha/erm/erm.pl");
+        cy.wait("@getReports");
 
         cy.get(".widget#ERMRunUsageReport .widget-content")
             .find(".v-select")
@@ -156,7 +222,11 @@ describe("ERM Module Dashboard", () => {
         ).click();
         cy.url().should("match", /erm\/eusage\/reports\/viewer/);
 
-        cy.intercept("GET", "/api/v1/erm/default_usage_reports", reports);
+        cy.intercept(
+            "GET",
+            "/api/v1/erm/default_usage_reports",
+            cy.get_eusage_reports()
+        );
         cy.visit("/cgi-bin/koha/erm/erm.pl");
 
         //Move
@@ -196,9 +266,6 @@ describe("ERM Module Dashboard", () => {
     });
 
     it("Licenses needing action", () => {
-        cy.intercept("GET", "/api/v1/erm/licenses*", [cy.get_license()]).as(
-            "getLicenses"
-        );
         cy.visit("/cgi-bin/koha/erm/erm.pl");
 
         //Display
@@ -268,64 +335,6 @@ describe("ERM Module Dashboard", () => {
     });
 
     it("Latest SUSHI Counter jobs", () => {
-        cy.intercept("GET", "/api/v1/jobs*", [
-            {
-                context: {
-                    branch: "CPL",
-                    branchname: "Centerville",
-                    cardnumber: "42",
-                    desk_id: null,
-                    desk_name: null,
-                    emailaddress: null,
-                    firstname: null,
-                    flags: "1",
-                    id: "koha",
-                    interface: "api",
-                    number: "51",
-                    register_id: null,
-                    register_name: null,
-                    shibboleth: "0",
-                    surname: "koha",
-                },
-                data: {
-                    begin_date: "2025-01-01",
-                    end_date: "2025-03-12",
-                    messages: [
-                        {
-                            code: 2010,
-                            message:
-                                "Error - Requestor is Not Authorized to Access Usage for Institution",
-                            type: "error",
-                        },
-                    ],
-                    report: {
-                        report_type: "PR",
-                        ud_provider_id: 1,
-                        ud_provider_name: "Wiley Online Library",
-                        us_report_info: {
-                            added_mus: 0,
-                            added_usage_objects: 0,
-                            added_yus: 0,
-                            skipped_mus: 0,
-                            skipped_yus: 0,
-                        },
-                    },
-                    report_type: "PR",
-                    ud_provider_id: 1,
-                    ud_provider_name: "Wiley Online Library",
-                },
-                ended_date: "2025-03-11T16:56:07+00:00",
-                enqueued_date: "2025-03-11T16:56:06+00:00",
-                job_id: 1,
-                patron_id: "51",
-                progress: "0",
-                queue: "long_tasks",
-                size: "1",
-                started_date: "2025-03-11T16:56:06+00:00",
-                status: "finished",
-                type: "erm_sushi_harvester",
-            },
-        ]).as("getJobs");
         cy.visit("/cgi-bin/koha/erm/erm.pl");
 
         //Display
