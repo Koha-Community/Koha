@@ -643,7 +643,7 @@ sub find_booking {
             branchcode => "*"
         }
     );
-    my $preparation_period = $rule ? $rule->rule_value : 0;
+    my $preparation_period = $rule && $rule->rule_value ? $rule->rule_value : 0;
     $end_date = $end_date->clone->add( days => $preparation_period );
 
     my $dtf      = Koha::Database->new->schema->storage->datetime_parser;
