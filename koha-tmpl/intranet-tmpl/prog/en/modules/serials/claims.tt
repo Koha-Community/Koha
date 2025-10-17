@@ -130,7 +130,7 @@
                             <table id="claimst">
                                 <thead>
                                     <tr>
-                                        <th><input type="checkbox" id="CheckAll"></th>
+                                        <th class="NoSort noExport"><input type="checkbox" id="CheckAll"></th>
                                         <th>Vendor</th>
                                         <th>Library</th>
                                         <th class="anti-the">Title</th>
@@ -180,24 +180,6 @@
                                         </tr>
                                     [% END # /FOREACH missingissue %]
                                 </tbody>
-                                <tfoot>
-                                    <tr>
-                                        <td></td>
-                                        <td><input type="text" class="filter" data-column_num="1" placeholder="Search vendor" /></td>
-                                        <td><input type="text" class="filter" data-column_num="2" placeholder="Search library" /></td>
-                                        <td><input type="text" class="filter" data-column_num="3" placeholder="Search title" /></td>
-                                        <td><input type="text" class="filter" data-column_num="4" placeholder="Search ISSN" /></td>
-                                        <td><input type="text" class="filter" data-column_num="5" placeholder="Search issue number" /></td>
-                                        <td><input type="text" class="filter" data-column_num="6" placeholder="Search status" /></td>
-                                        <td><input type="text" class="filter" data-column_num="7" placeholder="Search since" /></td>
-                                        <td><input type="text" class="filter" data-column_num="8" placeholder="Search publication date" /></td>
-                                        <td><input type="text" class="filter" data-column_num="9" placeholder="Search claim count" /></td>
-                                        <td><input type="text" class="filter" data-column_num="10" placeholder="Search claim date" /></td>
-                                        [% FOR field IN additional_fields_for_subscription %]
-                                            <td><input type="text" class="filter" data-column_num="[% loop.count + 10 | html %]" placeholder="Search [% field.name | html %]" /></td>
-                                        [% END %]
-                                    </tr>
-                                </tfoot>
                             </table> <!-- /#claimst -->
 
                             [% IF csv_profiles.count %]
@@ -242,17 +224,15 @@
 [% MACRO jsinclude BLOCK %]
     [% INCLUDE 'calendar.inc' %]
     [% INCLUDE 'datatables.inc' %]
+    [% INCLUDE 'columns_settings.inc' %]
     <script>
         var sTable;
         $(document).ready(function() {
-            sTable = $("#claimst").dataTable($.extend(true, {}, dataTablesDefaults, {
-                "dom": 't',
-                "columnDefs": [
-                    { "targets": [ 0 ], "orderable": false, "searchable":  false },
-                    { "type": "anti-the", "targets":  [ 'anti-the'] }
-                ],
-                "paginate": false
-            }));
+            stable = KohaTable("claimst", {
+                pagingType: "full",
+                order: [[2, "asc"]],
+            }, null, true);
+
             $('#supplierid').change(function() {
                 $('#claims').submit();
             });
