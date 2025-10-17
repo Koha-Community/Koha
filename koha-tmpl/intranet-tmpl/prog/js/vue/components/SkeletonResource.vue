@@ -108,6 +108,8 @@ export default {
             props: props,
             additionalToolbarButtons,
             defaultToolbarButtons,
+            // The default behaviour for the below is the "show" component so is not necessary if this is the desired behaviour
+            navigationOnFormSave: "SkeletonsList"
         });
 
         /*

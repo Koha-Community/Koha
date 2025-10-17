@@ -43,6 +43,7 @@ import {
  * @param {Function} resourceConfig.additionalToolbarButtons - A function to add additional buttons to the toolbar.
  * @param {String} resourceConfig.formGroupsDisplayMode - The display mode for the form groups if not the default. Can be one of the following: "accordion", "tabs".
  * @param {Array} resourceConfig.stickyToolbar - The names of the components with a toolbar that should be sticky.
+ * @param {Array} resourceConfig.navigationOnFormSave - The name of the component that should be navigated to when saving the resource creation/edit form. Defaults to the show component
  *
  * @return {Object} An object containing the utilities provided by this composable.
  */

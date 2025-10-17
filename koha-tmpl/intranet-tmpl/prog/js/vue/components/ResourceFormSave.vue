@@ -14,7 +14,7 @@
             :componentPropData="{ ...$props, ...$data, resourceForm }"
         />
         <form
-            @submit="instancedResource.onFormSave($event, resourceToSave)"
+            @submit="saveAndNavigate($event, resourceToSave)"
             ref="resourceForm"
         >
             <TabsWrapper
@@ -154,11 +154,31 @@ export default {
                 initialized.value = true;
             }
         });
+
+        const saveAndNavigate = ($event, resourceToSave) => {
+            const { components, navigationOnFormSave, onFormSave, router, idAttr } = props.instancedResource
+            // Default to show
+            const navigationAction = navigationOnFormSave || components.show
+            const idParamRequired = navigationAction === components.show || navigationAction === components.edit
+            onFormSave($event, resourceToSave).then(resource => {
+                if(resource) {
+                    router.push({
+                        name: navigationAction,
+                        ...(idParamRequired && {
+                            params: {
+                                [idAttr]: resource[idAttr]
+                            }
+                        })
+                    })
+                }
+            })
+        }
         return {
             initialized,
             resource,
             resourceToSave,
             resourceForm,
+            saveAndNavigate
         };
     },
     props: {

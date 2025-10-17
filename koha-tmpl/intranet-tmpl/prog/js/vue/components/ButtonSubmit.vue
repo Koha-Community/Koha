@@ -1,13 +1,8 @@
 <template>
     <button
-        v-if="form"
-        @click="form.value.requestSubmit()"
+        @click="form && form.value.requestSubmit()"
         class="btn btn-primary"
     >
-        <font-awesome-icon v-if="icon" :icon="icon" />
-        {{ title }}
-    </button>
-    <button v-else type="submit" class="btn btn-primary">
         <font-awesome-icon v-if="icon" :icon="icon" />
         {{ title }}
     </button>

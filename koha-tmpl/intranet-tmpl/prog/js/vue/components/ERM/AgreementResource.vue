@@ -826,18 +826,20 @@ export default {
             delete agreement.agreement_packages;
 
             if (agreement_id) {
-                baseResource.apiClient.update(agreement, agreement_id).then(
-                    success => {
-                        baseResource.setMessage($__("Agreement updated"));
-                        baseResource.router.push({ name: "AgreementsList" });
-                    },
-                    error => {}
-                );
+                return baseResource.apiClient
+                    .update(agreement, agreement_id)
+                    .then(
+                        agreement => {
+                            baseResource.setMessage($__("Agreement updated"));
+                            return agreement;
+                        },
+                        error => {}
+                    );
             } else {
-                baseResource.apiClient.create(agreement).then(
-                    success => {
+                return baseResource.apiClient.create(agreement).then(
+                    agreement => {
                         baseResource.setMessage($__("Agreement created"));
-                        baseResource.router.push({ name: "AgreementsList" });
+                        return agreement;
                     },
                     error => {}
                 );
