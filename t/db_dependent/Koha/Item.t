@@ -3073,7 +3073,7 @@ subtest 'bookings' => sub {
 };
 
 subtest 'find_booking' => sub {
-    plan tests => 8;
+    plan tests => 9;
 
     $schema->storage->txn_begin;
 
@@ -3241,6 +3241,30 @@ subtest 'find_booking' => sub {
             "Koha::Item->find_booking returns the future booking when lead period is included"
         );
 
+    };
+
+    subtest 'test empty string warning' => sub {
+        plan tests => 1;
+
+        Koha::CirculationRules->set_rules(
+            {
+                branchcode => '*',
+                itemtype   => $item->effective_itemtype,
+                rules      => {
+                    bookings_lead_period => '',
+                },
+            }
+        );
+
+        warning_is {
+            $found_booking = $item->find_booking(
+                {
+                    checkout_date => dt_from_string(),
+                    due_date      => dt_from_string()->add( days => 7 ),
+                }
+            );
+        }
+        undef, "No warnings were produced";
     };
 
     $schema->storage->txn_rollback;
