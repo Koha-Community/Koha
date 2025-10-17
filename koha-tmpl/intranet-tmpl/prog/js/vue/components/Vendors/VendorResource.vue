@@ -747,18 +747,18 @@ export default {
             if (errors.length) return false;
 
             if (vendorId) {
-                baseResource.apiClient.update(vendor, vendorId).then(
-                    success => {
+                return baseResource.apiClient.update(vendor, vendorId).then(
+                    vendor => {
                         baseResource.setMessage($__("Vendor updated"));
-                        baseResource.router.push({ name: "VendorList" });
+                        return vendor
                     },
                     error => {}
                 );
             } else {
-                baseResource.apiClient.create(vendor).then(
-                    success => {
+                return baseResource.apiClient.create(vendor).then(
+                    vendor => {
                         baseResource.setMessage($__("Vendor created"));
-                        baseResource.router.push({ name: "VendorList" });
+                        return vendor
                     },
                     error => {}
                 );

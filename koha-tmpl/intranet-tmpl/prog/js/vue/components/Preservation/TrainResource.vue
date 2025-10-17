@@ -276,18 +276,18 @@ export default {
 
             const client = APIClient.preservation;
             if (train_id) {
-                client.trains.update(train, train_id).then(
-                    success => {
+                return client.trains.update(train, train_id).then(
+                    train => {
                         baseResource.setMessage($__("Train updated"));
-                        baseResource.router.push({ name: "TrainsList" });
+                        return train;
                     },
                     error => {}
                 );
             } else {
-                client.trains.create(train).then(
-                    success => {
+                return client.trains.create(train).then(
+                    train => {
                         baseResource.setMessage($__("Train created"));
-                        baseResource.router.push({ name: "TrainsList" });
+                        return train;
                     },
                     error => {}
                 );

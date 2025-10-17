@@ -109,7 +109,7 @@ export default {
             additionalToolbarButtons,
             defaultToolbarButtons,
             // The default behaviour for the below is the "show" component so is not necessary if this is the desired behaviour
-            navigationOnFormSave: "SkeletonsList"
+            navigationOnFormSave: "SkeletonsList",
         });
 
         /*
@@ -156,18 +156,20 @@ export default {
             delete skeleton.skeleton_id;
 
             if (skeleton_id) {
-                baseResource.apiClient.update(skeleton, skeleton_id).then(
-                    success => {
-                        baseResource.setMessage($__("Skeleton updated"));
-                        baseResource.router.push({ name: "SkeletonsList" });
-                    },
-                    error => {}
-                );
+                return baseResource.apiClient
+                    .update(skeleton, skeleton_id)
+                    .then(
+                        skeleton => {
+                            baseResource.setMessage($__("Skeleton updated"));
+                            return skeleton;
+                        },
+                        error => {}
+                    );
             } else {
-                baseResource.apiClient.create(skeleton).then(
-                    success => {
+                return baseResource.apiClient.create(skeleton).then(
+                    skeleton => {
                         baseResource.setMessage($__("Skeleton created"));
-                        baseResource.router.push({ name: "SkeletonsList" });
+                        return skeleton;
                     },
                     error => {}
                 );

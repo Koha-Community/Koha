@@ -380,18 +380,18 @@ export default {
             );
 
             if (license_id) {
-                baseResource.apiClient.update(license, license_id).then(
-                    success => {
+                return baseResource.apiClient.update(license, license_id).then(
+                    license => {
                         baseResource.setMessage($__("License updated"));
-                        baseResource.router.push({ name: "LicensesList" });
+                        return license
                     },
                     error => {}
                 );
             } else {
-                baseResource.apiClient.create(license).then(
-                    success => {
+                return baseResource.apiClient.create(license).then(
+                    license => {
                         baseResource.setMessage($__("License created"));
-                        baseResource.router.push({ name: "LicensesList" });
+                        return license
                     },
                     error => {}
                 );

@@ -252,22 +252,18 @@ export default {
             );
 
             if (package_id) {
-                baseResource.apiClient.update(erm_package, package_id).then(
-                    success => {
+                return baseResource.apiClient.update(erm_package, package_id).then(
+                    erm_package => {
                         baseResource.setMessage($__("Package updated"));
-                        baseResource.router.push({
-                            name: "EHoldingsLocalPackagesList",
-                        });
+                        return erm_package
                     },
                     error => {}
                 );
             } else {
-                baseResource.apiClient.create(erm_package).then(
-                    success => {
+                return baseResource.apiClient.create(erm_package).then(
+                    erm_package => {
                         baseResource.setMessage($__("Package created"));
-                        baseResource.router.push({
-                            name: "EHoldingsLocalPackagesList",
-                        });
+                        return erm_package
                     },
                     error => {}
                 );

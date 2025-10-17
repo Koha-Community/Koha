@@ -82,7 +82,6 @@ export default {
 
         const onFormSave = (e, recordSourceToSave) => {
             e.preventDefault();
-            let response;
             const recordSource = JSON.parse(JSON.stringify(recordSourceToSave)); // copy
             const recordSourceId = recordSource.record_source_id;
 
@@ -90,24 +89,22 @@ export default {
 
             if (recordSourceId) {
                 // update
-                response = baseResource.apiClient
+                return baseResource.apiClient
                     .update(recordSource, recordSourceId)
                     .then(
-                        success => {
+                        recordResource => {
                             baseResource.setMessage(
                                 $__("Record source updated!")
                             );
-                            baseResource.router.push({
-                                name: "RecordSourcesList",
-                            });
+                            return recordResource
                         },
                         error => {}
                     );
             } else {
-                response = baseResource.apiClient.create(recordSource).then(
-                    success => {
+                return baseResource.apiClient.create(recordSource).then(
+                    recordResource => {
                         baseResource.setMessage($__("Record source created!"));
-                        baseResource.router.push({ name: "RecordSourcesList" });
+                        return recordResource
                     },
                     error => {}
                 );

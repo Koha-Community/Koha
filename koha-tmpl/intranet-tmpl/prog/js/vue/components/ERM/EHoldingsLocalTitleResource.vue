@@ -499,22 +499,18 @@ export default {
             });
 
             if (title_id) {
-                baseResource.apiClient.update(title, title_id).then(
-                    success => {
+                return baseResource.apiClient.update(title, title_id).then(
+                    title => {
                         baseResource.setMessage($__("Title updated"));
-                        baseResource.router.push({
-                            name: "EHoldingsLocalTitlesList",
-                        });
+                        return title;
                     },
                     error => {}
                 );
             } else {
-                baseResource.apiClient.create(title).then(
-                    success => {
+                return baseResource.apiClient.create(title).then(
+                    title => {
                         baseResource.setMessage($__("Title created"));
-                        baseResource.router.push({
-                            name: "EHoldingsLocalTitlesList",
-                        });
+                        return title;
                     },
                     error => {}
                 );
