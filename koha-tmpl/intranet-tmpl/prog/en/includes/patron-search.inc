@@ -16,7 +16,7 @@
     <form method="get" class="patron_search_form">
         <div class="hint">Enter patron card number or partial name:</div>
         <input type="text" size="40" id="search_patron_filter_simple" class="search_patron_filter focus" autocomplete="off" />
-        <input type="submit" class="btn btn-primary" value="Search" />
+        <input type="submit" class="btn btn-primary search_patron_filter_btn" value="Search" />
     </form>
 [% END %]
 
@@ -105,7 +105,7 @@
                 </ol>
             </fieldset>
             <fieldset class="action">
-                <input type="submit" class="btn btn-primary" value="Search" />
+                <input type="submit" class="btn btn-primary search_patron_filter_btn" value="Search" />
                 <input type="button" value="Clear" class="btn btn-default clear_search" />
             </fieldset>
         </form>
@@ -789,6 +789,8 @@
                 patron_search_form.on('submit', update_search_type);
                 patron_search_form.on('submit', function(){
                     parent_block.find(".searchheader").show();
+                    // Disable the search button until results are returned and displayed
+                    patron_search_form.find(".search_patron_filter_btn").prop({disabled: true});
                 });
 
 
@@ -911,6 +913,9 @@
                 }
                 patrons_table.data('loaded_from_state', false);
                 first_draw = 1; // Only redirect if we are coming from here
+                table_dt.on('draw.dt', function () {
+                    patron_search_form.find(".search_patron_filter_btn").prop({disabled: false});
+                });
                 table_dt.draw();
                 return false;
             }
@@ -924,6 +929,7 @@
                 patron_search_form.find(".branchcode_filter option:first").prop("selected", true);
                 patron_search_form.find("select[name='sort1_filter']").val('').trigger("change");
                 patron_search_form.find("select[name='sort2_filter']").val('').trigger("change");
+                patron_search_form.find(".search_patron_filter_btn").prop({disabled: false});
                 parent_block.find(".firstletter_filter").val('');
                 patron_search_form.find(".search_patron_filter").val('');
                 [% IF adjust_history %]
