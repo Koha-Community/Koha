@@ -5,6 +5,7 @@
                 ref="table"
                 v-bind="tableOptions"
                 :key="JSON.stringify(tableOptions)"
+                @show="goToLicense"
             />
         </template>
     </WidgetWrapper>
@@ -12,6 +13,7 @@
 
 <script>
 import { inject, ref, computed } from "vue";
+import { useRouter } from "vue-router";
 import { storeToRefs } from "pinia";
 import WidgetWrapper from "../WidgetWrapper.vue";
 import KohaTable from "../../KohaTable.vue";
@@ -32,6 +34,7 @@ export default {
         const { authorisedValues } = storeToRefs(ERMStore);
         const av_license_statuses = authorisedValues.value.av_license_statuses;
 
+        const router = useRouter();
         const table = ref();
         const default_settings = {
             status: ["in_negotiation", "not_yet_active", "rejected"],
@@ -117,6 +120,14 @@ export default {
             return params;
         }
 
+        const goToLicense = (row, dt, event) => {
+            event?.preventDefault();
+            router.push({
+                name: "LicensesShow",
+                params: { license_id: row.license_id },
+            });
+        };
+
         const tableOptions = computed(() => ({
             columns: [
                 {
@@ -172,6 +183,9 @@ export default {
             },
             url: "/api/v1/erm/licenses",
             default_filters: settingsToQueryParams(settings.value),
+            actions: {
+                0: ["show"],
+            },
         }));
 
         const baseWidget = useBaseWidget(
@@ -194,6 +208,7 @@ export default {
             ...baseWidget,
             table,
             tableOptions,
+            goToLicense,
         };
     },
 };
