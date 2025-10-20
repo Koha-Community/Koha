@@ -72,8 +72,14 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
 );
 
 # Are we able to actually work?
-my $patron             = Koha::Patrons->find($loggedinuser);
-my $backends           = Koha::ILL::Request::Config->new->opac_available_backends($patron);
+my $patron   = Koha::Patrons->find($loggedinuser);
+my $backends = Koha::ILL::Request::Config->new->opac_available_backends($patron);
+
+if ( $params->{backend} && !grep { $_ eq $params->{backend} } @$backends ) {
+    print $query->redirect("/cgi-bin/koha/errors/404.pl");
+    exit;
+}
+
 my $backends_available = ( scalar @{$backends} > 0 );
 $template->param( backends_available => $backends_available );
 
