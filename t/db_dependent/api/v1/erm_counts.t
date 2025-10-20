@@ -24,6 +24,13 @@ use Test::Mojo;
 use t::lib::TestBuilder;
 use t::lib::Mocks;
 
+use Koha::ERM::Agreements;
+use Koha::ERM::Documents;
+use Koha::ERM::EHoldings::Packages;
+use Koha::ERM::EHoldings::Titles;
+use Koha::ERM::Licenses;
+use Koha::ERM::EUsage::UsageDataProviders;
+
 use Koha::Database;
 
 my $schema  = Koha::Database->new->schema;
@@ -36,6 +43,13 @@ subtest 'count() tests' => sub {
     plan tests => 3;
 
     $schema->storage->txn_begin;
+
+    Koha::ERM::Agreements->search->delete;
+    Koha::ERM::Documents->search->delete;
+    Koha::ERM::EHoldings::Packages->search->delete;
+    Koha::ERM::EHoldings::Titles->search->delete;
+    Koha::ERM::Licenses->search->delete;
+    Koha::ERM::EUsage::UsageDataProviders->search->delete;
 
     my $librarian = $builder->build_object(
         {
@@ -64,8 +78,12 @@ subtest 'count() tests' => sub {
     $t->get_ok("//$userid:$password@/api/v1/erm/counts")->status_is(200)->json_is(
         {
             counts => {
-                agreements_count       => 1, documents_count => 0, eholdings_packages_count   => 0,
-                eholdings_titles_count => 0, licenses_count  => 1, usage_data_providers_count => 0
+                agreements_count           => 1,
+                documents_count            => 0,
+                eholdings_packages_count   => 0,
+                eholdings_titles_count     => 0,
+                licenses_count             => 1,
+                usage_data_providers_count => 0
             }
         }
     );
