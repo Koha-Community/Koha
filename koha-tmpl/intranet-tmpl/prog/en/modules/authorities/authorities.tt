@@ -493,7 +493,7 @@
                                                             [% UNLESS hide_marc %]
                                                                 <div class="subfieldcode">
                                                                     <input type="text"
-                                                                        title="[% subfield_loo.marc_lib | $raw %]"
+                                                                        title="[% subfield_loo.marc_lib | html %]"
                                                                         style=" [% IF ( subfield_loo.fixedfield ) %]display:none; [% END %]border:0;"
                                                                         name="tag_[% subfield_loo.tag | html %]_code_[% subfield_loo.subfield | html %]_[% subfield_loo.index | html %]_[% subfield_loo.index_subfield | html %]"
                                                                         value="[% subfield_loo.subfield | html %]"
@@ -519,7 +519,7 @@
                                                                     [% ELSE %]
                                                                         <label for="tag_[% subfield_loo.tag | html %]_subfield_[% subfield_loo.subfield | html %]_[% subfield_loo.index | html %]_[% subfield_loo.index_subfield | html %]" class="labelsubfield">
                                                                     [% END %]
-                                                                        [% subfield_loo.marc_lib | $raw %]
+                                                                        [% subfield_loo.marc_lib | html %]
                                                                     </label>
                                                                 </div> <!-- /.subfield -->
                                                             [% END # UNLESS advancedMARCEditor %]

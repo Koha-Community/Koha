@@ -94,9 +94,9 @@
             <li>
                 <div class="subfield_line" style="[% subfield.visibility | html %]" id="subfield[% subfield.tag | html %][% subfield.subfield | html %][% subfield.random | html %]">
                     [% IF ( subfield.mandatory ) %]
-                        <label class="required">[% subfield.subfield | html %] - [% subfield.marc_lib | $raw %]</label>
+                        <label class="required">[% subfield.subfield | html %] - [% subfield.marc_lib | html %]</label>
                     [% ELSE %]
-                       <label>[% subfield.subfield | html %] - [% subfield.marc_lib | $raw %]</label>
+                       <label>[% subfield.subfield | html %] - [% subfield.marc_lib | html %]</label>
                     [% END %]
 
                     [% SET mv = subfield.marc_value %]
