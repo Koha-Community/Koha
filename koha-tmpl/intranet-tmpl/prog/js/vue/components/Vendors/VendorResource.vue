@@ -33,24 +33,6 @@ export default {
         const additionalToolbarButtons = (resource, componentData) => {
             const { instancedResource } = componentData;
             const buttons = {
-                form: [
-                    {
-                        title: $__("Save"),
-                        icon: "save",
-                        callback: () => {
-                            componentData.resourceForm.value.requestSubmit()
-                        },
-                        cssClass: "btn btn-primary"
-                    },
-                    {
-                        to: {
-                            name: "VendorList",
-                        },
-                        title: $__("Cancel"),
-                        icon: "times",
-                        cssClass: "btn btn-link",
-                    },
-                ],
                 show: [
                     {
                         dropdownButtons: [
@@ -753,7 +735,7 @@ export default {
                 return baseResource.apiClient.update(vendor, vendorId).then(
                     vendor => {
                         baseResource.setMessage($__("Vendor updated"));
-                        return vendor
+                        return vendor;
                     },
                     error => {}
                 );
@@ -761,7 +743,7 @@ export default {
                 return baseResource.apiClient.create(vendor).then(
                     vendor => {
                         baseResource.setMessage($__("Vendor created"));
-                        return vendor
+                        return vendor;
                     },
                     error => {}
                 );

@@ -11,7 +11,12 @@
         <h2 v-else>{{ instancedResource.i18n.newLabel }}</h2>
         <slot
             name="toolbar"
-            :componentPropData="{ ...$props, ...$data, resourceForm }"
+            :componentPropData="{
+                ...$props,
+                ...$data,
+                resourceForm,
+                saveDropdownButtonActions,
+            }"
         />
         <form
             @submit="saveAndNavigate($event, resourceToSave)"
@@ -94,7 +99,7 @@
                 "
             >
                 <DropdownButtons
-                    :dropdownButtons="dropdownButtons"
+                    :dropdownButtons="saveDropdownButtonActions"
                     :cssClass="'btn-primary'"
                 >
                     <ButtonSubmit :title="$__('Save')" />
@@ -197,10 +202,10 @@ export default {
         const saveOptionSelected = ref(
             props.instancedResource.navigationOnFormSave
         );
-        const dropdownButtons = computed(() => {
+        const saveDropdownButtonActions = computed(() => {
             const { components, navigationOnFormSave } =
                 props.instancedResource;
-
+            const formToSubmit = resourceForm.value;
             const buttonOptions = {
                 list: {
                     title: $__("Save and return to list"),
@@ -208,6 +213,13 @@ export default {
                     cssClass: "btn btn-default",
                     callback: () => {
                         saveOptionSelected.value = components.list;
+                        if (
+                            props.instancedResource.stickyToolbar.includes(
+                                "Form"
+                            )
+                        ) {
+                            formToSubmit.value.requestSubmit();
+                        }
                     },
                 },
                 show: {
@@ -216,6 +228,13 @@ export default {
                     cssClass: "btn btn-default",
                     callback: () => {
                         saveOptionSelected.value = components.show;
+                        if (
+                            props.instancedResource.stickyToolbar.includes(
+                                "Form"
+                            )
+                        ) {
+                            formToSubmit.value.requestSubmit();
+                        }
                     },
                 },
                 edit: {
@@ -224,6 +243,13 @@ export default {
                     cssClass: "btn btn-default",
                     callback: () => {
                         saveOptionSelected.value = components.edit;
+                        if (
+                            props.instancedResource.stickyToolbar.includes(
+                                "Form"
+                            )
+                        ) {
+                            formToSubmit.value.requestSubmit();
+                        }
                     },
                 },
             };
@@ -241,7 +267,7 @@ export default {
             resourceForm,
             saveAndNavigate,
             editMode,
-            dropdownButtons,
+            saveDropdownButtonActions,
         };
     },
     props: {
