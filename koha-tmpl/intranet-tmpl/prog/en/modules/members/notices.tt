@@ -16,11 +16,6 @@
     [% END %]</title
 >
 [% INCLUDE 'doc-head-close.inc' %]
-<style>
-    .notice {
-        display: none;
-    }
-</style>
 </head>
 
 <body id="pat_notices" class="pat">
@@ -70,7 +65,7 @@
                                     href="/cgi-bin/koha/members/notices.pl?borrowernumber=[% borrowernumber | uri %]&amp;noticeid=[% QUEUED_MESSAGE.message_id | uri %]"
                                     >[% QUEUED_MESSAGE.subject | html %]</a
                                 >
-                                <iframe class="notice" id="notice[% QUEUED_MESSAGE.message_id | html %]" srcdoc="[% QUEUED_MESSAGE.html_content | html %]"></iframe>
+                                <div style="display:none;" class="notice" id="notice[% QUEUED_MESSAGE.message_id | html %]">[% QUEUED_MESSAGE.html_content | html %]</div>
                             </td>
                             <td>
                                 [% IF ( QUEUED_MESSAGE.message_transport_type == 'email' ) %]
@@ -195,7 +190,7 @@
                 var noticeid = $(this).data("noticeid");
 
                 // Use shadow DOM for notice content preview
-                var srcdoc = $("#notice" + noticeid).attr("srcdoc");
+                var srcdoc = $("#notice" + noticeid).text();
                 var shadowHost = document.createElement("div");
                 var shadowRoot = shadowHost.attachShadow({ mode: "open" });
                 shadowRoot.innerHTML = srcdoc;
