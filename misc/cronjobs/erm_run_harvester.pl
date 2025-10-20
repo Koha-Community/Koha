@@ -38,7 +38,7 @@ erm_run_harvester.pl This script will run the SUSHI harvesting for usage data pr
 
 erm_run_harvester.pl
   --begin-date <YYYY-MM-DD>
-  [ --dry-run ][ --debug ][ --end-date <YYYY-MM-DD> ]
+  [ --dry-run ][ --debug ][ --end-date <YYYY-MM-DD> ][ -p|--provider-id <id> ... ]
 
  Options:
    --help                         brief help message
@@ -47,6 +47,7 @@ erm_run_harvester.pl
    --dry-run                      test run only, do not harvest data
    --begin-date <YYYY-MM-DD>      date to harvest from
    --end-date <YYYY-MM-DD>        date to harvest until, defaults to today if not set
+   -p|--provider-id <id> ...      harvest only given providers
 
 =head1 OPTIONS
 
@@ -72,6 +73,10 @@ Date from which to harvest, previously harvested data will be ignored
 
 Date to harvest until, defaults to today if not set
 
+=item B<-p|--provider-id ...>
+
+Provider IDs that should be harvested; harvest all active providers if not set
+
 =item B<--dry-run>
 
 Test run only, do not harvest
@@ -95,6 +100,8 @@ C<erm_run_harvester.pl --begin-date 2000-01-01> - Harvest from the given date un
 
 C<erm_run_harvester.pl --begin-date 2000-01-01 --end-date 2024-01-01> - Harvest from the given date until the end date
 
+C<erm_run_harvester.pl --begin-date 2000-01-01 --provider-id 1 --provider-id 3> - Harvest from the given date until today, but only the given providers
+
 C<erm_run_harvester.pl --begin-date 2000-01-01 --end-date 2024-01-01 --debug --dry-run> - Dry run, with debuig information
 
 =cut
@@ -103,26 +110,32 @@ my $command_line_options = join( " ", @ARGV );
 cronlogaction( { info => $command_line_options } );
 
 # Command line option values
-my $help       = 0;
-my $man        = 0;
-my $begin_date = 0;
-my $end_date   = 0;
-my $dry_run    = 0;
-my $debug      = 0;
+my $help         = 0;
+my $man          = 0;
+my $begin_date   = 0;
+my $end_date     = 0;
+my @provider_ids = ();
+my $dry_run      = 0;
+my $debug        = 0;
 
 my $options = GetOptions(
-    'h|help'       => \$help,
-    'm|man'        => \$man,
-    'begin-date=s' => \$begin_date,
-    'end-date=s'   => \$end_date,
-    'dry-run'      => \$dry_run,
-    'debug'        => \$debug
+    'h|help'          => \$help,
+    'm|man'           => \$man,
+    'begin-date=s'    => \$begin_date,
+    'end-date=s'      => \$end_date,
+    'p|provider-id:s' => \@provider_ids,
+    'dry-run'         => \$dry_run,
+    'debug'           => \$debug
 );
 
 pod2usage(1)               if $help;
 pod2usage( -verbose => 2 ) if $man;
 
-my $udproviders = Koha::ERM::EUsage::UsageDataProviders->search( { active => 1 } );
+my %search_condition = ( active => 1 );
+if ( scalar @provider_ids ) {
+    $search_condition{erm_usage_data_provider_id} = { -in => \@provider_ids };
+}
+my $udproviders = Koha::ERM::EUsage::UsageDataProviders->search( \%search_condition );
 unless ( scalar @{ $udproviders->as_list() } ) {
     die "ERROR: No usage data providers found.";
 }
