@@ -15,6 +15,8 @@
         &rsaquo;
         [% IF ( method == 'tool' ) %]
             [% t("Tools") | html %]
+        [% ELSIF (method == 'report' ) %]
+            [% t("Reports") | html %]
         [% ELSE %]
             [% t("Administration") | html %]
         [% END %]
@@ -34,6 +36,8 @@
         [% WRAPPER breadcrumb_item %]
             [% IF ( method == 'tool' ) %]
                 <a href="/cgi-bin/koha/tools/tools-home.pl">Tools</a>
+            [% ELSIF (method == 'report' ) %]
+                <a href="/cgi-bin/koha/reports/reports-home.pl">Reports</a>
             [% ELSE %]
                 <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a>
             [% END %]
@@ -58,6 +62,8 @@
             <aside>
                 [% IF ( method == 'tool' ) %]
                     [% INCLUDE 'tools-menu.inc' %]
+                [% ELSIF (method == 'report' ) %]
+                    [% INCLUDE 'reports-menu.inc' %]
                 [% ELSE %]
                     [% INCLUDE 'admin-menu.inc' %]
                 [% END %]
