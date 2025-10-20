@@ -17,7 +17,12 @@ return {
 
         say $out "Added new permission 'view_checkout_history'";
 
-        my $IntranetBrowsingHistory = C4::Context->preference('intranetreadinghistory');
+        my ($IntranetBrowsingHistory) = $dbh->selectrow_array(
+            q|
+            SELECT value FROM systempreferences WHERE variable='intranetreadinghistory'
+        |
+        );
+
         if ($IntranetBrowsingHistory) {
 
             my $insert_sth = $dbh->prepare(
