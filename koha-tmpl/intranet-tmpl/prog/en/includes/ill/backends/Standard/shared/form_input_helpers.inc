@@ -54,4 +54,5 @@
     [% PROCESS ill_text_input_field id = 'issue' label = t('Issue number') value = whole.value.other.issue %]
     [% PROCESS ill_text_input_field id = 'year' label = t('Year') value = whole.value.other.year %]
     [% PROCESS ill_text_input_field id = 'issn' label = t('ISSN') value = whole.value.other.issn %]
+    [% PROCESS ill_text_input_field id = 'eissn' label = t('eISSN') value = whole.value.other.eissn %]
 [% END %]

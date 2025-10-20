@@ -12,6 +12,7 @@
         [% PROCESS ill_text_input_field id = 'pages' label = t('Pages') value = whole.value.other.pages %]
         [% PROCESS ill_text_input_field id = 'isbn' label = t('ISBN') value = whole.value.other.isbn %]
         [% PROCESS ill_text_input_field id = 'issn' label = t('ISSN') value = whole.value.other.issn %]
+        [% PROCESS ill_text_input_field id = 'eissn' label = t('eISSN') value = whole.value.other.eissn %]
         [% PROCESS ill_text_input_field id = 'doi' label = t('DOI') value = whole.value.other.doi %]
     </ol>
 </fieldset>

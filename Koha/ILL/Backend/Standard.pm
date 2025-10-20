@@ -677,7 +677,7 @@ sub migrate {
         $new_request->updated( dt_from_string() );
         $new_request->store;
 
-        my @default_attributes = (qw/title type author year volume isbn issn article_title article_author pages/);
+        my @default_attributes = (qw/title type author year volume isbn issn eissn article_title article_author pages/);
         my $original_attributes =
             $original_request->extended_attributes->search( { type => { '-in' => \@default_attributes } } );
 
@@ -886,6 +886,7 @@ sub _get_core_fields {
         conference_date => __('Conference date'),
         doi             => __('DOI'),
         editor          => __('Editor'),
+        eissn           => __('eISSN'),
         format          => __('Format'),
         genre           => __('Genre'),
         institution     => __('Institution'),
@@ -1000,6 +1001,7 @@ sub _openurl_to_ill {
         volume  => 'volume',
         isbn    => 'isbn',
         issn    => 'issn',
+        eissn   => 'eissn',
         doi     => 'doi',
         year    => 'year',
         title   => 'title',
