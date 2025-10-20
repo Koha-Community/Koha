@@ -93,8 +93,11 @@
                         !instancedResource.stickyToolbar.includes('Form'))
                 "
             >
-                <DropdownButtons :dropdownButtons="dropdownButtons" :cssClass="'btn-primary'">
-                    <ButtonSubmit :title="buttonTextLeader" />
+                <DropdownButtons
+                    :dropdownButtons="dropdownButtons"
+                    :cssClass="'btn-primary'"
+                >
+                    <ButtonSubmit :title="$__('Save')" />
                 </DropdownButtons>
                 <router-link
                     :to="{ name: instancedResource.components.list }"
@@ -114,7 +117,7 @@ import ButtonSubmit from "./ButtonSubmit.vue";
 import DropdownButtons from "./DropdownButtons.vue";
 import TabsWrapper from "./TabsWrapper.vue";
 import AccordionWrapper from "./AccordionWrapper.vue";
-import { $__ } from "@koha-vue/i18n"
+import { $__ } from "@koha-vue/i18n";
 
 export default {
     inheritAttrs: false,
@@ -122,7 +125,6 @@ export default {
         const initialized = ref(false);
         const resource = ref(null);
         const editMode = ref(false);
-        const buttonTextLeader = computed(() => editMode.value ? $__("Save") : $__("Submit"))
 
         const resourceToSave = computed(() => {
             return (
@@ -145,7 +147,7 @@ export default {
                     props.instancedResource.idAttr
                 ]
             ) {
-                editMode.value = true
+                editMode.value = true;
                 props.instancedResource.getResource(
                     props.instancedResource.route.params[
                         props.instancedResource.idAttr
@@ -163,60 +165,74 @@ export default {
         });
 
         const saveAndNavigate = ($event, resourceToSave) => {
-            const { components, navigationOnFormSave, onFormSave, router, idAttr } = props.instancedResource
+            const {
+                components,
+                navigationOnFormSave,
+                onFormSave,
+                router,
+                idAttr,
+            } = props.instancedResource;
             // Default to show
-            const navigationAction = saveOptionSelected.value || navigationOnFormSave || components.show
-            const idParamRequired = navigationAction === components.show || navigationAction === components.edit
+            const navigationAction =
+                saveOptionSelected.value ||
+                navigationOnFormSave ||
+                components.show;
+            const idParamRequired =
+                navigationAction === components.show ||
+                navigationAction === components.edit;
             onFormSave($event, resourceToSave).then(resource => {
-                if(resource) {
+                if (resource) {
                     router.push({
                         name: navigationAction,
                         ...(idParamRequired && {
                             params: {
-                                [idAttr]: resource[idAttr]
-                            }
-                        })
-                    })
+                                [idAttr]: resource[idAttr],
+                            },
+                        }),
+                    });
                 }
-            })
-        }
+            });
+        };
 
-        const saveOptionSelected = ref(props.instancedResource.navigationOnFormSave)
+        const saveOptionSelected = ref(
+            props.instancedResource.navigationOnFormSave
+        );
         const dropdownButtons = computed(() => {
-            const { components, navigationOnFormSave } = props.instancedResource
+            const { components, navigationOnFormSave } =
+                props.instancedResource;
 
             const buttonOptions = {
                 list: {
-                    title: $__("%s and return to list").format(buttonTextLeader.value),
+                    title: $__("Save and return to list"),
                     action: "submit",
                     cssClass: "btn btn-default",
                     callback: () => {
-                        saveOptionSelected.value = components.list
-                    }
+                        saveOptionSelected.value = components.list;
+                    },
                 },
                 show: {
-                    title: $__("%s and show").format(buttonTextLeader.value),
+                    title: $__("Save and show"),
                     action: "submit",
                     cssClass: "btn btn-default",
                     callback: () => {
-                        saveOptionSelected.value = components.show
-                    }
+                        saveOptionSelected.value = components.show;
+                    },
                 },
                 edit: {
-                    title: $__("%s and continue editing").format(buttonTextLeader.value),
+                    title: $__("Save and continue editing"),
                     action: "submit",
                     cssClass: "btn btn-default",
                     callback: () => {
-                        saveOptionSelected.value = components.edit
-                    }
-                }
-            }
+                        saveOptionSelected.value = components.edit;
+                    },
+                },
+            };
             return Object.keys(buttonOptions).reduce((acc, key) => {
-                if(key === "show" && !navigationOnFormSave) return acc
-                if(components[key] === navigationOnFormSave) return acc
-                return [buttonOptions[key], ...acc]
-            },[])
-        })
+                if (key === "show" && !navigationOnFormSave) return acc;
+                if (components[key] === navigationOnFormSave) return acc;
+                return [buttonOptions[key], ...acc];
+            }, []);
+        });
 
         return {
             initialized,
@@ -226,7 +242,6 @@ export default {
             saveAndNavigate,
             editMode,
             dropdownButtons,
-            buttonTextLeader
         };
     },
     props: {
@@ -237,7 +252,7 @@ export default {
         FormElement,
         TabsWrapper,
         AccordionWrapper,
-        DropdownButtons
+        DropdownButtons,
     },
     name: "ResourceFormSave",
 };
