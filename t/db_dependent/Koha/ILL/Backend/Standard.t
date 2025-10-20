@@ -116,7 +116,7 @@ subtest 'edititem() tests' => sub {
 
 subtest 'metadata() tests' => sub {
 
-    plan tests => 8;
+    plan tests => 9;
 
     $schema->storage->txn_begin;
 
@@ -129,6 +129,7 @@ subtest 'metadata() tests' => sub {
             title        => 'Test Title',
             author       => 'Test Author',
             isbn         => '1234567890',
+            eissn        => 'eissntest',
             year         => '2023',
             custom_field => 'custom_value',
 
@@ -150,6 +151,7 @@ subtest 'metadata() tests' => sub {
     is( $metadata->{Title},        'Test Title',   'Title included in metadata' );
     is( $metadata->{Author},       'Test Author',  'Author included in metadata' );
     is( $metadata->{ISBN},         '1234567890',   'ISBN included in metadata' );
+    is( $metadata->{eISSN},        'eissntest',    'eISSN included in metadata' );
     is( $metadata->{Year},         '2023',         'Year included in metadata' );
     is( $metadata->{Custom_field}, 'custom_value', 'Custom field included in metadata' );
 
