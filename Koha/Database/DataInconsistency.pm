@@ -19,19 +19,19 @@ sub invalid_item_library {
         if ( not $item->homebranch and not $item->holdingbranch ) {
             push @errors,
                 __x(
-                "Item with itemnumber={itemnumber} does not have homebranch and holdingbranch defined",
+                "Item with itemnumber={itemnumber} does not have home and holding library defined",
                 itemnumber => $item->itemnumber
                 );
         } elsif ( not $item->homebranch ) {
             push @errors,
                 __x(
-                "Item with itemnumber={itemnumber} does not have homebranch defined",
+                "Item with itemnumber={itemnumber} does not have a home library defined",
                 itemnumber => $item->itemnumber
                 );
         } else {
             push @errors,
                 __x(
-                "Item with itemnumber={itemnumber} does not have holdingbranch defined",
+                "Item with itemnumber={itemnumber} does not have a holding library defined",
                 itemnumber => $item->itemnumber
                 );
         }
@@ -67,13 +67,13 @@ sub no_item_type {
             while ( my $item = $items_without_itype->next ) {
                 if ( defined $item->biblioitem->itemtype && $item->biblioitem->itemtype ne '' ) {
                     push @errors, __x(
-                        "Item with itemnumber={itemnumber} does not have a itype value, biblio's item type will be used ({itemtype})",
+                        "Item with itemnumber={itemnumber} does not have an itype value, biblio's item type will be used ({itemtype})",
                         itemnumber => $item->itemnumber,
                         itemtype   => $item->biblioitem->itemtype,
                     );
                 } else {
                     push @errors, __x(
-                        "Item with itemnumber={itemnumber} does not have a itype value, additionally no item type defined for biblionumber={biblionumber}",
+                        "Item with itemnumber={itemnumber} does not have an itype value, additionally no item type defined for biblionumber={biblionumber}",
                         itemnumber   => $item->itemnumber,
                         biblionumber => $item->biblioitem->biblionumber,
                     );
@@ -81,11 +81,16 @@ sub no_item_type {
             }
         }
     } else {
-        my $biblioitems_without_itemtype = Koha::Biblioitems->search( { biblionumber => $ids, itemtype => undef } );
+        my $biblioitems_without_itemtype = Koha::Biblioitems->search(
+            {
+                biblionumber => $ids,
+                -or          => [ itemtype => undef, itemtype => '' ]
+            }
+        );
         if ( $biblioitems_without_itemtype->count ) {
             while ( my $biblioitem = $biblioitems_without_itemtype->next ) {
                 push @errors, __x(
-                    "Biblioitem with biblioitemnumber={biblioitemnumber} does not have a itemtype value",
+                    "Biblioitem with biblioitemnumber={biblioitemnumber} does not have an itemtype value",
                     biblioitemnumber => $biblioitem->biblioitemnumber,
                 );
             }
