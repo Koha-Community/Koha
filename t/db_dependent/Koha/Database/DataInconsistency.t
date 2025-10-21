@@ -1,7 +1,7 @@
 use Modern::Perl;
 
-#use Test::NoWarnings;
-use Test::More tests => 5;
+use Test::NoWarnings;
+use Test::More tests => 7;
 use Test::Warn;
 
 use Koha::Items;
@@ -394,5 +394,45 @@ subtest 'nonexistent_AV' => sub {
         $item_ko->set( { withdrawn => -1 } )->store;
         my @errors = Koha::Database::DataInconsistency->nonexistent_AV($biblios);
         is( scalar(@errors), 1 );
+    };
+};
+
+subtest 'empty_title' => sub {
+
+    plan tests => 3;
+
+    $schema->storage->txn_begin();
+
+    my $biblio_ok = $builder->build_sample_biblio;
+    my $item_ok   = $builder->build_sample_item( { biblionumber => $biblio_ok->biblionumber } );
+    my $biblio_ko = $builder->build_sample_biblio;
+    my $item_ko   = $builder->build_sample_item( { biblionumber => $biblio_ko->biblionumber } );
+
+    my $biblios = Koha::Biblios->search( { biblionumber => [ $biblio_ok->biblionumber, $biblio_ko->biblionumber ] } );
+
+    subtest 'ok' => sub {
+        plan tests => 1;
+        my @errors = Koha::Database::DataInconsistency->empty_title($biblios);
+        is_deeply( \@errors, [] );
+    };
+
+    subtest 'title => undef' => sub {
+        plan tests => 1;
+        $biblio_ko->set( { title => undef } )->store;
+        my @errors = Koha::Database::DataInconsistency->empty_title($biblios);
+        is_deeply(
+            \@errors,
+            [ sprintf 'Biblio with biblionumber=%s does not have title defined', $biblio_ko->biblionumber ]
+        );
+    };
+
+    subtest 'title => ""' => sub {
+        plan tests => 1;
+        $biblio_ko->set( { title => q{} } )->store;
+        my @errors = Koha::Database::DataInconsistency->empty_title($biblios);
+        is_deeply(
+            \@errors,
+            [ sprintf 'Biblio with biblionumber=%s does not have title defined', $biblio_ko->biblionumber ]
+        );
     };
 };
