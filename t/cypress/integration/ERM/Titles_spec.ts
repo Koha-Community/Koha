@@ -140,7 +140,7 @@ describe("Title CRUD operations", () => {
         // Fill in the form for normal attributes
         let erm_title = cy.get_title();
 
-        cy.get("#titles_add").contains("Submit").click();
+        cy.get("#titles_add").contains("Save").click();
         cy.get("input:invalid,textarea:invalid,select:invalid").should(
             "have.length",
             1
@@ -196,7 +196,7 @@ describe("Title CRUD operations", () => {
             statusCode: 500,
             error: "Something went wrong",
         });
-        cy.get("#titles_add").contains("Submit").click();
+        cy.get("#titles_add").contains("Save").click();
         cy.get("main div[class='alert alert-warning']").contains(
             "Something went wrong: Error: Internal Server Error"
         );
@@ -206,7 +206,7 @@ describe("Title CRUD operations", () => {
             statusCode: 201,
             body: erm_title,
         });
-        cy.get("#titles_add").contains("Submit").click();
+        cy.get("#titles_add").contains("Save").click();
         cy.get("main div[class='alert alert-info']").contains("Title created");
 
         // Add new related package (resource)
@@ -348,7 +348,7 @@ describe("Title CRUD operations", () => {
         cy.intercept("PUT", "/api/v1/erm/eholdings/local/titles/*", {
             statusCode: 500,
         });
-        cy.get("#titles_add").contains("Submit").click();
+        cy.get("#titles_add").contains("Save").click();
         cy.get("main div[class='alert alert-warning']").contains(
             "Something went wrong: Error: Internal Server Error"
         );
@@ -358,7 +358,7 @@ describe("Title CRUD operations", () => {
             statusCode: 200,
             body: erm_title,
         });
-        cy.get("#titles_add").contains("Submit").click();
+        cy.get("#titles_add").contains("Save").click();
         cy.get("main div[class='alert alert-info']").contains("Title updated");
     });
 

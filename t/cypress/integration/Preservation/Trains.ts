@@ -333,7 +333,7 @@ describe("Trains", () => {
             statusCode: 500,
             error: "Something went wrong",
         });
-        cy.get("#trains_add").contains("Submit").click();
+        cy.get("#trains_add").contains("Save").click();
         cy.get("main div[class='alert alert-warning']").contains(
             "Something went wrong: Error: Internal Server Error"
         );
@@ -343,7 +343,7 @@ describe("Trains", () => {
             statusCode: 201,
             body: train,
         });
-        cy.get("#trains_add").contains("Submit").click();
+        cy.get("#trains_add").contains("Save").click();
         cy.get("main div[class='alert alert-info']").contains("Train created");
     });
 
@@ -376,7 +376,7 @@ describe("Trains", () => {
         cy.intercept("PUT", "/api/v1/preservation/trains/*", {
             statusCode: 500,
         });
-        cy.get("#trains_add").contains("Submit").click();
+        cy.get("#trains_add").contains("Save").click();
         cy.get("main div[class='alert alert-warning']").contains(
             "Something went wrong: Error: Internal Server Error"
         );
@@ -390,7 +390,7 @@ describe("Trains", () => {
             statusCode: 200,
             body: [train],
         });
-        cy.get("#trains_add").contains("Submit").click();
+        cy.get("#trains_add").contains("Save").click();
         cy.get("main div[class='alert alert-info']").contains("Train updated");
     });
 

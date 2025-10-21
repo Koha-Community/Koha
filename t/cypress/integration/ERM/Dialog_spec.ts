@@ -90,21 +90,14 @@ describe("Dialog operations", () => {
             { force: true }
         );
 
-        cy.intercept("POST", "/api/v1/erm/eholdings/local/packages", {
-            statusCode: 201,
-            body: erm_package,
-        });
-        cy.intercept("GET", "/api/v1/erm/eholdings/local/packages*", {
-            statusCode: 200,
-            body: [erm_package],
-            headers: {
-                "X-Base-Total-Count": "1",
-                "X-Total-Count": "1",
-            },
-        }).as("get-packages");
-        cy.get("#packages_add").contains("Submit").click();
-        cy.wait("@get-packages");
-        cy.get("#packages_list").should("exist");
+        cy.intercept(
+            "GET",
+            "/api/v1/erm/eholdings/local/packages/*",
+            erm_package
+        ).as("get-package");
+        cy.get("#packages_add").contains("Save").click();
+        cy.wait("@get-package");
+        cy.get("#packages_show").should("exist");
         cy.get("main div[class='alert alert-info']").contains(
             "Package created"
         );
@@ -138,25 +131,25 @@ describe("Dialog operations", () => {
         });
         cy.intercept("PUT", "/api/v1/erm/eholdings/local/packages/*", {
             statusCode: 200,
-            body: [erm_package],
-        });
+            body: erm_package,
+        }).as("put-package");
         cy.intercept(
             "GET",
             "/api/v1/erm/eholdings/local/packages/*",
             erm_package
-        );
+        ).as("get-package");
         cy.visit("/cgi-bin/koha/erm/eholdings/local/packages");
 
         cy.get("#packages_list table tbody tr:first").contains("Edit").click();
-        cy.get("#packages_add").contains("Submit").click();
+        cy.wait("@get-package");
+        cy.get("#packages_add").contains("Save").click();
+        cy.wait("@put-package");
         cy.get("main div[class='alert alert-info']").contains(
             "Package updated"
         );
         cy.get("main div[class='alert alert-info']").should("have.length", 1);
 
-        cy.get("#packages_list table tbody tr:first")
-            .contains("Delete")
-            .click();
+        cy.get("#packages_show #toolbar").contains("Delete").click();
         cy.contains("No, do not delete").click();
         cy.get(".alert-warning.confirmation h1").should("not.exist");
         cy.get("main div[class='alert alert-info']").contains(
@@ -168,6 +161,8 @@ describe("Dialog operations", () => {
             statusCode: 204,
             body: null,
         });
+
+        cy.visit("/cgi-bin/koha/erm/eholdings/local/packages");
         cy.get("#packages_list table tbody tr:first")
             .contains("Delete")
             .click();

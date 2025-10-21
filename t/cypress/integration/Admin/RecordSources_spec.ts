@@ -40,7 +40,7 @@ describe("Record sources CRUD tests", () => {
             statusCode: 201,
             body: {},
         });
-        cy.get("#record_sources_add").contains("Submit").click();
+        cy.get("#record_sources_add").contains("Save").click();
 
         cy.get("main div[class='alert alert-info']").contains(
             "Record source created!"
@@ -178,7 +178,7 @@ describe("Record sources CRUD tests", () => {
                 can_be_edited: false,
             },
         });
-        cy.get("#record_sources_add").contains("Submit").click();
+        cy.get("#record_sources_add").contains("Save").click();
     });
 
     it("Delete", () => {

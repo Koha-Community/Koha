@@ -162,14 +162,14 @@ describe("Agreement CRUD operations", () => {
         cy.left_menu_active_item_is("Agreements");
 
         // Fill in the form for normal attributes
-        cy.get("#agreements_add").contains("Submit").click();
+        cy.get("#agreements_add").contains("Save").click();
         cy.get("input:invalid,textarea:invalid,select:invalid").should(
             "have.length",
             2
         );
         cy.get("#name").type(agreement.name);
         cy.get("#description").type(agreement.description);
-        cy.get("#agreements_add").contains("Submit").click();
+        cy.get("#agreements_add").contains("Save").click();
         cy.get("input:invalid,textarea:invalid,select:invalid").should(
             "have.length",
             1
@@ -208,7 +208,7 @@ describe("Agreement CRUD operations", () => {
         );
 
         cy.contains("Add new period").click();
-        cy.get("#agreements_add").contains("Submit").click();
+        cy.get("#agreements_add").contains("Save").click();
         cy.get("input:invalid,textarea:invalid,select:invalid").should(
             "have.length",
             1
@@ -295,7 +295,7 @@ describe("Agreement CRUD operations", () => {
         cy.intercept("POST", "/api/v1/erm/agreements", {
             statusCode: 500,
         });
-        cy.get("#agreements_add").contains("Submit").click();
+        cy.get("#agreements_add").contains("Save").click();
         cy.get("main div[class='alert alert-warning']").contains(
             "Something went wrong: Error: Internal Server Error"
         );
@@ -305,7 +305,7 @@ describe("Agreement CRUD operations", () => {
             statusCode: 201,
             body: agreement,
         });
-        cy.get("#agreements_add").contains("Submit").click();
+        cy.get("#agreements_add").contains("Save").click();
         cy.get("main div[class='alert alert-info']").contains(
             "Agreement created"
         );
@@ -493,7 +493,7 @@ describe("Agreement CRUD operations", () => {
                 delay: 1000,
             });
         }).as("edit-agreement");
-        cy.get("#agreements_add").contains("Submit").click();
+        cy.get("#agreements_add").contains("Save").click();
         cy.get("main div[class='modal_centered']").contains("Submitting...");
         cy.wait("@edit-agreement");
         cy.get("main div[class='alert alert-warning']").contains(
@@ -505,7 +505,7 @@ describe("Agreement CRUD operations", () => {
             statusCode: 200,
             body: agreement,
         });
-        cy.get("#agreements_add").contains("Submit").click();
+        cy.get("#agreements_add").contains("Save").click();
         cy.get("main div[class='alert alert-info']").contains(
             "Agreement updated"
         );

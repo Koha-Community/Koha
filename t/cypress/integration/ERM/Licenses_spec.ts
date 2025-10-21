@@ -76,14 +76,14 @@ describe("License CRUD operations", () => {
         cy.left_menu_active_item_is("Licenses");
 
         // Fill in the form for normal attributes
-        cy.get("#licenses_add").contains("Submit").click();
+        cy.get("#licenses_add").contains("Save").click();
         cy.get("input:invalid,textarea:invalid,select:invalid").should(
             "have.length",
             4
         );
         cy.get("#name").type(license.name);
         cy.get("#description").type(license.description);
-        cy.get("#licenses_add").contains("Submit").click();
+        cy.get("#licenses_add").contains("Save").click();
         cy.get("#type .vs__search").type(license.type + "{enter}", {
             force: true,
         });
@@ -139,7 +139,7 @@ describe("License CRUD operations", () => {
         cy.intercept("POST", "/api/v1/erm/licenses", {
             statusCode: 500,
         });
-        cy.get("#licenses_add").contains("Submit").click();
+        cy.get("#licenses_add").contains("Save").click();
         cy.get("main div[class='alert alert-warning']").contains(
             "Something went wrong: Error: Internal Server Error"
         );
@@ -149,7 +149,7 @@ describe("License CRUD operations", () => {
             statusCode: 201,
             body: license,
         });
-        cy.get("#licenses_add").contains("Submit").click();
+        cy.get("#licenses_add").contains("Save").click();
         cy.get("main div[class='alert alert-info']").contains(
             "License created"
         );
@@ -215,7 +215,7 @@ describe("License CRUD operations", () => {
         cy.intercept("PUT", "/api/v1/erm/licenses/*", {
             statusCode: 500,
         });
-        cy.get("#licenses_add").contains("Submit").click();
+        cy.get("#licenses_add").contains("Save").click();
         cy.get("main div[class='alert alert-warning']").contains(
             "Something went wrong: Error: Internal Server Error"
         );
@@ -225,7 +225,7 @@ describe("License CRUD operations", () => {
             statusCode: 200,
             body: license,
         });
-        cy.get("#licenses_add").contains("Submit").click();
+        cy.get("#licenses_add").contains("Save").click();
         cy.get("main div[class='alert alert-info']").contains(
             "License updated"
         );

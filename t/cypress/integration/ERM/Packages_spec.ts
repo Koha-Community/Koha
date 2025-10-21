@@ -66,7 +66,7 @@ describe("Package CRUD operations", () => {
         // Fill in the form for normal attributes
         let erm_package = cy.get_package();
 
-        cy.get("#packages_add").contains("Submit").click();
+        cy.get("#packages_add").contains("Save").click();
         cy.get("input:invalid,textarea:invalid,select:invalid").should(
             "have.length",
             1
@@ -89,7 +89,7 @@ describe("Package CRUD operations", () => {
         cy.intercept("POST", "/api/v1/erm/eholdings/local/packages", {
             statusCode: 500,
         });
-        cy.get("#packages_add").contains("Submit").click();
+        cy.get("#packages_add").contains("Save").click();
         cy.get("main div[class='alert alert-warning']").contains(
             "Something went wrong: Error: Internal Server Error"
         );
@@ -99,7 +99,7 @@ describe("Package CRUD operations", () => {
             statusCode: 201,
             body: erm_package,
         });
-        cy.get("#packages_add").contains("Submit").click();
+        cy.get("#packages_add").contains("Save").click();
         cy.get("main div[class='alert alert-info']").contains(
             "Package created"
         );
@@ -166,7 +166,7 @@ describe("Package CRUD operations", () => {
         cy.intercept("PUT", "/api/v1/erm/eholdings/local/packages/*", {
             statusCode: 500,
         });
-        cy.get("#packages_add").contains("Submit").click();
+        cy.get("#packages_add").contains("Save").click();
         cy.get("main div[class='alert alert-warning']").contains(
             "Something went wrong: Error: Internal Server Error"
         );
@@ -176,7 +176,7 @@ describe("Package CRUD operations", () => {
             statusCode: 200,
             body: erm_package,
         });
-        cy.get("#packages_add").contains("Submit").click();
+        cy.get("#packages_add").contains("Save").click();
         cy.get("main div[class='alert alert-info']").contains(
             "Package updated"
         );
