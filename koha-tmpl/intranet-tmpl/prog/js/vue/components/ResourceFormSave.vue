@@ -214,6 +214,7 @@ export default {
                     callback: () => {
                         saveOptionSelected.value = components.list;
                         if (
+                            props.instancedResource.stickyToolbar &&
                             props.instancedResource.stickyToolbar.includes(
                                 "Form"
                             )
@@ -229,6 +230,7 @@ export default {
                     callback: () => {
                         saveOptionSelected.value = components.show;
                         if (
+                            props.instancedResource.stickyToolbar &&
                             props.instancedResource.stickyToolbar.includes(
                                 "Form"
                             )
@@ -244,6 +246,7 @@ export default {
                     callback: () => {
                         saveOptionSelected.value = components.edit;
                         if (
+                            props.instancedResource.stickyToolbar &&
                             props.instancedResource.stickyToolbar.includes(
                                 "Form"
                             )
@@ -254,6 +257,7 @@ export default {
                 },
             };
             return Object.keys(buttonOptions).reduce((acc, key) => {
+                if (!components[key]) return acc;
                 if (key === "show" && !navigationOnFormSave) return acc;
                 if (components[key] === navigationOnFormSave) return acc;
                 return [buttonOptions[key], ...acc];

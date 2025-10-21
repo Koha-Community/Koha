@@ -40,6 +40,7 @@ export default {
                 newLabel: $__("New record source"),
             },
             props,
+            navigationOnFormSave: "RecordSourcesList",
             resourceAttrs: [
                 {
                     name: "record_source_id",
@@ -96,7 +97,7 @@ export default {
                             baseResource.setMessage(
                                 $__("Record source updated!")
                             );
-                            return recordResource
+                            return recordResource;
                         },
                         error => {}
                     );
@@ -104,7 +105,7 @@ export default {
                 return baseResource.apiClient.create(recordSource).then(
                     recordResource => {
                         baseResource.setMessage($__("Record source created!"));
-                        return recordResource
+                        return recordResource;
                     },
                     error => {}
                 );
