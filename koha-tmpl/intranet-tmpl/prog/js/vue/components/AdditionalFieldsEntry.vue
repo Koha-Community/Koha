@@ -125,7 +125,7 @@
 </template>
 
 <script>
-import { onBeforeMount, watch, ref } from "vue";
+import { onBeforeMount, watch, ref, reactive } from "vue";
 import { APIClient } from "../fetch/api-client.js";
 
 export default {
@@ -133,7 +133,7 @@ export default {
         const initialized = ref(false);
         const available_fields = ref([]);
         const av_options = ref([]);
-        const current_additional_fields_values = ref({});
+        const current_additional_fields_values = reactive({});
 
         onBeforeMount(() => {
             const client = APIClient.additional_fields;
@@ -154,7 +154,7 @@ export default {
         };
         const cloneField = (available_field, current, event) => {
             event.preventDefault();
-            current_additional_fields_values.value[
+            current_additional_fields_values[
                 available_field.extended_attribute_type_id
             ].push({
                 value: current.value,
@@ -231,7 +231,7 @@ export default {
                         // Iterate on available fields
                         newValue.forEach(available_field => {
                             // Initialize current field as empty array
-                            current_additional_fields_values.value[
+                            current_additional_fields_values[
                                 available_field.extended_attribute_type_id
                             ] = [];
 
@@ -264,7 +264,7 @@ export default {
                                                 ? av_value[0].label
                                                 : "";
                                         }
-                                        current_additional_fields_values.value[
+                                        current_additional_fields_values[
                                             existing_field_value.field_id
                                         ].push({
                                             value: existing_field_value.value,
@@ -278,7 +278,7 @@ export default {
                                 if (
                                     !available_field.authorised_value_category_name
                                 ) {
-                                    current_additional_fields_values.value[
+                                    current_additional_fields_values[
                                         available_field.extended_attribute_type_id
                                     ] = [
                                         {
