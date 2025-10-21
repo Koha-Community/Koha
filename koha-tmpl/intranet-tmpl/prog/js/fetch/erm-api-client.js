@@ -155,7 +155,8 @@ export class ERMAPIClient {
                 this.httpClient.get({
                     endpoint: "eholdings/local/titles/" + id,
                     headers: {
-                        "x-koha-embed": "resources,resources.package",
+                        "x-koha-embed":
+                            "resources,resources.package,extended_attributes,+strings",
                     },
                 }),
             delete: id =>

@@ -90,11 +90,16 @@ sub add {
 
                 my $resources            = delete $body->{resources}            // [];
                 my $create_linked_biblio = delete $body->{create_linked_biblio} // 0;
+                my $extended_attributes  = delete $body->{extended_attributes}  // [];
 
                 my $title = Koha::ERM::EHoldings::Title->new_from_api($body)
                     ->store( { create_linked_biblio => $create_linked_biblio } );
 
                 $title->resources($resources);
+
+                my @extended_attributes =
+                    map { { 'id' => $_->{field_id}, 'value' => $_->{value} } } @{$extended_attributes};
+                $title->extended_attributes( \@extended_attributes );
 
                 $c->res->headers->location( $c->req->url->to_string . '/' . $title->title_id );
                 return $c->render(
@@ -152,10 +157,14 @@ sub update {
 
                 my $resources            = delete $body->{resources}            // [];
                 my $create_linked_biblio = delete $body->{create_linked_biblio} // 0;
+                my $extended_attributes  = delete $body->{extended_attributes}  // [];
 
                 $title->set_from_api($body)->store( { create_linked_biblio => $create_linked_biblio } );
 
                 $title->resources($resources);
+                my @extended_attributes =
+                    map { { 'id' => $_->{field_id}, 'value' => $_->{value} } } @{$extended_attributes};
+                $title->extended_attributes( \@extended_attributes );
 
                 return $c->render(
                     status  => 200,

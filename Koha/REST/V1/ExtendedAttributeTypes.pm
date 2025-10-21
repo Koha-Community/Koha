@@ -53,6 +53,7 @@ sub _list {
         package   => 'erm_packages',
         order     => 'aqorders',
         vendor    => 'aqbooksellers:vendor',
+        title     => 'erm_titles'
     };
 
     my @tables;

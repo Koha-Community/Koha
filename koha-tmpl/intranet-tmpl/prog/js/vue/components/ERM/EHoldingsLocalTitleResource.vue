@@ -68,6 +68,7 @@ export default {
             props,
             additionalToolbarButtons,
             moduleStore: "ERMStore",
+            extendedAttributesResourceType: "title",
             resourceAttrs: [
                 {
                     name: "publication_title",
@@ -443,7 +444,7 @@ export default {
         const tableOptions = {
             url: baseResource.getResourceTableUrl(),
             options: {
-                embed: "resources.package",
+                embed: "resources.package,extended_attributes,+strings",
                 searchCols: [
                     { search: defaults.publication_title },
                     null,
@@ -491,6 +492,7 @@ export default {
             let title_id = title.title_id;
             delete title.title_id;
             delete title.biblio_id;
+            delete title._strings;
 
             // Cannot use the map/keepAttrs because of the reserved keyword 'package'
             title.resources.forEach(function (e) {

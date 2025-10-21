@@ -153,6 +153,8 @@
           type: string
           enum:
             - resources.package
+            - extended_attributes
+            - +strings
         collectionFormat: csv
       - $ref: "../swagger.yaml#/parameters/match"
       - $ref: "../swagger.yaml#/parameters/order_by"
@@ -278,6 +280,8 @@
           enum:
             - resources
             - resources.package
+            - extended_attributes
+            - +strings
         collectionFormat: csv
     responses:
       200:

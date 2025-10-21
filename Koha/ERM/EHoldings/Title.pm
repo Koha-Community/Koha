@@ -22,7 +22,7 @@ use MIME::Base64 qw( decode_base64 );
 
 use Koha::Database;
 
-use base qw(Koha::Object);
+use base qw(Koha::Object::Mixin::AdditionalFields Koha::Object);
 
 use C4::Biblio qw( AddBiblio TransformKohaToMarc GetMarcFromKohaField );
 
