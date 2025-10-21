@@ -17,10 +17,10 @@ return {
         ) && say_success( $out, "Added new permissions suggestions_delete" );
 
         $dbh->do(
-            q{INSERT IGNORE INTO user_permissions (borrowernumber, module_bit, code) SELECT borrowernumber, 12, 'suggestions_create' FROM borrowers WHERE flags & (1 << 2)}
+            q{INSERT IGNORE INTO user_permissions (borrowernumber, module_bit, code) SELECT borrowernumber, 12, 'suggestions_create' FROM borrowers WHERE flags & (1 << 12)}
         ) && say_success( $out, "Added new permissions suggestions_create to patrons with suggestions_manage" );
         $dbh->do(
-            q{INSERT IGNORE INTO user_permissions (borrowernumber, module_bit, code) SELECT borrowernumber, 12, 'suggestions_delete' FROM borrowers WHERE flags & (1 << 2)}
+            q{INSERT IGNORE INTO user_permissions (borrowernumber, module_bit, code) SELECT borrowernumber, 12, 'suggestions_delete' FROM borrowers WHERE flags & (1 << 12)}
         ) && say_success( $out, "Added new permissions suggestions_delete to patrons with suggestions_manage" );
 
     },
