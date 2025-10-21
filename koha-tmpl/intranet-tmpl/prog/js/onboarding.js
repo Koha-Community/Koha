@@ -130,7 +130,6 @@ $(document).ready(function () {
                     return $("#enrolmentperiod").val() === "";
                 },
                 enrollment_period: true,
-                // is_valid_date ($(#"enrolementperioddate").val());
             },
             dateofbirthrequired: {
                 digits: true,
