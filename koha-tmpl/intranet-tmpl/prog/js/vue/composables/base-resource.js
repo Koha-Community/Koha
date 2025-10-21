@@ -38,6 +38,7 @@ import {
  * @param {Function} resourceConfig.afterResourceFetch - A function to call after the resource is fetched. This can be used to edit resource data or fetch additional data
  * @param {Boolean} resourceConfig.embedded - A flag to indicate whether the resource is actually being used as a child component of another resource e.g. embedding a list of agreeements into EBSCO package agreements
  * @param {String} resourceConfig.extendedAttributesResourceType - The resource type for extended attributes, if applicable.
+ * @param {String} resourceConfig.extendedAttributesFieldGroup - The field group that you would like the additional fields to be displayed in.
  * @param {Function} resourceConfig.defaultToolbarButtons - A function to amend default buttons in the toolbar.
  * @param {Function} resourceConfig.additionalToolbarButtons - A function to add additional buttons to the toolbar.
  * @param {String} resourceConfig.formGroupsDisplayMode - The display mode for the form groups if not the default. Can be one of the following: "accordion", "tabs".
@@ -433,6 +434,9 @@ export function useBaseResource(resourceConfig) {
                 type: "additional_fields",
                 extended_attributes_resource_type:
                     resourceConfig.extendedAttributesResourceType,
+                ...(resourceConfig.extendedAttributesFieldGroup && {
+                    group: resourceConfig.extendedAttributesFieldGroup,
+                }),
             });
         }
         const groupings = attributesToConsider.reduce((acc, attr) => {
