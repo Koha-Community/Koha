@@ -329,4 +329,45 @@ describe("Form features", () => {
             cy.get("#name").should("have.value", vendor.name);
         });
     });
+    it("Should give three possible actions on saving", function () {
+        cy.visit("/cgi-bin/koha/acquisition/vendors/add");
+        cy.get("#toolbar button").contains("Save");
+        cy.get("#toolbar a.dropdown-toggle").click();
+        cy.get("#toolbar ul.dropdown-menu li:first").contains(
+            "Save and continue editing"
+        );
+        cy.get("#toolbar ul.dropdown-menu li")
+            .eq(1)
+            .contains("Save and return to list");
+
+        const vendor = cy.getVendor();
+
+        cy.intercept(
+            "GET",
+            new RegExp("/api/v1/acquisitions/vendors/(?!config$).+"),
+            vendor
+        ).as("get-vendor");
+        cy.get("#name").type(vendor.name);
+        cy.get("#toolbar button").contains("Save").click();
+        cy.wait("@get-vendor");
+        cy.get("#vendors_show");
+
+        cy.visit("/cgi-bin/koha/acquisition/vendors/add");
+        cy.get("#name").type(vendor.name);
+        cy.get("#toolbar a.dropdown-toggle").click();
+        cy.get("#toolbar ul.dropdown-menu li:first")
+            .contains("Save and continue editing")
+            .click();
+        cy.wait("@get-vendor");
+        cy.get("#vendors_add");
+
+        cy.visit("/cgi-bin/koha/acquisition/vendors/add");
+        cy.get("#name").type(vendor.name);
+        cy.get("#toolbar a.dropdown-toggle").click();
+        cy.get("#toolbar ul.dropdown-menu li")
+            .eq(1)
+            .contains("Save and return to list")
+            .click();
+        cy.get("#vendors_list");
+    });
 });
