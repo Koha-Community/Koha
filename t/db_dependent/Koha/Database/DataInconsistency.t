@@ -1,7 +1,7 @@
 use Modern::Perl;
 
 #use Test::NoWarnings;
-use Test::More tests => 4;
+use Test::More tests => 5;
 use Test::Warn;
 
 use Koha::Items;
@@ -368,4 +368,31 @@ subtest 'errors_in_marc' => sub {
     };
 
     $schema->storage->txn_rollback();
+};
+
+subtest 'nonexistent_AV' => sub {
+
+    plan tests => 2;
+
+    $schema->storage->txn_begin();
+
+    my $biblio_ok = $builder->build_sample_biblio;
+    my $item_ok   = $builder->build_sample_item( { biblionumber => $biblio_ok->biblionumber } );
+    my $biblio_ko = $builder->build_sample_biblio;
+    my $item_ko   = $builder->build_sample_item( { biblionumber => $biblio_ko->biblionumber } );
+
+    my $biblios = Koha::Biblios->search( { biblionumber => [ $biblio_ok->biblionumber, $biblio_ko->biblionumber ] } );
+
+    subtest 'ok' => sub {
+        plan tests => 1;
+        my @errors = Koha::Database::DataInconsistency->nonexistent_AV($biblios);
+        is_deeply( \@errors, [] );
+    };
+
+    subtest 'ccode not an AV' => sub {
+        plan tests => 1;
+        $item_ko->set( { withdrawn => -1 } )->store;
+        my @errors = Koha::Database::DataInconsistency->nonexistent_AV($biblios);
+        is( scalar(@errors), 1 );
+    };
 };
