@@ -122,13 +122,18 @@ sub invalid_item_type {
             }
         }
     } else {
-        my $biblioitems_with_invalid_itemtype =
-            Koha::Biblioitems->search( { biblionumber => $ids, itemtype => { not_in => \@itemtypes } } );
+        my $biblioitems_with_invalid_itemtype = Koha::Biblioitems->search(
+            {
+                biblionumber => $ids,
+                -and         => [ itemtype => { not_in => \@itemtypes }, itemtype => { '!=' => '' } ]
+            }
+        );
         if ( $biblioitems_with_invalid_itemtype->count ) {
             while ( my $biblioitem = $biblioitems_with_invalid_itemtype->next ) {
                 push @errors, __x(
-                    "Biblioitem with biblioitemnumber={biblioitemnumber} does not have a valid itemtype value",
+                    "Biblioitem with biblioitemnumber={biblioitemnumber} does not have a valid itemtype value ({itemtype})",
                     biblioitemnumber => $biblioitem->biblioitemnumber,
+                    itemtype         => $biblioitem->itemtype,
                 );
             }
         }
