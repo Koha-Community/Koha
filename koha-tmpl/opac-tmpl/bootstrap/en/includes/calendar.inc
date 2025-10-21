@@ -42,20 +42,6 @@
             altinput_dateformat = 'yyyy/mm/dd';
             delimiter = "-";
     }
-
-    function get_dateformat_str(dateformat) {
-        var dateformat_str;
-        if (dateformat == 'us') {
-            dateformat_str = 'mm/dd/yyyy';
-        } else if (dateformat == 'metric') {
-            dateformat_str = 'dd/mm/yyyy';
-        } else if (dateformat == 'iso') {
-            dateformat_str = 'yyyy-mm-dd';
-        } else if (dateformat == 'dmydot') {
-            dateformat_str = 'dd.mm.yyyy';
-        }
-        return dateformat_str;
-    }
 </script>
 [% Asset.js("lib/flatpickr/flatpickr.min.js") | $raw %]
 [% Asset.js("lib/maskito/maskito.core.js") | $raw %]
@@ -117,7 +103,6 @@
             new Maskito(instance.altInput, options);
         },
         onClose: function (selectedDates, dateText, instance) {
-            validate_date(dateText, instance);
             var thisInput = instance.input;
             if (thisInput.hasAttribute("data-start_for")) {
                 var endPicker = document.querySelector("#" + thisInput.dataset.start_for)._flatpickr;
@@ -127,39 +112,6 @@
     });
 
     var MSG_PLEASE_ENTER_A_VALID_DATE = _("Please enter a valid date (should match %s).");
-
-    function is_valid_date(date) {
-        // An empty string is considered as a valid date for convenient reasons.
-        if (date === "") return 1;
-        var dateformat = flatpickr_dateformat_string;
-        switch (dateformat_pref) {
-            case "us":
-                flatpickr_dateformat_string = "m/d/Y";
-                break;
-            case "metric":
-                flatpickr_dateformat_string = "d/m/Y";
-                break;
-            case "dmydot":
-                flatpickr_dateformat_string = "d.m.Y";
-                break;
-            default:
-                flatpickr_dateformat_string = "Y-m-d";
-        }
-        try {
-            flatpickr.parseDate(date, dateformat);
-        } catch (e) {
-            return 0;
-        }
-        return 1;
-    }
-
-    function validate_date(dateText, inst) {
-        if (!is_valid_date(dateText)) {
-            var dateformat_str = get_dateformat_str(dateformat_pref);
-            alert(MSG_PLEASE_ENTER_A_VALID_DATE.format(dateformat_str));
-            inst.clear();
-        }
-    }
 
     $(document).ready(function () {
         $(".flatpickr").each(function () {

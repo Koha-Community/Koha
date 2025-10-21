@@ -155,7 +155,6 @@
                 }
             },
             onClose: function( selectedDates, dateText, instance) {
-                validate_date( dateText, instance );
                 var thisInput = instance.input;
                 if ( thisInput.hasAttribute('data-date_to') ) {
                     var endPickerEl = document.querySelector("#"+thisInput.dataset.date_to);

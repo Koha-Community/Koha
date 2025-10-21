@@ -9,53 +9,6 @@ if (debug > 1) {
     );
 }
 
-function is_valid_date(date) {
-    // An empty string is considered as a valid date for convenient reasons.
-    if (date === "") return 1;
-    var dateformat = flatpickr_dateformat_string;
-    if (dateformat == "us") {
-        if (date.search(/^\d{2}\/\d{2}\/\d{4}($|\s)/) == -1) return 0;
-        dateformat = "m/d/Y";
-    } else if (dateformat == "metric") {
-        if (date.search(/^\d{2}\/\d{2}\/\d{4}($|\s)/) == -1) return 0;
-        dateformat = "d/m/Y";
-    } else if (dateformat == "iso") {
-        if (date.search(/^\d{4}-\d{2}-\d{2}($|\s)/) == -1) return 0;
-        dateformat = "Y-m-d";
-    } else if (dateformat == "dmydot") {
-        if (date.search(/^\d{2}\.\d{2}\.\d{4}($|\s)/) == -1) return 0;
-        dateformat = "d.m.Y";
-    }
-    try {
-        flatpickr.parseDate(date, dateformat);
-    } catch (e) {
-        return 0;
-    }
-    return 1;
-}
-
-function get_dateformat_str(dateformat) {
-    var dateformat_str;
-    if (dateformat == "us") {
-        dateformat_str = "mm/dd/yyyy";
-    } else if (dateformat == "metric") {
-        dateformat_str = "dd/mm/yyyy";
-    } else if (dateformat == "iso") {
-        dateformat_str = "yyyy-mm-dd";
-    } else if (dateformat == "dmydot") {
-        dateformat_str = "dd.mm.yyyy";
-    }
-    return dateformat_str;
-}
-
-function validate_date(dateText, inst) {
-    if (!is_valid_date(dateText)) {
-        var dateformat_str = get_dateformat_str(dateformat_pref);
-        alert(MSG_PLEASE_ENTER_A_VALID_DATE.format(dateformat_str));
-        inst.clear();
-    }
-}
-
 function Date_from_syspref(dstring) {
     var dateX = dstring.split(/[-/.]/);
     if (debug > 1 && sentmsg < 1) {
