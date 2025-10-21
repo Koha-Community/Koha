@@ -1921,14 +1921,12 @@
                 column = holdingst_table_settings.columns.find(c => c.columnname == '[% k | html %]');
                 column.is_hidden = 1;
                 column.cannot_be_toggled = 1;
-                column.force_visibility = 1;
             [% END %]
 
             [% FOR k IN hidden_columns_force.otherholdingst %]
                 column = otherholdingst_table_settings.columns.find(c => c.columnname == '[% k | html %]');
                 column.is_hidden = 1;
                 column.cannot_be_toggled = 1;
-                column.force_visibility = 1;
             [% END %]
 
             $("#holdingst").kohaTable(
