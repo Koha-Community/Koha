@@ -1,7 +1,8 @@
 use Modern::Perl;
 
 #use Test::NoWarnings;
-use Test::More tests => 3;
+use Test::More tests => 4;
+use Test::Warn;
 
 use Koha::Items;
 use Koha::Database::DataInconsistency;
@@ -260,6 +261,110 @@ subtest 'invalid_item_type' => sub {
             # Does not alert here, it's caught already in no_item_type
             is_deeply( \@errors, [] );
         };
+    };
+
+    $schema->storage->txn_rollback();
+};
+
+subtest 'errors_in_marc' => sub {
+
+    plan tests => 4;
+
+    $schema->storage->txn_begin();
+
+    my $biblio_ok = $builder->build_sample_biblio;
+    my $item_ok   = $builder->build_sample_item( { biblionumber => $biblio_ok->biblionumber } );
+    my $biblio_ko = $builder->build_sample_biblio;
+    my $item_ko   = $builder->build_sample_item( { biblionumber => $biblio_ko->biblionumber } );
+
+    my $biblios = Koha::Biblios->search( { biblionumber => [ $biblio_ok->biblionumber, $biblio_ko->biblionumber ] } );
+
+    my $itemtype         = $builder->build_object( { class => 'Koha::ItemTypes' } );
+    my $deleted_itemtype = $itemtype->itemtype;
+    $itemtype->delete;
+
+    subtest 'ok' => sub {
+        plan tests => 3;
+        my $errors = Koha::Database::DataInconsistency->errors_in_marc($biblios);
+        ok( !exists $errors->{decoding_errors} );
+        ok( !exists $errors->{ids_not_in_marc} );
+        ok( !exists $errors->{item_fields_in_marc} );
+    };
+
+    subtest 'ids_not_in_marc' => sub {
+        plan tests => 2;
+        $schema->storage->txn_begin();
+        my ( $biblio_tag,     $biblio_subfield )     = C4::Biblio::GetMarcFromKohaField("biblio.biblionumber");
+        my ( $biblioitem_tag, $biblioitem_subfield ) = C4::Biblio::GetMarcFromKohaField("biblioitems.biblioitemnumber");
+        my $record = $biblio_ko->metadata->record;
+        if ( my $field = $record->field($biblio_tag) ) {
+            $field->update( $biblio_subfield => '-42' );
+        }
+        $biblio_ko->metadata->metadata( $record->as_xml )->store;
+
+        my $errors = Koha::Database::DataInconsistency->errors_in_marc($biblios);
+        is_deeply(
+            $errors->{ids_not_in_marc},
+            [
+                sprintf q{Biblionumber %s has '%s' in %s$%s}, $biblio_ko->biblionumber, '-42', $biblio_tag,
+                $biblio_subfield
+            ]
+        );
+
+        $record = $biblio_ko->metadata->record;
+        if ( my $field = $record->field($biblioitem_tag) ) {
+            $field->update( $biblioitem_subfield => '-42' );
+        }
+        $biblio_ko->metadata->metadata( $record->as_xml )->store;
+
+        $errors = Koha::Database::DataInconsistency->errors_in_marc($biblios);
+        is_deeply(
+            $errors->{ids_not_in_marc},
+            [
+                sprintf(
+                    q{Biblionumber %s has '%s' in %s$%s}, $biblio_ko->biblionumber, '-42', $biblio_tag,
+                    $biblio_subfield
+                ),
+                sprintf(
+                    q{Biblionumber %s has biblioitemnumber '%s' but should be '%s' in %s$%s}, $biblio_ko->biblionumber,
+                    '-42', $biblio_ko->biblioitem->biblioitemnumber, $biblioitem_tag, $biblioitem_subfield
+                )
+            ]
+        );
+
+        $schema->storage->txn_rollback();
+    };
+
+    subtest 'item_fields_in_marc' => sub {
+        plan tests => 1;
+        $schema->storage->txn_begin();
+        my ( $item_tag, $item_subfield ) = C4::Biblio::GetMarcFromKohaField("items.itemnumber");
+        my $record = $biblio_ko->metadata->record;
+        $record->append_fields( MARC::Field->new( $item_tag, '', '', $item_subfield => 'booh' ) );
+        $biblio_ko->metadata->metadata( $record->as_xml )->store;
+
+        my $errors = Koha::Database::DataInconsistency->errors_in_marc($biblios);
+        is_deeply(
+            $errors->{item_fields_in_marc},
+            [ sprintf q{Biblionumber %s has item fields (%s) in the marc record}, $biblio_ko->biblionumber, $item_tag ]
+        );
+
+        $schema->storage->txn_rollback();
+    };
+
+    subtest 'decoding_errors' => sub {
+        plan tests => 2;
+        $schema->storage->txn_begin();
+        my $biblio_metadata = $biblio_ko->metadata;
+        $biblio_metadata->metadata('oops');
+        Koha::Object::store($biblio_metadata);
+        my $errors;
+        warning_like {
+            $errors = Koha::Database::DataInconsistency->errors_in_marc($biblios);
+        }
+        qr{parser error};
+        like( $errors->{decoding_errors}->[0], qr{Invalid data, cannot decode metadata object} );
+        $schema->storage->txn_rollback();
     };
 
     $schema->storage->txn_rollback();

@@ -159,8 +159,8 @@ sub errors_in_marc {
         }
     }
 
-    my ( $biblio_tag,      $biblio_subfield )     = C4::Biblio::GetMarcFromKohaField("biblio.biblionumber");
-    my ( $biblioitem_tag,  $biblioitem_subfield ) = C4::Biblio::GetMarcFromKohaField("biblioitems.biblioitemnumber");
+    my ( $biblio_tag,     $biblio_subfield )     = C4::Biblio::GetMarcFromKohaField("biblio.biblionumber");
+    my ( $biblioitem_tag, $biblioitem_subfield ) = C4::Biblio::GetMarcFromKohaField("biblioitems.biblioitemnumber");
     $biblios = Koha::Biblios->search( { biblionumber => $ids } );
     while ( my $biblio = $biblios->next ) {
         my $record = eval { $biblio->metadata->record; };
@@ -182,27 +182,26 @@ sub errors_in_marc {
             $biblioitemnumber = $record->subfield( $biblioitem_tag, $biblioitem_subfield );
         }
         if ( $biblionumber != $biblio->biblionumber ) {
-                push @{ $errors->{ids_not_in_marc} },
-                    __x(
-                    q{Biblionumber {biblionumber} has '{biblionumber_in_marc}' in {biblio_tag}${biblio_subfield}},
-                    biblionumber         => $biblio->biblionumber,
-                    biblionumber_in_marc => $biblionumber,
-                    biblio_tag           => $biblio_tag,
-                    biblio_subfield      => $biblio_subfield,
-                    );
+            push @{ $errors->{ids_not_in_marc} },
+                __x(
+                q{Biblionumber {biblionumber} has '{biblionumber_in_marc}' in {biblio_tag}${biblio_subfield}},
+                biblionumber         => $biblio->biblionumber,
+                biblionumber_in_marc => $biblionumber,
+                biblio_tag           => $biblio_tag,
+                biblio_subfield      => $biblio_subfield,
+                );
 
         }
         if ( $biblioitemnumber != $biblio->biblioitem->biblioitemnumber ) {
-                push @{ $errors->{ids_not_in_marc} },
-                    __x(
-                    q{Biblionumber {biblionumber} has biblioitemnumber '{biblioitemnumber}' but should be '{biblioitemnumber_in_marc}' in {biblioitem_tag}${biblioitem_subfield}},
-                    biblionumber             => $biblio->biblionumber,
-                    biblioitemnumber         => $biblio->biblioitem->biblioitemnumber,
-                    biblioitemnumber_in_marc => $biblionumber,
-                    biblioitem_tag           => $biblioitem_tag,
-                    biblioitem_subfield      => $biblioitem_subfield,
-                    );
-            }
+            push @{ $errors->{ids_not_in_marc} },
+                __x(
+                q{Biblionumber {biblionumber} has biblioitemnumber '{biblioitemnumber_in_marc}' but should be '{biblioitemnumber}' in {biblioitem_tag}${biblioitem_subfield}},
+                biblionumber             => $biblio->biblionumber,
+                biblioitemnumber_in_marc => $biblionumber,
+                biblioitemnumber         => $biblio->biblioitem->biblioitemnumber,
+                biblioitem_tag           => $biblioitem_tag,
+                biblioitem_subfield      => $biblioitem_subfield,
+                );
         }
     }
     if (@item_fields_in_marc) {
