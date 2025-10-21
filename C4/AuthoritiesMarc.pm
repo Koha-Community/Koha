@@ -1080,7 +1080,7 @@ sub BuildSummary {
             my $type = 'seefrom';
             $type = ( $marc21controlrefs{ substr $field->subfield('w'), 0, 1 } || '' ) if ( $field->subfield('w') );
             if ( $type eq 'notapplicable' ) {
-                $type = substr $field->subfield('w'), 2, 1;
+                $type = substr $field->subfield('w'), 2, 1 if length( $field->subfield('w') ) > 2;
                 $type = 'earlier' if $type && $type ne 'n';
             }
             if ( $type eq 'subfi' ) {
@@ -1103,7 +1103,7 @@ sub BuildSummary {
             my $type = 'seealso';
             $type = ( $marc21controlrefs{ substr $field->subfield('w'), 0, 1 } || '' ) if ( $field->subfield('w') );
             if ( $type eq 'notapplicable' ) {
-                $type = substr $field->subfield('w'), 2, 1;
+                $type = substr $field->subfield('w'), 2, 1 if length( $field->subfield('w') ) > 2;
                 $type = 'earlier' if $type && $type ne 'n';
             }
             if ( $type eq 'subfi' ) {
