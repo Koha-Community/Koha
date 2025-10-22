@@ -569,7 +569,7 @@
             $('form[name="f"]').on("submit", function(){
                 // Add the checkboxes to the DOM before we submit the form
                 var form = this;
-                var checkboxes = patron_table.$('input:checkbox:checked').serializeArray();
+                var checkboxes = $(patron_table).find('input:checkbox:checked').serializeArray();
                 $.each(checkboxes, function(){
                     let borrowernumber = this.value;
                     if(!$(form).find('input[name="borrowernumber"][value="'+borrowernumber+'"]').length){
