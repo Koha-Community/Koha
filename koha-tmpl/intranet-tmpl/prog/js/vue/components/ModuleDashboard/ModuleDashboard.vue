@@ -11,6 +11,12 @@
     </div>
     <div class="row">
         <div class="col-md-6 dashboard-left-col">
+            <div
+                v-if="selectedWidgetsLeft.length === 0"
+                class="empty-placeholder"
+            >
+                {{ $__("Drop widgets here") }}
+            </div>
             <draggable
                 :ghost="true"
                 @drag="handleDrag"
@@ -18,6 +24,12 @@
                 :list="selectedWidgetsLeft"
                 group="widgets"
                 handle=".widget-drag-handle"
+                :class="[
+                    'dragArea',
+                    'list-group',
+                    'w-full',
+                    { 'empty-drag-area': selectedWidgetsLeft.length === 0 },
+                ]"
             >
                 <component
                     v-for="(widget, index) in selectedWidgetsLeft"
@@ -32,6 +44,12 @@
             </draggable>
         </div>
         <div class="col-md-6 dashboard-right-col">
+            <div
+                v-if="selectedWidgetsRight.length === 0"
+                class="empty-placeholder"
+            >
+                {{ $__("Drop widgets here") }}
+            </div>
             <draggable
                 :ghost="true"
                 @drag="handleDrag"
@@ -39,6 +57,12 @@
                 :list="selectedWidgetsRight"
                 group="widgets"
                 handle=".widget-drag-handle"
+                :class="[
+                    'dragArea',
+                    'list-group',
+                    'w-full',
+                    { 'empty-drag-area': selectedWidgetsRight.length === 0 },
+                ]"
             >
                 <component
                     v-for="(widget, index) in selectedWidgetsRight"
@@ -252,5 +276,32 @@ export default {
 
 .sortable-ghost.sortable-chosen > * {
     visibility: hidden;
+}
+.dashboard-right-col,
+.dashboard-left-col {
+    position: relative;
+}
+
+.empty-placeholder {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    min-height: 150px;
+    background-color: #fafafa;
+    color: #999;
+    font-style: italic;
+    font-size: 1.2rem;
+    pointer-events: none;
+    border: 2px dotted #ccc;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+    z-index: 2;
+}
+
+.empty-drag-area {
+    min-height: 150px;
 }
 </style>
