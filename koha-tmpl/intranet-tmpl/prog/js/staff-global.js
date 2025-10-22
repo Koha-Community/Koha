@@ -223,11 +223,10 @@ $(document).ready(function () {
             );
             $("#lastborrower-window").css("display", "inline-flex");
 
-            previous_patrons.reverse();
             for (i in previous_patrons) {
                 p = previous_patrons[i];
                 const el = `<li><a class="dropdown-item" href="/cgi-bin/koha/circ/circulation.pl?borrowernumber=${p["borrowernumber"]}">${p["name"]} (${p["card"]})</a></li>`;
-                $("#lastBorrowerList").prepend(el);
+                $("#lastBorrowerList").append(el);
             }
         }
 
