@@ -1,7 +1,7 @@
 <template>
     <WidgetWrapper v-bind="widgetWrapperProps">
         <template #default>
-            <ul>
+            <ul class="count-list">
                 <li v-for="def in countDefinitions" :key="def.name">
                     <strong>
                         <router-link v-if="def.page" :to="{ name: def.page }">
@@ -132,3 +132,26 @@ export default {
     },
 };
 </script>
+<style scoped>
+.count-list {
+    list-style: none;
+    padding: 0;
+    display: flex;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+}
+.count-list li {
+    background: #eee;
+    padding: 0.3em 0.8em;
+    border-radius: 12px;
+}
+.inactive-link {
+    color: #888;
+}
+.count-list a {
+    text-decoration: none;
+}
+.count-list a:hover {
+    text-decoration: underline;
+}
+</style>
