@@ -27,6 +27,7 @@ use Koha::Acquisition::Bookseller;
 
 use base qw(Koha::Object::Mixin::AdditionalFields Koha::Object);
 
+use Koha::ERM::Agreement::Period;
 use Koha::ERM::Agreement::Periods;
 use Koha::ERM::Agreement::Licenses;
 use Koha::ERM::Agreement::Relationships;
@@ -60,7 +61,13 @@ sub periods {
                 $self->periods->delete;
 
                 for my $period (@$periods) {
-                    $self->_result->add_to_erm_agreement_periods($period);
+                    my $extended_attributes = delete $period->{extended_attributes} // [];
+                    my @extended_attributes =
+                        map { { 'id' => $_->{field_id}, 'value' => $_->{value} } } @{$extended_attributes};
+                    $period->{agreement_id} = $self->agreement_id;
+
+                    my $stored_period = Koha::ERM::Agreement::Period->new($period)->store;
+                    $stored_period->extended_attributes( \@extended_attributes );
                 }
             }
         );

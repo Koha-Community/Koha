@@ -55,16 +55,17 @@ sub to_api {
     my ( $self, $params ) = @_;
 
     my $table_to_resource = {
-        'accountlines:credit'  => 'credit',
-        'accountlines:debit'   => 'debit',
-        'aqbasket'             => 'basket',
-        'aqinvoices'           => 'invoice',
-        'erm_licenses'         => 'license',
-        'erm_agreements'       => 'agreement',
-        'erm_packages'         => 'package',
-        'aqorders'             => 'order',
-        'aqbooksellers:vendor' => 'vendor',
-        'erm_titles'           => 'title'
+        'accountlines:credit'   => 'credit',
+        'accountlines:debit'    => 'debit',
+        'aqbasket'              => 'basket',
+        'aqinvoices'            => 'invoice',
+        'erm_licenses'          => 'license',
+        'erm_agreements'        => 'agreement',
+        'erm_packages'          => 'package',
+        'aqorders'              => 'order',
+        'aqbooksellers:vendor'  => 'vendor',
+        'erm_titles'            => 'title',
+        'erm_agreement_periods' => 'agreement_period'
     };
 
     my $json = $self->SUPER::to_api($params);

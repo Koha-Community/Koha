@@ -169,6 +169,7 @@ export default {
                         type: "table",
                         columnData: "periods",
                         hidden: agreement => !!agreement.periods?.length,
+                        includeAdditionalFields: true,
                         columns: [
                             {
                                 name: $__("Period start"),
@@ -211,6 +212,7 @@ export default {
                                 ended_on: null,
                                 cancellation_deadline: null,
                                 notes: null,
+                                extended_attributes: [],
                             },
                         },
                     },
@@ -253,6 +255,12 @@ export default {
                             type: "text",
                             label: $__("Notes"),
                             indexRequired: true,
+                        },
+                        {
+                            name: "additional_fields",
+                            type: "additional_fields",
+                            extended_attributes_resource_type:
+                                "agreement_period",
                         },
                     ],
                     hideIn: ["List"],
@@ -797,8 +805,12 @@ export default {
             }
 
             agreement.periods = agreement.periods.map(
-                ({ agreement_id, agreement_period_id, ...keepAttrs }) =>
-                    keepAttrs
+                ({
+                    agreement_id,
+                    agreement_period_id,
+                    _strings,
+                    ...keepAttrs
+                }) => keepAttrs
             );
 
             agreement.user_roles = agreement.user_roles.map(

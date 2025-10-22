@@ -21,7 +21,7 @@ export class ERMAPIClient {
                     endpoint: "agreements/" + id,
                     headers: {
                         "x-koha-embed":
-                            "periods,user_roles,user_roles.patron,agreement_licenses,agreement_licenses.license,agreement_relationships,agreement_relationships.related_agreement,documents,agreement_packages,agreement_packages.package,vendor,extended_attributes,+strings",
+                            "periods,periods.extended_attributes,periods+strings,user_roles,user_roles.patron,agreement_licenses,agreement_licenses.license,agreement_relationships,agreement_relationships.related_agreement,documents,agreement_packages,agreement_packages.package,vendor,extended_attributes,+strings",
                     },
                 }),
             getAll: (query, params) =>

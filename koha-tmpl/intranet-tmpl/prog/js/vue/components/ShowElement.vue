@@ -55,7 +55,7 @@
             <table>
                 <thead>
                     <th
-                        v-for="column in attribute.columns"
+                        v-for="column in tableColumns"
                         :key="column.name + 'head'"
                     >
                         {{ column.name }}
@@ -67,7 +67,7 @@
                         v-bind:key="counter"
                     >
                         <td
-                            v-for="dataColumn in attribute.columns"
+                            v-for="dataColumn in tableColumns"
                             :key="dataColumn.name + 'data'"
                         >
                             <template
@@ -196,6 +196,30 @@ export default {
             );
             return option.description;
         });
+        const tableColumns = computed(() => {
+            const tableData = props.resource[attribute.value.columnData];
+            const columns = attribute.value.columns;
+            if (attribute.value.includeAdditionalFields && tableData?.length) {
+                const additionalFieldColumns = tableData.reduce((acc, curr) => {
+                    if (curr._strings?.additional_field_values.length) {
+                        curr._strings.additional_field_values.forEach(av => {
+                            if (!acc.includes(av.field_label)) {
+                                acc.push(av.field_label);
+                            }
+                            curr[av.field_label] = av.value_str;
+                        });
+                    }
+                    return acc;
+                }, []);
+                additionalFieldColumns.forEach(col => {
+                    columns.push({
+                        name: col,
+                        value: col,
+                    });
+                });
+            }
+            return columns;
+        });
 
         return {
             ...baseElement,
@@ -203,6 +227,7 @@ export default {
             attribute,
             formatValue,
             radioOptionText,
+            tableColumns,
         };
     },
     props: {
