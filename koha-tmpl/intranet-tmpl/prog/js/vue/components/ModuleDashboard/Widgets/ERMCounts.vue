@@ -1,29 +1,18 @@
 <template>
     <WidgetWrapper v-bind="widgetWrapperProps">
         <template #default>
-            <p class="text-left">
-                {{ $__("There are") }}
-                <template
-                    v-for="(definition, index) in countDefinitions"
-                    :key="index"
-                >
+            <ul>
+                <li v-for="def in countDefinitions" :key="def.name">
                     <strong>
-                        <router-link
-                            v-if="definition.page"
-                            :to="{ name: definition.page }"
-                        >
-                            {{ createCountText(definition) }}
+                        <router-link v-if="def.page" :to="{ name: def.page }">
+                            {{ createCountText(def) }}
                         </router-link>
-                        <span v-else class="inactive-link">
-                            {{ createCountText(definition) }}
-                        </span>
+                        <span v-else class="inactive-link">{{
+                            createCountText(def)
+                        }}</span>
                     </strong>
-                    <template v-if="index < countDefinitions.length - 1"
-                        >,&nbsp;</template
-                    >
-                    <template v-else>.</template>
-                </template>
-            </p>
+                </li>
+            </ul>
         </template>
     </WidgetWrapper>
 </template>
@@ -61,51 +50,51 @@ export default {
             {
                 page: "AgreementsList",
                 name: "agreements_count",
-                labelSingular: __("agreement"),
-                labelPlural: __("agreements"),
+                labelSingular: __("1 agreement"),
+                labelPlural: __("%s agreements"),
                 count: 0,
             },
             {
                 page: "LicensesList",
                 name: "licenses_count",
-                labelSingular: __("license"),
-                labelPlural: __("licenses"),
+                labelSingular: __("1 license"),
+                labelPlural: __("%s licenses"),
                 count: 0,
             },
             {
                 name: "documents_count",
-                labelSingular: __("document"),
-                labelPlural: __("documents"),
+                labelSingular: __("1 document"),
+                labelPlural: __("%s documents"),
                 count: 0,
             },
             {
                 page: "EHoldingsLocalPackagesList",
                 name: "eholdings_packages_count",
-                labelSingular: __("local package"),
-                labelPlural: __("local packages"),
+                labelSingular: __("1 local package"),
+                labelPlural: __("%s local packages"),
                 count: 0,
             },
             {
                 page: "EHoldingsLocalTitlesList",
                 name: "eholdings_titles_count",
-                labelSingular: __("local title"),
-                labelPlural: __("local titles"),
+                labelSingular: __("1 local title"),
+                labelPlural: __("%s local titles"),
                 count: 0,
             },
             {
                 page: "UsageStatisticsDataProvidersList",
                 name: "usage_data_providers_count",
-                labelSingular: __("usage data provider"),
-                labelPlural: __("usage data providers"),
+                labelSingular: __("1 usage data provider"),
+                labelPlural: __("%s usage data providers"),
                 count: 0,
             },
         ]);
 
         const createCountText = definition => {
             if (definition.count === 1) {
-                return `${definition.count} ${definition.labelSingular}`;
+                return definition.labelSingular;
             } else {
-                return `${definition.count} ${definition.labelPlural}`;
+                return definition.labelPlural.format(definition.count);
             }
         };
 

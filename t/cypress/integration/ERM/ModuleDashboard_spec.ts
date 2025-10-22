@@ -103,8 +103,15 @@ describe("ERM Module Dashboard", () => {
             "Loading..."
         );
         cy.wait("@getCounts");
+        cy.get(".widget#ERMCounts .widget-content").contains("1 agreement");
+        cy.get(".widget#ERMCounts .widget-content").contains("5 licenses");
+        cy.get(".widget#ERMCounts .widget-content").contains("0 documents");
         cy.get(".widget#ERMCounts .widget-content").contains(
-            "There are 1 agreement, 5 licenses, 0 documents, 0 local packages, 0 local titles, 1 usage data provider."
+            "0 local packages"
+        );
+        cy.get(".widget#ERMCounts .widget-content").contains("0 local titles");
+        cy.get(".widget#ERMCounts .widget-content").contains(
+            "1 usage data provider"
         );
 
         //Move to the right
