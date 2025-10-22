@@ -52,7 +52,7 @@ export default {
 
         function get_job_status(status) {
             const status_lib = job_statuses.find(s => s._id === status);
-            return status_lib ? status_lib._str : status;
+            return status_lib ? status_lib._str : $__("Unknown status");
         }
 
         function getTableColumns() {
