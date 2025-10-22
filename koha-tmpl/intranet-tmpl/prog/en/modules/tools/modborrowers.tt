@@ -471,12 +471,12 @@
                     </div>
                 [% END %]
             </form>
+        [% ELSIF ( op == 'show_results' ) %]
+            [% PROCESS show_patron_list %]
+            <p>
+                <a href="/cgi-bin/koha/tools/modborrowers.pl" title="New batch patrons modification">New batch patron modification</a>
+            </p>
         [% END %]
-    [% END %]
-    [% IF ( op == 'show_results' ) %]
-        <p>
-            <a href="/cgi-bin/koha/tools/modborrowers.pl" title="New batch patrons modification">New batch patron modification</a>
-        </p>
     [% END %]
 [% END %]
 
