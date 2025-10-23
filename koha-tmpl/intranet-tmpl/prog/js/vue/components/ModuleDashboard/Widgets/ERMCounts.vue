@@ -50,52 +50,56 @@ export default {
             {
                 page: "AgreementsList",
                 name: "agreements_count",
-                labelSingular: __("1 agreement"),
-                labelPlural: __("%s agreements"),
+                i18nLabel: count =>
+                    __n("%s agreement", "%s agreements", count).format(count),
                 count: 0,
             },
             {
                 page: "LicensesList",
                 name: "licenses_count",
-                labelSingular: __("1 license"),
-                labelPlural: __("%s licenses"),
+                i18nLabel: count =>
+                    __n("%s license", "%s licenses", count).format(count),
                 count: 0,
             },
             {
                 name: "documents_count",
-                labelSingular: __("1 document"),
-                labelPlural: __("%s documents"),
+                i18nLabel: count =>
+                    __n("%s document", "%s documents", count).format(count),
                 count: 0,
             },
             {
                 page: "EHoldingsLocalPackagesList",
                 name: "eholdings_packages_count",
-                labelSingular: __("1 local package"),
-                labelPlural: __("%s local packages"),
+                i18nLabel: count =>
+                    __n("%s local package", "%s local packages", count).format(
+                        count
+                    ),
                 count: 0,
             },
             {
                 page: "EHoldingsLocalTitlesList",
                 name: "eholdings_titles_count",
-                labelSingular: __("1 local title"),
-                labelPlural: __("%s local titles"),
+                i18nLabel: count =>
+                    __n("%s local title", "%s local titles", count).format(
+                        count
+                    ),
                 count: 0,
             },
             {
                 page: "UsageStatisticsDataProvidersList",
                 name: "usage_data_providers_count",
-                labelSingular: __("1 usage data provider"),
-                labelPlural: __("%s usage data providers"),
+                i18nLabel: count =>
+                    __n(
+                        "%s usage data provider",
+                        "%s usage data providers",
+                        count
+                    ).format(count),
                 count: 0,
             },
         ]);
 
         const createCountText = definition => {
-            if (definition.count === 1) {
-                return definition.labelSingular;
-            } else {
-                return definition.labelPlural.format(definition.count);
-            }
+            return definition.i18nLabel(definition.count);
         };
 
         async function getCounts() {
