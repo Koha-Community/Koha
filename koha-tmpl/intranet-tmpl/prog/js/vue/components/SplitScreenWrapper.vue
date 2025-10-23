@@ -24,8 +24,18 @@ export default {
         splitScreenGroupings: Array,
     },
     setup(props) {
+        const getPaneSortOrder = group => {
+            return props.splitScreenGroupings.findIndex(
+                grp => grp.name === group
+            );
+        };
         const determineGroupsForPane = pane => {
-            return props.fieldList.filter(group => group.splitPane == pane);
+            const groups = props.fieldList.filter(
+                group => group.splitPane == pane
+            );
+            return groups.sort(
+                (a, b) => getPaneSortOrder(a.name) - getPaneSortOrder(b.name)
+            );
         };
         const panesToDisplay = computed(() => {
             return props.splitScreenGroupings
