@@ -23,6 +23,7 @@ use File::Spec;
 use IO::File;
 use Net::SFTP::Foreign;
 use Try::Tiny;
+use JSON qw( decode_json encode_json );
 
 use base qw(Koha::File::Transport);
 
@@ -47,12 +48,14 @@ sub _connect {
     # String to capture STDERR output
     $self->{stderr_capture} = '';
     open my $stderr_fh, '>', \$self->{stderr_capture} or die "Can't open scalar as filehandle: $!";
+
+    # Use key-based auth if available, otherwise password auth
+    my $key_file = $self->_locate_key_file;
     $self->{connection} = Net::SFTP::Foreign->new(
-        host     => $self->host,
-        port     => $self->port,
-        user     => $self->user_name,
-        password => $self->plain_text_password,
-        $self->_locate_key_file ? ( key_path => $self->_locate_key_file ) : (),
+        host => $self->host,
+        port => $self->port,
+        user => $self->user_name,
+        $key_file ? ( key_path => $key_file ) : ( password => scalar $self->plain_text_password ),
         timeout   => $self->DEFAULT_TIMEOUT,
         stderr_fh => $stderr_fh,
         more      => [qw( -v -o StrictHostKeyChecking=no)],

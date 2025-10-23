@@ -46,7 +46,7 @@ sub _connect {
         Passive => $self->passive ? 1 : 0,
     ) or return $self->_abort_operation($operation);
 
-    $self->{connection}->login( $self->user_name, $self->plain_text_password )
+    $self->{connection}->login( $self->user_name, scalar $self->plain_text_password )
         or return $self->_abort_operation($operation);
 
     $self->add_message(
