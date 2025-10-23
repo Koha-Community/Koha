@@ -90,8 +90,8 @@
 [% END %]
 [%- BLOCK maybe_span -%]
     [%- IF no_html -%]
-        [%- content | html -%]
+        [%- content | $raw #filtered before passed in -%]
     [%- ELSE -%]
-        <span class="[% field_name | html %]">[%- content | html -%]</span>
+        <span class="[% field_name | html %]">[%- content | $raw #filtered before passed in -%]</span>
     [%- END -%]
 [%- END -%]
