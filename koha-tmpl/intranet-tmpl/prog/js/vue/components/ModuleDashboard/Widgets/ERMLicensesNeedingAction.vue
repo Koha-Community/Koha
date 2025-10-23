@@ -180,6 +180,7 @@ export default {
                 dom: "t",
                 embed: "vendor,extended_attributes,+strings",
                 pageLength: settings.value.per_page || 5,
+                processing: false,
             },
             url: "/api/v1/erm/licenses",
             default_filters: settingsToQueryParams(settings.value),

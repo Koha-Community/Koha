@@ -108,6 +108,7 @@ export default {
                 dom: "t",
                 pageLength: 5,
                 order: [2, "desc"],
+                processing: false,
             },
             url: "/api/v1/jobs",
             default_filters: {
