@@ -251,7 +251,7 @@
                         <tbody>
                             [% FOREACH borrower IN borrowers %]
                                 <tr>
-                                    <td [% IF op != 'show' %]class="NoVisible"[% END %]>
+                                    <td>
                                         <input type="checkbox" name="borrowernumber" value="[% borrower.borrowernumber | html %]" checked="checked" />
                                     </td>
                                     <td><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% borrower.borrowernumber | uri %]">[% borrower.cardnumber | html %]</a></td>
@@ -484,18 +484,47 @@
     <script>
         var patron_attributes_lib = new Array();
         var patron_attributes_values = new Array();
-        var table_settings = [% TablesSettings.GetTableSettings( 'tools', 'batch_patron_modification', 'borrowerst', 'json' ) | $raw %];
 
-        [% FOREACH attrh IN attributes_header %]
-            table_settings["columns"].push({
-                columname: "[% attrh.attribute | html %]",
-                cannot_be_modified: 0,
-                cannot_be_toggled: 0,
-                is_hidden: 0
-            });
-        [% END %]
         $(document).ready(function() {
             [% IF borrowers %]
+
+                var table_settings = [% TablesSettings.GetTableSettings( 'tools', 'batch_patron_modification', 'borrowerst', 'json' ) | $raw %];
+
+                [% FOREACH attrh IN attributes_header %]
+                    table_settings["columns"].push({
+                        columname: "[% attrh.attribute | html %]",
+                        cannot_be_modified: 0,
+                        cannot_be_toggled: 0,
+                        is_hidden: 0
+                    });
+                [% END %]
+
+                let selections_column = table_settings.columns.find(c => c.columnname == 'batch_patron_edit_selections');
+                selections_column.cannot_be_modified = 1;
+                selections_column.cannot_be_toggled = 1;
+                selections_column.force_visibility = 1;
+                [% IF op == 'show' %]
+                    selections_column.is_hidden = 0;
+                [% ELSE %]
+                    selections_column.is_hidden = 1;
+                [% END %]
+
+                [% UNLESS CanUpdatePasswordExpiration %]
+                    let password_expiration_date_column = table_settings.columns.find(c => c.columnname == 'batch_patron_edit_password_expiration_date');
+                    password_expiration_date_column.is_hidden = 1;
+                    password_expiration_date_column.cannot_be_modified = 1;
+                    password_expiration_date_column.cannot_be_toggled = 1;
+                    password_expiration_date_column.force_visibility = 1;
+                [% END %]
+
+                [% UNLESS CanUpdateProtectPatron %]
+                    let protected_column = table_settings.columns.find(c => c.columnname == 'batch_patron_edit_protected');
+                    protected_column.is_hidden = 1;
+                    protected_column.cannot_be_modified = 1;
+                    protected_column.cannot_be_toggled = 1;
+                    protected_column.force_visibility = 1;
+                [% END %]
+
                 let patron_table = $("#borrowerst").kohaTable(
                     {
                         order: [[1, "asc"]],
