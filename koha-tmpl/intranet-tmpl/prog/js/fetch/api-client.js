@@ -179,28 +179,29 @@ const createClientProxy = loader => {
     return /** @type {T} */ (createProxy(client => client));
 };
 
-const apiClientFiles = {
-    article_request: "./article-request-api-client.js",
-    authorised_values: "./authorised-values-api-client.js",
-    acquisition: "./acquisition-api-client.js",
-    cataloguing: "./cataloguing-api-client.js",
-    circulation: "./circulation-api-client.js",
-    club: "./club-api-client.js",
-    cover_image: "./cover-image-api-client.js",
-    localization: "./localization-api-client.js",
-    patron: "./patron-api-client.js",
-    patron_list: "./patron-list-api-client.js",
-    recall: "./recall-api-client.js",
-    sysprefs: "./system-preferences-api-client.js",
-    ticket: "./ticket-api-client.js",
-    default: "./default-api-client.js",
+export const APIClient = {
+    article_request: createClientProxy(
+        () => import("./article-request-api-client.js")
+    ),
+    authorised_values: createClientProxy(
+        () => import("./authorised-values-api-client.js")
+    ),
+    acquisition: createClientProxy(() => import("./acquisition-api-client.js")),
+    cataloguing: createClientProxy(() => import("./cataloguing-api-client.js")),
+    circulation: createClientProxy(() => import("./circulation-api-client.js")),
+    club: createClientProxy(() => import("./club-api-client.js")),
+    cover_image: createClientProxy(() => import("./cover-image-api-client.js")),
+    localization: createClientProxy(
+        () => import("./localization-api-client.js")
+    ),
+    patron: createClientProxy(() => import("./patron-api-client.js")),
+    patron_list: createClientProxy(() => import("./patron-list-api-client.js")),
+    recall: createClientProxy(() => import("./recall-api-client.js")),
+    sysprefs: createClientProxy(
+        () => import("./system-preferences-api-client.js")
+    ),
+    ticket: createClientProxy(() => import("./ticket-api-client.js")),
+    default: createClientProxy(() => import("./default-api-client.js")),
 };
-
-export const APIClient = Object.fromEntries(
-    Object.entries(apiClientFiles).map(([key, path]) => [
-        key,
-        createClientProxy(() => import(path)),
-    ])
-);
 
 export default APIClient;
