@@ -163,9 +163,8 @@ export default {
             splitScreenGroupings: [
                 { name: "Details", pane: 1 },
                 { name: "Aliases", pane: 1 },
-                { name: "Contacts", pane: 2 },
+                { name: "Ordering information", pane: 2 },
                 { name: "Interfaces", pane: 2 },
-                { name: "Ordering information", pane: 1 },
             ],
             additionalToolbarButtons,
             defaultToolbarButtons,
@@ -283,66 +282,6 @@ export default {
                     name: "contacts",
                     type: "relationshipWidget",
                     group: $__("Contacts"),
-                    showElement: {
-                        type: "table",
-                        columnData: "contacts",
-                        hidden: vendor => !!vendor.contacts?.length,
-                        columns: [
-                            {
-                                name: $__("Name"),
-                                value: "name",
-                            },
-                            {
-                                name: $__("Position"),
-                                value: "role",
-                            },
-                            {
-                                name: $__("Phone"),
-                                value: "phone",
-                            },
-                            {
-                                name: $__("Alternative phone"),
-                                value: "altphone",
-                            },
-                            {
-                                name: $__("Fax"),
-                                value: "fax",
-                            },
-                            {
-                                name: $__("Email"),
-                                value: "email",
-                            },
-                            {
-                                name: $__("Notes"),
-                                value: "notes",
-                            },
-                            {
-                                name: $__("Primary acquisitions contact"),
-                                value: "acqprimary",
-                                format: handleContactOptions,
-                            },
-                            {
-                                name: $__("Contact when ordering"),
-                                value: "orderacquisition",
-                                format: handleContactOptions,
-                            },
-                            {
-                                name: $__("Contact about late orders"),
-                                value: "claimacquisition",
-                                format: handleContactOptions,
-                            },
-                            {
-                                name: $__("Primary serials contact"),
-                                value: "serialsprimary",
-                                format: handleContactOptions,
-                            },
-                            {
-                                name: $__("Contact about late issues"),
-                                value: "claimissues",
-                                format: handleContactOptions,
-                            },
-                        ],
-                    },
                     componentProps: {
                         resourceRelationships: {
                             resourceProperty: "contacts",
@@ -427,7 +366,7 @@ export default {
                             hideIn: ["List", "Show"],
                         },
                     ],
-                    hideIn: ["List"],
+                    hideIn: ["List", "Show"],
                 },
                 {
                     name: "interfaces",
@@ -847,6 +786,69 @@ export default {
         const appendToShow = componentData => {
             let formatDate = format_date;
             return [
+                {
+                    name: $__("Contacts"),
+                    showElement: {
+                        type: "table",
+                        columnData: "contacts",
+                        hidden: vendor => !!vendor.contacts?.length,
+                        columns: [
+                            {
+                                name: $__("Name"),
+                                value: "name",
+                            },
+                            {
+                                name: $__("Position"),
+                                value: "position",
+                            },
+                            {
+                                name: $__("Phone"),
+                                value: "phone",
+                            },
+                            {
+                                name: $__("Alternative phone"),
+                                value: "altphone",
+                            },
+                            {
+                                name: $__("Fax"),
+                                value: "fax",
+                            },
+                            {
+                                name: $__("Email"),
+                                value: "email",
+                            },
+                            {
+                                name: $__("Notes"),
+                                value: "notes",
+                            },
+                            {
+                                name: $__("Primary acquisitions contact"),
+                                value: "acqprimary",
+                                format: handleContactOptions,
+                            },
+                            {
+                                name: $__("Contact when ordering"),
+                                value: "orderacquisition",
+                                format: handleContactOptions,
+                            },
+                            {
+                                name: $__("Contact about late orders"),
+                                value: "claimacquisition",
+                                format: handleContactOptions,
+                            },
+                            {
+                                name: $__("Primary serials contact"),
+                                value: "serialsprimary",
+                                format: handleContactOptions,
+                            },
+                            {
+                                name: $__("Contact about late issues"),
+                                value: "claimissues",
+                                format: handleContactOptions,
+                            },
+                        ],
+                    },
+                },
                 {
                     type: "component",
                     name: $__("Contracts"),
