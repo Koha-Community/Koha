@@ -121,7 +121,7 @@ sub get_table_settings {
     $default_sort_order //= $table_settings->{default_sort_order};
 
     my $default_save_state = $rs && $rs->default_save_state;
-    $default_save_state //= $table_settings->{default_save_state} // 0;
+    $default_save_state //= $table_settings->{default_save_state} // 1;
 
     my $default_save_state_search = $rs && $rs->default_save_state_search;
     $default_save_state_search //= $table_settings->{default_save_state_search} // 0;
