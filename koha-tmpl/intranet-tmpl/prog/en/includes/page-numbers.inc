@@ -25,7 +25,7 @@
             [% FOREACH PAGE_NUMBER IN PAGE_NUMBERS %]
                 [% IF ( PAGE_NUMBER.highlight ) %]
                     <li class="page-item active" aria-current="page">
-                        <a href="#" class="page-link">[% PAGE_NUMBER.pg | html %]</a>
+                        <a href="#" class="page-link" aria-disabled="true" tabindex="-1">[% PAGE_NUMBER.pg | html %]</a>
                     </li>
                 [% ELSE %]
                     <li class="page-item">

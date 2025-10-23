@@ -64,7 +64,7 @@
                                     [% IF ( languages_loo.group_enabled ) %]
                                         [% IF ( languages_loo.current ) %]
                                             <li class="nav-item">
-                                                <a class="nav-link active currentlanguage" aria-current="page" href="#">
+                                                <a class="nav-link active currentlanguage" href="#" aria-current="page" aria-disabled="true" tabindex="-1">
                                                     [% IF ( languages_loo.native_description ) %]
                                                         [% languages_loo.native_description | html %]
                                                     [% ELSE %]

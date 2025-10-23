@@ -16,7 +16,7 @@
                 [% FOREACH number IN numbers %]
                     [% IF ( startfrom == number.startfrom ) %]
                         <li class="page-item active" aria-current="page">
-                            <a href="#" class="page-link">[% number.number | html %]</a>
+                            <a href="#" class="page-link" aria-disabled="true" tabindex="-1">[% number.number | html %]</a>
                         </li>
                     [% ELSE %]
                         <li class="page-item">
