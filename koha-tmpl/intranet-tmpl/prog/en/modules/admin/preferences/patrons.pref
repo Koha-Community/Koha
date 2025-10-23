@@ -212,7 +212,7 @@ Patrons:
          - pref: EmailFieldPrecedence
            class: multi
          - '<br><strong>NOTE:</strong> All patron fields can be used, but to work correctly they must contain a valid email address or an empty string.'
-         - "Valid options are the <a href='https://schema.koha-community.org/__VERSION__/tables/borrowers.html' target='blank'>database columns</a> of the borrowers table, separated by | (pipe)."
+         - "Valid options are the <a href='https://schema.koha-community.org/__VERSION__/tables/borrowers.html' target='_blank'>database columns</a> of the borrowers table, separated by | (pipe)."
          - "Example: email|emailpro|B_email"
      -
          - "When <a href='/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=EmailFieldPrimary'>EmailFieldPrimary</a> is set to '<strong>selected addresses</strong>', send email to all valid email addresses in the selected fields:"
@@ -275,14 +275,14 @@ Patrons:
                cron: (Deprecated) according to --send-notices cron switch
     Patron forms:
      -
-         - "The following <a href='https://schema.koha-community.org/__VERSION__/tables/borrowers.html' target='blank'>database columns</a> must be filled in on the patron entry screen:"
+         - "The following <a href='https://schema.koha-community.org/__VERSION__/tables/borrowers.html' target='_blank'>database columns</a> must be filled in on the patron entry screen:"
          - pref: BorrowerMandatoryField
            type: modalselect
            source: borrowers
            exclusions: flags
          - '<strong>NOTE:</strong> If <a href="/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=autoMemberNum">autoMemberNum</a> is enabled, the system preference <a href="/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=BorrowerMandatoryField">BorrowerMandatoryField</a> must not contain the field <code>cardnumber</code>.'
      -
-         - "The following <a href='https://schema.koha-community.org/__VERSION__/tables/borrowers.html' target='blank'>database columns</a> will not appear on the patron entry screen:"
+         - "The following <a href='https://schema.koha-community.org/__VERSION__/tables/borrowers.html' target='_blank'>database columns</a> will not appear on the patron entry screen:"
          - pref: BorrowerUnwantedField
            type: modalselect
            source: borrowers
@@ -312,7 +312,7 @@ Patrons:
                0: "Don't"
          - store and display surnames in upper case.
      -
-         - "The following <a href='https://schema.koha-community.org/__VERSION__/tables/borrowers.html' target='blank'>database columns</a>:"
+         - "The following <a href='https://schema.koha-community.org/__VERSION__/tables/borrowers.html' target='_blank'>database columns</a>:"
          - pref: PatronQuickAddFields
            type: modalselect
            source: borrowers
@@ -338,7 +338,7 @@ Patrons:
                messaging: "Patron messaging preferences"
          - .
      -
-         - "The following <a href='https://schema.koha-community.org/__VERSION__/tables/borrowers.html' target='blank'>database columns</a>:"
+         - "The following <a href='https://schema.koha-community.org/__VERSION__/tables/borrowers.html' target='_blank'>database columns</a>:"
          - pref: PatronDuplicateMatchingAddFields
            type: modalselect
            source: borrowers
