@@ -74,6 +74,7 @@
       - hold_groups
     summary: Add hold group. May contain hold ids of existing holds
     parameters:
+      - $ref: "../swagger.yaml#/parameters/patron_id_pp"
       - name: body
         in: body
         description: A JSON object containing informations about the new hold group
