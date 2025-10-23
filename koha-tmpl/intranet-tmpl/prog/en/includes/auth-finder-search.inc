@@ -151,7 +151,7 @@
                     <label for="special_relationship">Special relationship: </label>
                     <select name="relationship" id="special_relationship">
                         [% selected=relationship | html %]
-                        <option>None specified</option>
+                        <option value="">None specified</option>
                         [% IF Koha.Preference('marcflavour') == 'MARC21' %]
                             <option [% IF selected == 'a' %]selected="selected"[% END %] value="a">a - Earlier heading</option>
                             <option [% IF selected == 'b' %]selected="selected"[% END %] value="b">b - Later heading</option>
