@@ -39,7 +39,7 @@ export function useBaseWidget(widgetConfig, emit) {
         const savedSettings = localStorage.getItem(
             "widget-" + widgetConfig.id + "-settings"
         );
-        return savedSettings || null;
+        return JSON.parse(savedSettings) || null;
     };
 
     onBeforeMount(() => {
