@@ -1187,7 +1187,7 @@
     </xsl:call-template>
 
     <xsl:if test="marc:datafield[@tag=856]">
-        <xsl:if test="marc:datafield[@tag=856]/marc:subfield[@code='u']">
+        <xsl:if test="normalize-space(marc:datafield[@tag=856]/marc:subfield[@code='u'])">
          <div class="results_summary online_resources">
                <span class="label">Online resources: </span>
                     <ul class="resource_list">

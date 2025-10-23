@@ -1065,7 +1065,7 @@
 
     <!-- Image processing code added here, takes precedence over text links including y3z text   -->
     <xsl:if test="marc:datafield[@tag=856]">
-        <xsl:if test="marc:datafield[@tag=856]/marc:subfield[@code='u']">
+        <xsl:if test="normalize-space(marc:datafield[@tag=856]/marc:subfield[@code='u'])">
         <span class="results_summary online_resources">
             <span class="label">Online resources: </span>
                 <ul class="resource_list">
