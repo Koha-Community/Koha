@@ -217,40 +217,32 @@
                     <table id="borrowerst">
                         <thead>
                             <tr>
-                                [% IF ( op == 'show' ) %]
-                                    <th class="no-sort">&nbsp;</th>
-                                [% ELSE %]
-                                    <th class="NoVisible">&nbsp;</th>
-                                [% END %]
-                                <th>Card number</th>
-                                <th>Surname</th>
-                                <th>First name</th>
-                                <th>Library</th>
-                                <th>Patron category</th>
-                                <th>Street number</th>
-                                <th>Address</th>
-                                <th>Address 2</th>
-                                <th>City</th>
-                                <th>State</th>
-                                <th>ZIP/Postal code</th>
-                                <th>Country</th>
-                                <th>Primary email</th>
-                                <th>Primary phone</th>
-                                <th>Other phone</th>
-                                <th>Fax</th>
-                                <th>Registration date</th>
-                                <th>Expiry date</th>
-                                [% IF CanUpdatePasswordExpiration %]
-                                    <th>Password expiration date</th>
-                                [% END %]
-                                [% IF CanUpdateProtectPatron %]
-                                    <th>Protected</th>
-                                [% END %]
-                                <th>Circulation note</th>
-                                <th>OPAC note</th>
-                                <th>Message</th>
-                                <th>Restriction expiration</th>
-                                <th>Restriction comment</th>
+                                <th data-colname="batch_patron_edit_selections" class="no-sort">&nbsp;</th>
+                                <th data-colname="batch_patron_edit_cardnumber">Card number</th>
+                                <th data-colname="batch_patron_edit_surname">Surname</th>
+                                <th data-colname="batch_patron_edit_firstname">First name</th>
+                                <th data-colname="batch_patron_edit_branchcode">Library</th>
+                                <th data-colname="batch_patron_edit_categorycode">Patron category</th>
+                                <th data-colname="batch_patron_edit_streetnumber">Street number</th>
+                                <th data-colname="batch_patron_edit_address">Address</th>
+                                <th data-colname="batch_patron_edit_address2">Address 2</th>
+                                <th data-colname="batch_patron_edit_city">City</th>
+                                <th data-colname="batch_patron_edit_state">State</th>
+                                <th data-colname="batch_patron_edit_zipcode">ZIP/Postal code</th>
+                                <th data-colname="batch_patron_edit_country">Country</th>
+                                <th data-colname="batch_patron_edit_email">Primary email</th>
+                                <th data-colname="batch_patron_edit_phone">Primary phone</th>
+                                <th data-colname="batch_patron_edit_mobile">Other phone</th>
+                                <th data-colname="batch_patron_edit_fax">Fax</th>
+                                <th data-colname="batch_patron_edit_dateenrolled">Registration date</th>
+                                <th data-colname="batch_patron_edit_dateexpiry">Expiry date</th>
+                                <th data-colname="batch_patron_edit_password_expiration_date">Password expiration date</th>
+                                <th data-colname="batch_patron_edit_protected">Protected</th>
+                                <th data-colname="batch_patron_edit_borrowernotes">Circulation note</th>
+                                <th data-colname="batch_patron_edit_opacnote">OPAC note</th>
+                                <th data-colname="batch_patron_edit_messages">Message</th>
+                                <th data-colname="batch_patron_edit_debarred">Restriction expiration</th>
+                                <th data-colname="batch_patron_edit_debarredcomment">Restriction comment</th>
                                 [% FOREACH attrh IN attributes_header %]
                                     <th>[% attrh.attribute | html %]</th>
                                 [% END %]
@@ -286,6 +278,8 @@
                                         [% ELSE %]
                                             <td data-order="9999-99-99">Never</td>
                                         [% END %]
+                                    [% ELSE %]
+                                        <td></td>
                                     [% END %]
                                     [% IF CanUpdateProtectPatron %]
                                         <td>
@@ -295,6 +289,8 @@
                                                 No
                                             [% END %]
                                         </td>
+                                    [% ELSE %]
+                                        <td></td>
                                     [% END %]
                                     <td>[% borrower.borrowernotes | $raw | html_line_break %]</td>
                                     <td>[% borrower.opacnote | html %]</td>
@@ -504,6 +500,7 @@
                     {
                         order: [[1, "asc"]],
                         autoWidth: true,
+                        bKohaColumnsUseNames: true,
                     },
                     table_settings
                 );
