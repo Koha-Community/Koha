@@ -12,7 +12,7 @@
     <div class="row">
         <div class="col-md-6 dashboard-left-col">
             <div
-                v-if="selectedWidgetsLeft.length === 0"
+                v-if="selectedWidgetsLeft.length === 0 && isDragging"
                 class="empty-placeholder"
             >
                 {{ $__("Drop widgets here") }}
@@ -30,6 +30,8 @@
                     'w-full',
                     { 'empty-drag-area': selectedWidgetsLeft.length === 0 },
                 ]"
+                @start="handleDragStart"
+                @end="handleDragEnd"
             >
                 <component
                     v-for="(widget, index) in selectedWidgetsLeft"
@@ -45,7 +47,7 @@
         </div>
         <div class="col-md-6 dashboard-right-col">
             <div
-                v-if="selectedWidgetsRight.length === 0"
+                v-if="selectedWidgetsRight.length === 0 && isDragging"
                 class="empty-placeholder"
             >
                 {{ $__("Drop widgets here") }}
@@ -63,6 +65,8 @@
                     'w-full',
                     { 'empty-drag-area': selectedWidgetsRight.length === 0 },
                 ]"
+                @start="handleDragStart"
+                @end="handleDragEnd"
             >
                 <component
                     v-for="(widget, index) in selectedWidgetsRight"
@@ -93,6 +97,7 @@ export default {
         const availableWidgets = props.availableWidgets;
         const selectedWidgetsLeft = ref([]);
         const selectedWidgetsRight = ref([]);
+        const isDragging = ref(false);
 
         const { setComponentDialog } = inject("mainStore");
 
@@ -251,6 +256,13 @@ export default {
             { deep: true }
         );
 
+        function handleDragStart() {
+            isDragging.value = true;
+        }
+        function handleDragEnd() {
+            isDragging.value = false;
+        }
+
         return {
             ...props,
             selectedWidgetsLeft,
@@ -260,6 +272,9 @@ export default {
             removeWidget,
             moveWidget,
             toggleWidgetPicker,
+            handleDragEnd,
+            handleDragStart,
+            isDragging,
         };
     },
     components: {
