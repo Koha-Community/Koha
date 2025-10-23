@@ -17,7 +17,12 @@ return {
 
         say $out "Added new permission 'view_holds_history'";
 
-        my $IntranetHoldsHistory = C4::Context->preference('IntranetReadingHistoryHolds');
+        my ($IntranetHoldsHistory) = $dbh->selectrow_array(
+            q|
+            SELECT value FROM systempreferences WHERE variable='IntranetReadingHistoryHolds'
+        |
+        );
+
         if ($IntranetHoldsHistory) {
 
             my $insert_sth = $dbh->prepare(
