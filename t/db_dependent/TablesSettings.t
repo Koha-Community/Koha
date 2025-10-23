@@ -467,8 +467,10 @@ subtest 'test upgrade' => sub {
                 default_display_length => undef,
                 default_sort_order     => undef,
 
-                # default_save_state is disabled by default but can be enabled.
-                default_save_state        => 0,
+                # default_save_state is enabled by default but can be disabled
+                default_save_state => 1,
+
+                # default_save_state_search is disabled by default but can be enabled
                 default_save_state_search => 0,
             }
         );
