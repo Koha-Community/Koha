@@ -408,6 +408,40 @@
     [% INCLUDE 'datatables.inc' %]
     [% INCLUDE 'select2.inc' %]
     <script>
+        const opac_display = document.getElementById("opac_display");
+        const opac_editable = document.getElementById("opac_editable");
+        const opac_mandatory = document.getElementById("opac_mandatory");
+
+        function setDisabled(el, disabled) {
+            const label = el.closest("label");
+            if (disabled) {
+                el.checked = false;
+                el.disabled = true;
+                if (label) label.setAttribute("aria-disabled", "true");
+            } else {
+                el.disabled = false;
+                if (label) label.removeAttribute("aria-disabled");
+            }
+        }
+
+        function updateCheckboxes() {
+            if (!opac_display.checked) {
+                setDisabled(opac_editable, true);
+            } else {
+                setDisabled(opac_editable, false);
+            }
+            if (opac_editable.checked) {
+                setDisabled(opac_mandatory, false);
+            } else {
+                setDisabled(opac_mandatory, true);
+            }
+        }
+
+        opac_display.addEventListener("change", updateCheckboxes);
+        opac_editable.addEventListener("change", updateCheckboxes);
+
+        updateCheckboxes();
+
         $(document).ready(function () {
             function toggle_search_default() {
                 if ($("#staff_searchable").is(":checked")) {
@@ -425,18 +459,6 @@
             if ($("#branches option:selected").length < 1) {
                 $("#branches option:first").attr("selected", "selected");
             }
-
-            $("#opac_display")
-                .change(function () {
-                    if (this.checked) {
-                        $("#opac_editable").removeAttr("disabled").parent().removeAttr("aria-disabled");
-                        $("#opac_mandatory").removeAttr("disabled").parent().removeAttr("aria-disabled");
-                    } else {
-                        $("#opac_editable").attr("disabled", true).parent().attr("aria-disabled", "true");
-                        $("#opac_mandatory").attr("disabled", true).parent().attr("aria-disabled", "true");
-                    }
-                })
-                .change();
 
             $("#is_date")
                 .change(function () {
