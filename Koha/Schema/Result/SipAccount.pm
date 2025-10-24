@@ -170,13 +170,7 @@ Foreign key to sip_institutions.sip_institution_id
   is_nullable: 0
   size: 255
 
-PREVIOUSLY id in Sipconfig.xml
-
-=head2 login_password
-
-  data_type: 'varchar'
-  is_nullable: 1
-  size: 255
+Staff userid for SIP2 authentication
 
 =head2 lost_block_checkout
 
@@ -305,8 +299,6 @@ __PACKAGE__->add_columns(
   { data_type => "varchar", is_nullable => 1, size => 255 },
   "login_id",
   { data_type => "varchar", is_nullable => 0, size => 255 },
-  "login_password",
-  { data_type => "varchar", is_nullable => 1, size => 255 },
   "lost_block_checkout",
   { data_type => "tinyint", is_nullable => 1 },
   "lost_block_checkout_value",
@@ -506,8 +498,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07051 @ 2025-02-13 16:12:24
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:gZLaINwjBTmy8eveMfrmhA
+# Created by DBIx::Class::Schema::Loader v0.07051 @ 2025-10-24 14:53:53
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:unjLCC8L7SMwMe6xIcBgNA
 
 
 __PACKAGE__->add_columns(
