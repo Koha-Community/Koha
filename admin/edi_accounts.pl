@@ -75,12 +75,16 @@ if ( $op eq 'acct_form' ) {
         my $password = scalar $input->param('password');
         $password = $crypt->encrypt_hex($password);
         my $fields = {
-            description   => scalar $input->param('description'),
-            host          => scalar $input->param('host'),
-            username      => scalar $input->param('username'),
-            password      => $password,
-            upload_port   => scalar $input->param('upload_port')   || $input->param('transport') eq 'FTP' ? 21 : 22,
-            download_port => scalar $input->param('download_port') || $input->param('transport') eq 'FTP' ? 21 : 22,
+            description => scalar $input->param('description'),
+            host        => scalar $input->param('host'),
+            username    => scalar $input->param('username'),
+            password    => $password,
+            upload_port => scalar $input->param('upload_port') ? scalar $input->param('upload_port')
+            : $input->param('transport') eq 'FTP' ? 21
+            : 22,
+            download_port => scalar $input->param('download_port') ? scalar $input->param('download_port')
+            : $input->param('transport') eq 'FTP' ? 21
+            : 22,
             vendor_id          => scalar $input->param('vendor_id'),
             upload_directory   => scalar $input->param('upload_directory'),
             download_directory => scalar $input->param('download_directory'),
