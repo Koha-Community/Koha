@@ -572,17 +572,19 @@ sub _new_Zconn {
     $syntax         = 'xml';
     $elementSetName = 'marcxml';
 
-    my $host       = _common_config( $server, 'listen' )->{content};
+    my $host = _common_config( $server, 'listen' );
+    $host = $host->{content};
     my $serverinfo = _common_config( $server, 'serverinfo' );
     my $user       = $serverinfo->{user};
     my $password   = $serverinfo->{password};
     eval {
         # set options
         my $o = ZOOM::Options->new();
-        $o->option( user                  => $user )     if $user && $password;
-        $o->option( password              => $password ) if $user && $password;
-        $o->option( async                 => 1 )         if $async;
-        $o->option( cqlfile               => _common_config( $server, 'server' )->{cql2rpn} );
+        $o->option( user     => $user )     if $user && $password;
+        $o->option( password => $password ) if $user && $password;
+        $o->option( async    => 1 )         if $async;
+        my $server_conf = _common_config( $server, 'server' );
+        $o->option( cqlfile               => $server_conf->{cql2rpn} );
         $o->option( cclfile               => $serverinfo->{ccl2rpn} );
         $o->option( preferredRecordSyntax => $syntax );
         $o->option( elementSetName        => $elementSetName ) if $elementSetName;
