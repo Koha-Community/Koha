@@ -63,8 +63,7 @@ return {
                     `holds_get_captured` tinyint(1) NULL,
                     `inhouse_item_types` varchar(255) NULL,
                     `inhouse_patron_categories` varchar(255) NULL,
-                    `login_id` varchar(255) NOT NULL COMMENT 'PREVIOUSLY id in Sipconfig.xml',
-                    `login_password` varchar(255) NULL,
+                    `login_id` varchar(255) NOT NULL COMMENT 'Staff userid for SIP2 authentication',
                     `lost_block_checkout` tinyint(1) NULL COMMENT 'actual tinyint, not boolean',
                     `lost_block_checkout_value` tinyint(1) NULL COMMENT 'actual tinyint, not boolean',
                     `lost_status_for_missing` tinyint(1) NULL COMMENT 'actual tinyint, not boolean',
@@ -290,7 +289,7 @@ return {
             next unless $sip_institution;
 
             my $insert_accounts = $dbh->prepare(
-                q{INSERT IGNORE INTO sip_accounts (sip_institution_id, ae_field_template, allow_additional_materials_checkout, allow_empty_passwords, allow_fields, av_field_template, blocked_item_types, checked_in_ok, convert_nonprinting_characters, cr_item_field, ct_always_send, cv_send_00_on_success, cv_triggers_alert, da_field_template, delimiter, disallow_overpayment, encoding, error_detect, format_due_date, hide_fields, holds_block_checkin, holds_get_captured, inhouse_item_types, inhouse_patron_categories, login_id, login_password, lost_block_checkout, lost_block_checkout_value, lost_status_for_missing, overdues_block_checkout, payment_type_writeoff, prevcheckout_block_checkout, register_id, seen_on_item_information, send_patron_home_library_in_af, show_checkin_message, show_outstanding_amount, terminator) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?, ?, ?, ?, ?, ?, ?, ?,?,?,?,?, ?,?,?,?,?,?,?, ?,?,?,?,?)}
+                q{INSERT IGNORE INTO sip_accounts (sip_institution_id, ae_field_template, allow_additional_materials_checkout, allow_empty_passwords, allow_fields, av_field_template, blocked_item_types, checked_in_ok, convert_nonprinting_characters, cr_item_field, ct_always_send, cv_send_00_on_success, cv_triggers_alert, da_field_template, delimiter, disallow_overpayment, encoding, error_detect, format_due_date, hide_fields, holds_block_checkin, holds_get_captured, inhouse_item_types, inhouse_patron_categories, login_id, lost_block_checkout, lost_block_checkout_value, lost_status_for_missing, overdues_block_checkout, payment_type_writeoff, prevcheckout_block_checkout, register_id, seen_on_item_information, send_patron_home_library_in_af, show_checkin_message, show_outstanding_amount, terminator) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?, ?, ?, ?, ?, ?, ?, ?,?,?,?, ?,?,?,?,?,?,?, ?,?,?,?,?)}
             );
 
             my $sip_institution_id = $sip_institution->get_column('sip_institution_id');
@@ -325,7 +324,6 @@ return {
             my $inhouse_item_types          = $SIPconfig->{accounts}->{$account_key}->{inhouse_item_types};
             my $inhouse_patron_categories   = $SIPconfig->{accounts}->{$account_key}->{inhouse_patron_categories};
             my $login_id                    = $SIPconfig->{accounts}->{$account_key}->{id};
-            my $login_password              = $SIPconfig->{accounts}->{$account_key}->{password};
             my $lost_block_checkout         = $SIPconfig->{accounts}->{$account_key}->{lost_block_checkout};
             my $lost_block_checkout_value   = $SIPconfig->{accounts}->{$account_key}->{lost_block_checkout_value};
             my $lost_status_for_missing     = $SIPconfig->{accounts}->{$account_key}->{lost_status_for_missing};
@@ -366,7 +364,6 @@ return {
                 $inhouse_item_types,
                 $inhouse_patron_categories,
                 $login_id,
-                $login_password,
                 $lost_block_checkout,
                 $lost_block_checkout_value,
                 $lost_status_for_missing,

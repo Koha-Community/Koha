@@ -69,7 +69,6 @@ sub get_for_config {
     # Map database columns to their expected C4/SIP counterparts
     $unblessed->{institution} = $self->institution->name;
     $unblessed->{id}          = delete $unblessed->{login_id};
-    $unblessed->{password}    = delete $unblessed->{login_password};
     if ( $unblessed->{error_detect} ) {
         $unblessed->{'error-detect'} = 'enabled';
         delete $unblessed->{error_detect};

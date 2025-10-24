@@ -109,16 +109,8 @@ export default {
                 name: "login_id",
                 required: true,
                 type: "text",
-                label: __("Account login id"),
+                label: __("Staff userid for SIP2 authentication"),
                 group: "Details",
-            },
-            {
-                name: "login_password",
-                required: true,
-                type: "text",
-                label: __("Account login password"),
-                group: "Details",
-                hideIn: ["List"],
             },
             {
                 name: "sip_institution_id",

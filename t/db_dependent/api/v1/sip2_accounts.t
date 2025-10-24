@@ -165,7 +165,7 @@ subtest 'get() tests' => sub {
 
 subtest 'add() tests' => sub {
 
-    plan tests => 17;
+    plan tests => 16;
 
     $schema->storage->txn_begin;
 
@@ -192,7 +192,6 @@ subtest 'add() tests' => sub {
 
     my $account = {
         login_id           => "koha",
-        login_password     => "koha",
         sip_institution_id => $account_obj->sip_institution_id,
     };
 
@@ -203,7 +202,6 @@ subtest 'add() tests' => sub {
     my $account_with_invalid_field = {
         blah               => "Account Blah",
         login_id           => "koha",
-        login_password     => "koha",
         sip_institution_id => $account->{sip_institution_id},
     };
 
@@ -223,7 +221,7 @@ subtest 'add() tests' => sub {
         ->header_like(
         Location => qr|^/api/v1/sip2/accounts/\d*|,
         'REST3.4.1'
-    )->json_is( '/login_id' => $account->{login_id} )->json_is( '/login_password' => $account->{login_password} )
+    )->json_is( '/login_id' => $account->{login_id} )
         ->json_is( '/sip_institution_id' => $account->{sip_institution_id} )->tx->res->json->{sip_account_id};
 
     # Authorized attempt to create with null id
@@ -281,7 +279,6 @@ subtest 'update() tests' => sub {
 
     # Attempt partial update on a PUT
     my $account_with_missing_field = {
-        login_password     => "koha",
         sip_institution_id => $account->sip_institution_id,
     };
 
@@ -291,7 +288,6 @@ subtest 'update() tests' => sub {
     # Full object update on PUT
     my $account_with_updated_field = {
         login_id           => "new koha",
-        login_password     => "koha",
         sip_institution_id => $account->sip_institution_id,
     };
 
@@ -302,7 +298,6 @@ subtest 'update() tests' => sub {
     my $account_with_invalid_field = {
         blah               => "Account Blah",
         login_id           => "koha",
-        login_password     => "koha",
         sip_institution_id => $account->sip_institution_id,
     };
 

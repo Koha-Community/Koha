@@ -423,9 +423,8 @@ sub telnet_transport {
             $pwd = get_clean_string($pwd);
             siplog( "LOG_DEBUG", "telnet_transport 2: uid length %s, pwd length %s", length($uid), length($pwd) );
 
-            if ( exists( $config->{accounts}->{$uid} )
-                && ( $pwd eq $config->{accounts}->{$uid}->{password} ) )
-            {
+            # Check if user is authorized for SIP access, then authenticate via login_core
+            if ( exists( $config->{accounts}->{$uid} ) ) {
                 $account = $config->{accounts}->{$uid};
                 if ( C4::SIP::Sip::MsgType::login_core( $self, $uid, $pwd ) ) {
                     last;

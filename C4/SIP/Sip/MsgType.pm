@@ -927,59 +927,59 @@ sub login_core {
     my $uid    = shift;
     my $pwd    = shift;
     my $status = 1;                 # Assume it all works
+
+    # Check if this userid is authorized for SIP access
     if ( !exists( $server->{config}->{accounts}->{$uid} ) ) {
-        siplog( "LOG_WARNING", "MsgType::login_core: Unknown login '$uid'" );
-        $status = 0;
-    } elsif ( $server->{config}->{accounts}->{$uid}->{password} ne $pwd ) {
-        siplog( "LOG_WARNING", "MsgType::login_core: Invalid password for login '$uid'" );
-        $status = 0;
-    } else {
-
-        # Store the active account someplace handy for everybody else to find.
-        $server->{account} = $server->{config}->{accounts}->{$uid};
-        my $inst = $server->{account}->{institution};
-        $server->{institution}  = $server->{config}->{institutions}->{$inst};
-        $server->{policy}       = $server->{institution}->{policy};
-        $server->{sip_username} = $uid;
-        $server->{sip_password} = $pwd;
-
-        my $auth_status = api_auth( $uid, $pwd, $inst );
-        if ( !$auth_status or $auth_status !~ /^ok$/i ) {
-            siplog(
-                "LOG_WARNING", "api_auth failed for SIP terminal '%s' of '%s': %s", $uid, $inst,
-                ( $auth_status || 'unknown' )
-            );
-            $status = 0;
-        } else {
-            siplog( "LOG_INFO", "Successful login/auth for '%s' of '%s'", $server->{account}->{id}, $inst );
-
-            #
-            # initialize connection to ILS
-            #
-            my $module = $server->{config}->{institutions}->{$inst}->{implementation};
-            siplog( "LOG_DEBUG", 'login_core: ' . Dumper($module) );
-
-            # Suspect this is always ILS but so we don't break any eccentic install (for now)
-            if ( $module eq 'ILS' ) {
-                $module = 'C4::SIP::ILS';
-            }
-            $module->use;
-            if ($@) {
-                siplog(
-                    "LOG_ERR", "%s: Loading ILS implementation '%s' for institution '%s' failed",
-                    $server->{service}, $module, $inst
-                );
-                die("Failed to load ILS implementation '$module' for $inst");
-            }
-
-            # like   ILS->new(), I think.
-            $server->{ils} = $module->new( $server->{institution}, $server->{account} );
-            if ( !$server->{ils} ) {
-                siplog( "LOG_ERR", "%s: ILS connection to '%s' failed", $server->{service}, $inst );
-                die("Unable to connect to ILS '$inst'");
-            }
-        }
+        siplog( "LOG_WARNING", "MsgType::login_core: SIP access not authorized for user '$uid'" );
+        return 0;
     }
+
+    # Store the active account configuration
+    $server->{account} = $server->{config}->{accounts}->{$uid};
+    my $inst = $server->{account}->{institution};
+    $server->{institution}  = $server->{config}->{institutions}->{$inst};
+    $server->{policy}       = $server->{institution}->{policy};
+    $server->{sip_username} = $uid;
+    $server->{sip_password} = $pwd;
+
+    # Authenticate using Koha's internal authentication (checks hashed password in borrowers table)
+    my $auth_status = api_auth( $uid, $pwd, $inst );
+    if ( !$auth_status or $auth_status !~ /^ok$/i ) {
+        siplog(
+            "LOG_WARNING", "Authentication failed for SIP terminal '%s' of '%s': %s",
+            $uid,          $inst, ( $auth_status || 'unknown' )
+        );
+        return 0;
+    }
+
+    siplog( "LOG_INFO", "Successful login/auth for '%s' of '%s'", $server->{account}->{id}, $inst );
+
+    #
+    # initialize connection to ILS
+    #
+    my $module = $server->{config}->{institutions}->{$inst}->{implementation};
+    siplog( "LOG_DEBUG", 'login_core: ' . Dumper($module) );
+
+    # Suspect this is always ILS but so we don't break any eccentic install (for now)
+    if ( $module eq 'ILS' ) {
+        $module = 'C4::SIP::ILS';
+    }
+    $module->use;
+    if ($@) {
+        siplog(
+            "LOG_ERR", "%s: Loading ILS implementation '%s' for institution '%s' failed",
+            $server->{service}, $module, $inst
+        );
+        die("Failed to load ILS implementation '$module' for $inst");
+    }
+
+    # like   ILS->new(), I think.
+    $server->{ils} = $module->new( $server->{institution}, $server->{account} );
+    if ( !$server->{ils} ) {
+        siplog( "LOG_ERR", "%s: ILS connection to '%s' failed", $server->{service}, $inst );
+        die("Unable to connect to ILS '$inst'");
+    }
+
     return $status;
 }
 

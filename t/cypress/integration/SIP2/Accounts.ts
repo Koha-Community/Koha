@@ -48,7 +48,6 @@ function get_account() {
             timeout: 100,
         },
         login_id: "asdas",
-        login_password: "dasdasd",
         lost_block_checkout: null,
         lost_block_checkout_value: null,
         lost_status_for_missing: null,
@@ -142,7 +141,6 @@ describe("Accounts", () => {
             3
         );
         cy.get("#login_id").type(account.login_id);
-        cy.get("#login_password").type(account.login_password);
 
         cy.wait("@getSIP2Institutions");
         cy.get("#sip_institution_id .vs__search").type(
@@ -284,10 +282,6 @@ describe("Accounts", () => {
 
         // Form has been correctly filled in
         cy.get("#login_id").should("have.value", accounts[0].login_id);
-        cy.get("#login_password").should(
-            "have.value",
-            accounts[0].login_password
-        );
 
         // cy.get("#checkin_yes").should("be.checked");
         // cy.get("#checkout_yes").should("be.checked");

@@ -66,6 +66,10 @@ subtest 'Config from XML matches config from database' => sub {
         {
             delete $fileSIPconfig->{accounts}->{$key}{'register_id'};
         }
+
+        # Remove 'password' from file config as it's no longer migrated (security improvement)
+        # Passwords are now validated against the borrowers table using bcrypt hashes
+        delete $fileSIPconfig->{accounts}->{$key}{'password'};
     }
 
     #Test accounts
@@ -124,7 +128,6 @@ subtest 'config_timestamp is updated when database configuration changes' => sub
             class => 'Koha::SIP2::Accounts',
             value => {
                 login_id           => $seen_patron->userid,
-                login_password     => '123456',
                 sip_institution_id => $sip_institution->sip_institution_id,
                 allow_fields       => '',
                 hide_fields        => '',
