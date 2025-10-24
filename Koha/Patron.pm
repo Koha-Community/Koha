@@ -1803,9 +1803,11 @@ disabled.
 sub account_locked {
     my ($self) = @_;
     my $FailedLoginAttempts = C4::Context->preference('FailedLoginAttempts');
-    return 1 if $FailedLoginAttempts
-          and $self->login_attempts
-          and $self->login_attempts >= $FailedLoginAttempts;
+    return 1
+        if $FailedLoginAttempts
+        && $FailedLoginAttempts > 0
+        && $self->login_attempts
+        && $self->login_attempts >= $FailedLoginAttempts;
     return 1 if ($self->login_attempts || 0) < 0; # administrative lockout
     return 0;
 }

@@ -268,9 +268,13 @@ sub search_anonymize_candidates {
     my $str = $parser->format_datetime($dt);
     $cond->{dateexpiry} = { '<=' => $str };
     $cond->{anonymized} = 0; # not yet done
-    if( $params->{locked} ) {
-        my $fails = C4::Context->preference('FailedLoginAttempts') || 0;
-        $cond->{login_attempts} = [ -and => { '!=' => undef }, { -not_in => [0, 1..$fails-1 ] } ]; # -not_in does not like undef
+    my $fails = C4::Context->preference('FailedLoginAttempts');
+
+    if ( $params->{locked} && $fails && $fails > 0 ) {    # $fails should actually not be negative btw
+        $cond->{login_attempts} =
+            [ -and => { '!=' => undef }, { -not_in => [ 0, 1 .. $fails - 1 ] } ];    # -not_in does not like undef
+    } elsif ( $params->{locked} ) {
+        $cond->{login_attempts} = -1;
     }
     return $class->search( $cond );
 }
