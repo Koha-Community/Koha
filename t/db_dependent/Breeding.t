@@ -295,12 +295,12 @@ sub test_add_custom_field_rowdata {
 
     is( $returned_row->{title}, "Just a title", "_add_rowdata returns the title of a biblio" );
     is(
-        $returned_row->{addnumberfields}[0], "245\$a",
+        $returned_row->{addnumberfields}[1], "245",
         "_add_rowdata returns the field number chosen in the AdditionalFieldsInZ3950ResultSearch preference"
     );
 
-    # Test repeatble tags,the trailing whitespace is a normal side-effect of _add_custom_field_row_data
-    is_deeply( \$returned_row->{"035\$a"}, \[ "First 035 ", "Second 035 " ], "_add_rowdata supports repeatable tags" );
+    # Test repeatable tags
+    is_deeply( $returned_row->{"035"}, [ "[a]First 035", "[a]Second 035" ], "_add_rowdata supports repeatable tags" );
 
     warning_is { C4::Breeding::_add_custom_field_rowdata( $row, $biblio, undef ) } undef,
         'no warn from add_custom_field_rowdata when pref_newtags undef';
