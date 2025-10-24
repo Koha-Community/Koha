@@ -965,7 +965,7 @@
                                             [% IF header_row.$place.cell == 'itemnumber' || header_types.item(header_row.$place.cell) == 'itemnumber'  %]
                                                 [% SET batch_itemnumbers = 1 %]
                                                 [% SET header_row.$place.has_itemnumbers = 1 %]
-                                                <input type="hidden" name="[% header_row.$place.cell | html %]" value="[% cells.cell | html %]" />
+                                                <input type="hidden" name="itemnumber" value="[% cells.cell | html %]" />
                                             [% END %]
                                         [% END %]
                                     [% END %]
@@ -982,7 +982,7 @@
                                             [% IF header_row.$place.cell == 'itemnumber' || header_types.item(header_row.$place.cell) == 'itemnumber'  %]
                                                 [% SET batch_itemnumbers = 1 %]
                                                 [% SET header_row.$place.has_itemnumbers = 1 %]
-                                                <input type="hidden" name="[% header_row.$place.cell | html %]" value="[% cells.cell | html %]" />
+                                                <input type="hidden" name="itemnumber" value="[% cells.cell | html %]" />
                                             [% END %]
                                         [% END %]
                                     [% END %]
