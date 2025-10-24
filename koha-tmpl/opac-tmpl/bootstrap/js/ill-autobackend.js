@@ -24,8 +24,13 @@ $(document).ready(function () {
                 auto_backend.available = 0;
             },
             success: function (data) {
-                _addSuccessMessage(auto_backend.name);
-                auto_backend.available = 1;
+                if (data.success !== undefined && data.success !== null) {
+                    _addSuccessMessage(auto_backend.name);
+                    auto_backend.available = 1;
+                } else if (data.warning) {
+                    _addWarningMessage(auto_backend.name, data);
+                    auto_backend.available = 0;
+                }
             },
             error: function (request, textstatus) {
                 if (textstatus === "timeout") {
@@ -78,6 +83,15 @@ $(document).ready(function () {
         });
         _addBackendPlaceholderEl("Standard");
         _addBackendOption("Standard");
+    }
+
+    function _addWarningMessage(auto_backend_name, data) {
+        _removeVerifyingMessage(auto_backend_name);
+        $(auto_ill_el + " > #backend-" + auto_backend_name).append(
+            '<span style="color:#8a6804;" class="text-warning"><i class="fa-solid fa-check"></i> ' +
+                __("Warning.").format(auto_backend_name) +
+                "</span>"
+        );
     }
 
     function _addSuccessMessage(auto_backend_name) {
