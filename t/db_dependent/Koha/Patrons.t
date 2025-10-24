@@ -1522,7 +1522,7 @@ subtest
     };
 
 subtest 'account_locked' => sub {
-    plan tests => 13;
+    plan tests => 14;
     my $patron = $builder->build({ source => 'Borrower', value => { login_attempts => 0 } });
     $patron = Koha::Patrons->find( $patron->{borrowernumber} );
     for my $value ( undef, '', 0 ) {
@@ -1535,8 +1535,10 @@ subtest 'account_locked' => sub {
         is( $patron->account_locked, 1, 'Feature is disabled but administrative lockout has been triggered' );
     }
 
-    t::lib::Mocks::mock_preference('FailedloginAttempts', 3);
     $patron->login_attempts(2)->store;
+    t::lib::Mocks::mock_preference( 'FailedloginAttempts', -3 );
+    is( $patron->account_locked, 0, 'Bad pref value tested' );
+    t::lib::Mocks::mock_preference( 'FailedloginAttempts', 3 );
     is( $patron->account_locked, 0, 'Patron has 2 failed attempts, account should not be considered locked yet' );
     $patron->login_attempts(3)->store;
     is( $patron->account_locked, 1, 'Patron has 3 failed attempts, account should be considered locked yet' );
@@ -2231,7 +2233,9 @@ subtest 'search_unsubscribed' => sub {
 };
 
 subtest 'search_anonymize_candidates' => sub {
-    plan tests => 7;
+    plan tests => 10;
+
+    my $cnt;
     my $patron1 = $builder->build_object({ class => 'Koha::Patrons' });
     my $patron2 = $builder->build_object({ class => 'Koha::Patrons' });
     $patron1->anonymized(0);
@@ -2239,11 +2243,13 @@ subtest 'search_anonymize_candidates' => sub {
     $patron2->anonymized(0);
     $patron2->dateexpiry( dt_from_string->add(days => 1) )->store;
 
+    t::lib::Mocks::mock_preference( 'PatronAnonymizeDelay', undef );
+    is( Koha::Patrons->search_anonymize_candidates->count, 0, 'Empty set expected (undef)' );
     t::lib::Mocks::mock_preference( 'PatronAnonymizeDelay', q{} );
-    is( Koha::Patrons->search_anonymize_candidates->count, 0, 'Empty set' );
+    is( Koha::Patrons->search_anonymize_candidates->count, 0, 'Empty set expected (empty string)' );
 
     t::lib::Mocks::mock_preference( 'PatronAnonymizeDelay', 0 );
-    my $cnt = Koha::Patrons->search_anonymize_candidates->count;
+    $cnt = Koha::Patrons->search_anonymize_candidates->count;
     $patron1->dateexpiry( dt_from_string->subtract(days => 1) )->store;
     $patron2->dateexpiry( dt_from_string->subtract(days => 3) )->store;
     is( Koha::Patrons->search_anonymize_candidates->count, $cnt+2, 'Delay 0' );
@@ -2264,24 +2270,28 @@ subtest 'search_anonymize_candidates' => sub {
     $patron2->dateexpiry( dt_from_string->subtract(days => 3) )->store;
     is( Koha::Patrons->search_anonymize_candidates->count, $cnt, 'Delay 4' );
 
+    t::lib::Mocks::mock_preference( 'FailedLoginAttempts', -2 );    # This is a bad value btw
+    $patron1->dateexpiry( dt_from_string->subtract( days => 5 ) )->login_attempts(0)->store;
+    $patron2->dateexpiry( dt_from_string->subtract( days => 5 ) )->login_attempts(0)->store;
+    $cnt = Koha::Patrons->search_anonymize_candidates( { locked => 1 } )->count;
+    $patron1->login_attempts(10)->store;
+    $patron2->login_attempts(-1)->store;
+    is( Koha::Patrons->search_anonymize_candidates( { locked => 1 } )->count, $cnt + 1, 'One admin lock higher' );
+    t::lib::Mocks::mock_preference( 'FailedLoginAttempts', q{} );
+    is( Koha::Patrons->search_anonymize_candidates( { locked => 1 } )->count, $cnt + 1, 'Still one up (empty)' );
+    t::lib::Mocks::mock_preference( 'FailedLoginAttempts', 0 );
+    is( Koha::Patrons->search_anonymize_candidates( { locked => 1 } )->count, $cnt + 1, 'Still one up (zero)' );
+
     t::lib::Mocks::mock_preference( 'FailedLoginAttempts', 3 );
-    $patron1->dateexpiry( dt_from_string->subtract(days => 5) )->store;
-    $patron1->login_attempts(0)->store;
-    $patron2->dateexpiry( dt_from_string->subtract(days => 5) )->store;
+    $patron1->login_attempts(2)->store;
     $patron2->login_attempts(0)->store;
     $cnt = Koha::Patrons->search_anonymize_candidates({locked => 1})->count;
     $patron1->login_attempts(3)->store;
-    is( Koha::Patrons->search_anonymize_candidates({locked => 1})->count,
-        $cnt+1, 'Locked flag' );
+    is( Koha::Patrons->search_anonymize_candidates( { locked => 1 } )->count, $cnt + 1, 'Patron 1 included' );
+    $patron2->login_attempts(-1)->store;
+    is( Koha::Patrons->search_anonymize_candidates( { locked => 1 } )->count, $cnt + 2, 'Patron 1 and 2 included' );
 
     t::lib::Mocks::mock_preference( 'FailedLoginAttempts', q{} );
-    # Patron 1 still on 3 == locked
-    is( Koha::Patrons->search_anonymize_candidates({locked => 1})->count,
-        $cnt+1, 'Still expect same number for FailedLoginAttempts empty' );
-    $patron1->login_attempts(0)->store;
-    # Patron 1 unlocked
-    is( Koha::Patrons->search_anonymize_candidates({locked => 1})->count,
-        $cnt, 'Patron 1 unlocked' );
 };
 
 subtest 'search_anonymized' => sub {
