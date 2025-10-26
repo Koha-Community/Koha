@@ -309,15 +309,7 @@ sub get_template_and_user {
                 auth_error  => $auth_error,
             );
 
-            print $in->{query}->header(
-                {
-                    type              => 'text/html',
-                    charset           => 'utf-8',
-                    cookie            => $cookie,
-                    'X-Frame-Options' => 'SAMEORIGIN'
-                }
-                ),
-                $template->output;
+            C4::Output::output_html_with_http_headers( $in->{query}, $cookie, $template->output );
             safe_exit;
         }
     }
@@ -1586,15 +1578,7 @@ sub checkauth {
         return ( undef, undef, undef, undef, $template );
     }
 
-    print $query->header(
-        {
-            type              => 'text/html',
-            charset           => 'utf-8',
-            cookie            => $cookie,
-            'X-Frame-Options' => 'SAMEORIGIN',
-        }
-        ),
-        $template->output;
+    C4::Output::output_html_with_http_headers( $query, $cookie, $template->output );
     safe_exit;
 }
 
