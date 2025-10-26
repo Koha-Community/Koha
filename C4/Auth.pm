@@ -1625,7 +1625,6 @@ sub checkauth {
             charset           => 'utf-8',
             cookie            => $cookie,
             'X-Frame-Options' => 'SAMEORIGIN',
-            -sameSite         => 'Lax'
         }
         ),
         $template->output;
