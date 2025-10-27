@@ -751,11 +751,10 @@
                                     <div id="publicshelves" class="tab-pane active" role="tabpanel" aria-labelledby="public_lists"> </div>
                                 [% END %]
 
+                                [% SET show_new_list = 0 %]
                                 [% IF !public || Koha.Preference('OpacAllowPublicListCreation') %]
                                     [% IF loggedinusername %]
-                                        <div id="toolbar" class="toolbar"
-                                            ><a class="btn btn-link newshelf" href="/cgi-bin/koha/opac-shelves.pl?op=add_form"><i class="fa fa-plus" aria-hidden="true"></i> New list</a></div
-                                        >
+                                        [% show_new_list = 1 %]
                                     [% ELSE %]
                                         [% IF Koha.Preference( 'opacuserlogin' ) == 1 %]
                                             <div class="alert alert-info"><a href="/cgi-bin/koha/opac-shelves.pl?op=add_form">Log in to create a new list</a></div>
@@ -764,6 +763,25 @@
                                 [% END %]
 
                                 [% IF shelves.count %]
+                                    <div id="toolbar" class="toolbar">
+                                        [% IF ( show_new_list ) %]
+                                            <a class="btn btn-link newshelf" href="/cgi-bin/koha/opac-shelves.pl?op=add_form"><i class="fa fa-plus" aria-hidden="true"></i> New list</a> <span class="sep">|</span>
+                                        [% END %]
+                                        <div class="btn-group dropdown">
+                                            <button type="button" class="btn btn-link dropdown-toggle" data-bs-toggle="dropdown" id="sortmenu" aria-haspopup="true" aria-expanded="false"
+                                                ><i class="fa fa-sort" aria-hidden="true"></i> Sort</button
+                                            >
+                                            <div class="dropdown-menu dropdown-menu-end" aria-labelledby="sortmenu">
+                                                <a class="dropdown-item" href="/cgi-bin/koha/opac-shelves.pl?op=list&public=[% public | html %]&sortfield=">Default sorting</a>
+                                                <span class="dropdown-header">List name</span>
+                                                <a class="dropdown-item" href="/cgi-bin/koha/opac-shelves.pl?op=list&public=[% public | html %]&sortfield=shelfname&direction=asc">List name (A-Z)</a>
+                                                <a class="dropdown-item" href="/cgi-bin/koha/opac-shelves.pl?op=list&public=[% public | html %]&sortfield=shelfname&direction=desc">List name (Z-A)</a>
+                                                <span class="dropdown-header">Modification date</span>
+                                                <a class="dropdown-item" href="/cgi-bin/koha/opac-shelves.pl?op=list&public=[% public | html %]&sortfield=lastmodified&direction=desc">Modification date (newest to oldest)</a>
+                                                <a class="dropdown-item" href="/cgi-bin/koha/opac-shelves.pl?op=list&public=[% public | html %]&sortfield=lastmodified&direction=asc">Modification date (oldest to newest)</a>
+                                            </div>
+                                        </div>
+                                    </div>
                                     <table class="table">
                                         [% IF !public %]
                                             <caption class="sr-only">Your lists</caption>

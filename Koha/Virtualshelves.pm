@@ -87,6 +87,9 @@ sub get_private_shelves {
     my $rows           = $params->{rows};
     my $borrowernumber = $params->{borrowernumber} || 0;
 
+    my $sort_by  = $params->{sort_by};
+    my $order_by = _prepare_order_by_for_shelves( { sort_by => $sort_by } );
+
     $self->search(
         {
             public => 0,
@@ -98,7 +101,7 @@ sub get_private_shelves {
         {
             join     => ['virtualshelfshares'],
             distinct => 'shelfnumber',
-            order_by => 'shelfname',
+            order_by => $order_by,
             ( ( $page and $rows ) ? ( page => $page, rows => $rows ) : () ),
         }
     );
@@ -113,16 +116,44 @@ sub get_public_shelves {
     my $page = $params->{page};
     my $rows = $params->{rows};
 
+    my $sort_by  = $params->{sort_by};
+    my $order_by = _prepare_order_by_for_shelves( { sort_by => $sort_by } );
+
     $self->search(
         {
             public => 1,
         },
         {
             distinct => 'shelfnumber',
-            order_by => 'shelfname',
+            order_by => $order_by,
             ( ( $page and $rows ) ? ( page => $page, rows => $rows ) : () ),
         }
     );
+}
+
+=head3 _prepare_order_by_for_shelves
+
+Create an "order_by" statement when sorting lists of lists
+
+=cut
+
+sub _prepare_order_by_for_shelves {
+    my ($args)       = @_;
+    my $sort_by      = $args->{sort_by};
+    my $order_by_dir = '-asc';
+    my $order_by_col = 'shelfname';
+    if ($sort_by) {
+        my $sortfield = $sort_by->{sortfield};
+        my $direction = $sort_by->{direction};
+        if ( $direction eq 'asc' || $direction eq 'desc' ) {
+            $order_by_dir = '-' . $direction;
+        }
+        if ( $sortfield eq 'shelfname' || $sortfield eq 'lastmodified' ) {
+            $order_by_col = $sortfield;
+        }
+    }
+    my $order_by = { $order_by_dir => $order_by_col };
+    return $order_by;
 }
 
 =head3 get_some_shelves

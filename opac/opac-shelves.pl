@@ -518,13 +518,17 @@ if ( $op eq 'view' ) {
         push @messages, { type => 'error', code => 'does_not_exist' };
     }
 } elsif ( $op eq 'list' ) {
+    my $direction = $query->param('direction') || 'asc';
+    my $sortfield = $query->param('sortfield') || 'shelfname';
+    my $sort_by   = { sortfield => $sortfield, direction => $direction };
+
     my $shelves;
     my ($rows) = (20);
     if ( !$public ) {
         $shelves = Koha::Virtualshelves->get_private_shelves(
-            { page => $page, rows => $rows, borrowernumber => $loggedinuser, } );
+            { page => $page, rows => $rows, borrowernumber => $loggedinuser, sort_by => $sort_by, } );
     } else {
-        $shelves = Koha::Virtualshelves->get_public_shelves( { page => $page, rows => $rows, } );
+        $shelves = Koha::Virtualshelves->get_public_shelves( { page => $page, rows => $rows, sort_by => $sort_by, } );
     }
 
     my $pager = $shelves->pager;
@@ -532,7 +536,11 @@ if ( $op eq 'view' ) {
         shelves        => $shelves,
         pagination_bar => pagination_bar(
             q||,   $pager->last_page - $pager->first_page + 1,
-            $page, "page", { op => 'list', public => $public, }
+            $page, "page",
+            {
+                op        => 'list', public => $public, sortfield => $sortfield,
+                direction => $direction,
+            }
         ),
     );
 }
