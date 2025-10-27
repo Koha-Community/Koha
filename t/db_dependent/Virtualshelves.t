@@ -1233,7 +1233,7 @@ subtest 'Shelf permissions' => sub {
 };
 
 subtest 'Get shelves' => sub {
-    plan tests => 5;
+    plan tests => 13;
     my $patron1 = $builder->build(
         {
             source => 'Borrower',
@@ -1300,8 +1300,45 @@ subtest 'Get shelves' => sub {
         'get_private_shelves should return all shelves for a given patron, even the shared ones'
     );
 
+    my $private_shelves_all = $private_shelves->as_list;
+    is(
+        $private_shelves_all->[0]->shelfname, 'private shelf 1 for patron 1',
+        'First private shelf sorted correctly by default'
+    );
+    is( $private_shelves_all->[-1]->shelfname, 'shared shelf', 'Last private shelf sorted correctly by default' );
+
+    my $private_shelves_sort_desc = Koha::Virtualshelves->get_private_shelves(
+        { borrowernumber => $patron1->{borrowernumber}, sort_by => { sortfield => 'shelfname', direction => 'desc' } }
+    );
+    my $private_shelves_sort_desc_all = $private_shelves_sort_desc->as_list;
+    is(
+        $private_shelves_sort_desc_all->[0]->shelfname, 'shared shelf',
+        'First private shelf sorted correctly by explicit desc name sort'
+    );
+    is(
+        $private_shelves_sort_desc_all->[-1]->shelfname, 'private shelf 1 for patron 1',
+        'Last private shelf sorted correctly by explicit desc name sort'
+    );
+
     my $public_shelves = Koha::Virtualshelves->get_public_shelves;
     is( $public_shelves->count, 2, 'get_public_shelves should return all public shelves, no matter who is the owner' );
+    my $public_shelves_all = $public_shelves->as_list;
+    is( $public_shelves_all->[0]->shelfname, 'public shelf 1 for patron 1', 'First shelf sorted correctly by default' );
+    is(
+        $public_shelves_all->[1]->shelfname, 'public shelf 2 for patron 1',
+        'Second shelf sorted correctly by default'
+    );
+    my $public_shelves_sort_desc =
+        Koha::Virtualshelves->get_public_shelves( { sort_by => { sortfield => 'shelfname', direction => 'desc' } } );
+    my $public_shelves_sort_desc_all = $public_shelves_sort_desc->as_list;
+    is(
+        $public_shelves_sort_desc_all->[0]->shelfname, 'public shelf 2 for patron 1',
+        'First shelf sorted correctly by explicit desc name sort'
+    );
+    is(
+        $public_shelves_sort_desc_all->[1]->shelfname, 'public shelf 1 for patron 1',
+        'Second shelf sorted correctly by explicit desc name sort'
+    );
 
     my $shared_shelf   = eval { $shelf_to_share->share("valid key") };
     my $shared_shelves = Koha::Virtualshelfshares->search( { borrowernumber => $patron1->{borrowernumber} } );
