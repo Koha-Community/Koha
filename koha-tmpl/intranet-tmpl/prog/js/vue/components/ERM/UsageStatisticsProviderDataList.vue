@@ -139,7 +139,6 @@ export default {
             columns: getTableColumns(),
             options: {},
             url: () => tableUrl(),
-            table_settings: title_table_settings,
             add_filters: true,
         });
 
