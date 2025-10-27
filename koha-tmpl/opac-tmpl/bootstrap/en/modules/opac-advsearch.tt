@@ -14,7 +14,7 @@
 </head>
 [% INCLUDE 'bodytag.inc' bodyid='advsearch' bodyclass='scrollto' %]
 [% INCLUDE 'masthead.inc' %]
-[% SET AllPublicBranches = Branches.all(  search_params => { public => 1 } ) %]
+[% SET AllPublicBranches = Branches.all( selected => opac_name, search_params => { public => 1 } ) %]
 
 <form id="advsearch_form" action="/cgi-bin/koha/opac-search.pl" method="get">
     <input type="hidden" name="advsearch" value="1"/>
