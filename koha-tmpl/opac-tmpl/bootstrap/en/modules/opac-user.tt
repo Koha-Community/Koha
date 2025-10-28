@@ -1191,6 +1191,8 @@
                 );
             });
 
+            const export_format_spreadsheet = ButtonsShim.export_format_spreadsheet;
+
             var dTables = $("#checkoutst,#holdst,#overduest,#opac-user-relative-issues-table");
             dTables.each(function(){
                 var thIndex = $(this).find("th.psort").index();
@@ -1231,7 +1233,8 @@
                             extend: "csv",
                             exportOptions: {
                                 /* CSV export should include all columns (even invisible ones) unless they are .noExport */
-                                columns: ":not(.noExport)"
+                                columns: ":not(.noExport)",
+                                format:  export_format_spreadsheet
                             }
                         }
                     ]

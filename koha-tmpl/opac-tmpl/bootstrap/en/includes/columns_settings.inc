@@ -1,5 +1,6 @@
 [% USE TablesSettings %]
-
+[% USE raw %]
+[% Asset.js("js/datatables_buttons_shim.js") | $raw %]
 <script>
 function KohaTable(selector, dt_parameters, columns_settings) {
     var id = 0;
@@ -40,6 +41,8 @@ function KohaTable(selector, dt_parameters, columns_settings) {
         }
     }
 
+    const export_format_spreadsheet = ButtonsShim.export_format_spreadsheet;
+
     // Add a "Clear filter" button to table filter form field
     dt_parameters[ "buttons" ] = [
         {
@@ -58,7 +61,7 @@ function KohaTable(selector, dt_parameters, columns_settings) {
             text: _("CSV"),
             exportOptions: {
                 columns: exportColumns,
-                format: export_format
+                format: export_format_spreadsheet
             },
         },
         {

@@ -24,4 +24,5 @@
     var MSG_DT_ALL = _("All");
     var CONFIG_EXCLUDE_ARTICLES_FROM_SORT = _("a an the");
 </script>
+[% Asset.js("js/datatables_buttons_shim.js") | $raw %]
 [% Asset.js("js/datatables.js") | $raw %]
