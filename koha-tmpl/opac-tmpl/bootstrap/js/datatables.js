@@ -240,6 +240,8 @@ $.fn.dataTable.ext.buttons.clearFilter = {
             }
         };
 
+        const export_format_spreadsheet = ButtonsShim.export_format_spreadsheet;
+
         var export_buttons = [
             {
                 extend: 'excelHtml5',
@@ -252,7 +254,7 @@ $.fn.dataTable.ext.buttons.clearFilter = {
                 extend: 'csvHtml5',
                 exportOptions: {
                     columns: exportColumns,
-                    format:  export_format
+                    format:  export_format_spreadsheet
                 },
             },
             {
