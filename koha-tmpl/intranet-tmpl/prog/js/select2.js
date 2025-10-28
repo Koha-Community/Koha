@@ -23,8 +23,8 @@ $.fn.select2.defaults.set("language", {
     },
     noResults:function(){return __("No results found"); },
     searching:function(){return __("Searching…"); },
-    removeAllItems:function(){return __("Remove all items"); },
-    removeItem:function(){return __("Remove item"); }
+    removeAllItems:function(){return __("Clear selections"); },
+    removeItem:function(){return __("Clear selection"); }
 });
 
 $(document).ready(function(){
