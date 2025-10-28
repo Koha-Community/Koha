@@ -84,15 +84,15 @@
                     [% INCLUDE display_holdpatron_address %]
 
                     [% IF ( patron.phone ) %]
-                        <li>[% patron.phone | html %]</li>
+                        <li class="patronphone">[% patron.phone | html %]</li>
                     [% END %]
 
                     [% IF ( patron.email ) %]
-                        <li>
+                        <li class="patronemail">
                             [% IF ( transfertodo ) %]
                                 [% patron.email | html %]
                             [% ELSE %]
-                                <a id="boremail" href="mailto:[% patron.email | html %]">[% patron.email | html %]</a>
+                                <a href="mailto:[% patron.email | html %]">[% patron.email | html %]</a>
                             [% END %]
                         </li>
                     [% END %]
@@ -704,10 +704,10 @@
                                     </li>
                                     [% INCLUDE display_holdpatron_address %]
                                     [% IF ( patron.phone ) %]
-                                        <li> [% patron.phone | html %]</li>
+                                        <li class="patronphone"> [% patron.phone | html %]</li>
                                     [% END %]
                                     [% IF ( patron.email ) %]
-                                        <li><a id="boremail" href="mailto:[% patron.email | html %]">[% patron.email | html %]</a></li>
+                                        <li class="patronemail"><a href="mailto:[% patron.email | html %]">[% patron.email | html %]</a></li>
                                     [% END %]
 
                                     [% IF ( patron.smsalertnumber ) %]
@@ -919,15 +919,15 @@
                     [% INCLUDE display_holdpatron_address %]
 
                     [% IF ( patron.phone ) %]
-                        <li>[% patron.phone | html %]</li>
+                        <li class="patron-phone">[% patron.phone | html %]</li>
                     [% END %]
 
                     [% IF ( patron.email ) %]
-                        <li>
+                        <li class="patronemail">
                             [% IF ( transfertodo ) %]
                                 [% patron.email | html %]
                             [% ELSE %]
-                                <a id="boremail" href="mailto:[% patron.email | html %]">[% patron.email | html %]</a>
+                                <a href="mailto:[% patron.email | html %]">[% patron.email | html %]</a>
                             [% END %]
                         </li>
                     [% END %]
@@ -1037,7 +1037,7 @@
                                     [% INCLUDE display_holdpatron_address patron=recall.patron %]
 
                                     [% IF ( recall.patron.phone ) %]
-                                        <li>[% recall.patron.phone | html %]</li>
+                                        <l >[% recall.patron.phone | html %]</li>
                                     [% END %]
 
                                     [% IF ( recall.patron.email ) %]
