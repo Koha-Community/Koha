@@ -18,7 +18,7 @@
 use Modern::Perl;
 
 use Test::NoWarnings;
-use Test::More tests => 68;
+use Test::More tests => 69;
 use DateTime::Duration;
 
 use t::lib::Mocks;
@@ -419,6 +419,39 @@ is_deeply(
     \@renewcount,
     [ 3, 3, 0, 0, 0, 0 ],
     "With issuing rules (renewal allowed, 1 remaining) and with a valid parameter, Getrenewcount of item1 returns 0 renews left"
+);
+
+# Check renewal due date when parameter due date is defined but empty
+Koha::CirculationRules->set_rules(
+    {
+        categorycode => undef,
+        itemtype     => undef,
+        branchcode   => undef,
+        rules        => {
+            renewalsallowed => 4,
+        }
+    }
+);
+my $datedue4 = AddRenewal(
+    {
+        borrowernumber  => $borrower_id1,
+        itemnumber      => $item_id1,
+        branch          => $branchcode_1,
+        datedue         => "",
+        lastreneweddate => $daysago10
+    }
+);
+my $datedue4_date = output_pref(
+    {
+        dt         => $datedue4,
+        dateformat => 'iso',
+        timeformat => '24hr',
+        dateonly   => 1
+    }
+);
+ok(
+    $datedue4_date ne $today,
+    q{AddRenewal with a defined but empty due date does not set the due date to today}
 );
 
 $dbh->do("DELETE FROM old_issues");
