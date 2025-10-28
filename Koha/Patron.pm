@@ -1219,7 +1219,6 @@ sub has_restricting_overdues {
 # Fetch first delayX value from overduerules where debarredX is set, or 0 for no delay
 sub _get_overdue_debarred_delay {
     my ( $branchcode, $categorycode ) = @_;
-    my $dbh = C4::Context->dbh();
 
     # We get default rules if there is no rule for this branch
     my $rule = Koha::OverdueRules->find(
