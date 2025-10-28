@@ -32,10 +32,10 @@ $.fn.select2.defaults.set("language", {
         return __("Searching…");
     },
     removeAllItems: function () {
-        return __("Remove all items");
+        return __("Clear selections");
     },
     removeItem: function () {
-        return __("Remove item");
+        return __("Clear selection");
     },
 });
 
