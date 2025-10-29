@@ -111,6 +111,9 @@ export default {
                 type: "text",
                 label: __("Staff userid for SIP2 authentication"),
                 group: "Details",
+                toolTip: __(
+                    "Must match the userid of an existing Koha user with appropriate circulation permissions"
+                ),
             },
             {
                 name: "sip_institution_id",
