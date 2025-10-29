@@ -70,7 +70,11 @@ $(document).ready(function () {
             $(this).replaceWith(span);
         } else {
             var data_rating = $(this).attr("data-rating-value");
-            $(this).append('<span class="sr-only">' + data_rating + "</span>");
+            if (data_rating) {
+                $(this).append(
+                    '<span class="sr-only">' + data_rating + "</span>"
+                );
+            }
         }
     });
 });
