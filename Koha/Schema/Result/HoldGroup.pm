@@ -30,6 +30,21 @@ __PACKAGE__->table("hold_groups");
   is_auto_increment: 1
   is_nullable: 0
 
+=head2 borrowernumber
+
+  data_type: 'integer'
+  is_foreign_key: 1
+  is_nullable: 1
+
+foreign key, linking this to the borrowers table
+
+=head2 visual_hold_group_id
+
+  data_type: 'integer'
+  is_nullable: 1
+
+visual ID for this hold group, in the context of the related patron
+
 =cut
 
 __PACKAGE__->add_columns(
@@ -40,6 +55,10 @@ __PACKAGE__->add_columns(
     is_auto_increment => 1,
     is_nullable => 0,
   },
+  "borrowernumber",
+  { data_type => "integer", is_foreign_key => 1, is_nullable => 1 },
+  "visual_hold_group_id",
+  { data_type => "integer", is_nullable => 1 },
 );
 
 =head1 PRIMARY KEY
@@ -55,6 +74,26 @@ __PACKAGE__->add_columns(
 __PACKAGE__->set_primary_key("hold_group_id");
 
 =head1 RELATIONS
+
+=head2 borrowernumber
+
+Type: belongs_to
+
+Related object: L<Koha::Schema::Result::Borrower>
+
+=cut
+
+__PACKAGE__->belongs_to(
+  "borrowernumber",
+  "Koha::Schema::Result::Borrower",
+  { borrowernumber => "borrowernumber" },
+  {
+    is_deferrable => 1,
+    join_type     => "LEFT",
+    on_delete     => "CASCADE",
+    on_update     => "RESTRICT",
+  },
+);
 
 =head2 old_reserves
 
@@ -87,8 +126,8 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07051 @ 2025-09-03 17:08:22
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:m3/7K38O11278k5glHlXAA
+# Created by DBIx::Class::Schema::Loader v0.07051 @ 2025-10-29 16:44:27
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:5QXHYebj61H0y9VqNzlUSA
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration
