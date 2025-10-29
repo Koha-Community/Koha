@@ -89,9 +89,9 @@ Return the target_hold_id
 sub target_hold_id {
     my ($self) = @_;
 
-    return unless $self->_result->hold_group_target_hold;
+    return unless $self->_result->hold_groups_target_hold;
 
-    return $self->_result->hold_group_target_hold->reserve_id;
+    return $self->_result->hold_groups_target_hold->reserve_id;
 }
 
 =head3 skip_non_target_holds_query
@@ -116,12 +116,12 @@ sub skip_non_target_holds_query {
                 -and => { '!=' => undef },
                 {
                     -not_in => \
-                        'SELECT hold_group_id FROM hold_group_target_holds WHERE reserve_id IS NOT NULL AND reserve_id != me.reserve_id'
+                        'SELECT hold_group_id FROM hold_groups_target_holds WHERE reserve_id IS NOT NULL AND reserve_id != me.reserve_id'
                 }
             ]
         ],
         'sql' =>
-            'AND (hold_group_id IS NULL OR reserves.hold_group_id NOT IN (SELECT hold_group_id FROM hold_group_target_holds WHERE reserve_id IS NOT NULL AND reserve_id != reserves.reserve_id))'
+            'AND (hold_group_id IS NULL OR reserves.hold_group_id NOT IN (SELECT hold_group_id FROM hold_groups_target_holds WHERE reserve_id IS NOT NULL AND reserve_id != reserves.reserve_id))'
     };
 
     return unless $query_type && exists $query_types->{$query_type};

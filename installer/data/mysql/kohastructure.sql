@@ -3561,6 +3561,24 @@ CREATE TABLE `hold_groups` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
+-- Table structure for table `hold_groups_target_holds`
+--
+
+DROP TABLE IF EXISTS `hold_groups_target_holds`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8mb4 */;
+CREATE TABLE `hold_groups_target_holds` (
+  `hold_group_id` int(10) unsigned NOT NULL COMMENT 'foreign key, linking this to the hold_groups table',
+  `reserve_id` int(11) NOT NULL COMMENT 'foreign key, linking this to the reserves table',
+  PRIMARY KEY (`hold_group_id`,`reserve_id`),
+  UNIQUE KEY `uq_hold_group_target_holds_hold_group_id` (`hold_group_id`),
+  UNIQUE KEY `uq_hold_group_target_holds_reserve_id` (`reserve_id`),
+  CONSTRAINT `hold_group_target_holds_ibfk_1` FOREIGN KEY (`hold_group_id`) REFERENCES `hold_groups` (`hold_group_id`) ON DELETE CASCADE,
+  CONSTRAINT `hold_group_target_holds_ibfk_2` FOREIGN KEY (`reserve_id`) REFERENCES `reserves` (`reserve_id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
 -- Table structure for table `housebound_profile`
 --
 
@@ -5110,21 +5128,6 @@ CREATE TABLE `old_issues` (
   CONSTRAINT `old_issues_ibfk_1` FOREIGN KEY (`borrowernumber`) REFERENCES `borrowers` (`borrowernumber`) ON DELETE SET NULL ON UPDATE SET NULL,
   CONSTRAINT `old_issues_ibfk_2` FOREIGN KEY (`itemnumber`) REFERENCES `items` (`itemnumber`) ON DELETE SET NULL ON UPDATE SET NULL,
   CONSTRAINT `old_issues_ibfk_borrowers_borrowernumber` FOREIGN KEY (`issuer_id`) REFERENCES `borrowers` (`borrowernumber`) ON DELETE SET NULL ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Table structure for table `hold_group_target_holds`
---
-DROP TABLE IF EXISTS `hold_group_target_holds`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE hold_group_target_holds (
-    `hold_group_id` int unsigned NOT NULL UNIQUE COMMENT 'foreign key, linking this to the hold_groups table',
-    `reserve_id` int(11) DEFAULT NULL UNIQUE COMMENT 'foreign key, linking this to the reserves table',
-    PRIMARY KEY (`hold_group_id`, `reserve_id`),
-    CONSTRAINT `hold_group_target_holds_ibfk_1` FOREIGN KEY (`hold_group_id`) REFERENCES `hold_groups` (`hold_group_id`) ON DELETE CASCADE,
-    CONSTRAINT `hold_group_target_holds_ibfk_2` FOREIGN KEY (`reserve_id`) REFERENCES `reserves` (`reserve_id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 

@@ -284,7 +284,7 @@ sub set_as_hold_group_target {
 
     if ( $self->hold_group && !$self->hold_group->target_hold_id && C4::Context->preference("DisplayAddHoldGroups") ) {
         $self->_result->create_related(
-            'hold_group_target_hold',
+            'hold_groups_target_hold',
             { hold_group_id => $self->hold_group->hold_group_id }
         );
     }
@@ -308,7 +308,7 @@ sub remove_as_hold_group_target {
         && C4::Context->preference("DisplayAddHoldGroups") )
     {
         $self->_result->find_related(
-            'hold_group_target_hold',
+            'hold_groups_target_hold',
             { hold_group_id => $self->hold_group->hold_group_id, reserve_id => $self->reserve_id }
         )->delete();
     }
