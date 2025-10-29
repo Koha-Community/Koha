@@ -1,3 +1,4 @@
+[% USE raw %]
 [% USE TablesSettings %]
 [% Asset.js("js/datatables_buttons_shim.js") | $raw %]
 <script>
