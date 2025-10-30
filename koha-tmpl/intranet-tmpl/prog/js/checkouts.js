@@ -1036,8 +1036,7 @@ $(document).ready(function () {
                         }
                         refresh_table = false;
                     }
-
-                    $(id).replaceWith(content);
+                    $(id).parent().empty().append(content);
                 },
                 error => {
                     console.warn("Something wrong happened: %s".format(error));
