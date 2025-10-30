@@ -281,6 +281,16 @@
                     $("#accounts").DataTable().draw();
                 });
 
+                patron_autocomplete($("#find_patron"), {
+                    "on-select-add-to": {
+                        container: $("#basket_creators"),
+                        input_name: "created_by",
+                    },
+                    "on-select-callback": function (event, ui) {
+                        $("#find_patron").val("").focus();
+                        return false;
+                    },
+                });
             });
         </script>
     [% END %]
