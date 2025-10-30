@@ -4,12 +4,19 @@
             <ul class="count-list">
                 <li v-for="def in countDefinitions" :key="def.name">
                     <strong>
-                        <router-link v-if="def.page" :to="{ name: def.page }">
+                        <router-link
+                            v-if="def.page && !def.loading"
+                            :to="{ name: def.page }"
+                        >
                             {{ createCountText(def) }}
                         </router-link>
-                        <span v-else class="inactive-link">{{
-                            createCountText(def)
-                        }}</span>
+                        <span v-else class="inactive-link">
+                            <div
+                                class="spinner-border spinner-border-sm"
+                                role="status"
+                            ></div>
+                            {{ createCountText(def) }}
+                        </span>
                     </strong>
                 </li>
             </ul>
@@ -46,20 +53,23 @@ export default {
             },
             emit
         );
+        baseWidget.loading.value = false;
         const countDefinitions = reactive([
             {
                 page: "AgreementsList",
                 name: "agreements_count",
                 i18nLabel: count =>
                     __n("%s agreement", "%s agreements", count).format(count),
-                count: 0,
+                count: "",
+                loading: true,
             },
             {
                 page: "LicensesList",
                 name: "licenses_count",
                 i18nLabel: count =>
                     __n("%s license", "%s licenses", count).format(count),
-                count: 0,
+                count: "",
+                loading: true,
             },
             {
                 page: "EHoldingsLocalPackagesList",
@@ -68,7 +78,8 @@ export default {
                     __n("%s local package", "%s local packages", count).format(
                         count
                     ),
-                count: 0,
+                count: "",
+                loading: true,
             },
             {
                 page: "EHoldingsLocalTitlesList",
@@ -77,7 +88,8 @@ export default {
                     __n("%s local title", "%s local titles", count).format(
                         count
                     ),
-                count: 0,
+                count: "",
+                loading: true,
             },
             {
                 page: "UsageStatisticsDataProvidersList",
@@ -88,7 +100,8 @@ export default {
                         "%s usage data providers",
                         count
                     ).format(count),
-                count: 0,
+                count: "",
+                loading: true,
             },
         ]);
 
@@ -124,17 +137,18 @@ export default {
                 endpoints.forEach(({ name, endpoint }) => {
                     endpoint
                         .then(response => {
-                            const definition = countDefinitions.find(i => i.name === name);
+                            const definition = countDefinitions.find(
+                                i => i.name === name
+                            );
                             if (definition) {
                                 definition.count = response;
+                                definition.loading = false;
                             }
                         })
                         .catch(error => {
                             console.error(`Error fetching ${name}:`, error);
                         });
                 });
-
-                baseWidget.loading.value = false;
             } catch (error) {
                 console.error(error);
             }
