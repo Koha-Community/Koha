@@ -7,16 +7,41 @@ describe("ERM Module Dashboard", () => {
             "/api/v1/erm/config",
             '{"settings":{"ERMModule":"1","ERMProviders":["local"]}}'
         );
-        cy.intercept("GET", "/api/v1/erm/counts", {
-            counts: {
-                agreements_count: 1,
-                documents_count: 0,
-                eholdings_packages_count: 0,
-                eholdings_titles_count: 0,
-                licenses_count: 5,
-                usage_data_providers_count: 1,
+
+        cy.intercept("GET", "/api/v1/erm/agreements*", {
+            statusCode: 200,
+            headers: {
+                "X-Total-Count": "1",
             },
-        }).as("getCounts");
+        }).as("getAgreementsCount");
+
+        cy.intercept("GET", "/api/v1/erm/eholdings/local/packages*", {
+            statusCode: 200,
+            headers: {
+                "X-Total-Count": "0",
+            },
+        }).as("getPackagesCount");
+
+        cy.intercept("GET", "/api/v1/erm/eholdings/local/titles*", {
+            statusCode: 200,
+            headers: {
+                "X-Total-Count": "0",
+            },
+        }).as("getTitlesCount");
+
+        cy.intercept("GET", "/api/v1/erm/licenses*", {
+            statusCode: 200,
+            headers: {
+                "X-Total-Count": "5",
+            },
+        }).as("getLicensesCount");
+
+        cy.intercept("GET", "/api/v1/erm/usage_data_providers*", {
+            statusCode: 200,
+            headers: {
+                "X-Total-Count": "1",
+            },
+        }).as("getDataProvidersCount");
 
         cy.intercept(
             "GET",
@@ -24,9 +49,13 @@ describe("ERM Module Dashboard", () => {
             cy.get_eusage_reports()
         ).as("getReports");
 
-        cy.intercept("GET", "/api/v1/erm/licenses*", [cy.get_license()]).as(
-            "getLicenses"
-        );
+        cy.intercept("GET", "/api/v1/erm/licenses*", {
+            statusCode: 200,
+            body: [cy.get_license()],
+            headers: {
+                "X-Total-Count": "5",
+            },
+        }).as("getLicenses");
 
         cy.intercept("GET", "/api/v1/jobs*", [
             {
@@ -98,14 +127,13 @@ describe("ERM Module Dashboard", () => {
         cy.visit("/cgi-bin/koha/erm/erm.pl");
 
         //Display
-        cy.get(".widget#ERMCounts .widget-content").should(
-            "contain",
-            "Loading..."
-        );
-        cy.wait("@getCounts");
+        cy.wait("@getAgreementsCount");
+        cy.wait("@getLicenses");
+        cy.wait("@getPackagesCount");
+        cy.wait("@getTitlesCount");
+        cy.wait("@getDataProvidersCount");
         cy.get(".widget#ERMCounts .widget-content").contains("1 agreement");
         cy.get(".widget#ERMCounts .widget-content").contains("5 licenses");
-        cy.get(".widget#ERMCounts .widget-content").contains("0 documents");
         cy.get(".widget#ERMCounts .widget-content").contains(
             "0 local packages"
         );
