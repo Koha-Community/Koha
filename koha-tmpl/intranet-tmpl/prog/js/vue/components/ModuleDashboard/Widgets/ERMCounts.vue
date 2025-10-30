@@ -40,7 +40,7 @@ export default {
                 name: $__("Counts"),
                 icon: "fas fa-chart-bar",
                 description: $__(
-                    "Shows the number of ERM related resources such as agreements, licenses, local packages, local titles, documents, etc."
+                    "Shows the number of ERM related resources such as agreements, licenses, local packages, local titles, etc."
                 ),
                 ...props,
             },
@@ -59,12 +59,6 @@ export default {
                 name: "licenses_count",
                 i18nLabel: count =>
                     __n("%s license", "%s licenses", count).format(count),
-                count: 0,
-            },
-            {
-                name: "documents_count",
-                i18nLabel: count =>
-                    __n("%s document", "%s documents", count).format(count),
                 count: 0,
             },
             {
