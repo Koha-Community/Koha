@@ -112,22 +112,14 @@ start_sip()
 stop_sip()
 {
     local name=$1
+    local PIDFILE="/var/run/koha/${name}/${name}-koha-sip.pid"
 
     if is_sip_running $name; then
-
-        DAEMONOPTS="--name=${name}-koha-sip \
-                    --errlog=/var/log/koha/${name}/sip-error.log \
-                    --output=/var/log/koha/${name}/sip-output.log \
-                    --verbose=1 \
-                    --respawn \
-                    --delay=30 \
-                    --pidfiles=/var/run/koha/${name} \
-                    --user=${name}-koha.${name}-koha"
 
         [ "$verbose" != "no" ] && \
             log_daemon_msg "Stopping SIP server for ${name}"
 
-        if daemon $DAEMONOPTS --stop; then
+        if start-stop-daemon --pidfile $PIDFILE --user ${name}-koha --stop --retry=TERM/30/KILL/5; then
             ([ "$verbose" != "no" ] && \
                 log_end_msg 0) || return 0
         else
