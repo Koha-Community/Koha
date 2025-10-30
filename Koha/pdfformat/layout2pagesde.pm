@@ -266,7 +266,9 @@ sub printpdf {
     # open the default PDF that will be used for base (1st page already filled)
     my $pdf_template =
         C4::Context->config('intrahtdocs') . '/' . C4::Context->preference('template') . '/pdf/layout2pagesde.pdf';
-    my $pdf = PDF::API2->open($pdf_template);
+    my $pdf_template_obj = PDF::API2->open($pdf_template);
+    my $pdf_template_str = $pdf_template_obj->to_string();
+    my $pdf              = PDF::API2->from_string($pdf_template_str);
     $pdf->pageLabel(
         0,
         {
