@@ -27,7 +27,6 @@ BEGIN {
         DelSuggestion
         GetSuggestion
         GetSuggestionByStatus
-        GetSuggestionFromBiblionumber
         GetSuggestionInfoFromBiblionumber
         GetSuggestionInfo
         ModStatus
@@ -72,31 +71,6 @@ All aqorders of a borrower can be seen by the borrower itself.
 Suggestions done by other borrowers can be seen when not "AVAILABLE"
 
 =head1 FUNCTIONS
-
-=head2 GetSuggestionFromBiblionumber
-
-$ordernumber = &GetSuggestionFromBiblionumber($biblionumber)
-
-Get a suggestion from it's biblionumber.
-
-return :
-the id of the suggestion which is related to the biblionumber given on input args.
-
-=cut
-
-sub GetSuggestionFromBiblionumber {
-    my ($biblionumber) = @_;
-    my $query = q{
-        SELECT suggestionid
-        FROM   suggestions
-        WHERE  biblionumber=? LIMIT 1
-    };
-    my $dbh = C4::Context->dbh;
-    my $sth = $dbh->prepare($query);
-    $sth->execute($biblionumber);
-    my ($suggestionid) = $sth->fetchrow;
-    return $suggestionid;
-}
 
 =head2 GetSuggestionInfoFromBiblionumber
 

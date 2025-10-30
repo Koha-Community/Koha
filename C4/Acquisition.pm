@@ -69,7 +69,7 @@ BEGIN {
 use Carp qw( carp croak );
 use Text::CSV_XS;
 use C4::Context;
-use C4::Suggestions qw( GetSuggestionFromBiblionumber ModSuggestion );
+use C4::Suggestions qw( ModSuggestion );
 use C4::Biblio      qw( GetMarcFromKohaField GetMarcStructure IsMarcStructureInternal );
 use C4::Contract    qw( GetContract );
 use C4::Log         qw( logaction );
@@ -1417,11 +1417,11 @@ sub ModReceiveOrder {
     $order->{invoice_unitprice} ||= $order->{unitprice};
     $order->{invoice_currency}  ||= Koha::Acquisition::Currencies->get_active->currency;
 
-    my $suggestionid = GetSuggestionFromBiblionumber($biblionumber);
-    if ($suggestionid) {
+    my $suggestion = Koha::Suggestions->find( { biblionumber => $biblionumber } );
+    if ($suggestion) {
         ModSuggestion(
             {
-                suggestionid => $suggestionid,
+                suggestionid => $suggestion->suggestionid,
                 STATUS       => 'AVAILABLE',
                 biblionumber => $biblionumber
             }

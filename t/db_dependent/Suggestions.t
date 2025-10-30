@@ -19,7 +19,7 @@ use Modern::Perl;
 
 use DateTime::Duration;
 use Test::NoWarnings;
-use Test::More tests => 95;
+use Test::More tests => 92;
 use Test::Warn;
 
 use t::lib::Mocks;
@@ -38,7 +38,7 @@ use Koha::Suggestions;
 BEGIN {
     use_ok(
         'C4::Suggestions',
-        qw( ModSuggestion GetSuggestionInfo GetSuggestionFromBiblionumber GetSuggestionInfoFromBiblionumber GetSuggestionByStatus ConnectSuggestionAndBiblio DelSuggestion MarcRecordFromNewSuggestion GetUnprocessedSuggestions DelSuggestionsOlderThan )
+        qw( ModSuggestion GetSuggestionInfo GetSuggestionInfoFromBiblionumber GetSuggestionByStatus ConnectSuggestionAndBiblio DelSuggestion MarcRecordFromNewSuggestion GetUnprocessedSuggestions DelSuggestionsOlderThan )
     );
 }
 
@@ -333,16 +333,6 @@ is( $suggestion->{firstnamesuggestedby}, $member->{firstname}, 'GetSuggestionInf
 is(
     $suggestion->{borrnumsuggestedby}, $my_suggestion->{suggestedby},
     'GetSuggestionInfo returns the borrower number correctly'
-);
-
-is( GetSuggestionFromBiblionumber(), undef, 'GetSuggestionFromBiblionumber without the biblio number returns undef' );
-is(
-    GetSuggestionFromBiblionumber(2), undef,
-    'GetSuggestionFromBiblionumber with an invalid biblio number returns undef'
-);
-is(
-    GetSuggestionFromBiblionumber( $biblio_1->biblionumber ), $my_suggestionid,
-    'GetSuggestionFromBiblionumber functions correctly'
 );
 
 is(
