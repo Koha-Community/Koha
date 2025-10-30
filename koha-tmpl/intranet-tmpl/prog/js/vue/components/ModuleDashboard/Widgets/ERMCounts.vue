@@ -104,13 +104,40 @@ export default {
 
         async function getCounts() {
             try {
-                const response = await APIClient.erm.counts.get();
+                const endpoints = [
+                    {
+                        name: "agreements_count",
+                        endpoint: APIClient.erm.agreements.count(),
+                    },
+                    {
+                        name: "licenses_count",
+                        endpoint: APIClient.erm.licenses.count(),
+                    },
+                    {
+                        name: "eholdings_packages_count",
+                        endpoint: APIClient.erm.localPackages.count(),
+                    },
+                    {
+                        name: "eholdings_titles_count",
+                        endpoint: APIClient.erm.localTitles.count(),
+                    },
+                    {
+                        name: "usage_data_providers_count",
+                        endpoint: APIClient.erm.usage_data_providers.count(),
+                    },
+                ];
 
-                Object.keys(response.counts).forEach(key => {
-                    const item = countDefinitions.find(i => i.name === key);
-                    if (item) {
-                        item.count = response.counts[key];
-                    }
+                endpoints.forEach(({ name, endpoint }) => {
+                    endpoint
+                        .then(response => {
+                            const definition = countDefinitions.find(i => i.name === name);
+                            if (definition) {
+                                definition.count = response;
+                            }
+                        })
+                        .catch(error => {
+                            console.error(`Error fetching ${name}:`, error);
+                        });
                 });
 
                 baseWidget.loading.value = false;
