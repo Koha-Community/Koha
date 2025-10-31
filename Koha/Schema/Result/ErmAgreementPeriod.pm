@@ -120,6 +120,39 @@ __PACKAGE__->belongs_to(
 # Created by DBIx::Class::Schema::Loader v0.07049 @ 2022-05-25 11:46:59
 # DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:NCQpSw+rp/9B/yOrtLtK6g
 
+__PACKAGE__->has_many(
+    "additional_field_values",
+    "Koha::Schema::Result::AdditionalFieldValue",
+    sub {
+        my ($args) = @_;
+
+        return {
+            "$args->{foreign_alias}.record_id" => { -ident => "$args->{self_alias}.agreement_period_id" },
+
+            "$args->{foreign_alias}.field_id" =>
+                { -in => \'(SELECT id FROM additional_fields WHERE tablename="erm_agreement_periods")' },
+        };
+    },
+    { cascade_copy => 0, cascade_delete => 0 },
+);
+
+__PACKAGE__->has_many(
+    "extended_attributes",
+    "Koha::Schema::Result::AdditionalFieldValue",
+    sub {
+        my ($args) = @_;
+
+        return {
+            "$args->{foreign_alias}.record_id" => { -ident => "$args->{self_alias}.agreement_period_id" },
+
+            "$args->{foreign_alias}.field_id" =>
+                { -in => \'(SELECT id FROM additional_fields WHERE tablename="erm_agreement_periods")' },
+        };
+    },
+    { cascade_copy => 0, cascade_delete => 0 },
+);
+
+
 =head2 koha_object_class
 
 Missing POD for koha_object_class.
