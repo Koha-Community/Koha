@@ -74,8 +74,6 @@ if [ "$mysqltls" = "yes" ]; then
     if [ -n "$mysqlkey" ] && [ "$mysqlkey" != "__DB_TLS_CLIENT_KEY__" ]; then
         set -- --ssl-key="$mysqlkey" "$@"
     fi
-else
-   set -- --skip-ssl "$@"
 fi
 
 if [ "$mysqltz" != "" ]; then
