@@ -3,6 +3,7 @@
 [% USE Koha %]
 [% USE KohaDates %]
 [% USE Branches %]
+[% USE HtmlScrubber %]
 [% PROCESS 'i18n.inc' %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
@@ -351,7 +352,7 @@
             ><button class="btn btn-default dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"> </button>
             <ul class="dropdown-menu">
                 <li>
-                    [% IF ( wysiwy || category == 'record_display' ) %]
+                    [% IF ( wysiwyg || category == 'record_display' ) %]
                         <a class="dropdown-item" href="/cgi-bin/koha/tools/additional-contents.pl?op=add_form&category=[% category | uri %]&editmode=text">New entry using text editor</a>
                     [% ELSE %]
                         <a class="dropdown-item" href="/cgi-bin/koha/tools/additional-contents.pl?op=add_form&category=[% category | uri %]&editmode=wysiwyg">New entry using WYSIWYG editor</a>
@@ -468,7 +469,11 @@
                                                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                                 </div>
                                                 <div class="modal-body">
-                                                    <template shadowrootmode="open"> [% default_localization.content | $raw %] </template>
+                                                    [% IF ( category == 'record_display' ) %]
+                                                        <template shadowrootmode="open"> [% default_localization.content | scrub_html type => 'record_display' | $raw %] </template>
+                                                    [% ELSE %]
+                                                        <template shadowrootmode="open"> [% default_localization.content | $raw %] </template>
+                                                    [% END %]
                                                 </div>
                                                 <div class="modal-footer">
                                                     <button type="button" class="btn btn-default" data-bs-dismiss="modal">Close</button>
@@ -483,7 +488,7 @@
                                         ><button class="btn btn-default btn-xs dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"> </button>
                                         <ul class="dropdown-menu">
                                             <li>
-                                                [% IF ( wysiwyg ) %]
+                                                [% IF ( wysiwyg || category == 'record_display' ) %]
                                                     <a class="dropdown-item" href="/cgi-bin/koha/tools/additional-contents.pl?op=add_form&amp;id=[% c.id | uri %]&editmode=text"><i class="fa-solid fa-pencil"></i> Edit with text editor</a>
                                                 [% ELSE %]
                                                     <a class="dropdown-item" href="/cgi-bin/koha/tools/additional-contents.pl?op=add_form&amp;id=[% c.id | uri %]&editmode=wysiwyg"
