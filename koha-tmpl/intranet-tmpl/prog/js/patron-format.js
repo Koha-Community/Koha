@@ -40,9 +40,9 @@
         }
         if (name.replace(" ", "").length == 0) {
             if (patron.library) {
-                return _("A patron from %s").format(patron.library.name);
+                return __("A patron from %s").format(patron.library.name);
             } else {
-                return _("A patron from another library");
+                return __("A patron from another library");
             }
         }
 
