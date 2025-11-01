@@ -112,7 +112,8 @@ if ( !$registers->count ) {
             );
 
             # Redirect to prevent duplicate submissions (POST/REDIRECT/GET pattern)
-            print $input->redirect( "/cgi-bin/koha/pos/register.pl?registerid=" . $registerid  . "&cashup_id=" . $cashup->id );
+            print $input->redirect(
+                "/cgi-bin/koha/pos/register.pl?registerid=" . $registerid . "#cashup-" . $cashup->id );
             exit;
         } else {
             $template->param( error_cashup_permission => 1 );

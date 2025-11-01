@@ -241,12 +241,17 @@
                $('#cashup_registerid').val(rid);
             });
 
-            [% IF cashup_id %]
-            let $button = $('[data-cashup="[% cashup_id | html %]"]');
-            if ($button.length) {
-                $button[0].click();
+            // Check for cashup hash in URL
+            let hash = window.location.hash;
+            if (hash && hash.startsWith('#cashup-')) {
+                let cashup_id = hash.substring(8); // Remove '#cashup-' prefix
+                let $button = $('[data-cashup="' + cashup_id + '"]');
+                if ($button.length) {
+                    $button[0].click();
+                    // Clean up URL without page reload
+                    history.replaceState(null, null, window.location.pathname + window.location.search);
+                }
             }
-            [% END %]
         });
     </script>
 [% END %]

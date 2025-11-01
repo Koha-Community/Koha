@@ -56,16 +56,17 @@ if ( !$registers->count ) {
 my $op = $input->param('op') // '';
 if ( $op eq 'cud-cashup' ) {
     if ( $logged_in_user->has_permission( { cash_management => 'cashup' } ) ) {
-        my $registerid = $input->param('registerid');
+        my $registerid   = $input->param('registerid');
+        my $redirect_url = "/cgi-bin/koha/pos/registers.pl";
         if ($registerid) {
             my $register = Koha::Cash::Registers->find( { id => $registerid } );
-            my $cashup = $register->add_cashup(
+            my $cashup   = $register->add_cashup(
                 {
                     manager_id => $logged_in_user->id,
                     amount     => $register->outstanding_accountlines->total
                 }
             );
-            $template->param( cashup_id => $cashup->id );
+            $redirect_url .= "#cashup-" . $cashup->id;
         } else {
             for my $register ( $registers->as_list ) {
                 $register->add_cashup(
@@ -78,7 +79,7 @@ if ( $op eq 'cud-cashup' ) {
         }
 
         # Redirect to prevent duplicate submissions (POST/REDIRECT/GET pattern)
-        print $input->redirect("/cgi-bin/koha/pos/registers.pl");
+        print $input->redirect($redirect_url);
         exit;
     } else {
         $template->param( error_cashup_permission => 1 );
