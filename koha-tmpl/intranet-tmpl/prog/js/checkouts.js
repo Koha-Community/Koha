@@ -245,19 +245,19 @@ function LoadIssuesTable() {
                         return title;
                     },
                     type: "anti-the",
-                    orderData: [1, 3],
+                    orderData: [1, 4],
                 },
                 {
                     data: function (oObj) {
                         return oObj.recordtype_description.escapeHtml();
                     },
-                    orderData: [1, 4],
+                    orderData: [1, 5],
                 },
                 {
                     data: function (oObj) {
                         return oObj.itemtype_description.escapeHtml();
                     },
-                    orderData: [1, 5],
+                    orderData: [1, 6],
                 },
                 {
                     data: function (oObj) {
@@ -265,13 +265,13 @@ function LoadIssuesTable() {
                             ? oObj.collection.escapeHtml()
                             : "";
                     },
-                    orderData: [1, 6],
+                    orderData: [1, 7],
                 },
                 {
                     data: function (oObj) {
                         return oObj.location ? oObj.location.escapeHtml() : "";
                     },
-                    orderData: [1, 7],
+                    orderData: [1, 8],
                 },
                 {
                     data: function (oObj) {
@@ -279,7 +279,7 @@ function LoadIssuesTable() {
                             ? oObj.homebranch.escapeHtml()
                             : "";
                     },
-                    orderData: [1, 8],
+                    orderData: [1, 9],
                 },
                 {
                     data: "issuedate",
@@ -299,7 +299,7 @@ function LoadIssuesTable() {
                             ? oObj.branchname.escapeHtml()
                             : "";
                     },
-                    orderData: [1, 11],
+                    orderData: [1, 12],
                 },
                 {
                     data: function (oObj) {
@@ -307,7 +307,7 @@ function LoadIssuesTable() {
                             ? oObj.itemcallnumber.escapeHtml()
                             : "";
                     },
-                    orderData: [1, 12],
+                    orderData: [1, 13],
                 },
                 {
                     data: function (oObj) {
@@ -315,7 +315,7 @@ function LoadIssuesTable() {
                             ? oObj.copynumber.escapeHtml()
                             : "";
                     },
-                    orderData: [1, 13],
+                    orderData: [1, 14],
                 },
                 {
                     data: function (oObj) {
@@ -326,7 +326,7 @@ function LoadIssuesTable() {
                             "<span>"
                         );
                     },
-                    orderData: [1, 14],
+                    orderData: [1, 15],
                     className: "nowrap",
                 },
                 {
@@ -338,7 +338,7 @@ function LoadIssuesTable() {
                             "<span>"
                         );
                     },
-                    orderData: [1, 15],
+                    orderData: [1, 16],
                     className: "nowrap",
                 },
                 {
@@ -350,7 +350,7 @@ function LoadIssuesTable() {
                             "<span>"
                         );
                     },
-                    orderData: [1, 16],
+                    orderData: [1, 17],
                     className: "nowrap",
                 },
                 {
