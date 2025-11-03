@@ -163,7 +163,7 @@ set_action()
 
 op=""
 quiet="no"
-batch_size=$(get_es_indexer_batch_size ${name})
+batch_size=10
 
 # Read command line parameters
 while [ $# -gt 0 ]; do
@@ -207,6 +207,8 @@ if [ $# -gt 0 ]; then
             adjust_paths_git_install $name
             worker_DAEMON="${KOHA_HOME}/${KOHA_BINDIR}/workers/es_indexer_daemon.pl"
             export PERL5LIB
+
+            batch_size=$(get_es_indexer_batch_size ${name})
 
             case $op in
                 "start")
