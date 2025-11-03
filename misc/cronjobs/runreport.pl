@@ -27,6 +27,7 @@ use C4::Context;
 use C4::Log qw( cronlogaction );
 use Koha::Email;
 use Koha::DateUtils qw( dt_from_string );
+use Koha::File::Transports;
 use Koha::SMTP::Servers;
 
 use Getopt::Long qw( GetOptions );
@@ -47,31 +48,33 @@ runreport.pl - Run pre-existing saved reports
 runreport.pl [ -h | -m ] [ -v ] reportID [ reportID ... ]
 
  Options:
-   -h --help       brief help message
-   -m --man        full documentation, same as --help --verbose
-   -v --verbose    verbose output
+   -h --help        brief help message
+   -m --man         full documentation, same as --help --verbose
+   -v --verbose     verbose output
 
-   --format=s      selects format. Choice of text, html, csv or tsv
+   --format=s       selects format. Choice of text, html, csv or tsv
 
-   -e --email      whether to use e-mail (implied by --to or --from)
-   --send_empty    whether to send an email when there are no results from the
-                   specified report
-   -a --attachment additionally attach the report as a file. cannot be used with html format
-   --username      username to pass to the SMTP server for authentication
-   --password      password to pass to the SMTP server for authentication
-   --method        method is the type of authentication. Ie. LOGIN, DIGEST-MD5, etc.
-   --to=s          e-mail address to send report to
-   --from=s        e-mail address to send report from
-   --subject=s     subject for the e-mail
-   --param=s       parameters for the report
-   --store-results store the result of the report
-   --separator     separator character for csv
-   --quote         quote character for csv
-   --csv-header    add column names as first line of csv output
+   -e --email       whether to use e-mail (implied by --to or --from)
+   --send_empty     whether to send an email when there are no results from the
+                    specified report
+   -a --attachment  additionally attach the report as a file. cannot be used with html format
+   -n --filename    (ftp/sftp only) optionally specify the name to use when uploading the file
+   --username       username to pass to the SMTP server for authentication
+   --password       password to pass to the SMTP server for authentication
+   --method         method is the type of authentication. Ie. LOGIN, DIGEST-MD5, etc.
+   --to=s           e-mail address to send report to
+   --from=s         e-mail address to send report from
+   --subject=s      subject for the e-mail
+   --param=s        parameters for the report
+   --store-results  store the result of the report
+   --sftp-dest-id=i the ID of the target FTP/SFTP server, if you wish to upload the report
+   --separator      separator character for csv
+   --quote          quote character for csv
+   --csv-header     add column names as first line of csv output
 
 
  Arguments:
-   reportID        report ID Number from saved_sql.id, multiple ID's may be specified
+   reportID         report ID Number from saved_sql.id, multiple ID's may be specified
 
 =head1 OPTIONS
 
@@ -187,6 +190,7 @@ my $man           = 0;
 my $verbose       = 0;
 my $send_email    = 0;
 my $send_empty    = 0;
+my $sftp_dest_id  = 0;
 my $attachment    = 0;
 my $format        = "text";
 my $to            = "";
@@ -200,6 +204,7 @@ my $csv_header    = 0;
 my $csv_separator = "";
 my $csv_quote     = "";
 
+my $filename = undef;
 my $username = undef;
 my $password = undef;
 my $method   = 'LOGIN';
@@ -208,24 +213,26 @@ my $command_line_options = join( " ", @ARGV );
 cronlogaction( { info => $command_line_options } );
 
 GetOptions(
-    'help|?'        => \$help,
-    'man'           => \$man,
-    'verbose'       => \$verbose,
-    'format=s'      => \$format,
-    'separator=s'   => \$csv_separator,
-    'quote=s'       => \$csv_quote,
-    'to=s'          => \$to,
-    'from=s'        => \$from,
-    'subject=s'     => \$subject,
-    'param=s'       => \@params,
-    'email'         => \$send_email,
-    'send_empty'    => \$send_empty,
-    'a|attachment'  => \$attachment,
-    'username:s'    => \$username,
-    'password:s'    => \$password,
-    'method:s'      => \$method,
-    'store-results' => \$store_results,
-    'csv-header'    => \$csv_header,
+    'help|?'         => \$help,
+    'man'            => \$man,
+    'verbose'        => \$verbose,
+    'format=s'       => \$format,
+    'separator=s'    => \$csv_separator,
+    'quote=s'        => \$csv_quote,
+    'to=s'           => \$to,
+    'from=s'         => \$from,
+    'subject=s'      => \$subject,
+    'param=s'        => \@params,
+    'email'          => \$send_email,
+    'send_empty'     => \$send_empty,
+    'sftp-dest-id=i' => \$sftp_dest_id,
+    'a|attachment'   => \$attachment,
+    'n|filename:s'   => \$filename,
+    'username:s'     => \$username,
+    'password:s'     => \$password,
+    'method:s'       => \$method,
+    'store-results'  => \$store_results,
+    'csv-header'     => \$csv_header,
 
 ) or pod2usage(2);
 pod2usage( -verbose => 2 ) if ($man);
@@ -392,7 +399,37 @@ foreach my $report_id (@ARGV) {
         } catch {
             carp "Mail not sent: $_";
         };
-    } else {
+    }
+
+    if ($sftp_dest_id) {
+        my $sftp_server = Koha::File::Transports->find($sftp_dest_id);
+
+        die("ERROR:\tSupplied FTP/SFTP Server doesn\'t exist")
+            unless ($sftp_server);
+
+        die("ERROR:\tUnable to connect to FTP/SFTP Server")
+            unless ( $sftp_server->connect );
+
+        my $upload_directory = $sftp_server->upload_directory;
+        my $content_type     = "text/$format";
+        my $filename         = $filename || "report$report_id-$date.$format";
+
+        open my $fh, "<", \$message;
+
+        die("ERROR\tMessage supplied is empty, or, not suitable for upload")
+            unless ($fh);
+
+        die("ERROR\tNo upload directory specified in config")
+            unless ($upload_directory);
+
+        die("ERROR\tUnable to change directory")
+            unless ( $sftp_server->change_directory($upload_directory) );
+
+        die("ERROR\tUnable to upload report to server")
+            unless ( $sftp_server->upload_file( $fh, $filename ) );
+    }
+
+    if ( !$send_email && !$sftp_dest_id ) {
         print $message;
     }
 }
