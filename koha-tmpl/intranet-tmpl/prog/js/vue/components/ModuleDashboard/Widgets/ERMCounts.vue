@@ -8,14 +8,14 @@
                             v-if="def.page && !def.loading"
                             :to="{ name: def.page }"
                         >
-                            {{ createCountText(def) }}
+                            {{ def.i18nLabel(def.count) }}
                         </router-link>
                         <span v-else class="inactive-link">
                             <div
                                 class="spinner-border spinner-border-sm"
                                 role="status"
                             ></div>
-                            {{ createCountText(def) }}
+                            {{ def.i18nLabel(def.count) }}
                         </span>
                     </strong>
                 </li>
@@ -58,6 +58,7 @@ export default {
             {
                 page: "AgreementsList",
                 name: "agreements_count",
+                fetchCount: () => APIClient.erm.agreements.count(),
                 i18nLabel: count =>
                     __nx("{count} agreement", "{count} agreements", count, {
                         count,
@@ -68,6 +69,7 @@ export default {
             {
                 page: "LicensesList",
                 name: "licenses_count",
+                fetchCount: () => APIClient.erm.licenses.count(),
                 i18nLabel: count =>
                     __nx("{count} license", "{count} licenses", count, {
                         count,
@@ -78,6 +80,7 @@ export default {
             {
                 page: "EHoldingsLocalPackagesList",
                 name: "eholdings_packages_count",
+                fetchCount: () => APIClient.erm.localPackages.count(),
                 i18nLabel: count =>
                     __nx(
                         "{count} local package",
@@ -91,6 +94,7 @@ export default {
             {
                 page: "EHoldingsLocalTitlesList",
                 name: "eholdings_titles_count",
+                fetchCount: () => APIClient.erm.localTitles.count(),
                 i18nLabel: count =>
                     __nx("{count} local title", "{count} local titles", count, {
                         count,
@@ -101,6 +105,7 @@ export default {
             {
                 page: "UsageStatisticsDataProvidersList",
                 name: "usage_data_providers_count",
+                fetchCount: () => APIClient.erm.usage_data_providers.count(),
                 i18nLabel: count =>
                     __nx(
                         "{count} usage data provider",
@@ -113,53 +118,14 @@ export default {
             },
         ]);
 
-        const createCountText = definition => {
-            return definition.i18nLabel(definition.count);
-        };
-
         async function getCounts() {
-            try {
-                const endpoints = [
-                    {
-                        name: "agreements_count",
-                        endpoint: APIClient.erm.agreements.count(),
-                    },
-                    {
-                        name: "licenses_count",
-                        endpoint: APIClient.erm.licenses.count(),
-                    },
-                    {
-                        name: "eholdings_packages_count",
-                        endpoint: APIClient.erm.localPackages.count(),
-                    },
-                    {
-                        name: "eholdings_titles_count",
-                        endpoint: APIClient.erm.localTitles.count(),
-                    },
-                    {
-                        name: "usage_data_providers_count",
-                        endpoint: APIClient.erm.usage_data_providers.count(),
-                    },
-                ];
-
-                endpoints.forEach(({ name, endpoint }) => {
-                    endpoint
-                        .then(response => {
-                            const definition = countDefinitions.find(
-                                i => i.name === name
-                            );
-                            if (definition) {
-                                definition.count = response;
-                                definition.loading = false;
-                            }
-                        })
-                        .catch(error => {
-                            console.error(`Error fetching ${name}:`, error);
-                        });
-                });
-            } catch (error) {
-                console.error(error);
-            }
+            await Promise.all(
+                countDefinitions.map(async definition => {
+                    const response = await definition.fetchCount();
+                    definition.count = response;
+                    definition.loading = false;
+                })
+            );
         }
 
         baseWidget.onDashboardMounted(() => {
@@ -172,7 +138,6 @@ export default {
 
         return {
             ...baseWidget,
-            createCountText,
             countDefinitions,
             goToPage,
         };
