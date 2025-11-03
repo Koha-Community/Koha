@@ -53,9 +53,12 @@ subtest 'list() tests' => sub {
     $t->get_ok( "//$userid:$password@/api/v1/patrons/" . $patron->id . '/holds' )->status_is( 200, 'REST3.2.2' )
         ->json_is( [] );
 
-    my $hold_1 = $builder->build_object( { class => 'Koha::Holds', value => { borrowernumber => $patron->id } } );
-    my $hold_2 = $builder->build_object( { class => 'Koha::Holds', value => { borrowernumber => $patron->id } } );
-    my $hold_3 = $builder->build_object( { class => 'Koha::Holds', value => { borrowernumber => $patron->id } } );
+    my $hold_1 = $builder->build_object(
+        { class => 'Koha::Holds', value => { hold_group_id => undef, borrowernumber => $patron->id } } );
+    my $hold_2 = $builder->build_object(
+        { class => 'Koha::Holds', value => { hold_group_id => undef, borrowernumber => $patron->id } } );
+    my $hold_3 = $builder->build_object(
+        { class => 'Koha::Holds', value => { hold_group_id => undef, borrowernumber => $patron->id } } );
 
     $t->get_ok( "//$userid:$password@/api/v1/patrons/" . $patron->id . '/holds?_order_by=+me.hold_id' )
         ->status_is( 200, 'REST3.2.2' )
