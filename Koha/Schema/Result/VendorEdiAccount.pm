@@ -115,6 +115,12 @@ __PACKAGE__->table("vendor_edi_accounts");
   is_foreign_key: 1
   is_nullable: 1
 
+=head2 po_is_basketname
+
+  data_type: 'tinyint'
+  default_value: 0
+  is_nullable: 0
+
 =cut
 
 __PACKAGE__->add_columns(
@@ -148,6 +154,8 @@ __PACKAGE__->add_columns(
   { data_type => "varchar", default_value => "", is_nullable => 0, size => 256 },
   "file_transport_id",
   { data_type => "integer", is_foreign_key => 1, is_nullable => 1 },
+  "po_is_basketname",
+  { data_type => "tinyint", default_value => 0, is_nullable => 0 },
 );
 
 =head1 PRIMARY KEY
@@ -240,8 +248,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07051 @ 2025-10-14 20:25:57
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:kt6vdvzzxk3kOdgIwBMFrg
+# Created by DBIx::Class::Schema::Loader v0.07051 @ 2025-11-03 20:27:30
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:1sHAak6V/HC2E1AUHzDapg
 
 __PACKAGE__->add_columns(
     '+auto_orders'       => { is_boolean => 1 },
