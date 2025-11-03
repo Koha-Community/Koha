@@ -238,9 +238,9 @@
                                         <label for="masthead_search" class="visually-hidden">Search the catalog by:</label>
                                         <select name="idx" id="masthead_search" class="form-select">
                                             [% IF ( ms_kw ) %]
-                                                <option selected="selected" value="" data-placeholder="[% t("Search the catalog by keyword") | html %]">Library catalog</option>
+                                                <option selected="selected" value="" data-placeholder="[% t("Search the catalog") | html %]">Library catalog</option>
                                             [% ELSE %]
-                                                <option value="" data-placeholder="[% t("Search the catalog by keyword") | html %]">Library catalog</option>
+                                                <option value="" data-placeholder="[% t("Search the catalog") | html %]">Library catalog</option>
                                             [% END # /ms_kw %]
                                             [% IF ( ms_ti ) %]
                                                 <option selected="selected" value="ti" data-placeholder="[% t("Search the catalog by title") | html %]">Title</option>
@@ -291,7 +291,7 @@
 
                                     <div class="col order-4 order-sm-3">
                                         [% IF ( !Koha.Preference( 'OpacAddMastheadLibraryPulldown' ) == 1 && mylibraryfirst ) %]
-                                            <label for="translControl1" class="visually-hidden">Search the catalog by keyword in [% Branches.GetName( mylibraryfirst ) | html %]</label>
+                                            <label for="translControl1" class="visually-hidden">Search the catalog in [% Branches.GetName( mylibraryfirst ) | html %]</label>
                                             <input
                                                 type="text"
                                                 class="transl1 form-control form-control-filtered"
@@ -301,11 +301,11 @@
                                                 data-bs-toggle="tooltip"
                                                 data-bs-placement="top"
                                                 title="Searching in [% Branches.GetName( mylibraryfirst ) | html %] only"
-                                                placeholder="Search the catalog by keyword"
+                                                placeholder="Search the catalog"
                                             /><span id="translControl"></span>
                                         [% ELSE %]
-                                            <label for="translControl1" class="visually-hidden">Search the catalog by keyword</label>
-                                            <input type="text" class="transl1 form-control" id="translControl1" name="q" value="[% ms_value | html %]" placeholder="Search the catalog by keyword" /><span id="translControl"></span>
+                                            <label for="translControl1" class="visually-hidden">Search the catalog</label>
+                                            <input type="text" class="transl1 form-control" id="translControl1" name="q" value="[% ms_value | html %]" placeholder="Search the catalog" /><span id="translControl"></span>
                                         [% END # /ms_value %]
                                     </div>
                                     <!-- /.col -->
