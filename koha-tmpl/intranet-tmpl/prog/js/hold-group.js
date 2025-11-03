@@ -32,7 +32,7 @@ $(document).ready(function () {
         button.className = "btn btn-primary";
         button.id = "select-group-holds";
         button.dataset.bsDismiss = "modal";
-        button.innerHTML = _("Select group holds");
+        button.innerHTML = __("Select group holds");
         if (!$("#select-group-holds").length) {
             $("#hold-group-modal .modal-footer").prepend(button);
         }
