@@ -18,7 +18,7 @@
 use Modern::Perl;
 use utf8;
 use Test::NoWarnings;
-use Test::More tests => 6;
+use Test::More tests => 7;
 
 use C4::Context;
 use Koha::AuthUtils;
@@ -37,15 +37,20 @@ SKIP: {
     my $builder = t::lib::TestBuilder->new;
 
     my $library_name = 'my ❤ library';
-    my $library = $builder->build_object( { class => 'Koha::Libraries', value => { branchname => $library_name } } );
-    my $patron  = $builder->build_object(
-        { class => 'Koha::Patrons', value => { flags => 1, branchcode => $library->branchcode } } );
+    my $library  = $builder->build_object( { class => 'Koha::Libraries', value => { branchname => $library_name } } );
+    my $category = $builder->build_object( { class => 'Koha::Patron::Categories' } );
+    my $patron   = $builder->build_object(
+        {
+            class => 'Koha::Patrons',
+            value => { flags => 1, branchcode => $library->branchcode, categorycode => $category->categorycode }
+        }
+    );
     $patron->flags(1)->store;    # superlibrarian permission
     my $password = Koha::AuthUtils::generate_password( $patron->category );
     t::lib::Mocks::mock_preference( 'RequireStrongPassword', 0 );
     $patron->set_password( { password => $password } );
 
-    push @data_to_cleanup, $patron, $patron->category, $patron->library;
+    push @data_to_cleanup, $category, $library, $patron;
 
     my $s      = t::lib::Selenium->new( { login => $patron->userid, password => $password } );
     my $driver = $s->driver;
@@ -355,11 +360,105 @@ SKIP: {
         is( $patron->auth_method(), 'password', 'auth_method has been reset to "password"' );
     };
 
+    subtest "Managing other users' 2FA" => sub {
+
+        plan tests => 2;
+
+        C4::Context->set_preference( 'TwoFactorAuthentication', 'enabled' );
+
+        # Create a staff user with minimal permissions and set up 2FA
+        my $staff_user = $builder->build_object(
+            {
+                class => 'Koha::Patrons',
+                value => { flags => 4, branchcode => $library->branchcode, categorycode => $category->categorycode }
+            }    # cataloguing permission only
+        );
+        my $staff_password = Koha::AuthUtils::generate_password( $staff_user->category );
+        t::lib::Mocks::mock_preference( 'RequireStrongPassword', 0 );
+        $staff_user->set_password( { password => $staff_password } );
+        push @data_to_cleanup, $staff_user;
+
+        # Set up 2FA for staff user the same way as previous tests
+        my $mainpage = $s->base_url . q|mainpage.pl|;
+        $driver->get( $mainpage . q|?logout.x=1| );
+        $s->fill_form( { userid => $staff_user->userid, password => $staff_password } );
+        $driver->find_element('//input[@id="submit-button"]')->click;
+
+        $driver->get( $s->base_url . q|members/two_factor_auth.pl| );
+        $driver->find_element('//*[@id="enable-2FA"]')->click;
+        $s->wait_for_ajax;
+
+        my $secret32 = $driver->find_element('//*[@id="secret32"]')->get_value();
+        my $auth     = Koha::Auth::TwoFactorAuth->new( { patron => $staff_user, secret32 => $secret32 } );
+        my $code     = $auth->code();
+        $driver->find_element('//*[@id="pin_code"]')->send_keys($code);
+        $driver->find_element('//*[@id="register-2FA"]')->click;
+        $s->wait_for_ajax;
+
+        subtest "Non-superlibrarian denied" => sub {
+            plan tests => 1;
+
+            # Try to access another user's 2FA page - should get 403
+            $driver->get( $s->base_url . q|members/two_factor_auth.pl?borrowernumber=| . $patron->borrowernumber );
+            like(
+                $driver->get_title, qr(Error 403),
+                'Non-superlibrarian gets 403 when trying to manage other user 2FA'
+            );
+        };
+
+        subtest "Superlibrarian can reset" => sub {
+            plan tests => 4;
+
+            # Create superlibrarian user
+            my $admin_user = $builder->build_object(
+                {
+                    class => 'Koha::Patrons',
+                    value => { flags => 1, branchcode => $library->branchcode, categorycode => $category->categorycode }
+                }
+            );
+            my $admin_password = Koha::AuthUtils::generate_password( $admin_user->category );
+            $admin_user->set_password( { password => $admin_password } );
+            push @data_to_cleanup, $admin_user;
+
+            # Login as superlibrarian
+            $driver->get( $mainpage . q|?logout.x=1| );
+            $s->fill_form( { userid => $admin_user->userid, password => $admin_password } );
+            $driver->find_element('//input[@id="submit-button"]')->click;
+
+            # Access staff user's 2FA management page
+            $driver->get( $s->base_url . q|members/two_factor_auth.pl?borrowernumber=| . $staff_user->borrowernumber );
+            like( $driver->get_title, qr(Two-factor authentication), 'Superlibrarian can access other user 2FA page' );
+
+            # Verify 2FA is enabled for the staff user
+            is(
+                $driver->find_element(
+                    '//div[@id="registration-status-enabled"]/div[@class="alert alert-success two-factor-status"]')
+                    ->get_text,
+                "Two-factor authentication: Enabled\n"
+                    . $staff_user->firstname . " "
+                    . $staff_user->surname
+                    . " has two-factor authentication enabled for enhanced account security.",
+                'Shows enabled status for staff user'
+            );
+
+            # Disable 2FA for the staff user
+            $driver->find_element('//form[@id="two-factor-auth"]//input[@type="submit"]')->click;
+
+            # Verify 2FA was disabled
+            $staff_user = $staff_user->get_from_storage;
+            is( $staff_user->secret,        undef,      "Staff user's secret has been cleared by superlibrarian" );
+            is( $staff_user->auth_method(), 'password', 'Staff user auth_method reset to password' );
+        };
+    };
+
     $driver->quit();
 }
 
 END {
-    $_->delete for @data_to_cleanup;
+    # Clean up in reverse order to handle foreign key constraints
+    for my $data ( reverse @data_to_cleanup ) {
+        $data->delete if $data->in_storage;
+    }
     C4::Context->set_preference( 'TwoFactorAuthentication', $pref_value );
 }
 
