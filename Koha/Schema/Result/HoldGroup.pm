@@ -95,6 +95,21 @@ __PACKAGE__->belongs_to(
   },
 );
 
+=head2 hold_groups_target_hold
+
+Type: might_have
+
+Related object: L<Koha::Schema::Result::HoldGroupsTargetHold>
+
+=cut
+
+__PACKAGE__->might_have(
+  "hold_groups_target_hold",
+  "Koha::Schema::Result::HoldGroupsTargetHold",
+  { "foreign.hold_group_id" => "self.hold_group_id" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+
 =head2 old_reserves
 
 Type: has_many
@@ -126,8 +141,8 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07051 @ 2025-10-29 16:44:27
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:5QXHYebj61H0y9VqNzlUSA
+# Created by DBIx::Class::Schema::Loader v0.07051 @ 2025-11-03 19:54:07
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:o9/2a3gatQnmc7nTYRpUPQ
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration
