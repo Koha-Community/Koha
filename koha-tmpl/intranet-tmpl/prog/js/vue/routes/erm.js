@@ -23,6 +23,7 @@ import { $__ } from "@koha-vue/i18n";
 export const routes = [
     {
         path: "/cgi-bin/koha/erm/erm.pl",
+        name: "ERMHome",
         redirect: "/cgi-bin/koha/erm/home",
         is_default: true,
         is_base: true,
