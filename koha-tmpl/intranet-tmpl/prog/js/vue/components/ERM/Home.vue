@@ -18,9 +18,9 @@ export default {
             markRaw(ERMLatestSUSHIJobs),
             markRaw(ERMCounts),
             markRaw(ERMLicensesNeedingAction),
-        ]
+        ];
         return {
-            availableWidgets
+            availableWidgets,
         };
     },
 };
