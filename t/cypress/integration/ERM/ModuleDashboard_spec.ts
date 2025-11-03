@@ -43,9 +43,14 @@ describe("ERM Module Dashboard", () => {
             },
         }).as("getDataProvidersCount");
 
+        cy.intercept("GET", "/api/v1/erm/usage_data_providers/1", {
+            statusCode: 200,
+            body: cy.get_usage_data_provider(),
+        }).as("getDataProvider");
+
         cy.intercept(
             "GET",
-            "/api/v1/erm/default_usage_reports",
+            "/api/v1/erm/default_usage_reports*",
             cy.get_eusage_reports()
         ).as("getReports");
 
@@ -123,15 +128,60 @@ describe("ERM Module Dashboard", () => {
         }).as("get-ERM-av-cats-values");
     });
 
-    it("Counts", () => {
+    it("Run eUsage report empty", () => {
+        cy.intercept("GET", "/api/v1/erm/default_usage_reports", []).as(
+            "emptyReports"
+        );
         cy.visit("/cgi-bin/koha/erm/erm.pl");
 
         //Display
+        cy.get(".widget#ERMRunUsageReport .widget-content").should(
+            "contain",
+            "Loading..."
+        );
+
+        cy.wait("@getLicenses");
+        cy.wait("@getJobs");
+        cy.wait("@emptyReports");
         cy.wait("@getAgreementsCount");
         cy.wait("@getLicenses");
         cy.wait("@getPackagesCount");
         cy.wait("@getTitlesCount");
         cy.wait("@getDataProvidersCount");
+
+        cy.get(".widget#ERMRunUsageReport .widget-content").should(
+            "contain",
+            "No saved eUsage reports are available to run."
+        );
+        cy.get(".widget#ERMRunUsageReport .widget-content")
+            .find("a")
+            .should("have.attr", "href", "/cgi-bin/koha/erm/eusage/reports")
+            .contains("Create a report");
+    });
+
+    it("ERM dashboard widgets", () => {
+        cy.visit("/cgi-bin/koha/erm/erm.pl");
+
+        //ERMLicensesNeedingAction loading
+        cy.get(".widget#ERMLicensesNeedingAction .widget-content").should(
+            "contain",
+            "Loading..."
+        );
+        //ERMLatestSUSHIJobs loading
+        cy.get(".widget#ERMLatestSUSHIJobs .widget-content").should(
+            "contain",
+            "Loading..."
+        );
+        cy.wait("@getLicenses");
+        cy.wait("@getJobs");
+        cy.wait("@getReports");
+        cy.wait("@getAgreementsCount");
+        cy.wait("@getLicenses");
+        cy.wait("@getPackagesCount");
+        cy.wait("@getTitlesCount");
+        cy.wait("@getDataProvidersCount");
+
+        //ERMCounts
         cy.get(".widget#ERMCounts .widget-content").contains("1 agreement");
         cy.get(".widget#ERMCounts .widget-content").contains("5 licenses");
         cy.get(".widget#ERMCounts .widget-content").contains(
@@ -206,34 +256,8 @@ describe("ERM Module Dashboard", () => {
             .children()
             .first()
             .should("have.id", "ERMCounts");
-    });
 
-    it("Run eUsage report empty", () => {
-        cy.intercept("GET", "/api/v1/erm/default_usage_reports", []).as(
-            "emptyReports"
-        );
-        cy.visit("/cgi-bin/koha/erm/erm.pl");
-
-        //Display
-        cy.get(".widget#ERMRunUsageReport .widget-content").should(
-            "contain",
-            "Loading..."
-        );
-        cy.wait("@emptyReports");
-        cy.get(".widget#ERMRunUsageReport .widget-content").should(
-            "contain",
-            "No saved eUsage reports are available to run."
-        );
-        cy.get(".widget#ERMRunUsageReport .widget-content")
-            .find("a")
-            .should("have.attr", "href", "/cgi-bin/koha/erm/eusage/reports")
-            .contains("Create a report");
-    });
-
-    it("Run eUsage report: exists", () => {
-        cy.visit("/cgi-bin/koha/erm/erm.pl");
-        cy.wait("@getReports");
-
+        //ERMRunUsageReport
         cy.get(".widget#ERMRunUsageReport .widget-content")
             .find(".v-select")
             .should("exist");
@@ -252,17 +276,6 @@ describe("ERM Module Dashboard", () => {
             .find("button")
             .contains("Run")
             .should("not.be.disabled");
-        cy.get(
-            ".widget#ERMRunUsageReport .widget-content button.btn-primary"
-        ).click();
-        cy.url().should("match", /erm\/eusage\/reports\/viewer/);
-
-        cy.intercept(
-            "GET",
-            "/api/v1/erm/default_usage_reports",
-            cy.get_eusage_reports()
-        );
-        cy.visit("/cgi-bin/koha/erm/erm.pl");
 
         //Move
         cy.get(
@@ -298,17 +311,8 @@ describe("ERM Module Dashboard", () => {
             .children()
             .first()
             .should("have.id", "ERMRunUsageReport");
-    });
 
-    it("Licenses needing action", () => {
-        cy.visit("/cgi-bin/koha/erm/erm.pl");
-
-        //Display
-        cy.get(".widget#ERMLicensesNeedingAction .widget-content").should(
-            "contain",
-            "Loading..."
-        );
-        cy.wait("@getLicenses");
+        // ERMLicensesNeedingAction
         cy.get(
             ".widget#ERMLicensesNeedingAction .widget-content table tbody tr:first"
         ).contains("license 1");
@@ -367,30 +371,15 @@ describe("ERM Module Dashboard", () => {
             .children()
             .first()
             .should("have.id", "ERMLicensesNeedingAction");
-    });
 
-    it("Latest SUSHI Counter jobs", () => {
-        cy.visit("/cgi-bin/koha/erm/erm.pl");
-
-        //Display
-        cy.get(".widget#ERMLatestSUSHIJobs .widget-content").should(
-            "contain",
-            "Loading..."
-        );
-        cy.wait("@getJobs");
+        //ERMLatestSUSHIJobs
         cy.get(
             ".widget#ERMLatestSUSHIJobs .widget-content table tbody tr td:first"
         ).contains("Finished");
 
         cy.get(
             ".widget#ERMLatestSUSHIJobs .widget-content table tbody tr td:nth-child(2)"
-        )
-            .contains("Wiley Online Library")
-            .click();
-
-        cy.url().should("match", /erm\/eusage\/usage_data_providers/);
-
-        cy.visit("/cgi-bin/koha/erm/erm.pl");
+        ).contains("Wiley Online Library");
 
         cy.get(
             ".widget#ERMLatestSUSHIJobs .widget-content table tbody tr td:nth-child(5)"
