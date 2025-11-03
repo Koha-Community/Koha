@@ -117,6 +117,20 @@
     [% INCLUDE 'js-date-format.inc' %]
     <script>
         let table_settings = [% TablesSettings.GetTableSettings( 'circ', 'bookings', 'bookings-to-collect', 'json' ) | $raw %];
+
+            let all_libraries  = [% To.json(Branches.all) | $raw %].map(e => {
+                e['_id'] = e.branchcode;
+                e['_str'] = e.branchname;
+                return e;
+            });
+
+            var coded_values = {
+                library: new Map(all_libraries.map( l => [l.branchname, l.branchcode] )),
+            };
+
+            let filters_options = {
+                libraries: all_libraries,
+            };
         $(document).ready(function() {
 
             let additional_filters = {
@@ -153,15 +167,6 @@
                 }
             };
 
-            let all_libraries  = [% To.json(Branches.all) | $raw %].map(e => {
-                e['_id'] = e.branchcode;
-                e['_str'] = e.branchname;
-                return e;
-            });
-            let filters_options = {
-                libraries: all_libraries,
-            };
-
             var bookings_table_url = '/api/v1/bookings?';
             var bookings_table = $("#bookingst").kohaTable({
                 "ajax": {
@@ -181,8 +186,10 @@
                     "visible": false
                 },
                 {
-                    "data": "pickup_library.name:me.pickup_library_id",
+                    "data": "me.pickup_library_id",
                     "title": _("Pickup library"),
+                    datatype: "coded_value:library",
+                    dataFilter: "libraries",
                     "searchable": true,
                     "orderable": true,
                     "render": function( data, type, row, meta ) {
