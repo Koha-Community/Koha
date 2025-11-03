@@ -59,7 +59,9 @@ export default {
                 page: "AgreementsList",
                 name: "agreements_count",
                 i18nLabel: count =>
-                    __n("%s agreement", "%s agreements", count).format(count),
+                    __nx("{count} agreement", "{count} agreements", count, {
+                        count,
+                    }),
                 count: "",
                 loading: true,
             },
@@ -67,7 +69,9 @@ export default {
                 page: "LicensesList",
                 name: "licenses_count",
                 i18nLabel: count =>
-                    __n("%s license", "%s licenses", count).format(count),
+                    __nx("{count} license", "{count} licenses", count, {
+                        count,
+                    }),
                 count: "",
                 loading: true,
             },
@@ -75,8 +79,11 @@ export default {
                 page: "EHoldingsLocalPackagesList",
                 name: "eholdings_packages_count",
                 i18nLabel: count =>
-                    __n("%s local package", "%s local packages", count).format(
-                        count
+                    __nx(
+                        "{count} local package",
+                        "{count} local packages",
+                        count,
+                        { count }
                     ),
                 count: "",
                 loading: true,
@@ -85,9 +92,9 @@ export default {
                 page: "EHoldingsLocalTitlesList",
                 name: "eholdings_titles_count",
                 i18nLabel: count =>
-                    __n("%s local title", "%s local titles", count).format(
-                        count
-                    ),
+                    __nx("{count} local title", "{count} local titles", count, {
+                        count,
+                    }),
                 count: "",
                 loading: true,
             },
@@ -95,11 +102,12 @@ export default {
                 page: "UsageStatisticsDataProvidersList",
                 name: "usage_data_providers_count",
                 i18nLabel: count =>
-                    __n(
-                        "%s usage data provider",
-                        "%s usage data providers",
-                        count
-                    ).format(count),
+                    __nx(
+                        "{count} usage data provider",
+                        "{count} usage data providers",
+                        count,
+                        { count }
+                    ),
                 count: "",
                 loading: true,
             },
