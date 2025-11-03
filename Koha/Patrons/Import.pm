@@ -308,7 +308,9 @@ LINE: while ( my $borrowerline = <$handle> ) {
                 next if $col eq 'dateexpiry' && $update_dateexpiry;
 
                 $borrower{$col} = $member->{$col}
-                    if $col eq 'dateexpiry' && ( !$csvkeycol{$col} || !$columns[ $csvkeycol{$col} ] );
+                    if $col eq 'dateexpiry'
+                    && ( !$csvkeycol{$col} || !$columns[ $csvkeycol{$col} ] )
+                    && !$borrower{$col};
 
                 unless ( exists( $csvkeycol{$col} ) || $defaults->{$col} ) {
                     $borrower{$col} = $member->{$col} if ( $member->{$col} );
