@@ -290,6 +290,9 @@ export default {
                 label: __("Format due date"),
                 hideIn: ["List"],
                 group: "Details",
+                toolTip: __(
+                    "Set to format the due date in the current DateFormat syspref"
+                ),
             },
             {
                 name: "hide_fields",
