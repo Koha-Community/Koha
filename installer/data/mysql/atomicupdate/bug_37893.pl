@@ -53,7 +53,7 @@ return {
                     `cv_send_00_on_success` tinyint(1) NULL,
                     `cv_triggers_alert` tinyint(1) NULL,
                     `da_field_template` varchar(255) NULL,
-                    `delimiter` varchar(10) NULL,
+                    `delimiter` varchar(10) NULL DEFAULT '|',
                     `disallow_overpayment` tinyint(1) NULL,
                     `encoding` varchar(10) NULL,
                     `error_detect` tinyint(1) NULL,
@@ -75,7 +75,7 @@ return {
                     `send_patron_home_library_in_af` tinyint(1) NULL,
                     `show_checkin_message` tinyint(1) NULL,
                     `show_outstanding_amount` tinyint(1) NULL,
-                    `terminator` enum( 'CR', 'CRLF' ) NULL,
+                    `terminator` enum('CR','CRLF') NOT NULL DEFAULT 'CRLF',
                     PRIMARY KEY(`sip_account_id`),
                     UNIQUE KEY `account_login_id` (`login_id`),
                     KEY `sip_accounts_ibfk_1` (`sip_institution_id`),
@@ -308,7 +308,7 @@ return {
             my $cv_send_00_on_success = $SIPconfig->{accounts}->{$account_key}->{cv_send_00_on_success};
             my $cv_triggers_alert     = $SIPconfig->{accounts}->{$account_key}->{cv_triggers_alert};
             my $da_field_template     = $SIPconfig->{accounts}->{$account_key}->{da_field_template};
-            my $delimiter             = $SIPconfig->{accounts}->{$account_key}->{delimiter} || undef;
+            my $delimiter             = $SIPconfig->{accounts}->{$account_key}->{delimiter} || '|';
             my $disallow_overpayment  = $SIPconfig->{accounts}->{$account_key}->{disallow_overpayment};
             my $encoding              = $SIPconfig->{accounts}->{$account_key}->{encoding};
 
@@ -336,7 +336,7 @@ return {
                 $SIPconfig->{accounts}->{$account_key}->{send_patron_home_library_in_af};
             my $show_checkin_message    = $SIPconfig->{accounts}->{$account_key}->{show_checkin_message};
             my $show_outstanding_amount = $SIPconfig->{accounts}->{$account_key}->{show_outstanding_amount};
-            my $terminator              = $SIPconfig->{accounts}->{$account_key}->{terminator};
+            my $terminator              = $SIPconfig->{accounts}->{$account_key}->{terminator} || 'CRLF';
 
             $insert_accounts->execute(
                 $sip_institution_id,

@@ -112,6 +112,7 @@ Foreign key to sip_institutions.sip_institution_id
 =head2 delimiter
 
   data_type: 'varchar'
+  default_value: '|'
   is_nullable: 1
   size: 10
 
@@ -241,8 +242,9 @@ Foreign key to cash_registers.id
 =head2 terminator
 
   data_type: 'enum'
+  default_value: 'CRLF'
   extra: {list => ["CR","CRLF"]}
-  is_nullable: 1
+  is_nullable: 0
 
 =cut
 
@@ -278,7 +280,7 @@ __PACKAGE__->add_columns(
   "da_field_template",
   { data_type => "varchar", is_nullable => 1, size => 255 },
   "delimiter",
-  { data_type => "varchar", is_nullable => 1, size => 10 },
+  { data_type => "varchar", default_value => "|", is_nullable => 1, size => 10 },
   "disallow_overpayment",
   { data_type => "tinyint", is_nullable => 1 },
   "encoding",
@@ -324,8 +326,9 @@ __PACKAGE__->add_columns(
   "terminator",
   {
     data_type => "enum",
+    default_value => "CRLF",
     extra => { list => ["CR", "CRLF"] },
-    is_nullable => 1,
+    is_nullable => 0,
   },
 );
 
@@ -498,8 +501,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07051 @ 2025-10-24 14:53:53
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:unjLCC8L7SMwMe6xIcBgNA
+# Created by DBIx::Class::Schema::Loader v0.07051 @ 2025-11-04 15:47:11
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:N8uHee0eMqOcg0I1obuEWA
 
 
 __PACKAGE__->add_columns(

@@ -59,12 +59,23 @@ subtest 'Config from XML matches config from database' => sub {
         delete $fileSIPconfig->{institutions}->{$key}{'parms'};
     }
 
-    # Remove 'register_id' out of each account if it's empty. This can no longer be returned as an empty string as is now an FK constraint
     foreach my $key ( keys %{ $fileSIPconfig->{accounts} } ) {
+
+        # Remove 'register_id' out of each account if it's empty. This can no longer be returned as an empty string as is now an FK constraint
         if ( defined $fileSIPconfig->{accounts}->{$key}{'register_id'}
             && $fileSIPconfig->{accounts}->{$key}{'register_id'} eq "" )
         {
             delete $fileSIPconfig->{accounts}->{$key}{'register_id'};
+        }
+
+        # Remove terminator from file check as it's no longer nullable and defaults to 'CRLF'
+        if ( !$fileSIPconfig->{accounts}->{$key}{'terminator'} ) {
+            $fileSIPconfig->{accounts}->{$key}{'terminator'} = 'CRLF';
+        }
+
+        # Remove delimiter from file check as it now defaults to '|'
+        if ( !$fileSIPconfig->{accounts}->{$key}{'delimiter'} ) {
+            $fileSIPconfig->{accounts}->{$key}{'delimiter'} = '|';
         }
 
         # Remove 'password' from file config as it's no longer migrated (security improvement)
