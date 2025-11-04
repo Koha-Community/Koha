@@ -405,9 +405,12 @@ export default {
             {
                 name: "prevcheckout_block_checkout",
                 type: "boolean",
-                label: __("Previous checkout block checkout"),
+                label: __("Block previous checkouts"),
                 hideIn: ["List"],
                 group: "Details",
+                toolTip: __(
+                    "Block checkout of items previously or currently checked out by a patron"
+                ),
             },
             {
                 name: "register_id",
