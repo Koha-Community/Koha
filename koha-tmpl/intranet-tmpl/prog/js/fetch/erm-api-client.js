@@ -447,6 +447,16 @@ export class ERMAPIClient {
                 }),
         };
     }
+
+    get additional_fields() {
+        return {
+            getAll: resource_type =>
+                this.httpClient.getAll({
+                    endpoint: "extended_attribute_types",
+                    params: { resource_type },
+                }),
+        };
+    }
 }
 
 export default ERMAPIClient;

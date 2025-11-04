@@ -35,14 +35,12 @@ use Try::Tiny qw( catch try );
 
 =head2 Methods
 
-=head3 list
+=head3 _list
 
 =cut
 
-sub list {
-    my $c = shift->openapi->valid_input or return;
-
-    my $resource_type = $c->param('resource_type');
+sub _list {
+    my ( $self, @resource_types ) = @_;
 
     # FIXME: Maybe not the best place for this mapping
     my $resource_to_table = {
@@ -56,17 +54,54 @@ sub list {
         order     => 'aqorders',
     };
 
-    return try {
-        my $additional_fields_set = Koha::AdditionalFields->new;
+    my @tables;
+    for my $resource_type (@resource_types) {
         if ( $resource_type && $resource_to_table->{$resource_type} ) {
-            $additional_fields_set =
-                $additional_fields_set->search( { tablename => $resource_to_table->{$resource_type} } );
+            push @tables, $resource_to_table->{$resource_type};
         } elsif ($resource_type) {
-            $additional_fields_set = $additional_fields_set->search( { tablename => $resource_type } );
-        } else {
-            $additional_fields_set = $additional_fields_set->search();
+            push @tables, $resource_type;
         }
+    }
+    return Koha::AdditionalFields->new->search( ( @tables ? { tablename => \@tables } : () ) );
+}
 
+=head3 list
+
+List all additional fields, can be filtered using the resource_type parameter.
+
+=cut
+
+sub list {
+    my ($self) = @_;
+
+    my $c = $self->openapi->valid_input or return;
+
+    my $resource_type = $c->param('resource_type');
+
+    return try {
+        my $additional_fields_set = $self->_list($resource_type);
+        return $c->render(
+            status  => 200,
+            openapi => $c->objects->search($additional_fields_set)
+        );
+    } catch {
+        $c->unhandled_exception($_);
+    };
+}
+
+=head3 list_erm
+
+List the ERM-related additional fields, can be filtered using the resource_type parameter.
+
+=cut
+
+sub list_erm {
+    my ($self)         = @_;
+    my $c              = shift->openapi->valid_input or return;
+    my @resource_types = qw(erm_licenses erm_agreements erm_packages);
+
+    return try {
+        my $additional_fields_set = $self->_list(@resource_types);
         return $c->render(
             status  => 200,
             openapi => $c->objects->search($additional_fields_set)
