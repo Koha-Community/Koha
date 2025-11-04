@@ -28,6 +28,9 @@ BEGIN {
     );
 }
 
+my $builder = t::lib::TestBuilder->new();
+t::lib::Mocks::mock_userenv( { patron => $builder->build_object( { class => 'Koha::Patrons', } ) } );
+
 # Auth required for cataloguing plugins
 my $mAuth = Test::MockModule->new('C4::Auth');
 $mAuth->mock( 'check_cookie_auth', sub { return ('ok') } );
@@ -37,8 +40,6 @@ $schema->storage->txn_begin;
 my $dbh = C4::Context->dbh;
 
 $dbh->do('DELETE FROM subscription');
-
-my $builder = t::lib::TestBuilder->new();
 
 # This could/should be used for all untested methods
 my @methods = ('updateClaim');
