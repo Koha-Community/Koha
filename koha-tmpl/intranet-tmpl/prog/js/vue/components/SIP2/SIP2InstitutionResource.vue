@@ -78,6 +78,7 @@ export default {
                     toolTip: __(
                         "Are the self service terminals permitted to check items in?"
                     ),
+                    defaultValue: true,
                 },
                 {
                     name: "checkout",
@@ -88,6 +89,7 @@ export default {
                     toolTip: __(
                         "Are the self service terminals permitted to check items out to patrons?"
                     ),
+                    defaultValue: true,
                 },
                 {
                     name: "offline",
@@ -98,6 +100,7 @@ export default {
                     toolTip: __(
                         "Does the ILS allow self-check units to operate when unconnected to the ILS?  That is, can a self-check unit check out items to patrons without checking the status of the items and patrons in real time?"
                     ),
+                    defaultValue: true,
                 },
                 {
                     name: "renewal",
@@ -108,6 +111,7 @@ export default {
                     toolTip: __(
                         "Are the self service terminals permitted to renew items?"
                     ),
+                    defaultValue: true,
                 },
                 {
                     name: "retries",
