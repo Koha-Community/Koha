@@ -41,7 +41,7 @@ export class AdditionalFieldsAPIClientWrapper {
 
     getModuleName(resource_type) {
         const moduleMappings = {
-            erm: ["agreement", "license", "package"],
+            erm: ["agreement", "license", "package", "title"],
             acquisition: ["vendor"],
         };
 

@@ -100,7 +100,7 @@ List the ERM-related additional fields, can be filtered using the resource_type 
 sub list_erm {
     my ($self)         = @_;
     my $c              = shift->openapi->valid_input or return;
-    my @resource_types = qw(erm_licenses erm_agreements erm_packages);
+    my @resource_types = qw(erm_licenses erm_agreements erm_packages erm_titles);
 
     return try {
         my $additional_fields_set = $self->_list(@resource_types);
