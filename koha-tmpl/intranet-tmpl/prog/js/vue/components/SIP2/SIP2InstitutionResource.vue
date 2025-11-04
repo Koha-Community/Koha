@@ -53,7 +53,7 @@ export default {
                     showInTable: true,
                     group: "Details",
                     toolTip: __(
-                        "Name of institution, often chosen to match an existing library branch code or library group title."
+                        "Name of institution, often chosen to match an existing library branch code or library group title. Unexpected behavior may occur if it is not a valid branch code."
                     ),
                 },
                 {
