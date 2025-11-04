@@ -476,7 +476,7 @@ export default {
                     { value: "CRLF", description: "CRLF" },
                     { value: "CR", description: "CR" },
                 ],
-                defaultValue: null,
+                defaultValue: "CRLF",
                 requiredKey: "value",
                 selectLabel: "description",
                 label: __("Terminator"),
