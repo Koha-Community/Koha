@@ -53,6 +53,7 @@
     "js:build:analyze": "rspack build --mode development --analyze",
     "js:watch": "rspack build --mode development --watch",
     "js:build:prod": "rspack build --mode production",
+    "js:clean": "rm -rf koha-tmpl/intranet-tmpl/prog/js/vue/dist/* t/cypress/plugins/dist/*",
     "build": "yarn css:build && yarn js:build && yarn api:bundle",
     "build:prod": "yarn css:build:prod && yarn js:build:prod && yarn api:bundle",
     "cypress": "cypress",

@@ -172,6 +172,7 @@ module.exports = [
             "api-client.cjs":
                 "./koha-tmpl/intranet-tmpl/prog/js/fetch/api-client.js",
         },
+        devtool: false,
         output: {
             filename: "[name].js",
             path: path.resolve(__dirname, "t/cypress/plugins/dist/"),
