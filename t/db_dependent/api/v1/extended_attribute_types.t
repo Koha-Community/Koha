@@ -18,7 +18,7 @@
 use Modern::Perl;
 
 use Test::NoWarnings;
-use Test::More tests => 2;
+use Test::More tests => 3;
 use Test::Mojo;
 
 use t::lib::TestBuilder;
@@ -127,6 +127,106 @@ subtest 'list() tests' => sub {
     # Warn on unsupported query parameter
     $t->get_ok("//$userid:$password@/api/v1/extended_attribute_types?blah=blah")->status_is(400)
         ->json_is( [ { path => '/query/blah', message => 'Malformed query string' } ] );
+
+    # Unauthorized access
+    $t->get_ok("//$unauth_userid:$password@/api/v1/extended_attribute_types")->status_is(403);
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'list_erm() tests' => sub {
+
+    plan tests => 23;
+
+    $schema->storage->txn_begin;
+
+    Koha::AdditionalFields->search->delete;
+
+    my $librarian = $builder->build_object(
+        {
+            class => 'Koha::Patrons',
+            value => { flags => 2**3 }    # parameters
+        }
+    );
+    my $password = 'thePassword123';
+    $librarian->set_password( { password => $password, skip_validation => 1 } );
+    my $userid = $librarian->userid;
+
+    my $patron = $builder->build_object(
+        {
+            class => 'Koha::Patrons',
+            value => { flags => 0 }
+        }
+    );
+
+    $patron->set_password( { password => $password, skip_validation => 1 } );
+    my $unauth_userid = $patron->userid;
+
+    my $erm_patron = $builder->build_object(
+        {
+            class => 'Koha::Patrons',
+            value => { flags => 28 }    # erm => 1
+        }
+    );
+
+    $patron->set_password( { password => $password, skip_validation => 1 } );
+    my $erm_userid = $patron->userid;
+
+    ## Authorized user tests
+    # No additional fields, so empty array should be returned
+    $t->get_ok("//$userid:$password@/api/v1/erm/extended_attribute_types")->status_is(200)->json_is( [] );
+
+    my $additional_field = $builder->build_object(
+        {
+            class => 'Koha::AdditionalFields',
+            value => { tablename => 'aqinvoices', name => 'af_name' },
+        }
+    );
+
+    # One aqinvoices additional_field created, none for 'erm' should get returned
+    $t->get_ok("//$userid:$password@/api/v1/erm/extended_attribute_types")->status_is(200)->json_is( [] );
+
+    my $erm_agreement_additional_field = $builder->build_object(
+        {
+            class => 'Koha::AdditionalFields',
+            value => { tablename => 'erm_agreements', name => 'agreement_name' },
+        }
+    );
+
+    my $erm_license_additional_field = $builder->build_object(
+        {
+            class => 'Koha::AdditionalFields',
+            value => { tablename => 'erm_licenses', name => 'license_name' },
+        }
+    );
+
+    $t->get_ok("//$userid:$password@/api/v1/erm/extended_attribute_types")->status_is(200)->json_is(
+        [
+            $erm_agreement_additional_field->to_api,
+            $erm_license_additional_field->to_api,
+        ]
+    );
+
+    # Filtering works, two existing additional fields returned for the queried table name
+    $t->get_ok("//$userid:$password@/api/v1/erm/extended_attribute_types?resource_type=license")->status_is(200)
+        ->json_is( [ $erm_license_additional_field->to_api ] );
+
+    # Cannot retrieve attributes from other tables
+    $t->get_ok("//$userid:$password@/api/v1/erm/extended_attribute_types?resource_type=order")->status_is(400)
+        ->json_is(
+        "/errors" => [ { message => "Not in enum list: license, agreement, package.", path => "/resource_type" } ] );
+
+    # Warn on unsupported query parameter
+    $t->get_ok("//$userid:$password@/api/v1/erm/extended_attribute_types?blah=blah")->status_is(400)
+        ->json_is( [ { path => '/query/blah', message => 'Malformed query string' } ] );
+
+    # erm only user
+    $t->get_ok("//$userid:$password@/api/v1/erm/extended_attribute_types")->status_is(200)->json_is(
+        [
+            $erm_agreement_additional_field->to_api,
+            $erm_license_additional_field->to_api,
+        ]
+    );
 
     # Unauthorized access
     $t->get_ok("//$unauth_userid:$password@/api/v1/extended_attribute_types")->status_is(403);

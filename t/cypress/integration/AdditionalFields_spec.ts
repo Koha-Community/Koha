@@ -489,7 +489,7 @@ describe("Additional Fields operations", () => {
         let license_additional_fields = get_licenses_additional_fields();
         let av_cats = get_av_cats();
 
-        cy.intercept("GET", "/api/v1/extended_attribute_types*", {
+        cy.intercept("GET", "/api/v1/erm/extended_attribute_types*", {
             body: license_additional_fields,
             statusCode: 200,
         });
@@ -551,7 +551,7 @@ describe("Additional Fields operations", () => {
             statusCode: 200,
             body: vendors,
         });
-        cy.intercept("GET", "/api/v1/extended_attribute_types*", {
+        cy.intercept("GET", "/api/v1/erm/extended_attribute_types*", {
             body: [],
             statusCode: 200,
         }).as("empty-additional-fields");
@@ -562,7 +562,7 @@ describe("Additional Fields operations", () => {
         cy.wait("@get-empty-license");
         cy.get("#licenses_show #additional_fields").should("not.exist");
 
-        cy.intercept("GET", "/api/v1/extended_attribute_types*", {
+        cy.intercept("GET", "/api/v1/erm/extended_attribute_types*", {
             body: license_additional_fields,
             statusCode: 200,
         }).as("existing-additional-fields");
@@ -657,7 +657,7 @@ describe("Additional Fields operations", () => {
             statusCode: 200,
             body: vendors,
         });
-        cy.intercept("GET", "/api/v1/extended_attribute_types*", {
+        cy.intercept("GET", "/api/v1/erm/extended_attribute_types*", {
             body: [],
             statusCode: 200,
         }).as("empty-additional-fields");
@@ -666,7 +666,7 @@ describe("Additional Fields operations", () => {
         cy.visit("/cgi-bin/koha/erm/licenses/add");
         cy.get("#licenses_add form #additional_fields").should("not.exist");
 
-        cy.intercept("GET", "/api/v1/extended_attribute_types*", {
+        cy.intercept("GET", "/api/v1/erm/extended_attribute_types*", {
             body: license_additional_fields,
             statusCode: 200,
         }).as("existing-additional-fields");
@@ -791,7 +791,7 @@ describe("Additional Fields operations", () => {
             body: vendors,
         });
 
-        cy.intercept("GET", "/api/v1/extended_attribute_types*", {
+        cy.intercept("GET", "/api/v1/erm/extended_attribute_types*", {
             body: license_additional_fields,
             statusCode: 200,
         }).as("existing-additional-fields");
@@ -888,7 +888,7 @@ describe("Additional Fields operations", () => {
         let agreement_additional_fields = get_agreements_additional_fields();
         let av_cats = get_av_cats();
 
-        cy.intercept("GET", "/api/v1/extended_attribute_types*", {
+        cy.intercept("GET", "/api/v1/erm/extended_attribute_types*", {
             body: agreement_additional_fields,
             statusCode: 200,
         });
@@ -950,7 +950,7 @@ describe("Additional Fields operations", () => {
             statusCode: 200,
             body: vendors,
         });
-        cy.intercept("GET", "/api/v1/extended_attribute_types*", {
+        cy.intercept("GET", "/api/v1/erm/extended_attribute_types*", {
             body: [],
             statusCode: 200,
         }).as("empty-additional-fields");
@@ -961,7 +961,7 @@ describe("Additional Fields operations", () => {
         cy.wait("@get-empty-agreement");
         cy.get("#agreements_show #additional_fields").should("not.exist");
 
-        cy.intercept("GET", "/api/v1/extended_attribute_types*", {
+        cy.intercept("GET", "/api/v1/erm/extended_attribute_types*", {
             body: agreement_additional_fields,
             statusCode: 200,
         }).as("existing-additional-fields");
@@ -1056,7 +1056,7 @@ describe("Additional Fields operations", () => {
             statusCode: 200,
             body: vendors,
         });
-        cy.intercept("GET", "/api/v1/extended_attribute_types*", {
+        cy.intercept("GET", "/api/v1/erm/extended_attribute_types*", {
             body: [],
             statusCode: 200,
         }).as("empty-additional-fields");
@@ -1065,7 +1065,7 @@ describe("Additional Fields operations", () => {
         cy.visit("/cgi-bin/koha/erm/agreements/add");
         cy.get("#agreements_add form #additional_fields").should("not.exist");
 
-        cy.intercept("GET", "/api/v1/extended_attribute_types*", {
+        cy.intercept("GET", "/api/v1/erm/extended_attribute_types*", {
             body: agreement_additional_fields,
             statusCode: 200,
         }).as("existing-additional-fields");
@@ -1190,7 +1190,7 @@ describe("Additional Fields operations", () => {
             body: vendors,
         });
 
-        cy.intercept("GET", "/api/v1/extended_attribute_types*", {
+        cy.intercept("GET", "/api/v1/erm/extended_attribute_types*", {
             body: agreement_additional_fields,
             statusCode: 200,
         }).as("existing-additional-fields");
@@ -1290,7 +1290,7 @@ describe("Additional Fields operations", () => {
             get_packages_additional_fields();
         let av_cats = get_av_cats();
 
-        cy.intercept("GET", "/api/v1/extended_attribute_types*", {
+        cy.intercept("GET", "/api/v1/erm/extended_attribute_types*", {
             body: eholdings_package_additional_fields,
             statusCode: 200,
         });
@@ -1359,7 +1359,7 @@ describe("Additional Fields operations", () => {
             statusCode: 200,
             body: vendors,
         });
-        cy.intercept("GET", "/api/v1/extended_attribute_types*", {
+        cy.intercept("GET", "/api/v1/erm/extended_attribute_types*", {
             body: [],
             statusCode: 200,
         }).as("empty-additional-fields");
@@ -1370,7 +1370,7 @@ describe("Additional Fields operations", () => {
         cy.wait("@get-empty-eholdings-package");
         cy.get("#packages_list #additional_fields").should("not.exist");
 
-        cy.intercept("GET", "/api/v1/extended_attribute_types*", {
+        cy.intercept("GET", "/api/v1/erm/extended_attribute_types*", {
             body: eholdings_package_additional_fields,
             statusCode: 200,
         }).as("existing-additional-fields");
@@ -1468,7 +1468,7 @@ describe("Additional Fields operations", () => {
             statusCode: 200,
             body: vendors,
         });
-        cy.intercept("GET", "/api/v1/extended_attribute_types*", {
+        cy.intercept("GET", "/api/v1/erm/extended_attribute_types*", {
             body: [],
             statusCode: 200,
         }).as("empty-additional-fields");
@@ -1477,7 +1477,7 @@ describe("Additional Fields operations", () => {
         cy.visit("/cgi-bin/koha/erm/eholdings/local/packages/add");
         cy.get("#packages_add form #additional_fields").should("not.exist");
 
-        cy.intercept("GET", "/api/v1/extended_attribute_types*", {
+        cy.intercept("GET", "/api/v1/erm/extended_attribute_types*", {
             body: eholdings_package_additional_fields,
             statusCode: 200,
         }).as("existing-additional-fields");
@@ -1605,7 +1605,7 @@ describe("Additional Fields operations", () => {
             body: vendors,
         });
 
-        cy.intercept("GET", "/api/v1/extended_attribute_types*", {
+        cy.intercept("GET", "/api/v1/erm/extended_attribute_types*", {
             body: eholdings_package_additional_fields,
             statusCode: 200,
         }).as("existing-additional-fields");
