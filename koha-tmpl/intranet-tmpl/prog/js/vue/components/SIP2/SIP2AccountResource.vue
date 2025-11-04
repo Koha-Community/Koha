@@ -965,6 +965,10 @@ export default {
 
             if (!account.terminator) account.terminator = null;
 
+            if (account.convert_nonprinting_characters === "") {
+                account.convert_nonprinting_characters = null;
+            }
+
             account.item_fields = account.item_fields?.map(
                 ({ account_id, account_item_field_id, ...rest }) => rest
             );
