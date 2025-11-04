@@ -13,7 +13,7 @@ return {
                 q{
                 ALTER TABLE vendor_edi_accounts
                 ADD COLUMN `po_is_basketname` tinyint(1) NOT NULL DEFAULT 0
-                AFTER `plugin`
+                AFTER `file_transport_id`
                 }
             );
             say_success( $out, "Added column 'vendor_edi_accounts.po_is_basketname'" );
