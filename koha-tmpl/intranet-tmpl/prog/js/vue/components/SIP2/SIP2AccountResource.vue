@@ -592,6 +592,9 @@ export default {
                         type: "text",
                         placeholder: "CODE",
                         label: __("Code"),
+                        toolTip: __(
+                            "Must match an existing patron attribute type code"
+                        ),
                     },
                 ],
             },
