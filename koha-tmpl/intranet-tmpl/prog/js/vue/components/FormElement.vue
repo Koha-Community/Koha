@@ -13,6 +13,7 @@
             :placeholder="attr.placeholder || attr.label"
             :required="attr.required ? true : false"
             :size="attr.size"
+            :maxlength="attr.maxlength"
             :disabled="disabled"
             @update:modelValue="checkForInputError()"
         />

@@ -125,6 +125,7 @@ export default {
                     toolTip: __(
                         "Number of times the system will attempt to connect"
                     ),
+                    maxlength: 3,
                 },
                 {
                     name: "status_update",

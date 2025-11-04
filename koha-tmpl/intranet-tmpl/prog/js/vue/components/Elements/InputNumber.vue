@@ -6,6 +6,7 @@
         :placeholder="placeholder"
         :required="required"
         :size="size"
+        :maxlength="maxlength"
     />
 </template>
 
@@ -18,6 +19,7 @@ export default {
         placeholder: String,
         required: Boolean,
         size: Number | null,
+        maxlength: Number | null,
     },
     emits: ["update:modelValue"],
     setup(props, { emit }) {
