@@ -125,6 +125,9 @@ sub enqueue {
     my $job_queue   = $params->{job_queue}   // 'default';
     my $json        = $self->json;
 
+    # session_id must not be logged
+    delete $job_context->{session_id};
+
     my $borrowernumber = ( C4::Context->userenv ) ? C4::Context->userenv->{number} : undef;
     $job_context->{interface} = C4::Context->interface;
     my $json_context = $json->encode($job_context);
