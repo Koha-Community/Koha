@@ -163,6 +163,11 @@
       summary: Delete hold group
       parameters:
         - $ref: "../swagger.yaml#/parameters/patron_id_pp"
+        - name: hold_group_id
+          in: path
+          description: Internal hold group identifier
+          type: integer
+          required: true
       produces:
         - application/json
       responses:
