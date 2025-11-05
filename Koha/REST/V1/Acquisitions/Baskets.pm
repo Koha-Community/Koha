@@ -43,14 +43,14 @@ sub add {
     my $c = shift->openapi->valid_input or return;
 
     return try {
-        my $basket = Koha::Acquisition::Basket->new_from_api( $c->validation->param('body') );
-        $basket->store->discard_changes;
+        my $basket = Koha::Acquisition::Basket->new_from_api( $c->req->json );
+        $basket->store;
 
         $c->res->headers->location( $c->req->url->to_string . '/' . $basket->basketno );
 
         return $c->render(
             status  => 201,
-            openapi => $basket->to_api
+            openapi => $c->objects->to_api($basket),
         );
     } catch {
         $c->unhandled_exception($_);
