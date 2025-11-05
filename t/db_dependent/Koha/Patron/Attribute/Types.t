@@ -20,7 +20,7 @@
 use Modern::Perl;
 
 use Test::NoWarnings;
-use Test::More tests => 8;
+use Test::More tests => 9;
 
 use t::lib::TestBuilder;
 use t::lib::Mocks;
@@ -432,7 +432,7 @@ subtest 'search_with_library_limits() tests' => sub {
     my $object_code_4 =
         $builder->build_object( { class => 'Koha::Patron::Attribute::Types', value => { code => 'code_4' } } );
 
-    is( Koha::Patron::Attribute::Types->search()->count, 4, 'Three objects created' );
+    is( Koha::Patron::Attribute::Types->search()->count, 4, 'Four objects created' );
 
     my $branch_1 = $builder->build( { source => 'Branch' } )->{branchcode};
     my $branch_2 = $builder->build( { source => 'Branch' } )->{branchcode};
@@ -466,3 +466,162 @@ subtest 'search_with_library_limits() tests' => sub {
     $schema->storage->txn_rollback;
 };
 
+subtest 'pattron_attributes_form tests' => sub {
+
+    plan tests => 12;
+
+    $schema->storage->txn_begin;
+
+    my $branch_1 = $builder->build_object( { class => 'Koha::Libraries' } );
+    my $branch_2 = $builder->build_object( { class => 'Koha::Libraries' } );
+
+    my $start_count = Koha::Patron::Attribute::Types->search()->count;
+
+    my $object_code_1 =
+        $builder->build_object( { class => 'Koha::Patron::Attribute::Types', value => { code => 'code_1' } } );
+    my $object_code_2 =
+        $builder->build_object( { class => 'Koha::Patron::Attribute::Types', value => { code => 'code_2' } } );
+    my $object_code_3 =
+        $builder->build_object( { class => 'Koha::Patron::Attribute::Types', value => { code => 'code_3' } } );
+    my $object_code_4 =
+        $builder->build_object( { class => 'Koha::Patron::Attribute::Types', value => { code => 'code_4' } } );
+
+    is( Koha::Patron::Attribute::Types->search()->count, $start_count + 4, 'Four objects created' );
+
+    $object_code_1->library_limits( [ $branch_1->branchcode ] );
+    $object_code_2->library_limits( [ $branch_2->branchcode ] );
+    $object_code_3->library_limits( [ $branch_1->branchcode, $branch_2->branchcode ] );
+
+    my $patron_1 =
+        $builder->build_object( { class => 'Koha::Patrons', value => { branchcode => $branch_1->branchcode } } );
+    my $patron_2 =
+        $builder->build_object( { class => 'Koha::Patrons', value => { branchcode => $branch_2->branchcode } } );
+    my $attribute_p1_1 = $builder->build_object(
+        {
+            class => 'Koha::Patron::Attributes',
+            value => {
+                borrowernumber => $patron_1->borrowernumber,
+                code           => $object_code_1->code,
+                attribute      => '1_1',
+            }
+        }
+    );
+    my $attribute_p1_3 = $builder->build_object(
+        {
+            class => 'Koha::Patron::Attributes',
+            value => {
+                borrowernumber => $patron_1->borrowernumber,
+                code           => $object_code_3->code,
+                attribute      => '1_3',
+            }
+        }
+    );
+    my $attribute_p1_4 = $builder->build_object(
+        {
+            class => 'Koha::Patron::Attributes',
+            value => {
+                borrowernumber => $patron_1->borrowernumber,
+                code           => $object_code_4->code,
+                attribute      => '1_4',
+            }
+        }
+    );
+    my $attribute_p2_2 = $builder->build_object(
+        {
+            class => 'Koha::Patron::Attributes',
+            value => {
+                borrowernumber => $patron_2->borrowernumber,
+                code           => $object_code_2->code,
+                attribute      => '2_2',
+            }
+        }
+    );
+    my $attribute_p2_3 = $builder->build_object(
+        {
+            class => 'Koha::Patron::Attributes',
+            value => {
+                borrowernumber => $patron_2->borrowernumber,
+                code           => $object_code_3->code,
+                attribute      => '2_3',
+            }
+        }
+    );
+    my $attribute_p2_4 = $builder->build_object(
+        {
+            class => 'Koha::Patron::Attributes',
+            value => {
+                borrowernumber => $patron_2->borrowernumber,
+                code           => $object_code_4->code,
+                attribute      => '2_4',
+            }
+        }
+    );
+    my $extended_patron_attributes_1 = $patron_1->extended_attributes->unblessed;
+    my $extended_patron_attributes_2 = $patron_2->extended_attributes->unblessed;
+
+    my $param_values;
+    my $C4_template = Test::MockModule->new('C4::Templates');
+    $C4_template->mock(
+        'param',
+        sub {
+            my ( $self, $param, $values ) = @_;
+            $param_values = $values;
+        }
+    );
+    my $template = C4::Templates->new( 'intranet', 'intranet', 'about.tt' );
+    t::lib::Mocks::mock_userenv( { branchcode => $branch_1->branchcode } );
+    Koha::Patron::Attribute::Types::patron_attributes_form( $template, $extended_patron_attributes_1, 'not_duplicate' );
+    my $seen_attributes = 0;
+    foreach my $param_value ( @{$param_values} ) {
+        if ( $param_value->{items}[0]->{class} eq $object_code_1->class ) {
+            is( $attribute_p1_1->attribute, $param_value->{items}[0]->{value}, "Got the expected value" );
+            $seen_attributes++;
+        }
+        if ( $param_value->{items}[0]->{class} eq $object_code_3->class ) {
+            is( $attribute_p1_3->attribute, $param_value->{items}[0]->{value}, "Got the expected value" );
+            $seen_attributes++;
+        }
+        if ( $param_value->{items}[0]->{class} eq $object_code_4->class ) {
+            is( $attribute_p1_4->attribute, $param_value->{items}[0]->{value}, "Got the expected value" );
+            $seen_attributes++;
+        }
+    }
+    is( $seen_attributes, 3, "Found all three expected values" );
+
+    t::lib::Mocks::mock_userenv( { branchcode => $branch_2->branchcode } );
+    Koha::Patron::Attribute::Types::patron_attributes_form( $template, $extended_patron_attributes_1, 'not_duplicate' );
+    $seen_attributes = 0;
+    foreach my $param_value ( @{$param_values} ) {
+        if ( $param_value->{items}[0]->{class} eq $object_code_1->class ) {
+            $seen_attributes++;    # We don't expect this one, branch limited
+        }
+        if ( $param_value->{items}[0]->{class} eq $object_code_3->class ) {
+            $seen_attributes++;
+            is( $attribute_p1_3->attribute, $param_value->{items}[0]->{value}, "Got the expected value" );
+        }
+        if ( $param_value->{items}[0]->{class} eq $object_code_4->class ) {
+            $seen_attributes++;
+            is( $attribute_p1_4->attribute, $param_value->{items}[0]->{value}, "Got the expected value" );
+        }
+    }
+    is( $seen_attributes, 2, "We get only 2 values when from a different branch" );
+
+    Koha::Patron::Attribute::Types::patron_attributes_form( $template, $extended_patron_attributes_2, 'not_duplicate' );
+    $seen_attributes = 0;
+    foreach my $param_value ( @{$param_values} ) {
+        if ( $param_value->{items}[0]->{class} eq $object_code_2->class ) {
+            is( $attribute_p2_2->attribute, $param_value->{items}[0]->{value}, "Got the expected value" );
+            $seen_attributes++;
+        }
+        if ( $param_value->{items}[0]->{class} eq $object_code_3->class ) {
+            $seen_attributes++;
+            is( $attribute_p2_3->attribute, $param_value->{items}[0]->{value}, "Got the expected value" );
+        }
+        if ( $param_value->{items}[0]->{class} eq $object_code_4->class ) {
+            $seen_attributes++;
+            is( $attribute_p2_4->attribute, $param_value->{items}[0]->{value}, "Got the expected value" );
+        }
+    }
+    is( $seen_attributes, 3, "We get all 3 expected values" );
+
+};
