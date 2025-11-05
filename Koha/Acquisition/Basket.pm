@@ -309,6 +309,7 @@ sub to_api_mapping {
     return {
         basketno                => 'basket_id',
         basketname              => 'name',
+        note                    => 'internal_note',
         booksellernote          => 'vendor_note',
         contractnumber          => 'contract_id',
         creationdate            => 'creation_date',

@@ -19,7 +19,11 @@ use Modern::Perl;
 
 use Mojo::Base 'Mojolicious::Controller';
 
-use Try::Tiny qw( catch try );
+use Koha::Acquisition::Baskets;
+
+use Clone        qw( clone );
+use Scalar::Util qw( blessed );
+use Try::Tiny    qw( catch try );
 
 =head1 NAME
 
@@ -28,6 +32,30 @@ Koha::REST::V1::Acquisitions::Baskets
 =head1 API
 
 =head2 Class methods
+
+=head3 add
+
+Controller function that handles adding a new Koha::Acquisition::Basket object
+
+=cut
+
+sub add {
+    my $c = shift->openapi->valid_input or return;
+
+    return try {
+        my $basket = Koha::Acquisition::Basket->new_from_api( $c->validation->param('body') );
+        $basket->store->discard_changes;
+
+        $c->res->headers->location( $c->req->url->to_string . '/' . $basket->basketno );
+
+        return $c->render(
+            status  => 201,
+            openapi => $basket->to_api
+        );
+    } catch {
+        $c->unhandled_exception($_);
+    };
+}
 
 =head3 list
 

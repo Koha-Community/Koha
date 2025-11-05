@@ -5,7 +5,9 @@ properties:
     type: integer
     description: Internal identifier for the basket
   name:
-    type: string
+    type:
+      - string
+      - "null"
     description: Basket name
   internal_note:
     type:
@@ -68,11 +70,6 @@ properties:
   closed:
     type: boolean
     description: Is the basket closed
-  note:
-    type:
-      - string
-      - "null"
-    description: basket notes
   create_items:
     type:
       - string
@@ -90,3 +87,5 @@ properties:
       - "null"
     description: The number of days the basket is late (x-koha-embed)
 additionalProperties: false
+required:
+  - vendor_id

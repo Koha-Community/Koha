@@ -60,6 +60,64 @@
     x-koha-authorization:
       permissions:
         acquisition: order_manage
+  post:
+    x-mojo-to: Acquisitions::Baskets#add
+    operationId: addBasket
+    tags:
+      - baskets
+    summary: Add basket
+    consumes:
+      - application/json
+    produces:
+      - application/json
+    parameters:
+      - name: body
+        in: body
+        description: A basket
+        required: true
+        schema:
+          $ref: "../swagger.yaml#/definitions/basket"
+    responses:
+      "201":
+        description: A successfully created basket
+        schema:
+          items:
+            $ref: "../swagger.yaml#/definitions/basket"
+      "400":
+        description: Bad request
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "401":
+        description: Authentication required
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "403":
+        description: Access forbidden
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "404":
+        description: Resource not found
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "409":
+        description: Conflict in creating resource
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "500":
+        description: |
+          Internal server error. Possible `error_code` attribute values:
+
+          * `internal_server_error`
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "503":
+        description: Under maintenance
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+    x-koha-authorization:
+      permissions:
+        acquisition:
+          - order_manage
 /acquisitions/baskets/managers:
   get:
     x-mojo-to: Acquisitions::Baskets#list_managers
