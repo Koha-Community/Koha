@@ -3074,11 +3074,12 @@ nav {
             margin-right: .3rem;
             width: .8em;
         }
-      /*rtl:raw:
-        &::before {
-            transform: scaleX(-1);
+    }
+
+    &.active {
+        a {
+            pointer-events: none;
         }
-        */
     }
 }
 
@@ -3621,18 +3622,10 @@ input.renew {
         &.currentlanguage {
             color: #000;
             font-weight: bold;
-        }
-    }
-
-    a {
-        &.currentlanguage {
-            &:link,
-            &:visited {
-                font-weight: bold;
-            }
+            pointer-events: none;
         }
 
-        .sublanguage-selected {
+        &.sublanguage-selected {
             color: #000;
             font-weight: bold;
         }
