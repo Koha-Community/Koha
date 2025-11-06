@@ -285,7 +285,7 @@
         <span class="sub_permission edit_items_subpermission"> Edit any item including items that would otherwise be restricted </span>
         <span class="permissioncode">([% name | html %])</span>
     [%- CASE 'edit_items_restricted' -%]
-        <span class="sub_permission edit_items_restricted_subpermission"> Limit item modification to subfields defined in the SubfieldsToAllowForRestrictedEditing preference (please note that edit_item is still required) </span>
+        <span class="sub_permission edit_items_restricted_subpermission"> Limit item modification to subfields defined in the SubfieldsToAllowForRestrictedEditing preference (please note that edit_items is still required) </span>
         <span class="permissioncode">([% name | html %])</span>
     [%- CASE 'fast_cataloging' -%]
         <span class="sub_permission fast_cataloging_subpermission"> Fast cataloging </span>
