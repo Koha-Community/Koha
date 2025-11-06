@@ -262,8 +262,7 @@ sub _start_worker {
     } else {
         $num_hits    = $results->size;
         $num_fetched = ( $self->{offset} + $self->{fetch} ) < $num_hits ? $self->{fetch} : $num_hits;
-
-        $hits = [ map { $_->raw() } @{ $results->records( $self->{offset}, $num_fetched, 1 ) } ];
+        $hits = [ map { $_->raw() } grep { defined } @{ $results->records( $self->{offset}, $num_fetched, 1 ) } ];
     }
 
     if ( !@$hits && $connection && $connection->exception() ) {
