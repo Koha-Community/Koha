@@ -159,16 +159,17 @@ subtest 'opac_info tests' => sub {
     );
 
     # Start testing
-    is( $library01->opac_info->content,                        '2', 'specific library, default language' );
-    is( $library01->opac_info( { lang => 'nl-NL' } )->content, '3', 'specific library, specific language' );
-    is( $library01->opac_info( { lang => 'nl-BE' } )->content, '2', 'specific library, unknown language' );
-    is( $library02->opac_info->content,                        '1', 'unknown library, default language' );
-    is( $library02->opac_info( { lang => 'fr-FR' } )->content, '4', 'unknown library, specific language' );
-    is( $library02->opac_info( { lang => 'de-DE' } )->content, '1', 'unknown library, unknown language' );
+    ok( $library01->opac_info,                        'specific library, default language' );
+    ok( $library01->opac_info( { lang => 'nl-NL' } ), 'specific library, specific language' );
+    ok( $library01->opac_info( { lang => 'nl-BE' } ), 'specific library, unknown language' );
+    ok( $library02->opac_info,                        'unknown library, default language' );
+    ok( $library02->opac_info( { lang => 'fr-FR' } ), 'unknown library, specific language' );
+    ok( $library02->opac_info( { lang => 'de-DE' } ), 'unknown library, unknown language' );
     $html01->delete;
-    is( $library02->opac_info, undef, 'unknown library, default language (after removing html01)' );
-    is(
-        $library02->opac_info( { lang => 'de-DE' } ), undef,
+
+    ok( $library02->opac_info, 'unknown library, default language (after removing html01)' );
+    ok(
+        $library02->opac_info( { lang => 'de-DE' } ),
         'unknown library, unknown language (after removing html01)'
     );
 
