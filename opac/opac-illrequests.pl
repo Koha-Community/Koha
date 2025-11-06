@@ -74,6 +74,7 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
 # Are we able to actually work?
 my $patron   = Koha::Patrons->find($loggedinuser);
 my $backends = Koha::ILL::Request::Config->new->opac_available_backends($patron);
+$params->{backend} = 'Standard' if $params->{backend} eq 'FreeForm';
 
 if ( $params->{backend} && !grep { $_ eq $params->{backend} } @$backends ) {
     print $query->redirect("/cgi-bin/koha/errors/404.pl");
@@ -131,7 +132,6 @@ if ( $op eq 'list' ) {
             );
         }
 
-        $params->{backend} = 'Standard' if $params->{backend} eq 'FreeForm';
         my $request = Koha::ILL::Request->new->load_backend( $params->{backend} );
 
         # Before request creation operations - Preparation
