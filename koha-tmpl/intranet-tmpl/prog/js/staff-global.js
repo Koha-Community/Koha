@@ -1023,7 +1023,10 @@ function toggleBtnIcon(element, start, replacement) {
  */
 function holds_table_patron_page() {
     var url = window.location.href;
-    if (url.indexOf("/circ/circulation.pl?borrowernumber=") !== -1)
+    if (
+        url.indexOf("/circ/circulation.pl?borrowernumber=") !== -1 ||
+        url.indexOf("/circ/circulation.pl?findborrower=") !== -1
+    )
         return "circ";
     else if (url.indexOf("/members/moremember.pl?borrowernumber=") !== -1)
         return "borrower";
