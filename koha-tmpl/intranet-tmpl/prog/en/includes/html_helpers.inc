@@ -551,7 +551,7 @@
     [% IF content.trim %]
         [% IF ( bc_active ) %]
             <li class="breadcrumb-item active" aria-current="page">
-                <a href="#" aria-disabled="true" tabindex="-1"> [% content | $raw %] </a>
+                <a aria-disabled="true" tabindex="-1"> [% content | $raw %] </a>
             </li>
         [% ELSE %]
             <li class="breadcrumb-item"> [% content | $raw %] </li>

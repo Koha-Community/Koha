@@ -159,7 +159,7 @@
 [% BLOCK breadcrumb_item %]
     [% IF ( bc_active ) %]
         <li class="breadcrumb-item active">
-            <a href="#" aria-current="page" aria-disabled="true" tabindex="-1"> [% content | $raw %] </a>
+            <a aria-current="page" aria-disabled="true" tabindex="-1"> [% content | $raw %] </a>
         </li>
     [% ELSE %]
         <li class="breadcrumb-item"> [% content | $raw %] </li>

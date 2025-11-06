@@ -22,7 +22,7 @@
                             [% IF ( languages_loo.group_enabled ) %]
                                 [% IF ( languages_loo.plural ) %]
                                     <li class="nav-item dropup">
-                                        <a class="nav-link dropdown-toggle" id="show[% languages_loo.rfc4646_subtag | html %]" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                        <a class="nav-link dropdown-toggle" id="show[% languages_loo.rfc4646_subtag | html %]" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                             [% IF ( languages_loo.native_description ) %]
                                                 [% languages_loo.native_description | html %]
                                             [% ELSE %]
@@ -41,7 +41,7 @@
                                                 [% IF ( sublanguages_loo.enabled ) %]
                                                     [% IF ( sublanguages_loo.sublanguage_current ) %]
                                                         <li>
-                                                            <a class="nav-link currentlanguage" href="#">
+                                                            <a class="nav-link currentlanguage" aria-current="page">
                                                                 [% sublanguages_loo.native_description | html %] [% sublanguages_loo.script_description | html %] [% sublanguages_loo.region_description | html %]
                                                                 [% sublanguages_loo.variant_description | html %]
                                                                 ([% sublanguages_loo.rfc4646_subtag | html %])
@@ -64,7 +64,7 @@
                                     [% IF ( languages_loo.group_enabled ) %]
                                         [% IF ( languages_loo.current ) %]
                                             <li class="nav-item">
-                                                <a class="nav-link active currentlanguage" href="#" aria-current="page" aria-disabled="true" tabindex="-1">
+                                                <a class="nav-link active currentlanguage" aria-current="page" aria-disabled="true" tabindex="-1">
                                                     [% IF ( languages_loo.native_description ) %]
                                                         [% languages_loo.native_description | html %]
                                                     [% ELSE %]
