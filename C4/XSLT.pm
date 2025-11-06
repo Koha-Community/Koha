@@ -244,8 +244,9 @@ sub XSLTParse4Display {
     }
     my $extracontent = '';
     my $location;
-    my $branch = C4::Context->userenv->{branch} || '';
-    my $lang   = C4::Languages::getlanguage;
+    my $branch = C4::Context->userenv && C4::Context->userenv->{branch};
+    $branch //= '';
+    my $lang = C4::Languages::getlanguage;
 
     if ( $xslsyspref eq "XSLTDetailsDisplay" ) {
         $location = 'StaffDetailPage';
