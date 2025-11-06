@@ -207,8 +207,9 @@ if ( $op eq 'cud-add' ) {
 }
 
 my $debit_types = Koha::Account::DebitTypes->search_with_library_limits(
-  { can_be_invoiced => 1, archived => 0 },
-  {}, $library_id );
+    { can_be_invoiced => 1, archived => 0 },
+    { order_by => { -asc => 'description' } }, $library_id
+);
 
 $template->param(
   debit_types => $debit_types,
