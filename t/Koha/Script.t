@@ -45,6 +45,7 @@ is_deeply(
         'desk_name'     => undef,
         'register_id'   => undef,
         'register_name' => undef,
+        'session_id'    => undef,
     },
     "Context userenv set correctly with no flags"
 );
