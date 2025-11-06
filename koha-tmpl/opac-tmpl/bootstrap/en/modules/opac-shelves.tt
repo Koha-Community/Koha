@@ -18,6 +18,19 @@
 [% SET ArticleRequestsEnabled = ( Koha.Preference('ArticleRequests') == 1 ) && LoginEnabled %]
 [% SET MultiHolds = ( Koha.Preference('DisplayMultiPlaceHold') == 1 ) && HoldsEnabled %]
 [% SET CoverImagePlugins = KohaPlugins.get_plugins_opac_cover_images %]
+[% SET OPACLocalCoverImages = Koha.Preference('OPACLocalCoverImages') %]
+[% SET OPACAmazonCoverImages = Koha.Preference('OPACAmazonCoverImages') %]
+[% SET SyndeticsCoverImages = ( Koha.Preference('SyndeticsEnabled') && Koha.Preference('SyndeticsCoverImages') ) %]
+[% SET GoogleJackets = Koha.Preference('GoogleJackets') %]
+[% SET OpenLibraryCovers = Koha.Preference('OpenLibraryCovers') %]
+[% SET BakerTaylorEnabled = Koha.Preference('BakerTaylorEnabled') %]
+[% SET OPACCoce = ( Koha.Preference('OPACCoce') && Koha.Preference('CoceProviders') ) %]
+[% IF ( CoverImagePlugins || OPACLocalCoverImages || OPACAmazonCoverImages || SyndeticsCoverImages || GoogleJackets || OpenLibraryCovers || BakerTaylorEnabled || OPACCoce || OPACCustomCoverImages ) %]
+    [% SET CoverImages = 1 %]
+    [% SET OPACCustomCoverImages = ( Koha.Preference('OPACCustomCoverImages') && Koha.Preference('CustomCoverImagesURL') ) %]
+    [% SET OverDriveEnabled = Koha.Preference('OverDriveLibraryID') && Koha.Preference('OverDriveClientKey') && Koha.Preference('OverDriveClientSecret') %]
+[% END %]
+[% SET OverDriveEnabled = ( Koha.Preference( "OPACOverDrive" ) && Koha.Preference('OverDriveLibraryID') && Koha.Preference('OverDriveClientKey') && Koha.Preference('OverDriveClientSecret') ) %]
 
 [% BLOCK delete_shelf %]
     <form action="/cgi-bin/koha/opac-shelves.pl" method="post" id="deleteshelf[% shelf.shelfnumber | html %]" class="d-inline">
@@ -49,6 +62,7 @@
 [% INCLUDE 'doc-head-close.inc' %]
 [% BLOCK cssinclude %]
 [% END %]
+[% Asset.css("lib/Chocolat/css/chocolat.css") | $raw %]
 </head>
 [% IF ( loggedinusername ) %]
     [% INCLUDE 'bodytag.inc' bodyid='opac-userlists' bodyclass='scrollto' %]
@@ -407,95 +421,7 @@
                                                         </td>
                                                     [% END %]
                                                     <td>
-                                                        <div class="coverimages">
-                                                            [% IF ( itemsloo.title ) %]
-                                                                [% img_title = itemsloo.title %]
-                                                            [% ELSE %]
-                                                                [% img_title = itemsloo.biblionumber %]
-                                                            [% END %]
-                                                            <a
-                                                                class="p1"
-                                                                href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% itemsloo.biblionumber | html %]"
-                                                                data-isbn="[% itemsloo.normalized_isbn | html %]"
-                                                                data-title="[% img_title | html %]"
-                                                            >
-                                                                [% IF ( OPACLocalCoverImages ) %]
-                                                                    <span title="[% img_title | html %]" class="[% itemsloo.biblionumber | html %]" id="local-thumbnail[% loop.count | html %]"></span>
-                                                                [% END %]
-
-                                                                [% IF ( OPACAmazonCoverImages ) %]
-                                                                    [% IF ( itemsloo.normalized_isbn ) %]
-                                                                        <span title="[% img_title | html %]" id="amazon-thumbnail[% loop.count | html %]"
-                                                                            ><img src="https://images-na.ssl-images-amazon.com/images/P/[% itemsloo.normalized_isbn | html %].01.TZZZZZZZ.jpg" alt=""
-                                                                        /></span>
-                                                                    [% ELSE %]
-                                                                        <span class="no-image">No cover image available</span>
-                                                                    [% END %]
-                                                                [% END %]
-
-                                                                [% IF ( SyndeticsEnabled && SyndeticsCoverImages ) %]
-                                                                    <span title="[% img_title | html %]" id="syndetics-thumbnail[% loop.count | html %]"
-                                                                        ><img
-                                                                            src="https://secure.syndetics.com/index.aspx?isbn=[% itemsloo.normalized_isbn | html %]/[% SyndeticsCoverImageSize | uri %].GIF&amp;client=[% SyndeticsClientCode | html %]&amp;type=xw10&amp;upc=[% itemsloo.normalized_upc | html %]&amp;oclc=[% itemsloo.normalized_oclc | html %]"
-                                                                            alt=""
-                                                                    /></span>
-                                                                [% END %]
-
-                                                                [% IF ( GoogleJackets ) %]
-                                                                    [% IF ( itemsloo.normalized_isbn ) %]
-                                                                        <div title="[% img_title | html %]" class="[% itemsloo.normalized_isbn | html %]" id="gbs-thumbnail[% loop.count | html %]"></div>
-                                                                    [% ELSE %]
-                                                                        <span class="no-image">No cover image available</span>
-                                                                    [% END %]
-                                                                [% END %]
-
-                                                                [% IF ( Koha.Preference('OpacCoce') && Koha.Preference('CoceProviders') ) %]
-                                                                    [% coce_id = itemsloo.normalized_ean || itemsloo.normalized_isbn %]
-                                                                    [% IF ( coce_id ) %]
-                                                                        <span title="[% img_title | html %]" class="[% coce_id | html %]" id="coce-thumbnail[% loop.count | html %]"></span>
-                                                                    [% ELSE %]
-                                                                        <span class="no-image">No cover image available</span>
-                                                                    [% END %]
-                                                                [% END %]
-
-                                                                [% IF OpenLibraryCovers %]
-                                                                    [% IF itemsloo.normalized_isbn %]
-                                                                        <span title="[% img_title | html %]" class="[% itemsloo.normalized_isbn | html %]" id="openlibrary-thumbnail[% loop.count | html %]"></span>
-                                                                    [% ELSE %]
-                                                                        <span class="no-image">No cover image available</span>
-                                                                    [% END %]
-                                                                [% END %]
-                                                            </a>
-                                                            <!-- / .p1 -->
-                                                            [% IF ( Koha.Preference('BakerTaylorEnabled') && !Koha.Preference('BakerTaylorBookstoreURL') ) %]
-                                                                [% bt_id = ( itemsloo.normalized_upc || itemsloo.normalized_isbn ) %]
-                                                                [% IF ( bt_id ) %]
-                                                                    <img alt="See Baker &amp; Taylor" src="[% BakerTaylorImageURL | html %][% bt_id | html %]" />
-                                                                [% ELSE %]
-                                                                    <span class="no-image">No cover image available</span>
-                                                                [% END %]
-                                                            [% END %]
-
-                                                            [% IF ( Koha.Preference('BakerTaylorEnabled') && Koha.Preference('BakerTaylorBookstoreURL') ) %]
-                                                                [% bt_id = ( itemsloo.normalized_upc || itemsloo.normalized_isbn ) %]
-                                                                [% IF ( bt_id ) %]
-                                                                    <a href="https://[% Koha.Preference('BakerTaylorBookstoreURL') | uri %][% bt_id | uri %]">
-                                                                        <img alt="See Baker &amp; Taylor" src="[% BakerTaylorImageURL | html %][% bt_id | html %]" />
-                                                                    </a>
-                                                                [% ELSE %]
-                                                                    <span class="no-image">No cover image available</span>
-                                                                [% END %]
-                                                            [% END %]
-
-                                                            [% IF Koha.Preference('OPACCustomCoverImages') AND Koha.Preference('CustomCoverImagesURL') %]
-                                                                [% SET custom_cover_image_url = itemsloo.biblio_object.custom_cover_image_url %]
-                                                                [% IF custom_cover_image_url %]
-                                                                    <a class="custom_cover_image" href="[% PROCESS biblio_a_href biblionumber => itemsloo.biblionumber %]">
-                                                                        <img alt="Cover image" src="[% custom_cover_image_url | url %]"
-                                                                    /></a>
-                                                                [% END %]
-                                                            [% END %]
-                                                        </div>
+                                                        <div class="coverimages"> [% INCLUDE 'cover-images.inc' SEARCH_RESULT=itemsloo %] </div>
 
                                                         [% itemsloo.XSLTBloc | $raw %]
 
@@ -871,6 +797,7 @@
 
 [% INCLUDE 'opac-bottom.inc' %]
 [% BLOCK jsinclude %]
+    [% Asset.js("lib/Chocolat/js/chocolat.js") | $raw %]
     [% CoverImagePlugins | $raw %]
     [% IF OpenLibraryCovers || OpenLibrarySearch %]
         [% Asset.js("js/openlibrary.js") | $raw %]
@@ -881,7 +808,46 @@
         const virtualshelves = [% ( virtualshelves ) ? 1 : 0 | html %];
     </script>
     [% Asset.js("js/results-list.js") | $raw %]
+    [% Asset.js("js/cover_images.js") | $raw %]
     <script>
+        let counter_wait = 0;
+        function wait_for_images(cb){
+
+            var loaded = 1;
+            counter_wait++;
+
+            [% IF GoogleJackets %]
+                if ( loaded ) {
+                    loaded = KOHA.Google.done;
+                }
+            [% END %]
+
+            [% IF OpenLibraryCovers %]
+                if ( loaded ) {
+                    loaded = KOHA.OpenLibrary.done;
+                }
+            [% END %]
+
+            [% IF ( Koha.Preference('OpacCoce') && Koha.Preference('CoceProviders') ) %]
+                if ( loaded ) {
+                    loaded = KOHA.coce.done;
+                }
+            [% END %]
+
+            if (!loaded && counter_wait < 50) {// Do not wait more than 5 seconds
+                window.setTimeout(function(){wait_for_images(cb);}, 100);
+            } else {
+                if (counter_wait >= 50 ) {
+                }
+                cb();
+            }
+        }
+
+        $(window).load(function() {
+            wait_for_images(verify_cover_images);
+        });
+
+
         [% IF ( TagsInputEnabled && loggedinusername ) %]
             function tagSelected() {
                 var checkedBoxes = $("input:checkbox:checked");
