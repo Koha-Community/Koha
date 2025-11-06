@@ -550,6 +550,18 @@ __PACKAGE__->add_columns(
 );
 
 __PACKAGE__->add_columns(
+    "+lost_block_checkout" => { is_boolean => 0 }
+);
+
+__PACKAGE__->add_columns(
+    "+lost_block_checkout_value" => { is_boolean => 0 }
+);
+
+__PACKAGE__->add_columns(
+    "+lost_status_for_missing" => { is_boolean => 0 }
+);
+
+__PACKAGE__->add_columns(
     "+overdues_block_checkout" => { is_boolean => 1 }
 );
 
