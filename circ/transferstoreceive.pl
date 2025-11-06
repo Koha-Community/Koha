@@ -98,6 +98,7 @@ while ( my $library = $libraries->next ) {
                 biblionumber   => $biblio->biblionumber,
                 itemnumber     => $item->itemnumber,
                 barcode        => $item->barcode,
+                ccode          => $item->ccode,
                 homebranch     => $item->homebranch,
                 holdingbranch  => $item->holdingbranch,
                 itemcallnumber => $item->itemcallnumber,

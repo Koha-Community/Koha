@@ -1,5 +1,6 @@
 [% USE raw %]
 [% USE Asset %]
+[% USE AuthorisedValues %]
 [% USE Koha %]
 [% USE KohaDates %]
 [% USE Branches %]
@@ -65,6 +66,9 @@
                                         <td>
                                             [% INCLUDE 'biblio-title.inc' biblio=reser link = 1 %] [% IF ( reser.author ) %]by [% reser.author | html %][% END %]
                                             [% IF ( reser.itemtype ) %](<strong>[% reser.itemtype | html %]</strong>)[% END %]
+                                            [% IF ( reser.ccode ) -%]
+                                                <span class="collection_code">Collection: [% AuthorisedValues.GetDescriptionByKohaField(kohafield => 'items.ccode', authorised_value => reser.ccode) | html %]</span>
+                                            [%- END %]
                                             <br />Barcode: [% reser.barcode | html %]
                                         </td>
                                         <td
