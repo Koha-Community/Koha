@@ -112,4 +112,26 @@ sub list_erm {
     };
 }
 
+=head3 list_acq_vendors
+
+List the vendors-related additional fields, can be filtered using the resource_type parameter.
+
+=cut
+
+sub list_acq_vendors {
+    my ($self)         = @_;
+    my $c              = shift->openapi->valid_input or return;
+    my @resource_types = qw(vendor);
+
+    return try {
+        my $additional_fields_set = $self->_list(@resource_types);
+        return $c->render(
+            status  => 200,
+            openapi => $c->objects->search($additional_fields_set)
+        );
+    } catch {
+        $c->unhandled_exception($_);
+    };
+}
+
 1;

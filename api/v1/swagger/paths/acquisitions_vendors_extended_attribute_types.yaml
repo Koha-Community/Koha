@@ -1,0 +1,54 @@
+---
+/acquisitions/vendors/extended_attribute_types:
+  get:
+    x-mojo-to: ExtendedAttributeTypes#list_acq_vendors
+    operationId: listAcquisitionVendorsAdditionalFields
+    tags:
+      - additional_fields
+    summary: List acquisition vendors extended attribute types
+    produces:
+      - application/json
+    parameters:
+      - description: filter by resource type
+        in: query
+        name: resource_type
+        type: string
+        enum:
+          - vendor
+      - $ref: "../swagger.yaml#/parameters/match"
+      - $ref: "../swagger.yaml#/parameters/order_by"
+      - $ref: "../swagger.yaml#/parameters/page"
+      - $ref: "../swagger.yaml#/parameters/per_page"
+      - $ref: "../swagger.yaml#/parameters/q_param"
+      - $ref: "../swagger.yaml#/parameters/q_body"
+    responses:
+      200:
+        description: A list of extended attribute types for acquisition vendors
+        schema:
+          items:
+            $ref: "../swagger.yaml#/definitions/extended_attribute_type"
+          type: array
+      "400":
+        description: |
+          Bad request. Possible `error_code` attribute values:
+
+            * `invalid_query`
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      403:
+        description: Access forbidden
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      500:
+        description: |-
+          Internal server error. Possible `error_code` attribute values:
+          * `internal_server_error`
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      503:
+        description: Under maintenance
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+    x-koha-authorization:
+      permissions:
+        - acquisition: vendors_manage

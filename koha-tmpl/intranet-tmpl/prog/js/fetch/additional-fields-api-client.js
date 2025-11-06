@@ -1,4 +1,5 @@
 import ERMAPIClient from "@fetch/erm-api-client";
+import AcquisitionAPIClient from "@fetch/acquisition-api-client.js";
 
 export class AdditionalFieldsAPIClient {
     constructor(HttpClient) {
@@ -23,6 +24,7 @@ export class AdditionalFieldsAPIClientWrapper {
         this.clients = {
             admin: new AdditionalFieldsAPIClient(HttpClient),
             erm: new ERMAPIClient(HttpClient),
+            acquisition: new AcquisitionAPIClient(HttpClient),
         };
     }
 
@@ -40,6 +42,7 @@ export class AdditionalFieldsAPIClientWrapper {
     getModuleName(resource_type) {
         const moduleMappings = {
             erm: ["agreement", "license", "package"],
+            acquisition: ["vendor"],
         };
 
         for (const [module, resourceTypes] of Object.entries(moduleMappings)) {
