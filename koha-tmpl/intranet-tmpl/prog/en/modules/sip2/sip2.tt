@@ -12,20 +12,19 @@
     [% INCLUDE 'prefs-admin-search.inc' %]
 [% END %]
 
-<div id="sip2">
-    <!-- this is closed in intranet-bottom.inc -->
+<div id="sip2"></div>
+<!-- this is closed in intranet-bottom.inc -->
 
-    [% MACRO jsinclude BLOCK %]
-        [% INCLUDE 'calendar.inc' %]
-        [% INCLUDE 'datatables.inc' %]
-        [% INCLUDE 'js-patron-format.inc' %]
-        <script>
-            const institutions_table_settings = [% TablesSettings.GetTableSettings( 'sip2', 'institutions', 'institutions', 'json' ) | $raw %];
-            const accounts_table_settings = [% TablesSettings.GetTableSettings( 'sip2', 'accounts', 'accounts', 'json' ) | $raw %];
-            const system_preference_overrides_table_settings = [% TablesSettings.GetTableSettings( 'sip2', 'system_preference_overrides', 'system_preference_overrides', 'json' ) | $raw %];
-            const logged_in_user = [% To.json(logged_in_user.unblessed) | $raw %];
-        </script>
-        [% Asset.js("js/vue/dist/sip2.js") | $raw %]
-    [% END %]
-    [% INCLUDE 'intranet-bottom.inc' %]
-</div>
+[% MACRO jsinclude BLOCK %]
+    [% INCLUDE 'calendar.inc' %]
+    [% INCLUDE 'datatables.inc' %]
+    [% INCLUDE 'js-patron-format.inc' %]
+    <script>
+        const institutions_table_settings = [% TablesSettings.GetTableSettings( 'sip2', 'institutions', 'institutions', 'json' ) | $raw %];
+        const accounts_table_settings = [% TablesSettings.GetTableSettings( 'sip2', 'accounts', 'accounts', 'json' ) | $raw %];
+        const system_preference_overrides_table_settings = [% TablesSettings.GetTableSettings( 'sip2', 'system_preference_overrides', 'system_preference_overrides', 'json' ) | $raw %];
+        const logged_in_user = [% To.json(logged_in_user.unblessed) | $raw %];
+    </script>
+    [% Asset.js("js/vue/dist/sip2.js") | $raw %]
+[% END %]
+[% INCLUDE 'intranet-bottom.inc' %]
