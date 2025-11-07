@@ -71,26 +71,37 @@ if (
     $branch = $userenv_branch;                           # fallback value
 }
 
-if ( $desk_id && ( !$userenv_desk or $userenv_desk ne $desk_id ) ) {
-    my $desk          = Koha::Desks->find( { desk_id => $desk_id } );
-    my $old_desk_name = '';
-    if ($userenv_desk) {
-        $old_desk_name = Koha::Desks->find( { desk_id => $userenv_desk } )->desk_name;
+if ( defined($desk_id) && ( !$userenv_desk || $userenv_desk ne $desk_id ) ) {
+    if ($desk_id) {
+
+        # A desk was selected
+        my $desk = Koha::Desks->find( { desk_id => $desk_id } );
+        $session->param( desk_name => $desk->desk_name );
+        $session->param( desk_id   => $desk->desk_id );
+    } else {
+
+        # "No desk" was explicitly selected - clear desk from session
+        $session->clear( [ 'desk_name', 'desk_id' ] );
     }
-    $session->param( desk_name => $desk->desk_name );
-    $session->param( desk_id   => $desk->desk_id );
     $updated = 1;
 } else {
     $desk_id = $userenv_desk;
 }
 
 if ( defined($register_id)
-    && ( $userenv_register_id ne $register_id ) )
+    && ( !$userenv_register_id || $userenv_register_id ne $register_id ) )
 {
-    my $old_register_name = C4::Context->userenv->{'register_name'} || '';
-    my $register          = Koha::Cash::Registers->find($register_id);
-    $session->param( 'register_id',   $register_id );
-    $session->param( 'register_name', $register ? $register->name : '' );
+    if ($register_id) {
+
+        # A register was selected
+        my $register = Koha::Cash::Registers->find($register_id);
+        $session->param( 'register_id',   $register_id );
+        $session->param( 'register_name', $register ? $register->name : '' );
+    } else {
+
+        # "No register" was explicitly selected - clear register from session
+        $session->clear( [ 'register_id', 'register_name' ] );
+    }
     $updated = 1;
 } else {
     $register_id = $userenv_register_id;
