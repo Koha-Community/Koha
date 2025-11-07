@@ -263,7 +263,7 @@ Or else the CLASS subs will be used.
 
 =head2 $types hashref
 
-The hash referenced can be thought of as the constructor farm for all the C4::Barcodes types.  
+The hash referenced can be thought of as the constructor farm for all the C4::Barcodes types.
 Each value should be a reference to a sub that calls the module constructor.
 
 =head1 Notes
