@@ -19,7 +19,6 @@ use Modern::Perl;
 
 use Mojo::Base 'Mojolicious::Controller';
 
-use Koha::SIP2::Institution;
 use Koha::SIP2::Institutions;
 
 use Try::Tiny qw( catch try );
