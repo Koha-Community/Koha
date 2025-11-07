@@ -3,6 +3,7 @@
 [% USE AuthorisedValues %]
 [% USE Branches %]
 [% USE raw %]
+[% USE I18N %]
 
 [% IF statuscode == "200" %]
     [% INCLUDE 'mana/mana-comment-status.inc' %]
@@ -38,13 +39,10 @@
                             [% SET tr_class = 'highlighted-row' %]
                             [% SET tr_warning = lowWarned %]
                         [% END %]
-                        <tr
-                            id="row[% subscription.id | html %]"
-                            [% IF tr_class %]class="[% tr_class | html %]"[% END %]
-                            [% IF tr_warning %]
-                                title="This resource has been reported more than [% tr_warning | html %] times, take care!"
-                            [% END %]
-                        >
+                        [% IF tr_warning %]
+                            [% SET tr_title = I18N.tnx('This resource has already been reported', 'This resource has been reported more than {count} times, take care!', tr_warning, { count = tr_warning }) %]
+                        [% END %]
+                        <tr id="row[% subscription.id | html %]" [% IF tr_class %]class="[% tr_class | html %]"[% END %] title="[% tr_title | html %]">
                             <input type="hidden" hidden class="rowid" value="[% subscription.id | html %]" />
                             <td>[% IF ( subscription.issn ) %][% subscription.issn | html %][% END %]</td>
                             <td>[% subscription.title | html %]</td>
