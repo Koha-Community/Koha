@@ -18,7 +18,6 @@
 [% MACRO jsinclude BLOCK %]
     [% INCLUDE 'calendar.inc' %]
     [% INCLUDE 'datatables.inc' %]
-    [% INCLUDE 'js-patron-format.inc' %]
     <script>
         const institutions_table_settings = [% TablesSettings.GetTableSettings( 'sip2', 'institutions', 'institutions', 'json' ) | $raw %];
         const accounts_table_settings = [% TablesSettings.GetTableSettings( 'sip2', 'accounts', 'accounts', 'json' ) | $raw %];
