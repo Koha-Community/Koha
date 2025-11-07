@@ -22,7 +22,7 @@ function verify_cover_images() {
                             div.remove();
                         } else {
                             lightbox_descriptions.push(
-                                _(
+                                __(
                                     "Amazon cover image (<a href='%s'>see the original image</a>)"
                                 ).format($(img).data("link"))
                             );
@@ -36,21 +36,23 @@ function verify_cover_images() {
                             // Remove the container
                             div.remove();
                         } else {
-                            lightbox_descriptions.push(_("Custom cover image"));
+                            lightbox_descriptions.push(
+                                __("Custom cover image")
+                            );
                         }
                     } else if (div.hasClass("syndetics-coverimg")) {
-                        lightbox_descriptions.push(_("Image from Syndetics"));
+                        lightbox_descriptions.push(__("Image from Syndetics"));
                     } else if (div.hasClass("googlejacket-coverimg")) {
                         if (img.naturalHeight) {
                             lightbox_descriptions.push(
-                                _(
+                                __(
                                     "Image from Google Books (<a href='%s'>see the original image</a>)"
                                 ).format($(img).data("link"))
                             );
                         }
                     } else if (div.hasClass("openlibrary-coverimg")) {
                         lightbox_descriptions.push(
-                            _(
+                            __(
                                 "Image from OpenLibrary (<a href='%s'>see the original image</a>)"
                             ).format($(img).data("link"))
                         );
@@ -59,13 +61,13 @@ function verify_cover_images() {
                         var coce_description;
                         let src = $(img).attr("src");
                         if (src.indexOf("amazon.com") >= 0) {
-                            coce_description = _("Coce image from Amazon.com");
+                            coce_description = __("Coce image from Amazon.com");
                         } else if (src.indexOf("google.com") >= 0) {
-                            coce_description = _(
+                            coce_description = __(
                                 "Coce image from Google Books"
                             );
                         } else if (src.indexOf("openlibrary.org") >= 0) {
-                            coce_description = _(
+                            coce_description = __(
                                 "Coce image from Open Library"
                             );
                         }
@@ -73,13 +75,13 @@ function verify_cover_images() {
                         lightbox_descriptions.push(coce_description);
                     } else if (div.hasClass("bakertaylor-coverimg")) {
                         lightbox_descriptions.push(
-                            _("Image from Baker &amp; Taylor")
+                            __("Image from Baker &amp; Taylor")
                         );
                     } else if (div.hasClass("cover-image local-coverimg")) {
-                        lightbox_descriptions.push(_("Local cover image"));
+                        lightbox_descriptions.push(__("Local cover image"));
                     } else {
                         lightbox_descriptions.push(
-                            _("Cover image source unknown")
+                            __("Cover image source unknown")
                         );
                     }
                 } else {
