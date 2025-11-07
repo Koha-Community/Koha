@@ -41,7 +41,9 @@
                         <tr
                             id="row[% subscription.id | html %]"
                             [% IF tr_class %]class="[% tr_class | html %]"[% END %]
-                            [% IF tr_warning %]title="This resource has been reported more than [% tr_warning | html %] times, take care!"[% END %]
+                            [% IF tr_warning %]
+                                title="This resource has been reported more than [% tr_warning | html %] times, take care!"
+                            [% END %]
                         >
                             <input type="hidden" hidden class="rowid" value="[% subscription.id | html %]" />
                             <td>[% IF ( subscription.issn ) %][% subscription.issn | html %][% END %]</td>
