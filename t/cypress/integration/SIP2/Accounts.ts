@@ -77,6 +77,7 @@ describe("Accounts", () => {
     beforeEach(() => {
         cy.login();
         cy.title().should("eq", "Koha staff interface");
+        cy.set_syspref("UseCashRegisters", 0);
     });
 
     it("List accounts", () => {
@@ -232,6 +233,8 @@ describe("Accounts", () => {
 
         cy.get("#login_id").should("not.be.visible");
 
+        cy.get("#register_id").should("not.exist");
+
         // Submit the form, get 500
         cy.intercept("POST", "/api/v1/sip2/accounts", {
             statusCode: 500,
@@ -251,6 +254,13 @@ describe("Accounts", () => {
         cy.get("main div[class='alert alert-info']").contains(
             "Account created"
         );
+    });
+
+    it("Should show/hide register_id based on syspref", () => {
+        cy.set_syspref("UseCashRegisters", 1).then(() => {
+            cy.visit("/cgi-bin/koha/sip2/accounts/add");
+            cy.get("#register_id").should("exist");
+        });
     });
 
     it("Edit account", () => {
@@ -282,6 +292,7 @@ describe("Accounts", () => {
 
         // Form has been correctly filled in
         cy.get("#login_id").should("have.value", accounts[0].login_id);
+        cy.get("#register_id").should("not.exist");
 
         // cy.get("#checkin_yes").should("be.checked");
         // cy.get("#checkout_yes").should("be.checked");
