@@ -138,7 +138,7 @@ describe("Accounts", () => {
         cy.get("#accounts_add").contains("Submit").click();
         cy.get("input:invalid,textarea:invalid,select:invalid").should(
             "have.length",
-            3
+            2
         );
         cy.get("#login_id").type(account.login_id);
 

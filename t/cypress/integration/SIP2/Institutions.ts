@@ -64,16 +64,18 @@ describe("Institutions", () => {
         );
         cy.get("#name").type(institution.name);
         cy.get("#implementation").type(institution.implementation);
-        cy.get("#checkin_no").should("be.checked");
-        cy.get("#checkin_yes").click();
-        cy.get("#checkin_no").should("not.be.checked");
         cy.get("#checkin_yes").should("be.checked");
-        cy.get("#checkout_no").should("be.checked");
-        cy.get("#checkout_yes").click();
-        cy.get("#checkout_no").should("not.be.checked");
+        cy.get("#checkin_no").click();
+        cy.get("#checkin_yes").should("not.be.checked");
+        cy.get("#checkin_yes").click();
+        cy.get("#checkin_yes").should("be.checked");
         cy.get("#checkout_yes").should("be.checked");
-        cy.get("#offline_no").should("be.checked");
-        cy.get("#renewal_no").should("be.checked");
+        cy.get("#checkout_no").click();
+        cy.get("#checkout_yes").should("not.be.checked");
+        cy.get("#checkout_yes").click();
+        cy.get("#checkout_yes").should("be.checked");
+        cy.get("#offline_yes").should("be.checked");
+        cy.get("#renewal_yes").should("be.checked");
         cy.get("#retries").type(institution.retries);
         cy.get("#timeout").type(institution.timeout);
 
