@@ -1,9 +1,9 @@
 [%- BLOCK account_type_description -%]
     <span>
     [%- IF account.credit_type_code -%]
-        [%- PROCESS credit_type_description credit_type_code = account.credit_type_code -%]
+        [%- PROCESS credit_type_description credit_type_code = account.credit_type_code account=account -%]
     [%- ELSIF account.debit_type_code -%]
-        [%- PROCESS debit_type_description debit_type_code = account.debit_type_code -%]
+        [%- PROCESS debit_type_description debit_type_code = account.debit_type_code account=account -%]
     [%- END -%]
     [%- PROCESS account_status_description account=account -%]
     </span>
@@ -27,7 +27,14 @@
         [%- CASE 'RESERVE_EXPIRED'  -%]<span>Hold waiting too long</span>
         [%- CASE 'PAYOUT'           -%]<span>Payment from library to patron</span>
         [%- CASE 'VOID'             -%]<span>Credit has been voided</span>
-        [%- CASE                    -%]<span>[% debit_type.description | html %]</span>
+        [%- CASE -%]
+            <span
+                >[%- IF account && account.debit_type && account.debit_type.description -%]
+                    [% account.debit_type.description | html %]
+                [%- ELSE -%]
+                    [% debit_type_code | html %]
+                [%- END -%]
+            </span>
     [%- END -%]
 [%- END -%]
 
@@ -44,7 +51,14 @@
         [%- CASE 'PURCHASE'     -%]<span>Purchase</span>
         [%- CASE 'REFUND'       -%]<span>Refund</span>
         [%- CASE 'WRITEOFF'     -%]<span>Writeoff</span>
-        [%- CASE                -%]<span>[% credit_type.description | html %]</span>
+        [%- CASE -%]
+            <span
+                >[%- IF account && account.credit_type && account.credit_type.description -%]
+                    [% account.credit_type.description | html %]
+                [%- ELSE -%]
+                    [% credit_type_code | html %]
+                [%- END -%]
+            </span>
     [%- END -%]
 [%- END -%]
 
