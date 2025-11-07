@@ -344,7 +344,7 @@
             [% END %]
 
             [% IF Koha.Preference('SeparateHoldings') %]
-                [% IF other_holdings_count %]
+                [% IF other_holdings_count > 0 %]
                     [% WRAPPER tab_item tabname= "otherholdings" %]
                         <span>Other holdings ([% other_holdings_count || 0 | html %])</span>
                     [% END %]
@@ -1750,23 +1750,29 @@
     [% END %]
     <script>
         var browser;
+        var group_tabs;
         browser = KOHA.browser("[% searchid | html %]", parseInt(biblionumber, 10));
         browser.show();
+        let group_tabs_array = new Array;
+        [% IF Koha.Preference('SeparateHoldingsByGroup') && lib_groups %]
+            [% FOREACH group IN lib_groups %]
+               group_tabs = "group_holdings_[% group.id | html %]"
+               group_tabs_array.push(group_tabs);
+            [% END %]
+          [% END %]
 
         [% IF bundlesEnabled %]
             var bundle_settings = [% TablesSettings.GetTableSettings('catalogue', 'detail','bundle_tables','json') | $raw %];
             var bundle_lost_value = [% Koha.Preference('BundleLostValue') | html %];
         [% END %]
 
-        let items_tab_ids = [
+        let items_tab_ids_default = [
             'holdings',
             'otherholdings'
-            [% IF Koha.Preference('SeparateHoldingsByGroup') && lib_groups %]
-                [% FOREACH group IN lib_groups %]
-                , 'group_holdings_[% group.id | html %]'
-                [% END %]
-            [% END %]
         ];
+
+        let items_tab_ids = items_tab_ids_default.concat(group_tabs_array);
+
         items_tab_ids.forEach( function( tab_id, index ) {
 
             // Early return if the tab is not shown (ie. no table)
