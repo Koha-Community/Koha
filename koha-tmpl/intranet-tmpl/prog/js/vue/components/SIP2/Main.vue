@@ -26,13 +26,14 @@ import Breadcrumbs from "../Breadcrumbs.vue";
 import { storeToRefs } from "pinia";
 import Help from "../Help.vue";
 import LeftMenu from "../LeftMenu.vue";
+import { APIClient } from "../../fetch/api-client.js";
 import Dialog from "../Dialog.vue";
 import "vue-select/dist/vue-select.css";
 
 export default {
     setup() {
         const SIP2Store = inject("SIP2Store");
-        const { authorisedValues } = storeToRefs(SIP2Store);
+        const { sysprefs, authorisedValues } = storeToRefs(SIP2Store);
         const { loadAuthorisedValues } = SIP2Store;
 
         const mainStore = inject("mainStore");
@@ -43,9 +44,20 @@ export default {
 
         onBeforeMount(() => {
             loading();
-            loadAuthorisedValues(authorisedValues.value, SIP2Store).then(() => {
-                loaded();
-                initialized.value = true;
+            const fetchAuthorised = () => {
+                return loadAuthorisedValues(
+                    authorisedValues.value,
+                    SIP2Store
+                ).then(() => {
+                    loaded();
+                    initialized.value = true;
+                });
+            };
+
+            const client = APIClient.sysprefs;
+            return client.sysprefs.get("UseCashRegisters").then(result => {
+                sysprefs.value.UseCashRegisters = result.value;
+                return fetchAuthorised();
             });
         });
 

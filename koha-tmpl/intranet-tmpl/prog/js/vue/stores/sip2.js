@@ -4,6 +4,9 @@ import { withAuthorisedValueActions } from "../composables/authorisedValues";
 
 export const useSIP2Store = defineStore("sip2", () => {
     const store = reactive({
+        sysprefs: {
+            UseCashRegisters: 0,
+        },
         authorisedValues: {
             av_lost: "LOST",
         },

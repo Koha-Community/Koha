@@ -20,6 +20,9 @@ export default {
     },
     emits: ["select-resource"],
     setup(props) {
+        const SIP2Store = inject("SIP2Store");
+        const { sysprefs } = storeToRefs(SIP2Store);
+
         const explodeValues = (value, delimiter) => {
             if (!value) return null;
             return Array.isArray(value) ? value : value.split(delimiter);
@@ -420,6 +423,7 @@ export default {
                 relationshipOptionLabelAttr: "name", // attr of the related resource used for display
                 relationshipRequiredKey: "cash_register_id",
                 hideIn: ["List"],
+                display: account => sysprefs.value.UseCashRegisters == 1,
                 group: "Details",
                 toolTip: __(
                     "Only required if system preference UseCashRegisters is enabled"
