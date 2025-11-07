@@ -39,6 +39,15 @@ primary key identifier
 
 foreign key references additional_fields(id)
 
+=head2 record_table
+
+  data_type: 'varchar'
+  default_value: (empty string)
+  is_nullable: 0
+  size: 255
+
+tablename of the related record
+
 =head2 record_id
 
   data_type: 'varchar'
@@ -64,6 +73,8 @@ __PACKAGE__->add_columns(
   { data_type => "integer", is_auto_increment => 1, is_nullable => 0 },
   "field_id",
   { data_type => "integer", is_foreign_key => 1, is_nullable => 0 },
+  "record_table",
+  { data_type => "varchar", default_value => "", is_nullable => 0, size => 255 },
   "record_id",
   { data_type => "varchar", default_value => "", is_nullable => 0, size => 80 },
   "value",
@@ -100,8 +111,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07051 @ 2025-05-15 07:10:26
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:cCtjuS1xNixY2E8SZZrgMw
+# Created by DBIx::Class::Schema::Loader v0.07051 @ 2025-11-07 17:40:20
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:4WijWKsS1JusMQfDILTJQQ
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration
