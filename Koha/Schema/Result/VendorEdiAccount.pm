@@ -257,6 +257,7 @@ __PACKAGE__->add_columns(
     '+orders_enabled'    => { is_boolean => 1 },
     '+quotes_enabled'    => { is_boolean => 1 },
     '+responses_enabled' => { is_boolean => 1 },
+    '+po_is_basketname'  => { is_boolean => 1 },
 );
 
 1;
