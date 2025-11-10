@@ -333,6 +333,21 @@ if ( defined $dat->{'itemtype'} ) {
 }
 
 my $total_group_holdings_count = 0;
+my $other_holdings_count       = 0;
+my $branch_holdings_count      = 0;
+if ( C4::Context->preference('SeparateHoldings') ) {
+    my $SeparateHoldingsBranch = C4::Context->preference('SeparateHoldingsBranch') || 'homebranch';
+    $branch_holdings_count =
+        $items_to_display->search( { $SeparateHoldingsBranch => { '=' => C4::Context->userenv->{branch} } } )->count;
+    $other_holdings_count = $items_to_display->count - $branch_holdings_count;
+}
+$template->param(
+    count                  => $all_items->count,         # FIXME 'count' is used in catalog-strings.inc
+    other_holdings_count   => $other_holdings_count,     # But it's not a meaningful variable, we should rename it there
+    all_items_count        => $all_items->count,
+    items_to_display_count => $items_to_display->count,
+    branch_holdings_count  => $branch_holdings_count,
+);
 if ( C4::Context->preference('SeparateHoldingsByGroup') ) {
     my $branchcode        = C4::Context->userenv->{branch};
     my @all_search_groups = Koha::Library::Groups->get_search_groups( { interface => 'staff' } );
@@ -367,6 +382,7 @@ if ( C4::Context->preference('SeparateHoldingsByGroup') ) {
                 $total_group_holdings_count += $group_holdings_count;
 
                 push @lib_groups, $group;
+                $other_holdings_count = ( $items_to_display->count ) - $total_group_holdings_count;
             }
         }
     }
@@ -376,22 +392,9 @@ if ( C4::Context->preference('SeparateHoldingsByGroup') ) {
         branchcodes                => \%branchcode_hash,
         holdings_count_hash        => \%holdings_count,
         total_group_holdings_count => $total_group_holdings_count,
+        other_holdings_count       => $other_holdings_count,
     );
 }
-
-if ( C4::Context->preference('SeparateHoldings') ) {
-    my $SeparateHoldingsBranch = C4::Context->preference('SeparateHoldingsBranch') || 'homebranch';
-    my $other_holdings_count =
-        $items_to_display->search( { $SeparateHoldingsBranch => { '!=' => C4::Context->userenv->{branch} } } )->count;
-    $other_holdings_count -= $total_group_holdings_count;
-    $template->param( other_holdings_count => $other_holdings_count );
-}
-$template->param(
-    count                  => $all_items->count,         # FIXME 'count' is used in catalog-strings.inc
-                                                         # But it's not a meaningful variable, we should rename it there
-    all_items_count        => $all_items->count,
-    items_to_display_count => $items_to_display->count,
-);
 
 my $some_private_shelves = Koha::Virtualshelves->get_some_shelves(
     {
