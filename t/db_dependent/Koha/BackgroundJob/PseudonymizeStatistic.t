@@ -68,7 +68,7 @@ subtest 'enqueue() tests' => sub {
 
 subtest 'process() tests' => sub {
 
-    plan tests => 3;
+    plan tests => 4;
 
     $schema->storage->txn_begin;
 
@@ -103,7 +103,8 @@ subtest 'process() tests' => sub {
     is( $statistic->{datetime}, $pt_after->last->datetime, "'datetime' column preserved" );
 
     $job->discard_changes;
-    is( $job->data, '{"data":""}', "Job data cleared after pseudonymization" );
+    is( $job->data,     '{"data":""}', "Job data cleared after pseudonymization" );
+    is( $job->progress, 1,             "Job progress is updated" );
 
     $schema->storage->txn_rollback;
 };
