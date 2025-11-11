@@ -53,6 +53,8 @@ sub process {
     my $statistic   = $args->{statistic};
     my $stat_object = Koha::Statistic->new($statistic);
     Koha::PseudonymizedTransaction->create_from_statistic($stat_object);
+    $self->progress(1)
+        ;    #We could use step here, but we are going to save the object during finish and this saves a DB write
     $self->finish( { data => "" } );    # We want to clear the job data to avoid storing patron information
 
 }
