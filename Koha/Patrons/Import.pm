@@ -377,9 +377,6 @@ LINE: while ( my $borrowerline = <$handle> ) {
                                 $patron_attributes =
                                     $patron->extended_attributes->merge_and_replace_with($patron_attributes);
                             }
-
-                            # We do not want to filter by branch, maybe we should?
-                            Koha::Patrons->find($borrowernumber)->extended_attributes->delete;
                             $patron->extended_attributes($patron_attributes);
                         }
                         $overwritten++;
