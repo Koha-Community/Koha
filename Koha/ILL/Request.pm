@@ -1080,12 +1080,14 @@ sub backend_create {
     # Establish whether we need to do a generic copyright clearance.
     if ( $params->{opac} ) {
 
+        my $patron = $params->{cardnumber} ? Koha::Patrons->find( { cardnumber => $params->{cardnumber} } ) : undef;
+        my $patron_branchcode = $patron    ? $patron->branchcode                                            : undef;
         my $copyright_content = Koha::AdditionalContents->search_for_display(
             {
-                category   => 'html_customizations',
-                location   => ['ILLModuleCopyrightClearance'],
-                lang       => $params->{lang},
-                library_id => $params->{branchcode},
+                category => 'html_customizations',
+                location => ['ILLModuleCopyrightClearance'],
+                lang     => $params->{lang},
+                $patron_branchcode ? ( library_id => $patron_branchcode ) : (),
             }
         );
 
