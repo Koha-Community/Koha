@@ -22,6 +22,7 @@ use File::Basename qw/basename/;
 use C4::Circulation qw( AddIssue AddReturn );
 
 use Koha::Database;
+use Koha::DateUtils qw( dt_from_string );
 use Koha::ILL::Request::Attributes;
 use Koha::ILL::Request::Config;
 use Koha::Biblios;
@@ -860,7 +861,7 @@ subtest 'Backend testing (mocks)' => sub {
 
 subtest 'Backend core methods' => sub {
 
-    plan tests => 20;
+    plan tests => 28;
 
     $schema->storage->txn_begin;
 
@@ -993,6 +994,133 @@ subtest 'Backend core methods' => sub {
         },
         "Backend create: commit stage, permitted, ILLModuleUnmediated disabled."
     );
+
+    # Test backend_create with ILLModuleCopyrightClearance
+    $backend->mock(
+        'create',
+        sub {
+            my ( $self, $params ) = @_;
+            my $request = $params->{request};
+            $request->branchcode( $params->{other}->{branchcode} );
+            $request->store;
+            return {
+                method => 'create',
+                stage  => 'commit',
+            };
+        }
+    );
+
+    Koha::AdditionalContents->search->delete;
+    my $tomorrow  = dt_from_string->add( days => 1 );
+    my $yesterday = dt_from_string->add( days => -1 );
+
+    my $library_additional_contents = $builder->build_object(
+        {
+            class => 'Koha::AdditionalContents',
+            value => {
+                expirationdate => $tomorrow,
+                published_on   => $yesterday,
+                category       => 'html_customizations',
+                location       => 'ILLModuleCopyrightClearance',
+                branchcode     => $illrq->patron->branchcode,
+            }
+        }
+    );
+    $library_additional_contents->translated_contents(
+        [
+            {
+                lang    => 'default',
+                content => '1',
+            }
+        ]
+    );
+    my $branchcode_before_create = $illrq->branchcode;
+    my $another_library          = $builder->build_object( { class => 'Koha::Libraries' } );
+    my $backend_create_result    = $illrq->backend_create(
+        {
+            stage      => 'form', op => 'cud-create', opac => 1, branchcode => $another_library->branchcode,
+            cardnumber => $illrq->patron->cardnumber
+        }
+    );
+    is( $illrq->branchcode, $another_library->branchcode, "Branchcode is the provided branchcode" );
+
+    my $copyright_content = Koha::AdditionalContents->search_for_display(
+        {
+            category   => 'html_customizations',
+            location   => ['ILLModuleCopyrightClearance'],
+            lang       => 'default',
+            library_id => $illrq->patron->branchcode,
+        }
+    );
+    is( $copyright_content->count, 1 );
+
+    $backend_create_result =
+        $illrq->backend_create(
+        { opac => 1, branchcode => $illrq->patron->branchcode, cardnumber => $illrq->patron->cardnumber } );
+    is(
+        $backend_create_result->{stage}, 'copyrightclearance',
+        'Additional contents found for provided cardnumber\'s library, should be copyrightclearance stage'
+    );
+
+    $backend_create_result = $illrq->backend_create( { opac => 1, branchcode => $illrq->patron->branchcode } );
+    is(
+        $backend_create_result->{stage}, 'commit',
+        'Cardnumber not supplied and couldnt find additional_contents for all libraries. Dont show copyrightclearance'
+    );
+
+    my $patron_1 = $builder->build_object( { class => 'Koha::Patrons' } );
+    $backend_create_result = $illrq->backend_create( { opac => 1, branchcode => $patron_1->branchcode } );
+    is(
+        $backend_create_result->{stage}, 'commit',
+        'Supplied cardnumber\'s branchcode doesnt match any additional_contents of same branchcode. Dont show copyrightclearance'
+    );
+
+    my $all_libraries_copyright_content = Koha::AdditionalContents->search_for_display(
+        {
+            category   => 'html_customizations',
+            location   => ['ILLModuleCopyrightClearance'],
+            lang       => 'default',
+            library_id => $another_library->branchcode,
+        }
+    );
+    is( $all_libraries_copyright_content->count, 0 );
+
+    my $all_libraries_additional_contents = $builder->build_object(
+        {
+            class => 'Koha::AdditionalContents',
+            value => {
+                expirationdate => $tomorrow,
+                published_on   => $yesterday,
+                category       => 'html_customizations',
+                location       => 'ILLModuleCopyrightClearance',
+                branchcode     => undef,
+            }
+        }
+    );
+    $all_libraries_additional_contents->translated_contents(
+        [
+            {
+                lang    => 'default',
+                content => '1',
+            }
+        ]
+    );
+
+    $backend_create_result = $illrq->backend_create( { opac => 1, branchcode => $illrq->patron->branchcode } );
+    is(
+        $backend_create_result->{stage}, 'copyrightclearance',
+        'Cardnumber not supplied, found additional_contents for all libraries. Should show copyrightclearance'
+    );
+
+    $all_libraries_copyright_content = Koha::AdditionalContents->search_for_display(
+        {
+            category   => 'html_customizations',
+            location   => ['ILLModuleCopyrightClearance'],
+            lang       => 'default',
+            library_id => $another_library->branchcode,
+        }
+    );
+    is( $all_libraries_copyright_content->count, 1 );
 
     # backend_renew
     $backend->set_series( 'renew', { stage => 'bar', method => 'renew' } );
