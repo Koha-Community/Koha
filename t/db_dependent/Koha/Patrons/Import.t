@@ -30,6 +30,7 @@ use Test::MockModule;
 use Koha::Database;
 use Koha::Patron::Relationships;
 use Koha::DateUtils qw(dt_from_string);
+use Koha::ActionLogs;
 
 use File::Temp qw(tempfile tempdir);
 my $temp_dir = tempdir( 'Koha_patrons_import_test_XXXX', CLEANUP => 1, TMPDIR => 1 );
@@ -1497,7 +1498,9 @@ subtest 'patron_attributes' => sub {
     }
 
     subtest 'update existing patron' => sub {
-        plan tests => 19;
+        plan tests => 22;
+
+        t::lib::Mocks::mock_preference( 'BorrowersLog', 0 );
 
         my $patron = $builder->build_object(
             {
@@ -1523,7 +1526,18 @@ subtest 'patron_attributes' => sub {
 
         is( $result->{overwritten}, 1 );
 
+        my $action_logs = Koha::ActionLogs->search(
+            {
+                module => "MEMBERS",
+                action => "MODIFY",
+                object => $patron->borrowernumber,
+            }
+        );
+        is( $action_logs->count, 0, ' ' );
+
         compare_patron_attributes( $patron->extended_attributes->unblessed, {%$attributes} );
+
+        t::lib::Mocks::mock_preference( 'BorrowersLog', 1 );
 
         # Adding a new non-repeatable attribute
         my $new_attributes = {
@@ -1543,6 +1557,35 @@ subtest 'patron_attributes' => sub {
 
         # The normal_attribute_type has been replaced with 'my normal attribute 2'
         compare_patron_attributes( $patron->extended_attributes->unblessed, { %$attributes, %$new_attributes } );
+
+        $action_logs = Koha::ActionLogs->search(
+            {
+                module => "MEMBERS",
+                action => "MODIFY",
+                object => $patron->borrowernumber,
+            }
+        );
+
+        is( $action_logs->count, 1, ' ' );
+
+        $result = $patrons_import->import_patrons(
+            {
+                file                         => $fh,
+                matchpoint                   => 'cardnumber',
+                overwrite_cardnumber         => 1,
+                preserve_extended_attributes => 1
+            }
+        );
+
+        $action_logs = Koha::ActionLogs->search(
+            {
+                module => "MEMBERS",
+                action => "MODIFY",
+                object => $patron->borrowernumber,
+            }
+        );
+
+        is( $action_logs->count, 1, ' ' );
 
         # UniqueIDConstraint
         $patron->extended_attributes->delete;    # reset
