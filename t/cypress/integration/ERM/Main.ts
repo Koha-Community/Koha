@@ -37,3 +37,26 @@ describe("Main component - pref on", () => {
         cy.get(".main div[class='alert alert-warning']").should("not.exist");
     });
 });
+
+describe("Breadcrumb", () => {
+    beforeEach(() => {
+        cy.login();
+        cy.title().should("eq", "Koha staff interface");
+        cy.intercept(
+            "GET",
+            "/api/v1/erm/config",
+            '{"settings":{"ERMModule":"1","ERMProviders":["local"]}}'
+        );
+    });
+
+    it("Home should not reload the app", () => {
+        cy.visit("/cgi-bin/koha/erm/agreements");
+        cy.window().then(win => {
+            const originalWindow = win;
+            cy.get("#breadcrumbs").contains("E-resource management").click();
+            cy.window().should(newWin => {
+                expect(newWin).to.equal(originalWindow);
+            });
+        });
+    });
+});
