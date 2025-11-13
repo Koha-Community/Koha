@@ -93,7 +93,9 @@ function prepUpLoad(event) {
     $("#fileuploadstatus, #upload_options").show();
     var fd = new FormData();
     fd.append("file", file);
+    $("#mimetype").val("");
     if (ParseFile(file)) {
+        $("#mimetype").val(file.type);
         StartUpload(fd);
     }
 }

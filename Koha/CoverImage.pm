@@ -63,9 +63,10 @@ sub new {
         my $fullsize =
             $class->_scale_image( $src_image, 600, 800 );    # MAX pixel dims are 600 X 800 for full-size image...
 
-        $params->{mimetype}  = 'image/png';
-        $params->{imagefile} = $fullsize->png();
-        $params->{thumbnail} = $thumbnail->png();
+        $params->{mimetype} = $params->{mimetype} || 'image/png';
+        my ( $app, $format ) = split( '/', $params->{mimetype} );
+        $params->{imagefile} = $fullsize->$format();
+        $params->{thumbnail} = $thumbnail->$format();
     }
 
     return $class->SUPER::new($params);

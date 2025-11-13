@@ -227,9 +227,11 @@
                 [% IF itemnumber %]
                     <input type="hidden" id="itemnumber" name="itemnumber" value="[% itemnumber | html %]" />
                     <input type="hidden" name="filetype" value="image" />
+                    <input type="hidden" name="mimetype" id="mimetype" value="" />
                 [% ELSIF biblionumber %]
                     <input type="hidden" id="biblionumber" name="biblionumber" value="[% biblionumber | html %]" />
                     <input type="hidden" name="filetype" value="image" />
+                    <input type="hidden" name="mimetype" id="mimetype" value="" />
                 [% END %]
 
                 <fieldset id="upload_options" class="rows">

@@ -67,6 +67,7 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
 my $filetype     = $input->param('filetype');
 my $biblionumber = $input->param('biblionumber');
 my $itemnumber   = $input->param('itemnumber');
+my $mimetype     = $input->param('mimetype');
 my $replace      = !C4::Context->preference("AllowMultipleCovers")
     || $input->param('replace');
 my $op = $input->param('op') // q{};
@@ -118,7 +119,8 @@ if ( $op eq 'cud-process' && $fileID ) {
                     {
                         biblionumber => $biblionumber,
                         itemnumber   => $itemnumber,
-                        src_image    => $srcimage
+                        src_image    => $srcimage,
+                        mimetype     => $mimetype
                     }
                 )->store;
             };

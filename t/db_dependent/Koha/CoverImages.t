@@ -19,7 +19,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 14;
+use Test::More tests => 23;
 use Test::Exception;
 
 use FindBin '$Bin';
@@ -96,4 +96,54 @@ Koha::CoverImage->new(
 is( $biblio->cover_images->count, 3, );
 is( $item->cover_images->count,   2, );
 
+$logo_filepath = "$Bin/../../../koha-tmpl/intranet-tmpl/prog/img/koha-logo.gif";
+my $mimetype = 'image/gif';
+$image = Koha::CoverImage->new(
+    {
+        biblionumber => $biblio->biblionumber,
+        src_image    => GD::Image->new($logo_filepath),
+        mimetype     => $mimetype
+    }
+)->store;
+$cover_image = $biblio->cover_images->last;
+ok( $cover_image->imagefile, 'image is stored in imagefile' );
+ok( $cover_image->thumbnail, 'thumbnail has been generated' );
+is(
+    $cover_image->mimetype, $mimetype,
+    'The original mimetype has been kept'
+);
+
+$logo_filepath = "$Bin/../../../koha-tmpl/intranet-tmpl/prog/img/koha-logo.png";
+$mimetype      = 'image/png';
+$image         = Koha::CoverImage->new(
+    {
+        biblionumber => $biblio->biblionumber,
+        src_image    => GD::Image->new($logo_filepath),
+        mimetype     => $mimetype
+    }
+)->store;
+$cover_image = $biblio->cover_images->last;
+ok( $cover_image->imagefile, 'image is stored in imagefile' );
+ok( $cover_image->thumbnail, 'thumbnail has been generated' );
+is(
+    $cover_image->mimetype, $mimetype,
+    'The original mimetype has been kept'
+);
+
+$logo_filepath = "$Bin/../../../koha-tmpl/opac-tmpl/lib/greybox/GreyBox_v5_5/static_files/night_valley.jpg";
+$mimetype      = 'image/jpeg';
+$image         = Koha::CoverImage->new(
+    {
+        biblionumber => $biblio->biblionumber,
+        src_image    => GD::Image->new($logo_filepath),
+        mimetype     => $mimetype
+    }
+)->store;
+$cover_image = $biblio->cover_images->last;
+ok( $cover_image->imagefile, 'image is stored in imagefile' );
+ok( $cover_image->thumbnail, 'thumbnail has been generated' );
+is(
+    $cover_image->mimetype, $mimetype,
+    'The original mimetype has been kept'
+);
 $schema->storage->txn_rollback;
