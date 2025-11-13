@@ -788,6 +788,7 @@ export default {
             return [
                 {
                     name: $__("Contacts"),
+                    hidden: vendor => !!vendor.contacts?.length,
                     showElement: {
                         type: "table",
                         columnData: "contacts",
