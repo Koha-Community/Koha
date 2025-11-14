@@ -152,10 +152,13 @@ export default {
                         resourceRelationships: {
                             resourceProperty: "user_roles",
                         },
-                        relationshipStrings: {
-                            nameLowerCase: $__("user"),
+                        relationshipI18n: {
                             nameUpperCase: $__("License user"),
-                            namePlural: $__("users"),
+                            removeThisMessage: $__("Remove this user"),
+                            addNewMessage: $__("Add new user"),
+                            noneCreatedYetMessage: $__(
+                                "There are no users created yet"
+                            ),
                         },
                         newRelationshipDefaultAttrs: {
                             type: "object",
@@ -225,10 +228,13 @@ export default {
                         resourceRelationships: {
                             resourceProperty: "documents",
                         },
-                        relationshipStrings: {
-                            nameLowerCase: $__("document"),
+                        relationshipI18n: {
                             nameUpperCase: $__("Document"),
-                            namePlural: $__("documents"),
+                            removeThisMessage: $__("Remove this document"),
+                            addNewMessage: $__("Add new document"),
+                            noneCreatedYetMessage: $__(
+                                "There are no documents created yet"
+                            ),
                         },
                         newRelationshipDefaultAttrs: {
                             type: "object",

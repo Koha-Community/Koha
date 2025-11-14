@@ -372,10 +372,13 @@ export default {
                         resourceRelationships: {
                             resourceProperty: "resources",
                         },
-                        relationshipStrings: {
-                            nameLowerCase: $__("package"),
+                        relationshipI18n: {
                             nameUpperCase: $__("Package"),
-                            namePlural: $__("packages"),
+                            removeThisMessage: $__("Remove this package"),
+                            addNewMessage: $__("Add new package"),
+                            noneCreatedYetMessage: $__(
+                                "There are no packages created yet"
+                            ),
                         },
                         fetchOptions: {
                             type: "boolean",

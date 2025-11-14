@@ -150,10 +150,13 @@ export default {
                         resourceRelationships: {
                             resourceProperty: "package_agreements",
                         },
-                        relationshipStrings: {
-                            nameLowerCase: $__("agreement"),
+                        relationshipI18n: {
                             nameUpperCase: $__("Agreement"),
-                            namePlural: $__("agreements"),
+                            removeThisMessage: $__("Remove this agreement"),
+                            addNewMessage: $__("Add new agreement"),
+                            noneCreatedYetMessage: $__(
+                                "There are no agreements created yet"
+                            ),
                         },
                         fetchOptions: {
                             type: "boolean",

@@ -8,14 +8,10 @@
             v-bind:key="counter"
         >
             <legend>
-                {{ relationshipStrings.nameUpperCase + " " + (counter + 1) }}
+                {{ relationshipI18n.nameUpperCase + " " + (counter + 1) }}
                 <a href="#" @click.prevent="deleteResourceRelationship(counter)"
                     ><i class="fa fa-trash"></i>
-                    {{
-                        $__("Remove this %s").format(
-                            relationshipStrings.nameLowerCase
-                        )
-                    }}</a
+                    {{ relationshipI18n.removeThisMessage }}</a
                 >
             </legend>
             <ol>
@@ -37,13 +33,11 @@
             class="btn btn-default add-new-relationship"
             @click="addResourceRelationship"
             ><font-awesome-icon icon="plus" />
-            {{ $__("Add new %s").format(relationshipStrings.nameLowerCase) }}</a
+            {{ relationshipI18n.addNewMessage }}</a
         >
-        <span v-else-if="resourceRelationshipCount == 0">{{
-            $__("There are no %s created yet").format(
-                relationshipStrings.namePlural
-            )
-        }}</span>
+        <span v-else-if="resourceRelationshipCount == 0">
+            {{ relationshipI18n.noneCreatedYetMessage }}
+        </span>
     </fieldset>
 </template>
 
@@ -113,7 +107,7 @@ export default {
     props: {
         resourceRelationships: Array,
         relationshipFields: Array,
-        relationshipStrings: Object,
+        relationshipI18n: Object,
         title: String,
         apiClient: Object,
         newRelationshipDefaultAttrs: Object,

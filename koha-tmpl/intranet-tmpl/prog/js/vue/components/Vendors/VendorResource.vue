@@ -256,10 +256,13 @@ export default {
                         resourceRelationships: {
                             resourceProperty: "aliases",
                         },
-                        relationshipStrings: {
-                            nameLowerCase: $__("alias"),
+                        relationshipI18n: {
                             nameUpperCase: $__("Alias"),
-                            namePlural: $__("aliases"),
+                            removeThisMessage: $__("Remove this alias"),
+                            addNewMessage: $__("Add new alias"),
+                            noneCreatedYetMessage: $__(
+                                "There are no aliases created yet"
+                            ),
                         },
                         newRelationshipDefaultAttrs: {
                             type: "object",
@@ -286,10 +289,13 @@ export default {
                         resourceRelationships: {
                             resourceProperty: "contacts",
                         },
-                        relationshipStrings: {
-                            nameLowerCase: $__("contact"),
+                        relationshipI18n: {
                             nameUpperCase: $__("Contact"),
-                            namePlural: $__("contacts"),
+                            removeThisMessage: $__("Remove this contact"),
+                            addNewMessage: $__("Add new contact"),
+                            noneCreatedYetMessage: $__(
+                                "There are no contacts created yet"
+                            ),
                         },
                         newRelationshipDefaultAttrs: {
                             type: "object",
@@ -388,10 +394,13 @@ export default {
                         resourceRelationships: {
                             resourceProperty: "interfaces",
                         },
-                        relationshipStrings: {
-                            nameLowerCase: $__("interface"),
+                        relationshipI18n: {
                             nameUpperCase: $__("Interface"),
-                            namePlural: $__("interfaces"),
+                            removeThisMessage: $__("Remove this interface"),
+                            addNewMessage: $__("Add new interface"),
+                            noneCreatedYetMessage: $__(
+                                "There are no interfaces created yet"
+                            ),
                         },
                         newRelationshipDefaultAttrs: {
                             type: "object",

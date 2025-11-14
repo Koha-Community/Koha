@@ -196,10 +196,13 @@ export default {
                         resourceRelationships: {
                             resourceProperty: "periods",
                         },
-                        relationshipStrings: {
-                            nameLowerCase: $__("period"),
+                        relationshipI18n: {
                             nameUpperCase: $__("Period"),
-                            namePlural: $__("periods"),
+                            removeThisMessage: $__("Remove this period"),
+                            addNewMessage: $__("Add new period"),
+                            noneCreatedYetMessage: $__(
+                                "There are no periods created yet"
+                            ),
                         },
                         newRelationshipDefaultAttrs: {
                             type: "object",
@@ -279,10 +282,13 @@ export default {
                         resourceRelationships: {
                             resourceProperty: "user_roles",
                         },
-                        relationshipStrings: {
-                            nameLowerCase: $__("user"),
+                        relationshipI18n: {
                             nameUpperCase: $__("Agreement user"),
-                            namePlural: $__("users"),
+                            removeThisMessage: $__("Remove this user"),
+                            addNewMessage: $__("Add new user"),
+                            noneCreatedYetMessage: $__(
+                                "There are no users created yet"
+                            ),
                         },
                         newRelationshipDefaultAttrs: {
                             type: "object",
@@ -388,10 +394,13 @@ export default {
                         resourceRelationships: {
                             resourceProperty: "agreement_licenses",
                         },
-                        relationshipStrings: {
-                            nameLowerCase: $__("license"),
+                        relationshipI18n: {
                             nameUpperCase: $__("License"),
-                            namePlural: $__("licenses"),
+                            removeThisMessage: $__("Remove this license"),
+                            addNewMessage: $__("Add new license"),
+                            noneCreatedYetMessage: $__(
+                                "There are no licenses created yet"
+                            ),
                         },
                     },
                     relationshipFields: [
@@ -491,10 +500,15 @@ export default {
                         resourceRelationships: {
                             resourceProperty: "agreement_relationships",
                         },
-                        relationshipStrings: {
-                            nameLowerCase: $__("related agreement"),
+                        relationshipI18n: {
                             nameUpperCase: $__("Related agreement"),
-                            namePlural: $__("related agreements"),
+                            removeThisMessage: $__(
+                                "Remove this related agreement"
+                            ),
+                            addNewMessage: $__("Add new related agreement"),
+                            noneCreatedYetMessage: $__(
+                                "There are no related agreements created yet"
+                            ),
                         },
                         filters: {
                             type: "filter",
@@ -578,10 +592,13 @@ export default {
                         resourceRelationships: {
                             resourceProperty: "documents",
                         },
-                        relationshipStrings: {
-                            nameLowerCase: $__("document"),
+                        relationshipI18n: {
                             nameUpperCase: $__("Document"),
-                            namePlural: $__("documents"),
+                            removeThisMessage: $__("Remove this document"),
+                            addNewMessage: $__("Add new document"),
+                            noneCreatedYetMessage: $__(
+                                "There are no documents created yet"
+                            ),
                         },
                         newRelationshipDefaultAttrs: {
                             type: "object",

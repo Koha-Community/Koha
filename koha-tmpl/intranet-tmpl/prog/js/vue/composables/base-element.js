@@ -92,7 +92,7 @@ export function useBaseElement(instancedElement) {
                     prop.value = propertyValue;
                 }
             }
-            if (key === "relationshipStrings") {
+            if (key === "relationshipI18n") {
                 acc[key] = prop;
             }
             if (prop.type === "av") {
