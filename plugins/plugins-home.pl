@@ -23,6 +23,7 @@ use CGI qw ( -utf8 );
 
 use JSON qw( from_json );
 use LWP::Simple qw( get );
+use Try::Tiny;
 
 use Koha::Plugins;
 use C4::Auth qw( get_template_and_user );
@@ -62,7 +63,7 @@ if ($plugins_enabled) {
     $template->param( plugins_restricted => C4::Context->config('plugins_restricted') );
 
     $template->param( can_search => C4::Context->config('plugin_repos') ? 1 : 0 );
-    my @results;
+    my ( @results, @errors );
     if ($plugin_search) {
         my $repos = C4::Context->config('plugin_repos');
 
@@ -72,6 +73,7 @@ if ($plugins_enabled) {
         }
 
         foreach my $r ( @{ $repos->{repo} } ) {
+            try {
             if ( $r->{service} eq 'github' ) {
                 my $url = "https://api.github.com/search/repositories?q=$plugin_search+user:$r->{org_name}+in:name,description";
                 my $response = from_json( get($url) );
@@ -129,10 +131,15 @@ if ($plugins_enabled) {
                     }
                 }
             }
+            } catch {
+                warn $_;
+                push @errors, { repo => $r, error => $_ };
+            };
         }
 
         $template->param(
             search_results => \@results,
+            search_errors  => \@errors,
             search_term    => $plugin_search,
         );
     }
