@@ -85,6 +85,15 @@
                         </div>
                     [% END %]
 
+                    [% IF search_errors %]
+                        <h2>Search errors</h2>
+                        <div class="page-section">
+                            [% FOREACH error IN search_errors %]
+                                <div class="alert alert-warning">Cannot search repository [% error.repo.name | html %]: [% error.error | html %]</div>
+                            [% END %]
+                        </div>
+                    [% END %]
+
                     [% IF search_results %]
                         <h2>Search results</h2>
                         <div class="page-section">
