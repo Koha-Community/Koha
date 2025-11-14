@@ -596,7 +596,7 @@ if ( $query->param('audit') ) {
     my $audit_errors = Koha::Database::DataInconsistency->for_biblio($biblio);
     $template->param(
         auditing     => 1,
-        audit_errors => [ map { scalar @{ $audit_errors->{$_} } ? $audit_errors->{$_} : () } keys %$audit_errors ],
+        audit_errors => [ map { scalar @{ $audit_errors->{$_} } ? @{ $audit_errors->{$_} } : () } keys %$audit_errors ],
     );
 }
 
