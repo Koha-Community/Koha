@@ -19,7 +19,7 @@
         [% ELSE %]
             <a id="ill-new" class="btn btn-default disabled" href=""> <i class="fa fa-plus"></i> New ILL request </a>
         [% END %]
-        [% IF query_type == 'illlist' %]
+        [% IF op == 'illlist' %]
             <a id="ill-list" class="btn btn-sm btn-default btn-group" href="/cgi-bin/koha/ill/ill-requests.pl"> <i class="fa fa-list"></i> Refresh </a>
         [% ELSE %]
             <a id="ill-list" class="btn btn-sm btn-default btn-group" href="/cgi-bin/koha/ill/ill-requests.pl"> <i class="fa fa-list"></i> List requests </a>
