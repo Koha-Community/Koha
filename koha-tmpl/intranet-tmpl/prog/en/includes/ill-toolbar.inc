@@ -20,9 +20,9 @@
             <a id="ill-new" class="btn btn-default disabled" href=""> <i class="fa fa-plus"></i> New ILL request </a>
         [% END %]
         [% IF op == 'illlist' %]
-            <a id="ill-list" class="btn btn-sm btn-default btn-group" href="/cgi-bin/koha/ill/ill-requests.pl"> <i class="fa fa-list"></i> Refresh </a>
+            <a id="ill-list" class="btn btn-default btn-group" href="/cgi-bin/koha/ill/ill-requests.pl"> <i class="fa fa-list"></i> Refresh </a>
         [% ELSE %]
-            <a id="ill-list" class="btn btn-sm btn-default btn-group" href="/cgi-bin/koha/ill/ill-requests.pl"> <i class="fa fa-list"></i> List requests </a>
+            <a id="ill-list" class="btn btn-default btn-group" href="/cgi-bin/koha/ill/ill-requests.pl"> <i class="fa fa-list"></i> List requests </a>
         [% END %]
         [% IF have_batch.size > 0 && metadata_enrichment_services %]
             <div id="ill-batch">
