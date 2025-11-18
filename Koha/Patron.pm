@@ -25,7 +25,6 @@ use JSON               qw( to_json );
 use Unicode::Normalize qw( NFKD );
 use Try::Tiny;
 use DateTime ();
-use C4::Log  qw( logaction );
 
 use C4::Auth qw( checkpw_hash );
 use C4::Context;
