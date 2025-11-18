@@ -6048,105 +6048,12 @@ CREATE TABLE `sessions` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Table structure for table `sip_accounts`
---
-
-DROP TABLE IF EXISTS `sip_accounts`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `sip_accounts` (
-  `sip_account_id` int(11) NOT NULL AUTO_INCREMENT,
-  `sip_institution_id` int(11) NOT NULL COMMENT 'Foreign key to sip_institutions.sip_institution_id',
-  `ae_field_template` varchar(255) NULL,
-  `allow_additional_materials_checkout` tinyint(1) NULL,
-  `allow_empty_passwords` tinyint(1) NULL,
-  `allow_fields` varchar(255) NULL,
-  `av_field_template` varchar(255) NULL,
-  `blocked_item_types` varchar(255) NULL,
-  `checked_in_ok` tinyint(1) NULL,
-  `convert_nonprinting_characters` varchar(10) NULL,
-  `cr_item_field` varchar(255) NULL,
-  `ct_always_send` tinyint(1) NULL,
-  `cv_send_00_on_success` tinyint(1) NULL,
-  `cv_triggers_alert` tinyint(1) NULL,
-  `da_field_template` varchar(255) NULL,
-  `delimiter` varchar(10) NULL DEFAULT '|',
-  `disallow_overpayment` tinyint(1) NULL,
-  `encoding` varchar(10) NULL,
-  `error_detect` tinyint(1) NULL,
-  `format_due_date` tinyint(1) NULL,
-  `hide_fields` varchar(255) NULL,
-  `holds_block_checkin` tinyint(1) NULL,
-  `holds_get_captured` tinyint(1) NULL,
-  `inhouse_item_types` varchar(255) NULL,
-  `inhouse_patron_categories` varchar(255) NULL,
-  `login_id` varchar(255) NOT NULL COMMENT 'Staff userid for SIP2 authentication',
-  `lost_block_checkout` tinyint(1) NULL COMMENT 'actual tinyint, not boolean',
-  `lost_block_checkout_value` tinyint(1) NULL COMMENT 'actual tinyint, not boolean',
-  `lost_status_for_missing` tinyint(1) NULL COMMENT 'actual tinyint, not boolean',
-  `overdues_block_checkout` tinyint(1) NULL,
-  `payment_type_writeoff` varchar(10) NULL,
-  `prevcheckout_block_checkout` tinyint(1) NULL,
-  `register_id` int(11) NULL COMMENT 'Foreign key to cash_registers.id',
-  `seen_on_item_information` varchar(255) NULL,
-  `send_patron_home_library_in_af` tinyint(1) NULL,
-  `show_checkin_message` tinyint(1) NULL,
-  `show_outstanding_amount` tinyint(1) NULL,
-  `terminator` enum('CR','CRLF') NOT NULL DEFAULT 'CRLF',
-  PRIMARY KEY (`sip_account_id`),
-  UNIQUE KEY `account_login_id` (`login_id`),
-  KEY `sip_accounts_ibfk_1` (`sip_institution_id`),
-  KEY `sip_accounts_ibfk_2` (`register_id`),
-  CONSTRAINT `sip_accounts_ibfk_1` FOREIGN KEY (`sip_institution_id`) REFERENCES `sip_institutions` (`sip_institution_id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `sip_accounts_ibfk_2` FOREIGN KEY (`register_id`) REFERENCES `cash_registers` (`id`) ON DELETE SET NULL ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Table structure for table `sip_account_custom_patron_fields`
---
-
-DROP TABLE IF EXISTS `sip_account_custom_patron_fields`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `sip_account_custom_patron_fields` (
-  `sip_account_custom_patron_field_id` int(11) NOT NULL AUTO_INCREMENT,
-  `sip_account_id` int(11) NOT NULL COMMENT 'Foreign key to sip_accounts.sip_account_id',
-  `field` varchar(80) NOT NULL COMMENT 'SIP field name e.g. XY',
-  `template` varchar(80) NOT NULL COMMENT 'Template toolkit template',
-  PRIMARY KEY (`sip_account_custom_patron_field_id`),
-  UNIQUE KEY `sip_account` (`sip_account_custom_patron_field_id`,`sip_account_id`),
-  KEY `sip_account_custom_patron_fields_ibfk_1` (`sip_account_id`),
-  CONSTRAINT `sip_account_custom_patron_fields_ibfk_1` FOREIGN KEY (`sip_account_id`) REFERENCES `sip_accounts` (`sip_account_id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Table structure for table `sip_account_patron_attributes`
---
-
-DROP TABLE IF EXISTS `sip_account_patron_attributes`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `sip_account_patron_attributes` (
-  `sip_account_patron_attribute_id` int(11) NOT NULL AUTO_INCREMENT,
-  `sip_account_id` int(11) NOT NULL COMMENT 'Foreign key to sip_accounts.sip_account_id',
-  `field` varchar(80) NOT NULL COMMENT 'SIP field name e.g. XY',
-  `code` varchar(80) NOT NULL COMMENT 'Patron attribute code as in borrower_attribute_types.code',
-  PRIMARY KEY (`sip_account_patron_attribute_id`),
-  UNIQUE KEY `sip_account` (`sip_account_patron_attribute_id`,`sip_account_id`),
-  KEY `sip_account_patron_attributes_ibfk_1` (`sip_account_id`),
-  CONSTRAINT `sip_account_patron_attributes_ibfk_1` FOREIGN KEY (`sip_account_id`) REFERENCES `sip_accounts` (`sip_account_id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
 -- Table structure for table `sip_account_custom_item_fields`
 --
 
 DROP TABLE IF EXISTS `sip_account_custom_item_fields`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `sip_account_custom_item_fields` (
   `sip_account_custom_item_field_id` int(11) NOT NULL AUTO_INCREMENT,
   `sip_account_id` int(11) NOT NULL COMMENT 'Foreign key to sip_accounts.sip_account_id',
@@ -6160,12 +6067,31 @@ CREATE TABLE `sip_account_custom_item_fields` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
+-- Table structure for table `sip_account_custom_patron_fields`
+--
+
+DROP TABLE IF EXISTS `sip_account_custom_patron_fields`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8mb4 */;
+CREATE TABLE `sip_account_custom_patron_fields` (
+  `sip_account_custom_patron_field_id` int(11) NOT NULL AUTO_INCREMENT,
+  `sip_account_id` int(11) NOT NULL COMMENT 'Foreign key to sip_accounts.sip_account_id',
+  `field` varchar(80) NOT NULL COMMENT 'SIP field name e.g. XY',
+  `template` varchar(80) NOT NULL COMMENT 'Template toolkit template',
+  PRIMARY KEY (`sip_account_custom_patron_field_id`),
+  UNIQUE KEY `sip_account` (`sip_account_custom_patron_field_id`,`sip_account_id`),
+  KEY `sip_account_custom_patron_fields_ibfk_1` (`sip_account_id`),
+  CONSTRAINT `sip_account_custom_patron_fields_ibfk_1` FOREIGN KEY (`sip_account_id`) REFERENCES `sip_accounts` (`sip_account_id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
 -- Table structure for table `sip_account_item_fields`
 --
 
 DROP TABLE IF EXISTS `sip_account_item_fields`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `sip_account_item_fields` (
   `sip_account_item_field_id` int(11) NOT NULL AUTO_INCREMENT,
   `sip_account_id` int(11) NOT NULL COMMENT 'Foreign key to sip_accounts.sip_account_id',
@@ -6179,12 +6105,31 @@ CREATE TABLE `sip_account_item_fields` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
+-- Table structure for table `sip_account_patron_attributes`
+--
+
+DROP TABLE IF EXISTS `sip_account_patron_attributes`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8mb4 */;
+CREATE TABLE `sip_account_patron_attributes` (
+  `sip_account_patron_attribute_id` int(11) NOT NULL AUTO_INCREMENT,
+  `sip_account_id` int(11) NOT NULL COMMENT 'Foreign key to sip_accounts.sip_account_id',
+  `field` varchar(80) NOT NULL COMMENT 'SIP field name e.g. XY',
+  `code` varchar(80) NOT NULL COMMENT 'Patron attribute code as in borrower_attribute_types.code',
+  PRIMARY KEY (`sip_account_patron_attribute_id`),
+  UNIQUE KEY `sip_account` (`sip_account_patron_attribute_id`,`sip_account_id`),
+  KEY `sip_account_patron_attributes_ibfk_1` (`sip_account_id`),
+  CONSTRAINT `sip_account_patron_attributes_ibfk_1` FOREIGN KEY (`sip_account_id`) REFERENCES `sip_accounts` (`sip_account_id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
 -- Table structure for table `sip_account_screen_msg_regexs`
 --
 
 DROP TABLE IF EXISTS `sip_account_screen_msg_regexs`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `sip_account_screen_msg_regexs` (
   `sip_account_screen_msg_regex_id` int(11) NOT NULL AUTO_INCREMENT,
   `sip_account_id` int(11) NOT NULL COMMENT 'Foreign key to sip_accounts.sip_account_id',
@@ -6198,12 +6143,12 @@ CREATE TABLE `sip_account_screen_msg_regexs` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Table structure for table `sip_account_system_preference_overrides`
+-- Table structure for table `sip_account_sort_bin_mappings`
 --
 
 DROP TABLE IF EXISTS `sip_account_sort_bin_mappings`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `sip_account_sort_bin_mappings` (
   `sip_account_sort_bin_mapping_id` int(11) NOT NULL AUTO_INCREMENT,
   `sip_account_id` int(11) NOT NULL COMMENT 'Foreign key to sip_accounts.sip_account_id',
@@ -6221,7 +6166,7 @@ CREATE TABLE `sip_account_sort_bin_mappings` (
 
 DROP TABLE IF EXISTS `sip_account_system_preference_overrides`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `sip_account_system_preference_overrides` (
   `sip_account_system_preference_override_id` int(11) NOT NULL AUTO_INCREMENT,
   `sip_account_id` int(11) NOT NULL COMMENT 'Foreign key to sip_accounts.sip_account_id',
@@ -6235,22 +6180,77 @@ CREATE TABLE `sip_account_system_preference_overrides` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
+-- Table structure for table `sip_accounts`
+--
+
+DROP TABLE IF EXISTS `sip_accounts`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8mb4 */;
+CREATE TABLE `sip_accounts` (
+  `sip_account_id` int(11) NOT NULL AUTO_INCREMENT,
+  `sip_institution_id` int(11) NOT NULL COMMENT 'Foreign key to sip_institutions.sip_institution_id',
+  `ae_field_template` varchar(255) DEFAULT NULL,
+  `allow_additional_materials_checkout` tinyint(1) DEFAULT NULL,
+  `allow_empty_passwords` tinyint(1) DEFAULT NULL,
+  `allow_fields` varchar(255) DEFAULT NULL,
+  `av_field_template` varchar(255) DEFAULT NULL,
+  `blocked_item_types` varchar(255) DEFAULT NULL,
+  `checked_in_ok` tinyint(1) DEFAULT NULL,
+  `convert_nonprinting_characters` varchar(10) DEFAULT NULL,
+  `cr_item_field` varchar(255) DEFAULT NULL,
+  `ct_always_send` tinyint(1) DEFAULT NULL,
+  `cv_send_00_on_success` tinyint(1) DEFAULT NULL,
+  `cv_triggers_alert` tinyint(1) DEFAULT NULL,
+  `da_field_template` varchar(255) DEFAULT NULL,
+  `delimiter` varchar(10) DEFAULT '|',
+  `disallow_overpayment` tinyint(1) DEFAULT NULL,
+  `encoding` varchar(10) DEFAULT NULL,
+  `error_detect` tinyint(1) DEFAULT NULL,
+  `format_due_date` tinyint(1) DEFAULT NULL,
+  `hide_fields` varchar(255) DEFAULT NULL,
+  `holds_block_checkin` tinyint(1) DEFAULT NULL,
+  `holds_get_captured` tinyint(1) DEFAULT NULL,
+  `inhouse_item_types` varchar(255) DEFAULT NULL,
+  `inhouse_patron_categories` varchar(255) DEFAULT NULL,
+  `login_id` varchar(255) NOT NULL COMMENT 'Staff userid for SIP2 authentication',
+  `lost_block_checkout` tinyint(1) DEFAULT NULL COMMENT 'actual tinyint, not boolean',
+  `lost_block_checkout_value` tinyint(1) DEFAULT NULL COMMENT 'actual tinyint, not boolean',
+  `lost_status_for_missing` tinyint(1) DEFAULT NULL COMMENT 'actual tinyint, not boolean',
+  `overdues_block_checkout` tinyint(1) DEFAULT NULL,
+  `payment_type_writeoff` varchar(10) DEFAULT NULL,
+  `prevcheckout_block_checkout` tinyint(1) DEFAULT NULL,
+  `register_id` int(11) DEFAULT NULL COMMENT 'Foreign key to cash_registers.id',
+  `seen_on_item_information` varchar(255) DEFAULT NULL,
+  `send_patron_home_library_in_af` tinyint(1) DEFAULT NULL,
+  `show_checkin_message` tinyint(1) DEFAULT NULL,
+  `show_outstanding_amount` tinyint(1) DEFAULT NULL,
+  `terminator` enum('CR','CRLF') NOT NULL DEFAULT 'CRLF',
+  PRIMARY KEY (`sip_account_id`),
+  UNIQUE KEY `account_login_id` (`login_id`),
+  KEY `sip_accounts_ibfk_1` (`sip_institution_id`),
+  KEY `sip_accounts_ibfk_2` (`register_id`),
+  CONSTRAINT `sip_accounts_ibfk_1` FOREIGN KEY (`sip_institution_id`) REFERENCES `sip_institutions` (`sip_institution_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `sip_accounts_ibfk_2` FOREIGN KEY (`register_id`) REFERENCES `cash_registers` (`id`) ON DELETE SET NULL ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
 -- Table structure for table `sip_institutions`
 --
 
 DROP TABLE IF EXISTS `sip_institutions`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `sip_institutions` (
   `sip_institution_id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(80) NOT NULL COMMENT 'Unique varchar identifier. Previously "id" in SIPconfig.xml',
   `implementation` varchar(80) NOT NULL DEFAULT 'ILS',
   `checkin` tinyint(1) NOT NULL DEFAULT 1 COMMENT 'Previously attribute of "policy" in SIPconfig.xml',
   `checkout` tinyint(1) NOT NULL DEFAULT 1 COMMENT 'Previously attribute of "policy" in SIPconfig.xml',
-  `offline` tinyint(1) NULL COMMENT 'Previously attribute of "policy" in SIPconfig.xml',
+  `offline` tinyint(1) DEFAULT NULL COMMENT 'Previously attribute of "policy" in SIPconfig.xml',
   `renewal` tinyint(1) NOT NULL DEFAULT 0 COMMENT 'Previously attribute of "policy" in SIPconfig.xml',
   `retries` int(11) NOT NULL DEFAULT 5 COMMENT 'Previously attribute of "policy" in SIPconfig.xml',
-  `status_update` tinyint(1) NULL COMMENT 'Previously attribute of "policy" in SIPconfig.xml',
+  `status_update` tinyint(1) DEFAULT NULL COMMENT 'Previously attribute of "policy" in SIPconfig.xml',
   `timeout` int(11) NOT NULL DEFAULT 100 COMMENT 'Previously attribute of "policy" in SIPconfig.xml',
   PRIMARY KEY (`sip_institution_id`),
   UNIQUE KEY `institution_name` (`name`)
@@ -6263,13 +6263,14 @@ CREATE TABLE `sip_institutions` (
 
 DROP TABLE IF EXISTS `sip_system_preference_overrides`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `sip_system_preference_overrides` (
   `sip_system_preference_override_id` int(11) NOT NULL AUTO_INCREMENT,
   `variable` varchar(80) NOT NULL COMMENT 'System preference name',
   `value` varchar(80) NOT NULL COMMENT 'System preference value',
   PRIMARY KEY (`sip_system_preference_override_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Table structure for table `sms_providers`
