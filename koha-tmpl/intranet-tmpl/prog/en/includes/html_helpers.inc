@@ -136,7 +136,9 @@
                                 [% IF aval == mv.default %]
                                     [% SET matched = 1 %]
                                     [% IF mv.restricted.$aval %]
-                                        <option value="[%- aval | html -%]" selected="selected" style="float:right" title="This value ([%- mv.labels.$aval | html -%]) is limited to other librairies">[%- mv.labels.$aval | html -%] &#9888;</option>
+                                        <option value="[%- aval | html -%]" selected="selected" style="float:right" title="This value ([%- mv.labels.$aval | html -%]) is limited to other libraries"
+                                            >[%- mv.labels.$aval | html -%] &#9888;</option
+                                        >
                                     [% ELSE %]
                                         <option value="[%- aval | html -%]" selected="selected">[%- mv.labels.$aval | html -%]</option>
                                     [% END %]
@@ -157,7 +159,9 @@
                                 [% IF mv.restricted %]
                                     [% FOREACH code IN mv.restricted.keys %]
                                         [% IF mv.default == code %]
-                                            <option value="[%- code | html -%]" selected="selected" style="float:right" title="This value ([%- mv.restricted.$code | html -%]) is limited to other librairies">[%- mv.restricted.$code | html -%] &#9888;</option>
+                                            <option value="[%- code | html -%]" selected="selected" style="float:right" title="This value ([%- mv.restricted.$code | html -%]) is limited to other libraries"
+                                                >[%- mv.restricted.$code | html -%] &#9888;</option
+                                            >
                                         [% END %]
                                     [% END %]
                                 [% END %]

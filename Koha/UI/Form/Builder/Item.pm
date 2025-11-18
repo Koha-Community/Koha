@@ -210,12 +210,12 @@ sub generate_subfield_form {
             } else {
                 $filtered_itemtypes = $all_itemtypes;
             }
-            while (my $itemtype = $filtered_itemtypes->next) {
+            while ( my $itemtype = $filtered_itemtypes->next ) {
                 push @authorised_values, $itemtype->itemtype;
                 $authorised_lib{ $itemtype->itemtype } = $itemtype->translated_description;
             }
-            while (my $itemtype = $all_itemtypes->next) {
-                if (!grep { $_ eq $itemtype->itemtype } @authorised_values) {
+            while ( my $itemtype = $all_itemtypes->next ) {
+                if ( !grep { $_ eq $itemtype->itemtype } @authorised_values ) {
                     $restricted_values{ $itemtype->itemtype } = $itemtype->translated_description;
                 }
             }
@@ -255,7 +255,7 @@ sub generate_subfield_form {
             my $av = GetAuthorisedValues( $subfield->{authorised_value}, undef, { 'no_limit' => 1 } );
             for my $r (@$av) {
                 push @authorised_values, $r->{authorised_value};
-                $authorised_lib{ $r->{authorised_value} } = $r->{lib};
+                $authorised_lib{ $r->{authorised_value} }    = $r->{lib};
                 $restricted_values{ $r->{authorised_value} } = $r->{restricted};
             }
         }
