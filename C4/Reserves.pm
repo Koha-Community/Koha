@@ -2226,13 +2226,13 @@ sub MoveReserve {
     my $lookahead = C4::Context->preference('ConfirmFutureHolds');    #number of days to look for future holds
     my ( $restype, $res, undef ) = CheckReserves( $item, $lookahead );
 
+    my $hold;
     if ( $res && $res->{borrowernumber} == $patron->borrowernumber ) {
-        my $hold = Koha::Holds->find( $res->{reserve_id} );
-        $hold->fill( { item_id => $item->id } );
+        $hold = Koha::Holds->find( $res->{reserve_id} );
     } else {
 
-        # The item is reserved by someone else.
-        # Find this item in the reserves
+        # The next reserve is for someone else,
+        # Check if this patron has a reserve on this biblio/item
 
         my $lookahead_date = output_pref(
             {
@@ -2240,7 +2240,7 @@ sub MoveReserve {
                 dateformat => 'iso', dateonly => 1
             }
         );
-        my $hold = $patron->holds->search(
+        $hold = $patron->holds->search(
             {
                 biblionumber => $item->biblionumber,
                 reservedate  => { '<=' => $lookahead_date },
@@ -2248,17 +2248,38 @@ sub MoveReserve {
             },
             { order_by => 'priority' }
         )->next();
+    }
 
-        if ($hold) {
+    if ($hold) {
+        if ( $hold->itemnumber && $hold->itemnumber == $item->id ) {
 
             # The item is reserved by the current patron
             $hold->fill( { item_id => $item->id } );
-        }
+        } else {
+            my $controlbranch = $patron->branchcode;
+            if ( C4::Context->preference('ReservesControlBranch') eq 'ItemHomeLibrary' ) {
+                $controlbranch = $item->homebranch;
+            }
 
+            # If no rule is set, the default behavior is to fill the hold
+            my $fill_other_biblio_holds_policy = Koha::CirculationRules->get_effective_rule_value(
+                {
+                    categorycode => undef,
+                    itemtype     => $item->itype,
+                    branchcode   => $controlbranch,
+                    rule_name    => 'fill_other_biblio_holds_policy',
+                }
+            ) // 1;
+
+            $hold->fill( { item_id => $item->id } ) if $fill_other_biblio_holds_policy;
+        }
+    }
+
+    if ( $cancelreserve && $res ) {
         $hold = Koha::Holds->find( $res->{reserve_id} );
         if ( $cancelreserve eq 'revert' ) {
             $hold->revert_found();
-        } elsif ( $cancelreserve eq 'cancel' || $cancelreserve ) {    # cancel reserves on this item
+        } else {    # cancel reserves on this item
             $hold->cancel;
         }
     }

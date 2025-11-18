@@ -1061,7 +1061,7 @@ subtest 'ChargeReserveFee tests' => sub {
 
 subtest 'MoveReserve additional test' => sub {
 
-    plan tests => 8;
+    plan tests => 10;
 
     # Create the items and patrons we need
     my $biblio = $builder->build_sample_biblio();
@@ -1131,6 +1131,38 @@ subtest 'MoveReserve additional test' => sub {
     MoveReserve( $item_1, $patron_2 );
     is( $patron_2->holds->count,       0, "The 2nd patron no longer has a hold" );
     is( $patron_2->old_holds->count(), 2, "The 2nd patron's hold was filled and moved to old holds" );
+
+    my $reserve_4 = AddReserve(
+        {
+            branchcode     => $item_2->homebranch,
+            borrowernumber => $patron_2->borrowernumber,
+            biblionumber   => $biblio->biblionumber,
+            priority       => 1,
+            itemnumber     => undef,
+        }
+    );
+    Koha::CirculationRules->set_rule(
+        {
+            branchcode => $item_1->homebranch,
+            itemtype   => $item_1->itype,
+            rule_name  => 'fill_other_biblio_holds_policy',
+            rule_value => 0
+        }
+    );
+    Koha::CirculationRules->set_rule(
+        {
+            branchcode => $patron_2->branchcode,
+            itemtype   => $item_1->itype,
+            rule_name  => 'fill_other_biblio_holds_policy',
+            rule_value => 1
+        }
+    );
+    t::lib::Mocks::mock_preference( 'ReservesControlBranch', 'ItemHomeLibrary' );
+    MoveReserve( $item_1, $patron_2 );
+    is( $patron_2->holds->count, 1, "The hold is not filled because of circ rules" );
+    t::lib::Mocks::mock_preference( 'ReservesControlBranch', 'PatronLibrary' );
+    MoveReserve( $item_1, $patron_2 );
+    is( $patron_2->holds->count, 0, "The hold is filled because of circ rules and affected by ReservesControlBranch" );
 
 };
 

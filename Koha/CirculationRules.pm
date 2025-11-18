@@ -74,6 +74,10 @@ our $RULE_KINDS = {
         scope        => [ 'branchcode', 'itemtype' ],
         can_be_blank => 0,
     },
+    fill_other_biblio_holds_policy => {
+        scope        => [ 'branchcode', 'itemtype' ],
+        can_be_blank => 0,
+    },
     returnbranch => {
         scope        => [ 'branchcode', 'itemtype' ],
         can_be_blank => 0,

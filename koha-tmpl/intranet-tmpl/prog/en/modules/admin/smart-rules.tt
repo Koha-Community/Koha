@@ -1310,6 +1310,7 @@
                 <tr>
                     <th>Item type</th>
                     <th>Hold policy</th>
+                    <th>Fill other holds on record</th>
                     <th>Hold and booking pickup library match</th>
                     <th>Booking pre-processing (days)</th>
                     <th>Booking post-processing (days)</th>
@@ -1320,12 +1321,13 @@
                     [% SET it = i.itemtype %]
                     [% SET c = undef %]
                     [% SET holdallowed = all_rules.$c.$it.holdallowed %]
+                    [% SET fill_other_biblio_holds_policy = all_rules.$c.$it.fill_other_biblio_holds_policy %]
                     [% SET hold_fulfillment_policy = all_rules.$c.$it.hold_fulfillment_policy %]
                     [% SET bookings_lead_period = all_rules.$c.$it.bookings_lead_period %]
                     [% SET bookings_trail_period = all_rules.$c.$it.bookings_trail_period %]
                     [% SET returnbranch = all_rules.$c.$it.returnbranch %]
 
-                    [% IF holdallowed || hold_fulfillment_policy || returnbranch || bookings_lead_period || bookings_trail_period %]
+                    [% IF holdallowed || hold_fulfillment_policy || fill_other_biblio_holds_policy || returnbranch || bookings_lead_period || bookings_trail_period %]
                         <tr>
                             <td> [% i.translated_description | html %] </td>
                             <td>
@@ -1337,6 +1339,13 @@
                                     <span>From home library</span>
                                 [% ELSE %]
                                     <span>No holds allowed</span>
+                                [% END %]
+                            </td>
+                            <td>
+                                [% IF fill_other_biblio_holds_policy %]
+                                    <span> Yes </span>
+                                [% ELSE %]
+                                    <span> No </span>
                                 [% END %]
                             </td>
                             <td>
@@ -1389,6 +1398,12 @@
                             <option value="from_local_hold_group">From local hold group</option>
                             <option value="from_home_library">From home library</option>
                             <option value="not_allowed">No holds allowed</option>
+                        </select>
+                    </td>
+                    <td>
+                        <select name="fill_other_biblio_holds_policy">
+                            <option value="1" selected="selected"> Yes </option>
+                            <option value="0"> No </option>
                         </select>
                     </td>
                     <td>
