@@ -204,66 +204,23 @@ if ( $op eq 'cud-delete' ) {
         );
     }
 } elsif ( $op eq 'cud-delete-branch-item' ) {
-    my $itemtype = $input->param('itemtype');
-    if ( $branch eq "*" ) {
-        if ( $itemtype eq "*" ) {
-            Koha::CirculationRules->set_rules(
-                {
-                    branchcode => undef,
-                    itemtype   => undef,
-                    rules      => {
-                        holdallowed             => undef,
-                        hold_fulfillment_policy => undef,
-                        bookings_lead_period    => undef,
-                        bookings_trail_period   => undef,
-                        returnbranch            => undef,
-                    }
-                }
-            );
-        } else {
-            Koha::CirculationRules->set_rules(
-                {
-                    branchcode => undef,
-                    itemtype   => $itemtype,
-                    rules      => {
-                        holdallowed             => undef,
-                        hold_fulfillment_policy => undef,
-                        bookings_lead_period    => undef,
-                        bookings_trail_period   => undef,
-                        returnbranch            => undef,
-                    }
-                }
-            );
+    my $itemtype    = $input->param('itemtype');
+    my $rule_branch = $branch eq '*' ? undef : $branch;
+    my $rule_itemtype =
+        $itemtype eq '*' ? undef : $itemtype;    #NOTE: This shouldn't be a thing - is a branch default rule if '*'
+    Koha::CirculationRules->set_rules(
+        {
+            branchcode => $rule_branch,
+            itemtype   => $rule_itemtype,
+            rules      => {
+                holdallowed             => undef,
+                hold_fulfillment_policy => undef,
+                bookings_lead_period    => undef,
+                bookings_trail_period   => undef,
+                returnbranch            => undef,
+            }
         }
-    } elsif ( $itemtype eq "*" ) {
-        Koha::CirculationRules->set_rules(
-            {
-                branchcode => $branch,
-                itemtype   => undef,
-                rules      => {
-                    holdallowed             => undef,
-                    hold_fulfillment_policy => undef,
-                    bookings_lead_period    => undef,
-                    bookings_trail_period   => undef,
-                    returnbranch            => undef,
-                }
-            }
-        );
-    } else {
-        Koha::CirculationRules->set_rules(
-            {
-                branchcode => $branch,
-                itemtype   => $itemtype,
-                rules      => {
-                    holdallowed             => undef,
-                    hold_fulfillment_policy => undef,
-                    bookings_lead_period    => undef,
-                    bookings_trail_period   => undef,
-                    returnbranch            => undef,
-                }
-            }
-        );
-    }
+    );
 }
 
 # save the values entered
