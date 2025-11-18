@@ -503,8 +503,8 @@ C<$opac> If set to a true value, displays OPAC descriptions rather than normal o
 =cut
 
 sub GetAuthorisedValues {
-    my $category = shift // '';             # optional parameter
-    my $opac     = shift ? 1 : 0;           # normalise to be safe
+    my $category = shift // '';      # optional parameter
+    my $opac     = shift ? 1 : 0;    # normalise to be safe
     my $options  = shift // '';
     my $no_limit;
     if ($options) { $no_limit = $options->{'no_limit'}; }    #optional parameter to ignore library limitation
@@ -517,7 +517,7 @@ sub GetAuthorisedValues {
     return $result if $result;
 
     my @results;
-    my $dbh   = C4::Context->dbh;
+    my $dbh = C4::Context->dbh;
 
     my $select_clause = 'SELECT av.*';
     my @where_args;
@@ -534,7 +534,7 @@ sub GetAuthorisedValues {
           LEFT JOIN authorised_values_branches ON ( id = av_id )
     } if $branch_limit;
     my @where_strings;
-    if($category) {
+    if ($category) {
         push @where_strings, "category = ?";
         push @where_args,    $category;
     }
@@ -544,8 +544,8 @@ sub GetAuthorisedValues {
         push @where_args,    $branch_limit;
     }
 
-    if(@where_strings > 0) {
-        $query .= " WHERE " . join(" AND ", @where_strings);
+    if ( @where_strings > 0 ) {
+        $query .= " WHERE " . join( " AND ", @where_strings );
     }
     $query .= ' ORDER BY category, '
         . (
