@@ -165,7 +165,6 @@ sub update {
                 $account->sort_bin_mappings($sort_bin_mappings);
                 $account->system_preference_overrides($system_preference_overrides);
 
-                $c->res->headers->location( $c->req->url->to_string . '/' . $account->sip_account_id );
                 return $c->render(
                     status  => 200,
                     openapi => $c->objects->to_api($account),
