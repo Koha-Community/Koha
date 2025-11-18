@@ -48,7 +48,8 @@ subtest 'Config from XML matches config from database' => sub {
     is( scalar( keys %{ $fileSIPconfig->{accounts} } ), 5, 'fileSIPconfig->{accounts} has 5 members' );
     is( Koha::SIP2::Accounts->search()->count,          0, 'Database does not yet contain any accounts' );
 
-    run_atomic_updates( ['bug_37893.pl'] );    #TODO: Update this to the DBREV when pushed
+    my $db_rev_file = C4::Context->config('intranetdir') . '/installer/data/mysql/db_revs/250600035.pl';
+    C4::Installer::run_db_rev($db_rev_file);
 
     is( Koha::SIP2::Accounts->search()->count, 5, 'Database now contains 5 accounts' );
 
