@@ -209,10 +209,10 @@ if ( $op and $op eq 'cud-serialchangestatus' ) {
         my ( $plan_date, $pub_date );
 
         if ( defined $planneddates[$i] && $planneddates[$i] ne 'XXX' ) {
-            $plan_date = $planneddates[$i];
+            $plan_date = $planneddates[$i] || $today;
         }
         if ( defined $publisheddates[$i] && $publisheddates[$i] ne 'XXX' ) {
-            $pub_date = $publisheddates[$i];
+            $pub_date = $publisheddates[$i] || $today;
         }
 
         if ( $serialids[$i] && $serialids[$i] eq 'NEW' ) {
