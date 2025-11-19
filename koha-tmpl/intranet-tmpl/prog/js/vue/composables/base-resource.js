@@ -1,7 +1,6 @@
 import { computed, inject, ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { build_url } from "../composables/datatables";
-import { isRef } from "vue";
 import { storeToRefs } from "pinia";
 import {
     $__,
@@ -420,10 +419,11 @@ export function useBaseResource(resourceConfig) {
                         relationshipField.relationshipName = ra.name;
                     });
                 }
-                if (ra.hideIn && !ra.hideIn.includes(component)) {
+                const shouldFieldBeHidden = ra.hideIn && typeof ra.hideIn === "function" ? ra.hideIn() : ra.hideIn
+                if (shouldFieldBeHidden && !shouldFieldBeHidden.includes(component)) {
                     return [...acc, ra];
                 }
-                if (ra.hideIn && ra.hideIn.includes(component)) {
+                if (shouldFieldBeHidden && shouldFieldBeHidden.includes(component)) {
                     return acc;
                 }
                 return [...acc, ra];
