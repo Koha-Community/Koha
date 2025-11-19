@@ -347,7 +347,7 @@
                             <td
                                 ><select name="Filter" id="homebranch">
                                     <option value=""> </option>
-                                    [% PROCESS options_for_libraries libraries => Branches.all() %]
+                                    [% PROCESS options_for_libraries libraries => Branches.all({ selected => "" }) %]
                                 </select>
                             </td>
                         </tr>
@@ -359,7 +359,7 @@
                             <td
                                 ><select name="Filter" id="holdingbranch">
                                     <option value=""> </option>
-                                    [% PROCESS options_for_libraries libraries => Branches.all() %]
+                                    [% PROCESS options_for_libraries libraries => Branches.all({ selected => "" }) %]
                                 </select>
                             </td>
                         </tr>
@@ -370,7 +370,7 @@
                             <td>
                                 <select name="Filter" id="patron_library">
                                     <option value=""> </option>
-                                    [% PROCESS options_for_libraries libraries => Branches.all() %]
+                                    [% PROCESS options_for_libraries libraries => Branches.all({ selected => "" }) %]
                                 </select>
                             </td>
                         </tr>
