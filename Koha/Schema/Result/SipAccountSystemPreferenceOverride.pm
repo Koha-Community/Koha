@@ -128,7 +128,7 @@ __PACKAGE__->belongs_to(
 =cut
 
 sub koha_objects_class {
-    'Koha::SIP2::Accounts::SystemPreferenceOverrides';
+    'Koha::SIP2::Account::SystemPreferenceOverrides';
 }
 
 =head2 koha_object_class
