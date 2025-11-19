@@ -39,7 +39,7 @@ This is the base class for SIP2 objects in the Koha library system.
 
 =head3 store
 
-store
+    store wrapper
 
 =cut
 
@@ -50,12 +50,24 @@ sub store {
     return $self->SUPER::store;
 }
 
+=head3 delete
+
+    delete wrapper
+
+=cut
+
 sub delete {
     my ($self) = @_;
 
     _update_config_timestamp();
     return $self->SUPER::delete;
 }
+
+=head3 _update_config_timestamp
+
+    Updates the sip2_resource_last_modified timestamp in cache
+
+=cut
 
 sub _update_config_timestamp {
     my $cache = Koha::Caches->get_instance();

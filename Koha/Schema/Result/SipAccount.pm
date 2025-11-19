@@ -581,9 +581,22 @@ __PACKAGE__->add_columns(
     "+show_outstanding_amount" => { is_boolean => 1 }
 );
 
+=head2 koha_objects_class
+
+  Koha Objects class
+
+=cut
+
 sub koha_objects_class {
     'Koha::SIP2::Accounts';
 }
+
+=head2 koha_object_class
+
+  Koha Object class
+
+=cut
+
 sub koha_object_class {
     'Koha::SIP2::Account';
 }

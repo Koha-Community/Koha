@@ -72,10 +72,21 @@ __PACKAGE__->set_primary_key("sip_system_preference_override_id");
 # Created by DBIx::Class::Schema::Loader v0.07051 @ 2025-02-10 10:27:51
 # DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:szyNGurH+wJBItdnYfAoRA
 
+=head2 koha_objects_class
+
+  Koha Objects class
+
+=cut
 
 sub koha_objects_class {
     'Koha::SIP2::SystemPreferenceOverrides';
 }
+
+=head2 koha_object_class
+
+  Koha Object class
+
+=cut
 
 sub koha_object_class {
     'Koha::SIP2::SystemPreferenceOverride';

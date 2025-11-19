@@ -195,9 +195,22 @@ __PACKAGE__->add_columns(
     "+status_update" => { is_boolean => 1 }
 );
 
+=head2 koha_objects_class
+
+  Koha Objects class
+
+=cut
+
 sub koha_objects_class {
     'Koha::SIP2::Institutions';
 }
+
+=head2 koha_object_class
+
+  Koha Object class
+
+=cut
+
 sub koha_object_class {
     'Koha::SIP2::Institution';
 }
