@@ -13,7 +13,7 @@ Koha::Devel::Files - A utility module for managing and filtering file lists in t
 
     my $file_manager = Koha::Devel::Files->new( { context => 'tidy' } );
 
-    my @perl_files = $file_manager->ls_perl_files($git_range);
+    my @perl_files = $file_manager->ls_perl_files();
     my @js_files   = $file_manager->ls_js_files();
     my @tt_files   = $file_manager->ls_tt_files();
 
@@ -186,30 +186,20 @@ sub ls_files {
 
 =head2 ls_perl_files
 
-    my @perl_files = $file_manager->ls_perl_files($git_range);
+    my @perl_files = $file_manager->ls_perl_files();
 
-Lists Perl files (with extensions .pl, .PL, .pm, .t) that have been modified within a specified Git range. If no range is provided, it lists all Perl files, excluding those specified in the exceptions.
+Lists Perl files (with extensions .pl, .PL, .pm, .t) in the repository, excluding those specified in the exceptions.
 
 =cut
 
 sub ls_perl_files {
-    my ( $self, $git_range ) = @_;
+    my ($self) = @_;
     my @files;
-    if ($git_range) {
-        $git_range =~ s|\.\.| |;
-        my @modified_files = qx{git diff --name-only $git_range};
-        chomp @modified_files;
-        push @files, grep { -e && /\.(pl|PL|pm|t)$/ } @modified_files;
-        push @files, grep { -e && /^(svc|opac\/svc)/ } @modified_files;
-        my @exception_files = $exceptions->{pl}->{ $self->{context} };
-        @files = array_minus( @files, @exception_files );
-    } else {
-        my $cmd =
-            sprintf q{git ls-files '*.pl' '*.PL' '*.pm' '*.t' svc opac/svc opac/unapi debian/build-git-snapshot %s},
-            $self->build_git_exclude('pl');
-        @files = qx{$cmd};
-        chomp for @files;
-    }
+    my $cmd =
+        sprintf q{git ls-files '*.pl' '*.PL' '*.pm' '*.t' svc opac/svc opac/unapi debian/build-git-snapshot %s},
+        $self->build_git_exclude('pl');
+    @files = qx{$cmd};
+    chomp for @files;
     return @files;
 }
 
