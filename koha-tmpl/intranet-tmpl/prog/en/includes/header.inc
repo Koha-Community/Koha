@@ -248,6 +248,24 @@
                             </li>
                         </ul>
                     </li>
+                    [% IF Koha.debug_flag %]
+                        <li class="nav-item dropdown" id="debug-controls-dropdown">
+                            <a id="debug-controls-menu" href="#" class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown" aria-expanded="false" title="Debug controls">
+                                <i id="debug-icon" class="fa fa-bug"></i>
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-dark dropdown-menu-end" role="menu" aria-labelledby="debug-controls-menu">
+                                <li>
+                                    <a id="toggleUserCSS" class="dropdown-item" href="#"> <i class="fa fa-fw fa-brands fa-css3"></i> <span class="toggle-text">Toggle User CSS</span> </a>
+                                </li>
+                                <li>
+                                    <a id="toggleUserJS" class="dropdown-item" href="#"> <i class="fa fa-fw fa-brands fa-square-js"></i> <span class="toggle-text">Toggle User JS</span> </a>
+                                </li>
+                                <li>
+                                    <a id="toggleStylesheets" class="dropdown-item" href="#"> <i class="fa fa-fw fa-file-code"></i> <span class="toggle-text">Toggle Custom Stylesheets</span> </a>
+                                </li>
+                            </ul>
+                        </li>
+                    [% END %]
                     [% INCLUDE 'langmenu-staff-top.inc' %]
                 [% ELSE %]
                     <li class="nav-item loggedout">
