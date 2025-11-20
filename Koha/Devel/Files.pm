@@ -146,6 +146,28 @@ sub build_git_exclude {
     return $exclude_list;
 }
 
+=head2 remove_exceptions
+
+    @files = $file_manager->remove_exceptions($files, $filetype);
+
+Remove from exceptions from the original file list.
+
+=cut
+
+sub remove_exceptions {
+    my ( $self, $files, $filetype ) = @_;
+    my @files = @$files;
+    return () unless @files;
+    my @exceptions = @{ $exceptions->{$filetype}->{ $self->{context} } // [] };
+    if (@exceptions) {
+        my $cmd             = qq{git ls-files @exceptions};
+        my @exception_files = qx{$cmd};
+        chomp for @exception_files;
+        @files = array_minus @files, @exception_files;
+    }
+    return @files;
+}
+
 =head2 ls_files
 
     my @files = $file_manager->ls_files( $filetype, $git_range );
@@ -160,7 +182,7 @@ sub ls_files {
     if ($git_range) {
         $git_range =~ s|\.\.| |;
         my @modified_files = qx{git diff --name-only $git_range};
-        chomp @modified_files;
+        chomp for @modified_files;
         if ( $filetype eq 'pl' ) {
             push @files, grep { -e && /\.(pl|PL|pm|t)$/ } @modified_files;
             push @files, grep { -e && /^(svc|opac\/svc)/ } @modified_files;
@@ -169,9 +191,7 @@ sub ls_files {
         } elsif ( $filetype eq 'tt' ) {
             push @files, grep { -e && /\.(tt|inc)$/ } @modified_files;
         }
-
-        my @exception_files = $exceptions->{$filetype}->{ $self->{context} };
-        @files = array_minus( @files, @exception_files );
+        @files = $self->remove_exceptions( \@files, $filetype );
     } else {
         if ( $filetype eq 'pl' ) {
             @files = $self->ls_perl_files;
