@@ -110,7 +110,7 @@ while ( my $patron = $patrons->next ) {
             {
                 borrowernumber => $patron->id,
                 expiration     => $expiration,
-                type           => 'SUSPENSION',
+                type           => 'FINES',
                 comment        => $message,
             }
         );
