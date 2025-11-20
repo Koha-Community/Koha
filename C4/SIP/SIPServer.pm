@@ -243,8 +243,12 @@ sub _config_up_to_date {
 # Child
 #
 
-# process_request is the callback used by Net::Server to handle
-# an incoming connection request.
+=head2 process_request
+
+process_request is the callback used by Net::Server to handle
+an incoming connection request.
+
+=cut
 
 sub process_request {
     my $self = shift;
@@ -303,6 +307,15 @@ sub process_request {
 #
 # Transports
 #
+
+=head2 raw_transport
+
+Manages the SIP login process for raw TCP connections. Clears any
+previous session state, applies a timeout, reads the initial request,
+and authenticates it. On success, sets up logging context and enters
+the SIP protocol loop. Returns on EOF, timeout, or failed login.
+
+=cut
 
 sub raw_transport {
     my $self = shift;
@@ -365,6 +378,15 @@ sub raw_transport {
     return;
 }
 
+=head2 get_clean_string
+
+Cleans a string by removing leading and trailing non-alphanumeric
+characters. Logs the string before and after cleaning, or notes if
+the input was undefined. Returns the cleaned string (or undef if no
+string was provided).
+
+=cut
+
 sub get_clean_string {
     my $string = shift;
     if ( defined $string ) {
@@ -379,6 +401,14 @@ sub get_clean_string {
     return $string;
 }
 
+=head2 get_clean_input
+
+Reads a single line from STDIN, normalizes it using
+C<get_clean_string>, and discards any additional input lines, logging
+them as errors. Returns the cleaned input line.
+
+=cut
+
 sub get_clean_input {
     local $/ = "\012";
     my $in = <STDIN>;
@@ -388,6 +418,17 @@ sub get_clean_input {
     }
     return $in;
 }
+
+=head2 telnet_transport
+
+Handles the login process for terminals connecting via the telnet
+transport. Prompts for a username and password, applies a timeout to
+protect against hung connections, and validates the credentials against
+configured accounts. On successful authentication, initializes the SIP
+session by invoking C<sip_protocol_loop>.  Dies on timeout or repeated
+failed login attempts.
+
+=cut
 
 sub telnet_transport {
     my $self = shift;
@@ -452,11 +493,15 @@ sub telnet_transport {
     return;
 }
 
-#
-# The terminal has logged in, using either the SIP login process
-# over a raw socket, or via the pseudo-unix login provided by the
-# telnet transport.  From that point on, both the raw and the telnet
-# processes are the same:
+=head2 sip_protocol_loop
+
+The terminal has logged in, using either the SIP login process
+over a raw socket, or via the pseudo-unix login provided by the
+telnet transport. From that point on, both the raw and the telnet
+processes are the same:
+
+=cut
+
 sub sip_protocol_loop {
     my $self    = shift;
     my $service = $self->{service};
@@ -514,6 +559,16 @@ sub sip_protocol_loop {
     return;
 }
 
+=head2 read_request
+
+Reads a single SIP request line from STDIN using carriage return as the
+record separator. Strips leading and trailing non-alphanumeric
+characters, removes extra line breaks, and logs any trimming that
+occurs. Also flushes Level-1 caches before processing each request.
+Returns the cleaned request string, or undef on EOF.
+
+=cut
+
 sub read_request {
     my $raw_length;
     local $/ = "\015";
@@ -552,15 +607,20 @@ sub read_request {
     return $buffer;
 }
 
-# $server->get_timeout({ $type => 1, fallback => $fallback });
-#     where $type is transport | client | policy
-#
-# Centralizes all timeout logic.
-# Transport refers to login process, client to active connections.
-# Policy timeout is transaction timeout (used in ACS status message).
-#
-# Fallback is optional. If you do not pass transport, client or policy,
-# you will get fallback or hardcoded default.
+=head2 get_timeout
+
+    $server->get_timeout({ $type => 1, fallback => $fallback });
+
+where $type is transport | client | policy
+
+Centralizes all timeout logic.
+Transport refers to login process, client to active connections.
+Policy timeout is transaction timeout (used in ACS status message).
+
+Fallback is optional. If you do not pass transport, client or policy,
+you will get fallback or hardcoded default.
+
+=cut
 
 sub get_timeout {
     my ( $server, $params ) = @_;
