@@ -184,7 +184,7 @@ my $success = AddUniqueDebarment({
 
 Creates a new debarment of the type defined by the key type.
 If a unique debarment already exists of the given type, it is updated instead.
-The current unique debarment types are OVERDUES, and SUSPENSION
+The current unique debarment types are OVERDUES, SUSPENSION, and FINES
 
 Required keys: borrowernumber, type
 
@@ -232,7 +232,7 @@ my $success = _DelUniqueDebarment({
 });
 
 Deletes a unique debarment of the type defined by the key type.
-The current unique debarment types are OVERDUES, and SUSPENSION
+The current unique debarment types are OVERDUES, SUSPENSION, and FINES
 
 Required keys: borrowernumber, type
 
