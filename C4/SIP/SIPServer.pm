@@ -91,7 +91,7 @@ push @params, 'group=' . $>;
 
 #
 # This is the main event.
-__PACKAGE__->run(@params);
+__PACKAGE__->run(@params) unless caller;
 
 #
 # Server
