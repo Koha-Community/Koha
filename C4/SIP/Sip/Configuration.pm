@@ -56,7 +56,7 @@ sub get_configuration {
     } else {
         $cfg = $current_config;
     }
-    die unless $cfg;
+
     my %listeners;
 
     # The key to the listeners hash is the 'port' component of the
