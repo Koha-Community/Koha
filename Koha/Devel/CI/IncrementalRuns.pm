@@ -140,6 +140,7 @@ sub get_files_to_test {
             @koha_commit_history;
             if ($last_build_commit) {
                 @files = @{ from_json( read_file("$self->{git_repo_dir}/$self->{test_dir}/$last_build_commit") ) };
+                @files = $dev_files->remove_exceptions( \@files, $filetype );
                 push @files, $dev_files->ls_files( $filetype, "$last_build_commit HEAD" );
             } else {
 
