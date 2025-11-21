@@ -750,12 +750,11 @@
                     <div class="rows">
                         <h4>Details from supplier ([% request.backend | html %])</h4>
                         <ol>
-                            [% FOREACH meta IN request.metadata.keys.sort('lower') %]
-                                [% val = request.metadata.${meta} %]
-                                [% IF val %]
-                                    <li class="requestmeta-[% meta.replace('\s','_') | html %]">
-                                        <span class="label">[% meta.replace('_',' ') | html %]:</span>
-                                        [% val | html %]
+                            [% FOREACH meta IN request.metadata %]
+                                [% IF meta.value.defined && meta.value.length %]
+                                    <li class="requestmeta-[% meta.key.replace('\s','_') | html %]">
+                                        <span class="label">[% meta.key.replace('_',' ') | html %]:</span>
+                                        [% meta.value | html %]
                                     </li>
                                 [% END %]
                             [% END %]
