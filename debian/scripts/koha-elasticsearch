@@ -131,16 +131,25 @@ run_rebuild_elasticsearch()
     fi
 }
 
-# Default parameters
-biblios="yes"
-authorities="yes"
+# Default parameters from koha-common.default
+biblios=$ES_INDEX_BIBLIOS         # the 'only' variants are skipped because they don't actually control
+authorities=$ES_INDEX_AUTHORITIES # anything and are just for setting stuff internally.
+commit_size=$ES_COMMIT_SIZE
+processes=$ES_NUMBER_OF_PROCESSES
+verbose=$ES_VERBOSE
+where=$ES_WHERE_QUERY_SQL
+
+# Default parameters if all else fails
+: ${biblios:="yes"}
+: ${authorities:="yes"}
+: ${commit_size:=5000}
+: ${processes:=1}
+: ${verbose:="no"}
+: ${where:=""}
+
 biblios_only="no"
 authorities_only="no"
-commit_size=5000
-processes=1
-verbose="no"
 op=""
-where=""
 
 # Read parameters
 while [ -n "$*" ]; do
