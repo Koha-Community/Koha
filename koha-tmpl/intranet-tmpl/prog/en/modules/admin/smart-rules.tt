@@ -801,7 +801,7 @@
                     <td class="actions">
                         <button type="submit" class="btn btn-default btn-xs"><i class="fa fa-save"></i> Save</button>
                         [% IF ( default_checkout_hold_and_return_policy ) %]
-                            <a href="#" class="delete-branch-cat btn btn-default btn-xs" data-categorycode="[% c || '*' | html %]" data-branch="[% current_branch | html %]"><i class="fa fa-undo"></i> Unset</a>
+                            <a href="#" class="delete-branch-cat btn btn-default btn-xs" data-categorycode="*" data-branch="[% current_branch | html %]"><i class="fa fa-undo"></i> Unset</a>
                         [% END %]
                     </td>
                 </tr>
