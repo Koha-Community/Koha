@@ -98,11 +98,11 @@
                                 </li>
                                 [% INCLUDE display_holdpatron_address %]
                                 [% IF ( patron.phone ) %]
-                                    <li> [% patron.phone | html %]</li>
+                                    <li class="patron-phone"> [% patron.phone | html %]</li>
                                 [% END %]
 
                                 [% IF ( patron.email ) %]
-                                    <li><a id="boremail" href="mailto:[% patron.email | html %]">[% patron.email | html %]</a></li>
+                                    <li class="patron-email"><a href="mailto:[% patron.email | uri %]">[% patron.email | html %]</a></li>
                                 [% END %]
 
                                 [% IF ( patron.is_debarred ) %]
