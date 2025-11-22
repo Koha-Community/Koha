@@ -44,7 +44,8 @@
             <legend>Task scheduler</legend
             ><ol>
                 <li><span class="label">Current server time is:</span> [% time | html %]</li>
-                <li><label for="starttime">Time:</label> <input type="text" name="starttime" id="starttime" value="" maxlength="5" size="5" /></li>
+                <li><label for="starttime">Time: (set 24 hour time hhmm):</label>
+                  <input type="text" name="starttime" id="starttime" value="" maxlength="5" size="5" placeholder="hhmm" required /></li>
                 <li>
                     <label for="startdate">Date: </label>
                     <input type="text" size="10" id="startdate" name="startdate" class="flatpickr" data-flatpickr-futuredate="true" value="" />
