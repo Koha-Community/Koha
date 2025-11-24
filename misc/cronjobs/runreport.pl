@@ -404,29 +404,24 @@ foreach my $report_id (@ARGV) {
     if ($sftp_dest_id) {
         my $sftp_server = Koha::File::Transports->find($sftp_dest_id);
 
-        die("ERROR:\tSupplied FTP/SFTP Server doesn\'t exist")
+        die("ERROR:\tSupplied FTP/SFTP Server doesn't exist")
             unless ($sftp_server);
 
-        die("ERROR:\tUnable to connect to FTP/SFTP Server")
-            unless ( $sftp_server->connect );
-
         my $upload_directory = $sftp_server->upload_directory;
-        my $content_type     = "text/$format";
-        my $filename         = $filename || "report$report_id-$date.$format";
+        my $filename_to_use  = $filename || "report$report_id-$date.$format";
 
         open my $fh, "<", \$message;
-
-        die("ERROR\tMessage supplied is empty, or, not suitable for upload")
+        die("ERROR:\tMessage supplied is empty, or not suitable for upload")
             unless ($fh);
 
-        die("ERROR\tNo upload directory specified in config")
+        die("ERROR:\tNo upload directory specified in config")
             unless ($upload_directory);
 
-        die("ERROR\tUnable to change directory")
-            unless ( $sftp_server->change_directory($upload_directory) );
+        # Use simplified API - automatic connection and directory management
+        my $result = $sftp_server->upload_file( $fh, $filename_to_use, { path => $upload_directory } );
 
-        die("ERROR\tUnable to upload report to server")
-            unless ( $sftp_server->upload_file( $fh, $filename ) );
+        die("ERROR:\tUnable to upload report to server")
+            unless ($result);
     }
 
     if ( !$send_email && !$sftp_dest_id ) {
