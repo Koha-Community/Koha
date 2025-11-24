@@ -107,6 +107,51 @@ if ( $op eq 'cud-add' ) {
             reason => 'invalid_id'
             };
     }
+} elsif ( $op eq 'cud-test_email' ) {
+    my $smtp_server_id = $input->param('smtp_server_id');
+    my $smtp_server;
+
+    $smtp_server = Koha::SMTP::Servers->find($smtp_server_id)
+        unless !$smtp_server_id;
+
+    if ($smtp_server) {
+        my $test_email_address = C4::Context->preference('KohaAdminEmailAddress');
+        my $smtp_transport     = $smtp_server->transport;
+
+        my $params = {
+            to        => $test_email_address,
+            from      => $test_email_address,
+            sender    => $test_email_address,
+            subject   => "Koha SMTP Test",
+            text_body => "Email is working."
+        };
+
+        my $email = Koha::Email->create($params);
+
+        try {
+            $email->send_or_die( { transport => $smtp_transport } );
+            push @messages,
+                {
+                type => 'message',
+                code => 'success_on_test'
+                };
+        } catch {
+            push @messages,
+                {
+                type => 'alert',
+                code => 'error_on_test'
+                };
+        };
+
+    } else {
+        push @messages,
+            {
+            type   => 'alert',
+            code   => 'error_on_test',
+            reason => 'invalid_id'
+            };
+    }
+    $op = 'list';
 } elsif ( $op eq 'cud-edit_save' ) {
 
     my $smtp_server_id = $input->param('smtp_server_id');
