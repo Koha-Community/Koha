@@ -17,8 +17,9 @@
 
 use Modern::Perl;
 
-use Test::More tests => 3;
+use Test::More tests => 4;
 use Test::NoWarnings;
+use Test::MockModule;
 
 use t::lib::TestBuilder;
 
@@ -175,3 +176,32 @@ subtest 'config_timestamp is updated when database configuration changes' => sub
 
     $schema->storage->txn_rollback;
 };
+
+subtest 'Atomicupdate skips migrating data if provided config file doesn\'t exist or is unreadable' => sub {
+
+    plan tests => 1;
+
+    my $captured_message;
+    my $mock = Test::MockModule->new('Koha::Installer::Output');
+    $mock->mock(
+        'say_warning',
+        sub {
+            my ( $out_object, $message ) = @_;
+            $captured_message = $message;
+        }
+    );
+
+    my $koha_instance    = $ENV{KOHA_CONF} =~ m!^.+/sites/([^/]+)/koha-conf\.xml$! ? $1 : undef;
+    my $SIPconfigXMLFile = "/etc/koha/sites/$koha_instance/SIPconfig.xml";
+    my $fileSIPconfig    = C4::SIP::Sip::Configuration->new($SIPconfigXMLFile);
+
+    rename $SIPconfigXMLFile, "/etc/koha/sites/$koha_instance/IDontExist.xml";
+    my $db_rev_file = C4::Context->config('intranetdir') . '/installer/data/mysql/db_revs/250600035.pl';
+    C4::Installer::run_db_rev($db_rev_file);
+    is(
+        $captured_message,
+        "Skipping migration. SIP config file not found or unreadable",
+        'say_warning received the correct migration skip message'
+    );
+    rename "/etc/koha/sites/$koha_instance/IDontExist.xml", $SIPconfigXMLFile;
+    }

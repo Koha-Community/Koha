@@ -243,6 +243,12 @@ return {
         }
 
         my $SIPconfigFile = "/etc/koha/sites/$koha_instance/SIPconfig.xml";
+
+        unless ( -f $SIPconfigFile && -r $SIPconfigFile ) {
+            say_warning( $out, "Skipping migration. SIP config file not found or unreadable" );
+            return;
+        }
+
         say_info( $out, "Reading SIPconfig.xml for $koha_instance located at $SIPconfigFile" );
         my $SIPconfig = C4::SIP::Sip::Configuration->new($SIPconfigFile);
 
