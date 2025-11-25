@@ -260,6 +260,10 @@ sub filter_by_in_transit {
     my ( $self, $params ) = @_;
 
     $params //= {};
+    $params->{datesent}      = { '!=' => undef };
+    $params->{datearrived}   = undef;
+    $params->{datecancelled} = undef;
+
     my $transfers = Koha::Item::Transfers->search(
         { %$params, 'me.itemnumber' => [ $self->get_column('itemnumber') ], },
         {

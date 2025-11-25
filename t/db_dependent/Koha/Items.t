@@ -155,10 +155,10 @@ subtest 'search' => sub {
         }
     );
 
-    ok( $lost_items->count == 1,       "Filtered to 1 lost item" );
-    ok( $damaged_items->count == 1,    "Filtered to 1 damaged item" );
-    ok( $withdrawn_items->count == 1,  "Filtered to 1 withdrawn item" );
-    ok( $notforloan_items->count == 1, "Filtered to 1 notforloan item" );
+    is( $lost_items->count,       1, "Filtered to 1 lost item" );
+    is( $damaged_items->count,    1, "Filtered to 1 damaged item" );
+    is( $withdrawn_items->count,  1, "Filtered to 1 withdrawn item" );
+    is( $notforloan_items->count, 1, "Filtered to 1 notforloan item" );
 
     C4::Circulation::AddIssue( $patron, $item_1->barcode );
 
@@ -169,15 +169,19 @@ subtest 'search' => sub {
         }
     );
 
-    ok( $checked_out_items->count == 1, "Filtered to 1 checked out item" );
+    is( $checked_out_items->count, 1, "Filtered to 1 checked out item" );
 
     my $transfer_1 = $builder->build_object(
         {
             class => 'Koha::Item::Transfers',
             value => {
-                itemnumber => $item_2->itemnumber,
-                frombranch => $library_1->{branchcode},
-                tobranch   => $library_2->{branchcode},
+                itemnumber    => $item_2->itemnumber,
+                frombranch    => $library_1->{branchcode},
+                tobranch      => $library_2->{branchcode},
+                datesent      => \'NOW()',
+                datearrived   => undef,
+                datecancelled => undef,
+                daterequested => \'NOW()',
             }
         }
     );
@@ -189,7 +193,7 @@ subtest 'search' => sub {
         }
     );
 
-    ok( $in_transit_items->count == 1, "Filtered to 1 in transit item" );
+    is( $in_transit_items->count, 1, "Filtered to 1 in transit item" );
 
     my $item_7 = $builder->build_sample_item( { biblionumber => $biblio->biblionumber, } );
 
@@ -209,7 +213,7 @@ subtest 'search' => sub {
         }
     );
 
-    ok( $on_hold_items->count == 1, "Filtered to 1 on hold item" );
+    is( $on_hold_items->count, 1, "Filtered to 1 on hold item" );
 
     my $item_8 = $builder->build_sample_item(
         {
@@ -225,7 +229,7 @@ subtest 'search' => sub {
         }
     );
 
-    ok( $restricted_items->count == 1, "Filtered to 1 restricted item" );
+    is( $restricted_items->count, 1, "Filtered to 1 restricted item" );
 
     $schema->storage->txn_rollback;
 };
@@ -2616,7 +2620,7 @@ subtest 'filter_by_checked_out' => sub {
 };
 
 subtest 'filter_by_in_transit' => sub {
-    plan tests => 3;
+    plan tests => 5;
 
     $schema->storage->txn_begin;
 
@@ -2636,9 +2640,13 @@ subtest 'filter_by_in_transit' => sub {
         {
             class => 'Koha::Item::Transfers',
             value => {
-                itemnumber => $item_1->itemnumber,
-                frombranch => $library_1->{branchcode},
-                tobranch   => $library_2->{branchcode},
+                itemnumber    => $item_1->itemnumber,
+                frombranch    => $library_1->{branchcode},
+                tobranch      => $library_2->{branchcode},
+                datesent      => \'NOW()',
+                datearrived   => undef,
+                datecancelled => undef,
+                daterequested => \'NOW()',
             }
         }
     );
@@ -2649,14 +2657,29 @@ subtest 'filter_by_in_transit' => sub {
         {
             class => 'Koha::Item::Transfers',
             value => {
-                itemnumber => $item_2->itemnumber,
-                frombranch => $library_2->{branchcode},
-                tobranch   => $library_1->{branchcode},
+                itemnumber    => $item_2->itemnumber,
+                frombranch    => $library_2->{branchcode},
+                tobranch      => $library_1->{branchcode},
+                datesent      => \'NOW()',
+                datearrived   => undef,
+                datecancelled => undef,
+                daterequested => \'NOW()',
             }
         }
     );
 
     is( $biblio->items->filter_by_in_transit->count, 2, "Filtered 2 in transit items" );
+
+    $item_1->get_transfer->receive;
+
+    is_deeply(
+        [ $biblio->items->filter_by_in_transit->get_column('itemnumber') ], [ $item_2->itemnumber ],
+        "First item has been received"
+    );
+
+    $item_2->get_transfer->cancel( { reason => "Manual", force => 1 } );
+
+    is( $biblio->items->filter_by_in_transit->count, 0, "Second item's transfer has been cancelled" );
 
     $schema->storage->txn_rollback;
 
