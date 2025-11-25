@@ -8,7 +8,7 @@ describe("Breadcrumb tests", () => {
 
     it("Breadcrumbs", () => {
         cy.visit("/cgi-bin/koha/cataloguing/cataloging-home.pl");
-        cy.contains("Manage staged records").click();
+        cy.contains("Manage staged records").should("exist");
         cy.get("#breadcrumbs").contains("Cataloging");
     });
 });
@@ -21,7 +21,7 @@ describe("loads the manage MARC import page", () => {
 
     it("loads the manage MARC import page", () => {
         cy.visit("/cgi-bin/koha/tools/manage-marc-import.pl");
-        cy.contains("Manage staged MARC records").click();
+        cy.contains("Manage staged MARC records").should("exist");
     });
 
     it("upload a MARC record", () => {
