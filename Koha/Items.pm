@@ -678,16 +678,31 @@ sub search {
         if ( $status eq 'lost' ) {
             $self = $self->search( { itemlost => { '!=' => 0 } } );
         }
+        if ( $status =~ '^lost-(.*)' ) {
+            $self = $self->search( { itemlost => $1 } );
+        }
         if ( $status eq 'withdrawn' ) {
             $self = $self->search( { withdrawn => { '!=' => 0 } } );
         }
+        if ( $status =~ '^withdrawn-(.*)' ) {
+            $self = $self->search( { withdrawn => $1 } );
+        }
         if ( $status eq 'damaged' ) {
             $self = $self->search( { damaged => { '!=' => 0 } } );
+        }
+        if ( $status =~ '^damaged-(.*)' ) {
+            $self = $self->search( { damaged => $1 } );
         }
         if ( $status eq 'not_for_loan' ) {
             my @item_types_notforloan =
                 Koha::ItemTypes->search( { notforloan => { '!=' => 0 } } )->get_column('itemtype');
             $self = $self->search( [ { notforloan => { '!=' => 0 } }, { 'me.itype' => \@item_types_notforloan } ] );
+        }
+        if ( $status =~ '^not_for_loan-(.*)' ) {
+            my $av_not_for_loan = $1;
+            my @item_types_notforloan =
+                Koha::ItemTypes->search( { notforloan => $av_not_for_loan } )->get_column('itemtype');
+            $self = $self->search( [ { notforloan => $av_not_for_loan }, { 'me.itype' => \@item_types_notforloan } ] );
         }
         if ( $status eq 'on_hold' ) {
             $self = $self->filter_by_has_holds;

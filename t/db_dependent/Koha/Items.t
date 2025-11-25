@@ -75,7 +75,7 @@ is( $retrieved_item_1->barcode, $new_item_1->barcode, 'Find a item by id should 
 
 subtest 'search' => sub {
 
-    plan tests => 9;
+    plan tests => 15;
     $schema->storage->txn_begin;
 
     my $patron   = $builder->build_object( { class => 'Koha::Patrons' } );
@@ -159,6 +159,75 @@ subtest 'search' => sub {
     is( $damaged_items->count,    1, "Filtered to 1 damaged item" );
     is( $withdrawn_items->count,  1, "Filtered to 1 withdrawn item" );
     is( $notforloan_items->count, 1, "Filtered to 1 notforloan item" );
+
+    $item_6->notforloan(-1)->store;
+    is_deeply(
+        [
+            Koha::Items->search(
+                {
+                    _status      => 'not_for_loan',
+                    biblionumber => $biblio->biblionumber,
+                }
+            )->get_column('itemnumber')
+        ],
+        [ $item_6->itemnumber ]
+    );
+    is_deeply(
+        [
+            Koha::Items->search(
+                {
+                    _status      => 'not_for_loan-1',
+                    biblionumber => $biblio->biblionumber,
+                }
+            )->get_column('itemnumber')
+        ],
+        []
+    );
+    is_deeply(
+        [
+            Koha::Items->search(
+                {
+                    _status      => 'not_for_loan--1',
+                    biblionumber => $biblio->biblionumber,
+                }
+            )->get_column('itemnumber')
+        ],
+        [ $item_6->itemnumber ]
+    );
+    $item_6->notforloan(2)->store;
+    is_deeply(
+        [
+            Koha::Items->search(
+                {
+                    _status      => 'not_for_loan',
+                    biblionumber => $biblio->biblionumber,
+                }
+            )->get_column('itemnumber')
+        ],
+        [ $item_6->itemnumber ]
+    );
+    is_deeply(
+        [
+            Koha::Items->search(
+                {
+                    _status      => 'not_for_loan-1',
+                    biblionumber => $biblio->biblionumber,
+                }
+            )->get_column('itemnumber')
+        ],
+        []
+    );
+    is_deeply(
+        [
+            Koha::Items->search(
+                {
+                    _status      => 'not_for_loan-2',
+                    biblionumber => $biblio->biblionumber,
+                }
+            )->get_column('itemnumber')
+        ],
+        [ $item_6->itemnumber ]
+    );
 
     C4::Circulation::AddIssue( $patron, $item_1->barcode );
 
