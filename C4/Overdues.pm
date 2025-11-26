@@ -814,7 +814,7 @@ sub GetOverdueMessageTransportTypes {
     }
 
     # Put 'print' in first if exists
-    # It avoid to sent a print notice with an email or sms template is no email or sms is defined
+    # It avoids sending a print notice with an email or sms template if no email or sms is defined
     @mtts = uniq( 'print', @mtts )
         if grep { $_ eq 'print' } @mtts;
 

@@ -501,7 +501,7 @@ foreach my $branchcode (@branches) {
     $verbose and print "======================================\n";
     $verbose and warn sprintf "branchcode : '%s' using %s\n", $branchcode, $branch_email_address;
 
-    my $sql2 = <<"END_SQL";
+    my $item_sql = <<"END_SQL";
 SELECT biblio.*, items.*, issues.*, biblioitems.itemtype, branchname
   FROM issues,items,biblio, biblioitems, branches b
   WHERE items.itemnumber=issues.itemnumber
@@ -514,11 +514,11 @@ SELECT biblio.*, items.*, issues.*, biblioitems.itemtype, branchname
 END_SQL
 
     if ($owning_library) {
-        $sql2 .= ' AND items.homebranch = ? ' unless ($patron_homelibrary);
+        $item_sql .= ' AND items.homebranch = ? ' unless ($patron_homelibrary);
     } else {
-        $sql2 .= ' AND issues.branchcode = ? ' unless ($patron_homelibrary);
+        $item_sql .= ' AND issues.branchcode = ? ' unless ($patron_homelibrary);
     }
-    my $sth2 = $dbh->prepare($sql2);
+    my $item_statement = $dbh->prepare($item_sql);
 
     my $query = "SELECT * FROM overduerules WHERE delay1 IS NOT NULL AND branchcode = ? ";
     $query .= " AND categorycode IN (" . join( ',', ('?') x @myborcat ) . ") "        if (@myborcat);
@@ -589,9 +589,9 @@ END_SQL
             }
             $borrower_sql .= '  AND categories.overduenoticerequired=1 ORDER BY issues.borrowernumber';
 
-            # $sth gets borrower info iff at least one overdue item has triggered the overdue action.
-            my $sth = $dbh->prepare($borrower_sql);
-            $sth->execute(@borrower_parameters);
+            # $borrower_statement gets borrower info if at least one overdue item has triggered the overdue action.
+            my $borrower_statement = $dbh->prepare($borrower_sql);
+            $borrower_statement->execute(@borrower_parameters);
 
             if ( $verbose > 1 ) {
                 warn sprintf "--------Borrower SQL------\n";
@@ -602,9 +602,9 @@ END_SQL
                     . $date_to_run->datetime() . ")\n";
                 warn sprintf "--------------------------\n";
             }
-            $verbose and warn sprintf "Found %s borrowers with overdues\n", $sth->rows;
+            $verbose and warn sprintf "Found %s borrowers with overdues\n", $borrower_statement->rows;
             my $borrowernumber;
-            while ( my $data = $sth->fetchrow_hashref ) {
+            while ( my $data = $borrower_statement->fetchrow_hashref ) {
 
                 # check the borrower has at least one item that matches
                 my $days_between;
@@ -697,14 +697,14 @@ END_SQL
                 }
                 my @params = $patron_homelibrary ? ($borrowernumber) : ( $borrowernumber, $branchcode );
 
-                $sth2->execute(@params);
+                $item_statement->execute(@params);
                 my $itemcount = 0;
                 my $titles    = "";
                 my @items     = ();
 
                 my $j                            = 0;
                 my $exceededPrintNoticesMaxLines = 0;
-                while ( my $item_info = $sth2->fetchrow_hashref() ) {
+                while ( my $item_info = $item_statement->fetchrow_hashref() ) {
                     if ( C4::Context->preference('OverdueNoticeCalendar') ) {
                         $days_between =
                             $calendar->days_between( dt_from_string( $item_info->{date_due} ), $date_to_run );
@@ -745,7 +745,7 @@ END_SQL
                     $itemcount++;
                     push @items, $item_info;
                 }
-                $sth2->finish;
+                $item_statement->finish;
 
                 my @message_transport_types =
                     @{ GetOverdueMessageTransportTypes( $notice_branchcode, $overdue_rules->{categorycode}, $i ) };
@@ -887,7 +887,7 @@ END_SQL
                 }
                 $already_queued{"$borrowernumber$i"} = 1;
             }
-            $sth->finish;
+            $borrower_statement->finish;
         }
     }
 
