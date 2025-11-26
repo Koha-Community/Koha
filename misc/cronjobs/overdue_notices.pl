@@ -542,6 +542,7 @@ END_SQL
     PERIOD: foreach my $i ( 1 .. 3 ) {
 
             $verbose and warn "branch '$branchcode', categorycode = $overdue_rules->{categorycode} pass $i\n";
+            my $notice_branchcode = $branchcode;
 
             my $mindays = $overdue_rules->{"delay$i"};    # the notice will be sent after mindays days (grace period)
             my $maxdays = (
@@ -647,8 +648,8 @@ END_SQL
 
                 my $patron = Koha::Patrons->find($borrowernumber);
                 if ($patron_homelibrary) {
-                    $branchcode           = $patron->branchcode;
-                    $library              = Koha::Libraries->find($branchcode);
+                    $notice_branchcode    = $patron->branchcode;
+                    $library              = Koha::Libraries->find($notice_branchcode);
                     $admin_email_address  = $library->from_email_address;
                     $branch_email_address = C4::Context->preference('AddressForFailedOverdueNotices')
                         || $library->inbound_email_address;
@@ -669,7 +670,7 @@ END_SQL
                     {
                         module     => 'circulation',
                         code       => $overdue_rules->{"letter$i"},
-                        branchcode => $branchcode,
+                        branchcode => $notice_branchcode,
                         lang       => $patron->lang
                     }
                 );
@@ -747,7 +748,7 @@ END_SQL
                 $sth2->finish;
 
                 my @message_transport_types =
-                    @{ GetOverdueMessageTransportTypes( $branchcode, $overdue_rules->{categorycode}, $i ) };
+                    @{ GetOverdueMessageTransportTypes( $notice_branchcode, $overdue_rules->{categorycode}, $i ) };
                 @message_transport_types =
                     @{ GetOverdueMessageTransportTypes( q{}, $overdue_rules->{categorycode}, $i ) }
                     unless @message_transport_types;
@@ -772,7 +773,7 @@ END_SQL
                             module                 => 'circulation',
                             code                   => $overdue_rules->{"letter$i"},
                             message_transport_type => $effective_mtt,
-                            branchcode             => $branchcode,
+                            branchcode             => $notice_branchcode,
                             lang                   => $patron->lang
                         }
                     );
@@ -781,7 +782,7 @@ END_SQL
                         {
                             letter_code    => $overdue_rules->{"letter$i"},
                             borrowernumber => $borrowernumber,
-                            branchcode     => $branchcode,
+                            branchcode     => $notice_branchcode,
                             items          => \@items,
                             substitute => {    # this appears to be a hack to overcome incomplete features in this code.
                                 bib             => $library->branchname,    # maybe 'bib' is a typo for 'lib<rary>'?
