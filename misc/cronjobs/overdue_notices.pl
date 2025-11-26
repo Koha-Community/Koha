@@ -748,7 +748,7 @@ END_SQL
                 $item_statement->finish;
 
                 my @message_transport_types =
-                    @{ GetOverdueMessageTransportTypes( $notice_branchcode, $overdue_rules->{categorycode}, $i ) };
+                    @{ GetOverdueMessageTransportTypes( $branchcode, $overdue_rules->{categorycode}, $i ) };
                 @message_transport_types =
                     @{ GetOverdueMessageTransportTypes( q{}, $overdue_rules->{categorycode}, $i ) }
                     unless @message_transport_types;
