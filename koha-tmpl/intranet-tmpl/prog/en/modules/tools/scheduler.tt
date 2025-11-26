@@ -36,7 +36,7 @@
         <div class="alert alert-info">Failed to add scheduled task</div>
     [% END %]
 
-    <form name="form1" action="scheduler.pl" method="post">
+    <form name="form1" action="scheduler.pl" method="post" class="validated">
         [% INCLUDE 'csrf-token.inc' %]
         <input type="hidden" name="op" value="cud-add" />
 
@@ -44,10 +44,14 @@
             <legend>Task scheduler</legend
             ><ol>
                 <li><span class="label">Current server time is:</span> [% time | html %]</li>
-                <li><label for="starttime">Time: (set 24 hour time hhmm):</label>
-                  <input type="text" name="starttime" id="starttime" value="" maxlength="5" size="5" placeholder="hhmm" required /></li>
+                <li
+                    ><label for="starttime" class="required">Time:</label>
+                    <input type="text" name="starttime" id="starttime" value="" maxlength="5" size="5" placeholder="HH:MM" class="required" required />
+                    <span class="required">Required</span>
+                    <div class="hint">Enter time in 24 hour format: HH:MM</div>
+                </li>
                 <li>
-                    <label for="startdate">Date: </label>
+                    <label for="startdate" class="required">Date: </label>
                     <input type="text" size="10" id="startdate" name="startdate" class="flatpickr" data-flatpickr-futuredate="true" value="" />
                     <div class="hint">[% INCLUDE 'date-format.inc' %]</div>
                 </li>
@@ -72,11 +76,13 @@
                     </select>
                 </li>
                 <li
-                    ><label for="email">Email:</label>
+                    ><label for="email" class="required">Email:</label>
 
-                    <input type="text" name="email" id="email" size="50" />
-                </li> </ol
-        ></fieldset>
+                    <input type="email" class="required" name="email" id="email" size="50" />
+                    <span class="required">Required</span>
+                </li>
+            </ol></fieldset
+        >
         <fieldset class="action"><input class="btn btn-primary" type="submit" value="Save" /></fieldset>
     </form>
 
