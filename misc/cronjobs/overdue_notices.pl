@@ -575,14 +575,14 @@ AND    items.itemlost = 0
 AND    TO_DAYS($date)-TO_DAYS(issues.date_due) >= 0
 END_SQL
             my @borrower_parameters;
-            if ($branchcode) {
-                if ($owning_library) {
-                    $borrower_sql .= ' AND items.homebranch=? ';
-                } else {
-                    $borrower_sql .= ' AND issues.branchcode=? ';
-                }
-                push @borrower_parameters, $branchcode;
+
+            if ($owning_library) {
+                $borrower_sql .= ' AND items.homebranch=? ';
+            } else {
+                $borrower_sql .= ' AND issues.branchcode=? ';
             }
+            push @borrower_parameters, $branchcode;
+
             if ( $overdue_rules->{categorycode} ) {
                 $borrower_sql .= ' AND borrowers.categorycode=? ';
                 push @borrower_parameters, $overdue_rules->{categorycode};
