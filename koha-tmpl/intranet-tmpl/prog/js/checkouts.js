@@ -36,24 +36,43 @@ function LoadIssuesTable() {
     $("#issues-table").show();
     $("#issues-table-actions").show();
     var msg_loading = __("Loading... you may continue scanning.");
+    let renew_column = table_settings_issues_table.columns.find(
+        c => c.columnname == "renew"
+    );
+    let checkin_column = table_settings_issues_table.columns.find(
+        c => c.columnname == "checkin"
+    );
+
     if (!AllowCirculate) {
-        table_settings_issues_table.columns.find(
-            c => c.columnname == "renew"
-        ).is_hidden = 42;
-        table_settings_issues_table.columns.find(
-            c => c.columnname == "checkin"
-        ).is_hidden = 1;
+        renew_column.is_hidden = 1;
+        renew_column.force_visibility = 1;
+    } else {
+        renew_column.is_hidden = 0;
+        checkin_column.is_hidden = 0;
     }
+    renew_column.force_visibility = 1;
+    checkin_column.force_visibility = 1;
+
+    let claims_returned_column = table_settings_issues_table.columns.find(
+        c => c.columnname == "claims_returned"
+    );
     if (!ClaimReturnedLostValue) {
-        table_settings_issues_table.columns.find(
-            c => c.columnname == "claims_returned"
-        ).is_hidden = 1;
+        claims_returned_column.is_hidden = 1;
+    } else {
+        claims_returned_column.is_hidden = 0;
     }
+    claims_returned_column.force_visibility = 1;
+
+    let export_column = table_settings_issues_table.columns.find(
+        c => c.columnname == "export"
+    );
     if (!exports_enabled) {
-        table_settings_issues_table.columns.find(
-            c => c.columnname == "export"
-        ).is_hidden = 1;
+        export_column.is_hidden = 1;
+    } else {
+        export_column.is_hidden = 0;
     }
+    export_column.force_visibility = 1;
+
     issuesTable = $("#issues-table").kohaTable(
         {
             language: {
@@ -665,6 +684,7 @@ function LoadIssuesTable() {
                 ),
             },
             bKohaAjaxSVC: true,
+            bKohaColumnsUseNames: true,
             rowGroup: {
                 dataSrc: "issued_today",
                 startRender: function (rows, group) {
