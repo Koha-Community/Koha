@@ -33,13 +33,12 @@ use C4::Output  qw( output_html_with_http_headers );
 use C4::Biblio  qw( GetBiblioData GetFrameworkCode );
 use C4::Items   qw( GetAnalyticsCount );
 use C4::Reserves;
-use C4::Serials          qw( CountSubscriptionFromBiblionumber SearchSubscriptions GetLatestSerials );
-use C4::XISBN            qw( get_xisbns );
-use C4::External::Amazon qw( get_amazon_tld );
-use C4::Search           qw( z3950_search_args enabled_staff_search_views new_record_from_zebra );
-use C4::Tags             qw( get_tags );
-use C4::XSLT             qw( XSLTParse4Display );
-use Koha::DateUtils      qw( format_sqldatetime );
+use C4::Serials     qw( CountSubscriptionFromBiblionumber SearchSubscriptions GetLatestSerials );
+use C4::XISBN       qw( get_xisbns );
+use C4::Search      qw( z3950_search_args enabled_staff_search_views new_record_from_zebra );
+use C4::Tags        qw( get_tags );
+use C4::XSLT        qw( XSLTParse4Display );
+use Koha::DateUtils qw( format_sqldatetime );
 use C4::HTML5Media;
 use C4::CourseReserves qw( GetItemCourseReservesInfo );
 use Koha::AuthorisedValues;
@@ -423,7 +422,6 @@ foreach ( keys %{$dat} ) {
 
 # does not work: my %views_enabled = map { $_ => 1 } $template->query(loop => 'EnableViews');
 # method query not found?!?!
-$template->param( AmazonTld => get_amazon_tld() ) if ( C4::Context->preference("AmazonCoverImages") );
 $template->param(
     biblionumber                            => $biblionumber,
     ( $analyze ? 'analyze' : 'detailview' ) => 1,

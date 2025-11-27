@@ -46,7 +46,6 @@ use C4::Biblio  qw(
 use C4::Record              qw( marc2cites );
 use C4::Tags                qw( get_tags );
 use C4::XISBN               qw( get_xisbns );
-use C4::External::Amazon    qw( get_amazon_tld );
 use C4::External::Syndetics qw(
     get_syndetics_anotes
     get_syndetics_excerpt
@@ -1139,8 +1138,6 @@ if ( C4::Context->preference("OPACShelfBrowser") ) {
         }
     }
 }
-
-$template->param( AmazonTld => get_amazon_tld() ) if ( C4::Context->preference("OPACAmazonCoverImages") );
 
 my $tag_quantity;
 if ( C4::Context->preference('TagsEnabled') and $tag_quantity = C4::Context->preference('TagsShowOnDetail') ) {

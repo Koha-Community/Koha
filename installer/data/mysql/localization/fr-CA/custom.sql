@@ -17,7 +17,7 @@
 -- along with Koha; if not, see <https://www.gnu.org/licenses>.
 
 UPDATE systempreferences SET value = 'fre|eng' WHERE variable = 'AdvancedSearchLanguages';
-UPDATE systempreferences SET value = 'CA' WHERE variable = 'AmazonLocale';
+UPDATE systempreferences SET value = 'ca' WHERE variable = 'AmazonLocaleTld';
 UPDATE systempreferences SET value = 'père|mère|grand-parent|tuteur légal|autre' WHERE variable = 'borrowerRelationship';
 UPDATE systempreferences SET value = 'M.|Mme|Mx' WHERE variable = 'BorrowersTitles';
 UPDATE systempreferences SET value = 'FR' WHERE variable = 'CurencyFormat';
