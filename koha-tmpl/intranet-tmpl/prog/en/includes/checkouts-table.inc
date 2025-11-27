@@ -20,32 +20,32 @@
         <table id="issues-table" style="width: 100% !Important; display: none;">
             <thead>
                 <tr>
-                    <th scope="col">&nbsp;</th>
-                    <th scope="col">&nbsp;</th>
-                    <th scope="col">Due date</th>
-                    <th scope="col">Due date</th>
-                    <th scope="col">Title</th>
-                    <th scope="col">Record-level item type</th>
-                    <th scope="col">Item type</th>
-                    <th scope="col">Collection</th>
-                    <th scope="col">Location</th>
-                    <th scope="col">Home library</th>
-                    <th scope="col">&nbsp;</th>
-                    <th scope="col">Checked out on</th>
-                    <th scope="col">Checked out from</th>
-                    <th scope="col">Call number</th>
-                    <th scope="col">Copy number</th>
-                    <th scope="col">Charge</th>
-                    <th scope="col">Fine</th>
-                    <th scope="col">Price</th>
-                    <th scope="col"
+                    <th data-colname="sort_order" scope="col">&nbsp;</th>
+                    <th data-colname="todays_or_previous_checkouts" scope="col">&nbsp;</th>
+                    <th data-colname="due_date_unformatted" scope="col">Due date</th>
+                    <th data-colname="due_date" scope="col">Due date</th>
+                    <th data-colname="title" scope="col">Title</th>
+                    <th data-colname="record_type" scope="col">Record-level item type</th>
+                    <th data-colname="item_type" scope="col">Item type</th>
+                    <th data-colname="collection" scope="col">Collection</th>
+                    <th data-colname="location" scope="col">Location</th>
+                    <th data-colname="homebranch" scope="col">Home library</th>
+                    <th data-colname="checkout_on_unformatted" scope="col">&nbsp;</th>
+                    <th data-colname="checkout_on" scope="col">Checked out on</th>
+                    <th data-colname="checkout_from" scope="col">Checked out from</th>
+                    <th data-colname="callno" scope="col">Call number</th>
+                    <th data-colname="copynumber" scope="col">Copy number</th>
+                    <th data-colname="charge" scope="col">Charge</th>
+                    <th data-colname="fine" scope="col">Fine</th>
+                    <th data-colname="price" scope="col">Price</th>
+                    <th data-colname="renew" scope="col"
                         >Renew <p class="column-tool"><a href="#" id="CheckAllRenewals">select all</a> | <a href="#" id="UncheckAllRenewals">none</a></p></th
                     >
-                    <th scope="col"
+                    <th data-colname="checkin" scope="col"
                         >Check in <p class="column-tool"><a href="#" id="CheckAllCheckins">select all</a> | <a href="#" id="UncheckAllCheckins">none</a></p></th
                     >
-                    <th scope="col">Return claims</th>
-                    <th scope="col"
+                    <th data-colname="claims_returned" scope="col">Return claims</th>
+                    <th data-colname="export" scope="col"
                         >Export <p class="column-tool"><a href="#" id="CheckAllExports">select all</a> | <a href="#" id="UncheckAllExports">none</a></p></th
                     >
                 </tr>
