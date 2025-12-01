@@ -74,7 +74,7 @@ is( scalar @$pot, 4, 'xgettext.pl generated a POT file' );
 
 my $pot_content = read_file("$tempdir/Koha.pot");
 $pot_content =~
-    s|msgid "Don't use TT directives if another attribute is translatable"\nmsgstr ""|msgid "Don't use TT directives if another attribute is translatable"\nmsgstr "Ne pas utiliser TT si un autre attribut est traduisible"|gms;
+    s|msgid "Don't use TT directives if another attribute is translatable"\nmsgstr ""|msgid "Don't use TT directives if another attribute is translatable"\nmsgstr "Ne pas utiliser TT si un autre 'attribute' est traduisible"|gms;
 $pot_content =~ s|msgid "Will be translated"\nmsgstr ""|msgid "Will be translated"\nmsgstr "Ceci sera traduit"|gms;
 write_file( "$tempdir/Koha.pot", $pot_content );
 
@@ -84,7 +84,7 @@ my $install_cmd =
 system($install_cmd);
 
 my $content = read_file("$tempdir_fr/tt/en/sample-not-working-2.tt");
-like( $content, qr{Ne pas utiliser TT si un autre attribut est traduisible} );
+like( $content, qr{Ne pas utiliser TT si un autre 'attribute' est traduisible} );
 like( $content, qr{Ceci sera traduit} );
 
 # So far so good, but #FIXME:
