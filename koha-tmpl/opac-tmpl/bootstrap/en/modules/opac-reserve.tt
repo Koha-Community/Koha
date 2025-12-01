@@ -418,7 +418,7 @@
                                                                         <td class="copynumber">
                                                                             <input
                                                                                 disabled="disabled"
-                                                                                type="radio"
+                                                                                type="[% reserve_input_type | html %]"
                                                                                 aria-label="Cannot be put on hold"
                                                                                 class="checkitem"
                                                                                 name="checkitem"
@@ -578,17 +578,17 @@
                     toggleLink.text($(this).is(':visible') ? _("Hide options") : _("Show more options"));
                 });
             });
-            if( $(".holddatefrom").prop('required') || $(".futuredate").prop('required') ) $(".toggle-hold-options").click();
+            if( $(".holddatefrom").prop('required') || $(".futuredate").prop('required') ) $(".toggle-hold-options").trigger('click');
 
             // Hides all 'specific copy' table rows on load.
             $(".copiesrow").hide();
 
             [% FOREACH bibitemloo IN bibitemloop %]
               [% IF bibitemloo.force_hold %]
-                if( $("#to[% bibitemloo.biblionumber | html %]").parent(":hidden").length )
-                    $("#toggle-hold-options-[% bibitemloo.biblionumber | html %]").click();
-                $("#reqspecific_[% bibitemloo.biblionumber | html %]").click();
-                $("#copiesrow_[% bibitemloo.biblionumber | html %]").show();
+                if( $("#hold-options-[% bibitemloo.biblionumber | html %]").is(":hidden") )
+                    $("#toggle-hold-options-[% bibitemloo.biblionumber | html %]").trigger('click');
+                $("#reqspecific_[% bibitemloo.biblionumber | html %]").prop('checked','checked');
+                $("#copiesrow_[% bibitemloo.biblionumber | html %]").css('display','');
               [% END %]
             [% END %]
 
@@ -692,7 +692,7 @@
                     // If required hold note is empty, make it visible
                     if( $("#holdnotes_"+biblioNum).attr( 'required' ) && $("#holdnotes_"+biblioNum).val() == '' ) {
                         if( !$("#hold-options-"+biblioNum).is(':visible')) {
-                            $("#toggle-hold-options-"+biblioNum).click();
+                            $("#toggle-hold-options-"+biblioNum).trigger('click');
                         }
                     }
 
@@ -754,7 +754,11 @@
                 $(this).DataTable({
                     dom: "t",
                     initComplete: function() {
+                        // Only select first radio button (if any)
                         this.find("input:radio").first().prop("checked", true );
+                        // If there is only one checkbox, select that one
+                        if( this.find("tr.holdable input:checkbox").length == 1 )
+                            this.find("tr.holdable input:checkbox").prop("checked", true );
                     },
                     paging: false
                 });
