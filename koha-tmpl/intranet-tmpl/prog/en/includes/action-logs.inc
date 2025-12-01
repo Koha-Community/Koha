@@ -204,7 +204,7 @@
     [% CASE 'PATRON_CANT' %]
         <span>Max renewals reached</span>
     [% CASE 'TOO_MANY' %]
-        <span>Too many checkout</span>
+        <span>Too many checkouts</span>
     [% CASE 'PREVISSUE' %]
         <span>Patron was notified of previous issues</span>
     [% CASE 'NOT_FOR_LOAN' %]
