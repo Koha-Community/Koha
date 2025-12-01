@@ -235,6 +235,7 @@ if ($noreport) {
         borrowers.title as borrowertitle,
         borrowers.surname,
         borrowers.firstname,
+        borrowers.preferred_name,
         borrowers.streetnumber,
         borrowers.streettype,
         borrowers.address,
@@ -268,7 +269,8 @@ if ($noreport) {
         items.itemnotes_nonpublic,
         items.itype,
         return_claims.created_on AS return_claim_created_on,
-        return_claims.id AS return_claim_id
+        return_claims.id AS return_claim_id,
+        IF(date_due < NOW(), 1, 0) AS overdue
       FROM issues
     LEFT JOIN borrowers   ON (issues.borrowernumber=borrowers.borrowernumber )
     LEFT JOIN categories  ON (categories.categorycode = borrowers.categorycode )
@@ -338,19 +340,6 @@ if ($noreport) {
     my @overduedata;
     while ( my $data = $sth->fetchrow_hashref ) {
 
-        # most of the overdue report data is linked to the database schema, i.e. things like borrowernumber and phone
-        # but the patron attributes (patron_attr_value_loop) are unnormalised and varies dynamically from one db to the next
-
-        my $pattrs = $borrowernumber_to_attributes{ $data->{borrowernumber} } || {};    # patron attrs for this borrower
-            # $pattrs is a hash { attrcode => [  [value,displayvalue], [value,displayvalue]... ] }
-
-        my @patron_attr_value_loop;    # template array [ {value=>v1}, {value=>v2} ... } ]
-        for my $pattr_filter ( grep { !$_->{isclone} } @patron_attr_filter_loop ) {
-            my @displayvalues =
-                map { $_->[1] } @{ $pattrs->{ $pattr_filter->{code} } };    # grab second value from each subarray
-            push @patron_attr_value_loop, { value => join( ', ', sort { lc $a cmp lc $b } @displayvalues ) };
-        }
-
         push @overduedata, {
             borrower => {
                 branchcode     => $data->{branchcode},
@@ -401,8 +390,7 @@ if ($noreport) {
             return_claim_id         => $data->{return_claim_id},
             enumchron               => $data->{enumchron},
             itemtype                => $data->{itype},
-            overdue                => DateTime->compare( dt_from_string( $data->{date_due} ), $today_dt ) == -1 ? 1 : 0,
-            patron_attr_value_loop => \@patron_attr_value_loop,
+            overdue                 => $data->{overdue}
         };
     }
 
