@@ -120,8 +120,8 @@
                                                 [% END %]
                                             </td>
                                             <td>
-                                                [% INCLUDE 'patron-title.inc' patron=overdueloo.patron hide_patron_infos_if_needed=1 %]
-                                                [% IF logged_in_user.can_see_patron_infos( overdueloo.patron ) %]
+                                                [% INCLUDE 'patron-title.inc' borrower=overdueloo.borrower hide_patron_infos_if_needed=1 %]
+                                                [% IF logged_in_user.can_see_patrons_from( overdueloo.branchcode ) %]
                                                     [% IF ( overdueloo.email ) %]
                                                         <span class="overdue_email"> [<a href="mailto:[% overdueloo.email | uri %]?subject=[% INCLUDE subject %] [% overdueloo.title | uri %]">email</a>] </span>
                                                     [% END %]
@@ -136,8 +136,8 @@
                                                     </span>
                                                 [% END %]
                                             </td>
-                                            <td>[% Categories.GetName( overdueloo.patron.categorycode ) | html %]</td>
-                                            <td>[% Branches.GetName( overdueloo.patron.branchcode ) | html %]</td>
+                                            <td>[% Categories.GetName( overdueloo.borrower.categorycode ) | html %]</td>
+                                            <td>[% Branches.GetName( overdueloo.borrower.branchcode ) | html %]</td>
                                             <td
                                                 >[% INCLUDE 'biblio-title.inc' biblio=overdueloo link = 1 %]
                                                 [% IF ( overdueloo.author ) %], by [% overdueloo.author | html %][% END %][% IF ( overdueloo.enumchron ) %], [% overdueloo.enumchron | html %][% END %]</td

@@ -247,6 +247,8 @@ if ($noreport) {
         borrowers.cardnumber,
         borrowers.borrowernumber,
         borrowers.branchcode,
+        borrowers.categorycode,
+        categories.category_type,
         issues.itemnumber,
         issues.issuedate,
         items.datelastborrowed,
@@ -269,6 +271,7 @@ if ($noreport) {
         return_claims.id AS return_claim_id
       FROM issues
     LEFT JOIN borrowers   ON (issues.borrowernumber=borrowers.borrowernumber )
+    LEFT JOIN categories  ON (categories.categorycode = borrowers.categorycode )
     LEFT JOIN items       ON (issues.itemnumber=items.itemnumber)
     LEFT JOIN biblioitems ON (biblioitems.biblioitemnumber=items.biblioitemnumber)
     LEFT JOIN biblio      ON (biblio.biblionumber=items.biblionumber )
@@ -349,7 +352,19 @@ if ($noreport) {
         }
 
         push @overduedata, {
-            patron                  => Koha::Patrons->find( $data->{borrowernumber} ),
+            borrower => {
+                branchcode     => $data->{branchcode},
+                borrowernumber => $data->{borrowernumber},
+                categorycode   => $data->{categorycode},
+                category_type  => $data->{category_type},
+                surname        => $data->{surname},
+                othernames     => $data->{othernames},
+                firstname      => $data->{firstname},
+                preferred_name => $data->{preferred_name},
+                middle_name    => $data->{middle_name},
+                cardnumber     => $data->{cardnumber},
+                title          => $data->{title}
+            },
             duedate                 => $data->{date_due},
             borrowernumber          => $data->{borrowernumber},
             cardnumber              => $data->{cardnumber},
