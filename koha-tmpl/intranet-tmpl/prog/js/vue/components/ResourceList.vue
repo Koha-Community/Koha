@@ -290,9 +290,9 @@ export default {
             ).map(col => {
                 const filterOptions =
                     props.instancedResource.tableOptions.filters_options;
-                const filterRequired = Object.keys(filterOptions).includes(
-                    col.data
-                );
+                const filterRequired =
+                    filterOptions &&
+                    Object.keys(filterOptions).includes(col.data);
                 if (filterRequired) {
                     col.dataFilter = col.data;
                 }
