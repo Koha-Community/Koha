@@ -1,14 +1,8 @@
 <template>
     <li class="breadcrumb-item">
         <span>
-            <a v-if="item.disabled" href="#" class="{ disabled: disabled }">
-                <template v-if="item.icon">
-                    <i :class="`${item.icon}`"></i>&nbsp;
-                </template>
-                <span v-if="item.title">{{ $__(item.title) }}</span>
-            </a>
             <router-link
-                v-else-if="item.name"
+                v-if="item.name && !item.disabled"
                 :to="{ name: item.name, params }"
             >
                 <template v-if="item.icon">
@@ -16,19 +10,27 @@
                 </template>
                 <span v-if="item.title">{{ $__(item.title) }}</span>
             </router-link>
-            <router-link v-else-if="item.path" :to="item.path">
+            <router-link
+                v-else-if="item.path && !item.disabled"
+                :to="item.path"
+            >
                 <template v-if="item.icon">
                     <i :class="`${item.icon}`"></i>&nbsp;
                 </template>
                 <span v-if="item.title">{{ $__(item.title) }}</span>
             </router-link>
-            <a v-else-if="item.href" :href="item.href">
+            <a v-else-if="item.href && !item.disabled" :href="item.href">
                 <template v-if="item.icon">
                     <i :class="`${item.icon}`"></i>&nbsp;
                 </template>
                 <span v-if="item.title">{{ $__(item.title) }}</span>
             </a>
-            <a v-else href="#" aria-current="page">
+            <a
+                v-else
+                href="#"
+                aria-current="page"
+                :class="{ disabled: item.disabled }"
+            >
                 <template v-if="item.icon">
                     <i :class="`${item.icon}`"></i>&nbsp;
                 </template>
