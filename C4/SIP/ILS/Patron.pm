@@ -131,7 +131,10 @@ sub new {
     }
 
     # Get currency 3 chars max
-    my $currency = substr Koha::Acquisition::Currencies->get_active->currency, 0, 3;
+    my $currency = Koha::Acquisition::Currencies->get_active;
+    if ($currency) {
+        $currency = substr $currency->currency, 0, 3;
+    }
 
     my $circ_blocked =
         ( C4::Context->preference('OverduesBlockCirc') ne "noblock" && defined $flags->{ODUES}->{itemlist} ) ? 1 : 0;
