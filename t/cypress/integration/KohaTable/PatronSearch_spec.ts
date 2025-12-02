@@ -159,25 +159,45 @@ describe("Filters", () => {
                 `Showing 1 to ${RESTdefaultPageSize} of ${baseTotalCount} entries`
             );
 
-            cy.get(`#${table_id} thead tr`).should("have.length", 2);
+            cy.get(`#${table_id}`).then($table => {
+                const dt = $table.DataTable();
+                const libraryCol = dt.column("library:name");
+                const libraryVisibleIndex = libraryCol.index("visible");
+                const categoryCol = dt.column("category:name");
+                const categoryVisibleIndex = categoryCol.index("visible");
 
-            cy.get(
-                `#${table_id} thead tr th[data-filter='libraries'] select`
-            ).should("have.value", "^CPL$");
-            // Lowercase see bug 32517 and related code in datatables.js
-            cy.get(
-                `#${table_id} thead tr th[data-filter='categories'] select`
-            ).should("have.value", "^s$");
+                cy.get(`#${table_id} thead tr`).should("have.length", 2);
+                cy.get(`#${table_id} thead tr`)
+                    .eq(1)
+                    .find("th")
+                    .eq(libraryVisibleIndex)
+                    .find("select")
+                    .should("have.value", "^CPL$");
 
-            cy.get(`form.patron_search_form input.clear_search`).click();
-            cy.get("form.patron_search_form input[type='submit']").click();
-            cy.get(
-                `#${table_id} thead tr th[data-filter='libraries'] select`
-            ).should("have.value", null);
-            // Lowercase see bug 32517 and related code in datatables.js
-            cy.get(
-                `#${table_id} thead tr th[data-filter='categories'] select`
-            ).should("have.value", null);
+                // Lowercase see bug 32517 and related code in datatables.js
+                cy.get(`#${table_id} thead tr`)
+                    .eq(1)
+                    .find("th")
+                    .eq(categoryVisibleIndex)
+                    .find("select")
+                    .should("have.value", "^s$");
+
+                cy.get(`form.patron_search_form input.clear_search`).click();
+                cy.get("form.patron_search_form input[type='submit']").click();
+                cy.get(`#${table_id} thead tr`)
+                    .eq(1)
+                    .find("th")
+                    .eq(libraryVisibleIndex)
+                    .find("select")
+                    .should("have.value", null);
+                // Lowercase see bug 32517 and related code in datatables.js
+                cy.get(`#${table_id} thead tr`)
+                    .eq(1)
+                    .find("th")
+                    .eq(categoryVisibleIndex)
+                    .find("select")
+                    .should("have.value", null);
+            });
         });
     });
 
@@ -257,9 +277,17 @@ describe("Filters", () => {
 
                 cy.wait("@searchPatrons");
 
-                cy.get(
-                    `#${table_id} thead tr th[data-filter='libraries'] select`
-                ).select("^CPL$");
+                cy.get(`#${table_id}`).then($table => {
+                    const dt = $table.DataTable();
+                    const libraryCol = dt.column("library:name");
+                    const libraryVisibleIndex = libraryCol.index("visible");
+                    cy.get(`#${table_id} thead tr`)
+                        .eq(1)
+                        .find("th")
+                        .eq(libraryVisibleIndex)
+                        .find("select")
+                        .select("^CPL$");
+                });
 
                 cy.wait("@searchPatrons").then(interception => {
                     const q = interception.request.query.q;

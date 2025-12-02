@@ -624,6 +624,7 @@
                                 }
                                 [% CASE 'branch' %]
                                 {
+                                    name: "library",
                                     data: "library.name:me.library_id",
                                     dataFilter: "libraries",
                                     searchable: true,
@@ -638,6 +639,7 @@
                                 }
                                 [% CASE 'category' %]
                                 {
+                                    name: "category",
                                     data: "category_id",
                                     dataFilter: "categories",
                                     searchable: true,
@@ -907,12 +909,16 @@
                         [% SWITCH c %]
                         [% CASE 'branch' %]
                             let library_id = patron_search_form.find(".branchcode_filter").val() || "";
-                            patrons_table.find('thead tr:eq(1) th[data-filter="libraries"] select').val('^' + library_id + '$');
-                            table_dt.column([% loop.count - 1 %]).search(library_id ? '^'+library_id+'$' : '');
+                            let library_column = table_dt.column('library:name');
+                            let library_visible_index = library_column.index("visible");
+                            patrons_table.find(`thead tr:eq(1) th:eq(${library_visible_index}) select`).val('^' + library_id + '$');
+                            library_column.search(library_id ? '^'+library_id+'$' : '');
                         [% CASE 'category' %]
                             let category_id = patron_search_form.find(".categorycode_filter").val() || "";
-                            patrons_table.find('thead tr:eq(1) th[data-filter="categories"] select').val('^' + category_id.toLowerCase() + '$');
-                            table_dt.column([% loop.count - 1 %]).search(category_id ? '^'+category_id+'$' : '');
+                            let category_column = table_dt.column('category:name');
+                            let category_visible_index = category_column.index("visible");
+                            patrons_table.find(`thead tr:eq(1) th:eq(${category_visible_index}) select`).val('^' + category_id.toLowerCase() + '$');
+                            category_column.search(category_id ? '^'+category_id+'$' : '');
                         [% END %]
                     [% END %]
                 }

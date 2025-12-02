@@ -342,9 +342,10 @@ subtest 'Search patrons' => sub {
         'Searching in standard brings back correct results'
     );
 
+    # Not ideal as there are 2 select.dt-select-filter in the header (for library and category)
     $s->driver->find_element( '//table[@id="'
             . $table_id
-            . '"]//th[@data-filter="libraries"]/select/option[@value="^'
+            . '"]//th/select[@class="dt-select-filter"]/option[@value="^'
             . $first_patron->library->branchcode
             . '$"]' )->click;
     sleep $DT_delay && $s->wait_for_ajax;
