@@ -196,6 +196,7 @@ our $mapping = {
     'circ/offline'                             => '/circulation.html#offline-circulation-in-koha',
     'circ/on-site_checkouts'                   => '/circulation.html#pending-on-site-checkouts',
     'circ/overdue'                             => '/circulation.html#overdues',
+    'circ/pendingbookings'                     => '/circulation.html#bookings-to-collect',
     'circ/pendingreserves'                     => '/circulation.html#holds-to-pull',
     'circ/renew'                               => '/circulation.html#renewing',
     'circ/reserveratios'                       => '/circulation.html#hold-ratios',
