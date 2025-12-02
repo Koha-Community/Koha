@@ -22,7 +22,7 @@
 
 <script>
 import Toolbar from "./Toolbar.vue";
-import { ref, inject, onBeforeMount, computed } from "vue";
+import { ref, onBeforeMount, computed } from "vue";
 import { APIClient } from "../fetch/api-client.js";
 import KohaTable from "./KohaTable.vue";
 import { $__ } from "@koha-vue/i18n";
@@ -89,7 +89,20 @@ export default {
                     });
                 });
         };
+        const handleShowField = (row, attr, thisResource) => {
+            if (!props.instancedResource.components.show) {
+                return row[attr.name];
+            }
+            return (
+                '<a href="' +
+                thisResource.getResourceShowURL(row[thisResource.idAttr]) +
+                '" class="show">' +
+                escape_str(row[attr.name]) +
+                "</a>"
+            );
+        };
         const assignShowEvent = (columnActions, i) => {
+            if (!props.instancedResource.components.show) return;
             if (!columnActions[i]) {
                 columnActions[i] = ["show"];
             }
@@ -123,15 +136,7 @@ export default {
                         searchable: true,
                         orderable: true,
                         render: function (data, type, row, meta) {
-                            return (
-                                '<a href="' +
-                                thisResource.getResourceShowURL(
-                                    row[thisResource.idAttr]
-                                ) +
-                                '" class="show">' +
-                                escape_str(row[thisResource.idAttr]) +
-                                "</a>"
-                            );
+                            return handleShowField(row, attr, thisResource);
                         },
                     });
                     return acc;
@@ -146,15 +151,7 @@ export default {
                         searchable: true,
                         orderable: true,
                         render: function (data, type, row, meta) {
-                            return (
-                                '<a href="' +
-                                thisResource.getResourceShowURL(
-                                    row[thisResource.idAttr]
-                                ) +
-                                '" class="show">' +
-                                escape_str(row[attr.name]) +
-                                "</a>"
-                            );
+                            return handleShowField(row, attr, thisResource);
                         },
                     });
                     return acc;

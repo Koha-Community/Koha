@@ -45,12 +45,7 @@ export default {
                     name: "record_source_id",
                     required: true,
                     type: "text",
-                    label: $__("Id"),
-                    tableColumnDefinition: {
-                        title: $__("ID"),
-                        data: "record_source_id",
-                        searchable: true,
-                    },
+                    label: $__("ID"),
                     hideIn: ["Form"],
                 },
                 {
