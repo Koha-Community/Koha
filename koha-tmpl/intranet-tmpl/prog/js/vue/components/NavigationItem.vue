@@ -1,42 +1,34 @@
 <template>
     <li class="breadcrumb-item">
         <span>
-            <router-link
-                v-if="item.name"
-                :to="{ name: item.name, params }"
-                :class="{ disabled: item.disabled }"
-            >
-                <template v-if="item.icon">
-                    <i :class="`${item.icon}`"></i>&nbsp;
-                </template>
-                <span v-if="item.title">{{ $__(item.title) }}</span>
-            </router-link>
-            <router-link
-                v-else-if="item.path"
-                :to="item.path"
-                :class="{ disabled: item.disabled }"
-            >
-                <template v-if="item.icon">
-                    <i :class="`${item.icon}`"></i>&nbsp;
-                </template>
-                <span v-if="item.title">{{ $__(item.title) }}</span>
-            </router-link>
-            <a
-                v-else-if="item.href"
-                :href="item.href"
-                :class="{ disabled: item.disabled }"
-            >
+            <a v-if="item.disabled" href="#" class="{ disabled: disabled }">
                 <template v-if="item.icon">
                     <i :class="`${item.icon}`"></i>&nbsp;
                 </template>
                 <span v-if="item.title">{{ $__(item.title) }}</span>
             </a>
-            <a
-                v-else
-                href="#"
-                aria-current="page"
-                :class="{ disabled: item.disabled }"
+            <router-link
+                v-else-if="item.name"
+                :to="{ name: item.name, params }"
             >
+                <template v-if="item.icon">
+                    <i :class="`${item.icon}`"></i>&nbsp;
+                </template>
+                <span v-if="item.title">{{ $__(item.title) }}</span>
+            </router-link>
+            <router-link v-else-if="item.path" :to="item.path">
+                <template v-if="item.icon">
+                    <i :class="`${item.icon}`"></i>&nbsp;
+                </template>
+                <span v-if="item.title">{{ $__(item.title) }}</span>
+            </router-link>
+            <a v-else-if="item.href" :href="item.href">
+                <template v-if="item.icon">
+                    <i :class="`${item.icon}`"></i>&nbsp;
+                </template>
+                <span v-if="item.title">{{ $__(item.title) }}</span>
+            </a>
+            <a v-else href="#" aria-current="page">
                 <template v-if="item.icon">
                     <i :class="`${item.icon}`"></i>&nbsp;
                 </template>
