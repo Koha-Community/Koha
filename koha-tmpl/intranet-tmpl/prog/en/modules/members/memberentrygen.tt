@@ -959,8 +959,12 @@
                                                 </optgroup>
                                             [% END %]
                                         </select>
+                                        <span class="required">Required</span>
                                         [% IF limited_category %]
-                                            <span title="The patron's current category ([% patron_category.description | html %]) is limited to other libraries"><i class="fa fa-exclamation-triangle" aria-hidden="true"></i></span>
+                                            <div class="hint">
+                                                <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
+                                                The patron's current category ([% patron_category.description | html %]) is limited to other libraries
+                                            </div>
                                         [% END %]
                                     </li>
 
