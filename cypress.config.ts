@@ -18,8 +18,8 @@ export default defineConfig({
         supportFile: "t/cypress/support/e2e.js",
         env: {
             opacBaseUrl: process.env.KOHA_OPAC_URL || "http://localhost:8080",
-            apiUsername: "koha",
-            apiPassword: "koha",
+            apiUsername: process.env.KOHA_USER || "koha",
+            apiPassword: process.env.KOHA_PASS || "koha",
         },
     },
 
