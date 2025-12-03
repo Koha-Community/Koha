@@ -262,8 +262,9 @@ SKIP: {
         $nb_of_checkouts++;
         like( $driver->get_title(), qr(Checking out to $sample_data->{patron}{surname}) );
         like(
-            $driver->find_element('//a[@href="#checkouts_panel"]')->get_attribute('text'),
-            qr/Checkouts \($nb_of_checkouts\)/
+            $driver->find_element('//a[@href="#checkouts_panel"]/span[@class="checkout_count badge text-bg-info"]')
+                ->get_text(),
+            qr($nb_of_checkouts)
         );
     }
 
