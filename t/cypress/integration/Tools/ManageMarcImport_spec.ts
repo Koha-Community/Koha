@@ -54,10 +54,10 @@ describe("loads the manage MARC import page", () => {
         cy.get('select[name="format"]').should("have.value", "MARCXML");
 
         //select some new options
-        cy.get("#matcher").select("3", { force: true });
         cy.get("#matcher")
             .select("3", { force: true })
             .should("have.value", "3");
+
         cy.get("#overlay_action")
             .select("create_new", { force: true })
             .should("have.value", "create_new");
@@ -72,7 +72,7 @@ describe("loads the manage MARC import page", () => {
 
         cy.get("#job_callback").should("exist");
 
-        cy.contains("View batch").click();
+        cy.get("#job_callback").contains("View batch").click();
 
         // Now verify all values are retained
         cy.get("#new_matcher_id").should("have.value", "3");
