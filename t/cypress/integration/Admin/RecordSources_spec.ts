@@ -15,7 +15,7 @@ describe("Breadcrumbs tests", () => {
         cy.get(".breadcrumb-item").eq(2).contains("Record sources");
         // use the 'New' button
         cy.contains("New record source").click();
-        cy.get(".current").contains("Add record source");
+        cy.get('[aria-current="page"]').contains("Add record source");
         cy.get("#breadcrumbs")
             .contains("Record sources")
             .should("have.attr", "href")
