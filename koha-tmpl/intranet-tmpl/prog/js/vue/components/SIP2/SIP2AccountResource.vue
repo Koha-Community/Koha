@@ -507,10 +507,15 @@ export default {
                     resourceRelationships: {
                         resourceProperty: "custom_patron_fields",
                     },
-                    relationshipStrings: {
-                        nameLowerCase: __("custom patron field"),
+                    relationshipI18n: {
                         nameUpperCase: __("Custom patron field"),
-                        namePlural: __("custom patron fields"),
+                        removeThisMessage: __(
+                            "Remove this custom patron field"
+                        ),
+                        addNewMessage: __("Add new custom patron field"),
+                        noneCreatedYetMessage: __(
+                            "There are no custom patron fields created yet"
+                        ),
                     },
                     newRelationshipDefaultAttrs: {
                         type: "object",
@@ -563,10 +568,13 @@ export default {
                     resourceRelationships: {
                         resourceProperty: "patron_attributes",
                     },
-                    relationshipStrings: {
-                        nameLowerCase: __("patron attribute"),
+                    relationshipI18n: {
                         nameUpperCase: __("Patron attribute"),
-                        namePlural: __("patron attributes"),
+                        removeThisMessage: __("Remove this patron attribute"),
+                        addNewMessage: __("Add new patron attribute"),
+                        noneCreatedYetMessage: __(
+                            "There are no patron attributes created yet"
+                        ),
                     },
                     newRelationshipDefaultAttrs: {
                         type: "object",
@@ -622,10 +630,13 @@ export default {
                     resourceRelationships: {
                         resourceProperty: "custom_item_fields",
                     },
-                    relationshipStrings: {
-                        nameLowerCase: __("custom item field"),
+                    relationshipI18n: {
                         nameUpperCase: __("Custom item field"),
-                        namePlural: __("custom item fields"),
+                        removeThisMessage: __("Remove this custom item field"),
+                        addNewMessage: __("Add new custom item field"),
+                        noneCreatedYetMessage: __(
+                            "There are no custom item fields created yet"
+                        ),
                     },
                     newRelationshipDefaultAttrs: {
                         type: "object",
@@ -678,10 +689,13 @@ export default {
                     resourceRelationships: {
                         resourceProperty: "item_fields",
                     },
-                    relationshipStrings: {
-                        nameLowerCase: __("item field"),
+                    relationshipI18n: {
                         nameUpperCase: __("Item field"),
-                        namePlural: __("item fields"),
+                        removeThisMessage: __("Remove this item field"),
+                        addNewMessage: __("Add new item field"),
+                        noneCreatedYetMessage: __(
+                            "There are no item fields created yet"
+                        ),
                     },
                     newRelationshipDefaultAttrs: {
                         type: "object",
@@ -730,10 +744,13 @@ export default {
                     resourceRelationships: {
                         resourceProperty: "sort_bin_mappings",
                     },
-                    relationshipStrings: {
-                        nameLowerCase: __("sort bin mapping"),
+                    relationshipI18n: {
                         nameUpperCase: __("Sort bin mapping"),
-                        namePlural: __("sort bin mappings"),
+                        removeThisMessage: __("Remove this sort bin mapping"),
+                        addNewMessage: __("Add new sort bin mapping"),
+                        noneCreatedYetMessage: __(
+                            "There are no sort bin mappings created yet"
+                        ),
                     },
                     newRelationshipDefaultAttrs: {
                         type: "object",
@@ -777,10 +794,13 @@ export default {
                     resourceRelationships: {
                         resourceProperty: "screen_msg_regexs",
                     },
-                    relationshipStrings: {
-                        nameLowerCase: __("screen msg regex"),
+                    relationshipI18n: {
                         nameUpperCase: __("Screen msg regex"),
-                        namePlural: __("screen msg regexs"),
+                        removeThisMessage: __("Remove this screen msg regex"),
+                        addNewMessage: __("Add new screen msg regex"),
+                        noneCreatedYetMessage: __(
+                            "There are no screen msg regexs created yet"
+                        ),
                     },
                     newRelationshipDefaultAttrs: {
                         type: "object",
@@ -834,10 +854,15 @@ export default {
                     resourceRelationships: {
                         resourceProperty: "system_preference_overrides",
                     },
-                    relationshipStrings: {
-                        nameLowerCase: __("system preference override"),
+                    relationshipI18n: {
                         nameUpperCase: __("System preference override"),
-                        namePlural: __("system preference overrides"),
+                        removeThisMessage: __(
+                            "Remove this system preference override"
+                        ),
+                        addNewMessage: __("Add new system preference override"),
+                        noneCreatedYetMessage: __(
+                            "There are no system preference overrides created yet"
+                        ),
                     },
                     newRelationshipDefaultAttrs: {
                         type: "object",
