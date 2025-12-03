@@ -128,6 +128,8 @@ export const routes = [
                     },
                     {
                         path: "processings",
+                        title: $__("Processings"),
+                        disabled: true,
                         children: [
                             {
                                 path: ":processing_id",
