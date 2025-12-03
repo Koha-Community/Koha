@@ -962,7 +962,6 @@
                                         [% IF limited_category %]
                                             <span title="The patron's current category ([% patron_category.description | html %]) is limited to other libraries"><i class="fa fa-exclamation-triangle" aria-hidden="true"></i></span>
                                         [% END %]
-                                        <span class="required">Required</span>
                                     </li>
 
                                     [% UNLESS nosort1 %]
@@ -1663,18 +1662,18 @@
 
 <!-- Expiration date modal-->
 <div id="expirationDateModal" class="modal" tabindex="-1" role="dialog" aria-labelledby="expirationDateModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
+    <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <button type="button" class="closebtn" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title" id="expirationDateModalLabel">Confirm expiration date</h4>
+                <h1 class="modal-title" id="expirationDateModalLabel">Confirm expiration date</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
                 <p>Change expiration date to default for this category?</p>
             </div>
             <div class="modal-footer">
                 <button id="expirationDateConfirmBtn" class="btn btn-primary"><i class="fa fa-check" aria-hidden="true"></i> Yes</button>
-                <button id="expirationDateCancelBtn" data-dismiss="modal" class="btn btn-secondary"><i class="fa fa-times" aria-hidden="true"></i> No</button>
+                <button id="expirationDateCancelBtn" data-bs-dismiss="modal" class="btn btn-secondary"><i class="fa fa-times" aria-hidden="true"></i> No</button>
             </div>
         </div>
     </div>
