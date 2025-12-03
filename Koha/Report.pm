@@ -29,8 +29,8 @@ use base qw(Koha::Object);
 # TODO Koha::Report->store should check this before saving
 
 use constant FORBIDDEN_COLUMN_MATCHES => qw(password token uuid secret);
-use constant WHITELISTED_COLUMN_NAMES =>
-    qw(password_expiration_date password_expiry_days reset_password change_password min_password_length require_strong_password password_expiration_date);
+use constant ALLOWLISTED_COLUMN_NAMES =>
+    qw(password_expiration_date password_expiry_days reset_password change_password min_password_length require_strong_password password_expiration_date force_password_reset_when_set_by_staff);
 
 =head1 NAME
 
@@ -99,8 +99,8 @@ sub check_columns {
         @columns = grep { /$regex/i } @columns;
     }
 
-    # Check for whitelisted variants
-    $regex   = '(^' . ( join '|', WHITELISTED_COLUMN_NAMES ) . ')$';    # should be full match
+    # Check for allowlisted variants
+    $regex   = '(^' . ( join '|', ALLOWLISTED_COLUMN_NAMES ) . ')$';    # should be full match
     @columns = grep { !/$regex/i } @columns;
     return @columns;
 }
