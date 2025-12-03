@@ -37,6 +37,27 @@
 
 [% WRAPPER 'main-container.inc' aside='admin-menu' %]
     <h1 class="parameters"> Transport cost matrix </h1>
+    <div id="toolbar" class="btn-toolbar">
+        <a id="enable_all_cells" class="btn btn-default" href="#"><i class="fa-solid fa-circle-check" aria-hidden="true"></i> Enable all cells</a>
+        <a id="disable_all_empty_cells" class="btn btn-default" href="#"><i class="fa-solid fa-ban" aria-hidden="true"></i> Disable empty cells</a>
+        <div id="addchild" class="btn-group">
+            <button class="btn btn-default dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i class="fa fa-plus"></i> Populate empty cells</button>
+            <ul class="dropdown-menu">
+                <li><a class="populate_empty_cells dropdown-item" data-value="0" href="#">0</a></li>
+                <li><a class="populate_empty_cells dropdown-item" data-value="10" href="#">10</a></li>
+                <li><a class="populate_empty_cells dropdown-item" data-value="20" href="#">20</a></li>
+                <li><a class="populate_empty_cells dropdown-item" data-value="30" href="#">30</a></li>
+                <li><a class="populate_empty_cells dropdown-item" data-value="40" href="#">40</a></li>
+                <li><a class="populate_empty_cells dropdown-item" data-value="50" href="#">50</a></li>
+                <li><a class="populate_empty_cells dropdown-item" data-value="60" href="#">60</a></li>
+                <li><a class="populate_empty_cells dropdown-item" data-value="70" href="#">70</a></li>
+                <li><a class="populate_empty_cells dropdown-item" data-value="80" href="#">80</a></li>
+                <li><a class="populate_empty_cells dropdown-item" data-value="90" href="#">90</a></li>
+                <li><a class="populate_empty_cells dropdown-item" data-value="100" href="#">100</a></li>
+            </ul>
+        </div>
+    </div>
+
     [% IF ( WARNING_transport_cost_matrix_off ) %]
         <div class="alert alert-info"
             >Because the "UseTransportCostMatrix" system preference is currently not enabled, the transport cost matrix is not being used. <br />Go to the
@@ -113,11 +134,13 @@
             }
             alert(_("Cost must be expressed as a decimal number >= 0"));
         }
+
         function disable_transport_cost_chg(e) {
             var input_name = e.name;
             var cost_id = input_name.replace(/disable_/, ""); // Parse the code_id out of the input name
             disable_transport_cost(cost_id, e.checked);
         }
+
         function disable_transport_cost(cost_id, disable) {
             if (disable) {
                 $("#celldiv_" + cost_id)
@@ -131,6 +154,7 @@
                     .removeClass("disabled-transfer");
             }
         }
+
         function enable_cost_input(cost_id) {
             var cell = $("#celldiv_" + cost_id);
             var cost = $(cell).text();
@@ -158,19 +182,52 @@
             $(f).find("input:disabled").prop("disabled", false);
             return true;
         }
+
         $(document).ready(function () {
             $(".enable_cost_input").on("click", function () {
                 var cost_id = $(this).data("cost-id");
                 enable_cost_input(cost_id);
             });
+
             $("body").on("blur", ".cost_input", function () {
                 check_transport_cost(this);
             });
+
             $("body").on("change", ".disable_transport_cost", function () {
                 disable_transport_cost_chg(this);
             });
+
             $("#cost_matrix_form").on("submit", function () {
                 return form_submit(this);
+            });
+
+            $("#enable_all_cells").on("click", function () {
+                $(".enable_cost_input").each(function () {
+                    $(this).trigger("click");
+                });
+
+                $(".disable_transport_cost")
+                    .filter(":checked")
+                    .each(function () {
+                        $(this).trigger("click");
+                    });
+            });
+
+            $("#disable_all_empty_cells").on("click", function () {
+                $(".cost_input").each(function () {
+                    if ($(this).val() == "") {
+                        $(this).siblings(".disable_transport_cost").filter(":not(:checked)").trigger("click");
+                    }
+                });
+            });
+
+            $(".populate_empty_cells").on("click", function () {
+                var value = $(this).data("value");
+                $(".cost_input").each(function () {
+                    if ($(this).val() == "") {
+                        $(this).val(value);
+                    }
+                });
             });
         });
     </script>
