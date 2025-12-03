@@ -129,7 +129,9 @@ subtest fill_holds_at_checkout => sub {
 
 subtest "FeePayment->pay tests" => sub {
 
-    plan tests => 5;
+    plan tests => 6;
+
+    my $inst_id = $builder->build_object( { class => 'Koha::Libraries' } )->id;
 
     # Create a borrower and add some outstanding debts to their account
     my $patron = $builder->build( { source => 'Borrower' } );
@@ -152,7 +154,7 @@ subtest "FeePayment->pay tests" => sub {
     my $pay_type = '00';          # 00 - Cash, 01 - VISA, 02 - Creditcard
     my $ok       = $trans->pay(
         $patron->{borrowernumber}, 100, $pay_type, $debt1->id, 0,
-        0
+        0, undef, $inst_id
     );
     ok( $ok, "FeePayment transaction succeeded" );
     $debt1->discard_changes;
@@ -163,7 +165,8 @@ subtest "FeePayment->pay tests" => sub {
     my $offsets = Koha::Account::Offsets->search( { debit_id => $debt1->id, credit_id => { '!=' => undef } } );
     is( $offsets->count, 1, "FeePayment produced an offset line correctly" );
     my $credit = $offsets->next->credit;
-    is( $credit->payment_type, 'SIP00', "Payment type was set correctly" );
+    is( $credit->payment_type, 'SIP00',  "Payment type was set correctly" );
+    is( $credit->branchcode,   $inst_id, "Branchcode was set correctly" );
 };
 
 subtest cancel_hold => sub {

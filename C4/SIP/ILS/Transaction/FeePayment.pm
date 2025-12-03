@@ -50,6 +50,7 @@ sub pay {
     my $is_writeoff          = shift;
     my $disallow_overpayment = shift;
     my $register_id          = shift;
+    my $inst_id              = shift;
 
     my $type = $is_writeoff ? 'WRITEOFF' : 'PAYMENT';
 
@@ -66,6 +67,7 @@ sub pay {
         payment_type  => 'SIP' . $sip_type,
         interface     => C4::Context->interface,
         cash_register => $register_id,
+        library_id    => $inst_id,
     };
 
     if ($fee_id) {
