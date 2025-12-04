@@ -17,10 +17,10 @@ const mysql = require("mysql2/promise");
  * @type {Object}
  */
 const connectionConfig = {
-    host: "db",
-    user: "koha_kohadev",
-    password: "password",
-    database: "koha_kohadev",
+    host: process.env.DB_HOSTNAME || "db",
+    user: process.env.DB_USER || "koha_kohadev",
+    password: process.env.DB_PASSWORD || "password",
+    database: process.env.DB_NAME || "koha_kohadev",
 };
 
 /**
