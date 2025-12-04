@@ -157,6 +157,11 @@ sub new {
         $response = $class->new( $self, %attr );
     }
 
+    # Strip trailing slash from requestURL for CGI.pm 4.68+ compatibility
+    my $url = $response->requestURL();
+    $url =~ s{/$}{};
+    $response->requestURL($url);
+
     $response->set_handler( XML::SAX::Writer->new( Output => *STDOUT ) );
     $response->xslt("/opac-tmpl/xslt/OAI.xslt");
     $response->generate;

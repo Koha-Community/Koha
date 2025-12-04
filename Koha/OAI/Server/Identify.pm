@@ -33,6 +33,7 @@ sub new {
     my $baseURL = $repository->self_url();
     $baseURL = $+{base_url}
         if $baseURL =~ m/(?<base_url>.*)\?.*/;
+    $baseURL =~ s{/$}{};    # Strip trailing slash for CGI.pm 4.68+ compatibility
 
     my $self = $class->SUPER::new(
         baseURL           => $baseURL,
