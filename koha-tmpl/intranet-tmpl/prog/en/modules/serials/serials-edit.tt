@@ -28,23 +28,25 @@
         window.open("subscription-renew.pl?op=renew&subscriptionid=" + subscriptionid, "subscription_renewal", "width=700,height=400,toolbar=false,scrollbars=yes");
     }
 
+    function presetItemFieldValue(index, fieldName, presetValue) {
+        item_div = $("fieldset#" + index + " div.cataloguing_additem_itemlist div.items");
+        // Getting subfield with correct mapping
+        subfield_div = $(item_div)
+            .find("input[name='kohafield'][value='" + fieldName + "']")
+            .parent();
+        // Setting text field if no saved default value
+        if (!$(subfield_div).children("input[type='text'][name='field_value']").val()) {
+            $(subfield_div).children("input[type='text'][name='field_value']").val(presetValue);
+        }
+    }
     function unHideItems(index, labelindex, serialId) {
         subfield = document.getElementById(index);
         subfield.style.display = "block";
         label = document.getElementById(labelindex);
         label.style.display = "none";
 
-        // Prefilling enumcron subfield with serial enumeration/issue number
-        // Getting item div
-        item_div = $("fieldset#" + index + " div.cataloguing_additem_itemlist div.items");
-        // Getting subfield with enumcron mapping
-        subfield_div = $(item_div).find("input[name='kohafield'][value='items.enumchron']").parent();
-        // Setting text field if no saved default value
-        if (!$(subfield_div).children("input[type='text'][name='field_value']").val()) {
-            $(subfield_div)
-                .children("input[type='text'][name='field_value']")
-                .val($("#serialseq" + serialId).val());
-        }
+        presetItemFieldValue(index, "items.enumchron", $("#serialseq" + serialId).val());
+        presetItemFieldValue(index, "items.booksellerid", $("input[type='hidden'][name='bookseller']").val());
     }
     function HideItems(index, labelindex) {
         subfield = document.getElementById(index);
@@ -192,6 +194,7 @@
                             <input type="hidden" name="biblionumber" value="[% serialslis.biblionumber | html %]" />
                             <input type="hidden" name="itemcount" value="[% serialslis.issuesatonce | html %]" />
                             <input type="hidden" name="user" value="[% serialslis.librarian | html %]" />
+                            <input type="hidden" name="bookseller" value="[% serialslis.aqbooksellerid | html %]" />
                             Issue <input type="text" name="serialseq" id="serialseq[% serialslis.serialid | html %]" value="[% serialslis.serialseq | html %]" size="20" maxlength="100" />
                         </td>
                         <td>
