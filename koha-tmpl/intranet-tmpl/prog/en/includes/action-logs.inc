@@ -242,7 +242,7 @@
     [% CASE 'HIGHHOLDS' %]
         <span>Item had high holds</span>
     [% CASE 'BIBLIO_ALREADY_ISSUED' %]
-        <span>Biblio was already issued</span>
+        <span>An item from this bibliographic record is already checked out</span>
     [% CASE 'DEBARRED' %]
         <span>Patron is restricted</span>
     [% CASE 'RENEWAL_LIMIT' %]
