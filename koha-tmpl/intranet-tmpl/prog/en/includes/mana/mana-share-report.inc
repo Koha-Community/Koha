@@ -24,7 +24,6 @@
                             <li><span class="label">Notes: </span><div id="shared_notes"></div></li>
                             [% IF (languages_loop) %]
                                 <li>
-                                    <input type="hidden" name="op" value="cud-share" />
                                     <label for="mana_language">Language:</label>
                                     <select id="mana_language" name="mana_language">
                                         [% FOREACH languages_loo IN languages_loop %]
@@ -87,6 +86,7 @@
                 <!-- /.modal-body -->
                 <div class="modal-footer">
                     <input type="hidden" id="reportid" name="reportid" />
+                    <input type="hidden" name="op" value="cud-share" />
                     <button id="ManaShareButton" type="submit" class="btn btn-primary shared_infos">Share</button>
                     <button type="button" class="btn btn-default" id="ManaCloseButton" data-bs-dismiss="modal">Cancel</button>
                 </div>
