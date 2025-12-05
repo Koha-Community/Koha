@@ -930,6 +930,7 @@ sub GetNextSeq {
         $calculated =~ s/\{MonthName\}/$dt->month_name/eg;
         $calculated =~ s/\{Year\}/$dt->year/eg;
         $calculated =~ s/\{Day\}/$dt->day/eg;
+        $calculated =~ s/\{Day2\}/sprintf("%02d", $dt->day())/eg;
         $calculated =~ s/\{DayName\}/$dt->day_name/eg;
 
     }
@@ -982,6 +983,7 @@ sub GetSeq {
     $calculated =~ s/\{MonthName\}/$dt->month_name/eg;
     $calculated =~ s/\{Year\}/$dt->year/eg;
     $calculated =~ s/\{Day\}/$dt->day/eg;
+    $calculated =~ s/\{Day2\}/sprintf("%02d", $dt->day())/eg;
     $calculated =~ s/\{DayName\}/$dt->day_name/eg;
 
     return $calculated;
