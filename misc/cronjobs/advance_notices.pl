@@ -262,9 +262,10 @@ my $admin_adress = C4::Context->preference('KohaAdminEmailAddress');
 my @letters;
 UPCOMINGITEM: foreach my $upcoming (@$upcoming_dues) {
     @letters = ();
-    warn 'examining ' . $upcoming->{'itemnumber'} . ' upcoming due items' if $verbose;
+    warn 'examining upcoming due itemnumber: ' . $upcoming->{'itemnumber'} if $verbose;
 
-    my $from_address = $upcoming->{branchemail} || $admin_adress;
+    my $from_address  = $upcoming->{branchemail}   || $admin_adress;
+    my $reply_address = $upcoming->{branchreplyto} || undef;
 
     my $borrower_preferences;
     if ( 0 == $upcoming->{'days_until_due'} ) {
@@ -344,9 +345,12 @@ UPCOMINGITEM: foreach my $upcoming (@$upcoming_dues) {
             # cache this one to process after we've run through all of the items.
             if ($digest_per_branch) {
                 $upcoming_digest->{ $upcoming->{branchcode} }->{ $upcoming->{borrowernumber} }->{email} = $from_address;
+                $upcoming_digest->{ $upcoming->{branchcode} }->{ $upcoming->{borrowernumber} }->{reply} =
+                    $reply_address;
                 $upcoming_digest->{ $upcoming->{branchcode} }->{ $upcoming->{borrowernumber} }->{count}++;
             } else {
                 $upcoming_digest->{ $upcoming->{borrowernumber} }->{email} = $from_address;
+                $upcoming_digest->{ $upcoming->{borrowernumber} }->{reply} = $reply_address;
                 $upcoming_digest->{ $upcoming->{borrowernumber} }->{count}++;
             }
         } else {
@@ -409,6 +413,7 @@ UPCOMINGITEM: foreach my $upcoming (@$upcoming_dues) {
                         letter                 => $letter,
                         borrowernumber         => $upcoming->{'borrowernumber'},
                         from_address           => $from_address,
+                        reply_address          => $reply_address,
                         message_transport_type => $letter->{message_transport_type}
                     }
                 );
@@ -606,8 +611,9 @@ sub send_digests {
 
 PATRON: while ( my ( $borrowernumber, $digest ) = each %{ $params->{digests} } ) {
         @letters = ();
-        my $count        = $digest->{count};
-        my $from_address = $digest->{email};
+        my $count         = $digest->{count};
+        my $from_address  = $digest->{email};
+        my $reply_address = $digest->{reply};
 
         my %branch_info;
         my $branchcode;
@@ -686,6 +692,7 @@ PATRON: while ( my ( $borrowernumber, $digest ) = each %{ $params->{digests} } )
                             letter                 => $letter,
                             borrowernumber         => $borrowernumber,
                             from_address           => $from_address,
+                            reply_address          => $reply_address,
                             message_transport_type => $letter->{message_transport_type}
                         }
                     );

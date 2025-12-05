@@ -3123,7 +3123,7 @@ sub GetUpcomingDueIssues {
     my $dbh = C4::Context->dbh;
     my $statement;
     $statement = q{
-        SELECT issues.*, items.itype as itemtype, items.homebranch, TO_DAYS( date_due )-TO_DAYS( NOW() ) as days_until_due, branches.branchemail
+        SELECT issues.*, items.itype as itemtype, items.homebranch, TO_DAYS( date_due )-TO_DAYS( NOW() ) as days_until_due, branches.branchemail, branches.branchreplyto
         FROM issues
         LEFT JOIN items USING (itemnumber)
         LEFT JOIN branches ON branches.branchcode =
