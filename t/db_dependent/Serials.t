@@ -704,7 +704,7 @@ subtest "NewSubscription|ModSubscription" => sub {
 };
 
 subtest "test numbering pattern with dates in GetSeq GetNextSeq" => sub {
-    plan tests => 4;
+    plan tests => 6;
     $subscription = {
         lastvalue1     => 1, lastvalue2 => 1, lastvalue3 => 1,
         innerloop1     => 0, innerloop2 => 0, innerloop3 => 0,
@@ -737,6 +737,22 @@ subtest "test numbering pattern with dates in GetSeq GetNextSeq" => sub {
     is(
         $numbering, '2024 29 Thursday 2 February',
         'GetNextSeq correctly calculates numbering from next published date, leap year'
+    );
+
+    $pattern = {
+        numberingmethod => '{Year} {Day} {DayName} {Month2} {MonthName}',
+    };
+    $subscription->{firstacquidate} = '2024-02-29';
+    $planneddate                    = '2024-02-29';
+    $numbering                      = GetSeq( $subscription, $pattern );
+    is(
+        $numbering, '2024 29 Thursday 02 February',
+        'GetSeq correctly calculates 2 digit month numbering from first aqui date, leap year'
+    );
+    ($numbering) = GetNextSeq( $subscription, $pattern, undef, $planneddate );
+    is(
+        $numbering, '2024 29 Thursday 02 February',
+        'GetNextSeq correctly calculates 2 digit month numbering from planned date, leap year'
     );
 
 };

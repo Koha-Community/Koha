@@ -926,6 +926,7 @@ sub GetNextSeq {
 
         my $dt = dt_from_string($nextpublisheddate);
         $calculated =~ s/\{Month\}/$dt->month/eg;
+        $calculated =~ s/\{Month2\}/sprintf("%02d", $dt->month())/eg;
         $calculated =~ s/\{MonthName\}/$dt->month_name/eg;
         $calculated =~ s/\{Year\}/$dt->year/eg;
         $calculated =~ s/\{Day\}/$dt->day/eg;
@@ -977,6 +978,7 @@ sub GetSeq {
 
     my $dt = dt_from_string( $subscription->{firstacquidate} );
     $calculated =~ s/\{Month\}/$dt->month/eg;
+    $calculated =~ s/\{Month2\}/sprintf("%02d", $dt->month())/eg;
     $calculated =~ s/\{MonthName\}/$dt->month_name/eg;
     $calculated =~ s/\{Year\}/$dt->year/eg;
     $calculated =~ s/\{Day\}/$dt->day/eg;
