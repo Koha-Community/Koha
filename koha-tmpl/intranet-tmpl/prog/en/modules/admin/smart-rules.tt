@@ -657,7 +657,7 @@
     ><!-- ./page-section -->
 
     <div id="defaults-for-this-library" class="page-section">
-        <h2>Default checkout, hold and return policy[% IF humanbranch %]for [% Branches.GetName( humanbranch ) | html %][% END %]</h2>
+        <h2>Default checkout, hold and return policy [% IF humanbranch %]for [% Branches.GetName( humanbranch ) | html %][% END %]</h2>
         <p>You can set a default maximum number of checkouts, hold policy and return policy that will be used if none is defined below for a particular item type or category.</p>
         <form method="post" action="/cgi-bin/koha/admin/smart-rules.pl">
             [% INCLUDE 'csrf-token.inc' %]
