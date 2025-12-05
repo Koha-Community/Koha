@@ -274,6 +274,8 @@ sub _next_seq {
         $seq,                        $subscription->{lastvalue1}, $subscription->{lastvalue2},
         $subscription->{lastvalue3}, $subscription->{innerloop1},
         $subscription->{innerloop2}, $subscription->{innerloop3}
-    ) = GetNextSeq( $subscription, $pattern, $frequency, $publisheddate );
+        )
+        = GetNextSeq( $subscription, $pattern, $frequency, $publisheddate, $publisheddate )
+        ;    # 5th parameter not really used btw
     return $seq;
 }
