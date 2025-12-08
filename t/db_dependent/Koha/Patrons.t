@@ -39,6 +39,8 @@ use Koha::Holds;
 use Koha::Old::Holds;
 use Koha::Patrons;
 use Koha::Old::Patrons;
+use Koha::Patron::Attribute;
+use Koha::Patron::Attribute::Type;
 use Koha::Patron::Attribute::Types;
 use Koha::Patron::Categories;
 use Koha::Patron::Relationship;
@@ -3605,7 +3607,7 @@ subtest 'filter_by_expired_opac_registrations' => sub {
 
 subtest 'find_by_identifier() tests' => sub {
 
-    plan tests => 7;
+    plan tests => 9;
 
     $schema->storage->txn_begin;
 
@@ -3644,6 +3646,53 @@ subtest 'find_by_identifier() tests' => sub {
     # Test with undef identifier
     $found_patron = Koha::Patrons->find_by_identifier(undef);
     is( $found_patron, undef, 'Returns undef for undef identifier' );
+
+    # Test with unique attributes
+    my $unique_code = 'UA_' . int( rand(100000) );
+    Koha::Patron::Attribute::Type->new(
+        {
+            code        => $unique_code,
+            description => 'Unique Attribute',
+            unique_id   => 1,
+            repeatable  => 0,
+        }
+    )->store;
+
+    my $non_unique_code = 'NUA_' . int( rand(100000) );
+    Koha::Patron::Attribute::Type->new(
+        {
+            code        => $non_unique_code,
+            description => 'Non-Unique Attribute',
+            unique_id   => 0,
+            repeatable  => 0,
+        }
+    )->store;
+
+    my $patron_u = $builder->build_object( { class => 'Koha::Patrons' } );
+    my $val_u    = 'VAL_U_' . int( rand(100000) );
+    Koha::Patron::Attribute->new(
+        {
+            borrowernumber => $patron_u->borrowernumber,
+            code           => $unique_code,
+            attribute      => $val_u,
+        }
+    )->store;
+
+    my $patron_nu = $builder->build_object( { class => 'Koha::Patrons' } );
+    my $val_nu    = 'VAL_NU_' . int( rand(100000) );
+    Koha::Patron::Attribute->new(
+        {
+            borrowernumber => $patron_nu->borrowernumber,
+            code           => $non_unique_code,
+            attribute      => $val_nu,
+        }
+    )->store;
+
+    $found_patron = Koha::Patrons->find_by_identifier($val_u);
+    is( $found_patron ? $found_patron->id : undef, $patron_u->id, 'Found patron by unique attribute' );
+
+    $found_patron = Koha::Patrons->find_by_identifier($val_nu);
+    is( $found_patron, undef, 'Did not find patron by non-unique attribute' );
 
     $schema->storage->txn_rollback;
 };

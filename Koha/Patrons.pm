@@ -63,6 +63,20 @@ sub find_by_identifier {
     # If not found by userid, try cardnumber
     $patron = $self->search( { cardnumber => $identifier } )->next unless $patron;
 
+    # If not found by cardnumber, try unique patron attributes
+    unless ($patron) {
+        $patron = $self->search(
+            {
+                'borrower_attributes.attribute' => $identifier,
+                'code.unique_id'                => 1,
+            },
+            {
+                join => { 'borrower_attributes' => 'code' },
+                rows => 1,
+            }
+        )->single;
+    }
+
     return $patron;
 }
 
