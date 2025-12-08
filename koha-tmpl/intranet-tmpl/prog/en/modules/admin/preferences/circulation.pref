@@ -848,7 +848,12 @@ Circulation:
             - Confirm future hold requests (starting no later than
             - pref: ConfirmFutureHolds
               class: integer
-            - days from now) at checkin time. Note that this number of days is used in determining which holds are considered as 'current holds'. It also sets the default end date for the Holds to pull-report. It still does not interfere with renewing items.
+            - days from now) at checkin time. Note that this number of days is used in determining which holds are considered as 'current holds'. It also sets the default end date for the Holds to pull-report.
+            - pref: FutureHoldsBlockRenewals
+              choices:
+                  1: Allow
+                  0: "Don't allow"
+            - future holds (within the same number of days) to block renewals.
         -
             - Check the rule from the
             - pref: ReservesControlBranch
