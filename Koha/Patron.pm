@@ -22,6 +22,7 @@ use Modern::Perl;
 
 use List::MoreUtils    qw( any none uniq notall zip6);
 use JSON               qw( to_json );
+use Scalar::Util       qw(looks_like_number);
 use Unicode::Normalize qw( NFKD );
 use Try::Tiny;
 use DateTime ();
@@ -3519,7 +3520,7 @@ sub is_patron_inside_charge_limits {
     my $guarantors_non_issues_charges = 0;
 
     # Check the debt of this patrons guarantees
-    if ( defined $no_issues_charge_guarantees ) {
+    if ( defined $no_issues_charge_guarantees && looks_like_number($no_issues_charge_guarantees) ) {
         my @guarantees = map { $_->guarantee } $patron->guarantee_relationships->as_list;
         foreach my $g (@guarantees) {
             $guarantees_non_issues_charges += $g->account->non_issues_charges;
@@ -3527,7 +3528,9 @@ sub is_patron_inside_charge_limits {
     }
 
     # Check the debt of this patrons guarantors *and* the guarantees of those guarantors
-    if ( defined $no_issues_charge_guarantors_with_guarantees ) {
+    if ( defined $no_issues_charge_guarantors_with_guarantees
+        && looks_like_number($no_issues_charge_guarantors_with_guarantees) )
+    {
         $guarantors_non_issues_charges = $patron->relationships_debt(
             { include_guarantors => 1, only_this_guarantor => 0, include_this_patron => 1 } );
     }
