@@ -42,626 +42,614 @@
     [% END #/ WRAPPER breadcrumbs %]
 [% END #/ WRAPPER sub-header.inc %]
 
-<div class="main container-fluid">
-    <div class="row">
-        <div class="col-sm-10 col-sm-push-2 order-sm-1">
-            <main>
-                [% IF view == "cud-form" %]
-                    <h1>Batch modify holds</h1>
-                    <div id="modify_holds_search">
-                        <form method="get" action="/cgi-bin/koha/tools/batch_modify_holds.pl" id="modify_holds_form">
-                            <fieldset class="rows">
-                                <legend>Hold search criteria:</legend>
-                                <ol>
-                                    <li>
-                                        <label for="expirationdate_from">Expiration date from:</label>
-                                        <input type="text" size="10" id="expirationdate_from" name="expirationdate_from" class="flatpickr" />
-                                    </li>
-                                    <li>
-                                        <label for="expirationdate_to">Expiration date to:</label>
-                                        <input type="text" size="10" id="expirationdate_to" name="expirationdate_to" class="flatpickr" />
-                                    </li>
-                                    <li>
-                                        <label for="branchcodes">Libraries:</label>
-                                        <select name="branchcodes" id="branchcodes" multiple="multiple">
-                                            [% PROCESS options_for_libraries libraries => Branches.all(selected => "") %]
-                                        </select>
-                                    </li>
-                                    <li>
-                                        <label for="found_status">Found status:</label>
-                                        <select name="found_status" id="found_status" multiple="multiple">
-                                            <option value="NULL">No status</option>
-                                            <option value="T">In transit</option>
-                                            <option value="P">In processing</option>
-                                            <option value="W">Waiting</option>
-                                        </select>
-                                    </li>
-                                    <li>
-                                        <label for="suspend_status">Suspended:</label>
-                                        <select name="suspend_status" id="suspend_status">
-                                            <option value="none" selected="selected"></option>
-                                            <option value="0">Not suspended</option>
-                                            <option value="1">Suspended</option>
-                                        </select>
-                                    </li>
-                                    <li>
-                                        <label for="suspend_until_from">Suspended until from:</label>
-                                        <input type="text" size="10" id="suspend_until_from" name="suspend_until_from" class="flatpickr" data-date_to="suspend_until_to" />
-                                    </li>
-                                    <li>
-                                        <label for="suspend_until_to">Suspended until to:</label>
-                                        <input type="text" size="10" id="suspend_until_to" name="suspend_until_to" class="flatpickr" />
-                                    </li>
-                                    <li>
-                                        <label for="holdnotes">Hold note:</label>
-                                        <input type="text" id="holdnotes" name="holdnotes" />
-                                    </li>
-                                </ol>
-                            </fieldset>
-                            <fieldset class="action">
-                                <input type="submit" class="btn btn-primary" value="Search" />
-                            </fieldset>
-                        </form>
-                        <!-- /#modify_holds_form -->
-                    </div>
-                    <!-- /#modify_holds_search -->
-                [% ELSIF view == "report" %]
-                    <h1>Modified holds</h1>
-                    <div id="modified_holds_results-wrapper">
-                        <div id="modified_holds_results" class="page-section">
-                            <table id="modified_holds">
-                                <thead>
-                                    <tr>
-                                        <th>Title</th>
-                                        <th>Patron</th>
-                                        <th>Pickup location</th>
-                                        <th>Priority</th>
-                                        <th>Expiration date</th>
-                                        <th>Status</th>
-                                        <th>Suspended</th>
-                                        <th>Suspended until</th>
-                                        <th>Notes</th>
-                                        <!-- Add other columns as needed -->
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    [% FOREACH hold IN updated_holds_obj %]
-                                        <tr>
-                                            <td>[% INCLUDE 'biblio-title.inc' biblio=hold.biblio link = 1 %]</td>
-                                            <td>[% INCLUDE 'patron-title.inc' invert_name=1 patron=hold.borrower hide_patron_infos_if_needed=1 link_to="circulation_reserves" %]</td>
-                                            <td>[% hold.branch.branchname | html %]</td>
-                                            <td>[% hold.priority | html %]</td>
-                                            <td>[% hold.expirationdate | $KohaDates %]</td>
-                                            <td>
-                                                [% IF hold.found == 'F' %]
-                                                    <span>Fulfilled</span>
-                                                [% ELSIF hold.cancellationdate %]
-                                                    <span>Cancelled</span>
-                                                [% ELSIF hold.found == 'W' %]
-                                                    [% IF hold.cancellation_requests.count == 0 %]
-                                                        <span>Waiting</span>
-                                                    [% ELSE %]
-                                                        <span>Cancelled</span>
-                                                    [% END %]
-                                                [% ELSIF hold.found == 'T' %]
-                                                    <span>In transit</span>
-                                                [% ELSE %]
-                                                    <span>Pending</span>
-                                                [% END %]
-                                            </td>
-                                            <td>[% IF hold.suspend %]Yes[% ELSE %]No[% END %]</td>
-                                            <td>[% IF hold.suspend_until %][% hold.suspend_until | $KohaDates %][% ELSE %]-[% END %]</td>
-                                            <td>[% hold.reservenotes | html %]</td>
-                                        </tr>
+[% WRAPPER "main-container.inc" aside="tools-menu" %]
+    [% IF view == "cud-form" %]
+        <h1>Batch modify holds</h1>
+        <div id="modify_holds_search">
+            <form method="get" action="/cgi-bin/koha/tools/batch_modify_holds.pl" id="modify_holds_form">
+                <fieldset class="rows">
+                    <legend>Hold search criteria:</legend>
+                    <ol>
+                        <li>
+                            <label for="expirationdate_from">Expiration date from:</label>
+                            <input type="text" size="10" id="expirationdate_from" name="expirationdate_from" class="flatpickr" />
+                        </li>
+                        <li>
+                            <label for="expirationdate_to">Expiration date to:</label>
+                            <input type="text" size="10" id="expirationdate_to" name="expirationdate_to" class="flatpickr" />
+                        </li>
+                        <li>
+                            <label for="branchcodes">Libraries:</label>
+                            <select name="branchcodes" id="branchcodes" multiple="multiple">
+                                [% PROCESS options_for_libraries libraries => Branches.all(selected => "") %]
+                            </select>
+                        </li>
+                        <li>
+                            <label for="found_status">Found status:</label>
+                            <select name="found_status" id="found_status" multiple="multiple">
+                                <option value="NULL">No status</option>
+                                <option value="T">In transit</option>
+                                <option value="P">In processing</option>
+                                <option value="W">Waiting</option>
+                            </select>
+                        </li>
+                        <li>
+                            <label for="suspend_status">Suspended:</label>
+                            <select name="suspend_status" id="suspend_status">
+                                <option value="none" selected="selected"></option>
+                                <option value="0">Not suspended</option>
+                                <option value="1">Suspended</option>
+                            </select>
+                        </li>
+                        <li>
+                            <label for="suspend_until_from">Suspended until from:</label>
+                            <input type="text" size="10" id="suspend_until_from" name="suspend_until_from" class="flatpickr" data-date_to="suspend_until_to" />
+                        </li>
+                        <li>
+                            <label for="suspend_until_to">Suspended until to:</label>
+                            <input type="text" size="10" id="suspend_until_to" name="suspend_until_to" class="flatpickr" />
+                        </li>
+                        <li>
+                            <label for="holdnotes">Hold note:</label>
+                            <input type="text" id="holdnotes" name="holdnotes" />
+                        </li>
+                    </ol>
+                </fieldset>
+                <fieldset class="action">
+                    <input type="submit" class="btn btn-primary" value="Search" />
+                </fieldset>
+            </form>
+            <!-- /#modify_holds_form -->
+        </div>
+        <!-- /#modify_holds_search -->
+    [% ELSIF view == "report" %]
+        <h1>Modified holds</h1>
+        <div id="modified_holds_results-wrapper">
+            <div id="modified_holds_results" class="page-section">
+                <table id="modified_holds">
+                    <thead>
+                        <tr>
+                            <th>Title</th>
+                            <th>Patron</th>
+                            <th>Pickup location</th>
+                            <th>Priority</th>
+                            <th>Expiration date</th>
+                            <th>Status</th>
+                            <th>Suspended</th>
+                            <th>Suspended until</th>
+                            <th>Notes</th>
+                            <!-- Add other columns as needed -->
+                        </tr>
+                    </thead>
+                    <tbody>
+                        [% FOREACH hold IN updated_holds_obj %]
+                            <tr>
+                                <td>[% INCLUDE 'biblio-title.inc' biblio=hold.biblio link = 1 %]</td>
+                                <td>[% INCLUDE 'patron-title.inc' invert_name=1 patron=hold.borrower hide_patron_infos_if_needed=1 link_to="circulation_reserves" %]</td>
+                                <td>[% hold.branch.branchname | html %]</td>
+                                <td>[% hold.priority | html %]</td>
+                                <td>[% hold.expirationdate | $KohaDates %]</td>
+                                <td>
+                                    [% IF hold.found == 'F' %]
+                                        <span>Fulfilled</span>
+                                    [% ELSIF hold.cancellationdate %]
+                                        <span>Cancelled</span>
+                                    [% ELSIF hold.found == 'W' %]
+                                        [% IF hold.cancellation_requests.count == 0 %]
+                                            <span>Waiting</span>
+                                        [% ELSE %]
+                                            <span>Cancelled</span>
+                                        [% END %]
+                                    [% ELSIF hold.found == 'T' %]
+                                        <span>In transit</span>
+                                    [% ELSE %]
+                                        <span>Pending</span>
                                     [% END %]
-                                </tbody>
-                            </table>
-                        </div>
-                        <!-- /#modified_holds_results -->
-                        <fieldset class="action">
-                            <a href="/cgi-bin/koha/tools/batch_modify_holds.pl">Return to batch hold modification</a>
-                        </fieldset>
-                    </div>
-                    <!-- /#modified_holds_results-wrapper -->
-                [% END %]
-                <div id="modify_holds_results-wrapper" style="display:none;">
-                    <div id="toolbar" class="btn-toolbar">
-                        <a href="#" id="edit_search" class="btn btn-default"><i class="fa-solid fa-pencil" aria-hidden="true"></i> Edit search</a>
-                    </div>
-                    <!-- /#toolbar -->
-                    <form action="/cgi-bin/koha/tools/batch_modify_holds.pl" method="post" id="process_mods">
-                        [% INCLUDE 'csrf-token.inc' %]
-                        <div id="modify_holds_results" class="page-section">
-                            <div id="searchheader" class="searchheader">
-                                <a id="select_all" href="#" class="btn btn-link"><i class="fa fa-check"></i> Select all visible rows</a>
-                                | <a id="clear_all" href="#" class="btn btn-link"><i class="fa fa-times"></i> Clear selections</a>
-                                <div id="table_search_selections" class="btn-group" style="display:none;">
-                                    <span></span>
-                                    <a href="#" id="clear-row-selection"><i class="fa fa-times"></i> Clear</a>
-                                </div>
-                            </div>
-                            <!-- /#searchheader -->
-                            <h3>Holds found for: <span class="searchpattern"></span></h3>
-                            <table id="holds_to_modify"></table>
-                        </div>
-                        <!-- /#modify_holds_results -->
-                        <div id="modify_holds_form_options" class="page-section">
-                            <h2>Modify holds</h2>
-                            <table id="modify_holds_options">
-                                <thead>
-                                    <tr>
-                                        <th>New expiration date</th>
-                                        <th>New pickup library</th>
-                                        <th>Suspend holds</th>
-                                        <th>Suspend until</th>
-                                        <th>New hold note</th>
-                                        <th>Clear hold notes</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td>
-                                            <input type="text" id="new_expiration_date" name="new_expiration_date" class="flatpickr" data-flatpickr-futuredate="true" />
-                                        </td>
-                                        <td>
-                                            <select name="new_pickup_loc" id="new_pickup_loc">
-                                                <option value="" selected="selected"></option>
-                                                [% PROCESS options_for_libraries libraries => Branches.pickup_locations({ selected => "" }) %]
-                                            </select>
-                                        </td>
-                                        <td>
-                                            <select id="new_suspend_status" name="new_suspend_status">
-                                                <option value="" selected="selected"></option>
-                                                <option value="0">Not suspended</option>
-                                                <option value="1">Suspend</option>
-                                            </select>
-                                        </td>
-                                        <td>
-                                            <input type="text" id="new_suspend_date" name="new_suspend_date" class="flatpickr" data-flatpickr-futuredate="true" />
-                                        </td>
-                                        <td>
-                                            <input type="text" id="new_hold_note" name="new_hold_note" />
-                                        </td>
-                                        <td>
-                                            <input class="selection" type="checkbox" id="clear_hold_notes" name="clear_hold_notes" value="1" />
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                            <!-- /#modify_holds_options -->
-                        </div>
-                        <!-- /#modify_holds_options -->
-                        <fieldset class="action">
-                            <input type="hidden" name="op" value="cud-modify" />
-                            <input type="submit" class="btn btn-primary" value="Modify holds" />
-                            <a class="cancel" href="/cgi-bin/koha/tools/batch_modify_holds.pl">Cancel</a>
-                        </fieldset>
-                    </form>
-                    <!-- /#process_mods -->
-                </div>
-                <!-- /#modify_holds_results-wrapper -->
-            </main>
+                                </td>
+                                <td>[% IF hold.suspend %]Yes[% ELSE %]No[% END %]</td>
+                                <td>[% IF hold.suspend_until %][% hold.suspend_until | $KohaDates %][% ELSE %]-[% END %]</td>
+                                <td>[% hold.reservenotes | html %]</td>
+                            </tr>
+                        [% END %]
+                    </tbody>
+                </table>
+            </div>
+            <!-- /#modified_holds_results -->
+            <fieldset class="action">
+                <a href="/cgi-bin/koha/tools/batch_modify_holds.pl">Return to batch hold modification</a>
+            </fieldset>
         </div>
-        <!-- /.col-sm-10 col-sm-push-2 -->
-        <div class="col-sm-2 col-sm-pull-10">
-            <aside> [% INCLUDE 'tools-menu.inc' %] </aside>
-        </div>
-        <!-- /.col-sm-2 col-sm-pull-10 -->
-    </div>
-    [% MACRO jsinclude BLOCK %]
-        [% Asset.js("js/tools-menu.js") | $raw %]
-        [% INCLUDE 'calendar.inc' %]
-        [% INCLUDE 'datatables.inc' %]
-        [% INCLUDE 'select2.inc' %]
-        [% INCLUDE 'js-biblio-format.inc' %]
-        [% Asset.js("lib/jquery/plugins/humanmsg.js") | $raw %]
-        <script>
-            let hide_patron_name = [% IF Koha.Preference('HidePatronName') %]true[% ELSE %]false[% END %];
-            let hold_ids = [% IF updated_holds %] [% updated_holds | $raw %] [% ELSE %] [] [% END %];
-            let hold_ids_from_sql = [% IF reserve_ids_list  %] [% reserve_ids_list  | $raw %] [% ELSE %] [] [% END %];
-
-            $(document).ready(function() {
-
-                // Apply select2 to all select fields having a "multiple" attribute
-                let selectFields = document.querySelectorAll('select[multiple]');
-                selectFields.forEach((selectField) => {
-                    selectField.style.minWidth = '200px';
-                    $(selectField).select2();
-                });
-
-                //Empty local storage from previous selections
-                localStorage.removeItem("holds_modify_selections");
-
-                $("#holds_to_modify").on("change", "input[type='checkbox']", function(){
-                    var holds_modify_selections = JSON.parse(localStorage.getItem("holds_modify_selections")) || [];
-                    var hold_id = $(this).val();
-                    if ($(this).prop("checked")) {
-
-                        hold_data = {
-                            hold_id: hold_id,
-                            found_status: $(this).closest('tr').find('.found_status').children('span').data('found-status'),
-                            suspended: $(this).closest('tr').find('.suspended').children('span').data('suspended'),
-                        }
-
-                        holds_modify_selections.push(hold_data);
-                        localStorage.setItem("holds_modify_selections", JSON.stringify(holds_modify_selections));
-                        showHoldSelections(holds_modify_selections.length);
-                    } else {
-                        var filtered = holds_modify_selections.filter(function( hold_obj ){
-                            return hold_obj.hold_id !== hold_id;
-                        });
-                        if( filtered.length > 0 ){
-                            localStorage.setItem("holds_modify_selections", JSON.stringify( filtered ));
-                            holds_modify_selections = filtered;
-                            showHoldSelections( filtered.length );
-                        } else {
-                            holds_modify_selections = [];
-                            localStorage.removeItem("holds_modify_selections");
-                            showHoldSelections( 0 );
-                        }
-                    }
-                });
-
-                $("#select_all").on("click", function(e){
-                    e.preventDefault();
-                    $("#holds_to_modify input[type='checkbox']").each(function(){
-                        $(this).prop("checked", true).change();
-                    });
-                });
-
-                $("#clear_all").on("click", function(e){
-                    e.preventDefault();
-                    $("#holds_to_modify input[type='checkbox']").each(function(){
-                        $(this).prop("checked", false).change();
-                    });
-                });
-
-                $("#clear-row-selection").on("click", function (e) {
-                    e.preventDefault();
-                    $("input[type='checkbox']").prop("checked", false).change();
-                    localStorage.removeItem("holds_modify_selections");
-                    $("#table_search_selections").hide();
-                });
-
-                $('#modify_holds_form').submit(function() {
-                    var modify_holds_form = $(this);
-                    search_holds(modify_holds_form);
-                    $("#modify_holds_search").hide();
-                    $('#edit_search').show();
-                    return false;
-                });
-
-                if(hold_ids_from_sql.length > 0){
-                    $('#modify_holds_form').trigger('submit');
-                }
-
-                $("#edit_search").on("click", function(e){
-                    e.preventDefault();
-                    $('#modify_holds_search').show();
-                    $('#edit_search').hide();
-                });
-
-                function showHoldSelections( number ){
-                    if (number === 0) {
-                        $("#table_search_selections").hide();
-                    } else {
-                        $("#table_search_selections")
-                            .show()
-                            .find("span")
-                            .text(_("Holds selected: %s").format(number));
-                    }
-                }
-
-                function search_holds(modify_holds_form){
-                    var table_settings = [% TablesSettings.GetTableSettings( 'tools', 'batch_hold_modification', 'holds_to_modify', 'json' ) | $raw %];
-                    var searchpattern = "";
-                    var filters = {
-                        "me.expirationdate": function(){
-                            var expirationdate_from = modify_holds_form.find("#expirationdate_from").val();
-                            var expirationdate_to   = modify_holds_form.find("#expirationdate_to").val();
-
-                            if (expirationdate_from && expirationdate_to){
-                                searchpattern += _("expiration date between ") + expirationdate_from + " and " + expirationdate_to + " ";
-                                return {"-between": [expirationdate_from, expirationdate_to]};
-                            }
-                            else if (expirationdate_from && !expirationdate_to){
-                                searchpattern += _("expiration date from ") + expirationdate_from + " ";
-                                return {">=": expirationdate_from };
-                            } else if (!expirationdate_from && expirationdate_to){
-                                searchpattern += _("expiration date to ") + expirationdate_to + " ";
-                                return {"<=": expirationdate_to };
-                            }
-                        },
-                        "me.branchcode": function(){
-                            var branchcodes = modify_holds_form.find("#branchcodes").val();
-                            if( branchcodes.length > 0 ){
-                                searchpattern += _("from libraries ");
-                                var selected_libraries = modify_holds_form.find("#branchcodes option:selected");
-                                $.each(selected_libraries, function(key, value) {
-                                    searchpattern += value.text + " ";
-                                });
-                                return {"-in": branchcodes };
-                            }
-                        },
-                        "me.status": function(){
-                            var found_status = modify_holds_form.find("#found_status").val();
-                            if( found_status.length > 0 ){
-                                var filters = [{"-in": found_status}];
-                                if(jQuery.inArray("NULL", found_status) !== -1){
-                                    filters.push({"=": null});
-                                }
-                                searchpattern += _("found status in ");
-                                $.each(found_status, function(key, value) {
-                                    let status = _("No status ");
-                                    if ( value == "T" ) {
-                                        status = _("In transit ");
-                                    } else if( value == "P" ) {
-                                        status = _("In processing ");
-                                    } else if( value == "W" ) {
-                                        status = _("Waiting ");
-                                    }
-                                    searchpattern += status;
-                                });
-                                return filters;
-                            }
-                        },
-                        "me.suspended": function(){
-                            var suspend_status = modify_holds_form.find("#suspend_status").val();
-
-                            if(suspend_status != "none"){
-                                var suspended_text = suspend_status == 0 ? _("Not suspended") : _("Suspended");
-                                searchpattern += _("with suspend status ") + suspended_text;
-
-                                return {"=": suspend_status};
-                            }
-                        },
-                        "me.suspend_until": function(){
-                            var suspend_until_from = modify_holds_form.find("#suspend_until_from").val();
-                            var suspend_until_to   = modify_holds_form.find("#suspend_until_to").val();
-
-                            if (suspend_until_from && suspend_until_to){
-                                searchpattern += _("suspend date between ") + suspend_until_from + " and " + suspend_until_to + " ";
-                                return {"-between": [suspend_until_from, suspend_until_to]};
-                            }
-                            else if (suspend_until_from && !suspend_until_to){
-                                searchpattern += _("suspend date from ") + suspend_until_from + " ";
-                                return {">=": suspend_until_from };
-                            } else if (!suspend_until_from && suspend_until_to){
-                                searchpattern += _("suspend date to ") + suspend_until_to + " ";
-                                return {"<=": suspend_until_to };
-                            }
-                        },
-                        "me.notes": function(){
-                            var holdnotes = modify_holds_form.find("#holdnotes").val();
-
-                            searchpattern += holdnotes ? _("hold notes like ") + holdnotes : "";
-
-                            return holdnotes ? {"-like": "%"+holdnotes+"%"} : "";
-                        },
-                        "me.hold_id": function(){
-                            return hold_ids_from_sql.length > 0 ? { "-in": hold_ids_from_sql } : "";
-                        }
-                    }
-
-                    var holds_modify_table = $("#holds_to_modify").kohaTable({
-                        ajax: {
-                            "url": "/api/v1/holds"
-                        },
-                        embed: [
-                            "biblio",
-                            "item",
-                            "pickup_library",
-                            "patron"
-                        ],
-                        destroy: true,
-                        autoWidth: false,
-                        processing: true,
-                        order: [
-                            [1, 'asc']
-                        ],
-                        columns: [
-                            {
-                                "data": "hold_id",
-                                "name": "checkbox",
-                                "orderable": false,
-                                "render": function(data, type, row, meta) {
-                                    return '<input class="selection" type="checkbox" value="'+ encodeURIComponent(data) +'"/>'
-                                }
-                            },
-                            {
-                                "data": "hold_date",
-                                "name": "hold_date",
-                                "type": "date",
-                                "title": _("Hold date"),
-                                "orderable": true,
-                                "render": function( data, type, row, meta ) {
-                                    return $date(data);
-                                }
-                            },
-                            {
-                                "data": "expiration_date",
-                                "name": "expiration_date",
-                                "type": "date",
-                                "title": _("Expiration date"),
-                                "orderable": true,
-                                "render": function( data, type, row, meta ) {
-                                    return $date(data);
-                                }
-                            },
-                            {
-                                "data": "biblio.title:biblio.subtitle:biblio.medium",
-                                "title": _("Title"),
-                                "searchable": true,
-                                "orderable": true,
-                                "render": function(data, type, row, meta) {
-                                    return $biblio_to_html(row.biblio, { link: 1 });
-                                }
-                            },
-                            {
-                                "data": "item.external_id",
-                                "name": "barcode",
-                                "title": _("Barcode"),
-                                "defaultContent": _(""),
-                                "orderable": true,
-                                "render": function( data, type, row, meta ) {
-                                    if( row.item ){
-                                        let item_id = encodeURIComponent( row.item_id );
-                                        let biblio_id = encodeURIComponent( row.biblio_id );
-                                        return '<a href="/cgi-bin/koha/catalogue/moredetail.pl?' +
-                                        'itemnumber='+ item_id +'&biblionumber='+ biblio_id +'&' +
-                                        'bi='+ biblio_id +'#item'+ item_id +'">' + escape_str( data ) + '</a>'
-                                    }
-                                }
-                            },
-                            {
-                                "data": "patron_id",
-                                "name": "patron",
-                                "title": _("Patron"),
-                                "orderable": true,
-                                "render": function( data, type, row, meta ) {
-                                    let patron_to_html = $patron_to_html(row.patron, { url: true, display_cardnumber: true, hide_patron_name });
-                                    return patron_to_html;
-                                }
-                            },
-                            {
-                                "data": "status",
-                                "name": "status",
-                                "title": _("Status"),
-                                "className": "found_status",
-                                "orderable": true,
-                                "render": function( data, type, row, meta ) {
-                                    let status = _("No status");
-                                    if ( data == "T" ) {
-                                        status = _("In transit");
-                                    } else if( data == "P" ) {
-                                        status = _("In processing");
-                                    } else if( data == "W" ) {
-                                        status = _("Waiting");
-                                    }
-                                    return "<span data-found-status='" + escape_str( data ) + "'>" + status + "</span>";
-                                }
-                            },
-                            {
-                                "data": "pickup_library_id",
-                                "name": "pickup_library",
-                                "title": _("Hold pickup library"),
-                                "orderable": true,
-                                "render": function( data, type, row, meta ) {
-                                    return escape_str( row.pickup_library.name );
-                                }
-                            },
-                            {
-                                "data": "suspended",
-                                "name": "suspended",
-                                "className": "suspended",
-                                "title": _("Suspended"),
-                                "orderable": true,
-                                "render": function( data, type, row, meta ) {
-                                    var suspended_string = data == 0 ? _("No") : _("Yes");
-                                    return "<span data-suspended='" + data + "'>" + suspended_string + "</span>";
-                                }
-                            },
-                            {
-                                "data": "suspended_until",
-                                "name": "suspended_until",
-                                "title": _("Suspended until"),
-                                "orderable": true,
-                                "render": function( data, type, row, meta ) {
-                                    return $date( data );
-                                }
-                            },
-                            {
-                                "data": "notes",
-                                "name": "notes",
-                                "title": _("Notes"),
-                                "orderable": true,
-                                "render": function( data, type, row, meta ) {
-                                    return escape_str( data );
-                                }
-                            }
-                        ],
-                    }, table_settings, 0, filters);
-
-                    $(".searchpattern").text(searchpattern);
-
-                    $("#modify_holds_results-wrapper").show();
-                }
-
-                $("#process_mods").on('submit', function(e) {
-
-                    var hold_ids = JSON.parse( localStorage.getItem("holds_modify_selections") ) || [];
-
-                    $("#process_mods input[name='hold_id']").remove();
-
-                    hold_ids.forEach(function(hold) {
-                        $('<input>').attr({
-                            type: 'hidden',
-                            name: 'hold_id',
-                            value: hold.hold_id
-                        }).appendTo('#process_mods');
-                    });
-
-                    var errors = [];
-
-                    var new_expiration_date = $("#new_expiration_date").val();
-                    var new_pickup_loc      = $("#new_pickup_loc").val();
-                    var new_suspend_status  = $("#new_suspend_status").val();
-                    var new_suspend_date    = $("#new_suspend_date").val();
-                    var new_hold_note       = $("#new_hold_note").val();
-                    var clear_hold_notes    = $("#clear_hold_notes").val();
-
-                    if ( hold_ids.length == 0 ) {
-                        e.preventDefault();
-                        errors.push(_("Please select at least one hold to process."));
-                    }
-
-                    if( new_pickup_loc || new_suspend_status || new_suspend_date ){
-                        var found = false;
-                        hold_ids.forEach(function(hold){
-                            if( hold.found_status ){
-                                e.preventDefault();
-                                found = true;
-                            }
-                        });
-                        if( ( new_suspend_status || new_suspend_date ) && found ){
-                            errors.push(_("One or more holds have found status and can't be suspended."));
-                        }
-                        if( new_pickup_loc && found ){
-                            errors.push(_("One or more holds have found status and their pick up location can't be changed."));
-                        }
-                    }
-
-                    var suspended = false;
-
-                    hold_ids.forEach(function(hold){
-                        if( hold.suspened ){
-                            suspended = true;
-                        }
-                    });
-
-                    if( ( !new_suspend_status || new_suspend_status == "0" || !suspended ) && new_suspend_date ){
-                        new_suspend_status = 1;
-                    }
-
-                    if (errors.length > 0) {
-                        e.preventDefault();
-                        $("#errorList").html(errors.map(error => `<li>${error}</li>`).join(""));
-                        $("#errorModal").modal('show');
-                        return false;
-                    }
-                    return true;
-                });
-
-                //Modified holds table
-                var table_settings = [% TablesSettings.GetTableSettings( 'circ', 'holds', 'modified_holds', 'json' ) | $raw %];
-                $("#modified_holds").kohaTable({
-                    pagingType: "full",
-                    autoWidth: false
-                }, table_settings);
-
-            });
-        </script>
+        <!-- /#modified_holds_results-wrapper -->
     [% END %]
+    <div id="modify_holds_results-wrapper" style="display:none;">
+        <div id="toolbar" class="btn-toolbar">
+            <a href="#" id="edit_search" class="btn btn-default"><i class="fa-solid fa-pencil" aria-hidden="true"></i> Edit search</a>
+        </div>
+        <!-- /#toolbar -->
+        <form action="/cgi-bin/koha/tools/batch_modify_holds.pl" method="post" id="process_mods">
+            [% INCLUDE 'csrf-token.inc' %]
+            <div id="modify_holds_results" class="page-section">
+                <div id="searchheader" class="searchheader">
+                    <a id="select_all" href="#" class="btn btn-link"><i class="fa fa-check"></i> Select all visible rows</a>
+                    | <a id="clear_all" href="#" class="btn btn-link"><i class="fa fa-times"></i> Clear selections</a>
+                    <div id="table_search_selections" class="btn-group" style="display:none;">
+                        <span></span>
+                        <a href="#" id="clear-row-selection"><i class="fa fa-times"></i> Clear</a>
+                    </div>
+                </div>
+                <!-- /#searchheader -->
+                <h3>Holds found for: <span class="searchpattern"></span></h3>
+                <table id="holds_to_modify"></table>
+            </div>
+            <!-- /#modify_holds_results -->
+            <div id="modify_holds_form_options" class="page-section">
+                <h2>Modify holds</h2>
+                <table id="modify_holds_options">
+                    <thead>
+                        <tr>
+                            <th>New expiration date</th>
+                            <th>New pickup library</th>
+                            <th>Suspend holds</th>
+                            <th>Suspend until</th>
+                            <th>New hold note</th>
+                            <th>Clear hold notes</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>
+                                <input type="text" id="new_expiration_date" name="new_expiration_date" class="flatpickr" data-flatpickr-futuredate="true" />
+                            </td>
+                            <td>
+                                <select name="new_pickup_loc" id="new_pickup_loc">
+                                    <option value="" selected="selected"></option>
+                                    [% PROCESS options_for_libraries libraries => Branches.pickup_locations({ selected => "" }) %]
+                                </select>
+                            </td>
+                            <td>
+                                <select id="new_suspend_status" name="new_suspend_status">
+                                    <option value="" selected="selected"></option>
+                                    <option value="0">Not suspended</option>
+                                    <option value="1">Suspend</option>
+                                </select>
+                            </td>
+                            <td>
+                                <input type="text" id="new_suspend_date" name="new_suspend_date" class="flatpickr" data-flatpickr-futuredate="true" />
+                            </td>
+                            <td>
+                                <input type="text" id="new_hold_note" name="new_hold_note" />
+                            </td>
+                            <td>
+                                <input class="selection" type="checkbox" id="clear_hold_notes" name="clear_hold_notes" value="1" />
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <!-- /#modify_holds_options -->
+            </div>
+            <!-- /#modify_holds_options -->
+            <fieldset class="action">
+                <input type="hidden" name="op" value="cud-modify" />
+                <input type="submit" class="btn btn-primary" value="Modify holds" />
+                <a class="cancel" href="/cgi-bin/koha/tools/batch_modify_holds.pl">Cancel</a>
+            </fieldset>
+        </form>
+        <!-- /#process_mods -->
+    </div>
+    <!-- /#modify_holds_results-wrapper -->
+[% END %]
+[% MACRO jsinclude BLOCK %]
+    [% Asset.js("js/tools-menu.js") | $raw %]
+    [% INCLUDE 'calendar.inc' %]
+    [% INCLUDE 'datatables.inc' %]
+    [% INCLUDE 'select2.inc' %]
+    [% INCLUDE 'js-biblio-format.inc' %]
+    [% Asset.js("lib/jquery/plugins/humanmsg.js") | $raw %]
+    <script>
+        let hide_patron_name = [% IF Koha.Preference('HidePatronName') %]true[% ELSE %]false[% END %];
+        let hold_ids = [% IF updated_holds %] [% updated_holds | $raw %] [% ELSE %] [] [% END %];
+        let hold_ids_from_sql = [% IF reserve_ids_list  %] [% reserve_ids_list  | $raw %] [% ELSE %] [] [% END %];
 
-    [% INCLUDE 'intranet-bottom.inc' %]
-</div>
+        $(document).ready(function() {
+
+            // Apply select2 to all select fields having a "multiple" attribute
+            let selectFields = document.querySelectorAll('select[multiple]');
+            selectFields.forEach((selectField) => {
+                selectField.style.minWidth = '200px';
+                $(selectField).select2();
+            });
+
+            //Empty local storage from previous selections
+            localStorage.removeItem("holds_modify_selections");
+
+            $("#holds_to_modify").on("change", "input[type='checkbox']", function(){
+                var holds_modify_selections = JSON.parse(localStorage.getItem("holds_modify_selections")) || [];
+                var hold_id = $(this).val();
+                if ($(this).prop("checked")) {
+
+                    hold_data = {
+                        hold_id: hold_id,
+                        found_status: $(this).closest('tr').find('.found_status').children('span').data('found-status'),
+                        suspended: $(this).closest('tr').find('.suspended').children('span').data('suspended'),
+                    }
+
+                    holds_modify_selections.push(hold_data);
+                    localStorage.setItem("holds_modify_selections", JSON.stringify(holds_modify_selections));
+                    showHoldSelections(holds_modify_selections.length);
+                } else {
+                    var filtered = holds_modify_selections.filter(function( hold_obj ){
+                        return hold_obj.hold_id !== hold_id;
+                    });
+                    if( filtered.length > 0 ){
+                        localStorage.setItem("holds_modify_selections", JSON.stringify( filtered ));
+                        holds_modify_selections = filtered;
+                        showHoldSelections( filtered.length );
+                    } else {
+                        holds_modify_selections = [];
+                        localStorage.removeItem("holds_modify_selections");
+                        showHoldSelections( 0 );
+                    }
+                }
+            });
+
+            $("#select_all").on("click", function(e){
+                e.preventDefault();
+                $("#holds_to_modify input[type='checkbox']").each(function(){
+                    $(this).prop("checked", true).change();
+                });
+            });
+
+            $("#clear_all").on("click", function(e){
+                e.preventDefault();
+                $("#holds_to_modify input[type='checkbox']").each(function(){
+                    $(this).prop("checked", false).change();
+                });
+            });
+
+            $("#clear-row-selection").on("click", function (e) {
+                e.preventDefault();
+                $("input[type='checkbox']").prop("checked", false).change();
+                localStorage.removeItem("holds_modify_selections");
+                $("#table_search_selections").hide();
+            });
+
+            $('#modify_holds_form').submit(function() {
+                var modify_holds_form = $(this);
+                search_holds(modify_holds_form);
+                $("#modify_holds_search").hide();
+                $('#edit_search').show();
+                return false;
+            });
+
+            if(hold_ids_from_sql.length > 0){
+                $('#modify_holds_form').trigger('submit');
+            }
+
+            $("#edit_search").on("click", function(e){
+                e.preventDefault();
+                $('#modify_holds_search').show();
+                $('#edit_search').hide();
+            });
+
+            function showHoldSelections( number ){
+                if (number === 0) {
+                    $("#table_search_selections").hide();
+                } else {
+                    $("#table_search_selections")
+                        .show()
+                        .find("span")
+                        .text(_("Holds selected: %s").format(number));
+                }
+            }
+
+            function search_holds(modify_holds_form){
+                var table_settings = [% TablesSettings.GetTableSettings( 'tools', 'batch_hold_modification', 'holds_to_modify', 'json' ) | $raw %];
+                var searchpattern = "";
+                var filters = {
+                    "me.expirationdate": function(){
+                        var expirationdate_from = modify_holds_form.find("#expirationdate_from").val();
+                        var expirationdate_to   = modify_holds_form.find("#expirationdate_to").val();
+
+                        if (expirationdate_from && expirationdate_to){
+                            searchpattern += _("expiration date between ") + expirationdate_from + " and " + expirationdate_to + " ";
+                            return {"-between": [expirationdate_from, expirationdate_to]};
+                        }
+                        else if (expirationdate_from && !expirationdate_to){
+                            searchpattern += _("expiration date from ") + expirationdate_from + " ";
+                            return {">=": expirationdate_from };
+                        } else if (!expirationdate_from && expirationdate_to){
+                            searchpattern += _("expiration date to ") + expirationdate_to + " ";
+                            return {"<=": expirationdate_to };
+                        }
+                    },
+                    "me.branchcode": function(){
+                        var branchcodes = modify_holds_form.find("#branchcodes").val();
+                        if( branchcodes.length > 0 ){
+                            searchpattern += _("from libraries ");
+                            var selected_libraries = modify_holds_form.find("#branchcodes option:selected");
+                            $.each(selected_libraries, function(key, value) {
+                                searchpattern += value.text + " ";
+                            });
+                            return {"-in": branchcodes };
+                        }
+                    },
+                    "me.status": function(){
+                        var found_status = modify_holds_form.find("#found_status").val();
+                        if( found_status.length > 0 ){
+                            var filters = [{"-in": found_status}];
+                            if(jQuery.inArray("NULL", found_status) !== -1){
+                                filters.push({"=": null});
+                            }
+                            searchpattern += _("found status in ");
+                            $.each(found_status, function(key, value) {
+                                let status = _("No status ");
+                                if ( value == "T" ) {
+                                    status = _("In transit ");
+                                } else if( value == "P" ) {
+                                    status = _("In processing ");
+                                } else if( value == "W" ) {
+                                    status = _("Waiting ");
+                                }
+                                searchpattern += status;
+                            });
+                            return filters;
+                        }
+                    },
+                    "me.suspended": function(){
+                        var suspend_status = modify_holds_form.find("#suspend_status").val();
+
+                        if(suspend_status != "none"){
+                            var suspended_text = suspend_status == 0 ? _("Not suspended") : _("Suspended");
+                            searchpattern += _("with suspend status ") + suspended_text;
+
+                            return {"=": suspend_status};
+                        }
+                    },
+                    "me.suspend_until": function(){
+                        var suspend_until_from = modify_holds_form.find("#suspend_until_from").val();
+                        var suspend_until_to   = modify_holds_form.find("#suspend_until_to").val();
+
+                        if (suspend_until_from && suspend_until_to){
+                            searchpattern += _("suspend date between ") + suspend_until_from + " and " + suspend_until_to + " ";
+                            return {"-between": [suspend_until_from, suspend_until_to]};
+                        }
+                        else if (suspend_until_from && !suspend_until_to){
+                            searchpattern += _("suspend date from ") + suspend_until_from + " ";
+                            return {">=": suspend_until_from };
+                        } else if (!suspend_until_from && suspend_until_to){
+                            searchpattern += _("suspend date to ") + suspend_until_to + " ";
+                            return {"<=": suspend_until_to };
+                        }
+                    },
+                    "me.notes": function(){
+                        var holdnotes = modify_holds_form.find("#holdnotes").val();
+
+                        searchpattern += holdnotes ? _("hold notes like ") + holdnotes : "";
+
+                        return holdnotes ? {"-like": "%"+holdnotes+"%"} : "";
+                    },
+                    "me.hold_id": function(){
+                        return hold_ids_from_sql.length > 0 ? { "-in": hold_ids_from_sql } : "";
+                    }
+                }
+
+                var holds_modify_table = $("#holds_to_modify").kohaTable({
+                    ajax: {
+                        "url": "/api/v1/holds"
+                    },
+                    embed: [
+                        "biblio",
+                        "item",
+                        "pickup_library",
+                        "patron"
+                    ],
+                    destroy: true,
+                    autoWidth: false,
+                    processing: true,
+                    order: [
+                        [1, 'asc']
+                    ],
+                    columns: [
+                        {
+                            "data": "hold_id",
+                            "name": "checkbox",
+                            "orderable": false,
+                            "render": function(data, type, row, meta) {
+                                return '<input class="selection" type="checkbox" value="'+ encodeURIComponent(data) +'"/>'
+                            }
+                        },
+                        {
+                            "data": "hold_date",
+                            "name": "hold_date",
+                            "type": "date",
+                            "title": _("Hold date"),
+                            "orderable": true,
+                            "render": function( data, type, row, meta ) {
+                                return $date(data);
+                            }
+                        },
+                        {
+                            "data": "expiration_date",
+                            "name": "expiration_date",
+                            "type": "date",
+                            "title": _("Expiration date"),
+                            "orderable": true,
+                            "render": function( data, type, row, meta ) {
+                                return $date(data);
+                            }
+                        },
+                        {
+                            "data": "biblio.title:biblio.subtitle:biblio.medium",
+                            "title": _("Title"),
+                            "searchable": true,
+                            "orderable": true,
+                            "render": function(data, type, row, meta) {
+                                return $biblio_to_html(row.biblio, { link: 1 });
+                            }
+                        },
+                        {
+                            "data": "item.external_id",
+                            "name": "barcode",
+                            "title": _("Barcode"),
+                            "defaultContent": _(""),
+                            "orderable": true,
+                            "render": function( data, type, row, meta ) {
+                                if( row.item ){
+                                    let item_id = encodeURIComponent( row.item_id );
+                                    let biblio_id = encodeURIComponent( row.biblio_id );
+                                    return '<a href="/cgi-bin/koha/catalogue/moredetail.pl?' +
+                                    'itemnumber='+ item_id +'&biblionumber='+ biblio_id +'&' +
+                                    'bi='+ biblio_id +'#item'+ item_id +'">' + escape_str( data ) + '</a>'
+                                }
+                            }
+                        },
+                        {
+                            "data": "patron_id",
+                            "name": "patron",
+                            "title": _("Patron"),
+                            "orderable": true,
+                            "render": function( data, type, row, meta ) {
+                                let patron_to_html = $patron_to_html(row.patron, { url: true, display_cardnumber: true, hide_patron_name });
+                                return patron_to_html;
+                            }
+                        },
+                        {
+                            "data": "status",
+                            "name": "status",
+                            "title": _("Status"),
+                            "className": "found_status",
+                            "orderable": true,
+                            "render": function( data, type, row, meta ) {
+                                let status = _("No status");
+                                if ( data == "T" ) {
+                                    status = _("In transit");
+                                } else if( data == "P" ) {
+                                    status = _("In processing");
+                                } else if( data == "W" ) {
+                                    status = _("Waiting");
+                                }
+                                return "<span data-found-status='" + escape_str( data ) + "'>" + status + "</span>";
+                            }
+                        },
+                        {
+                            "data": "pickup_library_id",
+                            "name": "pickup_library",
+                            "title": _("Hold pickup library"),
+                            "orderable": true,
+                            "render": function( data, type, row, meta ) {
+                                return escape_str( row.pickup_library.name );
+                            }
+                        },
+                        {
+                            "data": "suspended",
+                            "name": "suspended",
+                            "className": "suspended",
+                            "title": _("Suspended"),
+                            "orderable": true,
+                            "render": function( data, type, row, meta ) {
+                                var suspended_string = data == 0 ? _("No") : _("Yes");
+                                return "<span data-suspended='" + data + "'>" + suspended_string + "</span>";
+                            }
+                        },
+                        {
+                            "data": "suspended_until",
+                            "name": "suspended_until",
+                            "title": _("Suspended until"),
+                            "orderable": true,
+                            "render": function( data, type, row, meta ) {
+                                return $date( data );
+                            }
+                        },
+                        {
+                            "data": "notes",
+                            "name": "notes",
+                            "title": _("Notes"),
+                            "orderable": true,
+                            "render": function( data, type, row, meta ) {
+                                return escape_str( data );
+                            }
+                        }
+                    ],
+                }, table_settings, 0, filters);
+
+                $(".searchpattern").text(searchpattern);
+
+                $("#modify_holds_results-wrapper").show();
+            }
+
+            $("#process_mods").on('submit', function(e) {
+
+                var hold_ids = JSON.parse( localStorage.getItem("holds_modify_selections") ) || [];
+
+                $("#process_mods input[name='hold_id']").remove();
+
+                hold_ids.forEach(function(hold) {
+                    $('<input>').attr({
+                        type: 'hidden',
+                        name: 'hold_id',
+                        value: hold.hold_id
+                    }).appendTo('#process_mods');
+                });
+
+                var errors = [];
+
+                var new_expiration_date = $("#new_expiration_date").val();
+                var new_pickup_loc      = $("#new_pickup_loc").val();
+                var new_suspend_status  = $("#new_suspend_status").val();
+                var new_suspend_date    = $("#new_suspend_date").val();
+                var new_hold_note       = $("#new_hold_note").val();
+                var clear_hold_notes    = $("#clear_hold_notes").val();
+
+                if ( hold_ids.length == 0 ) {
+                    e.preventDefault();
+                    errors.push(_("Please select at least one hold to process."));
+                }
+
+                if( new_pickup_loc || new_suspend_status || new_suspend_date ){
+                    var found = false;
+                    hold_ids.forEach(function(hold){
+                        if( hold.found_status ){
+                            e.preventDefault();
+                            found = true;
+                        }
+                    });
+                    if( ( new_suspend_status || new_suspend_date ) && found ){
+                        errors.push(_("One or more holds have found status and can't be suspended."));
+                    }
+                    if( new_pickup_loc && found ){
+                        errors.push(_("One or more holds have found status and their pick up location can't be changed."));
+                    }
+                }
+
+                var suspended = false;
+
+                hold_ids.forEach(function(hold){
+                    if( hold.suspened ){
+                        suspended = true;
+                    }
+                });
+
+                if( ( !new_suspend_status || new_suspend_status == "0" || !suspended ) && new_suspend_date ){
+                    new_suspend_status = 1;
+                }
+
+                if (errors.length > 0) {
+                    e.preventDefault();
+                    $("#errorList").html(errors.map(error => `<li>${error}</li>`).join(""));
+                    $("#errorModal").modal('show');
+                    return false;
+                }
+                return true;
+            });
+
+            //Modified holds table
+            var table_settings = [% TablesSettings.GetTableSettings( 'circ', 'holds', 'modified_holds', 'json' ) | $raw %];
+            $("#modified_holds").kohaTable({
+                pagingType: "full",
+                autoWidth: false
+            }, table_settings);
+
+        });
+    </script>
+[% END %]
+[% INCLUDE 'intranet-bottom.inc' %]
