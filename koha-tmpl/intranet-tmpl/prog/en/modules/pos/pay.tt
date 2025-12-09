@@ -423,8 +423,12 @@
 
                     // Handle blur and Enter key events
                     input.addEventListener('blur', updateCell);
-                    input.addEventListener('keyup', function(e) {
-                        if (e.key === 'Enter') updateCell();
+                    input.addEventListener('keydown', function(e) {
+                        if (e.key === 'Enter') {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            updateCell();
+                        }
                     });
 
                     function updateCell() {
