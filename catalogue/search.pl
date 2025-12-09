@@ -263,7 +263,8 @@ $template->param( advancedsearchesloop => $advancedsearchesloop );
 
 $template->param( searchid => scalar $cgi->param('searchid'), );
 
-my $default_sort_by = C4::Context->default_catalog_sort_by;
+my $default_sort_by     = C4::Context->default_catalog_sort_by;
+my @sanitized_operators = grep { $_ ne 'cud-login' } $cgi->multi_param('op');
 
 # The following should only be loaded if we're bringing up the advanced search template
 if ( $template_type eq 'advsearch' ) {
@@ -274,7 +275,7 @@ if ( $template_type eq 'advsearch' ) {
     my $expanded = $cgi->param('expanded_options');
     if ( $cgi->param('edit_search') ) {
         @operands  = $cgi->multi_param('q');
-        @operators = $cgi->multi_param('op');
+        @operators = @sanitized_operators;
         @indexes   = $cgi->multi_param('idx');
         $template->param(
             sort => scalar $cgi->param('sort_by'),
@@ -370,7 +371,7 @@ $template->param( 'sort_by' => $sort_by[0] );
 
 # operators include boolean and proximity operators and are used
 # to evaluate multiple operands
-my @operators = map uri_unescape($_), $cgi->multi_param('op');
+my @operators = map uri_unescape($_), @sanitized_operators;
 
 # indexes are query qualifiers, like 'title', 'author', etc. They
 # can be single or multiple parameters separated by comma: kw,right-Truncation
