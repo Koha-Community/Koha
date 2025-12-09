@@ -768,7 +768,7 @@ $(document).ready(function () {
             var description = form.description.value;
             var opac_description = form.opac_description.value;
 
-            const client = APIClient.authorised_value;
+            const client = APIClient.authorised_values;
             client.values
                 .create({ category, value, description, opac_description })
                 .then(
