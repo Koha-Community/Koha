@@ -637,8 +637,10 @@ $(document).ready(function() {
             var description      = form.description.value;
             var opac_description = form.opac_description.value;
 
-            const client = APIClient.authorised_value;
-            client.values.create({category, value, description, opac_description}).then(
+            const client = APIClient.authorised_values;
+            client.values
+                .create({ category, value, description, opac_description })
+                .then(
                 success => {
                     $('#avCreate').modal('hide');
 
