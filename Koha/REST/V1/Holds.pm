@@ -515,7 +515,7 @@ sub update_priority {
 
     return try {
         my $priority = $c->req->json;
-        C4::Reserves::_FixPriority(
+        C4::Reserves::FixPriority(
             {
                 reserve_id => $hold->id,
                 rank       => $priority

@@ -930,7 +930,7 @@ sub cancel {
 
             $self->SUPER::delete();    # Do not add a DELETE log
                                        # now fix the priority on the others....
-            C4::Reserves::_FixPriority( { biblionumber => $self->biblionumber } );
+            C4::Reserves::FixPriority( { biblionumber => $self->biblionumber } );
 
             # and, if desired, charge a cancel fee
             if ( $params->{'charge_cancel_fee'} ) {
@@ -1029,7 +1029,7 @@ sub fill {
             $self->SUPER::delete();    # Do not add a DELETE log
 
             # now fix the priority on the others....
-            C4::Reserves::_FixPriority( { biblionumber => $self->biblionumber } );
+            C4::Reserves::FixPriority( { biblionumber => $self->biblionumber } );
 
             if ( C4::Context->preference('HoldFeeMode') eq 'any_time_is_collected' ) {
                 my $fee = $patron->category->reservefee // 0;
@@ -1118,7 +1118,7 @@ sub revert_found {
             logaction( 'HOLDS', 'MODIFY', $self->id, $self, undef, $original )
                 if C4::Context->preference('HoldsLog');
 
-            C4::Reserves::_FixPriority( { biblionumber => $self->biblionumber } );
+            C4::Reserves::FixPriority( { biblionumber => $self->biblionumber } );
 
             $self->remove_as_hold_group_target();
 

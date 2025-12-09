@@ -28,7 +28,7 @@ use List::MoreUtils qw( uniq );
 use Try::Tiny;
 
 use C4::Output;
-use C4::Reserves qw( ModReserve );
+use C4::Reserves qw( ModReserve FixPriority );
 use C4::Auth     qw( checkauth );
 use Koha::BackgroundJob::BatchUpdateBiblioHoldsQueue;
 
@@ -63,6 +63,7 @@ if ( $op eq 'cud-cancelall' || $op eq 'cud-modifyall' ) {
             itemnumber     => $itemnumber[$i],
             defined $suspend_until ? ( suspend_until => $suspend_until ) : (),
             cancellation_reason => $cancellation_reason,
+            skip_fixup_priority => 1,
         };
         if ( C4::Context->preference('AllowHoldDateInFuture') ) {
             $params->{reservedate} = $reservedates[$i] || undef;
@@ -95,6 +96,9 @@ if ( $op eq 'cud-cancelall' || $op eq 'cud-modifyall' ) {
     my @biblio_ids = uniq @biblionumber;
     Koha::BackgroundJob::BatchUpdateBiblioHoldsQueue->new->enqueue( { biblio_ids => \@biblio_ids } )
         if C4::Context->preference('RealTimeHoldsQueue');
+    foreach my $biblio_id (@biblio_ids) {
+        FixPriority( { biblionumber => $biblio_id } );
+    }
 }
 
 my $from = $query->param('from');

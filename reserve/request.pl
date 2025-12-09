@@ -157,7 +157,7 @@ if ( $op eq 'cud-move' ) {
     }
 
     #Fix the priority on the original record
-    C4::Reserves::_FixPriority( { biblionumber => $original_biblionumber } );
+    C4::Reserves::FixPriority( { biblionumber => $original_biblionumber } );
 
     $template->param(
         hold_move_successes => \@success_messages,

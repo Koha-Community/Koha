@@ -60,6 +60,8 @@ BEGIN {
         GetMaxPatronHoldsForRecord
 
         MergeHolds
+
+        FixPriority
     );
 }
 
@@ -290,7 +292,7 @@ sub AddReserve {
         ChargeReserveFee( $borrowernumber, $reserve_fee, $title );
     }
 
-    _FixPriority( { biblionumber => $biblionumber } );
+    FixPriority( { biblionumber => $biblionumber } );
 
     # Send e-mail to librarian if syspref is active
     if ( C4::Context->preference("emailLibrarianWhenHoldIsPlaced") ) {
@@ -1219,6 +1221,7 @@ sub ModReserve {
     my $biblionumber        = $params->{'biblionumber'};
     my $cancellation_reason = $params->{'cancellation_reason'};
     my $date                = $params->{expirationdate};
+    my $skip_fixup_priority = $params->{skip_fixup_priority};
 
     return if defined $rank && $rank eq "n";
 
@@ -1277,7 +1280,7 @@ sub ModReserve {
             }
         }
 
-        _FixPriority( { reserve_id => $reserve_id, rank => $rank } );
+        FixPriority( { reserve_id => $reserve_id, rank => $rank } ) unless $skip_fixup_priority;
 
         logaction( 'HOLDS', 'MODIFY', $hold->reserve_id, $hold, undef, $original )
             if C4::Context->preference('HoldsLog');
@@ -1390,7 +1393,7 @@ sub ModReserveAffect {
 
     _koha_notify_hold_changed($hold) if $notify_library;
 
-    _FixPriority( { biblionumber => $biblionumber } );
+    FixPriority( { biblionumber => $biblionumber } );
     my $item = Koha::Items->find($itemnumber);
     if (   $item->location
         && $item->location eq 'CART'
@@ -1477,7 +1480,7 @@ sub ModReserveMinusPriority {
     $sth_upd->execute( $itemnumber, $reserve_id );
 
     # second step update all others reserves
-    _FixPriority( { reserve_id => $reserve_id, rank => '0' } );
+    FixPriority( { reserve_id => $reserve_id, rank => '0' } );
 }
 
 =head2 IsAvailableForItemLevelRequest
@@ -1634,14 +1637,14 @@ sub AlterPriority {
 
     if ( $where eq 'up' ) {
         return unless $prev_priority;
-        _FixPriority( { reserve_id => $reserve_id, rank => $prev_priority } );
+        FixPriority( { reserve_id => $reserve_id, rank => $prev_priority } );
     } elsif ( $where eq 'down' ) {
         return unless $next_priority;
-        _FixPriority( { reserve_id => $reserve_id, rank => $next_priority } );
+        FixPriority( { reserve_id => $reserve_id, rank => $next_priority } );
     } elsif ( $where eq 'top' ) {
-        _FixPriority( { reserve_id => $reserve_id, rank => $first_priority } );
+        FixPriority( { reserve_id => $reserve_id, rank => $first_priority } );
     } elsif ( $where eq 'bottom' ) {
-        _FixPriority( { reserve_id => $reserve_id, rank => $last_priority } );
+        FixPriority( { reserve_id => $reserve_id, rank => $last_priority } );
     }
 
     Koha::BackgroundJob::BatchUpdateBiblioHoldsQueue->new->enqueue( { biblio_ids => [ $hold->biblionumber ] } )
@@ -1666,7 +1669,7 @@ sub ToggleLowestPriority {
     my $sth = $dbh->prepare("UPDATE reserves SET lowestPriority = NOT lowestPriority WHERE reserve_id = ?");
     $sth->execute($reserve_id);
 
-    _FixPriority( { reserve_id => $reserve_id, rank => '999999' } );
+    FixPriority( { reserve_id => $reserve_id, rank => '999999' } );
 }
 
 =head2 SuspendAll
@@ -1709,9 +1712,9 @@ sub SuspendAll {
     }
 }
 
-=head2 _FixPriority
+=head2 FixPriority
 
-  _FixPriority({
+  FixPriority({
     reserve_id => $reserve_id,
     [rank => $rank,]
     [ignoreSetLowestRank => $ignoreSetLowestRank]
@@ -1719,7 +1722,7 @@ sub SuspendAll {
 
   or
 
-  _FixPriority({ biblionumber => $biblionumber});
+ FixPriority({ biblionumber => $biblionumber});
 
 This routine adjusts the priority of a hold request and holds
 on the same bib.
@@ -1740,11 +1743,11 @@ In both cases, holds that have the lowestPriority flag on are have their
 priority adjusted to ensure that they remain at the end of the line.
 
 Note that the ignoreSetLowestRank parameter is meant to be used only
-when _FixPriority calls itself.
+when FixPriority calls itself.
 
 =cut
 
-sub _FixPriority {
+sub FixPriority {
     my ($params)            = @_;
     my $reserve_id          = $params->{reserve_id};
     my $rank                = $params->{rank} // '';
@@ -1837,7 +1840,7 @@ sub _FixPriority {
             "SELECT reserve_id FROM reserves WHERE lowestPriority = 1 AND biblionumber = ? ORDER BY priority");
         $sth->execute($biblionumber);
         while ( my $res = $sth->fetchrow_hashref() ) {
-            _FixPriority(
+            FixPriority(
                 {
                     reserve_id          => $res->{'reserve_id'},
                     rank                => '999999',
