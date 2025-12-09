@@ -969,7 +969,7 @@ sub cancel {
                         type       => 'RESERVE_EXPIRED',
                         item_id    => $self->itemnumber
                     }
-                ) if $charge;
+                ) if $charge > 0;
             }
 
             C4::Log::logaction( 'HOLDS', 'CANCEL', $self->reserve_id, $self, undef, $original )
