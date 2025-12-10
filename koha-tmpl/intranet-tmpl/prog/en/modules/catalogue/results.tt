@@ -556,7 +556,10 @@
             <div id="searchresults">
                 [% INCLUDE 'page-numbers.inc' %]
                 [% IF Koha.Preference('FilterSearchResultsByLoggedInBranch') %]
-                    <button href="#" id="toggleitems" class="btn btn-primary btn-xs show-local-items" style="float: right;">Show local items only</button>
+                    <button id="toggleitems" class="btn btn-primary btn-xs" data-mode="all" style="float: right;">
+                        <span class="when-all">[% t("Show local items only") | html %]</span>
+                        <span class="when-local" style="display:none">[% t("Show items in all libraries") | html %]</span>
+                    </button>
                 [% END %]
                 <form action="/cgi-bin/koha/catalogue/search.pl" method="get" name="bookbag_form" id="bookbag_form">
                     [% IF ( searchdesc ) %]
@@ -986,7 +989,12 @@
                 }
             });
             $('#toggleitems').click( function() {
-                $('#toggleitems').text() === 'Show local items only' ? $('#toggleitems').text("Show items in all libraries") : $('#toggleitems').text("Show local items only");
+                let this_toggle = $(this);
+                let show_all = this_toggle.data('mode') === 'all';
+
+                this_toggle.find('.when-local, .when-all').toggle();
+                this_toggle.data('mode', show_all ? 'local' : 'all');
+
                 $('.branch_specific').toggle();
                 $('.all').toggle();
                 $('ul[class*="_loop_items"] li').each( function() {
@@ -994,11 +1002,11 @@
                         $(this).toggle();
                     }
                 });
-                $(this).toggleClass('show-local-items show-all-items');
-                if ($(this).hasClass('show-local-items')) {
-                    localStorage.setItem("show_local_items", 'all');
-                } else {
+
+                if (show_all) {
                     localStorage.setItem("show_local_items", 'local');
+                } else {
+                    localStorage.setItem("show_local_items", 'all');
                 }
             });
         [% END %]
