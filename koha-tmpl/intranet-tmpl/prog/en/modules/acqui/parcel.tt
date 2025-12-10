@@ -614,7 +614,7 @@
                                 else {
                                     result += '<a href="/cgi-bin/koha/acqui/cancelorder.pl?ordernumber='
                                             + encodeURIComponent(row.order_id) + '&biblionumber=' + encodeURIComponent(row.biblio_id)
-                                            + '&del_biblio=1&referrer="/cgi-bin/koha/acqui/parcel.pl?invoiceid=[$ invoiceid | uri ]">'
+                                            + '&del_biblio=1&referrer=/cgi-bin/koha/acqui/parcel.pl?invoiceid=[% invoiceid | uri %]">'
                                             + _("Cancel order and catalog record") + '</a><br/>';
                                 }
 
