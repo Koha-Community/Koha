@@ -16,7 +16,7 @@ return {
         say $out "Added new permission 'merge_borrowers'";
 
         $dbh->do(
-            q{INSERT INTO user_permissions (borrowernumber, module_bit, code) SELECT  borrowernumber, module_bit, 'merge_borrowers' FROM user_permissions where module_bit = 4 and code = 'edit_borrowers';}
+            q{INSERT IGNORE INTO user_permissions (borrowernumber, module_bit, code) SELECT  borrowernumber, module_bit, 'merge_borrowers' FROM user_permissions where module_bit = 4 and code = 'edit_borrowers';}
         );
 
         say $out "Added 'merge_borrowers' permission to existing users with 'edit_borrowers'";
