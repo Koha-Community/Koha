@@ -683,8 +683,10 @@ if (   ( $findborrower && $borrowernumber_hold || $findclub && $club_hold )
                     )->unblessed
                 }
             };
-            my @reserves =
-                Koha::Holds->search( { biblionumber => $biblionumber }, { order_by => 'priority' } )->as_list;
+            my @reserves = Koha::Holds->search(
+                { 'me.biblionumber' => $biblionumber },
+                { prefetch          => [ 'borrowernumber', 'itemnumber' ], order_by => 'priority' }
+            )->as_list;
             foreach my $res (
                 sort {
                     my $a_found = $a->found() || '';
