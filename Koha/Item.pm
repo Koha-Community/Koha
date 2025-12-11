@@ -1181,7 +1181,10 @@ sub article_request_type {
     my $holds = $item->current_holds
 
 Return the holds placed on this item.
-Respects the lookahead days in ConfirmFutureHolds pref.
+Respects the lookahead days in preference ConfirmFutureHolds when the
+param skip_future_holds is not set.
+Note that the preference FutureHoldsBlockRenewals controls that setting
+for renewals; see also C4::Circulation::CanBookBeRenewed.
 
 =cut
 
