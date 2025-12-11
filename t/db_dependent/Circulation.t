@@ -19,7 +19,7 @@ use Modern::Perl;
 use utf8;
 
 use Test::NoWarnings;
-use Test::More tests => 83;
+use Test::More tests => 84;
 use Test::Exception;
 use Test::MockModule;
 use Test::Deep qw( cmp_deeply );
@@ -1935,6 +1935,57 @@ subtest "CanBookBeRenewed | bookings" => sub {
     is( $renewok, 0,        "Renewal not allowed as it would mean the item was not returned before the next booking" );
     is( $error,   'booked', "Error is 'booked'" );
 
+    $schema->storage->txn_rollback;
+};
+
+subtest "CanBookBeRenewed | future holds" => sub {
+    plan tests => 6;
+
+    $schema->storage->txn_begin;
+    t::lib::Mocks::mock_preference( 'ConfirmFutureHolds',       3 );
+    t::lib::Mocks::mock_preference( 'FutureHoldsBlockRenewals', 1 );
+
+    Koha::CirculationRules->set_rules(
+        {
+            categorycode => undef, branchcode => undef, itemtype => undef,
+            rules        => { renewalsallowed => 1, renewalperiod => 7 },
+        }
+    );
+
+    my $future_date = DateTime->today->add( days => 2 );
+    my $patron1     = $builder->build_object( { class => 'Koha::Patrons' } );
+    my $patron2     = $builder->build_object( { class => 'Koha::Patrons' } );
+    my $item        = $builder->build_sample_item;
+    my $library     = $builder->build_object( { class => 'Koha::Libraries' } );
+    my $issue       = AddIssue( $patron1, $item->barcode );                       # not mangling userenv here
+    my $reserve_id  = AddReserve(
+        {
+            branchcode   => $library->branchcode, borrowernumber => $patron2->id,
+            biblionumber => $item->biblionumber,  itemnumber     => $item->id, reservation_date => $future_date
+        }
+    );
+    my $hold = Koha::Holds->find($reserve_id);
+
+    # Future hold should block renewal
+    my ( $renewok, $error ) = CanBookBeRenewed( $patron1, $issue, 0 );
+    is( $renewok, 0,            'Cannot be renewed due to future hold' );
+    is( $error,   'on_reserve', 'Check error message' );
+
+    # Move hold past 3 days limit so should be renewable
+    $hold->reservedate( $future_date->add( days => 2 ) )->store;
+    ( $renewok, $error ) = CanBookBeRenewed( $patron1, $issue, 0 );
+    is( $renewok, 1,     'Can be renewed when reservedate is too far' );
+    is( $error,   undef, 'No error message' );
+
+    # Skip future holds for renewals
+    t::lib::Mocks::mock_preference( 'FutureHoldsBlockRenewals', 0 );
+    $hold->reservedate($future_date)->store;
+    ( $renewok, $error ) = CanBookBeRenewed( $patron1, $issue, 0 );
+    is( $renewok, 1,     'Can be renewed when future holds are skipped' );
+    is( $error,   undef, 'No error message 2' );
+
+    t::lib::Mocks::mock_preference( 'ConfirmFutureHolds',       0 );
+    t::lib::Mocks::mock_preference( 'FutureHoldsBlockRenewals', 0 );
     $schema->storage->txn_rollback;
 };
 
