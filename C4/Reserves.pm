@@ -1551,9 +1551,9 @@ sub IsAvailableForItemLevelRequest {
 
     my $on_shelf_holds = Koha::CirculationRules->get_onshelfholds_policy( { item => $item, patron => $patron } );
 
-    if ( $on_shelf_holds == 1 ) {
+    if ( $on_shelf_holds == 1 ) {    # Allow
         return 1;
-    } elsif ( $on_shelf_holds == 2 ) {
+    } elsif ( $on_shelf_holds == 2 ) {    # If all unavailable
 
         # These calculations work at the biblio level, and can be expensive
         # we use the in-memory cache to avoid calling once per item when looping items on a biblio
@@ -1569,7 +1569,7 @@ sub IsAvailableForItemLevelRequest {
         $memory_cache->set_in_cache( $cache_key, $any_available );
         return $any_available ? 0 : 1;
 
-    } else {  # on_shelf_holds == 0 "If any unavailable" (the description is rather cryptic and could still be improved)
+    } else {    # on_shelf_holds == 0 [If any unavailable]
         return $item->notforloan < 0 || $item->onloan || $item->holds->filter_by_found->count;
     }
 }
