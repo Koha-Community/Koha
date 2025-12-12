@@ -1979,8 +1979,10 @@ sub searchResults {
                     #        the in transit status count as unavailable for search limiting,
                     #        should map transit status to record indexed in Zebra.
 
-                    my $item_object = Koha::Items->find( $item->{itemnumber} );
-                    my $transfer    = defined($item_object) ? $item_object->get_transfer : undef;
+                    my $transfer = Koha::Item::Transfers->search(
+                        { itemnumber => $item->{itemnumber}, datearrived => undef, datecancelled => undef },
+                        { order_by   => [ { '-desc' => 'datesent' }, { '-asc' => 'daterequested' } ] }
+                    )->next;
                     ( $transfertwhen, $transfertfrom, $transfertto ) = defined($transfer)
                         ? (
                         $transfer->datesent, $transfer->frombranch,
