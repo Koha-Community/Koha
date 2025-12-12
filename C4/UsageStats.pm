@@ -194,6 +194,9 @@ sub _shared_preferences {
         WhenLostChargeReplacementFee
         WhenLostForgiveFine
         AllowHoldDateInFuture
+        OPACAllowHoldDateInFuture
+        ConfirmFutureHolds
+        FutureHoldsBlockRenewals
         AllowHoldItemTypeSelection
         AllowHoldPolicyOverride
         AllowHoldsOnDamagedItems
@@ -204,7 +207,6 @@ sub _shared_preferences {
         DisplayMultiPlaceHold
         emailLibrarianWhenHoldIsPlaced
         ExpireReservesMaxPickUpDelay
-        OPACAllowHoldDateInFuture
         OPACAllowUserToChooseBranch
         ReservesControlBranch
         ReservesNeedReturns
