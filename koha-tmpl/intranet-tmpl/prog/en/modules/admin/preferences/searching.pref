@@ -301,10 +301,11 @@ Searching:
             - pref: FacetOrder
               type: choice
               choices:
-                  Alphabetical: "alphabetically"
+                  Alphabetical: "alphabetically using locale"
                   Usage: "by usage count"
+                  Stringwise: "simple alphabetical"
               default: Alphabetical
-            - for each category.
+            - for each category. Locale can be set using the <a href="/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=FacetSortingLocale">FacetSortingLocale</a> preference.
         -
             - By default, show
             - pref: OPACnumSearchResults

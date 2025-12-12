@@ -575,6 +575,8 @@ sub _convert_facets {
             if ($sorted_facets) {
                 $facet->{facets} = $sorted_facets;
             }
+        } elsif ( C4::Context->preference('FacetOrder') eq 'Stringwise' ) {
+            @{ $facet->{facets} } = sort { $a->{facet_label_value} cmp $b->{facet_label_value} } @{ $facet->{facets} };
         }
         push @facets, $facet if exists $facet->{facets};
     }
