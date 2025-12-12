@@ -74,19 +74,21 @@ if ( $op eq 'cud-form' ) {
             $hold->branchcode($new_pickup_loc)->store;
         }
 
-        if ( $new_suspend_status && $new_suspend_status ne "" && !$hold->is_found ) {
-            $hold->suspend(1)->store;
-            if ($new_suspend_date) {
+        if ( $new_suspend_status ne "" ) {
+            if ( $new_suspend_status && !$hold->is_found ) {
+                $hold->suspend(1)->store;
+                if ($new_suspend_date) {
+                    $hold->suspend_until($new_suspend_date)->store;
+                } else {
+                    $hold->suspend_until(undef)->store;
+                }
+            } elsif ( !$new_suspend_status && $new_suspend_date ) {
+                $hold->suspend(1)->store;
                 $hold->suspend_until($new_suspend_date)->store;
             } else {
+                $hold->suspend(0)->store;
                 $hold->suspend_until(undef)->store;
             }
-        } elsif ( !$new_suspend_status && $new_suspend_date ) {
-            $hold->suspend(1)->store;
-            $hold->suspend_until($new_suspend_date)->store;
-        } else {
-            $hold->suspend(0)->store;
-            $hold->suspend_until(undef)->store;
         }
 
         if ($new_hold_note) {
