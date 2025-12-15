@@ -586,7 +586,7 @@ subtest 'add() tests' => sub {
 
         subtest 'extended_attributes handling tests' => sub {
 
-            plan tests => 25;
+            plan tests => 29;
 
             $mocked_patron->mock(
                 'extended_attributes',
@@ -621,6 +621,23 @@ subtest 'add() tests' => sub {
             )->status_is(400)->json_is( '/error' => "Missing mandatory extended attribute (type=$type)" );
 
             is( Koha::Patrons->search->count, $patrons_count, 'No patron added' );
+
+            # Bug 40219: Test that welcome email is not sent when extended attribute validation fails
+            t::lib::Mocks::mock_preference( 'AutoEmailNewUser', 1 );
+            $letter_enqueued          = 0;
+            $extended_attrs_exception = 'Koha::Exceptions::Patron::MissingMandatoryExtendedAttribute';
+            $t->post_ok(
+                "//$userid:$password\@/api/v1/patrons" => json => {
+                    "firstname"   => "Bug",
+                    "surname"     => "FortyZeroTwoOneNine",
+                    "address"     => "Somewhere",
+                    "category_id" => "ST",
+                    "city"        => "TestCity",
+                    "library_id"  => "MPL",
+                    "email"       => 'bug40219@test.com'
+                }
+            )->status_is(400)->json_is( '/error' => "Missing mandatory extended attribute (type=$type)" );
+            is( $letter_enqueued, 0, 'Bug 40219: No welcome email sent when extended attribute validation fails' );
 
             $extended_attrs_exception = 'Koha::Exceptions::Patron::Attribute::InvalidType';
             $t->post_ok(
