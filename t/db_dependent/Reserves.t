@@ -1483,9 +1483,15 @@ subtest 'IsAvailableForItemLevelRequest() tests' => sub {
             value => { itemtype => $item_type }
         }
     );
+    Koha::CirculationRules->set_rules(
+        {
+            categorycode => '*', itemtype => '*', branchcode => '*',
+            rules        => { onshelfholds => 1 }
+        }
+    );
     ok(
         C4::Reserves::IsAvailableForItemLevelRequest( $item, $patron ),
-        "Item not available for item-level hold because no effective item type"
+        "Item available for item-level hold because defined effective item type"
     );
 
     Koha::CirculationRules->set_rules(
