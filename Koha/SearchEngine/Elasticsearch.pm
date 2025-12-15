@@ -38,6 +38,24 @@ use Clone qw( clone );
 use Modern::Perl;
 use Readonly qw( Readonly );
 use Search::Elasticsearch;
+use Search::Elasticsearch::Role::Cxn;
+{
+    # Monkey-patch Search::Elasticsearch::Role::Cxn::process_response
+    no warnings 'redefine';
+
+    my $orig_sub = \&Search::Elasticsearch::Role::Cxn::process_response;
+
+    # Override method
+    *Search::Elasticsearch::Role::Cxn::process_response = sub {
+        my ( $self, $params, $code, $msg, $body, $headers ) = @_;
+
+        if ( $headers && $headers->{'x-elastic-product'} ne 'Elasticsearch' ) {
+            $Search::Elasticsearch::Role::Cxn::PRODUCT_CHECK_VALUE = '';
+        }
+        $orig_sub->(@_);
+    };
+}
+
 use Try::Tiny qw( catch try );
 use YAML::XS;
 
