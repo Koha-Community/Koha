@@ -298,12 +298,12 @@
                         },
                         [% IF show_itemtype_column %]
                         {
-                            data: "item_type.item_type",
+                            data: "item_type",
                             searchable: true,
                             orderable: true,
                             render: function (data, type, row, meta) {
                                 if ( row.item_type ) {
-                                    return row.item_type.item_type;
+                                    return row.item_type;
                                 } else {
                                     return _("Any item type");
                                 }
