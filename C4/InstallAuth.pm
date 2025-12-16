@@ -236,7 +236,6 @@ sub checkauth {
     my $type            = shift;
     $type = 'intranet' unless $type;
 
-    my $dbh = C4::Context->dbh();
     my $template_name;
     $template_name = "installer/auth.tt";
 

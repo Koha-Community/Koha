@@ -55,7 +55,6 @@ sub plugin {
     my $index   = $input->param('index');
     my $result  = $input->param('result');
 
-    my $dbh = C4::Context->dbh;
     my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
         {
             template_name => "cataloguing/value_builder/unimarc_field_115a.tt",

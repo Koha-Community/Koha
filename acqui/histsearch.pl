@@ -60,7 +60,6 @@ use Koha::DateUtils qw( dt_from_string );
 my $input     = CGI->new;
 my $do_search = $input->param('do_search') || 0;
 
-my $dbh = C4::Context->dbh;
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     {
         template_name => "acqui/histsearch.tt",

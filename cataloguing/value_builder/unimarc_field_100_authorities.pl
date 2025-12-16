@@ -52,8 +52,6 @@ sub plugin {
     my $index   = $input->param('index');
     my $result  = $input->param('result');
 
-    my $dbh = C4::Context->dbh;
-
     my $defaultlanguage = C4::Context->preference("UNIMARCField100Language");
     $defaultlanguage = "fre" if ( !$defaultlanguage || length($defaultlanguage) != 3 );
 

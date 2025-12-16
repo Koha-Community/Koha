@@ -51,7 +51,6 @@ This module provides facilities for retrieving ThingISBN and XISBN content in Ko
 
 sub _get_biblio_from_xisbn {
     my $xisbn = shift;
-    my $dbh   = C4::Context->dbh;
 
     my $searcher = Koha::SearchEngine::Search->new( { index => $Koha::SearchEngine::BIBLIOS_INDEX } );
     my ( $errors, $results, $total_hits ) = $searcher->simple_search_compat( "nb=$xisbn", 0, 1 );

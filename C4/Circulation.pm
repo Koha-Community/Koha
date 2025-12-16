@@ -431,7 +431,6 @@ sub TooMany {
     my $onsite_checkout        = $params->{onsite_checkout}        || 0;
     my $switch_onsite_checkout = $params->{switch_onsite_checkout} || 0;
     my $cat_borrower           = $patron->categorycode;
-    my $dbh                    = C4::Context->dbh;
 
     # Get which branchcode we need
     my $branch = _GetCircControlBranch( $item, $patron );

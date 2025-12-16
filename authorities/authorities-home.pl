@@ -37,7 +37,6 @@ use Koha::XSLT::Base;
 use Koha::Z3950Servers;
 
 my $query        = CGI->new;
-my $dbh          = C4::Context->dbh;
 my $op           = $query->param('op')           || '';
 my $authtypecode = $query->param('authtypecode') || '';
 my $authid       = $query->param('authid')       || '';

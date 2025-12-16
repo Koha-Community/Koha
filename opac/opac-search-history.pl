@@ -97,7 +97,6 @@ unless ($loggedinuser) {
 } else {
 
     # And if the user is logged in, we deal with the database
-    my $dbh = C4::Context->dbh;
 
     # Deleting search history
     if ( $op eq 'cud-delete' ) {
