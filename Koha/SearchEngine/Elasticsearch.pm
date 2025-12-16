@@ -49,7 +49,7 @@ use Search::Elasticsearch::Role::Cxn;
     *Search::Elasticsearch::Role::Cxn::process_response = sub {
         my ( $self, $params, $code, $msg, $body, $headers ) = @_;
 
-        if ( $headers && $headers->{'x-elastic-product'} ne 'Elasticsearch' ) {
+        unless ( $headers && $headers->{'x-elastic-product'} && $headers->{'x-elastic-product'} eq 'Elasticsearch' ) {
             $Search::Elasticsearch::Role::Cxn::PRODUCT_CHECK_VALUE = '';
         }
         $orig_sub->(@_);
