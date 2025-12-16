@@ -23,7 +23,7 @@ return {
         $dbh->do(
             q{
             ALTER TABLE systempreferences
-            MODIFY COLUMN `value` mediumtext NOT NULL DEFAULT '' COMMENT 'system preference values'
+            MODIFY COLUMN `value` mediumtext NOT NULL COMMENT 'system preference values'
         }
         );
     },

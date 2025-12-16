@@ -6677,7 +6677,7 @@ DROP TABLE IF EXISTS `systempreferences`;
 /*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `systempreferences` (
   `variable` varchar(50) NOT NULL DEFAULT '' COMMENT 'system preference name',
-  `value` mediumtext NOT NULL DEFAULT '' COMMENT 'system preference values',
+  `value` mediumtext NOT NULL COMMENT 'system preference values',
   `options` longtext DEFAULT NULL COMMENT 'options for multiple choice system preferences',
   `explanation` mediumtext DEFAULT NULL COMMENT 'descriptive text for the system preference',
   `type` varchar(20) DEFAULT NULL COMMENT 'type of question this preference asks (multiple choice, plain text, yes or no, etc)',
