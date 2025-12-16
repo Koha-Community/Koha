@@ -49,9 +49,6 @@
     [% ELSIF patron.is_anonymous %]
         <div class="alert alert-warning">This is the anonymous patron, so no holds history is displayed.</div>
     [% ELSE %]
-
-        [% SET show_itemtype_column = Koha.Preference('AllowHoldItemTypeSelection') %]
-
         <div id="holdshistory" class="page-section">
             <h2 id="current_holds_heading">Current holds</h2>
             <p
@@ -85,20 +82,18 @@
                 <table id="table_holdshistory">
                     <thead>
                         <tr>
-                            <th class="anti-the">Title</th>
-                            <th>Author</th>
-                            <th>Barcode</th>
-                            <th>Call number</th>
-                            <th>Library</th>
-                            <th>Hold date</th>
-                            <th>Expiration date</th>
-                            <th>Waiting date</th>
-                            <th>Cancellation date</th>
-                            [% IF show_itemtype_column %]
-                                <th>Requested item type</th>
-                            [% END %]
-                            <th>Status</th>
-                            <th>Notes</th>
+                            <th data-colname="title" class="anti-the">Title</th>
+                            <th data-colname="author">Author</th>
+                            <th data-colname="barcode">Barcode</th>
+                            <th data-colname="itemcallnumber">Call number</th>
+                            <th data-colname="branch">Library</th>
+                            <th data-colname="reservedate">Hold date</th>
+                            <th data-colname="expirationdate">Expiration date</th>
+                            <th data-colname="waitingdate">Waiting date</th>
+                            <th data-colname="cancellationdate">Cancellation date</th>
+                            <th data-colname="itemtype">Requested item type</th>
+                            <th data-colname="status">Status</th>
+                            <th data-colname="notes">Notes</th>
                         </tr>
                     </thead>
                 </table>
@@ -130,20 +125,18 @@
                 <table id="table_oldholdshistory">
                     <thead>
                         <tr>
-                            <th class="anti-the">Title</th>
-                            <th>Author</th>
-                            <th>Barcode</th>
-                            <th>Call number</th>
-                            <th>Library</th>
-                            <th>Hold date</th>
-                            <th>Expiration date</th>
-                            <th>Waiting date</th>
-                            <th>Cancellation date</th>
-                            [% IF show_itemtype_column %]
-                                <th>Requested item type</th>
-                            [% END %]
-                            <th>Status</th>
-                            <th>Notes</th>
+                            <th data-colname="title" class="anti-the">Title</th>
+                            <th data-colname="author">Author</th>
+                            <th data-colname="barcode">Barcode</th>
+                            <th data-colname="itemcallnumber">Call number</th>
+                            <th data-colname="branch">Library</th>
+                            <th data-colname="reservedate">Hold date</th>
+                            <th data-colname="expirationdate">Expiration date</th>
+                            <th data-colname="waitingdate">Waiting date</th>
+                            <th data-colname="cancellationdate">Cancellation date</th>
+                            <th data-colname="itemtype">Requested item type</th>
+                            <th data-colname="status">Status</th>
+                            <th data-colname="notes">Notes</th>
                         </tr>
                     </thead>
                 </table>
@@ -181,14 +174,21 @@
             item_types: all_item_types,
             libraries: all_libraries,
         };
+
+        const show_itemtype_column = [% Koha.Preference('AllowHoldItemTypeSelection') ? 1 : 0 %];
     </script>
     <script>
         $(document).ready(function() {
             var table_settings = [% TablesSettings.GetTableSettings('members', 'holdshistory', 'holdshistory-table', 'json') | $raw %];
-            [% UNLESS show_itemtype_column %]
-              //Remove item type column settings
-              table_settings['columns'] = table_settings['columns'].filter(function(c){return c['columnname'] != 'itemtype';});
-            [% END %]
+
+            let item_type_column = table_settings.columns.find(c => c.columnname == 'itemtype');
+            if ( !show_itemtype_column ) {
+                item_type_column.is_hidden = 1;
+                item_type_column.cannot_be_toggled = 1;
+            } else {
+                item_type_column.is_hidden = 0;
+            }
+            item_type_column.force_visibility = 1;
 
             let current_holds_table = build_holds_table("#table_holdshistory");
             let old_holds_table = build_holds_table("#table_oldholdshistory", 1);
@@ -323,7 +323,6 @@
                                 return $date(row.cancellation_date)
                             }
                         },
-                        [% IF show_itemtype_column %]
                         {
                             data: "item_type_id",
                             datatype: "coded_value:item_type",
@@ -331,14 +330,17 @@
                             searchable: true,
                             orderable: true,
                             render: function (data, type, row, meta) {
-                                if ( row.item_type_id ) {
-                                    return row._strings.item_type_id ? row._strings.item_type_id.str : row.item_type_id;
-                                } else {
-                                    return _("Any item type");
-                                }
+                                [% IF Koha.Preference('AllowHoldItemTypeSelection') %]
+                                    if ( row.item_type_id ) {
+                                        return row._strings.item_type_id ? row._strings.item_type_id.str : row.item_type_id;
+                                    } else {
+                                        return _("Any item type");
+                                    }
+                                [% ELSE %]
+                                    return "";
+                                [% END %]
                             }
                         },
-                        [% END %]
                         {
                             data: "status",
                             searchable: false,
@@ -372,6 +374,7 @@
                             }
                         },
                     ],
+                    bKohaColumnsUseNames: true,
                 },
                 table_settings,
                 true,
