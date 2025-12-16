@@ -1,3 +1,4 @@
+[% USE To %]
 [% USE raw %]
 [% USE Asset %]
 [% USE KohaDates %]
@@ -159,12 +160,36 @@
     [% Asset.js("js/members-menu.js") | $raw %]
     [% INCLUDE 'js-biblio-format.inc' %]
     <script>
+        const all_libraries = [% To.json(Branches.all) | $raw %].map(e => {
+                    e["_id"] = e["branchcode"];
+                    e["_str"] = e["branchname"];
+                    return e;
+                });
+
+        const all_item_types = [% To.json(ItemTypes.Get) | $raw %].map(e => {
+                    e["_id"] = e["itemtype"];
+                    e["_str"] = e["translated_description"];
+                    return e;
+                });
+
+        var coded_values = {
+            library: new Map(all_libraries.map( l => [l.branchname, l.branchcode] )),
+            item_type: new Map(all_item_types.map( i => [i.translated_description, i.itemtype] )),
+        };
+
+        let filters_options = {
+            item_types: all_item_types,
+            libraries: all_libraries,
+        };
+    </script>
+    <script>
         $(document).ready(function() {
             var table_settings = [% TablesSettings.GetTableSettings('members', 'holdshistory', 'holdshistory-table', 'json') | $raw %];
             [% UNLESS show_itemtype_column %]
               //Remove item type column settings
               table_settings['columns'] = table_settings['columns'].filter(function(c){return c['columnname'] != 'itemtype';});
             [% END %]
+
             let current_holds_table = build_holds_table("#table_holdshistory");
             let old_holds_table = build_holds_table("#table_oldholdshistory", 1);
             function build_holds_table(table_id, old){
@@ -253,11 +278,13 @@
                             }
                         },
                         {
-                            data: "pickup_library_id:pickup_library.name",
+                            data: "me.pickup_library_id",
+                            datatype: "coded_value:library",
+                            dataFilter: "libraries",
                             searchable: true,
                             orderable: true,
                             render: function (data, type, row, meta) {
-                                return row.pickup_library.name;
+                                return escape_str(row._strings.pickup_library_id ? row._strings.pickup_library_id.str : row.pickup_library_id);
                             }
                         },
                         {
@@ -298,12 +325,14 @@
                         },
                         [% IF show_itemtype_column %]
                         {
-                            data: "item_type",
+                            data: "item_type_id",
+                            datatype: "coded_value:item_type",
+                            dataFilter: "item_types",
                             searchable: true,
                             orderable: true,
                             render: function (data, type, row, meta) {
-                                if ( row.item_type ) {
-                                    return row.item_type;
+                                if ( row.item_type_id ) {
+                                    return row._strings.item_type_id ? row._strings.item_type_id.str : row.item_type_id;
                                 } else {
                                     return _("Any item type");
                                 }
@@ -343,7 +372,12 @@
                             }
                         },
                     ],
-                }, table_settings, true, additional_filters);
+                },
+                table_settings,
+                true,
+                additional_filters,
+                filters_options,
+                );
             }
             $("#current_holds_filters :checkbox, #old_holds_filters :checkbox").on("change", function(e){
                 e.preventDefault();
