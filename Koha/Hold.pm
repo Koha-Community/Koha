@@ -695,6 +695,19 @@ sub item {
     return Koha::Item->_new_from_dbic($rs);
 }
 
+=head3 item_type
+
+Returns the related Koha::ItemType object for this hold
+
+=cut
+
+sub item_type {
+    my ($self) = @_;
+    my $rs = $self->_result->itemtype;
+    return unless $rs;
+    return Koha::ItemType->_new_from_dbic($rs);
+}
+
 =head3 item_group
 
 Returns the related Koha::Biblio::ItemGroup object for this Hold
@@ -1281,7 +1294,7 @@ sub to_api_mapping {
         lowestPriority         => 'lowest_priority',
         suspend                => 'suspended',
         suspend_until          => 'suspended_until',
-        itemtype               => 'item_type',
+        itemtype               => 'item_type_id',
         item_level_hold        => 'item_level',
     };
 }
@@ -1318,6 +1331,10 @@ sub strings_map {
     my $strings = {
         pickup_library_id => { str => $self->pickup_library->branchname, type => 'library' },
     };
+
+    if ( defined $self->itemtype ) {
+        $strings->{item_type_id} = { str => $self->item_type->description, type => 'item_type' };
+    }
 
     if ( defined $self->cancellation_reason ) {
         my $av = Koha::AuthorisedValues->search(

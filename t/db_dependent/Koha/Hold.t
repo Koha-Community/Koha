@@ -20,7 +20,7 @@
 use Modern::Perl;
 
 use Test::NoWarnings;
-use Test::More tests => 20;
+use Test::More tests => 21;
 
 use Test::Exception;
 use Test::MockModule;
@@ -88,6 +88,27 @@ subtest 'biblio() tests' => sub {
     throws_ok { $hold->biblionumber(undef)->store; }
     'DBIx::Class::Exception',
         'reserves.biblionumber cannot be null, exception thrown';
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'item_type() tests' => sub {
+
+    plan tests => 2;
+
+    $schema->storage->txn_begin;
+
+    my $hold = $builder->build_object(
+        {
+            class => 'Koha::Holds',
+            value => { itemtype => undef },
+        }
+    );
+
+    is( $hold->item_type, undef, 'Koha::Hold->item_type returns undef if no item type selected' );
+    my $item_type = $builder->build_object( { class => "Koha::ItemTypes" } );
+    $hold->itemtype( $item_type->itemtype )->store;
+    is( $hold->item_type->itemtype, $item_type->itemtype, 'Koha::Hold->item_type returns the correct item type' );
 
     $schema->storage->txn_rollback;
 };
@@ -1207,7 +1228,7 @@ subtest 'change_type() tests' => sub {
 
 subtest 'strings_map() tests' => sub {
 
-    plan tests => 3;
+    plan tests => 4;
 
     $schema->txn_begin;
 
@@ -1233,7 +1254,8 @@ subtest 'strings_map() tests' => sub {
     is_deeply(
         $strings_map,
         {
-            pickup_library_id   => { str => $library->branchname, type => 'library' },
+            pickup_library_id   => { str => $library->branchname,          type => 'library' },
+            item_type_id        => { str => $hold->item_type->description, type => 'item_type' },
             cancellation_reason => { str => $av->lib, type => 'av', category => 'HOLD_CANCELLATION' },
         },
         'Strings map is correct'
@@ -1243,7 +1265,8 @@ subtest 'strings_map() tests' => sub {
     is_deeply(
         $strings_map,
         {
-            pickup_library_id   => { str => $library->branchname, type => 'library' },
+            pickup_library_id   => { str => $library->branchname,          type => 'library' },
+            item_type_id        => { str => $hold->item_type->description, type => 'item_type' },
             cancellation_reason => { str => $av->lib_opac, type => 'av', category => 'HOLD_CANCELLATION' },
         },
         'Strings map is correct (OPAC)'
@@ -1255,10 +1278,22 @@ subtest 'strings_map() tests' => sub {
     is_deeply(
         $strings_map,
         {
-            pickup_library_id   => { str => $library->branchname, type => 'library' },
+            pickup_library_id   => { str => $library->branchname,          type => 'library' },
+            item_type_id        => { str => $hold->item_type->description, type => 'item_type' },
             cancellation_reason => { str => $hold->cancellation_reason, type => 'av', category => 'HOLD_CANCELLATION' },
         },
         'Strings map shows the cancellation_value when AV not present'
+    );
+
+    $hold->itemtype(undef)->store;
+    $strings_map = $hold->strings_map( { public => 1 } );
+    is_deeply(
+        $strings_map,
+        {
+            pickup_library_id   => { str => $library->branchname, type => 'library' },
+            cancellation_reason => { str => $hold->cancellation_reason, type => 'av', category => 'HOLD_CANCELLATION' },
+        },
+        'Strings map does not show item_type_id if none selected'
     );
 
     $schema->txn_rollback;
