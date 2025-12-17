@@ -624,13 +624,13 @@
                 var suspended = false;
 
                 hold_ids.forEach(function(hold){
-                    if( hold.suspened ){
+                    if( hold.suspended ){
                         suspended = true;
                     }
                 });
 
                 if( ( !new_suspend_status || new_suspend_status == "0" || !suspended ) && new_suspend_date ){
-                    new_suspend_status = 1;
+                    $("#new_suspend_status").val("1");
                 }
 
                 if (errors.length > 0) {
