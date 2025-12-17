@@ -430,7 +430,7 @@ sub CanBookBeReserved {
             {
                 -or => [
                     biblionumber => $biblionumber,
-                    itemnumber   => { -in => @hostitemnumbers }
+                    itemnumber   => { -in => \@hostitemnumbers }
                 ]
             }
         );
