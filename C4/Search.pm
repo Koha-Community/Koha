@@ -592,8 +592,7 @@ sub getRecords {
                 if ($sorted_facets) {
                     $f->{facets} = $sorted_facets;
                 }
-            }
-            if ( C4::Context->preference('FacetOrder') eq 'Stringwise' ) {
+            } elsif ( C4::Context->preference('FacetOrder') eq 'Stringwise' ) {
                 @{ $f->{facets} } = sort { $a->{facet_label_value} cmp $b->{facet_label_value} } @{ $f->{facets} };
             }
         }
