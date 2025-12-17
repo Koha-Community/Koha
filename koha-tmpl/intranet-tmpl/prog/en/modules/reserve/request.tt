@@ -206,7 +206,7 @@
                         <span>[% fail.hold_id | html %]</span>
                         [% SWITCH fail.error %]
                         [% CASE 'cannotReserveFromOtherBranches' %]
-                            <span>Target item cannot be reserved from other branches</span>
+                            <span>Target item cannot be placed on hold from other libraries</span>
                         [% CASE 'ageRestricted' %]
                             <span>The target record and/or items are age restricted</span>
                         [% CASE 'alreadypossession' %]
@@ -219,8 +219,6 @@
                             <span>Target item has too many holds placed on it</span>
                         [% CASE 'notReservable' %]
                             <span>Target item is not reservable</span>
-                        [% CASE 'cannotReserveFromOtherBranches' %]
-                            <span>Target item cannot be placed on reserve for this branch</span>
                         [% CASE 'branchNotInHoldGroup' %]
                             <span>Tagret item is not in the local hold group</span>
                         [% CASE 'notforloan' %]
@@ -1607,7 +1605,7 @@
             tooManyReservesToday: _("Daily hold limit reached for patron"),
             tooManyReserves: _("Too many holds"),
             notReservable: _("Not holdable"),
-            noReservesAllowed: _("No reserves allowed"),
+            noReservesAllowed: _("No holds allowed"),
             cannotReserveFromOtherBranches: _("Patron is from different library"),
             itemAlreadyOnHold: _("Patron already has hold for this item"),
             cannotBeTransferred: _("Cannot be transferred to pickup library"),
