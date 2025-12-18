@@ -1725,6 +1725,12 @@ sub check_out {
         }
 
         # We can allegedly check out, so make it so
+        # Mark as ILL checkout in the logs to track system-initiated checkouts.
+        # AddIssue signature is ( $patron, $barcode, $datedue, $cancelreserve,
+        # $issuedate, $sipmode, $params ) - pad to position 7 so the params
+        # hashref is not mistaken for $issuedate or $sipmode.
+        push @issue_args, undef while @issue_args < 6;
+        push @issue_args, { forced => ['ILL_CHECKOUT'] };
         my $issue = C4::Circulation::AddIssue(@issue_args);
 
         if ($issue) {
