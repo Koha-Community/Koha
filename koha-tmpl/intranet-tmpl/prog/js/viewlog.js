@@ -75,10 +75,10 @@ function renderRecordInfo(raw) {
 /* global override_labels */
 
 /**
- * Render the info column for a CIRCULATION log entry whose payload is a
- * JSON object containing `forced` and/or `confirmations` arrays of
- * override codes. Returns rendered HTML, or null if the payload doesn't
- * look like a circulation JSON object.
+ * Render the info column for a CIRCULATION or HOLDS log entry whose
+ * payload is a JSON object containing `forced` and/or `confirmations`
+ * arrays of override codes. Returns rendered HTML, or null if the
+ * payload doesn't look like a circulation JSON object.
  */
 function renderCircInfo(raw) {
     if (!raw) return null;
@@ -394,7 +394,7 @@ function renderInfo(data, type, row) {
     }
 
     var body = null;
-    if (mod == "CIRCULATION") {
+    if (mod == "CIRCULATION" || mod == "HOLDS") {
         body = renderCircInfo(info);
     }
     if (body === null) {

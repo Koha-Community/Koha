@@ -271,7 +271,6 @@ sub AddReserve {
 
     # Log the hold creation
     if ( C4::Context->preference('HoldsLog') ) {
-
         my $info = to_json(
             {
                 hold                   => $hold->id,
@@ -289,12 +288,11 @@ sub AddReserve {
                 patron_expiration_date => $hold->patron_expiration_date,
                 priority               => $hold->priority,
                 reservenotes           => $hold->reservenotes,
-                confirmations          => $confirmations,
-                forced                 => $forced
+                confirmations          => $confirmations || [],
+                forced                 => $forced        || []
             },
             { pretty => 1, canonical => 1 }
         );
-
         logaction( 'HOLDS', 'CREATE', $hold->id, $info );
     }
 

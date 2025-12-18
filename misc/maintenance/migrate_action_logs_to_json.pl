@@ -27,10 +27,12 @@ use C4::Context;
 use Koha::ActionLogs;
 use Koha::Checkouts;
 use Koha::Old::Checkouts;
+use Koha::Holds;
+use Koha::Old::Holds;
 
 =head1 NAME
 
-migrate_action_logs_to_json.pl - Migrate old circulation log entries to JSON format
+migrate_action_logs_to_json.pl - Migrate old circulation and holds log entries to JSON format
 
 =head1 SYNOPSIS
 
@@ -44,18 +46,31 @@ migrate_action_logs_to_json.pl [ -c | --commit ] [ -v | --verbose ] [ --help ]
 
 =head1 DESCRIPTION
 
-This script migrates old CIRCULATION ISSUE action log entries from the legacy
-itemnumber-only format to the new consistent JSON format. This is necessary
-after the fix for Bug 41358 which ensures all circulation logs are stored in
-JSON format for consistent reporting.
+This script migrates old action log entries from the legacy ID-only format to
+the new consistent JSON format. This is necessary after the fix for Bug 41358
+which ensures all circulation and holds logs are stored in JSON format for
+consistent reporting.
 
 The script will:
 1. Find all CIRCULATION ISSUE log entries where info is just an itemnumber (not JSON)
-2. Convert them to JSON format with the structure:
+2. Find all HOLDS CREATE log entries where info is just a hold_id (not JSON)
+3. Convert them to JSON format with the appropriate structure:
+
+   For CIRCULATION ISSUE:
    {
      "issue": <issue_id if available>,
      "branchcode": <branchcode if available>,
      "itemnumber": <itemnumber>,
+     "confirmations": [],
+     "forced": []
+   }
+
+   For HOLDS CREATE:
+   {
+     "hold": <hold_id>,
+     "branchcode": <branchcode if available>,
+     "biblionumber": <biblionumber if available>,
+     "itemnumber": <itemnumber if available>,
      "confirmations": [],
      "forced": []
    }
@@ -87,14 +102,14 @@ if ($help) {
 
 my $dbh = C4::Context->dbh;
 
-print "Starting migration of CIRCULATION ISSUE logs to JSON format...\n";
+print "Starting migration of action logs to JSON format...\n";
 print $commit
     ? "COMMIT MODE - Changes will be saved\n"
     : "DRY RUN MODE - No changes will be saved (use --commit to save)\n";
 print "\n";
 
-# First, count how many entries need conversion
-my $count_sql = q(
+# Count CIRCULATION ISSUE entries
+my $circ_count_sql = q(
     SELECT COUNT(*)
     FROM action_logs
     WHERE module = 'CIRCULATION'
@@ -104,9 +119,26 @@ my $count_sql = q(
       AND info REGEXP '^[0-9]+$'
 );
 
-my ($total_count) = $dbh->selectrow_array($count_sql);
+my ($circ_count) = $dbh->selectrow_array($circ_count_sql);
 
-print "Found $total_count log entries to migrate\n";
+# Count HOLDS CREATE entries
+my $holds_count_sql = q(
+    SELECT COUNT(*)
+    FROM action_logs
+    WHERE module = 'HOLDS'
+      AND action = 'CREATE'
+      AND info IS NOT NULL
+      AND info NOT LIKE '{%'
+      AND info REGEXP '^[0-9]+$'
+);
+
+my ($holds_count) = $dbh->selectrow_array($holds_count_sql);
+
+my $total_count = $circ_count + $holds_count;
+
+print "Found $circ_count CIRCULATION ISSUE log entries to migrate\n";
+print "Found $holds_count HOLDS CREATE log entries to migrate\n";
+print "Total: $total_count entries\n";
 print "\n";
 
 if ( $total_count == 0 ) {
@@ -114,15 +146,19 @@ if ( $total_count == 0 ) {
     exit 0;
 }
 
-# Process in batches using keyset pagination by action_id.
-# Using OFFSET/LIMIT here is unsafe in commit mode: each UPDATE removes the
-# row from the matching set, shifting subsequent OFFSETs and silently skipping
-# records. Paging by "action_id > last_seen" is stable under mutation and works
-# identically in dry-run mode.
-my $last_action_id = 0;
-my $processed      = 0;
+# Both loops below use keyset pagination by action_id rather than OFFSET/LIMIT.
+# Under --commit each UPDATE removes the row from the matching set, so
+# OFFSET-based pagination would silently skip records as the set shrinks.
+# Paging on "action_id > last_seen" is stable under mutation and works the
+# same in dry-run mode.
+
+# Process CIRCULATION ISSUE logs
+print "=== Processing CIRCULATION ISSUE logs ===\n\n" if $circ_count > 0;
+
 my $converted      = 0;
 my $errors         = 0;
+my $circ_last_id   = 0;
+my $circ_processed = 0;
 
 while (1) {
     my $select_sql = q(
@@ -139,7 +175,7 @@ while (1) {
     );
 
     my $sth = $dbh->prepare($select_sql);
-    $sth->execute( $last_action_id, $batch_size );
+    $sth->execute( $circ_last_id, $batch_size );
 
     my $batch_count = 0;
 
@@ -149,7 +185,7 @@ while (1) {
         my $borrowernumber = $row->{object};
         my $timestamp      = $row->{timestamp};
 
-        $last_action_id = $action_id;
+        $circ_last_id = $action_id;
 
         # The info should be an itemnumber
         my $itemnumber = $info;
@@ -233,20 +269,150 @@ while (1) {
 
     last unless $batch_count;
 
-    $processed += $batch_count;
+    $circ_processed += $batch_count;
 
     unless ($verbose) {
-        print "Processed $processed / $total_count records...\r";
+        print "Processed $circ_processed / $circ_count records...\r";
     }
 }
 
-print "\n";
-print "Migration complete!\n";
+print "\n" unless $verbose;
+print "Completed CIRCULATION ISSUE: $converted converted, $errors errors\n\n";
+
+# Process HOLDS CREATE logs
+print "=== Processing HOLDS CREATE logs ===\n\n" if $holds_count > 0;
+
+my $holds_converted = 0;
+my $holds_errors    = 0;
+my $holds_last_id   = 0;
+my $holds_processed = 0;
+
+while (1) {
+    my $select_sql = q(
+        SELECT action_id, info, object, timestamp
+        FROM action_logs
+        WHERE module = 'HOLDS'
+          AND action = 'CREATE'
+          AND info IS NOT NULL
+          AND info NOT LIKE '{%'
+          AND info REGEXP '^[0-9]+$'
+          AND action_id > ?
+        ORDER BY action_id
+        LIMIT ?
+    );
+
+    my $sth = $dbh->prepare($select_sql);
+    $sth->execute( $holds_last_id, $batch_size );
+
+    my $batch_count = 0;
+
+    while ( my $row = $sth->fetchrow_hashref ) {
+        my $action_id = $row->{action_id};
+        my $info      = $row->{info};
+
+        $holds_last_id = $action_id;
+
+        # The info should be a hold_id
+        my $hold_id = $info;
+
+        # Try to find the corresponding hold to get full details
+        my $branchcode;
+        my $biblionumber;
+        my $itemnumber;
+
+        # First check old_reserves (most likely location for old logs)
+        my $old_hold = Koha::Old::Holds->search(
+            { reserve_id => $hold_id },
+            { rows       => 1 }
+        )->next;
+
+        if ($old_hold) {
+            $branchcode   = $old_hold->branchcode;
+            $biblionumber = $old_hold->biblionumber;
+            $itemnumber   = $old_hold->itemnumber;
+        } else {
+
+            # Try current reserves table (unlikely but possible)
+            my $current_hold = Koha::Holds->search( { reserve_id => $hold_id } )->next;
+
+            if ($current_hold) {
+                $branchcode   = $current_hold->branchcode;
+                $biblionumber = $current_hold->biblionumber;
+                $itemnumber   = $current_hold->itemnumber;
+            }
+        }
+
+        # Build the JSON structure
+        my $json_data = {
+            hold          => $hold_id,
+            branchcode    => $branchcode,
+            biblionumber  => $biblionumber,
+            itemnumber    => $itemnumber,
+            confirmations => [],
+            forced        => []
+        };
+
+        # Match the pretty/canonical encoding used by AddReserve so the
+        # converted entries are byte-identical to freshly logged ones.
+        my $json_info = JSON->new->pretty(1)->canonical(1)->encode($json_data);
+
+        if ($verbose) {
+            print "Converting action_id $action_id:\n";
+            print "  Old: $info\n";
+            print "  New: " . ( $json_info =~ s/\n/ /gr ) . "\n";
+            print "  hold_id: $hold_id\n";
+            print "  branchcode: " .   ( $branchcode   // 'NULL' ) . "\n";
+            print "  biblionumber: " . ( $biblionumber // 'NULL' ) . "\n";
+            print "  itemnumber: " .   ( $itemnumber   // 'NULL' ) . "\n";
+            print "\n";
+        }
+
+        if ($commit) {
+            my $update_sql = q(
+                UPDATE action_logs
+                SET info = ?
+                WHERE action_id = ?
+            );
+            my $update_sth = $dbh->prepare($update_sql);
+            if ( $update_sth->execute( $json_info, $action_id ) ) {
+                $holds_converted++;
+            } else {
+                print STDERR "ERROR: Failed to update action_id $action_id: " . $dbh->errstr . "\n";
+                $holds_errors++;
+            }
+        } else {
+            $holds_converted++;
+        }
+
+        $batch_count++;
+    }
+
+    last unless $batch_count;
+
+    $holds_processed += $batch_count;
+
+    unless ($verbose) {
+        print "Processed $holds_processed / $holds_count records...\r";
+    }
+}
+
+print "\n" unless $verbose;
+print "Completed HOLDS CREATE: $holds_converted converted, $holds_errors errors\n\n";
+
+# Final summary
+print "=== Migration Summary ===\n";
+print "CIRCULATION ISSUE:\n";
 print "  Converted: $converted\n";
 print "  Errors: $errors\n";
+print "HOLDS CREATE:\n";
+print "  Converted: $holds_converted\n";
+print "  Errors: $holds_errors\n";
+print "TOTAL:\n";
+print "  Converted: " . ( $converted + $holds_converted ) . "\n";
+print "  Errors: " .    ( $errors + $holds_errors ) . "\n";
 print "\n";
 
-if ( !$commit && $converted > 0 ) {
+if ( !$commit && ( $converted > 0 || $holds_converted > 0 ) ) {
     print "This was a DRY RUN. Use --commit to actually update the database.\n";
 }
 

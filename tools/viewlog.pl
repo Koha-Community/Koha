@@ -205,7 +205,7 @@ if ($do_it) {
                 }
             }
 
-            if ( $log->module eq "CIRCULATION" ) {
+            if ( $log->module eq "CIRCULATION" || $log->module eq "HOLDS" ) {
                 my $info = $log->info;
                 my $decoded;
                 my $is_json = eval {
@@ -214,13 +214,17 @@ if ($do_it) {
                 };
 
                 if ( $is_json && ref($decoded) ) {
-                    my $item = Koha::Items->find( $decoded->{itemnumber} );
-                    if ($item) {
-                        $decoded->{biblionumber}     = $item->biblionumber;
-                        $decoded->{biblioitemnumber} = $item->biblionumber;
-                        $decoded->{barcode}          = $item->barcode;
+                    if ( $decoded->{itemnumber} ) {
+                        my $item = Koha::Items->find( $decoded->{itemnumber} );
+                        if ($item) {
+                            $result->{'biblionumber'}     = $item->biblionumber;
+                            $result->{'biblioitemnumber'} = $item->biblionumber;
+                            $result->{'barcode'}          = $item->barcode;
+                        }
                     }
-                } else {
+                } elsif ( $log->module eq "CIRCULATION" ) {
+
+                    # Legacy CIRCULATION ISSUE format: info is the bare itemnumber
                     my $item = Koha::Items->find($info);
                     if ($item) {
                         $result->{'biblionumber'}     = $item->biblionumber;
