@@ -1196,7 +1196,16 @@ sub expand_template {
         # Set files to load
         $params->{template}      = $template_name;
         $params->{opac_template} = $template_name;
+    } elsif ( $params->{error}
+        && $params->{status} eq 'failed_captcha'
+        && C4::Context->preference("AutoILLBackendPriority") )
+    {
+        my $template_name = 'ill/backends/Standard/' . ( $params->{method} // q{} ) . '.inc';
 
+        # Set files to load
+        $params->{template}      = $template_name;
+        $params->{opac_template} = $template_name;
+        $params->{stage}         = 'form';
     } else {
         my $plugin = $self->get_backend_plugin( $self->_backend->name );
 
