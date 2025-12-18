@@ -269,6 +269,10 @@
         <span>Unseen renewal</span>
     [% CASE 'SEEN' %]
         <span>Seen renewal</span>
+    [% CASE 'OFFLINE_CIRCULATION' %]
+        <span>Offline circulation checkout</span>
+    [% CASE 'ILL_CHECKOUT' %]
+        <span>ILL system checkout</span>
     [% CASE %]
         <span>[% override | html %]</span>
     [% END %]
