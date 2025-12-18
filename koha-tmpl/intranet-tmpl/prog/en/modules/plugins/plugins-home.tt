@@ -172,23 +172,16 @@
                                 </thead>
 
                                 [% FOREACH plugin IN plugins %]
-                                    [% IF plugin.error %]
-                                        <tr class="warn">
-                                            <td>
+                                    <tr>
+                                        <td>
+                                            [% UNLESS plugin.error %]
+                                                <strong>[% plugin.metadata.name | html %]</strong>
+                                            [% ELSE %]
                                                 <strong>[% plugin.name | html %]</strong>
                                                 <span class="badge text-bg-warning">ERRORS</span>
-                                            </td>
-                                            [% IF ( CAN_user_plugins_configure || CAN_user_plugins_manage || CAN_user_plugins_report || CAN_user_plugins_tool ) %]
-                                                <td colspan="8">Error found whilst attempting to load plugin</td>
-                                            [% ELSE %]
-                                                <td colspan="8">Error found whilst attempting to load plugin</td>
                                             [% END %]
-                                        </tr>
-                                    [% ELSE %]
-                                        <tr>
-                                            <td>
-                                                <strong>[% plugin.metadata.name | html %]</strong>
-                                            </td>
+                                        </td>
+                                        [% UNLESS plugin.error %]
                                             <td>
                                                 [% plugin.metadata.description | html %]
 
@@ -200,89 +193,93 @@
                                                     <div class="alert alert-warning"> Warning: This plugin was written for an older version of Koha. Use at your own risk. </div>
                                                 [% END %]
                                             </td>
-                                            <td>[% plugin.metadata.author | html %]</td>
-                                            <td>[% plugin.metadata.version | html %]</td>
-                                            <td>[% plugin.metadata.minimum_version | html %]</td>
-                                            <td>[% plugin.metadata.maximum_version | html %]</td>
-                                            <td>[% plugin.metadata.date_updated | $KohaDates %]</td>
+                                        [% ELSE %]
                                             <td>
-                                                [% IF ( plugin.is_enabled ) %]
-                                                    <span class="badge text-bg-success">Enabled</span>
-                                                [% ELSE %]
-                                                    <span class="badge text-bg-warning">Disabled</span>
-                                                [% END %]
+                                                <span class="badge text-bg-warning">Error found whilst attempting to load plugin</span>
                                             </td>
-                                            [% IF ( CAN_user_plugins_configure || CAN_user_plugins_manage || CAN_user_plugins_report || CAN_user_plugins_tool ) %]
-                                                <td class="actions">
-                                                    <div class="btn-group dropup">
-                                                        <a class="btn btn-default btn-xs dropdown-toggle" id="pluginactions[% plugin.class | html %]" role="button" data-bs-toggle="dropdown" href="#"> Actions </a>
-                                                        <ul class="dropdown-menu" role="menu" aria-labelledby="pluginactions[% plugin.class | html %]">
-                                                            [% IF ( CAN_user_plugins_report ) %]
-                                                                [% IF plugin.can('report') %]
-                                                                    <li
-                                                                        ><a class="dropdown-item" href="/cgi-bin/koha/plugins/run.pl?class=[% plugin.class | uri %]&method=report"><i class="fa fa-table fa-fw"></i> Run report</a></li
-                                                                    >
-                                                                [% END %]
+                                        [% END %]
+                                        <td>[% plugin.metadata.author | html %]</td>
+                                        <td>[% plugin.metadata.version | html %]</td>
+                                        <td>[% plugin.metadata.minimum_version | html %]</td>
+                                        <td>[% plugin.metadata.maximum_version | html %]</td>
+                                        <td>[% plugin.metadata.date_updated | $KohaDates %]</td>
+                                        <td>
+                                            [% IF ( plugin.is_enabled ) %]
+                                                <span class="badge text-bg-success">Enabled</span>
+                                            [% ELSE %]
+                                                <span class="badge text-bg-warning">Disabled</span>
+                                            [% END %]
+                                        </td>
+                                        [% IF ( CAN_user_plugins_configure || CAN_user_plugins_manage || CAN_user_plugins_report || CAN_user_plugins_tool ) %]
+                                            <td class="actions">
+                                                <div class="btn-group dropup">
+                                                    <a class="btn btn-default btn-xs dropdown-toggle" id="pluginactions[% plugin.class | html %]" role="button" data-bs-toggle="dropdown" href="#"> Actions </a>
+                                                    <ul class="dropdown-menu" role="menu" aria-labelledby="pluginactions[% plugin.class | html %]">
+                                                        [% IF ( CAN_user_plugins_report ) %]
+                                                            [% IF plugin.can('report') %]
+                                                                <li
+                                                                    ><a class="dropdown-item" href="/cgi-bin/koha/plugins/run.pl?class=[% plugin.class | uri %]&method=report"><i class="fa fa-table fa-fw"></i> Run report</a></li
+                                                                >
                                                             [% END %]
+                                                        [% END %]
 
-                                                            [% IF ( CAN_user_plugins_tool ) %]
-                                                                [% IF plugin.can('tool') %]
-                                                                    <li
-                                                                        ><a class="dropdown-item" href="/cgi-bin/koha/plugins/run.pl?class=[% plugin.class | uri %]&method=tool"><i class="fa fa-wrench fa-fw"></i> Run tool</a></li
-                                                                    >
-                                                                [% END %]
+                                                        [% IF ( CAN_user_plugins_tool ) %]
+                                                            [% IF plugin.can('tool') %]
+                                                                <li
+                                                                    ><a class="dropdown-item" href="/cgi-bin/koha/plugins/run.pl?class=[% plugin.class | uri %]&method=tool"><i class="fa fa-wrench fa-fw"></i> Run tool</a></li
+                                                                >
                                                             [% END %]
+                                                        [% END %]
 
-                                                            [% IF ( CAN_user_plugins_admin ) %]
-                                                                [% IF plugin.can('admin') %]
-                                                                    <li
-                                                                        ><a class="dropdown-item" href="/cgi-bin/koha/plugins/run.pl?class=[% plugin.class | uri %]&method=admin"><i class="fa fa-wrench fa-fw"></i> Run admin tool</a></li
-                                                                    >
-                                                                [% END %]
+                                                        [% IF ( CAN_user_plugins_admin ) %]
+                                                            [% IF plugin.can('admin') %]
+                                                                <li
+                                                                    ><a class="dropdown-item" href="/cgi-bin/koha/plugins/run.pl?class=[% plugin.class | uri %]&method=admin"><i class="fa fa-wrench fa-fw"></i> Run admin tool</a></li
+                                                                >
                                                             [% END %]
+                                                        [% END %]
 
-                                                            [% IF ( CAN_user_plugins_configure ) %]
-                                                                [% IF plugin.can('configure') %]
-                                                                    <li
-                                                                        ><a class="dropdown-item" href="/cgi-bin/koha/plugins/run.pl?class=[% plugin.class | uri %]&method=configure"><i class="fa fa-cog fa-fw"></i> Configure</a></li
-                                                                    >
-                                                                [% END %]
+                                                        [% IF ( CAN_user_plugins_configure ) %]
+                                                            [% IF plugin.can('configure') %]
+                                                                <li
+                                                                    ><a class="dropdown-item" href="/cgi-bin/koha/plugins/run.pl?class=[% plugin.class | uri %]&method=configure"><i class="fa fa-cog fa-fw"></i> Configure</a></li
+                                                                >
                                                             [% END %]
-                                                            [% IF ( CAN_user_plugins_manage ) %]
+                                                        [% END %]
+                                                        [% IF ( CAN_user_plugins_manage ) %]
+                                                            <li
+                                                                ><a
+                                                                    class="dropdown-item uninstall_plugin"
+                                                                    data-plugin-name="[% plugin.metadata.name | html %]"
+                                                                    href="/cgi-bin/koha/plugins/plugins-uninstall.pl?class=[% plugin.class | html %]"
+                                                                    ><i class="fa fa-trash-can fa-fw"></i> Uninstall</a
+                                                                ></li
+                                                            >
+                                                            [% IF ( plugin.is_enabled ) %]
                                                                 <li
                                                                     ><a
-                                                                        class="dropdown-item uninstall_plugin"
+                                                                        class="dropdown-item enable_plugin"
                                                                         data-plugin-name="[% plugin.metadata.name | html %]"
-                                                                        href="/cgi-bin/koha/plugins/plugins-uninstall.pl?class=[% plugin.class | html %]"
-                                                                        ><i class="fa fa-trash-can fa-fw"></i> Uninstall</a
+                                                                        href="/cgi-bin/koha/plugins/plugins-enable.pl?class=[% plugin.class | html %]&method=disable"
+                                                                        ><i class="fa fa-pause fa-fw"></i> Disable</a
                                                                     ></li
                                                                 >
-                                                                [% IF ( plugin.is_enabled ) %]
-                                                                    <li
-                                                                        ><a
-                                                                            class="dropdown-item enable_plugin"
-                                                                            data-plugin-name="[% plugin.metadata.name | html %]"
-                                                                            href="/cgi-bin/koha/plugins/plugins-enable.pl?class=[% plugin.class | html %]&method=disable"
-                                                                            ><i class="fa fa-pause fa-fw"></i> Disable</a
-                                                                        ></li
-                                                                    >
-                                                                [% ELSE %]
-                                                                    <li
-                                                                        ><a
-                                                                            class="dropdown-item enable_plugin"
-                                                                            data-plugin-name="[% plugin.metadata.name | html %]"
-                                                                            href="/cgi-bin/koha/plugins/plugins-enable.pl?class=[% plugin.class | html %]&method=enable"
-                                                                            ><i class="fa fa-play fa-fw"></i> Enable</a
-                                                                        ></li
-                                                                    >
-                                                                [% END %]
+                                                            [% ELSE %]
+                                                                <li
+                                                                    ><a
+                                                                        class="dropdown-item enable_plugin"
+                                                                        data-plugin-name="[% plugin.metadata.name | html %]"
+                                                                        href="/cgi-bin/koha/plugins/plugins-enable.pl?class=[% plugin.class | html %]&method=enable"
+                                                                        ><i class="fa fa-play fa-fw"></i> Enable</a
+                                                                    ></li
+                                                                >
                                                             [% END %]
-                                                        </ul>
-                                                    </div>
-                                                </td>
-                                            [% END %]
-                                        </tr>
-                                    [% END %]
+                                                        [% END %]
+                                                    </ul>
+                                                </div>
+                                            </td>
+                                        [% END %]
+                                    </tr>
                                 [% END %]
                             </table> </div
                         ><!-- /.page-section -->
