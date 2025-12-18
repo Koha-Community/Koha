@@ -8317,7 +8317,7 @@ subtest 'ChildNeedsGuarantor' => sub {
 };
 
 subtest 'Bug 9762: AddIssue override JSON logging' => sub {
-    plan tests => 8;
+    plan tests => 11;
 
     my $library = $builder->build_object( { class => 'Koha::Libraries' } );
     my $patron  = $builder->build_object( { class => 'Koha::Patrons' } );
@@ -8329,7 +8329,7 @@ subtest 'Bug 9762: AddIssue override JSON logging' => sub {
     # Clear any existing logs
     Koha::ActionLogs->search( { module => 'CIRCULATION', action => 'ISSUE' } )->delete;
 
-    # Test 1: Normal checkout without overrides - should log item number only
+    # Test 1: Normal checkout without overrides - should log JSON with empty arrays
     my $issue = C4::Circulation::AddIssue( $patron, $item->barcode );
     ok( $issue, 'Item checked out successfully' );
 
@@ -8342,8 +8342,12 @@ subtest 'Bug 9762: AddIssue override JSON logging' => sub {
         { order_by => { -desc => 'timestamp' } }
     );
     is( $logs->count, 1, 'One log entry created for normal checkout' );
-    my $log = $logs->next;
-    is( $log->info, $item->itemnumber, 'Normal checkout logs item number only' );
+    my $log      = $logs->next;
+    my $log_data = eval { from_json( $log->info ) };
+    ok( !$@, 'Normal checkout log info is valid JSON' );
+    is( $log_data->{itemnumber}, $item->itemnumber, 'JSON contains correct itemnumber' );
+    is_deeply( $log_data->{confirmations}, [], 'Confirmations is empty array for normal checkout' );
+    is_deeply( $log_data->{forced},        [], 'Forced is empty array for normal checkout' );
 
     # Return the item for next test
     C4::Circulation::AddReturn( $item->barcode, $library->branchcode );
@@ -8367,14 +8371,14 @@ subtest 'Bug 9762: AddIssue override JSON logging' => sub {
             module => 'CIRCULATION',
             action => 'ISSUE',
             object => $patron->borrowernumber,
-            info   => { '!=', $item->itemnumber }    # Exclude the first test log
+            info   => { 'LIKE', '%' . $item2->itemnumber . '%' }    # Find the second test log by itemnumber
         },
         { order_by => { -desc => 'timestamp' } }
     );
     is( $logs->count, 1, 'One log entry created for override checkout' );
     $log = $logs->next;
 
-    my $log_data = eval { from_json( $log->info ) };
+    $log_data = eval { from_json( $log->info ) };
     ok( !$@,                               'Log info is valid JSON' );
     ok( exists $log_data->{confirmations}, 'JSON contains confirmations array' );
     is_deeply( $log_data->{confirmations}, [ 'DEBT', 'AGE_RESTRICTION' ], 'Confirmations logged correctly' );
