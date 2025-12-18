@@ -1185,56 +1185,49 @@ sub expand_template {
     my ( $self, $params ) = @_;
     my $backend = $self->_backend->name;
 
-    if (
-        $backend eq 'Standard'
-        || ( $params->{method} && $params->{method} eq 'edititem' && C4::Context->preference("AutoILLBackendPriority") )
-        )
-    {
+    my $auto_priority  = C4::Context->preference("AutoILLBackendPriority");
+    my $unauth_request = C4::Context->preference("ILLOpacUnauthenticatedRequest");
+    my $method         = $params->{method} // q{};
+    my $template_name  = "ill/backends/Standard/$method.inc";
 
-        my $template_name = 'ill/backends/Standard/' . ( $params->{method} // q{} ) . '.inc';
-
-        # Set files to load
+    if ( $backend eq 'Standard' || ( $method eq 'edititem' && $auto_priority ) ) {
         $params->{template}      = $template_name;
         $params->{opac_template} = $template_name;
-    } elsif ( $params->{error}
-        && $params->{status} eq 'failed_captcha'
-        && C4::Context->preference("AutoILLBackendPriority") )
-    {
-        my $template_name = 'ill/backends/Standard/' . ( $params->{method} // q{} ) . '.inc';
+        return $params;
+    }
 
-        # Set files to load
+    if ( $params->{error} && $params->{status} eq 'failed_captcha' && $auto_priority && $unauth_request ) {
         $params->{template}      = $template_name;
         $params->{opac_template} = $template_name;
         $params->{stage}         = 'form';
-    } else {
-        my $plugin = $self->get_backend_plugin( $self->_backend->name );
-
-        # Generate path to file to load
-        my $backend_dir;
-        my $backend_tmpl;
-
-        if ($plugin) {
-
-            # New way of loading backends: Through plugins
-            $backend_dir  = $plugin->bundle_path;
-            $backend_tmpl = $backend_dir;
-
-        } else {
-
-            # Old way of loading backends: Through backend_dir config
-            $backend_dir  = $self->_config->backend_dir;
-            $backend_tmpl = join "/", $backend_dir, $backend;
-        }
-
-        my $intra_tmpl = join "/", $backend_tmpl, "intra-includes",
-            ( $params->{method} // q{} ) . ".inc";
-        my $opac_tmpl = join "/", $backend_tmpl, "opac-includes",
-            ( $params->{method} // q{} ) . ".inc";
-
-        # Set files to load
-        $params->{template}      = $intra_tmpl;
-        $params->{opac_template} = $opac_tmpl;
+        return $params;
     }
+
+    my $plugin = $self->get_backend_plugin( $self->_backend->name );
+
+    # Generate path to file to load
+    my $backend_dir;
+    my $backend_tmpl;
+
+    if ($plugin) {
+
+        # New way of loading backends: Through plugins
+        $backend_dir  = $plugin->bundle_path;
+        $backend_tmpl = $backend_dir;
+
+    } else {
+
+        # Old way of loading backends: Through backend_dir config
+        $backend_dir  = $self->_config->backend_dir;
+        $backend_tmpl = join "/", $backend_dir, $backend;
+    }
+
+    my $intra_tmpl = join "/", $backend_tmpl, "intra-includes", "$method.inc";
+    my $opac_tmpl  = join "/", $backend_tmpl, "opac-includes",  "$method.inc";
+
+    # Set files to load
+    $params->{template}      = $intra_tmpl;
+    $params->{opac_template} = $opac_tmpl;
 
     return $params;
 }
