@@ -388,7 +388,7 @@ function LoadIssuesTable() {
                                 "<a href='/cgi-bin/koha/recalls/request.pl?biblionumber=" +
                                 oObj.biblionumber +
                                 "'>" +
-                                __("Recalled") +
+                                __("Item recalled by another patron") +
                                 "</a>" +
                                 "</span>";
 
@@ -400,7 +400,7 @@ function LoadIssuesTable() {
                                 "<a href='/cgi-bin/koha/bookings/list.pl?biblionumber=" +
                                 oObj.biblionumber +
                                 "'>" +
-                                __("Booked") +
+                                __("Item booked for another patron") +
                                 "</a>" +
                                 "</span>";
                             span_style = "display: none";
@@ -411,7 +411,7 @@ function LoadIssuesTable() {
                                 "<a href='/cgi-bin/koha/reserve/request.pl?biblionumber=" +
                                 oObj.biblionumber +
                                 "'>" +
-                                __("On hold") +
+                                __("Item on hold for another patron") +
                                 "</a>" +
                                 "</span>";
 
@@ -592,7 +592,7 @@ function LoadIssuesTable() {
                                 "<a href='/cgi-bin/koha/recalls/request.pl?biblionumber=" +
                                 oObj.biblionumber +
                                 "'>" +
-                                __("Recalled") +
+                                __("Item recalled by another patron") +
                                 "</a>"
                             );
                         } else if (oObj.can_renew_error == "on_reserve") {
@@ -600,7 +600,7 @@ function LoadIssuesTable() {
                                 "<a href='/cgi-bin/koha/reserve/request.pl?biblionumber=" +
                                 oObj.biblionumber +
                                 "'>" +
-                                __("On hold") +
+                                __("Item on hold for another patron") +
                                 "</a>"
                             );
                         } else if (oObj.materials) {
