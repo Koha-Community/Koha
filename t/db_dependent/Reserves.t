@@ -2090,7 +2090,7 @@ subtest 'CheckReserves() item type tests' => sub {
 };
 
 subtest 'Bug 40866: AddReserve override JSON logging' => sub {
-    plan tests => 9;
+    plan tests => 11;
 
     $schema->storage->txn_begin;
 
@@ -2115,7 +2115,7 @@ subtest 'Bug 40866: AddReserve override JSON logging' => sub {
     # Clear any existing logs
     Koha::ActionLogs->search( { module => 'HOLDS', action => 'CREATE' } )->delete;
 
-    # Test 1: Normal hold without overrides - should log hold ID only
+    # Test 1: Normal hold without overrides - should log JSON with empty arrays
     my $hold_id = C4::Reserves::AddReserve(
         {
             branchcode     => $library->branchcode,
@@ -2135,11 +2135,12 @@ subtest 'Bug 40866: AddReserve override JSON logging' => sub {
         { order_by => { -desc => 'timestamp' } }
     );
     is( $logs->count, 1, 'One log entry created for normal hold' );
-    my $log = $logs->next;
-
+    my $log      = $logs->next;
     my $log_data = eval { from_json( $log->info ) };
-    ok( !$@,                                    'Log info is valid JSON' );
-    ok( !defined( $log_data->{confirmations} ), 'Confirmations array is undefined' );
+    ok( !$@, 'Normal hold log info is valid JSON' );
+    is( $log_data->{hold}, $hold_id, 'JSON contains correct hold ID' );
+    is_deeply( $log_data->{confirmations}, [], 'Confirmations is empty array for normal hold' );
+    is_deeply( $log_data->{forced},        [], 'Forced is empty array for normal hold' );
 
     # Cancel the hold for next test
     my $hold = Koha::Holds->find($hold_id);
