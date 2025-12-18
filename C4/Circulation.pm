@@ -1950,19 +1950,16 @@ sub AddIssue {
 
             # Log the checkout
             if ( C4::Context->preference('IssueLog') ) {
-                my $info = $item_object->itemnumber;
-                if ( defined($confirmations) || defined($forced) ) {
-                    $info = to_json(
+                my $info = to_json(
                         {
                             issue         => $issue->issue_id,
                             branchcode    => $issue->branchcode,
                             itemnumber    => $item_object->itemnumber,
-                            confirmations => $confirmations,
-                            forced        => $forced
+                        confirmations => $confirmations || [],
+                        forced        => $forced        || []
                         },
                         { pretty => 1, canonical => 1 }
                     );
-                }
                 logaction(
                     "CIRCULATION", "ISSUE",
                     $patron->borrowernumber,
