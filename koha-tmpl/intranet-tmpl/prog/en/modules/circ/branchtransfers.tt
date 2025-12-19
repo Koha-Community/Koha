@@ -182,42 +182,43 @@
         [% END %]
 
         [% IF ( errmsgloop ) %]
-            <div class="alert alert-info">
-                <ul>
-                    [% FOREACH errmsgloo IN errmsgloop %]
-                        [% IF ( errmsgloo.errbadcode ) %]
-                            <li>No item with barcode: [% errmsgloo.msg | html %]</li>
-                        [% END %]
-                        [% IF ( errmsgloo.errnotallowed ) %]
-                            <li
-                                >Transfer is not allowed for:
-                                <ol>
-                                    [% IF ( Koha.Preference('BranchTransferLimitsType') == 'itemtype' ) %]
-                                        <li>Item type: <strong>[% ItemTypes.GetDescription( errmsgloo.code ) | html %]</strong></li>
-                                    [% ELSE %]
-                                        <li>Collection: <strong>[% AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.ccode', authorised_value => errmsgloo.code ) | html %]</strong></li>
-                                    [% END %]
-                                    <li>Originating library: <strong>[% Branches.GetName( errmsgloo.fbr ) | html %]</strong></li>
-                                    <li>Destination library: <strong>[% Branches.GetName( errmsgloo.tbr ) | html %]</strong></li>
-                                </ol>
-                            </li>
-                        [% END %]
-                        [% IF ( errmsgloo.errdesteqholding ) %]
-                            <li>Item is already at destination library.</li>
-                        [% END %]
-                        [% IF ( errmsgloo.errwasreturned ) %]
-                            <li
-                                >Item was on loan to
-                                <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% errmsgloo.patron.borrowernumber | uri %]">
-                                    [% errmsgloo.patron.firstname | html %] [% errmsgloo.patron.surname | html %] ([% errmsgloo.patron.cardnumber | html %])</a
-                                >
-                                and has been returned.</li
+            [% FOREACH errmsgloo IN errmsgloop %]
+                [% IF ( errmsgloo.errbadcode ) %]
+                    <div class="alert alert-info">
+                        <p>No item with barcode: [% errmsgloo.msg | html %]</p>
+                    </div>
+                [% END %]
+                [% IF ( errmsgloo.errnotallowed ) %]
+                    <div class="alert alert-info">
+                        <p>Transfer is not allowed for:</p>
+                        <ol>
+                            [% IF ( Koha.Preference('BranchTransferLimitsType') == 'itemtype' ) %]
+                                <li>Item type: <strong>[% ItemTypes.GetDescription( errmsgloo.code ) | html %]</strong></li>
+                            [% ELSE %]
+                                <li>Collection: <strong>[% AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.ccode', authorised_value => errmsgloo.code ) | html %]</strong></li>
+                            [% END %]
+                            <li>Originating library: <strong>[% Branches.GetName( errmsgloo.fbr ) | html %]</strong></li>
+                            <li>Destination library: <strong>[% Branches.GetName( errmsgloo.tbr ) | html %]</strong></li>
+                        </ol>
+                    </div>
+                [% END %]
+                [% IF ( errmsgloo.errdesteqholding ) %]
+                    <div class="alert alert-info">
+                        <p>Item is already at destination library.</p>
+                    </div>
+                [% END %]
+                [% IF ( errmsgloo.errwasreturned ) %]
+                    <div class="alert alert-info">
+                        <p
+                            >Item was on loan to
+                            <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% errmsgloo.patron.borrowernumber | uri %]"
+                                >[% errmsgloo.patron.firstname | html %] [% errmsgloo.patron.surname | html %] ([% errmsgloo.patron.cardnumber | html %])</a
                             >
-                        [% END %]
-                    [% END # /FOREACH errmsgloo %]
-                </ul>
-            </div>
-            <!-- /.dialog.message -->
+                            and has been returned.</p
+                        >
+                    </div>
+                [% END %]
+            [% END # /FOREACH errmsgloo %]
         [% END # /errmsgloop %]
 
         <div id="branchtransfers">
