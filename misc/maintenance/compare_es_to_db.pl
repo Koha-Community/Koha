@@ -68,33 +68,6 @@ if ($help) {
     exit;
 }
 
-my $help;
-my $fix;
-
-GetOptions(
-    'h|help' => \$help,
-    'f|fix'  => \$fix,
-);
-
-my $usage = <<'ENDUSAGE';
-
-This script finds differences between the records on the Koha database
-and the Elasticsearch index.
-
-The `--fix` option switch can be passed to try fixing them.
-
-This script has the following parameters :
-
-    -f|--fix     Try to fix errors
-    -h|--help    Print this message
-
-ENDUSAGE
-
-if ($help) {
-    print $usage;
-    exit;
-}
-
 foreach my $index ( ('biblios','authorities') ) {
     print "=================\n";
     print "Checking $index\n";
