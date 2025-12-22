@@ -10,7 +10,7 @@ return {
 
         $dbh->do(
             q{INSERT IGNORE INTO systempreferences (variable,value,options,explanation,type)
-            VALUES ('FutureHoldsBlockRenewals', 0, NULL, 'Allow future holds to block renewals', 'Integer' )}
+            VALUES ('FutureHoldsBlockRenewals', 0, NULL, 'Allow future holds to block renewals', 'YesNo' )}
         );
 
         say $out "Added new system preference 'FutureHoldsBlockRenewals'";
