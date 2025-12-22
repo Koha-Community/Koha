@@ -1979,7 +1979,7 @@ subtest "CanBookBeRenewed | future holds" => sub {
 
     # Skip future holds for renewals
     t::lib::Mocks::mock_preference( 'FutureHoldsBlockRenewals', 0 );
-    $hold->reservedate($future_date)->store;
+    $hold->reservedate( DateTime->today->add( days => 2 ) )->store;
     ( $renewok, $error ) = CanBookBeRenewed( $patron1, $issue, 0 );
     is( $renewok, 1,     'Can be renewed when future holds are skipped' );
     is( $error,   undef, 'No error message 2' );
