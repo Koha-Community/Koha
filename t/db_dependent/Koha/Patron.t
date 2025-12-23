@@ -19,7 +19,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 45;
+use Test::More tests => 46;
 use Test::NoWarnings;
 use Test::Exception;
 use Test::Warn;
@@ -2947,6 +2947,131 @@ subtest 'is_patron_inside_charge_limits() tests' => sub {
     is(
         $patron_borrowing_status->{NoIssuesChargeGuarantorsWithGuarantees}->{overlimit}, 1,
         "Patron is over the charge limit"
+    );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'is_patron_inside_charge_limits - edge cases for empty string and zero' => sub {
+    plan tests => 14;
+
+    $schema->storage->txn_begin;
+
+    my $patron_category = $builder->build(
+        {
+            source => 'Category',
+            value  => {
+                categorycode                           => 'TEST_CAT',
+                category_type                          => 'P',
+                enrolmentfee                           => 0,
+                noissuescharge                         => undef,
+                noissueschargeguarantees               => undef,
+                noissueschargeguarantorswithguarantees => undef
+            }
+        }
+    );
+
+    my $patron = $builder->build_object(
+        {
+            class => 'Koha::Patrons',
+            value => { categorycode => $patron_category->{categorycode} }
+        }
+    );
+
+    my $child = $builder->build_object( { class => 'Koha::Patrons' } );
+    $child->add_guarantor( { guarantor_id => $patron->borrowernumber, relationship => 'parent' } );
+
+    # Add some charges to the child
+    my $fee = $builder->build_object(
+        {
+            class => 'Koha::Account::Lines',
+            value => {
+                borrowernumber    => $child->borrowernumber,
+                amountoutstanding => 5.50,
+                debit_type_code   => 'OVERDUE',
+            }
+        }
+    )->store;
+
+    # Test 1: Empty string values should be treated as "not set"
+    # Empty string is the default value in sysprefs for these preferences
+    t::lib::Mocks::mock_preference( 'NoIssuesChargeGuarantees',               '' );
+    t::lib::Mocks::mock_preference( 'NoIssuesChargeGuarantorsWithGuarantees', '' );
+
+    my $patron_borrowing_status = $patron->is_patron_inside_charge_limits();
+
+    is(
+        $patron_borrowing_status->{NoIssuesChargeGuarantees}->{limit}, '',
+        "Empty string limit is preserved in return value"
+    );
+    is(
+        $patron_borrowing_status->{NoIssuesChargeGuarantees}->{charge}, 0,
+        "Charges should be 0 when limit is empty string (calculation skipped)"
+    );
+    is(
+        $patron_borrowing_status->{NoIssuesChargeGuarantees}->{overlimit}, 0,
+        "Patron should not be overlimit when preference is empty string"
+    );
+
+    is(
+        $patron_borrowing_status->{NoIssuesChargeGuarantorsWithGuarantees}->{limit}, '',
+        "Empty string limit is preserved for guarantors preference"
+    );
+    is(
+        $patron_borrowing_status->{NoIssuesChargeGuarantorsWithGuarantees}->{charge}, 0,
+        "Guarantors charges should be 0 when limit is empty string (calculation skipped)"
+    );
+    is(
+        $patron_borrowing_status->{NoIssuesChargeGuarantorsWithGuarantees}->{overlimit}, 0,
+        "Patron should not be overlimit when guarantors preference is empty string"
+    );
+
+    # Test 2: Zero values should trigger calculation but not block
+    t::lib::Mocks::mock_preference( 'NoIssuesChargeGuarantees',               0 );
+    t::lib::Mocks::mock_preference( 'NoIssuesChargeGuarantorsWithGuarantees', 0 );
+
+    $patron_borrowing_status = $patron->is_patron_inside_charge_limits();
+
+    is(
+        $patron_borrowing_status->{NoIssuesChargeGuarantees}->{limit}, 0,
+        "Zero limit is preserved in return value"
+    );
+    is(
+        $patron_borrowing_status->{NoIssuesChargeGuarantees}->{charge}, 5.50,
+        "Charges should be calculated when limit is 0 (valid number)"
+    );
+    is(
+        $patron_borrowing_status->{NoIssuesChargeGuarantees}->{overlimit}, 0,
+        "Patron should not be overlimit when limit is 0 (0 means no blocking)"
+    );
+
+    is(
+        $patron_borrowing_status->{NoIssuesChargeGuarantorsWithGuarantees}->{limit}, 0,
+        "Zero limit is preserved for guarantors preference"
+    );
+
+    # Note: This will be 5.50 because the child is included in guarantor debt calculation
+    ok(
+        $patron_borrowing_status->{NoIssuesChargeGuarantorsWithGuarantees}->{charge} > 0,
+        "Guarantors charges should be calculated when limit is 0 (valid number)"
+    );
+    is(
+        $patron_borrowing_status->{NoIssuesChargeGuarantorsWithGuarantees}->{overlimit}, 0,
+        "Patron should not be overlimit when guarantors limit is 0 (0 means no blocking)"
+    );
+
+    # Test 3: Verify that a small positive number triggers calculation and can block
+    t::lib::Mocks::mock_preference( 'NoIssuesChargeGuarantees', 5.00 );
+
+    $patron_borrowing_status = $patron->is_patron_inside_charge_limits();
+
+    is(
+        $patron_borrowing_status->{NoIssuesChargeGuarantees}->{charge}, 5.50,
+        "Charges are calculated with positive limit"
+    );
+    is(
+        $patron_borrowing_status->{NoIssuesChargeGuarantees}->{overlimit}, 1,
+        "Patron is correctly marked overlimit when charges exceed limit"
     );
 
     $schema->storage->txn_rollback;
