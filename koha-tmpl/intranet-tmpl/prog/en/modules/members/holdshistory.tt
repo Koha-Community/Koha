@@ -175,7 +175,7 @@
             libraries: all_libraries,
         };
 
-        const show_itemtype_column = [% Koha.Preference('AllowHoldItemTypeSelection') ? 1 : 0 %];
+        const show_itemtype_column = [% Koha.Preference('AllowHoldItemTypeSelection') ? 1 : 0 | html %];
     </script>
     <script>
         $(document).ready(function() {
