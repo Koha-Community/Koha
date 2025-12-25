@@ -15,7 +15,7 @@
 # You should have received a copy of the GNU General Public License
 # along with Koha; if not, see <https://www.gnu.org/licenses>.
 
-#This selenium test tests the Koha Administration module functionality including adding circ rules, item types and modifying frameworks
+#This selenium test tests the Administration module functionality including adding circ rules, item types and modifying frameworks
 
 #Note: If you are testing this on kohadevbox with selenium installed in kohadevbox then you need to set the staffClientBaseURL to localhost:8080 and the OPACBaseURL to http://localhost:80
 
@@ -55,7 +55,7 @@ SKIP: {
     $s->auth;
     {    # Item types
          # Navigate to the Administration area and create an item type
-        $s->click( { href => '/admin/admin-home.pl', main       => 'container-main' } );          # Koha administration
+        $s->click( { href => '/admin/admin-home.pl', main       => 'container-main' } );          # Administration
         $s->click( { href => '/admin/itemtypes.pl',  main_class => 'main container-fluid' } );    # Item Types
         $s->click( { href => '/admin/itemtypes.pl?op=add_form', main_class => 'main container-fluid' } )
             ;                                                                                     # New item type
@@ -72,7 +72,7 @@ SKIP: {
     {    # Circulation/fine rules
         my $itype = $builder->build_object( { class => "Koha::ItemTypes" } );
         $driver->get($mainpage);
-        $s->click( { href => '/admin/admin-home.pl',  main       => 'container-main' } );        # Koha administration
+        $s->click( { href => '/admin/admin-home.pl',  main       => 'container-main' } );        # Administration
         $s->click( { href => '/admin/smart-rules.pl', main_class => 'main container-fluid' } )
             ;    # Circulation and fine rules
         my $elt = $driver->find_element(
@@ -96,7 +96,7 @@ SKIP: {
 
     {    # Biblio frameworks
         $driver->get($mainpage);
-        $s->click( { href => '/admin/admin-home.pl',       main       => 'container-main' } );     # Koha administration
+        $s->click( { href => '/admin/admin-home.pl',       main       => 'container-main' } );        # Administration
         $s->click( { href => '/admin/biblio_framework.pl', main_class => 'main container-fluid' } )
             ;    # MARC bibliographic framework
         $s->click( { href => '/admin/biblio_framework.pl?op=add_form', main_class => 'main container-fluid' } )
@@ -120,7 +120,7 @@ SKIP: {
 
     {         #Libraries
         $driver->get($mainpage);
-        $s->click( { href => '/admin/admin-home.pl', main       => 'container-main' } );          # Koha administration
+        $s->click( { href => '/admin/admin-home.pl', main       => 'container-main' } );          # Administration
         $s->click( { href => '/admin/branches.pl',   main_class => 'main container-fluid' } );    # Libraries and groups
         $s->click( { href => '/admin/branches.pl?op=add_form', main_class => 'main container-fluid' } );   # New library
         $s->fill_form( { branchcode => $branchcode, branchname => 'my library' } );
@@ -148,7 +148,7 @@ SKIP: {
 
     {    #Authorized values
         $driver->get($mainpage);
-        $s->click( { href => '/admin/admin-home.pl', main => 'container-main' } );    #Koha administration
+        $s->click( { href => '/admin/admin-home.pl', main => 'container-main' } );    # Administration
 
         $s->click( { href => '/admin/authorised_values.pl', main_class => 'main container-fluid' } ); #Authorized values
 
@@ -194,7 +194,7 @@ SKIP: {
 
     {    # Patron categories
         $driver->get($mainpage);
-        $s->click( { href => '/admin/admin-home.pl', main       => 'container-main' } );          # Koha administration
+        $s->click( { href => '/admin/admin-home.pl', main       => 'container-main' } );          # Administration
         $s->click( { href => '/admin/categories.pl', main_class => 'main container-fluid' } );    # Patron categories
         $s->click( { href => '/admin/categories.pl?op=add_form', main_class => 'main container-fluid' } )
             ;                                                                                     # New patron category

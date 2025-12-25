@@ -25,7 +25,7 @@
 [% END #/ WRAPPER sub-header.inc %]
 
 [% WRAPPER 'main-container.inc' %]
-    <h1>Koha administration</h1>
+    <h1>Administration</h1>
     [% IF ( CAN_user_parameters_manage_mana ) %]
         [% IF ( Koha.Preference('Mana') == 1) && !mana_url %]
             <div class="alert alert-info">

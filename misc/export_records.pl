@@ -554,8 +554,8 @@ Print a brief help message.
 
 --destination_server_id=ID      Provide this option, along with the destination server ID, to
                                 upload the resultant mrc file to the selected file transport server.
-                                You can create file transport servers via the Koha Staff client, under
-                                Koha Administration.
+                                You can create file transport servers using the Koha staff interface,
+                                under Administration.
 
 =item B<--delete_local_after_run>
 
