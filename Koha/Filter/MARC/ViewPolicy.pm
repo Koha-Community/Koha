@@ -33,8 +33,7 @@ my $processor = Koha::RecordProcessor->new( { filters => ('ViewPolicy') } );
 
 Filter to remove fields based on the 'Advance constraints'
 settings found when editing a particular subfield definition of
-a MARC bibliographic framework found under the Koha administration
-menu.
+a MARC bibliographic framework found under the administration menu.
 
 =cut
 
