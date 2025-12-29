@@ -1542,7 +1542,7 @@
                         var current_input_id = $(current_column).children("input").first().attr("id");
                         if (current_input_id === "note") {
                             // specific processing for the Note column
-                            var note = $(this).find("a[id='viewnote']").data("content");
+                            var note = $(this).find("a[id='viewnote']").data("bsContent");
                             $(current_column).find("input[type='text']").val(note);
                         } else if (current_input_id === "hardduedate") {
                             // specific processing for Hard due date
