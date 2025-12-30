@@ -274,6 +274,7 @@ INSERT INTO systempreferences ( `variable`, `value` ) VALUES
 ('EnableOpacSearchHistory','1'),
 ('EnablePointOfSale','0'),
 ('EnableSearchHistory','0'),
+('EnableZotero','1'),
 ('EnhancedMessagingPreferences','1'),
 ('EnhancedMessagingPreferencesOPAC', '1'),
 ('ERMModule', '0'),
