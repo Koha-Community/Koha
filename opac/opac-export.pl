@@ -50,6 +50,11 @@ if ( any { $_ eq 'dc' } @valid_formats ) {
     @valid_formats = ( @valid_formats, @dc_subtypes );
 }
 
+# Allow utf8 format if EnableZotero is enabled, regardless of OpacExportOptions
+if ( C4::Context->preference('EnableZotero') && $format eq 'utf8' ) {
+    push @valid_formats, 'utf8' unless any { $_ eq 'utf8' } @valid_formats;
+}
+
 if ( !scalar @valid_formats || none { $format eq $_ } @valid_formats ) {
 
     # bad request: either the feature is disabled, or requested a format the
