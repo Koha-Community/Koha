@@ -170,6 +170,7 @@ $("#placeBookingModal").on("show.bs.modal", function (e) {
                     if (changed) {
                         periodPicker.clear();
                     }
+                    periodPicker.set("disable", periodPicker.config.disable);
                     periodPicker.redraw();
 
                     // Enable flatpickr now we have data we need
@@ -458,7 +459,7 @@ $("#placeBookingModal").on("show.bs.modal", function (e) {
                             }
 
                             // iterate existing bookings
-                            for (booking of bookings) {
+                            for (let booking of bookings) {
                                 // Skip if we're editing this booking
                                 if (
                                     booking_id &&
@@ -1112,6 +1113,27 @@ function setFormValues(
         });
     }
 
+    // If passed an itemnumber, pre-select
+    if (booking_item_id) {
+        // Wait a bit for the item options to be fully created with data attributes
+        setTimeout(function () {
+            $("#booking_item_id").val(booking_item_id).trigger("change");
+            // Also trigger the select2:select event with proper data
+            let selectedOption = $("#booking_item_id option:selected")[0];
+            if (selectedOption) {
+                $("#booking_item_id").trigger({
+                    type: "select2:select",
+                    params: {
+                        data: {
+                            id: booking_item_id,
+                            element: selectedOption,
+                        },
+                    },
+                });
+            }
+        }, 100);
+    }
+
     // Set booking start & end if this is an edit
     if (start_date) {
         // Allow invalid pre-load so setDate can set date range
@@ -1126,11 +1148,6 @@ function setFormValues(
     // Reset periodPicker, biblio_id may have been nulled
     else {
         periodPicker.redraw();
-    }
-
-    // If passed an itemnumber, pre-select
-    if (booking_item_id) {
-        $("#booking_item_id").val(booking_item_id).trigger("change");
     }
 }
 
