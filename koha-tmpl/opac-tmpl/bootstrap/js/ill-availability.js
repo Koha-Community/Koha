@@ -101,7 +101,8 @@ $(document).ready(function () {
                     column.render = renders[column.data];
                 }
             });
-            tableDef.ajax.dataSrc = function (data) {
+            tableDef.ajax.dataSrc = function (json) {
+                let data = json.data;
                 var results = data.results.search_results;
                 // The source appears to be returning it's own pagination
                 // data
