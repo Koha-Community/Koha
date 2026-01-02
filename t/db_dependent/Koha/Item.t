@@ -3869,7 +3869,7 @@ subtest 'effective_not_for_loan_status() tests' => sub {
 
 subtest 'effective_bookable() tests' => sub {
 
-    plan tests => 5;
+    plan tests => 7;
 
     $schema->storage->txn_begin;
 
@@ -3919,6 +3919,21 @@ subtest 'effective_bookable() tests' => sub {
         $item->effective_bookable, $item_itype->bookable,
         '->effective_bookable returns item specific bookable value when item bookable is defined'
     );
+
+    my $biblio_no_itype = $builder->build_sample_biblio;
+    $biblio_no_itype->biblioitem->set({ itemtype => undef })->store;
+    my $item_no_itype = $builder->build_sample_item({
+        biblionumber => $biblio_no_itype->biblionumber,
+        itype        => undef,
+    });
+    warning_like {
+        is(
+            $item_no_itype->effective_bookable, 0,
+            '->effective_bookable returns 0 when item has no itemtype and item bookable is undefined'
+        );
+    }
+    qr/item-level_itypes set but no itemtype set for item/,
+        'Warning raised for missing itemtype when item-level_itypes is set';
 
     $schema->storage->txn_rollback;
 };
