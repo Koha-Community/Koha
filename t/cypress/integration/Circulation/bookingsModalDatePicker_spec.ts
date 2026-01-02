@@ -674,6 +674,310 @@ describe("Booking Modal Date Picker Tests", () => {
         );
     });
 
+    it("should handle lead and trail periods", () => {
+        /**
+         * Lead and Trail Period Behaviour Tests
+         * =====================================
+         *
+         * Test Coverage:
+         * 1. Lead period visual hints (CSS classes) in clear zone
+         * 2. Trail period visual hints (CSS classes) in clear zone
+         * 3. Lead period conflicts with past dates or existing booking (leadDisable)
+         * 4. Trail period conflicts with existing booking (trailDisable)
+         * 5. Max date selectable when trail period is clear of existing booking
+         *
+         * Fixed Date Setup:
+         * ================
+         * - Today: June 10, 2026 (Wednesday)
+         * - Timezone: Europe/London
+         * - Lead Period: 2 days
+         * - Trail Period: 3 days
+         * - Issue Length: 3 days
+         * - Renewal Period: 2 days
+         * - Max Renewals: 2
+         * - Max Booking Period: 3 + (2 × 2) = 7 days
+         *
+         * Blocker Booking: June 25-27, 2026
+         *
+         * Timeline:
+         * =========
+         * June 2026
+         * Sun Mon Tue Wed Thu Fri Sat
+         *      8   9  10  11  12  13   ← 10 = TODAY
+         *  14  15  16  17  18  19  20
+         *  21  22  23  24  25  26  27   ← 25-27 = BLOCKER
+         *  28  29  30
+         *
+         * Test Scenarios:
+         * ==============
+         * Phase 1: Hover June 13 → Lead June 11-12 (clear) → no leadDisable
+         * Phase 2: Select June 13, hover June 16 → Trail June 17-19 (clear) → no trailDisable
+         * Phase 3a: Hover June 11 → Lead June 9-10, June 9 is past → leadDisable
+         * Phase 3b: Hover June 29 → Lead June 27-28, June 27 is in blocker → leadDisable
+         * Phase 4: Select June 20, hover June 23 → Trail June 24-26 overlaps blocker → trailDisable
+         * Phase 5: Select June 13, hover June 20 (max) → Trail June 21-23 (clear) → selectable
+         */
+
+        // Fix the browser Date object to June 10, 2026 at 09:00 Europe/London
+        // Using ["Date"] to avoid freezing timers which breaks Select2 async operations
+        const fixedToday = new Date("2026-06-10T08:00:00Z"); // 09:00 BST (UTC+1)
+        cy.clock(fixedToday, ["Date"]);
+        cy.log(`Fixed today: June 10, 2026`);
+
+        // Circulation rules with short periods for focused testing
+        const circulationRules = {
+            bookings_lead_period: 2,
+            bookings_trail_period: 3,
+            issuelength: 3,
+            renewalsallowed: 2,
+            renewalperiod: 2,
+        };
+
+        const maxBookingPeriod =
+            circulationRules.issuelength +
+            circulationRules.renewalsallowed * circulationRules.renewalperiod; // 7 days
+        cy.log(`Max booking period: ${maxBookingPeriod} days`);
+
+        cy.intercept("GET", "/api/v1/circulation_rules*", {
+            body: [circulationRules],
+        }).as("getFixedDateRules");
+
+        // Create blocker booking: June 25-27, 2026
+        const blockerStart = "2026-06-25 00:00:00";
+        const blockerEnd = "2026-06-27 23:59:59";
+
+        cy.task("query", {
+            sql: `INSERT INTO bookings (biblio_id, item_id, patron_id, start_date, end_date, pickup_library_id, status)
+                  VALUES (?, ?, ?, ?, ?, ?, '1')`,
+            values: [
+                testData.biblio.biblio_id,
+                testData.items[0].item_id,
+                testData.patron.patron_id,
+                blockerStart,
+                blockerEnd,
+                testData.libraries[0].library_id,
+            ],
+        });
+        cy.log(`Blocker booking created: June 25-27, 2026`);
+
+        // Setup modal
+        setupModalForDateTesting({ skipItemSelection: true });
+
+        cy.get("#booking_item_id").should("not.be.disabled");
+        cy.selectFromSelect2ByIndex("#booking_item_id", 1);
+        cy.wait("@getFixedDateRules");
+
+        cy.get("#period").should("not.be.disabled");
+        cy.get("#period").as("fp");
+        cy.get("@fp").openFlatpickr();
+
+        // Helper to get a specific date element by ISO date string
+        const getDateByISO = (isoDate: string) => {
+            const date = new Date(isoDate);
+            return cy.get("@fp").getFlatpickrDate(date);
+        };
+
+        // ========================================================================
+        // PHASE 1: Lead Period Clear - Visual Classes
+        // ========================================================================
+        cy.log("=== PHASE 1: Lead period visual hints in clear zone ===");
+
+        /**
+         * Hover June 13 as potential start date
+         * Lead period: June 11-12 (both after today June 10, no booking conflict)
+         * Expected: leadRangeStart on June 11, leadRange on June 12, no leadDisable on June 13
+         */
+
+        getDateByISO("2026-06-13").trigger("mouseover");
+
+        // Check lead period classes
+        getDateByISO("2026-06-11")
+            .should("have.class", "leadRangeStart")
+            .and("have.class", "leadRange");
+        cy.log("✓ June 11: Has leadRange and leadRangeStart classes");
+
+        getDateByISO("2026-06-12").should("have.class", "leadRange");
+        cy.log("✓ June 12: Has leadRange class");
+
+        // Hovered date should NOT have leadDisable (lead period is clear)
+        getDateByISO("2026-06-13")
+            .should("have.class", "leadRangeEnd")
+            .and("not.have.class", "leadDisable");
+        cy.log(
+            "✓ June 13: Has leadRangeEnd and not leadDisable (lead period is clear)"
+        );
+
+        // ========================================================================
+        // PHASE 2: Trail Period Clear - Visual Classes
+        // ========================================================================
+        cy.log("=== PHASE 2: Trail period visual hints in clear zone ===");
+
+        /**
+         * Select June 13 as start date (lead June 11-12 is clear)
+         * Then hover June 16 as potential end date
+         * Trail period calculation: trailStart = hoverDate, trailEnd = hoverDate + 3
+         * So: trailStart = June 16, trailEnd = June 19
+         * Classes: June 16 = trailRangeStart, June 17-18 = trailRange, June 19 = trailRange + trailRangeEnd
+         */
+
+        // Select June 13 as start date (same date we just hovered - lead is clear)
+        getDateByISO("2026-06-13").click();
+        cy.log("Selected June 13 as start date");
+
+        // Hover June 16 as potential end date
+        getDateByISO("2026-06-16").trigger("mouseover");
+
+        // Check trail period classes
+        // trailRangeStart is on the hovered date itself (June 16)
+        getDateByISO("2026-06-16").should("have.class", "trailRangeStart");
+        cy.log("✓ June 16: Has trailRangeStart class (hovered date)");
+
+        // trailRange is on days after trailStart up to and including trailEnd
+        getDateByISO("2026-06-17").should("have.class", "trailRange");
+        cy.log("✓ June 17: Has trailRange class");
+
+        getDateByISO("2026-06-18").should("have.class", "trailRange");
+        cy.log("✓ June 18: Has trailRange class");
+
+        // trailRangeEnd is on the last day of trail period
+        getDateByISO("2026-06-19")
+            .should("have.class", "trailRangeEnd")
+            .and("have.class", "trailRange");
+        cy.log("✓ June 19: Has trailRangeEnd and trailRange classes");
+
+        // Hovered date should NOT have trailDisable (trail period is clear)
+        getDateByISO("2026-06-16").should("not.have.class", "trailDisable");
+        cy.log("✓ June 16: No trailDisable (trail period is clear)");
+
+        // Clear selection for next phase
+        cy.get("#period").clearFlatpickr();
+        cy.get("@fp").openFlatpickr();
+        cy.log("Cleared selection for next phase");
+
+        // ========================================================================
+        // PHASE 3: Lead Period Conflict - Past Dates and Existing bookings
+        // ========================================================================
+        cy.log("=== PHASE 3: Lead period conflicts ===");
+
+        /**
+         * Hover June 11 as potential start date
+         * Lead period: June 9-10
+         * June 9 is in the past (before today June 10)
+         * Expected: leadDisable on June 11 because lead period extends into past
+         */
+
+        getDateByISO("2026-06-11").trigger("mouseover");
+
+        // June 11 should have leadDisable because lead period (June 9-10) includes past date
+        getDateByISO("2026-06-11").should("have.class", "leadDisable");
+        cy.log(
+            "✓ June 11: Has leadDisable (lead period June 9-10 includes past date)"
+        );
+
+        /**
+         * Hover June 29 as potential start date
+         * Lead period: June 27-28
+         * June 27 is in the existing booking (25-27 June)
+         * Expected: leadDisable on June 29 because lead period extends into existing booking
+         */
+
+        getDateByISO("2026-06-29").trigger("mouseover");
+
+        // June 29 should have leadDisable because lead period (June 27-28) includes existing booking date
+        getDateByISO("2026-06-29").should("have.class", "leadDisable");
+        cy.log(
+            "✓ June 29: Has leadDisable (lead period June 27-28 includes existing booking date)"
+        );
+
+        // ========================================================================
+        // PHASE 4: Trail Period Conflict - Existing Booking
+        // ========================================================================
+        cy.log("=== PHASE 4: Trail period conflict with existing booking ===");
+
+        /**
+         * Select June 20 as start date (lead June 18-19, both clear)
+         * Then hover June 23 as potential end date
+         * Trail period: June 24-26
+         * Blocker booking: June 25-27 (partial overlap)
+         * Expected: trailDisable on June 23
+         */
+
+        // Select June 20 as start date
+        getDateByISO("2026-06-20").click();
+        cy.log("Selected June 20 as start date");
+
+        // Hover June 23 as potential end date
+        getDateByISO("2026-06-23").trigger("mouseover");
+
+        // June 23 should have trailDisable because trail period (June 24-26) overlaps blocker (June 25-27)
+        getDateByISO("2026-06-23").should("have.class", "trailDisable");
+        cy.log(
+            "✓ June 23: Has trailDisable (trail June 24-26 overlaps blocker June 25-27)"
+        );
+
+        // Clear selection for next phase
+        cy.get("#period").clearFlatpickr();
+        cy.get("@fp").openFlatpickr();
+        cy.log("Cleared selection for next phase");
+
+        // ========================================================================
+        // PHASE 5: Max Date Selectable When Trail is Clear
+        // ========================================================================
+        cy.log("=== PHASE 5: Max date selectable when trail is clear ===");
+
+        /**
+         * Select June 13 as start date (lead June 11-12, both clear)
+         * Max end date: June 20 (13 + 7 days)
+         * Hover June 20: Trail period June 21-23
+         * Trail period is clear (blocker is June 25-27)
+         * Expected: June 20 is selectable (no trailDisable), can book full 7-day period
+         */
+
+        // Select June 13 as start date
+        getDateByISO("2026-06-13").click();
+        cy.log("Selected June 13 as start date");
+
+        // Hover June 20 (max date = start + 7 days)
+        getDateByISO("2026-06-20").trigger("mouseover");
+
+        // Max date should NOT have trailDisable (trail June 21-23 is clear)
+        getDateByISO("2026-06-20").should("not.have.class", "trailDisable");
+        cy.log("✓ June 20: No trailDisable (trail June 21-23 is clear)");
+
+        // Max date should not be disabled by flatpickr
+        getDateByISO("2026-06-20").should(
+            "not.have.class",
+            "flatpickr-disabled"
+        );
+        cy.log("✓ June 20: Not flatpickr-disabled (max date is selectable)");
+
+        // Actually select the max date to confirm booking can be made
+        getDateByISO("2026-06-20").click();
+
+        // Verify dates were accepted in the form
+        cy.get("#booking_start_date").should("not.have.value", "");
+        cy.get("#booking_end_date").should("not.have.value", "");
+        cy.log("✓ Full 7-day period selected: June 13 to June 20");
+
+        // ========================================================================
+        // SUMMARY
+        // ========================================================================
+        cy.log(
+            "✓ CONFIRMED: Lead and trail period behaviour working correctly"
+        );
+        cy.log("✓ Phase 1: Lead period visual hints appear in clear zones");
+        cy.log("✓ Phase 2: Trail period visual hints appear in clear zones");
+        cy.log(
+            "✓ Phase 3: Lead period into past dates or existing bookings triggers leadDisable"
+        );
+        cy.log(
+            "✓ Phase 4: Trail period overlapping booking triggers trailDisable"
+        );
+        cy.log(
+            "✓ Phase 5: Max date is selectable when trail period has no conflicts"
+        );
+    });
+
     it("should show event dots for dates with existing bookings", () => {
         /**
          * Comprehensive Event Dots Visual Indicator Test
