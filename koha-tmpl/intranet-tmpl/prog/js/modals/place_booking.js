@@ -996,7 +996,21 @@ $("#placeBookingModal").on("show.bs.modal", function (e) {
                                             elemDate.isAfter(trailStart) &&
                                             elemDate.isSameOrBefore(trailEnd)
                                         ) {
-                                            trailDisable = true;
+                                            // Only consider this a conflict if the disabled date is within the max date range
+                                            // (i.e., disabled due to booking conflict, not because it's beyond max date)
+                                            const maxDate = periodPicker.config
+                                                .maxDate
+                                                ? dayjs(
+                                                      periodPicker.config
+                                                          .maxDate
+                                                  )
+                                                : null;
+                                            if (
+                                                !maxDate ||
+                                                elemDate.isSameOrBefore(maxDate)
+                                            ) {
+                                                trailDisable = true;
+                                            }
                                         }
                                     }
                                     dayElem.classList.remove("leadDisable");
