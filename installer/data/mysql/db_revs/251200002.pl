@@ -17,7 +17,7 @@ return {
                 );
                 say_success(
                     $out,
-                    q{Column 'borrower_modifications.streetnumber' renamed to 'borrower_modifications.streetnumber'}
+                    q{Column 'borrower_modifications.streetnumber' changed to tinytext'}
                 );
                 $dbh->do(
                     q{
@@ -26,7 +26,7 @@ return {
                 );
                 say_success(
                     $out,
-                    q{Column 'borrower_modifications.B_streetnumber' renamed to 'borrower_modifications.B_streetnumber'}
+                    q{Column 'borrower_modifications.B_streetnumber' changed to tinytext'}
                 );
             }
         }
