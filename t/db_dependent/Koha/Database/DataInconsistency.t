@@ -1,7 +1,7 @@
 use Modern::Perl;
 
 use Test::NoWarnings;
-use Test::More tests => 7;
+use Test::More tests => 8;
 use Test::Warn;
 
 use Koha::Items;
@@ -435,4 +435,33 @@ subtest 'empty_title' => sub {
             [ sprintf 'Biblio with biblionumber=%s does not have title defined', $biblio_ko->biblionumber ]
         );
     };
+};
+
+subtest 'for_biblio' => sub {
+
+    plan tests => 1;
+
+    $schema->storage->txn_begin();
+
+    my $biblio_ok = $builder->build_sample_biblio;
+    my $item_ok   = $builder->build_sample_item( { biblionumber => $biblio_ok->biblionumber } );
+
+    subtest 'ok' => sub {
+        plan tests => 1;
+        my $errors = Koha::Database::DataInconsistency->for_biblio($biblio_ok);
+        is_deeply(
+            $errors,
+            {
+                decoding_errors      => [],
+                empty_title          => [],
+                ids_not_in_marc      => [],
+                invalid_item_library => [],
+                invalid_item_type    => [],
+                item_fields_in_marc  => [],
+                no_item_type         => [],
+                nonexistent_AV       => []
+            }
+        );
+    };
+
 };
