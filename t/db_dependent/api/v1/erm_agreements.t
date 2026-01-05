@@ -18,7 +18,7 @@
 use Modern::Perl;
 
 use Test::NoWarnings;
-use Test::More tests => 6;
+use Test::More tests => 7;
 use Test::Mojo;
 
 use t::lib::TestBuilder;
@@ -450,6 +450,79 @@ subtest 'delete() tests' => sub {
 
     # Attempt to delete non-existent agreement
     $t->delete_ok("//$userid:$password@/api/v1/erm/agreements/$agreement_id")->status_is(404);
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'extended_attributes() tests' => sub {
+
+    plan tests => 12;
+
+    $schema->storage->txn_begin;
+
+    my $librarian = $builder->build_object(
+        {
+            class => 'Koha::Patrons',
+            value => { flags => 2**28 }
+        }
+    );
+    my $password = 'thePassword123';
+    $librarian->set_password( { password => $password, skip_validation => 1 } );
+    my $userid = $librarian->userid;
+
+    # Create an additional field for erm_agreements
+    my $additional_field = $builder->build_object(
+        {
+            class => 'Koha::AdditionalFields',
+            value => {
+                tablename => 'erm_agreements',
+                name      => 'test_field',
+            }
+        }
+    );
+
+    # Create an agreement with extended attributes
+    my $agreement = $builder->build_object( { class => 'Koha::ERM::Agreements' } );
+
+    $agreement->set_additional_fields(
+        [
+            {
+                id    => $additional_field->id,
+                value => 'test_value',
+            }
+        ]
+    );
+
+    # Get the agreement with embedded extended_attributes
+    my $response = $t->get_ok( "//$userid:$password@/api/v1/erm/agreements/"
+            . $agreement->agreement_id => { 'x-koha-embed' => 'extended_attributes' } )->status_is(200)->tx->res->json;
+
+    # Verify extended_attributes are present
+    ok( exists $response->{extended_attributes}, 'extended_attributes key exists in response' );
+    is( ref $response->{extended_attributes},         'ARRAY', 'extended_attributes is an array' );
+    is( scalar @{ $response->{extended_attributes} }, 1,       'One extended attribute returned' );
+
+    my $attr = $response->{extended_attributes}[0];
+    is( $attr->{field_id}, $additional_field->id, 'Correct field_id' );
+    is( $attr->{value},    'test_value',          'Correct value' );
+    ok( !exists $attr->{record_table}, 'record_table field is not exposed in API' );
+
+    # Test with list endpoint
+    $response =
+        $t->get_ok( "//$userid:$password@/api/v1/erm/agreements" => { 'x-koha-embed' => 'extended_attributes' } )
+        ->status_is(200)->tx->res->json;
+
+    # Verify record_table is still not present in list endpoint
+    my $found = 0;
+    foreach my $agr (@$response) {
+        if ( $agr->{agreement_id} == $agreement->agreement_id ) {
+            $found = 1;
+            $attr  = $agr->{extended_attributes}[0];
+            ok( !exists $attr->{record_table}, 'record_table field is not exposed in list endpoint' );
+            last;
+        }
+    }
+    ok( $found, 'Agreement found in list response' );
 
     $schema->storage->txn_rollback;
 };
