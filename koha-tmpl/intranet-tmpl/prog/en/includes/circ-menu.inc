@@ -112,19 +112,19 @@
                         [% END %]
 
                         [% UNLESS ( patron.address or patron.address2 ) %]
-                            <li><span class="empty" id="noaddressstored">No address stored.</span></li>
+                            <li class="empty"><span id="noaddressstored">No address stored.</span></li>
                         [% END %]
                         [% UNLESS ( patron.city ) %]
-                            <li><span class="empty" id="nocitystored">No city stored.</span></li>
+                            <li class="empty"><span id="nocitystored">No city stored.</span></li>
                         [% END %]
                         [% UNLESS ( patron.phone or patron.mobile or patron.phonepro) %]
-                            <li> <span class="empty">No phone stored.</span></li>
+                            <li class="empty"><span>No phone stored.</span></li>
                         [% END %]
                         [% UNLESS ( patron.email or patron.emailpro) %]
-                            <li> <span class="empty">No email stored.</span></li>
+                            <li class="empty"><span>No email stored.</span></li>
                         [% END %]
                         [% UNLESS ( patron.dateofbirth ) %]
-                            <li> <span class="empty">No date of birth stored.</span></li>
+                            <li class="empty"><span>No date of birth stored.</span></li>
                         [% END %]
                     [% END # /IF HidePersonalPatronDetailOnCirculation %]
 
@@ -150,18 +150,12 @@
                     <li class="patroncategory"> Category: <span class="patroncategory_description">[% patron.category.description | html %]</span> <span class="patroncategory_code">([% patron.categorycode | html %])</span> </li>
                     <li class="patronlibrary"> Home library: [% Branches.GetName( patron.branchcode ) | html %] </li>
                     <li class="patronborrowernumber"> Borrowernumber: [% patron.borrowernumber | html %] </li>
-                    <li>
-                        <span class="patronupdatedon">Updated on: [% patron.updated_on | $KohaDates with_hours => 1 %]</span>
-                    </li>
+                    <li class="patronupdatedon">Updated on: [% patron.updated_on | $KohaDates with_hours => 1 %]</li>
                     [% IF Koha.Preference('TrackLastPatronActivityTriggers') %]
                         [% IF ( patron.lastseen ) %]
-                            <li>
-                                <span class="patronlastseenon">Last seen on: [% patron.lastseen | $KohaDates with_hours => 1 %]</span>
-                            </li>
+                            <li class="patronlastseenon"> Last seen on: [% patron.lastseen | $KohaDates with_hours => 1 %] </li>
                         [% ELSE %]
-                            <li>
-                                <span class="patronlastseenon">Last seen on: not recorded</span>
-                            </li>
+                            <li class="patronlastseenon"> Last seen on: not recorded </li>
                         [% END %]
                     [% END %]
                     [% IF patron.account_locked %]
