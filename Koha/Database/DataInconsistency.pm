@@ -1,5 +1,20 @@
 package Koha::Database::DataInconsistency;
 
+# This file is part of Koha.
+#
+# Koha is free software; you can redistribute it and/or modify it
+# under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 3 of the License, or
+# (at your option) any later version.
+#
+# Koha is distributed in the hope that it will be useful, but
+# WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with Koha; if not, see <https://www.gnu.org/licenses>.
+
 use Modern::Perl;
 use C4::Context;
 use C4::Biblio;
@@ -9,6 +24,18 @@ use Koha::BiblioFrameworks;
 use Koha::Items;
 use Koha::ItemTypes;
 use Koha::I18N qw( __x );
+
+=head1 NAME
+
+Koha::Database::DataInconsistency - Search for data inconsistency in the database
+
+=head1 API
+
+=head2 invalid_item_library
+
+    Search for items with non-existent holding or home library.
+
+=cut
 
 sub invalid_item_library {
     my ( $self, $items ) = @_;
@@ -39,6 +66,12 @@ sub invalid_item_library {
     return @errors;
 }
 
+=head2 ids
+
+    Build a hashref of IDs from a Koha::Object Koha::Objects-based object.
+
+=cut
+
 sub ids {
     my ( $self, $object ) = @_;
     if ( $object->can('_resultset') ) {
@@ -51,6 +84,12 @@ sub ids {
         return [ $object->biblionumber ];
     }
 }
+
+=head2 no_item_type
+
+    Search for items of biblioitems with non-existent item type.
+
+=cut
 
 sub no_item_type {
     my ( $self, $biblios ) = @_;
@@ -99,6 +138,12 @@ sub no_item_type {
     return @errors;
 }
 
+=head2 invalid_item_type
+
+    Search for items or biblioitems with invalid item type.
+
+=cut
+
 sub invalid_item_type {
     my ( $self, $biblios ) = @_;
     my $ids = $self->ids($biblios);
@@ -140,6 +185,12 @@ sub invalid_item_type {
     }
     return @errors;
 }
+
+=head2 errors_in_marc
+
+    Search for bibliographic records with errors in the MARC record.
+
+=cut
 
 sub errors_in_marc {
     my ( $self, $biblios ) = @_;
@@ -217,6 +268,12 @@ sub errors_in_marc {
 
     return $errors;
 }
+
+=head2 nonexistent_AV
+
+    Search for bibliographic frameworks with non-existent authorised values.
+
+=cut
 
 sub nonexistent_AV {
     my ( $self, $biblios ) = @_;
@@ -302,6 +359,12 @@ sub nonexistent_AV {
     return @errors;
 }
 
+=head2 empty_title
+
+    Search for bibliographic records without title defined.
+
+=cut
+
 sub empty_title {
     my ( $self, $biblios ) = @_;
     my $ids = $self->ids($biblios);
@@ -326,6 +389,12 @@ sub empty_title {
     }
     return @errors;
 }
+
+=head2 for_biblio
+
+    Search for possible problems in a given bibliographic record.
+
+=cut
 
 sub for_biblio {
     my ( $self, $biblio ) = @_;
