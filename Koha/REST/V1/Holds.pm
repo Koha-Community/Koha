@@ -81,7 +81,7 @@ sub add {
         my $pickup_library_id = $body->{pickup_library_id};
         my $item_id           = $body->{item_id};
         my $patron_id         = $body->{patron_id};
-        my $item_type         = $body->{item_type};
+        my $item_type_id      = $body->{item_type_id};
         my $expiration_date   = $body->{expiration_date};
         my $notes             = $body->{notes};
         my $hold_date         = $body->{hold_date};
@@ -209,7 +209,7 @@ sub add {
                 title            => $biblio->title,
                 itemnumber       => $item_id,
                 found            => undef,                # TODO: Why not?
-                itemtype         => $item_type,
+                itemtype         => $item_type_id,
                 non_priority     => $non_priority,
                 item_group_id    => $item_group_id,
                 confirmations    => $confirmations,

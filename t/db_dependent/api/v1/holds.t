@@ -277,7 +277,7 @@ subtest 'Reserves with itemtype' => sub {
         patron_id         => int( $patron_1->borrowernumber ),
         biblio_id         => int( $biblio_1->biblionumber ),
         pickup_library_id => $branchcode,
-        item_type         => $itemtype,
+        item_type_id      => $itemtype,
     };
 
     $t->delete_ok("//$userid_3:$password@/api/v1/holds/$reserve_id")->status_is( 204, 'REST3.2.4' )
@@ -294,7 +294,7 @@ subtest 'Reserves with itemtype' => sub {
     $reserve_id = $t->tx->res->json->{hold_id};
 
     $t->get_ok( "//$userid_1:$password@/api/v1/holds?patron_id=" . $patron_1->borrowernumber )->status_is(200)
-        ->json_is( '/0/hold_id', $reserve_id )->json_is( '/0/item_type', $itemtype );
+        ->json_is( '/0/hold_id', $reserve_id )->json_is( '/0/item_type_id', $itemtype );
 };
 
 subtest 'test AllowHoldDateInFuture' => sub {
@@ -769,7 +769,7 @@ subtest 'add() tests (maxreserves behaviour)' => sub {
         patron_id         => $patron->borrowernumber,
         biblio_id         => $biblio_1->biblionumber,
         pickup_library_id => $item_1->home_branch->branchcode,
-        item_type         => $item_1->itype,
+        item_type_id      => $item_1->itype,
     };
 
     $t->post_ok( "//$userid:$password@/api/v1/holds" => json => $post_data )->status_is(201);
