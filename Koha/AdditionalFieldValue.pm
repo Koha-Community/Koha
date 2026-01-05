@@ -28,6 +28,23 @@ sub field {
     return Koha::AdditionalField->_new_from_dbic( $self->_result()->field() );
 }
 
+=head3 to_api
+
+Overloaded to_api method to exclude internal fields from API representation
+
+=cut
+
+sub to_api {
+    my ( $self, $params ) = @_;
+
+    my $json = $self->SUPER::to_api($params);
+
+    # Remove internal database optimization fields that shouldn't be exposed via API
+    delete $json->{record_table};
+
+    return $json;
+}
+
 =head2 Internal methods
 
 =head3 _type
