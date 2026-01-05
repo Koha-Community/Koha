@@ -575,7 +575,7 @@ function LoadIssuesTable() {
                             }
                             content += ")</span>";
                         }
-                        if (oObj.auto_renew) {
+                        if (oObj.auto_renew && oObj.auto_renew_patron) {
                             content += "<span class='renewals-info'>(";
                             content += __("Scheduled for automatic renewal");
                             content += ")</span>";

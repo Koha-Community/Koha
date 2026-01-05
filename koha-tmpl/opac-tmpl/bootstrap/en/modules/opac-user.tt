@@ -481,7 +481,7 @@
                                                                 [% ELSIF ( ISSUE.item_denied_renewal ) %]
                                                                     Renewal not allowed
                                                                 [% END %]
-                                                                [% IF ( ISSUE.auto_renew || ISSUE.auto_too_soon ) %]
+                                                                [% IF ( ( ISSUE.auto_renew || ISSUE.auto_too_soon ) && borrower.autorenew_checkouts ) %]
                                                                     <br /><span class="usr-msg automatic-renewal">This item is scheduled for auto renewal.</span>
                                                                 [% END %]
                                                             </td>

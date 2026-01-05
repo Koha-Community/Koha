@@ -107,6 +107,7 @@ my $sql = '
         borrowers.surname,
         borrowers.firstname,
         borrowers.cardnumber,
+        borrowers.autorenew_checkouts,
 
         items.itemlost,
         items.damaged,
@@ -277,6 +278,7 @@ while ( my $c = $sth->fetchrow_hashref() ) {
         date_due_today         => $c->{date_due_today}   ? JSON::true : JSON::false,
         timestamp              => $c->{timestamp},
         auto_renew             => $c->{auto_renew},
+        auto_renew_patron      => $c->{autorenew_checkouts},
         onsite_checkout        => $c->{onsite_checkout},
         enumchron              => $c->{enumchron},
         renewals_count         => $renewals_count,
