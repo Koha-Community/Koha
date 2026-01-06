@@ -322,7 +322,8 @@ sub add_to_bundle {
 
         my $link = $item->add_to_bundle( $bundle_item, $options );
         if ($add_link) {
-            $bundle_item->biblio->link_marc_host( { host => $item->biblio } );
+            my $field = $item->biblio->generate_marc_host_field( { item => $item } );
+            $bundle_item->biblio->link_marc_host( { field => $field } );
         }
         return $c->render(
             status  => 201,
