@@ -60,7 +60,13 @@ my $launcher = sub {
             flagsrequired => { editcatalogue => '*' },
         }
     );
-    my $is_valid = is_valid_checksum($issn);
+    my $is_valid = 0;
+    if ( $issn =~ /^\d{4}-\d{3}[\dXx]$/ ) {
+        $is_valid = is_valid_checksum($issn);
+    }
+    if ( $issn eq '' ) {
+        $is_valid = 1;
+    }
     $template->param( return => $is_valid );
     output_html_with_http_headers $cgi, $cookie, $template->output;
 };
