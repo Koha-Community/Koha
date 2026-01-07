@@ -250,6 +250,7 @@
                             <a href="/cgi-bin/koha/reserve/request.pl?biblionumber=[% w.biblio.biblionumber | uri %]">[% w.biblio.title | html %]</a>
                             ([% ItemTypes.GetDescription( w.item.effective_itemtype ) | html %]), [% IF ( w.biblio.author ) %]by [% w.biblio.author | html %][% END %]
                             [% IF ( w.item.itemcallnumber ) %][[% w.item.itemcallnumber | html %]][% END %]
+                            ([% w.item.barcode %])
                             <span class="holddate">Hold placed on [% w.reservedate | $KohaDates %].</span>
                             <br />
                             <strong class="waitinghere"> [% SET expires_on = w.expirationdate %] Waiting here [% IF expires_on %]until [% expires_on | $KohaDates %][% END %]. </strong>
@@ -269,6 +270,7 @@
                             <a href="/cgi-bin/koha/reserve/request.pl?biblionumber=[% w.biblio.biblionumber | uri %]">[% w.biblio.title | html %]</a>
                             ([% ItemTypes.GetDescription( w.item.effective_itemtype ) | html %]), [% IF ( w.biblio.author ) %]by [% w.biblio.author | html %][% END %]
                             [% IF ( w.item.itemcallnumber ) %][[% w.item.itemcallnumber | html %]][% END %]
+                            ([% w.item.barcode %])
                             <span>Hold placed on [% w.reservedate | $KohaDates %].</span>
                             <br />
                             <strong> [% SET expires_on = w.expirationdate %] Waiting at [% w.branch.branchname | html %] [% IF expires_on %]until [% expires_on | $KohaDates %][% END %] </strong>
