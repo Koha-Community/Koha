@@ -19,7 +19,7 @@
 
 use Modern::Perl;
 use File::Basename qw(dirname);
-use Test::More tests => 105;
+use Test::More tests => 106;
 use Test::NoWarnings;
 
 use Test::MockModule;
@@ -1823,6 +1823,132 @@ subtest 'Virtual method ->strftime in notices' => sub {
     $expected_output =~ s/10=12/10=17\/12\/2024/;
     $expected_output =~ s/11=.{10}/11=12/;
     is( $get_letter->()->{content}, $expected_output, 'Check generated content for us dateformat' );
+};
+
+subtest 'Test exclude_letter_code parameter for SendQueuedMessages' => sub {
+    plan tests => 10;
+
+    my $dbh = C4::Context->dbh;
+
+    my $borrowernumber = Koha::Patron->new(
+        {
+            firstname      => 'Jane',
+            surname        => 'Smith',
+            categorycode   => $patron_category,
+            branchcode     => $library->{branchcode},
+            dateofbirth    => $date,
+            smsalertnumber => '5555555555',
+        }
+    )->store->borrowernumber;
+
+    $dbh->do(q|DELETE FROM message_queue|);
+
+    # Create messages with different letter codes
+    my $message_digest1 = {
+        'letter' => {
+            'content'      => 'digest message 1',
+            'metadata'     => 'metadata',
+            'code'         => 'DUEDGST',
+            'content_type' => 'text/plain',
+            'title'        => 'digest title'
+        },
+        'borrowernumber'         => $borrowernumber,
+        'to_address'             => undef,
+        'message_transport_type' => 'sms',
+        'from_address'           => 'from@example.com'
+    };
+    my $message_digest2 = {
+        'letter' => {
+            'content'      => 'digest message 2',
+            'metadata'     => 'metadata',
+            'code'         => 'PREDUEDGST',
+            'content_type' => 'text/plain',
+            'title'        => 'predigest title'
+        },
+        'borrowernumber'         => $borrowernumber,
+        'to_address'             => undef,
+        'message_transport_type' => 'sms',
+        'from_address'           => 'from@example.com'
+    };
+    my $message_regular = {
+        'letter' => {
+            'content'      => 'regular message',
+            'metadata'     => 'metadata',
+            'code'         => 'ACQ_NOTIF',
+            'content_type' => 'text/plain',
+            'title'        => 'regular title'
+        },
+        'borrowernumber'         => $borrowernumber,
+        'to_address'             => undef,
+        'message_transport_type' => 'sms',
+        'from_address'           => 'from@example.com'
+    };
+    my $message_regular2 = {
+        'letter' => {
+            'content'      => 'another regular message',
+            'metadata'     => 'metadata',
+            'code'         => 'TEST_MESSAGE',
+            'content_type' => 'text/plain',
+            'title'        => 'regular title 2'
+        },
+        'borrowernumber'         => $borrowernumber,
+        'to_address'             => undef,
+        'message_transport_type' => 'sms',
+        'from_address'           => 'from@example.com'
+    };
+
+    my @id = (
+        C4::Letters::EnqueueLetter($message_digest1),
+        C4::Letters::EnqueueLetter($message_digest2),
+        C4::Letters::EnqueueLetter($message_regular),
+        C4::Letters::EnqueueLetter($message_regular2),
+    );
+
+    # Test excluding single letter code (array)
+    C4::Letters::SendQueuedMessages(
+        {
+            exclude_letter_code => ['DUEDGST'],
+            type                => 'sms',
+        }
+    );
+
+    is( Koha::Notice::Messages->find( $id[0] )->status, 'pending', 'DUEDGST message excluded, still pending' );
+    is( Koha::Notice::Messages->find( $id[1] )->status, 'sent',    'PREDUEDGST message processed' );
+    is( Koha::Notice::Messages->find( $id[2] )->status, 'sent',    'ACQ_NOTIF message processed' );
+    is( Koha::Notice::Messages->find( $id[3] )->status, 'sent',    'TEST_MESSAGE message processed' );
+
+    # Reset messages to pending
+    Koha::Notice::Messages->find( $id[1] )->update( { status => 'pending' } );
+    Koha::Notice::Messages->find( $id[2] )->update( { status => 'pending' } );
+    Koha::Notice::Messages->find( $id[3] )->update( { status => 'pending' } );
+
+    # Test excluding multiple letter codes
+    C4::Letters::SendQueuedMessages(
+        {
+            exclude_letter_code => [ 'DUEDGST', 'PREDUEDGST' ],
+            type                => 'sms',
+        }
+    );
+
+    is( Koha::Notice::Messages->find( $id[0] )->status, 'pending', 'DUEDGST message excluded, still pending' );
+    is( Koha::Notice::Messages->find( $id[1] )->status, 'pending', 'PREDUEDGST message excluded, still pending' );
+    is( Koha::Notice::Messages->find( $id[2] )->status, 'sent',    'ACQ_NOTIF message processed' );
+    is( Koha::Notice::Messages->find( $id[3] )->status, 'sent',    'TEST_MESSAGE message processed' );
+
+    # Reset messages to pending
+    Koha::Notice::Messages->find( $id[2] )->update( { status => 'pending' } );
+    Koha::Notice::Messages->find( $id[3] )->update( { status => 'pending' } );
+
+    # Test with scalar exclude_letter_code
+    C4::Letters::SendQueuedMessages(
+        {
+            exclude_letter_code => 'TEST_MESSAGE',
+            type                => 'sms',
+        }
+    );
+
+    is( Koha::Notice::Messages->find( $id[2] )->status, 'sent',    'ACQ_NOTIF message processed' );
+    is( Koha::Notice::Messages->find( $id[3] )->status, 'pending', 'TEST_MESSAGE message excluded, still pending' );
 };
 
 $schema->storage->txn_rollback;
