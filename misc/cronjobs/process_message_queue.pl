@@ -35,6 +35,7 @@ my $verbose  = 0;
 my $where;
 my @type;
 my @letter_code;
+my @exclude_letter_code;
 my $exit_on_plugin_failure = 0;
 
 GetOptions(
@@ -46,6 +47,7 @@ GetOptions(
     'v|verbose'                => \$verbose,
     't|type:s'                 => \@type,
     'c|code:s'                 => \@letter_code,
+    'x|exclude-code:s'         => \@exclude_letter_code,
     'w|where:s'                => \$where,
     'e|exit-on-plugin-failure' => \$exit_on_plugin_failure,
 );
@@ -62,6 +64,7 @@ This script has the following parameters :
     -p --password: password of mail account
     -t --type: If supplied, only processes this type of message ( email, sms ), repeatable
     -c --code: If supplied, only processes messages with this letter code, repeatable
+    -x --exclude-code: If supplied, processes all messages except those with this letter code, repeatable
     -l --limit: The maximum number of messages to process for this run
     -m --method: authentication method required by SMTP server (See perldoc Sendmail.pm for supported authentication types.)
     -h --help: this message
@@ -86,6 +89,7 @@ try {
 
 # Remove empty elements, see bug 37075
 @letter_code = grep { $_ ne q{} } @letter_code;
+@exclude_letter_code = grep { $_ ne q{} } @exclude_letter_code;
 
 C4::Letters::SendQueuedMessages(
     {
@@ -96,6 +100,7 @@ C4::Letters::SendQueuedMessages(
         limit                  => $limit,
         type                   => \@type,
         letter_code            => \@letter_code,
+        exclude_letter_code    => \@exclude_letter_code,
         where                  => $where,
         exit_on_plugin_failure => $exit_on_plugin_failure,
     }

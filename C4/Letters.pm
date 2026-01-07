@@ -1088,6 +1088,13 @@ sub SendQueuedMessages {
             ref( $params->{letter_code} )
                 && @{ $params->{letter_code} } ? ( letter_code => $params->{letter_code} ) : (),
             !ref( $params->{letter_code} ) && $params->{letter_code} ? ( letter_code => $params->{letter_code} ) : (),
+
+            # Check for scalar or array in exclude_letter_code
+            ref( $params->{exclude_letter_code} )
+                && @{ $params->{exclude_letter_code} } ? ( letter_code => { '-not_in' => $params->{exclude_letter_code} } ) : (),
+            !ref( $params->{exclude_letter_code} )
+                && $params->{exclude_letter_code} ? ( letter_code => { '!=' => $params->{exclude_letter_code} } ) : (),
+
             ref( $params->{type} )
                 && @{ $params->{type} }
             ? ( message_transport_type => $params->{type} )
