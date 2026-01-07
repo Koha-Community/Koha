@@ -32,6 +32,12 @@ var CSS_BASE = args.view == "opac" ? OPAC_CSS_BASE : STAFF_CSS_BASE;
 
 var sassOptions = {
     importer: tildeImporter,
+    silenceDeprecations: [
+        "color-functions",
+        "global-builtin",
+        "import",
+        "legacy-js-api",
+    ],
     includePaths: [__dirname + "/node_modules", __dirname + "/../node_modules"],
 };
 
