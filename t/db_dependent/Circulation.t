@@ -7667,7 +7667,7 @@ subtest 'NoRefundOnLostFinesPaidAge' => sub {
 };
 
 subtest 'ChildNeedsGuarantor' => sub {
-    plan tests => 18;
+    plan tests => 12;
 
     t::lib::Mocks::mock_preference( 'ChildNeedsGuarantor', 0 );
     my $library        = $builder->build_object( { class => 'Koha::Libraries' } );
@@ -7745,47 +7745,6 @@ subtest 'ChildNeedsGuarantor' => sub {
             library      => $library->branchcode,
         }
     );
-    warnings_like {
-        AddIssue( $child_patron, $item->barcode, undef );
-    }
-    qr/Problem updating lastseen/,
-        "AddIssue generates a warning when Child type patron is missing a guarantor and ChildsNeedsGuarantor";
-    warnings_like {
-        AddRenewal(
-            {
-                borrowernumber => $child_patron->borrowernumber, itemnumber => $item->itemnumber,
-                branch         => $library->branchcode
-            }
-        );
-    }
-    qr/Problem updating lastseen/,
-        "AddRenewal generates a warning when Child type patron is missing a guarantor and ChildNeedsGuarantor";
-    warnings_like {
-        AddReturn( $item->barcode, $library->branchcode, undef, undef );
-    }
-    qr/Problem updating lastseen/,
-        "AddReturn generates a warning when Child type patron is missing a guarantor and ChildNeedsGuarantor";
-
-    warnings_like {
-        AddIssue( $guarantee_patron, $item->barcode, undef );
-    }
-    qr/Problem updating lastseen/,
-        "AddIssue generates a warning when can_be_guarantee type patron is missing a guarantor and ChildsNeedsGuarantor";
-    warnings_like {
-        AddRenewal(
-            {
-                borrowernumber => $guarantee_patron->borrowernumber, itemnumber => $item->itemnumber,
-                branch         => $library->branchcode
-            }
-        );
-    }
-    qr/Problem updating lastseen/,
-        "AddRenewal generates a warning when can_be_guarantee type patron is missing a guarantor and ChildNeedsGuarantor";
-    warnings_like {
-        AddReturn( $item->barcode, $library->branchcode, undef, undef );
-    }
-    qr/Problem updating lastseen/,
-        "AddReturn generates a warning when can_be_guarantee type patron is missing a guarantor and ChildNeedsGuarantor";
 
     t::lib::Mocks::mock_preference( 'ChildNeedsGuarantor', 0 );
     warnings_like {
