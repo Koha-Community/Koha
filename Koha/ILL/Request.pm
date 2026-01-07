@@ -1075,13 +1075,12 @@ pass it $params, as it does not yet have any other data associated with it.
 =cut
 
 sub backend_create {
-    my ( $self, $params ) = @_;
+    my ( $self, $params, $loggedin_patron ) = @_;
 
     # Establish whether we need to do a generic copyright clearance.
     if ( $params->{opac} ) {
 
-        my $patron = $params->{cardnumber} ? Koha::Patrons->find( { cardnumber => $params->{cardnumber} } ) : undef;
-        my $patron_branchcode = $patron    ? $patron->branchcode                                            : undef;
+        my $patron_branchcode = $loggedin_patron ? $loggedin_patron->branchcode : undef;
         my $copyright_content = Koha::AdditionalContents->search_for_display(
             {
                 category => 'html_customizations',

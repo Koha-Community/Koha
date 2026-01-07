@@ -186,7 +186,7 @@ if ( $op eq 'list' ) {
         $params->{cardnumber} = $patron->cardnumber if $patron;
         $params->{opac}       = 1;
         $params->{lang}       = C4::Languages::getlanguage($query);
-        my $backend_result = $request->backend_create($params);
+        my $backend_result = $request->backend_create( $params, $patron );
 
         if ( $backend_result->{stage} eq 'copyrightclearance' ) {
             $template->param(

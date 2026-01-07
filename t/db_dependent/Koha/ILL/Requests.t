@@ -1055,24 +1055,23 @@ subtest 'Backend core methods' => sub {
     is( $copyright_content->count, 1 );
 
     $backend_create_result =
-        $illrq->backend_create(
-        { opac => 1, branchcode => $illrq->patron->branchcode, cardnumber => $illrq->patron->cardnumber } );
+        $illrq->backend_create( { opac => 1, branchcode => $illrq->patron->branchcode }, $illrq->patron );
     is(
         $backend_create_result->{stage}, 'copyrightclearance',
-        'Additional contents found for provided cardnumber\'s library, should be copyrightclearance stage'
+        'Additional contents found for logged in user\'s library, should be copyrightclearance stage'
     );
 
     $backend_create_result = $illrq->backend_create( { opac => 1, branchcode => $illrq->patron->branchcode } );
     is(
         $backend_create_result->{stage}, 'commit',
-        'Cardnumber not supplied and couldnt find additional_contents for all libraries. Dont show copyrightclearance'
+        'Logged in patron not supplied and could not find additional_contents for all libraries. Dont show copyrightclearance'
     );
 
     my $patron_1 = $builder->build_object( { class => 'Koha::Patrons' } );
     $backend_create_result = $illrq->backend_create( { opac => 1, branchcode => $patron_1->branchcode } );
     is(
         $backend_create_result->{stage}, 'commit',
-        'Supplied cardnumber\'s branchcode doesnt match any additional_contents of same branchcode. Dont show copyrightclearance'
+        'Logged in user\'s branchcode does not match any additional_contents of same branchcode. Dont show copyrightclearance'
     );
 
     my $all_libraries_copyright_content = Koha::AdditionalContents->search_for_display(
@@ -1109,7 +1108,7 @@ subtest 'Backend core methods' => sub {
     $backend_create_result = $illrq->backend_create( { opac => 1, branchcode => $illrq->patron->branchcode } );
     is(
         $backend_create_result->{stage}, 'copyrightclearance',
-        'Cardnumber not supplied, found additional_contents for all libraries. Should show copyrightclearance'
+        'Logged in user not supplied, found additional_contents for all libraries. Should show copyrightclearance'
     );
 
     $all_libraries_copyright_content = Koha::AdditionalContents->search_for_display(
