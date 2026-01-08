@@ -1518,11 +1518,11 @@
                                                 [% IF CAN_user_suggestions_suggestions_delete %]
                                                     node += '<li><a href="#" data-op="cud-delete" data-suggestionid="%s" class="dropdown-item trigger_action">%s</a></li>'.format(row.suggestion_id, _("Delete"))
                                                 [% END %]
-                                                [% UNLESS s.archived %]
+                                                if (!row.archived){
                                                     node += '<li><a href="#" class="dropdown-item trigger_action" data-op="cud-archive" data-suggestionid="%s">%s</a></li>'.format(row.suggestion_id, _("Archive"))
-                                                [% ELSE %]
+                                                } else {
                                                     node += '<li><a href="#" class="dropdown-item trigger_action" data-op="cud-unarchive" data-suggestionid="%s">%s</a></li>'.format(row.suggestion_id, _("Unarchive"))
-                                                [% END %]
+                                                }
                                                 node += '</ul></div>'
                                                 return node
                                             [% ELSIF CAN_user_suggestions_suggestions_delete %]
