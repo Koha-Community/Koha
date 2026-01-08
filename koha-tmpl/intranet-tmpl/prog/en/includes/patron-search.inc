@@ -275,7 +275,7 @@
             return map;
         }, {});
 
-        let filters_options = {
+        var filters_options = {
             libraries,
             categories,
             av_bsort1,
