@@ -163,7 +163,7 @@
     [% INCLUDE 'modals/checkout_renewals.inc' %]
     [% INCLUDE 'js-date-format.inc' %]
     [% Asset.js("js/checkout_renewals_modal.js") | $raw %]
-    <script id="js">
+    <script>
         $(document).ready(function() {
             [% IF Koha.Preference('RecordStaffUserOnCheckout') %]
                 // FIXME This cannot work without bKohaColumnsUseNames

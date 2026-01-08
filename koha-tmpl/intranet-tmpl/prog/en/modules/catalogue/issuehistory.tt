@@ -127,7 +127,7 @@
 
 [% MACRO jsinclude BLOCK %]
     [% INCLUDE 'datatables.inc' %]
-    <script id="js">
+    <script>
         $(document).ready(function() {
             var table_settings = [% TablesSettings.GetTableSettings('catalogue', 'detail', 'checkoutshistory-table', 'json') | $raw %];
             [% UNLESS show_patron_column %]
