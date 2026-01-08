@@ -563,10 +563,6 @@
     [% Asset.js("js/acq.js") | $raw %]
     <script>
         $(document).ready(function() {
-            [% IF ( tab ) %]
-                $("#budgetsTabs li:eq([% tab | html %]) a").tab("show");
-            [% END %]
-
             let dt_params = {
                 pagingType: "full",
                 autoWidth: false,

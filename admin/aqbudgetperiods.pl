@@ -308,11 +308,9 @@ foreach my $result ( @{$results} ) {
     push( @period_inactive_loop, $budgetperiod );
 }
 
-my $tab = $input->param('tab') ? $input->param('tab') - 1 : 0;
 $template->param(
     period_active_loop   => \@period_active_loop,
     period_inactive_loop => \@period_inactive_loop,
-    tab                  => $tab,
 );
 
 $template->param( $op => 1 );
