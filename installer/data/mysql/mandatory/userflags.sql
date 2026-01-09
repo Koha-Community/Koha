@@ -28,6 +28,6 @@ INSERT INTO userflags (bit, flag, flagdesc, defaulton) VALUES
 (28, 'erm', 'Manage electronic resources', 0),
 (29, 'loggedinlibrary', 'Change logged in library', 0),
 (30, 'preservation', 'Preservation module', 0),
-(31, 'sip2', 'SIP2 module', 0)
+(31, 'sip2', 'SIP2 module', 0),
 (32, 'debug', 'Show debug interface', 0)
 ;
