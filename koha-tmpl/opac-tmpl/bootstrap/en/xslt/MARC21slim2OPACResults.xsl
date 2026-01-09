@@ -1209,7 +1209,7 @@
                             <xsl:with-param name="indicator1" select="@ind1"/>
                             <xsl:with-param name="accessMethod" select="marc:subfield[@code='2']"/>
                         </xsl:call-template>
-                        <xsl:value-of select="marc:subfield[@code='u']"/>
+                        <xsl:value-of select="normalize-space(marc:subfield[@code='u'])"/>
                     </xsl:attribute>
 				</xsl:otherwise>
 			      </xsl:choose>

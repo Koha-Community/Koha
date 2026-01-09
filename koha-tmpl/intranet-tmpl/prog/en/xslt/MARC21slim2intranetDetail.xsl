@@ -973,7 +973,7 @@
                         <xsl:with-param name="indicator1" select="@ind1"/>
                         <xsl:with-param name="accessMethod" select="marc:subfield[@code='2']"/>
                     </xsl:call-template>
-                    <xsl:value-of select="marc:subfield[@code='u']"/>
+                    <xsl:value-of select="normalize-space(marc:subfield[@code='u'])"/>
                 </xsl:attribute>
                 <xsl:choose>
                     <xsl:when test="($Show856uAsImage='Details' or $Show856uAsImage='Both') and (substring($SubqText,1,6)='image/' or $SubqText='img' or $SubqText='bmp' or $SubqText='cod' or $SubqText='gif' or $SubqText='ief' or $SubqText='jpe' or $SubqText='jpeg' or $SubqText='jpg' or $SubqText='jfif' or $SubqText='png' or $SubqText='svg' or $SubqText='tif' or $SubqText='tiff' or $SubqText='ras' or $SubqText='cmx' or $SubqText='ico' or $SubqText='pnm' or $SubqText='pbm' or $SubqText='pgm' or $SubqText='ppm' or $SubqText='rgb' or $SubqText='xbm' or $SubqText='xpm' or $SubqText='xwd')">
