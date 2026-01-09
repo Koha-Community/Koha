@@ -159,7 +159,7 @@
                                                             [% ELSIF ( hold.waitingdate ) %]
                                                                 <span class="waiting"> Waiting for patron at [% Branches.GetName( hold.branchcode ) | html %] since [% hold.waitingdate | $KohaDates %]. </span>
                                                             [% ELSIF ( hold.borrowernumber == logged_in_user.borrowernumber ) %]
-                                                                <span class="waiting"> You have already placed a <a href="/cgi-bin/koha/opac-user.pl#opac-user-holds">reserve</a> on this item. </span>
+                                                                <span class="waiting"> You have already placed a <a href="/cgi-bin/koha/opac-user.pl?tab=opac-user-holds">reserve</a> on this item. </span>
                                                             [% END # / IF ( item.recall or hold ) %]
                                                         </td>
                                                     </tr>

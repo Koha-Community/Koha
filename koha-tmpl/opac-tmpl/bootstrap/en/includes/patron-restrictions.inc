@@ -21,7 +21,7 @@
         [% END %]
         <li>
             <span>Usually the reason for freezing an account is old overdues or damage fees. If it appears that your account is clear, please contact the library.</span>
-            <a href="/cgi-bin/koha/opac-account.pl">Check your charges page.</a> <a href="/cgi-bin/koha/opac-user.pl?opac-user-overdues=1">Check your overdues.</a>
+            <a href="/cgi-bin/koha/opac-account.pl">Check your charges page.</a> <a href="/cgi-bin/koha/opac-user.pl?tab=opac-user-overdues">Check your overdues.</a>
         </li>
     </ul>
 </li>

@@ -96,7 +96,7 @@ if ( $op eq 'cud-create' ) {
     };
 
     if ($success) {
-        print $cgi->redirect("/cgi-bin/koha/opac-user.pl?opac-user-article-requests=1");
+        print $cgi->redirect("/cgi-bin/koha/opac-user.pl?tab=opac-user-article-requests");
         exit;
     }
 

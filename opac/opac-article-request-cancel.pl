@@ -50,4 +50,4 @@ if ($id) {
     $ar->cancel();
 }
 
-print $query->redirect("/cgi-bin/koha/opac-user.pl#opac-user-article-requests");
+print $query->redirect("/cgi-bin/koha/opac-user.pl?tab=opac-user-article-requests");

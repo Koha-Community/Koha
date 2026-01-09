@@ -1051,6 +1051,9 @@
     [% INCLUDE 'calendar.inc' %]
     [% INCLUDE 'datatables.inc' %]
     <script>
+        const tab = "[% tab | html %]";
+    </script>
+    <script>
         var AR_CAPTION_COUNT = _("(%s total)");
 
 
@@ -1063,13 +1066,13 @@
             }
         }
         $(document).ready(function(){
-            [% IF ( opac_user_holds ) %]
-                $("#opac-user-views a[href='#opac-user-holds_panel']").tab("show");
-            [% ELSIF ( opac_user_overdues ) %]
-                $("#opac-user-views a[href='#opac-user-overdues_panel']").tab("show");
-            [% ELSIF ( opac_user_article_requests ) %]
-                $("#opac-user-views a[href='#opac-user-article-requests_panel']").tab("show");
-            [% END %]
+            if (tab){
+                $(`#opac-user-views a[href='#${tab}_panel']`).tab("show");
+            }
+            if( $("#opac-user-views .tab-pane.active").length < 1 ){
+                $("#opac-user-views a:first").tab("show");
+            }
+
             $('#article-requests-table caption .count').html(AR_CAPTION_COUNT.format('[% current_article_requests.size | html %]'));
 
             $(".modal-nojs").addClass("modal").addClass("hide").removeClass("modal-nojs");
@@ -1340,13 +1343,6 @@
                 return confirmDelete(_("Are you sure you want to dismiss this message?"));
             });
 
-            [% IF ( tab ) %]
-                $("#opac-user-views #[% tab | html %]-tab").tab("show");
-            [% END %]
-
-            if( $("#opac-user-views .tab-pane.active").length < 1 ){
-                $("#opac-user-views a:first").tab("show");
-            }
         });
 
         function submitNote( title, issue_id, note ){

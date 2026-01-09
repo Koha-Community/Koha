@@ -54,4 +54,4 @@ if ( $op eq 'cud-suspend' ) {
     );
 }
 
-print $query->redirect("/cgi-bin/koha/opac-user.pl?opac-user-holds=1");
+print $query->redirect("/cgi-bin/koha/opac-user.pl?tab=opac-user-holds");
