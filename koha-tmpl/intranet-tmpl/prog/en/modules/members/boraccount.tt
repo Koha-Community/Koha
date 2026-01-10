@@ -638,6 +638,25 @@
                 $("#returned, #refund_type").focus();
             });
 
+            // Validate cash register requirement for refunds
+            [% IF Koha.Preference('UseCashRegisters') %]
+                $("#refund_form").on("submit", function(e) {
+                    var refund_type = $("#refund_type").val();
+                    var register = $("#refund_registerid").val();
+
+                    // Only require register for non-AC refunds with CASH or SIP00 payment types
+                    if (refund_type && refund_type !== 'AC' && (refund_type === 'CASH' || refund_type.match(/^SIP\d{2}$/))) {
+                        if (!register || register === '') {
+                            e.preventDefault();
+                            alert(_("Cash register is required for cash refunds"));
+                            $("#refund_registerid").focus();
+                            return false;
+                        }
+                    }
+                    return true;
+                });
+            [% END %]
+
             $("#applyDiscountModal").on("shown.bs.modal", function(e){
                 var button = $(e.relatedTarget);
                 var item = button.data('item');

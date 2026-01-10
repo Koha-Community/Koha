@@ -137,19 +137,24 @@ if ( !$registers->count ) {
                             amount         => $amount
                         }
                     );
-                    my $payout = $refund->payout(
-                        {
-                            payout_type   => $refund_type,
-                            branch        => $library_id,
-                            staff_id      => $logged_in_user->id,
-                            cash_register => $cash_register->id,
-                            interface     => 'intranet',
-                            amount        => $amount
-                        }
-                    );
-
+                    unless ( $refund_type eq 'AC' ) {
+                        my $payout = $refund->payout(
+                            {
+                                payout_type   => $refund_type,
+                                branch        => $library_id,
+                                staff_id      => $logged_in_user->id,
+                                cash_register => $registerid,
+                                interface     => 'intranet',
+                                amount        => $amount
+                            }
+                        );
+                    }
                 }
             );
+
+            # Redirect to prevent duplicate submissions (POST/REDIRECT/GET pattern)
+            print $input->redirect( "/cgi-bin/koha/pos/register.pl?registerid=" . $registerid );
+            exit;
         } else {
             $template->param( error_refund_permission => 1 );
         }
