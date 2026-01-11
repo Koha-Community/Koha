@@ -95,6 +95,18 @@ my $save_confirmed  = $input->param('save_confirmed') || 0;
 my $notify          = $input->param('notify');
 my $filter_archived = $input->param('filter_archived') || 0;
 
+#NOTE: Validate displayby as it gets passed to sensitive functions
+my %valid_displayby = (
+    STATUS     => 1,
+    branchcode => 1,
+    itemtype   => 1,
+    managedby  => 1,
+    acceptedby => 1,
+);
+if ( !$valid_displayby{$displayby} ) {
+    $displayby = '';
+}
+
 my $reasonsloop     = GetAuthorisedValues("SUGGEST");
 
 # filter informations which are not suggestion related.
