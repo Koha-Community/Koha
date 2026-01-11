@@ -103,6 +103,18 @@ my $filter_archived   = $input->param('filter_archived') || 0;
 my $new_itemtype      = $input->param('suggestion_itemtype');
 my $sugg_managedby    = $input->param('suggestion_managedby');
 
+#NOTE: Validate displayby as it gets passed to sensitive functions
+my %valid_displayby = (
+    STATUS     => 1,
+    branchcode => 1,
+    itemtype   => 1,
+    managedby  => 1,
+    acceptedby => 1,
+);
+if ( !$valid_displayby{$displayby} ) {
+    $displayby = '';
+}
+
 my $reasonsloop = GetAuthorisedValues("SUGGEST");
 
 my $suggestion_ref = { $input->Vars };
