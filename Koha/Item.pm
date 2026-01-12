@@ -977,7 +977,7 @@ sub last_returned_by {
 
                 # If StoreLastBorrower is 0 or disabled, bail without storing anything. Also delete any remaining rows from the table.
                 if ( $max_stored_borrowers == 0 ) {
-                    $self->last_borrowers->delete;
+                    $self->_result->last_returned_by->delete_all;
                     return $self;
                 }
 
