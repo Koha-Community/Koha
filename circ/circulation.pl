@@ -547,6 +547,17 @@ if ( @$barcodes && $op eq 'cud-checkout' ) {
                 if ( my $booked = $needsconfirmation->{BOOKED_EARLY} // $alerts->{BOOKED} ) {
                     $datedue = $booked->end_date;
                 }
+
+                # If renewing an item on hold, use renewonholdduedate (similar to renew.pl)
+                # This handles the same issue as Bug 37966 for circ/renew.pl
+                if ( $needsconfirmation->{RENEW_ISSUE} && $needsconfirmation->{RESERVED} ) {
+
+                    # Use duedatespec if SpecifyDueDate is enabled and duedatespec is provided
+                    # Otherwise use renewonholdduedate (may be empty string, letting AddRenewal calculate)
+                    if ( !( $duedatespec_allow && $duedatespec ) ) {
+                        $datedue = $query->param('renewonholdduedate');
+                    }
+                }
                 $needsconfirmation->{'DEBT'} = $needsconfirmationDEBT if ($debt_confirmed);
                 my $issue = AddIssue(
                     $patron, $barcode, $datedue,

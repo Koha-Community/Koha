@@ -348,6 +348,12 @@
                                 <input type="checkbox" id="cancelreserve" name="cancelreserve" value="cancel" />
                                 <label for="cancelreserve">Cancel hold</label>
                             </p>
+                            [% IF ( RENEW_ISSUE ) %]
+                                <p>
+                                    <label for="renewonholdduedate">Renewal due date:</label>
+                                    <input type="text" size="20" id="renewonholdduedate" name="renewonholdduedate" value="" class="flatpickr" data-flatpickr-enable-time="true" />
+                                </p>
+                            [% END %]
                         [% END %]
 
                         [% IF ( RESERVE_WAITING ) %]
