@@ -18,7 +18,7 @@
 use Modern::Perl;
 
 use Test::NoWarnings;
-use Test::More tests => 69;
+use Test::More tests => 71;
 use DateTime::Duration;
 
 use t::lib::Mocks;
@@ -452,6 +452,73 @@ my $datedue4_date = output_pref(
 ok(
     $datedue4_date ne $today,
     q{AddRenewal with a defined but empty due date does not set the due date to today}
+);
+
+# Bug 37966: Test AddIssue with empty string parameters
+# Update the default circulation rule to have a non-zero issuelength
+Koha::CirculationRules->set_rules(
+    {
+        itemtype     => '*',
+        categorycode => '*',
+        branchcode   => '*',
+        rules        => {
+            lengthunit  => 'days',
+            issuelength => 7,
+        }
+    }
+);
+$dbh->do("DELETE FROM old_issues");
+AddReturn($barcode_1);
+my $issue_empty_datedue   = C4::Circulation::AddIssue( $patron_1, $barcode_1, "", 0, undef );
+my $expected_datedue      = dt_from_string()->add( days => 7 );
+my $expected_datedue_date = output_pref(
+    {
+        dt         => $expected_datedue,
+        dateformat => 'iso',
+        timeformat => '24hr',
+        dateonly   => 1
+    }
+);
+my $issue_empty_datedue_date = output_pref(
+    {
+        dt         => dt_from_string( $issue_empty_datedue->date_due ),
+        dateformat => 'iso',
+        timeformat => '24hr',
+        dateonly   => 1
+    }
+);
+is(
+    $issue_empty_datedue_date, $expected_datedue_date,
+    q{AddIssue with empty string datedue calculates due date based on circulation rules}
+);
+
+AddReturn($barcode_1);
+my $issue_empty_issuedate = C4::Circulation::AddIssue( $patron_1, $barcode_1, undef, 0, "" );
+my $issue_check           = Koha::Checkouts->find( { itemnumber => $item_id1 } );
+my $issue_issuedate       = output_pref(
+    {
+        dt         => dt_from_string( $issue_check->issuedate ),
+        dateformat => 'iso',
+        timeformat => '24hr',
+        dateonly   => 1
+    }
+);
+ok(
+    $issue_issuedate eq $today,
+    q{AddIssue with empty string issuedate defaults to today}
+);
+
+# Restore default circulation rule
+Koha::CirculationRules->set_rules(
+    {
+        itemtype     => '*',
+        categorycode => '*',
+        branchcode   => '*',
+        rules        => {
+            lengthunit  => 'days',
+            issuelength => 0,
+        }
+    }
 );
 
 $dbh->do("DELETE FROM old_issues");
