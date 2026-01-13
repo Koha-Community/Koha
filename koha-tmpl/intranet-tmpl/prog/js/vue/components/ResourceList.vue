@@ -116,10 +116,11 @@ export default {
             let columnActions = thisResource.tableOptions.actions;
 
             const columns = resourceAttrs.reduce((acc, attr, i) => {
-                const shouldFieldBeHidden = attr.hideIn && typeof attr.hideIn === "function" ? attr.hideIn() : attr.hideIn
-                if (
-                    shouldFieldBeHidden && shouldFieldBeHidden.includes("List")
-                )
+                const shouldFieldBeHidden =
+                    attr.hideIn && typeof attr.hideIn === "function"
+                        ? attr.hideIn()
+                        : attr.hideIn;
+                if (shouldFieldBeHidden && shouldFieldBeHidden.includes("List"))
                     return acc;
                 if (
                     attr.hasOwnProperty("tableColumnDefinition") &&

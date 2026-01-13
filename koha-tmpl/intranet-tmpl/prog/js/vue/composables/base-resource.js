@@ -419,11 +419,20 @@ export function useBaseResource(resourceConfig) {
                         relationshipField.relationshipName = ra.name;
                     });
                 }
-                const shouldFieldBeHidden = ra.hideIn && typeof ra.hideIn === "function" ? ra.hideIn() : ra.hideIn
-                if (shouldFieldBeHidden && !shouldFieldBeHidden.includes(component)) {
+                const shouldFieldBeHidden =
+                    ra.hideIn && typeof ra.hideIn === "function"
+                        ? ra.hideIn()
+                        : ra.hideIn;
+                if (
+                    shouldFieldBeHidden &&
+                    !shouldFieldBeHidden.includes(component)
+                ) {
                     return [...acc, ra];
                 }
-                if (shouldFieldBeHidden && shouldFieldBeHidden.includes(component)) {
+                if (
+                    shouldFieldBeHidden &&
+                    shouldFieldBeHidden.includes(component)
+                ) {
                     return acc;
                 }
                 return [...acc, ra];

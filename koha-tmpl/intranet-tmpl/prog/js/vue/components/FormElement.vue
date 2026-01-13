@@ -45,9 +45,7 @@
             :id="getElementId"
             type="checkbox"
             v-model="resource[attr.name]"
-            :changeMethod="
-                attr.onChange && attr.onChange.bind(this, resource)
-            "
+            :changeMethod="attr.onChange && attr.onChange.bind(this, resource)"
             :disabled="disabled"
         />
     </template>

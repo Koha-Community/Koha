@@ -422,7 +422,10 @@ export default {
                 relationshipAPIClient: APIClient.cash.cash_registers,
                 relationshipOptionLabelAttr: "name", // attr of the related resource used for display
                 relationshipRequiredKey: "cash_register_id",
-                hideIn: () => sysprefs.value.UseCashRegisters !== "0" ? ["List"] : ["Form", "Show", "List"],
+                hideIn: () =>
+                    sysprefs.value.UseCashRegisters !== "0"
+                        ? ["List"]
+                        : ["Form", "Show", "List"],
                 group: "Details",
                 toolTip: __(
                     "Only required if system preference UseCashRegisters is enabled"
