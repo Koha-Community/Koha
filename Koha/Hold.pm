@@ -860,6 +860,9 @@ sub cancel {
 
     my $autofill_next = $params->{autofill} && $self->itemnumber && $self->found && $self->found eq 'W';
 
+    # Store hold data for plugin hook (before transaction)
+    my $old_hold_data;
+
     my $original = C4::Context->preference('HoldsLog') ? $self->unblessed : undef;
 
     $self->_result->result_source->schema->txn_do(
@@ -916,13 +919,8 @@ sub cancel {
 
             my $old_me = $self->_move_to_old;
 
-            Koha::Plugins->call(
-                'after_hold_action',
-                {
-                    action  => 'cancel',
-                    payload => { hold => $old_me->get_from_storage }
-                }
-            );
+            # Store data for plugin hook (to be called after transaction)
+            $old_hold_data = $old_me->get_from_storage;
 
             # anonymize if required
             $old_me->anonymize
@@ -963,6 +961,15 @@ sub cancel {
                 { biblio_ids => [ $old_me->biblionumber ] } )
                 unless $params->{skip_holds_queue}
                 or !C4::Context->preference('RealTimeHoldsQueue');
+        }
+    );
+
+    # Call plugin hook AFTER transaction completes
+    Koha::Plugins->call(
+        'after_hold_action',
+        {
+            action  => 'cancel',
+            payload => { hold => $old_hold_data }
         }
     );
 
