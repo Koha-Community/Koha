@@ -114,7 +114,7 @@ sub add {
         $vendor_to_store->aliases( $aliases       || [] );
         $vendor_to_store->interfaces( $interfaces || [] );
 
-        if ( scalar(@$extended_attributes) > 0 ) {
+        if ( $extended_attributes && scalar(@$extended_attributes) > 0 ) {
             my @extended_attributes =
                 map { { 'id' => $_->{field_id}, 'value' => $_->{value} } } @{$extended_attributes};
             $vendor_to_store->extended_attributes( \@extended_attributes );
@@ -160,7 +160,7 @@ sub update {
         $vendor->aliases( $aliases       || [] ) if defined $aliases;
         $vendor->interfaces( $interfaces || [] ) if defined $interfaces;
 
-        if ( scalar(@$extended_attributes) > 0 ) {
+        if ( $extended_attributes && scalar(@$extended_attributes) > 0 ) {
             my @extended_attributes =
                 map { { 'id' => $_->{field_id}, 'value' => $_->{value} } } @{$extended_attributes};
             $vendor->extended_attributes( \@extended_attributes );
