@@ -59,7 +59,7 @@ export default {
                     name: "can_be_edited",
                     type: "checkbox",
                     label: $__("Can be edited"),
-                    value: false,
+                    defaultValue: false,
                 },
             ],
         });
