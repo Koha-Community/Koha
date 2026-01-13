@@ -788,6 +788,8 @@ const insertObject = async ({ type, object, baseUrl, authHeader }) => {
             invoices,
             list_currency,
             invoice_currency,
+            extended_attributes,
+            _strings,
             ...vendor
         } = object;
 
