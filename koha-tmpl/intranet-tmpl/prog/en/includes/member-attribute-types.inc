@@ -45,9 +45,7 @@
                                                     class="flatpickr"
                                                 />
                                             [% ELSE %]
-                                                <textarea rows="2" cols="30" id="[% patron_attribute.form_id | html %]" name="[% patron_attribute.form_id | html %]" required="required">
-[% patron_attribute.value | html %]</textarea
-                                                >
+                                                <textarea rows="2" cols="30" id="[% patron_attribute.form_id | html %]" name="[% patron_attribute.form_id | html %]" required="required">[% patron_attribute.value | html %]</textarea>
                                             [% END %]
                                         [% ELSE %]
                                             [% IF patron_attribute.is_date %]
