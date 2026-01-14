@@ -18,14 +18,22 @@ describe("License CRUD operations", () => {
             "/api/v1/erm/config",
             '{"settings":{"ERMModule":"1","ERMProviders":["local"]}}'
         );
+        cy.intercept("GET", "/api/v1/erm/licenses*", {
+            statusCode: 200,
+            body: [cy.get_license()],
+            headers: {
+                "X-Total-Count": "5",
+            },
+        }).as("getDashboardLicenses");
     });
 
     it("List license", () => {
+        cy.visit("/cgi-bin/koha/erm/erm.pl");
+        cy.wait("@getDashboardLicenses");
         // GET license returns 500
         cy.intercept("GET", "/api/v1/erm/licenses*", {
             statusCode: 500,
         });
-        cy.visit("/cgi-bin/koha/erm/erm.pl");
         cy.get(".sidebar_menu").contains("Licenses").click();
         cy.get("main div[class='alert alert-warning']").contains(
             "Something went wrong: Error: Internal Server Error"
