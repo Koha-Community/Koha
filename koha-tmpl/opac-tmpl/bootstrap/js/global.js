@@ -270,7 +270,7 @@ function setAdvancedPlaceholder(selectEl) {
     var $row = $select.closest(".search-term-row");
     var $input = $row.find("input[name='q']");
     var ph = $select.find("option:selected").data("placeholder");
-    $input.attr("placeholder", ph || _("Enter search terms"));
+    $input.attr("placeholder", ph || __("Enter search terms"));
 }
 
 $(".advanced-search-terms select[name='idx']").each(function () {
