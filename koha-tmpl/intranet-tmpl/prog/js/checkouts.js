@@ -39,19 +39,14 @@ function LoadIssuesTable() {
     let renew_column = table_settings_issues_table.columns.find(
         c => c.columnname == "renew"
     );
-    let checkin_column = table_settings_issues_table.columns.find(
-        c => c.columnname == "checkin"
-    );
 
     if (!AllowCirculate) {
         renew_column.is_hidden = 1;
         renew_column.force_visibility = 1;
     } else {
         renew_column.is_hidden = 0;
-        checkin_column.is_hidden = 0;
     }
     renew_column.force_visibility = 1;
-    checkin_column.force_visibility = 1;
 
     let claims_returned_column = table_settings_issues_table.columns.find(
         c => c.columnname == "claims_returned"
