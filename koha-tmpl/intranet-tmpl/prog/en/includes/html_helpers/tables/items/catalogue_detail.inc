@@ -596,7 +596,7 @@
                             if ( status == 'on_hold') {
                                 if ( row.first_hold.waiting_date ) {
                                     if ( row.first_hold.desk ) {
-                                        nodes += '<span class="waitingat">%s</span>'.format(_("Waiting at %s, %s since %s.").format(row.first_hold._strings.pickup_library_id.str, row.first_hold.desk.desk_name, $date(row.first_hold.waiting_date)));
+                                        nodes += '<span class="waitingat">%s</span>'.format(_("Waiting at %s, %s since %s.").format(row.first_hold._strings.pickup_library_id.str, row.first_hold.desk.name, $date(row.first_hold.waiting_date)));
                                     } else {
                                         nodes += '<span class="waitingat">%s</span>'.format(_("Waiting at %s since %s.").format(row.first_hold._strings.pickup_library_id.str, $date(row.first_hold.waiting_date)));
                                     }
