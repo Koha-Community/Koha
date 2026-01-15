@@ -1189,21 +1189,23 @@
                         [% END %]
                     </form>
 
-                    <form method="POST" action="/cgi-bin/koha/tools/batch_extend_due_dates.pl" id="batch_extend_due_dates" target="_blank">
-                        [% INCLUDE 'csrf-token.inc' %]
-                        <input type="hidden" name="op" value="cud-form" />
-                        [% FOREACH result IN results %]
-                            [% FOREACH cells IN result.cells %]
-                                [% place = loop.index %]
-                                [% NEXT UNLESS cells.cell.match('^(\d+)$') %]
-                                [% IF header_row.$place.cell == 'itemnumber' || header_types.item(header_row.$place.cell) == 'itemnumber' %]
-                                    [% SET batch_itemnumbers = 1 %]
-                                    [% SET header_row.$place.has_itemnumbers = 1 %]
-                                    <input type="hidden" name="[% header_row.$place.cell | html %]" value="[% cells.cell | html %]" />
+                    [% IF ( CAN_user_tools_batch_extend_due_dates ) %]
+                        <form method="POST" action="/cgi-bin/koha/tools/batch_extend_due_dates.pl" id="batch_extend_due_dates" target="_blank">
+                            [% INCLUDE 'csrf-token.inc' %]
+                            <input type="hidden" name="op" value="cud-form" />
+                            [% FOREACH result IN results %]
+                                [% FOREACH cells IN result.cells %]
+                                    [% place = loop.index %]
+                                    [% NEXT UNLESS cells.cell.match('^(\d+)$') %]
+                                    [% IF header_row.$place.cell == 'itemnumber' || header_types.item(header_row.$place.cell) == 'itemnumber' %]
+                                        [% SET batch_itemnumbers = 1 %]
+                                        [% SET header_row.$place.has_itemnumbers = 1 %]
+                                        <input type="hidden" name="[% header_row.$place.cell | html %]" value="[% cells.cell | html %]" />
+                                    [% END %]
                                 [% END %]
                             [% END %]
-                        [% END %]
-                    </form>
+                        </form>
+                    [% END %]
 
                     <form method="get" action="/cgi-bin/koha/virtualshelves/addbybiblionumber.pl" id="batch_add_to_list" target="_blank">
                         [% FOREACH result IN results %]
@@ -1393,21 +1395,23 @@
                                                         >Batch item deletion</a
                                                     >
                                                 </li>
-                                                <li>
-                                                    <a
-                                                        href="#"
-                                                        data-submit="batch_extend_due_dates"
-                                                        data-bs-toggle="tooltip"
-                                                        data-bs-placement="right"
-                                                        title="Send visible items to batch extend due dates"
-                                                        class="dropdown-item batch_op send_to_extend_due"
-                                                        >Batch extend due dates</a
-                                                    >
-                                                </li>
+                                                [% IF ( CAN_user_tools_batch_extend_due_dates ) %]
+                                                    <li>
+                                                        <a
+                                                            href="#"
+                                                            data-submit="batch_extend_due_dates"
+                                                            data-bs-toggle="tooltip"
+                                                            data-bs-placement="right"
+                                                            title="Send visible items to batch extend due dates"
+                                                            class="dropdown-item batch_op send_to_extend_due"
+                                                            >Batch extend due dates</a
+                                                        >
+                                                    </li>
+                                                [% END %]
                                                 [% IF item_lists.count || CAN_user_item_lists_create_item_lists %]
                                                     <li>
                                                         <a href="#" data-bs-toggle="tooltip" data-bs-placement="right" title="Add visible items to an item list" class="dropdown-item send_to_item_list">Add items to item list</a>
-                                                    </li>
+                                                        </li>
                                                 [% END %]
                                             [% END %]
                                             [% IF header_ro.cell == 'reserve_id' || header_types.item( header_ro.cell ) == 'reserve_id' %]
