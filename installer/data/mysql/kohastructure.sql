@@ -4391,6 +4391,7 @@ CREATE TABLE `itemtypes` (
   `checkinmsg` varchar(255) DEFAULT NULL COMMENT 'message that is displayed when an item with the given item type is checked in',
   `checkinmsgtype` char(16) NOT NULL DEFAULT 'message' COMMENT 'type (CSS class) for the checkinmsg, can be ''alert'' or ''message''',
   `sip_media_type` varchar(3) DEFAULT NULL COMMENT 'SIP2 protocol media type for this itemtype',
+  `sip_magnetic` tinyint(1) NOT NULL DEFAULT 0 COMMENT 'Indicates if items of this type are magnetic media for SIP',
   `hideinopac` tinyint(1) NOT NULL DEFAULT 0 COMMENT 'Hide the item type from the search options in OPAC',
   `searchcategory` varchar(80) DEFAULT NULL COMMENT 'Group this item type with others with the same value on OPAC search options',
   `automatic_checkin` tinyint(1) NOT NULL DEFAULT 0 COMMENT 'If automatic checkin is enabled for items of this type',
