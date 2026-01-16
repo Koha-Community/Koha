@@ -631,9 +631,11 @@
             $("#holidaysyearlyrepeatable").kohaTable(dt_params);
             $("#holidaysunique").kohaTable(dt_params);
 
-            let unique_table = $("#holidaysunique").DataTable();
+            let exceptions_table = $("#holidayexceptions").DataTable();
+            let unique_table     = $("#holidaysunique").DataTable();
 
             $(".show_past").on("change", function(){
+                exceptions_table.draw();
                 unique_table.draw();
             });
 
