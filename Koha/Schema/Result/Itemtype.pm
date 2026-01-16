@@ -144,6 +144,14 @@ type (CSS class) for the checkinmsg, can be 'alert' or 'message'
 
 SIP2 protocol media type for this itemtype
 
+=head2 sip_magnetic
+
+  data_type: 'tinyint'
+  default_value: 0
+  is_nullable: 0
+
+Indicates if items of this type are magnetic media for SIP
+
 =head2 hideinopac
 
   data_type: 'tinyint'
@@ -223,6 +231,8 @@ __PACKAGE__->add_columns(
   },
   "sip_media_type",
   { data_type => "varchar", is_nullable => 1, size => 3 },
+  "sip_magnetic",
+  { data_type => "tinyint", default_value => 0, is_nullable => 0 },
   "hideinopac",
   { data_type => "tinyint", default_value => 0, is_nullable => 0 },
   "searchcategory",
