@@ -66,7 +66,7 @@ my $launcher = sub {
             flagsrequired => { editcatalogue => '*' },
         }
     );
-    my $is_valid = valid_isbn_checksum($isbn);
+    my $is_valid = $isbn eq q{} ? 1 : valid_isbn_checksum($isbn);
     $template->param( return => $is_valid );
     output_html_with_http_headers $cgi, $cookie, $template->output;
 };
