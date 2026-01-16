@@ -5,7 +5,7 @@
 
 use Modern::Perl;
 use Test::NoWarnings;
-use Test::More tests => 22;
+use Test::More tests => 23;
 use Test::Warn;
 
 use DateTime;
@@ -1674,6 +1674,57 @@ subtest 'Checkin message' => sub {
 
     $circ = $ils->checkout( $patron2->cardnumber, $item->barcode, undef, undef, $server->{account} );
     is( $circ->{screen_msg}, '', "Checked out item was checked out to the next patron" );
+};
+
+subtest 'magnetic_media flag from item type' => sub {
+    plan tests => 4;
+
+    # Create an item type with magnetic = 1
+    my $itemtype_magnetic = $builder->build_object(
+        {
+            class => 'Koha::ItemTypes',
+            value => {
+                itemtype     => 'MAGNETIC',
+                description  => 'Magnetic Test Item Type',
+                sip_magnetic => 1,
+            }
+        }
+    );
+
+    # Create an item type with magnetic = 0
+    my $itemtype_non_magnetic = $builder->build_object(
+        {
+            class => 'Koha::ItemTypes',
+            value => {
+                itemtype     => 'NONMAG',
+                description  => 'Non-Magnetic Test Item Type',
+                sip_magnetic => 0,
+            }
+        }
+    );
+
+    # Create items with these types
+    my $item_magnetic = $builder->build_sample_item(
+        {
+            itype => $itemtype_magnetic->itemtype,
+        }
+    );
+
+    my $item_non_magnetic = $builder->build_sample_item(
+        {
+            itype => $itemtype_non_magnetic->itemtype,
+        }
+    );
+
+    # Test magnetic item
+    my $sip_item_magnetic = C4::SIP::ILS::Item->new( $item_magnetic->barcode );
+    ok( defined $sip_item_magnetic, 'SIP Item object created for magnetic item' );
+    is( $sip_item_magnetic->magnetic_media, 1, 'magnetic_media is 1 for magnetic item type' );
+
+    # Test non-magnetic item
+    my $sip_item_non_magnetic = C4::SIP::ILS::Item->new( $item_non_magnetic->barcode );
+    ok( defined $sip_item_non_magnetic, 'SIP Item object created for non-magnetic item' );
+    is( $sip_item_non_magnetic->magnetic_media, 0, 'magnetic_media is 0 for non-magnetic item type' );
 };
 
 $schema->storage->txn_rollback;
