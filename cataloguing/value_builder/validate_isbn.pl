@@ -30,19 +30,25 @@ my $builder = sub {
 
     return qq|
 <script>
-function Blur$id(event) {
+function Change$id(event) {
     field = \$('#'+event.data.id);
     isbn = field.val();
     var url = '../cataloguing/plugin_launcher.pl?plugin_name=validate_isbn.pl&isbn=' + isbn;
     var req = \$.get(url);
     req.done(function(resp){
-        if ( resp != 1 ) {
+        field.addClass("checked_isbn");
+        if ( resp == 1 ) field.removeClass("subfield_not_filled");
+        else {
            field.addClass("subfield_not_filled");
+           field.focus();
            alert("Invalid ISBN : " + isbn);
-           return;
         }
-        field.removeClass("subfield_not_filled");
     });
+}
+function Blur$id(event) {
+    field = \$('#'+event.data.id);
+    // when not yet checked (in existing record), trigger change event
+    if ( !field.hasClass("checked_isbn") ) field.trigger("change");
 }
 </script>|;
 };

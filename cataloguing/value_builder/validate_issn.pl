@@ -30,19 +30,25 @@ my $builder = sub {
 
     return qq|
 <script>
-function Blur$id(event) {
+function Change$id(event) {
     field = \$('#'+event.data.id);
     issn = field.val();
     var url = '../cataloguing/plugin_launcher.pl?plugin_name=validate_issn.pl&issn=' + issn;
     var req = \$.get(url);
     req.done(function(resp){
-        if ( resp != 1 ) {
+        field.addClass("checked_issn");
+        if ( resp == 1 ) field.removeClass("subfield_not_filled");
+        else {
            field.addClass("subfield_not_filled");
+           field.focus();
            alert("Invalid ISSN : " + issn);
-           return;
         }
-        field.removeClass("subfield_not_filled");
     });
+}
+function Blur$id(event) {
+    field = \$('#'+event.data.id);
+    // when not yet checked (in existing record), trigger change event
+    if ( !field.hasClass("checked_issn") ) field.trigger("change");
 }
 </script>|;
 };
