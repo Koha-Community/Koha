@@ -60,6 +60,7 @@ sub process_tt {
             {
                 EVAL_PERL   => 0,
                 ABSOLUTE    => 0,
+                RELATIVE    => 0,
                 PLUGIN_BASE => 'Koha::Template::Plugin',
                 COMPILE_EXT => $use_template_cache ? '.ttc'                                    : '',
                 COMPILE_DIR => $use_template_cache ? C4::Context->config('template_cache_dir') : '',
