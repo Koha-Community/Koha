@@ -51,6 +51,7 @@ my $dbh = C4::Context->dbh;
 
 my $sip_media_type = $input->param('sip_media_type');
 undef($sip_media_type) if defined($sip_media_type) and $sip_media_type =~ /^\s*$/;
+my $sip_magnetic = $input->param('sip_magnetic') ? 1 : 0;
 
 if ( $op eq 'add_form' ) {
     my $itemtype = Koha::ItemTypes->find($itemtype_code);
@@ -112,6 +113,7 @@ if ( $op eq 'add_form' ) {
         $itemtype->checkinmsg($checkinmsg);
         $itemtype->checkinmsgtype($checkinmsgtype);
         $itemtype->sip_media_type($sip_media_type);
+        $itemtype->sip_magnetic($sip_magnetic);
         $itemtype->hideinopac($hideinopac);
         $itemtype->searchcategory($searchcategory);
         $itemtype->rentalcharge_daily_calendar($rentalcharge_daily_calendar);
@@ -146,6 +148,7 @@ if ( $op eq 'add_form' ) {
                 checkinmsg                   => $checkinmsg,
                 checkinmsgtype               => $checkinmsgtype,
                 sip_media_type               => $sip_media_type,
+                sip_magnetic                 => $sip_magnetic,
                 hideinopac                   => $hideinopac,
                 searchcategory               => $searchcategory,
                 rentalcharge_daily_calendar  => $rentalcharge_daily_calendar,

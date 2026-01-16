@@ -108,9 +108,7 @@ sub new {
     my $itemtype = Koha::Database->new()->schema()->resultset('Itemtype')->find($it);
     if ($itemtype) {
         $self->{sip_media_type} = $itemtype->sip_media_type;
-        if ( defined( $self->{sip_media_type} ) && $self->{sip_media_type} =~ m/^(00[4578]|010)/ ) {
-            $self->{magnetic_media} = 1;
-        }
+        $self->{magnetic_media} = $itemtype->sip_magnetic;
     }
 
     # check if its on issue and if so get the borrower
