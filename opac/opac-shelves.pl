@@ -459,6 +459,11 @@ if ( $op eq 'view' ) {
                         borrowernumber => $loggedinuser,
                     }
                 );
+
+                if ( C4::Context->preference('OPACLocalCoverImages') ) {
+                    $this_item->{has_local_cover_image} =
+                        $this_item->{biblio_object} ? $this_item->{biblio_object}->cover_images->count : 0;
+                }
                 push @items_info, $this_item;
             }
 
