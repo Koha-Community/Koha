@@ -46,19 +46,25 @@ foreach my $consent_type ( sort keys %$consent_types) {
     push @consents, $patron->consent($consent_type);
 }
 
-# Handle saves here
 my $needs_redirect;
-foreach my $consent ( @consents ) {
-    my $check = $vars->{ "check_".$consent->type };
-    next if !defined($check);    # no choice made
-    $needs_redirect = 1
-        if $consent->type eq q/GDPR_PROCESSING/ && !$check && C4::Context->preference('PrivacyPolicyConsent') eq 'Enforced';
-    next if $consent->given_on && $check || $consent->refused_on && !$check;
+if ( $op && $op eq 'cud-save' ) {
+    foreach my $consent (@consents) {
+        my $check = $vars->{ "check_" . $consent->type };
+        next if !defined($check);    # no choice made
+        $needs_redirect = 1
+            if $consent->type eq q/GDPR_PROCESSING/
+            && !$check
+            && C4::Context->preference('PrivacyPolicyConsent') eq 'Enforced';
+        next if $consent->given_on && $check || $consent->refused_on && !$check;
+
         # No update if no consent change
-    $consent->set({
-        given_on => $check ? dt_from_string() : undef,
-        refused_on => $check ? undef : dt_from_string(),
-    })->store;
+        $consent->set(
+            {
+                given_on   => $check ? dt_from_string() : undef,
+                refused_on => $check ? undef            : dt_from_string(),
+            }
+        )->store;
+    }
 }
 
 # If user refused GDPR consent and we enforce GDPR, logout (when saving)
