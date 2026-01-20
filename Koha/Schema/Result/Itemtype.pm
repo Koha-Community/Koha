@@ -380,11 +380,12 @@ __PACKAGE__->has_many(
 
 __PACKAGE__->add_columns(
     '+automatic_checkin'            => { is_boolean => 1 },
+    '+bookable'                     => { is_boolean => 1, is_nullable => 1 },
     '+hideinopac'                   => { is_boolean => 1 },
     '+notforloan'                   => { is_boolean => 1 },
     '+rentalcharge_daily_calendar'  => { is_boolean => 1 },
     '+rentalcharge_hourly_calendar' => { is_boolean => 1 },
-    '+bookable'                     => { is_boolean => 1, is_nullable => 1 },
+    '+sip_magnetic'                 => { is_boolean => 1 },
 );
 
 __PACKAGE__->load_components('+Koha::Schema::Component::Localization');
