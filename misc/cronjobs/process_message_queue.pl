@@ -75,6 +75,10 @@ ENDUSAGE
 
 die $usage if $help;
 
+if ( @letter_code && @exclude_letter_code ) {
+    die "The options --code and --exclude-code are mutually exclusive.\nUse one or the other.\n" . $usage;
+}
+
 my $script_handler = Koha::Script->new( { script => $0 } );
 
 try {
@@ -88,7 +92,7 @@ try {
 };
 
 # Remove empty elements, see bug 37075
-@letter_code = grep { $_ ne q{} } @letter_code;
+@letter_code         = grep { $_ ne q{} } @letter_code;
 @exclude_letter_code = grep { $_ ne q{} } @exclude_letter_code;
 
 C4::Letters::SendQueuedMessages(
