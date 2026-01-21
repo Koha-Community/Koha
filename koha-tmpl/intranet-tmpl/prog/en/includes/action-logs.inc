@@ -256,7 +256,7 @@
     [% CASE 'ACCOUNT_EXPIRED' %]
         <span>Account expired override</span>
     [% CASE 'ON_RESERVE' %]
-        <span>Override Renew hold for another</span>
+        <span>Override renew hold for another</span>
     [% CASE 'TOO_MUCH' %]
         <span>Override auto-renew too much owing restriction</span>
     [% CASE 'CURRENTISSUE' %]
