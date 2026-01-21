@@ -317,6 +317,7 @@ sub new {
         scale_height     => $params{'scale_height'},
         callnum_split    => $params{'callnum_split'},
         justify          => $params{'justify'},
+        barcode_justify  => $params{'barcode_justify'},
         format_string    => $params{'format_string'},
         text_wrap_cols   => $params{'text_wrap_cols'},
         barcode          => $params{'barcode'},
@@ -368,10 +369,11 @@ sub create_label {
     if ( $self->{'printing_type'} =~ /BAR/ ) {
         barcode(
             $self,
-            llx            => $barcode_llx,
-            lly            => $barcode_lly,
-            width          => $barcode_width,
-            y_scale_factor => $barcode_y_scale_factor,
+            llx             => $barcode_llx,
+            lly             => $barcode_lly,
+            width           => $barcode_width,
+            y_scale_factor  => $barcode_y_scale_factor,
+            barcode_justify => $self->{'barcode_justify'},
         );
     }
     return $label_text if $label_text;
@@ -516,9 +518,13 @@ sub draw_guide_box {
 sub barcode {
     my $self   = shift;
     my %params = @_;
+
     $params{'barcode_data'} = ( $self->{'barcode'} || _get_label_item( $self->{'item_number'}, 1 ) )
         if !$params{'barcode_data'};
     $params{'barcode_type'} = $self->{'barcode_type'} if !$params{'barcode_type'};
+
+    my $barcode_justify = $params{'barcode_justify'} || 'L';
+
     my $x_scale_factor = 1;
     my $num_of_bars    = length( $params{'barcode_data'} );
     my $tot_bar_length = 0;
@@ -541,8 +547,18 @@ sub barcode {
             my $oGdB                 = GD::Barcode::Code39->new("*$params{'barcode_data'}*");
             my $whole_barcode_length = ( length( $oGdB->barcode() ) * 0.9 ) + 20;
             $x_scale_factor = ( $params{'width'} / $whole_barcode_length );
+
+            my $adjusted_llx  = $params{'llx'};
+            my $barcode_width = $whole_barcode_length * $x_scale_factor;
+
+            if ( $barcode_justify eq 'C' ) {
+                $adjusted_llx = $params{'llx'} + ( ( $self->{'width'} - $barcode_width ) / 2 );
+            } elsif ( $barcode_justify eq 'R' ) {
+                $adjusted_llx = $params{'llx'} + ( $self->{'width'} - $barcode_width );
+            }
+
             PDF::Reuse::Barcode::Code39(
-                x             => $params{'llx'},
+                x             => $adjusted_llx,
                 y             => $params{'lly'},
                 value         => "*$params{barcode_data}*",
                 xSize         => $x_scale_factor,
@@ -559,9 +575,13 @@ sub barcode {
         $bar_length     = '9.43333333333333';
         $tot_bar_length = ( $bar_length * $num_of_bars ) + ( $guard_length * 2 );
         $x_scale_factor = ( $params{'width'} / $tot_bar_length ) * 0.9;
+
+        my $adjusted_llx  = $params{'llx'};
+        my $barcode_width = $tot_bar_length * $x_scale_factor;
+
         eval {
             PDF::Reuse::Barcode::COOP2of5(
-                x     => $params{'llx'},
+                x     => $adjusted_llx,
                 y     => $params{'lly'},
                 value => $params{barcode_data},
                 xSize => $x_scale_factor,
@@ -576,9 +596,13 @@ sub barcode {
         $bar_length     = '13.1333333333333';
         $tot_bar_length = ( $bar_length * $num_of_bars ) + ( $guard_length * 2 );
         $x_scale_factor = ( $params{'width'} / $tot_bar_length ) * 0.9;
+
+        my $adjusted_llx  = $params{'llx'};
+        my $barcode_width = $tot_bar_length * $x_scale_factor;
+
         eval {
             PDF::Reuse::Barcode::Industrial2of5(
-                x     => $params{'llx'},
+                x     => $adjusted_llx,
                 y     => $params{'lly'},
                 value => $params{barcode_data},
                 xSize => $x_scale_factor,

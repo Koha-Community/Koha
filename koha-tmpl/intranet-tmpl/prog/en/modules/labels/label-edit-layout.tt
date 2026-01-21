@@ -185,6 +185,18 @@
                     </select>
                 </li>
                 <li>
+                    <label for="barcode_justify">Barcode justification: </label>
+                    <select name="barcode_justify" id="barcode_justify">
+                        [% FOREACH barcode_justification_type IN barcode_justification_types %]
+                            [% IF ( barcode_justification_type.selected ) %]
+                                <option value="[% barcode_justification_type.type | html %]" selected="selected">[% PROCESS translate_justification_types type=barcode_justification_type.type %]</option>
+                            [% ELSE %]
+                                <option value="[% barcode_justification_type.type | html %]">[% PROCESS translate_justification_types type=barcode_justification_type.type %]</option>
+                            [% END %]
+                        [% END %]
+                    </select>
+                </li>
+                <li>
                     <label for="font">Font: </label>
                     <select name="font" id="font">
                         [% FOREACH font_type IN font_types %]

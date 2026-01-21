@@ -149,6 +149,7 @@ foreach my $item ( @{$items} ) {
             scale_height     => $layout->get_attr('scale_height'),
             callnum_split    => $layout->get_attr('callnum_split'),
             justify          => $layout->get_attr('text_justify'),
+            barcode_justify  => $layout->get_attr('barcode_justify'),
             format_string    => $layout->get_attr('format_string'),
             text_wrap_cols   => $layout->get_text_wrap_cols(
                 label_width      => $template->get_attr('label_width'),
@@ -178,6 +179,7 @@ foreach my $item ( @{$items} ) {
             scale_height     => $layout->get_attr('scale_height'),
             callnum_split    => $layout->get_attr('callnum_split'),
             justify          => $layout->get_attr('text_justify'),
+            barcode_justify  => $layout->get_attr('barcode_justify'),
             format_string    => $layout->get_attr('format_string'),
             text_wrap_cols   => $layout->get_text_wrap_cols(
                 label_width      => $template->get_attr('label_width'),
@@ -209,6 +211,7 @@ foreach my $item ( @{$items} ) {
         scale_height     => $layout->get_attr('scale_height'),
         callnum_split    => $layout->get_attr('callnum_split'),
         justify          => $layout->get_attr('text_justify'),
+        barcode_justify  => $layout->get_attr('barcode_justify'),
         format_string    => $layout->get_attr('format_string'),
         text_wrap_cols   => $layout->get_text_wrap_cols(
             label_width      => $template->get_attr('label_width'),
