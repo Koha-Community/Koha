@@ -226,9 +226,9 @@
     [% CASE 'RECALLED' %]
         <span>Item was recalled</span>
     [% CASE 'RESERVE_WAITING' %]
-        <span>Item had a reserve waiting</span>
+        <span>Hold waiting on item</span>
     [% CASE 'RESERVED' %]
-        <span>Item was reserved</span>
+        <span>Hold placed on item</span>
     [% CASE 'TRANSFERRED' %]
         <span>Item was transferred</span>
     [% CASE 'PROCESSING' %]
