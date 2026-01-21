@@ -1,8 +1,10 @@
+[% USE raw %]
 [% USE Koha %]
+[% PROCESS 'html_helpers.inc' %]
 <!-- oai-admin-search.inc -->
-<div id="header_search" role="tablist">
-    <div class="tab-content">
-        <div id="oai_search" role="tabpanel" class="tab-pane active">
+[% WRAPPER tabs id="header_search" %]
+    [% WRAPPER tab_panels %]
+        [% WRAPPER tab_panel tabname="oai_search" bt_active= 1 %]
             <form action="/cgi-bin/koha/admin/oai_servers.pl" method="get">
                 <div class="form-title">
                     <label class="control-label" for="searchfield">Search OAI repositories</label>
@@ -14,31 +16,28 @@
                 <input type="hidden" name="op" value="search" />
                 <button type="submit" aria-label="Search"><i class="fa fa-arrow-right"></i></button>
             </form>
-        </div>
-
+        [% END # /tab_panel %]
         [% IF ( CAN_user_circulate_circulate_remaining_permissions ) %]
             [% INCLUDE 'patron-search-box.inc' %]
         [% END %]
         [% IF ( CAN_user_catalogue ) %]
             [% INCLUDE 'catalogue-search-box.inc' %]
-        [% END %] </div
-    ><!-- /.tab-content -->
-    <ul class="nav nav-tabs" role="tablist">
-        <li role="presentation" class="active">
-            <a title="Search OAI repositories" href="#oai_search" aria-controls="z3950_search" role="tab" aria-expanded="true" data-bs-toggle="tab" class="keep_text"
-                ><i class="fa fa-search"></i> <span class="tab-title">Search OAI repositories</span></a
-            >
-        </li>
+        [% END %]
+    [% END # /tab_panels %]
+    [% WRAPPER tabs_nav %]
+        [% WRAPPER tab_item tabname= "oai_search" bt_active= 1 %]
+            <i class="fa fa-search"></i> <span class="tab-title">Search OAI repositories</span>
+        [% END %]
         [% IF ( CAN_user_circulate_circulate_remaining_permissions ) %]
-            <li role="presentation">
-                <a title="Check out" href="#circ_search" aria-controls="circ_search" role="tab" data-bs-toggle="tab" class="keep_text"><i class="fa fa-upload"></i> <span class="tab-title">Check out</span></a>
-            </li>
+            [% WRAPPER tab_item tabname= "circ_search" %]
+                <i class="fa fa-fw fa-upload" aria-hidden="true"></i> <span class="tab-title">Check out</span>
+            [% END %]
         [% END %]
         [% IF ( CAN_user_catalogue ) %]
-            <li role="presentation">
-                <a title="Search catalog" href="#catalog_search" aria-controls="catalog_search" role="tab" data-bs-toggle="tab" class="keep_text"><i class="fa fa-fw fa-search"></i> <span class="tab-title">Search catalog</span></a>
-            </li>
+            [% WRAPPER tab_item tabname= "catalog_search" %]
+                <i class="fa fa-fw fa-search" aria-hidden="true"></i> <span class="tab-title">Search catalog</span>
+            [% END %]
         [% END %]
-    </ul> </div
-><!-- /#header_search -->
+    [% END # /tabs_nav %]
+[% END # /WRAPPER tabs %]
 <!-- /oai-admin-search.inc -->
