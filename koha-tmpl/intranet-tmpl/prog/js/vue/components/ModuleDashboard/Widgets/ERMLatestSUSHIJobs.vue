@@ -67,7 +67,7 @@ export default {
                     },
                 },
                 {
-                    title: $__("Data Provider"),
+                    title: $__("Data provider"),
                     data: "data",
                     searchable: true,
                     orderable: true,
