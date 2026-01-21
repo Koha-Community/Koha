@@ -566,14 +566,28 @@ $("#placeBookingModal").on("show.bs.modal", function (e) {
                                         continue;
                                     }
 
-                                    // check that there are available items
-                                    // available = all bookable items - booked items - booked biblios
-                                    let total_available =
-                                        bookable_items.length -
-                                        unavailable_items.length -
-                                        biblio_bookings.length;
-                                    if (total_available === 0) {
-                                        return true;
+                                    // check availability based on selection type
+                                    if (
+                                        booking_item_id &&
+                                        booking_item_id != 0
+                                    ) {
+                                        // Specific item selected - check if that item is unavailable
+                                        if (
+                                            unavailable_items.indexOf(
+                                                parseInt(booking_item_id)
+                                            ) !== -1
+                                        ) {
+                                            return true;
+                                        }
+                                    } else {
+                                        // "Any item" selected - check if all items are unavailable
+                                        let total_available =
+                                            bookable_items.length -
+                                            unavailable_items.length -
+                                            biblio_bookings.length;
+                                        if (total_available === 0) {
+                                            return true;
+                                        }
                                     }
                                 }
 
