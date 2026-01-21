@@ -430,7 +430,7 @@ describe("Booking Modal Date Picker Tests", () => {
          * Circulation Rules Behavior Tests
          * ================================
          *
-         * Validate that  our flatpickr correctly caluculates and visualizes
+         * Validate that our flatpickr correctly calculates and visualizes
          * booking periods based on circulation rules, including maximum date
          * limits and visual styling for different date periods.
          *
