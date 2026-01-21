@@ -4,6 +4,7 @@
 [% USE TablesSettings %]
 [%- USE KohaSpan -%]
 [% USE KohaTimes %]
+[% USE LinkPref %]
 [% PROCESS 'i18n.inc' %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
@@ -265,14 +266,7 @@
                         <div class="fg-input">
                             <input type="text" name="branchillemail" id="branchillemail" class="email" value="[% library.branchillemail | html %]" />
                         </div>
-                        <div class="hint">
-                            [% IF ( CAN_user_parameters_manage_sysprefs ) %]
-                                [% pref_ILLDefaultStaffEmail_link = BLOCK %]<a href="/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=ILLDefaultStaffEmail">ILLDefaultStaffEmail</a>[% END %]
-                                Default: [% pref_ILLDefaultStaffEmail_link | $raw | $KohaSpan %] system preference
-                            [% ELSE %]
-                                Default: ILLDefaultStaffEmail system preference
-                            [% END %]
-                        </div>
+                        <div class="hint"> Default: [% "ILLDefaultStaffEmail" | html | $LinkPref %] system preference. </div>
                     </div>
                 [% END %]
                 <div class="fg-row">
@@ -282,14 +276,7 @@
                     <div class="fg-input">
                         <input type="text" name="branchreplyto" id="branchreplyto" class="email" value="[% library.branchreplyto | html %]" />
                     </div>
-                    <div class="hint">
-                        [% IF ( CAN_user_parameters_manage_sysprefs ) %]
-                            [% pref_ReplyToDefault_link = BLOCK %]<a href="/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=ReplyToDefault">ReplyToDefault</a>[% END %]
-                            Default: [% pref_ReplyToDefault_link | $raw | $KohaSpan %] system preference
-                        [% ELSE %]
-                            Default: ReplyToDefault system preference
-                        [% END %]
-                    </div>
+                    <div class="hint"> Default: [% "ReplyToDefault" | html | $LinkPref %] system preference. </div>
                 </div>
                 <div class="fg-row">
                     <div class="fg-label">
@@ -298,14 +285,7 @@
                     <div class="fg-input">
                         <input type="text" name="branchreturnpath" id="branchreturnpath" class="email" value="[% library.branchreturnpath | html %]" />
                     </div>
-                    <div class="hint">
-                        [% IF ( CAN_user_parameters_manage_sysprefs ) %]
-                            [% pref_ReturnpathDefault_link = BLOCK %]<a href="/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=ReturnpathDefault">ReturnpathDefault</a>[% END %]
-                            Default: [% pref_ReturnpathDefault_link | $raw | $KohaSpan %] system preference
-                        [% ELSE %]
-                            Default: ReturnpathDefault system preference
-                        [% END %]
-                    </div>
+                    <div class="hint"> Default: [% "ReturnpathDefault" | html | $LinkPref %] system preference. </div>
                 </div>
                 <div class="fg-row">
                     <div class="fg-label">
@@ -377,13 +357,7 @@
                         <input type="text" name="marcorgcode" id="marcorgcode" maxlength="16" value="[% library.marcorgcode | html %]" />
                     </div>
                     <div class="hint">
-                        [% IF ( CAN_user_parameters_manage_sysprefs ) %]
-                            [% pref_MARCOrgCode_link = BLOCK %]<a href="/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=MARCOrgCode">MARCOrgCode</a>[% END %]
-                            Default: [% pref_MARCOrgCode_link | $raw | $KohaSpan %] system preference.
-                        [% ELSE %]
-                            Default: MARCOrgCode system preference.
-                        [% END %]
-                        Obtain a library code from the <a href="https://www.loc.gov/marc/organizations/orgshome.html" target="_blank">Library of Congress</a>.
+                        Default: [% "MARCOrgCode" | html | $LinkPref %] system preference. Obtain a library code from the <a href="https://www.loc.gov/marc/organizations/orgshome.html" target="_blank">Library of Congress</a>.
                     </div>
                 </div>
                 <div class="fg-row">
