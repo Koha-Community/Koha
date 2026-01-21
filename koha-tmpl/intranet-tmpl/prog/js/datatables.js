@@ -407,7 +407,7 @@ function filterDataTable(table, column, term) {
     }
 }
 
-let specific_dt_errors = "";
+var specific_dt_errors = "";
 jQuery.fn.dataTable.ext.errMode = function (settings, note, message) {
     if (settings && settings.jqXHR) {
         console.log(
