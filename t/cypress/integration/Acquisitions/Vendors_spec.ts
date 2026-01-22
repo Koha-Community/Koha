@@ -131,6 +131,14 @@ describe("Vendor CRUD operations", () => {
             new RegExp("/api/v1/acquisitions/vendors/(?!config$).+"),
             vendor
         ).as("get-vendor");
+        cy.intercept(
+            "GET",
+            "/api/v1/acquisitions/vendors/extended_attribute_types*",
+            {
+                body: [],
+                statusCode: 200,
+            }
+        );
 
         // Click the 'Edit' button from the list
         cy.get("#vendors_list table tbody tr:first").contains("Edit").click();
@@ -202,6 +210,14 @@ describe("Vendor CRUD operations", () => {
             "GET",
             new RegExp("/api/v1/acquisitions/vendors/(?!config$).+"),
             vendor
+        );
+        cy.intercept(
+            "GET",
+            "/api/v1/acquisitions/vendors/extended_attribute_types*",
+            {
+                body: [],
+                statusCode: 200,
+            }
         );
         cy.visit("/cgi-bin/koha/acquisition/vendors");
 
