@@ -1120,7 +1120,8 @@ sub BuildSummary {
                 };
             }
         }
-        foreach my $field ( $record->field('4..') ) {    #See From
+        my @fields = _marc21_sort_hierarchy_alpha( $record->field('4..') );
+        foreach my $field (@fields) { #See From
             my $type = 'seefrom';
             $type = ( $marc21controlrefs{ substr $field->subfield('w'), 0, 1 } || '' ) if ( $field->subfield('w') );
             if ( $type eq 'notapplicable' ) {
@@ -1143,7 +1144,8 @@ sub BuildSummary {
                 };
             }
         }
-        foreach my $field ( $record->field('5..') ) {    #See Also
+        @fields = _marc21_sort_hierarchy_alpha( $record->field('5..') );
+        foreach my $field (@fields) { #See Also
             my $type = 'seealso';
             $type = ( $marc21controlrefs{ substr $field->subfield('w'), 0, 1 } || '' ) if ( $field->subfield('w') );
             if ( $type eq 'notapplicable' ) {
@@ -1273,6 +1275,18 @@ sub BuildSummary {
     $summary{otherscript}   = \@otherscript;
     $summary{equalterm}     = \@equalterm;
     return \%summary;
+}
+
+sub _marc21_sort_hierarchy_alpha {
+    my @fields = @_;
+    return sort {
+        # Sort broader (g) - no hierarchy (tric:gh) - narrower (h)
+        my $a_hier = $a->subfield('w') // q{}; $a_hier = 'gh' if $a_hier !~ /^[gh]$/;
+        my $b_hier = $b->subfield('w') // q{}; $b_hier = 'gh' if $b_hier !~ /^[gh]$/;
+
+        # When hierarchy does not resolve, sort on $a
+        $a_hier cmp $b_hier || $a->subfield('a') cmp $b->subfield('a');
+        } @fields;
 }
 
 =head2 GetAuthorizedHeading
