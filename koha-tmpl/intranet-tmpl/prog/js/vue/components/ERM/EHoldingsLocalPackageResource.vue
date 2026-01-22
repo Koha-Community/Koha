@@ -252,18 +252,20 @@ export default {
             );
 
             if (package_id) {
-                return baseResource.apiClient.update(erm_package, package_id).then(
-                    erm_package => {
-                        baseResource.setMessage($__("Package updated"));
-                        return erm_package
-                    },
-                    error => {}
-                );
+                return baseResource.apiClient
+                    .update(erm_package, package_id)
+                    .then(
+                        erm_package => {
+                            baseResource.setMessage($__("Package updated"));
+                            return erm_package;
+                        },
+                        error => {}
+                    );
             } else {
                 return baseResource.apiClient.create(erm_package).then(
                     erm_package => {
                         baseResource.setMessage($__("Package created"));
-                        return erm_package
+                        return erm_package;
                     },
                     error => {}
                 );

@@ -383,7 +383,7 @@ export default {
                 return baseResource.apiClient.update(license, license_id).then(
                     license => {
                         baseResource.setMessage($__("License updated"));
-                        return license
+                        return license;
                     },
                     error => {}
                 );
@@ -391,7 +391,7 @@ export default {
                 return baseResource.apiClient.create(license).then(
                     license => {
                         baseResource.setMessage($__("License created"));
-                        return license
+                        return license;
                     },
                     error => {}
                 );
