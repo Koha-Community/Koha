@@ -75,7 +75,7 @@ is( $retrieved_item_1->barcode, $new_item_1->barcode, 'Find a item by id should 
 
 subtest 'search' => sub {
 
-    plan tests => 15;
+    plan tests => 16;
     $schema->storage->txn_begin;
 
     my $patron   = $builder->build_object( { class => 'Koha::Patrons' } );
@@ -96,8 +96,12 @@ subtest 'search' => sub {
             biblionumber => $biblio->biblionumber,
         }
     );
+    is( $available_items->count, 2, "Filtered to 2 available items" );
 
-    ok( $available_items->count == 2, "Filtered to 2 available items" );
+    $available_items = Koha::Items->search(
+        { -and => { _status => 'available', biblionumber => $biblio->biblionumber } },
+    );
+    is( $available_items->count, 2, "Filtered to 2 available items - works when _status is in nested structure" );
 
     my $item_3 = $builder->build_sample_item(
         {
