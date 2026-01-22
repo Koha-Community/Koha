@@ -524,7 +524,7 @@ if ($verbose) {
     say $confirm ? sprintf( "Deleted %d patrons", $count ) : sprintf( "%d patrons would have been deleted", $count );
 }
 
-if ($pExpSelfReg) {
+if ( $pExpSelfReg && C4::Context->preference('PatronSelfRegistration') ) {
     try {
         my $opac_registrations = Koha::Patrons->search->filter_by_expired_opac_registrations->filter_by_safe_to_delete;
         my $count              = $opac_registrations->count;
