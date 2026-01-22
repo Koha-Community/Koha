@@ -19,38 +19,25 @@
 
 use Modern::Perl;
 
-use Carp;
-use Getopt::Long;
+use File::Slurp qw(read_file);
 use C4::Context;
 use Array::Utils qw(array_minus);
-
-# When this option is set, no tests are performed.
-# The missing sysprefs are displayed as sql inserts instead.
-our $showsql = 0;
-GetOptions( 'showsql' => \$showsql );
 
 use Test::NoWarnings;
 use Test::More tests => 3;
 
 our $dbh = C4::Context->dbh;
-my $intranetdir       = C4::Context->config('intranetdir');
-my $root_dir          = $intranetdir . '/installer/data/mysql/mandatory';
-my $base_syspref_file = "sysprefs.sql";
+my $intranetdir      = C4::Context->config('intranetdir');
+my $root_dir         = $intranetdir . '/installer/data/mysql/mandatory';
+my $syspref_filepath = "$root_dir/sysprefs.sql";
 
-open my $ref_fh, '<', "$root_dir/$base_syspref_file" or croak "Can't open '$root_dir/$base_syspref_file': $!";
-my $ref_syspref  = get_syspref_from_file($ref_fh);
-my @ref_sysprefs = sort { lc $a cmp lc $b } keys %$ref_syspref;
-my $num_sysprefs = scalar @ref_sysprefs;
+my @lines            = read_file($syspref_filepath) or die "Can't open $syspref_filepath: $!";
+my $sysprefs_in_file = get_sysprefs_from_file(@lines);
 
 subtest 'Compare database with sysprefs.sql file' => sub {
-    if ( !$showsql ) {
-        cmp_ok(
-            $num_sysprefs, '>', 0,
-            "Found $num_sysprefs sysprefs"
-        );
-    }
+    ok( scalar( keys %$sysprefs_in_file ), "Found sysprefs" );
 
-    check_db($ref_syspref);
+    check_db($sysprefs_in_file);
 };
 
 subtest 'Compare sysprefs.sql with YAML files' => sub {
@@ -60,28 +47,29 @@ subtest 'Compare sysprefs.sql with YAML files' => sub {
     my @yaml_mod   = @$yaml_prefs;
     @yaml_mod = grep !/marcflavour/, @yaml_mod;    # Added by web installer
 
-    my @sysprefs_mod = @ref_sysprefs;
-    @sysprefs_mod = grep !/ElasticsearchIndexStatus_authorities/, @sysprefs_mod;    # Not to be changed manually
-    @sysprefs_mod = grep !/ElasticsearchIndexStatus_biblios/,     @sysprefs_mod;    # Not to be changed manually
-    @sysprefs_mod = grep !/OPACdidyoumean/,                       @sysprefs_mod;    # Separate configuration page
-    @sysprefs_mod = grep !/UsageStatsID/,                         @sysprefs_mod;    # Separate configuration page
-    @sysprefs_mod = grep !/UsageStatsLastUpdateTime/,             @sysprefs_mod;    # Separate configuration page
-    @sysprefs_mod = grep !/UsageStatsPublicID/,                   @sysprefs_mod;    # Separate configuration page
+    my @syspref_names_in_file = keys %$sysprefs_in_file;
+    @syspref_names_in_file = grep !/ElasticsearchIndexStatus_authorities/,
+        @syspref_names_in_file;                    # Not to be changed manually
+    @syspref_names_in_file = grep !/ElasticsearchIndexStatus_biblios/,
+        @syspref_names_in_file;                    # Not to be changed manually
+    @syspref_names_in_file = grep !/OPACdidyoumean/,           @syspref_names_in_file;    # Separate configuration page
+    @syspref_names_in_file = grep !/UsageStatsID/,             @syspref_names_in_file;    # Separate configuration page
+    @syspref_names_in_file = grep !/UsageStatsLastUpdateTime/, @syspref_names_in_file;    # Separate configuration page
+    @syspref_names_in_file = grep !/UsageStatsPublicID/,       @syspref_names_in_file;    # Separate configuration page
 
-    my @missing_yaml = array_minus( @sysprefs_mod, @yaml_mod );
+    my @missing_yaml = array_minus( @syspref_names_in_file, @yaml_mod );
     is( scalar @missing_yaml, 0, "No system preference entries missing from sysprefs.sql" );
     if ( scalar @missing_yaml > 0 ) {
         diag "System preferences missing from YAML:\n  * " . join( "\n  * ", @missing_yaml ) . "\n";
     }
 
-    my @missing_sysprefs = array_minus( @yaml_mod, @sysprefs_mod );
+    my @missing_sysprefs = array_minus( @yaml_mod, @syspref_names_in_file );
     is( scalar @missing_sysprefs, 0, "No system preference entries missing from YAML files" );
     if ( scalar @missing_sysprefs > 0 ) {
         diag "System preferences missing from sysprefs.sql:\n  * " . join( "\n  * ", @missing_sysprefs ) . "\n";
     }
 };
 
-#
 # Get sysprefs from SQL file populating sysprefs table with INSERT statement.
 #
 # Example:
@@ -89,20 +77,52 @@ subtest 'Compare sysprefs.sql with YAML files' => sub {
 # VALUES('AmazonLocale','US','Use to set the Locale of your Amazon.com Web Services',
 # 'US|CA|DE|FR|JP|UK','Choice')
 #
-sub get_syspref_from_file {
-    my $fh = shift;
-    my %syspref;
-    while (<$fh>) {
-        next if /^--/;    # Comment line
-        my $query = $_;
-        if ( $_ =~ /\([\s]*\'([\w\-:]+)\'/ ) {
-            my $variable = $1;
-            if ($variable) {
-                $syspref{$variable} = $query;
+sub get_sysprefs_from_file {
+    my @lines = @_;
+    my $sysprefs;
+    for my $line (@lines) {
+        chomp $line;
+        next if $line =~ /^INSERT INTO /;    # first line
+        next if $line =~ /^;$/;              # last line
+        next if $line =~ /^--/;              # Comment line
+        if (
+            $line =~ m/
+            '(?<variable>[^'\\]*(?:\\.[^'\\]*)*)',\s*
+            '(?<value>[^'\\]*(?:\\.[^'\\]*)*)',\s*
+            (?<options>NULL|'(?<options_content>[^'\\]*(?:\\.[^'\\]*)*)'),\s*
+            (?<explanation>NULL|'(?<explanation_content>[^'\\]*(?:\\.[^'\\]*)*)'),\s*
+            (?<type>NULL|'(?<type_content>[^'\\]*(?:\\.[^'\\]*)*)')
+        /xms
+            )
+        {
+            my $variable    = $+{variable};
+            my $value       = $+{value};
+            my $options     = $+{options_content};
+            my $explanation = $+{explanation_content};
+            my $type        = $+{type_content};
+
+            if ($options) {
+                $options =~ s/\\'/'/g;
+                $options =~ s/\\\\/\\/g;
             }
+            if ($explanation) {
+                $explanation =~ s/\\'/'/g;
+                $explanation =~ s/\\n/\n/g;
+            }
+
+            # FIXME Explode if already exists?
+            $sysprefs->{$variable} = {
+                variable    => $variable,
+                value       => $value,
+                options     => $options,
+                explanation => $explanation,
+                type        => $type,
+            };
+        } else {
+            die "$line does not match";
         }
     }
-    return \%syspref;
+    return $sysprefs;
 }
 
 #  Get system preferences from YAML files
@@ -127,41 +147,63 @@ sub get_syspref_from_yaml {
 }
 
 sub check_db {
-    my $sysprefs = shift;
+    my @sysprefs_from_file = @_;
+
+    my $sysprefs_in_db = $dbh->selectall_hashref(
+        q{
+        SELECT * from systempreferences
+    }, 'variable'
+    );
 
     # Checking the number of sysprefs in the database
-    my $query = "SELECT COUNT(*) FROM systempreferences";
-    my $sth   = $dbh->prepare($query);
-    $sth->execute;
-    my $res     = $sth->fetchrow_arrayref;
-    my $dbcount = $res->[0];
-    if ( !$showsql ) {
-        cmp_ok(
-            $dbcount, ">=", scalar( keys %$sysprefs ),
-            "There are at least as many sysprefs in the database as in the sysprefs.sql"
-        );
-    }
+    my @syspref_names_in_db   = keys %$sysprefs_in_db;
+    my @syspref_names_in_file = keys %$sysprefs_in_file;
+    my @diff                  = array_minus @syspref_names_in_db, @syspref_names_in_file;
+    is_deeply( [ sort @diff ], [ 'Version', 'marcflavour' ] )
+        or diag sprintf( "Too many sysprefs in DB: %s", join ", ", @diff );
 
-    # Checking for missing sysprefs in the database
-    $query = "SELECT COUNT(*) FROM systempreferences WHERE variable=?";
-    $sth   = $dbh->prepare($query);
-    foreach ( keys %$sysprefs ) {
-        $sth->execute($_);
-        my $res   = $sth->fetchrow_arrayref;
-        my $count = $res->[0];
-        if ( !$showsql ) {
-            is( $count, 1, "Syspref $_ exists in the database" );
-        } else {
-            if ( $count != 1 ) {
-                print $sysprefs->{$_};
-            }
+    for my $pref ( sort values %$sysprefs_in_file ) {
+        my $in_db     = $sysprefs_in_db->{ $pref->{variable} };
+        my %db_copy   = %$in_db;
+        my %file_copy = %$pref;
+        delete $db_copy{value};
+        delete $file_copy{value};
+
+        if ( $pref->{variable} =~ m{^ElasticsearchIndexStatus_} ) {
+
+            # Exception for the 2 sysprefs ElasticsearchIndexStatus_authorities and ElasticsearchIndexStatus_biblios
+            # They do not have a type defined
+            # Will deal with them on a follow-up bugs
+            next;
         }
+
+        # Do not compare values, they can differ (new vs existing installs)
+        is_deeply( \%db_copy, \%file_copy, sprintf "Comparing %s", $pref->{variable} );
+        if ( !defined $pref->{type} ) {
+            fail( sprintf "%s does not have a type in file!", $pref->{variable} );
+        }
+        if ( !defined $in_db->{type} ) {
+            fail( sprintf "%s does not have a type in DB!", $in_db->{variable} );
+        }
+        if ( $pref->{type} && $pref->{type} eq 'YesNo' ) {
+            like(
+                $pref->{value}, qr{^(0|1)$},
+                sprintf( "Pref %s must be 0 or 1, found=%s in file", $pref->{variable}, $pref->{value} ),
+            );
+            like(
+                $in_db->{value}, qr{^(0|1)$},
+                sprintf( "Pref %s must be 0 or 1, found=%s in DB", $in_db->{variable}, $in_db->{value} ),
+            );
+        }
+
+        # TODO Check on valid 'type'
+        #like($pref->{type}, qr{^()$});
     }
 }
 
 =head1 NAME
 
-syspref.t
+check_sysprefs.t
 
 =head1 DESCRIPTION
 
@@ -171,12 +213,5 @@ and the sysprefs.sql file.
 System prefereces are gathered from the installation and YAML files.
 The database is then queried to check if all the system preferneces are
 in it.
-
-=head1 USAGE
-
-prove -v xt/check_sysprefs.t
-
-If you want to display the missing sysprefs as sql inserts :
-perl check_sysprefs.t --showsql
 
 =cut
