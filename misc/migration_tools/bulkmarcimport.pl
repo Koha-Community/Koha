@@ -332,7 +332,6 @@ $schema->txn_begin;
 RECORD: while () {
 
     my $record;
-    $record_number++;
 
     # get record
     eval { $record = $batch->next() };
