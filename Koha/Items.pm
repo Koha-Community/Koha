@@ -662,9 +662,42 @@ Filters items based on the specified status.
 
 =cut
 
+sub _extract_custom_attrs {
+    my ($params) = @_;
+    my %custom_attrs;
+    my $clean_params = _process_params( $params, \%custom_attrs );
+    return ( \%custom_attrs, $clean_params );
+}
+
+sub _process_params {
+    my ( $params, $custom_attrs ) = @_;
+
+    return $params unless ref $params;
+
+    if ( ref $params eq 'HASH' ) {
+        my %clean;
+        for my $key ( keys %$params ) {
+            if ( $key =~ /^_(.+)/ ) {
+                $custom_attrs->{$key} = $params->{$key};
+            } else {
+                $clean{$key} = _process_params( $params->{$key}, $custom_attrs );
+            }
+        }
+        return \%clean;
+    } elsif ( ref $params eq 'ARRAY' ) {
+        return [ map { _process_params( $_, $custom_attrs ) } @$params ];
+    } else {
+        return $params;
+    }
+}
+
 sub search {
     my ( $self, $params, $attributes ) = @_;
-    my $status = ( $params && ref($params) eq 'HASH' ) ? delete $params->{_status} : undef;
+
+    my ( $custom_attrs, $clean_params ) = _extract_custom_attrs($params);
+    $params = $clean_params;
+
+    my $status = $custom_attrs->{_status};
     if ($status) {
         if ( $status eq 'checked_out' ) {
             $self = $self->filter_by_checked_out( { onsite_checkout => 0 } );
