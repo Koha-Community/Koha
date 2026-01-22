@@ -78,20 +78,6 @@ __PACKAGE__->add_columns(
 
 __PACKAGE__->set_primary_key("id");
 
-=head1 UNIQUE CONSTRAINTS
-
-=head2 C<itemnumber>
-
-=over 4
-
-=item * L</itemnumber>
-
-=back
-
-=cut
-
-__PACKAGE__->add_unique_constraint("itemnumber", ["itemnumber"]);
-
 =head1 RELATIONS
 
 =head2 borrowernumber
@@ -125,8 +111,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07040 @ 2015-10-02 12:33:33
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:ByHKNZCEz4a1AqTnOJgUWA
+# Created by DBIx::Class::Schema::Loader v0.07051 @ 2026-01-22 21:05:23
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:KJ4G3ViVgIcXtUqmS18ang
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration
