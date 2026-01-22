@@ -620,24 +620,19 @@ sub GetPreparedLetter {
     }
 
     # add plugin-generated objects
-    if ( C4::Context->config("enable_plugins") ) {
-        my @plugins = Koha::Plugins->new->GetPlugins(
-            {
-                method => 'notices_content',
-            }
-        );
+    my @plugins = Koha::Plugins->get_enabled_plugins();
+    @plugins = grep { $_->can('notices_content') } @plugins;
 
-        foreach my $plugin (@plugins) {
-            my $namespace = $plugin->get_metadata()->{namespace};
-            if ($namespace) {
-                try {
-                    if ( my $content = $plugin->notices_content( \%params ) ) {
-                        $objects->{plugin_content}->{$namespace} = $content;
-                    }
-                } catch {
-                    next;
-                };
-            }
+    foreach my $plugin (@plugins) {
+        my $namespace = $plugin->get_metadata()->{namespace};
+        if ($namespace) {
+            try {
+                if ( my $content = $plugin->notices_content( \%params ) ) {
+                    $objects->{plugin_content}->{$namespace} = $content;
+                }
+            } catch {
+                next;
+            };
         }
     }
 
