@@ -273,7 +273,7 @@ subtest 'constraints' => sub {
 };
 
 subtest 'manager, suggester, accepter, rejecter, last_modifier' => sub {
-    plan tests => 11;
+    plan tests => 14;
     $schema->storage->txn_begin;
 
     my $suggestion = $builder->build_object( { class => 'Koha::Suggestions' } );
@@ -336,13 +336,22 @@ subtest 'manager, suggester, accepter, rejecter, last_modifier' => sub {
         '->last_modifier should have returned undef if no last_modifier set'
     );
 
-    my $accepter = $builder->build_object( { class => 'Koha::Patrons' } );
+    my $suggester = $builder->build_object( { class => 'Koha::Patrons' } );
+    my $accepter  = $builder->build_object( { class => 'Koha::Patrons' } );
+    my $rejecter  = $builder->build_object( { class => 'Koha::Patrons' } );
+    my $manager   = $builder->build_object( { class => 'Koha::Patrons' } );
     $suggestion->set(
         {
-            acceptedby => $accepter->id,
+            suggestedby => $suggester->id,
+            acceptedby  => $accepter->id,
+            rejectedby  => $rejecter->id,
+            managedby   => $manager->id
         }
     );
-    is( $suggestion->accepter->id, $accepter->id, 'Accepter correctly retrieved' );
+    is( $suggestion->suggester->id, $suggester->id, 'Suggester correctly retrieved' );
+    is( $suggestion->accepter->id,  $accepter->id,  'Accepter correctly retrieved' );
+    is( $suggestion->rejecter->id,  $rejecter->id,  'Rejecter correctly retrieved' );
+    is( $suggestion->manager->id,   $manager->id,   'Manager correctly retrieved' );
     $schema->storage->txn_rollback;
 };
 
