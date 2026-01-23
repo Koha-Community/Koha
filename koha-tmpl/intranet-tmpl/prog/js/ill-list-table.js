@@ -365,7 +365,7 @@ $(document).ready(function () {
                         ) {
                             display +=
                                 '<span style="display:block"> Article author: ' +
-                                display_extended_attribue(
+                                display_extended_attribute(
                                     row,
                                     "article_author"
                                 ) +
