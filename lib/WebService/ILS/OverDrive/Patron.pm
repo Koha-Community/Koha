@@ -334,7 +334,7 @@ C<$auto_checkout> defaults to false.
 
 =head3 Returns holds item record
 
-It is prefered that the C<$notification_email_address> is specified.
+It is preferred that the C<$notification_email_address> is specified.
 
 If C<$auto_checkout> is set to true, the item will be checked out as soon as
 it becomes available.
@@ -450,7 +450,7 @@ later (see L<lock_format()> below). That would be the case with
 L<place_hold()> with C<$auto_checkout> set to true. Once format is locked,
 an early return is not possible.
 
-If C<$allow_multiple_format_checkouts> flag is set to true, mutiple formats
+If C<$allow_multiple_format_checkouts> flag is set to true, multiple formats
 of the same item can be acioned. If it is false (default) and the item was
 already checked out, the checked out item record will be returned regardless
 of the format.

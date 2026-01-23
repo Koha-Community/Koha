@@ -159,7 +159,7 @@ sub _get_param_spec {
 =item C<client_secret> => secret key (password)
 
 =item C<library_id>    => sometimes service providers provide access
-                          to differnt "libraries"
+                          to different "libraries"
 
 =back
 
@@ -299,7 +299,7 @@ Sort order can be added after option with ":", eg
 
 =item C<copies_owned>     => number of copies owned
 
-=item C<type>             => availability type, provider dependant
+=item C<type>             => availability type, provider dependent
 
 =back
 
@@ -476,7 +476,7 @@ item records will have:
 
 =head3 Returns holds item record (as described above)
 
-In addition, C<total> field will be incorported as well.
+In addition, C<total> field will be incorporated as well.
 
 =head2 remove_hold ($item_id)
 
@@ -517,7 +517,7 @@ item records will have:
 
 =head3 Returns checkout item record (as described above)
 
-In addition, C<total> field will be incorported as well.
+In addition, C<total> field will be incorporated as well.
 
 =head2 return ($item_id)
 

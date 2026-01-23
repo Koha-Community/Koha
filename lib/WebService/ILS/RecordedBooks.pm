@@ -521,7 +521,7 @@ sub renew {
         $url
     );
 
-    my $checkouts = $self->checkouts(@_) or die "Cannot renew, unkmown error";
+    my $checkouts = $self->checkouts(@_) or die "Cannot renew, unknown error";
     foreach my $i (@{ $checkouts->{items} }) {
         if ($i->{isbn} eq $isbn) {
             $i->{total} = scalar @{ $checkouts->{items} };

@@ -344,7 +344,7 @@ sub _extract_link {
 
 sub _basic_callback { return $_[0]; }
 
-# This is not exatly how we meant to use with_get_request()
+# This is not exactly how we meant to use with_get_request()
 # ie processing should be placed within the callback.
 # However, if all goes well, it is faster (from the development perspective)
 # this way.
