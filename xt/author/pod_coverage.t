@@ -19,14 +19,14 @@ use Modern::Perl;
 use Test::More;
 use Test::NoWarnings;
 use Pod::Coverage;
+use Koha::Devel::Files;
 
 # Note that we are using Pod::Coverage instead of Test::Pod::Coverage
 # We do not want to fail if no pod exists in the file.
 # That could be a next step
 
-my @files;
-push @files, qx{git ls-files '*.pm'};
-chomp for @files;
+my $dev_files = Koha::Devel::Files->new( { context => 'tidy' } );
+my @files     = $dev_files->ls_perl_files;
 
 plan tests => scalar(@files) + 1;
 

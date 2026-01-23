@@ -54,6 +54,11 @@ my $exceptions = {
                 misc/cronjobs/build_browser_and_cloud.pl
             )
         ],
+        pod => [
+            qw(
+                lib/WebService/
+            )
+        ],
         core => [],
     },
     js => {
