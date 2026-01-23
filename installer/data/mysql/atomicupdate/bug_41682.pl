@@ -31,6 +31,7 @@ return {
             AdvancedSearchLanguages         =>
                 q{ISO 639-2 codes of languages you wish to see appear as an Advanced search option. Example: eng|fre|ita},
             AllowMultipleIssuesOnABiblio => q{Allow/Don't allow patrons to check out multiple items from one biblio},
+            ApiKeyLog                    => q{If enabled, log API key actions (create, revoke, activate, delete)},
             Babeltheque => q{Turn ON Babeltheque content - See babeltheque.com to subscribe to this service},
             BlockExpiredPatronOpacActions =>
                 q{Specific actions expired patrons of this category are blocked from performing. OPAC actions blocked based on the patron category take priority over this preference.},
