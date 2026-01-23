@@ -195,7 +195,7 @@ Returns the rejecter of the suggestion (Koha::Patron for rejectebby field)
 
 sub rejecter {
     my ($self) = @_;
-    my $rejecter_rs = $self->_result->managedby;
+    my $rejecter_rs = $self->_result->rejectedby;
     return unless $rejecter_rs;
     return Koha::Patron->_new_from_dbic($rejecter_rs);
 }
