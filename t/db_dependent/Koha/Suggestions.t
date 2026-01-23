@@ -272,8 +272,8 @@ subtest 'constraints' => sub {
     $schema->storage->txn_rollback;
 };
 
-subtest 'manager, suggester, rejecter, last_modifier' => sub {
-    plan tests => 8;
+subtest 'manager, suggester, accepter, rejecter, last_modifier' => sub {
+    plan tests => 11;
     $schema->storage->txn_begin;
 
     my $suggestion = $builder->build_object( { class => 'Koha::Suggestions' } );
@@ -287,6 +287,11 @@ subtest 'manager, suggester, rejecter, last_modifier' => sub {
         ref( $suggestion->rejecter ),
         'Koha::Patron',
         '->rejecter should have returned a Koha::Patron object'
+    );
+    is(
+        ref( $suggestion->accepter ),
+        'Koha::Patron',
+        '->accepter should have returned a Koha::Patron object'
     );
     is(
         ref( $suggestion->suggester ),
@@ -303,6 +308,7 @@ subtest 'manager, suggester, rejecter, last_modifier' => sub {
         {
             managedby          => undef,
             rejectedby         => undef,
+            acceptedby         => undef,
             suggestedby        => undef,
             lastmodificationby => undef
         }
@@ -317,6 +323,10 @@ subtest 'manager, suggester, rejecter, last_modifier' => sub {
         '->rejecter should have returned undef if no rejecter set'
     );
     is(
+        $suggestion->accepter, undef,
+        '->accepter should have returned undef if no rejecter set'
+    );
+    is(
         $suggestion->suggester, undef,
         '->suggester should have returned undef if no suggester set'
     );
@@ -326,6 +336,13 @@ subtest 'manager, suggester, rejecter, last_modifier' => sub {
         '->last_modifier should have returned undef if no last_modifier set'
     );
 
+    my $accepter = $builder->build_object( { class => 'Koha::Patrons' } );
+    $suggestion->set(
+        {
+            acceptedby => $accepter->id,
+        }
+    );
+    is( $suggestion->accepter->id, $accepter->id, 'Accepter correctly retrieved' );
     $schema->storage->txn_rollback;
 };
 
