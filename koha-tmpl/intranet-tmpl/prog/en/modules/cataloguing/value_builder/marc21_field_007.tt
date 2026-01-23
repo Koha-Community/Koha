@@ -9203,6 +9203,15 @@
                         _("s- Blu-ray disc") +
                         '</option> \
                                      [% END %] \
+                         [% IF ( f4t ) %] \
+                                            <option value="t" selected="selected">' +
+                        _("t - 4K Ultra HD Blu-ray") +
+                        '</option> \
+                                     [% ELSE %] \
+                                            <option value="t">' +
+                        _("t- 4K Ultra HD Blu-ray") +
+                        '</option> \
+                                     [% END %] \
                          [% IF ( f4u ) %] \
                                             <option value="u" selected="selected">' +
                         _("u- Unknown") +
