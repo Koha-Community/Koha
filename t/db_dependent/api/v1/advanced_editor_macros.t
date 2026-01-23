@@ -105,26 +105,34 @@ subtest 'list() tests' => sub {
         ->count - 1;
     ## Authorized user tests
     # Make sure we are returned with the correct amount of macros
-    $t->get_ok("//$userid:$password@/api/v1/advanced_editor/macros")->status_is( 200, 'REST3.2.2' )
-        ->json_has( '/' . $macros_index . '/macro_id' )->json_hasnt( '/' . ( $macros_index + 1 ) . '/macro_id' );
+    $t->get_ok("//$userid:$password@/api/v1/advanced_editor/macros")
+        ->status_is( 200, 'REST3.2.2' )
+        ->json_has( '/' . $macros_index . '/macro_id' )
+        ->json_hasnt( '/' . ( $macros_index + 1 ) . '/macro_id' );
 
     subtest 'query parameters' => sub {
 
         plan tests => 15;
-        $t->get_ok( "//$userid:$password@/api/v1/advanced_editor/macros?name=" . $macro_2->name )->status_is(200)
+        $t->get_ok( "//$userid:$password@/api/v1/advanced_editor/macros?name=" . $macro_2->name )
+            ->status_is(200)
             ->json_is( [ $macro_2->to_api ] );
-        $t->get_ok( "//$userid:$password@/api/v1/advanced_editor/macros?name=" . $macro_3->name )->status_is(200)
+        $t->get_ok( "//$userid:$password@/api/v1/advanced_editor/macros?name=" . $macro_3->name )
+            ->status_is(200)
             ->json_is( [] );
-        $t->get_ok("//$userid:$password@/api/v1/advanced_editor/macros?macro_text=delete%20100")->status_is(200)
+        $t->get_ok("//$userid:$password@/api/v1/advanced_editor/macros?macro_text=delete%20100")
+            ->status_is(200)
             ->json_is( [ $macro_1->to_api, $macro_2->to_api, $macro_4->to_api ] );
         $t->get_ok( "//$userid:$password@/api/v1/advanced_editor/macros?patron_id=" . $patron_1->borrowernumber )
-            ->status_is(200)->json_is( [ $macro_1->to_api, $macro_2->to_api ] );
-        $t->get_ok("//$userid:$password@/api/v1/advanced_editor/macros?shared=1")->status_is(200)
+            ->status_is(200)
+            ->json_is( [ $macro_1->to_api, $macro_2->to_api ] );
+        $t->get_ok("//$userid:$password@/api/v1/advanced_editor/macros?shared=1")
+            ->status_is(200)
             ->json_is( [ $macro_2->to_api, $macro_4->to_api ] );
     };
 
     # Warn on unsupported query parameter
-    $t->get_ok("//$userid:$password@/api/v1/advanced_editor/macros?macro_blah=blah")->status_is(400)
+    $t->get_ok("//$userid:$password@/api/v1/advanced_editor/macros?macro_blah=blah")
+        ->status_is(400)
         ->json_is( [ { path => '/query/macro_blah', message => 'Malformed query string' } ] );
 
 };
@@ -174,19 +182,22 @@ subtest 'get() tests' => sub {
         ->json_is( '/error' => 'This macro is shared, you must access it via advanced_editor/macros/shared' );
 
     $t->get_ok( "//$userid:$password@/api/v1/advanced_editor/macros/shared/" . $macro_1->id )
-        ->status_is( 200, 'Can get a shared macro via shared endpoint' )->json_is( $macro_1->to_api );
+        ->status_is( 200, 'Can get a shared macro via shared endpoint' )
+        ->json_is( $macro_1->to_api );
 
     $t->get_ok( "//$userid:$password@/api/v1/advanced_editor/macros/" . $macro_2->id )
         ->status_is( 403, 'Cannot access another users macro' )
         ->json_is( '/error' => 'You do not have permission to access this macro' );
 
     $t->get_ok( "//$userid:$password@/api/v1/advanced_editor/macros/" . $macro_3->id )
-        ->status_is( 200, 'Can get your own private macro' )->json_is( $macro_3->to_api );
+        ->status_is( 200, 'Can get your own private macro' )
+        ->json_is( $macro_3->to_api );
 
     my $non_existent_code = $macro_1->id;
     $macro_1->delete;
 
-    $t->get_ok( "//$userid:$password@/api/v1/advanced_editor/macros/" . $non_existent_code )->status_is(404)
+    $t->get_ok( "//$userid:$password@/api/v1/advanced_editor/macros/" . $non_existent_code )
+        ->status_is(404)
         ->json_is( '/error' => 'Macro not found' );
 
 };
@@ -243,7 +254,8 @@ subtest 'add() tests' => sub {
     $macro_with_invalid_field->{'big_mac_ro'} = 'Mac attack';
 
     $t->post_ok( "//$auth_userid:$password@/api/v1/advanced_editor/macros" => json => $macro_with_invalid_field )
-        ->status_is(400)->json_is(
+        ->status_is(400)
+        ->json_is(
         "/errors" => [
             {
                 message => "Properties not allowed: big_mac_ro.",
@@ -254,7 +266,8 @@ subtest 'add() tests' => sub {
 
     # Authorized attempt to write
     $t->post_ok( "//$auth_userid:$password@/api/v1/advanced_editor/macros" => json => $macro_values )
-        ->status_is( 201, 'REST3.2.1' )->json_has( '/macro_id', 'We generated a new id' )
+        ->status_is( 201, 'REST3.2.1' )
+        ->json_has( '/macro_id', 'We generated a new id' )
         ->json_is( '/name'       => $macro_values->{name},       'The name matches what we supplied' )
         ->json_is( '/macro_text' => $macro_values->{macro_text}, 'The text matches what we supplied' )
         ->json_is( '/patron_id'  => $macro_values->{patron_id},  'The borrower matches the borrower who submitted' )
@@ -267,7 +280,8 @@ subtest 'add() tests' => sub {
     # Authorized attempt to create with existing id
     $macro_values->{macro_id} = $macro_id;
 
-    $t->post_ok( "//$auth_userid:$password@/api/v1/advanced_editor/macros" => json => $macro_values )->status_is(400)
+    $t->post_ok( "//$auth_userid:$password@/api/v1/advanced_editor/macros" => json => $macro_values )
+        ->status_is(400)
         ->json_is(
         '/errors' => [
             {
@@ -368,7 +382,8 @@ subtest 'update() tests' => sub {
 
     $t->put_ok(
         "//$auth_userid:$password@/api/v1/advanced_editor/macros/$macro_id" => json => $macro_with_missing_field )
-        ->status_is(400)->json_has( "/errors" => [ { message => "Missing property.", path => "/body/macro_text" } ] );
+        ->status_is(400)
+        ->json_has( "/errors" => [ { message => "Missing property.", path => "/body/macro_text" } ] );
 
     my $macro_update = {
         name       => "Macro-update",
@@ -422,7 +437,8 @@ subtest 'update() tests' => sub {
 
     $t->put_ok(
         "//$auth_userid:$password@/api/v1/advanced_editor/macros/$macro_id" => json => $macro_with_invalid_field )
-        ->status_is(400)->json_is(
+        ->status_is(400)
+        ->json_is(
         "/errors" => [
             {
                 message => "Properties not allowed: big_mac_ro.",

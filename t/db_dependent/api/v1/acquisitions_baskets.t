@@ -133,7 +133,9 @@ subtest 'add() tests' => sub {
 
     $t->post_ok( $url, json => {} )->status_is(400);
 
-    $t->post_ok( $url, json => { vendor_id => $vendor->id } )->status_is(201)->json_has('/basket_id')
+    $t->post_ok( $url, json => { vendor_id => $vendor->id } )
+        ->status_is(201)
+        ->json_has('/basket_id')
         ->json_is( '/vendor_id', $vendor->id );
 
     my $basket = {
@@ -141,8 +143,11 @@ subtest 'add() tests' => sub {
         name        => 'Basket #1',
         vendor_note => 'Vendor note',
     };
-    $t->post_ok( $url, json => $basket )->status_is(201)->json_has('/basket_id')
-        ->json_is( '/vendor_id',   $basket->{vendor_id} )->json_is( '/name', $basket->{name} )
+    $t->post_ok( $url, json => $basket )
+        ->status_is(201)
+        ->json_has('/basket_id')
+        ->json_is( '/vendor_id',   $basket->{vendor_id} )
+        ->json_is( '/name',        $basket->{name} )
         ->json_is( '/vendor_note', $basket->{vendor_note} );
 
     $schema->storage->txn_rollback;

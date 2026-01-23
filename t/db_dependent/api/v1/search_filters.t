@@ -103,8 +103,11 @@ subtest 'list() tests' => sub {
     );
 
     # Make sure we are returned with the correct amount of macros
-    $t->get_ok("//$userid:$password@/api/v1/search_filters")->status_is( 200, 'REST3.2.2' )
-        ->json_has('/0/search_filter_id')->json_has('/1/search_filter_id')->json_has('/2/search_filter_id')
+    $t->get_ok("//$userid:$password@/api/v1/search_filters")
+        ->status_is( 200, 'REST3.2.2' )
+        ->json_has('/0/search_filter_id')
+        ->json_has('/1/search_filter_id')
+        ->json_has('/2/search_filter_id')
         ->json_has('/3/search_filter_id');
 
     $schema->storage->txn_rollback;
@@ -131,12 +134,14 @@ subtest 'get() tests' => sub {
     my $search_filter_3 = $builder->build_object( { class => 'Koha::SearchFilters' } );
 
     $t->get_ok( "//$userid:$password@/api/v1/search_filters/" . $search_filter_1->id )
-        ->status_is( 200, 'Filter retrieved correctly' )->json_is( $search_filter_1->to_api );
+        ->status_is( 200, 'Filter retrieved correctly' )
+        ->json_is( $search_filter_1->to_api );
 
     my $non_existent_code = $search_filter_1->id;
     $search_filter_1->delete;
 
-    $t->get_ok( "//$userid:$password@/api/v1/search_filters/" . $non_existent_code )->status_is(404)
+    $t->get_ok( "//$userid:$password@/api/v1/search_filters/" . $non_existent_code )
+        ->status_is(404)
         ->json_is( '/error' => 'Search filter not found' );
 
     $patron->flags(4)->store;
@@ -196,7 +201,8 @@ subtest 'add() tests' => sub {
     $search_filter_with_invalid_field->{'coffee_filter'} = 'Chemex';
 
     $t->post_ok( "//$auth_userid:$password@/api/v1/search_filters" => json => $search_filter_with_invalid_field )
-        ->status_is(400)->json_is(
+        ->status_is(400)
+        ->json_is(
         "/errors" => [
             {
                 message => "Properties not allowed: coffee_filter.",
@@ -207,7 +213,8 @@ subtest 'add() tests' => sub {
 
     # Authorized attempt to write
     $t->post_ok( "//$auth_userid:$password@/api/v1/search_filters" => json => $search_filter_values )
-        ->status_is( 201, 'REST3.2.1' )->json_has( '/search_filter_id', 'We generated a new id' )
+        ->status_is( 201, 'REST3.2.1' )
+        ->json_has( '/search_filter_id', 'We generated a new id' )
         ->json_is( '/name'         => $search_filter_values->{name},         'The name matches what we supplied' )
         ->json_is( '/query'        => $search_filter_values->{query},        'The query matches what we supplied' )
         ->json_is( '/limits'       => $search_filter_values->{limits},       'The limits match what we supplied' )
@@ -221,7 +228,8 @@ subtest 'add() tests' => sub {
     # Authorized attempt to create with existing id
     $search_filter_values->{search_filter_id} = $search_filter_id;
 
-    $t->post_ok( "//$auth_userid:$password@/api/v1/search_filters" => json => $search_filter_values )->status_is(400)
+    $t->post_ok( "//$auth_userid:$password@/api/v1/search_filters" => json => $search_filter_values )
+        ->status_is(400)
         ->json_is(
         '/errors' => [
             {

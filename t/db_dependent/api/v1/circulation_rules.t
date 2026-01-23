@@ -94,7 +94,8 @@ subtest 'list_rules() tests' => sub {
     );
 
     note("One default rule defined");
-    $t->get_ok("//$userid:$password@/api/v1/circulation_rules")->status_is(200)
+    $t->get_ok("//$userid:$password@/api/v1/circulation_rules")
+        ->status_is(200)
         ->json_is( '/0/fine'     => 2,     "Default fine rule is returned as expected" )
         ->json_is( '/0/finedays' => undef, "Rule finedays is undefined as expected" );
 
@@ -113,7 +114,8 @@ subtest 'list_rules() tests' => sub {
     );
 
     note("Two default rules defined");
-    $t->get_ok("//$userid:$password@/api/v1/circulation_rules")->status_is(200)
+    $t->get_ok("//$userid:$password@/api/v1/circulation_rules")
+        ->status_is(200)
         ->json_is( '/0/fine'     => 2, "Default fine rule is returned as expected" )
         ->json_is( '/0/finedays' => 5, "Default finedays rule is returned as expected" );
 
@@ -132,14 +134,16 @@ subtest 'list_rules() tests' => sub {
     );
 
     note("Two default rules and one branch rule defined");
-    $t->get_ok("//$userid:$password@/api/v1/circulation_rules?library_id=$branchcode")->status_is(200)
+    $t->get_ok("//$userid:$password@/api/v1/circulation_rules?library_id=$branchcode")
+        ->status_is(200)
         ->json_is( '/0/fine' => 4, "Branch specific fine rule is returned when library is added to request query" )
         ->json_is(
         '/0/finedays' => 5,
         "Default finedays rule is returned when library is added to request query but no branch specific rule is defined"
         );
 
-    $t->get_ok("//$userid:$password@/api/v1/circulation_rules")->status_is(200)
+    $t->get_ok("//$userid:$password@/api/v1/circulation_rules")
+        ->status_is(200)
         ->json_is( '/0/fine'     => 2, "Default fine rule returned when no library is added to request query" )
         ->json_is( '/0/finedays' => 5, "Default finedays rule returned when no library is added to request query" );
 
@@ -152,7 +156,8 @@ subtest 'list_rules() tests' => sub {
     );
 
     # Warn on unsupported query parameter
-    $t->get_ok("//$userid:$password@/api/v1/circulation_rules?rules_blah=blah")->status_is(400)
+    $t->get_ok("//$userid:$password@/api/v1/circulation_rules?rules_blah=blah")
+        ->status_is(400)
         ->json_is( [ { path => '/query/rules_blah', message => 'Malformed query string' } ] );
 
     # Make sure we have a non-existent library
@@ -161,7 +166,8 @@ subtest 'list_rules() tests' => sub {
     $library_to_delete->delete;
 
     # Warn on incorrect query parameter value
-    $t->get_ok("//$userid:$password@/api/v1/circulation_rules?library_id=$non_existent_library")->status_is(400)
+    $t->get_ok("//$userid:$password@/api/v1/circulation_rules?library_id=$non_existent_library")
+        ->status_is(400)
         ->json_is(
         '' => {
             error      => 'Invalid parameter value',
@@ -182,7 +188,8 @@ subtest 'list_rules() tests' => sub {
 
     # Warn on incorrect query parameter value
     $t->get_ok("//$userid:$password@/api/v1/circulation_rules?patron_category_id=$non_existent_category")
-        ->status_is(400)->json_is(
+        ->status_is(400)
+        ->json_is(
         '' => {
             error      => 'Invalid parameter value',
             error_code => 'invalid_parameter_value',
@@ -201,7 +208,8 @@ subtest 'list_rules() tests' => sub {
     $itemtype_to_delete->delete;
 
     # Warn on incorrect query parameter value
-    $t->get_ok("//$userid:$password@/api/v1/circulation_rules?item_type_id=$non_existent_itemtype")->status_is(400)
+    $t->get_ok("//$userid:$password@/api/v1/circulation_rules?item_type_id=$non_existent_itemtype")
+        ->status_is(400)
         ->json_is(
         '' => {
             error      => 'Invalid parameter value',
@@ -343,21 +351,24 @@ subtest 'set_rules() tests' => sub {
     # Invalid item_type_id
     note("Invalid item_type_id");
     $rules_to_set->{context}->{item_type_id} = 'invalid_itemtype';
-    $t->put_ok( "//$userid:$password@/api/v1/circulation_rules" => json => $rules_to_set )->status_is(400)
+    $t->put_ok( "//$userid:$password@/api/v1/circulation_rules" => json => $rules_to_set )
+        ->status_is(400)
         ->json_is( '/error_code' => 'invalid_parameter_value', "Handled invalid item_type_id" );
 
     # Invalid library_id
     note("Invalid library_id");
     $rules_to_set->{context}->{item_type_id} = $itemtype;
     $rules_to_set->{context}->{library_id}   = 'invalid_library';
-    $t->put_ok( "//$userid:$password@/api/v1/circulation_rules" => json => $rules_to_set )->status_is(400)
+    $t->put_ok( "//$userid:$password@/api/v1/circulation_rules" => json => $rules_to_set )
+        ->status_is(400)
         ->json_is( '/error_code' => 'invalid_parameter_value', "Handled invalid library_id" );
 
     # Invalid patron_category_id
     note("Invalid patron_category_id");
     $rules_to_set->{context}->{library_id}         = $branchcode;
     $rules_to_set->{context}->{patron_category_id} = 'invalid_category';
-    $t->put_ok( "//$userid:$password@/api/v1/circulation_rules" => json => $rules_to_set )->status_is(400)
+    $t->put_ok( "//$userid:$password@/api/v1/circulation_rules" => json => $rules_to_set )
+        ->status_is(400)
         ->json_is( '/error_code' => 'invalid_parameter_value', "Handled invalid patron_category_id" );
 
     # Unauthorized user tests

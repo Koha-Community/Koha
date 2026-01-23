@@ -235,8 +235,8 @@ sub GetPlugins {
                     {
                         enable_plugins => $self->{'enable_plugins'}
 
-                            # loads even if plugins are disabled
-                            # FIXME: is this for testing without bothering to mock config?
+                        # loads even if plugins are disabled
+                        # FIXME: is this for testing without bothering to mock config?
                     }
                 );
             } catch {

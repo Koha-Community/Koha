@@ -1088,7 +1088,7 @@ sub set_password {
                     module      => 'members',
                     letter_code => 'PASSWORD_CHANGE',
                     branchcode  => $self_from_storage->branchcode,
-                    ,
+
                     lang   => $self_from_storage->lang || 'default',
                     tables => {
                         'branches'  => $self_from_storage->branchcode,

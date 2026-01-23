@@ -67,14 +67,17 @@ subtest 'Patron checkouts list() tests' => sub {
     my $issue1 = C4::Circulation::AddIssue( $patron, $item1->barcode, $date_due );
     my $issue2 = C4::Circulation::AddIssue( $patron, $item2->barcode, $date_due );
 
-    $t->get_ok( "//$userid:$password@/api/v1/patrons/" . $patron->id . '/checkouts' )->status_is(200)
-        ->json_is( '/0/item_id' => $item1->itemnumber )->json_is( '/1/item_id' => $item2->itemnumber );
+    $t->get_ok( "//$userid:$password@/api/v1/patrons/" . $patron->id . '/checkouts' )
+        ->status_is(200)
+        ->json_is( '/0/item_id' => $item1->itemnumber )
+        ->json_is( '/1/item_id' => $item2->itemnumber );
 
     my $non_existent_patron    = $builder->build_object( { class => 'Koha::Patrons' } );
     my $non_existent_patron_id = $non_existent_patron->id;
     $non_existent_patron->delete;
 
-    $t->get_ok( "//$userid:$password@/api/v1/patrons/" . $non_existent_patron_id . '/checkouts' )->status_is(404)
+    $t->get_ok( "//$userid:$password@/api/v1/patrons/" . $non_existent_patron_id . '/checkouts' )
+        ->status_is(404)
         ->json_is( '/error' => 'Patron not found' );
 
     my $unauthorized_patron = $builder->build_object(
@@ -89,5 +92,6 @@ subtest 'Patron checkouts list() tests' => sub {
     my $unauthorized_userid = $unauthorized_patron->userid;
 
     $t->get_ok( "//$unauthorized_userid:$unauthorized_password@/api/v1/patrons/" . $patron->id . '/checkouts' )
-        ->status_is(403)->json_is( '/error' => 'Authorization failure. Missing required permission(s).' );
+        ->status_is(403)
+        ->json_is( '/error' => 'Authorization failure. Missing required permission(s).' );
     }

@@ -76,7 +76,7 @@ $dbh->do('DELETE FROM special_holidays');
 $dbh->do('DELETE FROM repeatable_holidays');
 
 my $daysago20   = dt_from_string->add_duration( DateTime::Duration->new( days => -20 ) );
-my $daysafter40 = dt_from_string->add_duration( DateTime::Duration->new( days => 40 ) );
+my $daysafter40 = dt_from_string->add_duration( DateTime::Duration->new( days =>  40 ) );
 
 AddIssue( $patron, $barcode, $daysago20 );
 AddReturn( $barcode, $branchcode );

@@ -168,7 +168,8 @@ subtest "get_login_shib tests" => sub {
 
     my $login = get_login_shib();
     $logger->debug_is( "koha borrower field to match: userid", "borrower match field debug info" )
-        ->debug_is( "shibboleth attribute to match: uid", "shib match attribute debug info" )->clear();
+        ->debug_is( "shibboleth attribute to match: uid", "shib match attribute debug info" )
+        ->clear();
     is( $login, "test1234", "good config, attribute value returned" );
 };
 
@@ -207,7 +208,8 @@ subtest "checkpw_shib tests" => sub {
     is( ref($retpatron),  'Koha::Patron',   "expected Koha::Patron object returned" );
 
     $logger->debug_is( "koha borrower field to match: userid", "borrower match field debug info" )
-        ->debug_is( "shibboleth attribute to match: uid", "shib match attribute debug info" )->clear();
+        ->debug_is( "shibboleth attribute to match: uid", "shib match attribute debug info" )
+        ->clear();
 
     # bad user
     $shib_login = 'martin';
@@ -217,7 +219,8 @@ subtest "checkpw_shib tests" => sub {
     is( $retuserid, undef );
     is( $retpatron, undef );
     $logger->debug_is( "koha borrower field to match: userid", "borrower match field debug info" )
-        ->debug_is( "shibboleth attribute to match: uid", "shib match attribute debug info" )->clear();
+        ->debug_is( "shibboleth attribute to match: uid", "shib match attribute debug info" )
+        ->clear();
 
     # duplicated matchpoint
     change_config( { matchpoint => 'email', mapping => { email => { is => 'email' } } } );
@@ -228,7 +231,8 @@ subtest "checkpw_shib tests" => sub {
     is( $retuserid, undef );
     is( $retpatron, undef );
     $logger->debug_is( "koha borrower field to match: email", "borrower match field debug info" )
-        ->debug_is( "shibboleth attribute to match: email", "shib match attribute debug info" )->clear();
+        ->debug_is( "shibboleth attribute to match: email", "shib match attribute debug info" )
+        ->clear();
 
     ( $retval, $retcard, $retuserid, $retpatron ) = checkpw_shib($shib_login);
     is( $retval,    0 );
@@ -236,10 +240,11 @@ subtest "checkpw_shib tests" => sub {
     is( $retuserid, undef );
     is( $retpatron, undef );
     $logger->debug_is( "koha borrower field to match: email", "borrower match field debug info" )
-        ->debug_is( "shibboleth attribute to match: email", "shib match attribute debug info" )->warn_is(
+        ->debug_is( "shibboleth attribute to match: email", "shib match attribute debug info" )
+        ->warn_is(
         'There are several users with email of kid@clamp.io, matchpoints must be unique',
         "duplicated matchpoint warned with debug"
-    )->clear();
+        )->clear();
 
     # autocreate user (welcome)
     change_config( { autocreate => 1, welcome => 1 } );
@@ -261,7 +266,8 @@ subtest "checkpw_shib tests" => sub {
     is( $retuserid,                              "test4321",     "expected userid returned" );
     is( ref($retpatron),                         'Koha::Patron', "expected Koha::Patron object returned" );
     $logger->debug_is( "koha borrower field to match: userid", "borrower match field debug info" )
-        ->debug_is( "shibboleth attribute to match: uid", "shib match attribute debug info" )->clear();
+        ->debug_is( "shibboleth attribute to match: uid", "shib match attribute debug info" )
+        ->clear();
 
     ok my $new_user = $schema->resultset('Borrower')->search( { 'userid' => 'test4321' }, { rows => 1 } ),
         "new user found";
@@ -280,7 +286,8 @@ subtest "checkpw_shib tests" => sub {
     is( $retuserid,      $shib_login,    "expected userid returned" );
     is( ref($retpatron), 'Koha::Patron', "expected Koha::Patron object returned" );
     $logger->debug_is( "koha borrower field to match: userid", "borrower match field debug info" )
-        ->debug_is( "shibboleth attribute to match: uid", "shib match attribute debug info" )->clear();
+        ->debug_is( "shibboleth attribute to match: uid", "shib match attribute debug info" )
+        ->clear();
 
     ok my $sync_user = $schema->resultset('Borrower')->search( { 'userid' => 'test4321' }, { rows => 1 } ),
         "sync user found";
@@ -301,7 +308,8 @@ subtest "checkpw_shib tests" => sub {
     is( $retuserid,      "test1234",       "expected userid returned" );
     is( ref($retpatron), 'Koha::Patron',   "expected Koha::Patron object returned" );
     $logger->debug_is( "koha borrower field to match: userid", "borrower match field debug info" )
-        ->debug_is( "shibboleth attribute to match: uid", "shib match attribute debug info" )->clear();
+        ->debug_is( "shibboleth attribute to match: uid", "shib match attribute debug info" )
+        ->clear();
 
     # bad user
     $shib_login = "martin";

@@ -73,7 +73,8 @@ subtest 'list() tests' => sub {
     my $another_smtp_server = $builder->build_object( { class => 'Koha::SMTP::Servers' } );
 
     # Two SMTP servers created, they should both be returned
-    $t->get_ok("//$userid:$password@/api/v1/config/smtp_servers")->status_is(200)
+    $t->get_ok("//$userid:$password@/api/v1/config/smtp_servers")
+        ->status_is(200)
         ->json_is( [ $smtp_server->to_api, $another_smtp_server->to_api, ] );
 
     # Unauthorized access
@@ -109,7 +110,8 @@ subtest 'get() tests' => sub {
     $patron->set_password( { password => $password, skip_validation => 1 } );
     my $unauth_userid = $patron->userid;
 
-    $t->get_ok( "//$userid:$password@/api/v1/config/smtp_servers/" . $smtp_server->id )->status_is(200)
+    $t->get_ok( "//$userid:$password@/api/v1/config/smtp_servers/" . $smtp_server->id )
+        ->status_is(200)
         ->json_is( $smtp_server->to_api );
 
     $t->get_ok( "//$unauth_userid:$password@/api/v1/config/smtp_servers/" . $smtp_server->id )->status_is(403);
@@ -118,7 +120,8 @@ subtest 'get() tests' => sub {
     my $non_existent_id       = $smtp_server_to_delete->id;
     $smtp_server_to_delete->delete;
 
-    $t->get_ok("//$userid:$password@/api/v1/config/smtp_servers/$non_existent_id")->status_is(404)
+    $t->get_ok("//$userid:$password@/api/v1/config/smtp_servers/$non_existent_id")
+        ->status_is(404)
         ->json_is( '/error' => 'SMTP server not found' );
 
     $schema->storage->txn_rollback;
@@ -168,7 +171,8 @@ subtest 'add() tests' => sub {
     };
 
     $t->post_ok( "//$userid:$password@/api/v1/config/smtp_servers" => json => $smtp_server_with_invalid_field )
-        ->status_is(400)->json_is(
+        ->status_is(400)
+        ->json_is(
         "/errors" => [
             {
                 message => "Properties not allowed: blah.",
@@ -180,21 +184,27 @@ subtest 'add() tests' => sub {
     # Authorized attempt to write
     my $smtp_server_id =
         $t->post_ok( "//$userid:$password@/api/v1/config/smtp_servers" => json => $smtp_server_data )
-        ->status_is( 201, 'REST3.2.1' )->header_like(
+        ->status_is( 201, 'REST3.2.1' )
+        ->header_like(
         Location => qr|^\/api\/v1\/config\/smtp_servers\/\d*|,
         'REST3.4.1'
-    )->json_is( '/name' => $smtp_server_data->{name} )->json_is( '/state' => $smtp_server_data->{state} )
+        )
+        ->json_is( '/name'        => $smtp_server_data->{name} )
+        ->json_is( '/state'       => $smtp_server_data->{state} )
         ->json_is( '/postal_code' => $smtp_server_data->{postal_code} )
-        ->json_is( '/country'     => $smtp_server_data->{country} )->tx->res->json->{smtp_server_id};
+        ->json_is( '/country'     => $smtp_server_data->{country} )
+        ->tx->res->json->{smtp_server_id};
 
     # Authorized attempt to create with null id
     $smtp_server_data->{smtp_server_id} = undef;
-    $t->post_ok( "//$userid:$password@/api/v1/config/smtp_servers" => json => $smtp_server_data )->status_is(400)
+    $t->post_ok( "//$userid:$password@/api/v1/config/smtp_servers" => json => $smtp_server_data )
+        ->status_is(400)
         ->json_has('/errors');
 
     # Authorized attempt to create with existing id
     $smtp_server_data->{smtp_server_id} = $smtp_server_id;
-    $t->post_ok( "//$userid:$password@/api/v1/config/smtp_servers" => json => $smtp_server_data )->status_is(400)
+    $t->post_ok( "//$userid:$password@/api/v1/config/smtp_servers" => json => $smtp_server_data )
+        ->status_is(400)
         ->json_is(
         "/errors" => [
             {
@@ -247,14 +257,16 @@ subtest 'update() tests' => sub {
 
     $t->put_ok(
         "//$userid:$password@/api/v1/config/smtp_servers/$smtp_server_id" => json => $smtp_server_with_missing_field )
-        ->status_is(400)->json_is( "/errors" => [ { message => "Missing property.", path => "/body/name" } ] );
+        ->status_is(400)
+        ->json_is( "/errors" => [ { message => "Missing property.", path => "/body/name" } ] );
 
     # Full object update on PUT
     my $smtp_server_with_updated_field = { name => "Some name", };
 
     $t->put_ok(
         "//$userid:$password@/api/v1/config/smtp_servers/$smtp_server_id" => json => $smtp_server_with_updated_field )
-        ->status_is(200)->json_is( '/name' => 'Some name' );
+        ->status_is(200)
+        ->json_is( '/name' => 'Some name' );
 
     # Authorized attempt to write invalid data
     my $smtp_server_with_invalid_field = {
@@ -264,7 +276,8 @@ subtest 'update() tests' => sub {
 
     $t->put_ok(
         "//$userid:$password@/api/v1/config/smtp_servers/$smtp_server_id" => json => $smtp_server_with_invalid_field )
-        ->status_is(400)->json_is(
+        ->status_is(400)
+        ->json_is(
         "/errors" => [
             {
                 message => "Properties not allowed: blah.",
@@ -322,7 +335,8 @@ subtest 'delete() tests' => sub {
     # Unauthorized attempt to delete
     $t->delete_ok("//$unauth_userid:$password@/api/v1/config/smtp_servers/$smtp_server_id")->status_is(403);
 
-    $t->delete_ok("//$userid:$password@/api/v1/config/smtp_servers/$smtp_server_id")->status_is( 204, 'REST3.2.4' )
+    $t->delete_ok("//$userid:$password@/api/v1/config/smtp_servers/$smtp_server_id")
+        ->status_is( 204, 'REST3.2.4' )
         ->content_is( '', 'REST3.3.4' );
 
     $t->delete_ok("//$userid:$password@/api/v1/config/smtp_servers/$smtp_server_id")->status_is(404);

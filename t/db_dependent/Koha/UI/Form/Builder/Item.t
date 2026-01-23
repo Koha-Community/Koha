@@ -83,7 +83,7 @@ subtest 'authorised values' => sub {
             $subfield->{marc_value}->{values},
             [
                 "",
-                map      { $_->authorised_value }
+                map { $_->authorised_value }
                     sort { $a->lib cmp $b->lib } $avs->as_list
             ],
             'AVs are sorted by lib and en empty option is created first'

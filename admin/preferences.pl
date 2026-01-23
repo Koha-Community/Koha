@@ -167,7 +167,7 @@ sub _get_chunk {
         @values = split /,/, $value if defined($value);
         $chunk->{'CHOICES'} = [
             sort { $a->{'text'} cmp $b->{'text'} }
-                map {
+            map {
                 my $c = $_;
                 {
                     text     => $options{'choices'}->{$c},
@@ -190,7 +190,7 @@ sub _get_chunk {
         $chunk->{type}    = 'multiple';
         $chunk->{CHOICES} = [
             sort { $a->{'text'} cmp $b->{'text'} }
-                map {
+            map {
                 my $option_value = $_;
                 {
                     text     => $options{multiple}->{$option_value},

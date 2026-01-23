@@ -213,8 +213,11 @@ sub DelPatronsFromList {
 
     return unless ( $list && $patron_list_patrons );
 
-    return Koha::Database->new()->schema()->resultset('PatronListPatron')
-        ->search( { patron_list_patron_id => { 'IN' => $patron_list_patrons } } )->delete();
+    return Koha::Database->new()
+        ->schema()
+        ->resultset('PatronListPatron')
+        ->search( { patron_list_patron_id => { 'IN' => $patron_list_patrons } } )
+        ->delete();
 }
 
 =head1 AUTHOR

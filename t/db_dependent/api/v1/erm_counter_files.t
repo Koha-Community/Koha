@@ -79,13 +79,15 @@ subtest 'list() tests' => sub {
     );
 
     # Two counter_files created, they should both be returned
-    $t->get_ok("//$userid:$password@/api/v1/erm/counter_files")->status_is(200)
+    $t->get_ok("//$userid:$password@/api/v1/erm/counter_files")
+        ->status_is(200)
         ->json_is( [ $counter_file->to_api, $another_counter_file->to_api, ] );
 
     # Attempt to search by type like 'ko'
     $counter_file->delete;
     $another_counter_file->delete;
-    $t->get_ok(qq~//$userid:$password@/api/v1/erm/counter_files?q=[{"me.type":{"like":"%ko%"}}]~)->status_is(200)
+    $t->get_ok(qq~//$userid:$password@/api/v1/erm/counter_files?q=[{"me.type":{"like":"%ko%"}}]~)
+        ->status_is(200)
         ->json_is( [] );
 
     my $counter_file_to_search = $builder->build_object(
@@ -98,11 +100,13 @@ subtest 'list() tests' => sub {
     );
 
     # Search works, searching for type like 'ko'
-    $t->get_ok(qq~//$userid:$password@/api/v1/erm/counter_files?q=[{"me.type":{"like":"%ko%"}}]~)->status_is(200)
+    $t->get_ok(qq~//$userid:$password@/api/v1/erm/counter_files?q=[{"me.type":{"like":"%ko%"}}]~)
+        ->status_is(200)
         ->json_is( [ $counter_file_to_search->to_api ] );
 
     # Warn on unsupported query parameter
-    $t->get_ok("//$userid:$password@/api/v1/erm/counter_files?blah=blah")->status_is(400)
+    $t->get_ok("//$userid:$password@/api/v1/erm/counter_files?blah=blah")
+        ->status_is(400)
         ->json_is( [ { path => '/query/blah', message => 'Malformed query string' } ] );
 
     # Unauthorized access
@@ -153,7 +157,8 @@ subtest 'get() tests' => sub {
     my $non_existent_id        = $counter_file_to_delete->erm_counter_files_id;
     $counter_file_to_delete->delete;
 
-    $t->get_ok("//$userid:$password@/api/v1/erm/counter_files/$non_existent_id/file/content")->status_is(404)
+    $t->get_ok("//$userid:$password@/api/v1/erm/counter_files/$non_existent_id/file/content")
+        ->status_is(404)
         ->json_is( '/error' => 'COUNTER file not found' );
 
     $schema->storage->txn_rollback;
@@ -192,7 +197,8 @@ subtest 'delete() tests' => sub {
     $t->delete_ok("//$unauth_userid:$password@/api/v1/erm/counter_files/$counter_file_id")->status_is(403);
 
     # Delete existing counter_file
-    $t->delete_ok("//$userid:$password@/api/v1/erm/counter_files/$counter_file_id")->status_is( 204, 'REST3.2.4' )
+    $t->delete_ok("//$userid:$password@/api/v1/erm/counter_files/$counter_file_id")
+        ->status_is( 204, 'REST3.2.4' )
         ->content_is( '', 'REST3.3.4' );
 
     # Attempt to delete non-existent counter_file

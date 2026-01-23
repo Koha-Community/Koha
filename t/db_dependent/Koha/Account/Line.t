@@ -966,7 +966,7 @@ subtest "void() tests" => sub {
     is( $account_payment->credit_type_code,      'PAYMENT', 'Voided payment credit_type_code is still PAYMENT' );
     is( $account_payment->status,                'VOID',    'Voided payment status is VOID' );
     is( $account_payment->amount + 0,            -30,       'Voided payment amount is still -30' );
-    is( $account_payment->amountoutstanding + 0, 0,         'Voided payment amount outstanding is 0' );
+    is( $account_payment->amountoutstanding + 0,  0,        'Voided payment amount outstanding is 0' );
 
     is( $line1->amountoutstanding + 0, 10, 'First fee again has amount outstanding of 10' );
     is( $line2->amountoutstanding + 0, 20, 'Second fee again has amount outstanding of 20' );

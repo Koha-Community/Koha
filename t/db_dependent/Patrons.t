@@ -247,10 +247,12 @@ subtest "Update patron categories" => sub {
     is( Koha::Patrons->search_patrons_to_update_category( { from => $c_categorycode, too_old => 1 } )
             ->next->borrowernumber, $child3->borrowernumber, 'Over age patron in child category is expected one' );
     is( Koha::Patrons->search( { branchcode => $branchcode2 } )
-            ->search_patrons_to_update_category( { from => $a_categorycode } )->count, 1, 'One patron in branch 2' );
+            ->search_patrons_to_update_category( { from => $a_categorycode } )
+            ->count, 1, 'One patron in branch 2' );
     is(
         Koha::Patrons->search( { branchcode => $branchcode2 } )
-            ->search_patrons_to_update_category( { from => $a_categorycode } )->next->borrowernumber,
+            ->search_patrons_to_update_category( { from => $a_categorycode } )
+            ->next->borrowernumber,
         $adult2->borrowernumber, 'Adult patron in branch 2 is expected one'
     );
     is(
@@ -344,7 +346,8 @@ subtest "Update patron categories" => sub {
 
     is(
         Koha::Patrons->search_patrons_to_update_category( { from => $a_categorycode, fine_max => 5 } )
-            ->search( { "me.borrowernumber" => $adult1->borrowernumber } )->next->borrowernumber,
+            ->search( { "me.borrowernumber" => $adult1->borrowernumber } )
+            ->next->borrowernumber,
         $adult1->borrowernumber, 'Expected patron is in the list of patrons to update'
     );
     my $userid_before = $adult1->userid;

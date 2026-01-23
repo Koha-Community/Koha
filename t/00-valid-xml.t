@@ -43,7 +43,7 @@ find(
             }
         },
     },
-    ,
+
     File::Spec->curdir()
 );
 

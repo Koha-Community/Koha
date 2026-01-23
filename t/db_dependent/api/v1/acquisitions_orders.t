@@ -81,7 +81,8 @@ subtest 'list() tests' => sub {
 
     # Make sure we are returned with the correct amount of orders
     $t->get_ok("//$userid:$password@/api/v1/acquisitions/orders?status=new&_per_page=-1")
-        ->status_is( 200, 'REST3.2.2' )->json_has( '/' . ( $count_of_orders - 1 ) . '/order_id' )
+        ->status_is( 200, 'REST3.2.2' )
+        ->json_has( '/' . ( $count_of_orders - 1 ) . '/order_id' )
         ->json_hasnt( '/' . ($count_of_orders) . '/order_id' );
 
     subtest 'query parameters' => sub {
@@ -146,7 +147,8 @@ subtest 'list() tests' => sub {
     is( scalar @{ $result->tx->res->json }, 1, 'Only one order is active' );
 
     # Warn on unsupported query parameter
-    $t->get_ok("//$userid:$password@/api/v1/acquisitions/orders?order_blah=blah")->status_is(400)
+    $t->get_ok("//$userid:$password@/api/v1/acquisitions/orders?order_blah=blah")
+        ->status_is(400)
         ->json_is( [ { path => '/query/order_blah', message => 'Malformed query string' } ] );
 
     subtest 'sorting tests' => sub {
@@ -184,7 +186,8 @@ subtest 'list() tests' => sub {
         my $result =
             $t->get_ok(
             "//$userid:$password@/api/v1/acquisitions/orders?_order_by=+me.order_id&basket_id=" . $basket->id )
-            ->status_is( 200, "query successful" )->tx->res->json;
+            ->status_is( 200, "query successful" )
+            ->tx->res->json;
 
         is( scalar @$result, 2, 'Two elements returned' );
 
@@ -195,7 +198,8 @@ subtest 'list() tests' => sub {
         $result =
             $t->get_ok(
             "//$userid:$password@/api/v1/acquisitions/orders?_order_by=-me.order_id&basket_id=" . $basket->id )
-            ->status_is( 200, "query successful" )->tx->res->json;
+            ->status_is( 200, "query successful" )
+            ->tx->res->json;
 
         is( scalar @$result, 2, 'Two elements returned' );
 
@@ -255,12 +259,14 @@ subtest 'get() tests' => sub {
     my $userid = $patron->userid;
 
     $t->get_ok( "//$userid:$password@/api/v1/acquisitions/orders/" . $order->ordernumber )
-        ->status_is( 200, 'REST3.2.2' )->json_is( '' => $order->to_api, 'REST3.3.2' );
+        ->status_is( 200, 'REST3.2.2' )
+        ->json_is( '' => $order->to_api, 'REST3.3.2' );
 
     my $non_existent_order_id = $order->ordernumber;
     $order->delete;
 
-    $t->get_ok( "//$userid:$password@/api/v1/acquisitions/orders/" . $non_existent_order_id )->status_is(404)
+    $t->get_ok( "//$userid:$password@/api/v1/acquisitions/orders/" . $non_existent_order_id )
+        ->status_is(404)
         ->json_is( '/error' => 'Order not found' );
 
     # FIXME This does not work on all the OS we support
@@ -336,7 +342,8 @@ subtest 'add() tests' => sub {
     $order_with_invalid_field->{'orderinvalid'} = 'Order invalid';
 
     $t->post_ok( "//$auth_userid:$password@/api/v1/acquisitions/orders" => json => $order_with_invalid_field )
-        ->status_is(400)->json_is(
+        ->status_is(400)
+        ->json_is(
         "/errors" => [
             {
                 message => "Properties not allowed: orderinvalid.",
@@ -347,7 +354,8 @@ subtest 'add() tests' => sub {
 
     # Authorized attempt to write
     $t->post_ok( "//$auth_userid:$password@/api/v1/acquisitions/orders" => json => $order )
-        ->status_is( 201, 'REST3.2.1' )->json_is( '/internal_note' => $order->{internal_note}, 'REST3.3.1' )
+        ->status_is( 201, 'REST3.2.1' )
+        ->json_is( '/internal_note' => $order->{internal_note}, 'REST3.3.1' )
         ->header_like( Location => qr/\/api\/v1\/acquisitions\/orders\/\d*/, 'REST3.4.1' );
 
     # save the order_id
@@ -356,14 +364,16 @@ subtest 'add() tests' => sub {
     # Authorized attempt to create with null id
     $order->{order_id} = undef;
 
-    $t->post_ok( "//$auth_userid:$password@/api/v1/acquisitions/orders" => json => $order )->status_is(400)
+    $t->post_ok( "//$auth_userid:$password@/api/v1/acquisitions/orders" => json => $order )
+        ->status_is(400)
         ->json_has('/errors');
 
     # Authorized attempt to create with existing id
     $order->{order_id} = $order_id;
 
     warning_like {
-        $t->post_ok( "//$auth_userid:$password@/api/v1/acquisitions/orders" => json => $order )->status_is(409)
+        $t->post_ok( "//$auth_userid:$password@/api/v1/acquisitions/orders" => json => $order )
+            ->status_is(409)
             ->json_has( '/error' => "Fails when trying to add an existing order_id" )
             ->json_like( '/conflict' => qr/(aqorders\.)?PRIMARY/ );
     }
@@ -437,14 +447,16 @@ subtest 'update() tests' => sub {
     $deleted_library->delete;
 
     $t->put_ok( "//$auth_userid:$password@/api/v1/libraries/$library_id" => json => $library_with_updated_field )
-        ->status_is( 200, 'REST3.2.1' )->json_is( '' => $library_with_updated_field, 'REST3.3.3' );
+        ->status_is( 200, 'REST3.2.1' )
+        ->json_is( '' => $library_with_updated_field, 'REST3.3.3' );
 
     # Authorized attempt to write invalid data
     my $library_with_invalid_field = {%$library_with_updated_field};
     $library_with_invalid_field->{'branchinvalid'} = 'Library invalid';
 
     $t->put_ok( "//$auth_userid:$password@/api/v1/libraries/$library_id" => json => $library_with_invalid_field )
-        ->status_is(400)->json_is(
+        ->status_is(400)
+        ->json_is(
         "/errors" => [
             {
                 message => "Properties not allowed: branchinvalid.",
@@ -494,7 +506,8 @@ subtest 'delete() tests' => sub {
     $t->delete_ok( "//$auth_userid:$password@/api/v1/acquisitions/orders/" . $order->ordernumber )->status_is(409);
     $order->orderstatus('cancelled')->store;
     $t->delete_ok( "//$auth_userid:$password@/api/v1/acquisitions/orders/" . $order->ordernumber )
-        ->status_is( 204, 'REST3.2.4' )->content_is( '', 'REST3.3.4' );
+        ->status_is( 204, 'REST3.2.4' )
+        ->content_is( '', 'REST3.3.4' );
     $t->delete_ok( "//$auth_userid:$password@/api/v1/acquisitions/orders/" . $order->ordernumber )->status_is(404);
 
     $schema->storage->txn_rollback;

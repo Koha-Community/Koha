@@ -142,7 +142,7 @@ subtest 'opac_available_backends() tests' => sub {
 };
 
 my $base_limits = {
-    branch  => { CPL   => { count => 1,  method => 'annual' } },
+    branch  => { CPL   => { count =>  1, method => 'annual' } },
     brw_cat => { A     => { count => -1, method => 'active' } },
     default => { count => 10, method => 'annual' },
 };

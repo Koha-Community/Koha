@@ -51,7 +51,8 @@ subtest 'bundled_items()' => sub {
     $nonprivilegedpatron->set_password( { password => $password, skip_validation => 1 } );
     my $userid = $nonprivilegedpatron->userid;
 
-    $t->get_ok("//$userid:$password@/api/v1/items/$itemnumber/bundled_items")->status_is(403)
+    $t->get_ok("//$userid:$password@/api/v1/items/$itemnumber/bundled_items")
+        ->status_is(403)
         ->json_is( '/error' => 'Authorization failure. Missing required permission(s).' );
 
     $patron->set_password( { password => $password, skip_validation => 1 } );
@@ -130,7 +131,8 @@ subtest 'add_to_bundle' => sub {
         marc_link     => 0
     };
 
-    $t->post_ok( "//$userid:$password@/api/v1/items/$itemnumber/bundled_items" => json => $link )->status_is(403)
+    $t->post_ok( "//$userid:$password@/api/v1/items/$itemnumber/bundled_items" => json => $link )
+        ->status_is(403)
         ->json_is( '/error' => 'Authorization failure. Missing required permission(s).' );
 
     $patron->set_password( { password => $password, skip_validation => 1 } );

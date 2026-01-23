@@ -66,7 +66,8 @@ subtest 'list() tests' => sub {
     $nonprivilegedpatron->set_password( { password => $password, skip_validation => 1 } );
     my $userid = $nonprivilegedpatron->userid;
 
-    $t->get_ok("//$userid:$password@/api/v1/record_sources")->status_is(403)
+    $t->get_ok("//$userid:$password@/api/v1/record_sources")
+        ->status_is(403)
         ->json_is( '/error' => 'Authorization failure. Missing required permission(s).' );
 
     $patron->set_password( { password => $password, skip_validation => 1 } );
@@ -79,12 +80,14 @@ subtest 'list() tests' => sub {
     is( $response_count, 10, 'The API returns 10 sources' );
 
     my $id = $source->record_source_id;
-    $t->get_ok("//$userid:$password@/api/v1/record_sources?q={\"record_source_id\": $id}")->status_is(200)
+    $t->get_ok("//$userid:$password@/api/v1/record_sources?q={\"record_source_id\": $id}")
+        ->status_is(200)
         ->json_is( '' => [ $source->to_api ], 'REST3.3.2' );
 
     $source->delete;
 
-    $t->get_ok("//$userid:$password@/api/v1/record_sources?q={\"record_source_id\": $id}")->status_is(200)
+    $t->get_ok("//$userid:$password@/api/v1/record_sources?q={\"record_source_id\": $id}")
+        ->status_is(200)
         ->json_is( '' => [] );
 
     $schema->storage->txn_rollback;
@@ -118,18 +121,21 @@ subtest 'get() tests' => sub {
 
     my $id = $source->record_source_id;
 
-    $t->get_ok("//$userid:$password@/api/v1/record_sources/$id")->status_is(403)
+    $t->get_ok("//$userid:$password@/api/v1/record_sources/$id")
+        ->status_is(403)
         ->json_is( '/error' => 'Authorization failure. Missing required permission(s).' );
 
     $patron->set_password( { password => $password, skip_validation => 1 } );
     $userid = $patron->userid;
 
-    $t->get_ok("//$userid:$password@/api/v1/record_sources/$id")->status_is( 200, 'REST3.2.2' )
+    $t->get_ok("//$userid:$password@/api/v1/record_sources/$id")
+        ->status_is( 200, 'REST3.2.2' )
         ->json_is( '' => $source->to_api, 'REST3.3.2' );
 
     $source->delete;
 
-    $t->get_ok("//$userid:$password@/api/v1/record_sources/$id")->status_is(404)
+    $t->get_ok("//$userid:$password@/api/v1/record_sources/$id")
+        ->status_is(404)
         ->json_is( '/error' => 'Record source not found' );
 
     $schema->storage->txn_rollback;
@@ -163,14 +169,16 @@ subtest 'delete() tests' => sub {
 
     my $id = $source->record_source_id;
 
-    $t->delete_ok("//$userid:$password@/api/v1/record_sources/$id")->status_is(403)
+    $t->delete_ok("//$userid:$password@/api/v1/record_sources/$id")
+        ->status_is(403)
         ->json_is( '/error' => 'Authorization failure. Missing required permission(s).' );
 
     $patron->set_password( { password => $password, skip_validation => 1 } );
     $userid = $patron->userid;
 
     $source->delete();
-    $t->delete_ok("//$userid:$password@/api/v1/record_sources/$id")->status_is( 404, 'REST4.3' )
+    $t->delete_ok("//$userid:$password@/api/v1/record_sources/$id")
+        ->status_is( 404, 'REST4.3' )
         ->json_is( { error => q{Record source not found}, error_code => q{not_found} } );
 
     $source = $builder->build_object( { class => 'Koha::RecordSources' } );
@@ -184,7 +192,8 @@ subtest 'delete() tests' => sub {
 
     $biblio->delete();
 
-    $t->delete_ok("//$userid:$password@/api/v1/record_sources/$id")->status_is( 204, 'REST3.2.4' )
+    $t->delete_ok("//$userid:$password@/api/v1/record_sources/$id")
+        ->status_is( 204, 'REST3.2.4' )
         ->content_is( q{}, 'REST3.3.4' );
 
     my $deleted_source = Koha::RecordSources->search( { record_source_id => $id } );
@@ -220,7 +229,8 @@ subtest 'add() tests' => sub {
     my $userid    = $nonprivilegedpatron->userid;
     my $patron_id = $nonprivilegedpatron->borrowernumber;
 
-    $t->post_ok( "//$userid:$password@/api/v1/record_sources" => json => { name => 'test1' } )->status_is(403)
+    $t->post_ok( "//$userid:$password@/api/v1/record_sources" => json => { name => 'test1' } )
+        ->status_is(403)
         ->json_is( '/error' => 'Authorization failure. Missing required permission(s).' );
 
     $patron->set_password( { password => $password, skip_validation => 1 } );
@@ -228,7 +238,9 @@ subtest 'add() tests' => sub {
 
     my $source_id =
         $t->post_ok( "//$userid:$password@/api/v1/record_sources" => json => { name => 'test1' } )
-        ->status_is( 201, 'REST3.2.2' )->json_is( '/name', 'test1' )->json_is( '/can_be_edited', 0 )
+        ->status_is( 201, 'REST3.2.2' )
+        ->json_is( '/name',          'test1' )
+        ->json_is( '/can_be_edited', 0 )
         ->tx->res->json->{record_source_id};
 
     my $created_source = Koha::RecordSources->find($source_id);
@@ -275,7 +287,8 @@ subtest 'update() tests' => sub {
     my $source_with_missing_field = {};
 
     $t->put_ok( "//$userid:$password@/api/v1/record_sources/$source_id" => json => $source_with_missing_field )
-        ->status_is(400)->json_is( "/errors" => [ { message => "Missing property.", path => "/body/name" } ] );
+        ->status_is(400)
+        ->json_is( "/errors" => [ { message => "Missing property.", path => "/body/name" } ] );
 
     # Full object update on PUT
     my $source_with_updated_field = {
@@ -283,7 +296,8 @@ subtest 'update() tests' => sub {
     };
 
     $t->put_ok( "//$userid:$password@/api/v1/record_sources/$source_id" => json => $source_with_updated_field )
-        ->status_is(200)->json_is( '/name' => $source_with_updated_field->{name} );
+        ->status_is(200)
+        ->json_is( '/name' => $source_with_updated_field->{name} );
 
     # Authorized attempt to write invalid data
     my $source_with_invalid_field = {
@@ -292,7 +306,8 @@ subtest 'update() tests' => sub {
     };
 
     $t->put_ok( "//$userid:$password@/api/v1/record_sources/$source_id" => json => $source_with_invalid_field )
-        ->status_is(400)->json_is(
+        ->status_is(400)
+        ->json_is(
         "/errors" => [
             {
                 message => "Properties not allowed: potato.",

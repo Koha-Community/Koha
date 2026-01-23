@@ -138,7 +138,7 @@ sub count {
 
 sub result {
     my ($self) = @_;
-    my @a      = map { $self->{files}->{$_}->{id} }
+    my @a = map { $self->{files}->{$_}->{id} }
         grep { !exists $self->{files}->{$_}->{errcode} }
         keys %{ $self->{files} };
     return @a ? ( join ',', @a ) : undef;

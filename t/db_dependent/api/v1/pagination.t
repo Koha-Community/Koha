@@ -76,29 +76,36 @@ subtest 'list() pagination tests' => sub {
     t::lib::Mocks::mock_preference( 'RESTdefaultPageSize', 20 );
 
     my $cities =
-        $t->get_ok("//$userid:$password@/api/v1/cities")->status_is(200)->header_is( 'X-Total-Count', '10' )
-        ->header_is( 'X-Base-Total-Count', '10' )->header_unlike( 'Link', qr|rel="prev"| )
-        ->header_unlike( 'Link', qr|rel="next"| )->header_like(
+        $t->get_ok("//$userid:$password@/api/v1/cities")
+        ->status_is(200)
+        ->header_is( 'X-Total-Count',      '10' )
+        ->header_is( 'X-Base-Total-Count', '10' )
+        ->header_unlike( 'Link', qr|rel="prev"| )
+        ->header_unlike( 'Link', qr|rel="next"| )
+        ->header_like(
         'Link',
         qr#(_per_page=20\&_page=1|_page=1\&_per_page=20)>\; rel="first"#
-    )->header_like(
+        )->header_like(
         'Link',
         qr#(_per_page=20\&_page=1|_page=1\&_per_page=20)>\; rel="last"#
-    )->tx->res->json;
+        )->tx->res->json;
 
     is( scalar @{$cities}, 10, '10 cities retrieved' );
 
     $cities =
-        $t->get_ok("//$userid:$password@/api/v1/cities?q={\"name\":{\"-like\":\"\%A\"}}")->status_is(200)
+        $t->get_ok("//$userid:$password@/api/v1/cities?q={\"name\":{\"-like\":\"\%A\"}}")
+        ->status_is(200)
         ->header_is( 'X-Total-Count',      '5',  'The resultset has 5 items' )
         ->header_is( 'X-Base-Total-Count', '10', 'The resultset, without the filter, has 10' )
-        ->header_unlike( 'Link', qr|rel="prev"| )->header_unlike( 'Link', qr|rel="next"| )->header_like(
+        ->header_unlike( 'Link', qr|rel="prev"| )
+        ->header_unlike( 'Link', qr|rel="next"| )
+        ->header_like(
         'Link',
         qr#(_per_page=20.*\&_page=1.*|_page=1.*\&_per_page=20.*)>\; rel="first"#
-    )->header_like(
+        )->header_like(
         'Link',
         qr#(_per_page=20.*\&_page=1.*|_page=1.*\&_per_page=20.*)>\; rel="last"#
-    )->tx->res->json;
+        )->tx->res->json;
 
     is( scalar @{$cities}, 5, '5 cities retrieved' );
 
@@ -106,31 +113,39 @@ subtest 'list() pagination tests' => sub {
 
     # _per_page overrides RESTdefaultPageSize
     $cities =
-        $t->get_ok("//$userid:$password@/api/v1/cities?_per_page=20")->status_is(200)
-        ->header_is( 'X-Total-Count', '10' )->header_is( 'X-Base-Total-Count', '10' )
-        ->header_unlike( 'Link', qr|rel="prev"| )->header_unlike( 'Link', qr|rel="next"| )->header_like(
+        $t->get_ok("//$userid:$password@/api/v1/cities?_per_page=20")
+        ->status_is(200)
+        ->header_is( 'X-Total-Count',      '10' )
+        ->header_is( 'X-Base-Total-Count', '10' )
+        ->header_unlike( 'Link', qr|rel="prev"| )
+        ->header_unlike( 'Link', qr|rel="next"| )
+        ->header_like(
         'Link',
         qr#(_per_page=20\&_page=1|_page=1\&_per_page=20)>\; rel="first"#
-    )->header_like(
+        )->header_like(
         'Link',
         qr#(_per_page=20\&_page=1|_page=1\&_per_page=20)>\; rel="last"#
-    )->tx->res->json;
+        )->tx->res->json;
 
     is( scalar @{$cities}, 10, '10 cities retrieved' );
 
     # page 1
     $cities =
-        $t->get_ok("//$userid:$password@/api/v1/cities")->status_is(200)->header_is( 'X-Total-Count', '10' )
-        ->header_is( 'X-Base-Total-Count', '10' )->header_unlike( 'Link', qr|rel="prev"| )->header_like(
+        $t->get_ok("//$userid:$password@/api/v1/cities")
+        ->status_is(200)
+        ->header_is( 'X-Total-Count',      '10' )
+        ->header_is( 'X-Base-Total-Count', '10' )
+        ->header_unlike( 'Link', qr|rel="prev"| )
+        ->header_like(
         'Link',
         qr#(_per_page=3\&_page=1|_page=1\&_per_page=3)>\; rel="first"#
-    )->header_like(
+        )->header_like(
         'Link',
         qr#(_per_page=3\&_page=2|_page=2\&_per_page=3)>\; rel="next"#
-    )->header_like(
+        )->header_like(
         'Link',
         qr#(_per_page=3\&_page=4|_page=4\&_per_page=3)>\; rel="last"#
-    )->tx->res->json;
+        )->tx->res->json;
 
     is( scalar @{$cities}, 3, '3 cities retrieved' );
 
@@ -138,48 +153,58 @@ subtest 'list() pagination tests' => sub {
     # to add all combinations to the regex
     $cities =
         $t->get_ok("//$userid:$password@/api/v1/cities?_per_page=2&_page=2&q={\"name\":{\"-like\":\"\%A\"}}")
-        ->status_is(200)->header_is( 'X-Total-Count', '5' )->header_is( 'X-Base-Total-Count', '10' )->header_like(
+        ->status_is(200)
+        ->header_is( 'X-Total-Count',      '5' )
+        ->header_is( 'X-Base-Total-Count', '10' )
+        ->header_like(
         'Link',
         qr#(_per_page=2.*\&_page=1.*|_page=1.*\&_per_page=2.*)>\; rel="prev"#
-    )->header_like(
+        )->header_like(
         'Link',
         qr#(_per_page=2.*\&_page=1.*|_page=1.*\&_per_page=2.*)>\; rel="first"#
-    )->header_like(
+        )->header_like(
         'Link',
         qr#(_per_page=2.*\&_page=3.*|_page=3.*\&_per_page=2.*)>\; rel="next"#
-    )->header_like(
+        )->header_like(
         'Link',
         qr#(_per_page=2.*\&_page=3.*|_page=3.*\&_per_page=2.*)>\; rel="last"#
-    )->tx->res->json;
+        )->tx->res->json;
 
     is( scalar @{$cities}, 2, '2 cities retrieved' );
 
     # last page, with only one result
     $cities =
-        $t->get_ok("//$userid:$password@/api/v1/cities?_page=4")->status_is(200)->header_is( 'X-Total-Count', '10' )
-        ->header_is( 'X-Base-Total-Count', '10' )->header_like(
+        $t->get_ok("//$userid:$password@/api/v1/cities?_page=4")
+        ->status_is(200)
+        ->header_is( 'X-Total-Count',      '10' )
+        ->header_is( 'X-Base-Total-Count', '10' )
+        ->header_like(
         'Link',
         qr#(_per_page=3\&_page=3|_page=3\&_per_page=3)>\; rel="prev"#
-    )->header_like(
+        )->header_like(
         'Link',
         qr#(_per_page=3\&_page=1|_page=1\&_per_page=3)>\; rel="first"#
-    )->header_unlike( 'Link', qr#rel="next"# )->header_like(
+        )->header_unlike( 'Link', qr#rel="next"# )->header_like(
         'Link',
         qr#(_per_page=3\&_page=4|_page=4\&_per_page=3)>\; rel="last"#
-    )->tx->res->json;
+        )->tx->res->json;
 
     is( scalar @{$cities}, 1, '1 city retrieved' );
 
     $cities =
-        $t->get_ok("//$userid:$password@/api/v1/cities?_per_page=-1")->status_is(200)
-        ->header_is( 'X-Total-Count', '10' )->header_is( 'X-Base-Total-Count', '10' )
-        ->header_unlike( 'Link', qr|rel="prev"| )->header_unlike( 'Link', qr|rel="next"| )->header_like(
+        $t->get_ok("//$userid:$password@/api/v1/cities?_per_page=-1")
+        ->status_is(200)
+        ->header_is( 'X-Total-Count',      '10' )
+        ->header_is( 'X-Base-Total-Count', '10' )
+        ->header_unlike( 'Link', qr|rel="prev"| )
+        ->header_unlike( 'Link', qr|rel="next"| )
+        ->header_like(
         'Link',
         qr#(_per_page=-1\&_page=1|_page=1\&_per_page=-1)>\; rel="first"#
-    )->header_like(
+        )->header_like(
         'Link',
         qr#(_per_page=-1\&_page=1|_page=1\&_per_page=-1)>\; rel="last"#
-    )->tx->res->json;
+        )->tx->res->json;
 
     is( scalar @{$cities}, 10, '10 cities retrieved, -1 means all' );
 

@@ -1236,7 +1236,7 @@ sub checkauth {
                             : Koha::Cash::Registers->search(
                             { branch => $branchcode, branch_default => 1 },
                             { rows   => 1 }
-                        )->single;
+                            )->single;
                         $register_id   = $register->id   if ($register);
                         $register_name = $register->name if ($register);
                     }

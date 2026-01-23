@@ -72,7 +72,8 @@ subtest 'list() tests' => sub {
     my $ehtitle = $builder->build_object( { class => 'Koha::ERM::EHoldings::Titles' } );
 
     # One EHoldings title created, should get returned
-    $t->get_ok("//$userid:$password@/api/v1/erm/eholdings/local/titles")->status_is(200)
+    $t->get_ok("//$userid:$password@/api/v1/erm/eholdings/local/titles")
+        ->status_is(200)
         ->json_is( [ $ehtitle->to_api ] );
 
     my $another_ehtitle = $builder->build_object(
@@ -95,14 +96,16 @@ subtest 'list() tests' => sub {
     # Filtering works, two EHoldings titles sharing publication_type
     $t->get_ok(
         "//$userid:$password@/api/v1/erm/eholdings/local/titles?publication_type=" . $ehtitle->publication_type )
-        ->status_is(200)->json_is( [ $ehtitle->to_api, $another_ehtitle->to_api ] );
+        ->status_is(200)
+        ->json_is( [ $ehtitle->to_api, $another_ehtitle->to_api ] );
 
     # Attempt to search by publication_title like 'ko'
     $ehtitle->delete;
     $another_ehtitle->delete;
     $ehtitle_with_another_publication_type->delete;
     $t->get_ok(qq~//$userid:$password@/api/v1/erm/eholdings/local/titles?q=[{"me.publication_title":{"like":"%ko%"}}]~)
-        ->status_is(200)->json_is( [] );
+        ->status_is(200)
+        ->json_is( [] );
 
     my $ehtitle_to_search = $builder->build_object(
         {
@@ -115,10 +118,12 @@ subtest 'list() tests' => sub {
 
     # Search works, searching for publication_title like 'ko'
     $t->get_ok(qq~//$userid:$password@/api/v1/erm/eholdings/local/titles?q=[{"me.publication_title":{"like":"%ko%"}}]~)
-        ->status_is(200)->json_is( [ $ehtitle_to_search->to_api ] );
+        ->status_is(200)
+        ->json_is( [ $ehtitle_to_search->to_api ] );
 
     # Warn on unsupported query parameter
-    $t->get_ok("//$userid:$password@/api/v1/erm/eholdings/local/titles?blah=blah")->status_is(400)
+    $t->get_ok("//$userid:$password@/api/v1/erm/eholdings/local/titles?blah=blah")
+        ->status_is(400)
         ->json_is( [ { path => '/query/blah', message => 'Malformed query string' } ] );
 
     # Unauthorized access
@@ -155,12 +160,14 @@ subtest 'get() tests' => sub {
     my $unauth_userid = $patron->userid;
 
     # This EHoldings title exists, should get returned
-    $t->get_ok( "//$userid:$password@/api/v1/erm/eholdings/local/titles/" . $ehtitle->title_id )->status_is(200)
+    $t->get_ok( "//$userid:$password@/api/v1/erm/eholdings/local/titles/" . $ehtitle->title_id )
+        ->status_is(200)
         ->json_is( $ehtitle->to_api );
 
     # Return one EHoldings title with embed
     $t->get_ok( "//$userid:$password@/api/v1/erm/eholdings/local/titles/"
-            . $ehtitle->title_id => { 'x-koha-embed' => 'resources,resources.package' } )->status_is(200)
+            . $ehtitle->title_id => { 'x-koha-embed' => 'resources,resources.package' } )
+        ->status_is(200)
         ->json_is( { %{ $ehtitle->to_api }, resources => [] } );
 
     # Unauthorized access
@@ -171,7 +178,8 @@ subtest 'get() tests' => sub {
     my $non_existent_id   = $ehtitle_to_delete->title_id;
     $ehtitle_to_delete->delete;
 
-    $t->get_ok("//$userid:$password@/api/v1/erm/eholdings/local/titles/$non_existent_id")->status_is(404)
+    $t->get_ok("//$userid:$password@/api/v1/erm/eholdings/local/titles/$non_existent_id")
+        ->status_is(404)
         ->json_is( '/error' => 'eHolding title not found' );
 
     $schema->storage->txn_rollback;
@@ -241,7 +249,8 @@ subtest 'add() tests' => sub {
     };
 
     $t->post_ok( "//$userid:$password@/api/v1/erm/eholdings/local/titles" => json => $ehtitle_with_invalid_field )
-        ->status_is(400)->json_is(
+        ->status_is(400)
+        ->json_is(
         "/errors" => [
             {
                 message => "Properties not allowed: blah.",
@@ -253,12 +262,16 @@ subtest 'add() tests' => sub {
     # Authorized attempt to write
     my $ehtitle_id =
         $t->post_ok( "//$userid:$password@/api/v1/erm/eholdings/local/titles" => json => $ehtitle )
-        ->status_is( 201, 'REST3.2.1' )->header_like(
+        ->status_is( 201, 'REST3.2.1' )
+        ->header_like(
         Location => qr|^/api/v1/erm/eholdings/local/titles/\d*|,
         'REST3.4.1'
-    )->json_is( '/publication_title' => $ehtitle->{publication_title} )
-        ->json_is( '/print_identifier' => $ehtitle->{print_identifier} )->json_is( '/notes' => $ehtitle->{notes} )
-        ->json_is( '/publisher_name'   => $ehtitle->{publisher_name} )->tx->res->json->{title_id};
+        )
+        ->json_is( '/publication_title' => $ehtitle->{publication_title} )
+        ->json_is( '/print_identifier'  => $ehtitle->{print_identifier} )
+        ->json_is( '/notes'             => $ehtitle->{notes} )
+        ->json_is( '/publisher_name'    => $ehtitle->{publisher_name} )
+        ->tx->res->json->{title_id};
 
     # Import titles from virtualshelf to package
     my $ehpackage_id = $builder->build_object( { class => 'Koha::ERM::EHoldings::Packages' } )->package_id;
@@ -277,21 +290,25 @@ subtest 'add() tests' => sub {
     };
 
     $t->post_ok( "//$userid:$password@/api/v1/erm/eholdings/local/titles/import" => json => $import_request )
-        ->status_is(201)->json_has('/job_id');
+        ->status_is(201)
+        ->json_has('/job_id');
 
     # Attempt to import titles from a virtualshelf that doesn't exist
     $virtual_shelf->delete;
     $t->post_ok( "//$userid:$password@/api/v1/erm/eholdings/local/titles/import" => json => $import_request )
-        ->status_is(404)->json_is( '/error' => 'List not found' );
+        ->status_is(404)
+        ->json_is( '/error' => 'List not found' );
 
     # Authorized attempt to create with null id
     $ehtitle->{title_id} = undef;
-    $t->post_ok( "//$userid:$password@/api/v1/erm/eholdings/local/titles" => json => $ehtitle )->status_is(400)
+    $t->post_ok( "//$userid:$password@/api/v1/erm/eholdings/local/titles" => json => $ehtitle )
+        ->status_is(400)
         ->json_has('/errors');
 
     # Authorized attempt to create with existing id
     $ehtitle->{title_id} = $ehtitle_id;
-    $t->post_ok( "//$userid:$password@/api/v1/erm/eholdings/local/titles" => json => $ehtitle )->status_is(400)
+    $t->post_ok( "//$userid:$password@/api/v1/erm/eholdings/local/titles" => json => $ehtitle )
+        ->status_is(400)
         ->json_is(
         "/errors" => [
             {
@@ -312,7 +329,8 @@ subtest 'add() tests' => sub {
         $request_body->{create_linked_biblio} = 1;
         my $biblios_count = Koha::Biblios->search()->count;
         $t->post_ok( "//$userid:$password@/api/v1/erm/eholdings/local/titles/" => json => $request_body )
-            ->status_is(201)->json_is( '/publication_title' => 'Publication title' );
+            ->status_is(201)
+            ->json_is( '/publication_title' => 'Publication title' );
         my $new_biblios_count = Koha::Biblios->search()->count;
         is( $new_biblios_count, $biblios_count + 1, "Biblio was added" );
     };
@@ -359,7 +377,8 @@ subtest 'update() tests' => sub {
 
     $t->put_ok(
         "//$userid:$password@/api/v1/erm/eholdings/local/titles/$ehtitle_id" => json => $ehtitle_with_missing_field )
-        ->status_is(400)->json_is(
+        ->status_is(400)
+        ->json_is(
         "/errors" => [
             {
                 message => "Missing property.",
@@ -398,7 +417,8 @@ subtest 'update() tests' => sub {
 
     $t->put_ok(
         "//$userid:$password@/api/v1/erm/eholdings/local/titles/$ehtitle_id" => json => $ehtitle_with_updated_field )
-        ->status_is(200)->json_is( '/publication_title' => 'Publication title' );
+        ->status_is(200)
+        ->json_is( '/publication_title' => 'Publication title' );
 
     # Authorized attempt to write invalid data
     my $ehtitle_with_invalid_field = {
@@ -409,7 +429,8 @@ subtest 'update() tests' => sub {
 
     $t->put_ok(
         "//$userid:$password@/api/v1/erm/eholdings/local/titles/$ehtitle_id" => json => $ehtitle_with_invalid_field )
-        ->status_is(400)->json_is(
+        ->status_is(400)
+        ->json_is(
         "/errors" => [
             {
                 message => "Properties not allowed: blah.",
@@ -446,7 +467,8 @@ subtest 'update() tests' => sub {
         my $ehtitle_updated_title = { publication_title => "The journal of writing unit tests :" };
 
         $t->put_ok( "//$userid:$password@/api/v1/erm/eholdings/local/titles/$ehtitle_id" => json =>
-                { %$ehtitle_updated_title, create_linked_biblio => 1 } )->status_is(200)
+                { %$ehtitle_updated_title, create_linked_biblio => 1 } )
+            ->status_is(200)
             ->json_is( '/publication_title' => 'The journal of writing unit tests :' );
 
         $biblio->discard_changes;
@@ -502,7 +524,8 @@ subtest 'delete() tests' => sub {
     $t->delete_ok("//$unauth_userid:$password@/api/v1/erm/eholdings/local/titles/$ehtitle_id")->status_is(403);
 
     # Delete existing EHolding title
-    $t->delete_ok("//$userid:$password@/api/v1/erm/eholdings/local/titles/$ehtitle_id")->status_is( 204, 'REST3.2.4' )
+    $t->delete_ok("//$userid:$password@/api/v1/erm/eholdings/local/titles/$ehtitle_id")
+        ->status_is( 204, 'REST3.2.4' )
         ->content_is( '', 'REST3.3.4' );
 
     # Attempt to delete non-existent EHolding title

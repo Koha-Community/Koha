@@ -56,7 +56,8 @@ subtest 'list() tests' => sub {
 
     my $limit = $builder->build_object( { class => 'Koha::Item::Transfer::Limits' } );
 
-    $t->get_ok("//$userid:$password@/api/v1/transfer_limits")->status_is( 200, 'REST3.2.2' )
+    $t->get_ok("//$userid:$password@/api/v1/transfer_limits")
+        ->status_is( 200, 'REST3.2.2' )
         ->json_is( [ $limit->to_api ] );
 
     $schema->storage->txn_rollback;
@@ -99,7 +100,8 @@ subtest 'add() tests' => sub {
     my $limit_with_invalid_field = { 'invalid' => 'invalid' };
 
     $t->post_ok( "//$auth_userid:$password@/api/v1/transfer_limits" => json => $limit_with_invalid_field )
-        ->status_is(400)->json_is(
+        ->status_is(400)
+        ->json_is(
         "/errors" => [
             {
                 message => "Properties not allowed: invalid.",
@@ -110,11 +112,13 @@ subtest 'add() tests' => sub {
 
     # Authorized attempt to write
     $t->post_ok( "//$auth_userid:$password@/api/v1/transfer_limits" => json => $limit_hashref )
-        ->status_is( 201, 'REST3.2.1' )->json_has( '' => $limit_hashref, 'REST3.3.1' )
+        ->status_is( 201, 'REST3.2.1' )
+        ->json_has( '' => $limit_hashref, 'REST3.3.1' )
         ->header_is( 'Location' => '/api/v1/transfer_limits/' . $t->tx->res->json->{limit_id}, 'REST3.4.1' );
 
     $t->post_ok( "//$auth_userid:$password@/api/v1/transfer_limits" => json => $limit_hashref )
-        ->status_is( 409, 'Conflict creating the resource' )->json_is(
+        ->status_is( 409, 'Conflict creating the resource' )
+        ->json_is(
         {
             error =>
                 qq{Exception 'Koha::Exceptions::TransferLimit::Duplicate' thrown 'A transfer limit with the given parameters already exists!'\n}
@@ -154,7 +158,8 @@ subtest 'delete() tests' => sub {
     # Unauthorized attempt to delete
     $t->delete_ok("//$unauth_userid:$password@/api/v1/transfer_limits/$limit_id")->status_is(403);
 
-    $t->delete_ok("//$auth_userid:$password@/api/v1/transfer_limits/$limit_id")->status_is( 204, 'REST3.2.4' )
+    $t->delete_ok("//$auth_userid:$password@/api/v1/transfer_limits/$limit_id")
+        ->status_is( 204, 'REST3.2.4' )
         ->content_is( '', 'REST3.3.4' );
 
     $t->delete_ok("//$auth_userid:$password@/api/v1/transfer_limits/$limit_id")->status_is(404);
@@ -205,7 +210,8 @@ subtest 'batch_add() and batch_delete() tests' => sub {
     my $limit_with_invalid_field = { 'invalid' => 'invalid' };
 
     $t->post_ok( "//$auth_userid:$password@/api/v1/transfer_limits/batch" => json => $limit_with_invalid_field )
-        ->status_is(400)->json_is(
+        ->status_is(400)
+        ->json_is(
         "/errors" => [
             {
                 message => "Properties not allowed: invalid.",
@@ -216,24 +222,28 @@ subtest 'batch_add() and batch_delete() tests' => sub {
 
     # Create all combinations of to/from libraries
     $t->post_ok( "//$auth_userid:$password@/api/v1/transfer_limits/batch" => json =>
-            { item_type => 'X', collection_code => 'Y' } )->status_is(400)
+            { item_type => 'X', collection_code => 'Y' } )
+        ->status_is(400)
         ->json_is( '/error' => "You can only pass 'item_type' or 'collection_code' at a time" );
 
     t::lib::Mocks::mock_preference( 'BranchTransferLimitsType', 'ccode' );
 
     # Create all combinations of to/from libraries
     $t->post_ok( "//$auth_userid:$password@/api/v1/transfer_limits/batch" => json => { item_type => 'X' } )
-        ->status_is(409)->json_is( '/error' => "You passed 'item_type' but configuration expects 'collection_code'" );
+        ->status_is(409)
+        ->json_is( '/error' => "You passed 'item_type' but configuration expects 'collection_code'" );
 
     t::lib::Mocks::mock_preference( 'BranchTransferLimitsType', 'itemtype' );
 
     # Create all combinations of to/from libraries
     $t->post_ok( "//$auth_userid:$password@/api/v1/transfer_limits/batch" => json => { collection_code => 'X' } )
-        ->status_is(409)->json_is( '/error' => "You passed 'collection_code' but configuration expects 'item_type'" );
+        ->status_is(409)
+        ->json_is( '/error' => "You passed 'collection_code' but configuration expects 'item_type'" );
 
     # Create all combinations of to/from libraries
     $t->post_ok( "//$auth_userid:$password@/api/v1/transfer_limits/batch" => json => $limit_hashref )
-        ->status_is( 201, 'REST3.2.1' )->json_has( '' => $limit_hashref, 'REST3.3.1' );
+        ->status_is( 201, 'REST3.2.1' )
+        ->json_has( '' => $limit_hashref, 'REST3.3.1' );
 
     my $limits = Koha::Item::Transfer::Limits->search;
 
@@ -242,7 +252,8 @@ subtest 'batch_add() and batch_delete() tests' => sub {
 
     # Delete all combinations of to/from libraries
     $t->delete_ok( "//$auth_userid:$password@/api/v1/transfer_limits/batch" => json => $limit_hashref )
-        ->status_is( 204, 'REST3.2.4' )->content_is( '', 'REST3.3.4' );
+        ->status_is( 204, 'REST3.2.4' )
+        ->content_is( '', 'REST3.3.4' );
 
     $limits = Koha::Item::Transfer::Limits->search;
 
@@ -251,7 +262,8 @@ subtest 'batch_add() and batch_delete() tests' => sub {
     # Create all combinations of 'to' libraries
     $limit_hashref->{to_library_id} = $library->id;
     $t->post_ok( "//$auth_userid:$password@/api/v1/transfer_limits/batch" => json => $limit_hashref )
-        ->status_is( 201, 'REST3.2.1' )->json_has( '' => $limit_hashref, 'REST3.3.1' );
+        ->status_is( 201, 'REST3.2.1' )
+        ->json_has( '' => $limit_hashref, 'REST3.3.1' );
 
     $limits = Koha::Item::Transfer::Limits->search;
 
@@ -259,7 +271,8 @@ subtest 'batch_add() and batch_delete() tests' => sub {
 
     # Delete all combinations of 'to' libraries
     $t->delete_ok( "//$auth_userid:$password@/api/v1/transfer_limits/batch" => json => $limit_hashref )
-        ->status_is( 204, 'REST3.2.4' )->content_is( '', 'REST3.3.4' );
+        ->status_is( 204, 'REST3.2.4' )
+        ->content_is( '', 'REST3.3.4' );
 
     $limits = Koha::Item::Transfer::Limits->search;
 
@@ -271,7 +284,8 @@ subtest 'batch_add() and batch_delete() tests' => sub {
     delete $limit_hashref->{to_library_id};
     $limit_hashref->{from_library_id} = $library->id;
     $t->post_ok( "//$auth_userid:$password@/api/v1/transfer_limits/batch" => json => $limit_hashref )
-        ->status_is( 201, 'REST3.2.1' )->json_has( '' => $limit_hashref, 'REST3.3.1' );
+        ->status_is( 201, 'REST3.2.1' )
+        ->json_has( '' => $limit_hashref, 'REST3.3.1' );
 
     $limits = Koha::Item::Transfer::Limits->search;
 
@@ -280,7 +294,8 @@ subtest 'batch_add() and batch_delete() tests' => sub {
 
     # Delete all combinations of 'from' libraries
     $t->delete_ok( "//$auth_userid:$password@/api/v1/transfer_limits/batch" => json => $limit_hashref )
-        ->status_is( 204, 'REST3.2.4' )->content_is( '', 'REST3.3.4' );
+        ->status_is( 204, 'REST3.2.4' )
+        ->content_is( '', 'REST3.3.4' );
 
     $limits = Koha::Item::Transfer::Limits->search;
 

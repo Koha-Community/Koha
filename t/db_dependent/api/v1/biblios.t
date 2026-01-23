@@ -81,7 +81,8 @@ subtest 'get() tests' => sub {
         ->status_is(400);
 
     $t->get_ok( "//$userid:$password@/api/v1/biblios/" . $biblio->biblionumber => { Accept => 'application/json' } )
-        ->status_is(200)->json_is( '/title', 'The unbearable lightness of being' )
+        ->status_is(200)
+        ->json_is( '/title',  'The unbearable lightness of being' )
         ->json_is( '/author', 'Milan Kundera' );
 
     $t->get_ok(
@@ -96,18 +97,21 @@ subtest 'get() tests' => sub {
         ->status_is(200);
 
     $t->get_ok( "//$userid:$password@/api/v1/biblios/" . $biblio->biblionumber => { Accept => 'text/plain' } )
-        ->status_is(200)->content_is( $biblio->metadata->record->as_formatted );
+        ->status_is(200)
+        ->content_is( $biblio->metadata->record->as_formatted );
 
     # Simulate a data error situation (BZ35246)
     $biblio->biblioitem->delete();
 
     $t->get_ok( "//$userid:$password@/api/v1/biblios/" . $biblio->biblionumber => { Accept => 'application/json' } )
-        ->status_is(500)->json_is( '/error_code', 'internal_server_error' )
-        ->json_is( '/error', 'Something went wrong, check Koha logs for details.' );
+        ->status_is(500)
+        ->json_is( '/error_code', 'internal_server_error' )
+        ->json_is( '/error',      'Something went wrong, check Koha logs for details.' );
 
     $biblio->delete;
     $t->get_ok( "//$userid:$password@/api/v1/biblios/" . $biblio->biblionumber => { Accept => 'application/marc' } )
-        ->status_is(404)->json_is( '/error', 'Bibliographic record not found' );
+        ->status_is(404)
+        ->json_is( '/error', 'Bibliographic record not found' );
 
     subtest 'marc-in-json encoding tests' => sub {
 
@@ -124,7 +128,8 @@ subtest 'get() tests' => sub {
 
         my $result = $t->get_ok(
             "//$userid:$password@/api/v1/biblios/" . $biblio->biblionumber => { Accept => 'application/marc-in-json' } )
-            ->status_is(200)->tx->res->body;
+            ->status_is(200)
+            ->tx->res->body;
 
         my $encoded_title = Encode::encode( "UTF-8", $title_with_diacritics );
 
@@ -153,7 +158,8 @@ subtest 'get() tests' => sub {
 
         my $result = $t->get_ok(
             "//$userid:$password@/api/v1/biblios/" . $biblio->biblionumber => { Accept => 'application/marcxml+xml' } )
-            ->status_is(200)->tx->res->body;
+            ->status_is(200)
+            ->tx->res->body;
 
         my $encoded_title = Encode::encode( "UTF-8", $title_with_diacritics );
 
@@ -186,14 +192,16 @@ subtest 'get_items() tests' => sub {
 
     $patron->flags(4)->store;
 
-    $t->get_ok( "//$userid:$password@/api/v1/biblios/" . $biblio->biblionumber . "/items" )->status_is(200)
+    $t->get_ok( "//$userid:$password@/api/v1/biblios/" . $biblio->biblionumber . "/items" )
+        ->status_is(200)
         ->json_is( '' => [], 'No items on the biblio' );
 
     my $item_1 = $builder->build_sample_item( { biblionumber => $biblio->biblionumber } );
     my $item_2 = $builder->build_sample_item( { biblionumber => $biblio->biblionumber } );
 
     $t->get_ok( "//$userid:$password@/api/v1/biblios/" . $biblio->biblionumber . "/items?_order_by=item_id" )
-        ->status_is(200)->json_is( '' => [ $item_1->to_api, $item_2->to_api ], 'The items are returned' );
+        ->status_is(200)
+        ->json_is( '' => [ $item_1->to_api, $item_2->to_api ], 'The items are returned' );
 
     $t->get_ok(
         "//$userid:$password@/api/v1/biblios/" . $biblio->biblionumber . "/items" => { "x-koha-embed" => "+strings" } )
@@ -234,7 +242,8 @@ subtest 'get_items() tests' => sub {
 
         $t->get_ok( "//$userid:$password@/api/v1/biblios/"
                 . $item->biblionumber
-                . "/items" => { "x-koha-embed" => "first_hold+strings" } )->status_is(200)
+                . "/items" => { "x-koha-embed" => "first_hold+strings" } )
+            ->status_is(200)
             ->json_is(
             '/0/first_hold/_strings/pickup_library_id' => { type => 'library', str => $pickup_library->branchname } );
     };
@@ -282,7 +291,8 @@ subtest 'delete() tests' => sub {
     $item->delete();
 
     # Bibs with no items can be deleted
-    $t->delete_ok("//$userid:$password@/api/v1/biblios/$biblio_id")->status_is( 204, 'REST3.2.4' )
+    $t->delete_ok("//$userid:$password@/api/v1/biblios/$biblio_id")
+        ->status_is( 204, 'REST3.2.4' )
         ->content_is( '', 'REST3.3.4' );
 
     $t->delete_ok("//$userid:$password@/api/v1/biblios/$biblio_id")->status_is(404);
@@ -329,7 +339,8 @@ subtest 'get_public() tests' => sub {
             . $biblio->biblionumber => { Accept => 'application/weird+format' } )->status_is(400);
 
     $t->get_ok( "//$userid:$password@/api/v1/public/biblios/" . $biblio->biblionumber => { Accept => 'text/plain' } )
-        ->status_is(200)->content_like(qr{100\s+_aMilan Kundera})
+        ->status_is(200)
+        ->content_like(qr{100\s+_aMilan Kundera})
         ->content_like(qr{245\s+_aThe unbearable lightness of being});
 
     $t->get_ok( "//$userid:$password@/api/v1/public/biblios/"
@@ -343,7 +354,8 @@ subtest 'get_public() tests' => sub {
         ->status_is(200);
 
     $t->get_ok( "//$userid:$password@/api/v1/public/biblios/" . $biblio->biblionumber => { Accept => 'text/plain' } )
-        ->status_is(200)->content_is( $biblio->metadata->record->as_formatted );
+        ->status_is(200)
+        ->content_is( $biblio->metadata->record->as_formatted );
 
     subtest 'anonymous access' => sub {
         plan tests => 9;
@@ -357,7 +369,8 @@ subtest 'get_public() tests' => sub {
         $t->get_ok( "/api/v1/public/biblios/" . $biblio->biblionumber => { Accept => 'application/marc' } )
             ->status_is(200);
 
-        $t->get_ok( "/api/v1/public/biblios/" . $biblio->biblionumber => { Accept => 'text/plain' } )->status_is(200)
+        $t->get_ok( "/api/v1/public/biblios/" . $biblio->biblionumber => { Accept => 'text/plain' } )
+            ->status_is(200)
             ->content_is( $biblio->metadata->record->as_formatted );
     };
 
@@ -376,7 +389,8 @@ subtest 'get_public() tests' => sub {
 
         my $result =
             $t->get_ok( "/api/v1/public/biblios/" . $biblio->biblionumber => { Accept => 'application/marc-in-json' } )
-            ->status_is(200)->tx->res->body;
+            ->status_is(200)
+            ->tx->res->body;
 
         my $encoded_title = Encode::encode( "UTF-8", $title_with_diacritics );
 
@@ -392,7 +406,8 @@ subtest 'get_public() tests' => sub {
     Koha::Caches->get_instance()->flush_all;
 
     $t->get_ok( "//$userid:$password@/api/v1/public/biblios/" . $biblio->biblionumber => { Accept => 'text/plain' } )
-        ->status_is(200)->content_unlike(qr{100\s+_aMilan Kundera})
+        ->status_is(200)
+        ->content_unlike(qr{100\s+_aMilan Kundera})
         ->content_like(qr{245\s+_aThe unbearable lightness of being});
 
     subtest 'hidden_in_opac tests' => sub {
@@ -456,7 +471,8 @@ subtest 'get_public() tests' => sub {
     $biblio->delete;
     $t->get_ok(
         "//$userid:$password@/api/v1/public/biblios/" . $biblio->biblionumber => { Accept => 'application/marc' } )
-        ->status_is(404)->json_is( '/error', 'Bibliographic record not found' );
+        ->status_is(404)
+        ->json_is( '/error', 'Bibliographic record not found' );
 
     $schema->storage->txn_rollback;
 };
@@ -581,7 +597,8 @@ subtest 'pickup_locations() tests' => sub {
                 . "patron_id="
                 . $patron->id
                 . "&_order_by=marc_org_code"
-                . "&_per_page=1" )->json_is( [$library_1_api] )
+                . "&_per_page=1" )
+            ->json_is( [$library_1_api] )
             ->header_is( 'X-Total-Count',      '4', '4 is the count for libraries with pickup_location=1' )
             ->header_is( 'X-Base-Total-Count', '4', '4 is the count for libraries with pickup_location=1' )
             ->header_unlike( 'Link', qr|rel="prev"| )
@@ -612,8 +629,11 @@ subtest 'pickup_locations() tests' => sub {
                 . "patron_id="
                 . $patron->id
                 . "&_order_by=marc_org_code"
-                . "&_per_page=1" )->json_is( [$library_1_api] )->header_is( 'X-Total-Count', '2' )
-            ->header_is( 'X-Base-Total-Count', '2' )->header_unlike( 'Link', qr|rel="prev"| )
+                . "&_per_page=1" )
+            ->json_is( [$library_1_api] )
+            ->header_is( 'X-Total-Count',      '2' )
+            ->header_is( 'X-Base-Total-Count', '2' )
+            ->header_unlike( 'Link', qr|rel="prev"| )
             ->header_like( 'Link', qr#(_per_page=1.*\&_page=2.*|_page=2.*\&_per_page=1.*)>\; rel="next"# )
             ->header_like( 'Link', qr#(_per_page=1.*\&_page=1.*|_page=1.*\&_per_page=1).*>\; rel="first"# )
             ->header_like( 'Link', qr#(_per_page=1.*\&_page=2.*|_page=2.*\&_per_page=1).*>\; rel="last"# );
@@ -633,7 +653,8 @@ subtest 'pickup_locations() tests' => sub {
 
     $t->get_ok(
         "//$userid:$password@/api/v1/biblios/" . $biblio->id . "/pickup_locations?" . "patron_id=" . $patron->id )
-        ->status_is(404)->json_is( '/error' => 'Bibliographic record not found' );
+        ->status_is(404)
+        ->json_is( '/error' => 'Bibliographic record not found' );
 
     $schema->storage->txn_rollback;
 };
@@ -672,13 +693,15 @@ subtest 'get_items_public() tests' => sub {
 
     my $biblio = $builder->build_sample_biblio();
 
-    $t->get_ok( "//$userid:$password@/api/v1/public/biblios/" . $biblio->id . "/items" )->status_is(200)
+    $t->get_ok( "//$userid:$password@/api/v1/public/biblios/" . $biblio->id . "/items" )
+        ->status_is(200)
         ->json_is( '' => [], 'No items on the biblio' );
 
     my $item_1 = $builder->build_sample_item( { biblionumber => $biblio->id } );
     my $item_2 = $builder->build_sample_item( { biblionumber => $biblio->id, withdrawn => 1 } );
 
-    $t->get_ok( "//$userid:$password@/api/v1/public/biblios/" . $biblio->biblionumber . "/items" )->status_is(200)
+    $t->get_ok( "//$userid:$password@/api/v1/public/biblios/" . $biblio->biblionumber . "/items" )
+        ->status_is(200)
         ->json_is(
         '' => [
             $item_1->to_api( { public => 1 } ),
@@ -689,7 +712,8 @@ subtest 'get_items_public() tests' => sub {
 
     $rules = { withdrawn => ['1'] };
 
-    $t->get_ok( "//$userid:$password@/api/v1/public/biblios/" . $biblio->biblionumber . "/items" )->status_is(200)
+    $t->get_ok( "//$userid:$password@/api/v1/public/biblios/" . $biblio->biblionumber . "/items" )
+        ->status_is(200)
         ->json_is(
         '' => [ $item_1->to_api( { public => 1 } ) ],
         'The items are returned, hidden one is not returned'
@@ -702,7 +726,8 @@ subtest 'get_items_public() tests' => sub {
 
     $override_hidden_items = 1;
 
-    $t->get_ok( "//$userid:$password@/api/v1/public/biblios/" . $biblio->biblionumber . "/items" )->status_is(200)
+    $t->get_ok( "//$userid:$password@/api/v1/public/biblios/" . $biblio->biblionumber . "/items" )
+        ->status_is(200)
         ->json_is(
         '' => [
             $item_1->to_api( { public => 1 } ),
@@ -755,7 +780,8 @@ subtest 'get_bookings() tests' => sub {
 
     $t->get_ok( "//$unauth_userid:$password@/api/v1/biblios/" . $biblio->biblionumber . "/bookings" )->status_is(403);
 
-    $t->get_ok( "//$userid:$password@/api/v1/biblios/" . $biblio->biblionumber . "/bookings" )->status_is(200)
+    $t->get_ok( "//$userid:$password@/api/v1/biblios/" . $biblio->biblionumber . "/bookings" )
+        ->status_is(200)
         ->json_is( '' => [], 'No bookings on the biblio' );
 
     # One booking
@@ -773,7 +799,9 @@ subtest 'get_bookings() tests' => sub {
         }
     );
 
-    my $ret = $t->get_ok( "//$userid:$password@/api/v1/biblios/" . $biblio->biblionumber . "/bookings" )->status_is(200)
+    my $ret =
+        $t->get_ok( "//$userid:$password@/api/v1/biblios/" . $biblio->biblionumber . "/bookings" )
+        ->status_is(200)
         ->tx->res->json;
 
     is_deeply( $ret, [ $booking_0->to_api ] );
@@ -846,7 +874,8 @@ subtest 'get_checkouts() tests' => sub {
     AddIssue( $patron, $item_2->barcode );
 
     my $ret =
-        $t->get_ok( "//$userid:$password@/api/v1/biblios/" . $biblio->biblionumber . "/checkouts" )->status_is(200)
+        $t->get_ok( "//$userid:$password@/api/v1/biblios/" . $biblio->biblionumber . "/checkouts" )
+        ->status_is(200)
         ->tx->res->json;
 
     my $checkout_1 = Koha::Checkouts->find( { itemnumber => $item_1->id } );
@@ -856,13 +885,17 @@ subtest 'get_checkouts() tests' => sub {
 
     AddReturn( $item_1->barcode );
 
-    $ret = $t->get_ok( "//$userid:$password@/api/v1/biblios/" . $biblio->biblionumber . "/checkouts" )->status_is(200)
+    $ret =
+        $t->get_ok( "//$userid:$password@/api/v1/biblios/" . $biblio->biblionumber . "/checkouts" )
+        ->status_is(200)
         ->tx->res->json;
 
     is_deeply( $ret, [ $checkout_2->to_api ] );
 
-    $ret = $t->get_ok( "//$userid:$password@/api/v1/biblios/" . $biblio->biblionumber . "/checkouts?checked_in=1" )
-        ->status_is(200)->tx->res->json;
+    $ret =
+        $t->get_ok( "//$userid:$password@/api/v1/biblios/" . $biblio->biblionumber . "/checkouts?checked_in=1" )
+        ->status_is(200)
+        ->tx->res->json;
 
     my $old_checkout_1 = Koha::Old::Checkouts->find( $checkout_1->id );
 
@@ -894,12 +927,18 @@ subtest 'set_rating() tests' => sub {
 
     $t->post_ok(
         "//$userid:$password@/api/v1/public/biblios/" . $biblio->biblionumber . "/ratings" => json => { rating => 3 } )
-        ->status_is(200)->json_is( '/rating', '3' )->json_is( '/average', '3' )->json_is( '/count', '1' );
+        ->status_is(200)
+        ->json_is( '/rating',  '3' )
+        ->json_is( '/average', '3' )
+        ->json_is( '/count',   '1' );
 
     $t->post_ok( "//$userid:$password@/api/v1/public/biblios/"
             . $biblio->biblionumber
-            . "/ratings" => json => { rating => undef } )->status_is(200)->json_is( '/rating', undef )
-        ->json_is( '/average', '0' )->json_is( '/count', '0' );
+            . "/ratings" => json => { rating => undef } )
+        ->status_is(200)
+        ->json_is( '/rating',  undef )
+        ->json_is( '/average', '0' )
+        ->json_is( '/count',   '0' );
 
     $schema->storage->txn_rollback;
 
@@ -1325,7 +1364,8 @@ subtest 'add() tests' => sub {
 
     $t->post_ok( "//$userid:$password@/api/v1/biblios" =>
             { 'Content-Type' => 'application/marcxml+xml', 'x-framework-id' => $frameworkcode } => $marcxml )
-        ->status_is(200)->json_has('/id')
+        ->status_is(200)
+        ->json_has('/id')
         ->header_is( 'Location' => "/api/v1/biblios/" . $t->tx->res->json->{id}, "REST3.4.1" );
 
     $t->post_ok(
@@ -1336,7 +1376,8 @@ subtest 'add() tests' => sub {
     )->status_is(200)->json_has('/id');
 
     $t->post_ok( "//$userid:$password@/api/v1/biblios" =>
-            { 'Content-Type' => 'application/marc', 'x-framework-id' => $frameworkcode } => $marc )->status_is(200)
+            { 'Content-Type' => 'application/marc', 'x-framework-id' => $frameworkcode } => $marc )
+        ->status_is(200)
         ->json_has('/id');
 
     subtest 'x-record-source-id header tests' => sub {
@@ -1380,7 +1421,8 @@ subtest 'add() tests' => sub {
     $mock_biblio->mock( 'AddBiblio', sub { return ( undef, undef ); } );
 
     $t->post_ok( "//$userid:$password@/api/v1/biblios" =>
-            { 'Content-Type' => 'application/marc', 'x-framework-id' => $frameworkcode } => $marc )->status_is(400)
+            { 'Content-Type' => 'application/marc', 'x-framework-id' => $frameworkcode } => $marc )
+        ->status_is(400)
         ->json_is(
         {
             error      => 'Error creating record',
@@ -1808,7 +1850,8 @@ subtest 'put() tests' => sub {
 
     $t->put_ok( "//$userid:$password@/api/v1/biblios/$biblionumber" =>
             { 'Content-Type' => 'application/marcxml+xml', 'x-framework-id' => $frameworkcode } => $marcxml )
-        ->status_is(200)->json_has('/id');
+        ->status_is(200)
+        ->json_has('/id');
 
     $biblio = Koha::Biblios->find($biblionumber);
 
@@ -1816,14 +1859,16 @@ subtest 'put() tests' => sub {
 
     $t->put_ok( "//$userid:$password@/api/v1/biblios/$biblionumber" =>
             { 'Content-Type' => 'application/marc-in-json', 'x-framework-id' => $frameworkcode } => $mij )
-        ->status_is(200)->json_has('/id');
+        ->status_is(200)
+        ->json_has('/id');
 
     $biblio = Koha::Biblios->find($biblionumber);
 
     is( $biblio->title, 'Introduction to Attic Greek  (Using mij) /' );
 
     $t->put_ok( "//$userid:$password@/api/v1/biblios/$biblionumber" =>
-            { 'Content-Type' => 'application/marc', 'x-framework-id' => $frameworkcode } => $marc )->status_is(200)
+            { 'Content-Type' => 'application/marc', 'x-framework-id' => $frameworkcode } => $marc )
+        ->status_is(200)
         ->json_has('/id');
 
     $biblio = Koha::Biblios->find($biblionumber);
@@ -1880,8 +1925,10 @@ subtest 'list() tests' => sub {
 
     $t->get_ok( "//$userid:$password@/api/v1/biblios?q=$query" => { Accept => 'application/json' } )->status_is(200);
 
-    my $result = $t->get_ok( "//$userid:$password@/api/v1/biblios?q=$query" => { Accept => 'application/marcxml+xml' } )
-        ->status_is(200)->tx->res->body;
+    my $result =
+        $t->get_ok( "//$userid:$password@/api/v1/biblios?q=$query" => { Accept => 'application/marcxml+xml' } )
+        ->status_is(200)
+        ->tx->res->body;
 
     my $encoded_title = Encode::encode( "UTF-8", $title_with_diacritics );
     like( $result, qr/\Q$encoded_title/, "The title is not double encoded" );
@@ -1909,7 +1956,8 @@ subtest 'list() tests' => sub {
 
     $query = encode_json( { biblio_id => $biblio->id } );
 
-    $t->get_ok( "//$userid:$password@/api/v1/biblios?q=$query" => { Accept => 'application/json' } )->status_is(200)
+    $t->get_ok( "//$userid:$password@/api/v1/biblios?q=$query" => { Accept => 'application/json' } )
+        ->status_is(200)
         ->json_is( '/0/timestamp' =>
             output_pref( { dt => $fixed_date, dateformat => 'rfc3339' }, 'biblio table timestamp takes precedence' ) );
 
@@ -2273,7 +2321,8 @@ subtest 'merge() tests' => sub {
     my $result =
         $t->post_ok( "//$userid:$password@/api/v1/biblios/$biblio_id1/merge" =>
             { 'Content-Type' => 'application/json', 'Accept' => 'application/marc-in-json' } => $json_input1 )
-        ->status_is(200)->tx->res->body;
+        ->status_is(200)
+        ->tx->res->body;
     like( $result, qr/$title_1/, "Merged record has the correct title" );
     unlike( $result, qr/$title_2/, "Merged record doesn't have the wrong title" );
 
@@ -2285,7 +2334,8 @@ subtest 'merge() tests' => sub {
     $result =
         $t->post_ok( "//$userid:$password@/api/v1/biblios/$biblio_id1/merge" =>
             { 'Content-Type' => 'application/json', 'Accept' => 'application/marc-in-json' } => $json_input2 )
-        ->status_is(200)->tx->res->body;
+        ->status_is(200)
+        ->tx->res->body;
     like( $result, qr/Using mij/, "Update with Marc-in-json record" );
     unlike( $result, qr/$title_1/, "Change all record with dat in the 'datarecord' field" );
 

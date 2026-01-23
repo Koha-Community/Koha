@@ -341,7 +341,8 @@ if (   ( $findborrower && $borrowernumber_hold || $findclub && $club_hold )
 
     if ( $patron && $multi_hold ) {
         my @multi_pickup_locations =
-            Koha::Biblios->search( { biblionumber => \@biblionumbers } )->pickup_locations( { patron => $patron } )
+            Koha::Biblios->search( { biblionumber => \@biblionumbers } )
+            ->pickup_locations( { patron => $patron } )
             ->as_list;
         $template->param( multi_pickup_locations => \@multi_pickup_locations );
     }

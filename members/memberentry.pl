@@ -301,7 +301,8 @@ if ( ( $op eq 'cud-save' || $op eq 'cud-insert' ) && $guarantors_to_be_validated
                 # If $patron's categorycode is about to change, check guarantor requirements against
                 # the new category but keep the original $patron object intact
                 # (this clone()s the $patron)
-                ( bless {%$patron}, ref $patron )->categorycode($categorycode)
+                ( bless {%$patron}, ref $patron )
+                    ->categorycode($categorycode)
                     ->can_be_guaranteed_by($guarantors_to_be_validated);
             }
         } else {
@@ -516,7 +517,7 @@ if ( ( !$nok ) and $nodouble and ( $op eq 'cud-insert' or $op eq 'cud-save' ) ) 
                     my $letter = GetPreparedLetter(
                         module      => 'members',
                         letter_code => 'WELCOME',
-                        branchcode  => $patron->branchcode,,
+                        branchcode  => $patron->branchcode,
                         lang        => $patron->lang || 'default',
                         tables      => {
                             'branches'  => $patron->branchcode,

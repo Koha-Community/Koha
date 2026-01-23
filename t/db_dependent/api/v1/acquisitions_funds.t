@@ -81,7 +81,8 @@ $t->get_ok( "//$unauth_userid:$unauth_password@/api/v1/acquisitions/funds?name="
 
 $t->get_ok("//$userid:$password@/api/v1/acquisitions/funds")->status_is(200);
 
-$t->get_ok( "//$userid:$password@/api/v1/acquisitions/funds?name=" . $fund_name )->status_is(200)
+$t->get_ok( "//$userid:$password@/api/v1/acquisitions/funds?name=" . $fund_name )
+    ->status_is(200)
     ->json_like( '/0/name' => qr/$fund_name/ );
 
 $schema->storage->txn_rollback;

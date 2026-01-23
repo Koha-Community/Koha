@@ -187,11 +187,13 @@ subtest 'list() tests' => sub {
 
     #Check for backend existing statuses
     $t->get_ok( "//$userid:$password@/api/v1/ill/backends/Mock" => { 'x-koha-embed' => 'statuses+strings' } )
-        ->status_is(200)->json_has( '/statuses', [ $backend_status, $core_status, $alias_status ] );
+        ->status_is(200)
+        ->json_has( '/statuses', [ $backend_status, $core_status, $alias_status ] );
 
     #Check for backend existing statuses of a backend that doesn't exist
     $t->get_ok( "//$userid:$password@/api/v1/ill/backends/GhostBackend" => { 'x-koha-embed' => 'statuses+strings' } )
-        ->status_is(200)->json_hasnt('statuses');
+        ->status_is(200)
+        ->json_hasnt('statuses');
 
     # Unauthorized attempt to list
     $t->get_ok("//$unauth_userid:$password@/api/v1/ill/backends")->status_is(403);

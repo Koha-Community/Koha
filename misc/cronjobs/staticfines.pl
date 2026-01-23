@@ -64,7 +64,7 @@ GetOptions(
     'u|use-borrower-library' => \$useborrowerlibrary,
     'b|borrower:i'           => \$borrowernumberlimit
 );
-my $usage = << 'ENDUSAGE';
+my $usage = <<'ENDUSAGE';
 
 This script calculates and charges overdue fines to patron accounts.
 

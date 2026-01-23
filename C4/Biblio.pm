@@ -1562,7 +1562,7 @@ sub GetAuthorisedValueDesc {
                     Koha::AuthorisedValues->search(
                     { category => $category },
                     { columns  => [ 'authorised_value', 'lib_opac', 'lib' ] }
-                )->as_list
+                    )->as_list
             };
             $cache->set_in_cache( $cache_key, $av_descriptions );
         }

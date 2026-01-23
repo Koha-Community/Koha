@@ -76,7 +76,7 @@ if ( $op eq 'send_welcome' ) {
             my $letter = GetPreparedLetter(
                 module      => 'members',
                 letter_code => 'WELCOME',
-                branchcode  => $patron->branchcode,,
+                branchcode  => $patron->branchcode,
                 lang        => $patron->lang || 'default',
                 tables      => {
                     'branches'  => $patron->branchcode,
@@ -99,7 +99,7 @@ if ( $op eq 'send_welcome' ) {
             my $print = GetPreparedLetter(
                 module      => 'members',
                 letter_code => 'WELCOME',
-                branchcode  => $patron->branchcode,,
+                branchcode  => $patron->branchcode,
                 lang        => $patron->lang || 'default',
                 tables      => {
                     'branches'  => $patron->branchcode,

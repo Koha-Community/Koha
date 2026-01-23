@@ -68,7 +68,8 @@ subtest 'list() tests' => sub {
     my $non_existent_cr_id      = $cash_register_to_delete->id;
     $cash_register_to_delete->delete;
 
-    $t->get_ok("//$userid:$password@/api/v1/cash_registers/$non_existent_cr_id/cashups")->status_is(404)
+    $t->get_ok("//$userid:$password@/api/v1/cash_registers/$non_existent_cr_id/cashups")
+        ->status_is(404)
         ->json_is( '/error' => 'Register not found' );
 
     my $register    = $builder->build_object( { class => 'Koha::Cash::Registers' } );
@@ -89,7 +90,8 @@ subtest 'list() tests' => sub {
     );
 
     # One cashup created, should get returned
-    $t->get_ok("//$userid:$password@/api/v1/cash_registers/$register_id/cashups")->status_is(200)
+    $t->get_ok("//$userid:$password@/api/v1/cash_registers/$register_id/cashups")
+        ->status_is(200)
         ->json_is( [ $cashup->to_api ] );
 
     my $another_cashup = $builder->build_object(
@@ -104,11 +106,13 @@ subtest 'list() tests' => sub {
     );
 
     # One more cashup created, both should be returned
-    $t->get_ok("//$userid:$password@/api/v1/cash_registers/$register_id/cashups")->status_is(200)
+    $t->get_ok("//$userid:$password@/api/v1/cash_registers/$register_id/cashups")
+        ->status_is(200)
         ->json_is( [ $another_cashup->to_api, $cashup->to_api, ] );
 
     # Warn on unsupported query parameter
-    $t->get_ok("//$userid:$password@/api/v1/cash_registers/$register_id/cashups?cashup_blah=blah")->status_is(400)
+    $t->get_ok("//$userid:$password@/api/v1/cash_registers/$register_id/cashups?cashup_blah=blah")
+        ->status_is(400)
         ->json_is(
         [
             {
@@ -159,7 +163,8 @@ subtest 'get() tests' => sub {
     my $non_existent_id  = $cashup_to_delete->id;
     $cashup_to_delete->delete;
 
-    $t->get_ok("//$userid:$password@/api/v1/cashups/$non_existent_id")->status_is(404)
+    $t->get_ok("//$userid:$password@/api/v1/cashups/$non_existent_id")
+        ->status_is(404)
         ->json_is( '/error' => 'Cashup not found' );
 
     $schema->storage->txn_rollback;

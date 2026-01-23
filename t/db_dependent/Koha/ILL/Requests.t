@@ -1011,7 +1011,7 @@ subtest 'Backend core methods' => sub {
     );
 
     Koha::AdditionalContents->search->delete;
-    my $tomorrow  = dt_from_string->add( days => 1 );
+    my $tomorrow  = dt_from_string->add( days =>  1 );
     my $yesterday = dt_from_string->add( days => -1 );
 
     my $library_additional_contents = $builder->build_object(

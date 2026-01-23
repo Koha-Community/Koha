@@ -37,7 +37,7 @@ GetOptions(
     'p|print'   => \$stdout_log
 );
 
-my $usage = << 'ENDUSAGE';
+my $usage = <<'ENDUSAGE';
 
 Script for fixing unclosed (FU), non accruing fine records, which
 may still need FU -> F correction post-Bug 15675. For details,

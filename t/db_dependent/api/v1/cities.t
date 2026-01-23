@@ -91,11 +91,13 @@ subtest 'list() tests' => sub {
         ]
     );
 
-    $t->get_ok( "//$userid:$password@/api/v1/cities?name=" . $city->city_name )->status_is(200)
+    $t->get_ok( "//$userid:$password@/api/v1/cities?name=" . $city->city_name )
+        ->status_is(200)
         ->json_is( [ $city->to_api ] );
 
     # Warn on unsupported query parameter
-    $t->get_ok("//$userid:$password@/api/v1/cities?city_blah=blah")->status_is(400)
+    $t->get_ok("//$userid:$password@/api/v1/cities?city_blah=blah")
+        ->status_is(400)
         ->json_is( [ { path => '/query/city_blah', message => 'Malformed query string' } ] );
 
     # Unauthorized access
@@ -139,7 +141,8 @@ subtest 'get() tests' => sub {
     my $non_existent_id = $city_to_delete->id;
     $city_to_delete->delete;
 
-    $t->get_ok("//$userid:$password@/api/v1/cities/$non_existent_id")->status_is(404)
+    $t->get_ok("//$userid:$password@/api/v1/cities/$non_existent_id")
+        ->status_is(404)
         ->json_is( '/error' => 'City not found' );
 
     $schema->storage->txn_rollback;
@@ -200,12 +203,16 @@ subtest 'add() tests' => sub {
 
     # Authorized attempt to write
     my $city_id =
-        $t->post_ok( "//$userid:$password@/api/v1/cities" => json => $city )->status_is( 201, 'REST3.2.1' )
+        $t->post_ok( "//$userid:$password@/api/v1/cities" => json => $city )
+        ->status_is( 201, 'REST3.2.1' )
         ->header_like(
         Location => qr|^\/api\/v1\/cities/\d*|,
         'REST3.4.1'
-    )->json_is( '/name' => $city->{name} )->json_is( '/state' => $city->{state} )
-        ->json_is( '/postal_code' => $city->{postal_code} )->json_is( '/country' => $city->{country} )
+        )
+        ->json_is( '/name'        => $city->{name} )
+        ->json_is( '/state'       => $city->{state} )
+        ->json_is( '/postal_code' => $city->{postal_code} )
+        ->json_is( '/country'     => $city->{country} )
         ->tx->res->json->{city_id};
 
     # Authorized attempt to create with null id
@@ -266,7 +273,8 @@ subtest 'update() tests' => sub {
         country => 'New country'
     };
 
-    $t->put_ok( "//$userid:$password@/api/v1/cities/$city_id" => json => $city_with_missing_field )->status_is(400)
+    $t->put_ok( "//$userid:$password@/api/v1/cities/$city_id" => json => $city_with_missing_field )
+        ->status_is(400)
         ->json_is( "/errors" => [ { message => "Missing property.", path => "/body/postal_code" } ] );
 
     # Full object update on PUT
@@ -277,7 +285,8 @@ subtest 'update() tests' => sub {
         country     => "City Country"
     };
 
-    $t->put_ok( "//$userid:$password@/api/v1/cities/$city_id" => json => $city_with_updated_field )->status_is(200)
+    $t->put_ok( "//$userid:$password@/api/v1/cities/$city_id" => json => $city_with_updated_field )
+        ->status_is(200)
         ->json_is( '/name' => 'London' );
 
     # Authorized attempt to write invalid data
@@ -288,7 +297,8 @@ subtest 'update() tests' => sub {
         country     => "City Country"
     };
 
-    $t->put_ok( "//$userid:$password@/api/v1/cities/$city_id" => json => $city_with_invalid_field )->status_is(400)
+    $t->put_ok( "//$userid:$password@/api/v1/cities/$city_id" => json => $city_with_invalid_field )
+        ->status_is(400)
         ->json_is(
         "/errors" => [
             {
@@ -344,7 +354,8 @@ subtest 'delete() tests' => sub {
     # Unauthorized attempt to delete
     $t->delete_ok("//$unauth_userid:$password@/api/v1/cities/$city_id")->status_is(403);
 
-    $t->delete_ok("//$userid:$password@/api/v1/cities/$city_id")->status_is( 204, 'REST3.2.4' )
+    $t->delete_ok("//$userid:$password@/api/v1/cities/$city_id")
+        ->status_is( 204, 'REST3.2.4' )
         ->content_is( '', 'REST3.3.4' );
 
     $t->delete_ok("//$userid:$password@/api/v1/cities/$city_id")->status_is(404);

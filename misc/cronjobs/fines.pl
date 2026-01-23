@@ -61,7 +61,7 @@ GetOptions(
     'm|maxdays:i'   => \$maxdays,
     'i|verifyissue' => \$verify_issue,
 );
-my $usage = << 'ENDUSAGE';
+my $usage = <<'ENDUSAGE';
 
 This script calculates and charges overdue fines
 to patron accounts.  The Koha system preference 'finesMode' controls

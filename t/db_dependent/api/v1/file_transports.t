@@ -78,7 +78,8 @@ subtest 'list() tests' => sub {
     );
 
     # One file transport created, should get returned
-    $t->get_ok("//$userid:$password@/api/v1/config/file_transports")->status_is(200)
+    $t->get_ok("//$userid:$password@/api/v1/config/file_transports")
+        ->status_is(200)
         ->json_is( [ $file_transport->to_api ] );
 
     my $another_file_transport = $builder->build_object(
@@ -94,7 +95,8 @@ subtest 'list() tests' => sub {
     );
 
     # Two File transports created, they should both be returned
-    $t->get_ok("//$userid:$password@/api/v1/config/file_transports")->status_is(200)
+    $t->get_ok("//$userid:$password@/api/v1/config/file_transports")
+        ->status_is(200)
         ->json_is( [ $file_transport->to_api, $another_file_transport->to_api, ] );
 
     # Unauthorized access
@@ -140,7 +142,8 @@ subtest 'get() tests' => sub {
     $patron->set_password( { password => $password, skip_validation => 1 } );
     my $unauth_userid = $patron->userid;
 
-    $t->get_ok( "//$userid:$password@/api/v1/config/file_transports/" . $file_transport->id )->status_is(200)
+    $t->get_ok( "//$userid:$password@/api/v1/config/file_transports/" . $file_transport->id )
+        ->status_is(200)
         ->json_is( $file_transport->to_api );
 
     $t->get_ok( "//$unauth_userid:$password@/api/v1/config/file_transports/" . $file_transport->id )->status_is(403);
@@ -159,7 +162,8 @@ subtest 'get() tests' => sub {
     my $non_existent_id = $file_transport_to_delete->id;
     $file_transport_to_delete->delete;
 
-    $t->get_ok("//$userid:$password@/api/v1/config/file_transports/$non_existent_id")->status_is(404)
+    $t->get_ok("//$userid:$password@/api/v1/config/file_transports/$non_existent_id")
+        ->status_is(404)
         ->json_is( '/error' => 'File transport not found' );
 
     $schema->storage->txn_rollback;
@@ -219,7 +223,8 @@ subtest 'add() tests' => sub {
     };
 
     $t->post_ok( "//$userid:$password@/api/v1/config/file_transports" => json => $file_transport_with_invalid_field )
-        ->status_is(400)->json_is(
+        ->status_is(400)
+        ->json_is(
         "/errors" => [
             {
                 message => "Properties not allowed: blah.",
@@ -233,16 +238,19 @@ subtest 'add() tests' => sub {
         $t->post_ok( "//$userid:$password@/api/v1/config/file_transports" => json => $file_transport_data )
         ->status_is( 201, 'SWAGGER3.2.1' )
         ->header_like( Location => qr|^\/api\/v1\/config\/file_transports\/\d*|, 'SWAGGER3.4.1' )
-        ->json_is( '/name' => $file_transport_data->{name} )->tx->res->json->{file_transport_id};
+        ->json_is( '/name' => $file_transport_data->{name} )
+        ->tx->res->json->{file_transport_id};
 
     # Authorized attempt to create with null id
     $file_transport_data->{file_transport_id} = undef;
-    $t->post_ok( "//$userid:$password@/api/v1/config/file_transports" => json => $file_transport_data )->status_is(400)
+    $t->post_ok( "//$userid:$password@/api/v1/config/file_transports" => json => $file_transport_data )
+        ->status_is(400)
         ->json_has('/errors');
 
     # Authorized attempt to create with existing id
     $file_transport_data->{file_transport_id} = $file_transport_id;
-    $t->post_ok( "//$userid:$password@/api/v1/config/file_transports" => json => $file_transport_data )->status_is(400)
+    $t->post_ok( "//$userid:$password@/api/v1/config/file_transports" => json => $file_transport_data )
+        ->status_is(400)
         ->json_is(
         "/errors" => [
             {
@@ -304,7 +312,8 @@ subtest 'update() tests' => sub {
     };
 
     $t->put_ok( "//$userid:$password@/api/v1/config/file_transports/$file_transport_id" => json =>
-            $file_transport_with_missing_field )->status_is(400)
+            $file_transport_with_missing_field )
+        ->status_is(400)
         ->json_is( "/errors" => [ { message => "Missing property.", path => "/body/name" } ] );
 
     # Full object update on PUT
@@ -400,7 +409,8 @@ subtest 'delete() tests' => sub {
     $t->delete_ok("//$unauth_userid:$password@/api/v1/config/file_transports/$file_transport_id")->status_is(403);
 
     $t->delete_ok("//$userid:$password@/api/v1/config/file_transports/$file_transport_id")
-        ->status_is( 204, 'SWAGGER3.2.4' )->content_is( '', 'SWAGGER3.3.4' );
+        ->status_is( 204, 'SWAGGER3.2.4' )
+        ->content_is( '', 'SWAGGER3.3.4' );
 
     $t->delete_ok("//$userid:$password@/api/v1/config/file_transports/$file_transport_id")->status_is(404);
 

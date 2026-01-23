@@ -73,7 +73,8 @@ subtest 'list() tests' => sub {
     $nonprivilegedpatron->set_password( { password => $password, skip_validation => 1 } );
     my $userid = $nonprivilegedpatron->userid;
 
-    $t->get_ok("//$userid:$password@/api/v1/items")->status_is(403)
+    $t->get_ok("//$userid:$password@/api/v1/items")
+        ->status_is(403)
         ->json_is( '/error' => 'Authorization failure. Missing required permission(s).' );
 
     $patron->set_password( { password => $password, skip_validation => 1 } );
@@ -85,16 +86,19 @@ subtest 'list() tests' => sub {
 
     is( $response_count, 10, 'The API returns 10 items' );
 
-    $t->get_ok( "//$userid:$password@/api/v1/items?external_id=" . $item->barcode )->status_is(200)
+    $t->get_ok( "//$userid:$password@/api/v1/items?external_id=" . $item->barcode )
+        ->status_is(200)
         ->json_is( '' => [ $item->to_api ], 'REST3.3.2' );
 
     $t->get_ok( "//$userid:$password@/api/v1/items?external_id=" . $item->barcode => { 'x-koha-embed' => 'biblio' } )
-        ->status_is(200)->json_is( '' => [ { %{ $item->to_api }, biblio => $item->biblio->to_api } ], 'REST3.3.2' );
+        ->status_is(200)
+        ->json_is( '' => [ { %{ $item->to_api }, biblio => $item->biblio->to_api } ], 'REST3.3.2' );
 
     my $barcode = $item->barcode;
     $item->delete;
 
-    $t->get_ok( "//$userid:$password@/api/v1/items?external_id=" . $item->barcode )->status_is(200)
+    $t->get_ok( "//$userid:$password@/api/v1/items?external_id=" . $item->barcode )
+        ->status_is(200)
         ->json_is( '' => [] );
 
     $schema->storage->txn_rollback;
@@ -277,19 +281,22 @@ subtest 'get() tests' => sub {
     $nonprivilegedpatron->set_password( { password => $password, skip_validation => 1 } );
     my $userid = $nonprivilegedpatron->userid;
 
-    $t->get_ok( "//$userid:$password@/api/v1/items/" . $item->itemnumber )->status_is(403)
+    $t->get_ok( "//$userid:$password@/api/v1/items/" . $item->itemnumber )
+        ->status_is(403)
         ->json_is( '/error' => 'Authorization failure. Missing required permission(s).' );
 
     $patron->set_password( { password => $password, skip_validation => 1 } );
     $userid = $patron->userid;
 
-    $t->get_ok( "//$userid:$password@/api/v1/items/" . $item->itemnumber )->status_is( 200, 'REST3.2.2' )
+    $t->get_ok( "//$userid:$password@/api/v1/items/" . $item->itemnumber )
+        ->status_is( 200, 'REST3.2.2' )
         ->json_is( '' => $item->to_api, 'REST3.3.2' );
 
     my $non_existent_code = $item->itemnumber;
     $item->delete;
 
-    $t->get_ok( "//$userid:$password@/api/v1/items/" . $non_existent_code )->status_is(404)
+    $t->get_ok( "//$userid:$password@/api/v1/items/" . $non_existent_code )
+        ->status_is(404)
         ->json_is( '/error' => 'Item not found' );
 
     t::lib::Mocks::mock_preference( 'item-level_itypes', 0 );
@@ -300,13 +307,15 @@ subtest 'get() tests' => sub {
 
     isnt( $biblio->itemtype, $itype->itemtype, "Test biblio level itemtype and item level itemtype do not match" );
 
-    $t->get_ok( "//$userid:$password@/api/v1/items/" . $item->itemnumber )->status_is( 200, 'REST3.2.2' )
+    $t->get_ok( "//$userid:$password@/api/v1/items/" . $item->itemnumber )
+        ->status_is( 200, 'REST3.2.2' )
         ->json_is( '/item_type_id'           => $itype->itemtype,  'item-level_itypes:0' )
         ->json_is( '/effective_item_type_id' => $biblio->itemtype, 'item-level_itypes:0' );
 
     t::lib::Mocks::mock_preference( 'item-level_itypes', 1 );
 
-    $t->get_ok( "//$userid:$password@/api/v1/items/" . $item->itemnumber )->status_is( 200, 'REST3.2.2' )
+    $t->get_ok( "//$userid:$password@/api/v1/items/" . $item->itemnumber )
+        ->status_is( 200, 'REST3.2.2' )
         ->json_is( '/item_type_id'           => $itype->itemtype, 'item-level_itype:1' )
         ->json_is( '/effective_item_type_id' => $itype->itemtype, 'item-level_itypes:1' );
 
@@ -315,27 +324,34 @@ subtest 'get() tests' => sub {
     $itype->notforloan(2)->store();
     $item->notforloan(1)->store();
 
-    $t->get_ok( "//$userid:$password@/api/v1/items/" . $item->itemnumber )->status_is( 200, 'REST3.2.2' )
+    $t->get_ok( "//$userid:$password@/api/v1/items/" . $item->itemnumber )
+        ->status_is( 200, 'REST3.2.2' )
         ->json_is( '/not_for_loan_status'           => 1, 'not_for_loan_status is 1' )
         ->json_is( '/effective_not_for_loan_status' => 1, 'effective_not_for_loan_status picks up item level' );
 
     $item->notforloan(0)->store();
-    $t->get_ok( "//$userid:$password@/api/v1/items/" . $item->itemnumber )->status_is( 200, 'REST3.2.2' )
-        ->json_is( '/not_for_loan_status' => 0, 'not_for_loan_status is 0' )->json_is(
+    $t->get_ok( "//$userid:$password@/api/v1/items/" . $item->itemnumber )
+        ->status_is( 200, 'REST3.2.2' )
+        ->json_is( '/not_for_loan_status' => 0, 'not_for_loan_status is 0' )
+        ->json_is(
         '/effective_not_for_loan_status' => 2,
         'effective_not_for_loan_status now picks up itemtype level - item-level_itypes:1'
         );
 
     $itype->notforloan(0)->store();
-    $t->get_ok( "//$userid:$password@/api/v1/items/" . $item->itemnumber )->status_is( 200, 'REST3.2.2' )
-        ->json_is( '/not_for_loan_status' => 0, 'not_for_loan_status is 0' )->json_is(
+    $t->get_ok( "//$userid:$password@/api/v1/items/" . $item->itemnumber )
+        ->status_is( 200, 'REST3.2.2' )
+        ->json_is( '/not_for_loan_status' => 0, 'not_for_loan_status is 0' )
+        ->json_is(
         '/effective_not_for_loan_status' => 0,
         'effective_not_for_loan_status now picks up itemtype level and falls back to 0 because undef'
         );
 
     t::lib::Mocks::mock_preference( 'item-level_itypes', 0 );
-    $t->get_ok( "//$userid:$password@/api/v1/items/" . $item->itemnumber )->status_is( 200, 'REST3.2.2' )
-        ->json_is( '/not_for_loan_status' => 0, 'not_for_loan_status is 0' )->json_is(
+    $t->get_ok( "//$userid:$password@/api/v1/items/" . $item->itemnumber )
+        ->status_is( 200, 'REST3.2.2' )
+        ->json_is( '/not_for_loan_status' => 0, 'not_for_loan_status is 0' )
+        ->json_is(
         '/effective_not_for_loan_status' => 3,
         'effective_not_for_loan_status now picks up itemtype level - item-level_itypes:0'
         );
@@ -416,7 +432,8 @@ subtest 'delete() tests' => sub {
 
     $expected_error = 'unknown_error';
     $t->delete_ok( "//$userid:$password@/api/v1/items/" . $item->id )
-        ->status_is( 500, 'unhandled error case generated default unhandled exception message' )->json_is(
+        ->status_is( 500, 'unhandled error case generated default unhandled exception message' )
+        ->json_is(
         {
             error      => 'Something went wrong, check Koha logs for details.',
             error_code => 'internal_server_error',
@@ -425,7 +442,8 @@ subtest 'delete() tests' => sub {
 
     $fail = 0;
 
-    $t->delete_ok( "//$userid:$password@/api/v1/items/" . $item->id )->status_is( 204, 'REST3.2.4' )
+    $t->delete_ok( "//$userid:$password@/api/v1/items/" . $item->id )
+        ->status_is( 204, 'REST3.2.4' )
         ->content_is( '', 'REST3.3.4' );
 
     $t->delete_ok( "//$userid:$password@/api/v1/items/" . $item->id )->status_is(404);
@@ -548,7 +566,8 @@ subtest 'pickup_locations() tests' => sub {
                 . "patron_id="
                 . $patron->id
                 . "&_order_by=marc_org_code"
-                . "&_per_page=1" )->json_is( [$library_1_api] )
+                . "&_per_page=1" )
+            ->json_is( [$library_1_api] )
             ->header_is( 'X-Total-Count',      '4', '4 is the count for libraries with pickup_location=1' )
             ->header_is( 'X-Base-Total-Count', '4', '4 is the count for libraries with pickup_location=1' )
             ->header_unlike( 'Link', qr|rel="prev"| )
@@ -579,8 +598,11 @@ subtest 'pickup_locations() tests' => sub {
                 . "patron_id="
                 . $patron->id
                 . "&_order_by=marc_org_code"
-                . "&_per_page=1" )->json_is( [$library_1_api] )->header_is( 'X-Total-Count', '2' )
-            ->header_is( 'X-Base-Total-Count', '2' )->header_unlike( 'Link', qr|rel="prev"| )
+                . "&_per_page=1" )
+            ->json_is( [$library_1_api] )
+            ->header_is( 'X-Total-Count',      '2' )
+            ->header_is( 'X-Base-Total-Count', '2' )
+            ->header_unlike( 'Link', qr|rel="prev"| )
             ->header_like( 'Link', qr#(_per_page=1.*\&_page=2.*|_page=2.*\&_per_page=1.*)>\; rel="next"# )
             ->header_like( 'Link', qr#(_per_page=1.*\&_page=1.*|_page=1.*\&_per_page=1).*>\; rel="first"# )
             ->header_like( 'Link', qr#(_per_page=1.*\&_page=2.*|_page=2.*\&_per_page=1).*>\; rel="last"# );
@@ -592,12 +614,14 @@ subtest 'pickup_locations() tests' => sub {
 
     $t->get_ok(
         "//$userid:$password@/api/v1/items/" . $item->id . "/pickup_locations?" . "patron_id=" . $deleted_patron_id )
-        ->status_is(400)->json_is( '/error' => 'Patron not found' );
+        ->status_is(400)
+        ->json_is( '/error' => 'Patron not found' );
 
     $item->delete;
 
     $t->get_ok( "//$userid:$password@/api/v1/items/" . $item->id . "/pickup_locations?" . "patron_id=" . $patron->id )
-        ->status_is(404)->json_is( '/error' => 'Item not found' );
+        ->status_is(404)
+        ->json_is( '/error' => 'Item not found' );
 
     $schema->storage->txn_rollback;
 };

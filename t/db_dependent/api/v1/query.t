@@ -82,13 +82,15 @@ subtest 'q handling tests' => sub {
     my $q_empty_list = "q=[]";
 
     $cities =
-        $t->get_ok("//$userid:$password@/api/v1/cities?$q_ends_with_a&$q_starts_with_a&$q_empty_list")->status_is(200)
+        $t->get_ok("//$userid:$password@/api/v1/cities?$q_ends_with_a&$q_starts_with_a&$q_empty_list")
+        ->status_is(200)
         ->tx->res->json;
 
     is( scalar @{$cities}, 1, 'empty list as trailing query, 1 city retrieved' );
 
     $cities =
-        $t->get_ok("//$userid:$password@/api/v1/cities?$q_empty_list&$q_ends_with_a&$q_starts_with_a")->status_is(200)
+        $t->get_ok("//$userid:$password@/api/v1/cities?$q_empty_list&$q_ends_with_a&$q_starts_with_a")
+        ->status_is(200)
         ->tx->res->json;
 
     is( scalar @{$cities}, 1, 'empty list as first query, 1 city retrieved' );
@@ -143,19 +145,22 @@ subtest 'q in body handling tests' => sub {
 
     $cities =
         $t->get_ok( "//$userid:$password@/api/v1/cities?q=$q_starts_with_a_str" => json => $q_ends_with_a )
-        ->status_is(200)->tx->res->json;
+        ->status_is(200)
+        ->tx->res->json;
 
     is( scalar @{$cities}, 1, 'Mixing query parameter and body, 1 city retrieved' );
 
     $cities =
         $t->get_ok( "//$userid:$password@/api/v1/cities?q=$q_ends_with_a_str" => json => $q_starts_with_a )
-        ->status_is(200)->tx->res->json;
+        ->status_is(200)
+        ->tx->res->json;
 
     is( scalar @{$cities}, 1, 'Mixing query parameter and body (flipped), 1 city retrieved' );
 
     $cities =
         $t->get_ok( "//$userid:$password@/api/v1/cities" => json => { "-and" => [ $q_ends_with_a, $q_starts_with_a ] } )
-        ->status_is(200)->tx->res->json;
+        ->status_is(200)
+        ->tx->res->json;
 
     is( scalar @{$cities}, 1, 'Body query is passed through, 1 city retrieved' );
 
@@ -189,7 +194,8 @@ subtest 'x-koha-embed tests' => sub {
             { 'x-koha-embed' => 'extended_attributes,custom_bad_embed,another_bad_embed' } )->status_is(400);
 
     $res =
-        $t->get_ok( "//$userid:$password@/api/v1/cities" => { 'x-koha-embed' => 'any_embed' } )->status_is(400)
+        $t->get_ok( "//$userid:$password@/api/v1/cities" => { 'x-koha-embed' => 'any_embed' } )
+        ->status_is(400)
         ->tx->res->json;
 
     is( $res, 'Embedding objects is not allowed on this endpoint.', 'Correct error message is returned' );

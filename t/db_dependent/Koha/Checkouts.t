@@ -78,9 +78,9 @@ is(
 subtest 'is_overdue' => sub {
     plan tests => 6;
     my $ten_days_ago   = dt_from_string->add( days => -10 );
-    my $ten_days_later = dt_from_string->add( days => 10 );
+    my $ten_days_later = dt_from_string->add( days =>  10 );
     my $yesterday      = dt_from_string->add( days => -1 );
-    my $tomorrow       = dt_from_string->add( days => 1 );
+    my $tomorrow       = dt_from_string->add( days =>  1 );
 
     $retrieved_checkout_1->date_due($ten_days_ago)->store;
     is(
@@ -299,7 +299,7 @@ subtest 'Koha::Old::Checkouts->filter_by_todays_checkins' => sub {
                 itemnumber     => $item->itemnumber,
                 branchcode     => $library->{branchcode},
             }
-        )->store;
+            )->store;
     }
 
     # Checkin 3 today - 2 days

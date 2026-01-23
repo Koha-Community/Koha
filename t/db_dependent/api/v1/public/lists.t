@@ -75,7 +75,8 @@ subtest 'list_public() tests' => sub {
     );
 
     # anonymous
-    $t->get_ok("/api/v1/public/lists?q=$q")->status_is( 200, "Anonymous users can only fetch public lists" )
+    $t->get_ok("/api/v1/public/lists?q=$q")
+        ->status_is( 200, "Anonymous users can only fetch public lists" )
         ->json_is( [ $list_1->to_api( { public => 1 } ), $list_3->to_api( { public => 1 } ) ] );
 
     $t->get_ok("/api/v1/public/lists?q=$q&only_public=1")

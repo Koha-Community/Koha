@@ -87,12 +87,14 @@ subtest 'list() tests' => sub {
 
     # Filtering works, single account with queried sip_account_id
     $t->get_ok( "//$userid:$password@/api/v1/sip2/accounts?sip_account_id=" . $another_account->sip_account_id )
-        ->status_is(200)->json_is( [ $another_account->to_api ] );
+        ->status_is(200)
+        ->json_is( [ $another_account->to_api ] );
 
     # Attempt to search by login_id like 'ko'
     $account->delete;
     $another_account->delete;
-    $t->get_ok(qq~//$userid:$password@/api/v1/sip2/accounts?q=[{"me.login_id":{"like":"%ko%"}}]~)->status_is(200)
+    $t->get_ok(qq~//$userid:$password@/api/v1/sip2/accounts?q=[{"me.login_id":{"like":"%ko%"}}]~)
+        ->status_is(200)
         ->json_is( [] );
 
     my $account_to_search = $builder->build_object(
@@ -105,11 +107,13 @@ subtest 'list() tests' => sub {
     );
 
     # Search works, searching for login_id like 'ko'
-    $t->get_ok(qq~//$userid:$password@/api/v1/sip2/accounts?q=[{"me.login_id":{"like":"%ko%"}}]~)->status_is(200)
+    $t->get_ok(qq~//$userid:$password@/api/v1/sip2/accounts?q=[{"me.login_id":{"like":"%ko%"}}]~)
+        ->status_is(200)
         ->json_is( [ $account_to_search->to_api ] );
 
     # Warn on unsupported query parameter
-    $t->get_ok("//$userid:$password@/api/v1/sip2/accounts?blah=blah")->status_is(400)
+    $t->get_ok("//$userid:$password@/api/v1/sip2/accounts?blah=blah")
+        ->status_is(400)
         ->json_is( [ { path => '/query/blah', message => 'Malformed query string' } ] );
 
     # Unauthorized access
@@ -146,7 +150,8 @@ subtest 'get() tests' => sub {
     my $unauth_userid = $patron->userid;
 
     # This account exists, should get returned
-    $t->get_ok( "//$userid:$password@/api/v1/sip2/accounts/" . $account->sip_account_id )->status_is(200)
+    $t->get_ok( "//$userid:$password@/api/v1/sip2/accounts/" . $account->sip_account_id )
+        ->status_is(200)
         ->json_is( $account->to_api );
 
     # Unauthorized access
@@ -157,7 +162,8 @@ subtest 'get() tests' => sub {
     my $non_existent_id   = $account_to_delete->sip_account_id;
     $account_to_delete->delete;
 
-    $t->get_ok("//$userid:$password@/api/v1/sip2/accounts/$non_existent_id")->status_is(404)
+    $t->get_ok("//$userid:$password@/api/v1/sip2/accounts/$non_existent_id")
+        ->status_is(404)
         ->json_is( '/error' => 'Account not found' );
 
     $schema->storage->txn_rollback;
@@ -205,7 +211,8 @@ subtest 'add() tests' => sub {
         sip_institution_id => $account->{sip_institution_id},
     };
 
-    $t->post_ok( "//$userid:$password@/api/v1/sip2/accounts" => json => $account_with_invalid_field )->status_is(400)
+    $t->post_ok( "//$userid:$password@/api/v1/sip2/accounts" => json => $account_with_invalid_field )
+        ->status_is(400)
         ->json_is(
         "/errors" => [
             {
@@ -217,12 +224,15 @@ subtest 'add() tests' => sub {
 
     # Authorized attempt to write
     my $sip_account_id =
-        $t->post_ok( "//$userid:$password@/api/v1/sip2/accounts" => json => $account )->status_is( 201, 'REST3.2.1' )
+        $t->post_ok( "//$userid:$password@/api/v1/sip2/accounts" => json => $account )
+        ->status_is( 201, 'REST3.2.1' )
         ->header_like(
         Location => qr|^/api/v1/sip2/accounts/\d*|,
         'REST3.4.1'
-    )->json_is( '/login_id' => $account->{login_id} )
-        ->json_is( '/sip_institution_id' => $account->{sip_institution_id} )->tx->res->json->{sip_account_id};
+        )
+        ->json_is( '/login_id'           => $account->{login_id} )
+        ->json_is( '/sip_institution_id' => $account->{sip_institution_id} )
+        ->tx->res->json->{sip_account_id};
 
     # Authorized attempt to create with null id
     $account->{sip_account_id} = undef;
@@ -283,7 +293,8 @@ subtest 'update() tests' => sub {
     };
 
     $t->put_ok( "//$userid:$password@/api/v1/sip2/accounts/$sip_account_id" => json => $account_with_missing_field )
-        ->status_is(400)->json_is( "/errors" => [ { message => "Missing property.", path => "/body/login_id" } ] );
+        ->status_is(400)
+        ->json_is( "/errors" => [ { message => "Missing property.", path => "/body/login_id" } ] );
 
     # Full object update on PUT
     my $account_with_updated_field = {
@@ -292,7 +303,8 @@ subtest 'update() tests' => sub {
     };
 
     $t->put_ok( "//$userid:$password@/api/v1/sip2/accounts/$sip_account_id" => json => $account_with_updated_field )
-        ->status_is(200)->json_is( '/login_id' => 'new koha' );
+        ->status_is(200)
+        ->json_is( '/login_id' => 'new koha' );
 
     # Authorized attempt to write invalid data
     my $account_with_invalid_field = {
@@ -302,7 +314,8 @@ subtest 'update() tests' => sub {
     };
 
     $t->put_ok( "//$userid:$password@/api/v1/sip2/accounts/$sip_account_id" => json => $account_with_invalid_field )
-        ->status_is(400)->json_is(
+        ->status_is(400)
+        ->json_is(
         "/errors" => [
             {
                 message => "Properties not allowed: blah.",
@@ -360,7 +373,8 @@ subtest 'delete() tests' => sub {
     $t->delete_ok("//$unauth_userid:$password@/api/v1/sip2/accounts/$sip_account_id")->status_is(403);
 
     # Delete existing account
-    $t->delete_ok("//$userid:$password@/api/v1/sip2/accounts/$sip_account_id")->status_is( 204, 'REST3.2.4' )
+    $t->delete_ok("//$userid:$password@/api/v1/sip2/accounts/$sip_account_id")
+        ->status_is( 204, 'REST3.2.4' )
         ->content_is( '', 'REST3.3.4' );
 
     # Attempt to delete non-existent account

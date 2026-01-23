@@ -73,7 +73,8 @@ subtest 'list() tests' => sub {
     );
 
     # One additional_field created, should get returned
-    $t->get_ok("//$userid:$password@/api/v1/extended_attribute_types")->status_is(200)
+    $t->get_ok("//$userid:$password@/api/v1/extended_attribute_types")
+        ->status_is(200)
         ->json_is( [ $additional_field->to_api ] );
 
     my $another_additional_field = $builder->build_object(
@@ -117,15 +118,18 @@ subtest 'list() tests' => sub {
     );
 
     # Filtering works, two existing additional fields returned for the queried table name
-    $t->get_ok("//$userid:$password@/api/v1/extended_attribute_types?resource_type=invoice")->status_is(200)
+    $t->get_ok("//$userid:$password@/api/v1/extended_attribute_types?resource_type=invoice")
+        ->status_is(200)
         ->json_is( [ $additional_field->to_api, $another_additional_field->to_api ] );
 
     # Filtering works for unmapped tablename
-    $t->get_ok("//$userid:$password@/api/v1/extended_attribute_types?resource_type=subscription")->status_is(200)
+    $t->get_ok("//$userid:$password@/api/v1/extended_attribute_types?resource_type=subscription")
+        ->status_is(200)
         ->json_is( [ $additional_field_yet_another_different_tablename->to_api ] );
 
     # Warn on unsupported query parameter
-    $t->get_ok("//$userid:$password@/api/v1/extended_attribute_types?blah=blah")->status_is(400)
+    $t->get_ok("//$userid:$password@/api/v1/extended_attribute_types?blah=blah")
+        ->status_is(400)
         ->json_is( [ { path => '/query/blah', message => 'Malformed query string' } ] );
 
     # Unauthorized access
@@ -208,16 +212,19 @@ subtest 'list_erm() tests' => sub {
     );
 
     # Filtering works, two existing additional fields returned for the queried table name
-    $t->get_ok("//$userid:$password@/api/v1/erm/extended_attribute_types?resource_type=license")->status_is(200)
+    $t->get_ok("//$userid:$password@/api/v1/erm/extended_attribute_types?resource_type=license")
+        ->status_is(200)
         ->json_is( [ $erm_license_additional_field->to_api ] );
 
     # Cannot retrieve attributes from other tables
-    $t->get_ok("//$userid:$password@/api/v1/erm/extended_attribute_types?resource_type=order")->status_is(400)
+    $t->get_ok("//$userid:$password@/api/v1/erm/extended_attribute_types?resource_type=order")
+        ->status_is(400)
         ->json_is( "/errors" =>
             [ { message => "Not in enum list: license, agreement, package, title.", path => "/resource_type" } ] );
 
     # Warn on unsupported query parameter
-    $t->get_ok("//$userid:$password@/api/v1/erm/extended_attribute_types?blah=blah")->status_is(400)
+    $t->get_ok("//$userid:$password@/api/v1/erm/extended_attribute_types?blah=blah")
+        ->status_is(400)
         ->json_is( [ { path => '/query/blah', message => 'Malformed query string' } ] );
 
     # erm only user

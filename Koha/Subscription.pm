@@ -74,7 +74,9 @@ sub subscribers {
     my ($self) = @_;
     my $schema = Koha::Database->new->schema;
     my @borrowernumbers =
-        $schema->resultset('Alert')->search( { externalid => $self->subscriptionid } )->get_column('borrowernumber')
+        $schema->resultset('Alert')
+        ->search( { externalid => $self->subscriptionid } )
+        ->get_column('borrowernumber')
         ->all;
     return Koha::Patrons->search( { borrowernumber => { -in => \@borrowernumbers } } );
 }

@@ -67,7 +67,7 @@ GetOptions(
     'source-value=s'         => $subfield_source_value,
 );
 
-my $usage = << 'ENDUSAGE';
+my $usage = <<'ENDUSAGE';
 import_lexile.pl: Import lexile scores for records from csv.
 
 import_lexile.pl -f /path/to/LexileTitles.txt

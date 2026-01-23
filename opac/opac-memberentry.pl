@@ -277,7 +277,7 @@ if ( $op eq 'cud-create' ) {
                             my $letter = GetPreparedLetter(
                                 module      => 'members',
                                 letter_code => 'WELCOME',
-                                branchcode  => $patron->branchcode,,
+                                branchcode  => $patron->branchcode,
                                 lang        => $patron->lang || 'default',
                                 tables      => {
                                     'branches'  => $patron->branchcode,

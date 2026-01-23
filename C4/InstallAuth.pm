@@ -352,7 +352,7 @@ sub checkauth {
     # else we have a problem...
     # get the inputs from the incoming query
     my @inputs = ();
-    foreach my $name ( param $query) {
+    foreach my $name ( param $query ) {
         (next) if ( $name eq 'userid' || $name eq 'password' );
         my $value = $query->param($name);
         push @inputs, { name => $name, value => $value };

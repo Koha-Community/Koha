@@ -311,7 +311,7 @@ subtest 'debits_total() tests' => sub {
             borrowernumber    => $patron->id,
             credit_type_code  => "PAYMENT",
             amount            => -10,
-            amountoutstanding => 0,
+            amountoutstanding =>  0,
             interface         => 'commandline',
         }
     )->store;
@@ -324,7 +324,7 @@ subtest 'debits_total() tests' => sub {
             borrowernumber    => $patron->id,
             credit_type_code  => "PAYMENT",
             amount            => -10,
-            amountoutstanding => 0,
+            amountoutstanding =>  0,
             interface         => 'commandline',
         }
     )->store;
@@ -337,7 +337,7 @@ subtest 'debits_total() tests' => sub {
             borrowernumber    => $patron->id,
             credit_type_code  => "PAYMENT",
             amount            => -100,
-            amountoutstanding => 0,
+            amountoutstanding =>  0,
             interface         => 'commandline',
         }
     )->store;

@@ -102,7 +102,8 @@ subtest 'import record matches tests' => sub {
             . $del_import_batch_id
             . "/records/"
             . $del_match_id
-            . "/matches/chosen" => json => { candidate_match_id => $match_1->candidate_match_id } )->status_is(404)
+            . "/matches/chosen" => json => { candidate_match_id => $match_1->candidate_match_id } )
+        ->status_is(404)
         ->json_is( '/error' => "Match not found" );
 
     # Valid, authorised update

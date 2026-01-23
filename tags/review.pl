@@ -110,7 +110,7 @@ if ( $op eq 'cud-approve' ) {
     $template->param(
         test_term => $tag,
         (
-              $check >= 1  ? 'verdict_ok'
+              $check >=  1 ? 'verdict_ok'
             : $check <= -1 ? 'verdict_rej'
             :                'verdict_indeterminate'
         ) => 1,

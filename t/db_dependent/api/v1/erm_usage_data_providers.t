@@ -104,7 +104,8 @@ subtest 'list() tests' => sub {
     $usage_data_provider->delete;
     $another_usage_data_provider->delete;
     $t->get_ok(qq~//$userid:$password@/api/v1/erm/usage_data_providers?q=[{"me.name":{"like":"%ko%"}}]~)
-        ->status_is(200)->json_is( [] );
+        ->status_is(200)
+        ->json_is( [] );
 
     my $usage_data_provider_to_search = $builder->build_object(
         {
@@ -118,10 +119,12 @@ subtest 'list() tests' => sub {
 
     # Search works, searching for name like 'ko'
     $t->get_ok(qq~//$userid:$password@/api/v1/erm/usage_data_providers?q=[{"me.name":{"like":"%ko%"}}]~)
-        ->status_is(200)->json_is( [$search_udp_result] );
+        ->status_is(200)
+        ->json_is( [$search_udp_result] );
 
     # Warn on unsupported query parameter
-    $t->get_ok("//$userid:$password@/api/v1/erm/usage_data_providers?blah=blah")->status_is(400)
+    $t->get_ok("//$userid:$password@/api/v1/erm/usage_data_providers?blah=blah")
+        ->status_is(400)
         ->json_is( [ { path => '/query/blah', message => 'Malformed query string' } ] );
 
     # Unauthorized access
@@ -160,7 +163,8 @@ subtest 'get() tests' => sub {
     # This usage_data_provider exists, should get returned
     $t->get_ok(
         "//$userid:$password@/api/v1/erm/usage_data_providers/" . $usage_data_provider->erm_usage_data_provider_id )
-        ->status_is(200)->json_is( $usage_data_provider->to_api );
+        ->status_is(200)
+        ->json_is( $usage_data_provider->to_api );
 
     # Unauthorized access
     $t->get_ok( "//$unauth_userid:$password@/api/v1/erm/usage_data_providers/"
@@ -171,7 +175,8 @@ subtest 'get() tests' => sub {
     my $non_existent_id               = $usage_data_provider_to_delete->erm_usage_data_provider_id;
     $usage_data_provider_to_delete->delete;
 
-    $t->get_ok("//$userid:$password@/api/v1/erm/usage_data_providers/$non_existent_id")->status_is(404)
+    $t->get_ok("//$userid:$password@/api/v1/erm/usage_data_providers/$non_existent_id")
+        ->status_is(404)
         ->json_is( '/error' => 'Usage data provider not found' );
 
     $schema->storage->txn_rollback;
@@ -229,7 +234,8 @@ subtest 'add() tests' => sub {
 
     $t->post_ok(
         "//$userid:$password@/api/v1/erm/usage_data_providers" => json => $usage_data_provider_with_invalid_field )
-        ->status_is(400)->json_is(
+        ->status_is(400)
+        ->json_is(
         "/errors" => [
             {
                 message => "Properties not allowed: blah.",
@@ -241,10 +247,12 @@ subtest 'add() tests' => sub {
     # Authorized attempt to write
     my $usage_data_provider_id =
         $t->post_ok( "//$userid:$password@/api/v1/erm/usage_data_providers" => json => $usage_data_provider )
-        ->status_is( 201, 'REST3.2.1' )->header_like(
+        ->status_is( 201, 'REST3.2.1' )
+        ->header_like(
         Location => qr|^/api/v1/erm/usage_data_providers/\d*|,
         'REST3.4.1'
-    )->json_is( '/name' => $usage_data_provider->{name} )
+        )
+        ->json_is( '/name'           => $usage_data_provider->{name} )
         ->json_is( '/customer_id'    => $usage_data_provider->{customer_id} )
         ->json_is( '/requestor_id'   => $usage_data_provider->{requestor_id} )
         ->json_is( '/api_key'        => $usage_data_provider->{api_key} )
@@ -255,12 +263,14 @@ subtest 'add() tests' => sub {
     # Authorized attempt to create with null id
     $usage_data_provider->{erm_usage_data_provider_id} = undef;
     $t->post_ok( "//$userid:$password@/api/v1/erm/usage_data_providers" => json => $usage_data_provider )
-        ->status_is(400)->json_has('/errors');
+        ->status_is(400)
+        ->json_has('/errors');
 
     # Authorized attempt to create with existing id
     $usage_data_provider->{erm_usage_data_provider_id} = $usage_data_provider_id;
     $t->post_ok( "//$userid:$password@/api/v1/erm/usage_data_providers" => json => $usage_data_provider )
-        ->status_is(400)->json_is(
+        ->status_is(400)
+        ->json_is(
         "/errors" => [
             {
                 message => "Read-only.",
@@ -316,7 +326,8 @@ subtest 'update() tests' => sub {
     };
 
     $t->put_ok( "//$userid:$password@/api/v1/erm/usage_data_providers/$usage_data_provider_id" => json =>
-            $usage_data_provider_with_missing_field )->status_is(400)
+            $usage_data_provider_with_missing_field )
+        ->status_is(400)
         ->json_is( "/errors" => [ { message => "Missing property.", path => "/body/name" } ] );
 
     # Full object update on PUT
@@ -402,7 +413,8 @@ subtest 'delete() tests' => sub {
 
     # Delete existing usage_data_provider
     $t->delete_ok("//$userid:$password@/api/v1/erm/usage_data_providers/$usage_data_provider_id")
-        ->status_is( 204, 'REST3.2.4' )->content_is( '', 'REST3.3.4' );
+        ->status_is( 204, 'REST3.2.4' )
+        ->content_is( '', 'REST3.3.4' );
 
     # Attempt to delete non-existent usage_data_provider
     $t->delete_ok("//$userid:$password@/api/v1/erm/usage_data_providers/$usage_data_provider_id")->status_is(404);

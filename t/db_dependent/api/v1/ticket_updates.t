@@ -77,7 +77,8 @@ subtest 'list_updates() tests' => sub {
     );
 
     # One ticket update added, should get returned
-    $t->get_ok("//$userid:$password@/api/v1/tickets/$ticket_id/updates")->status_is(200)
+    $t->get_ok("//$userid:$password@/api/v1/tickets/$ticket_id/updates")
+        ->status_is(200)
         ->json_is( [ $update->to_api ] );
 
     my $update_2 = $builder->build_object(
@@ -94,7 +95,8 @@ subtest 'list_updates() tests' => sub {
     );
 
     # Two ticket updates added, they should both be returned
-    $t->get_ok("//$userid:$password@/api/v1/tickets/$ticket_id/updates")->status_is(200)
+    $t->get_ok("//$userid:$password@/api/v1/tickets/$ticket_id/updates")
+        ->status_is(200)
         ->json_is( [ $update->to_api, $update_2->to_api, $update_3->to_api, ] );
 
     # Warn on unsupported query parameter
@@ -163,11 +165,16 @@ subtest 'add_update() tests' => sub {
     # Authorized attempt to write
     my $update_id =
         $t->post_ok( "//$userid:$password@/api/v1/tickets/$ticket_id/updates" => json => $update )
-        ->status_is( 201, 'REST3.2.1' )->header_like(
+        ->status_is( 201, 'REST3.2.1' )
+        ->header_like(
         Location => qr|^\/api\/v1\/tickets/\d*|,
         'REST3.4.1'
-    )->json_is( '/message' => $update->{message} )->json_is( '/public' => $update->{public} )
-        ->json_is( '/status' => undef )->json_is( '/assignee_id' => undef )->json_is( '/user_id' => $librarian->id )
+        )
+        ->json_is( '/message'     => $update->{message} )
+        ->json_is( '/public'      => $update->{public} )
+        ->json_is( '/status'      => undef )
+        ->json_is( '/assignee_id' => undef )
+        ->json_is( '/user_id'     => $librarian->id )
         ->tx->res->json->{update_id};
 
     # Check that notice trigger didn't fire for non-public update
@@ -179,12 +186,14 @@ subtest 'add_update() tests' => sub {
 
     # Authorized attempt to create with null id
     $update->{update_id} = undef;
-    $t->post_ok( "//$userid:$password@/api/v1/tickets/$ticket_id/updates" => json => $update )->status_is(400)
+    $t->post_ok( "//$userid:$password@/api/v1/tickets/$ticket_id/updates" => json => $update )
+        ->status_is(400)
         ->json_has('/errors');
 
     # Authorized attempt to create with existing id
     $update->{update_id} = $update_id;
-    $t->post_ok( "//$userid:$password@/api/v1/tickets/$ticket_id/updates" => json => $update )->status_is(400)
+    $t->post_ok( "//$userid:$password@/api/v1/tickets/$ticket_id/updates" => json => $update )
+        ->status_is(400)
         ->json_is(
         "/errors" => [
             {
@@ -199,7 +208,8 @@ subtest 'add_update() tests' => sub {
     my $update_with_missing_field = { message => "Another ticket update" };
 
     $t->post_ok( "//$userid:$password@/api/v1/tickets/$ticket_id/updates" => json => $update_with_missing_field )
-        ->status_is(400)->json_is(
+        ->status_is(400)
+        ->json_is(
         "/errors" => [
             {
                 message => "Missing property.",
@@ -212,11 +222,16 @@ subtest 'add_update() tests' => sub {
     $update->{public} = Mojo::JSON->true;
     $update_id =
         $t->post_ok( "//$userid:$password@/api/v1/tickets/$ticket_id/updates" => json => $update )
-        ->status_is( 201, 'REST3.2.1' )->header_like(
+        ->status_is( 201, 'REST3.2.1' )
+        ->header_like(
         Location => qr|^\/api\/v1\/tickets/\d*|,
         'REST3.4.1'
-    )->json_is( '/message' => $update->{message} )->json_is( '/public' => $update->{public} )
-        ->json_is( '/status' => undef )->json_is( '/assignee_id' => undef )->json_is( '/user_id' => $librarian->id )
+        )
+        ->json_is( '/message'     => $update->{message} )
+        ->json_is( '/public'      => $update->{public} )
+        ->json_is( '/status'      => undef )
+        ->json_is( '/assignee_id' => undef )
+        ->json_is( '/user_id'     => $librarian->id )
         ->tx->res->json->{update_id};
 
     $notices = Koha::Notice::Messages->search( { borrowernumber => $patron->id } );
@@ -235,11 +250,16 @@ subtest 'add_update() tests' => sub {
     $update->{state} = 'resolved';
     $update_id =
         $t->post_ok( "//$userid:$password@/api/v1/tickets/$ticket_id/updates" => json => $update )
-        ->status_is( 201, 'REST3.2.1' )->header_like(
+        ->status_is( 201, 'REST3.2.1' )
+        ->header_like(
         Location => qr|^\/api\/v1\/tickets/\d*|,
         'REST3.4.1'
-    )->json_is( '/message' => $update->{message} )->json_is( '/public' => $update->{public} )
-        ->json_is( '/status' => undef )->json_is( '/assignee_id' => undef )->json_is( '/user_id' => $librarian->id )
+        )
+        ->json_is( '/message'     => $update->{message} )
+        ->json_is( '/public'      => $update->{public} )
+        ->json_is( '/status'      => undef )
+        ->json_is( '/assignee_id' => undef )
+        ->json_is( '/user_id'     => $librarian->id )
         ->tx->res->json->{update_id};
 
     $notices = Koha::Notice::Messages->search( { borrowernumber => $patron->id } );
@@ -268,12 +288,17 @@ subtest 'add_update() tests' => sub {
     $update->{status} = 'TEST';
     $update_id =
         $t->post_ok( "//$userid:$password@/api/v1/tickets/$ticket_id/updates" => json => $update )
-        ->status_is( 201, 'REST3.2.1' )->header_like(
+        ->status_is( 201, 'REST3.2.1' )
+        ->header_like(
         Location => qr|^\/api\/v1\/tickets/\d*|,
         'REST3.4.1'
-    )->json_is( '/message' => $update->{message} )->json_is( '/public' => $update->{public} )
-        ->json_is( '/status'  => $update->{status} )->json_is( '/assignee_id' => undef )
-        ->json_is( '/user_id' => $librarian->id )->tx->res->json->{update_id};
+        )
+        ->json_is( '/message'     => $update->{message} )
+        ->json_is( '/public'      => $update->{public} )
+        ->json_is( '/status'      => $update->{status} )
+        ->json_is( '/assignee_id' => undef )
+        ->json_is( '/user_id'     => $librarian->id )
+        ->tx->res->json->{update_id};
 
     $ticket = $ticket->get_from_storage;
     is(
@@ -287,12 +312,17 @@ subtest 'add_update() tests' => sub {
     $update->{assignee_id} = $librarian->id;
     $update_id =
         $t->post_ok( "//$userid:$password@/api/v1/tickets/$ticket_id/updates" => json => $update )
-        ->status_is( 201, 'REST3.2.1' )->header_like(
+        ->status_is( 201, 'REST3.2.1' )
+        ->header_like(
         Location => qr|^\/api\/v1\/tickets/\d*|,
         'REST3.4.1'
-    )->json_is( '/message' => $update->{message} )->json_is( '/public' => $update->{public} )
-        ->json_is( '/status'  => $update->{status} )->json_is( '/assignee_id' => $update->{assignee_id} )
-        ->json_is( '/user_id' => $librarian->id )->tx->res->json->{update_id};
+        )
+        ->json_is( '/message'     => $update->{message} )
+        ->json_is( '/public'      => $update->{public} )
+        ->json_is( '/status'      => $update->{status} )
+        ->json_is( '/assignee_id' => $update->{assignee_id} )
+        ->json_is( '/user_id'     => $librarian->id )
+        ->tx->res->json->{update_id};
 
     $ticket = $ticket->get_from_storage;
     is(

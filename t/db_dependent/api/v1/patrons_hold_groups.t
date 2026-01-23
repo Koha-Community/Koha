@@ -50,7 +50,8 @@ subtest 'list() tests' => sub {
     $patron->set_password( { password => $password, skip_validation => 1 } );
     my $userid = $patron->userid;
 
-    $t->get_ok( "//$userid:$password@/api/v1/patrons/" . $patron->id . '/hold_groups' )->status_is( 200, 'REST3.2.2' )
+    $t->get_ok( "//$userid:$password@/api/v1/patrons/" . $patron->id . '/hold_groups' )
+        ->status_is( 200, 'REST3.2.2' )
         ->json_is( [] );
 
     my $hold_group_1 = $builder->build_object(
@@ -79,7 +80,8 @@ subtest 'list() tests' => sub {
     );
 
     $t->get_ok( "//$userid:$password@/api/v1/patrons/" . $patron->id . '/hold_groups' => { 'x-koha-embed' => 'holds' } )
-        ->status_is( 200, 'REST3.2.2' )->json_has( "/0/holds", "holds object correctly embedded" );
+        ->status_is( 200, 'REST3.2.2' )
+        ->json_has( "/0/holds", "holds object correctly embedded" );
 
     $schema->storage->txn_rollback;
 };
@@ -133,7 +135,8 @@ subtest 'add() tests' => sub {
 
     $t->post_ok( "//$userid:$password@/api/v1/patrons/"
             . $other_patron->id
-            . "/hold_groups" => json => { hold_ids => [ $hold_3->reserve_id ] } )->status_is( 400, 'REST3.2.1' )
+            . "/hold_groups" => json => { hold_ids => [ $hold_3->reserve_id ] } )
+        ->status_is( 400, 'REST3.2.1' )
         ->json_is(
         {
             error      => 'One or more holds have already been found: ' . $hold_3->item->barcode,
@@ -143,7 +146,8 @@ subtest 'add() tests' => sub {
 
     $t->post_ok( "//$userid:$password@/api/v1/patrons/"
             . $patron->id
-            . "/hold_groups" => json => { hold_ids => [ $hold_3->reserve_id ] } )->status_is( 400, 'REST3.2.1' )
+            . "/hold_groups" => json => { hold_ids => [ $hold_3->reserve_id ] } )
+        ->status_is( 400, 'REST3.2.1' )
         ->json_is(
         {
             error      => 'One or more holds do not belong to patron: ' . $hold_3->reserve_id,
@@ -154,12 +158,14 @@ subtest 'add() tests' => sub {
     $t->post_ok( "//$userid:$password@/api/v1/patrons/"
             . $patron->id
             . "/hold_groups" => json => { hold_ids => [ $hold_1->reserve_id, $hold_2->reserve_id ] } )
-        ->status_is( 201, 'REST3.2.1' )->json_has( "/holds", "holds object correctly embedded" );
+        ->status_is( 201, 'REST3.2.1' )
+        ->json_has( "/holds", "holds object correctly embedded" );
 
     $t->post_ok( "//$userid:$password@/api/v1/patrons/"
             . $patron->id
             . "/hold_groups" => json => { hold_ids => [ $hold_1->reserve_id, $hold_2->reserve_id ] } )
-        ->status_is( 400, 'REST3.2.1' )->json_is(
+        ->status_is( 400, 'REST3.2.1' )
+        ->json_is(
         {
                   error => "One or more holds already belong to a hold group: "
                 . $hold_1->reserve_id . ", "

@@ -224,7 +224,7 @@ my $mock_line_data = {
             sub_location_code => 'REFERENCE',    # LSL field
             branch            => 'BRANCH2'
 
-                # sequence_code missing for this item
+            # sequence_code missing for this item
         }
     ]
 };

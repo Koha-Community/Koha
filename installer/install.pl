@@ -415,7 +415,7 @@ if ( $step && $step == 1 ) {
         my $cmd = C4::Context->config("intranetdir")
             . "/installer/data/$info{dbms}/updatedatabase.pl >> $logfilepath 2>> $logfilepath_errors";
 
-        system($cmd );
+        system($cmd);
 
         my $fh;
         open( $fh, "<:encoding(utf-8)", $logfilepath )

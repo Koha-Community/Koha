@@ -172,14 +172,14 @@ sub process_tt_block {
         ? $pre_chomp =~ m|-|
             ? q|- |
             : $pre_chomp =~ m|~| ? q|~ |
-        : q| |
+            : q| |
         : q| |;
     $post_chomp =
           $post_chomp
         ? $post_chomp =~ m|-|
             ? q| -|
             : $post_chomp =~ m|~| ? q| ~|
-        : q| |
+            : q| |
         : q| |;
 
     if (   $tt_block =~ m{\s?\|\s?\$KohaDates[^\|]*\|.*$}

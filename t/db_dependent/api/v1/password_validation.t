@@ -73,12 +73,14 @@ subtest 'password validation - account lock out' => sub {
         password   => "bad",
     };
 
-    $t->post_ok( "//$userid:$password@/api/v1/auth/password/validation" => json => $json )->status_is(400)
+    $t->post_ok( "//$userid:$password@/api/v1/auth/password/validation" => json => $json )
+        ->status_is(400)
         ->json_is( { error => q{Validation failed} } );
 
     $json->{password} = $password;
 
-    $t->post_ok( "//$userid:$password@/api/v1/auth/password/validation" => json => $json )->status_is(400)
+    $t->post_ok( "//$userid:$password@/api/v1/auth/password/validation" => json => $json )
+        ->status_is(400)
         ->json_is( { error => q{Validation failed} } );
 
     $schema->storage->txn_rollback;
@@ -105,7 +107,8 @@ subtest 'password validation - unauthorized user' => sub {
         password   => "test",
     };
 
-    $t->post_ok( "//$userid:$password@/api/v1/auth/password/validation" => json => $json )->status_is(403)
+    $t->post_ok( "//$userid:$password@/api/v1/auth/password/validation" => json => $json )
+        ->status_is(403)
         ->json_is( '/error' => 'Authorization failure. Missing required permission(s).' );
 
     $schema->storage->txn_rollback;
@@ -122,7 +125,8 @@ subtest 'password validation - unauthenticated user' => sub {
     };
 
     $t->post_ok( "/api/v1/auth/password/validation" => json => $json )
-        ->json_is( '/error' => 'Authentication failure.' )->status_is(401);
+        ->json_is( '/error' => 'Authentication failure.' )
+        ->status_is(401);
 
     $schema->storage->txn_rollback;
 };
@@ -185,7 +189,8 @@ subtest 'Password validation - authorized requests tests' => sub {
     };
 
     $t->post_ok( "//$userid:$password@/api/v1/auth/password/validation" => json => $json )
-        ->status_is( 400, 'Validating using and invalid userid fails' )->json_is( { error => 'Validation failed' } );
+        ->status_is( 400, 'Validating using and invalid userid fails' )
+        ->json_is( { error => 'Validation failed' } );
 
     $json = {
         password => $password,
@@ -293,7 +298,8 @@ subtest 'password validation - expired password' => sub {
         password   => $patron_password,
     };
 
-    $t->post_ok( "//$userid:$password@/api/v1/auth/password/validation" => json => $json )->status_is(400)
+    $t->post_ok( "//$userid:$password@/api/v1/auth/password/validation" => json => $json )
+        ->status_is(400)
         ->json_is( '/error' => 'Password expired' );
 
     $schema->storage->txn_rollback;
@@ -328,7 +334,8 @@ subtest 'password validation - users with shared cardnumber / userid' => sub {
         password   => $patron_password_1,
     };
 
-    $t->post_ok( "//$userid:$password@/api/v1/auth/password/validation" => json => $json )->status_is(201)
+    $t->post_ok( "//$userid:$password@/api/v1/auth/password/validation" => json => $json )
+        ->status_is(201)
         ->json_is(
         { cardnumber => $patron_1->cardnumber, patron_id => $patron_1->borrowernumber, userid => $patron_1->userid } );
 
@@ -337,7 +344,8 @@ subtest 'password validation - users with shared cardnumber / userid' => sub {
         password   => $patron_password_2,
     };
 
-    $t->post_ok( "//$userid:$password@/api/v1/auth/password/validation" => json => $json )->status_is(201)
+    $t->post_ok( "//$userid:$password@/api/v1/auth/password/validation" => json => $json )
+        ->status_is(201)
         ->json_is(
         { cardnumber => $patron_2->cardnumber, patron_id => $patron_2->borrowernumber, userid => $patron_2->userid } );
 
@@ -346,7 +354,8 @@ subtest 'password validation - users with shared cardnumber / userid' => sub {
         password => $patron_password_1,
     };
 
-    $t->post_ok( "//$userid:$password@/api/v1/auth/password/validation" => json => $json )->status_is(201)
+    $t->post_ok( "//$userid:$password@/api/v1/auth/password/validation" => json => $json )
+        ->status_is(201)
         ->json_is(
         { cardnumber => $patron_1->cardnumber, patron_id => $patron_1->borrowernumber, userid => $patron_1->userid } );
 
@@ -355,7 +364,8 @@ subtest 'password validation - users with shared cardnumber / userid' => sub {
         password => $patron_password_2,
     };
 
-    $t->post_ok( "//$userid:$password@/api/v1/auth/password/validation" => json => $json )->status_is(201)
+    $t->post_ok( "//$userid:$password@/api/v1/auth/password/validation" => json => $json )
+        ->status_is(201)
         ->json_is(
         { cardnumber => $patron_2->cardnumber, patron_id => $patron_2->borrowernumber, userid => $patron_2->userid } );
 

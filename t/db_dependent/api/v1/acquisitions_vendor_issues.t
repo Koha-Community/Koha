@@ -64,13 +64,15 @@ subtest 'list() tests' => sub {
     )->store;
 
     # One issue created, should get returned
-    $t->get_ok("//$userid:$password@/api/v1/acquisitions/vendors/$vendor_id/issues")->status_is(200)
+    $t->get_ok("//$userid:$password@/api/v1/acquisitions/vendors/$vendor_id/issues")
+        ->status_is(200)
         ->json_is( [ $issue->to_api ] );
 
     # Embed the AV description
     $t->get_ok(
         "//$userid:$password@/api/v1/acquisitions/vendors/$vendor_id/issues" => { 'x-koha-embed' => '+strings' } )
-        ->status_is(200)->json_is( [ $issue->to_api( { strings => 1 } ) ] );
+        ->status_is(200)
+        ->json_is( [ $issue->to_api( { strings => 1 } ) ] );
 
     $vendor->delete;
 

@@ -38,7 +38,7 @@ GetOptions(
     'v|verbose' => \$verbose,
 );
 
-my $usage = << 'ENDUSAGE';
+my $usage = <<'ENDUSAGE';
 This script deletes old suggestions
 Parameters:
 -help|? This message

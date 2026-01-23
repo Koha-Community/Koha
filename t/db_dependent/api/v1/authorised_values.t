@@ -63,19 +63,22 @@ subtest 'list_av_from_category() tests' => sub {
 
     ## Authorized user tests
     # No category, 404 expected
-    $t->get_ok("//$userid:$password@/api/v1/authorised_value_categories/NON_EXISTS/authorised_values")->status_is(404)
+    $t->get_ok("//$userid:$password@/api/v1/authorised_value_categories/NON_EXISTS/authorised_values")
+        ->status_is(404)
         ->json_is( '/error' => 'Category not found' );
 
     my $av_cat = $builder->build_object( { class => 'Koha::AuthorisedValueCategories' } )->category_name;
 
     # No AVs, so empty array should be returned
-    $t->get_ok("//$userid:$password@/api/v1/authorised_value_categories/$av_cat/authorised_values")->status_is(200)
+    $t->get_ok("//$userid:$password@/api/v1/authorised_value_categories/$av_cat/authorised_values")
+        ->status_is(200)
         ->json_is( [] );
 
     my $av = $builder->build_object( { class => 'Koha::AuthorisedValues', value => { category => $av_cat } } );
 
     # One av created, should get returned
-    $t->get_ok("//$userid:$password@/api/v1/authorised_value_categories/$av_cat/authorised_values")->status_is(200)
+    $t->get_ok("//$userid:$password@/api/v1/authorised_value_categories/$av_cat/authorised_values")
+        ->status_is(200)
         ->json_is( [ $av->to_api ] );
 
     # Unauthorized access
@@ -88,13 +91,15 @@ subtest 'list_av_from_category() tests' => sub {
     my $av_cat_3 =
         $builder->build_object( { class => 'Koha::AuthorisedValueCategories', value => { category_name => 'cat_b' } } );
     my $query = { "me.category_name" => [ $av_cat_2->category_name, $av_cat_3->category_name ] };
-    $t->get_ok( "//$userid:$password@/api/v1/authorised_value_categories?q=" . encode_json($query) )->status_is(200)
+    $t->get_ok( "//$userid:$password@/api/v1/authorised_value_categories?q=" . encode_json($query) )
+        ->status_is(200)
         ->json_is( [ $av_cat_2->to_api, $av_cat_3->to_api ] );
 
     # Test the above but with x-koha-embed: authorised_values
     my $embedded_query = { "me.category_name" => [ $av_cat_2->category_name, $av_cat_3->category_name ] };
     $t->get_ok( "//$userid:$password@/api/v1/authorised_value_categories?q="
-            . encode_json($embedded_query) => { 'x-koha-embed' => 'authorised_values' } )->status_is(200)
+            . encode_json($embedded_query) => { 'x-koha-embed' => 'authorised_values' } )
+        ->status_is(200)
         ->json_has( '/0/authorised_values', 'authorised_values object correctly embedded' )
         ->json_has( '/1/authorised_values', 'authorised_values object correctly embedded' )
         ->json_hasnt( '/2/', 'authorised_values object correctly embedded' );

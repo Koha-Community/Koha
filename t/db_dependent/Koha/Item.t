@@ -2863,7 +2863,7 @@ subtest 'store() tests' => sub {
             {
                 borrowernumber    => $patron->id,
                 date              => '1970-01-01 14:00:01',
-                amountoutstanding => 0,
+                amountoutstanding =>  0,
                 amount            => -5,
                 interface         => 'commandline',
                 credit_type_code  => 'PAYMENT'

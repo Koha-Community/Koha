@@ -60,7 +60,7 @@ sub is_valid {
             cardnumber => $cardnumber,
             ( $patron ? ( borrowernumber => { '!=' => $patron->borrowernumber } ) : () )
         }
-    )->count;
+        )->count;
 
     my ( $min_length, $max_length ) = $class->get_valid_length();
     return Koha::Result::Boolean->new(0)->add_message( { message => "invalid_length" } )

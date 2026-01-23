@@ -71,8 +71,12 @@ subtest 'list() tests' => sub {
     );
 
     # One batch created, should get returned
-    $t->get_ok("//$userid:$password@/api/v1/ill/batchstatuses")->status_is(200)->json_has( '/0/id', 'ID' )
-        ->json_has( '/0/name', 'Name' )->json_has( '/0/code', 'Code' )->json_has( '/0/is_system', 'is_system' );
+    $t->get_ok("//$userid:$password@/api/v1/ill/batchstatuses")
+        ->status_is(200)
+        ->json_has( '/0/id',        'ID' )
+        ->json_has( '/0/name',      'Name' )
+        ->json_has( '/0/code',      'Code' )
+        ->json_has( '/0/is_system', 'is_system' );
 
     $schema->storage->txn_rollback;
 };
@@ -114,8 +118,11 @@ subtest 'get() tests' => sub {
     $patron->set_password( { password => $password, skip_validation => 1 } );
     my $unauth_userid = $patron->userid;
 
-    $t->get_ok( "//$userid:$password@/api/v1/ill/batchstatuses/" . $status->code )->status_is(200)
-        ->json_has( '/id',        'ID' )->json_has( '/name', 'Name' )->json_has( '/code', 'Code' )
+    $t->get_ok( "//$userid:$password@/api/v1/ill/batchstatuses/" . $status->code )
+        ->status_is(200)
+        ->json_has( '/id',        'ID' )
+        ->json_has( '/name',      'Name' )
+        ->json_has( '/code',      'Code' )
         ->json_has( '/is_system', 'is_system' );
 
     $t->get_ok( "//$unauth_userid:$password@/api/v1/ill/batchstatuses/" . $status->id )->status_is(403);
@@ -124,7 +131,8 @@ subtest 'get() tests' => sub {
     my $non_existent_code = $status_to_delete->code;
     $status_to_delete->delete;
 
-    $t->get_ok("//$userid:$password@/api/v1/ill/batchstatuses/$non_existent_code")->status_is(404)
+    $t->get_ok("//$userid:$password@/api/v1/ill/batchstatuses/$non_existent_code")
+        ->status_is(404)
         ->json_is( '/error' => 'ILL batch status not found' );
 
     $schema->storage->txn_rollback;
@@ -171,7 +179,8 @@ subtest 'add() tests' => sub {
     };
 
     $t->post_ok( "//$userid:$password@/api/v1/ill/batchstatuses" => json => $status_with_invalid_field )
-        ->status_is(400)->json_is(
+        ->status_is(400)
+        ->json_is(
         "/errors" => [
             {
                 message => "Properties not allowed: doh.",
@@ -181,14 +190,18 @@ subtest 'add() tests' => sub {
         );
 
     # Authorized attempt to write
-    $t->post_ok( "//$userid:$password@/api/v1/ill/batchstatuses" => json => $status_metadata )->status_is(201)
-        ->json_has( '/id',        'ID' )->json_has( '/name', 'Name' )->json_has( '/code', 'Code' )
+    $t->post_ok( "//$userid:$password@/api/v1/ill/batchstatuses" => json => $status_metadata )
+        ->status_is(201)
+        ->json_has( '/id',        'ID' )
+        ->json_has( '/name',      'Name' )
+        ->json_has( '/code',      'Code' )
         ->json_has( '/is_system', 'is_system' )
         ->header_is( 'Location' => '/api/v1/ill/batchstatuses/' . $t->tx->res->json->{code}, "REST3.4.1" );
 
     # Authorized attempt to create with null id
     $status_metadata->{id} = undef;
-    $t->post_ok( "//$userid:$password@/api/v1/ill/batchstatuses" => json => $status_metadata )->status_is(400)
+    $t->post_ok( "//$userid:$password@/api/v1/ill/batchstatuses" => json => $status_metadata )
+        ->status_is(400)
         ->json_has('/errors');
 
     $schema->storage->txn_rollback;
@@ -232,7 +245,8 @@ subtest 'update() tests' => sub {
     };
 
     $t->put_ok( "//$userid:$password@/api/v1/ill/batchstatuses/$status_code" => json => $status_with_missing_field )
-        ->status_is(400)->json_is( "/errors" => [ { message => "Missing property.", path => "/body/name" } ] );
+        ->status_is(400)
+        ->json_is( "/errors" => [ { message => "Missing property.", path => "/body/name" } ] );
 
     # Full object update on PUT
     my $status_with_updated_field = {
@@ -242,7 +256,8 @@ subtest 'update() tests' => sub {
     };
 
     $t->put_ok( "//$userid:$password@/api/v1/ill/batchstatuses/$status_code" => json => $status_with_updated_field )
-        ->status_is(200)->json_is( '/name' => 'Master Ploo Koon' );
+        ->status_is(200)
+        ->json_is( '/name' => 'Master Ploo Koon' );
 
     # Authorized attempt to write invalid data
     my $status_with_invalid_field = {
@@ -252,7 +267,8 @@ subtest 'update() tests' => sub {
     };
 
     $t->put_ok( "//$userid:$password@/api/v1/ill/batchstatuses/$status_code" => json => $status_with_invalid_field )
-        ->status_is(400)->json_is(
+        ->status_is(400)
+        ->json_is(
         "/errors" => [
             {
                 message => "Properties not allowed: doh.",
@@ -319,7 +335,8 @@ subtest 'delete() tests' => sub {
 
     $t->delete_ok( "//$userid:$password@/api/v1/ill/batchstatuses/" . $non_system_status->code )->status_is(404);
 
-    $t->delete_ok( "//$userid:$password@/api/v1/ill/batchstatuses/" . $system_status->code )->status_is(400)
+    $t->delete_ok( "//$userid:$password@/api/v1/ill/batchstatuses/" . $system_status->code )
+        ->status_is(400)
         ->json_is( "/errors" => [ { message => "ILL batch status cannot be deleted" } ] );
 
     $schema->storage->txn_rollback;

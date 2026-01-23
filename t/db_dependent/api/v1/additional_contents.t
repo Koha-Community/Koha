@@ -43,7 +43,7 @@ subtest 'anonymous access' => sub {
 
     my $today     = dt_from_string;
     my $yesterday = dt_from_string->add( days => -1 );
-    my $tomorrow  = dt_from_string->add( days => 1 );
+    my $tomorrow  = dt_from_string->add( days =>  1 );
     my $res;
 
     $builder->build_object(
@@ -104,7 +104,8 @@ subtest 'anonymous access' => sub {
 
     is( scalar @{$res}, 1, 'There is now one active and public additional content' );
 
-    $t->get_ok( "/api/v1/public/additional_contents" => { 'x-koha-embed' => 'translated_contents' } )->status_is(200)
+    $t->get_ok( "/api/v1/public/additional_contents" => { 'x-koha-embed' => 'translated_contents' } )
+        ->status_is(200)
         ->json_is(
         '/0' => {
             %{ $public_additional_contents->to_api( { public => 1 } ) },
@@ -142,7 +143,7 @@ subtest 'anonymous access' => sub {
             %{ $public_additional_contents->to_api( { public => 1 } ) },
             translated_contents => $public_additional_contents->translated_contents->to_api( { public => 1 } )
         }
-    )->json_hasnt('/1');
+        )->json_hasnt('/1');
 
     $t->get_ok( "/api/v1/public/additional_contents?q={\"translated_contents.lang\": \"fr-FR\"}" =>
             { 'x-koha-embed' => 'translated_contents' } )->status_is(200)->json_is(
@@ -150,7 +151,7 @@ subtest 'anonymous access' => sub {
             %{ $second_public_additional_contents->to_api( { public => 1 } ) },
             translated_contents => $second_public_additional_contents->translated_contents->to_api( { public => 1 } )
         }
-    )->json_hasnt('/1');
+        )->json_hasnt('/1');
 
     $schema->storage->txn_rollback;
 

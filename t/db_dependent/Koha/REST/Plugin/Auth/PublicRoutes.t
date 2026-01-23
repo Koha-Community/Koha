@@ -96,16 +96,19 @@ subtest 'auth.public helper' => sub {
 
     my $t = Test::Mojo->new;
 
-    $t->post_ok( '/public' => json => { patron_id => $another_patron->borrowernumber } )->status_is(401)
+    $t->post_ok( '/public' => json => { patron_id => $another_patron->borrowernumber } )
+        ->status_is(401)
         ->json_is( { message => 'authentication_required' } );
 
     $t->post_ok( '/public' => json =>
             { user => $unprivileged_patron->borrowernumber, patron_id => $another_patron->borrowernumber } )
-        ->status_is(403)->json_is( { message => 'unauthorized' } );
+        ->status_is(403)
+        ->json_is( { message => 'unauthorized' } );
 
     $t->post_ok( '/public' => json =>
             { user => $unprivileged_patron->borrowernumber, patron_id => $unprivileged_patron->borrowernumber } )
-        ->status_is(200)->json_is('OK');
+        ->status_is(200)
+        ->json_is('OK');
 
     $schema->storage->txn_rollback;
 };
@@ -124,21 +127,25 @@ subtest 'auth.public_guarantor helper' => sub {
 
     my $t = Test::Mojo->new;
 
-    $t->post_ok( '/public_guarantor' => json => { patron_id => $another_patron->borrowernumber } )->status_is(401)
+    $t->post_ok( '/public_guarantor' => json => { patron_id => $another_patron->borrowernumber } )
+        ->status_is(401)
         ->json_is( { message => 'authentication_required' } );
 
     $t->post_ok( '/public_guarantor' => json =>
-            { user => $guarantor->borrowernumber, patron_id => $another_patron->borrowernumber } )->status_is(403)
+            { user => $guarantor->borrowernumber, patron_id => $another_patron->borrowernumber } )
+        ->status_is(403)
         ->json_is( { message => 'unauthorized' } );
 
     # user is not a guarantor of themself
     $t->post_ok(
         '/public_guarantor' => json => { user => $guarantor->borrowernumber, patron_id => $guarantor->borrowernumber } )
-        ->status_is(403)->json_is( { message => 'unauthorized' } );
+        ->status_is(403)
+        ->json_is( { message => 'unauthorized' } );
 
     $t->post_ok(
         '/public_guarantor' => json => { user => $guarantor->borrowernumber, patron_id => $guarantee->borrowernumber } )
-        ->status_is(200)->json_is('OK');
+        ->status_is(200)
+        ->json_is('OK');
 
     $schema->storage->txn_rollback;
 };

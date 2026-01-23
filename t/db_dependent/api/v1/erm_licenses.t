@@ -88,14 +88,16 @@ subtest 'list() tests' => sub {
     );
 
     # Filtering works, two licenses sharing vendor_id
-    $t->get_ok( "//$userid:$password@/api/v1/erm/licenses?vendor_id=" . $license->vendor_id )->status_is(200)
+    $t->get_ok( "//$userid:$password@/api/v1/erm/licenses?vendor_id=" . $license->vendor_id )
+        ->status_is(200)
         ->json_is( [ $license->to_api, $another_license->to_api ] );
 
     # Attempt to search by name like 'ko'
     $license->delete;
     $another_license->delete;
     $license_with_another_vendor_id->delete;
-    $t->get_ok(qq~//$userid:$password@/api/v1/erm/licenses?q=[{"me.name":{"like":"%ko%"}}]~)->status_is(200)
+    $t->get_ok(qq~//$userid:$password@/api/v1/erm/licenses?q=[{"me.name":{"like":"%ko%"}}]~)
+        ->status_is(200)
         ->json_is( [] );
 
     my $license_to_search = $builder->build_object(
@@ -108,11 +110,13 @@ subtest 'list() tests' => sub {
     );
 
     # Search works, searching for name like 'ko'
-    $t->get_ok(qq~//$userid:$password@/api/v1/erm/licenses?q=[{"me.name":{"like":"%ko%"}}]~)->status_is(200)
+    $t->get_ok(qq~//$userid:$password@/api/v1/erm/licenses?q=[{"me.name":{"like":"%ko%"}}]~)
+        ->status_is(200)
         ->json_is( [ $license_to_search->to_api ] );
 
     # Warn on unsupported query parameter
-    $t->get_ok("//$userid:$password@/api/v1/erm/licenses?blah=blah")->status_is(400)
+    $t->get_ok("//$userid:$password@/api/v1/erm/licenses?blah=blah")
+        ->status_is(400)
         ->json_is( [ { path => '/query/blah', message => 'Malformed query string' } ] );
 
     # Unauthorized access
@@ -149,13 +153,15 @@ subtest 'get() tests' => sub {
     my $unauth_userid = $patron->userid;
 
     # This license exists, should get returned
-    $t->get_ok( "//$userid:$password@/api/v1/erm/licenses/" . $license->license_id )->status_is(200)
+    $t->get_ok( "//$userid:$password@/api/v1/erm/licenses/" . $license->license_id )
+        ->status_is(200)
         ->json_is( $license->to_api );
 
     # Return one license with embed
     $t->get_ok(
         "//$userid:$password@/api/v1/erm/licenses/" . $license->license_id => { 'x-koha-embed' => 'documents' } )
-        ->status_is(200)->json_is( { %{ $license->to_api }, documents => [] } );
+        ->status_is(200)
+        ->json_is( { %{ $license->to_api }, documents => [] } );
 
     # Unauthorized access
     $t->get_ok( "//$unauth_userid:$password@/api/v1/erm/licenses/" . $license->license_id )->status_is(403);
@@ -165,7 +171,8 @@ subtest 'get() tests' => sub {
     my $non_existent_id   = $license_to_delete->license_id;
     $license_to_delete->delete;
 
-    $t->get_ok("//$userid:$password@/api/v1/erm/licenses/$non_existent_id")->status_is(404)
+    $t->get_ok("//$userid:$password@/api/v1/erm/licenses/$non_existent_id")
+        ->status_is(404)
         ->json_is( '/error' => 'License not found' );
 
     $schema->storage->txn_rollback;
@@ -220,7 +227,8 @@ subtest 'add() tests' => sub {
         ended_on    => undef,
     };
 
-    $t->post_ok( "//$userid:$password@/api/v1/erm/licenses" => json => $license_with_invalid_field )->status_is(400)
+    $t->post_ok( "//$userid:$password@/api/v1/erm/licenses" => json => $license_with_invalid_field )
+        ->status_is(400)
         ->json_is(
         "/errors" => [
             {
@@ -232,12 +240,16 @@ subtest 'add() tests' => sub {
 
     # Authorized attempt to write
     my $license_id =
-        $t->post_ok( "//$userid:$password@/api/v1/erm/licenses" => json => $license )->status_is( 201, 'REST3.2.1' )
+        $t->post_ok( "//$userid:$password@/api/v1/erm/licenses" => json => $license )
+        ->status_is( 201, 'REST3.2.1' )
         ->header_like(
         Location => qr|^/api/v1/erm/licenses/\d*|,
         'REST3.4.1'
-    )->json_is( '/name' => $license->{name} )->json_is( '/description' => $license->{description} )
-        ->json_is( '/type' => $license->{type} )->json_is( '/status' => $license->{status} )
+        )
+        ->json_is( '/name'        => $license->{name} )
+        ->json_is( '/description' => $license->{description} )
+        ->json_is( '/type'        => $license->{type} )
+        ->json_is( '/status'      => $license->{status} )
         ->tx->res->json->{license_id};
 
     # Authorized attempt to create with null id
@@ -300,7 +312,8 @@ subtest 'update() tests' => sub {
     };
 
     $t->put_ok( "//$userid:$password@/api/v1/erm/licenses/$license_id" => json => $license_with_missing_field )
-        ->status_is(400)->json_is( "/errors" => [ { message => "Missing property.", path => "/body/name" } ] );
+        ->status_is(400)
+        ->json_is( "/errors" => [ { message => "Missing property.", path => "/body/name" } ] );
 
     # Full object update on PUT
     my $license_with_updated_field = {
@@ -313,7 +326,8 @@ subtest 'update() tests' => sub {
     };
 
     $t->put_ok( "//$userid:$password@/api/v1/erm/licenses/$license_id" => json => $license_with_updated_field )
-        ->status_is(200)->json_is( '/name' => 'New name' );
+        ->status_is(200)
+        ->json_is( '/name' => 'New name' );
 
     # Authorized attempt to write invalid data
     my $license_with_invalid_field = {
@@ -327,7 +341,8 @@ subtest 'update() tests' => sub {
     };
 
     $t->put_ok( "//$userid:$password@/api/v1/erm/licenses/$license_id" => json => $license_with_invalid_field )
-        ->status_is(400)->json_is(
+        ->status_is(400)
+        ->json_is(
         "/errors" => [
             {
                 message => "Properties not allowed: blah.",
@@ -385,7 +400,8 @@ subtest 'delete() tests' => sub {
     $t->delete_ok("//$unauth_userid:$password@/api/v1/erm/licenses/$license_id")->status_is(403);
 
     # Delete existing license
-    $t->delete_ok("//$userid:$password@/api/v1/erm/licenses/$license_id")->status_is( 204, 'REST3.2.4' )
+    $t->delete_ok("//$userid:$password@/api/v1/erm/licenses/$license_id")
+        ->status_is( 204, 'REST3.2.4' )
         ->content_is( '', 'REST3.3.4' );
 
     # Attempt to delete non-existent license

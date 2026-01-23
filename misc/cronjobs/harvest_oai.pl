@@ -41,7 +41,7 @@ GetOptions(
     'l|list'         => \$list,
     'f|force'        => \$force,
 );
-my $usage = << 'ENDUSAGE';
+my $usage = <<'ENDUSAGE';
 
 This script starts an OAI Harvest
 

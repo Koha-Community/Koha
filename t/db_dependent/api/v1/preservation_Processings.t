@@ -72,7 +72,8 @@ subtest 'list() tests' => sub {
     );
 
     # One processing created, should get returned
-    $t->get_ok("//$userid:$password@/api/v1/preservation/processings")->status_is(200)
+    $t->get_ok("//$userid:$password@/api/v1/preservation/processings")
+        ->status_is(200)
         ->json_is( [ $processing->to_api ] );
 
     # Unauthorized access
@@ -122,12 +123,14 @@ subtest 'get() tests' => sub {
     my $unauth_userid = $patron->userid;
 
     # This processing exists, should get returned
-    $t->get_ok( "//$userid:$password@/api/v1/preservation/processings/" . $processing->processing_id )->status_is(200)
+    $t->get_ok( "//$userid:$password@/api/v1/preservation/processings/" . $processing->processing_id )
+        ->status_is(200)
         ->json_is( $processing->to_api );
 
     # Return one processing with attributes
     $t->get_ok( "//$userid:$password@/api/v1/preservation/processings/"
-            . $processing->processing_id => { 'x-koha-embed' => 'attributes' } )->status_is(200)
+            . $processing->processing_id => { 'x-koha-embed' => 'attributes' } )
+        ->status_is(200)
         ->json_is( { %{ $processing->to_api }, attributes => $attributes->to_api } );
 
     # Unauthorized access
@@ -139,7 +142,8 @@ subtest 'get() tests' => sub {
     my $non_existent_id      = $processing_to_delete->processing_id;
     $processing_to_delete->delete;
 
-    $t->get_ok("//$userid:$password@/api/v1/preservation/processings/$non_existent_id")->status_is(404)
+    $t->get_ok("//$userid:$password@/api/v1/preservation/processings/$non_existent_id")
+        ->status_is(404)
         ->json_is( '/error' => 'Processing not found' );
 
     $schema->storage->txn_rollback;
@@ -186,7 +190,8 @@ subtest 'add() tests' => sub {
     };
 
     $t->post_ok( "//$userid:$password@/api/v1/preservation/processings" => json => $processing_with_invalid_field )
-        ->status_is(400)->json_is(
+        ->status_is(400)
+        ->json_is(
         "/errors" => [
             {
                 message => "Properties not allowed: blah.",
@@ -198,19 +203,22 @@ subtest 'add() tests' => sub {
     # Authorized attempt to write
     my $processing_id =
         $t->post_ok( "//$userid:$password@/api/v1/preservation/processings" => json => $processing )
-        ->status_is( 201, 'REST3.2.1' )->header_like(
+        ->status_is( 201, 'REST3.2.1' )
+        ->header_like(
         Location => qr|^/api/v1/preservation/processings/\d*|,
         'REST3.4.1'
-    )->json_is( '/name' => $processing->{name} )->tx->res->json->{processing_id};
+        )->json_is( '/name' => $processing->{name} )->tx->res->json->{processing_id};
 
     # Authorized attempt to create with null id
     $processing->{processing_id} = undef;
-    $t->post_ok( "//$userid:$password@/api/v1/preservation/processings" => json => $processing )->status_is(400)
+    $t->post_ok( "//$userid:$password@/api/v1/preservation/processings" => json => $processing )
+        ->status_is(400)
         ->json_has('/errors');
 
     # Authorized attempt to create with existing id
     $processing->{processing_id} = $processing_id;
-    $t->post_ok( "//$userid:$password@/api/v1/preservation/processings" => json => $processing )->status_is(400)
+    $t->post_ok( "//$userid:$password@/api/v1/preservation/processings" => json => $processing )
+        ->status_is(400)
         ->json_is(
         "/errors" => [
             {
@@ -259,7 +267,8 @@ subtest 'update() tests' => sub {
     my $processing_with_missing_field = {};
 
     $t->put_ok( "//$userid:$password@/api/v1/preservation/processings/$processing_id" => json =>
-            $processing_with_missing_field )->status_is(400)
+            $processing_with_missing_field )
+        ->status_is(400)
         ->json_is( "/errors" => [ { message => "Missing property.", path => "/body/name" } ] );
 
     my $default_processing = $builder->build_object( { class => 'Koha::Preservation::Processings' } );
@@ -337,7 +346,8 @@ subtest 'delete() tests' => sub {
     $t->delete_ok("//$unauth_userid:$password@/api/v1/preservation/processings/$processing_id")->status_is(403);
 
     # Delete existing processing
-    $t->delete_ok("//$userid:$password@/api/v1/preservation/processings/$processing_id")->status_is( 204, 'REST3.2.4' )
+    $t->delete_ok("//$userid:$password@/api/v1/preservation/processings/$processing_id")
+        ->status_is( 204, 'REST3.2.4' )
         ->content_is( '', 'REST3.3.4' );
 
     # Attempt to delete non-existent processing

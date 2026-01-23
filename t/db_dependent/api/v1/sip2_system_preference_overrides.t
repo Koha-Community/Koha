@@ -68,7 +68,8 @@ subtest 'list() tests' => sub {
     my $sys_pref_override = $builder->build_object( { class => 'Koha::SIP2::SystemPreferenceOverrides' } );
 
     # One system preference override created, should get returned
-    $t->get_ok("//$userid:$password@/api/v1/sip2/system_preference_overrides")->status_is(200)
+    $t->get_ok("//$userid:$password@/api/v1/sip2/system_preference_overrides")
+        ->status_is(200)
         ->json_is( [ $sys_pref_override->to_api ] );
 
     my $another_system_preference_override = $builder->build_object(
@@ -90,7 +91,8 @@ subtest 'list() tests' => sub {
     $sys_pref_override->delete;
     $another_system_preference_override->delete;
     $t->get_ok(qq~//$userid:$password@/api/v1/sip2/system_preference_overrides?q=[{"me.variable":{"like":"%ko%"}}]~)
-        ->status_is(200)->json_is( [] );
+        ->status_is(200)
+        ->json_is( [] );
 
     my $system_preference_override_to_search = $builder->build_object(
         {
@@ -103,10 +105,12 @@ subtest 'list() tests' => sub {
 
     # Search works, searching for name like 'ko'
     $t->get_ok(qq~//$userid:$password@/api/v1/sip2/system_preference_overrides?q=[{"me.variable":{"like":"%ko%"}}]~)
-        ->status_is(200)->json_is( [ $system_preference_override_to_search->to_api ] );
+        ->status_is(200)
+        ->json_is( [ $system_preference_override_to_search->to_api ] );
 
     # Warn on unsupported query parameter
-    $t->get_ok("//$userid:$password@/api/v1/sip2/system_preference_overrides?blah=blah")->status_is(400)
+    $t->get_ok("//$userid:$password@/api/v1/sip2/system_preference_overrides?blah=blah")
+        ->status_is(400)
         ->json_is( [ { path => '/query/blah', message => 'Malformed query string' } ] );
 
     # Unauthorized access
@@ -144,7 +148,8 @@ subtest 'get() tests' => sub {
 
     # This system preference override exists, should get returned
     $t->get_ok( "//$userid:$password@/api/v1/sip2/system_preference_overrides/"
-            . $sys_pref_override->sip_system_preference_override_id )->status_is(200)
+            . $sys_pref_override->sip_system_preference_override_id )
+        ->status_is(200)
         ->json_is( $sys_pref_override->to_api );
 
     # Unauthorized access
@@ -157,7 +162,8 @@ subtest 'get() tests' => sub {
     my $non_existent_id = $system_preference_override_to_delete->sip_system_preference_override_id;
     $system_preference_override_to_delete->delete;
 
-    $t->get_ok("//$userid:$password@/api/v1/sip2/system_preference_overrides/$non_existent_id")->status_is(404)
+    $t->get_ok("//$userid:$password@/api/v1/sip2/system_preference_overrides/$non_existent_id")
+        ->status_is(404)
         ->json_is( '/error' => 'System preference override not found' );
 
     $schema->storage->txn_rollback;
@@ -218,24 +224,29 @@ subtest 'add() tests' => sub {
     # Authorized attempt to write
     my $sip_system_preference_override_id =
         $t->post_ok( "//$userid:$password@/api/v1/sip2/system_preference_overrides" => json => $sys_pref_override )
-        ->status_is( 201, 'REST3.2.1' )->header_like(
+        ->status_is( 201, 'REST3.2.1' )
+        ->header_like(
         Location => qr|^/api/v1/sip2/system_preference_overrides/\d*|,
         'REST3.4.1'
-    )->json_is( '/name' => $sys_pref_override->{name} )
+        )
+        ->json_is( '/name'           => $sys_pref_override->{name} )
         ->json_is( '/implementation' => $sys_pref_override->{implementation} )
         ->json_is( '/retries'        => $sys_pref_override->{retries} )
-        ->json_is( '/timeout' => $sys_pref_override->{timeout} )->tx->res->json->{sip_system_preference_override_id};
+        ->json_is( '/timeout'        => $sys_pref_override->{timeout} )
+        ->tx->res->json->{sip_system_preference_override_id};
 
     # Authorized attempt to create with null id
     $sys_pref_override->{sip_system_preference_override_id} = undef;
     $t->post_ok( "//$userid:$password@/api/v1/sip2/system_preference_overrides" => json => $sys_pref_override )
-        ->status_is(400)->json_has('/errors');
+        ->status_is(400)
+        ->json_has('/errors');
 
     # Authorized attempt to create with existing id
     $sys_pref_override->{sip_system_preference_override_id} = $sip_system_preference_override_id;
 
     $t->post_ok( "//$userid:$password@/api/v1/sip2/system_preference_overrides" => json => $sys_pref_override )
-        ->status_is(400)->json_is(
+        ->status_is(400)
+        ->json_is(
         "/errors" => [
             {
                 message => "Read-only.",
@@ -289,7 +300,8 @@ subtest 'update() tests' => sub {
 
     $t->put_ok(
         "//$userid:$password@/api/v1/sip2/system_preference_overrides/$sip_system_preference_override_id" => json =>
-            $system_preference_override_with_missing_field )->status_is(400)
+            $system_preference_override_with_missing_field )
+        ->status_is(400)
         ->json_is( "/errors" => [ { message => "Missing property.", path => "/body/value" } ] );
 
     # Full object update on PUT
@@ -376,7 +388,8 @@ subtest 'delete() tests' => sub {
 
     # Delete existing system preference override
     $t->delete_ok("//$userid:$password@/api/v1/sip2/system_preference_overrides/$sip_system_preference_override_id")
-        ->status_is( 204, 'REST3.2.4' )->content_is( '', 'REST3.3.4' );
+        ->status_is( 204, 'REST3.2.4' )
+        ->content_is( '', 'REST3.3.4' );
 
     # Attempt to delete non-existent system preference override
     $t->delete_ok("//$userid:$password@/api/v1/sip2/system_preference_overrides/$sip_system_preference_override_id")

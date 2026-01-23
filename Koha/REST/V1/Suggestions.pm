@@ -102,8 +102,10 @@ sub add {
 
                 if ( $max_total and $days_range ) {
 
-                    my $total = Koha::Suggestions->search( { suggestedby => $body->{suggested_by} } )
-                        ->filter_by_suggested_days_range($days_range)->count;
+                    my $total =
+                        Koha::Suggestions->search( { suggestedby => $body->{suggested_by} } )
+                        ->filter_by_suggested_days_range($days_range)
+                        ->count;
 
                     if ( $total >= $max_total ) {
                         return $c->render(

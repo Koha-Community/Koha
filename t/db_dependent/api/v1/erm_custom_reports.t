@@ -113,7 +113,8 @@ subtest "monthly_report" => sub {
     my $expected_results1 = 2;    # One title, with one row for each metric type
 
     $t->get_ok( "//$userid:$password@/api/v1/erm/eUsage/monthly_report/title?$query_string" =>
-            { 'x-koha-embed' => 'erm_usage_muses' } )->status_is(200)
+            { 'x-koha-embed' => 'erm_usage_muses' } )
+        ->status_is(200)
         ->json_has( '/' . ( $expected_results1 - 2 ) . '/title_id' )
         ->json_has( '/' . ( $expected_results1 - 1 ) . '/title_id' )
         ->json_hasnt( '/' . ($expected_results1) . '/title_id' );
@@ -135,7 +136,8 @@ subtest "monthly_report" => sub {
     my $expected_results2 = 4;    # Two titles this time
 
     $t->get_ok( "//$userid:$password@/api/v1/erm/eUsage/monthly_report/title?$query_string_with_multiple_years" =>
-            { 'x-koha-embed' => 'erm_usage_muses' } )->status_is(200)
+            { 'x-koha-embed' => 'erm_usage_muses' } )
+        ->status_is(200)
         ->json_has( '/' . ( $expected_results2 - 4 ) . '/title_id' )
         ->json_has( '/' . ( $expected_results2 - 3 ) . '/title_id' )
         ->json_has( '/' . ( $expected_results2 - 2 ) . '/title_id' )
@@ -210,7 +212,8 @@ subtest "yearly_report" => sub {
     my $expected_results1 = 2;    # One title, with one row for each metric type
 
     $t->get_ok( "//$userid:$password@/api/v1/erm/eUsage/yearly_report/title?$query_string" =>
-            { 'x-koha-embed' => 'erm_usage_yuses' } )->status_is(200)
+            { 'x-koha-embed' => 'erm_usage_yuses' } )
+        ->status_is(200)
         ->json_has( '/' . ( $expected_results1 - 2 ) . '/title_id' )
         ->json_has( '/' . ( $expected_results1 - 1 ) . '/title_id' )
         ->json_hasnt( '/' . ($expected_results1) . '/title_id' );
@@ -225,7 +228,8 @@ subtest "yearly_report" => sub {
     my $expected_results2 = 4;    # Two titles this time
 
     $t->get_ok( "//$userid:$password@/api/v1/erm/eUsage/yearly_report/title?$query_string_with_multiple_years" =>
-            { 'x-koha-embed' => 'erm_usage_yuses' } )->status_is(200)
+            { 'x-koha-embed' => 'erm_usage_yuses' } )
+        ->status_is(200)
         ->json_has( '/' . ( $expected_results2 - 4 ) . '/title_id' )
         ->json_has( '/' . ( $expected_results2 - 3 ) . '/title_id' )
         ->json_has( '/' . ( $expected_results2 - 2 ) . '/title_id' )
@@ -302,7 +306,8 @@ subtest "metric_types_report" => sub {
     my $expected_results1 = 1;    # One title
 
     $t->get_ok( "//$userid:$password@/api/v1/erm/eUsage/metric_types_report/title?$query_string" =>
-            { 'x-koha-embed' => 'erm_usage_muses' } )->status_is(200)
+            { 'x-koha-embed' => 'erm_usage_muses' } )
+        ->status_is(200)
         ->json_has( '/' . ( $expected_results1 - 1 ) . '/title_id' )
         ->json_hasnt( '/' . ($expected_results1) . '/title_id' );
 
@@ -323,7 +328,8 @@ subtest "metric_types_report" => sub {
     my $expected_results2 = 2;    # Two titles this time
 
     $t->get_ok( "//$userid:$password@/api/v1/erm/eUsage/metric_types_report/title?$query_string_with_multiple_years" =>
-            { 'x-koha-embed' => 'erm_usage_muses' } )->status_is(200)
+            { 'x-koha-embed' => 'erm_usage_muses' } )
+        ->status_is(200)
         ->json_has( '/' . ( $expected_results2 - 2 ) . '/title_id' )
         ->json_has( '/' . ( $expected_results2 - 1 ) . '/title_id' )
         ->json_hasnt( '/' . ($expected_results2) . '/title_id' );
@@ -398,7 +404,8 @@ subtest "provider_rollup_report" => sub {
     my $expected_results1 = 2;    # One provider repeated once for each metric type
 
     $t->get_ok( "//$userid:$password@/api/v1/erm/eUsage/provider_rollup_report/title?$query_string" =>
-            { 'x-koha-embed' => 'erm_usage_titles.erm_usage_muses' } )->status_is(200)
+            { 'x-koha-embed' => 'erm_usage_titles.erm_usage_muses' } )
+        ->status_is(200)
         ->json_is( '/' . ( $expected_results1 - 2 ) . '/provider_rollup_total' => 2, 'Total is correct' )
         ->json_is( '/' . ( $expected_results1 - 1 ) . '/provider_rollup_total' => 1, 'Total is correct' );
 
@@ -476,7 +483,8 @@ subtest "5.1 monthly_report" => sub {
     my $expected_results1 = 2;    # One title, with one row for each metric type
 
     $t->get_ok( "//$userid:$password@/api/v1/erm/eUsage/monthly_report/title?$query_string" =>
-            { 'x-koha-embed' => 'erm_usage_muses' } )->status_is(200)
+            { 'x-koha-embed' => 'erm_usage_muses' } )
+        ->status_is(200)
         ->json_has( '/' . ( $expected_results1 - 2 ) . '/title_id' )
         ->json_has( '/' . ( $expected_results1 - 1 ) . '/title_id' )
         ->json_hasnt( '/' . ($expected_results1) . '/title_id' );
@@ -498,7 +506,8 @@ subtest "5.1 monthly_report" => sub {
     my $expected_results2 = 4;    # Two titles this time
 
     $t->get_ok( "//$userid:$password@/api/v1/erm/eUsage/monthly_report/title?$query_string_with_multiple_years" =>
-            { 'x-koha-embed' => 'erm_usage_muses' } )->status_is(200)
+            { 'x-koha-embed' => 'erm_usage_muses' } )
+        ->status_is(200)
         ->json_has( '/' . ( $expected_results2 - 4 ) . '/title_id' )
         ->json_has( '/' . ( $expected_results2 - 3 ) . '/title_id' )
         ->json_has( '/' . ( $expected_results2 - 2 ) . '/title_id' )
@@ -573,7 +582,8 @@ subtest "5.1 yearly_report" => sub {
     my $expected_results1 = 4;    # Two titles, with one row for each metric type
 
     $t->get_ok( "//$userid:$password@/api/v1/erm/eUsage/yearly_report/title?$query_string" =>
-            { 'x-koha-embed' => 'erm_usage_yuses' } )->status_is(200)
+            { 'x-koha-embed' => 'erm_usage_yuses' } )
+        ->status_is(200)
         ->json_has( '/' . ( $expected_results1 - 2 ) . '/title_id' )
         ->json_has( '/' . ( $expected_results1 - 1 ) . '/title_id' )
         ->json_hasnt( '/' . ($expected_results1) . '/title_id' );
@@ -588,7 +598,8 @@ subtest "5.1 yearly_report" => sub {
     my $expected_results2 = 4;    # Two titles this time
 
     $t->get_ok( "//$userid:$password@/api/v1/erm/eUsage/yearly_report/title?$query_string_with_multiple_years" =>
-            { 'x-koha-embed' => 'erm_usage_yuses' } )->status_is(200)
+            { 'x-koha-embed' => 'erm_usage_yuses' } )
+        ->status_is(200)
         ->json_has( '/' . ( $expected_results2 - 4 ) . '/title_id' )
         ->json_has( '/' . ( $expected_results2 - 3 ) . '/title_id' )
         ->json_has( '/' . ( $expected_results2 - 2 ) . '/title_id' )
@@ -665,7 +676,8 @@ subtest "5.1 metric_types_report" => sub {
     my $expected_results1 = 1;    # One title
 
     $t->get_ok( "//$userid:$password@/api/v1/erm/eUsage/metric_types_report/title?$query_string" =>
-            { 'x-koha-embed' => 'erm_usage_muses' } )->status_is(200)
+            { 'x-koha-embed' => 'erm_usage_muses' } )
+        ->status_is(200)
         ->json_has( '/' . ( $expected_results1 - 1 ) . '/title_id' )
         ->json_hasnt( '/' . ($expected_results1) . '/title_id' );
 
@@ -686,7 +698,8 @@ subtest "5.1 metric_types_report" => sub {
     my $expected_results2 = 2;    # Two titles this time
 
     $t->get_ok( "//$userid:$password@/api/v1/erm/eUsage/metric_types_report/title?$query_string_with_multiple_years" =>
-            { 'x-koha-embed' => 'erm_usage_muses' } )->status_is(200)
+            { 'x-koha-embed' => 'erm_usage_muses' } )
+        ->status_is(200)
         ->json_has( '/' . ( $expected_results2 - 2 ) . '/title_id' )
         ->json_has( '/' . ( $expected_results2 - 1 ) . '/title_id' )
         ->json_hasnt( '/' . ($expected_results2) . '/title_id' );
@@ -761,7 +774,8 @@ subtest "5.1 provider_rollup_report" => sub {
     my $expected_results1 = 2;    # One provider repeated once for each metric type
 
     $t->get_ok( "//$userid:$password@/api/v1/erm/eUsage/provider_rollup_report/title?$query_string" =>
-            { 'x-koha-embed' => 'erm_usage_titles.erm_usage_muses' } )->status_is(200)
+            { 'x-koha-embed' => 'erm_usage_titles.erm_usage_muses' } )
+        ->status_is(200)
         ->json_is( '/' . ( $expected_results1 - 2 ) . '/provider_rollup_total' => 528, 'Total is correct' )
         ->json_is( '/' . ( $expected_results1 - 1 ) . '/provider_rollup_total' => 228, 'Total is correct' );
 

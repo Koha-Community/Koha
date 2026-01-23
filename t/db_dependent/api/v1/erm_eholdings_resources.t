@@ -68,7 +68,8 @@ subtest 'list() tests' => sub {
     my $resource = $builder->build_object( { class => 'Koha::ERM::EHoldings::Resources' } );
 
     # One resource created, should get returned
-    $t->get_ok("//$userid:$password@/api/v1/erm/eholdings/local/resources")->status_is(200)
+    $t->get_ok("//$userid:$password@/api/v1/erm/eholdings/local/resources")
+        ->status_is(200)
         ->json_is( [ $resource->to_api ] );
 
     my $another_resource = $builder->build_object(
@@ -90,10 +91,12 @@ subtest 'list() tests' => sub {
 
     # Filtering works, two resources sharing vendor_id
     $t->get_ok( "//$userid:$password@/api/v1/erm/eholdings/local/resources?vendor_id=" . $resource->vendor_id )
-        ->status_is(200)->json_is( [ $resource->to_api, $another_resource->to_api ] );
+        ->status_is(200)
+        ->json_is( [ $resource->to_api, $another_resource->to_api ] );
 
     # Warn on unsupported query parameter
-    $t->get_ok("//$userid:$password@/api/v1/erm/eholdings/local/resources?blah=blah")->status_is(400)
+    $t->get_ok("//$userid:$password@/api/v1/erm/eholdings/local/resources?blah=blah")
+        ->status_is(400)
         ->json_is( [ { path => '/query/blah', message => 'Malformed query string' } ] );
 
     # Unauthorized access
@@ -130,7 +133,8 @@ subtest 'get() tests' => sub {
     my $unauth_userid = $patron->userid;
 
     # This resource exists, should get returned
-    $t->get_ok( "//$userid:$password@/api/v1/erm/eholdings/local/resources/" . $resource->resource_id )->status_is(200)
+    $t->get_ok( "//$userid:$password@/api/v1/erm/eholdings/local/resources/" . $resource->resource_id )
+        ->status_is(200)
         ->json_is( $resource->to_api );
 
     # Unauthorized access
@@ -142,7 +146,8 @@ subtest 'get() tests' => sub {
     my $non_existent_id    = $resource_to_delete->resource_id;
     $resource_to_delete->delete;
 
-    $t->get_ok("//$userid:$password@/api/v1/erm/eholdings/local/resources/$non_existent_id")->status_is(404)
+    $t->get_ok("//$userid:$password@/api/v1/erm/eholdings/local/resources/$non_existent_id")
+        ->status_is(404)
         ->json_is( '/error' => 'eHolding resource not found' );
 
     $schema->storage->txn_rollback;

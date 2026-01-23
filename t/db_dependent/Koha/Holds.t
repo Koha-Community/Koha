@@ -466,7 +466,8 @@ subtest 'cancel' => sub {
         my $reserve_id = C4::Reserves::AddReserve($hold_info);
         Koha::Holds->find($reserve_id)->cancel;
         my $number_of_logs =
-            $schema->resultset('ActionLog')->search( { module => 'HOLDS', action => 'CANCEL', object => $reserve_id } )
+            $schema->resultset('ActionLog')
+            ->search( { module => 'HOLDS', action => 'CANCEL', object => $reserve_id } )
             ->count;
         is( $number_of_logs, 0, 'Without HoldsLog, Koha::Hold->cancel should not have logged' );
 
@@ -474,7 +475,8 @@ subtest 'cancel' => sub {
         $reserve_id = C4::Reserves::AddReserve($hold_info);
         Koha::Holds->find($reserve_id)->cancel;
         $number_of_logs =
-            $schema->resultset('ActionLog')->search( { module => 'HOLDS', action => 'CANCEL', object => $reserve_id } )
+            $schema->resultset('ActionLog')
+            ->search( { module => 'HOLDS', action => 'CANCEL', object => $reserve_id } )
             ->count;
         is( $number_of_logs, 1, 'With HoldsLog, Koha::Hold->cancel should have logged' );
     };
@@ -828,8 +830,8 @@ subtest 'get_items_that_can_fill' => sub {
     my $item_4 = $builder->build_sample_item( { biblionumber => $biblio->biblionumber, itype => $itype_1->itemtype } )
         ;    # in transfer
     my $item_5 = $builder->build_sample_item( { biblionumber => $biblio->biblionumber, itype => $itype_2->itemtype } );
-    my $lost       = $builder->build_sample_item( { biblionumber => $biblio->biblionumber, itemlost   => 1 } );
-    my $withdrawn  = $builder->build_sample_item( { biblionumber => $biblio->biblionumber, withdrawn  => 1 } );
+    my $lost       = $builder->build_sample_item( { biblionumber => $biblio->biblionumber, itemlost   =>  1 } );
+    my $withdrawn  = $builder->build_sample_item( { biblionumber => $biblio->biblionumber, withdrawn  =>  1 } );
     my $notforloan = $builder->build_sample_item( { biblionumber => $biblio->biblionumber, notforloan => -1 } );
 
     my $patron_1 = $builder->build_object( { class => 'Koha::Patrons' } );

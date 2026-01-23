@@ -42,7 +42,7 @@ cronlogaction( { info => $command_line_options } );
 
 GetOptions( 'h|hours=s' => \$hours, );
 
-my $usage = << 'ENDUSAGE';
+my $usage = <<'ENDUSAGE';
 cart_to_shelf.pl: This cron script will set any item of the location CART ( Shelving Cart ) to it's original shelving location
                  after the given number of hours has passed.
 

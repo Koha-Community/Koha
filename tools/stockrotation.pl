@@ -473,7 +473,9 @@ sub process_rota {
 
     if ($rota) {
 
-        $rota->title( $sub_rota->{title} )->cyclical( $sub_rota->{cyclical} )->description( $sub_rota->{description} )
+        $rota->title( $sub_rota->{title} )
+            ->cyclical( $sub_rota->{cyclical} )
+            ->description( $sub_rota->{description} )
             ->store;
 
     } else {

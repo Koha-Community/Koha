@@ -50,7 +50,8 @@ subtest 'list_patron_attributes() tests' => sub {
     my $userid = $patron->userid;
 
     $t->get_ok( "//$userid:$password@/api/v1/patrons/" . $patron->id . '/extended_attributes' )
-        ->status_is( 200, 'REST3.2.2' )->json_is( [] );
+        ->status_is( 200, 'REST3.2.2' )
+        ->json_is( [] );
 
     # Let's add 3 attributes
     foreach my $i ( 1 .. 5 ) {
@@ -68,7 +69,8 @@ subtest 'list_patron_attributes() tests' => sub {
     $non_existent_patron->delete;
 
     $t->get_ok( "//$userid:$password@/api/v1/patrons/" . $non_existent_patron_id . '/extended_attributes' )
-        ->status_is(404)->json_is( '/error' => 'Patron not found' );
+        ->status_is(404)
+        ->json_is( '/error' => 'Patron not found' );
 
     subtest 'nullable value' => sub {
 
@@ -86,7 +88,8 @@ subtest 'list_patron_attributes() tests' => sub {
         );
 
         $t->get_ok( "//$userid:$password@/api/v1/patrons/" . $user->id . '/extended_attributes' )
-            ->status_is( 200, 'REST3.2.2' )->json_is(
+            ->status_is( 200, 'REST3.2.2' )
+            ->json_is(
             '' => $user->extended_attributes->to_api,
             'Extended attributes retrieved correctly'
             );
@@ -155,13 +158,15 @@ subtest 'add() tests' => sub {
     $t->post_ok( "//$userid:$password@/api/v1/patrons/"
             . $non_existent_patron_id
             . '/extended_attributes' => json => { type => $repeatable_attr_type->code, value => 'something' } )
-        ->status_is(404)->json_is( '/error' => 'Patron not found' );
+        ->status_is(404)
+        ->json_is( '/error' => 'Patron not found' );
 
     my $response =
         $t->post_ok( "//$userid:$password@/api/v1/patrons/"
             . $patron->id
             . '/extended_attributes' => json => { type => $repeatable_attr_type->code, value => 'something' } )
-        ->status_is(201)->tx->res->json;
+        ->status_is(201)
+        ->tx->res->json;
 
     is_deeply(
         Koha::Patron::Attributes->find( $response->{extended_attribute_id} )->to_api,
@@ -210,7 +215,8 @@ subtest 'add() tests' => sub {
 
         $t->post_ok( "//$userid:$password@/api/v1/patrons/"
                 . $patron->id
-                . '/extended_attributes' => json => { type => $invalid_type, value => 'blah' } )->status_is(400)
+                . '/extended_attributes' => json => { type => $invalid_type, value => 'blah' } )
+            ->status_is(400)
             ->json_is( '/error' => "Tried to use an invalid attribute type. type=$invalid_type" );
     };
 
@@ -281,11 +287,13 @@ subtest 'overwrite() tests' => sub {
     $t->put_ok( "//$userid:$password@/api/v1/patrons/"
             . $non_existent_patron_id
             . '/extended_attributes' => json => [ { type => $repeatable_attr_type->code, value => 'something' } ] )
-        ->status_is(404)->json_is( '/error' => 'Patron not found' );
+        ->status_is(404)
+        ->json_is( '/error' => 'Patron not found' );
 
     $t->put_ok( "//$userid:$password@/api/v1/patrons/"
             . $patron->id
-            . '/extended_attributes' => json => [ { type => $invalid_type, value => 'something' } ] )->status_is(400)
+            . '/extended_attributes' => json => [ { type => $invalid_type, value => 'something' } ] )
+        ->status_is(400)
         ->json_is( '/error' => "Tried to use an invalid attribute type. type=$invalid_type" );
 
     my $unique_value = 'The only one!';
@@ -308,7 +316,8 @@ subtest 'overwrite() tests' => sub {
             { type => $unique_attr_type->code, value => $value_1 },
             { type => $unique_attr_type->code, value => $value_2 }
         ]
-    )->status_is(409)
+        )
+        ->status_is(409)
         ->json_is( '/error' => "Tried to add more than one non-repeatable attributes. type="
             . $unique_attr_type->code
             . " value=$value_2" );
@@ -349,14 +358,16 @@ subtest 'overwrite() tests' => sub {
 
     $t->put_ok(
         "//$userid:$password@/api/v1/patrons/" . $patron->id . '/extended_attributes' => json => $updated_attributes )
-        ->status_is(200)->json_is( '/0/type' => $updated_attributes->[0]->{type} )
+        ->status_is(200)
+        ->json_is( '/0/type'  => $updated_attributes->[0]->{type} )
         ->json_is( '/0/value' => $updated_attributes->[0]->{value} )
         ->json_is( '/1/type'  => $updated_attributes->[1]->{type} )
         ->json_is( '/1/value' => $updated_attributes->[1]->{value} )
         ->json_is( '/2/type'  => $updated_attributes->[2]->{type} )
         ->json_is( '/2/value' => $updated_attributes->[2]->{value} )
         ->json_is( '/3/type'  => $updated_attributes->[3]->{type} )
-        ->json_is( '/3/value' => $updated_attributes->[3]->{value} )->json_hasnt('/4');
+        ->json_is( '/3/value' => $updated_attributes->[3]->{value} )
+        ->json_hasnt('/4');
 
     $schema->storage->txn_rollback;
 };
@@ -394,15 +405,18 @@ subtest 'delete() tests' => sub {
     my $attr = $dummy_patron->add_extended_attribute( { code => $attr_type->code, attribute => 'blah' } );
 
     $t->delete_ok( "//$userid:$password@/api/v1/patrons/" . $dummy_patron->id . '/extended_attributes/' . $attr->id )
-        ->status_is( 204, 'REST3.2.4' )->content_is( '', 'REST3.3.4' );
+        ->status_is( 204, 'REST3.2.4' )
+        ->content_is( '', 'REST3.3.4' );
 
     $t->delete_ok( "//$userid:$password@/api/v1/patrons/" . $dummy_patron->id . '/extended_attributes/' . $attr->id )
-        ->status_is(404)->json_is( '/error' => 'Attribute not found' );
+        ->status_is(404)
+        ->json_is( '/error' => 'Attribute not found' );
 
     $dummy_patron->delete;
 
     $t->delete_ok( "//$userid:$password@/api/v1/patrons/" . $dummy_patron->id . '/extended_attributes/' . $attr->id )
-        ->status_is(404)->json_is( '/error' => 'Patron not found' );
+        ->status_is(404)
+        ->json_is( '/error' => 'Patron not found' );
 
     $schema->storage->txn_rollback;
 };
@@ -478,7 +492,8 @@ subtest 'update() tests' => sub {
     $t->patch_ok( "//$userid:$password@/api/v1/patrons/"
             . $patron->id
             . '/extended_attributes/'
-            . $non_existent_attribute_id => json => { value => 'something' } )->status_is(404)
+            . $non_existent_attribute_id => json => { value => 'something' } )
+        ->status_is(404)
         ->json_is( '/error' => 'Attribute not found' );
 
     my $response =
@@ -506,7 +521,8 @@ subtest 'update() tests' => sub {
     $t->patch_ok( "//$userid:$password@/api/v1/patrons/"
             . $patron->id
             . '/extended_attributes/'
-            . $unique_attribute->id => json => { value => $unique_value } )->status_is(409)
+            . $unique_attribute->id => json => { value => $unique_value } )
+        ->status_is(409)
         ->json_is( '/error' => "Your action breaks a unique constraint on the attribute. type="
             . $unique_attr_type->code
             . " value=$unique_value" );

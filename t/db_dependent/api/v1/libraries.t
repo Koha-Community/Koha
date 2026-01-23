@@ -104,7 +104,8 @@ subtest 'list() tests' => sub {
     };
 
     # Warn on unsupported query parameter
-    $t->get_ok("//$userid:$password@/api/v1/libraries?library_blah=blah")->status_is(400)
+    $t->get_ok("//$userid:$password@/api/v1/libraries?library_blah=blah")
+        ->status_is(400)
         ->json_is( [ { path => '/query/library_blah', message => 'Malformed query string' } ] );
 
     $schema->storage->txn_rollback;
@@ -127,11 +128,13 @@ subtest 'get() tests' => sub {
     $patron->set_password( { password => $password, skip_validation => 1 } );
     my $userid = $patron->userid;
 
-    $t->get_ok( "//$userid:$password@/api/v1/libraries/" . $library->branchcode )->status_is( 200, 'REST3.2.2' )
+    $t->get_ok( "//$userid:$password@/api/v1/libraries/" . $library->branchcode )
+        ->status_is( 200, 'REST3.2.2' )
         ->json_is( '' => $library->to_api, 'REST3.3.2' );
 
     $t->get_ok( "//$userid:$password@/api/v1/libraries/"
-            . $library->branchcode => { 'x-koha-embed' => 'cash_registers,desks' } )->status_is(200)
+            . $library->branchcode => { 'x-koha-embed' => 'cash_registers,desks' } )
+        ->status_is(200)
         ->json_is( { %{ $library->to_api }, desks => [], cash_registers => [] } );
 
     my $desk = $builder->build_object( { class => 'Koha::Desks', value => { branchcode => $library->id } } );
@@ -139,14 +142,16 @@ subtest 'get() tests' => sub {
         $builder->build_object( { class => 'Koha::Cash::Registers', value => { branch => $library->id } } );
 
     $t->get_ok( "//$userid:$password@/api/v1/libraries/"
-            . $library->branchcode => { 'x-koha-embed' => 'cash_registers,desks' } )->status_is(200)
+            . $library->branchcode => { 'x-koha-embed' => 'cash_registers,desks' } )
+        ->status_is(200)
         ->json_is(
         { %{ $library->to_api }, desks => [ $desk->to_api ], cash_registers => [ $cash_register->to_api ] } );
 
     my $non_existent_code = $library->branchcode;
     $library->delete;
 
-    $t->get_ok( "//$userid:$password@/api/v1/libraries/" . $non_existent_code )->status_is(404)
+    $t->get_ok( "//$userid:$password@/api/v1/libraries/" . $non_existent_code )
+        ->status_is(404)
         ->json_is( '/error' => 'Library not found' );
 
     $schema->storage->txn_rollback;
@@ -188,7 +193,8 @@ subtest 'add() tests' => sub {
     my $library_with_invalid_field = {%$library};
     $library_with_invalid_field->{'branchinvalid'} = 'Library invalid';
 
-    $t->post_ok( "//$auth_userid:$password@/api/v1/libraries" => json => $library_with_invalid_field )->status_is(400)
+    $t->post_ok( "//$auth_userid:$password@/api/v1/libraries" => json => $library_with_invalid_field )
+        ->status_is(400)
         ->json_is(
         "/errors" => [
             {
@@ -199,7 +205,8 @@ subtest 'add() tests' => sub {
         );
 
     # Authorized attempt to write
-    $t->post_ok( "//$auth_userid:$password@/api/v1/libraries" => json => $library )->status_is( 201, 'REST3.2.1' )
+    $t->post_ok( "//$auth_userid:$password@/api/v1/libraries" => json => $library )
+        ->status_is( 201, 'REST3.2.1' )
         ->json_is( '' => $library, 'REST3.3.1' )
         ->header_is( Location => '/api/v1/libraries/' . $library->{library_id}, 'REST3.4.1' );
 
@@ -209,14 +216,16 @@ subtest 'add() tests' => sub {
     # Authorized attempt to create with null id
     $library->{library_id} = undef;
 
-    $t->post_ok( "//$auth_userid:$password@/api/v1/libraries" => json => $library )->status_is(400)
+    $t->post_ok( "//$auth_userid:$password@/api/v1/libraries" => json => $library )
+        ->status_is(400)
         ->json_has('/errors');
 
     # Authorized attempt to create with existing id
     $library->{library_id} = $library_id;
 
     warning_like {
-        $t->post_ok( "//$auth_userid:$password@/api/v1/libraries" => json => $library )->status_is(409)
+        $t->post_ok( "//$auth_userid:$password@/api/v1/libraries" => json => $library )
+            ->status_is(409)
             ->json_has( '/error' => "Fails when trying to add an existing library_id" )
             ->json_like( '/conflict' => qr/(branches\.)?PRIMARY/ );
     }
@@ -262,7 +271,8 @@ subtest 'update() tests' => sub {
     };
 
     $t->put_ok( "//$auth_userid:$password@/api/v1/libraries/$library_id" => json => $library_with_missing_field )
-        ->status_is(400)->json_has( "/errors" => [ { message => "Missing property.", path => "/body/address2" } ] );
+        ->status_is(400)
+        ->json_has( "/errors" => [ { message => "Missing property.", path => "/body/address2" } ] );
 
     my $deleted_library            = $builder->build_object( { class => 'Koha::Libraries' } );
     my $library_with_updated_field = $deleted_library->to_api;
@@ -270,14 +280,16 @@ subtest 'update() tests' => sub {
     $deleted_library->delete;
 
     $t->put_ok( "//$auth_userid:$password@/api/v1/libraries/$library_id" => json => $library_with_updated_field )
-        ->status_is( 200, 'REST3.2.1' )->json_is( '' => $library_with_updated_field, 'REST3.3.3' );
+        ->status_is( 200, 'REST3.2.1' )
+        ->json_is( '' => $library_with_updated_field, 'REST3.3.3' );
 
     # Authorized attempt to write invalid data
     my $library_with_invalid_field = {%$library_with_updated_field};
     $library_with_invalid_field->{'branchinvalid'} = 'Library invalid';
 
     $t->put_ok( "//$auth_userid:$password@/api/v1/libraries/$library_id" => json => $library_with_invalid_field )
-        ->status_is(400)->json_is(
+        ->status_is(400)
+        ->json_is(
         "/errors" => [
             {
                 message => "Properties not allowed: branchinvalid.",
@@ -322,7 +334,8 @@ subtest 'delete() tests' => sub {
     # Unauthorized attempt to delete
     $t->delete_ok("//$unauth_userid:$password@/api/v1/libraries/$library_id")->status_is(403);
 
-    $t->delete_ok("//$auth_userid:$password@/api/v1/libraries/$library_id")->status_is( 204, 'REST3.2.4' )
+    $t->delete_ok("//$auth_userid:$password@/api/v1/libraries/$library_id")
+        ->status_is( 204, 'REST3.2.4' )
         ->content_is( '', 'REST3.3.4' );
 
     $t->delete_ok("//$auth_userid:$password@/api/v1/libraries/$library_id")->status_is(404);
@@ -349,7 +362,8 @@ subtest 'list_desks() tests' => sub {
 
     t::lib::Mocks::mock_preference( 'UseCirculationDesks', 0 );
 
-    $t->get_ok( "//$userid:$password@/api/v1/libraries/" . $library->branchcode . "/desks" )->status_is(404)
+    $t->get_ok( "//$userid:$password@/api/v1/libraries/" . $library->branchcode . "/desks" )
+        ->status_is(404)
         ->json_is( '/error' => q{Feature disabled} );
 
     my $non_existent_code = $library->branchcode;
@@ -357,14 +371,19 @@ subtest 'list_desks() tests' => sub {
 
     t::lib::Mocks::mock_preference( 'UseCirculationDesks', 1 );
 
-    $t->get_ok( "//$userid:$password@/api/v1/libraries/" . $non_existent_code . "/desks" )->status_is(404)
+    $t->get_ok( "//$userid:$password@/api/v1/libraries/" . $non_existent_code . "/desks" )
+        ->status_is(404)
         ->json_is( '/error' => 'Library not found' );
 
     my $desk_1 = $builder->build_object( { class => 'Koha::Desks', value => { branchcode => $library->id } } );
     my $desk_2 = $builder->build_object( { class => 'Koha::Desks', value => { branchcode => $library->id } } );
 
-    my $res = $t->get_ok( "//$userid:$password@/api/v1/libraries/" . $library->branchcode . "/desks" )->status_is(200)
-        ->json_is( '/0/desk_id' => $desk_1->id )->json_is( '/1/desk_id' => $desk_2->id )->tx->res->json;
+    my $res =
+        $t->get_ok( "//$userid:$password@/api/v1/libraries/" . $library->branchcode . "/desks" )
+        ->status_is(200)
+        ->json_is( '/0/desk_id' => $desk_1->id )
+        ->json_is( '/1/desk_id' => $desk_2->id )
+        ->tx->res->json;
 
     is( scalar @{$res}, 2 );
 
@@ -390,7 +409,8 @@ subtest 'list_cash_registers() tests' => sub {
 
     t::lib::Mocks::mock_preference( 'UseCashRegisters', 0 );
 
-    $t->get_ok( "//$userid:$password@/api/v1/libraries/" . $library->branchcode . "/cash_registers" )->status_is(404)
+    $t->get_ok( "//$userid:$password@/api/v1/libraries/" . $library->branchcode . "/cash_registers" )
+        ->status_is(404)
         ->json_is( '/error' => q{Feature disabled} );
 
     my $non_existent_code = $library->branchcode;
@@ -398,7 +418,8 @@ subtest 'list_cash_registers() tests' => sub {
 
     t::lib::Mocks::mock_preference( 'UseCashRegisters', 1 );
 
-    $t->get_ok( "//$userid:$password@/api/v1/libraries/" . $non_existent_code . "/cash_registers" )->status_is(404)
+    $t->get_ok( "//$userid:$password@/api/v1/libraries/" . $non_existent_code . "/cash_registers" )
+        ->status_is(404)
         ->json_is( '/error' => 'Library not found' );
 
     my $cash_register_1 =
@@ -408,8 +429,10 @@ subtest 'list_cash_registers() tests' => sub {
 
     my $res =
         $t->get_ok( "//$userid:$password@/api/v1/libraries/" . $library->branchcode . "/cash_registers" )
-        ->status_is(200)->json_is( '/0/cash_register_id' => $cash_register_1->id )
-        ->json_is( '/1/cash_register_id' => $cash_register_2->id )->tx->res->json;
+        ->status_is(200)
+        ->json_is( '/0/cash_register_id' => $cash_register_1->id )
+        ->json_is( '/1/cash_register_id' => $cash_register_2->id )
+        ->tx->res->json;
 
     is( scalar @{$res}, 2 );
 

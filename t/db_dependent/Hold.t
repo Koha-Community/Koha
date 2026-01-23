@@ -358,7 +358,8 @@ subtest "delete() tests" => sub {
 
     my $number_of_logs =
         $schema->resultset('ActionLog')
-        ->search( { module => 'HOLDS', action => 'DELETE', object => $hold->{reserve_id} } )->count;
+        ->search( { module => 'HOLDS', action => 'DELETE', object => $hold->{reserve_id} } )
+        ->count;
     is( $number_of_logs, 0, 'With HoldsLogs, Koha::Hold->delete shouldn\'t have been logged' );
 
     # Enable logging
@@ -379,7 +380,8 @@ subtest "delete() tests" => sub {
 
     $number_of_logs =
         $schema->resultset('ActionLog')
-        ->search( { module => 'HOLDS', action => 'DELETE', object => $hold->{reserve_id} } )->count;
+        ->search( { module => 'HOLDS', action => 'DELETE', object => $hold->{reserve_id} } )
+        ->count;
     is( $number_of_logs, 1, 'With HoldsLogs, Koha::Hold->delete should have been logged' );
 
     $schema->storage->txn_rollback();
@@ -471,7 +473,8 @@ subtest 'suspend() tests' => sub {
     t::lib::Mocks::mock_preference( 'HoldsLog', 1 );
 
     my $logs_count =
-        $schema->resultset('ActionLog')->search( { module => 'HOLDS', action => 'SUSPEND', object => $hold->id } )
+        $schema->resultset('ActionLog')
+        ->search( { module => 'HOLDS', action => 'SUSPEND', object => $hold->id } )
         ->count;
 
     $hold = $builder->build_object(
@@ -483,7 +486,8 @@ subtest 'suspend() tests' => sub {
 
     $hold->suspend_hold;
     my $new_logs_count =
-        $schema->resultset('ActionLog')->search( { module => 'HOLDS', action => 'SUSPEND', object => $hold->id } )
+        $schema->resultset('ActionLog')
+        ->search( { module => 'HOLDS', action => 'SUSPEND', object => $hold->id } )
         ->count;
 
     is( $new_logs_count, $logs_count + 1, 'If logging is enabled, suspending a hold gets logged' );

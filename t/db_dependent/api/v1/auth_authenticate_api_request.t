@@ -68,8 +68,11 @@ subtest 'token-based tests' => sub {
         client_id     => $api_key->client_id,
         client_secret => $api_key->plain_text_secret
     };
-    $t->post_ok( '/api/v1/oauth/token', form => $formData )->status_is(200)->json_is( '/expires_in' => 3600 )
-        ->json_is( '/token_type' => 'Bearer' )->json_has('/access_token');
+    $t->post_ok( '/api/v1/oauth/token', form => $formData )
+        ->status_is(200)
+        ->json_is( '/expires_in' => 3600 )
+        ->json_is( '/token_type' => 'Bearer' )
+        ->json_has('/access_token');
 
     my $access_token = $t->tx->res->json->{access_token};
 
@@ -167,7 +170,8 @@ subtest 'cookie-based tests' => sub {
         $tx->req->cookies( { name => 'CGISESSID', value => $session->id } );
         $tx->req->env( { REMOTE_ADDR => $remote_address } );
 
-        $t->request_ok($tx)->status_is( 401, 'Anonymous session on permission protected resource returns 401' )
+        $t->request_ok($tx)
+            ->status_is( 401, 'Anonymous session on permission protected resource returns 401' )
             ->json_is( { error => 'Authentication failure.' } );
     };
 
@@ -259,7 +263,8 @@ subtest 'x-koha-library tests' => sub {
     is( $userenv->{branch}, $unprivileged->branchcode, 'branch set correctly' );
 
     $t->get_ok( "//$unprivileged_userid:$password@/api/v1/cities" => { 'x-koha-library' => $library->id } )
-        ->status_is(403)->json_is( '/error' => 'Unauthorized attempt to set library to ' . $library->id );
+        ->status_is(403)
+        ->json_is( '/error' => 'Unauthorized attempt to set library to ' . $library->id );
 
     $t->get_ok( "//$superlibrarian_userid:$password@/api/v1/cities" => { 'x-koha-library' => $library->id } )
         ->status_is(200);

@@ -96,8 +96,10 @@ subtest 'list profiles' => sub {
 
     my $uid = $patron->userid;
 
-    $t->get_ok("//$uid:$pwd@/api/v1/import_batch_profiles?_order_by=+name")->status_is(200)
-        ->json_is( '/0/name', $ibp1->name )->json_is( '/1/name', $ibp2->name );
+    $t->get_ok("//$uid:$pwd@/api/v1/import_batch_profiles?_order_by=+name")
+        ->status_is(200)
+        ->json_is( '/0/name', $ibp1->name )
+        ->json_is( '/1/name', $ibp2->name );
 
     $schema->storage->txn_rollback;
 
@@ -135,8 +137,10 @@ subtest 'add() tests' => sub {
         overlay_action => 'overlay_action'
     };
 
-    $t->post_ok( "//$uid:$pwd@/api/v1/import_batch_profiles", json => $post_data )->status_is(201)
-        ->json_has('/profile_id')->json_is( '/name', $post_data->{name} )
+    $t->post_ok( "//$uid:$pwd@/api/v1/import_batch_profiles", json => $post_data )
+        ->status_is(201)
+        ->json_has('/profile_id')
+        ->json_is( '/name',           $post_data->{name} )
         ->json_is( '/overlay_action', $post_data->{overlay_action} )
         ->header_is( 'Location', '/api/v1/import_batch_profiles/' . $t->tx->res->json->{profile_id}, 'REST3.4.1' );
 
@@ -175,8 +179,10 @@ subtest 'edit profile' => sub {
 
     my $post_data = { name => 'theProfile' };
 
-    $t->put_ok( "//$uid:$pwd@/api/v1/import_batch_profiles/" . $ibp->id, json => $post_data )->status_is(200)
-        ->json_is( '/profile_id', $ibp->id )->json_is( '/name', $post_data->{name} );
+    $t->put_ok( "//$uid:$pwd@/api/v1/import_batch_profiles/" . $ibp->id, json => $post_data )
+        ->status_is(200)
+        ->json_is( '/profile_id', $ibp->id )
+        ->json_is( '/name',       $post_data->{name} );
 
     $ibp->discard_changes;
 

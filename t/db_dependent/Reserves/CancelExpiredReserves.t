@@ -130,7 +130,7 @@ subtest 'Test handling of waiting reserves by CancelExpiredReserves' => sub {
 
     my $resdate    = dt_from_string->add( days => -20 );
     my $expdate    = dt_from_string->add( days => -2 );
-    my $notexpdate = dt_from_string->add( days => 2 );
+    my $notexpdate = dt_from_string->add( days =>  2 );
 
     my $hold1 = Koha::Hold->new(
         {

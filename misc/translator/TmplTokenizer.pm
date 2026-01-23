@@ -71,8 +71,8 @@ sub new {
         filename => $filename,
         _parser  => $parser
 
-            #     , handle => $handle
-            #     , readahead => []
+        #     , handle => $handle
+        #     , readahead => []
         },
         __PACKAGE__;
 }

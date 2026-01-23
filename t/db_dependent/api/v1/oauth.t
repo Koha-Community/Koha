@@ -52,13 +52,15 @@ subtest '/oauth/token tests' => sub {
     $t->post_ok('/api/v1/oauth/token')->status_is(400);
 
     # Wrong grant type
-    $t->post_ok( '/api/v1/oauth/token', form => { grant_type => 'password' } )->status_is(400)
+    $t->post_ok( '/api/v1/oauth/token', form => { grant_type => 'password' } )
+        ->status_is(400)
         ->json_is( { error => 'Unimplemented grant type' } );
 
     t::lib::Mocks::mock_preference( 'RESTOAuth2ClientCredentials', 1 );
 
     # No client_id/client_secret
-    $t->post_ok( '/api/v1/oauth/token', form => { grant_type => 'client_credentials' } )->status_is(403)
+    $t->post_ok( '/api/v1/oauth/token', form => { grant_type => 'client_credentials' } )
+        ->status_is(403)
         ->json_is( { error => 'unauthorized_client' } );
 
     subtest 'Client credentials in body' => sub {
@@ -96,8 +98,11 @@ subtest 'Net::OAuth2::AuthorizationServer missing tests' => sub {
         client_secret => $api_key->plain_text_secret
     };
 
-    $t->post_ok( '/api/v1/oauth/token', form => $form_data )->status_is(200)->json_is( '/expires_in' => 3600 )
-        ->json_is( '/token_type' => 'Bearer' )->json_has('/access_token');
+    $t->post_ok( '/api/v1/oauth/token', form => $form_data )
+        ->status_is(200)
+        ->json_is( '/expires_in' => 3600 )
+        ->json_is( '/token_type' => 'Bearer' )
+        ->json_has('/access_token');
 
     my $access_token = $t->tx->res->json->{access_token};
 
@@ -107,7 +112,8 @@ subtest 'Net::OAuth2::AuthorizationServer missing tests' => sub {
     $tx->req->headers->authorization("Bearer $access_token");
     $t->request_ok($tx)->status_is(403);
 
-    $t->post_ok( '/api/v1/oauth/token', form => $form_data )->status_is(400)
+    $t->post_ok( '/api/v1/oauth/token', form => $form_data )
+        ->status_is(400)
         ->json_is( { error => 'Unimplemented grant type' } );
 
     $schema->storage->txn_rollback;
@@ -139,8 +145,11 @@ sub run_oauth_tests {
 
         $formData = { grant_type => 'client_credentials' };
 
-        $t->post_ok( "//$client_id:$client_secret@/api/v1/oauth/token", form => $formData )->status_is(200)
-            ->json_is( '/expires_in' => 3600 )->json_is( '/token_type' => 'Bearer' )->json_has('/access_token');
+        $t->post_ok( "//$client_id:$client_secret@/api/v1/oauth/token", form => $formData )
+            ->status_is(200)
+            ->json_is( '/expires_in' => 3600 )
+            ->json_is( '/token_type' => 'Bearer' )
+            ->json_has('/access_token');
     } else {
 
         $formData = {
@@ -149,8 +158,11 @@ sub run_oauth_tests {
             client_secret => $api_key->plain_text_secret
         };
 
-        $t->post_ok( '/api/v1/oauth/token', form => $formData )->status_is(200)->json_is( '/expires_in' => 3600 )
-            ->json_is( '/token_type' => 'Bearer' )->json_has('/access_token');
+        $t->post_ok( '/api/v1/oauth/token', form => $formData )
+            ->status_is(200)
+            ->json_is( '/expires_in' => 3600 )
+            ->json_is( '/token_type' => 'Bearer' )
+            ->json_has('/access_token');
     }
 
     my $access_token = $t->tx->res->json->{access_token};
@@ -180,10 +192,12 @@ sub run_oauth_tests {
     $api_key->active(0)->store;
 
     if ( $test_case eq 'header' ) {
-        $t->post_ok( "//$client_id:$client_secret@/api/v1/oauth/token", form => $formData )->status_is(403)
+        $t->post_ok( "//$client_id:$client_secret@/api/v1/oauth/token", form => $formData )
+            ->status_is(403)
             ->json_is( { error => 'unauthorized_client' } );
     } else {
-        $t->post_ok( '/api/v1/oauth/token', form => $formData )->status_is(403)
+        $t->post_ok( '/api/v1/oauth/token', form => $formData )
+            ->status_is(403)
             ->json_is( { error => 'unauthorized_client' } );
     }
 
@@ -195,10 +209,12 @@ sub run_oauth_tests {
 
     # Wrong grant type
     if ( $test_case eq 'header' ) {
-        $t->post_ok( "//$client_id:$client_secret@/api/v1/oauth/token", form => $formData )->status_is(400)
+        $t->post_ok( "//$client_id:$client_secret@/api/v1/oauth/token", form => $formData )
+            ->status_is(400)
             ->json_is( { error => 'Unimplemented grant type' } );
     } else {
-        $t->post_ok( '/api/v1/oauth/token', form => $formData )->status_is(400)
+        $t->post_ok( '/api/v1/oauth/token', form => $formData )
+            ->status_is(400)
             ->json_is( { error => 'Unimplemented grant type' } );
     }
 

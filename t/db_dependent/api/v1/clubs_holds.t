@@ -134,7 +134,8 @@ subtest 'add() tests' => sub {
 
         $t->post_ok( "//$userid:$password@/api/v1/clubs/"
                 . $club_with_enrollments->id
-                . "/holds" => json => { pickup_library_id => $non_existent_item_homebranch } )->status_is(400)
+                . "/holds" => json => { pickup_library_id => $non_existent_item_homebranch } )
+            ->status_is(400)
             ->json_is( '/error' => 'At least one of biblio_id, item_id should be given' );
 
         $t->post_ok(
@@ -170,12 +171,15 @@ subtest 'add() tests' => sub {
 
             $t->post_ok(
                 "//$userid:$password@/api/v1/clubs/" . $club_without_enrollments->id . "/holds" => json => $data )
-                ->status_is(409)->json_is( '/error' => "Cannot place a hold on a club without patrons." );
+                ->status_is(409)
+                ->json_is( '/error' => "Cannot place a hold on a club without patrons." );
 
             # place a club hold with top level reserveforothers permission - should succeed
             $t->post_ok( "//$userid:$password@/api/v1/clubs/" . $club_with_enrollments->id . "/holds" => json => $data )
-                ->status_is( 201, 'Created Hold' )->json_has( '/club_hold_id', 'got a club hold id' )
-                ->json_is( '/club_id' => $club_with_enrollments->id )->json_is( '/biblio_id' => $item->biblionumber )
+                ->status_is( 201, 'Created Hold' )
+                ->json_has( '/club_hold_id', 'got a club hold id' )
+                ->json_is( '/club_id'   => $club_with_enrollments->id )
+                ->json_is( '/biblio_id' => $item->biblionumber )
                 ->header_is(
                       'Location' => '/api/v1/clubs/'
                     . $club_with_enrollments->id
@@ -189,7 +193,8 @@ subtest 'add() tests' => sub {
                 "//$userid_2:$password_2@/api/v1/clubs/" . $club_with_enrollments->id . "/holds" => json => $data )
                 ->status_is( 201, 'Created Hold with specific place_holds permission' )
                 ->json_has( '/club_hold_id', 'got a club hold id' )
-                ->json_is( '/club_id' => $club_with_enrollments->id )->json_is( '/biblio_id' => $item->biblionumber );
+                ->json_is( '/club_id'   => $club_with_enrollments->id )
+                ->json_is( '/biblio_id' => $item->biblionumber );
 
             # place a club hold with no reserveforothers or specific permsision - should fail
             $t->post_ok(
@@ -233,12 +238,15 @@ subtest 'add() tests' => sub {
 
             $t->post_ok(
                 "//$userid:$password@/api/v1/clubs/" . $club_without_enrollments->id . "/holds" => json => $data )
-                ->status_is(409)->json_is( '/error' => "Cannot place a hold on a club without patrons." );
+                ->status_is(409)
+                ->json_is( '/error' => "Cannot place a hold on a club without patrons." );
 
             # place a club hold with top level reserveforothers permission - should succeed
             $t->post_ok( "//$userid:$password@/api/v1/clubs/" . $club_with_enrollments->id . "/holds" => json => $data )
-                ->status_is( 201, 'Created Hold' )->json_has( '/club_hold_id', 'got a club hold id' )
-                ->json_is( '/club_id' => $club_with_enrollments->id )->json_is( '/biblio_id' => $item->biblionumber )
+                ->status_is( 201, 'Created Hold' )
+                ->json_has( '/club_hold_id', 'got a club hold id' )
+                ->json_is( '/club_id'   => $club_with_enrollments->id )
+                ->json_is( '/biblio_id' => $item->biblionumber )
                 ->header_is(
                       'Location' => '/api/v1/clubs/'
                     . $club_with_enrollments->id
@@ -252,7 +260,8 @@ subtest 'add() tests' => sub {
                 "//$userid_2:$password_2@/api/v1/clubs/" . $club_with_enrollments->id . "/holds" => json => $data )
                 ->status_is( 201, 'Created Hold with specific place_holds permission' )
                 ->json_has( '/club_hold_id', 'got a club hold id' )
-                ->json_is( '/club_id' => $club_with_enrollments->id )->json_is( '/biblio_id' => $item->biblionumber );
+                ->json_is( '/club_id'   => $club_with_enrollments->id )
+                ->json_is( '/biblio_id' => $item->biblionumber );
 
             # place a club hold with no reserveforothers or specific permsision - should fail
             $t->post_ok(
@@ -348,7 +357,8 @@ sub unauthorized_access_tests {
         $unauthorized_patron->set_password( { password => $password, skip_validation => 1 } );
         my $unauth_userid = $unauthorized_patron->userid;
 
-        $t->$verb_ok( "//$unauth_userid:$password\@$endpoint" => json => $json )->status_is(403)
+        $t->$verb_ok( "//$unauth_userid:$password\@$endpoint" => json => $json )
+            ->status_is(403)
             ->json_has('/required_permissions');
     };
 }

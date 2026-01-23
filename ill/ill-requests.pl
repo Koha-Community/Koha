@@ -144,12 +144,12 @@ if ($backends_available) {
             $op = 'historycheck';
             $template->param( $history_check->history_check_template_params($params) )
 
-                # ILLCheckAvailability operation
+            # ILLCheckAvailability operation
         } elsif ( $availability->show_availability($request) ) {
             $op = 'availability';
             $template->param( $availability->availability_template_params($params) )
 
-                # ILLModuleDisclaimerByType operation
+            # ILLModuleDisclaimerByType operation
         } elsif ( $type_disclaimer->show_type_disclaimer($request) ) {
             $op = 'typedisclaimer';
             $template->param( $type_disclaimer->type_disclaimer_template_params($params) );

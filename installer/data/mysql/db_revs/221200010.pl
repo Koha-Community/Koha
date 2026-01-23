@@ -86,7 +86,7 @@ return {
             )[0] == 0
             )
         {    # Check to make idempotent
-            my $cc_template = <<~ 'END_TEMPLATE';
+            my $cc_template = <<~'END_TEMPLATE';
             **Describe the concern**
             A clear and concise description of what the concern is.
 

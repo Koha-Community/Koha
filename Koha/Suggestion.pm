@@ -61,7 +61,7 @@ sub store {
             category         => 'SUGGEST_STATUS',
             authorised_value => $self->STATUS
         }
-    )->count;
+        )->count;
 
     $self->branchcode(undef) if defined $self->branchcode && $self->branchcode eq '';
     unless ( $self->suggesteddate() ) {

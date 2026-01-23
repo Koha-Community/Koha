@@ -36,7 +36,7 @@ if ( $#ARGV >= 3 && !caller ) {    # process command-line params only if not cal
     if ( !$file ) {
         my $marcxml = $svc->get($biblionumber);
         my $file    = "bib-$biblionumber.xml";
-        write_file $file , $marcxml;
+        write_file $file, $marcxml;
         print "saved $file ", -s $file, " bytes\n";
         print $marcxml;
     } else {

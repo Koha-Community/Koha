@@ -178,9 +178,11 @@ if ( $op eq 'add_form' ) {
 
                 # This basket was created from an EDI order/quote
                 # Check if the vendor EDI account is configured to use purchase order numbers
-                my $schema             = Koha::Database->new()->schema();
-                my $vendor_edi_account = $schema->resultset('VendorEdiAccount')
-                    ->search( { vendor_id => scalar $input->param('basketbooksellerid') } )->first;
+                my $schema = Koha::Database->new()->schema();
+                my $vendor_edi_account =
+                    $schema->resultset('VendorEdiAccount')
+                    ->search( { vendor_id => scalar $input->param('basketbooksellerid') } )
+                    ->first;
 
                 if ( $vendor_edi_account && $vendor_edi_account->po_is_basketname ) {
 

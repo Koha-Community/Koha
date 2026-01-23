@@ -161,7 +161,8 @@ subtest 'update() tests' => sub {
 
     # Authorized attempt
     $t->put_ok( "//$auth_userid:$password@/api/v1/biblios/$biblio_id/item_groups/$item_group_id" => json =>
-            { description => "Vol A" } )->status_is( 200, 'REST3.2.1' )
+            { description => "Vol A" } )
+        ->status_is( 200, 'REST3.2.1' )
         ->json_has( '/description' => "Vol A", 'REST3.3.3' );
 
     # Invalid biblio id
@@ -209,7 +210,8 @@ subtest 'delete() tests' => sub {
     my $item_groupid = $item_group->id;
 
     $t->delete_ok("//$auth_userid:$password@/api/v1/biblios/$biblio_id/item_groups/$item_groupid")
-        ->status_is( 204, 'REST3.2.4' )->content_is( '', 'REST3.3.4' );
+        ->status_is( 204, 'REST3.2.4' )
+        ->content_is( '', 'REST3.3.4' );
 
     # Unauthorized attempt to delete
     $t->delete_ok("//$unauth_userid:$password@/api/v1/biblios/$biblio_id/item_groups/$item_groupid")->status_is(403);
@@ -270,7 +272,8 @@ subtest 'volume items add() + delete() tests' => sub {
     is( scalar(@items), 2, 'Item group now has two items' );
 
     $t->delete_ok("//$userid:$password@/api/v1/biblios/$biblio_id/item_groups/$item_groupid/items/$item_1_id")
-        ->status_is( 204, 'REST3.2.4' )->content_is( '', 'REST3.3.4' );
+        ->status_is( 204, 'REST3.2.4' )
+        ->content_is( '', 'REST3.3.4' );
 
     @items = $item_group->items;
     is( scalar(@items), 1, 'Item group now has one item' );

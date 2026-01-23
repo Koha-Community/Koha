@@ -68,7 +68,8 @@ subtest 'list() tests' => sub {
     my $new_register = $builder->build_object( { class => 'Koha::Cash::Registers' } );
 
     # One more register created, both should be returned
-    $t->get_ok("//$userid:$password@/api/v1/cash_registers")->status_is(200)
+    $t->get_ok("//$userid:$password@/api/v1/cash_registers")
+        ->status_is(200)
         ->json_is( [ $register->to_api, $new_register->to_api, ] );
 
     # Unauthorized access

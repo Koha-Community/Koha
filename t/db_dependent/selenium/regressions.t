@@ -108,8 +108,8 @@ subtest 'OPAC - borrowernumber, branchcode and categorycode as html attributes' 
         $elt->get_attribute( 'data-branchcode', 1 ), $patron->library->branchcode,
         "Since bug 20921 span.loggedinusername should contain data-branchcode"
 
-            # No idea why we need the second param of get_attribute(). As
-            # data-branchcode is still there after page finished loading.
+        # No idea why we need the second param of get_attribute(). As
+        # data-branchcode is still there after page finished loading.
     );
     is(
         $elt->get_attribute( 'data-borrowernumber', 1 ), $patron->borrowernumber,

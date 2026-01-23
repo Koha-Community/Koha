@@ -140,7 +140,7 @@ if ( $op eq 'cud-add' ) {
                     borrowernumber => $borrowernumber
                 },
                 { order_by => { -desc => 'returndate' }, rows => 1 }
-            )->next;
+                )->next;
             $issue_id = $checkout ? $checkout->issue_id : undef;
         }
     }

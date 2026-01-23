@@ -35,7 +35,7 @@ my @files = map {
         || $name =~ m{xt/find-license-problems|xt/fix-old-fsf-address|misc/translator/po2json}
         || $name =~ m[t/mock_templates/intranet-tmpl/prog]
         || !-f $name )
-        ? $_
+    ? $_
         : ()
 } `git ls-tree -r HEAD --name-only`;    # only files part of git
 

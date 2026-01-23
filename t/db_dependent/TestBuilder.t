@@ -162,7 +162,8 @@ subtest 'Test FKs in overduerules_transport_type' => sub {
         'build stores the categorycode correctly'
     );
     is(
-        $schema->resultset('MessageTransportType')->find( $overduerules_transport_type->{message_transport_type} )
+        $schema->resultset('MessageTransportType')
+            ->find( $overduerules_transport_type->{message_transport_type} )
             ->message_transport_type,
         $overduerules_transport_type->{message_transport_type},
         'build stores the foreign key message_transport_type correctly'

@@ -150,11 +150,13 @@ subtest 'auth.register helper' => sub {
     )->status_is(200)->json_is( '/userid', $userid_1 );
 
     $t->post_ok( '/register_user' => json =>
-            { data => {}, domain_id => $domain_2->identity_provider_domain_id, interface => 'opac' } )->status_is(401)
+            { data => {}, domain_id => $domain_2->identity_provider_domain_id, interface => 'opac' } )
+        ->status_is(401)
         ->json_is( '/message', 'unauthorized' );
 
     $t->post_ok( '/register_user' => json =>
-            { data => {}, domain_id => $domain_1->identity_provider_domain_id, interface => 'staff' } )->status_is(401)
+            { data => {}, domain_id => $domain_1->identity_provider_domain_id, interface => 'staff' } )
+        ->status_is(401)
         ->json_is( '/message', 'unauthorized' );
 
     $t->post_ok(
@@ -172,11 +174,13 @@ subtest 'auth.register helper' => sub {
     )->status_is(200)->json_is( '/userid', $userid_2 );
 
     $t->post_ok( '/register_user' => json => { data => {}, domain_id => $domain_1->identity_provider_domain_id } )
-        ->status_is(400)->json_is( '/message', 'missing parameter: interface' );
+        ->status_is(400)
+        ->json_is( '/message', 'missing parameter: interface' );
 
     $t->post_ok( '/register_user' => json =>
             { data => {}, domain_id => $domain_1->identity_provider_domain_id, interface => 'invalid' } )
-        ->status_is(400)->json_is( '/message', 'bad parameter: interface' );
+        ->status_is(400)
+        ->json_is( '/message', 'bad parameter: interface' );
 
     $schema->storage->txn_rollback;
 };
@@ -188,7 +192,8 @@ subtest 'auth.session helper' => sub {
 
     my $patron = $builder->build_object( { class => 'Koha::Patrons' } );
 
-    $t->post_ok( '/start_session' => json => { userid => $patron->userid } )->status_is(200)
+    $t->post_ok( '/start_session' => json => { userid => $patron->userid } )
+        ->status_is(200)
         ->json_has( '/status', 'ok' );
 
     $schema->storage->txn_rollback;

@@ -86,14 +86,16 @@ subtest 'list() tests' => sub {
 
     # Filtering works, two rotas are active
     my $api_filter = encode_json( { 'me.active' => Mojo::JSON->true } );
-    $t->get_ok("//$userid:$password@/api/v1/rotas?q=$api_filter")->status_is(200)
+    $t->get_ok("//$userid:$password@/api/v1/rotas?q=$api_filter")
+        ->status_is(200)
         ->json_is( [ $active_rota->to_api, $another_active_rota->to_api ] );
 
     $api_filter = encode_json( { 'me.title' => $active_rota->title } );
     $t->get_ok("//$userid:$password@/api/v1/rotas?q=$api_filter")->status_is(200)->json_is( [ $active_rota->to_api ] );
 
     # Warn on unsupported query parameter
-    $t->get_ok( "//$userid:$password@/api/v1/rotas?title=" . $active_rota->title )->status_is(400)
+    $t->get_ok( "//$userid:$password@/api/v1/rotas?title=" . $active_rota->title )
+        ->status_is(400)
         ->json_is( [ { path => '/query/title', message => 'Malformed query string' } ] );
 
     # Unauthorized access
@@ -137,7 +139,8 @@ subtest 'get() tests' => sub {
     my $non_existent_id = $rota_to_delete->id;
     $rota_to_delete->delete;
 
-    $t->get_ok("//$userid:$password@/api/v1/rotas/$non_existent_id")->status_is(404)
+    $t->get_ok("//$userid:$password@/api/v1/rotas/$non_existent_id")
+        ->status_is(404)
         ->json_is( '/error' => 'Rota not found' );
 
     $schema->storage->txn_rollback;
@@ -198,12 +201,16 @@ subtest 'add() tests' => sub {
 
     # Authorized attempt to write
     my $rota_id =
-        $t->post_ok( "//$userid:$password@/api/v1/rotas" => json => $rota )->status_is( 201, 'REST3.2.1' )
+        $t->post_ok( "//$userid:$password@/api/v1/rotas" => json => $rota )
+        ->status_is( 201, 'REST3.2.1' )
         ->header_like(
         Location => qr|^\/api\/v1\/rotas/\d*|,
         'REST3.4.1'
-    )->json_is( '/title' => $rota->{title} )->json_is( '/description' => $rota->{description} )
-        ->json_is( '/active' => $rota->{active} )->json_is( '/cyclical' => $rota->{cyclical} )
+        )
+        ->json_is( '/title'       => $rota->{title} )
+        ->json_is( '/description' => $rota->{description} )
+        ->json_is( '/active'      => $rota->{active} )
+        ->json_is( '/cyclical'    => $rota->{cyclical} )
         ->tx->res->json->{rota_id};
 
     # Authorized attempt to create with null id
@@ -264,7 +271,8 @@ subtest 'update() tests' => sub {
         cyclical    => Mojo::JSON->false
     };
 
-    $t->put_ok( "//$userid:$password@/api/v1/rotas/$rota_id" => json => $rota_with_missing_field )->status_is(400)
+    $t->put_ok( "//$userid:$password@/api/v1/rotas/$rota_id" => json => $rota_with_missing_field )
+        ->status_is(400)
         ->json_is( "/errors" => [ { message => "Missing property.", path => "/body/active" } ] );
 
     # Full object update on PUT
@@ -275,7 +283,8 @@ subtest 'update() tests' => sub {
         cyclical    => Mojo::JSON->false
     };
 
-    $t->put_ok( "//$userid:$password@/api/v1/rotas/$rota_id" => json => $rota_with_updated_field )->status_is(200)
+    $t->put_ok( "//$userid:$password@/api/v1/rotas/$rota_id" => json => $rota_with_updated_field )
+        ->status_is(200)
         ->json_is( '/title' => 'London' );
 
     # Authorized attempt to write invalid data
@@ -286,7 +295,8 @@ subtest 'update() tests' => sub {
         cyclical    => Mojo::JSON->false
     };
 
-    $t->put_ok( "//$userid:$password@/api/v1/rotas/$rota_id" => json => $rota_with_invalid_field )->status_is(400)
+    $t->put_ok( "//$userid:$password@/api/v1/rotas/$rota_id" => json => $rota_with_invalid_field )
+        ->status_is(400)
         ->json_is(
         "/errors" => [
             {
@@ -342,7 +352,8 @@ subtest 'delete() tests' => sub {
     # Unauthorized attempt to delete
     $t->delete_ok("//$unauth_userid:$password@/api/v1/rotas/$rota_id")->status_is(403);
 
-    $t->delete_ok("//$userid:$password@/api/v1/rotas/$rota_id")->status_is( 204, 'REST3.2.4' )
+    $t->delete_ok("//$userid:$password@/api/v1/rotas/$rota_id")
+        ->status_is( 204, 'REST3.2.4' )
         ->content_is( '', 'REST3.3.4' );
 
     $t->delete_ok("//$userid:$password@/api/v1/rotas/$rota_id")->status_is(404);

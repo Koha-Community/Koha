@@ -63,7 +63,8 @@ subtest 'list() tests' => sub {
 
     ## Authorized user tests
     # No suggestions by patron, so empty array should be returned
-    $t->get_ok("//$userid:$password@/api/v1/suggestions?q={\"suggested_by\":\"$patron_id\"}")->status_is(200)
+    $t->get_ok("//$userid:$password@/api/v1/suggestions?q={\"suggested_by\":\"$patron_id\"}")
+        ->status_is(200)
         ->json_is( [] );
 
     my $suggestion_1 = $builder->build_object(
@@ -74,7 +75,8 @@ subtest 'list() tests' => sub {
     );
 
     # One suggestion created, should get returned
-    $t->get_ok("//$userid:$password@/api/v1/suggestions?q={\"suggested_by\":\"$patron_id\"}")->status_is(200)
+    $t->get_ok("//$userid:$password@/api/v1/suggestions?q={\"suggested_by\":\"$patron_id\"}")
+        ->status_is(200)
         ->json_is( [ $suggestion_1->to_api ] );
 
     my $suggestion_2 = $builder->build_object(
@@ -85,7 +87,8 @@ subtest 'list() tests' => sub {
     );
 
     # Two SMTP servers created, they should both be returned
-    $t->get_ok("//$userid:$password@/api/v1/suggestions?q={\"suggested_by\":\"$patron_id\"}")->status_is(200)
+    $t->get_ok("//$userid:$password@/api/v1/suggestions?q={\"suggested_by\":\"$patron_id\"}")
+        ->status_is(200)
         ->json_is( [ $suggestion_1->to_api, $suggestion_2->to_api, ] );
 
     # Unauthorized access
@@ -128,7 +131,8 @@ subtest 'get() tests' => sub {
         }
     );
 
-    $t->get_ok( "//$userid:$password@/api/v1/suggestions/" . $suggestion->id )->status_is(200)
+    $t->get_ok( "//$userid:$password@/api/v1/suggestions/" . $suggestion->id )
+        ->status_is(200)
         ->json_is( $suggestion->to_api );
 
     my $authorised_value = Koha::AuthorisedValue->new(
@@ -139,7 +143,8 @@ subtest 'get() tests' => sub {
     )->store;
     $suggestion->STATUS('FREDERIC')->store->discard_changes;
 
-    $t->get_ok( "//$userid:$password@/api/v1/suggestions/" . $suggestion->id )->status_is(200)
+    $t->get_ok( "//$userid:$password@/api/v1/suggestions/" . $suggestion->id )
+        ->status_is(200)
         ->json_is( $suggestion->to_api );
 
     $t->get_ok( "//$unauth_userid:$password@/api/v1/suggestions/" . $suggestion->id )->status_is(403);
@@ -148,7 +153,8 @@ subtest 'get() tests' => sub {
     my $non_existent_id      = $suggestion_to_delete->id;
     $suggestion_to_delete->delete;
 
-    $t->get_ok("//$userid:$password@/api/v1/suggestions/$non_existent_id")->status_is(404)
+    $t->get_ok("//$userid:$password@/api/v1/suggestions/$non_existent_id")
+        ->status_is(404)
         ->json_is( '/error' => 'Suggestion not found' );
 
     $schema->storage->txn_rollback;
@@ -198,7 +204,8 @@ subtest 'add() tests' => sub {
     # Authorized attempt to write invalid data
     my $suggestion_with_invalid_field = { blah => 'blah' };
 
-    $t->post_ok( "//$userid:$password@/api/v1/suggestions" => json => $suggestion_with_invalid_field )->status_is(400)
+    $t->post_ok( "//$userid:$password@/api/v1/suggestions" => json => $suggestion_with_invalid_field )
+        ->status_is(400)
         ->json_is(
         "/errors" => [
             {
@@ -211,10 +218,11 @@ subtest 'add() tests' => sub {
     # Authorized attempt to write
     my $generated_suggestion =
         $t->post_ok( "//$userid:$password@/api/v1/suggestions" => json => $suggestion_data )
-        ->status_is( 201, 'REST3.2.1' )->header_like(
+        ->status_is( 201, 'REST3.2.1' )
+        ->header_like(
         Location => qr|^\/api\/v1\/suggestions\/\d*|,
         'REST3.4.1'
-    )->tx->res->json;
+        )->tx->res->json;
 
     my $suggestion_id = $generated_suggestion->{suggestion_id};
     is_deeply(
@@ -225,7 +233,8 @@ subtest 'add() tests' => sub {
 
     # Authorized attempt to create with null id
     $suggestion_data->{suggestion_id} = undef;
-    $t->post_ok( "//$userid:$password@/api/v1/suggestions" => json => $suggestion_data )->status_is(400)
+    $t->post_ok( "//$userid:$password@/api/v1/suggestions" => json => $suggestion_data )
+        ->status_is(400)
         ->json_has('/errors');
 
     # Authorized attempt to create with existing id
@@ -266,13 +275,15 @@ subtest 'add() tests' => sub {
         $t->post_ok( "//$userid:$password@/api/v1/suggestions" => json => $suggestion_data )
             ->status_is( 201, 'Second pending suggestion' );
 
-        $t->post_ok( "//$userid:$password@/api/v1/suggestions" => json => $suggestion_data )->status_is(400)
+        $t->post_ok( "//$userid:$password@/api/v1/suggestions" => json => $suggestion_data )
+            ->status_is(400)
             ->json_is( '/error_code' => 'max_pending_reached' );
 
         $t->post_ok( "//$userid:$password@/api/v1/suggestions" => { 'x-koha-override' => 'max_pending' } => json =>
                 $suggestion_data )->status_is( 201, 'max_pending override does the job' );
 
-        $t->post_ok( "//$userid:$password@/api/v1/suggestions" => json => $suggestion_data )->status_is(400)
+        $t->post_ok( "//$userid:$password@/api/v1/suggestions" => json => $suggestion_data )
+            ->status_is(400)
             ->json_is( '/error_code' => 'max_total_reached' );
 
         $t->post_ok(
@@ -324,7 +335,8 @@ subtest 'update() tests' => sub {
     my $suggestion_with_updated_field = { reason => "Some reason", };
 
     $t->put_ok( "//$userid:$password@/api/v1/suggestions/$suggestion_id" => json => $suggestion_with_updated_field )
-        ->status_is(200)->json_is( '/reason' => 'Some reason' );
+        ->status_is(200)
+        ->json_is( '/reason' => 'Some reason' );
 
     # Authorized attempt to write invalid data
     my $suggestion_with_invalid_field = {
@@ -333,7 +345,8 @@ subtest 'update() tests' => sub {
     };
 
     $t->put_ok( "//$userid:$password@/api/v1/suggestions/$suggestion_id" => json => $suggestion_with_invalid_field )
-        ->status_is(400)->json_is(
+        ->status_is(400)
+        ->json_is(
         "/errors" => [
             {
                 message => "Properties not allowed: blah.",
@@ -389,7 +402,8 @@ subtest 'delete() tests' => sub {
     # Unauthorized attempt to delete
     $t->delete_ok("//$unauth_userid:$password@/api/v1/suggestions/$suggestion_id")->status_is(403);
 
-    $t->delete_ok("//$userid:$password@/api/v1/suggestions/$suggestion_id")->status_is( 204, 'REST3.2.4' )
+    $t->delete_ok("//$userid:$password@/api/v1/suggestions/$suggestion_id")
+        ->status_is( 204, 'REST3.2.4' )
         ->content_is( q{}, 'REST3.3.4' );
 
     $t->delete_ok("//$userid:$password@/api/v1/suggestions/$suggestion_id")->status_is(404);
@@ -448,10 +462,11 @@ subtest 'Permissions tests' => sub {
     # Authorized attempt to write
     my $generated_suggestion =
         $t->post_ok( "//$userid:$password@/api/v1/suggestions" => json => $suggestion_data )
-        ->status_is( 201, 'REST3.2.1' )->header_like(
+        ->status_is( 201, 'REST3.2.1' )
+        ->header_like(
         Location => qr|^\/api\/v1\/suggestions\/\d*|,
         'REST3.4.1'
-    )->tx->res->json;
+        )->tx->res->json;
 
     my $suggestion_id = $generated_suggestion->{suggestion_id};
     is_deeply(
@@ -473,7 +488,8 @@ subtest 'Permissions tests' => sub {
         }
     );
 
-    $t->delete_ok("//$userid:$password@/api/v1/suggestions/$suggestion_id")->status_is( 204, 'REST3.2.4' )
+    $t->delete_ok("//$userid:$password@/api/v1/suggestions/$suggestion_id")
+        ->status_is( 204, 'REST3.2.4' )
         ->content_is( q{}, 'REST3.3.4' );
 
     $schema->storage->txn_rollback;

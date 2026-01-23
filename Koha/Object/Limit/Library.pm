@@ -78,8 +78,10 @@ It returns undef if no library limits defined.
 sub get_library_limits {
     my ($self) = @_;
 
-    my @branchcodes = $self->_library_limit_rs->search( { $self->_library_limits->{id} => $self->id } )
-        ->get_column( $self->_library_limits->{library} )->all();
+    my @branchcodes =
+        $self->_library_limit_rs->search( { $self->_library_limits->{id} => $self->id } )
+        ->get_column( $self->_library_limits->{library} )
+        ->all();
 
     return unless @branchcodes;
 

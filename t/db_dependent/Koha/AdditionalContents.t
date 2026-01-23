@@ -110,7 +110,7 @@ subtest '->is_expired' => sub {
 
     my $today     = dt_from_string;
     my $yesterday = dt_from_string->add( days => -1 );
-    my $tomorrow  = dt_from_string->add( days => 1 );
+    my $tomorrow  = dt_from_string->add( days =>  1 );
     my $new_today = $builder->build_object(
         {
             class => 'Koha::AdditionalContents',
@@ -200,7 +200,7 @@ subtest '->search_for_display' => sub {
 
     my $today     = dt_from_string;
     my $yesterday = dt_from_string->add( days => -1 );
-    my $tomorrow  = dt_from_string->add( days => 1 );
+    my $tomorrow  = dt_from_string->add( days =>  1 );
     my $library1  = $builder->build_object( { class => 'Koha::Libraries' } );
     my $library2  = $builder->build_object( { class => 'Koha::Libraries' } );
 

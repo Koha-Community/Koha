@@ -178,8 +178,12 @@ subtest 'filter_by_obsolete and cancel' => sub {
 
     # First make order 1 obsolete by removing biblio, and order 3 by status problem.
     my $date = Koha::DateUtils::dt_from_string->subtract( days => 7 );
-    $order_1->orderstatus('ordered')->quantity(2)->quantityreceived(0)->datecancellationprinted(undef)
-        ->entrydate($date)->store;
+    $order_1->orderstatus('ordered')
+        ->quantity(2)
+        ->quantityreceived(0)
+        ->datecancellationprinted(undef)
+        ->entrydate($date)
+        ->store;
     Koha::Biblios->find( $order_1->biblionumber )->delete;
     $order_1->discard_changes;
     $order_2->orderstatus('ordered')->quantity(3)->quantityreceived(0)->datecancellationprinted(undef)->store;

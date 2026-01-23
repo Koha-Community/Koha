@@ -132,7 +132,7 @@ subtest 'outstanding_debits() tests' => sub {
         {
             borrowernumber    => $patron_4->id,
             amount            => -3,
-            amountoutstanding => 3,
+            amountoutstanding =>  3,
             interface         => 'commandline',
             credit_type_code  => 'PAYMENT'
         }
@@ -176,7 +176,7 @@ subtest 'outstanding_credits() tests' => sub {
     Koha::Account::Line->new(
         {
             borrowernumber    => $patron_2->id,
-            amount            => 2,
+            amount            =>  2,
             amountoutstanding => -3,
             interface         => 'commandline',
             debit_type_code   => 'OVERDUE'
@@ -544,13 +544,13 @@ subtest 'reconcile_balance' => sub {
         )->store;
 
         is( $account->balance(),                              -5,  "Account balance is -5" );
-        is( $account->outstanding_debits->total_outstanding,  10,  'Outstanding debits sum 10' );
+        is( $account->outstanding_debits->total_outstanding,   10, 'Outstanding debits sum 10' );
         is( $account->outstanding_credits->total_outstanding, -15, 'Outstanding credits sum -15' );
 
         $account->reconcile_balance();
 
         is( $account->balance(),                              -5, "Account balance is -5" );
-        is( $account->outstanding_debits->total_outstanding,  0,  'No outstanding debits' );
+        is( $account->outstanding_debits->total_outstanding,   0, 'No outstanding debits' );
         is( $account->outstanding_credits->total_outstanding, -5, 'Outstanding credits sum -5' );
 
         $schema->storage->txn_rollback;
@@ -597,8 +597,8 @@ subtest 'reconcile_balance' => sub {
             }
         )->store;
 
-        is( $account->balance(),                              0,   "Account balance is 0" );
-        is( $account->outstanding_debits->total_outstanding,  10,  'Outstanding debits sum 10' );
+        is( $account->balance(),                               0,  "Account balance is 0" );
+        is( $account->outstanding_debits->total_outstanding,   10, 'Outstanding debits sum 10' );
         is( $account->outstanding_credits->total_outstanding, -10, 'Outstanding credits sum -10' );
 
         $account->reconcile_balance();
@@ -652,8 +652,8 @@ subtest 'reconcile_balance' => sub {
             }
         )->store;
 
-        is( $account->balance(),                              5,   "Account balance is 5" );
-        is( $account->outstanding_debits->total_outstanding,  15,  'Outstanding debits sum 15' );
+        is( $account->balance(),                               5,  "Account balance is 5" );
+        is( $account->outstanding_debits->total_outstanding,   15, 'Outstanding debits sum 15' );
         is( $account->outstanding_credits->total_outstanding, -10, 'Outstanding credits sum -10' );
 
         $account->reconcile_balance();
@@ -683,8 +683,8 @@ subtest 'reconcile_balance' => sub {
         my $debit_2 = $account->add_debit( { amount => 2, interface => 'commandline', type => 'OVERDUE' } );
         my $debit_3 = $account->add_debit( { amount => 3, interface => 'commandline', type => 'OVERDUE' } );
 
-        is( $account->balance(),                              2,  "Account balance is 2" );
-        is( $account->outstanding_debits->total_outstanding,  6,  'Outstanding debits sum 6' );
+        is( $account->balance(),                               2, "Account balance is 2" );
+        is( $account->outstanding_debits->total_outstanding,   6, 'Outstanding debits sum 6' );
         is( $account->outstanding_credits->total_outstanding, -4, 'Outstanding credits sum -4' );
 
         $account->reconcile_balance();
@@ -1019,7 +1019,7 @@ subtest 'pay() handles lost items when paying by amount ( not specifying the los
 
     $account->pay(
         {
-            amount     => .5,,
+            amount     => .5,
             library_id => $library->id,
         }
     );
@@ -1363,7 +1363,7 @@ subtest 'Koha::Account::payout_amount() tests' => sub {
     my $credit_3 = $account->add_credit( { amount => 5,  interface => 'commandline' } );
     my $credit_4 = $account->add_credit( { amount => 10, interface => 'commandline' } );
     my $credits  = $account->outstanding_credits();
-    is( $credits->count,                 4,   "Found 4 credits with outstanding amounts" );
+    is( $credits->count,                  4,  "Found 4 credits with outstanding amounts" );
     is( $credits->total_outstanding + 0, -20, "Total -20 outstanding credit" );
 
     my $payout = $account->payout_amount($payout_params);
@@ -1371,7 +1371,7 @@ subtest 'Koha::Account::payout_amount() tests' => sub {
     is( $payout->amount + 0,            10,                    "Payout amount recorded correctly" );
     is( $payout->amountoutstanding + 0, 0,                     "Full amount was paid out" );
     $credits = $account->outstanding_credits();
-    is( $credits->count,                 1,   "Payout was applied against oldest outstanding credits first" );
+    is( $credits->count,                  1,  "Payout was applied against oldest outstanding credits first" );
     is( $credits->total_outstanding + 0, -10, "Total of 10 outstanding credit remaining" );
 
     my $offsets = Koha::Account::Offsets->search( { debit_id => $payout->id } );
@@ -1400,7 +1400,7 @@ subtest 'Koha::Account::payout_amount() tests' => sub {
     $payout                   = $account->payout_amount($payout_params);
 
     $credits = $account->outstanding_credits();
-    is( $credits->count,                 2,      "Second credit not fully paid off" );
+    is( $credits->count,                  2,     "Second credit not fully paid off" );
     is( $credits->total_outstanding + 0, -12.50, "12.50 outstanding credit remaining" );
     $credit_4->discard_changes;
     $credit_5->discard_changes;
@@ -1496,7 +1496,7 @@ subtest 'Koha::Account::payin_amount() tests' => sub {
     my $payin = $account->payin_amount($payin_params);
     is( ref($payin),                   'Koha::Account::Line', 'Return the Koha::Account::Line object for the payin' );
     is( $payin->amount + 0,            -10,                   "Payin amount recorded correctly" );
-    is( $payin->amountoutstanding + 0, 0,                     "Full amount was used to pay debts" );
+    is( $payin->amountoutstanding + 0,  0,                    "Full amount was used to pay debts" );
     $debits = $account->outstanding_debits();
     is( $debits->count,                 1,  "Payin was applied against oldest outstanding debits first" );
     is( $debits->total_outstanding + 0, 10, "Total of 10 outstanding debit remaining" );

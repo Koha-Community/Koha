@@ -110,12 +110,14 @@ subtest 'get() tests' => sub {
     my $unauth_userid = $patron->userid;
 
     # This train exists, should get returned
-    $t->get_ok( "//$userid:$password@/api/v1/preservation/trains/" . $train->train_id )->status_is(200)
+    $t->get_ok( "//$userid:$password@/api/v1/preservation/trains/" . $train->train_id )
+        ->status_is(200)
         ->json_is( $train->to_api );
 
     # Return one train with some embeds
     $t->get_ok( "//$userid:$password@/api/v1/preservation/trains/"
-            . $train->train_id => { 'x-koha-embed' => 'items,default_processing' } )->status_is(200)
+            . $train->train_id => { 'x-koha-embed' => 'items,default_processing' } )
+        ->status_is(200)
         ->json_is( { %{ $train->to_api }, items => [], default_processing => $default_processing->unblessed } );
 
     # Return one train with all embeds
@@ -140,7 +142,8 @@ subtest 'get() tests' => sub {
     my $non_existent_id = $train_to_delete->train_id;
     $train_to_delete->delete;
 
-    $t->get_ok("//$userid:$password@/api/v1/preservation/trains/$non_existent_id")->status_is(404)
+    $t->get_ok("//$userid:$password@/api/v1/preservation/trains/$non_existent_id")
+        ->status_is(404)
         ->json_is( '/error' => 'Train not found' );
 
     $schema->storage->txn_rollback;
@@ -190,7 +193,8 @@ subtest 'add() tests' => sub {
     };
 
     $t->post_ok( "//$userid:$password@/api/v1/preservation/trains" => json => $train_with_invalid_field )
-        ->status_is(400)->json_is(
+        ->status_is(400)
+        ->json_is(
         "/errors" => [
             {
                 message => "Properties not allowed: blah.",
@@ -202,16 +206,21 @@ subtest 'add() tests' => sub {
     # Authorized attempt to write
     my $train_id =
         $t->post_ok( "//$userid:$password@/api/v1/preservation/trains" => json => $train )
-        ->status_is( 201, 'REST3.2.1' )->header_like(
+        ->status_is( 201, 'REST3.2.1' )
+        ->header_like(
         Location => qr|^/api/v1/preservation/trains/\d*|,
         'REST3.4.1'
-    )->json_is( '/name' => $train->{name} )->json_is( '/description' => $train->{description} )
+        )
+        ->json_is( '/name'                  => $train->{name} )
+        ->json_is( '/description'           => $train->{description} )
         ->json_is( '/default_processing_id' => $train->{default_processing_id} )
-        ->json_is( '/not_for_loan'          => $train->{not_for_loan} )->tx->res->json->{train_id};
+        ->json_is( '/not_for_loan'          => $train->{not_for_loan} )
+        ->tx->res->json->{train_id};
 
     # Authorized attempt to create with null id
     $train->{train_id} = undef;
-    $t->post_ok( "//$userid:$password@/api/v1/preservation/trains" => json => $train )->status_is(400)
+    $t->post_ok( "//$userid:$password@/api/v1/preservation/trains" => json => $train )
+        ->status_is(400)
         ->json_has('/errors');
 
     # Authorized attempt to create with existing id
@@ -264,7 +273,8 @@ subtest 'update() tests' => sub {
     my $train_with_missing_field = {};
 
     $t->put_ok( "//$userid:$password@/api/v1/preservation/trains/$train_id" => json => $train_with_missing_field )
-        ->status_is(400)->json_is( "/errors" => [ { message => "Missing property.", path => "/body/name" } ] );
+        ->status_is(400)
+        ->json_is( "/errors" => [ { message => "Missing property.", path => "/body/name" } ] );
 
     my $default_processing = $builder->build_object( { class => 'Koha::Preservation::Processings' } );
 
@@ -277,7 +287,8 @@ subtest 'update() tests' => sub {
     };
 
     $t->put_ok( "//$userid:$password@/api/v1/preservation/trains/$train_id" => json => $train_with_updated_field )
-        ->status_is(200)->json_is( '/name' => 'New name' );
+        ->status_is(200)
+        ->json_is( '/name' => 'New name' );
 
     # Authorized attempt to write invalid data
     my $train_with_invalid_field = {
@@ -286,7 +297,8 @@ subtest 'update() tests' => sub {
     };
 
     $t->put_ok( "//$userid:$password@/api/v1/preservation/trains/$train_id" => json => $train_with_invalid_field )
-        ->status_is(400)->json_is(
+        ->status_is(400)
+        ->json_is(
         "/errors" => [
             {
                 message => "Properties not allowed: blah.",
@@ -345,7 +357,8 @@ subtest 'delete() tests' => sub {
     $t->delete_ok("//$unauth_userid:$password@/api/v1/preservation/trains/$train_id")->status_is(403);
 
     # Delete existing train
-    $t->delete_ok("//$userid:$password@/api/v1/preservation/trains/$train_id")->status_is( 204, 'REST3.2.4' )
+    $t->delete_ok("//$userid:$password@/api/v1/preservation/trains/$train_id")
+        ->status_is( 204, 'REST3.2.4' )
         ->content_is( '', 'REST3.3.4' );
 
     # Attempt to delete non-existent train
@@ -436,9 +449,12 @@ subtest '*_item() tests' => sub {
     ];
     my $train_item_id =
         $t->post_ok( "//$userid:$password@/api/v1/preservation/trains/$train_id/items" => json =>
-            { item_id => $item_1->itemnumber, attributes => $item_attributes } )->status_is( 201, 'REST3.2.1' )
-        ->json_is( '/item_id' => $item_1->itemnumber )->json_is( '/processing_id' => $train->default_processing_id )
-        ->json_has('/added_on')->tx->res->json->{train_item_id};
+            { item_id => $item_1->itemnumber, attributes => $item_attributes } )
+        ->status_is( 201, 'REST3.2.1' )
+        ->json_is( '/item_id'       => $item_1->itemnumber )
+        ->json_is( '/processing_id' => $train->default_processing_id )
+        ->json_has('/added_on')
+        ->tx->res->json->{train_item_id};
     my $train_item = Koha::Preservation::Train::Items->find($train_item_id);
 
     $t->get_ok( "//$userid:$password@/api/v1/preservation/trains/$train_id/items/$train_item_id" =>
@@ -471,8 +487,11 @@ subtest '*_item() tests' => sub {
 
     $item_3->notforloan($not_for_loan_waiting_list_in)->store;
     $t->post_ok( "//$userid:$password@/api/v1/preservation/trains/$train_id/items/batch" => json =>
-            [ { item_id => $item_3->itemnumber } ] )->status_is(201)->json_is( '/0/item_id' => $item_3->itemnumber )
-        ->json_is( '/0/processing_id' => $train->default_processing_id )->json_has('/0/added_on');
+            [ { item_id => $item_3->itemnumber } ] )
+        ->status_is(201)
+        ->json_is( '/0/item_id'       => $item_3->itemnumber )
+        ->json_is( '/0/processing_id' => $train->default_processing_id )
+        ->json_has('/0/added_on');
 
     # Update item
     my $new_item_attributes = [
@@ -502,10 +521,12 @@ subtest '*_item() tests' => sub {
 
     # Delete existing item
     $t->delete_ok("//$userid:$password@/api/v1/preservation/trains/$train_id/items/$train_item_id")
-        ->status_is( 204, 'REST3.2.4' )->content_is( '', 'REST3.3.4' );
+        ->status_is( 204, 'REST3.2.4' )
+        ->content_is( '', 'REST3.3.4' );
 
     # Delete non existing item
-    $t->delete_ok("//$userid:$password@/api/v1/preservation/trains/$train_id/items/$train_item_id")->status_is(404)
+    $t->delete_ok("//$userid:$password@/api/v1/preservation/trains/$train_id/items/$train_item_id")
+        ->status_is(404)
         ->json_is( '/error' => 'Train item not found' );
 
     $schema->storage->txn_rollback;

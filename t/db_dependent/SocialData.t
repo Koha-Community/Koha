@@ -59,7 +59,8 @@ subtest 'get_report' => sub {
     is( $report->{'without'}->[0]->{'isbn'},     '9780596526740', 'testing get_report' );
 
     # test if we can get with key instead
-    $schema->resultset('SocialData')->search( { isbn => '0-596-52674-1' } )
+    $schema->resultset('SocialData')
+        ->search( { isbn => '0-596-52674-1' } )
         ->next->update( { isbn => '9780596526740' } );
     $report = C4::SocialData::get_report();
     is( $report->{with}->[0]->{isbn}, '9780596526740', 'this isbn has social data' );
