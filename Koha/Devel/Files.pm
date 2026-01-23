@@ -35,6 +35,7 @@ my $exceptions = {
             qw(
                 Koha/Schema/Result
                 Koha/Schema.pm
+                lib/
             )
         ],
         valid => [
