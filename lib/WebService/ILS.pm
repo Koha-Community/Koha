@@ -408,11 +408,11 @@ An example:
         client_id => $client_id,
         client_secret => $client_secret,
     });
-    my $redirect_url = $ils->auth_url("http://myapp.com/ils-auth");
+    my $redirect_url = $ils->auth_url("https://myapp.com/ils-auth");
     $response->redirect($redirect_url);
     ...
     After successful authentication at the provider, provider redirects
-    back to specified app url (http://myapp.com/ils-auth)
+    back to specified app url (https://myapp.com/ils-auth)
 
     /ils-auth handler:
     my $auth_token = $req->param( $ils->auth_token_param_name )

@@ -639,7 +639,7 @@ sub native_item_summary {
 
 =head2 native_holds ()
 
-See L<http://developer.rbdigital.com/endpoints/title-holds>
+See L<https://developer.rbdigital.com/endpoints/title-holds>
 
 =cut
 

@@ -34,8 +34,8 @@ use parent qw(WebService::ILS::JSON);
 
 use constant API_VERSION => "v1";
 
-use constant DISCOVERY_API_URL => "http://api.overdrive.com/";
-use constant TEST_DISCOVERY_API_URL => "http://integration.api.overdrive.com/";
+use constant DISCOVERY_API_URL => "https://api.overdrive.com/";
+use constant TEST_DISCOVERY_API_URL => "https://integration.api.overdrive.com/";
 
 =head1 CONSTRUCTOR
 

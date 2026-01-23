@@ -31,8 +31,8 @@ use Data::Dumper;
 
 use parent qw(WebService::ILS::OverDrive);
 
-use constant CIRCULATION_API_URL => "http://patron.api.overdrive.com/";
-use constant TEST_CIRCULATION_API_URL => "http://integration-patron.api.overdrive.com/";
+use constant CIRCULATION_API_URL => "https://patron.api.overdrive.com/";
+use constant TEST_CIRCULATION_API_URL => "https://integration-patron.api.overdrive.com/";
 use constant OAUTH_BASE_URL => "https://oauth.overdrive.com/";
 use constant TOKEN_URL => OAUTH_BASE_URL . 'token';
 use constant AUTH_URL => OAUTH_BASE_URL . 'auth';
@@ -123,7 +123,7 @@ An example:
         client_secret => $client_secret,
         library_id => $library_id,
     });
-    my $redirect_url = $overdrive->auth_url("http://myapp.com/overdrive-auth");
+    my $redirect_url = $overdrive->auth_url("https://myapp.com/overdrive-auth");
     $response->redirect($redirect_url);
     ...
     /overdrive-auth handler:
