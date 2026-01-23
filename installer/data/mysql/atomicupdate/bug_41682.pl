@@ -26,6 +26,15 @@ return {
             }
         );
 
+        # At least StoreLastBorrower has type=integer
+        $dbh->do(
+            q{
+                UPDATE systempreferences
+                SET type='Integer'
+                WHERE BINARY type='integer'
+            }
+        );
+
         my $new_explanations = {
             AcquisitionsDefaultEmailAddress => q{Default email address that acquisition notices are sent from},
             AdvancedSearchLanguages         =>
