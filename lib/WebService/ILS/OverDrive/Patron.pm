@@ -362,7 +362,8 @@ sub remove_hold {
         sub {
             my ($data) = @_;
             return 1 if $data->{errorCode} eq "PatronDoesntHaveTitleOnHold";
-            die ($data->{message} || $data->{errorCode})."\n";
+            my $error = ($data->{message} || $data->{errorCode})."\n";
+            die $error;
         },
         $url
     );
@@ -570,7 +571,8 @@ sub return {
         sub {
             my ($data) = @_;
             return 1 if $data->{errorCode} eq "PatronDoesntHaveTitleCheckedOut";
-            die ($data->{message} || $data->{errorCode})."\n";
+            my $error = ($data->{message} || $data->{errorCode})."\n";
+            die $error;
         },
         $url
     );
@@ -640,7 +642,8 @@ sub native_place_hold {
                 }
             }
 
-            die ($data->{message} || $data->{errorCode})."\n";
+            my $error = ($data->{message} || $data->{errorCode})."\n";
+            die $error;
         },
         $url,
         {fields => \@fields}
