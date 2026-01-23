@@ -49,7 +49,7 @@ return {
                 q{Choose which search method to use by default when searching with PatronAutoComplete},
             displayFacetCount          => q{If enabled, display the number of facet counts},
             EnableBooking              => q{If enabled, activate every functionalities related with Bookings module},
-            HoldCancellationRequestSIP => q{Option to set holds cancelled via SIP as cancelation requests},
+            HoldCancellationRequestSIP => q{Option to set holds cancelled via SIP as cancellation requests},
             HoldRatioDefault           => q{Default value for the hold ratio report},
             ILLModule                  => q{If ON, enables the interlibrary loans module.},
             OPACLoginLabelTextContent  => q{Control the text displayed on the login form},
