@@ -187,5 +187,4 @@ recommends 'Test::YAML::Valid', '0.04';
 recommends 'Text::Unidecode', '0.04';
 recommends 'Time::Fake', '0.11';
 recommends 'UNIVERSAL::require', '0.13';
-recommends 'WebService::ILS', '0.17';
 recommends 'XML::Writer', '0.614';
