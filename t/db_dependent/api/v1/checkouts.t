@@ -18,7 +18,7 @@
 use Modern::Perl;
 
 use Test::NoWarnings;
-use Test::More tests => 109;
+use Test::More tests => 111;
 use Test::MockModule;
 use Test::Mojo;
 use t::lib::Mocks;
@@ -91,7 +91,8 @@ $bookings_librarian->set_password( { password => $password, skip_validation => 1
 my $bookings_userid = $bookings_librarian->userid;
 
 $t->get_ok("//$bookings_userid:$password@/api/v1/checkouts?patron_id=$patron_id")
-    ->status_is( 200, 'manage_bookings allows checkouts access' )->json_is( [] );
+    ->status_is( 200, 'manage_bookings allows checkouts access' )
+    ->json_is( [] );
 
 Koha::CirculationRules->set_rules(
     {
@@ -121,26 +122,39 @@ my $date_due3 = Koha::DateUtils::dt_from_string( $issue3->date_due );
 my $issue4    = C4::Circulation::AddIssue( $patron, $item4->barcode );
 C4::Circulation::AddReturn( $item4->barcode, $branchcode );
 
-$t->get_ok("//$userid:$password@/api/v1/checkouts?patron_id=$patron_id")->status_is(200)
-    ->json_is( '/0/patron_id' => $patron_id )->json_is( '/0/item_id' => $item1->itemnumber )
+$t->get_ok("//$userid:$password@/api/v1/checkouts?patron_id=$patron_id")
+    ->status_is(200)
+    ->json_is( '/0/patron_id' => $patron_id )
+    ->json_is( '/0/item_id'   => $item1->itemnumber )
     ->json_is( '/0/due_date'  => output_pref( { dateformat => "rfc3339", dt => $date_due1 } ) )
-    ->json_is( '/1/patron_id' => $patron_id )->json_is( '/1/item_id' => $item2->itemnumber )
-    ->json_is( '/1/due_date'  => output_pref( { dateformat => "rfc3339", dt => $date_due2 } ) )->json_hasnt('/2');
+    ->json_is( '/1/patron_id' => $patron_id )
+    ->json_is( '/1/item_id'   => $item2->itemnumber )
+    ->json_is( '/1/due_date'  => output_pref( { dateformat => "rfc3339", dt => $date_due2 } ) )
+    ->json_hasnt('/2');
 
 # Test checked_in parameter, zero means, the response is same as without it
-$t->get_ok("//$userid:$password@/api/v1/checkouts?patron_id=$patron_id&checked_in=0")->status_is(200)
-    ->json_is( '/0/patron_id' => $patron_id )->json_is( '/0/item_id' => $item1->itemnumber )
+$t->get_ok("//$userid:$password@/api/v1/checkouts?patron_id=$patron_id&checked_in=0")
+    ->status_is(200)
+    ->json_is( '/0/patron_id' => $patron_id )
+    ->json_is( '/0/item_id'   => $item1->itemnumber )
     ->json_is( '/0/due_date'  => output_pref( { dateformat => "rfc3339", dt => $date_due1 } ) )
-    ->json_is( '/1/patron_id' => $patron_id )->json_is( '/1/item_id' => $item2->itemnumber )
-    ->json_is( '/1/due_date'  => output_pref( { dateformat => "rfc3339", dt => $date_due2 } ) )->json_hasnt('/2');
+    ->json_is( '/1/patron_id' => $patron_id )
+    ->json_is( '/1/item_id'   => $item2->itemnumber )
+    ->json_is( '/1/due_date'  => output_pref( { dateformat => "rfc3339", dt => $date_due2 } ) )
+    ->json_hasnt('/2');
 
 # Test checked_in parameter, one measn, the checked in checkout is in the response too
-$t->get_ok("//$userid:$password@/api/v1/checkouts?patron_id=$patron_id&checked_in=1")->status_is(200)
-    ->json_is( '/0/patron_id' => $patron_id )->json_is( '/0/item_id' => $item4->itemnumber )->json_hasnt('/1');
+$t->get_ok("//$userid:$password@/api/v1/checkouts?patron_id=$patron_id&checked_in=1")
+    ->status_is(200)
+    ->json_is( '/0/patron_id' => $patron_id )
+    ->json_is( '/0/item_id'   => $item4->itemnumber )
+    ->json_hasnt('/1');
 
 $item4->delete;
-$t->get_ok("//$userid:$password@/api/v1/checkouts?patron_id=$patron_id&checked_in=1")->status_is(200)
-    ->json_is( '/0/patron_id' => $patron_id )->json_is( '/0/item_id' => undef );
+$t->get_ok("//$userid:$password@/api/v1/checkouts?patron_id=$patron_id&checked_in=1")
+    ->status_is(200)
+    ->json_is( '/0/patron_id' => $patron_id )
+    ->json_is( '/0/item_id'   => undef );
 
 $t->get_ok( "//$unauth_userid:$unauth_password@/api/v1/checkouts/" . $issue3->issue_id )->status_is(403)->json_is(
     {
@@ -149,49 +163,72 @@ $t->get_ok( "//$unauth_userid:$unauth_password@/api/v1/checkouts/" . $issue3->is
     }
 );
 
-$t->get_ok("//$userid:$password@/api/v1/checkouts?patron_id=$patron_id")->status_is(200)
-    ->json_is( '/0/patron_id' => $patron_id )->json_is( '/0/item_id' => $item1->itemnumber )
+$t->get_ok("//$userid:$password@/api/v1/checkouts?patron_id=$patron_id")
+    ->status_is(200)
+    ->json_is( '/0/patron_id' => $patron_id )
+    ->json_is( '/0/item_id'   => $item1->itemnumber )
     ->json_is( '/0/due_date'  => output_pref( { dateformat => "rfc3339", dt => $date_due1 } ) )
-    ->json_is( '/1/patron_id' => $patron_id )->json_is( '/1/item_id' => $item2->itemnumber )
-    ->json_is( '/1/due_date'  => output_pref( { dateformat => "rfc3339", dt => $date_due2 } ) )->json_hasnt('/2');
+    ->json_is( '/1/patron_id' => $patron_id )
+    ->json_is( '/1/item_id'   => $item2->itemnumber )
+    ->json_is( '/1/due_date'  => output_pref( { dateformat => "rfc3339", dt => $date_due2 } ) )
+    ->json_hasnt('/2');
 
-$t->get_ok("//$userid:$password@/api/v1/checkouts?patron_id=$patron_id&_per_page=1&_page=1")->status_is(200)
-    ->header_is( 'X-Total-Count', '2' )->header_like( 'Link', qr|rel="next"| )->header_like( 'Link', qr|rel="first"| )
-    ->header_like( 'Link', qr|rel="last"| )->json_is( '/0/patron_id' => $patron_id )
-    ->json_is( '/0/item_id'  => $item1->itemnumber )
-    ->json_is( '/0/due_date' => output_pref( { dateformat => "rfc3339", dt => $date_due1 } ) )->json_hasnt('/1');
+$t->get_ok("//$userid:$password@/api/v1/checkouts?patron_id=$patron_id&_per_page=1&_page=1")
+    ->status_is(200)
+    ->header_is( 'X-Total-Count', '2' )
+    ->header_like( 'Link', qr|rel="next"| )
+    ->header_like( 'Link', qr|rel="first"| )
+    ->header_like( 'Link', qr|rel="last"| )
+    ->json_is( '/0/patron_id' => $patron_id )
+    ->json_is( '/0/item_id'   => $item1->itemnumber )
+    ->json_is( '/0/due_date'  => output_pref( { dateformat => "rfc3339", dt => $date_due1 } ) )
+    ->json_hasnt('/1');
 
-$t->get_ok("//$userid:$password@/api/v1/checkouts?patron_id=$patron_id&_per_page=1&_page=2")->status_is(200)
-    ->header_is( 'X-Total-Count', '2' )->header_like( 'Link', qr|rel="prev"| )->header_like( 'Link', qr|rel="first"| )
-    ->header_like( 'Link', qr|rel="last"| )->json_is( '/0/patron_id' => $patron_id )
-    ->json_is( '/0/item_id'  => $item2->itemnumber )
-    ->json_is( '/0/due_date' => output_pref( { dateformat => "rfc3339", dt => $date_due2 } ) )->json_hasnt('/1');
+$t->get_ok("//$userid:$password@/api/v1/checkouts?patron_id=$patron_id&_per_page=1&_page=2")
+    ->status_is(200)
+    ->header_is( 'X-Total-Count', '2' )
+    ->header_like( 'Link', qr|rel="prev"| )
+    ->header_like( 'Link', qr|rel="first"| )
+    ->header_like( 'Link', qr|rel="last"| )
+    ->json_is( '/0/patron_id' => $patron_id )
+    ->json_is( '/0/item_id'   => $item2->itemnumber )
+    ->json_is( '/0/due_date'  => output_pref( { dateformat => "rfc3339", dt => $date_due2 } ) )
+    ->json_hasnt('/1');
 
-$t->get_ok( "//$userid:$password@/api/v1/checkouts/" . $issue1->issue_id )->status_is(200)
-    ->json_is( '/patron_id' => $patron_id )->json_is( '/item_id' => $item1->itemnumber )
-    ->json_is( '/due_date'  => output_pref( { dateformat => "rfc3339", dt => $date_due1 } ) )->json_hasnt('/1');
+$t->get_ok( "//$userid:$password@/api/v1/checkouts/" . $issue1->issue_id )
+    ->status_is(200)
+    ->json_is( '/patron_id' => $patron_id )
+    ->json_is( '/item_id'   => $item1->itemnumber )
+    ->json_is( '/due_date'  => output_pref( { dateformat => "rfc3339", dt => $date_due1 } ) )
+    ->json_hasnt('/1');
 
-$t->get_ok( "//$userid:$password@/api/v1/checkouts/" . $issue1->issue_id )->status_is(200)
+$t->get_ok( "//$userid:$password@/api/v1/checkouts/" . $issue1->issue_id )
+    ->status_is(200)
     ->json_is( '/due_date' => output_pref( { dateformat => "rfc3339", dt => $date_due1 } ) );
 
-$t->get_ok( "//$userid:$password@/api/v1/checkouts/" . $issue2->issue_id )->status_is(200)
+$t->get_ok( "//$userid:$password@/api/v1/checkouts/" . $issue2->issue_id )
+    ->status_is(200)
     ->json_is( '/due_date' => output_pref( { dateformat => "rfc3339", dt => $date_due2 } ) );
 
 my $expected_datedue =
     $date_due->set_time_zone('local')->add( days => 7 )->set( hour => 23, minute => 59, second => 0 );
 
-$t->post_ok( "//$userid:$password@/api/v1/checkouts/" . $issue1->issue_id . "/renewal" )->status_is(201)
+$t->post_ok( "//$userid:$password@/api/v1/checkouts/" . $issue1->issue_id . "/renewal" )
+    ->status_is(201)
     ->json_is( '/due_date' => output_pref( { dateformat => "rfc3339", dt => $expected_datedue } ) )
     ->header_is( Location => "/api/v1/checkouts/" . $issue1->issue_id . "/renewal" );
 
 my $renewal = $issue1->renewals->last;
 is( $renewal->renewal_type, 'Manual', 'Manual renewal recorded' );
 
-$t->get_ok( "//$userid:$password@/api/v1/checkouts/" . $issue1->issue_id . "/renewals" )->status_is(200)
-    ->json_is( '/0/checkout_id' => $issue1->issue_id )->json_is( '/0/interface' => 'api' )
+$t->get_ok( "//$userid:$password@/api/v1/checkouts/" . $issue1->issue_id . "/renewals" )
+    ->status_is(200)
+    ->json_is( '/0/checkout_id' => $issue1->issue_id )
+    ->json_is( '/0/interface'   => 'api' )
     ->json_is( '/0/renewer_id'  => $librarian->borrowernumber );
 
-$t->post_ok( "//$unauth_userid:$unauth_password@/api/v1/checkouts/" . $issue3->issue_id . "/renewal" )->status_is(403)
+$t->post_ok( "//$unauth_userid:$unauth_password@/api/v1/checkouts/" . $issue3->issue_id . "/renewal" )
+    ->status_is(403)
     ->json_is(
     {
         error                => "Authorization failure. Missing required permission(s).",
@@ -199,7 +236,8 @@ $t->post_ok( "//$unauth_userid:$unauth_password@/api/v1/checkouts/" . $issue3->i
     }
     );
 
-$t->get_ok( "//$userid:$password@/api/v1/checkouts/" . $issue2->issue_id . "/allows_renewal" )->status_is(200)
+$t->get_ok( "//$userid:$password@/api/v1/checkouts/" . $issue2->issue_id . "/allows_renewal" )
+    ->status_is(200)
     ->json_is(
     {
         allows_renewal   => Mojo::JSON->true,
@@ -210,14 +248,17 @@ $t->get_ok( "//$userid:$password@/api/v1/checkouts/" . $issue2->issue_id . "/all
     }
     );
 
-$t->post_ok( "//$userid:$password@/api/v1/checkouts/" . $issue2->issue_id . "/renewal" )->status_is(201)
+$t->post_ok( "//$userid:$password@/api/v1/checkouts/" . $issue2->issue_id . "/renewal" )
+    ->status_is(201)
     ->json_is( '/due_date' => output_pref( { dateformat => "rfc3339", dt => $expected_datedue } ) )
     ->header_is( Location => "/api/v1/checkouts/" . $issue2->issue_id . "/renewal" );
 
-$t->post_ok( "//$userid:$password@/api/v1/checkouts/" . $issue1->issue_id . "/renewal" )->status_is(403)
+$t->post_ok( "//$userid:$password@/api/v1/checkouts/" . $issue1->issue_id . "/renewal" )
+    ->status_is(403)
     ->json_is( { error => 'Renewal not authorized (too_many)' } );
 
-$t->get_ok( "//$userid:$password@/api/v1/checkouts/" . $issue2->issue_id . "/allows_renewal" )->status_is(200)
+$t->get_ok( "//$userid:$password@/api/v1/checkouts/" . $issue2->issue_id . "/allows_renewal" )
+    ->status_is(200)
     ->json_is(
     {
         allows_renewal   => Mojo::JSON->false,
@@ -227,6 +268,10 @@ $t->get_ok( "//$userid:$password@/api/v1/checkouts/" . $issue2->issue_id . "/all
         error            => 'too_many'
     }
     );
+
+#Confirm we can get a checkout with a note
+$issue1->note("Test")->notedate( dt_from_string() )->store;
+$t->get_ok("//$userid:$password@/api/v1/checkouts")->status_is(200);
 
 $schema->storage->txn_rollback;
 
@@ -275,7 +320,8 @@ subtest 'get_availability' => sub {
 
     $t->get_ok(
         "//$unauth_userid:$unauth_password@/api/v1/checkouts/availability?item_id=$item1_id&patron_id=$patron_id")
-        ->status_is(403)->json_is(
+        ->status_is(403)
+        ->json_is(
         {
             error                => "Authorization failure. Missing required permission(s).",
             required_permissions => { circulate => "circulate_remaining_permissions" }
@@ -284,21 +330,29 @@ subtest 'get_availability' => sub {
 
     # Available
     $t->get_ok("//$userid:$password@/api/v1/checkouts/availability?item_id=$item1_id&patron_id=$patron_id")
-        ->status_is(200)->json_is( '/blockers' => {} )->json_is( '/confirms' => {} )->json_is( '/warnings' => {} )
+        ->status_is(200)
+        ->json_is( '/blockers' => {} )
+        ->json_is( '/confirms' => {} )
+        ->json_is( '/warnings' => {} )
         ->json_has('/confirmation_token');
 
     # Blocked
     %issuingimpossible = ( GNA => 1 );
     $t->get_ok("//$userid:$password@/api/v1/checkouts/availability?item_id=$item1_id&patron_id=$patron_id")
-        ->status_is(200)->json_is( '/blockers' => { GNA => 1 } )->json_is( '/confirms' => {} )
-        ->json_is( '/warnings' => {} )->json_has('/confirmation_token');
+        ->status_is(200)
+        ->json_is( '/blockers' => { GNA => 1 } )
+        ->json_is( '/confirms' => {} )
+        ->json_is( '/warnings' => {} )
+        ->json_has('/confirmation_token');
     %issuingimpossible = ();
 
     # Warnings/Info
     %alerts   = ( alert1   => "this is an alert" );
     %messages = ( message1 => "this is a message" );
     $t->get_ok("//$userid:$password@/api/v1/checkouts/availability?item_id=$item1_id&patron_id=$patron_id")
-        ->status_is(200)->json_is( '/blockers' => {} )->json_is( '/confirms' => {} )
+        ->status_is(200)
+        ->json_is( '/blockers' => {} )
+        ->json_is( '/confirms' => {} )
         ->json_is( '/warnings' => { alert1 => "this is an alert", message1 => "this is a message" } )
         ->json_has('/confirmation_token');
     %alerts   = ();
@@ -308,8 +362,10 @@ subtest 'get_availability' => sub {
     %needsconfirmation = ( confirm1 => 1, confirm2 => 'please' );
     my $token = Koha::Token->new->generate_jwt( { id => $librarian->id . ":" . $item1_id . ":confirm1:confirm2" } );
     $t->get_ok("//$userid:$password@/api/v1/checkouts/availability?item_id=$item1_id&patron_id=$patron_id")
-        ->status_is(200)->json_is( '/blockers' => {} )
-        ->json_is( '/confirms' => { confirm1 => 1, confirm2 => 'please' } )->json_is( '/warnings' => {} )
+        ->status_is(200)
+        ->json_is( '/blockers' => {} )
+        ->json_is( '/confirms' => { confirm1 => 1, confirm2 => 'please' } )
+        ->json_is( '/warnings' => {} )
         ->json_has('/confirmation_token');
     my $confirmation_token = $t->tx->res->json('/confirmation_token');
     ok(
@@ -336,15 +392,23 @@ subtest 'get_availability' => sub {
         # All ok
         $t->get_ok(
             "//$unauth_userid:$unauth_password@/api/v1/public/checkouts/availability?item_id=$item1_id&patron_id=$patron_id"
-        )->status_is(200)->json_is( '/blockers' => {} )->json_is( '/confirms' => {} )->json_is( '/warnings' => {} )
+            )
+            ->status_is(200)
+            ->json_is( '/blockers' => {} )
+            ->json_is( '/confirms' => {} )
+            ->json_is( '/warnings' => {} )
             ->json_has('/confirmation_token');
 
         # Needs confirmation upgrade to blocker
         %needsconfirmation = ( TOO_MANY => 1, ISSUED_TO_ANOTHER => 1 );
         $t->get_ok(
             "//$unauth_userid:$unauth_password@/api/v1/public/checkouts/availability?item_id=$item1_id&patron_id=$patron_id"
-        )->status_is(200)->json_is( '/blockers' => { TOO_MANY => 1, ISSUED_TO_ANOTHER => 1 } )
-            ->json_is( '/confirms' => {} )->json_is( '/warnings' => {} )->json_has('/confirmation_token');
+            )
+            ->status_is(200)
+            ->json_is( '/blockers' => { TOO_MANY => 1, ISSUED_TO_ANOTHER => 1 } )
+            ->json_is( '/confirms' => {} )
+            ->json_is( '/warnings' => {} )
+            ->json_has('/confirmation_token');
         %needsconfirmation = ();
 
         # Remove personal information from public endpoint
@@ -393,7 +457,11 @@ subtest 'get_availability' => sub {
         );
         $t->get_ok(
             "//$unauth_userid:$unauth_password@/api/v1/public/checkouts/availability?item_id=$item1_id&patron_id=$patron_id"
-        )->status_is(200)->json_is( '/blockers' => {} )->json_is( '/confirms' => {} )->json_is( '/warnings' => {} )
+            )
+            ->status_is(200)
+            ->json_is( '/blockers' => {} )
+            ->json_is( '/confirms' => {} )
+            ->json_is( '/warnings' => {} )
             ->json_has('/confirmation_token');
         %issuingimpossible = ();
         %alerts            = ();
@@ -504,10 +572,12 @@ subtest 'add checkout' => sub {
 
         $t->post_ok(
             "/api/v1/public/patrons/$patron_id/checkouts" => json => { item_id => $item1_id, patron_id => $patron_id } )
-            ->status_is(401)->json_is( { error => "Authentication failure." } );
+            ->status_is(401)
+            ->json_is( { error => "Authentication failure." } );
 
         $t->post_ok( "//$useridp:$password@/api/v1/public/patrons/$patron_id/checkouts" => json =>
-                { item_id => $item1_id, patron_id => $patron_id } )->status_is(405)
+                { item_id => $item1_id, patron_id => $patron_id } )
+            ->status_is(405)
             ->json_is( { error => "Feature disabled", error_code => "FEATURE_DISABLED" } );
 
         # Feature enabled
@@ -515,10 +585,12 @@ subtest 'add checkout' => sub {
 
         $t->post_ok(
             "/api/v1/public/patrons/$patron_id/checkouts" => json => { item_id => $item1_id, patron_id => $patron_id } )
-            ->status_is(401)->json_is( { error => "Authentication failure." } );
+            ->status_is(401)
+            ->json_is( { error => "Authentication failure." } );
 
         $t->post_ok( "//$userid:$password@/api/v1/public/patrons/$patron_id/checkouts" => json =>
-                { item_id => $item1_id, patron_id => $patron_id } )->status_is(403)
+                { item_id => $item1_id, patron_id => $patron_id } )
+            ->status_is(403)
             ->json_is( { error => "Unprivileged user cannot access another user's resources" } );
 
         $t->post_ok( "//$useridp:$password@/api/v1/public/patrons/$patron_id/checkouts" => json =>
