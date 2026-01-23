@@ -273,7 +273,7 @@ sub native_search {
 }
 
 foreach my $f (qw(next prev first last)) {
-    no strict 'refs';
+    no strict 'refs'; ## no critic (ProhibitNoStrict)
     my $method = "native_search_$f";
     *$method = sub {
         my $self = shift;

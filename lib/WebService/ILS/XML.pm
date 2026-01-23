@@ -73,7 +73,7 @@ sub with_xml_request {
     my $method = shift || 'post';
 
     my $req_builder = "HTTP::Request::Common::".uc( $method );
-    no strict 'refs';
+    no strict 'refs'; ## no critic (ProhibitNoStrict)
     my $request = $req_builder->( $url );
     $request->header( 'Content-Type' => 'application/xml; charset=utf-8' );
     $request->content( $dom->toeString );

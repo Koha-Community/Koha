@@ -63,7 +63,7 @@ Differences to general L<WebService::ILS> interface
 =cut
 
 foreach my $sub (qw(place_hold remove_hold renew return)) {
-    no strict "refs";
+    no strict "refs"; ## no critic (ProhibitNoStrict)
     *$sub = sub {
         my $self = shift;
         my $patron_id = shift or croak "No patron id";
