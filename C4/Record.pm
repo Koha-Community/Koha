@@ -919,9 +919,11 @@ sub marc2cites {
                 $author = $field->subfield("a");
             }
             if ( $author =~ /([^,]+),?(.*)/ ) {
+                my $surname   = $1;
+                my $forenames = $2;
                 my %a;
-                ( $a{'surname'} = $1 ) =~ s/$re_clean//g;
-                $a{'forenames'} = [ map { my $t = $_; $t =~ s/$re_clean//g; $t } split ' ', $2 ];
+                ( $a{'surname'} = $surname ) =~ s/$re_clean//g;
+                $a{'forenames'} = [ map { my $t = $_; $t =~ s/$re_clean//g; $t } split ' ', $forenames ];
                 push( @authors, \%a );
             }
         }
