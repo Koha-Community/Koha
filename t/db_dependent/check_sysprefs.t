@@ -32,12 +32,12 @@ my $root_dir         = $intranetdir . '/installer/data/mysql/mandatory';
 my $syspref_filepath = "$root_dir/sysprefs.sql";
 
 my @lines            = read_file($syspref_filepath) or die "Can't open $syspref_filepath: $!";
-my $sysprefs_in_file = get_sysprefs_from_file(@lines);
+my @sysprefs_in_file = get_sysprefs_from_file(@lines);
 
 subtest 'Compare database with sysprefs.sql file' => sub {
-    ok( scalar( keys %$sysprefs_in_file ), "Found sysprefs" );
+    ok( scalar(@sysprefs_in_file), "Found sysprefs" );
 
-    check_db($sysprefs_in_file);
+    check_db(@sysprefs_in_file);
 };
 
 subtest 'Compare sysprefs.sql with YAML files' => sub {
@@ -47,7 +47,7 @@ subtest 'Compare sysprefs.sql with YAML files' => sub {
     my @yaml_mod   = @$yaml_prefs;
     @yaml_mod = grep !/marcflavour/, @yaml_mod;    # Added by web installer
 
-    my @syspref_names_in_file = keys %$sysprefs_in_file;
+    my @syspref_names_in_file = map { $_->{variable} } @sysprefs_in_file;
     @syspref_names_in_file = grep !/ElasticsearchIndexStatus_authorities/,
         @syspref_names_in_file;                    # Not to be changed manually
     @syspref_names_in_file = grep !/ElasticsearchIndexStatus_biblios/,
@@ -79,7 +79,7 @@ subtest 'Compare sysprefs.sql with YAML files' => sub {
 #
 sub get_sysprefs_from_file {
     my @lines = @_;
-    my $sysprefs;
+    my @sysprefs;
     for my $line (@lines) {
         chomp $line;
         next if $line =~ /^INSERT INTO /;    # first line
@@ -111,7 +111,7 @@ sub get_sysprefs_from_file {
             }
 
             # FIXME Explode if already exists?
-            $sysprefs->{$variable} = {
+            push @sysprefs, {
                 variable    => $variable,
                 value       => $value,
                 options     => $options,
@@ -122,7 +122,7 @@ sub get_sysprefs_from_file {
             die "$line does not match";
         }
     }
-    return $sysprefs;
+    return @sysprefs;
 }
 
 #  Get system preferences from YAML files
@@ -160,12 +160,17 @@ sub check_db {
 
     # Checking the number of sysprefs in the database
     my @syspref_names_in_db   = keys %$sysprefs_in_db;
-    my @syspref_names_in_file = keys %$sysprefs_in_file;
+    my @syspref_names_in_file = map { $_->{variable} } @sysprefs_in_file;
     my @diff                  = array_minus @syspref_names_in_db, @syspref_names_in_file;
     is_deeply( [ sort @diff ], [ 'Version', 'marcflavour' ] )
         or diag sprintf( "Too many sysprefs in DB: %s", join ", ", @diff );
 
-    for my $pref ( sort values %$sysprefs_in_file ) {
+    my @sorted_names_in_file = sort {
+        $b =~ s/_/ZZZ/g;    # mysql sorts underscore last, if you modify this qa-test-tools will need adjustements
+        lc($a) cmp lc($b)
+    } @syspref_names_in_file;
+    is_deeply( \@syspref_names_in_file, \@sorted_names_in_file, 'Syspref in sysprefs.sql must be sorted by name' );
+    for my $pref (@sysprefs_in_file) {
         my $in_db     = $sysprefs_in_db->{ $pref->{variable} };
         my %db_copy   = %$in_db;
         my %file_copy = %$pref;
