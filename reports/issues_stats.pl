@@ -221,7 +221,7 @@ sub calculate {
         my %cell;
         ( @$filters[$i] ) or next;
         if ( ( $i == 1 ) and ( @$filters[ $i - 1 ] ) ) {
-            $cell{err} = 1 if ( @$filters[$i] < @$filters[ $i - 1 ] );
+            $cell{err} = 1 if ( @$filters[$i] lt @$filters[ $i - 1 ] );
         }
 
         # format the dates filters, otherwise just fill as is
