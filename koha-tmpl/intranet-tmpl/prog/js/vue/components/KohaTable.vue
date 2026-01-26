@@ -101,10 +101,10 @@ export default {
         });
 
         const redraw = url => {
-            table.value.dt.ajax.url(url).draw();
+            table.value.dt().ajax.url(url).draw();
         };
         const useTableObject = () => {
-            let dt = table.value.dt;
+            let dt = table.value.dt();
             return dt;
         };
 
@@ -225,7 +225,7 @@ export default {
         });
 
         onMounted(() => {
-            let dt = table.value.dt;
+            let dt = table.value.dt();
             let table_node = dt.table().node();
             let add_filters = props.add_filters;
             let filters_options = props.filters_options;
@@ -276,7 +276,7 @@ export default {
         });
 
         onBeforeUnmount(() => {
-            const dt = table.value.dt;
+            const dt = table.value.dt();
             dt.destroy();
         });
         return {
