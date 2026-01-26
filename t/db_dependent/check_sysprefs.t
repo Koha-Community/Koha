@@ -149,9 +149,12 @@ sub get_syspref_from_yaml {
 sub check_db {
     my @sysprefs_from_file = @_;
 
+    # FIXME FrameworksLoaded is a temporary syspref created during the installation process
+    # We should either rewrite the code to avoid its need, or delete it once the installation is finished.
     my $sysprefs_in_db = $dbh->selectall_hashref(
         q{
         SELECT * from systempreferences
+        WHERE variable <> 'FrameworksLoaded'
     }, 'variable'
     );
 
