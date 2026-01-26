@@ -4,7 +4,7 @@ use warnings;
 use FindBin qw( $Bin );
 
 use Test::NoWarnings;
-use Test::More tests => 14;
+use Test::More tests => 16;
 use t::lib::Mocks;
 
 BEGIN { use_ok('Koha::Edifact::Order') }
@@ -135,4 +135,36 @@ cmp_ok(
 cmp_ok(
     $gsegs[3], 'eq', q{GIR+002+S_I:LVT},
     'Second part of split GIR field OK'
+);
+
+# Test that special characters are properly escaped in GIR segments
+my $special_orderfields = {
+    budget_code           => 'BUDGET?+',
+    servicing_instruction => "Note with 'special' chars:",
+};
+my @special_items = (
+    {
+        itype          => 'TYPE?:',
+        location       => 'LOC+TION',
+        itemcallnumber => 'CALL?' . q{'},
+        branchcode     => 'BRANCH:+',
+    }
+);
+
+my @special_gsegs = Koha::Edifact::Order::gir_segments(
+    {
+        ol_fields => $special_orderfields,
+        items     => \@special_items
+    }
+);
+
+cmp_ok(
+    $special_gsegs[0], 'eq',
+    q{GIR+001+BUDGET???+:LFN+BRANCH?:?+:LLO+TYPE???::LST+LOC?+TION:LSQ+CALL???':LSM},
+    'GIR segment with special characters properly escaped'
+);
+
+cmp_ok(
+    $special_gsegs[1], 'eq', q{GIR+001+Note with ?'special?' chars?::LVT},
+    'GIR segment with servicing instruction special characters properly escaped'
 );
