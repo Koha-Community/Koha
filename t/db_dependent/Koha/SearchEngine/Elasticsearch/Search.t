@@ -26,6 +26,9 @@ use Koha::SearchEngine::Elasticsearch::QueryBuilder;
 use Koha::SearchEngine::Elasticsearch::Indexer;
 use Koha::SearchFields;
 
+my $schema = Koha::Database->new()->schema();
+$schema->storage->txn_begin;
+
 my $se = Test::MockModule->new('Koha::SearchEngine::Elasticsearch');
 $se->mock(
     'get_elasticsearch_mappings',
@@ -123,7 +126,6 @@ SKIP: {
     subtest "_convert_facets" => sub {
         plan tests => 5;
 
-        my $schema = Koha::Database->new()->schema();
         $schema->storage->txn_begin;
         my $builder = t::lib::TestBuilder->new;
 
