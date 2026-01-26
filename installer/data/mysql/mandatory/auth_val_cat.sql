@@ -22,7 +22,9 @@ INSERT IGNORE INTO authorised_value_categories( category_name, is_system )
     ('AR_CANCELLATION', 0),
     ('VENDOR_TYPE', 1),
     ('VENDOR_INTERFACE_TYPE', 1),
-    ('VENDOR_ISSUE_TYPE', 1);
+    ('VENDOR_ISSUE_TYPE', 1),
+    ('VENDOR_PAYMENT_METHOD', 1);
+
 
 INSERT IGNORE INTO authorised_value_categories( category_name, is_system )
     VALUES
