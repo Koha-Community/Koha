@@ -1,5 +1,5 @@
 #!/usr/bin/perl
-#
+
 # This file is part of Koha.
 #
 # Koha is free software; you can redistribute it and/or modify it
@@ -15,21 +15,25 @@
 # You should have received a copy of the GNU General Public License
 # along with Koha; if not, see <https://www.gnu.org/licenses>.
 
-use strict;
-use warnings;
+use Modern::Perl;
 
 use Test::NoWarnings;
-use Test::More tests => 6;
+use Test::More tests => 7;
 
 use open qw/ :std :utf8 /;
 
 use t::lib::Mocks;
+use t::lib::TestBuilder;
+
 use Test::MockModule;
 
 use MARC::Record;
 use MARC::Field;
 use utf8;
 use C4::AuthoritiesMarc qw/ AddAuthority /;
+
+use Koha::Caches;
+use Koha::MarcSubfieldStructures;
 
 BEGIN {
     use_ok('C4::Heading');
@@ -75,8 +79,9 @@ subtest "_search tests" => sub {
 
     plan tests => 15;
 
-    t::lib::Mocks::mock_preference( 'marcflavour',  'MARC21' );
-    t::lib::Mocks::mock_preference( 'SearchEngine', 'Elasticsearch' );
+    t::lib::Mocks::mock_preference( 'marcflavour',                 'MARC21' );
+    t::lib::Mocks::mock_preference( 'SearchEngine',                'Elasticsearch' );
+    t::lib::Mocks::mock_preference( 'LinkerUseFrameworkAuthTypes', 0 );
 
     # NOTE: We are testing solely against ES here to make the assumptions simpler while testing
     # C4/Headings code specifically. The actual query building and searching code should
@@ -402,4 +407,72 @@ subtest "authorities exact match tests" => sub {
 
     $schema->storage->txn_rollback;
 
+};
+
+subtest 'LinkerUseFrameworkAuthTypes' => sub {
+    plan tests => 2;
+
+    my $schema  = Koha::Database->new->schema;
+    my $cache   = Koha::Caches->get_instance;
+    my $builder = t::lib::TestBuilder->new;
+    $schema->storage->txn_begin;
+
+    t::lib::Mocks::mock_preference( 'marcflavour', 'MARC21' );
+
+    subtest 'Preference disabled (default behavior)' => sub {
+        plan tests => 1;
+
+        t::lib::Mocks::mock_preference( 'LinkerUseFrameworkAuthTypes', 0 );
+
+        my $field   = MARC::Field->new( '650', ' ', '0', a => 'Test subject' );
+        my $heading = C4::Heading->new_from_field($field);
+
+        is( $heading->auth_type(), 'TOPIC_TERM', 'Uses hardcoded TOPIC_TERM when preference disabled' );
+    };
+
+    subtest 'Preference enabled with framework override' => sub {
+
+        plan tests => 1;
+
+        t::lib::Mocks::mock_preference( 'LinkerUseFrameworkAuthTypes', 1 );
+
+        my $custom_auth_type = $builder->build_object(
+            {
+                class => 'Koha::Authority::Types',
+                value => { auth_tag_to_report => '150' }
+            }
+        );
+
+        # Delete any existing 650$a in default framework to avoid unique constraint violation
+        Koha::MarcSubfieldStructures->search(
+            {
+                frameworkcode => '',
+                tagfield      => '650',
+                tagsubfield   => 'a',
+            }
+        )->delete;
+
+        # Create marc_subfield_structure entry linking 650$a to our custom auth type
+        my $mss = $builder->build_object(
+            {
+                class => 'Koha::MarcSubfieldStructures',
+                value => {
+                    frameworkcode => '',
+                    tagfield      => '650',
+                    tagsubfield   => 'a',
+                    authtypecode  => $custom_auth_type->authtypecode,
+                }
+            }
+        );
+
+        # Clear all caches
+        Koha::Caches->get_instance->flush_all;
+
+        my $field   = MARC::Field->new( '650', ' ', '0', a => 'Test subject' );
+        my $heading = C4::Heading->new_from_field($field);
+
+        is( $heading->auth_type(), $custom_auth_type->authtypecode, 'Uses framework authority type when enabled' );
+    };
+
+    $schema->storage->txn_rollback;
 };
