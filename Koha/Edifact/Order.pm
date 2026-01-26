@@ -468,7 +468,7 @@ sub order_line {
     # FTX free text for current orderline
     #    Pass vendor note in FTX free text segment
     if ( $orderline->order_vendornote ) {
-        my $vendornote = $orderline->order_vendornote;
+        my $vendornote = encode_text( $orderline->order_vendornote );
         chomp $vendornote;
         my $ftx = 'FTX+LIN+++';
         $ftx .= $vendornote;
@@ -492,7 +492,7 @@ sub order_line {
     # RFF : suppliers unique quotation reference number
     if ( $orderline->suppliers_reference_number ) {
         $rff = join q{}, 'RFF+', $orderline->suppliers_reference_qualifier,
-            ':', $orderline->suppliers_reference_number, $seg_terminator;
+            ':', encode_text( $orderline->suppliers_reference_number ), $seg_terminator;
         $self->add_seg($rff);
     }
 
@@ -579,7 +579,7 @@ sub gir_segments {
     my $orderfields  = $params->{ol_fields};
     my @onorderitems = @{ $params->{items} };
 
-    my $budget_code = $orderfields->{budget_code};
+    my $budget_code = encode_text( $orderfields->{budget_code} );
     my @segments;
     my $sequence_no = 1;
     my $lsq_field   = C4::Context->preference('EdifactLSQ');
@@ -593,27 +593,27 @@ sub gir_segments {
         }
         if ( $item->{branchcode} ) {
             push @gir_elements,
-                { identity_number => 'LLO', data => $item->{branchcode} };
+                { identity_number => 'LLO', data => encode_text( $item->{branchcode} ) };
         }
         if ( $item->{itype} ) {
             push @gir_elements,
-                { identity_number => 'LST', data => $item->{itype} };
+                { identity_number => 'LST', data => encode_text( $item->{itype} ) };
         }
 
         # Handle LSQ mapping
         if ( $lsq_field && $item->{$lsq_field} ) {
             push @gir_elements,
-                { identity_number => 'LSQ', data => $item->{$lsq_field} };
+                { identity_number => 'LSQ', data => encode_text( $item->{$lsq_field} ) };
         }
 
         # Handle LSL mapping
         if ( $lsl_field && $item->{$lsl_field} ) {
             push @gir_elements,
-                { identity_number => 'LSL', data => $item->{$lsl_field} };
+                { identity_number => 'LSL', data => encode_text( $item->{$lsl_field} ) };
         }
         if ( $item->{itemcallnumber} ) {
             push @gir_elements,
-                { identity_number => 'LSM', data => $item->{itemcallnumber} };
+                { identity_number => 'LSM', data => encode_text( $item->{itemcallnumber} ) };
         }
 
         # itemcallnumber -> shelfmark
@@ -621,7 +621,7 @@ sub gir_segments {
             push @gir_elements,
                 {
                 identity_number => 'LVT',
-                data            => $orderfields->{servicing_instruction}
+                data            => encode_text( $orderfields->{servicing_instruction} )
                 };
         }
         my $e_cnt   = 0;    # count number of elements so we dont exceed 5 per segment
@@ -666,7 +666,7 @@ sub lin_segment {
     my ( $line_number, $item_number_id ) = @_;
 
     if ($item_number_id) {
-        $item_number_id = "++${item_number_id}:EN";
+        $item_number_id = "++" . encode_text($item_number_id) . ":EN";
     } else {
         $item_number_id = q||;
     }
@@ -691,7 +691,7 @@ sub additional_product_id {
     }
 
     # function id set to 5 states this is the main product id
-    return "PIA+5+$product_id:$product_code$seg_terminator";
+    return "PIA+5+" . encode_text($product_id) . ":$product_code$seg_terminator";
 }
 
 sub message_date_segment {
