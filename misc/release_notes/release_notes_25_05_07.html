@@ -1,0 +1,339 @@
+<h1 id="releasenotesforkoha25.05.07">RELEASE NOTES FOR KOHA 25.05.07</h1>
+
+<p>26 Jan 2026</p>
+
+<p>Koha is the first free and open source software library automation
+package (ILS). Development is sponsored by libraries of varying types
+and sizes, volunteers, and support companies from around the world. The
+website for the Koha project is:</p>
+
+<ul>
+<li><a href="https://koha-community.org">Koha Community</a></li>
+</ul>
+
+<p>Koha 25.05.07 can be downloaded from:</p>
+
+<ul>
+<li><a href="https://download.koha-community.org/koha-25.05.07.tar.gz">Download</a></li>
+</ul>
+
+<p>Installation instructions can be found at:</p>
+
+<ul>
+<li><a href="https://wiki.koha-community.org/wiki/Installation_Documentation">Koha Wiki</a></li>
+<li>OR in the INSTALL files that come in the tarball</li>
+</ul>
+
+<p>Koha 25.05.07 is a bugfix/maintenance release.</p>
+
+<p>It includes 10 enhancements, 6 bugfixes.</p>
+
+<p><strong>System requirements</strong></p>
+
+<p>You can learn about the system components (like OS and database) needed for running Koha on the <a href="https://wiki.koha-community.org/wiki/System_requirements_and_recommendations">community wiki</a>.</p>
+
+<h4 id="securitybugs">Security bugs</h4>
+
+<ul>
+<li><a href="https://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=41593">41593</a> Authenticated SQL Injection in staff side suggestions</li>
+<li><a href="https://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=41662">41662</a> CSRF-vulnerability in opac-patron-consent.pl.</li>
+</ul>
+
+<h2 id="bugfixes">Bugfixes</h2>
+
+<h3 id="acquisitions">Acquisitions</h3>
+
+<h4 id="otherbugsfixed">Other bugs fixed</h4>
+
+<p><ul>
+<li><a href="https://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=39468">39468</a> EDI message status should be case insensitive</p>
+
+<blockquote>
+  <p>Fix EDI message status display in acquisitions so matching is case-insensitive by converting edi_order.status to lowercase before comparison.</li>
+  </ul></p>
+  
+  <h3 id="architectureinternalsandplumbing">Architecture, internals, and plumbing</h3>
+</blockquote>
+
+<h4 id="otherbugsfixed">Other bugs fixed</h4>
+
+<ul>
+<li><a href="https://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=40163">40163</a> Several http links should be moved to https</li>
+</ul>
+
+<h3 id="preservation">Preservation</h3>
+
+<h4 id="criticalbugsfixed">Critical bugs fixed</h4>
+
+<ul>
+<li><a href="https://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=41364">41364</a> Error in preservation module breadcrumb</li>
+</ul>
+
+<h3 id="staffinterface">Staff interface</h3>
+
+<h4 id="otherbugsfixed">Other bugs fixed</h4>
+
+<ul>
+<li><a href="https://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=41217">41217</a> Missing class on body tag for reserve/hold-group.tt</li>
+</ul>
+
+<h2 id="enhancements">Enhancements</h2>
+
+<h3 id="accessibility">Accessibility</h3>
+
+<h4 id="enhancements">Enhancements</h4>
+
+<p><ul>
+<li><a href="https://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=39677">39677</a> Add the role presentation to the vertical divider in the navigation</p>
+
+<blockquote>
+  <p>Accessibility improvement: Vertical dividers in the OPAC navigation now include role="presentation" to ensure they are correctly identified as decorative elements. This provides clearer semantics for assistive technologies without affecting display or design.</li>
+  </ul></p>
+  
+  <h3 id="architectureinternalsandplumbing">Architecture, internals, and plumbing</h3>
+</blockquote>
+
+<h4 id="enhancements">Enhancements</h4>
+
+<p><ul>
+<li><a href="https://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=40527">40527</a> Add SECURITY.md to Koha</p>
+
+<blockquote>
+  <p>This enhancement adds a markdown file to the Koha project repository to make it clear how to report security issues.</li>
+  <li><a href="https://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=40919">40919</a> Unnecessary DB access in Koha::Item::Transfer->receive</li>
+  </ul></p>
+  
+  <h3 id="authentication">Authentication</h3>
+</blockquote>
+
+<h4 id="enhancements">Enhancements</h4>
+
+<ul>
+<li><a href="https://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=34164">34164</a> OAuth2/OIDC should redirect to page that initiated login</li>
+</ul>
+
+<h3 id="restapi">REST API</h3>
+
+<h4 id="enhancements">Enhancements</h4>
+
+<ul>
+<li><a href="https://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=39830">39830</a> Add order claim object definition</li>
+</ul>
+
+<h3 id="staffinterface">Staff interface</h3>
+
+<h4 id="enhancements">Enhancements</h4>
+
+<p><ul>
+<li><a href="https://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=36518">36518</a> Add unique IDs to the fieldsets of the item search form to enable customization</p>
+
+<blockquote>
+  <p>This enhancement adds IDs to the fieldsets on the staff interface search form (Search > Item search), to make CSS customization easier. The fieldset IDs are:
+  - Library and location section: librarylocation
+  - Item information section: access_and_condition
+  - Barcode search section: barcodesearch
+  - Call number section: callnumber_checkouts</li>
+  <li><a href="https://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=38942">38942</a> Item template toolbar is not like other toolbars
+  This enhancement improves the item-template-toolbar in Koha, adding some classes to be consistent with other toolbars in Koha.</li>
+  <li><a href="https://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=40757">40757</a> Highlight circulation rules on click</li>
+  </ul></p>
+  
+  <h3 id="templates">Templates</h3>
+</blockquote>
+
+<h4 id="enhancements">Enhancements</h4>
+
+<ul>
+<li><p><a href="https://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=16721">16721</a> Add table configuration to serial claims table</p>
+
+<p><strong>Sponsored by</strong> <em>Athens County Public Libraries</em></p></li>
+<li><a href="https://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=28146">28146</a> E-mail address used on error pages should respect ReplytoDefault</li>
+</ul>
+
+<h2 id="documentation">Documentation</h2>
+
+<p>The Koha manual is maintained in Sphinx. The home page for Koha
+documentation is</p>
+
+<ul>
+<li><p><a href="https://koha-community.org/documentation/">Koha Documentation</a>
+As of the date of these release notes, the Koha manual is available in the following languages:</p></li>
+<li><p><a href="https://koha-community.org/manual/25.05/en/html/">English (USA)</a></p></li>
+<li><a href="https://koha-community.org/manual/25.05/fr/html/">French</a> (74%)</li>
+<li><a href="https://koha-community.org/manual/25.05/de/html/">German</a> (90%)</li>
+<li><a href="https://koha-community.org/manual/25.05/el/html/">Greek</a> (94%)</li>
+<li><a href="https://koha-community.org/manual/25.05/hi/html/">Hindi</a> (64%)</li>
+</ul>
+
+<p>The Git repository for the Koha manual can be found at</p>
+
+<ul>
+<li><a href="https://gitlab.com/koha-community/koha-manual">Koha Git Repository</a></li>
+</ul>
+
+<h2 id="translations">Translations</h2>
+
+<p>Complete or near-complete translations of the OPAC and staff
+interface are available in this release for the following languages:</p>
+
+<div style="column-count: 2;">
+
+- Arabic (ar_ARAB) (92%)
+- Armenian (hy_ARMN) (100%)
+- Bulgarian (bg_CYRL) (100%)
+- Chinese (Simplified Han script) (83%)
+- Chinese (Traditional Han script) (97%)
+- Czech (67%)
+- Dutch (86%)
+- English (100%)
+- English (New Zealand) (61%)
+- English (USA)
+- Finnish (99%)
+- French (99%)
+- French (Canada) (99%)
+- German (100%)
+- Greek (65%)
+- Hindi (94%)
+- Italian (80%)
+- Norwegian Bokmål (71%)
+- Persian (fa_ARAB) (93%)
+- Polish (99%)
+- Portuguese (Brazil) (99%)
+- Portuguese (Portugal) (87%)
+- Russian (93%)
+- Slovak (58%)
+- Spanish (98%)
+- Swedish (88%)
+- Telugu (65%)
+- Turkish (80%)
+- Ukrainian (74%)
+- Western Armenian (hyw_ARMN) (60%)
+</div>
+
+<p>Partial translations are available for various other languages.</p>
+
+<p>The Koha team welcomes additional translations; please see</p>
+
+<ul>
+<li><a href="https://wiki.koha-community.org/wiki/Translating_Koha">Koha Translation Info</a></li>
+</ul>
+
+<p>For information about translating Koha, and join the koha-translate 
+list to volunteer:</p>
+
+<ul>
+<li><a href="https://lists.koha-community.org/cgi-bin/mailman/listinfo/koha-translate">Koha Translate List</a></li>
+</ul>
+
+<p>The most up-to-date translations can be found at:</p>
+
+<ul>
+<li><a href="https://translate.koha-community.org/">Koha Translation</a></li>
+</ul>
+
+<h2 id="releaseteam">Release Team</h2>
+
+<p>The release team for Koha 25.05.07 is</p>
+
+<ul>
+<li>Release Manager: </li>
+</ul>
+
+<h2 id="credits">Credits</h2>
+
+<p>We thank the following libraries, companies, and other institutions who are known to have sponsored
+new features in Koha 25.05.07</p>
+
+<div style="column-count: 2;">
+
+- Athens County Public Libraries
+</div>
+
+<p>We thank the following individuals who contributed patches to Koha 25.05.07</p>
+
+<div style="column-count: 2;">
+
+- Rachel A-M (1)
+- Tomás Cohen Arazi (6)
+- Nick Clemens (1)
+- David Cook (4)
+- Jonathan Druart (2)
+- Laura Escamilla (2)
+- Lucas Gass (2)
+- David Gustafsson (1)
+- Brendan Lawlor (1)
+- Owen Leonard (1)
+- Nina Martinez (1)
+- Marcel de Rooy (1)
+- Lisette Scheer (1)
+</div>
+
+<p>We thank the following libraries, companies, and other institutions who contributed
+patches to Koha 25.05.07</p>
+
+<div style="column-count: 2;">
+
+- Athens County Public Libraries (1)
+- [BibLibre](https://www.biblibre.com) (1)
+- [ByWater Solutions](https://bywatersolutions.com) (6)
+- [Cape Libraries Automated Materials Sharing](https://info.clamsnet.org) (1)
+- Gothenburg University Library (1)
+- Independant Individuals (1)
+- Koha Community Developers (2)
+- [Prosentient Systems](https://www.prosentient.com.au) (4)
+- Rijksmuseum, Netherlands (1)
+- [Theke Solutions](https://theke.io) (6)
+</div>
+
+<p>We also especially thank the following individuals who tested patches
+for Koha</p>
+
+<div style="column-count: 2;">
+
+- Tomás Cohen Arazi (1)
+- David Cook (1)
+- Jonathan Druart (2)
+- Laura Escamilla (19)
+- Lucas Gass (1)
+- Barbara Johnson (1)
+- Ludovic Julien (1)
+- Lukas Koszyk (1)
+- Brendan Lawlor (3)
+- Owen Leonard (1)
+- David Nind (3)
+- Martin Renvoize (8)
+- Marcel de Rooy (1)
+- Lisette Scheer (3)
+- Michaela Sieber (1)
+- Emmi Takkinen (1)
+- Baptiste Wojtkowski (1)
+</div>
+
+<p>We regret any omissions.  If a contributor has been inadvertently missed,
+please send a patch against these release notes to koha-devel@lists.koha-community.org.</p>
+
+<h2 id="revisioncontrolnotes">Revision control notes</h2>
+
+<p>The Koha project uses Git for version control.  The current development
+version of Koha can be retrieved by checking out the main branch of:</p>
+
+<ul>
+<li><a href="https://git.koha-community.org/koha-community/koha">Koha Git Repository</a></li>
+</ul>
+
+<p>The branch for this version of Koha and future bugfixes in this release
+line is 25.05.x-security.</p>
+
+<h2 id="bugsandfeaturerequests">Bugs and feature requests</h2>
+
+<p>Bug reports and feature requests can be filed at the Koha bug
+tracker at:</p>
+
+<ul>
+<li><a href="https://bugs.koha-community.org">Koha Bugzilla</a></li>
+</ul>
+
+<p>He rau ringa e oti ai.
+(Many hands finish the work)</p>
+
+<p>Autogenerated release notes updated last on 26 Jan 2026 19:04:45.</p>
