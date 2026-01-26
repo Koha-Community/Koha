@@ -34,6 +34,13 @@ return {
                 WHERE BINARY type='integer'
             }
         );
+        $dbh->do(
+            q{
+                UPDATE systempreferences
+                SET type='Free'
+                WHERE BINARY type='free'
+            }
+        );
 
         my $new_explanations = {
             AcquisitionsDefaultEmailAddress => q{Default email address that acquisition notices are sent from},
@@ -51,9 +58,13 @@ return {
             EnableBooking              => q{If enabled, activate every functionalities related with Bookings module},
             HoldCancellationRequestSIP => q{Option to set holds cancelled via SIP as cancellation requests},
             HoldRatioDefault           => q{Default value for the hold ratio report},
+            'ILS-DI:AuthorizedIPs'     => q{Restricts usage of ILS-DI to some IPs},
             ILLModule                  => q{If ON, enables the interlibrary loans module.},
-            OPACLoginLabelTextContent  => q{Control the text displayed on the login form},
-            OpacHiddenItems            =>
+            LibrisKey                  =>
+                q{This key must be obtained at http://api.libris.kb.se/. It is unique for the IP of the server.},
+            LibrisURL                 => q{This is the base URL for the Libris spellchecking API.},
+            OPACLoginLabelTextContent => q{Control the text displayed on the login form},
+            OpacHiddenItems           =>
                 q{This syspref allows to define custom rules for hiding specific items at the OPAC. See https://wiki.koha-community.org/wiki/OpacHiddenItems for more information.},
             OPACShowLibraries =>
                 q{If enabled, a "Libraries" link appears in the OPAC pointing to a page with library information},
@@ -62,6 +73,7 @@ return {
             OPACVirtualCard        => q{If ON, the patron virtual library card tab in the OPAC will be enabled},
             OPACVirtualCardBarcode =>
                 q{Specify the type of barcode to be used in the patron virtual library card tab in the OPAC},
+            OrderPdfFormat                          => q{Controls what script is used for printing (basketgroups)},
             PatronSelfRegistrationEmailMustBeUnique =>
                 q{If set, the field borrowers.email will be considered as a unique field on self-registering},
             PatronSelfRegistrationPrefillForm =>
@@ -75,6 +87,10 @@ return {
                 q{Separate current branch holdings and holdings from libraries in the same library groups},
             ShowHeadingUse =>
                 q{Show whether MARC21 authority record contains an established heading that conforms to descriptive cataloguing rules, and can therefore be used as a main/added entry, or subject, or series title},
+            SubfieldsToAllowForRestrictedBatchmod =>
+                q{Define a list of subfields for which edition is authorized when items_batchmod_restricted permission is enabled, separated by spaces. Example: 995$f 995$h 995$j},
+            SubfieldsToAllowForRestrictedEditing =>
+                q{Define a list of subfields for which edition is authorized when edit_items_restricted permission is enabled, separated by spaces. Example: 995$f 995$h 995$j},
             SuggestionsLog               => q{If ON, log purchase suggestion changes},
             SuspendHoldsIntranet         => q{Allow holds to be suspended from the intranet.},
             SuspendHoldsOpac             => q{Allow holds to be suspended from the OPAC.},
@@ -116,7 +132,7 @@ return {
             q{
                 UPDATE systempreferences
                 SET options=NULL
-                WHERE type="YesNo";
+                WHERE type="YesNo" OR type="Free";
             }
         );
 
@@ -149,6 +165,14 @@ return {
                 UPDATE systempreferences
                 SET type='Free'
                 WHERE variable="OPACLoginLabelTextContent";
+            }
+        );
+
+        $dbh->do(
+            q{
+                UPDATE systempreferences
+                SET type='Choice', options='PHOTOCOPY|SCAN'
+                WHERE variable="ArticleRequestsSupportedFormats";
             }
         );
     },
