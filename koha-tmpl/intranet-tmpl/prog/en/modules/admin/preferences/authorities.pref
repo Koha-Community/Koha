@@ -163,3 +163,10 @@ Authorities:
                   1: Do
                   0: "Don't"
             - consider diacritics when linking, i.e. distinguish between 'A', 'Å', 'Ä', etc. Enabling this preference may generate new authority records if AutoCreateAuthorities is enabled.
+        -
+            - pref: LinkerUseFrameworkAuthTypes
+              default: no
+              choices:
+                  1: Use
+                  0: "Don't use"
+            - authority types defined in MARC bibliographic frameworks when linking headings to authorities (MARC21 only). When enabled, the authority type configured in the Default framework will be used instead of the hardcoded MARC21 defaults.

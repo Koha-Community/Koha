@@ -421,6 +421,7 @@ INSERT INTO systempreferences ( `variable`, `value` ) VALUES
 ('LinkerModule','Default'),
 ('LinkerOptions',''),
 ('LinkerRelink','1'),
+('LinkerUseFrameworkAuthTypes','0'),
 ('ListOwnerDesignated', ''),
 ('ListOwnershipUponPatronDeletion', 'delete'),
 ('LoadCheckoutsTableDelay','0'),
