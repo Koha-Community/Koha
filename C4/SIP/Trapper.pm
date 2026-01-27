@@ -65,9 +65,27 @@ sub BINMODE {
 =cut
 
 $SIG{__DIE__} = sub {
-    my $msg    = shift;
+    my $msg = shift;
+
+    # Check if we are inside an eval
+    my $logger_method = 'error';
+    $logger_method = 'warn' if defined $^S && $^S != 0;
+
+    # Check if error originated from SIP code
+    my $is_sip_error = 0;
+    my $i            = 0;    # Start from 0 to check the current caller
+    while ( my @caller = caller( $i++ ) ) {
+        if ( $caller[0] =~ /^C4::SIP::/ || $caller[1] =~ /\/C4\/SIP\// ) {
+            $is_sip_error = 1;
+            last;
+        }
+        last if $i > 10;     # Don't check too deep
+    }
+
+    # Only log if it's from SIP code
+    return unless $is_sip_error;
     my $logger = Koha::Logger->get( { interface => 'sip', category => 'STDERR' } );
-    $logger->error($msg) if $logger;
+    $logger->$logger_method($msg) if $logger;
     die $msg;
 };
 
