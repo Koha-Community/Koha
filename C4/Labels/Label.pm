@@ -579,6 +579,12 @@ sub barcode {
         my $adjusted_llx  = $params{'llx'};
         my $barcode_width = $tot_bar_length * $x_scale_factor;
 
+        if ( $barcode_justify eq 'C' ) {
+            $adjusted_llx = $params{'llx'} + ( ( $self->{'width'} - $barcode_width ) / 2 );
+        } elsif ( $barcode_justify eq 'R' ) {
+            $adjusted_llx = $params{'llx'} + ( $self->{'width'} - $barcode_width );
+        }
+
         eval {
             PDF::Reuse::Barcode::COOP2of5(
                 x     => $adjusted_llx,
@@ -599,6 +605,12 @@ sub barcode {
 
         my $adjusted_llx  = $params{'llx'};
         my $barcode_width = $tot_bar_length * $x_scale_factor;
+
+        if ( $barcode_justify eq 'C' ) {
+            $adjusted_llx = $params{'llx'} + ( ( $self->{'width'} - $barcode_width ) / 2 );
+        } elsif ( $barcode_justify eq 'R' ) {
+            $adjusted_llx = $params{'llx'} + ( $self->{'width'} - $barcode_width );
+        }
 
         eval {
             PDF::Reuse::Barcode::Industrial2of5(
