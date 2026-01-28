@@ -2395,20 +2395,62 @@ sub AddReturn {
     my $validTransfer = 1;
     my $stat_type     = 'return';
 
-    # get information on item
+    # Get item
     my $item = Koha::Items->find( { barcode => $barcode } );
     unless ($item) {
         return ( 0, { BadBarcode => $barcode } );    # no barcode means no item or borrower.  bail out.
+    }
+
+    # Check availability
+    my $availability = $item->checkin_availability( { branch => $branch } );
+
+    # Extract context objects
+    my $issue = $availability->context->{checkout};
+    $patron = $availability->context->{patron};
+
+    # Set NotIssued message if item not checked out
+    if ( !$issue ) {
+        $messages->{'NotIssued'} = $barcode;
+        $item->onloan(undef)->store( { skip_record_index => 1, skip_holds_queue => 1 } ) if defined $item->onloan;
+        $doreturn = 0;
+    }
+
+    # Handle blockers
+    if ( !$availability->available ) {
+        my $blockers = $availability->blockers;
+
+        if ( $blockers->{BlockedWithdrawn} ) {
+            $messages->{'withdrawn'} = 1;
+
+            # Record local use even when blocked, if preference is on
+            if ( !$issue && C4::Context->preference("RecordLocalUseOnReturn") ) {
+                my $localuse_count = $item->localuse || 0;
+                $localuse_count++;
+                $item->localuse($localuse_count)->store;
+                $messages->{'LocalUse'} = 1;
+            }
+
+            return ( 0, $messages, $issue, ( $patron ? $patron->unblessed : {} ) );
+        }
+        if ( $blockers->{BlockedLost} ) {
+            $doreturn = 0;
+        }
+        if ( $blockers->{Wrongbranch} ) {
+            $messages->{'Wrongbranch'} = $blockers->{Wrongbranch};
+            $doreturn = 0;
+            my $indexer = Koha::SearchEngine::Indexer->new( { index => $Koha::SearchEngine::BIBLIOS_INDEX } );
+            $indexer->index_records( $item->biblionumber, "specialUpdate", "biblioserver" );
+            return ( $doreturn, $messages, $issue, ( $patron ? $patron->unblessed : {} ) );
+        }
     }
 
     my $itemnumber     = $item->itemnumber;
     my $itemtype       = $item->effective_itemtype;
     my $localuse_count = $item->localuse || 0;
 
-    my $issue = $item->checkout;
-    if ($issue) {
-        $patron = $issue->patron
-            or die
+    # Data consistency check for issued items
+    if ( $issue && !$patron ) {
+        die
             "Data inconsistency: barcode $barcode (itemnumber:$itemnumber) claims to be issued to non-existent borrowernumber '"
             . $issue->borrowernumber . "'\n"
             . Dumper( $issue->unblessed ) . "\n";
@@ -2416,11 +2458,11 @@ sub AddReturn {
     } else {
         $messages->{'NotIssued'} = $barcode;
         $item->onloan(undef)->store( { skip_record_index => 1, skip_holds_queue => 1 } ) if defined $item->onloan;
+    }
 
-        # even though item is not on loan, it may still be transferred;  therefore, get current branch info
-        $doreturn = 0;
+    # Handle not issued items (continued)
+    if ( !$issue ) {
 
-        # No issue, no borrowernumber.  ONLY if $doreturn, *might* you have a $borrower later.
         # Record this as a local use, instead of a return, if the RecordLocalUseOnReturn is on
         if ( C4::Context->preference("RecordLocalUseOnReturn") ) {
             $localuse_count++;
@@ -2432,11 +2474,6 @@ sub AddReturn {
 
     if ( $item->withdrawn ) {    # book has been cancelled
         $messages->{'withdrawn'} = 1;
-
-        # In the case where we block return of withdrawn, we should completely block the return
-        # without updating item statuses, so we exit early
-        return ( 0, $messages, $issue, ( $patron ? $patron->unblessed : {} ) )
-            if C4::Context->preference("BlockReturnOfWithdrawnItems");
     }
 
     # full item data, but no borrowernumber or checkout info (no issue)
@@ -2479,6 +2516,22 @@ sub AddReturn {
     my $borrowernumber   = $patron ? $patron->borrowernumber : undef;    # we don't know if we had a borrower or not
     my $patron_unblessed = $patron ? $patron->unblessed      : {};
 
+    # Check branch transfer limits (bug 7376)
+    if ( $doreturn && defined($returnbranch) ) {
+        my $from_library = Koha::Libraries->find($branch);
+        my $to_library   = Koha::Libraries->find($returnbranch);
+        if ( !$item->can_be_transferred( { from => $from_library, to => $to_library } ) ) {
+            $messages->{'Wrongbranch'} = {
+                Wrongbranch => $branch,
+                Rightbranch => $returnbranch
+            };
+            $doreturn = 0;
+            my $indexer = Koha::SearchEngine::Indexer->new( { index => $Koha::SearchEngine::BIBLIOS_INDEX } );
+            $indexer->index_records( $item->biblionumber, "specialUpdate", "biblioserver" );
+            return ( $doreturn, $messages, $issue, $patron_unblessed );
+        }
+    }
+
     # Update item location
     my $loc_messages = $item->location_update_trigger('checkin');
     foreach my $loc_msg_key ( keys %$loc_messages ) {
@@ -2510,24 +2563,6 @@ sub AddReturn {
                 }
             }
         }
-    }
-
-    # check if the return is allowed at this branch
-    my ( $returnallowed, $message ) = CanBookBeReturned( $item, $branch, $returnbranch );
-
-    unless ($returnallowed) {
-        $messages->{'Wrongbranch'} = {
-            Wrongbranch => $branch,
-            Rightbranch => $message
-        } if $message;
-        $doreturn = 0;
-        my $indexer = Koha::SearchEngine::Indexer->new( { index => $Koha::SearchEngine::BIBLIOS_INDEX } );
-        $indexer->index_records( $item->biblionumber, "specialUpdate", "biblioserver" );
-        return ( $doreturn, $messages, $issue, $patron_unblessed );
-    }
-
-    if ( $item->itemlost and C4::Context->preference("BlockReturnOfLostItems") ) {
-        $doreturn = 0;
     }
 
     # case of a return of document (deal with issues and holdingbranch)
