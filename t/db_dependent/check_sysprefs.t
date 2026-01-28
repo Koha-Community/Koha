@@ -166,7 +166,7 @@ sub check_db {
         or diag sprintf( "Too many sysprefs in DB: %s", join ", ", @diff );
 
     my @sorted_names_in_file = sort {
-        $b =~ s/_/ZZZ/g;    # mysql sorts underscore last, if you modify this qa-test-tools will need adjustements
+        $b =~ s/_/ZZZ/g;    # mysql sorts underscore last, if you modify this qa-test-tools will need adjustments
         lc($a) cmp lc($b)
     } @syspref_names_in_file;
     is_deeply( \@syspref_names_in_file, \@sorted_names_in_file, 'Syspref in sysprefs.sql must be sorted by name' );
