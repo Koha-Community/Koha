@@ -5720,6 +5720,9 @@ subtest 'AddRenewal() adds to renewals' => sub {
 
     set_userenv( $library->unblessed );
 
+    #mock the system preference
+    t::lib::Mocks::mock_preference( 'AutomaticRenewalPeriodBase', 'now' );
+
     # Check the item out
     my $issue = AddIssue( $patron, $item->barcode );
     is( ref($issue), 'Koha::Checkout', 'Issue added' );
