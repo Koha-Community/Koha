@@ -451,7 +451,7 @@ subtest 'add() tests' => sub {
     $schema->storage->txn_rollback;
 
     subtest 'librarian access tests' => sub {
-        plan tests => 40;
+        plan tests => 41;
 
         $schema->storage->txn_begin;
 
@@ -461,7 +461,8 @@ subtest 'add() tests' => sub {
         my $attr = "Let's go";
 
         # Disable trigger to notify patrons of password changes for these tests
-        t::lib::Mocks::mock_preference( 'NotifyPasswordChange', 0 );
+        t::lib::Mocks::mock_preference( 'NotifyPasswordChange',     0 );
+        t::lib::Mocks::mock_preference( 'EmailPatronRegistrations', 0 );
 
         # Mock early, so existing mandatory attributes don't break all the tests
         my $mocked_patron = Test::MockModule->new('Koha::Patron');
@@ -614,6 +615,111 @@ subtest 'add() tests' => sub {
             ->status_is( 201, 'Patron created successfully with AutoEmailNewUser = 1 and empty WELCOME notice' );
         is( $letter_enqueued, 0, "Welcome not sent as it would be empty" );
         $message_has_content = 1;
+
+        subtest 'EmailPatronRegistrations' => sub {
+            plan tests => 20;
+            t::lib::Mocks::mock_preference( 'AutoEmailNewUser',                   0 );
+            t::lib::Mocks::mock_preference( 'EmailAddressForPatronRegistrations', 'test@example.org' );
+            my $mocked_patron = Test::MockModule->new('Koha::Patron');
+            $mocked_patron->mock(
+                'GetPreparedLetter',
+                sub {
+                    return 1;
+                }
+            );
+            my $message_has_content = 1;
+            my $letter_enqueued;
+            $mocked_patron->mock(
+                'EnqueueLetter',
+                sub {
+                    $letter_enqueued = $message_has_content ? 1 : 0;
+
+                    # return a 'message_id'
+                    return $message_has_content ? 42 : undef;
+                }
+            );
+            my $patron_to_delete = $builder->build_object( { class => 'Koha::Patrons' } );
+            $newpatron = $patron_to_delete->to_api( { user => $librarian } );
+
+            # delete RO attributes
+            delete $newpatron->{patron_id};
+            delete $newpatron->{restricted};
+            delete $newpatron->{expired};
+            delete $newpatron->{anonymized};
+            $patron_to_delete->delete;
+
+            # Set a date field
+            $newpatron->{date_of_birth} = '1980-06-18';
+
+            # Set a date-time field
+            $newpatron->{last_seen} =
+                output_pref( { dt => dt_from_string->add( days => -1 ), dateformat => 'rfc3339' } );
+
+            # Test welcome email sending with EmailPatronRegistrations = 0 but opac_reg_yes override
+            t::lib::Mocks::mock_preference( 'EmailPatronRegistrations', 0 );
+            $letter_enqueued = 0;
+            $t->post_ok(
+                "//$userid:$password@/api/v1/patrons" => { 'x-koha-override' => 'opac_reg_yes' } => json => $newpatron )
+                ->status_is( 201, 'Patron created successfully' )
+                ->header_like(
+                Location => qr|^\/api\/v1\/patrons/\d*|,
+                'REST3.4.1'
+                )
+                ->json_has( '/patron_id', 'got a patron_id' )
+                ->json_is( '/cardnumber'    => $newpatron->{cardnumber} )
+                ->json_is( '/surname'       => $newpatron->{surname} )
+                ->json_is( '/firstname'     => $newpatron->{firstname} )
+                ->json_is( '/date_of_birth' => $newpatron->{date_of_birth}, 'Date field set (Bug 28585)' )
+                ->json_is( '/last_seen'     => $newpatron->{last_seen},     'Date-time field set (Bug 28585)' );
+
+            my $p = Koha::Patrons->find( { cardnumber => $newpatron->{cardnumber} } );
+            is( $letter_enqueued, 1, "Enqueued a registration notice due to opac_reg_yes override" );
+
+            # Test when EmailPatronRegistrations = EmailAddressForPatronRegistrations but opac_reg_no override
+            $newpatron->{cardnumber} = "NewCard123456";
+            $newpatron->{userid}     = "newuserid6";
+            $letter_enqueued         = 0;
+            t::lib::Mocks::mock_preference( 'EmailPatronRegistrations', 'EmailAddressForPatronRegistrations' );
+            $t->post_ok( "//$userid:$password@/api/v1/patrons" =>
+                    { 'x-koha-override' => 'opac_reg_no', 'x-confirm-not-duplicate' => 1 } => json => $newpatron )
+                ->status_is( 201, 'Patron created successfully with opac_reg_no override' );
+            is( $letter_enqueued, 0, "No registration notice enqueued due to opac_reg_no override" );
+
+            # Test when EmailPatronRegistrations = EmailAddressForPatronRegistrations with no overrides
+            $newpatron->{cardnumber} = "NewCard654321";
+            $newpatron->{userid}     = "newuserid7";
+            $letter_enqueued         = 0;
+            t::lib::Mocks::mock_preference( 'EmailPatronRegistrations', 'EmailAddressForPatronRegistrations' );
+            $t->post_ok(
+                "//$userid:$password@/api/v1/patrons" => { 'x-confirm-not-duplicate' => 1 } => json => $newpatron )
+                ->status_is(
+                201,
+                'Patron created successfully with EmailPatronRegistrations = EmailAddressForPatronRegistrations'
+                );
+            is(
+                $letter_enqueued, 1,
+                "Patron registration notice enqueued due to EmailPatronRegistrations = EmailAddressForPatronRegistrations"
+            );
+
+            # Test case when notice template returns an empty string
+            $newpatron->{cardnumber} = "NewCardPidgeon2";
+            $newpatron->{userid}     = "newuserid9";
+            $letter_enqueued         = 0;
+            $message_has_content     = 0;
+            t::lib::Mocks::mock_preference( 'EmailPatronRegistrations', 'EmailAddressForPatronRegistrations' );
+            t::lib::Mocks::mock_preference( 'EmailAddressForPatronRegistrations', 'test@example.org' );
+            warning_like {
+                $t->post_ok(
+                    "//$userid:$password@/api/v1/patrons" => { 'x-confirm-not-duplicate' => 1 } => json => $newpatron )
+                    ->status_is(
+                    201,
+                    'Patron created successfully with EmailPatronRegistrations = 1 and empty OPAC_REG notice'
+                    );
+            }
+            qr/can't enqueue letter/;
+            is( $letter_enqueued, 0, "Registration notice not sent as it would be empty" );
+            $message_has_content = 1;
+        };
 
         subtest 'extended_attributes handling tests' => sub {
 
