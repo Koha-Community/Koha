@@ -110,12 +110,12 @@ my $lost_control_pref = C4::Context->preference('LostChargesControl');
 my $home_holding_pref = C4::Context->preference('HomeOrHoldingBranch');
 if (   ( scalar @branches || scalar @skip_branches )
     && $lost_control_pref eq 'PickupLibrary'
-    && !( C4::Context->userenv->{branch} ) )
+    && !( C4::Context->userenv->{'branch'} ) )
 {
     pod2usage(
         -verbose => 0,
         -message =>
-            "There is no branch set for the cron user, LostCharge Control is set to 'library you are logged in at'.\n"
+            "There is no branch set for the cron user, LostChargesControl is set to 'library you are logged in at'.\n"
             . "No branches will satisfy this requirement - exiting.",
         -exitval => 1
     );
