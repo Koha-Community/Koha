@@ -1417,7 +1417,7 @@ sub ModReceiveOrder {
     $order->{invoice_unitprice} ||= $order->{unitprice};
     $order->{invoice_currency}  ||= Koha::Acquisition::Currencies->get_active->currency;
 
-    my $suggestion = Koha::Suggestions->find( { biblionumber => $biblionumber } );
+    my $suggestion = Koha::Suggestions->search( { biblionumber => $biblionumber } )->single;
     if ($suggestion) {
         ModSuggestion(
             {
