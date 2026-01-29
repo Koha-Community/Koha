@@ -160,6 +160,13 @@ sub add {
                     }
                 }
 
+                my $notify_library = C4::Context->preference('EmailPatronRegistrations');
+                if ( $overrides->{opac_reg_yes}
+                    || ( $notify_library && !$overrides->{opac_reg_no} ) )
+                {
+                    $patron->notify_library_of_registration($notify_library);
+                }
+
                 if ( C4::Context->preference('EnhancedMessagingPreferences') ) {
                     C4::Members::Messaging::SetMessagingPreferencesFromDefaults(
                         {

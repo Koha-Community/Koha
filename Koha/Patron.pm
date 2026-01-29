@@ -3316,7 +3316,7 @@ sub notify_library_of_registration {
     my ( $self, $email_patron_registrations ) = @_;
 
     if (
-        my $letter = C4::Letters::GetPreparedLetter(
+        my $letter = GetPreparedLetter(
             module      => 'members',
             letter_code => 'OPAC_REG',
             branchcode  => $self->branchcode,
@@ -3339,7 +3339,7 @@ sub notify_library_of_registration {
                 || C4::Context->preference('KohaAdminEmailAddress');
         }
 
-        my $message_id = C4::Letters::EnqueueLetter(
+        my $message_id = EnqueueLetter(
             {
                 letter                 => $letter,
                 borrowernumber         => $self->borrowernumber,
