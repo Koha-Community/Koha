@@ -133,6 +133,7 @@ subtest 'superlibrarian tests' => sub {
         'CAN_user_borrowers_api_validate_password'                  => 1,
         'CAN_user_borrowers_view_borrower_infos_from_any_libraries' => 1,
         'CAN_user_borrowers_view_checkout_history'                  => 1,
+        'CAN_user_borrowers_view_holds_history'                     => 1,
         'CAN_user_borrowers'                                        => 1,
         'CAN_user_cash_management_anonymous_refund'                 => 1,
         'CAN_user_cash_management_cashup'                           => 1,
