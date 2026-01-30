@@ -787,6 +787,22 @@ $("#placeBookingModal").on("show.bs.modal", function (e) {
 
                                 // Update the maxDate option of the flatpickr instance
                                 instance.set("maxDate", maxDate);
+
+                                // Re-apply startRange class after redraw
+                                // Flatpickr may lose this class when maxDate triggers a redraw
+                                setTimeout(() => {
+                                    // Only apply if still in "start date only" state
+                                    if (instance.selectedDates.length !== 1) {
+                                        return;
+                                    }
+                                    instance.calendarContainer
+                                        .querySelectorAll(".flatpickr-day.selected")
+                                        .forEach(el => {
+                                            if (!el.classList.contains("startRange")) {
+                                                el.classList.add("startRange");
+                                            }
+                                        });
+                                }, 0);
                             }
                             // Range set, update hidden fields and set available items
                             else if (selectedDates[0] && selectedDates[1]) {
