@@ -258,6 +258,38 @@ sub _might_add_limit {
     return $sql;
 }
 
+=head3 apply_execution_time_limit
+
+    $sql = Koha::Report->apply_execution_time_limit($sql);
+
+Apply SQL execution time limits based on report_sql_max_statement_time_seconds.
+
+=cut
+
+sub apply_execution_time_limit {
+    my ( $class, $sql ) = @_;
+
+    # https://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=39164
+    my $report_sql_max_statement_time_seconds = C4::Context->config('report_sql_max_statement_time_seconds') // 0;
+    if ($report_sql_max_statement_time_seconds) {
+        my %versions = C4::Context::get_versions();
+        if ( $versions{'mysqlVersion'} =~ /MariaDB/i ) {
+            $sql = sprintf(
+                'SET STATEMENT max_statement_time=%f FOR %s',
+                $report_sql_max_statement_time_seconds,
+                $sql
+            );
+        } else {
+
+            # mysql timing is in milliseconds
+            $report_sql_max_statement_time_seconds *= 1000;
+            $sql =~ s#select#select /*+ MAX_EXECUTION_TIME($report_sql_max_statement_time_seconds) */#i;
+        }
+    }
+
+    return $sql;
+}
+
 =head3 _type
 
 Returns name of corresponding DBIC resultset

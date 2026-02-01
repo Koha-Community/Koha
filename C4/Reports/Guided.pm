@@ -54,6 +54,7 @@ use Koha::Logger;
 use Koha::Notice::Templates;
 use Koha::Patron::Categories;
 use Koha::Patrons;
+use Koha::Report;
 use Koha::Reports;
 use Koha::SharedContent;
 use Koha::TemplateUtils qw( process_tt );
@@ -604,6 +605,7 @@ sub execute_query {
 
     my ( $is_sql_valid, $errors ) = Koha::Report->new( { savedsql => $sql } )->is_sql_valid;
     return ( undef, @{$errors}[0] ) unless $is_sql_valid;
+    $sql = Koha::Report->apply_execution_time_limit($sql);
 
     foreach my $sql_param (@$sql_params) {
         if ( $sql_param =~ m/\n/ ) {
