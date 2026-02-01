@@ -18,7 +18,7 @@
 use Modern::Perl;
 
 use Test::NoWarnings;
-use Test::More tests => 9;
+use Test::More tests => 10;
 
 use Koha::Report;
 use Koha::Reports;
@@ -182,6 +182,31 @@ subtest '_might_add_limit' => sub {
     like(
         Koha::Report->_might_add_limit($sql), qr/ LIMIT 10$/,
         'Query refers to limit field, limit 10 found at the end'
+    );
+};
+
+subtest 'apply_execution_time_limit' => sub {
+    plan tests => 3;
+
+    my $sql = "SELECT * FROM biblio";
+
+    t::lib::Mocks::mock_config( 'report_sql_max_statement_time_seconds', 0 );
+    is( Koha::Report->apply_execution_time_limit($sql), $sql, 'No execution time limit configured' );
+
+    t::lib::Mocks::mock_config( 'report_sql_max_statement_time_seconds', 1.5 );
+    my $context = Test::MockModule->new('C4::Context');
+    $context->mock( 'get_versions', sub { return ( mysqlVersion => '10.6.0-MariaDB' ); } );
+    is(
+        Koha::Report->apply_execution_time_limit($sql),
+        'SET STATEMENT max_statement_time=1.500000 FOR SELECT * FROM biblio',
+        'MariaDB max statement time applied'
+    );
+
+    $context->mock( 'get_versions', sub { return ( mysqlVersion => '8.0.36' ); } );
+    like(
+        Koha::Report->apply_execution_time_limit($sql),
+        qr!^(?i:select) /\*\+ MAX_EXECUTION_TIME\(1500\) \*/ \* FROM biblio$!,
+        'MySQL max execution time hint applied'
     );
 };
 
