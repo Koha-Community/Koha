@@ -1000,14 +1000,18 @@ function _dt_force_visibility(table_settings, table_dt, state) {
                     .join(",")
             )
             .every(function () {
-                state.columns[this.index()].visible =
-                    table_settings.columns.find(
-                        c =>
-                            c.columnname ==
-                            this.header().getAttribute("data-colname")
-                    ).is_hidden
-                        ? false
-                        : true;
+                let column = table_settings.columns.find(
+                    c =>
+                        c.columnname ==
+                        this.header().getAttribute("data-colname")
+                );
+                if (
+                    !column.visibility_condition ||
+                    (column.is_hidden && column.cannot_be_toggled)
+                ) {
+                    state.columns[this.index()].visible = false;
+                    state.columns[this.index()].cannot_be_toggled = true;
+                }
             });
     } else {
         throw new Error(

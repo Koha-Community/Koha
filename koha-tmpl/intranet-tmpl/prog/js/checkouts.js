@@ -36,36 +36,29 @@ function LoadIssuesTable() {
     $("#issues-table").show();
     $("#issues-table-actions").show();
     var msg_loading = __("Loading... you may continue scanning.");
+
     let renew_column = table_settings_issues_table.columns.find(
         c => c.columnname == "renew"
     );
-
-    if (!AllowCirculate) {
-        renew_column.is_hidden = 1;
-        renew_column.force_visibility = 1;
-    } else {
-        renew_column.is_hidden = 0;
-    }
+    renew_column.visibility_condition = AllowCirculate;
     renew_column.force_visibility = 1;
+
+    let checkin_column = table_settings_issues_table.columns.find(
+        c => c.columnname == "checkin"
+    );
+    checkin_column.visibility_condition = AllowCirculate;
+    checkin_column.force_visibility = 1;
 
     let claims_returned_column = table_settings_issues_table.columns.find(
         c => c.columnname == "claims_returned"
     );
-    if (!ClaimReturnedLostValue) {
-        claims_returned_column.is_hidden = 1;
-    } else {
-        claims_returned_column.is_hidden = 0;
-    }
+    claims_returned_column.visibility_condition = ClaimReturnedLostValue;
     claims_returned_column.force_visibility = 1;
 
     let export_column = table_settings_issues_table.columns.find(
         c => c.columnname == "export"
     );
-    if (!exports_enabled) {
-        export_column.is_hidden = 1;
-    } else {
-        export_column.is_hidden = 0;
-    }
+    export_column.visibility_condition = exports_enabled;
     export_column.force_visibility = 1;
 
     issuesTable = $("#issues-table").kohaTable(
