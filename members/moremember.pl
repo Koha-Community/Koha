@@ -41,6 +41,7 @@ use Koha::Patron::Messages;
 use Koha::CsvProfiles;
 use Koha::Holds;
 use Koha::Patrons;
+use Koha::Patron::Consents;
 use Koha::Patron::Files;
 use Koha::Token;
 use Koha::Checkouts;
@@ -313,6 +314,25 @@ if ( C4::Context->preference('UseRecalls') ) {
     $template->param(
         recalls         => $patron->recalls( {}, { order_by => { -asc => 'recalldate' } } )->filter_by_current,
         specific_patron => 1,
+    );
+}
+
+# Fetch available consent types and patron's consents
+my $consent_types = Koha::Patron::Consents->available_types;
+if ( keys %$consent_types ) {
+    my @consents_data;
+    for my $type ( sort keys %$consent_types ) {
+        my $consent = $patron->consent($type);
+        push @consents_data, {
+            type       => $type,
+            title      => $consent_types->{$type},
+            given_on   => $consent->given_on,
+            refused_on => $consent->refused_on,
+        };
+    }
+    $template->param(
+        consents      => \@consents_data,
+        consent_types => $consent_types,
     );
 }
 
