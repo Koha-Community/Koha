@@ -115,7 +115,9 @@
           $ref: "../swagger.yaml#/definitions/error"
     x-koha-authorization:
       permissions:
-        cash_management: cashup
+        cash_management:
+          - cashup
+          - anonymous_refund
 "/cashups/{cashup_id}":
   get:
     x-mojo-to: CashRegisters::Cashups#get
@@ -167,4 +169,6 @@
           $ref: "../swagger.yaml#/definitions/error"
     x-koha-authorization:
       permissions:
-        cash_management: cashup
+        cash_management:
+          - cashup
+          - anonymous_refund
