@@ -6,7 +6,7 @@
 use Modern::Perl;
 
 use Test::NoWarnings;
-use Test::More tests => 15;
+use Test::More tests => 16;
 use Test::MockModule;
 use Test::Warn;
 use MARC::Field;
@@ -503,4 +503,23 @@ subtest 'Authority action logs include MARC-in-JSON diff' => sub {
     ok( ref $del_removed->{fields} eq 'ARRAY', '_marc.fields is an array in DELETE diff' );
 
     $schema->storage->txn_rollback;
+};
+
+subtest 'BuildSummary/_marc21_sort_hierarchy_alpha' => sub {
+    plan tests => 1;
+    #$schema->storage->txn_begin;
+    #t::lib::Mocks::mock_preference('marcflavour', 'MARC21');
+
+    my @fields;
+    push @fields, MARC::Field->new( '550', '', '', a => 'zzz', w => 'h' );
+    push @fields, MARC::Field->new( '550', '', '', a => 'yyy', w => 'g' );
+    push @fields, MARC::Field->new( '550', '', '', a => 'xxx', w => 'x' );
+    push @fields, MARC::Field->new( '550', '', '', a => 'www', w => '' );
+    push @fields, MARC::Field->new( '550', '', '', a => 'vvv', w => 'g' );
+    push @fields, MARC::Field->new( '550', '', '', a => 'uuu', w => 'h' );
+
+    my @sorted_sub_a = map { $_->subfield('a') } C4::AuthoritiesMarc::_marc21_sort_hierarchy_alpha(@fields);
+    is_deeply( \@sorted_sub_a, [ 'vvv', 'yyy', 'www', 'xxx', 'uuu', 'zzz' ], 'Sorted as expected' );
+
+    #$schema->storage->txn_rollback;
 };
