@@ -36,8 +36,8 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
 );
 
 my $payment_id = $input->param('accountlines_id');
-my $payment    = Koha::Account::Lines->find($payment_id);
-my $patron     = $payment->patron;
+my $accountline = Koha::Account::Lines->find($payment_id);
+my $patron     = $accountline->patron;
 
 my $logged_in_user = Koha::Patrons->find($loggedinuser) or die "Not logged in";
 output_and_exit_if_error(
@@ -51,14 +51,28 @@ output_and_exit_if_error(
 ) if $patron;    # Payment could have been anonymous
 
 my $lang   = $patron ? $patron->lang : $template->lang;
+# Determine template and table based on account line type
+my ($letter_code, $table_key, $table_id);
+if ($accountline->is_credit) {
+    $letter_code = 'RECEIPT';
+    $table_key = 'credits';
+    $table_id = $accountline->accountlines_id;
+} elsif ($accountline->is_debit && $accountline->debit_type_code eq 'PAYOUT') {
+    $letter_code = 'PAYOUT';
+    $table_key = 'debits';
+    $table_id = $accountline->accountlines_id;
+} else {
+    die "Account line " . $payment_id . " is not a credit or supported payout transaction";
+}
+
 my $letter = C4::Letters::GetPreparedLetter(
     module                 => 'pos',
-    letter_code            => 'RECEIPT',
+    letter_code            => $letter_code,
     branchcode             => C4::Context::mybranch,
     message_transport_type => 'print',
     lang                   => $lang,
     tables                 => {
-        credits   => $payment_id,
+        $table_key => $table_id,
         borrowers => $patron ? $patron->borrowernumber : undef
     },
     substitute => {
