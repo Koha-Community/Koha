@@ -55,6 +55,8 @@ subtest 'periods' => sub {
 
     ];
     $agreement->periods($periods);
+    $periods =
+        [ map { delete $_->{agreement_id}; $_ } @{$periods} ];
 
     my $retrieved_periods = $agreement->periods;
     is( ref($retrieved_periods), 'Koha::ERM::Agreement::Periods' );
