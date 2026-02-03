@@ -100,9 +100,8 @@ patron/borrower's middle name
 
 =head2 streetnumber
 
-  data_type: 'varchar'
+  data_type: 'tinytext'
   is_nullable: 1
-  size: 10
 
 =head2 streettype
 
@@ -175,9 +174,8 @@ patron/borrower's middle name
 =head2 B_streetnumber
 
   accessor: 'b_streetnumber'
-  data_type: 'varchar'
+  data_type: 'tinytext'
   is_nullable: 1
-  size: 10
 
 =head2 B_streettype
 
@@ -491,7 +489,7 @@ __PACKAGE__->add_columns(
   "pronouns",
   { data_type => "longtext", is_nullable => 1 },
   "streetnumber",
-  { data_type => "varchar", is_nullable => 1, size => 10 },
+  { data_type => "tinytext", is_nullable => 1 },
   "streettype",
   { data_type => "varchar", is_nullable => 1, size => 50 },
   "address",
@@ -519,12 +517,7 @@ __PACKAGE__->add_columns(
   "phonepro",
   { data_type => "mediumtext", is_nullable => 1 },
   "B_streetnumber",
-  {
-    accessor => "b_streetnumber",
-    data_type => "varchar",
-    is_nullable => 1,
-    size => 10,
-  },
+  { accessor => "b_streetnumber", data_type => "tinytext", is_nullable => 1 },
   "B_streettype",
   {
     accessor => "b_streettype",
@@ -655,8 +648,8 @@ __PACKAGE__->add_columns(
 __PACKAGE__->set_primary_key("verification_token", "borrowernumber");
 
 
-# Created by DBIx::Class::Schema::Loader v0.07051 @ 2024-11-11 11:07:06
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:QOqDkQ+8LuTY6qYrPhsQWw
+# Created by DBIx::Class::Schema::Loader v0.07051 @ 2026-02-03 09:57:42
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:h0JPmqWPv7elhdENUDSnFw
 
 __PACKAGE__->add_columns(
     '+gonenoaddress' => { is_boolean => 1 },
