@@ -169,16 +169,16 @@
                             <th>Fund</th>
                         </tr>
                     </thead>
-                    <tfoot>
-                        [% FOREACH order IN selected_order_loop %]
-                            [% INCLUDE display_order_line selected => 1 can_check => 1 %]
-                        [% END %]
-                    </tfoot>
                     <tbody>
                         [% FOREACH order IN result_order_loop %]
                             [% INCLUDE display_order_line can_check => 1 %]
                         [% END %]
                     </tbody>
+                    <tfoot>
+                        [% FOREACH order IN selected_order_loop %]
+                            [% INCLUDE display_order_line selected => 1 can_check => 1 %]
+                        [% END %]
+                    </tfoot>
                 </table>
             </div>
             <fieldset class="action">

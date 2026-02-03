@@ -134,16 +134,18 @@
                             <th>Amount outstanding</th>
                         </tr>
                     </thead>
-                    [% FOREACH guarantee IN guarantees %]
-                        <tr>
-                            <td>[% INCLUDE 'patron-title.inc' patron=guarantee hide_patron_infos_if_needed=1 %]</td>
-                            [% IF logged_in_user.can_see_patron_infos( guarantee ) %]
-                                <td>[% guarantee.account.balance | $Price %]</td>
-                            [% ELSE %]
-                                <td>-</td>
-                            [% END %]
-                        </tr>
-                    [% END %]
+                    <tbody>
+                        [% FOREACH guarantee IN guarantees %]
+                            <tr>
+                                <td>[% INCLUDE 'patron-title.inc' patron=guarantee hide_patron_infos_if_needed=1 %]</td>
+                                [% IF logged_in_user.can_see_patron_infos( guarantee ) %]
+                                    <td>[% guarantee.account.balance | $Price %]</td>
+                                [% ELSE %]
+                                    <td>-</td>
+                                [% END %]
+                            </tr>
+                        [% END %]
+                    </tbody>
                     <tfoot>
                         <td>Total due</td>
                         <td>[% guarantees_fines | $Price %]</td>

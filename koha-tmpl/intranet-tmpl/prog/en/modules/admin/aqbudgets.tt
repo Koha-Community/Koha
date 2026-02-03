@@ -167,21 +167,6 @@
                                         <th class="no-export">Actions</th>
                                     </tr>
                                 </thead>
-                                <tfoot>
-                                    <tr>
-                                        <th></th>
-                                        <th></th>
-                                        <th colspan="2" style="text-align: left;" nowrap="nowrap">Period allocated [% IF budget_period_total %][% budget_period_total | $Price %][% END %] </th>
-                                        <th nowrap="nowrap" class="data"> [% period_alloc_total | $Price %]</th>
-                                        <th></th>
-                                        <th class="data">[% ordered_total | $Price %]</th>
-                                        <th></th>
-                                        <th class="data">[% spent_total | $Price %]</th>
-                                        <th></th>
-                                        <th class="data">[% available_total | $Price %]</th>
-                                        <th></th>
-                                    </tr>
-                                </tfoot>
                                 <tbody>
                                     [% FOREACH budget IN budgets %]
                                         <tr data-tt-id="[% budget.budget_id | html %]" data-tt-parent-id="[% budget.budget_parent_id | html %]">
@@ -275,6 +260,21 @@
                                         </tr>
                                     [% END %]
                                 </tbody>
+                                <tfoot>
+                                    <tr>
+                                        <th></th>
+                                        <th></th>
+                                        <th colspan="2" style="text-align: left;" nowrap="nowrap">Period allocated [% IF budget_period_total %][% budget_period_total | $Price %][% END %] </th>
+                                        <th nowrap="nowrap" class="data"> [% period_alloc_total | $Price %]</th>
+                                        <th></th>
+                                        <th class="data">[% ordered_total | $Price %]</th>
+                                        <th></th>
+                                        <th class="data">[% spent_total | $Price %]</th>
+                                        <th></th>
+                                        <th class="data">[% available_total | $Price %]</th>
+                                        <th></th>
+                                    </tr>
+                                </tfoot>
                             </table>
                         </div>
                         <!-- /.page-section -->

@@ -55,12 +55,6 @@
                             <th>Count</th>
                         </tr>
                     </thead>
-                    <tfoot>
-                        <tr>
-                            <th>TOTAL</th>
-                            <th>[% mainloo.total | html %]</th>
-                        </tr>
-                    </tfoot>
                     <tbody>
                         [% FOREACH loopitemtyp IN mainloo.loopitemtype %]
                             <tr>
@@ -69,6 +63,12 @@
                             </tr>
                         [% END %]
                     </tbody>
+                    <tfoot>
+                        <tr>
+                            <th>TOTAL</th>
+                            <th>[% mainloo.total | html %]</th>
+                        </tr>
+                    </tfoot>
                 </table>
             </div>
             <!-- /.page-section -->

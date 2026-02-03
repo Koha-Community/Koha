@@ -168,22 +168,24 @@
                     <th>Item type</th>
                 </tr>
             </thead>
-            [% FOREACH loopresul IN loopresult %]
-                <tr>
-                    <td>[% loopresul.mfirstname | html %] [% loopresul.msurname | html %]</td>
-                    <td><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% loopresul.borrowernumber | uri %]">[% loopresul.cardnumber | html %]</a></td>
-                    <td>[% loopresul.bfirstname | html %] [% loopresul.bsurname | html %]</td>
-                    <td>[% loopresul.branchname | html %]</td>
-                    <td data-order="[% loopresul.date | html %]">[% loopresul.date | $KohaDates %]</td>
-                    <td data-order="[% loopresul.timestamp | html %]">[% loopresul.timestamp | $KohaDates with_hours = 1 %]</td>
-                    <td>[% loopresul.type_description | html %]</td>
-                    <td>[% loopresul.note | html %]</td>
-                    <td style="text-align:right;">[% loopresul.amount | $Price %]</td>
-                    <td><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% loopresul.biblionumber | uri %]">[% loopresul.title | html %]</a></td>
-                    <td>[% loopresul.barcode | html %]</td>
-                    <td>[% ItemTypes.GetDescription(loopresul.itype) | html %]</td>
-                </tr>
-            [% END %]
+            <tbody>
+                [% FOREACH loopresul IN loopresult %]
+                    <tr>
+                        <td>[% loopresul.mfirstname | html %] [% loopresul.msurname | html %]</td>
+                        <td><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% loopresul.borrowernumber | uri %]">[% loopresul.cardnumber | html %]</a></td>
+                        <td>[% loopresul.bfirstname | html %] [% loopresul.bsurname | html %]</td>
+                        <td>[% loopresul.branchname | html %]</td>
+                        <td data-order="[% loopresul.date | html %]">[% loopresul.date | $KohaDates %]</td>
+                        <td data-order="[% loopresul.timestamp | html %]">[% loopresul.timestamp | $KohaDates with_hours = 1 %]</td>
+                        <td>[% loopresul.type_description | html %]</td>
+                        <td>[% loopresul.note | html %]</td>
+                        <td style="text-align:right;">[% loopresul.amount | $Price %]</td>
+                        <td><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% loopresul.biblionumber | uri %]">[% loopresul.title | html %]</a></td>
+                        <td>[% loopresul.barcode | html %]</td>
+                        <td>[% ItemTypes.GetDescription(loopresul.itype) | html %]</td>
+                    </tr>
+                [% END %]
+            </tbody>
             <tfoot>
                 <tr>
                     [% IF transaction_type == "ACT" %]

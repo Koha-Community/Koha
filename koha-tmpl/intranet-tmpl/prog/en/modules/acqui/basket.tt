@@ -751,60 +751,6 @@
                                         <th data-colname="cancel" class="no-sort no-export">Cancel order</th>
                                     </tr>
                                 </thead>
-                                <tfoot>
-                                    [% FOREACH foot_loo IN book_foot_loop %]
-                                        <tr>
-                                            <th></th>
-                                            <th>Total (GST [% foot_loo.tax_rate * 100 | html %])</th>
-                                            <th>&nbsp;</th>
-                                            <th>&nbsp;</th>
-                                            <th>&nbsp;</th>
-                                            <th>&nbsp;</th>
-                                            <th>&nbsp;</th>
-                                            <th>&nbsp;</th>
-                                            <th>&nbsp;</th>
-                                            <th>[% foot_loo.quantity | html %]</th>
-                                            <th>[% foot_loo.total_tax_excluded | $Price %]</th>
-                                            <th>[% foot_loo.total_tax_included | $Price %]</th>
-                                            <th>&nbsp;</th>
-                                            <th>[% foot_loo.tax_value | $Price %]</th>
-                                            <th>&nbsp;</th>
-                                            <th>&nbsp;</th>
-                                            <th>&nbsp;</th>
-                                            <th>&nbsp;</th>
-                                            <th>&nbsp;</th>
-                                            <th>&nbsp;</th>
-                                            <th>&nbsp;</th>
-                                            <th>&nbsp;</th>
-                                            <th>&nbsp;</th>
-                                        </tr>
-                                    [% END %]
-                                    <tr>
-                                        <th></th>
-                                        <th>Total ([% currency | html %])</th>
-                                        <th>&nbsp;</th>
-                                        <th>&nbsp;</th>
-                                        <th>&nbsp;</th>
-                                        <th>&nbsp;</th>
-                                        <th>&nbsp;</th>
-                                        <th>&nbsp;</th>
-                                        <th>&nbsp;</th>
-                                        <th>[% total_quantity | html %]</th>
-                                        <th>[% total_tax_excluded | $Price %]</th>
-                                        <th>[% total_tax_included | $Price %]</th>
-                                        <th>&nbsp;</th>
-                                        <th>[% total_tax_value | $Price %]</th>
-                                        <th>&nbsp;</th>
-                                        <th>&nbsp;</th>
-                                        <th>&nbsp;</th>
-                                        <th>&nbsp;</th>
-                                        <th>&nbsp;</th>
-                                        <th>&nbsp;</th>
-                                        <th>&nbsp;</th>
-                                        <th>&nbsp;</th>
-                                        <th>&nbsp;</th>
-                                    </tr>
-                                </tfoot>
                                 <tbody>
                                     [% FOREACH books_loo IN books_loop %]
                                         [% IF ( books_loo.order_received ) %]
@@ -1019,6 +965,60 @@
                                         </tr>
                                     [% END %]
                                 </tbody>
+                                <tfoot>
+                                    [% FOREACH foot_loo IN book_foot_loop %]
+                                        <tr>
+                                            <th></th>
+                                            <th>Total (GST [% foot_loo.tax_rate * 100 | html %])</th>
+                                            <th>&nbsp;</th>
+                                            <th>&nbsp;</th>
+                                            <th>&nbsp;</th>
+                                            <th>&nbsp;</th>
+                                            <th>&nbsp;</th>
+                                            <th>&nbsp;</th>
+                                            <th>&nbsp;</th>
+                                            <th>[% foot_loo.quantity | html %]</th>
+                                            <th>[% foot_loo.total_tax_excluded | $Price %]</th>
+                                            <th>[% foot_loo.total_tax_included | $Price %]</th>
+                                            <th>&nbsp;</th>
+                                            <th>[% foot_loo.tax_value | $Price %]</th>
+                                            <th>&nbsp;</th>
+                                            <th>&nbsp;</th>
+                                            <th>&nbsp;</th>
+                                            <th>&nbsp;</th>
+                                            <th>&nbsp;</th>
+                                            <th>&nbsp;</th>
+                                            <th>&nbsp;</th>
+                                            <th>&nbsp;</th>
+                                            <th>&nbsp;</th>
+                                        </tr>
+                                    [% END %]
+                                    <tr>
+                                        <th></th>
+                                        <th>Total ([% currency | html %])</th>
+                                        <th>&nbsp;</th>
+                                        <th>&nbsp;</th>
+                                        <th>&nbsp;</th>
+                                        <th>&nbsp;</th>
+                                        <th>&nbsp;</th>
+                                        <th>&nbsp;</th>
+                                        <th>&nbsp;</th>
+                                        <th>[% total_quantity | html %]</th>
+                                        <th>[% total_tax_excluded | $Price %]</th>
+                                        <th>[% total_tax_included | $Price %]</th>
+                                        <th>&nbsp;</th>
+                                        <th>[% total_tax_value | $Price %]</th>
+                                        <th>&nbsp;</th>
+                                        <th>&nbsp;</th>
+                                        <th>&nbsp;</th>
+                                        <th>&nbsp;</th>
+                                        <th>&nbsp;</th>
+                                        <th>&nbsp;</th>
+                                        <th>&nbsp;</th>
+                                        <th>&nbsp;</th>
+                                        <th>&nbsp;</th>
+                                    </tr>
+                                </tfoot>
                             </table>
                             <!-- /#orders -->
                             [% IF ( listincgst ) %]<small class="highlight">** Vendor's listings already include tax.</small>[% END %]

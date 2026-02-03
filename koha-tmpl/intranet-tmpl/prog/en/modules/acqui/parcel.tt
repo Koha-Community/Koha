@@ -107,7 +107,7 @@
         </div>
         [% UNLESS (invoiceclosedate) %]
             <div id="acqui_receive_search" class="page-section">
-                <h3>Pending orders</h3>
+                <h2>Pending orders</h2>
                 <table id="pending_orders" class="table table-bordered table-striped">
                     <thead>
                         <tr>
@@ -163,39 +163,6 @@
                                 <th class="no-sort"></th>
                             </tr>
                         </thead>
-                        <tfoot>
-                            [% FOREACH key IN subtotal_for_funds.keys.sort %]
-                                <tr>
-                                    [% IF invoiceincgst %]
-                                        <td colspan="6" class="total">(Tax inc.)</td>
-                                    [% ELSE %]
-                                        <td colspan="6" class="total">(Tax exc.)</td>
-                                    [% END %]
-                                    <td colspan="3"><em>Subtotal for</em> [% key | html %]</td>
-                                    <td>[% subtotal_for_funds.$key.ecost | $Price %]</td>
-                                    <td>[% subtotal_for_funds.$key.unitprice | $Price %]</td>
-                                    <td>&nbsp;</td>
-                                    <td>&nbsp;</td>
-                                </tr>
-                            [% END %]
-                            <tr>
-                                <th colspan="11" class="total">Total tax exc.</th>
-                                <th>[% total_tax_excluded | $Price %]</th>
-                                <th></th>
-                            </tr>
-                            [% FOREACH book_foot IN book_foot_loop %]
-                                <tr>
-                                    <th colspan="11">Total (GST [% book_foot.tax_rate * 100 | html %]%)</th>
-                                    <th>[% book_foot.tax_value | $Price %]</th>
-                                    <th></th>
-                                </tr>
-                            [% END %]
-                            <tr>
-                                <th colspan="11" class="total">Total tax inc.</th>
-                                <th>[% total_tax_included | $Price %]</th>
-                                <th></th>
-                            </tr>
-                        </tfoot>
                         <tbody class="filterclass">
                             [% FOREACH order IN loop_received %]
                                 <tr>
@@ -301,6 +268,39 @@
                                 </tr>
                             [% END %]
                         </tbody>
+                        <tfoot>
+                            [% FOREACH key IN subtotal_for_funds.keys.sort %]
+                                <tr>
+                                    [% IF invoiceincgst %]
+                                        <td colspan="6" class="total">(Tax inc.)</td>
+                                    [% ELSE %]
+                                        <td colspan="6" class="total">(Tax exc.)</td>
+                                    [% END %]
+                                    <td colspan="3"><em>Subtotal for</em> [% key | html %]</td>
+                                    <td>[% subtotal_for_funds.$key.ecost | $Price %]</td>
+                                    <td>[% subtotal_for_funds.$key.unitprice | $Price %]</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                </tr>
+                            [% END %]
+                            <tr>
+                                <th colspan="11" class="total">Total tax exc.</th>
+                                <th>[% total_tax_excluded | $Price %]</th>
+                                <th></th>
+                            </tr>
+                            [% FOREACH book_foot IN book_foot_loop %]
+                                <tr>
+                                    <th colspan="11">Total (GST [% book_foot.tax_rate * 100 | html %]%)</th>
+                                    <th>[% book_foot.tax_value | $Price %]</th>
+                                    <th></th>
+                                </tr>
+                            [% END %]
+                            <tr>
+                                <th colspan="11" class="total">Total tax inc.</th>
+                                <th>[% total_tax_included | $Price %]</th>
+                                <th></th>
+                            </tr>
+                        </tfoot>
                     </table>
                 </form>
                 <form id="cancel_receipt" method="post" action="/cgi-bin/koha/acqui/parcel.pl">
