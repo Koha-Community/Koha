@@ -238,12 +238,7 @@ if ( $op eq 'cud-edit_note' ) {
     $schema->txn_do(
         sub {
             # Update the note and date in the account line
-            $payment->set(
-                {
-                    date => \'NOW()',
-                    note => $note
-                }
-            )->store();
+            $payment->set( { note => $note } )->store();
         }
     );
 }
