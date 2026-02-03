@@ -576,6 +576,18 @@
             </span>
         </xsl:if>
 
+        <xsl:if test="marc:datafield[@tag=026]">
+            <span class="results_summary fingerprint_identifier">
+                <span class="label">Fingerprint: </span>
+                <xsl:for-each select="marc:datafield[@tag=026]">
+                    <xsl:call-template name="subfieldSelect">
+                        <xsl:with-param name="codes">abcde5</xsl:with-param>
+                    </xsl:call-template>
+                <xsl:choose><xsl:when test="position()=last()"><xsl:text></xsl:text></xsl:when><xsl:otherwise><xsl:text>; </xsl:text></xsl:otherwise></xsl:choose>
+                </xsl:for-each>
+            </span>
+        </xsl:if>
+
         <xsl:if test="marc:datafield[@tag=013]">
             <span class="results_summary patent_info">
                 <span class="label">Patent information: </span>
