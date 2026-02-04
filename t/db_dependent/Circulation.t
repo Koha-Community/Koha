@@ -2897,7 +2897,7 @@ subtest 'CanBookBeIssued + Koha::Patron->is_debarred|has_overdues' => sub {
     );
 };
 
-subtest 'CanBookBeReturned + UseBranchTransfertLimits + CirculationRules' => sub {
+subtest 'CanBookBeReturned + UseBranchTransferLimits + CirculationRules' => sub {
     plan tests => 22;
     t::lib::Mocks::mock_preference( 'UseBranchTransferLimits', '1' );
 
@@ -3122,7 +3122,7 @@ subtest 'AddReturn + TransferLimits' => sub {
     $issue->delete;
     $issue = AddIssue( $patron, $item->barcode );
     ( $doreturn, $messages, $iteminfo, $borrowerinfo ) = AddReturn( $item->barcode, $returnbranch->{branchcode} );
-    is( $doreturn, 1, "Item cannot be returned if there is a transfer to do" );
+    is( $doreturn, 1, "Item can be returned when there is no transfer to do" );
 };
 
 subtest 'Statistic patrons "X"' => sub {
