@@ -1348,7 +1348,7 @@
                                 order: [[4, "asc"]],
                                 autoWidth: false,
                                 ajax: {
-                                    url: "/api/v1/suggestions?q=" + JSON.stringify(tabSuggestionData.search_params),
+                                    url: "/api/v1/suggestions?q=" + encodeURIComponent(JSON.stringify(tabSuggestionData.search_params)),
                                     delay: 300, // wait 300 milliseconds before triggering the request
                                     cache: true,
                                     dataType: "json",
