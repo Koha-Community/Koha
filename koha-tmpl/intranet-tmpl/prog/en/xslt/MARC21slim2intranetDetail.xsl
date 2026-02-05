@@ -458,6 +458,23 @@
             </span>
         </xsl:if>
 
+        <!-- 362 - Dates of Publication and/or Sequential Designation -->
+        <xsl:if test="marc:datafield[@tag=362]">
+            <span class="results_summary">
+                <span class="label">Dates of publication and/or sequential designation: </span>
+                <xsl:for-each select="marc:datafield[@tag=362]">
+                    <xsl:call-template name="chopPunctuation">
+                        <xsl:with-param name="chopString">
+                            <xsl:call-template name="subfieldSelect">
+                                <xsl:with-param name="codes">a</xsl:with-param>
+                                <xsl:with-param name="delimeter"> </xsl:with-param>
+                            </xsl:call-template>
+                        </xsl:with-param>
+                    </xsl:call-template>
+                </xsl:for-each>
+            </span>
+        </xsl:if>
+
         <!-- 385 - Audience -->
         <xsl:if test="marc:datafield[@tag=385]">
             <span class="results_summary audience">
