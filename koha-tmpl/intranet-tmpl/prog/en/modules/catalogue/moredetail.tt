@@ -137,6 +137,11 @@
 
         [% FOREACH ITEM_DAT IN ITEM_DATA %]
             <div id="container[% ITEM_DAT.itemnumber | html %]">
+                [% SET not_for_loan = 0 %]
+                [% IF ITEM_DAT.notforloan || ITEM_DAT.effective_itemtype.notforloan %]
+                    [% SET not_for_loan = 1 %]
+                    [% SET not_for_loan_description = AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.notforloan', authorised_value => ITEM_DAT.notforloan ) %]
+                [% END %]
                 <h3 id="item[% ITEM_DAT.itemnumber | html %]" class="expanded">
                     <i class="fa fa-caret-down" title="Collapse this section"></i>
                     [% IF ITEM_DAT.barcode -%]
@@ -144,14 +149,9 @@
                     [% ELSE -%]
                         Item number [% ITEM_DAT.itemnumber | html %]
                     [% END %]
-                    [% IF not_for_loan %][% not_for_loan_description | html %][% END %]
+                    [% IF not_for_loan %]([% not_for_loan_description | html %])[% END %]
                 </h3>
                 <div id="collapse_item[% ITEM_DAT.itemnumber | html %]" class="page-section clearfix">
-                    [% SET not_for_loan = 0 %]
-                    [% IF ITEM_DAT.notforloan || ITEM_DAT.effective_itemtype.notforloan %]
-                        [% SET not_for_loan = 1 %]
-                        [% SET not_for_loan_description = AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.notforloan', authorised_value => item.notforloan ) %]
-                    [% END %]
                     [% IF withdraw_error %]
                         <div class="alert alert-warning">
                             [% IF withdraw_error == 'intransit_cannot_withdraw' %]
