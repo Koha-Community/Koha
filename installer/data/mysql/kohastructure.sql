@@ -628,6 +628,7 @@ CREATE TABLE `aqcontacts` (
   `claimissues` tinyint(1) NOT NULL DEFAULT 0 COMMENT 'should this contact receive serial claims',
   `acqprimary` tinyint(1) NOT NULL DEFAULT 0 COMMENT 'is this the primary contact for acquisitions messages',
   `serialsprimary` tinyint(1) NOT NULL DEFAULT 0 COMMENT 'is this the primary contact for serials messages',
+  `edi_error_notification` tinyint(1) NOT NULL DEFAULT 0 COMMENT 'is the edi error notification contact',
   `booksellerid` int(11) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `booksellerid_aqcontacts_fk` (`booksellerid`),
@@ -700,6 +701,7 @@ CREATE TABLE `aqinvoices` (
   KEY `aqinvoices_fk_aqbooksellerid` (`booksellerid`),
   KEY `edifact_msg_fk` (`message_id`),
   KEY `aqinvoices_fk_shipmentcost_budgetid` (`shipmentcost_budgetid`),
+  KEY `idx_invoicenumber_booksellerid` (`invoicenumber`(100), `booksellerid`),
   CONSTRAINT `aqinvoices_fk_aqbooksellerid` FOREIGN KEY (`booksellerid`) REFERENCES `aqbooksellers` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `aqinvoices_fk_shipmentcost_budgetid` FOREIGN KEY (`shipmentcost_budgetid`) REFERENCES `aqbudgets` (`budget_id`) ON DELETE SET NULL ON UPDATE CASCADE,
   CONSTRAINT `edifact_msg_fk` FOREIGN KEY (`message_id`) REFERENCES `edifact_messages` (`id`) ON DELETE SET NULL
