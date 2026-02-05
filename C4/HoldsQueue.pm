@@ -48,6 +48,7 @@ use Koha::Patrons;
 use List::Util         qw( shuffle );
 use List::MoreUtils    qw( any );
 use Algorithm::Munkres qw();
+use Parallel::ForkManager;
 
 =head1 FUNCTIONS
 
