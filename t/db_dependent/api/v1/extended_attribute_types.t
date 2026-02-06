@@ -219,8 +219,14 @@ subtest 'list_erm() tests' => sub {
     # Cannot retrieve attributes from other tables
     $t->get_ok("//$userid:$password@/api/v1/erm/extended_attribute_types?resource_type=order")
         ->status_is(400)
-        ->json_is( "/errors" =>
-            [ { message => "Not in enum list: license, agreement, package, title.", path => "/resource_type" } ] );
+        ->json_is(
+        "/errors" => [
+            {
+                message => "Not in enum list: license, agreement, agreement_period, package, title.",
+                path    => "/resource_type"
+            }
+        ]
+        );
 
     # Warn on unsupported query parameter
     $t->get_ok("//$userid:$password@/api/v1/erm/extended_attribute_types?blah=blah")
