@@ -796,9 +796,15 @@ $("#placeBookingModal").on("show.bs.modal", function (e) {
                                         return;
                                     }
                                     instance.calendarContainer
-                                        .querySelectorAll(".flatpickr-day.selected")
+                                        .querySelectorAll(
+                                            ".flatpickr-day.selected"
+                                        )
                                         .forEach(el => {
-                                            if (!el.classList.contains("startRange")) {
+                                            if (
+                                                !el.classList.contains(
+                                                    "startRange"
+                                                )
+                                            ) {
                                                 el.classList.add("startRange");
                                             }
                                         });
