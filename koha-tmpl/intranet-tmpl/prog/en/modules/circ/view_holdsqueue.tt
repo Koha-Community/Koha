@@ -43,7 +43,11 @@
         [% END %]
         [% IF ( run_report ) %]
             [% WRAPPER breadcrumb_item %]
-                <a href="/cgi-bin/koha/circ/view_holdsqueue.pl?branchlimit=[% Branches.GetLoggedInBranchcode | uri %]&run_report=1">Holds queue</a>
+                [% IF Koha.Preference('UseHoldsQueueFilterOptions') %]
+                    <a href="/cgi-bin/koha/circ/view_holdsqueue.pl?branchlimit=[% Branches.GetLoggedInBranchcode | uri %]">Holds queue</a>
+                [% ELSE %]
+                    <a href="/cgi-bin/koha/circ/view_holdsqueue.pl?branchlimit=[% Branches.GetLoggedInBranchcode | uri %]&run_report=1">Holds queue</a>
+                [% END %]
             [% END %]
             [% WRAPPER breadcrumb_item bc_active= 1 %]
                 <span>Results</span>

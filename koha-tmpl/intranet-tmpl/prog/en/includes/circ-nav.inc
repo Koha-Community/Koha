@@ -46,7 +46,11 @@
     <h5>Holds</h5>
     <ul>
         <li>
-            <a href="/cgi-bin/koha/circ/view_holdsqueue.pl?branchlimit=[% Branches.GetLoggedInBranchcode | uri %]&run_report=1">Holds queue</a>
+            [% IF Koha.Preference('UseHoldsQueueFilterOptions') %]
+                <a href="/cgi-bin/koha/circ/view_holdsqueue.pl?branchlimit=[% Branches.GetLoggedInBranchcode | uri %]">Holds queue</a>
+            [% ELSE %]
+                <a href="/cgi-bin/koha/circ/view_holdsqueue.pl?branchlimit=[% Branches.GetLoggedInBranchcode | uri %]&run_report=1">Holds queue</a>
+            [% END %]
         </li>
         <li>
             <a href="/cgi-bin/koha/circ/pendingreserves.pl">Holds to pull</a>
