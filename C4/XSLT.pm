@@ -39,6 +39,7 @@ use C4::Koha   qw( xml_escape );
 use C4::Biblio qw( GetAuthorisedValueDesc GetFrameworkCode GetMarcStructure );
 use Koha::AuthorisedValues;
 use Koha::ItemTypes;
+use Koha::Plugins;
 use Koha::RecordProcessor;
 use Koha::Libraries;
 use Koha::Recalls;
@@ -197,10 +198,23 @@ sub XSLTParse4Display {
 
     my $xslfilename = get_xsl_filename($xslsyspref);
 
-    my $frameworkcode    = GetFrameworkCode($biblionumber) || '';
+    my $frameworkcode = GetFrameworkCode($biblionumber) || '';
+    my $filters       = ['ExpandCodedFields'];
+
+    Koha::Plugins->call(
+        'xslt_record_processor_filters',
+        {
+            filters       => $filters,
+            interface     => $interface,
+            frameworkcode => $frameworkcode,
+            xsl_syspref   => $xslsyspref,
+            biblionumber  => $biblionumber,
+        }
+    );
+
     my $record_processor = Koha::RecordProcessor->new(
         {
-            filters => ['ExpandCodedFields'],
+            filters => $filters,
             options => {
                 interface     => $interface,
                 frameworkcode => $frameworkcode
