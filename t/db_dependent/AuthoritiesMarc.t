@@ -507,6 +507,7 @@ subtest 'Authority action logs include MARC-in-JSON diff' => sub {
 
 subtest 'BuildSummary/_marc21_sort_hierarchy_alpha' => sub {
     plan tests => 1;
+
     #$schema->storage->txn_begin;
     #t::lib::Mocks::mock_preference('marcflavour', 'MARC21');
 
