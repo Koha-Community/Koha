@@ -1791,13 +1791,13 @@ sub FixPriority {
     }
     my @priority;
 
-    # get what's left
+    # get what's left, sorting lowestPriority holds to the bottom
     my $query = "
         SELECT reserve_id, borrowernumber, reservedate
         FROM   reserves
         WHERE  biblionumber   = ?
           AND  ((found <> 'W' AND found <> 'T' AND found <> 'P') OR found IS NULL)
-        ORDER BY priority ASC
+        ORDER BY lowestPriority ASC, priority ASC
     ";
     my $sth = $dbh->prepare($query);
     $sth->execute($biblionumber);
@@ -1816,6 +1816,22 @@ sub FixPriority {
         }
     }
 
+    # if this hold is marked lowest priority, we can only move it so far
+    if ( $hold && $hold->lowestPriority && $rank ne 'del' ) {
+        my $query = "
+            SELECT max(priority)
+            FROM reserves
+            WHERE biblionumber   = ?
+            AND  ((found <> 'W' AND found <> 'T' AND found <> 'P') OR found IS NULL)
+            AND lowestPriority = 0;
+        ";
+        my $sth = $dbh->prepare($query);
+        $sth->execute($biblionumber);
+        my ($highest_non_lowest_priority) = $sth->fetchrow_array();
+        $rank = $highest_non_lowest_priority + 1
+            if ( $highest_non_lowest_priority && $rank <= $highest_non_lowest_priority );
+    }
+
     # if index exists in array then move it to new position
     if ( $key > -1 && $rank ne 'del' && $rank > 0 ) {
         my $new_rank    = $rank - 1;                      # $new_rank is what you want the new index to be in the array
@@ -1825,33 +1841,20 @@ sub FixPriority {
     }
 
     # now fix the priority on those that are left....
+    # only updating if changed
     $query = "
         UPDATE reserves
         SET    priority = ?
-        WHERE  reserve_id = ?
+        WHERE  reserve_id = ? AND priority != ?
     ";
     $sth = $dbh->prepare($query);
     for ( my $j = 0 ; $j < @priority ; $j++ ) {
         $sth->execute(
             $j + 1,
-            $priority[$j]->{'reserve_id'}
+            $priority[$j]->{'reserve_id'}, $j + 1
         );
     }
 
-    unless ($ignoreSetLowestRank) {
-        $sth = $dbh->prepare(
-            "SELECT reserve_id FROM reserves WHERE lowestPriority = 1 AND biblionumber = ? ORDER BY priority");
-        $sth->execute($biblionumber);
-        while ( my $res = $sth->fetchrow_hashref() ) {
-            FixPriority(
-                {
-                    reserve_id          => $res->{'reserve_id'},
-                    rank                => '999999',
-                    ignoreSetLowestRank => 1
-                }
-            );
-        }
-    }
 }
 
 =head2 _Findgroupreserve
