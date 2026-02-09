@@ -254,7 +254,7 @@
             >
         </div>
         <h1>Basket grouping for <a href="/cgi-bin/koha/acquisition/vendors/[% booksellerid | uri %]">[% booksellername | html %]</a></h1>
-        [% IF (NoEDIMessage && Koha.Preference('EDIFACT')) %]<div><strong>No EDIFACT configuration for [% booksellername | html %]</strong></div>[% END %]
+        [% IF (NoEDIMessage && Koha.Preference('EDIFACT')) %]<div class="alert alert-warning">No EDIFACT configuration for [% booksellername | html %]</div>[% END %]
 
         [% WRAPPER tabs id= "basket_groups" %]
             [% WRAPPER tabs_nav %]
@@ -289,20 +289,22 @@
                                         <td>[% Branches.GetName( basketgroup.billingplace ) | html %]</td>
                                         <td>[% IF (basketgroup.freedeliveryplace) %]Free delivery place[% ELSE %][% Branches.GetName( basketgroup.deliveryplace ) | html %][% END %]</td>
                                         <td>[% basketgroup.basketsqty | html %]</td>
-                                        <td>
-                                            <input type="button" id="close_and_print" data-basketgroupid="[% basketgroup.id | html %]" value="Close and export as PDF" />
+                                        <td class="actions">
+                                            <button type="button" class="btn btn-default btn-xs close_and_print" data-basketgroupid="[% basketgroup.id | html %]"
+                                                ><i class="fa fa-file-export" aria-hidden="true"></i> Close and export PDF</button
+                                            >
                                             <form action="/cgi-bin/koha/acqui/basketgroup.pl" method="get">
                                                 <input type="hidden" name="op" value="add_form" />
                                                 <input type="hidden" name="booksellerid" value="[% basketgroup.booksellerid | html %]" />
                                                 <input type="hidden" name="basketgroupid" value="[% basketgroup.id | html %]" />
-                                                <input type="submit" class="btn btn-primary" value="Edit" />
+                                                <button type="submit" class="btn btn-default btn-xs"><i class="fa-solid fa-pencil" aria-hidden="true"></i> Edit</button>
                                             </form>
                                             [% UNLESS basketgroup.basketsqty %]
                                                 <form action="/cgi-bin/koha/acqui/basketgroup.pl" method="post">
                                                     <input type="hidden" name="op" value="cud-delete" />
                                                     <input type="hidden" name="booksellerid" value="[% basketgroup.booksellerid | html %]" />
                                                     <input type="hidden" name="basketgroupid" value="[% basketgroup.id | html %]" />
-                                                    <input type="submit" id="delete_basketgroup" class="btn btn-primary" value="Delete" />
+                                                    <button type="submit" class="btn btn-default btn-xs delete_basketgroup"><i class="fa fa-trash-can" aria-hidden="true"></i> Delete</button>
                                                     [% INCLUDE 'csrf-token.inc' %]
                                                 </form>
                                             [% END %]
@@ -331,55 +333,58 @@
                                 [% IF ( basketgroup.closed ) %]
                                     <tr>
                                         <td>
-                                            [% IF ( basketgroup.name ) %]
-                                                [% basketgroup.name | html %]
-                                            [% ELSE %]
-                                                <span>Basket group no. [% basketgroup.id | html %]</span>
-                                            [% END %]
+                                            <a href="/cgi-bin/koha/acqui/basketgroup.pl?op=add_form&booksellerid=[% basketgroup.booksellerid | uri %]&basketgroupid=[% basketgroup.id | uri %]">
+                                                [% IF ( basketgroup.name ) %]
+                                                    [% basketgroup.name | html %]
+                                                [% ELSE %]
+                                                    <span>Basket group no. [% basketgroup.id | html %]</span>
+                                                [% END %]
+                                            </a>
                                         </td>
                                         <td>[% basketgroup.id | html %]</td>
                                         <td>[% Branches.GetName( basketgroup.billingplace ) | html %]</td>
                                         <td>[% IF (basketgroup.freedeliveryplace) %]Free delivery place[% ELSE %][% Branches.GetName( basketgroup.deliveryplace ) | html %][% END %]</td>
                                         <td>[% basketgroup.basketsqty | html %]</td>
-                                        <td>
-                                            <form action="/cgi-bin/koha/acqui/basketgroup.pl" method="get"
-                                                ><input type="hidden" name="op" value="add_form" /><input type="hidden" name="booksellerid" value="[% basketgroup.booksellerid | html %]" /><input
-                                                    type="hidden"
-                                                    name="basketgroupid"
-                                                    value="[% basketgroup.id | html %]" /><input type="submit" class="btn btn-primary" value="View"
-                                            /></form>
-                                            <form action="/cgi-bin/koha/acqui/basketgroup.pl" method="post"
-                                                ><input type="hidden" name="op" value="cud-reopen" /><input type="hidden" name="booksellerid" value="[% basketgroup.booksellerid | html %]" /><input
-                                                    type="hidden"
-                                                    name="basketgroupid"
-                                                    value="[% basketgroup.id | html %]"
-                                                /><input type="submit" class="btn btn-primary" value="Reopen" />
+                                        <td class="actions">
+                                            <form action="/cgi-bin/koha/acqui/basketgroup.pl" method="post">
+                                                <input type="hidden" name="op" value="cud-reopen" />
+                                                <input type="hidden" name="booksellerid" value="[% basketgroup.booksellerid | html %]" />
+                                                <input type="hidden" name="basketgroupid" value="[% basketgroup.id | html %]" />
+                                                <button type="submit" class="btn btn-xs btn-default"><i class="fa fa-rotate-left" aria-hidden="true"></i> Reopen</button>
                                                 [% INCLUDE 'csrf-token.inc' %]
                                             </form>
-                                            <form action="/cgi-bin/koha/acqui/basketgroup.pl" method="get"
-                                                ><input type="hidden" name="op" value="print" /><input type="hidden" name="basketgroupid" value="[% basketgroup.id | html %]" /><input
-                                                    type="submit"
-                                                    class="btn btn-primary"
-                                                    value="Export as PDF"
-                                            /></form>
-                                            <form action="/cgi-bin/koha/acqui/basketgroup.pl" method="get"
-                                                ><input type="hidden" name="op" value="export" /><input type="hidden" name="basketgroupid" value="[% basketgroup.id | html %]" /><input
-                                                    type="submit"
-                                                    class="btn btn-primary"
-                                                    value="Export as CSV"
-                                            /></form>
+                                            <div class="btn-group">
+                                                <button type="button" class="btn btn-default btn-xs dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i class="fa fa-file-export"></i> Export</button>
+                                                <ul class="dropdown-menu">
+                                                    <li>
+                                                        <form action="/cgi-bin/koha/acqui/basketgroup.pl" method="get">
+                                                            <input type="hidden" name="op" value="export" />
+                                                            <input type="hidden" name="basketgroupid" value="[% basketgroup.id | html %]" />
+                                                            <button type="submit" class="dropdown-item">Export as CSV</button>
+                                                        </form>
+                                                    </li>
+                                                    <li>
+                                                        <form action="/cgi-bin/koha/acqui/basketgroup.pl" method="get">
+                                                            <input type="hidden" name="op" value="print" />
+                                                            <input type="hidden" name="basketgroupid" value="[% basketgroup.id | html %]" />
+                                                            <button type="submit" class="dropdown-item">Export PDF</button>
+                                                        </form>
+                                                    </li>
+                                                </ul>
+                                            </div>
                                             [% IF Koha.Preference('EDIFACT') %]
                                                 [% IF (ediaccount) %]
-                                                    <form action="/cgi-bin/koha/acqui/basketgroup.pl" method="post"
-                                                        ><input type="hidden" name="op" value="cud-ediprint" /><input type="hidden" name="basketgroupid" value="[% basketgroup.id | html %]" /><input
-                                                            type="hidden"
-                                                            name="booksellerid"
-                                                            value="[% basketgroup.booksellerid | html %]"
-                                                        /><input type="submit" class="btn btn-primary" value="Generate EDIFACT order" />
+                                                    <form action="/cgi-bin/koha/acqui/basketgroup.pl" method="post">
+                                                        <input type="hidden" name="op" value="cud-ediprint" />
+                                                        <input type="hidden" name="basketgroupid" value="[% basketgroup.id | html %]" />
+                                                        <input type="hidden" name="booksellerid" value="[% basketgroup.booksellerid | html %]" />
+                                                        <button type="submit" class="btn btn-xs btn-default"><i class="fa fa-bolt" aria-hidden="true"></i> Generate EDIFACT order</button>
                                                         [% INCLUDE 'csrf-token.inc' %]
                                                     </form>
                                                 [% ELSE %]
-                                                    <div>No EDIFACT configuration for [% booksellername | html %]</div>
+                                                    <span data-bs-toggle="tooltip" title="No EDIFACT configuration for [% booksellername | html %]"
+                                                        ><button type="button" class="btn btn-xs btn-default disabled" disabled><i class="fa fa-bolt" aria-hidden="true"></i> Generate EDIFACT order</button></span
+                                                    >
                                                 [% END %]
                                             [% END %]
                                         </td>
@@ -482,7 +487,7 @@
                 }
             });
 
-            $("#close_and_print").on("click", function (e) {
+            $(".close_and_print").on("click", function (e) {
                 e.preventDefault();
                 const basketgroupid = $(this).data("basketgroupid");
                 closeandprint(basketgroupid);
@@ -493,7 +498,7 @@
                 submitForm(this);
             });
 
-            $("#delete_basketgroup").on("click", function (e) {
+            $(".delete_basketgroup").on("click", function (e) {
                 return confirm(_("Are you sure you want to delete this basket group?"));
             });
         });
