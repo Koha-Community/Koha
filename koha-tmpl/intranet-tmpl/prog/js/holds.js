@@ -1719,7 +1719,7 @@ async function load_patron_holds_table(biblio_id, split_data) {
                     orderable: false,
                     searchable: false,
                     render: function (data, type, row, meta) {
-                        if (row.item_id) {
+                        if (row.status) {
                             return null;
                         } else {
                             if (row.lowest_priority) {
