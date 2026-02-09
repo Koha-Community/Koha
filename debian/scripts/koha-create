@@ -896,6 +896,8 @@ fi
 
 if [ "$op" = create ] || [ "$op" = populate ] || [ "$op" = use ]
 then
+    username="$name-koha"
+
     # Reconfigure Apache.
     if ! {
         a2ensite "$name" > /dev/null 2>&1 ||
