@@ -31,7 +31,7 @@ my @exclusions = qw(
 );
 @tt_files = array_minus @tt_files, @exclusions;
 
-plan tests => scalar(@tt_files) + 1;
+plan tests => scalar(@tt_files) * 2 + 1;
 
 my @translatable_attributes = qw(alt content title value label placeholder aria-label);
 
@@ -80,17 +80,20 @@ my $checkers = [
 for my $filepath (@tt_files) {
     my $parser = C4::TTParser->new;
     $parser->build_tokens($filepath);
-    my @errors;
+    my $errors = {};
     while ( my $token = $parser->next_token ) {
         my $attr = $token->{_attr};
         next unless $attr;
 
         for my $checker (@$checkers) {
             my @e = $checker->{check}->( $checker, $filepath, $token );
-            push @errors, @e if @e;
+            push @{ $errors->{ $checker->{description} } }, @e if @e;
         }
     }
-    is( scalar(@errors), 0 ) or diag( "$filepath: " . join( ', ', @errors ) );
+    for my $checker (@$checkers) {
+        my @errors = @{ $errors->{ $checker->{description} } || [] };
+        is( scalar(@errors), 0, $checker->{description} ) or diag( "$filepath: " . join( ', ', @errors ) );
+    }
 }
 
 =head1 NAME
