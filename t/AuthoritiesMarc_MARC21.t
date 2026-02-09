@@ -59,9 +59,17 @@ subtest "FindDuplicateAuthority tests" => sub {
         }
     );
 
+    my $marcflavour = C4::Context->preference('marcflavour');
+    my $field;
+    if ( $marcflavour eq 'MARC21' ) {
+        $field = '155';    # GENRE/FORM field in MARC21
+    } elsif ( $marcflavour eq 'UNIMARC' ) {
+        $field = '280';    # GENRE/FORM field in UNIMARC
+    }
+
     my $record = MARC::Record->new;
     $record->append_fields(
-        MARC::Field->new( '155', '', '', a => 'Potato' ),
+        MARC::Field->new( $field, '', '', a => 'Potato' ),
     );
 
     t::lib::Mocks::mock_preference( 'SearchEngine', 'Zebra' );
