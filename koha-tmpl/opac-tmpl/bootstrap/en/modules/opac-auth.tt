@@ -220,7 +220,7 @@
                                 [% END %]
                                 [% IF Koha.Preference('EnableExpiredPasswordReset') %]
                                     <a href="/cgi-bin/koha/opac-reset-password.pl">Reset your password</a>.
-                                [% ELSIF Koha.Preference('OpacPasswordChange') && Categories.can_any_reset_password %]
+                                [% ELSIF Koha.Preference('OpacResetPassword') && Categories.can_any_reset_password %]
                                     <div id="resetpassword">
                                         <a href="/cgi-bin/koha/opac-password-recovery.pl">Reset your password</a>
                                     </div>
@@ -272,7 +272,7 @@
                                             <p>If you don't have a library card, stop by your local library to sign up.</p>
                                         [% END # / IF OpacLoginInstructions %]
                                     </div>
-                                    [% IF Koha.Preference('OpacPasswordChange') && Categories.can_any_reset_password %]
+                                    [% IF Koha.Preference('OpacResetPassword') && Categories.can_any_reset_password %]
                                         <div id="forgotpassword">
                                             <p><a href="/cgi-bin/koha/opac-password-recovery.pl">Forgot your password?</a></p>
                                         </div>

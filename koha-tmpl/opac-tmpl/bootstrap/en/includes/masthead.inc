@@ -515,7 +515,7 @@
                                 [% IF OpacLoginInstructions %]
                                     <div id="nologininstructions-modal" class="nologininstructions"> [% PROCESS koha_news_block news => OpacLoginInstructions %] </div>
                                 [% END %]
-                                [% IF Koha.Preference('OpacPasswordChange') && Categories.can_any_reset_password %]
+                                [% IF Koha.Preference('OpacResetPassword') && Categories.can_any_reset_password %]
                                     <div id="forgotpassword-modal" class="forgotpassword">
                                         <p><a href="/cgi-bin/koha/opac-password-recovery.pl">Forgot your password?</a></p>
                                     </div>
