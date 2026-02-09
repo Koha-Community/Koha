@@ -106,12 +106,17 @@ This test validates .tt files.
 
 For the time being, two validations are done:
 
-[1] Test if TT files contain TT directive within HTML tag. For example:
+[1] Test if TT files contain TT tags that contain a translatable string. For example:
 
-  <li[% IF
+  <tr [% IF warning %]title="hello"[% END %]>
 
 This kind of construction MUST be avoided because it breaks Koha translation
-process.
+process. Use a TT variable instead to store the translatable string:
+
+  [% IF warning %]
+    [% SET tr_warning = I18N.t("hello");
+  [% END %]
+  <tr title="[% title | html %]">
 
 [2] Test tag <body> tags have both attributes 'id' and 'class'
 
