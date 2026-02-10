@@ -1641,7 +1641,7 @@ async function load_patron_holds_table(biblio_id, split_data) {
                         }
 
                         // Handle item level holds
-                        if (row.item_level_holds) {
+                        if (row.item_level) {
                             const barcode =
                                 row.item.external_id || __("No barcode");
                             const itemLink = `<a href="/cgi-bin/koha/catalogue/moredetail.pl?biblionumber=${row.biblio_id}&itemnumber=${row.item_id}">${barcode.escapeHtml ? barcode.escapeHtml() : barcode}</a>`;
