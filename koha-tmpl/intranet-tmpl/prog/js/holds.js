@@ -2198,6 +2198,36 @@ async function load_patron_holds_table(biblio_id, split_data) {
                             .attr("aria-hidden", true)
                     );
             },
+            onChange: function (selectedDates, dateStr, instance) {
+                let hold_id = $(instance.input).attr("data-id");
+                let current_date = $(instance.input).attr("data-suspend-date");
+                dateStr = dateStr ? dateStr : null;
+                if (current_date != dateStr) {
+                    let params =
+                        dateStr !== null && dateStr !== ""
+                            ? JSON.stringify({ end_date: dateStr })
+                            : null;
+                    $.ajax({
+                        method: "POST",
+                        url:
+                            "/api/v1/holds/" +
+                            encodeURIComponent(hold_id) +
+                            "/suspension",
+                        contentType: "application/json",
+                        data: params,
+                        success: function (data) {
+                            holdsQueueTable.api().ajax.reload(null, false);
+                            $(instance.input).attr(
+                                "data-suspend-date",
+                                dateStr
+                            );
+                        },
+                        error: function (jqXHR, textStatus, errorThrown) {
+                            holdsQueueTable.api().ajax.reload(null, false);
+                        },
+                    });
+                }
+            },
         });
         $(".toggle-suspend." + table_class).one("click", function (e) {
             e.preventDefault();
