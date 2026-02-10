@@ -791,14 +791,6 @@ $(document).ready(function () {
         }
     });
 
-    // if (!patron_page) {
-    //     $(".holds_table .select_hold_all").each(function () {
-    //         var table = $(this).parents(".holds_table");
-    //         var count = $(".select_hold:not(:checked)", table).length;
-    //         $(".select_hold_all", table).prop("checked", !count);
-    //     });
-    // }
-
     function updateSelectedHoldsButtonCounters() {
         $(".move_selected_holds").html(
             MSG_MOVE_SELECTED.format(
@@ -1639,79 +1631,47 @@ async function load_patron_holds_table(biblio_id, split_data) {
                     orderable: false,
                     searchable: false,
                     render: function (data, type, row, meta) {
+                        const group_hold_message = row.hold_group_id
+                            ? `<div>(${__("part of")} <a href="/cgi-bin/koha/reserve/hold-group.pl?hold_group_id=${row.hold_group_id}" class="hold-group">${__("hold group")}</a>)</div>`
+                            : "";
+
+                        // Handle status cases
                         if (row.status) {
-                            return (
-                                '<a href="/cgi-bin/koha/catalogue/moredetail.pl?biblionumber=' +
-                                row.biblio_id +
-                                "&itemnumber=" +
-                                row.item_id +
-                                '">' +
-                                row.item.external_id +
-                                "</a>"
-                            );
-                        } else if (row.item_id && row.item_level) {
-                            let barcode = row.item.external_id
-                                ? row.item.external_id
-                                : __("No barcode");
-                            if (row.item_level_holds >= 2) {
-                                let link =
-                                    '<a href="/cgi-bin/koha/catalogue/moredetail.pl?biblionumber=' +
-                                    row.biblio_id +
-                                    "&itemnumber=" +
-                                    row.item_id +
-                                    '">' +
-                                    (row.item.external_id
-                                        ? row.item.external_id.escapeHtml()
-                                        : __("No barcode")) +
-                                    "</a>";
-                                return __("Only item") + " " + link;
-                            } else {
-                                let select =
-                                    '<select id="change_hold_type" class="change_hold_type ' +
-                                    table_class +
-                                    '" data-id="' +
-                                    row.hold_id +
-                                    '">';
-                                select +=
-                                    '<option value="" selected>' +
-                                    __("Only item") +
-                                    " " +
-                                    barcode +
-                                    "</option>";
-                                select +=
-                                    '<option value="">' +
-                                    __("Next available") +
-                                    "</option>";
-                                select += "</select>";
-                                return select;
-                            }
-                        } else if (row.item_group_id) {
-                            return __(
-                                "Next available item from group <strong>%s</strong>"
-                            ).format(row.item_group.description);
-                        } else if (row.hold_group_id) {
-                            return (
-                                "<div>(" +
-                                __("part of") +
-                                ' <a href="/cgi-bin/koha/reserve/hold-group.pl?hold_group_id=' +
-                                row.hold_group_id +
-                                '" class="hold-group">' +
-                                __("hold group") +
-                                "</a>)</div>"
-                            );
-                        } else {
-                            if (row.non_priority) {
-                                return (
-                                    "<em>" +
-                                    __("Next available") +
-                                    "</em><br/><i>" +
-                                    __("Non priority hold") +
-                                    "</i>"
-                                );
-                            } else {
-                                return "<em>" + __("Next available") + "</em>";
-                            }
+                            return `<a href="/cgi-bin/koha/catalogue/moredetail.pl?biblionumber=${row.biblio_id}&itemnumber=${row.item_id}">${row.item.external_id}</a>${group_hold_message}`;
                         }
+
+                        // Handle item level holds
+                        if (row.item_level_holds) {
+                            const barcode =
+                                row.item.external_id || __("No barcode");
+                            const itemLink = `<a href="/cgi-bin/koha/catalogue/moredetail.pl?biblionumber=${row.biblio_id}&itemnumber=${row.item_id}">${barcode.escapeHtml ? barcode.escapeHtml() : barcode}</a>`;
+
+                            if (row.item_level_holds >= 2) {
+                                return `${__("Only item")} ${itemLink}${group_hold_message}`;
+                            }
+
+                            return `<select id="change_hold_type" class="change_hold_type ${table_class}" data-id="${row.hold_id}">
+                                <option value="" selected>${__("Only item")} ${barcode}</option>
+                                <option value="">${__("Next available")}</option>
+                            </select>${group_hold_message}`;
+                        }
+
+                        // Handle item group
+                        if (row.item_group_id) {
+                            return (
+                                __(
+                                    "Next available item from group <strong>%s</strong>"
+                                ).format(row.item_group.description) +
+                                group_hold_message
+                            );
+                        }
+
+                        // Default: Next available
+                        let message = __("Next available");
+                        if (row.non_priority) {
+                            message += `<br/><i>${__("Non priority hold")}</i>`;
+                        }
+                        return message + group_hold_message;
                     },
                 },
                 {
@@ -2297,6 +2257,9 @@ async function load_patron_holds_table(biblio_id, split_data) {
             let priority = $(this).attr("data-priority");
             var res_id = $(this).attr("reserve_id");
             var moveTo;
+            const $spinner = $(
+                '<img class="rank-spinner" src="/intranet-tmpl/prog/img/spinner-small.gif" alt="Loading..." style="display:block;margin:0 auto;vertical-align:middle;">'
+            );
             if (toPosition == "up") {
                 moveTo = parseInt(priority) - 1;
             }
@@ -2309,15 +2272,18 @@ async function load_patron_holds_table(biblio_id, split_data) {
             if (toPosition == "bottom") {
                 moveTo = totalHolds;
             }
+            $(this).parent().html($spinner);
             $.ajax({
                 method: "PUT",
                 url:
                     "/api/v1/holds/" + encodeURIComponent(res_id) + "/priority",
                 data: JSON.stringify(moveTo),
                 success: function (data) {
+                    $spinner.remove();
                     holdsQueueTable.api().ajax.reload(null, false);
                 },
                 error: function (jqXHR, textStatus, errorThrown) {
+                    $spinner.remove();
                     alert(
                         "There was an error:" + textStatus + " " + errorThrown
                     );
