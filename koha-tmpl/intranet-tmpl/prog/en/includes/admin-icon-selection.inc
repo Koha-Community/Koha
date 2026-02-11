@@ -71,15 +71,21 @@
             [% SET bt_active = 0 %]
         [% END %]
         [% WRAPPER tab_panel tabname="remote" %]
-            <label for="remote_image_check"> Remote image:</label>
-            [% IF image_location.match('^http') %]
-                <input type="radio" id="remote_image_check" name="image" value="remoteImage" checked="checked" />
-                <input id="remoteimage" type="text" name="remoteImage" size="48" maxlength="200" value="[% image_location | html %]" />
-                <img src="[% image_location | html %]" alt="" />
-            [% ELSE %]
-                <input type="radio" id="remote_image_check" name="image" value="remoteImage" />
-                <input type="text" id="remoteimage" name="remoteImage" size="48" maxlength="200" value="" />
-            [% END %]
+            <div class="fg-row">
+                <div class="fg-label">
+                    <label for="remote_image_check"> Remote image:</label>
+                </div>
+                <div class="fg-input">
+                    [% IF image_location.match('^http') %]
+                        <input type="radio" id="remote_image_check" name="image" value="remoteImage" checked="checked" />
+                        <input id="remoteimage" type="text" name="remoteImage" size="48" maxlength="200" value="[% image_location | html %]" />
+                        <img src="[% image_location | html %]" alt="" />
+                    [% ELSE %]
+                        <input type="radio" id="remote_image_check" name="image" value="remoteImage" />
+                        <input type="text" id="remoteimage" name="remoteImage" size="48" maxlength="200" value="" />
+                    [% END %]
+                </div>
+            </div>
         [% END %]
     [% END # /tab_panels %]
 [% END # /tabs#icons %]

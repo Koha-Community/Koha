@@ -52,8 +52,8 @@
             clear: both;
         }
         .authval-icons label {
-            float: none;
-            width: auto;
+            display: block;
+            padding: 0.5rem;
         }
         #authorised_value:invalid {
             color: red;
@@ -129,43 +129,66 @@
 
         <form action="/cgi-bin/koha/admin/authorised_values.pl" name="Aform" id="Aform" method="post" class="validated">
             [% INCLUDE 'csrf-token.inc' %]
-            <fieldset class="rows">
+            <fieldset class="fg">
                 [% IF action_add_category %]
-                    <ol>
-                        <li>
+                    <div class="fg-row">
+                        <div class="fg-label">
                             <label for="category" class="required">Category: </label>
-                            <input type="text" name="category" id="category" size="32" maxlength="32" class="focus required" />
-                            <span class="required">Required</span>
+                        </div>
+                        <div class="fg-input">
+                            <input type="text" name="category" id="category" maxlength="32" class="focus required" />
                             <input type="hidden" name="op" value="cud-add_category" />
-                        </li>
-                        <li> <input type="checkbox" name="is_integer_only" id="is_integer_only" /><label for="is_integer_only">Restrict value to numbers only</label> </li>
-                    </ol>
+                        </div>
+                        <div class="required">Required</div>
+                    </div>
+                    <div class="fg-row input-checkbox">
+                        <div class="fg-label">
+                            <label for="is_integer_only">Restrict value to numbers only</label>
+                        </div>
+                        <div class="fg-input">
+                            <input type="checkbox" name="is_integer_only" id="is_integer_only" />
+                        </div>
+                    </div>
                 [% ELSIF op == 'edit_form' %]
-                    <ol>
-                        <li>
+                    <div class="fg-row">
+                        <div class="fg-label">
                             <label for="category" class="required">Category: </label>
+                        </div>
+                        <div class="fg-input">
                             <input type="text" disabled value="[% category_name | html %]" />
-                        </li>
-                        <li>
+                        </div>
+                    </div>
+                    <div class="fg-row input-checkbox">
+                        <div class="fg-label">
+                            <label for="is_integer_only">Restrict value to numbers only</label>
+                        </div>
+                        <div class="fg-input">
                             [% IF category.is_integer_only %]
-                                <input type="checkbox" checked name="is_integer_only" id="is_integer_only" /><label for="is_integer_only">Restrict value to numbers only</label>
+                                <input type="checkbox" checked name="is_integer_only" id="is_integer_only" />
                             [% ELSE %]
-                                <input type="checkbox" name="is_integer_only" id="is_integer_only" /><label for="is_integer_only">Restrict value to numbers only</label>
+                                <input type="checkbox" name="is_integer_only" id="is_integer_only" />
                             [% END %]
-                        </li>
-                    </ol>
-                    <input type="hidden" name="op" value="cud-edit_category" />
-                    <input type="hidden" name="category" value="[% category_name | html %]" />
-                    <input type="hidden" name="searchfield" value="[% category_name | html %]" />
+                        </div>
+                        <input type="hidden" name="op" value="cud-edit_category" />
+                        <input type="hidden" name="category" value="[% category_name | html %]" />
+                        <input type="hidden" name="searchfield" value="[% category_name | html %]" />
+                    </div>
                 [% ELSE %]
-                    <ol>
-                        <li>
+                    <div class="fg-row">
+                        <div class="fg-label">
                             <span class="label">Category</span>
+                        </div>
+                        <div class="fg-text">
+                            [% category_name | html %]
                             <input type="hidden" name="op" value="cud-add" />
-                            <input type="hidden" name="category" value="[% category_name | html %]" /> [% category_name | html %]
-                        </li>
-                        <li>
+                            <input type="hidden" name="category" value="[% category_name | html %]" />
+                        </div>
+                    </div>
+                    <div class="fg-row">
+                        <div class="fg-label">
                             <label for="authorised_value">Authorized value: </label>
+                        </div>
+                        <div class="fg-input">
                             [% IF ( action_modify ) %]
                                 <input type="hidden" id="id" name="id" value="[% av.id | html %]" />
                             [% END %]
@@ -186,18 +209,30 @@
                             [% ELSE %]
                                 <input type="text" id="authorised_value" name="authorised_value" value="[% av.authorised_value | html %]" maxlength="80" class="focus" />
                             [% END %]
-                        </li>
-                        <li>
+                        </div>
+                    </div>
+                    <div class="fg-row">
+                        <div class="fg-label">
                             <label for="lib">Description: </label>
+                        </div>
+                        <div class="fg-input">
                             <input type="text" name="lib" id="lib" value="[% av.lib | html %]" maxlength="400" />
-                        </li>
-                        <li>
+                        </div>
+                    </div>
+                    <div class="fg-row">
+                        <div class="fg-label">
                             <label for="lib_opac">Description (OPAC): </label>
+                        </div>
+                        <div class="fg-input">
                             <input type="text" name="lib_opac" id="lib_opac" value="[% av.lib_opac | html %]" maxlength="400" />
-                        </li>
-                        <li
-                            ><label for="library_limitation">Library limitations: </label>
-                            <select id="library_limitation" name="branches" multiple size="10">
+                        </div>
+                    </div>
+                    <div class="fg-row">
+                        <div class="fg-label">
+                            <label for="library_limitation">Library limitations: </label>
+                        </div>
+                        <div class="fg-input">
+                            <select id="library_limitation" name="branches" multiple>
                                 [% FOREACH branch IN branches_loop %]
                                     [% IF ( branch.selected ) %]
                                         <option selected="selected" value="[% branch.branchcode | html %]">[% branch.branchname | html %]</option>
@@ -206,9 +241,9 @@
                                     [% END %]
                                 [% END %]
                             </select>
-                            <div class="hint">Limits the use of this authorized value to the selected libraries.</div>
-                        </li>
-                    </ol>
+                        </div>
+                        <div class="hint">Limits the use of this authorized value to the selected libraries.</div>
+                    </div>
 
                     [% INCLUDE 'admin-icon-selection.inc' context = "authval" %]
                 [% END # /IF action_add_category %]
