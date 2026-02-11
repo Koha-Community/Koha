@@ -114,44 +114,63 @@
                     <span>New authority type</span>
                 [% END %]
             </h1>
-            <fieldset class="rows">
+            <fieldset class="fg">
                 <legend class="sr-only">Enter authority type details</legend>
-                <ol>
-                    <li>
-                        [% IF authority_type.authtypecode.defined %]
+                <div class="fg-row input-md">
+                    [% IF authority_type.authtypecode.defined %]
+                        <div class="fg-label">
                             <span class="label">Authority type</span>
+                        </div>
+                        <div class="fg-text">
+                            [% authority_type.authtypecode | html %]
                             <input type="hidden" name="op" value="cud-add_validate" />
                             <input type="hidden" name="checked" value="0" />
-                            <input type="hidden" name="authtypecode" value="[% authority_type.authtypecode | html %]" />[% authority_type.authtypecode | html %]
-                        [% ELSE %]
+                            <input type="hidden" name="authtypecode" value="[% authority_type.authtypecode | html %]" />
+                        </div>
+                    [% ELSE %]
+                        <div class="fg-label">
                             <label for="authtypecode" class="required">Authority type: </label>
-                            <input id="authtypecode" type="text" class="required focus" required="required" name="authtypecode" size="20" maxlength="10" />
-                            <span class="required">Required</span>
-                            <div class="hint">10 characters maximum</div>
-                        [% END %]
-                    </li>
-                    <li>
+                        </div>
+                        <div class="fg-input">
+                            <input id="authtypecode" type="text" class="required focus" required="required" name="authtypecode" maxlength="10" />
+                        </div>
+                        <div class="required">Required</div>
+                        <div class="hint">10 characters maximum</div>
+                    [% END %]
+                </div>
+                <div class="fg-row">
+                    <div class="fg-label">
                         <label for="authtypetext" class="required">Description: </label>
-                        <input type="text" id="authtypetext" name="authtypetext" size="40" maxlength="80" value="[% authority_type.authtypetext | html %]" class="required" required="required" />
-                        <span class="required">Required</span>
-                    </li>
-                    <li>
+                    </div>
+                    <div class="fg-input">
+                        <input type="text" id="authtypetext" name="authtypetext" maxlength="80" value="[% authority_type.authtypetext | html %]" class="required" required="required" />
+                    </div>
+                    <div class="required">Required</div>
+                </div>
+                <div class="fg-row">
+                    <div class="fg-label">
                         <label for="summary">Summary: </label>
+                    </div>
+                    <div class="fg-input">
                         <textarea id="summary" name="summary" cols="55" rows="7">[% authority_type.summary | html %]</textarea>
-                    </li>
-                    <li>
+                    </div>
+                </div>
+                <div class="fg-row input-sm">
+                    <div class="fg-label">
                         <label for="auth_tag_to_report">Authority field to copy: </label>
-                        <input type="text" id="auth_tag_to_report" name="auth_tag_to_report" size="5" maxlength="3" value="[% authority_type.auth_tag_to_report | html %]" />
-                        <div class="hint"
-                            >Note: for 'Authority field to copy', enter the authority field that should be copied from the authority record to the bibliographic record. E.g., in MARC21, field 100 in the authority record should be copied to
-                            field 100 in the bibliographic record</div
-                        >
+                    </div>
+                    <div class="fg-input">
+                        <input type="text" id="auth_tag_to_report" name="auth_tag_to_report" maxlength="3" value="[% authority_type.auth_tag_to_report | html %]" />
                         <input type="hidden" name="op" value="cud-add_validate" />
                         [% IF authority_type.authtypecode.defined %]
                             <input type="hidden" name="is_a_modif" value="1" />
                         [% END %]
-                    </li>
-                </ol>
+                    </div>
+                    <div class="hint">
+                        Note: for 'Authority field to copy', enter the authority field that should be copied from the authority record to the bibliographic record. E.g., in MARC21, field 100 in the authority record should be copied to field
+                        100 in the bibliographic record
+                    </div>
+                </div>
             </fieldset>
             <fieldset class="action">
                 <input type="submit" class="btn btn-primary" value="Submit" />

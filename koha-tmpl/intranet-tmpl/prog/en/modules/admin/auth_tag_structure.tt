@@ -130,48 +130,82 @@
             <input type="hidden" name="op" value="cud-add_validate" />
             [% IF ( heading_modify_tag_p ) %]<input type="hidden" name="modif" value="1" />[% END %]
             <input type="hidden" name="authtypecode" value="[% authtypecode | html %]" />
-            <fieldset class="rows">
-                <ol>
-                    [% IF ( heading_modify_tag_p ) %]
-                        <li>
+            <fieldset class="fg">
+                [% IF ( heading_modify_tag_p ) %]
+                    <div class="fg-row">
+                        <div class="fg-label">
                             <span class="label">Tag: </span>
-                            <input type="hidden" name="tagfield" value="[% searchfield | html %]" />
+                        </div>
+                        <div class="fg-text">
                             [% searchfield | html %]
-                        </li>
-                    [% ELSE %]
-                        <li>
-                            <label for="tagfield" class="required">Tag: </label><input type="text" id="tagfield" name="tagfield" size="5" maxlength="3" required="required" class="required" />
-                            <span class="required">Required</span>
-                        </li>
-                    [% END %]
+                            <input type="hidden" name="tagfield" value="[% searchfield | html %]" />
+                        </div>
+                    </div>
+                [% ELSE %]
+                    <div class="fg-row input-sm">
+                        <div class="fg-label">
+                            <label for="tagfield" class="required">Tag: </label>
+                        </div>
+                        <div class="fg-input">
+                            <input type="text" id="tagfield" name="tagfield" maxlength="3" required="required" class="required" />
+                        </div>
+                        <div class="required">Required</div>
+                        <div class="hint">3 characters maximum</div>
+                    </div>
+                [% END %]
 
-                    <li><label for="liblibrarian">Description in staff interface: </label><input type="text" name="liblibrarian" id="liblibrarian" value="[% liblibrarian | html %]" size="40" maxlength="255" /></li>
-                    <li><label for="libopac">Description in OPAC: </label><input type="text" name="libopac" id="libopac" value="[% libopac | html %]" size="40" maxlength="255" /></li>
-                    <li
-                        ><label for="repeatable">Repeatable: </label>
+                <div class="fg-row">
+                    <div class="fg-label">
+                        <label for="liblibrarian">Description in staff interface: </label>
+                    </div>
+                    <div class="fg-input">
+                        <input type="text" name="liblibrarian" id="liblibrarian" value="[% liblibrarian | html %]" maxlength="255" />
+                    </div>
+                </div>
+                <div class="fg-row">
+                    <div class="fg-label">
+                        <label for="libopac">Description in OPAC: </label>
+                    </div>
+                    <div class="fg-input">
+                        <input type="text" name="libopac" id="libopac" value="[% libopac | html %]" maxlength="255" />
+                    </div>
+                </div>
+                <div class="fg-row input-checkbox">
+                    <div class="fg-label">
+                        <label for="repeatable">Repeatable</label>
+                    </div>
+                    <div class="fg-input">
                         [% IF ( repeatable ) %]
                             <input type="checkbox" name="repeatable" id="repeatable" value="1" checked="checked" />
                         [% ELSE %]
                             <input type="checkbox" name="repeatable" id="repeatable" value="1" />
                         [% END %]
-                    </li>
-                    <li
-                        ><label for="mandatory">Mandatory: </label>
+                    </div>
+                </div>
+                <div class="fg-row input-checkbox">
+                    <div class="fg-label">
+                        <label for="mandatory">Mandatory</label>
+                    </div>
+                    <div class="fg-input">
                         [% IF ( mandatory ) %]
                             <input type="checkbox" name="mandatory" id="mandatory" value="1" checked="checked" />
                         [% ELSE %]
                             <input type="checkbox" name="mandatory" id="mandatory" value="1" />
                         [% END %]
-                    </li>
-                    <li
-                        ><label for="authorised_value">Authorized value: </label>
+                    </div>
+                </div>
+                <div class="fg-row">
+                    <div class="fg-label">
+                        <label for="authorised_value">Authorized value: </label>
+                    </div>
+                    <div class="fg-input">
                         <select name="authorised_value" id="authorised_value">
                             <option value=""></option>
                             [% PROCESS options_for_authorised_value_categories authorised_value_categories => AuthorisedValues.GetCategories( selected => authorised_value ) %]
                         </select>
-                        <div class="hint">If you select a value here, the indicators will be limited to the authorized value list</div>
-                    </li>
-                </ol>
+                    </div>
+                    <div class="hint">If you select a value here, the indicators will be limited to the authorized value list</div>
+                </div>
             </fieldset>
             <fieldset class="action">
                 <input type="submit" class="btn btn-primary" value="Submit" />
@@ -222,7 +256,7 @@
         <form action="/cgi-bin/koha/admin/auth_tag_structure.pl" method="get">
             <fieldset>
                 <label for="searchfield"><strong>Search for tag:</strong></label>
-                <input type="text" id="searchfield" name="searchfield" size="4" value="[% searchfield | html %]" />
+                <input type="text" id="searchfield" name="searchfield" maxlength="3" value="[% searchfield | html %]" />
                 <label for="authtypecode"><strong>In framework:</strong> </label>
                 <select id="authtypecode" name="authtypecode">
                     [% FOREACH authority_type IN authority_types %]
