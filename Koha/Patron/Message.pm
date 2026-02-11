@@ -77,6 +77,27 @@ sub delete {
     return $self->SUPER::delete($self);
 }
 
+=head3 message_without_newlines
+
+my $message_without_newlines = $message->message_without_newlines
+
+This method returns the user's message, with all instances of \n and \r removed
+
+=cut
+
+sub message_without_newlines {
+    my ($self) = @_;
+    my $message = $self->message
+        or return;
+
+    $message =~ s/\n/ /g;
+    $message =~ s/\r//g;
+    $message =~ s/^\s+|\s+$//g;    # left and right trim
+    $message =~ s/ +/ /g;          # duplicate spaces
+
+    return $message;
+}
+
 =head3 _type
 
 =cut

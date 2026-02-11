@@ -212,7 +212,7 @@ sub new {
         while ( my $message = $patron_messages->next ) {
             my $messagedt      = dt_from_string( $message->message_date, 'iso' );
             my $formatted_date = output_pref( { dt => $messagedt, dateonly => 1 } );
-            push @messages_array, $formatted_date . ": " . $message->message;
+            push @messages_array, $formatted_date . ": " . $message->message_without_newlines;
         }
         if (@messages_array) {
             $ilspatron{screen_msg} .= " Messages for you: " . join( ' / ', @messages_array );
