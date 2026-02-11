@@ -159,52 +159,76 @@
         <h1>Duplicate budget</h1>
         <form action="/cgi-bin/koha/admin/aqbudgetperiods.pl" id="add_modify_budget" name="f" method="post">
             [% INCLUDE 'csrf-token.inc' %]
-            <fieldset class="rows">
+            <fieldset class="fg">
                 <input type="hidden" name="op" value="cud-duplicate_budget" />
                 <input type="hidden" name="budget_period_id" value="[% budget_period_id | html %]" />
 
-                <ol>
-                    <li>
+                <div class="fg-row input-md">
+                    <div class="fg-label">
                         <label class="required" for="from">Start date: </label>
-                        <input type="text" size="10" id="from" name="budget_period_startdate" value="[% budget_period_startdate | html %]" class="flatpickr" data-date_to="to" />
-                        <span class="required">Required</span>
-                        <div class="hint">[% INCLUDE 'date-format.inc' %]</div>
-                    </li>
-                    <li>
+                    </div>
+                    <div class="fg-input">
+                        <input type="text" id="from" name="budget_period_startdate" value="[% budget_period_startdate | html %]" class="flatpickr" data-date_to="to" />
+                    </div>
+                    <div class="required">Required</div>
+                    <div class="hint">[% INCLUDE 'date-format.inc' %]</div>
+                </div>
+                <div class="fg-row input-md">
+                    <div class="fg-label">
                         <label class="required" for="to">End date: </label>
-                        <input type="text" size="10" id="to" name="budget_period_enddate" value="[% budget_period_enddate | html %]" class="flatpickr" />
-                        <span class="required">Required</span>
-                        <div class="hint">[% INCLUDE 'date-format.inc' %]</div>
-                    </li>
+                    </div>
+                    <div class="fg-input">
+                        <input type="text" id="to" name="budget_period_enddate" value="[% budget_period_enddate | html %]" class="flatpickr" />
+                    </div>
+                    <div class="required">Required</div>
+                    <div class="hint">[% INCLUDE 'date-format.inc' %]</div>
+                </div>
 
-                    <li>
+                <div class="fg-row">
+                    <div class="fg-label">
                         <label class="required" for="budget_period_description">Description</label>
+                    </div>
+                    <div class="fg-input">
                         <input type="text" id="budget_period_description" name="budget_period_description" value="[% budgetperiod.budget_period_description | html %]" />
-                        <span class="required">Required</span>
-                    </li>
+                    </div>
+                    <div class="required">Required</div>
+                </div>
 
-                    <li>
-                        <label for="amount_change_percentage">Change amounts by</label>
-                        <input type="text" id="amount_change_percentage" name="amount_change_percentage" /> %
-                        <div class="hint">(can be positive or negative)</div>
-                    </li>
+                <div class="fg-row input-sm">
+                    <div class="fg-label">
+                        <label for="amount_change_percentage">Change amounts by:</label>
+                    </div>
+                    <div class="fg-input"> <input type="text" id="amount_change_percentage" name="amount_change_percentage" /> % </div>
+                    <div class="hint">Can be positive or negative</div>
+                </div>
 
-                    <li>
+                <div class="fg-row input-sm">
+                    <div class="fg-label">
                         <label for="amount_change_round_increment">If amounts changed, round to a multiple of</label>
+                    </div>
+                    <div class="fg-input">
                         <input type="text" id="amount_change_round_increment" name="amount_change_round_increment" />
-                        <div class="hint">(amounts will be rounded down)</div>
-                    </li>
+                    </div>
+                    <div class="hint">Amounts will be rounded down</div>
+                </div>
 
-                    <li>
+                <div class="fg-row input-checkbox">
+                    <div class="fg-label">
                         <label for="mark_as_inactive">Mark the original budget as inactive</label>
+                    </div>
+                    <div class="fg-input">
                         <input type="checkbox" id="mark_as_inactive" name="mark_original_budget_as_inactive" />
-                    </li>
+                    </div>
+                </div>
 
-                    <li>
+                <div class="fg-row input-checkbox">
+                    <div class="fg-label">
                         <label for="reset_all_budgets">Set all funds to zero</label>
+                    </div>
+                    <div class="fg-input">
                         <input type="checkbox" id="reset_all_budgets" name="reset_all_budgets" />
-                    </li>
-                </ol>
+                    </div>
+                </div>
             </fieldset>
 
             <fieldset class="action">
@@ -224,63 +248,85 @@
         [% END %]
         <form action="/cgi-bin/koha/admin/aqbudgetperiods.pl" id="add_modify_budget" name="f" method="post">
             [% INCLUDE 'csrf-token.inc' %]
-            <fieldset class="rows">
+            <fieldset class="fg">
                 <!-- ################################################################################# -->
                 <!-- display information about the budget period that must be added or modified -->
                 <!-- ################################################################################# -->
                 <input type="hidden" name="op" value="cud-add_validate" />
                 <input type="hidden" name="budget_period_id" value="[% budget_period_id | html %]" />
-                <ol>
-                    <li>
+                <div class="fg-row input-md">
+                    <div class="fg-label">
                         <label class="required" for="from">Start date: </label>
-                        <input type="text" size="10" id="from" name="budget_period_startdate" value="[% budget_period_startdate | html %]" class="flatpickr" data-date_to="to" />
-                        <span class="required">Required</span>
-                        <div class="hint">[% INCLUDE 'date-format.inc' %]</div>
-                    </li>
-                    <li>
+                    </div>
+                    <div class="fg-input">
+                        <input type="text" id="from" name="budget_period_startdate" value="[% budget_period_startdate | html %]" class="flatpickr" data-date_to="to" />
+                    </div>
+                    <div class="required">Required</div>
+                    <div class="hint">[% INCLUDE 'date-format.inc' %]</div>
+                </div>
+                <div class="fg-row input-md">
+                    <div class="fg-label">
                         <label class="required" for="to">End date: </label>
-                        <input type="text" size="10" id="to" name="budget_period_enddate" value="[% budget_period_enddate | html %]" class="flatpickr" />
-                        <span class="required">Required</span>
-                        <div class="hint">[% INCLUDE 'date-format.inc' %]</div>
-                    </li>
+                    </div>
+                    <div class="fg-input">
+                        <input type="text" id="to" name="budget_period_enddate" value="[% budget_period_enddate | html %]" class="flatpickr" />
+                    </div>
+                    <div class="required">Required</div>
+                    <div class="hint">[% INCLUDE 'date-format.inc' %]</div>
+                </div>
 
-                    <li>
-                        <!-- DESCRIPTION -->
-                        <!-- ############################## -->
+                <div class="fg-row">
+                    <!-- DESCRIPTION -->
+                    <!-- ############################## -->
+                    <div class="fg-label">
                         <label class="required" for="budget_period_description">Description: </label>
-                        <input type="text" id="budget_period_description" name="budget_period_description" size="48" maxlength="80" value="[% budget_period_description | html %]" />
-                        <span class="required">Required</span>
-                    </li>
+                    </div>
+                    <div class="fg-input">
+                        <input type="text" id="budget_period_description" name="budget_period_description" maxlength="80" value="[% budget_period_description | html %]" />
+                    </div>
+                    <div class="required">Required</div>
+                </div>
 
-                    <li>
-                        <!-- TOTAL -->
-                        <!-- ############################## -->
+                <div class="fg-row input-sm">
+                    <!-- TOTAL -->
+                    <!-- ############################## -->
+                    <div class="fg-label">
                         <label for="budget_period_total">Total amount: </label>
-                        <input type="text" id="budget_period_total" name="budget_period_total" size="10" maxlength="80" value="[% budget_period_total | $Price on_editing => 1 %]" />
-                    </li>
+                    </div>
+                    <div class="fg-input">
+                        <input type="text" id="budget_period_total" name="budget_period_total" maxlength="80" value="[% budget_period_total | $Price on_editing => 1 %]" />
+                    </div>
+                </div>
 
-                    <li>
-                        <!-- ACTIVE -->
-                        <!-- ############################## -->
-                        <label for="budget_period_active">Make budget active: </label>
+                <div class="fg-row input-checkbox">
+                    <!-- ACTIVE -->
+                    <!-- ############################## -->
+                    <div class="fg-label">
+                        <label for="budget_period_active">Make budget active</label>
+                    </div>
+                    <div class="fg-input">
                         [% IF ( budget_period_active ) %]
                             <input type="checkbox" checked="checked" id="budget_period_active" name="budget_period_active" value="1" />
                         [% ELSE %]
                             <input type="checkbox" id="budget_period_active" name="budget_period_active" value="1" />
                         [% END %]
-                    </li>
+                    </div>
+                </div>
 
-                    <li>
-                        <!-- LOCK  -->
-                        <!-- ############################## -->
-                        <label for="budget_period_locked">Lock budget: </label>
+                <div class="fg-row input-checkbox">
+                    <!-- LOCK  -->
+                    <!-- ############################## -->
+                    <div class="fg-label">
+                        <label for="budget_period_locked">Lock budget</label>
+                    </div>
+                    <div class="fg-input">
                         [% IF ( budget_period_locked ) %]
                             <input type="checkbox" checked="checked" id="budget_period_locked" name="budget_period_locked" value="1" />
                         [% ELSE %]
                             <input type="checkbox" id="budget_period_locked" name="budget_period_locked" value="1" />
                         [% END %]
-                    </li>
-                </ol>
+                    </div>
+                </div>
             </fieldset>
 
             <fieldset class="action">
@@ -371,22 +417,28 @@
                 </table>
                 <form action="/cgi-bin/koha/admin/aqbudgetperiods.pl" name="f" method="post" id="move_form">
                     [% INCLUDE 'csrf-token.inc' %]
-                    <fieldset class="rows">
-                        <ol>
-                            <li>
+                    <fieldset class="fg">
+                        <div class="fg-row">
+                            <div class="fg-label">
                                 <label class="required" for="to_budget_period_id">Select a budget</label>
+                            </div>
+                            <div class="fg-input">
                                 <select name="to_budget_period_id" id="to_budget_period_id" required="required">
                                     <option value=""></option>
                                     [% FOR budget_period IN budget_periods %]
                                         <option value="[% budget_period.budget_period_id | html %]">[% budget_period.budget_period_description | html %]</option>
                                     [% END %]
                                 </select>
-                            </li>
-                            <li>
+                            </div>
+                        </div>
+                        <div class="fg-row input-checkbox">
+                            <div class="fg-label">
                                 <label for="move_remaining_unspent">Move remaining unspent funds</label>
+                            </div>
+                            <div class="fg-input">
                                 <input type="checkbox" name="move_remaining_unspent" id="move_remaining_unspent" />
-                            </li>
-                        </ol>
+                            </div>
+                        </div>
                     </fieldset>
                     <fieldset class="action">
                         <input type="hidden" name="op" value="cud-close_confirmed" />

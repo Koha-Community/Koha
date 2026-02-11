@@ -108,58 +108,99 @@
         <form action="/cgi-bin/koha/admin/currency.pl" name="Aform" method="post" class="validated">
             [% INCLUDE 'csrf-token.inc' %]
             <input type="hidden" name="op" value="cud-add_validate" />
-            <fieldset class="rows">
+            <fieldset class="fg">
                 <legend class="sr-only">New currency entry form</legend>
-                <ol>
-                    <li>
-                        [% IF currency %]
+                <div class="fg-row input-md">
+                    [% IF currency %]
+                        <div class="fg-label">
                             <span class="label">Currency: </span>
+                        </div>
+                        <div class="fg-text">
+                            [% currency.currency | html %]
                             <input type="hidden" name="is_a_modif" value="1" />
-                            <input type="hidden" name="currency_code" id="currency" value="[% currency.currency | html %]" />[% currency.currency | html %]
-                        [% ELSE %]
+                            <input type="hidden" name="currency_code" id="currency" value="[% currency.currency | html %]" />
+                        </div>
+                    [% ELSE %]
+                        <div class="fg-label">
                             <label for="currency_code" class="required">Currency: </label>
-                            <input type="text" name="currency_code" id="currency_code" class="focus required" size="50" maxlength="50" required="required" /> <span class="required">Required</span>
-                        [% END %]
-                    </li>
-                    <li>
+                        </div>
+                        <div class="fg-input">
+                            <input type="text" name="currency_code" id="currency_code" class="focus required" size="50" maxlength="50" required="required" />
+                        </div>
+                        <div class="required">Required</div>
+                    [% END %]
+                </div>
+                <div class="fg-row input-sm">
+                    <div class="fg-label">
                         <label for="rate" class="required">Rate: </label>
-                        <input type="text" name="rate" id="rate" size="10" maxlength="10" value="[% currency.rate | html %]" required="required" class="required" /> <span class="required">Required</span>
-                    </li>
-                    <li>
+                    </div>
+                    <div class="fg-input">
+                        <input type="text" name="rate" id="rate" size="10" maxlength="10" value="[% currency.rate | html %]" required="required" class="required" />
+                    </div>
+                    <div class="required">Required</div>
+                </div>
+                <div class="fg-row input-sm">
+                    <div class="fg-label">
                         <label for="symbol" class="required">Symbol: </label>
-                        <input type="text" name="symbol" id="symbol" size="5" maxlength="5" value="[% currency.symbol | html %]" required="required" class="required" /> <span class="required">Required</span>
-                    </li>
-                    <li>
+                    </div>
+                    <div class="fg-input">
+                        <input type="text" name="symbol" id="symbol" size="5" maxlength="5" value="[% currency.symbol | html %]" required="required" class="required" />
+                    </div>
+                    <div class="required">Required</div>
+                </div>
+                <div class="fg-row input-sm">
+                    <div class="fg-label">
                         <label for="isocode">ISO code: </label>
+                    </div>
+                    <div class="fg-input">
                         <input type="text" name="isocode" id="isocode" size="5" maxlength="5" value="[% currency.isocode | html %]" />
-                    </li>
-                    <li> <span class="label">Last updated: </span>[% currency.timestamp | $KohaDates %] </li>
-                    <li>
+                    </div>
+                </div>
+                [% IF ( currency ) %]
+                    <div class="fg-row">
+                        <div class="fg-label">
+                            <span class="label">Last updated: </span>
+                        </div>
+                        <div class="fg-text"> [% currency.timestamp | $KohaDates %] </div>
+                    </div>
+                [% END %]
+                <div class="fg-row input-checkbox">
+                    <div class="fg-label">
                         <label for="p_sep_by_space">Space separation between symbol and value: </label>
+                    </div>
+                    <div class="fg-input">
                         [% IF currency.p_sep_by_space %]
                             <input type="checkbox" id="p_sep_by_space" name="p_sep_by_space" value="1" checked="checked" />
                         [% ELSE %]
                             <input type="checkbox" id="p_sep_by_space" name="p_sep_by_space" value="1" />
                         [% END %]
-                    </li>
-                    <li>
+                    </div>
+                </div>
+                <div class="fg-row input-checkbox">
+                    <div class="fg-label">
                         <label for="p_cs_precedes">Currency symbol precedes value: </label>
+                    </div>
+                    <div class="fg-input">
                         [% IF currency.p_cs_precedes %]
                             <input type="checkbox" id="p_cs_precedes" name="p_cs_precedes" value="1" checked="checked" />
                         [% ELSE %]
                             <input type="checkbox" id="p_cs_precedes" name="p_cs_precedes" value="1" />
                         [% END %]
-                    </li>
-                    <li>
+                    </div>
+                </div>
+                <div class="fg-row input-checkbox">
+                    <div class="fg-label">
                         <label for="active">Active: </label>
+                    </div>
+                    <div class="fg-input">
                         [% IF currency.active %]
                             <input type="checkbox" id="active" name="active" value="1" checked="checked" />
                         [% ELSE %]
                             <input type="checkbox" id="active" name="active" value="1" />
                         [% END %]
-                        <span id="hint" class="hint"></span>
-                    </li>
-                </ol>
+                    </div>
+                    <div id="hint" class="hint"></div>
+                </div>
             </fieldset>
 
             <fieldset class="action">

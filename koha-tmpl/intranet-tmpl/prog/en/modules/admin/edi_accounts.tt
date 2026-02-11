@@ -98,11 +98,13 @@
             </h1>
 
             <!-- Basic information -->
-            <fieldset class="rows">
+            <fieldset class="fg">
                 <legend>Basic information</legend>
-                <ol>
-                    <li>
+                <div class="fg-row">
+                    <div class="fg-label">
                         <label for="vendor_id">Vendor: </label>
+                    </div>
+                    <div class="fg-input">
                         <select name="vendor_id" id="vendor_id">
                             [% FOREACH vendor IN vendors %]
                                 [% IF account.vendor_id == vendor.id %]
@@ -112,14 +114,22 @@
                                 [% END %]
                             [% END %]
                         </select>
-                    </li>
-                    <li>
+                    </div>
+                </div>
+                <div class="fg-row">
+                    <div class="fg-label">
                         <label for="description">Description: </label>
+                    </div>
+                    <div class="fg-input">
                         <input type="text" name="description" id="description" size="20" value="[% account.description | html %]" />
-                    </li>
-                    [% IF plugins %]
-                        <li>
+                    </div>
+                </div>
+                [% IF plugins %]
+                    <div class="fg-row">
+                        <div class="fg-label">
                             <label for="plugin">Plugin: </label>
+                        </div>
+                        <div class="fg-input">
                             <select name="plugin" id="plugin">
                                 <option value="">Do not use plugin</option>
                                 [% FOREACH plugin IN plugins %]
@@ -130,12 +140,16 @@
                                     [% END %]
                                 [% END %]
                             </select>
-                        </li>
-                    [% ELSE %]
-                        <input type="hidden" name="plugin" value="" />
-                    [% END %]
-                    <li>
+                        </div>
+                    </div>
+                [% ELSE %]
+                    <input type="hidden" name="plugin" value="" />
+                [% END %]
+                <div class="fg-row">
+                    <div class="fg-label">
                         <label for="id_code_qualifier">Qualifier:</label>
+                    </div>
+                    <div class="fg-input">
                         <select name="id_code_qualifier" id="id_code_qualifier">
                             [% FOREACH qualifier IN code_qualifiers %]
                                 [% IF qualifier.code == account.id_code_qualifier %]
@@ -145,13 +159,21 @@
                                 [% END %]
                             [% END %]
                         </select>
-                    </li>
-                    <li>
+                    </div>
+                </div>
+                <div class="fg-row">
+                    <div class="fg-label">
                         <label for="san">SAN: </label>
+                    </div>
+                    <div class="fg-input">
                         <input type="text" name="san" id="san" size="20" maxlength="20" value="[% account.san | html %]" />
-                    </li>
-                    <li>
+                    </div>
+                </div>
+                <div class="fg-row">
+                    <div class="fg-label">
                         <label for="standard">Standard:</label>
+                    </div>
+                    <div class="fg-input">
                         <select name="standard" id="standard">
                             [% FOREACH standard IN standards %]
                                 [% IF standard == 'BIC' %]
@@ -166,16 +188,18 @@
                                 [% END %]
                             [% END %]
                         </select>
-                    </li>
-                </ol>
+                    </div>
+                </div>
             </fieldset>
 
             <!-- Transport settings -->
-            <fieldset class="rows">
+            <fieldset class="fg">
                 <legend>Transport settings</legend>
-                <ol>
-                    <li>
+                <div class="fg-row">
+                    <div class="fg-label">
                         <label for="file_transport_id">File transport: </label>
+                    </div>
+                    <div class="fg-input">
                         <select name="file_transport_id" id="file_transport_id">
                             <option value="">Select a file transport configuration</option>
                             [% FOREACH transport IN file_transports %]
@@ -186,76 +210,96 @@
                                 [% END %]
                             [% END %]
                         </select>
-                        <div class="hint"> Select a file transport configuration for this EDI account. File transports can be managed in <a href="/cgi-bin/koha/admin/file_transports.pl">Administration &rsaquo; File transports</a>. </div>
-                    </li>
-                </ol>
+                    </div>
+                    <div class="hint"> Select a file transport configuration for this EDI account. File transports can be managed in <a href="/cgi-bin/koha/admin/file_transports.pl">Administration &rsaquo; File transports</a>. </div>
+                </div>
             </fieldset>
 
             <!-- Message types -->
-            <fieldset class="rows">
+            <fieldset class="fg">
                 <legend>Message types</legend>
-                <ol>
-                    <li>
+                <div class="fg-row input-checkbox">
+                    <div class="fg-label">
                         <label for="quotes_enabled">Quotes enabled: </label>
+                    </div>
+                    <div class="fg-input">
                         [% IF account.quotes_enabled %]
                             <input type="checkbox" name="quotes_enabled" id="quotes_enabled" value="1" checked="checked" />
                         [% ELSE %]
                             <input type="checkbox" name="quotes_enabled" id="quotes_enabled" value="1" />
                         [% END %]
-                    </li>
-                    <li>
+                    </div>
+                </div>
+                <div class="fg-row input-checkbox">
+                    <div class="fg-label">
                         <label for="orders_enabled">Orders enabled: </label>
+                    </div>
+                    <div class="fg-input">
                         [% IF account.orders_enabled %]
                             <input type="checkbox" name="orders_enabled" id="orders_enabled" value="1" checked="checked" />
                         [% ELSE %]
                             <input type="checkbox" name="orders_enabled" id="orders_enabled" value="1" />
                         [% END %]
-                    </li>
-                    <li>
+                    </div>
+                </div>
+                <div class="fg-row input-checkbox">
+                    <div class="fg-label">
                         <label for="invoices_enabled">Invoices enabled: </label>
+                    </div>
+                    <div class="fg-input">
                         [% IF account.invoices_enabled %]
                             <input type="checkbox" name="invoices_enabled" id="invoices_enabled" value="1" checked="checked" />
                         [% ELSE %]
                             <input type="checkbox" name="invoices_enabled" id="invoices_enabled" value="1" />
                         [% END %]
-                    </li>
-                    <li>
+                    </div>
+                </div>
+                <div class="fg-row input-checkbox">
+                    <div class="fg-label">
                         <label for="responses_enabled">Responses enabled: </label>
+                    </div>
+                    <div class="fg-input">
                         [% IF account.responses_enabled %]
                             <input type="checkbox" name="responses_enabled" id="responses_enabled" value="1" checked="checked" />
                         [% ELSE %]
                             <input type="checkbox" name="responses_enabled" id="responses_enabled" value="1" />
                         [% END %]
-                    </li>
-                </ol>
+                    </div>
+                </div>
             </fieldset>
 
             <!-- Functional switches -->
-            <fieldset class="rows">
+            <fieldset class="fg">
                 <legend>Functional switches</legend>
-                <ol>
-                    <li>
+                <div class="fg-row input-checkbox">
+                    <div class="fg-label">
                         <label for="auto_orders">Automatic ordering: </label>
+                    </div>
+                    <div class="fg-input">
                         [% IF account.auto_orders %]
                             <input type="checkbox" name="auto_orders" id="auto_orders" value="1" checked="checked" />
                         [% ELSE %]
                             <input type="checkbox" name="auto_orders" id="auto_orders" value="1" />
                         [% END %]
-                        <div class="hint"> With automatic ordering quotes generate orders without staff intervention. </div>
-                    </li>
-                    <li>
+                    </div>
+                    <div class="hint"> With automatic ordering quotes generate orders without staff intervention. </div>
+                </div>
+                <div class="fg-row input-checkbox">
+                    <div class="fg-label">
                         <label for="po_is_basketname">Use purchase order numbers: </label>
+                    </div>
+                    <div class="fg-input">
                         [% IF account.po_is_basketname %]
                             <input type="checkbox" name="po_is_basketname" id="po_is_basketname" value="1" checked="checked" />
                         [% ELSE %]
                             <input type="checkbox" name="po_is_basketname" id="po_is_basketname" value="1" />
                         [% END %]
-                        <div class="hint">
-                            When enabled, basket names are used as purchase order numbers. <br />For received QUOTE messages, we will use the RFF+ON field to populate the basket name. <br />For generated ORDER messages, we will use the
-                            basket name to populate the BGM segment.</div
-                        >
-                    </li>
-                </ol>
+                    </div>
+                    <div class="hint">
+                        When enabled, basket names are used as purchase order numbers. <br />For received QUOTE messages, we will use the RFF+ON field to populate the basket name. <br />For generated ORDER messages, we will use the basket
+                        name to populate the BGM segment.
+                    </div>
+                </div>
             </fieldset>
 
             <fieldset class="action">

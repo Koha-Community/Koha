@@ -97,12 +97,14 @@
                 [% END %]
             </h1>
 
-            <fieldset class="rows">
+            <fieldset class="fg">
                 <legend class="sr-only">EAN details</legend>
 
-                <ol>
-                    <li>
+                <div class="fg-row">
+                    <div class="fg-label">
                         <label for="branchcode">Library: </label>
+                    </div>
+                    <div class="fg-input">
                         <select name="branchcode" id="branchcode">
                             <option value="">All libraries</option>
                             [% FOREACH branch IN branches %]
@@ -113,17 +115,29 @@
                                 [% END %]
                             [% END %]
                         </select>
-                    </li>
-                    <li>
+                    </div>
+                </div>
+                <div class="fg-row">
+                    <div class="fg-label">
                         <label for="description">Description: </label>
+                    </div>
+                    <div class="fg-input">
                         <input type="text" name="description" id="description" size="30" maxlength="128" value="[% ean.description | html %]" />
-                    </li>
-                    <li>
+                    </div>
+                </div>
+                <div class="fg-row">
+                    <div class="fg-label">
                         <label for="ean">EAN: </label>
+                    </div>
+                    <div class="fg-input">
                         <input type="text" name="ean" id="ean" size="20" maxlength="15" value="[% ean.ean | html %]" />
-                    </li>
-                    <li>
+                    </div>
+                </div>
+                <div class="fg-row">
+                    <div class="fg-label">
                         <label for="id_code_qualifier">Qualifier: </label>
+                    </div>
+                    <div class="fg-input">
                         <select name="id_code_qualifier" id="id_code_qualifier">
                             [% FOREACH qualifier IN code_qualifiers %]
                                 [% IF qualifier.code == ean.id_code_qualifier %]
@@ -133,8 +147,8 @@
                                 [% END %]
                             [% END %]
                         </select>
-                    </li>
-                </ol>
+                    </div>
+                </div>
             </fieldset>
 
             <fieldset class="action">

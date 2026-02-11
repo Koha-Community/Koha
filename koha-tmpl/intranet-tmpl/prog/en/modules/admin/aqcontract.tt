@@ -90,37 +90,56 @@
                 [% ELSE %]
                     <h1>New contract for [% booksellername | html %]</h1>
                 [% END %]
-                <fieldset class="rows">
-                    <ol>
-                        [% IF ( contractnumber ) %]
-                            <li
-                                ><span class="label">Contract ID </span>[% contractnumber | html %]
+                <fieldset class="fg">
+                    [% IF ( contractnumber ) %]
+                        <div class="fg-row">
+                            <div class="fg-label">
+                                <span class="label">Contract ID </span>
+                            </div>
+                            <div class="fg-text">
+                                [% contractnumber | html %]
                                 <input type="hidden" name="contractnumber" value="[% contractnumber | html %]" />
                                 <input type="hidden" name="is_a_modif" value="1" />
-                            </li>
-                        [% END %]
-                        <li
-                            ><label for="contractname" class="required">Name:</label> &nbsp;
+                            </div>
+                        </div>
+                    [% END %]
+                    <div class="fg-row">
+                        <div class="fg-label">
+                            <label for="contractname" class="required">Name:</label>
+                        </div>
+                        <div class="fg-input">
                             <input type="text" name="contractname" id="contractname" size="40" maxlength="80" value="[% contractname | html %]" />
-                            <span class="required">Required</span>
-                        </li>
-                        <li
-                            ><label for="contractdescription">Description: </label> &nbsp;
+                            <div class="required">Required</div>
+                        </div>
+                    </div>
+                    <div class="fg-row">
+                        <div class="fg-label">
+                            <label for="contractdescription">Description: </label>
+                        </div>
+                        <div class="fg-input">
                             <input type="text" name="contractdescription" id="contractdescription" size="40" maxlength="80" value="[% contractdescription | html %]" />
-                        </li>
-                        <li
-                            ><label for="from" class="required">Start date:</label> &nbsp;
+                        </div>
+                    </div>
+                    <div class="fg-row">
+                        <div class="fg-label">
+                            <label for="from" class="required">Start date:</label>
+                        </div>
+                        <div class="fg-input">
                             <input type="text" name="contractstartdate" id="from" value="[% contractstartdate | html %]" maxlength="10" size="10" class="flatpickr" data-date_to="to" />
-                            <span class="required">Required</span>
-                            <div class="hint">[% INCLUDE 'date-format.inc' %]</div>
-                        </li>
-                        <li
-                            ><label for="to" class="required">End date:</label> &nbsp;
+                            <div class="required">Required</div>
+                        </div>
+                        <div class="hint">[% INCLUDE 'date-format.inc' %]</div>
+                    </div>
+                    <div class="fg-row">
+                        <div class="fg-label">
+                            <label for="to" class="required">End date:</label>
+                        </div>
+                        <div class="fg-input">
                             <input type="text" name="contractenddate" id="to" value="[% contractenddate | html %]" maxlength="10" size="10" class="flatpickr" />
-                            <span class="required">Required</span>
-                            <div class="hint">[% INCLUDE 'date-format.inc' %]</div>
-                        </li>
-                    </ol>
+                            <div class="required">Required</div>
+                        </div>
+                        <div class="hint">[% INCLUDE 'date-format.inc' %]</div>
+                    </div>
                 </fieldset>
                 <fieldset class="action">
                     <input type="submit" class="btn btn-primary" value="Save" /> <a class="cancel" href="/cgi-bin/koha/admin/aqcontract.pl?booksellerid=[% booksellerid | html %]&amp;contractnumber=[% contractnumber | html %]">Cancel</a>

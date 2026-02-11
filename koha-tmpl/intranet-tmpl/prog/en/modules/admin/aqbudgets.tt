@@ -304,50 +304,76 @@
                                 [% END %]
                             [% END %]
                         </h1>
-                        <fieldset class="rows">
+                        <fieldset class="fg">
                             <legend class="sr-only">Fund details</legend>
 
                             <input type="hidden" name="op" value="cud-add_validate" />
                             <input type="hidden" name="checked" value="0" />
-                            <ol>
-                                [% IF ( budget_parent_id ) %]
-                                    <li>
+                            [% IF ( budget_parent_id ) %]
+                                <div class="fg-row">
+                                    <div class="fg-label">
                                         <span class="label">Fund parent: </span>
+                                    </div>
+                                    <div class="fg-text">
                                         [% budget_parent_name | html %]
                                         [% budget_parent_id | html %]
                                         - [% budget_parent_name | html %]
                                         <input type="hidden" name="budget_parent_id" value="[% budget_parent_id | html %]" />
-                                    </li>
-                                [% END %]
-                                <li>
+                                    </div>
+                                </div>
+                            [% END %]
+                            <div class="fg-row input-md">
+                                <div class="fg-label">
                                     <label class="required" for="budget_code">Fund code: </label>
-                                    <input type="text" name="budget_code" id="budget_code" class="focus" value="[% budget_code | html %]" size="30" />
-                                </li>
+                                </div>
+                                <div class="fg-input">
+                                    <input type="text" name="budget_code" id="budget_code" class="focus" value="[% budget_code | html %]" />
+                                </div>
+                            </div>
 
-                                <li>
+                            <div class="fg-row">
+                                <div class="fg-label">
                                     <label class="required" for="budget_name">Fund name: </label>
-                                    <input type="text" name="budget_name" id="budget_name" value="[% budget_name | html %]" size="60" />
-                                </li>
+                                </div>
+                                <div class="fg-input">
+                                    <input type="text" name="budget_name" id="budget_name" value="[% budget_name | html %]" />
+                                </div>
+                            </div>
 
-                                <li>
+                            <div class="fg-row input-sm">
+                                <div class="fg-label">
                                     <label for="budget_amount" class="required">Amount: </label>
-                                    <input type="text" name="budget_amount" id="budget_amount" value="[% budget_amount | $Price on_editing => 1 %]" size="8" />
-                                </li>
+                                </div>
+                                <div class="fg-input">
+                                    <input type="text" name="budget_amount" id="budget_amount" value="[% budget_amount | $Price on_editing => 1 %]" />
+                                </div>
+                            </div>
 
-                                <li>
+                            <div class="fg-row input-sm">
+                                <div class="fg-label">
                                     <label for="budget_encumb">Warning at (%): </label>
-                                    <input type="text" name="budget_encumb" id="budget_encumb" value="[% budget_encumb | html %]" size="10" />
-                                    <span class="hint">0 to disable</span>
-                                </li>
+                                </div>
+                                <div class="fg-input">
+                                    <input type="text" name="budget_encumb" id="budget_encumb" value="[% budget_encumb | html %]" />
+                                </div>
+                                <div class="hint">0 to disable</div>
+                            </div>
 
-                                <li>
+                            <div class="fg-row input-sm">
+                                <div class="fg-label">
                                     <label for="budget_expend">Warning at (amount): </label>
-                                    <input type="text" name="budget_expend" id="budget_expend" value="[% budget_expend | $Price on_editing => 1 %]" size="10" />
-                                    <span class="hint">0 to disable</span>
-                                </li>
+                                </div>
+                                <div class="fg-input">
+                                    <input type="text" name="budget_expend" id="budget_expend" value="[% budget_expend | $Price on_editing => 1 %]" />
+                                </div>
+                                <div class="hint">0 to disable</div>
+                            </div>
 
-                                <li>
+                            <div class="fg-row">
+                                <div class="fg-label">
                                     <span class="label">Owner: </span>
+                                </div>
+                                <div class="fg-text">
                                     [% IF  budget_owner %]
                                         <span id="budget_owner_name">
                                             <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% budget_owner.borrowernumber | uri %]"> [% budget_owner.firstname | html %] [% budget_owner.surname | html %] </a> |
@@ -358,20 +384,28 @@
                                     <a id="edit_owner" href="#patron_search_modal_owner" data-bs-toggle="modal"><i class="fa fa-search"></i> Select owner</a>
                                     <a id="remove_owner" href="#"><i class="fa fa-trash-can"></i> Remove owner</a>
                                     <input type="hidden" name="budget_owner_id" id="budget_owner_id" value="[% budget_owner.borrowernumber | html %]" />
-                                </li>
+                                </div>
+                            </div>
 
-                                [% IF budget_has_children %]
-                                    <li class="radio">
+                            [% IF budget_has_children %]
+                                <div class="fg-row input-checkbox">
+                                    <div class="fg-label">
                                         <label>
-                                            <input type="checkbox" id="set_owner_to_children" name="set_owner_to_children" value="1" />
                                             <span>Update all sub funds with this owner</span>
                                         </label>
-                                        <span class="hint">Selecting this option will overwrite existing fund owners, if any</span>
-                                    </li>
-                                [% END %]
+                                    </div>
+                                    <div class="fg-input">
+                                        <input type="checkbox" id="set_owner_to_children" name="set_owner_to_children" value="1" />
+                                    </div>
+                                    <div class="hint">Selecting this option will overwrite existing fund owners, if any</div>
+                                </div>
+                            [% END %]
 
-                                <li>
+                            <div class="fg-row">
+                                <div class="fg-label">
                                     <span class="label">Users:</span>
+                                </div>
+                                <div class="fg-input">
                                     <ul style="float:left;" id="budget_users">
                                         [% FOREACH user IN budget_users %]
                                             <li id="user_[% user.borrowernumber | html %]">
@@ -384,48 +418,66 @@
                                         >
                                     </ul>
                                     <input type="hidden" name="budget_users_ids" id="budget_users_id" value="[% budget_users_ids | html %]" />
-                                </li>
-                                <li>
+                                </div>
+                            </div>
+                            <div class="fg-row">
+                                <div class="fg-label">
                                     <label for="budget_branchcode">Library: </label>
+                                </div>
+                                <div class="fg-input">
                                     <select name="budget_branchcode" id="budget_branchcode">
                                         <option value=""></option>
                                         [% PROCESS options_for_libraries libraries => Branches.all( selected => budget_branchcode, unfiltered => 1 ) %]
                                     </select>
-                                </li>
+                                </div>
+                            </div>
 
-                                <li>
+                            <div class="fg-row input-md">
+                                <div class="fg-label">
                                     <label for="budget_permission">Restrict access to: </label>
+                                </div>
+                                <div class="fg-input">
                                     <select name="budget_permission" id="budget_permission">
                                         <option value="0" [% IF budget_perm_0 %]selected="selected"[% END %]> None </option>
-
                                         <option value="1" [% IF budget_perm_1 %]selected="selected"[% END %]> Owner </option>
-
                                         <option value="3" [% IF budget_perm_3 %]selected="selected"[% END %]> Owner and users </option>
-
                                         <option value="2" [% IF budget_perm_2 %]selected="selected"[% END %]> Owner, users and library </option>
                                     </select>
-                                </li>
+                                </div>
+                            </div>
 
-                                <li>
+                            <div class="fg-row">
+                                <div class="fg-label">
                                     <label for="budget_notes">Notes: </label>
+                                </div>
+                                <div class="fg-input">
                                     <textarea name="budget_notes" id="budget_notes" cols="80" rows="6">[% budget_notes | html %]</textarea>
-                                </li>
+                                </div>
+                            </div>
 
-                                <li>
+                            <div class="fg-row">
+                                <div class="fg-label">
                                     <label for="authorised_value_category1">Statistic 1 done on: </label>
+                                </div>
+                                <div class="fg-input">
                                     <select name="sort1_authcat" id="authorised_value_category1">
                                         <option value=""></option>
                                         [% PROCESS options_for_authorised_value_categories authorised_value_categories => AuthorisedValues.GetCategories( selected => sort1_authcat ) %]
                                     </select>
-                                </li>
-                                <li>
+                                </div>
+                            </div>
+
+                            <div class="fg-row">
+                                <div class="fg-label">
                                     <label for="authorised_value_category2">Statistic 2 done on: </label>
+                                </div>
+                                <div class="fg-input">
                                     <select name="sort2_authcat" id="authorised_value_category2">
                                         <option value=""></option>
                                         [% PROCESS options_for_authorised_value_categories authorised_value_categories => AuthorisedValues.GetCategories( selected => sort2_authcat ) %]
                                     </select>
-                                </li>
-                            </ol>
+                                </div>
+                            </div>
 
                             [% IF ( budget_id ) %]
                                 <input type="hidden" name="budget_id" value="[% budget_id | html %]" />
