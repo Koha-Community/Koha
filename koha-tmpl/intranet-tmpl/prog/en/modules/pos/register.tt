@@ -517,7 +517,8 @@
             $("#paid + span").text(paid.format_price());
             $("#returned").attr({ value: paid.format_price(), max: paid });
             var member = button.data("member");
-            if (member === "") {
+            // Hide AC option for anonymous transactions (no borrowernumber)
+            if (!member || member === "") {
                 $("#refund_type option[value='AC']").remove();
             } else if ($("#refund_type option[value='AC']").length == 0) {
                 $("#refund_type").prepend('<option value="AC" selected="selected">Account credit</option>');
