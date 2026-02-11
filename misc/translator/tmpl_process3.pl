@@ -65,7 +65,7 @@ sub text_replace_tag {
     for my $a ( 'alt', 'content', 'title', 'value', 'label', 'placeholder', 'aria-label' ) {
         if ( $attr->{$a} ) {
 
-            # xt/tt_valid.t must be adjusted if the following conditions are modified
+            # xt/author/tt_valid.t must be adjusted if the following conditions are modified
             next if $a eq 'label'   && $tag ne 'optgroup';
             next if $a eq 'content' && $tag ne 'meta';
             next
