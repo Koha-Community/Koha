@@ -1,7 +1,7 @@
 export class SysprefAPIClient {
     constructor(HttpClient) {
         this.httpClient = new HttpClient({
-            baseURL: "/cgi-bin/koha/svc/config/systempreferences",
+            baseURL: "",
         });
     }
 
@@ -9,7 +9,16 @@ export class SysprefAPIClient {
         return {
             get: variable =>
                 this.httpClient.get({
-                    endpoint: "/?pref=" + variable,
+                    endpoint:
+                        "/cgi-bin/koha/svc/config/systempreferences/?pref=" +
+                        variable,
+                }),
+            getAll: (query, params) =>
+                this.httpClient.getAll({
+                    endpoint: "/api/v1/sysprefs",
+                    query,
+                    params: { _order_by: "name", ...params },
+                    headers: {},
                 }),
             getAll: variables =>
                 this.httpClient.get({
@@ -17,7 +26,7 @@ export class SysprefAPIClient {
                 }),
             update: (variable, value) =>
                 this.httpClient.post({
-                    endpoint: "",
+                    endpoint: "/cgi-bin/koha/svc/config/systempreferences",
                     body: "pref_%s=%s".format(
                         encodeURIComponent(variable),
                         encodeURIComponent(value)
@@ -29,7 +38,7 @@ export class SysprefAPIClient {
                 }),
             update_all: sysprefs =>
                 this.httpClient.post({
-                    endpoint: "",
+                    endpoint: "/cgi-bin/koha/svc/config/systempreferences",
                     body: Object.keys(sysprefs)
                         .map(variable =>
                             sysprefs[variable].length

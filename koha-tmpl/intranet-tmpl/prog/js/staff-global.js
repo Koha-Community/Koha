@@ -1162,3 +1162,53 @@ function validatePatronSearch(form) {
     }
     return true;
 }
+
+function syspref_autocomplete(node) {
+    const client = APIClient.sysprefs;
+    node
+        .autocomplete({
+            source: function (request, response) {
+                let patterns = request.term
+                    .split(/[\s,]+/)
+                    .filter(function (s) {
+                        return s.length;
+                    });
+
+                var table_prefix = "me";
+                let search_fields = ["variable"];
+                let term_subquery_or = [];
+                search_fields.forEach(function (field, i) {
+                    term_subquery_or.push({
+                        [table_prefix + "." + field]: {
+                            like: "%" + request.term + "%",
+                        },
+                    });
+                });
+                let query = [{ "-or": term_subquery_or }];
+
+                let params = {
+                    _page: 1,
+                    _per_page: 10,
+                    _order_by: "+me.variable",
+                };
+                client.sysprefs.getAll(query, params).then(data => {
+                    return response(data);
+                });
+            },
+            minLength: 3,
+            select: function (event, ui) {
+                window.location.href = ui.item.link;
+            },
+            focus: function (event, ui) {
+                event.preventDefault(); // Don't replace the text field
+            },
+        })
+        .data("ui-autocomplete")._renderItem = function (ul, item) {
+        item.link = `/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=${item.variable}`;
+        item.value = item.variable; // Or we replace the input with the syspref's value when the item is selected
+        return $("<li></li>")
+            .data("ui-autocomplete-item", item)
+            .append(`<a href="${item.link}">${item.variable}</a>`)
+            .appendTo(ul);
+    };
+}

@@ -11,11 +11,11 @@
                 <input type="hidden" name="op" value="search" />
 
                 <div class="form-title">
-                    <label class="control-label" for="searchfield"><span class="control-text">Search system preferences</span> <i class="fa fa-fw fa-cogs" aria-hidden="true"></i></label>
+                    <label class="control-label" for="syspref_searchfield"><span class="control-text">Search system preferences</span> <i class="fa fa-fw fa-cogs" aria-hidden="true"></i></label>
                 </div>
 
                 <div class="form-content">
-                    <input class="head-searchbox form-control" type="text" name="searchfield" id="searchfield" value="" placeholder="System preference search" />
+                    <input class="head-searchbox form-control" type="text" name="searchfield" id="syspref_searchfield" value="" placeholder="System preference search" />
                 </div>
 
                 <button type="submit" aria-label="Search"><i class="fa fa-arrow-right"></i></button>

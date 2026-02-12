@@ -98,6 +98,16 @@
     </script>
 [% END %]
 
+[% IF ( CAN_user_parameters_manage_sysprefs ) %]
+    <script>
+        $(document).ready(function () {
+            if ($("#syspref_searchfield").length) {
+                syspref_autocomplete($("#syspref_searchfield"));
+            }
+        });
+    </script>
+[% END %]
+
 [% IF Koha.Preference( 'CookieConsent' ) %]
     [% Asset.js("js/cookieconsent.js") | $raw %]
 [% END %]
