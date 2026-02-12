@@ -406,6 +406,13 @@ Type of number above usually 'QLI'
 
 reports received from suppliers
 
+=head2 servicing_instruction
+
+  data_type: 'text'
+  is_nullable: 1
+
+Servicing instructions from vendor (EDIFACT LVT/LVC) stored as JSON array
+
 =head2 estimated_delivery_date
 
   data_type: 'date'
@@ -542,6 +549,8 @@ __PACKAGE__->add_columns(
   { data_type => "varchar", is_nullable => 1, size => 3 },
   "suppliers_report",
   { data_type => "mediumtext", is_nullable => 1 },
+  "servicing_instruction",
+  { data_type => "text", is_nullable => 1 },
   "estimated_delivery_date",
   { data_type => "date", datetime_undef_if_invalid => 1, is_nullable => 1 },
   "invoice_unitprice",
@@ -805,8 +814,8 @@ Composing rels: L</aqorder_users> -> borrowernumber
 __PACKAGE__->many_to_many("borrowernumbers", "aqorder_users", "borrowernumber");
 
 
-# Created by DBIx::Class::Schema::Loader v0.07051 @ 2024-04-30 13:34:51
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:FyRqcj4OmkBR6PpW3tY8bA
+# Created by DBIx::Class::Schema::Loader v0.07051 @ 2026-02-12 13:35:14
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:bAps1c3RzBWhGBkV4VlBaw
 
 __PACKAGE__->belongs_to(
   "basket",
