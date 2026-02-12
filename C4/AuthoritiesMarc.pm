@@ -1288,7 +1288,7 @@ sub _marc21_sort_hierarchy_alpha {
             $b_hier = 'gh' if $b_hier !~ /^[gh]$/;
 
             # When hierarchy does not resolve, sort on $a
-            $a_hier cmp $b_hier || $a->subfield('a') cmp $b->subfield('a');
+            $a_hier cmp $b_hier || ( ( $a->subfield('a') // q{} ) cmp( $b->subfield('a') // q{} ) );
         } @fields
     );
 }
