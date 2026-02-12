@@ -20,11 +20,13 @@
 use Modern::Perl;
 
 use Test::NoWarnings;
-use Test::More tests => 6;
+use Test::More tests => 7;
 
 use Koha::Edifact::Order;
+use JSON qw( encode_json );
 
 use t::lib::Mocks;
+use t::lib::Mocks::Logger;
 use t::lib::TestBuilder;
 
 my $schema = Koha::Database->new->schema;
@@ -122,11 +124,12 @@ subtest 'order_line() tests' => sub {
         {
             class => 'Koha::Acquisition::Orders',
             value => {
-                biblionumber     => $biblio->biblionumber,
-                quantity         => 2,
-                line_item_id     => 'EDILINEID1',
-                order_vendornote => 'A not so pretty note',
-                listprice        => '1.50'
+                biblionumber          => $biblio->biblionumber,
+                quantity              => 2,
+                line_item_id          => 'EDILINEID1',
+                order_vendornote      => 'A not so pretty note',
+                listprice             => '1.50',
+                servicing_instruction => undef
             }
         }
     );
@@ -610,6 +613,264 @@ subtest 'gir_segments() with LSL and LSQ preferences' => sub {
 
     like( $gir_both_ccode, qr/ADULT:LSQ/, 'LSQ field contains collection code value when both map to ccode' );
     like( $gir_both_ccode, qr/ADULT:LSL/, 'LSL field contains collection code value when both map to ccode' );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'gir_segments() with servicing instructions' => sub {
+    plan tests => 30;
+
+    $schema->storage->txn_begin;
+
+    my $logger = t::lib::Mocks::Logger->new();
+
+    # Test 1: Single LVC instruction
+    my $params_lvc = {
+        ol_fields => {
+            budget_code           => 'FUND123',
+            servicing_instruction => encode_json( [ [ { type => 'LVC', value => 'BB' } ] ] )
+        },
+        items => [
+            {
+                branchcode     => 'BRANCH1',
+                itype          => 'BOOK',
+                itemcallnumber => 'CALL1',
+            }
+        ]
+    };
+
+    my @segments = Koha::Edifact::Order::gir_segments($params_lvc);
+    ok( scalar @segments >= 1, 'Segment created with LVC servicing instruction' );
+    like( $segments[0], qr/BB:LVC/, 'LVC servicing instruction included in GIR segment' );
+
+    # Test 2: Single LVT instruction
+    my $params_lvt = {
+        ol_fields => {
+            budget_code           => 'FUND123',
+            servicing_instruction => encode_json( [ [ { type => 'LVT', value => 'Special handling required' } ] ] )
+        },
+        items => [
+            {
+                branchcode     => 'BRANCH1',
+                itype          => 'BOOK',
+                itemcallnumber => 'CALL1',
+            }
+        ]
+    };
+
+    @segments = Koha::Edifact::Order::gir_segments($params_lvt);
+    ok( scalar @segments >= 1, 'Segment created with LVT servicing instruction' );
+    like(
+        $segments[0], qr/Special handling required:LVT/,
+        'LVT servicing instruction included in GIR segment'
+    );
+
+    # Test 3: Multiple LVC instructions in one group
+    my $params_multi_lvc = {
+        ol_fields => {
+            budget_code           => 'FUND123',
+            servicing_instruction =>
+                encode_json( [ [ { type => 'LVC', value => 'BB' }, { type => 'LVC', value => 'BI' } ] ] )
+        },
+        items => [
+            {
+                branchcode     => 'BRANCH1',
+                itype          => 'BOOK',
+                itemcallnumber => 'CALL1',
+            }
+        ]
+    };
+
+    @segments = Koha::Edifact::Order::gir_segments($params_multi_lvc);
+    ok( scalar @segments >= 2, 'Multiple segments created when exceeding 5 elements' );
+    like( $segments[0], qr/BB:LVC/, 'First LVC instruction in first segment' );
+    like( $segments[1], qr/BI:LVC/, 'Second LVC instruction in second segment (overflow)' );
+
+    # Test 4: Mixed LVC and LVT in one group
+    my $params_mixed = {
+        ol_fields => {
+            budget_code           => 'FUND123',
+            servicing_instruction => encode_json(
+                [
+                    [
+                        { type => 'LVC', value => 'BB' },
+                        { type => 'LVT', value => 'Apply on spine only' }
+                    ]
+                ]
+            )
+        },
+        items => [
+            {
+                branchcode     => 'BRANCH1',
+                itype          => 'BOOK',
+                itemcallnumber => 'CALL1',
+            }
+        ]
+    };
+
+    @segments = Koha::Edifact::Order::gir_segments($params_mixed);
+    ok( scalar @segments >= 2, 'Multiple segments created with mixed LVC/LVT instructions' );
+    like( $segments[0], qr/BB:LVC/,                  'LVC instruction in first segment' );
+    like( $segments[1], qr/Apply on spine only:LVT/, 'LVT instruction in second segment (overflow)' );
+
+    # Test 5: Multiple groups
+    my $params_multi_groups = {
+        ol_fields => {
+            budget_code           => 'FUND123',
+            servicing_instruction => encode_json(
+                [
+                    [ { type => 'LVC', value => 'BB' }, { type => 'LVT', value => 'Spine label' } ],
+                    [ { type => 'LVC', value => 'BI' } ],
+                ]
+            )
+        },
+        items => [
+            {
+                branchcode     => 'BRANCH1',
+                itype          => 'BOOK',
+                itemcallnumber => 'CALL1',
+            }
+        ]
+    };
+
+    @segments = Koha::Edifact::Order::gir_segments($params_multi_groups);
+    ok( scalar @segments >= 2, 'Multiple segments created with multiple servicing groups' );
+
+    # With 4 item fields + 3 servicing instructions = 7 elements, we'll have overflow
+    like( $segments[0], qr/BB:LVC/,          'First group LVC in first segment' );
+    like( $segments[1], qr/Spine label:LVT/, 'First group LVT in second segment (overflow)' );
+    like( $segments[1], qr/BI:LVC/,          'Second group LVC in second segment' );
+
+    # Test 6: Empty servicing instruction
+    my $params_empty = {
+        ol_fields => {
+            budget_code           => 'FUND123',
+            servicing_instruction => undef
+        },
+        items => [
+            {
+                branchcode     => 'BRANCH1',
+                itype          => 'BOOK',
+                itemcallnumber => 'CALL1',
+            }
+        ]
+    };
+
+    @segments = Koha::Edifact::Order::gir_segments($params_empty);
+    ok( scalar @segments >= 1, 'Segment created without servicing instruction' );
+    unlike( $segments[0], qr/:LVC/, 'No LVC instruction when servicing_instruction is empty' );
+    unlike( $segments[0], qr/:LVT/, 'No LVT instruction when servicing_instruction is empty' );
+
+    # Test 7: Invalid JSON (should log error but not crash)
+    my $params_invalid = {
+        ol_fields => {
+            budget_code           => 'FUND123',
+            servicing_instruction => 'not valid json'
+        },
+        items => [
+            {
+                branchcode     => 'BRANCH1',
+                itype          => 'BOOK',
+                itemcallnumber => 'CALL1',
+            }
+        ]
+    };
+
+    # Invalid JSON is logged to EDI log but doesn't crash
+    $logger->clear;
+    @segments = Koha::Edifact::Order::gir_segments($params_invalid);
+    ok( scalar @segments >= 1, 'Segment created even with invalid JSON (degrades gracefully)' );
+    $logger->warn_like(
+        qr/Failed to parse servicing_instruction JSON/,
+        'A warning is logged when servicing_instruction JSON cannot be parsed'
+    );
+
+    # Test 8: More than 10 GIR elements require a third segment. This is the
+    # regression test for the e_cnt reset fix: without resetting e_cnt when a
+    # new segment starts, e_cnt free-runs past 5 and never equals 5 again, so
+    # every element past the first split piles into a single second segment
+    # instead of being split again at the 10th element.
+    my $params_many_elements = {
+        ol_fields => {
+            budget_code           => 'FUND123',
+            servicing_instruction => encode_json(
+                [
+                    [ { type => 'LVC', value => 'BB' } ],
+                    [ { type => 'LVC', value => 'BI' } ],
+                    [ { type => 'LVC', value => 'BC' } ],
+                    [ { type => 'LVC', value => 'CA' } ],
+                    [ { type => 'LVC', value => 'JK' } ],
+                    [ { type => 'LVC', value => 'KA' } ],
+                    [ { type => 'LVC', value => 'LA' } ],
+                ]
+            )
+        },
+        items => [
+            {
+                branchcode     => 'BRANCH1',
+                itype          => 'BOOK',
+                itemcallnumber => 'CALL1',
+            }
+        ]
+    };
+
+    # budget_code + branchcode + itype + itemcallnumber + 7 LVCs = 11 elements
+    @segments = Koha::Edifact::Order::gir_segments($params_many_elements);
+    is( scalar @segments, 3, 'Exactly 3 GIR segments created for 11 elements (5 + 5 + 1)' );
+    like( $segments[1], qr/BI:LVC/, 'Second segment contains an element from the second batch of 5' );
+    like( $segments[1], qr/KA:LVC/, 'Second segment contains the last element of the second batch of 5' );
+    unlike( $segments[1], qr/LA:LVC/, 'Second segment does not contain the 11th element' );
+    like( $segments[2], qr/LA:LVC/, 'Third segment contains the 11th (overflow) element on its own' );
+
+    # Test 9: A group with more than 2 instructions is not capped server-side;
+    # every valid instruction is still flattened into GIR elements
+    my $params_oversized_group = {
+        ol_fields => {
+            budget_code           => 'FUND123',
+            servicing_instruction => encode_json(
+                [
+                    [
+                        { type => 'LVC', value => 'BB' },
+                        { type => 'LVC', value => 'BI' },
+                        { type => 'LVT', value => 'Extra free text' }
+                    ]
+                ]
+            )
+        },
+        items => [
+            {
+                branchcode     => 'BRANCH1',
+                itype          => 'BOOK',
+                itemcallnumber => 'CALL1',
+            }
+        ]
+    };
+
+    @segments = Koha::Edifact::Order::gir_segments($params_oversized_group);
+    my $all_segments = join q{}, @segments;
+    like( $all_segments, qr/BB:LVC/,              'First instruction in an oversized group is included' );
+    like( $all_segments, qr/BI:LVC/,              'Second instruction in an oversized group is included' );
+    like( $all_segments, qr/Extra free text:LVT/, 'Third instruction in an oversized group is included' );
+
+    # Test 10: An empty servicing instruction group produces no GIR elements
+    my $params_empty_group = {
+        ol_fields => {
+            budget_code           => 'FUND123',
+            servicing_instruction => encode_json( [ [] ] )
+        },
+        items => [
+            {
+                branchcode     => 'BRANCH1',
+                itype          => 'BOOK',
+                itemcallnumber => 'CALL1',
+            }
+        ]
+    };
+
+    @segments = Koha::Edifact::Order::gir_segments($params_empty_group);
+    ok( scalar @segments >= 1, 'Segment created with an empty servicing instruction group' );
+    unlike( $segments[0], qr/:LVC/, 'No LVC instruction from an empty group' );
+    unlike( $segments[0], qr/:LVT/, 'No LVT instruction from an empty group' );
 
     $schema->storage->txn_rollback;
 };
