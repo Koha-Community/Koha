@@ -34,6 +34,7 @@ use utf8;
 use English qw{ -no_match_vars };
 use Business::ISBN;
 use DateTime;
+use JSON qw( encode_json );
 use C4::Context;
 use Koha::Database;
 use Koha::DateUtils qw( dt_from_string );
@@ -958,17 +959,50 @@ sub quote_item {
         $order_hash->{line_item_id} = $item->item_number_id;
     }
 
-    if ( $item->girfield('servicing_instruction') ) {
-        my $occ = 0;
-        my $txt = q{};
-        my $si;
-        while ( $si = $item->girfield( 'servicing_instruction', $occ ) ) {
-            if ($occ) {
-                $txt .= q{: };
+    # Extract servicing instructions (LVT freetext and/or LVC coded)
+    # Build JSON array structure: [[{type,value},...]]
+    my @servicing_groups;
+    my @current_group;
+
+    # Read LVC (coded) instructions
+    my $occ = 0;
+    my $lvc_val;
+    while ( $lvc_val = $item->girfield( 'coded_servicing_instruction', $occ ) ) {
+
+        # Validate against EDIFACT_SI authorized values
+        my $av = Koha::AuthorisedValues->find(
+            {
+                category         => 'EDIFACT_SI',
+                authorised_value => $lvc_val
             }
-            $txt .= $si;
-            ++$occ;
+        );
+        if ($av) {
+            push @current_group, { type => 'LVC', value => $lvc_val };
+        } else {
+            $quote_message->add_to_edifact_errors(
+                {
+                    section => "GIR+LVC validation",
+                    details =>
+                        "Invalid servicing instruction code '$lvc_val' - not found in EDIFACT_SI authorized values"
+                }
+            );
+            $logger->trace("Invalid servicing instruction code: $lvc_val");
         }
+        ++$occ;
+    }
+
+    # Read LVT (freetext) instructions
+    $occ = 0;
+    my $lvt_val;
+    while ( $lvt_val = $item->girfield( 'servicing_instruction', $occ ) ) {
+        push @current_group, { type => 'LVT', value => $lvt_val };
+        ++$occ;
+    }
+
+    # Store as JSON if we have any instructions
+    if (@current_group) {
+        push @servicing_groups, \@current_group;
+        $order_hash->{servicing_instruction} = encode_json( \@servicing_groups );
     }
     if ($order_note) {
         $order_hash->{order_vendornote} = $order_note;

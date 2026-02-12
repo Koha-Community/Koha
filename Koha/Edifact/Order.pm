@@ -26,7 +26,9 @@ use DateTime;
 use Readonly qw( Readonly );
 use Koha::Database;
 use Koha::DateUtils qw( dt_from_string );
-use C4::Budgets     qw( GetBudget );
+use Koha::Logger;
+use C4::Budgets qw( GetBudget );
+use JSON        qw( decode_json );
 
 use Koha::Acquisition::Orders;
 
@@ -432,7 +434,10 @@ sub order_line {
         }
     }
     my $budget    = GetBudget( $orderline->budget_id );
-    my $ol_fields = { budget_code => $budget->{budget_code}, };
+    my $ol_fields = {
+        budget_code           => $budget->{budget_code},
+        servicing_instruction => $orderline->servicing_instruction,
+    };
 
     my $item_fields = [];
     for my $item (@items) {
@@ -616,13 +621,38 @@ sub gir_segments {
                 { identity_number => 'LSM', data => encode_text( $item->{itemcallnumber} ) };
         }
 
-        # itemcallnumber -> shelfmark
+        # Servicing instructions (LVT freetext and/or LVC coded)
+        # Format: JSON array of arrays: [[{type,value},...],[{type,value},...]]
+        # Each inner array is a group of instructions that work together
         if ( $orderfields->{servicing_instruction} ) {
-            push @gir_elements,
-                {
-                identity_number => 'LVT',
-                data            => encode_text( $orderfields->{servicing_instruction} )
-                };
+            my $si_data = $orderfields->{servicing_instruction};
+            my $servicing_groups;
+
+            eval { $servicing_groups = decode_json($si_data); };
+            if ($@) {
+                my $logger = Koha::Logger->get( { interface => 'edi' } );
+                $logger->warn("Failed to parse servicing_instruction JSON: $@");
+            }
+
+            # Add all servicing instruction groups
+            if ( ref $servicing_groups eq 'ARRAY' ) {
+                foreach my $group (@$servicing_groups) {
+                    if ( ref $group eq 'ARRAY' ) {
+                        foreach my $instruction (@$group) {
+                            if (   ref $instruction eq 'HASH'
+                                && $instruction->{type}
+                                && $instruction->{value} )
+                            {
+                                push @gir_elements,
+                                    {
+                                    identity_number => $instruction->{type},
+                                    data            => encode_text( $instruction->{value} )
+                                    };
+                            }
+                        }
+                    }
+                }
+            }
         }
         my $e_cnt   = 0;    # count number of elements so we dont exceed 5 per segment
         my $copy_no = sprintf 'GIR+%03d', $sequence_no;
@@ -630,7 +660,8 @@ sub gir_segments {
         foreach my $e (@gir_elements) {
             if ( $e_cnt == 5 ) {
                 push @segments, $seg;
-                $seg = $copy_no;
+                $seg   = $copy_no;
+                $e_cnt = 0;
             }
             $seg .=
                 add_gir_identity_number( $e->{identity_number}, $e->{data} );
