@@ -22,8 +22,9 @@ use FindBin qw( $Bin );
 
 use Test::Exception;
 use Test::NoWarnings;
-use Test::More tests => 9;
+use Test::More tests => 11;
 use Test::MockModule;
+use JSON qw( decode_json );
 
 use t::lib::Mocks;
 use t::lib::Mocks::Logger;
@@ -2125,6 +2126,330 @@ subtest 'process_ordrsp' => sub {
             'Item deletion failure recorded in the EDI log'
         );
     };
+    $schema->storage->txn_rollback;
+};
+
+subtest 'servicing_instructions_quote_processing' => sub {
+    plan tests => 29;
+
+    $schema->storage->txn_begin;
+
+    # Setup test data
+    my $test_san = '5013546098818';
+    my $dirname  = ( $Bin =~ /^(.*\/t\/)/ ? $1 . 'edi_testfiles/' : q{} );
+
+    my $active_period = $builder->build(
+        {
+            source => 'Aqbudgetperiod',
+            value  => { budget_period_active => 1 }
+        }
+    );
+
+    # Create file transport
+    my $file_transport = $builder->build(
+        {
+            source => 'FileTransport',
+            value  => {
+                name               => 'Test Servicing Transport',
+                transport          => 'local',
+                download_directory => $dirname,
+                upload_directory   => $dirname,
+            }
+        }
+    );
+
+    # Create vendor EDI account
+    my $account = $builder->build(
+        {
+            source => 'VendorEdiAccount',
+            value  => {
+                description       => 'servicing instruction vendor',
+                file_transport_id => $file_transport->{file_transport_id},
+                plugin            => '',
+                san               => $test_san,
+                orders_enabled    => 1,
+                auto_orders       => 0,
+            }
+        }
+    );
+
+    my $ean = $builder->build(
+        {
+            source => 'EdifactEan',
+            value  => {
+                description => 'test ean',
+                branchcode  => undef,
+                ean         => $test_san
+            }
+        }
+    );
+
+    # Setup branches used in test file
+    for my $code (qw(CPL MPL FPL)) {
+        local $SIG{__WARN__} = sub { };    # Suppress warnings
+        eval {
+            $builder->build(
+                {
+                    source => 'Branch',
+                    value  => { branchcode => $code }
+                }
+            );
+        };                                 # Ignore duplicate key errors
+    }
+
+    # Setup funds used in test file
+    for my $code (qw(REF LOAN)) {
+        $builder->build(
+            {
+                source => 'Aqbudget',
+                value  => {
+                    budget_code      => $code,
+                    budget_period_id => $active_period->{budget_period_id}
+                }
+            }
+        );
+    }
+
+    # Add EDIFACT_SI authorized values for servicing instruction codes.
+    # These normally already exist as installer defaults; only build them
+    # here as a fallback for environments where those defaults are missing.
+    for my $code ( [ 'BB', 'Barcode labelling' ], [ 'BI', 'Binding' ], [ 'BJ', 'Sleeving' ] ) {
+        local $SIG{__WARN__} = sub { };    # Suppress warnings
+        eval {
+            $builder->build(
+                {
+                    source => 'AuthorisedValue',
+                    value  => {
+                        category         => 'EDIFACT_SI',
+                        authorised_value => $code->[0],
+                        lib              => $code->[1]
+                    }
+                }
+            );
+        };                                 # Ignore duplicate key errors
+    }
+
+    my $filename = 'QUOTES_SERVICING.CEQ';
+    ok( -e $dirname . $filename, 'File QUOTES_SERVICING.CEQ found' );
+
+    my $trans = Koha::Edifact::Transport->new( $account->{id} );
+    $trans->working_directory($dirname);
+
+    my $mhash = $trans->message_hash();
+    $mhash->{message_type} = 'QUOTE';
+    $trans->ingest( $mhash, $filename );
+
+    my $quote = $schema->resultset('EdifactMessage')->find( { filename => $filename } );
+    ok( $quote, 'Quote message created' );
+
+    t::lib::Mocks::mock_preference( 'AcqCreateItem', 'ordering' );
+
+    # Process quote
+    my $die;
+    eval {
+        process_quote($quote);
+        1;
+    } or do {
+        $die = $@;
+    };
+    ok( !$die, 'Quote with servicing instructions processed without dying' );
+
+    # Get the basket
+    my $baskets = Koha::Acquisition::Baskets->search( { booksellerid => $account->{vendor_id} } );
+    is( $baskets->count, 1, 'One basket created' );
+
+    my $basket = $baskets->next;
+    my $orders = $basket->orders->search( {}, { order_by => 'ordernumber' } );
+    is( $orders->count, 4, 'Four order lines created (1 + 2 + 1)' );
+
+    # Test Case 1: First order - both LVC (BB) and LVT in same group
+    my $order1 = $orders->next;
+    ok( $order1->servicing_instruction, 'First order has servicing_instruction' );
+
+    my $si1 = decode_json( $order1->servicing_instruction );
+    is( ref($si1),    'ARRAY', 'servicing_instruction is an array' );
+    is( scalar @$si1, 1,       'First order has 1 servicing instruction group' );
+
+    my $group1 = $si1->[0];
+    is( ref($group1),    'ARRAY', 'First group is an array' );
+    is( scalar @$group1, 2,       'First group has 2 instructions (LVC + LVT)' );
+
+    # Find LVC and LVT entries
+    my ($lvc1) = grep { $_->{type} eq 'LVC' } @$group1;
+    my ($lvt1) = grep { $_->{type} eq 'LVT' } @$group1;
+
+    ok( $lvc1, 'First order has LVC instruction' );
+    is( $lvc1->{value}, 'BB', 'LVC value is BB (Barcode labelling)' );
+
+    ok( $lvt1, 'First order has LVT instruction' );
+    is( $lvt1->{value}, 'Spine label required', 'LVT value is correct freetext' );
+
+    # Test Case 2: Second order - only LVC (BI)
+    my $order2 = $orders->next;
+    ok( $order2->servicing_instruction, 'Second order has servicing_instruction' );
+
+    my $si2 = decode_json( $order2->servicing_instruction );
+    is( scalar @$si2, 1, 'Second order has 1 servicing instruction group' );
+
+    my $group2 = $si2->[0];
+    is( scalar @$group2, 1, 'Second group has 1 instruction (LVC only)' );
+
+    is( $group2->[0]->{type},  'LVC', 'Second order has LVC type' );
+    is( $group2->[0]->{value}, 'BI',  'LVC value is BI (Binding)' );
+
+    # Test Case 3: Third order - LVC (BJ) and LVT in same group
+    my $order3 = $orders->next;
+    ok( $order3->servicing_instruction, 'Third order has servicing_instruction' );
+
+    my $si3 = decode_json( $order3->servicing_instruction );
+    is( scalar @$si3, 1, 'Third order has 1 servicing instruction group' );
+
+    my $group3 = $si3->[0];
+    is( scalar @$group3, 2, 'Third group has 2 instructions (LVC + LVT)' );
+
+    my ($lvc3) = grep { $_->{type} eq 'LVC' } @$group3;
+    my ($lvt3) = grep { $_->{type} eq 'LVT' } @$group3;
+
+    is( $lvc3->{value}, 'BJ',               'Third order LVC is BJ (Sleeving)' );
+    is( $lvt3->{value}, 'Handle with care', 'Third order LVT has correct text' );
+
+    # Test Case 4: Fourth order - only LVT
+    my $order4 = $orders->next;
+    ok( $order4->servicing_instruction, 'Fourth order has servicing_instruction' );
+
+    my $si4 = decode_json( $order4->servicing_instruction );
+    is( scalar @$si4, 1, 'Fourth order has 1 servicing instruction group' );
+
+    my $group4 = $si4->[0];
+    is( scalar @$group4, 1, 'Fourth group has 1 instruction (LVT only)' );
+
+    is( $group4->[0]->{type},  'LVT',                      'Fourth order has LVT type' );
+    is( $group4->[0]->{value}, 'Rush processing required', 'Fourth order LVT has correct text' );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'servicing_instructions_invalid_lvc_code' => sub {
+    plan tests => 8;
+
+    $schema->storage->txn_begin;
+
+    my $test_san = '5013546098818';
+    my $dirname  = ( $Bin =~ /^(.*\/t\/)/ ? $1 . 'edi_testfiles/' : q{} );
+
+    my $active_period = $builder->build(
+        {
+            source => 'Aqbudgetperiod',
+            value  => { budget_period_active => 1 }
+        }
+    );
+
+    my $file_transport = $builder->build(
+        {
+            source => 'FileTransport',
+            value  => {
+                name               => 'Test Invalid LVC Transport',
+                transport          => 'local',
+                download_directory => $dirname,
+                upload_directory   => $dirname,
+            }
+        }
+    );
+
+    my $account = $builder->build(
+        {
+            source => 'VendorEdiAccount',
+            value  => {
+                description       => 'invalid lvc code vendor',
+                file_transport_id => $file_transport->{file_transport_id},
+                plugin            => '',
+                san               => $test_san,
+                orders_enabled    => 1,
+                auto_orders       => 0,
+            }
+        }
+    );
+
+    $builder->build(
+        {
+            source => 'EdifactEan',
+            value  => {
+                description => 'test ean',
+                branchcode  => undef,
+                ean         => $test_san
+            }
+        }
+    );
+
+    for my $code (qw(CPL)) {
+        local $SIG{__WARN__} = sub { };
+        eval {
+            $builder->build(
+                {
+                    source => 'Branch',
+                    value  => { branchcode => $code }
+                }
+            );
+        };
+    }
+
+    $builder->build(
+        {
+            source => 'Aqbudget',
+            value  => {
+                budget_code      => 'LOAN',
+                budget_period_id => $active_period->{budget_period_id}
+            }
+        }
+    );
+
+    # Deliberately do NOT create an EDIFACT_SI authorised value for 'ZZ' - it
+    # must be treated as invalid.
+
+    my $filename = 'QUOTES_SERVICING_INVALID_LVC.CEQ';
+    ok( -e $dirname . $filename, 'File QUOTES_SERVICING_INVALID_LVC.CEQ found' );
+
+    my $trans = Koha::Edifact::Transport->new( $account->{id} );
+    $trans->working_directory($dirname);
+
+    my $mhash = $trans->message_hash();
+    $mhash->{message_type} = 'QUOTE';
+    $trans->ingest( $mhash, $filename );
+
+    my $quote = $schema->resultset('EdifactMessage')->find( { filename => $filename } );
+
+    t::lib::Mocks::mock_preference( 'AcqCreateItem', 'ordering' );
+
+    $logger->clear;
+    my $die;
+    eval {
+        process_quote($quote);
+        1;
+    } or do {
+        $die = $@;
+    };
+    ok( !$die, 'Quote with an invalid servicing instruction code processed without dying' );
+
+    my $baskets = Koha::Acquisition::Baskets->search( { booksellerid => $account->{vendor_id} } );
+    is( $baskets->count, 1, 'One basket created' );
+
+    my $basket = $baskets->next;
+    my $orders = $basket->orders->search( {}, { order_by => 'ordernumber' } );
+    is( $orders->count, 1, 'One order line created' );
+
+    my $order = $orders->next;
+
+    # The invalid LVC is skipped, but the LVT in the same group is still kept
+    ok( $order->servicing_instruction, 'Order still has a servicing_instruction (LVT survives)' );
+    my $si    = decode_json( $order->servicing_instruction );
+    my $group = $si->[0];
+    is( scalar @$group,      1,     'Group has only the LVT instruction, the invalid LVC was dropped' );
+    is( $group->[0]->{type}, 'LVT', 'Remaining instruction is the LVT one' );
+
+    $logger->warn_like(
+        qr/Invalid servicing instruction code/,
+        'A warning is logged for the invalid LVC code'
+    );
 
     $schema->storage->txn_rollback;
 };

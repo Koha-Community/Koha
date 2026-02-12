@@ -959,50 +959,55 @@ sub quote_item {
         $order_hash->{line_item_id} = $item->item_number_id;
     }
 
-    # Extract servicing instructions (LVT freetext and/or LVC coded)
-    # Build JSON array structure: [[{type,value},...]]
-    my @servicing_groups;
-    my @current_group;
+    # Helper function to extract servicing instructions for a specific GIR occurrence
+    my $extract_servicing_instructions = sub {
+        my ($occurrence) = @_;
+        my @group;
 
-    # Read LVC (coded) instructions
-    my $occ = 0;
-    my $lvc_val;
-    while ( $lvc_val = $item->girfield( 'coded_servicing_instruction', $occ ) ) {
+        # Read LVC (coded) instruction for this occurrence
+        my $lvc_val = $item->girfield( 'coded_servicing_instruction', $occurrence );
+        if ($lvc_val) {
 
-        # Validate against EDIFACT_SI authorized values
-        my $av = Koha::AuthorisedValues->find(
-            {
-                category         => 'EDIFACT_SI',
-                authorised_value => $lvc_val
-            }
-        );
-        if ($av) {
-            push @current_group, { type => 'LVC', value => $lvc_val };
-        } else {
-            $quote_message->add_to_edifact_errors(
+            # Validate against EDIFACT_SI authorized values
+            my $av = Koha::AuthorisedValues->find(
                 {
-                    section => "GIR+LVC validation",
-                    details =>
-                        "Invalid servicing instruction code '$lvc_val' - not found in EDIFACT_SI authorized values"
+                    category         => 'EDIFACT_SI',
+                    authorised_value => $lvc_val
                 }
             );
-            $logger->trace("Invalid servicing instruction code: $lvc_val");
+            if ($av) {
+                push @group, { type => 'LVC', value => $lvc_val };
+            } else {
+                $quote_message->add_to_edifact_errors(
+                    {
+                        section => "GIR+LVC validation",
+                        details =>
+                            "Invalid servicing instruction code '$lvc_val' - not found in EDIFACT_SI authorized values"
+                    }
+                );
+                $logger->warn("Invalid servicing instruction code: $lvc_val");
+            }
         }
-        ++$occ;
-    }
 
-    # Read LVT (freetext) instructions
-    $occ = 0;
-    my $lvt_val;
-    while ( $lvt_val = $item->girfield( 'servicing_instruction', $occ ) ) {
-        push @current_group, { type => 'LVT', value => $lvt_val };
-        ++$occ;
-    }
+        # Read LVT (freetext) instruction for this occurrence
+        my $lvt_val = $item->girfield( 'servicing_instruction', $occurrence );
+        if ($lvt_val) {
+            push @group, { type => 'LVT', value => $lvt_val };
+        }
+
+        return \@group;
+    };
+
+    # Extract servicing instructions for first order (occurrence 0)
+    my @servicing_groups;
+    my $current_group = $extract_servicing_instructions->(0);
 
     # Store as JSON if we have any instructions
-    if (@current_group) {
-        push @servicing_groups, \@current_group;
+    if (@$current_group) {
+        push @servicing_groups, $current_group;
         $order_hash->{servicing_instruction} = encode_json( \@servicing_groups );
+    } else {
+        $order_hash->{servicing_instruction} = undef;
     }
     if ($order_note) {
         $order_hash->{order_vendornote} = $order_note;
@@ -1131,6 +1136,15 @@ sub quote_item {
                 # we should handle both 1:1 GIR & 1:n GIR (with LQT values) here
 
                 $order_hash->{budget_id} = $budget->budget_id;
+
+                # Extract servicing instructions for this occurrence
+                my $si_group = $extract_servicing_instructions->($occurrence);
+                if (@$si_group) {
+                    my @si_groups = ($si_group);
+                    $order_hash->{servicing_instruction} = encode_json( \@si_groups );
+                } else {
+                    $order_hash->{servicing_instruction} = undef;
+                }
 
                 my $new_order = $schema->resultset('Aqorder')->create($order_hash);
                 my $o         = $new_order->ordernumber();
