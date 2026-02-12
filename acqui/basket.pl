@@ -24,6 +24,7 @@ use Modern::Perl;
 use C4::Auth   qw( get_template_and_user haspermission );
 use C4::Output qw( output_html_with_http_headers output_and_exit );
 use CGI        qw ( -utf8 );
+use JSON       qw( decode_json );
 use C4::Acquisition
     qw( GetBasket CanUserManageBasket GetBasketAsCSV NewBasket NewBasketgroup ModBasket ReopenBasket ModBasketUsers GetBasketgroup GetBasketgroups GetBasketUsers GetOrders GetOrder get_rounded_price );
 use C4::Budgets  qw( GetBudgetHierarchy GetBudget CanUserUseBudget );
@@ -32,12 +33,14 @@ use Koha::Biblios;
 use Koha::Acquisition::Baskets;
 use Koha::Acquisition::Booksellers;
 use Koha::Acquisition::Orders;
+use Koha::AuthorisedValues;
 use Koha::Libraries;
 use C4::Letters qw( SendAlerts );
 use Date::Calc  qw( Add_Delta_Days );
 use Koha::Database;
 use Koha::EDI qw( create_edi_order );
 use Koha::CsvProfiles;
+use Koha::Logger;
 use Koha::Patrons;
 use Koha::Edifact::Files;
 
@@ -472,6 +475,13 @@ if ( $op eq 'list' ) {
 
     my $active_currency = Koha::Acquisition::Currencies->get_active;
 
+    # Fetch EDIFACT servicing instruction authorized values for display
+    my @edifact_si_avs = Koha::AuthorisedValues->search(
+        { category => 'EDIFACT_SI' },
+        { order_by => 'lib' }
+    )->as_list;
+    my %edifact_si_map = map { $_->authorised_value => $_->lib } @edifact_si_avs;
+
     my @orders = GetOrders($basketno);
     my @books_loop;
 
@@ -482,7 +492,7 @@ if ( $op eq 'list' ) {
     my $total_tax_included = 0;
     my $total_tax_value    = 0;
     for my $order (@orders) {
-        my $line = get_order_infos( $order, $bookseller );
+        my $line = get_order_infos( $order, $bookseller, \%edifact_si_map );
         if ( $line->{uncertainprice} ) {
             $template->param( uncertainprices => 1 );
         }
@@ -509,7 +519,7 @@ if ( $op eq 'list' ) {
     my @cancelledorders = GetOrders( $basketno, { cancelled => 1 } );
     my @cancelledorders_loop;
     for my $order (@cancelledorders) {
-        my $line = get_order_infos( $order, $bookseller );
+        my $line = get_order_infos( $order, $bookseller, \%edifact_si_map );
         push @cancelledorders_loop, $line;
     }
 
@@ -586,9 +596,10 @@ $template->param( messages => \@messages );
 output_html_with_http_headers $query, $cookie, $template->output;
 
 sub get_order_infos {
-    my $order      = shift;
-    my $bookseller = shift;
-    my $qty        = $order->{'quantity'} || 0;
+    my $order          = shift;
+    my $bookseller     = shift;
+    my $edifact_si_map = shift;
+    my $qty            = $order->{'quantity'} || 0;
     if ( !defined $order->{quantityreceived} ) {
         $order->{quantityreceived} = 0;
     }
@@ -674,6 +685,58 @@ sub get_order_infos {
                 timestamp  => $line{ $key . '_timestamp' },
             };
         }
+    }
+
+    # Format servicing instruction for display
+    if ( $line{servicing_instruction} && $edifact_si_map ) {
+        my $si_display = '';
+        eval {
+            my $groups = decode_json( $line{servicing_instruction} );
+            if ( ref $groups eq 'ARRAY' && @$groups ) {
+                my @display_parts;
+                foreach my $group (@$groups) {
+                    if ( ref $group eq 'ARRAY' && @$group && @$group <= 2 ) {
+                        my $lvc;
+                        my $lvt;
+
+                        # Extract LVC and LVT from group
+                        foreach my $instruction (@$group) {
+                            if (   ref $instruction eq 'HASH'
+                                && $instruction->{type}
+                                && $instruction->{value} )
+                            {
+                                if ( $instruction->{type} eq 'LVC' ) {
+                                    $lvc = $instruction->{value};
+                                } elsif ( $instruction->{type} eq 'LVT' ) {
+                                    $lvt = $instruction->{value};
+                                }
+                            }
+                        }
+
+                        # Format based on what's present
+                        if ( $lvc && $lvt ) {
+
+                            # Both: "LVC description: LVT text"
+                            my $lvc_desc = $edifact_si_map->{$lvc} || $lvc;
+                            push @display_parts, $lvc_desc . ': ' . $lvt;
+                        } elsif ($lvc) {
+
+                            # LVC only: show description
+                            push @display_parts, $edifact_si_map->{$lvc} || $lvc;
+                        } elsif ($lvt) {
+
+                            # LVT only: show text
+                            push @display_parts, $lvt;
+                        }
+                    }
+                }
+                $si_display = join( '<br>', @display_parts ) if @display_parts;
+            }
+        };
+        if ($@) {
+            Koha::Logger->get->warn("Failed to parse servicing_instruction JSON: $@");
+        }
+        $line{servicing_instruction_display} = $si_display;
     }
 
     return \%line;

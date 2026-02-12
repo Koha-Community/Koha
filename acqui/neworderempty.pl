@@ -64,7 +64,8 @@ the item's id in the breeding reservoir
 =cut
 
 use Modern::Perl;
-use CGI qw ( -utf8 );
+use CGI  qw ( -utf8 );
+use JSON qw( decode_json encode_json );
 use C4::Context;
 
 use C4::Auth    qw( get_template_and_user );
@@ -99,6 +100,8 @@ use Koha::RecordProcessor;
 use Koha::Subscriptions;
 use Koha::UI::Form::Builder::Biblio;
 use Koha::AdditionalFields;
+use Koha::AuthorisedValues;
+use Koha::Logger;
 
 our $input        = CGI->new;
 our $biblionumber = $input->param('biblionumber');
@@ -379,17 +382,18 @@ if ( defined $from_subscriptionid ) {
         $budget_id              = $lastOrderReceived->{budgetid};
         $data->{listprice}      = $lastOrderReceived->{listprice};
         $data->{uncertainprice} = $lastOrderReceived->{uncertainprice};
-        $data->{tax_rate}           = $lastOrderReceived->{tax_rate_on_ordering};
-        $data->{discount}           = $lastOrderReceived->{discount};
-        $data->{rrp}                = $lastOrderReceived->{rrp};
-        $data->{replacementprice}   = $lastOrderReceived->{replacementprice};
-        $data->{ecost}              = $lastOrderReceived->{ecost};
-        $data->{quantity}           = $lastOrderReceived->{quantity};
-        $data->{unitprice}          = $lastOrderReceived->{unitprice};
-        $data->{order_internalnote} = $lastOrderReceived->{order_internalnote};
-        $data->{order_vendornote}   = $lastOrderReceived->{order_vendornote};
-        $data->{sort1}              = $lastOrderReceived->{sort1};
-        $data->{sort2}              = $lastOrderReceived->{sort2};
+        $data->{tax_rate}              = $lastOrderReceived->{tax_rate_on_ordering};
+        $data->{discount}              = $lastOrderReceived->{discount};
+        $data->{rrp}                   = $lastOrderReceived->{rrp};
+        $data->{replacementprice}      = $lastOrderReceived->{replacementprice};
+        $data->{ecost}                 = $lastOrderReceived->{ecost};
+        $data->{quantity}              = $lastOrderReceived->{quantity};
+        $data->{unitprice}             = $lastOrderReceived->{unitprice};
+        $data->{order_internalnote}    = $lastOrderReceived->{order_internalnote};
+        $data->{order_vendornote}      = $lastOrderReceived->{order_vendornote};
+        $data->{servicing_instruction} = $lastOrderReceived->{servicing_instruction};
+        $data->{sort1}                 = $lastOrderReceived->{sort1};
+        $data->{sort2}                 = $lastOrderReceived->{sort2};
 
         $basket = GetBasket( $input->param('basketno') );
     }
@@ -442,6 +446,26 @@ $template->param(
     items                   => $items,
 );
 
+# Get servicing instruction authorized values for EDIFACT_SI category
+my @servicing_instruction_authorised_values = Koha::AuthorisedValues->search(
+    { category => 'EDIFACT_SI' },
+    { order_by => 'lib' }
+)->as_list;
+
+# Parse servicing instruction JSON into array of groups
+my $servicing_instruction_groups      = [];
+my $servicing_instruction_groups_json = '[]';
+if ( $data->{'servicing_instruction'} ) {
+    eval { $servicing_instruction_groups = decode_json( $data->{'servicing_instruction'} ); };
+    if ($@) {
+        Koha::Logger->get->warn("Failed to parse servicing_instruction JSON: $@");
+    } else {
+
+        # Re-encode for JavaScript (already validated JSON)
+        $servicing_instruction_groups_json = $data->{'servicing_instruction'};
+    }
+}
+
 # fill template
 $template->param(
     existing => $biblionumber,
@@ -459,39 +483,42 @@ $template->param(
     closedate            => $basket->{'closedate'},
 
     # order details
-    suggestion         => $suggestion,
-    biblionumber       => $biblionumber,
-    uncertainprice     => $data->{'uncertainprice'},
-    discount_2dp       => sprintf( "%.2f", $bookseller->discount ),      # for display
-    discount           => $bookseller->discount,
-    orderdiscount_2dp  => sprintf( "%.2f", $data->{'discount'} || 0 ),
-    orderdiscount      => $data->{'discount'},
-    order_internalnote => $data->{'order_internalnote'},
-    order_vendornote   => $data->{'order_vendornote'},
-    listincgst         => $bookseller->listincgst,
-    invoiceincgst      => $bookseller->invoiceincgst,
-    cur_active_sym     => $active_currency->symbol,
-    cur_active         => $active_currency->currency,
-    currencies         => Koha::Acquisition::Currencies->search,
-    currency           => $data->{currency},
-    vendor_currency    => $bookseller->listprice,
-    orderexists        => ( $new eq 'yes' ) ? 0 : 1,
-    title              => $data->{'title'},
-    author             => $data->{'author'},
-    publicationyear    => $data->{'publicationyear'} ? $data->{'publicationyear'} : $data->{'copyrightdate'},
-    editionstatement   => $data->{'editionstatement'},
-    budget_loop        => $budget_loop,
-    isbn               => $data->{'isbn'},
-    ean                => $data->{'ean'},
-    seriestitle        => $data->{'seriestitle'},
-    itemtypeloop       => \@itemtypes,
-    quantity           => $quantity,
-    quantityrec        => $quantity,
-    quantitysugg       => $data->{quantitysugg},
-    rrp                => $data->{'rrp'},
-    replacementprice   => $data->{'replacementprice'},
-    gst_values         => \@gst_values,
-    tax_rate           => $data->{tax_rate_on_ordering} ? $data->{tax_rate_on_ordering} + 0.0
+    suggestion                              => $suggestion,
+    biblionumber                            => $biblionumber,
+    uncertainprice                          => $data->{'uncertainprice'},
+    discount_2dp                            => sprintf( "%.2f", $bookseller->discount ),      # for display
+    discount                                => $bookseller->discount,
+    orderdiscount_2dp                       => sprintf( "%.2f", $data->{'discount'} || 0 ),
+    orderdiscount                           => $data->{'discount'},
+    order_internalnote                      => $data->{'order_internalnote'},
+    order_vendornote                        => $data->{'order_vendornote'},
+    servicing_instruction_groups            => $servicing_instruction_groups,
+    servicing_instruction_groups_json       => $servicing_instruction_groups_json,
+    servicing_instruction_authorised_values => \@servicing_instruction_authorised_values,
+    listincgst                              => $bookseller->listincgst,
+    invoiceincgst                           => $bookseller->invoiceincgst,
+    cur_active_sym                          => $active_currency->symbol,
+    cur_active                              => $active_currency->currency,
+    currencies                              => Koha::Acquisition::Currencies->search,
+    currency                                => $data->{currency},
+    vendor_currency                         => $bookseller->listprice,
+    orderexists                             => ( $new eq 'yes' ) ? 0 : 1,
+    title                                   => $data->{'title'},
+    author                                  => $data->{'author'},
+    publicationyear  => $data->{'publicationyear'} ? $data->{'publicationyear'} : $data->{'copyrightdate'},
+    editionstatement => $data->{'editionstatement'},
+    budget_loop      => $budget_loop,
+    isbn             => $data->{'isbn'},
+    ean              => $data->{'ean'},
+    seriestitle      => $data->{'seriestitle'},
+    itemtypeloop     => \@itemtypes,
+    quantity         => $quantity,
+    quantityrec      => $quantity,
+    quantitysugg     => $data->{quantitysugg},
+    rrp              => $data->{'rrp'},
+    replacementprice => $data->{'replacementprice'},
+    gst_values       => \@gst_values,
+    tax_rate         => $data->{tax_rate_on_ordering} ? $data->{tax_rate_on_ordering} + 0.0
     : $bookseller->tax_rate ? $bookseller->tax_rate + 0.0
     : 0,
     listprice => sprintf( "%.2f", $data->{listprice} || $data->{price} || $listprice ),

@@ -208,6 +208,9 @@
             getAuthValueDropbox("sort2", sort2_authcat, destination_sort2, sort2);
         });
         $("#budget_id").change();
+
+        // Servicing Instructions Management
+        initServicingInstructions();
     });
 
     function add_user(borrowernumber, borrowername) {
@@ -232,6 +235,228 @@
         var ids = $("#users_ids").val().split(":");
         ids.splice(ids.indexOf(borrowernumber.toString()), 1);
         $("#users_ids").val(ids.join(":"));
+    }
+
+    // Servicing Instructions Management
+    var servicingInstructionGroups = [];
+    var servicingInstructionAVs = [
+        [% FOREACH av IN servicing_instruction_authorised_values %]
+            { value: '[% av.authorised_value | html %]', label: '[% av.lib | html %]' },
+        [% END %]
+    ];
+
+    function initServicingInstructions() {
+        // Load existing data from template
+        try {
+            var existingData = JSON.parse('[% servicing_instruction_groups_json | $raw %]');
+            servicingInstructionGroups = Array.isArray(existingData) ? existingData : [];
+        } catch (e) {
+            console.error('Failed to parse servicing instruction groups:', e);
+            servicingInstructionGroups = [];
+        }
+
+        renderServicingInstructions();
+        updateJSON();
+
+        // Add group button handler
+        $('#add_servicing_group').on('click', function() {
+            addServicingGroup();
+        });
+
+        // Form submission handler - update JSON before submit
+        $('form').on('submit', function() {
+            updateJSON();
+        });
+    }
+
+    function addServicingGroup() {
+        servicingInstructionGroups.push([]);
+        renderServicingInstructions();
+        updateJSON();
+    }
+
+    function removeServicingGroup(groupIndex) {
+        servicingInstructionGroups.splice(groupIndex, 1);
+        renderServicingInstructions();
+        updateJSON();
+    }
+
+    function addInstructionToGroup(groupIndex, type, value) {
+        var group = servicingInstructionGroups[groupIndex];
+
+        // Validate: max 2 instructions per group
+        if (group.length >= 2) {
+            alert('Each service group can contain at most 2 instructions (one LVC and/or one LVT).');
+            return;
+        }
+
+        if (!type) type = 'LVC'; // Default to LVC (coded)
+        if (!value) value = '';
+
+        // Check if this type already exists in the group
+        var hasLVC = group.some(function(inst) { return inst.type === 'LVC'; });
+        var hasLVT = group.some(function(inst) { return inst.type === 'LVT'; });
+
+        if (type === 'LVC' && hasLVC) {
+            alert('This group already has an LVC instruction. Each group can have only one LVC.');
+            return;
+        }
+        if (type === 'LVT' && hasLVT) {
+            alert('This group already has an LVT instruction. Each group can have only one LVT.');
+            return;
+        }
+
+        servicingInstructionGroups[groupIndex].push({ type: type, value: value });
+        renderServicingInstructions();
+        updateJSON();
+    }
+
+    function removeInstructionFromGroup(groupIndex, instructionIndex) {
+        servicingInstructionGroups[groupIndex].splice(instructionIndex, 1);
+        renderServicingInstructions();
+        updateJSON();
+    }
+
+    function updateInstruction(groupIndex, instructionIndex, type, value) {
+        var group = servicingInstructionGroups[groupIndex];
+
+        // Check if changing type would create a duplicate
+        for (var i = 0; i < group.length; i++) {
+            if (i !== instructionIndex && group[i].type === type) {
+                alert('This group already has a ' + type + ' instruction. Each group can have only one of each type.');
+                renderServicingInstructions(); // Re-render to reset the select
+                return;
+            }
+        }
+
+        servicingInstructionGroups[groupIndex][instructionIndex] = { type: type, value: value };
+        updateJSON();
+    }
+
+    function renderServicingInstructions() {
+        var container = $('#servicing_instructions_container');
+        container.empty();
+
+        if (servicingInstructionGroups.length === 0) {
+            container.append('<div class="hint">No servicing instructions added. Click "Add servicing group" to add one.</div>');
+            return;
+        }
+
+        servicingInstructionGroups.forEach(function(group, groupIndex) {
+            var groupDiv = $('<div class="servicing_group"></div>');
+            groupDiv.css({
+                'border': '1px solid #ddd',
+                'padding': '10px',
+                'margin-bottom': '10px',
+                'background': '#f9f9f9',
+                'border-radius': '4px'
+            });
+
+            var groupHeader = $('<div style="margin-bottom: 10px;"></div>');
+            groupHeader.append('<strong>Service Group ' + (groupIndex + 1) + '</strong> ');
+            groupHeader.append(
+                $('<button type="button" class="btn btn-default btn-xs" style="margin-left: 10px;">' +
+                    '<i class="fa fa-trash"></i> Remove group</button>')
+                    .on('click', function() { removeServicingGroup(groupIndex); })
+            );
+            groupDiv.append(groupHeader);
+
+            if (group.length === 0) {
+                groupDiv.append('<div class="hint" style="margin-left: 20px;">Empty group</div>');
+            }
+
+            group.forEach(function(instruction, instructionIndex) {
+                var instructionDiv = $('<div class="servicing_instruction" style="margin-left: 20px; margin-bottom: 5px;"></div>');
+
+                var typeSelect = $('<select style="width: 100px; margin-right: 5px;"></select>')
+                    .append('<option value="LVC"' + (instruction.type === 'LVC' ? ' selected' : '') + '>LVC (Coded)</option>')
+                    .append('<option value="LVT"' + (instruction.type === 'LVT' ? ' selected' : '') + '>LVT (Text)</option>')
+                    .on('change', function() {
+                        var newType = $(this).val();
+                        var valueInput = $(this).next();
+                        updateInstruction(groupIndex, instructionIndex, newType, valueInput.val());
+                        renderServicingInstructions(); // Re-render to update input type
+                    });
+
+                var valueInput;
+                if (instruction.type === 'LVC' && servicingInstructionAVs.length > 0) {
+                    valueInput = $('<select style="width: 300px; margin-right: 5px;"></select>');
+                    valueInput.append('<option value="">Select...</option>');
+                    servicingInstructionAVs.forEach(function(av) {
+                        valueInput.append(
+                            $('<option></option>')
+                                .attr('value', av.value)
+                                .text(av.label)
+                                .prop('selected', av.value === instruction.value)
+                        );
+                    });
+                } else {
+                    valueInput = $('<input type="text" style="width: 300px; margin-right: 5px;" />')
+                        .val(instruction.value);
+                }
+
+                valueInput.on('change', function() {
+                    updateInstruction(groupIndex, instructionIndex, typeSelect.val(), $(this).val());
+                });
+
+                var removeBtn = $('<button type="button" class="btn btn-default btn-xs">' +
+                    '<i class="fa fa-trash"></i> Remove</button>')
+                    .on('click', function() { removeInstructionFromGroup(groupIndex, instructionIndex); });
+
+                instructionDiv.append(typeSelect);
+                instructionDiv.append(valueInput);
+                instructionDiv.append(removeBtn);
+                groupDiv.append(instructionDiv);
+            });
+
+            // Determine what can be added to this group
+            var hasLVC = group.some(function(inst) { return inst.type === 'LVC'; });
+            var hasLVT = group.some(function(inst) { return inst.type === 'LVT'; });
+            var canAddMore = group.length < 2;
+
+            if (canAddMore) {
+                var btnText = '<i class="fa fa-plus"></i> Add instruction';
+                if (hasLVC && !hasLVT) {
+                    btnText += ' (LVT only)';
+                } else if (hasLVT && !hasLVC) {
+                    btnText += ' (LVC only)';
+                } else if (group.length === 0) {
+                    btnText += ' to this group';
+                }
+
+                var addInstructionBtn = $('<button type="button" class="btn btn-default btn-xs" style="margin-left: 20px; margin-top: 5px;">' + btnText + '</button>')
+                    .on('click', function() {
+                        // Determine default type based on what's already in the group
+                        var defaultType = 'LVC';
+                        if (hasLVC && !hasLVT) defaultType = 'LVT';
+                        else if (hasLVT && !hasLVC) defaultType = 'LVC';
+                        addInstructionToGroup(groupIndex, defaultType);
+                    });
+                groupDiv.append(addInstructionBtn);
+            } else {
+                var maxMsg = $('<div class="hint" style="margin-left: 20px; margin-top: 5px; color: #666;">' +
+                    'Maximum 2 instructions per group (one LVC + one LVT)</div>');
+                groupDiv.append(maxMsg);
+            }
+
+            container.append(groupDiv);
+        });
+    }
+
+    function updateJSON() {
+        // Filter out empty groups and instructions with empty values
+        var filtered = servicingInstructionGroups
+            .map(function(group) {
+                return group.filter(function(instruction) {
+                    return instruction.value && instruction.value.trim() !== '';
+                });
+            })
+            .filter(function(group) {
+                return group.length > 0;
+            });
+
+        var json = JSON.stringify(filtered);
+        $('#servicing_instruction_groups_json').val(json);
     }
 </script>
 [% Asset.css("css/addbiblio.css") | $raw %]
@@ -724,6 +949,15 @@
                 <li>
                     <label for="order_vendornote">Vendor note: </label>
                     <textarea id="order_vendornote" cols="30" rows="3" name="order_vendornote">[% IF ( order_vendornote ) %][% order_vendornote | html %][% END %]</textarea>
+                </li>
+                <li>
+                    <label for="servicing_instructions">Servicing instructions: </label>
+                    <div id="servicing_instructions_container">
+                        <!-- Servicing instruction groups will be populated here -->
+                    </div>
+                    <button type="button" id="add_servicing_group" class="btn btn-default btn-xs"> <i class="fa fa-plus"></i> Add servicing group </button>
+                    <input type="hidden" id="servicing_instruction_groups_json" name="servicing_instruction_groups_json" value="" />
+                    <div class="hint">EDIFACT servicing instructions (GIR LVT/LVC). Each group can contain multiple coded (LVC) and/or free-text (LVT) instructions that work together.</div>
                 </li>
                 <li>
                     <label for="estimated_delivery_date">Estimated delivery date: </label>

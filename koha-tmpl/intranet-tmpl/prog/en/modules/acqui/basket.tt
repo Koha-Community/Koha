@@ -789,6 +789,7 @@
                                         <th data-colname="statistic1">Statistic 1</th>
                                         <th data-colname="statistic2">Statistic 2</th>
                                         <th data-colname="invoice">Invoice</th>
+                                        <th data-colname="servicing_instruction">Servicing instruction</th>
                                         <th data-colname="supplier_report">Supplier report</th>
                                         <th data-colname="place_hold" class="no-sort no-export">Place hold</th>
                                         <th data-colname="modify" class="no-sort no-export">Modify</th>
@@ -931,7 +932,7 @@
                                                     [% books_loo.invoice_object.invoicenumber | html %]
                                                 [% END %]
                                             </td>
-
+                                            <td> [% books_loo.servicing_instruction_display | $raw %] </td>
                                             [% IF Koha.Preference('EDIFACT') && ediaccount %]
                                                 <td>[% books_loo.suppliers_report | html %]</td>
                                             [% ELSE %]
@@ -1033,6 +1034,7 @@
                                             <th>&nbsp;</th>
                                             <th>&nbsp;</th>
                                             <th>&nbsp;</th>
+                                            <th>&nbsp;</th>
                                         </tr>
                                     [% END %]
                                     <tr>
@@ -1050,6 +1052,7 @@
                                         <th>[% total_tax_included | $Price %]</th>
                                         <th>&nbsp;</th>
                                         <th>[% total_tax_value | $Price %]</th>
+                                        <th>&nbsp;</th>
                                         <th>&nbsp;</th>
                                         <th>&nbsp;</th>
                                         <th>&nbsp;</th>
@@ -1323,6 +1326,9 @@
         let supplier_report_column = orders_table_settings.columns.find(c => c.columnname == 'supplier_report');
         const edifact_available = [% Koha.Preference('EDIFACT') && ediaccount ? 'true' : 'false' | html %];
         supplier_report_column.visibility_condition = edifact_available;
+
+        let servicing_instruction_column = orders_table_settings.columns.find(c => c.columnname == 'servicing_instruction');
+        servicing_instruction_column.visibility_condition = edifact_available;
 
         let modify_column = orders_table_settings.columns.find(c => c.columnname == 'modify');
         const modify_column_available = [% active && !closedate ? 'true' : 'false' | html %];
