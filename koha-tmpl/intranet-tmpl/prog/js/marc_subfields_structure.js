@@ -1,29 +1,31 @@
-/* global tagsubfield selectBsTabByHash */
+/* global tagsubfield */
 $(document).ready(function () {
-    if (tagsubfield && tagsubfield == "@") {
-        $("#subfieldtabs a[href='#AT_panel']").tab("show");
-    } else if (tagsubfield && tagsubfield != "@") {
-        $("#subfieldtabs a[href='#" + tagsubfield + "_panel'").tab("show");
-    } else {
-        $("#subfieldtabs a:first").tab("show");
-    }
+    if ($("#subfieldtabs").length > 0) {
+        if (tagsubfield && tagsubfield == "@") {
+            $("#subfieldtabs a[href='#AT_panel']").tab("show");
+        } else if (tagsubfield && tagsubfield != "@") {
+            $(`#subfieldtabs a[href='#${tagsubfield}_panel']`).tab("show");
+        } else {
+            $("#subfieldtabs a:first").tab("show");
+        }
 
-    var subfields_list = $("#subfieldtabs > ul");
-    var sortable_subfields = new Sortable(subfields_list[0], {
-        onEnd: function (e) {
-            var old_index = e.oldIndex;
-            var new_index = e.newIndex;
-            if (old_index < new_index) new_index++;
-            var subfield_code = e.item.id.replace(/^tab_subfield_/, "");
-            var content = $("#" + subfield_code + "_panel");
-            var panels = $("#subfieldtabs .tab-pane");
-            if (new_index < $(panels).size()) {
-                $(content).insertBefore(panels[new_index]);
-            } else {
-                $(content).insertAfter(panels[new_index - 1]);
-            }
-        },
-    });
+        var subfields_list = $("#subfieldtabs > ul");
+        var sortable_subfields = new Sortable(subfields_list[0], {
+            onEnd: function (e) {
+                var old_index = e.oldIndex;
+                var new_index = e.newIndex;
+                if (old_index < new_index) new_index++;
+                var subfield_code = e.item.id.replace(/^tab_subfield_/, "");
+                var content = $("#" + subfield_code + "_panel");
+                var panels = $("#subfieldtabs .tab-pane");
+                if (new_index < $(panels).size()) {
+                    $(content).insertBefore(panels[new_index]);
+                } else {
+                    $(content).insertAfter(panels[new_index - 1]);
+                }
+            },
+        });
+    }
 
     $("input[id^='hidden_']").click(setHiddenValue);
     $("input[id^='hidden-']").each(function () {
@@ -33,8 +35,6 @@ $(document).ready(function () {
         order: [],
         paging: false,
     });
-
-    selectBsTabByHash("subfieldtabs");
 });
 
 /* Function to enable/disable hidden values checkboxes when Flag is (de)selected */

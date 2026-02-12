@@ -375,7 +375,7 @@
                     [% FOREACH loo IN loop %]
                         <tr>
                             <td
-                                ><a href="/cgi-bin/koha/admin/marc_subfields_structure.pl?op=add_form&amp;tagfield=[% loo.tagfield | uri %]&amp;frameworkcode=[% frameworkcode | uri %]#sub[% loo.tagsubfield | uri %]field"
+                                ><a href="/cgi-bin/koha/admin/marc_subfields_structure.pl?op=add_form&amp;tagfield=[% loo.tagfield | uri %]&amp;frameworkcode=[% frameworkcode | uri %]&tagsubfield=[% loo.tagsubfield | uri %]"
                                     >[% loo.tagsubfield | html %]</a
                                 ></td
                             >
@@ -405,7 +405,7 @@
                             </td>
                             <td class="actions">
                                 <a
-                                    href="/cgi-bin/koha/admin/marc_subfields_structure.pl?op=add_form&amp;tagfield=[% loo.tagfield | uri %]&tagsubfield=[% loo.tagsubfield | uri %]&amp;frameworkcode=[% frameworkcode | uri %]#sub[% loo.tagsubfield | uri %]field"
+                                    href="/cgi-bin/koha/admin/marc_subfields_structure.pl?op=add_form&amp;tagfield=[% loo.tagfield | uri %]&tagsubfield=[% loo.tagsubfield | uri %]&amp;frameworkcode=[% frameworkcode | uri %]"
                                     class="btn btn-default btn-xs"
                                     ><i class="fa-solid fa-pencil" aria-hidden="true"></i> Edit</a
                                 >
@@ -439,7 +439,7 @@
     [% Asset.js( "lib/sortable/Sortable.min.js" ) | $raw %]
     [% Asset.js("js/admin-menu.js") | $raw %]
     <script>
-        var tagsubfield = "[% tagsubfield | html %]";
+        const tagsubfield = [% IF tagsubfield %]"[% tagsubfield | html %]"[% ELSE %]null[% END %];
     </script>
     [% Asset.js("js/marc_subfields_structure.js") | $raw %]
 [% END %]
