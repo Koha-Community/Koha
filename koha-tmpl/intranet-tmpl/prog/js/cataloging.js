@@ -330,7 +330,7 @@ function CloneField(index, hideMarc, advancedMARCEditor) {
                 // do nothing if label does not exist.
             }
 
-            // setting its '+' and '-' buttons
+            // setting its '+', '-' and 'buttonDot' buttons
             try {
                 var anchors = divs[i].getElementsByTagName("a");
                 for (var j = 0; j < anchors.length; j++) {
@@ -351,6 +351,13 @@ function CloneField(index, hideMarc, advancedMARCEditor) {
                             "UnCloneField('" +
                                 divs[i].getAttribute("id") +
                                 "'); return false;"
+                        );
+                    } else if (
+                        anchors[j].getAttribute("id").match(/^buttonDot/)
+                    ) {
+                        anchors[j].setAttribute(
+                            "id",
+                            anchors[j].getAttribute("id") + new_key
                         );
                     }
                 }
