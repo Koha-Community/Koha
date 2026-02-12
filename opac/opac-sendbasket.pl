@@ -20,7 +20,6 @@
 use Modern::Perl;
 
 use CGI qw ( -utf8 );
-use Encode;
 
 use C4::Auth   qw( get_template_and_user );
 use C4::Biblio qw(GetMarcSubjects);
@@ -50,52 +49,35 @@ if ( $op eq "cud-send" && $email_add && $user_email ) {
     my $comment = $query->param('comment');
 
     my @bibs = split( /\//, $bib_list );
-    my $iso2709;
-    foreach my $bib (@bibs) {
-        $bib = int($bib);
-        my $biblio = Koha::Biblios->find($bib) or next;
-        $iso2709 .= $biblio->metadata_record( { interface => 'opac' } )->as_usmarc();
-    }
 
-    if ( !defined $iso2709 ) {
-        $template->param( error => 'NO_BODY' );
-    } else {
-        my %loops = ( biblio => \@bibs, );
+    my %loops = ( biblio => \@bibs, );
 
-        my %substitute = ( comment => $comment, );
+    my %substitute = ( comment => $comment, );
 
-        my $letter = C4::Letters::GetPreparedLetter(
-            module      => 'catalogue',
-            letter_code => 'CART',
-            lang        => $patron->lang,
-            tables      => {
-                borrowers => $borrowernumber,
-            },
+    my $letter = C4::Letters::GetPreparedLetter(
+        module      => 'catalogue',
+        letter_code => 'CART',
+        lang        => $patron->lang,
+        tables      => {
+            borrowers => $borrowernumber,
+        },
+        message_transport_type => 'email',
+        loops                  => \%loops,
+        substitute             => \%substitute,
+    );
+
+    my $message_id = C4::Letters::EnqueueLetter(
+        {
+            letter                 => $letter,
             message_transport_type => 'email',
-            loops                  => \%loops,
-            substitute             => \%substitute,
-        );
+            to_address             => $email_add,
+            reply_address          => $user_email,
+        }
+    );
 
-        my $attachment = {
-            filename => 'basket.iso2709',
-            type     => 'application/octet-stream',
-            content  => Encode::encode( "UTF-8", $iso2709 ),
-        };
+    C4::Letters::SendQueuedMessages( { message_id => $message_id } ) if $message_id;
 
-        my $message_id = C4::Letters::EnqueueLetter(
-            {
-                letter                 => $letter,
-                message_transport_type => 'email',
-                to_address             => $email_add,
-                reply_address          => $user_email,
-                attachments            => [$attachment],
-            }
-        );
-
-        C4::Letters::SendQueuedMessages( { message_id => $message_id } ) if $message_id;
-
-        $template->param( SENT => 1 );
-    }
+    $template->param( SENT => 1 );
 
     $template->param( email_add => $email_add );
     output_html_with_http_headers $query, $cookie, $template->output, undef,

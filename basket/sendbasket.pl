@@ -17,8 +17,7 @@
 
 use Modern::Perl;
 
-use CGI qw ( -utf8 );
-use Encode;
+use CGI       qw ( -utf8 );
 use Carp      qw( carp );
 use Try::Tiny qw( catch try );
 
@@ -56,17 +55,8 @@ if ( $op eq "cud-send" && $email_add ) {
     my $comment = $query->param('comment');
 
     my @bibs = split( /\//, $bib_list );
-    my $iso2709;
 
-    foreach my $bib (@bibs) {
-        my $biblio = Koha::Biblios->find($bib) or next;
-        $iso2709 .= $biblio->metadata_record()->as_usmarc();
-    }
-
-    if ( !defined $iso2709 ) {
-        carp "Error sending mail: empty basket";
-        $template->param( error => 1 );
-    } elsif ( !defined $user_email or $user_email eq '' ) {
+    if ( !defined $user_email or $user_email eq '' ) {
         carp "Error sending mail: sender's email address is invalid";
         $template->param( error => 1 );
     } else {
@@ -86,19 +76,12 @@ if ( $op eq "cud-send" && $email_add ) {
             substitute             => \%substitute,
         );
 
-        my $attachment = {
-            filename => 'basket.iso2709',
-            type     => 'application/octet-stream',
-            content  => Encode::encode( "UTF-8", $iso2709 ),
-        };
-
         my $message_id = C4::Letters::EnqueueLetter(
             {
                 letter                 => $letter,
                 message_transport_type => 'email',
                 to_address             => $email_add,
                 reply_address          => $user_email,
-                attachments            => [$attachment],
             }
         );
 

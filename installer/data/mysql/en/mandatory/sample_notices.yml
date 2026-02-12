@@ -2926,7 +2926,6 @@ tables:
             - "[%- PROCESS 'html_helpers.inc' -%]"
             - "Hi,<br><br>"
             - "[% borrower.firstname | html %] [% borrower.surname | html %] sent you a cart from our online catalog.<br>"
-            - "Please note that the attached file is a MARC bibliographic records file which can be imported into personal bibliographic software like EndNote, Reference Manager or ProCite.<br>"
             - "[% IF ( comment ) %]<hr><br>[% comment | html | html_line_break %]<br><br>[% END %]<hr>"
             - "<ol>[% FOREACH biblio IN biblios %]<li>"
             - "[% biblio.title | html %]"
