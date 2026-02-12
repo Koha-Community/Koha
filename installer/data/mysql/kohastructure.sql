@@ -780,6 +780,7 @@ CREATE TABLE `aqorders` (
   `suppliers_reference_number` varchar(35) DEFAULT NULL COMMENT 'Suppliers unique edifact quote ref',
   `suppliers_reference_qualifier` varchar(3) DEFAULT NULL COMMENT 'Type of number above usually ''QLI''',
   `suppliers_report` mediumtext DEFAULT NULL COMMENT 'reports received from suppliers',
+  `servicing_instruction` text DEFAULT NULL COMMENT 'Servicing instructions from vendor (EDIFACT LVT/LVC) stored as JSON array',
   `estimated_delivery_date` date DEFAULT NULL COMMENT 'Estimated delivery date',
   `invoice_unitprice` decimal(28,6) DEFAULT NULL COMMENT 'the unit price in foreign currency',
   `invoice_currency` varchar(10) DEFAULT NULL COMMENT 'the currency of the invoice_unitprice',
