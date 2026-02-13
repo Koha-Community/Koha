@@ -12,7 +12,7 @@
 [% INCLUDE 'doc-head-open.inc' %]
 <title
     >[% FILTER collapse %]
-        [% tx("Course details for {course_name}", { course_name = course.course_name }) | html %][%- IF course.section -%]- [% course.section | html %][%- END -%]
+        [% tx("Course details for {course_name}", { course_name = course.course_name }) | html %][%- IF course.section -%]-[% course.section | html %][%- END -%]
         &rsaquo; [% t("Course reserves") | html %] &rsaquo; [% t("Koha") | html %]
     [% END %]</title
 >
@@ -54,13 +54,14 @@
             <a href="/cgi-bin/koha/course_reserves/course-reserves.pl">Course reserves</a>
         [% END %]
         [% WRAPPER breadcrumb_item bc_active= 1 %]
-            <span>Course details for [% course.course_name | html | $HtmlTags tag="em" %][%- IF course.section -%]- [% course.section | html | $HtmlTags tag="em" %][%- END -%]</span>
+            <span>Course details for [% course.course_name | html | $HtmlTags tag="em" %][%- IF course.section -%]-[% course.section | html | $HtmlTags tag="em" %][%- END -%]</span>
         [% END %]
     [% END #/ WRAPPER breadcrumbs %]
 [% END #/ WRAPPER sub-header.inc %]
 
 [% WRAPPER 'main-container.inc' %]
-    <h1>[% tx("Course details for {course_name}", { course_name = course.course_name }) | html %][%- IF course.section -%]- [% course.section | html %][%- END -%]</h1>
+    [% course_em = ( course.section ? course.course_name _"-"_ course.section : course.course_name ) | html | $HtmlTags tag="em" %]
+    <h1>[% tx("Course details for {course_name}", { course_name = course_em }) | $raw %]</h1>
 
     [% IF CAN_user_coursereserves_add_reserves OR CAN_user_coursereserves_manage_courses OR CAN_user_coursereserves_manage_courses %]
         <div id="toolbar">

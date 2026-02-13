@@ -8,11 +8,11 @@
 <title
     >[% FILTER collapse %]
         [% IF is_edit || course_reserve %]
-            [% t("Edit reserve") | html %]
+            [% t("Editing item in course") | html %]
         [% ELSE %]
-            [% t("Add reserves") | html %]
+            [% t("Adding item to course") | html %]
         [% END %]
-        &rsaquo; [% course.course_name | html %] &rsaquo; [% t("Course reserves") | html %] &rsaquo; [% t("Koha") | html %]
+        &rsaquo; [% course.course_name | html %][%- IF course.section -%]-[% course.section | html %][%- END -%] &rsaquo; [% t("Course reserves") | html %] &rsaquo; [% t("Koha") | html %]
     [% END %]</title
 >
 [% INCLUDE 'doc-head-close.inc' %]
@@ -30,21 +30,28 @@
             <a href="/cgi-bin/koha/course_reserves/course-reserves.pl">Course reserves</a>
         [% END %]
         [% WRAPPER breadcrumb_item %]
-            <a href="/cgi-bin/koha/course_reserves/course-details.pl?course_id=[% course.course_id | uri %]">[% course.course_name | html %][%- IF course.section -%]- [% course.section | html %][%- END -%]</a>
+            <a href="/cgi-bin/koha/course_reserves/course-details.pl?course_id=[% course.course_id | uri %]">[% course.course_name | html %][%- IF course.section -%]-[% course.section | html %][%- END -%]</a>
         [% END %]
         [% WRAPPER breadcrumb_item bc_active= 1 %]
+            [% item_title = biblio.title | html | $HtmlTags tag="em" %]
             [% IF is_edit || course_reserve %]
-                [% tp("Edit course reserve", "Edit") | html %]
+                [% tpx("Editing course reserve item", "Editing {title}", { title = item_title }) | $raw %]
             [% ELSE %]
-                [% tp("Place course reserve", "Reserve") | html %]
+                [% tpx("Adding course reserve item", "Adding {title}", { title = item_title }) | $raw %]
             [% END %]
-            [% biblio.title | html | $HtmlTags tag="em" %]
         [% END %]
     [% END #/ WRAPPER breadcrumbs %]
 [% END #/ WRAPPER sub-header.inc %]
 
 [% WRAPPER 'main-container.inc' %]
-    <h1> [% IF is_edit || course_reserve %]<span>Edit</span>[% ELSE %]<span>Reserve</span>[% END %]<em>[% biblio.title | html %]</em> for <em>[% course.course_name | html %]</em> </h1>
+    <h1>
+        [% course_em = ( course.section ? course.course_name _"-"_ course.section : course.course_name ) | html | $HtmlTags tag="em" %]
+        [% IF is_edit || course_reserve %]
+            [% tx("Editing item in course {course_name}", { course_name = course_em }) | $raw %]
+        [% ELSE %]
+            [% tx("Adding item for course {course_name}", { course_name = course_em }) | $raw %]
+        [% END %]
+    </h1>
 
     [% IF course_reserve && !is_edit %]<div class="alert alert-info" id="already_on_reserve_this">This course already has this item on reserve.</div>[% END %]
     [% IF course_item %]
@@ -64,9 +71,9 @@
         [% IF item # adding an item to course items %]
             <fieldset class="rows">
                 [% IF is_edit || course_reserve %]
-                    <legend>Edit <em>[% biblio.title | html %]</em> in <em>[% course.course_name | html %][%- IF course.section -%]- [% course.section | html %][%- END -%]</em></legend>
+                    <legend>[% tpx("Editing course reserve item", "Editing {title}", { title = item_title }) | $raw %]</legend>
                 [% ELSE %]
-                    <legend>Add <em>[% biblio.title | html %]</em> to <em>[% course.course_name | html %][%- IF course.section -%]- [% course.section | html %][%- END -%]</em></legend>
+                    <legend>[% tpx("Adding course reserve item", "Adding {title}", { title = item_title }) | $raw %]</legend>
                 [% END %]
                 <ol>
                     <li>
