@@ -114,3 +114,8 @@ VALUES
 INSERT IGNORE INTO authorised_value_categories (category_name, is_system)
 VALUES
     ('BOOKING_CANCELLATION', 1);
+
+-- For EDIFACT
+INSERT IGNORE INTO authorised_value_categories (category_name, is_system)
+VALUES
+    ('EDIFACT_SI', 0);

@@ -2210,24 +2210,7 @@ subtest 'servicing_instructions_quote_processing' => sub {
         );
     }
 
-    # Add EDIFACT_SI authorized values for servicing instruction codes.
-    # These normally already exist as installer defaults; only build them
-    # here as a fallback for environments where those defaults are missing.
-    for my $code ( [ 'BB', 'Barcode labelling' ], [ 'BI', 'Binding' ], [ 'BJ', 'Sleeving' ] ) {
-        local $SIG{__WARN__} = sub { };    # Suppress warnings
-        eval {
-            $builder->build(
-                {
-                    source => 'AuthorisedValue',
-                    value  => {
-                        category         => 'EDIFACT_SI',
-                        authorised_value => $code->[0],
-                        lib              => $code->[1]
-                    }
-                }
-            );
-        };                                 # Ignore duplicate key errors
-    }
+    # EDIFACT_SI authorized values are expected to exist from database defaults
 
     my $filename = 'QUOTES_SERVICING.CEQ';
     ok( -e $dirname . $filename, 'File QUOTES_SERVICING.CEQ found' );
