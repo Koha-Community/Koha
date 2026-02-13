@@ -7,7 +7,7 @@
 <title
     >[% FILTER collapse %]
         [% IF ( course_name ) %]
-            [% tx("Edit {course_name}", { course_name = course_name }) | html %][% IF course.section %]- [% course.section | html %][% END %]
+            [% tx("Edit course {course_name}", { course_name = course_name }) | html %][% IF section %]-[% section | html %][% END %]
         [% ELSE %]
             [% t("New course") | html %]
         [% END %]
@@ -39,7 +39,7 @@
         [% END %]
         [% WRAPPER breadcrumb_item bc_active= 1 %]
             [% IF course_name %]
-                <span>Edit [% course_name | html | $HtmlTags tag="em" %][%- IF course.section -%]- [% course.section | html | $HtmlTags tag="em" %][%- END -%]</span>
+                [% tx("Edit course {course_name}", { course_name = course_name }) | $raw %]
             [% ELSE %]
                 <span>New course</span>
             [% END %]
@@ -52,7 +52,8 @@
     [% WRAPPER 'main-container.inc' %]
         <h1>
             [% IF course_name %]
-                <span>Edit [% course_name | html | $HtmlTags tag="em" %]</span>
+                [% course_em = ( section ? course_name _"-"_ section : course_name ) | html | $HtmlTags tag="em" %]
+                [% tx("Edit course {course_name}", { course_name = course_em }) | $raw %]
             [% ELSE %]
                 <span>New course</span>
             [% END %]
@@ -67,7 +68,13 @@
                 <input type="hidden" name="op" value="cud-add" />
             [% END %]
             <fieldset class="rows">
-                <legend>[% IF course_id %]Edit course[% ELSE %]Create course[% END %]</legend>
+                <legend class="visually-hidden">
+                    [% IF course_name %]
+                        [% tx("Edit {course_name}", { course_name = course_em }) | $raw %]
+                    [% ELSE %]
+                        <span>New course</span>
+                    [% END %]
+                </legend>
                 <ol>
                     <li>
                         <label class="required" for="department">Department:</label>

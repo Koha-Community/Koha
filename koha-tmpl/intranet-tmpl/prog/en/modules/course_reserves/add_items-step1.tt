@@ -1,4 +1,5 @@
 [% USE raw %]
+[% USE HtmlTags %]
 [% USE Koha %]
 [% PROCESS 'i18n.inc' %]
 [% SET footerjs = 1 %]
@@ -6,7 +7,7 @@
 <title
     >[% FILTER collapse %]
         [% t("Add reserves") | html %]
-        &rsaquo; [% course.course_name | html %] &rsaquo; [% t("Course reserves") | html %] &rsaquo; [% t("Koha") | html %]
+        &rsaquo; [% course.course_name | html %][%- IF course.section -%]-[% course.section | html %][%- END -%] &rsaquo; [% t("Course reserves") | html %] &rsaquo; [% t("Koha") | html %]
     [% END %]</title
 >
 [% INCLUDE 'doc-head-close.inc' %]
@@ -23,7 +24,7 @@
             <a href="/cgi-bin/koha/course_reserves/course-reserves.pl">Course reserves</a>
         [% END %]
         [% WRAPPER breadcrumb_item %]
-            <a href="/cgi-bin/koha/course_reserves/course-details.pl?course_id=[% course.course_id | uri %]">[% course.course_name | html %][%- IF course.section -%]- [% course.section | html %][%- END -%]</a>
+            <a href="/cgi-bin/koha/course_reserves/course-details.pl?course_id=[% course.course_id | uri %]">[% course.course_name | html %][%- IF course.section -%]-[% course.section | html %][%- END -%]</a>
         [% END %]
         [% WRAPPER breadcrumb_item bc_active= 1 %]
             <span>Add reserves</span>
@@ -32,7 +33,8 @@
 [% END #/ WRAPPER sub-header.inc %]
 
 [% WRAPPER 'main-container.inc' %]
-    <h1>Add reserves for <em>[% course.course_name | html %]</em></h1>
+    [% course_em = ( course.section ? course.course_name _"-"_ course.section : course.course_name ) | html | $HtmlTags tag="em" %]
+    <h1> [% tx("Add reserves for course {course_name}", { course_name = course_em }) | $raw %] </h1>
 
     [% IF ERROR_ITEM_NOT_FOUND %]
         [% IF UNKNOWN_BARCODE %]
@@ -50,7 +52,7 @@
         <input type="hidden" name="op" value="lookup" />
 
         <fieldset class="rows">
-            <legend>Add items: scan barcode</legend>
+            <legend>Add items by barcode</legend>
             <ol>
                 <li>
                     <label class="required" for="barcode">Item barcode:</label>
