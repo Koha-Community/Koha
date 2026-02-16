@@ -48,6 +48,10 @@
             <div id="error_message" class="alert alert-warning"> You do not have permission to perform cashup actions. </div>
         [% END %]
 
+        [% IF ( error_cashup_amount ) %]
+            <div id="error_message" class="alert alert-warning"> Invalid amount entered for cashup. Please enter a valid monetary amount. </div>
+        [% END %]
+
         [% IF ( error_refund_permission ) %]
             <div id="error_message" class="alert alert-warning"> You do not have permission to perform refund actions. </div>
         [% END %]
@@ -370,7 +374,7 @@
 
 <!-- Confirm cashup modal -->
 <div class="modal" id="confirmCashupModal" tabindex="-1" role="dialog" aria-labelledby="confirmCashupLabel">
-    <form id="cashup_form" method="post" enctype="multipart/form-data">
+    <form id="cashup_form" method="post" enctype="multipart/form-data" class="validated">
         [% INCLUDE 'csrf-token.inc' %]
         <div class="modal-dialog">
             <div class="modal-content">
@@ -379,13 +383,38 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    Please confirm that you have removed [% accountlines.total( payment_type => [ 'CASH', 'SIP00' ]) * -1 | $Price %] from the cash register and left a float of [% register.starting_float | $Price %].
+                    <fieldset class="rows">
+                        <ol>
+                            <li>
+                                <span class="label">Expected amount to remove:</span>
+                                <span id="expected_amount" class="expected-amount">[% accountlines.total( payment_type => [ 'CASH', 'SIP00' ]) * -1 | $Price %]</span>
+                            </li>
+                            <li>
+                                <span class="label">Float to remain:</span>
+                                <span>[% register.starting_float | $Price %]</span>
+                            </li>
+                            <li>
+                                <label class="required" for="amount">Actual amount removed from register:</label>
+                                <input type="text" inputmode="decimal" pattern="^\d+(\.\d{2})?$" id="amount" name="amount" required="required" />
+                                <span class="required">Required</span>
+                            </li>
+                            <li id="reconciliation_display" style="display: none;">
+                                <span class="label">Reconciliation:</span>
+                                <span id="reconciliation_text"></span>
+                            </li>
+                            <li id="reconciliation_note_field" style="display: none;">
+                                <label for="reconciliation_note">Note (optional):</label>
+                                <textarea id="reconciliation_note" name="reconciliation_note" rows="3" cols="40" maxlength="1000" placeholder="Enter a note explaining the surplus or deficit..."></textarea>
+                                <div class="hint">Maximum 1000 characters</div>
+                            </li>
+                        </ol>
+                    </fieldset>
                 </div>
                 <!-- /.modal-body -->
                 <div class="modal-footer">
                     <input type="hidden" name="registerid" value="[% register.id | html %]" />
                     <input type="hidden" name="op" value="cud-cashup" />
-                    <button type="submit" class="btn btn-primary" id="pos_cashup_confirm">Confirm</button>
+                    <button type="submit" class="btn btn-primary" id="pos_cashup_confirm">Confirm cashup</button>
                     <button type="button" class="btn btn-default" data-bs-dismiss="modal">Cancel</button>
                 </div>
                 <!-- /.modal-footer -->
@@ -609,6 +638,59 @@
                     history.replaceState(null, null, window.location.pathname + window.location.search);
                 }
             }
+        });
+
+        // Real-time reconciliation calculation for cashup modal
+        $("#amount").on("input", function() {
+            var actualAmount = parseFloat($(this).val()) || 0;
+            var expectedText = $("#expected_amount").text().replace(/[£$,]/g, '');
+            var expectedAmount = parseFloat(expectedText) || 0;
+            var difference = actualAmount - expectedAmount;
+
+            if ($(this).val() && !isNaN(actualAmount)) {
+                var reconciliationText = "";
+                var reconciliationClass = "";
+                var hasDiscrepancy = false;
+
+                if (difference > 0) {
+                    reconciliationText = "Surplus: " + difference.format_price();
+                    reconciliationClass = "success";
+                    hasDiscrepancy = true;
+                } else if (difference < 0) {
+                    reconciliationText = "Deficit: " + Math.abs(difference).format_price();
+                    reconciliationClass = "warning";
+                    hasDiscrepancy = true;
+                } else {
+                    reconciliationText = "Balanced - no surplus or deficit";
+                    reconciliationClass = "success";
+                    hasDiscrepancy = false;
+                }
+
+                $("#reconciliation_text").text(reconciliationText)
+                    .removeClass("success warning")
+                    .addClass(reconciliationClass);
+                $("#reconciliation_display").show();
+
+                // Show/hide note field based on whether there's a discrepancy
+                if (hasDiscrepancy) {
+                    $("#reconciliation_note_field").show();
+                } else {
+                    $("#reconciliation_note_field").hide();
+                    $("#reconciliation_note").val(''); // Clear note when balanced
+                }
+            } else {
+                $("#reconciliation_display").hide();
+                $("#reconciliation_note_field").hide();
+            }
+        });
+
+        // Reset modal when opened
+        $("#confirmCashupModal").on("shown.bs.modal", function() {
+            // Start with empty actual amount field (user must enter amount)
+            $("#amount").val('').focus();
+            $("#reconciliation_display").hide();
+            $("#reconciliation_note_field").hide();
+            $("#reconciliation_note").val('');
         });
     </script>
 [% END %]

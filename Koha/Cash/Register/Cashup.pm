@@ -80,10 +80,18 @@ sub summary {
         : { 'date' => { '<'        => $self->timestamp } };
 
     my $payout_transactions = $self->register->accountlines->search(
-        { %{$conditions}, credit_type_code => undef },
+        {
+            %{$conditions},
+            credit_type_code => undef,
+            debit_type_code  => { '!=' => 'CASHUP_DEFICIT' }
+        },
     );
     my $income_transactions = $self->register->accountlines->search(
-        { %{$conditions}, debit_type_code => undef },
+        {
+            %{$conditions},
+            debit_type_code  => undef,
+            credit_type_code => { '!=' => 'CASHUP_SURPLUS' }
+        },
     );
 
     my $income_summary = Koha::Account::Offsets->search(
@@ -173,6 +181,22 @@ sub summary {
         push @total_grouped, { payment_type => $type->lib, total => $typed_total };
     }
 
+    # Check for reconciliation lines separately (for footer display only)
+    my $surplus_lines =
+        $self->register->accountlines->search( { %{$conditions}, credit_type_code => 'CASHUP_SURPLUS' } );
+    my $deficit_lines =
+        $self->register->accountlines->search( { %{$conditions}, debit_type_code => 'CASHUP_DEFICIT' } );
+
+    my $surplus_total = $surplus_lines->count ? $surplus_lines->total : undef;
+    my $deficit_total = $deficit_lines->count ? $deficit_lines->total : undef;
+
+    # Extract notes from reconciliation lines
+    my ($surplus_record) = $surplus_lines->_resultset->search( {}, { rows => 1 } )->all;
+    my $surplus_note = $surplus_record ? $surplus_record->note : undef;
+
+    my ($deficit_record) = $deficit_lines->_resultset->search( {}, { rows => 1 } )->all;
+    my $deficit_note = $deficit_record ? $deficit_record->note : undef;
+
     $summary = {
         from_date      => $previous ? $previous->timestamp : undef,
         to_date        => $self->timestamp,
@@ -181,7 +205,13 @@ sub summary {
         payout_grouped => \@payout,
         payout_total   => abs($payout_total),
         total          => $total * -1,
-        total_grouped  => \@total_grouped
+        total_grouped  => \@total_grouped,
+
+        # Reconciliation data for footer display
+        surplus_total => $surplus_total ? $surplus_total * 1 : undef,
+        deficit_total => $deficit_total ? $deficit_total * 1 : undef,
+        surplus_note  => $surplus_note,
+        deficit_note  => $deficit_note
     };
 
     return $summary;

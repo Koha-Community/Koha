@@ -11,7 +11,8 @@
                     <li>Cash register: <span id="register_description"></span></li>
                     <li>Period: <span id="from_date"></span> to <span id="to_date"></span></li>
                 </ul>
-                <table>
+
+                <table class="table table-striped">
                     <thead>
                         <tr>
                             <th>Type</th>
@@ -21,6 +22,31 @@
                     <tbody> </tbody>
                     <tfoot> </tfoot>
                 </table>
+
+                <style>
+                    #cashupSummaryModal .reconciliation-separator hr {
+                        margin: 0.5rem 0;
+                        border-color: #dee2e6;
+                    }
+
+                    #cashupSummaryModal .reconciliation-info {
+                        background-color: #f8f9fa;
+                    }
+
+                    #cashupSummaryModal .reconciliation-result.text-warning {
+                        background-color: #fff3cd;
+                        color: #856404;
+                    }
+
+                    #cashupSummaryModal .reconciliation-result.text-danger {
+                        background-color: #f8d7da;
+                        color: #721c24;
+                    }
+
+                    #cashupSummaryModal .total-row {
+                        border-top: 2px solid #dee2e6;
+                    }
+                </style>
             </div>
             <!-- /.modal-body -->
             <div class="modal-footer">

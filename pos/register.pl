@@ -104,17 +104,29 @@ if ( !$registers->count ) {
     my $op = $input->param('op') // '';
     if ( $op eq 'cud-cashup' ) {
         if ( $logged_in_user->has_permission( { cash_management => 'cashup' } ) ) {
-            my $cashup = $cash_register->add_cashup(
-                {
-                    manager_id => $logged_in_user->id,
-                    amount     => $cash_register->outstanding_accountlines->total
-                }
-            );
+            my $amount = $input->param('amount');
 
-            # Redirect to prevent duplicate submissions (POST/REDIRECT/GET pattern)
-            print $input->redirect(
-                "/cgi-bin/koha/pos/register.pl?registerid=" . $registerid . "#cashup-" . $cashup->id );
-            exit;
+            # add_cashup() sanitizes (trims, limits length, empty-to-undef) the note itself
+            my $reconciliation_note = $input->param('reconciliation_note');
+
+            if ( defined $amount && $amount =~ /^\d+(?:\.\d{1,2})?$/ ) {
+
+                my $cashup = $cash_register->add_cashup(
+                    {
+                        manager_id          => $logged_in_user->id,
+                        amount              => $amount,
+                        reconciliation_note => $reconciliation_note
+                    }
+                );
+
+                # Redirect to prevent duplicate submissions (POST/REDIRECT/GET pattern)
+                print $input->redirect(
+                    "/cgi-bin/koha/pos/register.pl?registerid=" . $registerid . "#cashup-" . $cashup->id );
+                exit;
+
+            } else {
+                $template->param( error_cashup_amount => 1 );
+            }
         } else {
             $template->param( error_cashup_permission => 1 );
         }

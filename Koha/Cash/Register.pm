@@ -17,7 +17,10 @@ package Koha::Cash::Register;
 
 use Modern::Perl;
 
+use Koha::Account;
+use Koha::Account::Line;
 use Koha::Account::Lines;
+use Koha::Account::Offset;
 use Koha::Account::Offsets;
 use Koha::Cash::Register::Actions;
 use Koha::Cash::Register::Cashups;
@@ -125,6 +128,22 @@ sub outstanding_accountlines {
         $since->count
         ? { 'date' => { '>' => $since->get_column('timestamp')->as_query } }
         : {};
+
+    # Exclude reconciliation accountlines from outstanding accountlines
+    $local_conditions->{'-and'} = [
+        {
+            '-or' => [
+                { 'credit_type_code' => { '!=' => 'CASHUP_SURPLUS' } },
+                { 'credit_type_code' => undef }
+            ]
+        },
+        {
+            '-or' => [
+                { 'debit_type_code' => { '!=' => 'CASHUP_DEFICIT' } },
+                { 'debit_type_code' => undef }
+            ]
+        }
+    ];
     my $merged_conditions =
         $conditions
         ? { %{$conditions}, %{$local_conditions} }
@@ -208,27 +227,120 @@ sub drop_default {
 
     my $cashup = $cash_register->add_cashup(
         {
-            manager_id => $logged_in_user->id,
-            amount     => $cash_register->outstanding_accountlines->total
+            manager_id            => $logged_in_user->id,
+            amount                => $amount_removed_from_register,
+            [ reconciliation_note => $reconciliation_note ]
         }
     );
 
 Add a new cashup action to the till, returns the added action.
+If amount differs from expected amount, creates surplus/deficit accountlines.
 
 =cut
 
 sub add_cashup {
     my ( $self, $params ) = @_;
 
-    my $rs = $self->_result->add_to_cash_register_actions(
-        {
-            code       => 'CASHUP',
-            manager_id => $params->{manager_id},
-            amount     => $params->{amount}
-        }
-    )->discard_changes;
+    my $manager_id          = $params->{manager_id};
+    my $amount              = $params->{amount};
+    my $reconciliation_note = $params->{reconciliation_note};
 
-    return Koha::Cash::Register::Cashup->_new_from_dbic($rs);
+    # Sanitize reconciliation note - treat empty/whitespace-only as undef
+    if ( defined $reconciliation_note ) {
+        $reconciliation_note = substr( $reconciliation_note, 0, 1000 );    # Limit length
+        $reconciliation_note =~ s/^\s+|\s+$//g;                            # Trim whitespace
+        $reconciliation_note = undef if $reconciliation_note eq '';        # Empty after trim = undef
+    }
+
+    # Calculate expected amount from outstanding accountlines
+    my $expected_amount = $self->outstanding_accountlines->total;
+
+    # For backward compatibility, if no actual amount is specified, use expected amount
+    $amount //= abs($expected_amount);
+
+    # Calculate difference (actual - expected)
+    my $difference = $amount - abs($expected_amount);
+
+    # Use database transaction to ensure consistency
+    my $schema = $self->_result->result_source->schema;
+    my $cashup;
+
+    $schema->txn_do(
+        sub {
+            # Create the cashup action with actual amount
+            my $rs = $self->_result->add_to_cash_register_actions(
+                {
+                    code       => 'CASHUP',
+                    manager_id => $manager_id,
+                    amount     => $amount
+                }
+            )->discard_changes;
+
+            $cashup = Koha::Cash::Register::Cashup->_new_from_dbic($rs);
+
+            # Create reconciliation accountline if there's a difference
+            if ( $difference != 0 ) {
+
+                if ( $difference > 0 ) {
+
+                    # Surplus: more cash found than expected (credits are negative amounts)
+                    my $surplus = Koha::Account::Line->new(
+                        {
+                            date                => \'DATE_SUB(NOW(), INTERVAL 1 SECOND)',
+                            amount              => -abs($difference),                             # Credits are negative
+                            amountoutstanding   => 0,
+                            description         => 'Cash register surplus found during cashup',
+                            credit_type_code    => 'CASHUP_SURPLUS',
+                            payment_type        => 'CASH',
+                            manager_id          => $manager_id,
+                            interface           => 'intranet',
+                            branchcode          => $self->branch,
+                            register_id         => $self->id,
+                            note                => $reconciliation_note
+                        }
+                    )->store();
+
+                    # Record the account offset
+                    my $account_offset = Koha::Account::Offset->new(
+                        {
+                            credit_id => $surplus->id,
+                            type      => 'CREATE',
+                            amount    => -abs($difference)    # Offsets match the line amount
+                        }
+                    )->store();
+
+                } else {
+
+                    # Deficit: less cash found than expected
+                    my $deficit = Koha::Account::Line->new(
+                        {
+                            date                => \'DATE_SUB(NOW(), INTERVAL 1 SECOND)',
+                            amount              => abs($difference),
+                            amountoutstanding   => 0,
+                            description         => 'Cash register deficit found during cashup',
+                            debit_type_code     => 'CASHUP_DEFICIT',
+                            payment_type        => 'CASH',
+                            manager_id          => $manager_id,
+                            interface           => 'intranet',
+                            branchcode          => $self->branch,
+                            register_id         => $self->id,
+                            note                => $reconciliation_note
+                        }
+                    )->store();
+                    my $account_offset = Koha::Account::Offset->new(
+                        {
+                            debit_id => $deficit->id,
+                            type     => 'CREATE',
+                            amount   => abs($difference)    # Debits have positive offsets
+                        }
+                    )->store();
+
+                }
+            }
+        }
+    );
+
+    return $cashup;
 }
 
 =head3 to_api_mapping
