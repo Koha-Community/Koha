@@ -57,3 +57,13 @@ Accounting:
                 branchyyyymmincr: 'Automatically generate credit numbers in the form <branchcode>yyyymm0001'
                 incremental: 'Automatically generate credit numbers in the form 1, 2, 3'
             - Automatic generation also has to be enabled for each credit type (<a href="/cgi-bin/koha/admin/credit_types.pl">Configure credit types</a>).
+        -
+            - pref: CashupReconciliationNoteRequired
+              choices:
+                1: "Require"
+                0: "Don't require"
+            - a reconciliation note when completing cashup with discrepancies between expected and actual amounts.
+        -
+            - "Use authorized value category "
+            - pref: CashupReconciliationNoteAuthorisedValue
+            - " for reconciliation notes during cashup. Leave empty to allow free text entry."

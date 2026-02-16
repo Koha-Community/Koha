@@ -33,5 +33,45 @@ return {
             $out,
             "Staff can now record actual cash amounts during cashup with automatic surplus/deficit tracking"
         );
+
+        # Add CashupReconciliationNoteRequired preference
+        $dbh->do(
+            q{
+            INSERT IGNORE INTO systempreferences (variable, value, options, explanation, type)
+            VALUES (
+                'CashupReconciliationNoteRequired',
+                '0',
+                '',
+                'Require a reconciliation note when completing cashup with discrepancies between expected and actual amounts',
+                'YesNo'
+            )
+        }
+        );
+
+        say_success( $out, "Added CashupReconciliationNoteRequired system preference" );
+        say_info(
+            $out,
+            "CashupReconciliationNoteRequired: Controls whether reconciliation notes are required during cashup with discrepancies"
+        );
+
+        # Add CashupReconciliationNoteAuthorisedValue preference
+        $dbh->do(
+            q{
+            INSERT IGNORE INTO systempreferences (variable, value, options, explanation, type)
+            VALUES (
+                'CashupReconciliationNoteAuthorisedValue',
+                '',
+                '',
+                'Authorized value category to use for cashup reconciliation notes (leave empty for free text)',
+                'Free'
+            )
+        }
+        );
+
+        say_success( $out, "Added CashupReconciliationNoteAuthorisedValue system preference" );
+        say_info(
+            $out,
+            "CashupReconciliationNoteAuthorisedValue: Optionally restrict reconciliation notes to authorized values"
+        );
     },
 };

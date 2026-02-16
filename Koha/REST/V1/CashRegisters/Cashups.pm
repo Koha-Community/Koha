@@ -63,7 +63,27 @@ sub get {
     my $c = shift->openapi->valid_input or return;
 
     return try {
+
+        # Try to find as a completed cashup first. find() looks up
+        # cash_register_actions by primary key directly, bypassing the
+        # code = 'CASHUP' condition search() applies, so it can return any
+        # action type here -- check explicitly rather than trusting it.
         my $cashup = Koha::Cash::Register::Cashups->find( $c->param('cashup_id') );
+        undef $cashup if $cashup && $cashup->code ne 'CASHUP';
+
+        # If not found, try as a CASHUP_START action (for preview)
+        unless ($cashup) {
+            require Koha::Cash::Register::Actions;
+            my $action = Koha::Cash::Register::Actions->find( $c->param('cashup_id') );
+
+            # Only allow CASHUP_START actions for preview
+            if ( $action && $action->code eq 'CASHUP_START' ) {
+
+                # Wrap as Cashup object for summary generation
+                require Koha::Cash::Register::Cashup;
+                $cashup = Koha::Cash::Register::Cashup->_new_from_dbic( $action->_result );
+            }
+        }
 
         return $c->render_resource_not_found("Cashup")
             unless $cashup;

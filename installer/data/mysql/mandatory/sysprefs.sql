@@ -152,6 +152,8 @@ INSERT INTO systempreferences ( `variable`, `value` ) VALUES
 ('CardnumberLength', ''),
 ('CardnumberLog','1'),
 ('casAuthentication','0'),
+('CashupReconciliationNoteAuthorisedValue', ''),
+('CashupReconciliationNoteRequired', '0'),
 ('casLogout','0'),
 ('casServerUrl','https://localhost:8443/cas'),
 ('casServerVersion','2'),

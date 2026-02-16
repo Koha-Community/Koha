@@ -155,11 +155,11 @@ subtest 'list() tests' => sub {
 
 subtest 'get() tests' => sub {
 
-    plan tests => 10;
+    plan tests => 14;
 
     $schema->storage->txn_begin;
 
-    my $cashup    = $builder->build_object( { class => 'Koha::Cash::Register::Cashups' } );
+    my $cashup = $builder->build_object( { class => 'Koha::Cash::Register::Cashups', value => { code => 'CASHUP' } } );
     my $librarian = $builder->build_object(
         {
             class => 'Koha::Patrons',
@@ -191,6 +191,23 @@ subtest 'get() tests' => sub {
     $t->get_ok("//$userid:$password@/api/v1/cashups/$non_existent_id")
         ->status_is(404)
         ->json_is( '/error' => 'Cashup not found' );
+
+    # An in-progress CASHUP_START action is exposed as a preview
+    my $cashup_start = $builder->build_object(
+        {
+            class => 'Koha::Cash::Register::Actions',
+            value => {
+                register_id => $cashup->register_id,
+                code        => 'CASHUP_START',
+                manager_id  => $librarian->borrowernumber,
+            }
+        }
+    );
+
+    $t->get_ok( "//$userid:$password@/api/v1/cashups/" . $cashup_start->id )
+        ->status_is(200)
+        ->json_is( '/cashup_id'        => $cashup_start->id )
+        ->json_is( '/cash_register_id' => $cashup_start->register_id );
 
     # Test that anonymous_refund permission also grants access (bug fix)
     my $refund_librarian = $builder->build_object(
