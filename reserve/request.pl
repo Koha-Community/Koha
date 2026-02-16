@@ -668,7 +668,6 @@ if (   ( $findborrower && $borrowernumber_hold || $findclub && $club_hold )
         }
 
         # existingreserves building
-        my @reserveloop;
         my $total_holds       = 0;
         my $hold_branches     = [];
         my $hold_itemtypes    = [];
@@ -735,7 +734,6 @@ if (   ( $findborrower && $borrowernumber_hold || $findclub && $club_hold )
         $biblioloopiter{title}          = $biblio->title;
         $biblioloopiter{author}         = $biblio->author;
         $biblioloopiter{rank}           = $fixedRank;
-        $biblioloopiter{reserveloop}    = \@reserveloop;
         $biblioloopiter{total_holds}    = $total_holds;
         $biblioloopiter{hold_branches}  = $hold_branches;
         $biblioloopiter{hold_itemtypes} = $hold_itemtypes;
@@ -743,10 +741,6 @@ if (   ( $findborrower && $borrowernumber_hold || $findclub && $club_hold )
         # Pass through any reserve charge
         if ($patron) {
             $biblioloopiter{reserve_charge} = GetReserveFee( $patron->borrowernumber, $biblionumber );
-        }
-
-        if (@reserveloop) {
-            $template->param( reserveloop => \@reserveloop );
         }
 
         $template->param( total_holds => $total_holds );

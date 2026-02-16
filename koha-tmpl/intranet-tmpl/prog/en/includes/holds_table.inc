@@ -2,9 +2,6 @@
 [% SET hold_cancellation = AuthorisedValues.GetAuthValueDropbox('HOLD_CANCELLATION') %]
 [% USE AuthorisedValues %]
 
-[%#This include depends on the asset js/form-submit.js. Any template making use of this include must import form-submit.js as well. %]
-[%#FIXME can form-submit.js be imported into this file directly? %]
-
 <table id="patron_holds_table_[% biblio_id | html %]_[% split_data | html %]" class="holds_table" data-total-holds="[% total_holds | html %]">
     <thead>
         <tr>

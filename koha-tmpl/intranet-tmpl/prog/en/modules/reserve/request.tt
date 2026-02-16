@@ -1303,7 +1303,7 @@
                 <label for="always_show_holds">Always show holds</label>
                 [% IF always_show_holds == 'DONT' %]
                     <input type="checkbox" name="always_show_holds" id="always_show_holds" value="DO" />
-                    [% UNLESS reserveloop %]
+                    [% UNLESS total_holds %]
                         <a class="btn btn-default" value="Show holds" id="show_holds_now" href="/cgi-bin/koha/reserve/request.pl?biblionumber=[% biblio.biblionumber | uri %]&show_holds_now=1">Show holds ([% hold_count | html %])</a>
                     [% END %]
                 [% ELSE %]
@@ -1429,7 +1429,7 @@
                 </div>
             </form>
             <!-- /#existing_holds -->
-        [% END # IF reserveloop %]
+        [% END # IF total_holds %]
     [% END # UNLESS patron %]
 [% END %]
 
