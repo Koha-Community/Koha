@@ -180,6 +180,10 @@
                                                 ><i class="fa fa-print"></i> Print</a
                                             >
                                         [% END %]
+                                    [% ELSIF ( account.debit_type_code == 'PAYOUT' ) %]
+                                        <a target="_blank" href="/cgi-bin/koha/pos/printreceipt.pl?action=print&amp;accountlines_id=[% account.accountlines_id | uri %]" class="btn btn-default btn-xs receipt-print-action"
+                                            ><i class="fa fa-print"></i> Print</a
+                                        >
                                     [% ELSE %]
                                         <a target="_blank" href="printinvoice.pl?action=print&amp;accountlines_id=[% account.accountlines_id | uri %]" class="btn btn-default btn-xs invoice-print-action"><i class="fa fa-print"></i> Print</a>
                                     [% END %]
