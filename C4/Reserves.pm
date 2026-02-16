@@ -1266,6 +1266,9 @@ sub ModReserve {
         if ( exists $params->{expirationdate} ) {
             $properties->{expirationdate} = $params->{expirationdate} || undef;
         }
+        if ( exists $params->{item_level_hold} ) {
+            $properties->{item_level_hold} = $params->{item_level_hold};
+        }
 
         $hold->set($properties)->store();
 

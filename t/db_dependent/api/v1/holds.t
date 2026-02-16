@@ -527,7 +527,7 @@ subtest 'suspend and resume tests' => sub {
         ->json_is(
         '/end_date',
         output_pref( { dt => $date, dateformat => 'iso', dateonly => 1 } )
-        )->header_is( Location => "/api/v1/holds/" . $hold->id . "/suspension", 'The Location header is set' );
+    )->header_is( Location => "/api/v1/holds/" . $hold->id . "/suspension", 'The Location header is set' );
 
     $t->delete_ok( "//$userid:$password@/api/v1/holds/" . $hold->id . "/suspension" )
         ->status_is( 204, 'REST3.2.4' )
@@ -1236,7 +1236,7 @@ subtest 'pickup_locations() tests' => sub {
 
 subtest 'edit() tests' => sub {
 
-    plan tests => 47;
+    plan tests => 63;
 
     $schema->storage->txn_begin;
 
@@ -1293,12 +1293,13 @@ subtest 'edit() tests' => sub {
         {
             class => "Koha::Holds",
             value => {
-                biblionumber   => $biblio->biblionumber,
-                branchcode     => $library_3->branchcode,
-                itemnumber     => undef,
-                priority       => 1,
-                reservedate    => '2022-01-01',
-                expirationdate => '2022-03-01'
+                biblionumber    => $biblio->biblionumber,
+                branchcode      => $library_3->branchcode,
+                itemnumber      => undef,
+                item_level_hold => 0,
+                priority        => 1,
+                reservedate     => '2022-01-01',
+                expirationdate  => '2022-03-01'
             }
         }
     );
@@ -1359,14 +1360,15 @@ subtest 'edit() tests' => sub {
         {
             class => "Koha::Holds",
             value => {
-                biblionumber   => $biblio->biblionumber,
-                branchcode     => $library_3->branchcode,
-                itemnumber     => $item->itemnumber,
-                priority       => 1,
-                suspend        => 0,
-                suspend_until  => undef,
-                reservedate    => '2022-01-01',
-                expirationdate => '2022-03-01'
+                biblionumber    => $biblio->biblionumber,
+                branchcode      => $library_3->branchcode,
+                itemnumber      => $item->itemnumber,
+                item_level_hold => 1,
+                priority        => 1,
+                suspend         => 0,
+                suspend_until   => undef,
+                reservedate     => '2022-01-01',
+                expirationdate  => '2022-03-01'
             }
         }
     );
@@ -1419,6 +1421,58 @@ subtest 'edit() tests' => sub {
     $item_hold->discard_changes;
     is( $item_hold->reservedate,    '2022-01-02', 'Hold date changed correctly' );
     is( $item_hold->expirationdate, '2022-03-02', 'Expiration date changed correctly' );
+
+    # Test item_level and item_id parameters
+    my $item_2 = $builder->build_sample_item( { biblionumber => $biblio->biblionumber } );
+
+    # Test changing item_id on an existing item-level hold
+    $item_hold_data = { item_id => $item_2->itemnumber };
+
+    $t->patch_ok( "//$userid:$password@/api/v1/holds/" . $item_hold->id => json => $item_hold_data )->status_is(200);
+
+    $item_hold->discard_changes;
+    is( $item_hold->itemnumber,      $item_2->itemnumber, 'Item ID changed correctly on item-level hold' );
+    is( $item_hold->item_level_hold, 1,                   'Hold remains item-level' );
+
+    # Test converting item-level hold to biblio-level hold
+    $item_hold_data = {
+        item_id    => undef,
+        item_level => Mojo::JSON->false
+    };
+
+    $t->patch_ok( "//$userid:$password@/api/v1/holds/" . $item_hold->id => json => $item_hold_data )->status_is(200);
+
+    $item_hold->discard_changes;
+    is( $item_hold->itemnumber,      undef, 'Item ID removed - converted to biblio-level hold' );
+    is( $item_hold->item_level_hold, 0,     'Hold is now biblio-level' );
+
+    # Test converting biblio-level hold to item-level hold
+    $biblio_hold_data = {
+        item_id    => $item->itemnumber,
+        item_level => Mojo::JSON->true
+    };
+
+    $t->patch_ok( "//$userid:$password@/api/v1/holds/" . $biblio_hold->id => json => $biblio_hold_data )
+        ->status_is(200);
+
+    $biblio_hold->discard_changes;
+    is( $biblio_hold->itemnumber,      $item->itemnumber, 'Item ID set - converted to item-level hold' );
+    is( $biblio_hold->item_level_hold, 1,                 'Hold is now item-level' );
+
+    # Test setting item_level flag without changing item_id
+    $item_hold_data = {
+        item_id    => $item->itemnumber,
+        item_level => Mojo::JSON->true
+    };
+
+    # First make it biblio-level
+    $item_hold->update( { itemnumber => undef, item_level_hold => 0 } );
+
+    $t->patch_ok( "//$userid:$password@/api/v1/holds/" . $item_hold->id => json => $item_hold_data )->status_is(200);
+
+    $item_hold->discard_changes;
+    is( $item_hold->itemnumber,      $item->itemnumber, 'Item ID set correctly' );
+    is( $item_hold->item_level_hold, 1,                 'item_level flag set correctly' );
 
     $schema->storage->txn_rollback;
 
