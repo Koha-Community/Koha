@@ -783,13 +783,13 @@ sub is_suspended {
     return $self->suspend();
 }
 
-=head3 item_level_holds
+=head3 item_level_holds_count
 
 Returns the number (count) of item-level holds for this hold's biblionumber and patron
 
 =cut
 
-sub item_level_holds {
+sub item_level_holds_count {
     my ($self) = @_;
 
     return Koha::Holds->search(

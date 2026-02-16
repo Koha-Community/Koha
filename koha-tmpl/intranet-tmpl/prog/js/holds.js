@@ -1314,7 +1314,7 @@ async function load_patron_holds_table(biblio_id, split_data) {
             ajax: {
                 url: url,
             },
-            embed: ["patron", "item", "item_group", "item_level_holds"],
+            embed: ["patron", "item", "item_group", "item_level_holds_count"],
             columnDefs: [
                 {
                     targets: [2, 3],
@@ -1347,7 +1347,7 @@ async function load_patron_holds_table(biblio_id, split_data) {
                             '" data-hold-group-id="' +
                             row.hold_group_id +
                             '" data-item_level_hold="' +
-                            row.item_level_holds +
+                            row.item_level_holds_count +
                             '" data-waiting="' +
                             (row.status === "W" ? "1" : "") +
                             '" data-intransit="' +
@@ -1646,7 +1646,7 @@ async function load_patron_holds_table(biblio_id, split_data) {
                                 row.item.external_id || __("No barcode");
                             const itemLink = `<a href="/cgi-bin/koha/catalogue/moredetail.pl?biblionumber=${row.biblio_id}&itemnumber=${row.item_id}">${barcode.escapeHtml ? barcode.escapeHtml() : barcode}</a>`;
 
-                            if (row.item_level_holds >= 2) {
+                            if (row.item_level_holds_count >= 2) {
                                 return `${__("Only item")} ${itemLink}${group_hold_message}`;
                             }
 

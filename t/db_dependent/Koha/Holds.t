@@ -20,7 +20,7 @@
 use Modern::Perl;
 
 use Test::NoWarnings;
-use Test::More tests => 14;
+use Test::More tests => 15;
 use Test::Warn;
 
 use C4::Circulation qw( AddIssue );
@@ -466,8 +466,7 @@ subtest 'cancel' => sub {
         my $reserve_id = C4::Reserves::AddReserve($hold_info);
         Koha::Holds->find($reserve_id)->cancel;
         my $number_of_logs =
-            $schema->resultset('ActionLog')
-            ->search( { module => 'HOLDS', action => 'CANCEL', object => $reserve_id } )
+            $schema->resultset('ActionLog')->search( { module => 'HOLDS', action => 'CANCEL', object => $reserve_id } )
             ->count;
         is( $number_of_logs, 0, 'Without HoldsLog, Koha::Hold->cancel should not have logged' );
 
@@ -475,8 +474,7 @@ subtest 'cancel' => sub {
         $reserve_id = C4::Reserves::AddReserve($hold_info);
         Koha::Holds->find($reserve_id)->cancel;
         $number_of_logs =
-            $schema->resultset('ActionLog')
-            ->search( { module => 'HOLDS', action => 'CANCEL', object => $reserve_id } )
+            $schema->resultset('ActionLog')->search( { module => 'HOLDS', action => 'CANCEL', object => $reserve_id } )
             ->count;
         is( $number_of_logs, 1, 'With HoldsLog, Koha::Hold->cancel should have logged' );
     };
@@ -1294,6 +1292,82 @@ subtest 'processing() tests' => sub {
     my $processing = $holds->processing;
     is( $processing->count, 1 );
     is( $processing->next->id, $hold_1->id, "First hold is the only one in 'processing'" );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'item_level_holds_count() tests' => sub {
+    plan tests => 6;
+
+    $schema->storage->txn_begin;
+
+    my $biblio       = $builder->build_sample_biblio;
+    my $item_1       = $builder->build_sample_item( { biblionumber => $biblio->biblionumber } );
+    my $item_2       = $builder->build_sample_item( { biblionumber => $biblio->biblionumber } );
+    my $patron       = $builder->build_object( { class => 'Koha::Patrons' } );
+    my $other_patron = $builder->build_object( { class => 'Koha::Patrons' } );
+
+    # Create a biblio-level hold for the patron
+    my $biblio_hold = $builder->build_object(
+        {
+            class => 'Koha::Holds',
+            value => {
+                borrowernumber  => $patron->borrowernumber,
+                biblionumber    => $biblio->biblionumber,
+                itemnumber      => undef,
+                item_level_hold => 0,
+            }
+        }
+    );
+
+    is( $biblio_hold->item_level_holds_count, 0, 'No item-level holds yet for this patron/biblio' );
+
+    # Create first item-level hold for the patron
+    my $item_hold_1 = $builder->build_object(
+        {
+            class => 'Koha::Holds',
+            value => {
+                borrowernumber  => $patron->borrowernumber,
+                biblionumber    => $biblio->biblionumber,
+                itemnumber      => $item_1->itemnumber,
+                item_level_hold => 1,
+            }
+        }
+    );
+
+    is( $item_hold_1->item_level_holds_count, 1, 'One item-level hold for this patron/biblio' );
+    is( $biblio_hold->item_level_holds_count, 1, 'Biblio-level hold also sees the item-level hold count' );
+
+    # Create second item-level hold for the patron
+    my $item_hold_2 = $builder->build_object(
+        {
+            class => 'Koha::Holds',
+            value => {
+                borrowernumber  => $patron->borrowernumber,
+                biblionumber    => $biblio->biblionumber,
+                itemnumber      => $item_2->itemnumber,
+                item_level_hold => 1,
+            }
+        }
+    );
+
+    is( $item_hold_2->item_level_holds_count, 2, 'Two item-level holds for this patron/biblio' );
+
+    # Create item-level hold for different patron - should not be counted
+    my $other_patron_hold = $builder->build_object(
+        {
+            class => 'Koha::Holds',
+            value => {
+                borrowernumber  => $other_patron->borrowernumber,
+                biblionumber    => $biblio->biblionumber,
+                itemnumber      => $item_1->itemnumber,
+                item_level_hold => 1,
+            }
+        }
+    );
+
+    is( $item_hold_1->item_level_holds_count,       2, 'Still two item-level holds for original patron' );
+    is( $other_patron_hold->item_level_holds_count, 1, 'Only one item-level hold for other patron' );
 
     $schema->storage->txn_rollback;
 };
