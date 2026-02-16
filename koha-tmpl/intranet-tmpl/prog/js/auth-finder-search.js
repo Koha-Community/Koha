@@ -15,6 +15,7 @@ $(document).ready(function () {
     // marclistanywhere
     $("#value_any").autocomplete({
         source: function (request, response) {
+            const operator_value = $("#marclistanywhere").val();
             $.ajax({
                 url: "/cgi-bin/koha/authorities/ysearch.pl",
                 dataType: "json",
@@ -25,7 +26,7 @@ $(document).ready(function () {
                     op: "do_search",
                     type: "intranet",
                     and_or: "and",
-                    operator: "start",
+                    operator: operator_value,
                     orderby: "HeadingAsc",
                     querytype: "all",
                 },
@@ -49,6 +50,7 @@ $(document).ready(function () {
     // marclistheading
     $("#value_match").autocomplete({
         source: function (request, response) {
+            const operator_value = $("#marclistheading").val();
             $.ajax({
                 url: "/cgi-bin/koha/authorities/ysearch.pl",
                 dataType: "json",
@@ -59,7 +61,7 @@ $(document).ready(function () {
                     op: "do_search",
                     type: "intranet",
                     and_or: "and",
-                    operator: "start",
+                    operator: operator_value,
                     orderby: "HeadingAsc",
                     querytype: "match",
                 },
@@ -83,6 +85,7 @@ $(document).ready(function () {
     // mainentry
     $("#value_main").autocomplete({
         source: function (request, response) {
+            const operator_value = $("#mainentry").val();
             $.ajax({
                 url: "/cgi-bin/koha/authorities/ysearch.pl",
                 dataType: "json",
@@ -93,7 +96,7 @@ $(document).ready(function () {
                     op: "do_search",
                     type: "intranet",
                     and_or: "and",
-                    operator: "start",
+                    operator: operator_value,
                     orderby: "HeadingAsc",
                     querytype: "mainentry",
                 },
@@ -117,6 +120,7 @@ $(document).ready(function () {
     // mainmainentry
     $("#value_mainstr").autocomplete({
         source: function (request, response) {
+            const operator_value = $("#mainmainentry").val();
             $.ajax({
                 url: "/cgi-bin/koha/authorities/ysearch.pl",
                 dataType: "json",
@@ -127,7 +131,7 @@ $(document).ready(function () {
                     op: "do_search",
                     type: "intranet",
                     and_or: "and",
-                    operator: "start",
+                    operator: operator_value,
                     orderby: "HeadingAsc",
                     querytype: "mainmainentry",
                 },
