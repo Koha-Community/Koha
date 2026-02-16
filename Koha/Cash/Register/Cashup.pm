@@ -61,23 +61,29 @@ Return a hashref containing a summary of transactions that make up this cashup.
 sub summary {
     my ($self) = @_;
     my $summary;
-    my $prior_cashup = Koha::Cash::Register::Cashups->search(
-        {
-            'timestamp' => { '<' => $self->timestamp },
-            register_id => $self->register_id
-        },
-        {
-            order_by => { '-desc' => [ 'timestamp', 'id' ] },
-            rows     => 1
-        }
-    );
 
-    my $previous = $prior_cashup->single;
+    # Get the session boundaries for this cashup
+    my ( $session_start, $session_end ) = $self->_get_session_boundaries;
 
-    my $conditions =
-        $previous
-        ? { 'date' => { '-between' => [ $previous->_result->get_column('timestamp'), $self->timestamp ] } }
-        : { 'date' => { '<'        => $self->timestamp } };
+    my $conditions;
+    if ( $session_start && $session_end ) {
+
+        # Complete session: between start and end (exclusive)
+        $conditions = {
+            'date' => {
+                '>' => $session_start,
+                '<' => $session_end
+            }
+        };
+    } elsif ($session_end) {
+
+        # Session from beginning to end
+        $conditions = { 'date' => { '<' => $session_end } };
+    } else {
+
+        # Shouldn't happen for a completed cashup, but fallback
+        $conditions = { 'date' => { '<' => $self->timestamp } };
+    }
 
     my $payout_transactions = $self->register->accountlines->search(
         {
@@ -198,8 +204,8 @@ sub summary {
     my $deficit_note = $deficit_record ? $deficit_record->note : undef;
 
     $summary = {
-        from_date      => $previous ? $previous->timestamp : undef,
-        to_date        => $self->timestamp,
+        from_date      => $session_start,
+        to_date        => $session_end,
         income_grouped => \@income,
         income_total   => abs($income_total),
         payout_grouped => \@payout,
@@ -215,6 +221,110 @@ sub summary {
     };
 
     return $summary;
+}
+
+=head3 accountlines
+
+Fetch the accountlines associated with this cashup
+
+=cut
+
+sub accountlines {
+    my ($self) = @_;
+
+    # Get the session boundaries for this cashup
+    my ( $session_start, $session_end ) = $self->_get_session_boundaries;
+
+    my $conditions;
+    if ( $session_start && $session_end ) {
+
+        # Complete session: between start and end (exclusive)
+        $conditions = {
+            'date' => {
+                '>' => $session_start,
+                '<' => $session_end
+            }
+        };
+    } elsif ($session_end) {
+
+        # Session from beginning to end
+        $conditions = { 'date' => { '<' => $session_end } };
+    } else {
+
+        # Shouldn't happen for a completed cashup, but fallback
+        $conditions = { 'date' => { '<' => $self->timestamp } };
+    }
+
+    return $self->register->accountlines->search($conditions);
+}
+
+=head3 _get_session_boundaries
+
+Internal method to determine the session boundaries for this cashup.
+Returns ($session_start, $session_end) timestamps.
+
+=cut
+
+sub _get_session_boundaries {
+    my ($self) = @_;
+
+    my $session_end = $self->_get_session_end;
+
+    # Find the previous CASHUP
+    my $session_start;
+    my $previous_cashup = $self->register->cashups(
+        { 'timestamp' => { '<' => $session_end } },
+        {
+            order_by => { '-desc' => [ 'timestamp', 'id' ] },
+            rows     => 1
+        }
+    )->single;
+
+    $session_start = $previous_cashup ? $previous_cashup->_get_session_end : undef;
+
+    return ( $session_start, $session_end );
+}
+
+sub _get_session_end {
+    my ($self) = @_;
+
+    my $session_end = $self->timestamp;
+
+    # Find if this CASHUP was part of a two-phase workflow
+    my $nearest_start = $self->register->_result->search_related(
+        'cash_register_actions',
+        {
+            'code'      => 'CASHUP_START',
+            'timestamp' => { '<' => $session_end }
+        },
+        {
+            order_by => { '-desc' => [ 'timestamp', 'id' ] },
+            rows     => 1
+        }
+    )->single;
+
+    if ($nearest_start) {
+
+        # Check if this CASHUP_START was completed by this CASHUP
+        # (no other CASHUP between them)
+        my $intervening_cashup = $self->register->cashups(
+            {
+                'timestamp' => {
+                    '>' => $nearest_start->timestamp,
+                    '<' => $session_end
+                }
+            },
+            { rows => 1 }
+        )->single;
+
+        if ( !$intervening_cashup ) {
+
+            # Two-phase workflow: session runs to CASHUP_START
+            $session_end = $nearest_start->timestamp;
+        }
+    }
+
+    return $session_end;
 }
 
 =head3 to_api_mapping

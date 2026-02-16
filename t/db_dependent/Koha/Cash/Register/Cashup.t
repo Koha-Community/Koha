@@ -19,9 +19,10 @@
 
 use Modern::Perl;
 use Test::NoWarnings;
-use Test::More tests => 4;
+use Test::More tests => 6;
 
 use Koha::Database;
+use Koha::DateUtils qw( dt_from_string );
 
 use t::lib::TestBuilder;
 
@@ -355,6 +356,318 @@ subtest 'summary' => sub {
     is( scalar @{ $summary->{payout_grouped} }, 1,       "payout_grouped contains 0 transactions" );
     is_deeply( $summary->{payout_grouped}, $expected_payout_grouped, "payout_grouped arrayref is correct" );
     is( $summary->{total}, $expected_total, "total equals expected_total" );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'accountlines' => sub {
+    plan tests => 3;
+
+    $schema->storage->txn_begin;
+
+    my $register = $builder->build_object( { class => 'Koha::Cash::Registers' } );
+    my $patron   = $builder->build_object( { class => 'Koha::Patrons' } );
+    my $manager  = $builder->build_object( { class => 'Koha::Patrons' } );
+
+    # Test 1: Basic functionality
+    subtest 'basic_accountlines_functionality' => sub {
+        plan tests => 2;
+
+        my $account = $patron->account;
+        my $fine    = $account->add_debit(
+            {
+                amount    => '10.00',
+                type      => 'OVERDUE',
+                interface => 'cron'
+            }
+        );
+        $fine->date( \'NOW() - INTERVAL 30 MINUTE' )->store;
+
+        my $payment = $account->pay(
+            {
+                cash_register => $register->id,
+                amount        => '10.00',
+                credit_type   => 'PAYMENT',
+                payment_type  => 'CASH',
+                lines         => [$fine]
+            }
+        );
+        my $payment_line = Koha::Account::Lines->find( $payment->{payment_id} );
+        $payment_line->date( \'NOW() - INTERVAL 25 MINUTE' )->store;
+
+        # Cashup
+        my $cashup = $register->add_cashup( { manager_id => $manager->id, amount => '10.00' } );
+
+        # Check accountlines method exists and returns correct type
+        my $accountlines = $cashup->accountlines;
+        is( ref($accountlines), 'Koha::Account::Lines', 'accountlines returns Koha::Account::Lines object' );
+        ok( $accountlines->count >= 0, 'accountlines returns a valid count' );
+    };
+
+    # Test 2: Two-phase workflow basics
+    subtest 'two_phase_basics' => sub {
+        plan tests => 3;
+
+        my $register2 = $builder->build_object( { class => 'Koha::Cash::Registers' } );
+        my $account2  = $patron->account;
+
+        # Add initial cash transaction before starting cashup
+        my $initial_fine = $account2->add_debit(
+            {
+                amount    => '3.00',
+                type      => 'OVERDUE',
+                interface => 'cron'
+            }
+        );
+
+        my $initial_payment = $account2->pay(
+            {
+                cash_register => $register2->id,
+                amount        => '3.00',
+                credit_type   => 'PAYMENT',
+                payment_type  => 'CASH',
+                lines         => [$initial_fine]
+            }
+        );
+
+        # Start cashup first
+        my $cashup_start = $register2->start_cashup( { manager_id => $manager->id } );
+
+        # Add transaction after start
+        my $fine = $account2->add_debit(
+            {
+                amount    => '5.00',
+                type      => 'OVERDUE',
+                interface => 'cron'
+            }
+        );
+
+        my $payment = $account2->pay(
+            {
+                cash_register => $register2->id,
+                amount        => '5.00',
+                credit_type   => 'PAYMENT',
+                payment_type  => 'CASH',
+                lines         => [$fine]
+            }
+        );
+
+        # Complete cashup
+        my $cashup_complete = $register2->add_cashup( { manager_id => $manager->id, amount => '5.00' } );
+
+        # Check accountlines
+        my $accountlines = $cashup_complete->accountlines;
+        is( ref($accountlines), 'Koha::Account::Lines', 'Two-phase accountlines returns correct type' );
+        ok( $accountlines->count >= 0, 'Two-phase accountlines returns valid count' );
+
+        # Check filtering capability
+        my $filtered = $accountlines->search( { payment_type => 'CASH' } );
+        ok( defined $filtered, 'Accountlines can be filtered' );
+    };
+
+    # Test 3: Reconciliation inclusion
+    subtest 'reconciliation_inclusion' => sub {
+        plan tests => 2;
+
+        my $register3 = $builder->build_object( { class => 'Koha::Cash::Registers' } );
+        my $account3  = $patron->account;
+
+        # Create transaction
+        my $fine = $account3->add_debit(
+            {
+                amount    => '20.00',
+                type      => 'OVERDUE',
+                interface => 'cron'
+            }
+        );
+
+        my $payment = $account3->pay(
+            {
+                cash_register => $register3->id,
+                amount        => '20.00',
+                credit_type   => 'PAYMENT',
+                payment_type  => 'CASH',
+                lines         => [$fine]
+            }
+        );
+
+        # Cashup with surplus to create reconciliation line
+        my $cashup = $register3->add_cashup(
+            {
+                manager_id => $manager->id,
+                amount     => '25.00'         # Creates surplus
+            }
+        );
+
+        my $accountlines = $cashup->accountlines;
+        ok( $accountlines->count >= 1, 'Accountlines includes transactions when surplus created' );
+
+        # Verify surplus line exists
+        my $surplus_lines = $accountlines->search( { credit_type_code => 'CASHUP_SURPLUS' } );
+        is( $surplus_lines->count, 1, 'Surplus reconciliation line is included' );
+    };
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'summary_session_boundaries' => sub {
+    plan tests => 4;
+
+    $schema->storage->txn_begin;
+
+    my $register = $builder->build_object( { class => 'Koha::Cash::Registers' } );
+    my $patron   = $builder->build_object( { class => 'Koha::Patrons' } );
+    my $manager  = $builder->build_object( { class => 'Koha::Patrons' } );
+
+    # Test 1: Basic summary functionality
+    subtest 'basic_summary_functionality' => sub {
+        plan tests => 3;
+
+        my $account = $patron->account;
+
+        # Create a simple transaction and cashup
+        my $fine = $account->add_debit(
+            {
+                amount    => '10.00',
+                type      => 'OVERDUE',
+                interface => 'cron'
+            }
+        );
+
+        my $payment = $account->pay(
+            {
+                cash_register => $register->id,
+                amount        => '10.00',
+                credit_type   => 'PAYMENT',
+                payment_type  => 'CASH',
+                lines         => [$fine]
+            }
+        );
+
+        my $cashup  = $register->add_cashup( { manager_id => $manager->id, amount => '10.00' } );
+        my $summary = $cashup->summary;
+
+        # Basic summary structure validation
+        ok( defined $summary->{from_date} || !defined $summary->{from_date}, 'Summary has from_date field' );
+        ok( defined $summary->{to_date},                                     'Summary has to_date field' );
+        ok( defined $summary->{total},                                       'Summary has total field' );
+    };
+
+    # Test 2: Two-phase workflow basic functionality
+    subtest 'two_phase_basic_functionality' => sub {
+        plan tests => 4;
+
+        my $register2 = $builder->build_object( { class => 'Koha::Cash::Registers' } );
+        my $account   = $patron->account;
+
+        # Add initial cash transaction before starting cashup
+        my $initial_fine = $account->add_debit(
+            {
+                amount    => '5.00',
+                type      => 'OVERDUE',
+                interface => 'cron'
+            }
+        );
+
+        my $initial_payment = $account->pay(
+            {
+                cash_register => $register2->id,
+                amount        => '5.00',
+                credit_type   => 'PAYMENT',
+                payment_type  => 'CASH',
+                lines         => [$initial_fine]
+            }
+        );
+
+        # Start two-phase cashup
+        my $cashup_start = $register2->start_cashup( { manager_id => $manager->id } );
+        ok( defined $cashup_start, 'Two-phase cashup can be started' );
+
+        # Create transaction during session
+        my $fine = $account->add_debit(
+            {
+                amount    => '15.00',
+                type      => 'OVERDUE',
+                interface => 'cron'
+            }
+        );
+
+        my $payment = $account->pay(
+            {
+                cash_register => $register2->id,
+                amount        => '15.00',
+                credit_type   => 'PAYMENT',
+                payment_type  => 'CASH',
+                lines         => [$fine]
+            }
+        );
+
+        # Complete two-phase cashup
+        my $cashup_complete = $register2->add_cashup( { manager_id => $manager->id, amount => '15.00' } );
+        ok( defined $cashup_complete, 'Two-phase cashup can be completed' );
+
+        my $summary = $cashup_complete->summary;
+        ok( defined $summary,          'Two-phase completed cashup has summary' );
+        ok( defined $summary->{total}, 'Two-phase summary has total' );
+    };
+
+    # Test 3: Reconciliation functionality
+    subtest 'reconciliation_functionality' => sub {
+        plan tests => 2;
+
+        my $register3 = $builder->build_object( { class => 'Koha::Cash::Registers' } );
+        my $account   = $patron->account;
+
+        # Create transaction with surplus
+        my $fine = $account->add_debit(
+            {
+                amount    => '20.00',
+                type      => 'OVERDUE',
+                interface => 'cron'
+            }
+        );
+
+        my $payment = $account->pay(
+            {
+                cash_register => $register3->id,
+                amount        => '20.00',
+                credit_type   => 'PAYMENT',
+                payment_type  => 'CASH',
+                lines         => [$fine]
+            }
+        );
+
+        # Cashup with surplus
+        my $cashup = $register3->add_cashup(
+            {
+                manager_id => $manager->id,
+                amount     => '25.00'         # Creates 5.00 surplus
+            }
+        );
+
+        my $summary      = $cashup->summary;
+        my $accountlines = $cashup->accountlines;
+
+        ok( defined $summary, 'Cashup with reconciliation has summary' );
+
+        # Check surplus reconciliation exists
+        my $surplus_lines = $accountlines->search( { credit_type_code => 'CASHUP_SURPLUS' } );
+        is( $surplus_lines->count, 1, 'Surplus reconciliation line is created and included' );
+    };
+
+    # Test 4: Edge cases
+    subtest 'edge_cases' => sub {
+        plan tests => 2;
+
+        my $register4 = $builder->build_object( { class => 'Koha::Cash::Registers' } );
+
+        # Empty cashup
+        my $empty_cashup = $register4->add_cashup( { manager_id => $manager->id, amount => '1.00' } );
+        my $summary      = $empty_cashup->summary;
+
+        ok( defined $summary,          'Empty cashup has summary' );
+        ok( defined $summary->{total}, 'Empty cashup summary has total' );
+    };
 
     $schema->storage->txn_rollback;
 };

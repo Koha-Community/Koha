@@ -52,6 +52,47 @@
             <div id="error_message" class="alert alert-warning"> Invalid amount entered for cashup. Please enter a valid monetary amount. </div>
         [% END %]
 
+        [% IF ( error_cashup_in_progress ) %]
+            <div id="error_message" class="alert alert-warning"> A cashup is already in progress for this register. </div>
+        [% END %]
+
+        [% IF ( error_cashup_no_transactions ) %]
+            <div id="error_message" class="alert alert-info"> Cannot start cashup - there are no transactions in this register since the last cashup. </div>
+        [% END %]
+
+        [% IF ( error_no_cashup_start ) %]
+            <div id="error_message" class="alert alert-warning"> No cashup session has been started. Please start a cashup before attempting to complete it. </div>
+        [% END %]
+
+        [% IF ( error_cashup_already_completed ) %]
+            <div id="error_message" class="alert alert-warning"> This cashup session has already been completed. </div>
+        [% END %]
+
+        [% IF ( error_cashup_start ) %]
+            <div id="error_message" class="alert alert-warning"> Failed to start cashup. Please try again. </div>
+        [% END %]
+
+        [% IF ( error_cashup_missing_param ) %]
+            <div id="error_message" class="alert alert-warning"> Missing required parameter for cashup: [% error_message | html %] </div>
+        [% END %]
+
+        [% IF ( error_cashup_amount_invalid ) %]
+            <div id="error_message" class="alert alert-warning"> The cashup amount must be a valid number. </div>
+        [% END %]
+
+        [% IF ( error_reconciliation_note_required ) %]
+            <div id="error_message" class="alert alert-warning"> Reconciliation note is required when cashup amount differs from expected amount. </div>
+        [% END %]
+
+        [% IF ( error_cashup_complete ) %]
+            <div id="error_message" class="alert alert-warning">
+                Failed to complete cashup. Please try again.
+                [% IF error_details %]
+                    <br /><strong>Error details:</strong> [% error_details | html %]
+                [% END %]
+            </div>
+        [% END %]
+
         [% IF ( error_refund_permission ) %]
             <div id="error_message" class="alert alert-warning"> You do not have permission to perform refund actions. </div>
         [% END %]
@@ -60,9 +101,28 @@
             <div id="error_message" class="alert alert-warning"> Account credit refunds are not available for anonymous transactions. Please choose a different refund type. </div>
         [% END %]
 
+        [% IF cashup_in_progress %]
+            <div class="alert alert-warning">
+                <i class="fa-solid fa-info-circle"></i>
+                [% SET progress_timestamp = cashup_in_progress.timestamp | $KohaDates(with_hours => 1) %]
+                [% tx("Cashup in progress - started {timestamp}. You can continue to make transactions while counting cash.", { timestamp = progress_timestamp }) | html %]
+                (<a data-bs-toggle="modal" data-cashup="[% cashup_in_progress.id | html %]" data-register="[% register.description | html %]" data-in-progress="true" href="#cashupSummaryModal" class="button"
+                    >[% t("Preview cashup summary") | html %]</a
+                >)
+            </div>
+        [% END %]
+
+        [% SET total_bankable = accountlines.total( payment_type => [ 'CASH', 'SIP00' ]) * -1 %]
+        [% SET total_transactions = accountlines.total() * -1 %]
         [% IF ( CAN_user_cash_management_cashup ) %]
             <div id="toolbar" class="btn-toolbar">
-                <button id="pos_cashup" type="button" class="btn btn-default" data-bs-toggle="modal" data-bs-target="#confirmCashupModal"><i class="fa-solid fa-money-bill-1"></i> Record cashup</button>
+                [% IF cashup_in_progress %]
+                    <button id="pos_complete_cashup" type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#confirmCashupModal"> <i class="fa-solid fa-check"></i> Complete cashup </button>
+                [% ELSE %]
+                    <button type="button" class="btn btn-default" data-bs-toggle="modal" data-bs-target="#triggerCashupModal" [% IF total_transactions == 0 %]disabled title="No transactions"[% END %]>
+                        <i class="fa fa-money-bill-alt"></i> Record cashup
+                    </button>
+                [% END %]
             </div>
         [% END %]
 
@@ -85,7 +145,7 @@
             <li>Float: [% register.starting_float | $Price %]</li>
             <li>Total income (cash): [% accountlines.credits_total * -1 | $Price %] ([% accountlines.credits_total(payment_type => [ 'CASH', 'SIP00' ]) * -1 | $Price %])</li>
             <li>Total outgoing (cash): [% accountlines.debits_total * -1 | $Price %] ([% accountlines.debits_total( payment_type => [ 'CASH', 'SIP00' ]) * -1 | $Price %])</li>
-            <li>Total bankable: [% accountlines.total( payment_type => [ 'CASH', 'SIP00' ]) * -1 | $Price %]</li>
+            <li>Total bankable: [% total_bankable | $Price %]</li>
         </ul>
 
         [% IF register.last_cashup %]
@@ -372,60 +432,6 @@
     [% END %]
 [% END %]
 
-<!-- Confirm cashup modal -->
-<div class="modal" id="confirmCashupModal" tabindex="-1" role="dialog" aria-labelledby="confirmCashupLabel">
-    <form id="cashup_form" method="post" enctype="multipart/form-data" class="validated">
-        [% INCLUDE 'csrf-token.inc' %]
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h1 class="modal-title" id="confirmCashupLabel">Confirm cashup of <em>[% register.description | html %]</em></h1>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <fieldset class="rows">
-                        <ol>
-                            <li>
-                                <span class="label">Expected amount to remove:</span>
-                                <span id="expected_amount" class="expected-amount">[% accountlines.total( payment_type => [ 'CASH', 'SIP00' ]) * -1 | $Price %]</span>
-                            </li>
-                            <li>
-                                <span class="label">Float to remain:</span>
-                                <span>[% register.starting_float | $Price %]</span>
-                            </li>
-                            <li>
-                                <label class="required" for="amount">Actual amount removed from register:</label>
-                                <input type="text" inputmode="decimal" pattern="^\d+(\.\d{2})?$" id="amount" name="amount" required="required" />
-                                <span class="required">Required</span>
-                            </li>
-                            <li id="reconciliation_display" style="display: none;">
-                                <span class="label">Reconciliation:</span>
-                                <span id="reconciliation_text"></span>
-                            </li>
-                            <li id="reconciliation_note_field" style="display: none;">
-                                <label for="reconciliation_note">Note (optional):</label>
-                                <textarea id="reconciliation_note" name="reconciliation_note" rows="3" cols="40" maxlength="1000" placeholder="Enter a note explaining the surplus or deficit..."></textarea>
-                                <div class="hint">Maximum 1000 characters</div>
-                            </li>
-                        </ol>
-                    </fieldset>
-                </div>
-                <!-- /.modal-body -->
-                <div class="modal-footer">
-                    <input type="hidden" name="registerid" value="[% register.id | html %]" />
-                    <input type="hidden" name="op" value="cud-cashup" />
-                    <button type="submit" class="btn btn-primary" id="pos_cashup_confirm">Confirm cashup</button>
-                    <button type="button" class="btn btn-default" data-bs-dismiss="modal">Cancel</button>
-                </div>
-                <!-- /.modal-footer -->
-            </div>
-            <!-- /.modal-content -->
-        </div>
-        <!-- /.modal-dialog -->
-    </form>
-</div>
-<!-- /#confirmCashupModal -->
-
 <!-- Issue refund modal -->
 <div class="modal" id="issueRefundModal" tabindex="-1" role="dialog" aria-labelledby="issueRefundLabel">
     <form id="refund_form" method="post" enctype="multipart/form-data" class="validated">
@@ -470,12 +476,15 @@
 <!-- /#issueRefundModal -->
 
 [% INCLUDE 'modals/cashup_summary.inc' %]
+[% INCLUDE 'modals/trigger_cashup.inc' modal_id='triggerCashupModal' register_description=register.description register_id=register.id %]
+[% INCLUDE 'modals/confirm_cashup.inc' modal_id='confirmCashupModal' reconciliation_note_avs=reconciliation_note_avs reconciliation_note_required=reconciliation_note_required cashup_in_progress=cashup_in_progress %]
 
 [% MACRO jsinclude BLOCK %]
     [% INCLUDE 'datatables.inc' %]
     [% INCLUDE 'format_price.inc' %]
     [% INCLUDE 'js-date-format.inc' %]
     [% Asset.js("js/cashup_modal.js") | $raw %]
+    [% Asset.js("js/modals/cashup_modals.js") | $raw %]
     [% Asset.js("js/modal_printer.js") | $raw %]
     [% INCLUDE 'calendar.inc' %]
     <script nonce="[% Koha.CSPNonce | $raw %]">
@@ -640,57 +649,16 @@
             }
         });
 
-        // Real-time reconciliation calculation for cashup modal
-        $("#amount").on("input", function() {
-            var actualAmount = parseFloat($(this).val()) || 0;
-            var expectedText = $("#expected_amount").text().replace(/[£$,]/g, '');
-            var expectedAmount = parseFloat(expectedText) || 0;
-            var difference = actualAmount - expectedAmount;
-
-            if ($(this).val() && !isNaN(actualAmount)) {
-                var reconciliationText = "";
-                var reconciliationClass = "";
-                var hasDiscrepancy = false;
-
-                if (difference > 0) {
-                    reconciliationText = "Surplus: " + difference.format_price();
-                    reconciliationClass = "success";
-                    hasDiscrepancy = true;
-                } else if (difference < 0) {
-                    reconciliationText = "Deficit: " + Math.abs(difference).format_price();
-                    reconciliationClass = "warning";
-                    hasDiscrepancy = true;
-                } else {
-                    reconciliationText = "Balanced - no surplus or deficit";
-                    reconciliationClass = "success";
-                    hasDiscrepancy = false;
-                }
-
-                $("#reconciliation_text").text(reconciliationText)
-                    .removeClass("success warning")
-                    .addClass(reconciliationClass);
-                $("#reconciliation_display").show();
-
-                // Show/hide note field based on whether there's a discrepancy
-                if (hasDiscrepancy) {
-                    $("#reconciliation_note_field").show();
-                } else {
-                    $("#reconciliation_note_field").hide();
-                    $("#reconciliation_note").val(''); // Clear note when balanced
-                }
-            } else {
-                $("#reconciliation_display").hide();
-                $("#reconciliation_note_field").hide();
-            }
+        // Initialize cashup modals
+        initTriggerCashupModal('#triggerCashupModal', {
+            bankableAmount: [% accountlines.total( payment_type => [ 'CASH', 'SIP00' ]) * -1 | html %],
+            registerFloat: [% register.starting_float | html %]
         });
 
-        // Reset modal when opened
-        $("#confirmCashupModal").on("shown.bs.modal", function() {
-            // Start with empty actual amount field (user must enter amount)
-            $("#amount").val('').focus();
-            $("#reconciliation_display").hide();
-            $("#reconciliation_note_field").hide();
-            $("#reconciliation_note").val('');
+        initConfirmCashupModal('#confirmCashupModal', {
+            hasAuthorisedValues: [% reconciliation_note_avs ? 'true' : 'false' | html %],
+            noteRequired: [% reconciliation_note_required ? 'true' : 'false' | html %],
+            isInProgress: [% cashup_in_progress ? 'true' : 'false' | html %]
         });
     </script>
 [% END %]
