@@ -557,7 +557,7 @@ sub _convert_facets {
             if ( exists( $special{$type} ) ) {
                 $label = $special{$type}->{$t} // $t;
             } elsif ( $type_to_label{$type}{av_cat} ) {
-                $label = $authorised_values{$t};
+                $label = $authorised_values{$t} // $t;
             } else {
                 $label = $t;
             }
