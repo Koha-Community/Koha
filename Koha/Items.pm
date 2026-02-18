@@ -584,7 +584,9 @@ sub batch_update {
             )
         } catch {
             push @errors, {
-                error => eval { $_->{error} } || "$_",
+                itemnumber => $item->itemnumber,
+                barcode    => $item->barcode,
+                error      => eval { $_->message } || eval { $_->error } || "$_",
             };
             warn $_
         };

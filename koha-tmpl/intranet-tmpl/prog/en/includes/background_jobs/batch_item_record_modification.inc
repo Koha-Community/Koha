@@ -23,6 +23,20 @@
                 <div class="alert alert-warning">
                     [% SET error_items_count = report.errors.size %]
                     <span>[% tnx('{count} item could not be modified.', '{count} items could not be modified.', error_items_count, { count = error_items_count }) | html %]</span>
+                    <ul>
+                        [% FOR error IN report.errors %]
+                            <li>
+                                [% error.barcode | html %]
+                                [% IF error.error == 'intransit_cannot_withdraw' %]
+                                    : [% t('Item is in transit') | html %]
+                                [% ELSIF error.error == 'onloan_cannot_withdraw' %]
+                                    : [% t('Item is checked out') | html %]
+                                [% ELSE %]
+                                    : [% error.error | html %]
+                                [% END %]
+                            </li>
+                        [% END %]
+                    </ul>
                 </div>
             [% END %]
         </div>
