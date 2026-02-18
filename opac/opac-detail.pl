@@ -595,7 +595,7 @@ if ( $show_holds_count || $show_priority ) {
     $template->param( holds_count => $holds->count );
     while ( my $hold = $holds->next ) {
         $item_reserves{ $hold->itemnumber }++ if $hold->itemnumber;
-        if ( $show_priority && $hold->borrowernumber == $borrowernumber ) {
+        if ( $show_priority && $borrowernumber && $hold->borrowernumber == $borrowernumber ) {
             $has_hold = 1;
             $hold->itemnumber
                 ? ( $priority{ $hold->itemnumber } = $hold->priority )
