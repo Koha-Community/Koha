@@ -19,7 +19,7 @@ use Modern::Perl;
 
 use DateTime::Duration;
 use Test::NoWarnings;
-use Test::More tests => 50;
+use Test::More tests => 49;
 use Test::Warn;
 
 use t::lib::Mocks;
@@ -38,7 +38,7 @@ use Koha::Suggestions;
 BEGIN {
     use_ok(
         'C4::Suggestions',
-        qw( ModSuggestion DelSuggestion MarcRecordFromNewSuggestion GetUnprocessedSuggestions DelSuggestionsOlderThan )
+        qw( ModSuggestion DelSuggestion MarcRecordFromNewSuggestion GetUnprocessedSuggestions )
     );
 }
 
@@ -421,44 +421,6 @@ subtest 'GetUnprocessedSuggestions' => sub {
         scalar(@$unprocessed_suggestions), 0,
         'GetUnprocessedSuggestions should not return the suggestion, it has not been suggested 5 days ago'
     );
-};
-
-subtest 'DelSuggestionsOlderThan' => sub {
-    plan tests => 6;
-
-    Koha::Suggestions->delete;
-
-    # Add four suggestions; note that STATUS needs uppercase (FIXME)
-    my $d1 = output_pref( { dt => dt_from_string->add( days => -2 ), dateformat => 'sql' } );
-    my $d2 = output_pref( { dt => dt_from_string->add( days => -4 ), dateformat => 'sql' } );
-    my $sugg01 =
-        $builder->build( { source => 'Suggestion', value => { manageddate => $d1, date => $d2, STATUS => 'ASKED' } } );
-    my $sugg02 = $builder->build(
-        { source => 'Suggestion', value => { manageddate => $d1, date => $d2, STATUS => 'CHECKED' } } );
-    my $sugg03 =
-        $builder->build( { source => 'Suggestion', value => { manageddate => $d2, date => $d2, STATUS => 'ASKED' } } );
-    my $sugg04 = $builder->build(
-        { source => 'Suggestion', value => { manageddate => $d2, date => $d2, STATUS => 'ACCEPTED' } } );
-
-    # Test no parameter: should do nothing
-    C4::Suggestions::DelSuggestionsOlderThan();
-    is( Koha::Suggestions->count, 4, 'No suggestions deleted' );
-
-    # Test zero: should do nothing too
-    C4::Suggestions::DelSuggestionsOlderThan(0);
-    is( Koha::Suggestions->count, 4, 'No suggestions deleted again' );
-
-    # Test negative value
-    C4::Suggestions::DelSuggestionsOlderThan(-1);
-    is( Koha::Suggestions->count, 4, 'No suggestions deleted for -1' );
-
-    # Test positive values
-    C4::Suggestions::DelSuggestionsOlderThan(5);
-    is( Koha::Suggestions->count, 4, 'No suggestions>5d deleted' );
-    C4::Suggestions::DelSuggestionsOlderThan(3);
-    is( Koha::Suggestions->count, 3, '1 suggestions>3d deleted' );
-    C4::Suggestions::DelSuggestionsOlderThan(1);
-    is( Koha::Suggestions->count, 2, '1 suggestions>1d deleted' );
 };
 
 subtest 'EmailPurchaseSuggestions' => sub {

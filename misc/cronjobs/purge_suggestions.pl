@@ -63,7 +63,12 @@ if ( !$confirm || $help || !defined($days) ) {
     print $usage;
 } elsif ( $days and $days > 0 ) {
     print "Purging suggestions older than $days days\n" if $verbose;
-    DelSuggestionsOlderThan($days);
+    Koha::Suggestions->search( { STATUS => { '!=' => 'ASKED' } } )->filter_by_last_update(
+        {
+            days                  => $days,
+            timestamp_column_name => 'manageddate',
+        }
+    )->delete;
 } else {
     warn "This script requires a positive number of days. Aborted.\n";
 }

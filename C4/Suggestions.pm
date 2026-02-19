@@ -27,7 +27,6 @@ BEGIN {
         GetSuggestion
         ModStatus
         ModSuggestion
-        DelSuggestionsOlderThan
         GetUnprocessedSuggestions
         MarcRecordFromNewSuggestion
     );
@@ -176,28 +175,6 @@ sub DelSuggestion {
         my $suggestiondeleted = $sth->execute($suggestionid);
         return $suggestiondeleted;
     }
-}
-
-=head2 DelSuggestionsOlderThan
-    &DelSuggestionsOlderThan($days)
-
-    Delete all suggestions older than TODAY-$days , that have be accepted or rejected.
-    We do now allow a negative number. If you want to delete all suggestions, just use Koha::Suggestions->delete or so.
-
-=cut
-
-sub DelSuggestionsOlderThan {
-    my ($days) = @_;
-    return unless $days && $days > 0;
-    my $dbh = C4::Context->dbh;
-    my $sth = $dbh->prepare(
-        q{
-        DELETE FROM suggestions
-        WHERE STATUS<>'ASKED'
-            AND manageddate < ADDDATE(NOW(), ?)
-    }
-    );
-    $sth->execute("-$days");
 }
 
 =head2 GetUnprocessedSuggestions
