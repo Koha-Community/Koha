@@ -135,7 +135,6 @@ for my $routing (@routinglist) {
 }
 
 my $routingnotes = $serials[0]->{'routingnotes'};
-$routingnotes =~ s/\n/\<br \/\>/g;
 
 $template->param(
     title                                            => $subs->{'bibliotitle'},
