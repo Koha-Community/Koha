@@ -77,12 +77,7 @@ the id of the suggestion to select.
 
 =item op
 
-can be equal to
-    * connectDuplicate :
-        then call to the function : ConnectSuggestionAndBiblio.
-        i.e set the biblionumber of this suggestion.
-    * else :
-        is the default value.
+The operation to perform
 
 =back
 
@@ -93,7 +88,7 @@ use Modern::Perl;
 use CGI             qw ( -utf8 );
 use C4::Auth        qw( get_template_and_user );
 use C4::Output      qw( output_html_with_http_headers );
-use C4::Suggestions qw( ConnectSuggestionAndBiblio ModSuggestion );
+use C4::Suggestions qw( ModSuggestion );
 use C4::Budgets;
 
 use Koha::Acquisition::Booksellers;
@@ -123,10 +118,6 @@ my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
         flagsrequired => { acquisition => 'order_manage' },
     }
 );
-
-if ( $op eq 'connectDuplicate' ) {
-    ConnectSuggestionAndBiblio( $suggestionid, $duplicateNumber );
-}
 
 if ( $op eq 'cud-link_order' and $link_order ) {
     my $order = Koha::Acquisition::Orders->find($link_order);

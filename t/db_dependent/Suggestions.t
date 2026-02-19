@@ -19,7 +19,7 @@ use Modern::Perl;
 
 use DateTime::Duration;
 use Test::NoWarnings;
-use Test::More tests => 53;
+use Test::More tests => 50;
 use Test::Warn;
 
 use t::lib::Mocks;
@@ -38,7 +38,7 @@ use Koha::Suggestions;
 BEGIN {
     use_ok(
         'C4::Suggestions',
-        qw( ModSuggestion ConnectSuggestionAndBiblio DelSuggestion MarcRecordFromNewSuggestion GetUnprocessedSuggestions DelSuggestionsOlderThan )
+        qw( ModSuggestion DelSuggestion MarcRecordFromNewSuggestion GetUnprocessedSuggestions DelSuggestionsOlderThan )
     );
 }
 
@@ -309,16 +309,6 @@ warning_like(
 $messages = C4::Letters::GetQueuedMessages( { borrowernumber => $borrowernumber2 } );
 
 is( scalar(@$messages), 1, 'No new letter should have been generated if the update raised an error' );
-
-is( ConnectSuggestionAndBiblio(), '0E0', 'ConnectSuggestionAndBiblio without arguments returns 0E0' );
-my $biblio_2                      = $builder->build_object( { class => 'Koha::Biblios' } );
-my $connect_suggestion_and_biblio = ConnectSuggestionAndBiblio( $my_suggestionid, $biblio_2->biblionumber );
-is( $connect_suggestion_and_biblio, '1', 'ConnectSuggestionAndBiblio returns 1' );
-$suggestion = Koha::Suggestions->find($my_suggestionid);
-is(
-    $suggestion->biblionumber, $biblio_2->biblionumber,
-    'ConnectSuggestionAndBiblio updates the biblio number correctly'
-);
 
 my $del_suggestion = {
     title       => 'my deleted title',

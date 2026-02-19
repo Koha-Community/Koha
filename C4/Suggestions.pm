@@ -23,7 +23,6 @@ use base 'Exporter';
 
 BEGIN {
     our @EXPORT = qw(
-        ConnectSuggestionAndBiblio
         DelSuggestion
         GetSuggestion
         ModStatus
@@ -138,26 +137,6 @@ sub ModSuggestion {
     }
 
     return 1;    # No useful if the exception is raised earlier
-}
-
-=head2 ConnectSuggestionAndBiblio
-
-&ConnectSuggestionAndBiblio($ordernumber,$biblionumber)
-
-connect a suggestion to an existing biblio
-
-=cut
-
-sub ConnectSuggestionAndBiblio {
-    my ( $suggestionid, $biblionumber ) = @_;
-    my $dbh   = C4::Context->dbh;
-    my $query = q{
-        UPDATE suggestions
-        SET    biblionumber=?
-        WHERE  suggestionid=?
-    };
-    my $sth = $dbh->prepare($query);
-    $sth->execute( $biblionumber, $suggestionid );
 }
 
 =head2 DelSuggestion
