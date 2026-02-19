@@ -1839,7 +1839,9 @@
                         $(toggle_to+"[for='"+input_label+"']").next().prop('checked', $(this).next().prop('checked') );
                         return;
                     }
-                    $(toggle_to+"[for='"+input_label+"']").next().val(  $(this).next().val() );
+                    var source_input = $(this).nextAll(":input[name]").first();
+                    var target_input = $(toggle_to+"[for='"+input_label+"']").nextAll(":input[name]").first();
+                    target_input.val( source_input.val() );
                 });
 
                 $(".toggler").toggle();
