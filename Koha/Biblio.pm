@@ -394,10 +394,17 @@ sub check_booking {
         ? $existing_bookings->search( { booking_id => { '!=' => $booking_id } } )->count
         : $existing_bookings->count;
 
+    # Only count checkouts on bookable items; checkouts on non-bookable
+    # sibling items should not reduce the pool of available bookable items.
+    my $bookable_item_ids = [ $bookable_items->reset->get_column('itemnumber') ];
+
     my $checkouts = $self->current_checkouts->search(
         {
-            date_due        => { '>='      => $dtf->format_datetime($start_date) },
-            "me.itemnumber" => { '-not_in' => $existing_bookings->_resultset->get_column('item_id')->as_query }
+            date_due        => { '>=' => $dtf->format_datetime($start_date) },
+            "me.itemnumber" => {
+                '-not_in' => $existing_bookings->_resultset->get_column('item_id')->as_query,
+                '-in'     => $bookable_item_ids,
+            },
         }
     );
     $booked_count += $checkouts->count;

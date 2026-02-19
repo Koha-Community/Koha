@@ -2214,7 +2214,7 @@ sub host_record {
 }
 
 subtest 'check_booking tests' => sub {
-    plan tests => 6;
+    plan tests => 7;
 
     $schema->storage->txn_begin;
 
@@ -2395,6 +2395,49 @@ subtest 'check_booking tests' => sub {
     );
 
     is( $check_booking, 1, "Koha::Biblio->check_booking returns true when we can book on an item" );
+
+    subtest 'checkouts on non-bookable items do not cause false clashes' => sub {
+        plan tests => 2;
+
+        my $nb_biblio     = $builder->build_sample_biblio();
+        my $bookable_item = $builder->build_sample_item( { biblionumber => $nb_biblio->biblionumber, bookable => 1 } );
+        my $non_bookable_item =
+            $builder->build_sample_item( { biblionumber => $nb_biblio->biblionumber, bookable => 0 } );
+
+        my $nb_patron = $builder->build_object( { class => 'Koha::Patrons' } );
+
+        # Check out the non-bookable item
+        AddIssue( $nb_patron, $non_bookable_item->barcode );
+
+        my $nb_start = dt_from_string()->truncate( to => 'day' );
+        my $nb_end   = $nb_start->clone->add( days => 7 );
+
+        my $can_book = $nb_biblio->check_booking(
+            {
+                start_date => $nb_start,
+                end_date   => $nb_end,
+            }
+        );
+        is(
+            $can_book, 1,
+            "Checkout on non-bookable item does not reduce availability"
+        );
+
+        # Now also check out the bookable item to confirm it
+        # correctly detects unavailability
+        AddIssue( $nb_patron, $bookable_item->barcode );
+
+        $can_book = $nb_biblio->check_booking(
+            {
+                start_date => $nb_start,
+                end_date   => $nb_end,
+            }
+        );
+        is(
+            $can_book, 0,
+            "Checkout on bookable item correctly reduces availability"
+        );
+    };
 
     $schema->storage->txn_rollback;
 };
