@@ -21,14 +21,20 @@
     [% INCLUDE 'prefs-admin-search.inc' %]
 [% END %]
 
-<div id="record-source"></div>
+[% WRAPPER 'sub-header.inc' %]
+    <div id="vue-breadcrumbs-container"></div>
+[% END #/ WRAPPER sub-header.inc %]
+
+[% WRAPPER 'main-container.inc' aside='admin-menu' %]
+    <div id="record-source"></div>
+[% END #/ WRAPPER main-container.inc %]
 
 [% MACRO jsinclude BLOCK %]
     [% INCLUDE 'calendar.inc' %]
     <!-- FIXME: this shouldn't be needed -->
     [% INCLUDE 'datatables.inc' %]
     [% INCLUDE 'js-date-format.inc' %]
-
+    [% Asset.js("js/admin-menu.js") | $raw %]
     [% Asset.js("js/vue/dist/admin/record_sources.js") | $raw %]
 [% END %]
 

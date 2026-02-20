@@ -6,6 +6,7 @@
                     v-if="idx < breadcrumbs.length - 1 || item.breadcrumbFormat"
                     :item="item"
                     :params="params"
+                    :isBreadcrumb="true"
                 ></NavigationItem>
                 <NavigationItem
                     v-else
@@ -16,6 +17,7 @@
                         href: undefined,
                     }"
                     :params="params"
+                    :isBreadcrumb="true"
                 ></NavigationItem>
             </template>
         </ol>

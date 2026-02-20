@@ -1,5 +1,5 @@
 <template>
-    <li class="breadcrumb-item">
+    <li :class="{ 'breadcrumb-item': isBreadcrumb }">
         <span>
             <router-link
                 v-if="item.name && !item.disabled"
@@ -39,8 +39,10 @@
         </span>
         <ul v-if="item.children && item.children.length">
             <NavigationItem
-                v-for="(item, key) in item.children"
-                :item="item"
+                v-for="(child, key) in item.children"
+                v-bind:key="key"
+                :item="child"
+                :isBreadcrumb="isBreadcrumb"
             ></NavigationItem>
         </ul>
     </li>
@@ -52,6 +54,10 @@ export default {
     props: {
         item: Object,
         params: Object,
+        isBreadcrumb: {
+            type: Boolean,
+            default: false,
+        },
     },
 };
 </script>

@@ -72,6 +72,21 @@ export const componentRegistry: Map<string, WebComponentDynamicImport> =
                 },
             },
         ],
+        [
+            "admin-menu",
+            {
+                importFn: async () => {
+                    const module = await import(
+                        /* webpackChunkName: "admin-menu" */
+                        "../components/Islands/AdminMenu.vue"
+                    );
+                    return module.default;
+                },
+                config: {
+                    stores: [],
+                },
+            },
+        ],
     ]);
 
 /**
