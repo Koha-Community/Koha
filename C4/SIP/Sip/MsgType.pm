@@ -1124,13 +1124,6 @@ sub handle_patron_info {
         $resp .= maybe_add( FID_FEE_AMT,  $patron->fee_amount, $server );
         $resp .= add_field( FID_FEE_LMT, $patron->fee_limit, $server );
 
-        # TODO: zero or more item details for 2.0 can go here:
-        #          hold_items
-        #       overdue_items
-        #       charged_items
-        #          fine_items
-        #        recall_items
-
         $resp .= summary_info( $ils, $patron, $summary, $start, $end, $server );
 
         $resp .= maybe_add( FID_HOME_ADDR,  $patron->address,    $server );
