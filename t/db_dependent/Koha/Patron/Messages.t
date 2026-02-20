@@ -20,7 +20,7 @@
 use Modern::Perl;
 
 use Test::NoWarnings;
-use Test::More tests => 15;
+use Test::More tests => 16;
 
 use C4::Context;
 use Koha::ActionLogs;
@@ -139,6 +139,32 @@ is(
     $patron_obj->messages->filter_by_unread->count, $current_messages_count - 1,
     "One message has been marked as read"
 );
+
+subtest 'message_without_newlines' => sub {
+    plan tests => 6;
+
+    my $message = Koha::Patron::Message->new( { message => "  Line 1\nLine 2\r\nLine 3 \n  " } );
+
+    is(
+        $message->message_without_newlines, 'Line 1 Line 2 Line 3',
+        'Newlines and carriage returns removed, collapsed and trimmed'
+    );
+
+    $message->message("Multiple    spaces     stay collapsed");
+    is( $message->message_without_newlines, 'Multiple spaces stay collapsed', 'Multiple spaces collapsed' );
+
+    $message->message("\n\nOnly\nNewlines\n\n");
+    is( $message->message_without_newlines, 'Only Newlines', 'Only newlines handled correctly' );
+
+    $message->message("Already clean");
+    is( $message->message_without_newlines, 'Already clean', 'Clean string returns as is' );
+
+    $message->message(q{});
+    is( $message->message_without_newlines, undef, 'Empty string returns undef' );
+
+    $message->message(undef);
+    is( $message->message_without_newlines, undef, 'Undef message returns undef' );
+};
 
 $schema->storage->txn_rollback;
 
