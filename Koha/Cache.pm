@@ -45,9 +45,8 @@ use Module::Load::Conditional qw( can_load );
 use Sereal::Encoder;
 use Sereal::Decoder;
 
-use C4::Context;
-use Koha::Cache::Object;
 use Koha::Config;
+use Koha::Cache::Object;
 
 use base qw(Class::Accessor);
 
@@ -76,8 +75,8 @@ sub new {
     # Should we continue to support MEMCACHED ENV vars?
     $self->{'namespace'} ||= $ENV{MEMCACHED_NAMESPACE};
     my @servers = split /,/, $ENV{MEMCACHED_SERVERS} || '';
-    $self->{namespace} ||= C4::Context->config('memcached_namespace') || 'koha';
-    @servers = split /,/, C4::Context->config('memcached_servers') // ''
+    $self->{namespace} ||= Koha::Config->get_instance->get('memcached_namespace') || 'koha';
+    @servers = split /,/, Koha::Config->get_instance->get('memcached_servers') // ''
         unless @servers;
     $self->{namespace} .= ":$subnamespace:";
 
