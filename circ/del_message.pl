@@ -50,7 +50,7 @@ if ( $message
 
 $message->delete if $message && $op eq 'cud-delete';
 
-if ( $input->param('from') eq  "moremember" ) {
+if ( $input->param('from') && $input->param('from') eq "moremember" ) {
     print $input->redirect(
         "/cgi-bin/koha/members/moremember.pl?borrowernumber=$borrowernumber");
 } else {
