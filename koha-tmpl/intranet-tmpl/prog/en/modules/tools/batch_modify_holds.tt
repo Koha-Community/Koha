@@ -103,63 +103,133 @@
         </div>
         <!-- /#modify_holds_search -->
     [% ELSIF view == "report" %]
-        <h1>Modified holds</h1>
-        <div id="modified_holds_results-wrapper">
-            <div id="modified_holds_results" class="page-section">
-                <table id="modified_holds">
-                    <thead>
-                        <tr>
-                            <th>Title</th>
-                            <th>Patron</th>
-                            <th>Pickup location</th>
-                            <th>Priority</th>
-                            <th>Expiration date</th>
-                            <th>Status</th>
-                            <th>Suspended</th>
-                            <th>Suspended until</th>
-                            <th>Notes</th>
-                            <!-- Add other columns as needed -->
-                        </tr>
-                    </thead>
-                    <tbody>
-                        [% FOREACH hold IN updated_holds_obj %]
+        <h1>Modified holds report</h1>
+        [% IF updated_holds_obj %]
+            <div id="modified_holds_results-wrapper">
+                <div id="modified_holds_results" class="page-section">
+                    <h2>Updated holds ([% total_updated | html %])</h2>
+                    <table id="modified_holds">
+                        <thead>
                             <tr>
-                                <td>[% INCLUDE 'biblio-title.inc' biblio=hold.biblio link = 1 %]</td>
-                                <td>[% INCLUDE 'patron-title.inc' invert_name=1 patron=hold.borrower hide_patron_infos_if_needed=1 link_to="circulation_reserves" %]</td>
-                                <td>[% hold.branch.branchname | html %]</td>
-                                <td>[% hold.priority | html %]</td>
-                                <td>[% hold.expirationdate | $KohaDates %]</td>
-                                <td>
-                                    [% IF hold.found == 'F' %]
-                                        <span>Fulfilled</span>
-                                    [% ELSIF hold.cancellationdate %]
-                                        <span>Cancelled</span>
-                                    [% ELSIF hold.found == 'W' %]
-                                        [% IF hold.cancellation_requests.count == 0 %]
-                                            <span>Waiting</span>
-                                        [% ELSE %]
-                                            <span>Cancelled</span>
-                                        [% END %]
-                                    [% ELSIF hold.found == 'T' %]
-                                        <span>In transit</span>
-                                    [% ELSE %]
-                                        <span>Pending</span>
-                                    [% END %]
-                                </td>
-                                <td>[% IF hold.suspend %]Yes[% ELSE %]No[% END %]</td>
-                                <td>[% IF hold.suspend_until %][% hold.suspend_until | $KohaDates %][% ELSE %]-[% END %]</td>
-                                <td>[% hold.reservenotes | html %]</td>
+                                <th>Title</th>
+                                <th>Patron</th>
+                                <th>Pickup location</th>
+                                <th>Priority</th>
+                                <th>Expiration date</th>
+                                <th>Status</th>
+                                <th>Suspended</th>
+                                <th>Suspended until</th>
+                                <th>Notes</th>
+                                <th>Result</th>
+                                <!-- Add other columns as needed -->
                             </tr>
-                        [% END %]
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody>
+                            [% FOREACH hold IN updated_holds_obj %]
+                                <tr>
+                                    <td>[% INCLUDE 'biblio-title.inc' biblio=hold.biblio link = 1 %]</td>
+                                    <td>[% INCLUDE 'patron-title.inc' invert_name=1 patron=hold.borrower hide_patron_infos_if_needed=1 link_to="circulation_reserves" %]</td>
+                                    <td>[% hold.branch.branchname | html %]</td>
+                                    <td>[% hold.priority | html %]</td>
+                                    <td>[% hold.expirationdate | $KohaDates %]</td>
+                                    <td>
+                                        [% IF hold.found == 'F' %]
+                                            <span>Fulfilled</span>
+                                        [% ELSIF hold.cancellationdate %]
+                                            <span>Cancelled</span>
+                                        [% ELSIF hold.found == 'W' %]
+                                            [% IF hold.cancellation_requests.count == 0 %]
+                                                <span>Waiting</span>
+                                            [% ELSE %]
+                                                <span>Cancelled</span>
+                                            [% END %]
+                                        [% ELSIF hold.found == 'T' %]
+                                            <span>In transit</span>
+                                        [% ELSE %]
+                                            <span>Pending</span>
+                                        [% END %]
+                                    </td>
+                                    <td>[% IF hold.suspend %]Yes[% ELSE %]No[% END %]</td>
+                                    <td>[% IF hold.suspend_until %][% hold.suspend_until | $KohaDates %][% ELSE %]-[% END %]</td>
+                                    <td>[% hold.reservenotes | html %]</td>
+                                    <td><span class="badge rounded-pill bg-success">Success</span></td>
+                                </tr>
+                            [% END %]
+                        </tbody>
+                    </table>
+                </div>
+                <!-- /#modified_holds_results -->
             </div>
-            <!-- /#modified_holds_results -->
-            <fieldset class="action">
-                <a href="/cgi-bin/koha/tools/batch_modify_holds.pl">Return to batch hold modification</a>
-            </fieldset>
-        </div>
-        <!-- /#modified_holds_results-wrapper -->
+            <!-- /#modified_holds_results-wrapper -->
+        [% END %]
+        [% IF failed_holds_obj %]
+            <div id="failed_holds_results-wrapper">
+                <div id="failed_holds_results" class="page-section">
+                    <h2>Failed holds ([% total_failed | html %])</h2>
+                    <div class="alert alert-warning">Important: The following holds were not modified.</div>
+                    <table id="failed_holds">
+                        <thead>
+                            <tr>
+                                <th>Title</th>
+                                <th>Patron</th>
+                                <th>Pickup location</th>
+                                <th>Priority</th>
+                                <th>Expiration date</th>
+                                <th>Status</th>
+                                <th>Suspended</th>
+                                <th>Suspended until</th>
+                                <th>Notes</th>
+                                <th>Result</th>
+                                <!-- Add other columns as needed -->
+                            </tr>
+                        </thead>
+                        <tbody>
+                            [% FOREACH failure IN failed_holds_obj %]
+                                [% SET hold = failure.hold %]
+                                <tr>
+                                    <td>[% INCLUDE 'biblio-title.inc' biblio=hold.biblio link = 1 %]</td>
+                                    <td>[% INCLUDE 'patron-title.inc' invert_name=1 patron=hold.borrower hide_patron_infos_if_needed=1 link_to="circulation_reserves" %]</td>
+                                    <td>[% hold.branch.branchname | html %]</td>
+                                    <td>[% hold.priority | html %]</td>
+                                    <td>[% hold.expirationdate | $KohaDates %]</td>
+                                    <td>
+                                        [% IF hold.found == 'F' %]
+                                            <span>Fulfilled</span>
+                                        [% ELSIF hold.cancellationdate %]
+                                            <span>Cancelled</span>
+                                        [% ELSIF hold.found == 'W' %]
+                                            [% IF hold.cancellation_requests.count == 0 %]
+                                                <span>Waiting</span>
+                                            [% ELSE %]
+                                                <span>Cancelled</span>
+                                            [% END %]
+                                        [% ELSIF hold.found == 'T' %]
+                                            <span>In transit</span>
+                                        [% ELSE %]
+                                            <span>Pending</span>
+                                        [% END %]
+                                    </td>
+                                    <td>[% IF hold.suspend %]Yes[% ELSE %]No[% END %]</td>
+                                    <td>[% IF hold.suspend_until %][% hold.suspend_until | $KohaDates %][% ELSE %]-[% END %]</td>
+                                    <td>[% hold.reservenotes | html %]</td>
+                                    <td>
+                                        <span class="badge rounded-pill bg-warning text-dark">Failed</span>
+                                        [% IF failure.reason == 'pickupLocationNotAllowed' %]
+                                            New pickup location is invalid
+                                        [% END %]
+                                    </td>
+                                </tr>
+                            [% END %]
+                        </tbody>
+                    </table>
+                </div>
+                <!-- /#failed_holds_results -->
+            </div>
+            <!-- /#failed_holds_results-wrapper -->
+        [% END %]
+        <fieldset class="action">
+            <a href="/cgi-bin/koha/tools/batch_modify_holds.pl">Return to batch hold modification</a>
+        </fieldset>
     [% END %]
     <div id="modify_holds_results-wrapper" style="display:none;">
         <div id="toolbar" class="btn-toolbar">
@@ -642,12 +712,20 @@
                 return true;
             });
 
-            //Modified holds table
+            //Modified holds table and failed holds table share table settings
             var table_settings = [% TablesSettings.GetTableSettings( 'circ', 'holds', 'modified_holds', 'json' ) | $raw %];
-            $("#modified_holds").kohaTable({
-                pagingType: "full",
-                autoWidth: false
-            }, table_settings);
+            [% IF updated_holds_obj  %]
+                $("#modified_holds").kohaTable({
+                    pagingType: "full",
+                    autoWidth: false
+                }, table_settings);
+            [% END %]
+            [% IF failed_holds_obj  %]
+                $("#failed_holds").kohaTable({
+                    pagingType: "full",
+                    autoWidth: false
+                }, table_settings);
+            [% END %]
 
         });
     </script>

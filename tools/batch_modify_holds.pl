@@ -60,57 +60,84 @@ if ( $op eq 'cud-form' ) {
     my $clear_hold_notes    = $input->param('clear_hold_notes');
 
     @hold_ids = $input->multi_param('hold_id');
-    my @holds_data = ();
+    my @holds_data   = ();
+    my @failed_holds = ();
 
     my $holds_to_update =
         Koha::Holds->search( { reserve_id => { -in => \@hold_ids } }, { join => [ "item", "biblio" ] } );
 
     while ( my $hold = $holds_to_update->next ) {
         my $hold_before_mod = $hold->unblessed;
-
-        if ($new_expiration_date) {
-            $hold->expirationdate($new_expiration_date)->store;
-        }
-
+        my $hold_failed     = 0;
         if ( $new_pickup_loc && ( $hold->branchcode ne $new_pickup_loc ) ) {
+            my $patron = $hold->patron;
+            my $item   = $hold->item;
+            my $locations;
+
+            if ($item) {
+
+                #item level pickup location allowed?
+                $locations = $item->pickup_locations( { patron => $patron } );
+            } else {
+
+                #record level pickup location allowed?
+                $locations = $hold->biblio->pickup_locations( { patron => $patron } );
+            }
+
+            unless ( $locations->search( { branchcode => $new_pickup_loc } )->count ) {
+                push @failed_holds, { hold => $hold, reason => 'pickupLocationNotAllowed' };
+                $hold_failed = 1;
+                next;
+            }
+
             $hold->branchcode($new_pickup_loc)->store;
         }
 
-        if ( $new_suspend_status ne "" ) {
-            if ( $new_suspend_status && !$hold->is_found ) {
-                $hold->suspend(1)->store;
-                if ($new_suspend_date) {
+        #only continue to update the hold if it hasn't failed
+        unless ($hold_failed) {
+            if ( $new_suspend_status ne "" ) {
+                if ( $new_suspend_status && !$hold->is_found ) {
+                    $hold->suspend(1)->store;
+                    if ($new_suspend_date) {
+                        $hold->suspend_until($new_suspend_date)->store;
+                    } else {
+                        $hold->suspend_until(undef)->store;
+                    }
+                } elsif ( !$new_suspend_status && $new_suspend_date ) {
+                    $hold->suspend(1)->store;
                     $hold->suspend_until($new_suspend_date)->store;
                 } else {
+                    $hold->suspend(0)->store;
                     $hold->suspend_until(undef)->store;
                 }
-            } elsif ( !$new_suspend_status && $new_suspend_date ) {
-                $hold->suspend(1)->store;
-                $hold->suspend_until($new_suspend_date)->store;
-            } else {
-                $hold->suspend(0)->store;
-                $hold->suspend_until(undef)->store;
             }
+
+            if ($new_expiration_date) {
+                $hold->expirationdate($new_expiration_date)->store;
+            }
+
+            if ($new_hold_note) {
+                $hold->reservenotes($new_hold_note)->store;
+            }
+
+            if ($clear_hold_notes) {
+                $hold->reservenotes(undef)->store;
+            }
+
+            push @holds_data, $hold;
+
+            logaction( 'HOLDS', 'MODIFY', $hold->reserve_id, $hold, undef, $hold_before_mod )
+                if C4::Context->preference('HoldsLog');
         }
 
-        if ($new_hold_note) {
-            $hold->reservenotes($new_hold_note)->store;
-        }
-
-        if ($clear_hold_notes) {
-            $hold->reservenotes(undef)->store;
-        }
-
-        logaction( 'HOLDS', 'MODIFY', $hold->reserve_id, $hold, undef, $hold_before_mod )
-            if C4::Context->preference('HoldsLog');
-
-        push @holds_data, $hold;
     }
 
     $template->param(
         updated_holds     => to_json( \@hold_ids ),
         updated_holds_obj => \@holds_data,
+        failed_holds_obj  => \@failed_holds,
         total_updated     => scalar @holds_data,
+        total_failed      => scalar @failed_holds,
         view              => 'report',
     );
 
