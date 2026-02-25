@@ -103,7 +103,8 @@ sub running {
         $report_ids{$1} = 1 if $row->{info} =~ /saved_sql\.id:\s*(\d+)/;
     }
 
-    return $class->search( { id => { -in => [ keys %report_ids ] } } );
+    my $rs = $class->search( { id => { -in => [ keys %report_ids ] } } );
+    return wantarray ? $rs->as_list : $rs;
 }
 
 =head3 _processlist_rows

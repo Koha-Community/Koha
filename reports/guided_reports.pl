@@ -885,6 +885,42 @@ if ( $op eq 'run' ) {
     my $template_code   = $input->param('template_code');
     my $want_full_chart = $input->param('want_full_chart') || 0;
 
+    # Determine if the user is running this report too many times
+    my @duplicate_running_report_ids;
+    my $duplicate_running_reports_per_user_limit = C4::Context->config('duplicate_running_reports_per_user_limit');
+    if ( $duplicate_running_reports_per_user_limit && C4::Context->userenv ) {
+        my $user_id = C4::Context->userenv ? C4::Context->userenv->{number} : undef;
+        @duplicate_running_report_ids = Koha::Reports->running( { report_id => $report_id, user_id => $user_id } );
+    }
+    my $duplicate_running_reports_per_user_limit_exceeded =
+        $duplicate_running_reports_per_user_limit
+        ? scalar(@duplicate_running_report_ids) >= $duplicate_running_reports_per_user_limit
+        : 0;
+
+    # Determine if the user is running too many reports in total
+    my @total_running_for_user_report_ids;
+    my $total_running_reports_per_user_limit = C4::Context->config('total_running_reports_per_user_limit');
+    if ( $total_running_reports_per_user_limit && C4::Context->userenv ) {
+        my $user_id = C4::Context->userenv ? C4::Context->userenv->{number} : undef;
+        @total_running_for_user_report_ids = Koha::Reports->running( { user_id => $user_id } );
+    }
+    my $total_running_reports_per_user_limit_exceeded =
+        $total_running_reports_per_user_limit
+        ? scalar(@total_running_for_user_report_ids) >= $total_running_reports_per_user_limit
+        : 0;
+
+    # Determine if the Koha instance is running too many reports in total
+    my @total_running_for_instance_report_ids;
+    my $total_running_reports_per_instance_limit = C4::Context->config('total_running_reports_per_instance_limit');
+    if ( $total_running_reports_per_instance_limit && C4::Context->userenv ) {
+        my $instance_id = C4::Context->userenv ? C4::Context->userenv->{number} : undef;
+        @total_running_for_instance_report_ids = Koha::Reports->running();
+    }
+    my $total_running_reports_per_instance_limit_exceeded =
+        $total_running_reports_per_instance_limit
+        ? scalar(@total_running_for_instance_report_ids) >= $total_running_reports_per_instance_limit
+        : 0;
+
     # offset algorithm
     if ( $input->param('page') ) {
         $offset = ( $input->param('page') - 1 ) * $limit;
@@ -1069,6 +1105,33 @@ if ( $op eq 'run' ) {
                 'enter_params'    => 1,
                 'id'              => $report_id,
                 'template_code'   => $template_code,
+            );
+        } elsif ( $duplicate_running_reports_per_user_limit_exceeded
+            || $total_running_reports_per_user_limit_exceeded
+            || $total_running_reports_per_instance_limit_exceeded )
+        {
+            $template->param(
+                'sql'          => $sql,
+                'original_sql' => $original_sql,
+                'id'           => $report_id,
+                'execute'      => 1,
+                'name'         => $name,
+                'notes'        => $notes,
+                'errors'       => [
+                    $duplicate_running_reports_per_user_limit_exceeded
+                    ? { duplicate_running_report_ids => \@duplicate_running_report_ids }
+                    : (),
+                    $total_running_reports_per_user_limit_exceeded
+                    ? { total_running_reports_per_user_limit_exceeded => \@total_running_for_user_report_ids }
+                    : (),
+                    $total_running_reports_per_instance_limit_exceeded
+                    ? {
+                        total_running_reports_per_instance_limit_exceeded => \@total_running_for_instance_report_ids
+                        }
+                    : (),
+                ],
+                'sql_params'  => \@sql_params,
+                'param_names' => \@param_names,
             );
         } else {
             my ( $sql, $header_types );
