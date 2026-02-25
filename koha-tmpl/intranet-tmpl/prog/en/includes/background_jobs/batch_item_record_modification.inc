@@ -26,7 +26,7 @@
                     <ul>
                         [% FOR error IN report.errors %]
                             <li>
-                                [% error.barcode | html %]
+                                <a href="/cgi-bin/koha/catalogue/moredetail.pl?biblionumber=[% error.biblionumber | uri %]#item[% error.itemnumber | uri %]">[% error.barcode | html %]</a>
                                 [% IF error.error == 'intransit_cannot_withdraw' %]
                                     : [% t('Item is in transit') | html %]
                                 [% ELSIF error.error == 'onloan_cannot_withdraw' %]
