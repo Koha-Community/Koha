@@ -372,7 +372,12 @@ subtest 'report' => sub {
             modified_itemnumbers => [ $item_1->itemnumber ],
             modified_fields      => 1,
             errors               => [
-                { error => "Exception 'Koha::Exceptions::Item::Transfer::OnLoan' thrown 'onloan_cannot_withdraw'\n" }
+                {
+                    biblionumber => $item_2->biblionumber,
+                    itemnumber   => $item_2->itemnumber,
+                    barcode      => $item_2->barcode,
+                    error        => "onloan_cannot_withdraw"
+                }
             ]
         }
     );
@@ -402,8 +407,10 @@ subtest 'report' => sub {
             modified_fields      => 1,
             errors               => [
                 {
-                    error =>
-                        "Exception 'Koha::Exceptions::Item::Transfer::InTransit' thrown 'intransit_cannot_withdraw'\n"
+                    biblionumber => $item_3->biblionumber,
+                    itemnumber   => $item_3->itemnumber,
+                    barcode      => $item_3->barcode,
+                    error        => "intransit_cannot_withdraw"
                 }
             ]
         }
