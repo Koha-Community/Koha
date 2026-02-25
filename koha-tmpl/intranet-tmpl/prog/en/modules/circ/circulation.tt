@@ -1051,7 +1051,7 @@
 </div>
 <!-- /#barcodeSubmittedModal -->
 
-[% IF waiting_holds.count > 0 %]
+[% IF waiting_holds.count && waiting_holds.count > 0 %]
     <div id="circ-warnwaitingholds-modal" class="modal audio-alert-action block">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -1162,7 +1162,7 @@
                     barcodeSubmitInFlight = false;
                 }
             });
-            [% IF waiting_holds.count > 0 %]
+            [% IF waiting_holds.count && waiting_holds.count > 0 %]
                 $('#circ-warnwaitingholds-modal .btn-primary').on('click',function() {
                     $('#mainform').submit();
                 });
