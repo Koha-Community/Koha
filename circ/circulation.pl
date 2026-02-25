@@ -528,10 +528,10 @@ if ( @$barcodes && $op eq 'cud-checkout' ) {
                 $template_params->{ADDITIONAL_MATERIALS} = $materials;
                 $template_params->{itemhomebranch}       = $item->homebranch;
 
-                my $patron_session_confirmation = $query->cookie('patronSessionConfirmation') || undef;
+                my $patron_session_confirmation = $query->cookie('patronSessionConfirmation') || '';
                 my ( $patron_for_session, $session_confirmations ) = split( /:/, $patron_session_confirmation, 2 );
-                my $patron_match = $borrowernumber == $patron_for_session;
-                my @conf_keys    = split( /\|/, $session_confirmations );
+                my $patron_match = $patron_for_session && ( $borrowernumber == $patron_for_session );
+                my @conf_keys    = $session_confirmations ? split( /\|/, $session_confirmations ) : ();
                 if ( $patron_match && grep { $_ eq 'cancelreserve' } @conf_keys ) {
                     $cancelreserve = 1;
                 }
