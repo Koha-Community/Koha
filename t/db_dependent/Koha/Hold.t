@@ -38,6 +38,7 @@ use Koha::Libraries;
 use Koha::Old::Holds;
 use C4::Reserves    qw( AddReserve ModReserveAffect );
 use C4::Circulation qw( AddReturn );
+use JSON            qw( decode_json );
 
 my $schema  = Koha::Database->new->schema;
 my $builder = t::lib::TestBuilder->new;
@@ -1711,7 +1712,7 @@ subtest 'revert_found() tests' => sub {
     };
 };
 subtest 'move_hold() tests' => sub {
-    plan tests => 13;
+    plan tests => 16;
     $schema->storage->txn_begin;
 
     my $patron = Koha::Patron->new(
@@ -1852,6 +1853,20 @@ subtest 'move_hold() tests' => sub {
     );
 
     is( $logs_2->count, 1, 'Hold modification was logged' );
+
+    my $diff_2 = decode_json( $logs_2->next->diff );
+    is(
+        $diff_2->{D}->{biblionumber}->{O}, $biblio3->biblionumber,
+        'diff column for Old (O) contains original biblionumber for record level move'
+    );
+    is(
+        $diff_2->{D}->{biblionumber}->{N}, $biblio4->biblionumber,
+        'diff column for New (N) contains new biblionumber for record level move'
+    );
+    is(
+        $diff_2->{D}->{itemnumber}, undef,
+        'diff column contains undef itemnumber because this is a record level move'
+    );
 
     #disable HoldsLog
     t::lib::Mocks::mock_preference( 'HoldsLog', 0 );
