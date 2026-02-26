@@ -237,7 +237,7 @@ sub update {
 
     my $filtered_objects = $objects->filter_by_last_update({
         from => $from_datetime, to => $to_datetime,
-        days|older_than => $days, min_days => $days, younger_than => $days,
+        days|older_than => $days, min_days => $days, younger_than => $days, exact_days => $days
     });
 
 You should pass at least one of the parameters: from, to, days|older_than,
@@ -254,8 +254,8 @@ sub filter_by_last_update {
     my ( $self, $params ) = @_;
     my $timestamp_column_name = $params->{timestamp_column_name} || 'timestamp';
     my $conditions;
-    Koha::Exceptions::MissingParameter->throw("Please pass: days|from|to|older_than|younger_than")
-        unless grep { exists $params->{$_} } qw/days from to older_than younger_than min_days/;
+    Koha::Exceptions::MissingParameter->throw("Please pass: days|from|to|older_than|younger_than|exact_days")
+        unless grep { exists $params->{$_} } qw/days from to older_than younger_than min_days exact_days/;
 
     foreach my $key (qw(from to)) {
         if ( exists $params->{$key} and ref $params->{$key} ne 'DateTime' ) {
@@ -264,10 +264,10 @@ sub filter_by_last_update {
     }
 
     my $dtf = Koha::Database->new->schema->storage->datetime_parser;
-    foreach my $p (qw/days older_than younger_than min_days/) {
+    foreach my $p (qw/days older_than younger_than min_days exact_days/) {
         next if !exists $params->{$p};
         my $days     = $params->{$p};
-        my $operator = { days => '<', older_than => '<', min_days => '<=' }->{$p} // '>';
+        my $operator = { days => '<', older_than => '<', min_days => '<=', 'exact_days' => "=" }->{$p} // '>';
         $conditions->{$operator} = \[ 'DATE_SUB(CURDATE(), INTERVAL ? DAY)', $days ];
     }
     if ( exists $params->{from} ) {
