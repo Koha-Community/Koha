@@ -1275,6 +1275,9 @@ subtest "filter_by_last_update" => sub {
     my $count = $patrons->filter_by_last_update( { timestamp_column_name => 'updated_on', days => 2 } )->count;
     is( $count, 3, '3 patrons have been updated before the last 2 days (exclusive)' );
 
+    $count = $patrons->filter_by_last_update( { timestamp_column_name => 'updated_on', exact_days => 2 } )->count;
+    is( $count, 1, '1 patron has been updated 2 days ago' );
+
     $count = $patrons->filter_by_last_update( { timestamp_column_name => 'updated_on', min_days => 2 } )->count;
     is( $count, 4, '4 patrons have been updated before the last 2 days (inclusive)' );
 
