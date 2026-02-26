@@ -188,10 +188,10 @@ $hold->move_hold();
 sub move_hold {
     my ( $self, $args ) = @_;
 
-    my $original              = $self;
+    my $original              = $self->unblessed;
     my $original_biblionumber = $self->biblionumber;
 
-    my $found = $original->found // '';
+    my $found = $self->found // '';
 
     if ( $found eq 'W' ) {
         return { success => 0, error => 'Cannot move a waiting hold' };
