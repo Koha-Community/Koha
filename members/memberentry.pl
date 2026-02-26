@@ -165,8 +165,8 @@ foreach (@field_check) {
 $template->param( "quickadd"  => 1 ) if ($quickadd);
 $template->param( "duplicate" => 1 ) if ( $op eq 'duplicate' );
 $template->param( "checked"   => 1 ) if ( defined($nodouble) && $nodouble eq 1 );
+my $logged_in_user = Koha::Patrons->find($loggedinuser);
 if ( $op eq 'edit_form' or $op eq 'cud-save' or $op eq 'duplicate' ) {
-    my $logged_in_user = Koha::Patrons->find($loggedinuser);
     output_and_exit_if_error(
         $input, $cookie, $template,
         { module => 'members', logged_in_user => $logged_in_user, current_patron => $patron }
@@ -176,12 +176,12 @@ if ( $op eq 'edit_form' or $op eq 'cud-save' or $op eq 'duplicate' ) {
     if ( $patron->is_superlibrarian && !$logged_in_user->is_superlibrarian ) {
         $NoUpdateEmail = 1;
     }
-    if ( $logged_in_user->is_superlibrarian ) {
-        $CanUpdatePasswordExpiration = 1;
-        $CanUpdateProtectPatron      = 1;
-    }
-
     $borrower_data = $patron->unblessed;
+}
+
+if ( $logged_in_user->is_superlibrarian ) {
+    $CanUpdatePasswordExpiration = 1;
+    $CanUpdateProtectPatron      = 1;
 }
 
 my $categorycode = $input->param('categorycode') || $borrower_data->{'categorycode'};
