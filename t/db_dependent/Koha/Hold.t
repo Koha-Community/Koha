@@ -1712,7 +1712,7 @@ subtest 'revert_found() tests' => sub {
     };
 };
 subtest 'move_hold() tests' => sub {
-    plan tests => 16;
+    plan tests => 21;
     $schema->storage->txn_begin;
 
     my $patron = Koha::Patron->new(
@@ -1866,6 +1866,37 @@ subtest 'move_hold() tests' => sub {
     is(
         $diff_2->{D}->{itemnumber}, undef,
         'diff column contains undef itemnumber because this is a record level move'
+    );
+
+    $hold->move_hold( { new_itemnumber => $item_3->itemnumber } );
+    $hold->discard_changes;
+
+    my $logs_3 = Koha::ActionLogs->search(
+        {
+            action => 'MODIFY',
+            module => 'HOLDS',
+            object => $hold->id
+        }
+    );
+
+    is( $logs_3->count, 1, 'Item level hold modification was logged' );
+
+    my $diff_3 = decode_json( $logs_3->next->diff );
+    is(
+        $diff_3->{D}->{itemnumber}->{O}, $item_2->itemnumber,
+        'diff column for Old (O) contains original itemnumber for item level move'
+    );
+    is(
+        $diff_3->{D}->{itemnumber}->{N}, $item_3->itemnumber,
+        'diff column for New (N) contains new itemnumber for item level move'
+    );
+    is(
+        $diff_3->{D}->{biblionumber}->{O}, $biblio2->biblionumber,
+        'diff column for Old (O) contains original biblionumber for item level move'
+    );
+    is(
+        $diff_3->{D}->{biblionumber}->{N}, $biblio3->biblionumber,
+        'diff column for New (N) contains new biblionumber for item level move'
     );
 
     #disable HoldsLog
