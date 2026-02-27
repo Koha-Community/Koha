@@ -24,6 +24,7 @@ use Try::Tiny;
 use Koha::Cities;
 use Koha::Holds;
 use Koha::Biblios;
+use Koha::Patrons;
 use Koha::Patron::Relationship;
 
 app->log->level('error');
@@ -178,6 +179,132 @@ get '/dbic_merge_prefetch_count' => sub {
     );
 
     $c->render( json => $attributes, status => 200 );
+};
+
+get '/dbic_merge_prefetch_count_sorted' => sub {
+    my $c          = shift;
+    my $attributes = { order_by => [ { '-desc' => 'me.guarantee_count' } ] };
+    my $result_set = Koha::Patron::Relationship->new;
+    $c->stash( 'koha.embed', { "guarantee_count" => { "is_count" => 1 } } );
+
+    $c->dbic_merge_prefetch(
+        {
+            attributes => $attributes,
+            result_set => $result_set
+        }
+    );
+
+    # Serialize: scalar refs become the string they point to
+    my $order_by = $attributes->{order_by};
+    for my $atom (@$order_by) {
+        if ( ref($atom) eq 'HASH' ) {
+            for my $dir ( keys %$atom ) {
+                $atom->{$dir} = ${ $atom->{$dir} } if ref( $atom->{$dir} ) eq 'SCALAR';
+            }
+        }
+    }
+
+    $c->render( json => $attributes, status => 200 );
+};
+
+get '/dbic_merge_prefetch_count_unsortable' => sub {
+    my $c          = shift;
+    my $attributes = { order_by => [ { '-desc' => 'me.checkouts_count' } ] };
+    my $result_set = Koha::Patrons->new;
+
+    # checkouts is a Koha-only method, not a DBIC relationship
+    $c->stash( 'koha.embed', { "checkouts_count" => { "is_count" => 1 } } );
+
+    try {
+        $c->dbic_merge_prefetch(
+            {
+                attributes => $attributes,
+                result_set => $result_set
+            }
+        );
+        $c->render( json => { error => 'no exception thrown' }, status => 500 );
+    } catch {
+        if ( ref($_) eq 'Koha::Exceptions::BadParameter' ) {
+            $c->render( json => { error => $_->message, error_code => 'bad_parameter' }, status => 400 );
+        } else {
+            $c->render( json => { error => "$_" }, status => 500 );
+        }
+    };
+};
+
+get '/dbic_merge_prefetch_count_unsortable_display' => sub {
+    my $c          = shift;
+    my $attributes = {};
+    my $result_set = Koha::Patrons->new;
+
+    # checkouts is a Koha-only method — no order_by, so no error
+    $c->stash( 'koha.embed', { "checkouts_count" => { "is_count" => 1 } } );
+
+    $c->dbic_merge_prefetch(
+        {
+            attributes => $attributes,
+            result_set => $result_set
+        }
+    );
+
+    $c->render( json => $attributes, status => 200 );
+};
+
+get '/dbic_merge_prefetch_nested_count' => sub {
+    my $c          = shift;
+    my $attributes = { order_by => [ { '-asc' => 'guarantee.article_requests_count' } ] };
+    my $result_set = Koha::Patron::Relationship->new;
+    $c->stash(
+        'koha.embed',
+        { "guarantee" => { "children" => { "article_requests_count" => { "is_count" => 1 } } } }
+    );
+
+    $c->dbic_merge_prefetch(
+        {
+            attributes => $attributes,
+            result_set => $result_set
+        }
+    );
+
+    # Serialize scalar refs
+    my $order_by = $attributes->{order_by};
+    for my $atom (@$order_by) {
+        if ( ref($atom) eq 'HASH' ) {
+            for my $dir ( keys %$atom ) {
+                $atom->{$dir} = ${ $atom->{$dir} } if ref( $atom->{$dir} ) eq 'SCALAR';
+            }
+        }
+    }
+
+    $c->render( json => $attributes, status => 200 );
+};
+
+get '/dbic_merge_prefetch_nested_count_unsortable' => sub {
+    my $c          = shift;
+    my $attributes = { order_by => [ { '-desc' => 'guarantee.checkouts_count' } ] };
+    my $result_set = Koha::Patron::Relationship->new;
+
+    # checkouts is NOT in Patron's prefetch_whitelist
+    $c->stash(
+        'koha.embed',
+        { "guarantee" => { "children" => { "checkouts_count" => { "is_count" => 1 } } } }
+    );
+
+    try {
+        $c->dbic_merge_prefetch(
+            {
+                attributes => $attributes,
+                result_set => $result_set
+            }
+        );
+        $c->render( json => { error => 'no exception thrown' }, status => 500 );
+    } catch {
+        if ( ref($_) eq 'Koha::Exceptions::BadParameter' ) {
+            $c->render( json => { error => $_->message, error_code => 'bad_parameter' }, status => 400 );
+        } else {
+            $c->render( json => { error => "$_" }, status => 500 );
+        }
+    };
 };
 
 get '/merge_q_params' => sub {
@@ -466,7 +593,7 @@ subtest 'dbic_merge_sorting() tests' => sub {
 };
 
 subtest '/dbic_merge_prefetch' => sub {
-    plan tests => 10;
+    plan tests => 32;
 
     my $t = Test::Mojo->new;
 
@@ -485,7 +612,42 @@ subtest '/dbic_merge_prefetch' => sub {
         }
     );
 
-    $t->get_ok('/dbic_merge_prefetch_count')->status_is(200)->json_is( '/prefetch/0' => 'guarantee' );
+    # Top-level +count: produces +select/+as, no prefetch
+    $t->get_ok('/dbic_merge_prefetch_count')
+        ->status_is(200)
+        ->json_is( '/+as/0' => 'guarantee_count' )
+        ->json_hasnt('/prefetch');
+
+    # Top-level +count sorted: order_by gets the subquery substituted
+    $t->get_ok('/dbic_merge_prefetch_count_sorted')
+        ->status_is(200)
+        ->json_like( '/order_by/0/-desc' => qr/SELECT COUNT\(\*\) FROM borrowers/ )
+        ->json_is( '/+as/0' => 'guarantee_count' );
+
+    # Top-level unsortable +count with order_by: throws BadParameter (400)
+    $t->get_ok('/dbic_merge_prefetch_count_unsortable')
+        ->status_is(400)
+        ->json_is( '/error_code' => 'bad_parameter' )
+        ->json_like( '/error' => qr/Cannot sort on checkouts_count/ );
+
+    # Top-level unsortable +count without order_by: no error (display-only fallback)
+    $t->get_ok('/dbic_merge_prefetch_count_unsortable_display')
+        ->status_is(200)
+        ->json_hasnt('/prefetch')
+        ->json_hasnt('/+select');
+
+    # Nested +count sorted: subquery uses parent alias, dotted +as key
+    $t->get_ok('/dbic_merge_prefetch_nested_count')
+        ->status_is(200)
+        ->json_like( '/order_by/0/-asc' => qr/SELECT COUNT\(\*\) FROM article_requests/ )
+        ->json_like( '/order_by/0/-asc' => qr/guarantee\.borrowernumber/ )
+        ->json_is( '/+as/0' => 'guarantee.article_requests_count' );
+
+    # Nested unsortable +count with order_by: throws BadParameter (400)
+    $t->get_ok('/dbic_merge_prefetch_nested_count_unsortable')
+        ->status_is(400)
+        ->json_is( '/error_code' => 'bad_parameter' )
+        ->json_like( '/error' => qr/Cannot sort on guarantee\.checkouts_count/ );
 };
 
 subtest '/merge_q_params' => sub {
