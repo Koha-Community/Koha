@@ -1957,6 +1957,7 @@ sub searchResults {
                 # is item a waiting recall?
                 my $recallstatus = '';
 
+                # Check some statuses before checking transfer info, respect MaxSearchResultsItemsPerRecordStatusCheck
                 unless (
                        $item->{withdrawn}
                     || $item->{itemlost}
@@ -1967,18 +1968,8 @@ sub searchResults {
                     )
                 {
 
-                    # A couple heuristics to limit how many times
-                    # we query the database for item transfer information, sacrificing
-                    # accuracy in some cases for speed;
-                    #
-                    # 1. don't query if item has one of the other statuses
-                    # 2. don't check transit status if the bib has
-                    #    more than 20 items
-                    #
-                    # FIXME: to avoid having the query the database like this, and to make
-                    #        the in transit status count as unavailable for search limiting,
-                    #        should map transit status to record indexed in Zebra.
-
+                    # NOTE: We are bypassing an expected Koha::Item->get_transfer call here for speed.
+                    # TODO: Could we index the transfer status ?
                     my $transfer = Koha::Item::Transfers->search(
                         { itemnumber => $item->{itemnumber}, datearrived => undef, datecancelled => undef },
                         { order_by   => [ { '-desc' => 'datesent' }, { '-asc' => 'daterequested' } ] }
