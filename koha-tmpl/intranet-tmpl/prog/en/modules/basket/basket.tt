@@ -55,7 +55,7 @@
                 <ul class="dropdown-menu">
                     <li><a class="dropdown-item" href="/cgi-bin/koha/basket/downloadcart.pl?format=iso2709&amp;bib_list=[% bib_list | uri %]">iso2709</a></li>
                     <li><a class="dropdown-item" href="/cgi-bin/koha/basket/downloadcart.pl?format=ris&amp;bib_list=[% bib_list | uri %]">RIS</a></li>
-                    <li><a class="dropdown-item" href="/cgi-bin/koha/basket/downloadcart.pl?format=bibtex&amp;bib_list=[% bib_list | uri %]">BibTex</a></li>
+                    <li><a class="dropdown-item" href="/cgi-bin/koha/basket/downloadcart.pl?format=bibtex&amp;bib_list=[% bib_list | uri %]">BibTeX</a></li>
                     [% FOREACH csv_profile IN csv_profiles %]
                         <li><a class="dropdown-item" href="/cgi-bin/koha/basket/downloadcart.pl?format=[% csv_profile.export_format_id | uri %]&amp;bib_list=[% bib_list | uri %]">CSV - [% csv_profile.profile | html %]</a></li>
                     [% END %]

@@ -23,7 +23,7 @@
                         <option value="">-- Choose format --</option>
                         <option value="iso2709">MARC</option>
                         <option value="ris">RIS</option>
-                        <option value="bibtex">BibTex</option>
+                        <option value="bibtex">BibTeX</option>
                         [% FOREACH csv_profile IN csv_profiles %]
                             <option value="[% csv_profile.export_format_id | html %]">CSV - [% csv_profile.profile | html %]</option>
                         [% END %]
