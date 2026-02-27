@@ -73,6 +73,14 @@ sub register {
                         error_code => 'invalid_query',
                     }
                 );
+            } elsif ( blessed $exception && ref($exception) eq 'Koha::Exceptions::BadParameter' ) {
+                return $c->render(
+                    status => 400,
+                    json   => {
+                        error      => "$exception",
+                        error_code => 'bad_parameter',
+                    }
+                );
             } elsif ( blessed $exception
                 && ref($exception) eq 'Koha::Exceptions::REST::Public::Authentication::Required' )
             {

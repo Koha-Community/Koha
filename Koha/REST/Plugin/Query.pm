@@ -148,13 +148,63 @@ Generates the DBIC prefetch attribute based on embedded relations, and merges in
             return unless defined $embed;
 
             my @prefetches;
+            my $count_aliases = {};
+
             foreach my $key ( sort keys( %{$embed} ) ) {
-                my $parsed = _parse_prefetch( $key, $embed, $result_set );
+
+                # Handle +count embeds with SQL-level subquery
+                if ( $embed->{$key}->{is_count} ) {
+                    my $subquery = _merge_count_select( $key, $attributes, $result_set );
+                    if ($subquery) {
+                        $count_aliases->{$key} = $subquery;
+                        next;
+                    }
+
+                    # No DBIC relationship found; mark as unsortable (0) so the order_by
+                    # fixup rejects it with a 400. Fall through so to_api can use the
+                    # Koha method ->count fallback for display.
+                    $count_aliases->{$key} = 0;
+                }
+
+                my $parsed = _parse_prefetch( $key, $embed, $result_set, $attributes, undef, $count_aliases );
                 push @prefetches, $parsed if defined $parsed;
             }
 
             if ( scalar(@prefetches) ) {
                 $attributes->{prefetch} = \@prefetches;
+            }
+
+            # Fix order_by entries referencing count aliases (me.X_count => X_count).
+            # dbic_merge_sorting (which runs before this) translates _order_by=-me.claims_count
+            # into { -desc => 'me.claims_count' }. But +as aliases are not real table columns,
+            # so DBIC needs them without the 'me.' prefix to match the +select subquery.
+            if ( $attributes->{order_by} ) {
+
+                for my $i ( 0 .. $#{ $attributes->{order_by} } ) {
+                    my $atom = $attributes->{order_by}[$i];
+                    if ( ref($atom) eq 'HASH' ) {
+                        for my $dir ( keys %{$atom} ) {
+                            ( my $col = $atom->{$dir} ) =~ s/^me\.//;
+
+                            # Reject sorting on +count embeds without a DBIC relationship.
+                            # $count_aliases->{$col} is 0 (unsortable) or missing (top-level unsortable)
+                            Koha::Exceptions::BadParameter->throw(
+                                "Cannot sort on $col: no matching database relationship")
+                                if exists $count_aliases->{$col} && !$count_aliases->{$col};
+
+                            # Replace with the literal subquery so DBIC puts it directly
+                            # in the ORDER BY clause (DBIC +as is Perl-side only, not a SQL alias)
+                            $atom->{$dir} = $count_aliases->{$col} if $count_aliases->{$col};
+                        }
+                    } elsif ( !ref($atom) ) {
+                        ( my $col = $atom ) =~ s/^me\.//;
+
+                        Koha::Exceptions::BadParameter->throw("Cannot sort on $col: no matching database relationship")
+                            if exists $count_aliases->{$col} && !$count_aliases->{$col};
+
+                        $attributes->{order_by}[$i] = $count_aliases->{$col} if $count_aliases->{$col};
+                    }
+                }
             }
         }
     );
@@ -449,19 +499,121 @@ sub _merge_embed {
     }
 }
 
+=head3 _merge_count_select
+
+    my $added = _merge_count_select( $key, $attributes, $result_set );
+
+Given a I<$key> like C<claims_count> (from a C<claims+count> embed), strips the C<_count>
+suffix to derive the DBIC relationship name, then uses the relationship metadata to build
+a correlated COUNT subquery added via C<+select>/C<+as>.
+
+This makes the count available as a virtual column in the SQL result, enabling both
+server-side sorting (ORDER BY) and an efficient single-query count instead of N+1.
+
+Returns the subquery scalar reference if added (used by the caller to substitute
+into ORDER BY clauses), or undef if the relationship was not found in the
+C<prefetch_whitelist> or has no DBIC relationship info. In the latter case, the count
+embed still works for display: C<to_api> falls back transparently to the original
+C<< $object->$relation->count >> Perl-level call. Only sorting is unavailable.
+
+Handles both C<Koha::Objects> (plural, via C<_resultset>) and C<Koha::Object> (singular,
+via C<_result>) for accessing the DBIC result source.
+
+=cut
+
+sub _merge_count_select {
+    my ( $key, $attributes, $result_set ) = @_;
+
+    ( my $rel = $key ) =~ s/_count$//;
+    return unless exists $result_set->prefetch_whitelist->{$rel};
+
+    my $subquery = _build_count_subquery( $rel, $result_set, 'me' );
+    return unless $subquery;
+
+    push @{ $attributes->{'+select'} }, $subquery;
+    push @{ $attributes->{'+as'} },     $key;
+
+    return $subquery;
+}
+
+=head3 _build_count_subquery
+
+    my $subquery = _build_count_subquery( $rel, $result_set, $parent_alias );
+
+Builds a correlated COUNT subquery scalar ref for the given DBIC relationship.
+I<$parent_alias> is the SQL alias of the parent table (e.g. C<me> for top-level,
+or the relation name for nested embeds like C<biblio>).
+
+Returns the scalar ref, or undef if the relationship has no DBIC metadata.
+
+=cut
+
+sub _build_count_subquery {
+    my ( $rel, $result_set, $parent_alias ) = @_;
+
+    my $source =
+          $result_set->can('_resultset')
+        ? $result_set->_resultset->result_source
+        : $result_set->_result->result_source;
+    my $rel_info = $source->relationship_info($rel);
+    return unless $rel_info;
+
+    my $rel_table = $source->related_source($rel)->name;
+    my $cond      = $rel_info->{cond};
+
+    # NOTE: assumes single-column FK joins. Multi-column FKs would need
+    # a compound WHERE clause here. Rare in Koha but worth noting.
+    my ($fk_foreign) = keys %{$cond};
+    my $fk_self = $cond->{$fk_foreign};
+    $fk_foreign =~ s/^foreign\.//;
+    $fk_self    =~ s/^self\.//;
+
+    return \"(SELECT COUNT(*) FROM $rel_table WHERE $rel_table.$fk_foreign = $parent_alias.$fk_self)";
+}
+
 sub _parse_prefetch {
-    my ( $key, $embed, $result_set ) = @_;
+    my ( $key, $embed, $result_set, $attributes, $parent_alias, $count_aliases ) = @_;
+
+    $parent_alias //= 'me';
 
     my $pref_key = $key;
     $pref_key =~ s/_count$// if $embed->{$key}->{is_count};
-    return unless exists $result_set->prefetch_whitelist->{$pref_key};
+
+    if ( !exists $result_set->prefetch_whitelist->{$pref_key} ) {
+
+        # Track unsortable nested +count embeds (no DBIC relationship) so the
+        # order_by fixup can reject them with a 400 instead of a DBIC 500
+        if ( $embed->{$key}->{is_count} && $count_aliases ) {
+            my $alias_key = $parent_alias eq 'me' ? $key : "$parent_alias.$key";
+            $count_aliases->{$alias_key} = 0;    # 0 = unsortable
+        }
+        return;
+    }
+
+    # Handle nested +count embeds with SQL-level subquery
+    if ( $embed->{$key}->{is_count} && $attributes ) {
+        my $subquery = _build_count_subquery( $pref_key, $result_set, $parent_alias );
+        if ($subquery) {
+
+            # Use the full dotted path as the alias key so order_by fixup
+            # can match e.g. "biblio.items_count" from _from_api_param
+            my $alias_key = $parent_alias eq 'me' ? $key : "$parent_alias.$key";
+            push @{ $attributes->{'+select'} }, $subquery;
+            push @{ $attributes->{'+as'} },     $alias_key;
+            $count_aliases->{$alias_key} = $subquery if $count_aliases;
+            return;    # no prefetch needed, count is in the subquery
+        }
+    }
 
     my $ko_class = $result_set->prefetch_whitelist->{$pref_key};
     return $pref_key unless defined $embed->{$key}->{children} && defined $ko_class;
 
     my @prefetches;
     foreach my $child ( sort keys( %{ $embed->{$key}->{children} } ) ) {
-        my $parsed = _parse_prefetch( $child, $embed->{$key}->{children}, $ko_class->new );
+        my $parsed = _parse_prefetch(
+            $child, $embed->{$key}->{children}, $ko_class->new, $attributes, $pref_key,
+            $count_aliases
+        );
         push @prefetches, $parsed if defined $parsed;
     }
 
