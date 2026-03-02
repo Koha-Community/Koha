@@ -927,7 +927,7 @@
                             [% IF ( transfertodo ) %]
                                 [% patron.email | html %]
                             [% ELSE %]
-                                <a href="mailto:[% patron.email | uri %]">[% patron.email | uri %]</a>
+                                <a href="mailto:[% patron.email | uri %]">[% patron.email | html %]</a>
                             [% END %]
                         </li>
                     [% END %]
