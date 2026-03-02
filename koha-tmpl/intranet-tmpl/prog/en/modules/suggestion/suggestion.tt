@@ -1373,7 +1373,9 @@
                                         orderable: true,
                                         render: function (data, type, row, meta) {
                                             let node = '<a href="suggestion.pl?suggestionid=%s&amp;op=show" title="%s">%s'.format(row.suggestion_id, _("suggestion"), row.title);
-                                            if(row.author) node += ', by %s'.format(row.author);
+                                            if(row.author) {
+                                                node += ", %s %s".format(_("by"),row.author.escapeHtml());
+                                            }
                                             node += '</a><br />';
                                             if(row.copyright_date) node += ' &copy; <span class="suggestion_copyrightdate">%s</span>'.format(row.copyright_date);
                                             if(row.volume_desc) node += '; <span class="suggestion_volume">%s:<em>%s</em></span>'.format(_("Volume"), row.volume_desc);
