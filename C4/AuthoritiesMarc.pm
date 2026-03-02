@@ -107,18 +107,25 @@ sub GetAuthMARCFromKohaField {
 
 =head2 SearchAuthorities 
 
-  (\@finalresult, $nbresults)= &SearchAuthorities($tags, $and_or, 
-     $excluding, $operator, $value, $offset,$length,$authtypecode,
-     $sortby[, $skipmetadata])
+    ( \@finalresult, $nbresults ) = SearchAuthorities(
+        $tags,      $and_or,
+        $excluding, $operator, $value, $offset, $length, $authtypecode,
+        $sortby,    $skipmetadata
+    );
 
-returns ref to array result and count of results returned
+Note: The parameters and_or and excluding are not supported currently.
+The subexpressions in $tags are hardcoded with OR unless you pass the
+parameter authtypecode. In the latter case AND is used.
+
+Returns a results arrayref and a count of results
 
 =cut
 
 sub SearchAuthorities {
+
+    # NOTE: The parameters $and_or, $excluding below are UNUSED here.
     my ( $tags, $and_or, $excluding, $operator, $value, $offset, $length, $authtypecode, $sortby, $skipmetadata ) = @_;
 
-    # warn Dumper($tags, $and_or, $excluding, $operator, $value, $offset,$length,$authtypecode,$sortby);
     my $dbh = C4::Context->dbh;
     $sortby = "" unless $sortby;
     my $query;
