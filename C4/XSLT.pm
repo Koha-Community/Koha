@@ -355,6 +355,34 @@ sub buildKohaItemsNamespace {
         $items_rs = Koha::Items->new;
     }
 
+    # adding linked items that belong to host records
+    if ( C4::Context->preference('EasyAnalyticalRecords') ) {
+        my $marcflavor     = C4::Context->preference("marcflavour");
+        my $analyticsfield = '773';
+        if ( $marcflavor eq 'MARC21' ) {
+            $analyticsfield = '773';
+        } elsif ( $marcflavor eq 'UNIMARC' ) {
+            $analyticsfield = '461';
+        }
+        my $marcrecord   = Koha::Biblios->find($biblionumber)->metadata->record;
+        my $query_linked = [];
+        foreach my $hostfield ( $marcrecord->field($analyticsfield) ) {
+            my $hostbiblionumber = $hostfield->subfield("0");
+            my $linkeditemnumber = $hostfield->subfield("9");
+            if ( $hostbiblionumber && $linkeditemnumber ) {
+                push @$query_linked,
+                    {
+                    'me.biblionumber' => $hostbiblionumber,
+                    'me.itemnumber'   => { '=' => $linkeditemnumber, not_in => $hidden_items }
+                    };
+            }
+        }
+        if (@$query_linked) {
+            unshift @$query_linked, $query;
+            $query = { "-or" => $query_linked };
+        }
+    }
+
     my $items =
         $items_rs->search( $query, { prefetch => [ 'current_branchtransfers', 'reserves', 'tmp_holdsqueue' ] } );
 
