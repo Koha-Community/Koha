@@ -983,7 +983,7 @@
                             <div class="col">
                                 [% FOREACH pa_class IN patron_attribute_classes %]
                                     [% IF pa_class.class %]
-                                        <fieldset id="aai_[% pa_loo.class | html %]" class="rows patron-attributes">
+                                        <fieldset id="aai_[% pa_class.class | html %]" class="rows patron-attributes">
                                             <legend>[% pa_class.lib | html %]</legend>
                                     [% ELSE %]
                                         <fieldset class="rows patron-attributes">
