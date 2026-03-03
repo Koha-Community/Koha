@@ -74,7 +74,22 @@
                         clearTimeout(timeoutId);
                         pendingTimeouts.delete(button);
                     }
-                    toggleButton(button);
+                    if (!button.hasAttribute("data-throttle-persist")) {
+                        toggleButton(button);
+                    } else {
+                        const runningIcon = button.querySelector(
+                            ".button-icon-running"
+                        );
+                        const doneIcon =
+                            button.querySelector(".button-icon-done");
+                        if (runningIcon) {
+                            runningIcon.style.display = "none";
+                        }
+                        if (doneIcon) {
+                            doneIcon.style.display = "";
+                        }
+                        button.dataset.state = "done";
+                    }
                 });
         }
     });
