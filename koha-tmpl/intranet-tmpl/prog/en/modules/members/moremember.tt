@@ -132,10 +132,22 @@
 
                 <div class="rows">
                     <ol>
-                        [% IF ( patron.preferred_name && patron.firstname ) %]
+                        [% IF ( ( patron.preferred_name && patron.firstname ) && (patron.preferred_name != patron.firstname) ) %]
+                            <li id="patron_preferred_name">
+                                <span class="label patron_preferred_name">Preferred name: </span>
+                                [% patron.preferred_name | html %]
+                            </li>
+                        [% END %]
+                        [% IF ( patron.firstname ) %]
                             <li id="patron_first_name">
                                 <span class="label patron_first_name">First name: </span>
                                 [% patron.firstname | html %]
+                            </li>
+                        [% END %]
+                        [% IF ( patron.middle_name ) %]
+                            <li id="patron_middle_name">
+                                <span class="label patron_middle_name">Middle name: </span>
+                                [% patron.middle_name | html %]
                             </li>
                         [% END %]
                         [% IF ( patron.surname ) %]
