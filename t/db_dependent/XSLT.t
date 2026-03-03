@@ -21,7 +21,7 @@ use File::Temp;
 use File::Path qw/make_path/;
 use MARC::Record;
 use Test::NoWarnings;
-use Test::More tests => 5;
+use Test::More tests => 6;
 use Test::Warn;
 use t::lib::TestBuilder;
 use t::lib::Mocks;
@@ -305,6 +305,54 @@ subtest 'buildKohaItemsNamespace() including/omitting items tests' => sub {
     like( $xml, qr{<homebranch>$library_1_name</homebranch>}, '$item_1 present in the XML' );
     like( $xml, qr{<homebranch>$library_2_name</homebranch>}, '$item_2 present in the XML' );
     like( $xml, qr{<homebranch>$library_3_name</homebranch>}, '$item_3 present in the XML' );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'buildKohaItemsNamespace() EasyAnalyticalRecords items' => sub {
+    plan tests => 3;
+
+    $schema->storage->txn_begin;
+
+    t::lib::Mocks::mock_preference( 'marcflavour', 'MARC21' );
+
+    my $library      = $builder->build_object( { class => 'Koha::Libraries' } );
+    my $library_name = $library->branchname;
+
+    my $biblio1 = $builder->build_sample_biblio;
+    my $biblio2 = $builder->build_sample_biblio;
+
+    my $item_1 = $builder->build_sample_item( { biblionumber => $biblio1->biblionumber, library => $library->id } );
+
+    my $marc2 = $biblio2->metadata->record;
+    $marc2->insert_fields_ordered(
+        MARC::Field->new(
+            '773', '0', ' ',
+            0 => $biblio1->biblionumber,
+            9 => $item_1->itemnumber
+        )
+    );
+    C4::Biblio::ModBiblio( $marc2, $biblio2->biblionumber, '' );
+
+    t::lib::Mocks::mock_preference( 'EasyAnalyticalRecords', '0' );
+    my $xml = C4::XSLT::buildKohaItemsNamespace( $biblio2->biblionumber, undef, undef );
+    is(
+        $xml, '<items xmlns="http://www.koha-community.org/items"></items>',
+        'Empty XML'
+    );
+
+    t::lib::Mocks::mock_preference( 'EasyAnalyticalRecords', '1' );
+    $xml = C4::XSLT::buildKohaItemsNamespace( $biblio2->biblionumber, undef, undef );
+    isnt(
+        $xml,
+        '<items xmlns="http://www.koha-community.org/items"></items>',
+        'Items present'
+    );
+    like(
+        $xml,
+        qr{<homebranch>$library_name</homebranch>},
+        '$item_1 present in the XML'
+    );
 
     $schema->storage->txn_rollback;
 };
