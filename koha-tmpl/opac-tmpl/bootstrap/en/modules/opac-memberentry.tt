@@ -1226,7 +1226,7 @@
                                     [% SET legend = "Additional information" %]
                                     [% FOREACH pa_class IN patron_attribute_classes %]
                                         [% IF pa_class.class %]
-                                            [% fieldset_id = "aai_" _ pa_loo.class %]
+                                            [% fieldset_id = "aai_" _ pa_class.class %]
                                             [% legend = pa_class.lib %]
                                         [% END %]
                                         <fieldset id="[% fieldset_id | html %]" class="rows patron-attributes">
