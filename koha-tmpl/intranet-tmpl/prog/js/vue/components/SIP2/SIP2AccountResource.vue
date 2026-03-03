@@ -855,7 +855,7 @@ export default {
                     ],
                 },
                 hideIn: ["List"],
-                group: __("Syspref overrides"),
+                group: __("System preference overrides"),
                 componentProps: {
                     resourceRelationships: {
                         resourceProperty: "system_preference_overrides",
