@@ -221,7 +221,7 @@ GetOptions(
     'pseudo-transactions:i'      => \$pPseudoTransactions,
     'pseudo-transactions-from:s' => \$pPseudoTransactionsFrom,
     'pseudo-transactions-to:s'   => \$pPseudoTransactionsTo,
-    'labels'                     => \$labels,
+    'labels:i'                   => \$labels,
     'cards'                      => \$cards,
     'return-claims'              => \$return_claims,
     'jobs-type:s'                => \@jobs_types,
