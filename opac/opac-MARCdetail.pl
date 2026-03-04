@@ -271,54 +271,43 @@ for ( my $tabloop = 0 ; $tabloop <= 9 ; $tabloop++ ) {
     $template->param( "tab" . $tabloop . "XX" => \@loop_data );
 }
 
-# now, build item tab !
-# the main difference is that datas are in lines and not in columns : thus, we build the <th> first, then the values...
-# loop through each tag
-# warning : we may have different number of columns in each row. Thus, we first build a hash, complete it if necessary
-# then construct template.
-# $record has already had all the item fields filtered above.
+# Now, build item tab!
+# Data is in rows (one per item) not columns: build headers (%witness) and row data (@item_loop).
 $items->reset();
-my @fields = map { $_->as_marc_field } $items->as_list;
-my %witness;    #---- stores the list of subfields used at least once, with the "meaning" of the code
+my @fields       = map { $_->as_marc_field } $items->as_list;
+my $item_tag     = $fields[0] ? $fields[0]->tag()     : undef;
+my $item_tagslib = $item_tag  ? $tagslib->{$item_tag} : {};
+my %witness;
 my @item_subfield_codes;
 my @item_loop;
+
+my %date_fields = map { $_ => 1 }
+    qw( items.dateaccessioned items.onloan items.datelastseen items.datelastborrowed items.replacementpricedate );
+
 foreach my $field (@fields) {
-    next if ( $field->tag() < 10 );
-    my @subf = $field->subfields;
     my $item;
 
-    # loop through each subfield
-    for my $i ( 0 .. $#subf ) {
-        my $sf_def = $tagslib->{ $field->tag() }->{ $subf[$i][0] };
-        next if ( ( $sf_def->{tab}    || 0 ) != 10 );
+    for my $subf ( $field->subfields ) {
+        my ( $code, $value ) = @$subf;
+        my $sf_def = $item_tagslib->{$code};
         next if ( ( $sf_def->{hidden} || 0 ) > 0 );
 
-        push @item_subfield_codes, $subf[$i][0];
-        $witness{ $subf[$i][0] } = $sf_def->{lib};
+        push @item_subfield_codes, $code;
+        $witness{$code} = $sf_def->{lib};
 
         # Allow repeatables (BZ 13574)
-        if ( $item->{ $subf[$i][0] } ) {
-            $item->{ $subf[$i][0] } .= ' | ';
-        } else {
-            $item->{ $subf[$i][0] } = q{};
-        }
+        $item->{$code} = ( $item->{$code} ) ? $item->{$code} . ' | ' : q{};
 
         if ( $sf_def->{isurl} ) {
-            $item->{ $subf[$i][0] } .= "<a href=\"$subf[$i][1]\">$subf[$i][1]</a>";
+            $item->{$code} .= "<a href=\"$value\">$value</a>";
         } elsif ( $sf_def->{kohafield} eq "biblioitems.isbn" ) {
-            $item->{ $subf[$i][0] } .= $subf[$i][1];
+            $item->{$code} .= $value;
         } else {
-            $item->{ $subf[$i][0] } .= GetAuthorisedValueDesc(
-                $field->tag(), $subf[$i][0],
-                $subf[$i][1],  '', $tagslib, '', 'opac'
-            ) // q{};
+            $item->{$code} .= GetAuthorisedValueDesc( $item_tag, $code, $value, '', $tagslib, '', 'opac' ) // q{};
         }
 
-        my $kohafield = $tagslib->{ $field->tag() }->{ $subf[$i][0] }->{kohafield};
-        $item->{ $subf[$i][0] } = output_pref( { str => $item->{ $subf[$i][0] }, dateonly => 1 } )
-            if grep { $kohafield eq $_ }
-            qw( items.dateaccessioned items.onloan items.datelastseen items.datelastborrowed items.replacementpricedate );
-
+        $item->{$code} = output_pref( { str => $item->{$code}, dateonly => 1 } )
+            if $date_fields{ $sf_def->{kohafield} // q{} };
     }
     push @item_loop, $item if $item;
 }
