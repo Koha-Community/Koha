@@ -6,21 +6,23 @@
     <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
         <channel>
             <atom:link href="[% OPACBaseURL | url %]/cgi-bin/koha/opac-main.pl" rel="self" type="application/rss+xml" />
-            <title>
+            <title
+                ><![CDATA[
                 [% IF ( LibraryNameTitle ) %]
                     [% tx("News from {library} catalog", { library = LibraryNameTitle }) | html %]
                 [% ELSE %]
                     [% t("News from the library") | html %]
                 [% END %]
+                ]]>
             </title>
             <!-- prettier-ignore-start -->
-      <link>[% OPACBaseURL | html %]/cgi-bin/koha/opac-main.pl</link>
+      <link>[% OPACBaseURL | url %]/cgi-bin/koha/opac-main.pl</link>
       <!-- prettier-ignore-end -->
             <description></description>
             [% FOREACH newsitem IN koha_news %]
                 <item>
                     <title>[% newsitem.title | html %]</title>
-                    <description>[% newsitem.content | $raw %]</description>
+                    <description><![CDATA[[% newsitem.content | $raw %]]]></description>
                     <guid>[% OPACBaseURL | html %]/cgi-bin/koha/opac-main.pl#newsitem[% newsitem.additional_content_id | html %]</guid>
                 </item>
             [% END %]
