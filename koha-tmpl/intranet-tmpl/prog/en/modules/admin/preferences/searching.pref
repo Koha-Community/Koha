@@ -131,6 +131,14 @@ Searching:
             - "<pre>ccode: [REF,ARC]</pre><br/>  - would mark all REF and ARC collections (Reference and Archives) items as unavailable in Z3950 results.<br/><br/>"
             - "You can define multiple keys and values, items meeting ANY of the criteria will be marked unavailable:<br/><br/>"
             - "<pre>itype: [REF]<br/>holdingbranch: [REPAIR]</pre><br/>  - would mark all reference items AND items at the REPAIR branch as unavailable."
+        -
+            - "The following characters will always be escaped in intranet searches (with Elasticsearch):"
+            - pref: ElasticsearchEscapeCharacters
+              class: short
+            - ".</br>"
+            - "The following characters will always be escaped in OPAC searches (with Elasticsearch):"
+            - pref: OpacElasticsearchEscapeCharacters
+              class: short
     Search form:
         -
             - pref: LoadSearchHistoryToTheFirstLoggedUser
