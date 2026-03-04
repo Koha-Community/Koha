@@ -1026,6 +1026,9 @@ sub clean_search_term {
 
     $term = $self->_convert_index_strings_freeform($term);
 
+    # escape special characters
+    $term = $self->_escape_special_characters($term);
+
     # Remove unbalanced quotes
     my $unquoted = $term;
     my $count    = ( $unquoted =~ tr/"/ / );
@@ -1110,6 +1113,30 @@ sub clean_search_term {
         # restore temporary weird substitutions back to normal brackets
         $term =~
             s/~~L(C|S)~~([^\s\[\]\{\}]+ TO [^\s\[\]\{\}]+)~~R(C|S)~~/($1 eq 'S' ? '[':'{').$2.($3 eq 'S' ? ']':'}')/ge;
+    }
+    return $term;
+}
+
+=head2 _escape_special_characters
+
+    $term = $self->_escape_special_characters($term);
+
+Escapes characters in $term according to "ElasticsearchEscapeCharacters" /
+"OpacElasticsearchEscapeCharacters" system preference setting.
+
+=cut
+
+sub _escape_special_characters {
+    my ( $self, $term ) = @_;
+    my $characters_to_escape;
+    if ( C4::Context->interface eq 'opac' ) {
+        $characters_to_escape = C4::Context->preference('OpacElasticsearchEscapeCharacters');
+    } else {
+        $characters_to_escape = C4::Context->preference('ElasticsearchEscapeCharacters');
+    }
+    if ($characters_to_escape) {
+        $characters_to_escape =~ s/\s+//g;
+        $term                 =~ s/[\Q$characters_to_escape\E]/\\$&/g if $characters_to_escape;
     }
     return $term;
 }
