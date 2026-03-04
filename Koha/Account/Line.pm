@@ -848,15 +848,32 @@ sub adjust {
 
             # Catch cases that require patron refunds
             if ( $new_outstanding < 0 ) {
-                my $account = Koha::Patrons->find( $self->borrowernumber )->account;
-                my $credit  = $account->add_credit(
-                    {
-                        amount    => $new_outstanding * -1,
-                        type      => 'OVERPAYMENT',
-                        interface => $interface,
-                        ( $update_type eq 'overdue_update' ? ( item_id => $self->itemnumber ) : () ),
-                    }
-                );
+
+                # Only generate an OVERPAYMENT credit for reversible payments
+                # (e.g. cash payments). Non-reversible credits such as writeoffs,
+                # discounts and cancellations should simply be absorbed when the
+                # fine is adjusted downward - they must not produce a refund
+                # credit for the patron.
+                my $total_non_reversible = 0;
+                if ( my $debit_offsets = $self->debit_offsets ) {
+                    my $nr_offsets = $debit_offsets->filter_by_non_reversible;
+                    $total_non_reversible += abs( $_->amount ) for $nr_offsets->as_list;
+                }
+                my $total_applied      = $amount_before - $amount_outstanding_before;
+                my $total_reversible   = $total_applied - $total_non_reversible;
+                my $overpayment_amount = $total_reversible - $amount;
+
+                if ( $overpayment_amount > 0 ) {
+                    my $account = Koha::Patrons->find( $self->borrowernumber )->account;
+                    $account->add_credit(
+                        {
+                            amount    => $overpayment_amount,
+                            type      => 'OVERPAYMENT',
+                            interface => $interface,
+                            ( $update_type eq 'overdue_update' ? ( item_id => $self->itemnumber ) : () ),
+                        }
+                    );
+                }
                 $new_outstanding = 0;
             }
 

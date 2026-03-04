@@ -20,7 +20,7 @@
 use Modern::Perl;
 
 use Test::NoWarnings;
-use Test::More tests => 16;
+use Test::More tests => 17;
 use Test::Exception;
 use Test::MockModule;
 
@@ -722,6 +722,112 @@ subtest 'adjust() tests' => sub {
     my $overpayment_refund = $account->lines->last;
     is( $overpayment_refund->amount * 1,       -10,           'A new credit has been added' );
     is( $overpayment_refund->credit_type_code, 'OVERPAYMENT', 'Credit generated with the expected credit_type_code' );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'adjust() tests (writeoff does not generate overpayment credit)' => sub {
+
+    plan tests => 12;
+
+    $schema->storage->txn_begin;
+
+    my $patron  = $builder->build_object( { class => 'Koha::Patrons' } );
+    my $account = $patron->account;
+
+    # Scenario 1: Full writeoff then fine adjusted to 0 - no OVERPAYMENT credit
+    my $debit_1 = Koha::Account::Line->new(
+        {
+            borrowernumber    => $patron->id,
+            debit_type_code   => "OVERDUE",
+            status            => "UNRETURNED",
+            amount            => 100,
+            amountoutstanding => 100,
+            interface         => 'commandline',
+        }
+    )->store;
+
+    my $lines_count_before = $account->lines->count;
+
+    # Write off the full fine
+    $account->pay(
+        {
+            amount    => 100,
+            type      => 'WRITEOFF',
+            lines     => [$debit_1],
+            interface => 'commandline',
+        }
+    );
+    $debit_1->discard_changes;
+    is( $debit_1->amountoutstanding * 1, 0, 'Fine fully written off' );
+
+    # Simulate check-in recalculating fine to 0 (backdated or fine-free)
+    $debit_1->adjust( { amount => 0, type => 'overdue_update', interface => 'commandline' } )->discard_changes;
+
+    is( $debit_1->amount * 1,            0, 'Fine amount adjusted to 0' );
+    is( $debit_1->amountoutstanding * 1, 0, 'Fine amountoutstanding remains 0' );
+
+    # No new OVERPAYMENT credit should have been generated
+    is(
+        $account->lines->count,
+        $lines_count_before + 1,    # only the WRITEOFF credit, no OVERPAYMENT
+        'No OVERPAYMENT credit generated when fine adjusted after writeoff'
+    );
+    isnt(
+        $account->lines->last->credit_type_code,
+        'OVERPAYMENT',
+        'Last account line is not an OVERPAYMENT credit'
+    );
+
+    # Scenario 2: Partial payment + partial writeoff, fine drops below payment amount
+    # => OVERPAYMENT only for the payment portion
+    my $debit_2 = Koha::Account::Line->new(
+        {
+            borrowernumber    => $patron->id,
+            debit_type_code   => "OVERDUE",
+            status            => "UNRETURNED",
+            amount            => 100,
+            amountoutstanding => 100,
+            interface         => 'commandline',
+        }
+    )->store;
+
+    # Apply a $60 writeoff
+    $account->pay(
+        {
+            amount    => 60,
+            type      => 'WRITEOFF',
+            lines     => [$debit_2],
+            interface => 'commandline',
+        }
+    );
+    $debit_2->discard_changes;
+    is( $debit_2->amountoutstanding * 1, 40, 'Fine outstanding after writeoff' );
+
+    # Apply a $30 cash payment
+    my $payment = $account->add_credit( { amount => 30, type => 'PAYMENT', interface => 'commandline' } );
+    my $debits  = Koha::Account::Lines->search( { accountlines_id => $debit_2->id } );
+    $payment->apply( { debits => [ $debits->as_list ] } );
+    $debit_2->discard_changes;
+    is( $debit_2->amountoutstanding * 1, 10, 'Fine outstanding after payment' );
+
+    my $lines_count_before_2 = $account->lines->count;
+
+    # Simulate check-in recalculating fine to $0 (below the $30 payment)
+    $debit_2->adjust( { amount => 0, type => 'overdue_update', interface => 'commandline' } )->discard_changes;
+
+    is( $debit_2->amount * 1,            0, 'Fine amount adjusted to 0' );
+    is( $debit_2->amountoutstanding * 1, 0, 'Fine amountoutstanding remains 0' );
+
+    # OVERPAYMENT credit should be generated only for the reversible payment amount ($30)
+    is(
+        $account->lines->count,
+        $lines_count_before_2 + 1,
+        'One OVERPAYMENT credit generated (for cash payment only)'
+    );
+    my $overpayment = $account->lines->last;
+    is( $overpayment->amount * 1,       -30,           'OVERPAYMENT credit is for payment amount only, not writeoff' );
+    is( $overpayment->credit_type_code, 'OVERPAYMENT', 'Credit type is OVERPAYMENT' );
 
     $schema->storage->txn_rollback;
 };
