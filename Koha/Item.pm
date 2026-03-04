@@ -744,11 +744,13 @@ sub find_booking {
 =head3 check_booking
 
     my $bookable =
-        $item->check_booking( { start_date => $datetime, end_date => $datetime, [ booking_id => $booking_id ] } );
+        $item->check_booking( { start_date => $datetime, end_date => $datetime, [ booking_id => $booking_id, branchcode => $branchcode ] } );
 
 Returns a boolean denoting whether the passed booking can be made without clashing.
 
 Optionally, you may pass a booking id to exclude from the checks; This is helpful when you are updating an existing booking.
+
+Optionally, you may pass a branchcode to use when looking up lead/trail circulation rules.
 
 =cut
 
@@ -758,6 +760,26 @@ sub check_booking {
     my $start_date = dt_from_string( $params->{start_date} );
     my $end_date   = dt_from_string( $params->{end_date} );
     my $booking_id = $params->{booking_id};
+    my $branchcode = $params->{branchcode};
+
+    # Get lead and trail periods for this item type to enforce buffer zones
+    my $lead_rule = Koha::CirculationRules->get_effective_rule(
+        {
+            rule_name  => 'bookings_lead_period',
+            itemtype   => $self->effective_itemtype,
+            branchcode => $branchcode,
+        }
+    );
+    my $lead_days = $lead_rule && defined $lead_rule->rule_value ? $lead_rule->rule_value : 0;
+
+    my $trail_rule = Koha::CirculationRules->get_effective_rule(
+        {
+            rule_name  => 'bookings_trail_period',
+            itemtype   => $self->effective_itemtype,
+            branchcode => $branchcode,
+        }
+    );
+    my $trail_days = $trail_rule && defined $trail_rule->rule_value ? $trail_rule->rule_value : 0;
 
     if ( my $checkout = $self->checkout ) {
 
@@ -767,10 +789,22 @@ sub check_booking {
                defined($booking_id)
             && defined( $checkout->booking_id )
             && $checkout->booking_id == $booking_id;
-        return 0 if !$is_own_checkout && $start_date <= dt_from_string( $checkout->date_due );
+
+        # Item must be returned at least lead_days before booking starts
+        return 0
+            if !$is_own_checkout
+            && dt_from_string( $checkout->date_due ) >= $start_date->clone->subtract( days => $lead_days );
     }
 
     my $dtf = Koha::Database->new->schema->storage->datetime_parser;
+
+    # To check whether effective periods (core period ± lead/trail) overlap, we expand
+    # the query bounds. For items of the same effective itemtype the lead/trail values
+    # are identical for both the new and existing bookings, so the overlap condition
+    # becomes: existing_start <= new_end + trail + lead
+    #       AND existing_end   >= new_start - lead - trail
+    my $expanded_start = $start_date->clone->subtract( days => $lead_days + $trail_days );
+    my $expanded_end   = $end_date->clone->add( days => $trail_days + $lead_days );
 
     my $existing_bookings = $self->bookings(
         {
@@ -780,13 +814,13 @@ sub check_booking {
                         start_date => {
                             '-between' => [
                                 $dtf->format_datetime($start_date),
-                                $dtf->format_datetime($end_date)
+                                $dtf->format_datetime($expanded_end),
                             ]
                         },
                         end_date => {
                             '-between' => [
-                                $dtf->format_datetime($start_date),
-                                $dtf->format_datetime($end_date)
+                                $dtf->format_datetime($expanded_start),
+                                $dtf->format_datetime($end_date),
                             ]
                         },
                         {

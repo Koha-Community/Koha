@@ -193,7 +193,8 @@ sub store {
                     {
                         start_date => $self->start_date,
                         end_date   => $self->end_date,
-                        booking_id => $self->in_storage ? $self->booking_id : undef
+                        booking_id => $self->in_storage ? $self->booking_id : undef,
+                        branchcode => $self->pickup_library_id,
                     }
                     );
 
@@ -203,7 +204,9 @@ sub store {
                     {
                         start_date => $self->start_date,
                         end_date   => $self->end_date,
-                        booking_id => $self->in_storage ? $self->booking_id : undef
+                        booking_id => $self->in_storage ? $self->booking_id : undef,
+                        branchcode => $self->pickup_library_id,
+                        itemtype   => $self->item_id ? $self->item->effective_itemtype : undef,
                     }
                     );
             }
@@ -288,8 +291,17 @@ sub _assign_item_for_booking {
         }
     );
 
-    my $checkouts =
-        $biblio->current_checkouts->search( { date_due => { '>=' => $dtf->format_datetime($start_date) } } );
+    my $lead_rule = Koha::CirculationRules->get_effective_rule(
+        {
+            rule_name  => 'bookings_lead_period',
+            itemtype   => $biblio->biblioitem->itemtype,
+            branchcode => $self->pickup_library_id,
+        }
+    );
+    my $lead_days = $lead_rule && defined $lead_rule->rule_value ? $lead_rule->rule_value : 0;
+
+    my $checkouts = $biblio->current_checkouts->search(
+        { date_due => { '>=' => $dtf->format_datetime( $start_date->clone->subtract( days => $lead_days ) ) } } );
 
     # Build search conditions for bookable items
     my $item_search_conditions = {

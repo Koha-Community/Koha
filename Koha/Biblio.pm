@@ -349,11 +349,15 @@ sub can_be_edited {
 =head3 check_booking
 
   my $bookable =
-    $biblio->check_booking( { start_date => $datetime, end_date => $datetime, [ booking_id => $booking_id ] } );
+    $biblio->check_booking( { start_date => $datetime, end_date => $datetime, [ booking_id => $booking_id, branchcode => $branchcode, itemtype => $itemtype ] } );
 
 Returns a boolean denoting whether the passed booking can be made without clashing.
 
 Optionally, you may pass a booking id to exclude from the checks; This is helpful when you are updating an existing booking.
+
+Optionally, you may pass a branchcode to use when looking up lead/trail circulation rules.
+
+Optionally, you may pass an itemtype to use when looking up lead/trail circulation rules; falls back to a global rule if not provided.
 
 =cut
 
@@ -363,11 +367,36 @@ sub check_booking {
     my $start_date = dt_from_string( $params->{start_date} );
     my $end_date   = dt_from_string( $params->{end_date} );
     my $booking_id = $params->{booking_id};
+    my $branchcode = $params->{branchcode};
+    my $itemtype   = $params->{itemtype};
+
+    my $lead_rule = Koha::CirculationRules->get_effective_rule(
+        {
+            rule_name  => 'bookings_lead_period',
+            itemtype   => $itemtype,
+            branchcode => $branchcode,
+        }
+    );
+    my $lead_days = $lead_rule && defined $lead_rule->rule_value ? $lead_rule->rule_value : 0;
+
+    my $trail_rule = Koha::CirculationRules->get_effective_rule(
+        {
+            rule_name  => 'bookings_trail_period',
+            itemtype   => $itemtype,
+            branchcode => $branchcode,
+        }
+    );
+    my $trail_days = $trail_rule && defined $trail_rule->rule_value ? $trail_rule->rule_value : 0;
 
     my $bookable_items = $self->bookable_items;
     my $total_bookable = $bookable_items->count;
 
-    my $dtf               = Koha::Database->new->schema->storage->datetime_parser;
+    my $dtf = Koha::Database->new->schema->storage->datetime_parser;
+
+    # Expand bounds to account for lead/trail buffer zones on both sides
+    my $expanded_start = $start_date->clone->subtract( days => $lead_days + $trail_days );
+    my $expanded_end   = $end_date->clone->add( days => $trail_days + $lead_days );
+
     my $existing_bookings = $self->bookings(
         {
             '-and' => [
@@ -376,13 +405,13 @@ sub check_booking {
                         start_date => {
                             '-between' => [
                                 $dtf->format_datetime($start_date),
-                                $dtf->format_datetime($end_date)
+                                $dtf->format_datetime($expanded_end),
                             ]
                         },
                         end_date => {
                             '-between' => [
-                                $dtf->format_datetime($start_date),
-                                $dtf->format_datetime($end_date)
+                                $dtf->format_datetime($expanded_start),
+                                $dtf->format_datetime($end_date),
                             ]
                         },
                         {
@@ -407,7 +436,8 @@ sub check_booking {
 
     my $checkouts = $self->current_checkouts->search(
         {
-            date_due        => { '>=' => $dtf->format_datetime($start_date) },
+            # Item must be returned at least lead_days before booking starts
+            date_due        => { '>=' => $dtf->format_datetime( $start_date->clone->subtract( days => $lead_days ) ) },
             "me.itemnumber" => {
                 '-not_in' => $existing_bookings->_resultset->get_column('item_id')->as_query,
                 '-in'     => $bookable_item_ids,

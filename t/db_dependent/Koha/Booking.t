@@ -20,13 +20,14 @@
 use Modern::Perl;
 use utf8;
 
-use Test::More tests => 7;
+use Test::More tests => 8;
 use Test::NoWarnings;
 
 use Test::Warn;
 
 use Test::Exception;
 
+use Koha::CirculationRules;
 use Koha::DateUtils qw( dt_from_string );
 use Koha::Notice::Template;
 use Koha::Notice::Templates;
@@ -1258,6 +1259,180 @@ subtest 'store() skips clash detection on lifecycle status transitions' => sub {
     # Cancellation is also a terminal transition
     lives_ok { $booking->status('cancelled')->store() }
     'Transition to cancelled skips clash detection';
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'lead/trail period enforcement tests' => sub {
+    plan tests => 8;
+    $schema->storage->txn_begin;
+
+    my $patron = $builder->build_object( { class => "Koha::Patrons" } );
+    t::lib::Mocks::mock_userenv( { patron => $patron } );
+
+    my $item       = $builder->build_sample_item( { bookable => 1 } );
+    my $branchcode = $item->homebranch;
+    my $itype      = $item->effective_itemtype;
+
+    # Set lead=3 days, trail=2 days
+    Koha::CirculationRules->set_rule(
+        {
+            branchcode => $branchcode,
+            itemtype   => $itype,
+            rule_name  => 'bookings_lead_period',
+            rule_value => 3,
+        }
+    );
+    Koha::CirculationRules->set_rule(
+        {
+            branchcode => $branchcode,
+            itemtype   => $itype,
+            rule_name  => 'bookings_trail_period',
+            rule_value => 2,
+        }
+    );
+
+    # Existing booking B1: today+10 to today+20
+    # B1 effective period (with lead=3, trail=2): today+7 to today+22
+    my $b1_start = dt_from_string->add( days => 10 )->truncate( to => 'day' );
+    my $b1_end   = dt_from_string->add( days => 20 )->truncate( to => 'day' );
+    my $booking1 = Koha::Booking->new(
+        {
+            patron_id         => $patron->borrowernumber,
+            biblio_id         => $item->biblio->biblionumber,
+            item_id           => $item->itemnumber,
+            pickup_library_id => $branchcode,
+            start_date        => $b1_start,
+            end_date          => $b1_end,
+        }
+    )->store;
+    ok( $booking1->in_storage, 'First booking stored OK' );
+
+    # FAIL: B2 ends inside B1's lead period (B2: today+5 to today+8, B1 lead starts today+7)
+    throws_ok {
+        Koha::Booking->new(
+            {
+                patron_id         => $patron->borrowernumber,
+                biblio_id         => $item->biblio->biblionumber,
+                item_id           => $item->itemnumber,
+                pickup_library_id => $branchcode,
+                start_date        => dt_from_string->add( days => 5 )->truncate( to => 'day' ),
+                end_date          => dt_from_string->add( days => 8 )->truncate( to => 'day' ),
+            }
+        )->store;
+    }
+    'Koha::Exceptions::Booking::Clash',
+        'Throws when new booking ends inside an existing booking lead period';
+
+    # SUCCESS: B2 ends before B1's effective period (B2: today+3 to today+4)
+    # B2 effective end = today+4+trail=today+6 < B1 effective start today+7
+    my $booking2 = Koha::Booking->new(
+        {
+            patron_id         => $patron->borrowernumber,
+            biblio_id         => $item->biblio->biblionumber,
+            item_id           => $item->itemnumber,
+            pickup_library_id => $branchcode,
+            start_date        => dt_from_string->add( days => 3 )->truncate( to => 'day' ),
+            end_date          => dt_from_string->add( days => 4 )->truncate( to => 'day' ),
+        }
+    )->store;
+    ok( $booking2->in_storage, 'Booking OK when it ends before existing booking effective period' );
+
+    # FAIL: B3 starts inside B1's trail period (B3: today+22 to today+25, B1 trail ends today+22)
+    throws_ok {
+        Koha::Booking->new(
+            {
+                patron_id         => $patron->borrowernumber,
+                biblio_id         => $item->biblio->biblionumber,
+                item_id           => $item->itemnumber,
+                pickup_library_id => $branchcode,
+                start_date        => dt_from_string->add( days => 22 )->truncate( to => 'day' ),
+                end_date          => dt_from_string->add( days => 25 )->truncate( to => 'day' ),
+            }
+        )->store;
+    }
+    'Koha::Exceptions::Booking::Clash',
+        'Throws when new booking starts inside an existing booking trail period';
+
+    # FAIL: B3 lead period overlaps B1's trail period
+    # B3: today+23 to today+25, lead=3 → B3 eff start=today+20, which overlaps B1 end at today+20
+    throws_ok {
+        Koha::Booking->new(
+            {
+                patron_id         => $patron->borrowernumber,
+                biblio_id         => $item->biblio->biblionumber,
+                item_id           => $item->itemnumber,
+                pickup_library_id => $branchcode,
+                start_date        => dt_from_string->add( days => 23 )->truncate( to => 'day' ),
+                end_date          => dt_from_string->add( days => 25 )->truncate( to => 'day' ),
+            }
+        )->store;
+    }
+    'Koha::Exceptions::Booking::Clash',
+        "Throws when new booking's lead period overlaps an existing booking's trail period";
+
+    # SUCCESS: B3 starts after B1's full effective period ends
+    # B3: today+26 to today+30, B3 eff start = today+26-3=today+23 > B1 eff end today+22
+    my $booking3 = Koha::Booking->new(
+        {
+            patron_id         => $patron->borrowernumber,
+            biblio_id         => $item->biblio->biblionumber,
+            item_id           => $item->itemnumber,
+            pickup_library_id => $branchcode,
+            start_date        => dt_from_string->add( days => 26 )->truncate( to => 'day' ),
+            end_date          => dt_from_string->add( days => 30 )->truncate( to => 'day' ),
+        }
+    )->store;
+    ok(
+        $booking3->in_storage,
+        'Booking OK when new effective period starts after existing effective period ends'
+    );
+
+    # Checkout tests: item must be returned at least lead_days before booking start.
+    # Use dates outside all existing bookings' effective periods (B3 effective end = today+32,
+    # so B4 effective start must be > today+32 → B4 start >= today+36).
+    # FAIL: checkout due today+34, booking start today+36 (lead=3 → must return by today+33)
+    # today+34 >= today+33 → FAIL
+    $builder->build_object(
+        {
+            class => 'Koha::Checkouts',
+            value => {
+                itemnumber => $item->itemnumber,
+                date_due   => dt_from_string->add( days => 34 )->truncate( to => 'day' )->datetime(q{ }),
+            }
+        }
+    );
+    throws_ok {
+        Koha::Booking->new(
+            {
+                patron_id         => $patron->borrowernumber,
+                biblio_id         => $item->biblio->biblionumber,
+                item_id           => $item->itemnumber,
+                pickup_library_id => $branchcode,
+                start_date        => dt_from_string->add( days => 36 )->truncate( to => 'day' ),
+                end_date          => dt_from_string->add( days => 40 )->truncate( to => 'day' ),
+            }
+        )->store;
+    }
+    'Koha::Exceptions::Booking::Clash',
+        'Throws when checked-out item is due within the booking lead period';
+
+    # SUCCESS: checkout due today+32, booking start today+36 (lead=3 → must return by today+33)
+    # today+32 < today+33 → OK
+    # Update the checkout to an earlier due date
+    Koha::Checkouts->search( { itemnumber => $item->itemnumber } )
+        ->update( { date_due => dt_from_string->add( days => 32 )->truncate( to => 'day' )->datetime(q{ }) } );
+    my $booking4 = Koha::Booking->new(
+        {
+            patron_id         => $patron->borrowernumber,
+            biblio_id         => $item->biblio->biblionumber,
+            item_id           => $item->itemnumber,
+            pickup_library_id => $branchcode,
+            start_date        => dt_from_string->add( days => 36 )->truncate( to => 'day' ),
+            end_date          => dt_from_string->add( days => 40 )->truncate( to => 'day' ),
+        }
+    )->store;
+    ok( $booking4->in_storage, 'Booking OK when checkout is due before the lead period starts' );
 
     $schema->storage->txn_rollback;
 };
