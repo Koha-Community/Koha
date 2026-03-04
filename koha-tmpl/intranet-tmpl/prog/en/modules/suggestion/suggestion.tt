@@ -548,17 +548,20 @@
                                                     [% INCLUDE 'date-format.inc' %]
                                                 </td>
                                                 <td id="tdsuggestedby">
-                                                    <input type="hidden" id="suggestedby" name="suggestedby" value="[% suggestion.suggestedby | html %]" />
                                                     [% IF ( suggestion.suggester.borrowernumber ) %]
+                                                        <input type="hidden" id="suggestedby" name="suggestedby" value="[% suggestion.suggester.borrowernumber | html %]" />
                                                         <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% suggestion.suggester.borrowernumber | uri %]"
                                                             >[% suggestion.suggester.surname | html %], [% suggestion.suggester.firstname | html %] ([% suggestion.suggester.cardnumber | html %])</a
                                                         >
                                                         [% Branches.GetName( suggestion.suggester.branchcode ) | html %] ([% suggestion.suggester.category.description | html %])
                                                     [% ELSIF ( default_suggester ) %]
+                                                        <input type="hidden" id="suggestedby" name="suggestedby" value="[% default_suggester.borrowernumber | html %]" />
                                                         <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% default_suggester.borrowernumber | uri %]"
                                                             >[% default_suggester.surname | html %], [% default_suggester.firstname | html %] ([% default_suggester.cardnumber | html %])</a
                                                         >
                                                         [% Branches.GetName( default_suggester.branchcode ) | html %] ([% default_suggester.category.description | html %])
+                                                    [% ELSE %]
+                                                        <input type="hidden" id="suggestedby" name="suggestedby" value="" />
                                                     [% END %]
                                                 </td>
                                                 <td>
