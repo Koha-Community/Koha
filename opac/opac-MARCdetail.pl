@@ -277,7 +277,8 @@ for ( my $tabloop = 0 ; $tabloop <= 9 ; $tabloop++ ) {
 # warning : we may have different number of columns in each row. Thus, we first build a hash, complete it if necessary
 # then construct template.
 # $record has already had all the item fields filtered above.
-my @fields = $record->fields();
+$items->reset();
+my @fields = map { $_->as_marc_field } $items->as_list;
 my %witness;    #---- stores the list of subfields used at least once, with the "meaning" of the code
 my @item_subfield_codes;
 my @item_loop;
