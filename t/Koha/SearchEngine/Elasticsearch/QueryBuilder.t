@@ -232,7 +232,7 @@ subtest '_split_query() tests' => sub {
 };
 
 subtest 'clean_search_term() tests' => sub {
-    plan tests => 25;
+    plan tests => 29;
 
     my $qb;
     ok(
@@ -330,6 +330,24 @@ subtest 'clean_search_term() tests' => sub {
 
     $res = $qb->clean_search_term('kw:test');
     is( $res, 'test', 'kw converted to empty string, dangling colon is removed' );
+
+    C4::Context->interface('opac');
+    t::lib::Mocks::mock_preference( 'OpacElasticsearchEscapeCharacters', '' );
+    $res = $qb->clean_search_term('Simple? query');
+    is( $res, 'Simple? query', 'question mark not touched' );
+
+    t::lib::Mocks::mock_preference( 'OpacElasticsearchEscapeCharacters', '?' );
+    $res = $qb->clean_search_term('Simple? query');
+    is( $res, 'Simple\? query', 'question mark escaped' );
+
+    C4::Context->interface('intranet');
+    t::lib::Mocks::mock_preference( 'ElasticsearchEscapeCharacters', '' );
+    $res = $qb->clean_search_term('Simple? query');
+    is( $res, 'Simple? query', 'question mark not touched' );
+
+    t::lib::Mocks::mock_preference( 'ElasticsearchEscapeCharacters', '?#' );
+    $res = $qb->clean_search_term('Simple?# query');
+    is( $res, 'Simple\?\# query', 'question mark and hash escaped' );
 };
 
 subtest '_join_queries' => sub {
