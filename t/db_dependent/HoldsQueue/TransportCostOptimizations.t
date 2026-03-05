@@ -9,7 +9,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 120;
+use Test::More tests => 123;
 use Test::NoWarnings;
 use Test::Warn;
 use Data::Dumper;
@@ -193,7 +193,10 @@ sub test_allocation {
     if ($expected_allocation) {
         my @indices = allocation_indices( $libraries, $holds_queue );
 
-        is( scalar(@indices), scalar(@$expected_allocation), "$label correct number of allocations" );
+        is(
+            scalar(@indices), scalar(@$expected_allocation),
+            "$label correct number of allocations (" . scalar @$expected_allocation . ")"
+        );
 
         # print STDERR Dumper(\@indices);
 
@@ -347,6 +350,21 @@ test_allocation(
     [ 0,        0, 1, 1, 1 ],
     [ [ 0, 2 ], [ 1, 4 ] ],
     2
+);
+
+test_allocation(
+    "more holds than items and items cannot fill all holds",
+    [
+        [  0,  1,  1, -1,  1 ],
+        [ -1,  0, -1, -1,  1 ],
+        [ -1, -1,  0, -1, -1 ],
+        [ -1, -1, -1,  0, -1 ],
+        [ -1, -1, -1, -1,  0 ]
+    ],
+    [ 1, 0, 0, 0, 0 ],
+    [ 0, 0, 0, 1, 1 ],
+    [ [ 0, 4 ] ],
+    1
 );
 
 test_allocation(
