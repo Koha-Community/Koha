@@ -605,4 +605,5 @@ sub redirect_with_params {
             if defined( $input->param($key) );
     }
     print $input->redirect("/cgi-bin/koha/suggestion/suggestion.pl?$params");
+    exit;
 }
