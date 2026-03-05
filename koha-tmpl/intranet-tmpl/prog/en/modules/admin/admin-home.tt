@@ -58,7 +58,7 @@
                         <h4><a href="/cgi-bin/koha/admin/preferences.pl">System preferences</a></h4>
                         <p>Manage system preferences like MARC flavor, date format, administrator email, and templates.</p>
                         <input type="hidden" name="op" value="search" />
-                        <input type="text" name="searchfield" value="[% searchfield | html %]" />
+                        <input type="text" id="syspref-searchfield-main" name="searchfield" value="[% searchfield | html %]" />
                         <input type="submit" name="ok" class="btn btn-primary" value="Search" />
                     </fieldset>
                 </form>
@@ -325,4 +325,12 @@
     </div>
 [% END %]
 
+[% MACRO jsinclude BLOCK %]
+    [% INCLUDE "datatables.inc" %]
+    <script>
+        $(document).ready(function () {
+            syspref_autocomplete($("#syspref-searchfield-main"));
+        });
+    </script>
+[% END %]
 [% INCLUDE 'intranet-bottom.inc' %]
