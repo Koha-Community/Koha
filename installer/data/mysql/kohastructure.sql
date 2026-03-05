@@ -2943,11 +2943,13 @@ DROP TABLE IF EXISTS `edifact_errors`;
 CREATE TABLE `edifact_errors` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `message_id` int(11) NOT NULL,
+  `invoicenumber` varchar(48) DEFAULT NULL,
   `date` date DEFAULT NULL,
   `section` mediumtext DEFAULT NULL,
   `details` mediumtext DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `messageid` (`message_id`),
+  KEY `message_id_invoicenumber` (`message_id`, `invoicenumber`),
   CONSTRAINT `emfk_message` FOREIGN KEY (`message_id`) REFERENCES `edifact_messages` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
