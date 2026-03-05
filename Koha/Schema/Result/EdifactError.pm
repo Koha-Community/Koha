@@ -35,6 +35,12 @@ __PACKAGE__->table("edifact_errors");
   is_foreign_key: 1
   is_nullable: 0
 
+=head2 invoicenumber
+
+  data_type: 'varchar'
+  is_nullable: 1
+  size: 48
+
 =head2 date
 
   data_type: 'date'
@@ -58,6 +64,8 @@ __PACKAGE__->add_columns(
   { data_type => "integer", is_auto_increment => 1, is_nullable => 0 },
   "message_id",
   { data_type => "integer", is_foreign_key => 1, is_nullable => 0 },
+  "invoicenumber",
+  { data_type => "varchar", is_nullable => 1, size => 48 },
   "date",
   { data_type => "date", datetime_undef_if_invalid => 1, is_nullable => 1 },
   "section",
@@ -96,8 +104,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07051 @ 2025-02-21 15:22:01
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:e6TNAJbngU94ZrRDcp1OlQ
+# Created by DBIx::Class::Schema::Loader v0.07051 @ 2026-03-05 11:19:08
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:18c9vI4S/e07vp/LxlAipw
 
 =head1 OBJECT HELPERS
 
