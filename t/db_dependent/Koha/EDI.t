@@ -22,7 +22,7 @@ use FindBin qw( $Bin );
 
 use Test::Exception;
 use Test::NoWarnings;
-use Test::More tests => 13;
+use Test::More tests => 14;
 use Test::MockModule;
 use JSON qw( decode_json );
 
@@ -3721,6 +3721,216 @@ subtest 'duplicate_invoice_blocking' => sub {
             qr/Invalid vendor contact email address/,
             'Warning logged for invalid vendor contact email'
         );
+
+        $logger->clear();
+        $schema->storage->txn_rollback;
+    };
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'duplicate_order_email_notifications' => sub {
+    plan tests => 3;
+
+    $schema->storage->txn_begin;
+
+    # Helper: build a vendor with EDI account (po_is_basketname=1), an existing basket,
+    # and a new basket with one orderline, ready to trigger the duplicate PO check.
+    my $_setup_duplicate_order = sub {
+        my $bookseller = $builder->build_object( { class => 'Koha::Acquisition::Booksellers' } );
+
+        $builder->build(
+            {
+                source => 'VendorEdiAccount',
+                value  => {
+                    vendor_id        => $bookseller->id,
+                    plugin           => '',
+                    san              => '9876543210',
+                    po_is_basketname => 1,
+                }
+            }
+        );
+
+        # Existing basket whose name will conflict with the new one
+        $builder->build(
+            {
+                source => 'Aqbasket',
+                value  => {
+                    basketname   => 'DUP-PO-42001',
+                    booksellerid => $bookseller->id,
+                }
+            }
+        );
+
+        # New basket with the same name and one orderline
+        my $new_basket = $builder->build_object(
+            {
+                class => 'Koha::Acquisition::Baskets',
+                value => {
+                    basketname   => 'DUP-PO-42001',
+                    booksellerid => $bookseller->id,
+                }
+            }
+        );
+
+        $builder->build_object(
+            {
+                class => 'Koha::Acquisition::Orders',
+                value => {
+                    basketno    => $new_basket->basketno,
+                    orderstatus => 'new',
+                }
+            }
+        );
+
+        my $ean = $builder->build(
+            {
+                source => 'EdifactEan',
+                value  => {
+                    branchcode => undef,
+                    ean        => '9876543210',
+                }
+            }
+        );
+
+        return ( $bookseller, $new_basket, $ean );
+    };
+
+    # Test 1: No email when EdiDuplicateOrderEmailNotice is disabled
+    subtest 'email_notification_disabled' => sub {
+        plan tests => 3;
+
+        $schema->storage->txn_begin;
+
+        t::lib::Mocks::mock_preference( 'EdiDuplicateOrderEmailNotice',    0 );
+        t::lib::Mocks::mock_preference( 'EdiDuplicateOrderEmailAddresses', 'library@example.com' );
+
+        my ( $bookseller, $new_basket, $ean ) = $_setup_duplicate_order->();
+
+        $logger->clear();
+
+        my $result = create_edi_order( { basketno => $new_basket->basketno, ean => $ean->{ean} } );
+
+        is( ref($result),     'HASH',                'create_edi_order returns error hash for duplicate PO' );
+        is( $result->{error}, 'duplicate_po_number', 'Error code is duplicate_po_number' );
+
+        my $messages = $schema->resultset('MessageQueue')->search( { to_address => 'library@example.com' } );
+        is( $messages->count, 0, 'No email queued when EdiDuplicateOrderEmailNotice is disabled' );
+
+        $logger->clear();
+        $schema->storage->txn_rollback;
+    };
+
+    # Test 2: Library staff email notification
+    subtest 'library_email_notification' => sub {
+        plan tests => 5;
+
+        $schema->storage->txn_begin;
+
+        t::lib::Mocks::mock_preference( 'EdiDuplicateOrderEmailNotice',    1 );
+        t::lib::Mocks::mock_preference( 'EdiDuplicateOrderEmailAddresses', 'acq@library.org' );
+
+        $schema->resultset('Letter')
+            ->search( { module => 'acquisition', code => [ 'EDI_DUP_ORD_LIBRARY', 'EDI_DUP_ORD_VENDOR' ] } )
+            ->delete;
+
+        $builder->build(
+            {
+                source => 'Letter',
+                value  => {
+                    module     => 'acquisition',
+                    code       => 'EDI_DUP_ORD_LIBRARY',
+                    branchcode => '',
+                    name       => 'Test library order notification',
+                    is_html    => 0,
+                    title      => 'Duplicate Order - [% po_number %]',
+                    content    =>
+                        'Duplicate PO [% po_number %] blocked. Basket [% basketno %], existing basket [% existing_basketno %].',
+                    message_transport_type => 'email',
+                    lang                   => 'default',
+                }
+            }
+        );
+
+        my ( $bookseller, $new_basket, $ean ) = $_setup_duplicate_order->();
+
+        $logger->clear();
+
+        my $result = create_edi_order( { basketno => $new_basket->basketno, ean => $ean->{ean} } );
+
+        is( ref($result),     'HASH',                'create_edi_order returns error hash for duplicate PO' );
+        is( $result->{error}, 'duplicate_po_number', 'Error code is duplicate_po_number' );
+
+        my $messages = $schema->resultset('MessageQueue')
+            ->search( { to_address => 'acq@library.org', status => [ 'sent', 'pending', 'failed' ] } );
+        is( $messages->count, 1, 'Library notification was queued' );
+
+        my $msg = $messages->next;
+        like( $msg->subject, qr/Duplicate Order/, 'Library email has correct subject' );
+        like( $msg->content, qr/DUP-PO-42001/,    'Library email contains the PO number' );
+
+        $logger->clear();
+        $schema->storage->txn_rollback;
+    };
+
+    # Test 3: Vendor contact email notification
+    subtest 'vendor_email_notification' => sub {
+        plan tests => 4;
+
+        $schema->storage->txn_begin;
+
+        t::lib::Mocks::mock_preference( 'EdiDuplicateOrderEmailNotice',    1 );
+        t::lib::Mocks::mock_preference( 'EdiDuplicateOrderEmailAddresses', '' );
+
+        $schema->resultset('Letter')
+            ->search( { module => 'acquisition', code => [ 'EDI_DUP_ORD_LIBRARY', 'EDI_DUP_ORD_VENDOR' ] } )
+            ->delete;
+
+        $builder->build(
+            {
+                source => 'Letter',
+                value  => {
+                    module     => 'acquisition',
+                    code       => 'EDI_DUP_ORD_VENDOR',
+                    branchcode => '',
+                    name       => 'Test vendor order notification',
+                    is_html    => 0,
+                    title      => 'Duplicate Order Received - [% po_number %]',
+                    content    => 'Duplicate PO number [% po_number %] detected. Please contact the library.',
+                    message_transport_type => 'email',
+                    lang                   => 'default',
+                }
+            }
+        );
+
+        my ( $bookseller, $new_basket, $ean ) = $_setup_duplicate_order->();
+
+        # Add a vendor contact with edi_error_notification enabled
+        $builder->build(
+            {
+                source => 'Aqcontact',
+                value  => {
+                    booksellerid           => $bookseller->id,
+                    name                   => 'EDI Contact',
+                    email                  => 'vendor-edi@supplier.com',
+                    edi_error_notification => 1,
+                }
+            }
+        );
+
+        $logger->clear();
+
+        my $result = create_edi_order( { basketno => $new_basket->basketno, ean => $ean->{ean} } );
+
+        is( ref($result),     'HASH',                'create_edi_order returns error hash for duplicate PO' );
+        is( $result->{error}, 'duplicate_po_number', 'Error code is duplicate_po_number' );
+
+        my $messages = $schema->resultset('MessageQueue')
+            ->search( { to_address => 'vendor-edi@supplier.com', status => [ 'sent', 'pending', 'failed' ] } );
+        is( $messages->count, 1, 'Vendor notification was queued' );
+
+        my $msg = $messages->next;
+        like( $msg->subject, qr/Duplicate Order Received/, 'Vendor email has correct subject' );
 
         $logger->clear();
         $schema->storage->txn_rollback;
