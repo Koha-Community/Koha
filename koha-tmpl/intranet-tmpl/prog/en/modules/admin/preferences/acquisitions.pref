@@ -196,3 +196,20 @@ Acquisitions:
                 ccode: "collection"
                 "": "ignore"
             - " in items."
+        -
+            - pref: EdiBlockDuplicateInvoice
+              choices:
+                  1: Block
+                  0: "Don't block"
+            - processing of EDIFACT invoices when a duplicate invoice number is detected for the same supplier.
+        -
+            - pref: EdiBlockDuplicateInvoiceEmailNotice
+              choices:
+                  1: Send
+                  0: "Don't send"
+            - email notifications when duplicate EDIFACT invoices are detected.
+        -
+            - "Send duplicate invoice notifications to these email addresses (comma-separated):"
+            - pref: EdiBlockDuplicateInvoiceEmailAddresses
+              type: textarea
+              class: code

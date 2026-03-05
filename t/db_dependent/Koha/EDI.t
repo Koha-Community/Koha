@@ -22,7 +22,7 @@ use FindBin qw( $Bin );
 
 use Test::Exception;
 use Test::NoWarnings;
-use Test::More tests => 11;
+use Test::More tests => 12;
 use Test::MockModule;
 use JSON qw( decode_json );
 
@@ -2439,6 +2439,1016 @@ subtest 'servicing_instructions_invalid_lvc_code' => sub {
 
 # Build a minimal single-line EDIFACT ORDRSP message for testing process_ordrsp().
 # action_code: 2=cancelled, 4=no_action, 5=accepted
+
+subtest 'duplicate_invoice_blocking' => sub {
+    plan tests => 7;
+
+    $schema->storage->txn_begin;
+
+    # Get dirname for transport
+    my $dirname = ( $Bin =~ /^(.*\/t\/)/ ? $1 . 'edi_testfiles/' : q{} );
+
+    # Test 1: Backward compatibility - duplicate detection disabled
+    subtest 'duplicate_detection_disabled' => sub {
+        plan tests => 4;
+
+        $schema->storage->txn_begin;
+
+        # Disable duplicate blocking preference
+        t::lib::Mocks::mock_preference( 'EdiBlockDuplicateInvoice', 0 );
+
+        # Create file transport for local testing
+        my $file_transport = $builder->build(
+            {
+                source => 'FileTransport',
+                value  => {
+                    name               => 'Test Invoice Transport',
+                    transport          => 'local',
+                    download_directory => $dirname,
+                    upload_directory   => $dirname,
+                }
+            }
+        );
+
+        # Create vendor EDI account
+        my $account = $builder->build(
+            {
+                source => 'VendorEdiAccount',
+                value  => {
+                    description       => 'test vendor',
+                    file_transport_id => $file_transport->{file_transport_id},
+                    plugin            => '',
+                    san               => '5013546027173',
+                }
+            }
+        );
+
+        # Create test invoice that already exists
+        my $existing_invoice = $builder->build(
+            {
+                source => 'Aqinvoice',
+                value  => {
+                    invoicenumber => 'INV00003',
+                    booksellerid  => $account->{vendor_id},
+                    shipmentdate  => '2020-01-01',
+                }
+            }
+        );
+
+        # Create test basket and order
+        my $basket = $builder->build_object(
+            {
+                class => 'Koha::Acquisition::Baskets',
+                value => {
+                    booksellerid => $account->{vendor_id},
+                    basketname   => 'Test Basket',
+                }
+            }
+        );
+        my $order = $builder->build_object(
+            {
+                class => 'Koha::Acquisition::Orders',
+                value => {
+                    basketno     => $basket->id,
+                    orderstatus  => 'new',
+                    biblionumber => undef,
+                }
+            }
+        );
+        my $ordernumber = $order->ordernumber;
+
+        # Prepare invoice message
+        my $filename = 'INVOICE.CEI';
+        ok( -e $dirname . $filename, 'File INVOICE.CEI found' );
+
+        my $trans = Koha::Edifact::Transport->new( $account->{id} );
+        $trans->working_directory($dirname);
+
+        my $mhash = $trans->message_hash();
+        $mhash->{message_type} = 'INVOICE';
+        $trans->ingest( $mhash, $filename );
+
+        my $invoice_message = $schema->resultset('EdifactMessage')->find( { filename => $filename } );
+        my $raw_msg         = $invoice_message->raw_msg;
+        $raw_msg =~ s/ORDERNUMBER1/$ordernumber/g;
+        $raw_msg =~ s/ORDERNUMBER2/$ordernumber/g;
+        $invoice_message->update( { raw_msg => $raw_msg } );
+
+        # Clear logger
+        $logger->clear();
+
+        # Process the invoice - should succeed despite duplicate
+        my $error;
+        eval {
+            process_invoice($invoice_message);
+            1;
+        } or do {
+            $error = $@;
+        };
+        ok( !$error, 'Invoice processing completed without dying when preference disabled' );
+
+        # Verify duplicate was NOT blocked (second invoice created)
+        my $duplicate_invoices = $schema->resultset('Aqinvoice')->search(
+            {
+                invoicenumber => 'INV00003',
+                booksellerid  => $account->{vendor_id},
+            }
+        );
+        is( $duplicate_invoices->count, 2, 'Duplicate invoice was allowed when preference disabled' );
+
+        # Verify no duplicate error was logged
+        my $errors          = $invoice_message->edifact_errors;
+        my $duplicate_error = $errors->search( { details => { 'like', '%Duplicate invoice%' } } )->count;
+        is( $duplicate_error, 0, 'No duplicate error logged when preference disabled' );
+
+        $logger->clear();
+        $schema->storage->txn_rollback;
+    };
+
+    # Test 2: Duplicate blocking enabled
+    subtest 'duplicate_blocking_enabled' => sub {
+        plan tests => 6;
+
+        $schema->storage->txn_begin;
+
+        # Enable duplicate blocking preference
+        t::lib::Mocks::mock_preference( 'EdiBlockDuplicateInvoice',            1 );
+        t::lib::Mocks::mock_preference( 'EdiBlockDuplicateInvoiceEmailNotice', 0 );
+
+        # Create file transport for local testing
+        my $file_transport = $builder->build(
+            {
+                source => 'FileTransport',
+                value  => {
+                    name               => 'Test Invoice Transport',
+                    transport          => 'local',
+                    download_directory => $dirname,
+                    upload_directory   => $dirname,
+                }
+            }
+        );
+
+        # Create vendor EDI account
+        my $account = $builder->build(
+            {
+                source => 'VendorEdiAccount',
+                value  => {
+                    description       => 'test vendor',
+                    file_transport_id => $file_transport->{file_transport_id},
+                    plugin            => '',
+                    san               => '5013546027173',
+                }
+            }
+        );
+
+        # Create test invoice that already exists
+        my $existing_invoice = $builder->build(
+            {
+                source => 'Aqinvoice',
+                value  => {
+                    invoicenumber => 'INV00003',
+                    booksellerid  => $account->{vendor_id},
+                    shipmentdate  => '2020-01-01',
+                }
+            }
+        );
+
+        # Create test basket and order
+        my $basket = $builder->build_object(
+            {
+                class => 'Koha::Acquisition::Baskets',
+                value => {
+                    booksellerid => $account->{vendor_id},
+                    basketname   => 'Test Basket',
+                }
+            }
+        );
+        my $order = $builder->build_object(
+            {
+                class => 'Koha::Acquisition::Orders',
+                value => {
+                    basketno     => $basket->id,
+                    orderstatus  => 'new',
+                    biblionumber => undef,
+                }
+            }
+        );
+        my $ordernumber = $order->ordernumber;
+
+        # Prepare invoice message
+        my $filename = 'INVOICE.CEI';
+        my $trans    = Koha::Edifact::Transport->new( $account->{id} );
+        $trans->working_directory($dirname);
+
+        my $mhash = $trans->message_hash();
+        $mhash->{message_type} = 'INVOICE';
+        $trans->ingest( $mhash, $filename );
+
+        my $invoice_message = $schema->resultset('EdifactMessage')->find( { filename => $filename } );
+        my $raw_msg         = $invoice_message->raw_msg;
+        $raw_msg =~ s/ORDERNUMBER1/$ordernumber/g;
+        $raw_msg =~ s/ORDERNUMBER2/$ordernumber/g;
+        $invoice_message->update( { raw_msg => $raw_msg } );
+
+        # Clear logger
+        $logger->clear();
+
+        # Process the invoice - should block duplicate
+        my $error;
+        eval {
+            process_invoice($invoice_message);
+            1;
+        } or do {
+            $error = $@;
+        };
+        ok( !$error, 'Invoice processing completed without dying' );
+
+        # Verify duplicate was blocked (only original invoice exists)
+        my $duplicate_invoices = $schema->resultset('Aqinvoice')->search(
+            {
+                invoicenumber => 'INV00003',
+                booksellerid  => $account->{vendor_id},
+            }
+        );
+        is( $duplicate_invoices->count, 1, 'Duplicate invoice was blocked' );
+
+        # Verify error was logged
+        $logger->error_like(
+            qr/Duplicate invoice INV00003 for vendor.*/,
+            'Error logged for duplicate invoice'
+        );
+
+        # Verify error recorded in edifact_errors table
+        my $errors          = $invoice_message->edifact_errors;
+        my $duplicate_error = $errors->search( { details => { 'like', '%Duplicate invoice%' } } )->first;
+        ok( $duplicate_error, 'Duplicate error recorded in edifact_errors table' );
+        like(
+            $duplicate_error->details, qr/Duplicate invoice number 'INV00003'/,
+            'Error details contain invoice number'
+        );
+
+        # Verify message status set to error
+        $invoice_message->discard_changes;
+        is( $invoice_message->status, 'error', 'Message status set to error' );
+
+        $logger->clear();
+        $schema->storage->txn_rollback;
+    };
+
+    # Test 3: Same invoice number with different vendor should be allowed
+    subtest 'different_vendor_allowed' => sub {
+        plan tests => 3;
+
+        $schema->storage->txn_begin;
+
+        # Enable duplicate blocking preference
+        t::lib::Mocks::mock_preference( 'EdiBlockDuplicateInvoice', 1 );
+
+        # Create file transport for local testing
+        my $file_transport = $builder->build(
+            {
+                source => 'FileTransport',
+                value  => {
+                    name               => 'Test Invoice Transport',
+                    transport          => 'local',
+                    download_directory => $dirname,
+                    upload_directory   => $dirname,
+                }
+            }
+        );
+
+        # Create two different vendors
+        my $account1 = $builder->build(
+            {
+                source => 'VendorEdiAccount',
+                value  => {
+                    description       => 'test vendor 1',
+                    file_transport_id => $file_transport->{file_transport_id},
+                    plugin            => '',
+                    san               => '5013546027173',
+                }
+            }
+        );
+
+        my $account2 = $builder->build(
+            {
+                source => 'VendorEdiAccount',
+                value  => {
+                    description       => 'test vendor 2',
+                    file_transport_id => $file_transport->{file_transport_id},
+                    plugin            => '',
+                    san               => '5013546027999',
+                }
+            }
+        );
+
+        # Create invoice for vendor 1
+        my $invoice1 = $builder->build(
+            {
+                source => 'Aqinvoice',
+                value  => {
+                    invoicenumber => 'INV00003',
+                    booksellerid  => $account1->{vendor_id},
+                }
+            }
+        );
+
+        # Create test basket and order for vendor 2
+        my $basket = $builder->build_object(
+            {
+                class => 'Koha::Acquisition::Baskets',
+                value => {
+                    booksellerid => $account2->{vendor_id},
+                    basketname   => 'Test Basket',
+                }
+            }
+        );
+        my $order = $builder->build_object(
+            {
+                class => 'Koha::Acquisition::Orders',
+                value => {
+                    basketno     => $basket->id,
+                    orderstatus  => 'new',
+                    biblionumber => undef,
+                }
+            }
+        );
+
+        # Prepare invoice message for vendor 2 using same file
+        my $filename = 'INVOICE.CEI';
+        my $trans    = Koha::Edifact::Transport->new( $account2->{id} );
+        $trans->working_directory($dirname);
+
+        my $mhash = $trans->message_hash();
+        $mhash->{message_type} = 'INVOICE';
+        $trans->ingest( $mhash, $filename );
+
+        my $invoice_message = $schema->resultset('EdifactMessage')->search(
+            { filename => $filename },
+            { order_by => { -desc => 'id' }, rows => 1 }
+        )->single;
+        my $raw_msg = $invoice_message->raw_msg;
+        $raw_msg =~ s/ORDERNUMBER1/$order->ordernumber/g;
+        $raw_msg =~ s/ORDERNUMBER2/$order->ordernumber/g;
+        $raw_msg =~ s/5013546027173/$account2->{san}/g;     # Replace vendor SAN
+        $invoice_message->update(
+            {
+                raw_msg   => $raw_msg,
+                vendor_id => $account2->{vendor_id},
+                edi_acct  => $account2->{id}
+            }
+        );
+
+        # Clear logger
+        $logger->clear();
+
+        # Process the invoice - should succeed (different vendor)
+        my $error;
+        eval {
+            process_invoice($invoice_message);
+            1;
+        } or do {
+            $error = $@;
+        };
+        ok( !$error, 'Invoice processing completed without dying' );
+
+        # Verify both invoices exist (one per vendor)
+        my $invoices_vendor1 = $schema->resultset('Aqinvoice')->search(
+            {
+                invoicenumber => 'INV00003',
+                booksellerid  => $account1->{vendor_id},
+            }
+        );
+        is( $invoices_vendor1->count, 1, 'Invoice exists for vendor 1' );
+
+        my $invoices_vendor2 = $schema->resultset('Aqinvoice')->search(
+            {
+                invoicenumber => 'INV00003',
+                booksellerid  => $account2->{vendor_id},
+            }
+        );
+        is( $invoices_vendor2->count, 1, 'Invoice allowed for vendor 2 with same invoice number' );
+
+        $logger->clear();
+        $schema->storage->txn_rollback;
+    };
+
+    # Test 4: Library staff email notification
+    subtest 'library_email_notification' => sub {
+        plan tests => 5;
+
+        $schema->storage->txn_begin;
+
+        # Enable duplicate blocking and email notifications
+        t::lib::Mocks::mock_preference( 'EdiBlockDuplicateInvoice',               1 );
+        t::lib::Mocks::mock_preference( 'EdiBlockDuplicateInvoiceEmailNotice',    1 );
+        t::lib::Mocks::mock_preference( 'EdiBlockDuplicateInvoiceEmailAddresses', 'library@example.com' );
+
+        # Create letter templates for notifications (delete first if exist)
+        $schema->resultset('Letter')->search(
+            {
+                module => 'acquisition',
+                code   => [ 'EDI_DUP_INV_LIBRARY', 'EDI_DUP_INV_VENDOR' ],
+            }
+        )->delete;
+
+        $builder->build(
+            {
+                source => 'Letter',
+                value  => {
+                    module                 => 'acquisition',
+                    code                   => 'EDI_DUP_INV_LIBRARY',
+                    branchcode             => '',
+                    name                   => 'Test library notification',
+                    is_html                => 0,
+                    title                  => 'Duplicate Invoice - <<invoicenumber>>',
+                    content                => 'Duplicate invoice <<invoicenumber>>. Processing has been blocked.',
+                    message_transport_type => 'email',
+                    lang                   => 'default',
+                }
+            }
+        );
+        $builder->build(
+            {
+                source => 'Letter',
+                value  => {
+                    module                 => 'acquisition',
+                    code                   => 'EDI_DUP_INV_VENDOR',
+                    branchcode             => '',
+                    name                   => 'Test vendor notification',
+                    is_html                => 0,
+                    title                  => 'Duplicate Invoice - <<invoicenumber>>',
+                    content                => 'Duplicate invoice <<invoicenumber>>. Please use UNIQUE invoice number.',
+                    message_transport_type => 'email',
+                    lang                   => 'default',
+                }
+            }
+        );
+
+        # Create file transport for local testing
+        my $file_transport = $builder->build(
+            {
+                source => 'FileTransport',
+                value  => {
+                    name               => 'Test Invoice Transport',
+                    transport          => 'local',
+                    download_directory => $dirname,
+                    upload_directory   => $dirname,
+                }
+            }
+        );
+
+        # Create vendor EDI account
+        my $account = $builder->build(
+            {
+                source => 'VendorEdiAccount',
+                value  => {
+                    description       => 'test vendor',
+                    file_transport_id => $file_transport->{file_transport_id},
+                    plugin            => '',
+                    san               => '5013546027173',
+                }
+            }
+        );
+
+        # Create test invoice that already exists
+        my $existing_invoice = $builder->build(
+            {
+                source => 'Aqinvoice',
+                value  => {
+                    invoicenumber => 'INV00003',
+                    booksellerid  => $account->{vendor_id},
+                    shipmentdate  => '2020-01-01',
+                }
+            }
+        );
+
+        # Create test basket and order
+        my $basket = $builder->build_object(
+            {
+                class => 'Koha::Acquisition::Baskets',
+                value => {
+                    booksellerid => $account->{vendor_id},
+                    basketname   => 'Test Basket',
+                }
+            }
+        );
+        my $order = $builder->build_object(
+            {
+                class => 'Koha::Acquisition::Orders',
+                value => {
+                    basketno     => $basket->id,
+                    orderstatus  => 'new',
+                    biblionumber => undef,
+                }
+            }
+        );
+
+        # Prepare invoice message
+        my $filename = 'INVOICE.CEI';
+        my $trans    = Koha::Edifact::Transport->new( $account->{id} );
+        $trans->working_directory($dirname);
+
+        my $mhash = $trans->message_hash();
+        $mhash->{message_type} = 'INVOICE';
+        $trans->ingest( $mhash, $filename );
+
+        my $invoice_message = $schema->resultset('EdifactMessage')->find( { filename => $filename } );
+        my $raw_msg         = $invoice_message->raw_msg;
+        $raw_msg =~ s/ORDERNUMBER1/$order->ordernumber/g;
+        $raw_msg =~ s/ORDERNUMBER2/$order->ordernumber/g;
+        $invoice_message->update( { raw_msg => $raw_msg } );
+
+        # Process the invoice
+        process_invoice($invoice_message);
+
+        # Verify library email was queued in message_queue
+        my $library_messages = $schema->resultset('MessageQueue')->search(
+            {
+                to_address => 'library@example.com',
+                status     => [ 'sent', 'pending', 'failed' ],    # Accept any status - queuing is what matters
+            }
+        );
+        is( $library_messages->count, 1, 'Library notification was queued' );
+
+        my $library_message = $library_messages->next;
+        like( $library_message->subject, qr/Duplicate Invoice/,           'Library email has correct subject' );
+        like( $library_message->content, qr/INV00003/,                    'Library email contains invoice number' );
+        like( $library_message->content, qr/Processing has been blocked/, 'Library email contains blocking message' );
+
+        # Verify message was recorded in message_queue for audit trail
+        ok( $library_message->message_id, 'Message has ID for audit trail' );
+
+        $schema->storage->txn_rollback;
+    };
+
+    # Test 5: Vendor email notification
+    subtest 'vendor_email_notification' => sub {
+        plan tests => 5;
+
+        $schema->storage->txn_begin;
+
+        # Enable duplicate blocking and email notifications
+        t::lib::Mocks::mock_preference( 'EdiBlockDuplicateInvoice',               1 );
+        t::lib::Mocks::mock_preference( 'EdiBlockDuplicateInvoiceEmailNotice',    1 );
+        t::lib::Mocks::mock_preference( 'EdiBlockDuplicateInvoiceEmailAddresses', 'library@example.com' );
+
+        # Create letter templates for notifications (delete first if exist)
+        $schema->resultset('Letter')->search(
+            {
+                module => 'acquisition',
+                code   => [ 'EDI_DUP_INV_LIBRARY', 'EDI_DUP_INV_VENDOR' ],
+            }
+        )->delete;
+
+        $builder->build(
+            {
+                source => 'Letter',
+                value  => {
+                    module                 => 'acquisition',
+                    code                   => 'EDI_DUP_INV_LIBRARY',
+                    branchcode             => '',
+                    name                   => 'Test library notification',
+                    is_html                => 0,
+                    title                  => 'Duplicate Invoice - <<invoicenumber>>',
+                    content                => 'Duplicate invoice <<invoicenumber>>. Processing has been blocked.',
+                    message_transport_type => 'email',
+                    lang                   => 'default',
+                }
+            }
+        );
+        $builder->build(
+            {
+                source => 'Letter',
+                value  => {
+                    module                 => 'acquisition',
+                    code                   => 'EDI_DUP_INV_VENDOR',
+                    branchcode             => '',
+                    name                   => 'Test vendor notification',
+                    is_html                => 0,
+                    title                  => 'Duplicate Invoice - <<invoicenumber>>',
+                    content                => 'Duplicate invoice <<invoicenumber>>. Please use UNIQUE invoice number.',
+                    message_transport_type => 'email',
+                    lang                   => 'default',
+                }
+            }
+        );
+
+        # Create file transport for local testing
+        my $file_transport = $builder->build(
+            {
+                source => 'FileTransport',
+                value  => {
+                    name               => 'Test Invoice Transport',
+                    transport          => 'local',
+                    download_directory => $dirname,
+                    upload_directory   => $dirname,
+                }
+            }
+        );
+
+        # Create vendor EDI account
+        my $account = $builder->build(
+            {
+                source => 'VendorEdiAccount',
+                value  => {
+                    description       => 'test vendor',
+                    file_transport_id => $file_transport->{file_transport_id},
+                    plugin            => '',
+                    san               => '5013546027173',
+                }
+            }
+        );
+
+        # Create vendor contact with EDI error notification enabled
+        my $vendor_contact = $builder->build(
+            {
+                source => 'Aqcontact',
+                value  => {
+                    name                   => 'Test Vendor Contact',
+                    email                  => 'vendor@supplier.com',
+                    booksellerid           => $account->{vendor_id},
+                    edi_error_notification => 1,
+                }
+            }
+        );
+
+        # Create test invoice that already exists
+        my $existing_invoice = $builder->build(
+            {
+                source => 'Aqinvoice',
+                value  => {
+                    invoicenumber => 'INV00003',
+                    booksellerid  => $account->{vendor_id},
+                    shipmentdate  => '2020-01-01',
+                }
+            }
+        );
+
+        # Create test basket and order
+        my $basket = $builder->build_object(
+            {
+                class => 'Koha::Acquisition::Baskets',
+                value => {
+                    booksellerid => $account->{vendor_id},
+                    basketname   => 'Test Basket',
+                }
+            }
+        );
+        my $order = $builder->build_object(
+            {
+                class => 'Koha::Acquisition::Orders',
+                value => {
+                    basketno     => $basket->id,
+                    orderstatus  => 'new',
+                    biblionumber => undef,
+                }
+            }
+        );
+
+        # Prepare invoice message
+        my $filename = 'INVOICE.CEI';
+        my $trans    = Koha::Edifact::Transport->new( $account->{id} );
+        $trans->working_directory($dirname);
+
+        my $mhash = $trans->message_hash();
+        $mhash->{message_type} = 'INVOICE';
+        $trans->ingest( $mhash, $filename );
+
+        my $invoice_message = $schema->resultset('EdifactMessage')->find( { filename => $filename } );
+        my $raw_msg         = $invoice_message->raw_msg;
+        $raw_msg =~ s/ORDERNUMBER1/$order->ordernumber/g;
+        $raw_msg =~ s/ORDERNUMBER2/$order->ordernumber/g;
+        $invoice_message->update( { raw_msg => $raw_msg } );
+
+        # Process the invoice
+        process_invoice($invoice_message);
+
+        # Verify vendor email was queued in message_queue
+        my $vendor_messages = $schema->resultset('MessageQueue')->search(
+            {
+                to_address => 'vendor@supplier.com',
+                status     => [ 'sent', 'pending', 'failed' ],    # Accept any status - queuing is what matters
+            }
+        );
+        is( $vendor_messages->count, 1, 'Vendor notification was queued' );
+
+        my $vendor_message = $vendor_messages->next;
+        like( $vendor_message->subject, qr/Duplicate Invoice/,     'Vendor email has correct subject' );
+        like( $vendor_message->content, qr/INV00003/,              'Vendor email contains invoice number' );
+        like( $vendor_message->content, qr/UNIQUE invoice number/, 'Vendor email contains action required message' );
+
+        # Verify message was recorded for audit trail
+        ok( $vendor_message->message_id, 'Message has ID for audit trail' );
+
+        $schema->storage->txn_rollback;
+    };
+
+    # Test 6: Multiple email recipients
+    subtest 'multiple_email_recipients' => sub {
+        plan tests => 3;
+
+        $schema->storage->txn_begin;
+
+        # Enable duplicate blocking and email notifications with multiple addresses
+        t::lib::Mocks::mock_preference( 'EdiBlockDuplicateInvoice',            1 );
+        t::lib::Mocks::mock_preference( 'EdiBlockDuplicateInvoiceEmailNotice', 1 );
+        t::lib::Mocks::mock_preference(
+            'EdiBlockDuplicateInvoiceEmailAddresses',
+            'library1@example.com, library2@example.com, library3@example.com'
+        );
+
+        # Create letter templates (delete first if exist)
+        $schema->resultset('Letter')->search(
+            {
+                module => 'acquisition',
+                code   => 'EDI_DUP_INV_LIBRARY',
+            }
+        )->delete;
+
+        $builder->build(
+            {
+                source => 'Letter',
+                value  => {
+                    module                 => 'acquisition',
+                    code                   => 'EDI_DUP_INV_LIBRARY',
+                    branchcode             => '',
+                    name                   => 'Test library notification',
+                    is_html                => 0,
+                    title                  => 'Duplicate Invoice',
+                    content                => 'Duplicate invoice.',
+                    message_transport_type => 'email',
+                    lang                   => 'default',
+                }
+            }
+        );
+
+        # Create file transport for local testing
+        my $file_transport = $builder->build(
+            {
+                source => 'FileTransport',
+                value  => {
+                    name               => 'Test Invoice Transport',
+                    transport          => 'local',
+                    download_directory => $dirname,
+                    upload_directory   => $dirname,
+                }
+            }
+        );
+
+        # Create vendor EDI account
+        my $account = $builder->build(
+            {
+                source => 'VendorEdiAccount',
+                value  => {
+                    description       => 'test vendor',
+                    file_transport_id => $file_transport->{file_transport_id},
+                    plugin            => '',
+                    san               => '5013546027173',
+                }
+            }
+        );
+
+        # Create test invoice that already exists
+        my $existing_invoice = $builder->build(
+            {
+                source => 'Aqinvoice',
+                value  => {
+                    invoicenumber => 'INV00003',
+                    booksellerid  => $account->{vendor_id},
+                }
+            }
+        );
+
+        # Create test basket and order
+        my $basket = $builder->build_object(
+            {
+                class => 'Koha::Acquisition::Baskets',
+                value => {
+                    booksellerid => $account->{vendor_id},
+                    basketname   => 'Test Basket',
+                }
+            }
+        );
+        my $order = $builder->build_object(
+            {
+                class => 'Koha::Acquisition::Orders',
+                value => {
+                    basketno     => $basket->id,
+                    orderstatus  => 'new',
+                    biblionumber => undef,
+                }
+            }
+        );
+
+        # Prepare invoice message
+        my $filename = 'INVOICE.CEI';
+        my $trans    = Koha::Edifact::Transport->new( $account->{id} );
+        $trans->working_directory($dirname);
+
+        my $mhash = $trans->message_hash();
+        $mhash->{message_type} = 'INVOICE';
+        $trans->ingest( $mhash, $filename );
+
+        my $invoice_message = $schema->resultset('EdifactMessage')->find( { filename => $filename } );
+        my $raw_msg         = $invoice_message->raw_msg;
+        $raw_msg =~ s/ORDERNUMBER1/$order->ordernumber/g;
+        $raw_msg =~ s/ORDERNUMBER2/$order->ordernumber/g;
+        $invoice_message->update( { raw_msg => $raw_msg } );
+
+        # Process the invoice
+        process_invoice($invoice_message);
+
+        # Verify all three library emails were queued
+        my $library_messages = $schema->resultset('MessageQueue')->search(
+            {
+                to_address => [ 'library1@example.com', 'library2@example.com', 'library3@example.com' ],
+                status     => [ 'sent', 'pending', 'failed' ],    # Accept any status - queuing is what matters
+            }
+        );
+        is( $library_messages->count, 3, 'Three library notification emails queued' );
+
+        my @to_addresses = map { $_->to_address } $library_messages->all;
+        ok( ( grep { $_ eq 'library1@example.com' } @to_addresses ), 'Email sent to library1' );
+        ok( ( grep { $_ eq 'library2@example.com' } @to_addresses ), 'Email sent to library2' );
+
+        $schema->storage->txn_rollback;
+    };
+
+    # Test 7: Invalid email handling
+    subtest 'invalid_email_handling' => sub {
+        plan tests => 3;
+
+        $schema->storage->txn_begin;
+
+        # Enable duplicate blocking and email notifications with invalid addresses
+        t::lib::Mocks::mock_preference( 'EdiBlockDuplicateInvoice',               1 );
+        t::lib::Mocks::mock_preference( 'EdiBlockDuplicateInvoiceEmailNotice',    1 );
+        t::lib::Mocks::mock_preference( 'EdiBlockDuplicateInvoiceEmailAddresses', 'invalid-email, valid@example.com' );
+
+        # Create letter templates (delete first if exist)
+        $schema->resultset('Letter')->search(
+            {
+                module => 'acquisition',
+                code   => [ 'EDI_DUP_INV_LIBRARY', 'EDI_DUP_INV_VENDOR' ],
+            }
+        )->delete;
+
+        $builder->build(
+            {
+                source => 'Letter',
+                value  => {
+                    module                 => 'acquisition',
+                    code                   => 'EDI_DUP_INV_LIBRARY',
+                    branchcode             => '',
+                    name                   => 'Test library notification',
+                    is_html                => 0,
+                    title                  => 'Duplicate Invoice',
+                    content                => 'Duplicate invoice.',
+                    message_transport_type => 'email',
+                    lang                   => 'default',
+                }
+            }
+        );
+        $builder->build(
+            {
+                source => 'Letter',
+                value  => {
+                    module                 => 'acquisition',
+                    code                   => 'EDI_DUP_INV_VENDOR',
+                    branchcode             => '',
+                    name                   => 'Test vendor notification',
+                    is_html                => 0,
+                    title                  => 'Duplicate Invoice',
+                    content                => 'Duplicate invoice.',
+                    message_transport_type => 'email',
+                    lang                   => 'default',
+                }
+            }
+        );
+
+        # Create file transport for local testing
+        my $file_transport = $builder->build(
+            {
+                source => 'FileTransport',
+                value  => {
+                    name               => 'Test Invoice Transport',
+                    transport          => 'local',
+                    download_directory => $dirname,
+                    upload_directory   => $dirname,
+                }
+            }
+        );
+
+        # Create vendor EDI account
+        my $account = $builder->build(
+            {
+                source => 'VendorEdiAccount',
+                value  => {
+                    description       => 'test vendor',
+                    file_transport_id => $file_transport->{file_transport_id},
+                    plugin            => '',
+                    san               => '5013546027173',
+                }
+            }
+        );
+
+        # Create vendor contact with invalid email
+        my $vendor_contact = $builder->build(
+            {
+                source => 'Aqcontact',
+                value  => {
+                    name                   => 'Test Vendor Contact',
+                    email                  => 'not-an-email',
+                    booksellerid           => $account->{vendor_id},
+                    edi_error_notification => 1,
+                }
+            }
+        );
+
+        # Create test invoice that already exists
+        my $existing_invoice = $builder->build(
+            {
+                source => 'Aqinvoice',
+                value  => {
+                    invoicenumber => 'INV00003',
+                    booksellerid  => $account->{vendor_id},
+                }
+            }
+        );
+
+        # Create test basket and order
+        my $basket = $builder->build_object(
+            {
+                class => 'Koha::Acquisition::Baskets',
+                value => {
+                    booksellerid => $account->{vendor_id},
+                    basketname   => 'Test Basket',
+                }
+            }
+        );
+        my $order = $builder->build_object(
+            {
+                class => 'Koha::Acquisition::Orders',
+                value => {
+                    basketno     => $basket->id,
+                    orderstatus  => 'new',
+                    biblionumber => undef,
+                }
+            }
+        );
+
+        # Prepare invoice message
+        my $filename = 'INVOICE.CEI';
+        my $trans    = Koha::Edifact::Transport->new( $account->{id} );
+        $trans->working_directory($dirname);
+
+        my $mhash = $trans->message_hash();
+        $mhash->{message_type} = 'INVOICE';
+        $trans->ingest( $mhash, $filename );
+
+        my $invoice_message = $schema->resultset('EdifactMessage')->find( { filename => $filename } );
+        my $raw_msg         = $invoice_message->raw_msg;
+        $raw_msg =~ s/ORDERNUMBER1/$order->ordernumber/g;
+        $raw_msg =~ s/ORDERNUMBER2/$order->ordernumber/g;
+        $invoice_message->update( { raw_msg => $raw_msg } );
+
+        # Clear logger
+        $logger->clear();
+
+        # Process the invoice
+        process_invoice($invoice_message);
+
+        # Verify only valid email was queued (invalid email skipped)
+        my $valid_messages = $schema->resultset('MessageQueue')->search(
+            {
+                to_address => 'valid@example.com',
+                status     => [ 'sent', 'pending', 'failed' ],    # Accept any status - queuing is what matters
+            }
+        );
+        is( $valid_messages->count, 1, 'Only valid library email queued' );
+
+        # Verify no message for invalid email
+        my $invalid_messages = $schema->resultset('MessageQueue')->search(
+            {
+                to_address => 'invalid-email',
+            }
+        );
+        is( $invalid_messages->count, 0, 'No message queued for invalid email' );
+
+        # Verify invalid vendor contact email was logged
+        $logger->warn_like(
+            qr/Invalid vendor contact email address/,
+            'Warning logged for invalid vendor contact email'
+        );
+
+        $logger->clear();
+        $schema->storage->txn_rollback;
+    };
+
+    $schema->storage->txn_rollback;
+};
+
 # reason_code: 'OP'=Out of print, 'IB'=In stock (EditEUR 8B table)
 sub _build_ordrsp_msg {
     my ( $ordernumber, $action_code, $reason_code ) = @_;

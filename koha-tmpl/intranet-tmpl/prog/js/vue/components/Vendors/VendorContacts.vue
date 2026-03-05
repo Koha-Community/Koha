@@ -44,6 +44,17 @@
                                 {{ $__("Contact about late orders") }}
                             </label>
                         </li>
+                        <li>
+                            <label>
+                                <input
+                                    type="checkbox"
+                                    :id="`contact_edi_error_notification_${index}`"
+                                    class="contact_edi_error_notification"
+                                    v-model="contact.edi_error_notification"
+                                />
+                                {{ $__("Contact about EDI errors") }}
+                            </label>
+                        </li>
                     </ol>
                 </fieldset>
             </div>

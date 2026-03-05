@@ -43,6 +43,63 @@ tables:
             - ""
             - "Your library."
 
+        - module: acquisition
+          code: EDI_DUP_INV_LIBRARY
+          branchcode: ""
+          name: "EDIFACT duplicate invoice detected - library notification"
+          is_html: 0
+          title: "EDIFACT Duplicate Invoice Blocked - [% invoicenumber %]"
+          message_transport_type: email
+          lang: default
+          content:
+            - "Duplicate EDIFACT Invoice Detected and Blocked"
+            - ""
+            - "Invoice Number: [% invoicenumber %]"
+            - "Vendor: [% aqbooksellers.name %] (ID: [% vendor_id %])"
+            - "EDI Message File: [% filename %]"
+            - "Original Invoice ID: [% original_invoiceid %]"
+            - "Original Invoice Date: [% original_shipmentdate %]"
+            - ""
+            - "Status: Processing has been blocked. The invoice was NOT created in Koha."
+            - ""
+            - "Action Required:"
+            - "The supplier must resend this invoice with a unique invoice number."
+            - ""
+            - "View EDI Message: [% OPACBaseURL %]/cgi-bin/koha/acqui/edimsg.pl?id=[% message_id %]"
+            - "View Original Invoice: [% OPACBaseURL %]/cgi-bin/koha/acqui/invoice.pl?invoiceid=[% original_invoiceid %]"
+            - ""
+            - "This is an automated notification from your Koha system."
+
+        - module: acquisition
+          code: EDI_DUP_INV_VENDOR
+          branchcode: ""
+          name: "EDIFACT duplicate invoice detected - vendor notification"
+          is_html: 0
+          title: "Duplicate Invoice Number - Action Required - [% invoicenumber %]"
+          message_transport_type: email
+          lang: default
+          content:
+            - "Dear Supplier,"
+            - ""
+            - "We have received an EDIFACT invoice message from your system with a duplicate invoice number."
+            - ""
+            - "Invoice Number: [% invoicenumber %]"
+            - "Your Reference (SAN): [% vendor_san %]"
+            - "EDI Message File: [% filename %]"
+            - "Received Date: [% received_date %]"
+            - ""
+            - "Issue:"
+            - "This invoice number has already been processed in our system (original invoice ID: [% original_invoiceid %], date: [% original_shipmentdate %])."
+            - ""
+            - "Action Required:"
+            - "Please resend this invoice using a UNIQUE invoice number. Duplicate invoice numbers cannot be processed by our system."
+            - ""
+            - "If you believe this is in error, please contact our acquisitions department."
+            - ""
+            - "Library: [% aqbooksellers.name %]"
+            - ""
+            - "This is an automated notification. Please do not reply to this email."
+
         - module: bookings
           code: BOOKING_CANCELLATION
           branchcode: ""

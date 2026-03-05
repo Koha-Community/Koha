@@ -343,6 +343,48 @@ sub process_invoice {
                 next;
             }
             $invoice_message->edi_acct( $vendor_acct->id );
+
+            # Check for duplicate invoices if preference enabled
+            if ( C4::Context->preference('EdiBlockDuplicateInvoice') ) {
+                my $duplicate_invoice = $schema->resultset('Aqinvoice')->search(
+                    {
+                        invoicenumber => $invoicenumber,
+                        booksellerid  => $invoice_message->vendor_id,
+                    }
+                )->first;
+
+                if ($duplicate_invoice) {
+                    $logger->error( "Duplicate invoice $invoicenumber for vendor "
+                            . $invoice_message->vendor_id . " in "
+                            . $invoice_message->filename );
+
+                    # Log to edifact_errors table
+                    $invoice_message->add_to_edifact_errors(
+                        {
+                            section => "BGM+" . $invoicenumber,
+                            details => "Duplicate invoice number '$invoicenumber'. "
+                                . "Original invoice ID: "
+                                . $duplicate_invoice->invoiceid . ". "
+                                . "Processing blocked."
+                        }
+                    );
+
+                    # Send email notification if enabled
+                    _send_duplicate_invoice_email_notice(
+                        $invoice_message,
+                        $invoicenumber,
+                        $vendor_acct,
+                        $duplicate_invoice
+                    );
+
+                    # Mark message as error and stop processing this invoice
+                    $invoice_message->status('error');
+                    $invoice_message->update;
+
+                    next;    # Skip to next message in transmission
+                }
+            }
+
             $logger->trace("Adding invoice: $invoicenumber");
             my $new_invoice = $schema->resultset('Aqinvoice')->create(
                 {
@@ -504,7 +546,11 @@ sub process_invoice {
         }
     }
 
-    $invoice_message->status('received');
+    # Only set status to 'received' if not already set to 'error'
+    $invoice_message->discard_changes;
+    if ( $invoice_message->status ne 'error' ) {
+        $invoice_message->status('received');
+    }
     $invoice_message->update;    # status and basketno link
     return;
 }
@@ -1593,6 +1639,127 @@ sub _handle_008_field {
     return $bib_record;
 }
 
+sub _send_duplicate_invoice_email_notice {
+    my ( $invoice_message, $invoicenumber, $vendor_acct, $duplicate_invoice ) = @_;
+
+    my $logger = Koha::Logger->get( { interface => 'edi' } );
+
+    # Check if email notifications enabled
+    return unless C4::Context->preference('EdiBlockDuplicateInvoiceEmailNotice');
+
+    # Get vendor information
+    my $vendor_id = $invoice_message->vendor_id;
+
+    # Prepare template substitution values
+    my $substitute = {
+        invoicenumber         => $invoicenumber,
+        vendor_id             => $vendor_id,
+        vendor_san            => $vendor_acct ? $vendor_acct->san : '',
+        filename              => $invoice_message->filename,
+        message_id            => $invoice_message->id,
+        original_invoiceid    => $duplicate_invoice->invoiceid,
+        original_shipmentdate => $duplicate_invoice->shipmentdate || 'N/A',
+        received_date         => dt_from_string()->ymd,
+    };
+
+    # 1. Send notification to library staff
+    my $library_email_addresses = C4::Context->preference('EdiBlockDuplicateInvoiceEmailAddresses');
+    if ($library_email_addresses) {
+        my @library_addresses = split /\s*,\s*/, $library_email_addresses;
+
+        foreach my $to_address (@library_addresses) {
+            $to_address =~ s/^\s+|\s+$//g;    # trim whitespace
+            next unless $to_address;
+            next unless Koha::Email->is_valid($to_address);
+
+            my $letter = C4::Letters::GetPreparedLetter(
+                module                 => 'acquisition',
+                letter_code            => 'EDI_DUP_INV_LIBRARY',
+                message_transport_type => 'email',
+                tables                 => {
+                    aqbooksellers => $vendor_id,
+                },
+                substitute => $substitute,
+            );
+
+            if ($letter) {
+                my $message_id = C4::Letters::EnqueueLetter(
+                    {
+                        letter                 => $letter,
+                        to_address             => $to_address,
+                        message_transport_type => 'email',
+                    }
+                );
+
+                if ($message_id) {
+                    $logger->info(
+                        "Library duplicate invoice notification queued (message_id: $message_id) for $to_address, invoice $invoicenumber. Message will be sent by message_queue cronjob."
+                    );
+                } else {
+                    $logger->warn("Failed to enqueue library notification to $to_address for invoice $invoicenumber");
+                }
+            } else {
+                $logger->warn("Could not generate library notification letter for invoice $invoicenumber");
+            }
+        }
+    }
+
+    # 2. Send notification to vendor contacts
+    if ($vendor_acct) {
+        my $schema = Koha::Database->new()->schema();
+        my $vendor = $schema->resultset('Aqbookseller')->find($vendor_id);
+        if ($vendor) {
+            my @edi_contacts = $vendor->aqcontacts->search(
+                {
+                    edi_error_notification => 1,
+                    email                  => { '!=' => undef },
+                }
+            )->all;
+
+            foreach my $contact (@edi_contacts) {
+                my $vendor_email = $contact->email;
+
+                if ( Koha::Email->is_valid($vendor_email) ) {
+                    my $letter = C4::Letters::GetPreparedLetter(
+                        module                 => 'acquisition',
+                        letter_code            => 'EDI_DUP_INV_VENDOR',
+                        message_transport_type => 'email',
+                        tables                 => {
+                            aqbooksellers => $vendor_id,
+                        },
+                        substitute => $substitute,
+                    );
+
+                    if ($letter) {
+                        my $message_id = C4::Letters::EnqueueLetter(
+                            {
+                                letter                 => $letter,
+                                to_address             => $vendor_email,
+                                message_transport_type => 'email',
+                            }
+                        );
+
+                        if ($message_id) {
+                            $logger->info(
+                                "Vendor duplicate invoice notification queued (message_id: $message_id) for $vendor_email (contact: "
+                                    . $contact->name
+                                    . "), invoice $invoicenumber. Message will be sent by message_queue cronjob." );
+                        } else {
+                            $logger->warn(
+                                "Failed to enqueue vendor notification to $vendor_email for invoice $invoicenumber");
+                        }
+                    } else {
+                        $logger->warn("Could not generate vendor notification letter for invoice $invoicenumber");
+                    }
+                } else {
+                    $logger->warn(
+                        "Invalid vendor contact email address: $vendor_email for contact: " . $contact->name );
+                }
+            }
+        }
+    }
+}
+
 1;
 __END__
 
@@ -1707,6 +1874,34 @@ Koha::EDI
       If unable to returns the shelfmark or classification from the GIR segment
 
       If all else fails returns empty string
+
+=head2 _send_duplicate_invoice_email_notice
+
+    _send_duplicate_invoice_email_notice($invoice_message, $invoicenumber, $vendor_acct, $duplicate_invoice)
+
+    Internal function to queue email notifications when duplicate EDIFACT invoices are detected.
+
+    Uses the standard Koha messaging pattern:
+    - GetPreparedLetter: Generates the notice content from templates
+    - EnqueueLetter: Adds the message to the message_queue table for delivery by the cronjob
+
+    Queues two types of notifications using letter templates:
+    1. EDI_DUP_INV_LIBRARY - to library staff (addresses from EdiBlockDuplicateInvoiceEmailAddresses)
+    2. EDI_DUP_INV_VENDOR - to vendor (address from vendor_edi_accounts.vendor_email)
+
+    All messages are recorded in the message_queue table for auditing and can be reviewed
+    in the Koha notices interface. Messages will be sent by the message_queue cronjob
+    (misc/cronjobs/process_message_queue.pl).
+
+    Only runs if EdiBlockDuplicateInvoiceEmailNotice preference is enabled.
+
+    Parameters:
+    - $invoice_message: The EdifactMessage object being processed
+    - $invoicenumber: The duplicate invoice number found
+    - $vendor_acct: The VendorEdiAccount object
+    - $duplicate_invoice: The existing Aqinvoice object with the same invoice number
+
+    Returns: nothing
 
 =head2 _create_bib_from_quote
 
