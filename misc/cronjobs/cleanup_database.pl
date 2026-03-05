@@ -222,7 +222,7 @@ GetOptions(
     'pseudo-transactions-from:s' => \$pPseudoTransactionsFrom,
     'pseudo-transactions-to:s'   => \$pPseudoTransactionsTo,
     'labels:i'                   => \$labels,
-    'cards'                      => \$cards,
+    'cards:i'                    => \$cards,
     'return-claims'              => \$return_claims,
     'jobs-type:s'                => \@jobs_types,
     'jobs-days:i'                => \$jobs_days,
@@ -771,11 +771,11 @@ if ($labels) {
 
 if ($cards) {
     print "Purging card creator batches last added to more than $cards days ago.\n" if $verbose;
-    my $count = PurgeCreatorBatches( $labels, 'patroncards', $confirm );
+    my $count = PurgeCreatorBatches( $cards, 'patroncards', $confirm );
     if ($verbose) {
         say $confirm
             ? sprintf "Done with purging %d card creator batches last added to more than %d days ago.\n", $count,
-            $labels
+            $cards
             : sprintf "%d card creator batches would have been purged.", $count;
     }
 }
