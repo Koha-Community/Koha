@@ -527,7 +527,7 @@ subtest 'suspend and resume tests' => sub {
         ->json_is(
         '/end_date',
         output_pref( { dt => $date, dateformat => 'iso', dateonly => 1 } )
-    )->header_is( Location => "/api/v1/holds/" . $hold->id . "/suspension", 'The Location header is set' );
+        )->header_is( Location => "/api/v1/holds/" . $hold->id . "/suspension", 'The Location header is set' );
 
     $t->delete_ok( "//$userid:$password@/api/v1/holds/" . $hold->id . "/suspension" )
         ->status_is( 204, 'REST3.2.4' )
