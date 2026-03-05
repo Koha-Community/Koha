@@ -126,6 +126,14 @@ is this the primary contact for acquisitions messages
 
 is this the primary contact for serials messages
 
+=head2 edi_error_notification
+
+  data_type: 'tinyint'
+  default_value: 0
+  is_nullable: 0
+
+should this contact receive EDI error notifications (e.g. duplicate invoices)
+
 =head2 booksellerid
 
   data_type: 'integer'
@@ -160,6 +168,8 @@ __PACKAGE__->add_columns(
   "acqprimary",
   { data_type => "tinyint", default_value => 0, is_nullable => 0 },
   "serialsprimary",
+  { data_type => "tinyint", default_value => 0, is_nullable => 0 },
+  "edi_error_notification",
   { data_type => "tinyint", default_value => 0, is_nullable => 0 },
   "booksellerid",
   { data_type => "integer", is_foreign_key => 1, is_nullable => 0 },
@@ -199,11 +209,12 @@ __PACKAGE__->belongs_to(
 # DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:IefjqDsoXPLWKSfhYGne1A
 
 __PACKAGE__->add_columns(
-    '+orderacquisition' => { is_boolean => 1 },
-    '+claimacquisition' => { is_boolean => 1 },
-    '+claimissues'      => { is_boolean => 1 },
-    '+acqprimary'       => { is_boolean => 1 },
-    '+serialsprimary'   => { is_boolean => 1 },
+    '+orderacquisition'       => { is_boolean => 1 },
+    '+claimacquisition'       => { is_boolean => 1 },
+    '+claimissues'            => { is_boolean => 1 },
+    '+acqprimary'             => { is_boolean => 1 },
+    '+serialsprimary'         => { is_boolean => 1 },
+    '+edi_error_notification' => { is_boolean => 1 },
 );
 
 =head2 koha_object_class
