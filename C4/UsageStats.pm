@@ -317,6 +317,11 @@ sub _shared_preferences {
         PatronSelfRegistration
         OPACShelfBrowser
         AutoEmailNewUser
+        EdiBlockDuplicateInvoice
+        EdiBlockDuplicateInvoiceEmailAddresses
+        EdiBlockDuplicateInvoiceEmailNotice
+        EdiDuplicateOrderEmailAddresses
+        EdiDuplicateOrderEmailNotice
         EmailFieldPrimary
         autoMemberNum
         BorrowerRenewalPeriodBase
