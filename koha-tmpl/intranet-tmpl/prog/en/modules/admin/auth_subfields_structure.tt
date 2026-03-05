@@ -143,10 +143,10 @@
                                 [% IF ( loo.new_subfield ) %]
                                     <div class="fg-row">
                                         <div class="fg-label">
-                                            <label for="tagsubfieldinput[% loo.row | html %]">Subfield code: </label>
+                                            <label for="tagsubfield[% loo.row | html %]">Subfield code: </label>
                                         </div>
                                         <div class="fg-input">
-                                            <input type="text" name="tagsubfield" value="[% loo.tagsubfield | html %]" size="1" id="tagsubfield" maxlength="1" />
+                                            <input type="text" name="tagsubfield" value="[% loo.tagsubfield | html %]" size="1" id="tagsubfield[% loo.row | html %]" maxlength="1" />
                                         </div>
                                     </div>
                                 [% ELSE %]
