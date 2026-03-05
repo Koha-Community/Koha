@@ -214,3 +214,14 @@ Acquisitions:
             - pref: EdifactInvoiceImportBlockDuplicatesEmailAddresses
               type: textarea
               class: code
+        -
+            - pref: EdiDuplicateOrderEmailNotice
+              choices:
+                  1: Send
+                  0: "Don't send"
+            - email notifications when a duplicate EDIFACT purchase order number is detected.
+        -
+            - "Send duplicate order notifications to these email addresses (comma-separated):"
+            - pref: EdiDuplicateOrderEmailAddresses
+              type: textarea
+              class: code

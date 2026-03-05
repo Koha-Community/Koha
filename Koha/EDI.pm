@@ -104,8 +104,8 @@ sub create_edi_order {
             my $existing_basket = $schema->resultset('Aqbasket')->search(
                 {
                     basketname   => $basket->basketname,
-                    booksellerid => $basket->booksellerid,
-                    basketno     => { '!=' => $basketno },    # Exclude current basket
+                    booksellerid => $basket->get_column('booksellerid'),
+                    basketno     => { '!=' => $basketno },                 # Exclude current basket
                 }
             )->first;
 
@@ -115,6 +115,7 @@ sub create_edi_order {
                         . "' (existing basket: "
                         . $existing_basket->basketno
                         . ")" );
+                _send_duplicate_order_email_notice( $basket, $vendor, $existing_basket );
                 return {
                     error     => "duplicate_po_number", existing_basket => $existing_basket->basketno,
                     po_number => $basket->basketname
@@ -1786,6 +1787,122 @@ sub _handle_008_field {
     return $bib_record;
 }
 
+sub _send_duplicate_order_email_notice {
+    my ( $basket, $vendor, $existing_basket ) = @_;
+
+    my $logger = Koha::Logger->get( { interface => 'edi' } );
+
+    # Check if email notifications enabled
+    return unless C4::Context->preference('EdiDuplicateOrderEmailNotice');
+
+    my $vendor_id = $vendor->vendor_id;
+    my $po_number = $basket->basketname;
+    my $basketno  = $basket->basketno;
+
+    # Prepare template substitution values
+    my $substitute = {
+        po_number         => $po_number,
+        basketno          => $basketno,
+        existing_basketno => $existing_basket->basketno,
+        vendor_id         => $vendor_id,
+        vendor_san        => $vendor->san || '',
+    };
+
+    # 1. Send notification to library staff
+    my $library_email_addresses = C4::Context->preference('EdiDuplicateOrderEmailAddresses');
+    if ($library_email_addresses) {
+        my @library_addresses = split /\s*,\s*/, $library_email_addresses;
+
+        foreach my $to_address (@library_addresses) {
+            $to_address =~ s/^\s+|\s+$//g;    # trim whitespace
+            next unless $to_address;
+            next unless Koha::Email->is_valid($to_address);
+
+            my $letter = C4::Letters::GetPreparedLetter(
+                module                 => 'acquisition',
+                letter_code            => 'EDI_DUP_ORD_LIBRARY',
+                message_transport_type => 'email',
+                tables                 => {
+                    aqbooksellers => $vendor_id,
+                },
+                substitute => $substitute,
+            );
+
+            if ($letter) {
+                my $message_id = C4::Letters::EnqueueLetter(
+                    {
+                        letter                 => $letter,
+                        to_address             => $to_address,
+                        message_transport_type => 'email',
+                    }
+                );
+
+                if ($message_id) {
+                    $logger->info(
+                        "Library duplicate order notification queued (message_id: $message_id) for $to_address, PO number $po_number. Message will be sent by message_queue cronjob."
+                    );
+                } else {
+                    $logger->warn("Failed to enqueue library notification to $to_address for PO number $po_number");
+                }
+            } else {
+                $logger->warn("Could not generate library notification letter for PO number $po_number");
+            }
+        }
+    }
+
+    # 2. Send notification to vendor contacts
+    my $schema            = Koha::Database->new()->schema();
+    my $vendor_bookseller = $schema->resultset('Aqbookseller')->find($vendor_id);
+    if ($vendor_bookseller) {
+        my @edi_contacts = $vendor_bookseller->aqcontacts->search(
+            {
+                edi_error_notification => 1,
+                email                  => { '!=' => undef },
+            }
+        )->all;
+
+        foreach my $contact (@edi_contacts) {
+            my $vendor_email = $contact->email;
+
+            if ( Koha::Email->is_valid($vendor_email) ) {
+                my $letter = C4::Letters::GetPreparedLetter(
+                    module                 => 'acquisition',
+                    letter_code            => 'EDI_DUP_ORD_VENDOR',
+                    message_transport_type => 'email',
+                    tables                 => {
+                        aqbooksellers => $vendor_id,
+                    },
+                    substitute => $substitute,
+                );
+
+                if ($letter) {
+                    my $message_id = C4::Letters::EnqueueLetter(
+                        {
+                            letter                 => $letter,
+                            to_address             => $vendor_email,
+                            message_transport_type => 'email',
+                        }
+                    );
+
+                    if ($message_id) {
+                        $logger->info(
+                            "Vendor duplicate order notification queued (message_id: $message_id) for $vendor_email (contact: "
+                                . $contact->name
+                                . "), PO number $po_number. Message will be sent by message_queue cronjob." );
+                    } else {
+                        $logger->warn(
+                            "Failed to enqueue vendor notification to $vendor_email for PO number $po_number");
+                    }
+                } else {
+                    $logger->warn("Could not generate vendor notification letter for PO number $po_number");
+                }
+            } else {
+                $logger->warn( "Invalid vendor contact email address: $vendor_email for contact: " . $contact->name );
+            }
+        }
+    }
+}
+
 sub _send_duplicate_invoice_email_notice {
     my ( $invoice_message, $invoicenumber, $vendor_acct, $duplicate_invoice ) = @_;
 
@@ -2051,6 +2168,24 @@ Koha::EDI
       If unable to returns the shelfmark or classification from the GIR segment
 
       If all else fails returns empty string
+
+=head2 _send_duplicate_order_email_notice
+
+    _send_duplicate_order_email_notice($basket, $vendor, $existing_basket)
+
+    Internal function to queue email notifications when duplicate EDIFACT purchase orders
+    are detected (i.e. a basket with the same PO number already exists for the vendor).
+
+    Queues two types of notifications using letter templates:
+    1. EDI_DUP_ORD_LIBRARY - to library staff (addresses from EdiDuplicateOrderEmailAddresses)
+    2. EDI_DUP_ORD_VENDOR - to vendor contacts with edi_error_notification set
+
+    Only runs if EdiDuplicateOrderEmailNotice preference is enabled.
+
+    Parameters:
+    - $basket: The Aqbasket DBIC row for the basket being blocked
+    - $vendor: The VendorEdiAccount DBIC row
+    - $existing_basket: The existing Aqbasket DBIC row with the same basket name/PO number
 
 =head2 _send_duplicate_invoice_email_notice
 
