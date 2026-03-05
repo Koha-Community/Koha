@@ -406,6 +406,23 @@ sub process_invoice {
                 $logger->trace( "Receipting order:$ordernumber Qty: " . $line->quantity );
                 $logger->trace( "Updating bib:" . $bib->biblionumber . " id:" . $line->item_number_id );
 
+                if ( $order->orderstatus eq 'complete' ) {
+                    $invoice_message->add_to_edifact_errors(
+                        {
+                            section => join( "\n", map { $_->as_string } @{ $line->{segs} } ),
+                            details => "Warning: invoice line "
+                                . $line->line_item_number
+                                . " references ordernumber "
+                                . $ordernumber
+                                . " which is already marked as complete (previously received on "
+                                . ( $order->datereceived // 'unknown date' )
+                                . "). The ordernumber in this invoice may be incorrect."
+                        }
+                    );
+                    $logger->warn(
+                        "Invoice line references already-complete order $ordernumber (invoice $invoicenumber)");
+                }
+
                 # check suggestions
                 my $s = $schema->resultset('Suggestion')->search(
                     {
@@ -605,6 +622,7 @@ sub receipt_items {
 
             $item->update;
         } else {
+            my $available_branches = join( ', ', sort keys %branch_map ) || 'none';
             $invoice_message->add_to_edifact_errors(
                 {
                     section => join( "\n", map { $_->as_string } @{ $inv_line->{segs} } ),
@@ -612,9 +630,11 @@ sub receipt_items {
                         . $inv_line->line_item_number . ":"
                         . $gir_occurrence
                         . " at branch $branch"
+                        . " (order $ordernumber has items at: $available_branches)."
+                        . " Check whether the ordernumber in the invoice (RFF+LI) is correct."
                 }
             );
-            $logger->warn("Unmatched item at branch:$branch");
+            $logger->warn("Unmatched item at branch:$branch for order:$ordernumber (available: $available_branches)");
         }
         ++$gir_occurrence;
     }
