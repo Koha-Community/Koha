@@ -100,6 +100,62 @@ tables:
             - ""
             - "This is an automated notification. Please do not reply to this email."
 
+        - module: acquisition
+          code: EDI_DUP_ORD_LIBRARY
+          branchcode: ""
+          name: "EDIFACT duplicate order detected - library notification"
+          is_html: 0
+          title: "EDIFACT Duplicate Purchase Order Blocked - [% po_number %]"
+          message_transport_type: email
+          lang: default
+          content:
+            - "Duplicate EDIFACT Purchase Order Detected and Blocked"
+            - ""
+            - "Purchase Order Number: [% po_number %]"
+            - "Vendor: [% aqbooksellers.name %] (ID: [% vendor_id %])"
+            - "Basket No: [% basketno %]"
+            - "Existing Basket No: [% existing_basketno %]"
+            - ""
+            - "Status: The EDI order was NOT sent. The basket remains open."
+            - ""
+            - "This purchase order number already exists for this vendor (basket [% existing_basketno %])."
+            - "A basket name/PO number must be unique per vendor when the vendor EDI account has \"Use basket name as PO number\" enabled."
+            - ""
+            - "Action Required:"
+            - "Rename the basket to use a unique purchase order number, then resend the EDI order."
+            - ""
+            - "View Basket: [% OPACBaseURL %]/cgi-bin/koha/acqui/basket.pl?basketno=[% basketno %]"
+            - "View Existing Basket: [% OPACBaseURL %]/cgi-bin/koha/acqui/basket.pl?basketno=[% existing_basketno %]"
+            - ""
+            - "This is an automated notification from your Koha system."
+
+        - module: acquisition
+          code: EDI_DUP_ORD_VENDOR
+          branchcode: ""
+          name: "EDIFACT duplicate order detected - vendor notification"
+          is_html: 0
+          title: "Duplicate Purchase Order Number Received - [% po_number %]"
+          message_transport_type: email
+          lang: default
+          content:
+            - "Dear Supplier,"
+            - ""
+            - "We have attempted to send an EDIFACT order to your system but the purchase order number is a duplicate."
+            - ""
+            - "Purchase Order Number: [% po_number %]"
+            - "Your Reference (SAN): [% vendor_san %]"
+            - ""
+            - "Issue:"
+            - "This purchase order number has already been used in a previous order with your organisation. We were unable to send the order."
+            - ""
+            - "No action is required from you at this stage. Our acquisitions team has been notified and will resubmit the order with a corrected purchase order number."
+            - ""
+            - "If you have any questions, please contact our acquisitions department."
+            - ""
+            - "Library: [% aqbooksellers.name %]"
+            - ""
+            - "This is an automated notification. Please do not reply to this email."
+
         - module: bookings
           code: BOOKING_CANCELLATION
           branchcode: ""

@@ -242,6 +242,8 @@ INSERT INTO systempreferences ( `variable`, `value` ) VALUES
 ('DumpTemplateVarsIntranet', '0'),
 ('DumpTemplateVarsOpac', '0'),
 ('EasyAnalyticalRecords','0'),
+('EdiDuplicateOrderEmailAddresses', ''),
+('EdiDuplicateOrderEmailNotice', '0'),
 ('EDIFACT','0'),
 ('EdifactInvoiceImport', 'automatic'),
 ('EdifactInvoiceImportBlockDuplicates', '0'),
