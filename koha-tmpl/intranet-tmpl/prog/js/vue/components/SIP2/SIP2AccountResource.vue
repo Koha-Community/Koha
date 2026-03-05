@@ -835,7 +835,6 @@ export default {
                     },
                     {
                         name: "replace",
-                        required: true,
                         indexRequired: true,
                         type: "text",
                         placeholder: "Welcome to your library!",
@@ -1033,6 +1032,15 @@ export default {
 
             if (account.convert_nonprinting_characters === "") {
                 account.convert_nonprinting_characters = null;
+            }
+
+            if (account.screen_msg_regexs) {
+                account.screen_msg_regexs = account.screen_msg_regexs.map(
+                    item => ({
+                        ...item,
+                        replace: item.replace ?? "",
+                    })
+                );
             }
 
             account.item_fields = account.item_fields?.map(
