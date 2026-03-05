@@ -328,8 +328,17 @@ if ( $edifact_enabled && $details->{'message_id'} ) {
 
     if ($edifact_message) {
 
-        # Get any processing errors for this message using the relation accessor
-        my $errors = $edifact_message->errors;
+        # Get processing errors for this specific invoice, plus any message-level
+        # errors (invoicenumber IS NULL) that affect the whole EDI file.
+        # This avoids showing errors from other invoices in the same EDI file.
+        my $errors = $edifact_message->errors->search(
+            {
+                -or => [
+                    { invoicenumber => $details->{'invoicenumber'} },
+                    { invoicenumber => undef },
+                ]
+            }
+        );
 
         while ( my $error = $errors->next ) {
             push @$edifact_errors, {
