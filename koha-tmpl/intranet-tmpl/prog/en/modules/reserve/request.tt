@@ -1312,7 +1312,7 @@
             [% END %]
         [% END %]
         [% IF ( total_holds ) %]
-            <form id="existing_holds" name="T[% time | html %]" action="modrequest.pl" method="post" style="display:block">
+            <form id="existing_holds" name="T[% time | html %]" style="display:block">
                 [% INCLUDE 'csrf-token.inc' %]
                 [% IF ( multi_hold ) %]
                     [% FOREACH biblionumber IN biblionumbers %]
