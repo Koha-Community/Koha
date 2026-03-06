@@ -43,7 +43,6 @@ my $query            = $input->param('q');
 my @value            = $input->multi_param('value');
 my $page             = $input->param('page') || 1;
 my $results_per_page = 20;
-my $lang             = C4::Languages::getlanguage($input);
 
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     {
@@ -53,6 +52,7 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
         flagsrequired => { editcatalogue => '*' },
     }
 );
+my $lang = C4::Languages::getlanguage($input);
 
 # Searching the catalog.
 if ($query) {
