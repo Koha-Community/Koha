@@ -517,28 +517,22 @@
         $(document).ready(function () {
             if (has_patrons) {
                 let selections_column = table_settings.columns.find(c => c.columnname == "batch_patron_edit_selections");
+                const selections_column_available = op == "show";
                 selections_column.cannot_be_modified = 1;
-                selections_column.cannot_be_toggled = 1;
+                selections_column.visibility_condition = selections_column_available;
                 selections_column.force_visibility = 1;
-                if (op == "show") {
-                    selections_column.is_hidden = 0;
-                } else {
-                    selections_column.is_hidden = 1;
-                }
 
                 if (!Koha.permissions.CanUpdatePasswordExpiration) {
                     let password_expiration_date_column = table_settings.columns.find(c => c.columnname == "batch_patron_edit_password_expiration_date");
-                    password_expiration_date_column.is_hidden = 1;
                     password_expiration_date_column.cannot_be_modified = 1;
-                    password_expiration_date_column.cannot_be_toggled = 1;
+                    password_expiration_date_column.visibility_condition = 0;
                     password_expiration_date_column.force_visibility = 1;
                 }
 
                 if (!Koha.permissions.CanUpdateProtectPatron) {
                     let protected_column = table_settings.columns.find(c => c.columnname == "batch_patron_edit_protected");
-                    protected_column.is_hidden = 1;
                     protected_column.cannot_be_modified = 1;
-                    protected_column.cannot_be_toggled = 1;
+                    protected_column.visibility_condition = 0;
                     protected_column.force_visibility = 1;
                 }
 
