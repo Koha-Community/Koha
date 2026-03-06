@@ -119,6 +119,8 @@
         </select>
         <a onclick="addToList()"><i class="fa fa-plus"></i></a>
     </div>
+[% ELSIF CAN_user_tools_manage_patron_lists %]
+    <p>Patron is not on any list. <a href="/cgi-bin/koha/patron_lists/add-modify.pl">Create a new patron list</a>.</p>
 [% END %]
 <script>
     var patron_lists_dt_params = {
