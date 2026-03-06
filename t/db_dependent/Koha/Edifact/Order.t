@@ -32,7 +32,7 @@ my $schema = Koha::Database->new->schema;
 my $builder = t::lib::TestBuilder->new;
 
 subtest 'beggining_of_message tests' => sub {
-    plan tests => 3;
+    plan tests => 5;
 
     $schema->storage->txn_begin;
 
@@ -61,6 +61,22 @@ subtest 'beggining_of_message tests' => sub {
     is(
         $bgm, qq{BGM+22V+$purchase_order_number+9'},
         "When purchase order number provided, it's used in BGM segment instead of basketno"
+    );
+
+    # Bug 42010: EDIFACT special characters in purchase order number must be escaped
+    my $po_with_apostrophe = "Children's Requests 24/02/26 CB";
+    $bgm = Koha::Edifact::Order::beginning_of_message( $basketno, $dbic_edi_vendor->standard, 1, $po_with_apostrophe );
+    is(
+        $bgm, "BGM+22V+Children?'s Requests 24/02/26 CB+9'",
+        "Apostrophe in purchase order number is escaped with release character in BGM segment"
+    );
+
+    my $po_with_special_chars = "PO?+:' test";
+    $bgm =
+        Koha::Edifact::Order::beginning_of_message( $basketno, $dbic_edi_vendor->standard, 1, $po_with_special_chars );
+    is(
+        $bgm, "BGM+22V+PO???+?:?' test+9'",
+        "All EDIFACT special characters in purchase order number are escaped in BGM segment"
     );
 
     $schema->storage->txn_rollback;
@@ -293,7 +309,7 @@ subtest 'filename() tests' => sub {
 };
 
 subtest 'RFF+ON purchase order number generation' => sub {
-    plan tests => 3;
+    plan tests => 4;
 
     $schema->storage->txn_begin;
 
@@ -423,6 +439,43 @@ subtest 'RFF+ON purchase order number generation' => sub {
     like(
         $transmission, qr/BGM\+220\+PO123456789\+9'/,
         'Purchase order number included in BGM segment when purchase order number present'
+    );
+
+    # Bug 42010: basket name with apostrophe must be escaped in BGM segment
+    my $basket_apostrophe = $builder->build(
+        {
+            source => 'Aqbasket',
+            value  => {
+                basketname   => "Children's Requests 24/02/26 CB",
+                booksellerid => $vendor_po->{vendor_id},
+            }
+        }
+    );
+    my $order_apostrophe = $builder->build(
+        {
+            source => 'Aqorder',
+            value  => {
+                basketno     => $basket_apostrophe->{basketno},
+                biblionumber => $biblio_po->biblionumber,
+                orderstatus  => 'new',
+                quantity     => 1,
+                listprice    => '10.00',
+            }
+        }
+    );
+    my @orderlines_apostrophe =
+        $schema->resultset('Aqorder')->search( { basketno => $basket_apostrophe->{basketno} } );
+    my $order_obj_apostrophe = Koha::Edifact::Order->new(
+        {
+            orderlines => \@orderlines_apostrophe,
+            vendor     => $dbic_vendor_po,
+            ean        => $dbic_ean,
+        }
+    );
+    my $transmission_apostrophe = $order_obj_apostrophe->encode();
+    like(
+        $transmission_apostrophe, qr/BGM\+220\+Children\?'s Requests 24\/02\/26 CB\+9'/,
+        'Apostrophe in basket name is escaped with release character in BGM segment (Bug 42010)'
     );
 
     $schema->storage->txn_rollback;
