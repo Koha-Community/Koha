@@ -404,6 +404,7 @@
                                                 [% IF ( item.itemcallnumber ) %]
                                                     [<a href="/cgi-bin/koha/catalogue/search.pl?idx=callnum&amp;q=%22[% item.itemcallnumber | uri %]%22">[% item.itemcallnumber | html %]</a>]
                                                 [% END %]
+                                                <span class="availability"> [% INCLUDE "item-status.inc" item=item %] </span>
                                             </li>
                                         [% END # /FOREACH item %]
                                     </ul>
