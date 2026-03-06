@@ -2,7 +2,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 15;
+use Test::More tests => 16;
 use MARC::Record;
 
 use t::lib::Mocks;
@@ -158,3 +158,11 @@ is ($entity[0], "Bj&#xC3;&#xB6;rn", "Html umlauts");
 $marc->field('260')->add_subfields( a => 'Hogwarts' );
 my $cites = marc2cites($marc);
 is( $cites->{'Chicago'}, 'Rowling J.K, . 2011. Harry potter. Hogwarts: Reprints.', 'testing marc2cites' );
+
+my $field245 = $marc->field('245');
+$field245->add_subfields( 'b' => 'the cursed child' );
+$cites = marc2cites($marc);
+is(
+    $cites->{'Chicago'}, 'Rowling J.K, . 2011. Harry potter: the cursed child. Hogwarts: Reprints.',
+    'testing marc2cites'
+);
