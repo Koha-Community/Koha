@@ -20,7 +20,7 @@
 use Modern::Perl;
 use CGI;
 use C4::Auth   qw( get_template_and_user );
-use C4::Output qw( output_html_with_http_headers );
+use C4::Output qw( output_with_http_headers );
 use Koha::AdditionalContents;
 
 my $input = CGI->new;
@@ -53,4 +53,4 @@ my $koha_news = Koha::AdditionalContents->search_for_display(
 
 $template->param( koha_news => $koha_news );
 
-output_html_with_http_headers $input, $cookie, $template->output;
+output_with_http_headers $input, $cookie, $template->output, "rss";
