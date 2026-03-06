@@ -1450,28 +1450,18 @@
     <script nonce="[% Koha.CSPNonce | $raw %]">
         var orders_table_settings = [% TablesSettings.GetTableSettings( 'acqui', 'basket', 'orders', 'json' ) | $raw %];
         let supplier_report_column = orders_table_settings.columns.find(c => c.columnname == 'supplier_report');
-        [% IF !(Koha.Preference('EDIFACT') && ediaccount) %]
-            supplier_report_column.is_hidden = 1;
-            supplier_report_column.cannot_be_toggled = 1;
-        [% ELSE %]
-            supplier_report_column.is_hidden = 0;
-        [% END %]
+        const editfact_available = [% Koha.Preference('EDIFACT') && ediaccount ? 1 : 0 | html %];
+        supplier_report_column.visibility_condition = edifact_available;
         supplier_report_column.force_visibility = 1;
 
         let modify_column = orders_table_settings.columns.find(c => c.columnname == 'modify');
-        [% IF ( active && !closedate ) %]
-            modify_column.is_hidden = 0;
-        [% ELSE %]
-            modify_column.is_hidden = 1;
-        [% END %]
+        const modify_column_available = [% active && !closedate ? 1 : 0 | html %];
+        modify_column.visibility_condition = modify_column_available;
         modify_column.force_visibility = 1;
 
         let cancel_column = orders_table_settings.columns.find(c => c.columnname == 'cancel');
-        [% IF !closedate || Koha.Preference('CancelOrdersInClosedBaskets') %]
-            cancel_column.is_hidden = 0;
-        [% ELSE %]
-            cancel_column.is_hidden = 1;
-        [% END %]
+        const cancel_column_available = [% !closedate || Koha.Preference('CancelOrdersInClosedBaskets') ? 1 : 0 %]
+        cancel_column.visibility_condition = cancel_column_available;
         cancel_column.force_visibility = 1;
 
         let skip_confirm_reopen = [% skip_confirm_reopen ? 1 : 0 | html %];
