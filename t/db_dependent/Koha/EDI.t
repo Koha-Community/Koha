@@ -3796,14 +3796,14 @@ subtest 'duplicate_order_email_notifications' => sub {
         return ( $bookseller, $new_basket, $ean );
     };
 
-    # Test 1: No email when EdiDuplicateOrderEmailNotice is disabled
+    # Test 1: No email when EdifactOrderSendBlockDuplicatesEmailNotice is disabled
     subtest 'email_notification_disabled' => sub {
         plan tests => 3;
 
         $schema->storage->txn_begin;
 
-        t::lib::Mocks::mock_preference( 'EdiDuplicateOrderEmailNotice',    0 );
-        t::lib::Mocks::mock_preference( 'EdiDuplicateOrderEmailAddresses', 'library@example.com' );
+        t::lib::Mocks::mock_preference( 'EdifactOrderSendBlockDuplicatesEmailNotice',    0 );
+        t::lib::Mocks::mock_preference( 'EdifactOrderSendBlockDuplicatesEmailAddresses', 'library@example.com' );
 
         my ( $bookseller, $new_basket, $ean ) = $_setup_duplicate_order->();
 
@@ -3815,7 +3815,7 @@ subtest 'duplicate_order_email_notifications' => sub {
         is( $result->{error}, 'duplicate_po_number', 'Error code is duplicate_po_number' );
 
         my $messages = $schema->resultset('MessageQueue')->search( { to_address => 'library@example.com' } );
-        is( $messages->count, 0, 'No email queued when EdiDuplicateOrderEmailNotice is disabled' );
+        is( $messages->count, 0, 'No email queued when EdifactOrderSendBlockDuplicatesEmailNotice is disabled' );
 
         $logger->clear();
         $schema->storage->txn_rollback;
@@ -3827,8 +3827,11 @@ subtest 'duplicate_order_email_notifications' => sub {
 
         $schema->storage->txn_begin;
 
-        t::lib::Mocks::mock_preference( 'EdiDuplicateOrderEmailNotice',    1 );
-        t::lib::Mocks::mock_preference( 'EdiDuplicateOrderEmailAddresses', 'acq@library.org' );
+        t::lib::Mocks::mock_preference(
+            'EdifactOrderSendBlockDuplicatesEmailNotice',
+            'EdifactOrderSendBlockDuplicatesEmailAddresses'
+        );
+        t::lib::Mocks::mock_preference( 'EdifactOrderSendBlockDuplicatesEmailAddresses', 'acq@library.org' );
 
         $schema->resultset('Letter')
             ->search( { module => 'acquisition', code => [ 'EDI_DUP_ORD_LIBRARY', 'EDI_DUP_ORD_VENDOR' ] } )
@@ -3879,8 +3882,11 @@ subtest 'duplicate_order_email_notifications' => sub {
 
         $schema->storage->txn_begin;
 
-        t::lib::Mocks::mock_preference( 'EdiDuplicateOrderEmailNotice',    1 );
-        t::lib::Mocks::mock_preference( 'EdiDuplicateOrderEmailAddresses', '' );
+        t::lib::Mocks::mock_preference(
+            'EdifactOrderSendBlockDuplicatesEmailNotice',
+            'EdifactOrderSendBlockDuplicatesEmailAddresses'
+        );
+        t::lib::Mocks::mock_preference( 'EdifactOrderSendBlockDuplicatesEmailAddresses', '' );
 
         $schema->resultset('Letter')
             ->search( { module => 'acquisition', code => [ 'EDI_DUP_ORD_LIBRARY', 'EDI_DUP_ORD_VENDOR' ] } )

@@ -215,13 +215,14 @@ Acquisitions:
               type: textarea
               class: code
         -
-            - pref: EdiDuplicateOrderEmailNotice
+            - "Send duplicate EDIFACT order block notifications using the EDI_DUP_ORD_LIBRARY notice template to:"
+            - pref: EdifactOrderSendBlockDuplicatesEmailNotice
               choices:
-                  1: Send
-                  0: "Don't send"
-            - email notifications when a duplicate EDIFACT purchase order number is detected.
-        -
-            - "Send duplicate order notifications to these email addresses (comma-separated):"
-            - pref: EdiDuplicateOrderEmailAddresses
+                  0: "Do not send"
+                  AcquisitionsDefaultEmailAddress: AcquisitionsDefaultEmailAddress
+                  EdifactOrderSendBlockDuplicatesEmailAddresses: "specific email addresses"
+                  KohaAdminEmailAddress: KohaAdminEmailAddress
+            - '<br>Vendor EDI contacts are always notified separately via the EDI_DUP_ORD_VENDOR notice using contacts flagged in the vendor''s EDI account.<br>If choosing specific email addresses, enter them here (comma-separated):'
+            - pref: EdifactOrderSendBlockDuplicatesEmailAddresses
               type: textarea
               class: code

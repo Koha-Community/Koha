@@ -7,35 +7,46 @@ return {
         my ($args) = @_;
         my ( $dbh, $out ) = @$args{qw(dbh out)};
 
-        # Email notification toggle
+        # Email notification destination
         $dbh->do(
             q{
             INSERT IGNORE INTO systempreferences (variable, value, options, explanation, type)
             VALUES (
-                'EdiDuplicateOrderEmailNotice',
+                'EdifactOrderSendBlockDuplicatesEmailNotice',
                 '0',
-                NULL,
-                'Send email notification when a duplicate EDIFACT purchase order number is detected for the same supplier.',
-                'YesNo'
+                '0|AcquisitionsDefaultEmailAddress|EdifactOrderSendBlockDuplicatesEmailAddresses|KohaAdminEmailAddress',
+                'Send duplicate EDIFACT order block notifications using the EDI_DUP_ORD_LIBRARY notice template to the selected address. Vendor EDI contacts are always notified separately via EDI_DUP_ORD_VENDOR.',
+                'Choice'
             )
         }
         );
-        say $out "Added system preference 'EdiDuplicateOrderEmailNotice'";
+        $dbh->do(
+            q{
+            UPDATE systempreferences
+            SET type    = 'Choice',
+                options = '0|AcquisitionsDefaultEmailAddress|EdifactOrderSendBlockDuplicatesEmailAddresses|KohaAdminEmailAddress',
+                value   = CASE WHEN value = '1' THEN 'AcquisitionsDefaultEmailAddress' ELSE '0' END,
+                explanation = 'Send duplicate EDIFACT order block notifications using the EDI_DUP_ORD_LIBRARY notice template to the selected address. Vendor EDI contacts are always notified separately via EDI_DUP_ORD_VENDOR.'
+            WHERE variable = 'EdifactOrderSendBlockDuplicatesEmailNotice'
+              AND type = 'YesNo'
+        }
+        );
+        say $out "Added system preference 'EdifactOrderSendBlockDuplicatesEmailNotice'";
 
         # Email recipient list
         $dbh->do(
             q{
             INSERT IGNORE INTO systempreferences (variable, value, options, explanation, type)
             VALUES (
-                'EdiDuplicateOrderEmailAddresses',
+                'EdifactOrderSendBlockDuplicatesEmailAddresses',
                 '',
                 NULL,
-                'Comma-separated list of email addresses to notify when duplicate EDIFACT purchase order numbers are detected (e.g., "purchasing@library.org,edi_support@library.org"). Requires EdiDuplicateOrderEmailNotice to be enabled.',
+                'Comma-separated list of acquisitions staff email addresses to use when EdifactOrderSendBlockDuplicatesEmailNotice is set to specific email addresses.',
                 'Textarea'
             )
         }
         );
-        say $out "Added system preference 'EdiDuplicateOrderEmailAddresses'";
+        say $out "Added system preference 'EdifactOrderSendBlockDuplicatesEmailAddresses'";
 
         # Add notice template - library staff notification
         $dbh->do(
