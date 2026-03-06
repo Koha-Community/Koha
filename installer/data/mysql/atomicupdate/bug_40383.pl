@@ -12,45 +12,56 @@ return {
             q{
             INSERT IGNORE INTO systempreferences (variable, value, options, explanation, type)
             VALUES (
-                'EdiBlockDuplicateInvoice',
+                'EdifactInvoiceImportBlockDuplicates',
                 '0',
                 NULL,
-                'Block processing of EDIFACT invoices when a duplicate invoice number is detected for the same supplier. When enabled, duplicate invoices will be rejected and logged as errors.',
+                'Block automatic processing of EDIFACT invoices when a duplicate invoice number is detected for the same supplier. Similar to AcqWarnOnDuplicateInvoice for manually created invoices, but applies to invoices received via EDI.',
                 'YesNo'
             )
         }
         );
-        say $out "Added system preference 'EdiBlockDuplicateInvoice'";
+        say $out "Added system preference 'EdifactInvoiceImportBlockDuplicates'";
 
-        # Email notification toggle
+        # Email notification destination
         $dbh->do(
             q{
             INSERT IGNORE INTO systempreferences (variable, value, options, explanation, type)
             VALUES (
-                'EdiBlockDuplicateInvoiceEmailNotice',
+                'EdifactInvoiceImportBlockDuplicatesEmailNotice',
                 '0',
-                NULL,
-                'Send email notification when duplicate EDIFACT invoices are detected. Requires EdiBlockDuplicateInvoice to be enabled.',
-                'YesNo'
+                '0|AcquisitionsDefaultEmailAddress|EdifactInvoiceImportBlockDuplicatesEmailAddresses|KohaAdminEmailAddress',
+                'Send duplicate EDIFACT invoice block notifications using the EDI_DUP_INV_LIBRARY notice template to the selected address. Vendor EDI contacts are always notified separately via EDI_DUP_INV_VENDOR. Requires EdifactInvoiceImportBlockDuplicates to be enabled.',
+                'Choice'
             )
         }
         );
-        say $out "Added system preference 'EdiBlockDuplicateInvoiceEmailNotice'";
+        $dbh->do(
+            q{
+            UPDATE systempreferences
+            SET type    = 'Choice',
+                options = '0|AcquisitionsDefaultEmailAddress|EdifactInvoiceImportBlockDuplicatesEmailAddresses|KohaAdminEmailAddress',
+                value   = CASE WHEN value = '1' THEN 'AcquisitionsDefaultEmailAddress' ELSE '0' END,
+                explanation = 'Send duplicate EDIFACT invoice block notifications using the EDI_DUP_INV_LIBRARY notice template to the selected address. Vendor EDI contacts are always notified separately via EDI_DUP_INV_VENDOR. Requires EdifactInvoiceImportBlockDuplicates to be enabled.'
+            WHERE variable = 'EdifactInvoiceImportBlockDuplicatesEmailNotice'
+              AND type = 'YesNo'
+        }
+        );
+        say $out "Added system preference 'EdifactInvoiceImportBlockDuplicatesEmailNotice'";
 
         # Email recipient list
         $dbh->do(
             q{
             INSERT IGNORE INTO systempreferences (variable, value, options, explanation, type)
             VALUES (
-                'EdiBlockDuplicateInvoiceEmailAddresses',
+                'EdifactInvoiceImportBlockDuplicatesEmailAddresses',
                 '',
                 NULL,
-                'Comma-separated list of email addresses to notify when duplicate EDIFACT invoices are detected (e.g., "purchasing@library.org,edi_support@library.org"). Requires EdiBlockDuplicateInvoiceEmailNotice to be enabled.',
+                'Comma-separated list of acquisitions staff email addresses to use when EdifactInvoiceImportBlockDuplicatesEmailNotice is set to specific email addresses.',
                 'Textarea'
             )
         }
         );
-        say $out "Added system preference 'EdiBlockDuplicateInvoiceEmailAddresses'";
+        say $out "Added system preference 'EdifactInvoiceImportBlockDuplicatesEmailAddresses'";
 
         # Add database index for performance
         my $index_exists = $dbh->selectrow_array(

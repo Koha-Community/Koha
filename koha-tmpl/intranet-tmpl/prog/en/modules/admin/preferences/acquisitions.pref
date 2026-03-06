@@ -197,19 +197,20 @@ Acquisitions:
                 "": "ignore"
             - " in items."
         -
-            - pref: EdiBlockDuplicateInvoice
+            - pref: EdifactInvoiceImportBlockDuplicates
               choices:
                   1: Block
                   0: "Don't block"
-            - processing of EDIFACT invoices when a duplicate invoice number is detected for the same supplier.
+            - automatic processing of EDIFACT invoices when a duplicate invoice number is detected for the same supplier. Similar to AcqWarnOnDuplicateInvoice, which warns staff when manually creating a duplicate invoice, but applies to invoices received via EDI.
         -
-            - pref: EdiBlockDuplicateInvoiceEmailNotice
+            - "Send duplicate EDIFACT invoice block notifications using the EDI_DUP_INV_LIBRARY notice template to:"
+            - pref: EdifactInvoiceImportBlockDuplicatesEmailNotice
               choices:
-                  1: Send
-                  0: "Don't send"
-            - email notifications when duplicate EDIFACT invoices are detected.
-        -
-            - "Send duplicate invoice notifications to these email addresses (comma-separated):"
-            - pref: EdiBlockDuplicateInvoiceEmailAddresses
+                  0: "Do not send"
+                  AcquisitionsDefaultEmailAddress: AcquisitionsDefaultEmailAddress
+                  EdifactInvoiceImportBlockDuplicatesEmailAddresses: "specific email addresses"
+                  KohaAdminEmailAddress: KohaAdminEmailAddress
+            - '<br>Vendor EDI contacts are always notified separately via the EDI_DUP_INV_VENDOR notice using contacts flagged in the vendor''s EDI account.<br>If choosing specific email addresses, enter them here (comma-separated):'
+            - pref: EdifactInvoiceImportBlockDuplicatesEmailAddresses
               type: textarea
               class: code

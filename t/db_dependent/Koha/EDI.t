@@ -2455,7 +2455,7 @@ subtest 'duplicate_invoice_blocking' => sub {
         $schema->storage->txn_begin;
 
         # Disable duplicate blocking preference
-        t::lib::Mocks::mock_preference( 'EdiBlockDuplicateInvoice', 0 );
+        t::lib::Mocks::mock_preference( 'EdifactInvoiceImportBlockDuplicates', 0 );
 
         # Create file transport for local testing
         my $file_transport = $builder->build(
@@ -2572,8 +2572,8 @@ subtest 'duplicate_invoice_blocking' => sub {
         $schema->storage->txn_begin;
 
         # Enable duplicate blocking preference
-        t::lib::Mocks::mock_preference( 'EdiBlockDuplicateInvoice',            1 );
-        t::lib::Mocks::mock_preference( 'EdiBlockDuplicateInvoiceEmailNotice', 0 );
+        t::lib::Mocks::mock_preference( 'EdifactInvoiceImportBlockDuplicates',            1 );
+        t::lib::Mocks::mock_preference( 'EdifactInvoiceImportBlockDuplicatesEmailNotice', 0 );
 
         # Create file transport for local testing
         my $file_transport = $builder->build(
@@ -2702,7 +2702,7 @@ subtest 'duplicate_invoice_blocking' => sub {
         $schema->storage->txn_begin;
 
         # Enable duplicate blocking preference
-        t::lib::Mocks::mock_preference( 'EdiBlockDuplicateInvoice', 1 );
+        t::lib::Mocks::mock_preference( 'EdifactInvoiceImportBlockDuplicates', 1 );
 
         # Create file transport for local testing
         my $file_transport = $builder->build(
@@ -2840,9 +2840,12 @@ subtest 'duplicate_invoice_blocking' => sub {
         $schema->storage->txn_begin;
 
         # Enable duplicate blocking and email notifications
-        t::lib::Mocks::mock_preference( 'EdiBlockDuplicateInvoice',               1 );
-        t::lib::Mocks::mock_preference( 'EdiBlockDuplicateInvoiceEmailNotice',    1 );
-        t::lib::Mocks::mock_preference( 'EdiBlockDuplicateInvoiceEmailAddresses', 'library@example.com' );
+        t::lib::Mocks::mock_preference( 'EdifactInvoiceImportBlockDuplicates', 1 );
+        t::lib::Mocks::mock_preference(
+            'EdifactInvoiceImportBlockDuplicatesEmailNotice',
+            'EdifactInvoiceImportBlockDuplicatesEmailAddresses'
+        );
+        t::lib::Mocks::mock_preference( 'EdifactInvoiceImportBlockDuplicatesEmailAddresses', 'library@example.com' );
 
         # Create letter templates for notifications (delete first if exist)
         $schema->resultset('Letter')->search(
@@ -2989,9 +2992,12 @@ subtest 'duplicate_invoice_blocking' => sub {
         $schema->storage->txn_begin;
 
         # Enable duplicate blocking and email notifications
-        t::lib::Mocks::mock_preference( 'EdiBlockDuplicateInvoice',               1 );
-        t::lib::Mocks::mock_preference( 'EdiBlockDuplicateInvoiceEmailNotice',    1 );
-        t::lib::Mocks::mock_preference( 'EdiBlockDuplicateInvoiceEmailAddresses', 'library@example.com' );
+        t::lib::Mocks::mock_preference( 'EdifactInvoiceImportBlockDuplicates', 1 );
+        t::lib::Mocks::mock_preference(
+            'EdifactInvoiceImportBlockDuplicatesEmailNotice',
+            'EdifactInvoiceImportBlockDuplicatesEmailAddresses'
+        );
+        t::lib::Mocks::mock_preference( 'EdifactInvoiceImportBlockDuplicatesEmailAddresses', 'library@example.com' );
 
         # Create letter templates for notifications (delete first if exist)
         $schema->resultset('Letter')->search(
@@ -3151,10 +3157,13 @@ subtest 'duplicate_invoice_blocking' => sub {
         $schema->storage->txn_begin;
 
         # Enable duplicate blocking and email notifications with multiple addresses
-        t::lib::Mocks::mock_preference( 'EdiBlockDuplicateInvoice',            1 );
-        t::lib::Mocks::mock_preference( 'EdiBlockDuplicateInvoiceEmailNotice', 1 );
+        t::lib::Mocks::mock_preference( 'EdifactInvoiceImportBlockDuplicates', 1 );
         t::lib::Mocks::mock_preference(
-            'EdiBlockDuplicateInvoiceEmailAddresses',
+            'EdifactInvoiceImportBlockDuplicatesEmailNotice',
+            'EdifactInvoiceImportBlockDuplicatesEmailAddresses'
+        );
+        t::lib::Mocks::mock_preference(
+            'EdifactInvoiceImportBlockDuplicatesEmailAddresses',
             'library1@example.com, library2@example.com, library3@example.com'
         );
 
@@ -3282,9 +3291,15 @@ subtest 'duplicate_invoice_blocking' => sub {
         $schema->storage->txn_begin;
 
         # Enable duplicate blocking and email notifications with invalid addresses
-        t::lib::Mocks::mock_preference( 'EdiBlockDuplicateInvoice',               1 );
-        t::lib::Mocks::mock_preference( 'EdiBlockDuplicateInvoiceEmailNotice',    1 );
-        t::lib::Mocks::mock_preference( 'EdiBlockDuplicateInvoiceEmailAddresses', 'invalid-email, valid@example.com' );
+        t::lib::Mocks::mock_preference( 'EdifactInvoiceImportBlockDuplicates', 1 );
+        t::lib::Mocks::mock_preference(
+            'EdifactInvoiceImportBlockDuplicatesEmailNotice',
+            'EdifactInvoiceImportBlockDuplicatesEmailAddresses'
+        );
+        t::lib::Mocks::mock_preference(
+            'EdifactInvoiceImportBlockDuplicatesEmailAddresses',
+            'invalid-email, valid@example.com'
+        );
 
         # Create letter templates (delete first if exist)
         $schema->resultset('Letter')->search(
