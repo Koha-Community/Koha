@@ -484,7 +484,7 @@ sub _allocateWithTransportCostMatrix {
 
 RETRY:
     while (1) {
-        return [] if $num_agents == 0 || $num_tasks == 0;
+        return [] if $num_agents == 0 || $num_tasks + scalar(@remaining) == 0;
 
         if ( $num_tasks < $num_agents && @remaining ) {
 
