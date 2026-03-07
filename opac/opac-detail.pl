@@ -714,9 +714,10 @@ if ( not $viewallitems and $items->count > $max_items_to_display ) {
         # Get opac_info from Additional contents for home and holding library
         my ( $opac_info_home, $opac_info_holding );
         $opac_info_holding = $library_info->{ $item->holdingbranch }
-            // $item->holding_branch->opac_info( { lang => $lang } );
+            // $item->holding_branch->opac_info( { lang => $lang } )->next;
         $library_info->{ $item->holdingbranch } = $opac_info_holding;
-        $opac_info_home = $library_info->{ $item->homebranch } // $item->home_branch->opac_info( { lang => $lang } );
+        $opac_info_home = $library_info->{ $item->homebranch }
+            // $item->home_branch->opac_info( { lang => $lang } )->next;
         $library_info->{ $item->homebranch } = $opac_info_home;
         $item_info->{holding_library_info}   = $opac_info_holding if $opac_info_holding;
         $item_info->{home_library_info}      = $opac_info_home    if $opac_info_home;
