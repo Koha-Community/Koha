@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 69;
+use Test::More tests => 70;
 use Test::NoWarnings;
 use Test::MockModule;
 use Test::Warn;
@@ -35,7 +35,7 @@ use C4::Biblio qw( GetMarcFromKohaField ModBiblio );
 use C4::HoldsQueue;
 use C4::Members;
 use C4::Reserves
-    qw( AddReserve AlterPriority CheckReserves ModReserve ModReserveAffect ReserveSlip CalculatePriority CanBookBeReserved IsAvailableForItemLevelRequest MoveReserve ChargeReserveFee CanItemBeReserved MergeHolds );
+    qw( AddReserve AlterPriority CheckReserves FixPriority ModReserve ModReserveAffect ReserveSlip CalculatePriority CanBookBeReserved IsAvailableForItemLevelRequest MoveReserve ChargeReserveFee CanItemBeReserved MergeHolds ToggleLowestPriority );
 use Koha::ActionLogs;
 use Koha::Biblios;
 use Koha::Caches;
@@ -2131,6 +2131,114 @@ subtest 'Bug 40866: AddReserve override JSON logging' => sub {
         ['HOLD_POLICY_OVERRIDE'],
         'Confirmations logged correctly'
     );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'FixPriority() lowestPriority tests' => sub {
+
+    plan tests => 14;
+
+    $schema->storage->txn_begin;
+
+    my $library = $builder->build_object( { class => 'Koha::Libraries' } );
+    my $biblio  = $builder->build_sample_biblio;
+
+    # Helper: place holds with explicit priorities to avoid tie-breaking ambiguity
+    my @patrons;
+    my @reserve_ids;
+    for my $i ( 1 .. 5 ) {
+        my $patron = $builder->build_object( { class => 'Koha::Patrons' } );
+        push @patrons, $patron;
+        my $rid = AddReserve(
+            {
+                branchcode     => $library->branchcode,
+                borrowernumber => $patron->id,
+                biblionumber   => $biblio->id,
+                priority       => $i,
+            }
+        );
+        push @reserve_ids, $rid;
+    }
+
+    # Mark holds 4 and 5 as lowestPriority; initial priorities should be 1..5
+    ToggleLowestPriority( $reserve_ids[3] );    # hold 4 → lowestPriority, pushed to bottom
+    ToggleLowestPriority( $reserve_ids[4] );    # hold 5 → lowestPriority, pushed to bottom
+
+    my @holds = map { Koha::Holds->find($_) } @reserve_ids;
+
+    is( $holds[0]->priority, 1, 'Hold 1 priority is 1' );
+    is( $holds[1]->priority, 2, 'Hold 2 priority is 2' );
+    is( $holds[2]->priority, 3, 'Hold 3 priority is 3' );
+    $holds[3]->discard_changes;
+    $holds[4]->discard_changes;
+    ok( $holds[3]->priority > $holds[2]->priority, 'lowestPriority hold 4 is after non-lowest holds' );
+    ok( $holds[4]->priority > $holds[2]->priority, 'lowestPriority hold 5 is after non-lowest holds' );
+
+    # Attempting to move a lowestPriority hold to rank 1 should be clamped
+    FixPriority( { reserve_id => $reserve_ids[3], rank => 1 } );
+    $holds[3]->discard_changes;
+    $holds[0]->discard_changes;
+    $holds[1]->discard_changes;
+    $holds[2]->discard_changes;
+    ok(
+        $holds[3]->priority > $holds[2]->priority,
+        'lowestPriority hold cannot be moved above non-lowestPriority holds'
+    );
+    is( $holds[0]->priority, 1, 'Hold 1 priority unchanged after clamped move' );
+    is( $holds[1]->priority, 2, 'Hold 2 priority unchanged after clamped move' );
+    is( $holds[2]->priority, 3, 'Hold 3 priority unchanged after clamped move' );
+
+    # Moving a lowestPriority hold within the lowest-priority group should work
+    my $p4_before = $holds[3]->priority;
+    my $p5_before = $holds[4]->priority;
+    FixPriority( { reserve_id => $reserve_ids[3], rank => $p5_before } );
+    $holds[3]->discard_changes;
+    $holds[4]->discard_changes;
+    isnt( $holds[3]->priority, $p4_before, 'lowestPriority hold moved within lowest-priority group' );
+    ok( $holds[3]->priority > $holds[2]->priority, 'Moved lowestPriority hold still below non-lowest holds' );
+
+    # When ALL holds are lowestPriority, movement is unconstrained
+    my $biblio2 = $builder->build_sample_biblio;
+    my @all_low_ids;
+    for my $i ( 1 .. 3 ) {
+        my $patron = $builder->build_object( { class => 'Koha::Patrons' } );
+        my $rid    = AddReserve(
+            {
+                branchcode     => $library->branchcode,
+                borrowernumber => $patron->id,
+                biblionumber   => $biblio2->id,
+                priority       => $i,
+            }
+        );
+        ToggleLowestPriority($rid);
+        push @all_low_ids, $rid;
+    }
+    my $h1 = Koha::Holds->find( $all_low_ids[2] );
+    FixPriority( { reserve_id => $all_low_ids[2], rank => 1 } );
+    $h1->discard_changes;
+    is( $h1->priority, 1, 'lowestPriority hold moves freely when all holds are lowestPriority' );
+
+    # When NO holds are lowestPriority, FixPriority works as before
+    my $biblio3 = $builder->build_sample_biblio;
+    my @normal_ids;
+    for my $i ( 1 .. 3 ) {
+        my $patron = $builder->build_object( { class => 'Koha::Patrons' } );
+        my $rid    = AddReserve(
+            {
+                branchcode     => $library->branchcode,
+                borrowernumber => $patron->id,
+                biblionumber   => $biblio3->id,
+                priority       => $i,
+            }
+        );
+        push @normal_ids, $rid;
+    }
+    FixPriority( { reserve_id => $normal_ids[2], rank => 1 } );
+    my $moved = Koha::Holds->find( $normal_ids[2] );
+    is( $moved->priority, 1, 'Non-lowestPriority hold moves to rank 1 normally' );
+    my $other = Koha::Holds->find( $normal_ids[0] );
+    is( $other->priority, 2, 'Other holds renumbered correctly after normal move' );
 
     $schema->storage->txn_rollback;
 };
