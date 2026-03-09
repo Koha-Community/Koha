@@ -1251,6 +1251,7 @@ function _dt_save_restore_state(table_settings, external_filter_nodes = {}) {
         }
 
         state = _dt_force_visibility(table_settings, this.api(), state);
+        state.start = 0;
 
         return state;
     };
