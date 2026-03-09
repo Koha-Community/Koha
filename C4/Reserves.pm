@@ -1747,101 +1747,108 @@ priority adjusted to ensure that they remain at the end of the line.
 =cut
 
 sub FixPriority {
-    my ($params)     = @_;
-    my $reserve_id   = $params->{reserve_id};
-    my $rank         = $params->{rank} // '';
-    my $biblionumber = $params->{biblionumber};
+    my ($params) = @_;
 
-    my $dbh = C4::Context->dbh;
+    Koha::Database->new->schema->txn_do(
+        sub {
+            my $reserve_id   = $params->{reserve_id};
+            my $rank         = $params->{rank} // '';
+            my $biblionumber = $params->{biblionumber};
 
-    my $hold;
-    if ($reserve_id) {
-        $hold = Koha::Holds->find($reserve_id);
-        if ( !defined $hold ) {
+            my $dbh = C4::Context->dbh;
 
-            # may have already been checked out and hold fulfilled
-            require Koha::Old::Holds;
-            $hold = Koha::Old::Holds->find($reserve_id);
+            my $hold;
+            if ($reserve_id) {
+                $hold = Koha::Holds->find($reserve_id);
+                if ( !defined $hold ) {
+
+                    # may have already been checked out and hold fulfilled
+                    require Koha::Old::Holds;
+                    $hold = Koha::Old::Holds->find($reserve_id);
+                }
+                return unless $hold;
+            }
+
+            unless ($biblionumber) {    # FIXME This is a very weird API
+                $biblionumber = $hold->biblionumber;
+            }
+
+            if ( $rank eq "del" ) {     # FIXME will crash if called without $hold
+                $hold->cancel;
+            } elsif ( $reserve_id && ( $rank eq "W" || $rank eq "0" ) ) {
+
+                # make sure priority for waiting or in-transit items is 0
+                my $query = "
+                    UPDATE reserves
+                    SET    priority = 0
+                    WHERE reserve_id = ?
+                    AND found IN ('W', 'T', 'P')
+                ";
+                my $sth = $dbh->prepare($query);
+                $sth->execute($reserve_id);
+            }
+            my @priority;
+
+            # Lock all active holds for this bib so concurrent FixPriority calls
+            # for the same hold set cannot interleave their read-modify-write cycle.
+            # FOR UPDATE is effective inside the enclosing txn_do transaction.
+            my $query = "
+                SELECT reserve_id, borrowernumber, reservedate, lowestPriority
+                FROM   reserves
+                WHERE  biblionumber   = ?
+                  AND  ((found <> 'W' AND found <> 'T' AND found <> 'P') OR found IS NULL)
+                ORDER BY lowestPriority ASC, priority ASC
+                FOR UPDATE
+            ";
+            my $sth = $dbh->prepare($query);
+            $sth->execute($biblionumber);
+            while ( my $line = $sth->fetchrow_hashref ) {
+                push( @priority, $line );
+            }
+
+            # FIXME This whole sub must be rewritten, especially to highlight what is done when reserve_id is not given
+            # To find the matching index
+            my $i;
+            my $key = -1;    # to allow for 0 to be a valid result
+            for ( $i = 0 ; $i < @priority ; $i++ ) {
+                if ( $reserve_id && $reserve_id == $priority[$i]->{'reserve_id'} ) {
+                    $key = $i;    # save the index
+                    last;
+                }
+            }
+
+            # if this hold is marked lowest priority, we can only move it so far;
+            # cap rank to just after the last non-lowestPriority hold using the
+            # already-fetched @priority array (avoids a second DB query and stale data)
+            if ( $hold && $hold->lowestPriority && $rank ne 'del' && $rank > 0 ) {
+                my $non_lowest_count = scalar grep { !$_->{lowestPriority} } @priority;
+                $rank = $non_lowest_count + 1 if $non_lowest_count && $rank <= $non_lowest_count;
+            }
+
+            # if index exists in array then move it to new position
+            if ( $key > -1 && $rank ne 'del' && $rank > 0 ) {
+                my $new_rank    = $rank - 1;    # $new_rank is what you want the new index to be in the array
+                my $moving_item = splice( @priority, $key, 1 );
+                $new_rank = scalar @priority if $new_rank > scalar @priority;
+                splice( @priority, $new_rank, 0, $moving_item );
+            }
+
+            # now fix the priority on those that are left....
+            # only updating if changed
+            $query = "
+                UPDATE reserves
+                SET    priority = ?
+                WHERE  reserve_id = ? AND priority != ?
+            ";
+            $sth = $dbh->prepare($query);
+            for ( my $j = 0 ; $j < @priority ; $j++ ) {
+                $sth->execute(
+                    $j + 1,
+                    $priority[$j]->{'reserve_id'}, $j + 1
+                );
+            }
         }
-        return unless $hold;
-    }
-
-    unless ($biblionumber) {    # FIXME This is a very weird API
-        $biblionumber = $hold->biblionumber;
-    }
-
-    if ( $rank eq "del" ) {     # FIXME will crash if called without $hold
-        $hold->cancel;
-    } elsif ( $reserve_id && ( $rank eq "W" || $rank eq "0" ) ) {
-
-        # make sure priority for waiting or in-transit items is 0
-        my $query = "
-            UPDATE reserves
-            SET    priority = 0
-            WHERE reserve_id = ?
-            AND found IN ('W', 'T', 'P')
-        ";
-        my $sth = $dbh->prepare($query);
-        $sth->execute($reserve_id);
-    }
-    my @priority;
-
-    # get what's left, sorting lowestPriority holds to the bottom
-    my $query = "
-        SELECT reserve_id, borrowernumber, reservedate, lowestPriority
-        FROM   reserves
-        WHERE  biblionumber   = ?
-          AND  ((found <> 'W' AND found <> 'T' AND found <> 'P') OR found IS NULL)
-        ORDER BY lowestPriority ASC, priority ASC
-    ";
-    my $sth = $dbh->prepare($query);
-    $sth->execute($biblionumber);
-    while ( my $line = $sth->fetchrow_hashref ) {
-        push( @priority, $line );
-    }
-
-    # FIXME This whole sub must be rewritten, especially to highlight what is done when reserve_id is not given
-    # To find the matching index
-    my $i;
-    my $key = -1;    # to allow for 0 to be a valid result
-    for ( $i = 0 ; $i < @priority ; $i++ ) {
-        if ( $reserve_id && $reserve_id == $priority[$i]->{'reserve_id'} ) {
-            $key = $i;    # save the index
-            last;
-        }
-    }
-
-    # if this hold is marked lowest priority, we can only move it so far;
-    # cap rank to just after the last non-lowestPriority hold using the
-    # already-fetched @priority array (avoids a second DB query and stale data)
-    if ( $hold && $hold->lowestPriority && $rank ne 'del' && $rank > 0 ) {
-        my $non_lowest_count = scalar grep { !$_->{lowestPriority} } @priority;
-        $rank = $non_lowest_count + 1 if $non_lowest_count && $rank <= $non_lowest_count;
-    }
-
-    # if index exists in array then move it to new position
-    if ( $key > -1 && $rank ne 'del' && $rank > 0 ) {
-        my $new_rank    = $rank - 1;                      # $new_rank is what you want the new index to be in the array
-        my $moving_item = splice( @priority, $key, 1 );
-        $new_rank = scalar @priority if $new_rank > scalar @priority;
-        splice( @priority, $new_rank, 0, $moving_item );
-    }
-
-    # now fix the priority on those that are left....
-    # only updating if changed
-    $query = "
-        UPDATE reserves
-        SET    priority = ?
-        WHERE  reserve_id = ? AND priority != ?
-    ";
-    $sth = $dbh->prepare($query);
-    for ( my $j = 0 ; $j < @priority ; $j++ ) {
-        $sth->execute(
-            $j + 1,
-            $priority[$j]->{'reserve_id'}, $j + 1
-        );
-    }
-
+    );
 }
 
 =head2 _Findgroupreserve
