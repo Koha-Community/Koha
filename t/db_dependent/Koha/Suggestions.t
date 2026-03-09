@@ -20,10 +20,12 @@
 use Modern::Perl;
 
 use Test::NoWarnings;
-use Test::More tests => 12;
+use Test::More tests => 13;
 use Test::Exception;
 use Test::Warn;
 
+use C4::Suggestions qw( DelSuggestion );
+use Koha::ActionLogs;
 use Koha::Suggestions;
 use Koha::Notice::Messages;
 use Koha::Database;
@@ -501,6 +503,52 @@ subtest 'filter_by_suggested_days_range() tests' => sub {
 
     my $one_days = $suggestions->filter_by_suggested_days_range(1);
     is( $one_days->count, 1 );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'Suggestion action logs populate the diff column' => sub {
+
+    plan tests => 9;
+
+    $schema->storage->txn_begin;
+
+    t::lib::Mocks::mock_preference( 'SuggestionsLog', 1 );
+
+    my $patron = $builder->build_object( { class => 'Koha::Patrons' } );
+
+    # CREATE
+    my $suggestion = Koha::Suggestion->new(
+        {
+            suggestedby => $patron->borrowernumber,
+            title       => 'Test title',
+        }
+    )->store;
+    my $suggestionid = $suggestion->suggestionid;
+
+    my $create_log =
+        Koha::ActionLogs->search( { module => 'SUGGESTION', action => 'CREATE', object => $suggestionid } )->single;
+    ok( defined $create_log,       'CREATE log entry exists' );
+    ok( defined $create_log->diff, 'diff column is populated for CREATE' );
+    like( $create_log->diff, qr/title/, 'CREATE diff contains suggestion fields' );
+
+    # MODIFY
+    $suggestion->title('Updated title')->store;
+
+    my $modify_log =
+        Koha::ActionLogs->search( { module => 'SUGGESTION', action => 'MODIFY', object => $suggestionid } )->single;
+    ok( defined $modify_log,       'MODIFY log entry exists' );
+    ok( defined $modify_log->diff, 'diff column is populated for MODIFY' );
+    like( $modify_log->diff, qr/title/, 'MODIFY diff contains changed field' );
+
+    # DELETE via DelSuggestion
+    C4::Suggestions::DelSuggestion( undef, $suggestionid, 'intranet' );
+
+    my $delete_log =
+        Koha::ActionLogs->search( { module => 'SUGGESTION', action => 'DELETE', object => $suggestionid } )->single;
+    ok( defined $delete_log,       'DELETE log entry exists' );
+    ok( defined $delete_log->diff, 'diff column is populated for DELETE' );
+    like( $delete_log->diff, qr/title/, 'DELETE diff contains suggestion fields' );
 
     $schema->storage->txn_rollback;
 };

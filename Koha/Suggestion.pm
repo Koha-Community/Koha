@@ -71,12 +71,19 @@ sub store {
     my $emailpurchasesuggestions = C4::Context->preference("EmailPurchaseSuggestions");
 
     my $new_suggestion = !$self->in_storage;
+    my $original       = $new_suggestion ? undef : $self->get_from_storage->unblessed;
 
     my $result = $self->SUPER::store();
 
     if ( C4::Context->preference("SuggestionsLog") ) {
-        my $action = $new_suggestion ? 'CREATE' : 'MODIFY';
-        logaction( 'SUGGESTION', $action, $result->suggestionid, $self );
+        if ($new_suggestion) {
+            logaction(
+                'SUGGESTION', 'CREATE', $result->suggestionid, undef, undef,
+                $result->get_from_storage->unblessed
+            );
+        } else {
+            logaction( 'SUGGESTION', 'MODIFY', $result->suggestionid, $result, undef, $original );
+        }
     }
 
     if ( $emailpurchasesuggestions && $self->STATUS eq 'ASKED' ) {

@@ -327,15 +327,16 @@ sub DelSuggestion {
     $borrowernumber //= '';
 
     if ( defined $type && $type eq 'intranet' || $suggestedby eq $borrowernumber ) {
+        my $suggestion = Koha::Suggestions->find($suggestionid);
+        if ( C4::Context->preference("SuggestionsLog") ) {
+            logaction( 'SUGGESTION', 'DELETE', $suggestionid, $suggestion, undef, $suggestion );
+        }
         my $queryDelete = q{
             DELETE FROM suggestions
             WHERE suggestionid=?
         };
         $sth = $dbh->prepare($queryDelete);
         my $suggestiondeleted = $sth->execute($suggestionid);
-        if ( C4::Context->preference("SuggestionsLog") ) {
-            logaction( 'SUGGESTION', 'DELETE', $suggestionid, '' );
-        }
         return $suggestiondeleted;
     }
 }
