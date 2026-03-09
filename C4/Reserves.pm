@@ -1720,7 +1720,6 @@ sub SuspendAll {
   FixPriority({
     reserve_id => $reserve_id,
     [rank => $rank,]
-    [ignoreSetLowestRank => $ignoreSetLowestRank]
   });
 
   or
@@ -1742,20 +1741,16 @@ then have reserves.priority set so that the first non-captured hold
 has its priority set to 1, the second non-captured hold has its priority
 set to 2, and so forth.
 
-In both cases, holds that have the lowestPriority flag on are have their
+In both cases, holds that have the lowestPriority flag on have their
 priority adjusted to ensure that they remain at the end of the line.
-
-Note that the ignoreSetLowestRank parameter is meant to be used only
-when FixPriority calls itself.
 
 =cut
 
 sub FixPriority {
-    my ($params)            = @_;
-    my $reserve_id          = $params->{reserve_id};
-    my $rank                = $params->{rank} // '';
-    my $ignoreSetLowestRank = $params->{ignoreSetLowestRank};
-    my $biblionumber        = $params->{biblionumber};
+    my ($params)     = @_;
+    my $reserve_id   = $params->{reserve_id};
+    my $rank         = $params->{rank} // '';
+    my $biblionumber = $params->{biblionumber};
 
     my $dbh = C4::Context->dbh;
 
