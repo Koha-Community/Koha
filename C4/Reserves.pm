@@ -1788,7 +1788,7 @@ sub FixPriority {
 
     # get what's left, sorting lowestPriority holds to the bottom
     my $query = "
-        SELECT reserve_id, borrowernumber, reservedate
+        SELECT reserve_id, borrowernumber, reservedate, lowestPriority
         FROM   reserves
         WHERE  biblionumber   = ?
           AND  ((found <> 'W' AND found <> 'T' AND found <> 'P') OR found IS NULL)
@@ -1811,20 +1811,12 @@ sub FixPriority {
         }
     }
 
-    # if this hold is marked lowest priority, we can only move it so far
+    # if this hold is marked lowest priority, we can only move it so far;
+    # cap rank to just after the last non-lowestPriority hold using the
+    # already-fetched @priority array (avoids a second DB query and stale data)
     if ( $hold && $hold->lowestPriority && $rank ne 'del' && $rank > 0 ) {
-        my $query = "
-            SELECT max(priority)
-            FROM reserves
-            WHERE biblionumber   = ?
-            AND  ((found <> 'W' AND found <> 'T' AND found <> 'P') OR found IS NULL)
-            AND lowestPriority = 0;
-        ";
-        my $sth = $dbh->prepare($query);
-        $sth->execute($biblionumber);
-        my ($highest_non_lowest_priority) = $sth->fetchrow_array();
-        $rank = $highest_non_lowest_priority + 1
-            if ( $highest_non_lowest_priority && $rank <= $highest_non_lowest_priority );
+        my $non_lowest_count = scalar grep { !$_->{lowestPriority} } @priority;
+        $rank = $non_lowest_count + 1 if $non_lowest_count && $rank <= $non_lowest_count;
     }
 
     # if index exists in array then move it to new position
