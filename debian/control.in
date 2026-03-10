@@ -16,26 +16,14 @@ Build-Depends:__AUTODEPENDS__,
 
 Package: koha-common
 Architecture: all
-Depends: ${misc:Depends}, ${koha:Depends},
+Depends: ${misc:Depends},
+ koha-core,
+ koha-systemd | koha-sysv,
  apache2,
  apache2-mpm-itk | libapache2-mpm-itk,
- at,
- cron-daemon,
- daemon,
- debconf,
  idzebra-2.0,
- koha-l10n,
  memcached,
- mysql-client | virtual-mysql-client,
- perl-doc,
- pwgen,
- rabbitmq-server,
- sudo,
- fonts-dejavu | ttf-dejavu,
- unzip,
- weasyprint,
- xmlstarlet,
- yaz
+ rabbitmq-server
 Suggests: mysql-server | virtual-mysql-server,
  letsencrypt,
 Homepage: http://koha-community.org/
@@ -43,8 +31,9 @@ Description: integrated (physical) library management system
  Koha is an Integrated Library Management system for real-world libraries
  (the kinds with books).
  .
- This package contains everything needed to run Koha, except the site
- specific configuration files. See the package koha for the rest.
+ This metapackage installs the complete Koha system with all dependencies.
+ On systemd-based systems, it will use native systemd units (koha-systemd).
+ On other systems or containers, it will use SysV init scripts (koha-sysv).
 
 Package: koha
 Architecture: all
@@ -108,14 +97,15 @@ Description: integrated (physical) library management system
  Koha is an Integrated Library Management system for real-world libraries
  (the kinds with books).
  .
- This package provides a version of Koha identical to that of koha-full,
- but without third-party systems such as MariaDB, RabbitMQ, et cetera.
+ This package provides the core Koha application files, scripts, and
+ configuration without any init system. It requires either koha-sysv or
+ koha-systemd to manage services.
  .
- This package is EXPERIMENTAL and not recommended for production use.
+ Most users should install koha-common instead, which will automatically
+ select the appropriate init system.
 Depends: ${misc:Depends}, ${koha:Depends},
  at,
  cron-daemon,
- daemon,
  debconf,
  koha-l10n,
  mysql-client | virtual-mysql-client,
@@ -150,7 +140,9 @@ Description: integrated (physical) library management system
 
 Package: koha-systemd
 Architecture: all
-Depends: ${misc:Depends}, systemd, koha-common
+Depends: ${misc:Depends}, systemd, koha-core
+Provides: koha-init
+Conflicts: koha-sysv
 Description: systemd units for Koha ILS
  Koha is an Integrated Library Management system for real-world libraries
  (the kinds with books).
@@ -165,7 +157,7 @@ Description: systemd units for Koha ILS
 
 Package: koha-sysv
 Architecture: all
-Depends: ${misc:Depends}, daemon, koha-common
+Depends: ${misc:Depends}, daemon, koha-core
 Provides: koha-init
 Conflicts: koha-systemd
 Description: SysV init scripts for Koha ILS
