@@ -46,7 +46,8 @@ use Koha::SearchEngine::Search;
 
 use open qw( :std :encoding(UTF-8) );
 binmode( STDOUT, ":encoding(UTF-8)" );
-my ( $input_marc_file, $number, $offset, $cleanisbn ) = ( '', 0, 0, 1 );
+my ( $input_marc_file, $offset, $cleanisbn ) = ( '', 0, 1 );
+my $number;
 my $version;
 my $delete;
 my $test_parameter;
@@ -298,7 +299,7 @@ my $yamlhash;
 # Skip file offset
 if ($offset) {
     print "Skipping file offset: $offset records\n";
-    $batch->next() while ( $offset-- );
+    eval { $batch->next() } while ( $offset-- );
 }
 
 my ( $tagid, $subfieldid );
@@ -333,22 +334,31 @@ RECORD: while () {
 
     my $record;
 
-    # get record
-    eval { $record = $batch->next() };
-    if ($@) {
-        print "Bad MARC record $record_number: $@ skipped\n";
+    # max number (n) is defined and reached
+    $records_exhausted = 1 if defined($number) && $record_number >= $number;
 
-        # FIXME - because MARC::Batch->next() combines grabbing the next
-        # blob and parsing it into one operation, a correctable condition
-        # such as a MARC-8 record claiming that it's UTF-8 can't be recovered
-        # from because we don't have access to the original blob.  Note
-        # that the staging import can deal with this condition (via
-        # C4::Charset::MarcToUTF8Record) because it doesn't use MARC::Batch.
-        next;
+    if ( !$records_exhausted ) {
+
+        # get record
+        eval { $record = $batch->next() };
+        if ($@) {
+
+            # do increase number for broken records
+            $record_number++;
+            print "Bad MARC record $record_number: $@ skipped\n";
+
+            # FIXME - because MARC::Batch->next() combines grabbing the next
+            # blob and parsing it into one operation, a correctable condition
+            # such as a MARC-8 record claiming that it's UTF-8 can't be recovered
+            # from because we don't have access to the original blob.  Note
+            # that the staging import can deal with this condition (via
+            # C4::Charset::MarcToUTF8Record) because it doesn't use MARC::Batch.
+            next;
+        }
     }
-    if ($record) {
-        $record_number++;
 
+    if ( $record && !$records_exhausted ) {
+        $record_number++;
         if ($skip_bad_records) {
             my $xml = $record->as_xml_record();
             eval { MARC::Record::new_from_xml( $xml, 'UTF-8', "MARC21" ); };
@@ -721,7 +731,7 @@ RECORD: while () {
         $records_exhausted = 1;
     }
 
-    if ( !$test_parameter && $record_number % $commitnum == 0 || $record_number == $number || $records_exhausted ) {
+    if ( !$test_parameter && $record_number % $commitnum == 0 || $records_exhausted ) {
         if ($indexer) {
             $indexer->update_index( \@search_engine_record_ids, \@search_engine_records ) unless $skip_indexing;
             if ( C4::Context->preference('AutoLinkBiblios') ) {
@@ -735,7 +745,7 @@ RECORD: while () {
         $schema->txn_commit;
         $schema->txn_begin;
     }
-    last if $record_number == $number || $records_exhausted;
+    last if $records_exhausted;
 }
 
 if ( !$test_parameter ) {
