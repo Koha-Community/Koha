@@ -10,7 +10,7 @@
     <table class="items_table" id="[% tab | html %]_table">
         <thead>
             <tr>
-                <th id="[% tab | html %]_checkbox" data-colname="checkbox" class="no-sort"></th>
+                <th id="[% tab | html %]_checkbox" data-colname="checkbox" class="no-sort no-export"></th>
                 <th id="[% tab | html %]_cover_image" data-colname="cover_image">Cover image</th>
                 <th id="[% tab | html %]_itype" data-colname="itype">Item type</th>
                 <th id="[% tab | html %]_holdingbranch" data-colname="holdingbranch">Current library</th>
@@ -40,7 +40,7 @@
                 <th id="[% tab | html %]_usedin" data-colname="usedin">Used in</th>
                 <th id="[% tab | html %]_create_analytics" data-colname="create_analytics"></th>
                 <th id="[% tab | html %]_course_reserves" data-colname="course_reserves">Course reserves</th>
-                <th id="[% tab | html %]_spinelabel" data-colname="spinelabel" class="no-sort">Spine label</th>
+                <th id="[% tab | html %]_spinelabel" data-colname="spinelabel" class="no-sort no-export">Spine label</th>
                 <th id="[% tab | html %]_actions" data-colname="actions" class="no-sort no-export">&nbsp;</th>
             </tr>
         </thead>
