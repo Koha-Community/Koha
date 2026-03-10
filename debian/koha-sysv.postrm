@@ -1,0 +1,15 @@
+#!/bin/sh
+
+set -e
+
+if [ "$1" = "purge" ]; then
+    # Disable the service on systemd systems
+    if [ -d /run/systemd/system ]; then
+        deb-systemd-helper purge koha-common.service >/dev/null || true
+        deb-systemd-helper unmask koha-common.service >/dev/null || true
+    fi
+fi
+
+#DEBHELPER#
+
+exit 0

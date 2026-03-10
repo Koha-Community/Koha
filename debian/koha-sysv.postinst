@@ -1,0 +1,13 @@
+#!/bin/sh
+
+set -e
+
+#DEBHELPER#
+
+# Enable and start the service on systemd systems
+if [ -d /run/systemd/system ]; then
+    deb-systemd-helper enable koha-common.service >/dev/null || true
+    deb-systemd-invoke start koha-common.service >/dev/null || true
+fi
+
+exit 0

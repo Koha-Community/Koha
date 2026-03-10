@@ -162,3 +162,19 @@ Description: systemd units for Koha ILS
  This allows granular control over individual services per instance and
  leverages systemd features like dependency management, resource limits,
  and journald logging.
+
+Package: koha-sysv
+Architecture: all
+Depends: ${misc:Depends}, daemon, koha-common
+Provides: koha-init
+Conflicts: koha-systemd
+Description: SysV init scripts for Koha ILS
+ Koha is an Integrated Library Management system for real-world libraries
+ (the kinds with books).
+ .
+ This package provides traditional SysV init.d scripts for managing Koha
+ instances. All services (Plack, Zebra, SIP, Z3950, workers, indexers) are
+ managed through a single init script using the daemon wrapper.
+ .
+ This package is intended for legacy systems, containers without systemd
+ (like KTD), or environments where SysV init is preferred.
