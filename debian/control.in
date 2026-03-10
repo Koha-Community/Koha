@@ -3,6 +3,7 @@ Maintainer: Mason James <mtj@kohaaloha.com>
 Section: web
 Priority: optional
 Standards-Version: 3.8.4
+# koha-systemd package provides systemd units only
 # WARNING: The "control" file is automatically generated from the "control.in" file.
 # Do not manually edit "control" or your changes will be clobbered when you
 # run update-control
@@ -146,3 +147,18 @@ Description: integrated (physical) library management system
  systems such as MariaDB, RabbitMQ, et cetera.
  .
  This package is EXPERIMENTAL and not recommended for production use.
+
+Package: koha-systemd
+Architecture: all
+Depends: ${misc:Depends}, systemd, koha-common
+Description: systemd units for Koha ILS
+ Koha is an Integrated Library Management system for real-world libraries
+ (the kinds with books).
+ .
+ This package provides native systemd service units for managing Koha
+ instances. Each service type (Plack, Zebra, SIP, Z3950, workers, indexers)
+ is managed as a separate systemd unit using instance templates.
+ .
+ This allows granular control over individual services per instance and
+ leverages systemd features like dependency management, resource limits,
+ and journald logging.

@@ -1,0 +1,56 @@
+#!/bin/bash
+# koha-systemd-ctl - Helper for managing Koha instances via systemd
+
+set -e
+
+usage() {
+    cat <<EOF
+Usage: $(basename $0) <command> <instance> [service]
+
+Commands:
+  enable <instance>          Enable all services for instance
+  disable <instance>         Disable all services for instance
+  start <instance>           Start all services for instance
+  stop <instance>            Stop all services for instance
+  restart <instance>         Restart all services for instance
+  status <instance>          Show status of all services for instance
+
+  enable <instance> <svc>    Enable specific service for instance
+  disable <instance> <svc>   Disable specific service for instance
+  start <instance> <svc>     Start specific service for instance
+  stop <instance> <svc>      Stop specific service for instance
+  restart <instance> <svc>   Restart specific service for instance
+  status <instance> <svc>    Show status of specific service for instance
+
+Services: plack, zebra, sip, z3950, worker, worker-long, indexer, es-indexer
+
+Examples:
+  $(basename $0) enable library
+  $(basename $0) start library plack
+  $(basename $0) status library
+  $(basename $0) restart library worker
+EOF
+    exit 1
+}
+
+[ $# -lt 2 ] && usage
+
+CMD=$1
+INSTANCE=$2
+SERVICE=${3:-}
+
+if [ -n "$SERVICE" ]; then
+    UNIT="koha-${SERVICE}@${INSTANCE}.service"
+else
+    UNIT="koha@${INSTANCE}.target"
+fi
+
+case "$CMD" in
+    enable|disable|start|stop|restart|status)
+        systemctl "$CMD" "$UNIT"
+        ;;
+    *)
+        echo "Unknown command: $CMD"
+        usage
+        ;;
+esac

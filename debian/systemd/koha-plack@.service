@@ -1,0 +1,21 @@
+[Unit]
+Description=Koha Plack server for %i
+PartOf=koha@%i.target
+After=koha@%i.target
+
+[Service]
+Type=forking
+User=%i-koha
+Group=%i-koha
+WorkingDirectory=/var/lib/koha/%i
+Environment=KOHA_CONF=/etc/koha/sites/%i/koha-conf.xml
+Environment=KOHA_HOME=/usr/share/koha
+Environment=PERL5LIB=/usr/share/koha/lib
+PIDFile=/var/run/koha/%i/plack.pid
+ExecStart=/usr/bin/plackup -s Starman --daemonize --pid /var/run/koha/%i/plack.pid --listen /var/run/koha/%i/plack.sock /etc/koha/plack.psgi
+ExecReload=/bin/kill -HUP $MAINPID
+Restart=on-failure
+RestartSec=5s
+
+[Install]
+WantedBy=koha@%i.target

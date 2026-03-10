@@ -1,0 +1,21 @@
+[Unit]
+Description=Koha SIP server for %i
+PartOf=koha@%i.target
+After=koha@%i.target
+ConditionPathExists=/var/lib/koha/%i/sip.enabled
+ConditionPathExists=/etc/koha/sites/%i/SIPconfig.xml
+
+[Service]
+Type=simple
+User=%i-koha
+Group=%i-koha
+WorkingDirectory=/var/lib/koha/%i
+Environment=KOHA_CONF=/etc/koha/sites/%i/koha-conf.xml
+Environment=KOHA_HOME=/usr/share/koha
+Environment=PERL5LIB=/usr/share/koha/lib
+ExecStart=/usr/bin/perl /usr/share/koha/lib/C4/SIP/SIPServer.pm /etc/koha/sites/%i/SIPconfig.xml
+Restart=on-failure
+RestartSec=30s
+
+[Install]
+WantedBy=koha@%i.target

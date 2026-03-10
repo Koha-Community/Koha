@@ -1,0 +1,88 @@
+# Koha systemd Units
+
+This package provides native systemd service units for Koha ILS.
+
+## Architecture
+
+Each Koha service type runs as a separate systemd unit using instance templates:
+
+- `koha-plack@.service` - Plack/Starman web application server
+- `koha-zebra@.service` - Zebra search indexing server
+- `koha-sip@.service` - SIP2 circulation protocol server
+- `koha-z3950@.service` - Z39.50/SRU server
+- `koha-worker@.service` - Background job worker (default queue)
+- `koha-worker-long@.service` - Background job worker (long_tasks queue)
+- `koha-indexer@.service` - Zebra indexing daemon
+- `koha-es-indexer@.service` - Elasticsearch indexing daemon
+
+Instance grouping:
+- `koha@.target` - Groups all services for a single instance
+- `koha.target` - Groups all Koha instances
+
+## Usage
+
+### Managing a complete instance
+
+```bash
+# Start all services for instance "library"
+systemctl start koha@library.target
+
+# Enable at boot
+systemctl enable koha@library.target
+
+# Check status
+systemctl status koha@library.target
+```
+
+### Managing individual services
+
+```bash
+# Start only Plack for instance "library"
+systemctl start koha-plack@library.service
+
+# Restart SIP server
+systemctl restart koha-sip@library.service
+
+# Check worker status
+systemctl status koha-worker@library.service
+systemctl status koha-worker-long@library.service
+```
+
+### Logs
+
+```bash
+# View logs for all services of an instance
+journalctl -u 'koha-*@library.service'
+
+# View Plack logs
+journalctl -u koha-plack@library.service -f
+
+# View all Koha logs
+journalctl -u 'koha-*.service'
+```
+
+## Service Enablement
+
+Some services are conditionally enabled based on configuration files:
+
+- **SIP**: Requires `/var/lib/koha/{instance}/sip.enabled` and `/etc/koha/sites/{instance}/SIPconfig.xml`
+- **Z3950**: Requires `/etc/koha/sites/{instance}/z3950/config.xml`
+
+## Migration from init scripts
+
+The koha-systemd package is designed to coexist with koha-common but provides
+an alternative service management approach. To migrate:
+
+1. Stop services via init script: `service koha-common stop`
+2. Install koha-systemd package
+3. Enable instance target: `systemctl enable koha@{instance}.target`
+4. Start services: `systemctl start koha@{instance}.target`
+
+## Advantages
+
+- **Granular control**: Start/stop individual services per instance
+- **Resource limits**: Apply CPU/memory limits via systemd
+- **Dependency management**: Proper service ordering and failure handling
+- **Logging**: Centralized logging via journald
+- **Security**: Modern sandboxing options available
+- **Monitoring**: Native systemd health checks and status reporting

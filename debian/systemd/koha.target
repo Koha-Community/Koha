@@ -1,0 +1,6 @@
+[Unit]
+Description=Koha ILS - All instances
+After=network.target memcached.service mysql.service
+
+[Install]
+WantedBy=multi-user.target

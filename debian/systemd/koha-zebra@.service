@@ -1,0 +1,19 @@
+[Unit]
+Description=Koha Zebra indexing server for %i
+PartOf=koha@%i.target
+After=koha@%i.target
+
+[Service]
+Type=forking
+User=%i-koha
+Group=%i-koha
+WorkingDirectory=/var/lib/koha/%i
+Environment=KOHA_CONF=/etc/koha/sites/%i/koha-conf.xml
+Environment=KOHA_HOME=/usr/share/koha
+PIDFile=/var/run/koha/%i/zebra.pid
+ExecStart=/usr/bin/zebrasrv -f /etc/koha/sites/%i/koha-conf.xml -p /var/run/koha/%i/zebra.pid -D
+Restart=on-failure
+RestartSec=30s
+
+[Install]
+WantedBy=koha@%i.target

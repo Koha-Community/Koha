@@ -1,0 +1,21 @@
+[Unit]
+Description=Koha background worker (long_tasks queue) for %i
+PartOf=koha@%i.target
+After=koha@%i.target
+StartLimitIntervalSec=60
+StartLimitBurst=3
+
+[Service]
+Type=simple
+User=%i-koha
+Group=%i-koha
+WorkingDirectory=/var/lib/koha/%i
+Environment=KOHA_CONF=/etc/koha/sites/%i/koha-conf.xml
+Environment=KOHA_HOME=/usr/share/koha
+Environment=PERL5LIB=/usr/share/koha/lib
+ExecStart=/usr/share/koha/bin/workers/background_jobs_worker.pl --queue long_tasks
+Restart=on-failure
+RestartSec=5s
+
+[Install]
+WantedBy=koha@%i.target
