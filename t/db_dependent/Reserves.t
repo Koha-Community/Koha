@@ -2137,7 +2137,7 @@ subtest 'Bug 40866: AddReserve override JSON logging' => sub {
 
 subtest 'FixPriority() lowestPriority tests' => sub {
 
-    plan tests => 14;
+    plan tests => 16;
 
     $schema->storage->txn_begin;
 
@@ -2162,8 +2162,8 @@ subtest 'FixPriority() lowestPriority tests' => sub {
     }
 
     # Mark holds 4 and 5 as lowestPriority; initial priorities should be 1..5
-    ToggleLowestPriority( $reserve_ids[3] );    # hold 4 → lowestPriority, pushed to bottom
-    ToggleLowestPriority( $reserve_ids[4] );    # hold 5 → lowestPriority, pushed to bottom
+    ToggleLowestPriority( $reserve_ids[3], 0 );    # hold 4 → lowestPriority, pushed to bottom
+    ToggleLowestPriority( $reserve_ids[4], 0 );    # hold 5 → lowestPriority, pushed to bottom
 
     my @holds = map { Koha::Holds->find($_) } @reserve_ids;
 
@@ -2197,6 +2197,14 @@ subtest 'FixPriority() lowestPriority tests' => sub {
     $holds[4]->discard_changes;
     isnt( $holds[3]->priority, $p4_before, 'lowestPriority hold moved within lowest-priority group' );
     ok( $holds[3]->priority > $holds[2]->priority, 'Moved lowestPriority hold still below non-lowest holds' );
+
+    ToggleLowestPriority( $reserve_ids[4], 1 );    # Untoggle lowest priority for hold 4
+    $holds[4]->discard_changes;
+    is( $holds[4]->priority, 4, 'Hold is moved to the lowest of non-priority holds when toggled off' );
+
+    ToggleLowestPriority( $reserve_ids[1], 0 );    # Untoggle lowest priority for hold 4
+    $holds[1]->discard_changes;
+    is( $holds[1]->priority, 5, 'Hold is moved to the lowest of low priority holds when toggled on' );
 
     # When ALL holds are lowestPriority, movement is unconstrained
     my $biblio2 = $builder->build_sample_biblio;

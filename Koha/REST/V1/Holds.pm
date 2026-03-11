@@ -665,7 +665,7 @@ sub lowest_priority {
         unless $hold;
 
     return try {
-        C4::Reserves::ToggleLowestPriority($hold_id);
+        C4::Reserves::ToggleLowestPriority( $hold_id, $hold->lowestPriority );
         $hold->discard_changes;    # refresh
         return $c->render( status => 200, openapi => $hold_id );
     } catch {

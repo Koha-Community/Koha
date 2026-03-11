@@ -1658,21 +1658,27 @@ sub AlterPriority {
 
 =head2 ToggleLowestPriority
 
-  ToggleLowestPriority( $borrowernumber, $biblionumber );
+  ToggleLowestPriority( $reserve_id, $is_lowestPriority );
 
-This function sets the lowestPriority field to true if is false, and false if it is true.
+This function sets the lowestPriority field to true if is false, and false if it is true
+and then reorders the holds on the record.
+
+A hold toggled to lowest priority will go the bottom.
+A hold toggled to NOT lowest priority will go to the bottom of other non-lowest priority holds.
 
 =cut
 
 sub ToggleLowestPriority {
-    my ($reserve_id) = @_;
+    my ( $reserve_id, $is_lowestPriority ) = @_;
 
     my $dbh = C4::Context->dbh;
+
+    my $rank = $is_lowestPriority ? undef : '999999';
 
     my $sth = $dbh->prepare("UPDATE reserves SET lowestPriority = NOT lowestPriority WHERE reserve_id = ?");
     $sth->execute($reserve_id);
 
-    FixPriority( { reserve_id => $reserve_id, rank => '999999' } );
+    FixPriority( { reserve_id => $reserve_id, rank => $rank } );
 }
 
 =head2 SuspendAll
@@ -1826,7 +1832,7 @@ sub FixPriority {
             }
 
             # if index exists in array then move it to new position
-            if ( $key > -1 && $rank ne 'del' && $rank > 0 ) {
+            if ( $key > -1 && $rank ne 'del' && $rank && $rank > 0 ) {
                 my $new_rank    = $rank - 1;    # $new_rank is what you want the new index to be in the array
                 my $moving_item = splice( @priority, $key, 1 );
                 $new_rank = scalar @priority if $new_rank > scalar @priority;
