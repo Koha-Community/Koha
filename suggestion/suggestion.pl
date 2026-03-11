@@ -118,6 +118,11 @@ if ( !$valid_displayby{$displayby} ) {
 my $reasonsloop = GetAuthorisedValues("SUGGEST");
 
 my $suggestion_ref = { $input->Vars };
+my $stored_suggestion;
+if ( $op eq "edit_form" || $op eq "show" ) {
+    $stored_suggestion = Koha::Suggestions->find( $input->param('suggestionid') ) if $input->param('suggestionid');
+}
+
 delete $suggestion_ref->{$_} for qw(csrf_token suggestion_itemtype suggestion_managedby table_1_length);
 
 # get only the columns of Suggestion
