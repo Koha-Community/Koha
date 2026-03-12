@@ -59,8 +59,13 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
 
 my $supplier  = $query->param('supplier');
 my @suppliers = Koha::Acquisition::Booksellers->search(
-    { name     => { -like => "%$supplier%" } },
-    { order_by => { -asc  => 'name' } }
+    {
+        -or => [
+            name => { -like => "%$supplier%" },
+            id   => $supplier,
+        ]
+    },
+    { order_by => { -asc => 'name' } }
 )->as_list;
 
 #build result page
