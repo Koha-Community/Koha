@@ -63,9 +63,9 @@ if ( $op eq 'download' ) {
     my $fname = $file->{'file_name'};
     my $ftype = $file->{'file_type'};
     print $input->header(
-        -type       => $file->{'file_type'},
-        -charset    => 'utf-8',
-        -attachment => $file->{'file_name'}
+        -type                     => $file->{'file_type'},
+        -charset                  => 'utf-8',
+        'Content-Security-Policy' => "default-src 'none'; script-src 'none';"
     );
     print $file->{'file_content'};
 } else {
