@@ -251,6 +251,7 @@
       - $ref: "../swagger.yaml#/parameters/framework_id_header"
       - $ref: "../swagger.yaml#/parameters/marc_schema_header"
       - $ref: "../swagger.yaml#/parameters/confirm_not_duplicate_header"
+      - $ref: "../swagger.yaml#/parameters/record_source_id_header"
     produces:
       - application/json
     responses:
@@ -279,6 +280,10 @@
           description: Accepted content-types
           items:
             type: string
+      "409":
+        description: Conflict
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
       "500":
         description: |
           Internal server error. Possible `error_code` attribute values:
