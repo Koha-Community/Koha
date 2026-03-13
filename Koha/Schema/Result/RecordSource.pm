@@ -46,6 +46,14 @@ User defined name for the record source
 
 If records from this source can be edited
 
+=head2 is_system
+
+  data_type: 'tinyint'
+  default_value: 0
+  is_nullable: 0
+
+If this record source is system-defined and cannot be deleted
+
 =cut
 
 __PACKAGE__->add_columns(
@@ -54,6 +62,8 @@ __PACKAGE__->add_columns(
   "name",
   { data_type => "text", is_nullable => 0 },
   "can_be_edited",
+  { data_type => "tinyint", default_value => 0, is_nullable => 0 },
+  "is_system",
   { data_type => "tinyint", default_value => 0, is_nullable => 0 },
 );
 
@@ -68,6 +78,20 @@ __PACKAGE__->add_columns(
 =cut
 
 __PACKAGE__->set_primary_key("record_source_id");
+
+=head1 UNIQUE CONSTRAINTS
+
+=head2 C<name>
+
+=over 4
+
+=item * L</name>
+
+=back
+
+=cut
+
+__PACKAGE__->add_unique_constraint("name", ["name"]);
 
 =head1 RELATIONS
 
@@ -102,8 +126,8 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07049 @ 2024-01-24 18:05:50
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:WX72aRYhWBK9bQWr9AJk2A
+# Created by DBIx::Class::Schema::Loader v0.07051 @ 2026-03-26 08:48:25
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:vUBTwdxkGhnSy3w0UrEIJw
 
 __PACKAGE__->add_columns(
     '+can_be_edited' => { is_boolean => 1 },
