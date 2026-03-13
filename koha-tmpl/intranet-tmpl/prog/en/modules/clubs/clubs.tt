@@ -73,7 +73,9 @@
                         <th>Public enrollment</th>
                         <th>Email required</th>
                         <th>Library</th>
-                        <th class="no-export no-sort">Actions</th>
+                        [% IF ( CAN_user_clubs_edit_templates || CAN_user_clubs_edit_clubs ) %]
+                            <th class="no-export no-sort">Actions</th>
+                        [% END %]
                     </tr>
                 </thead>
                 <tbody>
@@ -96,12 +98,28 @@
                                 [% END %]
                             </td>
                             <td>[% Branches.GetName( t.branchcode ) | html %]</td>
-                            <td class="actions">
-                                [% IF CAN_user_clubs_edit_templates %]
-                                    <a class="btn btn-xs btn-default" style="white-space:nowrap" href="/cgi-bin/koha/clubs/templates-add-modify.pl?id=[% t.id | html %]"> <i class="fa-solid fa-pencil" aria-hidden="true"></i> Edit </a>
-                                    <a class="btn btn-xs btn-default delete_template" href="#" data-id="[% t.id | html %]" data-name="[% t.name | html %]"> <i class="fa fa-trash-can"></i> Delete </a>
-                                [% END %]
-                            </td>
+                            [% IF ( CAN_user_clubs_edit_templates || CAN_user_clubs_edit_clubs ) %]
+                                <td class="actions">
+                                    <div class="btn-group dropup">
+                                        <a class="btn btn-default btn-xs dropdown-toggle" id="template_actions_[% c.id | html %]" role="button" data-bs-toggle="dropdown" href="#"> Actions </a>
+                                        <ul class="dropdown-menu dropdown-menu-end" role="menu" aria-labelledby="template_actions_[% c.id | html %]">
+                                            [% IF CAN_user_clubs_edit_templates %]
+                                                <li>
+                                                    <a class="dropdown-item" href="/cgi-bin/koha/clubs/templates-add-modify.pl?id=[% t.id | html %]"> <i class="fa-solid fa-pencil" aria-hidden="true"></i> Edit </a>
+                                                </li>
+                                                <li>
+                                                    <a class="dropdown-item delete_template" href="#" data-id="[% t.id | html %]" data-name="[% t.name | html %]"> <i class="fa fa-trash-can"></i> Delete </a>
+                                                </li>
+                                            [% END %]
+                                            [% IF CAN_user_clubs_edit_clubs %]
+                                                <li>
+                                                    <a class="dropdown-item" href="/cgi-bin/koha/clubs/clubs-add-modify.pl?club_template_id=[% t.id | html %]"><i class="fa fa-plus" aria-hidden="true"></i> New club</a>
+                                                </li>
+                                            [% END %]
+                                        </ul>
+                                    </div>
+                                </td>
+                            [% END %]
                         </tr>
                     [% END %]
                 </tbody>
