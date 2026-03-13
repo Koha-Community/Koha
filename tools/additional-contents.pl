@@ -229,7 +229,12 @@ if ( $op eq 'list' ) {
         { category => $category,                   'additional_contents_localizations.lang' => 'default' },
         { order_by => { -desc => 'published_on' }, join => 'additional_contents_localizations' }
     );
-    $template->param( additional_contents => $additional_contents );
+
+    $template->param(
+        additional_contents     => $additional_contents,
+        opac_available_options  => Koha::AdditionalContents::get_html_customizations_options('opac'),
+        staff_available_options => Koha::AdditionalContents::get_html_customizations_options('staff'),
+    );
 }
 
 my $translated_languages = C4::Languages::getTranslatedLanguages();
