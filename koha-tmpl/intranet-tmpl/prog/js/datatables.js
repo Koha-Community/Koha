@@ -1028,6 +1028,18 @@ function _dt_visibility(table_settings, table_dt) {
         let i = 0;
         let use_names = $(table_dt.table().node()).data("bKohaColumnsUseNames");
         if (use_names) {
+            // Deal with visibility_condition (needed when state is not saved)
+            table_settings.columns = table_settings.columns.map(c => {
+                if (c.visibility_condition === false) {
+                    return {
+                        ...c,
+                        is_hidden: true,
+                        cannot_be_toggled: true,
+                    };
+                }
+                return c;
+            });
+
             let hidden_columns = table_settings.columns.filter(
                 c => c.is_hidden
             );
