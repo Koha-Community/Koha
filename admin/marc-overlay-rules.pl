@@ -26,6 +26,7 @@ use C4::Output qw( output_html_with_http_headers );
 use C4::ImportBatch;
 use Koha::MarcOverlayRules;
 use Koha::Patron::Categories;
+use Koha::RecordSources;
 
 my $input  = CGI->new;
 my $op     = $input->param('op') || '';
@@ -124,10 +125,14 @@ my $categories = Koha::Patron::Categories->search_with_library_limits(
     { order_by => ['description'], columns => [ 'categorycode', 'description' ] }
 )->unblessed;
 
+my @record_sources =
+    map { $_->{name} } @{ Koha::RecordSources->search->unblessed };
+
 $template->param(
-    rules      => $rules,
-    categories => $categories,
-    messages   => $errors
+    rules          => $rules,
+    categories     => $categories,
+    record_sources => \@record_sources,
+    messages       => $errors
 );
 
 output_html_with_http_headers $input, $cookie, $template->output;

@@ -496,20 +496,25 @@
             // Note: This allows displaying a sorted list of categories later, but we still depend on an object!
             categories.unshift({ categorycode: '*', description: '*'});
             categories = categories.reduce( ( a,c ) => ( { ...a, [c.categorycode]: c.description } ), {} );
-
-            var module_filter_options = {
-            source: {
-                '*': '*',
-                batchmod: _("Batch record modification"),
-                intranet: _("Staff interface MARC editor"),
-                batchimport: _("Staged MARC import"),
-                z3950: _("Z39.50"),
-                bulkmarcimport: _("bulkmarcimport.pl"),
-                import_lexile: _("import_lexile.pl")
-            },
-
                 categorycode: categories,
             };
+
+
+        var module_filter_options = {
+        source: {
+            '*': '*',
+            [% FOREACH record_source IN record_sources %]
+                [% SWITCH record_source %]
+                  [% CASE 'batchmod' %]'[% record_source %]': _("Batch record modification"),
+                  [% CASE 'intranet' %]'[% record_source %]':_("Staff interface MARC editor"),
+                  [% CASE 'batchimport' %]'[% record_source %]': _("Staged MARC import"),
+                  [% CASE 'z3950' %]'[% record_source %]': _("Z39.50"),
+                  [% CASE 'bulkmarkimport' %]'[% record_source %]': _("bulkmarcimport.pl"),
+                  [% CASE 'import_lexile' %]'[% record_source %]':  _("import_lexile.pl"),
+                  [% CASE %] '[% record_source %]' : '[% record_source | html %]',
+                [% END %]
+            [% END %]
+        },
 
             //Kind of hack: Replace filter value with label when one exist
             $('.rule-module').each(function() {
