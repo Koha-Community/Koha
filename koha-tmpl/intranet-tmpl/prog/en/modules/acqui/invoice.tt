@@ -500,7 +500,7 @@
                     [% FOREACH f IN files %]
                         <tr>
                             <td>
-                                <a href="/cgi-bin/koha/acqui/invoice-files.pl?invoiceid=[% invoiceid | uri %]&amp;op=download&amp;file_id=[% f.file_id | uri %]">[% f.file_name | html %]</a>
+                                <a href="/cgi-bin/koha/acqui/invoice-files.pl?invoiceid=[% invoiceid | uri %]&amp;op=download&amp;view=1&amp;file_id=[% f.file_id | uri %]">[% f.file_name | html %]</a>
                             </td>
                             <td>[% f.file_type | html %]</td>
                             <td>[% f.file_description | html %]</td>

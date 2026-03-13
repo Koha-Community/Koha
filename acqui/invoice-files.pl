@@ -28,6 +28,7 @@ Manage files associated with invoice
 =cut
 
 use Modern::Perl;
+use File::LibMagic;
 
 use CGI;
 use C4::Auth        qw( get_template_and_user );
@@ -49,6 +50,15 @@ if ( !C4::Context->preference('AcqEnableFiles') ) {
     output_error( $input, '404' );
 }
 
+#NOTE: 'image/svg+xml' is not a safe type as the XML can contain Javascript
+my $allowed_ftypes = {
+    'application/pdf' => 1,
+    'image/png'       => 1,
+    'image/jpeg'      => 1,
+    'image/gif'       => 1,
+    'image/webp'      => 1,
+};
+
 my $invoiceid = $input->param('invoiceid') // '';
 my $op        = $input->param('op')        // '';
 my %errors;
@@ -62,11 +72,23 @@ if ( $op eq 'download' ) {
 
     my $fname = $file->{'file_name'};
     my $ftype = $file->{'file_type'};
-    print $input->header(
-        -type                     => $file->{'file_type'},
-        -charset                  => 'utf-8',
-        'Content-Security-Policy' => "default-src 'none'; script-src 'none';"
-    );
+
+    my $magic           = File::LibMagic->new();
+    my $magic_info      = $magic->info_from_string( $file->{'file_content'} );
+    my $magic_mime_type = $magic_info->{mime_type};
+    if ( $input->param('view') && ( $magic_mime_type && $allowed_ftypes->{$magic_mime_type} ) ) {
+        print $input->header(
+            -type                     => $file->{'file_type'},
+            -charset                  => 'utf-8',
+            'Content-Security-Policy' => "default-src 'none';"
+        );
+    } else {
+        print $input->header(
+            -type       => $file->{'file_type'},
+            -charset    => 'utf-8',
+            -attachment => $file->{'file_name'},
+        );
+    }
     print $file->{'file_content'};
 } else {
     my $details = GetInvoiceDetails($invoiceid);
