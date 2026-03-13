@@ -24,6 +24,8 @@ use C4::Context;
 use C4::Service;
 use C4::Log;
 use Koha::Token;
+use CGI::Cookie;
+use C4::Auth qw( get_session );
 
 =head1 NAME
 
@@ -133,6 +135,16 @@ sub set_preferences {
     }
 
     C4::Service->return_success($response);
+}
+
+my %cookies = CGI::Cookie->fetch;
+
+if ( exists $cookies{'CGISESSID'} ) {
+    my $sessionID = $cookies{'CGISESSID'}->value;
+    if ($sessionID) {
+        my $session = get_session($sessionID);
+        C4::Context->interface( $session->param('interface') ) if ($session);
+    }
 }
 
 C4::Service->dispatch(
