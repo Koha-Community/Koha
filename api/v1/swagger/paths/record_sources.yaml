@@ -97,6 +97,13 @@
         description: Not allowed
         schema:
           $ref: "../swagger.yaml#/definitions/error"
+      "409":
+        description: |
+          Conflict creating the resource. Possible `error_code` attribute values:
+
+          * `duplicate`
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
       "500":
         description: |
           Internal server error. Possible `error_code` attribute values:
@@ -198,6 +205,13 @@
         description: Not found
         schema:
           $ref: "../swagger.yaml#/definitions/error"
+      "409":
+        description: |
+          Conflict creating the resource. Possible `error_code` attribute values:
+
+          * `duplicate`
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
       "500":
         description: |
           Internal server error. Possible `error_code` attribute values:
@@ -248,6 +262,7 @@
           Conflict in deleting resource. Possible `error_code` attribute values:
 
           * `cannot_delete_used`: record source linked to a record cannot be deleted.
+          * `cannot_delete_is_system`: record source is system defined and cannot be deleted.
         schema:
           $ref: "../swagger.yaml#/definitions/error"
       "500":

@@ -46,6 +46,31 @@ sub usage_count {
     return $self->_result->biblio_metadatas->count();
 }
 
+=head3 store
+
+=cut
+
+sub store {
+    my ($self) = @_;
+    Koha::Exceptions::BadParameter->throw('* not allowed') if $self->name eq '*';
+
+    return $self->SUPER::store;
+}
+
+=head3 delete
+
+Overridden delete method to prevent system default deletions
+
+=cut
+
+sub delete {
+    my ($self) = @_;
+
+    Koha::Exceptions::CannotDeleteDefault->throw if $self->is_system;
+
+    return $self->SUPER::delete;
+}
+
 =head2 Internal methods
 
 =head3 _type

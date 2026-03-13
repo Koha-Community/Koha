@@ -81,6 +81,17 @@ sub add {
             openapi => $c->objects->to_api($source)
         );
     } catch {
+        if ( blessed $_ and $_->isa('Koha::Exceptions::Object::DuplicateID') ) {
+            return $c->render(
+                status  => 409,
+                openapi => { error => 'Duplicate name.' }
+            );
+        } elsif ( blessed $_ and $_->isa('Koha::Exceptions::BadParameter') ) {
+            return $c->render(
+                status  => 409,
+                openapi => { error => 'Name not allowed.' }
+            );
+        }
         $c->unhandled_exception($_);
     };
 }
@@ -97,11 +108,29 @@ sub update {
     return $c->render_resource_not_found("Record source")
         unless $source;
 
+    if ( $source->is_system ) {
+        return $c->render(
+            status  => 409,
+            openapi => { error => 'Cannot edit system defined value.' }
+        );
+    }
+
     return try {
         $source->set_from_api( $c->req->json )->store;
         $source->discard_changes;
         return $c->render( status => 200, openapi => $c->objects->to_api($source) );
     } catch {
+        if ( blessed $_ and $_->isa('Koha::Exceptions::Object::DuplicateID') ) {
+            return $c->render(
+                status  => 409,
+                openapi => { error => 'Duplicate name.' }
+            );
+        } elsif ( blessed $_ and $_->isa('Koha::Exceptions::BadParameter') ) {
+            return $c->render(
+                status  => 409,
+                openapi => { error => 'Name not allowed.' }
+            );
+        }
         $c->unhandled_exception($_);
     };
 }
@@ -128,6 +157,14 @@ sub delete {
                 openapi => {
                     error      => 'Cannot delete record source linked to existing records',
                     error_code => 'cannot_delete_used',
+                }
+            );
+        } elsif ( blessed $_ and $_->isa('Koha::Exceptions::CannotDeleteDefault') ) {
+            return $c->render(
+                status  => 409,
+                openapi => {
+                    error      => 'Cannot delete system defined record source',
+                    error_code => 'cannot_delete_is_system',
                 }
             );
         }
