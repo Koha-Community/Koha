@@ -1302,7 +1302,7 @@ subtest 'delete() tests' => sub {
 
     $schema->storage->txn_begin;
 
-    my $rs     = $builder->build_object( { class => 'Koha::RecordSources' } );
+    my $rs     = $builder->build_object( { class => 'Koha::RecordSources', value => { is_system => 0 } } );
     my $biblio = $builder->build_sample_biblio();
 
     $biblio->metadata->set( { record_source_id => $rs->id } )->store();

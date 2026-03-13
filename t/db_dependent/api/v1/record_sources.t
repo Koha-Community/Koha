@@ -42,7 +42,8 @@ subtest 'list() tests' => sub {
 
     $schema->storage->txn_begin;
 
-    my $source = $builder->build_object( { class => 'Koha::RecordSources' } );
+    # set is_system = 0 so delete does not throw an error
+    my $source = $builder->build_object( { class => 'Koha::RecordSources', value => { is_system => 0 } } );
     my $patron = $builder->build_object(
         {
             class => 'Koha::Patrons',
@@ -99,7 +100,7 @@ subtest 'get() tests' => sub {
 
     $schema->storage->txn_begin;
 
-    my $source = $builder->build_object( { class => 'Koha::RecordSources' } );
+    my $source = $builder->build_object( { class => 'Koha::RecordSources', value => { is_system => 0 } } );
     my $patron = $builder->build_object(
         {
             class => 'Koha::Patrons',
@@ -143,11 +144,11 @@ subtest 'get() tests' => sub {
 
 subtest 'delete() tests' => sub {
 
-    plan tests => 12;
+    plan tests => 15;
 
     $schema->storage->txn_begin;
 
-    my $source = $builder->build_object( { class => 'Koha::RecordSources' } );
+    my $source = $builder->build_object( { class => 'Koha::RecordSources', value => { is_system => 0 } } );
     my $patron = $builder->build_object(
         {
             class => 'Koha::Patrons',
@@ -181,7 +182,7 @@ subtest 'delete() tests' => sub {
         ->status_is( 404, 'REST4.3' )
         ->json_is( { error => q{Record source not found}, error_code => q{not_found} } );
 
-    $source = $builder->build_object( { class => 'Koha::RecordSources' } );
+    $source = $builder->build_object( { class => 'Koha::RecordSources', value => { is_system => 0 } } );
     $id     = $source->id;
 
     my $biblio   = $builder->build_sample_biblio();
@@ -199,6 +200,12 @@ subtest 'delete() tests' => sub {
     my $deleted_source = Koha::RecordSources->search( { record_source_id => $id } );
 
     is( $deleted_source->count, 0, 'No record source found' );
+
+    $source = $builder->build_object( { class => 'Koha::RecordSources', value => { is_system => 1 } } );
+    $id     = $source->id;
+    $t->delete_ok("//$userid:$password@/api/v1/record_sources/$id")
+        ->status_is( 409, 'REST3.2.4' )
+        ->json_is( '/error_code' => 'cannot_delete_is_system', 'REST3.3.4' );
 
     $schema->storage->txn_rollback;
 };
@@ -316,7 +323,7 @@ subtest 'update() tests' => sub {
         ]
         );
 
-    my $source_to_delete = $builder->build_object( { class => 'Koha::RecordSources' } );
+    my $source_to_delete = $builder->build_object( { class => 'Koha::RecordSources', value => { is_system => 0 } } );
     my $non_existent_id  = $source_to_delete->id;
     $source_to_delete->delete;
 

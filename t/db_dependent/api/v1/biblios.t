@@ -1435,7 +1435,7 @@ subtest 'add() tests' => sub {
 
 subtest 'put() tests' => sub {
 
-    plan tests => 14;
+    plan tests => 16;
 
     $schema->storage->txn_begin;
 
@@ -1848,6 +1848,9 @@ subtest 'put() tests' => sub {
         }
     );
 
+    # disable overlay rules before updateing biblio
+    t::lib::Mocks::mock_preference( 'MARCOverlayRules', '0' );
+
     $t->put_ok( "//$userid:$password@/api/v1/biblios/$biblionumber" =>
             { 'Content-Type' => 'application/marcxml+xml', 'x-framework-id' => $frameworkcode } => $marcxml )
         ->status_is(200)
@@ -1874,6 +1877,175 @@ subtest 'put() tests' => sub {
     $biblio = Koha::Biblios->find($biblionumber);
 
     is( $biblio->title, 'Introduction to Attic Greek  (Using usmarc) /' );
+
+    subtest 'put() locked record' => sub {
+
+        plan tests => 10;
+
+        my $record_source =
+            $builder->build_object(
+            { class => 'Koha::RecordSources', value => { can_be_edited => 0, is_system => 0 } } );
+
+        # create a biblio that has a locked record source
+        my $locked_biblio = $builder->build_sample_biblio( { frameworkcode => $frameworkcode } );
+        $locked_biblio->metadata->record_source_id( $record_source->id )->store;
+        my $locked_biblio_biblionumber = $locked_biblio->biblionumber;
+
+        $t->put_ok( "//$userid:$password@/api/v1/biblios/$locked_biblio_biblionumber" =>
+                { 'Content-Type' => 'application/marcxml+xml', 'x-framework-id' => $frameworkcode } => $marcxml )
+            ->status_is(403)
+            ->json_is( '/error' => 'You do not have permission to edit a locked record' );
+
+        # Add required subpermission
+        $builder->build(
+            {
+                source => 'UserPermission',
+                value  => {
+                    borrowernumber => $patron->id,
+                    module_bit     => 9,
+                    code           => 'edit_locked_records'
+                }
+            }
+        );
+
+        $t->put_ok( "//$userid:$password@/api/v1/biblios/$locked_biblio_biblionumber" =>
+                { 'Content-Type' => 'application/marcxml+xml', 'x-framework-id' => $frameworkcode } => $marcxml )
+            ->status_is(200);
+
+        # now include a record source id
+        $t->put_ok(
+            "//$userid:$password@/api/v1/biblios/$locked_biblio_biblionumber" => {
+                'Content-Type'       => 'application/marc', 'x-framework-id' => $frameworkcode,
+                'x-record-source-id' => $record_source->id
+            } => $marc
+        )->status_is(403)->json_is( '/error' => 'You do not have permission to set the record source' );
+
+        # Add required subpermission
+        $builder->build(
+            {
+                source => 'UserPermission',
+                value  => {
+                    borrowernumber => $patron->id,
+                    module_bit     => 9,
+                    code           => 'set_record_sources'
+                }
+            }
+        );
+
+        $t->put_ok(
+            "//$userid:$password@/api/v1/biblios/$locked_biblio_biblionumber" => {
+                'Content-Type'       => 'application/marc', 'x-framework-id' => $frameworkcode,
+                'x-record-source-id' => $record_source->id
+            } => $marc
+        )->status_is(200);
+
+        $locked_biblio->delete();
+
+    };
+
+    subtest 'put() with overlay_context' => sub {
+
+        plan tests => 6;
+
+        t::lib::Mocks::mock_preference( 'MARCOverlayRules', '1' );
+
+        my $orig_record              = $builder->build_sample_biblio( { frameworkcode => $frameworkcode } );
+        my $orig_record_title        = $orig_record->title;
+        my $orig_record_biblionumber = $orig_record->biblionumber;
+
+        my $incoming_record_xml = q|<?xml version="1.0" encoding="UTF-8"?>
+<record
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.loc.gov/MARC21/slim http://www.loc.gov/standards/marcxml/schema/MARC21slim.xsd"
+    xmlns="http://www.loc.gov/MARC21/slim">
+
+  <leader>00222nam a22001097a 4500</leader>
+  <controlfield tag="003">OSt</controlfield>
+  <controlfield tag="005">20260312124417.0</controlfield>
+  <datafield tag="040" ind1=" " ind2=" ">
+    <subfield code="c">c</subfield>
+  </datafield>
+  <datafield tag="245" ind1=" " ind2=" ">
+    <subfield code="a">new title</subfield>
+  </datafield>
+  <datafield tag="942" ind1=" " ind2=" ">
+    <subfield code="2">ddc</subfield>
+    <subfield code="c">BK</subfield>
+    <subfield code="n">0</subfield>
+  </datafield>
+  <datafield tag="999" ind1=" " ind2=" ">
+    <subfield code="c">1454</subfield>
+    <subfield code="d">1454</subfield>
+  </datafield>
+</record>|;
+
+        #use Data::Dumper;
+        #warn Dumper($incoming_record_xml);
+
+        my $record_source =
+            $builder->build_object(
+            { class => 'Koha::RecordSources', value => { can_be_edited => 1, is_system => 0 } } );
+
+        # source * PROTECT
+        my $rule = Koha::MarcOverlayRules->find_or_create(
+            {
+                tag    => '245',
+                module => 'source',
+                filter => '*',
+                add    => 0,
+                append => 0,
+                remove => 0,
+                delete => 0
+            }
+        );
+
+        # title should remain the same
+        $t->put_ok(
+            "//$userid:$password@/api/v1/biblios/$orig_record_biblionumber" => {
+                'Content-Type'       => 'application/marcxml+xml', 'x-framework-id' => $frameworkcode,
+                'x-record-source-id' => $record_source->id
+            } => $incoming_record_xml
+        )->status_is(200);
+
+        $biblio = Koha::Biblios->find($orig_record_biblionumber);
+        my $title = $biblio->title;
+
+        is(
+            $title,
+            $orig_record_title,
+            'Title remained'
+        );
+
+        # source record_source OVERWRITE
+        $rule = Koha::MarcOverlayRules->find_or_create(
+            {
+                tag    => '245',
+                module => 'source',
+                filter => $record_source->name,
+                add    => 1,
+                append => 1,
+                remove => 1,
+                delete => 1
+            }
+        );
+
+        $t->put_ok(
+            "//$userid:$password@/api/v1/biblios/$orig_record_biblionumber" => {
+                'Content-Type'       => 'application/marcxml+xml', 'x-framework-id' => $frameworkcode,
+                'x-record-source-id' => $record_source->id
+            } => $incoming_record_xml
+        )->status_is(200);
+
+        $biblio = Koha::Biblios->find($orig_record_biblionumber);
+        is(
+            $biblio->title,
+            'new title',
+            'Title has been changed'
+        );
+        $biblio->delete();
+        $record_source->delete();
+        $rule->delete();
+    };
 
     $schema->storage->txn_rollback;
 };
