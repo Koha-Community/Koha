@@ -26,7 +26,7 @@ use List::MoreUtils           qw(none);
 use Module::Load::Conditional qw(can_load);
 use Test::MockModule;
 use Test::NoWarnings;
-use Test::More tests => 20;
+use Test::More tests => 21;
 use Test::Warn;
 use Test::Exception;
 
@@ -410,6 +410,45 @@ subtest 'Koha::Plugin::Test' => sub {
     @plugins = Koha::Plugins->new( { enable_plugins => 1 } )->GetPlugins( { all => 1 } );
     @names   = map { $_->get_metadata()->{'name'} } @plugins;
     is( scalar grep( /^Test Plugin$/, @names ), 1, "With all param, GetPlugins found disabled Test Plugin" );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'Handler::run() skips disabled plugins' => sub {
+
+    plan tests => 5;
+
+    $schema->storage->txn_begin;
+
+    # Temporarily remove any installed plugins data
+    Koha::Plugins->RemovePlugins( { destructive => 1 } );
+
+    t::lib::Mocks::mock_config( 'enable_plugins', 1 );
+    my $plugins = Koha::Plugins->new( { enable_plugins => 1 } );
+    my @plugins;
+    warning_is { @plugins = $plugins->InstallPlugins; } undef;
+
+    # Enabled plugin runs successfully
+    my $plugin = Koha::Plugin::Test->new( { enable_plugins => 1, cgi => CGI->new } );
+    $plugin->enable;
+    is(
+        Koha::Plugins::Handler->run( { class => "Koha::Plugin::Test", method => 'report', enable_plugins => 1 } ),
+        "Koha::Plugin::Test::report", 'Handler::run() executes enabled plugin'
+    );
+
+    # Disabled plugin is skipped
+    $plugin->disable;
+    is(
+        Koha::Plugins::Handler->run( { class => "Koha::Plugin::Test", method => 'report', enable_plugins => 1 } ),
+        undef, 'Handler::run() returns undef for disabled plugin'
+    );
+
+    # Management methods still work on disabled plugins
+    $plugin = Koha::Plugin::Test->new( { enable_plugins => 1, cgi => CGI->new } );
+    ok( !$plugin->is_enabled, 'Plugin is still disabled after Handler::run skipped it' );
+    Koha::Plugins::Handler->run( { class => "Koha::Plugin::Test", method => 'enable', enable_plugins => 1 } );
+    $plugin = Koha::Plugin::Test->new( { enable_plugins => 1, cgi => CGI->new } );
+    ok( $plugin->is_enabled, 'Handler::run() allows enable method on disabled plugin' );
 
     $schema->storage->txn_rollback;
 };

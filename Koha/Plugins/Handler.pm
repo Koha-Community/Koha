@@ -19,8 +19,9 @@ package Koha::Plugins::Handler;
 
 use Modern::Perl;
 
-use Array::Utils qw( array_minus );
-use File::Path   qw( remove_tree );
+use Array::Utils    qw( array_minus );
+use File::Path      qw( remove_tree );
+use List::MoreUtils qw( any );
 
 use Module::Load qw( load );
 
@@ -69,6 +70,10 @@ sub run {
     if ($has_method) {
         load $plugin_class;
         my $plugin = $plugin_class->new( { cgi => $cgi, enable_plugins => $args->{'enable_plugins'} } );
+
+        my @management_methods = qw( enable disable install uninstall upgrade configure );
+        return unless ( $plugin->is_enabled || any { $plugin_method eq $_ } @management_methods );
+
         return $plugin->$plugin_method($params);
     } else {
         warn "Plugin does not have method $plugin_method";
