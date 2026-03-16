@@ -680,7 +680,10 @@
 
                                         [% SEARCH_RESULT.result_number | html %].
                                         [% SEARCH_RESULT.XSLTResultsRecord | $raw %]
-
+                                        [% IF Koha.Preference('SearchEngine') == 'Elasticsearch' %]
+                                            [% SET score_index = loop().index %]
+                                            <span class="search_score" style="display:none;">Score: [% SCORES.$score_index | html %]</span>
+                                        [% END %]
                                         <p class="hold">
                                             [% IF ( SEARCH_RESULT.norequests ) %]
                                                 <span class="noholdstext">No holds allowed</span>
