@@ -140,7 +140,7 @@ subtest 'output_and_exit_if_error() tests' => sub {
 };
 
 subtest 'output_error' => sub {
-    plan tests => 4;
+    plan tests => 6;
 
     local *STDOUT;
     my $stdout;
@@ -151,12 +151,12 @@ subtest 'output_error' => sub {
 
     open STDOUT, '>', \$stdout;
     output_error( $query, "404" );
-    like( $stdout, qr{Error 404}, '404 returned' );
+    like( $stdout, qr{intranet-tmpl.*Error 404}s, '404 returned for staff interface' );
     close STDOUT;
 
     open STDOUT, '>', \$stdout;
     output_error( $query, "403" );
-    like( $stdout, qr{Error 403}, '403 returned' );
+    like( $stdout, qr{intranet-tmpl.*Error 403}s, '403 returned for staff interface' );
     close STDOUT;
 
     throws_ok {
@@ -168,4 +168,14 @@ subtest 'output_error' => sub {
         output_error( $query, "Error" );
     }
     'Koha::Exceptions::WrongParameter';
+
+    open STDOUT, '>', \$stdout;
+    output_error( $query, "404", { interface => 'opac' } );
+    like( $stdout, qr{opac-tmpl.*Error 404}s, '404 returned for OPAC' );
+    close STDOUT;
+
+    open STDOUT, '>', \$stdout;
+    output_error( $query, "403", { interface => 'opac' } );
+    like( $stdout, qr{opac-tmpl.*Error 403}s, '403 returned for OPAC' );
+    close STDOUT;
 };
