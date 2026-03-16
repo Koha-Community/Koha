@@ -74,7 +74,8 @@ if ( $op eq 'download' ) {
     my $ftype = $file->{'file_type'};
 
     my $magic           = File::LibMagic->new();
-    my $magic_info      = $magic->info_from_string( $file->{'file_content'} );
+    my $test_str        = substr( $file->{'file_content'}, 0, 99 );
+    my $magic_info      = $magic->info_from_string( \$test_str );
     my $magic_mime_type = $magic_info->{mime_type};
     if ( $input->param('view') && ( $magic_mime_type && $allowed_ftypes->{$magic_mime_type} ) ) {
         print $input->header(
