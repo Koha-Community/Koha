@@ -37,23 +37,33 @@
     <form id="new-alert-form" action="audio_alerts.pl" method="post" class="validated">
         [% INCLUDE 'csrf-token.inc' %]
         <h1><span class="create-alert">New alert</span><span class="edit-alert">Edit alert</span></h1>
-        <fieldset class="rows">
+        <fieldset class="fg">
             <legend class="visually-hidden">Audio alert details</legend>
             <input id="id" name="id" type="hidden" value="" />
-            <ol>
-                <li>
+            <div class="fg-row">
+                <div class="fg-label">
                     <label for="selector" class="required">Selector: </label>
-                    <input id="selector" name="selector" type="text" class="required input-large" placeholder="selector" />
-                    <span class="required">Required</span>
-                </li>
-                <li>
+                </div>
+                <div class="fg-input">
+                    <input id="selector" name="selector" type="text" class="required" />
+                </div>
+                <div class="required">Required</div>
+            </div>
+            <div class="fg-row">
+                <div class="fg-label">
                     <label for="sound" class="required">Sound: </label>
-                    <input id="sound" name="sound" type="text" class="required input-large" placeholder="sound" />
-                    <button id="play-sound" class="btn btn-default btn-xs disabled"><i class="fa fa-play"></i> Play sound</button>
-                    <span class="required">Required</span>
-                </li>
-                <li>
+                </div>
+                <div class="fg-input">
+                    <input id="sound" name="sound" type="text" class="required" />
+                    <button id="play-sound" class="btn btn-default btn-xs disabled" style="margin:.4rem 0"><i class="fa fa-play"></i> Play sound</button>
+                </div>
+                <div class="required">Required</div>
+            </div>
+            <div class="fg-row">
+                <div class="fg-label">
                     <label for="koha-sounds">Select a built-in sound: </label>
+                </div>
+                <div class="fg-input">
                     <select id="koha-sounds">
                         <option value=""> -- Choose one -- </option>
                         <option value="beep.ogg">beep.ogg</option>
@@ -75,8 +85,8 @@
                         <option value="popup.ogg">popup.ogg</option>
                         <option value="warning.ogg">warning.ogg</option>
                     </select>
-                </li>
-            </ol>
+                </div>
+            </div>
         </fieldset>
         <fieldset class="action">
             <input type="hidden" id="op-add-edit" name="op" value="cud-add" />

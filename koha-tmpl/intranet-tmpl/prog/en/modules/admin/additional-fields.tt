@@ -243,36 +243,54 @@
         [% END %]
         <form action="" name="add_form" id="add_field" method="post">
             [% INCLUDE 'csrf-token.inc' %]
-            <fieldset class="rows">
-                <ol>
-                    <li>
+            <fieldset class="fg">
+                <div class="fg-row">
+                    <div class="fg-label">
                         <label for="name" class="required">Name: </label>
+                    </div>
+                    <div class="fg-input">
                         <input type="text" name="name" id="name" value="[% field.name | html %]" class="required focus" required="required" />
-                        <span class="required">Required</span>
-                    </li>
-                    <li>
+                    </div>
+                    <div class="required">Required</div>
+                </div>
+                <div class="fg-row">
+                    <div class="fg-label">
                         <label for="av">Authorized value category: </label>
+                    </div>
+                    <div class="fg-input">
                         <select id="av" name="authorised_value_category">
                             <option value="">None</option>
                             [% PROCESS options_for_authorised_value_categories authorised_value_categories = AuthorisedValues.GetCategories({selected => field.authorised_value_category}) %]
                         </select>
-                    </li>
-                    <li>
-                        <label for="repeatable">Repeatable: </label>
+                    </div>
+                </div>
+                <div class="fg-row input-checkbox">
+                    <div class="fg-label">
+                        <label for="repeatable">Repeatable </label>
+                    </div>
+                    <div class="fg-input">
                         [% IF field.repeatable %]
                             <input type="checkbox" name="repeatable" id="repeatable" checked="checked" />
                         [% ELSE %]
                             <input type="checkbox" name="repeatable" id="repeatable" />
                         [% END %]
-                    </li>
-                    [% IF show_marcfield %]
-                        <li>
-                            <label for="marcfield">MARC field: </label>
+                    </div>
+                </div>
+                [% IF show_marcfield %]
+                    <div class="fg-row input-sm">
+                        <div class="fg-label">
+                            <label for="marcfield">MARC field</label>
+                        </div>
+                        <div class="fg-input">
                             <input type="text" name="marcfield" id="marcfield" value="[% field.marcfield | html %]" />
-                            <div class="hint">Example: 942$c</div>
-                        </li>
-                        <li>
-                            <label for="marcfield_mode">MARC field mode: </label>
+                        </div>
+                        <div class="hint">Example: 942$c</div>
+                    </div>
+                    <div class="fg-row">
+                        <div class="fg-label">
+                            <label for="marcfield_mode">MARC field mode</label>
+                        </div>
+                        <div class="fg-input">
                             <select id="marcfield_mode" name="marcfield_mode">
                                 [% IF field.marcfield_mode == 'get' %]
                                     <option value="get" selected>Get value from MARC record (not modifiable)</option>
@@ -286,19 +304,23 @@
                                     <option value="set">Save value to MARC record</option>
                                 [% END %]
                             </select>
-                        </li>
-                    [% END %]
-                    [% IF show_searchable %]
-                        <li>
-                            <label for="searchable">Searchable: </label>
+                        </div>
+                    </div>
+                [% END %]
+                [% IF show_searchable %]
+                    <div class="fg-row input-checkbox">
+                        <div class="fg-label">
+                            <label for="searchable">Searchable</label>
+                        </div>
+                        <div class="fg-input">
                             [% IF field.searchable %]
                                 <input type="checkbox" name="searchable" id="searchable" checked="checked" />
                             [% ELSE %]
                                 <input type="checkbox" name="searchable" id="searchable" />
                             [% END %]
-                        </li>
-                    [% END %]
-                </ol>
+                        </div>
+                    </div>
+                [% END %]
             </fieldset>
             <fieldset class="action">
                 [% IF field %]

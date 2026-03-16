@@ -33,13 +33,29 @@
     [% END %]</title
 >
 [% INCLUDE 'doc-head-close.inc' %]
-<style nonce="[% Koha.CSPNonce | $raw %]">
-    #button_add,
-    .split_regex,
-    .split_callnumber {
-        padding-left: 10em;
-    }
-</style>
+[% FILTER collapse %]
+    <style nonce="[% Koha.CSPNonce | $raw %]">
+        #result_split_callnumbers {
+            flex-wrap: wrap;
+        }
+        .cn_box {
+            background-color: #fff;
+            display: flex;
+            flex-direction: column;
+        }
+        .cn_label {
+            border: 1px solid #ddd;
+            border-bottom-width: 0;
+            font-weight: bold;
+            padding: 0.5rem;
+        }
+        .split_callnumber {
+            border: 1px solid #ddd;
+            font-family: monospace;
+            padding: 0.5rem;
+        }
+    </style>
+[% END %]
 </head>
 
 <body id="admin_classsources" class="admin">
@@ -147,34 +163,52 @@
         <form action="/cgi-bin/koha/admin/classsources.pl" name="Aform" class="validated" method="post">
             [% INCLUDE 'csrf-token.inc' %]
             <input type="hidden" name="op" value="cud-add_source_validate" />
-            <fieldset class="rows">
-                <ol>
-                    <li>
-                        [% IF class_source %]
+            <fieldset class="fg">
+                <div class="fg-row">
+                    [% IF class_source %]
+                        <div class="fg-label">
                             <span class="label">Classification source code: </span>
+                        </div>
+                        <div class="fg-text">
                             <input type="hidden" name="cn_source" value="[% class_source.cn_source | html %]" />
                             [% class_source.cn_source | html %]
-                        [% ELSE %]
+                        </div>
+                    [% ELSE %]
+                        <div class="fg-label">
                             <label class="required" for="class_source">Classification source code: </label>
+                        </div>
+                        <div class="fg-input">
                             <input class="required focus" required="required" type="text" id="class_source" name="cn_source" size="10" maxlength="10" />
-                            <span class="required">Required</span>
-                        [% END %]
-                    </li>
-                    <li
-                        ><label class="required" for="description">Description: </label>
+                        </div>
+                        <div class="required">Required</div>
+                    [% END %]
+                </div>
+                <div class="fg-row">
+                    <div class="fg-label">
+                        <label class="required" for="description">Description: </label>
+                    </div>
+                    <div class="fg-input">
                         <input class="required" required="required" type="text" id="description" name="description" size="50" maxlength="250" value="[% class_source.description | html %]" />
-                        <span class="required">Required</span>
-                    </li>
-                    <li
-                        ><label for="used">Source in use?</label>
+                    </div>
+                    <div class="required">Required</div>
+                </div>
+                <div class="fg-row input-checkbox">
+                    <div class="fg-label">
+                        <label for="used">Source in use?</label>
+                    </div>
+                    <div class="fg-input">
                         [% IF ( class_source.used ) %]
                             <input type="checkbox" id="used" name="used" value="used" checked="checked" />
                         [% ELSE %]
                             <input type="checkbox" id="used" name="used" value="used" />
                         [% END %]
-                    </li>
-                    <li>
+                    </div>
+                </div>
+                <div class="fg-row">
+                    <div class="fg-label">
                         <label class="required" for="class_sort_rule">Filing rule: </label>
+                    </div>
+                    <div class="fg-input">
                         <select class="required" required="required" id="class_sort_rule" name="class_sort_rule">
                             [% FOREACH r IN sort_rules %]
                                 [% IF class_source.class_sort_rule == r.class_sort_rule %]
@@ -184,10 +218,14 @@
                                 [% END %]
                             [% END %]
                         </select>
-                        <span class="required">Required</span>
-                    </li>
-                    <li>
+                    </div>
+                    <div class="required">Required</div>
+                </div>
+                <div class="fg-row">
+                    <div class="fg-label">
                         <label class="required" for="class_split_rule">Splitting rule: </label>
+                    </div>
+                    <div class="fg-input">
                         <select class="required" required="required" id="split_rule" name="class_split_rule">
                             [% FOREACH r IN split_rules %]
                                 [% IF class_source.class_split_rule == r.class_split_rule %]
@@ -197,9 +235,9 @@
                                 [% END %]
                             [% END %]
                         </select>
-                        <span class="required">Required</span>
-                    </li>
-                </ol>
+                    </div>
+                    <div class="required">Required</div>
+                </div>
             </fieldset>
             <fieldset class="action">
                 <input type="submit" class="btn btn-primary" value="Save" />
@@ -217,26 +255,40 @@
         <form action="/cgi-bin/koha/admin/classsources.pl" name="Aform" class="validated" method="post">
             [% INCLUDE 'csrf-token.inc' %]
             <input type="hidden" name="op" value="cud-add_sort_rule_validate" />
-            <fieldset class="rows">
-                <ol>
-                    <li>
-                        [% IF sort_rule %]
+            <fieldset class="fg">
+                <div class="fg-row">
+                    [% IF sort_rule %]
+                        <div class="fg-label">
                             <span class="label">Filing rule code: </span>
+                        </div>
+                        <div class="fg-text">
                             <input type="hidden" name="class_sort_rule" value="[% sort_rule.class_sort_rule | html %]" />
                             [% sort_rule.class_sort_rule | html %]
-                        [% ELSE %]
+                        </div>
+                    [% ELSE %]
+                        <div class="fg-label">
                             <label for="class_sort_rule" class="required">Filing rule code: </label>
+                        </div>
+                        <div class="fg-input">
                             <input class="required focus" required="required" type="text" id="class_sort_rule" name="class_sort_rule" size="10" maxlength="10" />
-                            <span class="required">Required</span>
-                        [% END %]
-                    </li>
-                    <li
-                        ><label for="description" class="required">Description: </label>
+                        </div>
+                        <div class="required">Required</div>
+                    [% END %]
+                </div>
+                <div class="fg-row">
+                    <div class="fg-label">
+                        <label for="description" class="required">Description: </label>
+                    </div>
+                    <div class="fg-input">
                         <input class="required" required="required" type="text" id="description" name="description" size="50" maxlength="250" value="[% sort_rule.description | html %]" />
-                        <span class="required">Required</span>
-                    </li>
-                    <li
-                        ><label for="sort_routine" class="required">Filing routine: </label>
+                    </div>
+                    <div class="required">Required</div>
+                </div>
+                <div class="fg-row">
+                    <div class="fg-label">
+                        <label for="sort_routine" class="required">Filing routine: </label>
+                    </div>
+                    <div class="fg-input">
                         <select class="required" required="required" id="sort_routine" name="sort_routine">
                             [% FOREACH routine_name IN sort_routines %]
                                 [% IF routine_name == sort_rule.sort_routine %]
@@ -246,9 +298,9 @@
                                 [% END %]
                             [% END %]
                         </select>
-                        <span class="required">Required</span>
-                    </li>
-                </ol>
+                    </div>
+                    <div class="required">Required</div>
+                </div>
             </fieldset>
             <fieldset class="action">
                 <input type="submit" class="btn btn-primary" value="Save" />
@@ -266,26 +318,40 @@
         <form action="/cgi-bin/koha/admin/classsources.pl" name="Aform" class="validated" method="post">
             [% INCLUDE 'csrf-token.inc' %]
             <input type="hidden" name="op" value="cud-add_split_rule_validate" />
-            <fieldset class="rows">
-                <ol>
-                    <li>
-                        [% IF split_rule %]
+            <fieldset class="fg">
+                <div class="fg-row">
+                    [% IF split_rule %]
+                        <div class="fg-label">
                             <span class="label">Splitting rule code: </span>
+                        </div>
+                        <div class="fg-text">
                             <input type="hidden" name="class_split_rule" value="[% split_rule.class_split_rule | html %]" />
                             [% split_rule.class_split_rule | html %]
-                        [% ELSE %]
+                        </div>
+                    [% ELSE %]
+                        <div class="fg-label">
                             <label for="class_split_rule" class="required">Splitting rule code: </label>
+                        </div>
+                        <div class="fg-input">
                             <input class="required focus" required="required" type="text" id="class_split_rule" name="class_split_rule" size="10" maxlength="10" />
-                            <span class="required">Required</span>
-                        [% END %]
-                    </li>
-                    <li
-                        ><label for="description" class="required">Description: </label>
+                        </div>
+                        <div class="required">Required</div>
+                    [% END %]
+                </div>
+                <div class="fg-row">
+                    <div class="fg-label">
+                        <label for="description" class="required">Description: </label>
+                    </div>
+                    <div class="fg-input">
                         <input class="required" required="required" type="text" id="description" name="description" size="50" maxlength="250" value="[% split_rule.description | html %]" />
-                        <span class="required">Required</span>
-                    </li>
-                    <li
-                        ><label for="split_routine" class="required">Splitting routine: </label>
+                    </div>
+                    <div class="required">Required</div>
+                </div>
+                <div class="fg-row">
+                    <div class="fg-label">
+                        <label for="split_routine" class="required">Splitting routine: </label>
+                    </div>
+                    <div class="fg-input">
                         <select class="required" required="required" id="split_routine" name="split_routine">
                             [% FOREACH routine_name IN split_routines %]
                                 [% IF routine_name == split_rule.split_routine %]
@@ -295,37 +361,46 @@
                                 [% END %]
                             [% END %]
                         </select>
-                        <span class="required">Required</span>
-                    </li>
-                    <li id="regex_block">
-                        <label for="split_regex" class="required">Regular expression: </label>
-                        <div>
-                            [% IF split_rule AND split_rule.regexs.size %]
-                                [% FOR re IN split_rule.regexs %]
-                                    <div class="split_regex">
-                                        <input type="text" name="split_regex" id="split_regex" value="[% re | html %]" />
-                                        <a href="#" title="Delete" class="del_regex"><i class="fa fa-fw fa-trash-can"></i>Delete</a>
-                                    </div>
-                                [% END %]
-                            [% ELSE %]
-                                <div class="split_regex">
-                                    <input type="text" name="split_regex" id="split_regex" value="" />
-                                    <a href="#" title="Delete" class="del_regex"><i class="fa fa-fw fa-trash-can"></i>Delete</a>
+                    </div>
+                    <div class="required">Required</div>
+                </div>
+                <div id="regex_block">
+                    <div class="fg-row split_regex">
+                        <div class="fg-label">
+                            <label for="split_regex" class="required">Regular expression: </label>
+                        </div>
+                        [% IF split_rule AND split_rule.regexs.size %]
+                            [% FOR re IN split_rule.regexs %]
+                                <div class="fg-input">
+                                    <input type="text" name="split_regex" id="split_regex" value="[% re | html %]" />
+                                    <a href="#" title="Delete" class="btn btn-link del_regex"><i class="fa fa-fw fa-trash-can"></i>Delete</a>
                                 </div>
                             [% END %]
+                        [% ELSE %]
+                            <div class="fg-input">
+                                <input type="text" name="split_regex" id="split_regex" value="" />
+                                <a href="#" title="Delete" class="btn btn-link del_regex"><i class="fa fa-fw fa-trash-can"></i>Delete</a>
+                            </div>
+                        [% END %]
+                        <div class="required">Required</div>
+                        <div class="hint" id="button_add">
+                            <a href="#" class="btn btn-link add_regex" title="Add a new regular expression"><i class="fa fa-fw fa-plus"></i> New</a>
                         </div>
-                        <div id="button_add">
-                            <a href="#" class="add_regex" title="Add a new regular expression"><i class="fa fa-fw fa-plus"></i> New</a>
-                            <span class="required">Required</span>
+                    </div>
+                    <div class="fg-row">
+                        <div class="fg-label">
+                            <label for="callnumbers">Test the regular expressions:</label>
                         </div>
-                        <label for="callnumbers">Test the regular expressions:</label>
-                        <div id="test_split">
-                            <textarea name="callnumbers"></textarea>
-                            <button name="test_split_cns">Test</button>
-                            <div id="result_split_callnumbers"></div>
+                        <div class="fg-input" id="test_split">
+                            <textarea name="callnumbers" rows="3" cols="30"></textarea>
+                            <button class="btn btn-default btn-xs" name="test_split_cns">Test</button>
                         </div>
-                    </li>
-                </ol>
+                    </div>
+                    <div class="fg-row wide">
+                        <div class="fg-label"></div>
+                        <div class="fg-input" id="result_split_callnumbers"> </div>
+                    </div>
+                </div>
             </fieldset>
             <fieldset class="action">
                 <input type="submit" class="btn btn-primary" value="Save" />
@@ -463,7 +538,7 @@
             update_delete_links_visibility();
         }
         function del_regex(a_node) {
-            $(a_node).parent("div").remove();
+            $(a_node).parent().parent().remove();
             update_delete_links_visibility();
         }
 
@@ -503,13 +578,14 @@
                 $.getJSON("/cgi-bin/koha/svc/split_callnumbers", { regexs: JSON.stringify(regexs), callnumbers: callnumbers }, function (answer) {
                     var callnumbers = answer["split_callnumbers"];
                     $("#result_split_callnumbers").html("");
-                    var list_node = $("<ol></ol>");
                     $(callnumbers).each(function () {
                         var split_cn = this["split"].join("<br/>");
-                        var li_node = $("<li><label>" + this["inline"] + '</label><div class="split_callnumber">' + split_cn + "</div></li>");
-                        $(list_node).append(li_node);
+                        var box_node = $('<div class="cn_box"></div>');
+                        var li_node = '<div class="cn_label">' + this["inline"] + "</div>";
+                        li_node += '<div class="split_callnumber">' + split_cn + "</div>";
+                        box_node.append(li_node);
+                        $("#result_split_callnumbers").append(box_node);
                     });
-                    $("#result_split_callnumbers").append(list_node);
                 }).fail(function () {
                     alert("Something went wrong.");
                 });

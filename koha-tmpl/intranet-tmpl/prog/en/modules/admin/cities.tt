@@ -101,28 +101,49 @@
             <input type="hidden" name="op" value="cud-add_validate" />
             <input type="hidden" name="cityid" value="[% city.cityid | html %]" />
 
-            <fieldset class="rows">
-                <ol>
-                    [% IF city %]
-                        <li><span class="label">City ID: </span>[% city.cityid | html %]</li>
-                    [% END %]
-                    <li>
+            <fieldset class="fg">
+                [% IF city %]
+                    <div class="fg-row">
+                        <div class="fg-label">
+                            <span class="label">City ID: </span>
+                        </div>
+                        <div class="fg-text"> [% city.cityid | html %] </div>
+                    </div>
+                [% END %]
+                <div class="fg-row">
+                    <div class="fg-label">
                         <label for="city_name" class="required">City: </label>
-                        <input type="text" name="city_name" id="city_name" size="80" maxlength="100" value="[% city.city_name | html %]" required="required" class="required focus" /> <span class="required">Required</span>
-                    </li>
-                    <li>
+                    </div>
+                    <div class="fg-input">
+                        <input type="text" name="city_name" id="city_name" maxlength="100" value="[% city.city_name | html %]" required="required" class="required focus" />
+                    </div>
+                    <div class="required">Required</div>
+                </div>
+                <div class="fg-row">
+                    <div class="fg-label">
                         <label for="city_state">State: </label>
-                        <input type="text" name="city_state" id="city_state" size="80" maxlength="100" value="[% city.city_state | html %]" />
-                    </li>
-                    <li>
+                    </div>
+                    <div class="fg-input">
+                        <input type="text" name="city_state" id="city_state" maxlength="100" value="[% city.city_state | html %]" />
+                    </div>
+                </div>
+                <div class="fg-row input-md">
+                    <div class="fg-label">
                         <label for="city_zipcode" class="required">ZIP/Postal code: </label>
-                        <input type="text" name="city_zipcode" id="city_zipcode" size="20" maxlength="20" value="[% city.city_zipcode | html %]" required="required" class="required" /> <span class="required">Required</span>
-                    </li>
-                    <li>
+                    </div>
+                    <div class="fg-input">
+                        <input type="text" name="city_zipcode" id="city_zipcode" maxlength="20" value="[% city.city_zipcode | html %]" required="required" class="required" />
+                    </div>
+                    <div class="required">Required</div>
+                </div>
+                <div class="fg-row">
+                    <div class="fg-label">
                         <label for="city_country">Country: </label>
-                        <input type="text" name="city_country" id="city_country" size="80" maxlength="100" value="[% city.city_country | html %]" />
-                    </li>
-                </ol>
+                    </div>
+                    <div class="fg-input">
+                        <input type="text" name="city_country" id="city_country" maxlength="100" value="[% city.city_country | html %]" />
+                    </div>
+                </div>
             </fieldset>
 
             <fieldset class="action">
