@@ -131,6 +131,7 @@ __PACKAGE__->has_many(
 
 __PACKAGE__->add_columns(
     '+can_be_edited' => { is_boolean => 1 },
+    '+is_system' => { is_boolean => 1 },
 );
 
 1;

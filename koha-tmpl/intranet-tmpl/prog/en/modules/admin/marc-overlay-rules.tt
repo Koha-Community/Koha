@@ -505,13 +505,13 @@
             '*': '*',
             [% FOREACH record_source IN record_sources %]
                 [% SWITCH record_source %]
-                  [% CASE 'batchmod' %]'[% record_source %]': _("Batch record modification"),
-                  [% CASE 'intranet' %]'[% record_source %]':_("Staff interface MARC editor"),
-                  [% CASE 'batchimport' %]'[% record_source %]': _("Staged MARC import"),
-                  [% CASE 'z3950' %]'[% record_source %]': _("Z39.50"),
-                  [% CASE 'bulkmarkimport' %]'[% record_source %]': _("bulkmarcimport.pl"),
-                  [% CASE 'import_lexile' %]'[% record_source %]':  _("import_lexile.pl"),
-                  [% CASE %] '[% record_source %]' : '[% record_source | html %]',
+                  [% CASE 'batchmod' %]'[% record_source | html %]': _("Batch record modification"),
+                  [% CASE 'intranet' %]'[% record_source | html %]':_("Staff interface MARC editor"),
+                  [% CASE 'batchimport' %]'[% record_source | html %]': _("Staged MARC import"),
+                  [% CASE 'z3950' %]'[% record_source | html %]': _("Z39.50"),
+                  [% CASE 'bulkmarkimport' %]'[% record_source | html %]': _("bulkmarcimport.pl"),
+                  [% CASE 'import_lexile' %]'[% record_source | html %]':  _("import_lexile.pl"),
+                  [% CASE %] '[% record_source | html %]' : '[% record_source | html %]',
                 [% END %]
             [% END %]
         },

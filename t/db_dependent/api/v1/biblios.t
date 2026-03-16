@@ -1848,7 +1848,7 @@ subtest 'put() tests' => sub {
         }
     );
 
-    # disable overlay rules before updateing biblio
+    # disable overlay rules before updating biblio
     t::lib::Mocks::mock_preference( 'MARCOverlayRules', '0' );
 
     $t->put_ok( "//$userid:$password@/api/v1/biblios/$biblionumber" =>
