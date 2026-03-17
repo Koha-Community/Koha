@@ -66,33 +66,45 @@
                 <input type="hidden" name="op" value="cud-savemod" />
                 <input type="hidden" name="id" value="[% id | html %]" />
             [% END %]
-            <fieldset id="oaidetails" class="rows">
-                <ol>
-                    <li>
+            <fieldset id="oaidetails" class="fg">
+                <div class="fg-row">
+                    <div class="fg-label">
                         <label for="spec" class="required">setSpec: </label>
+                    </div>
+                    <div class="fg-input">
                         [% IF ( spec == "" ) %]
                             <input type="text" id="spec" class="focus required" name="spec" value="[% spec | html %]" required="required" />
                         [% ELSE %]
                             <input type="text" id="spec" name="spec" value="[% spec | html %]" required="required" class="required" />
                         [% END %]
-                        <span class="required">Required</span>
-                    </li>
-                    <li>
+                    </div>
+                    <div class="required">Required</div>
+                </div>
+                <div class="fg-row">
+                    <div class="fg-label">
                         <label for="name" class="required">setName: </label>
+                    </div>
+                    <div class="fg-input">
                         <input type="text" id="name" name="name" value="[% name | html %]" required="required" class="required" />
-                        <span class="required">Required</span>
-                    </li>
-                    [% FOREACH desc IN descriptions %]
-                        <li>
+                    </div>
+                    <div class="required">Required</div>
+                </div>
+                [% FOREACH desc IN descriptions %]
+                    <div class="fg-row">
+                        <div class="fg-label">
                             <label>setDescription: </label>
+                        </div>
+                        <div class="fg-input">
                             <textarea style="vertical-align:middle" rows="2" cols="30" name="description">[% desc.description | html %]</textarea>
-                            <a class="remove_description" href="#"><i class="fa fa-fw fa-trash-can"></i> Remove</a>
-                        </li>
-                    [% END %]
-                    <li id="adddescription"
-                        ><span class="label">&nbsp;</span><a href="#" class="add_description"><i class="fa fa-fw fa-plus"></i> Add description</a></li
-                    >
-                </ol>
+                            <a class="btn btn-link remove_description" href="#"><i class="fa fa-fw fa-trash-can"></i> Remove</a>
+                        </div>
+                    </div>
+                [% END %]
+                <div class="fg-row" id="adddescription">
+                    <div class="fg-text">
+                        <a href="#" class="btn btn-link add_description"><i class="fa fa-fw fa-plus"></i> Add description</a>
+                    </div>
+                </div>
             </fieldset>
             <fieldset class="action"> <input type="submit" class="btn btn-primary" value="Save" /> <a class="cancel" href="/cgi-bin/koha/admin/oai_sets.pl">Cancel</a> </fieldset>
         </form>
@@ -167,20 +179,21 @@
     <script nonce="[% Koha.CSPNonce | $raw %]">
         function newDescField() {
             $("#adddescription").before(
-                "<li><label>" +
+                '<div class="fg-row"><div class="fg-label"><label>' +
                     _("setDescription: ") +
-                    "</label>" +
-                    '<textarea style="vertical-align:middle" rows="2" cols="30" name="description"></textarea>' +
-                    '<a class="remove_description" href="#"><i class="fa fa-fw fa-trash-can"></i>' +
+                    "</label></div>" +
+                    '<div class=\"fg-input\"><textarea style="vertical-align:middle" rows="2" cols="30" name="description"></textarea>' +
+                    '<a class="btn btn-link remove_description" href="#"><i class="fa fa-fw fa-trash-can"></i>' +
                     _(" Remove") +
                     "</a>" +
-                    "</li>"
+                    "</div>" +
+                    "</div>"
             );
         }
 
         function delDescField(minusButton) {
-            var li = minusButton.parent("li");
-            $(li).remove();
+            var line = minusButton.parent().parent();
+            $(line).remove();
         }
 
         $(document).ready(function () {

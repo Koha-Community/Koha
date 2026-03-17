@@ -84,62 +84,91 @@
         <form action="/cgi-bin/koha/admin/smtp_servers.pl" id="add" name="add" class="validated" method="post">
             [% INCLUDE 'csrf-token.inc' %]
             <input type="hidden" name="op" value="cud-add" />
-            <fieldset class="rows">
-                <ol>
-                    <li>
+            <fieldset class="fg">
+                <div class="fg-row">
+                    <div class="fg-label">
                         <label for="smtp_name" class="required">Name: </label>
+                    </div>
+                    <div class="fg-input">
                         <input type="text" name="smtp_name" id="smtp_name" size="60" class="required focus" required="required" />
-                        <span class="required">Required</span>
-                    </li>
-                </ol>
-            </fieldset>
-
-            <fieldset class="rows">
-                <ol>
-                    <li>
+                    </div>
+                    <div class="required">Required</div>
+                </div>
+                <div class="fg-row">
+                    <div class="fg-label">
                         <label for="smtp_host" class="required">Host: </label>
+                    </div>
+                    <div class="fg-input">
                         <input type="text" name="smtp_host" id="smtp_host" size="60" class="required" />
-                        <span class="required">Required</span>
-                    </li>
-                    <li>
+                    </div>
+                    <div class="required">Required</div>
+                </div>
+                <div class="fg-row input-sm">
+                    <div class="fg-label">
                         <label for="smtp_port" class="required">Port: </label>
+                    </div>
+                    <div class="fg-input">
                         <input type="text" inputmode="numeric" pattern="[0-9]*" value="25" name="smtp_port" id="smtp_port" size="20" class="required" />
-                        <span class="required">Required</span>
-                    </li>
-                    <li>
+                    </div>
+                    <div class="required">Required</div>
+                </div>
+                <div class="fg-row input-sm">
+                    <div class="fg-label">
                         <label for="smtp_timeout">Timeout (seconds): </label>
+                    </div>
+                    <div class="fg-input">
                         <input type="text" inputmode="numeric" pattern="[0-9]*" value="120" name="smtp_timeout" id="smtp_timeout" size="20" />
-                    </li>
-                    <li>
+                    </div>
+                </div>
+                <div class="fg-row input-sm">
+                    <div class="fg-label">
                         <label for="smtp_ssl_mode">SSL: </label>
+                    </div>
+                    <div class="fg-input">
                         <select name="smtp_ssl_mode" id="smtp_ssl_mode">
                             <option value="disabled" selected="selected">Disabled</option>
                             <option value="ssl">SSL</option>
                             <option value="starttls">STARTTLS</option>
                         </select>
-                    </li>
-                    <li>
+                    </div>
+                </div>
+                <div class="fg-row input-md">
+                    <div class="fg-label">
                         <label for="smtp_user_name">User name: </label>
+                    </div>
+                    <div class="fg-input">
                         <input type="text" name="smtp_user_name" id="smtp_user_name" size="60" autocomplete="off" />
-                    </li>
-                    <li>
+                    </div>
+                </div>
+                <div class="fg-row input-md">
+                    <div class="fg-label">
                         <label for="smtp_password">Password: </label>
+                    </div>
+                    <div class="fg-input">
                         <input type="password" name="smtp_password" id="smtp_password" size="60" autocomplete="off" />
-                    </li>
-                    <li>
+                    </div>
+                </div>
+                <div class="fg-row input-sm">
+                    <div class="fg-label">
                         <label for="smtp_debug_mode">Debug mode: </label>
+                    </div>
+                    <div class="fg-input">
                         <select name="smtp_debug_mode" id="smtp_debug_mode">
                             <option value="1">Enabled</option>
                             <option value="0" selected="selected">Disabled</option>
                         </select>
-                        <span class="hint">Enables additional debug output in the logs</span>
-                    </li>
-                    <li>
+                    </div>
+                    <div class="hint">Enables additional debug output in the logs</div>
+                </div>
+                <div class="fg-row input-checkbox">
+                    <div class="fg-label">
                         <label for="smtp_default">Default server: </label>
+                    </div>
+                    <div class="fg-input">
                         <input type="checkbox" name="smtp_default" id="smtp_default" />
-                        <span class="hint">Sets this SMTP server as the default SMTP server.</span>
-                    </li>
-                </ol>
+                    </div>
+                    <div class="hint">Sets this SMTP server as the default SMTP server.</div>
+                </div>
             </fieldset>
             <fieldset class="action">
                 <input type="submit" class="btn btn-primary" value="Submit" />
@@ -159,34 +188,47 @@
             [% INCLUDE 'csrf-token.inc' %]
             <input type="hidden" name="op" value="cud-edit_save" />
             <input type="hidden" name="smtp_server_id" value="[%- smtp_server.id | html -%]" />
-            <fieldset class="rows">
-                <ol>
-                    <li>
+            <fieldset class="fg">
+                <div class="fg-row">
+                    <div class="fg-label">
                         <label for="smtp_name" class="required">Name: </label>
+                    </div>
+                    <div class="fg-input">
                         <input type="text" name="smtp_name" id="smtp_name" size="60" class="required" required="required" value="[%- smtp_server.name | html -%]" />
-                        <span class="required">Required</span>
-                    </li>
-                </ol>
-            </fieldset>
-
-            <fieldset class="rows">
-                <ol>
-                    <li>
+                    </div>
+                    <div class="required">Required</div>
+                </div>
+                <div class="fg-row">
+                    <div class="fg-label">
                         <label for="smtp_host" class="required">Host: </label>
+                    </div>
+                    <div class="fg-input">
                         <input type="text" name="smtp_host" id="smtp_host" size="60" class="required" value="[%- smtp_server.host | html -%]" />
-                        <span class="required">Required</span>
-                    </li>
-                    <li>
+                    </div>
+                    <div class="required">Required</div>
+                </div>
+                <div class="fg-row input-sm">
+                    <div class="fg-label">
                         <label for="smtp_port" class="required">Port: </label>
+                    </div>
+                    <div class="fg-input">
                         <input type="text" inputmode="numeric" pattern="[0-9]*" name="smtp_port" id="smtp_port" size="20" class="required" value="[%- smtp_server.port | html -%]" />
-                        <span class="required">Required</span>
-                    </li>
-                    <li>
+                    </div>
+                    <div class="required">Required</div>
+                </div>
+                <div class="fg-row input-sm">
+                    <div class="fg-label">
                         <label for="smtp_timeout">Timeout (seconds): </label>
+                    </div>
+                    <div class="fg-input">
                         <input type="text" inputmode="numeric" pattern="[0-9]*" name="smtp_timeout" id="smtp_timeout" size="20" value="[%- smtp_server.timeout | html -%]" />
-                    </li>
-                    <li>
+                    </div>
+                </div>
+                <div class="fg-row input-sm">
+                    <div class="fg-label">
                         <label for="smtp_ssl_mode">SSL: </label>
+                    </div>
+                    <div class="fg-input">
                         <select name="smtp_ssl_mode" id="smtp_ssl_mode">
                             [%- IF smtp_server.ssl_mode == 'disabled' -%]
                                 <option value="disabled" selected="selected">Disabled</option>
@@ -202,21 +244,33 @@
                                 <option value="starttls" selected="selected">STARTTLS</option>
                             [%- END -%]
                         </select>
-                    </li>
-                    <li>
+                    </div>
+                </div>
+                <div class="fg-row input-md">
+                    <div class="fg-label">
                         <label for="smtp_user_name">User name: </label>
+                    </div>
+                    <div class="fg-input">
                         <input type="text" name="smtp_user_name" id="smtp_user_name" size="60" value="[%- smtp_server.user_name | html -%]" autocomplete="off" />
-                    </li>
-                    <li>
+                    </div>
+                </div>
+                <div class="fg-row input-md">
+                    <div class="fg-label">
                         <label for="smtp_password">Password: </label>
+                    </div>
+                    <div class="fg-input">
                         [% IF smtp_server.password %]
                             <input type="password" name="smtp_password" id="smtp_password" size="60" value="****" autocomplete="off" />
                         [% ELSE %]
                             <input type="password" name="smtp_password" id="smtp_password" size="60" value="" autocomplete="off" />
                         [% END %]
-                    </li>
-                    <li>
+                    </div>
+                </div>
+                <div class="fg-row input-sm">
+                    <div class="fg-label">
                         <label for="smtp_debug_mode">Debug mode: </label>
+                    </div>
+                    <div class="fg-input">
                         <select name="smtp_debug_mode" id="smtp_debug_mode">
                             [%- IF smtp_server.debug == 1 -%]
                                 <option value="1" selected="selected">Enabled</option>
@@ -226,17 +280,22 @@
                                 <option value="0" selected="selected">Disabled</option>
                             [%- END -%]
                         </select>
-                    </li>
-                    <li>
+                    </div>
+                    <div class="hint">Enables additional debug output in the logs</div>
+                </div>
+                <div class="fg-row input-checkbox">
+                    <div class="fg-label">
                         <label for="smtp_default">Default server: </label>
+                    </div>
+                    <div class="fg-input">
                         [% IF smtp_server.is_default %]
                             <input type="checkbox" name="smtp_default" id="smtp_default" checked="checked" />
                         [% ELSE %]
                             <input type="checkbox" name="smtp_default" id="smtp_default" />
                         [% END %]
-                        <span class="hint">Sets this SMTP server as the default SMTP server.</span>
-                    </li>
-                </ol>
+                    </div>
+                    <div class="hint">Sets this SMTP server as the default SMTP server.</div>
+                </div>
             </fieldset>
             <fieldset class="action">
                 <input type="submit" class="btn btn-primary" value="Submit" />
