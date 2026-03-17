@@ -73,22 +73,28 @@
     <div id="sms_add_form">
         <form id="sms_form" action="sms_providers.pl" method="post" class="validated">
             [% INCLUDE 'csrf-token.inc' %]
-            <fieldset class="rows">
+            <fieldset class="fg">
                 <legend>Add an SMS cellular provider</legend>
                 <input type="hidden" id="id" name="id" value="" />
                 <input type="hidden" id="op" name="op" value="cud-add_update" />
-                <ol>
-                    <li>
+                <div class="fg-row">
+                    <div class="fg-label">
                         <label for="name" class="required">Name: </label>
+                    </div>
+                    <div class="fg-input">
                         <input type="text" id="name" name="name" required="required" />
-                        <span class="required">Required</span>
-                    </li>
-                    <li>
+                    </div>
+                    <div class="required">Required</div>
+                </div>
+                <div class="fg-row">
+                    <div class="fg-label">
                         <label for="domain" class="required">Domain: </label>
+                    </div>
+                    <div class="fg-input">
                         <input type="text" id="domain" name="domain" required="required" size="40" />
-                        <span class="required">Required</span>
-                    </li>
-                </ol>
+                    </div>
+                    <div class="required">Required</div>
+                </div>
             </fieldset>
             <fieldset class="action">
                 <input type="submit" id="submit_save" class="btn btn-primary" value="Submit" />
