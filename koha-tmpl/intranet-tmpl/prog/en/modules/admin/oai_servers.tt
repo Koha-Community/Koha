@@ -75,47 +75,73 @@
             [% END %]
 
             <input type="hidden" name="op" value="cud-add_validated" />
-            <fieldset class="rows">
-                <ol>
-                    <li
-                        ><label for="name" class="required">Repository name: </label>
+            <fieldset class="fg">
+                <div class="fg-row">
+                    <div class="fg-label">
+                        <label for="servername" class="required">Repository name: </label>
+                    </div>
+                    <div class="fg-input">
                         [% IF server.servername %]
                             <input type="text" name="servername" id="servername" size="65" maxlength="100" value="[% server.servername | html %]" required="required" />
                         [% ELSE %]
                             <input type="text" name="servername" id="servername" class="focus" size="65" maxlength="100" value="[% server.servername | html %]" required="required" />
                         [% END %]
-                        <span class="required">Required</span>
-                    </li>
+                    </div>
+                    <div class="required">Required</div>
+                </div>
 
-                    <li
-                        ><label for="endpoint" class="required">Endpoint: </label> <input type="text" name="endpoint" id="endpoint" size="30" value="[% server.endpoint | html %]" required="required" /> <span class="required">Required</span>
-                    </li>
-                    <li><label for="oai_set">[% I18N.tp('OAI', 'Set:') | html %] </label> <input type="text" name="oai_set" id="oai_set" value="[% server.oai_set | html %]" /> </li>
-                    <li>
+                <div class="fg-row">
+                    <div class="fg-label">
+                        <label for="endpoint" class="required">Endpoint: </label>
+                    </div>
+                    <div class="fg-input">
+                        <input type="text" name="endpoint" id="endpoint" size="30" value="[% server.endpoint | html %]" required="required" />
+                    </div>
+                    <div class="required">Required</div>
+                </div>
+                <div class="fg-row">
+                    <div class="fg-label">
+                        <label for="oai_set">[% I18N.tp('OAI', 'Set:') | html %] </label>
+                    </div>
+                    <div class="fg-input">
+                        <input type="text" name="oai_set" id="oai_set" value="[% server.oai_set | html %]" />
+                    </div>
+                </div>
+                <div class="fg-row">
+                    <div class="fg-label">
                         <label for="dataformat">Data format: </label>
+                    </div>
+                    <div class="fg-input">
                         <select name="dataformat" id="dataformat">
                             <option value="oai_dc">Dublin Core (oai_dc)</option>
                             <option value="marc-xml">Marcxml (marc-xml)</option>
                             <option value="marcxml">Marcxml (marcxml)</option>
                         </select>
-                        <div class="hint">OAI can send records in various formats. Choose one.</div>
-                    </li>
-
-                    <li
-                        ><label for="recordtype">Record type: </label>
+                    </div>
+                    <div class="hint">OAI can send records in various formats. Choose one.</div>
+                </div>
+                <div class="fg-row">
+                    <div class="fg-label">
+                        <label for="recordtype">Record type: </label>
+                    </div>
+                    <div class="fg-input">
                         <select name="recordtype" id="recordtype">
                             <option value="biblio">Bibliographic</option>
                             <option value="authority">Authority</option>
                         </select>
-                    </li>
-                    <li>
+                    </div>
+                </div>
+                <div class="fg-row">
+                    <div class="fg-label">
                         <label for="add_xslt">XSLT file for transforming results: </label>
+                    </div>
+                    <div class="fg-input">
                         <input type="text" name="add_xslt" id="add_xslt" size="100" placeholder="[% xslt_path | html %]" value="[% server.add_xslt | html %]" />
-                    </li>
-                </ol>
+                    </div>
+                </div>
             </fieldset>
 
-            <fieldset class="action"><input type="submit" class="btn btn-primary" value="Save" /> <a class="cancel" href="/cgi-bin/koha/admin/oai_servers.pl">Cancel</a></fieldset>
+            <fieldset class="action"> <input type="submit" class="btn btn-primary" value="Save" /> <a class="cancel" href="/cgi-bin/koha/admin/oai_servers.pl">Cancel</a> </fieldset>
         </form>
     [% END %]
 
