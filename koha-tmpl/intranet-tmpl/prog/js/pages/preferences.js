@@ -68,6 +68,10 @@ KOHA.Preferences = {
         $(form)
             .find(".modified")
             .each(function () {
+                // set defaultValue to changed value - enables re-saving when input changes back to initial value
+                if (this.defaultValue != undefined) {
+                    this.defaultValue = this.value;
+                }
                 var modified_pref = $(this).attr("id");
                 modified_pref = modified_pref.replace("pref_", "");
                 msg +=
