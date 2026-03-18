@@ -74,11 +74,11 @@
             <label for="remote_image_check"> Remote image:</label>
             [% IF image_location.match('^http') %]
                 <input type="radio" id="remote_image_check" name="image" value="remoteImage" checked="checked" />
-                <input type="text" name="remoteImage" size="48" maxlength="200" value="[% image_location | html %]" onmousedown="document.getElementById('remote_image_check').checked = true;" />
+                <input id="remoteimage" type="text" name="remoteImage" size="48" maxlength="200" value="[% image_location | html %]" />
                 <img src="[% image_location | html %]" alt="" />
             [% ELSE %]
                 <input type="radio" id="remote_image_check" name="image" value="remoteImage" />
-                <input type="text" id="remoteImage" name="remoteImage" size="48" maxlength="200" value="" />
+                <input type="text" id="remoteimage" name="remoteImage" size="48" maxlength="200" value="" />
             [% END %]
         [% END %]
     [% END # /tab_panels %]
