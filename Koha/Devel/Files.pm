@@ -46,6 +46,15 @@ my $exceptions = {
                 misc/translator/TmplTokenizer.pm
             )
         ],
+        strict => [
+            qw(
+                Koha/Account/Credit.pm
+                Koha/Account/Debit.pm
+                Koha/Old/Hold.pm
+                t
+                xt
+            )
+        ],
         codespell => [
             qw(
                 installer/data/mysql/updatedatabase.pl
