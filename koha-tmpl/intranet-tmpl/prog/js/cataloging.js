@@ -843,12 +843,12 @@ $(document).ready(function () {
     // We use delegated event handlers here so that dynamically added elements
     // (like when cloning a field or a subfield) respond to these events
     // without having to re-attach events manually
-    $(".marc_editor").on(
+    $(".marc_editor, .item_edit_form").on(
         "click",
         ".tag_editor.framework_plugin",
         callClickPluginEventHandler
     );
-    $(".marc_editor").on(
+    $(".marc_editor, .item_edit_form").on(
         "focusin focusout change mousedown mouseup keydown keyup",
         "input.input_marceditor.framework_plugin",
         callPluginEventHandler

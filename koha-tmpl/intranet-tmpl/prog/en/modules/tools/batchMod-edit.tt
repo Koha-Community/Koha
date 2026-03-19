@@ -349,7 +349,7 @@
             });
         });
     </script>
-    [% IF ( show ) %]
+    [% IF op == 'cud-action' %]
         [%- # Loop over fields which may have plugin JavaScript -%]
         [%- UNLESS (too_many_items_process) -%]
             [%- FOREACH subfield IN subfields -%]
