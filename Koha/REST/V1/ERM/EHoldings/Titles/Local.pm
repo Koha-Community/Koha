@@ -22,6 +22,7 @@ use Mojo::Base 'Mojolicious::Controller';
 use Koha::ERM::EHoldings::Titles;
 use Koha::BackgroundJob::CreateEHoldingsFromBiblios;
 use Koha::BackgroundJob::ImportKBARTFile;
+use Koha::SearchEngine::Indexer;
 
 use Scalar::Util qw( blessed );
 use Try::Tiny    qw( catch try );
@@ -95,6 +96,11 @@ sub add {
                 my $title = Koha::ERM::EHoldings::Title->new_from_api($body)
                     ->store( { create_linked_biblio => $create_linked_biblio } );
 
+                if ($create_linked_biblio) {
+                    my $indexer = Koha::SearchEngine::Indexer->new( { index => $Koha::SearchEngine::BIBLIOS_INDEX } );
+                    $indexer->index_records( $title->biblio_id, "specialUpdate", "biblioserver" );
+                }
+
                 $title->resources($resources);
 
                 my @extended_attributes =
@@ -160,6 +166,11 @@ sub update {
                 my $extended_attributes  = delete $body->{extended_attributes}  // [];
 
                 $title->set_from_api($body)->store( { create_linked_biblio => $create_linked_biblio } );
+
+                if ($create_linked_biblio) {
+                    my $indexer = Koha::SearchEngine::Indexer->new( { index => $Koha::SearchEngine::BIBLIOS_INDEX } );
+                    $indexer->index_records( $title->biblio_id, "specialUpdate", "biblioserver" );
+                }
 
                 $title->resources($resources);
                 my @extended_attributes =
