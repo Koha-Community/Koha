@@ -824,7 +824,13 @@
                                     <textarea id="style_[% lang | html %]" name="style_[% lang | html %]" rows="15" cols="80">[% letters.$lang.params.style | $raw %]</textarea>
                                 </li>
                                 <li class="format_all_notices_option">
-                                    <label for="format_all_[% lang | html %]">Apply format settings to all notices[% IF Koha.Preference('TranslateNotices') %]for this language[% END %]:</label>
+                                    <label for="format_all_[% lang | html %]">
+                                        [% IF Koha.Preference('TranslateNotices') %]
+                                            Apply format settings to all notices for this language:
+                                        [% ELSE %]
+                                            Apply format settings to all notices:
+                                        [% END %]
+                                    </label>
                                     <input type="checkbox" name="format_all_[% lang | html %]" id="format_all_[% lang | html %]" class="format_all" value="1" />
                                     <span class="hint">Existing format settings will be overwritten.</span>
                                 </li>
