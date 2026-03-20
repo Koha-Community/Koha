@@ -1,6 +1,3 @@
-const { query } = require("./../../plugins/db.js");
-const { getBasicAuthHeader } = require("./../../plugins/auth.js");
-
 describe("insertData", () => {
     let tablesToCheck = [
         "borrowers",
