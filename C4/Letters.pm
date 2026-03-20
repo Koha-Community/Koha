@@ -1805,8 +1805,14 @@ sub _process_tt {
     my $use_template_cache = C4::Context->config('template_cache_dir') && defined $ENV{GATEWAY_INTERFACE};
     my $template           = Template->new(
         {
-            EVAL_PERL    => 0,
-            ABSOLUTE     => 0,
+            EVAL_PERL => 0,
+            ABSOLUTE  => 0,
+            RELATIVE  => 0,
+            PLUGINS   => {
+                cgi       => 'Koha::Template::Plugin::noop',
+                directory => 'Koha::Template::Plugin::noop',
+                file      => 'Koha::Template::Plugin::noop',
+            },
             PLUGIN_BASE  => 'Koha::Template::Plugin',
             COMPILE_EXT  => $use_template_cache ? '.ttc'                                    : '',
             COMPILE_DIR  => $use_template_cache ? C4::Context->config('template_cache_dir') : '',
