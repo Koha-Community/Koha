@@ -3921,11 +3921,13 @@ subtest 'effective_bookable() tests' => sub {
     );
 
     my $biblio_no_itype = $builder->build_sample_biblio;
-    $biblio_no_itype->biblioitem->set({ itemtype => undef })->store;
-    my $item_no_itype = $builder->build_sample_item({
-        biblionumber => $biblio_no_itype->biblionumber,
-        itype        => undef,
-    });
+    $biblio_no_itype->biblioitem->set( { itemtype => undef } )->store;
+    my $item_no_itype = $builder->build_sample_item(
+        {
+            biblionumber => $biblio_no_itype->biblionumber,
+            itype        => undef,
+        }
+    );
     warning_like {
         is(
             $item_no_itype->effective_bookable, 0,
