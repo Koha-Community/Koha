@@ -44,6 +44,7 @@ export default {
                 resourceTableUrl:
                     APIClient.sip2.httpClient._baseURL + "institutions",
             },
+            navigationOnFormSave: "SIP2InstitutionsList",
             resourceAttrs: [
                 {
                     name: "name",
@@ -172,16 +173,19 @@ export default {
 
             try {
                 if (sip_institution_id) {
-                    await baseResource.apiClient.update(
-                        institution,
-                        sip_institution_id
-                    );
+                    let updatedInstitution =
+                        await baseResource.apiClient.update(
+                            institution,
+                            sip_institution_id
+                        );
                     baseResource.setMessage(__("Institution updated"));
+                    return updatedInstitution;
                 } else {
-                    await baseResource.apiClient.create(institution);
+                    let createdInstitution =
+                        await baseResource.apiClient.create(institution);
                     baseResource.setMessage(__("Institution created"));
+                    return createdInstitution;
                 }
-                baseResource.router.push({ name: "SIP2InstitutionsList" });
             } catch (error) {
                 // Handle error here if needed
             }
