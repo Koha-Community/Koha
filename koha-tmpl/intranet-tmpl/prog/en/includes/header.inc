@@ -7,7 +7,7 @@
 [% IF Koha.Preference( 'CookieConsent' ) %]
     [% USE JSConsents %]
 [% END %]
-<nav class="navbar navbar-expand navbar-dark bg-dark">
+<nav class="navbar navbar-expand navbar-dark bg-dark" aria-label="Main">
     <div class="container-fluid">
         <a id="logo" class="navbar-brand" href="/cgi-bin/koha/mainpage.pl"><img src="[% interface | html %]/[% theme | html %]/img/picto-koha.svg" alt="Koha" /></a>
 
