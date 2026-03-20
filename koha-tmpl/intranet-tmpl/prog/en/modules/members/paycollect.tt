@@ -46,7 +46,7 @@
             <a href="/cgi-bin/koha/members/members-home.pl">Patrons</a>
         [% END %]
         [% WRAPPER breadcrumb_item %]
-            <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% patron.borrowernumber | uri %]">[% INCLUDE 'patron-title.inc' %]</a>
+            [% INCLUDE 'patron-title.inc' %]
         [% END %]
         [% WRAPPER breadcrumb_item %]
             <a href="/cgi-bin/koha/members/pay.pl?borrowernumber=[% patron.borrowernumber | uri %]">Make a payment</a>

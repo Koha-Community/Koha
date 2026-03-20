@@ -43,7 +43,7 @@
             [% UNLESS op == 'add_form' %]
                 [% IF (borrower_data.firstname || borrower_data.surname ) %]
                     [% WRAPPER breadcrumb_item %]
-                        <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% borrowernumber | uri %]"> [% INCLUDE 'patron-title.inc' %] </a>
+                        [% INCLUDE 'patron-title.inc' %]
                     [% END %]
                 [% END %]
             [% END %]

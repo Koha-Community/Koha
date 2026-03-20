@@ -36,7 +36,7 @@
         [% END %]
         [% UNLESS blocking_error %]
             [% WRAPPER breadcrumb_item %]
-                <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% patron.borrowernumber | uri %]"> [% INCLUDE 'patron-title.inc' %] </a>
+                [% INCLUDE 'patron-title.inc' %]
             [% END %]
             [% WRAPPER breadcrumb_item bc_active= 1 %]
                 <span>Details</span>
