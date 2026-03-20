@@ -47,6 +47,7 @@ export default {
                 ),
                 newLabel: $__("New system preference override"),
             },
+            navigationOnFormSave: "SIP2SystemPreferenceOverridesList",
             resourceAttrs: [
                 {
                     name: "variable",
@@ -77,24 +78,23 @@ export default {
 
             try {
                 if (sip_system_preference_override_id) {
-                    await baseResource.apiClient.update(
+                    let updatedResource = await baseResource.apiClient.update(
                         system_preference_override,
                         sip_system_preference_override_id
                     );
                     baseResource.setMessage(
                         $__("System preference override updated")
                     );
+                    return updatedResource;
                 } else {
-                    await baseResource.apiClient.create(
+                    let createdResource = await baseResource.apiClient.create(
                         system_preference_override
                     );
                     baseResource.setMessage(
                         $__("System preference override created")
                     );
+                    return createdResource;
                 }
-                baseResource.router.push({
-                    name: "SIP2SystemPreferenceOverridesList",
-                });
             } catch (error) {
                 // Handle error here if needed
             }
