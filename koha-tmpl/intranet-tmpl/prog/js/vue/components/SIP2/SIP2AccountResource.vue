@@ -1044,14 +1044,17 @@ export default {
 
             try {
                 if (sip_account_id) {
-                    await client.update(account, sip_account_id);
+                    let updatedAccount = await client.update(
+                        account,
+                        sip_account_id
+                    );
                     baseResource.setMessage(__("Account updated"));
+                    return updatedAccount;
                 } else {
-                    await client.create(account);
+                    let createdAccount = await client.create(account);
                     baseResource.setMessage(__("Account created"));
+                    return createdAccount;
                 }
-
-                baseResource.router.push({ name: "SIP2AccountsList" });
             } catch (error) {
                 // Handle errors if needed
             }
