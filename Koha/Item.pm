@@ -2067,7 +2067,7 @@ Returns the effective bookability of the current item, be that item or itemtype 
 sub effective_bookable {
     my ($self) = @_;
 
-    return $self->bookable if defined $self->bookable;
+    return $self->bookable           if defined $self->bookable;
     return $self->itemtype->bookable if $self->itemtype;
     return 0;
 }
