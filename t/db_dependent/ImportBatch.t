@@ -308,9 +308,11 @@ subtest "RecordsFromMarcPlugin" => sub {
     $plugins->InstallPlugins;
     my ($plugin) = $plugins->GetPlugins( { all => 1, metadata => { name => 'MarcFieldValues' } } );
     isnt( $plugin, undef, "Plugin found" );
+    $plugin->enable();
     my $records = C4::ImportBatch::RecordsFromMarcPlugin( $name, ref $plugin, 'UTF-8' );
     is( @$records,         2,              'Two results returned' );
     is( ref $records->[0], 'MARC::Record', 'Returned MARC::Record object' );
+
     if ( C4::Context->preference('marcflavour') eq 'UNIMARC' ) {
         is(
             $records->[0]->subfield( '200', 'a' ), 'Silence in the library',
