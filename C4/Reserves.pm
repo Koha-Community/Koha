@@ -473,6 +473,16 @@ sub CanBookBeReserved {
 
 our $CanItemBeReserved_cache_key;
 
+=head2 _cache
+
+    _cache($return);
+
+Internal helper that stores C<$return> in the memory cache under
+C<$CanItemBeReserved_cache_key> and returns it. Used by C<CanItemBeReserved>
+to avoid redundant lookups within the same request.
+
+=cut
+
 sub _cache {
     my ($return) = @_;
     my $memory_cache = Koha::Cache::Memory::Lite->get_instance();
