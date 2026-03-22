@@ -589,10 +589,15 @@ subtest 'Tests for OpacHiddenItems' => sub {
     t::lib::Mocks::mock_preference(
         'OAI-PMH:ConfFile' => File::Spec->rel2abs( dirname(__FILE__) ) . '/oaiconf_items.yaml' );
     $schema->storage->txn_begin;
-    my $builder       = t::lib::TestBuilder->new;
-    my $item          = $builder->build_sample_item();
-    my $biblio        = $item->biblio;
-    my $utc_datetime  = dt_from_string( undef, undef, 'UTC' );
+    my $builder = t::lib::TestBuilder->new;
+    my $item    = $builder->build_sample_item();
+    my $biblio  = $item->biblio;
+
+    # Read the timestamp MySQL actually assigned rather than capturing Perl's
+    # wall clock after the fact — on slow systems the two can differ by 1 second,
+    # causing the 'from' filter to miss the just-created record.
+    $item->discard_changes;
+    my $utc_datetime  = dt_from_string( $item->timestamp );
     my $utc_timestamp = $utc_datetime->ymd . 'T' . $utc_datetime->hms . 'Z';
 
     my $get_items = {
