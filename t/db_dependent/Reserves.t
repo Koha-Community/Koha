@@ -2047,7 +2047,7 @@ subtest 'CheckReserves() item type tests' => sub {
 };
 
 subtest 'Bug 40866: AddReserve override JSON logging' => sub {
-    plan tests => 8;
+    plan tests => 9;
 
     $schema->storage->txn_begin;
 
@@ -2093,7 +2093,10 @@ subtest 'Bug 40866: AddReserve override JSON logging' => sub {
     );
     is( $logs->count, 1, 'One log entry created for normal hold' );
     my $log = $logs->next;
-    is( $log->info, $hold_id, 'Normal hold logs hold ID only' );
+
+    my $log_data = eval { from_json( $log->info ) };
+    ok( !$@,                                    'Log info is valid JSON' );
+    ok( !defined( $log_data->{confirmations} ), 'Confirmations array is undefined' );
 
     # Cancel the hold for next test
     my $hold = Koha::Holds->find($hold_id);
@@ -2123,7 +2126,7 @@ subtest 'Bug 40866: AddReserve override JSON logging' => sub {
     is( $logs->count, 1, 'One log entry created for override hold' );
     $log = $logs->next;
 
-    my $log_data = eval { from_json( $log->info ) };
+    $log_data = eval { from_json( $log->info ) };
     ok( !$@,                               'Log info is valid JSON' );
     ok( exists $log_data->{confirmations}, 'JSON contains confirmations array' );
     is_deeply(
