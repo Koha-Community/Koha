@@ -404,7 +404,7 @@ INSERT INTO systempreferences ( `variable`, `value` ) VALUES
 ('itemcallnumber',''),
 ('ItemListsLog','0'),
 ('ItemsDeniedRenewal',''),
-('JobsNotificationMethod','STOMP'),
+('JobsNotificationMethod','polling'),
 ('KohaAdminEmailAddress','root@localhost'),
 ('KohaManualBaseURL','https://koha-community.org/manual/'),
 ('KohaManualLanguage','en'),
