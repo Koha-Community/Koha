@@ -267,20 +267,30 @@ sub AddReserve {
 
     # Log the hold creation
     if ( C4::Context->preference('HoldsLog') ) {
-        my $info = $hold->id;
-        if ( defined($confirmations) || defined($forced) ) {
-            $info = to_json(
-                {
-                    hold          => $hold->id,
-                    branchcode    => $hold->branchcode,
-                    biblionumber  => $hold->biblionumber,
-                    itemnumber    => $hold->itemnumber,
-                    confirmations => $confirmations,
-                    forced        => $forced
-                },
-                { pretty => 1, canonical => 1 }
-            );
-        }
+
+        my $info = to_json(
+            {
+                hold                   => $hold->id,
+                branchcode             => $hold->branchcode,
+                biblionumber           => $hold->biblionumber,
+                borrowernumber         => $hold->borrowernumber,
+                itemnumber             => $hold->itemnumber,
+                desk_id                => $hold->desk_id,
+                hold_group_id          => $hold->hold_group_id,
+                item_group_id          => $hold->item_group_id,
+                item_level_hold        => $hold->item_level_hold,
+                itemtype               => $hold->itemtype,
+                lowestPriority         => $hold->lowestPriority,
+                non_priority           => $hold->non_priority,
+                patron_expiration_date => $hold->patron_expiration_date,
+                priority               => $hold->priority,
+                reservenotes           => $hold->reservenotes,
+                confirmations          => $confirmations,
+                forced                 => $forced
+            },
+            { pretty => 1, canonical => 1 }
+        );
+
         logaction( 'HOLDS', 'CREATE', $hold->id, $info );
     }
 
