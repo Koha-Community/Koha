@@ -1624,7 +1624,9 @@ sub get_marc_authors {
     if ( $marcflavour eq "UNIMARC" ) {
         $fields_filter = '200';
     } else {    # marc21/normarc
-        $fields_filter = '100';
+        $fields_filter = '1..';
+        $mintag        = '100';
+        $maxtag        = '111';
     }
 
     my @first_authors = @{
