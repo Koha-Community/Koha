@@ -1,5 +1,5 @@
 <template>
-    <nav id="shortcut" class="shortcut">
+    <nav id="shortcut" class="shortcut" :aria-label="$__('Quick shortcuts')">
         <a
             href="/cgi-bin/koha/help.pl"
             class="toplinks"

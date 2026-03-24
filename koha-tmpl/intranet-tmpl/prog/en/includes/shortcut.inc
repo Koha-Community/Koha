@@ -1,4 +1,4 @@
-<nav id="shortcut" class="shortcut">
+<nav id="shortcut" class="shortcut" aria-label="Quick shortcuts">
     [% IF Koha.Preference('showLastPatron') %]
         [% INCLUDE 'last-borrower.inc' %]
     [% END %]
