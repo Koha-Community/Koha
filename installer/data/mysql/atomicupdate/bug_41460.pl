@@ -9,7 +9,9 @@ return {
         my ( $dbh, $out ) = @$args{qw(dbh out)};
 
         # Do you stuffs here
-        $dbh->do(q{MODIFY COLUMN `value` mediumtext NOT NULL COMMENT 'system preference values'});
+        $dbh->do(
+            q{ALTER TABLE systempreferences MODIFY COLUMN `value` mediumtext NOT NULL COMMENT 'system preference values'}
+        );
 
         # Print useful stuff here
         # tables
