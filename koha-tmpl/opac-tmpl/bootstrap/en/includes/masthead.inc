@@ -232,7 +232,7 @@
                         [% IF ( OpacCustomSearch ) %]
                             [% PROCESS koha_news_block news => OpacCustomSearch %]
                         [% ELSE %]
-                            <form name="searchform" method="get" action="/cgi-bin/koha/opac-search.pl" id="searchform">
+                            <form name="searchform" method="get" action="/cgi-bin/koha/opac-search.pl" id="searchform" role="search">
                                 <div class="row gx-2">
                                     <div class="col-sm-auto order-2 order-sm-2">
                                         <label for="masthead_search" class="visually-hidden">Search the catalog by:</label>
