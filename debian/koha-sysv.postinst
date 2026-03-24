@@ -8,6 +8,12 @@ set -e
 if [ -d /run/systemd/system ]; then
     deb-systemd-helper enable koha-common.service >/dev/null || true
     deb-systemd-invoke start koha-common.service >/dev/null || true
+else
+    # Bug 18250: Correct startup order of koha-common and memcached
+    # Since the init script has been updated, we can force the order in rc.d
+    # by disabling and enabling again.
+    update-rc.d koha-common disable
+    update-rc.d koha-common enable
 fi
 
 exit 0
