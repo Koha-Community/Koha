@@ -4,12 +4,13 @@
 
 use Modern::Perl;
 use Test::NoWarnings;
-use Test::More tests => 15;
+use Test::More tests => 16;
 
 use Getopt::Long;
 use MARC::Record;
 use Test::MockModule;
 use Test::Warn;
+use Test::Deep qw( cmp_deeply bag );
 
 use t::lib::Mocks;
 use t::lib::TestBuilder;
@@ -19,6 +20,7 @@ use Koha::Authorities;
 use Koha::Authority::ControlledIndicators;
 use Koha::Authority::MergeRequests;
 use Koha::Biblios;
+use Koha::BackgroundJobs;
 use Koha::Database;
 
 BEGIN {
@@ -867,8 +869,70 @@ subtest 'ModBiblio calls from merge' => sub {
             }
         );
     }
-    ["ModBiblio called"], "real modification of bibliographic record, ModBiblio called";
+    [ "ModBiblio called", "index_records called" ], "real modification of bibliographic record, ModBiblio called";
     is( $num_biblio_edited, 1, 'only one bibliographic record updated while merging two authorities' );
+
+    $schema->storage->txn_rollback;
+
+    # need to explicitly unmock ModBiblio here, because we have other mocks on C4::AuthoritiesMarc still in scope which cause problems on the next test;
+    $biblio_module->unmock('ModBiblio');
+
+};
+
+subtest 'merge with ModBiblio only creates one indexer background job for multiple biblios' => sub {
+
+    plan tests => 3;
+
+    $schema->storage->txn_begin;
+
+    my $starting_job_count = Koha::BackgroundJobs->search->count;
+
+    t::lib::Mocks::mock_preference( 'marcflavour',                   'MARC21' );
+    t::lib::Mocks::mock_preference( 'AuthorityControlledIndicators', '' );
+    t::lib::Mocks::mock_preference( 'SearchEngine',                  'Elasticsearch' );
+
+    # NOT mocking ModBiblio here, because we need to actually call ModBiblio to check that it is no longer adding a distinct background job
+
+    # create a new auth record
+    my $auth_record = MARC::Record->new();
+    $auth_record->insert_fields_ordered( MARC::Field->new( '109', '1', ' ', a => 'Brown,', 'c' => 'Father' ) );
+    my $authid = AddAuthority( $auth_record, undef, $authtype1, { skip_record_index => 1 } );
+
+    # create 3 biblios using that auth
+    my @biblio_ids;
+    for my $c ( 1 .. 3 ) {
+        my $biblio_record = MARC::Record->new();
+        $biblio_record->insert_fields_ordered(
+            MARC::Field->new( '109', '1', ' ', a => 'Brown,', 'c' => 'Father', 9 => $authid ),
+            MARC::Field->new( '245', '0', '0', a => 'Test Biblio ' . $c )
+        );
+        my ($biblionumber) = AddBiblio( $biblio_record, '', { skip_record_index => 1 } );
+        push( @biblio_ids, $biblionumber );
+    }
+
+    # update the auth
+    my $auth_record_modified = $auth_record->clone;
+    $auth_record_modified->field('109')->update( x => 'Father (Fictitious character)' );
+
+    # merge the auth, which will update the 3 biblios
+    my $num_biblio_edited = merge(
+        {
+            mergefrom     => $authid, MARCfrom => $auth_record, mergeto => $authid, MARCto => $auth_record_modified,
+            biblionumbers => \@biblio_ids,
+        }
+    );
+    is( $num_biblio_edited, 3, '3 bibliographic record updated while merging two authorities' );
+
+    # the final test:
+    # there should be only one background job with three biblio ids
+    my $job_count = Koha::BackgroundJobs->search->count;
+    is( $job_count, $starting_job_count + 1, 'we have only one more background job' );
+
+    my $job = Koha::BackgroundJobs->search( {}, { order_by => 'enqueued_on' } )->last;
+    cmp_deeply(
+        $job->decoded_data->{record_ids}, bag(@biblio_ids),
+        'we have the correct biblio ids in the job to be indexed'
+    );
 
     $schema->storage->txn_rollback;
 

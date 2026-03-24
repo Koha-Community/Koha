@@ -1685,6 +1685,7 @@ sub merge {
            C4::Context->preference('IncludeSeeFromInSearches')
         || C4::Context->preference('IncludeSeeAlsoFromInSearches')
         || 0;
+    my @biblios_to_index;
     while ( my $biblio = $biblios->next ) {
         my $marcrecord        = $biblio->metadata->record;
         my $update            = 0;
@@ -1784,12 +1785,19 @@ sub merge {
             && $reindex_if_needed
             && $syspref_include_see_from )
         {
-            my $indexer = Koha::SearchEngine::Indexer->new( { index => $Koha::SearchEngine::BIBLIOS_INDEX } );
-            $indexer->index_records( $biblio->biblionumber, "specialUpdate", "biblioserver" );
+            push( @biblios_to_index, $biblio->biblionumber );
         }
         next if !$update;
-        ModBiblio( $marcrecord, $biblio->biblionumber, $biblio->frameworkcode, { disable_autolink => 1 } );
+        ModBiblio(
+            $marcrecord, $biblio->biblionumber, $biblio->frameworkcode,
+            { disable_autolink => 1, skip_record_index => 1 }
+        );
+        push( @biblios_to_index, $biblio->biblionumber );
         $counteditedbiblio++;
+    }
+    if (@biblios_to_index) {
+        my $indexer = Koha::SearchEngine::Indexer->new( { index => $Koha::SearchEngine::BIBLIOS_INDEX } );
+        $indexer->index_records( \@biblios_to_index, "specialUpdate", "biblioserver" );
     }
     return $counteditedbiblio;
 }
