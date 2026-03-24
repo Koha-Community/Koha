@@ -1387,17 +1387,17 @@ async function load_patron_holds_table(biblio_id, split_data) {
                                     select += '" disabled="disabled">';
                                     selected = " selected='selected' ";
                                     value = "T";
-                                    desc = "In transit";
+                                    desc = __("In transit");
                                 } else if (data == i && row.status == "P") {
                                     select += '" disabled="disabled">';
                                     selected = " selected='selected' ";
                                     value = "P";
-                                    desc = "In processing";
+                                    desc = __("In processing");
                                 } else if (data == i && row.status == "W") {
                                     select += '" disabled="disabled">';
                                     selected = " selected='selected' ";
                                     value = "W";
-                                    desc = "Waiting";
+                                    desc = __("Waiting");
                                 } else if (data == i && !row.status) {
                                     select += '">';
                                     selected = " selected='selected' ";
@@ -1426,13 +1426,19 @@ async function load_patron_holds_table(biblio_id, split_data) {
                         } else {
                             if (row.status == "T") {
                                 select +=
-                                    '" disabled="disabled"><option value="T" selected="selected">In transit</option></select>';
+                                    '" disabled="disabled"><option value="T" selected="selected">' +
+                                    __("In transit") +
+                                    "</option></select>";
                             } else if (row.status == "P") {
                                 select +=
-                                    '" disabled="disabled"><option value="P" selected="selected">In processing</option></select>';
+                                    '" disabled="disabled"><option value="P" selected="selected">' +
+                                    __("In processing") +
+                                    "</option></select>";
                             } else if (row.status == "W") {
                                 select +=
-                                    '" disabled="disabled"><option value="W" selected="selected">Waiting</option></select>';
+                                    '" disabled="disabled"><option value="W" selected="selected">' +
+                                    __("Waiting") +
+                                    "</option></select>";
                             } else {
                                 if (
                                     HoldsSplitQueue !== "nothing" &&
@@ -1476,7 +1482,9 @@ async function load_patron_holds_table(biblio_id, split_data) {
                         let buttons =
                             '<a class="hold-arrow move-hold ' +
                             table_class +
-                            '" title="Move hold up" href="#" data-move-hold="up" data-priority="' +
+                            '" title="' +
+                            __("Move hold up") +
+                            '" href="#" data-move-hold="up" data-priority="' +
                             row.priority +
                             '" reserve_id="' +
                             row.hold_id +
@@ -1484,7 +1492,9 @@ async function load_patron_holds_table(biblio_id, split_data) {
                         buttons +=
                             '<a class="hold-arrow move-hold ' +
                             table_class +
-                            '" title="Move hold to top" href="#" data-move-hold="top" data-priority="' +
+                            '" title="' +
+                            __("Move hold to top") +
+                            '" href="#" data-move-hold="top" data-priority="' +
                             row.priority +
                             '" reserve_id="' +
                             row.hold_id +
@@ -1492,7 +1502,9 @@ async function load_patron_holds_table(biblio_id, split_data) {
                         buttons +=
                             '<a class="hold-arrow move-hold ' +
                             table_class +
-                            '" title="Move hold to bottom" href="#" data-move-hold="bottom" data-priority="' +
+                            '" title="' +
+                            __("Move hold to bottom") +
+                            '" href="#" data-move-hold="bottom" data-priority="' +
                             row.priority +
                             '" reserve_id="' +
                             row.hold_id +
@@ -1500,7 +1512,9 @@ async function load_patron_holds_table(biblio_id, split_data) {
                         buttons +=
                             '<a class="hold-arrow move-hold ' +
                             table_class +
-                            '" title="Move hold down" href="#" data-move-hold="down" data-priority="' +
+                            '" title="' +
+                            __("Move hold down") +
+                            '" href="#" data-move-hold="down" data-priority="' +
                             row.priority +
                             '" reserve_id="' +
                             row.hold_id +
