@@ -72,137 +72,50 @@ EOF
 start_plack()
 {
     local instancename=$1
-
-    local PIDFILE="/var/run/koha/${instancename}/plack.pid"
-    local PLACKSOCKET="/var/run/koha/${instancename}/plack.sock"
-    local PSGIFILE="/etc/koha/plack.psgi"
-    local NAME="${instancename}-koha-plack"
-
-    if [ -e "/etc/koha/sites/${instancename}/plack.psgi" ]; then
-        # pick instance-specific psgi file
-        PSGIFILE="/etc/koha/sites/${instancename}/plack.psgi"
-    fi # else stick with the default one
-
-    _check_and_fix_perms $instancename
-
-    PLACK_MAX_REQUESTS=$(run_safe_xmlstarlet $instancename plack_max_requests)
-    [ -z $PLACK_MAX_REQUESTS ] && PLACK_MAX_REQUESTS="50"
-    PLACK_WORKERS=$(run_safe_xmlstarlet $instancename plack_workers)
-    [ -z $PLACK_WORKERS ] && PLACK_WORKERS="2"
-
-    instance_user="${instancename}-koha"
-
-    if is_debug_mode ${instancename} || [ -n "$development_environment" ]; then
-        environment="development"
+    if [ "$(koha_init_backend)" = "systemd" ]; then
+        koha_service_ctl start plack "$instancename"
     else
-        environment="deployment"
-    fi
-    daemonize="--daemonize"
-    logging="--access-log /var/log/koha/${instancename}/plack.log \
-             --error-log /var/log/koha/${instancename}/plack-error.log"
-    max_requests_and_workers="--max-requests ${PLACK_MAX_REQUESTS} --workers ${PLACK_WORKERS}"
-
-    # Enable debugger?
-    if [ "$debugger" = "yes" ] && [ "$environment" = "development" ]; then
-        daemonize=""
-        logging="" # remote debugger takes care
-        max_requests_and_workers="--workers 1"
-        STARMAN="/usr/bin/perl -d ${STARMAN}"
-    fi
-
-    STARMANOPTS="-M FindBin ${max_requests_and_workers} \
-                 --user=${instance_user} --group ${instancename}-koha \
-                 --pid ${PIDFILE} ${daemonize} ${logging} \
-                 -E ${environment} --socket ${PLACKSOCKET} ${PSGIFILE}"
-
-    if ! is_plack_running ${instancename}; then
-        export KOHA_CONF="/etc/koha/sites/${instancename}/koha-conf.xml"
-
-        log_daemon_msg "Starting Plack daemon for ${instancename}"
-
-        # Change to the instance's user dir
-        current_dir=$(pwd)
-        eval cd ~$instance_user
-
-        if ${STARMAN} ${STARMANOPTS}; then
-            log_end_msg 0
-        else
-            log_end_msg 1
-        fi
-        # Go back to the original dir
-        cd "$current_dir"
-
-    else
-        log_daemon_msg "Error: Plack already running for ${instancename}"
-        log_end_msg 1
+        _sysv_start_plack "$instancename"
     fi
 }
 
 stop_plack()
 {
     local instancename=$1
-
-    local PIDFILE="/var/run/koha/${instancename}/plack.pid"
-
-    if is_plack_running ${instancename}; then
-
-        log_daemon_msg "Stopping Plack daemon for ${instancename}"
-
-        if start-stop-daemon --pidfile ${PIDFILE} --user="${instancename}-koha" --stop --retry=QUIT/30/KILL/5; then
-            log_end_msg 0
-        else
-            log_end_msg 1
-        fi
+    if [ "$(koha_init_backend)" = "systemd" ]; then
+        koha_service_ctl stop plack "$instancename"
     else
-        log_daemon_msg "Error: Plack not running for ${instancename}"
-        log_end_msg 1
+        _sysv_stop_plack "$instancename"
     fi
 }
 
 restart_plack()
 {
     local instancename=$1
-
-    local PIDFILE="/var/run/koha/${instancename}/plack.pid"
-
-    if is_plack_running ${instancename}; then
-        stop_plack $instancename && start_plack $instancename
+    if [ "$(koha_init_backend)" = "systemd" ]; then
+        koha_service_ctl restart plack "$instancename"
     else
-        log_warning_msg "Plack not running for ${instancename}."
-        start_plack $instancename
+        _sysv_restart_plack "$instancename"
     fi
 }
 
 reload_plack()
 {
     local instancename=$1
-
-    local PIDFILE="/var/run/koha/${instancename}/plack.pid"
-
-    if is_plack_running ${instancename}; then
-        log_daemon_msg "Reloading Plack daemon for ${instancename}"
-
-        if start-stop-daemon --pidfile ${PIDFILE} --user="${instancename}-koha" --stop --signal HUP; then
-            log_end_msg 0
-        else
-            log_end_msg 1
-        fi
+    if [ "$(koha_init_backend)" = "systemd" ]; then
+        koha_service_ctl reload plack "$instancename"
     else
-        log_daemon_msg "Error: Plack not running for ${instancename}"
-        log_end_msg 1
+        _sysv_reload_plack "$instancename"
     fi
 }
 
 plack_status()
 {
     local name=$1
-
-    if is_plack_running ${name}; then
-        log_daemon_msg "Plack running for ${name}"
-        log_end_msg 0
+    if [ "$(koha_init_backend)" = "systemd" ]; then
+        koha_service_ctl status plack "$name"
     else
-        log_daemon_msg "Plack not running for ${name}"
-        log_end_msg 3
+        _sysv_plack_status "$name"
     fi
 }
 
@@ -340,21 +253,6 @@ EOM
     fi
 }
 
-_check_and_fix_perms()
-{
-    local instance=$1
-
-    local files="/var/log/koha/${instance}/plack.log \
-                 /var/log/koha/${instance}/plack-error.log"
-
-    for file in ${files}
-    do
-        if [ ! -e "${file}" ]; then
-            touch ${file}
-        fi
-        chown "${instance}-koha":"${instance}-koha" ${file}
-    done
-}
 
 set_action()
 {

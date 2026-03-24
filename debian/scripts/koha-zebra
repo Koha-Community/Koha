@@ -58,132 +58,43 @@ EOF
 start_zebra()
 {
     local name=$1
-
-    # get zebra log levels from koha-conf.xml
-    local loglevels=$(get_loglevels ${name})
-    local max_record_size=$(get_max_record_size ${name})
-
-    if ! is_zebra_running $name; then
-
-        _check_and_fix_perms ${name}
-
-        DAEMONOPTS="--name=${name}-koha-zebra \
-                    --pidfiles=/var/run/koha/${name}/ \
-                    --errlog=/var/log/koha/${name}/zebra-error.log \
-                    --output=/var/log/koha/${name}/zebra-output.log \
-                    --verbose=1 \
-                    --respawn \
-                    --delay=30 \
-                    --user=${name}-koha.${name}-koha"
-
-        ZEBRA_PARAMS="-v $loglevels \
-                      -k $max_record_size \
-                      -f /etc/koha/sites/${name}/koha-conf.xml"
-        ZEBRA_TIMEFORMAT='%FT%T'
-
-        [ "$verbose" != "no" ] && \
-            log_daemon_msg "Starting Koha Zebra daemon for ${name}"
-
-        if daemon $DAEMONOPTS -- $ZEBRA_DAEMON $ZEBRA_PARAMS -m "$ZEBRA_TIMEFORMAT"; then
-            ([ "$verbose" != "no" ] && \
-                log_end_msg 0) || return 0
-        else
-            ([ "$verbose" != "no" ] && \
-                log_end_msg 1) || return 1
-        fi
+    if [ "$(koha_init_backend)" = "systemd" ]; then
+        koha_service_ctl start zebra "$name"
     else
-        if [ "$verbose" != "no" ]; then
-            log_daemon_msg "Error: Zebra already running for ${name}"
-            log_end_msg 1
-        else
-            return 1
-        fi
+        _sysv_start_zebra "$name"
     fi
 }
 
 stop_zebra()
 {
     local name=$1
-
-    if is_zebra_running $name; then
-
-        DAEMONOPTS="--name=${name}-koha-zebra \
-                    --pidfiles=/var/run/koha/${name}/ \
-                    --errlog=/var/log/koha/${name}/zebra-error.log \
-                    --output=/var/log/koha/${name}/zebra-output.log \
-                    --verbose=1 \
-                    --respawn \
-                    --delay=30 \
-                    --user=${name}-koha.${name}-koha"
-
-        [ "$verbose" != "no" ] && \
-            log_daemon_msg "Stopping Koha Zebra daemon for ${name}"
-
-        if daemon $DAEMONOPTS --stop -- $ZEBRA_DAEMON $ZEBRA_PARAMS; then
-            ([ "$verbose" != "no" ] && \
-                log_end_msg 0) || return 0
-        else
-            ([ "$verbose" != "no" ] && \
-                log_end_msg 1) || return 1
-        fi
+    if [ "$(koha_init_backend)" = "systemd" ]; then
+        koha_service_ctl stop zebra "$name"
     else
-        if [ "$verbose" != "no" ]; then
-            log_daemon_msg "Error: Zebra not running for ${name}"
-            log_end_msg 1
-        else
-            return 1
-        fi
+        _sysv_stop_zebra "$name"
     fi
 }
 
 restart_zebra()
 {
     local name=$1
-
-    if is_zebra_running ${name}; then
-        local noLF="-n"
-        [ "$verbose" != "no" ] && noLF=""
-        echo $noLF `stop_zebra ${name}`
-        echo $noLF `start_zebra ${name}`
+    if [ "$(koha_init_backend)" = "systemd" ]; then
+        koha_service_ctl restart zebra "$name"
     else
-        if [ "$verbose" != "no" ]; then
-            log_warning_msg "Zebra not running for ${name}."
-            start_zebra ${name}
-        else
-            start_zebra ${name}
-            return 0
-        fi
+        _sysv_restart_zebra "$name"
     fi
 }
 
 zebra_status()
 {
     local name=$1
-
-    if is_zebra_running ${name}; then
-        log_daemon_msg "Zebra running for ${name}"
-        log_end_msg 0
+    if [ "$(koha_init_backend)" = "systemd" ]; then
+        koha_service_ctl status zebra "$name"
     else
-        log_daemon_msg "Zebra not running for ${name}"
-        log_end_msg 3
+        _sysv_zebra_status "$name"
     fi
 }
 
-_check_and_fix_perms()
-{
-    local name=$1
-
-    local files="/var/log/koha/${name}/zebra-output.log \
-                 /var/log/koha/${name}/zebra-error.log"
-
-    for file in ${files}
-    do
-        if [ ! -e "${file}" ]; then
-            touch ${file}
-        fi
-        chown "${name}-koha":"${name}-koha" ${file}
-    done
-}
 
 set_action()
 {

@@ -68,102 +68,30 @@ EOF
 start_z3950()
 {
     local instancename=$1
-
-    local PIDFILE="/var/run/koha/${instancename}/z3950-responder.pid"
-    local NAME="${instancename}-koha-z3950-responder"
-    local CONFIGDIR="/etc/koha/z3950"
-
-    if [ -e "/etc/koha/sites/${instancename}/z3950/config.xml" ]; then
-        # pick instance-specific config dir
-        CONFIGDIR="/etc/koha/sites/${instancename}/z3950"
-    fi # else stick with the default one
-
-    _check_and_fix_perms $instancename
-
-    instance_user="${instancename}-koha"
-
-    daemonize="-D -d ${instancename}-koha-z3950"
-    logging="-l /var/log/koha/${instancename}/z3950.log"
-
-    Z3950RESPONDER="/usr/bin/perl $KOHA_HOME/$KOHA_BINDIR/z3950_responder.pl"
-    if [ "$debugger" = "yes" ] && is_debug_mode $instancename; then
-        daemonize=""
-        logging="" # remote debugger takes care
-        Z3950RESPONDER="/usr/bin/perl -d $KOHA_HOME/$KOHA_BINDIR/z3950_responder.pl"
-    elif [ "$debugger" = "yes" ]; then
-        warn "Not a test system, disabling debugger"
-    fi
-
-    Z3950OPTS="-c ${CONFIGDIR} \
-               -u ${instance_user} \
-               -p ${PIDFILE} ${daemonize} ${logging}"
-
-    if ! is_z3950_running ${instancename}; then
-        export KOHA_CONF="/etc/koha/sites/${instancename}/koha-conf.xml"
-
-        if [[ ! $Z3950_ADDITIONAL_OPTS ]]; then
-            Z3950_ADDITIONAL_OPTS="$( xmlstarlet sel -t -v 'yazgfs/config/z3950_responder_options' "$CONFIGDIR/config.xml" || true )"
-        fi
-
-        log_daemon_msg "Starting Z39.50/SRU daemon for ${instancename}"
-
-        # Change to the instance's user dir
-        current_dir=$(pwd)
-        eval cd ~$instance_user
-
-        if ${Z3950RESPONDER} ${Z3950_ADDITIONAL_OPTS} ${Z3950OPTS}; then
-            log_end_msg 0
-        else
-            log_end_msg 1
-        fi
-        # Go back to the original dir
-        cd "$current_dir"
-
+    if [ "$(koha_init_backend)" = "systemd" ]; then
+        koha_service_ctl start z3950 "$instancename"
     else
-        log_daemon_msg "Error: Z39.50/SRU already running for ${instancename}"
-        log_end_msg 1
+        _sysv_start_z3950 "$instancename"
     fi
 }
 
 stop_z3950()
 {
     local instancename=$1
-
-    local PIDFILE="/var/run/koha/${instancename}/z3950-responder.pid"
-
-    if is_z3950_running ${instancename}; then
-
-        log_daemon_msg "Stopping Z39.50/SRU daemon for ${instancename}"
-
-        if start-stop-daemon --pidfile ${PIDFILE} --stop --retry=TERM/30/KILL/5; then
-            log_end_msg 0
-        else
-            log_end_msg 1
-        fi
+    if [ "$(koha_init_backend)" = "systemd" ]; then
+        koha_service_ctl stop z3950 "$instancename"
     else
-        log_daemon_msg "Error: Z39.50/SRU not running for ${instancename}"
-        log_end_msg 1
+        _sysv_stop_z3950 "$instancename"
     fi
 }
 
 restart_z3950()
 {
     local instancename=$1
-
-    local PIDFILE="/var/run/koha/${instancename}/z3950.pid"
-
-    if is_z3950_running ${instancename}; then
-
-        log_daemon_msg "Restarting Z39.50/SRU daemon for ${instancename}"
-
-        if stop_z3950 $instancename && start_z3950 $instancename; then
-            log_end_msg 0
-        else
-            log_end_msg 1
-        fi
+    if [ "$(koha_init_backend)" = "systemd" ]; then
+        koha_service_ctl restart z3950 "$instancename"
     else
-        log_warning_msg "Z39.50/SRU not running for ${instancename}."
-        start_z3950 $instancename
+        _sysv_restart_z3950 "$instancename"
     fi
 }
 
@@ -209,21 +137,6 @@ disable_z3950()
         [ "${quiet}" != "yes" ] && warn "Z39.50/SRU already disabled for ${instancename}"
         return 1
     fi
-}
-
-_check_and_fix_perms()
-{
-    local instance=$1
-
-    local files="/var/log/koha/${instance}/z3950.log"
-
-    for file in ${files}
-    do
-        if [ ! -e "${file}" ]; then
-            touch ${file}
-        fi
-        chown "${instance}-koha":"${instance}-koha" ${file}
-    done
 }
 
 set_action()

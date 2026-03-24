@@ -59,96 +59,40 @@ EOF
 start_es_indexer()
 {
     local name=$1
-
-    if ! is_es_indexer_running $name; then
-
-        export KOHA_CONF="/etc/koha/sites/$name/koha-conf.xml"
-
-        DAEMONOPTS="--name=$name-koha-es-indexer \
-            --errlog=/var/log/koha/$name/es-indexer-error.log \
-            --output=/var/log/koha/$name/es-indexer-output.log \
-            --pidfiles=/var/run/koha/$name/ \
-            --verbose=1 --respawn --delay=30 \
-            --user=$name-koha.$name-koha"
-
-        log_daemon_msg "Starting Koha ES indexing daemon for $name"
-
-        if daemon $DAEMONOPTS -- $worker_DAEMON --batch_size ${batch_size}; then
-            log_end_msg 0
-        else
-            log_end_msg 1
-        fi
+    if [ "$(koha_init_backend)" = "systemd" ]; then
+        koha_service_ctl start es-indexer "$name"
     else
-        log_daemon_msg "Error: ES indexing daemon already running for $name"
-        log_end_msg 1
+        _sysv_start_es_indexer "$name"
     fi
 }
 
 stop_es_indexer()
 {
     local name=$1
-
-    if is_es_indexer_running $name; then
-        export KOHA_CONF="/etc/koha/sites/$name/koha-conf.xml"
-
-        DAEMONOPTS="--name=$name-koha-es-indexer \
-            --errlog=/var/log/koha/$name/es-indexer-error.log \
-            --output=/var/log/koha/$name/es-indexer-output.log \
-            --pidfiles=/var/run/koha/$name/ \
-            --verbose=1 --respawn --delay=30 \
-            --user=$name-koha.$name-koha"
-
-        log_daemon_msg "Stopping Koha ES indexing daemon for $name"
-
-        if daemon $DAEMONOPTS --stop -- $worker_DAEMON; then
-            log_end_msg 0
-        else
-            log_end_msg 1
-        fi
+    if [ "$(koha_init_backend)" = "systemd" ]; then
+        koha_service_ctl stop es-indexer "$name"
     else
-        log_daemon_msg "Error: ES indexing daemon not running for $name"
-        log_end_msg 1
+        _sysv_stop_es_indexer "$name"
     fi
 }
 
 restart_es_indexer()
 {
     local name=$1
-    local queue=$2
-
-    if is_es_indexer_running $name; then
-        export KOHA_CONF="/etc/koha/sites/$name/koha-conf.xml"
-
-        DAEMONOPTS="--name=$name-koha-es-indexer \
-            --errlog=/var/log/koha/$name/es-indexer-error.log \
-            --output=/var/log/koha/$name/es-indexer-output.log \
-            --pidfiles=/var/run/koha/$name/ \
-            --verbose=1 --respawn --delay=30 \
-            --user=$name-koha.$name-koha"
-
-        log_daemon_msg "Restarting Koha ES indexing daemon for $name"
-
-        if daemon $DAEMONOPTS --restart -- $worker_DAEMON --batch_size ${batch_size}; then
-            log_end_msg 0
-        else
-            log_end_msg 1
-        fi
+    if [ "$(koha_init_backend)" = "systemd" ]; then
+        koha_service_ctl restart es-indexer "$name"
     else
-        log_warning_msg "ES indexing daemon not running for $name."
-        start_es_indexer $name
+        _sysv_restart_es_indexer "$name"
     fi
 }
 
 es_indexer_status()
 {
     local name=$1
-
-    if is_es_indexer_running $name; then
-        log_daemon_msg "ES indexing daemon running for ${name}"
-        log_end_msg 0
+    if [ "$(koha_init_backend)" = "systemd" ]; then
+        koha_service_ctl status es-indexer "$name"
     else
-        log_daemon_msg "ES indexing daemon not running for ${name}"
-        log_end_msg 3
+        _sysv_es_indexer_status "$name"
     fi
 }
 

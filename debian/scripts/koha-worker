@@ -64,118 +64,52 @@ start_worker()
 {
     local name=$1
     local queues=$2
-
-    local error_count=0
-
-    for queue in $queues; do
-        if ! is_worker_running "$name" "$queue"; then
-
-            worker_name=$(get_worker_name "$name" "$queue")
-            export KOHA_CONF="/etc/koha/sites/${name}/koha-conf.xml"
-
-            DAEMONOPTS="--name=${worker_name} \
-                --errlog=/var/log/koha/${name}/worker-error.log \
-                --output=/var/log/koha/${name}/worker-output.log \
-                --pidfiles=/var/run/koha/${name}/ \
-                --verbose=1 --respawn --delay=30 \
-                --user=${name}-koha.${name}-koha"
-
-            echo "Starting Koha worker daemon for ${name} (${queue})"
-
-            if ! daemon $DAEMONOPTS -- "$worker_DAEMON" --queue "$queue"; then
-                ((error_count++))
-            fi
-        else
-            echo "Error: worker already running for ${name} (${queue})"
-            ((error_count++))
-        fi
-    done
-
-    log_end_msg $error_count
+    if [ "$(koha_init_backend)" = "systemd" ]; then
+        for queue in $queues; do
+            koha_service_ctl start worker "$name" "$queue"
+        done
+    else
+        _sysv_start_worker "$name" "$queues"
+    fi
 }
 
 stop_worker()
 {
     local name=$1
     local queues=$2
-
-    local error_count=0
-
-    for queue in $queues; do
-        if is_worker_running "$name" "$queue"; then
-            export KOHA_CONF="/etc/koha/sites/${name}/koha-conf.xml"
-
-            worker_name=$(get_worker_name "$name" "$queue")
-
-            DAEMONOPTS="--name=${worker_name} \
-                --errlog=/var/log/koha/${name}/worker-error.log \
-                --output=/var/log/koha/${name}/worker-output.log \
-                --pidfiles=/var/run/koha/${name}/ \
-                --verbose=1 --respawn --delay=30 \
-                --user=${name}-koha.${name}-koha"
-
-            echo "Stopping Koha worker daemon for ${name} (${queue})"
-
-            if ! daemon $DAEMONOPTS --stop -- "$worker_DAEMON" --queue "$queue"; then
-                ((error_count++))
-            fi
-        else
-            echo "Error: worker not running for ${name} (${queue})"
-            ((error_count++))
-        fi
-    done
-
-    log_end_msg $error_count
+    if [ "$(koha_init_backend)" = "systemd" ]; then
+        for queue in $queues; do
+            koha_service_ctl stop worker "$name" "$queue"
+        done
+    else
+        _sysv_stop_worker "$name" "$queues"
+    fi
 }
 
 restart_worker()
 {
     local name=$1
     local queues=$2
-
-    local error_count=0
-
-    for queue in $queues; do
-        if is_worker_running "$name" "$queue"; then
-            export KOHA_CONF="/etc/koha/sites/${name}/koha-conf.xml"
-
-            worker_name=$(get_worker_name "$name" "$queue")
-
-            DAEMONOPTS="--name=${worker_name} \
-                --errlog=/var/log/koha/${name}/worker-error.log \
-                --output=/var/log/koha/${name}/worker-output.log \
-                --pidfiles=/var/run/koha/${name}/ \
-                --verbose=1 --respawn --delay=30 \
-                --user=${name}-koha.${name}-koha"
-
-            echo "Restarting Koha worker daemon for ${name} (${queue})"
-
-            if ! daemon $DAEMONOPTS --restart -- "$worker_DAEMON" --queue "$queue"; then
-                ((error_count++))
-            fi
-        else
-            echo "Worker not running for ${name} (${queue})."
-            start_worker $name $queue
-        fi
-    done
-
-    log_end_msg $error_count
+    if [ "$(koha_init_backend)" = "systemd" ]; then
+        for queue in $queues; do
+            koha_service_ctl restart worker "$name" "$queue"
+        done
+    else
+        _sysv_restart_worker "$name" "$queues"
+    fi
 }
 
 worker_status()
 {
     local name=$1
     local queues=$2
-
-    for queue in $queues; do
-        if is_worker_running "$name" "$queue"; then
-            log_daemon_msg "worker running for ${name} (${queue})"
-            log_end_msg 0
-        else
-            log_daemon_msg "worker not running for ${name} (${queue})"
-            log_end_msg 3
-        fi
-    done
+    if [ "$(koha_init_backend)" = "systemd" ]; then
+        for queue in $queues; do
+            koha_service_ctl status worker "$name" "$queue"
+        done
+    else
+        _sysv_worker_status "$name" "$queues"
+    fi
 }
 
 set_action()
