@@ -1,4 +1,4 @@
-## General koha-common default options file
+## General koha-core default options file
 
 PERL5LIB="/usr/share/koha/lib"
 KOHA_HOME="/usr/share/koha"
@@ -14,7 +14,7 @@ KOHA_HOME="/usr/share/koha"
 #
 # USE_INDEXER_DAEMON: "no" | "yes"
 #
-USE_INDEXER_DAEMON="no"
+USE_INDEXER_DAEMON="yes"
 
 # Set an alternate indexer daemon. The default is to use the rebuild_zebra.pl
 # in daemon mode.
@@ -34,4 +34,27 @@ INDEXER_TIMEOUT=5
 #
 # INDEXER_PARAMS=""
 
-## End of general koha-common default options
+# Elasticsearch default options. Specifying the command line options to
+# koha-elasticsearch will override these
+
+# Should biblios be indexed by default?
+ES_INDEX_BIBLIOS="yes"
+# Should authorities be indexed by default?
+ES_INDEX_AUTHORITIES="yes"
+# How many records should be batched for committing to elasticsearch at one time. You
+# might want to decrease this if you're having issues with memory.
+# Equivalent to '--commit'
+ES_COMMIT_SIZE=5000
+# Now many parallel processes to use for indexing. If you have CPU
+# cores to spare, this might be worth increasing.
+# Equivalent to '--processes'
+ES_NUMBER_OF_PROCESSES=1
+# Should the output be verbose by default?
+# Equivalent to '--verbose'
+ES_VERBOSE="no"
+# A string that's supplied as a "where" query that can limit the records being idexed.
+# You probably don't want to use this by default expect in some sort of special case.
+# Equivalent to '--where'
+#ES_WHERE_QUERY_SQL=""
+
+## End of general koha-core default options
