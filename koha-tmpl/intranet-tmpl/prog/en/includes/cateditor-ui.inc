@@ -414,7 +414,10 @@
                     if( remove_control_num ){ record.removeField("001"); }
                     if( parts[0] === 'duplicate' ) {
                         let today = new Date();
-                        record.field('008').subfield('@', today.toISOString().substring(2,10).replaceAll('-','') + record.field('008').subfield('@').substring(6));
+                        let field008 = record.field('008');
+                        if ( field008 ) {
+                            record.field('008').subfield('@', today.toISOString().substring(2,10).replaceAll('-','') + record.field('008').subfield('@').substring(6));
+                        }
                     }
                     editor.displayRecord( record );
                     editor.focus();
