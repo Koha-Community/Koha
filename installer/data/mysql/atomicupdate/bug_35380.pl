@@ -39,5 +39,15 @@ return {
             ('import_lexile', 1, 1 )
         }
         );
+
+        # Ensure pre-existing rows with these names are also marked as system records.
+        # INSERT IGNORE above skips duplicate names, so existing rows would retain is_system=0.
+        $dbh->do(
+            q{
+            UPDATE record_sources SET is_system = 1
+            WHERE name IN ('batchmod', 'intranet', 'batchimport', 'z3950', 'bulkmarcimport', 'import_lexile')
+        }
+        );
+        say $out "Marked system record sources with is_system=1";
     },
 };
