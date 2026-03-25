@@ -1757,7 +1757,7 @@ subtest 'current_checkouts() and old_checkouts() tests' => sub {
 
 subtest 'get_marc_contributors() tests' => sub {
 
-    plan tests => 2;
+    plan tests => 4;
 
     $schema->storage->txn_begin;
 
@@ -1776,6 +1776,32 @@ subtest 'get_marc_contributors() tests' => sub {
 
     is( @{ $biblio->get_marc_authors },      3, 'get_marc_authors retrieves correct number of author subfields' );
     is( @{ $biblio->get_marc_contributors }, 2, 'get_marc_contributors retrieves correct number of author subfields' );
+
+    # main heading 110
+    my $biblio2 = $builder->build_sample_biblio;
+    my $record2 = $biblio2->metadata->record;
+    $record2->delete_fields( $record2->field('1..') );
+
+    # add author information
+    $field = MARC::Field->new( '110', '1', '', 'a' => 'City of Marseille' );
+    $record2->append_fields($field);
+    $field = MARC::Field->new( '700', '1', '', 'a' => 'Jefferson, Thomas' );
+    $record2->append_fields($field);
+    $field = MARC::Field->new( '701', '1', '', 'd' => 'Secondary author 2' );
+    $record2->append_fields($field);
+
+    # get record2
+    C4::Biblio::ModBiblio( $record2, $biblio2->biblionumber );
+    $biblio2 = Koha::Biblios->find( $biblio2->biblionumber );
+
+    is(
+        @{ $biblio2->get_marc_authors }, 3,
+        'get_marc_authors retrieves correct number of author fields for 110 being the main heading'
+    );
+    is(
+        @{ $biblio2->get_marc_contributors }, 2,
+        'get_marc_contributors retrieves correct number of author fields for 110 being the main heading'
+    );
     $schema->storage->txn_rollback;
 };
 
