@@ -35,7 +35,7 @@
                 <div class="modal-footer">
                     <input type="hidden" name="select2" value="" />
                     <button type="submit" class="btn btn-default">Save</button>
-                    <button class="btn btn-default" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-default" data-bs-dismiss="modal">Cancel</button>
                 </div>
             </form>
         </div>
