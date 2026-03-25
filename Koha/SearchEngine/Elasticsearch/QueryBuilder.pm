@@ -778,6 +778,19 @@ sub _convert_sort_fields {
     } @sort_by;
 }
 
+=head2 _convert_index_fields
+
+    my ($conv) = $self->_convert_index_fields($field);
+
+Converts the zebra-style sort index information into elasticsearch-style.
+
+ Convert according to our table, drop anything that doesn't convert.
+ If a field starts with mc- we save it as it's used (and removed) later
+ when joining things, to indicate we make it an 'OR' join.
+ (Sorry, this got a bit ugly after special cases were found.)
+
+=cut
+
 sub _convert_index_fields {
     my ( $self, @indexes ) = @_;
 
@@ -785,10 +798,6 @@ sub _convert_index_fields {
 
     @indexes = grep { $_ ne q{} } @indexes;    # Remove any blank indexes, i.e. keyword
 
-    # Convert according to our table, drop anything that doesn't convert.
-    # If a field starts with mc- we save it as it's used (and removed) later
-    # when joining things, to indicate we make it an 'OR' join.
-    # (Sorry, this got a bit ugly after special cases were found.)
     map {
         # Lower case all field names
         my ( $f, $t ) = map( lc, split /,/ );
@@ -1515,6 +1524,14 @@ sub _is_safe_to_auto_truncate {
     # It is safe to auto truncate:
     return 1;
 }
+
+=head2 _rebuild_to_es_advanced_query
+
+    $res = _rebuild_to_es_advanced_query( $res );
+
+Passed in a query, this function converts a geolocation query into the necessary format for Elasticsearch
+
+=cut
 
 sub _rebuild_to_es_advanced_query {
     my ($res) = @_;
