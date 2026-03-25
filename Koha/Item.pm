@@ -805,6 +805,35 @@ sub check_booking {
     return $bookings_count ? 0 : 1;
 }
 
+=head3 checkin_availability
+
+    my $availability = $item->checkin_availability(
+        {
+            branch => $branchcode,
+        }
+    );
+
+Returns check-in availability information for this item.
+
+This is a convenience method that calls Koha::Item::Checkin::Availability->check().
+
+Returns a Koha::Availability::Result object with methods:
+    available()         # Boolean: true if check-in allowed
+    needs_confirmation()# Boolean: true if confirmation required
+    blockers()          # Hashref of blocking conditions
+    confirmations()     # Hashref of conditions requiring confirmation
+    warnings()          # Hashref of warning messages
+    context()           # Hashref with checkout and patron objects
+
+=cut
+
+sub checkin_availability {
+    my ( $self, $params ) = @_;
+
+    require Koha::Item::Checkin::Availability;
+    return Koha::Item::Checkin::Availability->check( $self, $params );
+}
+
 =head3 request_transfer
 
   my $transfer = $item->request_transfer(
