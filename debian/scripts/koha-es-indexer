@@ -47,6 +47,8 @@ $scriptname -h|--help
     --start               Start the ES indexing daemon for the specified instances
     --stop                Stop the ES indexing daemon for the specified instances
     --restart             Restart the ES indexing daemon for the specified instances
+    --enable              Enable the ES indexing daemon for the specified instances
+    --disable             Disable the ES indexing daemon for the specified instances
     --batch_size N        Specify the batch size to commit at a time (default: 10)
     --status              Show the status of the ES indexing for the specified instances
     --quiet|-q            Make the script quiet about non existent instance names
@@ -83,6 +85,22 @@ restart_es_indexer()
         koha_service_ctl restart es-indexer "$name"
     else
         _sysv_restart_es_indexer "$name"
+    fi
+}
+
+enable_es_indexer()
+{
+    local name=$1
+    if [ "$(koha_init_backend)" = "systemd" ]; then
+        koha_service_ctl enable es-indexer "$name"
+    fi
+}
+
+disable_es_indexer()
+{
+    local name=$1
+    if [ "$(koha_init_backend)" = "systemd" ]; then
+        koha_service_ctl disable es-indexer "$name"
     fi
 }
 
@@ -130,6 +148,12 @@ while [ $# -gt 0 ]; do
         --restart)
             set_action "restart"
             shift ;;
+        --enable)
+            set_action "enable"
+            shift ;;
+        --disable)
+            set_action "disable"
+            shift ;;
         --status)
             set_action "status"
             shift ;;
@@ -163,6 +187,12 @@ if [ $# -gt 0 ]; then
                     ;;
                 "restart")
                     restart_es_indexer $name
+                    ;;
+                "enable")
+                    enable_es_indexer $name
+                    ;;
+                "disable")
+                    disable_es_indexer $name
                     ;;
                 "status")
                     es_indexer_status $name

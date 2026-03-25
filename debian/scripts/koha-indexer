@@ -47,6 +47,8 @@ $scriptname -h|--help
     --start               Start the indexer daemon for the specified instances
     --stop                Stop the indexer daemon for the specified instances
     --restart             Restart the indexer daemon for the specified instances
+    --enable              Enable the indexer daemon for the specified instances
+    --disable             Disable the indexer daemon for the specified instances
     --status              Show the status of the indexer for the specified instances
     --quiet|-q            Make the script quiet about non existent instance names
                           (useful for calling from another scripts).
@@ -82,6 +84,22 @@ restart_indexer()
         koha_service_ctl restart indexer "$name"
     else
         _sysv_restart_indexer "$name"
+    fi
+}
+
+enable_indexer()
+{
+    local name=$1
+    if [ "$(koha_init_backend)" = "systemd" ]; then
+        koha_service_ctl enable indexer "$name"
+    fi
+}
+
+disable_indexer()
+{
+    local name=$1
+    if [ "$(koha_init_backend)" = "systemd" ]; then
+        koha_service_ctl disable indexer "$name"
     fi
 }
 
@@ -124,6 +142,12 @@ while [ $# -gt 0 ]; do
             shift ;;
         --restart)
             set_action "restart"
+            shift ;;
+        --enable)
+            set_action "enable"
+            shift ;;
+        --disable)
+            set_action "disable"
             shift ;;
         --status)
             set_action "status"
@@ -177,6 +201,12 @@ if [ $# -gt 0 ]; then
                     ;;
                 "restart")
                     restart_indexer $name
+                    ;;
+                "enable")
+                    start_indexer $name
+                    ;;
+                "disable")
+                    stop_indexer $name
                     ;;
                 "status")
                     indexer_status $name

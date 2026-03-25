@@ -45,6 +45,8 @@ $scriptname -h|--help
     --start               Start the worker daemon for the specified instances
     --stop                Stop the worker daemon for the specified instances
     --restart             Restart the worker daemon for the specified instances
+    --enable              Enable the worker daemon for the specified instances
+    --disable             Disable the worker daemon for the specified instances
     --queue               Specify the queue/worker to perform the action on - 'default' is
                           used if not specified (unless --all-queues is passed)
                           current queues are: default, long_tasks
@@ -99,6 +101,28 @@ restart_worker()
     fi
 }
 
+enable_worker()
+{
+    local name=$1
+    local queues=$2
+    if [ "$(koha_init_backend)" = "systemd" ]; then
+        for queue in $queues; do
+            koha_service_ctl enable worker "$name" "$queue"
+        done
+    fi
+}
+
+disable_worker()
+{
+    local name=$1
+    local queues=$2
+    if [ "$(koha_init_backend)" = "systemd" ]; then
+        for queue in $queues; do
+            koha_service_ctl disable worker "$name" "$queue"
+        done
+    fi
+}
+
 worker_status()
 {
     local name=$1
@@ -144,6 +168,12 @@ while [ $# -gt 0 ]; do
         --restart)
             set_action "restart"
             shift ;;
+        --enable)
+            set_action "enable"
+            shift ;;
+        --disable)
+            set_action "disable"
+            shift ;;
         --status)
             set_action "status"
             shift ;;
@@ -187,6 +217,12 @@ if [ $# -gt 0 ]; then
                     ;;
                 "restart")
                     restart_worker "$name" "$queues"
+                    ;;
+                "enable")
+                    enable_worker "$name" "$queues"
+                    ;;
+                "disable")
+                    disable_worker "$name" "$queues"
                     ;;
                 "status")
                     worker_status "$name" "$queues"

@@ -195,7 +195,7 @@ koha_service_ctl()
     local unit=$(_koha_systemd_unit "$service" "$instance" "$queue")
 
     case "$action" in
-        start|stop|restart)
+        start|stop|restart|enable|disable)
             systemctl "$action" "$unit" ;;
         reload)
             systemctl reload-or-restart "$unit" ;;

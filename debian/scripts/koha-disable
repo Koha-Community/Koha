@@ -65,14 +65,18 @@ do
             restart_apache="yes"
             if is_sip_enabled $name; then
                 koha-sip --stop $name
+                koha-sip --disable $name
             fi
             if is_zebra_running $name; then
                 koha-zebra --stop $name
+                koha-zebra --disable $name
             fi
             if is_indexer_running $name; then
                 koha-indexer --stop $name
+                koha-indexer --disable $name
             fi
             koha-worker --all-queues --stop $name || /bin/true
+            koha-worker --all-queues --disable $name || /bin/true
         elif [ "$RET" = 2 ]; then
             warn "Error: Apache configuration file not present for instance $name."
         else

@@ -124,6 +124,10 @@ enable_plack()
     local instancename=$1
     local instancefile=$(get_apache_config_for "$instancename")
 
+    if [ "$(koha_init_backend)" = "systemd" ]; then
+        koha_service_ctl enable plack "$instancename"
+    fi
+
     alreadyopac=0
     alreadyintra=0
     failopac=0
@@ -174,6 +178,10 @@ disable_plack()
 {
     local instancename=$1
     local instancefile=$(get_apache_config_for "$instancename")
+
+    if [ "$(koha_init_backend)" = "systemd" ]; then
+        koha_service_ctl disable plack "$instancename"
+    fi
 
     alreadyopac=0
     alreadyintra=0

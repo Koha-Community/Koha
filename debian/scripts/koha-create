@@ -908,14 +908,17 @@ then
     fi
     service apache2 restart
 
-    # Start Zebra.
+    # Enable & start Zebra.
+    koha-zebra --enable "$name"
     koha-zebra --start "$name"
 
     # Start workers
+    koha-worker --all-queues --enable "$name"
     koha-worker --all-queues --start "$name"
 
     if [ "$USE_INDEXER_DAEMON" = "yes" ]; then
         # Start Indexer daemon
+        koha-indexer --enable "$name"
         koha-indexer --start "$name"
     fi
 

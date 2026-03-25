@@ -49,6 +49,8 @@ $scriptname -h|--help
     --stop                Stop the Zebra daemon for the specified instance(s)
     --restart             Restart the Zebra daemon for the specified instance(s)
     --status              Show the status of the Zebra daemon for the specified instance(s)
+    --enable              Enable the Zebra daemon for the specified instance(s)
+    --disable             Disable the Zebra daemon for the specified instance(s)
     --verbose|-v          Display progress and actions messages
     --help|-h             Display this help message
 
@@ -82,6 +84,22 @@ restart_zebra()
         koha_service_ctl restart zebra "$name"
     else
         _sysv_restart_zebra "$name"
+    fi
+}
+
+enable_zebra()
+{
+    local name=$1
+    if [ "$(koha_init_backend)" = "systemd" ]; then
+        koha_service_ctl enable zebra "$name"
+    fi
+}
+
+disable_zebra()
+{
+    local name=$1
+    if [ "$(koha_init_backend)" = "systemd" ]; then
+        koha_service_ctl disable zebra "$name"
     fi
 }
 
@@ -122,6 +140,10 @@ if [ "$used_script_name" != "koha-zebra" ]; then
             set_action "stop" ;;
         koha-restart-zebra)
             set_action "restart" ;;
+        koha-enable-zebra)
+            set_action "enable" ;;
+        koha-disable-zebra)
+            set_action "disable" ;;
         *)
             break ;;
     esac
@@ -145,6 +167,12 @@ while [ $# -gt 0 ]; do
             shift ;;
         --restart)
             set_action "restart"
+            shift ;;
+        --enable)
+            set_action "enable"
+            shift ;;
+        --disable)
+            set_action "disable"
             shift ;;
         --status)
             set_action "status"
@@ -175,6 +203,12 @@ if [ $# -gt 0 ]; then
                     ;;
                 "restart")
                     restart_zebra $name
+                    ;;
+                "enable")
+                    enable_zebra $name
+                    ;;
+                "disable")
+                    disable_zebra $name
                     ;;
                 "status")
                     zebra_status $name
