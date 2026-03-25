@@ -6,6 +6,14 @@ case "$1" in
         # Reload systemd daemon
         systemctl daemon-reload || true
         ;;
+
+	# on upgrade, restart running Koha services so they pick up new code/unit files
+            if [ -n "$2" ]; then
+                deb-systemd-invoke try-restart \
+                    'koha-*@*.service' \
+                    >/dev/null || true
+            fi
+
 esac
 
 #DEBHELPER#
