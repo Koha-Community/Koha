@@ -5,68 +5,98 @@ $(document).ready(function () {
     });
 
     if (window.location.href.indexOf("op=add") === -1) {
-        message_prefs_dirty = true; // unless op=add consider the message prefs dirty
+        message_prefs_dirty = true;
     }
 
     if ($("#messaging_prefs_loading").length) {
-        // This element only appears in the template if op=add
         $("#categorycode_entry").change(function () {
-            var messaging_prefs_loading = $("#messaging_prefs_loading");
-            // Upon selecting a new patron category, show "Loading" message for messaging defaults
-            messaging_prefs_loading.show();
             var categorycode = $(this).val();
-            if (message_prefs_dirty) {
-                if (
-                    !confirm(
-                        __(
-                            "Change messaging preferences to default for this category?"
-                        )
-                    )
-                ) {
-                    // Not loading messaging defaults. Hide loading indicator
-                    messaging_prefs_loading.hide();
-                    return;
-                }
-            }
-            var jqxhr = $.getJSON(
-                "/cgi-bin/koha/members/default_messageprefs.pl?categorycode=" +
-                    categorycode,
-                function (data) {
-                    $.each(data.messaging_preferences, function (i, item) {
-                        var attrid = item.message_attribute_id;
-                        var transports = ["email", "rss", "sms"];
-                        $.each(transports, function (j, transport) {
-                            if (item["transports_" + transport] == 1) {
-                                $("#" + transport + attrid).prop(
-                                    "checked",
-                                    true
+
+            // Show the combined modal and reset checkboxes to checked
+            $("#categoryChangeUpdateMessaging").prop("checked", true);
+            $("#categoryChangeUpdateExpiry").prop("checked", true);
+            $("#categoryChangeModal").modal("show");
+
+            // Remove any previously bound confirm handler to avoid stacking
+            $("#categoryChangeConfirmBtn")
+                .off("click")
+                .on("click", function () {
+                    $("#categoryChangeModal").modal("hide");
+
+                    // --- Update messaging preferences ---
+                    if (
+                        $("#categoryChangeUpdateMessaging").prop("checked") &&
+                        message_prefs_dirty
+                    ) {
+                        var messaging_prefs_loading = $(
+                            "#messaging_prefs_loading"
+                        );
+                        messaging_prefs_loading.show();
+
+                        $.getJSON(
+                            "/cgi-bin/koha/members/default_messageprefs.pl?categorycode=" +
+                                categorycode,
+                            function (data) {
+                                $.each(
+                                    data.messaging_preferences,
+                                    function (i, item) {
+                                        var attrid = item.message_attribute_id;
+                                        var transports = [
+                                            "email",
+                                            "rss",
+                                            "sms",
+                                        ];
+                                        $.each(
+                                            transports,
+                                            function (j, transport) {
+                                                var checked =
+                                                    item[
+                                                        "transports_" +
+                                                            transport
+                                                    ] == 1;
+                                                $(
+                                                    "#" + transport + attrid
+                                                ).prop("checked", checked);
+                                                toggle_digest(attrid);
+                                            }
+                                        );
+                                        if (item.digest && item.digest != " ") {
+                                            $("#digest" + attrid).prop(
+                                                "checked",
+                                                true
+                                            );
+                                        } else {
+                                            $("#digest" + attrid).prop(
+                                                "checked",
+                                                false
+                                            );
+                                        }
+                                        if (item.takes_days == "1") {
+                                            $("[name=" + attrid + "-DAYS]").val(
+                                                "" + item.days_in_advance
+                                            );
+                                        }
+                                    }
                                 );
-                                toggle_digest(attrid);
-                            } else {
-                                $("#" + transport + attrid).prop(
-                                    "checked",
-                                    false
-                                );
-                                toggle_digest(attrid);
+                                message_prefs_dirty = false;
                             }
+                        ).always(function () {
+                            messaging_prefs_loading.hide();
                         });
-                        if (item.digest && item.digest != " ") {
-                            $("#digest" + attrid).prop("checked", true);
-                        } else {
-                            $("#digest" + attrid).prop("checked", false);
+                    }
+
+                    // --- Update expiry date ---
+                    if ($("#categoryChangeUpdateExpiry").prop("checked")) {
+                        var fp = $("#to").flatpickr();
+                        var expiryDate = $(
+                            "select" + category_selector + " option:selected"
+                        ).data("expiryDate");
+                        if (expiryDate) {
+                            var formattedDate = expiryDate.split("T")[0];
+                            fp.setDate(formattedDate);
                         }
-                        if (item.takes_days == "1") {
-                            $("[name=" + attrid + "-DAYS]").val(
-                                "" + item.days_in_advance
-                            );
-                        }
-                    });
-                    message_prefs_dirty = false;
-                }
-            ).always(function () {
-                // Loaded messaging defaults. Hide loading indicator
-                messaging_prefs_loading.hide();
-            });
+                    }
+                });
         });
     }
 
@@ -91,12 +121,11 @@ $(document).ready(function () {
                 .tooltip("enable");
         }
     }
-    // At load time, we want digest disabled if no digest using transport is enabled
+
     $(".pmp_email").each(function () {
         toggle_digest(Number($(this).attr("id").replace("email", "")));
     });
 
-    // If user clears all digest using transports for a notice, disable digest checkbox
     $(".pmp_email").click(function () {
         toggle_digest(Number($(this).attr("id").replace("email", "")));
     });

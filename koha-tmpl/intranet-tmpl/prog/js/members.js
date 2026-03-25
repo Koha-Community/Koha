@@ -88,24 +88,6 @@ function update_category_code(category_code) {
     );
     var hint_string = __("Minimum password length: %s").format(min_length);
     hint.html(hint_string);
-
-    // Change patron's expiration date
-    $("#categorycode_entry").change(function () {
-        $("#expirationDateModal").modal("show");
-        // Handle confirmation Yes button click
-        $("#expirationDateConfirmBtn").on("click", function () {
-            var fp = $("#to").flatpickr();
-            var expiryDate = $(
-                "select" + category_selector + " option:selected"
-            ).data("expiryDate");
-            // Check if expiryDate is available and format it to YYYY-MM-DD
-            if (expiryDate) {
-                var formattedDate = expiryDate.split("T")[0];
-                fp.setDate(formattedDate);
-            }
-            $("#expirationDateModal").modal("hide");
-        });
-    });
 }
 
 function select_user(borrowernumber, borrower, relationship) {
