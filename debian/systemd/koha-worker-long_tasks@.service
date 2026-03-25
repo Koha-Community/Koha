@@ -13,6 +13,7 @@ WorkingDirectory=/var/lib/koha/%i
 Environment=KOHA_CONF=/etc/koha/sites/%i/koha-conf.xml
 Environment=KOHA_HOME=/usr/share/koha
 Environment=PERL5LIB=/usr/share/koha/lib
+ExecStartPre=+/usr/sbin/koha-create-dirs %i
 ExecStart=/usr/share/koha/bin/workers/background_jobs_worker.pl --queue long_tasks
 Restart=on-failure
 RestartSec=5s
