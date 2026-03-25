@@ -1,12 +1,14 @@
 [% USE raw %]
+[% USE Asset %]
+[% USE Koha %]
 [% PROCESS 'i18n.inc' %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 [% IF ( ! method ) %]
     [% method = 'tool'; %]
-[% END %]
-<title
-    >[% FILTER collapse %]
+[% END #/ method check %]
+<title>
+    [% FILTER collapse %]
         [% IF ( plugin_title ) %]
             [% plugin_title | html %]
             &rsaquo;
@@ -21,15 +23,15 @@
             [% t("Administration") | html %]
         [% END %]
         &rsaquo; [% t("Koha") | html %]
-    [% END %]</title
->
+    [% END %]
+</title>
 [% INCLUDE 'doc-head-close.inc' %]
 </head>
 
 <body id="plugins_run_tool" class="plugins">
 [% WRAPPER 'header.inc' %]
     [% INCLUDE 'prefs-admin-search.inc' %]
-[% END %]
+[% END #/ WRAPPER header.inc %]
 
 [% WRAPPER 'sub-header.inc' %]
     [% WRAPPER breadcrumbs %]
@@ -50,28 +52,25 @@
         [% END %]
     [% END #/ WRAPPER breadcrumbs %]
 [% END #/ WRAPPER sub-header.inc %]
-
-<div class="main container-fluid">
-    <div class="row">
-        <div class="col-md-10 order-md-2 order-sm-1">
-            <main> [% content | $raw %] </main>
-        </div>
-        <!-- /.col-md-10.order-md-2 -->
-
-        <div class="col-md-2 order-sm-2 order-md-1">
-            <aside>
-                [% IF ( method == 'tool' ) %]
-                    [% INCLUDE 'tools-menu.inc' %]
-                [% ELSIF (method == 'report' ) %]
-                    [% INCLUDE 'reports-menu.inc' %]
-                [% ELSE %]
-                    [% INCLUDE 'admin-menu.inc' %]
-                [% END %]
-            </aside>
-        </div>
-        <!-- /.col-md-2.order-md-1 -->
-    </div>
+[% IF ( method == 'tool' ) %]
+    [% SET 'dynamicaside' = 'tool-menu' %]
+[% ELSIF (method == 'report' ) %]
+    [% SET 'dynamicaside' = 'tool-menu' %]
+[% ELSE %]
+    [% SET 'dynamicaside' = 'admin-menu' %]
+[% END %]
+[% WRAPPER 'main-container.inc' aside=dynamicaside %]
+    <main> [% content | $raw %] </main>
     <!-- /.row -->
-
-    [% INCLUDE 'intranet-bottom.inc' %]
-</div>
+    [% SET islands = Asset.js("js/vue/dist/islands.esm.js").match('(src="([^"]+)")').1 %]
+ <script src="[% islands | $raw %]" type="module">
+</script>
+    <script nonce="[% Koha.CSPNonce | $raw %]" type="module">
+        import { hydrate } from "[% islands | $raw %]";
+        hydrate();
+    </script>
+    [% MACRO jsinclude BLOCK %]
+        [% Asset.js("js/admin-menu.js") | $raw %]
+    [% END %]
+[% END %]
+[% INCLUDE 'intranet-bottom.inc' %]
