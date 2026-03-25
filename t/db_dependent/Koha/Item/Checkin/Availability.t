@@ -40,7 +40,7 @@ subtest 'check() - item exists' => sub {
     my $library = $builder->build_object( { class => 'Koha::Libraries' } );
     my $item    = $builder->build_object( { class => 'Koha::Items' } );
 
-    my $result = $item->checkin_availability( { branch => $library->branchcode } );
+    my $result = $item->checkin_availability( { library => $library->branchcode } );
 
     isa_ok( $result, 'Koha::Availability::Result', 'Returns Result object' );
     ok( $result->available, 'Item is available for check-in' );
@@ -64,7 +64,7 @@ subtest 'check() - BlockedWithdrawn blocker' => sub {
         }
     );
 
-    my $result = $item->checkin_availability( { branch => $library->branchcode } );
+    my $result = $item->checkin_availability( { library => $library->branchcode } );
 
     is( $result->blockers->{BlockedWithdrawn}, 1, 'BlockedWithdrawn blocker set' );
     is( keys %{ $result->confirmations },      0, 'no confirmations when blocked' );
@@ -90,7 +90,7 @@ subtest 'check() - BlockedLost blocker' => sub {
 
     my $result = $item->checkin_availability(
         {
-            branch => $library->branchcode,
+            library => $library->branchcode,
         }
     );
 
@@ -125,7 +125,7 @@ subtest 'check() - Wrongbranch blocker' => sub {
     t::lib::Mocks::mock_preference( 'AllowReturnToBranch', 'homebranch' );
     my $result = $item->checkin_availability(
         {
-            branch => $wrongbranch->branchcode,
+            library => $wrongbranch->branchcode,
         }
     );
 
@@ -137,7 +137,7 @@ subtest 'check() - Wrongbranch blocker' => sub {
     t::lib::Mocks::mock_preference( 'AllowReturnToBranch', 'holdingbranch' );
     $result = $item->checkin_availability(
         {
-            branch => $wrongbranch->branchcode,
+            library => $wrongbranch->branchcode,
         }
     );
 
@@ -154,7 +154,7 @@ subtest 'check() - Wrongbranch blocker' => sub {
     t::lib::Mocks::mock_preference( 'AllowReturnToBranch', 'homeorholdingbranch' );
     $result = $item->checkin_availability(
         {
-            branch => $wrongbranch->branchcode,
+            library => $wrongbranch->branchcode,
         }
     );
 
@@ -167,7 +167,7 @@ subtest 'check() - Wrongbranch blocker' => sub {
     t::lib::Mocks::mock_preference( 'AllowReturnToBranch', 'anywhere' );
     $result = $item->checkin_availability(
         {
-            branch => $wrongbranch->branchcode,
+            library => $wrongbranch->branchcode,
         }
     );
 
@@ -188,7 +188,7 @@ subtest 'check() - NotIssued confirmation' => sub {
 
     my $result = $item->checkin_availability(
         {
-            branch => $library->branchcode,
+            library => $library->branchcode,
         }
     );
 
@@ -221,7 +221,7 @@ subtest 'check() - checked out item (no confirmations)' => sub {
 
     my $result = $item->checkin_availability(
         {
-            branch => $library->branchcode,
+            library => $library->branchcode,
         }
     );
 

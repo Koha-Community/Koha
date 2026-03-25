@@ -21,6 +21,7 @@ use Modern::Perl;
 
 use C4::Context;
 use Koha::Availability::Result;
+use Koha::Libraries;
 
 =head1 NAME
 
@@ -30,12 +31,18 @@ Koha::Item::Checkin::Availability - Check-in availability validation for items
 
     my $availability = Koha::Item::Checkin::Availability->check( $item,
         {
-            branch => $branch,
+            library    => $branchcode,
+            to_library => $destination_branchcode,
         }
     );
 
     # Or via instance method
-    my $availability = $item->checkin_availability( { branch => $branch } );
+    my $availability = $item->checkin_availability(
+        {
+            library    => $branchcode,
+            to_library => $destination_branchcode,
+        }
+    );
 
 =head1 DESCRIPTION
 
@@ -55,7 +62,8 @@ The result categorizes conditions as:
 
     my $availability = Koha::Item::Checkin::Availability->check( $item,
         {
-            branch => $branch,
+            library    => $branchcode,
+            to_library => $destination_branchcode,
         }
     );
 
@@ -64,7 +72,9 @@ Validates check-in availability for an item.
 Parameters:
     $item   - Koha::Item object (required)
     $params - hashref with:
-        branch => $branchcode (required)
+        library    => branchcode where the return takes place (required)
+        to_library => branchcode where the item should be sent after return
+                      (optional, for transfer limit validation)
 
 Returns a Koha::Availability::Result object with:
     blockers      => {}       # Conditions that prevent check-in
@@ -80,7 +90,8 @@ Returns a Koha::Availability::Result object with:
 sub check {
     my ( $class, $item, $params ) = @_;
 
-    my $branch = $params->{branch};
+    my $library    = $params->{library};
+    my $to_library = $params->{to_library};
 
     my $result = Koha::Availability::Result->new();
 
@@ -96,16 +107,31 @@ sub check {
         return $result;
     }
 
-    # Check branch check-in policy
-    my ( $returnallowed, $message ) = _can_book_be_returned( $item, $branch );
+    # Check AllowReturnToBranch policy
+    my ( $returnallowed, $message ) = _check_return_policy( $item, $library );
     unless ($returnallowed) {
         $result->add_blocker(
             Wrongbranch => {
-                Wrongbranch => $branch,
+                Wrongbranch => $library,
                 Rightbranch => $message
             }
         );
         return $result;
+    }
+
+    # Check branch transfer limits (bug 7376)
+    if ( defined $to_library ) {
+        my $from = Koha::Libraries->find($library);
+        my $to   = Koha::Libraries->find($to_library);
+        if ( !$item->can_be_transferred( { from => $from, to => $to } ) ) {
+            $result->add_blocker(
+                Wrongbranch => {
+                    Wrongbranch => $library,
+                    Rightbranch => $to_library
+                }
+            );
+            return $result;
+        }
     }
 
     # Check if item is currently checked out
@@ -129,33 +155,31 @@ sub check {
 
 =head2 Internal methods
 
-=head3 _can_book_be_returned
+=head3 _check_return_policy
 
-    my ($allowed, $message) = _can_book_be_returned($item, $branch);
+    my ($allowed, $message) = _check_return_policy($item, $library);
 
-Internal method to check if an item can be checked in to a specific branch
-based on the AllowReturnToBranch system preference.
-
-This is extracted from C4::Circulation::CanBookBeReturned.
+Check if an item can be checked in at the given library based on the
+AllowReturnToBranch system preference.
 
 =cut
 
-sub _can_book_be_returned {
-    my ( $item, $branch ) = @_;
+sub _check_return_policy {
+    my ( $item, $library ) = @_;
     my $allowreturntobranch = C4::Context->preference("AllowReturnToBranch") || 'anywhere';
 
     my $allowed = 1;
     my $message;
 
-    if ( $allowreturntobranch eq 'homebranch' && $branch ne $item->homebranch ) {
+    if ( $allowreturntobranch eq 'homebranch' && $library ne $item->homebranch ) {
         $allowed = 0;
         $message = $item->homebranch;
-    } elsif ( $allowreturntobranch eq 'holdingbranch' && $branch ne $item->holdingbranch ) {
+    } elsif ( $allowreturntobranch eq 'holdingbranch' && $library ne $item->holdingbranch ) {
         $allowed = 0;
         $message = $item->holdingbranch;
     } elsif ( $allowreturntobranch eq 'homeorholdingbranch'
-        && $branch ne $item->homebranch
-        && $branch ne $item->holdingbranch )
+        && $library ne $item->homebranch
+        && $library ne $item->holdingbranch )
     {
         $allowed = 0;
         $message = $item->homebranch;

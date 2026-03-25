@@ -809,13 +809,19 @@ sub check_booking {
 
     my $availability = $item->checkin_availability(
         {
-            branch => $branchcode,
+            library    => $branchcode,
+            to_library => $destination_branchcode,
         }
     );
 
 Returns check-in availability information for this item.
 
 This is a convenience method that calls Koha::Item::Checkin::Availability->check().
+
+Parameters:
+    library    => branchcode where the return takes place (required)
+    to_library => branchcode where the item should be sent after return
+                  (optional, for transfer limit validation)
 
 Returns a Koha::Availability::Result object with methods:
     available()         # Boolean: true if check-in allowed

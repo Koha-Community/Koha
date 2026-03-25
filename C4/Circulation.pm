@@ -2402,7 +2402,43 @@ sub AddReturn {
     }
 
     # Check availability
-    my $availability = $item->checkin_availability( { branch => $branch } );
+    my $hbr = Koha::CirculationRules->get_return_branch_policy($item);
+
+    # check if returnbranch and homebranch belong to the same float group
+    my $validate_float =
+        Koha::Libraries->find( $item->homebranch )->validate_float_sibling( { branchcode => $branch } );
+
+    # get the proper branch to which to return the item
+    my $returnbranch;
+    if ( $hbr eq 'noreturn' ) {
+        $returnbranch = $branch;
+    } elsif ( $hbr eq 'returnbylibrarygroup' ) {
+
+        # if library isn't in same the float group, transfer item to homebranch
+        $hbr          = 'homebranch';
+        $returnbranch = $validate_float ? $branch : $item->$hbr;
+    } else {
+        $returnbranch = $item->$hbr;
+    }
+
+    # if $hbr was "noreturn" or any other non-item table value, then it should 'float' (i.e. stay at this branch)
+    my $transfer_trigger = $hbr eq 'homebranch' ? 'ReturnToHome' : $hbr eq 'holdingbranch' ? 'ReturnToHolding' : undef;
+
+    # check library float limits if enabled if the item isn't being transferred away
+    if ( ( $returnbranch eq $branch ) && C4::Context->preference('UseLibraryFloatLimits') ) {
+        my $effective_itemtype = $item->effective_itemtype;
+        my $limit = Koha::Library::FloatLimits->find( { itemtype => $effective_itemtype, branchcode => $branch } );
+        if ($limit) {
+            my $transfer_library =
+                Koha::Library::FloatLimits->lowest_ratio_library( $item, $branch, $item->holdingbranch );
+            if ( $transfer_library && $transfer_library->branchcode ne $branch ) {
+                $returnbranch     = $transfer_library->branchcode;
+                $transfer_trigger = 'LibraryFloatLimit';
+            }
+        }
+    }
+
+    my $availability = $item->checkin_availability( { library => $branch, to_library => $returnbranch } );
 
     # Extract context objects
     my $issue = $availability->context->{checkout};
@@ -2476,61 +2512,8 @@ sub AddReturn {
         $messages->{'withdrawn'} = 1;
     }
 
-    # full item data, but no borrowernumber or checkout info (no issue)
-    my $hbr = Koha::CirculationRules->get_return_branch_policy($item);
-
-    # check if returnbranch and homebranch belong to the same float group
-    my $validate_float =
-        Koha::Libraries->find( $item->homebranch )->validate_float_sibling( { branchcode => $branch } );
-
-    # get the proper branch to which to return the item
-    my $returnbranch;
-    if ( $hbr eq 'noreturn' ) {
-        $returnbranch = $branch;
-    } elsif ( $hbr eq 'returnbylibrarygroup' ) {
-
-        # if library isn't in same the float group, transfer item to homebranch
-        $hbr          = 'homebranch';
-        $returnbranch = $validate_float ? $branch : $item->$hbr;
-    } else {
-        $returnbranch = $item->$hbr;
-    }
-
-    # if $hbr was "noreturn" or any other non-item table value, then it should 'float' (i.e. stay at this branch)
-    my $transfer_trigger = $hbr eq 'homebranch' ? 'ReturnToHome' : $hbr eq 'holdingbranch' ? 'ReturnToHolding' : undef;
-
-    # check library float limits if enabled if the item isn't being transferred away
-    if ( ( $returnbranch eq $branch ) && C4::Context->preference('UseLibraryFloatLimits') ) {
-        my $effective_itemtype = $item->effective_itemtype;
-        my $limit = Koha::Library::FloatLimits->find( { itemtype => $effective_itemtype, branchcode => $branch } );
-        if ($limit) {
-            my $transfer_library =
-                Koha::Library::FloatLimits->lowest_ratio_library( $item, $branch, $item->holdingbranch );
-            if ( $transfer_library && $transfer_library->branchcode ne $branch ) {
-                $returnbranch     = $transfer_library->branchcode;
-                $transfer_trigger = 'LibraryFloatLimit';
-            }
-        }
-    }
-
     my $borrowernumber   = $patron ? $patron->borrowernumber : undef;    # we don't know if we had a borrower or not
     my $patron_unblessed = $patron ? $patron->unblessed      : {};
-
-    # Check branch transfer limits (bug 7376)
-    if ( $doreturn && defined($returnbranch) ) {
-        my $from_library = Koha::Libraries->find($branch);
-        my $to_library   = Koha::Libraries->find($returnbranch);
-        if ( !$item->can_be_transferred( { from => $from_library, to => $to_library } ) ) {
-            $messages->{'Wrongbranch'} = {
-                Wrongbranch => $branch,
-                Rightbranch => $returnbranch
-            };
-            $doreturn = 0;
-            my $indexer = Koha::SearchEngine::Indexer->new( { index => $Koha::SearchEngine::BIBLIOS_INDEX } );
-            $indexer->index_records( $item->biblionumber, "specialUpdate", "biblioserver" );
-            return ( $doreturn, $messages, $issue, $patron_unblessed );
-        }
-    }
 
     # Update item location
     my $loc_messages = $item->location_update_trigger('checkin');
