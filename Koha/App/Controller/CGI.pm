@@ -80,9 +80,10 @@ sub _render_script {
         return $c->reply->not_found;
     }
 
-    my $sub      = CGI::Compile->compile($script);
-    my $app      = CGI::Emulate::PSGI->handler($sub);
-    my $response = $app->( $c->_psgi_env() );
+    my $abs_script = $c->app->home->rel_file($script);
+    my $sub        = CGI::Compile->compile($abs_script);
+    my $app        = CGI::Emulate::PSGI->handler($sub);
+    my $response   = $app->( $c->_psgi_env() );
 
     $c->res->code( $response->[0] );
     $c->res->headers->from_hash( { @{ $response->[1] } } );
