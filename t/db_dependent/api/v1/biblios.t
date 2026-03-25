@@ -1939,8 +1939,6 @@ subtest 'put() tests' => sub {
             } => $marc
         )->status_is(200);
 
-        $locked_biblio->delete();
-
     };
 
     subtest 'put() with overlay_context' => sub {
@@ -1978,9 +1976,6 @@ subtest 'put() tests' => sub {
     <subfield code="d">1454</subfield>
   </datafield>
 </record>|;
-
-        #use Data::Dumper;
-        #warn Dumper($incoming_record_xml);
 
         my $record_source =
             $builder->build_object(
@@ -2042,9 +2037,6 @@ subtest 'put() tests' => sub {
             'new title',
             'Title has been changed'
         );
-        $biblio->delete();
-        $record_source->delete();
-        $rule->delete();
     };
 
     $schema->storage->txn_rollback;

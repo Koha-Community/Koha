@@ -126,7 +126,7 @@ my $categories = Koha::Patron::Categories->search_with_library_limits(
 )->unblessed;
 
 my @record_sources =
-    map { $_->{name} } @{ Koha::RecordSources->search->unblessed };
+    map { $_->{name} } @{ Koha::RecordSources->search( {}, { order_by => ['name'] } )->unblessed };
 
 $template->param(
     rules          => $rules,

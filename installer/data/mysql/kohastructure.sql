@@ -5662,7 +5662,7 @@ CREATE TABLE `record_sources` (
   `record_source_id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Primary key for the `record_sources` table',
   `name` text NOT NULL COMMENT 'User defined name for the record source',
   `can_be_edited` tinyint(1) NOT NULL DEFAULT 0 COMMENT 'If records from this source can be edited',
-  `is_system` tinyint(1) NOT NULL DEFAULT 0,
+  `is_system` tinyint(1) NOT NULL DEFAULT 0 COMMENT 'If this record source is system-defined and cannot be deleted',
   PRIMARY KEY (`record_source_id`),
   UNIQUE KEY `name` (`name`(191))
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
