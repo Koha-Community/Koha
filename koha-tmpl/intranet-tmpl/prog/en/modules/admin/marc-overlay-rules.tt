@@ -273,8 +273,8 @@
                                             <span>Staged MARC import</span>
                                         [% CASE 'z3950' %]
                                             <span>Z39.50</span>
-                                        [% CASE 'bulkmarkimport' %]
-                                            <span>bulkmarkimport.pl</span>
+                                        [% CASE 'bulkmarcimport' %]
+                                            <span>bulkmarcimport.pl</span>
                                         [% CASE 'import_lexile' %]
                                             <span>import_lexile.pl</span>
                                         [% CASE %]
@@ -509,7 +509,7 @@
                   [% CASE 'intranet' %]'[% record_source | html %]':_("Staff interface MARC editor"),
                   [% CASE 'batchimport' %]'[% record_source | html %]': _("Staged MARC import"),
                   [% CASE 'z3950' %]'[% record_source | html %]': _("Z39.50"),
-                  [% CASE 'bulkmarkimport' %]'[% record_source | html %]': _("bulkmarcimport.pl"),
+                  [% CASE 'bulkmarcimport' %]'[% record_source | html %]': _("bulkmarcimport.pl"),
                   [% CASE 'import_lexile' %]'[% record_source | html %]':  _("import_lexile.pl"),
                   [% CASE %] '[% record_source | html %]' : '[% record_source | html %]',
                 [% END %]
