@@ -1010,13 +1010,8 @@
             <form action="/cgi-bin/koha/opac-modrequest-suspend.pl" method="post">
                 [% INCLUDE 'csrf-token.inc' %]
                 <div class="modal-header">
-                    [% IF HOLD.suspend %]
-                        <h1 class="modal-title" id="suspendModalLabel">Resume hold</h1>
-                        <input type="hidden" name="op" value="cud-unsuspend" />
-                    [% ELSE %]
                         <h1 class="modal-title" id="suspendModalLabel">Suspend hold</h1>
                         <input type="hidden" name="op" value="cud-suspend" />
-                    [% END %]
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
