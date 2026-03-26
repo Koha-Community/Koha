@@ -7,16 +7,83 @@ $(document).ready(function () {
     if (window.location.href.indexOf("op=add") === -1) {
         message_prefs_dirty = true;
     }
-
     $("#categorycode_entry").change(function () {
         var categorycode = $(this).val();
         // if we change category, consider the messaging prefs dirty
         message_prefs_dirty = true;
         // Show the combined modal and reset checkboxes to checked
-        $("#categoryChangeUpdateMessaging").prop("checked", true);
-        $("#categoryChangeUpdateExpiry").prop("checked", true);
-        $("#categoryChangeModal").modal("show");
+        if (UpdateExpiryDateOnCategoryChange == "softyes") {
+            $("#categoryChangeUpdateExpiry").prop("checked", true);
+        } else if (UpdateExpiryDateOnCategoryChange == "softno") {
+            $("#categoryChangeUpdateExpiry").prop("checked", false);
+        }
 
+        if (UpdateMessagingPrefsOnCategoryChange == "softyes") {
+            $("#categoryChangeUpdateMessaging").prop("checked", true);
+        } else if (UpdateMessagingPrefsOnCategoryChange == "softno") {
+            $("#categoryChangeUpdateMessaging").prop("checked", false);
+        }
+
+        if (UpdateExpiryDateOnCategoryChange === "yes") {
+            // Just do it, no need to ask
+            var fp = $("#to").flatpickr();
+            var expiryDate = $(
+                "select" + category_selector + " option:selected"
+            ).data("expiryDate");
+            if (expiryDate) {
+                fp.setDate(expiryDate.split("T")[0]);
+            }
+        }
+
+        if (UpdateMessagingPrefsOnCategoryChange === "yes") {
+            // Just do it, no need to ask
+            var messaging_prefs_loading = $("#messaging_prefs_loading");
+            messaging_prefs_loading.show();
+
+            $.getJSON(
+                "/cgi-bin/koha/members/default_messageprefs.pl?categorycode=" +
+                    categorycode,
+                function (data) {
+                    $.each(data.messaging_preferences, function (i, item) {
+                        var attrid = item.message_attribute_id;
+                        var transports = ["email", "rss", "sms"];
+                        $.each(transports, function (j, transport) {
+                            var checked = item["transports_" + transport] == 1;
+                            $("#" + transport + attrid).prop(
+                                "checked",
+                                checked
+                            );
+                            toggle_digest(attrid);
+                        });
+
+                        if (item.digest && item.digest != " ") {
+                            $("#digest" + attrid).prop("checked", true);
+                        } else {
+                            $("#digest" + attrid).prop("checked", false);
+                        }
+                        if (item.takes_days == "1") {
+                            $("[name=" + attrid + "-DAYS]").val(
+                                "" + item.days_in_advance
+                            );
+                        }
+                    });
+                    message_prefs_dirty = false;
+                }
+            ).always(function () {
+                messaging_prefs_loading.hide();
+            });
+        }
+
+        var softUpdate =
+            UpdateMessagingPrefsOnCategoryChange === "softyes" ||
+            UpdateMessagingPrefsOnCategoryChange === "softno" ||
+            UpdateExpiryDateOnCategoryChange === "softyes" ||
+            UpdateExpiryDateOnCategoryChange === "softno";
+
+        // if softUpdate we should ask for confirmation in the modal, show it
+        if (softUpdate) {
+            $("#categoryChangeModal").modal("show");
+        }
         // Remove any previously bound confirm handler to avoid stacking
         $("#categoryChangeConfirmBtn")
             .off("click")
@@ -76,7 +143,10 @@ $(document).ready(function () {
                 }
 
                 // --- Update expiry date ---
-                if ($("#categoryChangeUpdateExpiry").prop("checked")) {
+                if (
+                    UpdateExpiryDateOnCategoryChange !== "yes" &&
+                    $("#categoryChangeUpdateExpiry").prop("checked")
+                ) {
                     var fp = $("#to").flatpickr();
                     var expiryDate = $(
                         "select" + category_selector + " option:selected"

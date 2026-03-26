@@ -100,6 +100,22 @@ Patrons:
                0: "Don't"
          - charge a fee when a patron changes to a category with an enrollment fee.
      -
+         - pref: UpdateExpiryDateOnCategoryChange
+           choices:
+               yes: "Always update without asking"
+               softyes: "Ask before updating, default to yes"
+               softno: "Ask before updating, default to no"
+               no: "Never update"
+         -  the date expiry when changing an existing patron to a new category.
+     -
+         - pref: UpdateMessagingPrefsOnCategoryChange
+           choices:
+               yes: "Always update without asking"
+               softyes: "Ask before updating, default to yes"
+               softno: "Ask before updating, default to no"
+               no: "Never update"
+         -  messaging preferences when changing an existing patron to a new category.
+     -
          - Select which patron activities should be tracked to signify patron activity. Each time that one of these activities occurs, borrowers.lastseen will update with the current date and time.
          - pref: TrackLastPatronActivityTriggers
            multiple:
