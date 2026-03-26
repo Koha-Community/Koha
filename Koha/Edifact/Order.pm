@@ -302,7 +302,8 @@ sub beginning_of_message {
     my $purchase_order_number = shift;
 
     # Use purchase order number if available, otherwise use basketno
-    my $document_message_no = $purchase_order_number
+    my $document_message_no =
+        $purchase_order_number
         ? encode_text($purchase_order_number)
         : sprintf '%011d', $basketno;
 
