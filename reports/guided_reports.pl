@@ -648,7 +648,7 @@ if ( !$op ) {
     my $reportid = $input->param('reportid');
     my $result   = Koha::SharedContent::send_entity( $lang, $borrowernumber, $reportid, 'report' );
     if ($result) {
-        print $input->redirect( "/cgi-bin/koha/reports/guided_reports.pl?op=listmanamsg=" . $result->{msg} );
+        print $input->redirect( "/cgi-bin/koha/reports/guided_reports.pl?op=list&manamsg=" . $result->{msg} );
     } else {
         print $input->redirect("/cgi-bin/koha/reports/guided_reports.pl?op=list&manamsg=noanswer");
     }
