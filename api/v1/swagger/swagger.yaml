@@ -4,6 +4,8 @@ basePath: /api/v1
 definitions:
   account_line:
     $ref: ./definitions/account_line.yaml
+  action_log:
+    $ref: ./definitions/action_log.yaml
   additional_content:
     $ref: ./definitions/additional_content.yaml
   advancededitormacro:
@@ -209,6 +211,8 @@ definitions:
   vendors_config:
     $ref: ./definitions/vendors_config.yaml
 paths:
+  /action_logs:
+    $ref: ./paths/action_logs.yaml#/~1action_logs
   /acquisitions/baskets:
     $ref: ./paths/acquisitions_baskets.yaml#/~1acquisitions~1baskets
   /acquisitions/baskets/managers:

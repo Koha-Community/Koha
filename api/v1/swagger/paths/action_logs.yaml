@@ -1,0 +1,91 @@
+---
+/action_logs:
+  get:
+    x-mojo-to: ActionLogs#list
+    operationId: listActionLogs
+    tags:
+      - action_logs
+    summary: List action logs
+    produces:
+      - application/json
+    parameters:
+      - name: action_id
+        in: query
+        description: Search on action log id
+        required: false
+        type: integer
+      - name: timestamp
+        in: query
+        description: Search on timestamp
+        required: false
+        type: string
+        format: date-time
+      - name: user
+        in: query
+        description: Search on user (borrowernumber)
+        required: false
+        type: integer
+      - name: module
+        in: query
+        description: Search on module
+        required: false
+        type: string
+      - name: action
+        in: query
+        description: Search on action
+        required: false
+        type: string
+      - name: object
+        in: query
+        description: Search on object
+        required: false
+        type: integer
+      - name: info
+        in: query
+        description: Search on info
+        required: false
+        type: string
+      - name: interface
+        in: query
+        description: Search on interface
+        required: false
+        type: string
+      - $ref: "../swagger.yaml#/parameters/match"
+      - $ref: "../swagger.yaml#/parameters/order_by"
+      - $ref: "../swagger.yaml#/parameters/page"
+      - $ref: "../swagger.yaml#/parameters/per_page"
+      - $ref: "../swagger.yaml#/parameters/q_param"
+      - $ref: "../swagger.yaml#/parameters/q_body"
+      - $ref: "../swagger.yaml#/parameters/request_id_header"
+    responses:
+      "200":
+        description: A list of action logs
+        schema:
+          type: array
+          items:
+            $ref: "../swagger.yaml#/definitions/action_log"
+      "400":
+        description: |
+          Bad request. Possible `error_code` attribute values:
+
+            * `invalid_query`
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "403":
+        description: Access forbidden
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "500":
+        description: |
+          Internal server error. Possible `error_code` attribute values:
+
+          * `internal_server_error`
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "503":
+        description: Under maintenance
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+    x-koha-authorization:
+      permissions:
+        tools: view_system_logs

@@ -1,0 +1,55 @@
+---
+type: object
+properties:
+  action_id:
+    type: integer
+    description: Internal action log identifier
+    readOnly: true
+  timestamp:
+    type: string
+    format: date-time
+    description: The date and time the action took place
+  user:
+    type: integer
+    description: The staff member who performed the action (borrowernumber)
+  module:
+    type:
+      - string
+      - "null"
+    description: The module this action was taken against
+  action:
+    type:
+      - string
+      - "null"
+    description: The action performed (e.g. ADD, DELETE, MODIFY)
+  object:
+    type:
+      - integer
+      - "null"
+    description: The object that the action was taken against
+  info:
+    type:
+      - string
+      - "null"
+    description: Information about the action
+  interface:
+    type:
+      - string
+      - "null"
+    description: The context this action was taken in (INTRANET, OPAC, SIP, etc.)
+  script:
+    type:
+      - string
+      - "null"
+    description: The name of the cron script that caused this change
+  trace:
+    type:
+      - string
+      - "null"
+    description: An optional stack trace
+  diff:
+    type:
+      - string
+      - "null"
+    description: A diff of the changed object
+additionalProperties: false
