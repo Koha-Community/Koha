@@ -293,6 +293,7 @@
         [% Asset.js("js/members-menu.js") | $raw %]
     [% END %]
     [% Asset.js("lib/jsdiff/jsdiff.min.js") | $raw %]
+    [% INCLUDE 'str/viewlog.inc' %]
     <script>
         var table_settings = [% TablesSettings.GetTableSettings('tools', 'logviewer', 'logst', 'json') | $raw %];
         var CAN_user_parameters_manage_sysprefs = "[% CAN_user_parameters_manage_sysprefs | html %]";
