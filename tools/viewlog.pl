@@ -89,156 +89,11 @@ $template->param(
 );
 
 if ($do_it) {
-    my $dtf = Koha::Database->new->schema->storage->datetime_parser;
-    my %search_params;
-
-    if ( $datefrom and $dateto ) {
-        my $dateto_endday = dt_from_string($dateto);
-        $dateto_endday->set(    # We set last second of day to see all log from that day
-            hour   => 23,
-            minute => 59,
-            second => 59
-        );
-        $search_params{'timestamp'} = {
-            -between => [
-                $dtf->format_datetime( dt_from_string($datefrom) ),
-                $dtf->format_datetime($dateto_endday),
-            ]
-        };
-    } elsif ($datefrom) {
-        $search_params{'timestamp'} = { '>=' => $dtf->format_datetime( dt_from_string($datefrom) ) };
-    } elsif ($dateto) {
-        my $dateto_endday = dt_from_string($dateto);
-        $dateto_endday->set(    # We set last second of day to see all log from that day
-            hour   => 23,
-            minute => 59,
-            second => 59
-        );
-        $search_params{'timestamp'} = { '<=' => $dtf->format_datetime($dateto_endday) };
-    }
-
-    # Circulation uses RENEWAL, but Patrons uses RENEW, this helps to find both
-    if ( grep { $_ eq 'RENEW' } @actions ) {
-        push @actions, 'RENEWAL';
-    }
-
-    $search_params{user}      = $user                    if $user;
-    $search_params{module}    = { -in => [@modules] }    if ( defined $modules[0] and $modules[0] ne '' );
-    $search_params{action}    = { -in => [@actions] }    if ( defined $actions[0] && $actions[0] ne '' );
-    $search_params{interface} = { -in => [@interfaces] } if ( defined $interfaces[0] && $interfaces[0] ne '' );
-
-    if ( @modules == 1 && $object_type eq 'biblio' ) {
-
-        # Handle 'Modification log' from cataloguing
-        my $biblio      = Koha::Biblios->find($object);
-        my @itemnumbers = $biblio->items->get_column('itemnumber');
-        $search_params{'-or'} = [
-            { -and => { object => $object,       info => { -like => 'biblio%' } } },
-            { -and => { object => \@itemnumbers, info => { -like => 'item%' } } },
-        ];
-        $template->param( biblio => $biblio );
-    } else {
-        $search_params{info}   = { -like => '%' . $info . '%' } if $info;
-        $search_params{object} = $object                        if $object;
-    }
-
-    my @logs = Koha::ActionLogs->search( \%search_params )->as_list;
-
-    my @data;
-    foreach my $log (@logs) {
-        my $result = $log->unblessed;
-
-        # Init additional columns for CSV export
-        $result->{'biblionumber'}     = q{};
-        $result->{'biblioitemnumber'} = q{};
-        $result->{'barcode'}          = q{};
-
-        if ( substr( $log->info, 0, 4 ) eq 'item' ) {
-
-            # get item information so we can create a working link
-            my $itemnumber = $log->object;
-            my $item       = Koha::Items->find($itemnumber);
-            if ($item) {
-                $result->{'object_found'}     = 1;
-                $result->{'biblionumber'}     = $item->biblionumber;
-                $result->{'biblioitemnumber'} = $item->biblionumber;
-                $result->{'barcode'}          = $item->barcode;
-            }
-        }
-
-        if ( $log->module eq "CIRCULATION" ) {
-            my $info = $log->info;
-            my $decoded;
-            my $is_json = eval {
-                $decoded = decode_json($info);
-                1;
-            };
-
-            if ( $is_json && ref($decoded) ) {
-                $result->{'json_found'} = 1;
-                my $item = Koha::Items->find( $decoded->{itemnumber} );
-                if ($item) {
-                    $decoded->{biblionumber}     = $item->biblionumber;
-                    $decoded->{biblioitemnumber} = $item->biblionumber;
-                    $decoded->{barcode}          = $item->barcode;
-                }
-                $result->{'json'} = $decoded;
-            } else {
-                my $item = Koha::Items->find($info);
-                if ($item) {
-                    $result->{'object_found'}     = 1;
-                    $result->{'biblionumber'}     = $item->biblionumber;
-                    $result->{'biblioitemnumber'} = $item->biblionumber;
-                    $result->{'barcode'}          = $item->barcode;
-                }
-            }
-        }
-
-        #always add firstname and surname for librarian/user
-        if ( $log->user ) {
-            my $patron = Koha::Patrons->find( $log->user );
-            if ( $patron && $output eq 'screen' ) {
-                $result->{librarian} = $patron;
-            }
-        }
-
-        #add firstname and surname for borrower, when using the CIRCULATION, MEMBERS, FINES
-        if ( $log->module eq "CIRCULATION" || $log->module eq "MEMBERS" || $log->module eq "FINES" ) {
-            if ( $log->object ) {
-                my $patron = Koha::Patrons->find( $log->object );
-                if ( $patron && $output eq 'screen' ) {
-                    $result->{patron} = $patron;
-                }
-            }
-        }
-
-        if ( $log->module eq 'NOTICES' ) {
-            if ( $log->object ) {
-                my $notice = Koha::Notice::Templates->find( { id => $log->object } );
-                if ( $notice && $output eq 'screen' ) {
-                    $result->{notice} = $notice->unblessed;
-                }
-            }
-        }
-
-        # get recall information
-        if ( $log->module eq "RECALLS" ) {
-            if ( $log->object ) {
-                my $recall = Koha::Recalls->find( $log->object );
-                if ( $recall && $output eq 'screen' ) {
-                    $result->{recall} = $recall;
-                }
-            }
-        }
-        push @data, $result;
-    }
     if ( $output eq "screen" ) {
 
-        # Printing results to screen
+        # Screen output: pass search params to template, DataTable loads via REST API
         $template->param(
             logview    => 1,
-            total      => scalar @data,
-            looprow    => \@data,
             do_it      => 1,
             datefrom   => $datefrom,
             dateto     => $dateto,
@@ -256,6 +111,110 @@ if ($do_it) {
         }
         output_html_with_http_headers $input, $cookie, $template->output;
     } else {
+
+        # CSV export: fetch and enrich data server-side
+        my $dtf = Koha::Database->new->schema->storage->datetime_parser;
+        my %search_params;
+
+        if ( $datefrom and $dateto ) {
+            my $dateto_endday = dt_from_string($dateto);
+            $dateto_endday->set(    # We set last second of day to see all log from that day
+                hour   => 23,
+                minute => 59,
+                second => 59
+            );
+            $search_params{'timestamp'} = {
+                -between => [
+                    $dtf->format_datetime( dt_from_string($datefrom) ),
+                    $dtf->format_datetime($dateto_endday),
+                ]
+            };
+        } elsif ($datefrom) {
+            $search_params{'timestamp'} = { '>=' => $dtf->format_datetime( dt_from_string($datefrom) ) };
+        } elsif ($dateto) {
+            my $dateto_endday = dt_from_string($dateto);
+            $dateto_endday->set(    # We set last second of day to see all log from that day
+                hour   => 23,
+                minute => 59,
+                second => 59
+            );
+            $search_params{'timestamp'} = { '<=' => $dtf->format_datetime($dateto_endday) };
+        }
+
+        # Circulation uses RENEWAL, but Patrons uses RENEW, this helps to find both
+        if ( grep { $_ eq 'RENEW' } @actions ) {
+            push @actions, 'RENEWAL';
+        }
+
+        $search_params{user}      = $user                    if $user;
+        $search_params{module}    = { -in => [@modules] }    if ( defined $modules[0] and $modules[0] ne '' );
+        $search_params{action}    = { -in => [@actions] }    if ( defined $actions[0] && $actions[0] ne '' );
+        $search_params{interface} = { -in => [@interfaces] } if ( defined $interfaces[0] && $interfaces[0] ne '' );
+
+        if ( @modules == 1 && $object_type eq 'biblio' ) {
+
+            # Handle 'Modification log' from cataloguing
+            my $biblio      = Koha::Biblios->find($object);
+            my @itemnumbers = $biblio->items->get_column('itemnumber');
+            $search_params{'-or'} = [
+                { -and => { object => $object,       info => { -like => 'biblio%' } } },
+                { -and => { object => \@itemnumbers, info => { -like => 'item%' } } },
+            ];
+        } else {
+            $search_params{info}   = { -like => '%' . $info . '%' } if $info;
+            $search_params{object} = $object                        if $object;
+        }
+
+        my @logs = Koha::ActionLogs->search( \%search_params )->as_list;
+
+        my @data;
+        foreach my $log (@logs) {
+            my $result = $log->unblessed;
+
+            # Init additional columns for CSV export
+            $result->{'biblionumber'}     = q{};
+            $result->{'biblioitemnumber'} = q{};
+            $result->{'barcode'}          = q{};
+
+            if ( defined $log->info && substr( $log->info, 0, 4 ) eq 'item' ) {
+
+                # get item information so we can create a working link
+                my $itemnumber = $log->object;
+                my $item       = Koha::Items->find($itemnumber);
+                if ($item) {
+                    $result->{'biblionumber'}     = $item->biblionumber;
+                    $result->{'biblioitemnumber'} = $item->biblionumber;
+                    $result->{'barcode'}          = $item->barcode;
+                }
+            }
+
+            if ( $log->module eq "CIRCULATION" ) {
+                my $info = $log->info;
+                my $decoded;
+                my $is_json = eval {
+                    $decoded = decode_json($info);
+                    1;
+                };
+
+                if ( $is_json && ref($decoded) ) {
+                    my $item = Koha::Items->find( $decoded->{itemnumber} );
+                    if ($item) {
+                        $decoded->{biblionumber}     = $item->biblionumber;
+                        $decoded->{biblioitemnumber} = $item->biblionumber;
+                        $decoded->{barcode}          = $item->barcode;
+                    }
+                } else {
+                    my $item = Koha::Items->find($info);
+                    if ($item) {
+                        $result->{'biblionumber'}     = $item->biblionumber;
+                        $result->{'biblioitemnumber'} = $item->biblionumber;
+                        $result->{'barcode'}          = $item->barcode;
+                    }
+                }
+            }
+
+            push @data, $result;
+        }
 
         # Printing to a csv file
         my $content = q{};
