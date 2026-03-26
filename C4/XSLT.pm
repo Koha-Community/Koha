@@ -66,6 +66,12 @@ The helper function _get_best_default_xslt_filename is used in a unit test.
 
 =cut
 
+=head2 _get_best_default_xslt_filename
+
+Find the default file, trying a few standard variations, until the file is located
+
+=cut
+
 sub _get_best_default_xslt_filename {
     my ( $htdocs, $theme, $lang, $base_xslfile ) = @_;
 
