@@ -11,7 +11,8 @@ $(document).ready(function () {
     if ($("#messaging_prefs_loading").length) {
         $("#categorycode_entry").change(function () {
             var categorycode = $(this).val();
-
+            // if we change category, consider the messaging prefs dirty
+            message_prefs_dirty = true;
             // Show the combined modal and reset checkboxes to checked
             $("#categoryChangeUpdateMessaging").prop("checked", true);
             $("#categoryChangeUpdateExpiry").prop("checked", true);
