@@ -123,13 +123,28 @@ sub logaction {
     if ( $actionname =~ /^(ADD|CREATE)$/ ) {
 
         # Log diff against empty hashref for newly created objects
-        $updated  = $is_object ? $original->unblessed : $original;
+        $updated = $is_object ? $original->unblessed : $original;
+        for my $key ( keys %{$updated} ) {
+
+            if ( defined $updated->{$key} && $updated->{$key} ne '' ) {
+                $updated->{$key} = "$updated->{$key}" if blessed( $updated->{$key} );
+            } else {
+                delete $updated->{$key};
+            }
+        }
         $original = {};
     } elsif ( $actionname eq 'DELETE' ) {
 
         # Log diff for deleted objects against empty hashref
         $original = $is_object ? $original->unblessed : $original;
-        $updated  = {};
+        for my $key ( keys %{$original} ) {
+            if ( defined $original->{$key} && $original->{$key} ne '' ) {
+                $original->{$key} = "$original->{$key}" if blessed( $original->{$key} );
+            } else {
+                delete $original->{$key};
+            }
+        }
+        $updated = {};
     } else {
 
         # Log diff against hashref of pre-modified object if passed in
