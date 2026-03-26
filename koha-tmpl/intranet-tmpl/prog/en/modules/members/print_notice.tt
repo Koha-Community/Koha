@@ -19,13 +19,13 @@
     [% INCLUDE 'doc-head-close.inc' %]
     [% Asset.css("css/print.css") | $raw %]
     [% IF ( Koha.Preference('AllNoticeCSS') ) %]
-    <style>[% Koha.Preference('AllNoticeCSS') | $raw %]</style>
+    <style nonce="[% Koha.CSPNonce | $raw %]">[% Koha.Preference('AllNoticeCSS') | $raw %]</style>
     [% END %]
     [% FOR style IN styles %]
-    <style>[% style | $raw %]</style>
+    <style nonce="[% Koha.CSPNonce | $raw %]">[% style | $raw %]</style>
     [% END %]
     [% FOR notice IN notices %]
-        [% IF notice.style %]<style>[% notice.style.replace('([^\{\}]+?)\s*\{', '#notice_' _ notice.id _ ' $1 {') | $raw %]</style>[% END %]
+        [% IF notice.style %]<style nonce="[% Koha.CSPNonce | $raw %]">[% notice.style.replace('([^\{\}]+?)\s*\{', '#notice_' _ notice.id _ ' $1 {') | $raw %]</style>[% END %]
     [% END %]
 </head>
 <body id="members_printnotice" class="member">

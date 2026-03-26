@@ -15,7 +15,7 @@
 >
 [% INCLUDE 'doc-head-close.inc' %]
 [% FILTER collapse %]
-    <style>
+    <style nonce="[% Koha.CSPNonce | $raw %]">
         .notice {
             display: none;
         }
@@ -304,7 +304,7 @@
         [% INCLUDE 'calendar.inc' %]
         [% INCLUDE 'datatables.inc' %]
         [% Asset.js("js/modal_printer.js") | $raw %]
-        <script>
+        <script nonce="[% Koha.CSPNonce | $raw %]">
             $(document).ready(function () {
                 $("#notices").dataTable(
                     $.extend(true, {}, dataTablesDefaults, {
