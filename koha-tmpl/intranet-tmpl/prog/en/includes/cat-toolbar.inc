@@ -317,7 +317,7 @@
     [% END %]
 
     [% FOREACH p IN plugins %]
-        [% p.intranet_catalog_biblio_enhancements_toolbar_button | $raw %]
+        [% p.intranet_catalog_biblio_enhancements_toolbar_button({ biblionumber => biblionumber }) | $raw %]
     [% END %]
 </div>
 

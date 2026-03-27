@@ -55,8 +55,9 @@ sub to_marc {
 }
 
 sub intranet_catalog_biblio_enhancements_toolbar_button {
-    my ( $self, $args ) = @_;
-    return "Koha::Plugin::Test::intranet_catalog_biblio_enhancements_toolbar_button";
+    my ( $self, $params ) = @_;
+    my $biblionumber = $params->{biblionumber};
+    return $biblionumber;
 }
 
 sub intranet_catalog_biblio_enhancements {

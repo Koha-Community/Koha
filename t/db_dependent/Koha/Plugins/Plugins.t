@@ -397,7 +397,8 @@ subtest 'Koha::Plugin::Test' => sub {
 
     ok( can_load( modules => { "Koha::Plugin::Test" => undef } ), 'Test can_load' );
 
-    my $plugin = Koha::Plugin::Test->new( { enable_plugins => 1, cgi => CGI->new } );
+    my $plugin       = Koha::Plugin::Test->new( { enable_plugins => 1, cgi => CGI->new } );
+    my $biblionumber = 1;
 
     isa_ok( $plugin, "Koha::Plugin::Test",  'Test plugin class' );
     isa_ok( $plugin, "Koha::Plugins::Base", 'Test plugin parent class' );
@@ -406,9 +407,10 @@ subtest 'Koha::Plugin::Test' => sub {
     ok( $plugin->can('tool'),                                 'Test plugin can tool' );
     ok( $plugin->can('to_marc'),                              'Test plugin can to_marc' );
     ok( $plugin->can('intranet_catalog_biblio_enhancements'), 'Test plugin can intranet_catalog_biblio_enhancements' );
-    ok(
-        $plugin->can('intranet_catalog_biblio_enhancements_toolbar_button'),
-        'Test plugin can intranet_catalog_biblio_enhancements_toolbar_button'
+    is(
+        $plugin->intranet_catalog_biblio_enhancements_toolbar_button( { biblionumber => $biblionumber } ),
+        $biblionumber,
+        'Test plugin can intranet_catalog_biblio_enhancements_toolbar_button with biblionumber parameter'
     );
     ok( $plugin->can('opac_online_payment'),       'Test plugin can opac_online_payment' );
     ok( $plugin->can('after_hold_create'),         'Test plugin can after_hold_create' );
