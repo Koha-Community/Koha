@@ -164,11 +164,11 @@ describe("Accounts", () => {
         cy.get("#allow_fields .vs__search").type("CG" + "{enter}", {
             force: true,
         });
-        cy.get("#allow_fields .vs__search").type("CE" + "{enter}", {
+        cy.get("#allow_fields .vs__search").type("CE - " + "{enter}", {
             force: true,
         });
         cy.get("#allow_fields .vs__selected-options").contains("CG");
-        cy.get("#allow_fields .vs__selected-options").contains("CE");
+        cy.get("#allow_fields .vs__selected-options").contains("CE - Unused");
 
         cy.get("#allow_fields .vs__selected-options .vs__selected")
             .contains("CG")
