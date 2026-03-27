@@ -425,6 +425,62 @@
     x-koha-authorization:
       permissions:
         catalogue: 1
+"/libraries/{library_id}/holidays":
+  get:
+    x-mojo-to: Libraries#list_holidays
+    operationId: listLibraryHolidays
+    tags:
+      - libraries
+    summary: List holidays for a library
+    description: |
+      Returns a list of closed days (holidays) for a library within a date range.
+      Used by booking calendar to disable selection of closed days.
+    parameters:
+      - $ref: "../swagger.yaml#/parameters/library_id_pp"
+      - name: from
+        in: query
+        description: Start date for the range (ISO 8601 format, e.g., 2024-01-01). Defaults to today.
+        required: false
+        type: string
+        format: date
+      - name: to
+        in: query
+        description: End date for the range (ISO 8601 format, e.g., 2024-03-31). Defaults to 3 months from 'from'.
+        required: false
+        type: string
+        format: date
+    produces:
+      - application/json
+    responses:
+      "200":
+        description: A list of holiday dates in YYYY-MM-DD format
+        schema:
+          type: array
+          items:
+            type: string
+            format: date
+      "400":
+        description: Bad request
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "404":
+        description: Library not found
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "500":
+        description: |
+          Internal server error. Possible `error_code` attribute values:
+
+          * `internal_server_error`
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "503":
+        description: Under maintenance
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+    x-koha-authorization:
+      permissions:
+        catalogue: "1"
 /public/libraries:
   get:
     x-mojo-to: Libraries#list

@@ -18,7 +18,10 @@ package Koha::REST::V1::Libraries;
 use Modern::Perl;
 
 use Mojo::Base 'Mojolicious::Controller';
+use C4::Context;
 use Koha::Libraries;
+use Koha::Calendar;
+use Koha::DateUtils qw( dt_from_string );
 
 use Scalar::Util qw( blessed );
 
@@ -203,6 +206,56 @@ sub list_cash_registers {
         return $c->render(
             status  => 200,
             openapi => $c->objects->to_api( $library->cash_registers )
+        );
+    } catch {
+        $c->unhandled_exception($_);
+    };
+}
+
+=head3 list_holidays
+
+Controller function that returns closed days for a library within a date range.
+Used by booking calendar to disable selection of closed days.
+
+=cut
+
+sub list_holidays {
+    my $c = shift->openapi->valid_input or return;
+
+    my $library_id = $c->param('library_id');
+    my $from       = $c->param('from');
+    my $to         = $c->param('to');
+
+    my $library = Koha::Libraries->find($library_id);
+
+    return $c->render_resource_not_found("Library")
+        unless $library;
+
+    return try {
+        my $from_dt = $from ? dt_from_string( $from, 'iso' ) : dt_from_string();
+        my $to_dt   = $to   ? dt_from_string( $to,   'iso' ) : $from_dt->clone->add( months => 3 );
+
+        if ( $to_dt->compare($from_dt) < 0 ) {
+            return $c->render(
+                status  => 400,
+                openapi => { error => "'to' date must be after 'from' date" }
+            );
+        }
+
+        my $calendar = Koha::Calendar->new( branchcode => $library_id );
+        my @holidays;
+
+        my $current = $from_dt->clone;
+        while ( $current <= $to_dt ) {
+            if ( $calendar->is_holiday($current) ) {
+                push @holidays, $current->ymd;
+            }
+            $current->add( days => 1 );
+        }
+
+        return $c->render(
+            status  => 200,
+            openapi => \@holidays
         );
     } catch {
         $c->unhandled_exception($_);

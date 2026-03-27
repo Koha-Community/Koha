@@ -18,7 +18,7 @@
 use Modern::Perl;
 
 use Test::NoWarnings;
-use Test::More tests => 8;
+use Test::More tests => 9;
 use Test::Mojo;
 use Test::Warn;
 
@@ -27,6 +27,7 @@ use t::lib::Mocks;
 
 use List::Util qw(min);
 
+use Koha::Caches;
 use Koha::Libraries;
 use Koha::Database;
 
@@ -435,6 +436,103 @@ subtest 'list_cash_registers() tests' => sub {
         ->tx->res->json;
 
     is( scalar @{$res}, 2 );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'list_holidays() tests' => sub {
+
+    plan tests => 16;
+
+    $schema->storage->txn_begin;
+
+    my $library = $builder->build_object( { class => 'Koha::Libraries' } );
+    my $patron  = $builder->build_object(
+        {
+            class => 'Koha::Patrons',
+            value => { flags => 4 }
+        }
+    );
+    my $password = 'thePassword123';
+    $patron->set_password( { password => $password, skip_validation => 1 } );
+    my $userid = $patron->userid;
+
+    my $branchcode = $library->branchcode;
+    my $cache      = Koha::Caches->get_instance();
+
+    # Clear existing holidays for this branch
+    $schema->resultset('SpecialHoliday')->search( { branchcode => $branchcode } )->delete;
+    $schema->resultset('RepeatableHoliday')->search( { branchcode => $branchcode } )->delete;
+    $cache->clear_from_cache( $branchcode . '_holidays' );
+
+    # Add a specific holiday
+    $builder->build(
+        {
+            source => 'SpecialHoliday',
+            value  => {
+                branchcode  => $branchcode,
+                day         => 15,
+                month       => 6,
+                year        => 2026,
+                title       => 'Test holiday',
+                description => '',
+                isexception => 0,
+            },
+        }
+    );
+
+    # Add a second holiday
+    $builder->build(
+        {
+            source => 'SpecialHoliday',
+            value  => {
+                branchcode  => $branchcode,
+                day         => 20,
+                month       => 6,
+                year        => 2026,
+                title       => 'Another holiday',
+                description => '',
+                isexception => 0,
+            },
+        }
+    );
+    $cache->clear_from_cache( $branchcode . '_holidays' );
+
+    # Returns holidays within range
+    $t->get_ok("//$userid:$password@/api/v1/libraries/$branchcode/holidays?from=2026-06-01&to=2026-06-30")
+        ->status_is(200);
+
+    my $holidays = $t->tx->res->json;
+    ok( ( grep { $_ eq '2026-06-15' } @$holidays ), 'First holiday found in response' );
+    ok( ( grep { $_ eq '2026-06-20' } @$holidays ), 'Second holiday found in response' );
+
+    # Returns empty list when no holidays in range
+    $t->get_ok("//$userid:$password@/api/v1/libraries/$branchcode/holidays?from=2026-07-01&to=2026-07-05")
+        ->status_is(200);
+
+    my $no_holidays = $t->tx->res->json;
+    my @filtered    = grep { $_ eq '2026-06-15' || $_ eq '2026-06-20' } @$no_holidays;
+    is( scalar @filtered, 0, 'No test holidays outside their range' );
+
+    # 400 when to < from
+    $t->get_ok("//$userid:$password@/api/v1/libraries/$branchcode/holidays?from=2026-06-30&to=2026-06-01")
+        ->status_is(400)
+        ->json_is( '/error' => "'to' date must be after 'from' date" );
+
+    # 404 for non-existent library
+    my $non_existent_code = $library->branchcode;
+    $library->delete;
+    $cache->clear_from_cache( $non_existent_code . '_holidays' );
+
+    $t->get_ok("//$userid:$password@/api/v1/libraries/$non_existent_code/holidays?from=2026-06-01&to=2026-06-30")
+        ->status_is(404)
+        ->json_is( '/error' => 'Library not found' );
+
+    # Defaults work (no from/to params)
+    my $library2 = $builder->build_object( { class => 'Koha::Libraries' } );
+    $t->get_ok( "//$userid:$password@/api/v1/libraries/" . $library2->branchcode . "/holidays" )
+        ->status_is(200)
+        ->json_is( '' => [], 'Empty holidays for fresh library with defaults' );
 
     $schema->storage->txn_rollback;
 };
