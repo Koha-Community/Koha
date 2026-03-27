@@ -90,6 +90,21 @@ __PACKAGE__->set_primary_key("matcher_id");
 
 =head1 RELATIONS
 
+=head2 biblio_framework_marc_matchers
+
+Type: has_many
+
+Related object: L<Koha::Schema::Result::BiblioFrameworkMarcMatcher>
+
+=cut
+
+__PACKAGE__->has_many(
+  "biblio_framework_marc_matchers",
+  "Koha::Schema::Result::BiblioFrameworkMarcMatcher",
+  { "foreign.marc_matcher_id" => "self.matcher_id" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+
 =head2 matchchecks
 
 Type: has_many
@@ -136,8 +151,8 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07025 @ 2013-10-14 20:56:21
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:2K4K9wfjRlJJKDztPgHJDA
+# Created by DBIx::Class::Schema::Loader v0.07053 @ 2026-03-27 15:07:35
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:tslWEzCAF2HweHUyaDxojw
 
 
 # You can replace this text with custom content, and it will be preserved on regeneration
