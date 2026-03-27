@@ -91,6 +91,9 @@ __PACKAGE__->belongs_to(
 # Created by DBIx::Class::Schema::Loader v0.07053 @ 2026-03-24 08:59:31
 # DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:vVdKoIqtbvnSk0EXoQT4iw
 
+__PACKAGE__->add_columns(
+  '+forbid_duplicate_creation' => { is_boolean => 1 },
+);
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration
 1;
