@@ -134,9 +134,13 @@
 [% END %]
 
 [% MACRO jsinclude BLOCK %]
-    <script nonce="[% Koha.CSPNonce | $raw %]">
+    <script nonce="[% Koha.CSPNonce | $raw %]" data-tt-allowed="true">
         const authid = "[% authid | html %]";
         const searchType = "[% marclist | html %]";
+        const displayhierarchy = [% displayhierarchy ? 1 : 0 | html %];
+        Koha.addPrefs({
+            DefaultAuthorityTab: "[% Koha.Preference('DefaultAuthorityTab') | html %]",
+        });
     </script>
     [% Asset.js("js/authorities.js") | $raw %]
     [% IF ( displayhierarchy ) %]
@@ -147,10 +151,9 @@
            if( $("#authoritiestabs .tab-pane.active").length < 1 ){
                let tab_object = [];
 
-               [% SET DefaultAuthorityTab = Koha.Preference('DefaultAuthorityTab') %]
-               [% IF DefaultAuthorityTab %]
-                   tab_object = $("#authoritiestabs #tab[% DefaultAuthorityTab | html %]XX-tab");
-               [% END %]
+               if (Koha.prefs.DefaultAuthorityTab){
+                   tab_object = $(`#authoritiestabs #tab${Koha.prefs.DefaultAuthorityTab}XX-tab`);
+               }
 
                if( tab_object.length > 0 ){
                    tab_object.tab("show");
@@ -167,7 +170,7 @@
                editAuth.attr("href", editAuthLink + newTabId );
            });
 
-           [% IF ( displayhierarchy ) %]
+           if (displayhierarchy){
                $('#hierarchies').jstree({
                    "types" : {
                        "default" : {
@@ -177,7 +180,7 @@
                    "plugins" : [ "types" ]
                }).on('ready.jstree', function(){
                    $(this).jstree('open_all');
-                   $("#hier"+[% authid | html %]+"_anchor").on("click",
+                   $(`#hier${authid}_anchor`).on("click",
                        function(e){e.preventDefault(); return false;}
                    ).css("text-decoration", "none").css("color", "#333");
                    $(".currentauth").css("text-decoration", "none").css("color", "#333");
@@ -185,7 +188,7 @@
                    e.preventDefault();
                    document.location.href = data.node.a_attr.href;
                });
-           [% END # /IF ( displayhierarchy ) %]
+            }
         });
     </script>
 [% END %]

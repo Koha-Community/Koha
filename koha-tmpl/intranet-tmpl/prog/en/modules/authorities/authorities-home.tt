@@ -40,7 +40,7 @@
     [%- END -%]
 [% END %]
 [% MACRO jsinclude BLOCK %]
-    <script nonce="[% Koha.CSPNonce | $raw %]">
+    <script nonce="[% Koha.CSPNonce | $raw %]" data-tt-allowed="true">
         const searchType = "[% marclist | html %]";
     </script>
     [% Asset.js("js/authorities.js") | $raw %]

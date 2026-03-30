@@ -19,7 +19,7 @@
 [% END %]
 
 [% MACRO jsinclude BLOCK %]
-    <script nonce="[% Koha.CSPNonce | $raw %]">
+    <script nonce="[% Koha.CSPNonce | $raw %]" data-tt-allowed="true">
         $(document).ready(function(){
             [% IF rancor %]
                 function RancorReplaceField( new_text, ind_1, ind_2 ){

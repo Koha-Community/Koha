@@ -140,8 +140,9 @@
 [% END %]
 
 [% MACRO jsinclude BLOCK %]
-    <script nonce="[% Koha.CSPNonce | $raw %]">
+    <script nonce="[% Koha.CSPNonce | $raw %]" data-tt-allowed="true">
         const searchType = "";
+        const frameworkcode = "[% framework | html %]";
     </script>
     [% Asset.js("js/authorities.js") | $raw %]
     [% Asset.js("js/merge-record.js") | $raw %]
@@ -154,7 +155,7 @@
         $(document).ready(function(){
             // Getting marc structure via ajax
             tagslib = [];
-            $.getJSON("/cgi-bin/koha/authorities/merge_ajax.pl", {frameworkcode : "[% framework | html %]" }, function(json) {
+            $.getJSON("/cgi-bin/koha/authorities/merge_ajax.pl", {frameworkcode}, function(json) {
                 tagslib = json;
                 rebuild_target($("#tabs"), $("#resultul"));
             });
