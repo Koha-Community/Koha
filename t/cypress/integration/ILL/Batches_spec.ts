@@ -125,35 +125,33 @@ const parse_to_ill_response = {
 };
 
 const batchstatuses = [
-  {
-    "code": "NEW",
-    "id": 1,
-    "is_system": true,
-    "name": "New"
-  },
-  {
-    "code": "IN_PROGRESS",
-    "id": 2,
-    "is_system": true,
-    "name": "In progress"
-  },
-  {
-    "code": "COMPLETED",
-    "id": 3,
-    "is_system": true,
-    "name": "Completed"
-  },
-  {
-    "code": "UNKNOWN",
-    "id": 4,
-    "is_system": true,
-    "name": "Unknown"
-  }
+    {
+        code: "NEW",
+        id: 1,
+        is_system: true,
+        name: "New",
+    },
+    {
+        code: "IN_PROGRESS",
+        id: 2,
+        is_system: true,
+        name: "In progress",
+    },
+    {
+        code: "COMPLETED",
+        id: 3,
+        is_system: true,
+        name: "Completed",
+    },
+    {
+        code: "UNKNOWN",
+        id: 4,
+        is_system: true,
+        name: "Unknown",
+    },
 ];
 
 describe("ILL Batches", () => {
-    let original_plugin_restricted;
-    let kohaconf = "/etc/koha/sites/kohadev/koha-conf.xml";
     beforeEach(() => {
         cy.login();
         cy.task("query", {
@@ -162,21 +160,8 @@ describe("ILL Batches", () => {
             cy.wrap(rows[0].value).as("syspref_ILLModule");
         });
         cy.set_syspref("ILLModule", 1);
-        cy.task("readXmlElementValue", {
-            filePath: kohaconf,
-            element: "plugins_restricted",
-        }).then(value => {
-            original_plugin_restricted = value;
-            if (value == "1") {
-                cy.task("modifyXmlElement", {
-                    filePath: kohaconf,
-                    element: "plugins_restricted",
-                    value: "0",
-                });
-            }
-        });
         cy.title().should("eq", "Koha staff interface");
-        cy.get("a.icon_administration").contains("Koha administration").click();
+        cy.get("a.icon_administration").contains("Administration").click();
         cy.get("a").contains("Manage plugins").click();
         cy.get("a#upload_plugin").contains("Upload plugin").click();
 
@@ -188,30 +173,22 @@ describe("ILL Batches", () => {
 
         cy.intercept("GET", "/api/v1/ill/batchstatuses", {
             statusCode: 200,
-            body: batchstatuses
+            body: batchstatuses,
         }).as("get-batchstatuses");
-
     });
     afterEach(function () {
         //Restore ILLModule sys pref original value
         cy.set_syspref("ILLModule", this.syspref_ILLModule);
-        //Restore plugins_restricted original value
-        cy.task("modifyXmlElement", {
-            filePath: kohaconf,
-            element: "plugins_restricted",
-            value: original_plugin_restricted,
-        });
         //Clean-up created test batches
         cy.task("query", {
-            sql: "DELETE from illbatches",
+            sql: "DELETE from illbatches where name IN ('test batch', 'second test batch')",
         });
-        //Clean-up installed plugin(s)
-        cy.task("query", {
-            sql: "DELETE from plugin_data",
-        });
-        cy.task("query", {
-            sql: "DELETE from plugin_methods",
-        });
+        //Uninstall plugin
+        cy.visit("/cgi-bin/koha/plugins/plugins-home.pl");
+        cy.get('.actions .btn-group.dropup a[id*="Pubmed"]')
+            .contains("Actions")
+            .click();
+        cy.get(".dropdown-item.uninstall_plugin").click();
     });
     it("ILL requests batch modal", function () {
         cy.visit("/cgi-bin/koha/mainpage.pl");
