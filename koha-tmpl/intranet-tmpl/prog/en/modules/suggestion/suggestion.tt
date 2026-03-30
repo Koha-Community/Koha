@@ -1207,6 +1207,19 @@
 [% MACRO jsinclude BLOCK %]
     [% INCLUDE 'calendar.inc' %]
     [% INCLUDE 'select_manager.inc' manager => suggestion.manager %]
+    <script nonce="[% Koha.CSPNonce | $raw %]" data-tt-allowed="true">
+        [% IF op == 'else' %]
+            const has_suggestions = [% suggestions.size ? 1 : 0 | html %];
+            let suggestionData = [% To.json(suggestions || []) | $raw %];
+            var suggestions_table_settings = [% TablesSettings.GetTableSettings( 'acqui', 'suggestions', 'suggestions', 'json' ) | $raw %]
+            Koha.addPermissions({
+                CAN_user_suggestions_suggestions_manage: [% CAN_user_suggestions_suggestions_manage ? 1 : 0 | html %],
+                CAN_user_suggestions_suggestions_delete: [% CAN_user_suggestions_suggestions_delete ? 1 : 0 | html %],
+            });
+        [% ELSIF op == 'save' %]
+            const has_other_reason = [% other_reason ? 1 : 0 | html %];
+        [% END %]
+    </script>
     <script nonce="[% Koha.CSPNonce | $raw %]">
         function select_suggester(borrowernumber, borrower) {
             $.ajax({
@@ -1253,15 +1266,6 @@
         </script>
     [% END %]
     [% IF op == 'else' %]
-        <script nonce="[% Koha.CSPNonce | $raw %]">
-            const has_suggestions = [% suggestions.size ? 1 : 0 | html %];
-            let suggestionData = [% To.json(suggestions || []) | $raw %];
-            var suggestions_table_settings = [% TablesSettings.GetTableSettings( 'acqui', 'suggestions', 'suggestions', 'json' ) | $raw %]
-            Koha.addPermissions({
-                CAN_user_suggestions_suggestions_manage: [% CAN_user_suggestions_suggestions_manage ? 1 : 0 | html %],
-                CAN_user_suggestions_suggestions_delete: [% CAN_user_suggestions_suggestions_delete ? 1 : 0 | html %],
-            });
-        </script>
         [% INCLUDE 'datatables.inc' %]
         <script nonce="[% Koha.CSPNonce | $raw %]">
             $(document).ready(function () {
@@ -1595,13 +1599,13 @@
                     calcNewsuggTotal();
                 });
 
-                [% IF other_reason %]
+                if (has_other_reason){
                     $(".select-reason").hide();
                     $(".select-reason").find("option[value='other']").attr("selected","selected");
                     $("#other_reason").show();
-                [% ELSE %]
+                } else {
                     $("#other_reason").hide();
-                [% END %]
+                }
                 $(".select-reason").change(function(){
                     if($(this).val() == "other"){
                         $(this).hide();
