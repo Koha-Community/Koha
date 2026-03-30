@@ -13,7 +13,7 @@
 [% SET OpacNavRight = AdditionalContents.get( location => "OpacNavRight", lang => lang, library => logged_in_user.branchcode || default_branch ) %]
 [% SET OpacMainUserBlock = AdditionalContents.get( location => "OpacMainUserBlock", lang => lang, library => logged_in_user.branchcode || default_branch ) %]
 [% SET OpacLoginInstructions = AdditionalContents.get( location => "OpacLoginInstructions", lang => lang, library => branchcode || default_branch ) %]
-[% SET AllPublicBranches = Branches.all(  search_params => { public => 1 }, selected => branchcode ) %]
+[% SET AllPublicBranches = Branches.all(  search_params => { public => 1 }, selected => branchcode, unfiltered => 1 ) %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title
     >[% FILTER collapse %]
