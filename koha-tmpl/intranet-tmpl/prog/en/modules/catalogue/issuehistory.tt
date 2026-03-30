@@ -127,7 +127,7 @@
 
 [% MACRO jsinclude BLOCK %]
     [% INCLUDE 'datatables.inc' %]
-    <script nonce="[% Koha.CSPNonce | $raw %]">
+    <script nonce="[% Koha.CSPNonce | $raw %]" data-tt-allowed="true">
         var table_settings = [% TablesSettings.GetTableSettings('catalogue', 'detail', 'checkoutshistory-table', 'json') | $raw %];
         [% UNLESS show_patron_column %]
             // Remove the patron column definition

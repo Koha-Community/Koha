@@ -1285,18 +1285,66 @@
     [%# can_edit_items_from item_type_image_locations %]
     [% PROCESS build_items_table_js biblio => biblio %]
 
+    <script nonce="[% Koha.CSPNonce | $raw %]" data-tt-allowed="true">
+        /* Set a variable needed by add_catalog_concern.js */
+        var logged_in_user_borrowernumber = "[% logged_in_user.borrowernumber | html %]";
+
+        var searchid = "[% searchid | html %]";
+        var biblio_id = parseInt('[% biblionumber | html %]', 10);
+
+        var interface = "[% interface | html %]";
+        var theme = "[% theme | html %]";
+        var all_items_count = [% count || 0 | html %];
+
+        const activetab = "[% activetab | html %]";
+        const has_component_parts = [% ComponentParts && ComponentParts.size ? 1 : 0 | html %];
+        const show_holdings_panel = [% items_to_display_count - ( other_holdings_count || 0 ) ? 1 : 0 | html %]
+
+        const normalized_isbn = "[% normalized_isbn | html %]";
+        const normalized_upc = "[% normalized_upc | html %]";
+
+        [% IF ( ( Koha.Preference('CatalogConcerns') || Koha.Preference('OpacCatalogConcerns') ) && CAN_user_editcatalogue_edit_catalogue ) %]
+            var concerns_table_settings = [% TablesSettings.GetTableSettings( 'catalogue', 'concerns', 'table_concerns', 'json' ) | $raw %];
+        [% END %]
+
+        [% IF Koha.Preference('AcquisitionDetails') %]
+            var acquisitiondetails_table_settings = [% TablesSettings.GetTableSettings('catalogue', 'detail', 'acquisitiondetails-table', 'json') | $raw %];
+        [% END %]
+
+        [% IF reviews %]
+            var comment_table_settings = [% TablesSettings.GetTableSettings('catalogue', 'detail', 'comments-table', 'json') | $raw %];
+        [% END %]
+
+        [% IF bundlesEnabled %]
+            var bundle_settings = [% TablesSettings.GetTableSettings('catalogue', 'detail','bundle_tables','json') | $raw %];
+        [% END %]
+
+        const bundlesEnabled = [% bundlesEnabled ? 1 : 0 | html %];
+
+        Koha.addPrefs({
+            AlwaysShowHoldingsTableFilters: [% Koha.Preference('AlwaysShowHoldingsTableFilters') ? 1 : 0 | html %],
+            BundleLostValue: "[% Koha.Preference('BundleLostValue') | html %]",
+            CoceHost: "[% Koha.Preference('CoceHost') | html %]",
+            CoceProviders: "[% Koha.Preference('CoceProviders') | html %]",
+            HTML5MediaEnabled: "[% HTML5MediaEnabled | html %]",
+            KohaAdminEmailAddress: "[% KohaAdminEmailAddress | uri %]",
+            IntranetCoce: [% Koha.Preference('IntranetCoce') ? 1 : 0 | html %],
+            NovelistSelectStaffEnabled: [% Koha.Preference('NovelistSelectStaffEnabled') ? 1 : 0 | html %],
+            NovelistSelectStaffProfile: "[% Koha.Preference('NovelistSelectStaffProfile') | html %]",
+            NovelistSelectPassword: "[% Koha.Preference('NovelistSelectPassword') | html %]",
+            SearchEngine: "[% Koha.Preference('SearchEngine') | html %]",
+        });
+
+        Koha.addPermissions({
+            CAN_user_editcatalogue_manage_item_groups: [% CAN_user_editcatalogue_manage_item_groups ? 1 : 0 | html %],
+            CAN_user_tools_upload_local_cover_images: [% CAN_user_tools_upload_local_cover_images ? 1 : 0 | html %],
+        });
+    </script>
+
     [% IF ( Koha.Preference('CatalogConcerns') ) %]
-        <script nonce="[% Koha.CSPNonce | $raw %]">
-            /* Set a variable needed by add_catalog_concern.js */
-            var logged_in_user_borrowernumber = "[% logged_in_user.borrowernumber | html %]";
-        </script>
         [% Asset.js("js/modals/add_catalog_concern.js") | $raw %]
     [% END %]
     [% IF ( ( Koha.Preference('CatalogConcerns') || Koha.Preference('OpacCatalogConcerns') ) && CAN_user_editcatalogue_edit_catalogue ) %]
-        <script nonce="[% Koha.CSPNonce | $raw %]">
-            var table_settings = [% TablesSettings.GetTableSettings( 'catalogue', 'concerns', 'table_concerns', 'json' ) | $raw %];
-            const biblio_id = "[% biblionumber | html %]";
-        </script>
         <script nonce="[% Koha.CSPNonce | $raw %]">
             $(document).ready(function () {
                 $("#bibliodetails a:first").tab("show");
@@ -1458,7 +1506,7 @@
                             },
                         ],
                     },
-                    table_settings,
+                    concerns_table_settings,
                     0,
                     additional_filters,
                     undefined,
@@ -1479,8 +1527,6 @@
         [% Asset.js("js/modals/display_ticket.js") | $raw %]
     [% END # /IF CatalogConcerns %]
     <script nonce="[% Koha.CSPNonce | $raw %]">
-        var interface = "[% interface | html %]";
-        var theme = "[% theme | html %]";
         // http://www.oreillynet.com/pub/a/javascript/2003/10/21/amazonhacks.html
         function verify_cover_images(container) {
             // Loop over each container in the template which contains covers
@@ -1625,32 +1671,32 @@
         function showNoImageMessage() {
             var no_images_msg = _("No images have been uploaded for this bibliographic record yet.");
             no_images_msg = '<p>' + no_images_msg + '</p>';
-            [% IF ( CAN_user_tools_upload_local_cover_images ) %]
-                var please_upload = _("Upload an image file: %sUpload%s").format("<a class='btn btn-default btn-xs' href='/cgi-bin/koha/tools/upload-cover-image.pl?biblionumber=" + biblionumber + "&amp;filetype=image'><i class='fa fa-upload' aria-hidden='true'></i> ","</a>");
+            if (Koha.permissions.CAN_user_tools_upload_local_cover_images ) {
+                var please_upload = _("Upload an image file: %sUpload%s").format("<a class='btn btn-default btn-xs' href='/cgi-bin/koha/tools/upload-cover-image.pl?biblionumber=" + biblio_id + "&amp;filetype=image'><i class='fa fa-upload' aria-hidden='true'></i> ","</a>");
                 no_images_msg += "<p id='upload_image'>" + please_upload + '</p>';
-            [% END %]
+            }
             $('#images').html(no_images_msg);
         }
 
         $(document).ready(function() {
             // Pick details tab to display by default
-            [% IF activetab == "comments" %]
+            if (activetab == "comments" ){
                 $("#bibliodetails a[href='#comments_panel']").tab("show");
-            [% ELSIF count == 0 %]
-                [% IF ( Koha.Preference('HTML5MediaEnabled') == 'staff' or Koha.Preference('HTML5MediaEnabled') == 'both' ) && HTML5MediaSets.size %]
+            } else if (all_items_count == 0){
+                if ((Koha.prefs.HTML5MediaEnabled == 'staff' || Koha.prefs.HTML5MediaEnabled == 'both' ) && HTML5MediaSets.size ){
                     $("#bibliodetails a[href='#html5media_panel']").tab("show");
-                [% ELSIF ComponentParts && ComponentParts.size %]
+                } else if (has_component_parts){
                     $("#bibliodetails a[href='#components_panel']").tab("show");
-                [% ELSE %]
+                } else {
                     $("#bibliodetails a[href='#holdings_panel']").tab("show");
-                [% END %]
-            [% ELSE %]
-                [% IF items_to_display_count - ( other_holdings_count || 0 ) %]
+                }
+            } else {
+                if (show_holdings_panel ) {
                     $("#bibliodetails a[href='#holdings_panel']").tab("show");
-                [% ELSE %]
+                } else {
                     $("#bibliodetails a[href='#otherholdings_panel']").tab("show");
-                [% END %]
-            [% END %]
+                }
+            }
             $('#search-form').focus();
             $('.thumbnails > li > .remove').click(function() {
                 var result = confirm(_("Are you sure you want to delete this cover image?"));
@@ -1662,9 +1708,9 @@
 
                 return false;
             });
-            [% IF ( IntranetCoce && CoceProviders ) %]
-                KOHA.coce.getURL('[% CoceHost | html %]', '[% CoceProviders | html %]');
-            [% END %]
+            if (Koha.prefs.IntranetCoce && Koha.prefs.CoceProviders){
+                KOHA.coce.getURL(Koha.prefs.CoceHost, Koha.prefs.CoceProviders);
+            }
 
             $("body").on("click",".previewMARC", function(e){
                 e.preventDefault();
@@ -1674,33 +1720,33 @@
 
             });
 
-            [% IF ( Koha.Preference('SearchEngine') == 'Elasticsearch' ) %]
+            if (Koha.prefs.SearchEngine == 'Elasticsearch' ){
                 $("body").on("click",".previewElastic", function(e){
                     e.preventDefault();
                     var pageElastic = $(this).attr("href");
                     $("#elasticPreview .modal-body").load(pageElastic, function( response, status, xhr ) {
                         if( status == 'error' ){
-                            $("#elasticPreview .modal-body").html("<h1>"+_("An error has occurred!")+"</h1><h2><em>"+_("Error 404")+"</em></h2><ul><li>"+_("An internal link in the staff interface is broken and the page does not exist")+"</li></ul><h3>"+_("What's next?")+"</h3><ul style='margin-bottom: 1em; padding-bottom: 1em; border-bottom: 1px solid #CCC;'><li>"+_("Use top menu bar to navigate to another part of Koha.")+"</li><li>"+_("To report a broken link or any other issue, please contact the Koha administrator.")+" <a href='mailto:[% Koha.Preference("KohaAdminEmailAddress") | uri %]'>"+_("Send email")+"</a></li></ul>");
+                            $("#elasticPreview .modal-body").html("<h1>"+_("An error has occurred!")+"</h1><h2><em>"+_("Error 404")+"</em></h2><ul><li>"+_("An internal link in the staff interface is broken and the page does not exist")+"</li></ul><h3>"+_("What's next?")+"</h3><ul style='margin-bottom: 1em; padding-bottom: 1em; border-bottom: 1px solid #CCC;'><li>"+_("Use top menu bar to navigate to another part of Koha.")+"</li><li>"+_("To report a broken link or any other issue, please contact the Koha administrator.")+" <a href='mailto: + Koha.prefs.KohaAdminEmailAddress'>"+_("Send email")+"</a></li></ul>");
                         }
                     });
                     $('#elasticPreview').modal("show");
                 });
-            [% END %]
+            }
 
-            [% IF ( Koha.Preference('NovelistSelectStaffEnabled') && Koha.Preference('NovelistSelectStaffProfile') && ( normalized_isbn || normalized_upc ) ) %]
+            if (Koha.prefs.NovelistSelectStaffEnabled && Koha.prefs.NovelistSelectStaffProfile && ( normalized_isbn || normalized_upc ) ){
                 novSelect.loadContentForQuery({
-                    ClientIdentifier : '[% IF normalized_isbn %][% normalized_isbn | html %][% ELSE %][% normalized_upc | html %][% END %]',
-                    ISBN : '[% IF normalized_isbn %][% normalized_isbn | html %][% ELSE %][% normalized_upc | html %][% END %]',
+                    ClientIdentifier : normalized_isbn || normalized_upc,
+                    ISBN : normalized_isbn || normalized_upc,
                     version : '2.1'
                 },
-                '[% Koha.Preference('NovelistSelectStaffProfile') | html %]',
-                '[% Koha.Preference('NovelistSelectPassword') | html %]',
+                Koha.prefs.NovelistSelectStaffProfile,
+                Koha.prefs.NovelistSelectPassword,
                 function(d){
                     if ( d.length > 0 ){ //If no content
                         $(".NovelistSelect").show();
                     }
                  });
-            [% END %]
+            }
             $(".cover-slider").on("click",".cover-nav", function(e){
                 e.preventDefault();
                 var cover_slider = $(this).parent();
@@ -1714,7 +1760,7 @@
         });
 
 
-        [% IF ( IntranetCoce && CoceProviders ) %]
+        if(Koha.prefs.IntranetCoce && Koha.prefs.CoceProviders ){
             let counter_wait = 0;
             function wait_for_images(cb){
 
@@ -1738,11 +1784,11 @@
             $(window).load(function() {
                 wait_for_images(verify_cover_images);
             });
-        [% ELSE %]
+        } else {
             $(window).load(function() {
                 verify_cover_images();
             });
-        [% END # /IF IntranetCoce %]
+        }
     </script>
     [% IF ( Koha.Preference('NovelistSelectStaffEnabled') && Koha.Preference('NovelistSelectStaffProfile') && ( normalized_isbn || normalized_upc ) ) %]
         <script src="https://imageserver.ebscohost.com/novelistselect/ns2init.js">
@@ -1764,25 +1810,11 @@
     [% IF Koha.Preference('EnableBooking') %]
         [% Asset.js("js/modals/place_booking.js") | $raw %]
     [% END %]
+
     <script nonce="[% Koha.CSPNonce | $raw %]">
-        var browser;
-        browser = KOHA.browser("[% searchid | html %]", parseInt(biblionumber, 10));
+        var browser = KOHA.browser(searchid, biblio_id);
         browser.show();
 
-        [% IF bundlesEnabled %]
-            var bundle_settings = [% TablesSettings.GetTableSettings('catalogue', 'detail','bundle_tables','json') | $raw %];
-        [% END %]
-
-        Koha.addPrefs({
-            AlwaysShowHoldingsTableFilters: [% Koha.Preference('AlwaysShowHoldingsTableFilters') ? 1 : 0 | html %],
-            BundleLostValue: "[% Koha.Preference('BundleLostValue') | html %]",
-        });
-
-        Koha.addPermissions({
-            CAN_user_editcatalogue_manage_item_groups: [% CAN_user_editcatalogue_manage_item_groups ? 1 : 0 | html %],
-        });
-    </script>
-    <script nonce="[% Koha.CSPNonce | $raw %]">
         let items_tab_ids = ["holdings", "otherholdings"];
         items_tab_ids.forEach(function (tab_id, index) {
             // Early return if the tab is not shown (ie. no table)
@@ -2137,9 +2169,6 @@
     </script>
     [% IF Koha.Preference('AcquisitionDetails') %]
         <script nonce="[% Koha.CSPNonce | $raw %]">
-            var table_settings = [% TablesSettings.GetTableSettings('catalogue', 'detail', 'acquisitiondetails-table', 'json') | $raw %];
-        </script>
-        <script nonce="[% Koha.CSPNonce | $raw %]">
             $(document).ready(function () {
                 var acquisitiondetails_table = $("#orders").kohaTable(
                     {
@@ -2148,7 +2177,7 @@
                         autoWidth: false,
                         order: [[4, "desc"]],
                     },
-                    table_settings
+                    acquisitiondetails_table_settings
                 );
             });
         </script>
@@ -2165,9 +2194,6 @@
     [% END %]
 
     [% IF ( reviews ) %]
-        <script nonce="[% Koha.CSPNonce | $raw %]">
-            var comment_table_settings = [% TablesSettings.GetTableSettings('catalogue', 'detail', 'comments-table', 'json') | $raw %];
-        </script>
         <script nonce="[% Koha.CSPNonce | $raw %]">
             $(document).ready(function () {
                 var comments_table = $("#comments_table").kohaTable(

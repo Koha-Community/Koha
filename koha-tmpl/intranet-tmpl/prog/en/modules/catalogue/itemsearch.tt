@@ -397,7 +397,7 @@
     [% INCLUDE 'calendar.inc' %]
     [% INCLUDE 'datatables.inc' %]
     [% INCLUDE 'select2.inc' %]
-    <script nonce="[% Koha.CSPNonce | $raw %]">
+    <script nonce="[% Koha.CSPNonce | $raw %]" data-tt-allowed="true">
         var authorised_values = [% authorised_values_json | $raw %];
         var table_settings = [% TablesSettings.GetTableSettings( 'catalogue', 'itemsearch', 'results', 'json' ) | $raw %];
         Koha.addPermissions({

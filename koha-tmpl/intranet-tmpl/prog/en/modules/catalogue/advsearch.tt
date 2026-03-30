@@ -401,7 +401,7 @@
     [% Asset.js("js/browser.js") | $raw %]
     [% Asset.css("css/humanmsg.css") | $raw %]
     [% Asset.js("lib/jquery/plugins/humanmsg.js") | $raw %]
-    <script nonce="[% Koha.CSPNonce | $raw %]">
+    <script nonce="[% Koha.CSPNonce | $raw %]" data-tt-allowed="true">
         /**
          *  Function add_field();
          *  This function allows to display a new field to search.

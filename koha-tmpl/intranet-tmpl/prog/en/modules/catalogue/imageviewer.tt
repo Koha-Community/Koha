@@ -144,18 +144,22 @@
         [% Asset.js("js/modals/place_booking.js") | $raw %]
     [% END %]
 
+    <script nonce="[% Koha.CSPNonce | $raw %]" data-tt-allowed="true">
+        /* Set a variable needed by add_catalog_concern.js */
+        var logged_in_user_borrowernumber = "[% logged_in_user.borrowernumber | html %]";
+
+        var interface = "[% interface | html %]";
+        var theme = "[% theme | html %]";
+
+        const imagenumber = [% imagenumber | html %];
+    </script>
+
     [% IF ( Koha.Preference('CatalogConcerns') ) %]
-        <script nonce="[% Koha.CSPNonce | $raw %]">
-            /* Set a variable needed by add_catalog_concern.js */
-            var logged_in_user_borrowernumber = "[% logged_in_user.borrowernumber | html %]";
-        </script>
         [% Asset.js("js/modals/add_catalog_concern.js") | $raw %]
     [% END %]
     <script nonce="[% Koha.CSPNonce | $raw %]">
-        var interface = "[% interface | html %]";
-        var theme = "[% theme | html %]";
         $(document).ready(function(){
-            showCover([% imagenumber | html %]);
+            showCover(imagenumber);
             $(".show_cover").on("click",function(e){
                 e.preventDefault();
                 if( $(this).find("img").hasClass("selected") ){

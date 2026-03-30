@@ -980,7 +980,7 @@
     [% Asset.css("css/humanmsg.css") | $raw %]
     [% Asset.js("lib/jquery/plugins/humanmsg.js") | $raw %]
     [% INCLUDE 'select2.inc' %]
-    <script nonce="[% Koha.CSPNonce | $raw %]">
+    <script nonce="[% Koha.CSPNonce | $raw %]" data-tt-allowed="true">
         var PREF_AmazonCoverImages = parseInt( "[% Koha.Preference('AmazonCoverImages') | html %]", 10);
         var q_array = new Array();  // will hold search terms, if present
         var PREF_IntranetCoce = parseInt( "[% Koha.Preference('IntranetCoce') | html %]", 10);
