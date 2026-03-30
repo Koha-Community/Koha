@@ -453,7 +453,7 @@
     [% INCLUDE 'datatables.inc' %]
     [% INCLUDE 'js-date-format.inc' %]
     [% INCLUDE 'format_price.inc' %]
-    <script nonce="[% Koha.CSPNonce | $raw %]">
+    <script nonce="[% Koha.CSPNonce | $raw %]" data-tt-allowed="true">
         var edit_mode = "[% edit | html %]";
         var invoiceincgst = "[% invoiceincgst | html %]";
         var active_currency = "[% active_currency.currency | html %]";

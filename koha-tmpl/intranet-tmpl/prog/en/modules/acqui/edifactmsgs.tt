@@ -47,7 +47,7 @@
     [% INCLUDE 'datatables.inc' %]
     [% Asset.js("js/modals/edifact_interchange.js") | $raw %]
     [% Asset.js("js/modals/edifact_errors.js") | $raw %]
-    <script nonce="[% Koha.CSPNonce | $raw %]">
+    <script nonce="[% Koha.CSPNonce | $raw %]" data-tt-allowed="true">
         var interface = "[% interface | html %]";
         var theme = "[% theme | html %]";
     </script>

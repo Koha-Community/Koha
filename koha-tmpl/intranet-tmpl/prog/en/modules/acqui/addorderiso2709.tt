@@ -45,7 +45,7 @@
 [% INCLUDE 'doc-head-close.inc' %]
 [% Asset.css("css/addbiblio.css") | $raw %]
 [%# As long as cataloging plugins rely on 'script' tags added inline, JS must be in the header %]
-<script nonce="[% Koha.CSPNonce | $raw %]">
+<script nonce="[% Koha.CSPNonce | $raw %]" data-tt-allowed="true">
     const template_path = "[% interface | html %]/[% theme | html %]";
 </script>
 [% Asset.js("js/acquisitions-menu.js") | $raw %]

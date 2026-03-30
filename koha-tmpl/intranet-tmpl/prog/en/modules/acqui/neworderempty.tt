@@ -54,11 +54,22 @@
 [% Asset.js("js/additional-fields-entry.js") | $raw %]
 [% INCLUDE 'calendar.inc' %]
 [% INCLUDE 'select2.inc' %]
+<script nonce="[% Koha.CSPNonce | $raw %]" data-tt-allowed="true">
+    const AcqCreateItemOrdering = [% AcqCreateItemOrdering ? 1 : 0 | html %];
+    const is_standing = [% basket.is_standing ? 1 : 0 | html %];
+    const ordernumber = "[% ordernumber | html %]";
+    const from_suggestion = [% suggestion ? 1 : 0 | html %];
+    const quantityrec = "[% quantityrec | html %]";
+    const subscriptionid = "[% subscriptionid | html %]";
+    Koha.addPrefs({
+        UniqueItemFields: "[% Koha.Preference("UniqueItemFields") | html %]",
+    });
+</script>
 <script nonce="[% Koha.CSPNonce | $raw %]">
     actTotal = "";
 
     function Check(ff) {
-        [% IF (AcqCreateItemOrdering) %]
+        if (AcqCreateItemOrdering) {
             // Remove last itemblock if it is not in items_list
             var lastitemblock = $("#outeritemblock > div:last");
             var tobedeleted = true;
@@ -71,7 +82,7 @@
             if(tobedeleted){
                 $(lastitemblock).remove();
             }
-        [% END %]
+        }
 
         var ok=0;
         var _alertString= _("Form not submitted because of the following problem(s)")+"\n";
@@ -115,45 +126,47 @@
 
         if (ok) {
             alert(_alertString);
-            [% IF (AcqCreateItemOrdering) %]
+            if (AcqCreateItemOrdering) {
                 if(tobedeleted) {
                     $(lastitemblock).appendTo('#outeritemblock');
                 }
-            [% END %]
+            }
             return false;
         }
 
-        [% IF (AcqCreateItemOrdering) %]
-            if(check_additem('[% UniqueItemFields | html %]') == false) {
+        if (AcqCreateItemOrdering) {
+            if(check_additem(Koha.prefs.UniqueItemFields) == false) {
                 alert(_("Duplicate values detected. Please correct the errors and resubmit.") );
                 if(tobedeleted) {
                     $(lastitemblock).appendTo('#outeritemblock');
                 }
                 return false;
             }
-        [% END %]
+        }
     }
 
     $(document).ready(function(){
-        [% UNLESS ordernumber %]
+        if (!ordernumber ){
             $("#items_list").hide();
-        [% END %]
+        }
 
-        [% IF AcqCreateItemOrdering and not basket.is_standing %]
-            cloneItemBlock(0, '[% UniqueItemFields | html %]');
-        [% END %]
+        if (AcqCreateItemOrdering && !is_standing ){
+            cloneItemBlock(0, Koha.prefs.UniqueItemFields);
+        }
 
-        [% IF ( suggestion ) %]updateCosts();[% END %]
+        if (from_suggestion) {
+            updateCosts();
+        }
         $("#quantity").change(function() {
             updateCosts();
         });
 
         //We apply the function only for modify option
-        [% IF ( quantityrec and not subscriptionid ) %]
-            [% IF ( acqcreate ) %]
+        if ( quantityrec && !subscriptionid ) {
+            if ( AcqCreateItemOrdering ){
                 $('#quantity').blur(function(){
                     // if user decreases the quantity
-                    if($(this).val() < [% quantityrec | html %]){
+                    if($(this).val() < quantityrec ){
                         alert(_("You have deleted item(s) in the order, don't forget to delete it(them) in the catalog"));
                         return true;
                     } else {
@@ -165,8 +178,8 @@
                         return false;
                     }
                 });
-            [% END %]
-        [% END %]
+            }
+        }
 
         //keep a copy of all budgets before removing the inactives
         disabledBudgetsCopy = $('#budget_id').html();

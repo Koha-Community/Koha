@@ -359,7 +359,6 @@ if ( $basketobj->effective_create_items eq 'ordering' ) {
     }
     $template->param(
         AcqCreateItemOrdering => 1,
-        UniqueItemFields      => C4::Context->preference('UniqueItemFields'),
     );
 }
 
@@ -502,7 +501,6 @@ $template->param(
     publishercode                                    => $data->{'publishercode'},
     barcode_subfield                                 => $barcode_subfield,
     import_batch_id                                  => $import_batch_id,
-    acqcreate                                        => $basketobj->effective_create_items eq "ordering" ? 1 : "",
     users_ids                                        => join( ':', @order_user_ids ),
     users                                            => \@order_users,
     ( uc( C4::Context->preference("marcflavour") ) ) => 1,

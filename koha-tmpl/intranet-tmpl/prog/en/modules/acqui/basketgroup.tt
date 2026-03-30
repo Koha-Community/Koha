@@ -401,7 +401,7 @@
 
 [% MACRO jsinclude BLOCK %]
     [% INCLUDE 'datatables.inc' %]
-    <script nonce="[% Koha.CSPNonce | $raw %]">
+    <script nonce="[% Koha.CSPNonce | $raw %]" data-tt-allowed="true">
         let listclosed = [% listclosed ? 1 : 0 | html %];
         let grouping = [% grouping ? 1 : 0 | html %];
     </script>

@@ -577,7 +577,7 @@
     [% INCLUDE 'datatables.inc' %]
     [% Asset.css("css/edifact_interchange.css") | $raw %]
     [% Asset.js("js/modals/edifact_interchange.js") | $raw %]
-    <script nonce="[% Koha.CSPNonce | $raw %]">
+    <script nonce="[% Koha.CSPNonce | $raw %]" data-tt-allowed="true">
         EdifactDisplay.init({
             modalId: "#EDI_modal",
             expandByDefault: true,

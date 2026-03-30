@@ -314,7 +314,7 @@
     [% INCLUDE 'datatables.inc' %]
     [% Asset.js("js/acq.js") | $raw %]
     [% Asset.js("js/funds_sorts.js") | $raw %]
-    <script nonce="[% Koha.CSPNonce | $raw %]">
+    <script nonce="[% Koha.CSPNonce | $raw %]" data-tt-allowed="true">
         const op = "[% op | html %]";
         const has_results = [% result_order_loop ? 1 : 0 | html %];
     </script>
