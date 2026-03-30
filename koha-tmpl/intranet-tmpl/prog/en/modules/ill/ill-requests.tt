@@ -88,12 +88,6 @@
 
     [% UNLESS blocking_error %]
 
-        [% IF op == 'illlist' %]
-            <script nonce="[% Koha.CSPNonce | $raw %]">
-                var ill_table_actions = [% table_actions | $raw %];
-            </script>
-        [% END %]
-
         <div id="interlibraryloans">
             [% IF !backends_available || !has_branch || ill_deprecated_backend_freeform_is_installed %]
                 <div class="alert alert-info">ILL module configuration problem. Take a look at the <a href="/cgi-bin/koha/about.pl?tab=sysinfo">about page</a></div>
@@ -1132,20 +1126,22 @@
         [% IF op == 'edit_action' %]
             [% INCLUDE 'select_manager.inc' add_modal => 1, manager => request.manager, filter => 'ill_users' %]
         [% END %]
-        [% IF metadata_enrichment_services %]
-            <script nonce="[% Koha.CSPNonce | $raw %]">
+
+        <script nonce="[% Koha.CSPNonce | $raw %]" data-tt-allowed="true">
+            [% IF op == 'illlist' %]
+                var ill_table_actions = [% table_actions | $raw %];
+            [% END %]
+
+            [% IF metadata_enrichment_services %]
                 var ill_check_availability_syspref = '[% Koha.Preference('ILLCheckAvailability') | html %]';
                 var metadata_enrichment_services = [% metadata_enrichment_services | $raw %];
-            </script>
-            <script nonce="[% Koha.CSPNonce | $raw %]">
                 [% IF batch_availability_services %]
-                var batch_availability_services = [% batch_availability_services | $raw %];
+                    var batch_availability_services = [% batch_availability_services | $raw %];
                 [% ELSE %]
-                var batch_availability_services = [];
+                    var batch_availability_services = [];
                 [% END %]
-            </script>
-        [% END %]
-        <script nonce="[% Koha.CSPNonce | $raw %]">
+            [% END %]
+
             var prefilters = '[% prefilters | $raw %]';
             // Set column settings
             var table_settings = [% TablesSettings.GetTableSettings( 'illrequests', 'ill-requests', 'ill-requests', 'json' ) | $raw %];
@@ -1164,6 +1160,7 @@
             var metadata = "[% metadata | $raw %]";
             [% END %]
         </script>
+
         <script nonce="[% Koha.CSPNonce | $raw %]">
             $("#ill_checkout_inhouse_select").on("change", function () {
                 if ($(this).val().length > 0) {
