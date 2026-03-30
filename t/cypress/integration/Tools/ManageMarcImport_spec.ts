@@ -68,9 +68,17 @@ describe("loads the manage MARC import page", () => {
             .select("ignore", { force: true })
             .should("have.value", "ignore");
 
+        cy.intercept("GET", "/api/v1/jobs/*").as("jobPoll");
         cy.get("#mainformsubmit").click();
 
-        cy.get("#job_callback").should("exist");
+        const waitForJobFinished = () => {
+            cy.wait("@jobPoll").then(interception => {
+                if (interception.response?.body?.status !== "finished") {
+                    waitForJobFinished();
+                }
+            });
+        };
+        waitForJobFinished();
 
         cy.get("#job_callback").contains("View batch").click();
 
