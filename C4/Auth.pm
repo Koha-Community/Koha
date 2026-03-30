@@ -194,8 +194,9 @@ sub get_template_and_user {
         $in->{query}->param( -name => 'login_password',     -values => [$AutoSelfCheckPass] );
         $in->{query}->param( -name => 'koha_login_context', -values => ['sco'] );
     } else {
-        my $request_method = $in->{query}->request_method // q{};
-        unless ( $request_method eq 'POST' && $in->{query}->param('login_op') eq 'cud-login' ) {
+        my $request_method = $in->{query}->request_method    // q{};
+        my $login_op       = $in->{query}->param('login_op') // q{};
+        unless ( $request_method eq 'POST' && $login_op eq 'cud-login' ) {
             for my $v (qw( login_userid login_password )) {
                 $in->{query}->param( $v, '' )
                     if $in->{query}->param($v);
