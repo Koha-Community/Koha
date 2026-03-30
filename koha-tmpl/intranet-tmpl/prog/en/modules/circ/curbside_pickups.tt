@@ -469,7 +469,7 @@
     </script>
     [% INCLUDE 'calendar.inc' %]
     [% INCLUDE 'datatables.inc' %]
-    <script nonce="[% Koha.CSPNonce | $raw %]">
+    <script nonce="[% Koha.CSPNonce | $raw %]" data-tt-allowed="true">
         let pickups = [% To.json(curbside_pickups.unblessed) | $raw %];
         let policy = [% To.json(policy.unblessed) | $raw %];
         let opening_slots = [% To.json(policy.opening_slots.unblessed) | $raw %];

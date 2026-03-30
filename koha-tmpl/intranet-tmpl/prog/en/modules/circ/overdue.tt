@@ -346,11 +346,14 @@
     [% INCLUDE 'select2.inc' %]
     [% INCLUDE 'js-date-format.inc' %]
     [% PROCESS 'modal-claims-js' %]
-    <script nonce="[% Koha.CSPNonce | $raw %]">
+    <script nonce="[% Koha.CSPNonce | $raw %]" data-tt-allowed="true">
+        const ClaimReturnedLostValue = [% Koha.Preference('ClaimReturnedLostValue') ? 1 : 0 | html %];
         var table_settings = [% TablesSettings.GetTableSettings( 'circ', 'overdues', 'circ-overdues', 'json' ) | $raw %];
-        [% IF !Koha.Preference('ClaimReturnedLostValue') %]
-            table_settings['columns'].splice(13, 1);
-        [% END %]
+    </script>
+    <script nonce="[% Koha.CSPNonce | $raw %]">
+        if (!ClaimReturnedLostValue) {
+            table_settings["columns"].splice(13, 1);
+        }
     </script>
     <script nonce="[% Koha.CSPNonce | $raw %]">
         function clone_input(node, original_id) {

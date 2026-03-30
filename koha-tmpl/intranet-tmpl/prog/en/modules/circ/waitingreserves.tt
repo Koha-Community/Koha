@@ -204,7 +204,7 @@
 
 [% MACRO jsinclude BLOCK %]
     [% INCLUDE 'datatables.inc' %]
-    <script nonce="[% Koha.CSPNonce | $raw %]">
+    <script nonce="[% Koha.CSPNonce | $raw %]" data-tt-allowed="true">
         var holdst_table_settings  = [% TablesSettings.GetTableSettings( 'circ', 'holds_awaiting_pickup', 'holdst',  'json' ) | $raw %];
         var holdso_table_settings  = [% TablesSettings.GetTableSettings( 'circ', 'holds_awaiting_pickup', 'holdso',  'json' ) | $raw %];
         var holdscr_table_settings = [% TablesSettings.GetTableSettings( 'circ', 'holds_awaiting_pickup', 'holdscr', 'json' ) | $raw %];

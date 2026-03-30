@@ -1525,7 +1525,7 @@
     [% INCLUDE 'calendar.inc' %]
     [% Asset.js("js/pages/circulation.js") | $raw %]
     [% Asset.js("js/modal_printer.js") | $raw %]
-    <script nonce="[% Koha.CSPNonce | $raw %]">
+    <script nonce="[% Koha.CSPNonce | $raw %]" data-tt-allowed="true">
         /* Set a variable needed by resolve_claim_modal.js or add_catalog_concern.js */
         var logged_in_user_borrowernumber = "[% logged_in_user.borrowernumber | html %]";
 

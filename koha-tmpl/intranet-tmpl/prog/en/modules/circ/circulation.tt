@@ -1128,7 +1128,7 @@
     [% PROCESS 'modal-claims.inc' %]
     [% PROCESS 'modal-claims-js' %]
     [% INCLUDE 'js-date-format.inc' %]
-    <script nonce="[% Koha.CSPNonce | $raw %]">
+    <script nonce="[% Koha.CSPNonce | $raw %]" data-tt-allowed="true">
         /* Set some variable needed in circulation.js */
         const LoadCheckoutsTableDelay = [% Koha.Preference('LoadCheckoutsTableDelay') || 0 | html %];
         const AlwaysLoadCheckoutsTable = [% Koha.Preference('AlwaysLoadCheckoutsTable') | html %];
@@ -1153,6 +1153,29 @@
         [% END %]
         var SuspendHoldsIntranet = [% ( Koha.Preference('SuspendHoldsIntranet') ) ? 1 : 0 | html %];
         var DisplayAddHoldGroups = [% ( Koha.Preference('DisplayAddHoldGroups') ) ? 1 : 0 | html %];
+
+        Koha.addPrefs({
+            OnSiteCheckoutAutoCheck: [% Koha.Preference("OnSiteCheckoutAutoCheck") ? 1 : 0 | html %],
+        });
+        const table_settings_issues_table = [% TablesSettings.GetTableSettings( 'circ', 'circulation', 'issues-table', 'json' ) | $raw %];
+        const table_settings_relatives_issues_table = [% TablesSettings.GetTableSettings( 'circ', 'circulation', 'relatives-issues-table', 'json' ) | $raw %];
+        const table_settings_holds_table = [% TablesSettings.GetTableSettings( 'circ', 'circulation', 'holds-table', 'json' ) | $raw %];
+        const table_settings_bookings_table = [% TablesSettings.GetTableSettings( 'members', 'moremember', 'bookings-table', 'json' ) | $raw %];
+        const CAN_user_circulate_manage_bookings = [% CAN_user_circulate_manage_bookings | $raw %];
+        const patron_borrowernumber = [% patron.borrowernumber | $raw %];
+        const has_patron = [% borrowernumber && patron ? 1 : 0 | html %];
+        const CircAutoPrintQuickSlip = "[% CircAutoPrintQuickSlip | html %]";
+        const amountlimit = "[% Koha.Preference('FineNoRenewals') | html %]";
+        const fines = "[% fines | $Price %]";
+        const today_due_date_and_time = "[% today_due_date_and_time | $KohaDates dateformat => 'iso', with_hours => 1 %]";
+        const duedatespec = "[% duedatespec | html %]";
+        const override_high_holds = [% override_high_holds ? 1 : 0 | html %];
+        const HIGHHOLDS = [% HIGHHOLDS ? To.json(HIGHHOLDS) : 'null' | $raw %];
+        const waiting_holds_barcodes = new Array();
+        [% FOREACH wh IN waiting_holds %]
+            waiting_holds_barcodes.push("[% wh.item.barcode | html %]");
+        [% END %]
+        const onsite_checkout = "[% onsite_checkout | html %]";
     </script>
     [% Asset.js("js/pages/circulation.js") | $raw %]
     [% IF Koha.Preference('ClaimReturnedLostValue') || Koha.Preference('BundleLostValue') %]
@@ -1165,25 +1188,18 @@
     [% INCLUDE 'js-biblio-format.inc' %]
     [% Asset.js("js/hold-group.js") | $raw %]
     <script nonce="[% Koha.CSPNonce | $raw %]">
-        table_settings_issues_table = [% TablesSettings.GetTableSettings( 'circ', 'circulation', 'issues-table', 'json' ) | $raw %]
-        table_settings_relatives_issues_table = [% TablesSettings.GetTableSettings( 'circ', 'circulation', 'relatives-issues-table', 'json' ) | $raw %]
-        table_settings_holds_table = [% TablesSettings.GetTableSettings( 'circ', 'circulation', 'holds-table', 'json' ) | $raw %]
-        table_settings_bookings_table = [% TablesSettings.GetTableSettings( 'members', 'moremember', 'bookings-table', 'json' ) | $raw %]
-        CAN_user_circulate_manage_bookings = [% CAN_user_circulate_manage_bookings | $raw %]
-        patron_borrowernumber = [% patron.borrowernumber | $raw %]
-
-        [% IF borrowernumber and patron %]
-            if( Cookies.get("holdfor") != [% patron.borrowernumber | html %]){
+        if( has_patron ){
+            if( Cookies.get("holdfor") != patron_borrowernumber ){
                 Cookies.remove("holdfor", { path: '/', SameSite: 'Lax' });
             }
-        [% ELSE %]
+        } else {
             Cookies.remove("holdfor", { path: '/', SameSite: 'Lax' });
-        [% END %]
+        }
 
-        [% UNLESS ( patron.borrowernumber ) %]window.onload=function(){ $('#findborrower').focus(); };[% END %]
+        if (borrowernumber ) {
+            window.onload=function(){ $('#findborrower').focus(); };
+        }
 
-        var amountlimit = "[% Koha.Preference('FineNoRenewals') | html %]";
-        var fines = "[% fines | $Price %]";
         var MSG_CONFIRM_RENEW = _("The patron has a debt of %s").format(fines);
         MSG_CONFIRM_RENEW += _("Are you sure you want to renew checkout(s)?");
 
@@ -1193,7 +1209,7 @@
             if( duedatespec ){
                 const duedatespec_fp = duedatespec._flatpickr;
                 if ( $("#onsite_checkout").prop('checked') ) {
-                    duedatespec_fp.setDate("[% today_due_date_and_time | $KohaDates dateformat => 'iso', with_hours => 1 %]");
+                    duedatespec_fp.setDate(today_due_date_and_time);
                 } else {
                     duedatespec_fp.setDate("");
                 }
@@ -1216,15 +1232,11 @@
                     barcodeSubmitInFlight = false;
                 }
             });
-            [% IF waiting_holds.count && waiting_holds.count > 0 %]
+            if (waiting_holds_barcodes.length > 0) {
                 $('#circ-warnwaitingholds-modal .btn-primary').on('click',function() {
                     $('#mainform').submit();
                 });
 
-                var waiting_holds_barcodes = new Array();
-                [% FOREACH wh IN waiting_holds %]
-                    waiting_holds_barcodes.push("[% wh.item.barcode | html %]");
-                [% END %]
                 $("#mainform").on('submit', function(){
                     if( $("#checkout_confirmed").length > 0 ){
                         return true;
@@ -1239,7 +1251,7 @@
                 $("#circ-warnwaitingholds-modal").on('hidden.bs.modal',function(){
                     $("#mainform").append('<input type="hidden" id="checkout_confirmed" value=1>').submit();
                 });
-            [% END %]
+            }
 
             $('#mainform').on('submit',function() {
                 if ($("#barcode").length && $("#barcode").val()) {
@@ -1250,40 +1262,40 @@
             // listen submit to trigger qslip on empty checkout
             $('#mainform').bind('submit',function() {
                 if ($('#barcode').val() == '') {
-                    [% IF ( CircAutoPrintQuickSlip == 'clear' ) %]
+                    if (CircAutoPrintQuickSlip == 'clear') {
                         window.location='/cgi-bin/koha/circ/circulation.pl';
                         return false;
-                    [% ELSIF ( CircAutoPrintQuickSlip == 'ignore' ) %]
+                    } else if (CircAutoPrintQuickSlip == 'ignore') {
                         return false;
-                    [% ELSE %]
-                        window.open("/cgi-bin/koha/members/printslip.pl?borrowernumber=" + borrowernumber + "&amp;print=issue[% CircAutoPrintQuickSlip | html %]", "printwindow");
+                    } else {
+                        window.open("/cgi-bin/koha/members/printslip.pl?borrowernumber=" + borrowernumber + "&amp;print=issue" + CircAutoPrintQuickSlip, "printwindow");
                         return false;
-                    [% END %]
+                    }
                 }
             });
-            [% IF Koha.Preference('OnSiteCheckoutAutoCheck') && onsite_checkout == "on" %]
+            if (Koha.prefs.OnSiteCheckoutAutoCheck && onsite_checkout == "on") {
                 toggle_onsite_checkout();
-            [% END %]
+            }
             $("#onsite_checkout").click(function(){
                 toggle_onsite_checkout();
             });
 
-            [% IF HIGHHOLDS %]
-                [% IF !override_high_holds %]
-                    $("input[name=duedatespec]:hidden").val('[% HIGHHOLDS.returndate | html %]');
-                    if ('[% duedatespec | html %]' === '') {
+            if (HIGHHOLDS) {
+                if (!override_high_holds) {
+                    $("input[name=duedatespec]:hidden").val(HIGHHOLDS.returndate);
+                    if (duedatespec === '') {
                         $("input[name=restoreduedatespec]:hidden").val('highholds_empty');
                     } else {
-                        $("input[name=restoreduedatespec]:hidden").val('[% duedatespec | html %]');
+                        $("input[name=restoreduedatespec]:hidden").val(duedatespec);
                     }
-                [% END %]
+                }
 
                 $("#override_high_holds_tmp").on( 'change', function() {
                     if ( this.checked ) {
                         $("input[name=duedatespec]:hidden").val('');
                     }
                 });
-            [% END %]
+            }
 
             // Handle checkout for fast cataloging
             // Check the referrer to prevent csrf, fill and submit form

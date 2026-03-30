@@ -523,7 +523,7 @@
 
 [% MACRO jsinclude BLOCK %]
     [% INCLUDE 'datatables.inc' %]
-    <script nonce="[% Koha.CSPNonce | $raw %]">
+    <script nonce="[% Koha.CSPNonce | $raw %]" data-tt-allowed="true">
         let requested_table_settings = [% TablesSettings.GetTableSettings( 'circ', 'article-requests', 'article-requests-requested-table', 'json' ) | $raw %]
         let pending_table_settings = [% TablesSettings.GetTableSettings( 'circ', 'article-requests', 'article-requests-pending-table', 'json' ) | $raw %]
         let processing_table_settings = [% TablesSettings.GetTableSettings( 'circ', 'article-requests', 'article-requests-processing-table', 'json' ) | $raw %]

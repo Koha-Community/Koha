@@ -115,7 +115,7 @@
     [% INCLUDE 'datatables.inc' %]
     [% INCLUDE 'js-biblio-format.inc' %]
     [% INCLUDE 'js-date-format.inc' %]
-    <script nonce="[% Koha.CSPNonce | $raw %]">
+    <script nonce="[% Koha.CSPNonce | $raw %]" data-tt-allowed="true">
         let table_settings = [% TablesSettings.GetTableSettings( 'circ', 'bookings', 'bookings-to-collect', 'json' ) | $raw %];
 
         let all_libraries  = [% To.json(Branches.all) | $raw %].map(e => {

@@ -242,15 +242,6 @@
                                     [% IF checkout_info.HIGHHOLDS %]
                                         <li><i class="fa fa-li fa-warning"></i>High demand item. Loan period shortened to [% checkout_info.HIGHHOLDS.duration | html %] days (due [% checkout_info.HIGHHOLDS.returndate | html %]).</li>
                                     [% END %]
-                                    [% IF checkout_info.HIGHHOLDS %]
-                                        <!-- FIXME -->
-                                        <script nonce="[% Koha.CSPNonce | $raw %]">
-                                            $(document).ready(function() {
-                                                $("input[name=duedatespec]:hidden").val('[% checkout_info.HIGHHOLDS.returndate | html %]');
-                                            });
-                                        </script>
-                                    [% END %]
-
                                     [% IF NOT checkout_info.IMPOSSIBLE && ( CAN_user_circulate_force_checkout || checkout_info.HIGHHOLDS ) && ( checkout_info.RESERVED || checkout_info.RESERVE_WAITING || checkout_info.TRANSFERRED || checkout_info.PROCESSING ) %]
                                         <!-- arbitrary choice, revert the hold is not possible-->
                                         <li><i class="fa fa-li fa-warning"></i>This item is on hold for another patron. The hold will be overridden, but not cancelled.</li>
@@ -352,10 +343,19 @@
 [% MACRO jsinclude BLOCK %]
     [% INCLUDE 'calendar.inc' %]
     [% INCLUDE 'datatables.inc' %]
-    <script nonce="[% Koha.CSPNonce | $raw %]">
+    <script nonce="[% Koha.CSPNonce | $raw %]" data-tt-allowed="true">
         // FIXME Why are we using a Perl variable here?
         const today_due_date_and_time = "[% today_due_date_and_time | $KohaDates dateformat => 'iso', with_hours => 1 %]";
+
+        [% FOR checkout_info IN checkout_infos %]
+            [% IF checkout_info.HIGHHOLDS %]
+                $(document).ready(function() {
+                    $("input[name=duedatespec]:hidden").val('[% checkout_info.HIGHHOLDS.returndate | html %]');
+                });
+            [% END %]
+        [% END %]
     </script>
+
     <script nonce="[% Koha.CSPNonce | $raw %]">
         $(document).ready(function () {
             if ($("#barcodelist").length) {

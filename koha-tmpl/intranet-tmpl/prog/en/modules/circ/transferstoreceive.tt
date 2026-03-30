@@ -117,7 +117,7 @@
 
 [% MACRO jsinclude BLOCK %]
     [% INCLUDE 'datatables.inc' %]
-    <script nonce="[% Koha.CSPNonce | $raw %]">
+    <script nonce="[% Koha.CSPNonce | $raw %]" data-tt-allowed="true">
         let library_ids = [];
         [% FOR library IN branchesloop %]
             library_ids.push("[% library.branchcode | html %]");
