@@ -1,7 +1,7 @@
 [% USE Koha %]
 [% USE Branches %]
 [% PROCESS 'html_helpers.inc' %]
-[% SET AllPublicBranches = Branches.all(  search_params => { public => 1 }, selected => branch ) %]
+[% SET AllPublicBranches = Branches.all(  search_params => { public => 1 }, selected => branch, unfiltered => 1 ) %]
 
 <div id="search-facets">
     <form method="get" action="/cgi-bin/koha/opac-topissues.pl">

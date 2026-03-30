@@ -16,7 +16,7 @@
 [% SET OpacMoreSearches = AdditionalContents.get( location => "OpacMoreSearches", lang => lang, library => branchcode || default_branch ) %]
 [% SET CookieConsentBar = AdditionalContents.get( location => "CookieConsentBar", lang => lang, library => branchcode || default_branch ) %]
 [% SET CookieConsentPopup = AdditionalContents.get( location => "CookieConsentPopup", lang => lang, library => branchcode || default_branch ) %]
-[% SET AllPublicBranches = Branches.all(  search_params => { public => 1 }, selected => opac_name ) %]
+[% SET AllPublicBranches = Branches.all(  search_params => { public => 1 }, selected => opac_name, unfiltered => 1 ) %]
 
 <button id="scrolltocontent">Skip to main content</button>
 <!-- prettier-ignore-start -->
