@@ -24,12 +24,9 @@
 [% INCLUDE 'doc-head-close.inc' %]
 [% Asset.css("css/addbiblio.css") | $raw %]
 [% INCLUDE 'datatables.inc' %]
-<script nonce="[% Koha.CSPNonce | $raw %]">
-    [% IF Koha.Preference('CreateAVFromCataloguing') && CAN_user_parameters_manage_auth_values %]
-        var auth_values_creation = 1;
-    [% ELSE %]
-        var auth_values_creation = 0;
-    [% END %]
+<script nonce="[% Koha.CSPNonce | $raw %]" data-tt-allowed="true">
+    var auth_values_creation = [% IF Koha.Preference('CreateAVFromCataloguing') && CAN_user_parameters_manage_auth_values %]1[% ELSE %]0[% END %];
+    var has_item_groups = "[% item_groups.size | html %]";
 </script>
 [% INCLUDE 'select2.inc' %]
 [% Asset.js("js/cataloging.js") | $raw %]
@@ -37,9 +34,6 @@
 [% INCLUDE 'calendar.inc' %]
 [% INCLUDE 'str/cataloging_additem.inc' %]
 [% Asset.js("js/cataloging_additem.js") | $raw %]
-<script nonce="[% Koha.CSPNonce | $raw %]">
-    var has_item_groups = "[% item_groups.size | html %]";
-</script>
 <style nonce="[% Koha.CSPNonce | $raw %]">
     .flatpickr_wrapper input {
         width: 100%;

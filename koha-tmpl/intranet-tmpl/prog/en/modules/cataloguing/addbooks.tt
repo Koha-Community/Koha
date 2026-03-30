@@ -1,4 +1,5 @@
 [% USE raw %]
+[% USE To %]
 [% USE Koha %]
 [% USE KohaDates %]
 [% USE TablesSettings %]
@@ -326,12 +327,13 @@
 
 [% MACRO jsinclude BLOCK %]
     [% INCLUDE 'datatables.inc' %]
-    <script nonce="[% Koha.CSPNonce | $raw %]">
+    <script nonce="[% Koha.CSPNonce | $raw %]" data-tt-allowed="true">
         var table_settings = [% TablesSettings.GetTableSettings( 'cataloguing', 'addbooks', 'reservoir-table', 'json' ) | $raw %]
         const interface = "[% interface | html %]";
         const theme = "[% theme | html %]";
         const biblionumber = "[% biblionumber | html %]";
         var logged_in_user_borrowernumber = "[% logged_in_user.borrowernumber | html %]";
+        var z3950_search_params = [% To.json(z3950_search_params || []) | $raw %];
     </script>
     <script nonce="[% Koha.CSPNonce | $raw %]">
         $(document).ready(function () {
@@ -414,9 +416,9 @@
         /* provide Z3950 search points */
         function GetZ3950Terms(fw){
             var strQuery="&frameworkcode=" + fw;
-            [% FOREACH z3950_search_param IN z3950_search_params %]
-                strQuery += "&" + "[% z3950_search_param.name | uri %]" + "=" + "[% z3950_search_param.value | uri %]";
-            [% END %]
+            z3950_search_params.forEach(function(z3950_search_param) {
+                strQuery += "&" + z3950_search_param.name + "=" + z3950_search_param.value;
+            });
             return strQuery;
         }
     </script>

@@ -225,7 +225,7 @@
 
 [% MACRO jsinclude BLOCK %]
     [% Asset.js("js/merge-record.js") | $raw %]
-    <script nonce="[% Koha.CSPNonce | $raw %]">
+    <script nonce="[% Koha.CSPNonce | $raw %]" data-tt-allowed="true">
         [% UNLESS (result) %]
           [% IF (choosereference) %]
             function changeFramework(fw) {

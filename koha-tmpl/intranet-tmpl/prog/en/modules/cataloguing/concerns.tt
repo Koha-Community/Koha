@@ -63,10 +63,18 @@
     [% INCLUDE 'datatables.inc' %]
     [% INCLUDE 'js-date-format.inc' %]
     [% INCLUDE 'js-biblio-format.inc' %]
-    <script nonce="[% Koha.CSPNonce | $raw %]">
+    <script nonce="[% Koha.CSPNonce | $raw %]" data-tt-allowed="true">
         logged_in_user_borrowernumber = [% logged_in_user.borrowernumber | html %];
 
         var table_settings = [% TablesSettings.GetTableSettings('cataloguing', 'concerns', 'table_concerns', 'json') | $raw %];
+
+        var statuses = [];
+        [% FOR st IN status %]
+            statuses.push({
+                authorised_value: "[% st.authorised_value | html %]",
+                lib: "[% st.lib | html %]",
+            });
+        [% END %]
     </script>
     <script nonce="[% Koha.CSPNonce | $raw %]">
         $(document).ready(function () {
@@ -253,15 +261,13 @@
                 tickets.DataTable().draw();
             });
             adjust_filter_label();
-        });
-    </script>
-    <script nonce="[% Koha.CSPNonce | $raw %]">
-        $(document).ready(function() {
-            [% FOR st IN status %]
-            $('#[% st.authorised_value | html %]_filter').on("click", function() {
-                if ($("#hide_[% st.authorised_value | html %]").is(":checked")){
+
+            statuses.forEach(function(st){
+            const av = st.authorised_value;
+            $(`#${av}_filter`).on("click", function() {
+                if ($(`#${av}`).is(":checked")){
                     additional_filters.status.find((o, i) => {
-                        if (o["!="] === '[% st.authorised_value | html %]') {
+                        if (o["!="] === av) {
                             additional_filters.status.splice(i, 1);
                             return true; // stop searching
                         }
@@ -269,18 +275,18 @@
                     if ( additional_filters.status.length === 1 ){
                         delete additional_filters.status;
                     }
-                    $(this).html('<i class="fa fa-filter"></i> '+_("Filter ")+"[% st.lib | html %]");
+                    $(this).html('<i class="fa fa-filter"></i> '+_("Filter ")+st.lib);
                 } else {
                     if (!additional_filters.hasOwnProperty("status")) {
                         additional_filters.status = [ '-and' ];
                     }
-                    additional_filters.status.push({ '!=': "[% st.authorised_value | html %]" });
-                    $(this).html('<i class="fa fa-bars"></i> '+_("Include ")+"[% st.lib | html %]");
+                    additional_filters.status.push({ '!=': av});
+                    $(this).html('<i class="fa fa-bars"></i> '+_("Include ")+st.lib);
                 }
-                $("#hide_[% st.authorised_value | html %]").prop("checked", !$("#hide_[% st.authorised_value | html %]").is(":checked"));
+                $(`#hide_${av}`).prop("checked", !$(`#hide${av}`).is(":checked"));
                 tickets.DataTable().draw();
             });
-            [% END %]
+            });
         });
     </script>
     [% INCLUDE 'select2.inc' %]
