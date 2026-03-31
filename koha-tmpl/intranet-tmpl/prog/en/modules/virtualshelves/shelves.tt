@@ -661,6 +661,68 @@
 
 [% MACRO jsinclude BLOCK %]
     [% INCLUDE 'datatables.inc' %]
+
+    <script nonce="[% Koha.CSPNonce | $raw %]" data-tt-allowed="true">
+        [% IF op == 'list' %]
+            var public = [% public | html %];
+            const allow_transfer = [% allow_transfer ? 1 : 0 | html %];
+        [% END %]
+
+        const is_shelf_shared = [% shelf.is_shared ? 1 : 0 | html %];
+
+        [% IF shelf AND op == 'view' %]
+            Koha.addPrefs({
+                intranetbookbag: [% Koha.Preference("intranetbookbag") ? 1 : 0 | html %],
+                virtualshelves: [% Koha.Preference("virtualshelves") ? 1 : 0 | html %],
+            });
+        [% END %]
+
+        [% IF op == 'view' %]
+            var shelfnumber = "[% shelf.shelfnumber | html %]";
+        [% END %]
+
+        [% IF shelf AND op == 'view' %]
+            function build_dropdown(){
+                var param1 = "| <label for=\"addto\">"+_("Add to:")+"<\/label><select name=\"addto\" id=\"addto\"><option value=\"\"><\/option>";
+                if (Koha.prefs.intranetbookbag){
+                     param1 += "<option value=\"addtocart\">"+_("Cart")+"<\/option>";
+                }
+                if (Koha.prefs.virtualshelves){
+                    [% IF add_to_some_private_shelves.count %]
+                        param1 += "<optgroup label=\""+_("Your lists:")+"\">";
+                        [% SET number_of_private_shelves = 0 %]
+                        [% FOREACH s IN add_to_some_private_shelves %]
+                            [% IF shelfnumber != s.shelfnumber %]
+                                param1 += "<option id=\"s[% s.shelfnumber | html %]\" value=\"addtolist\">[% s.shelfname | html %]<\/option>";
+                                [% SET number_of_private_shelves = number_of_private_shelves + 1 %]
+                                [% IF number_of_private_shelves == 10 %][% LAST %][% END %]
+                            [% END %]
+                        [% END %]
+                        param1 += "<\/optgroup>";
+                    [% END %]
+                    [% IF add_to_some_public_shelves.count %]
+                        param1 += "<optgroup label=\""+_("Public lists:")+"\">";
+                        [% SET number_of_public_shelves = 0 %]
+                        [% FOREACH s IN add_to_some_public_shelves %]
+                            [% IF shelfnumber != s.shelfnumber %]
+                                param1 += "<option id=\"s[% s.shelfnumber | html %]\" value=\"addtolist\">[% s.shelfname | html %]<\/option>";
+                                [% SET number_of_public_shelves = number_of_public_shelves + 1 %]
+                                [% IF number_of_public_shelves == 10 %][% LAST %][% END %]
+                            [% END %]
+                        [% END %]
+                        param1 += "<\/optgroup>";
+                    [% END %]
+                    [% IF add_to_some_private_shelves.count > 10 or add_to_some_public_shelves.count > 10 %]
+                        param1 += "<option value=\"morelists\">[ "+_("More lists")+" ]<\/option>";
+                    [% END %]
+                    param1 +="<option value=\"newlist\">"+_("[ New list ]")+"<\/option>"
+                }
+                param1 += "<\/select> <button id=\"cartsubmit\" type=\"submit\" class=\"btn btn-default btn-xs\">"+_("Save")+"</button>";
+                return param1;
+            }
+        [% END %]
+    </script>
+
     [% IF print %]
         <script nonce="[% Koha.CSPNonce | $raw %]">
             $(document).ready(function () {
@@ -680,10 +742,6 @@
         var MSG_CONFIRM_DELETE_LIST = _("Are you sure you want to remove this list?");
     </script>
     [% IF op == 'list' %]
-        <script nonce="[% Koha.CSPNonce | $raw %]">
-            var public = [% public | html %];
-            const allow_transfer = [% allow_transfer ? 1 : 0 | html %];
-        </script>
         <script nonce="[% Koha.CSPNonce | $raw %]">
             $(document).ready(function () {
                 let sorton = ["vs.shelfname", "count", "vs.public", "vs.owner", "vs.sortfield", "vs.created_on", "vs.lastmodified"];
@@ -753,51 +811,6 @@
     [% END # /IF op == 'list' %]
 
     [% IF shelf AND op == 'view' %]
-        <script nonce="[% Koha.CSPNonce | $raw %]">
-            Koha.addPrefs({
-                intranetbookbag: [% Koha.Preference("intranetbookbag") ? 1 : 0 | html %],
-                virtualshelves: [% Koha.Preference("virtualshelves") ? 1 : 0 | html %],
-            });
-
-            function build_dropdown(){
-                var param1 = "| <label for=\"addto\">"+_("Add to:")+"<\/label><select name=\"addto\" id=\"addto\"><option value=\"\"><\/option>";
-                if (Koha.prefs.intranetbookbag){
-                     param1 += "<option value=\"addtocart\">"+_("Cart")+"<\/option>";
-                }
-                if (Koha.prefs.virtualshelves){
-                    [% IF add_to_some_private_shelves.count %]
-                        param1 += "<optgroup label=\""+_("Your lists:")+"\">";
-                        [% SET number_of_private_shelves = 0 %]
-                        [% FOREACH s IN add_to_some_private_shelves %]
-                            [% IF shelfnumber != s.shelfnumber %]
-                                param1 += "<option id=\"s[% s.shelfnumber | html %]\" value=\"addtolist\">[% s.shelfname | html %]<\/option>";
-                                [% SET number_of_private_shelves = number_of_private_shelves + 1 %]
-                                [% IF number_of_private_shelves == 10 %][% LAST %][% END %]
-                            [% END %]
-                        [% END %]
-                        param1 += "<\/optgroup>";
-                    [% END %]
-                    [% IF add_to_some_public_shelves.count %]
-                        param1 += "<optgroup label=\""+_("Public lists:")+"\">";
-                        [% SET number_of_public_shelves = 0 %]
-                        [% FOREACH s IN add_to_some_public_shelves %]
-                            [% IF shelfnumber != s.shelfnumber %]
-                                param1 += "<option id=\"s[% s.shelfnumber | html %]\" value=\"addtolist\">[% s.shelfname | html %]<\/option>";
-                                [% SET number_of_public_shelves = number_of_public_shelves + 1 %]
-                                [% IF number_of_public_shelves == 10 %][% LAST %][% END %]
-                            [% END %]
-                        [% END %]
-                        param1 += "<\/optgroup>";
-                    [% END %]
-                    [% IF add_to_some_private_shelves.count > 10 or add_to_some_public_shelves.count > 10 %]
-                        param1 += "<option value=\"morelists\">[ "+_("More lists")+" ]<\/option>";
-                    [% END %]
-                    param1 +="<option value=\"newlist\">"+_("[ New list ]")+"<\/option>"
-                }
-                param1 += "<\/select> <button id=\"cartsubmit\" type=\"submit\" class=\"btn btn-default btn-xs\">"+_("Save")+"</button>";
-                return param1;
-            }
-        </script>
         <script nonce="[% Koha.CSPNonce | $raw %]">
             $(document).ready(function () {
                 $("span.clearall").html('<a id="CheckNone" href="/cgi-bin/koha/shelves.pl"><i class="fa fa-times"></i>' + _(" Clear all") + "<\/a>");
@@ -963,7 +976,7 @@
             } else if( public==0 ) {
                 // If we move to Private (without shares), show Anyone remark
                 // Note: the number of shares is not tested real-time
-                [% IF !shelf.is_shared %]
+                if (!is_shelf_shared){
                     if( perms== 2) {
                         $("#anyone_remark").show();
                         $("#staff_remark").hide();
@@ -977,11 +990,11 @@
                         $("#staff_remark").hide();
                         $("#permitted_staff_remark").show();
                     }
-                [% ELSE %]
+                } else {
                     $("#anyone_remark").hide();
                     $("#staff_remark").hide();
                     $("#permitted_staff_remark").hide();
-                [% END %]
+                }
             } else { // public==1
                 $("#anyone_remark").hide();
                 $("#staff_remark").hide();
@@ -997,7 +1010,7 @@
     [% IF op == 'view' %]
         <script nonce="[% Koha.CSPNonce | $raw %]">
             function sendList(){
-               openWindow( CGIBIN + 'virtualshelves/sendshelf.pl?shelfid=[% shelf.shelfnumber | html %]' );
+               openWindow( CGIBIN + `virtualshelves/sendshelf.pl?shelfid=${shelfnumber}` );
             }
 
             $(document).ready(function() {
