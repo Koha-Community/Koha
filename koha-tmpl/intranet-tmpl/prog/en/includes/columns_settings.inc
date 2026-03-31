@@ -52,6 +52,26 @@ function KohaTable(id_selector, dt_parameters, table_settings, add_filters) {
         }
     }
 
+    const export_format_print = {
+        body: function (data, row, column, node) {
+            const newnode = node.cloneNode(true);
+            const no_export_nodes = newnode.querySelectorAll(".noExport");
+            no_export_nodes.forEach(child => {
+                child.parentNode.removeChild(child);
+            });
+            //Note: innerHTML is the same thing as the data variable,
+            //minus the ".noExport" nodes that we've removed
+            //Note: See dataTables.buttons.js for original function usage
+            const str = DataTable.Buttons.stripData(newnode.innerHTML, {
+                decodeEntities: false,
+                stripHtml: true,
+                stripNewlines: true,
+                trim: true,
+            });
+            return str;
+        },
+    };
+
     var export_format = {
         body: function ( data, row, column, node ) {
             var newnode = $(node);
@@ -104,7 +124,7 @@ function KohaTable(id_selector, dt_parameters, table_settings, add_filters) {
             exportOptions: {
                 columns: exportColumns,
                 rows: exportRows,
-                format:  export_format
+                format:  export_format_print
             },
         }
     ];
