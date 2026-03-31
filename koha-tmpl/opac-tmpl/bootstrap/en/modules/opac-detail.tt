@@ -1623,7 +1623,7 @@
     [% IF OpenLibraryCovers || OpenLibrarySearch %]
         [% Asset.js("js/openlibrary.js") | $raw %]
     [% END %]
-    <script nonce="[% Koha.CSPNonce | $raw %]">
+    <script nonce="[% Koha.CSPNonce | $raw %]" data-tt-allowed="true">
         const interface = "[% interface | html %]";
         Koha.addPrefs({
             OpacHighlightedWords: "[% Koha.Preference('OpacHighlightedWords') | html %]",
@@ -1671,11 +1671,20 @@
         var serial_table_settings = [% TablesSettings.GetTableSettings( 'opac', 'biblio-detail', 'subscriptionst', 'json' ) | $raw %];
 
         const defaulttab = "[% defaulttab | html %]";
+
+        [% IF ( Koha.Preference('OPACShowMusicalInscripts') ) %]
+            var PREF_OPACPlayMusicalInscripts = "[% Koha.Preference('OPACPlayMusicalInscripts') | html %]";
+        [% END %]
+
+        [% IF NovelistSelectProfile %]
+            var NovelistSelectProfile = "[% NovelistSelectProfile | html %]";
+            var NovelistSelectProfile = "[% NovelistSelectPassword | html %]";
+            var normalized_isbn = "[% normalized_isbn | html %]";
+            var normalized_upc = "[% normalized_upc | html %]";
+        [% END %]
+
     </script>
     [% IF ( Koha.Preference('OPACShowMusicalInscripts') ) %]
-        <script nonce="[% Koha.CSPNonce | $raw %]">
-            var PREF_OPACPlayMusicalInscripts = "[% Koha.Preference('OPACPlayMusicalInscripts') | html %]";
-        </script>
         [% Asset.js("js/verovio.js") | $raw %]
     [% END %]
     <script nonce="[% Koha.CSPNonce | $raw %]">
@@ -2263,12 +2272,12 @@
             $(document).ready(function() {
                 novSelect.loadContentForQuery(
                     {
-                        ClientIdentifier : '[% IF normalized_isbn %][% normalized_isbn | html %][% ELSE %][% normalized_upc | html %][% END %]',
-                        ISBN : '[% IF normalized_isbn %][% normalized_isbn | html %][% ELSE %][% normalized_upc | html %][% END %]',
+                        ClientIdentifier : normalized_isbn || normalized_upc,
+                        ISBN : normalized_isbn || normalized_upc,
                         version : '2.1'
                     },
-                    '[% NovelistSelectProfile | html %]',
-                    '[% NovelistSelectPassword | html %]',
+                    NovelistSelectProfile,
+                    NovelistSelectPassword,
                     function(d){
                         if ( d.length > 0 ){ //If no content
                             $(".NovelistSelect").show();

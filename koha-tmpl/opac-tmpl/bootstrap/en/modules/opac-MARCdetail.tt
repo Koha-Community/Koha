@@ -197,7 +197,7 @@
     [% IF Koha.Preference('OpacCatalogConcerns') %]
         [% Asset.js("js/modals/catalog_concern.js") | $raw %]
     [% END %]
-    <script nonce="[% Koha.CSPNonce | $raw %]">
+    <script nonce="[% Koha.CSPNonce | $raw %]" data-tt-allowed="true">
         $(document).ready(function(){
             var loaded = 0;
             var toggle = 0;

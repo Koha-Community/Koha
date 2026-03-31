@@ -83,7 +83,7 @@
 [% INCLUDE 'opac-bottom.inc' %]
 [% BLOCK jsinclude %]
     [% Asset.js("js/overdrive.js") | $raw %]
-    <script nonce="[% Koha.CSPNonce | $raw %]">
+    <script nonce="[% Koha.CSPNonce | $raw %]" data-tt-allowed="true">
         [%- IF Koha.Preference('OverDrivePasswordRequired') -%]
             var OD_password_required = 1;
         [%- ELSE -%]

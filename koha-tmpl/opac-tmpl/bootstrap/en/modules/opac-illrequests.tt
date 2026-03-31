@@ -406,7 +406,7 @@
 
 [% BLOCK jsinclude %]
     [% INCLUDE 'datatables.inc' %]
-    <script nonce="[% Koha.CSPNonce | $raw %]">
+    <script nonce="[% Koha.CSPNonce | $raw %]" data-tt-allowed="true">
         const logged_in_user_borrowernumber = "[% logged_in_user.borrowernumber | html %]";
         [% IF services_json.length > 0 %]
             var services = [% services_json | $raw %];

@@ -1382,7 +1382,7 @@
     [% INCLUDE 'validator-strings.inc' %]
     [% Asset.js("lib/jquery/plugins/jquery.validate.min.js") | $raw %]
     [% INCLUDE 'calendar.inc' %]
-    <script nonce="[% Koha.CSPNonce | $raw %]">
+    <script nonce="[% Koha.CSPNonce | $raw %]" data-tt-allowed="true">
         $(document).ready(function() {
                 let formName
                 [% IF (self_renewal) %]

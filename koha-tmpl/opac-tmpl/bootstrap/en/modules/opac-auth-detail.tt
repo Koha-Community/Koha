@@ -214,7 +214,7 @@
     [% IF ( displayhierarchy ) %]
         [% Asset.js("lib/jquery/plugins/jstree/jstree-3.3.12.min.js") | $raw %]
     [% END %]
-    <script nonce="[% Koha.CSPNonce | $raw %]">
+    <script nonce="[% Koha.CSPNonce | $raw %]" data-tt-allowed="true">
         $(document).ready(function() {
             [% IF ( displayhierarchy ) %]
                 $('#hierarchies').jstree({

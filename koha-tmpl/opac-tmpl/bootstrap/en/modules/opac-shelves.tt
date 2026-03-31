@@ -834,10 +834,30 @@
     [% IF OpenLibraryCovers || OpenLibrarySearch %]
         [% Asset.js("js/openlibrary.js") | $raw %]
     [% END %]
-    <script nonce="[% Koha.CSPNonce | $raw %]">
+    <script nonce="[% Koha.CSPNonce | $raw %]" data-tt-allowed="true">
         const loggedinusername = [% ( loggedinusername ) ? 1 : 0 | html %];
         const opacbookbag = [% ( opacbookbag ) ? 1 : 0 | html %];
         const virtualshelves = [% ( virtualshelves ) ? 1 : 0 | html %];
+        const is_shelf_shared = [% shelf.is_shared ? 1 : 0 | html %];
+        const default_public = "[% public | html %]";
+
+        Koha.addPrefs({
+            GoogleJackets: [% Koha.Preference("GoogleJackets") ? 1 : 0 | html %],
+            OpenLibraryCovers: [% Koha.Preference("OpenLibraryCovers") ? 1 : 0 | html %],
+            OPACLocalCoverImages: [% Koha.Preference("OPACLocalCoverImages") ? 1 : 0 | html %],
+            OpacCoce: [% Koha.Preference('OpacCoce') ? 1 : 0 | html %],
+            CoceHost: "[% Koha.Preference('CoceHost') | html %]",
+            CoceProviders: "[% Koha.Preference('CoceProviders') | html %]",
+            OverDriveEnabled: [% Koha.Preference("OverDriveEnabled") ? 1 : 0 | html %],
+            OverDriveLibraryID: "[% Koha.Preference("OverDriveLibraryID") | html %]",
+            OpenLibrarySearch: [% Koha.Preference("OpenLibrarySearch") ? 1 : 0 | html %],
+        });
+
+        const TagsInputEnabled = [% TagsInputEnabled ? 1 : 0 | html %];
+        const can_remove_biblios = [% can_remove_biblios ? 1 : 0 | html %];
+        var print = [% print ? 1 : 0 | html %];
+        const has_items = [% itemsloop ? 1 : 0 | html %]
+
     </script>
     [% Asset.js("js/results-list.js") | $raw %]
     [% Asset.js("js/cover_images.js") | $raw %]
@@ -848,23 +868,23 @@
             var loaded = 1;
             counter_wait++;
 
-            [% IF GoogleJackets %]
+            if (Koha.prefs.GoogleJackets){
                 if ( loaded ) {
                     loaded = KOHA.Google.done;
                 }
-            [% END %]
+            }
 
-            [% IF OpenLibraryCovers %]
+            if (Koha.prefs.OpenLibraryCovers){
                 if ( loaded ) {
                     loaded = KOHA.OpenLibrary.done;
                 }
-            [% END %]
+            }
 
-            [% IF ( Koha.Preference('OpacCoce') && Koha.Preference('CoceProviders') ) %]
+            if ( Koha.prefs.OpacCoce && Koha.prefs.CoceProviders ) {
                 if ( loaded ) {
                     loaded = KOHA.coce.done;
                 }
-            [% END %]
+            }
 
             if (!loaded && counter_wait < 50) {// Do not wait more than 5 seconds
                 window.setTimeout(function(){wait_for_images(cb);}, 100);
@@ -880,7 +900,7 @@
         });
 
 
-        [% IF ( TagsInputEnabled && loggedinusername ) %]
+        if (TagsInputEnabled && loggedinusername){
             function tagSelected() {
                 var checkedBoxes = $("input:checkbox:checked");
                 if ($(checkedBoxes).size()) {
@@ -922,12 +942,12 @@
                 KOHA.Tags.add_multitags_button(bibs, tag);
                 return false;
             }
-        [% END %]
+        }
 
         $(function() {
             $("a.print").show();
 
-            [% IF ( TagsInputEnabled && loggedinusername ) %]
+            if ( TagsInputEnabled && loggedinusername ) {
                 var tagAdd = $(".tag_add");
                 tagAdd.removeClass("hidden");
                 $("#tagsel_tag").click(function(){
@@ -971,9 +991,9 @@
                   KOHA.Tags.add_tag_button(thisid, tag);
                   return false;
                 });
-            [% END %]
+            }
 
-            [% IF loggedinusername && can_remove_biblios %]
+            if (loggedinusername && can_remove_biblios){
                 $("body").on("click", ".removeitems", function(e){
                     e.preventDefault();
                     var title;
@@ -1020,32 +1040,32 @@
                         });
                     }
                 });
-            [% END %]
+            }
 
-            [% IF OpenLibraryCovers %]KOHA.OpenLibrary.GetCoverFromIsbn();[% END %]
-            [% IF OPACLocalCoverImages %]KOHA.LocalCover.GetCoverFromBibnumber(false);[% END %]
-            [% IF ( GoogleJackets ) %]KOHA.Google.GetCoverFromIsbn();[% END %]
-            [% IF ( Koha.Preference('OpacCoce') && Koha.Preference('CoceProviders') ) %]
-                KOHA.coce.getURL('[% Koha.Preference('CoceHost') | html %]', '[% Koha.Preference('CoceProviders') | html %]');
-            [% END %]
+            if (Koha.prefs.OpenLibraryCovers){KOHA.OpenLibrary.GetCoverFromIsbn();}
+            if (Koha.prefs.OPACLocalCoverImages){KOHA.LocalCover.GetCoverFromBibnumber(false);}
+            if (Koha.prefs.GoogleJackets){KOHA.Google.GetCoverFromIsbn();}
+            if (Koha.prefs.OpacCoce && Koha.prefs.CoceProviders){
+                KOHA.coce.getURL(Koha.prefs.CoceHost, Koha.prefs.CoceProviders);
+            }
 
-            [% IF print %]
+            if (print){
                 window.print();
                 window.onafterprint = function () {
                     window.close();
                 }
                 setTimeout('window.close()', 1000); // Hack for Chrome < 63
-            [% END %]
+            }
 
             AdjustRemark();
 
-            [% IF itemsloop %]
+            if (has_items){
                 sortMenu( $("#sorting-form") );
 
                 $("#sortfield").on("change", function(){
                     $('#sorting-form').submit();
                 });
-            [% END %]
+            }
 
             $(".deleteshelf").on("click", function(e){
                 e.preventDefault();
@@ -1125,7 +1145,7 @@
             if( $("#public").length > 0 ) {
                 public = $("#public").val();
             } else {
-                public = "[% public | html %]";
+                public = default_public;
             }
             var perms = $("#allow_changes_from").val();
 
@@ -1136,7 +1156,7 @@
             } else if( public==0 ) {
                 // If we move to Private (without shares), show Anyone remark
                 // Note: the number of shares is not tested real-time
-                [% IF !shelf.is_shared %]
+                if (!is_shelf_shared){
                     if ( perms==2 ) {
                         $("#anyone_remark").show();
                         $("#staff_remark").hide();
@@ -1150,11 +1170,11 @@
                         $("#staff_remark").hide();
                         $("#permitted_staff_remark").show();
                     }
-                [% ELSE %]
+                } else {
                     $("#anyone_remark").hide();
                     $("#staff_remark").hide();
                     $("#permitted_staff_remark").hide();
-                [% END %]
+                }
             } else { // public==1
                 $("#anyone_remark").hide();
                 $("#staff_remark").hide();

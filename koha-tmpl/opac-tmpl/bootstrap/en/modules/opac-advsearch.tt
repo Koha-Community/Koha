@@ -525,7 +525,7 @@
 
 [% BLOCK jsinclude %]
     [% Asset.js("lib/jquery/plugins/jquery.deserialize.min.js") | $raw %]
-    <script nonce="[% Koha.CSPNonce | $raw %]">
+    <script nonce="[% Koha.CSPNonce | $raw %]" data-tt-allowed="true">
         window.addEventListener('pageshow', function( e ){
             $('.form-control:visible').prop('disabled' , false );
         });

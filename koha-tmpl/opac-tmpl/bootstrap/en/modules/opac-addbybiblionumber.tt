@@ -188,7 +188,7 @@
 
 [% INCLUDE 'opac-bottom.inc' is_popup=1 %]
 [% BLOCK jsinclude %]
-    <script nonce="[% Koha.CSPNonce | $raw %]">
+    <script nonce="[% Koha.CSPNonce | $raw %]" data-tt-allowed="true">
         $(document).ready(function() {
             [% IF WINDOW_PARENT_RELOAD %]
                 opener.location.reload();

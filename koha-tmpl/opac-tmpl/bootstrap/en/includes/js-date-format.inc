@@ -9,12 +9,19 @@
     dayjs.extend(window.dayjs_plugin_utc);
     dayjs.extend(window.dayjs_plugin_timezone);
 </script>
+<script nonce="[% Koha.CSPNonce | $raw %]" data-tt-allowed="true">
+    Koha.addPrefs({
+        dateformat: '[% Koha.Preference('dateformat') | html %]',
+        TimeFormat: '[% Koha.Preference('TimeFormat') | html %]',
+    });
+    var tz = "[% KohaDates.tz | html %]";
+</script>
 <!-- js-date-format.inc -->
 <script nonce="[% Koha.CSPNonce | $raw %]">
     (function() {
-        var def_date_format = '[% Koha.Preference('dateformat') | html %]';
-        var def_time_format = '[% Koha.Preference('TimeFormat') | html %]';
-        var def_tz = '[% KohaDates.tz | html %]';
+        var def_date_format = Koha.prefs.dateformat;
+        var def_time_format = Koha.prefs.TimeFormat;
+        var def_tz = tz;
 
         var get_date_pattern = function(format) {
             var date_pattern = 'YYYY-MM-DD';

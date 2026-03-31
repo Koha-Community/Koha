@@ -410,17 +410,21 @@
     [% INCLUDE 'opac-bottom.inc' %]
     [% BLOCK jsinclude %]
         [% INCLUDE 'datatables.inc' %]
-        <script nonce="[% Koha.CSPNonce | $raw %]">
+        <script nonce="[% Koha.CSPNonce | $raw %]" data-tt-allowed="true">
             Koha.addPrefs({
                 OPACTableColExpandedByDefault: [% Koha.Preference('OPACTableColExpandedByDefault') ? 1 : 0 | html %],
                 SelfCheckTimeout: "[% Koha.Preference('SelfCheckTimeout') || 120 | html %]",
                 SelfCheckReceiptPrompt: [% Koha.Preference('SelfCheckReceiptPrompt') ? 1 : 0 | html %],
             });
             const logged_in_user_cardnumber = "[% patronid | html %]";
+            [% IF Koha.Preference('AudioAlerts') %]
+                var AUDIO_ALERTS = JSON.parse( "[% To.json(AudioAlerts.AudioAlerts) | $raw %]" );
+            [% END %]
+
+            var interface = "[% interface | html %]";
         </script>
         [% IF Koha.Preference('AudioAlerts') %]
             <script nonce="[% Koha.CSPNonce | $raw %]">
-                var AUDIO_ALERTS = JSON.parse( "[% To.json(AudioAlerts.AudioAlerts) | $raw %]" );
                 $( document ).ready(function() {
                     if ( AUDIO_ALERTS ) {
                         for ( var k in AUDIO_ALERTS ) {
@@ -434,7 +438,7 @@
                 });
                 function playSound( sound ) {
                     if (!(sound.indexOf("http://") === 0 || sound.indexOf("https://") === 0)) {
-                        sound = '[% interface | html %]' + '/bootstrap/sound/' + sound;
+                        sound = interface + '/bootstrap/sound/' + sound;
                     }
                     document.getElementById("audio-alert").innerHTML = '<audio src="' + sound + '" autoplay="autoplay" autobuffer="autobuffer"></audio>';
                 }
@@ -549,7 +553,7 @@
         </script>
         [% Asset.js("js/holds.js") | $raw %]
         [% IF ( Koha.Preference('SCOUserJS') ) %]
-            <script nonce="[% Koha.CSPNonce | $raw %]">
+            <script nonce="[% Koha.CSPNonce | $raw %]" data-tt-allowed="true">
                 [% Koha.Preference('SCOUserJS') | $raw %]
             </script>
         [% END %]

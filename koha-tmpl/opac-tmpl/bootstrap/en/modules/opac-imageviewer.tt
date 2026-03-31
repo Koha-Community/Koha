@@ -121,7 +121,7 @@
 
 [% INCLUDE 'opac-bottom.inc' %]
 [% BLOCK jsinclude %]
-    <script nonce="[% Koha.CSPNonce | $raw %]">
+    <script nonce="[% Koha.CSPNonce | $raw %]" data-tt-allowed="true">
         $(document).ready(function(){
             $("#largeCoverImg").attr("src","[% interface | html %]/[% theme | html %]/images/loading.gif");
             showCover([% imagenumber | html %]);

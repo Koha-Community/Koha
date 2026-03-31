@@ -98,7 +98,7 @@
 [% Asset.js("lib/bootstrap/js/bootstrap.bundle.min.js") | $raw %]
 [% Asset.js("lib/fontfaceobserver/fontfaceobserver.min.js") | $raw %]
 [% Asset.js("lib/enquire/enquire.min.js") | $raw %]
-<script nonce="[% Koha.CSPNonce | $raw %]">
+<script nonce="[% Koha.CSPNonce | $raw %]" data-tt-allowed="true">
     let logged_in_user_id = "[% logged_in_user.borrowernumber | html %]";
 </script>
 [% Asset.js("js/global.js") | $raw %]
@@ -106,7 +106,7 @@
 [% IF ( OPACAmazonCoverImages || SyndeticsCoverImages ) %]
     [% Asset.js("js/amazonimages.js") | $raw %]
 [% END %]
-<script nonce="[% Koha.CSPNonce | $raw %]">
+<script nonce="[% Koha.CSPNonce | $raw %]" data-tt-allowed="true">
     var query_desc = "[% query_desc | html %]";
     var querystring = "[% querystring | html %]";
     var query_cgi = "[% query_cgi | html %]";
@@ -182,19 +182,19 @@
 [% INCLUDE 'js-biblio-format.inc' %]
 [% PROCESS jsinclude %]
 [% IF ( Koha.Preference('OPACUserJS') ) %]
-    <script nonce="[% Koha.CSPNonce | $raw %]">
+    <script nonce="[% Koha.CSPNonce | $raw %]" data-tt-allowed="true">
         [% Koha.Preference('OPACUserJS') | $raw %]
     </script>
 [% END %]
 [% IF Branches.GetBranchSpecificJS( Branches.GetLoggedInBranchcode() || default_branch) %]
-    <script nonce="[% Koha.CSPNonce | $raw %]">
+    <script nonce="[% Koha.CSPNonce | $raw %]" data-tt-allowed="true">
         [% Branches.GetBranchSpecificJS( Branches.GetLoggedInBranchcode() || default_branch) | $raw %]
     </script>
 [% END %]
 [% IF SCO_login %]
     [% SET SCOUserJS = Koha.Preference('SCOUserJS') %]
     [% IF ( SCOUserJS ) %]
-        <script nonce="[% Koha.CSPNonce | $raw %]">
+        <script nonce="[% Koha.CSPNonce | $raw %]" data-tt-allowed="true">
             [% SCOUserJS | $raw %]
         </script>
     [% END %]

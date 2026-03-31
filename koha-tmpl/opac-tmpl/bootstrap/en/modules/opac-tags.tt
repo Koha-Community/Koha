@@ -249,7 +249,7 @@
 [% INCLUDE 'opac-bottom.inc' %]
 [% BLOCK jsinclude %]
     [% INCLUDE 'datatables.inc' %]
-    <script nonce="[% Koha.CSPNonce | $raw %]">
+    <script nonce="[% Koha.CSPNonce | $raw %]" data-tt-allowed="true">
         const loggedinusername = [% ( loggedinusername ) ? 1 : 0 | html %];
         const opacbookbag = [% ( opacbookbag ) ? 1 : 0 | html %];
         const virtualshelves = [% ( virtualshelves ) ? 1 : 0 | html %];

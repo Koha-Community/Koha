@@ -1071,7 +1071,7 @@
 [% BLOCK jsinclude %]
     [% INCLUDE 'calendar.inc' %]
     [% INCLUDE 'datatables.inc' %]
-    <script nonce="[% Koha.CSPNonce | $raw %]">
+    <script nonce="[% Koha.CSPNonce | $raw %]" data-tt-allowed="true">
         const tab = "[% tab | html %]";
         const logged_in_user_borrowernumber = "[% borrowernumber | html %]";
         Koha.addPrefs({
@@ -1083,6 +1083,14 @@
         const can_renew = [% canrenew ? 1 : 0 | html %];
         const is_debarred = [% userdebarred ? 1 : 0 | html %];
         const current_article_requests_size = [% current_article_requests.size || 0 | html %];
+
+        [% IF OverDriveCirculation %]
+            Koha.addPrefs({
+                OverDrivePasswordRequired: [% Koha.Preference('OverDrivePasswordRequired') ? 1 : 0 | html %],
+            });
+            var overdrive_error = "[% overdrive_error.dquote | html %]";
+            var overdrive_tab = [% overdrive_tab ? 1 : 0 | html %];
+        [% END %]
     </script>
     <script nonce="[% Koha.CSPNonce | $raw %]">
         var AR_CAPTION_COUNT = _("(%s total)");
@@ -1463,19 +1471,14 @@
     [% IF OverDriveCirculation %]
         [% Asset.js("js/overdrive.js") | $raw %]
         <script nonce="[% Koha.CSPNonce | $raw %]">
-            [%- IF Koha.Preference('OverDrivePasswordRequired') -%]
-                var OD_password_required = 1;
-            [%- ELSE -%]
-                var OD_password_required = 0;
-            [%- END -%]
             $(document).ready(function() {
-                [% IF ( overdrive_error ) %]
-                    KOHA.OverDriveCirculation.display_error("#opac-user-overdrive_panel", "[% overdrive_error.dquote | html %]");
-                [% END %]
+                if ( overdrive_error ){
+                    KOHA.OverDriveCirculation.display_error("#opac-user-overdrive_panel", overdrive_error);
+                }
 
-                [% IF ( overdrive_tab ) %]
+                if ( overdrive_tab ){
                     $("#opac-user-views a[href='#opac-user-overdrive_panel']").tab("show");
-                [% END %]
+                }
 
                 $("#opac-user-overdrive_panel").each( function() {
                     KOHA.OverDriveCirculation.display_account_details(this);

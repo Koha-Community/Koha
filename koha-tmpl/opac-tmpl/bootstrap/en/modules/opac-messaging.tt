@@ -362,7 +362,7 @@
 [% INCLUDE 'opac-bottom.inc' %]
 [% BLOCK jsinclude %]
     [% INCLUDE 'datatables.inc' %]
-    <script nonce="[% Koha.CSPNonce | $raw %]">
+    <script nonce="[% Koha.CSPNonce | $raw %]" data-tt-allowed="true">
         Koha.addPrefs({
             PhoneNotification: [% Koha.Preference('PhoneNotification') ? 1 : 0 | html %],
             TalkingTechItivaPhoneNotification: [% Koha.Preference('TalkingTechItivaPhoneNotification') ? 1 : 0 | html %],

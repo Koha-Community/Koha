@@ -480,15 +480,35 @@
     [% END %]
     [% Asset.js("lib/Chocolat/js/chocolat.js") | $raw %]
     [% CoverImagePlugins | $raw %]
-    <script nonce="[% Koha.CSPNonce | $raw %]">
+    <script nonce="[% Koha.CSPNonce | $raw %]" data-tt-allowed="true">
         const loggedinusername = [% ( loggedinusername ) ? 1 : 0 | html %];
         const opacbookbag = [% ( opacbookbag ) ? 1 : 0 | html %];
         const virtualshelves = [% ( virtualshelves ) ? 1 : 0 | html %];
+        var interface = "[% interface | html %]";
+        var theme = "[% theme | html %]";
+        const firstPage = [% firstPage ? 1 : 0 | html %];
+        Koha.addPrefs({
+            OpacHighlightedWords: "[% Koha.Preference('OpacHighlightedWords') | html %]",
+            NotHighlightedWords: "[% Koha.Preference("NotHighlightedWords") | html %]",
+            GoogleJackets: [% Koha.Preference("GoogleJackets") ? 1 : 0 | html %],
+            OpenLibraryCovers: [% Koha.Preference("OpenLibraryCovers") ? 1 : 0 | html %],
+            OPACLocalCoverImages: [% Koha.Preference("OPACLocalCoverImages") ? 1 : 0 | html %],
+            OpacCoce: [% Koha.Preference('OpacCoce') ? 1 : 0 | html %],
+            CoceHost: "[% Koha.Preference('CoceHost') | html %]",
+            CoceProviders: "[% Koha.Preference('CoceProviders') | html %]",
+            OverDriveEnabled: [% Koha.Preference("OverDriveEnabled") ? 1 : 0 | html %],
+            OverDriveLibraryID: "[% Koha.Preference("OverDriveLibraryID") | html %]",
+            OpenLibrarySearch: [% Koha.Preference("OpenLibrarySearch") ? 1 : 0 | html %],
+        });
+        const DidYouMean = [% DidYouMean ? 1 : 0 | html %];
+        // query_desc and querystring are set in opac-bottom.inc
+        let query_desc_uri = "[% query_desc | uri %]";
+        let querystring_uri = "[% querystring | uri %]";
     </script>
     [% Asset.js("js/results-list.js") | $raw %]
     [% Asset.js("js/cover_images.js") | $raw %]
     <script nonce="[% Koha.CSPNonce | $raw %]">
-        [% IF ( OpacHighlightedWords ) %]
+        if (Koha.prefs.OpacHighlightedWords){
             var q_array = new Array();  // holds search terms if available
 
             function highlightOff() {
@@ -500,7 +520,7 @@
                 for (x in q_array) {
                     q_array[x] = q_array[x].replace(/\w*:([\w])/, "$1");
                     q_array[x] = q_array[x].toLowerCase();
-                    var myStopwords = "[% Koha.Preference('NotHighlightedWords') | html %]".toLowerCase().split('|');
+                    var myStopwords = Koha.prefs.NotHighlightedWords.toLowerCase().split('|');
                     if ( (q_array[x].length > 0) && ($.inArray(q_array[x], myStopwords) == -1) ) {
                         $(".title").highlight(q_array[x]);
                         $(".author").highlight(q_array[x]);
@@ -509,7 +529,7 @@
                 }
                 $(".highlight_toggle").toggle();
             }
-        [% END # /IF OpacHighlightedWords %]
+        }
 
 
 
@@ -519,23 +539,23 @@
             var loaded = 1;
             counter_wait++;
 
-            [% IF GoogleJackets %]
+            if (Koha.prefs.GoogleJackets){
                 if ( loaded ) {
                     loaded = KOHA.Google.done;
                 }
-            [% END %]
+            }
 
-            [% IF OpenLibraryCovers %]
+            if (Koha.prefs.OpenLibraryCovers){
                 if ( loaded ) {
                     loaded = KOHA.OpenLibrary.done;
                 }
-            [% END %]
+            }
 
-            [% IF ( Koha.Preference('OpacCoce') && Koha.Preference('CoceProviders') ) %]
+            if (Koha.prefs.OpacCoce && Koha.prefs.CoceProviders){
                 if ( loaded ) {
                     loaded = KOHA.coce.done;
                 }
-            [% END %]
+            }
 
             if (!loaded && counter_wait < 50) {// Do not wait more than 5 seconds
                 window.setTimeout(function(){wait_for_images(cb);}, 100);
@@ -559,11 +579,11 @@
                 $(this).toggle();
             });
 
-            [% IF ( OpacHighlightedWords ) %]
+            if (Koha.prefs.OpacHighlightedWords){
                 $('a.title').each(function() {
-                    $(this).attr("href", $(this).attr("href") + "&query_desc=[% query_desc | uri %]");
+                    $(this).attr("href", $(this).attr("href") + "&query_desc=" + query_desc_uri);
                 });
-            [% END %]
+            }
 
             $(".br-readonly a").on("click", function(e){
                 e.preventDefault();
@@ -577,8 +597,8 @@
                 $('#bookbag_form').submit();
             });
 
-            [% IF ( query_desc ) %]
-                [% IF ( OpacHighlightedWords ) %]
+            if ( query_desc ){
+                if (Koha.prefs.OpacHighlightedWords){
                     q_array = query_desc.split(" ");
                     // ensure that we don't have "" at the end of the array, which can
                     // break the highlighter
@@ -594,16 +614,16 @@
                         e.preventDefault();
                         highlightOff();
                     });
-                [% END # /IF OpacHighlightedWords %]
-                [% IF ( OverDriveEnabled && firstPage ) %]
-                    var $overdrive_results = $( '<div id="overdrive-results">' + _("Searching %s...").format('OverDrive') + ' <img class="throbber" src="[% interface | html %]/[% theme | html %]/images/spinner-small.gif" /></div>' );
+                }
+                if (OverDriveEnabled && firstPage){
+                    var $overdrive_results = $( '<div id="overdrive-results">' + _("Searching %s...").format('OverDrive') + ' <img class="throbber" src=`${interface}/${theme}/images/spinner-small.gif` /></div>' );
                     $( '#numresults' ) .after( $overdrive_results );
                     //Clean querystring, first we remove CCL entities, then decode HTML entities, then swap double quotes for single quotes
                     //as the overdrive API treats double quotes as a search term and returns extra results
                     od_querystring = querystring.replace(/(?:^|\W)([\w-]+)(,[\w-]+)*([:=])/g,' ');
                     od_querystring = new DOMParser().parseFromString( od_querystring, 'text/html').body.innerText;
                     od_querystring = od_querystring.replace(/\"/g,"'");
-                    KOHA.OverDrive.Search( "[% Koha.Preference('OverDriveLibraryID') | html %]", od_querystring, 1, 0, function( data ) {
+                    KOHA.OverDrive.Search( Koha.prefs.OverDriveLibraryID, od_querystring, 1, 0, function( data ) {
                         if ( data.error ) {
                             $overdrive_results.html( _("Error searching %s collection").format('OverDrive') );
                             return;
@@ -615,9 +635,9 @@
                             $overdrive_results.remove();
                         }
                     } );
-                [% END # /IF OverDriveEnabled %]
-                [% IF ( OpenLibrarySearch ) %]
-                    var $openlibrary_results = $( '<div id="openlibrary-results">' + _("Searching %s...").format('OpenLibrary' ) + ' <img class="throbber" src="[% interface | html %]/[% theme | html %]/images/spinner-small.gif" /></div>' );
+                }
+                if ( OpenLibrarySearch ) {
+                    var $openlibrary_results = $( '<div id="openlibrary-results">' + _("Searching %s...").format('OpenLibrary' ) + ' <img class="throbber" src=`${interface}/${theme}/images/spinner-small.gif` /></div>' );
                     $( '#numresults' ) .after( $openlibrary_results );
                     KOHA.OpenLibrary.search( querystring, null, function( data ) {
                         if ( data.error ) {
@@ -631,22 +651,22 @@
                             $openlibrary_results.remove();
                         }
                     } );
-                [% END # /IF OpenLibrarySearch %]
-            [% END # /IF query_desc %]
+                }
+            }
 
-            [% IF OpenLibraryCovers %]KOHA.OpenLibrary.GetCoverFromIsbn();[% END %]
-            [% IF OPACLocalCoverImages %]KOHA.LocalCover.GetCoverFromBibnumber(false);[% END %]
-            [% IF ( GoogleJackets ) %]KOHA.Google.GetCoverFromIsbn();[% END %]
-            [% IF ( Koha.Preference('OpacCoce') && Koha.Preference('CoceProviders') ) %]
-                KOHA.coce.getURL('[% Koha.Preference('CoceHost') | html %]', '[% Koha.Preference('CoceProviders') | html %]');
-            [% END %]
+            if (Koha.prefs.OpenLibraryCovers){KOHA.OpenLibrary.GetCoverFromIsbn();}
+            if (Koha.prefs.OPACLocalCoverImages){KOHA.LocalCover.GetCoverFromBibnumber(false);}
+            if (Koha.prefs.GoogleJackets){KOHA.Google.GetCoverFromIsbn();}
+            if (Koha.prefs.OpacCoce && Koha.prefs.CoceProviders){
+                KOHA.coce.getURL(Koha.prefs.CoceHost, Koha.prefs.CoceProviders);
+            }
 
-            [% IF ( DidYouMean ) %]
-                $("#didyoumean").load("/cgi-bin/koha/svc/suggestion?render=stub&q=[% querystring |uri %]",
+            if (DidYouMean){
+                $("#didyoumean").load("/cgi-bin/koha/svc/suggestion?render=stub&q=" + querystring_uri,
                     function() {
                         $(this).addClass("dym-loaded");
                     });
-            [% END %]
+            }
 
             $("input.newtag").on('keydown', function(e){
                 if (e.keyCode == 13) { e.preventDefault(); }

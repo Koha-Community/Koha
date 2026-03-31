@@ -1,4 +1,4 @@
-/* global OD_password_required __ */
+/* global Koha.prefs.OverDrivePasswordRequired __ */
 
 if (typeof KOHA == "undefined" || !KOHA) {
     var KOHA = {};
@@ -76,7 +76,7 @@ KOHA.OverDriveCirculation = new (function () {
     var login_link = $('<a class="btn btn-primary" href="#">')
         .click(function (e) {
             e.preventDefault();
-            if (OD_password_required) {
+            if (Koha.prefs.OverDrivePasswordRequired) {
                 $("#overdrive-login").modal("show");
             } else {
                 login("");

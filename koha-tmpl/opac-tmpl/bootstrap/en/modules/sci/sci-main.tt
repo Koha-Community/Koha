@@ -232,6 +232,10 @@
 
     [% INCLUDE 'opac-bottom.inc' %]
     [% BLOCK jsinclude %]
+        <script nonce="[% Koha.CSPNonce | $raw %]" data-tt-allowed="true">
+            const refresh_timeout = "[% refresh_timeout | html %]";
+        </script>
+
         <script nonce="[% Koha.CSPNonce | $raw %]">
             function mungeHistory() {
                         // prevent back button from allowing form resubmission
@@ -319,7 +323,7 @@
                     function timerIncrement() {
                         if ( $("#sci_finish_button").is(":visible") || $("#sci_refresh_button").is(":visible") ) {
                             idleTime = idleTime + 1;
-                            idleTimeout = [% refresh_timeout | html %];
+                            idleTimeout = refresh_timeout;
                             if (idleTime >= idleTimeout ) {
                                 location.href = '/cgi-bin/koha/sci/sci-main.pl';
                             }
@@ -347,7 +351,7 @@
             });
         </script>
         [% IF ( Koha.Preference('SelfCheckInUserJS') ) %]
-            <script nonce="[% Koha.CSPNonce | $raw %]">
+            <script nonce="[% Koha.CSPNonce | $raw %]" data-tt-allowed="true">
                 [% Koha.Preference('SelfCheckInUserJS') | $raw %]
             </script>
         [% END %]

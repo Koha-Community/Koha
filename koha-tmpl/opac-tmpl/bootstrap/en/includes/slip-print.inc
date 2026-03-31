@@ -1,5 +1,5 @@
 [% USE raw %]
-<script nonce="[% Koha.CSPNonce | $raw %]">
+<script nonce="[% Koha.CSPNonce | $raw %]" data-tt-allowed="true">
     [% IF ( Koha.Preference('IntranetSlipPrinterJS') ) %]
         [% Koha.Preference('IntranetSlipPrinterJS') | $raw %]
     [% ELSE %]

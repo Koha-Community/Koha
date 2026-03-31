@@ -1,6 +1,15 @@
 [% USE Asset %]
 [% USE Koha %]
 [% USE raw %]
+<script nonce="[% Koha.CSPNonce | $raw %]" data-tt-allowed="true">
+    var debug = "[% debug | html %]";
+    Koha.addPrefs({
+        dateformat: "[% Koha.Preference('dateformat') | html %]",
+        CalendarFirstDayOfWeek: "[% Koha.Preference('CalendarFirstDayOfWeek') | html %]",
+        TimeFormat: "[% Koha.Preference('TimeFormat') | html %]",
+    });
+</script>
+
 <script nonce="[% Koha.CSPNonce | $raw %]">
     var flatpickr_weekdays = {
         shorthand: [ "Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],
@@ -11,13 +20,11 @@
         shorthand: [ "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
         longhand: [ "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
     };
-    var debug    = "[% debug | html %]";
-    var dateformat_pref = "[% Koha.Preference('dateformat') | html %]";
     var sentmsg = 0;
     if (debug > 1) {alert("dateformat: " + dateformat_pref + "\ndebug is on (level " + debug + ")");}
-    var calendarFirstDayOfWeek = '[% Koha.Preference('CalendarFirstDayOfWeek') | html %]';
-    var flatpickr_timeformat_string = [% IF Koha.Preference('TimeFormat') == '12hr' %]"G:i K"[% ELSE %]"H:i"[% END %];
-    var flatpickr_timeformat = [% IF Koha.Preference('TimeFormat') == '12hr' %]false[% ELSE %]true[% END %];
+    var calendarFirstDayOfWeek = Koha.prefs.CalendarFirstDayOfWeek;
+    var flatpickr_timeformat_string = Koha.prefs.TimeFormat == '12hr' ? "G:i K" : "H:i";
+    var flatpickr_timeformat = Koha.prefs.TimeFormat == '12hr' ? false : true;
     var flatpickr_dateformat_string = "";
     var delimiter = "";
     var altinput_dateformat = "";

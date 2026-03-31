@@ -139,7 +139,7 @@
     <p>Unknown stage. This should not have happened. </p>
 [% END %]
 [% BLOCK backend_jsinclude %]
-    <script nonce="[% Koha.CSPNonce | $raw %]">
+    <script nonce="[% Koha.CSPNonce | $raw %]" data-tt-allowed="true">
         var core = [ [% whole.core | $raw %] ];
         // <![CDATA[]
         [% INCLUDE "ill/backends/Standard/shared/shared.js" %]
