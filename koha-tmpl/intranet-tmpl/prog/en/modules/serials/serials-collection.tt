@@ -341,8 +341,9 @@
 
 [% MACRO jsinclude BLOCK %]
     [% INCLUDE 'datatables.inc' %]
-    <script nonce="[% Koha.CSPNonce | $raw %]">
+    <script nonce="[% Koha.CSPNonce | $raw %]" data-tt-allowed="true">
         var subscriptionid = "[% subscriptionid | html %]";
+        var subscriptionidlist = "[% subscriptionidlist | html %]";
     </script>
     [% Asset.js("js/serials-toolbar.js") | $raw %]
     <script nonce="[% Koha.CSPNonce | $raw %]">
@@ -420,7 +421,7 @@
         $(document).ready(function() {
             $(".delete-issues").on("click", function(e){
                 e.preventDefault();
-                deleteIssues("[% subscriptionidlist | html %]");
+                deleteIssues(subscriptionidlist);
             });
         });
     </script>

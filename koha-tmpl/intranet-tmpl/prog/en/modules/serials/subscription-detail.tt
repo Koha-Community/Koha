@@ -447,18 +447,17 @@
 [% END %]
 
 [% MACRO jsinclude BLOCK %]
-    <script nonce="[% Koha.CSPNonce | $raw %]">
+    <script nonce="[% Koha.CSPNonce | $raw %]" data-tt-allowed="true">
         var subscriptionid = "[% subscriptionid | html %]";
+
+        var table_settings = [% TablesSettings.GetTableSettings( 'serials', 'subscription-detail', 'orders', 'json' ) | $raw %];
+        const has_orders = [% orders_grouped.size ? 1 : 0 | html %];
+        const print_routing_list_issue = "[% print_routing_list_issue | uri %]";
     </script>
     [% Asset.js("js/serials-toolbar.js") | $raw %]
     [% Asset.js("js/mana.js") | $raw %]
     [% INCLUDE 'datatables.inc' %]
     [% Asset.js("lib/jquery/plugins/treetable/jquery.treetable.js") | $raw %]
-    <script nonce="[% Koha.CSPNonce | $raw %]">
-        var table_settings = [% TablesSettings.GetTableSettings( 'serials', 'subscription-detail', 'orders', 'json' ) | $raw %];
-        const has_orders = [% orders_grouped.size ? 1 : 0 | html %];
-        const print_routing_list_issue = "[% print_routing_list_issue | uri %]";
-    </script>
     <script nonce="[% Koha.CSPNonce | $raw %]">
         // the english words used in display purposes
         var text = new Array(

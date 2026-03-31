@@ -135,6 +135,9 @@
 [% END %]
 
 [% MACRO jsinclude BLOCK %]
+    <script nonce="[% Koha.CSPNonce | $raw %]" data-tt-allowed="true">
+        var subscriptionid = [% subscriptionid || 0 | html %];
+    </script>
     <script nonce="[% Koha.CSPNonce | $raw %]">
         $(document).ready(function () {
             $(".itemrank").on("change", function () {
@@ -184,7 +187,7 @@
             }
             $.ajax({
                 data: {
-                    subscriptionid: [% subscriptionid | html %],
+                    subscriptionid,
                     borrowernumbers,
                     op: 'cud-add_new_recipients',
                     csrf_token: $('meta[name="csrf-token"]').attr('content'),
@@ -192,7 +195,7 @@
                 type: 'POST',
                 url: '/cgi-bin/koha/serials/routing.pl',
                 success: function (data) {
-                    document.location.href = '/cgi-bin/koha/serials/routing.pl?subscriptionid=[% subscriptionid | uri %]';
+                    document.location.href = `/cgi-bin/koha/serials/routing.pl?subscriptionid=${subscriptionid}`;
                     return false;
                 },
                 error: function (data) {
