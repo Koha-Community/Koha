@@ -1954,21 +1954,33 @@ sub create_hold_group {
         $next_available_visual_hold_group_id++;
     }
 
-    my $hold_group_rs = $self->_result->create_related(
-        'hold_groups',
-        { visual_hold_group_id => $next_available_visual_hold_group_id }
-    );
-    foreach my $hold_id (@$hold_ids) {
-        my $hold                   = Koha::Holds->find($hold_id);
-        my $previous_hold_group_id = $hold->hold_group_id;
+    my @holds_to_group = Koha::Holds->search( { reserve_id => { -in => $hold_ids } } )->as_list;
 
-        $hold->hold_group_id( $hold_group_rs->hold_group_id )->store;
-        if ( $previous_hold_group_id && $previous_hold_group_id != $hold_group_rs->hold_group_id ) {
-            $hold->cleanup_hold_group($previous_hold_group_id);
+    my %cleanup_map;
+    foreach my $hold (@holds_to_group) {
+        if ( $hold->hold_group_id ) {
+            $cleanup_map{ $hold->id } = $hold->hold_group_id;
         }
     }
 
-    return Koha::HoldGroup->_new_from_dbic($hold_group_rs);
+    my $hold_group = Koha::HoldGroup->new(
+        {
+            borrowernumber       => $self->borrowernumber,
+            visual_hold_group_id => $next_available_visual_hold_group_id
+        }
+    );
+    $hold_group->store( { holds => \@holds_to_group } );
+
+    foreach my $hold_id ( keys %cleanup_map ) {
+        my $old_group_id = $cleanup_map{$hold_id};
+
+        if ( $old_group_id != $hold_group->hold_group_id ) {
+            my $hold = Koha::Holds->find($hold_id);
+            $hold->cleanup_hold_group($old_group_id);
+        }
+    }
+
+    return $hold_group;
 }
 
 =head3 curbside_pickups

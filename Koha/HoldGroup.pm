@@ -19,6 +19,9 @@ package Koha::HoldGroup;
 
 use Modern::Perl;
 
+use C4::Context;
+use C4::Log qw( logaction );
+
 use base qw(Koha::Object);
 
 =head1 NAME
@@ -30,6 +33,89 @@ Koha::HoldGroup - Koha Hold Group object class
 =head2 Class Methods
 
 =cut
+
+=head3 store
+
+    store override
+
+Logs changes to related holds
+
+=cut
+
+sub store {
+    my ( $self, $params ) = @_;
+
+    my $is_new           = !$self->in_storage;
+    my $associated_holds = $params->{holds} || [];
+
+    my %prior_states;
+    foreach my $hold (@$associated_holds) {
+        my $unblessed = $hold->unblessed;
+        $unblessed->{hold_group_id} = undef if $is_new;
+        $prior_states{ $hold->id } = $unblessed;
+    }
+
+    my $result = $self->SUPER::store();
+
+    foreach my $hold (@$associated_holds) {
+        $hold->hold_group_id( $self->hold_group_id )->store;
+    }
+
+    if ( $result && C4::Context->preference('HoldsLog') ) {
+        foreach my $hold (@$associated_holds) {
+            eval { $hold->discard_changes; };
+            next if $@;
+
+            logaction(
+                'HOLDS',
+                'MODIFY',
+                $hold->reserve_id,
+                $hold,
+                undef,
+                $prior_states{ $hold->id }
+            );
+        }
+    }
+
+    return $result;
+}
+
+=head3 delete
+
+    delete override
+
+Log changes to related holds
+
+=cut
+
+sub delete {
+    my ($self) = @_;
+
+    my $hold_group_id    = $self->hold_group_id;
+    my $borrowernumber   = $self->borrowernumber;
+    my @associated_holds = $self->holds->as_list;
+
+    my $result = $self->SUPER::delete();
+
+    if ( $result && C4::Context->preference('HoldsLog') ) {
+        foreach my $hold (@associated_holds) {
+            my $hold_prior_to_delete = $hold->unblessed;
+            eval { $hold->discard_changes; };
+            next if $@;
+
+            logaction(
+                'HOLDS',
+                'MODIFY',
+                $hold->reserve_id,
+                $hold,
+                undef,
+                $hold_prior_to_delete
+            );
+        }
+    }
+
+    return $result;
+}
 
 =head3 to_api
 
