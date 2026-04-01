@@ -139,7 +139,7 @@ $(document).ready(function () {
     });
 
     // If the holds tab is preselected on load, we need to load the table
-    if ($("#holds-tab").parent().hasClass("active")) {
+    if ($("#holds-tab").hasClass("active")) {
         load_holds_table();
     }
 
