@@ -481,8 +481,9 @@ Missing POD for language_get_description.
 sub language_get_description {
     my ( $script, $lang, $type ) = @_;
 
+    my $script_key   = $script || "undef";
     my $memory_cache = Koha::Cache::Memory::Lite->get_instance;
-    my $cache_key    = "Language_descriptions:$script:$lang:$type";
+    my $cache_key    = "Language_descriptions:$script_key:$lang:$type";
     my $cached       = $memory_cache->get_from_cache($cache_key);
     return $cached if $cached;
 
