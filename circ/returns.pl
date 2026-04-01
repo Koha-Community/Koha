@@ -646,6 +646,8 @@ if ( $messages->{'ResFound'} ) {
         reservenotes   => $reserve->{'reservenotes'},
         reserve_id     => $reserve->{reserve_id},
         bormessagepref => $holdmsgpreferences->{'transports'},
+        C4::Context->preference('DisplayAddHoldGroups')
+            && $reserve->{hold_group_id} ? ( hold_group_id => $reserve->{hold_group_id} ) : (),
     );
 }
 
