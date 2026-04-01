@@ -19,6 +19,7 @@
 
 use Modern::Perl;
 
+use Test::MockModule;
 use Test::More tests => 2;
 use Test::NoWarnings;
 
@@ -33,7 +34,7 @@ my $builder = t::lib::TestBuilder->new;
 my $schema  = Koha::Database->new->schema;
 
 subtest 'move_to_deleted' => sub {
-    plan tests => 2;
+    plan tests => 6;
     $schema->storage->txn_begin;
 
     t::lib::Mocks::mock_preference( 'marcflavour', 'MARC21' );    # TODO UNIMARC?
@@ -54,6 +55,64 @@ subtest 'move_to_deleted' => sub {
 
     # Check leader position 05 in marcxml
     like( $rec->marcxml, qr/<leader>.{5}d/, 'Leader in marcxml checked' );
+
+    $record = MARC::Record->new;
+    $record->append_fields( MARC::Field->new( '100', '1', '2', a => 'Name' ) );
+    $record->append_fields( MARC::Field->new( '040', '',  '',  c => 'Test' ) );
+    $type   = $builder->build( { source => 'AuthType', value => { auth_tag_to_report => '100' } } );
+    $authid = C4::AuthoritiesMarc::AddAuthority(
+        $record, undef,
+        $type->{authtypecode}
+    );
+    my $dbh = C4::Context->dbh;
+    my $sth = $dbh->prepare(
+        q|UPDATE auth_header  SET marcxml = UpdateXML(marcxml, '//datafield[@tag="040"]/subfield[@code="c"]',CONCAT('<subfield code',CHAR(27),'="c">OSt</subfield>')) WHERE auth_header.authid=?|
+    );
+    $sth->execute( ($authid) );
+    $authority = Koha::Authorities->find($authid);
+    $count     = $schema->resultset('DeletedauthHeader')->count;
+    $rec       = $authority->move_to_deleted;
+    is(
+        $schema->resultset('DeletedauthHeader')->count, $count + 1,
+        'count one higher, successfully deleted record with invalid XML characters'
+    );
+
+    # Check leader position 05 in marcxml
+    like( $rec->marcxml, qr/<leader>.{5}d/, 'Leader in marcxml checked, error was recoverable so leader updated' );
+
+    my $ka = Test::MockModule->new('Koha::Authority');
+    $ka->mock(
+        'record_strip_nonxml',
+        sub {
+            return;
+        }
+    );
+    $record = MARC::Record->new;
+    $record->append_fields( MARC::Field->new( '100', '1', '2', a => 'Name' ) );
+    $record->append_fields( MARC::Field->new( '040', '',  '',  c => 'Test' ) );
+    $type   = $builder->build( { source => 'AuthType', value => { auth_tag_to_report => '100' } } );
+    $authid = C4::AuthoritiesMarc::AddAuthority(
+        $record, undef,
+        $type->{authtypecode}
+    );
+    $dbh = C4::Context->dbh;
+    $sth = $dbh->prepare(
+        q|UPDATE auth_header  SET marcxml = UpdateXML(marcxml, '//datafield[@tag="040"]/subfield[@code="c"]',CONCAT('<subfield code',CHAR(27),'="c">OSt</subfield>')) WHERE auth_header.authid=?|
+    );
+    $sth->execute( ($authid) );
+    $authority = Koha::Authorities->find($authid);
+    $count     = $schema->resultset('DeletedauthHeader')->count;
+    $rec       = $authority->move_to_deleted;
+    is(
+        $schema->resultset('DeletedauthHeader')->count, $count + 1,
+        'count one higher, successfully deleted record with invalid XML characters'
+    );
+
+    # Check leader position 05 in marcxml
+    unlike(
+        $rec->marcxml, qr/<leader>.{5}d/,
+        'Leader in marcxml checked, error was unrecoverable so leader not updated'
+    );
 
     $schema->storage->txn_rollback;
 };

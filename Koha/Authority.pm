@@ -25,6 +25,7 @@ use Koha::Authority::ControlledIndicators;
 use Koha::SearchEngine::Search;
 
 use C4::Heading qw( new_from_field );
+use C4::Charset qw( StripNonXmlChars );
 
 =head1 NAME
 
@@ -324,12 +325,57 @@ sub move_to_deleted {
     delete $data->{modification_time};    # trigger new timestamp
 
     # Set leader 05 (deleted)
-    my $format = C4::Context->preference('marcflavour') eq 'UNIMARC' ? 'UNIMARCAUTH' : 'MARC21';
-    my $record = $self->record;
-    $record->leader( substr( $record->leader, 0, 5 ) . 'd' . substr( $record->leader, 6, 18 ) );
-    $data->{marcxml} = $record->as_xml_record($format);
+    my $format         = C4::Context->preference('marcflavour') eq 'UNIMARC' ? 'UNIMARCAUTH' : 'MARC21';
+    my $record         = eval { $self->record };
+    my $invalid_record = $@ || !$record;
+    if ($invalid_record) {
+        $record = $self->record_strip_nonxml;
+    }
+
+    # We don't do this for biblios, and deleted authorities aren't accessible outside the DB
+    # not in OAI, export, REST, etc. so we should just use the marcxml if we cannot update it
+    # i.e. it is more important to allow the deletion than to force this
+    $record->leader( substr( $record->leader, 0, 5 ) . 'd' . substr( $record->leader, 6, 18 ) ) if $record;
+    $data->{marcxml} = $record ? $record->as_xml_record($format) : $self->marcxml;
 
     return Koha::Database->new->schema->resultset('DeletedauthHeader')->create($data);
+}
+
+=head3 record_strip_nonxml
+
+my $record = $authority->record_strip_nonxml;
+
+This subroutine is intended for cases where we encounter a record that cannot be parsed, but want
+to make a good effort to present the record (for harvesting, deletion, editing) rather than throwing
+an exception
+
+Will return undef if the record cannot be built
+
+=cut
+
+sub record_strip_nonxml {
+
+    my ( $self, $params ) = @_;
+    $params //= {};
+
+    my $record;
+    my $marcxml_error;
+
+    my $flavour = $self->record_schema;
+    eval {
+        $record = MARC::Record->new_from_xml(
+            StripNonXmlChars( $self->marcxml ), 'UTF-8',
+            $flavour
+        );
+    };
+    if ($@) {
+        $marcxml_error = $@;
+        chomp $marcxml_error;
+        warn $marcxml_error;
+        return;
+    }
+
+    return $record;
 }
 
 =head2 Internal methods
