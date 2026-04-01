@@ -3477,7 +3477,7 @@ subtest 'reset_2fa() tests' => sub {
 
 subtest "create_hold_group, hold_groups, visual_hold_group_id tests" => sub {
 
-    plan tests => 13;
+    plan tests => 17;
 
     $schema->storage->txn_begin;
 
@@ -3559,6 +3559,32 @@ subtest "create_hold_group, hold_groups, visual_hold_group_id tests" => sub {
     $patron->create_hold_group( [ $hold5->reserve_id, $hold6->reserve_id ] );
     my $third_hold_group = $patron->hold_groups->as_list->[0];
     is( $third_hold_group->visual_hold_group_id, 1, 'Visual hold group id is 1' );
+
+    t::lib::Mocks::mock_preference( 'HoldsLog', 1 );
+    my $new_hg     = $patron->create_hold_group( [ $hold6->reserve_id, $hold5->reserve_id ], 1 );
+    my $hg_id      = $new_hg->hold_group_id;
+    my $create_log = $schema->resultset('ActionLog')->search(
+        {
+            module => 'HOLDS',
+            action => 'MODIFY',
+            object => $hold6->reserve_id,
+        },
+        { order_by => { -desc => 'action_id' } }
+    )->first;
+    ok( $create_log, 'Log entry created for hold when added to a new group' );
+    like( $create_log->info, qr/'hold_group_id' => $hg_id/, 'Log info contains hold_group_id change' );
+
+    $new_hg->delete;
+    my $delete_log = $schema->resultset('ActionLog')->search(
+        {
+            module => 'HOLDS',
+            action => 'MODIFY',
+            object => $hold6->reserve_id,
+        },
+        { order_by => { -desc => 'action_id' } }
+    )->first;
+    ok( $delete_log, 'Log entry created for hold when group was deleted' );
+    like( $delete_log->info, qr/'hold_group_id' => undef/, 'Log shows the old group ID was removed' );
 
     $schema->storage->txn_rollback;
 };
