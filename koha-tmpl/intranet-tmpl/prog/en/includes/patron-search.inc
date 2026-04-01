@@ -78,12 +78,12 @@
                         [% CASE 'sort1' %]
                             <li>
                                 <label>Sort 1:</label>
-                                [% PROCESS 'av-build-dropbox.inc' no_id => 1, name="sort1_filter", category="Bsort1", empty=1, size = 20 %]
+                                [% PROCESS 'av-build-dropbox.inc' no_id => 1, name="sort1_filter", default="", category="Bsort1", empty=1, size = 20 %]
                             </li>
                         [% CASE 'sort2' %]
                             <li>
                                 <label>Sort 2:</label>
-                                [% PROCESS 'av-build-dropbox.inc' no_id => 1, name="sort2_filter", category="Bsort2", empty=1, size = 20 %]
+                                [% PROCESS 'av-build-dropbox.inc' no_id => 1, name="sort2_filter", default="", category="Bsort2", empty=1, size = 20 %]
                             </li>
                         [% CASE 'search_field' %]
                             <li> [% INCLUDE patron_fields_dropdown %] </li>
