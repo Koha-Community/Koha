@@ -443,7 +443,10 @@
                                                                 [% IF ISSUE.renewed %]<span class="badge text-bg-success">Renewed!</span><br />[% END %]
                                                                 [% IF ( ISSUE.status ) %]
                                                                     [% IF ( canrenew ) %]
-                                                                        <input type="checkbox" name="issue" value="[% ISSUE.issue_id | uri %]" />
+                                                                        <label>
+                                                                            <span class="visually-hidden">Select item to renew</span>
+                                                                            <input type="checkbox" name="issue" value="[% ISSUE.issue_id | uri %]" />
+                                                                        </label>
                                                                         <a class="submit-form-link" href="#" data-method="post" data-action="/cgi-bin/koha/opac-renew.pl" data-issue="[% ISSUE.issue_id | html %]" data-op="cud-renew">Renew</a>
                                                                     [% END %]
                                                                     [% IF ISSUE.renewalfee > 0 %]
@@ -587,8 +590,9 @@
                                                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                                 </div>
                                                 <div class="modal-body" id="addNoteBody">
-                                                    <h2 id="addNoteTitle"></h2>
+                                                    <h2 id="addNoteTitle" hidden>Item title</h2>
                                                     <input type="hidden" id="addNoteIssueId" name="issue_id" value="" />
+                                                    <label for="addNote" class="visually-hidden">Note</label>
                                                     <textarea name="note" id="addNote" rows="4"></textarea>
                                                     <div class="hint">Your note will be shown to the librarian when the item is checked in.</div>
                                                 </div>
@@ -1037,7 +1041,7 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <h2 id="suspendHoldTitle"></h2>
+                    <h2 id="suspendHoldTitle" hidden>Hold details</h2>
                     <input type="hidden" name="reserve_id" id="suspendHoldReserveId" value="" />
                     <label for="suspend_untilDate">Suspend until:</label>
                     <input type="text" name="suspend_until" id="suspend_untilDate" size="10" />
