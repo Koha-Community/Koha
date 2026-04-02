@@ -18,7 +18,7 @@
 use Modern::Perl;
 
 use Test::NoWarnings;
-use Test::More tests => 4;
+use Test::More tests => 5;
 use Test::MockModule;
 use Test::Mojo;
 
@@ -251,6 +251,83 @@ subtest 'delete() tests' => sub {
 
     my $nonexistent_hold = Koha::HoldGroups->find( $hold_group->hold_group_id );
     is( $nonexistent_hold, undef, 'The hold group does not exist after deletion' );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'cancel() tests' => sub {
+    plan tests => 10;
+
+    $schema->storage->txn_begin;
+
+    my $patron = $builder->build_object(
+        {
+            class => 'Koha::Patrons',
+            value => { flags => 2**6 }    # reserveforothers
+        }
+    );
+    my $password = 'thePassword123';
+    $patron->set_password( { password => $password, skip_validation => 1 } );
+    my $userid = $patron->userid;
+
+    my $hold1 = $builder->build_object(
+        {
+            class => 'Koha::Holds',
+            value => {
+                borrowernumber => $patron->id,
+                found          => undef,
+                hold_group_id  => undef,
+            }
+        }
+    );
+    my $hold2 = $builder->build_object(
+        {
+            class => 'Koha::Holds',
+            value => {
+                borrowernumber => $patron->id,
+                found          => undef,
+                hold_group_id  => undef,
+            }
+        }
+    );
+
+    my $hold_group = $patron->create_hold_group( [ $hold1->id, $hold2->id ] );
+    my $hg_id      = $hold_group->id;
+
+    # 2. Test Cancellation via API
+    my $reason = "Customer changed their mind";
+
+    {
+        # Mocking letters locally to prevent "No HOLD_CANCELLATION letter" exceptions
+        my $mock_letters = Test::MockModule->new('C4::Letters');
+        $mock_letters->mock( 'GetPreparedLetter', sub { return } );
+        $mock_letters->mock( 'EnqueueLetter',     sub { return } );
+
+        $t->post_ok( "//$userid:$password@/api/v1/patrons/"
+                . $patron->id
+                . "/hold_groups/$hg_id/cancel" => json => { cancellation_reason => $reason } )
+            ->status_is( 204, 'REST API returns 204 No Content on success' );
+    }
+
+    # 3. Verify Holds were moved to old_reserves
+    my $old_hold1 = Koha::Old::Holds->find( $hold1->id );
+    my $old_hold2 = Koha::Old::Holds->find( $hold2->id );
+
+    ok( $old_hold1 && $old_hold2, 'Both holds moved to old_reserves' );
+    is( $old_hold1->cancellation_reason, $reason, 'Correct cancellation reason stored for hold 1' );
+    is( $old_hold2->cancellation_reason, $reason, 'Correct cancellation reason stored for hold 2' );
+
+    # 4. Verify the group was cleaned up
+    my $deleted_group = Koha::HoldGroups->find($hg_id);
+    is( $deleted_group, undef, 'The hold group was automatically deleted after bulk cancellation' );
+
+    # 5. Verify they are no longer in the active reserves table
+    is( Koha::Holds->find( $hold1->id ), undef, 'Hold 1 removed from active holds' );
+    is( Koha::Holds->find( $hold2->id ), undef, 'Hold 2 removed from active holds' );
+
+    # 6. Test 404 for non-existent group
+    $t->post_ok( "//$userid:$password@/api/v1/patrons/" . $patron->id . "/hold_groups/99999/cancel" )
+        ->status_is( 404, 'Returns 404 for non-existent hold group' );
 
     $schema->storage->txn_rollback;
 };
