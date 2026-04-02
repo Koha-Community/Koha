@@ -971,7 +971,7 @@
                     [% IF ( hold_group_id ) %]
                         <br />
                         <strong>[% t('Part of a hold group') | html %]:</strong>
-                        <a target="_blank" href="/cgi-bin/koha/circ/circulation.pl?borrowernumber=[% patron.borrowernumber %]#holds_panel"><i class="fa fa-fw fa-external-link-alt"></i> View patron's holds</a>
+                        <a target="_blank" href="/cgi-bin/koha/circ/circulation.pl?borrowernumber=[% patron.borrowernumber | uri %]#holds_panel"><i class="fa fa-fw fa-external-link-alt"></i> View patron's holds</a>
                     [% END %]
                 </p>
 
