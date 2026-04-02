@@ -90,7 +90,7 @@
                 </td>
                 [% IF Koha.Preference('DisplayAddHoldGroups') %]
                     [% IF HOLD.hold_group %]
-                        <td class="visual_hold_group_id"> [% HOLD.hold_group.visual_hold_group_id %] </td>
+                        <td class="visual_hold_group_id"> [% HOLD.hold_group.visual_hold_group_id | html %] </td>
                     [% ELSE %]
                         <td class="visual_hold_group_id"></td>
                     [% END %]
