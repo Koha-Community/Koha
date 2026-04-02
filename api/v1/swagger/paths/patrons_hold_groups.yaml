@@ -208,3 +208,67 @@
       x-koha-authorization:
         permissions:
           reserveforothers: "1"
+"/patrons/{patron_id}/hold_groups/{hold_group_id}/cancel":
+  post:
+    x-mojo-to: Patrons::HoldGroups#cancel
+    operationId: cancelPatronHoldGroup
+    tags:
+      - hold_groups
+    summary: Cancel all holds within a hold group
+    parameters:
+      - $ref: "../swagger.yaml#/parameters/patron_id_pp"
+      - name: hold_group_id
+        in: path
+        description: Internal hold group identifier
+        type: integer
+        required: true
+      - name: body
+        in: body
+        description: A JSON object containing the cancellation reason
+        required: false
+        schema:
+          type: object
+          properties:
+            cancellation_reason:
+              description: The reason for cancelling the holds in the group
+              type:
+                - string
+                - "null"
+          additionalProperties: false
+    consumes:
+      - application/json
+    produces:
+      - application/json
+    responses:
+      "204":
+        description: Hold group holds cancelled
+      "400":
+        description: Bad request
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "401":
+        description: Authentication required
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "403":
+        description: Access forbidden
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "404":
+        description: Patron or Hold group not found
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "500":
+        description: |
+          Internal server error. Possible `error_code` attribute values:
+
+          * `internal_server_error`
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "503":
+        description: Under maintenance
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+    x-koha-authorization:
+      permissions:
+        reserveforothers: "1"

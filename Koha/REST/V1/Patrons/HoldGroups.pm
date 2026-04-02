@@ -154,4 +154,43 @@ sub delete {
     };
 }
 
+=head3 cancel
+
+Controller method that handles cancelling all holds within a hold group.
+
+=cut
+
+sub cancel {
+    my $c = shift->openapi->valid_input or return;
+
+    my $patron = Koha::Patrons->find( $c->param('patron_id') );
+
+    return $c->render_resource_not_found("Patron")
+        unless $patron;
+
+    my $body                = $c->req->json;
+    my $cancellation_reason = $body->{cancellation_reason};
+
+    return try {
+        my $hold_group = $patron->hold_groups->find( $c->param('hold_group_id') );
+
+        return $c->render_resource_not_found("Hold group")
+            unless $hold_group;
+
+        my @holds = $hold_group->holds->as_list;
+        foreach my $h (@holds) {
+            $h->cancel( { cancellation_reason => $cancellation_reason, skip_hold_group_cleanup => 1 } );
+        }
+
+        $hold_group->discard_changes;
+        if ( $hold_group->holds->count <= 1 ) {
+            $hold_group->delete;
+        }
+
+        return $c->render( status => 204, openapi => {} );
+    } catch {
+        $c->unhandled_exception($_);
+    };
+}
+
 1;
