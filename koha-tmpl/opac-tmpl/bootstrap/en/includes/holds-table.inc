@@ -68,9 +68,12 @@
                     [% IF HOLD.item_level_hold %]
                         <p class="hint">Item on hold: [% HOLD.item.barcode | html %]</p>
                     [% END %]
-                    [% IF HOLD.hold_group_id %]
+                    [% IF Koha.Preference('DisplayAddHoldGroups') && HOLD.hold_group_id %]
                         <div class="group_hold">
-                            <span class="hint">(part of a hold group)</span>
+                            <a href="#" class="group_hold_trigger btn btn-link p-0" role="button" aria-expanded="false" style="text-decoration: none;">
+                                <i class="fa fa-caret-right" aria-hidden="true"></i>
+                                [% t('Part of a hold group') | html %]
+                            </a>
                             <div class="group_hold_list" style="display:none">
                                 [% group_holds = HOLD.hold_group.holds %]
                                 [% IF ( group_holds.count ) %]
