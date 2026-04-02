@@ -722,7 +722,7 @@
                                         <li class="error">Patron's address is in doubt</li>
                                     [% END %]
                                 </ul>
-
+                                [% INCLUDE display_hold_group_info %]
                                 [% IF ( transfertodo ) %]
                                     <h4><strong>Transfer to:</strong> [% Branches.GetName( destbranch ) | html %]</h4>
                                 [% ELSE %]
