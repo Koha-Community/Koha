@@ -30,6 +30,15 @@
     [% PROCESS 'display-address-style' %]
 [% END %]
 
+[% BLOCK display_hold_group_info %]
+    [% IF ( hold_group_id ) %]
+        <h4><strong>[% t('Part of a hold group') | html %]:</strong></h4>
+        <a target="_blank" href="/cgi-bin/koha/circ/circulation.pl?borrowernumber=[% patron.borrowernumber | uri %]#holds_panel">
+            <i class="fa fa-fw fa-external-link-alt"></i> [% t("View patron's holds") | html %]
+        </a>
+    [% END %]
+[% END %]
+
 [% INCLUDE 'doc-head-open.inc' %]
 <title
     >[% FILTER collapse %]
@@ -951,6 +960,7 @@
                         <li class="error">[% t("Patron's address is in doubt") | html %]</li>
                     [% END %]
                 </ul>
+                [% INCLUDE display_hold_group_info %]
                 [% IF ( transfertodo ) %]
                     <h4><strong>[% t('Transfer to') | html %]:</strong> [% Branches.GetName( destbranch ) | html %]</h4>
                 [% ELSE %]
@@ -967,12 +977,6 @@
 
                     <strong>[% t('Checked in at') | html %]:</strong>
                     [% Branches.GetName( Branches.GetLoggedInBranchcode ) | html %]
-
-                    [% IF ( hold_group_id ) %]
-                        <br />
-                        <strong>[% t('Part of a hold group') | html %]:</strong>
-                        <a target="_blank" href="/cgi-bin/koha/circ/circulation.pl?borrowernumber=[% patron.borrowernumber | uri %]#holds_panel"><i class="fa fa-fw fa-external-link-alt"></i> View patron's holds</a>
-                    [% END %]
                 </p>
 
                 [% PROCESS passthrough_data %]
