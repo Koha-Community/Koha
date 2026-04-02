@@ -17,7 +17,8 @@
 use Modern::Perl;
 
 use Test::NoWarnings;
-use Test::More tests => 9;
+use Test::More tests => 14;
+use Test::Warn;
 use Test::MockModule;
 use t::lib::TestBuilder;
 
@@ -62,5 +63,27 @@ my $item_5 = $builder->build_sample_item( { barcode => '978e0143019375' } );
 ( $nextnum, $scr ) = C4::Barcodes::ValueBuilder::incremental::get_barcode( \%args );
 is( $nextnum, '979', 'incremental barcode' );
 is( $scr,     undef, 'incremental javascript' );
+
+# EAN-13 tests
+$dbh->do(q|DELETE FROM items|);
+$builder->build_sample_item( { barcode => '3999900001927' } );    # valid 13-digit EAN-13
+( $nextnum, $scr ) = C4::Barcodes::ValueBuilder::EAN13::get_barcode( \%args );
+is( $nextnum, '3999900001934', 'EAN-13 increments correctly from valid EAN-13' );
+is( $scr,     undef,           'EAN-13 javascript' );
+
+$dbh->do(q|DELETE FROM items|);
+$builder->build_sample_item( { barcode => '39999000019193' } );    # 14-digit, should be ignored
+warning_like(
+    sub { ( $nextnum, $scr ) = C4::Barcodes::ValueBuilder::EAN13::get_barcode( \%args ) },
+    qr/ERROR: invalid EAN-13/,
+    'EAN-13 warns when no valid 13-digit barcode found'
+);
+is( $nextnum, 1, 'EAN-13 not confused by 14-digit barcode (falls back to increment)' );
+
+$dbh->do(q|DELETE FROM items|);
+$builder->build_sample_item( { barcode => '39999000019193' } );    # 14-digit
+$builder->build_sample_item( { barcode => '3999900001927' } );     # 13-digit EAN-13
+( $nextnum, $scr ) = C4::Barcodes::ValueBuilder::EAN13::get_barcode( \%args );
+is( $nextnum, '3999900001934', 'EAN-13 picks max among 13-digit barcodes, ignores 14-digit' );
 
 $schema->storage->txn_rollback;

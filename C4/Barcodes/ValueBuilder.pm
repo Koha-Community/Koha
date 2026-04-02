@@ -92,6 +92,33 @@ sub get_barcode {
     return $nextnum;
 }
 
+package C4::Barcodes::ValueBuilder::EAN13;
+use Modern::Perl;
+use C4::Context;
+use Algorithm::CheckDigits qw( CheckDigits );
+
+sub get_barcode {
+    my ($args) = @_;
+
+    # Filter to 13-digit barcodes only so non-EAN-13 items (e.g. 14-digit sample
+    # barcodes) do not dominate max() and prevent the sequence from advancing.
+    my $query = "SELECT max(cast(barcode as unsigned)) FROM items WHERE length(barcode) = 13";
+    my $sth   = C4::Context->dbh->prepare($query);
+    $sth->execute();
+    my ($nextnum) = $sth->fetchrow_array;
+
+    my $ean = CheckDigits('ean');
+    if ( $nextnum && $ean->is_valid($nextnum) ) {
+        my $next = $ean->basenumber($nextnum) + 1;
+        $nextnum = $ean->complete($next);
+        $nextnum = '0' x ( 13 - length($nextnum) ) . $nextnum;    # pad zeros
+    } else {
+        warn "ERROR: invalid EAN-13 " . ( $nextnum // '' ) . ", using increment";
+        $nextnum = ( $nextnum // 0 ) + 1;
+    }
+    return $nextnum;
+}
+
 1;
 
 =head1 Barcodes::ValueBuilder
