@@ -33,9 +33,7 @@
 [% BLOCK display_hold_group_info %]
     [% IF ( hold_group_id ) %]
         <h4><strong>[% t('Part of a hold group') | html %]:</strong></h4>
-        <a target="_blank" href="/cgi-bin/koha/circ/circulation.pl?borrowernumber=[% patron.borrowernumber | uri %]#holds_panel">
-            <i class="fa fa-fw fa-external-link-alt"></i> [% t("View patron's holds") | html %]
-        </a>
+        <a target="_blank" href="/cgi-bin/koha/circ/circulation.pl?borrowernumber=[% patron.borrowernumber | uri %]#holds_panel"> <i class="fa fa-fw fa-external-link-alt"></i> [% t("View patron's holds") | html %] </a>
     [% END %]
 [% END %]
 
@@ -785,7 +783,14 @@
                                             [% END %]
                                         </select>
                                     [% END %]
-                                    <button type="button" class="btn btn-default deny cancel-hold" accesskey="X"> <i class="fa fa-trash-can"></i> Cancel hold (X) </button>
+                                    [% IF ( hold_group_id ) %]
+                                        <button type="button" class="btn btn-default deny cancel-hold-group" data-borrowernumber="[% patron.borrowernumber | html %]" data-holdgroupid="[% hold_group_id | html %]" accesskey="X">
+                                            <i class="fa fa-trash-can"></i> Cancel all holds in hold group (X)
+                                        </button>
+                                        <button type="button" class="btn btn-default deny cancel-hold" accesskey="X"> <i class="fa fa-trash-can"></i> Cancel this hold (X) </button>
+                                    [% ELSE %]
+                                        <button type="button" class="btn btn-default deny cancel-hold" accesskey="X"> <i class="fa fa-trash-can"></i> Cancel hold (X) </button>
+                                    [% END %]
                                 </fieldset>
                             </div>
                             <!-- /.modal-footer -->
@@ -1787,6 +1792,34 @@
                     });
                 [% END %]
             [% END %]
+
+            $(".cancel-hold-group").on("click", function (e) {
+                e.preventDefault();
+
+                const borrowernumber = $(this).data("borrowernumber");
+                const hold_group_id = $(this).data("holdgroupid");
+
+                // Assuming you have a reason input with id #cancellation_reason
+                const reason = $("#cancellation-reason").val() || "";
+
+                if (confirm(_("Are you sure you want to cancel all holds in this hold's group?"))) {
+                    $.ajax({
+                        url: `/api/v1/patrons/${borrowernumber}/hold_groups/${hold_group_id}/cancel`,
+                        type: "POST",
+                        contentType: "application/json",
+                        data: JSON.stringify({
+                            cancellation_reason: reason,
+                        }),
+                        success: function (response) {
+                            location.reload();
+                        },
+                        error: function (xhr) {
+                            alert(_("An error occurred while cancelling the hold group."));
+                            console.error(xhr.responseText);
+                        },
+                    });
+                }
+            });
         });
     </script>
 [% END %]
