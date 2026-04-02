@@ -10,6 +10,9 @@
     <thead>
         <tr>
             <th class="all anti-the">Title</th>
+            [% IF Koha.Preference('DisplayAddHoldGroups') %]
+                <th class="nosort">Hold group</th>
+            [% END %]
             [% IF ( showpriority ) %]
                 <th>Placed on</th>
             [% ELSE %]
@@ -82,6 +85,9 @@
                         </div>
                     [% END %]
                 </td>
+                [% IF Koha.Preference('DisplayAddHoldGroups') && HOLD.hold_group %]
+                    <td class="visual_hold_group_id"> [% HOLD.hold_group.visual_hold_group_id %] </td>
+                [% END %]
                 <td class="reservedate" data-order="[% HOLD.reservedate | html %]"> [% HOLD.reservedate | $KohaDates %] </td>
                 <td class="expirationdate" data-order="[% !HOLD.found ? HOLD.expirationdate : '0000-00-00' | html %]">
                     [% IF ! HOLD.found %]
