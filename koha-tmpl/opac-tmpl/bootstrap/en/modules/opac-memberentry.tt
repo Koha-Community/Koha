@@ -267,9 +267,8 @@
                                         <ol>
                                             [% UNLESS hidden.defined('cardnumber') || ( !borrower && Koha.Preference('autoMemberNum') ) %]
                                                 <li>
-                                                    <label for="borrower_cardnumber" class="[% required.cardnumber | html %]">Library card number:</label>
-
                                                     [% IF borrower && !(cardnumber_wrong_length || cardnumber_already_exists) && op == 'edit' %]
+                                                        <span class="label">Library card number:</span>
                                                         [% borrower.cardnumber | html %]
                                                     [% ELSE %]
                                                         [% IF minlength_cardnumber == maxlength_cardnumber %]
@@ -322,7 +321,7 @@
                                             [% IF op != 'new' %]
                                                 [% UNLESS hidden.defined('userid') %]
                                                     <li>
-                                                        <label>Username:</label>
+                                                        <span class="label">Username:</span>
                                                         [% borrower.userid | html %]
                                                     </li>
                                                 [% END %]
@@ -330,7 +329,7 @@
 
                                             [% UNLESS hidden.defined('dateexpiry') %]
                                                 <li>
-                                                    <label>Expiration date:</label>
+                                                    <span class="label">Expiration date:</span>
                                                     [% borrower.dateexpiry | $KohaDates %]
                                                 </li>
                                             [% END %]
@@ -365,12 +364,12 @@
 
                                             [% UNLESS hidden.defined('categorycode') %]
                                                 <li>
-                                                    <label for="borrower_categorycode" class="[% required.categorycode | html %]"> Category:</label>
-
                                                     [% IF borrower %]
+                                                        <span class="label">Category:</span>
                                                         [% Categories.GetName( borrower.categorycode ) | html %]
                                                         <input type="hidden" name="borrower_categorycode" value="[% borrower.categorycode | html %]" />
                                                     [% ELSE %]
+                                                        <label for="borrower_categorycode" class="[% required.categorycode | html %]">Category:</label>
                                                         <select id="borrower_categorycode" name="borrower_categorycode" class="[% required.categorycode | html %]">
                                                             [% FOREACH c IN Categories.all() %]
                                                                 [% IF c.categorycode == Koha.Preference('PatronSelfRegistrationDefaultCategory') %]
