@@ -1188,27 +1188,29 @@
     [% INCLUDE 'js-biblio-format.inc' %]
     [% Asset.js("js/hold-group.js") | $raw %]
     <script nonce="[% Koha.CSPNonce | $raw %]">
-        if( has_patron ){
-            if( Cookies.get("holdfor") != patron_borrowernumber ){
-                Cookies.remove("holdfor", { path: '/', SameSite: 'Lax' });
+        if (has_patron) {
+            if (Cookies.get("holdfor") != patron_borrowernumber) {
+                Cookies.remove("holdfor", { path: "/", SameSite: "Lax" });
             }
         } else {
-            Cookies.remove("holdfor", { path: '/', SameSite: 'Lax' });
+            Cookies.remove("holdfor", { path: "/", SameSite: "Lax" });
         }
 
-        if (borrowernumber ) {
-            window.onload=function(){ $('#findborrower').focus(); };
+        if (borrowernumber) {
+            window.onload = function () {
+                $("#findborrower").focus();
+            };
         }
 
         var MSG_CONFIRM_RENEW = _("The patron has a debt of %s").format(fines);
         MSG_CONFIRM_RENEW += _("Are you sure you want to renew checkout(s)?");
 
         // On-site checkout
-        function toggle_onsite_checkout(){
+        function toggle_onsite_checkout() {
             const duedatespec = document.querySelector("#duedatespec");
-            if( duedatespec ){
+            if (duedatespec) {
                 const duedatespec_fp = duedatespec._flatpickr;
-                if ( $("#onsite_checkout").prop('checked') ) {
+                if ($("#onsite_checkout").prop("checked")) {
                     duedatespec_fp.setDate(today_due_date_and_time);
                 } else {
                     duedatespec_fp.setDate("");
@@ -1217,55 +1219,57 @@
         }
 
         function Dopop(link) {
-            var newin = window.open(link, 'popup', 'width=600,height=400,resizable=1,toolbar=0,scrollbars=1,top');
+            var newin = window.open(link, "popup", "width=600,height=400,resizable=1,toolbar=0,scrollbars=1,top");
         }
-        $(document).ready(function() {
+        $(document).ready(function () {
             let barcodeSubmitInFlight = false;
-            $('#barcode').off('keypress.preventDouble').on('keypress.preventDouble', function(e) {
-                if (barcodeSubmitInFlight) {
-                    $('#barcodeSubmittedModal').modal('show');
-                    e.preventDefault();
-                }
-            });
-            window.addEventListener('pageshow', function(event) {
+            $("#barcode")
+                .off("keypress.preventDouble")
+                .on("keypress.preventDouble", function (e) {
+                    if (barcodeSubmitInFlight) {
+                        $("#barcodeSubmittedModal").modal("show");
+                        e.preventDefault();
+                    }
+                });
+            window.addEventListener("pageshow", function (event) {
                 if (event.persisted) {
                     barcodeSubmitInFlight = false;
                 }
             });
             if (waiting_holds_barcodes.length > 0) {
-                $('#circ-warnwaitingholds-modal .btn-primary').on('click',function() {
-                    $('#mainform').submit();
+                $("#circ-warnwaitingholds-modal .btn-primary").on("click", function () {
+                    $("#mainform").submit();
                 });
 
-                $("#mainform").on('submit', function(){
-                    if( $("#checkout_confirmed").length > 0 ){
+                $("#mainform").on("submit", function () {
+                    if ($("#checkout_confirmed").length > 0) {
                         return true;
                     }
-                    if ( waiting_holds_barcodes.includes($('#barcode').val().trim()) ) {
+                    if (waiting_holds_barcodes.includes($("#barcode").val().trim())) {
                         return true;
                     } else {
-                        $('#circ-warnwaitingholds-modal').modal('show');
+                        $("#circ-warnwaitingholds-modal").modal("show");
                         return false;
                     }
                 });
-                $("#circ-warnwaitingholds-modal").on('hidden.bs.modal',function(){
+                $("#circ-warnwaitingholds-modal").on("hidden.bs.modal", function () {
                     $("#mainform").append('<input type="hidden" id="checkout_confirmed" value=1>').submit();
                 });
             }
 
-            $('#mainform').on('submit',function() {
+            $("#mainform").on("submit", function () {
                 if ($("#barcode").length && $("#barcode").val()) {
                     barcodeSubmitInFlight = true;
                 }
             });
 
             // listen submit to trigger qslip on empty checkout
-            $('#mainform').bind('submit',function() {
-                if ($('#barcode').val() == '') {
-                    if (CircAutoPrintQuickSlip == 'clear') {
-                        window.location='/cgi-bin/koha/circ/circulation.pl';
+            $("#mainform").bind("submit", function () {
+                if ($("#barcode").val() == "") {
+                    if (CircAutoPrintQuickSlip == "clear") {
+                        window.location = "/cgi-bin/koha/circ/circulation.pl";
                         return false;
-                    } else if (CircAutoPrintQuickSlip == 'ignore') {
+                    } else if (CircAutoPrintQuickSlip == "ignore") {
                         return false;
                     } else {
                         window.open("/cgi-bin/koha/members/printslip.pl?borrowernumber=" + borrowernumber + "&amp;print=issue" + CircAutoPrintQuickSlip, "printwindow");
@@ -1276,23 +1280,23 @@
             if (Koha.prefs.OnSiteCheckoutAutoCheck && onsite_checkout == "on") {
                 toggle_onsite_checkout();
             }
-            $("#onsite_checkout").click(function(){
+            $("#onsite_checkout").click(function () {
                 toggle_onsite_checkout();
             });
 
             if (HIGHHOLDS) {
                 if (!override_high_holds) {
                     $("input[name=duedatespec]:hidden").val(HIGHHOLDS.returndate);
-                    if (duedatespec === '') {
-                        $("input[name=restoreduedatespec]:hidden").val('highholds_empty');
+                    if (duedatespec === "") {
+                        $("input[name=restoreduedatespec]:hidden").val("highholds_empty");
                     } else {
                         $("input[name=restoreduedatespec]:hidden").val(duedatespec);
                     }
                 }
 
-                $("#override_high_holds_tmp").on( 'change', function() {
-                    if ( this.checked ) {
-                        $("input[name=duedatespec]:hidden").val('');
+                $("#override_high_holds_tmp").on("change", function () {
+                    if (this.checked) {
+                        $("input[name=duedatespec]:hidden").val("");
                     }
                 });
             }
@@ -1300,18 +1304,18 @@
             // Handle checkout for fast cataloging
             // Check the referrer to prevent csrf, fill and submit form
             if (document.referrer.length) {
-                const referrerSplit = document.referrer.split(window.location.origin + '/cgi-bin/koha/cataloguing/additem.pl?')
-                if(referrerSplit[1] && referrerSplit[1].match(/frameworkcode=FA&circborrowernumber=/) ) {
+                const referrerSplit = document.referrer.split(window.location.origin + "/cgi-bin/koha/cataloguing/additem.pl?");
+                if (referrerSplit[1] && referrerSplit[1].match(/frameworkcode=FA&circborrowernumber=/)) {
                     let urlParams = new URLSearchParams(window.location.search);
-                    let barcode = urlParams.get('barcode');
-                    $('#barcode').val(barcode);
-                    $('#mainform').submit();
+                    let barcode = urlParams.get("barcode");
+                    $("#barcode").val(barcode);
+                    $("#mainform").submit();
                 }
             }
             $("#cancellation-reason").comboBox({
-                displayProperty: 'name',
+                displayProperty: "name",
                 placeholder: _("Select or type a reason"),
-                context: 'modal',
+                context: "modal",
             });
         });
     </script>
