@@ -19,7 +19,7 @@
 
 use Modern::Perl;
 use Test::NoWarnings;
-use Test::More tests => 4;
+use Test::More tests => 5;
 
 use utf8;
 
@@ -57,5 +57,26 @@ subtest 'Plugin related tests' => sub {
         ),
         "This is a simple test.",
         "Processing template toolkit with a Koha plugin works"
+    );
+};
+
+subtest 'Security-related tests' => sub {
+    plan tests => 2;
+
+    is(
+        Koha::TemplateUtils::process_tt(
+            q{[% USE dir = Directory('/') ~%]
+[% FOREACH entry IN dir.list ~%]
+<p>[%  entry.abs %]</p>
+[% END %]},
+        ),
+        q{},
+        "Plugins not allowed for User-entered TT"
+    );
+
+    is(
+        Koha::TemplateUtils::process_tt(q{[% USE raw %][% 'foo' | $raw %]}),
+        q{foo},
+        "Koha plugins are still available"
     );
 };
