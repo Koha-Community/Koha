@@ -87,7 +87,6 @@
 [% WRAPPER 'main-container.inc' wide_centered => ( op == 'illlist' ? 0 : 1 ) aside = ( op == 'illlist' ? 'ill-filter' : '' ) %]
 
     [% UNLESS blocking_error %]
-
         <div id="interlibraryloans">
             [% IF !backends_available || !has_branch || ill_deprecated_backend_freeform_is_installed %]
                 <div class="alert alert-info">ILL module configuration problem. Take a look at the <a href="/cgi-bin/koha/about.pl?tab=sysinfo">about page</a></div>
@@ -1126,7 +1125,6 @@
         [% IF op == 'edit_action' %]
             [% INCLUDE 'select_manager.inc' add_modal => 1, manager => request.manager, filter => 'ill_users' %]
         [% END %]
-
         <script nonce="[% Koha.CSPNonce | $raw %]" data-tt-allowed="true">
             [% IF op == 'illlist' %]
                 var ill_table_actions = [% table_actions | $raw %];
@@ -1160,7 +1158,6 @@
             var metadata = "[% metadata | $raw %]";
             [% END %]
         </script>
-
         <script nonce="[% Koha.CSPNonce | $raw %]">
             $("#ill_checkout_inhouse_select").on("change", function () {
                 if ($(this).val().length > 0) {
