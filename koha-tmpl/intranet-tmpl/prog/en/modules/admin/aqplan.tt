@@ -325,44 +325,50 @@
     </script>
     <script nonce="[% Koha.CSPNonce | $raw %]">
         jQuery.validator.addClassRules({ plan_entry: { pnumber: true } }); // require that input be a number in fields with the class 'plan_entry'
-        jQuery.validator.addMethod("pnumber", $.validator.methods.number, _("Please enter a valid number.") );
-        $(document).ready(function() {
-            $("#selections input").on("change",function(e){
+        jQuery.validator.addMethod("pnumber", $.validator.methods.number, _("Please enter a valid number."));
+        $(document).ready(function () {
+            $("#selections input").on("change", function (e) {
                 var num = $(this).attr("id");
-                if(num == 'showall'){
+                if (num == "showall") {
                     showAllColumns();
                     e.stopPropagation();
-                } else if(num == 'hideall'){
+                } else if (num == "hideall") {
                     hideAllColumns();
                     e.stopPropagation();
                 } else {
-                    if($(this).prop("checked")){
+                    if ($(this).prop("checked")) {
                         showColumn(num);
                     } else {
                         hideColumn(num);
                     }
                 }
             });
-            $(".plan_entry").on("change",function(){
-                calcTotalRow( this );
+            $(".plan_entry").on("change", function () {
+                calcTotalRow(this);
             });
             $("#Aform").validate();
-            $(".auto_fill_row").on("click",function(){
+            $(".auto_fill_row").on("click", function () {
                 var budget_id = $(this).data("budget-id");
-                autoFillRow( budget_id );
+                autoFillRow(budget_id);
             });
-            $(".clear_fields").on("click",function(){
+            $(".clear_fields").on("click", function () {
                 var budget_id = $(this).data("budget-id");
-                var edit_row = $("#"+budget_id);
-                $(edit_row).find("input").each(function(){
-                    var type = $(this).attr("type");
-                    if (type != "button" && type != "submit" ) {
-                      $(this).val(zero_formatted);
-                      $(this).prop('disabled', false);
-                    }
-                });
-                $("#budget_est_"+budget_id).text($("#budget_tot_"+budget_id).prev().text());
-                $("#budget_est_"+budget_id).css("color","green");
+                var edit_row = $("#" + budget_id);
+                $(edit_row)
+                    .find("input")
+                    .each(function () {
+                        var type = $(this).attr("type");
+                        if (type != "button" && type != "submit") {
+                            $(this).val(zero_formatted);
+                            $(this).prop("disabled", false);
+                        }
+                    });
+                $("#budget_est_" + budget_id).text(
+                    $("#budget_tot_" + budget_id)
+                        .prev()
+                        .text()
+                );
+                $("#budget_est_" + budget_id).css("color", "green");
             });
         });
     </script>
