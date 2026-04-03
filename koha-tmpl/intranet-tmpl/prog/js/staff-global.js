@@ -424,15 +424,21 @@ $(document).ready(function () {
     );
 
     $("#branch_select_cog").on("click", function (e) {
+        e.preventDefault();
         e.stopPropagation();
+
+        let toggle = $(this);
         let setlibrary_panel = $("#setlibrary_panel");
+
         if (setlibrary_panel.hasClass("setlibrary_panel_open")) {
             setlibrary_panel
                 .removeClass("setlibrary_panel_open")
                 .html("")
                 .hide();
+            toggle.attr("aria-expanded", "false");
         } else {
             setlibrary_panel.addClass("setlibrary_panel_open").show();
+            toggle.attr("aria-expanded", "true");
             $("#setlibrary_panel").load(
                 "/cgi-bin/koha/circ/set-library.pl #set-library-form",
                 function () {

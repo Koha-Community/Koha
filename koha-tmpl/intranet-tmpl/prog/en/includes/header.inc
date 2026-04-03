@@ -200,7 +200,9 @@
                                         </div>
                                         [% IF ( CAN_user_superlibrarian || CAN_user_loggedinlibrary || Koha.Preference('UseCirculationDesks') || Koha.Preference('UseCashRegisters') ) %]
                                             <div>
-                                                <a id="branch_select_cog" class="dropdown-item" href="#"><i class="fa fa-cog" aria-label="Toggle panel for login settings"></i></a>
+                                                <a id="branch_select_cog" class="dropdown-item" href="#" role="button" aria-label="Toggle panel for login settings" aria-expanded="false">
+                                                    <i class="fa fa-cog" aria-hidden="true"></i>
+                                                </a>
                                             </div>
                                         [% END %]
                                     </div>
