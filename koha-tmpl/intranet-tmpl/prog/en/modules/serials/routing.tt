@@ -174,26 +174,23 @@
     [% PROCESS patron_search_modal columns => columns, modal_title => t("Add recipients") %]
     [% PROCESS patron_search_js columns => columns, actions => ["add"], preview_on_name_click => 1 %]
     <script nonce="[% Koha.CSPNonce | $raw %]">
-        $(document).on(
-            "hidden.bs.modal",
-            "#patron_search_modal",
-            add_new_recipients);
+        $(document).on("hidden.bs.modal", "#patron_search_modal", add_new_recipients);
 
-        function add_new_recipients(e){
+        function add_new_recipients(e) {
             e.preventDefault();
             let borrowernumbers = $("#new_recipients").val();
-            if(!borrowernumbers.length > 0) {
+            if (!borrowernumbers.length > 0) {
                 return;
             }
             $.ajax({
                 data: {
                     subscriptionid,
                     borrowernumbers,
-                    op: 'cud-add_new_recipients',
-                    csrf_token: $('meta[name="csrf-token"]').attr('content'),
+                    op: "cud-add_new_recipients",
+                    csrf_token: $('meta[name="csrf-token"]').attr("content"),
                 },
-                type: 'POST',
-                url: '/cgi-bin/koha/serials/routing.pl',
+                type: "POST",
+                url: "/cgi-bin/koha/serials/routing.pl",
                 success: function (data) {
                     document.location.href = `/cgi-bin/koha/serials/routing.pl?subscriptionid=${subscriptionid}`;
                     return false;

@@ -370,10 +370,10 @@
     </script>
     [% IF ( mana ) %]
         <script nonce="[% Koha.CSPNonce | $raw %]">
-            $(document).ready(function() {
+            $(document).ready(function () {
                 $(".local").hide();
                 additional_fields_for_subscription.forEach(f => {
-                      $(`label[for=additional_field_${f.id}], input#additional_field_${f.id}`).hide();
+                    $(`label[for=additional_field_${f.id}], input#additional_field_${f.id}`).hide();
                 });
             });
         </script>
