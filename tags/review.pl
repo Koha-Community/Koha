@@ -23,7 +23,8 @@ use Modern::Perl;
 use POSIX qw( ceil );
 use CGI qw ( -utf8 );
 use CGI::Cookie;     # need to check cookies before having CGI parse the POST request
-use URI::Escape qw( uri_escape_utf8 uri_unescape );
+use URI::Escape qw( uri_unescape );
+use JSON qw( encode_json );
 use C4::Auth qw( check_cookie_auth get_template_and_user );
 use C4::Context;
 use C4::Output qw( output_with_http_headers is_ajax pagination_bar output_html_with_http_headers );
@@ -57,18 +58,22 @@ if (is_ajax()) {
     my $input = &ajax_auth_cgi($needed_flags);
     my $operator = C4::Context->userenv->{'number'};  # must occur AFTER auth
     my ($tag, $js_reply);
+    my $status;
     if ($tag = $input->param('test')) {
-        $tag = uri_unescape($tag);
         my $check = is_approved($tag);
-        $js_reply = ( $check >=  1 ? 'success' : $check <= -1 ? 'failure' : 'indeterminate' ) . "_test('".uri_escape_utf8($tag)."');\n";
+        $status = $check >= 1 ? 'success' : $check <= -1 ? 'failure' : 'indeterminate';
     }
     if ($tag = $input->param('ok')) {
-        $js_reply = (   whitelist($operator,$tag) ? 'success' : 'failure') . "_approve('".uri_escape_utf8($tag)."');\n";
+	$status = whitelist( $operator, $tag ) ? 'success' : 'failure';
     }
     if ($tag = $input->param('rej')) {
-        $js_reply = (   blacklist($operator,$tag) ? 'success' : 'failure')  . "_reject('".uri_escape_utf8($tag)."');\n";
+	$status = blacklist( $operator, $tag ) ? 'success' : 'failure';
     }
-    output_with_http_headers $input, undef, $js_reply, 'js';
+    my $response = {
+        status => $status,
+        tag    => $tag,
+    };
+    output_with_http_headers $input, undef, encode_json($response), 'js';
     exit;
 }
 
