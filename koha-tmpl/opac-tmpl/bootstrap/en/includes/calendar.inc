@@ -9,44 +9,45 @@
         TimeFormat: "[% Koha.Preference('TimeFormat') | html %]",
     });
 </script>
-
 <script nonce="[% Koha.CSPNonce | $raw %]">
     var flatpickr_weekdays = {
-        shorthand: [ "Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],
-        longhand: [ "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday" ]
+        shorthand: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],
+        longhand: ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
     };
 
     var flatpickr_months = {
-        shorthand: [ "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
-        longhand: [ "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
+        shorthand: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+        longhand: ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
     };
     var sentmsg = 0;
-    if (debug > 1) {alert("dateformat: " + dateformat_pref + "\ndebug is on (level " + debug + ")");}
+    if (debug > 1) {
+        alert("dateformat: " + dateformat_pref + "\ndebug is on (level " + debug + ")");
+    }
     var calendarFirstDayOfWeek = Koha.prefs.CalendarFirstDayOfWeek;
-    var flatpickr_timeformat_string = Koha.prefs.TimeFormat == '12hr' ? "G:i K" : "H:i";
-    var flatpickr_timeformat = Koha.prefs.TimeFormat == '12hr' ? false : true;
+    var flatpickr_timeformat_string = Koha.prefs.TimeFormat == "12hr" ? "G:i K" : "H:i";
+    var flatpickr_timeformat = Koha.prefs.TimeFormat == "12hr" ? false : true;
     var flatpickr_dateformat_string = "";
     var delimiter = "";
     var altinput_dateformat = "";
-    switch ( dateformat_pref ){
+    switch (dateformat_pref) {
         case "us":
             flatpickr_dateformat_string = "m/d/Y";
-            altinput_dateformat = 'mm/dd/yyyy';
+            altinput_dateformat = "mm/dd/yyyy";
             delimiter = "/";
             break;
         case "metric":
             flatpickr_dateformat_string = "d/m/Y";
-             altinput_dateformat = 'dd/mm/yyyy';
-             delimiter = "/";
+            altinput_dateformat = "dd/mm/yyyy";
+            delimiter = "/";
             break;
         case "dmydot":
             flatpickr_dateformat_string = "d.m.Y";
-            altinput_dateformat = 'dd/mm/yyyy';
+            altinput_dateformat = "dd/mm/yyyy";
             delimiter = ".";
             break;
         default:
             flatpickr_dateformat_string = "Y-m-d";
-            altinput_dateformat = 'yyyy/mm/dd';
+            altinput_dateformat = "yyyy/mm/dd";
             delimiter = "-";
     }
 </script>

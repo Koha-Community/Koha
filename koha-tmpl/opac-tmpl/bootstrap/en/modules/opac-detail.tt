@@ -1682,7 +1682,6 @@
             var normalized_isbn = "[% normalized_isbn | html %]";
             var normalized_upc = "[% normalized_upc | html %]";
         [% END %]
-
     </script>
     [% IF ( Koha.Preference('OPACShowMusicalInscripts') ) %]
         [% Asset.js("js/verovio.js") | $raw %]
@@ -2269,17 +2268,18 @@
     </script>
     [% IF ( NovelistSelectProfile && ( normalized_isbn || normalized_upc ) ) %]
         <script nonce="[% Koha.CSPNonce | $raw %]">
-            $(document).ready(function() {
+            $(document).ready(function () {
                 novSelect.loadContentForQuery(
                     {
-                        ClientIdentifier : normalized_isbn || normalized_upc,
-                        ISBN : normalized_isbn || normalized_upc,
-                        version : '2.1'
+                        ClientIdentifier: normalized_isbn || normalized_upc,
+                        ISBN: normalized_isbn || normalized_upc,
+                        version: "2.1",
                     },
                     NovelistSelectProfile,
                     NovelistSelectPassword,
-                    function(d){
-                        if ( d.length > 0 ){ //If no content
+                    function (d) {
+                        if (d.length > 0) {
+                            //If no content
                             $(".NovelistSelect").show();
                         }
                     }

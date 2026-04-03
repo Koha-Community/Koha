@@ -857,50 +857,50 @@
         const can_remove_biblios = [% can_remove_biblios ? 1 : 0 | html %];
         var print = [% print ? 1 : 0 | html %];
         const has_items = [% itemsloop ? 1 : 0 | html %]
-
     </script>
     [% Asset.js("js/results-list.js") | $raw %]
     [% Asset.js("js/cover_images.js") | $raw %]
     <script nonce="[% Koha.CSPNonce | $raw %]">
         let counter_wait = 0;
-        function wait_for_images(cb){
-
+        function wait_for_images(cb) {
             var loaded = 1;
             counter_wait++;
 
-            if (Koha.prefs.GoogleJackets){
-                if ( loaded ) {
+            if (Koha.prefs.GoogleJackets) {
+                if (loaded) {
                     loaded = KOHA.Google.done;
                 }
             }
 
-            if (Koha.prefs.OpenLibraryCovers){
-                if ( loaded ) {
+            if (Koha.prefs.OpenLibraryCovers) {
+                if (loaded) {
                     loaded = KOHA.OpenLibrary.done;
                 }
             }
 
-            if ( Koha.prefs.OpacCoce && Koha.prefs.CoceProviders ) {
-                if ( loaded ) {
+            if (Koha.prefs.OpacCoce && Koha.prefs.CoceProviders) {
+                if (loaded) {
                     loaded = KOHA.coce.done;
                 }
             }
 
-            if (!loaded && counter_wait < 50) {// Do not wait more than 5 seconds
-                window.setTimeout(function(){wait_for_images(cb);}, 100);
+            if (!loaded && counter_wait < 50) {
+                // Do not wait more than 5 seconds
+                window.setTimeout(function () {
+                    wait_for_images(cb);
+                }, 100);
             } else {
-                if (counter_wait >= 50 ) {
+                if (counter_wait >= 50) {
                 }
                 cb();
             }
         }
 
-        $(window).load(function() {
+        $(window).load(function () {
             wait_for_images(verify_cover_images);
         });
 
-
-        if (TagsInputEnabled && loggedinusername){
+        if (TagsInputEnabled && loggedinusername) {
             function tagSelected() {
                 var checkedBoxes = $("input:checkbox:checked");
                 if ($(checkedBoxes).size()) {
@@ -908,7 +908,7 @@
                     $(".tag_hides").hide();
                     $("#tagsel_form").show();
                 } else {
-                    alert( _("No item was selected") );
+                    alert(_("No item was selected"));
                 }
             }
 
@@ -923,13 +923,13 @@
             function tagAdded() {
                 var checkedBoxes = $("input:checkbox:checked");
                 if (!$(checkedBoxes).size()) {
-                    alert( _("No item was selected") );
+                    alert(_("No item was selected"));
                     return false;
                 }
 
                 var tag = $("#tagsel_new").val();
-                if (!tag || (tag == "")) {
-                    alert( _("No tag was specified.") );
+                if (!tag || tag == "") {
+                    alert(_("No tag was specified."));
                     return false;
                 }
 
@@ -944,57 +944,61 @@
             }
         }
 
-        $(function() {
+        $(function () {
             $("a.print").show();
 
-            if ( TagsInputEnabled && loggedinusername ) {
+            if (TagsInputEnabled && loggedinusername) {
                 var tagAdd = $(".tag_add");
                 tagAdd.removeClass("hidden");
-                $("#tagsel_tag").click(function(){
+                $("#tagsel_tag").click(function () {
                     tagSelected();
                     return false;
                 });
-                $("#tagsel_cancel").click(function(){
+                $("#tagsel_cancel").click(function () {
                     tagCanceled();
                     return false;
                 });
-                $("#tagsel_button").click(function(){
+                $("#tagsel_button").click(function () {
                     tagAdded();
                     return false;
                 });
 
-                tagAdd.click(function(){
+                tagAdd.click(function () {
                     var thisid = $(this).attr("id");
-                    thisid = thisid.replace("tag_add","");
+                    thisid = thisid.replace("tag_add", "");
                     $(this).hide();
-                    $("#tagform"+thisid).show();
-                    $("#newtag"+thisid).focus();
-                    $("#newtag"+thisid+"_status").empty().hide();
+                    $("#tagform" + thisid).show();
+                    $("#newtag" + thisid).focus();
+                    $("#newtag" + thisid + "_status")
+                        .empty()
+                        .hide();
                     return false;
                 });
-                $(".cancel_tag_add").click(function(){
+                $(".cancel_tag_add").click(function () {
                     var thisid = $(this).attr("id");
-                    thisid = thisid.replace("cancel","");
-                    $("#tagform"+thisid).hide();
-                    $("#tag_add"+thisid).show();
-                    $("#newtag"+thisid).val("");
-                    $("#newtag"+thisid+"_status").empty().hide();
+                    thisid = thisid.replace("cancel", "");
+                    $("#tagform" + thisid).hide();
+                    $("#tag_add" + thisid).show();
+                    $("#newtag" + thisid).val("");
+                    $("#newtag" + thisid + "_status")
+                        .empty()
+                        .hide();
                     return false;
                 });
-                $(".tagbutton").click(function(){
-                  var thisid = $(this).attr("title");
-                  var tag = $("#newtag"+thisid).val();
-                  if (!tag || (tag == "")) {
-                      alert( _("No tag was specified.") );
-                      return false;
-                  }
-                  KOHA.Tags.add_tag_button(thisid, tag);
-                  return false;
+                $(".tagbutton").click(function () {
+                    var thisid = $(this).attr("title");
+                    var tag = $("#newtag" + thisid).val();
+                    if (!tag || tag == "") {
+                        alert(_("No tag was specified."));
+                        return false;
+                    }
+                    KOHA.Tags.add_tag_button(thisid, tag);
+                    return false;
                 });
             }
 
-            if (loggedinusername && can_remove_biblios){
-                $("body").on("click", ".removeitems", function(e){
+            if (loggedinusername && can_remove_biblios) {
+                $("body").on("click", ".removeitems", function (e) {
                     e.preventDefault();
                     var title;
                     var yes_label;
@@ -1002,36 +1006,36 @@
                     var message = "";
                     var biblionumber;
                     /* Single "Remove from list" link has a biblionumber data-attribute */
-                    if( $(this).data("biblionumber") ){
+                    if ($(this).data("biblionumber")) {
                         /* Use the checkbox with that value to preview the title in the confirmation */
                         var selected_titles = $(".cb[value='" + $(this).data("biblionumber") + "'");
                         biblionumber = $(this).data("biblionumber");
                     } else {
                         var selected_titles = $(".cb:checked");
                     }
-                    if ( selected_titles.size() < 1 ) {
-                        alert( _("No item was selected") );
+                    if (selected_titles.size() < 1) {
+                        alert(_("No item was selected"));
                     } else {
-                        if( selected_titles.size() > 1 ){
+                        if (selected_titles.size() > 1) {
                             message = $("<ul></ul>");
                             title = _("Are you sure you want to remove these items from the list?");
                             yes_label = _("Yes, remove from list");
                             no_label = _("No, do not remove from list");
-                            selected_titles.each(function(){
-                                message.append( "<li>" +  $(this).data("title") + "</li>" );
+                            selected_titles.each(function () {
+                                message.append("<li>" + $(this).data("title") + "</li>");
                             });
                         } else {
                             title = _("Are you sure you want to remove this item from the list?");
                             yes_label = _("Yes, remove from list");
                             no_label = _("No, do not remove from list");
-                            selected_titles.each(function(){
+                            selected_titles.each(function () {
                                 message += $(this).data("title");
                             });
                         }
-                        confirmModal( message, title, yes_label, no_label, function( result ){
-                            if( result ){
-                                if( biblionumber ){
-                                    $("#shelf_delete_biblionumber").val( biblionumber );
+                        confirmModal(message, title, yes_label, no_label, function (result) {
+                            if (result) {
+                                if (biblionumber) {
+                                    $("#shelf_delete_biblionumber").val(biblionumber);
                                     $("#shelf_delete_title").submit();
                                 } else {
                                     $("#myform").submit();
@@ -1042,130 +1046,140 @@
                 });
             }
 
-            if (Koha.prefs.OpenLibraryCovers){KOHA.OpenLibrary.GetCoverFromIsbn();}
-            if (Koha.prefs.OPACLocalCoverImages){KOHA.LocalCover.GetCoverFromBibnumber(false);}
-            if (Koha.prefs.GoogleJackets){KOHA.Google.GetCoverFromIsbn();}
-            if (Koha.prefs.OpacCoce && Koha.prefs.CoceProviders){
+            if (Koha.prefs.OpenLibraryCovers) {
+                KOHA.OpenLibrary.GetCoverFromIsbn();
+            }
+            if (Koha.prefs.OPACLocalCoverImages) {
+                KOHA.LocalCover.GetCoverFromBibnumber(false);
+            }
+            if (Koha.prefs.GoogleJackets) {
+                KOHA.Google.GetCoverFromIsbn();
+            }
+            if (Koha.prefs.OpacCoce && Koha.prefs.CoceProviders) {
                 KOHA.coce.getURL(Koha.prefs.CoceHost, Koha.prefs.CoceProviders);
             }
 
-            if (print){
+            if (print) {
                 window.print();
                 window.onafterprint = function () {
                     window.close();
-                }
-                setTimeout('window.close()', 1000); // Hack for Chrome < 63
+                };
+                setTimeout("window.close()", 1000); // Hack for Chrome < 63
             }
 
             AdjustRemark();
 
-            if (has_items){
-                sortMenu( $("#sorting-form") );
+            if (has_items) {
+                sortMenu($("#sorting-form"));
 
-                $("#sortfield").on("change", function(){
-                    $('#sorting-form').submit();
+                $("#sortfield").on("change", function () {
+                    $("#sorting-form").submit();
                 });
             }
 
-            $(".deleteshelf").on("click", function(e){
+            $(".deleteshelf").on("click", function (e) {
                 e.preventDefault();
                 var shelf_name = $(this).data("shelfname");
                 var shelf_number = $(this).data("shelfnumber");
                 var is_shared = $(this).data("shared");
                 var count = $(this).data("count");
                 var message = "<p><em>" + escape_str(shelf_name) + "</em></p>";
-                if( count ){
+                if (count) {
                     message += "<p>" + _("Items on this list:") + " <strong>" + escape_str(count) + "</strong></p>";
                 }
-                if( is_shared ){
+                if (is_shared) {
                     message += "<p>" + _("This list is shared. Other users will lose access to it.") + "</p>";
                 }
-                confirmModal( message, _("Are you sure you want to delete this list?"), _("Yes, delete"), _("No, do not delete"), function( result ){
-                        if( result ){
-                            $("#deleteshelf" + shelf_number ).submit();
-                        }
+                confirmModal(message, _("Are you sure you want to delete this list?"), _("Yes, delete"), _("No, do not delete"), function (result) {
+                    if (result) {
+                        $("#deleteshelf" + shelf_number).submit();
                     }
-                );
+                });
             });
 
-            $(".remove_share").on("click", function(e){
+            $(".remove_share").on("click", function (e) {
                 e.preventDefault();
                 var shelf_name = $(this).data("shelfname");
                 var shelf_number = $(this).data("shelfnumber");
-                confirmModal( escape_str(shelf_name), _("Are you sure you want to remove sharing? You will no longer have access to the list."), _("Yes, remove sharing"), _("No, do not remove sharing"), function( result ){
-                        if( result ){
-                            $("#unshare" + shelf_number ).submit();
-                        }
+                confirmModal(escape_str(shelf_name), _("Are you sure you want to remove sharing? You will no longer have access to the list."), _("Yes, remove sharing"), _("No, do not remove sharing"), function (result) {
+                    if (result) {
+                        $("#unshare" + shelf_number).submit();
                     }
-                );
+                });
             });
 
-            $(".download-list").on("click", function(e){
+            $(".download-list").on("click", function (e) {
                 e.preventDefault();
                 var format = $(this).data("format");
-                $("#download_format").val( format );
+                $("#download_format").val(format);
                 $("#download_list").submit();
             });
 
-            $("#allow_changes_from, #public").on("change", function(){
+            $("#allow_changes_from, #public").on("change", function () {
                 AdjustRemark();
             });
 
-            $(".send").on("click", function(e){
+            $(".send").on("click", function (e) {
                 e.preventDefault();
                 let link = this.href;
-                Dopop( link );
+                Dopop(link);
             });
-
         }); // document.ready
 
-        function sortMenu( sorting_form ){
+        function sortMenu(sorting_form) {
             var shelfnumber = sorting_form.find("input[name='shelfnumber']").val();
             var sort_link = "/cgi-bin/koha/opac-shelves.pl?op=view&amp;shelfnumber=" + shelfnumber + "&sortfield=";
-            var menu = "<div class=\"btn-group dropdown\"><button type=\"button\" class=\"btn btn-link dropdown-toggle\" data-bs-toggle=\"dropdown\" id=\"sortmenu\" aria-haspopup=\"true\" aria-expanded=\"false\"><i class=\"fa fa-sort\" aria-hidden=\"true\"></i> " + _("Sort") + "</span></button><div class=\"dropdown-menu dropdown-menu-end\" aria-labelledby=\"sortmenu\">";
-            $("#sortfield").children().each(function(){
-                if( $(this)[0].tagName.toUpperCase() == "OPTION" ){
-                    menu += "<a class=\"dropdown-item\" href=\"" + sort_link + $(this).val() + "\">" + $(this).text() + "</a>";
-                } else if( $(this)[0].tagName.toUpperCase() == "OPTGROUP" ){
-                    menu += "<span class=\"dropdown-header\">" + $(this).attr("label") + "</span>";
-                    $(this).children().each(function(){
-                        if( $(this)[0].tagName.toUpperCase() == "OPTION" ){
-                            menu += "<a class=\"dropdown-item\" href=\"" + sort_link + $(this).val() + "&direction=" + $(this).data('direction') + "\">" + $(this).text() + "</a>";
-                        }
-                    });
-                }
-            });
+            var menu =
+                '<div class="btn-group dropdown"><button type="button" class="btn btn-link dropdown-toggle" data-bs-toggle="dropdown" id="sortmenu" aria-haspopup="true" aria-expanded="false"><i class="fa fa-sort" aria-hidden="true"></i> ' +
+                _("Sort") +
+                '</span></button><div class="dropdown-menu dropdown-menu-end" aria-labelledby="sortmenu">';
+            $("#sortfield")
+                .children()
+                .each(function () {
+                    if ($(this)[0].tagName.toUpperCase() == "OPTION") {
+                        menu += '<a class="dropdown-item" href="' + sort_link + $(this).val() + '">' + $(this).text() + "</a>";
+                    } else if ($(this)[0].tagName.toUpperCase() == "OPTGROUP") {
+                        menu += '<span class="dropdown-header">' + $(this).attr("label") + "</span>";
+                        $(this)
+                            .children()
+                            .each(function () {
+                                if ($(this)[0].tagName.toUpperCase() == "OPTION") {
+                                    menu += '<a class="dropdown-item" href="' + sort_link + $(this).val() + "&direction=" + $(this).data("direction") + '">' + $(this).text() + "</a>";
+                                }
+                            });
+                    }
+                });
             menu += "</div>";
-            $(".list-actions").append( menu );
+            $(".list-actions").append(menu);
             sorting_form.remove();
         }
 
         function AdjustRemark() {
             var public;
-            if( $("#public").length > 0 ) {
+            if ($("#public").length > 0) {
                 public = $("#public").val();
             } else {
                 public = default_public;
             }
             var perms = $("#allow_changes_from").val();
 
-            if( perms < 2 ) {
+            if (perms < 2) {
                 $("#anyone_remark").hide();
                 $("#staff_remark").hide();
                 $("#permitted_staff_remark").hide();
-            } else if( public==0 ) {
+            } else if (public == 0) {
                 // If we move to Private (without shares), show Anyone remark
                 // Note: the number of shares is not tested real-time
-                if (!is_shelf_shared){
-                    if ( perms==2 ) {
+                if (!is_shelf_shared) {
+                    if (perms == 2) {
                         $("#anyone_remark").show();
                         $("#staff_remark").hide();
                         $("#permitted_staff_remark").hide();
-                    } else if ( perms==3 ) {
+                    } else if (perms == 3) {
                         $("#anyone_remark").hide();
                         $("#staff_remark").show();
                         $("#permitted_staff_remark").hide();
-                    } else if ( perms==4 ) {
+                    } else if (perms == 4) {
                         $("#anyone_remark").hide();
                         $("#staff_remark").hide();
                         $("#permitted_staff_remark").show();
@@ -1175,7 +1189,8 @@
                     $("#staff_remark").hide();
                     $("#permitted_staff_remark").hide();
                 }
-            } else { // public==1
+            } else {
+                // public==1
                 $("#anyone_remark").hide();
                 $("#staff_remark").hide();
                 $("#permitted_staff_remark").hide();

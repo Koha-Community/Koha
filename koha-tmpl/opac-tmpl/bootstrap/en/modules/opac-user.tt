@@ -1471,18 +1471,18 @@
     [% IF OverDriveCirculation %]
         [% Asset.js("js/overdrive.js") | $raw %]
         <script nonce="[% Koha.CSPNonce | $raw %]">
-            $(document).ready(function() {
-                if ( overdrive_error ){
+            $(document).ready(function () {
+                if (overdrive_error) {
                     KOHA.OverDriveCirculation.display_error("#opac-user-overdrive_panel", overdrive_error);
                 }
 
-                if ( overdrive_tab ){
+                if (overdrive_tab) {
                     $("#opac-user-views a[href='#opac-user-overdrive_panel']").tab("show");
                 }
 
-                $("#opac-user-overdrive_panel").each( function() {
+                $("#opac-user-overdrive_panel").each(function () {
                     KOHA.OverDriveCirculation.display_account_details(this);
-                } );
+                });
             });
         </script>
     [% END %]

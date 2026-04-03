@@ -425,20 +425,20 @@
         </script>
         [% IF Koha.Preference('AudioAlerts') %]
             <script nonce="[% Koha.CSPNonce | $raw %]">
-                $( document ).ready(function() {
-                    if ( AUDIO_ALERTS ) {
-                        for ( var k in AUDIO_ALERTS ) {
+                $(document).ready(function () {
+                    if (AUDIO_ALERTS) {
+                        for (var k in AUDIO_ALERTS) {
                             var alert = AUDIO_ALERTS[k];
-                            if ( $( alert.selector ).length ) {
-                                playSound( alert.sound );
+                            if ($(alert.selector).length) {
+                                playSound(alert.sound);
                                 break;
                             }
                         }
                     }
                 });
-                function playSound( sound ) {
+                function playSound(sound) {
                     if (!(sound.indexOf("http://") === 0 || sound.indexOf("https://") === 0)) {
-                        sound = interface + '/bootstrap/sound/' + sound;
+                        sound = interface + "/bootstrap/sound/" + sound;
                     }
                     document.getElementById("audio-alert").innerHTML = '<audio src="' + sound + '" autoplay="autoplay" autobuffer="autobuffer"></audio>';
                 }

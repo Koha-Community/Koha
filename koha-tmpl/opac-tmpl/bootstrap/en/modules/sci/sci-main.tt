@@ -235,68 +235,70 @@
         <script nonce="[% Koha.CSPNonce | $raw %]" data-tt-allowed="true">
             const refresh_timeout = "[% refresh_timeout | html %]";
         </script>
-
         <script nonce="[% Koha.CSPNonce | $raw %]">
             function mungeHistory() {
-                        // prevent back button from allowing form resubmission
-                        if (history && history.pushState) {
-                            history.replaceState(null, document.title, window.location.href);
-                        }
-                    }
+                // prevent back button from allowing form resubmission
+                if (history && history.pushState) {
+                    history.replaceState(null, document.title, window.location.href);
+                }
+            }
 
-                    function dofocus() {
-                        $(".focus:last").select();
-                    }
+            function dofocus() {
+                $(".focus:last").select();
+            }
 
-                    var barcodes = [];
+            var barcodes = [];
 
-                    $( window ).on( "load", function() {
-                        dofocus();
-                    });
+            $(window).on("load", function () {
+                dofocus();
+            });
 
-                    $( window ).on( "unload", function() {
-                        mungeHistory();
-                    });
+            $(window).on("unload", function () {
+                mungeHistory();
+            });
 
-                    $(document).ready(function() {
+            $(document).ready(function () {
                 // Barcodes scanning table initially hidden
                 $("#sci_barcodes_table").hide();
 
                 // Control the 'append' button behaviour
-                $("#sci_append_button").on('click', function(e) {
+                $("#sci_append_button").on("click", function (e) {
                     // Make sure the form is not submitted by the button
                     e.preventDefault();
 
-                    var barcode = $('#barcode_input').val().trim(); // Trim whitespace from input
+                    var barcode = $("#barcode_input").val().trim(); // Trim whitespace from input
 
                     if (barcode !== "") {
                         // Properly escape the barcode value by using .text() for display
                         var barcodeHtml = $('<tr style="font-size: initial;"><td></td></tr>');
-                        barcodeHtml.find('td').text(barcode).append(
-                            $('<input>').attr({
-                                type: 'hidden',
-                                name: 'barcode',
-                                value: barcode
-                            })
-                        );
+                        barcodeHtml
+                            .find("td")
+                            .text(barcode)
+                            .append(
+                                $("<input>").attr({
+                                    type: "hidden",
+                                    name: "barcode",
+                                    value: barcode,
+                                })
+                            );
 
-                        $('#sci_barcodes_table tbody').append(barcodeHtml);
+                        $("#sci_barcodes_table tbody").append(barcodeHtml);
 
                         // Make sure the table is now displayed
                         $("#sci_barcodes_table").show();
-                        $('#sci_checkin_button').show();
-                        $('#sci_refresh_button').show();
+                        $("#sci_checkin_button").show();
+                        $("#sci_refresh_button").show();
 
                         // Add barcode to the array
                         barcodes.push(barcode);
                     }
 
                     // Clear the input and reset the focus
-                    $('#barcode_input').val('');
+                    $("#barcode_input").val("");
                     dofocus();
                 });
 
-                $(".helpModal-trigger").on("click", function(e) {
+                $(".helpModal-trigger").on("click", function (e) {
                     e.preventDefault();
                     $("#helpModal").modal("show");
                 });
@@ -305,48 +307,46 @@
                 dofocus();
             });
 
+            var idleTime = 0;
+            $(document).ready(function () {
+                //Increment the idle time counter every second
+                var idleInterval = setInterval(timerIncrement, 1000);
 
-                    var idleTime = 0;
-                    $(document).ready(function () {
-                        //Increment the idle time counter every second
-                        var idleInterval = setInterval(timerIncrement, 1000);
+                //Zero the idle timer on mouse movement.
+                $(this).mousemove(function (e) {
+                    idleTime = 0;
+                });
+                $(this).keypress(function (e) {
+                    idleTime = 0;
+                });
+            });
 
-                        //Zero the idle timer on mouse movement.
-                        $(this).mousemove(function (e) {
-                            idleTime = 0;
-                        });
-                        $(this).keypress(function (e) {
-                            idleTime = 0;
-                        });
-                    });
-
-                    function timerIncrement() {
-                        if ( $("#sci_finish_button").is(":visible") || $("#sci_refresh_button").is(":visible") ) {
-                            idleTime = idleTime + 1;
-                            idleTimeout = refresh_timeout;
-                            if (idleTime >= idleTimeout ) {
-                                location.href = '/cgi-bin/koha/sci/sci-main.pl';
-                            }
-                        }
+            function timerIncrement() {
+                if ($("#sci_finish_button").is(":visible") || $("#sci_refresh_button").is(":visible")) {
+                    idleTime = idleTime + 1;
+                    idleTimeout = refresh_timeout;
+                    if (idleTime >= idleTimeout) {
+                        location.href = "/cgi-bin/koha/sci/sci-main.pl";
                     }
+                }
+            }
 
+            function checkBarcodeInput() {
+                var inputField = document.getElementById("barcode_input");
+                var button = document.getElementById("sci_append_button");
 
-                    function checkBarcodeInput() {
-                        var inputField = document.getElementById("barcode_input");
-                        var button = document.getElementById("sci_append_button");
-
-                        if (inputField.value.trim() === "") {
-                            button.disabled = true;
-                        } else {
-                            button.disabled = false;
-                        }
-                    }
+                if (inputField.value.trim() === "") {
+                    button.disabled = true;
+                } else {
+                    button.disabled = false;
+                }
+            }
 
             checkBarcodeInput();
 
             document.getElementById("barcode_input").addEventListener("input", checkBarcodeInput);
 
-            document.getElementById("sci_append_button").addEventListener("click", function() {
+            document.getElementById("sci_append_button").addEventListener("click", function () {
                 setTimeout(checkBarcodeInput, 10);
             });
         </script>
