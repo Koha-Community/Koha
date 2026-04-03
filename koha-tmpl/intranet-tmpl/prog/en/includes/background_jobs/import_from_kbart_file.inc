@@ -71,26 +71,28 @@
 [% BLOCK js %]
     [% INCLUDE 'str/job_progress.inc' job_id=job.id %]
     [% INCLUDE 'str/import_from_kbart_file.inc' %]
+    <script nonce="[% Koha.CSPNonce | $raw %]" data-tt-allowed="true">
+        const job_id = [% job.id | html %];
+    </script>
     <script nonce="[% Koha.CSPNonce | $raw %]">
-        $(document).ready(function(){
-            let job_id = [% job.id | html %];
+        $(document).ready(function () {
             updateProgress(job_id, {
-                progress_callback : function(){
-                    $.getJSON('/api/v1/jobs/'+job_id, function(job){
-                        if(job.progress == 0){
-                            $('#jobactionlabel').text(READING_FILE);
-                        }else if(job.progress >= 1){
-                            $('#jobactionlabel').text(PROCESSING_FILE);
+                progress_callback: function () {
+                    $.getJSON("/api/v1/jobs/" + job_id, function (job) {
+                        if (job.progress == 0) {
+                            $("#jobactionlabel").text(READING_FILE);
+                        } else if (job.progress >= 1) {
+                            $("#jobactionlabel").text(PROCESSING_FILE);
                         }
                     });
                 },
-                finish_callback : function(){
-                    $.getJSON('/api/v1/jobs/'+job_id, function(job){
-                        if(!$('#finishedtable').length){
+                finish_callback: function () {
+                    $.getJSON("/api/v1/jobs/" + job_id, function (job) {
+                        if (!$("#finishedtable").length) {
                             window.location.reload();
                         }
                     });
-                }
+                },
             });
         });
     </script>

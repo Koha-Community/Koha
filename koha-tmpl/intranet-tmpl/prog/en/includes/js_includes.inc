@@ -34,13 +34,32 @@
 [% INCLUDE 'js-patron-format-address.inc' %]
 
 [% INCLUDE 'validator-strings.inc' %]
-[% IF ( IntranetUserJS ) %]
-    <!-- js_includes.inc: IntranetUserJS -->
-    <script nonce="[% Koha.CSPNonce | $raw %]">
+
+<script nonce="[% Koha.CSPNonce | $raw %]" data-tt-allowed="true">
+    [% IF ( IntranetUserJS ) %]
+        <!-- js_includes.inc: IntranetUserJS -->
         [% IntranetUserJS | $raw %]
-    </script>
-    <!-- / js_includes.inc: IntranetUserJS -->
-[% END %]
+        <!-- / js_includes.inc: IntranetUserJS -->
+    [% END %]
+
+    Koha.addPrefs({
+        DefaultPatronSearchFields: "[% Koha.Preference('DefaultPatronSearchFields') || 'firstname|preferred_name|middle_name|surname|othernames|cardnumber|userid' | html %]",
+        DefaultPatronSearchMethod: "[% Koha.Preference('DefaultPatronSearchMethod') || 'contains' | html %]",
+        ExtendedPatronAttributes: "[% Koha.Preference('ExtendedPatronAttributes') | html %]",
+        ShowPatronFirstnameIfDifferentThanPreferredname: [% Koha.Preference('ShowPatronFirstnameIfDifferentThanPreferredname') ? 1 : 0 | html %],
+    });
+
+    Koha.addPermissions({
+        CAN_user_circulate_circulate_remaining_permissions: [% CAN_user_circulate_circulate_remaining_permissions ? 1 : 0 | html %],
+    });
+    var loggedInLibrary = '[% Branches.GetLoggedInBranchcode | html %]';
+    var singleBranchMode = '[% singleBranchMode | html %]';
+
+    [% IF Koha.Preference('AudioAlerts') || AudioAlertsPage %]
+        var AUDIO_ALERT_PATH = '[% interface | html %]/[% theme | html %]/sound/';
+        var AUDIO_ALERTS = JSON.parse( "[% To.json(AudioAlerts.AudioAlerts) | $raw %]" );
+    [% END %]
+</script>
 
 <!-- js_includes.inc -->
 [% IF ( Koha.Preference('virtualshelves') || Koha.Preference('intranetbookbag') ) %]
@@ -54,9 +73,6 @@
 [% IF Koha.Preference('AudioAlerts') || AudioAlertsPage %]
     <script nonce="[% Koha.CSPNonce | $raw %]">
         // AudioAlerts
-        var AUDIO_ALERT_PATH = '[% interface | html %]/[% theme | html %]/sound/';
-        var AUDIO_ALERTS = JSON.parse( "[% To.json(AudioAlerts.AudioAlerts) | $raw %]" );
-
         $( document ).ready(function() {
             if ( AUDIO_ALERTS ) {
                 for ( var k in AUDIO_ALERTS ) {
@@ -70,27 +86,19 @@
         });
     </script>
 [% END %]
-<script nonce="[% Koha.CSPNonce | $raw %]">
-    var defaultPatronSearchFields = "[% Koha.Preference('DefaultPatronSearchFields') || 'firstname|preferred_name|middle_name|surname|othernames|cardnumber|userid' | html %]";
-    var defaultPatronSearchMethod = "[% Koha.Preference('DefaultPatronSearchMethod') || 'contains' | html %]";
-    var extendedPatronAttributes = "[% Koha.Preference('ExtendedPatronAttributes') | html %]";
-    var loggedInLibrary = '[% Branches.GetLoggedInBranchcode | html %]';
-    var singleBranchMode = '[% singleBranchMode | html %]';
-    var showPatronFirstnameIfDifferentThanPreferredname = [% Koha.Preference('ShowPatronFirstnameIfDifferentThanPreferredname') ? 1 : 0 | html %];
-</script>
 [% IF ( PatronAutoComplete ) %]
     <script nonce="[% Koha.CSPNonce | $raw %]">
         // PatronAutoComplete
         var loggedInClass = "";
         $(document).ready(function(){
-            [% IF ( CAN_user_circulate_circulate_remaining_permissions ) %]
+            if ( Koha.permissions.CAN_user_circulate_circulate_remaining_permissions ) {
                 if ( $("#findborrower").length ) {
                     patron_autocomplete($("#findborrower"), { 'link-to': 'circ' });
                 }
                 if ( $("#findborrower_main").length ) {
                     patron_autocomplete($("#findborrower_main"), { 'link-to': 'circ' });
                 }
-            [% END %]
+            }
             if ( $("#searchmember").length ) {
                 patron_autocomplete($("#searchmember"), { 'link-to': 'patron' });
             }

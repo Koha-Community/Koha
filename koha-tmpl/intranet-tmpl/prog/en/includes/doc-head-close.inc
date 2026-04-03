@@ -8,8 +8,14 @@
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <meta name="csrf-token" content="[% Koha.GenerateCSRF | $raw %]" />
 [% IF logged_in_user %]<meta name="generator" content="Koha [% Koha.Version.maintenance | html %]" />[% END %]
-<script nonce="[% Koha.CSPNonce | $raw %]">
+<script nonce="[% Koha.CSPNonce | $raw %]" data-tt-allowed="true">
+
+    var Koha = {};
+
     window.__CSP_NONCE__ = "[% Koha.CSPNonce | $raw %]";
+
+    // We could use addPrefs but it's defined later (js/stores.js) and we will need to adjust the occurrences where this variable is used
+    var CAN_user_parameters_manage_column_config = [% CAN_user_parameters_manage_column_config ? 1 : 0 | $raw %];
 </script>
 [%# Prevent XFS attacks -%]
 [% UNLESS popup %]
@@ -33,14 +39,6 @@
 <script nonce="[% Koha.CSPNonce | $raw %]" type="module">
     import { APIClient } from "/intranet-tmpl/prog/js/fetch/api-client.js";
     window.APIClient = APIClient;
-</script>
-<script nonce="[% Koha.CSPNonce | $raw %]">
-    var Koha = {};
-    [% IF CAN_user_parameters_manage_column_config %]
-        var CAN_user_parameters_manage_column_config = 1;
-    [% ELSE %]
-        var CAN_user_parameters_manage_column_config = 0;
-    [% END %]
 </script>
 [% IF lang && lang != 'en' %]
     [% Asset.js(lang _ '/js/locale_data.js') | $raw %]

@@ -1,7 +1,7 @@
 [% USE Koha %]
 [% USE raw %]
 <!-- password_check.inc -->
-<script nonce="[% Koha.CSPNonce | $raw %]">
+<script nonce="[% Koha.CSPNonce | $raw %]" data-tt-allowed="true">
     var pwd_title = "";
     var pattern_title = "";
     var new_password_node_name = "[% new_password | html %]";

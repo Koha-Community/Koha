@@ -1,6 +1,6 @@
 [% USE raw %]
 <!-- str/cataloging_additem.inc -->
-<script nonce="[% Koha.CSPNonce | $raw %]">
+<script nonce="[% Koha.CSPNonce | $raw %]" data-tt-allowed="true">
     var searchid = '[% searchid | html %]';
     var biblionumber = '[% biblionumber | html %]';
     var frameworkcode = '[% frameworkcode | html %]';

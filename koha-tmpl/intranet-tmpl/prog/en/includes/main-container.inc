@@ -110,7 +110,7 @@
 </script>
 <script src="[% islands | $raw %]" type="module">
 </script>
-<script nonce="[% Koha.CSPNonce | $raw %]" type="module">
+<script nonce="[% Koha.CSPNonce | $raw %]" type="module" data-tt-allowed="true">
     import { hydrate } from "[% islands | $raw %]";
     hydrate();
 </script>

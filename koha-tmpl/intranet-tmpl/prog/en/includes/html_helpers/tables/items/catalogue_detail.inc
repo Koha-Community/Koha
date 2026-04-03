@@ -94,7 +94,7 @@
 [% END %][%# end of block items_table %]
 
 [% BLOCK build_items_table_js %]
-    <script nonce="[% Koha.CSPNonce | $raw %]">
+    <script nonce="[% Koha.CSPNonce | $raw %]" data-tt-allowed="true">
         let hide_patron_name = [% IF Koha.Preference('HidePatronName') %]true[% ELSE %]false[% END %];
         const all_libraries = [% To.json(Branches.all) | $raw %].map(e => {
                     e["_id"] = e["branchcode"];

@@ -6,7 +6,7 @@
 [% IF ( Koha.Preference('patronimages') ) %]
     [% Asset.js("js/patron-webcam.js") | $raw %]
 [% END %]
-<script nonce="[% Koha.CSPNonce | $raw %]">
+<script nonce="[% Koha.CSPNonce | $raw %]" data-tt-allowed="true">
     var advsearch = "[% advsearch | html %]";
     var destination = "[% destination | html %]";
 

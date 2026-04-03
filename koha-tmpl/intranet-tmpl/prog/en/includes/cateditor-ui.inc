@@ -9,24 +9,64 @@
 [% Asset.js("lib/koha/cateditor/marc-mode.js") | $raw %]
 [% Asset.js("lib/require.js") | $raw %]
 <!-- cateditor-ui.inc -->
-<script nonce="[% Koha.CSPNonce | $raw %]">
+<script nonce="[% Koha.CSPNonce | $raw %]" data-tt-allowed="true">
     [% FOREACH shortcut IN shortcuts -%]
         var [% shortcut.shortcut_name | html %] = "[% shortcut.shortcut_keys | html %]";
     [% END %]
-        var authInfo = {
-            [%- FOREACH authtag = authtags -%]
-                [% authtag.tagfield | html %]: {
-                    subfield: '[% authtag.tagsubfield | html %]',
-                    authtypecode: '[% authtag.authtypecode | html %]',
-                    },
-            [%- END -%]
-        };
+
+    var authInfo = {
+        [%- FOREACH authtag = authtags -%]
+            [% authtag.tagfield | html %]: {
+                subfield: '[% authtag.tagsubfield | html %]',
+                authtypecode: '[% authtag.authtypecode | html %]',
+                },
+        [%- END -%]
+    };
+
+    var z3950Servers = [
+        {
+            server_id: 'koha:biblioserver',
+            name: _("Local catalog"),
+            recordtype: 'biblio',
+            checked: false,
+        },
+        [%- FOREACH server = z3950_servers -%]
+            {
+                server_id: [% server.id | html %],
+                name: '[% server.servername | html_entity %]',
+                recordtype: '[% server.recordtype | html %]',
+                checked: [% server.checked ? 'true' : 'false' | html %],
+            },
+        [%- END -%]
+    ];
+
+    const interface = "[% interface | html %]";
+    const themelang = "[% themelang | html %]";
+    const lang = "[% lang | html %]";
+    const logged_in_user_borrowernumber = "[% logged_in_user.borrowernumber | html %]";
+
+    Koha.addPrefs({
+        marcflavour: "[% marcflavour | html %]",
+        MarcFieldDocURL: "[% Koha.Preference('MarcFieldDocURL') | html %]",
+        autoControlNumber: "[% Koha.Preference('autoControlNumber') | html %]",
+        DefaultSaveRecordFileID: "[% Koha.Preference('DefaultSaveRecordFileID') | html %]",
+    });
+
+    Koha.addPermissions({
+        CAN_user_editcatalogue_create_shared_macros: [% CAN_user_editcatalogue_create_shared_macros ? 1 : 0 | html %],
+        CAN_user_editcatalogue_delete_shared_macros: [% CAN_user_editcatalogue_delete_shared_macros ? 1 : 0 | html %],
+    });
+
+    const auth_forwarded_hash = "[% auth_forwarded_hash | html %]";
+</script>
+
+<script nonce="[% Koha.CSPNonce | $raw %]">
     require.config( {
-        baseUrl: '[% interface | html %]/lib/koha/cateditor/',
+        baseUrl: `${interface}/lib/koha/cateditor/`,
         config: {
             resources: {
-                marcflavour: '[% marcflavour | html %]',
-                themelang: '[% themelang | html %]',
+                marcflavour: Koha.prefs.marcflavour,
+                themelang,
             },
         },
         waitSeconds: 0,
@@ -41,22 +81,6 @@
 [% END %]
 <script nonce="[% Koha.CSPNonce | $raw %]">
     require( [ 'koha-backend', 'search', 'macros', 'marc-editor', 'marc-record', 'preferences', 'resources', 'text-marc', 'widget' ], function( KohaBackend, Search, Macros, MARCEditor, MARC, Preferences, Resources, TextMARC, Widget ) {
-        var z3950Servers = [
-            {
-                server_id: 'koha:biblioserver',
-                name: _("Local catalog"),
-                recordtype: 'biblio',
-                checked: false,
-            },
-            [%- FOREACH server = z3950_servers -%]
-                {
-                    server_id: [% server.id | html %],
-                    name: '[% server.servername | html_entity %]',
-                    recordtype: '[% server.recordtype | html %]',
-                    checked: [% server.checked ? 'true' : 'false' | html %],
-                },
-            [%- END -%]
-        ];
 
         // The columns that should show up in a search, in order, and keyed by the corresponding <metadata> tag in the XSL and Pazpar2 config
         var z3950Labels = [
@@ -200,13 +224,13 @@
         }
 
         function getFieldHelpURL( tag ) {
-            [% IF Koha.Preference('MarcFieldDocURL') %]
-                var docurl = "[% Koha.Preference('MarcFieldDocURL').replace('"','&quot;') | html %]";
-                docurl = docurl.replace("{MARC}", "[% marcflavour | html %]");
+            if (Koha.prefs.MarcFieldDocURL){
+                var docurl = Koha.prefs.MarcFieldDocURL.replace('"','&quot;');
+                docurl = docurl.replace("{MARC}", Koha.prefs.marcflavour);
                 docurl = docurl.replace("{FIELD}", ""+tag);
-                docurl = docurl.replace("{LANG}", "[% lang | html %]");
+                docurl = docurl.replace("{LANG}", lang);
                 return docurl;
-            [% ELSIF ( marcflavour == 'MARC21' ) %]
+            } else if ( Koha.prefs.marcflavour == 'MARC21' ) {
                 if ( tag == '000' ) {
                     return "https://www.loc.gov/marc/bibliographic/bdleader.html";
                 } else if ( tag >= '090' && tag < '100' ) {
@@ -216,12 +240,12 @@
                 } else {
                     return "https://www.loc.gov/marc/bibliographic/bd9xx.html";
                 }
-            [% ELSIF ( marcflavour == 'UNIMARC' ) %]
+            } else if ( Koha.prefs.marcflavour == 'UNIMARC' ) {
                 /* IFLA no longer provides field-level pages for the UNIMARC format
                    (as at December 2024).
                 */
                 return "https://www.ifla.org/g/unimarc-rg/unimarc-updates/";
-            [% END %]
+            }
         }
 
         // Record loading
@@ -249,7 +273,7 @@
                 saveLabel: _("Duplicate"),
                 get: function( id, callback ) {
                     if ( !id ) return false;
-                    var remove_control_num = [% IF Koha.Preference('autoControlNumber') == 'OFF' %] false [% ELSE %] true [% END %];
+                    var remove_control_num = Koha.prefs.autoControlNumber == 'OFF' ? false : true;
 
                     KohaBackend.GetRecord( id, remove_control_num, callback );
                 },
@@ -257,9 +281,9 @@
                     function finishCb( data ) {
                         done( { error: data.error, newRecord: data.marcxml && data.marcxml[0], newId: data.biblionumber && [ 'catalog', data.biblionumber ] } );
                     }
-                    [% IF Koha.Preference('autoControlNumber') != 'OFF' %]
+                    if (Koha.prefs.autoControlNumber != 'OFF'){
                         record.removeField("001");
-                    [% END %]
+                    }
 
                     KohaBackend.CreateRecord( record, finishCb );
                 }
@@ -296,12 +320,12 @@
                         recname = 'bib-'+state.recordID+'.mrc';
                     }
 
-                    [% IF (Koha.Preference('DefaultSaveRecordFileID') == 'controlnumber') %]
+                    if (Koha.prefs.DefaultSaveRecordFileID == 'controlnumber'){
                         var controlnumfield = record.field('001');
                         if(controlnumfield) {
                             recname = 'record-'+controlnumfield.subfield('@')+'.mrc';
                         }
-                    [% END %]
+                    }
                     saveAs( new Blob( [record.toISO2709()], { 'type': 'application/octet-stream;charset=utf-8' } ), recname );
 
                     done( {} );
@@ -315,12 +339,12 @@
                         recname = 'bib-'+state.recordID+'.xml';
                     }
 
-                    [% IF (Koha.Preference('DefaultSaveRecordFileID') == 'controlnumber') %]
+                    if (Koha.prefs.DefaultSaveRecordFileID == 'controlnumber'){
                         var controlnumfield = record.field('001');
                         if(controlnumfield) {
                             recname = 'record-'+controlnumfield.subfield('@')+'.xml';
                         }
-                    [% END %]
+                    }
                     saveAs( new Blob( [record.toXML()], { 'type': 'application/octet-stream;charset=utf-8' } ), recname );
 
                     done( {} );
@@ -410,7 +434,7 @@
 
             backends[ parts[0] ].get( parts[1], function( record ) {
                 if ( !record.error ) {
-                    var remove_control_num = ([% IF Koha.Preference('autoControlNumber') == 'OFF' %] false [% ELSE %] true [% END %]) && (parts[0] === 'duplicate');
+                    var remove_control_num = (Koha.prefs.autoControlNumber == 'OFF' ? false : true ) && (parts[0] === 'duplicate');
                     if( remove_control_num ){ record.removeField("001"); }
                     if( parts[0] === 'duplicate' ) {
                         let today = new Date();
@@ -691,7 +715,7 @@
                 $( sel ).on( event, function (e) {
                     e.preventDefault();
                     handler( e, Preferences.user[pref] );
-                    Preferences.Save( [% logged_in_user.borrowernumber | html %] );
+                    Preferences.Save( logged_in_user_borrowernumber );
                     showPreference(pref);
                 } );
             }
@@ -716,7 +740,7 @@
                     $( document ).on( 'change', 'input.search-toggle-server', function() {
                         var server_id = $( this ).closest('li').data('server-id');
                         Preferences.user.selected_search_targets[server_id] = this.checked;
-                        Preferences.Save( [% logged_in_user.borrowernumber | html %] );
+                        Preferences.Save( logged_in_user_borrowernumber );
                     } );
                     break;
             }
@@ -730,8 +754,8 @@
         }
 
         //> Macro functions
-        var canCreatePublic = "[% CAN_user_editcatalogue_create_shared_macros | html %]";
-        var canDeletePublic = "[% CAN_user_editcatalogue_delete_shared_macros | html %]";
+        var canCreatePublic = Koha.permissions.CAN_user_editcatalogue_create_shared_macros;
+        var canDeletePublic = Koha.permissions.CAN_user_editcatalogue_delete_shared_macros;
 
         function deleteMacro( id ){
             $( '#macro-list' ).empty();
@@ -833,7 +857,7 @@
                     contentType: "application/json",
                     data: JSON.stringify({
                         name: macro.name,
-                        patron_id: [% logged_in_user.borrowernumber | html %],
+                        patron_id: logged_in_user_borrowernumber,
                         macro_text: macro.contents,
                         shared: false
                     })
@@ -841,7 +865,7 @@
                 $.ajax(options)
                     .then(function(undef, result) {
                         delete Preferences.user.macros[macro.name];
-                        Preferences.Save( [% logged_in_user.borrowernumber | html %] );
+                        Preferences.Save( logged_in_user_borrowernumber );
                         if( index == macro_list.length -1 ){
                             showSavedMacros();
                         }
@@ -908,7 +932,7 @@
                     contentType: "application/json",
                     data: JSON.stringify({
                         name: name,
-                        patron_id: [% logged_in_user.borrowernumber | html %],
+                        patron_id: logged_in_user_borrowernumber,
                         macro_text: "",
                         shared: false
                     })
@@ -949,7 +973,7 @@
                 contentType: "application/json",
                 data: JSON.stringify({
                     name: name,
-                    patron_id: [% logged_in_user.borrowernumber | html %],
+                    patron_id: logged_in_user_borrowernumber,
                     macro_text: macroEditor.getValue(),
                     shared: shared
                 })
@@ -976,7 +1000,7 @@
         function changeEditor() {
                 if ( !confirm( _("Any changes will not be saved. Continue?") ) ) return;
 
-                Cookies.set( "catalogue_editor_[% logged_in_user.borrowernumber | html %]", "basic", { expires: 365, path: '/', sameSite: 'Lax'} );
+                Cookies.set( "catalogue_editor_" + logged_in_user_borrowernumber, "basic", { expires: 365, path: '/', sameSite: 'Lax'} );
 
                 if ( state.backend == 'catalog' ) {
                     window.location = '/cgi-bin/koha/cataloguing/addbiblio.pl?biblionumber=' + state.recordID;
@@ -1372,7 +1396,7 @@
             } );
 
             // Start editor
-            Preferences.Load( [% logged_in_user.borrowernumber || 0 | html %] );
+            Preferences.Load( logged_in_user_borrowernumber || 0 );
             displayPreferences(editor);
             makeAuthorisedValueWidgets( '' );
             Search.Init( {
@@ -1394,8 +1418,8 @@
                 } );
             }
 
-            if ( "[% auth_forwarded_hash | html %]" ) {
-                document.location.hash = "[% auth_forwarded_hash | html %]";
+            if ( auth_forwarded_hash ) {
+                document.location.hash = auth_forwarded_hash;
             }
 
             if ( !document.location.hash || !openRecord( document.location.hash.slice(1), editor, finishCb ) ) {

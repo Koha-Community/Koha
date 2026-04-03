@@ -3,9 +3,18 @@
 [% USE raw %]
 <!-- calendar.inc -->
 [% FILTER collapse %]
-    <script nonce="[% Koha.CSPNonce | $raw %]">
+    <script nonce="[% Koha.CSPNonce | $raw %]" data-tt-allowed="true">
         var debug    = "[% debug | html %]";
-        var dateformat_pref = "[% Koha.Preference('dateformat') | html %]";
+        var bidy = [% bidy ? 'true' : 'false' | $raw %];
+        Koha.addPrefs({
+            dateformat: "[% Koha.Preference('dateformat') | html %]",
+            CalendarFirstDayOfWeek: "[% Koha.Preference('CalendarFirstDayOfWeek') | html %]",
+            TimeFormat: "[% Koha.Preference('TimeFormat') | html %]",
+        });
+    </script>
+
+    <script nonce="[% Koha.CSPNonce | $raw %]">
+        var dateformat_pref = Koha.prefs.dateformat;
         var flatpickr_dateformat_string = "";
         var delimiter = "";
         var altinput_dateformat = "";
@@ -31,10 +40,9 @@
                 delimiter = "-";
         }
         var sentmsg = 0;
-        var bidi = [% IF(bidi) %] true[% ELSE %] false[% END %];
-        var calendarFirstDayOfWeek = '[% Koha.Preference('CalendarFirstDayOfWeek') | html %]';
-        var flatpickr_timeformat_string = [% IF Koha.Preference('TimeFormat') == '12hr' %]"G:i K"[% ELSE %]"H:i"[% END %];
-        var flatpickr_timeformat = [% IF Koha.Preference('TimeFormat') == '12hr' %]false[% ELSE %]true[% END %];
+        var calendarFirstDayOfWeek = Koha.prefs.CalendarFirstDayOfWeek;
+        var flatpickr_timeformat_string = Koha.prefs.TimeFormat == '12hr' ? "G:i K" : "H:i";
+        var flatpickr_timeformat = Koha.prefs.TimeFormat == '12hr' ? false : true;
     </script>
     <!-- / calendar.inc -->
     [% Asset.js("js/calendar.js") | $raw %]
@@ -101,11 +109,9 @@
                             overwiteMode: 'replace',
                         });
                    } else if ( accepts_time_only ) {
-                        maskitoOptions = {
-                            [% IF Koha.Preference('TimeFormat') == '12hr' -%] mask: [/\d/, /\d/, ':', /\d/, /\d/, ' ', /(a|A|p|P)/, /(m|M)/]
-                            [%- ELSE -%]mask: [/\d/, /\d/, ':', /\d/, /\d/]
-                            [%- END %],
-                        };
+                        maskitoOptions = Koha.prefs.TimeFormat == '12hr'
+                            ? {mask: [/\d/, /\d/, ':', /\d/, /\d/, ' ', /(a|A|p|P)/, /(m|M)/]}
+                            : {mask: [/\d/, /\d/, ':', /\d/, /\d/]}
                     } else {
                         maskitoOptions = maskitoDateOptionsGenerator({
                             mode: altinput_dateformat,

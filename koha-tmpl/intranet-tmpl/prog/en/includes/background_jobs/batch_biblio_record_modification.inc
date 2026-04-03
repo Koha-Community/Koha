@@ -50,18 +50,21 @@
 [% END %]
 
 [% BLOCK js %]
+    <script nonce="[% Koha.CSPNonce | $raw %]" data-tt-allowed="true">
+        let bibs = [
+            [% FOREACH message IN job.messages %]
+                [% IF message.code == 'biblio_modified' %]
+                    [% message.biblionumber | html %][% UNLESS loop.last %],[% END %]
+                [% END %]
+            [% END %]
+        ];
+    </script>
     <script nonce="[% Koha.CSPNonce | $raw %]">
         $("#add_bibs_to_list").change(function(){
             var selected = $("#add_bibs_to_list").find("option:selected");
             if ( selected.attr("class") == "shelf" ){
                 var shelfnumber = selected.val();
-                var bibs = new Array();
-                [% FOREACH message IN job.messages %]
-                    [% IF message.code == 'biblio_modified' %]
-                        bibs.push("biblionumber="+[% message.biblionumber | html %]);
-                    [% END %]
-                [% END %]
-                var bibstring = bibs.join("&");
+                var bibstring = bibs.map(bib => "biblionumber=" + bib).join("&");
                 window.open('/cgi-bin/koha/virtualshelves/addbybiblionumber.pl?shelfnumber='+shelfnumber+'&confirm=1&'+bibstring, 'popup', 'width=500,height=500,toolbar=false,scrollbars=yes,resizable=yes');
                 return false;
             }

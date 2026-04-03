@@ -108,9 +108,12 @@
 [% BLOCK js %]
     [% INCLUDE 'str/job_progress.inc' job_id=job.id %]
     [% INCLUDE 'str/erm_sushi_harvester.inc' %]
+    <script nonce="[% Koha.CSPNonce | $raw %]" data-tt-allowed="true">
+        const job_id = [% job.id | $raw %];
+        const job_data = [% job.data | $raw %];
+    </script>
     <script nonce="[% Koha.CSPNonce | $raw %]">
         $(document).ready(function(){
-            let job_id = [% job.id | $raw %];
             updateProgress(job_id, {
                 progress_callback : function(){
                     $.getJSON('/api/v1/jobs/'+job_id, function(job){
@@ -130,7 +133,6 @@
                 }
             });
 
-            let job_data = [% job.data | $raw %];
             let report_type = job_data.report_type;
             let ud_provider_name = job_data.ud_provider_name;
             $('#failed_report_type').text(report_type);

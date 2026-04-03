@@ -1,7 +1,7 @@
 [% USE Koha %]
 [% USE raw %]
 <!-- catalog-strings.inc -->
-<script nonce="[% Koha.CSPNonce | $raw %]">
+<script nonce="[% Koha.CSPNonce | $raw %]" data-tt-allowed="true">
     /* Some required variables from the template */
     var biblionumber = "[% biblionumber | html %]";
     var count = [% count || 0 | html %];

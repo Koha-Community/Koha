@@ -4,7 +4,7 @@
 [% Asset.js("lib/tiny_mce/tinymce.min.js") | $raw %]
 [% INCLUDE 'str/tinymce_i18n.inc' %]
 <!-- wysiwyg-systempreferences.inc -->
-<script nonce="[% Koha.CSPNonce | $raw %]">
+<script nonce="[% Koha.CSPNonce | $raw %]" data-tt-allowed="true">
     // Save TinyMCE content and trigger an event on the original element
     function wysiwyg_change (ed){
         ed.save();

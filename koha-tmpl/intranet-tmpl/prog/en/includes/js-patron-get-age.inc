@@ -2,7 +2,7 @@
 [% USE raw %]
 <!-- js-patron-get-age.inc -->
 [% USE KohaDates %]
-<script nonce="[% Koha.CSPNonce | $raw %]">
+<script nonce="[% Koha.CSPNonce | $raw %]" data-tt-allowed="true">
     (function() {
 
         const tz = '[% KohaDates.tz | html %]';

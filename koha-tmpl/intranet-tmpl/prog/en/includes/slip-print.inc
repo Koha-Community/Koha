@@ -1,6 +1,6 @@
 [% USE raw %]
 <!-- slip-print.inc -->
-<script nonce="[% Koha.CSPNonce | $raw %]">
+<script nonce="[% Koha.CSPNonce | $raw %]" data-tt-allowed="true">
     [% IF ( Koha.Preference('IntranetSlipPrinterJS') ) %]
         let autoprint = false;
         [% Koha.Preference('IntranetSlipPrinterJS') | $raw %]

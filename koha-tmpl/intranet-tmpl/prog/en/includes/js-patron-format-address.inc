@@ -2,7 +2,7 @@
 [% USE raw %]
 [% USE To %]
 [% USE AuthorisedValues %]
-<script nonce="[% Koha.CSPNonce | $raw %]">
+<script nonce="[% Koha.CSPNonce | $raw %]" data-tt-allowed="true">
     (function() {
 
         const roadtypes = [% To.json(AuthorisedValues.Get('ROADTYPE')) | $raw %];
