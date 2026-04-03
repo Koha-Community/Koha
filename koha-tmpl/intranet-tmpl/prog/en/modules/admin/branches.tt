@@ -817,7 +817,7 @@
             width: 50em;
         }
     </style>
-    <script nonce="[% Koha.CSPNonce | $raw %]">
+    <script nonce="[% Koha.CSPNonce | $raw %]" data-tt-allowed="true">
         var table_settings = [% TablesSettings.GetTableSettings( 'admin', 'libraries', 'libraries', 'json' ) | $raw %];
         var calendarFirstDayOfWeek = '[% Koha.Preference('CalendarFirstDayOfWeek') | html %]';
     </script>

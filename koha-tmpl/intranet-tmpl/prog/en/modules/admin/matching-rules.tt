@@ -731,7 +731,7 @@
 
 [% MACRO jsinclude BLOCK %]
     [% Asset.js("js/admin-menu.js") | $raw %]
-    <script nonce="[% Koha.CSPNonce | $raw %]">
+    <script nonce="[% Koha.CSPNonce | $raw %]" data-tt-allowed="true">
         var maxMatchPoint = [% max_matchpoint | html %];
         var maxMatchCheck = [% max_matchcheck | html %];
 

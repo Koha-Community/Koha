@@ -348,7 +348,7 @@
 [% MACRO jsinclude BLOCK %]
     [% Asset.js("js/admin-menu.js") | $raw %]
     [% INCLUDE 'datatables.inc' %]
-    <script nonce="[% Koha.CSPNonce | $raw %]">
+    <script nonce="[% Koha.CSPNonce | $raw %]" data-tt-allowed="true">
         var identity_provider_domains_url = '/api/v1/auth/identity_providers/[%- identity_provider_id | html -%]/domains';
         [% SET categories = Categories.all() %]
         var categories = {

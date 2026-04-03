@@ -185,7 +185,7 @@
         [% INCLUDE 'datatables.inc' %]
     [% END %]
     [% IF server %]
-        <script nonce="[% Koha.CSPNonce | $raw %]">
+        <script nonce="[% Koha.CSPNonce | $raw %]" data-tt-allowed="true">
             const server = {
                 dataformat: "[% server.dataformat | html %]",
                 recordtype: "[% server.recordtype | html %]",

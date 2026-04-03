@@ -472,7 +472,7 @@
     [% INCLUDE 'datatables.inc' %]
     [% Asset.js( "lib/sortable/Sortable.min.js" ) | $raw %]
     [% Asset.js("js/admin-menu.js") | $raw %]
-    <script nonce="[% Koha.CSPNonce | $raw %]">
+    <script nonce="[% Koha.CSPNonce | $raw %]" data-tt-allowed="true">
         const tagsubfield = [% IF tagsubfield %]"[% tagsubfield | html %]"[% ELSE %]null[% END %];
     </script>
     <script nonce="[% Koha.CSPNonce | $raw %]">

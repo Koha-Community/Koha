@@ -403,7 +403,7 @@
     [% Asset.js("js/admin-menu.js") | $raw %]
 
     [%- IF ( panel.defined ) -%]
-        <script nonce="[% Koha.CSPNonce | $raw %]">
+        <script nonce="[% Koha.CSPNonce | $raw %]" data-tt-allowed="true">
             $(document).ready( function() {
                 $("#[% panel | uri %]_panel").collapse("show");
                 [%- IF page.defined -%]

@@ -465,7 +465,7 @@
 [% MACRO jsinclude BLOCK %]
     [% INCLUDE 'datatables.inc' %]
     [% Asset.js("js/admin-menu.js") | $raw %]
-    <script nonce="[% Koha.CSPNonce | $raw %]">
+    <script nonce="[% Koha.CSPNonce | $raw %]" data-tt-allowed="true">
         var template_path = "[% interface | html %]/[% theme | html %]";
     </script>
     [% Asset.js("js/biblio_framework.js") | $raw %]

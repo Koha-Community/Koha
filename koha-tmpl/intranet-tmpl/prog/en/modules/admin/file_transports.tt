@@ -459,7 +459,7 @@
     [% Asset.js("js/admin-menu.js") | $raw %]
     [% Asset.js("js/transport_status.js") | $raw %]
     [% INCLUDE 'datatables.inc' %]
-    <script nonce="[% Koha.CSPNonce | $raw %]">
+    <script nonce="[% Koha.CSPNonce | $raw %]" data-tt-allowed="true">
         const i18n = {
             on: "[% tp("Active", "On") | html %]",
             passive: "[% tp('FTP connection mode', '(passive)') | html %]",

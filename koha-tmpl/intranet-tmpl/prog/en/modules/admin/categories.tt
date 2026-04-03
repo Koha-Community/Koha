@@ -918,9 +918,10 @@
 [% END %]
 
 [% MACRO jsinclude BLOCK %]
-    <script nonce="[% Koha.CSPNonce | $raw %]">
+    <script nonce="[% Koha.CSPNonce | $raw %]" data-tt-allowed="true">
         var TalkingTechItivaPhoneNotification = [% Koha.Preference('TalkingTechItivaPhoneNotification') || 0 | html %];
         var PhoneNotification = [% Koha.Preference('PhoneNotification') || 0 | html %];
+        var table_settings = [% TablesSettings.GetTableSettings( 'admin', 'categories', 'patron_categories', 'json' ) | $raw %];
     </script>
     [% Asset.js("js/admin-menu.js") | $raw %]
     [% Asset.js("js/messaging-preference-form.js") | $raw %]
@@ -929,7 +930,6 @@
     [% INCLUDE 'datatables.inc' %]
     [% INCLUDE 'select2.inc' %]
     <script nonce="[% Koha.CSPNonce | $raw %]">
-        var table_settings = [% TablesSettings.GetTableSettings( 'admin', 'categories', 'patron_categories', 'json' ) | $raw %];
         $(document).ready(function () {
             function getTextareaFromParent(el) {
                 return $(el).children("textarea").eq(0);

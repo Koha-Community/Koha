@@ -304,7 +304,7 @@
     [% END %]
 
     [% IF server %]
-        <script nonce="[% Koha.CSPNonce | $raw %]">
+        <script nonce="[% Koha.CSPNonce | $raw %]" data-tt-allowed="true">
             const server = {
                 syntax: "[% server.syntax | html %]",
                 encoding: "[% server.encoding | html %]",

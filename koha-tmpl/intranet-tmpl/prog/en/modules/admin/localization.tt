@@ -327,7 +327,7 @@
             });
         });
     </script>
-    <script nonce="[% Koha.CSPNonce | $raw %]">
+    <script nonce="[% Koha.CSPNonce | $raw %]" data-tt-allowed="true">
         var languages_select = $('<select name="lang" id="lang"></select>');
         [% FOR language IN languages %]
             [% FOR sublanguage IN language.sublanguages_loop %]
