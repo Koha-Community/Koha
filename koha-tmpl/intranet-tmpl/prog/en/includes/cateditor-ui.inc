@@ -780,7 +780,7 @@ require( [ 'koha-backend', 'search', 'macros', 'marc-editor', 'marc-record', 'pr
             macroEditor.setValue( '' );
             return;
         }
-        $( '#macro-list li[data-name="' + name + '"][data-id="' + id + '"]' ).addClass( 'active' );
+	$( '#macro-list li[data-id="' + id + '"]' ).addClass( 'active' );
         api_url = "/api/v1/advanced_editor/macros/";
         if( shared ) { api_url += "shared/" }
         let options = {
@@ -885,7 +885,7 @@ require( [ 'koha-backend', 'search', 'macros', 'marc-editor', 'marc-record', 'pr
         $.ajax(options)
             .then(function(result) {
                     $.each(result,function( undef, macro ){
-                        var $li = $( '<li data-name="' + macro.name + '" data-id="' + macro.macro_id + '"><a href="#">' + macro.name + '</a><ol class="macro-info"></ol></li>' );
+			var $li = $( '<li data-name="' + escape_str(macro.name) + '" data-id="' + macro.macro_id + '"><a href="#">' + escape_str(macro.name) + '</a><ol class="macro-info"></ol></li>' );
                         if ( macro.macro_id == macroEditor.activeMacroId ) $li.addClass( 'active' );
                         $li.click( function() {
                             loadMacro(macro.name, macro.macro_id, macro.shared);
