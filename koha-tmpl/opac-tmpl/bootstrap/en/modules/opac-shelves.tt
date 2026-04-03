@@ -1039,9 +1039,9 @@
                 var shelf_number = $(this).data("shelfnumber");
                 var is_shared = $(this).data("shared");
                 var count = $(this).data("count");
-                var message = "<p><em>" + shelf_name + "</em></p>";
+                var message = "<p><em>" + escape_str(shelf_name) + "</em></p>";
                 if( count ){
-                    message += "<p>" + _("Items on this list:") + " <strong>" + count + "</strong></p>";
+                    message += "<p>" + _("Items on this list:") + " <strong>" + escape_str(count) + "</strong></p>";
                 }
                 if( is_shared ){
                     message += "<p>" + _("This list is shared. Other users will lose access to it.") + "</p>";
@@ -1058,7 +1058,7 @@
                 e.preventDefault();
                 var shelf_name = $(this).data("shelfname");
                 var shelf_number = $(this).data("shelfnumber");
-                confirmModal( shelf_name, _("Are you sure you want to remove sharing? You will no longer have access to the list."), _("Yes, remove sharing"), _("No, do not remove sharing"), function( result ){
+                confirmModal( escape_str(shelf_name), _("Are you sure you want to remove sharing? You will no longer have access to the list."), _("Yes, remove sharing"), _("No, do not remove sharing"), function( result ){
                         if( result ){
                             $("#unshare" + shelf_number ).submit();
                         }
