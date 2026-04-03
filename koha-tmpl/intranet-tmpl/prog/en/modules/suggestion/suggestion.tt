@@ -1593,27 +1593,27 @@
     [% END %]
     [% IF op == 'save' %]
         <script nonce="[% Koha.CSPNonce | $raw %]">
-            $(document).ready(function(){
+            $(document).ready(function () {
                 calcNewsuggTotal();
-                $("#quantity,#price,#currency").on("change",function(){
+                $("#quantity,#price,#currency").on("change", function () {
                     calcNewsuggTotal();
                 });
 
-                if (has_other_reason){
+                if (has_other_reason) {
                     $(".select-reason").hide();
-                    $(".select-reason").find("option[value='other']").attr("selected","selected");
+                    $(".select-reason").find("option[value='other']").attr("selected", "selected");
                     $("#other_reason").show();
                 } else {
                     $("#other_reason").hide();
                 }
-                $(".select-reason").change(function(){
-                    if($(this).val() == "other"){
+                $(".select-reason").change(function () {
+                    if ($(this).val() == "other") {
                         $(this).hide();
                         $("#other_reason").show();
                     }
                 });
-                $("a[href*=back]").click(function(){
-                    $(".select-reason").show().find("option[value='']").attr("selected","selected");
+                $("a[href*=back]").click(function () {
+                    $(".select-reason").show().find("option[value='']").attr("selected", "selected");
                     $("#other_reason").hide();
                 });
             });
