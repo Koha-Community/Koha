@@ -1,6 +1,6 @@
 review_ajax_params = {
     url: "/cgi-bin/koha/tags/review.pl",
-    dataType: "script",
+    dataType: "json",
 };
 
 var ok_count = 0;
@@ -21,6 +21,11 @@ function pull_counts() {
 }
 
 function count_approve() {
+    if (response.status == "success") {
+        success_approve(response.tag);
+    } else {
+        failure_approve(response.tag);
+    }
     pull_counts();
     if (nok_count > 0) {
         $("#terms_summary_unapproved_count").html(nok_count - 1);
@@ -28,7 +33,12 @@ function count_approve() {
     }
 }
 
-function count_reject() {
+function count_reject(response) {
+    if (response.status == "success") {
+        success_reject(response.tag);
+    } else {
+        failure_reject(response.tag);
+    }
     pull_counts();
     if (nok_count > 0) {
         $("#terms_summary_unapproved_count").html(nok_count - 1);
@@ -40,33 +50,34 @@ var success_approve = function (tag) {
     // window.alert(__("AJAX approved tag: ") + tag);
 };
 var failure_approve = function (tag) {
-    window.alert(
-        __("AJAX failed to approve tag: %s").format(decodeURIComponent(tag))
-    );
+    window.alert(__("AJAX failed to approve tag: %s").format(escape_str(tag)));
 };
 var success_reject = function (tag) {
     // window.alert(__("AJAX rejected tag: ") + tag);
 };
 var failure_reject = function (tag) {
-    window.alert(
-        __("AJAX failed to reject tag: %s").format(decodeURIComponent(tag))
-    );
+    window.alert(__("AJAX failed to reject tag: %s").format(escape_str(tag)));
 };
 var success_test = function (tag) {
-    $("#verdict").html(__("%s is permitted!").format(decodeURIComponent(tag)));
+    $("#verdict").html(__("%s is permitted!").format(escape_str(tag)));
 };
 var failure_test = function (tag) {
-    $("#verdict").html(__("%s is prohibited!").format(decodeURIComponent(tag)));
+    $("#verdict").html(__("%s is prohibited!").format(escape_str(tag)));
 };
 var indeterminate_test = function (tag) {
     $("#verdict").html(
-        __("%s is neither permitted nor prohibited!").format(
-            decodeURIComponent(tag)
-        )
+        __("%s is neither permitted nor prohibited!").format(escape_str(tag))
     );
 };
 
-var success_test_call = function () {
+var success_test_call = function (response) {
+    if (response.status == "success") {
+        success_test(response.tag);
+    } else if (response.status == "failure") {
+        failure_test(response.tag);
+    } else {
+        indeterminate_test(response.tag);
+    }
     $("#test_button").prop("disabled", false);
     $("#test_button").html(
         "<i class='fa fa-check-square' aria-hidden='true'></i>" + __(" Test")
@@ -213,7 +224,7 @@ $(document).ready(function () {
                     { ...review_ajax_params, type: "GET" },
                     {
                         data: {
-                            tag: escape_str($("#test").val()),
+                            tag: $("#test").val(),
                             op: "test",
                         },
                         success: success_test_call, // success_reject

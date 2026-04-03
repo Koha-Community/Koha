@@ -23,7 +23,8 @@ use Modern::Perl;
 use POSIX qw( ceil );
 use CGI   qw ( -utf8 );
 use CGI::Cookie;    # need to check cookies before having CGI parse the POST request
-use URI::Escape qw( uri_escape_utf8 uri_unescape );
+use URI::Escape qw( uri_unescape );
+use JSON        qw(encode_json);
 use C4::Auth    qw( check_cookie_auth get_template_and_user );
 use C4::Context;
 use C4::Output qw( output_with_http_headers is_ajax pagination_bar output_html_with_http_headers );
@@ -59,21 +60,20 @@ if ( is_ajax() ) {
     my $js_reply;
     my $op  = $input->param('op') || q{};
     my $tag = $input->param('tag');
+    my $status;
     if ( $op eq 'test' ) {
-        $tag = uri_unescape($tag);
         my $check = is_approved($tag);
-        $js_reply =
-              ( $check >= 1 ? 'success' : $check <= -1 ? 'failure' : 'indeterminate' )
-            . "_test('"
-            . uri_escape_utf8($tag) . "');\n";
+        $status = $check >= 1 ? 'success' : $check <= -1 ? 'failure' : 'indeterminate';
     } elsif ( $op eq 'cud-approve' ) {
-        $js_reply =
-            ( whitelist( $operator, $tag ) ? 'success' : 'failure' ) . "_approve('" . uri_escape_utf8($tag) . "');\n";
+        $status = whitelist( $operator, $tag ) ? 'success' : 'failure';
     } elsif ( $op eq 'cud-reject' ) {
-        $js_reply =
-            ( blacklist( $operator, $tag ) ? 'success' : 'failure' ) . "_reject('" . uri_escape_utf8($tag) . "');\n";
+        $status = blacklist( $operator, $tag ) ? 'success' : 'failure';
     }
-    output_with_http_headers $input, undef, $js_reply, 'js';
+    my $response = {
+        status => $status,
+        tag    => $tag,
+    };
+    output_with_http_headers $input, undef, encode_json($response), 'js';
     exit;
 }
 
