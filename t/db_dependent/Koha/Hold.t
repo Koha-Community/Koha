@@ -2050,8 +2050,8 @@ subtest 'is_hold_group_target, cleanup_hold_group and set_as_hold_group_target t
 
     $hold_2->cancel();
     is(
-        $hold_3->hold_group, undef,
-        'Third hold was left as the only member of its group. Group was deleted and the hold is no longer part of a hold group'
+        $hold_3->hold_group->hold_group_id, $new_hold_group->hold_group_id,
+        'Third hold was left as the only member of its group. Group is kept and this hold is still part of it for historic reasons.'
     );
 
     $schema->storage->txn_rollback;

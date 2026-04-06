@@ -125,7 +125,7 @@ subtest "target_hold_id tests" => sub {
     my $hold = Koha::Holds->find($reserve_id);
     is( $hold_group->get_from_storage->target_hold_id, $hold->reserve_id, 'target_hold_id is correct' );
     $hold->fill();
-    is( $hold_group->get_from_storage, undef, 'hold group no longer exists' );
+    is( $hold_group->get_from_storage->hold_group_id, $hold->hold_group_id, 'hold_group is kept' );
 
     $schema->storage->txn_rollback;
 };

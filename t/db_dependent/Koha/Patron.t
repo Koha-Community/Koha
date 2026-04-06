@@ -3477,7 +3477,7 @@ subtest 'reset_2fa() tests' => sub {
 
 subtest "create_hold_group, hold_groups, visual_hold_group_id tests" => sub {
 
-    plan tests => 17;
+    plan tests => 19;
 
     $schema->storage->txn_begin;
 
@@ -3535,7 +3535,7 @@ subtest "create_hold_group, hold_groups, visual_hold_group_id tests" => sub {
     is( $hold_group->hold_group_id,        $hold3->get_from_storage->hold_group_id, 'hold3 added to hold_group' );
 
     # Create 2nd hold group
-    $patron->create_hold_group( [ $hold4->reserve_id, $hold5->reserve_id ] );
+    my $hg_to_be_kept = $patron->create_hold_group( [ $hold4->reserve_id, $hold5->reserve_id ] );
     is( $patron_hold_groups->count, 2, 'Patron has two hold groups' );
 
     my $second_hold_group = $patron->hold_groups->as_list->[1];
@@ -3550,13 +3550,21 @@ subtest "create_hold_group, hold_groups, visual_hold_group_id tests" => sub {
     );
 
     $hold3->get_from_storage->fill();
-    is( $patron->get_from_storage->hold_groups->count, 1, 'Patron only has one hold group again' );
+    is( $patron->get_from_storage->hold_groups->count, 1, 'Patron only has one active hold group' );
+    is(
+        $patron->get_from_storage->hold_groups->next->hold_group_id, $hg_to_be_kept->hold_group_id,
+        'Patron only has one active hold group. The 2nd created'
+    );
 
     $hold4->get_from_storage->cancel();
-    is( $patron->get_from_storage->hold_groups->count, 0, 'Patron does not have any hold groups again' );
+    is( $patron->get_from_storage->hold_groups->count, 1, 'Patron only has one active hold group' );
+    is(
+        $patron->get_from_storage->hold_groups->next->hold_group_id, $hg_to_be_kept->hold_group_id,
+        'Patron only has one active hold group. The 2nd created. It was kept because one hold was cancelled and one hold remains.'
+    );
 
     # Create 3rd hold group
-    $patron->create_hold_group( [ $hold5->reserve_id, $hold6->reserve_id ] );
+    $patron->create_hold_group( [ $hold5->reserve_id, $hold6->reserve_id ], 1 );
     my $third_hold_group = $patron->hold_groups->as_list->[0];
     is( $third_hold_group->visual_hold_group_id, 1, 'Visual hold group id is 1' );
 
