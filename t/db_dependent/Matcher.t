@@ -18,7 +18,8 @@
 use Modern::Perl;
 use MARC::Record;
 use Test::NoWarnings;
-use Test::More tests => 4;
+use Test::MockModule;
+use Test::More tests => 5;
 use Test::Warn;
 
 use t::lib::TestBuilder;
@@ -26,6 +27,7 @@ use t::lib::Mocks;
 
 use Koha::Database;
 use C4::Matcher;
+use C4::AuthoritiesMarc qw(AddAuthority);
 
 my $schema  = Koha::Database->new->schema;
 my $builder = t::lib::TestBuilder->new;
@@ -364,6 +366,53 @@ subtest '_get_match_keys() leader tests' => sub {
     is( $keys[0], 'a', 'Match key correctly calculated as "a" from LDR6' );
 };
 
+subtest 'get_matches bad record test' => sub {
+    plan tests => 1;
+
+    # First we need to generate a bad record
+    my $record = MARC::Record->new();
+    $record->append_fields( MARC::Field->new( '100', '1', '2', a => 'Name' ) );
+    $record->append_fields( MARC::Field->new( '040', '',  '',  c => 'Test' ) );
+    my $type   = $builder->build( { source => 'AuthType', value => { auth_tag_to_report => '100' } } );
+    my $authid = C4::AuthoritiesMarc::AddAuthority(
+        $record, undef,
+        $type->{authtypecode}
+    );
+    my $dbh = C4::Context->dbh;
+    my $sth = $dbh->prepare(
+        q|UPDATE auth_header  SET marcxml = UpdateXML(marcxml, '//datafield[@tag="040"]/subfield[@code="c"]',CONCAT('<subfield code',CHAR(27),'="c">OSt</subfield>')) WHERE auth_header.authid=?|
+    );
+    $sth->execute( ($authid) );
+
+    # Now we need to mock the search routines to ensure we get a result match
+    t::lib::Mocks::mock_preference( 'SearchEngine', 'Elasticsearch' );
+
+    #we aren't testing search, just need to be consistent to mock
+    my $mock_searcher = Test::MockModule->new('Koha::SearchEngine::Elasticsearch::Search');
+    $mock_searcher->mock(
+        'search_auth_compat',
+        sub {
+            return [ { authid => $authid } ];
+        }
+    );
+
+    # Now we create a matcher and fill the matchpoints
+    my $matcher_db = $builder->build(
+        {
+            source => 'MarcMatcher',
+            value  => { record_type => 'authority' },
+        }
+    );
+    my $matcher_object = C4::Matcher->fetch( $matcher_db->{matcher_id} );
+    $matcher_object->{matchpoints} = [ get_authority_matchpoint() ];
+
+    # Now we are ready to test that a malformed record is handled
+    warnings_like {
+        $matcher_object->get_matches( $record, 1 );
+    }
+    [qr/Error parsing matched authority record /], "Record with bad XML characters handled";
+};
+
 sub get_title_matchpoint {
     my $params = shift;
 
@@ -385,6 +434,30 @@ sub get_title_matchpoint {
             }
         ],
         index => "title",
+        score => 1000
+    };
+
+    return $matchpoint;
+}
+
+sub get_authority_matchpoint {
+    my $params = shift;
+
+    my $length = $params->{length} // 0;
+    my $norms  = $params->{norms}  // [];
+    my $offset = $params->{offset} // 0;
+
+    my $matchpoint = {
+        components => [
+            {
+                length    => $length,
+                norms     => $norms,
+                offset    => $offset,
+                subfields => { a => 1 },
+                tag       => '100'
+            }
+        ],
+        index => "match-heading",
         score => 1000
     };
 
