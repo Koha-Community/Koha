@@ -164,6 +164,21 @@ sub holds {
     return Koha::Holds->_new_from_dbic($holds_rs);
 }
 
+=head3 old_holds
+
+    $holds = $hold_group->old_holds
+
+Return all old holds associated with this group
+
+=cut
+
+sub old_holds {
+    my ($self) = @_;
+
+    my $holds_rs = $self->_result->old_reserves->search;
+    return Koha::Holds->_new_from_dbic($holds_rs);
+}
+
 =head3 target_hold_id
 
     $holds = $hold_group->target_hold_id

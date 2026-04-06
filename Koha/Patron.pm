@@ -1883,13 +1883,16 @@ sub old_holds {
 
 my $hold_groups = $patron->hold_groups
 
-Return all of this patron's hold groups
+Return all of this patron's active hold groups
 
 =cut
 
 sub hold_groups {
     my ($self) = @_;
-    my $hold_group_rs = $self->_result->hold_groups->search( {}, { order_by => 'hold_group_id' } );
+    my $hold_group_rs = $self->_result->hold_groups->search(
+        { visual_hold_group_id => { '!=' => undef } },
+        { order_by             => 'hold_group_id' }
+    );
     return Koha::HoldGroups->_new_from_dbic($hold_group_rs);
 }
 
@@ -1948,7 +1951,7 @@ sub create_hold_group {
         hold_ids => \@already_in_group_holds,
     ) if @already_in_group_holds && !$force_grouped;
 
-    my @existing_ids                        = $self->_result->hold_groups->get_column('visual_hold_group_id')->all;
+    my @existing_ids = grep { defined } $self->_result->hold_groups->get_column('visual_hold_group_id')->all;
     my $next_available_visual_hold_group_id = 1;
     while ( grep { $_ == $next_available_visual_hold_group_id } @existing_ids ) {
         $next_available_visual_hold_group_id++;
