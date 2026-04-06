@@ -34,19 +34,26 @@
             [% INCLUDE 'csrf-token.inc' %]
 
             <h1>Sending your list</h1>
-            <fieldset class="rows">
+            <fieldset class="fg">
                 <legend class="sr-only">Enter message details</legend>
-                <ol>
-                    <li>
+                <div class="fg-row">
+                    <div class="fg-label">
                         <label for="email">Email address:</label>
-                        <input type="text" id="email" name="email" size="43" class="focus" />
-                    </li>
-                    <li>
+                    </div>
+                    <div class="fg-input">
+                        <input type="text" id="email" name="email" class="focus" />
+                    </div>
+                </div>
+                <div class="fg-row">
+                    <div class="fg-label">
                         <label for="comment">Comment:</label>
+                    </div>
+                    <div class="fg-input">
                         <textarea id="comment" name="comment" rows="4" cols="40"></textarea>
-                    </li>
-                    <li> <input type="hidden" name="shelfid" value="[% shelfid | html %]" /> </li></ol
-            ></fieldset>
+                        <input type="hidden" name="shelfid" value="[% shelfid | html %]" />
+                    </div>
+                </div>
+            </fieldset>
             <input type="hidden" name="op" value="cud-send" />
 
             <nav class="navbar navbar-default fixed-bottom">

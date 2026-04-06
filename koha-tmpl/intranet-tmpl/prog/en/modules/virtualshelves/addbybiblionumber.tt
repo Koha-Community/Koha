@@ -51,11 +51,14 @@
 
                 [% UNLESS ( newshelf ) %]
                     [% IF private_shelves.count OR public_shelves.count OR private_shelves_shared_with_me.count %]
-                        <fieldset class="rows">
+                        <fieldset class="fg">
                             <legend>Select an existing list</legend>
-                            <ol>
-                                <li>
+
+                            <div class="fg-row">
+                                <div class="fg-label">
                                     <label>Choose list</label>
+                                </div>
+                                <div class="fg-input">
                                     <select name="shelfnumber" id="shelfnumber">
                                         [% IF private_shelves.count %]
                                             <optgroup label="Private lists">
@@ -79,8 +82,9 @@
                                             </optgroup>
                                         [% END %]
                                     </select>
-                                </li>
-                            </ol>
+                                </div>
+                            </div>
+
                             [% FOREACH biblio IN biblios %]<input type="hidden" name="biblionumber" value="[% biblio.biblionumber | html %]" />[% END %]
                             [% UNLESS ( biblionumbers ) %]
                                 <input type="hidden" name="biblionumber" value="[% biblionumber | html %]" />
@@ -93,11 +97,13 @@
                     [% END %]
                 [% END %]
 
-                <fieldset class="rows"
-                    ><legend>Add to a new list:</legend>
-                    <ol
-                        ><li>
+                <fieldset class="fg">
+                    <legend>Add to a new list:</legend>
+                    <div class="fg-row">
+                        <div class="fg-label">
                             <label for="newvirtualshelf"> List name: </label>
+                        </div>
+                        <div class="fg-input">
                             [% FOREACH biblio IN biblios %]<input type="hidden" name="biblionumber" value="[% biblio.biblionumber | html %]" />[% END %]
                             [% UNLESS ( biblionumbers ) %]
                                 <input type="hidden" name="biblionumber" id="biblionumber" value="[% biblionumber | html %]" />
@@ -106,15 +112,19 @@
                             [% END %]
                             <input type="text" name="newvirtualshelf" id="newvirtualshelf" size="40" />
                             <input type="hidden" name="confirmed" value="1" />
-                        </li>
-                        <li>
-                            <label for="category">Category:</label>
+                        </div>
+                    </div>
+                    <div class="fg-row">
+                        <div class="fg-label">
+                            <label for="public">Category:</label>
+                        </div>
+                        <div class="fg-input">
                             <select name="public" id="public">
                                 <option value="0">Private</option>
                                 <option value="1">Public</option>
                             </select>
-                        </li></ol
-                    >
+                        </div>
+                    </div>
                 </fieldset>
             [% END %]
 

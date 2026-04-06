@@ -29,11 +29,14 @@
 [% ELSE %]
     <div id="export" class="detailtagcell">
         <form method="get" action="/cgi-bin/koha/virtualshelves/downloadshelf.pl">
-            <fieldset class="rows">
-                <legend><h1>Download list</h1></legend>
-                <ol
-                    ><li>
+            <h1>Download list</h1>
+            <fieldset class="fg">
+                <legend>Select a download format</legend>
+                <div class="fg-row">
+                    <div class="fg-label">
                         <label for="format">Format: </label>
+                    </div>
+                    <div class="fg-input">
                         <select name="format" id="format">
                             <option value="">-- Choose format --</option>
                             <option value="iso2709">MARC</option>
@@ -43,8 +46,8 @@
                                 <option value="[% csv_profile.export_format_id | html %]">CSV - [% csv_profile.profile | html %]</option>
                             [% END %]
                         </select>
-                    </li></ol
-                >
+                    </div>
+                </div>
             </fieldset>
             <fieldset class="action"><input type="hidden" name="shelfid" value="[% shelfid | html %]" /> <input type="submit" name="save" class="btn btn-primary" value="Save" /> <a class="cancel close" href="#">Cancel</a> </fieldset>
         </form>

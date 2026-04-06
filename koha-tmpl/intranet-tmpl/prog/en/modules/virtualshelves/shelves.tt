@@ -34,42 +34,46 @@
 </style>
 
 [% BLOCK list_permissions %]
-    <li>
-        <label for="allow_changes_from">Allow changes to contents from: </label>
-        <select name="allow_changes_from" id="allow_changes_from" onchange="AdjustRemark()">
-            [% IF shelf.allow_change_from_owner %]
-                <option value="0">Nobody</option>
-            [% ELSE %]
-                <option value="0" selected="selected">Nobody</option>
-            [% END %]
+    <div class="fg-row">
+        <div class="fg-label">
+            <label for="allow_changes_from">Allow changes to contents from: </label>
+        </div>
+        <div class="fg-input">
+            <select name="allow_changes_from" id="allow_changes_from" onchange="AdjustRemark()">
+                [% IF shelf.allow_change_from_owner %]
+                    <option value="0">Nobody</option>
+                [% ELSE %]
+                    <option value="0" selected="selected">Nobody</option>
+                [% END %]
 
-            [% IF shelf.allow_change_from_owner && (( !shelf.is_public && !shelf.is_shared ) || !shelf.allow_change_from_others ) %]
-                <option value="1" selected="selected">Owner only</option>
-            [% ELSE %]
-                <option value="1">Owner only</option>
-            [% END %]
+                [% IF shelf.allow_change_from_owner && (( !shelf.is_public && !shelf.is_shared ) || !shelf.allow_change_from_others ) %]
+                    <option value="1" selected="selected">Owner only</option>
+                [% ELSE %]
+                    <option value="1">Owner only</option>
+                [% END %]
 
-            [% IF shelf.allow_change_from_permitted_staff %]
-                <option value="4" selected="selected">Permitted staff only</option>
-            [% ELSE %]
-                <option value="4">Permitted staff only</option>
-            [% END %]
-            [% IF shelf.allow_change_from_staff %]
-                <option value="3" selected="selected">Staff only</option>
-            [% ELSE %]
-                <option value="3">Staff only</option>
-            [% END %]
+                [% IF shelf.allow_change_from_permitted_staff %]
+                    <option value="4" selected="selected">Permitted staff only</option>
+                [% ELSE %]
+                    <option value="4">Permitted staff only</option>
+                [% END %]
+                [% IF shelf.allow_change_from_staff %]
+                    <option value="3" selected="selected">Staff only</option>
+                [% ELSE %]
+                    <option value="3">Staff only</option>
+                [% END %]
 
-            [% IF shelf.allow_change_from_others %]
-                <option value="2" selected="selected">Anyone seeing this list</option>
-            [% ELSE %]
-                <option value="2">Anyone seeing this list</option>
-            [% END %]
-        </select>
-        &emsp; <span id="permitted_staff_remark" style="display:none;color:red;">The Permitted staff only permission has no actual effect while this list is strictly private.</span> &emsp;
-        <span id="staff_remark" style="display:none;color:red;">The Staff only permission has no actual effect while this list is strictly private.</span> &emsp;
-        <span id="anyone_remark" style="display:none;color:red;">The Anyone permission has no actual effect while this list is strictly private.</span>
-    </li>
+                [% IF shelf.allow_change_from_others %]
+                    <option value="2" selected="selected">Anyone seeing this list</option>
+                [% ELSE %]
+                    <option value="2">Anyone seeing this list</option>
+                [% END %]
+            </select>
+        </div>
+        &emsp; <div class="hint" id="permitted_staff_remark" style="display:none;color:red;">The Permitted staff only permission has no effect while this list is private.</div> &emsp;
+        <div class="hint" id="staff_remark" style="display:none;color:red;">The Staff only permission has no effect while this list is private.</div> &emsp;
+        <div class="hint" id="anyone_remark" style="display:none;color:red;">The Anyone permission has no effect while this list is private.</div>
+    </div>
 [% END %]
 </head>
 
@@ -413,7 +417,7 @@
     [% IF op == 'add_form' OR op == 'edit_form' %]
         <form method="post" action="/cgi-bin/koha/virtualshelves/shelves.pl" class="validated">
             [% INCLUDE 'csrf-token.inc' %]
-            <fieldset class="rows">
+            <fieldset class="fg">
                 [% IF op == 'add_form' %]
                     <legend><h1>Create a new list</h1></legend>
                     <input type="hidden" name="op" value="cud-add" />
@@ -425,13 +429,21 @@
                 [% END %]
                 <input type="hidden" name="referer" value="[% referer | html %]" />
                 <input type="hidden" name="shelfnumber" value="[% shelf.shelfnumber | html %]" />
-                <ol>
-                    <li>
-                        <label for="shelfname" class="required">Name: </label><input type="text" id="shelfname" name="shelfname" size="25" value="[% shelf.shelfname | html %]" required="required" class="focus required" />
-                        <span class="required">Required</span>
-                    </li>
-                    <li>
+
+                <div class="fg-row">
+                    <div class="fg-label">
+                        <label for="shelfname" class="required">Name: </label>
+                    </div>
+                    <div class="fg-input">
+                        <input type="text" id="shelfname" name="shelfname" size="25" value="[% shelf.shelfname | html %]" required="required" class="focus required" />
+                    </div>
+                    <div class="required">Required</div>
+                </div>
+                <div class="fg-row">
+                    <div class="fg-label">
                         <span class="label">Owner: </span>
+                    </div>
+                    <div class="fg-text">
                         [% IF op == 'add_form' %]
                             <input type="hidden" name="owner" id="owner" value="[% loggedinusernumber | html %]" />[% logged_in_user.userid | html %]
                         [% ELSE %]
@@ -441,10 +453,14 @@
                                 <input type="hidden" id="owner" name="owner" value="[% loggedinusernumber | html %]" />[% logged_in_user.userid | html %]
                             [% END %]
                         [% END %]
-                    </li>
-                    <li>
+                    </div>
+                </div>
+                <div class="fg-row">
+                    <div class="fg-label">
                         <label for="sortfield">Sort this list by: </label>
-                        <select name="sortfield">
+                    </div>
+                    <div class="fg-input">
+                        <select id="sortfield" name="sortfield">
                             [% IF shelf.sortfield == "title" %]
                                 <option value="title" selected="selected">Title</option>
                             [% ELSE %]
@@ -473,10 +489,14 @@
                                 <option value="dateadded">Date added</option>
                             [% END %]
                         </select>
-                    </li>
-                    <li>
-                        [% IF ( CAN_user_lists_create_public_lists ) %]
+                    </div>
+                </div>
+                [% IF ( CAN_user_lists_create_public_lists ) %]
+                    <div class="fg-row">
+                        <div class="fg-label">
                             <label for="public">Public: </label>
+                        </div>
+                        <div class="fg-input">
                             <select id="public" name="public" onchange="AdjustRemark()">
                                 [% IF shelf.is_private %]
                                     <option value="0" selected="selected">Private</option>
@@ -489,14 +509,20 @@
                                     <option value="1">Public</option>
                                 [% END %]
                             </select>
-                        [% ELSE %]
-                            <label>Public: </label>
+                        </div>
+                    </div>
+                [% ELSE %]
+                    <div class="fg-row">
+                        <div class="fg-label">
+                            <span class="label">Public: </span>
+                        </div>
+                        <div class="fg-text">
                             <span>Private</span>
                             <input id="public" name="public" value="0" type="hidden" />
-                        [% END %]
-                    </li>
-                    [% INCLUDE list_permissions %]
-                </ol>
+                        </div>
+                    </div>
+                [% END %]
+                [% INCLUDE list_permissions %]
             </fieldset>
 
             <fieldset class="action">
@@ -591,23 +617,29 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                        <fieldset class="brief">
-                            <ol>
-                                <li>
+                        <fieldset class="fg">
+                            <div class="fg-row">
+                                <div class="fg-label">
                                     <label for="barcodes">Barcodes:</label>
+                                </div>
+                                <div class="fg-input">
                                     <textarea name="barcodes" id="barcodes" rows="5"></textarea>
                                     <input type="hidden" name="op" value="cud-add_biblio" />
                                     <input type="hidden" name="referer" value="view" />
                                     <input type="hidden" name="shelfnumber" value="[% shelf.shelfnumber | html %]" />
-                                </li>
-                                <li>
+                                </div>
+                            </div>
+                            <div class="fg-row">
+                                <div class="fg-label">
                                     <label for="biblionumbers">Biblio numbers:</label>
+                                </div>
+                                <div class="fg-input">
                                     <textarea name="biblionumbers" id="biblionumbers" rows="5"></textarea>
                                     <input type="hidden" name="op" value="cud-add_biblio" />
                                     <input type="hidden" name="referer" value="view" />
                                     <input type="hidden" name="shelfnumber" value="[% shelf.shelfnumber | html %]" />
-                                </li>
-                            </ol>
+                                </div>
+                            </div>
                         </fieldset>
                     </div>
                     <!-- /.modal-body -->
