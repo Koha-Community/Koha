@@ -98,6 +98,9 @@
                                     <thead>
                                         <tr>
                                             <th class="anti-the">Title</th>
+                                            [% IF Koha.Preference('DisplayAddHoldGroups') %]
+                                                <th>Hold group ID</th>
+                                            [% END %]
                                             <th>Author</th>
                                             <th>Barcode</th>
                                             <th>Library</th>
@@ -116,9 +119,15 @@
                                             <tr>
                                                 [% IF hold.biblio %]
                                                     <td>[% INCLUDE 'biblio-title.inc' biblio=hold.biblio link=>1 %]</td>
+                                                    [% IF Koha.Preference('DisplayAddHoldGroups') %]
+                                                        <td>[% hold.hold_group_id | html %]</td>
+                                                    [% END %]
                                                     <td>[% hold.biblio.author | html %]</td>
                                                 [% ELSE %]
                                                     <td>[% INCLUDE 'biblio-title.inc' biblio=hold.deleted_biblio link=>0 deleted=>1 %]</td>
+                                                    [% IF Koha.Preference('DisplayAddHoldGroups') %]
+                                                        <td>[% hold.hold_group_id | html %]</td>
+                                                    [% END %]
                                                     <td>[% hold.deleted_biblio.author | html %]</td>
                                                 [% END %]
                                                 <td>[% hold.item.barcode | html %]</td>
