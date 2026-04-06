@@ -204,6 +204,12 @@ sub fetch {
     return $self;
 }
 
+=head2 _fetch_matchpoint
+
+helper function that retrieves a matchpint and components from the DB
+
+=cut
+
 sub _fetch_matchpoint {
     my $self          = shift;
     my $matchpoint_id = shift;
@@ -271,6 +277,13 @@ sub store {
     return $self->{'id'};
 }
 
+=head2 _del_matcher_components
+
+helper function that deletes matchpionts and matchchecks for a matcher
+used to clear existing values before saving new
+
+=cut
+
 sub _del_matcher_components {
     my $self = shift;
 
@@ -284,6 +297,12 @@ sub _del_matcher_components {
     # from matcher_matchpoints, matchpoint_components, and
     # matchpoint_component_norms
 }
+
+=head2 _update_marc_matchers
+
+helper function that updates a march matcher db entry
+
+=cut
 
 sub _update_marc_matchers {
     my $self = shift;
@@ -303,6 +322,12 @@ sub _update_marc_matchers {
     );
 }
 
+=head2 _new_marc_matchers
+
+helper function that inserts a new marc matcher entry
+
+=cut
+
 sub _new_marc_matchers {
     my $self = shift;
 
@@ -315,6 +340,12 @@ sub _new_marc_matchers {
     $sth->execute( $self->{'code'}, $self->{'description'}, $self->{'record_type'}, $self->{'threshold'} );
     $self->{'id'} = $dbh->{'mysql_insertid'};
 }
+
+=head2 _store_matcher_components
+
+helper function that stores the values for mathcpoints and match checks for a matcher
+
+=cut
 
 sub _store_matcher_components {
     my $self = shift;
@@ -342,6 +373,12 @@ sub _store_matcher_components {
     }
 
 }
+
+=head2 _store_matchpoint
+
+helper function that stores a matchpoint and its components
+
+=cut
 
 sub _store_matchpoint {
     my $self       = shift;
@@ -849,6 +886,12 @@ sub dump {
     return $result;
 }
 
+=head2 _passes_required_checks
+
+helper function that checks the match keys for all matched records
+
+=cut
+
 sub _passes_required_checks {
     my ( $source_record, $target_record, $matchchecks ) = @_;
 
@@ -862,6 +905,12 @@ sub _passes_required_checks {
     }
     return 1;
 }
+
+=head2 _get_match_keys
+
+helper function that retrieves the values of the match fields from a source record
+
+=cut
 
 sub _get_match_keys {
 
@@ -952,6 +1001,12 @@ sub _get_match_keys {
     }
     return @keys;
 }
+
+=head2 _parse_match_component
+
+helper function to transform a match component into the expected form
+
+=cut
 
 sub _parse_match_component {
     my $input_component = shift;
