@@ -56,46 +56,60 @@ my ($unitprice_field) = C4::Budgets->FieldsForCalculatingFundValues();
 
 my $query = <<EOQ;
 SELECT
-    aqorders.biblionumber, aqorders.basketno, aqorders.ordernumber,
-    quantity-quantityreceived AS tleft,
-    budgetdate, entrydate,
-    aqbasket.booksellerid,
-    GROUP_CONCAT(DISTINCT itype SEPARATOR '|') as itypes,
+    biblionumber,
+    basketno,
+    ordernumber,
+    tleft,
+    budgetdate,
+    entrydate,
+    booksellerid,
+    itypes,
     title,
-    aqorders.invoiceid,
-    aqinvoices.invoicenumber,
+    invoiceid,
+    invoicenumber,
     quantityreceived,
-    $unitprice_field,
+    unitprice_tax_included,
     datereceived,
     aqbooksellers.name as vendorname
-FROM (aqorders, aqbasket)
-LEFT JOIN biblio ON
-    biblio.biblionumber=aqorders.biblionumber
-LEFT JOIN aqorders_items ON
-    aqorders.ordernumber = aqorders_items.ordernumber
-LEFT JOIN items ON
-    aqorders_items.itemnumber = items.itemnumber
-LEFT JOIN aqinvoices ON
-    aqorders.invoiceid = aqinvoices.invoiceid
-LEFT JOIN aqbooksellers ON
-    aqbasket.booksellerid = aqbooksellers.id
-WHERE
-    aqorders.basketno=aqbasket.basketno AND
-    budget_id=? AND
-    datecancellationprinted IS NULL AND
-    datereceived IS NOT NULL
-    GROUP BY aqorders.biblionumber, aqorders.basketno, aqorders.ordernumber,
-             tleft,
-             budgetdate, entrydate,
-             aqbasket.booksellerid,
-             title,
-             aqorders.invoiceid,
-             aqinvoices.invoicenumber,
-             quantityreceived,
-             $unitprice_field,
-             datereceived,
-             aqbooksellers.name
-
+FROM
+    (
+    SELECT
+        aqorders.biblionumber, aqorders.basketno, aqorders.ordernumber,
+        quantity-quantityreceived AS tleft,
+        budgetdate, entrydate,
+        aqbasket.booksellerid,
+        GROUP_CONCAT(DISTINCT itype SEPARATOR '|') as itypes,
+        title,
+        aqorders.invoiceid,
+        aqinvoices.invoicenumber,
+        quantityreceived,
+        $unitprice_field,
+        datereceived
+    FROM aqorders
+    JOIN aqbasket ON aqorders.basketno=aqbasket.basketno
+    LEFT JOIN biblio ON
+        biblio.biblionumber=aqorders.biblionumber
+    LEFT JOIN aqorders_items ON
+        aqorders.ordernumber = aqorders_items.ordernumber
+    LEFT JOIN items ON
+        aqorders_items.itemnumber = items.itemnumber
+    LEFT JOIN aqinvoices ON
+        aqorders.invoiceid = aqinvoices.invoiceid
+    WHERE
+        budget_id=? AND
+        datecancellationprinted IS NULL AND
+        datereceived IS NOT NULL
+        GROUP BY aqorders.biblionumber, aqorders.basketno, aqorders.ordernumber,
+                 tleft,
+                 budgetdate, entrydate,
+                 aqbasket.booksellerid,
+                 title,
+                 aqorders.invoiceid,
+                 aqinvoices.invoicenumber,
+                 quantityreceived,
+                 $unitprice_field,
+                 datereceived
+    ) orders LEFT JOIN aqbooksellers ON orders.booksellerid = aqbooksellers.id
 EOQ
 my $sth = $dbh->prepare($query);
 $sth->execute($bookfund);
