@@ -126,6 +126,9 @@
                     <thead>
                         <tr>
                             <th data-colname="title" class="anti-the">Title</th>
+                            [% IF Koha.Preference('DisplayAddHoldGroups') %]
+                                <th data-colname="hold_group_id">Hold group ID</th>
+                            [% END %]
                             <th data-colname="author">Author</th>
                             <th data-colname="barcode">Barcode</th>
                             <th data-colname="itemcallnumber">Call number</th>
@@ -176,6 +179,7 @@
         };
 
         const show_itemtype_column = [% Koha.Preference('AllowHoldItemTypeSelection') ? 1 : 0 | html %];
+        const display_hold_group_id = [% Koha.Preference('DisplayAddHoldGroups') ? 1 : 0 | html %];
     </script>
     <script>
         $(document).ready(function() {
@@ -252,6 +256,15 @@
                                 }
                             }
                         },
+                        ...(display_hold_group_id
+                            ? [
+                                  {
+                                      data: "hold_group_id",
+                                      searchable: true,
+                                      orderable: true,
+                                  },
+                              ]
+                            : []),
                         {
                             data: "biblio.author",
                             searchable: true,
