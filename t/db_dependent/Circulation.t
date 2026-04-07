@@ -498,7 +498,7 @@ subtest "GetIssuingCharges tests" => sub {
 
 my ( $reused_itemnumber_1, $reused_itemnumber_2 );
 subtest "CanBookBeRenewed tests" => sub {
-    plan tests => 121;
+    plan tests => 124;
 
     C4::Context->set_preference( 'ItemsDeniedRenewal', '' );
 
@@ -1127,6 +1127,14 @@ subtest "CanBookBeRenewed tests" => sub {
     is( $renewokay,                  1,            'Bug 25393: Can auto renew' );
     is( $error,                      'auto_renew', 'Bug 25393: Can auto renew' );
     is( $info->{soonest_renew_date}, undef, "soonest_renew_date is not returned because this issue can be renewed" );
+
+    $dbh->do(q{UPDATE circulation_rules SET rule_value = '1' WHERE rule_name = 'norenewalbefore'});
+    Koha::Cache::Memory::Lite->flush();
+    ( $renewokay, $error, $info ) = CanBookBeRenewed( $renewing_borrower_obj, $auto_renew_issue, undef, 1 );
+    is( $renewokay,                  1,            'Bug 42298: No autorenew before rule is respected' );
+    is( $error,                      'auto_renew', 'Bug 42298: No autorenew before rule is respected' );
+    is( $info->{soonest_renew_date}, undef, "soonest_renew_date is not returned because this issue can be renewed" );
+    $dbh->do(q{UPDATE circulation_rules SET rule_value = '99' WHERE rule_name = 'norenewalbefore'});
 
     $renewing_borrower_obj->autorenew_checkouts(0)->store;
     ( $renewokay, $error ) = CanBookBeRenewed( $renewing_borrower_obj, $auto_renew_issue );
