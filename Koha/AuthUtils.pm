@@ -110,7 +110,7 @@ sub generate_salt {
     my $source;
 
     if ( $length < 1 ) {
-        die "non-positive strength of '$strength' passed to Koha::AuthUtils::generate_salt\n";
+        die "non-positive length of '$length' passed to Koha::AuthUtils::generate_salt\n";
     }
 
     if ( $strength eq "strong" ) {
@@ -130,7 +130,7 @@ sub generate_salt {
     # $string is the concatenation of all the bytes read so far
     my ( $bytes, $string ) = ( "", "" );
 
-    # keep reading until we have $length bytes in $strength
+    # keep reading until we have $length bytes in $string
     while ( length($string) < $length ) {
 
         # return the number of bytes read, 0 (EOF), or -1 (ERROR)
@@ -154,7 +154,7 @@ sub generate_salt {
 my ( $is_valid, $error ) = is_password_valid( $password, $category );
 
 return $is_valid == 1 if the password match category's minimum password length and strength if provided, or general minPasswordLength and RequireStrongPassword conditions
-otherwise return $is_valid == 0 and $error will contain the error ('too_short' or 'too_weak')
+otherwise return $is_valid == 0 and $error will contain the error ('too_short', 'too_weak', or 'has_whitespaces')
 
 =cut
 
