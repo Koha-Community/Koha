@@ -233,7 +233,7 @@ subtest 'check() - NotIssued confirmation' => sub {
 
     is( keys %{ $result->blockers },         0,              'no blockers for not issued item' );
     is( $result->confirmations->{NotIssued}, $item->barcode, 'NotIssued confirmation set with barcode' );
-    is( $result->{issue},                    undef,          'checkout is undef when not checked out' );
+    is( $result->context->{checkout},        undef,          'checkout is undef when not checked out' );
     is( $result->context->{patron},          undef,          'patron is undef when not checked out' );
 
     $schema->storage->txn_rollback;
