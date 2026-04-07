@@ -23,9 +23,8 @@ use Modern::Perl;
 use POSIX qw( ceil );
 use CGI   qw ( -utf8 );
 use CGI::Cookie;    # need to check cookies before having CGI parse the POST request
-use URI::Escape qw( uri_unescape );
-use JSON        qw(encode_json);
-use C4::Auth    qw( check_cookie_auth get_template_and_user );
+use JSON     qw(encode_json);
+use C4::Auth qw( check_cookie_auth get_template_and_user );
 use C4::Context;
 use C4::Output qw( output_with_http_headers is_ajax pagination_bar output_html_with_http_headers );
 use C4::Tags   qw(
@@ -46,6 +45,8 @@ sub ajax_auth_cgi {    # returns CGI object
     my $sessid        = $cookies{'CGISESSID'}->value;
     my ($auth_status) = check_cookie_auth( $sessid, $needed_flags );
     if ( $auth_status ne "ok" ) {
+
+        #FIMXE: This should return a HTTP error and not a script
         output_with_http_headers $input, undef,
             "window.alert('Your CGI session cookie ($sessid) is not current.  "
             . "Please refresh the page and try again.');\n", 'js';
@@ -73,7 +74,7 @@ if ( is_ajax() ) {
         status => $status,
         tag    => $tag,
     };
-    output_with_http_headers $input, undef, encode_json($response), 'js';
+    output_with_http_headers $input, undef, encode_json($response), 'json';
     exit;
 }
 

@@ -20,9 +20,9 @@ function pull_counts() {
     );
 }
 
-function count_approve() {
+function count_approve(response) {
     if (response.status == "success") {
-        success_approve(response.tag);
+        //success_approve(response.tag);
     } else {
         failure_approve(response.tag);
     }
@@ -35,7 +35,7 @@ function count_approve() {
 
 function count_reject(response) {
     if (response.status == "success") {
-        success_reject(response.tag);
+        //success_reject(response.tag);
     } else {
         failure_reject(response.tag);
     }
@@ -46,28 +46,37 @@ function count_reject(response) {
     }
 }
 
-var success_approve = function (tag) {
-    // window.alert(__("AJAX approved tag: ") + tag);
-};
+//var success_approve = function (tag) {
+// window.alert(__("AJAX approved tag: ") + tag);
+//};
 var failure_approve = function (tag) {
     window.alert(__("AJAX failed to approve tag: %s").format(escape_str(tag)));
 };
-var success_reject = function (tag) {
-    // window.alert(__("AJAX rejected tag: ") + tag);
-};
+//var success_reject = function (tag) {
+// window.alert(__("AJAX rejected tag: ") + tag);
+//};
 var failure_reject = function (tag) {
     window.alert(__("AJAX failed to reject tag: %s").format(escape_str(tag)));
 };
 var success_test = function (tag) {
-    $("#verdict").html(__("%s is permitted!").format(escape_str(tag)));
+    const verdict = document.querySelector("#verdict");
+    if (verdict) {
+        verdict.textContent = __("%s is permitted!").format(tag);
+    }
 };
 var failure_test = function (tag) {
-    $("#verdict").html(__("%s is prohibited!").format(escape_str(tag)));
+    const verdict = document.querySelector("#verdict");
+    if (verdict) {
+        verdict.textContent = __("%s is prohibited!").format(tag);
+    }
 };
 var indeterminate_test = function (tag) {
-    $("#verdict").html(
-        __("%s is neither permitted nor prohibited!").format(escape_str(tag))
-    );
+    const verdict = document.querySelector("#verdict");
+    if (verdict) {
+        verdict.textContent = __(
+            "%s is neither permitted nor prohibited!"
+        ).format(tag);
+    }
 };
 
 var success_test_call = function (response) {
