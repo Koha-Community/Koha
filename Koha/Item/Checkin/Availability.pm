@@ -113,12 +113,6 @@ sub check {
         return $result;
     }
 
-    # Check if item is lost and blocked
-    if ( $item->itemlost && C4::Context->preference("BlockReturnOfLostItems") ) {
-        $result->add_blocker( BlockedLost => 1 );
-        return $result;
-    }
-
     # Check AllowReturnToBranch policy
     my ( $returnallowed, $message ) = _check_return_policy( $item, $library );
     unless ($returnallowed) {
@@ -144,6 +138,12 @@ sub check {
             );
             return $result;
         }
+    }
+
+    # Check if item is lost and blocked
+    if ( $item->itemlost && C4::Context->preference("BlockReturnOfLostItems") ) {
+        $result->add_blocker( BlockedLost => 1 );
+        return $result;
     }
 
     # Add warnings for withdrawn (when not blocked)
