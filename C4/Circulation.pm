@@ -2442,7 +2442,7 @@ sub AddReturn {
 
     # Extract context objects
     my $issue = $availability->context->{checkout};
-    $patron = $availability->context->{patron};
+    $patron   = $availability->context->{patron};
 
     # Set NotIssued message if item not checked out
     if ( !$issue ) {
