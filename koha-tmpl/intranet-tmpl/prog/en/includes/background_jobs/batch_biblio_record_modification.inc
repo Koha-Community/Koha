@@ -60,12 +60,12 @@
         ];
     </script>
     <script nonce="[% Koha.CSPNonce | $raw %]">
-        $("#add_bibs_to_list").change(function(){
+        $("#add_bibs_to_list").change(function () {
             var selected = $("#add_bibs_to_list").find("option:selected");
-            if ( selected.attr("class") == "shelf" ){
+            if (selected.attr("class") == "shelf") {
                 var shelfnumber = selected.val();
                 var bibstring = bibs.map(bib => "biblionumber=" + bib).join("&");
-                window.open('/cgi-bin/koha/virtualshelves/addbybiblionumber.pl?shelfnumber='+shelfnumber+'&confirm=1&'+bibstring, 'popup', 'width=500,height=500,toolbar=false,scrollbars=yes,resizable=yes');
+                window.open("/cgi-bin/koha/virtualshelves/addbybiblionumber.pl?shelfnumber=" + shelfnumber + "&confirm=1&" + bibstring, "popup", "width=500,height=500,toolbar=false,scrollbars=yes,resizable=yes");
                 return false;
             }
         });

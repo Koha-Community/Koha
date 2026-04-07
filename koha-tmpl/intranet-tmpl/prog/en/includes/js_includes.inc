@@ -34,7 +34,6 @@
 [% INCLUDE 'js-patron-format-address.inc' %]
 
 [% INCLUDE 'validator-strings.inc' %]
-
 <script nonce="[% Koha.CSPNonce | $raw %]" data-tt-allowed="true">
     [% IF ( IntranetUserJS ) %]
         <!-- js_includes.inc: IntranetUserJS -->
@@ -60,7 +59,6 @@
         var AUDIO_ALERTS = JSON.parse( "[% To.json(AudioAlerts.AudioAlerts) | $raw %]" );
     [% END %]
 </script>
-
 <!-- js_includes.inc -->
 [% IF ( Koha.Preference('virtualshelves') || Koha.Preference('intranetbookbag') ) %]
     [% Asset.js("js/basket.js") | $raw %]
@@ -73,12 +71,12 @@
 [% IF Koha.Preference('AudioAlerts') || AudioAlertsPage %]
     <script nonce="[% Koha.CSPNonce | $raw %]">
         // AudioAlerts
-        $( document ).ready(function() {
-            if ( AUDIO_ALERTS ) {
-                for ( var k in AUDIO_ALERTS ) {
+        $(document).ready(function () {
+            if (AUDIO_ALERTS) {
+                for (var k in AUDIO_ALERTS) {
                     var alert = AUDIO_ALERTS[k];
-                    if ( $( alert.selector ).length ) {
-                        playSound( alert.sound );
+                    if ($(alert.selector).length) {
+                        playSound(alert.sound);
                         break;
                     }
                 }
@@ -90,17 +88,17 @@
     <script nonce="[% Koha.CSPNonce | $raw %]">
         // PatronAutoComplete
         var loggedInClass = "";
-        $(document).ready(function(){
-            if ( Koha.permissions.CAN_user_circulate_circulate_remaining_permissions ) {
-                if ( $("#findborrower").length ) {
-                    patron_autocomplete($("#findborrower"), { 'link-to': 'circ' });
+        $(document).ready(function () {
+            if (Koha.permissions.CAN_user_circulate_circulate_remaining_permissions) {
+                if ($("#findborrower").length) {
+                    patron_autocomplete($("#findborrower"), { "link-to": "circ" });
                 }
-                if ( $("#findborrower_main").length ) {
-                    patron_autocomplete($("#findborrower_main"), { 'link-to': 'circ' });
+                if ($("#findborrower_main").length) {
+                    patron_autocomplete($("#findborrower_main"), { "link-to": "circ" });
                 }
             }
-            if ( $("#searchmember").length ) {
-                patron_autocomplete($("#searchmember"), { 'link-to': 'patron' });
+            if ($("#searchmember").length) {
+                patron_autocomplete($("#searchmember"), { "link-to": "patron" });
             }
         });
     </script>

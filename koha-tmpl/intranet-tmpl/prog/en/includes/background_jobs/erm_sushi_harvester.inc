@@ -113,30 +113,30 @@
         const job_data = [% job.data | $raw %];
     </script>
     <script nonce="[% Koha.CSPNonce | $raw %]">
-        $(document).ready(function(){
+        $(document).ready(function () {
             updateProgress(job_id, {
-                progress_callback : function(){
-                    $.getJSON('/api/v1/jobs/'+job_id, function(job){
-                        if(job.progress == 0){
-                            $('#jobactionlabel').text(REQUESTING_SUSHI);
-                        }else if(job.progress >= 1){
-                            $('#jobactionlabel').text(CREATING_COUNTER);
+                progress_callback: function () {
+                    $.getJSON("/api/v1/jobs/" + job_id, function (job) {
+                        if (job.progress == 0) {
+                            $("#jobactionlabel").text(REQUESTING_SUSHI);
+                        } else if (job.progress >= 1) {
+                            $("#jobactionlabel").text(CREATING_COUNTER);
                         }
                     });
                 },
-                finish_callback : function(){
-                    $.getJSON('/api/v1/jobs/'+job_id, function(job){
-                        if(!$('#finishedtable').length){
+                finish_callback: function () {
+                    $.getJSON("/api/v1/jobs/" + job_id, function (job) {
+                        if (!$("#finishedtable").length) {
                             window.location.reload();
                         }
                     });
-                }
+                },
             });
 
             let report_type = job_data.report_type;
             let ud_provider_name = job_data.ud_provider_name;
-            $('#failed_report_type').text(report_type);
-            $('#failed_provider_name').text(ud_provider_name);
+            $("#failed_report_type").text(report_type);
+            $("#failed_provider_name").text(ud_provider_name);
         });
     </script>
 [% END %]

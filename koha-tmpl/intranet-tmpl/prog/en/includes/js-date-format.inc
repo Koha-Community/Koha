@@ -18,25 +18,24 @@
     });
     var tz = '[% KohaDates.tz | html %]';
 </script>
-
 <!-- js-date-format.inc -->
 <script nonce="[% Koha.CSPNonce | $raw %]">
-    (function() {
+    (function () {
         var def_date_format = Koha.prefs.dateformat;
         var def_time_format = Koha.prefs.TimeFormat;
         var def_tz = tz;
 
-        var get_date_pattern = function(format) {
-            var date_pattern = 'YYYY-MM-DD';
-            if(format == 'us') date_pattern = 'MM/DD/YYYY';
-            if(format == 'metric') date_pattern = 'DD/MM/YYYY';
-            if(format == 'dmydot') date_pattern = 'DD.MM.YYYY';
+        var get_date_pattern = function (format) {
+            var date_pattern = "YYYY-MM-DD";
+            if (format == "us") date_pattern = "MM/DD/YYYY";
+            if (format == "metric") date_pattern = "DD/MM/YYYY";
+            if (format == "dmydot") date_pattern = "DD.MM.YYYY";
             return date_pattern;
         };
 
-        var get_time_pattern = function(format) {
-            var time_pattern = 'HH:mm';
-            if(format == '12hr') time_pattern = 'hh:mm a';
+        var get_time_pattern = function (format) {
+            var time_pattern = "HH:mm";
+            if (format == "12hr") time_pattern = "hh:mm a";
             return time_pattern;
         };
 
@@ -53,86 +52,88 @@
          * @property {Boolean} [options.as_due_date]    Enable/Disable due date output format
          * @returns {String}                            A date string formatted as per the koha instance configuration.
          */
-        window.$date = function(value, options) {
-            if(!value) return '';
-            let tz = (options&&options.tz)||def_tz;
-            let no_tz_adjust = (options&&options.no_tz_adjust)||false;
+        window.$date = function (value, options) {
+            if (!value) return "";
+            let tz = (options && options.tz) || def_tz;
+            let no_tz_adjust = (options && options.no_tz_adjust) || false;
             var m = dayjs(value);
-            if ( !no_tz_adjust && ! value.match(/^\d{4}-\d{2}-\d{2}$/ ) ) {
+            if (!no_tz_adjust && !value.match(/^\d{4}-\d{2}-\d{2}$/)) {
                 m = m.tz(tz);
             }
 
-            var dateformat = (options&&options.dateformat)||def_date_format;
-            var withtime = (options&&options.withtime)||false;
+            var dateformat = (options && options.dateformat) || def_date_format;
+            var withtime = (options && options.withtime) || false;
 
-            if(dateformat=='rfc3339' && withtime) return m.format();
+            if (dateformat == "rfc3339" && withtime) return m.format();
 
-            var timeformat = (options&&options.timeformat)||def_time_format;
+            var timeformat = (options && options.timeformat) || def_time_format;
             var date_pattern = get_date_pattern(dateformat);
-            let as_due_date = (options&&options.as_due_date);
+            let as_due_date = options && options.as_due_date;
             if (as_due_date) {
-                withtime = !( m.hour() == 23 && m.minute() == 59 );
+                withtime = !(m.hour() == 23 && m.minute() == 59);
             }
-            var time_pattern = !withtime?'':' '+get_time_pattern(timeformat);
+            var time_pattern = !withtime ? "" : " " + get_time_pattern(timeformat);
 
-            return m.format(date_pattern+time_pattern);
-        }
+            return m.format(date_pattern + time_pattern);
+        };
 
-        window.$datetime = function(value, options) {
-            options = options||{};
+        window.$datetime = function (value, options) {
+            options = options || {};
             options.withtime = true;
             return $date(value, options);
         };
 
-        window.$time = function(value, options) {
-            if(!value) return '';
-            var tz = (options&&options.tz)||def_tz;
+        window.$time = function (value, options) {
+            if (!value) return "";
+            var tz = (options && options.tz) || def_tz;
             var m = dayjs(value);
-            if(tz) m = m.tz(tz);
+            if (tz) m = m.tz(tz);
 
-            var dateformat = (options&&options.dateformat);
-            var timeformat = (dateformat=='rfc3339'&&'24hr')||(options&&options.timeformat)||def_time_format;
+            var dateformat = options && options.dateformat;
+            var timeformat = (dateformat == "rfc3339" && "24hr") || (options && options.timeformat) || def_time_format;
 
-            return m.format(get_time_pattern(timeformat)+(dateformat=='rfc3339'?':ss'+(!m.isUTC()?'Z':''):''))+(dateformat=='rfc3339' && m.isUTC()?'Z':'');
-        }
+            return m.format(get_time_pattern(timeformat) + (dateformat == "rfc3339" ? ":ss" + (!m.isUTC() ? "Z" : "") : "")) + (dateformat == "rfc3339" && m.isUTC() ? "Z" : "");
+        };
 
-        window.$date_to_rfc3339 = function(value, options) {
-            var dateformat = (options&&options.dateformat)||def_date_format;
+        window.$date_to_rfc3339 = function (value, options) {
+            var dateformat = (options && options.dateformat) || def_date_format;
             let m = dayjs(value, get_date_pattern(dateformat), true);
             return m.format("YYYY-MM-DD");
-        }
+        };
 
         /**
-        * A JS equivalent of the KohaTimes TT Plugin. Passed a time in HH:MM:SS or HH:MM format
-        * the function will return a time string formatted as per the koha instance config.
-        */
+         * A JS equivalent of the KohaTimes TT Plugin. Passed a time in HH:MM:SS or HH:MM format
+         * the function will return a time string formatted as per the koha instance config.
+         */
 
-        window.$kohatime = function(value) {
-            if(!value) return 'invalid time';
-            var intime = value.split(':');
+        window.$kohatime = function (value) {
+            if (!value) return "invalid time";
+            var intime = value.split(":");
             var hours = intime[0];
             var minutes = intime[1];
 
-            if ( hours < 0 || hours > 23 || minutes < 0 || minutes > 59 ) { return 'invalid time'; }
-
-            if ( def_time_format == '12hr') {
-                var ampm = ( hours >= 12 ) ? 'pm' : 'am';
-                hours = ( hours == 0 ) ? "12" : hours;
-                hours = ( hours > 12 ) ? ( hours - 12 ) : hours;
-
-                return hours.toString().padStart(2,'0') + ':' + minutes.toString().padStart(2,'0') + " " + ampm;
-            } else {
-                return hours.toString().padStart(2,'0') + ':' + minutes.toString().padStart(2,'0');
+            if (hours < 0 || hours > 23 || minutes < 0 || minutes > 59) {
+                return "invalid time";
             }
-        }
+
+            if (def_time_format == "12hr") {
+                var ampm = hours >= 12 ? "pm" : "am";
+                hours = hours == 0 ? "12" : hours;
+                hours = hours > 12 ? hours - 12 : hours;
+
+                return hours.toString().padStart(2, "0") + ":" + minutes.toString().padStart(2, "0") + " " + ampm;
+            } else {
+                return hours.toString().padStart(2, "0") + ":" + minutes.toString().padStart(2, "0");
+            }
+        };
 
         /**
          * Returns the configured Koha server timezone.
          * Useful for components that need to display dates/times in library timezone.
          */
-        window.$timezone = function() {
+        window.$timezone = function () {
             return def_tz;
-        }
+        };
 
         /**
          * Converts a dayjs object to a Date for timeline/calendar display.
@@ -145,10 +146,9 @@
          * @param {dayjs.Dayjs} dayjsObj - A dayjs object (typically converted to a specific timezone)
          * @returns {Date} A Date object that will display the dayjs values in the browser
          */
-        window.$toDisplayDate = function(dayjsObj) {
-            return new Date(dayjsObj.format('YYYY-MM-DDTHH:mm:ss'));
-        }
-
+        window.$toDisplayDate = function (dayjsObj) {
+            return new Date(dayjsObj.format("YYYY-MM-DDTHH:mm:ss"));
+        };
     })();
 </script>
 <!-- / js-date-format.inc -->

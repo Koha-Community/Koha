@@ -9,7 +9,6 @@
 <meta name="csrf-token" content="[% Koha.GenerateCSRF | $raw %]" />
 [% IF logged_in_user %]<meta name="generator" content="Koha [% Koha.Version.maintenance | html %]" />[% END %]
 <script nonce="[% Koha.CSPNonce | $raw %]" data-tt-allowed="true">
-
     var Koha = {};
 
     window.__CSP_NONCE__ = "[% Koha.CSPNonce | $raw %]";
