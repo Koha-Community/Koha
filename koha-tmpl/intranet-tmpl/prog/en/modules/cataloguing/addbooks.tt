@@ -414,9 +414,9 @@
     </script>
     <script nonce="[% Koha.CSPNonce | $raw %]">
         /* provide Z3950 search points */
-        function GetZ3950Terms(fw){
-            var strQuery="&frameworkcode=" + fw;
-            z3950_search_params.forEach(function(z3950_search_param) {
+        function GetZ3950Terms(fw) {
+            var strQuery = "&frameworkcode=" + fw;
+            z3950_search_params.forEach(function (z3950_search_param) {
                 strQuery += "&" + z3950_search_param.name + "=" + z3950_search_param.value;
             });
             return strQuery;

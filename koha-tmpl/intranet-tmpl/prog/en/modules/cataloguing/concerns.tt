@@ -262,30 +262,30 @@
             });
             adjust_filter_label();
 
-            statuses.forEach(function(st){
-            const av = st.authorised_value;
-            $(`#${av}_filter`).on("click", function() {
-                if ($(`#${av}`).is(":checked")){
-                    additional_filters.status.find((o, i) => {
-                        if (o["!="] === av) {
-                            additional_filters.status.splice(i, 1);
-                            return true; // stop searching
+            statuses.forEach(function (st) {
+                const av = st.authorised_value;
+                $(`#${av}_filter`).on("click", function () {
+                    if ($(`#${av}`).is(":checked")) {
+                        additional_filters.status.find((o, i) => {
+                            if (o["!="] === av) {
+                                additional_filters.status.splice(i, 1);
+                                return true; // stop searching
+                            }
+                        });
+                        if (additional_filters.status.length === 1) {
+                            delete additional_filters.status;
                         }
-                    });
-                    if ( additional_filters.status.length === 1 ){
-                        delete additional_filters.status;
+                        $(this).html('<i class="fa fa-filter"></i> ' + _("Filter ") + st.lib);
+                    } else {
+                        if (!additional_filters.hasOwnProperty("status")) {
+                            additional_filters.status = ["-and"];
+                        }
+                        additional_filters.status.push({ "!=": av });
+                        $(this).html('<i class="fa fa-bars"></i> ' + _("Include ") + st.lib);
                     }
-                    $(this).html('<i class="fa fa-filter"></i> '+_("Filter ")+st.lib);
-                } else {
-                    if (!additional_filters.hasOwnProperty("status")) {
-                        additional_filters.status = [ '-and' ];
-                    }
-                    additional_filters.status.push({ '!=': av});
-                    $(this).html('<i class="fa fa-bars"></i> '+_("Include ")+st.lib);
-                }
-                $(`#hide_${av}`).prop("checked", !$(`#hide${av}`).is(":checked"));
-                tickets.DataTable().draw();
-            });
+                    $(`#hide_${av}`).prop("checked", !$(`#hide${av}`).is(":checked"));
+                    tickets.DataTable().draw();
+                });
             });
         });
     </script>
