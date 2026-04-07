@@ -143,7 +143,6 @@
         [% INCLUDE 'select2.inc' %]
         [% Asset.js("js/modals/place_booking.js") | $raw %]
     [% END %]
-
     <script nonce="[% Koha.CSPNonce | $raw %]" data-tt-allowed="true">
         /* Set a variable needed by add_catalog_concern.js */
         var logged_in_user_borrowernumber = "[% logged_in_user.borrowernumber | html %]";
@@ -153,37 +152,35 @@
 
         const imagenumber = [% imagenumber | html %];
     </script>
-
     [% IF ( Koha.Preference('CatalogConcerns') ) %]
         [% Asset.js("js/modals/add_catalog_concern.js") | $raw %]
     [% END %]
     <script nonce="[% Koha.CSPNonce | $raw %]">
-        $(document).ready(function(){
+        $(document).ready(function () {
             showCover(imagenumber);
-            $(".show_cover").on("click",function(e){
+            $(".show_cover").on("click", function (e) {
                 e.preventDefault();
-                if( $(this).find("img").hasClass("selected") ){
+                if ($(this).find("img").hasClass("selected")) {
                     return false;
                 } else {
-                    $("#largeCoverImg").attr( "src", interface + "/" + theme + "/img/spinner-small.gif");
+                    $("#largeCoverImg").attr("src", interface + "/" + theme + "/img/spinner-small.gif");
                     var imagenumber = $(this).data("coverimg");
-                    showCover( imagenumber );
+                    showCover(imagenumber);
                 }
             });
 
-            $('.thumbnails .remove').on("click", function(e) {
+            $(".thumbnails .remove").on("click", function (e) {
                 e.preventDefault();
                 var result = confirm(_("Are you sure you want to delete this cover image?"));
                 var imagenumber = $(this).data("coverimg");
-                if ( result == true ) {
+                if (result == true) {
                     removeLocalImage(imagenumber);
                 }
             });
-
         });
 
         function removeLocalImage(imagenumber) {
-            var thumbnail = $("#imagenumber-" + imagenumber );
+            var thumbnail = $("#imagenumber-" + imagenumber);
             var itemnumber = $(thumbnail).data("itemnumber");
             var biblionumber = $(thumbnail).data("biblionumber");
             var copy = thumbnail.html();
@@ -193,19 +190,19 @@
             const client = APIClient.cover_image;
             client.cover_images.delete(imagenumber).then(
                 success => {
-                    if ( success.deleted == 1 ) {
-                        if( itemnumber ) {
-                            location.href="/cgi-bin/koha/catalogue/imageviewer.pl?itemnumber=" + itemnumber;
+                    if (success.deleted == 1) {
+                        if (itemnumber) {
+                            location.href = "/cgi-bin/koha/catalogue/imageviewer.pl?itemnumber=" + itemnumber;
                         } else {
-                            location.href="/cgi-bin/koha/catalogue/imageviewer.pl?biblionumber=" + biblionumber;
+                            location.href = "/cgi-bin/koha/catalogue/imageviewer.pl?biblionumber=" + biblionumber;
                         }
                     } else {
-                        thumbnail.html( copy );
+                        thumbnail.html(copy);
                         alert(_("An error occurred on deleting this image"));
                     }
                 },
                 error => {
-                    thumbnail.html( copy );
+                    thumbnail.html(copy);
                     alert(_("An error occurred on deleting this image"));
                     console.warn("Something wrong happened: %s".format(error));
                 }
@@ -213,9 +210,11 @@
         }
 
         function showCover(img) {
-            $('.thumbnail img').removeClass("selected");
-            $('#largeCoverImg').attr("src","").attr('src', '/cgi-bin/koha/catalogue/image.pl?imagenumber=' + img);
-            $('#thumbnail_' + img).addClass("selected");
+            $(".thumbnail img").removeClass("selected");
+            $("#largeCoverImg")
+                .attr("src", "")
+                .attr("src", "/cgi-bin/koha/catalogue/image.pl?imagenumber=" + img);
+            $("#thumbnail_" + img).addClass("selected");
         }
     </script>
 [% END %]

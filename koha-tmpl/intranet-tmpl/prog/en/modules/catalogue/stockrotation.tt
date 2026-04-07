@@ -196,7 +196,6 @@
         var searchid = "[% searchid | html %]";
         var biblio_id = parseInt('[% biblionumber | html %]', 10);
     </script>
-
     <script nonce="[% Koha.CSPNonce | $raw %]">
         var browser = KOHA.browser(searchid, biblio_id);
         browser.show();

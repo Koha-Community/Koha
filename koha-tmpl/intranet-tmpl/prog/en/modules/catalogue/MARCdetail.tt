@@ -228,11 +228,11 @@
         var browser = KOHA.browser(searchid, biblio_id);
         browser.show();
 
-         $(document).ready(function() {
-            $("#Frameworks").on("change",function(){
+        $(document).ready(function () {
+            $("#Frameworks").on("change", function () {
                 Changefwk(this);
             });
-            if( $("#bibliotabs .tab-pane.active").length < 1 ){
+            if ($("#bibliotabs .tab-pane.active").length < 1) {
                 $("#bibliotabs a:first").tab("show");
             }
         });
