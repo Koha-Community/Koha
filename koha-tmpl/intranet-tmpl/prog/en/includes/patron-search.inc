@@ -236,7 +236,9 @@
             console.log("Wrong call of patron_search_js - missing redirect_url");
         </script>
     [% END %]
-    <script nonce="[% Koha.CSPNonce | $raw %]">
+    <script nonce="[% Koha.CSPNonce | $raw %]" data-tt-allowed="true">
+        var interface = "[% interface | html %]";
+        var theme = "[% theme | html %]";
         var categories = [% To.json(Categories.all.unblessed) | $raw %].map(e => {
             e['_id'] = e.categorycode.toLowerCase();
             e['_str'] = e.description;
@@ -283,14 +285,97 @@
             av_bsort2,
         };
 
-        var empty_table_settings = '[% empty_table_settings | html %]'
-
         [% IF Koha.Preference('ExtendedPatronAttributes') %]
             [% SET extended_attribute_types = ExtendedAttributeTypes.codes( staff_searchable => 1, searched_by_default => 1 ) %]
             [% IF ( extended_attribute_types ) %][% extended_attribute_types = [ extended_attribute_types ]  %][% END %]
             var extended_attribute_types = [% To.json(extended_attribute_types || []) | $raw %];
         [% END %]
 
+        Koha.addPrefs({
+            singleBranchMode: [% Koha.Preference('singleBranchMode') ? 1 : 0 | html %],
+            PatronsPerPage: "[% Koha.Preference('PatronsPerPage') | html %]",
+            ShowPatronFirstnameIfDifferentThanPreferredname: [% Koha.Preference('ShowPatronFirstnameIfDifferentThanPreferredname') ? 1 : 0 | html %],
+        });
+        Koha.addPermissions({
+            CAN_user_borrowers_edit_borrowers: [% CAN_user_borrowers_edit_borrowers ? 1 : 0 | html %],
+            CAN_user_circulate_circulate_remaining_permissions: [% CAN_user_circulate_circulate_remaining_permissions ? 1 : 0 | html %],
+        });
+
+        var logged_in_library_id = "[% Branches.GetLoggedInBranchcode | html %]";
+
+        [% SWITCH filter %]
+        [% CASE 'suggestions_managers' %]
+            var patron_search_url = '/api/v1/suggestions/managers';
+        [% CASE 'baskets_managers' %]
+            var patron_search_url = '/api/v1/acquisitions/baskets/managers';
+        [% CASE 'funds_owners' %]
+            var patron_search_url = '/api/v1/acquisitions/funds/owners';
+        [% CASE 'funds_users' %]
+            var patron_search_url = '/api/v1/acquisitions/funds/users';
+        [% CASE 'erm_users' %]
+            var patron_search_url = '/api/v1/erm/users';
+        [% CASE 'ill_users' %]
+            var patron_search_url = '/api/v1/ill/users';
+        [% CASE %]
+            var patron_search_url = '/api/v1/patrons';
+        [% END %]
+
+
+        if (!Koha.patron_searches) {
+            Koha.patron_searches = {};
+        }
+        var table_id = "[% table_id | html %]";
+        var has_patron_search_filters_block = [% has_patron_search_filters_block ? 1 : 0 | html %];
+        var redirect_if_one_result = [% redirect_if_one_result ? 1 : 0 | html %];
+        var redirect_url = "[% redirect_url | url %]";
+        var redirect_if_attribute_equal = [% redirect_if_attribute_equal ? 1 : 0 | html %];
+        var open_on_row_click = [% open_on_row_click ? 1 : 0 | html %];
+        var on_click_url = "[% on_click_url | url %]";
+        var columns = [% To.json(columns) || [] | $raw %];
+        var preview_on_name_click = [% preview_on_name_click ? 1 : 0 | html %];
+        var actions = [% To.json(actions) || [] | $raw %];
+        var callback = "[% callback | html %]";
+        var display_search_description = [% display_search_description ? 1 : 0 | html %];
+        var adjust_history = [% adjust_history ? 1 : 0 | html %];
+        var defer_loading = Number( '[% defer_loading | html %]' || 1 );
+        var empty_table_settings = '[% empty_table_settings | html %]'
+
+        var search_results_block_id = "[% search_results_block_id | html %]";
+        var searchtype = "[% searchtype | html %]";
+        var sticky_header = "[% sticky_header | html %]";
+        var remember_selections = [% remember_selections ? 1 : 0 | html %];
+
+        var default_sort_column = "[% default_sort_column || 'name' | html %]";
+        var embed = ['extended_attributes', 'library'];
+
+        Koha.patron_searches[table_id] = {
+            has_patron_search_filters_block,
+            redirect_if_one_result,
+            redirect_url,
+            redirect_if_attribute_equal,
+            open_on_row_click,
+            on_click_url,
+            columns,
+            preview_on_name_click,
+            actions,
+            callback,
+            display_search_description,
+            adjust_history,
+            defer_loading,
+            empty_table_settings,
+            search_results_block_id,
+            searchtype,
+            remember_selections,
+            sticky_header,
+            default_sort_column,
+            embed,
+        };
+
+    </script>
+    [% INCLUDE 'datatables.inc' %]
+    [% INCLUDE 'js-patron-get-age.inc' %]
+    [% INCLUDE 'js-patron-format-address.inc' %]
+    <script nonce="[% Koha.CSPNonce | $raw %]">
         $(document).on("shown.bs.modal", function(){
             $('select[name="sort1_filter"]').select2({allowClear:true,dropdownParent:$('#patron_search_modal')});
             $('select[name="sort2_filter"]').select2({allowClear:true,dropdownParent:$('#patron_search_modal')});
@@ -301,51 +386,49 @@
                 }
             });
         });
-    </script>
-    [% INCLUDE 'datatables.inc' %]
-    [% INCLUDE 'js-patron-get-age.inc' %]
-    [% INCLUDE 'js-patron-format-address.inc' %]
-    <script nonce="[% Koha.CSPNonce | $raw %]">
+
         {
+            const current_table_id = table_id;
+            const {has_patron_search_filters_block,
+            redirect_if_one_result,
+            redirect_url,
+            redirect_if_attribute_equal,
+            open_on_row_click,
+            on_click_url,
+            columns,
+            preview_on_name_click,
+            actions,
+            callback,
+            display_search_description,
+            adjust_history,
+            defer_loading,
+            empty_table_settings,
+            search_results_block_id,
+            searchtype,
+            remember_selections,
+            sticky_header,
+            default_sort_column,
+            embed} = Koha.patron_searches[current_table_id];
 
             function get_patron_search_form(){
-                let parent_block = $("#[% search_results_block_id | html %]");
+                let parent_block = $(`#${search_results_block_id}`);
                 let patron_search_form = parent_block.parent().find(".patron_search_form");
                 if ( !patron_search_form.length ) patron_search_form = $(".patron_search_form");
                 return patron_search_form;
             }
             let first_draw = 0;
             let patrons_table;
-            let singleBranchMode = '[% singleBranchMode | html %]';
-            let logged_in_library_id = "[% Branches.GetLoggedInBranchcode | html %]";
-            let defer_loading = Number( '[% defer_loading | html %]' || 1 );
-            [% IF adjust_history %]
+            let singleBranchMode = Koha.prefs.singleBranchMode;
+            if (adjust_history){
                 /* popstate event triggered by forward and back button. Need to refresh search */
                 window.addEventListener('popstate', (event) => {
                     getSearchByLocation( false );
                 });
-            [% END %]
-
-            [% SWITCH filter %]
-            [% CASE 'suggestions_managers' %]
-                let patron_search_url = '/api/v1/suggestions/managers';
-            [% CASE 'baskets_managers' %]
-                let patron_search_url = '/api/v1/acquisitions/baskets/managers';
-            [% CASE 'funds_owners' %]
-                let patron_search_url = '/api/v1/acquisitions/funds/owners';
-            [% CASE 'funds_users' %]
-                let patron_search_url = '/api/v1/acquisitions/funds/users';
-            [% CASE 'erm_users' %]
-                let patron_search_url = '/api/v1/erm/users';
-            [% CASE 'ill_users' %]
-                let patron_search_url = '/api/v1/ill/users';
-            [% CASE %]
-                let patron_search_url = '/api/v1/patrons';
-            [% END %]
+            }
 
             $(document).ready(function(){
 
-                let parent_block = $("#[% search_results_block_id | html %]");
+                let parent_block = $(`#${search_results_block_id}`);
                 let patron_search_form = get_patron_search_form();
 
                 parent_block.find(".info").hide();
@@ -353,7 +436,7 @@
 
                 // Build the aLengthMenu
                 let aLengthMenu = [
-                    ...new Set([[% Koha.Preference('PatronsPerPage') | html %], 10, 20, 50, 100, -1])
+                    ...new Set([Koha.prefs.PatronsPerPage, 10, 20, 50, 100, -1])
                 ];
                 aLengthMenu.sort(function( a, b ){
                     // Put "All" at the end
@@ -413,7 +496,7 @@
                     }
                 };
                 let external_filter_nodes = {};
-                [% IF has_patron_search_filters_block %]
+                if (has_patron_search_filters_block){
                     external_filter_nodes = {
                         search_patron_filter: '.search_patron_filter',
                         firstletter_filter: '.firstletter_filter',
@@ -422,13 +505,13 @@
                         categorycode_filter: '.categorycode_filter',
                         branchcode_filter: '.branchcode_filter'
                     };
-                [% END %]
+                }
 
                 let additional_search_descriptions = {};
-                [% IF display_search_description %]
+                if (display_search_description){
                     additional_search_descriptions = {
                         main: function(){
-                            let parent_block = $("#[% search_results_block_id | html %]");
+                            let parent_block = $(`#${search_results_block_id}`);
                             let patron_search_form = get_patron_search_form();
                             let searched = "";
                             let pattern = patron_search_form.find(".search_patron_filter").val();
@@ -462,98 +545,56 @@
                             return searched;
                         },
                         surname: function(){
-                            let parent_block = $("#[% search_results_block_id | html %]");
+                            let parent_block = $(`#${search_results_block_id}`);
                             let start_with = parent_block.find(".firstletter_filter").val()
                             if (!start_with) return "";
                             return _("Surname begins with '%s'".format(start_with));
                         },
                     };
-                [% END %]
+                }
 
-                [% UNLESS default_sort_column %]
-                    [% default_sort_column = "name" %]
-                [% END %]
-                [% SET order_column_index = 0 %]
-                [% SET embed = ['extended_attributes','library'] %]
-                let table_node = $("#[% table_id | html %]");
-                patrons_table = table_node.kohaTable({
-                    ajax: {
-                        url: patron_search_url,
-                        dataSrc: function ( json ) {
-                            [% IF redirect_if_one_result %]
-                                // redirect if there is only 1 result.
-                                // Do not redirect if state has been loaded
-                                let loaded_from_state = table_node.data('loaded_from_state');
-                                if ( !loaded_from_state && first_draw && json.recordsFiltered == 1 ) {
-                                    let url = '[% redirect_url | url %]'.indexOf("?") != -1
-                                        ? '[% redirect_url | url %]&borrowernumber=' + json.data[0].patron_id
-                                        : '[% redirect_url | url %]?borrowernumber=' + json.data[0].patron_id;
-                                    document.location.href = url;
-                                    return false;
-                                }
-                                first_draw = 0;
-                            [% END %]
-                            return json.data;
-                        }
-                    },
-                    [% IF open_on_row_click OR preview_on_name_click OR remember_selections %]
-                    drawCallback: function( settings ) {
-                        var api = this.api();
-                        var data = api.data();
-                        if ( data.length == 0 ) return;
-
-                        [% IF open_on_row_click %]
-                        $.each($(this).find("tbody tr"), function(index, tr) {
-                            let url = "[% on_click_url | url %]&borrowernumber=" + data[index].patron_id;
-                            $(tr).off('click').on('click', function() {
-                                document.location.href = url;
-                            }).addClass('clickable');
-                            $(tr).find("a.patron_name").attr('href', url);
-                        });
-                        [% END %]
-                        [% IF preview_on_name_click %]
-                        $.each($(this).find("tbody tr"), function(index, tr) {
-                            $(tr).find("a.patron_name").addClass("patron_preview");
-                        });
-                        [% END %]
-                        [% IF remember_selections %]
-                            prepSelections();
-                        [% END %]
-                    },
-                    [% END %]
-                    deferLoading: defer_loading,
-                    columns: [
-                        [% FOR column IN columns %]
-                            [% IF default_sort_column == column %]
-                                [% order_column_index = loop.count - 1%]
-                            [% END %]
-                            [% SWITCH column %]
-                                [% CASE 'checkbox' %]
-                                {
+                let dt_columns = [];
+                var order_column_index = 0;
+                columns.forEach((column, i) => {
+                    if (default_sort_column == column){
+                        order_column_index = i - 1;
+                    }
+                    switch (column){
+                        case 'checkbox':
+                            dt_columns.push({
                                     data: "patron_id",
                                     searchable: false,
                                     orderable: false,
                                     render: function( data, type, row, meta ) {
                                         return "<label for='check" + data + "' class='content_hidden'>" + _("Select patron") + "</label><input type='checkbox' class='check" + data + " selection' name='borrowernumber' value='" + data + "' />";
                                     }
-                                }
-                                [% CASE 'cardnumber' %]
-                                {
+                                });
+                                break;
+                        case 'cardnumber':
+                            dt_columns.push({
                                     data: "cardnumber",
                                     searchable: true,
                                     orderable: true,
                                     render: function( data, type, row, meta ) {
                                         let patron_id = encodeURIComponent(row.patron_id);
-                                        [% IF !open_on_row_click AND CAN_user_circulate_circulate_remaining_permissions %]
-                                            return "<a href=\"/cgi-bin/koha/circ/circulation.pl?borrowernumber=" + patron_id + "\" title=\"[% I18N.t("Check out") | html %]\" class=\"patron_name\" data-borrowernumber=\"" + patron_id + "\" style=\"white-space:nowrap\">" + escape_str(data) + "</a>";
-                                        [% ELSE %]
+                                        if (!open_on_row_click && Koha.permissions.CAN_user_circulate_circulate_remaining_permissions){
+                                            const a = document.createElement("a");
+                                            a.href = "/cgi-bin/koha/circ/circulation.pl?borrowernumber=" + patron_id;
+                                            a.title = _("Check out");
+                                            a.className = "patron_name";
+                                            a.dataset.borrowernumber = patron_id;
+                                            a.style.whiteSpace = "nowrap";
+                                            a.textContent = escape_str(data);
+                                            return a.outerHTML;
+                                        } else {
                                             return escape_str(data);
-                                        [% END %]
+                                        }
                                     }
 
-                                }
-                                [% CASE 'dateofbirth' %]
-                                {
+                                });
+                            return
+                        case 'dateofbirth':
+                                dt_columns.push({
                                     data: "date_of_birth",
                                     type:  "date",
                                     searchable: true,
@@ -561,9 +602,10 @@
                                     render: function( data, type, row, meta ) {
                                         return data ? "<span class=\"dateofbirth\">" + escape_str($date(data)) + "<span class=\"agehint\"> (" + _("%s years").format($get_age(data)) + ")</span></span>" : "";
                                     }
-                                }
-                                [% CASE 'address' %]
-                                {
+                                });
+                                break;
+                        case 'address':
+                                dt_columns.push({
                                     data: "me.street_number:me.address:me.address2:me.city:me.state:me.postal_code:me.country",
                                     searchable: true,
                                     orderable: true,
@@ -573,9 +615,10 @@
                                         r += '</div></ul>';
                                         return r;
                                     }
-                                }
-                                [% CASE 'address-library' %]
-                                {
+                                });
+                                break;
+                        case 'address-library':
+                                dt_columns.push({
                                     data: "me.street_number:me.address:me.address2:me.city:me.state:me.postal_code:me.country",
                                     searchable: true,
                                     orderable: true,
@@ -586,21 +629,23 @@
                                         r += " " + escape_str(libraries_map[row.library_id].branchname);
                                         return r;
                                     }
-                                }
-                                [% CASE 'name-address' %]
-                                {
+                                });
+                                break;
+
+                        case 'name-address':
+                                dt_columns.push({
                                     data: "me.surname:me.preferred_name:me.firstname:me.middle_name:me.othernames:me.street_number:me.address:me.address2:me.city:me.state:me.postal_code:me.country",
                                     searchable: true,
                                     orderable: true,
                                     render: function( data, type, row, meta ) {
                                         let patron_id = encodeURIComponent(row.patron_id);
                                         let r = '';
-                                        [% IF ! open_on_row_click %]
+                                        if (! open_on_row_click ){
                                         r += "<a href=\"/cgi-bin/koha/members/moremember.pl?borrowernumber=" + patron_id + "\" class=\"patron_name\" data-borrowernumber=\"" + patron_id + "\" style=\"white-space:nowrap\">"
-                                            + $patron_to_html(row, { invert_name: 1, showDiffFirstname: [% Koha.Preference('ShowPatronFirstnameIfDifferentThanPreferredname') ? 1 : 0 | html %] }) + "</a>";
-                                        [% ELSE %]
-                                        r += $patron_to_html(row, { invert_name: 1, showDiffFirstname: [% Koha.Preference('ShowPatronFirstnameIfDifferentThanPreferredname') ? 1 : 0 | html %] });
-                                        [% END %]
+                                            + $patron_to_html(row, { invert_name: 1, showDiffFirstname: Koha.prefs.ShowPatronFirstnameIfDifferentThanPreferredname }) + "</a>";
+                                        } else {
+                                        r += $patron_to_html(row, { invert_name: 1, showDiffFirstname: Koha.prefs.ShowPatronFirstnameIfDifferentThanPreferredname });
+                                        }
                                         r += '<br/>';
                                         r += '<div class="address"><ul>';
                                         r += $format_address(row, { no_line_break: true, include_li: true });
@@ -612,23 +657,25 @@
 
                                         return r;
                                     }
-                                }
-                                [% CASE 'name' %]
-                                {
+                                });
+                                break;
+                        case 'name':
+                                dt_columns.push({
                                     data: "me.surname:me.preferred_name:me.firstname:me.middle_name:me.othernames",
                                     searchable: true,
                                     orderable: true,
                                     render: function( data, type, row, meta ) {
                                         let patron_id = encodeURIComponent(row.patron_id);
-                                        [% IF ! open_on_row_click %]
+                                        if (! open_on_row_click){
                                         return "<a href=\"/cgi-bin/koha/members/moremember.pl?borrowernumber=" + patron_id + "\" class=\"patron_name\" data-borrowernumber=\"" + patron_id + "\" style=\"white-space:nowrap\">" + $patron_to_html(row, { invert_name: 1 }) + "</a>";
-                                        [% ELSE %]
+                                        } else {
                                         return $patron_to_html(row, { invert_name: 1 });
-                                        [% END %]
+                                        }
                                     }
-                                }
-                                [% CASE 'branch' %]
-                                {
+                                });
+                                break;
+                        case 'branch':
+                                dt_columns.push({
                                     name: "library",
                                     data: "library.name:me.library_id",
                                     dataFilter: "libraries",
@@ -641,9 +688,10 @@
                                             return escape_str(row.library.name);
                                         }
                                     }
-                                }
-                                [% CASE 'category' %]
-                                {
+                                });
+                                break;
+                        case 'category':
+                                dt_columns.push({
                                     name: "category",
                                     data: "category_id",
                                     dataFilter: "categories",
@@ -652,9 +700,10 @@
                                     render: function( data, type, row, meta ) {
                                         return escape_str(categories_map[data.toLowerCase()].description);
                                     }
-                                }
-                                [% CASE 'dateexpiry' %]
-                                {
+                                });
+                                break;
+                        case 'dateexpiry':
+                                dt_columns.push({
                                     data: "expiry_date",
                                     type:  "date",
                                     searchable: true,
@@ -662,25 +711,30 @@
                                     render: function( data, type, row, meta ) {
                                         return "<span class=\"dateexpiry" + (new Date(data) < new Date() ? ' expired' : '') + "\">" + (data ? escape_str($date(data)) : '') + "</span>";
                                     }
-                                }
-                                [% CASE 'borrowernotes' %]
-                                {
+                                });
+                                break;
+                        case 'borrowernotes':
+                                dt_columns.push({
                                     data: "staff_notes",
                                     searchable: true,
                                     orderable: true,
-                                    [%# We don't escape here, we allow html tag in staff notes %]
-                                }
-                                [% CASE 'phone' %]
-                                {
+                                    /* We don't escape here, we allow html tag in staff notes */
+                                });
+                                break;
+                        case 'phone':
+                                dt_columns.push({
                                     data: "phone",
                                     searchable: true,
                                     orderable: true,
                                     render: function( data, type, row, meta ) {
                                         return escape_str(data);
                                     }
-                                }
-                                [% CASE 'checkouts' %][% embed.push('checkouts+count', 'overdues+count') %]
-                                {
+                                });
+                                break;
+
+                        case 'checkouts':
+                            embed.push('checkouts+count', 'overdues+count');
+                                dt_columns.push({
                                     data: "",
                                     searchable: false,
                                     orderable: false,
@@ -691,9 +745,11 @@
                                             return "0 / " + row.checkouts_count;
                                         }
                                     }
-                                }
-                                [% CASE 'account_balance' %][% embed.push('account_balance') %]
-                                {
+                                });
+                                break;
+                        case 'account_balance':
+                            embed.push('account_balance');
+                            dt_columns.push({
                                     data: "",
                                     searchable: false,
                                     orderable: false,
@@ -712,15 +768,14 @@
                                         r += "</a></span>";
                                         return r;
                                     }
-                                }
+                                });
+                                break;
 
-
-                                [% CASE 'sort1' %]
-                                {
+                        case 'sort1':
+                                dt_columns.push({
                                     data: "statistics_1",
-                                    [% IF av_bsort1.size %]
-                                        dataFilter: "av_bsort1",
-                                    [% END %]
+                                    ...(av_bsort1.length?
+                                        {dataFilter: "av_bsort1"}: {}),
                                     searchable: true,
                                     orderable: true,
                                     render: function( data, type, row, meta ) {
@@ -728,14 +783,14 @@
                                         let bsort1 = av_bsort1_map[data.toString()];
                                         return escape_str(bsort1 ? bsort1.lib : data);
                                     }
-                                }
+                                });
+                                break;
 
-                                [% CASE 'sort2' %]
-                                {
+                        case 'sort2':
+                                dt_columns.push({
                                     data: "statistics_2",
-                                    [% IF av_bsort2.size %]
-                                        dataFilter: "av_bsort2",
-                                    [% END %]
+                                    ...(av_bsort2.length?
+                                        {dataFilter: "av_bsort2"}: {}),
                                     searchable: true,
                                     orderable: true,
                                     render: function( data, type, row, meta ) {
@@ -743,31 +798,34 @@
                                         let bsort2 = av_bsort2_map[data.toString()];
                                         return escape_str(bsort2 ? bsort2.lib : data);
                                     }
-                                }
-
-
-                                [% CASE 'action' %]
-                                {
+                                });
+                                break;
+                        case 'action':
+                                dt_columns.push({
                                     data: function( row, type, val, meta ) {
 
                                         let patron_id = encodeURIComponent(row.patron_id);
                                         let action_node = "";
-                                        [% FOR action IN actions %]
-                                        [% SWITCH action %]
-                                        [% CASE 'select' %]
-                                            action_node += '<a href="#" class="btn btn-default btn-xs select_user" data-borrowernumber="' + patron_id + '">' + _("Select") + '</a>';
-                                        [% CASE 'add' %]
-                                            action_node += '<a href="#" class="btn btn-default btn-xs add_user" data-borrowernumber="' + patron_id + '">' + _("Add") + '</a>';
-                                        [% CASE 'edit' %]
-                                            [% IF CAN_user_borrowers_edit_borrowers %]
-                                                action_node += '<a href="/cgi-bin/koha/members/memberentry.pl?op=edit_form&amp;destination=circ&amp;borrowernumber=' + patron_id + '" class="btn btn-default btn-xs"><i class="fa-solid fa-pencil" aria-hidden="true"></i> ' + _("Edit") + '</a>';
-                                            [% END %]
-                                        [% CASE 'checkout' %]
-                                            [% IF CAN_user_circulate_circulate_remaining_permissions %]
-                                                action_node += '<a class="btn btn-default btn-xs" href="/cgi-bin/koha/circ/circulation.pl?borrowernumber=' + patron_id + '"><i class="fa fa-barcode"></i> ' + _("Check out") + '</a>';
-                                            [% END %]
-                                        [% END %]
-                                        [% END %]
+                                        actions.forEach(action => {
+                                            switch(action){
+                                                case "select":
+                                                    action_node += '<a href="#" class="btn btn-default btn-xs select_user" data-borrowernumber="' + patron_id + '">' + _("Select") + '</a>';
+                                                    break;
+                                                case 'add':
+                                                    action_node += '<a href="#" class="btn btn-default btn-xs add_user" data-borrowernumber="' + patron_id + '">' + _("Add") + '</a>';
+                                                    break;
+                                                case 'edit':
+                                                    if (Koha.permissions.CAN_user_borrowers_edit_borrowers){
+                                                        action_node += '<a href="/cgi-bin/koha/members/memberentry.pl?op=edit_form&amp;destination=circ&amp;borrowernumber=' + patron_id + '" class="btn btn-default btn-xs"><i class="fa-solid fa-pencil" aria-hidden="true"></i> ' + _("Edit") + '</a>';
+                                                    }
+                                                    break;
+                                                case 'checkout':
+                                                    if (Koha.permissions.CAN_user_circulate_circulate_remaining_permissions){
+                                                        action_node += '<a class="btn btn-default btn-xs" href="/cgi-bin/koha/circ/circulation.pl?borrowernumber=' + patron_id + '"><i class="fa fa-barcode"></i> ' + _("Check out") + '</a>';
+                                                    }
+                                                    break;
+                                            }
+                                        });
 
                                         let patron_str = JSON.stringify(row);
                                         let input_node = $('<input type="hidden" name="borrower_data'+ patron_id + '"/>');
@@ -778,22 +836,69 @@
                                     },
                                     searchable: false,
                                     orderable: false
+                                });
+                                break;
                                 }
-                            [% END %]
-                            [% UNLESS loop.last %],[% END %]
-                        [% END %]
-                    ],
-                    embed: [% To.json(embed) | $raw %],
-                    order: [[ [% order_column_index | html %], "asc" ]],
+                                });
+
+                let table_node = $(`#${current_table_id}`);
+                patrons_table = table_node.kohaTable({
+                    ajax: {
+                        url: patron_search_url,
+                        dataSrc: function ( json ) {
+                            if (redirect_if_one_result){
+                                // redirect if there is only 1 result.
+                                // Do not redirect if state has been loaded
+                                let loaded_from_state = table_node.data('loaded_from_state');
+                                if ( !loaded_from_state && first_draw && json.recordsFiltered == 1 ) {
+                                    let url = redirect_url.indexOf("?") != -1
+                                        ? redirect_url + '&borrowernumber=' + json.data[0].patron_id
+                                        : redirect_url + '?borrowernumber=' + json.data[0].patron_id;
+                                    document.location.href = url;
+                                    return false;
+                                }
+                                first_draw = 0;
+                            }
+                            return json.data;
+                        }
+                    },
+                    ...(open_on_row_click || preview_on_name_click || remember_selections ?
+                    {
+                    drawCallback: function( settings ) {
+                        var api = this.api();
+                        var data = api.data();
+                        if ( data.length == 0 ) return;
+
+                        if (open_on_row_click){
+                        $.each($(this).find("tbody tr"), function(index, tr) {
+                            let url = on_click_url + "&borrowernumber=" + data[index].patron_id;
+                            $(tr).off('click').on('click', function() {
+                                document.location.href = url;
+                            }).addClass('clickable');
+                            $(tr).find("a.patron_name").attr('href', url);
+                        });
+                        }
+                        if (preview_on_name_click){
+                        $.each($(this).find("tbody tr"), function(index, tr) {
+                            $(tr).find("a.patron_name").addClass("patron_preview");
+                        });
+                        }
+                        if (remember_selections){
+                            prepSelections();
+                        }
+                    }}: {}),
+                    deferLoading: defer_loading,
+                    columns: dt_columns,
+                    embed,
+                    order: [[ order_column_index, "asc" ]],
                     autoWidth: false,
                     lengthMenu: [aLengthMenu, aLengthMenuLabel],
                     pagingType: 'full_numbers',
-                    pageLength: [% Koha.Preference('PatronsPerPage') | html %],
-                    [% IF sticky_header %]
-                        initComplete: function(settings, json) {
-                            $("#[% sticky_header | html %]").show();
-                        },
-                    [% END %]
+                    pageLength: Koha.prefs.PatronsPerPage,
+                    ...(sticky_header ?
+                        {initComplete: function(settings, json) {
+                            $(`#${sticky_header}`).show();
+                        }}:{}),
                     fixedHeader: false,
                 }, typeof table_settings !== 'undefined' && !empty_table_settings ? table_settings : null, 1, additional_filters, filters_options, external_filter_nodes, parent_block.find(".search_description"), additional_search_descriptions );
 
@@ -837,7 +942,7 @@
                 });
 
                 $("#patronPreview").on('hidden.bs.modal', function (e) {
-                    $("#patronPreview .modal-body").html("<img src=\"[% interface | html %]/[% theme | html %]/img/spinner-small.gif\" alt=\"\" /> Loading");
+                    $("#patronPreview .modal-body").html(`<img src="${interface}/${theme}/img/spinner-small.gif" alt="" /> ${_("Loading")}`);
                 });
 
                 patron_search_form.find(".clear_search").on("click",function(e){
@@ -850,13 +955,13 @@
                     patron_search_form.submit();
                 }
 
-                [% IF adjust_history %]
+                if (adjust_history){
                     /* Initial page load does not trigger the popstate event, so we explicitly call this */
                     getSearchByLocation( false );
-                [% END %]
+                }
             });
 
-            [% IF adjust_history %]
+            if (adjust_history){
                 function getSearchByLocation( setstate ){
                     /* Check to see if the URL contains a search parameter */
                     if( location.search != ""){
@@ -869,19 +974,19 @@
                         }
                     }
                 }
-            [% END %]
+            }
 
             function update_search_type(){
                 $("#searchtype").val($("#searchtype_filter").val());
             }
 
             function filter() {
-                let parent_block = $("#[% search_results_block_id | html %]");
+                let parent_block = $(`#${search_results_block_id}`);
                 let patron_search_form = get_patron_search_form();
                 // Empty header filters. Do not need to deal with selects.
-                let table_node = $("#[% table_id | html %]");
+                let table_node = $(`#${current_table_id}`);
                 table_node.find('thead tr:eq(1) th input').val("");
-                [% IF redirect_if_attribute_equal %]
+                if (redirect_if_attribute_equal){
                     let filter = patron_search_form.find(".search_patron_filter").val();
                     if ( filter ) {
                         $.ajax({
@@ -890,9 +995,9 @@
                             url: patron_search_url,
                             success: function(data) {
                                 if ( data.length == 1 ) {
-                                    let url = '[% redirect_url | url %]'.indexOf("?") != -1
-                                        ? '[% redirect_url | url %]&borrowernumber=' + data[0].patron_id
-                                        : '[% redirect_url | url %]?borrowernumber=' + data[0].patron_id;
+                                    let url = redirect_url.indexOf("?") != -1
+                                        ? redirect_url + '&borrowernumber=' + data[0].patron_id
+                                        : redirect_url + '?borrowernumber=' + data[0].patron_id;
                                     document.location.href = url;
                                     return false;
                                 }
@@ -902,30 +1007,32 @@
                             }
                         });
                     }
-                [% END %]
+                }
                 parent_block.find(".firstletter_filter").val('');
-                $("#[% table_id | html %]_search_results").show();
+                $(`#${current_table_id}_search_results`).show();
 
                 let table_dt = patrons_table.DataTable();
                 let loaded_from_state = patrons_table.data('loaded_from_state');
                 if ( !loaded_from_state ) {
                     table_dt.search("").columns().search("");
-                    [% FOR c IN columns %]
-                        [% SWITCH c %]
-                        [% CASE 'branch' %]
+                    columns.forEach(c => {
+                        switch(c){
+                        case 'branch':
                             let library_id = patron_search_form.find(".branchcode_filter").val() || "";
                             let library_column = table_dt.column('library:name');
                             let library_visible_index = library_column.index("visible");
                             patrons_table.find(`thead tr:eq(1) th:eq(${library_visible_index}) select`).val('^' + library_id + '$');
                             library_column.search(library_id ? '^'+library_id+'$' : '');
-                        [% CASE 'category' %]
+                            break;
+                        case 'category':
                             let category_id = patron_search_form.find(".categorycode_filter").val() || "";
                             let category_column = table_dt.column('category:name');
                             let category_visible_index = category_column.index("visible");
                             patrons_table.find(`thead tr:eq(1) th:eq(${category_visible_index}) select`).val('^' + category_id.toLowerCase() + '$');
                             category_column.search(category_id ? '^'+category_id+'$' : '');
-                        [% END %]
-                    [% END %]
+                            break;
+                        }
+                    });
                 }
                 patrons_table.data('loaded_from_state', false);
                 first_draw = 1; // Only redirect if we are coming from here
@@ -937,10 +1044,10 @@
             }
 
             function clearFilters() {
-                let parent_block = $("#[% search_results_block_id | html %]");
+                let parent_block = $(`#${search_results_block_id}`);
                 let patron_search_form = get_patron_search_form();
                 patron_search_form.find(".searchfieldstype_filter option:first").prop("selected", true);
-                patron_search_form.find(".searchtype_filter option[value='[% searchtype | html %]']").prop("selected", true);
+                patron_search_form.find(".searchtype_filter option[value='" + searchtype + "']").prop("selected", true);
                 patron_search_form.find(".categorycode_filter option:first").prop("selected", true);
                 patron_search_form.find(".branchcode_filter option:first").prop("selected", true);
                 patron_search_form.find("select[name='sort1_filter']").val('').trigger("change");
@@ -948,34 +1055,34 @@
                 patron_search_form.find(".search_patron_filter_btn").prop({disabled: false});
                 parent_block.find(".firstletter_filter").val('');
                 patron_search_form.find(".search_patron_filter").val('');
-                [% IF adjust_history %]
+                if (adjust_history){
                     /* remove any search string added by firstletter search */
                     history.pushState( {}, null, window.location.href.split("?" )[0]);
-                [% END %]
-                $("#[% table_id | html %]_search_results").hide();
+                }
+                $(`#${current_table_id}_search_results`).hide();
                 parent_block.find(".search_description").hide();
             }
 
             // User has clicked on a letter
             function filterByFirstLetterSurname(letter, setstate ) {
-                let parent_block = $("#[% search_results_block_id | html %]");
+                let parent_block = $(`#${search_results_block_id}`);
                 parent_block.find(".firstletter_filter").val(letter);
 
-                $("#[% table_id | html %]_search_results").show();
+                $(`#${current_table_id}_search_results`).show();
 
-                [% IF adjust_history %]
+                if (adjust_history){
                     if ( setstate ) {
                         history.pushState( null, null, "?firstletter=" + letter );
                     }
-                [% END %]
+                }
 
                 patrons_table.DataTable().draw();
             }
 
             // modify parent window owner element
             function modal_add_user(borrowernumber, borrowername) {
-                [%# Note that add_user could sent data instead of borrowername too %]
-                let parent_block = $("#[% search_results_block_id | html %]");
+                // Note that add_user could sent data instead of borrowername too
+                let parent_block = $(`#${search_results_block_id}`);
                 parent_block.find(".info").hide();
                 parent_block.find(".error").hide();
                 if ( add_user(borrowernumber, borrowername) < 0 ) {
@@ -988,11 +1095,11 @@
                 if ( document.getElementById("selected_patron_id") ) {
                     document.getElementById("selected_patron_id").value = borrowernumber;
                 } else {
-                    [% IF callback %]
-                        [% callback | html %](borrowernumber, data);
-                    [% ELSE %]
+                    if (callback){
+                        callback(borrowernumber, data);
+                    } else {
                         select_user(borrowernumber, data);
-                    [% END %]
+                    }
                 }
             }
         }
@@ -1043,7 +1150,7 @@
     <div id="patron_preview_modal" class="basicModal"></div>
     <script nonce="[% Koha.CSPNonce | $raw %]">
         $(document).ready(function() {
-            let parent_block = $("#[% search_results_block_id | html %]");
+            let parent_block = $(`#${search_results_block_id}`);
             parent_block.find(".select_all").on("click",function(e){
                 e.preventDefault();
                 parent_block.find(".selection").prop("checked", true).change();
