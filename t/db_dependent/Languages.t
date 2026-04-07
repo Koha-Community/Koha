@@ -7,13 +7,14 @@ use Modern::Perl;
 
 use Encode;
 use Test::NoWarnings;
-use Test::More tests => 23;
+use Test::More tests => 24;
 use Test::Deep;
 use Test::Exception;
 use List::Util qw(first);
 use Data::Dumper;
 use Test::Warn;
 use t::lib::Mocks;
+use Koha::Cache::Memory::Lite;
 use Koha::Database;
 
 BEGIN {
@@ -125,6 +126,24 @@ foreach my $pair (@$DistinctLangRfc4646) {
     $i++ if $pair->{rfc4646_subtag} eq C4::Languages::get_rfc4646_from_iso639( $pair->{iso639_2_code} );
 }
 is( $i, scalar(@$DistinctLangRfc4646), "get_rfc4646_from_iso639 returns correct rfc for all iso values." );
+
+subtest 'get_rfc4646_from_iso639() caching tests' => sub {
+    plan tests => 3;
+
+    Koha::Cache::Memory::Lite->get_instance->flush;
+
+    my $first_pair = $DistinctLangRfc4646->[0];
+    my $iso_code   = $first_pair->{iso639_2_code};
+    my $expected   = $first_pair->{rfc4646_subtag};
+
+    my $first_call = C4::Languages::get_rfc4646_from_iso639($iso_code);
+    is( $first_call, $expected, "First call returns correct subtag" );
+
+    my $second_call = C4::Languages::get_rfc4646_from_iso639($iso_code);
+    is( $second_call, $expected, "Second call (cached) returns the same correct subtag" );
+
+    ok( !ref($second_call), "Cached return value is a plain string, not an object" );
+};
 
 $schema->storage->txn_rollback;
 subtest 'getLanguages()' => sub {
