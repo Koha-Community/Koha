@@ -1800,7 +1800,7 @@ DROP TABLE IF EXISTS `categories`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `categories` (
-  `categorycode` varchar(10) NOT NULL DEFAULT '' COMMENT 'unique primary key used to idenfity the patron category',
+  `categorycode` varchar(10) NOT NULL DEFAULT '' COMMENT 'unique primary key used to identify the patron category',
   `description` longtext DEFAULT NULL COMMENT 'description of the patron category',
   `enrolmentperiod` smallint(6) DEFAULT NULL COMMENT 'number of months the patron is enrolled for (will be NULL if enrolmentperioddate is set)',
   `enrolmentperioddate` date DEFAULT NULL COMMENT 'date the patron is enrolled until (will be NULL if enrolmentperiod is set)',
