@@ -3504,17 +3504,13 @@ sub CanBookBeRenewed {
 
         # If its cron, tell it it's too soon for a an auto renewal
         return ( 0, $auto_renew, { soonest_renew_date => $soonest } ) if $cron;
-
-        # Check if it's too soon for a manual renewal
-        my $soonestManual = GetSoonestRenewDate( $patron, $issue );
-        if ( $soonestManual > dt_from_string() ) {
-            return ( 0, "too_soon", { soonest_renew_date => $soonestManual } ) unless $override_limit;
-        }
     }
 
-    $soonest = GetSoonestRenewDate( $patron, $issue );
-    if ( $soonest > dt_from_string() ) {
-        return ( 0, "too_soon", { soonest_renew_date => $soonest } ) unless $override_limit;
+    unless ($cron) {
+        $soonest = GetSoonestRenewDate( $patron, $issue );
+        if ( $soonest > dt_from_string() ) {
+            return ( 0, "too_soon", { soonest_renew_date => $soonest } ) unless $override_limit;
+        }
     }
 
     my $auto_renew_code =
