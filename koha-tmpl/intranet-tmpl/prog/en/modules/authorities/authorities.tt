@@ -16,13 +16,43 @@
 >
 [% INCLUDE 'doc-head-close.inc' %]
 [% INCLUDE 'select2.inc' %]
-<script nonce="[% Koha.CSPNonce | $raw %]">
-    [% IF Koha.Preference('CreateAVFromCataloguing') && CAN_user_parameters_manage_auth_values %]
-        var auth_values_creation = 1;
-    [% ELSE %]
-        var auth_values_creation = 0;
-    [% END %]
+<script nonce="[% Koha.CSPNonce | $raw %]" data-tt-allowed="true">
+    var auth_values_creation = [% IF Koha.Preference('CreateAVFromCataloguing') && CAN_user_parameters_manage_auth_values %]1[% ELSE %]0[% END %];
+    var authid = "[% authid | html %]";
+    var index = "[% index | html %]";
     $.fn.select2.defaults.set("width", "100%" );
+
+    var mandatory_fields = [];
+    var mandatory_subfields = [];
+    var z3950_mandatory_subfields = [];
+    [% FOREACH BIG_LOO IN BIG_LOOP ~%]
+        [% FOREACH innerloo IN BIG_LOO.innerloop ~%]
+            [% IF innerloo.mandatory ~%]
+                mandatory_fields.push({
+                    tag: "[% innerloo.tag | html %]",
+                    id: "[% innerloo.index | html %][% innerloo.random | html %]",
+                    index: "[% innerloo.index | html %]",
+                    tab: "[% BIG_LOO.number | html %]",
+                });
+            [% END ~%]
+            [% FOREACH subfield_loo IN innerloo.subfield_loop ~%]
+                [% IF subfield_loo.mandatory ~%]
+                    mandatory_subfields.push({
+                        id: "[% subfield_loo.id | html %]",
+                        label: "[% subfield_loo.marc_lib | html %]",
+                        tab: "[% BIG_LOO.number | html %]",
+                    });
+                [% END ~%]
+                [% IF subfield_loo.z3950_mandatory ~%]
+                    z3950_mandatory_subfields.push({
+                        id: "[% subfield_loo.id | html %]",
+                        label: "[% subfield_loo.marc_lib | html %]",
+                        tab: "[% BIG_LOO.number | html %]",
+                    });
+                [% END ~%]
+            [% END ~%]
+        [% END ~%]
+    [% END %]
 </script>
 [% Asset.js( "lib/sortable/Sortable.min.js" ) | $raw %]
 [% Asset.js("js/cataloging.js") | $raw %]
@@ -57,9 +87,8 @@
         });
         $("#z3950submit").click(function(){
             var strQuery = GetZ3950Terms();
-            var index = "&index=[% index | html %]";
             if(strQuery){
-                window.open("/cgi-bin/koha/cataloguing/z3950_auth_search.pl?authid=[% authid | html %]"+strQuery+index,"z3950search",'width=800,height=500,location=yes,toolbar=no,scrollbars=yes,resize=yes');
+                window.open(`/cgi-bin/koha/cataloguing/z3950_auth_search.pl?authid=${authid}${strQuery}&${index}`,"z3950search",'width=800,height=500,location=yes,toolbar=no,scrollbars=yes,resize=yes');
             }
             return false;
         });
@@ -91,7 +120,7 @@
             var authtypecode = $(this).data("authtypecode");
             var f = document.f;
             f.op.value = "cud-change-framework";
-            f.authid.value = "[% authid | html %]";
+            f.authid.value = authid;
             f.authtypecode.value = authtypecode;
             f.submit();
         });
@@ -110,7 +139,7 @@
         });
 
         $("#preview").click(function () {
-            var content = "<h3>" + _("Authority number") + ": [% authid | html %]</h3><hr>";
+            var content = "<h3>" + _("Authority number") + ": " + authid + "</h3><hr>";
             content += "<div style=\"color:#004d99;\">";
             var line = 1;
             var has_input = 0;
@@ -183,17 +212,12 @@
     */
     function GetZ3950Terms(){
         var strQuery="&authtypecode="+document.forms['f'].authtypecode.value;
-        var mandatories = new Array();
-        var mandatories_label = new Array();
-        [% FOREACH BIG_LOO IN BIG_LOOP %][% FOREACH innerloo IN BIG_LOO.innerloop %][% FOREACH subfield_loo IN innerloo.subfield_loop %][% IF ( subfield_loo.z3950_mandatory ) %]mandatories.push("[% subfield_loo.id | html %]");
-            mandatories_label.push("[% subfield_loo.z3950_mandatory | html %]");[% END %][% END %][% END %][% END %]
-
-        for(var i=0,len=mandatories.length; i<len ; i++){
-            var field_value = document.getElementById(mandatories[i]).value;
+        z3950_mandatory_subfields.forEach(sf => {
+            var field_value = document.getElementById(sf.id).value;
             if( field_value ){
-                strQuery += "&"+mandatories_label[i]+"="+encodeURIComponent(field_value);
+                strQuery += "&"+encodeURIComponent(sf.label)+"="+encodeURIComponent(field_value);
             }
-        }
+        });
         return strQuery;
     }
 
@@ -210,48 +234,37 @@
         var StrAlert = "<div id='form-errors' class='alert alert-warning list'>";
         var notFilledClass = "subfield_not_filled";
 
-        [% FOREACH BIG_LOO IN BIG_LOOP %]
-            [% FOREACH innerloo IN BIG_LOO.innerloop %]
-                [% IF ( innerloo.mandatory ) %]
-                    fields.push(new Array("[% innerloo.tag | html %]","[% innerloo.index | html %][% innerloo.random | html %]","[% innerloo.index | html %]", "[% BIG_LOO.number | html %]"));
-                [% END %]
-                [% FOREACH subfield_loo IN innerloo.subfield_loop %]
-                    [% IF ( subfield_loo.mandatory ) %]subfields.push("[% subfield_loo.id | html %]");
-                        tab.push("[% BIG_LOO.number | html %]");
-                        label.push("[% subfield_loo.marc_lib | html %]");
-                    [% END %]
-                [% END %]
-            [% END %]
-        [% END %]
-
+        fields = mandatory_fields;
+        subfields = mandatory_subfields;
         StrAlert += "<h4>" + _("The following mandatory subfields aren't filled:") + "</h4>";
         StrAlert += "<ul>";
 
-        for(var i=0,len=subfields.length; i<len ; i++){
-            var tag=subfields[i].substr(4,3);
-            var subfield=subfields[i].substr(17,1);
-            var tagnumber=subfields[i].substr(19,subfields[i].lastIndexOf("_")-19);
+        subfields.forEach(sf => {
+            var id = sf.id;
+            var tag = id.substr(4,3);
+            var subfield=id.substr(17,1);
+            var tagnumber=id.substr(19,id.lastIndexOf("_")-19);
             if (tabflag[tag+subfield+tagnumber] ==  null) {
                 tabflag[tag+subfield+tagnumber]=new Array();
                 tabflag[tag+subfield+tagnumber][0]=0;
             }
-            if( tabflag[tag+subfield+tagnumber][0] != 1 && (document.getElementById(subfields[i]) != null && ! document.getElementById(subfields[i]).value || document.getElementById(subfields[i]) == null)){
+            if( tabflag[tag+subfield+tagnumber][0] != 1 && (document.getElementById(id) != null && ! document.getElementById(id).value || document.getElementById(id) == null)){
                 tabflag[tag+subfield+tagnumber][0] = 0 + tabflag[tag+subfield+tagnumber] ;
 
-                var elt = document.getElementById(subfields[i]);
+                var elt = document.getElementById(id);
                 if ( elt.nodeName == 'SELECT' ) {
                     $(elt).siblings('.select2').find("span[role='combobox']").addClass(notFilledClass);
                 } else {
                     elt.setAttribute('class','input_marceditor noEnterSubmit framework_plugin ' + notFilledClass);
                 }
-                $('#' + subfields[i]).focus();
-                tabflag[tag+subfield+tagnumber][1]=label[i];
-                tabflag[tag+subfield+tagnumber][2]=tab[i];
+                $('#' + id).focus();
+                tabflag[tag+subfield+tagnumber][1]=sf.label;
+                tabflag[tag+subfield+tagnumber][2]=sf.tab;
             } else {
                 tabflag[tag+subfield+tagnumber][0] = 1;
             }
-            tabflag[tag+subfield+tagnumber][3] = subfields[i];
-        }
+            tabflag[tag+subfield+tagnumber][3] = id;
+        });
 
         for (var tagsubfieldid in tabflag){
             if (tabflag[tagsubfieldid][0]==0){
@@ -266,20 +279,19 @@
         mandatoryFields = new Object();
 
         /* Check for mandatories field(not subfields) */
-        for(var i=0,len=fields.length; i<len; i++){
+        fields.forEach(field => {
             isempty  = true;
-            arr      = fields[i];
-            divid    = "tag_" + arr[0] + "_" + arr[1];
-            varegexp = new RegExp("^tag_" + arr[0] + "_code_");
+            divid    = "tag_" + field.tag + "_" + field.id;
+            varegexp = new RegExp("^tag_" + field.tag + "_code_");
 
-            if(parseInt(arr[0]) >= 10){
+            if(parseInt(field.tag) >= 10){
                 elem = document.getElementById(divid);
                 eleminputs = elem.getElementsByTagName('input');
 
                 for(var j=0,len2=eleminputs.length; j<len2; j++){
 
                     if(eleminputs[j].name.match(varegexp) && eleminputs[j].value){
-                        inputregexp = new RegExp("^tag_" + arr[0] + "_subfield_" + eleminputs[j].value + "_" + arr[2]);
+                        inputregexp = new RegExp("^tag_" + field.tag + "_subfield_" + eleminputs[j].value + "_" + field.index);
 
                         for( var k=0; k<len2; k++){
                             if( eleminputs[k].id.match(inputregexp) ){
@@ -312,14 +324,14 @@
 
             if(isempty){
                 flag = true;
-                mandatoryFields[ arr[0] ] = {
+                mandatoryFields[ field.tag ] = {
                     importance: "mandatory",
                     elemid: "div_indicator_" + divid,
-                    tab: arr[3]
+                    tab: field.tab
                 }
             }
 
-        }
+        });
 
         if( Object.entries(mandatoryFields).length > 0 ){
             StrAlert += "<h4>" + _("The following fields aren't filled:") + "</h4>";

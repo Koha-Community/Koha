@@ -1,4 +1,5 @@
 [% USE raw %]
+[% USE To %]
 [% USE Asset %]
 [% USE Koha %]
 [% USE HtmlTags %]
@@ -18,18 +19,84 @@
 [% INCLUDE 'calendar.inc' %]
 [% Asset.js( "lib/sortable/Sortable.min.js" ) | $raw %]
 [% INCLUDE 'select2.inc' %]
-<script nonce="[% Koha.CSPNonce | $raw %]">
-    [% IF Koha.Preference('CreateAVFromCataloguing') && CAN_user_parameters_manage_auth_values %]
-        var auth_values_creation = 1;
-    [% ELSE %]
-        var auth_values_creation = 0;
-    [% END %]
+<script nonce="[% Koha.CSPNonce | $raw %]" data-tt-allowed="true">
+    var auth_values_creation = [% IF Koha.Preference('CreateAVFromCataloguing') && CAN_user_parameters_manage_auth_values %]1[% ELSE %]0[% END %];
     $.fn.select2.defaults.set("width", "100%" );
+
+    Koha.addPrefs({
+        marcflavour: "[% marcflavour | html %]",
+        hide_marc: [% Koha.Preference("hide_marc") ? 1 : 0 | html %],
+        MarcFieldDocURL: "[% Koha.Preference('MarcFieldDocURL') | html %]",
+    });
+    Koha.addPermissions({
+        CAN_user_editcatalogue_edit_items: [% CAN_user_editcatalogue_edit_items ? 1 : 0 | html %],
+    });
+    const lang = "[% lang | html %]";
+    const logged_in_user_borrowernumber = "[% logged_in_user.borrowernumber | html %]";
+    var breedingid = [% breedingid || "null" | html %];
+    var biblionumber = [% biblionumber || "null" | html %];
+    var title = "[% title | html %]";
+    const bib_doesnt_exist = [% bib_doesnt_exist ? 1 : 0 | html %];
+    const biblionumberdata = "[% biblionumberdata | html %]";
+
+    var searchid = "[% searchid | html %]";
+    [%# FIXME remove biblionumber or biblio_id %]
+    var biblio_id = parseInt('[% biblionumber| html %]', 10);
+    var tab = "[% tab | html %]";
+
+    var mandatory_fields = [];
+    var mandatory_subfields = [];
+    var important_fields = [];
+    var important_subfields = [];
+    var z3950_mandatory_subfields = [];
+    [% FOREACH BIG_LOO IN BIG_LOOP %]
+        [% FOREACH innerloo IN BIG_LOO.innerloop %]
+            [% IF innerloo.mandatory %]
+                mandatory_fields.push({
+                    tag: "[% innerloo.tag | html %]",
+                    id: "[% innerloo.index | html %]$[% innerloo.random | html %]",
+                    index: "[% innerloo.index | html %]",
+                    tab: "[% BIG_LOO.number | html %]",
+                });
+            [% END %]
+            [% IF innerloo.important %]
+                important_fields.push([
+                    tag: "[% innerloo.tag | html %]",
+                    id: "[% innerloo.index | html %]$[% innerloo.random | html %]",
+                    index: "[% innerloo.index | html %]",
+                    tab: "[% BIG_LOO.number | html %]",
+                ]);
+            [% END %]
+            [% FOREACH subfield_loo IN innerloo.subfield_loop %]
+                [% IF subfield_loo.mandatory %]
+                    mandatory_subfields.push({
+                        id: "[% subfield_loo.id | html %]",
+                        label: "[% subfield_loo.marc_lib | html %]",
+                        tab: "[% BIG_LOO.number | html %]",
+                    });
+                [% END %]
+                [% IF subfield_loo.important %]
+                    important_subfields.push({
+                        id: "[% subfield_loo.id | html %]",
+                        label: "[% subfield_loo.marc_lib | html %]",
+                        tab: "[% BIG_LOO.number | html %]",
+                    });
+                [% END %]
+                [% IF subfield_loo.z3950_mandatory %]
+                    z3950_mandatory_subfields.push({
+                        id: "[% subfield_loo.id | html %]",
+                        label: "[% subfield_loo.marc_lib | html %]",
+                        tab: "[% BIG_LOO.number | html %]",
+                    });
+                [% END %]
+            [% END %]
+        [% END %]
+    [% END %]
 </script>
 [% Asset.js("js/cataloging.js") | $raw %]
 [% Asset.js("js/browser.js") | $raw %]
 <script nonce="[% Koha.CSPNonce | $raw %]">
-    var browser = KOHA.browser('[% searchid | html %]', parseInt('[% biblionumber | html %]', 10));
+    var browser = KOHA.browser(searchid, biblio_id);
         browser.show();
 
         $(window).load(function(){
@@ -38,13 +105,9 @@
 
         function changeEditor() {
 
-            var breedingid = [% breedingid || "null" | html %];
-
             if ( !confirm( breedingid ? _("This record cannot be transferred to the advanced editor. Continue?") : _("Any changes will not be saved. Continue?") ) ) return false;
 
-            Cookies.set( 'catalogue_editor_[% logged_in_user.borrowernumber | html %]', 'advanced', { expires: 365, path: '/', sameSite: 'Lax'  } );
-
-            var biblionumber = [% biblionumber || "null" | html %];
+            Cookies.set( `catalogue_editor_${logged_in_user_borrowernumber}`, 'advanced', { expires: 365, path: '/', sameSite: 'Lax'  } );
 
             if ( biblionumber ) {
                 window.location = '/cgi-bin/koha/cataloguing/editor.pl#catalog/' + biblionumber;
@@ -57,10 +120,10 @@
 
         $(document).ready(function() {
 
-            [% IF bib_doesnt_exist %]
+            if (bib_doesnt_exist){
                 $("#addbibliotabs").hide();
                 $("#toolbar").hide();
-            [% END %]
+            }
 
             $("a[data-bs-toggle='tab']").on("shown.bs.tab", function (e) {
                 $( e.target.hash + " .input_marceditor:visible:eq(0)").focus();
@@ -80,20 +143,20 @@
             initializeSortable("#addbibliotabs ul.sortable_field");
             initializeSortable("#addbibliotabs ul.sortable_subfield");
 
-            [% IF tab %]
-                hash = "#[% tab | html %]";
+            if(tab){
+                hash = `#${tab}`;
                 selectTab( hash );
-            [% END %]
+            }
 
             /* check cookie to hide/show marcdocs*/
-            if( Cookies.get("marcdocs_[% borrowernumber | html %]") == 'hide'){
+            if( Cookies.get(`marcdocs_${logged_in_user_borrowernumber}`) == 'hide'){
                 toggleMARCdocLinks(false);
             } else {
                 toggleMARCdocLinks(true);
             }
 
             $("#marcDocsSelect").click(function(){
-                if( Cookies.get("marcdocs_[% borrowernumber | html %]") == 'hide'){
+                if( Cookies.get(`marcdocs_${logged_in_user_borrowernumber}`) == 'hide'){
                     toggleMARCdocLinks(true);
                 } else {
                     toggleMARCdocLinks(false);
@@ -101,21 +164,21 @@
             });
 
             /* check cookie to hide/show marc tags*/
-            var marctags_cookie = Cookies.get("marctags_[% borrowernumber | html %]");
+            var marctags_cookie = Cookies.get(`marctags_${logged_in_user_borrowernumber}`);
             if( marctags_cookie == 'hide'){
                 toggleMARCTagLinks(false);
             } else if( marctags_cookie == 'show'){
                 toggleMARCTagLinks(true)
             } else {
-                [% UNLESS Koha.Preference("hide_marc") %]
+                if (Koha.prefs.hide_marc){
                     toggleMARCTagLinks(true)
-                [% ELSE %]
+                } else {
                     toggleMARCTagLinks(false);
-                [% END %]
+                }
             }
 
             $("#marcTagsSelect").click(function(){
-                if( Cookies.get("marctags_[% borrowernumber | html %]") == 'hide'){
+                if( Cookies.get(`marctags_${logged_in_user_borrowernumber}`) == 'hide'){
                     toggleMARCTagLinks(true)
                 } else {
                     toggleMARCTagLinks(false);
@@ -214,11 +277,11 @@
             return Check();
         }
 
-        [% IF ( CAN_user_editcatalogue_edit_items ) %]
+        if (Koha.permissions.CAN_user_editcatalogue_edit_items){
             var onOption = function () {
                 return Check();
             }
-        [% END %]
+        }
 
     /**
     * this function append button for create new authority if not found
@@ -422,20 +485,20 @@
 
     function PopupMARCFieldDoc() {
         let field = this.dataset.tag;
-        [% IF Koha.Preference('MarcFieldDocURL') %]
-            var docurl = "[% Koha.Preference('MarcFieldDocURL').replace('"','&quot;') | html %]";
-            docurl = docurl.replace("{MARC}", "[% marcflavour | html %]");
+        if (Koha.prefs.MarcFieldDocURL){
+            var docurl = Koha.prefs.MarcFieldDocURL.replace('"','&quot;');
+            docurl = docurl.replace("{MARC}", Koha.prefs.marcflavour);
             docurl = docurl.replace("{FIELD}", ""+field);
-            docurl = docurl.replace("{LANG}", "[% lang | html %]");
+            docurl = docurl.replace("{LANG}", lang);
             window.open(docurl);
-        [% ELSIF ( marcflavour == 'MARC21' ) %]
+        } else if (marcflavour == 'MARC21'){
             _MARC21FieldDoc(field);
-        [% ELSIF ( marcflavour == 'UNIMARC' ) %]
+        } else if( marcflavour == 'UNIMARC'){
             _UNIMARCFieldDoc(field);
-        [% END %]
+        }
         return false;
     }
-    [%# Attach to body, so that cloned nodes will still have the event listener %]
+    /* Attach to body, so that cloned nodes will still have the event listener */
     $(document).ready(function(){
         $('body').on('click','.marcdocs',PopupMARCFieldDoc);
     });
@@ -457,7 +520,7 @@
         function PopupZ3950() {
             var strQuery = GetZ3950Terms();
             if(strQuery){
-                window.open("/cgi-bin/koha/cataloguing/z3950_search.pl?biblionumber=[% biblionumber | html %]"+strQuery,"z3950search",'width=800,height=550,location=yes,toolbar=no,scrollbars=yes,resize=yes');
+                window.open(`/cgi-bin/koha/cataloguing/z3950_search.pl?biblionumber=${biblionumber}`+strQuery,"z3950search",'width=800,height=550,location=yes,toolbar=no,scrollbars=yes,resize=yes');
             }
         }
 
@@ -491,11 +554,11 @@
         function toggleMARCdocLinks(flag){
             if( flag === true ){
                 $(".marcdocs").show();
-                Cookies.set("marcdocs_[% borrowernumber | html %]",'show', { path: "/", expires: 365, sameSite: 'Lax'  });
+                Cookies.set(`marcdocs_${logged_in_user_borrowernumber}`,'show', { path: "/", expires: 365, sameSite: 'Lax'  });
                 $("#marcDocsSelect i").addClass('fa-check-square').removeClass('fa-square');
             } else {
                 $(".marcdocs").hide();
-                Cookies.set("marcdocs_[% borrowernumber | html %]",'hide', { path: "/", expires: 365, sameSite: 'Lax'  });
+                Cookies.set(`marcdocs_${logged_in_user_borrowernumber}`,'hide', { path: "/", expires: 365, sameSite: 'Lax'  });
                 $("#marcDocsSelect i").removeClass('fa-check-square').addClass('fa-square');
             }
         }
@@ -504,12 +567,12 @@
             if( flag === true ){
                 $(".tagnum").show();
                 $(".subfieldcode").show();
-                Cookies.set("marctags_[% borrowernumber | html %]",'show', { path: "/", expires: 365, sameSite: 'Lax'  });
+                Cookies.set(`marctags_${logged_in_user_borrowernumber}`,'show', { path: "/", expires: 365, sameSite: 'Lax'  });
                 $("#marcTagsSelect i").addClass('fa-check-square').removeClass('fa-square');
             } else {
                 $(".tagnum").hide();
                 $(".subfieldcode").hide();
-                Cookies.set("marctags_[% borrowernumber | html %]",'hide', { path: "/", expires: 365, sameSite: 'Lax'  });
+                Cookies.set(`marctags_${logged_in_user_borrowernumber}`,'hide', { path: "/", expires: 365, sameSite: 'Lax'  });
                 $("#marcTagsSelect i").removeClass('fa-check-square').addClass('fa-square');
             }
         }
@@ -521,71 +584,48 @@
         function AreFieldsNotOk (mandatory = true) {
             var fields = new Array();
             var subfields = new Array();
-            var tab = new Array();
-            var label = new Array();
             var flag = false;
             var tabflag= new Array();
             var StrAlert = "<div id='form-errors' class='alert alert-warning list'>";
             var notFilledClass = "subfield_not_filled";
 
             if (mandatory) {
-                [%- FOREACH BIG_LOO IN BIG_LOOP %]
-                    [%- FOREACH innerloo IN BIG_LOO.innerloop %]
-                        [%- IF ( innerloo.mandatory ) %]
-                            fields.push(new Array("[% innerloo.tag | html %]","[% innerloo.index | html %][% innerloo.random | html %]","[% innerloo.index | html %]", "[% BIG_LOO.number | html %]"));
-                        [%- END %]
-                        [%- FOREACH subfield_loo IN innerloo.subfield_loop %]
-                            [%- IF ( subfield_loo.mandatory ) %]subfields.push("[% subfield_loo.id | html %]");
-                                tab.push("[% BIG_LOO.number | html %]");
-                                label.push("[% subfield_loo.marc_lib | html %]");
-                            [% END %]
-                        [% END %]
-                    [% END %]
-                [% END %]
+                fields = mandatory_fields;
+                subfields = mandatory_subfields;
                 StrAlert += "<h4>" + _("The following mandatory subfields aren't filled:") + "</h4>";
             } else {
-                [%- FOREACH BIG_LOO IN BIG_LOOP %]
-                    [%- FOREACH innerloo IN BIG_LOO.innerloop %]
-                        [%- IF ( innerloo.important ) %]
-                            fields.push(new Array("[% innerloo.tag | html %]","[% innerloo.index | html %][% innerloo.random | html %]","[% innerloo.index | html %]", "[% BIG_LOO.number | html %]"));
-                        [%- END %]
-                        [%- FOREACH subfield_loo IN innerloo.subfield_loop %]
-                            [%- IF ( subfield_loo.important ) %]subfields.push("[% subfield_loo.id | html %]");
-                                tab.push("[% BIG_LOO.number | html %]");
-                                label.push("[% subfield_loo.marc_lib | html %]");
-                            [% END %]
-                        [% END %]
-                    [% END %]
-                [% END %]
+                fields = important_fields;
+                subfields = important_subfields;
                 StrAlert += "<h4>" + _("The following important subfields aren’t filled:") + "</h4>";
                 notFilledClass = "important_subfield_not_filled";
             }
             StrAlert += "<ul>";
-            for(var i=0,len=subfields.length; i<len ; i++){
-                var tag=subfields[i].substr(4,3);
-                var subfield=subfields[i].substr(17,1);
-                var tagnumber=subfields[i].substr(19,subfields[i].lastIndexOf("_")-19);
+            subfields.forEach(sf => {
+                var id = sf.id;
+                var tag = id.substr(4,3);
+                var subfield=id.substr(17,1);
+                var tagnumber=id.substr(19,id.lastIndexOf("_")-19);
                 if (tabflag[tag+subfield+tagnumber] ==  null) {
                     tabflag[tag+subfield+tagnumber]=new Array();
                     tabflag[tag+subfield+tagnumber][0]=0;
                 }
-                if( tabflag[tag+subfield+tagnumber][0] != 1 && (document.getElementById(subfields[i]) != null && ! document.getElementById(subfields[i]).value)){
+                if( tabflag[tag+subfield+tagnumber][0] != 1 && (document.getElementById(id) != null && ! document.getElementById(id).value ) ){
                     tabflag[tag+subfield+tagnumber][0] = 0 + tabflag[tag+subfield+tagnumber] ;
 
-                    var elt = document.getElementById(subfields[i]);
+                    var elt = document.getElementById(id);
                     if ( elt.nodeName == 'SELECT' ) {
                         $(elt).siblings('.select2').find("span[role='combobox']").addClass(notFilledClass);
                     } else {
                         elt.setAttribute('class','input_marceditor noEnterSubmit framework_plugin ' + notFilledClass);
                     }
-                    $('#' + subfields[i]).focus();
-                    tabflag[tag+subfield+tagnumber][1]=label[i];
-                    tabflag[tag+subfield+tagnumber][2]=tab[i];
+                    $('#' + id).focus();
+                    tabflag[tag+subfield+tagnumber][1]=sf.label;
+                    tabflag[tag+subfield+tagnumber][2]=sf.tab;
                 } else {
                     tabflag[tag+subfield+tagnumber][0] = 1;
                 }
-                tabflag[tag+subfield+tagnumber][3] = subfields[i];
-            }
+                tabflag[tag+subfield+tagnumber][3] = id;
+            });
 
             for (var tagsubfieldid in tabflag){
                 if (tabflag[tagsubfieldid][0]==0){
@@ -601,21 +641,20 @@
                important to see if at least one subfield is filled */
             mandatoryFields = new Object();
 
-            for(var i=0,len=fields.length; i<len; i++){
+            fields.forEach(field => {
                 isempty  = true;
-                arr      = fields[i];
-                divid    = "tag_" + arr[0] + "_" + arr[1];
-                varegexp = new RegExp("^tag_" + arr[0] + "_code_");
+                divid    = "tag_" + field.tag + "_" + field.id;
+                varegexp = new RegExp("^tag_" + field.tag + "_code_");
 
-                if(parseInt(arr[0]) >= 10){
+                if(parseInt(field.tag) >= 10){
                     elem = document.getElementById(divid);
-                    if( !elem ){ continue; }
+                    if( !elem ){ return; }
                     eleminputs = elem.getElementsByTagName('input');
 
                     for(var j=0,len2=eleminputs.length; j<len2; j++){
 
                         if(eleminputs[j].name.match(varegexp) && eleminputs[j].value){
-                            inputregexp = new RegExp("^tag_" + arr[0] + "_subfield_" + eleminputs[j].value + "_" + arr[2]);
+                            inputregexp = new RegExp("^tag_" + field.tag + "_subfield_" + eleminputs[j].value + "_" + field.index);
 
                             for( var k=0; k<len2; k++){
                                 if( eleminputs[k].id.match(inputregexp) ){
@@ -649,21 +688,20 @@
                 if(isempty){
                     flag = true;
                     if (mandatory) {
-                        mandatoryFields[ arr[0] ] = {
+                        mandatoryFields[ field.tag ] = {
                             importance: "mandatory",
                             elemid: "div_indicator_" + divid,
-                            tab: arr[3]
+                            tab: field.tab
                         }
                     } else {
-                        mandatoryFields[ arr[0] ] = {
+                        mandatoryFields[ field.tag ] = {
                             importance: "important",
                             elemid: "div_indicator_" + divid,
-                            tab: arr[3]
+                            tab: field.tab
                         }
                     }
                 }
-
-            }
+            });
 
             if( Object.entries(mandatoryFields).length > 0 ){
                 StrAlert += "<h4>" + _("The following fields aren't filled:") + "</h4>";
@@ -677,6 +715,7 @@
                 }
                 StrAlert += "</ul>";
             }
+
             StrAlert += "</div>";
             if ( flag ) {
                 $("#show-errors").html('<button type="button" class="btn btn-danger show-errors"><i class="fa-solid fa-triangle-exclamation"></i> ' + _("Errors") + '</span>');
@@ -728,32 +767,19 @@
         function GetZ3950Terms(){
             var frameworkcode = document.getElementById("frameworkcode").value;
             var strQuery = "&frameworkcode=" + encodeURIComponent(frameworkcode);
-            var mandatories = new Array();
-            var mandatories_label = new Array();
-            [% FOREACH BIG_LOO IN BIG_LOOP %]
-                [% FOREACH innerloo IN BIG_LOO.innerloop %]
-                    [% FOREACH subfield_loo IN innerloo.subfield_loop %]
-                        [% IF ( subfield_loo.z3950_mandatory ) %]
-                            mandatories.push("[% subfield_loo.id | html %]");
-                            mandatories_label.push("[% subfield_loo.z3950_mandatory | html %]");
-                        [% END %]
-                    [% END %]
-                [% END %]
-            [% END %]
-
-            for(var i=0,len=mandatories.length; i<len ; i++){
-                var field_value = document.getElementById(mandatories[i]).value;
+            z3950_mandatory_subfields.forEach(sf => {
+                var field_value = document.getElementById(sf.id).value;
                 if( field_value ){
-                    strQuery += "&"+encodeURIComponent(mandatories_label[i])+"="+encodeURIComponent(field_value);
+                    strQuery += "&"+encodeURIComponent(sf.label)+"="+encodeURIComponent(field_value);
                 }
-            }
+            });
             return strQuery;
         }
 
         function Changefwk() {
             var f = document.f;
             f.op.value = "cud-change-framework";
-            f.biblionumber.value = "[% biblionumberdata | html %]";
+            f.biblionumber.value = biblionumberdata;
             f.submit();
         }
 
@@ -895,8 +921,8 @@
     <!-- prettier-ignore-start -->
                 [% IF ( done ) %]
                     <script nonce="[% Koha.CSPNonce | $raw %]">
-                        opener.document.forms['f'].biblionumber.value=[% biblionumber | html %];
-                        opener.document.forms['f'].title.value='[% title | html %]';
+                        opener.document.forms['f'].biblionumber.value=biblionumber;
+                        opener.document.forms['f'].title.value=title;
                         window.close();
                     </script>
                 [% ELSE %]
