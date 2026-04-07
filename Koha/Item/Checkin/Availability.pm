@@ -95,6 +95,18 @@ sub check {
 
     my $result = Koha::Availability::Result->new();
 
+    # Always check checkout status first so context is available to callers
+    # even when blockers prevent the check-in
+    my $checkout = $item->checkout;
+    if ($checkout) {
+        $result->set_context( checkout => $checkout );
+        $result->set_context( patron   => $checkout->patron );
+    } else {
+
+        # Item not checked out
+        $result->add_confirmation( NotIssued => $item->barcode );
+    }
+
     # Check if item is withdrawn and blocked
     if ( $item->withdrawn && C4::Context->preference("BlockReturnOfWithdrawnItems") ) {
         $result->add_blocker( BlockedWithdrawn => 1 );
@@ -132,17 +144,6 @@ sub check {
             );
             return $result;
         }
-    }
-
-    # Check if item is currently checked out
-    my $checkout = $item->checkout;
-    if ($checkout) {
-        $result->set_context( checkout => $checkout );
-        $result->set_context( patron   => $checkout->patron );
-    } else {
-
-        # Item not checked out
-        $result->add_confirmation( NotIssued => $item->barcode );
     }
 
     # Add warnings for withdrawn (when not blocked)

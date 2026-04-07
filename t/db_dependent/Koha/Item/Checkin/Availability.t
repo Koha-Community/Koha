@@ -50,7 +50,7 @@ subtest 'check() - item exists' => sub {
 
 subtest 'check() - BlockedWithdrawn blocker' => sub {
 
-    plan tests => 2;
+    plan tests => 4;
 
     $schema->storage->txn_begin;
 
@@ -64,17 +64,35 @@ subtest 'check() - BlockedWithdrawn blocker' => sub {
         }
     );
 
+    # Not checked out: blocker and NotIssued confirmation
     my $result = $item->checkin_availability( { library => $library->branchcode } );
 
-    is( $result->blockers->{BlockedWithdrawn}, 1, 'BlockedWithdrawn blocker set' );
-    is( keys %{ $result->confirmations },      0, 'no confirmations when blocked' );
+    is( $result->blockers->{BlockedWithdrawn}, 1,              'BlockedWithdrawn blocker set' );
+    is( $result->confirmations->{NotIssued},   $item->barcode, 'NotIssued confirmation set for non-checked-out item' );
+
+    # Checked out: blocker but no NotIssued, context has checkout/patron
+    my $patron   = $builder->build_object( { class => 'Koha::Patrons' } );
+    my $checkout = $builder->build_object(
+        {
+            class => 'Koha::Checkouts',
+            value => {
+                itemnumber     => $item->itemnumber,
+                borrowernumber => $patron->borrowernumber,
+            }
+        }
+    );
+
+    $result = $item->checkin_availability( { library => $library->branchcode } );
+
+    is( $result->blockers->{BlockedWithdrawn}, 1,                'BlockedWithdrawn blocker set for checked-out item' );
+    is( ref( $result->context->{checkout} ),   'Koha::Checkout', 'checkout context preserved when blocked' );
 
     $schema->storage->txn_rollback;
 };
 
 subtest 'check() - BlockedLost blocker' => sub {
 
-    plan tests => 2;
+    plan tests => 4;
 
     $schema->storage->txn_begin;
 
@@ -88,15 +106,36 @@ subtest 'check() - BlockedLost blocker' => sub {
         }
     );
 
+    # Not checked out: blocker and NotIssued confirmation
     my $result = $item->checkin_availability(
         {
             library => $library->branchcode,
         }
     );
 
-    is( $result->blockers->{BlockedLost}, 1, 'BlockedLost blocker set' );
+    is( $result->blockers->{BlockedLost},    1,              'BlockedLost blocker set' );
+    is( $result->confirmations->{NotIssued}, $item->barcode, 'NotIssued confirmation set for non-checked-out item' );
 
-    is( keys %{ $result->confirmations }, 0, 'no confirmations when blocked' );
+    # Checked out: blocker but checkout context preserved
+    my $patron   = $builder->build_object( { class => 'Koha::Patrons' } );
+    my $checkout = $builder->build_object(
+        {
+            class => 'Koha::Checkouts',
+            value => {
+                itemnumber     => $item->itemnumber,
+                borrowernumber => $patron->borrowernumber,
+            }
+        }
+    );
+
+    $result = $item->checkin_availability(
+        {
+            library => $library->branchcode,
+        }
+    );
+
+    is( $result->blockers->{BlockedLost},    1,                'BlockedLost blocker set for checked-out item' );
+    is( ref( $result->context->{checkout} ), 'Koha::Checkout', 'checkout context preserved when blocked' );
 
     $schema->storage->txn_rollback;
 };
