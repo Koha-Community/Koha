@@ -53,6 +53,12 @@ app.provide("mainStore", mainStore);
 app.provide("navigationStore", navigationStore);
 app.mount("#record-source");
 
+document.dispatchEvent(
+    new CustomEvent("koha:vue-loaded", {
+        detail: { module: "admin/record_sources" },
+    })
+);
+
 router.beforeEach(to => {
     navigationStore.$patch({ current: to.matched, params: to.params || {} });
     removeMessages(); // This will actually flag the messages as displayed already

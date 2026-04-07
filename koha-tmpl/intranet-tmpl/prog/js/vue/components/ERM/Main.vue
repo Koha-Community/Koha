@@ -26,7 +26,7 @@
 </template>
 
 <script>
-import { inject, onBeforeMount, ref, nextTick } from "vue";
+import { inject, nextTick, onBeforeMount, ref } from "vue";
 import Breadcrumbs from "../Breadcrumbs.vue";
 import Help from "../Help.vue";
 import LeftMenu from "../LeftMenu.vue";

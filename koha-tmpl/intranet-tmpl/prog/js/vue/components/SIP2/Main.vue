@@ -19,7 +19,7 @@
 </template>
 
 <script>
-import { inject, onBeforeMount, ref } from "vue";
+import { inject, nextTick, onBeforeMount, ref } from "vue";
 import Breadcrumbs from "../Breadcrumbs.vue";
 import { storeToRefs } from "pinia";
 import Help from "../Help.vue";
@@ -49,6 +49,13 @@ export default {
                 ).then(() => {
                     loaded();
                     initialized.value = true;
+                    nextTick(() => {
+                        document.dispatchEvent(
+                            new CustomEvent("koha:vue-loaded", {
+                                detail: { module: "sip2" },
+                            })
+                        );
+                    });
                 });
             };
 

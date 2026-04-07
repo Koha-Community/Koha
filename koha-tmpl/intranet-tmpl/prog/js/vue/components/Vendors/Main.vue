@@ -23,7 +23,7 @@
 </template>
 
 <script>
-import { inject, onBeforeMount, ref } from "vue";
+import { inject, nextTick, onBeforeMount, ref } from "vue";
 import Breadcrumbs from "../Breadcrumbs.vue";
 import Help from "../Help.vue";
 import LeftMenu from "../LeftMenu.vue";
@@ -65,6 +65,13 @@ export default {
                         });
                         loaded();
                         initialized.value = true;
+                        nextTick(() => {
+                            document.dispatchEvent(
+                                new CustomEvent("koha:vue-loaded", {
+                                    detail: { module: "acquisitions" },
+                                })
+                            );
+                        });
                     });
                 }
             );
