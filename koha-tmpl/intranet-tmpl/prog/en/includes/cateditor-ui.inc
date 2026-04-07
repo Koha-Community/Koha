@@ -878,7 +878,8 @@
             $.ajax(options)
                 .then(function(result) {
                         $.each(result,function( undef, macro ){
-                            var $li = $( '<li data-name="' + escape_str(macro.name) + '" data-id="' + macro.macro_id + '"><a href="#">' + escape_str(macro.name) + '</a><ol class="macro-info"></ol></li>' );
+                            var $li = $( '<li data-id="' + macro.macro_id + '"><a href="#">' + escape_str(macro.name) + '</a><ol class="macro-info"></ol></li>' );
+                            $li.get(0).setAttribute('data-name',macro.name);
                             if ( macro.macro_id == macroEditor.activeMacroId ) $li.addClass( 'active' );
                             $li.click( function() {
                                 loadMacro(macro.name, macro.macro_id, macro.shared);
