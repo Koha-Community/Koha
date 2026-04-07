@@ -812,9 +812,10 @@ sub get_rfc4646_from_iso639 {
     return $cached if $cached;
     my $rfc_subtag =
         Koha::Database->new()->schema->resultset('LanguageRfc4646ToIso639')->find( { iso639_2_code => $iso_code } );
-    $memory_cache->set_in_cache( $cache_key, $rfc_subtag );
     if ($rfc_subtag) {
-        return $rfc_subtag->rfc4646_subtag;
+        my $subtag = $rfc_subtag->rfc4646_subtag;
+        $memory_cache->set_in_cache( $cache_key, $subtag );
+        return $subtag;
     } else {
         return;
     }
