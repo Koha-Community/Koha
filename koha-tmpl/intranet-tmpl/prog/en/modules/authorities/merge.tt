@@ -148,23 +148,23 @@
     [% Asset.js("js/merge-record.js") | $raw %]
     <script nonce="[% Koha.CSPNonce | $raw %]">
         // When submitting the form
-            function mergeformsubmit() {
-                $('#tabs').remove();
-            }
+        function mergeformsubmit() {
+            $("#tabs").remove();
+        }
 
-        $(document).ready(function(){
+        $(document).ready(function () {
             // Getting marc structure via ajax
             tagslib = [];
-            $.getJSON("/cgi-bin/koha/authorities/merge_ajax.pl", {frameworkcode}, function(json) {
+            $.getJSON("/cgi-bin/koha/authorities/merge_ajax.pl", { frameworkcode }, function (json) {
                 tagslib = json;
                 rebuild_target($("#tabs"), $("#resultul"));
             });
 
-            $('.preview-merge-reference').click(function (ev) {
+            $(".preview-merge-reference").click(function (ev) {
                 ev.preventDefault();
-                newin=window.open($(this).attr('href'),'merge_reference', 'width=1000,height=600,toolbar=false,scrollbars=yes');
+                newin = window.open($(this).attr("href"), "merge_reference", "width=1000,height=600,toolbar=false,scrollbars=yes");
             });
-            if( $("#tabs .tab-pane.active").length < 1 ){
+            if ($("#tabs .tab-pane.active").length < 1) {
                 $("#tabs a:first").tab("show");
             }
             $(".change_framework").on("click", function () {
@@ -172,7 +172,6 @@
                 changeFramework(framework);
             });
         });
-
 
         function changeFramework(fw) {
             $("#frameworkcode").val(fw);

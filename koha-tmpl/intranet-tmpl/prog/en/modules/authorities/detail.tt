@@ -147,47 +147,54 @@
         [% Asset.js("lib/jquery/plugins/jstree/jstree-3.3.12.min.js") | $raw %]
     [% END %]
     <script nonce="[% Koha.CSPNonce | $raw %]">
-        $(document).ready(function() {
-           if( $("#authoritiestabs .tab-pane.active").length < 1 ){
-               let tab_object = [];
+        $(document).ready(function () {
+            if ($("#authoritiestabs .tab-pane.active").length < 1) {
+                let tab_object = [];
 
-               if (Koha.prefs.DefaultAuthorityTab){
-                   tab_object = $(`#authoritiestabs #tab${Koha.prefs.DefaultAuthorityTab}XX-tab`);
-               }
+                if (Koha.prefs.DefaultAuthorityTab) {
+                    tab_object = $(`#authoritiestabs #tab${Koha.prefs.DefaultAuthorityTab}XX-tab`);
+                }
 
-               if( tab_object.length > 0 ){
-                   tab_object.tab("show");
-               } else {
-                   $("#authoritiestabs a:first").tab("show");
-               }
-           }
+                if (tab_object.length > 0) {
+                    tab_object.tab("show");
+                } else {
+                    $("#authoritiestabs a:first").tab("show");
+                }
+            }
 
-           var editAuth = $("#editAuth");
-           var editAuthLink = editAuth.attr("href");
+            var editAuth = $("#editAuth");
+            var editAuthLink = editAuth.attr("href");
 
-           $("a[data-bs-toggle='tab']").on("shown.bs.tab", function (e) {
-               var newTabId = $(this).attr("href");
-               editAuth.attr("href", editAuthLink + newTabId );
-           });
+            $("a[data-bs-toggle='tab']").on("shown.bs.tab", function (e) {
+                var newTabId = $(this).attr("href");
+                editAuth.attr("href", editAuthLink + newTabId);
+            });
 
-           if (displayhierarchy){
-               $('#hierarchies').jstree({
-                   "types" : {
-                       "default" : {
-                           "icon" : "fa-solid fa-file"
-                       }
-                   },
-                   "plugins" : [ "types" ]
-               }).on('ready.jstree', function(){
-                   $(this).jstree('open_all');
-                   $(`#hier${authid}_anchor`).on("click",
-                       function(e){e.preventDefault(); return false;}
-                   ).css("text-decoration", "none").css("color", "#333");
-                   $(".currentauth").css("text-decoration", "none").css("color", "#333");
-               }).bind("select_node.jstree", function (e, data) {
-                   e.preventDefault();
-                   document.location.href = data.node.a_attr.href;
-               });
+            if (displayhierarchy) {
+                $("#hierarchies")
+                    .jstree({
+                        types: {
+                            default: {
+                                icon: "fa-solid fa-file",
+                            },
+                        },
+                        plugins: ["types"],
+                    })
+                    .on("ready.jstree", function () {
+                        $(this).jstree("open_all");
+                        $(`#hier${authid}_anchor`)
+                            .on("click", function (e) {
+                                e.preventDefault();
+                                return false;
+                            })
+                            .css("text-decoration", "none")
+                            .css("color", "#333");
+                        $(".currentauth").css("text-decoration", "none").css("color", "#333");
+                    })
+                    .bind("select_node.jstree", function (e, data) {
+                        e.preventDefault();
+                        document.location.href = data.node.a_attr.href;
+                    });
             }
         });
     </script>

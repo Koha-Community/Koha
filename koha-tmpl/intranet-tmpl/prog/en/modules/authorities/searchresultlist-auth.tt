@@ -152,16 +152,16 @@
     [% Asset.js("js/auth-finder-search.js") | $raw %]
     [% Asset.js("js/authorities-detail-modal.js") | $raw %]
     <script nonce="[% Koha.CSPNonce | $raw %]">
-        function jumpfull(page){
-            window.open(page,'','width=100,height=100,resizable=yes,toolbar=false,scrollbars=yes,top');
+        function jumpfull(page) {
+            window.open(page, "", "width=100,height=100,resizable=yes,toolbar=false,scrollbars=yes,top");
         }
-        function doauth(authid, index, repet){
-            if ( source == 'auth' ) {
+        function doauth(authid, index, repet) {
+            if (source == "auth") {
                 var elem = document.getElementById("special_relationship");
                 var relationship = elem.options[elem.selectedIndex].value;
-                jumpfull('blinddetail-biblio-search.pl?authid=' + authid + '&index=' + index + '&repet=' + repet + '&source=' + source + '&relationship=' + relationship);
+                jumpfull("blinddetail-biblio-search.pl?authid=" + authid + "&index=" + index + "&repet=" + repet + "&source=" + source + "&relationship=" + relationship);
             } else {
-                jumpfull('blinddetail-biblio-search.pl?authid=' + authid + '&index=' + index + '&repet=' + repet + '&source=' + source);
+                jumpfull("blinddetail-biblio-search.pl?authid=" + authid + "&index=" + index + "&repet=" + repet + "&source=" + source);
             }
         }
     </script>
