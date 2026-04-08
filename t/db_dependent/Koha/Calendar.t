@@ -19,12 +19,16 @@
 
 use Modern::Perl;
 
-use Test::More tests => 3;
+use Test::More tests => 4;
 use Test::Exception;
 use Test::NoWarnings;
 
 use Koha::Database;
 use Koha::DateUtils qw( dt_from_string );
+use Koha::Calendar::WeeklyClosures;
+use Koha::Calendar::RepeatingClosures;
+use Koha::Calendar::SingleClosures;
+use Koha::Calendar::Exceptions;
 use t::lib::TestBuilder;
 
 BEGIN {
@@ -114,6 +118,112 @@ subtest 'has_business_days_between' => sub {
         $calendar->has_business_days_between( $monday, $monday ), 0,
         'Should find no business days between same date'
     );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'CRUD methods' => sub {
+
+    plan tests => 20;
+
+    $schema->storage->txn_begin;
+
+    my $library  = $builder->build_object( { class => 'Koha::Libraries' } );
+    my $calendar = Koha::Calendar->new( branchcode => $library->branchcode );
+
+    # add_weekly_closure
+    my $weekly = $calendar->add_weekly_closure( { weekday => 0, title => 'Sundays', description => 'Closed' } );
+    isa_ok( $weekly, 'Koha::Calendar::WeeklyClosure', 'add_weekly_closure returns object' );
+    is(
+        Koha::Calendar::WeeklyClosures->search( { library_id => $library->branchcode } )->count, 1,
+        'Weekly closure created'
+    );
+
+    # add_repeating_closure
+    my $repeating =
+        $calendar->add_repeating_closure( { day => 25, month => 12, title => 'Christmas', description => '' } );
+    isa_ok( $repeating, 'Koha::Calendar::RepeatingClosure', 'add_repeating_closure returns object' );
+    is(
+        Koha::Calendar::RepeatingClosures->search( { library_id => $library->branchcode } )->count, 1,
+        'Repeating closure created'
+    );
+
+    # add_single_closure
+    my $single = $calendar->add_single_closure( { date => '2026-06-15', title => 'Staff day', description => '' } );
+    isa_ok( $single, 'Koha::Calendar::SingleClosure', 'add_single_closure returns object' );
+    is(
+        Koha::Calendar::SingleClosures->search( { library_id => $library->branchcode } )->count, 1,
+        'Single closure created'
+    );
+
+    # add_exception
+    my $exception = $calendar->add_exception( { date => '2026-12-25', title => 'Special opening', description => '' } );
+    isa_ok( $exception, 'Koha::Calendar::Exception', 'add_exception returns object' );
+    is( Koha::Calendar::Exceptions->search( { library_id => $library->branchcode } )->count, 1, 'Exception created' );
+
+    # Verify is_holiday uses the new data
+    my $cal    = Koha::Calendar->new( branchcode => $library->branchcode );
+    my $sunday = dt_from_string('2026-06-14');                                # a Sunday
+    is( $cal->is_holiday($sunday), 1, 'Sunday is closed after add_weekly_closure' );
+
+    my $june15 = dt_from_string('2026-06-15');
+    is( $cal->is_holiday($june15), 1, 'Single closure date is closed' );
+
+    my $xmas = dt_from_string('2026-12-25');
+    is( $cal->is_holiday($xmas), 0, 'Exception overrides repeating closure' );
+
+    # delete methods
+    $calendar->delete_weekly_closure( { weekday => 0 } );
+    is(
+        Koha::Calendar::WeeklyClosures->search( { library_id => $library->branchcode } )->count, 0,
+        'Weekly closure deleted'
+    );
+
+    $calendar->delete_repeating_closure( { day => 25, month => 12 } );
+    is(
+        Koha::Calendar::RepeatingClosures->search( { library_id => $library->branchcode } )->count, 0,
+        'Repeating closure deleted'
+    );
+
+    $calendar->delete_single_closure( { date => '2026-06-15' } );
+    is(
+        Koha::Calendar::SingleClosures->search( { library_id => $library->branchcode } )->count, 0,
+        'Single closure deleted'
+    );
+
+    $calendar->delete_exception( { date => '2026-12-25' } );
+    is( Koha::Calendar::Exceptions->search( { library_id => $library->branchcode } )->count, 0, 'Exception deleted' );
+
+    # copy_to
+    $calendar->add_weekly_closure( { weekday => 6,            title => 'Saturdays', description => '' } );
+    $calendar->add_single_closure( { date    => '2027-01-01', title => 'New Year',  description => '' } );
+
+    my $library2 = $builder->build_object( { class => 'Koha::Libraries' } );
+    $calendar->copy_to( $library2->branchcode );
+
+    is(
+        Koha::Calendar::WeeklyClosures->search( { library_id => $library2->branchcode } )->count, 1,
+        'Weekly closure copied'
+    );
+    is(
+        Koha::Calendar::SingleClosures->search( { library_id => $library2->branchcode } )->count, 1,
+        'Single closure copied'
+    );
+
+    # copy_to should not duplicate
+    $calendar->copy_to( $library2->branchcode );
+    is(
+        Koha::Calendar::WeeklyClosures->search( { library_id => $library2->branchcode } )->count, 1,
+        'No duplicate after second copy'
+    );
+    is(
+        Koha::Calendar::SingleClosures->search( { library_id => $library2->branchcode } )->count, 1,
+        'No duplicate single after second copy'
+    );
+
+    # Verify is_holiday after deletions and re-init
+    my $cal2 = Koha::Calendar->new( branchcode => $library->branchcode );
+    is( $cal2->is_holiday($june15), 0, 'Deleted single closure no longer a holiday' );
 
     $schema->storage->txn_rollback;
 };

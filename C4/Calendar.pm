@@ -21,6 +21,7 @@ use vars qw(@EXPORT);
 
 use Carp       qw( croak );
 use Date::Calc qw( Today );
+use Koha::Calendar;
 
 use C4::Context;
 use Koha::Caches;
@@ -64,30 +65,32 @@ sub new {
     return $self;
 }
 
+=head2 _init
+
+Loads calendar data from the database for the given branch.
+
+=cut
+
 sub _init {
     my $self   = shift @_;
     my $branch = shift;
     defined($branch) or die "No branchcode sent to _init";    # must test for defined here and above to allow ""
-    my $dbh        = C4::Context->dbh();
-    my $repeatable = $dbh->prepare(
-        'SELECT *
-                                       FROM repeatable_holidays
-                                      WHERE ( branchcode = ? )
-                                        AND (ISNULL(weekday) = ?)'
-    );
-    $repeatable->execute( $branch, 0 );
-    my %week_days_holidays;
+    my $dbh = C4::Context->dbh();
 
-    while ( my $row = $repeatable->fetchrow_hashref ) {
+    my $weekly_sth = $dbh->prepare('SELECT * FROM library_weekly_closures WHERE library_id = ?');
+    $weekly_sth->execute($branch);
+    my %week_days_holidays;
+    while ( my $row = $weekly_sth->fetchrow_hashref ) {
         my $key = $row->{weekday};
         $week_days_holidays{$key}{title}       = $row->{title};
         $week_days_holidays{$key}{description} = $row->{description};
     }
     $self->{'week_days_holidays'} = \%week_days_holidays;
 
-    $repeatable->execute( $branch, 1 );
+    my $repeating_sth = $dbh->prepare('SELECT * FROM library_repeating_closures WHERE library_id = ?');
+    $repeating_sth->execute($branch);
     my %day_month_holidays;
-    while ( my $row = $repeatable->fetchrow_hashref ) {
+    while ( my $row = $repeating_sth->fetchrow_hashref ) {
         my $key = $row->{month} . "/" . $row->{day};
         $day_month_holidays{$key}{title}       = $row->{title};
         $day_month_holidays{$key}{description} = $row->{description};
@@ -96,29 +99,26 @@ sub _init {
     }
     $self->{'day_month_holidays'} = \%day_month_holidays;
 
-    my $special = $dbh->prepare(
-        'SELECT day, month, year, title, description
-                                    FROM special_holidays
-                                   WHERE ( branchcode = ? )
-                                     AND (isexception = ?)'
-    );
-    $special->execute( $branch, 1 );
+    my $exceptions_sth =
+        $dbh->prepare('SELECT date, title, description FROM library_closure_exceptions WHERE library_id = ?');
+    $exceptions_sth->execute($branch);
     my %exception_holidays;
-    while ( my ( $day, $month, $year, $title, $description ) = $special->fetchrow ) {
-        $exception_holidays{"$year/$month/$day"}{title}       = $title;
-        $exception_holidays{"$year/$month/$day"}{description} = $description;
-        $exception_holidays{"$year/$month/$day"}{date} =
-            sprintf( ISO_DATE_FORMAT, $year, $month, $day );
+    while ( my $row = $exceptions_sth->fetchrow_hashref ) {
+        my ( $year, $month, $day ) = split( /-/, $row->{date} );
+        $exception_holidays{"$year/$month/$day"}{title}       = $row->{title};
+        $exception_holidays{"$year/$month/$day"}{description} = $row->{description};
+        $exception_holidays{"$year/$month/$day"}{date}        = $row->{date};
     }
     $self->{'exception_holidays'} = \%exception_holidays;
 
-    $special->execute( $branch, 0 );
+    my $single_sth = $dbh->prepare('SELECT date, title, description FROM library_single_closures WHERE library_id = ?');
+    $single_sth->execute($branch);
     my %single_holidays;
-    while ( my ( $day, $month, $year, $title, $description ) = $special->fetchrow ) {
-        $single_holidays{"$year/$month/$day"}{title}       = $title;
-        $single_holidays{"$year/$month/$day"}{description} = $description;
-        $single_holidays{"$year/$month/$day"}{date} =
-            sprintf( ISO_DATE_FORMAT, $year, $month, $day );
+    while ( my $row = $single_sth->fetchrow_hashref ) {
+        my ( $year, $month, $day ) = split( /-/, $row->{date} );
+        $single_holidays{"$year/$month/$day"}{title}       = $row->{title};
+        $single_holidays{"$year/$month/$day"}{description} = $row->{description};
+        $single_holidays{"$year/$month/$day"}{date}        = $row->{date};
     }
     $self->{'single_holidays'} = \%single_holidays;
     return $self;
@@ -202,17 +202,13 @@ C<$description> Is the description to store for the holiday formed by $year/$mon
 sub insert_week_day_holiday {
     my $self    = shift @_;
     my %options = @_;
-
-    my $weekday = $options{weekday};
-    croak "Invalid weekday $weekday" unless $weekday =~ m/^[0-6]$/;
-
-    my $dbh           = C4::Context->dbh();
-    my $insertHoliday = $dbh->prepare(
-        "insert into repeatable_holidays (branchcode,weekday,day,month,title,description) values ( ?,?,NULL,NULL,?,? )"
+    Koha::Calendar->new( branchcode => $self->{branchcode} )->add_weekly_closure(
+        {
+            weekday => $options{weekday}, title => $options{title}, description => $options{description},
+        }
     );
-    $insertHoliday->execute( $self->{branchcode}, $weekday, $options{title}, $options{description} );
-    $self->{'week_days_holidays'}->{$weekday}{title}       = $options{title};
-    $self->{'week_days_holidays'}->{$weekday}{description} = $options{description};
+    $self->{'week_days_holidays'}->{ $options{weekday} }{title}       = $options{title};
+    $self->{'week_days_holidays'}->{ $options{weekday} }{description} = $options{description};
     return $self;
 }
 
@@ -238,14 +234,11 @@ C<$description> Is the description to store for the holiday formed by $year/$mon
 sub insert_day_month_holiday {
     my $self    = shift @_;
     my %options = @_;
-
-    my $dbh           = C4::Context->dbh();
-    my $insertHoliday = $dbh->prepare(
-        "insert into repeatable_holidays (branchcode,weekday,day,month,title,description) values (?, NULL, ?, ?, ?,? )"
-    );
-    $insertHoliday->execute(
-        $self->{branchcode}, $options{day}, $options{month}, $options{title},
-        $options{description}
+    Koha::Calendar->new( branchcode => $self->{branchcode} )->add_repeating_closure(
+        {
+            day         => $options{day}, month => $options{month}, title => $options{title},
+            description => $options{description},
+        }
     );
     $self->{'day_month_holidays'}->{"$options{month}/$options{day}"}{title}       = $options{title};
     $self->{'day_month_holidays'}->{"$options{month}/$options{day}"}{description} = $options{description};
@@ -277,28 +270,16 @@ C<$description> Is the description to store for the holiday formed by $year/$mon
 sub insert_single_holiday {
     my $self    = shift @_;
     my %options = @_;
-    @options{qw(year month day)} = ( $options{date} =~ m/(\d+)-(\d+)-(\d+)/o )
-        if $options{date} && !$options{day};
-
-    my $dbh           = C4::Context->dbh();
-    my $isexception   = 0;
-    my $insertHoliday = $dbh->prepare(
-        "insert into special_holidays (branchcode,day,month,year,isexception,title,description) values (?,?,?,?,?,?,?)"
+    my $date    = $options{date};
+    unless ($date) {
+        $date = sprintf( ISO_DATE_FORMAT, $options{year}, $options{month}, $options{day} );
+    }
+    Koha::Calendar->new( branchcode => $self->{branchcode} )->add_single_closure(
+        {
+            date => $date, title => $options{title}, description => $options{description},
+        }
     );
-    $insertHoliday->execute(
-        $self->{branchcode}, $options{day}, $options{month}, $options{year}, $isexception,
-        $options{title},     $options{description}
-    );
-    $self->{'single_holidays'}->{"$options{year}/$options{month}/$options{day}"}{title}       = $options{title};
-    $self->{'single_holidays'}->{"$options{year}/$options{month}/$options{day}"}{description} = $options{description};
-
-    # changed the 'single_holidays' table, lets force/reset its cache
-    my $cache = Koha::Caches->get_instance();
-    my $key   = $self->{branchcode} . "_holidays";
-    $cache->clear_from_cache($key);
-
     return $self;
-
 }
 
 =head2 insert_exception_holiday
@@ -326,28 +307,15 @@ C<$description> Is the description to store for the holiday formed by $year/$mon
 sub insert_exception_holiday {
     my $self    = shift @_;
     my %options = @_;
-
-    @options{qw(year month day)} = ( $options{date} =~ m/(\d+)-(\d+)-(\d+)/o )
-        if $options{date} && !$options{day};
-
-    my $dbh             = C4::Context->dbh();
-    my $isexception     = 1;
-    my $insertException = $dbh->prepare(
-        "insert into special_holidays (branchcode,day,month,year,isexception,title,description) values (?,?,?,?,?,?,?)"
+    my $date    = $options{date};
+    unless ($date) {
+        $date = sprintf( ISO_DATE_FORMAT, $options{year}, $options{month}, $options{day} );
+    }
+    Koha::Calendar->new( branchcode => $self->{branchcode} )->add_exception(
+        {
+            date => $date, title => $options{title}, description => $options{description},
+        }
     );
-    $insertException->execute(
-        $self->{branchcode}, $options{day}, $options{month}, $options{year}, $isexception,
-        $options{title},     $options{description}
-    );
-    $self->{'exception_holidays'}->{"$options{year}/$options{month}/$options{day}"}{title} = $options{title};
-    $self->{'exception_holidays'}->{"$options{year}/$options{month}/$options{day}"}{description} =
-        $options{description};
-
-    # changed the 'single_holidays' table, lets force/reset its cache
-    my $cache = Koha::Caches->get_instance();
-    my $key   = $self->{branchcode} . "_holidays";
-    $cache->clear_from_cache($key);
-
     return $self;
 }
 
@@ -368,13 +336,10 @@ C<$description> Is the description to update for the holiday.
 sub ModWeekdayholiday {
     my $self    = shift @_;
     my %options = @_;
-
-    my $dbh = C4::Context->dbh();
-    my $updateHoliday =
-        $dbh->prepare("UPDATE repeatable_holidays SET title = ?, description = ? WHERE branchcode = ? AND weekday = ?");
-    $updateHoliday->execute( $options{title}, $options{description}, $self->{branchcode}, $options{weekday} );
-    $self->{'week_days_holidays'}->{ $options{weekday} }{title}       = $options{title};
-    $self->{'week_days_holidays'}->{ $options{weekday} }{description} = $options{description};
+    my $closure =
+        Koha::Calendar::WeeklyClosures->search( { library_id => $self->{branchcode}, weekday => $options{weekday} } )
+        ->next;
+    $closure->title( $options{title} )->description( $options{description} )->store if $closure;
     return $self;
 }
 
@@ -400,16 +365,9 @@ C<$description> The description to be update for the holiday.
 sub ModDaymonthholiday {
     my $self    = shift @_;
     my %options = @_;
-
-    my $dbh           = C4::Context->dbh();
-    my $updateHoliday = $dbh->prepare(
-        "UPDATE repeatable_holidays SET title = ?, description = ? WHERE month = ? AND day = ? AND branchcode = ?");
-    $updateHoliday->execute(
-        $options{title}, $options{description}, $options{month}, $options{day},
-        $self->{branchcode}
-    );
-    $self->{'day_month_holidays'}->{"$options{month}/$options{day}"}{title}       = $options{title};
-    $self->{'day_month_holidays'}->{"$options{month}/$options{day}"}{description} = $options{description};
+    my $closure = Koha::Calendar::RepeatingClosures->search(
+        { library_id => $self->{branchcode}, day => $options{day}, month => $options{month} } )->next;
+    $closure->title( $options{title} )->description( $options{description} )->store if $closure;
     return $self;
 }
 
@@ -438,25 +396,12 @@ C<$description> Is the description to update for the holiday formed by $year/$mo
 sub ModSingleholiday {
     my $self    = shift @_;
     my %options = @_;
-
-    my $dbh         = C4::Context->dbh();
-    my $isexception = 0;
-
-    my $updateHoliday = $dbh->prepare( "
-UPDATE special_holidays SET title = ?, description = ?
-    WHERE day = ? AND month = ? AND year = ? AND branchcode = ? AND isexception = ?" );
-    $updateHoliday->execute(
-        $options{title},     $options{description}, $options{day}, $options{month}, $options{year},
-        $self->{branchcode}, $isexception
-    );
-    $self->{'single_holidays'}->{"$options{year}/$options{month}/$options{day}"}{title}       = $options{title};
-    $self->{'single_holidays'}->{"$options{year}/$options{month}/$options{day}"}{description} = $options{description};
-
-    # changed the 'single_holidays' table, lets force/reset its cache
-    my $cache = Koha::Caches->get_instance();
-    my $key   = $self->{branchcode} . "_holidays";
-    $cache->clear_from_cache($key);
-
+    my $date    = $options{date} || sprintf( ISO_DATE_FORMAT, $options{year}, $options{month}, $options{day} );
+    my $closure = Koha::Calendar::SingleClosures->search( { library_id => $self->{branchcode}, date => $date } )->next;
+    if ($closure) {
+        $closure->title( $options{title} )->description( $options{description} )->store;
+        Koha::Caches->get_instance()->clear_from_cache( $self->{branchcode} . '_holidays' );
+    }
     return $self;
 }
 
@@ -483,27 +428,14 @@ C<$description> Is the description to be modified for the holiday formed by $yea
 =cut
 
 sub ModExceptionholiday {
-    my $self    = shift @_;
-    my %options = @_;
-
-    my $dbh           = C4::Context->dbh();
-    my $isexception   = 1;
-    my $updateHoliday = $dbh->prepare( "
-UPDATE special_holidays SET title = ?, description = ?
-    WHERE day = ? AND month = ? AND year = ? AND branchcode = ? AND isexception = ?" );
-    $updateHoliday->execute(
-        $options{title},     $options{description}, $options{day}, $options{month}, $options{year},
-        $self->{branchcode}, $isexception
-    );
-    $self->{'exception_holidays'}->{"$options{year}/$options{month}/$options{day}"}{title} = $options{title};
-    $self->{'exception_holidays'}->{"$options{year}/$options{month}/$options{day}"}{description} =
-        $options{description};
-
-    # changed the 'single_holidays' table, lets force/reset its cache
-    my $cache = Koha::Caches->get_instance();
-    my $key   = $self->{branchcode} . "_holidays";
-    $cache->clear_from_cache($key);
-
+    my $self      = shift @_;
+    my %options   = @_;
+    my $date      = $options{date} || sprintf( ISO_DATE_FORMAT, $options{year}, $options{month}, $options{day} );
+    my $exception = Koha::Calendar::Exceptions->search( { library_id => $self->{branchcode}, date => $date } )->next;
+    if ($exception) {
+        $exception->title( $options{title} )->description( $options{description} )->store;
+        Koha::Caches->get_instance()->clear_from_cache( $self->{branchcode} . '_holidays' );
+    }
     return $self;
 }
 
@@ -529,68 +461,37 @@ C<$year> Is year to make the date to delete.
 sub delete_holiday {
     my $self    = shift @_;
     my %options = @_;
+    my $cal     = Koha::Calendar->new( branchcode => $self->{branchcode} );
 
-    # Verify what kind of holiday that day is. For example, if it is
-    # a repeatable holiday, this should check if there are some exception
-    # for that holiday rule. Otherwise, if it is a regular holiday, it´s
-    # ok just deleting it.
+    if ( $options{day} && $options{month} && $options{year} ) {
+        my $date = sprintf( ISO_DATE_FORMAT, $options{year}, $options{month}, $options{day} );
 
-    my $dbh             = C4::Context->dbh();
-    my $isSingleHoliday = $dbh->prepare(
-        "SELECT id FROM special_holidays WHERE (branchcode = ?) AND (day = ?) AND (month = ?) AND (year = ?)");
-    $isSingleHoliday->execute( $self->{branchcode}, $options{day}, $options{month}, $options{year} );
-    if ( $isSingleHoliday->rows ) {
-        my $id = $isSingleHoliday->fetchrow;
-        $isSingleHoliday->finish;    # Close the last query
-
-        my $deleteHoliday = $dbh->prepare("DELETE FROM special_holidays WHERE id = ?");
-        $deleteHoliday->execute($id);
-        delete( $self->{'single_holidays'}->{"$options{year}/$options{month}/$options{day}"} );
-    } else {
-        $isSingleHoliday->finish;    # Close the last query
-
-        my $isWeekdayHoliday = $dbh->prepare("SELECT id FROM repeatable_holidays WHERE branchcode = ? AND weekday = ?");
-        $isWeekdayHoliday->execute( $self->{branchcode}, $options{weekday} );
-        if ( $isWeekdayHoliday->rows ) {
-            my $id = $isWeekdayHoliday->fetchrow;
-            $isWeekdayHoliday->finish;    # Close the last query
-
-            my $updateExceptions = $dbh->prepare(
-                "UPDATE special_holidays SET isexception = 0 WHERE (WEEKDAY(CONCAT(special_holidays.year,'-',special_holidays.month,'-',special_holidays.day)) = ?) AND (branchcode = ?)"
-            );
-            $updateExceptions->execute( $options{weekday}, $self->{branchcode} );
-            $updateExceptions->finish;    # Close the last query
-
-            my $deleteHoliday = $dbh->prepare("DELETE FROM repeatable_holidays WHERE id = ?");
-            $deleteHoliday->execute($id);
-            delete( $self->{'week_days_holidays'}->{ $options{weekday} } );
-        } else {
-            $isWeekdayHoliday->finish;    # Close the last query
-
-            my $isDayMonthHoliday = $dbh->prepare(
-                "SELECT id FROM repeatable_holidays WHERE (branchcode = ?) AND (day = ?) AND (month = ?)");
-            $isDayMonthHoliday->execute( $self->{branchcode}, $options{day}, $options{month} );
-            if ( $isDayMonthHoliday->rows ) {
-                my $id = $isDayMonthHoliday->fetchrow;
-                $isDayMonthHoliday->finish;
-                my $updateExceptions = $dbh->prepare(
-                    "UPDATE special_holidays SET isexception = 0 WHERE (special_holidays.branchcode = ?) AND (special_holidays.day = ?) and (special_holidays.month = ?)"
-                );
-                $updateExceptions->execute( $self->{branchcode}, $options{day}, $options{month} );
-                $updateExceptions->finish;    # Close the last query
-
-                my $deleteHoliday = $dbh->prepare("DELETE FROM repeatable_holidays WHERE (id = ?)");
-                $deleteHoliday->execute($id);
-                delete( $self->{'day_month_holidays'}->{"$options{month}/$options{day}"} );
-            }
+        # Try single closure first
+        if ( Koha::Calendar::SingleClosures->search( { library_id => $self->{branchcode}, date => $date } )->count ) {
+            $cal->delete_single_closure( { date => $date } );
         }
+
+        # Also remove any exception for this date
+        Koha::Calendar::Exceptions->search( { library_id => $self->{branchcode}, date => $date } )->delete;
     }
 
-    # changed the 'single_holidays' table, lets force/reset its cache
-    my $cache = Koha::Caches->get_instance();
-    my $key   = $self->{branchcode} . "_holidays";
-    $cache->clear_from_cache($key);
+    if ( defined $options{weekday}
+        && Koha::Calendar::WeeklyClosures->search( { library_id => $self->{branchcode}, weekday => $options{weekday} } )
+        ->count )
+    {
+        $cal->delete_weekly_closure( { weekday => $options{weekday} } );
+    } elsif (
+        $options{day}
+        && $options{month}
+        && Koha::Calendar::RepeatingClosures->search(
+            { library_id => $self->{branchcode}, day => $options{day}, month => $options{month} }
+        )->count
+        )
+    {
+        $cal->delete_repeating_closure( { day => $options{day}, month => $options{month} } );
+    }
 
+    $cal->_clear_cache;
     return $self;
 }
 
@@ -613,17 +514,8 @@ C<$year> Is year to make the date to delete.
 sub delete_holiday_range {
     my $self    = shift;
     my %options = @_;
-
-    my $dbh = C4::Context->dbh();
-    my $sth = $dbh->prepare(
-        "DELETE FROM special_holidays WHERE (branchcode = ?) AND (day = ?) AND (month = ?) AND (year = ?)");
-    $sth->execute( $self->{branchcode}, $options{day}, $options{month}, $options{year} );
-
-    # changed the 'single_holidays' table, lets force/reset its cache
-    my $cache = Koha::Caches->get_instance();
-    my $key   = $self->{branchcode} . "_holidays";
-    $cache->clear_from_cache($key);
-
+    my $date    = $options{date} || sprintf( ISO_DATE_FORMAT, $options{year}, $options{month}, $options{day} );
+    Koha::Calendar->new( branchcode => $self->{branchcode} )->delete_single_closure( { date => $date } );
 }
 
 =head2 delete_holiday_range_repeatable
@@ -642,15 +534,8 @@ C<$month> Is month to make the date to delete.
 sub delete_holiday_range_repeatable {
     my $self    = shift;
     my %options = @_;
-
-    my $dbh = C4::Context->dbh();
-    my $sth = $dbh->prepare("DELETE FROM repeatable_holidays WHERE (branchcode = ?) AND (day = ?) AND (month = ?)");
-    $sth->execute( $self->{branchcode}, $options{day}, $options{month} );
-
-    # changed the 'single_holidays' table, lets force/reset its cache
-    my $cache = Koha::Caches->get_instance();
-    my $key   = $self->{branchcode} . "_holidays";
-    $cache->clear_from_cache($key);
+    Koha::Calendar->new( branchcode => $self->{branchcode} )
+        ->delete_repeating_closure( { day => $options{day}, month => $options{month} } );
 }
 
 =head2 delete_exception_holiday_range
@@ -673,17 +558,8 @@ C<$year> Is year to make the date to delete.
 sub delete_exception_holiday_range {
     my $self    = shift;
     my %options = @_;
-
-    my $dbh = C4::Context->dbh();
-    my $sth = $dbh->prepare(
-        "DELETE FROM special_holidays WHERE (branchcode = ?) AND (isexception = 1) AND (day = ?) AND (month = ?) AND (year = ?)"
-    );
-    $sth->execute( $self->{branchcode}, $options{day}, $options{month}, $options{year} );
-
-    # changed the 'single_holidays' table, lets force/reset its cache
-    my $cache = Koha::Caches->get_instance();
-    my $key   = $self->{branchcode} . "_holidays";
-    $cache->clear_from_cache($key);
+    my $date    = $options{date} || sprintf( ISO_DATE_FORMAT, $options{year}, $options{month}, $options{day} );
+    Koha::Calendar->new( branchcode => $self->{branchcode} )->delete_exception( { date => $date } );
 }
 
 =head2 isHoliday
@@ -734,47 +610,7 @@ sub isHoliday {
 
 sub copy_to_branch {
     my ( $self, $target_branch ) = @_;
-
-    croak "No target_branch" unless $target_branch;
-
-    my $target_calendar = C4::Calendar->new( branchcode => $target_branch );
-
-    my ( $y, $m, $d ) = Today();
-    my $today = sprintf ISO_DATE_FORMAT, $y, $m, $d;
-
-    my $wdh        = $self->get_week_days_holidays;
-    my $target_wdh = $target_calendar->get_week_days_holidays;
-    foreach my $key ( keys %$wdh ) {
-        unless ( grep { $_ eq $key } keys %$target_wdh ) {
-            $target_calendar->insert_week_day_holiday( weekday => $key, %{ $wdh->{$key} } );
-        }
-    }
-
-    my $dmh        = $self->get_day_month_holidays;
-    my $target_dmh = $target_calendar->get_day_month_holidays;
-    foreach my $values ( values %$dmh ) {
-        unless ( grep { $_->{day} eq $values->{day} && $_->{month} eq $values->{month} } values %$target_dmh ) {
-            $target_calendar->insert_day_month_holiday( %{$values} );
-        }
-    }
-
-    my $exception_holidays = $self->get_exception_holidays;
-    my $target_exceptions  = $target_calendar->get_exception_holidays;
-    foreach my $values ( grep { $_->{date} gt $today } values %{$exception_holidays} ) {
-        unless ( grep { $_->{date} eq $values->{date} } values %$target_exceptions ) {
-            $target_calendar->insert_exception_holiday( %{$values} );
-        }
-    }
-
-    my $single_holidays = $self->get_single_holidays;
-    my $target_singles  = $target_calendar->get_single_holidays;
-    foreach my $values ( grep { $_->{date} gt $today } values %{$single_holidays} ) {
-        unless ( grep { $_->{date} eq $values->{date} } values %$target_singles ) {
-            $target_calendar->insert_single_holiday( %{$values} );
-        }
-    }
-
-    return 1;
+    return Koha::Calendar->new( branchcode => $self->{branchcode} )->copy_to($target_branch);
 }
 
 1;

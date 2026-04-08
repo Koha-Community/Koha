@@ -7,6 +7,7 @@ use DateTime;
 use DateTime::Duration;
 use C4::Context;
 use Koha::Caches;
+use Koha::DateUtils qw( dt_from_string );
 use Koha::Exceptions;
 use Koha::Exceptions::Calendar;
 use Koha::Calendar::WeeklyClosures;
@@ -422,6 +423,124 @@ sub clear_weekly_closed_days {
     return;
 }
 
+sub add_weekly_closure {
+    my ( $self, $params ) = @_;
+    return Koha::Calendar::WeeklyClosure->new( { library_id => $self->{branchcode}, %$params } )->store;
+}
+
+sub add_repeating_closure {
+    my ( $self, $params ) = @_;
+    return Koha::Calendar::RepeatingClosure->new( { library_id => $self->{branchcode}, %$params } )->store;
+}
+
+sub add_single_closure {
+    my ( $self, $params ) = @_;
+    my $result = Koha::Calendar::SingleClosure->new( { library_id => $self->{branchcode}, %$params } )->store;
+    $self->_clear_cache;
+    return $result;
+}
+
+sub add_exception {
+    my ( $self, $params ) = @_;
+    my $result = Koha::Calendar::Exception->new( { library_id => $self->{branchcode}, %$params } )->store;
+    $self->_clear_cache;
+    return $result;
+}
+
+sub delete_weekly_closure {
+    my ( $self, $params ) = @_;
+    Koha::Calendar::WeeklyClosures->search( { library_id => $self->{branchcode}, weekday => $params->{weekday} } )
+        ->delete;
+    return $self;
+}
+
+sub delete_repeating_closure {
+    my ( $self, $params ) = @_;
+    Koha::Calendar::RepeatingClosures->search(
+        { library_id => $self->{branchcode}, day => $params->{day}, month => $params->{month} } )->delete;
+    return $self;
+}
+
+sub delete_single_closure {
+    my ( $self, $params ) = @_;
+    Koha::Calendar::SingleClosures->search( { library_id => $self->{branchcode}, date => $params->{date} } )->delete;
+    $self->_clear_cache;
+    return $self;
+}
+
+sub delete_exception {
+    my ( $self, $params ) = @_;
+    Koha::Calendar::Exceptions->search( { library_id => $self->{branchcode}, date => $params->{date} } )->delete;
+    $self->_clear_cache;
+    return $self;
+}
+
+sub copy_to {
+    my ( $self, $target_branchcode ) = @_;
+    croak "No target_branchcode" unless $target_branchcode;
+
+    my $today = dt_from_string()->ymd;
+
+    my $weekly = Koha::Calendar::WeeklyClosures->search( { library_id => $self->{branchcode} } );
+    while ( my $row = $weekly->next ) {
+        next
+            if Koha::Calendar::WeeklyClosures->search( { library_id => $target_branchcode, weekday => $row->weekday } )
+            ->count;
+        Koha::Calendar::WeeklyClosure->new(
+            {
+                library_id => $target_branchcode, weekday     => $row->weekday,
+                title      => $row->title,        description => $row->description,
+            }
+        )->store;
+    }
+
+    my $repeating = Koha::Calendar::RepeatingClosures->search( { library_id => $self->{branchcode} } );
+    while ( my $row = $repeating->next ) {
+        next
+            if Koha::Calendar::RepeatingClosures->search(
+            { library_id => $target_branchcode, day => $row->day, month => $row->month } )->count;
+        Koha::Calendar::RepeatingClosure->new(
+            {
+                library_id => $target_branchcode, day         => $row->day, month => $row->month,
+                title      => $row->title,        description => $row->description,
+            }
+        )->store;
+    }
+
+    my $singles =
+        Koha::Calendar::SingleClosures->search( { library_id => $self->{branchcode}, date => { '>=' => $today } } );
+    while ( my $row = $singles->next ) {
+        next
+            if Koha::Calendar::SingleClosures->search( { library_id => $target_branchcode, date => $row->date } )
+            ->count;
+        Koha::Calendar::SingleClosure->new(
+            {
+                library_id => $target_branchcode, date        => $row->date,
+                title      => $row->title,        description => $row->description,
+            }
+        )->store;
+    }
+
+    my $exceptions =
+        Koha::Calendar::Exceptions->search( { library_id => $self->{branchcode}, date => { '>=' => $today } } );
+    while ( my $row = $exceptions->next ) {
+        next if Koha::Calendar::Exceptions->search( { library_id => $target_branchcode, date => $row->date } )->count;
+        Koha::Calendar::Exception->new(
+            {
+                library_id => $target_branchcode, date        => $row->date,
+                title      => $row->title,        description => $row->description,
+            }
+        )->store;
+    }
+
+    return 1;
+}
+
+sub _clear_cache {
+    my ($self) = @_;
+    Koha::Caches->get_instance()->clear_from_cache( $self->{branchcode} . '_holidays' );
+}
+
 1;
 __END__
 
@@ -598,8 +717,53 @@ allow testing of more configurations
 =head2 add_holiday
 
 Passed a datetime object this will add it to the calendar's list of
-closed days. This is for testing so that we can alter the Calenfar object's
+closed days. This is for testing so that we can alter the Calendar object's
 list of specified dates
+
+=head2 CRUD methods
+
+=head3 add_weekly_closure
+
+    $calendar->add_weekly_closure({ weekday => 0, title => 'Sundays', description => '' });
+
+=head3 add_repeating_closure
+
+    $calendar->add_repeating_closure({ day => 25, month => 12, title => 'Christmas', description => '' });
+
+=head3 add_single_closure
+
+    $calendar->add_single_closure({ date => '2026-06-15', title => 'Staff day', description => '' });
+
+=head3 add_exception
+
+    $calendar->add_exception({ date => '2026-12-25', title => 'Special opening', description => '' });
+
+=head3 delete_weekly_closure
+
+    $calendar->delete_weekly_closure({ weekday => 0 });
+
+=head3 delete_repeating_closure
+
+    $calendar->delete_repeating_closure({ day => 25, month => 12 });
+
+=head3 delete_single_closure
+
+    $calendar->delete_single_closure({ date => '2026-06-15' });
+
+=head3 delete_exception
+
+    $calendar->delete_exception({ date => '2026-12-25' });
+
+=head3 copy_to
+
+    $calendar->copy_to($target_branchcode);
+
+Copies all closure rules to another branch. Only copies future single
+closures and exceptions.
+
+=head3 _clear_cache
+
+Clears the holidays cache for this branch.
 
 =head2 Internal methods
 
