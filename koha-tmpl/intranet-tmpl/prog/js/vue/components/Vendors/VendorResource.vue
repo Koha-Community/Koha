@@ -705,6 +705,10 @@ export default {
             delete vendor.id;
 
             if (vendor.physical) {
+                vendor[`address1`] = "";
+                vendor[`address2`] = "";
+                vendor[`address3`] = "";
+                vendor[`address4`] = "";
                 const addressLines = vendor.physical.split("\n");
                 if (addressLines.length > 4) {
                     addressLines.length = 4;
@@ -786,7 +790,7 @@ export default {
                 let physicalAddress = "";
                 [1, 2, 3, 4].forEach(i => {
                     if (resource[`address${i}`]) {
-                        physicalAddress += `${resource[`address${i}`]}`;
+                        physicalAddress += `${resource[`address${i}`]} `;
                     }
                 });
                 resource.physical = physicalAddress;
