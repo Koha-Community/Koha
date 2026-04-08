@@ -54,27 +54,81 @@ subtest 'Original tests from t' => sub {
         }
     );
 
-    my $mpl  = $builder->build_object( { class => 'Koha::Libraries' } )->branchcode;
-    my $cpl  = $builder->build_object( { class => 'Koha::Libraries' } )->branchcode;
-    my $rows = [    # add weekly holidays
-        { branchcode => $mpl, weekday => 0 },                  # sundays
-        { branchcode => $mpl, weekday => 6 },                  # saturdays
-        { branchcode => $mpl, day     => 1,  month => 1 },     # new year's day
-        { branchcode => $mpl, day     => 25, month => 12 },    # chrismas
-    ];
-    $schema->resultset('RepeatableHoliday')->delete_all;
-    $schema->resultset('RepeatableHoliday')->create( { %$_, description => q{} } ) for @$rows;
+    my $mpl = $builder->build_object( { class => 'Koha::Libraries' } )->branchcode;
+    my $cpl = $builder->build_object( { class => 'Koha::Libraries' } )->branchcode;
 
-    $rows = [                                                  # exception holidays
-        { branchcode => $mpl, day => 11, month => 11, year => 2012, isexception => 1 },    # sunday exception
-        { branchcode => $mpl, day => 1,  month => 6,  year => 2011, isexception => 0 },
-        { branchcode => $mpl, day => 4,  month => 7,  year => 2012, isexception => 0 },
-        { branchcode => $cpl, day => 6,  month => 8,  year => 2012, isexception => 0 },
-        { branchcode => $mpl, day => 7,  month => 7,  year => 2012, isexception => 1 },    # holiday exception
-        { branchcode => $mpl, day => 7,  month => 7,  year => 2012, isexception => 0 },    # holiday
-    ];
-    $schema->resultset('SpecialHoliday')->delete_all;
-    $schema->resultset('SpecialHoliday')->create( { %$_, description => q{} } ) for @$rows;
+    Koha::Calendar::WeeklyClosures->search( { library_id => [ $mpl, $cpl ] } )->delete;
+    Koha::Calendar::RepeatingClosures->search( { library_id => [ $mpl, $cpl ] } )->delete;
+    Koha::Calendar::SingleClosures->search( { library_id => [ $mpl, $cpl ] } )->delete;
+    Koha::Calendar::Exceptions->search( { library_id => [ $mpl, $cpl ] } )->delete;
+
+    # Weekly closures
+    $builder->build_object(
+        {
+            class => 'Koha::Calendar::WeeklyClosures',
+            value => { library_id => $mpl, weekday => 0, title => '', description => '' }
+        }
+    );    # sundays
+    $builder->build_object(
+        {
+            class => 'Koha::Calendar::WeeklyClosures',
+            value => { library_id => $mpl, weekday => 6, title => '', description => '' }
+        }
+    );    # saturdays
+
+    # Repeating annual closures
+    $builder->build_object(
+        {
+            class => 'Koha::Calendar::RepeatingClosures',
+            value => { library_id => $mpl, day => 1, month => 1, title => '', description => '' }
+        }
+    );    # new year
+    $builder->build_object(
+        {
+            class => 'Koha::Calendar::RepeatingClosures',
+            value => { library_id => $mpl, day => 25, month => 12, title => '', description => '' }
+        }
+    );    # christmas
+
+    # Single closures
+    $builder->build_object(
+        {
+            class => 'Koha::Calendar::SingleClosures',
+            value => { library_id => $mpl, date => '2011-06-01', title => '', description => '' }
+        }
+    );
+    $builder->build_object(
+        {
+            class => 'Koha::Calendar::SingleClosures',
+            value => { library_id => $mpl, date => '2012-07-04', title => '', description => '' }
+        }
+    );
+    $builder->build_object(
+        {
+            class => 'Koha::Calendar::SingleClosures',
+            value => { library_id => $cpl, date => '2012-08-06', title => '', description => '' }
+        }
+    );
+    $builder->build_object(
+        {
+            class => 'Koha::Calendar::SingleClosures',
+            value => { library_id => $mpl, date => '2012-07-07', title => '', description => '' }
+        }
+    );
+
+    # Exceptions (open overrides)
+    $builder->build_object(
+        {
+            class => 'Koha::Calendar::Exceptions',
+            value => { library_id => $mpl, date => '2012-11-11', title => '', description => '' }
+        }
+    );    # sunday exception
+    $builder->build_object(
+        {
+            class => 'Koha::Calendar::Exceptions',
+            value => { library_id => $mpl, date => '2012-07-07', title => '', description => '' }
+        }
+    );    # holiday exception
 
     my $cache = Koha::Caches->get_instance();
     $cache->clear_from_cache( $mpl . '_holidays' );
@@ -366,17 +420,11 @@ subtest 'Original tests from t' => sub {
 
 my $library  = $builder->build_object( { class => 'Koha::Libraries' } );
 my $calendar = Koha::Calendar->new( branchcode => $library->branchcode, days_mode => 'Calendar' );
-my $holiday  = $builder->build(
+$builder->build_object(
     {
-        source => 'SpecialHoliday',
-        value  => {
-            branchcode  => $library->branchcode,
-            day         => $holiday_dt->day,
-            month       => $holiday_dt->month,
-            year        => $holiday_dt->year,
-            title       => 'My holiday',
-            isexception => 0
-        },
+        class => 'Koha::Calendar::SingleClosures',
+        value =>
+            { library_id => $library->branchcode, date => $holiday_dt->ymd, title => 'My holiday', description => '' }
     }
 );
 
@@ -518,12 +566,13 @@ subtest 'hours_between | days_between' => sub {
         my $library = $builder->build_object( { class => 'Koha::Libraries' } );
 
         # Wednesdays are closed
-        my $dbh = C4::Context->dbh;
-        $dbh->do(
-            q|
-            INSERT INTO repeatable_holidays (branchcode,weekday,day,month,title,description)
-            VALUES ( ?, ?, NULL, NULL, ?, '' )
-        |, undef, $library->branchcode, 3, 'Closed on Wednesday'
+        $builder->build_object(
+            {
+                class => 'Koha::Calendar::WeeklyClosures',
+                value => {
+                    library_id => $library->branchcode, weekday => 3, title => 'Closed on Wednesday', description => '',
+                }
+            }
         );
 
         my $calendar = Koha::Calendar->new( branchcode => $library->branchcode );
@@ -668,16 +717,16 @@ subtest 'is_holiday' => sub {
         $dow = 0 if $dow == 7;
 
         # Closed this day of the week
-        my $dbh = C4::Context->dbh;
-        $dbh->do(
-            q|
-            INSERT INTO repeatable_holidays (branchcode,weekday,day,month,title,description)
-            VALUES ( ?, ?, NULL, NULL, ?, '' )
-        |, undef, $library->branchcode, $dow, "TEST"
+        my $closure = $builder->build_object(
+            {
+                class => 'Koha::Calendar::WeeklyClosures',
+                value => {
+                    library_id => $library->branchcode, weekday => $dow, title => 'TEST', description => '',
+                }
+            }
         );
 
         # Iterate 7 days
-        my $sth = $dbh->prepare("UPDATE repeatable_holidays SET weekday = ? WHERE branchcode = ? AND title = 'TEST'");
         for my $i ( 0 .. 6 ) {
             my $calendar = Koha::Calendar->new( branchcode => $library->branchcode );
 
@@ -687,7 +736,7 @@ subtest 'is_holiday' => sub {
             $day->add( days => 1 );
             $dow++;
             $dow = 0 if $dow == 7;
-            $sth->execute( $dow, $library->branchcode );
+            $closure->weekday($dow)->store;
         }
     };
 };
@@ -707,16 +756,16 @@ subtest 'get_push_amt' => sub {
         $dow = 0 if $dow == 7;
 
         # Closed this day of the week
-        my $dbh = C4::Context->dbh;
-        $dbh->do(
-            q|
-            INSERT INTO repeatable_holidays (branchcode,weekday,day,month,title,description)
-            VALUES ( ?, ?, NULL, NULL, ?, '' )
-        |, undef, $library->branchcode, $dow, "TEST"
+        my $closure = $builder->build_object(
+            {
+                class => 'Koha::Calendar::WeeklyClosures',
+                value => {
+                    library_id => $library->branchcode, weekday => $dow, title => 'TEST', description => '',
+                }
+            }
         );
 
         # Iterate 7 days
-        my $sth = $dbh->prepare("UPDATE repeatable_holidays SET weekday = ? WHERE branchcode = ? AND title = 'TEST'");
         for my $i ( 0 .. 6 ) {
             my $calendar = Koha::Calendar->new( branchcode => $library->branchcode, days_mode => 'Dayweek' );
 
@@ -739,7 +788,7 @@ subtest 'get_push_amt' => sub {
             $day->add( days => 1 );
             $dow++;
             $dow = 0 if $dow == 7;
-            $sth->execute( $dow, $library->branchcode );
+            $closure->weekday($dow)->store;
         }
     };
 };

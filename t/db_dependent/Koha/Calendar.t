@@ -53,46 +53,27 @@ subtest 'has_business_days_between' => sub {
     my $sunday    = dt_from_string('2024-01-07');    # Sunday
 
     # Make Wednesday a holiday
-    my $wednesday_holiday = $builder->build(
+    $builder->build_object(
         {
-            source => 'SpecialHoliday',
-            value  => {
-                branchcode  => $branchcode,
-                day         => $wednesday->day,
-                month       => $wednesday->month,
-                year        => $wednesday->year,
-                title       => 'Wednesday Holiday',
-                isexception => 0
-            },
+            class => 'Koha::Calendar::SingleClosures',
+            value =>
+                { library_id => $branchcode, date => $wednesday->ymd, title => 'Wednesday Holiday', description => '' }
         }
     );
 
     # Make Saturday and Sunday holidays (weekend)
-    my $saturday_holiday = $builder->build(
+    $builder->build_object(
         {
-            source => 'SpecialHoliday',
-            value  => {
-                branchcode  => $branchcode,
-                day         => $saturday->day,
-                month       => $saturday->month,
-                year        => $saturday->year,
-                title       => 'Saturday Holiday',
-                isexception => 0
-            },
+            class => 'Koha::Calendar::SingleClosures',
+            value =>
+                { library_id => $branchcode, date => $saturday->ymd, title => 'Saturday Holiday', description => '' }
         }
     );
 
-    my $sunday_holiday = $builder->build(
+    $builder->build_object(
         {
-            source => 'SpecialHoliday',
-            value  => {
-                branchcode  => $branchcode,
-                day         => $sunday->day,
-                month       => $sunday->month,
-                year        => $sunday->year,
-                title       => 'Sunday Holiday',
-                isexception => 0
-            },
+            class => 'Koha::Calendar::SingleClosures',
+            value => { library_id => $branchcode, date => $sunday->ymd, title => 'Sunday Holiday', description => '' }
         }
     );
 

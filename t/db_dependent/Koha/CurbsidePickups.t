@@ -164,7 +164,7 @@ subtest 'Create a pickup' => sub {
     'Koha::Exceptions::CurbsidePickup::LibraryIsClosed',
         'Cannot create a pickup on a holiday';
 
-    C4::Context->dbh->do(q{DELETE FROM repeatable_holidays});
+    C4::Context->dbh->do(q{DELETE FROM library_weekly_closures});
     Koha::Caches->get_instance->flush_all;
 };
 

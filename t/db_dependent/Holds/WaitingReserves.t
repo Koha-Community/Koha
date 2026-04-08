@@ -17,8 +17,10 @@ my $schema = Koha::Database->new->schema;
 $schema->storage->txn_begin;
 
 my $dbh = C4::Context->dbh;
-$dbh->do(q{DELETE FROM special_holidays});
-$dbh->do(q{DELETE FROM repeatable_holidays});
+$dbh->do(q{DELETE FROM library_single_closures});
+$dbh->do(q{DELETE FROM library_closure_exceptions});
+$dbh->do(q{DELETE FROM library_weekly_closures});
+$dbh->do(q{DELETE FROM library_repeating_closures});
 $dbh->do("DELETE FROM reserves");
 
 my $builder = t::lib::TestBuilder->new();
@@ -170,34 +172,24 @@ my $reserve3 = $builder->build(
 my $special_holiday1_dt = $today->clone;
 $special_holiday1_dt->add( days => 2 );
 
-my $holiday = $builder->build(
+my $holiday = $builder->build_object(
     {
-        source => 'SpecialHoliday',
-        value  => {
-            branchcode  => 'LIB1',
-            day         => $special_holiday1_dt->day,
-            month       => $special_holiday1_dt->month,
-            year        => $special_holiday1_dt->year,
-            title       => 'My special holiday',
-            isexception => 0
-        },
+        class => 'Koha::Calendar::SingleClosures',
+        value => {
+            library_id => 'LIB1', date => $special_holiday1_dt->ymd, title => 'My special holiday', description => ''
+        }
     }
 );
 
 my $special_holiday2_dt = $today->clone;
 $special_holiday2_dt->add( days => 4 );
 
-my $holiday2 = $builder->build(
+my $holiday2 = $builder->build_object(
     {
-        source => 'SpecialHoliday',
-        value  => {
-            branchcode  => 'LIB1',
-            day         => $special_holiday2_dt->day,
-            month       => $special_holiday2_dt->month,
-            year        => $special_holiday2_dt->year,
-            title       => 'My special holiday 2',
-            isexception => 0
-        },
+        class => 'Koha::Calendar::SingleClosures',
+        value => {
+            library_id => 'LIB1', date => $special_holiday2_dt->ymd, title => 'My special holiday 2', description => ''
+        }
     }
 );
 

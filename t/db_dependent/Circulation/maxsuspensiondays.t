@@ -72,8 +72,10 @@ my $itemnumber = Koha::Item->new(
 
 # clear any holidays to avoid throwing off the suspension day
 # calculations
-$dbh->do('DELETE FROM special_holidays');
-$dbh->do('DELETE FROM repeatable_holidays');
+$dbh->do('DELETE FROM library_single_closures');
+$dbh->do('DELETE FROM library_closure_exceptions');
+$dbh->do('DELETE FROM library_weekly_closures');
+$dbh->do('DELETE FROM library_repeating_closures');
 
 my $daysago20   = dt_from_string->add_duration( DateTime::Duration->new( days => -20 ) );
 my $daysafter40 = dt_from_string->add_duration( DateTime::Duration->new( days =>  40 ) );

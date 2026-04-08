@@ -122,8 +122,10 @@ my $mocked_datetime = Test::MockModule->new('DateTime');
 $mocked_datetime->mock( 'now', sub { return $now_value->clone; } );
 
 my $cache = Koha::Caches->get_instance();
-$dbh->do(q|DELETE FROM special_holidays|);
-$dbh->do(q|DELETE FROM repeatable_holidays|);
+$dbh->do(q|DELETE FROM library_single_closures|);
+$dbh->do(q|DELETE FROM library_closure_exceptions|);
+$dbh->do(q|DELETE FROM library_weekly_closures|);
+$dbh->do(q|DELETE FROM library_repeating_closures|);
 my $branches = Koha::Libraries->search();
 for my $branch ( $branches->next ) {
     my $key = $branch->branchcode . "_holidays";
