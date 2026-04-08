@@ -839,8 +839,10 @@
                                 <xsl:if test="marc:subfield[@code=9]">
                                     <a class='authlink'>
                                         <xsl:attribute name="href">/cgi-bin/koha/opac-authoritiesdetail.pl?authid=<xsl:value-of select="str:encode-uri(marc:subfield[@code=9], true())"/></xsl:attribute>
+                                        <xsl:attribute name="title">View authority record</xsl:attribute>
                                         <xsl:element name="i">
                                             <xsl:attribute name="class">fa fa-search</xsl:attribute>
+                                            <xsl:attribute name="aria-label">View authority record</xsl:attribute>
                                         </xsl:element>
                                     </a>
                                 </xsl:if>
@@ -886,8 +888,10 @@
                                 <xsl:text> </xsl:text>
                                 <a class='authlink'>
                                     <xsl:attribute name="href">/cgi-bin/koha/opac-authoritiesdetail.pl?authid=<xsl:value-of select="str:encode-uri(marc:subfield[@code=9], true())"/></xsl:attribute>
+                                    <xsl:attribute name="title">View authority record</xsl:attribute>
                                     <xsl:element name="i">
                                         <xsl:attribute name="class">fa fa-search</xsl:attribute>
+                                        <xsl:attribute name="aria-label">View authority record</xsl:attribute>
                                     </xsl:element>
                                 </a>
                             </xsl:if>
@@ -2135,8 +2139,10 @@
             <xsl:if test="marc:subfield[@code=9]">
                 <a class='authlink'>
                     <xsl:attribute name="href">/cgi-bin/koha/opac-authoritiesdetail.pl?authid=<xsl:value-of select="str:encode-uri(marc:subfield[@code=9], true())"/></xsl:attribute>
+                    <xsl:attribute name="title">View authority record</xsl:attribute>
                     <xsl:element name="i">
                         <xsl:attribute name="class">fa fa-search</xsl:attribute>
+                        <xsl:attribute name="aria-label">View authority record</xsl:attribute>
                     </xsl:element>
                 </a>
             </xsl:if>
