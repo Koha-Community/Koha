@@ -601,6 +601,19 @@ Passed a datetime object this will add it to the calendar's list of
 closed days. This is for testing so that we can alter the Calenfar object's
 list of specified dates
 
+=head2 Internal methods
+
+=head3 _init
+
+Loads weekly closed days and repeating annual closures from the database
+into the object's internal data structures.
+
+=head3 _holidays
+
+Returns a hashref of single closures and exceptions keyed by YYYYMMDD.
+Values are 1 for closures and 0 for exceptions (open overrides).
+Results are cached in memcache.
+
 =head1 DIAGNOSTICS
 
 Will croak if not passed a branchcode in new
