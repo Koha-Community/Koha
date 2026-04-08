@@ -448,6 +448,20 @@ sub library_hours {
     return Koha::Library::Hours->_new_from_dbic($library_hours_rs);
 }
 
+=head3 calendar
+
+    my $calendar = $library->calendar;
+
+Returns a L<Koha::Calendar> object for this library.
+
+=cut
+
+sub calendar {
+    my ($self) = @_;
+    require Koha::Calendar;
+    return Koha::Calendar->new( branchcode => $self->branchcode );
+}
+
 =head2 Internal methods
 
 =head3 _type

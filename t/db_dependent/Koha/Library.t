@@ -20,7 +20,7 @@
 use Modern::Perl;
 
 use Test::NoWarnings;
-use Test::More tests => 4;
+use Test::More tests => 5;
 
 use Koha::Database;
 use Koha::AdditionalContents;
@@ -196,6 +196,21 @@ subtest 'desks() tests' => sub {
     is( $rs->count,    2 );
     is( $rs->next->id, $desk_1->id );
     is( $rs->next->id, $desk_2->id );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'calendar() tests' => sub {
+
+    plan tests => 2;
+
+    $schema->storage->txn_begin;
+
+    my $library  = $builder->build_object( { class => 'Koha::Libraries' } );
+    my $calendar = $library->calendar;
+
+    isa_ok( $calendar, 'Koha::Calendar', 'calendar() returns a Koha::Calendar object' );
+    is( $calendar->{branchcode}, $library->branchcode, 'Calendar is for the correct branch' );
 
     $schema->storage->txn_rollback;
 };
