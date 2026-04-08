@@ -9,6 +9,10 @@ use C4::Context;
 use Koha::Caches;
 use Koha::Exceptions;
 use Koha::Exceptions::Calendar;
+use Koha::Calendar::WeeklyClosures;
+use Koha::Calendar::RepeatingClosures;
+use Koha::Calendar::SingleClosures;
+use Koha::Calendar::Exceptions;
 
 # This limit avoids an infinite loop when searching for an open day in an
 # always closed library
@@ -36,21 +40,17 @@ sub new {
 sub _init {
     my $self   = shift;
     my $branch = $self->{branchcode};
-    my $dbh    = C4::Context->dbh();
-    my $weekly_closed_days_sth =
-        $dbh->prepare('SELECT weekday FROM repeatable_holidays WHERE branchcode = ? AND weekday IS NOT NULL');
-    $weekly_closed_days_sth->execute($branch);
+
     $self->{weekly_closed_days} = [ 0, 0, 0, 0, 0, 0, 0 ];
-    while ( my $tuple = $weekly_closed_days_sth->fetchrow_hashref ) {
-        $self->{weekly_closed_days}->[ $tuple->{weekday} ] = 1;
+    my $weekly = Koha::Calendar::WeeklyClosures->search( { library_id => $branch } );
+    while ( my $row = $weekly->next ) {
+        $self->{weekly_closed_days}->[ $row->weekday ] = 1;
     }
-    my $day_month_closed_days_sth =
-        $dbh->prepare('SELECT day, month FROM repeatable_holidays WHERE branchcode = ? AND weekday IS NULL');
-    $day_month_closed_days_sth->execute($branch);
+
     $self->{day_month_closed_days} = {};
-    while ( my $tuple = $day_month_closed_days_sth->fetchrow_hashref ) {
-        $self->{day_month_closed_days}->{ $tuple->{month} }->{ $tuple->{day} } =
-            1;
+    my $repeating = Koha::Calendar::RepeatingClosures->search( { library_id => $branch } );
+    while ( my $row = $repeating->next ) {
+        $self->{day_month_closed_days}->{ $row->month }->{ $row->day } = 1;
     }
 
     $self->{test} = 0;
@@ -66,27 +66,26 @@ sub _holidays {
 
     # $holidays looks like:
     # {
-    #    20131122 => 1, # single_holiday
-    #    20131123 => 0, # exception_holiday
+    #    20131122 => 1, # single_closure
+    #    20131123 => 0, # exception (open override)
     #    ...
     # }
 
-    # Populate the cache if necessary
     unless ($holidays) {
-        my $dbh = C4::Context->dbh;
         $holidays = {};
 
-        # Add holidays for each branch
-        my $holidays_sth = $dbh->prepare(
-            'SELECT day, month, year, MAX(isexception) FROM special_holidays WHERE branchcode = ? GROUP BY day, month, year'
-        );
-        $holidays_sth->execute( $self->{branchcode} );
-
-        while ( my ( $day, $month, $year, $exception ) = $holidays_sth->fetchrow ) {
-            my $datestring = sprintf( "%04d", $year ) . sprintf( "%02d", $month ) . sprintf( "%02d", $day );
-
-            $holidays->{$datestring} = $exception ? 0 : 1;
+        my $single = Koha::Calendar::SingleClosures->search( { library_id => $self->{branchcode} } );
+        while ( my $row = $single->next ) {
+            ( my $datestring = $row->date ) =~ s/-//g;
+            $holidays->{$datestring} = 1;
         }
+
+        my $exceptions = Koha::Calendar::Exceptions->search( { library_id => $self->{branchcode} } );
+        while ( my $row = $exceptions->next ) {
+            ( my $datestring = $row->date ) =~ s/-//g;
+            $holidays->{$datestring} = 0;
+        }
+
         $cache->set_in_cache( $key, $holidays, { expiry => 76800 } );
     }
     return $holidays // {};
