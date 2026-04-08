@@ -21,29 +21,26 @@ description:
   - "Sample holidays: Sunday, Christmas, New Year's"
 
 tables:
-  - repeatable_holidays:
+  - library_weekly_closures:
       translatable: [ description ]
       multiline: []
       rows:
-        - id: 2
-          branchcode: MPL
+        - library_id: MPL
           weekday: 0
-          day: ~
-          month: ~
           title: ""
           description: "Sundays"
 
-        - id: 3
-          branchcode: MPL
-          weekday: ~
+  - library_repeating_closures:
+      translatable: [ description ]
+      multiline: []
+      rows:
+        - library_id: MPL
           day: 1
           month: 1
           title: ""
           description: "New Year's Day"
 
-        - id: 4
-          branchcode: MPL
-          weekday: ~
+        - library_id: MPL
           day: 25
           month: 12
           title: ""

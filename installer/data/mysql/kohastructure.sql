@@ -5773,20 +5773,38 @@ CREATE TABLE `record_sources` (
 -- Table structure for table `repeatable_holidays`
 --
 
-DROP TABLE IF EXISTS `repeatable_holidays`;
+DROP TABLE IF EXISTS `library_repeating_closures`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8mb4 */;
-CREATE TABLE `repeatable_holidays` (
-  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'unique identifier assigned by Koha',
-  `branchcode` varchar(10) NOT NULL COMMENT 'foreign key from the branches table, defines which branch this closing is for',
-  `weekday` smallint(6) DEFAULT NULL COMMENT 'day of the week (0=Sunday, 1=Monday, etc) this closing is repeated on',
-  `day` smallint(6) DEFAULT NULL COMMENT 'day of the month this closing is on',
-  `month` smallint(6) DEFAULT NULL COMMENT 'month this closing is in',
+CREATE TABLE `library_repeating_closures` (
+  `library_repeating_closure_id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'unique identifier',
+  `library_id` varchar(10) NOT NULL COMMENT 'foreign key from the branches table',
+  `day` smallint(6) NOT NULL COMMENT 'day of the month this closing is on',
+  `month` smallint(6) NOT NULL COMMENT 'month this closing is in',
   `title` varchar(50) NOT NULL DEFAULT '' COMMENT 'title of this closing',
   `description` mediumtext NOT NULL COMMENT 'description for this closing',
-  PRIMARY KEY (`id`),
-  KEY `repeatable_holidays_ibfk_1` (`branchcode`),
-  CONSTRAINT `repeatable_holidays_ibfk_1` FOREIGN KEY (`branchcode`) REFERENCES `branches` (`branchcode`) ON DELETE CASCADE ON UPDATE CASCADE
+  PRIMARY KEY (`library_repeating_closure_id`),
+  UNIQUE KEY `library_id_day_month` (`library_id`, `day`, `month`),
+  CONSTRAINT `library_repeating_closures_ibfk_1` FOREIGN KEY (`library_id`) REFERENCES `branches` (`branchcode`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `library_weekly_closures`
+--
+
+DROP TABLE IF EXISTS `library_weekly_closures`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8mb4 */;
+CREATE TABLE `library_weekly_closures` (
+  `library_weekly_closure_id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'unique identifier',
+  `library_id` varchar(10) NOT NULL COMMENT 'foreign key from the branches table',
+  `weekday` smallint(6) NOT NULL COMMENT 'day of the week (0=Sunday, 1=Monday, etc)',
+  `title` varchar(50) NOT NULL DEFAULT '' COMMENT 'title of this closing',
+  `description` mediumtext NOT NULL COMMENT 'description for this closing',
+  PRIMARY KEY (`library_weekly_closure_id`),
+  UNIQUE KEY `library_id_weekday` (`library_id`, `weekday`),
+  CONSTRAINT `library_weekly_closures_ibfk_1` FOREIGN KEY (`library_id`) REFERENCES `branches` (`branchcode`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -6454,24 +6472,40 @@ CREATE TABLE `social_data` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Table structure for table `special_holidays`
+-- Table structure for table `library_closure_exceptions`
 --
 
-DROP TABLE IF EXISTS `special_holidays`;
+DROP TABLE IF EXISTS `library_closure_exceptions`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8mb4 */;
-CREATE TABLE `special_holidays` (
-  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'unique identifier assigned by Koha',
-  `branchcode` varchar(10) NOT NULL COMMENT 'foreign key from the branches table, defines which branch this closing is for',
-  `day` smallint(6) NOT NULL DEFAULT 0 COMMENT 'day of the month this closing is on',
-  `month` smallint(6) NOT NULL DEFAULT 0 COMMENT 'month this closing is in',
-  `year` smallint(6) NOT NULL DEFAULT 0 COMMENT 'year this closing is in',
-  `isexception` smallint(1) NOT NULL DEFAULT 1 COMMENT 'is this a holiday exception to a repeatable holiday (1 for yes, 0 for no)',
+CREATE TABLE `library_closure_exceptions` (
+  `library_closure_exception_id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'unique identifier',
+  `library_id` varchar(10) NOT NULL COMMENT 'foreign key from the branches table',
+  `date` date NOT NULL COMMENT 'date of the exception (library is open despite a closure rule)',
+  `title` varchar(50) NOT NULL DEFAULT '' COMMENT 'title for this exception',
+  `description` mediumtext NOT NULL COMMENT 'description of this exception',
+  PRIMARY KEY (`library_closure_exception_id`),
+  UNIQUE KEY `library_id_date` (`library_id`, `date`),
+  CONSTRAINT `library_closure_exceptions_ibfk_1` FOREIGN KEY (`library_id`) REFERENCES `branches` (`branchcode`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `library_single_closures`
+--
+
+DROP TABLE IF EXISTS `library_single_closures`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8mb4 */;
+CREATE TABLE `library_single_closures` (
+  `library_single_closure_id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'unique identifier',
+  `library_id` varchar(10) NOT NULL COMMENT 'foreign key from the branches table',
+  `date` date NOT NULL COMMENT 'date of the closure',
   `title` varchar(50) NOT NULL DEFAULT '' COMMENT 'title for this closing',
   `description` mediumtext NOT NULL COMMENT 'description of this closing',
-  PRIMARY KEY (`id`),
-  KEY `special_holidays_ibfk_1` (`branchcode`),
-  CONSTRAINT `special_holidays_ibfk_1` FOREIGN KEY (`branchcode`) REFERENCES `branches` (`branchcode`) ON DELETE CASCADE ON UPDATE CASCADE
+  PRIMARY KEY (`library_single_closure_id`),
+  UNIQUE KEY `library_id_date` (`library_id`, `date`),
+  CONSTRAINT `library_single_closures_ibfk_1` FOREIGN KEY (`library_id`) REFERENCES `branches` (`branchcode`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
