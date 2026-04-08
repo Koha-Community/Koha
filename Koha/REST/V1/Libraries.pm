@@ -212,14 +212,13 @@ sub list_cash_registers {
     };
 }
 
-=head3 list_holidays
+=head3 list_closed_dates
 
-Controller function that returns closed days for a library within a date range.
-Used by booking calendar to disable selection of closed days.
+Controller function that returns closed dates for a library within a date range.
 
 =cut
 
-sub list_holidays {
+sub list_closed_dates {
     my $c = shift->openapi->valid_input or return;
 
     my $library_id = $c->param('library_id');
@@ -238,24 +237,48 @@ sub list_holidays {
         if ( $to_dt->compare($from_dt) < 0 ) {
             return $c->render(
                 status  => 400,
-                openapi => { error => "'to' date must be after 'from' date" }
+                openapi => { error => "'to' date must be after 'from' date", error_code => 'invalid_date_range' }
             );
         }
 
-        my $calendar = Koha::Calendar->new( branchcode => $library_id );
-        my @holidays;
+        if ( $to_dt->delta_days($from_dt)->in_units('days') > 365 ) {
+            return $c->render(
+                status  => 400,
+                openapi => { error => "Date range cannot exceed 365 days", error_code => 'date_range_too_large' }
+            );
+        }
 
+        my $calendar  = Koha::Calendar->new( branchcode => $library_id );
+        my $holidays  = $calendar->_holidays;
+        my $weekly    = $calendar->{weekly_closed_days};
+        my $day_month = $calendar->{day_month_closed_days};
+
+        my @closed;
         my $current = $from_dt->clone;
         while ( $current <= $to_dt ) {
-            if ( $calendar->is_holiday($current) ) {
-                push @holidays, $current->ymd;
+            my $dominated;
+            my $ymd = $current->ymd('');
+
+            # Check special holidays hash first (includes exceptions)
+            if ( defined $holidays->{$ymd} ) {
+                $dominated = $holidays->{$ymd};    # 1 = closed, 0 = exception (open)
             }
+
+            unless ( defined $dominated && $dominated == 0 ) {
+                if (   $dominated
+                    || $weekly->[ $current->day_of_week % 7 ]
+                    || $day_month->{ $current->month }->{ $current->day } )
+                {
+                    push @closed, $current->ymd;
+                }
+            }
+
             $current->add( days => 1 );
         }
 
         return $c->render(
             status  => 200,
-            openapi => \@holidays
+            openapi => \@closed
         );
     } catch {
         $c->unhandled_exception($_);

@@ -425,42 +425,58 @@
     x-koha-authorization:
       permissions:
         catalogue: 1
-"/libraries/{library_id}/holidays":
+"/libraries/{library_id}/closed_dates":
   get:
-    x-mojo-to: Libraries#list_holidays
-    operationId: listLibraryHolidays
+    x-mojo-to: Libraries#list_closed_dates
+    operationId: listLibraryClosedDates
     tags:
       - libraries
-    summary: List holidays for a library
+    summary: List closed dates for a library
     description: |
-      Returns a list of closed days (holidays) for a library within a date range.
-      Used by booking calendar to disable selection of closed days.
+      Returns a list of dates on which the library is closed within the
+      given range. Accounts for weekly closures, repeating annual closures,
+      single closures, and exceptions.
+
+      The date range cannot exceed 365 days.
     parameters:
       - $ref: "../swagger.yaml#/parameters/library_id_pp"
       - name: from
         in: query
-        description: Start date for the range (ISO 8601 format, e.g., 2024-01-01). Defaults to today.
+        description: Start date (ISO 8601). Defaults to today.
         required: false
         type: string
         format: date
       - name: to
         in: query
-        description: End date for the range (ISO 8601 format, e.g., 2024-03-31). Defaults to 3 months from 'from'.
+        description: End date (ISO 8601). Defaults to 3 months from 'from'. Max range 365 days.
         required: false
         type: string
         format: date
+      - $ref: "../swagger.yaml#/parameters/request_id_header"
     produces:
       - application/json
     responses:
       "200":
-        description: A list of holiday dates in YYYY-MM-DD format
+        description: A list of closed dates in YYYY-MM-DD format
         schema:
           type: array
           items:
             type: string
             format: date
       "400":
-        description: Bad request
+        description: |
+          Bad request. Possible `error_code` attribute values:
+
+          * `invalid_date_range` - 'to' date is before 'from' date
+          * `date_range_too_large` - Date range exceeds 365 days
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "401":
+        description: Authentication required
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "403":
+        description: Access forbidden
         schema:
           $ref: "../swagger.yaml#/definitions/error"
       "404":

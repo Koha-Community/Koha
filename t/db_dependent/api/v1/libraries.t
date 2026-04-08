@@ -440,9 +440,9 @@ subtest 'list_cash_registers() tests' => sub {
     $schema->storage->txn_rollback;
 };
 
-subtest 'list_holidays() tests' => sub {
+subtest 'list_closed_dates() tests' => sub {
 
-    plan tests => 16;
+    plan tests => 20;
 
     $schema->storage->txn_begin;
 
@@ -460,79 +460,88 @@ subtest 'list_holidays() tests' => sub {
     my $branchcode = $library->branchcode;
     my $cache      = Koha::Caches->get_instance();
 
-    # Clear existing holidays for this branch
+    # Clear all closure data so we fully control what exists
     $schema->resultset('SpecialHoliday')->search( { branchcode => $branchcode } )->delete;
     $schema->resultset('RepeatableHoliday')->search( { branchcode => $branchcode } )->delete;
     $cache->clear_from_cache( $branchcode . '_holidays' );
 
-    # Add a specific holiday
+    # Weekly closure: Saturday (6)
+    # 2026-06-13 and 2026-06-20 are Saturdays
     $builder->build(
         {
-            source => 'SpecialHoliday',
+            source => 'RepeatableHoliday',
             value  => {
-                branchcode  => $branchcode,
-                day         => 15,
-                month       => 6,
-                year        => 2026,
-                title       => 'Test holiday',
-                description => '',
-                isexception => 0,
+                branchcode => $branchcode, weekday     => 6, day => undef, month => undef,
+                title      => 'Saturdays', description => '',
             },
         }
     );
 
-    # Add a second holiday
+    # Single closure: 2026-06-15 (a Monday)
     $builder->build(
         {
             source => 'SpecialHoliday',
             value  => {
-                branchcode  => $branchcode,
-                day         => 20,
-                month       => 6,
-                year        => 2026,
-                title       => 'Another holiday',
-                description => '',
-                isexception => 0,
+                branchcode => $branchcode, day         => 15, month       => 6, year => 2026,
+                title      => 'Test',      description => '', isexception => 0,
+            },
+        }
+    );
+
+    # Exception: 2026-06-20 (a Saturday — normally closed, but open this day)
+    $builder->build(
+        {
+            source => 'SpecialHoliday',
+            value  => {
+                branchcode => $branchcode, day         => 20, month       => 6, year => 2026,
+                title      => 'Exception', description => '', isexception => 1,
             },
         }
     );
     $cache->clear_from_cache( $branchcode . '_holidays' );
 
-    # Returns holidays within range
-    $t->get_ok("//$userid:$password@/api/v1/libraries/$branchcode/holidays?from=2026-06-01&to=2026-06-30")
+    # Range covering 2026-06-13 (Sat) through 2026-06-21 (Sun)
+    $t->get_ok("//$userid:$password\@/api/v1/libraries/$branchcode/closed_dates?from=2026-06-13&to=2026-06-21")
         ->status_is(200);
 
-    my $holidays = $t->tx->res->json;
-    ok( ( grep { $_ eq '2026-06-15' } @$holidays ), 'First holiday found in response' );
-    ok( ( grep { $_ eq '2026-06-20' } @$holidays ), 'Second holiday found in response' );
+    my $dates = $t->tx->res->json;
+    ok( ( grep { $_ eq '2026-06-13' } @$dates ),  'Weekly closure (Saturday 13th) found' );
+    ok( ( grep { $_ eq '2026-06-15' } @$dates ),  'Single closure (Monday 15th) found' );
+    ok( !( grep { $_ eq '2026-06-20' } @$dates ), 'Exception (Saturday 20th) excluded — open despite weekly closure' );
+    ok( !( grep { $_ eq '2026-06-16' } @$dates ), 'Regular weekday (Tuesday 16th) not closed' );
 
-    # Returns empty list when no holidays in range
-    $t->get_ok("//$userid:$password@/api/v1/libraries/$branchcode/holidays?from=2026-07-01&to=2026-07-05")
-        ->status_is(200);
-
-    my $no_holidays = $t->tx->res->json;
-    my @filtered    = grep { $_ eq '2026-06-15' || $_ eq '2026-06-20' } @$no_holidays;
-    is( scalar @filtered, 0, 'No test holidays outside their range' );
+    # Range with no closures: Mon-Fri week with no specials
+    # 2026-06-22 Mon through 2026-06-26 Fri — no Saturday, no specials
+    $t->get_ok("//$userid:$password\@/api/v1/libraries/$branchcode/closed_dates?from=2026-06-22&to=2026-06-26")
+        ->status_is(200)
+        ->json_is( '' => [], 'No closed dates in a weekday-only range' );
 
     # 400 when to < from
-    $t->get_ok("//$userid:$password@/api/v1/libraries/$branchcode/holidays?from=2026-06-30&to=2026-06-01")
+    $t->get_ok("//$userid:$password\@/api/v1/libraries/$branchcode/closed_dates?from=2026-06-30&to=2026-06-01")
         ->status_is(400)
-        ->json_is( '/error' => "'to' date must be after 'from' date" );
+        ->json_is( '/error_code' => 'invalid_date_range' );
+
+    # 400 when range > 365 days
+    $t->get_ok("//$userid:$password\@/api/v1/libraries/$branchcode/closed_dates?from=2026-01-01&to=2028-01-01")
+        ->status_is(400)
+        ->json_is( '/error_code' => 'date_range_too_large' );
 
     # 404 for non-existent library
-    my $non_existent_code = $library->branchcode;
+    my $gone = $library->branchcode;
     $library->delete;
-    $cache->clear_from_cache( $non_existent_code . '_holidays' );
+    $cache->clear_from_cache( $gone . '_holidays' );
+    $t->get_ok("//$userid:$password\@/api/v1/libraries/$gone/closed_dates?from=2026-06-01&to=2026-06-30")
+        ->status_is(404);
 
-    $t->get_ok("//$userid:$password@/api/v1/libraries/$non_existent_code/holidays?from=2026-06-01&to=2026-06-30")
-        ->status_is(404)
-        ->json_is( '/error' => 'Library not found' );
-
-    # Defaults work (no from/to params)
-    my $library2 = $builder->build_object( { class => 'Koha::Libraries' } );
-    $t->get_ok( "//$userid:$password@/api/v1/libraries/" . $library2->branchcode . "/holidays" )
+    # Defaults work (no from/to) — fresh library with no closures at all
+    my $lib2        = $builder->build_object( { class => 'Koha::Libraries' } );
+    my $branchcode2 = $lib2->branchcode;
+    $schema->resultset('RepeatableHoliday')->search( { branchcode => $branchcode2 } )->delete;
+    $schema->resultset('SpecialHoliday')->search( { branchcode => $branchcode2 } )->delete;
+    $cache->clear_from_cache( $branchcode2 . '_holidays' );
+    $t->get_ok("//$userid:$password\@/api/v1/libraries/$branchcode2/closed_dates")
         ->status_is(200)
-        ->json_is( '' => [], 'Empty holidays for fresh library with defaults' );
+        ->json_is( '' => [], 'Empty for library with no closures defined' );
 
     $schema->storage->txn_rollback;
 };
