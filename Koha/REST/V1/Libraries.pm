@@ -21,7 +21,6 @@ use Mojo::Base 'Mojolicious::Controller';
 use C4::Context;
 use Koha::DateUtils qw( dt_from_string );
 use Koha::Libraries;
-use Koha::Library::Calendar;
 
 use Scalar::Util qw( blessed );
 
@@ -248,7 +247,7 @@ sub list_closed_dates {
             );
         }
 
-        my $calendar  = Koha::Library::Calendar->new( branchcode => $library_id );
+        my $calendar  = $library->calendar;
         my $holidays  = $calendar->_holidays;
         my $weekly    = $calendar->{weekly_closed_days};
         my $day_month = $calendar->{day_month_closed_days};
