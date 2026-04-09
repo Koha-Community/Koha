@@ -19,6 +19,7 @@ package Koha::Calendar::Exception;
 
 use Modern::Perl;
 
+use Koha::Caches;
 use Koha::Database;
 
 use base qw(Koha::Object);
@@ -28,6 +29,45 @@ use base qw(Koha::Object);
 Koha::Calendar::Exception - Koha closure exception (open override) Object class
 
 =head1 API
+
+=head2 Class methods
+
+=head3 store
+
+Overloaded store method that clears the holidays cache on insert.
+
+Only flushes on insert (new exception), not on title/description updates,
+because the holidays cache only stores dates and their open/closed status.
+
+=cut
+
+sub store {
+    my ($self) = @_;
+
+    my $flush = !$self->in_storage;
+
+    $self = $self->SUPER::store;
+
+    if ($flush) {
+        Koha::Caches->get_instance()->clear_from_cache( $self->library_id . '_holidays' );
+    }
+
+    return $self;
+}
+
+=head3 delete
+
+Overloaded delete method that clears the holidays cache.
+
+=cut
+
+sub delete {
+    my ($self) = @_;
+    my $library_id = $self->library_id;
+    $self->SUPER::delete;
+    Koha::Caches->get_instance()->clear_from_cache( $library_id . '_holidays' );
+    return $self;
+}
 
 =head2 Internal methods
 

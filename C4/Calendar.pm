@@ -400,7 +400,6 @@ sub ModSingleholiday {
     my $closure = Koha::Calendar::SingleClosures->search( { library_id => $self->{branchcode}, date => $date } )->next;
     if ($closure) {
         $closure->title( $options{title} )->description( $options{description} )->store;
-        Koha::Caches->get_instance()->clear_from_cache( $self->{branchcode} . '_holidays' );
     }
     return $self;
 }
@@ -434,7 +433,6 @@ sub ModExceptionholiday {
     my $exception = Koha::Calendar::Exceptions->search( { library_id => $self->{branchcode}, date => $date } )->next;
     if ($exception) {
         $exception->title( $options{title} )->description( $options{description} )->store;
-        Koha::Caches->get_instance()->clear_from_cache( $self->{branchcode} . '_holidays' );
     }
     return $self;
 }
@@ -491,7 +489,6 @@ sub delete_holiday {
         $cal->delete_repeating_closure( { day => $options{day}, month => $options{month} } );
     }
 
-    $cal->_clear_cache;
     return $self;
 }
 

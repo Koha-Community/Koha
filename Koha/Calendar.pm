@@ -435,16 +435,12 @@ sub add_repeating_closure {
 
 sub add_single_closure {
     my ( $self, $params ) = @_;
-    my $result = Koha::Calendar::SingleClosure->new( { library_id => $self->{branchcode}, %$params } )->store;
-    $self->_clear_cache;
-    return $result;
+    return Koha::Calendar::SingleClosure->new( { library_id => $self->{branchcode}, %$params } )->store;
 }
 
 sub add_exception {
     my ( $self, $params ) = @_;
-    my $result = Koha::Calendar::Exception->new( { library_id => $self->{branchcode}, %$params } )->store;
-    $self->_clear_cache;
-    return $result;
+    return Koha::Calendar::Exception->new( { library_id => $self->{branchcode}, %$params } )->store;
 }
 
 sub delete_weekly_closure {
@@ -464,14 +460,12 @@ sub delete_repeating_closure {
 sub delete_single_closure {
     my ( $self, $params ) = @_;
     Koha::Calendar::SingleClosures->search( { library_id => $self->{branchcode}, date => $params->{date} } )->delete;
-    $self->_clear_cache;
     return $self;
 }
 
 sub delete_exception {
     my ( $self, $params ) = @_;
     Koha::Calendar::Exceptions->search( { library_id => $self->{branchcode}, date => $params->{date} } )->delete;
-    $self->_clear_cache;
     return $self;
 }
 
@@ -534,11 +528,6 @@ sub copy_to {
     }
 
     return 1;
-}
-
-sub _clear_cache {
-    my ($self) = @_;
-    Koha::Caches->get_instance()->clear_from_cache( $self->{branchcode} . '_holidays' );
 }
 
 1;
@@ -760,10 +749,6 @@ list of specified dates
 
 Copies all closure rules to another branch. Only copies future single
 closures and exceptions.
-
-=head3 _clear_cache
-
-Clears the holidays cache for this branch.
 
 =head2 Internal methods
 
