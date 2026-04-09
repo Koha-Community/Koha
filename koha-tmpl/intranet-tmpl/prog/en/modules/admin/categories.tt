@@ -717,16 +717,10 @@
                             <th scope="col" data-colname="enrollment_fee">Enrollment fee</th>
                             <th scope="col" data-colname="overdue">Overdue</th>
                             <th scope="col" data-colname="lost_items">Lost items</th>
-                            [% IF ( EnhancedMessagingPreferences ) %]
-                                <th scope="col" data-colname="messaging">Messaging</th>
-                            [% END %]
+                            <th scope="col" data-colname="messaging">Messaging</th>
                             <th scope="col" data-colname="branches_limitations">Library limitations</th>
-                            [% IF ( Koha.Preference('CheckPrevCheckout') == 'softyes' || Koha.Preference('CheckPrevCheckout') == 'softno' ) %]
-                                <th scope="col" data-colname="check_previous_checkout">Check previous checkout?</th>
-                            [% END %]
-                            [% IF ( Koha.Preference('ILLModule') ) %]
-                                <th scope="col" data-colname="can_place_ill_in_opac">Can place ILL in OPAC?</th>
-                            [% END %]
+                            <th scope="col" data-colname="check_previous_checkout">Check previous checkout?</th>
+                            <th scope="col" data-colname="can_place_ill_in_opac">Can place ILL in OPAC?</th>
                             <th scope="col" data-colname="can_be_guarantee">Can be guarantee</th>
                             <th scope="col" data-colname="default_privacy">Default privacy</th>
                             <th scope="col" data-colname="exclude_from_local_holds_priority">Exclude from local holds priority</th>
@@ -833,6 +827,8 @@
                                             <span>None</span>
                                         [% END %]
                                     </td>
+                                [% ELSE %]
+                                    <td></td>
                                 [% END %]
                                 <td>
                                     [% SET library_limits = category.library_limits %]
@@ -867,9 +863,13 @@
                                             <span>Inherit</span>
                                         [% END %]
                                     </td>
+                                [% ELSE %]
+                                    <td></td>
                                 [% END %]
                                 [% IF ( Koha.Preference('ILLModule') ) %]
                                     <td>[% IF category.can_place_ill_in_opac %]Yes[% ELSE %]No[% END %]</td>
+                                [% ELSE %]
+                                    <td></td>
                                 [% END %]
                                 <td>[% IF category.can_be_guarantee %]Yes[% ELSE %]No[% END %]</td>
                                 <td>
@@ -925,6 +925,15 @@
         var TalkingTechItivaPhoneNotification = [% Koha.Preference('TalkingTechItivaPhoneNotification') || 0 | html %];
         var PhoneNotification = [% Koha.Preference('PhoneNotification') || 0 | html %];
         var table_settings = [% TablesSettings.GetTableSettings( 'admin', 'categories', 'patron_categories', 'json' ) | $raw %];
+
+        let messaging_column = table_settings.columns.find(c => c.columnname == 'messaging');
+        messaging_column.visibility_condition = [% EnhancedMessagingPreferences ? 'true' : 'false' | html %];
+
+        let check_previous_checkout_column = table_settings.columns.find(c => c.columnname == 'check_previous_checkout');
+        check_previous_checkout_column.visibility_condition = [% Koha.Preference('CheckPrevCheckout') == 'softyes' || Koha.Preference('CheckPrevCheckout') == 'softno' ? 'true' : 'false' | html %];
+
+        let can_place_ill_in_opac_column = table_settings.columns.find(c => c.columnname == 'can_place_ill_in_opac');
+        can_place_ill_in_opac_column.visibility_condition = [% Koha.Preference('ILLModule') ? 'true' : 'false' | html %];
     </script>
     [% Asset.js("js/admin-menu.js") | $raw %]
     [% Asset.js("js/messaging-preference-form.js") | $raw %]
