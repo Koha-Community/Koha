@@ -2277,10 +2277,12 @@ sub MoveReserve {
 
     if ( $cancelreserve && $res ) {
         $hold = Koha::Holds->find( $res->{reserve_id} );
-        if ( $cancelreserve eq 'revert' ) {
-            $hold->revert_found();
-        } else {    # cancel reserves on this item
-            $hold->cancel;
+        if ($hold) {
+            if ( $cancelreserve eq 'revert' ) {
+                $hold->revert_found();
+            } else {    # cancel reserves on this item
+                $hold->cancel;
+            }
         }
     }
 }
