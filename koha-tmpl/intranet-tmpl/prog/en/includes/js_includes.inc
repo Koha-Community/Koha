@@ -26,6 +26,7 @@
 [% Asset.js("lib/jquery/plugins/jquery.validate.min.js") | $raw %]
 <!-- koha core js -->
 [% Asset.js("js/patron-format.js") | $raw %]
+[% Asset.js("js/sidebar.js") | $raw %]
 [% Asset.js("js/staff-global.js") | $raw %]
 [% Asset.js("js/form-submit.js",{'type' => 'module'}) | $raw %]
 [% INCLUDE 'js-date-format.inc' %]

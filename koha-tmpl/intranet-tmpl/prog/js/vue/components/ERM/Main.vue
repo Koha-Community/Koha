@@ -13,12 +13,10 @@
                     </main>
                 </div>
 
-                <div class="col-md-2 order-sm-2 order-md-1">
-                    <LeftMenu
-                        :title="$__('E-resource management')"
-                        :condition="filterProviders"
-                    ></LeftMenu>
-                </div>
+                <LeftMenu
+                    :title="$__('E-resource management')"
+                    :condition="filterProviders"
+                ></LeftMenu>
             </div>
         </div>
     </div>

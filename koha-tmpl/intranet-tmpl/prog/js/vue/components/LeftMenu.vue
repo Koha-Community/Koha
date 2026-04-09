@@ -1,19 +1,47 @@
 <template>
-    <aside v-if="navigationTree !== 'none'">
-        <VendorMenu v-if="navigationTree === 'VendorMenu'" />
-        <AcquisitionsMenu v-else-if="navigationTree === 'AcquisitionsMenu'" />
-        <div v-else class="sidebar_menu">
-            <h5>{{ $__(title) }}</h5>
-            <ul>
-                <NavigationItem
-                    v-for="(item, key) in navigationTree"
-                    v-bind:key="key"
-                    :item="item"
-                ></NavigationItem>
-            </ul>
+    <div
+        class="sidebar-toggle-wrapper"
+        style="position: relative; z-index: 1001"
+        v-if="navigationTree !== 'none'"
+    >
+        <div class="sidebar-toggle">
+            <button
+                @click="toggleSidebar()"
+                id="toggle-sidebar"
+                class="btn btn-sm btn-outline-secondary"
+            >
+                <i
+                    class="fa fa-chevron-left"
+                    aria-hidden="true"
+                    title="Collapse sidebar"
+                ></i>
+            </button>
         </div>
-        <!-- /.sidebar_menu -->
-    </aside>
+    </div>
+    <div
+        class="col-md-2 order-sm-2 order-md-1"
+        id="sidebar-container"
+        style="position: relative"
+        v-if="navigationTree !== 'none'"
+    >
+        <aside>
+            <VendorMenu v-if="navigationTree === 'VendorMenu'" />
+            <AcquisitionsMenu
+                v-else-if="navigationTree === 'AcquisitionsMenu'"
+            />
+            <div v-else class="sidebar_menu">
+                <h5>{{ $__(title) }}</h5>
+                <ul>
+                    <NavigationItem
+                        v-for="(item, key) in navigationTree"
+                        v-bind:key="key"
+                        :item="item"
+                    ></NavigationItem>
+                </ul>
+            </div>
+            <!-- /.sidebar_menu -->
+        </aside>
+    </div>
 </template>
 
 <script>
@@ -26,6 +54,7 @@ import { storeToRefs } from "pinia";
 export default {
     name: "LeftMenu",
     setup(props) {
+        const toggleSidebar = $toggle_sidebar;
         const navigationStore = inject("navigationStore");
         const { leftNavigation } = storeToRefs(navigationStore);
 
@@ -37,6 +66,7 @@ export default {
         return {
             leftNavigation,
             navigationTree,
+            toggleSidebar,
         };
     },
     props: {
