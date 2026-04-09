@@ -222,12 +222,44 @@
 </div>
 <!-- #update_sql -->
 
-<div class="main container-fluid">
-    <div class="row">
-        <div class="col-md-10 order-md-2 order-sm-1">
-            <main>
-                [% INCLUDE 'messages.inc' %]
+[% aside = BLOCK %]
+    [% IF ( saved1 ) %]
+        <div id="saved-reports-filter">
+            <form action="/cgi-bin/koha/reports/guided_reports.pl" method="get">
+                <input type="hidden" name="op" value="list" />
+                <input type="hidden" name="filter_set" value="1" />
+                <fieldset class="brief">
+                    <h3>Filter</h3>
+                    <ol>
+                        <li>
+                            <label for="filter_date">Date:</label>
+                            <input type="text" id="filter_date" name="filter_date" size="10" value="[% filters.date | html %]" class="flatpickr" />
+                            <div class="hint">[% INCLUDE 'date-format.inc' %]</div>
+                        </li>
+                        <li>
+                            <label for="filter_author">Author:</label>
+                            <input type="text" id="filter_author" name="filter_author" value="[% filters.author | html %]" size="16" />
+                        </li>
+                        <li>
+                            <label for="filter_keyword">Keyword:</label>
+                            <input type="text" id="filter_keyword" name="filter_keyword" value="[% filters.keyword | html %]" size="16" />
+                        </li>
+                    </ol>
+                </fieldset>
+                <!-- /.brief -->
+                <fieldset class="action">
+                    <input type="submit" class="btn btn-primary" value="Apply filter" />
+                    <a class="btn btn-default clear_search" id="resetReportsFilter" href="/cgi-bin/koha/reports/guided_reports.pl?op=list&clear_filters=1">Clear</a>
+                </fieldset>
+            </form>
+        </div>
+        <!-- /#saved-reports-filter -->
+    [% END %]
+    [% INCLUDE 'guided-reports-view.inc' %]
+[% END %]
 
+
+[% WRAPPER 'main-container.inc' aside_block=aside %]
                 [% INCLUDE "reports-toolbar.inc" %]
 
                 [% IF access_denied %]
@@ -1731,72 +1763,7 @@
                         </fieldset>
                     </form>
                 [% END # /IF ( errors ) %]
-            </main>
-        </div>
-        <!-- /.col-md-10.order-md-2 -->
-
-        <div class="col-md-2 order-sm-2 order-md-1">
-            <aside>
-                [% IF ( saved1 ) %]
-                    <div id="saved-reports-filter">
-                        <form action="/cgi-bin/koha/reports/guided_reports.pl" method="get">
-                            <input type="hidden" name="op" value="list" />
-                            <input type="hidden" name="filter_set" value="1" />
-                            <fieldset class="brief">
-                                <h3>Filter</h3>
-                                <ol>
-                                    <li>
-                                        <label for="filter_date">Date:</label>
-                                        <input type="text" id="filter_date" name="filter_date" size="10" value="[% filters.date | html %]" class="flatpickr" />
-                                        <div class="hint">[% INCLUDE 'date-format.inc' %]</div>
-                                    </li>
-                                    <li>
-                                        <label for="filter_author">Author:</label>
-                                        <input type="text" id="filter_author" name="filter_author" value="[% filters.author | html %]" size="16" />
-                                    </li>
-                                    <li>
-                                        <label for="filter_keyword">Keyword:</label>
-                                        <input type="text" id="filter_keyword" name="filter_keyword" value="[% filters.keyword | html %]" size="16" />
-                                    </li>
-                                    <li>
-                                        [% IF Koha.Preference('LimitReportsByLibrary') %]
-                                            [% IF ( CAN_user_superlibrarian || CAN_user_reports_manage_report_limits ) %]
-                                                <label for="filter_show_all_reports">Show reports:</label>
-                                                <select name="filter_show_all_reports" id="filter_show_all_reports">
-                                                    [% IF filters.show_all_reports == "1" %]
-                                                        <option value="1" selected="selected">Show all reports</option>
-                                                    [% ELSE %]
-                                                        <option value="1">Show all reports</option>
-                                                    [% END %]
-
-                                                    [% IF filters.show_all_reports == 0 %]
-                                                        <option value="0" selected="selected">Show my library reports</option>
-                                                    [% ELSE %]
-                                                        <option value="0">Show my library reports</option>
-                                                    [% END %]
-                                                </select>
-                                            [% END %]
-                                        [% END %]
-                                    </li>
-                                </ol>
-                            </fieldset>
-                            <!-- /.brief -->
-                            <fieldset class="action">
-                                <input type="submit" class="btn btn-primary" value="Apply filter" />
-                                <a class="btn btn-default clear_search" id="resetReportsFilter" href="/cgi-bin/koha/reports/guided_reports.pl?op=list&clear_filters=1">Clear</a>
-                            </fieldset>
-                        </form>
-                    </div>
-                    <!-- /#saved-reports-filter -->
-                [% END %]
-                [% INCLUDE 'guided-reports-view.inc' %]
-            </aside>
-        </div>
-        <!-- /.col-md-2.order-md-1 -->
-    </div>
-    <!-- /.row -->
-</div>
-<!-- /.main.container-fluid -->
+[% END %]
 
 <!-- Runtime Parameters Modal -->
 <div class="modal" id="runtime_parameters" tabindex="-1" role="dialog" aria-labelledby="runtime_parametersLabel">
