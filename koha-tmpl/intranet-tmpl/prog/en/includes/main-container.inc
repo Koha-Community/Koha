@@ -12,7 +12,14 @@
                     [% content | $raw %]
                 </main>
             </div>
-            <div class="col-md-2 order-sm-2 order-md-1">
+            <div class="sidebar-toggle-wrapper" style="position: relative; z-index: 1001;">
+                <div class="sidebar-toggle">
+                    <button id="toggle-sidebar" class="btn btn-sm btn-outline-secondary">
+                        <i class="fa fa-chevron-left" aria-hidden="true" title="Collapse sidebar"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="col-md-2 order-sm-2 order-md-1" id="sidebar-container" style="position: relative;">
                 <aside>
                     [% FOR aside IN asides %]
                         [% SWITCH aside %]
