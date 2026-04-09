@@ -72,7 +72,7 @@ requires 'Locale::Messages', '1.20';
 requires 'Locale::PO', '0.24';
 requires 'Log::Log4perl', '1.29';
 requires 'MARC::Charset', '0.98';
-requires 'MARC::File::XML', 'v1.0.1';
+requires 'MARC::File::XML', 'v1.0.5';
 requires 'MARC::Lint', 'v1.52';
 requires 'MARC::Record', 'v2.0.6';
 requires 'MARC::Record::MiJ', '0.04';
