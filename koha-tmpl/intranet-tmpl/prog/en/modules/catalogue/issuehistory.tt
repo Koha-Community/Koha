@@ -49,20 +49,14 @@
             <table id="table_issues">
                 <thead
                     ><tr>
-                        [% IF show_patron_column %]
-                            <th>Patron</th>
-                        [% END %]
-                        <th>Barcode</th>
-                        <th>Checked out from</th>
-                        [% IF Koha.Preference('RecordStaffUserOnCheckout') %]
-                            <th>Checked out by</th>
-                        [% ELSE %]
-                            <th class="NoVisible">Checked out by</th>
-                        [% END %]
-                        <th>Renewed</th>
-                        <th>Checkout on</th>
-                        <th>Due date</th>
-                        <th>Checkin on</th>
+                        <th data-colname="patron">Patron</th>
+                        <th data-colname="barcode">Barcode</th>
+                        <th data-colname="checked_out_from">Checked out from</th>
+                        <th data-colname="checked_out_by">Checked out by</th>
+                        <th data-colname="renewed">Renewed</th>
+                        <th data-colname="checkout_on">Checkout on</th>
+                        <th data-colname="due_date">Due date</th>
+                        <th data-colname="checkin_on">Checkin on</th>
                     </tr></thead
                 >
                 <tbody>
@@ -80,6 +74,8 @@
                                         [% END %]
                                     [% END %]
                                 </td>
+                            [% ELSE %]
+                                <td></td>
                             [% END %]
                             <td>
                                 [% IF checkout.item.barcode %]
@@ -129,10 +125,8 @@
     [% INCLUDE 'datatables.inc' %]
     <script nonce="[% Koha.CSPNonce | $raw %]" data-tt-allowed="true">
         var table_settings = [% TablesSettings.GetTableSettings('catalogue', 'detail', 'checkoutshistory-table', 'json') | $raw %];
-        [% UNLESS show_patron_column %]
-            // Remove the patron column definition
-            table_settings['columns'].splice(0,1);
-        [% END %]
+        let patron_column = table_settings.columns.find(c => c.columnname == 'patron');
+        patron_column.visibility_condition = [% show_patron_column ? 'true' : 'false' | html %]
     </script>
     <script nonce="[% Koha.CSPNonce | $raw %]">
         $(document).ready(function () {
@@ -141,6 +135,7 @@
                     dom: 'C<"top pager"ilpfB><"#filter_c">tr<"bottom pager"ip>',
                     order: [[5, "desc"]],
                     pagingType: "full_numbers",
+                    bKohaColumnsUseNames: true,
                 },
                 table_settings
             );
