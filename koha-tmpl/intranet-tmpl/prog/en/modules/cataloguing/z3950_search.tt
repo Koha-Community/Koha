@@ -130,17 +130,15 @@
                         <table id="resultst">
                             <thead>
                                 <tr>
-                                    <th>Server</th>
-                                    <th>Title</th>
-                                    <th>Author</th>
-                                    <th>Year</th>
-                                    <th>Edition</th>
-                                    <th>ISBN</th>
-                                    <th>LCCN</th>
-                                    [% IF Koha.Preference('AdditionalFieldsInZ3950ResultSearch') != '' %]
-                                        <th>Additional fields</th>
-                                    [% END %]
-                                    <th class="no-export">Actions</th>
+                                    <th data-colname="server">Server</th>
+                                    <th data-colname="title">Title</th>
+                                    <th data-colname="author">Author</th>
+                                    <th data-colname="date">Year</th>
+                                    <th data-colname="edition">Edition</th>
+                                    <th data-colname="isbn">ISBN</th>
+                                    <th data-colname="lccn">LCCN</th>
+                                    <th data-colname="additional_fields">Additional fields</th>
+                                    <th data-colname="actions" class="no-export">Actions</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -165,6 +163,8 @@
                                                         [% END %]
                                                     </dl>
                                                 </td>
+                                            [% ELSE %]
+                                                <td></td>
                                             [% END %]
                                             <td class="actions">
                                                 <div class="btn-group dropup">
@@ -282,6 +282,8 @@
     [% Asset.js("js/z3950_search.js") | $raw %]
     <script nonce="[% Koha.CSPNonce | $raw %]" data-tt-allowed="true">
         var table_settings = [% TablesSettings.GetTableSettings( 'cataloguing', 'z3950_search', 'resultst', 'json' ) | $raw %];
+        let additional_fields_column = table_settings.columns.find(c => c.columnname == 'additional_fields');
+        additional_fields_column.visibility_condition = [% show_patron_column ? 'true' : 'false' | html %]
     </script>
     <script nonce="[% Koha.CSPNonce | $raw %]">
         $(document).ready(function () {
@@ -291,6 +293,7 @@
                     paging: false,
                     searching: false,
                     info: false,
+                    bKohaColumnsUseNames: true,
                 },
                 table_settings
             );
