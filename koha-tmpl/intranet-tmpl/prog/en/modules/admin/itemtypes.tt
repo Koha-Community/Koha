@@ -427,22 +427,22 @@
             <div class="page-section">
                 <table id="table_item_type">
                     <thead>
-                        [% UNLESS Koha.Preference('noItemTypeImages') && Koha.Preference('OpacNoItemTypeImages') %]<th class="no-export">Image</th>[% END %]
-                        <th>Description</th>
-                        <th>Code</th>
-                        <th>Parent code</th>
-                        <th>Search category</th>
-                        <th>Not for loan</th>
-                        <th>Hide in OPAC</th>
-                        <th>Rental charge</th>
-                        <th>Daily rental charge</th>
-                        <th>Hourly rental charge</th>
-                        <th>Default replacement cost</th>
-                        <th>Checkin message</th>
-                        <th>Library limitations</th>
-                        <th>Automatic check-in</th>
-                        <th>Bookable</th>
-                        <th class="no-export no-sort">Actions</th>
+                        <th data-colname="image" class="no-export">Image</th>
+                        <th data-colname="description">Description</th>
+                        <th data-colname="code">Code</th>
+                        <th data-colname="parent_code">Parent code</th>
+                        <th data-colname="search_category">Search category</th>
+                        <th data-colname="not_for_loan">Not for loan</th>
+                        <th data-colname="hide_in_opac">Hide in OPAC</th>
+                        <th data-colname="rental_charge">Rental charge</th>
+                        <th data-colname="daily_rental_charge">Daily rental charge</th>
+                        <th data-colname="hourly_rental_charge">Hourly rental charge</th>
+                        <th data-colname="default_replacement_cost">Default replacement cost</th>
+                        <th data-colname="checkin_message">Checkin message</th>
+                        <th data-colname="library_limitations">Library limitations</th>
+                        <th data-colname="automatic_checkin">Automatic check-in</th>
+                        <th data-colname="bookable">Bookable</th>
+                        <th data-colname="actions" class="no-export no-sort">Actions</th>
                     </thead>
                     [% FOREACH itemtype IN itemtypes %]
                         <tr>
@@ -451,6 +451,8 @@
                                     [% SET image_location = itemtype.image_location('intranet') %]
                                     [% IF image_location %]<img class="itemtype-image" src="[% image_location | html %]" alt="" />[% ELSE %]&nbsp;[% END %]
                                 </td>
+                            [% ELSE %]
+                                <td></td>
                             [% END %]
                             <td>
                                 [% IF itemtype.parent_type %]
@@ -559,9 +561,8 @@
     [% INCLUDE 'select2.inc' %]
     <script nonce="[% Koha.CSPNonce | $raw %]" data-tt-allowed="true">
         var table_settings = [% TablesSettings.GetTableSettings( 'admin', 'itemtypes', 'table_item_type', 'json' ) | $raw %];
-        [% IF ( Koha.Preference('noItemTypeImages') && Koha.Preference('OpacNoItemTypeImages') ) %]
-            table_settings['columns'].shift(); // Remove item type image column from configuration
-        [% END %]
+        let image_column = table_settings.columns.find(c => c.columnname == 'image');
+        image_column.visibility_condition = [% !(Koha.Preference('noItemTypeImages') && !Koha.Preference('OpacNoItemTypeImages')) ? 'true' : 'false' | html %]
     </script>
     [% Asset.js("js/pages/itemtypes.js") | $raw %]
 [% END %]
