@@ -345,6 +345,7 @@
                                 [% SET rating_avg = ratings.get_avg_rating() %]
                                 [% rating_avg_int = BLOCK %][% rating_avg | format("%.0f") %][% END %]
 
+                                <label for="star_rating" class="sr-only">Rate this title from 1 to 5 stars</label>
                                 <select
                                     id="star_rating"
                                     class="star_rating"
