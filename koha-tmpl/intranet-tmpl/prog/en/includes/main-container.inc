@@ -12,15 +12,13 @@
                     [% content | $raw %]
                 </main>
             </div>
-            <div class="sidebar-toggle-wrapper" style="position: relative; z-index: 1001;">
-                <div class="sidebar-toggle">
-                    <button id="toggle-sidebar" class="btn btn-sm btn-outline-secondary">
-                        <i class="fa fa-chevron-left" aria-hidden="true" title="Collapse sidebar"></i>
-                    </button>
-                </div>
-            </div>
-            <div class="col-md-2 order-sm-2 order-md-1" id="sidebar-container" style="position: relative;">
+            <div class="col-md-2 order-sm-2 order-md-1" id="sidebar-container">
                 <aside>
+                    <div class="sidebar-toggle">
+                        <button id="toggle-sidebar" class="btn btn-default" aria-controls="sidebar-container" aria-expanded="true" title="Toggle sidebar">
+                            <i class="fa fa-chevron-left" aria-hidden="true"></i>
+                        </button>
+                    </div>
                     [% IF aside_block %]
                         [% aside_block %]
                     [% ELSE %]

@@ -1,30 +1,20 @@
 <template>
     <div
-        class="sidebar-toggle-wrapper"
-        style="position: relative; z-index: 1001"
-        v-if="navigationTree !== 'none'"
-    >
-        <div class="sidebar-toggle">
-            <button
-                @click="toggleSidebar()"
-                id="toggle-sidebar"
-                class="btn btn-sm btn-outline-secondary"
-            >
-                <i
-                    class="fa fa-chevron-left"
-                    aria-hidden="true"
-                    title="Collapse sidebar"
-                ></i>
-            </button>
-        </div>
-    </div>
-    <div
         class="col-md-2 order-sm-2 order-md-1"
         id="sidebar-container"
-        style="position: relative"
         v-if="navigationTree !== 'none'"
     >
         <aside>
+            <div class="sidebar-toggle" v-if="navigationTree !== 'none'">
+                <button
+                    id="toggle-sidebar"
+                    class="btn btn-default"
+                    title="Toggle sidebar"
+                    @click="toggleSidebar()"
+                >
+                    <i class="fa fa-chevron-left" aria-hidden="true"></i>
+                </button>
+            </div>
             <VendorMenu v-if="navigationTree === 'VendorMenu'" />
             <AcquisitionsMenu
                 v-else-if="navigationTree === 'AcquisitionsMenu'"

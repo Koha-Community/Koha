@@ -1,4 +1,4 @@
-/* global shortcut delBasket AUDIO_ALERT_PATH Cookies */
+/* global shortcut delBasket AUDIO_ALERT_PATH Cookies $toggle_sidebar */
 /* exported addBibToContext delBibToContext escape_str escape_price openWindow _ removeFocus toUC confirmDelete confirmClone playSound validatePatronSearch */
 if (KOHA === undefined) var KOHA = {};
 
@@ -1159,6 +1159,6 @@ function validatePatronSearch(form) {
     return true;
 }
 
-$("#toggle-sidebar").click(function () {
+$("#toggle-sidebar").on("click", function () {
     $toggle_sidebar();
 });
