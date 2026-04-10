@@ -1179,9 +1179,14 @@
         Koha.addPrefs({
             OnSiteCheckoutAutoCheck: [% Koha.Preference("OnSiteCheckoutAutoCheck") ? 1 : 0 | html %],
         });
+
         const table_settings_issues_table = [% TablesSettings.GetTableSettings( 'circ', 'circulation', 'issues-table', 'json' ) | $raw %];
         const table_settings_relatives_issues_table = [% TablesSettings.GetTableSettings( 'circ', 'circulation', 'relatives-issues-table', 'json' ) | $raw %];
+
         const table_settings_holds_table = [% TablesSettings.GetTableSettings( 'circ', 'circulation', 'holds-table', 'json' ) | $raw %];
+        let hold_group_column = table_settings_holds_table.columns.find(c => c.columnname == 'hold_group');
+        hold_group_column.visibility_condition = [% Koha.Preference('DisplayAddHoldGroups') ? 'true' : 'false' | html %];
+
         const table_settings_bookings_table = [% TablesSettings.GetTableSettings( 'members', 'moremember', 'bookings-table', 'json' ) | $raw %];
         const CAN_user_circulate_manage_bookings = [% CAN_user_circulate_manage_bookings || 0 | $raw %];
         const patron_borrowernumber = [% patron.borrowernumber || 'null' | $raw %];

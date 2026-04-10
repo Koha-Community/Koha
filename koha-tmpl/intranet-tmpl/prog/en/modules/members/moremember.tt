@@ -885,7 +885,11 @@
 
         table_settings_issues_table = [% TablesSettings.GetTableSettings( 'members', 'moremember', 'issues-table', 'json' ) | $raw %]
         table_settings_relatives_issues_table = [% TablesSettings.GetTableSettings( 'members', 'moremember', 'relatives-issues-table', 'json' ) | $raw %]
+
         table_settings_holds_table = [% TablesSettings.GetTableSettings( 'members', 'moremember', 'holds-table', 'json' ) | $raw %]
+        let hold_group_column = table_settings_holds_table.columns.find(c => c.columnname == 'hold_group');
+        hold_group_column.visibility_condition = [% Koha.Preference('DisplayAddHoldGroups') ? 'true' : 'false' | html %];
+
         table_settings_bookings_table = [% TablesSettings.GetTableSettings( 'members', 'moremember', 'bookings-table', 'json' ) | $raw %]
         CAN_user_circulate_manage_bookings = [% CAN_user_circulate_manage_bookings | $raw %]
         patron_borrowernumber = [% patron.borrowernumber | $raw %]

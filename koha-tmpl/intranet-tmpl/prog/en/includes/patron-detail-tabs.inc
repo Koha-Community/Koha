@@ -177,22 +177,20 @@
                     <table id="holds-table" class="holds_table" style="width: 100% !Important;">
                         <thead>
                             <tr>
-                                <th id="checkbox" data-colname="checkbox"><input type="checkbox" class="select_hold_all" /></th>
-                                <th>Hold date</th>
-                                [% IF Koha.Preference('DisplayAddHoldGroups') %]
-                                    <th>Hold group</th>
-                                [% END %]
-                                <th class="anti-the">Title</th>
-                                <th>Call number</th>
-                                <th>Item type</th>
-                                <th>Barcode</th>
-                                <th>Pickup at</th>
-                                <th>Expiration</th>
-                                <th>Priority</th>
-                                <th>Notes</th>
-                                <th>Delete?</th>
-                                <th>Suspend?</th>
-                                <th>Status</th>
+                                <th data-colname="checkbox" id="checkbox" data-colname="checkbox"><input type="checkbox" class="select_hold_all" /></th>
+                                <th data-colname="reservedate">Hold date</th>
+                                <th data-colname="hold_group">Hold group</th>
+                                <th data-colname="title" class="anti-the">Title</th>
+                                <th data-colname="callnumber">Call number</th>
+                                <th data-colname="itemtype">Item type</th>
+                                <th data-colname="barcode">Barcode</th>
+                                <th data-colname="pickup_location">Pickup at</th>
+                                <th data-colname="expirationdate">Expiration</th>
+                                <th data-colname="priority">Priority</th>
+                                <th data-colname="notes">Notes</th>
+                                <th data-colname="delete">Delete?</th>
+                                <th data-colname="suspend">Suspend?</th>
+                                <th data-colname="status">Status</th>
                             </tr>
                         </thead>
                     </table>

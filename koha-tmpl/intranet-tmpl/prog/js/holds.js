@@ -555,6 +555,7 @@ $(document).ready(function () {
                         },
                     },
                     bKohaAjaxSVC: true,
+                    bKohaColumnsUseNames: true,
                 },
                 table_settings_holds_table
             );
