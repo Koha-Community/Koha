@@ -5199,31 +5199,26 @@ div .suggestion_note {
     &.collapsed {
         width: 3rem;
 
+        form *,
         .sidebar_menu * {
-            visibility: hidden;
+            display: none;
         }
 
         #toggle-sidebar {
             border-color: #E6E6E6;
             border-bottom-color: #B9B9B9;
             border-radius: 0;
-            border-width: 1px;
-            padding: .375rem .75rem;
-
-            &:hover {
-                border-width: 1px;
-            }
+            box-shadow: 2px 2px 3px 0 rgba( 0, 0, 0, .15 );
         }
     }
 }
 
 #toggle-sidebar {
-    background-color: #E6E6E6;
-    border-color: #B9B9B9;
+    background-color: #FFF;
+    border-color: #E6E6E6;
     border-radius: 0;
-    border-bottom-left-radius: 5px;
-    border-width: 0 0 1px 1px;
-    padding: .5rem;
+    border-width: 1px;
+    box-shadow: -2px 2px 3px 0 rgba( 0, 0, 0, .15 );
 
     &:hover {
         background-color: #FFF;
