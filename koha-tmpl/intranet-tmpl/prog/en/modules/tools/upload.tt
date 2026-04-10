@@ -200,14 +200,14 @@
         <table id="uploadresults">
             <thead>
                 <tr>
-                    <th>Filename</th>
-                    <th>Size</th>
-                    <th>Hashvalue</th>
-                    <th>Date added</th>
-                    <th>Category</th>
-                    [% IF !plugin %]<th>Public</th>[% END %]
-                    [% IF !plugin %]<th>Temporary</th>[% END %]
-                    <th class="no-sort no-export">Actions</th>
+                    <th data-colname="filename">Filename</th>
+                    <th data-colname="size">Size</th>
+                    <th data-colname="hashvalue">Hashvalue</th>
+                    <th data-colname="date">Date added</th>
+                    <th data-colname="category">Category</th>
+                    <th data-colname="public">Public</th>
+                    <th data-colname="temporary">Temporary</th>
+                    <th data-colname="actions" class="no-sort no-export">Actions</th>
                 </tr>
             </thead>
             <tbody>
@@ -231,6 +231,9 @@
                                 [% END %]
                             </td>
                             <td>[% IF record.permanent %]No[% ELSE %]Yes[% END %]</td>
+                        [% ELSE %]
+                            <td></td>
+                            <td></td>
                         [% END %]
                         <td class="actions">
                             [% IF plugin %]
@@ -348,10 +351,10 @@
         var plugin_index = "[% index | html %]";
 
         var table_settings = [% TablesSettings.GetTableSettings( 'tools', 'upload', 'uploadresults', 'json' ) | $raw %];
-        if (plugin){
-            table_settings['columns'].splice(6, 1);
-            table_settings['columns'].splice(5, 1);
-        }
+        let public_column = table_settings.columns.find(c => c.columnname == 'public');
+        public_column.visibility_condition = [% !plugin ? 'true' : 'false' | html %];
+        let temporary_column = table_settings.columns.find(c => c.columnname == 'temporary');
+        temporary_column.visibility_condition = [% !plugin ? 'true' : 'false' | html %];
 
         Koha.addPrefs({
             OPACBaseURL: "[% Koha.Preference('OPACBaseURL') | html %]",
@@ -496,7 +499,12 @@
         }
 
         $(document).ready(function () {
-            $("#uploadresults").kohaTable({}, table_settings);
+            $("#uploadresults").kohaTable(
+                {
+                    bKohaColumnsUseNames: true,
+                },
+                table_settings
+            );
 
             if (msg_alert) {
                 ShowAlerts(msg_alert);
