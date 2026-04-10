@@ -142,23 +142,21 @@
             <table id="course_reserves_table">
                 <thead>
                     <tr>
-                        <th class="anti-the">Title</th>
-                        <th>Author</th>
-                        <th>Barcode</th>
-                        <th>Call number</th>
-                        [% IF item_level_itypes %]<th>Item type</th>[% END %]
-                        <th>Collection</th>
-                        <th>Location</th>
-                        <th>Home library</th>
-                        <th>Holding library</th>
-                        <th>Staff note</th>
-                        <th>Public note</th>
-                        <th>Link</th>
-                        <th class="no-sort">Other course reserves</th>
-                        <th>Status</th>
-                        [% IF CAN_user_coursereserves_add_reserves || CAN_user_coursereserves_delete_reserves %]
-                            <th class="no-sort no-export">Actions</th>
-                        [% END %]
+                        <th data-colname="title" class="anti-the">Title</th>
+                        <th data-colname="author">Author</th>
+                        <th data-colname="barcode">Barcode</th>
+                        <th data-colname="call_number">Call number</th>
+                        <th data-colname="item_type">Item type</th>
+                        <th data-colname="collection">Collection</th>
+                        <th data-colname="location">Location</th>
+                        <th data-colname="home_library">Home library</th>
+                        <th data-colname="holding_library">Holding library</th>
+                        <th data-colname="staff_note">Staff note</th>
+                        <th data-colname="public_note">Public note</th>
+                        <th data-colname="link">Link</th>
+                        <th data-colname="other_course_reserves" class="no-sort">Other course reserves</th>
+                        <th data-colname="status">Status</th>
+                        <th data-colname="actions" class="no-sort no-export">Actions</th>
                     </tr>
                 </thead>
 
@@ -197,6 +195,8 @@
                                             [% END %]
                                         [% END %]
                                     </td>
+                                [% ELSE %]
+                                    <td></td>
                                 [% END %]
                                 <td>
                                     [% IF cr.course_item.ccode_enabled %]
@@ -349,6 +349,8 @@
                                         <a href="#" class="btn btn-default btn-xs delete_item" data-cr-id="[% cr.cr_id | html %]"><i class="fa fa-trash-can"></i> Remove</a>
                                     [% END %]
                                 </td>
+                            [% ELSE %]
+                                <td></td>
                             [% END %]
                         </tr>
                     [% END %]
@@ -363,6 +365,11 @@
     [% INCLUDE 'datatables.inc' %]
     <script nonce="[% Koha.CSPNonce | $raw %]" data-tt-allowed="true">
         var table_settings = [% TablesSettings.GetTableSettings( 'coursereserves', 'reserves', 'course_reserves_table', 'json' ) | $raw %];
+        let item_type_column = table_settings.columns.find(c => c.columnname == 'item_type');
+        item_type_column.visibility_condition = [% item_level_itypes ? 'true' : 'false' | html %];
+        let actions_column = table_settings.columns.find(c => c.columnname == 'actions');
+        actions_column.visibility_condition = [% CAN_user_coursereserves_add_reserves || CAN_user_coursereserves_delete_reserves ? 'true' : 'false' | html %];
+
         const course_reserves_size = [% course_reserves.size || 0 | html %];
         const i18n = {
             are_you_sure_items: "[% I18N.tnx('Are you sure you want to delete this course? There is one attached item.', 'Are you sure you want to delete this course? There are {count} attached items.', course_reserves.size, { count = course_reserves.size}) | html %]",
@@ -382,6 +389,7 @@
                 {
                     pagingType: "full",
                     autoWidth: false,
+                    bKohaColumnsUseNames: true,
                 },
                 table_settings
             );
