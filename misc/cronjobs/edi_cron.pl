@@ -146,6 +146,8 @@ foreach my $response (@downloaded_responses) {
     process_ordrsp($response);
 }
 
+cronlogaction( { action => 'End', info => "COMPLETED" } );
+
 if ( close $pid_handle ) {
     unlink $pidfile;
     exit 0;
@@ -153,8 +155,6 @@ if ( close $pid_handle ) {
     $logger->error("Error on pidfile close: $!");
     exit 1;
 }
-
-cronlogaction( { action => 'End', info => "COMPLETED" } );
 
 sub check_pidfile {
 
