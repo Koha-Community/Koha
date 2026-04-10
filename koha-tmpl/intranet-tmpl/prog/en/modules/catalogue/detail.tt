@@ -901,13 +901,11 @@
                     <table id="comments_table">
                         <thead>
                             <tr>
-                                <th>Commenter</th>
-                                <th>Date</th>
-                                <th>Status</th>
-                                <th>Comment</th>
-                                [% IF ( CAN_user_tools_moderate_comments ) %]
-                                    <th class="no-sort">Actions</th>
-                                [% END %]
+                                <th data-colname="patron">Commenter</th>
+                                <th data-colname="date">Date</th>
+                                <th data-colname="status">Status</th>
+                                <th data-colname="comment">Comment</th>
+                                <th data-colname="actions" class="no-sort">Actions</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -963,6 +961,8 @@
                                                 <button type="submit" class="btn btn-default btn-xs delete-comment"><i class="fa fa-trash-can" aria-hidden="true"></i> Delete</button>
                                             </form>
                                         </td>
+                                    [% ELSE %]
+                                        <td></td>
                                     [% END # /IF CAN_user_tools_moderate_comments %]
                                 </tr>
                             [% END # / FOREACH reviews %]
@@ -1313,6 +1313,8 @@
 
         [% IF reviews %]
             var comment_table_settings = [% TablesSettings.GetTableSettings('catalogue', 'detail', 'comments-table', 'json') | $raw %];
+            let actions_column = comment_table_settings.columns.find(c => c.columnname == 'actions');
+            actions_column.visibility_condition = [% CAN_user_tools_moderate_comments ? 'true' : 'false' | html %];
         [% END %]
 
         [% IF bundlesEnabled %]
@@ -2221,6 +2223,7 @@
                         paging: false,
                         autoWidth: false,
                         order: [[2, "desc"]],
+                        bKohaColumnsUseNames: true,
                     },
                     comment_table_settings
                 );
