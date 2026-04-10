@@ -3,6 +3,7 @@ $(document).ready(function () {
         {
             pagingType: "full",
             order: [[column_sort, "desc"]],
+            bKohaColumnsUseNames: true,
         },
         table_settings
     );

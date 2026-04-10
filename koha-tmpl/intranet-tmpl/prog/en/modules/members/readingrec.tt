@@ -61,21 +61,19 @@
             <table id="table_readingrec">
                 <thead>
                     <tr>
-                        <th>Type</th>
-                        <th>Date</th>
-                        <th class="anti-the">Title</th>
-                        <th>Author</th>
-                        <th>Call number</th>
-                        <th>Vol info</th>
-                        <th>Barcode</th>
-                        <th>Number of renewals</th>
-                        <th>Checked out on</th>
-                        <th>Checked out from</th>
-                        [% IF Koha.Preference('RecordStaffUserOnCheckout') %]
-                            <th>Checked out by</th>
-                        [% END %]
-                        <th>Date due</th>
-                        <th>Return date</th>
+                        <th data-colname="type">Type</th>
+                        <th data-colname="date">Date</th>
+                        <th data-colname="title" class="anti-the">Title</th>
+                        <th data-colname="author">Author</th>
+                        <th data-colname="call_number">Call number</th>
+                        <th data-colname="enumchron">Vol info</th>
+                        <th data-colname="barcode">Barcode</th>
+                        <th data-colname="number_of_renewals">Number of renewals</th>
+                        <th data-colname="checked_out_on">Checked out on</th>
+                        <th data-colname="checked_out_from">Checked out from</th>
+                        <th data-colname="checked_out_by">Checked out by</th>
+                        <th data-colname="date_due">Date due</th>
+                        <th data-colname="return_date">Return date</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -121,6 +119,8 @@
                             [% IF Koha.Preference('RecordStaffUserOnCheckout') %]
                                 [% SET issuer = checkout.issuer %]
                                 <td><a href="/cgi-bin/koha/circ/circulation.pl?borrowernumber=[% issuer.borrowernumber | uri %]">[% issuer.firstname | html %] [% issuer.surname | html %]</a></td>
+                            [% ELSE %]
+                                <td></td>
                             [% END %]
                             <td data-order="[% checkout.date_due | html %]"> [% checkout.date_due | $KohaDates as_due_date => 1 %] </td>
                             [% IF checkout.returndate %]
@@ -168,6 +168,8 @@
         var column_sort = [% Koha.Preference('RecordStaffUserOnCheckout') ? 11 : 10 | html %];
 
         var table_settings = [% TablesSettings.GetTableSettings('members', 'checkouthistory', 'checkouthistory-table', 'json') | $raw %];
+        let checked_out_by_column = table_settings.columns.find(c => c.columnname == 'checked_out_by');
+        checked_out_by_column.visibility_condition = [% Koha.Preference('RecordStaffUserOnCheckout') ? 'true' : 'false' | html %];
     </script>
     [% Asset.js("js/members/readingrec.js") | $raw %]
 [% END %]
