@@ -80,25 +80,23 @@
                 <table id="lostitems-table">
                     <thead>
                         <tr>
-                            [% IF csv_profiles.count %]
-                                <th class="no-sort"></th>
-                            [% END %]
-                            <th class="anti-the">Title</th>
-                            <th>Author</th>
-                            <th>Lost status</th>
-                            <th>Lost on</th>
-                            <th>Barcode</th>
-                            <th>Call number</th>
-                            <th>Date last seen</th>
-                            <th>Price</th>
-                            <th>Rep.price</th>
-                            <th>Library</th>
-                            <th>Item type</th>
-                            <th>Collection</th>
-                            <th>Current library</th>
-                            <th>Location</th>
-                            <th>Not for loan status</th>
-                            <th>Notes</th>
+                            <th data-colname="selection" class="no-sort"></th>
+                            <th data-colname="title" class="anti-the">Title</th>
+                            <th data-colname="author">Author</th>
+                            <th data-colname="lostcode">Lost status</th>
+                            <th data-colname="itemlost_on">Lost on</th>
+                            <th data-colname="barcode">Barcode</th>
+                            <th data-colname="callnumber">Call number</th>
+                            <th data-colname="datelastseen">Date last seen</th>
+                            <th data-colname="price">Price</th>
+                            <th data-colname="replacementprice">Rep.price</th>
+                            <th data-colname="library">Library</th>
+                            <th data-colname="itemtype">Item type</th>
+                            <th data-colname="collection_code">Collection</th>
+                            <th data-colname="current_location">Current library</th>
+                            <th data-colname="location">Location</th>
+                            <th data-colname="notforloan">Not for loan status</th>
+                            <th data-colname="notes">Notes</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -108,6 +106,8 @@
                                     <td style="text-align:center;vertical-align:middle">
                                         <input type="checkbox" value="[% item.itemnumber | html %]" name="itemnumber" />
                                     </td>
+                                [% ELSE %]
+                                    <td></td>
                                 [% END %]
                                 <td>
                                     <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% item.biblionumber | uri %]">[% item.biblio.title | html %]</a>
@@ -195,11 +195,8 @@
     [% INCLUDE 'datatables.inc' %]
     <script nonce="[% Koha.CSPNonce | $raw %]" data-tt-allowed="true">
         var table_settings = [% TablesSettings.GetTableSettings( 'reports', 'lostitems', 'lostitems-table', 'json' ) | $raw %];
-        [% IF csv_profiles.count %]
-            // Add the first (checkbox) column if it is displayed
-            // FIXME This cannot work without bKohaColumnsUseNames
-            table_settings['columns'].unshift({cannot_be_modified: 1, cannot_be_toggled: 1, columnname: 'itemnumber', is_hidden: 0});
-        [% END %]
+        let selection_column = table_settings.columns.find(c => c.columnname == 'selection');
+        selection_column.visibility_condition = [% csv_profiles.count ? 'true' : 'false' | html %];
     </script>
     <script nonce="[% Koha.CSPNonce | $raw %]">
         $(document).ready(function () {
@@ -208,6 +205,7 @@
                     order: [],
                     autoWidth: false,
                     paging: false,
+                    bKohaColumnsUseNames: true,
                 },
                 table_settings,
                 "with_filters"
