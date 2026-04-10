@@ -389,17 +389,9 @@
                                         <th data-colname="last_run" class="report_last_run">Last run</th>
                                         <th data-colname="public" class="report_public">Public</th>
                                         <th data-colname="json_url" class="report_json_url">JSON URL</th>
-                                        [% IF (usecache) %]
-                                            <th data-colname="cache_expiry" class="report_cache_expiry">Cache expiry (seconds)</th>
-                                        [% ELSE %]
-                                            <th data-colname="cache_expiry" class="report_cache_expiry NoVisible">Cache expiry (seconds)</th>
-                                        [% END %]
+                                        <th data-colname="cache_expiry" class="report_cache_expiry">Cache expiry (seconds)</th>
                                         <th data-colname="saved_results" class="report_saved_results">Saved results</th>
-                                        [% IF has_obsolete_reports %]
-                                            <th data-colname="update" class="report_update">Update</th>
-                                        [% ELSE %]
-                                            <th data-colname="update" class="report_update NoVisible">Update</th>
-                                        [% END %]
+                                        <th data-colname="update" class="report_update">Update</th>
                                         <th data-colname="library_limits" class="report_library_limits">Library limits</th>
                                         <th data-colname="actions" class="no-sort no-export">Actions</th>
                                     </tr>
@@ -1893,19 +1885,16 @@
             [% END %]
         [% END %]
 
-        const can_limit_reports_by_library = [% (Koha.Preference('LimitReportsByLibrary') && (CAN_user_superlibrarian || CAN_user_reports_manage_report_limits)) ? 1 : 0 | html %];
-
         var table_settings = [% TablesSettings.GetTableSettings( 'reports', 'saved-sql', 'table_reports', 'json' ) | $raw %];
-        if (table_settings && table_settings.columns) {
-            let library_limits_column = table_settings.columns.find(function (c) {
-                return c.columnname === "library_limits";
-            });
-            if (library_limits_column) {
-                library_limits_column.is_hidden = !can_limit_reports_by_library;
-                library_limits_column.cannot_be_toggled = !can_limit_reports_by_library;
-                library_limits_column.visibility_condition = !!can_limit_reports_by_library;
-            }
-        }
+
+        let cache_expiry_column = table_settings.columns.find(c => c.columnname == 'cache_expiry');
+        cache_expiry_column.visibility_condition = [% usecache ? 'true' : 'false' | html %];
+
+        let update_column = table_settings.columns.find(c => c.columnname == 'update');
+        update_column.visibility_condition = [% has_obsolete_reports ? 'true' : 'false' | html %];
+
+        let library_limits_column = table_settings.columns.find(c => c.columnname == 'library_limits');
+        library_limits_column.visibility_condition = [% Koha.Preference('LimitReportsByLibrary') && ( CAN_user_superlibrarian || CAN_user_reports_manage_report_limits ) ? 'true' : 'false' | html %];
 
         const tables = [% To.json(tables || []) | $raw %];
 
