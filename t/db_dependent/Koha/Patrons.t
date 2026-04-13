@@ -356,6 +356,31 @@ subtest 'is_expired' => sub {
     $patron->delete;
 };
 
+subtest 'DST is_expired' => sub {
+    plan tests => 2;
+
+    my $context = Test::MockModule->new('C4::Context');
+    $context->mock(
+        'tz',
+        sub {
+            'Africa/Cairo';
+        }
+    );
+
+    Time::Fake->offset(1745580600);
+    my $patron = $builder->build( { source => 'Borrower' } );
+    $patron = Koha::Patrons->find( $patron->{borrowernumber} );
+    $patron->dateexpiry('2025-04-24 23:59:59');
+    is( $patron->is_expired, 1, 'Patron should be expired as they expire the day before today' );
+
+    $patron->dateexpiry('2025-04-25 00:00:01');
+    is( $patron->is_expired, 0, 'Patron should not be expired as they expire the same day as today' );
+
+    $context->unmock('tz');
+    Time::Fake->reset();
+
+};
+
 subtest 'is_going_to_expire' => sub {
     plan tests => 9;
 
