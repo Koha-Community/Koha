@@ -163,12 +163,35 @@ subtest 'delete() tests' => sub {
 
 subtest 'post() tests' => sub {
 
-    plan tests => 19;
+    plan tests => 39;
 
     $schema->storage->txn_begin;
 
     my $authorities_mock = Test::MockModule->new('C4::AuthoritiesMarc');
     $authorities_mock->mock( 'FindDuplicateAuthority', sub { return 1234; } );
+
+    # C4::Matcher mock -- deterministic behaviour for id-based lookups
+    #   7      -> authority matcher returning two matches
+    #   2      -> authority matcher returning no matches
+    #   42     -> biblio matcher (wrong record_type)
+    #   999999 -> not found
+    my $matcher_mock = Test::MockModule->new('C4::Matcher');
+    $matcher_mock->mock(
+        'fetch',
+        sub {
+            my ( $class, $id ) = @_;
+            return undef if $id == 999999;
+            my $rt      = ( $id == 42 ) ? 'biblio' : 'authority';
+            my @matches = ();
+            @matches = (
+                { record_id => 555, score => 1000 },
+                { record_id => 666, score => 800 },
+            ) if $id == 7;
+            return bless { record_type => $rt, matches => \@matches }, $class;
+        }
+    );
+    $matcher_mock->mock( 'record_type', sub { $_[0]->{record_type} } );
+    $matcher_mock->mock( 'get_matches', sub { my $self = shift; return @{ $self->{matches} } } );
 
     my $patron = $builder->build_object(
         {
@@ -238,6 +261,72 @@ subtest 'post() tests' => sub {
     )->status_is(201)->json_is(q{})->header_like(
         Location => qr|^\/api\/v1\/authorities/\d*|,
         'REST3.4.1'
+    );
+
+    # x-koha-matchrule: non-integer id -> 400 (caught by OpenAPI schema validator)
+    $t->post_ok(
+        "//$userid:$password@/api/v1/authorities" => {
+            'Content-Type'     => 'application/marc-in-json',
+            'x-authority-type' => 'CORPO_NAME',
+            'x-koha-matchrule' => 'abc',
+        } => $mij
+    )->status_is(400);
+
+    # x-koha-matchrule: unknown id -> 400 matching_rule_not_found
+    $t->post_ok(
+        "//$userid:$password@/api/v1/authorities" => {
+            'Content-Type'     => 'application/marc-in-json',
+            'x-authority-type' => 'CORPO_NAME',
+            'x-koha-matchrule' => '999999',
+        } => $mij
+    )->status_is(400)->json_is( '/error_code' => 'matching_rule_not_found' );
+
+    # x-koha-matchrule: biblio matcher -> 400 invalid_matching_rule_type
+    $t->post_ok(
+        "//$userid:$password@/api/v1/authorities" => {
+            'Content-Type'     => 'application/marc-in-json',
+            'x-authority-type' => 'CORPO_NAME',
+            'x-koha-matchrule' => '42',
+        } => $mij
+    )->status_is(400)->json_is( '/error_code' => 'invalid_matching_rule_type' );
+
+    # x-koha-matchrule: authority matcher finds duplicates -> 409 with matches array
+    $t->post_ok(
+        "//$userid:$password@/api/v1/authorities" => {
+            'Content-Type'     => 'application/marc-in-json',
+            'x-authority-type' => 'CORPO_NAME',
+            'x-koha-matchrule' => '7',
+        } => $mij
+        )
+        ->status_is(409)
+        ->json_like( '/error' => qr/Duplicate record \(555\)/ )
+        ->json_is( '/error_code'       => 'duplicate' )
+        ->json_is( '/matches/0/authid' => 555 )
+        ->json_is( '/matches/0/score'  => 1000 );
+
+    # x-koha-matchrule: authority matcher with no duplicates -> 201
+    $t->post_ok(
+        "//$userid:$password@/api/v1/authorities" => {
+            'Content-Type'     => 'application/marc-in-json',
+            'x-authority-type' => 'CORPO_NAME',
+            'x-koha-matchrule' => '2',
+        } => $mij
+    )->status_is(201)->header_like(
+        Location => qr|^\/api\/v1\/authorities/\d*|,
+        'matcher with no duplicates still creates record'
+    );
+
+    # x-koha-matchrule + x-koha-override: override wins, matcher skipped
+    $t->post_ok(
+        "//$userid:$password@/api/v1/authorities" => {
+            'Content-Type'     => 'application/marc-in-json',
+            'x-authority-type' => 'CORPO_NAME',
+            'x-koha-matchrule' => '7',
+            'x-koha-override'  => 'duplicate',
+        } => $mij
+    )->status_is(201)->header_like(
+        Location => qr|^\/api\/v1\/authorities/\d*|,
+        'override takes precedence over matcher'
     );
 
     $schema->storage->txn_rollback;
