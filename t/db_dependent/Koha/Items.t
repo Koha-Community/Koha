@@ -2867,18 +2867,25 @@ subtest 'filter_by_has_recalls' => sub {
     my $patron = $builder->build_object( { class => 'Koha::Patrons' } );
     t::lib::Mocks::mock_userenv( { branchcode => $patron->branchcode } );
 
-    my $item = $builder->build_sample_item(
+    my $item_1 = $builder->build_sample_item(
         {
             biblionumber => $biblio->biblionumber,
             library      => $library->branchcode,
         }
     );
 
-    C4::Circulation::AddIssue( $patron, $item->barcode );
+    my $item_2 = $builder->build_sample_item(
+        {
+            biblionumber => $biblio->biblionumber,
+            library      => $library->branchcode,
+        }
+    );
+
+    C4::Circulation::AddIssue( $patron, $item_1->barcode );
 
     is( $biblio->items->filter_by_has_recalls->count, 0, "0 items with recalls on this record" );
 
-    Koha::Recalls->add_recall( { biblio => $item->biblio, item => $item, patron => $patron } );
+    Koha::Recalls->add_recall( { biblio => $item_1->biblio, item => $item_1, patron => $patron } );
 
     is( $biblio->items->filter_by_has_recalls->count, 1, "1 item with recalls on this record" );
 
