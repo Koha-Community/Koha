@@ -125,72 +125,72 @@
 [% END #/ WRAPPER sub-header.inc %]
 
 [% aside = BLOCK %]
-        [%~ IF op != 'add_form' %]
-                    <div id="news-filter">
-                        <form action="/cgi-bin/koha/tools/additional-contents.pl" method="get">
-                            <h4>Filter</h4>
-                            <fieldset class="brief">
-                                <ol>
-                                    <li>
-                                        <label for="news_keyword">Keyword:</label>
-                                        <input type="text" name="news_keyword" id="news_keyword" />
-                                    </li>
-                                    <li>
-                                        <label for="news_display_location">Display location:</label>
-                                        <select name="news_display_location" id="news_display_location">
-                                            <option value="">All</option>
-                                            [% PROCESS locations_options category => category %]
-                                        </select>
-                                    </li>
-                                    <li>
-                                        <label for="news_library">Library: </label>
-                                        <select id="news_library" name="news_library">
-                                            <option value=""></option>
-                                            <option value="">All libraries</option>
-                                            [% PROCESS options_for_libraries libraries => Branches.all( selected => branchcode, unfiltered => 1, ) %]
-                                        </select>
-                                    </li>
-                                    <li>
-                                        <label> <input type="checkbox" name="show_expired" id="show_expired" /> Show expired </label>
-                                    </li>
-                                </ol>
-                            </fieldset>
-                        </form>
-                    </div>
+    [%~ IF op != 'add_form' %]
+        <div id="news-filter">
+            <form action="/cgi-bin/koha/tools/additional-contents.pl" method="get">
+                <h4>Filter</h4>
+                <fieldset class="brief">
+                    <ol>
+                        <li>
+                            <label for="news_keyword">Keyword:</label>
+                            <input type="text" name="news_keyword" id="news_keyword" />
+                        </li>
+                        <li>
+                            <label for="news_display_location">Display location:</label>
+                            <select name="news_display_location" id="news_display_location">
+                                <option value="">All</option>
+                                [% PROCESS locations_options category => category %]
+                            </select>
+                        </li>
+                        <li>
+                            <label for="news_library">Library: </label>
+                            <select id="news_library" name="news_library">
+                                <option value=""></option>
+                                <option value="">All libraries</option>
+                                [% PROCESS options_for_libraries libraries => Branches.all( selected => branchcode, unfiltered => 1, ) %]
+                            </select>
+                        </li>
+                        <li>
+                            <label> <input type="checkbox" name="show_expired" id="show_expired" /> Show expired </label>
+                        </li>
+                    </ol>
+                </fieldset>
+            </form>
+        </div>
 
-                    [% INCLUDE 'tools-menu.inc' %]
-        [% END ~%]
+        [% INCLUDE 'tools-menu.inc' %]
+    [% END ~%]
 [% END %]
 
 [% messages_block = BLOCK %]
-                [% FOR m IN messages %]
-                    <div class="alert alert-[% m.type | html %]">
-                        [% SWITCH m.code %]
-                        [% CASE 'error_on_update' %]
-                            <span>An error occurred when updating this content. Perhaps it already exists.</span>
-                        [% CASE 'error_on_insert' %]
-                            <span>An error occurred when adding this content. Check the logs for details.</span>
-                        [% CASE 'error_on_delete' %]
-                            <span>An error occurred when deleting this content. Check the logs for details.</span>
-                        [% CASE 'success_on_update' %]
-                            <span>Content updated successfully.</span>
-                        [% CASE 'success_on_insert' %]
-                            <span>Content added successfully.</span>
-                        [% CASE 'success_on_delete' %]
-                            <span>Content deleted successfully.</span>
-                        [% CASE %]
-                            <span>[% m.code | html %]</span>
-                        [% END %]
-                    </div>
-                [% END %]
+    [% FOR m IN messages %]
+        <div class="alert alert-[% m.type | html %]">
+            [% SWITCH m.code %]
+            [% CASE 'error_on_update' %]
+                <span>An error occurred when updating this content. Perhaps it already exists.</span>
+            [% CASE 'error_on_insert' %]
+                <span>An error occurred when adding this content. Check the logs for details.</span>
+            [% CASE 'error_on_delete' %]
+                <span>An error occurred when deleting this content. Check the logs for details.</span>
+            [% CASE 'success_on_update' %]
+                <span>Content updated successfully.</span>
+            [% CASE 'success_on_insert' %]
+                <span>Content added successfully.</span>
+            [% CASE 'success_on_delete' %]
+                <span>Content deleted successfully.</span>
+            [% CASE %]
+                <span>[% m.code | html %]</span>
+            [% END %]
+        </div>
+    [% END %]
 [% END %]
 
 [% WRAPPER 'main-container.inc' aside_block=aside messages_block=messages_block %]
-                [% IF op == 'add_form' %]
-                    [% PROCESS add_form %]
-                [% ELSE %]
-                    [% PROCESS list %]
-                [% END %]
+    [% IF op == 'add_form' %]
+        [% PROCESS add_form %]
+    [% ELSE %]
+        [% PROCESS list %]
+    [% END %]
 [% END %]
 
 [% BLOCK add_form %]

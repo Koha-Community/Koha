@@ -37,77 +37,77 @@
 [% END #/ WRAPPER sub-header.inc %]
 
 [% WRAPPER 'main-container.inc' aside='admin-menu' %]
-                <h1 class="parameters"> Library float limits </h1>
+    <h1 class="parameters"> Library float limits </h1>
 
-                [% UNLESS Koha.Preference('UseLibraryFloatLimits') %]
-                    <div class="dialog message">
-                        <p>Because the "UseLibraryFloatLimits" system preference is currently not enabled, float limits will not be enforced.</p>
-                        <p>
-                            Go to the <a href="/cgi-bin/koha/admin/preferences.pl?op=search&amp;searchfield=UseLibraryFloatLimits">UseLibraryFloatLimits</a>
-                            system preference if you wish to enable this feature.
-                        </p>
-                    </div>
-                [% END %]
-
-                <form method="post" action="/cgi-bin/koha/admin/float_limits.pl" id="float_limit_form">
-                    [% INCLUDE 'csrf-token.inc' %]
-                    <input type="hidden" name="op" value="cud-set_float_limits" />
-                    <fieldset id="float_limits">
-                        <div class="help">
-                            <p>Specify the total number of items per itemtype that are allowed to float at each library.</p>
-                            <p>
-                                When an item is checked in, the librarian will get a request to transfer the item to the library with the lowest ratio of items held versus items allowed for that item type if the checkin library has reached
-                                its' limit for that type of item.
-                            </p>
-                            <p> If a library and item type combination is left empty, that library will be ignored when finding the best library to transfer the item to. </p>
-                        </div>
-
-                        <div class="form_validation_errors"><span></span></div>
-
-                        <table>
-                            <tr>
-                                <th>Item type \ Library</th>
-                                [% FOR b IN Branches.all(unfiltered => 1) %]
-                                    <th>[% b.branchname | html %]</th>
-                                [% END %]
-                            </tr>
-
-                            [% FOR i IN ItemTypes.Get() %]
-                                <tr>
-                                    <th>[% i.description | html %]</th>
-
-                                    [% FOR b IN Branches.all(unfiltered => 1) %]
-                                        <td>
-                                            [% SET bc = b.branchcode %]
-                                            [% SET it = i.itemtype %]
-                                            <input name="limit_[% bc | html %]_[% it | html %]" size="4" class="float_limit" value="[% limits.$bc.$it | html %]" />
-                                        </td>
-                                    [% END %]
-                                </tr>
-                            [% END %]
-                        </table>
-                    </fieldset>
-
-                    <div class="form_validation_errors"><span></span></div>
-
-                    <fieldset class="action"> <input type="submit" class="btn btn-primary" value="Save" /> <a href="/cgi-bin/koha/admin/float_limits.pl" class="cancel">Cancel</a> </fieldset>
-                </form>
-[% END %]
-
-    [% MACRO jsinclude BLOCK %]
-        [% Asset.js("js/admin-menu.js") | $raw %]
-        <script nonce="[% Koha.CSPNonce | $raw %]">
-            $(document).ready(function () {
-                jQuery.validator.addClassRules("float_limit", {
-                    digits: true,
-                });
-
-                $("#float_limit_form").validate({
-                    errorContainer: ".form_validation_errors",
-                    errorLabelContainer: ".form_validation_errors span",
-                });
-            });
-        </script>
+    [% UNLESS Koha.Preference('UseLibraryFloatLimits') %]
+        <div class="dialog message">
+            <p>Because the "UseLibraryFloatLimits" system preference is currently not enabled, float limits will not be enforced.</p>
+            <p>
+                Go to the <a href="/cgi-bin/koha/admin/preferences.pl?op=search&amp;searchfield=UseLibraryFloatLimits">UseLibraryFloatLimits</a>
+                system preference if you wish to enable this feature.
+            </p>
+        </div>
     [% END %]
 
-    [% INCLUDE 'intranet-bottom.inc' %]
+    <form method="post" action="/cgi-bin/koha/admin/float_limits.pl" id="float_limit_form">
+        [% INCLUDE 'csrf-token.inc' %]
+        <input type="hidden" name="op" value="cud-set_float_limits" />
+        <fieldset id="float_limits">
+            <div class="help">
+                <p>Specify the total number of items per itemtype that are allowed to float at each library.</p>
+                <p>
+                    When an item is checked in, the librarian will get a request to transfer the item to the library with the lowest ratio of items held versus items allowed for that item type if the checkin library has reached its' limit
+                    for that type of item.
+                </p>
+                <p> If a library and item type combination is left empty, that library will be ignored when finding the best library to transfer the item to. </p>
+            </div>
+
+            <div class="form_validation_errors"><span></span></div>
+
+            <table>
+                <tr>
+                    <th>Item type \ Library</th>
+                    [% FOR b IN Branches.all(unfiltered => 1) %]
+                        <th>[% b.branchname | html %]</th>
+                    [% END %]
+                </tr>
+
+                [% FOR i IN ItemTypes.Get() %]
+                    <tr>
+                        <th>[% i.description | html %]</th>
+
+                        [% FOR b IN Branches.all(unfiltered => 1) %]
+                            <td>
+                                [% SET bc = b.branchcode %]
+                                [% SET it = i.itemtype %]
+                                <input name="limit_[% bc | html %]_[% it | html %]" size="4" class="float_limit" value="[% limits.$bc.$it | html %]" />
+                            </td>
+                        [% END %]
+                    </tr>
+                [% END %]
+            </table>
+        </fieldset>
+
+        <div class="form_validation_errors"><span></span></div>
+
+        <fieldset class="action"> <input type="submit" class="btn btn-primary" value="Save" /> <a href="/cgi-bin/koha/admin/float_limits.pl" class="cancel">Cancel</a> </fieldset>
+    </form>
+[% END %]
+
+[% MACRO jsinclude BLOCK %]
+    [% Asset.js("js/admin-menu.js") | $raw %]
+    <script nonce="[% Koha.CSPNonce | $raw %]">
+        $(document).ready(function () {
+            jQuery.validator.addClassRules("float_limit", {
+                digits: true,
+            });
+
+            $("#float_limit_form").validate({
+                errorContainer: ".form_validation_errors",
+                errorLabelContainer: ".form_validation_errors span",
+            });
+        });
+    </script>
+[% END %]
+
+[% INCLUDE 'intranet-bottom.inc' %]

@@ -41,97 +41,89 @@
 [% END #/ WRAPPER sub-header.inc %]
 
 [% aside = BLOCK %]
-            [% PROCESS patron_search_filters categories => categories, libraries => libraries, filters => ['search_field', 'search_type', 'category', 'branch'], search_filter => searchmember %]
+    [% PROCESS patron_search_filters categories => categories, libraries => libraries, filters => ['search_field', 'search_type', 'category', 'branch'], search_filter => searchmember %]
 [% END %]
 
 [% WRAPPER 'main-container.inc' aside_block=aside %]
 
-                [% IF CAN_user_tools_manage_patron_lists %]
-                    <div id="patron_list_dialog" class="alert alert-info"> Added <span class="patrons-length"></span> patrons to <a></a>. </div>
-                [% END %]
+    [% IF CAN_user_tools_manage_patron_lists %]
+        <div id="patron_list_dialog" class="alert alert-info"> Added <span class="patrons-length"></span> patrons to <a></a>. </div>
+    [% END %]
 
-                [% INCLUDE 'patron-toolbar.inc' %]
-                [% INCLUDE 'noadd-warnings.inc' %]
+    [% INCLUDE 'patron-toolbar.inc' %]
+    [% INCLUDE 'noadd-warnings.inc' %]
 
-                [% IF CAN_user_borrowers_edit_borrowers && pending_borrower_modifications %]
-                    <div class="pending-info" id="patron_updates_pending">
-                        <a href="/cgi-bin/koha/members/members-update.pl">Patrons requesting modifications</a>:
-                        <span class="badge bg-info-subtle"><a href="/cgi-bin/koha/members/members-update.pl">[% pending_borrower_modifications | html %]</a></span>
-                    </div>
-                [% END %]
+    [% IF CAN_user_borrowers_edit_borrowers && pending_borrower_modifications %]
+        <div class="pending-info" id="patron_updates_pending">
+            <a href="/cgi-bin/koha/members/members-update.pl">Patrons requesting modifications</a>:
+            <span class="badge bg-info-subtle"><a href="/cgi-bin/koha/members/members-update.pl">[% pending_borrower_modifications | html %]</a></span>
+        </div>
+    [% END %]
 
-                <div id="searchresults">
-                    [% IF CAN_user_tools_manage_patron_lists || CAN_user_borrowers_edit_borrowers %]
-                        <div class="searchheader fh-fixedHeader" id="searchheader" style="display:none;">
-                            <div>
-                                <a href="#" class="btn btn-link" id="select_all"><i class="fa fa-check"></i> Select all</a>
-                                |
-                                <a href="#" class="btn btn-link" id="clear_all"><i class="fa fa-times"></i> Clear all</a>
-                                [% IF CAN_user_tools_manage_patron_lists %]
+    <div id="searchresults">
+        [% IF CAN_user_tools_manage_patron_lists || CAN_user_borrowers_edit_borrowers %]
+            <div class="searchheader fh-fixedHeader" id="searchheader" style="display:none;">
+                <div>
+                    <a href="#" class="btn btn-link" id="select_all"><i class="fa fa-check"></i> Select all</a>
+                    |
+                    <a href="#" class="btn btn-link" id="clear_all"><i class="fa fa-times"></i> Clear all</a>
+                    [% IF CAN_user_tools_manage_patron_lists %]
+                    [% END %]
+
+                    [% IF CAN_user_tools_manage_patron_lists %]
+                        <div id="patronlist-dropdown" class="btn-group">
+                            <button id="patronlist-menu" type="button" class="btn btn-default btn-sm dropdown-toggle patron-edits disabled" disabled="disabled" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Add to patron list
+                            </button>
+                            <ul class="dropdown-menu">
+                                [% IF patron_lists %]
+                                    [% FOREACH pl IN patron_lists %]
+                                        <li><a href="#" class="patron-list-add dropdown-item" data-listid="[% pl.patron_list_id | html %]">[% pl.name | html %]</a></li>
+                                    [% END %]
                                 [% END %]
-
-                                [% IF CAN_user_tools_manage_patron_lists %]
-                                    <div id="patronlist-dropdown" class="btn-group">
-                                        <button
-                                            id="patronlist-menu"
-                                            type="button"
-                                            class="btn btn-default btn-sm dropdown-toggle patron-edits disabled"
-                                            disabled="disabled"
-                                            data-bs-toggle="dropdown"
-                                            aria-haspopup="true"
-                                            aria-expanded="false"
-                                        >
-                                            Add to patron list
-                                        </button>
-                                        <ul class="dropdown-menu">
-                                            [% IF patron_lists %]
-                                                [% FOREACH pl IN patron_lists %]
-                                                    <li><a href="#" class="patron-list-add dropdown-item" data-listid="[% pl.patron_list_id | html %]">[% pl.name | html %]</a></li>
-                                                [% END %]
-                                            [% END %]
-                                            <li><hr class="dropdown-divider" /></li>
-                                            <li><a href="#" class="patron-list-add dropdown-item" data-listid="new">New list</a></li>
-                                        </ul>
-                                    </div>
-                                [% END %]
-
-                                [% IF CAN_user_borrowers_merge_borrowers %]
-                                    <div class="btn-group">
-                                        <button id="merge-patrons" class="btn btn-default btn-sm disabled" disabled="disabled" type="submit"><i class="fa fa-compress" aria-hidden="true"></i> Merge selected patrons</button>
-                                    </div>
-                                [% END %]
-
-                                [% IF CAN_user_tools_edit_patrons %]
-                                    <div class="btn-group">
-                                        <button id="batch-mod-patrons" class="btn btn-default btn-sm disabled" disabled="disabled" type="button"><i class="fa fa-pencil" aria-hidden="true"></i> Batch patron modification</button>
-                                    </div>
-                                [% END %]
-
-                                <div id="table_search_selections" class="btn-group" style="display:none;">
-                                    <span></span>
-                                    <a href="#" id="clear-row-selection"><i class="fa fa-times"></i> Clear</a>
-                                </div>
-                            </div>
+                                <li><hr class="dropdown-divider" /></li>
+                                <li><a href="#" class="patron-list-add dropdown-item" data-listid="new">New list</a></li>
+                            </ul>
                         </div>
                     [% END %]
 
-                    [% IF CAN_user_borrowers_edit_borrowers || CAN_user_tools_manage_patron_lists %]
-                        [% columns.unshift('checkbox') | html %]
+                    [% IF CAN_user_borrowers_merge_borrowers %]
+                        <div class="btn-group">
+                            <button id="merge-patrons" class="btn btn-default btn-sm disabled" disabled="disabled" type="submit"><i class="fa fa-compress" aria-hidden="true"></i> Merge selected patrons</button>
+                        </div>
                     [% END %]
-                    [% PROCESS patron_search_table table_id => 'memberresultst' columns => columns %]
-                </div>
-                [% IF CAN_user_tools_edit_patrons %]
-                    <form id="patron_batchmod_form" method="post" action="/cgi-bin/koha/tools/modborrowers.pl">
-                        [% INCLUDE 'csrf-token.inc' %]
-                        <input type="hidden" name="op" value="cud-show" />
-                        <textarea style="display:none" id="borrowernumberlist" name="borrowernumberlist"></textarea>
-                    </form>
-                [% END %]
 
-                [%- SET StaffPatronsHome = AdditionalContents.get( location => "StaffPatronsHome", lang => lang, library => Branches.GetLoggedInBranchcode ) -%]
-                [%- FOREACH block IN StaffPatronsHome.content -%]
-                    <div class="page-section"> [%- block.content | $raw -%] </div>
-                [%- END -%]
+                    [% IF CAN_user_tools_edit_patrons %]
+                        <div class="btn-group">
+                            <button id="batch-mod-patrons" class="btn btn-default btn-sm disabled" disabled="disabled" type="button"><i class="fa fa-pencil" aria-hidden="true"></i> Batch patron modification</button>
+                        </div>
+                    [% END %]
+
+                    <div id="table_search_selections" class="btn-group" style="display:none;">
+                        <span></span>
+                        <a href="#" id="clear-row-selection"><i class="fa fa-times"></i> Clear</a>
+                    </div>
+                </div>
+            </div>
+        [% END %]
+
+        [% IF CAN_user_borrowers_edit_borrowers || CAN_user_tools_manage_patron_lists %]
+            [% columns.unshift('checkbox') | html %]
+        [% END %]
+        [% PROCESS patron_search_table table_id => 'memberresultst' columns => columns %]
+    </div>
+    [% IF CAN_user_tools_edit_patrons %]
+        <form id="patron_batchmod_form" method="post" action="/cgi-bin/koha/tools/modborrowers.pl">
+            [% INCLUDE 'csrf-token.inc' %]
+            <input type="hidden" name="op" value="cud-show" />
+            <textarea style="display:none" id="borrowernumberlist" name="borrowernumberlist"></textarea>
+        </form>
+    [% END %]
+
+    [%- SET StaffPatronsHome = AdditionalContents.get( location => "StaffPatronsHome", lang => lang, library => Branches.GetLoggedInBranchcode ) -%]
+    [%- FOREACH block IN StaffPatronsHome.content -%]
+        <div class="page-section"> [%- block.content | $raw -%] </div>
+    [%- END -%]
 [% END %]
 
 <!-- New Patron List Modal -->

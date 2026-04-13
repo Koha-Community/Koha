@@ -32,82 +32,82 @@
 [%- searchtype = searchtype || Koha.Preference('DefaultPatronSearchMethod') -%]
 [% BLOCK patron_search_filters %]
     [% SET has_patron_search_filters_block = 1 %]
-        <form method="get" class="patron_search_form">
-            <fieldset class="brief">
-                <h3>Search for patron</h3>
-                <ol>
-                    <li>
-                        <label>Search:</label>
-                        <input type="text" id="search_patron_filter" class="search_patron_filter focus" value="[% search_filter | html %]" />
-                    </li>
+    <form method="get" class="patron_search_form">
+        <fieldset class="brief">
+            <h3>Search for patron</h3>
+            <ol>
+                <li>
+                    <label>Search:</label>
+                    <input type="text" id="search_patron_filter" class="search_patron_filter focus" value="[% search_filter | html %]" />
+                </li>
 
-                    [% FOR f IN filters %]
-                        [% SWITCH f %]
-                        [% CASE 'branch' %]
-                            <li>
-                                <label>Library:</label>
-                                <select class="branchcode_filter">
-                                    [% SET libraries = Branches.all( only_from_group => 1 ) %]
-                                    [% IF libraries.size != 1 %]
-                                        <option value="">Any</option>
-                                    [% END %]
-                                    [% FOREACH l IN libraries %]
-                                        [% IF (l.branchcode == branchcode_filter) %]
-                                            <option value="[% l.branchcode | html %]" selected="selected">[% l.branchname | html %]</option>
-                                        [% ELSE %]
-                                            <option value="[% l.branchcode | html %]">[% l.branchname | html %]</option>
-                                        [% END %]
-                                    [% END %]
-                                </select>
-                            </li>
-                        [% CASE 'category' %]
-                            <li>
-                                <label>Category:</label>
-                                <select class="categorycode_filter">
+                [% FOR f IN filters %]
+                    [% SWITCH f %]
+                    [% CASE 'branch' %]
+                        <li>
+                            <label>Library:</label>
+                            <select class="branchcode_filter">
+                                [% SET libraries = Branches.all( only_from_group => 1 ) %]
+                                [% IF libraries.size != 1 %]
                                     <option value="">Any</option>
-                                    [% FOREACH category IN Categories.limited.unblessed %]
-                                        [% IF ( category.categorycode == categorycode_filter ) %]
-                                            <option value="[% category.categorycode | html %]" selected="selected">[% category.description | html %]</option>
-                                        [% ELSE %]
-                                            <option value="[% category.categorycode | html %]">[% category.description | html %]</option>
-                                        [% END %]
-                                    [% END %]
-                                </select>
-                            </li>
-                        [% CASE 'sort1' %]
-                            <li>
-                                <label>Sort 1:</label>
-                                [% PROCESS 'av-build-dropbox.inc' no_id => 1, name="sort1_filter", default="", category="Bsort1", empty=1, size = 20 %]
-                            </li>
-                        [% CASE 'sort2' %]
-                            <li>
-                                <label>Sort 2:</label>
-                                [% PROCESS 'av-build-dropbox.inc' no_id => 1, name="sort2_filter", default="", category="Bsort2", empty=1, size = 20 %]
-                            </li>
-                        [% CASE 'search_field' %]
-                            <li> [% INCLUDE patron_fields_dropdown %] </li>
-                        [% CASE 'search_type' %]
-                            <li>
-                                <label>Search type:</label>
-                                <select name="searchtype" class="searchtype_filter">
-                                    [% IF searchtype == "starts_with" %]
-                                        <option value="starts_with" selected="selected">Starts with</option>
-                                        <option value="contains">Contains</option>
+                                [% END %]
+                                [% FOREACH l IN libraries %]
+                                    [% IF (l.branchcode == branchcode_filter) %]
+                                        <option value="[% l.branchcode | html %]" selected="selected">[% l.branchname | html %]</option>
                                     [% ELSE %]
-                                        <option value="starts_with">Starts with</option>
-                                        <option value="contains" selected="selected">Contains</option>
+                                        <option value="[% l.branchcode | html %]">[% l.branchname | html %]</option>
                                     [% END %]
-                                </select>
-                            </li>
-                        [% END %]
+                                [% END %]
+                            </select>
+                        </li>
+                    [% CASE 'category' %]
+                        <li>
+                            <label>Category:</label>
+                            <select class="categorycode_filter">
+                                <option value="">Any</option>
+                                [% FOREACH category IN Categories.limited.unblessed %]
+                                    [% IF ( category.categorycode == categorycode_filter ) %]
+                                        <option value="[% category.categorycode | html %]" selected="selected">[% category.description | html %]</option>
+                                    [% ELSE %]
+                                        <option value="[% category.categorycode | html %]">[% category.description | html %]</option>
+                                    [% END %]
+                                [% END %]
+                            </select>
+                        </li>
+                    [% CASE 'sort1' %]
+                        <li>
+                            <label>Sort 1:</label>
+                            [% PROCESS 'av-build-dropbox.inc' no_id => 1, name="sort1_filter", default="", category="Bsort1", empty=1, size = 20 %]
+                        </li>
+                    [% CASE 'sort2' %]
+                        <li>
+                            <label>Sort 2:</label>
+                            [% PROCESS 'av-build-dropbox.inc' no_id => 1, name="sort2_filter", default="", category="Bsort2", empty=1, size = 20 %]
+                        </li>
+                    [% CASE 'search_field' %]
+                        <li> [% INCLUDE patron_fields_dropdown %] </li>
+                    [% CASE 'search_type' %]
+                        <li>
+                            <label>Search type:</label>
+                            <select name="searchtype" class="searchtype_filter">
+                                [% IF searchtype == "starts_with" %]
+                                    <option value="starts_with" selected="selected">Starts with</option>
+                                    <option value="contains">Contains</option>
+                                [% ELSE %]
+                                    <option value="starts_with">Starts with</option>
+                                    <option value="contains" selected="selected">Contains</option>
+                                [% END %]
+                            </select>
+                        </li>
                     [% END %]
-                </ol>
-            </fieldset>
-            <fieldset class="action">
-                <input type="submit" class="btn btn-primary search_patron_filter_btn" value="Search" />
-                <input type="button" value="Clear" class="btn btn-default clear_search" />
-            </fieldset>
-        </form>
+                [% END %]
+            </ol>
+        </fieldset>
+        <fieldset class="action">
+            <input type="submit" class="btn btn-primary search_patron_filter_btn" value="Search" />
+            <input type="button" value="Clear" class="btn btn-default clear_search" />
+        </fieldset>
+    </form>
 [% END %]
 
 [%# Display the table with: %]

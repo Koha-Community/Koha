@@ -295,47 +295,47 @@
 [% END %]
 
 [% aside = BLOCK %]
-        [% IF !plugin %]
-                    [% IF op == 'report' %]
-                        [% PROCESS form_browse %]
-                        [% PROCESS form_search %]
-                    [% END %]
-
-                    [% INCLUDE 'tools-menu.inc' %]
+    [% IF !plugin %]
+        [% IF op == 'report' %]
+            [% PROCESS form_browse %]
+            [% PROCESS form_search %]
         [% END %]
+
+        [% INCLUDE 'tools-menu.inc' %]
+    [% END %]
 [% END %]
 
 [% WRAPPER 'main-container.inc' aside_block=aside %]
-                <h1>Uploads</h1>
-                <div class="alert alert-warning" id="myalerts" style="display:none;"></div>
+    <h1>Uploads</h1>
+    <div class="alert alert-warning" id="myalerts" style="display:none;"></div>
 
-                [% PROCESS submitter %]
-                [% IF op == 'new' %]
-                    [% PROCESS form_new %]
-                    <div class="row">
-                        [% SET div_class="col" %]
-                        [% IF uploadcategories %]
-                            <div class="col-6"> [% PROCESS form_browse %] </div>
-                            <div class="col-6"> [% SET div_class="col-6" %] </div>
-                        [% END %]
-                        <div class="[% div_class | html %]"> [% PROCESS form_search %] </div>
-                    </div>
-                    [% PROCESS closer %]
-                [% ELSIF op == 'report' %]
-                    <div id="toolbar" class="btn-toolbar">
-                        <a href="/cgi-bin/koha/tools/upload.pl" class="btn btn-default">Upload file</a>
-                    </div>
-                    [% IF uploads %]
-                        <h3>Your request gave the following results:</h3>
-                        [% PROCESS table_results %]
-                        [% PROCESS closer %]
-                        [% PROCESS back %]
-                        [% PROCESS form_delete %]
-                    [% ELSE %]
-                        <h4>Sorry, your request had no results.</h4>
-                        [% PROCESS newsearch %]
-                    [% END %]
-                [% END %]
+    [% PROCESS submitter %]
+    [% IF op == 'new' %]
+        [% PROCESS form_new %]
+        <div class="row">
+            [% SET div_class="col" %]
+            [% IF uploadcategories %]
+                <div class="col-6"> [% PROCESS form_browse %] </div>
+                <div class="col-6"> [% SET div_class="col-6" %] </div>
+            [% END %]
+            <div class="[% div_class | html %]"> [% PROCESS form_search %] </div>
+        </div>
+        [% PROCESS closer %]
+    [% ELSIF op == 'report' %]
+        <div id="toolbar" class="btn-toolbar">
+            <a href="/cgi-bin/koha/tools/upload.pl" class="btn btn-default">Upload file</a>
+        </div>
+        [% IF uploads %]
+            <h3>Your request gave the following results:</h3>
+            [% PROCESS table_results %]
+            [% PROCESS closer %]
+            [% PROCESS back %]
+            [% PROCESS form_delete %]
+        [% ELSE %]
+            <h4>Sorry, your request had no results.</h4>
+            [% PROCESS newsearch %]
+        [% END %]
+    [% END %]
 [% END %]
 
 [% MACRO jsinclude BLOCK %]

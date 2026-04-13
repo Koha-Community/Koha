@@ -15,71 +15,71 @@
 <body id="admin_sru_modmapping" class="admin">
 
 [% WRAPPER 'main-container.inc' %]
-        <h1>SRU search field mapping for bibliographic records</h1>
+    <h1>SRU search field mapping for bibliographic records</h1>
 
-        <form id="form01" method="get">
-            <fieldset class="rows">
-                <div class="row">
-                    <div class="col-md-6">
-                        <ol>
-                            <li>
-                                <label for="title">Title: </label>
-                                <input id="title" type="text" value="[% mapping.title | html %]" />
-                            </li>
-                            <li>
-                                <label for="isbn">ISBN: </label>
-                                <input id="isbn" type="text" value="[% mapping.isbn | html %]" />
-                            </li>
-                            <li>
-                                <label for="lccall">LC call number: </label>
-                                <input id="lccall" type="text" value="[% mapping.lccall | html %]" />
-                            </li>
-                            <li>
-                                <label for="controlnumber">Control number: </label>
-                                <input id="controlnumber" type="text" value="[% mapping.controlnumber | html %]" />
-                            </li>
-                            <li>
-                                <label for="srchany">Any: </label>
-                                <input id="srchany" type="text" value="[% mapping.srchany | html %]" />
-                            </li>
-                        </ol>
-                    </div>
-                    <div class="col-md-6">
-                        <ol>
-                            <li>
-                                <label for="author">Author: </label>
-                                <input id="author" type="text" value="[% mapping.author | html %]" />
-                            </li>
-                            <li>
-                                <label for="issn">ISSN: </label>
-                                <input id="issn" type="text" value="[% mapping.issn | html %]" />
-                            </li>
-                            <li>
-                                <label for="subject">Subject: </label>
-                                <input id="subject" type="text" value="[% mapping.subject | html %]" />
-                            </li>
-                            <li>
-                                <label for="dewey">Dewey: </label>
-                                <input id="dewey" type="text" value="[% mapping.dewey | html %]" />
-                            </li>
-                            <li>
-                                <label for="stdid">Standard ID: </label>
-                                <input id="stdid" type="text" value="[% mapping.stdid | html %]" />
-                            </li>
-                        </ol>
-                    </div>
+    <form id="form01" method="get">
+        <fieldset class="rows">
+            <div class="row">
+                <div class="col-md-6">
+                    <ol>
+                        <li>
+                            <label for="title">Title: </label>
+                            <input id="title" type="text" value="[% mapping.title | html %]" />
+                        </li>
+                        <li>
+                            <label for="isbn">ISBN: </label>
+                            <input id="isbn" type="text" value="[% mapping.isbn | html %]" />
+                        </li>
+                        <li>
+                            <label for="lccall">LC call number: </label>
+                            <input id="lccall" type="text" value="[% mapping.lccall | html %]" />
+                        </li>
+                        <li>
+                            <label for="controlnumber">Control number: </label>
+                            <input id="controlnumber" type="text" value="[% mapping.controlnumber | html %]" />
+                        </li>
+                        <li>
+                            <label for="srchany">Any: </label>
+                            <input id="srchany" type="text" value="[% mapping.srchany | html %]" />
+                        </li>
+                    </ol>
                 </div>
-            </fieldset>
+                <div class="col-md-6">
+                    <ol>
+                        <li>
+                            <label for="author">Author: </label>
+                            <input id="author" type="text" value="[% mapping.author | html %]" />
+                        </li>
+                        <li>
+                            <label for="issn">ISSN: </label>
+                            <input id="issn" type="text" value="[% mapping.issn | html %]" />
+                        </li>
+                        <li>
+                            <label for="subject">Subject: </label>
+                            <input id="subject" type="text" value="[% mapping.subject | html %]" />
+                        </li>
+                        <li>
+                            <label for="dewey">Dewey: </label>
+                            <input id="dewey" type="text" value="[% mapping.dewey | html %]" />
+                        </li>
+                        <li>
+                            <label for="stdid">Standard ID: </label>
+                            <input id="stdid" type="text" value="[% mapping.stdid | html %]" />
+                        </li>
+                    </ol>
+                </div>
+            </div>
+        </fieldset>
 
-            <nav class="navbar fixed-bottom bg-light">
-                <div class="container-fluid">
-                    <fieldset class="action">
-                        <input type="submit" class="btn btn-primary" value="Save" />
-                        <button class="btn btn-default close_window">Cancel</button>
-                    </fieldset>
-                </div>
-            </nav>
-        </form>
+        <nav class="navbar fixed-bottom bg-light">
+            <div class="container-fluid">
+                <fieldset class="action">
+                    <input type="submit" class="btn btn-primary" value="Save" />
+                    <button class="btn btn-default close_window">Cancel</button>
+                </fieldset>
+            </div>
+        </nav>
+    </form>
 [% END %]
 
 [% MACRO jsinclude BLOCK %]

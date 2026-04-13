@@ -43,96 +43,95 @@
 [% END #/ WRAPPER sub-header.inc %]
 
 [% aside = BLOCK %]
-                <div id="list-menu" class="sidebar_menu">
-                    <ul>
-                        <li><a href="/cgi-bin/koha/tags/review.pl?approved=1">Approved tags</a></li>
-                        <li><a href="/cgi-bin/koha/tags/review.pl?approved=-1">Rejected tags</a></li>
-                        <li><a href="/cgi-bin/koha/tags/review.pl?approved=0">Pending tags</a></li>
-                        <li><a href="/cgi-bin/koha/tags/review.pl?approved=all">All tags</a></li>
-                    </ul>
-                </div>
-                <!-- /.sidebar_menu -->
-                [% INCLUDE 'tools-menu.inc' %]
-
+    <div id="list-menu" class="sidebar_menu">
+        <ul>
+            <li><a href="/cgi-bin/koha/tags/review.pl?approved=1">Approved tags</a></li>
+            <li><a href="/cgi-bin/koha/tags/review.pl?approved=-1">Rejected tags</a></li>
+            <li><a href="/cgi-bin/koha/tags/review.pl?approved=0">Pending tags</a></li>
+            <li><a href="/cgi-bin/koha/tags/review.pl?approved=all">All tags</a></li>
+        </ul>
+    </div>
+    <!-- /.sidebar_menu -->
+    [% INCLUDE 'tools-menu.inc' %]
 [% END %]
 
 [% WRAPPER 'main-container.inc' aside_block=aside %]
-                <h1>[% tx("Results for tag '{tag}'", { tag = tag }) | html %]</h1>
+    <h1>[% tx("Results for tag '{tag}'", { tag = tag }) | html %]</h1>
 
-                [% IF ( titles ) %]
-                    <div class="page-section">
-                        <table id="itemst">
-                            <thead
-                                ><tr>
-                                    <th class="anti-the">Title</th>
-                                    <th class="no-sort">Location</th>
-                                    <th class="no-sort">&nbsp;</th>
-                                </tr></thead
+    [% IF ( titles ) %]
+        <div class="page-section">
+            <table id="itemst">
+                <thead
+                    ><tr>
+                        <th class="anti-the">Title</th>
+                        <th class="no-sort">Location</th>
+                        <th class="no-sort">&nbsp;</th>
+                    </tr></thead
+                >
+
+                [% FOREACH title IN titles %]
+                    <tr>
+                        <td
+                            >[% INCLUDE 'biblio-title.inc' biblio=title link = 1 %]
+                            [% title.author | html %]
+                            <p
+                                >[% IF ( title.publishercode ) %]
+                                    - [% title.publishercode | html %]
+                                    [% IF ( title.place ) %][% title.place | html %][% END %]
+                                [% END %]
+                                [% IF ( title.pages ) %]
+                                    -
+                                    [% title.pages | html %][% IF ( title.size ) %]
+                                        [% title.size | html %]
+                                    [% END %]
+                                [% END %]</p
                             >
-
-                            [% FOREACH title IN titles %]
-                                <tr>
-                                    <td
-                                        >[% INCLUDE 'biblio-title.inc' biblio=title link = 1 %]
-                                        [% title.author | html %]
-                                        <p
-                                            >[% IF ( title.publishercode ) %]
-                                                - [% title.publishercode | html %]
-                                                [% IF ( title.place ) %][% title.place | html %][% END %]
-                                            [% END %]
-                                            [% IF ( title.pages ) %]
-                                                -
-                                                [% title.pages | html %][% IF ( title.size ) %]
-                                                    [% title.size | html %]
-                                                [% END %]
-                                            [% END %]</p
-                                        >
-                                        [% IF ( title.notes ) %]
-                                            <p>[% title.notes | html %]</p>
-                                        [% END %]
-                                        [% IF ( title.TagLoop ) %]
-                                            <p style="font-size:90%"
-                                                ><strong>Tagged with:</strong> [% FOREACH TagLoo IN title.TagLoop %]
-                                                    <a href="/cgi-bin/koha/tags/list.pl?tag=[% TagLoo.term | uri %]">[% TagLoo.term | html %]</a>
-                                                    <span class="weight">([% TagLoo.weight_total | html %])</span>[% IF ( loop.last ) %][% ELSE %],[% END %]
-                                                [% END %]</p
-                                            >
-                                        [% END %]
-                                    </td>
-                                    <td
-                                        >[% IF ( title.items.count ) %]
-                                            <ul style="font-size:80%"
-                                                >[% FOREACH item IN title.items %]
-                                                    <li>
-                                                        [% Branches.GetName(item.holdingbranch) | html %]
-                                                        <span class="shelvingloc"> [% AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.location', authorised_value => item.location ) | html %] </span>
-                                                        [% IF ( item.itemcallnumber ) %]
-                                                            ([% item.itemcallnumber | html %])
-                                                        [% END %]
-                                                    </li>
-                                                [% END %]</ul
-                                            >
-                                        [% ELSE %]
-                                            This record has no items.
-                                        [% END %]
-                                    </td>
-                                    <td>
-                                        <form method="post" action="/cgi-bin/koha/tags/list.pl">
-                                            [% INCLUDE 'csrf-token.inc' %]
-                                            <input type="hidden" name="op" value="cud-del" />
-                                            <input type="hidden" name="tag" value="[% tag | html %]" />
-                                            <input type="hidden" name="tag_id" value="[% title.tag_id | html %]" />
-                                            <button type="submit" class="delete btn btn-default btn-sm"><i class="fa fa-trash-can"></i> Remove tag</button>
-                                        </form>
-                                    </td>
-                                </tr>
+                            [% IF ( title.notes ) %]
+                                <p>[% title.notes | html %]</p>
                             [% END %]
-                        </table>
-                    </div>
-                    <!-- /.page-section -->
-                [% ELSE %]
-                    <div class="alert alert-info">There are no titles tagged with the term <em>[% tag | html %]</em></div>
+                            [% IF ( title.TagLoop ) %]
+                                <p style="font-size:90%"
+                                    ><strong>Tagged with:</strong> [% FOREACH TagLoo IN title.TagLoop %]
+                                        <a href="/cgi-bin/koha/tags/list.pl?tag=[% TagLoo.term | uri %]">[% TagLoo.term | html %]</a>
+                                        <span class="weight">([% TagLoo.weight_total | html %])</span>[% IF ( loop.last ) %][% ELSE %],[% END %]
+                                    [% END %]</p
+                                >
+                            [% END %]
+                        </td>
+                        <td
+                            >[% IF ( title.items.count ) %]
+                                <ul style="font-size:80%"
+                                    >[% FOREACH item IN title.items %]
+                                        <li>
+                                            [% Branches.GetName(item.holdingbranch) | html %]
+                                            <span class="shelvingloc"> [% AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.location', authorised_value => item.location ) | html %] </span>
+                                            [% IF ( item.itemcallnumber ) %]
+                                                ([% item.itemcallnumber | html %])
+                                            [% END %]
+                                        </li>
+                                    [% END %]</ul
+                                >
+                            [% ELSE %]
+                                This record has no items.
+                            [% END %]
+                        </td>
+                        <td>
+                            <form method="post" action="/cgi-bin/koha/tags/list.pl">
+                                [% INCLUDE 'csrf-token.inc' %]
+                                <input type="hidden" name="op" value="cud-del" />
+                                <input type="hidden" name="tag" value="[% tag | html %]" />
+                                <input type="hidden" name="tag_id" value="[% title.tag_id | html %]" />
+                                <button type="submit" class="delete btn btn-default btn-sm"><i class="fa fa-trash-can"></i> Remove tag</button>
+                            </form>
+                        </td>
+                    </tr>
                 [% END %]
+            </table>
+        </div>
+        <!-- /.page-section -->
+    [% ELSE %]
+        <div class="alert alert-info">There are no titles tagged with the term <em>[% tag | html %]</em></div>
+    [% END %]
 [% END %]
 
 [% MACRO jsinclude BLOCK %]

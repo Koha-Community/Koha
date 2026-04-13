@@ -39,101 +39,98 @@
 [% END #/ WRAPPER sub-header.inc %]
 
 [% aside = BLOCK %]
-                <h3>Z39.50/SRU search</h3>
-                <form method="get" id="quicksearch">
-                    <fieldset class="brief">
-                        <ol>
-                            <li><label for="search-by-keywords">Keywords:</label></li>
-                            <li><input class="search-box" data-qualifier="term" id="search-by-keywords" placeholder="(Ctrl-Alt-K)" /></li>
-                            <li><label for="search-by-author">Author:</label></li>
-                            <li><input class="search-box" data-qualifier="author" id="search-by-author" placeholder="(Ctrl-Alt-A)" /></li>
-                            <li><label for="search-by-isbn">ISBN:</label></li>
-                            <li><input class="search-box" data-qualifier="isbn" id="search-by-isbn" placeholder="(Ctrl-Alt-I)" /></li>
-                            <li><label for="search-by-title">Title:</label></li>
-                            <li><input class="search-box" data-qualifier="title" id="search-by-title" placeholder="(Ctrl-Alt-T)" /></li>
-                            <li><a href="#" id="show-advanced-search" title="Show advanced Z39.50/SRU search (Ctrl-Alt-S)">Advanced &raquo;</a></li>
-                        </ol>
-                    </fieldset>
-                </form>
-                <h3>Clipboard</h3>
-                <fieldset class="brief">
-                    <select id="clipboard" name="clipboard" size="10"> </select>
-                </fieldset>
-
+    <h3>Z39.50/SRU search</h3>
+    <form method="get" id="quicksearch">
+        <fieldset class="brief">
+            <ol>
+                <li><label for="search-by-keywords">Keywords:</label></li>
+                <li><input class="search-box" data-qualifier="term" id="search-by-keywords" placeholder="(Ctrl-Alt-K)" /></li>
+                <li><label for="search-by-author">Author:</label></li>
+                <li><input class="search-box" data-qualifier="author" id="search-by-author" placeholder="(Ctrl-Alt-A)" /></li>
+                <li><label for="search-by-isbn">ISBN:</label></li>
+                <li><input class="search-box" data-qualifier="isbn" id="search-by-isbn" placeholder="(Ctrl-Alt-I)" /></li>
+                <li><label for="search-by-title">Title:</label></li>
+                <li><input class="search-box" data-qualifier="title" id="search-by-title" placeholder="(Ctrl-Alt-T)" /></li>
+                <li><a href="#" id="show-advanced-search" title="Show advanced Z39.50/SRU search (Ctrl-Alt-S)">Advanced &raquo;</a></li>
+            </ol>
+        </fieldset>
+    </form>
+    <h3>Clipboard</h3>
+    <fieldset class="brief">
+        <select id="clipboard" name="clipboard" size="10"> </select>
+    </fieldset>
 [% END %]
 
 [% WRAPPER 'main-container.inc' aside_block=aside %]
-                [% IF Koha.Preference('EnableAdvancedCatalogingEditor') %]
-                    <div id="toggle-editor">
-                        <label for="toggle-editor">Advanced editor: </label>
-                        <label class="switch">
-                            <input id="toggleEditor" type="checkbox" checked="checked" />
-                            <span class="slider"></span>
-                        </label>
-                    </div>
-                [% END %]
+    [% IF Koha.Preference('EnableAdvancedCatalogingEditor') %]
+        <div id="toggle-editor">
+            <label for="toggle-editor">Advanced editor: </label>
+            <label class="switch">
+                <input id="toggleEditor" type="checkbox" checked="checked" />
+                <span class="slider"></span>
+            </label>
+        </div>
+    [% END %]
 
-                <h1 id="title">Cataloging editor</h1>
+    <h1 id="title">Cataloging editor</h1>
 
-                <div id="editor">
-                    <input id="import-records-input" type="file" style="display: none" />
-                    <div id="toolbar" class="btn-toolbar">
-                        <button class="btn btn-default" id="new-record" title="Open fresh record"><i class="fa fa-plus"></i> <span>New record</span></button>
-                        <div class="btn-group">
-                            <button class="btn btn-default" id="save-record" title="Save current record (Ctrl-S)"><i class="fa-solid fa-hard-drive"></i> <span>Save</span></button>
-                            <button class="btn btn-default dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"> </button>
-                            <ul class="dropdown-menu" id="save-dropdown"> </ul>
-                        </div>
-                        <button class="btn btn-default" id="import-records" title="Import an MARC (ISO 2709) or MARCXML record"><i class="fa fa-download"></i> <span>Import record...</span></button>
-                        <button class="btn btn-default" id="open-macros" title="Run and edit macros"><i class="fa fa-play"></i> <span>Macros...</span></button>
-                        <div class="btn-group">
-                            <button class="btn btn-default dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i class="fa fa-cog"></i> Settings</button>
-                            <ul id="prefs-menu" class="dropdown-menu">
-                                <li><a class="dropdown-item" id="switch-editor" href="#">Switch to basic editor</a></li>
-                                <li><a class="dropdown-item" id="set-field-widgets" href="#"></a></li>
-                                <li><h6 class="dropdown-header">Change framework</h6></li>
-                                <li>
-                                    <a class="change-framework dropdown-item" data-frameworkcode="">
-                                        <i class="fa fa-fw unselected">&nbsp;</i>
-                                        <i class="fa fa-fw fa-check selected">&nbsp;</i>
-                                        Default
-                                    </a>
-                                </li>
-                                [% FOREACH framework IN frameworks %]
-                                    <li>
-                                        <a class="change-framework dropdown-item" data-frameworkcode="[% framework.frameworkcode | html %]">
-                                            <i class="fa fa-fw fa-check selected"></i>
-                                            <i class="fa fa-fw unselected">&nbsp;</i>
-                                            [% framework.frameworktext | html %]
-                                        </a>
-                                    </li>
-                                [% END %]
-                                <li><hr class="dropdown-divider" /></li>
-                                <li><a class="set-fontSize dropdown-item" style="font-size: .92em" href="#">Small text</a></li>
-                                <li><a class="set-fontSize dropdown-item" style="font-size: 1em" href="#">Normal text</a></li>
-                                <li><a class="set-fontSize dropdown-item" style="font-size: 1.08em" href="#">Large text</a></li>
-                                <li><a class="set-fontSize dropdown-item" style="font-size: 1.18em" href="#">Huge text</a></li>
-                                <li><hr class="dropdown-divider" /></li>
-                                <li><a class="set-font dropdown-item" style="font-family: monospace" href="#">Default font</a></li>
-                                <li><a class="set-font dropdown-item" style="font-family: Consolas" href="#">Consolas</a></li>
-                                <li><a class="set-font dropdown-item" style="font-family: 'Courier New'" href="#">Courier New</a></li>
-                                <li><a class="set-font dropdown-item" style="font-family: 'DejaVu Sans Mono'" href="#">DejaVu Sans Mono</a></li>
-                                <li><a class="set-font dropdown-item" style="font-family: 'Lucida Console'" href="#">Lucida Console</a></li>
-                                <li><a class="set-font dropdown-item" style="font-family: Monaco" href="#">Monaco</a></li>
-                            </ul>
-                        </div>
-                        <button class="btn btn-default" id="show-alerts" title="Previous alerts"><i class="fa fa-bell"></i> Alerts</button>
-                        <button class="btn btn-default" id="show-shortcuts" title="Supported keyboard shortcuts"><i class="fa-solid fa-keyboard"></i> Keyboard shortcuts</button>
-                        <button class="btn btn-default hide" id="set-keyboard-layout" data-bs-target="#keyboard-layout" data-bs-toggle="modal" title="Set virtual keyboard layout"
-                            ><i class="fa-solid fa-keyboard"></i> Keyboard layout
-                        </button>
-                    </div>
-                    [%# CodeMirror instance will be inserted here %]
-                    <div id="statusbar">
-                        <div id="status-tag-info"> </div>
-                        <div id="status-subfield-info"> </div>
-                    </div>
-                </div>
+    <div id="editor">
+        <input id="import-records-input" type="file" style="display: none" />
+        <div id="toolbar" class="btn-toolbar">
+            <button class="btn btn-default" id="new-record" title="Open fresh record"><i class="fa fa-plus"></i> <span>New record</span></button>
+            <div class="btn-group">
+                <button class="btn btn-default" id="save-record" title="Save current record (Ctrl-S)"><i class="fa-solid fa-hard-drive"></i> <span>Save</span></button>
+                <button class="btn btn-default dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"> </button>
+                <ul class="dropdown-menu" id="save-dropdown"> </ul>
+            </div>
+            <button class="btn btn-default" id="import-records" title="Import an MARC (ISO 2709) or MARCXML record"><i class="fa fa-download"></i> <span>Import record...</span></button>
+            <button class="btn btn-default" id="open-macros" title="Run and edit macros"><i class="fa fa-play"></i> <span>Macros...</span></button>
+            <div class="btn-group">
+                <button class="btn btn-default dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i class="fa fa-cog"></i> Settings</button>
+                <ul id="prefs-menu" class="dropdown-menu">
+                    <li><a class="dropdown-item" id="switch-editor" href="#">Switch to basic editor</a></li>
+                    <li><a class="dropdown-item" id="set-field-widgets" href="#"></a></li>
+                    <li><h6 class="dropdown-header">Change framework</h6></li>
+                    <li>
+                        <a class="change-framework dropdown-item" data-frameworkcode="">
+                            <i class="fa fa-fw unselected">&nbsp;</i>
+                            <i class="fa fa-fw fa-check selected">&nbsp;</i>
+                            Default
+                        </a>
+                    </li>
+                    [% FOREACH framework IN frameworks %]
+                        <li>
+                            <a class="change-framework dropdown-item" data-frameworkcode="[% framework.frameworkcode | html %]">
+                                <i class="fa fa-fw fa-check selected"></i>
+                                <i class="fa fa-fw unselected">&nbsp;</i>
+                                [% framework.frameworktext | html %]
+                            </a>
+                        </li>
+                    [% END %]
+                    <li><hr class="dropdown-divider" /></li>
+                    <li><a class="set-fontSize dropdown-item" style="font-size: .92em" href="#">Small text</a></li>
+                    <li><a class="set-fontSize dropdown-item" style="font-size: 1em" href="#">Normal text</a></li>
+                    <li><a class="set-fontSize dropdown-item" style="font-size: 1.08em" href="#">Large text</a></li>
+                    <li><a class="set-fontSize dropdown-item" style="font-size: 1.18em" href="#">Huge text</a></li>
+                    <li><hr class="dropdown-divider" /></li>
+                    <li><a class="set-font dropdown-item" style="font-family: monospace" href="#">Default font</a></li>
+                    <li><a class="set-font dropdown-item" style="font-family: Consolas" href="#">Consolas</a></li>
+                    <li><a class="set-font dropdown-item" style="font-family: 'Courier New'" href="#">Courier New</a></li>
+                    <li><a class="set-font dropdown-item" style="font-family: 'DejaVu Sans Mono'" href="#">DejaVu Sans Mono</a></li>
+                    <li><a class="set-font dropdown-item" style="font-family: 'Lucida Console'" href="#">Lucida Console</a></li>
+                    <li><a class="set-font dropdown-item" style="font-family: Monaco" href="#">Monaco</a></li>
+                </ul>
+            </div>
+            <button class="btn btn-default" id="show-alerts" title="Previous alerts"><i class="fa fa-bell"></i> Alerts</button>
+            <button class="btn btn-default" id="show-shortcuts" title="Supported keyboard shortcuts"><i class="fa-solid fa-keyboard"></i> Keyboard shortcuts</button>
+            <button class="btn btn-default hide" id="set-keyboard-layout" data-bs-target="#keyboard-layout" data-bs-toggle="modal" title="Set virtual keyboard layout"><i class="fa-solid fa-keyboard"></i> Keyboard layout </button>
+        </div>
+        [%# CodeMirror instance will be inserted here %]
+        <div id="statusbar">
+            <div id="status-tag-info"> </div>
+            <div id="status-subfield-info"> </div>
+        </div>
+    </div>
 [% END %]
 
 <div id="advanced-search-ui" class="modal modal-full" tabindex="-1" role="dialog" aria-labelledby="advanced-search-title" aria-hidden="true">
