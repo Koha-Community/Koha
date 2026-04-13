@@ -933,7 +933,12 @@ sub is_expired {
     my ($self) = @_;
     return 0 unless $self->dateexpiry;
     return 0 if $self->dateexpiry =~ '^9999';
-    return 1 if dt_from_string( $self->dateexpiry ) < dt_from_string->truncate( to => 'day' );
+
+    #NOTE: We set the timezone to floating so that we can do datetime math regardless of impossible local (DST) times
+    #In this case, we need a comparison with "local midnight" but local midnight doesn't exist for some timezones.
+    return 1
+        if ( dt_from_string( $self->dateexpiry )->set_time_zone('floating') ) <
+        ( dt_from_string()->set_time_zone('floating')->truncate( to => 'day' ) );
     return 0;
 }
 
