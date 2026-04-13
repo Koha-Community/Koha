@@ -155,7 +155,9 @@ sub Z3950Search {
     }
     my $xslh = Koha::XSLT::Base->new;
 
-    my $nremaining = $s;
+    my $nremaining    = $s;
+    my $hits_per_page = 20;    #TODO make configurable
+    my $total_hits    = 0;
     while ( $nremaining-- ) {
         my $k;
         my $event;
@@ -169,18 +171,22 @@ sub Z3950Search {
             my ($error) = $oConnection[$k]->error_x();    #ignores errmsg, addinfo, diagset
             if ($error) {
                 if ( $error =~ m/^(10000|10007)$/ ) {
-                    push( @errconn, { server => $servers[$k]->{host}, error => $error } );
+                    push( @errconn, { server => $servers[$k]->{host}, errcode => $error } );
                 }
             } else {
                 my $numresults = $oResult[$k]->size();
+                $total_hits += $numresults;
                 my $i;
                 my $res;
-                if ( $numresults > 0 and $numresults >= ( ( $page - 1 ) * 20 ) ) {
-                    $show_next   = 1                           if $numresults >= ( $page * 20 );
-                    $total_pages = int( $numresults / 20 ) + 1 if $total_pages < ( $numresults / 20 );
+                if ( $numresults > 0 and $numresults >= ( ( $page - 1 ) * $hits_per_page ) ) {
+                    $show_next   = 1 if $numresults >= ( $page * $hits_per_page );
+                    $total_pages = int( $numresults / $hits_per_page ) + 1
+                        if $total_pages < ( $numresults / $hits_per_page );
                     for (
-                        $i = ( $page - 1 ) * 20 ;
-                        $i < ( ( $numresults < ( $page * 20 ) ) ? $numresults : ( $page * 20 ) ) ;
+                        $i = ( $page - 1 ) * $hits_per_page ;
+                        $i < (
+                            ( $numresults < ( $page * $hits_per_page ) ) ? $numresults : ( $page * $hits_per_page )
+                            ) ;
                         $i++
                         )
                     {
@@ -191,14 +197,17 @@ sub Z3950Search {
                                 $xslh
                             );    #ignores error in sequence numbering
                             push @breeding_loop, $res if $res;
-                            push @errconn, { server => $servers[$k]->{servername}, error => $error, seq => $i + 1 }
+                            push @errconn, { server => $servers[$k]->{servername}, errcode => $error, seq => $i + 1 }
                                 if $error;
                         } else {
+                            my @diags = $oConnection[$k]->error_x();    # errcode, errmsg, addinfo, diagset
+                            next unless $diags[0];                      # Just silently ignore empty results
                             push @errconn,
                                 {
-                                'server'  => $servers[$k]->{servername},
-                                error     => ( ( $oConnection[$k]->error_x() )[0] ),
-                                error_msg => ( ( $oConnection[$k]->error_x() )[1] ), seq => $i + 1
+                                server  => $servers[$k]->{servername},
+                                errcode => $diags[0],
+                                errmsg  => $diags[1],
+                                seq     => $i + 1,
                                 };
                         }
                     }
@@ -212,6 +221,7 @@ sub Z3950Search {
             total_pages     => $total_pages,
             show_nextbutton => $show_next ? 1 : 0,
             show_prevbutton => $page != 1,
+            total_hits      => $total_hits,
         );
     }    # while nremaining
 

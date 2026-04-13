@@ -103,19 +103,23 @@
                         [% IF ( dewey ) %]<em>Dewey: </em><span class="term">[% dewey | html %]</span>[% END %]
                         [% IF ( srchany ) %]<em>Raw (any): </em><span class="term">[% srchany | html %]</span>[% END %]
                         [% IF ( stdid ) %]<em>Standard ID: </em><span class="term">[% stdid | html %]</span>[% END %]
+                        <span class="z3950_total_hits"> (Having [% total_hits | html %] results)</span>
                     </p>
                     [% IF ( errconn ) %]
                         <div class="alert alert-warning">
                             <ul>
                                 [% FOREACH errcon IN errconn %]
-                                    [% IF ( errcon.error == '10000' ) %]
+                                    [% IF ( errcon.errcode == '10000' ) %]
                                         <li>Connection failed to [% errcon.server | html %]</li>
-                                    [% ELSIF ( errcon.error == '10007' ) %]
+                                    [% ELSIF ( errcon.errcode == '10007' ) %]
                                         <li>Connection timeout to [% errcon.server | html %]</li>
-                                    [% ELSIF errcon.error.match( '^XSLTH' ) %]
-                                        <li>[% errcon.server | html %] record [% errcon.seq | html %]: [% PROCESS 'xslt-handler.inc' code=errcon.error %]</li>
+                                    [% ELSIF errcon.errcode.match( '^XSLTH' ) %]
+                                        <li>[% errcon.server | html %] record [% errcon.seq | html %]: [% PROCESS 'xslt-handler.inc' code=errcon.errcode %]</li>
                                     [% ELSE %]
-                                        <li>[% errcon.error_msg | html %] (ref. [% errcon.error | html %]) for [% errcon.server | html %] result [% errcon.seq | html %]</li>
+                                        <li>
+                                            [% errcon.errmsg | html %] (ref. [% errcon.errcode | html %]) for [% errcon.server | html %] result [% errcon.seq | html %]
+                                            [% IF errcon.errcode == '61' # 'First record position out of range' %](TIP: Refresh with Go button.)[% END %]
+                                        </li>
                                     [% END %]
                                 [% END %]
                             </ul>
