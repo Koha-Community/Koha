@@ -821,7 +821,10 @@
                     searchable: false,
                     orderable: false,
                     render: function (data, type, row, meta) {
-                        return '<a class="btn btn-default btn-xs print-label" href="/cgi-bin/koha/labels/spinelabel-print.pl?barcode=%s"><i class="fa fa-print"></i> Print label</a>'.format(escape_str(row.external_id));
+                        return '<a class="btn btn-default btn-xs print-label" href="/cgi-bin/koha/labels/spinelabel-print.pl?barcode=%s"><i class="fa fa-print"></i> %s</a>'.format(
+                            escape_str(row.external_id),
+                            escape_str(_("Print label"))
+                        );
                     }
                 },
                 [% END %]
