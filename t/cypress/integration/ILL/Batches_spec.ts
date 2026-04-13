@@ -187,8 +187,10 @@ describe("ILL Batches", () => {
         cy.visit("/cgi-bin/koha/plugins/plugins-home.pl");
         cy.get('.actions .btn-group.dropup a[id*="Pubmed"]')
             .contains("Actions")
-            .click();
-        cy.get(".dropdown-item.uninstall_plugin").click();
+            .click({ force: true })
+            .closest(".btn-group.dropup")
+            .find(".dropdown-item.uninstall_plugin")
+            .click({ force: true });
     });
     it("ILL requests batch modal", function () {
         cy.visit("/cgi-bin/koha/mainpage.pl");
