@@ -36,4 +36,5 @@ INSERT INTO keyboard_shortcuts (shortcut_name, shortcut_keys) VALUES
     ("copy_line","Ctrl-Alt-C"),
     ("copy_subfield","Shift-Ctrl-C"),
     ("paste_line","Ctrl-P"),
-    ("insert_line","Ctrl-I");
+    ("insert_line","Ctrl-I"),
+    ("open_helper_plugin","Shift-Ctrl-H");
