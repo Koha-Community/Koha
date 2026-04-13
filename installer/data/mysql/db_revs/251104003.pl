@@ -13,7 +13,7 @@ return {
             $dbh->do(
                 q{
                 ALTER TABLE record_sources
-                ADD UNIQUE KEY name (`name`)
+                ADD UNIQUE KEY name (`name`(191))
             }
             );
             say $out "Added unique key 'name' ";
