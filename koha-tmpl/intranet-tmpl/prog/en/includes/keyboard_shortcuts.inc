@@ -32,5 +32,7 @@
         <span>Paste selection from 'clipboard'</span>
     [%- CASE 'insert_line' -%]
         <span>Copy current field on next line</span>
+    [%- CASE 'open_helper_plugin' -%]
+        <span>Open fixed-length field helper (Leader, 006, 007, 008)</span>
     [%- END -%]
 [%- END -%]

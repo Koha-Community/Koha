@@ -289,6 +289,71 @@ define( [ 'marc-record', 'koha-backend', 'preferences', 'text-marc', 'widget' ],
         cm.replaceRange( "‡", cur, null );
     }
 
+    _editorKeys[open_helper_plugin] = function( cm ) {
+            // Launch the appropriate fixed-length field value_builder popup
+            // when the cursor is on Leader/006/007/008.
+            var field = cm.marceditor.getCurrentField();
+            if ( !field || !field.isControlField ) return;
+
+            var pluginMap = {
+                '000': 'marc21_leader.pl',
+                '006': 'marc21_field_006.pl',
+                '007': 'marc21_field_007.pl',
+                '008': 'marc21_field_008.pl',
+            };
+            var plugin = pluginMap[ field.tag ];
+            if ( !plugin ) return;
+
+            // Control-field content begins at column 4 (3-char tag + 1 space).
+            var lineText     = cm.getLine( field.line );
+            var currentValue = lineText.substr( 4 );
+
+            var indexId = 'adv_editor_fixedfield_buffer';
+            var $buf    = $( '#' + indexId );
+            $buf.val( currentValue );
+
+            // The 008 plugin needs the Leader value to pick the material-type byte map.
+            var extra = '';
+            if ( field.tag === '008' ) {
+                var leaderField = cm.marceditor.getFields( '000' )[0];
+                if ( leaderField ) {
+                    var leaderValue = cm.getLine( leaderField.line ).substr( 4 );
+                    extra = '&leader=' + encodeURIComponent( leaderValue );
+                }
+            }
+
+            // The plugin's report() callback writes
+            //   opener.document.getElementById(index).value = newValue
+            // but does not fire a change event, so poll the buffer when the popup closes.
+            var fieldLine    = field.line;
+            var capturedLen  = lineText.length;
+            var helperWindow = window.open(
+                '../cataloguing/plugin_launcher.pl'
+                    + '?plugin_name=' + plugin
+                    + '&index=' + indexId
+                    + '&result=' + encodeURIComponent( currentValue )
+                    + extra,
+                'fixed_field_helper',
+                'width=1000,height=600,toolbar=false,scrollbars=yes'
+            );
+            if ( !helperWindow ) return;
+
+            var pollTimer = setInterval( function() {
+                if ( !helperWindow.closed ) return;
+                clearInterval( pollTimer );
+
+                var newValue = $buf.val();
+                if ( newValue === currentValue ) return;
+
+                cm.replaceRange(
+                    newValue,
+                    { line: fieldLine, ch: 4 },
+                    { line: fieldLine, ch: capturedLen },
+                    'marcAware'
+                );
+            }, 300 );
+        }
+
     _editorKeys[toggle_keyboard] = function( cm ) {
        let keyboard = $(cm.getInputField()).getkeyboard();
        keyboard.isVisible()?keyboard.close():keyboard.reveal();
@@ -302,7 +367,7 @@ define( [ 'marc-record', 'koha-backend', 'preferences', 'text-marc', 'widget' ],
     // be temporary, and should only be reused with great care. The macro code does this only
     // because it is careful to dispose of the object after any other updates.
     //
-    // Note, however, tha you can continue to use a field object after changing subfields. It's just
+    // Note, however, that you can continue to use a field object after changing subfields. It's just
     // the subfield objects that become invalid.
 
     // This is an exception raised by the EditorSubfield and EditorField when an invalid change is

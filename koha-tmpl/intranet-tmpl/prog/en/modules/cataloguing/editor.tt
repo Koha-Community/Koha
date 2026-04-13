@@ -283,6 +283,11 @@
     </div>
 </div>
 
+<!-- Hidden buffer used by the fixed-length field helper popups (Leader/006/007/008).
+     The value_builder plugin templates write their result here via opener.document; the
+     advanced editor watches for the change and splices the new value back into CodeMirror. -->
+<input type="hidden" id="adv_editor_fixedfield_buffer" />
+
 <div id="macro-ui" class="modal" tabindex="-1" role="dialog" aria-labelledby="macro-title" aria-hidden="true">
     <div class="modal-dialog modal-xl">
         <div class="modal-content">
