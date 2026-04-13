@@ -42,14 +42,17 @@
     [% END #/ WRAPPER breadcrumbs %]
 [% END #/ WRAPPER sub-header.inc %]
 
-[% IF ( method == 'tool' ) %]
-    [% SET 'dynamicaside' = 'tools-menu' %]
-[% ELSIF ( method == 'report' ) %]
-    [% SET 'dynamicaside' = 'reports-menu' %]
-[% ELSE %]
-    [% SET 'dynamicaside' = 'admin-menu' %]
+[% aside = BLOCK %]
+    [% IF ( method == 'tool' ) %]
+        [% INCLUDE 'tools-menu.inc' %]
+    [% ELSIF ( method == 'report' ) %]
+        [% INCLUDE 'reports-menu.inc' %]
+    [% ELSE %]
+        [% INCLUDE 'admin-menu.inc' %]
+    [% END %]
 [% END %]
-[% WRAPPER 'main-container.inc' aside=dynamicaside %]
+
+[% WRAPPER 'main-container.inc' aside_block=aside %]
     <h1>Plugins</h1>
 
     <div class="details">

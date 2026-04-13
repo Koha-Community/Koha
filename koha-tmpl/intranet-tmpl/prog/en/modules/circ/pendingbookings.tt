@@ -33,24 +33,7 @@
     [% END #/ WRAPPER breadcrumbs %]
 [% END #/ WRAPPER sub-header.inc %]
 
-<div class="main container-fluid">
-    <div class="row">
-        <!-- Results -->
-        <div class="col-md-10 order-md-2 order-sm1">
-            <main>
-                [% INCLUDE 'messages.inc' %]
-                <h1>Items required for bookings between <span id="from_date">[% from | $KohaDates %]</span> and <span id="to_date">[% to | $KohaDates %]</span></h1>
-                <h2>Reported on [% todaysdate | $KohaDates %]</h2>
-                <p>The following items have not been collected for bookings.</p>
-                <div id="searchresults">
-                    <table id="bookingst"></table>
-                </div>
-            </main>
-        </div>
-
-        <!-- Filters & Navigation -->
-        <div class="col-md-2 order-sm-2 order-md-1">
-            <aside>
+[% aside = BLOCK %]
                 <form id="bookingsf">
                     <fieldset class="brief">
                         <h4>Refine results</h4>
@@ -103,12 +86,17 @@
                 </form>
 
                 [% INCLUDE 'circ-nav.inc' %]
-            </aside>
-        </div>
-    </div>
-    <!-- /.row -->
-</div>
-<!-- /.main.container-fluid -->
+
+[% END %]
+
+[% WRAPPER 'main-container.inc' aside_block=aside %]
+                <h1>Items required for bookings between <span id="from_date">[% from | $KohaDates %]</span> and <span id="to_date">[% to | $KohaDates %]</span></h1>
+                <h2>Reported on [% todaysdate | $KohaDates %]</h2>
+                <p>The following items have not been collected for bookings.</p>
+                <div id="searchresults">
+                    <table id="bookingst"></table>
+                </div>
+[% END %]
 
 [% MACRO jsinclude BLOCK %]
     [% INCLUDE 'calendar.inc' %]

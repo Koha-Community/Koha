@@ -114,12 +114,59 @@
     [% END #/ WRAPPER breadcrumbs %]
 [% END #/ WRAPPER sub-header.inc %]
 
-<div class="main container-fluid">
-    <div class="row">
-        <div class="col-md-10 order-md-2 order-sm-1">
-            <main>
-                [% INCLUDE 'messages.inc' %]
+[% aside = BLOCK %]
+                [% IF op == 'list' %]
+                    <form action="/cgi-bin/koha/admin/aqbudgets.pl" method="get">
+                        <fieldset class="brief" id="fundfilters">
+                            <h4>Fund filters</h4>
+                            <ol>
+                                <li>
+                                    <label for="filter_budgetbranch2">Library: </label>
+                                    <select name="filter_budgetbranch" id="filter_budgetbranch2">
+                                        <option value=""></option>
+                                        [% PROCESS options_for_libraries libraries => Branches.all( selected => selected_branchcode, unfiltered => 1 ) %]
+                                    </select>
+                                </li>
 
+                                [% IF periods %]
+                                    <li>
+                                        <label for="periods">Budget:</label>
+                                        <select id="periods" name="budget_period_id">
+                                            <option value="">All budgets</option>
+                                            [% FOR period IN periods %]
+                                                [% IF budget_period_id && period.budget_period_id == budget_period_id %]
+                                                    <option value="[% period.budget_period_id | html %]" selected="selected">[% period.budget_period_description | html %]</option>
+                                                [% ELSE %]
+                                                    <option value="[% period.budget_period_id | html %]">[% period.budget_period_description | html %]</option>
+                                                [% END %]
+                                            [% END %]
+                                        </select>
+                                    </li>
+                                [% END %]
+                                <li class="radio">
+                                    <label for="show_mine">
+                                        [% IF ( show_mine ) %]
+                                            <input type="checkbox" id="show_mine" name="show_mine" value="1" checked="checked" />
+                                        [% ELSE %]
+                                            <input type="checkbox" id="show_mine" name="show_mine" value="1" />
+                                        [% END %]
+                                        Show my funds only
+                                    </label>
+                                </li>
+                            </ol>
+                        </fieldset>
+                        <fieldset class="action">
+                            <input type="hidden" name="op" value="list" />
+                            <input type="submit" class="btn btn-primary" name="filter" value="Go" />
+                        </fieldset>
+                    </form>
+                [% END %]
+
+                [% INCLUDE 'acquisitions-menu.inc' %]
+
+[% END %]
+
+[% WRAPPER 'main-container.inc' aside_block=aside %]
                 [% UNLESS op == 'delete_confirm' %][% INCLUDE 'budgets-admin-toolbar.inc' %][% END %]
 
                 [% IF (error_not_authorised_to_modify) %]
@@ -515,67 +562,7 @@
                         </form>
                     </div>
                 [% END %]
-            </main>
-        </div>
-        <!-- /.col-md-10.order-md-2 -->
-
-        <div class="col-md-2 order-sm-2 order-md-1">
-            <aside>
-                [% IF op == 'list' %]
-                    <form action="/cgi-bin/koha/admin/aqbudgets.pl" method="get">
-                        <fieldset class="brief" id="fundfilters">
-                            <h4>Fund filters</h4>
-                            <ol>
-                                <li>
-                                    <label for="filter_budgetbranch2">Library: </label>
-                                    <select name="filter_budgetbranch" id="filter_budgetbranch2">
-                                        <option value=""></option>
-                                        [% PROCESS options_for_libraries libraries => Branches.all( selected => selected_branchcode, unfiltered => 1 ) %]
-                                    </select>
-                                </li>
-
-                                [% IF periods %]
-                                    <li>
-                                        <label for="periods">Budget:</label>
-                                        <select id="periods" name="budget_period_id">
-                                            <option value="">All budgets</option>
-                                            [% FOR period IN periods %]
-                                                [% IF budget_period_id && period.budget_period_id == budget_period_id %]
-                                                    <option value="[% period.budget_period_id | html %]" selected="selected">[% period.budget_period_description | html %]</option>
-                                                [% ELSE %]
-                                                    <option value="[% period.budget_period_id | html %]">[% period.budget_period_description | html %]</option>
-                                                [% END %]
-                                            [% END %]
-                                        </select>
-                                    </li>
-                                [% END %]
-                                <li class="radio">
-                                    <label for="show_mine">
-                                        [% IF ( show_mine ) %]
-                                            <input type="checkbox" id="show_mine" name="show_mine" value="1" checked="checked" />
-                                        [% ELSE %]
-                                            <input type="checkbox" id="show_mine" name="show_mine" value="1" />
-                                        [% END %]
-                                        Show my funds only
-                                    </label>
-                                </li>
-                            </ol>
-                        </fieldset>
-                        <fieldset class="action">
-                            <input type="hidden" name="op" value="list" />
-                            <input type="submit" class="btn btn-primary" name="filter" value="Go" />
-                        </fieldset>
-                    </form>
-                [% END %]
-
-                [% INCLUDE 'acquisitions-menu.inc' %]
-            </aside>
-        </div>
-        <!-- /.col-md-2.order-md-1 -->
-    </div>
-    <!-- /.row -->
-</div>
-<!-- /.main.container-fluid -->
+[% END %]
 
 [% MACRO jsinclude BLOCK %]
     [% Asset.js("js/acq.js") | $raw %]

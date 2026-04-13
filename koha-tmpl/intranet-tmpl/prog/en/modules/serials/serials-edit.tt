@@ -124,12 +124,30 @@
     [% END #/ WRAPPER breadcrumbs %]
 [% END #/ WRAPPER sub-header.inc %]
 
-<div class="main container-fluid">
-    <div class="row">
-        <div class="col-md-10 order-md-2 order-sm-1">
-            <main>
-                [% INCLUDE 'messages.inc' %]
+[% aside = BLOCK %]
+                [% INCLUDE 'serials-menu.inc' %]
+                <div id="serialmenu" class="sidebar_menu">
+                    <h5>Serial links</h5>
+                    <ul>
+                        [% FOREACH subscription IN subscriptions %]
+                            <li
+                                ><a href="serials-collection.pl?subscriptionid=[% subscription.subscriptionid | uri %]" title="Serial collection for [% subscription.subscriptionid | html %]"
+                                    >Serial collection #[% subscription.subscriptionid | html %]</a
+                                ></li
+                            >
+                            <li><a href="subscription-detail.pl?subscriptionid=[% subscription.subscriptionid | uri %]" title="Detail of the subscription">Subscription #[% subscription.subscriptionid | html %]</a></li>
+                            [% IF ( subscription.abouttoexpire ) %]
+                                [% UNLESS subscription.closed %]
+                                    <li><a href="#" onclick="javascript:popup([% subscription.subscriptionid | html %])">Renew #[% subscription.subscriptionid | html %]</a></li>
+                                [% END %]
+                            [% END %]
+                        [% END %]
+                        <li><a href="[% PROCESS biblio_a_href biblionumber => biblionumber %]" title="Go to [% bibliotitle | html %]">Show bibliographic record</a></li>
+                    </ul>
+                </div>
+[% END %]
 
+[% WRAPPER 'main-container.inc' aside_block=aside %]
                 <div class="btn-group"><input type="button" value="Generate next" href="#generate_next" class="btn btn-default btn-sm" data-bs-toggle="modal" /></div>
                 [% INCLUDE 'modals/generate_next.inc' referrer="serials-edit" %]
 
@@ -616,38 +634,6 @@
                         [% END %]
                     </fieldset>
                 </form>
-            </main>
-        </div>
-        <!-- /.col-md-10.order-md-2 -->
-
-        <div class="col-md-2 order-sm-2 order-md-1">
-            <aside>
-                [% INCLUDE 'serials-menu.inc' %]
-                <div id="serialmenu" class="sidebar_menu">
-                    <h5>Serial links</h5>
-                    <ul>
-                        [% FOREACH subscription IN subscriptions %]
-                            <li
-                                ><a href="serials-collection.pl?subscriptionid=[% subscription.subscriptionid | uri %]" title="Serial collection for [% subscription.subscriptionid | html %]"
-                                    >Serial collection #[% subscription.subscriptionid | html %]</a
-                                ></li
-                            >
-                            <li><a href="subscription-detail.pl?subscriptionid=[% subscription.subscriptionid | uri %]" title="Detail of the subscription">Subscription #[% subscription.subscriptionid | html %]</a></li>
-                            [% IF ( subscription.abouttoexpire ) %]
-                                [% UNLESS subscription.closed %]
-                                    <li><a href="#" onclick="javascript:popup([% subscription.subscriptionid | html %])">Renew #[% subscription.subscriptionid | html %]</a></li>
-                                [% END %]
-                            [% END %]
-                        [% END %]
-                        <li><a href="[% PROCESS biblio_a_href biblionumber => biblionumber %]" title="Go to [% bibliotitle | html %]">Show bibliographic record</a></li>
-                    </ul>
-                </div>
-            </aside>
-        </div>
-        <!-- /.col-md-2.order-md-1 -->
-    </div>
-    <!-- /.row -->
-</div>
-<!-- /.main.container-fluid -->
+[% END %]
 
 [% INCLUDE 'intranet-bottom.inc' %]

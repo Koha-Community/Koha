@@ -12,9 +12,7 @@
 
 <body id="admin_sru_modmapping" class="admin">
 
-<div class="main container-fluid">
-    <main>
-        [% INCLUDE 'messages.inc' %]
+[% WRAPPER 'main-container.inc' %]
         <h1>SRU search field mapping for authorities</h1>
         <form id="form01" method="get">
             <fieldset class="rows">
@@ -82,9 +80,7 @@
                 </div>
             </nav>
         </form>
-    </main>
-</div>
-<!-- /.main.container-fluid -->
+[% END %]
 
 [% MACRO jsinclude BLOCK %]
     <script nonce="[% Koha.CSPNonce | $raw %]">

@@ -40,11 +40,11 @@
     [% END #/ WRAPPER breadcrumbs %]
 [% END #/ WRAPPER sub-header.inc %]
 
-<div class="main container-fluid">
-    <div class="row">
-        <div class="col-md-10 order-md-2 order-sm-1">
-            <main>
-                [% INCLUDE 'messages.inc' %]
+[% aside = BLOCK %]
+            [% PROCESS patron_search_filters categories => categories, libraries => libraries, filters => ['search_field', 'search_type', 'category', 'branch'], search_filter => searchmember %]
+[% END %]
+
+[% WRAPPER 'main-container.inc' aside_block=aside %]
 
                 [% IF CAN_user_tools_manage_patron_lists %]
                     <div id="patron_list_dialog" class="alert alert-info"> Added <span class="patrons-length"></span> patrons to <a></a>. </div>
@@ -132,18 +132,7 @@
                 [%- FOREACH block IN StaffPatronsHome.content -%]
                     <div class="page-section"> [%- block.content | $raw -%] </div>
                 [%- END -%]
-            </main>
-        </div>
-        <!-- /.col-md-10.order-md-2 -->
-
-        <div class="col-md-2 order-sm-2 order-md-1">
-            [% PROCESS patron_search_filters categories => categories, libraries => libraries, filters => ['search_field', 'search_type', 'category', 'branch'], search_filter => searchmember %]
-        </div>
-        <!-- /.col-md-2 order-sm-2 order-md-1 -->
-    </div>
-    <!-- /.row -->
-</div>
-<!-- /.main.container-fluid -->
+[% END %]
 
 <!-- New Patron List Modal -->
 <div class="modal" id="new-patron-list" tabindex="-1" role="dialog" aria-labelledby="new-patron-listLabel">

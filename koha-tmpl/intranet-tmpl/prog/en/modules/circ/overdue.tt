@@ -55,140 +55,7 @@
     [% END #/ WRAPPER breadcrumbs %]
 [% END #/ WRAPPER sub-header.inc %]
 
-<div class="main container-fluid">
-    <div class="row">
-        <div class="col-md-10 order-md-2 order-sm-1">
-            <main>
-                [% INCLUDE 'messages.inc' %]
-
-                [% IF ( noreport ) %]
-                    <h1>Overdue report</h1>
-                    <p>Please choose one or more filters to proceed.</p>
-                [% ELSE %]
-
-                    [% IF ( overdueloop ) %]
-                        <h2
-                            >[% nnoverdue | html %] [% IF ( noverdue_is_plural ) %]Items[% ELSE %]Item[% END %] overdue as of
-                            [% todaysdate | $KohaDates %][% IF ( isfiltered ) %]<span style="font-size:70%;">(Filtered. <a href="/cgi-bin/koha/circ/overdue.pl">Reset filter</a>)</span>[% END %]</h2
-                        >
-
-                        <p>
-                            [% IF ( isfiltered ) %]
-                                [% SET url_params = '' %]
-                                [% FOR var IN filters.keys %]
-                                    [% url_params = BLOCK %][% url_params | $raw %]&amp;[% var | uri %]=[% filters.$var | uri %][% END %]
-                                [% END %]
-                                <a href="overdue.pl?op=csv[% url_params | $raw %]">Download file of displayed overdues</a>
-                            [% ELSE %]
-                                <a href="overdue.pl?op=csv">Download file of all overdues</a>
-                            [% END %]
-                        </p>
-
-                        <div class="sql"><pre>[% sql | html %]</pre></div>
-                        <div class="page-section searchresults">
-                            <table id="overduest">
-                                <thead>
-                                    <tr>
-                                        <th>Due date</th>
-                                        <th>Patron</th>
-                                        <th>Patron category</th>
-                                        <th>Patron library</th>
-                                        <th class="anti-the">Title</th>
-                                        <th>Home library</th>
-                                        <th>Holding library</th>
-                                        <th>Shelving location</th>
-                                        <th>Checked out on</th>
-                                        <th>Barcode</th>
-                                        <th>Call number</th>
-                                        <th>Item type</th>
-                                        <th>Price</th>
-                                        <th>Non-public note</th>
-                                        [% IF Koha.Preference('ClaimReturnedLostValue') %]
-                                            <th>Return claims</th>
-                                        [% END %]
-                                    </tr>
-                                </thead>
-                                [%- BLOCK subject -%]Overdue:[%- END -%]
-                                <tbody>
-                                    [% FOREACH overdueloo IN overdueloop %]
-                                        <tr>
-                                            <td data-order="[% overdueloo.duedate | html %]">
-                                                [% IF ( overdueloo.overdue ) %]
-                                                    <span class="overdue">[% overdueloo.duedate | $KohaDates %]</span>
-                                                [% ELSE %]
-                                                    [% overdueloo.duedate | $KohaDates %]
-                                                [% END %]
-                                            </td>
-                                            <td>
-                                                [% INCLUDE 'patron-title.inc' borrower=overdueloo.borrower hide_patron_infos_if_needed=1 %]
-                                                [% IF logged_in_user.can_see_patrons_from( overdueloo.branchcode ) %]
-                                                    [% IF ( overdueloo.email ) %]
-                                                        <span class="overdue_email"> [<a href="mailto:[% overdueloo.email | uri %]?subject=[% INCLUDE subject %] [% overdueloo.title | uri %]">email</a>] </span>
-                                                    [% END %]
-                                                    <span class="overdue_phone">
-                                                        [% IF ( overdueloo.phone ) %]
-                                                            ([% overdueloo.phone | html %])
-                                                        [% ELSIF ( overdueloo.mobile ) %]
-                                                            ([% overdueloo.mobile | html %])
-                                                        [% ELSIF ( overdueloo.phonepro ) %]
-                                                            ([% overdueloo.phonepro | html %])
-                                                        [% END %]
-                                                    </span>
-                                                [% END %]
-                                            </td>
-                                            <td>[% Categories.GetName( overdueloo.borrower.categorycode ) | html %]</td>
-                                            <td>[% Branches.GetName( overdueloo.borrower.branchcode ) | html %]</td>
-                                            <td
-                                                >[% INCLUDE 'biblio-title.inc' biblio=overdueloo link = 1 %]
-                                                [% IF ( overdueloo.author ) %], by [% overdueloo.author | html %][% END %][% IF ( overdueloo.enumchron ) %], [% overdueloo.enumchron | html %][% END %]</td
-                                            >
-                                            <td>[% Branches.GetName( overdueloo.homebranchcode ) | html %]</td>
-                                            <td>[% Branches.GetName( overdueloo.holdingbranchcode ) | html %]</td>
-                                            <td>[% AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.location', authorised_value => overdueloo.location ) | html %]</td>
-                                            <td data-order="[% overdueloo.datelastborrowed | html %]">[% overdueloo.datelastborrowed | $KohaDates %]</td>
-                                            <td
-                                                ><a href="/cgi-bin/koha/catalogue/moredetail.pl?biblionumber=[% overdueloo.biblionumber | uri %]&amp;itemnumber=[% overdueloo.itemnum | uri %]#item[% overdueloo.itemnum | uri %]"
-                                                    >[% overdueloo.barcode | html %]</a
-                                                ></td
-                                            >
-                                            <td>[% overdueloo.itemcallnumber | html %]</td>
-                                            <td>[% ItemTypes.GetDescription( overdueloo.itemtype ) | html %]</td>
-                                            <td>[% overdueloo.replacementprice | $Price %]</td>
-                                            <td>[% overdueloo.itemnotes_nonpublic | html %]</td>
-                                            [% IF Koha.Preference('ClaimReturnedLostValue') %]
-                                                <td>
-                                                    [% IF ( overdueloo.return_claim_created_on ) %]
-                                                        <span class="badge text-bg-info">[% overdueloo.return_claim_created_on | $KohaDates with_hours => 1 %]</span>
-                                                    [% ELSE %]
-                                                        <a class="btn btn-default btn-xs claim-returned-btn" data-itemnumber="[% overdueloo.itemnum | html %]"> <i class="fa fa-exclamation-circle"></i> Claim returned </a>
-                                                    [% END %]
-                                                </td>
-                                            [% END %]
-                                        </tr>
-                                    [% END %]
-                                </tbody>
-                            </table>
-                        </div>
-
-                        <!-- Claims Returned Modal -->
-                        [% PROCESS 'modal-claims-display' %]
-                    [% ELSE %]
-                        <h1>Overdue report</h1>
-                        [% IF ( isfiltered ) %]
-                            <p>There are no overdues matching your search. <a href="/cgi-bin/koha/circ/overdue.pl">Reset filter</a></p>
-                        [% ELSE %]
-                            <p>There are no overdues.</p>
-                        [% END %]
-                    [% END %]
-                    <!-- overdueloop -->
-                [% END %]
-                <!-- noreport -->
-            </main>
-        </div>
-        <!-- /.col-md-10.order-md-2 -->
-
-        <div class="col-md-2 order-sm-2 order-md-1">
-            <aside>
+[% aside = BLOCK %]
                 <form method="post" action="/cgi-bin/koha/circ/overdue.pl">
                     [% INCLUDE 'csrf-token.inc' %]
                     <fieldset class="brief">
@@ -332,13 +199,133 @@
                         <input type="hidden" name="op" value="cud-apply filter" />
                     </fieldset>
                 </form>
-            </aside>
-        </div>
-        <!-- /.col-md-2.order-md-1 -->
-    </div>
-    <!-- /.row -->
-</div>
-<!-- /.main.container-fluid -->
+
+[% END %]
+
+[% WRAPPER 'main-container.inc' aside_block=aside %]
+                [% IF ( noreport ) %]
+                    <h1>Overdue report</h1>
+                    <p>Please choose one or more filters to proceed.</p>
+                [% ELSE %]
+
+                    [% IF ( overdueloop ) %]
+                        <h2
+                            >[% nnoverdue | html %] [% IF ( noverdue_is_plural ) %]Items[% ELSE %]Item[% END %] overdue as of
+                            [% todaysdate | $KohaDates %][% IF ( isfiltered ) %]<span style="font-size:70%;">(Filtered. <a href="/cgi-bin/koha/circ/overdue.pl">Reset filter</a>)</span>[% END %]</h2
+                        >
+
+                        <p>
+                            [% IF ( isfiltered ) %]
+                                [% SET url_params = '' %]
+                                [% FOR var IN filters.keys %]
+                                    [% url_params = BLOCK %][% url_params | $raw %]&amp;[% var | uri %]=[% filters.$var | uri %][% END %]
+                                [% END %]
+                                <a href="overdue.pl?op=csv[% url_params | $raw %]">Download file of displayed overdues</a>
+                            [% ELSE %]
+                                <a href="overdue.pl?op=csv">Download file of all overdues</a>
+                            [% END %]
+                        </p>
+
+                        <div class="sql"><pre>[% sql | html %]</pre></div>
+                        <div class="page-section searchresults">
+                            <table id="overduest">
+                                <thead>
+                                    <tr>
+                                        <th>Due date</th>
+                                        <th>Patron</th>
+                                        <th>Patron category</th>
+                                        <th>Patron library</th>
+                                        <th class="anti-the">Title</th>
+                                        <th>Home library</th>
+                                        <th>Holding library</th>
+                                        <th>Shelving location</th>
+                                        <th>Checked out on</th>
+                                        <th>Barcode</th>
+                                        <th>Call number</th>
+                                        <th>Item type</th>
+                                        <th>Price</th>
+                                        <th>Non-public note</th>
+                                        [% IF Koha.Preference('ClaimReturnedLostValue') %]
+                                            <th>Return claims</th>
+                                        [% END %]
+                                    </tr>
+                                </thead>
+                                [%- BLOCK subject -%]Overdue:[%- END -%]
+                                <tbody>
+                                    [% FOREACH overdueloo IN overdueloop %]
+                                        <tr>
+                                            <td data-order="[% overdueloo.duedate | html %]">
+                                                [% IF ( overdueloo.overdue ) %]
+                                                    <span class="overdue">[% overdueloo.duedate | $KohaDates %]</span>
+                                                [% ELSE %]
+                                                    [% overdueloo.duedate | $KohaDates %]
+                                                [% END %]
+                                            </td>
+                                            <td>
+                                                [% INCLUDE 'patron-title.inc' borrower=overdueloo.borrower hide_patron_infos_if_needed=1 %]
+                                                [% IF logged_in_user.can_see_patrons_from( overdueloo.branchcode ) %]
+                                                    [% IF ( overdueloo.email ) %]
+                                                        <span class="overdue_email"> [<a href="mailto:[% overdueloo.email | uri %]?subject=[% INCLUDE subject %] [% overdueloo.title | uri %]">email</a>] </span>
+                                                    [% END %]
+                                                    <span class="overdue_phone">
+                                                        [% IF ( overdueloo.phone ) %]
+                                                            ([% overdueloo.phone | html %])
+                                                        [% ELSIF ( overdueloo.mobile ) %]
+                                                            ([% overdueloo.mobile | html %])
+                                                        [% ELSIF ( overdueloo.phonepro ) %]
+                                                            ([% overdueloo.phonepro | html %])
+                                                        [% END %]
+                                                    </span>
+                                                [% END %]
+                                            </td>
+                                            <td>[% Categories.GetName( overdueloo.borrower.categorycode ) | html %]</td>
+                                            <td>[% Branches.GetName( overdueloo.borrower.branchcode ) | html %]</td>
+                                            <td
+                                                >[% INCLUDE 'biblio-title.inc' biblio=overdueloo link = 1 %]
+                                                [% IF ( overdueloo.author ) %], by [% overdueloo.author | html %][% END %][% IF ( overdueloo.enumchron ) %], [% overdueloo.enumchron | html %][% END %]</td
+                                            >
+                                            <td>[% Branches.GetName( overdueloo.homebranchcode ) | html %]</td>
+                                            <td>[% Branches.GetName( overdueloo.holdingbranchcode ) | html %]</td>
+                                            <td>[% AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.location', authorised_value => overdueloo.location ) | html %]</td>
+                                            <td data-order="[% overdueloo.datelastborrowed | html %]">[% overdueloo.datelastborrowed | $KohaDates %]</td>
+                                            <td
+                                                ><a href="/cgi-bin/koha/catalogue/moredetail.pl?biblionumber=[% overdueloo.biblionumber | uri %]&amp;itemnumber=[% overdueloo.itemnum | uri %]#item[% overdueloo.itemnum | uri %]"
+                                                    >[% overdueloo.barcode | html %]</a
+                                                ></td
+                                            >
+                                            <td>[% overdueloo.itemcallnumber | html %]</td>
+                                            <td>[% ItemTypes.GetDescription( overdueloo.itemtype ) | html %]</td>
+                                            <td>[% overdueloo.replacementprice | $Price %]</td>
+                                            <td>[% overdueloo.itemnotes_nonpublic | html %]</td>
+                                            [% IF Koha.Preference('ClaimReturnedLostValue') %]
+                                                <td>
+                                                    [% IF ( overdueloo.return_claim_created_on ) %]
+                                                        <span class="badge text-bg-info">[% overdueloo.return_claim_created_on | $KohaDates with_hours => 1 %]</span>
+                                                    [% ELSE %]
+                                                        <a class="btn btn-default btn-xs claim-returned-btn" data-itemnumber="[% overdueloo.itemnum | html %]"> <i class="fa fa-exclamation-circle"></i> Claim returned </a>
+                                                    [% END %]
+                                                </td>
+                                            [% END %]
+                                        </tr>
+                                    [% END %]
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <!-- Claims Returned Modal -->
+                        [% PROCESS 'modal-claims-display' %]
+                    [% ELSE %]
+                        <h1>Overdue report</h1>
+                        [% IF ( isfiltered ) %]
+                            <p>There are no overdues matching your search. <a href="/cgi-bin/koha/circ/overdue.pl">Reset filter</a></p>
+                        [% ELSE %]
+                            <p>There are no overdues.</p>
+                        [% END %]
+                    [% END %]
+                    <!-- overdueloop -->
+                [% END %]
+                <!-- noreport -->
+[% END %]
 
 [% MACRO jsinclude BLOCK %]
     [% INCLUDE 'calendar.inc' %]

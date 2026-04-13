@@ -294,17 +294,18 @@
     [% END #/ WRAPPER sub-header.inc %]
 [% END %]
 
-[% IF plugin %]
-    [% SET div_class = 'col-sm-12' %]
-[% ELSE %]
-    [% SET div_class = 'col-md-10 order-md-2 order-sm-1' %]
-[% END %]
-<div class="main container-fluid">
-    <div class="row">
-        <div class="[% div_class | html %]">
-            <main>
-                [% INCLUDE 'messages.inc' %]
+[% aside = BLOCK %]
+        [% IF !plugin %]
+                    [% IF op == 'report' %]
+                        [% PROCESS form_browse %]
+                        [% PROCESS form_search %]
+                    [% END %]
 
+                    [% INCLUDE 'tools-menu.inc' %]
+        [% END %]
+[% END %]
+
+[% WRAPPER 'main-container.inc' aside_block=aside %]
                 <h1>Uploads</h1>
                 <div class="alert alert-warning" id="myalerts" style="display:none;"></div>
 
@@ -335,26 +336,7 @@
                         [% PROCESS newsearch %]
                     [% END %]
                 [% END %]
-            </main>
-        </div>
-        <!-- /.col-md-10.order-md-2 -->
-        [% IF !plugin %]
-            <div class="col-md-2 order-sm-2 order-md-1">
-                <aside>
-                    [% IF op == 'report' %]
-                        [% PROCESS form_browse %]
-                        [% PROCESS form_search %]
-                    [% END %]
-
-                    [% INCLUDE 'tools-menu.inc' %]
-                </aside>
-            </div>
-            <!-- /.col-md-2.order-md-1 -->
-        [% END %]
-    </div>
-    <!-- /.row -->
-</div>
-<!-- /.main.container-fluid -->
+[% END %]
 
 [% MACRO jsinclude BLOCK %]
     [% Asset.js("js/tools-menu.js") | $raw %]

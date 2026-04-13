@@ -42,12 +42,21 @@
     [% END #/ WRAPPER breadcrumbs %]
 [% END #/ WRAPPER sub-header.inc %]
 
-<div class="main container-fluid">
-    <div class="row">
-        <div class="col-md-10 order-md-2 order-sm-1">
-            <main>
-                [% INCLUDE 'messages.inc' %]
+[% aside = BLOCK %]
+                <div id="list-menu" class="sidebar_menu">
+                    <ul>
+                        <li><a href="/cgi-bin/koha/tags/review.pl?approved=1">Approved tags</a></li>
+                        <li><a href="/cgi-bin/koha/tags/review.pl?approved=-1">Rejected tags</a></li>
+                        <li><a href="/cgi-bin/koha/tags/review.pl?approved=0">Pending tags</a></li>
+                        <li><a href="/cgi-bin/koha/tags/review.pl?approved=all">All tags</a></li>
+                    </ul>
+                </div>
+                <!-- /.sidebar_menu -->
+                [% INCLUDE 'tools-menu.inc' %]
 
+[% END %]
+
+[% WRAPPER 'main-container.inc' aside_block=aside %]
                 <h1>[% tx("Results for tag '{tag}'", { tag = tag }) | html %]</h1>
 
                 [% IF ( titles ) %]
@@ -124,29 +133,7 @@
                 [% ELSE %]
                     <div class="alert alert-info">There are no titles tagged with the term <em>[% tag | html %]</em></div>
                 [% END %]
-            </main>
-        </div>
-        <!-- /.col-md-10.order-md-2 -->
-
-        <div class="col-md-2 order-sm-2 order-md-1">
-            <aside>
-                <div id="list-menu" class="sidebar_menu">
-                    <ul>
-                        <li><a href="/cgi-bin/koha/tags/review.pl?approved=1">Approved tags</a></li>
-                        <li><a href="/cgi-bin/koha/tags/review.pl?approved=-1">Rejected tags</a></li>
-                        <li><a href="/cgi-bin/koha/tags/review.pl?approved=0">Pending tags</a></li>
-                        <li><a href="/cgi-bin/koha/tags/review.pl?approved=all">All tags</a></li>
-                    </ul>
-                </div>
-                <!-- /.sidebar_menu -->
-                [% INCLUDE 'tools-menu.inc' %]
-            </aside>
-        </div>
-        <!-- /.col-md-2.order-md-1 -->
-    </div>
-    <!-- /.row -->
-</div>
-<!-- /.main.container-fluid -->
+[% END %]
 
 [% MACRO jsinclude BLOCK %]
     [% INCLUDE 'datatables.inc' %]

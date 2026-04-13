@@ -32,7 +32,6 @@
 [%- searchtype = searchtype || Koha.Preference('DefaultPatronSearchMethod') -%]
 [% BLOCK patron_search_filters %]
     [% SET has_patron_search_filters_block = 1 %]
-    <aside>
         <form method="get" class="patron_search_form">
             <fieldset class="brief">
                 <h3>Search for patron</h3>
@@ -109,7 +108,6 @@
                 <input type="button" value="Clear" class="btn btn-default clear_search" />
             </fieldset>
         </form>
-    </aside>
 [% END %]
 
 [%# Display the table with: %]

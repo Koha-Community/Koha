@@ -5,9 +5,12 @@
         [% IF aside && !asides %]
             [% SET asides = [aside] %]
         [% END %]
-        [% IF asides || aside_block %]
+        [% IF ( asides && asides.size ) || aside_block %]
             <div class="col-md-10 order-sm-1 order-md-2">
                 <main>
+                    [% IF messages_block %]
+                        [% messages_block | $raw %]
+                    [% END %]
                     [% INCLUDE 'messages.inc' %]
                     [% content | $raw %]
                 </main>
@@ -71,6 +74,9 @@
         [% ELSIF wide_centered %]
             <div class="col-md-10 offset-md-1">
                 <main>
+                    [% IF messages_block %]
+                        [% messages_block | $raw %]
+                    [% END %]
                     [% INCLUDE 'messages.inc' %]
                     [% content | $raw %]
                 </main>
@@ -78,6 +84,9 @@
         [% ELSIF wide_full %]
             <div class="col-lg-8 offset-lg-2 col-xl-12 offset-xl-0">
                 <main>
+                    [% IF messages_block %]
+                        [% messages_block | $raw %]
+                    [% END %]
                     [% INCLUDE 'messages.inc' %]
                     [% content | $raw %]
                 </main>
@@ -85,6 +94,9 @@
         [% ELSE %]
             <div class="col-md-10 offset-md-1 col-lg-8 offset-lg-2">
                 <main>
+                    [% IF messages_block %]
+                        [% messages_block | $raw %]
+                    [% END %]
                     [% INCLUDE 'messages.inc' %]
                     [% content | $raw %]
                 </main>

@@ -33,12 +33,118 @@
     [% END #/ WRAPPER breadcrumbs %]
 [% END #/ WRAPPER sub-header.inc %]
 
-<div class="main container-fluid">
-    <div class="row">
-        <div class="col-md-10 order-md-2 order-sm-2">
-            <main>
-                [% INCLUDE 'messages.inc' %]
+[% aside = BLOCK %]
+                <form action="" method="get">
+                    <fieldset class="sidebar brief">
+                        <h3>Search filters</h3>
+                        <ol>
+                            <li>
+                                <label for="invoicenumber">Invoice number</label>
+                                <input type="text" id="invoicenumber" name="invoicenumber" value="[% invoicenumber | html %]" class="focus" />
+                            </li>
+                            <li>
+                                <label for="supplier">Vendor:</label>
+                                <select id="supplierid" name="supplierid">
+                                    [% IF ( supplier ) %]
+                                        <option selected="selected" value="[% supplier.id | html %]">[% supplier.name | html %]</option>
+                                    [% END %]
+                                </select>
+                            </li>
+                            <li>
+                                <fieldset class="brief">
+                                    <legend>Shipment date</legend>
+                                    <ol>
+                                        <li>
+                                            <label for="shipmentdatefrom">From:</label>
+                                            <input type="text" id="shipmentdatefrom" name="shipmentdatefrom" size="10" value="[% shipmentdatefrom | html %]" class="flatpickr" data-date_to="shipmentdateto" />
+                                            <div class="hint">[% INCLUDE 'date-format.inc' %]</div>
+                                        </li>
+                                        <li>
+                                            <label for="shipmentdateto">To:</label>
+                                            <input type="text" id="shipmentdateto" name="shipmentdateto" size="10" value="[% shipmentdateto | html %]" class="flatpickr" />
+                                            <div class="hint">[% INCLUDE 'date-format.inc' %]</div>
+                                        </li>
+                                    </ol>
+                                </fieldset>
+                            </li>
+                            <li>
+                                <fieldset class="brief">
+                                    <legend>Billing date</legend>
+                                    <ol>
+                                        <li>
+                                            <label for="billingdatefrom">From:</label>
+                                            <input type="text" id="billingdatefrom" name="billingdatefrom" size="10" value="[% billingdatefrom | html %]" class="flatpickr" data-date_to="billingdateto" />
+                                            <div class="hint">[% INCLUDE 'date-format.inc' %]</div>
+                                        </li>
+                                        <li>
+                                            <label for="billingdateto">To:</label>
+                                            <input type="text" id="billingdateto" name="billingdateto" size="10" value="[% billingdateto | html %]" class="flatpickr" />
+                                            <div class="hint">[% INCLUDE 'date-format.inc' %]</div>
+                                        </li>
+                                    </ol>
+                                </fieldset>
+                            </li>
+                            <li>
+                                <label for="isbneanissn">ISBN / EAN / ISSN:</label>
+                                <input type="text" id="isbneanissn" name="isbneanissn" value="[% isbneanissn | html %]" />
+                            </li>
+                            <li>
+                                <label for="title">Title:</label>
+                                <input type="text" id="title" name="title" value="[% title | html %]" />
+                            </li>
+                            <li>
+                                <label for="author">Author:</label>
+                                <input type="text" id="author" name="author" value="[% author | html %]" />
+                            </li>
+                            <li>
+                                <label for="publisher">Publisher:</label>
+                                <input type="text" id="publisher" name="publisher" value="[% publisher | html %]" />
+                            </li>
+                            <li>
+                                <label for="publicationyear">Publication year:</label>
+                                <input type="text" id="publicationyear" name="publicationyear" value="[% publicationyear | html %]" />
+                            </li>
+                            <li>
+                                <label for="branch">Library:</label>
+                                <select id="branch" name="branch">
+                                    <option value="">All</option>
+                                    [%# FIXME Should not we filter the libraries %]
+                                    [% PROCESS options_for_libraries libraries => Branches.all( selected => branch, unfiltered => 1 ) %]
+                                </select>
+                            </li>
+                            [%# FIXME additional-fields.entry.inc should/could be considered here %]
+                            [% FOR field IN additional_fields_for_invoice %]
+                                <li>
+                                    <label for="additional_field_[% field.id | html %]ID"> [% field.name | html %]: </label>
+                                    [% IF field.authorised_value_category %]
+                                        <select id="additional_field_[% field.id | html %]" name="additional_field_[% field.id | html %]">
+                                            <option value="">All</option>
+                                            [% FOREACH av IN AuthorisedValues.GetAuthValueDropbox(field.authorised_value_category) %]
+                                                [% IF av.authorised_value == additional_field_filters.${field.id} %]
+                                                    <option value="[% av.authorised_value | html %]" selected="selected">[% av.lib | html %]</option>
+                                                [% ELSE %]
+                                                    <option value="[% av.authorised_value | html %]">[% av.lib | html %]</option>
+                                                [% END %]
+                                            [% END %]
+                                        </select>
+                                    [% ELSE %]
+                                        <input id="additional_field_[% field.id | html %]" type="text" value="[% additional_field_filters.${field.id} | html %]" name="additional_field_[% field.id | html %]" />
+                                    [% END %]
+                                </li>
+                            [% END %]
+                        </ol>
+                    </fieldset>
+                    <!-- /.sidebar.brief -->
+                    <fieldset class="action">
+                        <input type="submit" class="btn btn-primary" value="Search" />
+                    </fieldset>
+                    <input type="hidden" name="op" id="op" value="do_search" />
+                </form>
+                [% INCLUDE 'acquisitions-menu.inc' %]
 
+[% END %]
+
+[% WRAPPER 'main-container.inc' aside_block=aside %]
                 <h1>Invoices</h1>
                 [% IF ( do_search ) %]
                     [% IF invoices %]
@@ -360,126 +466,7 @@
                 [% ELSE %]
                     <p>Use the search form on the left to find invoices.</p>
                 [% END %]<!-- do_search -->
-            </main>
-        </div>
-        <!-- /.col-md-10.order-md-2 -->
-
-        <div class="col-md-2 order-sm-2 order-md-1">
-            <aside>
-                <form action="" method="get">
-                    <fieldset class="sidebar brief">
-                        <h3>Search filters</h3>
-                        <ol>
-                            <li>
-                                <label for="invoicenumber">Invoice number</label>
-                                <input type="text" id="invoicenumber" name="invoicenumber" value="[% invoicenumber | html %]" class="focus" />
-                            </li>
-                            <li>
-                                <label for="supplier">Vendor:</label>
-                                <select id="supplierid" name="supplierid">
-                                    [% IF ( supplier ) %]
-                                        <option selected="selected" value="[% supplier.id | html %]">[% supplier.name | html %]</option>
-                                    [% END %]
-                                </select>
-                            </li>
-                            <li>
-                                <fieldset class="brief">
-                                    <legend>Shipment date</legend>
-                                    <ol>
-                                        <li>
-                                            <label for="shipmentdatefrom">From:</label>
-                                            <input type="text" id="shipmentdatefrom" name="shipmentdatefrom" size="10" value="[% shipmentdatefrom | html %]" class="flatpickr" data-date_to="shipmentdateto" />
-                                            <div class="hint">[% INCLUDE 'date-format.inc' %]</div>
-                                        </li>
-                                        <li>
-                                            <label for="shipmentdateto">To:</label>
-                                            <input type="text" id="shipmentdateto" name="shipmentdateto" size="10" value="[% shipmentdateto | html %]" class="flatpickr" />
-                                            <div class="hint">[% INCLUDE 'date-format.inc' %]</div>
-                                        </li>
-                                    </ol>
-                                </fieldset>
-                            </li>
-                            <li>
-                                <fieldset class="brief">
-                                    <legend>Billing date</legend>
-                                    <ol>
-                                        <li>
-                                            <label for="billingdatefrom">From:</label>
-                                            <input type="text" id="billingdatefrom" name="billingdatefrom" size="10" value="[% billingdatefrom | html %]" class="flatpickr" data-date_to="billingdateto" />
-                                            <div class="hint">[% INCLUDE 'date-format.inc' %]</div>
-                                        </li>
-                                        <li>
-                                            <label for="billingdateto">To:</label>
-                                            <input type="text" id="billingdateto" name="billingdateto" size="10" value="[% billingdateto | html %]" class="flatpickr" />
-                                            <div class="hint">[% INCLUDE 'date-format.inc' %]</div>
-                                        </li>
-                                    </ol>
-                                </fieldset>
-                            </li>
-                            <li>
-                                <label for="isbneanissn">ISBN / EAN / ISSN:</label>
-                                <input type="text" id="isbneanissn" name="isbneanissn" value="[% isbneanissn | html %]" />
-                            </li>
-                            <li>
-                                <label for="title">Title:</label>
-                                <input type="text" id="title" name="title" value="[% title | html %]" />
-                            </li>
-                            <li>
-                                <label for="author">Author:</label>
-                                <input type="text" id="author" name="author" value="[% author | html %]" />
-                            </li>
-                            <li>
-                                <label for="publisher">Publisher:</label>
-                                <input type="text" id="publisher" name="publisher" value="[% publisher | html %]" />
-                            </li>
-                            <li>
-                                <label for="publicationyear">Publication year:</label>
-                                <input type="text" id="publicationyear" name="publicationyear" value="[% publicationyear | html %]" />
-                            </li>
-                            <li>
-                                <label for="branch">Library:</label>
-                                <select id="branch" name="branch">
-                                    <option value="">All</option>
-                                    [%# FIXME Should not we filter the libraries %]
-                                    [% PROCESS options_for_libraries libraries => Branches.all( selected => branch, unfiltered => 1 ) %]
-                                </select>
-                            </li>
-                            [%# FIXME additional-fields.entry.inc should/could be considered here %]
-                            [% FOR field IN additional_fields_for_invoice %]
-                                <li>
-                                    <label for="additional_field_[% field.id | html %]ID"> [% field.name | html %]: </label>
-                                    [% IF field.authorised_value_category %]
-                                        <select id="additional_field_[% field.id | html %]" name="additional_field_[% field.id | html %]">
-                                            <option value="">All</option>
-                                            [% FOREACH av IN AuthorisedValues.GetAuthValueDropbox(field.authorised_value_category) %]
-                                                [% IF av.authorised_value == additional_field_filters.${field.id} %]
-                                                    <option value="[% av.authorised_value | html %]" selected="selected">[% av.lib | html %]</option>
-                                                [% ELSE %]
-                                                    <option value="[% av.authorised_value | html %]">[% av.lib | html %]</option>
-                                                [% END %]
-                                            [% END %]
-                                        </select>
-                                    [% ELSE %]
-                                        <input id="additional_field_[% field.id | html %]" type="text" value="[% additional_field_filters.${field.id} | html %]" name="additional_field_[% field.id | html %]" />
-                                    [% END %]
-                                </li>
-                            [% END %]
-                        </ol>
-                    </fieldset>
-                    <!-- /.sidebar.brief -->
-                    <fieldset class="action">
-                        <input type="submit" class="btn btn-primary" value="Search" />
-                    </fieldset>
-                    <input type="hidden" name="op" id="op" value="do_search" />
-                </form>
-                [% INCLUDE 'acquisitions-menu.inc' %]
-            </aside>
-        </div>
-        <!-- /.col-md-2.order-md-1 -->
-    </div>
-    <!-- /.row -->
-</div>
-<!-- /.main.container-fluid -->
+[% END %]
 
 [% MACRO jsinclude BLOCK %]
     [% Asset.js("js/acquisitions-menu.js") | $raw %]

@@ -33,12 +33,47 @@
     [% END #/ WRAPPER breadcrumbs %]
 [% END #/ WRAPPER sub-header.inc %]
 
-<div class="main container-fluid">
-    <div class="row">
-        <div class="col-md-10 order-md-2 order-sm-2">
-            <main>
-                [% INCLUDE 'messages.inc' %]
+[% aside = BLOCK %]
+                <form action="lateorders.pl" method="get">
+                    <fieldset class="brief">
+                        <h4>Filter results:</h4>
+                        [% FOREACH ERROR_LOO IN ERROR_LOOP %]
+                            [% IF ( ERROR_LOO.delay_digits ) %]<p class="error">The number of days ([% ERROR_LOO.bad_delay | html %]) must be a number between 0 and 999.</p>[% END %]
+                        [% END %]
+                        <ol>
+                            <li><label for="delay">Order date:</label><input size="3" maxlength="3" id="delay" type="text" name="delay" value="[% delay | html %]" /> days ago</li>
+                            <li
+                                ><label for="from">Estimated delivery date from: </label>
+                                <input type="text" size="10" id="from" name="estimateddeliverydatefrom" value="[% estimateddeliverydatefrom | html %]" class="flatpickr" data-date_to="to" />
+                                <div class="hint">[% INCLUDE 'date-format.inc' %]</div>
+                            </li>
+                            <li
+                                ><label for="to">To: </label>
+                                <input type="text" size="10" id="to" name="estimateddeliverydateto" value="[% estimateddeliverydateto | html %]" class="flatpickr" />
+                                <div class="hint">[% INCLUDE 'date-format.inc' %]</div>
+                            </li>
 
+                            <li
+                                ><label for="booksellerid">Vendor:</label>
+                                <select id="booksellerid" tabindex="" name="booksellerid">
+                                    <option value=""></option>
+                                    [% FOREACH bookseller IN booksellers %]
+                                        [% IF bookseller.id == bookseller_filter.id %]
+                                            <option value="[% bookseller.id | html %]" selected="selected">[% bookseller.name | html %]</option>
+                                        [% ELSE %]
+                                            <option value="[% bookseller.id | html %]">[% bookseller.name | html %]</option>
+                                        [% END %]
+                                    [% END %]
+                                </select>
+                            </li></ol
+                        >
+                    </fieldset>
+                    <fieldset class="action"><input type="submit" class="btn btn-primary" value="Filter" /></fieldset>
+                </form>
+                [% INCLUDE 'acquisitions-menu.inc' %]
+[% END %]
+
+[% WRAPPER 'main-container.inc' aside_block=aside %]
                 <h1>[% IF bookseller_filter %][% bookseller_filter.name | html %] :[% END %]Late orders</h1>
                 <div id="acqui_lateorders" class="page-section">
                     [% IF error_claim %]
@@ -270,55 +305,7 @@
                     [% END %]
                 </div>
                 <!-- /#acqui_lateorders -->
-            </main>
-        </div>
-        <!-- /.col-md-10.order-md-2 -->
-
-        <div class="col-md-2 order-sm-2 order-md-1">
-            <aside>
-                <form action="lateorders.pl" method="get">
-                    <fieldset class="brief">
-                        <h4>Filter results:</h4>
-                        [% FOREACH ERROR_LOO IN ERROR_LOOP %]
-                            [% IF ( ERROR_LOO.delay_digits ) %]<p class="error">The number of days ([% ERROR_LOO.bad_delay | html %]) must be a number between 0 and 999.</p>[% END %]
-                        [% END %]
-                        <ol>
-                            <li><label for="delay">Order date:</label><input size="3" maxlength="3" id="delay" type="text" name="delay" value="[% delay | html %]" /> days ago</li>
-                            <li
-                                ><label for="from">Estimated delivery date from: </label>
-                                <input type="text" size="10" id="from" name="estimateddeliverydatefrom" value="[% estimateddeliverydatefrom | html %]" class="flatpickr" data-date_to="to" />
-                                <div class="hint">[% INCLUDE 'date-format.inc' %]</div>
-                            </li>
-                            <li
-                                ><label for="to">To: </label>
-                                <input type="text" size="10" id="to" name="estimateddeliverydateto" value="[% estimateddeliverydateto | html %]" class="flatpickr" />
-                                <div class="hint">[% INCLUDE 'date-format.inc' %]</div>
-                            </li>
-
-                            <li
-                                ><label for="booksellerid">Vendor:</label>
-                                <select id="booksellerid" tabindex="" name="booksellerid">
-                                    <option value=""></option>
-                                    [% FOREACH bookseller IN booksellers %]
-                                        [% IF bookseller.id == bookseller_filter.id %]
-                                            <option value="[% bookseller.id | html %]" selected="selected">[% bookseller.name | html %]</option>
-                                        [% ELSE %]
-                                            <option value="[% bookseller.id | html %]">[% bookseller.name | html %]</option>
-                                        [% END %]
-                                    [% END %]
-                                </select>
-                            </li></ol
-                        >
-                    </fieldset>
-                    <fieldset class="action"><input type="submit" class="btn btn-primary" value="Filter" /></fieldset>
-                </form>
-                [% INCLUDE 'acquisitions-menu.inc' %]
-            </aside>
-        </div>
-        <!-- /.col-md-2.order-md-1 -->
-    </div>
-</div>
-<!-- /.main.container-fluid -->
+[% END %]
 
 <!-- Modal for editing vendor and internal notes -->
 <div class="modal" id="noteEditor" tabindex="-1" role="dialog" aria-labelledby="noteEditorLabel">

@@ -60,19 +60,18 @@
     [% END #/ WRAPPER breadcrumbs %]
 [% END #/ WRAPPER sub-header.inc %]
 
-<div class="main container-fluid">
-    <div class="row">
-        <div class="col-sm-12">
-            <main>
-                <div class="row">
-                    [% IF ( total || Koha.Preference('CircSidebar') ) %]
-                        [% SET div_class='col-md-10 order-md-2 order-sm-1' %]
-                    [% ELSE %]
-                        [% SET div_class='col-md-10 offset-md-1 col-lg-8 offset-lg-2' %]
-                    [% END %]
-                    <div class="[% div_class | html %]">
-                        [% INCLUDE 'messages.inc' %]
+[% aside = BLOCK %]
+                            [%~ IF ( total || Koha.Preference('CircSidebar') ) %]
+                                [% IF ( total ) %]
+                                    [% PROCESS filter_form %]
+                                [% END %]
+                                [% IF Koha.Preference('CircSidebar') %]
+                                    [% INCLUDE 'circ-nav.inc' %]
+                                [% END %]
+                            [% END ~%]
+[% END %]
 
+[% WRAPPER 'main-container.inc' aside_block=aside %]
                         <h1>Holds queue</h1>
 
                         [% IF ( run_report ) %]
@@ -304,30 +303,7 @@
                             [% branchlimit = Branches.GetLoggedInBranchcode %]
                             [% PROCESS filter_form %]
                         [% END %]
-                    </div>
-                    <!-- /.col-md-10.order-md-2 -->
-                    [% IF ( total || Koha.Preference('CircSidebar') ) %]
-                        <div class="col-md-2 order-sm-2 order-md-1">
-                            <aside>
-                                [% IF ( total ) %]
-                                    [% PROCESS filter_form %]
-                                [% END %]
-                                [% IF Koha.Preference('CircSidebar') %]
-                                    [% INCLUDE 'circ-nav.inc' %]
-                                [% END %]
-                            </aside>
-                        </div>
-                        <!-- /.col-md-2.order-md-1 -->
-                    [% END %]
-                </div>
-                <!-- /.row -->
-            </main>
-        </div>
-        <!-- /.col-sm-12 -->
-    </div>
-    <!-- /.row -->
-</div>
-<!-- /.main.container-fluid -->
+[% END %]
 
 [% BLOCK filter_form %]
     <form method="get" name="f" action="/cgi-bin/koha/circ/view_holdsqueue.pl">

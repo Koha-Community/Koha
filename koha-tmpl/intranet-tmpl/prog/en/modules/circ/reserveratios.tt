@@ -45,12 +45,57 @@
     [% END #/ WRAPPER breadcrumbs %]
 [% END #/ WRAPPER sub-header.inc %]
 
-<div class="main container-fluid">
-    <div class="row">
-        <div class="col-md-10 order-md-2 order-sm-1">
-            <main>
-                [% INCLUDE 'messages.inc' %]
+[% aside = BLOCK %]
+                <form action="/cgi-bin/koha/circ/reserveratios.pl" method="get">
+                    <fieldset class="brief">
+                        <h4>Refine results:</h4>
+                        <ol>
+                            <li>
+                                <label for="ratio">Hold ratio (greater than or equal to):</label>
+                                <input type="text" size="5" id="ratio" name="ratio" value="[% ratio | html %]" />
+                            </li>
 
+                            <li class="checkbox">
+                                [% IF include_ordered %]
+                                    <input id="include_ordered" name="include_ordered" type="checkbox" checked="checked" />
+                                [% ELSE %]
+                                    <input id="include_ordered" name="include_ordered" type="checkbox" />
+                                [% END %]
+                                <label for="include_ordered">Include ordered</label>
+                            </li>
+
+                            <li class="checkbox">
+                                [% IF include_suspended %]
+                                    <input id="include_suspended" name="include_suspended" type="checkbox" checked="checked" />
+                                [% ELSE %]
+                                    <input id="include_suspended" name="include_suspended" type="checkbox" />
+                                [% END %]
+                                <label for="include_suspended">Include suspended</label>
+                            </li>
+
+                            <li>
+                                <label for="from">Start date:</label>
+                                <input type="text" size="10" id="from" name="from" value="[% from | html %]" class="flatpickr" data-date_to="to" />
+                            </li>
+
+                            <li>
+                                <label for="to">End date:</label>
+                                <input size="10" id="to" name="to" value="[% to | html %]" type="text" class="flatpickr" />
+                            </li>
+                        </ol>
+                        (inclusive)
+
+                        <fieldset class="action"><input type="submit" value="Go" class="submit" /></fieldset>
+                    </fieldset>
+                    [% IF ( CAN_user_acquisition && basketno && booksellerid ) %]
+                        <input type="hidden" name="booksellerid" value="[% booksellerid | html %]" />
+                        <input type="hidden" name="basketno" value="[% basketno | html %]" />
+                    [% END %]
+                </form>
+
+[% END %]
+
+[% WRAPPER 'main-container.inc' aside_block=aside %]
                 <h1>Hold ratios to calculate items needed</h1>
                 <h3>Calculated on [% todaysdate | $KohaDates %]. From [% from | $KohaDates %] to [% to | $KohaDates %]</h3>
                 <p>These items have a hold ratio &ge; [% ratio | html %].</p>
@@ -151,65 +196,7 @@
                 [% ELSE %]
                     <strong>No items found.</strong>
                 [% END %]
-            </main>
-        </div>
-        <!-- /.col-md-10.order-md-2 -->
-
-        <div class="col-md-2 order-sm-2 order-md-1">
-            <aside>
-                <form action="/cgi-bin/koha/circ/reserveratios.pl" method="get">
-                    <fieldset class="brief">
-                        <h4>Refine results:</h4>
-                        <ol>
-                            <li>
-                                <label for="ratio">Hold ratio (greater than or equal to):</label>
-                                <input type="text" size="5" id="ratio" name="ratio" value="[% ratio | html %]" />
-                            </li>
-
-                            <li class="checkbox">
-                                [% IF include_ordered %]
-                                    <input id="include_ordered" name="include_ordered" type="checkbox" checked="checked" />
-                                [% ELSE %]
-                                    <input id="include_ordered" name="include_ordered" type="checkbox" />
-                                [% END %]
-                                <label for="include_ordered">Include ordered</label>
-                            </li>
-
-                            <li class="checkbox">
-                                [% IF include_suspended %]
-                                    <input id="include_suspended" name="include_suspended" type="checkbox" checked="checked" />
-                                [% ELSE %]
-                                    <input id="include_suspended" name="include_suspended" type="checkbox" />
-                                [% END %]
-                                <label for="include_suspended">Include suspended</label>
-                            </li>
-
-                            <li>
-                                <label for="from">Start date:</label>
-                                <input type="text" size="10" id="from" name="from" value="[% from | html %]" class="flatpickr" data-date_to="to" />
-                            </li>
-
-                            <li>
-                                <label for="to">End date:</label>
-                                <input size="10" id="to" name="to" value="[% to | html %]" type="text" class="flatpickr" />
-                            </li>
-                        </ol>
-                        (inclusive)
-
-                        <fieldset class="action"><input type="submit" value="Go" class="submit" /></fieldset>
-                    </fieldset>
-                    [% IF ( CAN_user_acquisition && basketno && booksellerid ) %]
-                        <input type="hidden" name="booksellerid" value="[% booksellerid | html %]" />
-                        <input type="hidden" name="basketno" value="[% basketno | html %]" />
-                    [% END %]
-                </form>
-            </aside>
-        </div>
-        <!-- /.col-md-2.order-md-1 -->
-    </div>
-    <!-- /.row -->
-</div>
-<!-- /.main.container-fluid -->
+[% END %]
 
 [% MACRO jsinclude BLOCK %]
     [% INCLUDE 'calendar.inc' %]

@@ -38,12 +38,31 @@
     [% END #/ WRAPPER breadcrumbs %]
 [% END #/ WRAPPER sub-header.inc %]
 
-<div class="main container-fluid">
-    <div class="row">
-        <div class="col-md-10 order-md-2 order-sm-1">
-            <main>
-                [% INCLUDE 'messages.inc' %]
+[% aside = BLOCK %]
+                <h3>Z39.50/SRU search</h3>
+                <form method="get" id="quicksearch">
+                    <fieldset class="brief">
+                        <ol>
+                            <li><label for="search-by-keywords">Keywords:</label></li>
+                            <li><input class="search-box" data-qualifier="term" id="search-by-keywords" placeholder="(Ctrl-Alt-K)" /></li>
+                            <li><label for="search-by-author">Author:</label></li>
+                            <li><input class="search-box" data-qualifier="author" id="search-by-author" placeholder="(Ctrl-Alt-A)" /></li>
+                            <li><label for="search-by-isbn">ISBN:</label></li>
+                            <li><input class="search-box" data-qualifier="isbn" id="search-by-isbn" placeholder="(Ctrl-Alt-I)" /></li>
+                            <li><label for="search-by-title">Title:</label></li>
+                            <li><input class="search-box" data-qualifier="title" id="search-by-title" placeholder="(Ctrl-Alt-T)" /></li>
+                            <li><a href="#" id="show-advanced-search" title="Show advanced Z39.50/SRU search (Ctrl-Alt-S)">Advanced &raquo;</a></li>
+                        </ol>
+                    </fieldset>
+                </form>
+                <h3>Clipboard</h3>
+                <fieldset class="brief">
+                    <select id="clipboard" name="clipboard" size="10"> </select>
+                </fieldset>
 
+[% END %]
+
+[% WRAPPER 'main-container.inc' aside_block=aside %]
                 [% IF Koha.Preference('EnableAdvancedCatalogingEditor') %]
                     <div id="toggle-editor">
                         <label for="toggle-editor">Advanced editor: </label>
@@ -115,38 +134,7 @@
                         <div id="status-subfield-info"> </div>
                     </div>
                 </div>
-            </main>
-        </div>
-        <!-- /.col-md-10.order-md-2 -->
-
-        <div class="col-md-2 order-sm-2 order-md-1">
-            <aside>
-                <h3>Z39.50/SRU search</h3>
-                <form method="get" id="quicksearch">
-                    <fieldset class="brief">
-                        <ol>
-                            <li><label for="search-by-keywords">Keywords:</label></li>
-                            <li><input class="search-box" data-qualifier="term" id="search-by-keywords" placeholder="(Ctrl-Alt-K)" /></li>
-                            <li><label for="search-by-author">Author:</label></li>
-                            <li><input class="search-box" data-qualifier="author" id="search-by-author" placeholder="(Ctrl-Alt-A)" /></li>
-                            <li><label for="search-by-isbn">ISBN:</label></li>
-                            <li><input class="search-box" data-qualifier="isbn" id="search-by-isbn" placeholder="(Ctrl-Alt-I)" /></li>
-                            <li><label for="search-by-title">Title:</label></li>
-                            <li><input class="search-box" data-qualifier="title" id="search-by-title" placeholder="(Ctrl-Alt-T)" /></li>
-                            <li><a href="#" id="show-advanced-search" title="Show advanced Z39.50/SRU search (Ctrl-Alt-S)">Advanced &raquo;</a></li>
-                        </ol>
-                    </fieldset>
-                </form>
-                <h3>Clipboard</h3>
-                <fieldset class="brief">
-                    <select id="clipboard" name="clipboard" size="10"> </select>
-                </fieldset>
-            </aside>
-        </div>
-        <!-- /.col-md-2.order-md-1 -->
-    </div>
-    <!-- /.row -->
-</div>
+[% END %]
 
 <div id="advanced-search-ui" class="modal modal-full" tabindex="-1" role="dialog" aria-labelledby="advanced-search-title" aria-hidden="true">
     <div class="modal-dialog modal-xl">

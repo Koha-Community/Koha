@@ -124,49 +124,8 @@
     [% END #/ WRAPPER breadcrumbs %]
 [% END #/ WRAPPER sub-header.inc %]
 
-[% IF op == 'add_form' %]
-    [% SET div_class="col-md-10 offset-md-1 col-lg-8 offset-lg-2" %]
-[% ELSE %]
-    [% SET div_class="col-md-10 order-md-2 order-sm-1" %]
-[% END %]
-<div class="main container-fluid">
-    <div class="row">
-        <div class="[% div_class | html %]">
-            <main>
-                [% INCLUDE 'messages.inc' %]
-
-                [% FOR m IN messages %]
-                    <div class="alert alert-[% m.type | html %]">
-                        [% SWITCH m.code %]
-                        [% CASE 'error_on_update' %]
-                            <span>An error occurred when updating this content. Perhaps it already exists.</span>
-                        [% CASE 'error_on_insert' %]
-                            <span>An error occurred when adding this content. Check the logs for details.</span>
-                        [% CASE 'error_on_delete' %]
-                            <span>An error occurred when deleting this content. Check the logs for details.</span>
-                        [% CASE 'success_on_update' %]
-                            <span>Content updated successfully.</span>
-                        [% CASE 'success_on_insert' %]
-                            <span>Content added successfully.</span>
-                        [% CASE 'success_on_delete' %]
-                            <span>Content deleted successfully.</span>
-                        [% CASE %]
-                            <span>[% m.code | html %]</span>
-                        [% END %]
-                    </div>
-                [% END %]
-
-                [% IF op == 'add_form' %]
-                    [% PROCESS add_form %]
-                [% ELSE %]
-                    [% PROCESS list %]
-                [% END %]
-            </main>
-        </div>
-        <!-- /.col-md-10.order-md-2 -->
-        [% IF op != 'add_form' %]
-            <div class="col-md-2 order-sm-2 order-md-1">
-                <aside>
+[% aside = BLOCK %]
+        [%~ IF op != 'add_form' %]
                     <div id="news-filter">
                         <form action="/cgi-bin/koha/tools/additional-contents.pl" method="get">
                             <h4>Filter</h4>
@@ -200,14 +159,39 @@
                     </div>
 
                     [% INCLUDE 'tools-menu.inc' %]
-                </aside>
-            </div>
-            <!-- /.col-md-2.order-md-1 -->
-        [% END %]
-    </div>
-    <!-- /.row -->
-</div>
-<!-- /.main.container-fluid -->
+        [% END ~%]
+[% END %]
+
+[% messages_block = BLOCK %]
+                [% FOR m IN messages %]
+                    <div class="alert alert-[% m.type | html %]">
+                        [% SWITCH m.code %]
+                        [% CASE 'error_on_update' %]
+                            <span>An error occurred when updating this content. Perhaps it already exists.</span>
+                        [% CASE 'error_on_insert' %]
+                            <span>An error occurred when adding this content. Check the logs for details.</span>
+                        [% CASE 'error_on_delete' %]
+                            <span>An error occurred when deleting this content. Check the logs for details.</span>
+                        [% CASE 'success_on_update' %]
+                            <span>Content updated successfully.</span>
+                        [% CASE 'success_on_insert' %]
+                            <span>Content added successfully.</span>
+                        [% CASE 'success_on_delete' %]
+                            <span>Content deleted successfully.</span>
+                        [% CASE %]
+                            <span>[% m.code | html %]</span>
+                        [% END %]
+                    </div>
+                [% END %]
+[% END %]
+
+[% WRAPPER 'main-container.inc' aside_block=aside messages_block=messages_block %]
+                [% IF op == 'add_form' %]
+                    [% PROCESS add_form %]
+                [% ELSE %]
+                    [% PROCESS list %]
+                [% END %]
+[% END %]
 
 [% BLOCK add_form %]
     <h1>[% PROCESS page_heading %]</h1>
