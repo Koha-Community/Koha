@@ -5199,9 +5199,14 @@ div .suggestion_note {
     &.collapsed {
         width: 3rem;
 
-        form *,
-        .sidebar_menu * {
-            display: none;
+        .sidebar_menu,
+        form,
+        .patroninfo,
+        .browse-controls,
+        #search-facets {
+            * {
+              display: none;
+            }
         }
 
         #toggle-sidebar {
