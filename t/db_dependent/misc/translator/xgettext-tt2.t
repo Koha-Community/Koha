@@ -11,7 +11,7 @@ use Test::More tests => 37;
 
 my $tempdir = tempdir( CLEANUP => 1 );
 
-write_file( "$tempdir/files", "$Bin/sample.tt" );
+write_file( "$tempdir/files", "$Bin/tt/en/sample.tt" );
 
 my $xgettext_cmd =
     "$Bin/../../../../misc/translator/xgettext-tt2 --from-code=UTF-8 " . "-o $tempdir/Koha.pot -f $tempdir/files";
