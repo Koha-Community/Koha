@@ -21,6 +21,7 @@ use Mojo::Base 'Mojolicious::Controller';
 
 use Koha::Authorities;
 use C4::AuthoritiesMarc qw( DelAuthority AddAuthority FindDuplicateAuthority ModAuthority);
+use C4::Matcher;
 
 use List::MoreUtils qw( any );
 use MARC::Record::MiJ;
@@ -156,17 +157,63 @@ sub add {
             );
         }
 
-        unless ( $overrides->{any} || $overrides->{duplicate} ) {
-            my ( $duplicateauthid, $duplicateauthvalue ) =
-                C4::AuthoritiesMarc::FindDuplicateAuthority( $record, $authtypecode );
+        my $matcher_id = $headers->header('x-koha-matchrule');
+        my $matcher;
+        if ( defined $matcher_id && $matcher_id ne '' ) {
+            $matcher = C4::Matcher->fetch($matcher_id);
+            unless ($matcher) {
+                return $c->render(
+                    status  => 400,
+                    openapi => {
+                        error      => "Matching rule $matcher_id not found",
+                        error_code => 'matching_rule_not_found',
+                    }
+                );
+            }
+            unless ( $matcher->record_type eq 'authority' ) {
+                return $c->render(
+                    status  => 400,
+                    openapi => {
+                        error      => "Matching rule $matcher_id is not an authority matcher",
+                        error_code => 'invalid_matching_rule_type',
+                    }
+                );
+            }
+        }
 
-            return $c->render(
-                status  => 409,
-                openapi => {
-                    error      => "Duplicate record ($duplicateauthid)",
-                    error_code => 'duplicate',
+        unless ( $overrides->{any} || $overrides->{duplicate} ) {
+            if ($matcher) {
+                my @matches = $matcher->get_matches( $record, 10 );
+                if (@matches) {
+                    my $first = $matches[0]->{record_id};
+                    return $c->render(
+                        status  => 409,
+                        openapi => {
+                            error      => "Duplicate record ($first)",
+                            error_code => 'duplicate',
+                            matches    => [
+                                map {
+                                    {
+                                        authid => $_->{record_id} + 0,
+                                        score  => $_->{score} + 0,
+                                    }
+                                } @matches
+                            ],
+                        }
+                    );
                 }
-            ) unless !$duplicateauthid;
+            } else {
+                my ( $duplicateauthid, $duplicateauthvalue ) =
+                    C4::AuthoritiesMarc::FindDuplicateAuthority( $record, $authtypecode );
+
+                return $c->render(
+                    status  => 409,
+                    openapi => {
+                        error      => "Duplicate record ($duplicateauthid)",
+                        error_code => 'duplicate',
+                    }
+                ) unless !$duplicateauthid;
+            }
         }
 
         my $authid = AddAuthority( $record, undef, $authtypecode );

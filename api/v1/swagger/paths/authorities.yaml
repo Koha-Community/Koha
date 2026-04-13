@@ -94,11 +94,24 @@
             - any
             - duplicate
         collectionFormat: csv
+      - name: x-koha-matchrule
+        in: header
+        required: false
+        description: |
+          Numeric id of a Koha record matching rule (record_type=authority) to
+          use for duplicate detection instead of the default heading-based
+          check. If the id does not reference an authority matcher a 400
+          response is returned.
+        type: integer
     responses:
       "201":
         description: An authority
       "400":
-        description: Bad request
+        description: |
+          Bad request. Possible `error_code` attribute values:
+
+          * `matching_rule_not_found`
+          * `invalid_matching_rule_type`
         schema:
           $ref: "../swagger.yaml#/definitions/error"
       "401":
@@ -121,6 +134,10 @@
           Conflict creating the resource. Possible `error_code` attribute values:
 
           * `duplicate`
+
+          When a matching rule is requested via `x-koha-matchrule`, the response
+          body additionally contains a `matches` array of objects with
+          `authid` and `score` for every authority returned by the matcher.
         schema:
           $ref: "../swagger.yaml#/definitions/error"
       "500":
