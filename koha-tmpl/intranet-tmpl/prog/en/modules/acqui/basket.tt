@@ -1339,13 +1339,12 @@
         const basketno = "[% basketno | html %]";
         const booksellerid = "[% booksellerid | html %]";
     </script>
-
     <script nonce="[% Koha.CSPNonce | $raw %]">
         function updateColumnsVisibility(visible) {
-            if ( visible ) {
+            if (visible) {
                 $("table .tax_excluded, .tax_included").show();
             } else {
-                if ( listincgst ) {
+                if (listincgst) {
                     $("table .tax_excluded").hide();
                 } else {
                     $("table .tax_included").hide();
@@ -1353,75 +1352,74 @@
             }
         }
 
-        $(document).ready(function() {
-
-            if ( !has_closedate ) {
-                $('#addtoBasket').on('show', function () {
-                   $(this).find(".modal-body").html($(".acqui_basket_add")[0].outerHTML);
+        $(document).ready(function () {
+            if (!has_closedate) {
+                $("#addtoBasket").on("show", function () {
+                    $(this).find(".modal-body").html($(".acqui_basket_add")[0].outerHTML);
                 });
             }
 
-            $("body").on("click", ".del_user", function(e){
+            $("body").on("click", ".del_user", function (e) {
                 e.preventDefault();
-                del_user( $(this).data("borrowernumber") );
+                del_user($(this).data("borrowernumber"));
             });
 
-            $(".transfer_order").on("click",function(e){
+            $(".transfer_order").on("click", function (e) {
                 e.preventDefault();
-                transfer_order_popup( $(this).data("ordernumber"));
+                transfer_order_popup($(this).data("ordernumber"));
             });
 
-            $(".edit_note").on("click", function(e) {
+            $(".edit_note").on("click", function (e) {
                 e.preventDefault();
                 var ordernumber = $(this).data("ordernumber");
                 var note_type = $(this).data("note_type");
                 var order_number_text = _("(order number %s)").format(ordernumber);
                 var modalTitle = $(this).attr("title") + " " + order_number_text;
-                var note_text = $( "#" + note_type + "-note-" + ordernumber ).html();
+                var note_text = $("#" + note_type + "-note-" + ordernumber).html();
                 $("#noteEditor .modal-title").text(modalTitle);
-                $("#ordernumber").val( ordernumber );
-                $("#ordernotes").html( note_text );
-                $("#type").val( note_type );
+                $("#ordernumber").val(ordernumber);
+                $("#ordernotes").html(note_text);
+                $("#type").val(note_type);
                 $("#noteEditor").modal("show");
                 $("#ordernotes").focus();
             });
 
-             $("#noteEditor").on('hidden.bs.modal', function (e) {
+            $("#noteEditor").on("hidden.bs.modal", function (e) {
                 $("#noteEditorLabel").html("");
                 $("#noteEditor .modal-title").text("");
-                $("#ordernotes").html( "" );
+                $("#ordernotes").html("");
                 $("#ordernumber").val("");
                 $("#type").val("");
             });
 
-            $("#set_managing_library").on("click", function(e){
+            $("#set_managing_library").on("click", function (e) {
                 e.preventDefault();
                 $(this).hide();
                 $("#managing_library_entry").show();
             });
 
-            $("#library_entry_cancel").on("click", function(e){
+            $("#library_entry_cancel").on("click", function (e) {
                 e.preventDefault();
                 $("#managing_library_entry").hide();
                 $("#set_managing_library").show();
             });
 
-            $("#set_basket_group").on("click", function(e){
+            $("#set_basket_group").on("click", function (e) {
                 e.preventDefault();
                 $(this).hide();
                 $("#basket_grouping").show();
             });
 
-            $("#basket_group_cancel").on("click", function(e){
+            $("#basket_group_cancel").on("click", function (e) {
                 e.preventDefault();
                 $("#basket_grouping").hide();
                 $("#set_basket_group").show();
             });
 
-            $("#addtoBasket").on("shown.bs.modal", function(){
+            $("#addtoBasket").on("shown.bs.modal", function () {
                 var basket = $(this).data("basketno");
                 var legend = _("Add order to basket %s").format(basket);
-                $(this).find("h4").text( legend );
+                $(this).find("h4").text(legend);
                 $(this).find("legend").html(legend);
                 $(this).find("input:text").focus();
             });
@@ -1430,9 +1428,8 @@
     [% UNLESS ( closedate ) %]
         <script nonce="[% Koha.CSPNonce | $raw %]">
             function transfer_order_popup(ordernumber) {
-                var url = "/cgi-bin/koha/acqui/transferorder.pl?"
-                    + "ordernumber=" + ordernumber
-                window.open(url, 'TransferOrder','width=600,height=400,toolbar=false,scrollbars=yes');
+                var url = "/cgi-bin/koha/acqui/transferorder.pl?" + "ordernumber=" + ordernumber;
+                window.open(url, "TransferOrder", "width=600,height=400,toolbar=false,scrollbars=yes");
             }
 
             function confirm_ediorder() {
@@ -1442,26 +1439,26 @@
                 }
             }
 
-            $(document).ready(function() {
-                $(".delete_order").on('click', function(e) {
+            $(document).ready(function () {
+                $(".delete_order").on("click", function (e) {
                     e.preventDefault();
-                    if( $(this).data('biblionumber') ) {
-                        alert( _("Please delete the linked bibliographic record first.") );
+                    if ($(this).data("biblionumber")) {
+                        alert(_("Please delete the linked bibliographic record first."));
                         return false;
-                    } else if( !confirm(_("Are you sure you want to delete this order line?")) ) {
+                    } else if (!confirm(_("Are you sure you want to delete this order line?"))) {
                         return false;
                     }
-                    $('#delete_order_form input[name="ordernumber"]').val( $(this).data('ordernumber') );
-                    $('#delete_order_form').submit();
+                    $('#delete_order_form input[name="ordernumber"]').val($(this).data("ordernumber"));
+                    $("#delete_order_form").submit();
                 });
             });
         </script>
     [% ELSE %]
         <script nonce="[% Koha.CSPNonce | $raw %]">
-            $(document).ready(function(){
-                $("#basketgroupid").change(function(){
-                    if($(this).val() == "new"){
-                        location.href=`/cgi-bin/koha/acqui/basketgroup.pl?op=add&booksellerid=${booksellerid}`;
+            $(document).ready(function () {
+                $("#basketgroupid").change(function () {
+                    if ($(this).val() == "new") {
+                        location.href = `/cgi-bin/koha/acqui/basketgroup.pl?op=add&booksellerid=${booksellerid}`;
                     } else {
                         $(this).parent().submit();
                     }
