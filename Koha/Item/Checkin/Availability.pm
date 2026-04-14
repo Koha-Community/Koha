@@ -21,7 +21,6 @@ use Modern::Perl;
 
 use C4::Context;
 use Koha::Availability::Result;
-use Koha::Libraries;
 
 =head1 NAME
 
@@ -113,8 +112,9 @@ sub check {
         return $result;
     }
 
-    # Check AllowReturnToBranch policy
-    my ( $returnallowed, $message ) = _check_return_policy( $item, $library );
+    # Check AllowReturnToBranch policy and branch transfer limits
+    my ( $returnallowed, $message ) =
+        $item->can_be_returned_at( { library => $library, to_library => $to_library } );
     unless ($returnallowed) {
         $result->add_blocker(
             Wrongbranch => {
@@ -125,68 +125,13 @@ sub check {
         return $result;
     }
 
-    # Check branch transfer limits (bug 7376)
-    if ( defined $to_library ) {
-        my $from = Koha::Libraries->find($library);
-        my $to   = Koha::Libraries->find($to_library);
-        if ( !$item->can_be_transferred( { from => $from, to => $to } ) ) {
-            $result->add_blocker(
-                Wrongbranch => {
-                    Wrongbranch => $library,
-                    Rightbranch => $to_library
-                }
-            );
-            return $result;
-        }
-    }
-
     # Check if item is lost and blocked
     if ( $item->itemlost && C4::Context->preference("BlockReturnOfLostItems") ) {
         $result->add_blocker( BlockedLost => 1 );
         return $result;
     }
 
-    # Add warnings for withdrawn (when not blocked)
-    if ( $item->withdrawn ) {
-        $result->add_warning( withdrawn => 1 );
-    }
-
     return $result;
-}
-
-=head2 Internal methods
-
-=head3 _check_return_policy
-
-    my ($allowed, $message) = _check_return_policy($item, $library);
-
-Check if an item can be checked in at the given library based on the
-AllowReturnToBranch system preference.
-
-=cut
-
-sub _check_return_policy {
-    my ( $item, $library ) = @_;
-    my $allowreturntobranch = C4::Context->preference("AllowReturnToBranch") || 'anywhere';
-
-    my $allowed = 1;
-    my $message;
-
-    if ( $allowreturntobranch eq 'homebranch' && $library ne $item->homebranch ) {
-        $allowed = 0;
-        $message = $item->homebranch;
-    } elsif ( $allowreturntobranch eq 'holdingbranch' && $library ne $item->holdingbranch ) {
-        $allowed = 0;
-        $message = $item->holdingbranch;
-    } elsif ( $allowreturntobranch eq 'homeorholdingbranch'
-        && $library ne $item->homebranch
-        && $library ne $item->holdingbranch )
-    {
-        $allowed = 0;
-        $message = $item->homebranch;
-    }
-
-    return ( $allowed, $message );
 }
 
 =head1 AUTHOR

@@ -1478,37 +1478,7 @@ Returns:
 
 sub CanBookBeReturned {
     my ( $item, $returnbranch, $transferbranch ) = @_;
-    my $allowreturntobranch = C4::Context->preference("AllowReturnToBranch") || 'anywhere';
-
-    my $allowed = 1;
-    my $message;
-
-    # Refuse check-in if it does not respect AllowReturnToBranch rules
-    if ( $allowreturntobranch eq 'homebranch' && $returnbranch ne $item->homebranch ) {
-        $allowed = 0;
-        $message = $item->homebranch;
-    } elsif ( $allowreturntobranch eq 'holdingbranch' && $returnbranch ne $item->holdingbranch ) {
-        $allowed = 0;
-        $message = $item->holdingbranch;
-    } elsif ( $allowreturntobranch eq 'homeorholdingbranch'
-        && $returnbranch ne $item->homebranch
-        && $returnbranch ne $item->holdingbranch )
-    {
-        $allowed = 0;
-        $message = $item->homebranch;    # FIXME: choice of homebranch is arbitrary
-    }
-
-    # Refuse check-in if book cannot be transferred to $transferbranch due to transfer limits
-    if ( defined($transferbranch) && $allowed ) {
-        my $from_library = Koha::Libraries->find($returnbranch);
-        my $to_library   = Koha::Libraries->find($transferbranch);
-        if ( !$item->can_be_transferred( { from => $from_library, to => $to_library } ) ) {
-            $allowed = 0;
-            $message = $transferbranch;
-        }
-    }
-
-    return ( $allowed, $message );
+    return $item->can_be_returned_at( { library => $returnbranch, to_library => $transferbranch } );
 }
 
 =head2 CheckHighHolds

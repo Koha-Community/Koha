@@ -805,6 +805,57 @@ sub check_booking {
     return $bookings_count ? 0 : 1;
 }
 
+=head3 can_be_returned_at
+
+    my ($allowed, $message) = $item->can_be_returned_at(
+        {
+            library    => $branchcode,
+            to_library => $destination_branchcode,  # optional
+        }
+    );
+
+Checks whether this item can be returned at the given library, based on
+the AllowReturnToBranch system preference and branch transfer limits.
+
+Returns a two-element list: ($allowed, $message).
+
+When the return is not allowed, $message contains the branchcode of
+the library where the item should be returned instead.
+
+=cut
+
+sub can_be_returned_at {
+    my ( $self, $params ) = @_;
+
+    my $library    = $params->{library};
+    my $to_library = $params->{to_library};
+
+    my $allowreturntobranch = C4::Context->preference("AllowReturnToBranch") || 'anywhere';
+
+    # Refuse check-in if it does not respect AllowReturnToBranch rules
+    if ( $allowreturntobranch eq 'homebranch' && $library ne $self->homebranch ) {
+        return ( 0, $self->homebranch );
+    } elsif ( $allowreturntobranch eq 'holdingbranch' && $library ne $self->holdingbranch ) {
+        return ( 0, $self->holdingbranch );
+    } elsif ( $allowreturntobranch eq 'homeorholdingbranch'
+        && $library ne $self->homebranch
+        && $library ne $self->holdingbranch )
+    {
+        return ( 0, $self->homebranch );    # FIXME: choice of homebranch is arbitrary
+    }
+
+    # Refuse check-in if item cannot be transferred to $to_library due to transfer limits
+    if ( defined $to_library ) {
+        my $from = Koha::Libraries->find($library);
+        my $to   = Koha::Libraries->find($to_library);
+        if ( !$self->can_be_transferred( { from => $from, to => $to } ) ) {
+            return ( 0, $to_library );
+        }
+    }
+
+    return ( 1, undef );
+}
+
 =head3 checkin_availability
 
     my $availability = $item->checkin_availability(
