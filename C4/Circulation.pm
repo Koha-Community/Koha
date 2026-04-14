@@ -2461,33 +2461,20 @@ sub AddReturn {
         $doreturn = 0;
     }
 
-    # Handle blockers
-    if ( !$availability->available ) {
-        my $blockers = $availability->blockers;
+    # Handle BlockedWithdrawn blocker first - this was the earliest early
+    # return in the original code, before any status updates ran
+    if ( !$availability->available && $availability->blockers->{BlockedWithdrawn} ) {
+        $messages->{'withdrawn'} = 1;
 
-        if ( $blockers->{BlockedWithdrawn} ) {
-            $messages->{'withdrawn'} = 1;
+        # Record local use even when blocked, if preference is on
+        if ( !$issue && C4::Context->preference("RecordLocalUseOnReturn") ) {
+            my $localuse_count = $item->localuse || 0;
+            $localuse_count++;
+            $item->localuse($localuse_count)->store;
+            $messages->{'LocalUse'} = 1;
+        }
 
-            # Record local use even when blocked, if preference is on
-            if ( !$issue && C4::Context->preference("RecordLocalUseOnReturn") ) {
-                my $localuse_count = $item->localuse || 0;
-                $localuse_count++;
-                $item->localuse($localuse_count)->store;
-                $messages->{'LocalUse'} = 1;
-            }
-
-            return ( 0, $messages, $issue, ( $patron ? $patron->unblessed : {} ) );
-        }
-        if ( $blockers->{BlockedLost} ) {
-            $doreturn = 0;
-        }
-        if ( $blockers->{Wrongbranch} ) {
-            $messages->{'Wrongbranch'} = $blockers->{Wrongbranch};
-            $doreturn = 0;
-            my $indexer = Koha::SearchEngine::Indexer->new( { index => $Koha::SearchEngine::BIBLIOS_INDEX } );
-            $indexer->index_records( $item->biblionumber, "specialUpdate", "biblioserver" );
-            return ( $doreturn, $messages, $issue, ( $patron ? $patron->unblessed : {} ) );
-        }
+        return ( 0, $messages, $issue, ( $patron ? $patron->unblessed : {} ) );
     }
 
     my $itemnumber     = $item->itemnumber;
@@ -2555,6 +2542,24 @@ sub AddReturn {
                     last;
                 }
             }
+        }
+    }
+
+    # Handle remaining blockers after status updates - in the original code
+    # CanBookBeReturned and BlockReturnOfLostItems ran after
+    # location_update_trigger and UpdateNotForLoanStatusOnCheckin
+    if ( !$availability->available ) {
+        my $blockers = $availability->blockers;
+
+        if ( $blockers->{Wrongbranch} ) {
+            $messages->{'Wrongbranch'} = $blockers->{Wrongbranch};
+            $doreturn = 0;
+            my $indexer = Koha::SearchEngine::Indexer->new( { index => $Koha::SearchEngine::BIBLIOS_INDEX } );
+            $indexer->index_records( $item->biblionumber, "specialUpdate", "biblioserver" );
+            return ( $doreturn, $messages, $issue, $patron_unblessed );
+        }
+        if ( $blockers->{BlockedLost} ) {
+            $doreturn = 0;
         }
     }
 
