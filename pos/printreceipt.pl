@@ -37,7 +37,15 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
 
 my $payment_id  = $input->param('accountlines_id');
 my $accountline = Koha::Account::Lines->find($payment_id);
-my $patron      = $accountline->patron;
+if ( !$accountline ) {
+    $template->param(
+        error_msg => 'Receipt not found or access denied.',
+    );
+    output_html_with_http_headers $input, $cookie, $template->output;
+    exit;
+}
+my $patron    = $accountline->patron;
+my $autoprint = $input->param('autoprint') // 0;
 
 my $logged_in_user = Koha::Patrons->find($loggedinuser) or die "Not logged in";
 output_and_exit_if_error(
@@ -83,9 +91,10 @@ my $letter = C4::Letters::GetPreparedLetter(
 );
 
 $template->param(
-    slip  => $letter->{content},
-    plain => !$letter->{is_html},
-    style => $letter->{style},
+    slip      => $letter->{content},
+    plain     => !$letter->{is_html},
+    style     => $letter->{style},
+    autoprint => $autoprint,
 );
 
 output_html_with_http_headers $input, $cookie, $template->output;
