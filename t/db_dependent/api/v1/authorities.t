@@ -180,7 +180,7 @@ subtest 'post() tests' => sub {
         'fetch',
         sub {
             my ( $class, $id ) = @_;
-            return undef if $id == 999999;
+            return if $id == 999999;
             my $rt      = ( $id == 42 ) ? 'biblio' : 'authority';
             my @matches = ();
             @matches = (
