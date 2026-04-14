@@ -2475,7 +2475,7 @@ sub AddReturn {
         }
     }
 
-    if ( $item->withdrawn ) {    # book has been cancelled
+    if ( $availability->warnings->{withdrawn} ) {    # book has been cancelled
         $messages->{'withdrawn'} = 1;
     }
 

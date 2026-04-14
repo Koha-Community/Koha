@@ -131,6 +131,11 @@ sub check {
         return $result;
     }
 
+    # Add warnings for withdrawn (when not blocked)
+    if ( $item->withdrawn ) {
+        $result->add_warning( withdrawn => 1 );
+    }
+
     return $result;
 }
 

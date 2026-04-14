@@ -19,7 +19,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 7;
+use Test::More tests => 8;
 use Test::NoWarnings;
 
 use t::lib::TestBuilder;
@@ -86,6 +86,31 @@ subtest 'check() - BlockedWithdrawn blocker' => sub {
 
     is( $result->blockers->{BlockedWithdrawn}, 1,                'BlockedWithdrawn blocker set for checked-out item' );
     is( ref( $result->context->{checkout} ),   'Koha::Checkout', 'checkout context preserved when blocked' );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'check() - withdrawn warning (not blocked)' => sub {
+
+    plan tests => 3;
+
+    $schema->storage->txn_begin;
+
+    t::lib::Mocks::mock_preference( 'BlockReturnOfWithdrawnItems', 0 );
+
+    my $library = $builder->build_object( { class => 'Koha::Libraries' } );
+    my $item    = $builder->build_object(
+        {
+            class => 'Koha::Items',
+            value => { withdrawn => 1 }
+        }
+    );
+
+    my $result = $item->checkin_availability( { library => $library->branchcode } );
+
+    ok( $result->available, 'no blockers when BlockReturnOfWithdrawnItems is off' );
+    is( $result->warnings->{withdrawn},      1,              'withdrawn warning set' );
+    is( $result->confirmations->{NotIssued}, $item->barcode, 'NotIssued confirmation still set' );
 
     $schema->storage->txn_rollback;
 };
