@@ -2444,6 +2444,16 @@ sub AddReturn {
     my $issue = $availability->context->{checkout};
     $patron   = $availability->context->{patron};
 
+    # Data consistency check for issued items - must run before any blocker
+    # handling so that DB corruption is never masked by an early return
+    if ( $issue && !$patron ) {
+        die "Data inconsistency: barcode $barcode (itemnumber:"
+            . $item->itemnumber
+            . ") claims to be issued to non-existent borrowernumber '"
+            . $issue->borrowernumber . "'\n"
+            . Dumper( $issue->unblessed ) . "\n";
+    }
+
     # Set NotIssued message if item not checked out
     if ( !$issue ) {
         $messages->{'NotIssued'} = $barcode;
