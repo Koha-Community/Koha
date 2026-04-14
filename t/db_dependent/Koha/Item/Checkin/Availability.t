@@ -19,7 +19,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 8;
+use Test::More tests => 9;
 use Test::NoWarnings;
 
 use t::lib::TestBuilder;
@@ -38,7 +38,12 @@ subtest 'check() - item exists' => sub {
     $schema->storage->txn_begin;
 
     my $library = $builder->build_object( { class => 'Koha::Libraries' } );
-    my $item    = $builder->build_object( { class => 'Koha::Items' } );
+    my $item    = $builder->build_object(
+        {
+            class => 'Koha::Items',
+            value => { withdrawn => 0, itemlost => 0 }
+        }
+    );
 
     my $result = $item->checkin_availability( { library => $library->branchcode } );
 
@@ -55,12 +60,13 @@ subtest 'check() - BlockedWithdrawn blocker' => sub {
     $schema->storage->txn_begin;
 
     t::lib::Mocks::mock_preference( 'BlockReturnOfWithdrawnItems', 1 );
+    t::lib::Mocks::mock_preference( 'BlockReturnOfLostItems',      0 );
 
     my $library = $builder->build_object( { class => 'Koha::Libraries' } );
     my $item    = $builder->build_object(
         {
             class => 'Koha::Items',
-            value => { withdrawn => 1 }
+            value => { withdrawn => 1, itemlost => 0 }
         }
     );
 
@@ -97,12 +103,13 @@ subtest 'check() - withdrawn warning (not blocked)' => sub {
     $schema->storage->txn_begin;
 
     t::lib::Mocks::mock_preference( 'BlockReturnOfWithdrawnItems', 0 );
+    t::lib::Mocks::mock_preference( 'BlockReturnOfLostItems',      0 );
 
     my $library = $builder->build_object( { class => 'Koha::Libraries' } );
     my $item    = $builder->build_object(
         {
             class => 'Koha::Items',
-            value => { withdrawn => 1 }
+            value => { withdrawn => 1, itemlost => 0 }
         }
     );
 
@@ -121,13 +128,14 @@ subtest 'check() - BlockedLost blocker' => sub {
 
     $schema->storage->txn_begin;
 
-    t::lib::Mocks::mock_preference( 'BlockReturnOfLostItems', 1 );
+    t::lib::Mocks::mock_preference( 'BlockReturnOfLostItems',      1 );
+    t::lib::Mocks::mock_preference( 'BlockReturnOfWithdrawnItems', 0 );
 
     my $library = $builder->build_object( { class => 'Koha::Libraries' } );
     my $item    = $builder->build_object(
         {
             class => 'Koha::Items',
-            value => { itemlost => 1 }
+            value => { itemlost => 1, withdrawn => 0 }
         }
     );
 
@@ -175,12 +183,17 @@ subtest 'check() - Wrongbranch blocker' => sub {
     my $holdingbranch = $builder->build_object( { class => 'Koha::Libraries' } );
     my $wrongbranch   = $builder->build_object( { class => 'Koha::Libraries' } );
 
+    t::lib::Mocks::mock_preference( 'BlockReturnOfWithdrawnItems', 0 );
+    t::lib::Mocks::mock_preference( 'BlockReturnOfLostItems',      0 );
+
     my $item = $builder->build_object(
         {
             class => 'Koha::Items',
             value => {
                 homebranch    => $homebranch->branchcode,
                 holdingbranch => $holdingbranch->branchcode,
+                withdrawn     => 0,
+                itemlost      => 0,
             }
         }
     );
@@ -248,7 +261,12 @@ subtest 'check() - NotIssued confirmation' => sub {
     $schema->storage->txn_begin;
 
     my $library = $builder->build_object( { class => 'Koha::Libraries' } );
-    my $item    = $builder->build_object( { class => 'Koha::Items' } );
+    my $item    = $builder->build_object(
+        {
+            class => 'Koha::Items',
+            value => { withdrawn => 0, itemlost => 0 }
+        }
+    );
 
     my $result = $item->checkin_availability(
         {
@@ -272,8 +290,13 @@ subtest 'check() - checked out item (no confirmations)' => sub {
 
     my $library = $builder->build_object( { class => 'Koha::Libraries' } );
     my $patron  = $builder->build_object( { class => 'Koha::Patrons' } );
-    my $item    = $builder->build_object( { class => 'Koha::Items' } );
-    my $issue   = $builder->build_object(
+    my $item    = $builder->build_object(
+        {
+            class => 'Koha::Items',
+            value => { withdrawn => 0, itemlost => 0 }
+        }
+    );
+    my $issue = $builder->build_object(
         {
             class => 'Koha::Checkouts',
             value => {
@@ -295,6 +318,46 @@ subtest 'check() - checked out item (no confirmations)' => sub {
     is( ref( $result->context->{checkout} ), 'Koha::Checkout', 'checkout object returned' );
     is( ref( $result->context->{patron} ),   'Koha::Patron',   'patron object returned' );
     is( $result->context->{patron}->id,      $patron->id,      'correct patron returned' );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'check() - multiple simultaneous blockers' => sub {
+
+    plan tests => 5;
+
+    $schema->storage->txn_begin;
+
+    t::lib::Mocks::mock_preference( 'BlockReturnOfWithdrawnItems', 1 );
+    t::lib::Mocks::mock_preference( 'BlockReturnOfLostItems',      1 );
+    t::lib::Mocks::mock_preference( 'AllowReturnToBranch',         'homebranch' );
+
+    my $homebranch  = $builder->build_object( { class => 'Koha::Libraries' } );
+    my $wrongbranch = $builder->build_object( { class => 'Koha::Libraries' } );
+
+    my $item = $builder->build_object(
+        {
+            class => 'Koha::Items',
+            value => {
+                homebranch    => $homebranch->branchcode,
+                holdingbranch => $homebranch->branchcode,
+                withdrawn     => 1,
+                itemlost      => 1,
+            }
+        }
+    );
+
+    my $result = $item->checkin_availability(
+        {
+            library => $wrongbranch->branchcode,
+        }
+    );
+
+    ok( !$result->available, 'item is not available for check-in' );
+    is( keys %{ $result->blockers },                     3, 'all three blockers reported simultaneously' );
+    is( $result->blockers->{BlockedWithdrawn},           1, 'BlockedWithdrawn blocker present' );
+    is( $result->blockers->{Wrongbranch}->{Rightbranch}, $homebranch->branchcode, 'Wrongbranch blocker present' );
+    is( $result->blockers->{BlockedLost},                1,                       'BlockedLost blocker present' );
 
     $schema->storage->txn_rollback;
 };

@@ -106,10 +106,13 @@ sub check {
         $result->add_confirmation( NotIssued => $item->barcode );
     }
 
-    # Check if item is withdrawn and blocked
-    if ( $item->withdrawn && C4::Context->preference("BlockReturnOfWithdrawnItems") ) {
-        $result->add_blocker( BlockedWithdrawn => 1 );
-        return $result;
+    # Check if item is withdrawn
+    if ( $item->withdrawn ) {
+        if ( C4::Context->preference("BlockReturnOfWithdrawnItems") ) {
+            $result->add_blocker( BlockedWithdrawn => 1 );
+        } else {
+            $result->add_warning( withdrawn => 1 );
+        }
     }
 
     # Check AllowReturnToBranch policy and branch transfer limits
@@ -122,18 +125,11 @@ sub check {
                 Rightbranch => $message
             }
         );
-        return $result;
     }
 
     # Check if item is lost and blocked
     if ( $item->itemlost && C4::Context->preference("BlockReturnOfLostItems") ) {
         $result->add_blocker( BlockedLost => 1 );
-        return $result;
-    }
-
-    # Add warnings for withdrawn (when not blocked)
-    if ( $item->withdrawn ) {
-        $result->add_warning( withdrawn => 1 );
     }
 
     return $result;
