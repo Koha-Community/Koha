@@ -1104,6 +1104,12 @@ Circulation:
                   holdingbranch: "holding library"
             - <br/><strong>Note:</strong> If a group option is selected, LocalHoldsPriorityPatronControl and LocalHoldsPriorityItemControl will use the <a href="/cgi-bin/koha/admin/library_groups.pl">library hold group</a> of the selected libraries.
         -
+            - For
+            - pref: LocalHoldsPriorityExclusivityPeriod
+              class: integer
+            - days after a hold is placed, only items flagged by the holds queue as a local hold group match may be used to fill the hold. Set to 0 to disable.
+            - <br/><strong>Note:</strong> Only takes effect when LocalHoldsPriority is set to something other than 'Don't give'.
+        -
             - pref: OPACHoldsIfAvailableAtPickup
               choices:
                   1: Allow

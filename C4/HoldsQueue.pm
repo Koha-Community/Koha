@@ -798,10 +798,11 @@ sub MapItemsToHoldRequests {
                                 holdingbranch  => $item->{holdingbranch},
                                 pickup_branch  => $request->{branchcode}
                                     || $request->{borrowerbranch},
-                                reserve_id   => $request->{reserve_id},
-                                item_level   => $request->{item_level_hold},
-                                reservedate  => $request->{reservedate},
-                                reservenotes => $request->{reservenotes},
+                                reserve_id            => $request->{reserve_id},
+                                item_level            => $request->{item_level_hold},
+                                reservedate           => $request->{reservedate},
+                                reservenotes          => $request->{reservenotes},
+                                local_holdgroup_match => 1,
                             };
                             $allocated_items{ $item->{itemnumber} }++;
                             $request->{allocated} = 1;
@@ -848,10 +849,11 @@ sub MapItemsToHoldRequests {
                                 holdingbranch  => $item->{holdingbranch},
                                 pickup_branch  => $request->{branchcode}
                                     || $request->{borrowerbranch},
-                                reserve_id   => $request->{reserve_id},
-                                item_level   => $request->{item_level_hold},
-                                reservedate  => $request->{reservedate},
-                                reservenotes => $request->{reservenotes},
+                                reserve_id            => $request->{reserve_id},
+                                item_level            => $request->{item_level_hold},
+                                reservedate           => $request->{reservedate},
+                                reservenotes          => $request->{reservenotes},
+                                local_holdgroup_match => 1,
                             };
                             $allocated_items{ $item->{itemnumber} }++;
                             $request->{allocated} = 1;
@@ -1086,19 +1088,20 @@ sub CreatePicklistFromItemMap {
     my $sth_load = $dbh->prepare( "
         INSERT INTO tmp_holdsqueue (biblionumber,itemnumber,barcode,surname,firstname,phone,borrowernumber,
                                     cardnumber,reservedate,title, itemcallnumber,
-                                    holdingbranch,pickbranch,notes, hold_group_id, item_level_request)
+                                    holdingbranch,pickbranch,notes, hold_group_id, item_level_request, local_holdgroup_match)
         VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)
     " );
 
     foreach my $itemnumber ( sort keys %$item_map ) {
-        my $mapped_item    = $item_map->{$itemnumber};
-        my $biblionumber   = $mapped_item->{biblionumber};
-        my $borrowernumber = $mapped_item->{borrowernumber};
-        my $pickbranch     = $mapped_item->{pickup_branch};
-        my $holdingbranch  = $mapped_item->{holdingbranch};
-        my $reservedate    = $mapped_item->{reservedate};
-        my $reservenotes   = $mapped_item->{reservenotes};
-        my $item_level     = $mapped_item->{item_level};
+        my $mapped_item           = $item_map->{$itemnumber};
+        my $biblionumber          = $mapped_item->{biblionumber};
+        my $borrowernumber        = $mapped_item->{borrowernumber};
+        my $pickbranch            = $mapped_item->{pickup_branch};
+        my $holdingbranch         = $mapped_item->{holdingbranch};
+        my $reservedate           = $mapped_item->{reservedate};
+        my $reservenotes          = $mapped_item->{reservenotes};
+        my $item_level            = $mapped_item->{item_level};
+        my $local_holdgroup_match = $mapped_item->{local_holdgroup_match} ? 1 : 0;
 
         my $item           = Koha::Items->find($itemnumber);
         my $barcode        = $item->barcode;
@@ -1123,7 +1126,7 @@ sub CreatePicklistFromItemMap {
         $sth_load->execute(
             $biblionumber,  $itemnumber,  $barcode,      $surname, $firstname, $phone, $borrowernumber,
             $cardnumber,    $reservedate, $title,        $itemcallnumber,
-            $holdingbranch, $pickbranch,  $reservenotes, $hold_group_id, $item_level
+            $holdingbranch, $pickbranch,  $reservenotes, $hold_group_id, $item_level, $local_holdgroup_match
         );
     }
 }
@@ -1139,7 +1142,7 @@ sub AddToHoldTargetMap {
     my $schema = Koha::Database->new->schema;
 
     my $insert_sql = q(
-        INSERT INTO hold_fill_targets (borrowernumber, biblionumber, itemnumber, source_branchcode, item_level_request, reserve_id) VALUES (?, ?, ?, ?, ?, ?)
+        INSERT INTO hold_fill_targets (borrowernumber, biblionumber, itemnumber, source_branchcode, item_level_request, reserve_id, local_holdgroup_match) VALUES (?, ?, ?, ?, ?, ?, ?)
     );
     my $sth_insert = $dbh->prepare($insert_sql);
 
@@ -1150,7 +1153,8 @@ sub AddToHoldTargetMap {
                 $dbh->do( 'DELETE FROM hold_fill_targets WHERE itemnumber = ?', {}, $itemnumber );
                 $sth_insert->execute(
                     $mapped_item->{borrowernumber}, $mapped_item->{biblionumber}, $itemnumber,
-                    $mapped_item->{holdingbranch},  $mapped_item->{item_level},   $mapped_item->{reserve_id}
+                    $mapped_item->{holdingbranch},  $mapped_item->{item_level},   $mapped_item->{reserve_id},
+                    $mapped_item->{local_holdgroup_match} ? 1 : 0,
                 );
             }
         );

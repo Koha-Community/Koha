@@ -895,6 +895,31 @@ sub CheckReserves {
                     }
                 }
 
+                # Local holds priority exclusivity period: when the queue has
+                # targeted a local-group item for this hold and we're still
+                # within the exclusivity window, skip non-local items so the
+                # targeted local item can fulfil it.  If the queue has not yet
+                # run for this reserve (no hold_fill_targets row), we fall
+                # through and let the hold be filled normally.
+                my $excl_period = C4::Context->preference('LocalHoldsPriorityExclusivityPeriod');
+                if (   $excl_period
+                    && !$local_hold_match
+                    && !$local_hold_group_match
+                    && $res->{reserve_id} )
+                {
+                    my $reservedate_dt = eval { dt_from_string( $res->{reservedate} ) };
+                    if ($reservedate_dt) {
+                        my $age_days = dt_from_string->delta_days($reservedate_dt)->in_units('days');
+                        if ( $age_days < $excl_period ) {
+                            my $target =
+                                Koha::Database->new->schema->resultset('HoldFillTarget')
+                                ->search( { reserve_id => $res->{reserve_id} }, { rows => 1 } )
+                                ->next;
+                            next if $target && $target->local_holdgroup_match;
+                        }
+                    }
+                }
+
                 # See if this item is more important than what we've got so far
                 if (   ( $res->{'priority'} && $res->{'priority'} < $priority )
                     || $local_hold_match
