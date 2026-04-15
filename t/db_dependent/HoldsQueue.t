@@ -9,7 +9,7 @@
 use Modern::Perl;
 
 use Test::NoWarnings;
-use Test::More tests => 65;
+use Test::More tests => 67;
 use Data::Dumper;
 
 use C4::Calendar;
@@ -468,6 +468,18 @@ $holds_queue = $dbh->selectall_arrayref( "SELECT * FROM tmp_holdsqueue", { Slice
 is(
     $holds_queue->[0]->{cardnumber}, $borrower3->{cardnumber},
     "Holds queue giving priority to patron who's home library matches item's home library"
+);
+is(
+    $holds_queue->[0]->{local_holdgroup_match}, 1,
+    "tmp_holdsqueue.local_holdgroup_match is set when LocalHoldsPriority finds a local match"
+);
+my $hft_row = $dbh->selectrow_hashref(
+    "SELECT local_holdgroup_match FROM hold_fill_targets WHERE borrowernumber = ?",
+    undef, $borrower3->{borrowernumber}
+);
+is(
+    $hft_row->{local_holdgroup_match}, 1,
+    "hold_fill_targets.local_holdgroup_match is set when LocalHoldsPriority finds a local match"
 );
 
 ### Test branch transfer limits ###

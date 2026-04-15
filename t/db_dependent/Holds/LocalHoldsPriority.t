@@ -6,7 +6,7 @@ use t::lib::Mocks;
 use C4::Context;
 
 use Test::NoWarnings;
-use Test::More tests => 7;
+use Test::More tests => 8;
 use MARC::Record;
 
 use Koha::Patrons;
@@ -387,6 +387,121 @@ subtest "exclude from local holds" => sub {
     is(
         $reserve->{borrowernumber}, $patron_nex_l2->borrowernumber,
         "Patron from other library is next checkout because item is excluded"
+    );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'LocalHoldsPriorityExclusivityPeriod' => sub {
+    plan tests => 4;
+
+    $schema->storage->txn_begin;
+
+    my $dbh = C4::Context->dbh;
+
+    t::lib::Mocks::mock_preference( 'LocalHoldsPriority',              'GiveLibraryGroup' );
+    t::lib::Mocks::mock_preference( 'LocalHoldsPriorityPatronControl', 'HomeLibrary' );
+    t::lib::Mocks::mock_preference( 'LocalHoldsPriorityItemControl',   'homebranch' );
+
+    my $group =
+        Koha::Library::Group->new( { title => "Excl period group", ft_local_hold_group => 1 } )->store();
+
+    my $local_lib     = $builder->build_object( { class => 'Koha::Libraries' } );
+    my $other_lib_in  = $builder->build_object( { class => 'Koha::Libraries' } );
+    my $non_local_lib = $builder->build_object( { class => 'Koha::Libraries' } );
+
+    Koha::Library::Group->new( { parent_id => $group->id, branchcode => $local_lib->branchcode } )->store;
+    Koha::Library::Group->new( { parent_id => $group->id, branchcode => $other_lib_in->branchcode } )->store;
+
+    my $category = $builder->build_object(
+        { class => 'Koha::Patron::Categories', value => { exclude_from_local_holds_priority => 0 } } );
+
+    my $biblio     = $builder->build_sample_biblio();
+    my $local_item = $builder->build_sample_item(
+        {
+            biblionumber                      => $biblio->biblionumber,
+            homebranch                        => $other_lib_in->branchcode,
+            holdingbranch                     => $other_lib_in->branchcode,
+            exclude_from_local_holds_priority => 0,
+        }
+    );
+    my $non_local_item = $builder->build_sample_item(
+        {
+            biblionumber                      => $biblio->biblionumber,
+            homebranch                        => $non_local_lib->branchcode,
+            holdingbranch                     => $non_local_lib->branchcode,
+            exclude_from_local_holds_priority => 0,
+        }
+    );
+
+    my $patron = $builder->build_object(
+        {
+            class => 'Koha::Patrons',
+            value => {
+                branchcode   => $local_lib->branchcode,
+                categorycode => $category->categorycode,
+            }
+        }
+    );
+
+    my $reserve_id = AddReserve(
+        {
+            branchcode     => $local_lib->branchcode,
+            borrowernumber => $patron->borrowernumber,
+            biblionumber   => $biblio->biblionumber,
+            priority       => 1,
+        }
+    );
+
+    # Simulate the holds queue having targeted the local-group item for this reserve.
+    $dbh->do(
+        q{
+            INSERT INTO hold_fill_targets
+                (borrowernumber, biblionumber, itemnumber, source_branchcode,
+                 item_level_request, reserve_id, local_holdgroup_match)
+            VALUES (?, ?, ?, ?, ?, ?, ?)
+        },
+        undef,
+        (
+            $patron->borrowernumber, $biblio->biblionumber, $local_item->itemnumber,
+            $local_item->homebranch, 0, $reserve_id, 1
+        )
+    );
+
+    # 1. Pref disabled (0): the non-local item may still fill the hold.
+    t::lib::Mocks::mock_preference( 'LocalHoldsPriorityExclusivityPeriod', 0 );
+    my ( undef, $reserve ) = CheckReserves($non_local_item);
+    is(
+        $reserve->{reserve_id}, $reserve_id,
+        "Non-local item fills the hold when exclusivity period is disabled"
+    );
+
+    # 2. Pref active, hold is fresh: non-local item must be skipped.
+    t::lib::Mocks::mock_preference( 'LocalHoldsPriorityExclusivityPeriod', 7 );
+    ( undef, $reserve ) = CheckReserves($non_local_item);
+    ok(
+        !$reserve,
+        "Non-local item is blocked by exclusivity period when queue targeted a local match"
+    );
+
+    # 3. Push reservedate back past the exclusivity window: should fill again.
+    $dbh->do(
+        q{UPDATE reserves SET reservedate = DATE_SUB(CURRENT_DATE, INTERVAL 10 DAY) WHERE reserve_id = ?},
+        undef, $reserve_id
+    );
+    ( undef, $reserve ) = CheckReserves($non_local_item);
+    is(
+        $reserve->{reserve_id}, $reserve_id,
+        "Non-local item fills the hold once the exclusivity period has expired"
+    );
+
+    # 4. Remove the hold_fill_targets row: with no queue target we must not block.
+    $dbh->do( q{UPDATE reserves SET reservedate = CURRENT_DATE WHERE reserve_id = ?}, undef, $reserve_id );
+    $dbh->do( q{DELETE FROM hold_fill_targets WHERE reserve_id = ?},                  undef, $reserve_id );
+    ( undef, $reserve ) = CheckReserves($non_local_item);
+    is(
+        $reserve->{reserve_id}, $reserve_id,
+        "Non-local item fills the hold when no hold_fill_targets row exists for the reserve"
     );
 
     $schema->storage->txn_rollback;

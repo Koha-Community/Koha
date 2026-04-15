@@ -1108,7 +1108,8 @@ subtest 'MoveReserve additional test' => sub {
 
     # Fake the holds queue
     $dbh->do(
-        q{INSERT INTO hold_fill_targets VALUES (?, ?, ?, ?, ?,?)}, undef,
+        q{INSERT INTO hold_fill_targets (borrowernumber, biblionumber, itemnumber, source_branchcode, item_level_request, reserve_id) VALUES (?, ?, ?, ?, ?, ?)},
+        undef,
         ( $patron_1->borrowernumber, $biblio->biblionumber, $item_1->itemnumber, $item_1->homebranch, 0, $reserve_1 )
     );
 

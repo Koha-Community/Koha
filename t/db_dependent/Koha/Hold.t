@@ -2316,7 +2316,8 @@ subtest '_Findgroupreserve in the context of hold groups' => sub {
     # Fake the holds queue
     my $dbh = C4::Context->dbh;
     $dbh->do(
-        q{INSERT INTO hold_fill_targets VALUES (?, ?, ?, ?, ?,?)}, undef,
+        q{INSERT INTO hold_fill_targets (borrowernumber, biblionumber, itemnumber, source_branchcode, item_level_request, reserve_id) VALUES (?, ?, ?, ?, ?, ?)},
+        undef,
         (
             $patron_1->borrowernumber, $item->biblionumber, $item->itemnumber, $item->homebranch, 0,
             $first_reserve_id_again
