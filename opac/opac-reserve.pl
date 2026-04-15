@@ -295,18 +295,19 @@ if ( $op eq 'cud-place_reserve' ) {
         if ($canreserve) {
             my $reserve_id = AddReserve(
                 {
-                    branchcode       => $branch,
-                    borrowernumber   => $borrowernumber,
-                    biblionumber     => $biblioNum,
-                    priority         => $rank,
-                    reservation_date => $startdate,
-                    expiration_date  => $patron_expiration_date,
-                    notes            => $notes,
-                    title            => $biblio->title,
-                    itemnumber       => $itemNum,
-                    found            => undef,
-                    itemtype         => $itemtype,
-                    item_group_id    => $item_group_id,
+                    branchcode             => $branch,
+                    borrowernumber         => $borrowernumber,
+                    biblionumber           => $biblioNum,
+                    priority               => $rank,
+                    reservation_date       => $startdate,
+                    expiration_date        => $patron_expiration_date,
+                    patron_expiration_date => $patron_expiration_date,
+                    notes                  => $notes,
+                    title                  => $biblio->title,
+                    itemnumber             => $itemNum,
+                    found                  => undef,
+                    itemtype               => $itemtype,
+                    item_group_id          => $item_group_id,
                 }
             );
             if ($reserve_id) {
