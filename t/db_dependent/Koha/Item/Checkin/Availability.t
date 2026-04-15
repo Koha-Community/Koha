@@ -19,7 +19,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 9;
+use Test::More tests => 10;
 use Test::NoWarnings;
 
 use t::lib::TestBuilder;
@@ -349,7 +349,8 @@ subtest 'check() - multiple simultaneous blockers' => sub {
 
     my $result = $item->checkin_availability(
         {
-            library => $wrongbranch->branchcode,
+            library          => $wrongbranch->branchcode,
+            no_short_circuit => 1,
         }
     );
 
@@ -358,6 +359,45 @@ subtest 'check() - multiple simultaneous blockers' => sub {
     is( $result->blockers->{BlockedWithdrawn},           1, 'BlockedWithdrawn blocker present' );
     is( $result->blockers->{Wrongbranch}->{Rightbranch}, $homebranch->branchcode, 'Wrongbranch blocker present' );
     is( $result->blockers->{BlockedLost},                1,                       'BlockedLost blocker present' );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'check() - default short-circuits on first blocker' => sub {
+
+    plan tests => 3;
+
+    $schema->storage->txn_begin;
+
+    t::lib::Mocks::mock_preference( 'BlockReturnOfWithdrawnItems', 1 );
+    t::lib::Mocks::mock_preference( 'BlockReturnOfLostItems',      1 );
+    t::lib::Mocks::mock_preference( 'AllowReturnToBranch',         'homebranch' );
+
+    my $homebranch  = $builder->build_object( { class => 'Koha::Libraries' } );
+    my $wrongbranch = $builder->build_object( { class => 'Koha::Libraries' } );
+
+    my $item = $builder->build_object(
+        {
+            class => 'Koha::Items',
+            value => {
+                homebranch    => $homebranch->branchcode,
+                holdingbranch => $homebranch->branchcode,
+                withdrawn     => 1,
+                itemlost      => 1,
+            }
+        }
+    );
+
+    # Default behavior: short-circuit on first blocker
+    my $result = $item->checkin_availability(
+        {
+            library => $wrongbranch->branchcode,
+        }
+    );
+
+    ok( !$result->available, 'item is not available for check-in' );
+    is( keys %{ $result->blockers },           1, 'only first blocker reported (short-circuited)' );
+    is( $result->blockers->{BlockedWithdrawn}, 1, 'BlockedWithdrawn is the first blocker' );
 
     $schema->storage->txn_rollback;
 };

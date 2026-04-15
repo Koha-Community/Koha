@@ -43,6 +43,15 @@ Koha::Item::Checkin::Availability - Check-in availability validation for items
         }
     );
 
+    # Collect all blockers (e.g. for API responses)
+    my $availability = $item->checkin_availability(
+        {
+            library          => $branchcode,
+            to_library       => $destination_branchcode,
+            no_short_circuit => 1,
+        }
+    );
+
 =head1 DESCRIPTION
 
 This class provides validation logic for item check-in operations, extracting
@@ -61,8 +70,9 @@ The result categorizes conditions as:
 
     my $availability = Koha::Item::Checkin::Availability->check( $item,
         {
-            library    => $branchcode,
-            to_library => $destination_branchcode,
+            library          => $branchcode,
+            to_library       => $destination_branchcode,
+            no_short_circuit => 1,
         }
     );
 
@@ -71,9 +81,13 @@ Validates check-in availability for an item.
 Parameters:
     $item   - Koha::Item object (required)
     $params - hashref with:
-        library    => branchcode where the return takes place (required)
-        to_library => branchcode where the item should be sent after return
-                      (optional, for transfer limit validation)
+        library          => branchcode where the return takes place (required)
+        to_library       => branchcode where the item should be sent after return
+                            (optional, for transfer limit validation)
+        no_short_circuit => boolean, if true all checks are performed and all
+                            blockers collected. Default: false (short-circuit
+                            on first blocker). This follows the same pattern
+                            as Koha::Patron->can_place_holds.
 
 Returns a Koha::Availability::Result object with:
     blockers      => {}       # Conditions that prevent check-in
@@ -89,8 +103,9 @@ Returns a Koha::Availability::Result object with:
 sub check {
     my ( $class, $item, $params ) = @_;
 
-    my $library    = $params->{library};
-    my $to_library = $params->{to_library};
+    my $library          = $params->{library};
+    my $to_library       = $params->{to_library};
+    my $no_short_circuit = $params->{no_short_circuit} // 0;
 
     my $result = Koha::Availability::Result->new();
 
@@ -110,6 +125,7 @@ sub check {
     if ( $item->withdrawn ) {
         if ( C4::Context->preference("BlockReturnOfWithdrawnItems") ) {
             $result->add_blocker( BlockedWithdrawn => 1 );
+            return $result unless $no_short_circuit;
         } else {
             $result->add_warning( withdrawn => 1 );
         }
@@ -125,6 +141,7 @@ sub check {
                 Rightbranch => $message
             }
         );
+        return $result unless $no_short_circuit;
     }
 
     # Check if item is lost and blocked
