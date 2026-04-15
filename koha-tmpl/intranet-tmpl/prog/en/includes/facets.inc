@@ -5,7 +5,7 @@
 
 [% IF ( opacfacets ) %]
     [% IF ( facets_loop ) %]
-        <div id="search-facets" class="sidebar_menu">
+        <div id="search-facets">
             <h4>Refine your search</h4>
             <ul>
                 [% IF Koha.Preference("SavedSearchFilters") && search_filters.count > 0 %]

@@ -492,6 +492,10 @@ $(document).ready(function () {
             e.preventDefault();
         }
     });
+
+    $("#toggle-sidebar").on("click", function () {
+        $toggle_sidebar();
+    });
 });
 
 function removeLastBorrower() {
@@ -1158,7 +1162,3 @@ function validatePatronSearch(form) {
     }
     return true;
 }
-
-$("#toggle-sidebar").on("click", function () {
-    $toggle_sidebar();
-});

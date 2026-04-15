@@ -39,9 +39,9 @@
 [% END #/ WRAPPER sub-header.inc %]
 
 [% aside = BLOCK %]
-    <h3>Z39.50/SRU search</h3>
     <form method="get" id="quicksearch">
-        <fieldset class="brief">
+        <fieldset class="sidebar brief">
+            <h3>Z39.50/SRU search</h3>
             <ol>
                 <li><label for="search-by-keywords">Keywords:</label></li>
                 <li><input class="search-box" data-qualifier="term" id="search-by-keywords" placeholder="(Ctrl-Alt-K)" /></li>
@@ -54,11 +54,11 @@
                 <li><a href="#" id="show-advanced-search" title="Show advanced Z39.50/SRU search (Ctrl-Alt-S)">Advanced &raquo;</a></li>
             </ol>
         </fieldset>
+        <fieldset class="sidebar brief">
+            <h3>Clipboard</h3>
+            <select id="clipboard" name="clipboard" size="10"> </select>
+        </fieldset>
     </form>
-    <h3>Clipboard</h3>
-    <fieldset class="brief">
-        <select id="clipboard" name="clipboard" size="10"> </select>
-    </fieldset>
 [% END %]
 
 [% WRAPPER 'main-container.inc' aside_block=aside %]
