@@ -170,16 +170,7 @@ sub store {
         }
     }
 
-    try {
-        return $self->_result()->update_or_insert() ? $self : undef;
-    } catch {
-
-        # Log DBIx::Class exceptions for debugging (expected by tests)
-        warn $_->{msg} if ref($_) eq 'DBIx::Class::Exception';
-
-        # Delegate to centralized exception translation with object context for enum handling
-        $self->_result->result_source->schema->translate_exception( $_, $columns_info, $self );
-    }
+    return $self->_result()->update_or_insert() ? $self : undef;
 }
 
 =head3 discard_changes
@@ -221,13 +212,7 @@ sub delete {
 
     my $deleted;
 
-    try {
-        $deleted = $self->_result()->delete;
-    } catch {
-
-        # Delegate to centralized exception translation
-        $self->_result->result_source->schema->translate_exception($_);
-    };
+    $deleted = $self->_result()->delete;
 
     if ( ref $deleted ) {
         my $object_class = Koha::Object::_get_object_class( $self->_result->result_class );

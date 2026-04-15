@@ -31,63 +31,32 @@ Koha::Schema::Util::ExceptionTranslator - Centralized DBIx::Class exception tran
 
     use Koha::Schema::Util::ExceptionTranslator;
 
-    try {
-        # DBIx::Class operation that might fail
-        $schema->resultset('SomeTable')->create(\%data);
-    } catch {
-        Koha::Schema::Util::ExceptionTranslator->translate_exception($_, \%columns_info);
-    };
+    # Called automatically via Koha::Schema's exception_action hook.
+    # No manual invocation needed in normal code.
 
 =head1 DESCRIPTION
 
-This utility class provides centralized exception translation from DBIx::Class
-exceptions to Koha-specific exceptions. This eliminates the need for duplicated
-exception handling code throughout the codebase.
+This utility class provides centralized exception translation from database
+error messages to Koha-specific exceptions. It is installed as the
+C<exception_action> handler on L<Koha::Schema>, so all DBIx::Class exceptions
+are automatically translated before they propagate to callers.
 
 =head1 METHODS
 
 =head2 translate_exception
 
-    Koha::Schema::Util::ExceptionTranslator->translate_exception($exception, $columns_info);
+    Koha::Schema::Util::ExceptionTranslator->translate_exception($msg);
 
-Translates a DBIx::Class exception into an appropriate Koha exception and throws it.
-If the exception cannot be translated, it rethrows the original exception.
-
-=head3 Parameters
-
-=over 4
-
-=item * C<$exception> - The caught exception object
-
-=item * C<$columns_info> (optional) - Hash reference of column information for enhanced error reporting
-
-=back
-
-=head3 Exception Types Handled
-
-=over 4
-
-=item * Foreign key constraint violations → C<Koha::Exceptions::Object::FKConstraint>
-
-=item * Duplicate key violations → C<Koha::Exceptions::Object::DuplicateID>
-
-=item * Invalid data type values → C<Koha::Exceptions::Object::BadValue>
-
-=item * Data truncation for enum columns → C<Koha::Exceptions::Object::BadValue>
-
-=back
+Attempts to translate a database error message into a Koha exception and
+throw it. If the message does not match any known pattern, returns without
+throwing, allowing the default DBIx::Class exception handling to proceed.
 
 =cut
 
 sub translate_exception {
-    my ( $class, $exception, $columns_info, $object ) = @_;
+    my ( $class, $msg ) = @_;
 
-    # Only handle DBIx::Class exceptions
-    return $exception->rethrow() unless ref($exception) eq 'DBIx::Class::Exception';
-
-    my $msg = $exception->{msg};
-
-    # Foreign key constraint failures
+    # Foreign key constraint failures (insert/update)
     if ( $msg =~ /Cannot add or update a child row: a foreign key constraint fails/ ) {
 
         # FIXME: MySQL error, if we support more DB engines we should implement this for each
@@ -99,9 +68,9 @@ sub translate_exception {
         }
     }
 
-    # Foreign key constraint deletion failures (parent row deletion blocked)
+    # Foreign key constraint failures (delete)
     elsif ( $msg =~
-        /Cannot delete or update a parent row\: a foreign key constraint fails \(\`(?<database>.*?)\`\.\`(?<table>.*?)\`, CONSTRAINT \`(?<constraint>.*?)\` FOREIGN KEY \(\`(?<fk>.*?)\`\) REFERENCES \`.*\` \(\`(?<column>.*?)\`\)/
+        /Cannot delete or update a parent row\: a foreign key constraint fails \(\`(?<database>.*?)\`\.`(?<table>.*?)`, CONSTRAINT \`(?<constraint>.*?)\` FOREIGN KEY \(\`(?<fk>.*?)\`\) REFERENCES \`.*\` \(\`(?<column>.*?)\`\)/
         )
     {
         Koha::Exceptions::Object::FKConstraintDeletion->throw(
@@ -140,49 +109,20 @@ sub translate_exception {
 
     # Data truncation for enum columns
     elsif ( $msg =~ /Data truncated for column \W?(?<property>\w+)/ ) {
-
-        # The optional \W in the regex might be a quote or backtick
         my $property = $+{property};
 
-        # Only handle enum truncation if we have column info
-        if ( $columns_info && $columns_info->{$property} ) {
-            my $type = $columns_info->{$property}->{data_type};
-            if ( $type && $type eq 'enum' ) {
-                my $value = 'Invalid enum value';    # Default value
-
-                # If we have an object, try to get the actual property value
-                if ( $object && $object->can($property) ) {
-                    eval { $value = $object->$property; };
-                }
-
-                Koha::Exceptions::Object::BadValue->throw(
-                    type     => 'enum',
-                    property => $property =~ /(\w+\.\w+)$/
-                    ? $1
-                    : $property,    # results in table.column without quotes or backticks
-                    value => $value,
-                );
-            }
-        }
+        Koha::Exceptions::Object::BadValue->throw(
+            type     => 'enum',
+            property => $property =~ /(\w+\.\w+)$/
+            ? $1
+            : $property,
+            value => 'Invalid enum value',
+        );
     }
 
-    # Catch-all: rethrow the original exception if we can't translate it
-    $exception->rethrow();
+    # No match — return without throwing so DBIC's default handling proceeds
+    return;
 }
-
-=head1 FUTURE ENHANCEMENTS
-
-This utility is designed to be extended to support:
-
-=over 4
-
-=item * Multiple database engines (PostgreSQL, SQLite, etc.)
-
-=item * Additional exception types as they are identified
-
-=item * Enhanced error reporting with more context
-
-=back
 
 =head1 AUTHOR
 

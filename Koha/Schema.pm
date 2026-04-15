@@ -19,18 +19,34 @@ use Koha::Schema::Util::ExceptionTranslator;
 
 =head1 UTILITY METHODS
 
-=head2 translate_exception
+=head2 connection
 
-    $schema->translate_exception($exception, $columns_info, $object);
+    my $schema = Koha::Schema->connection(@args);
 
-Convenience method that delegates to the ExceptionTranslator utility.
-This allows the schema to act as a central point for exception handling.
+Override connection to install our C<exception_action> handler. This ensures
+all DBIx::Class exceptions are automatically translated into Koha exceptions
+before they propagate to callers.
 
 =cut
 
-sub translate_exception {
-    my ( $self, $exception, $columns_info, $object ) = @_;
-    return Koha::Schema::Util::ExceptionTranslator->translate_exception($exception, $columns_info, $object);
+sub connection {
+    my ( $class, @args ) = @_;
+
+    my $self = $class->next::method(@args);
+
+    $self->exception_action(
+        sub {
+            my ($msg) = @_;
+
+            # Attempt translation — throws a Koha exception on match
+            Koha::Schema::Util::ExceptionTranslator->translate_exception($msg);
+
+            # No match — let DBIC throw its default DBIx::Class::Exception
+            DBIx::Class::Exception->throw($msg);
+        }
+    );
+
+    return $self;
 }
 
 # You can replace this text with custom content, and it will be preserved on regeneration

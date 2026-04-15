@@ -19,7 +19,7 @@
 
 use Modern::Perl;
 use Test::NoWarnings;
-use Test::More tests => 8;
+use Test::More tests => 9;
 use Test::Exception;
 
 use Koha::Database;
@@ -31,163 +31,140 @@ my $builder = t::lib::TestBuilder->new;
 my $schema  = Koha::Database->new->schema;
 
 subtest 'foreign_key_constraint_translation' => sub {
-    plan tests => 1;
+    plan tests => 2;
 
     $schema->storage->txn_begin;
 
-    # Create a mock DBIx::Class::Exception for FK constraint
-    my $exception =
-        bless { msg =>
-            "Cannot add or update a child row: a foreign key constraint fails (`koha`.`items`, CONSTRAINT `items_ibfk_1` FOREIGN KEY (`biblionumber`) REFERENCES `biblio` (`biblionumber`))"
-        }, 'DBIx::Class::Exception';
+    my $msg =
+        "Cannot add or update a child row: a foreign key constraint fails (`koha`.`items`, CONSTRAINT `items_ibfk_1` FOREIGN KEY (`biblionumber`) REFERENCES `biblio` (`biblionumber`))";
 
     throws_ok {
-        Koha::Schema::Util::ExceptionTranslator->translate_exception($exception);
+        Koha::Schema::Util::ExceptionTranslator->translate_exception($msg);
     }
     'Koha::Exceptions::Object::FKConstraint', 'FK constraint exception is properly translated';
+
+    is( $@->broken_fk, 'biblionumber', 'broken_fk is correctly extracted' );
 
     $schema->storage->txn_rollback;
 };
 
 subtest 'duplicate_key_translation' => sub {
-    plan tests => 1;
+    plan tests => 2;
 
     $schema->storage->txn_begin;
 
-    # Create a mock DBIx::Class::Exception for duplicate key
-    my $exception = bless { msg => "Duplicate entry 'test\@example.com' for key 'borrowers.email'" },
-        'DBIx::Class::Exception';
+    my $msg = "Duplicate entry 'test\@example.com' for key 'borrowers.email'";
 
     throws_ok {
-        Koha::Schema::Util::ExceptionTranslator->translate_exception($exception);
+        Koha::Schema::Util::ExceptionTranslator->translate_exception($msg);
     }
     'Koha::Exceptions::Object::DuplicateID', 'Duplicate key exception is properly translated';
+
+    is( $@->duplicate_id, 'borrowers.email', 'duplicate_id is correctly extracted' );
 
     $schema->storage->txn_rollback;
 };
 
 subtest 'bad_value_translation' => sub {
-    plan tests => 1;
+    plan tests => 2;
 
     $schema->storage->txn_begin;
 
-    # Create a mock DBIx::Class::Exception for bad value
-    my $exception = bless { msg => "Incorrect datetime value: '2025-13-45' for column 'date_due' at row 1" },
-        'DBIx::Class::Exception';
+    my $msg = "Incorrect datetime value: '2025-13-45' for column 'date_due' at row 1";
 
     throws_ok {
-        Koha::Schema::Util::ExceptionTranslator->translate_exception($exception);
+        Koha::Schema::Util::ExceptionTranslator->translate_exception($msg);
     }
     'Koha::Exceptions::Object::BadValue', 'Bad value exception is properly translated';
+
+    is( $@->type, 'datetime', 'type is correctly extracted' );
 
     $schema->storage->txn_rollback;
 };
 
 subtest 'enum_truncation_translation' => sub {
-    plan tests => 1;
+    plan tests => 2;
 
     $schema->storage->txn_begin;
 
-    # Create a mock DBIx::Class::Exception for enum truncation
-    my $exception = bless { msg => "Data truncated for column 'status' at row 1" }, 'DBIx::Class::Exception';
-
-    my $columns_info = { status => { data_type => 'enum' } };
+    my $msg = "Data truncated for column 'status' at row 1";
 
     throws_ok {
-        Koha::Schema::Util::ExceptionTranslator->translate_exception( $exception, $columns_info );
+        Koha::Schema::Util::ExceptionTranslator->translate_exception($msg);
     }
     'Koha::Exceptions::Object::BadValue', 'Enum truncation exception is properly translated';
+
+    is( $@->type, 'enum', 'type is enum' );
 
     $schema->storage->txn_rollback;
 };
 
-subtest 'non_dbix_exception_passthrough' => sub {
+subtest 'unmatched_message_returns' => sub {
     plan tests => 1;
 
     $schema->storage->txn_begin;
 
-    # Create a regular exception (not DBIx::Class::Exception)
-    my $exception = bless { msg => "Some other error" }, 'Some::Other::Exception';
+    my $msg    = "Some unknown database error at row 1";
+    my $result = Koha::Schema::Util::ExceptionTranslator->translate_exception($msg);
 
-    # Mock the rethrow method
-    $exception->{rethrown} = 0;
-    {
-
-        package Some::Other::Exception;
-        sub rethrow { $_[0]->{rethrown} = 1; die $_[0]; }
-    }
-
-    throws_ok {
-        Koha::Schema::Util::ExceptionTranslator->translate_exception($exception);
-    }
-    qr/Some::Other::Exception/, 'Non-DBIx::Class exceptions are rethrown unchanged';
+    is( $result, undef, 'Unmatched message returns without throwing' );
 
     $schema->storage->txn_rollback;
 };
 
 subtest 'fk_constraint_deletion_translation' => sub {
-    plan tests => 1;
-
-    $schema->storage->txn_begin;
-
-    # Create a mock DBIx::Class::Exception for FK constraint deletion
-    my $exception =
-        bless { msg =>
-            "Cannot delete or update a parent row: a foreign key constraint fails (`koha`.`items`, CONSTRAINT `items_ibfk_1` FOREIGN KEY (`biblionumber`) REFERENCES `biblio` (`biblionumber`))"
-        }, 'DBIx::Class::Exception';
-
-    throws_ok {
-        Koha::Schema::Util::ExceptionTranslator->translate_exception($exception);
-    }
-    'Koha::Exceptions::Object::FKConstraintDeletion', 'FK constraint deletion exception is properly translated';
-
-    $schema->storage->txn_rollback;
-};
-
-subtest 'enum_truncation_with_object_value' => sub {
     plan tests => 2;
 
     $schema->storage->txn_begin;
 
-    # Create a mock object class with proper methods
-    package TestObject {
+    my $msg =
+        "Cannot delete or update a parent row: a foreign key constraint fails (`koha`.`items`, CONSTRAINT `items_ibfk_1` FOREIGN KEY (`biblionumber`) REFERENCES `biblio` (`biblionumber`))";
 
-        sub new {
-            my ( $class, %args ) = @_;
-            return bless \%args, $class;
-        }
-
-        sub can {
-            my ( $self, $method ) = @_;
-            return $method eq 'test_enum' ? \&test_enum : undef;
-        }
-
-        sub test_enum {
-            my ($self) = @_;
-            return $self->{test_enum};
-        }
-    }
-
-    # Create a mock object with a property accessor
-    my $mock_object = TestObject->new( test_enum => 'invalid_value' );
-
-    # Create a mock DBIx::Class::Exception for enum data truncation
-    my $exception = bless { msg => "Data truncated for column 'test_enum'" }, 'DBIx::Class::Exception';
-
-    # Mock column info with enum type
-    my $columns_info = { test_enum => { data_type => 'enum' } };
-
-    # Test with object - should include the actual value
     throws_ok {
-        Koha::Schema::Util::ExceptionTranslator->translate_exception( $exception, $columns_info, $mock_object );
+        Koha::Schema::Util::ExceptionTranslator->translate_exception($msg);
     }
-    'Koha::Exceptions::Object::BadValue', 'Enum truncation with object throws BadValue exception';
+    'Koha::Exceptions::Object::FKConstraintDeletion', 'FK constraint deletion exception is properly translated';
 
-    # Test without object - should use default value
+    is( $@->fk, 'biblionumber', 'fk is correctly extracted' );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'exception_action integration' => sub {
+    plan tests => 2;
+
+    $schema->storage->txn_begin;
+
+    # Test that the schema's exception_action translates known errors
     throws_ok {
-        Koha::Schema::Util::ExceptionTranslator->translate_exception( $exception, $columns_info );
+        $schema->throw_exception("Duplicate entry 'test' for key 'primary'");
     }
-    'Koha::Exceptions::Object::BadValue', 'Enum truncation without object throws BadValue exception';
+    'Koha::Exceptions::Object::DuplicateID', 'exception_action translates known errors';
+
+    # Test that unknown errors still throw as DBIx::Class::Exception
+    throws_ok {
+        $schema->throw_exception("Some unknown DBIC error");
+    }
+    'DBIx::Class::Exception', 'exception_action preserves unknown errors as DBIx::Class::Exception';
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'Object::store integration' => sub {
+    plan tests => 1;
+
+    $schema->storage->txn_begin;
+
+    my $patron  = $builder->build_object( { class => 'Koha::Patrons' } );
+    my $patron2 = $builder->build_object( { class => 'Koha::Patrons' } );
+
+    # Force a duplicate cardnumber
+    $patron2->cardnumber( $patron->cardnumber );
+
+    throws_ok {
+        $patron2->store();
+    }
+    'Koha::Exceptions::Object::DuplicateID', 'Object::store gets automatic exception translation';
 
     $schema->storage->txn_rollback;
 };
