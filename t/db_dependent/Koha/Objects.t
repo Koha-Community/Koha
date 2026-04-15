@@ -730,21 +730,24 @@ subtest 'Return same values as DBIx::Class' => sub {
 
                 # CASE 3 - Delete a patron that cannot be deleted (as a checkout)
                 $patron = Koha::Patron->new($patron_data)->store;
+                $r_us   = Koha::Patrons->find( $patron->borrowernumber );
                 $builder->build_object(
                     {
                         class => 'Koha::Checkouts',
                         value => { borrowernumber => $patron->borrowernumber }
                     }
                 );
+                $e_us = undef;
                 try { $r_us = $r_us->delete; } catch { $e_us = $_ };
                 $patron = $schema->resultset('Borrower')->find( $patron->borrowernumber );
+                $e_them = undef;
                 try { $r_them = $r_them->delete; } catch { $e_them = $_ };
                 ok(
                     defined $e_us && defined $e_them,
                     'Delete a patron that cannot be deleted should raise an exception'
                 );
-                is( ref($e_us), 'DBIx::Class::Exception' )
-                    ;    # FIXME This needs adjustment, we want to throw a Koha::Exception
+                is( ref($e_us), 'Koha::Exceptions::Object::FKConstraintDeletion' )
+                    ;    # Bug 42391: exception_action now translates FK deletion errors
             };
 
             subtest 'Koha::Objects->delete' => sub {
