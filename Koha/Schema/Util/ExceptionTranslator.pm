@@ -120,6 +120,20 @@ sub translate_exception {
         );
     }
 
+    # NOT NULL violations
+    elsif ($msg =~ /Column '(?<property>\w+)' cannot be null/
+        || $msg =~ /'(?<property>\w+)' doesn't have a default value/ )
+    {
+        Koha::Exceptions::Object::NotNull->throw(
+            property => $+{property},
+        );
+    }
+
+    # Object not in storage (fires for update, but not for delete on detached Rows)
+    elsif ( $msg =~ /Not in database/ ) {
+        Koha::Exceptions::Object::NotInStorage->throw();
+    }
+
     # No match — return without throwing so DBIC's default handling proceeds
     return;
 }

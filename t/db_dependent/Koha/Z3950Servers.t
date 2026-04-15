@@ -89,16 +89,16 @@ subtest 'Host, syntax and encoding are NOT NULL now (BZ 30571)' => sub {
         }
     );
 
-    throws_ok { $server->store } 'DBIx::Class::Exception', 'Exception on empty host';
-    like( $@->{msg}, qr/'host' doesn't have a default value/, 'Verified that DBIx blamed host' );
+    throws_ok { $server->store } 'Koha::Exceptions::Object::NotNull', 'Exception on empty host';
+    is( $@->property, 'host', 'Exception identifies the host column' );
 
     $server->host('host_added.nl');
-    throws_ok { $server->store } 'DBIx::Class::Exception', 'Exception on empty syntax';
-    like( $@->{msg}, qr/'syntax' doesn't have a default value/, 'Verified that DBIx blamed syntax' );
+    throws_ok { $server->store } 'Koha::Exceptions::Object::NotNull', 'Exception on empty syntax';
+    is( $@->property, 'syntax', 'Exception identifies the syntax column' );
 
     $server->syntax('USMARC');
-    throws_ok { $server->store } 'DBIx::Class::Exception', 'Exception on empty encoding';
-    like( $@->{msg}, qr/'encoding' doesn't have a default value/, 'Verified that DBIx blamed encoding' );
+    throws_ok { $server->store } 'Koha::Exceptions::Object::NotNull', 'Exception on empty encoding';
+    is( $@->property, 'encoding', 'Exception identifies the encoding column' );
 
     $server->encoding('utf8');
     lives_ok { $server->store } 'No exceptions anymore';

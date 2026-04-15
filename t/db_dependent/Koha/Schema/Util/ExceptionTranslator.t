@@ -19,7 +19,7 @@
 
 use Modern::Perl;
 use Test::NoWarnings;
-use Test::More tests => 9;
+use Test::More tests => 11;
 use Test::Exception;
 
 use Koha::Database;
@@ -130,8 +130,36 @@ subtest 'fk_constraint_deletion_translation' => sub {
     $schema->storage->txn_rollback;
 };
 
-subtest 'exception_action integration' => sub {
+subtest 'not_null_translation' => sub {
     plan tests => 2;
+
+    $schema->storage->txn_begin;
+
+    throws_ok {
+        Koha::Schema::Util::ExceptionTranslator->translate_exception("Column 'host' cannot be null");
+    }
+    'Koha::Exceptions::Object::NotNull', 'NOT NULL violation is properly translated';
+
+    is( $@->property, 'host', 'property is correctly extracted' );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'not_in_database_translation' => sub {
+    plan tests => 1;
+
+    $schema->storage->txn_begin;
+
+    throws_ok {
+        Koha::Schema::Util::ExceptionTranslator->translate_exception("Not in database");
+    }
+    'Koha::Exceptions::Object::NotInStorage', 'Not in database is properly translated';
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'exception_action integration' => sub {
+    plan tests => 3;
 
     $schema->storage->txn_begin;
 
@@ -141,11 +169,17 @@ subtest 'exception_action integration' => sub {
     }
     'Koha::Exceptions::Object::DuplicateID', 'exception_action translates known errors';
 
-    # Test that unknown errors still throw as DBIx::Class::Exception
+    # Test that unknown DBI errors throw as UnhandledDBError
     throws_ok {
-        $schema->throw_exception("Some unknown DBIC error");
+        $schema->throw_exception("DBI Exception: DBD::mysql::st execute failed: Some unknown DB error");
     }
-    'DBIx::Class::Exception', 'exception_action preserves unknown errors as DBIx::Class::Exception';
+    'Koha::Exceptions::Object::UnhandledDBError', 'exception_action wraps unknown DBI errors as UnhandledDBError';
+
+    # Test that non-DBI DBIC internal errors remain DBIx::Class::Exception
+    throws_ok {
+        $schema->throw_exception("Some internal DBIC error");
+    }
+    'DBIx::Class::Exception', 'exception_action preserves DBIC internal errors';
 
     $schema->storage->txn_rollback;
 };

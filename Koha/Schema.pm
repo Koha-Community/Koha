@@ -38,10 +38,19 @@ sub connection {
         sub {
             my ($msg) = @_;
 
+            # Don't re-wrap Koha exceptions that DBIC is re-throwing (e.g. from txn_do)
+            die $msg if ref($msg);
+
             # Attempt translation — throws a Koha exception on match
+            # Handles both DBI errors and DBIC internal errors (e.g. "Not in database")
             Koha::Schema::Util::ExceptionTranslator->translate_exception($msg);
 
-            # No match — let DBIC throw its default DBIx::Class::Exception
+            # No match — wrap DBI errors so DBIx::Class::Exception never leaks
+            if ( $msg =~ /^DBI Exception:/ ) {
+                Koha::Exceptions::Object::UnhandledDBError->throw( error => $msg );
+            }
+
+            # Non-DBI DBIC internal errors: let DBIC handle normally
             DBIx::Class::Exception->throw($msg);
         }
     );

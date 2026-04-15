@@ -69,6 +69,15 @@ use Exception::Class (
         isa         => 'Koha::Exceptions::Object',
         description => 'The object is not in storage yet',
     },
+    'Koha::Exceptions::Object::NotNull' => {
+        isa         => 'Koha::Exceptions::Object',
+        description => 'A required column value was not provided',
+        fields      => ['property'],
+    },
+    'Koha::Exceptions::Object::UnhandledDBError' => {
+        isa         => 'Koha::Exceptions::Object',
+        description => 'An unhandled database error occurred',
+    },
 );
 
 sub full_message {

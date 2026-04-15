@@ -595,8 +595,7 @@ subtest 'Return same values as DBIx::Class' => sub {
                     defined $e_us && defined $e_them,
                     'Delete an object that is not in storage should raise an exception'
                 );
-                is( ref($e_us), 'DBIx::Class::Exception' )
-                    ;    # FIXME This needs adjustment, we want to throw a Koha::Exception
+                is( ref($e_us), 'DBIx::Class::Exception' );
 
             };
 
@@ -725,8 +724,7 @@ subtest 'Return same values as DBIx::Class' => sub {
                     defined $e_us && defined $e_them,
                     'Delete a patron that is not in storage should raise an exception'
                 );
-                is( ref($e_us), 'DBIx::Class::Exception' )
-                    ;    # FIXME This needs adjustment, we want to throw a Koha::Exception
+                is( ref($e_us), 'DBIx::Class::Exception' );
 
                 # CASE 3 - Delete a patron that cannot be deleted (as a checkout)
                 $patron = Koha::Patron->new($patron_data)->store;

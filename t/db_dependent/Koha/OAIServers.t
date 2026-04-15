@@ -81,12 +81,12 @@ subtest 'Check NOT NULL without default values' => sub {
         }
     );
 
-    throws_ok { $server->store } 'DBIx::Class::Exception', 'Exception on empty endpoint';
-    like( $@->{msg}, qr/'endpoint' doesn't have a default value/, 'Verified that DBIx blamed endpoint' );
+    throws_ok { $server->store } 'Koha::Exceptions::Object::NotNull', 'Exception on empty endpoint';
+    is( $@->property, 'endpoint', 'Exception identifies the endpoint column' );
 
     $server->endpoint('endpoint_added');
-    throws_ok { $server->store } 'DBIx::Class::Exception', 'Exception on empty servername';
-    like( $@->{msg}, qr/'servername' doesn't have a default value/, 'Verified that DBIx blamed servername' );
+    throws_ok { $server->store } 'Koha::Exceptions::Object::NotNull', 'Exception on empty servername';
+    is( $@->property, 'servername', 'Exception identifies the servername column' );
 
     $server->servername('servername_added');
 
