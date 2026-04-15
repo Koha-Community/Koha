@@ -246,7 +246,8 @@ __PACKAGE__->belongs_to(
 # DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:wvYdiCgLY1Ssu8dCA8yc7Q
 
 __PACKAGE__->add_columns(
-    '+item_level_request' => { is_boolean => 1 }
+    '+item_level_request'    => { is_boolean => 1 },
+    '+local_holdgroup_match' => { is_boolean => 1 },
 );
 
 __PACKAGE__->belongs_to(

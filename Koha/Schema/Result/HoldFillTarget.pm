@@ -169,6 +169,9 @@ __PACKAGE__->belongs_to(
 # Created by DBIx::Class::Schema::Loader v0.07053 @ 2026-07-29 15:48:55
 # DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:GvKPS52gZzIFzCxMwDuIrg
 
+__PACKAGE__->add_columns(
+    '+local_holdgroup_match' => { is_boolean => 1 },
+);
 
 # You can replace this text with custom content, and it will be preserved on regeneration
 1;
