@@ -15,7 +15,7 @@ __PACKAGE__->load_namespaces;
 # Created by DBIx::Class::Schema::Loader v0.07025 @ 2013-10-14 20:56:21
 # DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:oDUxXckmfk6H9YCjW8PZTw
 
-use Koha::Schema::Util::ExceptionTranslator;
+use Koha::Schema::ExceptionMapper;
 
 =head1 UTILITY METHODS
 
@@ -43,7 +43,7 @@ sub connection {
 
             # Attempt translation — throws a Koha exception on match
             # Handles both DBI errors and DBIC internal errors (e.g. "Not in database")
-            Koha::Schema::Util::ExceptionTranslator->translate_exception($msg);
+            Koha::Schema::ExceptionMapper->translate_exception($msg);
 
             # No match — wrap DBI errors so DBIx::Class::Exception never leaks
             if ( $msg =~ /^DBI Exception:/ ) {

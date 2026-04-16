@@ -23,7 +23,7 @@ use Test::More tests => 11;
 use Test::Exception;
 
 use Koha::Database;
-use Koha::Schema::Util::ExceptionTranslator;
+use Koha::Schema::ExceptionMapper;
 
 use t::lib::TestBuilder;
 
@@ -39,7 +39,7 @@ subtest 'foreign_key_constraint_translation' => sub {
         "Cannot add or update a child row: a foreign key constraint fails (`koha`.`items`, CONSTRAINT `items_ibfk_1` FOREIGN KEY (`biblionumber`) REFERENCES `biblio` (`biblionumber`))";
 
     throws_ok {
-        Koha::Schema::Util::ExceptionTranslator->translate_exception($msg);
+        Koha::Schema::ExceptionMapper->translate_exception($msg);
     }
     'Koha::Exceptions::Object::FKConstraint', 'FK constraint exception is properly translated';
 
@@ -56,7 +56,7 @@ subtest 'duplicate_key_translation' => sub {
     my $msg = "Duplicate entry 'test\@example.com' for key 'borrowers.email'";
 
     throws_ok {
-        Koha::Schema::Util::ExceptionTranslator->translate_exception($msg);
+        Koha::Schema::ExceptionMapper->translate_exception($msg);
     }
     'Koha::Exceptions::Object::DuplicateID', 'Duplicate key exception is properly translated';
 
@@ -73,7 +73,7 @@ subtest 'bad_value_translation' => sub {
     my $msg = "Incorrect datetime value: '2025-13-45' for column 'date_due' at row 1";
 
     throws_ok {
-        Koha::Schema::Util::ExceptionTranslator->translate_exception($msg);
+        Koha::Schema::ExceptionMapper->translate_exception($msg);
     }
     'Koha::Exceptions::Object::BadValue', 'Bad value exception is properly translated';
 
@@ -90,7 +90,7 @@ subtest 'enum_truncation_translation' => sub {
     my $msg = "Data truncated for column 'status' at row 1";
 
     throws_ok {
-        Koha::Schema::Util::ExceptionTranslator->translate_exception($msg);
+        Koha::Schema::ExceptionMapper->translate_exception($msg);
     }
     'Koha::Exceptions::Object::BadValue', 'Enum truncation exception is properly translated';
 
@@ -105,7 +105,7 @@ subtest 'unmatched_message_returns' => sub {
     $schema->storage->txn_begin;
 
     my $msg    = "Some unknown database error at row 1";
-    my $result = Koha::Schema::Util::ExceptionTranslator->translate_exception($msg);
+    my $result = Koha::Schema::ExceptionMapper->translate_exception($msg);
 
     is( $result, undef, 'Unmatched message returns without throwing' );
 
@@ -121,7 +121,7 @@ subtest 'fk_constraint_deletion_translation' => sub {
         "Cannot delete or update a parent row: a foreign key constraint fails (`koha`.`items`, CONSTRAINT `items_ibfk_1` FOREIGN KEY (`biblionumber`) REFERENCES `biblio` (`biblionumber`))";
 
     throws_ok {
-        Koha::Schema::Util::ExceptionTranslator->translate_exception($msg);
+        Koha::Schema::ExceptionMapper->translate_exception($msg);
     }
     'Koha::Exceptions::Object::FKConstraintDeletion', 'FK constraint deletion exception is properly translated';
 
@@ -136,7 +136,7 @@ subtest 'not_null_translation' => sub {
     $schema->storage->txn_begin;
 
     throws_ok {
-        Koha::Schema::Util::ExceptionTranslator->translate_exception("Column 'host' cannot be null");
+        Koha::Schema::ExceptionMapper->translate_exception("Column 'host' cannot be null");
     }
     'Koha::Exceptions::Object::NotNull', 'NOT NULL violation is properly translated';
 
@@ -151,7 +151,7 @@ subtest 'not_in_database_translation' => sub {
     $schema->storage->txn_begin;
 
     throws_ok {
-        Koha::Schema::Util::ExceptionTranslator->translate_exception("Not in database");
+        Koha::Schema::ExceptionMapper->translate_exception("Not in database");
     }
     'Koha::Exceptions::Object::NotInStorage', 'Not in database is properly translated';
 

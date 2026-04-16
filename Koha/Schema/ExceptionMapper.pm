@@ -1,4 +1,4 @@
-package Koha::Schema::Util::ExceptionTranslator;
+package Koha::Schema::ExceptionMapper;
 
 # Copyright 2025 Koha Development team
 #
@@ -25,11 +25,11 @@ use Koha::Exceptions::Object;
 
 =head1 NAME
 
-Koha::Schema::Util::ExceptionTranslator - Centralized DBIx::Class exception translation
+Koha::Schema::ExceptionMapper - Centralized DBIx::Class exception translation
 
 =head1 SYNOPSIS
 
-    use Koha::Schema::Util::ExceptionTranslator;
+    use Koha::Schema::ExceptionMapper;
 
     # Called automatically via Koha::Schema's exception_action hook.
     # No manual invocation needed in normal code.
@@ -45,7 +45,7 @@ are automatically translated before they propagate to callers.
 
 =head2 translate_exception
 
-    Koha::Schema::Util::ExceptionTranslator->translate_exception($msg);
+    Koha::Schema::ExceptionMapper->translate_exception($msg);
 
 Attempts to translate a database error message into a Koha exception and
 throw it. If the message does not match any known pattern, returns without
