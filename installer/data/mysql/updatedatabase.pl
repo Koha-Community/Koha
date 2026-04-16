@@ -31,6 +31,11 @@ use Modern::Perl;
 
 use feature 'say';
 
+BEGIN {
+    #See BZ 42374 about bug in Business::ISBN::Data
+    delete $ENV{ISBN_RANGE_MESSAGE} if defined $ENV{ISBN_RANGE_MESSAGE};
+}
+
 # CPAN modules
 use DBI;
 use Getopt::Long;
