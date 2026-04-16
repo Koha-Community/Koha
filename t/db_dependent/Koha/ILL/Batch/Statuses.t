@@ -19,6 +19,7 @@ use Modern::Perl;
 
 use File::Basename qw/basename/;
 use Koha::Database;
+use Koha::ActionLogs;
 use Koha::ILL::Batch::Status;
 use Koha::ILL::Batch::Statuses;
 use Koha::Patrons;
@@ -29,7 +30,7 @@ use Test::MockObject;
 use Test::MockModule;
 
 use Test::NoWarnings;
-use Test::More tests => 14;
+use Test::More tests => 17;
 
 my $schema  = Koha::Database->new->schema;
 my $builder = t::lib::TestBuilder->new;
@@ -40,22 +41,7 @@ $schema->storage->txn_begin;
 
 Koha::ILL::Batch::Statuses->search->delete;
 
-# Keep track of whether our CRUD logging side-effects are happening
-my $effects = {
-    batch_status_create => 0,
-    batch_status_update => 0,
-    batch_status_delete => 0
-};
-
-# Mock a logger so we can check it is called
-my $logger = Test::MockModule->new('Koha::ILL::Request::Logger');
-$logger->mock(
-    'log_something',
-    sub {
-        my ( $self, $to_log ) = @_;
-        $effects->{ $to_log->{actionname} }++;
-    }
-);
+t::lib::Mocks::mock_preference( 'IllLog', 1 );
 
 # Create a batch status
 my $status = $builder->build(
@@ -102,11 +88,11 @@ my $status3 = Koha::ILL::Batch::Status->new(
     }
 );
 $status3->create_and_log;
-is(
-    $effects->{'batch_status_create'},
-    1,
-    "Creation of status calls log_something"
-);
+my $create_log =
+    Koha::ActionLogs->search( { module => 'ILL_BATCHES', action => 'batch_status_create', object => $status3->id } )
+    ->next;
+ok( $create_log, 'batch_status_create writes an action log entry' );
+is( $create_log->module, 'ILL_BATCHES', 'batch_status_create is logged under ILL_BATCHES module' );
 
 # Try creating a system status and ensure it's not created
 my $cannot_create_system = Koha::ILL::Batch::Status->new(
@@ -136,12 +122,11 @@ my $not_updated = Koha::ILL::Batch::Statuses->find( { code => "DARK_SIDE" } )->u
 is( $not_updated->{is_system}, 0,     "is_system cannot be changed" );
 is( $not_updated->{name},      "Rey", "name can be changed" );
 
-# Ensure the logger is called
-is(
-    $effects->{'batch_status_update'},
-    1,
-    "Update of status calls log_something"
-);
+my $update_log =
+    Koha::ActionLogs->search( { module => 'ILL_BATCHES', action => 'batch_status_update', object => $status3->id } )
+    ->next;
+ok( $update_log, 'batch_status_update writes an action log entry' );
+is( $update_log->module, 'ILL_BATCHES', 'batch_status_update is logged under ILL_BATCHES module' );
 
 ## Status delete
 my $cannot_delete = Koha::ILL::Batch::Status->new(
@@ -164,12 +149,11 @@ isa_ok( $not_deleted, 'Koha::ILL::Batch::Status', "is_system statuses cannot be 
 $can_delete->create_and_log;
 $can_delete->delete_and_log;
 
-# Ensure the logger is called following a successful delete
-is(
-    $effects->{'batch_status_delete'},
-    1,
-    "Delete of status calls log_something"
-);
+my $delete_log =
+    Koha::ActionLogs->search( { module => 'ILL_BATCHES', action => 'batch_status_delete', object => $can_delete->id } )
+    ->next;
+ok( $delete_log, 'batch_status_delete writes an action log entry' );
+is( $delete_log->module, 'ILL_BATCHES', 'batch_status_delete is logged under ILL_BATCHES module' );
 
 # Create a system "UNKNOWN" status
 my $status_unknown = Koha::ILL::Batch::Status->new(

@@ -17,6 +17,7 @@
 
 use Modern::Perl;
 
+use Koha::ActionLogs;
 use Koha::Database;
 use Koha::ILL::Batch;
 use Koha::ILL::Batches;
@@ -28,7 +29,7 @@ use Test::MockObject;
 use Test::MockModule;
 
 use Test::NoWarnings;
-use Test::More tests => 7;
+use Test::More tests => 13;
 
 my $schema  = Koha::Database->new->schema;
 my $builder = t::lib::TestBuilder->new;
@@ -85,6 +86,35 @@ is( $batch_patron->firstname, "Grogu", "patron returns correctly" );
 my $batch_branch = $illbatch->library;
 isa_ok( $batch_branch, 'Koha::Library' );
 is( $batch_branch->branchcode, $branch->{branchcode}, "branch returns correctly" );
+
+t::lib::Mocks::mock_preference( 'IllLog', 1 );
+
+my $ill_batch = Koha::ILL::Batch->new(
+    {
+        name       => "Logging test batch",
+        backend    => "Mock",
+        patron_id  => $patron->{borrowernumber},
+        library_id => $branch->{branchcode},
+    }
+);
+
+$ill_batch->create_and_log;
+my $create_log =
+    Koha::ActionLogs->search( { module => 'ILL_BATCHES', action => 'batch_create', object => $ill_batch->id } )->next;
+ok( $create_log, 'create_and_log writes an action log entry' );
+is( $create_log->module, 'ILL_BATCHES', 'create_and_log logs under ILL_BATCHES module' );
+
+$ill_batch->update_and_log( { name => "Updated logging test batch" } );
+my $update_log =
+    Koha::ActionLogs->search( { module => 'ILL_BATCHES', action => 'batch_update', object => $ill_batch->id } )->next;
+ok( $update_log, 'update_and_log writes an action log entry' );
+is( $update_log->module, 'ILL_BATCHES', 'update_and_log logs under ILL_BATCHES module' );
+
+$ill_batch->delete_and_log;
+my $delete_log =
+    Koha::ActionLogs->search( { module => 'ILL_BATCHES', action => 'batch_delete', object => $ill_batch->id } )->next;
+ok( $delete_log, 'delete_and_log writes an action log entry' );
+is( $delete_log->module, 'ILL_BATCHES', 'delete_and_log logs under ILL_BATCHES module' );
 
 $illrq_obj->delete;
 $schema->storage->txn_rollback;
