@@ -20,14 +20,16 @@
 use Modern::Perl;
 
 use Test::NoWarnings;
-use Test::More tests => 15;
+use Test::More tests => 16;
 use Test::MockModule;
 
 use List::MoreUtils qw(any);
+use Storable        qw( dclone );
 
 use Koha::Database;
 use Koha::BackgroundJobs;
 use Koha::DateUtils qw( dt_from_string );
+use Koha::Session;
 
 use t::lib::TestBuilder;
 use t::lib::Mocks;
@@ -144,6 +146,28 @@ subtest 'search_limited' => sub {
     is( Koha::BackgroundJobs->search_limited->count, 1, 'My job found' );
     C4::Context->set_userenv( $patron2->id, $patron2->userid );
     is( Koha::BackgroundJobs->search_limited->count, 0, 'No jobs for me' );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'Do not mutate userenv' => sub {
+    plan tests => 1;
+
+    $schema->storage->txn_begin;
+    my $patron = $builder->build_object( { class => 'Koha::Patrons', value => { flags => 0 } } );
+
+    my $session = Koha::Session->get_session();
+    C4::Context->set_userenv_from_session($session);
+    my $pre_userenv = dclone( C4::Context->userenv );
+    my $job_id      = t::lib::Koha::BackgroundJob::BatchTest->new->enqueue(
+        {
+            size => $job_size,
+            %$data
+        }
+    );
+
+    my $post_userenv = C4::Context->userenv;
+    is_deeply( $pre_userenv, $post_userenv );
 
     $schema->storage->txn_rollback;
 };
