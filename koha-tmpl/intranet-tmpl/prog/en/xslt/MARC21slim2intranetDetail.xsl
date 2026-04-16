@@ -595,9 +595,9 @@
             </xsl:call-template>
         </xsl:if>
 
-        <xsl:if test="marc:datafield[@tag=130]|marc:datafield[@tag=240]|marc:datafield[@tag=730][@ind2=2]">
+        <xsl:if test="marc:datafield[@tag=130]|marc:datafield[@tag=240]|marc:datafield[@tag=730][@ind2!=2]">
             <span class="results_summary uniform_title"><span class="label">Uniform titles: </span>
-                <xsl:for-each select="marc:datafield[@tag=130]|marc:datafield[@tag=240]|marc:datafield[@tag=730][@ind2=2]">
+                <xsl:for-each select="marc:datafield[@tag=130]|marc:datafield[@tag=240]|marc:datafield[@tag=730][@ind2!=2]">
                     <xsl:if test="marc:subfield[@code='i']">
 			    <xsl:call-template name="subfieldSelect">
 				    <xsl:with-param name="codes">i</xsl:with-param>

@@ -693,11 +693,11 @@
             </span>
         </xsl:if>
 
-        <xsl:if test="marc:datafield[@tag=130]|marc:datafield[@tag=240]|marc:datafield[@tag=730][@ind2=2]">
+        <xsl:if test="marc:datafield[@tag=130]|marc:datafield[@tag=240]|marc:datafield[@tag=730][@ind2!=2]">
             <span class="results_summary uniform_titles">
                 <span class="label">Uniform titles: </span>
                 <ul class="resource_list">
-                    <xsl:for-each select="marc:datafield[@tag=130]|marc:datafield[@tag=240]|marc:datafield[@tag=730][@ind2=2]">
+                    <xsl:for-each select="marc:datafield[@tag=130]|marc:datafield[@tag=240]|marc:datafield[@tag=730][@ind2!=2]">
                         <li>
                             <span property="alternateName">
                                 <xsl:if test="marc:subfield[@code='i']">
