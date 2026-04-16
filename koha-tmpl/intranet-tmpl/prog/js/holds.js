@@ -1847,7 +1847,7 @@ async function load_patron_holds_table(biblio_id, split_data) {
         },
         hold_table_settings
     );
-    holdsQueueTable.api().page(0).draw(false);
+
     // Clear selectedHolds on page load
     localStorage.removeItem("selectedHolds");
     $(table_id).on("draw.dt", function () {
