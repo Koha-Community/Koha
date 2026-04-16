@@ -17,11 +17,10 @@
 
 use Modern::Perl;
 use Test::NoWarnings;
-use Test::More tests => 2;    # N + 1 (NoWarnings)
+use Test::More tests => 3;    # N + 1 (NoWarnings)
 use Test::MockModule;
 use Test::Exception;
 
-use DDP;
 use MARC::Record;
 use MARC::File::XML;
 
@@ -35,7 +34,17 @@ use t::lib::TestBuilder;
 my $schema  = Koha::Database->new->schema;
 my $builder = t::lib::TestBuilder->new;
 
-subtest 'get_biblio_marcxml() tests' => sub {
+# Helper: build a repository object, silencing the Identify output
+sub _build_repository {
+    my $repository;
+    my $stdout;
+    local *STDOUT;
+    open STDOUT, '>', \$stdout;
+    $repository = Koha::OAI::Server::Repository->new();
+    return $repository;
+}
+
+subtest 'get_biblio_marcxml() expanded_avs tests' => sub {
 
     plan tests => 2;
 
@@ -45,6 +54,7 @@ subtest 'get_biblio_marcxml() tests' => sub {
     t::lib::Mocks::mock_preference( 'marcflavour',      'MARC21' );
     t::lib::Mocks::mock_preference( 'OAI-PMH:ConfFile', 1 );          # so it loads the mocked one
     t::lib::Mocks::mock_preference( 'OpacHiddenItems',  '' );
+    t::lib::Mocks::mock_preference( 'OpacSuppression',  0 );
 
     my $library =
         $builder->build_object( { class => 'Koha::Libraries', value => { branchname => q{Nick's Library} } } );
@@ -79,14 +89,7 @@ subtest 'get_biblio_marcxml() tests' => sub {
         }
     );
 
-    # Initialize $repository object, silence output
-    my $repository;
-    {
-        my $stdout;
-        local *STDOUT;
-        open STDOUT, '>', \$stdout;
-        $repository = Koha::OAI::Server::Repository->new();
-    }
+    my $repository = _build_repository();
 
     # not expanded case
     my ($xml)      = $repository->get_biblio_marcxml( $item->biblionumber, 'not_expanded' );
@@ -101,6 +104,49 @@ subtest 'get_biblio_marcxml() tests' => sub {
     $item_field = $record->field('952');
 
     is( $item_field->subfield('a'), $library->branchname );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'get_biblio_marcxml() OpacSuppression tests' => sub {
+
+    plan tests => 4;
+
+    $schema->storage->txn_begin;
+
+    t::lib::Mocks::mock_preference( 'marcflavour',      'MARC21' );
+    t::lib::Mocks::mock_preference( 'OAI-PMH:ConfFile', 0 );
+    t::lib::Mocks::mock_preference( 'OpacHiddenItems',  '' );
+
+    my $biblio = $builder->build_sample_biblio();
+
+    my $cgi = Test::MockModule->new('CGI');
+    $cgi->mock( 'Vars', sub { ( 'verb', 'Identify' ); } );
+
+    my $repository = _build_repository();
+
+    # Suppression disabled: record returned regardless of flag
+    t::lib::Mocks::mock_preference( 'OpacSuppression', 0 );
+    $biblio->opac_suppressed(1)->store;
+    my ($xml) = $repository->get_biblio_marcxml( $biblio->biblionumber, 'oai_dc' );
+    ok( $xml, 'Record returned when OpacSuppression is disabled even if opac_suppressed is set' );
+
+    # Suppression enabled, record not suppressed: record returned
+    t::lib::Mocks::mock_preference( 'OpacSuppression', 1 );
+    $biblio->opac_suppressed(0)->store;
+    ($xml) = $repository->get_biblio_marcxml( $biblio->biblionumber, 'oai_dc' );
+    ok( $xml, 'Record returned when OpacSuppression is enabled but record is not suppressed' );
+
+    # Suppression enabled, record suppressed: no record
+    t::lib::Mocks::mock_preference( 'OpacSuppression', 1 );
+    $biblio->opac_suppressed(1)->store;
+    ($xml) = $repository->get_biblio_marcxml( $biblio->biblionumber, 'oai_dc' );
+    is( $xml, undef, 'Record hidden when OpacSuppression is enabled and record is suppressed' );
+
+    # Suppression disabled again: record returned
+    t::lib::Mocks::mock_preference( 'OpacSuppression', 0 );
+    ($xml) = $repository->get_biblio_marcxml( $biblio->biblionumber, 'oai_dc' );
+    ok( $xml, 'Record returned again after OpacSuppression is disabled' );
 
     $schema->storage->txn_rollback;
 };
