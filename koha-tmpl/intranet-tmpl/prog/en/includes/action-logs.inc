@@ -20,6 +20,8 @@
         <span>Holds</span>[% UNLESS Koha.Preference('HoldsLog') %]<i class="log-disabled fa-solid fa-triangle-exclamation" title="Log not enabled" data-log="HoldsLog"></i>[% END %]
     [% CASE 'ILL' %]
         <span>Interlibrary loans</span>[% UNLESS Koha.Preference('IllLog') %]<i class="log-disabled fa-solid fa-triangle-exclamation" title="Log not enabled" data-log="IllLog"></i>[% END %]
+    [% CASE 'ILL_BATCHES' %]
+        <span>Interlibrary loan batches</span>[% UNLESS Koha.Preference('IllLog') %]<i class="log-disabled fa-solid fa-triangle-exclamation" title="Log not enabled" data-log="IllLog"></i>[% END %]
     [% CASE 'CIRCULATION' %]
         <span>Circulation</span>[% UNLESS Koha.Preference('IssueLog') %]<i class="log-disabled fa-solid fa-triangle-exclamation" title="Log not enabled" data-log="IssueLog"></i>[% END %]
     [% CASE 'CLAIMS' %]

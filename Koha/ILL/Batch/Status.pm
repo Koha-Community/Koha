@@ -63,7 +63,7 @@ sub create_and_log {
 
     $logger->log_something(
         {
-            modulename   => 'ILL',
+            modulename   => 'ILL_BATCHES',
             actionname   => 'batch_status_create',
             objectnumber => $self->id,
             infos        => to_json( {} )
@@ -94,7 +94,7 @@ sub update_and_log {
 
     $logger->log_something(
         {
-            modulename   => 'ILL',
+            modulename   => 'ILL_BATCHES',
             actionname   => 'batch_status_update',
             objectnumber => $self->id,
             infos        => to_json(
@@ -131,7 +131,7 @@ sub delete_and_log {
 
     $logger->log_something(
         {
-            modulename   => 'ILL',
+            modulename   => 'ILL_BATCHES',
             actionname   => 'batch_status_delete',
             objectnumber => $self->id,
             infos        => to_json( {} )
