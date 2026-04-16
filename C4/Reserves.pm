@@ -895,27 +895,50 @@ sub CheckReserves {
                     }
                 }
 
-                # Local holds priority exclusivity period: when the queue has
+                # Local holds exclusivity period: when the queue has
                 # targeted a local-group item for this hold and we're still
                 # within the exclusivity window, skip non-local items so the
                 # targeted local item can fulfil it.  If the queue has not yet
                 # run for this reserve (no hold_fill_targets row), we fall
                 # through and let the hold be filled normally.
-                my $excl_period = C4::Context->preference('LocalHoldsPriorityExclusivityPeriod');
-                if (   $excl_period
-                    && !$local_hold_match
-                    && !$local_hold_group_match
-                    && $res->{reserve_id} )
-                {
-                    my $reservedate_dt = eval { dt_from_string( $res->{reservedate} ) };
-                    if ($reservedate_dt) {
-                        my $age_days = dt_from_string->delta_days($reservedate_dt)->in_units('days');
-                        if ( $age_days < $excl_period ) {
-                            my $target =
-                                Koha::Database->new->schema->resultset('HoldFillTarget')
-                                ->search( { reserve_id => $res->{reserve_id} }, { rows => 1 } )
-                                ->next;
-                            next if $target && $target->local_holdgroup_match;
+                # This is independent of LocalHoldsPriority.
+                my $excl_period = C4::Context->preference('LocalHoldsExclusivityPeriod');
+                if ( $excl_period && $res->{reserve_id} ) {
+                    my $excl_item_control =
+                        C4::Context->preference('LocalHoldsExclusivityItemControl') || 'holdingbranch';
+                    my $excl_patron_control =
+                        C4::Context->preference('LocalHoldsExclusivityPatronControl') || 'PickupLibrary';
+
+                    my $excl_item_branchcode = $item->$excl_item_control;
+                    $patron //= Koha::Patrons->find( $res->{borrowernumber} );
+                    my $excl_patron_branchcode =
+                          ( $excl_patron_control eq 'PickupLibrary' ) ? $res->{branchcode}
+                        : ( $excl_patron_control eq 'HomeLibrary' )   ? $patron->branchcode
+                        :                                               undef;
+
+                    my $is_local_for_exclusivity = 0;
+                    if ( $excl_item_branchcode && $excl_patron_branchcode ) {
+                        if ( $excl_item_branchcode eq $excl_patron_branchcode ) {
+                            $is_local_for_exclusivity = 1;
+                        } else {
+                            my $excl_library = Koha::Libraries->find( { branchcode => $excl_item_branchcode } );
+                            $is_local_for_exclusivity = 1
+                                if $excl_library
+                                && $excl_library->validate_hold_sibling( { branchcode => $excl_patron_branchcode } );
+                        }
+                    }
+
+                    if ( !$is_local_for_exclusivity ) {
+                        my $reservedate_dt = eval { dt_from_string( $res->{reservedate} ) };
+                        if ($reservedate_dt) {
+                            my $age_days = dt_from_string->delta_days($reservedate_dt)->in_units('days');
+                            if ( $age_days < $excl_period ) {
+                                my $target =
+                                    Koha::Database->new->schema->resultset('HoldFillTarget')
+                                    ->search( { reserve_id => $res->{reserve_id} }, { rows => 1 } )
+                                    ->next;
+                                next if $target && $target->local_holdgroup_match;
+                            }
                         }
                     }
                 }

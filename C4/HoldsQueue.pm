@@ -911,6 +911,7 @@ sub MapItemsToHoldRequests {
             $item_map{ $allocation->[0] } = $allocation->[1];
             $num_items_remaining--;
         }
+        _flag_local_holdgroup_matches( \%item_map, \%items_by_itemnumber );
         return \%item_map;
     }
 
@@ -922,7 +923,10 @@ sub MapItemsToHoldRequests {
         push @{ $items_by_branch{ $item->{holdingbranch} } }, $item
             unless exists $allocated_items{ $item->{itemnumber} };
     }
-    return \%item_map unless keys %items_by_branch;
+    unless ( keys %items_by_branch ) {
+        _flag_local_holdgroup_matches( \%item_map, \%items_by_itemnumber );
+        return \%item_map;
+    }
 
     # now handle the title-level requests
     $num_items_remaining = scalar(@$available_items) - scalar( keys %allocated_items );
@@ -1034,7 +1038,61 @@ sub MapItemsToHoldRequests {
             $num_items_remaining--;
         }
     }
+    _flag_local_holdgroup_matches( \%item_map, \%items_by_itemnumber );
     return \%item_map;
+}
+
+=head2 _flag_local_holdgroup_matches
+
+  _flag_local_holdgroup_matches( $item_map, $items_by_itemnumber );
+
+For each mapped item that does not already have local_holdgroup_match set,
+check whether the item and the patron belong to the same library hold group
+using the LocalHoldsExclusivity* system preferences.  This runs independently
+of LocalHoldsPriority so that the exclusivity feature can operate on its own.
+
+=cut
+
+sub _flag_local_holdgroup_matches {
+    my ( $item_map, $items_by_itemnumber ) = @_;
+
+    my $excl_period = C4::Context->preference('LocalHoldsExclusivityPeriod');
+    return unless $excl_period;
+
+    my $patron_control = C4::Context->preference('LocalHoldsExclusivityPatronControl') || 'PickupLibrary';
+    my $item_control   = C4::Context->preference('LocalHoldsExclusivityItemControl')   || 'holdingbranch';
+
+    foreach my $itemnumber ( keys %$item_map ) {
+        my $mapped = $item_map->{$itemnumber};
+        next if $mapped->{local_holdgroup_match};
+
+        my $item_branchcode =
+              $items_by_itemnumber->{$itemnumber}
+            ? $items_by_itemnumber->{$itemnumber}->{$item_control}
+            : undef;
+
+        unless ($item_branchcode) {
+            my $item_obj = Koha::Items->find($itemnumber);
+            $item_branchcode = $item_obj->$item_control if $item_obj;
+        }
+        next unless $item_branchcode;
+
+        my $patron_branchcode =
+              ( $patron_control eq 'PickupLibrary' ) ? $mapped->{pickup_branch}
+            : ( $patron_control eq 'HomeLibrary' )   ? Koha::Patrons->find( $mapped->{borrowernumber} )->branchcode
+            :                                          undef;
+        next unless $patron_branchcode;
+
+        if ( $item_branchcode eq $patron_branchcode ) {
+            $mapped->{local_holdgroup_match} = 1;
+            next;
+        }
+
+        my $item_library = Koha::Libraries->find( { branchcode => $item_branchcode } );
+        if ( $item_library && $item_library->validate_hold_sibling( { branchcode => $patron_branchcode } ) ) {
+            $mapped->{local_holdgroup_match} = 1;
+        }
+    }
 }
 
 =head2 _can_item_fill_request

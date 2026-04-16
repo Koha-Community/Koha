@@ -9,7 +9,7 @@
 use Modern::Perl;
 
 use Test::NoWarnings;
-use Test::More tests => 67;
+use Test::More tests => 68;
 use Data::Dumper;
 
 use C4::Calendar;
@@ -471,7 +471,7 @@ is(
 );
 is(
     $holds_queue->[0]->{local_holdgroup_match}, 1,
-    "tmp_holdsqueue.local_holdgroup_match is set when LocalHoldsPriority finds a local match"
+    "tmp_holdsqueue.local_holdgroup_match is set for a local match"
 );
 my $hft_row = $dbh->selectrow_hashref(
     "SELECT local_holdgroup_match FROM hold_fill_targets WHERE borrowernumber = ?",
@@ -479,7 +479,7 @@ my $hft_row = $dbh->selectrow_hashref(
 );
 is(
     $hft_row->{local_holdgroup_match}, 1,
-    "hold_fill_targets.local_holdgroup_match is set when LocalHoldsPriority finds a local match"
+    "hold_fill_targets.local_holdgroup_match is set for a local match"
 );
 
 ### Test branch transfer limits ###
@@ -2545,4 +2545,105 @@ subtest "Test unallocated option" => sub {
         $hold->timestamp, $after_rebuild_timestamp,
         "Previously allocated hold not updated when unallocated passed and others are allocated"
     );
+};
+
+subtest "local_holdgroup_match is set independently of LocalHoldsPriority" => sub {
+    plan tests => 4;
+
+    $schema->storage->txn_begin;
+
+    # Disable LocalHoldsPriority to prove independence
+    t::lib::Mocks::mock_preference( 'LocalHoldsPriority', 'None' );
+
+    # Enable exclusivity so _flag_local_holdgroup_matches runs
+    t::lib::Mocks::mock_preference( 'LocalHoldsExclusivityPeriod',        7 );
+    t::lib::Mocks::mock_preference( 'LocalHoldsExclusivityPatronControl', 'HomeLibrary' );
+    t::lib::Mocks::mock_preference( 'LocalHoldsExclusivityItemControl',   'homebranch' );
+
+    my $group = $builder->build_object( { class => 'Koha::Library::Groups', value => { ft_local_hold_group => 1 } } );
+
+    my $lib_a = $builder->build_object( { class => 'Koha::Libraries' } );
+    my $lib_b = $builder->build_object( { class => 'Koha::Libraries' } );
+    my $lib_c = $builder->build_object( { class => 'Koha::Libraries' } );    # not in group
+
+    $builder->build_object(
+        { class => 'Koha::Library::Groups', value => { parent_id => $group->id, branchcode => $lib_a->branchcode } } );
+    $builder->build_object(
+        { class => 'Koha::Library::Groups', value => { parent_id => $group->id, branchcode => $lib_b->branchcode } } );
+
+    Koha::CirculationRules->set_rule(
+        {
+            rule_name  => 'holdallowed',
+            rule_value => 'from_any_library',
+            branchcode => undef,
+            itemtype   => undef,
+        }
+    );
+
+    # Use a single item at lib_b so the allocation is deterministic.
+    # lib_b is in the hold group with lib_a but not with lib_c.
+    my $biblio = $builder->build_sample_biblio();
+    my $item   = $builder->build_sample_item(
+        {
+            biblionumber  => $biblio->biblionumber,
+            homebranch    => $lib_b->branchcode,
+            holdingbranch => $lib_b->branchcode,
+        }
+    );
+
+    my $patron_local =
+        $builder->build_object( { class => 'Koha::Patrons', value => { branchcode => $lib_a->branchcode } } );
+    my $patron_non_local =
+        $builder->build_object( { class => 'Koha::Patrons', value => { branchcode => $lib_c->branchcode } } );
+
+    # Hold by the local patron (lib_a, in same group as item at lib_b)
+    my $reserve_id_local = AddReserve(
+        {
+            branchcode     => $lib_a->branchcode,
+            borrowernumber => $patron_local->borrowernumber,
+            biblionumber   => $biblio->biblionumber,
+            priority       => 1,
+        }
+    );
+
+    C4::HoldsQueue::CreateQueue();
+
+    my $hft_local =
+        $schema->resultset('HoldFillTarget')->search( { reserve_id => $reserve_id_local }, { rows => 1 } )->next;
+    ok( $hft_local, "Hold fill target created for the local patron's hold" );
+
+SKIP: {
+        skip "No hold_fill_target row to inspect", 1 unless $hft_local;
+        is(
+            $hft_local->local_holdgroup_match, 1,
+            "local_holdgroup_match is set even though LocalHoldsPriority is 'None'"
+        );
+    }
+
+    # Now test a non-local patron (lib_c, NOT in hold group with item at lib_b)
+    $schema->resultset('Reserve')->search( {} )->delete;
+    my $reserve_id_non_local = AddReserve(
+        {
+            branchcode     => $lib_c->branchcode,
+            borrowernumber => $patron_non_local->borrowernumber,
+            biblionumber   => $biblio->biblionumber,
+            priority       => 1,
+        }
+    );
+
+    C4::HoldsQueue::CreateQueue();
+
+    my $hft_non_local =
+        $schema->resultset('HoldFillTarget')->search( { reserve_id => $reserve_id_non_local }, { rows => 1 } )->next;
+    ok( $hft_non_local, "Hold fill target created for the non-local patron's hold" );
+
+SKIP: {
+        skip "No hold_fill_target row to inspect", 1 unless $hft_non_local;
+        is(
+            $hft_non_local->local_holdgroup_match, 0,
+            "local_holdgroup_match is NOT set for a non-local match"
+        );
+    }
+
+    $schema->storage->txn_rollback;
 };
