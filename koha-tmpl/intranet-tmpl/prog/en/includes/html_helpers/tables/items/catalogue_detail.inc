@@ -338,22 +338,22 @@
             holdings: false,
             otherholdings: false,
         };
-        $(".GroupByStatus").on("click",function(e){
+        $(".GroupByStatus").on("click", function (e) {
             e.preventDefault();
             let tab_id = $(this).data("tab");
             let was_grouped = group_by_status_values[tab_id];
             group_by_status_values[tab_id] = !was_grouped;
 
-            build_items_table(tab_id, true, { destroy: true }, build_items_table_drawncallback );
+            build_items_table(tab_id, true, { destroy: true }, build_items_table_drawncallback);
 
-            if ( was_grouped ) {
-                $(this).html('<i class="fa fa-object-group"></i>' + _("Group by status") + '</button>');
+            if (was_grouped) {
+                $(this).html('<i class="fa fa-object-group"></i>' + _("Group by status") + "</button>");
             } else {
-                $(this).html('<i class="fa fa-object-ungroup"></i>' + _("Ungroup by status") + '</button>');
+                $(this).html('<i class="fa fa-object-ungroup"></i>' + _("Ungroup by status") + "</button>");
             }
         });
 
-        let user_colvis = {holdings: {}, otherholdings: {}};
+        let user_colvis = { holdings: {}, otherholdings: {} };
         function build_items_table(tab_id, add_filters, dt_options, drawcallback) {
             let table_dt;
             if (dt_options && dt_options.hasOwnProperty("destroy")) {
@@ -388,12 +388,12 @@
                 return $("#" + tab_id + "_status select").val();
             };
 
-            let group_by_status = function(){
-                if ( group_by_status_values[tab_id] ) {
-                    return 'group_by_status=1';
+            let group_by_status = function () {
+                if (group_by_status_values[tab_id]) {
+                    return "group_by_status=1";
                 }
-                return '';
-            }
+                return "";
+            };
 
             var columns = [
                 {
@@ -611,7 +611,7 @@
                             }
 
                             if (status == "lost") {
-                                let lost_lib = av_lost.get(row.lost_status.toString()) || _("Unavailable (lost or missing");
+                                let lost_lib = av_lost.get(row.lost_status.toString()) || _("Unavailable (lost or missing)");
                                 nodes += '<span class="lost">%s</span>'.format(escape_str(lost_lib));
 
                                 const hasReturnClaims = row.return_claims && row.return_claims.filter(rc => !rc.resolution).length > 0 ? true : false;
@@ -947,7 +947,7 @@
             ];
             var items_table = $("#" + tab_id + "_table").kohaTable(
                 {
-                    ajax: { url: "/api/v1/biblios/[% biblio.biblionumber | uri %]/items?" + group_by_status() },
+                    ajax: { url: `/api/v1/biblios/${biblionumber}/items?` + group_by_status() },
                     order: [],
                     embed,
                     autoWidth: false,
