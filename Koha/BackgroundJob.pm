@@ -125,6 +125,8 @@ sub enqueue {
     my $job_queue   = $params->{job_queue}   // 'default';
     my $json        = $self->json;
 
+    $job_context = {%$job_context};
+
     # session_id must not be logged
     delete $job_context->{session_id};
 
