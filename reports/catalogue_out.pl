@@ -24,6 +24,9 @@ use C4::Auth qw( get_template_and_user );
 use C4::Context;
 use C4::Output qw( output_html_with_http_headers );
 
+use Koha::Libraries;
+use Koha::ItemTypes;
+
 # use Date::Manip;  # TODO: add not borrowed since date X criteria
 
 =head1 catalogue_out
@@ -32,11 +35,38 @@ Report that shows unborrowed items.
 
 =cut
 
-my $input   = CGI->new;
-my $do_it   = $input->param('do_it');
-my $limit   = $input->param("Limit") || 10;
-my $column  = $input->param("Criteria");
-my @filters = $input->multi_param("Filter");
+my $input = CGI->new;
+my $do_it = $input->param('do_it') ? 1 : 0;    #NOTE: Constrain input
+
+my $limit       = 10;
+my $limit_input = $input->param("Limit");
+
+my $column;
+my $column_input = $input->param("Criteria");
+
+my @filters       = ();
+my @filters_input = $input->multi_param("Filter");
+
+#NOTE: Validate Filter parameter
+if (@filters_input) {
+    foreach my $filter (@filters_input) {
+        if ( Koha::Libraries->find($filter) || Koha::ItemTypes->find($filter) ) {
+            push( @filters, $filter );
+        }
+    }
+}
+
+#NOTE: Validate Limit parameter
+if ( $limit_input && $limit_input =~ /^\d+$/ ) {
+    $limit = $limit_input;
+}
+
+#NOTE: Validate Criteria parameter
+if ($column_input) {
+    if ( $column_input eq "homebranch" || $column_input eq "itype" ) {
+        $column = $column_input;
+    }
+}
 
 my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
     {
@@ -84,6 +114,7 @@ sub calculate {
     }
     push @loopfilter, { crit => 'limit', filter => $limit } if ($limit);
     if ($column) {
+        my @bind = ();
         push @loopfilter, { crit => 'by', filter => $column };
         my $tablename = ( $column =~ /branchcode/ ) ? 'branches' : 'items';
         $column =
@@ -97,12 +128,13 @@ sub calculate {
         if ( $tablename eq 'branches' ) {
             my $f = @$filters[0];
             $f =~ s/\*/%/g;
-            $strsth2 .= " AND $column LIKE '$f' ";
+            $strsth2 .= " AND $column LIKE ? ";
+            push( @bind, $f );
         }
         $strsth2 .= " GROUP BY $column ORDER BY $column ";    # needed for count
         push @loopfilter, { crit => 'SQL', sql => 1, filter => $strsth2 };
         my $sth2 = $dbh->prepare($strsth2);
-        $sth2->execute;
+        $sth2->execute(@bind);
 
         while ( my ( $celvalue, $count ) = $sth2->fetchrow ) {
             ($celvalue) or $celvalue = 'UNKNOWN';
