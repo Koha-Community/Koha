@@ -154,8 +154,6 @@ subtest 'Do not mutate userenv' => sub {
     plan tests => 1;
 
     $schema->storage->txn_begin;
-    my $patron = $builder->build_object( { class => 'Koha::Patrons', value => { flags => 0 } } );
-
     my $session = Koha::Session->get_session();
     C4::Context->set_userenv_from_session($session);
     my $pre_userenv = dclone( C4::Context->userenv );
@@ -167,7 +165,7 @@ subtest 'Do not mutate userenv' => sub {
     );
 
     my $post_userenv = C4::Context->userenv;
-    is_deeply( $pre_userenv, $post_userenv );
+    is_deeply( $pre_userenv, $post_userenv, 'enqueue does not mutate userenv' );
 
     $schema->storage->txn_rollback;
 };
