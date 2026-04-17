@@ -46,7 +46,7 @@ sub ajax_auth_cgi {    # returns CGI object
     my ($auth_status) = check_cookie_auth( $sessid, $needed_flags );
     if ( $auth_status ne "ok" ) {
 
-        #FIMXE: This should return a HTTP error and not a script
+        #FIXME: This should return a HTTP error and not a script
         output_with_http_headers $input, undef,
             "window.alert('Your CGI session cookie ($sessid) is not current.  "
             . "Please refresh the page and try again.');\n", 'js';
@@ -58,9 +58,8 @@ sub ajax_auth_cgi {    # returns CGI object
 if ( is_ajax() ) {
     my $input    = &ajax_auth_cgi($needed_flags);
     my $operator = C4::Context->userenv->{'number'};    # must occur AFTER auth
-    my $js_reply;
-    my $op  = $input->param('op') || q{};
-    my $tag = $input->param('tag');
+    my $op       = $input->param('op') || q{};
+    my $tag      = $input->param('tag');
     my $status;
     if ( $op eq 'test' ) {
         my $check = is_approved($tag);
