@@ -3,7 +3,6 @@
 $(document).ready(function () {
     $("#Aform").preventDoubleFormSubmit();
     $("#files").kohaTable({
-        pagingType: "full",
         order: [],
     });
 

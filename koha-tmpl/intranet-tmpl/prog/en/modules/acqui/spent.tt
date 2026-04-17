@@ -130,9 +130,7 @@
     [% INCLUDE 'datatables.inc' %]
     <script nonce="[% Koha.CSPNonce | $raw %]">
         $(document).ready(function () {
-            $("#spent").kohaTable({
-                pagingType: "full",
-            });
+            $("#spent").kohaTable({});
         });
     </script>
 [% END %]

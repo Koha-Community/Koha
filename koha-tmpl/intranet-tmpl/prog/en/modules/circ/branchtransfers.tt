@@ -330,11 +330,8 @@
             }
             var transfers_table = $("#transferstable").kohaTable(
                 {
-                    searching: false,
-                    paging: false,
-                    info: false,
+                    tableFeatures: ["buttons"],
                     ordering: false,
-                    dom: '<"table_controls"B>rt',
                 },
                 table_settings
             );

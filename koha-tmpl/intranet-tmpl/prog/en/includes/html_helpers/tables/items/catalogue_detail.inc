@@ -972,12 +972,15 @@
                         });
 
                         if (!add_filters && settings._iRecordsDisplay == settings._iRecordsTotal && settings._iDisplayLength >= settings._iRecordsDisplay) {
-                            let container = $(this).parent();
-                            container.find(".dt-info").remove();
-                            container.find(".table_entries").remove();
-                            container.find(".dataTables_filter").remove();
-                            container.find(".dt_button_clear_filter").remove();
-                            container.find(".bottom.pager").remove();
+                            let container = $(this).parent().parent().parent();
+                            container.find(".dt-info-row").remove();
+                            container.find(".dt-length").remove();
+                            container.find(".dt-paging").remove();
+                            container.find(".dt-buttons").remove();
+                            // Remove the bottom
+                            container.find(".dt-layout-row.dt-info-row.dt-paging-row").remove();
+                            // Move the global search box to the left
+                            container.find(".dt-search").parent().removeClass("dt-layout-end");
                         }
 
                         $(".print-label").on("click", function (e) {

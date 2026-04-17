@@ -166,15 +166,9 @@
     [% Asset.js("js/tools-menu.js") | $raw %]
     <script nonce="[% Koha.CSPNonce | $raw %]">
         $(document).ready(function () {
-            tTable = $("#club-templates-table").kohaTable({
-                pagingType: "full",
-                dom: 'C<"top pager"ilpf><"#filter_c">tr<"bottom pager"ip>',
-            });
+            tTable = $("#club-templates-table").kohaTable({});
 
-            cTable = $("#clubs-table").kohaTable({
-                pagingType: "full",
-                dom: 'C<"top pager"ilpf><"#filter_c">tr<"bottom pager"ip>',
-            });
+            cTable = $("#clubs-table").kohaTable({});
 
             $("body").on("click", ".delete_club", function (e) {
                 e.preventDefault();

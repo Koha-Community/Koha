@@ -95,7 +95,7 @@ $(document).ready(function () {
     $("#downloadcartc").empty();
 
     $("#itemst").kohaTable({
-        dom: "t",
+        tableFeatures: [],
         columnDefs: [{ type: "callnumbers", targets: ["callnumbers"] }],
         order: [[1, "asc"]],
         paging: false,

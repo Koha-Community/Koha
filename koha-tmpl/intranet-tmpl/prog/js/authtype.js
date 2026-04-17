@@ -9,7 +9,6 @@ $(document).ready(function () {
             { targets: [0, 1], type: "natural" },
         ],
         ordering: true,
-        pagingType: "full",
     });
 
     $("body").css("cursor", "auto");

@@ -438,31 +438,26 @@
             if (!grouping) {
                 let dt_params = {
                     autoWidth: false,
-                    pagingType: "full",
                 };
                 $("#ungrouped").kohaTable(dt_params);
                 $("#grouped").kohaTable(dt_params);
                 $("#basket_group_opened").kohaTable(dt_params);
                 $("#basket_group_closed").kohaTable(dt_params);
             } else {
-                grouped_dt = $("#grouped")
-                    .kohaTable({
-                        dom: "t",
-                        autoWidth: false,
-                        language: {
-                            emptyTable: _("There are no baskets in this group"),
-                        },
-                    })
-                    .DataTable();
-                ungrouped_dt = $("#ungrouped")
-                    .kohaTable({
-                        dom: "t",
-                        autoWidth: false,
-                        language: {
-                            emptyTable: _("There are no ungrouped baskets"),
-                        },
-                    })
-                    .DataTable();
+                grouped_dt = $("#grouped").kohaTable({
+                    tableFeatures: [],
+                    autoWidth: false,
+                    language: {
+                        emptyTable: _("There are no baskets in this group"),
+                    },
+                });
+                ungrouped_dt = $("#ungrouped").kohaTable({
+                    tableFeatures: [],
+                    autoWidth: false,
+                    language: {
+                        emptyTable: _("There are no ungrouped baskets"),
+                    },
+                });
             }
 
             $("#basketgroupcolumns").on("click", ".addtogroup", function () {

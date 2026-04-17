@@ -96,7 +96,6 @@ var success_test_call = function (response) {
 $(document).ready(function () {
     $("#tagst").kohaTable({
         order: [[2, "desc"]],
-        pagingType: "full",
     });
     $(".ajax_buttons").css({ visibility: "visible" });
     $("p.check").html(

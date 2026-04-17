@@ -17,9 +17,6 @@
     .version-ellipsis {
         text-decoration: underline;
     }
-    #dt-info {
-        display: flex;
-    }
     .filter_controls {
         margin-top: 0.25em;
     }
@@ -99,12 +96,6 @@
                 autoWidth: false,
                 paging: false,
                 columns: [null, { width: "10%" }, { width: "10%" }, { width: "10%" }, null],
-                dom: '<"#dt-info"i><"top pager"<"table_entries"lp><"table_controls"fB>>tr<"bottom pager"i>',
-                initComplete: function (settings, json) {
-                    $("#dt-info").append(
-                        '<div class="filter_controls"><a id="show_all" class="btn btn-link filter_table" href="#">Show all</a> | <a id="show_required_modules" class="btn btn-link filter_table" href="#"><i class="fa fa-asterisk"></i> Show required</a> | <a id="show_missing_modules" class="btn btn-link filter_table" href="#"><i class="fa fa-question"></i> Show missing</a></div>'
-                    );
-                },
             });
 
             $("body").on("click", ".filter_table", function (e) {
@@ -323,6 +314,12 @@
 [% BLOCK perl_panel %]
     [% WRAPPER tab_panel tabname= "perl" bt_active = 1 %]
         <h2>Perl modules</h2>
+
+        <div class="filter_controls">
+            <a id="show_all" class="btn btn-link filter_table" href="#">Show all</a>
+            | <a id="show_required_modules" class="btn btn-link filter_table" href="#"><i class="fa fa-asterisk"></i> Show required</a> |
+            <a id="show_missing_modules" class="btn btn-link filter_table" href="#"><i class="fa fa-question"></i> Show missing</a>
+        </div>
         <table id="perl_table" style="cursor:pointer">
             <caption class="visually-hidden">Perl modules</caption>
             <thead>

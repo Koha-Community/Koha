@@ -1,7 +1,6 @@
 $(document).ready(function () {
     $("#table_item_type").kohaTable(
         {
-            pagingType: "full",
             bKohaColumnsUseNames: true,
         },
         table_settings

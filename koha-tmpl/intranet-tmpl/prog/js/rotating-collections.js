@@ -26,7 +26,6 @@ $(document).ready(function () {
             columnDefs: [
                 { targets: [-1], orderable: false, searchable: false },
             ],
-            pagingType: "full",
         });
     }
 });

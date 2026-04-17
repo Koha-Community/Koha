@@ -39,7 +39,6 @@ $(document).ready(function () {
             },
         ],
         order: [[1, "asc"]],
-        pagingType: "full",
     });
 
     $("#restriction_form").validate({

@@ -69,9 +69,8 @@
     <script nonce="[% Koha.CSPNonce | $raw %]">
         $(document).ready(function () {
             $("#catst").kohaTable({
-                dom: "t",
+                tableFeatures: [],
                 order: [[2, "asc"]],
-                paging: false,
             });
             $("#updatechildf").validate({
                 rules: {

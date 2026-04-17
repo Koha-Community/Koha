@@ -2196,8 +2196,6 @@
             $(document).ready(function () {
                 var acquisitiondetails_table = $("#orders").kohaTable(
                     {
-                        dom: 'C<"top pager"ilpfB><"#filter_c">tr<"bottom pager"ip>',
-                        paging: false,
                         autoWidth: false,
                         order: [[4, "desc"]],
                     },
@@ -2210,9 +2208,7 @@
     [% IF suggestions.count %]
         <script nonce="[% Koha.CSPNonce | $raw %]">
             $(document).ready(function () {
-                $("#suggestions").kohaTable({
-                    pagingType: "full",
-                });
+                $("#suggestions").kohaTable({});
             });
         </script>
     [% END %]
@@ -2252,8 +2248,8 @@
         <script nonce="[% Koha.CSPNonce | $raw %]">
             // Load item groups table
             var itemGroupsTable = $("#items-group-table").kohaTable({
+                tableFeatures: ["info"],
                 autoWidth: false,
-                dom: '<"top pager"ilp>t<"bottom pager"ip>r',
                 columns: [
                     {
                         data: "display_order",

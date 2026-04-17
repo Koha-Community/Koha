@@ -1,7 +1,6 @@
 $(document).ready(function () {
     let table = $("#table_readingrec").kohaTable(
         {
-            pagingType: "full",
             order: [[column_sort, "desc"]],
             bKohaColumnsUseNames: true,
         },

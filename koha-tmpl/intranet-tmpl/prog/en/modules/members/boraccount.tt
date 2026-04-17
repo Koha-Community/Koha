@@ -80,7 +80,9 @@
             <div role="tabpanel" class="tab-pane active">
                 [% INCLUDE 'renew_results.inc' renew_results=renew_results %]
                 <!-- The table with the account items -->
-                <table id="table_account_fines">
+                <p
+                    ><a href="#" id="filter_transacs"><i class="fa fa-filter"></i> Filter paid transactions</a> </p
+                ><table id="table_account_fines">
                     <thead>
                         <tr>
                             <th>Created</th>
@@ -606,13 +608,10 @@
             var txtInactivefilter = _("Show all transactions");
             var table_account_fines = $("#table_account_fines").kohaTable(
                 {
-                    pagingType: "full",
                     order: [[0, "desc"]],
-                    dom: 'C<"top pager"ilpfB><"#filter_c">tr<"bottom pager"ip>',
                 },
                 table_settings
             );
-            $("#filter_c").html('<p><a href="#" id="filter_transacs"><i class="fa fa-filter"></i> ' + txtActivefilter + "</a>");
             $("#filter_transacs").click(function (e) {
                 e.preventDefault();
                 if ($(this).hasClass("filtered")) {

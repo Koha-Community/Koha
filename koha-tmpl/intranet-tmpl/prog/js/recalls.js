@@ -135,7 +135,6 @@ $(document).ready(function () {
 
     $("#recalls-table").kohaTable({
         order: [[1, "asc"]],
-        pagingType: "full_numbers",
     });
 
     $("#cancel_selected").click(function () {

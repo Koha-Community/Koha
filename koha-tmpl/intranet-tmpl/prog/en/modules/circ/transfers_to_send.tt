@@ -106,8 +106,7 @@
         $(document).ready(function () {
             library_ids.forEach(library_id => {
                 $(`#transferst${library_id}`).kohaTable({
-                    dom: "t",
-                    paging: false,
+                    tableFeatures: [],
                 });
             });
         });

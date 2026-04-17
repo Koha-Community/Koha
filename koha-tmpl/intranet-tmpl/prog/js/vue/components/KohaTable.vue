@@ -1,9 +1,5 @@
 <template>
-    <DataTable
-        :columns="tableColumns"
-        :options="{ ...dataTablesDefaults, ...allOptions }"
-        ref="table"
-    >
+    <DataTable :columns="tableColumns" :options="allOptions" ref="table">
         <slot></slot>
     </DataTable>
 </template>
@@ -59,6 +55,9 @@ export default {
             }
         }
 
+        let tableFeatures = props.options?.tableFeatures || ["full"];
+        let dataTablesDefaults = get_DT_defaults(tableFeatures);
+
         const table = useTemplateRef("table");
         const tableColumns = ref(props.columns);
 
@@ -80,6 +79,7 @@ export default {
         });
 
         const allOptions = ref({
+            ...dataTablesDefaults,
             paging: true,
             searching: true,
             ...(props.select && { select: { style: "multi" } }),
@@ -95,7 +95,6 @@ export default {
                     }),
                 },
                 serverSide: true,
-                pagingType: "full_numbers",
                 processing: true,
             }),
             ...(props.data && { data: props.data }),
@@ -321,7 +320,7 @@ export default {
             dt.destroy();
         });
         return {
-            dataTablesDefaults,
+            get_DT_defaults,
             tableColumns,
             allOptions,
             redraw,

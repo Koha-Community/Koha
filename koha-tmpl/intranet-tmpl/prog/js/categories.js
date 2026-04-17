@@ -46,7 +46,6 @@ $(document).ready(function () {
                     type: "natural",
                 },
             ],
-            pagingType: "full",
             bKohaColumnsUseNames: true,
         },
         table_settings

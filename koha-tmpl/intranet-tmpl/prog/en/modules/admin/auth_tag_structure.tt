@@ -323,9 +323,7 @@
     [% Asset.js("js/admin-menu.js") | $raw %]
     <script nonce="[% Koha.CSPNonce | $raw %]">
         $(document).ready(function () {
-            $("#table_authtagstructure").kohaTable({
-                pagingType: "full",
-            });
+            $("#table_authtagstructure").kohaTable({});
         });
     </script>
 [% END %]

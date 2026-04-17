@@ -268,9 +268,8 @@
     <script nonce="[% Koha.CSPNonce | $raw %]">
         $(document).ready(function () {
             $("#resultst").kohaTable({
-                dom: "t",
+                tableFeatures: [],
                 order: [[1, "asc"]],
-                paging: false,
             });
             InitLastAction();
         });

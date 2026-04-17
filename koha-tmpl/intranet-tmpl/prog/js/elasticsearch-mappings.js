@@ -149,15 +149,13 @@ $(document).ready(function () {
         }
     });
 
-    $("#facet_biblios_table").DataTable(
-        $.extend(true, {}, dataTablesDefaults, {
-            columnDefs: [{ searchable: false, visible: false, targets: 0 }],
-            dom: "t",
-            paging: false,
-            autoWidth: false,
-            rowReorder: true,
-        })
-    );
+    $("#facet_biblios_table").kohaTable({
+        tableFeatures: [],
+        columnDefs: [{ searchable: false, visible: false, targets: 0 }],
+        paging: false,
+        autoWidth: false,
+        rowReorder: true,
+    });
 
     $("#es_mappings").on("submit", function (e) {
         let table_ids = [

@@ -249,9 +249,7 @@
     [% ELSE %]
         <script nonce="[% Koha.CSPNonce | $raw %]">
             $(document).ready(function () {
-                $("#serverst").kohaTable({
-                    pagingType: "full",
-                });
+                $("#serverst").kohaTable({});
                 $(".delete").on("click", function (e) {
                     var servername = $(this).data("servername");
                     let formid = $(this).data("formid");

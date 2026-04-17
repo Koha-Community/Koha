@@ -621,7 +621,7 @@
         <script nonce="[% Koha.CSPNonce | $raw %]">
             $(document).ready(function () {
                 $("#budgeth").kohaTable({
-                    dom: "t",
+                    tableFeatures: [],
                 });
                 $("#move_form").submit(function () {
                     var budget_from = budget_period_description;
@@ -669,7 +669,6 @@
                     ordering: true,
                     orderFixed: [[1, "asc"]],
                     autoWidth: false,
-                    pagingType: "full_numbers",
                 });
             });
         </script>
@@ -677,7 +676,6 @@
     <script nonce="[% Koha.CSPNonce | $raw %]">
         $(document).ready(function () {
             let dt_params = {
-                pagingType: "full",
                 autoWidth: false,
             };
 

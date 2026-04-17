@@ -73,7 +73,6 @@ $(document).ready(function () {
 
     $("#stock_rotation_manage_items").kohaTable(
         {
-            pagingType: "full",
             autoWidth: false,
         },
         stock_rotation_items_table_settings
@@ -81,7 +80,6 @@ $(document).ready(function () {
 
     $("#stock_rotation").kohaTable(
         {
-            pagingType: "full",
             autoWidth: false,
         },
         stock_rotation_table_settings

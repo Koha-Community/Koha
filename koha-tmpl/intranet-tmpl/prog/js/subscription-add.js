@@ -557,7 +557,6 @@ function mana_search() {
             __("Results from Mana Knowledge Base")
         );
         $("#mana_results_datatable").kohaTable({
-            pagingType: "full",
             order: [
                 [4, "desc"],
                 [5, "desc"],

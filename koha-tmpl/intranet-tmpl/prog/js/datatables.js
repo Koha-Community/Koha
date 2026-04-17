@@ -4,100 +4,165 @@
 //  $("#table_id").dataTable($.extend(true, {}, dataTableDefaults, {
 //      // other settings
 //  } ) );
-var dataTablesDefaults = {
-    language: {
-        paginate: {
-            first: __("First"),
-            last: __("Last"),
-            next: __("Next"),
-            previous: __("Previous"),
-        },
-        emptyTable: __("No data available in table"),
-        info: __("Showing _START_ to _END_ of _TOTAL_ entries"),
-        infoEmpty: __("No entries to show"),
-        infoFiltered: __("(filtered from _MAX_ total entries)"),
-        lengthMenu: __("Show _MENU_ entries"),
-        loadingRecords: __("Loading..."),
-        processing: __("Processing..."),
-        search: __("Search:"),
-        zeroRecords: __("No matching records found"),
-        buttons: {
-            copyTitle: __("Copy to clipboard"),
-            copyKeys: __(
-                "Press <i>ctrl</i> or <i>⌘</i> + <i>C</i> to copy the table data<br>to your system clipboard.<br><br>To cancel, click this message or press escape."
-            ),
-            copySuccess: {
-                _: __("Copied %d rows to clipboard"),
-                1: __("Copied one row to clipboard"),
-            },
-            print: __("Print"),
-            copy: __("Copy"),
-            csv: __("CSV"),
-            excel: __("Excel"),
-        },
-    },
 
-    layout: {
-        top2Start: {
-            features: ["info"],
-            rowClass: "dt-layout-row dt-info-row",
-        },
-        top2End: null,
-        top1Start: {
-            className: "dt-layout-cell dt-layout-start dt-paging",
-            features: ["pageLength", "paging"],
-            rowClass: "dt-layout-row dt-paging-row",
-        },
-        top1End: {
-            className: "dt-layout-cell dt-layout-end dt-search-buttons",
-            features: ["search", "buttons"],
-        },
-        top: null,
+function get_DT_defaults(tableFeatures = ["full"]) {
+    if (tableFeatures.includes("full")) {
+        tableFeatures = ["info", "search", "buttons", "paging"];
+    }
+
+    const pagingConfig = {
+        boundaryNumbers: tableFeatures.includes("paging"),
+        firstLast: tableFeatures.includes("paging"),
+        numbers: tableFeatures.includes("paging"),
+        previousNext: tableFeatures.includes("paging"),
+        buttons: tableFeatures.includes("paging") ? 7 : false,
+    };
+
+    const hasInfo = tableFeatures.includes("info");
+    const hasSearch = tableFeatures.includes("search");
+    const hasButtons = tableFeatures.includes("buttons");
+    const hasPaging = tableFeatures.includes("paging");
+    const hasNoTop = tableFeatures.includes("no-top");
+
+    let layout = {
         topStart: null,
         topEnd: null,
-
-        bottomStart: {
-            className: "dt-layout-cell dt-layout-start dt-paging",
-            features: ["info", "paging"],
-            rowClass: "dt-layout-row dt-info-row dt-paging-row",
-        },
+        top1Start: null,
+        top1End: null,
+        top2Start: null,
+        top2End: null,
+        bottomStart: null,
         bottomEnd: null,
-    },
-    buttons: [],
-    lengthMenu: [
-        [10, 20, 50, 100, -1],
-        [10, 20, 50, 100, __("All")],
-    ],
-    pageLength: 20,
-    fixedHeader: true,
-    initComplete: function (settings) {
-        var tableId = settings.nTable.id;
-        // Add clear icon 'x' xinside search input
-        $("#" + tableId + "_wrapper")
-            .find(".dt-search .dt-input")
-            .after(
-                '<a href="#" class="dt-search-clear"><i class="fa fa-lg fa-times" title="' +
-                    __("Clear filter") +
-                    '"></i></a>'
-            );
+    };
 
-        $("#" + tableId + "_wrapper")
-            .find(".dt-search .dt-search-clear")
-            .on("click", function (e) {
-                e.preventDefault();
-                let dt = $(`#${tableId}`).DataTable();
-                var input = $(this).siblings("input[type='search']");
-                input.val("");
-                dt.search("").draw("page");
-                $(this).removeClass("visible");
-                input.focus();
-            });
-        state = settings.oLoadedState;
-        state &&
-            state.search &&
-            toggledClearFilter(state.search.search, tableId);
-    },
-};
+    if (hasInfo && !hasNoTop) {
+        layout.top2Start = {
+            features: ["info"],
+            rowClass: "dt-layout-row dt-info-row",
+        };
+    }
+
+    if (hasPaging && !hasNoTop) {
+        layout.top1Start = {
+            className: "dt-layout-cell dt-layout-start dt-paging",
+            features: ["pageLength", { paging: pagingConfig }],
+            rowClass: "dt-layout-row dt-paging-row",
+        };
+    }
+
+    if ((hasSearch || hasButtons) && !hasNoTop) {
+        layout.top1End = {
+            className:
+                "dt-layout-cell dt-layout-" +
+                (hasButtons ? "end" : "start") +
+                " dt-search-buttons",
+            features: [hasSearch && "search", hasButtons && "buttons"].filter(
+                Boolean
+            ),
+        };
+    }
+
+    if (hasInfo || hasPaging) {
+        layout.bottomStart = {
+            className: "dt-layout-cell dt-layout-start dt-paging",
+            features: [
+                hasInfo && "info",
+                hasPaging && { paging: pagingConfig },
+            ].filter(Boolean),
+            rowClass:
+                "dt-layout-row dt-info-row" +
+                (hasPaging ? " dt-paging-row" : ""),
+        };
+    }
+
+    if (hasNoTop) {
+        layout.bottomEnd = {
+            className:
+                "dt-layout-cell dt-layout-" +
+                (hasButtons ? "end" : "start") +
+                " dt-search-buttons",
+            features: [hasSearch && "search", hasButtons && "buttons"].filter(
+                Boolean
+            ),
+        };
+    }
+
+    return {
+        language: {
+            paginate: {
+                first: __("First"),
+                last: __("Last"),
+                next: __("Next"),
+                previous: __("Previous"),
+            },
+            emptyTable: __("No data available in table"),
+            info: __("Showing _START_ to _END_ of _TOTAL_ entries"),
+            infoEmpty: __("No entries to show"),
+            infoFiltered: __("(filtered from _MAX_ total entries)"),
+            lengthMenu: __("Show _MENU_ entries"),
+            loadingRecords: __("Loading..."),
+            processing: __("Processing..."),
+            search: __("Search:"),
+            zeroRecords: __("No matching records found"),
+            buttons: {
+                copyTitle: __("Copy to clipboard"),
+                copyKeys: __(
+                    "Press <i>ctrl</i> or <i>⌘</i> + <i>C</i> to copy the table data<br>to your system clipboard.<br><br>To cancel, click this message or press escape."
+                ),
+                copySuccess: {
+                    _: __("Copied %d rows to clipboard"),
+                    1: __("Copied one row to clipboard"),
+                },
+                print: __("Print"),
+                copy: __("Copy"),
+                csv: __("CSV"),
+                excel: __("Excel"),
+            },
+        },
+
+        layout,
+
+        buttons: [],
+        lengthMenu: [
+            [10, 20, 50, 100, -1],
+            [10, 20, 50, 100, __("All")],
+        ],
+        pageLength: 20,
+        fixedHeader: true,
+        initComplete: function (settings) {
+            var tableId = settings.nTable.id;
+
+            // Add clear icon 'x' xinside search input
+            $("#" + tableId + "_wrapper")
+                .find(".dt-search .dt-input")
+                .after(
+                    '<a href="#" class="dt-search-clear"><i class="fa fa-lg fa-times" title="' +
+                        __("Clear filter") +
+                        '"></i></a>'
+                );
+
+            $("#" + tableId + "_wrapper")
+                .find(".dt-search .dt-search-clear")
+                .on("click", function (e) {
+                    e.preventDefault();
+                    let dt = $(`#${tableId}`).DataTable();
+                    var input = $(this).siblings("input[type='search']");
+                    input.val("");
+                    dt.search("").draw("page");
+                    $(this).removeClass("visible");
+                    input.focus();
+                });
+
+            state = settings.oLoadedState;
+            state &&
+                state.search &&
+                toggledClearFilter(state.search.search, tableId);
+        },
+    };
+}
+
+var dataTablesDefaults = get_DT_defaults();
+
 DataTable.defaults.column.orderSequence = ["asc", "desc"];
 var kohaTableUserChoices = {};
 
@@ -1520,16 +1585,9 @@ function update_search_description(
         // Early return if the node does not exist
         if (!this.length) return;
 
-        if (options) {
-            // Don't redefine the default initComplete
-            if (options.initComplete) {
-                let our_initComplete = options.initComplete;
-                options.initComplete = function (settings, json) {
-                    our_initComplete(settings, json);
-                    dataTablesDefaults.initComplete(settings, json);
-                };
-            }
+        let tableFeatures = options?.tableFeatures || ["full"];
 
+        if (options) {
             if (options.ajax && !options.bKohaAjaxSVC) {
                 options.ajax = Object.assign(
                     {},
@@ -1538,8 +1596,25 @@ function update_search_description(
                 );
                 options.serverSide = true;
                 options.processing = true;
-                options.pagingType = "full_numbers";
             }
+        }
+
+        let dataTablesDefaults = get_DT_defaults(tableFeatures);
+
+        // Don't redefine the default initComplete
+        if (options?.initComplete) {
+            let our_initComplete = options.initComplete;
+            options.initComplete = function (settings, json) {
+                our_initComplete(settings, json);
+                dataTablesDefaults.initComplete(settings, json);
+            };
+        }
+
+        if (options?.pagingType) {
+            console.log(
+                "pagingType is not longer accepted as a kohaTable options, ignoring it."
+            );
+            delete options.pagingType;
         }
 
         var settings = $.extend(

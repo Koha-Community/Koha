@@ -93,10 +93,7 @@
     [% Asset.js("js/tools-menu.js") | $raw %]
     <script nonce="[% Koha.CSPNonce | $raw %]">
         $(document).ready(function () {
-            eTable = $("#enrollments-table").kohaTable({
-                pagingType: "full",
-                dom: 'C<"top pager"ilpf><"#filter_c">tr<"bottom pager"ip>',
-            });
+            eTable = $("#enrollments-table").kohaTable({});
         });
     </script>
 [% END %]

@@ -219,7 +219,7 @@ function addConsentDeleteHandler() {
 }
 
 $("table.preferences").kohaTable({
-    dom: "t",
+    tableFeatures: [],
     columnDefs: [{ targets: [-1], orderable: false, searchable: false }],
     paging: false,
     fixedHeader: false,

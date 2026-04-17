@@ -105,7 +105,7 @@ export default {
         const tableOptions = computed(() => ({
             columns: getTableColumns(),
             options: {
-                dom: "t",
+                tableFeatures: [],
                 pageLength: 5,
                 order: [2, "desc"],
                 processing: false,

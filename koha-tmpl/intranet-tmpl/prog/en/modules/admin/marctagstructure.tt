@@ -332,9 +332,7 @@
     [% Asset.js("js/admin-menu.js") | $raw %]
     <script nonce="[% Koha.CSPNonce | $raw %]">
         $(document).ready(function () {
-            $("#table_marctagstructure").kohaTable({
-                pagingType: "full",
-            });
+            $("#table_marctagstructure").kohaTable({});
             $("#select_display").on("change", function () {
                 var checked = $(this).prop("checked") ? 1 : 0;
                 Cookies.set("marctagstructure_selectdisplay", checked, { sameSite: "Lax" });

@@ -59,12 +59,12 @@ function LoadIssuesTable() {
 
     issuesTable = $("#issues-table").kohaTable(
         {
+            tableFeatures: ["buttons"],
             language: {
                 emptyTable: msg_loading,
                 processing: msg_loading,
             },
             autoWidth: false,
-            dom: '<"table_controls"B>rt',
             columns: [
                 {
                     data: function (oObj) {
@@ -1168,8 +1168,8 @@ $(document).ready(function () {
         if (!relativesIssuesTable) {
             relativesIssuesTable = $("#relatives-issues-table").kohaTable(
                 {
+                    tableFeatures: ["buttons"],
                     autoWidth: false,
-                    dom: '<"table_controls"B>rt',
                     order: [],
                     columns: [
                         {
@@ -1482,8 +1482,8 @@ $(document).ready(function () {
     function loadReturnClaimsTable() {
         if (!returnClaimsTable) {
             returnClaimsTable = $("#return-claims-table").kohaTable({
+                tableFeatures: [],
                 autoWidth: false,
-                dom: "rt",
                 order: [],
                 columnDefs: [{ type: "anti-the", targets: ["anti-the"] }],
                 columns: [

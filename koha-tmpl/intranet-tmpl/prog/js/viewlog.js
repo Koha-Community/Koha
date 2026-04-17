@@ -681,7 +681,6 @@ $(document).ready(function () {
                 },
                 embed: ["librarian", "patron", "item"],
                 order: [[0, "desc"]],
-                pagingType: "full",
                 autoWidth: false,
                 columns: [
                     {

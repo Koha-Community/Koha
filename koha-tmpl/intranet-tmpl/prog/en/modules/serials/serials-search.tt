@@ -322,7 +322,6 @@
         $(document).ready(function () {
             var osrlt = $("#opened_panel table").kohaTable(
                 {
-                    pagingType: "full",
                     order: [[2, "asc"]],
                 },
                 null,
@@ -333,15 +332,12 @@
                 {
                     // FIXME sort function of additional_fields!
                     order: [[2, "asc"]],
-                    pagingType: "full",
                 },
                 null,
                 true
             );
 
-            var manarlt = $("#mana_results_datatable").kohaTable({
-                pagingType: "full",
-            });
+            var manarlt = $("#mana_results_datatable").kohaTable({});
 
             $("#reopensub").click(function () {
                 return confirm(_("Are you sure you want to reopen this subscription?"));

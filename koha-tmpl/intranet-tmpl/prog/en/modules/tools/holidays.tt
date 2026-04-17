@@ -620,13 +620,11 @@
                 first_td.html(weekdays[first_td.html()]);
             });
             $("#holidayweeklyrepeatable").kohaTable({
-                dom: "t",
-                paging: false,
+                tableFeatures: [],
             });
 
             let dt_params = {
-                dom: "t",
-                paging: false,
+                tableFeatures: [],
                 createdRow: function (row, data, dataIndex) {
                     var holiday = $(row).data("date");
                     if (holiday < datestring) {

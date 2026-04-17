@@ -154,8 +154,8 @@ $(document).ready(function () {
 
             holdsTable = $("#holds-table").kohaTable(
                 {
+                    tableFeatures: ["buttons"],
                     autoWidth: false,
-                    dom: '<"table_controls"B>rt',
                     columns: [
                         {
                             orderable: false,

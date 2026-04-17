@@ -378,12 +378,7 @@
                 $("#dataPreview .modal-body").html('<div id="loading"><img src="' + interface + "/" + theme + '/img/spinner-small.gif" alt="" /> ' + _("Loading") + "</div>");
             });
 
-            var reservoirt = $("#reservoir-table").kohaTable(
-                {
-                    pagingType: "simple",
-                },
-                table_settings
-            );
+            var reservoirt = $("#reservoir-table").kohaTable({}, table_settings);
         });
 
         /* this function open a popup to search on z3950 server.  */

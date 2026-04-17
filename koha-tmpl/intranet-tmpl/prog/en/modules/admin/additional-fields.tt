@@ -345,15 +345,8 @@
             });
 
             $("#fieldst").kohaTable({
+                tableFeatures: ["info", "paging", "search", "no-top"],
                 autoWidth: false,
-                dom: 't<"bottom pager"ilpf>',
-                pagingType: "full",
-                lengthMenu: [
-                    [10, 20, 50, 100, -1],
-                    [10, 20, 50, 100, "All"],
-                ],
-                pageLength: 20,
-                order: [[0, "asc"]],
             });
 
             $("#add_field").on("submit", function () {

@@ -1,7 +1,6 @@
 $(document).ready(function () {
     $("#categoriest").kohaTable({
         order: [[0, "asc"]],
-        pagingType: "full",
     });
 
     if ($("#branches option:selected").length < 1) {

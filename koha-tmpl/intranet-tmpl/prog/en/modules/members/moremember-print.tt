@@ -181,8 +181,7 @@
         function initTables() {
             $("#print-summary-checkouts").kohaTable(
                 {
-                    dom: '<"dt-info"><"top pager"<"table_controls"B>>t',
-                    paging: false,
+                    tableFeatures: [],
                     autoWidth: false,
                 },
                 checkouts_columns
@@ -190,8 +189,7 @@
 
             $("#print-summary-holds").kohaTable(
                 {
-                    dom: '<"dt-info"><"top pager"<"table_controls"B>>t',
-                    paging: false,
+                    tableFeatures: [],
                     autoWidth: false,
                 },
                 holds_columns
@@ -199,8 +197,7 @@
 
             $("#print-summary-fines").kohaTable(
                 {
-                    dom: '<"dt-info"><"top pager"<"table_controls"B>>t',
-                    paging: false,
+                    tableFeatures: [],
                     autoWidth: false,
                 },
                 fines_columns

@@ -159,12 +159,7 @@
     </script>
     <script nonce="[% Koha.CSPNonce | $raw %]">
         $(document).ready(function () {
-            $("#histsearcht").kohaTable(
-                {
-                    pagingType: "full",
-                },
-                table_settings
-            );
+            $("#histsearcht").kohaTable({}, table_settings);
 
             patron_autocomplete($("#find_patron"), {
                 "on-select-add-to": { container: $("#basket_creators"), input_name: "created_by" },

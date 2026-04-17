@@ -458,12 +458,7 @@
     </script>
     <script nonce="[% Koha.CSPNonce | $raw %]">
         $(document).ready(function () {
-            $("#edi_accounts_table").kohaTable(
-                {
-                    pagingType: "full",
-                },
-                table_settings
-            );
+            $("#edi_accounts_table").kohaTable({}, table_settings);
         });
     </script>
 [% END %]

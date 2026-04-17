@@ -1481,15 +1481,12 @@
             $("#orders").kohaTable(
                 {
                     bKohaColumnsUseNames: true,
-                    pagingType: "full",
                     autoWidth: false,
                 },
                 orders_table_settings
             );
 
-            $("#cancelledorderst").kohaTable({
-                pagingType: "full",
-            });
+            $("#cancelledorderst").kohaTable({});
             $("#reopenform").on("submit", function (e) {
                 var is_confirmed = skip_confirm_reopen || confirm(_("Are you sure you want to reopen this basket?"));
                 if (is_confirmed) {

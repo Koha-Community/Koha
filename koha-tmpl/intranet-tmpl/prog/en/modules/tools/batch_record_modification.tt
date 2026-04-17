@@ -357,17 +357,15 @@
             $("#selectall").click();
 
             $("#biblios").kohaTable({
+                tableFeatures: [],
                 columnDefs: [{ targets: [1], type: "num-html" }],
-                dom: "t",
                 order: [],
-                paging: false,
             });
 
             $("#authorities").kohaTable({
+                tableFeatures: [],
                 columnDefs: [{ targets: [1], type: "num-html" }],
-                dom: "t",
                 order: [],
-                paging: false,
             });
 
             $("#mainformsubmit").click(function () {

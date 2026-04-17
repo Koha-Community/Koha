@@ -235,10 +235,7 @@
     <script nonce="[% Koha.CSPNonce | $raw %]">
         $(document).ready(function () {
             $("table.baskets").kohaTable({
-                dom: "t",
-                paging: false,
-                searching: false,
-                info: false,
+                tableFeatures: [],
                 order: [[1, "asc"]],
             });
             $("#supplierlist").change(function () {

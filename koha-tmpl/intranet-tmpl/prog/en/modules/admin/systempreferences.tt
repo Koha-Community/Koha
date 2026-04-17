@@ -495,10 +495,7 @@
         [% INCLUDE 'datatables.inc' %]
         <script nonce="[% Koha.CSPNonce | $raw %]">
             $(document).ready(function () {
-                $("#sysprefst").kohaTable({
-                    dom: '<"top pager"ilf>t',
-                    paging: false,
-                });
+                $("#sysprefst").kohaTable();
             });
         </script>
     [% END %]

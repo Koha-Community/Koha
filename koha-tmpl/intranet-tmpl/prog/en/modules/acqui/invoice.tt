@@ -604,17 +604,11 @@
 
         $(document).ready(function () {
             $("#orderst").kohaTable({
-                info: false,
-                paging: false,
-                searching: false,
-                dom: "t",
+                tableFeatures: [],
             });
             if (Koha.prefs.AcqEnableFiles && has_files) {
                 $("#invoice_files_table").kohaTable({
-                    info: false,
-                    paging: false,
-                    searching: false,
-                    dom: "t",
+                    tableFeatures: [],
                 });
             }
             $("#show_all_details").click(function () {

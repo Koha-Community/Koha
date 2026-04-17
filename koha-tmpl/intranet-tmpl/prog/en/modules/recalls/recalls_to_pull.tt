@@ -150,9 +150,7 @@
     [% INCLUDE 'datatables.inc' %]
     <script nonce="[% Koha.CSPNonce | $raw %]">
         $(document).ready(function () {
-            $("#recalls-table").kohaTable({
-                pagingType: "full_numbers",
-            });
+            $("#recalls-table").kohaTable({});
 
             $(".cancelreturn").click(function () {
                 return confirmDelete(_("Are you sure you want to remove this recall and return the item to its home library?"));

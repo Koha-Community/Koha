@@ -191,9 +191,7 @@
     [% INCLUDE 'datatables.inc' %]
     <script nonce="[% Koha.CSPNonce | $raw %]">
         $(document).ready(function () {
-            var uncertainpricet = $("#uncertainpricet").kohaTable({
-                pagingType: "full",
-            });
+            var uncertainpricet = $("#uncertainpricet").kohaTable({});
             $(".check_uncertain").on("change", function () {
                 var form = document.getElementById("uncertainprices");
                 var ordernumber = $(this).data("ordernumber");

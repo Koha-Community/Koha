@@ -349,17 +349,15 @@
             }
 
             $("#biblios").kohaTable({
+                tableFeatures: [],
                 columnDefs: [{ targets: [3, 4], type: "num-html" }],
-                dom: "t",
                 order: [],
-                paging: false,
             });
 
             $("#authorities").kohaTable({
+                tableFeatures: [],
                 columnDefs: [{ targets: [3], type: "num-html" }],
-                dom: "t",
                 order: [],
-                paging: false,
             });
 
             $("#selectrecords").on("submit", function () {

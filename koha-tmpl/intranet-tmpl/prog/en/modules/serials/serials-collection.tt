@@ -365,12 +365,9 @@
                 $("#subscription_years a:first").tab("show");
             }
             $(".subscription-year-table").kohaTable({
+                tableFeatures: [],
                 order: [[1, "desc"]],
-                dom: "t",
                 autoWidth: false,
-                paging: false,
-                info: false,
-                searching: false,
             });
 
             $(".CheckAll").on("click", function (e) {

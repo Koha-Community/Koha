@@ -908,7 +908,6 @@
                         order: [[order_column_index, "asc"]],
                         autoWidth: false,
                         lengthMenu: [aLengthMenu, aLengthMenuLabel],
-                        pagingType: "full_numbers",
                         pageLength: Koha.prefs.PatronsPerPage,
                         ...(sticky_header
                             ? {
