@@ -247,37 +247,11 @@ sub list_closed_dates {
             );
         }
 
-        my $calendar  = $library->calendar;
-        my $holidays  = $calendar->_holidays;
-        my $weekly    = $calendar->{weekly_closed_days};
-        my $day_month = $calendar->{day_month_closed_days};
-
-        my @closed;
-        my $current = $from_dt->clone;
-        while ( $current <= $to_dt ) {
-            my $dominated;
-            my $ymd = $current->ymd('');
-
-            # Check special holidays hash first (includes exceptions)
-            if ( defined $holidays->{$ymd} ) {
-                $dominated = $holidays->{$ymd};    # 1 = closed, 0 = exception (open)
-            }
-
-            unless ( defined $dominated && $dominated == 0 ) {
-                if (   $dominated
-                    || $weekly->[ $current->day_of_week % 7 ]
-                    || $day_month->{ $current->month }->{ $current->day } )
-                {
-                    push @closed, $current->ymd;
-                }
-            }
-
-            $current->add( days => 1 );
-        }
+        my $closed = $library->calendar->closed_dates_in_range( $from_dt, $to_dt );
 
         return $c->render(
             status  => 200,
-            openapi => \@closed
+            openapi => $closed
         );
     } catch {
         $c->unhandled_exception($_);
