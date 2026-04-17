@@ -417,7 +417,7 @@
         function GetZ3950Terms(fw) {
             var strQuery = "&frameworkcode=" + fw;
             z3950_search_params.forEach(function (z3950_search_param) {
-                strQuery += "&" + z3950_search_param.name + "=" + z3950_search_param.value;
+                strQuery += "&" + encodeURIComponent(z3950_search_param.name) + "=" + encodeURIComponent(z3950_search_param.value);
             });
             return strQuery;
         }
