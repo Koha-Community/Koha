@@ -855,7 +855,7 @@
 
         const TagsInputEnabled = [% TagsInputEnabled ? 1 : 0 | html %];
         const can_remove_biblios = [% can_remove_biblios ? 1 : 0 | html %];
-        var print = [% print ? 1 : 0 | html %];
+        var should_print = [% print ? 1 : 0 | html %];
         const has_items = [% itemsloop ? 1 : 0 | html %]
     </script>
     [% Asset.js("js/results-list.js") | $raw %]
@@ -1059,7 +1059,7 @@
                 KOHA.coce.getURL(Koha.prefs.CoceHost, Koha.prefs.CoceProviders);
             }
 
-            if (print) {
+            if (should_print) {
                 window.print();
                 window.onafterprint = function () {
                     window.close();
