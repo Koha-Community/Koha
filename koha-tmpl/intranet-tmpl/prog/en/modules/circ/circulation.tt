@@ -1131,7 +1131,7 @@
     <script nonce="[% Koha.CSPNonce | $raw %]" data-tt-allowed="true">
         /* Set some variable needed in circulation.js */
         const LoadCheckoutsTableDelay = [% Koha.Preference('LoadCheckoutsTableDelay') || 0 | html %];
-        const AlwaysLoadCheckoutsTable = [% Koha.Preference('AlwaysLoadCheckoutsTable') | html %];
+        const AlwaysLoadCheckoutsTable = [% Koha.Preference('AlwaysLoadCheckoutsTable') || 0 | html %];
         var logged_in_user_borrowernumber = "[% logged_in_user.borrowernumber | html %]";
         var ClaimReturnedLostValue = "[% Koha.Preference('ClaimReturnedLostValue') | html %]";
         var ClaimReturnedChargeFee = "[% Koha.Preference('ClaimReturnedChargeFee') | html %]";
@@ -1161,8 +1161,8 @@
         const table_settings_relatives_issues_table = [% TablesSettings.GetTableSettings( 'circ', 'circulation', 'relatives-issues-table', 'json' ) | $raw %];
         const table_settings_holds_table = [% TablesSettings.GetTableSettings( 'circ', 'circulation', 'holds-table', 'json' ) | $raw %];
         const table_settings_bookings_table = [% TablesSettings.GetTableSettings( 'members', 'moremember', 'bookings-table', 'json' ) | $raw %];
-        const CAN_user_circulate_manage_bookings = [% CAN_user_circulate_manage_bookings | $raw %];
-        const patron_borrowernumber = [% patron.borrowernumber | $raw %];
+        const CAN_user_circulate_manage_bookings = [% CAN_user_circulate_manage_bookings || 0 | $raw %];
+        const patron_borrowernumber = [% patron.borrowernumber || 'null' | $raw %];
         const has_patron = [% borrowernumber && patron ? 1 : 0 | html %];
         const CircAutoPrintQuickSlip = "[% CircAutoPrintQuickSlip | html %]";
         const amountlimit = "[% Koha.Preference('FineNoRenewals') | html %]";
