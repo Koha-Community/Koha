@@ -54,18 +54,18 @@
             [% IF innerloo.mandatory %]
                 mandatory_fields.push({
                     tag: "[% innerloo.tag | html %]",
-                    id: "[% innerloo.index | html %]$[% innerloo.random | html %]",
+                    id: "[% innerloo.index | html %][% innerloo.random | html %]",
                     index: "[% innerloo.index | html %]",
                     tab: "[% BIG_LOO.number | html %]",
                 });
             [% END %]
             [% IF innerloo.important %]
-                important_fields.push([
+                important_fields.push({
                     tag: "[% innerloo.tag | html %]",
-                    id: "[% innerloo.index | html %]$[% innerloo.random | html %]",
+                    id: "[% innerloo.index | html %][% innerloo.random | html %]",
                     index: "[% innerloo.index | html %]",
                     tab: "[% BIG_LOO.number | html %]",
-                ]);
+                });
             [% END %]
             [% FOREACH subfield_loo IN innerloo.subfield_loop %]
                 [% IF subfield_loo.mandatory %]
