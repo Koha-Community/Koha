@@ -85,7 +85,7 @@
                 [% IF subfield_loo.z3950_mandatory %]
                     z3950_mandatory_subfields.push({
                         id: "[% subfield_loo.id | html %]",
-                        label: "[% subfield_loo.marc_lib | html %]",
+                        label: "[% subfield_loo.z3950_mandatory | html %]",
                         tab: "[% BIG_LOO.number | html %]",
                     });
                 [% END %]
