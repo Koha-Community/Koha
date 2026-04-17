@@ -22,7 +22,7 @@ use Modern::Perl;
 use C4::Context;
 
 use Koha::Caches;
-use Koha::Calendar;
+use Koha::Library::Calendar;
 use Koha::Database;
 use Koha::Desks;
 use Koha::StockRotationStages;
@@ -453,14 +453,14 @@ sub library_hours {
 
     my $calendar = $library->calendar;
 
-Returns a L<Koha::Calendar> object scoped to this library's branchcode,
+Returns a L<Koha::Library::Calendar> object scoped to this library's branchcode,
 used to query holidays/closures and to add or remove calendar entries.
 
 =cut
 
 sub calendar {
     my ($self) = @_;
-    return Koha::Calendar->new( branchcode => $self->branchcode );
+    return Koha::Library::Calendar->new( branchcode => $self->branchcode );
 }
 
 =head2 Internal methods

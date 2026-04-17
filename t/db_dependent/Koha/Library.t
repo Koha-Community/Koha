@@ -209,7 +209,7 @@ subtest 'calendar() tests' => sub {
     my $library  = $builder->build_object( { class => 'Koha::Libraries' } );
     my $calendar = $library->calendar;
 
-    isa_ok( $calendar, 'Koha::Calendar', 'calendar() returns a Koha::Calendar object' );
+    isa_ok( $calendar, 'Koha::Library::Calendar', 'calendar() returns a Koha::Library::Calendar object' );
     is( $calendar->{branchcode}, $library->branchcode, 'Calendar is for the correct branch' );
 
     $schema->storage->txn_rollback;
