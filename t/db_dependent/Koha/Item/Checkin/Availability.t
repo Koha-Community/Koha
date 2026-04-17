@@ -47,7 +47,7 @@ subtest 'check() - item exists' => sub {
 
     my $result = $item->checkin_availability( { library => $library->branchcode } );
 
-    isa_ok( $result, 'Koha::Availability::Result', 'Returns Result object' );
+    isa_ok( $result, 'Koha::Result::Availability', 'Returns Result object' );
     ok( $result->available, 'Item is available for check-in' );
 
     $schema->storage->txn_rollback;

@@ -874,7 +874,7 @@ Parameters:
     to_library => branchcode where the item should be sent after return
                   (optional, for transfer limit validation)
 
-Returns a Koha::Availability::Result object with methods:
+Returns a Koha::Result::Availability object with methods:
     available()         # Boolean: true if check-in allowed
     needs_confirmation()# Boolean: true if confirmation required
     blockers()          # Hashref of blocking conditions

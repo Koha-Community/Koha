@@ -1,4 +1,4 @@
-package Koha::Availability::Result;
+package Koha::Result::Availability;
 
 # Copyright 2026 Koha Development Team
 #
@@ -21,11 +21,11 @@ use Modern::Perl;
 
 =head1 NAME
 
-Koha::Availability::Result - Base class for availability check results
+Koha::Result::Availability - Base class for availability check results
 
 =head1 SYNOPSIS
 
-    my $result = Koha::Availability::Result->new();
+    my $result = Koha::Result::Availability->new();
 
     $result->add_blocker( BadBarcode => $barcode );
     $result->add_confirmation( NotIssued => $barcode );
@@ -51,7 +51,7 @@ Results are categorized into:
 
 =head3 new
 
-    my $result = Koha::Availability::Result->new();
+    my $result = Koha::Result::Availability->new();
 
 Constructor. Creates a new result object with empty blockers, confirmations,
 and warnings.

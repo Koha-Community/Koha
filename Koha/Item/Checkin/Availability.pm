@@ -20,7 +20,7 @@ package Koha::Item::Checkin::Availability;
 use Modern::Perl;
 
 use C4::Context;
-use Koha::Availability::Result;
+use Koha::Result::Availability;
 
 =head1 NAME
 
@@ -89,7 +89,7 @@ Parameters:
                             on first blocker). This follows the same pattern
                             as Koha::Patron->can_place_holds.
 
-Returns a Koha::Availability::Result object with:
+Returns a Koha::Result::Availability object with:
     blockers      => {}       # Conditions that prevent check-in
     confirmations => {}       # Conditions requiring confirmation
     warnings      => {}       # Informational messages
@@ -107,7 +107,7 @@ sub check {
     my $to_library       = $params->{to_library};
     my $no_short_circuit = $params->{no_short_circuit} // 0;
 
-    my $result = Koha::Availability::Result->new();
+    my $result = Koha::Result::Availability->new();
 
     # Always check checkout status first so context is available to callers
     # even when blockers prevent the check-in
