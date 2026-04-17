@@ -265,7 +265,7 @@
             statuses.forEach(function (st) {
                 const av = st.authorised_value;
                 $(`#${av}_filter`).on("click", function () {
-                    if ($(`#${av}`).is(":checked")) {
+                    if ($(`#hide_${av}`).is(":checked")) {
                         additional_filters.status.find((o, i) => {
                             if (o["!="] === av) {
                                 additional_filters.status.splice(i, 1);
@@ -283,7 +283,7 @@
                         additional_filters.status.push({ "!=": av });
                         $(this).html('<i class="fa fa-bars"></i> ' + _("Include ") + st.lib);
                     }
-                    $(`#hide_${av}`).prop("checked", !$(`#hide${av}`).is(":checked"));
+                    $(`#hide_${av}`).prop("checked", !$(`#hide_${av}`).is(":checked"));
                     tickets.DataTable().draw();
                 });
             });
