@@ -21,7 +21,7 @@
     };
     var sentmsg = 0;
     if (debug > 1) {
-        alert("dateformat: " + dateformat_pref + "\ndebug is on (level " + debug + ")");
+        alert("dateformat: " + Koha.prefs.dateformat + "\ndebug is on (level " + debug + ")");
     }
     var calendarFirstDayOfWeek = Koha.prefs.CalendarFirstDayOfWeek;
     var flatpickr_timeformat_string = Koha.prefs.TimeFormat == "12hr" ? "G:i K" : "H:i";
@@ -29,7 +29,7 @@
     var flatpickr_dateformat_string = "";
     var delimiter = "";
     var altinput_dateformat = "";
-    switch (dateformat_pref) {
+    switch (Koha.prefs.dateformat) {
         case "us":
             flatpickr_dateformat_string = "m/d/Y";
             altinput_dateformat = "mm/dd/yyyy";
