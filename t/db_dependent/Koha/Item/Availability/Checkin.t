@@ -26,7 +26,7 @@ use t::lib::TestBuilder;
 use t::lib::Mocks;
 
 use Koha::Database;
-use Koha::Item::Checkin::Availability;
+use Koha::Item::Availability::Checkin;
 
 my $builder = t::lib::TestBuilder->new;
 my $schema  = Koha::Database->new->schema;

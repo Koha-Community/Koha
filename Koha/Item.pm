@@ -867,7 +867,7 @@ sub can_be_returned_at {
 
 Returns check-in availability information for this item.
 
-This is a convenience method that calls Koha::Item::Checkin::Availability->check().
+This is a convenience method that calls Koha::Item::Availability::Checkin->check().
 
 Parameters:
     library    => branchcode where the return takes place (required)
@@ -887,8 +887,8 @@ Returns a Koha::Result::Availability object with methods:
 sub checkin_availability {
     my ( $self, $params ) = @_;
 
-    require Koha::Item::Checkin::Availability;
-    return Koha::Item::Checkin::Availability->check( $self, $params );
+    require Koha::Item::Availability::Checkin;
+    return Koha::Item::Availability::Checkin->check( $self, $params );
 }
 
 =head3 request_transfer

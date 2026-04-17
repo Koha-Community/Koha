@@ -1,4 +1,4 @@
-package Koha::Item::Checkin::Availability;
+package Koha::Item::Availability::Checkin;
 
 # Copyright 2026 Koha Development Team
 #
@@ -24,11 +24,11 @@ use Koha::Result::Availability;
 
 =head1 NAME
 
-Koha::Item::Checkin::Availability - Check-in availability validation for items
+Koha::Item::Availability::Checkin - Check-in availability validation for items
 
 =head1 SYNOPSIS
 
-    my $availability = Koha::Item::Checkin::Availability->check( $item,
+    my $availability = Koha::Item::Availability::Checkin->check( $item,
         {
             library    => $branchcode,
             to_library => $destination_branchcode,
@@ -68,7 +68,7 @@ The result categorizes conditions as:
 
 =head3 check
 
-    my $availability = Koha::Item::Checkin::Availability->check( $item,
+    my $availability = Koha::Item::Availability::Checkin->check( $item,
         {
             library          => $branchcode,
             to_library       => $destination_branchcode,
