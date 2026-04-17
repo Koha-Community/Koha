@@ -1196,7 +1196,7 @@
             Cookies.remove("holdfor", { path: "/", SameSite: "Lax" });
         }
 
-        if (borrowernumber) {
+        if (!borrowernumber) {
             window.onload = function () {
                 $("#findborrower").focus();
             };
