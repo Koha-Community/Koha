@@ -59,7 +59,7 @@
     const is_standing = [% basket.is_standing ? 1 : 0 | html %];
     const ordernumber = "[% ordernumber | html %]";
     const from_suggestion = [% suggestion ? 1 : 0 | html %];
-    const quantityrec = "[% quantityrec | html %]";
+    const quantityrec = [% quantityrec || 0 | html %];
     const subscriptionid = "[% subscriptionid | html %]";
     Koha.addPrefs({
         UniqueItemFields: "[% Koha.Preference("UniqueItemFields") | html %]",
