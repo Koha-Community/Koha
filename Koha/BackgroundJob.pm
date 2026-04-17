@@ -121,7 +121,7 @@ sub enqueue {
     my $job_type    = $self->job_type;
     my $job_size    = $params->{job_size};
     my $job_args    = $params->{job_args};
-    my $job_context = $params->{job_context} // C4::Context->userenv;
+    my $job_context = $params->{job_context} // C4::Context->userenv // {};
     my $job_queue   = $params->{job_queue}   // 'default';
     my $json        = $self->json;
 
