@@ -45,7 +45,7 @@ use C4::RotatingCollections;
 use Koha::AuthorisedValues;
 use Koha::BackgroundJob::BatchUpdateBiblioHoldsQueue;
 use Koha::BiblioFrameworks;
-use Koha::Calendar;
+use Koha::Library::Calendar;
 use Koha::Checkouts;
 use Koha::CirculationRules;
 use Koha::DateUtils qw( dt_from_string );

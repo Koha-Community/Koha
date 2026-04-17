@@ -24,7 +24,7 @@ use Test::Exception;
 use C4::Calendar;
 use Koha::CurbsidePickups;
 use Koha::CurbsidePickupPolicies;
-use Koha::Calendar;
+use Koha::Library::Calendar;
 use Koha::Database;
 use Koha::DateUtils qw( dt_from_string );
 
@@ -157,7 +157,7 @@ subtest 'Create a pickup' => sub {
         title       => '',
         description => 'Mondays',
     );
-    my $calendar = Koha::Calendar->new( branchcode => $library->branchcode );
+    my $calendar = Koha::Library::Calendar->new( branchcode => $library->branchcode );
     throws_ok {
         Koha::CurbsidePickup->new( { %$params, scheduled_pickup_datetime => $schedule_dt } )->store;
     }

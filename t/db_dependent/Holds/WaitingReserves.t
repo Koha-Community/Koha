@@ -174,7 +174,7 @@ $special_holiday1_dt->add( days => 2 );
 
 my $holiday = $builder->build_object(
     {
-        class => 'Koha::Calendar::SingleClosures',
+        class => 'Koha::Library::Calendar::SingleClosures',
         value => {
             library_id => 'LIB1', date => $special_holiday1_dt->ymd, title => 'My special holiday', description => ''
         }
@@ -186,7 +186,7 @@ $special_holiday2_dt->add( days => 4 );
 
 my $holiday2 = $builder->build_object(
     {
-        class => 'Koha::Calendar::SingleClosures',
+        class => 'Koha::Library::Calendar::SingleClosures',
         value => {
             library_id => 'LIB1', date => $special_holiday2_dt->ymd, title => 'My special holiday 2', description => ''
         }

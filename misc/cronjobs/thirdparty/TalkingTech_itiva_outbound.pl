@@ -27,7 +27,7 @@ use Koha::Script -cron;
 use C4::Context;
 use C4::Letters;
 use C4::Overdues;
-use Koha::Calendar;
+use Koha::Library::Calendar;
 use Koha::DateUtils qw( dt_from_string output_pref );
 use Koha::Patrons;
 use Koha::Libraries;
@@ -378,7 +378,7 @@ sub GetWaitingHolds {
             }
         );
 
-        my $calendar = Koha::Calendar->new( branchcode => $issue->{'site'}, days_mode => $daysmode );
+        my $calendar = Koha::Library::Calendar->new( branchcode => $issue->{'site'}, days_mode => $daysmode );
 
         my $waiting_date = dt_from_string( $issue->{waitingdate}, 'sql' );
 

@@ -38,7 +38,7 @@ use Carp         qw( carp croak );
 use File::Spec;
 use Try::Tiny qw( catch try );
 
-use Koha::Calendar;
+use Koha::Library::Calendar;
 use Koha::DateUtils qw( dt_from_string output_pref );
 use Koha::Patrons;
 use C4::Log qw( cronlogaction );
@@ -212,7 +212,7 @@ EOM
 sub set_holiday {
     my ( $branch, $dt ) = @_;
 
-    my $calendar = Koha::Calendar->new( branchcode => $branch );
+    my $calendar = Koha::Library::Calendar->new( branchcode => $branch );
     return $calendar->is_holiday($dt);
 }
 

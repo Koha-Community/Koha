@@ -93,7 +93,7 @@ subtest 'CancelExpiredReserves tests incl. holidays' => sub {
     Koha::Caches->get_instance()->flush_all();
     my $holiday = $builder->build_object(
         {
-            class => 'Koha::Calendar::SingleClosures',
+            class => 'Koha::Library::Calendar::SingleClosures',
             value => { library_id => 'LIB1', date => $today->ymd, title => 'My holiday', description => '' }
         }
     );
@@ -286,7 +286,7 @@ subtest 'Holiday logic edge cases' => sub {
         # Make Wednesday a holiday (but Monday and Tuesday are business days)
         my $wednesday_holiday = $builder->build_object(
             {
-                class => 'Koha::Calendar::SingleClosures',
+                class => 'Koha::Library::Calendar::SingleClosures',
                 value => {
                     library_id  => $library->branchcode, date => $wednesday->ymd, title => 'Wednesday Holiday',
                     description => ''
@@ -355,7 +355,7 @@ subtest 'Holiday logic edge cases' => sub {
         # Make Monday a holiday
         my $monday_holiday = $builder->build_object(
             {
-                class => 'Koha::Calendar::SingleClosures',
+                class => 'Koha::Library::Calendar::SingleClosures',
                 value => {
                     library_id  => $library->branchcode, date => $monday->ymd, title => 'Monday Holiday',
                     description => ''

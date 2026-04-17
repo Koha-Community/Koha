@@ -17811,7 +17811,7 @@ if ( CheckVersion($DBversion) ) {
 
 $DBversion = '16.12.00.032';
 if ( CheckVersion($DBversion) ) {
-    require Koha::Calendar;
+    require Koha::Library::Calendar;
 
     $dbh->do(
         q{
@@ -17844,7 +17844,7 @@ if ( CheckVersion($DBversion) ) {
 
         my $expirationdate = dt_from_string( $hold->{waitingdate} );
         if ( C4::Context->preference("ExcludeHolidaysFromMaxPickUpDelay") ) {
-            my $calendar = Koha::Calendar->new(
+            my $calendar = Koha::Library::Calendar->new(
                 branchcode => $hold->{branchcode},
                 days_mode  => C4::Context->preference('useDaysMode')
             );

@@ -403,7 +403,7 @@ C4::Calendar->new( branchcode => $branchcodes[0] )->insert_single_holiday(
 # If the test below is removed, another tests using the holiday will fail. For some reason if we call is_holiday now
 # the holiday will get set in cache correctly, but not if we let C4::HoldsQueue call is_holiday instead.
 is(
-    Koha::Calendar->new( branchcode => $branchcodes[0] )->is_holiday($today), 1,
+    Koha::Library::Calendar->new( branchcode => $branchcodes[0] )->is_holiday($today), 1,
     'Is today a holiday for pickup branch'
 );
 C4::HoldsQueue::CreateQueue();

@@ -3,7 +3,7 @@ use Koha::Installer::Output qw(say_warning say_success say_info);
 
 return {
     bug_number  => "42310",
-    description => "Normalize calendar tables into Koha::Calendar::* schema",
+    description => "Normalize calendar tables into Koha::Library::Calendar::* schema",
     up          => sub {
         my ($args) = @_;
         my ( $dbh, $out ) = @$args{qw(dbh out)};

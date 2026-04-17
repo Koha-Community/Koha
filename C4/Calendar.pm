@@ -21,7 +21,7 @@ use vars qw(@EXPORT);
 
 use Carp       qw( croak );
 use Date::Calc qw( Today );
-use Koha::Calendar;
+use Koha::Library::Calendar;
 
 use C4::Context;
 use Koha::Caches;
@@ -202,7 +202,7 @@ C<$description> Is the description to store for the holiday formed by $year/$mon
 sub insert_week_day_holiday {
     my $self    = shift @_;
     my %options = @_;
-    Koha::Calendar->new( branchcode => $self->{branchcode} )->add_weekly_closure(
+    Koha::Library::Calendar->new( branchcode => $self->{branchcode} )->add_weekly_closure(
         {
             weekday => $options{weekday}, title => $options{title}, description => $options{description},
         }
@@ -234,7 +234,7 @@ C<$description> Is the description to store for the holiday formed by $year/$mon
 sub insert_day_month_holiday {
     my $self    = shift @_;
     my %options = @_;
-    Koha::Calendar->new( branchcode => $self->{branchcode} )->add_repeating_closure(
+    Koha::Library::Calendar->new( branchcode => $self->{branchcode} )->add_repeating_closure(
         {
             day         => $options{day}, month => $options{month}, title => $options{title},
             description => $options{description},
@@ -274,7 +274,7 @@ sub insert_single_holiday {
     unless ($date) {
         $date = sprintf( ISO_DATE_FORMAT, $options{year}, $options{month}, $options{day} );
     }
-    Koha::Calendar->new( branchcode => $self->{branchcode} )->add_single_closure(
+    Koha::Library::Calendar->new( branchcode => $self->{branchcode} )->add_single_closure(
         {
             date => $date, title => $options{title}, description => $options{description},
         }
@@ -311,7 +311,7 @@ sub insert_exception_holiday {
     unless ($date) {
         $date = sprintf( ISO_DATE_FORMAT, $options{year}, $options{month}, $options{day} );
     }
-    Koha::Calendar->new( branchcode => $self->{branchcode} )->add_exception(
+    Koha::Library::Calendar->new( branchcode => $self->{branchcode} )->add_exception(
         {
             date => $date, title => $options{title}, description => $options{description},
         }
@@ -337,8 +337,8 @@ sub ModWeekdayholiday {
     my $self    = shift @_;
     my %options = @_;
     my $closure =
-        Koha::Calendar::WeeklyClosures->search( { library_id => $self->{branchcode}, weekday => $options{weekday} } )
-        ->next;
+        Koha::Library::Calendar::WeeklyClosures->search(
+        { library_id => $self->{branchcode}, weekday => $options{weekday} } )->next;
     $closure->title( $options{title} )->description( $options{description} )->store if $closure;
     return $self;
 }
@@ -365,7 +365,7 @@ C<$description> The description to be update for the holiday.
 sub ModDaymonthholiday {
     my $self    = shift @_;
     my %options = @_;
-    my $closure = Koha::Calendar::RepeatingClosures->search(
+    my $closure = Koha::Library::Calendar::RepeatingClosures->search(
         { library_id => $self->{branchcode}, day => $options{day}, month => $options{month} } )->next;
     $closure->title( $options{title} )->description( $options{description} )->store if $closure;
     return $self;
@@ -397,7 +397,8 @@ sub ModSingleholiday {
     my $self    = shift @_;
     my %options = @_;
     my $date    = $options{date} || sprintf( ISO_DATE_FORMAT, $options{year}, $options{month}, $options{day} );
-    my $closure = Koha::Calendar::SingleClosures->search( { library_id => $self->{branchcode}, date => $date } )->next;
+    my $closure =
+        Koha::Library::Calendar::SingleClosures->search( { library_id => $self->{branchcode}, date => $date } )->next;
     if ($closure) {
         $closure->title( $options{title} )->description( $options{description} )->store;
     }
@@ -427,10 +428,11 @@ C<$description> Is the description to be modified for the holiday formed by $yea
 =cut
 
 sub ModExceptionholiday {
-    my $self      = shift @_;
-    my %options   = @_;
-    my $date      = $options{date} || sprintf( ISO_DATE_FORMAT, $options{year}, $options{month}, $options{day} );
-    my $exception = Koha::Calendar::Exceptions->search( { library_id => $self->{branchcode}, date => $date } )->next;
+    my $self    = shift @_;
+    my %options = @_;
+    my $date    = $options{date} || sprintf( ISO_DATE_FORMAT, $options{year}, $options{month}, $options{day} );
+    my $exception =
+        Koha::Library::Calendar::Exceptions->search( { library_id => $self->{branchcode}, date => $date } )->next;
     if ($exception) {
         $exception->title( $options{title} )->description( $options{description} )->store;
     }
@@ -459,29 +461,34 @@ C<$year> Is year to make the date to delete.
 sub delete_holiday {
     my $self    = shift @_;
     my %options = @_;
-    my $cal     = Koha::Calendar->new( branchcode => $self->{branchcode} );
+    my $cal     = Koha::Library::Calendar->new( branchcode => $self->{branchcode} );
 
     if ( $options{day} && $options{month} && $options{year} ) {
         my $date = sprintf( ISO_DATE_FORMAT, $options{year}, $options{month}, $options{day} );
 
         # Try single closure first
-        if ( Koha::Calendar::SingleClosures->search( { library_id => $self->{branchcode}, date => $date } )->count ) {
+        if ( Koha::Library::Calendar::SingleClosures->search( { library_id => $self->{branchcode}, date => $date } )
+            ->count )
+        {
             $cal->delete_single_closure( { date => $date } );
         }
 
         # Also remove any exception for this date
-        Koha::Calendar::Exceptions->search( { library_id => $self->{branchcode}, date => $date } )->delete;
+        Koha::Library::Calendar::Exceptions->search( { library_id => $self->{branchcode}, date => $date } )->delete;
     }
 
-    if ( defined $options{weekday}
-        && Koha::Calendar::WeeklyClosures->search( { library_id => $self->{branchcode}, weekday => $options{weekday} } )
-        ->count )
+    if (
+        defined $options{weekday}
+        && Koha::Library::Calendar::WeeklyClosures->search(
+            { library_id => $self->{branchcode}, weekday => $options{weekday} }
+        )->count
+        )
     {
         $cal->delete_weekly_closure( { weekday => $options{weekday} } );
     } elsif (
         $options{day}
         && $options{month}
-        && Koha::Calendar::RepeatingClosures->search(
+        && Koha::Library::Calendar::RepeatingClosures->search(
             { library_id => $self->{branchcode}, day => $options{day}, month => $options{month} }
         )->count
         )
@@ -512,7 +519,7 @@ sub delete_holiday_range {
     my $self    = shift;
     my %options = @_;
     my $date    = $options{date} || sprintf( ISO_DATE_FORMAT, $options{year}, $options{month}, $options{day} );
-    Koha::Calendar->new( branchcode => $self->{branchcode} )->delete_single_closure( { date => $date } );
+    Koha::Library::Calendar->new( branchcode => $self->{branchcode} )->delete_single_closure( { date => $date } );
 }
 
 =head2 delete_holiday_range_repeatable
@@ -531,7 +538,7 @@ C<$month> Is month to make the date to delete.
 sub delete_holiday_range_repeatable {
     my $self    = shift;
     my %options = @_;
-    Koha::Calendar->new( branchcode => $self->{branchcode} )
+    Koha::Library::Calendar->new( branchcode => $self->{branchcode} )
         ->delete_repeating_closure( { day => $options{day}, month => $options{month} } );
 }
 
@@ -556,7 +563,7 @@ sub delete_exception_holiday_range {
     my $self    = shift;
     my %options = @_;
     my $date    = $options{date} || sprintf( ISO_DATE_FORMAT, $options{year}, $options{month}, $options{day} );
-    Koha::Calendar->new( branchcode => $self->{branchcode} )->delete_exception( { date => $date } );
+    Koha::Library::Calendar->new( branchcode => $self->{branchcode} )->delete_exception( { date => $date } );
 }
 
 =head2 isHoliday
@@ -607,7 +614,7 @@ sub isHoliday {
 
 sub copy_to_branch {
     my ( $self, $target_branch ) = @_;
-    return Koha::Calendar->new( branchcode => $self->{branchcode} )->copy_to($target_branch);
+    return Koha::Library::Calendar->new( branchcode => $self->{branchcode} )->copy_to($target_branch);
 }
 
 1;

@@ -34,7 +34,7 @@ use Koha::Biblios;
 use Koha::Hold::CancellationRequests;
 use Koha::Items;
 use Koha::Libraries;
-use Koha::Calendar;
+use Koha::Library::Calendar;
 use Koha::Plugins;
 use Koha::ILL::ISO18626::Request;
 
@@ -72,7 +72,7 @@ sub age {
     my $age;
 
     if ($use_calendar) {
-        my $calendar = Koha::Calendar->new( branchcode => $self->branchcode );
+        my $calendar = Koha::Library::Calendar->new( branchcode => $self->branchcode );
         $age = $calendar->days_between( dt_from_string( $self->reservedate ), $today );
     } else {
         $age = $today->delta_days( dt_from_string( $self->reservedate ) );
@@ -428,7 +428,7 @@ sub set_waiting {
                 branchcode   => $self->branchcode,
             }
         );
-        my $calendar = Koha::Calendar->new( branchcode => $self->branchcode, days_mode => $daysmode );
+        my $calendar = Koha::Library::Calendar->new( branchcode => $self->branchcode, days_mode => $daysmode );
 
         $new_expiration_date = $calendar->days_forward( dt_from_string( $self->waitingdate ), $max_pickup_delay );
     }

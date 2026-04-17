@@ -1257,7 +1257,8 @@ sub load_branches_to_pull_from {
 
     my $today = dt_from_string();
     if ( C4::Context->preference('HoldsQueueSkipClosed') ) {
-        @branches_to_use = grep { !Koha::Calendar->new( branchcode => $_ )->is_holiday($today) } @branches_to_use;
+        @branches_to_use =
+            grep { !Koha::Library::Calendar->new( branchcode => $_ )->is_holiday($today) } @branches_to_use;
     }
 
     return \@branches_to_use;

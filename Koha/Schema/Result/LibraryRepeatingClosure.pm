@@ -143,7 +143,7 @@ __PACKAGE__->belongs_to(
 =cut
 
 sub koha_objects_class {
-    'Koha::Calendar::RepeatingClosures';
+    'Koha::Library::Calendar::RepeatingClosures';
 }
 
 =head2 koha_object_class
@@ -151,7 +151,7 @@ sub koha_objects_class {
 =cut
 
 sub koha_object_class {
-    'Koha::Calendar::RepeatingClosure';
+    'Koha::Library::Calendar::RepeatingClosure';
 }
 
 1;

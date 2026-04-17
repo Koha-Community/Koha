@@ -350,7 +350,7 @@ sub get_chargeable_units {
 
     if ( $unit eq 'hours' ) {
         if ( C4::Context->preference('finesCalendar') eq 'noFinesWhenClosed' ) {
-            my $calendar = Koha::Calendar->new( branchcode => $branchcode );
+            my $calendar = Koha::Library::Calendar->new( branchcode => $branchcode );
             $charge_duration = $calendar->hours_between( $date_due, $date_returned );
         } else {
             $charge_duration = $date_returned->delta_ms($date_due);
@@ -361,7 +361,7 @@ sub get_chargeable_units {
         return $charge_duration->in_units('hours');
     } else {    # days
         if ( C4::Context->preference('finesCalendar') eq 'noFinesWhenClosed' ) {
-            my $calendar = Koha::Calendar->new( branchcode => $branchcode );
+            my $calendar = Koha::Library::Calendar->new( branchcode => $branchcode );
             $charge_duration = $calendar->days_between( $date_due, $date_returned );
         } else {
             $charge_duration = $date_returned->delta_days($date_due);

@@ -24,7 +24,7 @@ use Pod::Usage   qw( pod2usage );
 use Koha::Script -cron;
 use C4::Reserves;
 use Koha::Holds;
-use Koha::Calendar;
+use Koha::Library::Calendar;
 use Koha::Libraries;
 
 =head1 NAME

@@ -1,4 +1,4 @@
-package Koha::Calendar::Exception;
+package Koha::Library::Calendar::SingleClosure;
 
 # Copyright 2026 Theke Solutions
 #
@@ -26,7 +26,7 @@ use base qw(Koha::Object);
 
 =head1 NAME
 
-Koha::Calendar::Exception - Koha closure exception (open override) Object class
+Koha::Library::Calendar::SingleClosure - Koha single-date closure Object class
 
 =head1 API
 
@@ -36,7 +36,7 @@ Koha::Calendar::Exception - Koha closure exception (open override) Object class
 
 Overloaded store method that clears the holidays cache on insert.
 
-Only flushes on insert (new exception), not on title/description updates,
+Only flushes on insert (new closure), not on title/description updates,
 because the holidays cache only stores dates and their open/closed status.
 
 =cut
@@ -76,7 +76,7 @@ sub delete {
 =cut
 
 sub _type {
-    return 'LibraryClosureException';
+    return 'LibrarySingleClosure';
 }
 
 1;

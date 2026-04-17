@@ -1,4 +1,4 @@
-package Koha::Calendar::RepeatingClosures;
+package Koha::Library::Calendar::RepeatingClosure;
 
 # Copyright 2026 Theke Solutions
 #
@@ -21,17 +21,15 @@ use Modern::Perl;
 
 use Koha::Database;
 
-use Koha::Calendar::RepeatingClosure;
-
-use base qw(Koha::Objects);
+use base qw(Koha::Object);
 
 =head1 NAME
 
-Koha::Calendar::RepeatingClosures - Koha annual repeating closure Object set class
+Koha::Library::Calendar::RepeatingClosure - Koha annual repeating closure Object class
 
 =head1 API
 
-=head2 Class methods
+=head2 Internal methods
 
 =head3 _type
 
@@ -39,14 +37,6 @@ Koha::Calendar::RepeatingClosures - Koha annual repeating closure Object set cla
 
 sub _type {
     return 'LibraryRepeatingClosure';
-}
-
-=head3 object_class
-
-=cut
-
-sub object_class {
-    return 'Koha::Calendar::RepeatingClosure';
 }
 
 1;

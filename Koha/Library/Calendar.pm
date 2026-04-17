@@ -1,4 +1,4 @@
-package Koha::Calendar;
+package Koha::Library::Calendar;
 
 use Modern::Perl;
 
@@ -11,10 +11,10 @@ use Koha::Database;
 use Koha::DateUtils qw( dt_from_string );
 use Koha::Exceptions;
 use Koha::Exceptions::Calendar;
-use Koha::Calendar::WeeklyClosures;
-use Koha::Calendar::RepeatingClosures;
-use Koha::Calendar::SingleClosures;
-use Koha::Calendar::Exceptions;
+use Koha::Library::Calendar::WeeklyClosures;
+use Koha::Library::Calendar::RepeatingClosures;
+use Koha::Library::Calendar::SingleClosures;
+use Koha::Library::Calendar::Exceptions;
 
 # This limit avoids an infinite loop when searching for an open day in an
 # always closed library
@@ -33,7 +33,7 @@ sub new {
         $self->{$o} = $options{$o_name};
     }
     if ( !defined $self->{branchcode} ) {
-        croak 'No branchcode argument passed to Koha::Calendar->new';
+        croak 'No branchcode argument passed to Koha::Library::Calendar->new';
     }
     $self->_init();
     return $self;
@@ -44,13 +44,13 @@ sub _init {
     my $branch = $self->{branchcode};
 
     $self->{weekly_closed_days} = [ 0, 0, 0, 0, 0, 0, 0 ];
-    my $weekly = Koha::Calendar::WeeklyClosures->search( { library_id => $branch } );
+    my $weekly = Koha::Library::Calendar::WeeklyClosures->search( { library_id => $branch } );
     while ( my $row = $weekly->next ) {
         $self->{weekly_closed_days}->[ $row->weekday ] = 1;
     }
 
     $self->{day_month_closed_days} = {};
-    my $repeating = Koha::Calendar::RepeatingClosures->search( { library_id => $branch } );
+    my $repeating = Koha::Library::Calendar::RepeatingClosures->search( { library_id => $branch } );
     while ( my $row = $repeating->next ) {
         $self->{day_month_closed_days}->{ $row->month }->{ $row->day } = 1;
     }
@@ -76,13 +76,13 @@ sub _holidays {
     unless ($holidays) {
         $holidays = {};
 
-        my $single = Koha::Calendar::SingleClosures->search( { library_id => $self->{branchcode} } );
+        my $single = Koha::Library::Calendar::SingleClosures->search( { library_id => $self->{branchcode} } );
         while ( my $row = $single->next ) {
             ( my $datestring = $row->date ) =~ s/-//g;
             $holidays->{$datestring} = 1;
         }
 
-        my $exceptions = Koha::Calendar::Exceptions->search( { library_id => $self->{branchcode} } );
+        my $exceptions = Koha::Library::Calendar::Exceptions->search( { library_id => $self->{branchcode} } );
         while ( my $row = $exceptions->next ) {
             ( my $datestring = $row->date ) =~ s/-//g;
             $holidays->{$datestring} = 0;
@@ -426,27 +426,27 @@ sub clear_weekly_closed_days {
 
 sub add_weekly_closure {
     my ( $self, $params ) = @_;
-    return Koha::Calendar::WeeklyClosure->new( { library_id => $self->{branchcode}, %$params } )->store;
+    return Koha::Library::Calendar::WeeklyClosure->new( { library_id => $self->{branchcode}, %$params } )->store;
 }
 
 sub add_repeating_closure {
     my ( $self, $params ) = @_;
-    return Koha::Calendar::RepeatingClosure->new( { library_id => $self->{branchcode}, %$params } )->store;
+    return Koha::Library::Calendar::RepeatingClosure->new( { library_id => $self->{branchcode}, %$params } )->store;
 }
 
 sub add_single_closure {
     my ( $self, $params ) = @_;
-    return Koha::Calendar::SingleClosure->new( { library_id => $self->{branchcode}, %$params } )->store;
+    return Koha::Library::Calendar::SingleClosure->new( { library_id => $self->{branchcode}, %$params } )->store;
 }
 
 sub add_exception {
     my ( $self, $params ) = @_;
-    return Koha::Calendar::Exception->new( { library_id => $self->{branchcode}, %$params } )->store;
+    return Koha::Library::Calendar::Exception->new( { library_id => $self->{branchcode}, %$params } )->store;
 }
 
 sub delete_weekly_closure {
     my ( $self, $params ) = @_;
-    my $row = Koha::Calendar::WeeklyClosures->search(
+    my $row = Koha::Library::Calendar::WeeklyClosures->search(
         { library_id => $self->{branchcode}, weekday => $params->{weekday} },
         { rows       => 1 }
     )->single;
@@ -456,7 +456,7 @@ sub delete_weekly_closure {
 
 sub delete_repeating_closure {
     my ( $self, $params ) = @_;
-    my $row = Koha::Calendar::RepeatingClosures->search(
+    my $row = Koha::Library::Calendar::RepeatingClosures->search(
         { library_id => $self->{branchcode}, day => $params->{day}, month => $params->{month} },
         { rows       => 1 }
     )->single;
@@ -466,7 +466,7 @@ sub delete_repeating_closure {
 
 sub delete_single_closure {
     my ( $self, $params ) = @_;
-    my $row = Koha::Calendar::SingleClosures->search(
+    my $row = Koha::Library::Calendar::SingleClosures->search(
         { library_id => $self->{branchcode}, date => $params->{date} },
         { rows       => 1 }
     )->single;
@@ -476,7 +476,7 @@ sub delete_single_closure {
 
 sub delete_exception {
     my ( $self, $params ) = @_;
-    my $row = Koha::Calendar::Exceptions->search(
+    my $row = Koha::Library::Calendar::Exceptions->search(
         { library_id => $self->{branchcode}, date => $params->{date} },
         { rows       => 1 }
     )->single;
@@ -525,12 +525,12 @@ sub copy_to {
 
     $schema->txn_do(
         sub {
-            my $weekly = Koha::Calendar::WeeklyClosures->search( { library_id => $self->{branchcode} } );
+            my $weekly = Koha::Library::Calendar::WeeklyClosures->search( { library_id => $self->{branchcode} } );
             while ( my $row = $weekly->next ) {
                 next
-                    if Koha::Calendar::WeeklyClosures->search(
+                    if Koha::Library::Calendar::WeeklyClosures->search(
                     { library_id => $target_branchcode, weekday => $row->weekday } )->count;
-                Koha::Calendar::WeeklyClosure->new(
+                Koha::Library::Calendar::WeeklyClosure->new(
                     {
                         library_id => $target_branchcode, weekday     => $row->weekday,
                         title      => $row->title,        description => $row->description,
@@ -538,12 +538,12 @@ sub copy_to {
                 )->store;
             }
 
-            my $repeating = Koha::Calendar::RepeatingClosures->search( { library_id => $self->{branchcode} } );
+            my $repeating = Koha::Library::Calendar::RepeatingClosures->search( { library_id => $self->{branchcode} } );
             while ( my $row = $repeating->next ) {
                 next
-                    if Koha::Calendar::RepeatingClosures->search(
+                    if Koha::Library::Calendar::RepeatingClosures->search(
                     { library_id => $target_branchcode, day => $row->day, month => $row->month } )->count;
-                Koha::Calendar::RepeatingClosure->new(
+                Koha::Library::Calendar::RepeatingClosure->new(
                     {
                         library_id => $target_branchcode, day         => $row->day, month => $row->month,
                         title      => $row->title,        description => $row->description,
@@ -551,13 +551,13 @@ sub copy_to {
                 )->store;
             }
 
-            my $singles = Koha::Calendar::SingleClosures->search(
+            my $singles = Koha::Library::Calendar::SingleClosures->search(
                 { library_id => $self->{branchcode}, date => { '>=' => $today } } );
             while ( my $row = $singles->next ) {
                 next
-                    if Koha::Calendar::SingleClosures->search(
+                    if Koha::Library::Calendar::SingleClosures->search(
                     { library_id => $target_branchcode, date => $row->date } )->count;
-                Koha::Calendar::SingleClosure->new(
+                Koha::Library::Calendar::SingleClosure->new(
                     {
                         library_id => $target_branchcode, date        => $row->date,
                         title      => $row->title,        description => $row->description,
@@ -566,12 +566,12 @@ sub copy_to {
             }
 
             my $exceptions =
-                Koha::Calendar::Exceptions->search( { library_id => $self->{branchcode}, date => { '>=' => $today } } );
+                Koha::Library::Calendar::Exceptions->search( { library_id => $self->{branchcode}, date => { '>=' => $today } } );
             while ( my $row = $exceptions->next ) {
                 next
-                    if Koha::Calendar::Exceptions->search( { library_id => $target_branchcode, date => $row->date } )
+                    if Koha::Library::Calendar::Exceptions->search( { library_id => $target_branchcode, date => $row->date } )
                     ->count;
-                Koha::Calendar::Exception->new(
+                Koha::Library::Calendar::Exception->new(
                     {
                         library_id => $target_branchcode, date        => $row->date,
                         title      => $row->title,        description => $row->description,
@@ -595,13 +595,13 @@ __END__
 
 =head1 NAME
 
-Koha::Calendar - Object containing a branches calendar
+Koha::Library::Calendar - Object containing a library's calendar
 
 =head1 SYNOPSIS
 
-  use Koha::Calendar
+  use Koha::Library::Calendar
 
-  my $c = Koha::Calendar->new( branchcode => 'MAIN' );
+  my $c = Koha::Library::Calendar->new( branchcode => 'MAIN' );
   my $dt = dt_from_string();
 
   # are we open
@@ -632,7 +632,7 @@ C<YYYYMMDD> date strings. Results are cached.
 
 =head2 new : Create a calendar object
 
-my $calendar = Koha::Calendar->new( branchcode => 'MAIN' );
+my $calendar = Koha::Library::Calendar->new( branchcode => 'MAIN' );
 
 The option branchcode is required
 

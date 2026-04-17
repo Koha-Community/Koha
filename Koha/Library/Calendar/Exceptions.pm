@@ -1,4 +1,4 @@
-package Koha::Calendar::RepeatingClosure;
+package Koha::Library::Calendar::Exceptions;
 
 # Copyright 2026 Theke Solutions
 #
@@ -21,22 +21,32 @@ use Modern::Perl;
 
 use Koha::Database;
 
-use base qw(Koha::Object);
+use Koha::Library::Calendar::Exception;
+
+use base qw(Koha::Objects);
 
 =head1 NAME
 
-Koha::Calendar::RepeatingClosure - Koha annual repeating closure Object class
+Koha::Library::Calendar::Exceptions - Koha closure exception Object set class
 
 =head1 API
 
-=head2 Internal methods
+=head2 Class methods
 
 =head3 _type
 
 =cut
 
 sub _type {
-    return 'LibraryRepeatingClosure';
+    return 'LibraryClosureException';
+}
+
+=head3 object_class
+
+=cut
+
+sub object_class {
+    return 'Koha::Library::Calendar::Exception';
 }
 
 1;

@@ -30,7 +30,7 @@ use Koha::Database;
 use Koha::DateUtils qw( dt_from_string );
 
 BEGIN {
-    use_ok('Koha::Calendar');
+    use_ok('Koha::Library::Calendar');
     use_ok('C4::Calendar');
 }
 
@@ -56,7 +56,7 @@ subtest 'is_holiday timezone tests' => sub {
     tzset;
 
     my $branch   = $builder->build( { source => 'Branch' } )->{branchcode};
-    my $calendar = Koha::Calendar->new( branchcode => $branch );
+    my $calendar = Koha::Library::Calendar->new( branchcode => $branch );
 
     C4::Calendar->new( branchcode => $branch )->insert_exception_holiday(
         day         => 6,
@@ -109,11 +109,11 @@ C4::Calendar->new( branchcode => $branch_1 )->insert_day_month_holiday(
     description => 'Christmas',
 );
 
-my $koha_calendar = Koha::Calendar->new( branchcode => $branch_1 );
+my $koha_calendar = Koha::Library::Calendar->new( branchcode => $branch_1 );
 my $c4_calendar   = C4::Calendar->new( branchcode => $branch_1 );
 
-isa_ok( $koha_calendar, 'Koha::Calendar', 'Koha::Calendar class returned' );
-isa_ok( $c4_calendar,   'C4::Calendar',   'C4::Calendar class returned' );
+isa_ok( $koha_calendar, 'Koha::Library::Calendar', 'Koha::Library::Calendar class returned' );
+isa_ok( $c4_calendar,   'C4::Calendar',            'C4::Calendar class returned' );
 
 my $sunday = DateTime->new(
     year  => 2011,
@@ -159,8 +159,14 @@ C4::Calendar->new( branchcode => $branch_2 )->insert_single_holiday(
     description => "$today",
 );
 
-is( Koha::Calendar->new( branchcode => $branch_2 )->is_holiday($today), 1, "Today is a holiday for $branch_2" );
-is( Koha::Calendar->new( branchcode => $branch_1 )->is_holiday($today), 0, "Today is not a holiday for $branch_1" );
+is(
+    Koha::Library::Calendar->new( branchcode => $branch_2 )->is_holiday($today), 1,
+    "Today is a holiday for $branch_2"
+);
+is(
+    Koha::Library::Calendar->new( branchcode => $branch_1 )->is_holiday($today), 0,
+    "Today is not a holiday for $branch_1"
+);
 
 $schema->storage->txn_rollback;
 
@@ -303,12 +309,12 @@ subtest 'with a library that is never open' => sub {
     my $now = dt_from_string;
 
     subtest 'next_open_days should throw an exception' => sub {
-        my $kcalendar = Koha::Calendar->new( branchcode => $branchcode, days_mode => 'Calendar' );
+        my $kcalendar = Koha::Library::Calendar->new( branchcode => $branchcode, days_mode => 'Calendar' );
         throws_ok { $kcalendar->next_open_days( $now, 1 ) } 'Koha::Exceptions::Calendar::NoOpenDays';
     };
 
     subtest 'prev_open_days should throw an exception' => sub {
-        my $kcalendar = Koha::Calendar->new( branchcode => $branchcode, days_mode => 'Calendar' );
+        my $kcalendar = Koha::Library::Calendar->new( branchcode => $branchcode, days_mode => 'Calendar' );
         throws_ok { $kcalendar->prev_open_days( $now, 1 ) } 'Koha::Exceptions::Calendar::NoOpenDays';
     };
 
@@ -333,13 +339,13 @@ subtest 'with a library that is *almost* never open' => sub {
     $calendar->insert_exception_holiday( date => $open_day_in_the_past->ymd,   title => '', description => '' );
 
     subtest 'next_open_days should find the open day' => sub {
-        my $kcalendar     = Koha::Calendar->new( branchcode => $branchcode, days_mode => 'Calendar' );
+        my $kcalendar     = Koha::Library::Calendar->new( branchcode => $branchcode, days_mode => 'Calendar' );
         my $next_open_day = $kcalendar->next_open_days( $now, 1 );
         is( $next_open_day->ymd, $open_day_in_the_future->ymd );
     };
 
     subtest 'prev_open_days should find the open day' => sub {
-        my $kcalendar     = Koha::Calendar->new( branchcode => $branchcode, days_mode => 'Calendar' );
+        my $kcalendar     = Koha::Library::Calendar->new( branchcode => $branchcode, days_mode => 'Calendar' );
         my $prev_open_day = $kcalendar->prev_open_days( $now, 1 );
         is( $prev_open_day->ymd, $open_day_in_the_past->ymd );
     };

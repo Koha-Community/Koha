@@ -25,7 +25,7 @@ use DateTime::Duration;
 use C4::Context;
 use C4::Letters;
 use Koha::DateUtils qw( dt_from_string );
-use Koha::Calendar;
+use Koha::Library::Calendar;
 use Koha::Libraries;
 use Koha::Notice::Templates;
 use Koha::Patrons;
@@ -237,7 +237,7 @@ foreach my $branchcode (@branchcodes) {    #BEGIN BRANCH LOOP
     # If respecting calendar get the correct waiting since date
     my $waiting_date;
     if ($use_calendar) {
-        my $calendar = Koha::Calendar->new( branchcode => $branchcode, days_mode => 'Calendar' );
+        my $calendar = Koha::Library::Calendar->new( branchcode => $branchcode, days_mode => 'Calendar' );
 
         #if today is a holiday skip sending the message
         next if $calendar->is_holiday($date_to_run);

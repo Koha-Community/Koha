@@ -1,4 +1,4 @@
-package Koha::Calendar::WeeklyClosure;
+package Koha::Library::Calendar::WeeklyClosures;
 
 # Copyright 2026 Theke Solutions
 #
@@ -21,15 +21,17 @@ use Modern::Perl;
 
 use Koha::Database;
 
-use base qw(Koha::Object);
+use Koha::Library::Calendar::WeeklyClosure;
+
+use base qw(Koha::Objects);
 
 =head1 NAME
 
-Koha::Calendar::WeeklyClosure - Koha weekly closure Object class
+Koha::Library::Calendar::WeeklyClosures - Koha weekly closure Object set class
 
 =head1 API
 
-=head2 Internal methods
+=head2 Class methods
 
 =head3 _type
 
@@ -37,6 +39,14 @@ Koha::Calendar::WeeklyClosure - Koha weekly closure Object class
 
 sub _type {
     return 'LibraryWeeklyClosure';
+}
+
+=head3 object_class
+
+=cut
+
+sub object_class {
+    return 'Koha::Library::Calendar::WeeklyClosure';
 }
 
 1;

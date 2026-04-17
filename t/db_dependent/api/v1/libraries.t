@@ -28,10 +28,10 @@ use t::lib::Mocks;
 use List::Util qw(min);
 
 use Koha::Caches;
-use Koha::Calendar::WeeklyClosures;
-use Koha::Calendar::RepeatingClosures;
-use Koha::Calendar::SingleClosures;
-use Koha::Calendar::Exceptions;
+use Koha::Library::Calendar::WeeklyClosures;
+use Koha::Library::Calendar::RepeatingClosures;
+use Koha::Library::Calendar::SingleClosures;
+use Koha::Library::Calendar::Exceptions;
 use Koha::Libraries;
 use Koha::Database;
 
@@ -465,17 +465,17 @@ subtest 'list_closed_dates() tests' => sub {
     my $cache      = Koha::Caches->get_instance();
 
     # Clear all closure data so we fully control what exists
-    Koha::Calendar::WeeklyClosures->search( { library_id => $branchcode } )->delete;
-    Koha::Calendar::RepeatingClosures->search( { library_id => $branchcode } )->delete;
-    Koha::Calendar::SingleClosures->search( { library_id => $branchcode } )->delete;
-    Koha::Calendar::Exceptions->search( { library_id => $branchcode } )->delete;
+    Koha::Library::Calendar::WeeklyClosures->search( { library_id => $branchcode } )->delete;
+    Koha::Library::Calendar::RepeatingClosures->search( { library_id => $branchcode } )->delete;
+    Koha::Library::Calendar::SingleClosures->search( { library_id => $branchcode } )->delete;
+    Koha::Library::Calendar::Exceptions->search( { library_id => $branchcode } )->delete;
     $cache->clear_from_cache( $branchcode . '_holidays' );
 
     # Weekly closure: Saturday (6)
     # 2026-06-13 and 2026-06-20 are Saturdays
     $builder->build_object(
         {
-            class => 'Koha::Calendar::WeeklyClosures',
+            class => 'Koha::Library::Calendar::WeeklyClosures',
             value => {
                 library_id => $branchcode, weekday => 6, title => 'Saturdays', description => '',
             }
@@ -485,7 +485,7 @@ subtest 'list_closed_dates() tests' => sub {
     # Single closure: 2026-06-15 (a Monday)
     $builder->build_object(
         {
-            class => 'Koha::Calendar::SingleClosures',
+            class => 'Koha::Library::Calendar::SingleClosures',
             value => {
                 library_id => $branchcode, date => '2026-06-15', title => 'Test', description => '',
             }
@@ -495,7 +495,7 @@ subtest 'list_closed_dates() tests' => sub {
     # Exception: 2026-06-20 (a Saturday — normally closed, but open this day)
     $builder->build_object(
         {
-            class => 'Koha::Calendar::Exceptions',
+            class => 'Koha::Library::Calendar::Exceptions',
             value => {
                 library_id => $branchcode, date => '2026-06-20', title => 'Exception', description => '',
             }
@@ -539,10 +539,10 @@ subtest 'list_closed_dates() tests' => sub {
     # Defaults work (no from/to) — fresh library with no closures at all
     my $lib2        = $builder->build_object( { class => 'Koha::Libraries' } );
     my $branchcode2 = $lib2->branchcode;
-    Koha::Calendar::WeeklyClosures->search( { library_id => $branchcode2 } )->delete;
-    Koha::Calendar::RepeatingClosures->search( { library_id => $branchcode2 } )->delete;
-    Koha::Calendar::SingleClosures->search( { library_id => $branchcode2 } )->delete;
-    Koha::Calendar::Exceptions->search( { library_id => $branchcode2 } )->delete;
+    Koha::Library::Calendar::WeeklyClosures->search( { library_id => $branchcode2 } )->delete;
+    Koha::Library::Calendar::RepeatingClosures->search( { library_id => $branchcode2 } )->delete;
+    Koha::Library::Calendar::SingleClosures->search( { library_id => $branchcode2 } )->delete;
+    Koha::Library::Calendar::Exceptions->search( { library_id => $branchcode2 } )->delete;
     $cache->clear_from_cache( $branchcode2 . '_holidays' );
     $t->get_ok("//$userid:$password\@/api/v1/libraries/$branchcode2/closed_dates")
         ->status_is(200)

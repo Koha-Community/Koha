@@ -1,4 +1,4 @@
-package Koha::Calendar::SingleClosures;
+package Koha::Library::Calendar::SingleClosures;
 
 # Copyright 2026 Theke Solutions
 #
@@ -21,13 +21,13 @@ use Modern::Perl;
 
 use Koha::Database;
 
-use Koha::Calendar::SingleClosure;
+use Koha::Library::Calendar::SingleClosure;
 
 use base qw(Koha::Objects);
 
 =head1 NAME
 
-Koha::Calendar::SingleClosures - Koha single-date closure Object set class
+Koha::Library::Calendar::SingleClosures - Koha single-date closure Object set class
 
 =head1 API
 
@@ -46,7 +46,7 @@ sub _type {
 =cut
 
 sub object_class {
-    return 'Koha::Calendar::SingleClosure';
+    return 'Koha::Library::Calendar::SingleClosure';
 }
 
 1;

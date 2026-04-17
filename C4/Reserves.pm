@@ -77,7 +77,7 @@ use C4::Members;
 use Koha::Account::Lines;
 use Koha::BackgroundJob::BatchUpdateBiblioHoldsQueue;
 use Koha::Biblios;
-use Koha::Calendar;
+use Koha::Library::Calendar;
 use Koha::Cache::Memory::Lite;
 use Koha::CirculationRules;
 use Koha::Database;
@@ -1089,7 +1089,7 @@ sub CancelExpiredReserves {
         my $cache_key = sprintf "Calendar_CancelExpiredReserves:%s", $hold->branchcode;
         my $calendar  = $cache->get_from_cache($cache_key);
         if ( !$calendar ) {
-            $calendar = Koha::Calendar->new( branchcode => $hold->branchcode );
+            $calendar = Koha::Library::Calendar->new( branchcode => $hold->branchcode );
             $cache->set_in_cache( $cache_key, $calendar );
         }
 

@@ -133,7 +133,7 @@ __PACKAGE__->belongs_to(
 =cut
 
 sub koha_objects_class {
-    'Koha::Calendar::SingleClosures';
+    'Koha::Library::Calendar::SingleClosures';
 }
 
 =head2 koha_object_class
@@ -141,7 +141,7 @@ sub koha_objects_class {
 =cut
 
 sub koha_object_class {
-    'Koha::Calendar::SingleClosure';
+    'Koha::Library::Calendar::SingleClosure';
 }
 
 1;

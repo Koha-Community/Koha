@@ -1,4 +1,4 @@
-package Koha::Calendar::WeeklyClosures;
+package Koha::Library::Calendar::RepeatingClosures;
 
 # Copyright 2026 Theke Solutions
 #
@@ -21,13 +21,13 @@ use Modern::Perl;
 
 use Koha::Database;
 
-use Koha::Calendar::WeeklyClosure;
+use Koha::Library::Calendar::RepeatingClosure;
 
 use base qw(Koha::Objects);
 
 =head1 NAME
 
-Koha::Calendar::WeeklyClosures - Koha weekly closure Object set class
+Koha::Library::Calendar::RepeatingClosures - Koha annual repeating closure Object set class
 
 =head1 API
 
@@ -38,7 +38,7 @@ Koha::Calendar::WeeklyClosures - Koha weekly closure Object set class
 =cut
 
 sub _type {
-    return 'LibraryWeeklyClosure';
+    return 'LibraryRepeatingClosure';
 }
 
 =head3 object_class
@@ -46,7 +46,7 @@ sub _type {
 =cut
 
 sub object_class {
-    return 'Koha::Calendar::WeeklyClosure';
+    return 'Koha::Library::Calendar::RepeatingClosure';
 }
 
 1;

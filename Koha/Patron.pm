@@ -1468,7 +1468,7 @@ sub has_restricting_overdues {
             next DELAY unless $overdue_rules->{ "overdue_$i" . '_restrict' };
 
             if ( C4::Context->preference('OverdueNoticeCalendar') ) {
-                $calendar = Koha::Calendar->new( branchcode => $branchcode );
+                $calendar = Koha::Library::Calendar->new( branchcode => $branchcode );
             }
 
             my $days_between =
