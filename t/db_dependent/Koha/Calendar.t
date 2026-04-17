@@ -19,7 +19,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 5;
+use Test::More tests => 6;
 use Test::Exception;
 use Test::NoWarnings;
 
@@ -225,6 +225,49 @@ subtest 'CRUD methods' => sub {
     # Verify is_holiday after deletions and re-init
     my $cal2 = Koha::Calendar->new( branchcode => $library->branchcode );
     is( $cal2->is_holiday($june15), 0, 'Deleted single closure no longer a holiday' );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'closed_dates_in_range' => sub {
+
+    plan tests => 5;
+
+    $schema->storage->txn_begin;
+
+    my $library    = $builder->build_object( { class => 'Koha::Libraries' } );
+    my $branchcode = $library->branchcode;
+
+    # Sunday closed every week, 25 December every year, 2026-06-15 single,
+    # 2026-12-25 open exception (overrides the repeating rule).
+    $builder->build_object(
+        { class => 'Koha::Calendar::WeeklyClosures', value => { library_id => $branchcode, weekday => 0 } } );
+    $builder->build_object(
+        {
+            class => 'Koha::Calendar::RepeatingClosures',
+            value => { library_id => $branchcode, day => 25, month => 12 }
+        }
+    );
+    $builder->build_object(
+        { class => 'Koha::Calendar::SingleClosures', value => { library_id => $branchcode, date => '2026-06-15' } } );
+    $builder->build_object(
+        { class => 'Koha::Calendar::Exceptions', value => { library_id => $branchcode, date => '2026-12-25' } } );
+
+    my $calendar = Koha::Calendar->new( branchcode => $branchcode );
+
+    my $closed = $calendar->closed_dates_in_range( dt_from_string('2026-06-14'), dt_from_string('2026-06-16') );
+    is_deeply( $closed, [ '2026-06-14', '2026-06-15' ], 'Sunday and single closure returned' );
+
+    $closed = $calendar->closed_dates_in_range( dt_from_string('2026-12-24'), dt_from_string('2026-12-26') );
+    is_deeply( $closed, [], 'Exception suppresses repeating closure on 2026-12-25' );
+
+    $closed = $calendar->closed_dates_in_range( dt_from_string('2027-06-15'), dt_from_string('2027-06-15') );
+    is_deeply( $closed, [], 'Open Tuesday not returned' );
+
+    $closed = $calendar->closed_dates_in_range( dt_from_string('2027-12-25'), dt_from_string('2027-12-25') );
+    is_deeply( $closed, ['2027-12-25'], 'Repeating closure returned in a year with no exception' );
+
+    throws_ok { $calendar->closed_dates_in_range() } qr/Missing from_dt/, 'croaks without from_dt';
 
     $schema->storage->txn_rollback;
 };

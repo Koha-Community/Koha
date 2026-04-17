@@ -484,6 +484,38 @@ sub delete_exception {
     return $self;
 }
 
+sub closed_dates_in_range {
+    my ( $self, $from_dt, $to_dt ) = @_;
+
+    croak 'Missing from_dt in closed_dates_in_range' unless $from_dt;
+    croak 'Missing to_dt in closed_dates_in_range'   unless $to_dt;
+
+    my $holidays = $self->_holidays;
+
+    my @closed;
+    my $current = $from_dt->clone;
+    while ( $current <= $to_dt ) {
+        my $ymd = $current->ymd('');
+
+        # Exception (open override) wins over any other closure rule.
+        if ( defined $holidays->{$ymd} && $holidays->{$ymd} == 0 ) {
+            $current->add( days => 1 );
+            next;
+        }
+
+        if (   ( defined $holidays->{$ymd} && $holidays->{$ymd} == 1 )
+            || $self->{weekly_closed_days}->[ $current->day_of_week % 7 ]
+            || $self->{day_month_closed_days}->{ $current->month }->{ $current->day } )
+        {
+            push @closed, $current->ymd;
+        }
+
+        $current->add( days => 1 );
+    }
+
+    return \@closed;
+}
+
 sub copy_to {
     my ( $self, $target_branchcode ) = @_;
     croak "No target_branchcode" unless $target_branchcode;
@@ -770,6 +802,17 @@ list of specified dates
 =head3 delete_exception
 
     $calendar->delete_exception({ date => '2026-12-25' });
+
+=head3 closed_dates_in_range
+
+    my $dates = $calendar->closed_dates_in_range($from_dt, $to_dt);
+
+Returns an arrayref of ISO date strings (YYYY-MM-DD) representing every
+closed day between C<$from_dt> and C<$to_dt> (inclusive), taking
+weekly, annual-repeating, single and exception (open override)
+closures into account. Exceptions win: a date listed as an exception
+is never returned even if a weekly or repeating rule would otherwise
+close it.
 
 =head3 copy_to
 
