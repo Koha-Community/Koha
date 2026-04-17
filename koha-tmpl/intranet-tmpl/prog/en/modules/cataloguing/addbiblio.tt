@@ -168,7 +168,7 @@
         } else if (marctags_cookie == "show") {
             toggleMARCTagLinks(true);
         } else {
-            if (Koha.prefs.hide_marc) {
+            if (!Koha.prefs.hide_marc) {
                 toggleMARCTagLinks(true);
             } else {
                 toggleMARCTagLinks(false);
