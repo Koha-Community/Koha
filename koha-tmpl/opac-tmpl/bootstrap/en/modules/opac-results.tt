@@ -496,10 +496,10 @@
             OpacCoce: [% Koha.Preference('OpacCoce') ? 1 : 0 | html %],
             CoceHost: "[% Koha.Preference('CoceHost') | html %]",
             CoceProviders: "[% Koha.Preference('CoceProviders') | html %]",
-            OverDriveEnabled: [% Koha.Preference("OverDriveEnabled") ? 1 : 0 | html %],
             OverDriveLibraryID: "[% Koha.Preference("OverDriveLibraryID") | html %]",
             OpenLibrarySearch: [% Koha.Preference("OpenLibrarySearch") ? 1 : 0 | html %],
         });
+        const OverDriveEnabled = [% OverDriveEnabled ? 1 : 0 | html %];
         const DidYouMean = [% DidYouMean ? 1 : 0 | html %];
         // query_desc and querystring are set in opac-bottom.inc
         let query_desc_uri = "[% query_desc | uri %]";
@@ -619,7 +619,7 @@
                         });
                 }
                 if (OverDriveEnabled && firstPage) {
-                    var $overdrive_results = $('<div id="overdrive-results">' + _("Searching %s...").format("OverDrive") + ' <img class="throbber" src=`${interface}/${theme}/images/spinner-small.gif` /></div>');
+                    var $overdrive_results = $('<div id="overdrive-results">' + _("Searching %s...").format("OverDrive") + ' <img class="throbber" src="' + interface + "/" + theme + '/images/spinner-small.gif" /></div>');
                     $("#numresults").after($overdrive_results);
                     //Clean querystring, first we remove CCL entities, then decode HTML entities, then swap double quotes for single quotes
                     //as the overdrive API treats double quotes as a search term and returns extra results
@@ -641,8 +641,8 @@
                         }
                     });
                 }
-                if (OpenLibrarySearch) {
-                    var $openlibrary_results = $('<div id="openlibrary-results">' + _("Searching %s...").format("OpenLibrary") + ' <img class="throbber" src=`${interface}/${theme}/images/spinner-small.gif` /></div>');
+                if (Koha.prefs.OpenLibrarySearch) {
+                    var $openlibrary_results = $('<div id="openlibrary-results">' + _("Searching %s...").format("OpenLibrary") + ' <img class="throbber" src="' + interface + "/" + theme + '/images/spinner-small.gif" /></div>');
                     $("#numresults").after($openlibrary_results);
                     KOHA.OpenLibrary.search(querystring, null, function (data) {
                         if (data.error) {
