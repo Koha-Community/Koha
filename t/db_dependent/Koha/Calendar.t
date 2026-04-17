@@ -19,10 +19,11 @@
 
 use Modern::Perl;
 
-use Test::More tests => 4;
+use Test::More tests => 5;
 use Test::Exception;
 use Test::NoWarnings;
 
+use Koha::Caches;
 use Koha::Database;
 use Koha::DateUtils qw( dt_from_string );
 use Koha::Calendar::WeeklyClosures;
@@ -224,6 +225,34 @@ subtest 'CRUD methods' => sub {
     # Verify is_holiday after deletions and re-init
     my $cal2 = Koha::Calendar->new( branchcode => $library->branchcode );
     is( $cal2->is_holiday($june15), 0, 'Deleted single closure no longer a holiday' );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'delete_*_closure clears _holidays cache' => sub {
+
+    plan tests => 4;
+
+    $schema->storage->txn_begin;
+
+    my $library    = $builder->build_object( { class => 'Koha::Libraries' } );
+    my $branchcode = $library->branchcode;
+    my $cache_key  = $branchcode . '_holidays';
+    my $cache      = Koha::Caches->get_instance;
+
+    my $calendar = Koha::Calendar->new( branchcode => $branchcode );
+
+    $calendar->add_single_closure( { date => '2027-07-04', title => 'Independence', description => '' } );
+    $calendar->is_holiday( dt_from_string('2027-07-04') );    # warm cache
+    ok( defined $cache->get_from_cache($cache_key), 'Cache warm after is_holiday (single)' );
+    $calendar->delete_single_closure( { date => '2027-07-04' } );
+    is( $cache->get_from_cache($cache_key), undef, 'Cache cleared after delete_single_closure' );
+
+    $calendar->add_exception( { date => '2027-07-05', title => 'Special open', description => '' } );
+    $calendar->is_holiday( dt_from_string('2027-07-05') );    # warm cache
+    ok( defined $cache->get_from_cache($cache_key), 'Cache warm after is_holiday (exception)' );
+    $calendar->delete_exception( { date => '2027-07-05' } );
+    is( $cache->get_from_cache($cache_key), undef, 'Cache cleared after delete_exception' );
 
     $schema->storage->txn_rollback;
 };

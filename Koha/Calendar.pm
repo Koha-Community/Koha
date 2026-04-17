@@ -445,27 +445,41 @@ sub add_exception {
 
 sub delete_weekly_closure {
     my ( $self, $params ) = @_;
-    Koha::Calendar::WeeklyClosures->search( { library_id => $self->{branchcode}, weekday => $params->{weekday} } )
-        ->delete;
+    my $row = Koha::Calendar::WeeklyClosures->search(
+        { library_id => $self->{branchcode}, weekday => $params->{weekday} },
+        { rows       => 1 }
+    )->single;
+    $row->delete if $row;
     return $self;
 }
 
 sub delete_repeating_closure {
     my ( $self, $params ) = @_;
-    Koha::Calendar::RepeatingClosures->search(
-        { library_id => $self->{branchcode}, day => $params->{day}, month => $params->{month} } )->delete;
+    my $row = Koha::Calendar::RepeatingClosures->search(
+        { library_id => $self->{branchcode}, day => $params->{day}, month => $params->{month} },
+        { rows       => 1 }
+    )->single;
+    $row->delete if $row;
     return $self;
 }
 
 sub delete_single_closure {
     my ( $self, $params ) = @_;
-    Koha::Calendar::SingleClosures->search( { library_id => $self->{branchcode}, date => $params->{date} } )->delete;
+    my $row = Koha::Calendar::SingleClosures->search(
+        { library_id => $self->{branchcode}, date => $params->{date} },
+        { rows       => 1 }
+    )->single;
+    $row->delete if $row;
     return $self;
 }
 
 sub delete_exception {
     my ( $self, $params ) = @_;
-    Koha::Calendar::Exceptions->search( { library_id => $self->{branchcode}, date => $params->{date} } )->delete;
+    my $row = Koha::Calendar::Exceptions->search(
+        { library_id => $self->{branchcode}, date => $params->{date} },
+        { rows       => 1 }
+    )->single;
+    $row->delete if $row;
     return $self;
 }
 
