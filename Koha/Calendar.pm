@@ -7,6 +7,7 @@ use DateTime;
 use DateTime::Duration;
 use C4::Context;
 use Koha::Caches;
+use Koha::Database;
 use Koha::DateUtils qw( dt_from_string );
 use Koha::Exceptions;
 use Koha::Exceptions::Calendar;
@@ -487,59 +488,72 @@ sub copy_to {
     my ( $self, $target_branchcode ) = @_;
     croak "No target_branchcode" unless $target_branchcode;
 
-    my $today = dt_from_string()->ymd;
+    my $today  = dt_from_string()->ymd;
+    my $schema = Koha::Database->new->schema;
 
-    my $weekly = Koha::Calendar::WeeklyClosures->search( { library_id => $self->{branchcode} } );
-    while ( my $row = $weekly->next ) {
-        next
-            if Koha::Calendar::WeeklyClosures->search( { library_id => $target_branchcode, weekday => $row->weekday } )
-            ->count;
-        Koha::Calendar::WeeklyClosure->new(
-            {
-                library_id => $target_branchcode, weekday     => $row->weekday,
-                title      => $row->title,        description => $row->description,
+    $schema->txn_do(
+        sub {
+            my $weekly = Koha::Calendar::WeeklyClosures->search( { library_id => $self->{branchcode} } );
+            while ( my $row = $weekly->next ) {
+                next
+                    if Koha::Calendar::WeeklyClosures->search(
+                    { library_id => $target_branchcode, weekday => $row->weekday } )->count;
+                Koha::Calendar::WeeklyClosure->new(
+                    {
+                        library_id => $target_branchcode, weekday     => $row->weekday,
+                        title      => $row->title,        description => $row->description,
+                    }
+                )->store;
             }
-        )->store;
-    }
 
-    my $repeating = Koha::Calendar::RepeatingClosures->search( { library_id => $self->{branchcode} } );
-    while ( my $row = $repeating->next ) {
-        next
-            if Koha::Calendar::RepeatingClosures->search(
-            { library_id => $target_branchcode, day => $row->day, month => $row->month } )->count;
-        Koha::Calendar::RepeatingClosure->new(
-            {
-                library_id => $target_branchcode, day         => $row->day, month => $row->month,
-                title      => $row->title,        description => $row->description,
+            my $repeating = Koha::Calendar::RepeatingClosures->search( { library_id => $self->{branchcode} } );
+            while ( my $row = $repeating->next ) {
+                next
+                    if Koha::Calendar::RepeatingClosures->search(
+                    { library_id => $target_branchcode, day => $row->day, month => $row->month } )->count;
+                Koha::Calendar::RepeatingClosure->new(
+                    {
+                        library_id => $target_branchcode, day         => $row->day, month => $row->month,
+                        title      => $row->title,        description => $row->description,
+                    }
+                )->store;
             }
-        )->store;
-    }
 
-    my $singles =
-        Koha::Calendar::SingleClosures->search( { library_id => $self->{branchcode}, date => { '>=' => $today } } );
-    while ( my $row = $singles->next ) {
-        next
-            if Koha::Calendar::SingleClosures->search( { library_id => $target_branchcode, date => $row->date } )
-            ->count;
-        Koha::Calendar::SingleClosure->new(
-            {
-                library_id => $target_branchcode, date        => $row->date,
-                title      => $row->title,        description => $row->description,
+            my $singles = Koha::Calendar::SingleClosures->search(
+                { library_id => $self->{branchcode}, date => { '>=' => $today } } );
+            while ( my $row = $singles->next ) {
+                next
+                    if Koha::Calendar::SingleClosures->search(
+                    { library_id => $target_branchcode, date => $row->date } )->count;
+                Koha::Calendar::SingleClosure->new(
+                    {
+                        library_id => $target_branchcode, date        => $row->date,
+                        title      => $row->title,        description => $row->description,
+                    }
+                )->store;
             }
-        )->store;
-    }
 
-    my $exceptions =
-        Koha::Calendar::Exceptions->search( { library_id => $self->{branchcode}, date => { '>=' => $today } } );
-    while ( my $row = $exceptions->next ) {
-        next if Koha::Calendar::Exceptions->search( { library_id => $target_branchcode, date => $row->date } )->count;
-        Koha::Calendar::Exception->new(
-            {
-                library_id => $target_branchcode, date        => $row->date,
-                title      => $row->title,        description => $row->description,
+            my $exceptions =
+                Koha::Calendar::Exceptions->search( { library_id => $self->{branchcode}, date => { '>=' => $today } } );
+            while ( my $row = $exceptions->next ) {
+                next
+                    if Koha::Calendar::Exceptions->search( { library_id => $target_branchcode, date => $row->date } )
+                    ->count;
+                Koha::Calendar::Exception->new(
+                    {
+                        library_id => $target_branchcode, date        => $row->date,
+                        title      => $row->title,        description => $row->description,
+                    }
+                )->store;
             }
-        )->store;
-    }
+        }
+    );
+
+    # Per-row store() in SingleClosure/Exception flushes the target's
+    # _holidays cache on insert; flush defensively here in case copy_to
+    # added no new single/exception rows but the caller expects a clean
+    # cache state for the target.
+    Koha::Caches->get_instance()->clear_from_cache( $target_branchcode . '_holidays' );
 
     return 1;
 }
@@ -761,8 +775,17 @@ list of specified dates
 
     $calendar->copy_to($target_branchcode);
 
-Copies all closure rules to another branch. Only copies future single
-closures and exceptions.
+Copies closure rules to another branch inside a single transaction.
+
+Weekly and repeating closures are always copied. Single closures and
+exceptions are only copied when their date is today or later (past
+dates are filtered out by design).
+
+Rows already present on the target (matched by (library_id, weekday),
+(library_id, day, month) or (library_id, date)) are skipped so the
+operation is idempotent.
+
+Flushes the target library's C<_holidays> cache before returning.
 
 =head2 Internal methods
 
