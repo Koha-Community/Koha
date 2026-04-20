@@ -250,7 +250,7 @@
                 let tab = $("#" + tab_id + "_panel");
                 tab.find(".show_filters").hide();
                 tab.find(".hide_filters").show();
-                filters_show = true;
+                filters_shown = true;
                 $("#" + tab_id + "_table thead tr:eq(1)").remove();
                 build_items_table(tab_id, true, { destroy: true }, build_items_table_drawncallback);
                 itemSelectionBuildActionLinks(tab_id);
@@ -262,7 +262,7 @@
                 let tab = $("#" + tab_id + "_panel");
                 tab.find(".hide_filters").hide();
                 tab.find(".show_filters").show();
-                filters_show = false;
+                filters_shown = false;
                 $("#" + tab_id + "_table thead tr:eq(1)").remove();
                 build_items_table(tab_id, false, { destroy: true }, build_items_table_drawncallback);
                 itemSelectionBuildActionLinks(tab_id);
@@ -344,7 +344,7 @@
             let was_grouped = group_by_status_values[tab_id];
             group_by_status_values[tab_id] = !was_grouped;
 
-            build_items_table(tab_id, true, { destroy: true }, build_items_table_drawncallback);
+            build_items_table(tab_id, filters_shown, { destroy: true }, build_items_table_drawncallback);
 
             if (was_grouped) {
                 $(this).html('<i class="fa fa-object-group"></i>' + _("Group by status") + "</button>");
