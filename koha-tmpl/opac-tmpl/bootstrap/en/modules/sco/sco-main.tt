@@ -203,7 +203,7 @@
                                                                             [% ELSE %]
                                                                                 <strong>[% ISSUE.title | html %]</strong>
                                                                             [% END %]
-                                                                            [% IF ( newissues.match(ISSUE.barcode)) %]
+                                                                            [% IF ( newissues.match('\Q' + ISSUE.barcode + '\E')) %]
                                                                                 <span class="badge text-bg-info">NEW</span>
                                                                             [% END %]
                                                                             <span class="item-details">[% ISSUE.author | html %]</span>
