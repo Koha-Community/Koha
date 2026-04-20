@@ -259,7 +259,7 @@ sub errors_in_marc {
         for my $biblionumber (@item_fields_in_marc) {
             push @{ $errors->{item_fields_in_marc} },
                 __x(
-                q{Biblionumber {biblionumber} has item fields ({item_tag}) in the marc record},
+                q{Biblionumber {biblionumber} has item fields ({item_tag}) in the MARC record},
                 biblionumber => $biblionumber->{biblionumber},
                 item_tag     => $item_tag,
                 );

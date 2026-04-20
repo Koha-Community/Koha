@@ -440,7 +440,7 @@
         <span class="sub_permission manage_staged_marc_subpermission"> Manage staged MARC records, including completing and reversing imports </span>
         <span class="permissioncode">([% name | html %])</span>
     [%- CASE 'marc_modification_templates' -%]
-        <span class="sub_permission marc_modification_templates_subpermission"> Manage marc modification templates </span>
+        <span class="sub_permission marc_modification_templates_subpermission"> Manage MARC modification templates </span>
         <span class="permissioncode">([% name | html %])</span>
     [%- CASE 'moderate_comments' -%]
         <span class="sub_permission moderate_comments_subpermission"> Moderate patron comments </span>
