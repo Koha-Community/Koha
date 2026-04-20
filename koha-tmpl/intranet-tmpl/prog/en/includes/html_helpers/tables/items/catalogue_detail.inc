@@ -347,9 +347,9 @@
             build_items_table(tab_id, filters_shown, { destroy: true }, build_items_table_drawncallback);
 
             if (was_grouped) {
-                $(this).html('<i class="fa fa-object-group"></i>' + _("Group by status") + "</button>");
+                $(this).html('<i class="fa fa-object-group"></i> ' + _("Group by status") + "</button>");
             } else {
-                $(this).html('<i class="fa fa-object-ungroup"></i>' + _("Ungroup by status") + "</button>");
+                $(this).html('<i class="fa fa-object-ungroup"></i> ' + _("Ungroup by status") + "</button>");
             }
         });
 
