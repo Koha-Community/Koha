@@ -24,7 +24,9 @@ use Test::More tests => 29;
 
 use Test::MockModule;
 use Test::Exception;
+use Test::Warn;
 use Time::Fake;
+use String::Random;
 
 use C4::Circulation qw( AddIssue LostItem AddReturn );
 use C4::Context;
@@ -72,6 +74,41 @@ is( Koha::Items->search->count, $nb_of_items + 2, 'The 2 items should have been 
 
 my $retrieved_item_1 = Koha::Items->find( $new_item_1->itemnumber );
 is( $retrieved_item_1->barcode, $new_item_1->barcode, 'Find a item by id should return the correct item' );
+
+subtest 'properties' => sub {
+    plan tests => 1;
+    $schema->storage->txn_begin;
+
+    subtest 'barcode length' => sub {
+        plan tests => 3;
+        my $string_gen = String::Random->new;
+
+        my $barcode_25 = $string_gen->randregex('\w{25}');
+        my $item       = $builder->build_sample_item(
+            {
+                barcode => $barcode_25,
+            }
+        );
+        is( $item->barcode, $barcode_25 );
+
+        my $barcode_33 = $string_gen->randregex('\w{33}');
+
+        # An exception is thrown and a warning generated from Koha::Object->store
+        warnings_like {
+            throws_ok {
+                $item = $builder->build_sample_item(
+                    {
+                        barcode => $barcode_33,
+                    }
+                );
+
+            }
+            qr{DBD::mysql::st execute failed: Data too long for column 'barcode'}
+        }
+        qr{DBD::mysql::st execute failed: Data too long for column 'barcode'};
+    };
+    $schema->storage->txn_rollback;
+};
 
 subtest 'search' => sub {
 
