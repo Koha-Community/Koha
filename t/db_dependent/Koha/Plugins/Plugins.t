@@ -26,7 +26,7 @@ use List::MoreUtils           qw(none);
 use Module::Load::Conditional qw(can_load);
 use Test::MockModule;
 use Test::NoWarnings;
-use Test::More tests => 21;
+use Test::More tests => 22;
 use Test::Warn;
 use Test::Exception;
 
@@ -260,6 +260,72 @@ subtest 'InstallPlugins() tests' => sub {
         $plugins->InstallPlugins( { include => ["Koha::Plugin::NotfoundPlugin"] } );
     }
     'Koha::Exceptions::BadParameter';
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'InstallPlugins() reloads stale symbol tables tests' => sub {
+
+    plan tests => 5;
+
+    $schema->storage->txn_begin;
+
+    Koha::Plugins::Methods->delete;
+    $schema->resultset('PluginData')->delete;
+
+    my $plugins = Koha::Plugins->new( { enable_plugins => 1 } );
+    $plugins->InstallPlugins( { include => ['Koha::Plugin::Test'] } );
+
+    # Simulate the stale-symbol-table scenario that a long-lived Plack worker
+    # would hit when a plugin is upgraded in place: inject a method into the
+    # loaded package that is not present in the .pm file on disk, and add a
+    # matching plugin_methods row as if a previous version of the plugin had
+    # this method and had loaded the older version into memory.
+    # A run of InstallPlugins should reload from disk and the phantom method
+    # should disappear.
+    {
+        no strict 'refs';
+        *{'Koha::Plugin::Test::stale_phantom_method'} = sub { 1 };
+    }
+
+    Koha::Plugins::Method->new(
+        {
+            plugin_class  => 'Koha::Plugin::Test',
+            plugin_method => 'stale_phantom_method',
+        }
+    )->store;
+
+    ok(
+        Koha::Plugin::Test->can('stale_phantom_method'),
+        'Phantom method is in the in-memory symbol table before reinstall'
+    );
+
+    ok(
+        Koha::Plugins::Methods->search(
+            { plugin_class => 'Koha::Plugin::Test', plugin_method => 'stale_phantom_method' }
+        )->count,
+        'Phantom method row is present in plugin_methods before reinstall'
+    );
+
+    $plugins->InstallPlugins( { include => ['Koha::Plugin::Test'] } );
+
+    ok(
+        !Koha::Plugin::Test->can('stale_phantom_method'),
+        'Phantom method is gone from the symbol table after reinstall (package was reloaded)'
+    );
+
+    is(
+        Koha::Plugins::Methods->search(
+            { plugin_class => 'Koha::Plugin::Test', plugin_method => 'stale_phantom_method' }
+        )->count,
+        0,
+        'Phantom method absent from the .pm file is not persisted to plugin_methods after reinstall'
+    );
+
+    ok(
+        Koha::Plugins::Methods->search( { plugin_class => 'Koha::Plugin::Test', plugin_method => 'tool' } )->count,
+        'Real methods from the .pm file are persisted to plugin_methods'
+    );
 
     $schema->storage->txn_rollback;
 };
