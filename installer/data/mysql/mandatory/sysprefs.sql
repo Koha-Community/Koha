@@ -101,6 +101,7 @@ INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `
 ('AutomaticEmailReceipts','0','','Send email receipts for payments and write-offs','YesNo'),
 ('AutomaticItemReturn','1',NULL,'If ON, Koha will automatically set up a transfer of this item to its homebranch','YesNo'),
 ('autoMemberNum','0','','If ON, patron number is auto-calculated','YesNo'),
+('autoMemberNumValue','0',NULL,'Stores the last auto-generated cardnumber to prevent re-issuance','Integer'),
 ('AutoRemoveOverduesRestrictions','no','no|when_no_overdue|when_no_overdue_causing_debarment', 'Defines if and on what conditions OVERDUES debarments should automatically be lifted when overdue items are returned by the patron.','Choice'),
 ('AutoRenewalNotices','preferences','cron|preferences|never','How should Koha determine whether to end autorenewal notices','Choice'),
 ('AutoResumeSuspendedHolds','1',NULL,'Allow suspended holds to be automatically resumed by a set date.','YesNo'),
