@@ -19,7 +19,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 42;
+use Test::More tests => 43;
 use Test::NoWarnings;
 use Test::Exception;
 use Test::Warn;
@@ -3308,4 +3308,100 @@ subtest 'is_anonymous' => sub {
 
     $schema->storage->txn_rollback;
 
+};
+
+subtest 'fixup_cardnumber and autoMemberNumValue counter' => sub {
+    plan tests => 10;
+
+    $schema->storage->txn_begin;
+
+    t::lib::Mocks::mock_preference( 'autoMemberNum',       1 );
+    t::lib::Mocks::mock_preference( 'ChildNeedsGuarantor', 0 );
+
+    my $pref_rs = $schema->resultset('Systempreference');
+
+    my $set_counter = sub {
+        my $value = shift;
+        my $row   = $pref_rs->find('autoMemberNumValue');
+        if ($row) { $row->update( { value => $value } ) }
+        else      { $pref_rs->create( { variable => 'autoMemberNumValue', value => $value } ) }
+    };
+    my $get_counter = sub {
+        my $row = $pref_rs->find('autoMemberNumValue');
+        return $row ? $row->value : undef;
+    };
+
+    my $category = $builder->build_object( { class => 'Koha::Patron::Categories' } );
+    my $library  = $builder->build_object( { class => 'Koha::Libraries' } );
+
+    my $new_patron = sub {
+        return Koha::Patron->new(
+            {
+                surname      => 'fixup-test',
+                categorycode => $category->categorycode,
+                branchcode   => $library->branchcode,
+                cardnumber   => undef,
+            }
+        );
+    };
+
+    # Anchor well above any existing fixture cardnumbers for deterministic assertions.
+    my $baseline = Koha::Patrons->search(
+        { cardnumber => { -regexp => '^-?[0-9]+$' } },
+        {
+            select => \'CAST(cardnumber AS SIGNED)',
+            as     => ['m'],
+        }
+        )->_resultset->get_column('m')->max
+        || 0;
+    my $start = $baseline + 1_000;
+    $set_counter->($start);
+
+    my $p1 = $new_patron->()->store;
+    is( $p1->cardnumber + 0,  $start + 1, 'First auto-generated cardnumber is counter + 1' );
+    is( $get_counter->() + 0, $start + 1, 'Counter persisted after auto-generation' );
+
+    # The bug fix: renaming a patron's cardnumber must not free the old number.
+    my $original = $p1->cardnumber;
+    $p1->cardnumber('MANUAL-XYZ')->store;
+    my $p2 = $new_patron->()->store;
+    isnt( $p2->cardnumber, $original, q{Original auto-generated number not reused after rename} );
+    is( $p2->cardnumber + 0, $start + 2, 'Next patron uses counter + 1, skipping the freed slot' );
+
+    # Deleting a patron must not free their cardnumber either.
+    my $p2_cardnumber = $p2->cardnumber;
+    $p2->delete;
+    my $p3 = $new_patron->()->store;
+    isnt( $p3->cardnumber, $p2_cardnumber, q{Deleted patron's cardnumber not reused} );
+
+    # Counter ahead of DB max: counter wins.
+    $set_counter->( $start + 1_000_000 );
+    my $p4 = $new_patron->()->store;
+    is( $p4->cardnumber + 0, $start + 1_000_001, 'Counter ahead of DB max wins' );
+
+    # DB max ahead of counter (e.g. admin imported high numbers directly): DB max wins.
+    my $high = $start + 2_000_000;
+    $set_counter->(5);
+    Koha::Patron->new(
+        {
+            surname      => 'manual-high',
+            categorycode => $category->categorycode,
+            branchcode   => $library->branchcode,
+            cardnumber   => "$high",
+        }
+    )->store;
+    my $p5 = $new_patron->()->store;
+    is( $p5->cardnumber + 0,  $high + 1, 'DB max ahead of counter wins' );
+    is( $get_counter->() + 0, $high + 1, 'Counter catches up to DB max + 1' );
+
+    # Pre-upgrade fallback: syspref row absent -> behaves like pre-34000 code.
+    $pref_rs->find('autoMemberNumValue')->delete;
+    my $p6 = $new_patron->()->store;
+    is( $p6->cardnumber + 0, $high + 2, 'Legacy fallback when syspref row is absent' );
+    is(
+        $pref_rs->find('autoMemberNumValue'), undef,
+        'Syspref row stays absent when fallback path is taken'
+    );
+
+    $schema->storage->txn_rollback;
 };

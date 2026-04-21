@@ -67,6 +67,7 @@ subtest 'Compare sysprefs.sql with YAML files' => sub {
     @sysprefs_mod = grep !/UsageStatsID/,                         @sysprefs_mod;    # Separate configuration page
     @sysprefs_mod = grep !/UsageStatsLastUpdateTime/,             @sysprefs_mod;    # Separate configuration page
     @sysprefs_mod = grep !/UsageStatsPublicID/,                   @sysprefs_mod;    # Separate configuration page
+    @sysprefs_mod = grep !/autoMemberNumValue/,                   @sysprefs_mod;    # Separate configuration page
 
     my @missing_yaml = array_minus( @sysprefs_mod, @yaml_mod );
     is( scalar @missing_yaml, 0, "No system preference entries missing from sysprefs.sql" );
