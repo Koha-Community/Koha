@@ -47,14 +47,16 @@ subtest 'patron_barcode_transform() and item_barcode_transform() hook tests' => 
 
     $schema->storage->txn_begin;
 
-    # Avoid testing useless warnings
-    my $test_plugin = Test::MockModule->new('Koha::Plugin::Test');
-    $test_plugin->mock( 'after_item_action',   undef );
-    $test_plugin->mock( 'after_biblio_action', undef );
-
     my $plugins = Koha::Plugins->new;
 
     warning_is { $plugins->InstallPlugins; } undef;
+
+    # Avoid testing useless warnings. Must be applied after InstallPlugins,
+    # which reloads plugin classes from disk and would otherwise wipe the
+    # mocks.
+    my $test_plugin = Test::MockModule->new('Koha::Plugin::Test');
+    $test_plugin->mock( 'after_item_action',   undef );
+    $test_plugin->mock( 'after_biblio_action', undef );
 
     C4::Context->dbh->do("DELETE FROM plugin_methods WHERE plugin_class LIKE '%TestBarcodes%'");
 
