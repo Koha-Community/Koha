@@ -789,14 +789,15 @@ sub get_matches {
             my ( $authresults, $total ) = $searcher->search_auth_compat( $search_query, 0, 20 );
 
             foreach my $result (@$authresults) {
-                my $id             = $result->{authid};
-                my $target_auth    = Koha::Authorities->find($id);
+                my $id          = $result->{authid};
+                my $target_auth = Koha::Authorities->find($id);
+                next unless $target_auth;
                 my $target_record  = eval { $target_auth->record };
                 my $invalid_record = $@ || !$target_record;
                 if ($invalid_record) {
                     warn
                         "Error parsing matched authority record $id, attempting to clean record, record will be skipped if it fails";
-                    $target_record = $target_auth->record_strip_nonxml;
+                    $target_record = eval { $target_auth->record_strip_nonxml };
                 }
                 next unless $target_record;
                 $matches->{$id}->{score} += $matchpoint->{'score'};
