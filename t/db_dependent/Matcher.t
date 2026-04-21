@@ -367,7 +367,7 @@ subtest '_get_match_keys() leader tests' => sub {
 };
 
 subtest 'get_matches bad record test' => sub {
-    plan tests => 1;
+    plan tests => 6;
 
     # First we need to generate a bad record
     my $record = MARC::Record->new();
@@ -400,17 +400,41 @@ subtest 'get_matches bad record test' => sub {
     my $matcher_db = $builder->build(
         {
             source => 'MarcMatcher',
-            value  => { record_type => 'authority' },
+            value  => { record_type => 'authority', threshold => 1 },
         }
     );
     my $matcher_object = C4::Matcher->fetch( $matcher_db->{matcher_id} );
     $matcher_object->{matchpoints} = [ get_authority_matchpoint() ];
 
-    # Now we are ready to test that a malformed record is handled
+    # Recoverable case: bad XML characters are stripped and the record is returned
+    my @results;
     warnings_like {
-        $matcher_object->get_matches( $record, 1 );
+        @results = $matcher_object->get_matches( $record, 1 );
     }
     [qr/Error parsing matched authority record /], "Record with bad XML characters handled";
+    is( scalar(@results),         1,       "Recovered record is returned to the caller" );
+    is( $results[0]->{record_id}, $authid, "Recovered record carries the expected authid" );
+
+    # Unrecoverable case: record_strip_nonxml also fails, record must be skipped silently
+    my $mock_authority = Test::MockModule->new('Koha::Authority');
+    $mock_authority->mock( 'record_strip_nonxml', sub { return; } );
+    warnings_like {
+        @results = $matcher_object->get_matches( $record, 1 );
+    }
+    [qr/Error parsing matched authority record /],
+        "Unrecoverable record still emits the parse warning";
+    is( scalar(@results), 0, "Unrecoverable record is skipped from results" );
+    $mock_authority->unmock('record_strip_nonxml');
+
+    # Stale search index: the authid no longer exists in the database
+    $mock_searcher->mock(
+        'search_auth_compat',
+        sub {
+            return [ { authid => 0 } ];
+        }
+    );
+    @results = $matcher_object->get_matches( $record, 1 );
+    is( scalar(@results), 0, "Stale authid pointing at a missing record is skipped without dying" );
 };
 
 sub get_title_matchpoint {
