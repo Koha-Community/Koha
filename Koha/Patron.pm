@@ -121,24 +121,46 @@ sub new {
 
 =head3 fixup_cardnumber
 
-Autogenerate next cardnumber from highest value found in database
+Autogenerate next cardnumber from highest value found in database.
+
+Uses the C<autoMemberNumValue> system preference as a monotonic floor so a
+cardnumber is never re-issued after the original holder's cardnumber has been
+changed or their account deleted. The syspref row is selected C<FOR UPDATE>
+inside the enclosing transaction so that concurrent C<store()> callers are
+serialised.
 
 =cut
 
 sub fixup_cardnumber {
     my ($self) = @_;
 
-    my $max = $self->cardnumber;
-    Koha::Plugins->call( 'patron_barcode_transform', \$max );
+    my $next = $self->cardnumber;
+    Koha::Plugins->call( 'patron_barcode_transform', \$next );
 
-    $max ||= Koha::Patrons->search(
-        { cardnumber => { -regexp => '^-?[0-9]+$' } },
-        {
-            select => \'CAST(cardnumber AS SIGNED)',
-            as     => ['cast_cardnumber']
-        }
-    )->_resultset->get_column('cast_cardnumber')->max;
-    $self->cardnumber( ( $max || 0 ) + 1 );
+    # Only auto-generate when no cardnumber has been supplied (directly or by a plugin).
+    unless ($next) {
+        my $schema  = $self->_result->result_source->schema;
+        my $pref_rs = $schema->resultset('Systempreference')->search(
+            { variable => 'autoMemberNumValue' },
+            { for      => 'update' },
+        );
+        my $pref    = $pref_rs->first;
+        my $counter = ( $pref && $pref->value ) || 0;
+
+        my $db_max = Koha::Patrons->search(
+            { cardnumber => { -regexp => '^-?[0-9]+$' } },
+            {
+                select => \'CAST(cardnumber AS SIGNED)',
+                as     => ['cast_cardnumber'],
+            }
+            )->_resultset->get_column('cast_cardnumber')->max
+            || 0;
+
+        $next = ( $counter > $db_max ? $counter : $db_max ) + 1;
+        $pref->update( { value => $next } ) if $pref;
+    }
+
+    $self->cardnumber($next);
 }
 
 =head3 trim_whitespace
