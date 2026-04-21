@@ -466,8 +466,10 @@ $(document).ready(function () {
     });
 
     $("#patron_header_search").on("submit", function (e) {
-        e.preventDefault();
-        validatePatronSearch($(this)[0]);
+        const validated = validatePatronSearch(e.target);
+        if (validated !== true) {
+            e.preventDefault();
+        }
     });
 });
 
