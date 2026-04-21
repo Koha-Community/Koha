@@ -26,6 +26,7 @@ use Module::Load::Conditional qw( can_load );
 use Module::Load;
 use Module::Pluggable search_path => ['Koha::Plugin'],
     except                        => qr/::Edifact(|::Line|::Message|::Order|::Segment|::Transport)$/;
+use Symbol qw( delete_package );
 use Try::Tiny;
 use POSIX qw(getpid);
 
@@ -322,6 +323,17 @@ sub InstallPlugins {
     }
 
     foreach my $plugin_class (@plugin_classes) {
+
+        # Force a fresh load from disk. Without this, a long-lived Plack
+        # worker that already has the plugin loaded would rescan a stale
+        # symbol table during an upgrade, so plugin_methods ends up out of
+        # sync with the installed .pm (e.g. missing newly-added methods or
+        # retaining methods that were renamed or removed).
+        ( my $plugin_inc_key = $plugin_class ) =~ s{::}{/}g;
+        $plugin_inc_key .= '.pm';
+        delete $INC{$plugin_inc_key};
+        delete_package($plugin_class);
+
         if ( can_load( modules => { $plugin_class => undef }, verbose => $verbose, nocache => 1 ) ) {
             next unless $plugin_class->isa('Koha::Plugins::Base');
 
