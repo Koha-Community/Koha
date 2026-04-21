@@ -22,7 +22,7 @@
                 <i class="fa fa-exclamation error"></i>
             [% END %]
             [% IF m.code == 'authority_not_exists' %]
-                <span>The authority id [% m.authid | html %] does not exist in the database.</span>
+                <span>The authority ID [% m.authid | html %] does not exist in the database.</span>
             [% ELSIF m.code == 'authority_not_deleted' %]
                 <span>Authority record [% m.authid | html %] was not deleted. An error occurred.</span>
             [% ELSIF m.code == 'authority_deleted' %]

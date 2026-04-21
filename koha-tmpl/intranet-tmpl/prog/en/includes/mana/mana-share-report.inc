@@ -16,7 +16,7 @@
                     <div id="note-error" class="alert alert-warning" role="alert"> Please enter a report name and descriptive note before sharing (minimum 20 characters) </div>
                     <div class="shared_infos rows">
                         <ul>
-                            <li><span class="label">Id: </span><div id="shared_id"></div></li>
+                            <li><span class="label">ID: </span><div id="shared_id"></div></li>
                             <li><span class="label">Name: </span><div id="shared_name"></div></li>
                             <li><span class="label">SQL: </span><div id="shared_sql"></div></li>
                             <li><span class="label">Group: </span><div id="shared_group"></div></li>

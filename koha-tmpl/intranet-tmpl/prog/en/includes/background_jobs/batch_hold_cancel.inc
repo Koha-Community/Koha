@@ -34,7 +34,7 @@
                 <span>An error occurred on cancelling.</span>
                 [% SWITCH m.error %]
                 [% CASE 'hold_not_found' %]
-                    <span>No hold with id [% m.hold_id | html %] found.</span>
+                    <span>No hold with ID [% m.hold_id | html %] found.</span>
                 [% CASE %]
                     <span>Unknown error '[% m.error | html %]'.</span>
                 [% END %]
