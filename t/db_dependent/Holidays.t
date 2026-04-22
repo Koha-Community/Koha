@@ -44,7 +44,8 @@ subtest 'is_holiday timezone tests' => sub {
 
     $schema->storage->txn_begin;
 
-    $dbh->do("DELETE FROM special_holidays");
+    $dbh->do("DELETE FROM library_single_closures");
+    $dbh->do("DELETE FROM library_closure_exceptions");
 
     # Clear cache
     Koha::Caches->get_instance->flush_all;
@@ -141,8 +142,10 @@ is( $koha_calendar->is_holiday($monday),    0, 'Monday is not a closed day' );
 is( $koha_calendar->is_holiday($christmas), 1, 'Christmas is a closed day' );
 is( $koha_calendar->is_holiday($newyear),   1, 'New Years day is a closed day' );
 
-$dbh->do("DELETE FROM repeatable_holidays");
-$dbh->do("DELETE FROM special_holidays");
+$dbh->do("DELETE FROM library_weekly_closures");
+$dbh->do("DELETE FROM library_repeating_closures");
+$dbh->do("DELETE FROM library_single_closures");
+$dbh->do("DELETE FROM library_closure_exceptions");
 
 my $custom_holiday = DateTime->new(
     year  => 2013,
@@ -172,7 +175,7 @@ $schema->storage->txn_rollback;
 
 subtest 'copy_to_branch' => sub {
 
-    plan tests => 8;
+    plan tests => 10;
 
     $schema->storage->txn_begin;
 
@@ -256,40 +259,70 @@ subtest 'copy_to_branch' => sub {
     C4::Calendar->new( branchcode => $branch1 )->copy_to_branch($branch2);
 
     #Select all rows with same values from database
-    my $dbh                     = C4::Context->dbh;
-    my $get_repeatable_holidays = "SELECT a.* FROM repeatable_holidays a
-        JOIN (SELECT branchcode, weekday, day, month, COUNT(*)
-        FROM repeatable_holidays
-        GROUP BY branchcode, weekday, day, month HAVING count(*) > 1) b
-        ON a.branchcode = b.branchcode
-        AND ( a.weekday = b.weekday OR (a.day = b.day AND a.month = b.month))
-        ORDER BY a.branchcode;";
-    my $sth = $dbh->prepare($get_repeatable_holidays);
+    my $dbh                 = C4::Context->dbh;
+    my $get_weekly_closures = "SELECT a.* FROM library_weekly_closures a
+        JOIN (SELECT library_id, weekday, COUNT(*)
+        FROM library_weekly_closures
+        GROUP BY library_id, weekday HAVING count(*) > 1) b
+        ON a.library_id = b.library_id AND a.weekday = b.weekday
+        ORDER BY a.library_id;";
+    my $sth = $dbh->prepare($get_weekly_closures);
     $sth->execute;
 
-    my @repeatable_holidays;
+    my @weekly_closures;
     while ( my $row = $sth->fetchrow_hashref ) {
-        push @repeatable_holidays, $row;
+        push @weekly_closures, $row;
     }
 
-    is( scalar(@repeatable_holidays), 0, "None of the repeatable holidays were doubled" );
+    is( scalar(@weekly_closures), 0, "None of the weekly closures were doubled" );
 
-    my $get_special_holidays = "SELECT a.* FROM special_holidays a
-    JOIN (SELECT branchcode, day, month, year, isexception, COUNT(*)
-    FROM special_holidays
-    GROUP BY branchcode, day, month, year, isexception HAVING count(*) > 1) b
-    ON a.branchcode = b.branchcode
-    AND a.day = b.day AND a.month = b.month AND a.year = b.year AND a.isexception = b.isexception
-    ORDER BY a.branchcode;";
-    $sth = $dbh->prepare($get_special_holidays);
+    my $get_repeating_closures = "SELECT a.* FROM library_repeating_closures a
+        JOIN (SELECT library_id, day, month, COUNT(*)
+        FROM library_repeating_closures
+        GROUP BY library_id, day, month HAVING count(*) > 1) b
+        ON a.library_id = b.library_id AND a.day = b.day AND a.month = b.month
+        ORDER BY a.library_id;";
+    $sth = $dbh->prepare($get_repeating_closures);
     $sth->execute;
 
-    my @special_holidays;
+    my @repeating_closures;
     while ( my $row = $sth->fetchrow_hashref ) {
-        push @special_holidays, $row;
+        push @repeating_closures, $row;
     }
 
-    is( scalar(@special_holidays), 0, "None of the special holidays were doubled" );
+    is( scalar(@repeating_closures), 0, "None of the repeating closures were doubled" );
+
+    my $get_single_closures = "SELECT a.* FROM library_single_closures a
+        JOIN (SELECT library_id, date, COUNT(*)
+        FROM library_single_closures
+        GROUP BY library_id, date HAVING count(*) > 1) b
+        ON a.library_id = b.library_id AND a.date = b.date
+        ORDER BY a.library_id;";
+    $sth = $dbh->prepare($get_single_closures);
+    $sth->execute;
+
+    my @single_closures;
+    while ( my $row = $sth->fetchrow_hashref ) {
+        push @single_closures, $row;
+    }
+
+    is( scalar(@single_closures), 0, "None of the single closures were doubled" );
+
+    my $get_closure_exceptions = "SELECT a.* FROM library_closure_exceptions a
+        JOIN (SELECT library_id, date, COUNT(*)
+        FROM library_closure_exceptions
+        GROUP BY library_id, date HAVING count(*) > 1) b
+        ON a.library_id = b.library_id AND a.date = b.date
+        ORDER BY a.library_id;";
+    $sth = $dbh->prepare($get_closure_exceptions);
+    $sth->execute;
+
+    my @closure_exceptions;
+    while ( my $row = $sth->fetchrow_hashref ) {
+        push @closure_exceptions, $row;
+    }
+
+    is( scalar(@closure_exceptions), 0, "None of the closure exceptions were doubled" );
 
     $schema->storage->txn_rollback;
 
