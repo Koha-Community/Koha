@@ -125,6 +125,13 @@ if ( !$registers->count ) {
             my $refund_type    = $input->param('refund_type');
 
             my $accountline = Koha::Account::Lines->find($accountline_id);
+
+            # Refuse 'AC' (Account credit) refunds for anonymous accountlines:
+            # there is no patron account to credit, so the refund would be
+            # orphaned and the register would be left unbalanced.
+            if ( $refund_type eq 'AC' && !$accountline->borrowernumber ) {
+                $template->param( error_refund_anonymous_ac => 1 );
+            } else {
             $schema->txn_do(
                 sub {
 
@@ -158,6 +165,7 @@ if ( !$registers->count ) {
             # Redirect to prevent duplicate submissions (POST/REDIRECT/GET pattern)
             print $input->redirect( "/cgi-bin/koha/pos/register.pl?registerid=" . $registerid );
             exit;
+            }
         } else {
             $template->param( error_refund_permission => 1 );
         }
