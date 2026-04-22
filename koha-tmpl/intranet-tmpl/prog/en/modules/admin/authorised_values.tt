@@ -444,6 +444,10 @@
                 $("#library_limitation")[0].style.minWidth = "450px";
                 $("#library_limitation").select2();
             }
+
+            $("#remoteImage").on("mousedown", function () {
+                $("#remote_image_check").prop("checked", true);
+            });
         });
     </script>
 [% END %]
