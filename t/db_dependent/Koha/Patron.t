@@ -19,7 +19,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 23;
+use Test::More tests => 24;
 use Test::NoWarnings;
 use Test::Exception;
 use Test::Warn;
@@ -324,7 +324,7 @@ subtest 'Accessor tests' => sub {
 
 subtest 'add_guarantor() tests' => sub {
 
-    plan tests => 6;
+    plan tests => 7;
 
     $schema->storage->txn_begin;
 
@@ -353,15 +353,16 @@ subtest 'add_guarantor() tests' => sub {
 
     is( $guarantors->count, 1, 'No guarantors added' );
 
-    {
-        local *STDERR;
-        open STDERR, '>', '/dev/null';
-        throws_ok
-            { $patron_1->add_guarantor({ guarantor_id => $patron_2->borrowernumber, relationship => 'father2' }); }
+    warning_like(
+        sub {
+            throws_ok {
+                $patron_1->add_guarantor( { guarantor_id => $patron_2->borrowernumber, relationship => 'father2' } );
+            }
             'Koha::Exceptions::Patron::Relationship::DuplicateRelationship',
-            'Exception is thrown for duplicated relationship';
-        close STDERR;
-    }
+                'Exception is thrown for duplicated relationship';
+        },
+        qr{Duplicate entry.* for key '(borrower_relationships\.)?guarantor_guarantee_idx'}
+    );
 
     $schema->storage->txn_rollback;
 };
@@ -1716,7 +1717,8 @@ subtest 'fixup_cardnumber and autoMemberNumValue counter' => sub {
 
     $schema->storage->txn_begin;
 
-    t::lib::Mocks::mock_preference( 'autoMemberNum', 1 );
+    t::lib::Mocks::mock_preference( 'autoMemberNum',       1 );
+    t::lib::Mocks::mock_preference( 'ChildNeedsGuarantor', 0 );
 
     my $pref_rs = $schema->resultset('Systempreference');
 
