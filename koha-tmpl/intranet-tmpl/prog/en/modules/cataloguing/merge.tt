@@ -132,10 +132,19 @@
                                         checked="checked"
                                         id="ref_biblionumber[% record.biblionumber | html %]"
                                         name="ref_biblionumber"
-                                        onclick="changeFramework('[% record.frameworkcode | html %]')"
+                                        class="change_framework"
+                                        data-framework="[% record.frameworkcode | html %]"
                                     />
+                                    [% SET selected_frameworkcode = record.frameworkcode %]
                                 [% ELSE %]
-                                    <input type="radio" value="[% record.biblionumber | html %]" id="ref_biblionumber[% record.biblionumber | html %]" name="ref_biblionumber" onclick="changeFramework('[% record.frameworkcode | html %]')" />
+                                    <input
+                                        type="radio"
+                                        value="[% record.biblionumber | html %]"
+                                        id="ref_biblionumber[% record.biblionumber | html %]"
+                                        name="ref_biblionumber"
+                                        class="change_framework"
+                                        data-framework="[% record.frameworkcode | html %]"
+                                    />
                                 [% END %]
                                 <label for="ref_biblionumber[% record.biblionumber | html %]">
                                     [% INCLUDE 'biblio-title.inc' biblio=record.data link = 1 %] ([% record.biblionumber | uri %])
@@ -149,7 +158,7 @@
                             <select name="frameworkcode" id="frameworkcode">
                                 <option value="">Default</option>
                                 [% FOREACH framework IN frameworks %]
-                                    <option value="[% framework.frameworkcode | html %]">[% framework.frameworktext | html %]</option>
+                                    <option value="[% framework.frameworkcode | html %]" [% IF framework.frameworkcode == selected_frameworkcode %]selected="selected"[% END %]>[% framework.frameworktext | html %]</option>
                                 [% END %]
                             </select>
                         </li>
@@ -234,6 +243,10 @@
                 $("#dataPreview").on("hidden.bs.modal", function(){
                     $("#dataPreviewLabel").html("");
                     $("#dataPreview .modal-body").html("<div id=\"loading\"><img src=\"[% interface | html %]/[% theme | html %]/img/spinner-small.gif\" alt=\"\" /> "+_("Loading")+"</div>");
+                });
+                $(".change_framework").on("click", function(){
+                    let framework = $(this).data("framework");
+                    changeFramework( framework );
                 });
             });
           [% ELSE %]
