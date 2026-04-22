@@ -126,39 +126,47 @@ if ( !$registers->count ) {
             my $refund_type    = $input->param('refund_type');
 
             my $accountline = Koha::Account::Lines->find($accountline_id);
-            $schema->txn_do(
-                sub {
 
-                    my $refund = $accountline->reduce(
-                        {
-                            reduction_type => 'REFUND',
-                            branch         => $library_id,
-                            staff_id       => $logged_in_user->id,
-                            interface      => 'intranet',
-                            amount         => $amount
-                        }
-                    );
+            # Refuse 'AC' (Account credit) refunds for anonymous accountlines:
+            # there is no patron account to credit, so the refund would be
+            # orphaned and the register would be left unbalanced.
+            if ( $refund_type eq 'AC' && !$accountline->borrowernumber ) {
+                $template->param( error_refund_anonymous_ac => 1 );
+            } else {
+                $schema->txn_do(
+                    sub {
 
-                    # Only create a payout if refund_type is not 'AC' (Account Credit)
-                    # When 'AC' is selected, the refund stays as credit on the patron's account
-                    unless ( $refund_type eq 'AC' ) {
-                        my $payout = $refund->payout(
+                        my $refund = $accountline->reduce(
                             {
-                                payout_type   => $refund_type,
-                                branch        => $library_id,
-                                staff_id      => $logged_in_user->id,
-                                cash_register => $cash_register->id,
-                                interface     => 'intranet',
-                                amount        => $amount
+                                reduction_type => 'REFUND',
+                                branch         => $library_id,
+                                staff_id       => $logged_in_user->id,
+                                interface      => 'intranet',
+                                amount         => $amount
                             }
                         );
-                    }
-                }
-            );
 
-            # Redirect to prevent duplicate submissions (POST/REDIRECT/GET pattern)
-            print $input->redirect( "/cgi-bin/koha/pos/register.pl?registerid=" . $registerid );
-            exit;
+                        # Only create a payout if refund_type is not 'AC' (Account Credit)
+                        # When 'AC' is selected, the refund stays as credit on the patron's account
+                        unless ( $refund_type eq 'AC' ) {
+                            my $payout = $refund->payout(
+                                {
+                                    payout_type   => $refund_type,
+                                    branch        => $library_id,
+                                    staff_id      => $logged_in_user->id,
+                                    cash_register => $cash_register->id,
+                                    interface     => 'intranet',
+                                    amount        => $amount
+                                }
+                            );
+                        }
+                    }
+                );
+
+                # Redirect to prevent duplicate submissions (POST/REDIRECT/GET pattern)
+                print $input->redirect( "/cgi-bin/koha/pos/register.pl?registerid=" . $registerid );
+                exit;
+            }
         } else {
             $template->param( error_refund_permission => 1 );
         }

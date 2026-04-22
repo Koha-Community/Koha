@@ -52,6 +52,10 @@
             <div id="error_message" class="alert alert-warning"> You do not have permission to perform refund actions. </div>
         [% END %]
 
+        [% IF ( error_refund_anonymous_ac ) %]
+            <div id="error_message" class="alert alert-warning"> Account credit refunds are not available for anonymous transactions. Please choose a different refund type. </div>
+        [% END %]
+
         [% IF ( CAN_user_cash_management_cashup ) %]
             <div id="toolbar" class="btn-toolbar">
                 <button id="pos_cashup" type="button" class="btn btn-default" data-bs-toggle="modal" data-bs-target="#confirmCashupModal"><i class="fa-solid fa-money-bill-1"></i> Record cashup</button>
