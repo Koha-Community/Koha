@@ -54,7 +54,7 @@
         <p
             ><strong
                 >With framework:
-                <select name="Frameworks" id="Frameworks" onchange="Changefwk(this);">
+                <select name="Frameworks" id="Frameworks">
                     <option value="">Default</option>
                     [% FOREACH framework IN frameworks %]
                         [% IF framework.frameworkcode == frameworkcode %]
@@ -91,8 +91,6 @@
     [% Asset.js("lib/dayjs/plugin/isSameOrBefore.js") | $raw %]
     <script nonce="[% Koha.CSPNonce | $raw %]">
         dayjs.extend(window.dayjs_plugin_isSameOrAfter);
-    </script>
-    <script nonce="[% Koha.CSPNonce | $raw %]">
         dayjs.extend(window.dayjs_plugin_isSameOrBefore);
     </script>
     [% Asset.js("js/catalog.js") | $raw %]
@@ -116,15 +114,16 @@
         var browser = KOHA.browser(searchid, biblio_id);
         browser.show();
 
+        function Changefwk(FwkList) {
+            var fwk = FwkList.options[FwkList.selectedIndex].value;
+            window.location = `labeledMARCdetail.pl?biblionumber=${biblio_id}&frameworkcode=${fwk}`;
+        }
+
         $(document).ready(function () {
             $("#Frameworks").on("change", function () {
                 Changefwk(this);
             });
         });
-        function Changefwk(FwkList) {
-            var fwk = FwkList.options[FwkList.selectedIndex].value;
-            window.location = `labeledMARCdetail.pl?biblionumber=${biblio_id}&frameworkcode=${fwk}`;
-        }
     </script>
 [% END %]
 
