@@ -39,7 +39,7 @@
             <label for="allow_changes_from">Allow changes to contents from: </label>
         </div>
         <div class="fg-input">
-            <select name="allow_changes_from" id="allow_changes_from" onchange="AdjustRemark()">
+            <select name="allow_changes_from" id="allow_changes_from" class="adjust_remark">
                 [% IF shelf.allow_change_from_owner %]
                     <option value="0">Nobody</option>
                 [% ELSE %]
@@ -501,7 +501,7 @@
                             <label for="public">Public: </label>
                         </div>
                         <div class="fg-input">
-                            <select id="public" name="public" onchange="AdjustRemark()">
+                            <select id="public" name="public" class="adjust_remark">
                                 [% IF shelf.is_private %]
                                     <option value="0" selected="selected">Private</option>
                                 [% ELSE %]
@@ -988,6 +988,11 @@
                 $("#permitted_staff_remark").hide();
             }
         }
+        $(document).ready(function () {
+            $(".adjust_remark").on("change", function () {
+                AdjustRemark();
+            });
+        });
     </script>
     [% IF op == 'view' %]
         <script nonce="[% Koha.CSPNonce | $raw %]">
