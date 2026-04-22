@@ -952,21 +952,6 @@ sub _get_match_keys {
     my $matchpoint              = shift;
     my $check_only_first_repeat = @_ ? shift : 0;
 
-    # If there is more than one component to the matchpoint (e.g.,
-    # matchpoint includes both 003 and 001), any repeats
-    # of the first component's tag are identified; repeats
-    # of the subsequent components' tags are appended to
-    # each parallel key derived from the first component,
-    # up to the number of repeats of the first component's tag.
-    #
-    # For example, if the record has one 003 and two 001s, only
-    # one key is retrieved because there is only one 003.  The key
-    # will consist of the contents of the first 003 and first 001.
-    #
-    # If there are two 003s and two 001s, there will be two keys:
-    #    first 003 + first 001
-    #    second 003 + second 001
-
     my @keys = ();
     for ( my $i = 0 ; $i <= $#{ $matchpoint->{'components'} } ; $i++ ) {
         my $component = $matchpoint->{'components'}->[$i];

@@ -31,7 +31,7 @@ Koha::BiblioFrameworkMarcMatcher
 
 =cut
 
-=head3 type
+=head3 _type
 
 =cut
 

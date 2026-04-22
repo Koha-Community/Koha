@@ -48,7 +48,7 @@ sub delete {
     $self->SUPER::delete();
 }
 
-=head3 type
+=head3 _type
 
 =cut
 

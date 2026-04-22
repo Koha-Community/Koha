@@ -692,6 +692,12 @@ sub GetFacets {
     return $facets;
 }
 
+=head3 _get_facets_from_records
+
+Helper function that converts a zebra record into a MARC record and calculates the facets.
+
+=cut
+
 sub _get_facets_from_records {
 
     my $rs = shift;
@@ -895,6 +901,16 @@ sub _get_facets_info {
 }
 
 # TRUNCATION
+
+=head3 _detect_truncation
+
+Helper function that takes an operand (search string) and an index (unused)
+and returns each word from the operand (space delimited) and places it into
+an array depending on whether it is not truncated, right truncated, left truncated,
+or otherwise as a regex expression.
+
+=cut
+
 sub _detect_truncation {
     my ( $operand, $index ) = @_;
     my (
@@ -923,6 +939,21 @@ sub _detect_truncation {
 }
 
 # STEMMING
+
+=head3 _build_stemmed_operand
+
+Helper function that uses Lingua::Stem::Snowball to stem a term depending upon
+the language passed in.
+
+Will return operand unaltered if the operand contains a digit.
+If operand contains a digit, it is almost certainly an identifier, and should
+not be stemmed.  This is particularly relevant for ISBNs and ISSNs, which
+can contain the letter "X" - for example, _build_stemmend_operand would reduce
+"014100018X" to "x ", which for a MARC21 database would bring up irrelevant
+results (e.g., "23 x 29 cm." from the 300$c).  Bug 2098.
+
+=cut
+
 sub _build_stemmed_operand {
     my ( $operand, $lang ) = @_;
     require Lingua::Stem::Snowball;
@@ -931,15 +962,10 @@ sub _build_stemmed_operand {
     # Stemmer needs language
     return $operand unless $lang;
 
-    # If operand contains a digit, it is almost certainly an identifier, and should
-    # not be stemmed.  This is particularly relevant for ISBNs and ISSNs, which
-    # can contain the letter "X" - for example, _build_stemmend_operand would reduce
-    # "014100018X" to "x ", which for a MARC21 database would bring up irrelevant
-    # results (e.g., "23 x 29 cm." from the 300$c).  Bug 2098.
     return $operand if $operand =~ /\d/;
 
     # FIXME: the locale should be set based on the user's language and/or search choice
-    #warn "$lang";
+
     # Make sure we only use the first two letters from the language code
     $lang = lc( substr( $lang, 0, 2 ) );
 
@@ -966,7 +992,19 @@ sub _build_stemmed_operand {
     return $stemmed_operand;
 }
 
-# FIELD WEIGHTING
+#  FIELD WEIGHTING
+
+=head3 _build_weighted_query
+
+Helper function that builds additional searches used to increase the relevancy
+when searching.
+
+On a basic search we add exact title cover, exact title, phrase title, words in
+title, exact match on any field, words in any field and optional fuzziness, stemming
+and truncation depending on settings.
+
+=cut
+
 sub _build_weighted_query {
 
     # FIELD WEIGHTING - This is largely experimental stuff. What I'm committing works
