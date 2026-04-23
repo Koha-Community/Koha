@@ -58,21 +58,38 @@ my $usecache = Koha::Caches->get_instance->memcached_cache;
 
 my $op = $input->param('op') // '';
 my $flagsrequired;
-if (   $op eq 'add_form'
+if (
+       $op eq 'add_form'
     || $op eq 'add_form_sql'
     || $op eq 'edit_form'
     || $op eq 'duplicate'
+    || $op eq 'cud-report'    #Guided wizard start
+    || $op eq 'cud-choose_type'
+    || $op eq 'cud-choose_columns'
+    || $op eq 'cud-choose_criteria'
+    || $op eq 'cud-choose_operations'
+    || $op eq 'cud-build_report'    #Guided wizard end
+    || $op eq 'convert'    #FIXME: This should be changed to cud-convert, although this feature is broken in main anyway
+    || $op eq 'save'       #FIXME: This appears to be unused currently. The template also has other unused ops in it...
     || $op eq 'cud-save'
+    || $op eq
+    'cud-share' #FIXME: Sharing with Mana should probably have its own permission but this is the most logical one for now
     || $op eq 'cud-update_sql'
-    || $op eq 'cud-update_and_run_sql' )
+    )
 {
     $flagsrequired = 'create_reports';
-} elsif ( $op eq 'list' ) {
+} elsif ( $op eq 'list' | $op eq 'show' ) {
+    $flagsrequired = [ 'create_reports', 'execute_reports', 'delete_reports' ];    #NOTE: "or" permissions
+} elsif ( $op eq 'run' || $op eq 'export' || $op eq 'retrieve_results' ) {
     $flagsrequired = 'execute_reports';
+} elsif ( $op eq 'cud-update_and_run_sql' ) {
+    $flagsrequired = { 'create_reports' => 1, 'execute_reports' => 1 };            #NOTE: "and" permissions
 } elsif ( $op eq 'cud-delete' ) {
     $flagsrequired = 'delete_reports';
 } else {
-    $flagsrequired = '*';
+
+    #NOTE: You should never get here
+    $flagsrequired = 1;
 }
 
 my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
