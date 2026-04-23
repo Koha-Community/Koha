@@ -56,7 +56,10 @@ $(document).ready(function () {
             }
         }
         if (action == "update_field") {
-            if ($("#from_subfield").val().length <= 0) {
+            if (
+                $("#from_field").val() > 10 &&
+                $("#from_subfield").val().length <= 0
+            ) {
                 alert(__("The source subfield should be filled for update."));
                 return false;
             }
@@ -103,6 +106,7 @@ $(document).ready(function () {
 
     $("#conditional_field,#from_field").change(function () {
         updateAllEvery();
+        toggleCharacterPositionField();
     });
 
     $("#cancel_edit").on("click", function (e) {
@@ -177,6 +181,30 @@ $(document).ready(function () {
     });
 });
 
+function toggleCharacterPositionField() {
+    if ($("#from_field").val().length > 0 && $("#from_field").val() < 10) {
+        if ($("#action").val() === "update_field") {
+            $("#from_subfield").show();
+            $("#character_position").show();
+        } else {
+            $("#from_subfield").val("");
+            $("#from_subfield").hide();
+            $("#character_position").hide();
+        }
+    } else {
+        $("#from_subfield").show();
+        $("#character_position").hide();
+    }
+    if (
+        $("#conditional_field").val().length > 0 &&
+        $("#conditional_field").val() < 10
+    ) {
+        $("#conditional_subfield").val("");
+        $("#conditional_subfield").hide();
+    } else {
+        $("#conditional_subfield").show();
+    }
+}
 function updateAllEvery() {
     if ($("#conditional_field").is(":visible")) {
         if (
@@ -202,12 +230,14 @@ function onActionChange(selectObj) {
             show("field_number_block");
             hide("with_value_block");
             hide("to_field_block");
+            hide("character_position");
             break;
 
         case "add_field":
             hide("field_number_block");
             show("with_value_block");
             hide("to_field_block");
+            hide("character_position");
             break;
 
         case "update_field":
@@ -220,20 +250,25 @@ function onActionChange(selectObj) {
             show("field_number_block");
             hide("with_value_block");
             show("to_field_block");
+            hide("character_position");
             break;
 
         case "copy_field":
             show("field_number_block");
             hide("with_value_block");
             show("to_field_block");
+            hide("character_position");
             break;
 
         case "copy_and_replace_field":
             show("field_number_block");
             hide("with_value_block");
             show("to_field_block");
+            hide("character_position");
             break;
     }
+
+    toggleCharacterPositionField();
 }
 
 function onConditionalChange(selectObj) {
@@ -380,6 +415,8 @@ function editAction(mmta) {
 
     window.action_submit_value = document.getElementById("action_submit").value;
     document.getElementById("action_submit").value = __("Update action");
+
+    toggleCharacterPositionField();
 }
 
 function cancelEditAction() {
@@ -421,6 +458,7 @@ function cancelEditAction() {
         $("#no_defined_actions").show();
     }
 
+    toggleCharacterPositionField();
     $("#add_action").hide();
 }
 
