@@ -18,6 +18,8 @@ package Koha::SimpleMARC;
 use Modern::Perl;
 use base 'Exporter';
 
+use Koha::Exceptions;
+
 BEGIN {
     our @EXPORT_OK = qw(
         read_field
@@ -172,6 +174,9 @@ sub copy_and_replace_field {
 
 Missing POD for update_field.
 
+When parameter C<field> is a control field (000-009), parameter C<subfield> is
+used to indicate character position. Defaults to position C<0>.
+
 =cut
 
 sub update_field {
@@ -184,19 +189,28 @@ sub update_field {
 
     if ( !( $record && $fieldName ) ) { return; }
 
-    if ( not defined $subfieldName or $subfieldName eq '' ) {
+    if ( $fieldName > 10 && ( not defined $subfieldName or $subfieldName eq '' ) ) {
 
         # FIXME I'm not sure the actual implementation is correct.
         die "This action is not implemented yet";
 
         #_update_field({ record => $record, field => $fieldName, values => \@values });
     } else {
-        _update_subfield(
-            {
-                record        => $record, field => $fieldName, subfield => $subfieldName, values => \@values,
-                field_numbers => $field_numbers
-            }
-        );
+        if ( $fieldName < 10 ) {
+            _update_controlfield(
+                {
+                    record        => $record, field => $fieldName, position => $subfieldName, values => \@values,
+                    field_numbers => $field_numbers
+                }
+            );
+        } else {
+            _update_subfield(
+                {
+                    record        => $record, field => $fieldName, subfield => $subfieldName, values => \@values,
+                    field_numbers => $field_numbers
+                }
+            );
+        }
     }
 }
 
@@ -300,6 +314,42 @@ sub _update_subfield {
         foreach my $value (@values) {
             my $field = MARC::Field->new( $fieldName, '', '', "$subfieldName" => $values[ $i++ ] );
             $record->insert_fields_ordered($field);
+        }
+    }
+}
+
+sub _update_controlfield {
+    my ($params)  = @_;
+    my $record    = $params->{record};
+    my $fieldName = $params->{field};
+    if ( $params->{position} && $params->{position} =~ /[^0-9]/ ) {
+        Koha::Exceptions::BadParameter->throw(
+            error     => 'Parameter "subfield", if given, must be numeric',
+            parameter => 'subfield',
+        );
+    }
+    my $position      = $params->{position} ? $params->{position} + 0 : 0;    # converts 01 to 1
+    my @values        = @{ $params->{values} };
+    my $value         = $values[0];
+    my $dont_erase    = $params->{dont_erase};
+    my $field_numbers = $params->{field_numbers} // [];
+    my $i             = 0;
+
+    my $field = $record->field($fieldName);
+
+    unless ($field) {
+        ## Control field does not exist, create it.
+        $value = ' ' x $position . $value;                 # using empty whitespace ' ' as the fill character
+        $field = MARC::Field->new( $fieldName, $value );
+        $record->insert_fields_ordered($field);
+    } else {
+        unless ($dont_erase) {
+            my $controldata = $field->data;
+            if ( length($controldata) < $position ) {
+                $controldata = $controldata . ' ' x ( $position - length($controldata) );  # add leading fill characters
+            }
+            substr $controldata, $position, length($value), $value;
+            $field->update($controldata);
         }
     }
 }

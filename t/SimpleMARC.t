@@ -2,6 +2,7 @@
 
 use Modern::Perl;
 
+use Test::Exception;
 use Test::NoWarnings;
 use Test::More tests => 13;
 
@@ -204,7 +205,7 @@ subtest 'read_field' => sub {
 
 # update_field
 subtest 'update_field' => sub {
-    plan tests => 1;
+    plan tests => 2;
     subtest 'update subfield' => sub {
         plan tests => 6;
         my $record = new_record;
@@ -301,6 +302,126 @@ subtest 'update_field' => sub {
             \@fields_9520,
             [ '654321', '654321' ],
             'update all subfields 952$0 with the same value'
+        );
+
+    };
+
+    subtest 'update control field' => sub {
+        plan tests => 11;
+        my $record = new_record;
+        update_field(
+            {
+                record   => $record,
+                field    => '008',
+                subfield => '1',
+                values   => ['1']
+            }
+        );
+        is_deeply(
+            [ read_field( { record => $record, field => '008' } ) ],
+            ['110829t20132012nyu bk 001 0ceng'],
+            'update existing subfield 008 char position 1 value from 2 to 1'
+        );
+
+        update_field(
+            {
+                record   => $record,
+                field    => '008',
+                subfield => '2',
+                values   => ['09']
+            }
+        );
+        is_deeply(
+            [ read_field( { record => $record, field => '008' } ) ],
+            ['110929t20132012nyu bk 001 0ceng'],
+            'update existing subfield 008 char positions 2-3 from 08 to 09'
+        );
+
+        update_field(
+            {
+                record   => $record,
+                field    => '008',
+                subfield => '2',
+                values   => [ '10', '08' ]
+            }
+        );
+        is_deeply(
+            [ read_field( { record => $record, field => '008' } ) ],
+            ['111029t20132012nyu bk 001 0ceng'],
+            'update existing subfield 008, only first elements from "values" is used'
+        );
+
+        is_deeply(
+            [ read_field( { record => $record, field => '007' } ) ],
+            [],
+            '007 does not yet exist'
+        );
+        update_field(
+            {
+                record   => $record,
+                field    => '007',
+                subfield => '',
+                values   => ['a']
+            }
+        );
+        is_deeply(
+            [ read_field( { record => $record, field => '007' } ) ],
+            ['a'],
+            'create non existing 007'
+        );
+
+        update_field(
+            {
+                record   => $record,
+                field    => '007',
+                subfield => '3',
+                values   => ['canzn']
+            }
+        );
+        is_deeply(
+            [ read_field( { record => $record, field => '007' } ) ],
+            ['a  canzn'],
+            'used fill characters to populate non-existing character positions, maintaining prefixed characters'
+        );
+
+        delete_field( { record => $record, field => '007' } );
+        is_deeply(
+            [ read_field( { record => $record, field => '007' } ) ],
+            [],
+            '007 does not yet exist'
+        );
+
+        update_field(
+            {
+                record   => $record,
+                field    => '007',
+                subfield => '3',
+                values   => ['canzn']
+            }
+        );
+        is_deeply(
+            [ read_field( { record => $record, field => '007' } ) ],
+            ['   canzn'],
+            'created field 007, populated non-existing prefixing character positions with fill characters'
+        );
+
+        throws_ok {
+            update_field(
+                {
+                    record   => $record,
+                    field    => '007',
+                    subfield => '3a',
+                    values   => ['canzn']
+                }
+            );
+        }
+        'Koha::Exceptions::BadParameter',
+            'Koha::Exceptions::BadParameter is thrown when non-numeric character position is given';
+
+        is( $@->parameter, 'subfield', 'Confirming the exception is due to parameter subfield' );
+        is(
+            $@->error, 'Parameter "subfield", if given, must be numeric',
+            'Confirming the exception is due to parameter subfield'
         );
 
     };
