@@ -134,6 +134,12 @@ sub get_enabled_plugins {
     return Koha::Plugins::Loader->get_enabled_plugins();
 }
 
+=head3 _verbose
+
+Helper function to reduce verbosity in tests
+
+=cut
+
 sub _verbose {
     my $class = shift;
 
@@ -413,6 +419,13 @@ sub RemovePlugins {
 
     $class->_restart_after_change();
 }
+
+=head3 _restart_after_change
+
+Helper function to reload plack after a plugin change if the
+'plugins_restart' flag is enabled in the koha-conf.xml
+
+=cut
 
 sub _restart_after_change {
     my ( $class, $params ) = @_;
