@@ -61,8 +61,9 @@ sub new {
         );
     }
     return $class->SUPER::new(
-        -key    => $encryption_key,
-        -cipher => 'Cipher::AES'
+        -key         => $encryption_key,
+        -cipher      => 'Cipher::AES',
+        -nodeprecate => 1,
     );
 }
 
