@@ -396,10 +396,23 @@ if ( $op and $op eq 'cud-serialchangestatus' ) {
                 else {
 
                     #modify item
-                    my ( $oldbiblionumber, $oldbibnum, $itemnumber ) = ModItemFromMarc(
-                        $bib_record,
-                        $itemhash{$item}->{'bibnum'}, $item
-                    );
+                    my $exists;
+                    my ( $barcodetagfield, $barcodetagsubfield ) = GetMarcFromKohaField('items.barcode');
+                    if ( $bib_record->subfield( $barcodetagfield, $barcodetagsubfield ) ) {
+                        my $barcode = $bib_record->subfield( $barcodetagfield, $barcodetagsubfield );
+                        $exists = Koha::Items->find( { barcode => $barcode } );
+                    }
+
+                    # if found itemnumber is not same as modified items itemnumber assume that barcode was changed
+                    if ( $exists && $exists->itemnumber ne $item ) {
+                        push @errors, 'barcode_not_unique';
+                        push @errseq, { serialseq => $serialseqs[$index] };
+                    } else {
+                        my ( $oldbiblionumber, $oldbibnum, $itemnumber ) = ModItemFromMarc(
+                            $bib_record,
+                            $itemhash{$item}->{'bibnum'}, $item
+                        );
+                    }
                 }
             }
         }
