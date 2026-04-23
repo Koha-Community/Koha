@@ -212,7 +212,7 @@
                     [% END %]
 
                     [% IF ( CAN_user_reports_execute_reports ) %]
-                        <a href="/cgi-bin/koha/reports/guided_reports.pl?op=list" class="btn btn-primary">Use saved</a>
+                        <a href="/cgi-bin/koha/reports/guided_reports.pl?op=list" class="btn btn-primary">View saved</a>
                     [% END %]
 
                     [% IF ( CAN_user_reports_create_reports ) %]
@@ -379,13 +379,14 @@
                                                         <td>
                                                             <div class="btn-group dropup">
                                                                 [%# There should be no space between these two buttons, it would render badly %]
-                                                                [% INCLUDE 'throttled-button.inc' element_type='link' href='/cgi-bin/koha/reports/guided_reports.pl?id=' _ savedreport.id _ '&op=run' classes='btn btn-default btn-xs' label=t('Run') attrs={ role => 'button' } %]<a
-                                                                    class="btn btn-default btn-xs dropdown-toggle"
-                                                                    id="reportactions[% savedreport.id | html %]"
-                                                                    role="button"
-                                                                    data-bs-toggle="dropdown"
-                                                                    href="#"
-                                                                ></a>
+                                                                [%- IF ( CAN_user_reports_execute_reports ) -%]
+                                                                    [% INCLUDE 'throttled-button.inc' element_type='link' href='/cgi-bin/koha/reports/guided_reports.pl?id=' _ savedreport.id _ '&op=run' classes='btn btn-default btn-xs' label=t('Run') attrs={ role => 'button' } %]
+                                                                [%- ELSE -%]
+                                                                    <a class="btn btn-default btn-xs" href="/cgi-bin/koha/reports/guided_reports.pl?id=[% savedreport.id | uri %]&amp;op=show">
+                                                                        <i class="fa fa-search" aria-hidden="true"></i> View
+                                                                    </a>
+                                                                [% END -%]
+                                                                [%- "" |$raw %]<a class="btn btn-default btn-xs dropdown-toggle" id="reportactions[% savedreport.id | html %]" role="button" data-bs-toggle="dropdown" href="#"></a>
                                                                 <ul class="dropdown-menu" role="menu" aria-labelledby="reportactions[% savedreport.id | html %]">
                                                                     <li
                                                                         ><a class="dropdown-item" href="/cgi-bin/koha/reports/guided_reports.pl?id=[% savedreport.id | uri %]&amp;op=show"

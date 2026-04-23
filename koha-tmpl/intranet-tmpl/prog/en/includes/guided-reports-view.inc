@@ -1,8 +1,8 @@
 [% USE Koha %]
 <div id="guided-reports-view-menu" class="sidebar_menu">
-    <h5>Run reports</h5>
+    <h5>View reports</h5>
     <ul>
-        [% IF ( CAN_user_reports_execute_reports ) %]<li><a href="/cgi-bin/koha/reports/guided_reports.pl?op=list">Saved reports</a></li>[% END %]
+        [% IF ( CAN_user_reports_execute_reports || CAN_user_reports_create_reports || CAN_user_reports_delete_reports ) %]<li><a href="/cgi-bin/koha/reports/guided_reports.pl?op=list">Saved reports</a></li>[% END %]
     </ul>
     <h5>Reports dictionary</h5>
     <ul>
