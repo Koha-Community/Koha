@@ -18,7 +18,7 @@
 use Modern::Perl;
 
 use Test::NoWarnings;
-use Test::More tests => 9;
+use Test::More tests => 10;
 
 use Koha::SIP2::Accounts;
 use Koha::Database;
@@ -243,6 +243,45 @@ subtest 'system_preference_overrides' => sub {
     is_deeply( $retrieved_system_preference_overrides, $system_preference_overrides );
     $account->system_preference_overrides( [] );
     is( $account->system_preference_overrides->count, 0 );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'template fields accept long text' => sub {
+
+    plan tests => 5;
+
+    $schema->storage->txn_begin;
+
+    my $template = '[% patron.surname %], [% patron.firstname %] ' . ( 'x' x 1000 );
+
+    my $account = $builder->build_object(
+        {
+            class => 'Koha::SIP2::Accounts',
+            value => {
+                ae_field_template => $template,
+                av_field_template => $template,
+                da_field_template => $template,
+            },
+        }
+    );
+
+    my $stored = $account->get_from_storage;
+    is( $stored->ae_field_template, $template, 'ae_field_template can store large templates' );
+    is( $stored->av_field_template, $template, 'av_field_template can store large templates' );
+    is( $stored->da_field_template, $template, 'da_field_template can store large templates' );
+
+    $account->custom_item_fields( [ { field => 'IN', template => $template } ] );
+    $account->custom_patron_fields( [ { field => 'DE', template => $template } ] );
+
+    is(
+        $account->custom_item_fields->next->template, $template,
+        'custom_item_fields.template can store large templates'
+    );
+    is(
+        $account->custom_patron_fields->next->template, $template,
+        'custom_patron_fields.template can store large templates'
+    );
 
     $schema->storage->txn_rollback;
 };
