@@ -134,7 +134,7 @@ sub SearchAuthorities {
         my @authtypecode;
         my @auths = split / /, $authtypecode;
         foreach my $auth (@auths) {
-            $query .= " \@attr 1=authtype \@attr 5=100 \@attr 6=3 " . $auth;    ##No truncation on authtype
+            $query .= " \@attr 1=authtype \@attr 5=100 \@attr 6=3 " . $auth;    #5=100 No truncation, 6=3 Complete field
             push @authtypecode, $auth;
             $n++;
         }
