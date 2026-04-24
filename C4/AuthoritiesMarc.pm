@@ -1291,9 +1291,10 @@ sub _marc21_sort_hierarchy_alpha {
     return (
         sort {
             # Sort broader (g) - no hierarchy (tric:gh) - narrower (h)
-            my $a_hier = $a->subfield('w') // q{};
+            # MARC21 $w has up to 4 positions; only position 0 encodes hierarchy.
+            my $a_hier = substr( $a->subfield('w') // q{}, 0, 1 );
             $a_hier = 'gh' if $a_hier !~ /^[gh]$/;
-            my $b_hier = $b->subfield('w') // q{};
+            my $b_hier = substr( $b->subfield('w') // q{}, 0, 1 );
             $b_hier = 'gh' if $b_hier !~ /^[gh]$/;
 
             # When hierarchy does not resolve, sort on $a

@@ -506,7 +506,7 @@ subtest 'Authority action logs include MARC-in-JSON diff' => sub {
 };
 
 subtest 'BuildSummary/_marc21_sort_hierarchy_alpha' => sub {
-    plan tests => 1;
+    plan tests => 2;
 
     #$schema->storage->txn_begin;
     #t::lib::Mocks::mock_preference('marcflavour', 'MARC21');
@@ -521,6 +521,24 @@ subtest 'BuildSummary/_marc21_sort_hierarchy_alpha' => sub {
 
     my @sorted_sub_a = map { $_->subfield('a') } C4::AuthoritiesMarc::_marc21_sort_hierarchy_alpha(@fields);
     is_deeply( \@sorted_sub_a, [ 'vvv', 'yyy', 'www', 'xxx', 'uuu', 'zzz' ], 'Sorted as expected' );
+
+    # MARC21 $w has up to 4 positions; only position 0 encodes the hierarchy.
+    # Values like 'gnna' or 'hnnn' must still classify as broader/narrower.
+    my @multi_pos_fields;
+    push @multi_pos_fields, MARC::Field->new( '550', '', '', a => 'zzz', w => 'hnnn' );
+    push @multi_pos_fields, MARC::Field->new( '550', '', '', a => 'yyy', w => 'gnna' );
+    push @multi_pos_fields, MARC::Field->new( '550', '', '', a => 'xxx', w => 'nnnn' );
+    push @multi_pos_fields, MARC::Field->new( '550', '', '', a => 'www', w => '' );
+    push @multi_pos_fields, MARC::Field->new( '550', '', '', a => 'vvv', w => 'g   ' );
+    push @multi_pos_fields, MARC::Field->new( '550', '', '', a => 'uuu', w => 'h   ' );
+
+    my @sorted_multi_pos =
+        map { $_->subfield('a') } C4::AuthoritiesMarc::_marc21_sort_hierarchy_alpha(@multi_pos_fields);
+    is_deeply(
+        \@sorted_multi_pos,
+        [ 'vvv', 'yyy', 'www', 'xxx', 'uuu', 'zzz' ],
+        'Multi-position $w classified by position 0 only'
+    );
 
     #$schema->storage->txn_rollback;
 };
