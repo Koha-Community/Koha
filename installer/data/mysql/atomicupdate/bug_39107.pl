@@ -8,19 +8,7 @@ return {
         my ($args) = @_;
         my ( $dbh, $out ) = @$args{qw(dbh out)};
 
-        # Check if the foreign key exists before trying to drop it
-        my $fk_exists = $dbh->selectrow_array(
-            q{
-                SELECT COUNT(*)
-                FROM information_schema.TABLE_CONSTRAINTS
-                WHERE CONSTRAINT_SCHEMA = DATABASE()
-                AND TABLE_NAME = 'illrequests'
-                AND CONSTRAINT_NAME = 'illrequests_safk'
-                AND CONSTRAINT_TYPE = 'FOREIGN KEY'
-            }
-        );
-
-        if ($fk_exists) {
+        if ( foreign_key_exists( 'illrequests', 'illrequests_safk' ) ) {
             $dbh->do(q{ ALTER TABLE illrequests DROP FOREIGN KEY illrequests_safk });
             say_success( $out, "Removed illrequests_safk FK constraint on illrequests.status_alias" );
         } else {
